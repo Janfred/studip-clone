@@ -1,8 +1,10 @@
 <?php
 # Lifter001: DONE
 # Lifter002: TODO
+# Lifter003: TEST
 # Lifter007: TODO
 # Lifter003: TODO
+# Lifter005: TEST
 /*
 folder.php - Anzeige und Verwaltung des Ordnersystems
 Copyright (C) 2001 Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <ckater@gwdg.de>
@@ -23,7 +25,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 ob_start();
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+page_open(array("sess" => "Seminar_Session",
+	"auth" => "Seminar_Auth", 
+	"perm" => "Seminar_Perm", "" .
+	"user" => "Seminar_User"));
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
@@ -36,21 +41,172 @@ require_once 'lib/functions.php';
 require_once('lib/classes/StudipDocumentTree.class.php');
 require_once 'lib/raumzeit/Issue.class.php';
 
-$db=new DB_Seminar;
-$db2=new DB_Seminar;
+$db = DBManager::get();
+$db2 = DBManager::get();
 
-$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessionSeminar));
+URLHelper::bindLinkParam('data', $folder_system_data);
+
+//Switch fuer die Ansichten
+if ($cmd == 'tree') {
+	$folder_system_data = "";
+	$folder_system_data['cmd'] = 'tree';
+	}
+if ($cmd == 'all') {
+	$folder_system_data = "";
+	$folder_system_data['cmd'] = 'all';
+	}
+
+if (strpos($open, "_") !== false){
+	$folder_system_data["open"][substr($open, 0, strpos($open, "_")+1)] = true;
+}
+
+///////////////////////////////////////////////////////////
+//Ajax-Funktionen
+///////////////////////////////////////////////////////////
+
+//Frage den Dateienkörper ab
+if ($_REQUEST["getfilebody"]) {
+	URLHelper::bindLinkParam('data', $folder_system_data);
+	$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessionSeminar));
+	$result = $db->query("SELECT range_id FROM dokumente WHERE dokument_id = ".$db->quote($_REQUEST["getfilebody"]))->fetch();
+	if ($folder_tree->isReadable($result['range_id'] , $user->id)) {
+		$query = "SELECT ". $_fullname_sql['full'] ." AS fullname, username, a.user_id, a.*, IF(IFNULL(a.name,'')='', a.filename,a.name) AS t_name FROM dokumente a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE a.dokument_id = ".$db->quote($_REQUEST["getfilebody"])."";
+		$datei = $db->query($query)->fetch();
+		ob_start();
+		display_file_body($datei, $folder_system_data["open"], $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE, $folder_system_data["refresh"], $folder_system_data["link"]);
+		$output = ob_get_clean();
+		print utf8_encode($output);
+	}
+	die();
+}
+
+//Frage den Ordnerkörper ab
+if ($_REQUEST["getfolderbody"]) {
+	URLHelper::bindLinkParam('data', $folder_system_data);
+	$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessionSeminar));
+	if ($folder_tree->isExecutable($_REQUEST["getfolderbody"] , $user->id)) {
+		ob_start();
+		display_folder_body($_REQUEST["getfolderbody"], $folder_system_data["open"], $change, $move, $upload, $refresh, $filelink);
+		$output = ob_get_clean();
+		print utf8_encode($output);
+	}
+	die();
+}
+
+//Dateien eines Ordners sollen sortiert werden nach einem Array
+if ($_REQUEST["folder_sort"]) {
+	ob_start();
+	URLHelper::bindLinkParam('data', $folder_system_data);
+	$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessionSeminar));
+	if (($rechte) && ($_REQUEST["folder_sort"] == "root")) {
+		
+	} else {
+		if (($rechte) || ($folder_tree->isWriteable($_REQUEST["folder_sort"] , $user->id))) {
+			$file_order = explode(",", $file_order);
+			$sorttype = "";
+			if ($file_order) {
+				$result = $db->query("SELECT 1 FROM dokumente WHERE dokument_id = ".$db->quote($file_order[0]))->fetch();
+				if ($result) {
+					$sorttype = "file";
+				} else {
+					$result = $db->query("SELECT 1 FROM folder WHERE folder_id = ".$db->quote($file_order[0]))->fetch();
+					if ($result) {
+						$sorttype = "folder";
+					}
+				}
+			}
+			if ($sorttype == "file") {
+				//Dateien werden sortiert:
+				for ($i=0; $i < count($file_order); $i++) {
+					$db->query("UPDATE dokumente SET priority = ".($i+1)." WHERE dokument_id = ".$db->quote($file_order[$i]));
+				}
+			} elseif ($sorttype == "folder") {
+				//Ordner werden sortiert:
+				for ($i=0; $i < count($file_order); $i++) {
+					$db->query("UPDATE folder SET priority = ".($i+1)." WHERE folder_id = ".$db->quote($file_order[$i]));
+				}
+			}
+		}
+	}
+	$output = ob_get_clean();
+	print utf8_encode($output);
+	die();
+}
+
+//Datei soll in einen Ordner verschoben werden
+if (($_REQUEST["moveintofolder"]) && ($_REQUEST["movefile"])) {
+	URLHelper::bindLinkParam('data', $folder_system_data);
+	$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessionSeminar));
+	$result = $db->query("SELECT range_id FROM dokumente WHERE dokument_id = '".$_REQUEST["movefile"]."'")->fetch();
+	if (($rechte) || (($folder_tree->isWriteable($result['range_id'] , $user->id)) 
+		 && ($folder_tree->isWriteable($result['moveintofolder'] , $user->id)))) {
+		$db->query("UPDATE dokumente SET range_id = '".$_REQUEST["moveintofolder"]."', priority = 0 WHERE dokument_id = '".$_REQUEST["movefile"]."'");
+	}
+	die();
+}
+
+//Datei soll in einen Ordner kopiert werden
+if (($_REQUEST["copyintofolder"]) && ($_REQUEST["copyfile"])) {
+	URLHelper::bindLinkParam('data', $folder_system_data);
+	$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessionSeminar));
+	$result = $db->query("SELECT * FROM dokumente WHERE dokument_id = ".$db->quote($_REQUEST["copyfile"]))->fetch();
+	if (($rechte) || ($folder_tree->isWriteable($result['moveintofolder'] , $user->id))) {
+		$db->query("INSERT INTO dokumente " .
+				"SET dokument_id = '".md5(uniqid("helloGOOdByE"))."', " .
+						"range_id = ".$db->quote($_REQUEST["copyintofolder"]).", " .
+						"user_id = ".$db->quote($user->id).", " .
+						"seminar_id = ".$db->quote($SessionSeminar).", " .
+						"name = ".$db->quote($result['name']).", " .
+						"description = ".$db->quote($result['description']).", " .
+						"filename = ".$db->quote($result['filename']).", " .
+						"mkdate = ".$db->quote($result['mkdate']).", " .
+						"chdate = ".$db->quote(time()).", " .
+						"filesize = ".$db->quote($result['filesize']).", " .
+						"autor_host = ".$db->quote($result['autor_host']).", " .
+						"downloads = ".$db->quote(0).", " .
+						"url = ".$db->quote($result['url']).", " .
+						"protected = ".$db->quote($result['protected']).", " .
+						"priority = '0'");
+	}
+	die();
+}
 
 if ($folderzip) {
 	$zip_file_id = createFolderZip($folderzip, true, true);
 	if($zip_file_id){
 		$query = sprintf ("SELECT name FROM folder WHERE folder_id = '%s'", $folderzip);
-		$db->query($query);
-		$db->next_record();
-		$zip_name = prepareFilename(_("Dateiordner").'_'.$db->f('name').'.zip');
+		$result = $db->query($query)->fetch();
+		$zip_name = prepareFilename(_("Dateiordner").'_'.$result['name'].'.zip');
 		header('Location: ' . getDownloadLink( $zip_file_id, $zip_name, 4));
 		page_close();
 		die;
+	}
+}
+
+if ($zipnewest) {
+	//Abfrage der neuen Dateien
+	$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessionSeminar));
+	$download_ids = $db->query("SELECT * " .
+			"FROM dokumente " .
+			"WHERE seminar_id = '$SessionSeminar' " .
+			"AND user_id != '".$user->id."' " .
+			"AND ( chdate > '".(($zipnewest) ? $zipnewest : time())."' " .
+					"OR mkdate > '".(($zipnewest) ? $zipnewest : time())."')")->fetchAll();
+	foreach($download_ids as $key => $dl_id) {
+		if ($folder_tree->isReadable($dl_id['range_id'], $user->id))
+			$download_ids[$key] = $dl_id['dokument_id'];
+		else {
+			unset($download_ids[$key]);
+		}
+	}
+	if (count($download_ids)>0) {
+		$zip_file_id = createSelectedZip($download_ids, true, true);
+		if($zip_file_id){
+			$zip_name = prepareFilename($SessSemName[0].'-'._("Neue Dokumente").'.zip');
+			header('Location: ' . getDownloadLink( $zip_file_id, $zip_name, 4));
+			page_close();
+			die;
+		}
 	}
 }
 
@@ -68,25 +224,14 @@ if ($download_selected_x) {
 
 if($zip_file_id === false){
 	$msg = 'error§'
-	. sprintf(_("Der Zip Download ist fehlgeschlagen. Bitte beachten Sie das Limit von maximal %s Dateien und die maximale Größe der zu zippenden Dateien von %s MB."),
+	. sprintf(_("Der Zip Download ist fehlgeschlagen. Bitte beachten Sie das Limit " 
+	.	"von maximal %s Dateien und die maximale Größe der zu zippenden Dateien von %s MB."),
 	(int)Config::GetInstance()->getValue('ZIP_DOWNLOAD_MAX_FILES'),
 	(int)Config::GetInstance()->getValue('ZIP_DOWNLOAD_MAX_SIZE') )
 	. '§';
 }
 
-URLHelper::bindLinkParam('data', $folder_system_data);
-
-//Switch fuer die Ansichten
-if ($cmd == 'tree') {
-	$folder_system_data = '';
-	$folder_system_data['cmd'] = 'tree';
-	}
-if ($cmd == 'all') {
-	$folder_system_data = '';
-	$folder_system_data['cmd'] = 'all';
-	}
-
-mark_public_course();
+//mark_public_course();
 
 // Start of Output
 
@@ -106,6 +251,14 @@ checkObject();
 checkObjectModule('documents');
 object_set_visit_module('documents');
 
+
+$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessionSeminar));
+
+//include ('lib/include/links_openobject.inc.php');
+//Nur bei 1.8 - irgendwie haut das links_openobject .inc.php das $db raus
+$db = DBManager::get();
+
+
 //obskuren id+_?_ string zerpflücken
 if (strpos($open, "_") !== false){
 	list($open_id, $open_cmd) = explode('_', $open);
@@ -113,9 +266,11 @@ if (strpos($open, "_") !== false){
 
 //Wenn nicht Rechte und Operation uebermittelt: Ist das mein Dokument und ist der Ordner beschreibbar?
 if ((!$rechte) && $open_cmd) {
-	$db->query("SELECT user_id,range_id FROM dokumente WHERE dokument_id = '".$open_id."'");
-	$db->next_record();
-	if (($db->f("user_id") == $user->id) && ($db->f("user_id") != "nobody") && $folder_tree->isWritable($db->f('range_id'), $user->id))
+	$query = "SELECT user_id,range_id FROM dokumente WHERE dokument_id = ".$db->quote($open_id)."";
+	$result = $db->query($query)->fetch();
+	if (($result["user_id"] == $user->id) 
+		 && ($result["user_id"] != "nobody") 
+		 && $folder_tree->isWritable($result['range_id'], $user->id))
 		$owner=TRUE;
 	else
 		$owner=FALSE;
@@ -136,11 +291,12 @@ if ($rechte || $owner || $create_folder_perm) {
 	//wurde Code fuer Anlegen von Ordnern ubermittelt (=id+"_n_"), wird entsprechende Funktion aufgerufen
 	if ($open_cmd == 'n' && (!$cancel_x)) {
 		$change = create_folder(_("Neuer Ordner"), '', $open_id );
-		$open = $change;
-		$open_cmd = null;
+		$open_id = $change;
+		//$open_cmd = null;
 		}
 
-	//wurde Code fuer Anlegen von Ordnern der obersten Ebene ubermittelt (=id+"_a_"), wird entsprechende Funktion aufgerufen
+	//wurde Code fuer Anlegen von Ordnern der obersten Ebene ubermittelt (=id+"_a_"), 
+	//wird entsprechende Funktion aufgerufen
 	if ($open_cmd == 'a') {
 		$permission = 7;
 		if ($open_id == $SessionSeminar) {
@@ -166,16 +322,16 @@ if ($rechte || $owner || $create_folder_perm) {
 			$titel = $issue->getTitle();
 			$description= _("Themenbezogener Dateiordner");
 		} else {
-			$db->query("SELECT title FROM themen WHERE issue_id='".$open_id."'");
-			if ($db->next_record()) {
-				$titel = $db->f("title");
+			$query = "SELECT title FROM themen WHERE issue_id=".$db->quote($open_id)."";
+			if ($result = $db->query($query)->fetch()) {
+				$titel = $result["title"];
 				$description= _("Themenbezogener Dateiordner");
 			}
 		}
 		$change = create_folder(addslashes($titel), $description, $open_id, $permission);
 		$folder_system_data["open"][$change] = TRUE;
 		$folder_system_data['open']['anker'] = $change;
-		}
+	}
 
 	//wurde Code fuer Loeschen von Ordnern ubermittelt (=id+"_d_"), wird entsprechende Funktion aufgerufen
 	if ($open_cmd == 'd') {
@@ -184,23 +340,29 @@ if ($rechte || $owner || $create_folder_perm) {
 			$msg.="<b><a href=\"".URLHelper::getLink("?open=".$open_id."_rd_")."\">" . makeButton("ja2", "img") . "</a>&nbsp;&nbsp; <a href=\"".URLHelper::getLink('')."\">" . makeButton("nein", "img") . "</a>§";
 		} else {
 			delete_folder($open_id, true);
+			$open_id = $folder_tree->getParents($open_id); 
+			$open_id = $open_id[0]; 
+			$folder_tree->init();
 		}
 	}
 
 	//Loeschen von Ordnern im wirklich-ernst Mode
 	if ($open_cmd == 'rd') {
 		delete_folder($open_id, true);
+		$open_id = $folder_tree->getParents($open_id); 
+		$open_id = $open_id[0]; 
+		$folder_tree->init();
 	}
 
 	//wurde Code fuer Loeschen von Dateien ubermittelt (=id+"_fd_"), wird erstmal nachgefragt
 	if ($open_cmd == 'fd') {
-		$db->query("SELECT filename, ". $_fullname_sql['full'] ." AS fullname, username FROM dokumente LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE dokument_id ='".$open_id."'");
-		$db->next_record();
+		$query = "SELECT filename, ". $_fullname_sql['full'] ." AS fullname, username FROM dokumente LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE dokument_id ='".$open_id."'";
+		$result = $db->query($query)->fetch();
 		if (getLinkPath($open_id)) {
-			$msg="info§" . sprintf(_("Wollen Sie die Verlinkung zu <b>%s</b> von %s wirklich löschen?"), htmlReady($db->f("filename")), "<a href=\"".URLHelper::getLink("about.php?username=".$db->f("username"))."\">".htmlReady($db->f("fullname"))."</a>") . "<br>";
+			$msg="info§" . sprintf(_("Wollen Sie die Verlinkung zu <b>%s</b> von %s wirklich löschen?"), htmlReady($result["filename"]), "<a href=\"".URLHelper::getLink("about.php?username=".$result["username"])."\">".htmlReady($result["fullname"])."</a>") . "<br>";
 			$msg.="<b><a href=\"".URLHelper::getLink("?open=".$open_id."_rl_")."\">" . makeButton("ja2", "img") . "</a>&nbsp;&nbsp; <a href=\"".URLHelper::getLink('')."\">" . makeButton("nein", "img") . "</a>§";
 		} else {
-			$msg="info§" . sprintf(_("Wollen Sie die Datei <b>%s</b> von %s wirklich löschen?"), htmlReady($db->f("filename")), "<a href=\"".URLHelper::getLink("about.php?username=".$db->f("username"))."\">".htmlReady($db->f("fullname"))."</a>") . "<br>";
+			$msg="info§" . sprintf(_("Wollen Sie die Datei <b>%s</b> von %s wirklich löschen?"), htmlReady($result["filename"]), "<a href=\"".URLHelper::getLink("about.php?username=".$result["username"])."\">".htmlReady($result["fullname"])."</a>") . "<br>";
 			$msg.="<b><a href=\"".URLHelper::getLink("?open=".$open_id."_rm_")."\">" . makeButton("ja2", "img") . "</a>&nbsp;&nbsp; <a href=\"".URLHelper::getLink('')."\">" . makeButton("nein", "img") . "</a>§";
 		}
 	}
@@ -237,6 +399,78 @@ if ($rechte || $owner || $create_folder_perm) {
 		$folder_system_data["mode"]='move';
 		}
 
+	//wurde Code fuer Hoch-Schieben einer Datei (=id+"_mfu_") in der Darstellungsreihenfolge ausgewählt?
+	if (($open_cmd == 'mfu') && (!$cancel_x)) {
+		$result = $db->query("SELECT range_id FROM dokumente WHERE dokument_id = ".$db->quote($open_id)."")->fetch();
+		$result = $db->query("SELECT dokument_id FROM dokumente WHERE range_id = '".$result['range_id']."' ORDER BY priority ASC, chdate")->fetchAll();
+		for ($i=1; $i < count($result); $i++) {
+			if ($result[$i]['dokument_id'] == $open_id) {
+				$result[$i]['dokument_id'] = $result[$i-1]['dokument_id'];
+				$result[$i-1]['dokument_id'] = $open_id;
+			}
+		}
+		for ($i=0; $i < count($result); $i++) {
+			$db->query("UPDATE dokumente SET priority = ".($i+1)." WHERE dokument_id = '".$result[$i]['dokument_id']."'");
+		}
+	}
+
+	//wurde Code fuer Runter-Schieben einer Datei (=id+"_mfu_") in der Darstellungsreihenfolge ausgewählt?
+	if (($open_cmd == 'mfd') && (!$cancel_x)) {
+		$result = $db->query("SELECT range_id FROM dokumente WHERE dokument_id = ".$db->quote($open_id)."")->fetch();
+		$result = $db->query("SELECT dokument_id FROM dokumente WHERE range_id = '".$result['range_id']."' ORDER BY priority ASC, chdate")->fetchAll();
+		for ($i=count($result)-1; $i >=0 ; $i--) {
+			if ($result[$i]['dokument_id'] == $open_id) {
+				$result[$i]['dokument_id'] = $result[$i+1]['dokument_id'];
+				$result[$i+1]['dokument_id'] = $open_id;
+			}
+		}
+		for ($i=0; $i < count($result); $i++) {
+			$db->query("UPDATE dokumente SET priority = ".($i+1)." WHERE dokument_id = '".$result[$i]['dokument_id']."'");
+		}
+	}
+	
+	//wurde Code fuer Hoch-Schieben eines Ordners (=id+"_mfou_") in der Darstellungsreihenfolge ausgewählt?
+	if (($open_cmd == 'mfou') && (!$cancel_x)) {
+		$result = $db->query("SELECT range_id FROM folder WHERE folder_id = ".$db->quote($open_id))->fetch();
+		$result = $db->query("SELECT folder_id FROM folder WHERE range_id = '".$result['range_id']."' ORDER BY priority ASC, chdate")->fetchAll();
+		for ($i=1; $i < count($result); $i++) {
+			if ($result[$i]['folder_id'] == $open_id) {
+				$result[$i]['folder_id'] = $result[$i-1]['folder_id'];
+				$result[$i-1]['folder_id'] = $open_id;
+			}
+		}
+		for ($i=0; $i < count($result); $i++) {
+			$db->query("UPDATE folder SET priority = ".($i+1)." WHERE folder_id = '".$result[$i]['folder_id']."'");
+		}
+	}
+
+	//wurde Code fuer Runter-Schieben einer Datei (=id+"_mfu_") in der Darstellungsreihenfolge ausgewählt?
+	if (($open_cmd == 'mfod') && (!$cancel_x)) {
+		$result = $db->query("SELECT range_id FROM folder WHERE folder_id = ".$db->quote($open_id))->fetch();
+		$result = $db->query("SELECT folder_id FROM folder WHERE range_id = '".$result['range_id']."' ORDER BY priority ASC, chdate")->fetchAll();
+		for ($i=count($result)-1; $i >=0 ; $i--) {
+			if ($result[$i]['folder_id'] == $open_id) {
+				$result[$i]['folder_id'] = $result[$i+1]['folder_id'];
+				$result[$i+1]['folder_id'] = $open_id;
+			}
+		}
+		for ($i=0; $i < count($result); $i++) {
+			$db->query("UPDATE folder SET priority = ".($i+1)." WHERE folder_id = '".$result[$i]['folder_id']."'");
+		}
+	}
+	
+	//wurde Code für alphabetisches Sortieren (=id+"_az_") fuer Ordner id ausgewählt?
+	if (($open_cmd == 'az') && (!$cancel_x)) {
+		$result = $db->query("SELECT dokument_id FROM dokumente WHERE range_id = ".$db->quote($open_id)." ORDER BY name ASC, chdate DESC")->fetchAll();
+		for ($i=0; $i < count($result); $i++) {
+			$db->query("UPDATE dokumente SET priority = ".($i+1)." WHERE dokument_id = '".$result[$i]['dokument_id']."'");
+		}
+		$result = $db->query("SELECT folder_id FROM folder WHERE range_id = ".$db->quote($open_id)." ORDER BY name ASC, chdate DESC")->fetchAll();
+		for ($i=0; $i < count($result); $i++) {
+			$db->query("UPDATE folder SET priority = ".($i+1)." WHERE folder_id = '".$result[$i]['dokument_id']."'");
+		}
+	}
+	
 	//wurde Code fuer Kopieren-Vorwaehlen uebermittelt (=id+"_co_"), wird entsprechende Funktion aufgerufen
 	if ($open_cmd == 'co' && (!$cancel_x)) {
 		$folder_system_data["move"]=$open_id;
@@ -256,7 +490,6 @@ if ($rechte || $owner || $create_folder_perm) {
 		$folder_system_data["update_link"]=TRUE;
 	}
 }
-
 
 //Upload, Check auf Konsistenz mit Seminar-Schreibberechtigung
 if (($SemUserStatus == "autor") || ($rechte)) {
@@ -360,6 +593,7 @@ if (($SemUserStatus == "autor") || ($rechte)) {
 		unset($cmd);
 	}
 }
+
 //verschieben / kopieren innerhalb der Veranstaltung
 //wurde Code fuer Starten der Verschiebung uebermittelt (=id+"_md_"), wird entsprechende Funktion aufgerufen (hier kein Rechtecheck noetig, da Dok_id aus Sess_Variable.
 if ($open_cmd == 'md' && $folder_tree->isWritable($open_id, $user->id) && !$cancel_x && (!$folder_tree->isFolder($folder_system_data["move"]) || ($folder_tree->isFolder($folder_system_data["move"]) && $folder_tree->checkCreateFolder($open_id, $user->id)))) {
@@ -383,15 +617,30 @@ if ($open_cmd == 'md' && $folder_tree->isWritable($open_id, $user->id) && !$canc
 }
 
 //wurde ein weiteres Objekt aufgeklappt?
-if (!$open_cmd && isset($open)) {
-	$folder_system_data["open"][$open] = true;
-	$folder_system_data["open"]['anker'] = $open;
+if (isset($open)) {
+	if (!isset($open_id))
+		$open_id = $open;
+	$folder_system_data["open"][$open_id] = true;
+	$folder_system_data["open"]['anker'] = $open_id;
+	//Übergeordnete Ordner mitöffnen - das ergibt Sinn
+	if (!($path = $folder_tree->getParents($open_id))) {
+		//Und falls $open ein Dokument sein sollte:
+		$path = $db->query("SELECT range_id FROM dokumente WHERE dokument_id = '".$open_id."'")->fetch();
+		$path = $path["range_id"];
+		$folder_system_data["open"][$path] = true;
+		$path = $folder_tree->getParents($path);
+	}
+	for ($i=0; $i < count($path); $i++) {
+		if ($path[$i] != "root") 
+			$folder_system_data["open"][$path[$i]] = true;
+	}
 }
 //wurde ein Objekt zugeklappt?
 if ($close) {
 	unset($folder_system_data["open"][$close]);
 	$folder_system_data["open"]['anker'] = $close;
 }
+
 
 // Hauptteil
 
@@ -482,52 +731,49 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 
 		} elseif($folder_system_data["cmd"]=="tree") {
 			$select = '<option value="' . md5("new_top_folder") . '_a_">' . _("ausw&auml;hlen oder wie Eingabe").' --&gt;</option>';
-			$db2->query("SELECT name FROM folder WHERE range_id='$range_id'");
-			if (!$db2->affected_rows())
+			$query = "SELECT SUM(1) FROM folder WHERE range_id='$range_id'";
+			$result2 = $db2->query($query)->fetch();
+			if ($result2[0] == 0)
 				$select.="\n<option value=\"".$range_id."_a_\">" . _("Allgemeiner Dateiordner") . "</option>";
 
-			/*$db2->query("SELECT issue_id, title FROM themen LEFT JOIN folder ON (issue_id = range_id) WHERE themen.seminar_id='$range_id' AND folder_id IS NULL ORDER BY priority");
-			while ($db2->next_record()) {
-				$select.="\n<option value=\"".$db2->f("issue_id")."_a_\">" . sprintf(_("Dateiordner zum Thema: %s"), htmlReady($db2->f("title"))) . "</option>";
-			}*/
-
+			
 			if($SessSemName['class'] == 'sem'){
-				$db2->query("SELECT statusgruppen.name, statusgruppe_id FROM statusgruppen LEFT JOIN folder ON (statusgruppe_id = folder.range_id) WHERE statusgruppen.range_id='$range_id' AND folder_id IS NULL ORDER BY position");
-				while ($db2->next_record()) {
-					$select.="\n<option value=\"".$db2->f("statusgruppe_id")."_a_\">" . sprintf(_("Dateiordner der Gruppe: %s"), htmlReady($db2->f('name'))) . "</option>";
+				$query = "SELECT statusgruppen.name, statusgruppe_id FROM statusgruppen LEFT JOIN folder ON (statusgruppe_id = folder.range_id) WHERE statusgruppen.range_id='$range_id' AND folder_id IS NULL ORDER BY position";
+				$result2 = $db2->query($query)->fetchAll();
+				foreach ($result2 as $row2) {
+					$select.="\n<option value=\"".$row2["statusgruppe_id"]."_a_\">" . sprintf(_("Dateiordner der Gruppe: %s"), htmlReady($row2['name'])) . "</option>";
 				}
 
-				$db2->query("SELECT themen_termine.issue_id, termine.date, folder.name, termine.termin_id, date_typ FROM termine LEFT JOIN themen_termine USING (termin_id) LEFT JOIN folder ON (themen_termine.issue_id = folder.range_id) WHERE termine.range_id='$range_id' AND folder.folder_id IS NULL ORDER BY termine.date, name");
-
+				$query = "SELECT themen_termine.issue_id, termine.date, folder.name, termine.termin_id, date_typ FROM termine LEFT JOIN themen_termine USING (termin_id) LEFT JOIN folder ON (themen_termine.issue_id = folder.range_id) WHERE termine.range_id='$range_id' AND folder.folder_id IS NULL ORDER BY termine.date, name";
+				
 				$issues = array();
 				$shown_dates = array();
-
-				while (($db2->next_record()) && (!$db2->f("name"))) {
-
-					/*if (!$shown_dates[$db2->f('termin_id')]) {
-						$shown_dates[$db2->f('termin_id')] = true;*/
+				$result2 = $db2->query($query)->fetchAll();
+				
+				foreach ($result2 as $row2) {
+					if (!$row2["name"]) {
 						$issue_name = false;
-						if ($db2->f('issue_id')) {
-							if (!$issues[$db2->f('issue_id')]) {
-								$issues[$db2->f('issue_id')] = new Issue(array('issue_id' => $db2->f('issue_id')));
+						if ($row2['issue_id']) {
+							if (!$issues[$row2['issue_id']]) {
+								$issues[$row2['issue_id']] = new Issue(array('issue_id' => $row2['issue_id']));
 							}
-							$issue_name = $issues[$db2->f('issue_id')]->toString();
+							$issue_name = $issues[$row2['issue_id']]->toString();
 							$issue_name = htmlReady(my_substr($issue_name, 0, 20));
-							$option_id = $db2->f('issue_id');
+							$option_id = $row2['issue_id'];
 						} else {
-							$option_id = $db2->f('termin_id');
+							$option_id = $row2['termin_id'];
 						}
 
 						$select .= "\n".sprintf('<option value="%s_a_">%s</option>',
 							$option_id,
 							sprintf(_("Ordner für %s [%s]%s"),
-								date("d.m.Y", $db2->f("date")),
-								$TERMIN_TYP[$db2->f("date_typ")]["name"],
+								date("d.m.Y", $row2["date"]),
+								$TERMIN_TYP[$row2["date_typ"]]["name"],
 								($issue_name ? ', '.$issue_name : '')
 							)
 						);
 
-					//}
+					}
 				}
 
 			}
@@ -565,57 +811,458 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 
 
 	if ($folder_system_data["cmd"]=="all") {
-		?>
-		<blockquote><font size='-1'>
-		<? printf (_("Hier sehen Sie alle Dateien, die zu dieser %s eingestellt wurden. Wenn Sie eine neue Datei einstellen m&ouml;chten, w&auml;hlen Sie bitte die Ordneransicht und &ouml;ffnen den Ordner, in den Sie die Datei einstellen wollen."), $SessSemName["art_generic"]); ?>
-		</font></blockquote>
-		<?
-		if (!$folder_system_data["upload"] && !$folder_system_data["link"])
-			print ("<div align=\"right\"><a href=\"".URLHelper::getLink("?check_all=TRUE")."\">".makeButton("alleauswaehlen")."</a>&nbsp;<input style=\"vertical-align: middle;\" type=\"IMAGE\" name=\"download_selected\" border=\"0\" ".makeButton("herunterladen", "src")." />&nbsp;</div>");
-		}
-
-	//Treeview
+		print "<blockquote><font size='-1'>";
+		printf (_("Hier sehen Sie alle Dateien, die zu dieser %s eingestellt wurden. Wenn Sie eine neue Datei einstellen m&ouml;chten, w&auml;hlen Sie bitte die Ordneransicht und &ouml;ffnen den Ordner, in den Sie die Datei einstellen wollen."), $SessSemName["art_generic"]); 
+		print "</font></blockquote>";
+	}
+	
+	$lastvisit = object_get_visit($SessSemName[1], "documents");
+	$query = "SELECT * " .
+			"FROM dokumente " .
+			"WHERE seminar_id = '$range_id' " .
+			"AND user_id != '".$user->id."' " .
+			"AND ( chdate > '".(($lastvisit) ? $lastvisit : time())."' " .
+					"OR mkdate > '".(($lastvisit) ? $lastvisit : time())."')";
+	$result = $db->query($query)->fetchAll();
+	if (count($result)>0) {
+		print "<blockquote><font size='-1'>";
+		print _("Es gibt ");
+		print "<b>".(count($result)>1 ? count($result) : _("eine"))."</b>";
+		print _(" neue/geänderte Dateie(n). Jetzt ");
+		print " <a href=\"".URLHelper::getLink("?zipnewest=".$lastvisit)."\">" . makeButton("herunterladen", "img") . "</a>";
+		print "</font></blockquote>";
+	}
+	
+	?>
+<script type="text/javascript">
+/* ------------------------------------------------------------------------
+ * the namespace of this page
+ * ------------------------------------------------------------------------ */
+STUDIP.Filesystem = {};
+</script>
+	<?php
+	
+	//Treeview in Ordnerstruktur
 	if ($folder_system_data["cmd"]=="tree") {
+		
+		print "<style>
+div.droppable {
+	border: 1pt solid white;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+div.droppable.hover {
+	border: 1pt solid red;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+</style>";
+		
+		print '<table border=0 cellpadding=0 cellspacing=0 width="100%"><tr>';
+		print "<td class=\"blank\" valign=\"top\" heigth=21 nowrap width=1px>&nbsp;</td>";
+		print "<td>";
+		print "<div class=\"\" id=\"folder_subfolders_root\">"; //class = "folder_container" for sorting
 		//Seminar...
-		display_folder_system($range_id, 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE, $folder_system_data["refresh"], $folder_system_data["link"]);
-
-		display_folder_system(md5($SessionSeminar . 'top_folder'), 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE, $folder_system_data["refresh"], $folder_system_data["link"]);
-
-		if($SessSemName['class'] == 'sem'){
-		// get all issues for the seminar and order them by assigned dates, if any
-		$db->query("SELECT DISTINCT th.issue_id FROM themen as th LEFT JOIN themen_termine as tt ON(th.issue_id = tt.issue_id) LEFT JOIN termine as t ON (t.termin_id = tt.termin_id) INNER JOIN folder ON (th.issue_id=folder.range_id) WHERE th.seminar_id='$range_id' ORDER BY t.date, th.priority");
-		while ($db->next_record()) {
-			// display the issue-connected folders
-			display_folder_system($db->f("issue_id"), 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE, $folder_system_data["refresh"], $folder_system_data["link"]);
-			}
-			//Gruppenordner
-			$db->query("SELECT sg.statusgruppe_id FROM statusgruppen sg "
-					. (!$rechte ? "INNER JOIN statusgruppe_user sgu ON sgu.statusgruppe_id=sg.statusgruppe_id AND sgu.user_id='$user->id'" : "")
-					. " INNER JOIN folder ON sg.statusgruppe_id=folder.range_id WHERE sg.range_id='$range_id' ORDER BY sg.position");
-			while ($db->next_record()) {
-				display_folder_system($db->f("statusgruppe_id"), 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE, $folder_system_data["refresh"], $folder_system_data["link"]);
+		//Algemeiner Dateienordner
+		$folders = $db->query("SELECT folder_id FROM folder WHERE range_id = '$range_id' ORDER BY name")->fetchAll();
+		foreach($folders as $general_folder) {
+			if ($folder_tree->isExecutable($general_folder["folder_id"], $user->id) || $rechte) {
+				display_folder($general_folder["folder_id"], $folder_system_data["open"], 
+						$change, $folder_system_data["move"], $folder_system_data["upload"], 
+						$folder_system_data["refresh"], $folder_system_data["link"]);
 			}
 		}
+		//display_folder_system($range_id, 0, $folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], $folder_system_data["refresh"], $folder_system_data["link"]);
+		
+		
+		//Weitere Ordner:
+		$folders = $db->query("SELECT folder_id FROM folder WHERE range_id = '".md5($SessionSeminar . 'top_folder')."' ORDER BY name")->fetchAll();
+		foreach($folders as $general_folder) {
+			if ($folder_tree->isExecutable($general_folder['folder_id'], $user->id) || $rechte) {
+				display_folder($general_folder["folder_id"], $folder_system_data["open"], 
+						$change, $folder_system_data["move"], $folder_system_data["upload"], 
+						$folder_system_data["refresh"], $folder_system_data["link"]);
+			}
+		}
+		
+		if($SessSemName['class'] == 'sem'){
+			// Themenordner zu Terminen:
+			$query = "SELECT DISTINCT folder_id FROM themen as th LEFT JOIN themen_termine as tt ON(th.issue_id = tt.issue_id) LEFT JOIN termine as t ON (t.termin_id = tt.termin_id) INNER JOIN folder ON (th.issue_id=folder.range_id) WHERE th.seminar_id='$range_id' ORDER BY th.title, t.date, th.priority";
+			
+			$result = $db->query($query)->fetchAll();
+			foreach ($result as $row) {
+				display_folder($row['folder_id'], $folder_system_data["open"], $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE, $folder_system_data["refresh"], $folder_system_data["link"]);
+			}
+			//Gruppenordner:
+			$query = "SELECT sg.statusgruppe_id FROM statusgruppen sg "
+					. (!$rechte ? "INNER JOIN statusgruppe_user sgu ON sgu.statusgruppe_id=sg.statusgruppe_id AND sgu.user_id='$user->id'" : "")
+					. " INNER JOIN folder ON sg.statusgruppe_id=folder.range_id WHERE sg.range_id='$range_id' ORDER BY sg.position";
+			$result2 = $db->query($query)->fetchAll();
+			foreach ($result2 as $row2) {
+				$folders = $db->query("SELECT folder_id FROM folder WHERE range_id = '".$row2["statusgruppe_id"]."'")->fetchAll();
+				foreach ($folders as $folder) {
+					if ($folder_tree->isExecutable($folder["folder_id"], $user->id) || $rechte) {
+						display_folder($folder["folder_id"], $folder_system_data["open"], $change, 
+						$folder_system_data["move"], $folder_system_data["upload"], FALSE, 
+						$folder_system_data["refresh"], $folder_system_data["link"]);
+					}
+				}
+			}
+		print "</div>";
+		print '</td><td width=1px>&nbsp;</td></tr></table>';
+		}
+	}	else {
+		//Flatview ohne Ordnerstruktur
+		print '<table border=0 cellpadding=0 cellspacing=0 width="100%">';
+		print "<tr>" .
+				"<td class=\"blank\"></td><td class=\"blank\"><div align=\"right\">" .
+					"<a href=\"".URLHelper::getLink("?check_all=TRUE")."\">".makeButton("alleauswaehlen")."</a>" .
+					"&nbsp;<input style=\"vertical-align: middle;\" type=\"IMAGE\" name=\"download_selected\" border=\"0\" ".makeButton("herunterladen", "src")." />&nbsp;</div>" .
+				"</td><td class=\"blank\"></td></tr> <tr><td></td><td class=\"blank\">&nbsp;</td><td class=\"blank\"></td></tr>";
+		$dreieck_runter = "calendar_down_small.gif";
+		$dreieck_hoch = "calendar_up_small.gif";
+		print "<tr><td></td><td><table border=0 cellpadding=0 cellspacing=0 width=\"100%\">" .
+				"<tr>" .
+				"<td class=\"steelgraudunkel\">&nbsp;&nbsp;&nbsp;" .
+				"<a href=\"".URLHelper::getLink((($_REQUEST['orderby'] != "type") ? "?orderby=type" : "?orderby=type_rev"))."\" class=\"tree\">";
+		print (($_REQUEST['orderby'] != "type_rev") ? "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">").((($_REQUEST['orderby'] == "type_rev") || ($_REQUEST['orderby'] == "type")) ? "<b>": "")._("Typ")."</b></a>&nbsp;&nbsp; ";
+		print "<a href=\"".URLHelper::getLink((($_REQUEST['orderby'] != "filename") ? "?orderby=filename" : "?orderby=filename_rev"))."\" class=\"tree\">";
+		print (($_REQUEST['orderby'] != "filename_rev") ? "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">").((($_REQUEST['orderby'] == "filename_rev") || ($_REQUEST['orderby'] == "filename")) ? "<b>": "")._("Name")."</b></a>&nbsp;&nbsp; ";
+		print "<a href=\"".URLHelper::getLink((($_REQUEST['orderby'] != "size") ? "?orderby=size" : "?orderby=size_rev"))."\" class=\"tree\">";
+		print (($_REQUEST['orderby'] != "size_rev") ? "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">").((($_REQUEST['orderby'] == "size_rev") || ($_REQUEST['orderby'] == "size")) ? "<b>": "")._("Größe")."</b></a>&nbsp;&nbsp; ";
+		print "<a href=\"".URLHelper::getLink((($_REQUEST['orderby'] != "downloads") ? "?orderby=downloads" : "?orderby=downloads_rev"))."\" class=\"tree\">";
+		print (($_REQUEST['orderby'] != "downloads_rev") ? "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">").((($_REQUEST['orderby'] == "downloads_rev") || ($_REQUEST['orderby'] == "downloads")) ? "<b>": "")._("Downloads")."</b></a>&nbsp;&nbsp;</td><td class=\"steelgraudunkel\" align=right>";
+		print	"<a href=\"".URLHelper::getLink((($_REQUEST['orderby'] != "autor") ? "?orderby=autor" : "?orderby=autor_rev"))."\" class=\"tree\">";
+		print (($_REQUEST['orderby'] != "autor_rev") ? "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">").((($_REQUEST['orderby'] == "autor_rev") || ($_REQUEST['orderby'] == "autor")) ? "<b>": "")._("Autor")."</b></a>&nbsp;&nbsp; ";
+		print "<a href=\"".URLHelper::getLink((($_REQUEST['orderby'] != "date") ? "?orderby=date" : "?orderby=date_rev"))."\" class=\"tree\">";
+		print (($_REQUEST['orderby'] != "date_rev") ? "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">").((($_REQUEST['orderby'] == "date_rev") || ($_REQUEST['orderby'] == "date")) ? "<b>": "")._("Datum")."</b></a> &nbsp;&nbsp;&nbsp;&nbsp;</td</tr></table></td><td>";
+		print '<tr>';
+		print "<td class=\"blank\" valign=\"top\" heigth=21 nowrap width=1px>&nbsp;</td>";
+		print "<td id=\"folder_1\">";
+		
+		//Ordnen nach: Typ, Name, Größe, Downloads, Autor, Alter
+		$query = "SELECT ". $_fullname_sql['full'] ." AS fullname, username, a.user_id, a.*, IF(IFNULL(a.name,'')='', a.filename,a.name) AS t_name, a.range_id FROM dokumente a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_id = '$range_id'";
+		if ($_REQUEST['orderby'] == "type")
+			$query .= " ORDER BY SUBSTRING_INDEX(a.filename, '.', -1) ASC";
+		if ($_REQUEST['orderby'] == "type_rev")
+			$query .= " ORDER BY SUBSTRING_INDEX(a.filename, '.', -1) DESC";
+		if ($_REQUEST['orderby'] == "filename")
+			$query .= " ORDER BY t_name ASC, a.chdate DESC";
+		if ($_REQUEST['orderby'] == "filename_rev")
+			$query .= " ORDER BY t_name DESC, a.chdate ASC";
+		if ($_REQUEST['orderby'] == "size") 
+			$query .= " ORDER BY a.filesize DESC";
+		if ($_REQUEST['orderby'] == "size_rev") 
+			$query .= " ORDER BY a.filesize ASC";
+		if ($_REQUEST['orderby'] == "downloads") 
+			$query .= " ORDER BY a.downloads DESC, t_name ASC, a.chdate DESC";
+		if ($_REQUEST['orderby'] == "downloads_rev") 
+			$query .= " ORDER BY a.downloads ASC, t_name DESC, a.chdate ASC";
+		if ($_REQUEST['orderby'] == "autor")
+			$query .= " ORDER BY ". $_fullname_sql['no_title_rev'] ." ASC";
+		if ($_REQUEST['orderby'] == "autor_rev")
+			$query .= " ORDER BY ". $_fullname_sql['no_title_rev'] ." DESC";
+		if (($_REQUEST['orderby'] == "date") || (!$orderby)) //default-wert
+			$query .= " ORDER BY a.chdate DESC";
+		if ($_REQUEST['orderby'] == "date_rev")
+			$query .= " ORDER BY a.chdate ASC";
+		$result2 = $db->query($query)->fetchAll();
+		foreach ($result2 as $datei) {
+			if ($folder_tree->isReadable($datei['range_id'], $user->id)) {
+				display_file_line($datei, $range_id, $folder_system_data["open"], $change, $folder_system_data["move"], $folder_system_data["upload"], TRUE, $folder_system_data["refresh"], $folder_system_data["link"]);
+			}
+		}
+		
+		//display_folder_system($range_id, 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], TRUE, $folder_system_data["refresh"], $folder_system_data["link"]);
+		
+		print '</td><td width=1px class="blank">&nbsp;</td></tr>';
 	}
 
-	//Alle / Listview
-	else {
-		?><table border=0 cellpadding=0 cellspacing=0 width="100%"><tr><?
-		display_folder_system($range_id, 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], TRUE, $folder_system_data["refresh"], $folder_system_data["link"]);
-		?><td class="blank" width="*">&nbsp;</td></tr></table><?
-		}
-
 	//und Form wieder schliessen
-	if ($change || $folder_system_data["cmd"]=="all")
+	if ($change)
 		echo "\n</form>";
 
 	$folder_system_data["linkerror"]="";
+
+	if ($folder_system_data["cmd"]=="tree") {
 ?>
 		<br>
 		</td>
 	</tr>
 </table>
+<script type="text/javascript">  
+
 <?php
-	include ('lib/include/html_end.inc.php');
-	page_close();
+		if ($rechte) {
+?>
+//Wenn Javascript aktiviert ist, verwenden wir nicht die gelben Pfeile zum Verschieben
+STUDIP.Filesystem.unsetarrows = function() {
+	var i = 1;
+	var allElements = document.getElementsByTagName('span');
+	for (i=0; i < allElements.length; i++) {
+		if (allElements[i].className && allElements[i].className == 'move_arrows')
+			allElements[i].innerHTML = '';
+		if (allElements[i].className && allElements[i].className == 'updown_marker')
+			allElements[i].innerHTML = '<a href="#" class="drag" onclick="return false" style="cursor: move"><img src="assets/images/verschieben.png" border=0 <?= tooltip(_("Datei verschieben")) ?>></a>';
+	}
+}
+STUDIP.Filesystem.unsetarrows();
+
+STUDIP.Filesystem.sendstop = false;
+
+STUDIP.Filesystem.setdraggables = function() {
+	var i = 0;
+	var allDivs = document.getElementsByTagName('div');
+	for(i=0; i < allDivs.length; i++) {
+		if (allDivs[i].className == "folder_container") {
+			var id = allDivs[i].getAttribute('id');
+			var md5_id = id.substr(id.lastIndexOf('_')+1);
+			Sortable.create(id, {
+				ghosting:false, 
+				constraint:false,
+				scroll: window,
+				tag:'div',
+				onUpdate: function(container) {
+					if (!STUDIP.Filesystem.sendstop) { //wenn nicht schon in einen Ordner verschieben.
+						var id = container.getAttribute('id');
+						var sorttype = id.substr(0, id.lastIndexOf('_'));
+						md5_id = id.substr(id.lastIndexOf('_')+1);
+						var order_ids = Sortable.sequence(id);
+						for (i=0; i < order_ids.length; i++) {
+							if (sorttype == "folder_subfolders") {
+								// Unterordner:
+								order_ids[i] = $("getmd5_fo"+md5_id+"_"+order_ids[i]).innerHTML;
+							} else {
+								// Dateien:
+								order_ids[i] = $("getmd5_fi"+md5_id+"_"+order_ids[i]).innerHTML;
+							}
+						}
+						var sort_var = md5_id;
+						order_ids = order_ids.join(',');
+						new Ajax.Request('<?= URLHelper::getURL('folder.php') ?>', {
+							method: "post",
+							parameters: {
+								folder_sort: sort_var,
+								file_order: order_ids
+							},
+							onSuccess: function(transport) {
+								if (transport.responseText) {
+									alert(transport.responseText);
+								}
+							}
+						}); //of Ajax-Request
+					}
+				},
+				//only drawn by '<a class="drag">'s in folder_id
+				handles: $$('#'+id+' a.drag')
+			}); //of Sortable.create
+		}
+	} //of for-loop
+}
+STUDIP.Filesystem.setdraggables();
+
+STUDIP.Filesystem.hovered_folder = '';
+STUDIP.Filesystem.hover_begin = 0;
+STUDIP.Filesystem.openhoveredfolder = function(md5_id) {
+	var zeit = new Date();
+	if (md5_id == STUDIP.Filesystem.hovered_folder) {
+		if (STUDIP.Filesystem.hover_begin < zeit.getTime() - 1000) {
+			if ($("folder_"+md5_id+"_body").style.display == "none") {
+				STUDIP.Filesystem.changefolderbody(md5_id);
+				STUDIP.Filesystem.hover_begin = zeit.getTime();
+			}
+		}
+	} else {
+		//alert("hi");
+		STUDIP.Filesystem.hovered_folder = md5_id;
+		STUDIP.Filesystem.hover_begin = zeit.getTime();
+	}
+}
+
+STUDIP.Filesystem.isCtrlKeyPressed = false;
+document.observe('keydown', function(event) {
+	event = event || window.event; 
+	if ((event.keyCode == 17)  || (event.ctrlKey)) {
+		STUDIP.Filesystem.isCtrlKeyPressed = true; 
+	}
+});
+document.observe('keyup', function(event) {
+	STUDIP.Filesystem.isCtrlKeyPressed = false; 
+});
+
+STUDIP.Filesystem.setdroppables = function() {
+	var i = 0;
+	var allDivs = document.getElementsByTagName('div');
+	for (i=0; i < allDivs.length; i++) {
+		if (allDivs[i].className == 'droppable') {
+			var id = allDivs[i].getAttribute('id');
+			var md5_id = id.substr(id.lastIndexOf('_')+1);
+				Droppables.add(id, { 
+				  accept: 'draggable',
+				  hoverclass: 'hover',
+				  onHover: function (datei, folder) {
+				  	var folder_md5_id = folder.getAttribute('id');
+				  	folder_md5_id = folder_md5_id.substr(folder_md5_id.lastIndexOf('_')+1);
+				  	STUDIP.Filesystem.openhoveredfolder(folder_md5_id);
+				  },
+				  onDrop: function(datei, folder) { 
+				  	var id = datei.getAttribute('id');
+				  	var file_md5_id = id.substr(id.indexOf('_')+1);
+				  	file_md5_id = $("getmd5_fi"+file_md5_id).innerHTML;
+				  	var folder_md5_id = folder.getAttribute('id');
+				  	folder_md5_id = folder_md5_id.substr(folder_md5_id.lastIndexOf('_')+1);
+				  	//alert("Drop "+file_md5_id+" on "+folder_md5_id);
+	 			  	if (STUDIP.Filesystem.isCtrlKeyPressed) {
+							new Ajax.Request('<?= URLHelper::getURL('folder.php') ?>', {
+									method: "post",
+									parameters: { copyintofolder: folder_md5_id, copyfile: file_md5_id },
+									onSuccess: function(transport) {
+										location.href='<?= URLHelper::getURL('folder.php') ?>&open='+folder_md5_id;
+									}
+								});
+	 			  	} else {
+							new Ajax.Request('<?= URLHelper::getURL('folder.php') ?>', {
+									method: "post",
+									parameters: { moveintofolder: folder_md5_id, movefile: file_md5_id },
+									onSuccess: function(transport) {
+										location.href='<?= URLHelper::getURL('folder.php') ?>&open='+folder_md5_id;
+									}
+								});
+						}
+	 			  	greedy: false; 
+		  		 	sendstop = true;
+				  }
+				});
+			
+		}
+	}
+}
+STUDIP.Filesystem.setdroppables();
+
+<?php
+	}
+?>
+STUDIP.Filesystem.changefolderbody = function(md5_id) {
+	if (!STUDIP.Filesystem.movelock) {
+		STUDIP.Filesystem.movelock = true;
+		window.setTimeout("STUDIP.Filesystem.movelock = false;", 410);
+		if ($("folder_"+md5_id+"_body").style.display != "none") {
+			Effect.BlindUp("folder_"+md5_id+"_body", { duration: 0.4 });
+			$("folder_"+md5_id+"_header").style.fontWeight = 'normal';
+			$("folder_"+md5_id+"_arrow_img").setAttribute('src', "<?= $GLOBALS['ASSETS_URL'] ?>images/forumgrau2.gif");
+			$("folder_"+md5_id+"_arrow_td").addClassName('printhead2');
+			$("folder_"+md5_id+"_arrow_td").removeClassName('printhead3');
+		} else {
+			if ($("folder_"+md5_id+"_body").innerHTML == "") {
+				new Ajax.Request('<?= URLHelper::getURL('folder.php') ?>&getfolderbody='+md5_id, {
+					method:'get',
+					onSuccess: function(transport) {
+						$("folder_"+md5_id+"_body").innerHTML = transport.responseText;
+						$("folder_"+md5_id+"_header").style.fontWeight = 'bold';
+						$("folder_"+md5_id+"_arrow_img").setAttribute('src', "<?= $GLOBALS['ASSETS_URL'] ?>images/forumgraurunt2.gif");
+						$("folder_"+md5_id+"_arrow_td").addClassName('printhead3');
+						$("folder_"+md5_id+"_arrow_td").removeClassName('printhead2');
+						<?php
+						if ($rechte) {
+							print "
+						STUDIP.Filesystem.unsetarrows();
+						STUDIP.Filesystem.setdraggables();
+						STUDIP.Filesystem.setdroppables();";
+						}
+						?>
+						$("folder_"+md5_id+"_body").style.display="none";
+						Effect.BlindDown("folder_"+md5_id+"_body", { duration: 0.4 });
+					},
+				  onFailure: function() { alert('Something went wrong...') }
+				});
+			} else {
+				Effect.BlindDown("folder_"+md5_id+"_body", { duration: 0.4 });
+				$("folder_"+md5_id+"_header").style.fontWeight = 'bold';
+				$("folder_"+md5_id+"_arrow_img").setAttribute('src', "<?= $GLOBALS['ASSETS_URL'] ?>images/forumgraurunt2.gif");
+				$("folder_"+md5_id+"_arrow_td").addClassName('printhead3');
+				$("folder_"+md5_id+"_arrow_td").removeClassName('printhead2');
+			}
+		}
+	}
+	return false;
+}
+ 
+</script>
+
+<?php
+	} else { //if $all
+		if (!$folder_system_data["upload"] && !$folder_system_data["link"])
+			print "<tr><td class=\"blank\">&nbsp;</td><td>";
+			print "	<table border=0 cellpadding=0 cellspacing=0 width=\"100%\">";
+			print "	<tr><td class=\"blank\"></td><td class=\"blank\" style=\"font-size: 4px;\">&nbsp;</td><td class=\"blank\"></td></tr>"; 
+			print "	<tr><td class=\"steelgraudunkel\">&nbsp;";
+			print "	</td><td class=\"steelgraudunkel\" align=right>";
+			print "	&nbsp;</td></tr></table>";
+			print "</td><td class=\"blank\">&nbsp;</td></tr>";
+			
+			print "<tr><td class=\"blank\"></td><td class=\"blank\"><div align=\"right\"><br><a href=\"".URLHelper::getLink("?check_all=TRUE")."\">".makeButton("alleauswaehlen")."</a>&nbsp;<input style=\"vertical-align: middle;\" type=\"IMAGE\" name=\"download_selected\" border=\"0\" ".makeButton("herunterladen", "src")." />&nbsp;</div></td><td class=\"blank\"></td></tr> <tr><td></td><td class=\"blank\">&nbsp;</td><td class=\"blank\"></td></tr>";
+	}
+	print "</table></form>";
+	
+	print "		<br>
+		</td>
+	</tr>
+</table>";
+
+?>
+<script type="text/javascript">  
+STUDIP.Filesystem.movelock = false;
+
+STUDIP.Filesystem.changefilebody = function(md5_id) {
+	//alert(Effect.Queue.size);
+	if (!STUDIP.Filesystem.movelock) {
+		STUDIP.Filesystem.movelock = true;
+		window.setTimeout("STUDIP.Filesystem.movelock = false;", 410);
+		if ($("file_"+md5_id+"_body_row").style.visibility == "visible") {
+			Effect.BlindUp("file_"+md5_id+"_body", { duration: 0.3 });
+			$("file_"+md5_id+"_header").style.fontWeight = 'normal';
+			$("file_"+md5_id+"_arrow_td").addClassName('printhead2');
+			$("file_"+md5_id+"_arrow_td").removeClassName('printhead3');
+			$("file_"+md5_id+"_arrow_img").setAttribute('src', "<?= $GLOBALS['ASSETS_URL'] ?>images/forumgrau2.gif");
+			window.setTimeout("$('file_"+md5_id+"_body_row').style.visibility = 'collapse'", 310);
+		} else {
+			if ($("file_"+md5_id+"_body").innerHTML == "") {
+				new Ajax.Request('<?= URLHelper::getURL('folder.php') ?>&getfilebody='+md5_id, {
+					method:'get',
+					onSuccess: function(transport) {
+						$("file_"+md5_id+"_header").style.fontWeight = 'bold';
+						$("file_"+md5_id+"_arrow_td").addClassName('printhead3');
+						$("file_"+md5_id+"_arrow_td").removeClassName('printhead2');
+						$("file_"+md5_id+"_arrow_img").setAttribute('src', "<?= $GLOBALS['ASSETS_URL'] ?>images/forumgraurunt2.gif");
+						$("file_"+md5_id+"_body").innerHTML = transport.responseText;
+						$("file_"+md5_id+"_body").style.display="none";
+						$("file_"+md5_id+"_body_row").style.visibility = "visible";
+						Effect.BlindDown("file_"+md5_id+"_body", { duration: 0.3 });
+					},
+				  onFailure: function() { alert('<?= _('Konnte Ordner nicht laden.') ?>') }
+				});
+			} else {
+				//Falls der Dateikörper schon geladen ist.
+				$("file_"+md5_id+"_body_row").style.visibility = "visible";
+				$("file_"+md5_id+"_header").style.fontWeight = 'bold';
+				$("file_"+md5_id+"_arrow_td").addClassName('printhead3');
+				$("file_"+md5_id+"_arrow_td").removeClassName('printhead2');
+				$("file_"+md5_id+"_arrow_img").setAttribute('src', "<?= $GLOBALS['ASSETS_URL'] ?>images/forumgraurunt2.gif");
+				Effect.BlindDown("file_"+md5_id+"_body", { duration: 0.3 });
+			}
+		}
+	}
+	return false;
+}	
+
+</script>
+<div id="fehler_seite"></div>
+<br>
+<br>
+<br>
+<br>
+<?php
+
+include ('lib/include/html_end.inc.php');
+page_close();
 ?>

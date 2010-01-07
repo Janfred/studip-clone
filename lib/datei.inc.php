@@ -53,7 +53,6 @@ function readfile_chunked($filename,$retbytes=true) {
        return $cnt; // return num. bytes delivered like readfile() does.
    }
    return $status;
-
 }
 
 function parse_header($header){
@@ -108,7 +107,10 @@ function parse_link($link, $level=0) {
 
 		if (!$url_parts["user"]) $url_parts["user"] = "anonymous";
 		if (!$url_parts["pass"]) {
-			$url_parts["pass"] = "info%40studip.de";
+			$mailclass = new studip_smtp_class;
+			$mailtmp = $mailclass->localhost;
+			if ($mailtmp == "127.0.0.1") $mailtmp = "localhost.de";
+			$url_parts["pass"] = "wwwrun%40".$mailtmp;
 		}
 		if (!@ftp_login($ftp,$url_parts["user"],$url_parts["pass"])) {
 			ftp_quit($ftp);
@@ -183,6 +185,30 @@ function parse_link($link, $level=0) {
 	}
 }
 
+// FL:START 
+// Funktion zur ermittlung der erlaubten Uploadgroesse 
+function get_max_filesize($folder) { 
+	global $UPLOAD_TYPES, $SessSemName, $user, $auth; 
+	
+	$sem_status = $GLOBALS['perm']->get_studip_perm($SessSemName[1]); 
+	
+	// get the right configuration 
+	if ($UPLOAD_TYPES[$SessSemName["art_num"]]) 
+		$conf = $UPLOAD_TYPES[$SessSemName["art_num"]]["file_sizes"]; 
+	else 
+		$conf = $UPLOAD_TYPES["default"]["file_sizes"]; 
+ 	 
+	$size = $conf[$sem_status]; 
+
+	// ExerciseFolder (= upload only) may have a bigger allowed upload size 
+	$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessSemName[1])); 
+
+	if($folder_tree->isExerciseFolder($folder)) 
+		$size = max($conf[$sem_status], $conf["exercise_folder"]); 
+ 
+	return $size; 
+} 
+// FL:END 
 
 function createSelectedZip ($file_ids, $perm_check = TRUE, $size_check = false) {
 	global $TMP_PATH, $ZIP_PATH, $SessSemName;
@@ -296,6 +322,12 @@ function createTempFolder($folder_id, $tmp_full_path, $perm_check = TRUE) {
 }
 
 
+/**
+ * Returns the read- and executable subfolders to a given folder_id
+ * @folder_id: id of the target folder
+ * @return: array($subfolders, $numberofsubfolders)
+ */
+
 function getFolderChildren($folder_id){
 	global $SessionSeminar, $user;
 
@@ -331,7 +363,11 @@ function getFolderId($parent_id, $in_recursion = false){
 		return (!$in_recursion) ? $kidskids : null;
 }
 
-
+/**
+ * Counts and returns the number of subfolders and files of the given folder.
+ * @parent_id: id of the given folder
+ * @return: number of readable subfolders and files
+ */
 function doc_count ($parent_id) {
 	global $SessionSeminar, $user;
 	$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessionSeminar));
@@ -593,7 +629,6 @@ function edit_item ($item_id, $type, $name, $description, $protected=0, $url = "
 
 function create_folder ($name, $description, $parent_id, $permission = 7) {
 	global $user, $SessionSeminar;
-
 	$db=new DB_Seminar;
 	$id=md5(uniqid("salmonellen",1));
 	$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessionSeminar));
@@ -614,22 +649,19 @@ function form($refresh = FALSE) {
 	$sem_status = $GLOBALS['perm']->get_studip_perm($SessSemName[1]);
 
 	//erlaubte Dateigroesse aus Regelliste der Config.inc.php auslesen
-	if ($UPLOAD_TYPES[$SessSemName["art_num"]]) {
-		$max_filesize=$UPLOAD_TYPES[$SessSemName["art_num"]]["file_sizes"][$sem_status];
-		}
-	else {
-		$max_filesize=$UPLOAD_TYPES["default"]["file_sizes"][$sem_status];
-		}
+	// FL:START
+	$max_filesize = get_max_filesize($folder_system_data['upload']);
+	// FL:END
 
 	$c=1;
 
 	if ($folder_system_data['zipupload'])
-		$print="\n<br><br>" . _("Sie haben diesen Ordner zum Upload ausgew&auml;hlt:")
-			. '<br>' . _("Die Dateien und Ordner, die im hochzuladenden Ziparchiv enthalten sind, werden in diesen Ordner entpackt.") .  "<br><br><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
+		$print="\n<br /><br />" . _("Sie haben diesen Ordner zum Upload ausgew&auml;hlt:")
+			. '<br>' . _("Die Dateien und Ordner, die im hochzuladenden Ziparchiv enthalten sind, werden in diesen Ordner entpackt.") .  "<br /><br /><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
 	else if (!$refresh)
-		$print="\n<br><br>" . _("Sie haben diesen Ordner zum Upload ausgew&auml;hlt:") . "<br><br><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
+		$print="\n<br /><br />" . _("Sie haben diesen Ordner zum Upload ausgew&auml;hlt:") . "<br /><br /><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
 	else
-		$print="\n<br><br>" . _("Sie haben diese Datei zum Aktualisieren ausgew&auml;hlt. Sie <b>&uuml;berschreiben</b> damit die vorhandene Datei durch eine neue Version!") . "<br><br><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
+		$print="\n<br /><br />" . _("Sie haben diese Datei zum Aktualisieren ausgew&auml;hlt. Sie <b>&uuml;berschreiben</b> damit die vorhandene Datei durch eine neue Version!") . "<br /><br /><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
 	$print.="\n";
 	$print.="\n<tr><td class=\"steel1\" width=\"20%\"><font size=-1><b>";
 
@@ -694,7 +726,7 @@ function form($refresh = FALSE) {
 	$print.= "\n<form enctype=\"multipart/form-data\" NAME=\"upload_form\" action=\"" . URLHelper::getLink('') . "\" method=\"post\">";
 	$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("1. Klicken Sie auf <b>'Durchsuchen...'</b>, um eine Datei auszuw&auml;hlen.") . " </font></td></tr>";
 	$print.= "\n<tr>";
-	$print.= "\n<td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Dateipfad:") . "&nbsp;</font><br>";
+	$print.= "\n<td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Dateipfad:") . "&nbsp;</font><br />";
 	$print.= "&nbsp;<INPUT NAME=\"the_file\" TYPE=\"file\"  style=\"width: 70%\" SIZE=\"30\">&nbsp;</td></td>";
 	$print.= "\n</tr>";
 	if (!$refresh && !$folder_system_data['zipupload']) {
@@ -702,11 +734,11 @@ function form($refresh = FALSE) {
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>";
 		$print.= "\n&nbsp;<input type=\"RADIO\" name=\"protected\" value=\"0\"".(!$protect ? "checked" :"") .">"._("Ja, dieses Dokument ist frei von Rechten Dritter") ;
 		$print.= "\n&nbsp;<input type=\"RADIO\" name=\"protected\" value=\"1\"".($protect ? "checked" :"") .">"._("Nein, dieses Dokument ist <u>nicht</u> frei von Rechten Dritter");
-		$print.= "</td></tr>";
+		$print.= "<br/>&nbsp;&nbsp;&nbsp;<a href=\"http://www.uni-hannover.de/imperia/md/content/elearning/druck/flyer_rechtsfragen_2009_web.pdf\">Wann ist ein Dokument frei von Rechten Dritter? Informationen in der Brosch&uuml;re \"Rechtssicherheit im eLearning\"</a></font></td></tr>";
 
 		$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("3. Geben Sie eine kurze Beschreibung und einen Namen f&uuml;r die Datei ein.") . "</font></td></tr>";
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Name:") . "&nbsp;</font><br>";
-		$print.= "\n&nbsp;<input type=\"TEXT\" name=\"name\" style=\"width: 70%\" size=\"40\" maxlength\"255\" ></td></tr>";
+		$print.= "\n&nbsp;<input type=\"TEXT\" name=\"name\" style=\"width: 70%\" size=\"40\" maxlength\"255\" /></td></tr>";
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Beschreibung:") . "&nbsp;</font><br>";
 		$print.= "\n&nbsp;<TEXTAREA NAME=\"description\"  style=\"width: 70%\" COLS=40 ROWS=3 WRAP=PHYSICAL></TEXTAREA>&nbsp;</td></tr>";
 		$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>" . _("4. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen") . "</font></td></tr>";
@@ -720,7 +752,7 @@ function form($refresh = FALSE) {
 	$print.="&nbsp;<a href=\"".URLHelper::getLink("?cancel_x=true")."\">" . makeButton("abbrechen", "img") . "</a></td></tr>";
 	$print.= "\n<input type=\"hidden\" name=\"cmd\" value=\"upload\">";
 	$print.= "\n<input type=\"hidden\" name=\"upload_seminar_id\" value=\"".$SessSemName[1]."\">";
-	$print.= "\n</form></table><br></center>";
+	$print.= "\n</form></table><br /></center>";
 
 	return $print;
 }
@@ -755,26 +787,14 @@ function getFileExtension($str) {
 
 //Check auf korrekten Upload
 function validate_upload($the_file) {
-	global $UPLOAD_TYPES,$the_file_size, $msg, $the_file_name, $SessSemName, $user, $auth, $i_page;
+	global $UPLOAD_TYPES,$the_file_size, $msg, $the_file_name, $SessSemName, $user, $auth;
 
-	if ($i_page == "sms_send.php") {
-		if (!$GLOBALS["ENABLE_EMAIL_ATTACHMENTS"] == true)
-			$emsg.= "error§" . _("Dateianhänge für Nachrichten sind in dieser Installation nicht erlaubt!") . "§";
-		$active_upload_type = "attachments";
-		$sem_status = $GLOBALS['perm']->get_perm();
-		}
-	else {
-		$sem_status = $GLOBALS['perm']->get_studip_perm($SessSemName[1]);
-		$active_upload_type = $SessSemName["art_num"];
-		}
+	$sem_status = $GLOBALS['perm']->get_studip_perm($SessSemName[1]);
 
 	//erlaubte Dateigroesse aus Regelliste der Config.inc.php auslesen
-	if ($UPLOAD_TYPES[$active_upload_type]) {
-		$max_filesize=$UPLOAD_TYPES[$active_upload_type]["file_sizes"][$sem_status];
-		}
-	else {
-		$max_filesize=$UPLOAD_TYPES["default"]["file_sizes"][$sem_status];
-		}
+	// FL:START
+	$max_filesize = get_max_filesize($folder_system_data['upload']);
+	// FL:END
 
 	$error = FALSE;
 	if ($the_file == "none") { # haben wir eine Datei?
@@ -787,11 +807,11 @@ function validate_upload($the_file) {
 			$doc=TRUE;
 
 		//Erweiterung mit Regelliste in config.inc.php vergleichen
-		if ($UPLOAD_TYPES[$active_upload_type]) {
-			if ($UPLOAD_TYPES[$active_upload_type]["type"] == "allow") {
+		if ($UPLOAD_TYPES[$SessSemName["art_num"]]) {
+			if ($UPLOAD_TYPES[$SessSemName["art_num"]]["type"] == "allow") {
 				$t=TRUE;
 				$i=1;
-				foreach ($UPLOAD_TYPES[$active_upload_type]["file_types"] as $ft) {
+				foreach ($UPLOAD_TYPES[$SessSemName["art_num"]]["file_types"] as $ft) {
 					if ($pext == $ft)
 						$t=FALSE;
 					if ($i !=1)
@@ -816,7 +836,7 @@ function validate_upload($the_file) {
 			} else {
 				$t=FALSE;
 				$i=1;
-				foreach ($UPLOAD_TYPES[$active_upload_type]["file_types"] as $ft) {
+				foreach ($UPLOAD_TYPES[$SessSemName["art_num"]]["file_types"] as $ft) {
 					if ($pext == $ft)
 						$t=TRUE;
 					if ($i !=1)
@@ -984,11 +1004,7 @@ function insert_entry_db($range_id, $sem_id=0, $refresh = FALSE) {
 
 function JS_for_upload() {
 
-	global $UPLOAD_TYPES, $SessSemName, $folder_system_data, $i_page;
-	if ($i_page == "sms_send.php")
-		$active_upload_type = "attachments";
-	else
-		$active_upload_type = $SessSemName["art_num"];
+	global $UPLOAD_TYPES, $SessSemName, $folder_system_data;
 
 	?>
 	 <SCRIPT LANGUAGE="JavaScript">
@@ -1026,10 +1042,10 @@ function JS_for_upload() {
 	if (<?
 	if (!$folder_system_data["zipupload"]){
 
-	if ($UPLOAD_TYPES[$active_upload_type]) {
-		if ($UPLOAD_TYPES[$active_upload_type]["type"] == "allow") {
+	if ($UPLOAD_TYPES[$SessSemName["art_num"]]) {
+		if ($UPLOAD_TYPES[$SessSemName["art_num"]]["type"] == "allow") {
 			$i=1;
-			foreach ($UPLOAD_TYPES[$active_upload_type]["file_types"] as $ft) {
+			foreach ($UPLOAD_TYPES[$SessSemName["art_num"]]["file_types"] as $ft) {
 				if ($i !=1)
 					echo " && ";
 				echo "ext == \"$ft\"";
@@ -1041,7 +1057,7 @@ function JS_for_upload() {
 		else {
 			$i=1;
 			$deny_doc=TRUE;
-			foreach ($UPLOAD_TYPES[$active_upload_type]["file_types"] as $ft) {
+			foreach ($UPLOAD_TYPES[$SessSemName["art_num"]]["file_types"] as $ft) {
 				if ($i !=1)
 					echo " && ";
 				echo "ext != \"$ft\"";
@@ -1091,7 +1107,7 @@ function JS_for_upload() {
 	msg_window=window.open("","messagewindow","height=250,width=200,left=20,top=20,scrollbars=no,resizable=no,toolbar=no");
 	msg_window.document.write("<html><head><title>Datei Upload</title></head>");
 	msg_window.document.write("<body bgcolor='#ffffff'><center><p><img src='<?= $GLOBALS['ASSETS_URL'] ?>images/alienupload.gif' width='165' height='125'></p>");
-	msg_window.document.write("<p><font face='arial, helvetica, sans-serif'><b>&nbsp;"+file_only+"</b><br>&nbsp;<?=_("wird hochgeladen.")?><br>&nbsp;<?=_("Bitte haben Sie etwas Geduld!")?><br></font></p></body></html>");
+	msg_window.document.write("<p><font face='arial, helvetica, sans-serif'><b>&nbsp;"+file_only+"</b><br>&nbsp;<?=_("wird hochgeladen.")?><br>&nbsp;<?=_("Bitte haben sie etwas Geduld!")?><br /></font></p></body></html>");
 
 	upload=true;
 
@@ -1233,13 +1249,13 @@ function link_form ($range_id, $updating=FALSE) {
 
 
 
-	$print.="\n<br><br>" . _("Sie haben diesen Ordner zum Upload ausgewählt:") . "<br><br><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
+	$print.="\n<br /><br />" . _("Sie haben diesen Ordner zum Upload ausgewählt:") . "<br /><br /><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
 
 	$print.="</font></td></tr>";
 	$print.= "\n<form enctype=\"multipart/form-data\" NAME=\"link_form\" action=\"" . URLHelper::getLink('') . "\" method=\"post\">";
-	$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("1. Geben Sie hier den <b>vollständigen Pfad</b> zu der Datei an die Sie verlinken wollen.") . " </font></td></tr>";
+	$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("1. Geben Sie hier den <b>vollständigen Pfad</b> zu der Datei an die sie verlinken wollen.") . " </font></td></tr>";
 	$print.= "\n<tr>";
-	$print.= "\n<td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Dateipfad:") . "&nbsp;</font><br>";
+	$print.= "\n<td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Dateipfad:") . "&nbsp;</font><br />";
 	if ($hiddenurl)
 		$print.= "&nbsp;<INPUT NAME=\"the_link\" TYPE=\"text\"  style=\"width: 70%\" SIZE=\"30\" value=\"***\">&nbsp;</td></td>";
 	else
@@ -1251,7 +1267,7 @@ function link_form ($range_id, $updating=FALSE) {
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Dieses Dokument ist frei von Rechten Dritter:") . "&nbsp;";
 		$print.= "\n&nbsp;<input type=\"RADIO\" name=\"protect\" value=\"0\"".(!$protect ? "checked" :"") .">"._("Ja");
 		$print.= "\n&nbsp;<input type=\"RADIO\" name=\"protect\" value=\"1\"".($protect ? "checked" :"") .">"._("Nein");
-		$print.= "</td></tr>";
+		$print.= "<br/>&nbsp;<a href=\"http://www.uni-hannover.de/imperia/md/content/elearning/druck/flyer_rechtsfragen_2009_web.pdf\">Wann ist ein Dokument frei von Rechten Dritter? Informationen in der Brosch&uuml;re \"Rechtssicherheit im eLearning\"</a></font></td></tr>";
 
 		$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("3. Geben Sie eine kurze Beschreibung und einen Namen für die Datei ein.") . "</font></td></tr>";
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Name:") . "&nbsp;</font><br>";
@@ -1272,7 +1288,7 @@ function link_form ($range_id, $updating=FALSE) {
 	} else {
 		$print.= "\n<input type=\"hidden\" name=\"cmd\" value=\"link\">";
 	}
-	$print.= "\n</form></table><br></center>";
+	$print.= "\n</form></table><br /></center>";
 
 	return $print;
 
@@ -1280,6 +1296,638 @@ function link_form ($range_id, $updating=FALSE) {
 
 ## Ende Upload Funktionen ################################################################################
 
+/**
+ * Displays the body of a file containing the decription, downloadbuttons and change-forms
+ * 
+ */
+function display_file_body($datei, $folder_id, $open, $change, $move, $upload, $all, $refresh=FALSE, $filelink="") {
+	global $rechte, $user, $SessionSeminar;
+	$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessionSeminar));
+	
+	$content='';	
+						
+	if ($change == $datei["dokument_id"]) { 	//Aenderungsmodus, Formular aufbauen
+		if ($datei["protected"]==1)
+			$protect = "checked";
+		$content.= "\n&nbsp;<input type=\"CHECKBOX\" name=\"change_protected\" $protect>&nbsp;"._("geschützter Inhalt")."</br>";
+		$content.= "<br><textarea name=\"change_description\" rows=3 cols=40>".$datei["description"]."</textarea><br>";
+		$content.= "<input type=\"image\" " . makeButton("uebernehmen", "src") . " border=0 value=\""._("&Auml;nderungen speichern")."\">";
+		$content.= "&nbsp;<input type=\"image\" " . makeButton("abbrechen", "src") . " border=0 name=\"cancel\" value=\""._("Abbrechen")."\">";
+		$content.= "<input type=\"hidden\" name=\"open\" value=\"".$datei["dokument_id"]."_sc_\">";
+		$content.= "<input type=\"hidden\" name=\"type\" value=\"0\">";
+	} else {
+		$content = '';
+		if (strtolower(getFileExtension($datei['filename'])) == 'flv') {
+			$cfg = &Config::GetInstance();
+			$DOCUMENTS_EMBEDD_FLASH_MOVIES = $cfg->getValue('DOCUMENTS_EMBEDD_FLASH_MOVIES');
+			if (trim($DOCUMENTS_EMBEDD_FLASH_MOVIES) != 'deny') {
+				$flash_player = get_flash_player($datei['dokument_id'], $datei['filename'], $type);
+				$content = "<div style=\"margin-bottom: 10px; height: {$flash_player['height']}; width: {$flash_player['width']};\">" . $flash_player['player'] . '</div>';
+			}
+		}
+		if ($datei["description"]) {
+			$content .= htmlReady($datei["description"], TRUE, TRUE);
+		} else {
+			$content .= _("Keine Beschreibung vorhanden");
+		}
+		$content.=  "<br><br>" . sprintf(_("<b>Dateigr&ouml;&szlig;e:</b> %s kB"), round ($datei["filesize"] / 1024));
+		$content.=  "&nbsp; " . sprintf(_("<b>Dateiname:</b> %s "),htmlReady($datei['filename']));
+	}
+	
+	if ($move == $datei["dokument_id"])
+		$content.="<br>" . sprintf(_("Diese Datei wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um diese Datei in den gew&uuml;nschten Ordner zu verschieben / kopieren. Wenn Sie diese Datei in eine andere Veranstaltung verschieben / kopieren möchten, wählen Sie die gewünschte Veranstaltung oben auf der Seite aus (sofern Sie Dozent oder Tutor in einer anderen Veranstaltung sind)."), "<img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0 " . tooltip(_("Klicken Sie dieses Symbol, um diese Datei in einen anderen Ordner einzufügen")) . ">");
+	
+	$content.= "\n";
+	
+	if ($upload == $datei["dokument_id"]) 
+		$content.=upload_item ($upload,FALSE,FALSE,$refresh);
+	
+	//Editbereich ertstellen
+	$edit='';
+	if (($change != $datei["dokument_id"]) && ($upload != $datei["dokument_id"]) && $filelink != $datei["dokument_id"]) {
+		$type = ($datei['url'] != '')? 6 : 0;
+		if (check_protected_download($datei['dokument_id'])) {
+			$edit= '&nbsp;<a href="' . GetDownloadLink( $datei['dokument_id'], $datei['filename'], $type, 'force') .'">' . makeButton('herunterladen', 'img') . '</a>';
+		
+			$fext = getFileExtension(strtolower($datei['filename']));
+			if (($type != '6') && ($fext != 'zip') && ($fext != 'tgz') && ($fext != 'gz') && ($fext != 'bz2')) {
+				$edit.= '&nbsp;<a href="'. GetDownloadLink( $datei['dokument_id'], $datei['filename'], $type, 'zip') . '">' . makeButton('alsziparchiv', 'img') . '</a>';
+			}
+		}
+		if (($rechte) || ($datei["user_id"] == $user->id && $folder_tree->isWritable($datei["range_id"], $user->id))) {
+			if ($type!=6)
+			$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"".URLHelper::getLink("?open=".$datei["dokument_id"]."_c_#anker")."\">" . makeButton("bearbeiten", "img") . "</a>";
+			if ($type==6)
+				$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"".URLHelper::getLink("?open=".$datei["dokument_id"]."_led_&rnd=".rand()."#anker")."\">" . makeButton("bearbeiten", "img") . "</a>";
+			else
+				$edit.= "&nbsp;<a href=\"".URLHelper::getLink("?open=".$datei["dokument_id"]."_rfu_#anker")."\">" . makeButton("aktualisieren", "img") . "</a>";
+			if (!$all){
+				$edit.= "&nbsp;<a href=\"".URLHelper::getLink("?open=".$datei["dokument_id"]."_m_#anker")."\">" . makeButton("verschieben", "img") . "</a>";
+				$edit.= "&nbsp;<a href=\"".URLHelper::getLink("?open=".$datei["dokument_id"]."_co_#anker")."\">" . makeButton("kopieren", "img") . "</a>";
+			}
+			$edit.= "&nbsp;<a href=\"".URLHelper::getLink("?open=".$datei["dokument_id"]."_fd_")."\">" . makeButton("loeschen", "img") . "</a>";
+		}
+	}
+								
+	//Dokument_Body ausgeben; dies ist auch der Bereich, der über Ajax abgerufen werden wird
+	print "<table width=\"100%\" cellpadding=0 cellspacing=0 border=0>"; 
+	if ($datei["protected"]) {
+		$content .= "<br><br><hr><table><tr><td><img src=\"".$GLOBALS['ASSETS_URL']."images/ausruf.gif\" valign=\"middle\"></td><td><font size=\"2\"><b>"
+							._("Diese Datei ist urheberrechtlich geschützt.");
+							$content .= "<br>";
+							if(check_protected_download($datei["dokument_id"])){
+								$content .=_("Sie darf nur im Rahmen dieser Veranstaltung verwendet werden, jede weitere Verbreitung ist unzul&auml;ssig!");
+							} else {
+								$content .= _("Sie k&ouml;nnen diese Datei nicht herunterladen, so lange diese Veranstaltung einen offenen Teilnehmerkreis aufweist.");
+							}
+							$content .= "</td></tr></table>";
+	}
+	if ($filelink == $datei["dokument_id"]) 
+		$content .= link_item($datei["dokument_id"],FALSE,FALSE,$datei["dokument_id"]);
+	printcontent ("100%",TRUE, $content, $edit);
+	print "</table>";
+}
+
+//$countfiles is important, so that each file_line has its own unique id and can be found by javascript.
+$countfiles = 0;
+/**
+ * Displays one file/document with all of its information and options. 
+ * 
+ */
+function display_file_line ($datei, $folder_id, $open, $change, $move, $upload, $all, $refresh=FALSE, $filelink="") {
+	global $_fullname_sql,$SessionSeminar,$SessSemName, $rechte, $anfang,
+		$user, $SemSecLevelWrite, $SemUserStatus, $check_all, $countfiles;
+	//Einbinden einer Klasse, die Informationen über den ganzen Baum enthält
+	$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessionSeminar));
+	$javascriptok = true;
+	print "\n\t<div style=\"position: relative; z-index: 0; top: 0px; left: 0px; margin-top: 0; margin-bottom: 0;\" class=\"draggable\" nowrap" .
+			" id=\"file_".$folder_id."_$countfiles\">";
+	print "<div style=\"display:none\" id=\"getmd5_fi".$folder_id."_$countfiles\">".$datei['dokument_id']."</div>";
+	print "<table cellpadding=0 border=0 cellspacing=0 width=\"100%\"><tr>";
+	if (!$all)
+		print "<td width=5px nowrap=\"nowrap\" valign=\"middle\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/datatree_2.gif\"></td>";
+	
+	
+	//Farbe des Pfeils bestimmen:
+	$chdate = (($datei["chdate"]) ? $datei["chdate"] : $datei["mkdate"]);
+	if (object_get_visit($SessSemName[1], "documents") < $chdate)
+		$timecolor = "#FF0000";
+	else {
+		$timediff = (int) log((time() - doc_newest($folder_id)) / 86400 + 1) * 15;
+		if ($timediff >= 68)
+			$timediff = 68;
+		$red = dechex(255 - $timediff);
+		$other = dechex(119 + $timediff);
+		$timecolor= "#" . $red . $other . $other;
+	}
+
+	if ($open[$datei["dokument_id"]]) {
+		print "<td id=\"file_".$datei["dokument_id"]."_arrow_td\" nowrap valign=\"top\" align=\"left\" width=1% bgcolor=\"$timecolor\" class=\"printhead3\">&nbsp<a href=\"";
+		print URLHelper::getLink("?close=".$datei["dokument_id"]."#anker");
+		print "\" class=\"tree\" onClick=\"return STUDIP.Filesystem.changefilebody('".$datei["dokument_id"]."')\"><img id=\"file_".$datei["dokument_id"]."_arrow_img\" src=\"".$GLOBALS['ASSETS_URL']."images/forumgraurunt2.gif\"".tooltip(_("Objekt zuklappen"))." border=0></a></td>";
+	} else {
+		print "<td id=\"file_".$datei["dokument_id"]."_arrow_td\" nowrap valign=\"top\" align=\"left\" width=1% bgcolor=\"$timecolor\" class=\"printhead2\">&nbsp<a href=\"";
+		print URLHelper::getLink("?open=".$datei["dokument_id"]."#anker");
+		print "\" class=\"tree\" onClick=\"return STUDIP.Filesystem.changefilebody('".$datei["dokument_id"]."')\"><img id=\"file_".$datei["dokument_id"]."_arrow_img\" src=\"".$GLOBALS['ASSETS_URL']."images/forumgrau2.gif\"".tooltip(_("Objekt aufklappen"))." border=0></a></td>";
+	}
+	
+	// -> Pfeile zum Verschieben (bzw. die Ziehfläche)
+	if ((!$all) && ($rechte)) {
+		$countfiles++;
+		$bewegeflaeche = "<span class=\"updown_marker\" id=\"pfeile_".$datei["dokument_id"]."\">" .
+				"<a href=\"".URLHelper::getLink('?open='.$datei['dokument_id'])."_mfu_\" title=\""._("Datei nach oben schieben").
+				"\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/move_up.gif\"></a><a href=\"".URLHelper::getLink('?open='.
+				$datei['dokument_id'])."_mfd_\" title=\""._("Datei nach unten schieben").
+				"\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/move_down.gif\"></a></span>";
+	}
+	
+	print "<td class=\"printhead\">";
+	if ($change == $datei["dokument_id"]) {
+		print "<span id=\"file_".$datei["dokument_id"]."_header\" style=\"font-weight: bold\"><a href=\"".URLHelper::getLink("?close=".$datei["dokument_id"]."#anker")."\" class=\"tree\"";
+		print ' name="anker"></a>';
+		print $bewegeflaeche;
+		print "<img src=\"".$GLOBALS['ASSETS_URL']."images/".GetFileIcon(getFileExtension($datei['filename']))."\">";
+		print "<input style=\"{font-size:8 pt; width: 50%;}\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($datei["name"])."\"></b>";
+	} else {	
+		print $bewegeflaeche;
+		$type = ($datei['url'] != '')? 6 : 0;
+		// LUH Spezerei:
+		if (check_protected_download($datei["dokument_id"])) {
+			print "<a href=\"".GetDownloadLink( $datei["dokument_id"], $datei["filename"], $type, "force")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/".GetFileIcon(getFileExtension($datei['filename']))."\"></a>";
+		} else {
+			print "<img src=\"".$GLOBALS['ASSETS_URL']."images/ausruf_small3.gif\">";
+		}
+		//Jetzt folgt der Link zum Aufklappen
+		if ($open[$datei["dokument_id"]]) {
+			print "<span id=\"file_".$datei["dokument_id"]."_header\" style=\"font-weight: bold\">";
+			print "<a href=\"".URLHelper::getLink("?close=".$datei["dokument_id"]."#anker")."\" class=\"tree\" onClick=\"return STUDIP.Filesystem.changefilebody('".$datei["dokument_id"]."')\"";
+		} else {
+			print "<span id=\"file_".$datei["dokument_id"]."_header\" style=\"font-weight: normal\">";
+			print "<a href=\"".URLHelper::getLink("?open=".$datei["dokument_id"]."#anker")."\" class=\"tree\" onClick=\"return STUDIP.Filesystem.changefilebody('".$datei["dokument_id"]."')\"";
+		}
+		if (($change == $datei["dokument_id"]) ||  ($move == $datei["dokument_id"]) ||  ($upload == $datei["dokument_id"]) || ($open[$datei["dokument_id"]]))
+			print ' name="anker" ';
+		print ">";
+		
+		print htmlReady($datei['name'])."</a>";
+		print "</span>";
+	}
+	
+	//add the size
+	if (($datei["filesize"] /1024 / 1024) >= 1)
+		print "&nbsp;&nbsp;(".round ($datei["filesize"] / 1024 / 1024)." MB";
+	else
+		print "&nbsp;&nbsp;(".round ($datei["filesize"] / 1024)." kB";
+						
+	//add number of downloads
+	print " / ".(($datei["downloads"] == 1) ? $datei["downloads"]." "._("Download") : $datei["downloads"]." "._("Downloads")).")";
+								
+	
+	//So und jetzt die rechtsbündigen Sachen:
+	print "</td><td align=right class=\"printhead\">";
+	print "<a href=\"".URLHelper::getLink('about.php?username='.$datei['username'])."\">".htmlReady($datei['fullname'])."</a>";
+	
+	//Workaround for older data from previous versions (chdate is 0)
+	print " ".date("d.m.Y - H:i", (($datei["chdate"]) ? $datei["chdate"] : $datei["mkdate"]));
+	
+	if (($all) && (!$upload) && ($datei["url"]=="")) {
+		$box = sprintf ("<input type=\"CHECKBOX\" %s name=\"download_ids[]\" value=\"%s\">",($check_all) ? "checked" : "" , $datei["dokument_id"]);
+		print $box;
+	} else {
+		if ($all)
+			print "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+	}
+	print "</td></tr>";
+	
+	//Ab jetzt kommt der Bereich zum Runterladen und Bearbeiten:
+	if (isset($open[$datei["dokument_id"]])) {
+		//Dokument-Content ausgeben
+		print "<tr id=\"file_".$datei["dokument_id"]."_body_row\" style=\"visibility: visible\">".(($all) ? "" : "<td></td>")."<td colspan=3><div id=\"file_".$datei["dokument_id"]."_body\">";
+		//Der eigentliche Teil ist outsourced in die folgende Funktion, 
+		//damit der Körper auch über Ajax abgerufen werden kann.
+		display_file_body($datei, $folder_id, $open, $change, $move, $upload, $all, $refresh, $filelink);					
+	} else {
+		print "<tr id=\"file_".$datei["dokument_id"]."_body_row\" style=\"visibility: invisible\">".(($all) ? "" : "<td></td>")."<td colspan=3><div id=\"file_".$datei["dokument_id"]."_body\">";
+	}
+	print "</div></td></tr></table>\n\t</div>"; 
+}
+
+/**
+ * Displays the body of a folder including the description, changeform, subfolder and files
+ * 
+ */
+function display_folder_body($folder_id, $open, $change, $move, $upload, $refresh=FALSE, $filelink="") {
+	global $_fullname_sql, $SessionSeminar, $SemUserStatus, $SessSemName, $rechte, $countfolder;
+	$db = DBManager::get();
+	//Einbinden einer Klasse, die Informationen über den ganzen Baum enthält
+	$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessionSeminar));
+	//Hole alle Informationen, die es über $folder_id gibt
+	$query = "SELECT ". $_fullname_sql['full'] ." AS fullname , username, folder_id, a.range_id, a.user_id, name, a.description, a.mkdate, a.chdate FROM folder a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE a.folder_id = '$folder_id' ORDER BY a.name, a.chdate";
+	$result = $db->query($query)->fetch();
+	$document_count = doc_count($folder_id);
+	$super_folder = $folder_tree->getNextSuperFolder($folder_id);
+	$is_issue_folder = ((count($folder_tree->getParents($folder_id)) > 1) && IssueDB::isIssue($result["range_id"]));
+	if ($is_issue_folder) {
+		$dates_for_issue = IssueDB::getDatesforIssue($result['range_id']);
+	}
+	print "<table cellpadding=0 border=0 cellspacing=0 width=\"100%\">";
+		
+	//Ausgabe der Optionen zu dem Ordner mit Beschreibung, Knöpfen und PiPaPo
+	print "<tr>";
+	
+	if ((($document_count > 0) || ($folder_tree->hasKids($folder_id))) && ($folder_tree->isReadable($folder_id)))
+		print "<td style=\"background-image: url(".$GLOBALS['ASSETS_URL']."/images/datatree_grau.gif); background-repeat: repeat-y;\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/datatree_grau.gif\"></td>";
+	else
+		print "<td class=\"printcontent\">&nbsp;</td>";
+	print "<td width=100% class=\"printcontent\" style=\"font-align: center\">";
+	
+	$content='';		
+	if ($super_folder){
+		$content .=  '<img  src="'.$GLOBALS['ASSETS_URL'].'images/lock.gif">&nbsp;'
+			. sprintf(_("Dieser Ordner ist nicht zugänglich, da der übergeordnete Ordner \"%s\" nicht lesbar oder nicht sichtbar ist!"), htmlReady($folder_tree->getValue($super_folder,'name')))
+			. '<hr>';
+	}
+	if ($folder_tree->isExerciseFolder($folder_id)){
+		$content .=  '<img  src="'.$GLOBALS['ASSETS_URL'].'images/eigene2.gif">&nbsp;'
+				. _("Dieser Ordner ist ein Hausaufgabenordner. Es können nur Dateien eingestellt werden.")
+				. (!$rechte ? _("Sie selbst haben folgende Dateien in diesen Ordner eingestellt:")
+				. '<br><b>' . htmlReady(join('; ', get_user_documents_in_folder($folder_id, $GLOBALS['user']->id))).'</b>' : '')
+				. '<hr>';
+	}
+	if ($is_issue_folder) {
+		$dates = array();
+		foreach ($dates_for_issue as $date) {
+			$dates[] = strftime("%x", $date['date']);
+		}
+		$content .= _("Dieser Ordner ist ein themenbezogener Dateiordner.");
+		if(count($dates)){
+			$content .= '&nbsp;' ._("Folgende Termine sind diesem Thema zugeordnet:")
+			. '<br><b>' . htmlReady(join('; ', $dates)).'</b>';
+		}
+		$content .=  '<hr>';
+	}
+	if ($folder_tree->isGroupFolder(folder_id)){
+		$content .=  sprintf(_("Dieser Ordner gehört der Gruppe <b>%s</b>. Nur Mitglieder dieser Gruppe können diesen Ordner sehen."),
+		htmlReady(GetStatusgruppeName($result["range_id"]))) . '<hr>';
+	}
+	//Contentbereich erstellen
+	if ($change == $folder_id) { //Aenderungsmodus, zweiter Teil
+		$content .= chr(10) . '<table cellpadding="2" cellspacing="2" border="0">';
+		$content .= chr(10) . '<tr><td>';
+		$content.="\n<textarea name=\"change_description\" rows=3 cols=40>".htmlReady($result["description"])."</textarea>";
+		$content .= chr(10) . '</td><td><font size="-1">';
+		if($rechte){
+			if ($folder_tree->permissions_activated){
+				$content.= "\n<INPUT style=\"vertical-align:middle\" TYPE=\"checkbox\" VALUE=\"1\" ".($folder_tree->isReadable($folder_id) ? "CHECKED" : "" ) . " NAME=\"perm_read\">&nbsp;";
+				$content.= "<b>r</b> - " . _("Lesen (Dateien k&ouml;nnen heruntergeladen werden)");
+				$content.= "\n<br><INPUT style=\"vertical-align:middle\" TYPE=\"checkbox\" VALUE=\"1\" ".($folder_tree->isWritable($folder_id) ? "CHECKED" : "" ) . " NAME=\"perm_write\">&nbsp;";
+				$content.= "<b>w</b> - " . _("Schreiben (Dateien k&ouml;nnen heraufgeladen werden)");
+				$content.= "\n<br><INPUT style=\"vertical-align:middle\" TYPE=\"checkbox\" VALUE=\"1\" ".($folder_tree->isExecutable($folder_id) ? "CHECKED" : "" ) . " NAME=\"perm_exec\">&nbsp;";
+				$content.= "<b>x</b> - " . _("Sichtbarkeit (Ordner wird angezeigt)");
+			}
+			if($level == 0 && $folder_tree->entity_type == 'sem'){
+				$content .= "\n<br><INPUT style=\"vertical-align:middle\" TYPE=\"checkbox\" VALUE=\"1\" ".($folder_tree->checkCreateFolder($folder_id) ? "CHECKED" : "" ) . " NAME=\"perm_folder\">&nbsp;";
+				$content .= "<b>f</b> - " . _("Ordner erstellen (Alle Nutzer können Ordner erstellen)");
+			} else {
+				$content .= '&nbsp;';
+			}
+		} else {
+			$content .= '&nbsp;';
+		}
+		$content .= chr(10) . '</font></td></tr>';
+		$content .= chr(10) . '<tr><td colspan="2">';
+		$content.="\n<input type=\"image\"" . makeButton("uebernehmen", "src") . " align=\"absmiddle\" value=\""._("&Auml;nderungen speichern")."\">&nbsp;";
+		$content.="\n<input type=\"image\"" . makeButton("abbrechen", "src") . " align=\"absmiddle\" name=\"cancel\" value=\""._("Abbrechen")."\">";
+		$content.= "\n<input type=\"hidden\" name=\"open\" value=\"".$folder_id."_sc_\">";
+		$content.="\n<input type=\"hidden\" name=\"type\" value=\"1\">";
+		$content .= chr(10) . '</td></tr></table>';
+	}
+	elseif ($result["description"])
+		$content .= htmlReady($result["description"], TRUE, TRUE);
+	else
+		$content .= _("Keine Beschreibung vorhanden");
+	if ($move == $result["folder_id"]){
+		$content .="<br>" . sprintf(_("Dieser Ordner wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um ihn in den gew&uuml;nschten Ordner zu verschieben."), "<img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0 " . tooltip(_("Klicken Sie auf dieses Symbol, um diesen Ordner in einen anderen Ordner einzufügen.")) . ">");
+		if($rechte) $content .= _("Wenn Sie den Ordner in eine andere Veranstaltung verschieben / kopieren möchten, wählen Sie die gewünschte Veranstaltung oben auf der Seite aus.");
+	}
+	if ($upload == $folder_id) {
+		$content .= form($refresh);
+	}
+	// Abfrage ob Dateilink eingeleitet
+	if ($filelink == $folder_id) {
+		$content .= link_item($folder_id);
+	}
+	$content.= "\n";
+	$edit='';
+	//Editbereich erstellen
+	if (($change != $folder_id) && ($upload != $folder_id) && ($filelink != $folder_id)) {
+		if (($rechte) || ($SemUserStatus == "autor") ) {
+			if (($folder_tree->isWritable($folder_id, $user->id)) || ($rechte))
+				$edit= "<a href=\"".URLHelper::getLink("?open=".$folder_id."_u_&rand=".rand()."#anker")."\">" . makeButton("dateihochladen", "img") . "</a>";
+			if ($rechte)
+				$edit.= "&nbsp;<a href=\"".URLHelper::getLink("?open=".$folder_id."_l_&rand=".rand()."#anker")."\">" . makeButton("link", "img") . "</a>";
+			if ($document_count && ($folder_tree->isReadable($folder_id, $user->id) || $rechte))
+				$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"".URLHelper::getLink("?folderzip=".$folder_id)."\">" . makeButton("ordneralszip", "img") . "</a>";
+			if ($rechte || ($folder_tree->checkCreateFolder($folder_id, $user->id)) ) {
+				if($rechte || ($folder_tree->isWritable($folder_id, $user->id) && !$folder_tree->isExerciseFolder($folder_id, $user->id))) {
+					$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"".URLHelper::getLink("?open=".$folder_id."_n_#anker")."\">" . makeButton("neuerordner", "img") . "</a>";
+					if($rechte && get_config('ZIP_UPLOAD_ENABLE')) {
+						$edit .= "&nbsp;&nbsp;&nbsp;<a href=\"".URLHelper::getLink("?open=".$folder_id."_z_&rand="
+							. rand()."#anker")."\">" . makeButton("ziphochladen", "img") . "</a>";
+						}
+					}
+				if($rechte ||
+					(!$document_count && $level !=0 &&
+						($folder_tree->isWritable($folder_id, $user->id) &&
+						$folder_tree->isWritable($folder_tree->getValue($folder_id, 'parent_id'), $user->id) &&
+							!$folder_tree->isExerciseFolder($folder_id, $user->id))
+					)
+						) $edit.= " <a href=\"".URLHelper::getLink("?open=".$folder_id."_d_")."\">" . makeButton("loeschen", "img") . "</a>";
+				if($rechte || ($folder_tree->isWritable($folder_id, $user->id) && !$folder_tree->isExerciseFolder($folder_id, $user->id))) $edit.= " <a href=\"".URLHelper::getLink("?open=".$folder_id."_c_#anker")."\">" . makeButton("bearbeiten", "img") . "</a>";
+				if(($rechte && $result['range_id'] != $SessSemName[1]) ||
+					($level !=0 &&
+						($folder_tree->isWritable($folder_id, $user->id) &&
+						$folder_tree->isWritable($folder_tree->getValue($folder_id, 'parent_id'), $user->id) &&
+						!$folder_tree->isExerciseFolder($folder_id, $user->id))
+						)
+					) $edit.= " <a href=\"".URLHelper::getLink("?open=".$folder_id."_m_#anker")."\">" . makeButton("verschieben", "img") . "</a>";
+				if($rechte || ($level !=0 && !$folder_tree->isExerciseFolder($folder_id, $user->id))) {
+					$edit.= " <a href=\"".URLHelper::getLink("?open=".$folder_id."_co_#anker")."\">" . makeButton("kopieren", "img") . "</a>";
+				}
+			}
+		}
+		$sortierbare_dateien = $db->query("SELECT SUM(1) FROM dokumente WHERE range_id = '$folder_id'")->fetch();
+		if (($rechte) && ($sortierbare_dateien[0] > 4)) {
+			$edit .= " <a href=\"".URLHelper::getLink("?open=".$folder_id."_az_#anker")."\"".tooltip("Dateien alphabetisch sortieren").">" . makeButton("sortieren", "img") . "</a>";
+		}
+	}
+		
+	if (!$edit) $edit = '&nbsp;';
+	print "<table width=\"100%\" cellpadding=0 cellspacing=0 border=0><tr>";
+	//Ordner-Content ausgeben
+	printcontent ("99%", TRUE, $content, $edit);
+	print "</tr></table>";
+	
+	print "</td></tr>";
+	
+	//Ein paar Überprüfungen, was eigentlich angezeigt werden soll: Dateien und Unterordner
+	$folders_kids = $folder_tree->getKids($folder_id);
+	$folders_kids = $db->query("SELECT folder_id FROM folder WHERE range_id = ".$db->quote($folder_id)." ORDER BY priority ASC, mkdate ASC")->fetchAll();;
+	
+	$hasrealkids = $folder_tree->hasKids($folder_id);
+	if ( ((count($folders_kids)) || ($document_count > 0)) 
+			&& (($rechte) || ($folder_tree->isExecutable($folder_id, $user->id))) ) {
+		print "<tr>";
+		//Der Navigationsast nach unten
+		print "<td width=5px valign=bottom style=\"background-image: url(".$GLOBALS['ASSETS_URL']."/images/datatree_1.gif); background-repeat: repeat-y;\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/datatree_3.gif\"></td>";
+		//Mehrere Zeilen, die wiederum Dateien mit eventuellen Optionen sind.
+		print "<td colspan=3>";
+		
+		print "<div class=\"folder_container\" id=\"folder_subfolders_".$folder_id."\">";
+		//Unterordner darstellen:
+		if (!is_array($folders_kids)) {
+			$folders_kids = array();
+		}
+		foreach ($folders_kids as $unterordner) {
+			if (($folder_tree->isReadable($folder_id, $user->id)) || ($rechte)) { //habe ich Rechte?
+				display_folder($unterordner['folder_id'], $open, $change, $move, $upload, $refresh, $filelink);
+			}
+		}
+		print "</div>";
+		
+		//Dateien darstellen:
+		$countfolder++;
+		print "<div class=\"folder_container\" id=\"folder_".$folder_id."\">";
+		if (($rechte) || ($folder_tree->isReadable($folder_id, $user->id))) {
+			$query = "SELECT ". $_fullname_sql['full'] ." AS fullname, username, a.user_id, a.*, IF(IFNULL(a.name,'')='', a.filename,a.name) AS t_name FROM dokumente a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE range_id = '".$result["folder_id"]."' ORDER BY a.priority ASC, a.chdate DESC, t_name ";
+			$result2 = $db->query($query)->fetchAll();
+			foreach ($result2 as $datei) {
+				display_file_line($datei, $folder_id, $open, $change, $move, $upload, FALSE, $refresh, $filelink);	
+			}
+		}
+		print "</div>";
+		print "</td></tr>";
+		
+	}
+	print "</table>";	//Ende der zweiten Tabelle
+}
+
+$countfolder = 0;
+$droppable_folder = 0;
+/**
+ * Displays the folder and all of its documents and recursively subfolders.
+ * This function is not dependent on the recursive-level so it looks as if it all starts from here.
+ * 
+ */
+function display_folder ($folder_id, $open, $change, $move, $upload, $refresh=FALSE, $filelink="") {
+	global $_fullname_sql,$SessionSeminar,$SessSemName, $rechte, $anfang,
+		$user, $SemSecLevelWrite, $SemUserStatus, $check_all, $countfolder, $droppable_folder;
+	$option = true;
+	$countfolder++;
+	$more = true;
+	$db = DBManager::get();
+	$droppable_folder++;
+	$javascriptok = true;
+	//Einbinden einer Klasse, die Informationen über den ganzen Baum enthält
+	$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessionSeminar));
+	
+	//Hole alle Informationen, die es über $folder_id gibt
+	$query = "SELECT ". $_fullname_sql['full'] ." AS fullname , username, folder_id, a.range_id, a.user_id, name, a.description, a.mkdate, a.chdate FROM folder a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE a.folder_id = '$folder_id' ORDER BY a.name, a.chdate";
+	$result = $db->query($query)->fetch();
+	
+	$depth = $folder_tree->getItemPath($folder_id);
+	$depth = count(explode(" / ", $depth));
+	print "<div id=\"folder_".(($depth > 3) ? $result['range_id'] : "root")."_".$countfolder."\">";
+	print "<div style=\"display:none\" id=\"getmd5_fo".$result['range_id']."_".$countfolder."\">".$folder_id."</div>";
+	print "<table cellpadding=0 border=0 cellspacing=0 width=\"100%\"><tr>";
+	
+	//Abzweigung, wenn Ordner ein Unterordner ist	
+	if ($depth > 3) //Warum gerade 3, soll jeder selbst rausfinden
+		print "<td width=5px nowrap=\"nowrap\" valign=\"top\"><img src=\"".$GLOBALS['ASSETS_URL']."images/datatree_2.gif\"></td>";
+	else
+		print "<td></td>";
+	print "<td>";
+	
+	//Farbe des Pfeils bestimmen:
+	$chdate = (($result["chdate"]) ? $result["chdate"] : $result["mkdate"]);
+	if (object_get_visit($SessSemName[1], "documents") < $chdate)
+		$neuer_ordner = TRUE;
+	else
+		$neuer_ordner = FALSE;
+	if ($neuer_ordner == TRUE)
+		$timecolor = "#FF0000";
+	else {
+		$timediff = (int) log((time() - doc_newest($folder_id)) / 86400 + 1) * 15;
+		if ($timediff >= 68)
+			$timediff = 68;
+		$red = dechex(255 - $timediff);
+		$other = dechex(119 + $timediff);
+		$timecolor= "#" . $red . $other . $other;
+	}
+
+	//Jetzt fängt eine zweite Tabelle an mit den Zeilen: Titel, Beschreibung und Knöpfe, Unterdateien und Unterordner 
+	if ($rechte)
+		print "<div class=\"droppable\" id=\"dropfolder_$folder_id\">";
+	print "<table cellpadding=0 border=0 cellspacing=0 width=\"100%\" id=\"droppable_folder_$droppable_folder\"><tr>";
+	
+	// -> Pfeile zum Verschieben (bzw. die Ziehfläche)
+	if (($rechte) && ($depth > 3)) {
+		$bewegeflaeche = "<span class=\"updown_marker\" id=\"pfeile_".$folder_id."\">" .
+				"<a href=\"".URLHelper::getLink('?open='.$folder_id)."_mfou_\" title=\""._("Nach oben verschieben").
+				"\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/move_up.gif\"></a><a href=\"".URLHelper::getLink('?open='.
+				$folder_id)."_mfod_\" title=\""._("Nach unten verschieben").
+				"\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/move_down.gif\"></a></span>";
+	}
+	
+	//Jetzt folgt der Link zum Aufklappen
+	//".URLHelper::getLink("?open=".$db->f("folder_id")."_md_")."
+	if ($open[$folder_id]) {
+		//print "<td width=1px class=\"printhead\">&nbsp;</td>";
+		print "<td id=\"folder_".$folder_id."_arrow_td\" nowrap valign=\"top\" align=\"left\" width=1% bgcolor=\"$timecolor\" class=\"printhead3\">";
+		print "&nbsp;<a href=\"".URLHelper::getLink("?close=".$folder_id."#anker");
+		print "\" class=\"tree\" onClick=\"return STUDIP.Filesystem.changefolderbody('".$folder_id."')\"><img id=\"folder_".$folder_id."_arrow_img\" src=\"".$GLOBALS['ASSETS_URL']."images/forumgraurunt2.gif\"".tooltip(_("Objekt zuklappen"))." border=0></a>";
+		print "</td>";
+		//print ($javascriptok ? "<td class=\"printhead\"><a href=\"Javascript: changefolderbody('".$folder_id."')\" class=\"tree\"><span id=\"folder_".$folder_id."_header\" style=\"font-weight: bold\">" : 
+		print "<td class=\"printhead\">";
+		if ($move && ($move != $folder_id) && $folder_tree->isWritable($folder_id, $user->id) && (!$folder_tree->isFolder($move) || ($folder_tree->checkCreateFolder($folder_id, $user->id) && !$folder_tree->isExerciseFolder($folder_id, $user->id)))){
+				print "&nbsp;<a href=\"".URLHelper::getLink("?open=".$folder_id."_md_")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0></a>";
+		}
+		print $bewegeflaeche;
+		print "<a href=\"".URLHelper::getLink("?close=".$folder_id."#anker")."\" class=\"tree\" onClick=\"return STUDIP.Filesystem.changefolderbody('".$folder_id."')\"><span id=\"folder_".$folder_id."_header\" style=\"font-weight: bold\">";
+	} else {
+		//print "<td width=1px class=\"printhead\">&nbsp;</td>";
+		print "<td id=\"folder_".$folder_id."_arrow_td\" nowrap valign=\"top\" align=\"left\" width=1% bgcolor=\"$timecolor\" class=\"printhead2\">";
+		print "&nbsp;<a href=\"";
+		print URLHelper::getLink("?open=".$folder_id."#anker");
+		print "\" class=\"tree\" onClick=\"return STUDIP.Filesystem.changefolderbody('".$folder_id."')\"><img id=\"folder_".$folder_id."_arrow_img\" src=\"".$GLOBALS['ASSETS_URL']."images/forumgrau2.gif\"".tooltip(_("Objekt aufklappen"))." border=0></a></td>";
+		print "<td class=\"printhead\">";
+				if ($move && ($move != $folder_id) && $folder_tree->isWritable($folder_id, $user->id) && (!$folder_tree->isFolder($move) || ($folder_tree->checkCreateFolder($folder_id, $user->id) && !$folder_tree->isExerciseFolder($folder_id, $user->id)))){
+				print "&nbsp;<a href=\"".URLHelper::getLink("?open=".$folder_id."_md_")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0></a>";
+		}
+		print $bewegeflaeche;
+		print "<a href=\"".URLHelper::getLink("?open=".$folder_id."#anker")."\" class=\"tree\" " .
+				"onClick=\"return STUDIP.Filesystem.changefolderbody('".$folder_id."')\"><span id=\"folder_".$folder_id."_header\" " .
+				"style=\"font-weight: normal\">";
+	}
+		
+	$document_count = doc_count($folder_id);
+	
+	if ($document_count > 0)
+		print "<img src=\"".$GLOBALS['ASSETS_URL']."images/cont_folder.gif\" border=0>";
+	else
+		print "<img src=\"".$GLOBALS['ASSETS_URL']."images/cont_folder2.gif\" border=0>";
+	
+	// Schloss, wenn Folder gelockt
+	if ($folder_tree->isLockedFolder($folder_id)) 
+		print "<img ".tooltip(_("Dieser Ordner ist gesperrt."))." src=\"".$GLOBALS['ASSETS_URL']."images/closelock.gif\">";
+	//Wenn verdeckt durch gesperrten übergeordneten Ordner
+	else if ( ($super_folder = $folder_tree->getNextSuperFolder($folder_id)) ) 
+		print "<img ".tooltip(_("Dieser Ordner ist nicht zugänglich, da ein übergeordneter Ordner gesperrt ist."))." src=\"".$GLOBALS['ASSETS_URL']."images/lock.gif\">";
+	// Wenn es ein Hausaufgabenordner ist
+	if ($folder_tree->isExerciseFolder($folder_id)) 
+		print "<img ".tooltip(_("Dieser Ordner ist ein Hausaufgabenordner. Es können nur Dateien eingestellt werden."))." src=\"".$GLOBALS['ASSETS_URL']."images/eigene2.gif\" WIDTH=\"18\" HEIGTH=\"18\">";
+	//Pfeile, wenn Datei bewegt werden soll
+	if ($move && ($folder_id != $move) && $folder_tree->isWritable($folder_id, $user->id) && (!$folder_tree->isFolder($move) || ($folder_tree->checkCreateFolder($folder_id, $user->id) && !$folder_tree->isExerciseFolder($folder_id, $user->id)))){
+		print "</a><span class=\"move_arrows\"><a href=\"".URLHelper::getLink("?open=".$folder_id."_md_")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0></a></span>";
+		if ($open[$folder_id])
+			print "<a href=\"".URLHelper::getLink("?close=".$folder_id."#anker")."\" class=\"tree\" onClick=\"return STUDIP.Filesystem.changefolderbody('".$folder_id."')\">";
+		else	
+			print "<a href=\"".URLHelper::getLink("?open=".$folder_id."#anker")."\" class=\"tree\" onClick=\"return STUDIP.Filesystem.changefolderbody('".$folder_id."')\">";
+	}
+	
+	//Dateiname, Rechte und Dokumente anzeigen
+	$tmp_titel=htmlReady(mila($result['name']));
+	if (($change == $folder_id) 
+			&& ((count($folder_tree->getParents($folder_id)) > 1) 
+			 || $result['range_id'] == md5($SessSemName[1] . 'top_folder') 
+			 || $folder_tree->isGroupFolder($result['folder_id'])
+			 ) 
+			) { //Aenderungsmodus, Anker + Formular machen, Font tag direkt ausgeben (muss ausserhalb einer td stehen!
+		$titel= "</a><input style=\"font-size:8 pt; width: 400px;\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($result['name'])."\" >";
+		if ($rechte && $folder_tree->permissions_activated) 
+			$titel .= '&nbsp;<font color="red">['.$folder_tree->getPermissionString($result["folder_id"]).']</font>';
+	}	else {
+		//create a link onto the titel, too
+		if ($rechte && $folder_tree->permissions_activated ) { 
+			$tmp_titel .= '&nbsp;'; 
+			$tmp_titel .= '<font color="red">['.$folder_tree->getPermissionString($result["folder_id"]).']</font>';
+			/*if (!$folder_tree->isExecutable($result["folder_id"]))
+			*	$tmp_titel .= "<img src=\"".$GLOBALS['ASSETS_URL']."images/threewisemonkeys_x.png\" ".tooltip("Nicht wahrnehmbar").">";
+			*if (!$folder_tree->isReadable($result["folder_id"]))
+			*	$tmp_titel .= "<img src=\"".$GLOBALS['ASSETS_URL']."images/threewisemonkeys_r.png\" ".tooltip("Nicht lesbar").">";
+			*if (!$folder_tree->isWritable($result["folder_id"]))
+			*	$tmp_titel .= "<img src=\"".$GLOBALS['ASSETS_URL']."images/threewisemonkeys_w.png\" ".tooltip("Nicht schreibbar").">";
+			*/
+		}
+		if ($document_count > 1)
+			$titel= $tmp_titel."</span>&nbsp;&nbsp;" . sprintf(_("(%s Dokumente)"), $document_count);
+		elseif ($document_count)
+			$titel= $tmp_titel."</span>&nbsp;&nbsp;" . _("(1 Dokument)");
+		else
+			$titel= $tmp_titel;
+	}
+	print $titel;			
+	
+	$is_issue_folder = ((count($folder_tree->getParents($folder_id)) > 1) && IssueDB::isIssue($result["range_id"]));
+	if ($is_issue_folder) {
+		$dates_for_issue = IssueDB::getDatesforIssue($result['range_id']);
+	}
+	if ($is_issue_folder) {
+		$dates_title = array();
+		foreach ($dates_for_issue as $date) {
+			$dates_title[] .= date('d.m.y, H:i', $date['date']).' - '.date('H:i', $date['end_time']);
+		}
+		if (sizeof($dates_title) > 0) {
+			$title_name = sprintf(_("Sitzung am: %s"), implode(', ', $dates_title));		
+			if (!$result['name']) {
+				$title_name .= _(", ohne Titel");
+			} else {
+				$title_name .= ', '.htmlReady($result['name']);
+			}
+		}
+	}
+	
+	print "</a></td>";
+	
+	//So und jetzt die rechtsbündigen Sachen:
+	print "</td><td align=right class=\"printhead\">";
+	
+	print "<a href=\"".URLHelper::getLink('about.php?username='.$result['username'])."\">".htmlReady($result['fullname'])."</a> ";
+	
+	//Workaround for older data from previous versions (chdate is 0)
+	print date("d.m.Y - H:i", (($result["chdate"]) ? $result["chdate"] : $result["mkdate"]));
+	
+	print "</td></tr></table>"; //Ende des Titels, Beschreibung und Knöpfen
+	if ($rechte)
+		print "</div>";  //End des Droppable-Divs
+	
+	if ($open[$folder_id]) {
+		print "<div id=\"folder_".$folder_id."_body\">";
+		//Der ganze Teil des Unterbaus wurde in die folgende Funktion outsourced:
+		display_folder_body($folder_id, $open, $change, $move, $upload, $refresh, $filelink);
+	} else {
+		print "<div id=\"folder_".$folder_id."_body\" style=\"display: none\">";
+	}
+	print "</div></td></tr></table>";
+	print "</div>";
+}
+
+
+
+
+
+
+
+
+
+/**
+ * The old function to recursively display the folder and its subfolders.
+ * This produces a lot of table-rows which all begin with the lines in 
+ * dependency of the "$level".
+ * It works for both treeview and flatview.
+ * 
+ */
+#TODO: remove this function
 //create the folder-system
 function display_folder_system ($folder_id, $level, $open, $lines, $change, $move, $upload, $all, $refresh=FALSE, $filelink="") {
 	global $_fullname_sql,$SessionSeminar,$SessSemName, $rechte, $anfang,
@@ -1406,7 +2054,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 
 			$tmp_titel=htmlReady(mila($title_name));
 			if ($change == $db->f("folder_id") && ($level != 0 || $db->f('range_id') == md5($SessSemName[1] . 'top_folder') || $folder_tree->isGroupFolder($db->f('folder_id'))) ) { //Aenderungsmodus, Anker + Formular machen, Font tag direkt ausgeben (muss ausserhalb einer td stehen!
-				$titel= "<a $anker ></a><input style=\"font-size:8 pt; width: 100%;\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($title_name)."\" >";
+				$titel= "<a $anker ></a><input style=\"font-size:8 pt; width: 100%;\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($title_name)."\" />";
 				if ($rechte && $folder_tree->permissions_activated) $titel .= '&nbsp;<span style="color:red">['.$folder_tree->getPermissionString($db->f("folder_id")).']</span>';
 			}
 			else {
@@ -1520,8 +2168,8 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						$content .= chr(10) . '<tr><td colspan="2">';
 						$content.="\n<input type=\"image\"" . makeButton("uebernehmen", "src") . " align=\"absmiddle\" value=\""._("&Auml;nderungen speichern")."\">&nbsp;";
 						$content.="\n<input type=\"image\"" . makeButton("abbrechen", "src") . " align=\"absmiddle\" name=\"cancel\" value=\""._("Abbrechen")."\">";
-						$content.= "\n<input type=\"hidden\" name=\"open\" value=\"".$db->f("folder_id")."_sc_\">";
-						$content.="\n<input type=\"hidden\" name=\"type\" value=\"1\">";
+						$content.= "\n<input type=\"hidden\" name=\"open\" value=\"".$db->f("folder_id")."_sc_\" />";
+						$content.="\n<input type=\"hidden\" name=\"type\" value=1 />";
 						$content .= chr(10) . '</td></tr></table>';
 					}
 					elseif ($db->f("description"))
@@ -1530,7 +2178,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 					$content .= _("Keine Beschreibung vorhanden");
 
 					if ($move == $db->f("folder_id")){
-						$content .="<br>" . sprintf(_("Dieser Ordner wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um ihn in den gew&uuml;nschten Ordner zu verschieben."), "<img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0 " . tooltip(_("Klicken Sie auf dieses Symbol, um diesen Ordner in einen anderen Ordner einzufügen.")) . ">");
+						$content .="<br />" . sprintf(_("Dieser Ordner wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um ihn in den gew&uuml;nschten Ordner zu verschieben."), "<img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0 " . tooltip(_("Klicken Sie auf dieses Symbol, um diesen Ordner in einen anderen Ordner einzufügen.")) . ">");
 						if($rechte) $content .= _("Wenn Sie den Ordner in eine andere Veranstaltung verschieben / kopieren möchten, wählen Sie die gewünschte Veranstaltung oben auf der Seite aus.");
 					}
 			if ($upload == $db->f("folder_id")) {
@@ -1563,8 +2211,8 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 									. rand()."#anker")."\">" . makeButton("ziphochladen", "img") . "</a>";
 								}
 							}
-						if($rechte ||
-							(!$documents_count && $level !=0 &&
+						if($rechte || 
+							(!$documents_count && $level !=0 && 
 								($folder_tree->isWritable($db->f("folder_id"), $user->id) &&
 								$folder_tree->isWritable($folder_tree->getValue($db->f("folder_id"), 'parent_id'), $user->id) &&
 								!$folder_tree->isExerciseFolder($db->f("folder_id"), $user->id))
@@ -1572,7 +2220,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 							) $edit.= " <a href=\"".URLHelper::getLink("?open=".$db->f("folder_id")."_d_")."\">" . makeButton("loeschen", "img") . "</a>";
 						if($rechte || ($folder_tree->isWritable($db->f("folder_id"), $user->id) && !$folder_tree->isExerciseFolder($db->f("folder_id"), $user->id))) $edit.= " <a href=\"".URLHelper::getLink("?open=".$db->f("folder_id")."_c_#anker")."\">" . makeButton("bearbeiten", "img") . "</a>";
 						if(($rechte && $db->f('range_id') != $SessSemName[1]) ||
-							($level !=0 &&
+							($level !=0 && 
 								($folder_tree->isWritable($db->f("folder_id"), $user->id) &&
 								$folder_tree->isWritable($folder_tree->getValue($db->f("folder_id"), 'parent_id'), $user->id) &&
 								!$folder_tree->isExerciseFolder($db->f("folder_id"), $user->id))
@@ -1646,7 +2294,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 					//Titelbereich erstellen
 					$box = "";
 					if ($change == $db3->f("dokument_id")){
-						$titel= "<input style=\"{font-size:8 pt; width: 100%;}\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($db3->f("name"))."\">";
+						$titel= "<input style=\"{font-size:8 pt; width: 100%;}\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($db3->f("name"))."\" />";
 					} else {
 						$tmp_titel=htmlReady(mila($db3->f("t_name")));
 
@@ -1664,7 +2312,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						$titel .= " / ".(($db3->f("downloads") == 1) ? $db3->f("downloads")." "._("Download") : $db3->f("downloads")." "._("Downloads")).")";
 
 						if (($all) && (!$upload) && ($db3->f("url")=="")) {
-							$box = sprintf ("<input type=\"CHECKBOX\" %s name=\"download_ids[]\" value=\"%s\">",($check_all) ? "checked" : "" , $db3->f("dokument_id"));
+							$box = sprintf ("<input type=\"CHECKBOX\" %s name=\"download_ids[]\" value=\"%s\" />",($check_all) ? "checked" : "" , $db3->f("dokument_id"));
 						}
 					}
 					//Zusatzangaben erstellen
@@ -1710,6 +2358,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						if ($change == $db3->f("dokument_id")) { 	//Aenderungsmodus, Formular aufbauen
 							$content.= "<input type=\"RADIO\" name=\"change_protected\" value=\"0\"".((!$db3->f("protected")) ? "checked" :"") .">"._("Ja, dieses Dokument ist frei von Rechten Dritter") ;
 							$content.= "\n&nbsp;<input type=\"RADIO\" name=\"change_protected\" value=\"1\"".(($db3->f("protected")) ? "checked" :"") .">"._("Nein, dieses Dokument ist <u>nicht</u> frei von Rechten Dritter");
+							$content.= "<br/>&nbsp;<a href=\"http://www.uni-hannover.de/imperia/md/content/elearning/druck/flyer_rechtsfragen_2009_web.pdf\">Wann ist ein Dokument frei von Rechten Dritter? Informationen in der Brosch&uuml;re \"Rechtssicherheit im eLearning\"</a>";
 							$content.= "<br /><br /><textarea name=\"change_description\" rows=3 cols=40>".$db3->f("description")."</textarea><br />";
 							$content.= "<input type=\"image\" " . makeButton("uebernehmen", "src") . " border=0 value=\""._("&Auml;nderungen speichern")."\" />";
 							$content.= "&nbsp;<input type=\"image\" " . makeButton("abbrechen", "src") . " border=0 name=\"cancel\" value=\""._("Abbrechen")."\" />";
@@ -1731,12 +2380,12 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 							} else {
 								$content .= _("Keine Beschreibung vorhanden");
 							}
-							$content.=  "<br><br>" . sprintf(_("<b>Dateigr&ouml;&szlig;e:</b> %s kB"), round ($db3->f("filesize") / 1024));
+							$content.=  "<br /><br />" . sprintf(_("<b>Dateigr&ouml;&szlig;e:</b> %s kB"), round ($db3->f("filesize") / 1024));
 							$content.=  "&nbsp; " . sprintf(_("<b>Dateiname:</b> %s "),$db3->f("filename"));
 						}
 
 						if ($move == $db3->f("dokument_id"))
-							$content.="<br>" . sprintf(_("Diese Datei wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um diese Datei in den gew&uuml;nschten Ordner zu verschieben / kopieren. Wenn Sie diese Datei in eine andere Veranstaltung verschieben / kopieren möchten, wählen Sie die gewünschte Veranstaltung oben auf der Seite aus (sofern Sie Dozent oder Tutor in einer anderen Veranstaltung sind)."), "<img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0 " . tooltip(_("Klicken Sie dieses Symbol, um diese Datei in einen anderen Ordner einzufügen")) . ">");
+							$content.="<br />" . sprintf(_("Diese Datei wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um diese Datei in den gew&uuml;nschten Ordner zu verschieben / kopieren. Wenn Sie diese Datei in eine andere Veranstaltung verschieben / kopieren möchten, wählen Sie die gewünschte Veranstaltung oben auf der Seite aus (sofern Sie Dozent oder Tutor in einer anderen Veranstaltung sind)."), "<img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0 " . tooltip(_("Klicken Sie dieses Symbol, um diese Datei in einen anderen Ordner einzufügen")) . ">");
 
 						$content.= "\n";
 
@@ -2126,6 +2775,12 @@ function create_zip_from_directory($fullpath, $zip_file_name){
 		}
 		return $ret;
 	}
+}
+
+function create_zip_from_newest_files() {
+	global $SessSemName;
+	$db = DBManager::get();
+	$result = $db->query("SELECT filename FROM dokumente WHERE chdate > ".object_get_visit($SessSemName[1], "documents")." OR mkdate > ".object_get_visit($SessSemName[1], "documents"))->fetchAll();
 }
 
 function unzip_file($file_name, $dir_name = '', $testonly = false){
