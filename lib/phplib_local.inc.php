@@ -58,8 +58,12 @@ function studip_default_exception_handler($exception) {
 	while (ob_get_level()) {
 		ob_end_clean();
 	}
-	echo $GLOBALS['template_factory']->render($template,
+	try {
+		echo $GLOBALS['template_factory']->render($template,
 	                                          compact('exception'));
+	} catch (Exception $e) {
+		echo 'Error: ' . htmlspecialchars($e->getMessage());
+	}
 	exit;
 }
 set_exception_handler('studip_default_exception_handler');
