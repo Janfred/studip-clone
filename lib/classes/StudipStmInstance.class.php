@@ -50,9 +50,9 @@ class StudipStmInstance extends SimpleORMap {
 	var $el_struct = array();
 	var $assigns = array();
 	
-	function GetStmInstancesByUser($user_id, $semester_id = false){
+	static function GetStmInstancesByUser($user_id, $semester_id = false){
 		$ret = array();
-		$query = "SELECT DISTINCT stm_instances.*,stm_abstract.*,stm_instances_text.*,semester_data.name as sem_name FROM stm_instances_user
+		$query = "SELECT DISTINCT stm_instances.stm_instance_id as my_id, stm_instances.*,stm_abstract.*,stm_instances_text.*,semester_data.name as sem_name FROM stm_instances_user
 				INNER JOIN stm_instances ON stm_instances.stm_instance_id = stm_instances_user.stm_instance_id
 				INNER JOIN stm_abstract ON stm_instances.stm_abstr_id = stm_abstract.stm_abstr_id
 				INNER JOIN stm_instances_text ON stm_instances.stm_instance_id = stm_instances_text.stm_instance_id AND stm_instances_text.lang_id='".LANGUAGE_ID."'
@@ -60,16 +60,14 @@ class StudipStmInstance extends SimpleORMap {
 				WHERE stm_instances_user.user_id='$user_id'"
 				. ($semester_id ? " AND stm_instances.semester_id='$semester_id' " : "")
 				. " ORDER BY id_number, title";
-		$db = new DB_Seminar($query);
-		while($db->next_record()){
-			$ret[$db->f('stm_instance_id')] = $db->Record;
-		}
-		return $ret;
+		$rs = DBManager::get()->query($query);
+		$ret = $rs->fetchAll(PDO::FETCH_ASSOC|PDO::FETCH_GROUP);
+		return array_map('reset', $ret);
 	}
 	
-	function GetStmInstancesBySeminar($seminar_id, $semester_id = false){
+	static function GetStmInstancesBySeminar($seminar_id, $semester_id = false){
 		$ret = array();
-		$query = "SELECT DISTINCT stm_instances.*,stm_abstract.*,stm_instances_text.*,semester_data.name as sem_name FROM stm_instances_elements
+		$query = "SELECT DISTINCT stm_instances.stm_instance_id as my_id, stm_instances.*,stm_abstract.*,stm_instances_text.*,semester_data.name as sem_name FROM stm_instances_elements
 				INNER JOIN stm_instances ON stm_instances.stm_instance_id = stm_instances_elements.stm_instance_id
 				INNER JOIN stm_abstract ON stm_instances.stm_abstr_id = stm_abstract.stm_abstr_id
 				INNER JOIN stm_instances_text ON stm_instances.stm_instance_id = stm_instances_text.stm_instance_id AND stm_instances_text.lang_id='".LANGUAGE_ID."'
@@ -77,16 +75,14 @@ class StudipStmInstance extends SimpleORMap {
 				WHERE stm_instances_elements.sem_id='$seminar_id'"
 				. ($semester_id ? " AND stm_instances.semester_id='$semester_id' " : "")
 				. " ORDER BY id_number, title";
-		$db = new DB_Seminar($query);
-		while($db->next_record()){
-			$ret[$db->f('stm_instance_id')] = $db->Record;
-		}
-		return $ret;
+		$rs = DBManager::get()->query($query);
+		$ret = $rs->fetchAll(PDO::FETCH_ASSOC|PDO::FETCH_GROUP);
+		return array_map('reset', $ret);
 	}
 	
-	function GetStmInstancesBySeminarAndUser($seminar_id, $user_id){
+	static function GetStmInstancesBySeminarAndUser($seminar_id, $user_id){
 		$ret = array();
-		$query = "SELECT DISTINCT stm_instances.*,stm_abstract.*,stm_instances_text.*,semester_data.name as sem_name FROM stm_instances_user
+		$query = "SELECT DISTINCT stm_instances.stm_instance_id as my_id, stm_instances.*,stm_abstract.*,stm_instances_text.*,semester_data.name as sem_name FROM stm_instances_user
 				INNER JOIN stm_instances_elements ON stm_instances_elements.element_id = stm_instances_user.element_id AND stm_instances_elements.stm_instance_id = stm_instances_user.stm_instance_id 
 				INNER JOIN stm_instances ON stm_instances.stm_instance_id = stm_instances_elements.stm_instance_id
 				INNER JOIN stm_abstract ON stm_instances.stm_abstr_id = stm_abstract.stm_abstr_id
@@ -94,15 +90,13 @@ class StudipStmInstance extends SimpleORMap {
 				LEFT JOIN semester_data ON semester_data.semester_id = stm_instances.semester_id
 				WHERE stm_instances_user.user_id='$user_id' AND stm_instances_elements.sem_id='$seminar_id'"
 				. " ORDER BY id_number, title";
-		$db = new DB_Seminar($query);
-		while($db->next_record()){
-			$ret[$db->f('stm_instance_id')] = $db->Record;
-		}
-		return $ret;
+		$rs = DBManager::get()->query($query);
+		$ret = $rs->fetchAll(PDO::FETCH_ASSOC|PDO::FETCH_GROUP);
+		return array_map('reset', $ret);
 	}
 	
-	function StudipStmInstance ($id = NULL, $stm_abstr_id = null) {
-		parent::SimpleORMap($id);
+	function __construct ($id = NULL, $stm_abstr_id = null) {
+		parent::__construct($id);
 		if ($this->is_new) {
 			$this->setValue('stm_abstr_id', $stm_abstr_id);
 			$this->setValue('lang_id', LANGUAGE_ID);
@@ -111,9 +105,9 @@ class StudipStmInstance extends SimpleORMap {
 	
 	function addElement ($element = null, $sem_id = null) {
 		if (!is_object($element)){
-			$obj =& new StudipStmInstanceElement($element, $this->getId(), $sem_id);
+			$obj = new StudipStmInstanceElement($element, $this->getId(), $sem_id);
 		} else {
-			$obj =& $element;
+			$obj = $element;
 		}
 		$obj->setValue('stm_instance_id', $this->getId());
 		$obj->setValue('sem_id', $sem_id);
@@ -156,11 +150,10 @@ class StudipStmInstance extends SimpleORMap {
 			} else {
 				$sem_to_insert = $sem_ids[0];
 			}
-			$this->db->query(sprintf("INSERT INTO stm_instances_user 
+			$inserted += DBManager::get()->exec(sprintf("INSERT INTO stm_instances_user 
 									(stm_instance_id,element_id,user_id,mkdate)
 									VALUES ('%s','%s','%s',UNIX_TIMESTAMP())",
 									$this->getId(),$element,$user_id));
-			$inserted += $this->db->affected_rows();
 			insert_seminar_user($sem_to_insert, $user_id, 'autor', FALSE);
 		}
 		return ($inserted == count($this->el_struct[$elementgroup]));
@@ -170,8 +163,8 @@ class StudipStmInstance extends SimpleORMap {
 		$el = StudipStmInstanceElement::GetElementsByInstanceParticipant($this->getId(), $user_id);
 		if (count($el)){
 			foreach($el as $element){
-				$this->db->query("DELETE FROM stm_instances_user WHERE stm_instance_id='".$this->getId()."' AND user_id='$user_id' AND element_id='{$element[0]}'");
-				$this->db->query("DELETE FROM seminar_user WHERE user_id='$user_id' AND seminar_id='{$element[2]}'");
+				DBManager::get()->exec("DELETE FROM stm_instances_user WHERE stm_instance_id='".$this->getId()."' AND user_id='$user_id' AND element_id='{$element[0]}'");
+				DBManager::get()->exec("DELETE FROM seminar_user WHERE user_id='$user_id' AND seminar_id='{$element[2]}'");
 				// Löschen aus Statusgruppen
 				RemovePersonStatusgruppeComplete(get_username($user_id), $element[2]);
 				//Pruefen, ob es Nachruecker gibt
@@ -197,16 +190,20 @@ class StudipStmInstance extends SimpleORMap {
 	}
 	
 	function isParticipant($user_id){
-		$this->db->query("SELECT mkdate FROM stm_instances_user WHERE user_id='$user_id' AND stm_instance_id='".$this->getId()."' LIMIT 1");
-		return $this->db->next_record();
+		return 
+			DBManager::get()
+			->query("SELECT mkdate FROM stm_instances_user WHERE user_id='$user_id' AND stm_instance_id='".$this->getId()."' LIMIT 1")
+			->fetchColumn();
 	}
 	
 	function isAllowedToEnter($user_id, $check_semester = false){
 		$abstr_id = $this->getValue('stm_abstr_id');
 		if ($check_semester) $add = " AND sem BETWEEN earliest AND latest ";
-		$this->db->query("SELECT * FROM stm_abstract_assign saa INNER JOIN his_stud_stg hss ON (hss.stg=saa.stg AND hss.abschl=saa.abschl)
-						WHERE user_id='$user_id' AND stm_abstr_id='$abstr_id' $add LIMIT 1");
-		return $this->db->next_record();
+		return 
+			DBManager::get()
+			->query("SELECT * FROM stm_abstract_assign saa INNER JOIN his_stud_stg hss ON (hss.stg=saa.stg AND hss.abschl=saa.abschl)
+					WHERE user_id='$user_id' AND stm_abstr_id='$abstr_id' $add LIMIT 1")
+			->fetchColumn();
 	}
 	
 	function isAllowedToEdit($user_id){
@@ -219,15 +216,12 @@ class StudipStmInstance extends SimpleORMap {
 	function restoreAssigns(){
 		$this->assigns = array();
 		if ($stm_abstr_id = $this->getValue('stm_abstr_id')){
-			$this->db->query("SELECT sam.*, his_stg.dtxt as stg_name,his_pvers.dtxt as p_version_name, his_abschl.ltxt as abschl_name, sat.name as type_name FROM stm_abstract_assign sam
+			$this->assigns = DBManager::get()->query("SELECT sam.*, his_stg.dtxt as stg_name,his_pvers.dtxt as p_version_name, his_abschl.ltxt as abschl_name, sat.name as type_name FROM stm_abstract_assign sam
 								INNER JOIN his_stg ON his_stg.stg=sam.stg
 								INNER JOIN his_abschl ON his_abschl.abint=sam.abschl
 								INNER JOIN his_pvers ON his_pvers.pvers=sam.pversion
 								INNER JOIN stm_abstract_types sat ON sat.stm_type_id = sam.stm_type_id AND sat.lang_id='".LANGUAGE_ID."'
-								WHERE stm_abstr_id='$stm_abstr_id'");
-			while($this->db->next_record()){
-				$this->assigns[] = $this->db->Record;
-			}
+								WHERE stm_abstr_id='$stm_abstr_id'")->fetchAll(PDO::FETCH_ASSOC);
 		}
 		return count($this->assigns);
 	}
@@ -242,14 +236,9 @@ class StudipStmInstance extends SimpleORMap {
 						LEFT JOIN semester_data ON semester_data.semester_id = stm_instances.semester_id
 						LEFT JOIN Institute ON Institute.Institut_id = stm_instances.homeinst WHERE "
 					. join(" AND ", $where_query);
-			$this->db->query($query);
-			if ($this->db->next_record()) {
-				$this->content = array();
-				foreach($this->db->Record as $key => $value){
-					if(!is_int($key)){
-						$this->content[$key] = $value;
-					}
-				}
+			$rs = DBManager::get()->query($query)->fetchAll(PDO::FETCH_ASSOC);
+			if (isset($rs[0])) {
+				$this->content = $rs[0];
 				$this->is_new = false;
 			}
 		} else {
