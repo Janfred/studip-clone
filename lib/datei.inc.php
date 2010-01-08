@@ -1444,11 +1444,11 @@ function display_file_line ($datei, $folder_id, $open, $change, $move, $upload, 
 	if ($open[$datei["dokument_id"]]) {
 		print "<td id=\"file_".$datei["dokument_id"]."_arrow_td\" nowrap valign=\"top\" align=\"left\" width=1% bgcolor=\"$timecolor\" class=\"printhead3\">&nbsp<a href=\"";
 		print URLHelper::getLink("?close=".$datei["dokument_id"]."#anker");
-		print "\" class=\"tree\" onClick=\"return STUDIP.Filesystem.changefilebody('".$datei["dokument_id"]."')\"><img id=\"file_".$datei["dokument_id"]."_arrow_img\" src=\"".$GLOBALS['ASSETS_URL']."images/forumgraurunt2.gif\"".tooltip(_("Objekt zuklappen"))." border=0></a></td>";
+		print "\" class=\"tree\" onClick=\"return STUDIP.Filesystem.changefilebody('".$datei["dokument_id"]."', '".$SessionSeminar."')\"><img id=\"file_".$datei["dokument_id"]."_arrow_img\" src=\"".$GLOBALS['ASSETS_URL']."images/forumgraurunt2.gif\"".tooltip(_("Objekt zuklappen"))." border=0></a></td>";
 	} else {
 		print "<td id=\"file_".$datei["dokument_id"]."_arrow_td\" nowrap valign=\"top\" align=\"left\" width=1% bgcolor=\"$timecolor\" class=\"printhead2\">&nbsp<a href=\"";
 		print URLHelper::getLink("?open=".$datei["dokument_id"]."#anker");
-		print "\" class=\"tree\" onClick=\"return STUDIP.Filesystem.changefilebody('".$datei["dokument_id"]."')\"><img id=\"file_".$datei["dokument_id"]."_arrow_img\" src=\"".$GLOBALS['ASSETS_URL']."images/forumgrau2.gif\"".tooltip(_("Objekt aufklappen"))." border=0></a></td>";
+		print "\" class=\"tree\" onClick=\"return STUDIP.Filesystem.changefilebody('".$datei["dokument_id"]."', '".$SessionSeminar."')\"><img id=\"file_".$datei["dokument_id"]."_arrow_img\" src=\"".$GLOBALS['ASSETS_URL']."images/forumgrau2.gif\"".tooltip(_("Objekt aufklappen"))." border=0></a></td>";
 	}
 	
 	// -> Pfeile zum Verschieben (bzw. die Ziehfläche)
@@ -1459,6 +1459,8 @@ function display_file_line ($datei, $folder_id, $open, $change, $move, $upload, 
 				"\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/move_up.gif\"></a><a href=\"".URLHelper::getLink('?open='.
 				$datei['dokument_id'])."_mfd_\" title=\""._("Datei nach unten schieben").
 				"\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/move_down.gif\"></a></span>";
+		$bewegeflaeche .= "<span class=\"anfasser\" style=\"display:none\"><a href=\"#\" class=\"drag\" onclick=\"return false\" " .
+				"style=\"cursor: move\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/verschieben.png\" border=0 title=\"Datei verschieben\"></a></span>";
 	}
 	
 	print "<td class=\"printhead\">";
@@ -1797,6 +1799,8 @@ function display_folder ($folder_id, $open, $change, $move, $upload, $refresh=FA
 				"\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/move_up.gif\"></a><a href=\"".URLHelper::getLink('?open='.
 				$folder_id)."_mfod_\" title=\""._("Nach unten verschieben").
 				"\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/move_down.gif\"></a></span>";
+		$bewegeflaeche .= "<span class=\"anfasser\" style=\"display:none\"><a href=\"#\" class=\"drag\" onclick=\"return false\" " .
+				"style=\"cursor: move\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/verschieben.png\" border=0 title=\"Ordner verschieben\"></a></span>";
 	}
 	
 	//Jetzt folgt der Link zum Aufklappen
@@ -1805,7 +1809,7 @@ function display_folder ($folder_id, $open, $change, $move, $upload, $refresh=FA
 		//print "<td width=1px class=\"printhead\">&nbsp;</td>";
 		print "<td id=\"folder_".$folder_id."_arrow_td\" nowrap valign=\"top\" align=\"left\" width=1% bgcolor=\"$timecolor\" class=\"printhead3\">";
 		print "&nbsp;<a href=\"".URLHelper::getLink("?close=".$folder_id."#anker");
-		print "\" class=\"tree\" onClick=\"return STUDIP.Filesystem.changefolderbody('".$folder_id."')\"><img id=\"folder_".$folder_id."_arrow_img\" src=\"".$GLOBALS['ASSETS_URL']."images/forumgraurunt2.gif\"".tooltip(_("Objekt zuklappen"))." border=0></a>";
+		print "\" class=\"tree\" onClick=\"return STUDIP.Filesystem.changefolderbody('".$folder_id."', '".$SessionSeminar."')\"><img id=\"folder_".$folder_id."_arrow_img\" src=\"".$GLOBALS['ASSETS_URL']."images/forumgraurunt2.gif\"".tooltip(_("Objekt zuklappen"))." border=0></a>";
 		print "</td>";
 		//print ($javascriptok ? "<td class=\"printhead\"><a href=\"Javascript: changefolderbody('".$folder_id."')\" class=\"tree\"><span id=\"folder_".$folder_id."_header\" style=\"font-weight: bold\">" : 
 		print "<td class=\"printhead\">";
@@ -1819,14 +1823,14 @@ function display_folder ($folder_id, $open, $change, $move, $upload, $refresh=FA
 		print "<td id=\"folder_".$folder_id."_arrow_td\" nowrap valign=\"top\" align=\"left\" width=1% bgcolor=\"$timecolor\" class=\"printhead2\">";
 		print "&nbsp;<a href=\"";
 		print URLHelper::getLink("?open=".$folder_id."#anker");
-		print "\" class=\"tree\" onClick=\"return STUDIP.Filesystem.changefolderbody('".$folder_id."')\"><img id=\"folder_".$folder_id."_arrow_img\" src=\"".$GLOBALS['ASSETS_URL']."images/forumgrau2.gif\"".tooltip(_("Objekt aufklappen"))." border=0></a></td>";
+		print "\" class=\"tree\" onClick=\"return STUDIP.Filesystem.changefolderbody('".$folder_id."','".$SessionSeminar."')\"><img id=\"folder_".$folder_id."_arrow_img\" src=\"".$GLOBALS['ASSETS_URL']."images/forumgrau2.gif\"".tooltip(_("Objekt aufklappen"))." border=0></a></td>";
 		print "<td class=\"printhead\">";
 				if ($move && ($move != $folder_id) && $folder_tree->isWritable($folder_id, $user->id) && (!$folder_tree->isFolder($move) || ($folder_tree->checkCreateFolder($folder_id, $user->id) && !$folder_tree->isExerciseFolder($folder_id, $user->id)))){
 				print "&nbsp;<a href=\"".URLHelper::getLink("?open=".$folder_id."_md_")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0></a>";
 		}
 		print $bewegeflaeche;
 		print "<a href=\"".URLHelper::getLink("?open=".$folder_id."#anker")."\" class=\"tree\" " .
-				"onClick=\"return STUDIP.Filesystem.changefolderbody('".$folder_id."')\"><span id=\"folder_".$folder_id."_header\" " .
+				"onClick=\"return STUDIP.Filesystem.changefolderbody('".$folder_id."', '".$SessionSeminar."')\"><span id=\"folder_".$folder_id."_header\" " .
 				"style=\"font-weight: normal\">";
 	}
 		
