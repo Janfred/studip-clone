@@ -1,6 +1,6 @@
 <?
 # Lifter002: TODO
-# Lifter005: TODO
+# Lifter005: TEST
 # Lifter007: TODO
 # Lifter003: TODO
 // vim: noexpandtab
@@ -59,14 +59,10 @@ function return_val_from_key($array, $key) {
 
 function MessageIcon($message_hovericon) {
 	global $my_messaging_settings, $PHP_SELF, $auth, $forum;
-	if ($auth->auth["jscript"] AND $message_hovericon["content"]!="" && $message_hovericon["openclose"]=="close" &&  $forum["jshover"] == "1") {
-		$hovericon = "<a href=\"javascript:void(0);\" "
-			."onMouseOver=\"return overlib('"
-			.JSReady($message_hovericon["content"], "forum")
-			."', CAPTION, '&nbsp;"
-			.JSReady($message_hovericon["titel"])
-			."', NOCLOSE, CSSOFF)\" "
-			." onMouseOut=\"nd();\"><img src=\"".$GLOBALS['ASSETS_URL']."images/".$message_hovericon["picture"]."\" border=0></a>";
+	if ($message_hovericon["content"]!="" && $message_hovericon["openclose"]=="close" &&  $forum["jshover"] == "1") {
+		$hovericon = "<img onmouseover=\"return STUDIP.OverDiv.BindInline(
+		{position:'middle right', id: '".$message_hovericon["id"]."',
+		content_element_type: 'message', initiator: this}, event);\" src=\"".$GLOBALS['ASSETS_URL']."images/".$message_hovericon["picture"]."\" border=0>";
 	} else {
 		$hovericon = "<a href=\"".$message_hovericon['link']."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/".$message_hovericon["picture"]."\" border=0></a>";
 	}
@@ -220,10 +216,9 @@ function print_snd_message($psm) {
 
 	if ($open == "open") {
 		$content = formatReady($psm['message']);
-		// StEP 155: Mail Attachments
-		if (is_array($psm["attachments"]) AND (sizeof($psm["attachments"]) > 0)) {
+		if ($psm['num_attachments']) {
 			$content.= "<br>--<br>";
-			foreach ($psm["attachments"] as $key => $attachment) {
+			foreach (get_message_attachments($psm["message_id"]) as $key => $attachment) {
 				$content.= "\n<a href=\"" . GetDownloadLink($attachment["dokument_id"], $attachment["name"], 7) . "\">";
 				$content.= "&nbsp;". GetFileIcon(getFileExtension($attachment["name"]), true);
 				$content.= "&nbsp;" . htmlready($attachment["name"]);
@@ -266,8 +261,7 @@ function print_snd_message($psm) {
 		}
 	}
 
-	// StEP 155: Mail Attachments
-	if (is_array($psm["attachments"]) AND (sizeof($psm["attachments"]) > 0))
+	if ($psm['num_attachments'])
 		$attachment_icon = " <img src=\"".$GLOBALS['ASSETS_URL']."images/attachment.gif\" border=0 ".tooltip(_("Diese Nachricht enthält einen Dateianhang.")).">";
 	else
 		$attachment_icon = "";
@@ -356,8 +350,7 @@ function print_rec_message($prm) {
 	$zusatz .= "&nbsp;".$move_option."<a href=\"".$PHP_SELF."?cmd=".$tmp_cmd."&sel_lock=".$prm['message_id']."#".$prm['message_id']."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/".$tmp_picture.".gif\" border=0 ".$tmp_tooltip."></a><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"2\">".$trash."<input type=\"checkbox\" name=\"sel_sms[]\" value=\"".$prm['message_id']."\" ".CheckChecked($cmd, "select_all").">";
 	$zusatz .= "</font>";
 
-	// StEP 155: Mail Attachments
-	if (is_array($prm["attachments"]) AND (sizeof($prm["attachments"]) > 0))
+	if ($prm["num_attachments"])
 		$attachment_icon = " <img src=\"".$GLOBALS['ASSETS_URL']."images/attachment.gif\" border=0 ".tooltip(_("Diese Nachricht enthält einen Dateianhang.")).">";
 	else
 		$attachment_icon = "";
@@ -366,10 +359,9 @@ function print_rec_message($prm) {
 
 	if ($open == 'open'){
 		$content = formatReady($prm['message']);
-		// StEP 155: Mail Attachments
-		if (is_array($prm["attachments"]) AND (sizeof($prm["attachments"]) > 0)) {
+		if ($prm["num_attachments"]) {
 			$content.= "<br>--<br>";
-			foreach ($prm["attachments"] as $key => $attachment) {
+			foreach (get_message_attachments($prm['message_id']) as $key => $attachment) {
 				$content.= "\n<a href=\"" . GetDownloadLink($attachment["dokument_id"], $attachment["name"], 7) . "\">";
 				$content.= "&nbsp;". GetFileIcon(getFileExtension($attachment["name"]), true);
 				$content.= "&nbsp;" . htmlready($attachment["name"]);
@@ -463,10 +455,11 @@ function print_messages() {
 	$n = 0;
 	$user_id = $user->id;
 	if ($sms_data['view'] == "in") { // postbox in
-		$query = "SELECT message.*, folder,confirmed_read,answered,message_user.readed,dont_delete,Vorname,Nachname,username FROM message_user
+		$query = "SELECT message.*, folder,confirmed_read,answered,message_user.readed,dont_delete,Vorname,Nachname,username,count(dokument_id) as num_attachments FROM message_user
 				LEFT JOIN message USING (message_id) LEFT JOIN auth_user_md5 ON (autor_id=auth_user_md5.user_id)
+				LEFT JOIN dokumente ON range_id=message_user.message_id
 				WHERE message_user.user_id = '".$user_id."' AND message_user.snd_rec = 'rec'
-				AND message_user.deleted = 0 ".$query_movetofolder." ".$query_showfolder." ".$query_time;
+				AND message_user.deleted = 0 ".$query_movetofolder." ".$query_showfolder." ".$query_time. " GROUP BY message_user.message_id ORDER BY message_user.mkdate DESC";
 		$db->query($query);
 		$tmp_move_to_folder = sizeof($sms_data['tmp']['move_to_folder']);
 		while ($db->next_record()) {
@@ -488,11 +481,7 @@ function print_messages() {
 			$prm['dont_delete'] = $db->f("dont_delete");
 			$prm['uname_snd'] = $db->f("username");
 			$prm['priority'] = $db->f("priority");
-			// StEP 155: Mail Attachments
-			$prm['attachments'] = array();
-			if ($GLOBALS["ENABLE_EMAIL_ATTACHMENTS"] == true) {
-				$prm['attachments'] = get_message_attachments($prm['message_id']);
-			}
+			$prm['num_attachments'] = $db->f("num_attachments");
 			ob_start();
 			print_rec_message($prm);
 			ob_end_flush();
@@ -500,11 +489,13 @@ function print_messages() {
 	} else if ($sms_data['view'] == "out") { // postbox out
 		$db->query("SELECT message. * , message_user.folder,message_user.dont_delete , auth_user_md5.user_id AS rec_uid,
 					auth_user_md5.vorname AS rec_vorname, auth_user_md5.nachname AS rec_nachname,
-					auth_user_md5.username AS rec_uname, count( mu.message_id )  AS num_rec
+					auth_user_md5.username AS rec_uname, count( mu.message_id )  AS num_rec,
+					count(dokument_id) as num_attachments
 					FROM message_user
 					LEFT  JOIN message_user AS mu ON ( message_user.message_id = mu.message_id AND mu.snd_rec =  'rec'  )
 					LEFT  JOIN message ON ( message.message_id = message_user.message_id )
 					LEFT  JOIN auth_user_md5 ON ( mu.user_id = auth_user_md5.user_id )
+					LEFT JOIN dokumente ON range_id=message_user.message_id
 					WHERE message_user.user_id = '".$user_id."'
 					AND message_user.snd_rec = 'snd' AND message_user.deleted = 0 "
 					.$query_movetofolder." ".$query_showfolder. $query_time_sort . " GROUP BY (message_user.message_id) ORDER BY message_user.mkdate DESC");
@@ -524,11 +515,7 @@ function print_messages() {
 			$psm['rec_nachname'] = $db->f("rec_nachname");
 			$psm['rec_uname'] = $db->f("rec_uname");
 			$psm['num_rec'] = $db->f("num_rec");
-			// StEP 155: Mail Attachments
-			$psm['attachments'] = array();
-			if ($GLOBALS["ENABLE_EMAIL_ATTACHMENTS"] == true) {
-				$psm['attachments'] = get_message_attachments($psm['message_id']);
-			}
+			$psm['num_attachments'] = $db->f("num_attachments");
 			ob_start();
 			print_snd_message($psm);
 			ob_end_flush();

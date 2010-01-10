@@ -3,6 +3,7 @@
 # Lifter002: TODO
 # Lifter007: TODO
 # Lifter003: TODO
+# Lifter005: TEST
 // vim: noexpandtab
 /**
 * helper functions for handling the board
@@ -129,7 +130,7 @@ function editarea($forumposting) {
 		$description="";
 	}
 	if ($user->id == "nobody") {  // nicht angemeldete muessen Namen angeben
-		$description =	"<b>" . _("Ihr Name:") . "</b>&nbsp; <input type=text size=50 name=nobodysname onchange=\"pruefe_name()\" value=\"" . _("unbekannt") . "\"><br><br><input type=hidden name=update value='".$forumposting["id"]."'>"
+		$description =	"<b>" . _("Ihr Name:") . "</b>&nbsp; <input type=text size=50 name=nobodysname onchange=\"STUDIP.Forum.pruefe_name()\" value=\"" . _("unbekannt") . "\"><br><br><input type=hidden name=update value='".$forumposting["id"]."'>"
 				."<div align=center><textarea name=description style=\"width:70%\" cols=\"". $cols."\" rows=12 wrap=virtual>"
 				.htmlReady($description)
 				.htmlReady($zitat)
@@ -1048,30 +1049,21 @@ function print_rating($rate, $id, $username) {
 			$bar = "<img src=\"".$GLOBALS['ASSETS_URL']."images/rate_neutral$ratecount.gif\" width=\"50\" height=\"11\" border=\"0\">";
 		}
 	}
-	if ($auth->auth["jscript"]) { //Java Script activated?
+	if (object_check_user($id, "rate") == TRUE || get_username($user->id) == $username) { // already rated / my own posting
+ 		$bar = '<span ' . tooltip(sprintf(_("Bewertung: %s"),$rate), false) . '>' . $bar. '</span>';
+ 	} else {
+ 	 		$bar = '<span onClick="return STUDIP.OverDiv.BindInline(
+				{position:\'top left\',
+				id: \''.$id.'_rate\',
+				title: \'\',
+				content: STUDIP.Forum.rate_template.evaluate({id: \''.$id.'\'}),
+				initiator: this, width: 250}, event);" ' 
+ 	 			. tooltip(sprintf(_("Bewertung: %s Zum Abstimmen bitte klicken."),$rate), false) . '>'
+ 	 			. $bar
+ 	 			. '</span>';
+ 	 }
+ 	
 
-  		if (object_check_user($id, "rate") == TRUE || get_username($user->id) == $username) { // already rated / my own posting
- 			$ol_txt = "'<div align=center>Bewertung: $rate</div>', CSSOFF, LEFT, WIDTH, 100";
- 		 	$bar = '<a href="javascript:void(0);" onmouseover="return overlib('.$ol_txt.');" onmouseout="return nd();">' . $bar . '</a>&nbsp;';
- 		 } else {
-  		 	$random = rand();
-    			$start = $forum["flatviewstartposting"];
-    			$txt  = sprintf(_("Bewertung: %sZum Abstimmen bitte klicken."),$rate . ' <br>');
-    			$txt2 = _("Bitte werten:");
-    			$txt3 = _("Bewertung des Beitrags");
-    			$txt4 = _("Schulnote");
-    			$ol_txt = "'<div align=center>$txt</div>', LEFT, WIDTH, 200";
-    			$ol_txt2 = "'<div align=center><font size=-1>$txt3</font><br><font size=-2>($txt4)</font><br>";
-  			$ol_txt2 .= "<form method=post action=".URLHelper::getLink("#anker")."><b>&nbsp;<font size=2 color=#009900 >1";
-  			$ol_txt2 .= "<input type=radio name=rate[$id] value=1><input type=radio name=rate[$id] value=2>";
-	 		$ol_txt2 .= "<input type=radio name=rate[$id] value=3><input type=radio name=rate[$id] value=4>";
-  			$ol_txt2 .= "<input type=radio name=rate[$id] value=5><font size=2 color=#990000>5&nbsp;<br><br>";
-  			$ol_txt2 .= "<input type=hidden name=open value=$openorig><input type=hidden name=flatviewstartposting value=$start>";
- 	 		$ol_txt2 .= "<input type=image name=sidebar value=$id src=".localeButtonUrl('bewerten-button.png')." align=absmiddle border=0></form></font></div>";
-  			$ol_txt2 .= "', CAPTION, '$txt2', CSSOFF, STICKY, LEFT, ABOVE, WIDTH, 200, HEIGHT, 100";
-  			$bar = '<a href="javascript:overlib('.$ol_txt2.'), void(0);" onmouseover="return overlib('.$ol_txt.');"  onmouseout="return nd();">' . $bar . '</a>&nbsp;';
-  		}
-	}
 //	$bar .= " | ";
 	return $bar;
 }

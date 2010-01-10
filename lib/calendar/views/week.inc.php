@@ -62,14 +62,6 @@ else
 
 include('lib/include/html_head.inc.php');
 
-if ($forum["jshover"] == 1 AND $auth->auth["jscript"]) { // JS an und erwuenscht?
-	echo "<script language=\"JavaScript\">";
-	echo "var ol_textfont = \"Arial\"";
-	echo "</script>";
-	echo "<DIV ID=\"overDiv\" STYLE=\"position:absolute; visibility:hidden; z-index:1000;\"></DIV>";
-	echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"".$GLOBALS['ASSETS_URL']."javascripts/overlib.js\"></SCRIPT>";
-}
-
 include('lib/include/header.php');
 
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\" align=\"center\">\n";

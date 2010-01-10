@@ -769,46 +769,10 @@ function fit_title ($title, $cols, $rows, $max_length, $end_str = "...", $pad = 
 function js_hover ($aterm) {
 	global $forum, $auth;
 
-	if ($forum["jshover"] == 1 AND $auth->auth["jscript"]) { // Hovern
-		$jscript_text = array();
-
-		$jscript_text = '<b>' . _("Zusammenfassung:") . ' </b>'
-				. htmlReady($aterm->getTitle()) . '<hr>';
-
-		if (strtolower(get_class($aterm)) == 'seminarevent') {
-			$jscript_text .= '<b>' . _("Veranstaltung:") . ' </b> '
-					. htmlReady($aterm->getSemName()) . '<br>';
-		}
-		if ($aterm->getDescription()) {
-			$jscript_text .= '<b>' . _("Beschreibung:") . ' </b> '
-					. htmlReady($aterm->getDescription()) . '<br>';
-		}
-		if ($categories = $aterm->toStringCategories()) {
-			$jscript_text .= '<b>' . _("Kategorie:") . ' </b> '
-					. htmlReady($categories) . '<br>';
-		}
-		if ($aterm->getProperty('LOCATION')) {
-			$jscript_text .= '<b>' . _("Ort:") . ' </b> '
-					. htmlReady($aterm->getProperty('LOCATION')) . '<br>';
-		}
-		if (strtolower(get_class($aterm)) != 'seminarevent') {
-			$jscript_text .= '<b>' . _("Priorit&auml;t:") . ' </b>'
-					. htmlReady($aterm->toStringPriority()) . '<br>';
-			$jscript_text .= '<b>' . _("Zugriff:") . ' </b>'
-					. htmlReady($aterm->toStringAccessibility()) . '<br>';
-			$jscript_text .= '<b>' . _("Wiederholung:") . ' </b>'
-					. htmlReady($aterm->toStringRecurrence()) . '<br>';
-		}
-
-		$jscript_text = "'" . JSReady($jscript_text, 'contact')
-								. "',CAPTION,'"
-								. JSReady($aterm->toStringDate('SHORT_DAY'))
-							//	. "&nbsp; &nbsp; ". $jscript_title
-								. "',NOCLOSE,CSSOFF";
-
-		return " onmouseover=\"return overlib($jscript_text);\" onmouseout=\"return nd();\"";
+	if ($forum["jshover"] == 1) { // Hovern
+		return " onmouseover=\"return STUDIP.OverDiv.BindInline({position:'middle right',width:250, id: '".$aterm->getId()."',
+				content_element_type: 'calendarevent', is_moveable: false, initiator: this}, event);\"";
 	}
-
 	return "";
 }
 

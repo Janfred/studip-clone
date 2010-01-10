@@ -348,42 +348,15 @@ function ShowContact ($contact_id)
 						."<a href=\"$PHP_SELF?view=$view&cmd=delete&contact_id=$contact_id&open=$open\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" ".tooltip(_("Kontakt löschen"))."></a></td></tr>"
 						."<tr><td colspan=\"2\" class=\"steelgraulight\" align=\"center\"><a href=\"$PHP_SELF?view=$view&filter=$filter\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumgraurauf.gif\" border=\"0\" ".tooltip(_("Kontakte schließen"))."></a></td></tr>";
 		} else {
-			if ($forum["jshover"]==1 AND $auth->auth["jscript"]) { // Hovern
-				$description = "";
-				$userinfo = GetUserInfo($db->f("user_id"));
-				if (sizeof($userinfo)>0) {
-					while(list($key,$value) = each($userinfo)) {
-//						$description .= "<tr><td class=\"steel1\" width=\"100\"><font size=\"2\">".$key.":</font></td><td class=\"steel1\" width=\"250\"><font size=\"2\">".$value."</font></td></tr>";
-						$description .= "<b>".FormatReady($key).":</b>       ".$value."\n";
-					}
-				}
-
-				$userinstinfo = GetInstInfo($db->f("user_id"));
-				for ($i=0; $i <sizeof($userinstinfo); $i++) {
-					$output .= "<tr><td class=\"steel1\" colspan=\"2\"><hr></td></tr>";
-					while(list($key,$value) = each($userinstinfo[$i])) {
-						$description .= "<b>".JSReady($key).":</b>      ".$value."\n";
-					}
-				}
-
-				$extra = GetExtraUserinfo ($contact_id);
-				if (sizeof($extra)>0) {
-					while(list($key,$value) = each($extra)) {
-						$description .= "<b>".JSReady($key).":</b>      ".FormatReady($value)."\n";
-					}
-				}
-
+			if ($forum["jshover"]==1) { // Hovern
 				$hoverlink = "<a href=\"$PHP_SELF?view=$view&filter=$filter&open=".$contact_id."#anker\" ";
-				$name = "huhu";
 				$txt = "<hr>"._("Klicken zum Bearbeiten");
 				$bild = $GLOBALS['ASSETS_URL']."images/forumgraurunt.gif";
 				if ($description == "")
 					$description = "<br>"._("Keine eingegeben")."<br>";
 				$link =	$hoverlink
-						."onMouseOver=\"return overlib('"
-						.JSReady($description,"contact").$txt
-						."', CAPTION, '&nbsp; &nbsp; &nbsp; "._("Weitere Informationen:")."', NOCLOSE, CSSOFF)\" "
-						." onMouseOut=\"nd();\"><img src=\"".$bild."\" border=0></a>";
+						."onmouseover=\"return STUDIP.OverDiv.BindInline({position:'middle right',width:280, id: '".$contact_id."',
+						content_element_type: 'contact', is_moveable: false, initiator: this}, event);\"><img src=\"".$bild."\" border=0></a>";
 			} else {
 				$link = "<a href=\"$PHP_SELF?view=$view&filter=$filter&open=".$contact_id."#anker\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumgraurunt.gif\" border=\"0\"></a>";
 			}

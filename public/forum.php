@@ -1,7 +1,7 @@
 <?
 # Lifter001: DONE
 # Lifter002: TODO
-# Lifter005: TODO
+# Lifter005: TEST
 # Lifter007: TODO
 # Lifter003: TODO
 /*
@@ -62,44 +62,53 @@ if ($forumsend && $forumsend!="bla") {
 	}
 	$CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("Forum");
 }
+ob_start();
+?>
+<script type="text/javascript">
+
+STUDIP.Forum = {};
+
+STUDIP.Forum.pruefe_name = function(){
+ var re_nachname = /^([a-zA-ZÄÖÜ][^0-9"´'`\/\\\(\)\[\]]+)$/;
+ var checked = true;
+ if (re_nachname.test(document.forumwrite.nobodysname.value)==false) {
+ alert("<?=_("Bitte geben Sie Ihren tatsächlichen Namen an.")?>");
+ document.forumwrite.nobodysname.focus();
+ checked = false;
+ }
+  if (document.forumwrite.nobodysname.value=="unbekannt") {
+ alert("<?=_("Bitte geben Sie Ihren Namen an.")?>");
+ document.forumwrite.nobodysname.focus();
+ checked = false;
+ }
+ return checked;
+}
+
+STUDIP.Forum.rate_template = new Template(
+'<form method="post" action="<?=URLHelper::getLink("?view=$view&open=$open&flatviewstartposting=$flatviewstartposting#anker")?>">\
+<div style="text-align:center">\
+<?=_("Bewertung des Beitrags")?>\
+<br>\
+<?=_("Schulnote")?>\
+<br>\
+<span style="color:#009900;font-weight:bold;">1</span>\
+<?php foreach(range(1,5) as $r) :?>
+<input type="radio" name="rate[#{id}]" value="<?=$r?>">\
+<?php endforeach?>
+<span style="color:#990000;font-weight:bold;">5</span>\
+<br>\
+\<?=makebutton('bewerten','input',_("Bewertung abgeben"),'sidebar')?>\
+</form>\
+</div>\
+');
+</script>
+<?php 
+$_include_additional_header = ob_get_clean();
 
 // Start of Output
 	include ('lib/include/html_head.inc.php'); // Output of html head
 	include ('lib/include/header.php');   // Output of Stud.IP head
-
-	if ($user->id == "nobody") {  // nicht angemeldete muessen Namen angeben, dazu auch JS Check auf Name
-?>
-<SCRIPT language="JavaScript">
-<!--
-function pruefe_name(){
- var re_nachname = /^([a-zA-ZÄÖÜ][^0-9"´'`\/\\\(\)\[\]]+)$/;
- var checked = true;
- if (re_nachname.test(document.forumwrite.nobodysname.value)==false) {
- 	alert("Bitte geben Sie Ihren tatsächlichen Namen an.");
- 	document.forumwrite.nobodysname.focus();
- 	checked = false;
- 	}
-  if (document.forumwrite.nobodysname.value=="unbekannt") {
- 	alert("Bitte geben Sie Ihren Namen an.");
- 	document.forumwrite.nobodysname.focus();
- 	checked = false;
- 	}
- return checked;
-}
-// -->
-</SCRIPT>
-<?
-
-}
-
-if ($auth->auth["jscript"]) { // JS an
-	echo "<script language=\"JavaScript\">";
-	echo "var ol_textfont = \"Arial\"";
-	echo "</script>";
-	echo "<DIV ID=\"overDiv\" STYLE=\"position:absolute; visibility:hidden; z-index:1000;\"></DIV>";
-	echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"".$GLOBALS['ASSETS_URL']."javascripts/overlib.js\"></SCRIPT>";
-}
-
+  			
 require_once 'lib/functions.php';
 require_once ('lib/visual.inc.php');
 require_once ('lib/forum.inc.php');

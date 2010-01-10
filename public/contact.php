@@ -1,6 +1,6 @@
 <?
 # Lifter002: TODO
-# Lifter005: TODO - overlib
+# Lifter005: TEST - overlib
 # Lifter007: TODO
 # Lifter003: TODO
 /*
@@ -26,14 +26,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Default_Auth
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("user");
-
-	if ($forum["jshover"]==1 AND $auth->auth["jscript"]) { // JS an und erwuenscht?
-		echo "<script language=\"JavaScript\">";
-		echo "var ol_textfont = \"Arial\"";
-		echo "</script>";
-		echo "<DIV ID=\"overDiv\" STYLE=\"position:absolute; visibility:hidden; z-index:1000;\"></DIV>";
-		echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"".$GLOBALS['ASSETS_URL']."javascripts/overlib.js\"></SCRIPT>";
-	}
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 

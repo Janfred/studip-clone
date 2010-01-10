@@ -37,14 +37,6 @@
 // Begin of output
 include('lib/include/html_head.inc.php');
 
-if ($forum["jshover"] == 1 AND $auth->auth["jscript"]) { // JS an und erwuenscht?
-	echo "<script language=\"JavaScript\">";
-	echo "var ol_textfont = \"Arial\"";
-	echo "</script>";
-	echo "<div id=\"overDiv\" style=\"position:absolute; visibility:hidden; z-index:1000;\"></div>";
-	echo "<script language=\"JavaScript\" SRC=\"".Assets::url()."javascripts/overlib.js\"></script>";
-}
-
 include('lib/include/header.php');
 
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">\n";

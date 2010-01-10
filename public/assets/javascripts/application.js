@@ -179,52 +179,27 @@ STUDIP.study_area_selection = {
   }
 };
 
-STUDIP.OverDiv = Object.extend(Class.create(), {
-    overdivs: {},
-    BindInline: function (options, event) {
-      event = Event.extend(event);
-      if (!this.overdivs[options.id]) {
-        options.event_type = event.type;
-        this.overdivs[options.id] = new STUDIP.OverDiv(options);
-      }
-      this.overdivs[options.id].show(event);
-      return false;
-    },
-
-    BindToEvent: function (options, event_type) {
-      event_type = event_type || 'mouseover';
-      if (!this.overdivs[options.id]) {
-        options.event_type = event.type;
-        this.overdivs[options.id] = new STUDIP.OverDiv(options);
-        Event.observe($(options.initiator), event_type, this.overdivs[options.id].show.bindAsEventListener(this.overdivs[options.id]));
-      }
-      return this.overdivs[options.id];
-    }
-  }
-);
-
-STUDIP.OverDiv.prototype = {
-  options: {
-    id: '',
-    title: '',
-    content: '',
-    content_url: '',
-    content_element_type: '',
-    position: 'bottom right',
-    width: 0,
-    is_moveable: true,
-    inititator: null,
-    event_type: 'mouseover'
-  },
-  is_drawn: false,
-  is_hidden: true,
-  is_scaled : false,
-  id: '',
-  container: null,
-  title: null,
-  content: null,
-
+STUDIP.OverDiv = Class.create ({
   initialize: function (options) {
+    this.options = {
+        id: '',
+        title: '',
+        content: '',
+        content_url: '',
+        content_element_type: '',
+        position: 'bottom right',
+        width: 0,
+        is_moveable: true,
+        initiator: null,
+        event_type: 'mouseover'
+    };
+    this.is_drawn = false;
+    this.is_hidden = true;
+    this.is_scaled = false;
+    this.id = '';
+    this.container = null;
+    this.title = null;
+    this.content = null;
     Object.extend(this.options, options || {});
     this.id = this.options.id;
     this.initiator = $(this.options.initiator);
@@ -256,6 +231,7 @@ STUDIP.OverDiv.prototype = {
       outer.appendChild(content);
       this.container = outer;
       this.container.absolutize();
+      this.container.setStyle({width: this.getWidth() + 'px'});
       this.container.hide();
       $('overdiv_container').appendChild(this.container);
       this.is_drawn = true;
@@ -343,7 +319,33 @@ STUDIP.OverDiv.prototype = {
     this.is_scaled = !this.is_scaled;
   }
 
-};
+});
+
+Object.extend(STUDIP.OverDiv, {
+    overdivs: {},
+    BindInline: function (options, event) {
+      event = Event.extend(event);
+      if (!this.overdivs[options.id]) {
+        options.event_type = event.type;
+        this.overdivs[options.id] = new STUDIP.OverDiv(options);
+      } else {
+        this.overdivs[options.id].initiator = $(options.initiator);
+      }
+      this.overdivs[options.id].show(event);
+      return false;
+    },
+
+    BindToEvent: function (options, event_type) {
+      event_type = event_type || 'mouseover';
+      if (!this.overdivs[options.id]) {
+        options.event_type = event.type;
+        this.overdivs[options.id] = new STUDIP.OverDiv(options);
+        Event.observe($(options.initiator), event_type, this.overdivs[options.id].show.bindAsEventListener(this.overdivs[options.id]));
+      }
+      return this.overdivs[options.id];
+    }
+  }
+);
 
 /* ------------------------------------------------------------------------
  * Markup toolbar
