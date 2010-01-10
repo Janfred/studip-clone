@@ -14,6 +14,7 @@
 
 require_once 'StudipCache.class.php';
 require_once 'StudipNullCache.class.php';
+require_once 'StudipFileCache.class.php';
 
 /**
  * This factory retrieves the instance of StudipCache configured for use in
@@ -35,7 +36,7 @@ class StudipCacheFactory {
      *
      * @var string
      */
-    const DEFAULT_CACHE_CLASS = 'StudipNullCache';
+    const DEFAULT_CACHE_CLASS = 'StudipFileCache';
 
     /**
      * singleton instance
@@ -141,6 +142,9 @@ class StudipCacheFactory {
      */
     static function getCache()
     {
+        if (!$GLOBALS['CACHING_ENABLE']) {
+            return new StudipNullCache();
+        }
 
         if (is_null(self::$cache)) {
 
