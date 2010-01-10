@@ -109,14 +109,7 @@ function check_group_new($group_members, $my_obj){
 	foreach ($group_members as $member){
 		$seminar_content = $my_obj[$member['seminar_id']];
 		if ($seminar_content['visitdate'] <= $seminar_content["chdate"]
-			|| $seminar_content['neuepostings']
-			|| $seminar_content['neuedokumente']
-			|| $seminar_content['neuenews']
-			|| $seminar_content['neuetermine']
-			|| $seminar_content['neuelitlist']
-			|| $seminar_content['neuscmcontent']
-			|| $seminar_content['neuewikiseiten']
-			|| $seminar_content['neuevotes']){
+			|| $seminar_content['last_modified'] > 0){
 			$last_modified = ($seminar_content['visitdate'] <= $seminar_content["chdate"] && $seminar_content["chdate"] > $seminar_content['last_modified'] ? $seminar_content["chdate"] : $seminar_content['last_modified']);
 			if ($last_modified > $group_last_modified){
 				$group_last_modified = $last_modified;

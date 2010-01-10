@@ -388,7 +388,6 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 
 		sort_groups($group_field, $groups);
 		$group_names = get_group_names($group_field, $groups);
-
 		foreach ($groups as $group_id => $group_members){
 			if ($group_field != 'not_grouped'){
 				$last_modified = check_group_new($group_members, $my_obj);
@@ -430,7 +429,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 				echo '</td><td class="blue_gradient" align= "right" valign="top" colspan="4" nowrap>';
 
 				if ($last_modified){
-					echo '&nbsp;<span style="font-size:0.8em"><sup>letzte &Auml;nderung:&nbsp;</sup></span><span style="color:red;font-size:0.8em"><sup>' . date("d.m.Y, H:i",$last_modified) . '</sup></span>';
+					echo '&nbsp;<span style="font-size:0.8em"><sup>' . _("letzte Änderung:") . '&nbsp;</sup></span><span style="color:red;font-size:0.8em"><sup>' . strftime("%x, %H:%M",$last_modified) . '</sup></span>';
 				}
 				echo '</a></td></tr>';
 			} else {
