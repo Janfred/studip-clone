@@ -45,18 +45,17 @@ $db = DBManager::get();
 $db2 = DBManager::get();
 
 //Switch fuer die Ansichten
+URLHelper::bindLinkParam('data', $folder_system_data);
 if ($cmd == 'tree') {
-	URLHelper::removeLinkParam('cmd');
-	URLHelper::removeLinkParam('data');
 	$folder_system_data = array();
 	$folder_system_data['cmd'] = 'tree';
 } elseif ($cmd == 'all') {
-	URLHelper::removeLinkParam('cmd');
 	URLHelper::removeLinkParam('data');
 	$folder_system_data = array();
 	$folder_system_data['cmd'] = 'all';
-} else {
-	URLHelper::bindLinkParam('data', $folder_system_data);
+} elseif(!isset($folder_system_data['cmd'])) {
+	//'all' und 'tree' verhalten sich leider asymmetrisch:
+	$folder_system_data['cmd'] = 'all';
 }
 
 if (strpos($open, "_") !== false) {
