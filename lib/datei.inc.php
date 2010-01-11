@@ -1694,7 +1694,10 @@ function display_folder_body($folder_id, $open, $change, $move, $upload, $refres
 	
 	//Ein paar Überprüfungen, was eigentlich angezeigt werden soll: Dateien und Unterordner
 	$folders_kids = $folder_tree->getKids($folder_id);
-	$folders_kids = $db->query("SELECT folder_id FROM folder WHERE range_id = ".$db->quote($folder_id)." ORDER BY priority ASC, mkdate ASC")->fetchAll();;
+	$folders_kids = $db->query("SELECT folder_id " .
+			"FROM folder " .
+			"WHERE range_id = ".$db->quote($folder_id)." " .
+					"ORDER BY priority ASC, name ASC")->fetchAll();;
 	
 	$hasrealkids = $folder_tree->hasKids($folder_id);
 	if ( ((count($folders_kids)) || ($document_count > 0)) 

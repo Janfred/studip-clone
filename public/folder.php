@@ -418,6 +418,7 @@ if ($rechte || $owner || $create_folder_perm) {
 		for ($i=0; $i < count($result); $i++) {
 			$db->query("UPDATE dokumente SET priority = ".($i+1)." WHERE dokument_id = '".$result[$i]['dokument_id']."'");
 		}
+		unset($open_id);
 	}
 
 	//wurde Code fuer Runter-Schieben einer Datei (=id+"_mfu_") in der Darstellungsreihenfolge ausgewählt?
@@ -433,6 +434,7 @@ if ($rechte || $owner || $create_folder_perm) {
 		for ($i=0; $i < count($result); $i++) {
 			$db->query("UPDATE dokumente SET priority = ".($i+1)." WHERE dokument_id = '".$result[$i]['dokument_id']."'");
 		}
+		unset($open_id);
 	}
 	
 	//wurde Code fuer Hoch-Schieben eines Ordners (=id+"_mfou_") in der Darstellungsreihenfolge ausgewählt?
@@ -448,6 +450,7 @@ if ($rechte || $owner || $create_folder_perm) {
 		for ($i=0; $i < count($result); $i++) {
 			$db->query("UPDATE folder SET priority = ".($i+1)." WHERE folder_id = '".$result[$i]['folder_id']."'");
 		}
+		unset($open_id);
 	}
 
 	//wurde Code fuer Runter-Schieben einer Datei (=id+"_mfu_") in der Darstellungsreihenfolge ausgewählt?
@@ -463,6 +466,7 @@ if ($rechte || $owner || $create_folder_perm) {
 		for ($i=0; $i < count($result); $i++) {
 			$db->query("UPDATE folder SET priority = ".($i+1)." WHERE folder_id = '".$result[$i]['folder_id']."'");
 		}
+		unset($open_id);
 	}
 	
 	//wurde Code für alphabetisches Sortieren (=id+"_az_") fuer Ordner id ausgewählt?
