@@ -618,6 +618,11 @@ STUDIP.Filesystem.setdroppables = function() {
       Droppables.add(id, { 
         accept: 'draggable',
         hoverclass: 'hover',
+        onHover: function (datei, folder) {
+          var folder_md5_id = folder.getAttribute('id');
+          folder_md5_id = folder_md5_id.substr(folder_md5_id.lastIndexOf('_')+1);
+          STUDIP.Filesystem.openhoveredfolder(folder_md5_id);
+        },
         onDrop: function(datei, folder, event) { 
           var id = datei.getAttribute('id');
           var file_md5_id = id.substr(id.indexOf('_')+1);
