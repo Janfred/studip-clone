@@ -62,6 +62,10 @@ if (strpos($open, "_") !== false) {
 	$folder_system_data["open"][substr($open, 0, strpos($open, "_")+1)] = true;
 }
 
+if ($_REQUEST['orderby']) {
+	$folder_system_data['orderby'] = $_REQUEST['orderby'];
+}
+
 ///////////////////////////////////////////////////////////
 //Ajax-Funktionen
 ///////////////////////////////////////////////////////////
@@ -917,47 +921,47 @@ div.droppable.hover {
 		print "<tr><td></td><td><table border=0 cellpadding=0 cellspacing=0 width=\"100%\">" .
 				"<tr>" .
 				"<td class=\"steelgraudunkel\">&nbsp;&nbsp;&nbsp;" .
-				"<a href=\"".URLHelper::getLink((($_REQUEST['orderby'] != "type") ? "?orderby=type" : "?orderby=type_rev"))."\" class=\"tree\">";
-		print (($_REQUEST['orderby'] != "type_rev") ? "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">").((($_REQUEST['orderby'] == "type_rev") || ($_REQUEST['orderby'] == "type")) ? "<b>": "")._("Typ")."</b></a>&nbsp;&nbsp; ";
-		print "<a href=\"".URLHelper::getLink((($_REQUEST['orderby'] != "filename") ? "?orderby=filename" : "?orderby=filename_rev"))."\" class=\"tree\">";
-		print (($_REQUEST['orderby'] != "filename_rev") ? "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">").((($_REQUEST['orderby'] == "filename_rev") || ($_REQUEST['orderby'] == "filename")) ? "<b>": "")._("Name")."</b></a>&nbsp;&nbsp; ";
-		print "<a href=\"".URLHelper::getLink((($_REQUEST['orderby'] != "size") ? "?orderby=size" : "?orderby=size_rev"))."\" class=\"tree\">";
-		print (($_REQUEST['orderby'] != "size_rev") ? "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">").((($_REQUEST['orderby'] == "size_rev") || ($_REQUEST['orderby'] == "size")) ? "<b>": "")._("Größe")."</b></a>&nbsp;&nbsp; ";
-		print "<a href=\"".URLHelper::getLink((($_REQUEST['orderby'] != "downloads") ? "?orderby=downloads" : "?orderby=downloads_rev"))."\" class=\"tree\">";
-		print (($_REQUEST['orderby'] != "downloads_rev") ? "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">").((($_REQUEST['orderby'] == "downloads_rev") || ($_REQUEST['orderby'] == "downloads")) ? "<b>": "")._("Downloads")."</b></a>&nbsp;&nbsp;</td><td class=\"steelgraudunkel\" align=right>";
-		print	"<a href=\"".URLHelper::getLink((($_REQUEST['orderby'] != "autor") ? "?orderby=autor" : "?orderby=autor_rev"))."\" class=\"tree\">";
-		print (($_REQUEST['orderby'] != "autor_rev") ? "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">").((($_REQUEST['orderby'] == "autor_rev") || ($_REQUEST['orderby'] == "autor")) ? "<b>": "")._("Autor")."</b></a>&nbsp;&nbsp; ";
-		print "<a href=\"".URLHelper::getLink((($_REQUEST['orderby'] != "date") ? "?orderby=date" : "?orderby=date_rev"))."\" class=\"tree\">";
-		print (($_REQUEST['orderby'] != "date_rev") ? "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">").((($_REQUEST['orderby'] == "date_rev") || ($_REQUEST['orderby'] == "date")) ? "<b>": "")._("Datum")."</b></a> &nbsp;&nbsp;&nbsp;&nbsp;</td</tr></table></td><td>";
+				"<a href=\"".URLHelper::getLink((($folder_system_data['orderby'] != "type") ? "?orderby=type" : "?orderby=type_rev"))."\" class=\"tree\">";
+		print (($folder_system_data['orderby'] != "type_rev") ? "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">").((($folder_system_data['orderby'] == "type_rev") || ($folder_system_data['orderby'] == "type")) ? "<b>": "")._("Typ")."</b></a>&nbsp;&nbsp; ";
+		print "<a href=\"".URLHelper::getLink((($folder_system_data['orderby'] != "filename") ? "?orderby=filename" : "?orderby=filename_rev"))."\" class=\"tree\">";
+		print (($folder_system_data['orderby'] != "filename_rev") ? "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">").((($folder_system_data['orderby'] == "filename_rev") || ($folder_system_data['orderby'] == "filename")) ? "<b>": "")._("Name")."</b></a>&nbsp;&nbsp; ";
+		print "<a href=\"".URLHelper::getLink((($folder_system_data['orderby'] != "size") ? "?orderby=size" : "?orderby=size_rev"))."\" class=\"tree\">";
+		print (($folder_system_data['orderby'] != "size_rev") ? "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">").((($folder_system_data['orderby'] == "size_rev") || ($folder_system_data['orderby'] == "size")) ? "<b>": "")._("Größe")."</b></a>&nbsp;&nbsp; ";
+		print "<a href=\"".URLHelper::getLink((($folder_system_data['orderby'] != "downloads") ? "?orderby=downloads" : "?orderby=downloads_rev"))."\" class=\"tree\">";
+		print (($folder_system_data['orderby'] != "downloads_rev") ? "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">").((($folder_system_data['orderby'] == "downloads_rev") || ($folder_system_data['orderby'] == "downloads")) ? "<b>": "")._("Downloads")."</b></a>&nbsp;&nbsp;</td><td class=\"steelgraudunkel\" align=right>";
+		print	"<a href=\"".URLHelper::getLink((($folder_system_data['orderby'] != "autor") ? "?orderby=autor" : "?orderby=autor_rev"))."\" class=\"tree\">";
+		print (($folder_system_data['orderby'] != "autor_rev") ? "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">").((($folder_system_data['orderby'] == "autor_rev") || ($folder_system_data['orderby'] == "autor")) ? "<b>": "")._("Autor")."</b></a>&nbsp;&nbsp; ";
+		print "<a href=\"".URLHelper::getLink((($folder_system_data['orderby'] != "date") ? "?orderby=date" : "?orderby=date_rev"))."\" class=\"tree\">";
+		print (($folder_system_data['orderby'] != "date_rev") ? "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">").((($$folder_system_data['orderby'] == "date_rev") || ($folder_system_data['orderby'] == "date")) ? "<b>": "")._("Datum")."</b></a> &nbsp;&nbsp;&nbsp;&nbsp;</td</tr></table></td><td>";
 		print '<tr>';
 		print "<td class=\"blank\" valign=\"top\" heigth=21 nowrap width=1px>&nbsp;</td>";
 		print "<td id=\"folder_1\">";
 		
 		//Ordnen nach: Typ, Name, Größe, Downloads, Autor, Alter
 		$query = "SELECT ". $_fullname_sql['full'] ." AS fullname, username, a.user_id, a.*, IF(IFNULL(a.name,'')='', a.filename,a.name) AS t_name, a.range_id FROM dokumente a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_id = '$range_id'";
-		if ($_REQUEST['orderby'] == "type")
+		if ($folder_system_data['orderby'] == "type")
 			$query .= " ORDER BY SUBSTRING_INDEX(a.filename, '.', -1) ASC";
-		if ($_REQUEST['orderby'] == "type_rev")
+		if ($folder_system_data['orderby'] == "type_rev")
 			$query .= " ORDER BY SUBSTRING_INDEX(a.filename, '.', -1) DESC";
-		if ($_REQUEST['orderby'] == "filename")
+		if ($folder_system_data['orderby'] == "filename")
 			$query .= " ORDER BY t_name ASC, a.chdate DESC";
-		if ($_REQUEST['orderby'] == "filename_rev")
+		if ($folder_system_data['orderby'] == "filename_rev")
 			$query .= " ORDER BY t_name DESC, a.chdate ASC";
-		if ($_REQUEST['orderby'] == "size") 
+		if ($folder_system_data['orderby'] == "size") 
 			$query .= " ORDER BY a.filesize DESC";
-		if ($_REQUEST['orderby'] == "size_rev") 
+		if ($folder_system_data['orderby'] == "size_rev") 
 			$query .= " ORDER BY a.filesize ASC";
-		if ($_REQUEST['orderby'] == "downloads") 
+		if ($folder_system_data['orderby'] == "downloads") 
 			$query .= " ORDER BY a.downloads DESC, t_name ASC, a.chdate DESC";
-		if ($_REQUEST['orderby'] == "downloads_rev") 
+		if ($folder_system_data['orderby'] == "downloads_rev") 
 			$query .= " ORDER BY a.downloads ASC, t_name DESC, a.chdate ASC";
-		if ($_REQUEST['orderby'] == "autor")
+		if ($folder_system_data['orderby'] == "autor")
 			$query .= " ORDER BY ". $_fullname_sql['no_title_rev'] ." ASC";
-		if ($_REQUEST['orderby'] == "autor_rev")
+		if ($folder_system_data['orderby'] == "autor_rev")
 			$query .= " ORDER BY ". $_fullname_sql['no_title_rev'] ." DESC";
-		if (($_REQUEST['orderby'] == "date") || (!$orderby)) //default-wert
+		if (($folder_system_data['orderby'] == "date") || (!$folder_system_data['orderby'])) //default-wert
 			$query .= " ORDER BY a.chdate DESC";
-		if ($_REQUEST['orderby'] == "date_rev")
+		if ($folder_system_data['orderby'] == "date_rev")
 			$query .= " ORDER BY a.chdate ASC";
 		$result2 = $db->query($query)->fetchAll();
 		foreach ($result2 as $datei) {
