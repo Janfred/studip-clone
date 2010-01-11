@@ -877,7 +877,10 @@ div.droppable.hover {
 		
 		
 		//Weitere Ordner:
-		$folders = $db->query("SELECT folder_id FROM folder WHERE range_id = '".md5($SessionSeminar . 'top_folder')."' ORDER BY name")->fetchAll();
+		$folders = $db->query("SELECT folder_id " .
+				"FROM folder " .
+				"WHERE range_id = '".md5($SessionSeminar . 'top_folder')."' " .
+				"ORDER BY name")->fetchAll();
 		foreach($folders as $general_folder) {
 			if ($folder_tree->isExecutable($general_folder['folder_id'], $user->id) || $rechte) {
 				display_folder($general_folder["folder_id"], $folder_system_data["open"], 

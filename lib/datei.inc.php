@@ -1482,16 +1482,16 @@ function display_file_line ($datei, $folder_id, $open, $change, $move, $upload, 
 		//Jetzt folgt der Link zum Aufklappen
 		if ($open[$datei["dokument_id"]]) {
 			print "<span id=\"file_".$datei["dokument_id"]."_header\" style=\"font-weight: bold\">";
-			print "<a href=\"".URLHelper::getLink("?close=".$datei["dokument_id"]."#anker")."\" class=\"tree\" onClick=\"return STUDIP.Filesystem.changefilebody('".$datei["dokument_id"]."')\"";
+			print "&nbsp;<a href=\"".URLHelper::getLink("?close=".$datei["dokument_id"]."#anker")."\" class=\"tree\" onClick=\"return STUDIP.Filesystem.changefilebody('".$datei["dokument_id"]."')\"";
 		} else {
 			print "<span id=\"file_".$datei["dokument_id"]."_header\" style=\"font-weight: normal\">";
-			print "<a href=\"".URLHelper::getLink("?open=".$datei["dokument_id"]."#anker")."\" class=\"tree\" onClick=\"return STUDIP.Filesystem.changefilebody('".$datei["dokument_id"]."')\"";
+			print "&nbsp;<a href=\"".URLHelper::getLink("?open=".$datei["dokument_id"]."#anker")."\" class=\"tree\" onClick=\"return STUDIP.Filesystem.changefilebody('".$datei["dokument_id"]."')\"";
 		}
 		if (($change == $datei["dokument_id"]) ||  ($move == $datei["dokument_id"]) ||  ($upload == $datei["dokument_id"]) || ($open[$datei["dokument_id"]]))
 			print ' name="anker" ';
 		print ">";
 		
-		print htmlReady($datei['name'])."</a>";
+		print htmlReady($datei['t_name'])."</a>";
 		print "</span>";
 	}
 	
@@ -1724,7 +1724,16 @@ function display_folder_body($folder_id, $open, $change, $move, $upload, $refres
 		$countfolder++;
 		print "<div class=\"folder_container\" id=\"folder_".$folder_id."\">";
 		if (($rechte) || ($folder_tree->isReadable($folder_id, $user->id))) {
-			$query = "SELECT ". $_fullname_sql['full'] ." AS fullname, username, a.user_id, a.*, IF(IFNULL(a.name,'')='', a.filename,a.name) AS t_name FROM dokumente a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE range_id = '".$result["folder_id"]."' ORDER BY a.priority ASC, a.chdate DESC, t_name ";
+			$query = "SELECT ". $_fullname_sql['full'] ." AS fullname, " .
+							"username, " .
+							"a.user_id, " .
+							"a.*, " .
+							"IF(IFNULL(a.name,'')='', a.filename,a.name) AS t_name " .
+					"FROM dokumente a " .
+							"LEFT JOIN auth_user_md5 USING (user_id) " .
+							"LEFT JOIN user_info USING (user_id) " .
+					"WHERE range_id = '".$result["folder_id"]."' " .
+					"ORDER BY a.priority ASC, a.chdate DESC, t_name ";
 			$result2 = $db->query($query)->fetchAll();
 			foreach ($result2 as $datei) {
 				display_file_line($datei, $folder_id, $open, $change, $move, $upload, FALSE, $refresh, $filelink);	
