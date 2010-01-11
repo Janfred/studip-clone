@@ -83,15 +83,16 @@ if ($cmd == "write_chatinv" && !isset($messagesubject)) $messagesubject = _("Cha
 
 //wurde eine Datei hochgeladen?
 if($GLOBALS["ENABLE_EMAIL_ATTACHMENTS"]){
-	if(Request::submitted('upload')){
-		$current_size_of_attachments = 0;
-		$max_size_of_attachments = $GLOBALS['UPLOAD_TYPES']['attachments']['file_sizes'][$perm->get_perm()];
-		foreach(get_message_attachments(Request::option('attachment_message_id'), true) as $document){
-			if(Request::submitted('remove_attachment_' . $document['dokument_id'])){
-				delete_document($document['dokument_id']);
-			}
+	$current_size_of_attachments = 0;
+	$max_size_of_attachments = $GLOBALS['UPLOAD_TYPES']['attachments']['file_sizes'][$perm->get_perm()];
+	foreach(get_message_attachments(Request::option('attachment_message_id'), true) as $document){
+		if(Request::submitted('remove_attachment_' . $document['dokument_id'])){
+			delete_document($document['dokument_id']);
+		} else {
 			$current_size_of_attachments += $document['filesize'];
 		}
+	}
+	if(Request::submitted('upload')){
 		if ($_FILES['the_file']['error'] === UPLOAD_ERR_OK && validate_upload($_FILES['the_file']['tmp_name'])) {
 			if($current_size_of_attachments + $_FILES['the_file']['size'] > $max_size_of_attachments){
 				$msg = "error§" . sprintf(_("Die Gesamtgröße der angehängten Dateien überschreitet die zulässige Größe von %sMB."), round($max_size_of_attachments/1048576,1));
