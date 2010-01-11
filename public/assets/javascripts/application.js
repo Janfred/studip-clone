@@ -534,16 +534,25 @@ STUDIP.Tabs = (function () {
 
 STUDIP.Filesystem = {};
 
-STUDIP.Filesystem.movelock = false;
-STUDIP.Filesystem.sendstop = false;
-STUDIP.Filesystem.hovered_folder = '';
-STUDIP.Filesystem.hover_begin = 0;
+// hier ein paar "globale" Variablen, die nur in Funktionen des Filesystem-Namespace verwendet werden:
+STUDIP.Filesystem.movelock = false;       //wenn auf true gesetzt, findet gerade eine Animation statt.
+STUDIP.Filesystem.sendstop = false;       //wenn auf true gesetzt, wurde eine Datei in einen Ordner gedropped und die Seite lädt sich gerade neu.
+STUDIP.Filesystem.hovered_folder = '';    //letzter Ordner, über den eine gezogene Datei bewegt wurde.
+STUDIP.Filesystem.hover_begin = 0;        //erste Zeit, dass eine Datei über den Ordner ...hovered_folder bewegt wurde.
 
+/**
+ * Lässt die gelben Pfeile verschwinden und ersetzt sie durch Anfassersymbole.
+ * Wichtig für Javascript-Nichtjavascript Behandlung. Nutzer ohne Javascript
+ * sehen nur die gelben Pfeile zum Sortieren.
+ */
 STUDIP.Filesystem.unsetarrows = function() {
   $$("span.move_arrows, span.updown_marker").invoke("hide");
   $$("span.anfasser").invoke("show");
 }
 
+/**
+ * deklariert Ordner und Dateien als ziehbare Elemente bzw. macht sie sortierbar
+ */
 STUDIP.Filesystem.setdraggables = function() {
   var i = 0;
   var allDivs = document.getElementsByTagName('div');
@@ -551,49 +560,54 @@ STUDIP.Filesystem.setdraggables = function() {
     if (allDivs[i].className == "folder_container") {
       var id = allDivs[i].getAttribute('id');
       var md5_id = id.substr(id.lastIndexOf('_')+1);
-      Sortable.create(id, {
-        ghosting:false, 
-        constraint:false,
-        scroll: window,
-        tag:'div',
-        onUpdate: function(container) {
-          if (!STUDIP.Filesystem.sendstop) { //wenn nicht schon in einen Ordner verschieben.
-            var id = container.getAttribute('id');
-            var sorttype = id.substr(0, id.lastIndexOf('_'));
-            md5_id = id.substr(id.lastIndexOf('_')+1);
-            var order_ids = Sortable.sequence(id);
-            for (i=0; i < order_ids.length; i++) {
-              if (sorttype == "folder_subfolders") {
-                // Unterordner:
-                order_ids[i] = $("getmd5_fo"+md5_id+"_"+order_ids[i]).innerHTML;
-              } else {
-                // Dateien:
-                order_ids[i] = $("getmd5_fi"+md5_id+"_"+order_ids[i]).innerHTML;
-              }
-            }
-            var sort_var = md5_id;
-            order_ids = order_ids.join(',');
-            new Ajax.Request(document.URL, {
-              method: "post",
-              parameters: {
-                folder_sort: sort_var,
-                file_order: order_ids
-              },
-              onSuccess: function(transport) {
-                if (transport.responseText) {
-                  alert(transport.responseText);
+      if ($$('#'+id+' a.drag').length > 0) {             //wenn es einen Anfasser gibt, also wenn Nutzer verschieben darf
+        Sortable.create(id, {
+          ghosting:false, 
+          constraint:false,
+          scroll: window,
+          tag:'div',
+          onUpdate: function(container) {
+            if (!STUDIP.Filesystem.sendstop) { //wenn nicht schon irgendwas in einen Ordner verschoben wird.
+              var id = container.getAttribute('id');
+              var sorttype = id.substr(0, id.lastIndexOf('_'));
+              md5_id = id.substr(id.lastIndexOf('_')+1);
+              var order_ids = Sortable.sequence(id);
+              for (i=0; i < order_ids.length; i++) {
+                if (sorttype == "folder_subfolders") {
+                  // Unterordner:
+                  order_ids[i] = $("getmd5_fo"+md5_id+"_"+order_ids[i]).innerHTML;
+                } else {
+                  // Dateien:
+                  order_ids[i] = $("getmd5_fi"+md5_id+"_"+order_ids[i]).innerHTML;
                 }
               }
-            }); //of Ajax-Request
-          }
-        },
-        //only drawn by '<a class="drag">'s in folder_id
-        handles: $$('#'+id+' a.drag')
-      }); //of Sortable.create
+              var sort_var = md5_id;
+              order_ids = order_ids.join(',');
+              new Ajax.Request(document.URL, {
+                method: "post",
+                parameters: {
+                  folder_sort: sort_var,
+                  file_order: order_ids
+                },
+                onSuccess: function(transport) {
+                  if (transport.responseText) {
+                    alert(transport.responseText);
+                  }
+                }
+              }); //of Ajax-Request
+            }
+          },
+          //only drawn by '<a class="drag">'s in folder_id
+          handles: $$('#'+id+' a.drag')
+        }); //of Sortable.create
+      }
     }
   } //of for-loop
 }
 
+/**
+ * deklariert Ordner als Objekte, in die Dateien gedropped werden können
+ */
 STUDIP.Filesystem.setdroppables = function() {
   var i = 0;
   var allDivs = document.getElementsByTagName('div');
@@ -660,6 +674,10 @@ STUDIP.Filesystem.openhoveredfolder = function(md5_id) {
   }
 }
 
+/**
+ * öffnet/schließt einen Dateiordner entweder per AJAX oder nur per Animation, 
+ * wenn Inhalt schon geladen wurde.
+ */
 STUDIP.Filesystem.changefolderbody = function(md5_id) {
   if (!STUDIP.Filesystem.movelock) {
     STUDIP.Filesystem.movelock = true;
@@ -700,6 +718,10 @@ STUDIP.Filesystem.changefolderbody = function(md5_id) {
   return false;
 }
 
+/**
+ * öffnet/schließt eine Datei entweder per AJAX oder nur per Animation, 
+ * wenn Inhalt schon geladen wurde.
+ */
 STUDIP.Filesystem.changefilebody = function(md5_id) {
   //alert(Effect.Queue.size);
   if (!STUDIP.Filesystem.movelock) {
