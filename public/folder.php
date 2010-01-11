@@ -985,7 +985,7 @@ div.droppable.hover {
 	</tr>
 </table>
 <script type="text/javascript">  
-STUDIP.Filesystem.imagesFolder = "<?= $GLOBALS['ASSETS_URL'] ?>images/";
+//Initialisierung der Ordner und Dateien und verschwinden lassen der gelben Pfeile durch Anfasser:
 STUDIP.Filesystem.unsetarrows();
 STUDIP.Filesystem.setdraggables();
 STUDIP.Filesystem.setdroppables();

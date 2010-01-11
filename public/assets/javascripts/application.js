@@ -664,7 +664,7 @@ STUDIP.Filesystem.openhoveredfolder = function(md5_id) {
   if (md5_id == STUDIP.Filesystem.hovered_folder) {
     if (STUDIP.Filesystem.hover_begin < zeit.getTime() - 1000) {
       if ($("folder_"+md5_id+"_body").style.display == "none") {
-        STUDIP.Filesystem.changefolderbody(md5_id, STUDIP.Filesystem.cid);
+        STUDIP.Filesystem.changefolderbody(md5_id);
         STUDIP.Filesystem.hover_begin = zeit.getTime();
       }
     }
@@ -685,7 +685,7 @@ STUDIP.Filesystem.changefolderbody = function(md5_id) {
     if ($("folder_"+md5_id+"_body").style.display != "none") {
       Effect.BlindUp("folder_"+md5_id+"_body", { duration: 0.4 });
       $("folder_"+md5_id+"_header").style.fontWeight = 'normal';
-      $("folder_"+md5_id+"_arrow_img").setAttribute('src', STUDIP.Filesystem.imagesFolder+"forumgrau2.gif");
+      $("folder_"+md5_id+"_arrow_img").setAttribute('src', STUDIP.ASSETS_URL+"images/forumgrau2.gif");
       $("folder_"+md5_id+"_arrow_td").addClassName('printhead2');
       $("folder_"+md5_id+"_arrow_td").removeClassName('printhead3');
     } else {
@@ -695,7 +695,7 @@ STUDIP.Filesystem.changefolderbody = function(md5_id) {
           onSuccess: function(transport) {
             $("folder_"+md5_id+"_body").innerHTML = transport.responseText;
             $("folder_"+md5_id+"_header").style.fontWeight = 'bold';
-            $("folder_"+md5_id+"_arrow_img").setAttribute('src', STUDIP.Filesystem.imagesFolder+"forumgraurunt2.gif");
+            $("folder_"+md5_id+"_arrow_img").setAttribute('src', STUDIP.ASSETS_URL+"images/forumgraurunt2.gif");
             $("folder_"+md5_id+"_arrow_td").addClassName('printhead3');
             $("folder_"+md5_id+"_arrow_td").removeClassName('printhead2');
             STUDIP.Filesystem.unsetarrows();
@@ -709,7 +709,7 @@ STUDIP.Filesystem.changefolderbody = function(md5_id) {
       } else {
         Effect.BlindDown("folder_"+md5_id+"_body", { duration: 0.4 });
         $("folder_"+md5_id+"_header").style.fontWeight = 'bold';
-        $("folder_"+md5_id+"_arrow_img").setAttribute('src', STUDIP.Filesystem.imagesFolder+"forumgraurunt2.gif");
+        $("folder_"+md5_id+"_arrow_img").setAttribute('src', STUDIP.ASSETS_URL+"images/forumgraurunt2.gif");
         $("folder_"+md5_id+"_arrow_td").addClassName('printhead3');
         $("folder_"+md5_id+"_arrow_td").removeClassName('printhead2');
       }
@@ -732,7 +732,7 @@ STUDIP.Filesystem.changefilebody = function(md5_id) {
       $("file_"+md5_id+"_header").style.fontWeight = 'normal';
       $("file_"+md5_id+"_arrow_td").addClassName('printhead2');
       $("file_"+md5_id+"_arrow_td").removeClassName('printhead3');
-      $("file_"+md5_id+"_arrow_img").setAttribute('src', STUDIP.Filesystem.imagesFolder+"forumgrau2.gif");
+      $("file_"+md5_id+"_arrow_img").setAttribute('src', STUDIP.ASSETS_URL+"images/forumgrau2.gif");
       window.setTimeout("$('file_"+md5_id+"_body_row').style.visibility = 'collapse'", 310);
     } else {
       if ($("file_"+md5_id+"_body").innerHTML == "") {
@@ -742,7 +742,7 @@ STUDIP.Filesystem.changefilebody = function(md5_id) {
             $("file_"+md5_id+"_header").style.fontWeight = 'bold';
             $("file_"+md5_id+"_arrow_td").addClassName('printhead3');
             $("file_"+md5_id+"_arrow_td").removeClassName('printhead2');
-            $("file_"+md5_id+"_arrow_img").setAttribute('src', STUDIP.Filesystem.imagesFolder+"forumgraurunt2.gif");
+            $("file_"+md5_id+"_arrow_img").setAttribute('src', STUDIP.ASSETS_URL+"images/forumgraurunt2.gif");
             $("file_"+md5_id+"_body").innerHTML = transport.responseText;
             $("file_"+md5_id+"_body").style.display="none";
             $("file_"+md5_id+"_body_row").style.visibility = "visible";
@@ -756,7 +756,7 @@ STUDIP.Filesystem.changefilebody = function(md5_id) {
         $("file_"+md5_id+"_header").style.fontWeight = 'bold';
         $("file_"+md5_id+"_arrow_td").addClassName('printhead3');
         $("file_"+md5_id+"_arrow_td").removeClassName('printhead2');
-        $("file_"+md5_id+"_arrow_img").setAttribute('src', STUDIP.Filesystem.imagesFolder+"forumgraurunt2.gif");
+        $("file_"+md5_id+"_arrow_img").setAttribute('src', STUDIP.ASSETS_URL+"images/forumgraurunt2.gif");
         Effect.BlindDown("file_"+md5_id+"_body", { duration: 0.3 });
       }
     }
