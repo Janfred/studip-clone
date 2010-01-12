@@ -428,17 +428,16 @@ if ($perm->have_perm("autor")) {	// Navigationsleiste ab status "Autor", autors 
 			//more Options for archiving
 			if ($i_page == "archiv_assi.php") {
 				?>
-				<tr <? $cssSw->switchClass() ?>>
-					<td class="<? echo $cssSw->getClass() ?>" colspan=3>
-						&nbsp; <font size=-1><?=_("Alle ausgewählten Veranstaltungen")?>&nbsp;<input type="IMAGE" <?=makeButton("archivieren", "src")?> border=0 align="absmiddle" /></font><br>
-						&nbsp; <font size=-1 color="red"><?=_("Achtung: Das Archivieren ist ein Schritt, der <b>nicht</b> rückgängig gemacht werden kann!")?></font>
+                <tr class="steel2">
+                    <td colspan="3">
+						<font size="-1"><?=_("Alle ausgewählten Veranstaltungen")?></font> <input type="image" <?=makeButton("archivieren", "src")?> border="0"><br>
+						<font size="-1" color="red"><?=_("Achtung: Das Archivieren ist ein Schritt, der <b>nicht</b> rückgängig gemacht werden kann!")?></font>
 					</td>
-					<td class="<? echo $cssSw->getClass() ?>" colspan=3 align="right">
-					<?
-					if ($auth->auth["jscript"]) {
-						printf("<font size=-1><a href=\"%s\">%s</a></font>", URLHelper::getLink('?select_all=TRUE&list=TRUE'), makeButton("alleauswaehlen"));
-					}
-					?>&nbsp;
+					<td colspan="<?=(Request::get('show_rooms_check')=='on')?'4':'3'; ?>" align="right">
+				    <?
+						printf("<font size=-1><a href=\"%s\">%s</a></font>", URLHelper::getLink('?select_all=TRUE&list=TRUE&show_rooms_check='.Request::get('show_rooms_check')), makeButton("alleauswaehlen"));
+                        printf(" <a href=\"%s\">%s</a></font>", URLHelper::getLink('?select_none=TRUE&list=TRUE&show_rooms_check='.Request::get('show_rooms_check')), makeButton("keineauswaehlen"));
+					?>
 					</td>
 				</tr>
 				<?
@@ -446,17 +445,15 @@ if ($perm->have_perm("autor")) {	// Navigationsleiste ab status "Autor", autors 
 			//more Options for visibility changing
 			if ($i_page == "admin_visibility.php") {
 				?>
-				<tr <? $cssSw->switchClass() ?>>
-					<td class="<? echo $cssSw->getClass() ?>" colspan="3">
-						<font size=-1><?=_("Sichtbarkeit der angezeigten Veranstaltungen")?></font> <input type="image" <?=makeButton("zuweisen", "src")?> border="0"><br>
+				<tr class="steel2">
+					<td colspan="3">
+						<font size="-1"><?=_("Sichtbarkeit der angezeigten Veranstaltungen")?></font> <input type="image" <?=makeButton("zuweisen", "src")?> border="0">
 					</td>
-					<td class="<? echo $cssSw->getClass() ?>" colspan="4" align="right">
+					<td colspan="<?=(Request::get('show_rooms_check')=='on')?'4':'3'; ?>" align="right">
 					<input type="hidden" name="change_visible" value="1">
 					<?
-					if ($auth->auth["jscript"]) {
 						printf("<a href=\"%s\">%s</a></font>", URLHelper::getLink('?select_all=TRUE&list=TRUE'), makeButton("alleauswaehlen"));
 						printf(" <a href=\"%s\">%s</a></font>", URLHelper::getLink('?select_none=TRUE&list=TRUE'), makeButton("keineauswaehlen"));
-					}
 					?>
 					</td>
 				</tr>
