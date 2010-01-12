@@ -447,18 +447,17 @@ if ($perm->have_perm("autor")) {	// Navigationsleiste ab status "Autor", autors 
 			if ($i_page == "admin_visibility.php") {
 				?>
 				<tr <? $cssSw->switchClass() ?>>
-					<td class="<? echo $cssSw->getClass() ?>" colspan=3>
-						&nbsp; <font size=-1><?=_("Sichtbarkeit der angezeigten Veranstaltungen")?>&nbsp;<input type="IMAGE" <?=makeButton("zuweisen", "src")?> border=0 align="absmiddle" /></font><br>
+					<td class="<? echo $cssSw->getClass() ?>" colspan="3">
+						<font size=-1><?=_("Sichtbarkeit der angezeigten Veranstaltungen")?></font> <input type="image" <?=makeButton("zuweisen", "src")?> border="0"><br>
 					</td>
-					<td class="<? echo $cssSw->getClass() ?>" colspan=3 align="right">
-					<input type="HIDDEN" name="change_visible" value="1">
+					<td class="<? echo $cssSw->getClass() ?>" colspan="4" align="right">
+					<input type="hidden" name="change_visible" value="1">
 					<?
 					if ($auth->auth["jscript"]) {
-						printf("<font size=-1><a href=\"%s\">%s</a></font>", URLHelper::getLink('?select_all=TRUE&list=TRUE'), makeButton("alleauswaehlen"));
-						// echo "&nbsp;<br>";
-						// printf("<font size=-1><a href=\"%s\">%s</a></font>", URLHelper::getLink('?select_none=TRUE&list=TRUE'), makeButton("alleauswaehlen"));
+						printf("<a href=\"%s\">%s</a></font>", URLHelper::getLink('?select_all=TRUE&list=TRUE'), makeButton("alleauswaehlen"));
+						printf(" <a href=\"%s\">%s</a></font>", URLHelper::getLink('?select_none=TRUE&list=TRUE'), makeButton("keineauswaehlen"));
 					}
-					?>&nbsp;
+					?>
 					</td>
 				</tr>
 				<?
@@ -468,7 +467,7 @@ if ($perm->have_perm("autor")) {	// Navigationsleiste ab status "Autor", autors 
 			?>
 			<tr <? $cssSw->switchClass() ?>>
 				<td class="<? echo $cssSw->getClass() ?>" colspan="3">
-					&nbsp; <font size=-1><?=_("Gewählte Sperrebenen den angezeigten Veranstaltungen ")?>&nbsp;<input type="IMAGE" <?=makeButton("zuweisen", "src")?> border=0 align="absmiddle" /></font><br>
+					<font size=-1><?=_("Gewählte Sperrebenen den angezeigten Veranstaltungen ")?></font> <input type="image" <?=makeButton("zuweisen", "src")?> border="0"><br>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan="4" align="right">
 				<?
