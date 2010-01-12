@@ -868,9 +868,13 @@ div.droppable.hover {
 		$folders = $db->query("SELECT folder_id FROM folder WHERE range_id = '$range_id' ORDER BY name")->fetchAll();
 		foreach($folders as $general_folder) {
 			if ($folder_tree->isExecutable($general_folder["folder_id"], $user->id) || $rechte) {
-				display_folder($general_folder["folder_id"], $folder_system_data["open"], 
-						$change, $folder_system_data["move"], $folder_system_data["upload"], 
-						$folder_system_data["refresh"], $folder_system_data["link"]);
+				display_folder($general_folder["folder_id"], 
+						$folder_system_data["open"], 
+						$change, $folder_system_data["move"], 
+						$folder_system_data["upload"], 
+						$folder_system_data["refresh"], 
+						$folder_system_data["link"],
+						$open_id);
 			}
 		}
 		//display_folder_system($range_id, 0, $folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], $folder_system_data["refresh"], $folder_system_data["link"]);
@@ -883,9 +887,13 @@ div.droppable.hover {
 				"ORDER BY name")->fetchAll();
 		foreach($folders as $general_folder) {
 			if ($folder_tree->isExecutable($general_folder['folder_id'], $user->id) || $rechte) {
-				display_folder($general_folder["folder_id"], $folder_system_data["open"], 
-						$change, $folder_system_data["move"], $folder_system_data["upload"], 
-						$folder_system_data["refresh"], $folder_system_data["link"]);
+				display_folder($general_folder["folder_id"], 
+						$folder_system_data["open"], 
+						$change, $folder_system_data["move"], 
+						$folder_system_data["upload"], 
+						$folder_system_data["refresh"], 
+						$folder_system_data["link"],
+						$open_id);
 			}
 		}
 		
@@ -906,9 +914,15 @@ div.droppable.hover {
 				$folders = $db->query("SELECT folder_id FROM folder WHERE range_id = '".$row2["statusgruppe_id"]."'")->fetchAll();
 				foreach ($folders as $folder) {
 					if ($folder_tree->isExecutable($folder["folder_id"], $user->id) || $rechte) {
-						display_folder($folder["folder_id"], $folder_system_data["open"], $change, 
-						$folder_system_data["move"], $folder_system_data["upload"], FALSE, 
-						$folder_system_data["refresh"], $folder_system_data["link"]);
+						display_folder($folder["folder_id"], 
+							$folder_system_data["open"], 
+							$change, 
+							$folder_system_data["move"], 
+							$folder_system_data["upload"], 
+							FALSE, 
+							$folder_system_data["refresh"], 
+							$folder_system_data["link"],
+							$open_id);
 					}
 				}
 			}
@@ -973,7 +987,16 @@ div.droppable.hover {
 		$result2 = $db->query($query)->fetchAll();
 		foreach ($result2 as $datei) {
 			if ($folder_tree->isReadable($datei['range_id'], $user->id)) {
-				display_file_line($datei, $range_id, $folder_system_data["open"], $change, $folder_system_data["move"], $folder_system_data["upload"], TRUE, $folder_system_data["refresh"], $folder_system_data["link"]);
+				display_file_line($datei, 
+						$range_id, 
+						$folder_system_data["open"], 
+						$change, 
+						$folder_system_data["move"], 
+						$folder_system_data["upload"], 
+						TRUE, 
+						$folder_system_data["refresh"], 
+						$folder_system_data["link"], 
+						$open_id);
 			}
 		}
 		

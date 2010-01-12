@@ -1414,7 +1414,7 @@ $countfiles = 0;
  * Displays one file/document with all of its information and options. 
  * 
  */
-function display_file_line ($datei, $folder_id, $open, $change, $move, $upload, $all, $refresh=FALSE, $filelink="") {
+function display_file_line ($datei, $folder_id, $open, $change, $move, $upload, $all, $refresh=FALSE, $filelink="", $anchor_id) {
 	global $_fullname_sql,$SessionSeminar,$SessSemName, $rechte, $anfang,
 		$user, $SemSecLevelWrite, $SemUserStatus, $check_all, $countfiles;
 	//Einbinden einer Klasse, die Informationen über den ganzen Baum enthält
@@ -1459,7 +1459,7 @@ function display_file_line ($datei, $folder_id, $open, $change, $move, $upload, 
 				"\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/move_up.gif\"></a><a href=\"".URLHelper::getLink('?open='.
 				$datei['dokument_id'])."_mfd_\" title=\""._("Datei nach unten schieben").
 				"\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/move_down.gif\"></a></span>";
-		$bewegeflaeche .= "<span class=\"anfasser\" style=\"display:none\"><a href=\"#\" class=\"drag\" onclick=\"return false\" " .
+		$bewegeflaeche_anfasser = "<span class=\"anfasser\" style=\"display:none\"><a href=\"#\" class=\"drag\" onclick=\"return false\" " .
 				"style=\"cursor: move\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/verschieben.png\" border=0 title=\"Datei verschieben\"></a></span>";
 	}
 	
@@ -1467,11 +1467,14 @@ function display_file_line ($datei, $folder_id, $open, $change, $move, $upload, 
 	if ($change == $datei["dokument_id"]) {
 		print "<span id=\"file_".$datei["dokument_id"]."_header\" style=\"font-weight: bold\"><a href=\"".URLHelper::getLink("?close=".$datei["dokument_id"]."#anker")."\" class=\"tree\"";
 		print ' name="anker"></a>';
-		print $bewegeflaeche;
+		print $bewegeflaeche_anfasser;
 		print "<img src=\"".$GLOBALS['ASSETS_URL']."images/".GetFileIcon(getFileExtension($datei['filename']))."\">";
 		print "<input style=\"{font-size:8 pt; width: 50%;}\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($datei["name"])."\"></b>";
 	} else {	
-		print $bewegeflaeche;
+		print $bewegeflaeche_anfasser;
+		if (($move == $datei["dokument_id"]) ||  ($upload == $datei["dokument_id"]) || ($anchor_id == $datei["dokument_id"])) {
+			print "<a name=\"anker\"></a>";
+		}
 		$type = ($datei['url'] != '')? 6 : 0;
 		// LUH Spezerei:
 		if (check_protected_download($datei["dokument_id"])) {
@@ -1487,11 +1490,9 @@ function display_file_line ($datei, $folder_id, $open, $change, $move, $upload, 
 			print "<span id=\"file_".$datei["dokument_id"]."_header\" style=\"font-weight: normal\">";
 			print "&nbsp;<a href=\"".URLHelper::getLink("?open=".$datei["dokument_id"]."#anker")."\" class=\"tree\" onClick=\"return STUDIP.Filesystem.changefilebody('".$datei["dokument_id"]."')\"";
 		}
-		if (($change == $datei["dokument_id"]) ||  ($move == $datei["dokument_id"]) ||  ($upload == $datei["dokument_id"]) || ($open[$datei["dokument_id"]]))
-			print ' name="anker" ';
 		print ">";
-		
 		print htmlReady($datei['t_name'])."</a>";
+		
 		print "</span>";
 	}
 	
@@ -1507,7 +1508,9 @@ function display_file_line ($datei, $folder_id, $open, $change, $move, $upload, 
 	
 	//So und jetzt die rechtsbündigen Sachen:
 	print "</td><td align=right class=\"printhead\">";
-	print "<a href=\"".URLHelper::getLink('about.php?username='.$datei['username'])."\">".htmlReady($datei['fullname'])."</a>";
+	print "<a href=\"".URLHelper::getLink('about.php?username='.$datei['username'])."\">".htmlReady($datei['fullname'])."</a> ";
+	
+	print $bewegeflaeche." ";
 	
 	//Workaround for older data from previous versions (chdate is 0)
 	print " ".date("d.m.Y - H:i", (($datei["chdate"]) ? $datei["chdate"] : $datei["mkdate"]));
@@ -1538,7 +1541,7 @@ function display_file_line ($datei, $folder_id, $open, $change, $move, $upload, 
  * Displays the body of a folder including the description, changeform, subfolder and files
  * 
  */
-function display_folder_body($folder_id, $open, $change, $move, $upload, $refresh=FALSE, $filelink="") {
+function display_folder_body($folder_id, $open, $change, $move, $upload, $refresh=FALSE, $filelink="", $anchor_id) {
 	global $_fullname_sql, $SessionSeminar, $SemUserStatus, $SessSemName, $rechte, $countfolder;
 	$db = DBManager::get();
 	//Einbinden einer Klasse, die Informationen über den ganzen Baum enthält
@@ -1715,7 +1718,7 @@ function display_folder_body($folder_id, $open, $change, $move, $upload, $refres
 		}
 		foreach ($folders_kids as $unterordner) {
 			if (($folder_tree->isReadable($folder_id, $user->id)) || ($rechte)) { //habe ich Rechte?
-				display_folder($unterordner['folder_id'], $open, $change, $move, $upload, $refresh, $filelink);
+				display_folder($unterordner['folder_id'], $open, $change, $move, $upload, $refresh, $filelink, $anchor_id);
 			}
 		}
 		print "</div>";
@@ -1736,7 +1739,7 @@ function display_folder_body($folder_id, $open, $change, $move, $upload, $refres
 					"ORDER BY a.priority ASC, a.chdate DESC, t_name ";
 			$result2 = $db->query($query)->fetchAll();
 			foreach ($result2 as $datei) {
-				display_file_line($datei, $folder_id, $open, $change, $move, $upload, FALSE, $refresh, $filelink);	
+				display_file_line($datei, $folder_id, $open, $change, $move, $upload, FALSE, $refresh, $filelink, $anchor_id);	
 			}
 		}
 		print "</div>";
@@ -1753,7 +1756,7 @@ $droppable_folder = 0;
  * This function is not dependent on the recursive-level so it looks as if it all starts from here.
  * 
  */
-function display_folder ($folder_id, $open, $change, $move, $upload, $refresh=FALSE, $filelink="") {
+function display_folder ($folder_id, $open, $change, $move, $upload, $refresh=FALSE, $filelink="", $anchor_id) {
 	global $_fullname_sql,$SessionSeminar,$SessSemName, $rechte, $anfang,
 		$user, $SemSecLevelWrite, $SemUserStatus, $check_all, $countfolder, $droppable_folder;
 	$option = true;
@@ -1811,7 +1814,7 @@ function display_folder ($folder_id, $open, $change, $move, $upload, $refresh=FA
 				"\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/move_up.gif\"></a><a href=\"".URLHelper::getLink('?open='.
 				$folder_id)."_mfod_\" title=\""._("Nach unten verschieben").
 				"\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/move_down.gif\"></a></span>";
-		$bewegeflaeche .= "<span class=\"anfasser\" style=\"display:none\"><a href=\"#\" class=\"drag\" onclick=\"return false\" " .
+		$bewegeflaeche_anfasser = "<span class=\"anfasser\" style=\"display:none\"><a href=\"#\" class=\"drag\" onclick=\"return false\" " .
 				"style=\"cursor: move\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/verschieben.png\" border=0 title=\"Ordner verschieben\"></a></span>";
 	}
 	
@@ -1828,7 +1831,10 @@ function display_folder ($folder_id, $open, $change, $move, $upload, $refresh=FA
 		if ($move && ($move != $folder_id) && $folder_tree->isWritable($folder_id, $user->id) && (!$folder_tree->isFolder($move) || ($folder_tree->checkCreateFolder($folder_id, $user->id) && !$folder_tree->isExerciseFolder($folder_id, $user->id)))){
 				print "&nbsp;<a href=\"".URLHelper::getLink("?open=".$folder_id."_md_")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0></a>";
 		}
-		print $bewegeflaeche;
+		if (($anchor_id == $folder_id) || (($move == $folder_id))) {
+			print "<a name=\"anker\"></a>";
+		}
+		print $bewegeflaeche_anfasser;
 		print "<a href=\"".URLHelper::getLink("?close=".$folder_id."#anker")."\" class=\"tree\" onClick=\"return STUDIP.Filesystem.changefolderbody('".$folder_id."')\"><span id=\"folder_".$folder_id."_header\" style=\"font-weight: bold\">";
 	} else {
 		//print "<td width=1px class=\"printhead\">&nbsp;</td>";
@@ -1840,7 +1846,7 @@ function display_folder ($folder_id, $open, $change, $move, $upload, $refresh=FA
 				if ($move && ($move != $folder_id) && $folder_tree->isWritable($folder_id, $user->id) && (!$folder_tree->isFolder($move) || ($folder_tree->checkCreateFolder($folder_id, $user->id) && !$folder_tree->isExerciseFolder($folder_id, $user->id)))){
 				print "&nbsp;<a href=\"".URLHelper::getLink("?open=".$folder_id."_md_")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0></a>";
 		}
-		print $bewegeflaeche;
+		print $bewegeflaeche_anfasser;
 		print "<a href=\"".URLHelper::getLink("?open=".$folder_id."#anker")."\" class=\"tree\" " .
 				"onClick=\"return STUDIP.Filesystem.changefolderbody('".$folder_id."', '".$SessionSeminar."')\"><span id=\"folder_".$folder_id."_header\" " .
 				"style=\"font-weight: normal\">";
@@ -1930,6 +1936,8 @@ function display_folder ($folder_id, $open, $change, $move, $upload, $refresh=FA
 	
 	print "<a href=\"".URLHelper::getLink('about.php?username='.$result['username'])."\">".htmlReady($result['fullname'])."</a> ";
 	
+	print $bewegeflaeche." ";
+	
 	//Workaround for older data from previous versions (chdate is 0)
 	print date("d.m.Y - H:i", (($result["chdate"]) ? $result["chdate"] : $result["mkdate"]));
 	
@@ -1940,7 +1948,7 @@ function display_folder ($folder_id, $open, $change, $move, $upload, $refresh=FA
 	if ($open[$folder_id]) {
 		print "<div id=\"folder_".$folder_id."_body\">";
 		//Der ganze Teil des Unterbaus wurde in die folgende Funktion outsourced:
-		display_folder_body($folder_id, $open, $change, $move, $upload, $refresh, $filelink);
+		display_folder_body($folder_id, $open, $change, $move, $upload, $refresh, $filelink, $anchor_id);
 	} else {
 		print "<div id=\"folder_".$folder_id."_body\" style=\"display: none\">";
 	}
