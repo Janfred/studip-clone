@@ -1414,7 +1414,7 @@ $countfiles = 0;
  * Displays one file/document with all of its information and options. 
  * 
  */
-function display_file_line ($datei, $folder_id, $open, $change, $move, $upload, $all, $refresh=FALSE, $filelink="", $anchor_id) {
+function display_file_line ($datei, $folder_id, $open, $change, $move, $upload, $all, $refresh=FALSE, $filelink="", $anchor_id, $position = "middle") {
 	global $_fullname_sql,$SessionSeminar,$SessSemName, $rechte, $anfang,
 		$user, $SemSecLevelWrite, $SemUserStatus, $check_all, $countfiles;
 	//Einbinden einer Klasse, die Informationen über den ganzen Baum enthält
@@ -1454,11 +1454,17 @@ function display_file_line ($datei, $folder_id, $open, $change, $move, $upload, 
 	// -> Pfeile zum Verschieben (bzw. die Ziehfläche)
 	if ((!$all) && ($rechte)) {
 		$countfiles++;
-		$bewegeflaeche = "<span class=\"updown_marker\" id=\"pfeile_".$datei["dokument_id"]."\">" .
-				"<a href=\"".URLHelper::getLink('?open='.$datei['dokument_id'])."_mfu_\" title=\""._("Datei nach oben schieben").
-				"\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/move_up.gif\"></a><a href=\"".URLHelper::getLink('?open='.
-				$datei['dokument_id'])."_mfd_\" title=\""._("Datei nach unten schieben").
-				"\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/move_down.gif\"></a></span>";
+		$bewegeflaeche = "<span class=\"updown_marker\" id=\"pfeile_".$datei["dokument_id"]."\">";
+		if (($position == "middle") || ($position == "bottom")) {
+			$bewegeflaeche .= "<a href=\"".URLHelper::getLink('?open='.$datei['dokument_id'])."_mfu_\" title=\""._("Datei nach oben schieben").
+				"\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/move_up.gif\"></a>";
+		}
+		if (($position == "middle") || ($position == "top")) {
+			$bewegeflaeche .= "<a href=\"".URLHelper::getLink('?open='.
+					$datei['dokument_id'])."_mfd_\" title=\""._("Datei nach unten schieben").
+					"\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/move_down.gif\"></a>";
+		}
+		$bewegeflaeche .= "</span>";
 		$bewegeflaeche_anfasser = "<span class=\"anfasser\" style=\"display:none\"><a href=\"#\" class=\"drag\" onclick=\"return false\" " .
 				"style=\"cursor: move\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/verschieben.png\" border=0 title=\"Datei verschieben\"></a></span>";
 	}
@@ -1716,9 +1722,16 @@ function display_folder_body($folder_id, $open, $change, $move, $upload, $refres
 		if (!is_array($folders_kids)) {
 			$folders_kids = array();
 		}
-		foreach ($folders_kids as $unterordner) {
+		$subfolders = array();
+		foreach ($folders_kids as $key => $unterordner) {
 			if (($folder_tree->isReadable($folder_id, $user->id)) || ($rechte)) { //habe ich Rechte?
-				display_folder($unterordner['folder_id'], $open, $change, $move, $upload, $refresh, $filelink, $anchor_id);
+				$subfolders[] = $unterordner['folder_id'];
+			}
+		}
+		if ($subfolders) {
+			foreach ($subfolders as $key => $subfolder) {
+				$folder_pos = ((count($subfolders) > 1) ? (($key == 0) ? "top" : (($key == count($subfolders)-1) ? "bottom" : "middle")) : "alone");
+				display_folder($subfolder, $open, $change, $move, $upload, $refresh, $filelink, $anchor_id, $folder_pos);
 			}
 		}
 		print "</div>";
@@ -1738,8 +1751,9 @@ function display_folder_body($folder_id, $open, $change, $move, $upload, $refres
 					"WHERE range_id = '".$result["folder_id"]."' " .
 					"ORDER BY a.priority ASC, a.chdate DESC, t_name ";
 			$result2 = $db->query($query)->fetchAll();
-			foreach ($result2 as $datei) {
-				display_file_line($datei, $folder_id, $open, $change, $move, $upload, FALSE, $refresh, $filelink, $anchor_id);	
+			foreach ($result2 as $key => $datei) {
+				$file_pos = ((count($result2) > 1) ? (($key == 0) ? "top" : (($key == count($result2)-1) ? "bottom" : "middle")) : "alone");
+				display_file_line($datei, $folder_id, $open, $change, $move, $upload, FALSE, $refresh, $filelink, $anchor_id, $file_pos);	
 			}
 		}
 		print "</div>";
@@ -1756,7 +1770,7 @@ $droppable_folder = 0;
  * This function is not dependent on the recursive-level so it looks as if it all starts from here.
  * 
  */
-function display_folder ($folder_id, $open, $change, $move, $upload, $refresh=FALSE, $filelink="", $anchor_id) {
+function display_folder ($folder_id, $open, $change, $move, $upload, $refresh=FALSE, $filelink="", $anchor_id, $position="middle") {
 	global $_fullname_sql,$SessionSeminar,$SessSemName, $rechte, $anfang,
 		$user, $SemSecLevelWrite, $SemUserStatus, $check_all, $countfolder, $droppable_folder;
 	$option = true;
@@ -1803,17 +1817,24 @@ function display_folder ($folder_id, $open, $change, $move, $upload, $refresh=FA
 	}
 
 	//Jetzt fängt eine zweite Tabelle an mit den Zeilen: Titel, Beschreibung und Knöpfe, Unterdateien und Unterordner 
-	if ($rechte)
+	if ($rechte) {
 		print "<div class=\"droppable\" id=\"dropfolder_$folder_id\">";
+	}
 	print "<table cellpadding=0 border=0 cellspacing=0 width=\"100%\" id=\"droppable_folder_$droppable_folder\"><tr>";
 	
 	// -> Pfeile zum Verschieben (bzw. die Ziehfläche)
 	if (($rechte) && ($depth > 3)) {
-		$bewegeflaeche = "<span class=\"updown_marker\" id=\"pfeile_".$folder_id."\">" .
-				"<a href=\"".URLHelper::getLink('?open='.$folder_id)."_mfou_\" title=\""._("Nach oben verschieben").
-				"\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/move_up.gif\"></a><a href=\"".URLHelper::getLink('?open='.
-				$folder_id)."_mfod_\" title=\""._("Nach unten verschieben").
-				"\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/move_down.gif\"></a></span>";
+		$bewegeflaeche = "<span class=\"updown_marker\" id=\"pfeile_".$folder_id."\">";
+		if (($position == "middle") || ($position == "bottom")) {
+			$bewegeflaeche .= "<a href=\"".URLHelper::getLink('?open='.$folder_id)."_mfou_\" title=\""._("Nach oben verschieben").
+					"\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/move_up.gif\"></a>";
+		}
+		if (($position == "middle") || ($position == "top")) {
+			$bewegeflaeche .= "<a href=\"".URLHelper::getLink('?open='.
+					$folder_id)."_mfod_\" title=\""._("Nach unten verschieben").
+					"\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/move_down.gif\"></a>";
+		}
+		$bewegeflaeche .= "</span>";
 		$bewegeflaeche_anfasser = "<span class=\"anfasser\" style=\"display:none\"><a href=\"#\" class=\"drag\" onclick=\"return false\" " .
 				"style=\"cursor: move\"><img src=\"".$GLOBALS['ASSETS_URL']."/images/verschieben.png\" border=0 title=\"Ordner verschieben\"></a></span>";
 	}
