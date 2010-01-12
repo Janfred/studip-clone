@@ -79,7 +79,7 @@ if ($_REQUEST["getfilebody"]) {
 		$query = "SELECT ". $_fullname_sql['full'] ." AS fullname, username, a.user_id, a.*, IF(IFNULL(a.name,'')='', a.filename,a.name) AS t_name FROM dokumente a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE a.dokument_id = ".$db->quote($_REQUEST["getfilebody"])."";
 		$datei = $db->query($query)->fetch();
 		ob_start();
-		display_file_body($datei, $folder_system_data["open"], $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE, $folder_system_data["refresh"], $folder_system_data["link"]);
+		display_file_body($datei, $folder_system_data["open"], $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE, $folder_system_data["refresh"], $folder_system_data["link"], NULL);
 		$output = ob_get_clean();
 		print utf8_encode($output);
 	}
@@ -92,7 +92,7 @@ if ($_REQUEST["getfolderbody"]) {
 	$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessionSeminar));
 	if ($folder_tree->isExecutable($_REQUEST["getfolderbody"] , $user->id)) {
 		ob_start();
-		display_folder_body($_REQUEST["getfolderbody"], $folder_system_data["open"], $change, $move, $upload, $refresh, $filelink);
+		display_folder_body($_REQUEST["getfolderbody"], $folder_system_data["open"], $change, $move, $upload, $refresh, $filelink, NULL);
 		$output = ob_get_clean();
 		print utf8_encode($output);
 	}
@@ -477,7 +477,7 @@ if ($rechte || $owner || $create_folder_perm) {
 		}
 		$result = $db->query("SELECT folder_id FROM folder WHERE range_id = ".$db->quote($open_id)." ORDER BY name ASC, chdate DESC")->fetchAll();
 		for ($i=0; $i < count($result); $i++) {
-			$db->query("UPDATE folder SET priority = ".($i+1)." WHERE folder_id = '".$result[$i]['dokument_id']."'");
+			$db->query("UPDATE folder SET priority = ".($i+1)." WHERE folder_id = '".$result[$i]['folder_id']."'");
 		}
 	}
 	
