@@ -53,8 +53,6 @@ class StartupChecks {
 		"semesterAdmin" => array("perm" => "admin"),
 		"semesterDozent" => array("perm" => "dozent")
 	);
-	var $db;
-	var $db2;
 	
 	function StartupChecks() {
 		$this->registered_checks["institutes"]["msg"] = _("Sie ben&ouml;tigen mindestens eine Einrichtung, an der Veranstaltungen angeboten werden k&ouml;nnen. Legen Sie bitte zun&auml;chst eine Einrichtung an.");
@@ -103,36 +101,33 @@ class StartupChecks {
 		$this->registered_checks["semesterDozent"]["msg"] = _("Um Veranstaltungen anlegen zu können muss mindestens ein Semester existieren, welches den jetzigen Zeitpunkt beinhaltet. Bitte wenden Sie sich an einen der Administratoren des Systems.");
 		$this->registered_checks["semesterDozent"]["link"] = "dispatch.php/siteinfo/show";
 		$this->registered_checks["semesterDozent"]["link_name"] = _("Kontakt zu den Administratoren");
-
-		$this->db = new DB_Seminar;
-		$this->db2 = new DB_Seminar;
 	}
 	
 	function institutes() {
+		$db = DBManager::get();
+
 		$query = "SELECT Institut_id FROM Institute";
-		$this->db->query ($query);
+		$result = $db->query($query);
 		
-		if ($this->db->nf()) {
-			return FALSE;
-		} else {
-			return TRUE;
-		}
+		return $result->rowCount() == 0;
 	}
 
 	function institutesRange() {
 		global $user, $perm;
 	
+		$db = DBManager::get();
+
 		if (!$perm->have_perm ("root")) {
 			$query = sprintf ("SELECT a.Institut_id, IF(a.Institut_id=fakultaets_id,1,0) AS is_fak,inst_perms FROM user_inst  a LEFT JOIN Institute USING (institut_id) WHERE (user_id = '%s' AND inst_perms = 'admin')", $user->id);
 	
-			$this->db->query($query);
-			while ($this->db->next_record()) {
-				$tmp_inst_ids[]=$this->db->f("Institut_id");
-				if ($this->db->f("is_fak")) {
-					$query2 = sprintf ("SELECT a.Institut_id, a.Name FROM Institute a WHERE fakultaets_id='%s' AND a.Institut_id!='%s' ", $this->db->f("Institut_id"), $this->db->f("Institut_id"));
-					$this->db2->query($query2);
-					while ($this->db2->next_record()) {
-						$tmp_inst_ids[]=$this->db2->f("Institut_id");
+			$result = $db->query($query);
+			foreach ($result as $row) {
+				$tmp_inst_ids[]=$row['Institut_id'];
+				if ($row['is_fak']) {
+					$query2 = sprintf ("SELECT a.Institut_id FROM Institute a WHERE fakultaets_id='%s' AND a.Institut_id!='%s' ", $row['Institut_id'], $row['Institut_id']);
+					$result2 = $db->query($query2);
+					foreach ($result2 as $row2) {
+						$tmp_inst_ids[]=$row2['Institut_id'];
 					}
 				}
 			}
@@ -145,83 +140,73 @@ class StartupChecks {
 			$query = "SELECT studip_object_id FROM sem_tree LEFT JOIN Institute ON (Institute.fakultaets_id = sem_tree.studip_object_id)";
 		}
 
-		$this->db->query ($query);
+		$result = $db->query($query);
 		
-		if ($this->db->nf()) {
-			return FALSE;
-		} else {
-			return TRUE;
-		}
+		return $result->rowCount() == 0;
 	}
 
 	function myInstituteRange() {
 		global $user;
 
+		$db = DBManager::get();
+
 		$query = sprintf ("SELECT studip_object_id FROM user_inst LEFT JOIN Institute USING (Institut_id) LEFT JOIN sem_tree ON (Institute.fakultaets_id = sem_tree.studip_object_id) WHERE user_id = '%s' ", $user->id);
-		$this->db->query ($query);
+		$result = $db->query($query);
 		
-		if ($this->db->nf()) {
-			return FALSE;
-		} else {
-			return TRUE;
-		}
+		return $result->rowCount() == 0;
 	}
 
 	function myAdminInstitute() {
 		global $user, $perm;
 		
+		$db = DBManager::get();
+
 		if ($perm->have_perm ("root")) {
 			return FALSE;
-		} else {
-			$query = sprintf ("SELECT user_id FROM user_inst WHERE user_id = '%s' AND inst_perms = 'admin' ", $user->id);
-			$this->db->query ($query);
-		
-			if ($this->db->nf()) {
-				return FALSE;
-			} else {
-				return TRUE;
-			}
 		}
+
+		$query = sprintf ("SELECT user_id FROM user_inst WHERE user_id = '%s' AND inst_perms = 'admin' ", $user->id);
+		$result = $db->query($query);
+	
+		return $result->rowCount() == 0;
 	}
 
 	function dozent() {
+		$db = DBManager::get();
+
 		$query = "SELECT user_id FROM auth_user_md5 WHERE perms = 'dozent'";
-		$this->db->query ($query);
+		$result = $db->query($query);
 		
-		if ($this->db->nf()) {
-			return FALSE;
-		} else {
-			return TRUE;
-		}
+		return $result->rowCount() == 0;
 	}
 
 	function institutesDozent() {
+		$db = DBManager::get();
+
 		$query = "SELECT user_id FROM user_inst WHERE inst_perms = 'dozent'";
-		$this->db->query ($query);
+		$result = $db->query($query);
 		
-		if ($this->db->nf()) {
-			return FALSE;
-		} else {
-			return TRUE;
-		}
+		return $result->rowCount() == 0;
 	}
 
 	function myInstitutesDozent() {
 		global $user, $perm;
 		
+		$db = DBManager::get();
+
 		if ($perm->have_perm ("root")) {
 			return FALSE;
 		} else {
 			$query = sprintf ("SELECT a.Institut_id, IF(a.Institut_id=fakultaets_id,1,0) AS is_fak,inst_perms FROM user_inst  a LEFT JOIN Institute USING (institut_id) WHERE (user_id = '%s' AND inst_perms = 'admin')", $user->id);
 	
-			$this->db->query($query);
-			while ($this->db->next_record()) {
-				$tmp_inst_ids[]=$this->db->f("Institut_id");
-				if ($this->db->f("is_fak")) {
-					$query2 = sprintf ("SELECT a.Institut_id, a.Name FROM Institute a WHERE fakultaets_id='%s' AND a.Institut_id!='%s' ", $this->db->f("Institut_id"), $this->db->f("Institut_id"));
-					$this->db2->query($query2);
-					while ($this->db2->next_record()) {
-						$tmp_inst_ids[]=$this->db2->f("Institut_id");
+			$result = $db->query($query);
+			foreach ($result as $row) {
+				$tmp_inst_ids[]=$row['Institut_id'];
+				if ($row['is_fak']) {
+					$query2 = sprintf ("SELECT a.Institut_id FROM Institute a WHERE fakultaets_id='%s' AND a.Institut_id!='%s' ", $row['Institut_id'], $row['Institut_id']);
+					$result2 = $db->query($query2);
+					foreach ($result2 as $row2) {
+						$tmp_inst_ids[]=$row2['Institut_id'];
 					}
 				}
 			}
@@ -232,26 +217,20 @@ class StartupChecks {
 			$query = sprintf ("SELECT user_id FROM user_inst WHERE inst_perms = 'dozent' AND Institut_id IN ('%s')", $clause);
 		} 
 				
-		$this->db->query ($query);
+		$result = $db->query($query);
 
-		if ($this->db->nf()) {
-			return FALSE;
-		} else {
-			return TRUE;
-		}
+		return $result->rowCount() == 0;
 	}
 
 	function myInstitutes() {
 		global $user;
 		
+		$db = DBManager::get();
+
 		$query = sprintf ("SELECT user_id FROM user_inst WHERE inst_perms = 'dozent' AND user_id = '%s'", $user->id);
-		$this->db->query ($query);
+		$result = $db->query($query);
 		
-		if ($this->db->nf()) {
-			return FALSE;
-		} else {
-			return TRUE;
-		}
+		return $result->rowCount() == 0;
 	}
 	
 	function semester() {
