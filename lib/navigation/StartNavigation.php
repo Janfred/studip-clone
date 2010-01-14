@@ -120,6 +120,13 @@ class StartNavigation extends Navigation
             $this->addSubNavigation('admin_user', $navigation);
 	}
 
+        // plugin and role administration
+        if ($perm->have_perm('root')) {
+            $navigation = new Navigation(_('Verwaltung von Plugins'), 'dispatch.php/plugin_admin');
+            $navigation->addSubNavigation('admin_roles', new Navigation(_('Verwaltung von Rollen'), 'dispatch.php/role_admin'));
+            $this->addSubNavigation('admin_plugins', $navigation);
+        }
+
         // calendar / home page
         if (!$perm->have_perm('admin')) {
             $navigation = new Navigation(_('Mein Planer'));

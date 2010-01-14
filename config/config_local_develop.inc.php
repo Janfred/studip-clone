@@ -243,7 +243,7 @@ $PLUGINS_UPLOAD_ENABLE = TRUE; 					//Upload of Plugins is enabled
 $NEW_PLUGINS_PATH = ""; 							//The place from which new plugins should be loaded
 
 $PLUGIN_REPOSITORIES = array(
-	'http://plugins.studip.de/svn/plugins/plugins.xml'
+	'http://plugins.studip.de/plugin-wiki.php'
 );
 
 /*system functions

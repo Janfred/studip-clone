@@ -9,6 +9,7 @@
  */
 
 require_once 'PluginManager.class.php';
+require_once 'PluginNotFound.class.php';
 
 class PluginEngine {
 
@@ -163,66 +164,6 @@ class PluginEngine {
 	}
 
 	/**
-	 * Reads the manifest of the plugin in the given path
-	 * @return array containing the manifest information
-	 *
-	 * @deprecated
-	 */
-	public static function getPluginManifest($pluginpath) {
-		$manifest = file($pluginpath . '/plugin.manifest');
-		$result = array();
-
-		if ($manifest !== false) {
-			foreach ($manifest as $line) {
-				list($key, $value) = explode('=', $line);
-				$key = trim($key);
-				$value = trim($value);
-
-				if ($key === '' || $key[0] === '#') {
-					continue;
-				}
-
-				if ($key === 'pluginclassname' && isset($result[$key])) {
-					$result['additionalclasses'][] = $value;
-				} else {
-					$result[$key] = $value;
-				}
-			}
-		}
-
-		return $result;
-	}
-
-	/**
-	 * Searches for plugins in the plugins installation directory, if enabled in local.inc
-	 * @return list of installable names of plugin packages
-	 *
-	 * @deprecated
-	 */
-	public static function getInstallablePlugins() {
-		$newpluginsdir = $GLOBALS["NEW_PLUGINS_PATH"];
-
-		if (!isset($newpluginsdir)) {
-			// there's no dir defined in the local.inc
-			return array();
-		}
-		else {
-			if (!file_exists($newpluginsdir)) {
-				// the directory doesn't exist
-				return array();
-			}
-			$dir = dir($newpluginsdir);
-			$installableplugins = array();
-			while ($file = readdir($dir->handle)) {
-				if (preg_match("/(.*)\.zip/",$file) > 0) {
-					$installableplugins[] = $file;
-				}
-			}
-			return $installableplugins;
-		}
-	}
-
-	/**
 	 * Saves a value to the global session
 	 *
 	 * @deprecated
@@ -234,7 +175,6 @@ class PluginEngine {
 	public static function saveToSession($plugin,$key,$value) {
 		$_SESSION["PLUGIN_SESSION_SPACE"][strtolower(get_class($plugin))][$key] =serialize($value);
 	}
-
 
 	/**
 	 * Retrieves the value to key from the global plugin session

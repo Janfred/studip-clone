@@ -1117,3 +1117,38 @@ form#quicksearch .autocomplete li {
     font-weight: bold;
 }
 
+/* --- Plugin Administration ---------------------------------------------------- */
+table.plugin_admin {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.plugin_admin th {
+    padding: 3px;
+    text-align: left;
+}
+
+table.plugin_admin td {
+    padding: 3px;
+}
+
+table.plugin_admin .plugin_score {
+    white-space: nowrap;
+}
+
+table.plugin_admin .plugin_install {
+    text-align: center;
+}
+
+table.plugin_admin img.plugin_preview {
+    height: 60px;
+    width: 80px;
+}
+
+#plugin_update {
+    margin: 1ex;
+}
+
+#plugin_update label {
+    display: block;
+}

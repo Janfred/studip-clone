@@ -77,7 +77,6 @@ class PluginManager
                 'class'       => $plugin['pluginclassname'],
                 'path'        => $plugin['pluginpath'],
                 'type'        => explode(',', $plugin['plugintype']),
-                'description' => $plugin['plugindesc'],
                 'enabled'     => $plugin['enabled'] === 'yes',
                 'position'    => $plugin['navigationpos'],
                 'depends'     => (int) $plugin['dependentonid']
@@ -287,7 +286,6 @@ class PluginManager
             'class'       => $class,
             'path'        => $path,
             'type'        => $type,
-            'description' => '',
             'enabled'     => false,
             'position'    => $position,
             'depends'     => $depends

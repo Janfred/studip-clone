@@ -1,10 +1,16 @@
 <?php
-/**
- * @author Dennis Reil, <dennis.reil@offis.de>
- * @package pluginengine
+/*
+ * plugins.inc.php - plugin API for Stud.IP
+ *
+ * Copyright (c) 2009  Elmar Ludwig
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
  */
 
-// helper classes
+// helper classes (deprecated)
 require_once 'core/Permission.class.php';
 require_once 'core/StudIPInstitute.class.php';
 require_once 'core/StudIPUser.class.php';
@@ -38,5 +44,6 @@ require_once 'core/AbstractStudIPSystemPlugin.class.php';
 require_once 'core/Role.class.php';
 require_once 'db/RolePersistence.class.php';
 require_once 'engine/PluginEngine.class.php';
-require_once 'engine/PluginNotFound.class.php';
+
+// old plugin API (deprecated)
 require_once 'engine/StudIPTemplateEngine.class.php';

@@ -10,7 +10,7 @@
  * the License, or (at your option) any later version.
  */
 
-require_once 'public/plugins_packages/core/PluginRepository.class.php';
+require_once 'lib/plugins/engine/PluginRepository.class.php';
 
 class PluginRepositoryTest extends UnitTestCase
 {

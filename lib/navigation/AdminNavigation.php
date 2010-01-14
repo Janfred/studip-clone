@@ -185,6 +185,12 @@ class AdminNavigation extends Navigation
         // admin tools
         $navigation = new Navigation(_('Tools'));
 
+        // plugin and role administration
+        if ($perm->have_perm('root')) {
+            $navigation->addSubNavigation('plugins', new Navigation(_('Pluginverwaltung'), 'dispatch.php/plugin_admin'));
+            $navigation->addSubNavigation('roles', new Navigation(_('Rollenverwaltung'), 'dispatch.php/role_admin'));
+        }
+
         if (get_config('EXPORT_ENABLE')) {
             $navigation->addSubNavigation('export', new Navigation(_('Export'), 'export.php'));
         }
