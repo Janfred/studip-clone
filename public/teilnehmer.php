@@ -441,9 +441,9 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 			$msg ="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.") . "§";
 		}
 	}
-	if(isset($_REQUEST['admission_rein_x'])){
+	if(is_array($_REQUEST['admission_rein'])){
 		$cmd = 'admission_rein';
-		$username = $_REQUEST['admission_rein'];
+		$username = key($_REQUEST['admission_rein']);
 	}
 	//aus der Anmelde- oder Warteliste in die Veranstaltung hochstufen / aus der freien Suche als Tutoren oder Autoren eintragen
 	if ((isset($_REQUEST['do_admission_insert_x']) && is_array($_REQUEST['admission_insert'])) || (($cmd == "admission_rein" || $cmd == "add_user") && $username)){
@@ -1451,7 +1451,7 @@ if ($rechte) {
 
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><a href=\"%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" %s border=\"0\"></a></td>", $cssSw->getClass(), URLHelper::getLink('sms_send.php', array('sms_source_page' => 'teilnehmer.php', 'rec_uname' => $db->f("username"))), tooltip(_("Nachricht an User verschicken")));
 			if(!LockRules::Check($id, 'participants')){
-				printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><input type=\"image\" name=\"admission_rein\" value=\"%s\" border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/up.gif\" width=\"21\" height=\"16\">
+				printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><input type=\"image\" name=\"admission_rein[%s]\" border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/up.gif\" width=\"21\" height=\"16\">
 						<input type=\"checkbox\" name=\"admission_insert[%s]\" value=\"1\"></td>", $cssSw->getClass(), $db->f("username"), $db->f("username"));
 				printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"%s\"><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/down.gif\" width=\"21\" height=\"16\"></a>
 						<input type=\"checkbox\" name=\"admission_delete[%s]\" value=\"1\"></td>", $cssSw->getClass(), URLHelper::getLink("?cmd=admission_raus&username=".$db->f("username")."&studipticket=$studipticket"), $db->f("username"));
