@@ -2503,7 +2503,7 @@ if ($level == 2)
                            echo "<td>";
                            if ($i > 0)
                            {
-															$href = "?moveup_doz=".get_username($key)."&".time()."#anker";
+															$href = "?moveup_doz=".get_username($key)."&foo=".time()."#anker";
 															$img_src = "images/move_up.gif";
 															echo "<a href='".URLHelper::getLink($href)."'>";
 															echo "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
@@ -2514,7 +2514,7 @@ if ($level == 2)
                            echo "<td>";
                            if ($i < (sizeof($sem_create_data["sem_doz"]) - 1))
                            {
-															$href = "?movedown_doz=".get_username($key)."&".time()."#anker";
+															$href = "?movedown_doz=".get_username($key)."&foo=".time()."#anker";
 															$img_src = "images/move_down.gif";
 															echo "<a href='".URLHelper::getLink($href)."'>";
 															echo "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
@@ -2608,7 +2608,7 @@ if ($level == 2)
                            echo "<td>";
                            if ($i > 0)
                            {
-															$href = "?moveup_tut=".get_username($key)."&".time()."#anker";
+															$href = "?moveup_tut=".get_username($key)."&foo=".time()."#anker";
 															$img_src ="images/move_up.gif";
 
 															echo "<a href='".URLHelper::getLink($href)."'>";
@@ -2620,7 +2620,7 @@ if ($level == 2)
                            echo "<td>";
                            if ($i < (sizeof($sem_create_data["sem_tut"]) - 1))
                            {
-															$href = "?movedown_tut=".get_username($key)."&".time()."#anker";
+															$href = "?movedown_tut=".get_username($key)."&foo=".time()."#anker";
 															$img_src = "images/move_down.gif";
 
 															echo "<a href='".URLHelper::getLink($href)."'>";
