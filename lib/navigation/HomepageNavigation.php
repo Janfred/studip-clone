@@ -33,8 +33,8 @@ class HomepageNavigation extends Navigation
 
         if ($count > 0) {
             $hp_txt = _('Zu Ihrer Einstellungsseite') . ', ' .
-                ngettext(_('Sie haben %d neuen Eintrag im Gästebuch.'),
-                         _('Sie haben %d neue Einträge im Gästebuch.'), $count);
+                sprintf(ngettext('Sie haben %d neuen Eintrag im Gästebuch.',
+                                 'Sie haben %d neue Einträge im Gästebuch.', $count), $count);
             $picture = 'header_einst2';
             $hp_link = 'about.php?guestbook=open#guest';
         } else {

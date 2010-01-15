@@ -31,14 +31,14 @@ class MessagingNavigation extends Navigation
         $icon = $neum ? 'header_nachricht2' : 'header_nachricht';
 
         if ($neux > 0) {
-            $tip = sprintf(ngettext(_('Sie haben %d neue ungelesene Nachricht'),
-                                    _('Sie haben %d neue ungelesene Nachrichten'), $neux), $neux);
+            $tip = sprintf(ngettext('Sie haben %d neue ungelesene Nachricht',
+                                    'Sie haben %d neue ungelesene Nachrichten', $neux), $neux);
         } else if ($neum > 1) {
-            $tip = sprintf(ngettext(_('Sie haben %d ungelesene Nachricht'),
-                                    _('Sie haben %d ungelesene Nachrichten'), $neum), $neum);
+            $tip = sprintf(ngettext('Sie haben %d ungelesene Nachricht',
+                                    'Sie haben %d ungelesene Nachrichten', $neum), $neum);
         } else if ($altm > 1) {
-            $tip = sprintf(ngettext(_('Sie haben %d alte empfangene Nachricht'),
-                                    _('Sie haben %d alte empfangene Nachrichten'), $altm), $altm);
+            $tip = sprintf(ngettext('Sie haben %d alte empfangene Nachricht',
+                                    'Sie haben %d alte empfangene Nachrichten', $altm), $altm);
         } else {
             $tip = _('Sie haben keine alten empfangenen Nachrichten');
         }
