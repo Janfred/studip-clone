@@ -963,19 +963,9 @@ div.overdiv div.content {
 div.modalshadow {
     background-image: url('../images/background-transparent.png');
     position: absolute;
-    left: 25%;
+    max-width: 40%;
+    left: 30%;
     top: 50%;
-    width: 50%;
-    -moz-border-radius: 10px;
-}
-
-div.modaldialog {
-    background-color: #FFFFDD;
-    font-size: 12pt;
-    margin: -10px 10px 10px -10px;
-    padding: 10px;
-    text-align: center;
-    -moz-border-radius: 10px;
 }
 
 /* --- Editor Toolbar ------------------------------------------------------- */
@@ -1034,6 +1024,13 @@ div.messagebox_exception {
     color: #ff0400;
     background-color: #ffbaba;
     background-image: url("../images/icons/icon_exception.png");
+}
+
+div.messagebox_modal {
+    color: #000000;
+    background-color: #d8e3fc;
+    background-image: url("../images/icons/icon_modal.png");
+    margin: -8px 8px 8px -8px;
 }
 
 #index .messagebox {
