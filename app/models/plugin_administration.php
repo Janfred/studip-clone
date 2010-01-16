@@ -338,6 +338,7 @@ class PluginAdministration
     public function getUpdateInfo($plugins)
     {
         $default_repository = new PluginRepository();
+        $update_info = array();
 
         foreach ($plugins as $plugin) {
             $repository = $default_repository;
