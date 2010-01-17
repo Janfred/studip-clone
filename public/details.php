@@ -573,12 +573,19 @@ echo $template_factory->render(
 				if (count($studienmodule)){
 					$semester_id = SemesterData::GetSemesterIdByDate($db2->f("start_time"));
 					foreach($studienmodule as $module){
+						$nav = $studienmodulmanagement->getModuleInfoNavigation($module->getId(), $semester_id);
+						$icon_html = '';
+						if($icon = $nav->getImage()){
+							$icon_html = '<img ';
+							foreach ($icon as $key => $value) $icon_html .= sprintf('%s="%s" ', $key, htmlReady($value));
+							$icon_html .= '>';
+						}
 						$stm_out[$module->getId()] = '<a href="'
-													. htmlspecialchars($studienmodulmanagement->getModuleDescriptionUrl($module->getId(), $semester_id))
+													. UrlHelper::getLink($nav->getUrl())
 													. '">'
-													. htmlReady($studienmodulmanagement->getModuleTitle($module->getId(), $semester_id))
+													. htmlReady($nav->getTitle())
 													. '</a> '.
-													$studienmodulmanagement->getModuleInfoHTML($module->getId(), $semester_id);
+													$icon_html;
 					}
 					?>
 			<tr>

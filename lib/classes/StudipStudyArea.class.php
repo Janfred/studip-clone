@@ -491,12 +491,16 @@ class StudipStudyArea {
    * @return string
    */
   function getModuleInfoHTML($semester_id = ''){
+    $ret = '';
     if ($this->isModule()) {
-      return PluginEngine::getPlugin('StudienmodulManagement')
-             ->getModuleInfoHTML($this->getID(), $semester_id);
-    } else {
-      return '';
+      $nav = PluginEngine::getPlugin('StudienmodulManagement')->getModuleInfoNavigation($this->getID(), $semester_id);
+      if($icon = $nav->getImage()){
+        $ret = '<img ';
+        foreach ($icon as $key => $value) $ret .= sprintf('%s="%s" ', $key, htmlReady($value));
+        $ret .= '>';
+      }
     }
+    return $ret;
   }
   
 

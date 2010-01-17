@@ -43,49 +43,16 @@ interface StudienmodulManagementPlugin {
 	function getModuleDescription($module_id, $semester_id = null);
 	
 	/**
-	 * Gibt einen HTML Schnipsel zurück, der z.B. zur Darstellung eines Info Icons
-	 * benutzt werden kann. Wird an verschiedenen Stellen direkt hinter dem Namen 
-	 * ausgegeben, wenn es sich um ein Modul handelt
+	 * Gibt ein Objekt vom Typ Navigation zurück, das Titel, Link und Icon für
+	 * ein Modul enthalten kann, z.B. zur Darstellung eines Info Icons
 	 *
 	 * @param string $module_id $module_id eine ID aus der Tabelle sem_tree
 	 * @param string $semester_id eine ID aus der Tabelle semester_data
 	 * 
-	 * @return string
+	 * @return Navigation
 	 */
-	function getModuleInfoHTML($module_id, $semester_id = null);
+	function getModuleInfoNavigation($module_id, $semester_id = null);
 	
-	/**
-	 * Gibt eine Url zurück, die über eine entsprechende Plugin Aktion eine komplette
-	 * Seite mit ausführlicher Beschreibung des Moduls ergeben soll 
-	 *
-	 * @param string $module_id eine ID aus der Tabelle sem_tree
-	 * @param string $semester_id eine ID aus der Tabelle semester_data
-	 * 
-	 * @return string
-	 */
-	function getModuleDescriptionUrl($module_id, $semester_id = null);
-	
-	/**
-	 * Die Methode wird immer aufgerufen, wenn eine Veranstaltung einer Ebene im
-	 * Bereichsbaum zugewiesen wurde, die vom Typ "Modul" ist
-	 *
-	 * @param string $module_id eine ID aus der Tabelle sem_tree
-	 * @param string $course_id eine ID aus der Tabelle seminare
-	 * 
-	 * @return void
-	 */
-	function triggerCourseAddedToModule($module_id, $course_id);
-	
-	/**
-	 * Die Methode wird immer aufgerufen, wenn eine Veranstaltung aus einer Ebene im
-	 * Bereichsbaum entfernt wurde, die vom Typ "Modul" ist
-	 *
-	 * @param string $module_id eine ID aus der Tabelle sem_tree
-	 * @param string $course_id eine ID aus der Tabelle seminare
-	 * 
-	 * @return void
-	 */
-	function triggerCourseRemovedFromModule($module_id, $course_id);
 	
 }
 

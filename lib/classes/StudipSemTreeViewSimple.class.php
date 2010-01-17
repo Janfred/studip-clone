@@ -124,11 +124,16 @@ class StudipSemTreeViewSimple {
 
 	function getInfoIcon($item_id){
 		if(is_object($this->studienmodulmanagement) && $this->tree->isModuleItem($item_id)){
-			$ret = $this->studienmodulmanagement->getModuleInfoHTML($item_id, SemesterData::GetSemesterIdByIndex($this->tree->sem_number[0]));
+			$nav = $this->studienmodulmanagement->getModuleInfoNavigation($item_id, SemesterData::GetSemesterIdByIndex($this->tree->sem_number[0]));
+			if($icon = $nav->getImage()){
+				$ret = '<img ';
+				foreach ($icon as $key => $value) $ret .= sprintf('%s="%s" ', $key, htmlReady($value));
+				$ret .= '>';
+			}
 		} else {
-		if ($item_id == "root"){
+			if ($item_id == "root"){
 				$info = ($this->root_content) ? $this->root_content : _("Keine weitere Info vorhanden");
-		} else {
+			} else {
 				$info = ($this->tree->tree_data[$item_id]['info']) ? $this->tree->tree_data[$item_id]['info'] :  _("Keine weitere Info vorhanden");
 			}
 			$ret = "<a href=\"#\" " . tooltip(kill_format($info), false, true) . "><img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" border=\"0\" align=\"absmiddle\"></a>";

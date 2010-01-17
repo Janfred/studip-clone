@@ -271,7 +271,14 @@ $SEM_CLASS[6]=array("name"=>_("importierte Kurse"),
 					"create_description"=> "Sie sollten diesen Text garnicht sehen.");
 //weitere Klassen koennen hier angefuegt werden. Bitte Struktur wie oben exakt uebernehmen.
 
-$SEM_TREE_TYPES[0] = array("name" => "", "editable" => true);
+/*
+possible types of sem_tree ("Veranstaltungshierarchie") types
+the "editable" flag could be used to prevent modifications, e.g. imported data
+the "is_module" flag specifies an entry which represents a "Studienmodul", if the "studienmodulmanagement"
+plugin interface is used
+*/
+$SEM_TREE_TYPES[0] = array("name" => "", "editable" => true); //default type, must be present
+$SEM_TREE_TYPES[1] = array("name" => _("Studienmodul") , "editable" => true, "is_module" => true);
 
 //Festlegen der erlaubten oder verbotenen Dateitypen
 $UPLOAD_TYPES=array( 	"default" =>												//Name bezeichnet den zugehoerigen SEM_TYPE, name "1" waere entsprechend die Definition der Dateiendungen fuer SEM_TYPE[1]; default wird verwendet, wenn es keine spezielle Definition fuer einen SEM_TYPE gibt
