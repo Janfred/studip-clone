@@ -118,13 +118,12 @@ if ($perm->have_perm("autor")) {	// Navigationsleiste ab status "Autor", autors 
 		$links_admin_data["sortby"]=$_REQUEST['adminarea_sortby'];
 		$list=TRUE;
 	}
-	if (!isset($links_admin_data["sortby"]) || $links_admin_data["sortby"]==null) {
+	if (!isset($links_admin_data["sortby"])) {
 		$links_admin_data["sortby"]=$userConfig->getValue($user->id,'LINKS_ADMIN');
 
 	    if ($links_admin_data["sortby"]=="" || $links_admin_data["sortby"]==false) {
 			$links_admin_data["sortby"]="VeranstaltungsNummer";
 	    }
-	    $list=TRUE;
 	} else {
 	    $userConfig->setValue($links_admin_data["sortby"],$user->id,'LINKS_ADMIN');
 	}
