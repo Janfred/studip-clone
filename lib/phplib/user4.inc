@@ -153,8 +153,14 @@ class User {
 	  if ($this->id == 'nobody'){
 		  return;
 	  }
-	  if(!$this->that->ac_store($this->id, $this->name, $this->serialize())){
-	  	$this->that->ac_halt("User: freeze() failed.");
+	  $vals = $this->serialize();
+
+	  if($this->checksum != hash('md5', $vals)){
+		  if(!$this->that->ac_store($this->id, $this->name, $vals)){
+		  	$this->that->ac_halt("User: freeze() failed.");
+		  }
+	  } else {
+	  		$this->that->ac_set_changed($this->id, $this->name, time());
 	  }
 	  return true;
   } // end func freeze
@@ -166,6 +172,8 @@ class User {
   function thaw() {
   
     $vals = $this->that->ac_get_value($this->id, $this->name);
+   
+    $this->checksum = hash('md5', $vals);
     
     $vars = @unserialize($vals);
     
