@@ -73,7 +73,7 @@ class DBManager {
    *
    * @return DBManager  the singleton instance
    */
-  public function getInstance() {
+  static public function getInstance() {
     if (is_null(DBManager::$instance)) {
       DBManager::$instance = new DBManager();
     }

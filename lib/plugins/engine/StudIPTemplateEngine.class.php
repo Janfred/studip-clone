@@ -14,16 +14,13 @@
  * @subpackage 	pluginengine
  */
 
-//Imports
-require_once'lib/msg.inc.php';
-
 /**
- * @deprecated should be deprecated
+ * @deprecated is now deprecated
  *
  */
 class StudIPTemplateEngine
 {
-	function makeHeadline($title,$full_width=true,$img="")
+	static function makeHeadline($title,$full_width=true,$img="")
 	{
 		if (!$full_width) {
 			echo "\n<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\" width=\"70%\">";
@@ -41,7 +38,7 @@ class StudIPTemplateEngine
 		printf("</b></td></tr></table>");
 	}
 
-	function startContentTable($full_width=true)
+	static function startContentTable($full_width=true)
 	{
 		if (!$full_width){
 			echo ("<table border=\"0\" width=\"70%\" cellspacing=\"0\" cellpadding=\"0\" bgcolor=\"#ffffff\">");
@@ -64,7 +61,7 @@ class StudIPTemplateEngine
 		<?php
 	}
 
-	function createInfoBoxTableCell()
+	static function createInfoBoxTableCell()
 	{
 		?>
 					</td>
@@ -75,7 +72,7 @@ class StudIPTemplateEngine
 		<?php
 	}
 
-	function endInfoBoxTableCell()
+	static function endInfoBoxTableCell()
 	{
 		?>
 			</td>
@@ -91,7 +88,7 @@ class StudIPTemplateEngine
 		<?php
 	}
 
-	function endContentTable()
+	static function endContentTable()
 	{
 		?>
 					</td>
@@ -108,7 +105,7 @@ class StudIPTemplateEngine
 		<?php
 	}
 
-	function makeContentHeadline($title,$colspan=2)
+	static function makeContentHeadline($title,$colspan=2)
 	{
 		printf('<table width="100%%" cellpadding="0" cellspacing="0"><tr><th align="left">&nbsp;%s</th></tr></table>', $title);
 	}
@@ -119,7 +116,7 @@ class StudIPTemplateEngine
 	 * @param unknown_type $text
 	 * @param unknown_type $colspan
 	 */
-	function showErrorMessage($text,$colspan=2)
+	static function showErrorMessage($text,$colspan=2)
 	{
 		echo MessageBox::error($text);
 	}
@@ -130,7 +127,7 @@ class StudIPTemplateEngine
 	 * @param unknown_type $text
 	 * @param unknown_type $colspan
 	 */
-	function showSuccessMessage($text,$colspan=2)
+	static function showSuccessMessage($text,$colspan=2)
 	{
 		echo MessageBox::success($text);
 	}
@@ -141,12 +138,12 @@ class StudIPTemplateEngine
 	 * @param unknown_type $text
 	 * @param unknown_type $colspan
 	 */
-	function showInfoMessage($text,$colspan=2)
+	static function showInfoMessage($text,$colspan=2)
 	{
 		echo MessageBox::info($text);
 	}
 
-	function showQuestionMessage($text,$colspan=2,$newrow=true)
+	static function showQuestionMessage($text,$colspan=2,$newrow=true)
 	{
 		$colspan = $colspan -1;
 		?>
