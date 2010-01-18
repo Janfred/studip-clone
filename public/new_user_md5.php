@@ -143,14 +143,13 @@ if (check_ticket($_REQUEST['studipticket'])){
 						}
 					}
 				}
-				if( isset( $_REQUEST[ 'select_dom_id' ] ) ){
-					$domain = new UserDomain( $_REQUEST[ 'select_dom_id' ] );
-					if( $perm->have_perm('root') || in_array($domain , UserDomain::getUserDomainsForUser( $auth->auth["uid"] ) ) ){
-						$domain->addUser( $UserManagement->user_data['auth_user_md5.user_id'] );
-						$UserManagement->msg .= "msg§" . sprintf(_("Benutzer wurde in Nutzerdomäne \"%s\" eingetragen." ) , htmlReady( $domain->getName() ) );
-					}
-					else{
-						$UserManagement->msg .= "error§" . sprintf(_("Benutzer konnte nicht in die Nutzerdomäne eingetragen werden." ) );
+				if ($_REQUEST['select_dom_id'] != '') {
+					$domain = new UserDomain($_REQUEST['select_dom_id']);
+					if ($perm->have_perm('root') || in_array($domain, UserDomain::getUserDomainsForUser($auth->auth["uid"]))) {
+						$domain->addUser($UserManagement->user_data['auth_user_md5.user_id']);
+						$UserManagement->msg .= "msg§" . sprintf(_("Benutzer wurde in Nutzerdomäne \"%s\" eingetragen." ) , htmlReady($domain->getName()));
+					} else {
+						$UserManagement->msg .= "error§" . sprintf(_("Benutzer konnte nicht in die Nutzerdomäne eingetragen werden."));
 					}
 				}
 				$_GET['details'] = $details = $UserManagement->user_data['auth_user_md5.username'];
