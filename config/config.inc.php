@@ -472,13 +472,13 @@ $LIT_LIST_FORMAT_TEMPLATE = "**{dc_creator}** |({dc_contributor})||\n"
 
 //define the used modules for instiutes
 $INST_MODULES["default"] = array(
-			"forum"=>TRUE,				//forum, this modul is stud_ip core; always avaiable
-			"documents"=>TRUE,			//documents, this modul is stud_ip core; always avaiable
-			"schedule"=>TRUE,
-			"participants"=>TRUE,
-			"literature"=>TRUE,
-			"chat"=>TRUE,				//chat, only, if the modul is global activated; see local.inc
-			"support"=>FALSE,			//support, only, if the modul is global activated; see local.inc (this modul is not part of the main distribution)
+			"forum"=>TRUE,				//forum, this module is stud_ip core; always available
+			"documents"=>TRUE,			//documents, this module is stud_ip core; always available
+			"personal"=>TRUE,			//personal, this module is stud_ip core; always available
+			"literature"=>TRUE,			//literature, this module is stud_ip core; always available
+			"scm"=>FALSE,				//simple content module, this modul is stud_ip core; always available
+			"chat"=>TRUE,				//chat, only, if the module is global activated; see config_local.inc.php
+			"wiki"=>FALSE,				//wikiwiki-web, this module is stud_ip core; always available
 			);
 //you can add more specific presets for the different types
 
