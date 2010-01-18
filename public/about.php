@@ -256,7 +256,8 @@ if ($show_tabs) {
 	Navigation::activateItem('/homepage/view/all');
 }
 
-
+// TODO this can be removed when page output is moved to a template
+URLHelper::addLinkParam('username', $username);
 
 ?>
 <script language="Javascript">
