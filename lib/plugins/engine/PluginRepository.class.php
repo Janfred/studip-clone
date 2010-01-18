@@ -54,14 +54,14 @@ class PluginRepository
     {
         global $SOFTWARE_VERSION;
 
-        if (($metadata = file_get_contents($url)) === false) {
-            throw new Exception("Error reading URL: $url");
+        if (($metadata = @file_get_contents($url)) === false) {
+            throw new Exception(sprintf(_('Fehler beim Zugriff auf %s'), $url));
         }
 
         $xml = new SimpleXMLElement($metadata);
 
         if (!isset($xml->plugin)) {
-            throw new Exception("No plugin meta data found");
+            throw new Exception(_('Keine Plugin Meta-Daten gefunden'));
         }
 
         foreach ($xml->plugin as $plugin) {

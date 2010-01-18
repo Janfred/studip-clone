@@ -3,60 +3,64 @@
     <input name="search" type="text" size="20" value="<?= $search ?>">
     <?= makeButton('suchen', 'input' , _('Plugin suchen')) ?>
     &nbsp;
-    <a href="http://plugins.studip.de/" target="_blank">
-        <?= makeButton('alleanzeigen', 'img', _('alle Plugins anzeigen')) ?>
+    <a href="<?= $controller->url_for('plugin_admin/search') ?>">
+        <?= makeButton('zuruecksetzen', 'img', _('Suche zurücksetzen')) ?>
     </a>
 </form>
 
-<? if (isset($search_results)): ?>
-    <h3>
-        <? if ($search === NULL): ?>
-            <?= _('Empfohlene Plugins') ?>
-        <? else: ?>
-            <?= _('Suchergebnisse') ?>
-        <? endif ?>
-    </h3>
+<h3>
+    <? if ($search === NULL): ?>
+        <?= _('Empfohlene Plugins') ?>
+    <? else: ?>
+        <?= _('Suchergebnisse') ?>
+    <? endif ?>
+</h3>
 
-    <table class="plugin_admin">
-        <tr>
-            <th style="text-align: center;"><?= _('Bild')?></th>
-            <th><?= _('Name und Beschreibung')?></th>
-            <th><?= _('Version') ?></th>
-            <th><?= _('Bewertung') ?></th>
-            <th class="plugin_install"><?= _('Installieren') ?></th>
+<table class="plugin_admin">
+    <tr>
+        <th style="text-align: center;"><?= _('Bild')?></th>
+        <th><?= _('Name und Beschreibung')?></th>
+        <th><?= _('Version') ?></th>
+        <th><?= _('Bewertung') ?></th>
+        <th class="plugin_install"><?= _('Installieren') ?></th>
+    </tr>
+
+    <? foreach ($search_results as $name => $plugin): ?>
+        <tr class="<?= TextHelper::cycle('cycle_odd', 'cycle_even') ?>">
+            <td style="padding-left: 1ex;">
+                <a href="<?= htmlReady($plugin['plugin_url']) ?>" target="_blank">
+                    <img src="<?= $plugin['image'] ?>" class="plugin_preview">
+                </a>
+            </td>
+            <td>
+                <a href="<?= htmlReady($plugin['plugin_url']) ?>" target="_blank">
+                    <b><?= htmlspecialchars($name) ?></b>
+                </a>
+                <p>
+                    <?= htmlspecialchars($plugin['description']) ?>
+                </p>
+            </td>
+            <td>
+                <?= htmlspecialchars($plugin['version']) ?>
+            </td>
+            <td class="plugin_score">
+                <? for ($i = 0; $i < $plugin['score']; ++$i): ?>
+                    <?= Assets::img('star.png') ?>
+                <? endfor ?>
+            </td>
+            <td class="plugin_install">
+                <a href="<?= $controller->url_for('plugin_admin/install/'.$name) ?>">
+                    <?= Assets::img('install.png', array('title' => _('Plugin installieren'))) ?>
+                </a>
+            </td>
         </tr>
+    <? endforeach ?>
+</table>
 
-        <? foreach ($search_results as $name => $plugin): ?>
-            <tr class="<?= TextHelper::cycle('cycle_odd', 'cycle_even') ?>">
-                <td style="padding-left: 1ex;">
-                    <a href="<?= htmlReady($plugin['plugin_url']) ?>" target="_blank">
-                        <img src="<?= $plugin['image'] ?>" class="plugin_preview">
-                    </a>
-                </td>
-                <td>
-                    <a href="<?= htmlReady($plugin['plugin_url']) ?>" target="_blank">
-                        <b><?= htmlspecialchars($name) ?></b>
-                    </a>
-                    <p>
-                        <?= htmlspecialchars($plugin['description']) ?>
-                    </p>
-                </td>
-                <td>
-                    <?= htmlspecialchars($plugin['version']) ?>
-                </td>
-                <td class="plugin_score">
-                    <? for ($i = 0; $i < $plugin['score']; ++$i): ?>
-                        <?= Assets::img('star.png') ?>
-                    <? endfor ?>
-                </td>
-                <td class="plugin_install">
-                    <a href="<?= $controller->url_for('plugin_admin/install/'.$name) ?>">
-                        <?= Assets::img('install.png', array('title' => _('Plugin installieren'))) ?>
-                    </a>
-                </td>
-            </tr>
-        <? endforeach ?>
-    </table>
+<? if (empty($search_results)): ?>
+    <p>
+        <?= _('Es wurden keine Plugins gefunden.') ?>
+    </p>
 <? endif ?>
 
 <? if (get_config('PLUGINS_UPLOAD_ENABLE')): ?>
@@ -80,6 +84,14 @@ $infobox_content = array(
             array(
                 'icon' => 'link_intern.gif',
                 'text' => '<a href="'.$controller->url_for('plugin_admin').'">'._('Verwaltung von Plugins').'</a>'
+            )
+        )
+    ), array(
+        'kategorie' => _('Links:'),
+        'eintrag'   => array(
+            array(
+                'icon' => 'link_extern.gif',
+                'text' => '<a href="http://plugins.studip.de/" target="_blank">'._('Alle Plugins im Plugin-Marktplatz').'</a>'
             )
         )
     ), array(

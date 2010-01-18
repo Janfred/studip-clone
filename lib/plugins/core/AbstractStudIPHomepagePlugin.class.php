@@ -16,7 +16,13 @@ class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin
 
 	function AbstractStudIPHomepagePlugin(){
 		parent::__construct();
-		$this->requesteduser = $this->getRequestedUser();
+
+		// ignore errors about unknown users here
+		try {
+			$this->requesteduser = $this->getRequestedUser();
+		} catch (Exception $ex) {
+		}
+
 		$this->status_showOverview = 1;
 	}
 
