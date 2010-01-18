@@ -97,6 +97,7 @@ class DB_Seminar extends DB_Sql {
 	}
 }
 
+require_once 'lib/msg.inc.php';
 require_once('lib/language.inc.php');
 require_once('lib/classes/auth_plugins/StudipAuthAbstract.class.php');
 require_once('lib/classes/Config.class.php');
@@ -450,7 +451,6 @@ class Seminar_Auth extends Auth {
 		}
 		if ($cfg->getValue('MAINTENANCE_MODE_ENABLE') && $actual_perms != 'root'){
 			$this->unauth();
-			include_once 'lib/msg.inc.php';
 			include_once 'lib/include/html_head.inc.php';
 			parse_window('error§' . _("Das System befindet sich im Wartungsmodus. Zur Zeit ist kein Zugriff möglich."), '§', $GLOBALS['UNI_NAME'] . ' ' . _("Wartungsmodus"), '&nbsp;');
 			include_once 'lib/include/html_end.inc.php';
@@ -536,9 +536,7 @@ class Seminar_Auth extends Auth {
 
 	function auth_loginform() {
 		// first of all init I18N because seminar_open is not called here...
-		require_once('lib/language.inc.php');
 		require_once('lib/visual.inc.php');
-		require_once('lib/msg.inc.php');
 		require_once('config.inc.php');
 
 		global $_language, $_language_path, $fail_count;
@@ -663,7 +661,6 @@ class Seminar_Register_Auth extends Seminar_Auth {
 
 	function auth_registerform() {
 
-		require_once('lib/language.inc.php');
 		require_once('lib/visual.inc.php');
 		require_once('config.inc.php');
 
