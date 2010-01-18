@@ -1688,7 +1688,7 @@ function display_folder_body($folder_id, $open, $change, $move, $upload, $refres
 			}
 		}
 		$sortierbare_dateien = $db->query("SELECT SUM(1) FROM dokumente WHERE range_id = '$folder_id'")->fetch();
-		if (($rechte) && ($sortierbare_dateien[0] > 4)) {
+		if (($rechte)) {
 			$edit .= " <a href=\"".URLHelper::getLink("?open=".$folder_id."_az_#anker")."\"".tooltip("Dateien alphabetisch sortieren").">" . makeButton("sortieren", "img") . "</a>";
 		}
 	}
