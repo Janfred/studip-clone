@@ -248,9 +248,9 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 		if (sizeof($GLOBALS['dview']) == 0) {
 			if ($structure['raum']) echo '<td '.$css_switcher->getFullClass().'>'. htmlReady($db->f('raum')) .'</td>';
 			if ($structure['sprechzeiten']) echo '<td '.$css_switcher->getFullClass().'>'. htmlReady($db->f('sprechzeiten')) .'</td>';
-			if ($structure['telefon']) echo '<td '.$css_switcher->getFullClass().'>'. htmlReady($db->f('telefon')) .'</td>';
+			if ($structure['telefon']) echo '<td '.$css_switcher->getFullClass().'>'. htmlReady($db->f('Telefon')) .'</td>';
 			if ($structure['email']) echo '<td '.$css_switcher->getFullClass().'>'. htmlReady($db->f('Email')) .'</td>';
-			if ($structure['homepage']) echo '<td '.$css_switcher->getFullClass().'>'. htmlReady($db->f('Homepage')) .'</td>';
+			if ($structure['homepage']) echo '<td '.$css_switcher->getFullClass().'>'. htmlReady($db->f('Home')) .'</td>';
 		}
 
 		if ($structure["nachricht"]) {
