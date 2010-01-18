@@ -47,7 +47,7 @@ try {
   # user is not permitted, show login screen
   if (is_null($plugin)) {
     # TODO (mlunzena) should not getPlugin throw this exception?
-    throw new Studip_AccessDeniedException();
+    throw new Studip_AccessDeniedException(_('Sie besitzen keine Rechte zum Aufruf dieses Plugins.'));
   }
 
   if (is_callable(array($plugin, 'initialize'))) {
