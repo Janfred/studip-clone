@@ -75,13 +75,6 @@
 </form>
 <?
 $infobox_content = array(
-    array  ("kategorie"  => _("Hinweise:"),
-        "eintrag" => array  (
-            array ( "icon" => "ausruf_small.gif",
-                            "text"  => _("Hier können Sie nach Benutzern suchen und Ihnen verschiedene Rollen zuweisen.")
-            )
-        )
-    ),
     array  ("kategorie"  => _("Aktionen:"),
             "eintrag" => array  (
                 array ( "icon" => "link_intern.gif",
@@ -97,6 +90,13 @@ $infobox_content = array(
                                 "text"  => '<a href="'.$controller->url_for('role_admin/show_role').'">'._("Rollenzuweisungen anzeigen").'</a>'
                 ),
             )
+    ),
+    array  ("kategorie"  => _("Hinweise:"),
+        "eintrag" => array  (
+            array ( "icon" => "ausruf_small.gif",
+                            "text"  => _("Hier können Sie nach Benutzern suchen und Ihnen verschiedene Rollen zuweisen.")
+            )
+        )
     )
 );
 $infobox = array('picture' => 'modules.jpg', 'content' => $infobox_content);

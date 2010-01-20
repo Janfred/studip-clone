@@ -49,16 +49,6 @@
 </form>
 <?
 $infobox_content = array(
-        array  ("kategorie"  => _("Hinweise:"),
-                "eintrag" => array  (
-                    array ( "icon" => "ausruf_small.gif",
-                                    "text"  => _("Sie können in diesem Dialog den Zugriff auf das Plugin durch die Auswahl von Rollen beschränken.")
-                    ),
-                    array ( "icon" => "ausruf_small.gif",
-                                    "text"  =>_("Wählen Sie bspw. Evaluationsbeauftragte(r), so können alle Nutzer, die sich in der Rolle Evaluationsbeauftragte(r) befinden, dieses Plugin sehen und nutzen, unabhängig vom Stud.IP-Status")
-                    )
-                )
-        ),
         array  ("kategorie"  => _("Aktionen:"),
                 "eintrag" => array  (
                     array ( "icon" => "link_intern.gif",
@@ -73,6 +63,16 @@ $infobox_content = array(
                     array ( "icon" => "link_intern.gif",
                                     "text"  => '<a href="'.$controller->url_for('role_admin/show_role').'">'._("Rollenzuweisungen anzeigen").'</a>'
                     ),
+                )
+        ),
+        array  ("kategorie"  => _("Hinweise:"),
+                "eintrag" => array  (
+                    array ( "icon" => "ausruf_small.gif",
+                                    "text"  => _("Sie können in diesem Dialog den Zugriff auf das Plugin durch die Auswahl von Rollen beschränken.")
+                    ),
+                    array ( "icon" => "ausruf_small.gif",
+                                    "text"  =>_("Wählen Sie bspw. Evaluationsbeauftragte(r), so können alle Nutzer, die sich in der Rolle Evaluationsbeauftragte(r) befinden, dieses Plugin sehen und nutzen, unabhängig vom Stud.IP-Status")
+                    )
                 )
         )
 );

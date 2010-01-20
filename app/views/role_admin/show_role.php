@@ -63,19 +63,6 @@
 <?
 //Infobox
 $infobox_content = array(
-    array(
-        'kategorie' => _('Hinweise').':',
-        'eintrag' => array(
-            array(
-                'icon' => 'ausruf_small.gif',
-                'text' => _('Hier werden alle Benutzer und Plugins angezeigt, die der ausgewählten Rolle zugewiesen sind.')
-            ),
-            array(
-                'icon' => 'ausruf_small.gif',
-                'text' => _('Klicken Sie auf den Benutzernamen, um sich die Homepage des Benutzers anzeigen zulassen.')
-            )
-        )
-    ),
     array  ("kategorie"  => _("Aktionen:"),
             "eintrag" => array  (
                 array ( "icon" => "link_intern.gif",
@@ -91,6 +78,19 @@ $infobox_content = array(
                                 "text"  => '<a href="'.$controller->url_for('role_admin/show_role').'">'._("Rollenzuweisungen anzeigen").'</a>'
                 ),
             )
+    ),
+    array(
+        'kategorie' => _('Hinweise').':',
+        'eintrag' => array(
+            array(
+                'icon' => 'ausruf_small.gif',
+                'text' => _('Hier werden alle Benutzer und Plugins angezeigt, die der ausgewählten Rolle zugewiesen sind.')
+            ),
+            array(
+                'icon' => 'ausruf_small.gif',
+                'text' => _('Klicken Sie auf den Benutzernamen, um sich die Homepage des Benutzers anzeigen zulassen.')
+            )
+        )
     )
 );
 $infobox = array('picture' => 'modules.jpg', 'content' => $infobox_content);

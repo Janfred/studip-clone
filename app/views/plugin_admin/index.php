@@ -70,11 +70,10 @@
                 </td>
             </tr>
         <? endforeach ?>
+        <tr class="steel2">
+            <td colspan="8" align="center"><?= makeButton('speichern', 'input', _('Einstellungen speichern'), 'save') ?></td>
+        </tr>
     </table>
-
-    <div style="padding-top: 1em; text-align: center;">
-        <?= makeButton('speichern', 'input', _('Einstellungen speichern'), 'save') ?>
-    </div>
 </form>
 
 <?
