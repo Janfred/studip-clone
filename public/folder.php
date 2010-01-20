@@ -983,9 +983,9 @@ div.droppable.hover {
 		
 		print "<a href=\"".URLHelper::getLink((($folder_system_data['orderby'] != "date_rev") ? "?orderby=date_rev" : "?orderby=date"))."\">";
 		print "<b>"._("Datum")."</b>".
-			($folder_system_data['orderby'] == "date" 
+			(($folder_system_data['orderby'] == "date"  || (!$folder_system_data['orderby']))
 				? "<img style=\"vertical-align:middle\" border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">" 
-				: ($folder_system_data['orderby'] == "date_rev" ? "<img style=\"vertical-align:middle\" border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "")).
+				: (($folder_system_data['orderby'] == "date_rev") ? "<img style=\"vertical-align:middle\" border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "")).
 			"</a>&nbsp;&nbsp; ";
 		
 		print "</td</tr></table></td><td>";
