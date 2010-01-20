@@ -18,13 +18,15 @@
 <form action="<?=$controller->url_for('role_admin/remove_role')?>" method="post">
 <table cellpadding="2" cellspacing="0" width="100%">
     <tr>
-        <th align="left"><?=_("Vorhandene Rollen")?></th>
+        <th align="left"><?=_("Vorhandene Rollen (außer Systemrollen)")?></th>
     </tr>
     <tr class="steel1">
         <td>
             <select size="10" name="rolesel[]" multiple style="width: 300px">
                 <? foreach($roles as $role): ?>
-                    <option value="<?=$role->getRoleid()?>" <? if($role->getSystemtype()):?>disabled="disabled"<? endif; ?>><?=$role->getRolename()?> <? if($role->getSystemtype()):?>[Systemrolle]<? endif; ?></option>
+                <? if(!$role->getSystemtype()):?>
+                    <option value="<?=$role->getRoleid()?>"><?=$role->getRolename()?></option>
+                 <? endif; ?>
                 <? endforeach; ?>
             </select>
         </td>

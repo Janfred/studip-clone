@@ -13,6 +13,7 @@
               'disapprovalLink' => $controller->url_for('plugin_admin'))) ?>
 <? endif ?>
 
+<h3><?= _("Pluginverwaltung")?></h3>
 <form action="<?= $controller->url_for('plugin_admin/save') ?>" method="post">
     <input type="hidden" name="plugin_filter" value="<?= $plugin_filter ?>">
     <table class="plugin_admin">
