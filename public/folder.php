@@ -937,23 +937,58 @@ div.droppable.hover {
 					"<a href=\"".URLHelper::getLink("?check_all=TRUE")."\">".makeButton("alleauswaehlen")."</a>" .
 					"&nbsp;<input style=\"vertical-align: middle;\" type=\"IMAGE\" name=\"download_selected\" border=\"0\" ".makeButton("herunterladen", "src")." />&nbsp;</div>" .
 				"</td><td class=\"blank\"></td></tr> <tr><td></td><td class=\"blank\">&nbsp;</td><td class=\"blank\"></td></tr>";
-		$dreieck_runter = "calendar_down_small.gif";
-		$dreieck_hoch = "calendar_up_small.gif";
+		$dreieck_runter = "dreieck_down.png";
+		$dreieck_hoch = "dreieck_up.png";
 		print "<tr><td></td><td><table border=0 cellpadding=0 cellspacing=0 width=\"100%\">" .
 				"<tr>" .
-				"<td class=\"steelgraudunkel\">&nbsp;&nbsp;&nbsp;" .
-				"<a href=\"".URLHelper::getLink((($folder_system_data['orderby'] != "type") ? "?orderby=type" : "?orderby=type_rev"))."\" class=\"tree\">";
-		print (($folder_system_data['orderby'] != "type_rev") ? "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">").((($folder_system_data['orderby'] == "type_rev") || ($folder_system_data['orderby'] == "type")) ? "<b>": "")._("Typ")."</b></a>&nbsp;&nbsp; ";
-		print "<a href=\"".URLHelper::getLink((($folder_system_data['orderby'] != "filename") ? "?orderby=filename" : "?orderby=filename_rev"))."\" class=\"tree\">";
-		print (($folder_system_data['orderby'] != "filename_rev") ? "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">").((($folder_system_data['orderby'] == "filename_rev") || ($folder_system_data['orderby'] == "filename")) ? "<b>": "")._("Name")."</b></a>&nbsp;&nbsp; ";
-		print "<a href=\"".URLHelper::getLink((($folder_system_data['orderby'] != "size") ? "?orderby=size" : "?orderby=size_rev"))."\" class=\"tree\">";
-		print (($folder_system_data['orderby'] != "size_rev") ? "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">").((($folder_system_data['orderby'] == "size_rev") || ($folder_system_data['orderby'] == "size")) ? "<b>": "")._("Größe")."</b></a>&nbsp;&nbsp; ";
-		print "<a href=\"".URLHelper::getLink((($folder_system_data['orderby'] != "downloads") ? "?orderby=downloads" : "?orderby=downloads_rev"))."\" class=\"tree\">";
-		print (($folder_system_data['orderby'] != "downloads_rev") ? "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">").((($folder_system_data['orderby'] == "downloads_rev") || ($folder_system_data['orderby'] == "downloads")) ? "<b>": "")._("Downloads")."</b></a>&nbsp;&nbsp;</td><td class=\"steelgraudunkel\" align=right>";
-		print	"<a href=\"".URLHelper::getLink((($folder_system_data['orderby'] != "autor") ? "?orderby=autor" : "?orderby=autor_rev"))."\" class=\"tree\">";
-		print (($folder_system_data['orderby'] != "autor_rev") ? "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">").((($folder_system_data['orderby'] == "autor_rev") || ($folder_system_data['orderby'] == "autor")) ? "<b>": "")._("Autor")."</b></a>&nbsp;&nbsp; ";
-		print "<a href=\"".URLHelper::getLink((($folder_system_data['orderby'] != "date") ? "?orderby=date" : "?orderby=date_rev"))."\" class=\"tree\">";
-		print (($folder_system_data['orderby'] != "date_rev") ? "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">").((($$folder_system_data['orderby'] == "date_rev") || ($folder_system_data['orderby'] == "date")) ? "<b>": "")._("Datum")."</b></a> &nbsp;&nbsp;&nbsp;&nbsp;</td</tr></table></td><td>";
+				"<td class=\"steelgraudunkel\">&nbsp;&nbsp;&nbsp;";
+				
+		print "<a href=\"".URLHelper::getLink((($folder_system_data['orderby'] != "type") ? "?orderby=type" : "?orderby=type_rev"))."\">";
+		print "<b>"._("Typ")."</b>".
+			($folder_system_data['orderby'] == "type_rev" 
+				? "<img style=\"vertical-align:middle\" border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">" 
+				: ($folder_system_data['orderby'] == "type" ? "<img style=\"vertical-align:middle\" border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "")).
+			"</a>&nbsp;&nbsp; ";
+		
+		
+		print "<a href=\"".URLHelper::getLink((($folder_system_data['orderby'] != "filename") ? "?orderby=filename" : "?orderby=filename_rev"))."\">";
+		print "<b>"._("Name")."</b>".
+			($folder_system_data['orderby'] == "filename_rev" 
+				? "<img style=\"vertical-align:middle\" border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">" 
+				: ($folder_system_data['orderby'] == "filename" ? "<img style=\"vertical-align:middle\" border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "")).
+			"</a>&nbsp;&nbsp; ";
+		
+		print "<a href=\"".URLHelper::getLink((($folder_system_data['orderby'] != "size_rev") ? "?orderby=size_rev" : "?orderby=size"))."\">";
+		print "<b>"._("Größe")."</b>".
+			($folder_system_data['orderby'] == "size" 
+				? "<img style=\"vertical-align:middle\" border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">" 
+				: ($folder_system_data['orderby'] == "size_rev" ? "<img style=\"vertical-align:middle\" border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "")).
+			"</a>&nbsp;&nbsp; ";
+		
+		print "<a href=\"".URLHelper::getLink((($folder_system_data['orderby'] != "downloads") ? "?orderby=downloads" : "?orderby=downloads_rev"))."\">";
+		print "<b>"._("Downloads")."</b>".
+			($folder_system_data['orderby'] == "downloads_rev" 
+				? "<img style=\"vertical-align:middle\" border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">" 
+				: ($folder_system_data['orderby'] == "downloads" ? "<img style=\"vertical-align:middle\" border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "")).
+			"</a>&nbsp;&nbsp; ";
+		
+		print "</td><td class=\"steelgraudunkel\" align=right>";
+		
+		print "<a href=\"".URLHelper::getLink((($folder_system_data['orderby'] != "autor") ? "?orderby=autor" : "?orderby=autor_rev"))."\">";
+		print "<b>"._("Autor")."</b>".
+			($folder_system_data['orderby'] == "autor_rev" 
+				? "<img style=\"vertical-align:middle\" border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">" 
+				: ($folder_system_data['orderby'] == "autor" ? "<img style=\"vertical-align:middle\" border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "")).
+			"</a>&nbsp;&nbsp; ";
+		
+		print "<a href=\"".URLHelper::getLink((($folder_system_data['orderby'] != "date_rev") ? "?orderby=date_rev" : "?orderby=date"))."\">";
+		print "<b>"._("Datum")."</b>".
+			($folder_system_data['orderby'] == "date" 
+				? "<img style=\"vertical-align:middle\" border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_hoch\">" 
+				: ($folder_system_data['orderby'] == "date_rev" ? "<img style=\"vertical-align:middle\" border=0 src=\"".$GLOBALS['ASSETS_URL']."images/$dreieck_runter\">" : "")).
+			"</a>&nbsp;&nbsp; ";
+		
+		print "</td</tr></table></td><td>";
 		print '<tr>';
 		print "<td class=\"blank\" valign=\"top\" heigth=21 nowrap width=1px>&nbsp;</td>";
 		print "<td id=\"folder_1\">";
