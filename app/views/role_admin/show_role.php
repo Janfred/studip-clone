@@ -1,24 +1,18 @@
 <?= $this->render_partial('role_admin/status_message') ?>
-<h3>
-    <?= _('Rollenzuweisungen anzeigen') ?>
-</h3>
-<table border="0" cellpadding="2" cellspacing="0" width="100%">
-    <tr class="steel1">
-        <td>
-        <form action="<?=$controller->url_for('role_admin/show_role')?>" method="post">
-        <select name="role" style="width: 300px">
-            <? foreach($roles as $getrole): ?>
-                <option value="<?=$getrole->getRoleid()?>"<? if($getrole->getRoleid()==$roleid):?>selected="selected"<? endif; ?>><?=$getrole->getRolename()?> <? if($getrole->getSystemtype()):?>[Systemrolle]<? endif; ?></option>
-            <? endforeach; ?>
-        </select>
-        <?= makeButton("auswaehlen","input",_("Rolle auswählen"),"selectrole") ?>
-        </form>
-        </td>
-    </tr>
-</table>
-<br/>
+<h3><?= _('Rollenzuweisungen anzeigen') ?></h3>
+
+<form action="<?=$controller->url_for('role_admin/show_role')?>" method="post">
+<select name="role" style="width: 300px">
+    <? foreach($roles as $getrole): ?>
+        <option value="<?=$getrole->getRoleid()?>"<? if($getrole->getRoleid()==$roleid):?>selected="selected"<? endif; ?>><?=$getrole->getRolename()?> <? if($getrole->getSystemtype()):?>[Systemrolle]<? endif; ?></option>
+    <? endforeach; ?>
+</select>
+<?= makeButton("auswaehlen","input",_("Rolle auswählen"),"selectrole") ?>
+</form>
+<br>
+
 <? if(!empty($role)): ?>
-<div class="topic"><b><?= sprintf(_('Liste der Benutzer mit der Rolle "%s"'), $role->getRolename()) ?></i></b></div>
+<h3><?= sprintf(_('Liste der Benutzer mit der Rolle "%s"'), $role->getRolename()) ?></h3>
 <? if (count($users) > 0): ?>
 <table border="0" cellpadding="2" cellspacing="0" width="100%">
     <tr>
@@ -37,10 +31,10 @@
     <? endforeach; ?>
 </table>
 <? else:?>
-<div class="steel1" style="padding:5px;"><?=_("Es wurden keine Benutzer gefunden.") ?></div>
+    <?=Messagebox::error(_("Es wurden keine Benutzer gefunden.")) ?>
 <? endif; ?>
-<br/>
-<div class="topic"><b><?= sprintf(_('Liste der Plugins mit der Rolle "%s"'), $role->getRolename()) ?></i></b></div>
+<br>
+<h3><?= sprintf(_('Liste der Plugins mit der Rolle "%s"'), $role->getRolename()) ?></h3>
 <? if (count($plugins) > 0): ?>
 <table border="0" cellpadding="2" cellspacing="0" width="100%">
     <tr>
@@ -57,7 +51,7 @@
     <? endforeach; ?>
 </table>
 <? else:?>
-<div class="steel1" style="padding:5px;"><?=_("Es wurden keine Plugins gefunden.") ?></div>
+    <?=Messagebox::error(_("Es wurden keine Plugins gefunden.")) ?>
 <? endif; ?>
 <? endif; ?>
 <?

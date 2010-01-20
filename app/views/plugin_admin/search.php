@@ -16,6 +16,9 @@
     <? endif ?>
 </h3>
 
+<? if (empty($search_results)): ?>
+    <?= Messagebox::error(_('Es wurden keine Plugins gefunden.')) ?>
+<? else: ?>
 <table class="plugin_admin">
     <tr>
         <th style="text-align: center;"><?= _('Bild')?></th>
@@ -24,7 +27,6 @@
         <th><?= _('Bewertung') ?></th>
         <th class="plugin_install"><?= _('Installieren') ?></th>
     </tr>
-
     <? foreach ($search_results as $name => $plugin): ?>
         <tr class="<?= TextHelper::cycle('cycle_odd', 'cycle_even') ?>">
             <td style="padding-left: 1ex;">
@@ -56,12 +58,8 @@
         </tr>
     <? endforeach ?>
 </table>
-
-<? if (empty($search_results)): ?>
-    <p>
-        <?= _('Es wurden keine Plugins gefunden.') ?>
-    </p>
 <? endif ?>
+
 
 <? if (get_config('PLUGINS_UPLOAD_ENABLE')): ?>
     <h3>

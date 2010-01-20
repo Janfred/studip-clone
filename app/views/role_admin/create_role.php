@@ -1,7 +1,6 @@
 <?= $this->render_partial('role_admin/status_message') ?>
-<h3>
-    <?=_("Rollenverwaltung")?>
-</h3>
+<h3><?=_("Rollenverwaltung")?></h3>
+
 <form action="<?=$controller->url_for('role_admin/create_role')?>" method="POST">
 <table cellpadding="2" cellspacing="0" width="100%">
     <tr>
@@ -14,7 +13,8 @@
     </tr>
 </table>
 </form>
-<br/>
+<br>
+
 <form action="<?=$controller->url_for('role_admin/remove_role')?>" method="post">
 <table cellpadding="2" cellspacing="0" width="100%">
     <tr>

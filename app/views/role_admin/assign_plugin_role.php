@@ -1,21 +1,15 @@
 <?= $this->render_partial('role_admin/status_message') ?>
-<h3>
-    <?=_("Rollenverwaltung für Plugins")?>
-</h3>
+<h3><?=_("Rollenverwaltung für Plugins")?></h3>
+
 <form action="<?=$controller->url_for('role_admin/assign_plugin_role')?>" method="POST">
-<table border="0" width="100%" cellpadding="2" cellspacing="0">
-    <tr class="steel1">
-        <td>
-        <select name="pluginid" style="min-width: 300px;">
-        <? foreach ($plugins as $plugin): ?>
-            <option value="<?=$plugin['id']?>" <? if($plugin['id']==$pluginid): ?>selected="selected"<? endif; ?>><?=$plugin['name']?></option>
-        <? endforeach; ?>
-        </select>
-            <?= makeButton("auswaehlen","input",_("Plugin auswahlen"),"searchuserbtn") ?>
-        </td>
-    </tr>
-</table>
-<br/>
+    <select name="pluginid" style="min-width: 300px;">
+    <? foreach ($plugins as $plugin): ?>
+        <option value="<?=$plugin['id']?>" <? if($plugin['id']==$pluginid): ?>selected="selected"<? endif; ?>><?=$plugin['name']?></option>
+    <? endforeach; ?>
+    </select>
+    <?= makeButton("auswaehlen","input",_("Plugin auswahlen"),"searchuserbtn") ?>
+<br>
+
 <? if($pluginid): ?>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
 <tr>
@@ -33,7 +27,7 @@
     </td>
     <td valign="middle" align="center">
         <input type="image" src="<?= Assets::image_path('move_left.gif') ?>" name="assignrolebtn" alt="<?= _("Markierte Rollen dem Plugin zuweisen.") ?>">
-        <br/><br/>
+        <br><br>
         <input type="image" src="<?= Assets::image_path('move_right.gif') ?>" name="deleteroleassignmentbtn" alt="<?= _("Markierte Rollen entfernen.") ?>">
     </td>
     <td valign="top">
