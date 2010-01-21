@@ -987,8 +987,8 @@ function wikiSinglePageHeader($wikiData, $keyword) {
 * @param	string	backpage	Page to display if editing is aborted
 *
 **/
-function wikiEdit($keyword, $wikiData, $user_id, $backpage=NULL) {
-
+function wikiEdit($keyword, $wikiData, $user_id, $backpage=NULL)
+{
 	showPageFrameStart();
 	wikiSinglePageHeader($wikiData, $keyword);
 	begin_blank_table();
@@ -1005,10 +1005,10 @@ function wikiEdit($keyword, $wikiData, $user_id, $backpage=NULL) {
 	$locks=getLock($keyword);
 	$cont="";
 	if ($locks && $lock["user_id"]!=$user_id) {
-		parse_msg("info§" . "<p>&nbsp;</p>". sprintf(_("Die Seite wird eventuell von %s bearbeitet."), $locks) . "<br>" . _("Wenn Sie die Seite trotzdem &auml;ndern, kann ein Versionskonflikt entstehen.") . "<br>" . _("Es werden dann beide Versionen eingetragen und m&uuml;ssen von Hand zusammengef&uuml;hrt werden.") . "<br>" . _("Klicken Sie auf Abbrechen, um zurückzukehren."), "§", "printcontent");
+        echo Messagebox::info(sprintf(_("Die Seite wird eventuell von %s bearbeitet."), $locks), array(_("Wenn Sie die Seite trotzdem &auml;ndern, kann ein Versionskonflikt entstehen."), _("Es werden dann beide Versionen eingetragen und m&uuml;ssen von Hand zusammengef&uuml;hrt werden."),  _("Klicken Sie auf Abbrechen, um zurückzukehren.")));
 	}
 	if ($keyword=='toc') {
-		parse_msg("info§" . _("Sie bearbeiten die QuickLinks.") . "<br>" . _("Verwenden Sie Aufzählungszeichen (-, --, ---), um Verweise auf Seiten hinzuzufügen.") , "§", "printcontent");
+	    echo Messagebox::info(_("Sie bearbeiten die QuickLinks."), array(_("Verwenden Sie Aufzählungszeichen (-, --, ---), um Verweise auf Seiten hinzuzufügen.")));
 		if (!$body) { $body=_("- WikiWikiWeb\n- BeispielSeite\n-- UnterSeite1\n-- UnterSeite2"); }
 	}
 
