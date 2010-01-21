@@ -78,6 +78,7 @@ class PluginAdminController extends AuthenticatedController
             }
         }
 
+        $this->flash['message'] = _('Die Änderungen wurden gespeichert.');
         $this->redirect('plugin_admin?plugin_filter='.$plugin_filter);
     }
 

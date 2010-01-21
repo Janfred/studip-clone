@@ -1129,6 +1129,11 @@ table.plugin_admin td {
     padding: 3px;
 }
 
+table.plugin_admin .plugin_image {
+    text-align: center;
+    width: 88px;
+}
+
 table.plugin_admin .plugin_score {
     white-space: nowrap;
 }
@@ -1140,12 +1145,4 @@ table.plugin_admin .plugin_install {
 table.plugin_admin img.plugin_preview {
     height: 60px;
     width: 80px;
-}
-
-#plugin_update {
-    margin: 1ex;
-}
-
-#plugin_update label {
-    display: block;
 }

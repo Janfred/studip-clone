@@ -8,12 +8,15 @@
 
 <? if ($delete_plugin): ?>
     <?= $GLOBALS['template_factory']->render('shared/question',
-        array('question' => sprintf(_('Wollen Sie wirklich **%s** deinstallieren?'), $delete_plugin['name']),
+        array('question' => sprintf(_('Wollen Sie wirklich %s deinstallieren?'), $delete_plugin['name']),
               'approvalLink' => $controller->url_for('plugin_admin/delete/'.$delete_plugin['id']),
               'disapprovalLink' => $controller->url_for('plugin_admin'))) ?>
 <? endif ?>
 
-<h3><?= _("Pluginverwaltung")?></h3>
+<h3>
+    <?= _('Verwaltung von Plugins')?>
+</h3>
+
 <form action="<?= $controller->url_for('plugin_admin/save') ?>" method="post">
     <input type="hidden" name="plugin_filter" value="<?= $plugin_filter ?>">
     <table class="plugin_admin">
@@ -71,10 +74,11 @@
                 </td>
             </tr>
         <? endforeach ?>
-        <tr class="steel2">
-            <td colspan="8" align="center"><?= makeButton('speichern', 'input', _('Einstellungen speichern'), 'save') ?></td>
-        </tr>
     </table>
+
+    <div style="padding-top: 1em; text-align: center;">
+        <?= makeButton('speichern', 'input', _('Einstellungen speichern'), 'save') ?>
+    </div>
 </form>
 
 <?

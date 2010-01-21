@@ -17,49 +17,59 @@
 </h3>
 
 <? if (empty($search_results)): ?>
-    <?= Messagebox::error(_('Es wurden keine Plugins gefunden.')) ?>
+    <?= Messagebox::info(_('Es wurden keine Plugins gefunden.')) ?>
 <? else: ?>
-<table class="plugin_admin">
-    <tr>
-        <th style="text-align: center;"><?= _('Bild')?></th>
-        <th><?= _('Name und Beschreibung')?></th>
-        <th><?= _('Version') ?></th>
-        <th><?= _('Bewertung') ?></th>
-        <th class="plugin_install"><?= _('Installieren') ?></th>
-    </tr>
-    <? foreach ($search_results as $name => $plugin): ?>
-        <tr class="<?= TextHelper::cycle('cycle_odd', 'cycle_even') ?>">
-            <td style="padding-left: 1ex;">
-                <a href="<?= htmlReady($plugin['plugin_url']) ?>" target="_blank">
-                    <img src="<?= $plugin['image'] ?>" class="plugin_preview">
-                </a>
-            </td>
-            <td>
-                <a href="<?= htmlReady($plugin['plugin_url']) ?>" target="_blank">
-                    <b><?= htmlspecialchars($name) ?></b>
-                </a>
-                <p>
-                    <?= htmlspecialchars($plugin['description']) ?>
-                </p>
-            </td>
-            <td>
-                <?= htmlspecialchars($plugin['version']) ?>
-            </td>
-            <td class="plugin_score">
-                <? for ($i = 0; $i < $plugin['score']; ++$i): ?>
-                    <?= Assets::img('star.png') ?>
-                <? endfor ?>
-            </td>
-            <td class="plugin_install">
-                <a href="<?= $controller->url_for('plugin_admin/install/'.$name) ?>">
-                    <?= Assets::img('install.png', array('title' => _('Plugin installieren'))) ?>
-                </a>
-            </td>
+    <table class="plugin_admin">
+        <tr>
+            <th class="plugin_image"><?= _('Bild')?></th>
+            <th><?= _('Name und Beschreibung')?></th>
+            <th><?= _('Version') ?></th>
+            <th><?= _('Bewertung') ?></th>
+            <th class="plugin_install"><?= _('Installieren') ?></th>
         </tr>
-    <? endforeach ?>
-</table>
-<? endif ?>
 
+        <? foreach ($search_results as $name => $plugin): ?>
+            <tr class="<?= TextHelper::cycle('cycle_odd', 'cycle_even') ?>">
+                <td class="plugin_image">
+                    <? if ($plugin['image']): ?>
+                        <? if ($plugin['plugin_url']): ?>
+                            <a href="<?= htmlReady($plugin['plugin_url']) ?>" target="_blank">
+                                <img src="<?= $plugin['image'] ?>" class="plugin_preview">
+                            </a>
+                        <? else: ?>
+                            <img src="<?= $plugin['image'] ?>" class="plugin_preview">
+                        <? endif ?>
+                    <? endif ?>
+                </td>
+                <td>
+                    <? if ($plugin['plugin_url']): ?>
+                        <a href="<?= htmlReady($plugin['plugin_url']) ?>" target="_blank">
+                            <b><?= htmlspecialchars($name) ?></b>
+                        </a>
+                    <? else: ?>
+                        <b><?= htmlspecialchars($name) ?></b>
+                    <? endif ?>
+                    <p>
+                        <?= htmlspecialchars($plugin['description']) ?>
+                    </p>
+                </td>
+                <td>
+                    <?= htmlspecialchars($plugin['version']) ?>
+                </td>
+                <td class="plugin_score">
+                    <? for ($i = 0; $i < $plugin['score']; ++$i): ?>
+                        <?= Assets::img('star.png') ?>
+                    <? endfor ?>
+                </td>
+                <td class="plugin_install">
+                    <a href="<?= $controller->url_for('plugin_admin/install/'.$name) ?>">
+                        <?= Assets::img('install.png', array('title' => _('Plugin installieren'))) ?>
+                    </a>
+                </td>
+            </tr>
+        <? endforeach ?>
+    </table>
+<? endif ?>
 
 <? if (get_config('PLUGINS_UPLOAD_ENABLE')): ?>
     <h3>

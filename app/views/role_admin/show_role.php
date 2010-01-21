@@ -31,7 +31,7 @@
     <? endforeach; ?>
 </table>
 <? else:?>
-    <?=Messagebox::error(_("Es wurden keine Benutzer gefunden.")) ?>
+    <?=Messagebox::info(_("Es wurden keine Benutzer gefunden.")) ?>
 <? endif; ?>
 <br>
 <h3><?= sprintf(_('Liste der Plugins mit der Rolle "%s"'), $role->getRolename()) ?></h3>
@@ -51,7 +51,7 @@
     <? endforeach; ?>
 </table>
 <? else:?>
-    <?=Messagebox::error(_("Es wurden keine Plugins gefunden.")) ?>
+    <?=Messagebox::info(_("Es wurden keine Plugins gefunden.")) ?>
 <? endif; ?>
 <? endif; ?>
 <?
@@ -74,7 +74,7 @@ $infobox_content = array(
             )
     ),
     array(
-        'kategorie' => _('Hinweise').':',
+        'kategorie' => _('Hinweise:'),
         'eintrag' => array(
             array(
                 'icon' => 'ausruf_small.gif',
