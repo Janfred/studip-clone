@@ -39,7 +39,7 @@ $infobox['content'] = array(
 <? endif; ?>
 <ul style="overflow:hidden;display:block;list-style-type:none;list-style-image:none;
 list-style-position:outside;list-style-type:none;">
-<? foreach ($members as $m) : ?>
+<? foreach ($cmembers as $m) : ?>
 
 <? $this->m = $m ?>
     <li style="position:relative;width:200px;display:inline-block;overflow:hidden;vertical-align:top;" align="left">
@@ -82,9 +82,9 @@ list-style-position:outside;list-style-type:none;">
         <div style="clear: both; margin-right: 25px;">
         <a href="<?= URLHelper::getLink('about.php?username='.$m['username']) ?>">
             <?= htmlReady($m['fullname']) ?><br>
-            <?  if (in_array($m, $moderators)) : ?>
+            <?  if (isset($moderators[$m['user_id']])) : ?>
               <em><?= _("GruppengründerIn") ?></em>
-            <? elseif (in_array($m, $tutors)) : ?>
+            <? elseif (isset($tutors[$m['user_id']])) : ?>
               <em><?= _("ModeratorIn") ?></em>
             <? endif ?>
     				<br>
@@ -94,6 +94,15 @@ list-style-position:outside;list-style-type:none;">
     </li>
 <? endforeach ?>
 </ul>
+<? $link = "dispatch.php/course/studygroup/members/$sem_id/%s"; ?>
+<? if($anzahl>20) :?>
+<div style="text-align:right; padding-top: 2px; padding-bottom: 2px; margin-top:-1.5em" class=""><?=
+	$pages = $GLOBALS['template_factory']->open('shared/pagechooser');
+ 	$pages->set_attributes(array("perPage" => 20, "num_postings" => $anzahl, "page"=>$page, "pagelink" => $link));
+	echo $this->render_partial($pages);?>
+</div>
+<? endif;?>
+</br>
 <? if ($rechte && count($accepted) > 0) : ?>
     <h2 style="clear:left; padding-top: 50px;"><?= _("Offene Mitgliedsanträge") ?></h2>
     <table cellspacing="0" cellpadding="2" border="0" style="max-width: 100%; min-width: 70%">

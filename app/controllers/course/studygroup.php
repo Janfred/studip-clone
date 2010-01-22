@@ -19,6 +19,8 @@ require_once 'app/models/studygroup.php';
 require_once('lib/classes/AdminModules.class.php');
 require_once('lib/classes/Config.class.php');
 
+if (!defined('ELEMENTS_PER_PAGE')) define("ELEMENTS_PER_PAGE", 20); 
+
 class Course_StudygroupController extends AuthenticatedController {
 
 
@@ -465,20 +467,25 @@ class Course_StudygroupController extends AuthenticatedController {
 		$this->redirect('course/studygroup/edit/'. $id);
 	}
 
-	function members_action($id)
+	function members_action($id, $page = 1)
 	{
 		$GLOBALS['CURRENT_PAGE'] = getHeaderLine($id) . ' - ' . _("TeilnehmerInnen");
 		Navigation::activateItem('/course/members/view');
 
 		$sem=new Seminar($id);
-
+		$this->page = $page;
+	    	$this->anzahl = StudygroupModel::countMembers($id);
+    	
+	    	if($this->page < 1 || $this->page > ceil($this->anzahl/ELEMENTS_PER_PAGE)) $this->page = 1;
+	    	
+		$this->lower_bound = ($this->page - 1) * ELEMENTS_PER_PAGE;
+	    	$this->cmembers = StudygroupModel::getMembers($id, $this->lower_bound, ELEMENTS_PER_PAGE);
 		$this->groupname = $sem->name;
 		$this->sem_id = $id;
 		$this->groupdescription = $sem->description;
 		$this->moderators = $sem->getMembers('dozent');
 		unset($this->moderators[md5('studygroup_dozent')]);
 		$this->tutors =  $sem->getMembers('tutor');
-		$this->members = array_merge($this->moderators, $this->tutors, $sem->getMembers('autor'));
 		$this->accepted = $sem->getAdmissionMembers('accepted');
 		$this->rechte = $GLOBALS['perm']->have_studip_perm("tutor", $id);
 	}

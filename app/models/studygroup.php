@@ -268,4 +268,16 @@ class StudygroupModel {
 
 		return $stmt->fetchAll();
 	}
+	
+	function getMembers ( $sem_id, $lower_bound = 1, $elements_per_page = 20 ) {
+		$stmt = DBManager::get()->prepare($query = "SELECT username,user_id ,perms, seminar_user.status, ". $GLOBALS['_fullname_sql']['full_rev'] ." as fullname FROM seminar_user
+			LEFT JOIN auth_user_md5 USING (user_id)
+			LEFT JOIN user_info USING (user_id)
+			WHERE Seminar_id = ? AND username != 'studygroup_dozent'
+			ORDER BY seminar_user.mkdate ASC, seminar_user.status ASC  LIMIT ". $lower_bound .",". $elements_per_page);
+
+		$stmt->execute( array($sem_id) );
+
+		return $stmt->fetchAll();
+	}
 }
