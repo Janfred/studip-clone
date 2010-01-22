@@ -63,7 +63,54 @@ include ('lib/include/header.php');   // Output of Stud.IP head
 
 ob_start();
 
-$online = get_users_online($my_messaging_settings['active_time'], $user->cfg->getValue($user->id, "ONLINE_NAME_FORMAT"));
+$kompletter_datensatz= get_users_online($my_messaging_settings['active_time'], $user->cfg->getValue($user->id, "ONLINE_NAME_FORMAT"));
+$alle=count($kompletter_datensatz);
+/*
+ * Start to filter 
+ */
+
+//Only use visible users
+$visible_users=array();
+
+foreach($kompletter_datensatz as $key=>$val){
+	if($val['is_visible']){
+		$visible_users[$key]=$val;
+	}
+}
+
+if ($cmd=="add_user") {
+	$msging->add_buddy ($add_uname);
+	$visible_users[$add_uname]['is_buddy'] = true;
+}
+
+if ($cmd=="delete_user"){
+	$msging->delete_buddy ($delete_uname);
+	$visible_users[$delete_uname]['is_buddy'] = false;
+}
+
+//now seperate the buddies from the others
+$filtered_buddies=array();
+$others=array();
+
+foreach($visible_users as $key=>$val){
+	if($val['is_buddy']){
+		$filtered_buddies[$key]=$val;
+	} else {
+		$others[$key]=$val;
+	}
+}
+
+
+
+$user_count=count($others);
+$weitere=$alle-$user_count;
+
+$page = Request::int('page', 1);
+
+if($page < 1 || $page > ceil($user_count/25)) $page = 1;
+
+//Slice the array to limit data
+$other_users=array_slice($others,($page-1) * 25, 25);
 
 if ($sms_msg) {
 	$msg = $sms_msg;
@@ -79,15 +126,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	die;
 }
 
-if ($cmd=="add_user") {
-	$msging->add_buddy ($add_uname);
-	$online[$add_uname]['is_buddy'] = true;
-}
 
-if ($cmd=="delete_user"){
-	$msging->delete_buddy ($delete_uname);
-	$online[$delete_uname]['is_buddy'] = false;
-}
 ?>
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 <?
@@ -126,26 +165,21 @@ ob_start();
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 
-	$weitere = 0;
 
-	if (is_array ($online)) { // wenn jemand online ist
-		foreach($online as $username=>$value) { //alle durchgehen die online sind
+
+		foreach($filtered_buddies as $username=>$value) { //alle durchgehen die online sind
 			$user_id = $value["userid"];
-			if ($value['is_visible']) {
-				if ($value['is_buddy']) { // er ist auf jeden Fall als Buddy eingetragen
 					$db2->query ("SELECT statusgruppen.position, name, statusgruppen.statusgruppe_id FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE range_id = '$owner_id' AND user_id = '$user_id' ORDER BY statusgruppen.position ASC LIMIT 1");
 					if ($db2->next_record()) { // er ist auch einer Gruppe zugeordnet
-						$group_buddies[]=array($db2->f("position"), $db2->f("name"), $online[$username]["name"],$online[$username]["last_action"],$username,$db2->f("statusgruppe_id"),$user_id);
+						$group_buddies[]=array($db2->f("position"), $db2->f("name"), $filtered_buddies[$username]["name"],$filtered_buddies[$username]["last_action"],$username,$db2->f("statusgruppe_id"),$user_id);
 					} else {	// buddy, aber keine Gruppe
-						$non_group_buddies[]=array($online[$username]["name"],$online[$username]["last_action"],$username,$user_id);
+						$non_group_buddies[]=array($filtered_buddies[$username]["name"],$filtered_buddies[$username]["last_action"],$username,$user_id);
 					}
-				} else { // online, aber kein buddy
-					$n_buddies[]=array($online[$username]["name"],$online[$username]["last_action"],$username,$user_id);
-				}
-			} else {
-				$weitere++;
-			}
 		}
+
+	foreach($other_users as $username=>$value) {
+		$user_id = $value["userid"];
+			$n_buddies[]=array($other_users[$username]["name"],$other_users[$username]["last_action"],$username,$user_id);
 	}
 
 
@@ -154,9 +188,6 @@ ob_start();
 
 if (is_array($non_group_buddies))
 	sort ($non_group_buddies);
-
-if (is_array($n_buddies))
-	sort ($n_buddies);
 
 	$cssSw->switchClass();
 	//Anzeige
@@ -227,6 +258,7 @@ if (is_array($n_buddies))
 					$template = $GLOBALS['template_factory']->open('online/user');
 					while (list($index)=each($group_buddies)) {
 						list($position,$gruppe,$fullname,$zeit,$tmp_online_uname,$statusgruppe_id,$tmp_user_id)=$group_buddies[$index];
+						//list($fullname, $zeit, $tmp_online_uname, $tmp_user_id) = $n_buddies[$index];
 						if ($gruppe != $lastgroup) {// Ueberschrift fuer andere Gruppe
 							printf("\n<tr><td colspan=\"7\" align=\"middle\" class=\"steelkante\"><a href=\"contact.php?view=gruppen&filter=%s\"><font size=\"2\" color=\"#555555\">%s</font></a></td></tr>",$statusgruppe_id, htmlready($gruppe));
 							$groupcount++;
@@ -295,16 +327,7 @@ if (is_array($n_buddies))
 				$cssSw->switchClass();
 			}
 
-			if ($weitere > 0) { ?>
-				<tr>
-					<td colspan="7" align="center">
-						<br>
-						<font size="-1"><?=sprintf(_("+ %s unsichtbare NutzerInnen"), $weitere)?></font>
-					</td>
-				</tr>
-			<? } ?>
-
-		<? } else {
+		   } else {
 			// if we previously found unvisible users who are online
 			if ($weitere > 0) {
 			?>
@@ -313,12 +336,6 @@ if (is_array($n_buddies))
 					<font size="-1" color="white">
 						<b>&nbsp;<?=_("Keine sichtbaren Nutzer online.")?></b>
 					</font>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="5" align="center">
-					<br>
-					<font size="-1"><?=sprintf(_("+ %s unsichtbare NutzerInnen"), $weitere)?></font>
 				</td>
 			</tr>
 			<?
@@ -339,6 +356,22 @@ if (is_array($n_buddies))
 ?>
 			</tr>
 			</table>
+			<? if ($user_count > 0) : ?>
+			<div style="text-align:right; padding-top: 2px; padding-bottom: 2px" class="steelgraudunkel">
+			<?
+			$pagination = $GLOBALS['template_factory']->open('shared/pagechooser');
+			$pagination->clear_attributes();
+			$pagination->set_attribute('perPage', 25);
+			$pagination->set_attribute('num_postings', $user_count);
+			$pagination->set_attribute('page', $page);
+			$pagination->set_attribute('pagelink', 'online.php?page=%s');
+			echo $pagination->render("shared/pagechooser");
+			?>
+			</div>
+			<? endif; ?>
+			<? if ($weitere > 0) : ?>
+				<div align="center"><font size="-1" align="center"><br><?=sprintf(_("+ %s unsichtbare NutzerInnen"), $weitere)?></font></div>
+			<? endif; ?>
 		</td>
 	</tr>
 </table>
