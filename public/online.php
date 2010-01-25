@@ -102,8 +102,8 @@ foreach($visible_users as $key=>$val){
 
 
 
-$user_count=count($others);
-$weitere=$alle-$user_count;
+$user_count = count($others);
+$weitere = $alle - count($filtered_buddies) - $user_count;
 
 $page = Request::int('page', 1);
 
