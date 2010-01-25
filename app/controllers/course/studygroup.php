@@ -14,6 +14,7 @@ require_once 'lib/classes/Seminar.class.php';
 require_once 'lib/classes/Modules.class.php';
 require_once 'lib/classes/StudygroupAvatar.class.php';
 require_once 'app/models/studygroup.php';
+require_once 'lib/messaging.inc.php';
 
 // classes required for global-module-settings 
 require_once('lib/classes/AdminModules.class.php');
@@ -503,8 +504,42 @@ class Course_StudygroupController extends AuthenticatedController {
 			} elseif ($status == 'deny') {
 				StudygroupModel::deny_user($user,$id);
 				$this->flash['success'] = sprintf(_("Der Nutzer %s wurde nicht akzeptiert."), get_fullname_from_uname($user));
+			} elseif ($status == 'add_invites') {
+				if (Request::get('search_member') || Request::get('search_member_x')) {
+					$search_for_member = Request::get('search_for_member');
+					if ($search_for_member) {
+						// search for the user
+						$pdo = DBManager::get();
+						$search_for_member = $pdo->quote('%'. $search_for_member .'%');
+						$stmt = $pdo->query("SELECT user_id, {$GLOBALS['_fullname_sql']['full_rev']} as fullname, username, perms FROM auth_user_md5 
+							LEFT JOIN user_info USING (user_id)
+							WHERE username LIKE $search_for_member OR Vorname LIKE $search_for_member
+								OR Nachname LIKE $search_for_member
+							LIMIT 500");
+						while ($data = $stmt->fetch()) {
+							$results_members[$data['user_id']] = array( 
+								'fullname' => $data['fullname'],
+								'username' => $data['username'],
+								'perms'    => $data['perms']
+							);
+						}
+					}
+					$this->flash['results_choose_members'] = $results_members;
+					$this->flash['request'] = Request::getInstance();
+					
+				}
+				if (Request::get('choose_member') || Request::get('add_member_x')) {
+					$msg = new Messaging();
+					$receiver = Request::get('choose_member');
+					$sem = new Seminar($id);
+					$u_name = get_fullname_from_uname(get_username($user));
+					$message = sprintf(_("%s möchte Sie auf die Studiengruppe %s aufmerksam machen. Klicken Sie auf den untenstehenden Link " .
+										"um direkt zur Studiengruppe zu gelangen.\n\n %s"),
+										$u_name, $sem->name, URLHelper::getlink("dispatch.php/course/studygroup/details/".$id));
+					$subject = _("Sie wurden in eine Studiengruppe eingeladen");
+					$msg->insert_message($message, $receiver,'', '', '', '', '', $subject);
+				}
 			}
-
 			if ($perm->have_studip_perm('dozent', $id)) {
 				if ($status == 'promote' && $perm !='') {
 					StudygroupModel::promote_user($user,$id,$stat);

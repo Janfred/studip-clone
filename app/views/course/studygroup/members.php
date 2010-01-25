@@ -103,39 +103,43 @@ list-style-position:outside;list-style-type:none;">
 </div>
 <? endif;?>
 </br>
-<? if ($rechte && count($accepted) > 0) : ?>
-    <h2 style="clear:left; padding-top: 50px;"><?= _("Offene Mitgliedsanträge") ?></h2>
-    <table cellspacing="0" cellpadding="2" border="0" style="max-width: 100%; min-width: 70%">
-        <tr>
-            <th colspan="2" width="70%">
-                <?= _("Name") ?>
-            </th>
-            <th width="30%">
-                <?= _("Aktionen") ?>
-            </th>
-        </tr>
+<? if ($rechte) : ?>
+	<?=$this->render_partial("course/studygroup/_invite_members", array('members' => $flash['members'], 'results_choose_members' => $flash['results_choose_members']));?>
+	<br>
+	<? if (count($accepted) > 0) : ?>
+		<h2 style="clear:left; padding-top: 50px;"><?= _("Offene Mitgliedsanträge") ?></h2>
+		<table cellspacing="0" cellpadding="2" border="0" style="max-width: 100%; min-width: 70%">
+			<tr>
+				<th colspan="2" width="70%">
+					<?= _("Name") ?>
+				</th>
+				<th width="30%">
+					<?= _("Aktionen") ?>
+				</th>
+			</tr>
 
-        <? foreach($accepted as $p) : ?>
-        <tr class="<?= TextHelper::cycle('steel1', 'steelgraulight') ?>">
-            <td>
-                <a href="<?= URLHelper::getLink('about.php?username='.$p['username']) ?>">
-                    <?= Avatar::getAvatar($p['user_id'])->getImageTag(Avatar::SMALL) ?>
-                </a>
-            </td>
-            <td>
-                <a href="<?= URLHelper::getLink('about.php?username='.$p['username']) ?>">
-                    <?= htmlReady($p['fullname']) ?>
-                </a>
-            </td>
-            <td style='padding-left:1em;'>
-                <a href="<?= $controller->url_for('course/studygroup/edit_members/'.$sem_id.'/'.$p['username'].'/accept') ?>">
-                    <?= makebutton('eintragen') ?>
-                </a>
-                <a href="<?= $controller->url_for('course/studygroup/edit_members/'.$sem_id.'/'.$p['username'].'/deny') ?>">
-                    <?= makebutton('ablehnen') ?>
-                </a>
-            </td>
-        </tr>
-        <? endforeach ?>
-    </table>
-<? endif ?>
+			<? foreach($accepted as $p) : ?>
+			<tr class="<?= TextHelper::cycle('steel1', 'steelgraulight') ?>">
+				<td>
+					<a href="<?= URLHelper::getLink('about.php?username='.$p['username']) ?>">
+						<?= Avatar::getAvatar($p['user_id'])->getImageTag(Avatar::SMALL) ?>
+					</a>
+				</td>
+				<td>
+					<a href="<?= URLHelper::getLink('about.php?username='.$p['username']) ?>">
+						<?= htmlReady($p['fullname']) ?>
+					</a>
+				</td>
+				<td style='padding-left:1em;'>
+					<a href="<?= $controller->url_for('course/studygroup/edit_members/'.$sem_id.'/'.$p['username'].'/accept') ?>">
+						<?= makebutton('eintragen') ?>
+					</a>
+					<a href="<?= $controller->url_for('course/studygroup/edit_members/'.$sem_id.'/'.$p['username'].'/deny') ?>">
+						<?= makebutton('ablehnen') ?>
+					</a>
+				</td>
+			</tr>
+			<? endforeach ?>
+		</table>
+    <? endif; ?>
+<? endif; ?>
