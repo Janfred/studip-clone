@@ -110,7 +110,10 @@ $page = Request::int('page', 1);
 if($page < 1 || $page > ceil($user_count/25)) $page = 1;
 
 //Slice the array to limit data
-$other_users=array_slice($others,($page-1) * 25, 25);
+if (is_array($others)) {
+	sort($others);
+}
+$other_users = array_slice($others,($page-1) * 25, 25);
 
 if ($sms_msg) {
 	$msg = $sms_msg;
