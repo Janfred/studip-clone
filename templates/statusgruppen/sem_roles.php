@@ -26,7 +26,7 @@ if (is_array($roles)) foreach ($roles as $id => $role) :
 			<?= Assets::img('edit_transparent', array('title' => _("Gruppe bearbeiten"))) ?>
 		</a>
 		<a href="<?= URLHelper::getLink('?cmd=sortByName&role_id='.  $id) ?>">
-			<?= Assets::img('sort', array('title' => _("Personene dieser Gruppe alphabetisch sortieren"))) ?>
+			<?= Assets::img('sort', array('title' => _("Personen dieser Gruppe alphabetisch sortieren"))) ?>
 		</a>
 	</td>
 	<td width="1%" class="blank" nowrap style="padding-left: 5px">
