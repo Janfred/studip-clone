@@ -100,8 +100,6 @@ foreach($visible_users as $key=>$val){
 	}
 }
 
-
-
 $user_count = count($others);
 $weitere = $alle - count($filtered_buddies) - $user_count;
 
@@ -110,9 +108,6 @@ $page = Request::int('page', 1);
 if($page < 1 || $page > ceil($user_count/25)) $page = 1;
 
 //Slice the array to limit data
-if (is_array($others)) {
-	sort($others);
-}
 $other_users = array_slice($others,($page-1) * 25, 25);
 
 if ($sms_msg) {
@@ -359,7 +354,7 @@ if (is_array($non_group_buddies))
 ?>
 			</tr>
 			</table>
-			<? if ($user_count > 0) : ?>
+			<? if ($user_count > 25) : ?>
 			<div style="text-align:right; padding-top: 2px; padding-bottom: 2px" class="steelgraudunkel">
 			<?
 			$pagination = $GLOBALS['template_factory']->open('shared/pagechooser');

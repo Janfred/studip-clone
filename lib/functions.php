@@ -1063,12 +1063,15 @@ function get_users_online($active_time = 5, $name_format = 'full_rev'){
 		$name_format = key($_fullname_sql);
 	}
 	$now = time(); // nach eingestellter Zeit (default = 5 Minuten ohne Aktion) zaehlt man als offline
-	$query = "SELECT a.username," . $_fullname_sql[$name_format] . " AS name,UNIX_TIMESTAMP()-UNIX_TIMESTAMP(changed) AS last_action, a.user_id as userid, contact_id as is_buddy, " . get_vis_query('a') . " AS is_visible
-		FROM " . PHPLIB_USERDATA_TABLE . " LEFT JOIN auth_user_md5 a ON (a.user_id=sid) LEFT JOIN user_info USING(user_id)
+	$query = "SELECT a.username," . $_fullname_sql[$name_format] . " AS name,UNIX_TIMESTAMP() - UNIX_TIMESTAMP(changed) AS last_action,
+		a.user_id as userid, contact_id as is_buddy, " . get_vis_query('a') . " AS is_visible
+		FROM " . PHPLIB_USERDATA_TABLE . " 
+		LEFT JOIN auth_user_md5 a ON (a.user_id=sid)
+		LEFT JOIN user_info USING(user_id)
 		LEFT JOIN contact ON (owner_id='".$user->id."' AND contact.user_id=a.user_id AND buddy=1)
 		WHERE changed > '" . date("YmdHis", ($now - ($active_time * 60)))."'
 		AND sid != '".$user->id."' AND sid !='nobody'
-		ORDER BY changed DESC";
+		ORDER BY a.username ASC LIMIT 100";
 	$rs = DBManager::get()->query($query);
 	$online = $rs->fetchAll(PDO::FETCH_ASSOC|PDO::FETCH_GROUP);
 	return array_map('array_shift', $online);
