@@ -23,10 +23,10 @@ if (is_array($roles)) foreach ($roles as $id => $role) :
 			echo Assets::img('icon-guest', array('title' => _("Personen können sich dieser Gruppe selbst zuordnen")));
 		endif; ?>
 		<a href="<?= URLHelper::getLink('?cmd=editRole&role_id='.  $id) ?>">
-			<?= Assets::img('edit_transparent') ?>
+			<?= Assets::img('edit_transparent', array('title' => _("Gruppe bearbeiten"))) ?>
 		</a>
 		<a href="<?= URLHelper::getLink('?cmd=sortByName&role_id='.  $id) ?>">
-			<?= Assets::img('sort') ?>
+			<?= Assets::img('sort', array('title' => _("Personene dieser Gruppe alphabetisch sortieren"))) ?>
 		</a>
 	</td>
 	<td width="1%" class="blank" nowrap style="padding-left: 5px">
@@ -64,7 +64,7 @@ if (is_array($roles)) foreach ($roles as $id => $role) :
 	<td class="<?= $cssSw->getClass() ?>" width="1%" nowrap>
 		<? if ($pos < sizeof($persons)) : ?>
 		<a href="<?= URLHelper::getLink('?cmd=move_down&role_id='. $id .'&username='. $person['username']) ?>">
-			<?= Assets::img('move_down') ?>
+			<?= Assets::img('move_down', array('title' => _("Person eine Position nach unten platzieren"))) ?>
 		</a>
 		<? endif; ?>
 	</td>
@@ -72,14 +72,14 @@ if (is_array($roles)) foreach ($roles as $id => $role) :
 	<td class="<?= $cssSw->getClass() ?>" width="1%" nowrap style="padding-left: 4px">
 		<? if ($pos > 1) : ?>
 		<a href="<?= URLHelper::getLink('?cmd=move_up&role_id='. $id .'&username='. $person['username']) ?>">
-			<?= Assets::img('move_up') ?>
+			<?= Assets::img('move_up', array('title' => _("Person einen Position nach oben platzieren"))) ?>
 		</a>
 		<? endif; ?>
 	</td>
 
 	<td class="blank" width="1%" align="center">
 		<a href="<?= URLHelper::getLink('?role_id='. $id .'&cmd=removePerson&username='. $person['username'])  ?>">
-		<?= Assets::img('trash.gif') ?>
+		<?= Assets::img('trash.gif', array('title' => _("Gruppenzuordnung für diese Person aufheben"))) ?>
 		</a>
 	</td>
 </tr>
