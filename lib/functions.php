@@ -1071,7 +1071,7 @@ function get_users_online($active_time = 5, $name_format = 'full_rev'){
 		LEFT JOIN contact ON (owner_id='".$user->id."' AND contact.user_id=a.user_id AND buddy=1)
 		WHERE changed > '" . date("YmdHis", ($now - ($active_time * 60)))."'
 		AND sid != '".$user->id."' AND sid !='nobody'
-		ORDER BY a.username ASC LIMIT 100";
+		ORDER BY a.Nachname ASC, a.Vorname ASC";
 	$rs = DBManager::get()->query($query);
 	$online = $rs->fetchAll(PDO::FETCH_ASSOC|PDO::FETCH_GROUP);
 	return array_map('array_shift', $online);
