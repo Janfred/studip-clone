@@ -538,6 +538,7 @@ class Course_StudygroupController extends AuthenticatedController {
 					$receiver = Request::get('choose_member');
 					$sem = new Seminar($id);
 					$u_name = get_fullname_from_uname(get_username($user));
+					URLHelper::removeLinkParam('cid'); 
 					$message = sprintf(_("%s möchte Sie auf die Studiengruppe %s aufmerksam machen. Klicken Sie auf den untenstehenden Link " .
 										"um direkt zur Studiengruppe zu gelangen.\n\n %s"),
 										$u_name, $sem->name, URLHelper::getlink("dispatch.php/course/studygroup/details/".$id));
