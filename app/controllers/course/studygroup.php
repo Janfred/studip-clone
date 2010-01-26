@@ -672,9 +672,19 @@ class Course_StudygroupController extends AuthenticatedController {
 		global $perm;
 		$perm->check("root");
 		$GLOBALS['HELP_KEYWORD'] = 'Admin.Studiengruppen';
-		$cfg=new Config();
-		$cfg->setValue(FALSE,"STUDYGROUPS_ENABLE","Studiengruppen");
-		$this->flash['success'] = _("Die Studiengruppen wurden deaktiviert.");
+
+		$db = DBManager::get()->query("SELECT COUNT(*) as c FROM seminare 
+			WHERE status IN ('". implode("', '", studygroup_sem_types()) ."')");
+		if (($count = $db->fetchColumn()) != 0) {
+			$this->flash['messages'] = array('error' => array(
+				'title' => sprintf(_("Sie können die Studiengruppen nicht deaktivieren, da noch %s Studiengruppen vorhanden sind!"), $count)
+			));
+		} else {
+			$cfg=new Config();
+			$cfg->setValue(FALSE,"STUDYGROUPS_ENABLE","Studiengruppen");
+			$this->flash['success'] = _("Die Studiengruppen wurden deaktiviert.");
+		}
+
 		$this->redirect('course/studygroup/globalmodules');
 	}
 

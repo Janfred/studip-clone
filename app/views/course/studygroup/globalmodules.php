@@ -51,10 +51,10 @@ $cssSw = new cssClassSwitcher();
 		&nbsp;
 	</div>
 	<?= $cssSw->switchClass(); ?>
-	<div style="float: left; width: 50%; clear: left;" class="<?= $cssSw->getClass() ?>">
+	<div style="float: left; width: 50%; clear: left; height: 30px;" class="<?= $cssSw->getClass() ?>">
 	    <?=_("TeilnehmerInnen")?>
 	</div>
-	<div style="float: left; width: 50%;" class="<?= $cssSw->getClass() ?>">
+	<div style="float: left; width: 50%; height: 30px;" class="<?= $cssSw->getClass() ?>">
 		<?=_("immer aktiv")?>
 	</div>
 
@@ -64,11 +64,11 @@ $cssSw = new cssClassSwitcher();
 	$cssSw->switchClass(); ?>
 
 
-	<div style="float: left; width: 50%; clear: left;" class="<?= $cssSw->getClass() ?>">
+	<div style="float: left; width: 50%; clear: left; height: 30px;" class="<?= $cssSw->getClass() ?>">
 	    <?= $name ?>
 	</div>
 
-	<div style="float: left; width: 50%;" class="<?= $cssSw->getClass() ?>">
+	<div style="float: left; width: 50%; height: 30px;" class="<?= $cssSw->getClass() ?>">
 	<select name='modules[<?= $key ?>]'>
 		<? if (!Config::getInstance()->getValue('STUDYGROUPS_ENABLE')):?>
 		<option value='invalid' selected><?= _("-- bitte auswählen --")?></option>
