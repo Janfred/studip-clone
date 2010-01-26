@@ -468,6 +468,8 @@ class Course_StudygroupController extends AuthenticatedController {
 		$this->redirect('course/studygroup/edit/'. $id);
 	}
 
+
+
 	function members_action($id, $page = 1)
 	{
 		$GLOBALS['CURRENT_PAGE'] = getHeaderLine($id) . ' - ' . _("TeilnehmerInnen");
@@ -475,12 +477,15 @@ class Course_StudygroupController extends AuthenticatedController {
 
 		$sem=new Seminar($id);
 		$this->page = $page;
-	    	$this->anzahl = StudygroupModel::countMembers($id);
-    	
-	    	if($this->page < 1 || $this->page > ceil($this->anzahl/ELEMENTS_PER_PAGE)) $this->page = 1;
+		$this->anzahl = StudygroupModel::countMembers($id);
+		
+		
+		if($this->page < 1 || $this->page > ceil($this->anzahl/ELEMENTS_PER_PAGE)) $this->page = 1;
 	    	
 		$this->lower_bound = ($this->page - 1) * ELEMENTS_PER_PAGE;
-	    	$this->cmembers = StudygroupModel::getMembers($id, $this->lower_bound, ELEMENTS_PER_PAGE);
+		$this->cmembers = StudygroupModel::getMembers($id, $this->lower_bound, ELEMENTS_PER_PAGE);
+		usort($this->cmembers, array('StudygroupModel','compare_status'));
+	    
 		$this->groupname = $sem->name;
 		$this->sem_id = $id;
 		$this->groupdescription = $sem->description;
