@@ -34,7 +34,6 @@ class PluginAdministration
      * manifest, creates the new plugin directory und finally registers it
      * in the database.
      * @param string $filename the name of the uploaded file
-     * @return ERROR_CODE or 0 (success)
      */
     public function installPlugin($filename) {
         global $SOFTWARE_VERSION;
@@ -46,18 +45,18 @@ class PluginAdministration
         unzip_file($filename, $packagedir);
 
         // load the manifest
-        $plugininfos = $this->getPluginManifest($packagedir);
+        $manifest = $this->getPluginManifest($packagedir);
 
-        if ($plugininfos === NULL) {
+        if ($manifest === NULL) {
             rmdirr($packagedir);
             throw new PluginInstallationException(_('Das Manifest des Plugins fehlt.'));
         }
 
         // get plugin meta data
-        $pluginclass = $plugininfos['pluginclassname'];
-        $origin      = $plugininfos['origin'];
-        $min_version = $plugininfos['studipMinVersion'];
-        $max_version = $plugininfos['studipMaxVersion'];
+        $pluginclass = $manifest['pluginclassname'];
+        $origin      = $manifest['origin'];
+        $min_version = $manifest['studipMinVersion'];
+        $max_version = $manifest['studipMaxVersion'];
 
         // check for compatible version
         if (isset($min_version) && version_compare($min_version, $SOFTWARE_VERSION) > 0 ||
@@ -77,7 +76,7 @@ class PluginAdministration
         // is the plugin already installed?
         if (file_exists($plugindir)) {
             if ($pluginregistered) {
-                $this->updateDBSchema($plugindir, $packagedir, $plugininfos);
+                $this->updateDBSchema($plugindir, $packagedir, $manifest);
             }
 
             // delete the plugin directory, registration info will be updated automatically
@@ -92,10 +91,10 @@ class PluginAdministration
         rename($packagedir, $plugindir);
 
         // create database schema if needed
-        $this->createDBSchema($plugindir, $plugininfos, $pluginregistered);
+        $this->createDBSchema($plugindir, $manifest, $pluginregistered);
 
         // now register the plugin in the database
-        $pluginid = $plugin_manager->registerPlugin($plugininfos['pluginname'], $pluginclass, $pluginpath);
+        $pluginid = $plugin_manager->registerPlugin($manifest['pluginname'], $pluginclass, $pluginpath);
 
         if ($pluginid === NULL) {
             rmdirr($plugindir);
@@ -103,22 +102,19 @@ class PluginAdministration
         }
 
         // do we have additional plugin classes in this package?
-        $additionalclasses = $plugininfos['additionalclasses'];
+        $additionalclasses = $manifest['additionalclasses'];
 
         if (is_array($additionalclasses)){
             foreach ($additionalclasses as $class){
                 $plugin_manager->registerPlugin($class, $class, $pluginpath, $pluginid);
             }
         }
-
-        return 0;
     }
 
     /**
      * Downloads and installs a new plugin from the given URL.
      *
      * @param string $plugin_url the URL of the plugin package
-     * @return ERROR_CODE or 0 (success)
      */
     public function installPluginFromURL($plugin_url)
     {
@@ -128,9 +124,8 @@ class PluginAdministration
             throw new PluginInstallationException(_('Das Herunterladen des Plugins ist fehlgeschlagen.'));
         }
 
-        $status = $this->installPlugin($temp_name);
+        $this->installPlugin($temp_name);
         unlink($temp_name);
-        return $status;
     }
 
     /**
@@ -138,7 +133,6 @@ class PluginAdministration
      * the plugin repository.
      *
      * @param string $pluginname name of the plugin to install
-     * @return ERROR_CODE or 0 (success)
      */
     public function installPluginByName($pluginname)
     {
@@ -146,10 +140,10 @@ class PluginAdministration
         $plugin = $repository->getPlugin($pluginname);
 
         if (!isset($plugin)) {
-            throw new PluginInstallationException(_('Das Herunterladen des Plugins ist fehlgeschlagen.'));
+            throw new PluginInstallationException(_('Das Plugin konnte nicht gefunden werden.'));
         }
 
-        return $this->installPluginFromURL($plugin['url']);
+        $this->installPluginFromURL($plugin['url']);
     }
 
     /**
@@ -349,19 +343,14 @@ class PluginAdministration
                 $repository = new PluginRepository($manifest['updateURL']);
             }
 
-            $plugin_info = array(
-                'name' => $manifest['pluginname'],
-                'version' => $manifest['version']
-            );
-
             $meta_data = $repository->getPlugin($manifest['pluginname']);
 
             if (isset($meta_data) &&
                 version_compare($meta_data['version'], $manifest['version']) > 0) {
-                $plugin_info['update'] = $meta_data;
+                $manifest['update'] = $meta_data;
             }
 
-            $update_info[$plugin['id']] = $plugin_info;
+            $update_info[$plugin['id']] = $manifest;
         }
 
         return $update_info;

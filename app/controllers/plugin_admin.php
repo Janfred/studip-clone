@@ -36,6 +36,14 @@ class PluginAdminController extends AuthenticatedController
         $this->plugin_admin = new PluginAdministration();
     }
 
+    private function check_ticket()
+    {
+        if (!check_ticket(Request::option('ticket'))) {
+            throw new InvalidArgumentException(_('Das Ticket für diese Aktion ist ungültig.'));
+        }
+
+    }
+
     /**
      * Shows the plugins view and display all available plugin updates.
      */
@@ -66,6 +74,8 @@ class PluginAdminController extends AuthenticatedController
         $plugin_filter = Request::option('plugin_filter', '');
         $type = $plugin_filter != '' ? $plugin_filter : NULL;
         $plugins = $plugin_manager->getPluginInfos($type);
+
+        $this->check_ticket();
 
         foreach ($plugins as $plugin){
             $enabled = Request::int('enabled_' . $plugin['id'], 0);
@@ -124,13 +134,15 @@ class PluginAdminController extends AuthenticatedController
 
     public function install_action($pluginname = NULL)
     {
+        $this->check_ticket();
+
         try {
             if (isset($pluginname)) {
-                $status = $this->plugin_admin->installPluginByName($pluginname);
+                $this->plugin_admin->installPluginByName($pluginname);
             } else if (get_config('PLUGINS_UPLOAD_ENABLE')) {
                 // process the upload and register plugin in the database
                 $upload_file = $_FILES['upload_file']['tmp_name'];
-                $status = $this->plugin_admin->installPlugin($upload_file);
+                $this->plugin_admin->installPlugin($upload_file);
             }
 
             $this->flash['message'] = _('Das Plugin wurde erfolgreich installiert.');
@@ -162,6 +174,8 @@ class PluginAdminController extends AuthenticatedController
         $plugin_manager = PluginManager::getInstance();
         $plugin_filter = Request::option('plugin_filter', '');
         $plugin = $plugin_manager->getPluginInfoById($plugin_id);
+
+        $this->check_ticket();
 
         if (isset($plugin)) {
             $this->plugin_admin->uninstallPlugin($plugin);
@@ -204,20 +218,23 @@ class PluginAdminController extends AuthenticatedController
         $update = Request::intArray('update');
         $update_status = array();
 
+        $this->check_ticket();
+
         foreach ($update as $id) {
             if (isset($update_info[$id]['update'])) {
                 try {
                     $update_url = $update_info[$id]['update']['url'];
-                    $status = $this->plugin_admin->installPluginFromURL($update_url);
+                    $this->plugin_admin->installPluginFromURL($update_url);
                 } catch (PluginInstallationException $ex) {
-                    $update_errors[] = sprintf('%s: %s', $update_info[$id]['name'], $ex->getMessage());
+                    $update_errors[] = sprintf('%s: %s', $plugins[$id]['name'], $ex->getMessage());
                 }
             }
         }
 
         if (isset($update_errors)) {
-            $this->flash['error'] = ngettext('Beim Update ist ein Fehler auftretren:',
-                                             'Beim Update sind Fehler aufgetreten:', count($update_errors));
+            $this->flash['error'] = ngettext(
+                'Beim Update ist ein Fehler aufgetreten:',
+                'Beim Update sind Fehler aufgetreten:', count($update_errors));
             $this->flash['error_detail'] = $update_errors;
         } else {
             $this->flash['message'] = _('Update erfolgreich installiert.');
@@ -231,50 +248,52 @@ class PluginAdminController extends AuthenticatedController
      * dependence on other plugins, ...
      */
     public function manifest_action($plugin_id) {
-        // get information about the plugin
         $plugin_manager = PluginManager::getInstance();
         $plugin = $plugin_manager->getPluginInfoById($plugin_id);
 
         // retrieve manifest
         $pluginpath = get_config('PLUGINS_PATH').'/'.$plugin['path'];
-        $plugininfos = $this->plugin_admin->getPluginManifest($pluginpath);
+        $manifest = $this->plugin_admin->getPluginManifest($pluginpath);
 
-        $this->plugin      = $plugin;
-        $this->plugininfos = $plugininfos;
+        $this->plugin   = $plugin;
+        $this->manifest = $manifest;
     }
 
     /**
      * Shows the standard configuration.
      */
     public function default_activation_action($plugin_id) {
-        // get information about the plugin
         $plugin_manager = PluginManager::getInstance();
         $plugin = $plugin_manager->getPluginInfoById($plugin_id);
+        $selected_inst = $plugin_manager->getDefaultActivations($plugin_id);
 
-        if (Request::submitted('save')) {
-            $selected_inst = Request::optionArray('selected_inst');
-
-            if (Request::get('nodefault')) {
-                $plugin_manager->setDefaultActivations($plugin_id, array());
-                $message = _('Die Voreinstellungen wurden gelöscht.');
-                $selected_inst = array();
-            } else {
-                // save selected institutes
-                $plugin_manager->setDefaultActivations($plugin_id, $selected_inst);
-                $message = ngettext(
-                    'Für das ausgewählte Institut wurde das Plugin standardmäßig aktiviert.',
-                    'Für die ausgewählten Institute wurde das Plugin standardmäßig aktiviert.',
-                    count($selected_inst));
-            }
-        } else {
-            // load old config
-            $selected_inst = $plugin_manager->getDefaultActivations($plugin_id);
-        }
-
-        $this->message       = $message;
         $this->plugin_name   = $plugin['name'];
         $this->plugin_id     = $plugin_id;
         $this->selected_inst = $selected_inst;
         $this->institutes    = $this->plugin_admin->getInstitutes();
+    }
+
+    /**
+     * Shows the standard configuration.
+     */
+    public function save_default_activation_action($plugin_id) {
+        $plugin_manager = PluginManager::getInstance();
+
+        $this->check_ticket();
+
+        if (Request::get('nodefault')) {
+            $selected_inst = array();
+            $this->flash['message'] = _('Die Voreinstellungen wurden gelöscht.');
+        } else {
+            $selected_inst = Request::optionArray('selected_inst');
+            $this->flash['message'] = ngettext(
+                'Für die ausgewählte Einrichtung wurde das Plugin standardmäßig aktiviert.',
+                'Für die ausgewählten Einrichtungen wurde das Plugin standardmäßig aktiviert.',
+                count($selected_inst));
+        }
+
+        // save selected institutes
+        $plugin_manager->setDefaultActivations($plugin_id, $selected_inst);
+        $this->redirect('plugin_admin/default_activation/'.$plugin_id);
     }
 }

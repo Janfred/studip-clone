@@ -17,15 +17,15 @@
     </tr>
     <tr>
         <td>Origin:</td>
-        <td><?= htmlspecialchars($plugininfos['origin']) ?></td>
+        <td><?= htmlspecialchars($manifest['origin']) ?></td>
     </tr>
     <tr>
         <td>Version:</td>
-        <td><?= htmlspecialchars($plugininfos['version']) ?></td>
+        <td><?= htmlspecialchars($manifest['version']) ?></td>
     </tr>
     <tr>
         <td>Beschreibung:</td>
-        <td><?= htmlspecialchars($plugininfos['description']) ?></td>
+        <td><?= htmlspecialchars($manifest['description']) ?></td>
     </tr>
 </table>
 

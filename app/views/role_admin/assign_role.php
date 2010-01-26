@@ -1,97 +1,111 @@
 <?= $this->render_partial('role_admin/status_message') ?>
+
 <h3>
-    <?=_("Rollenverwaltung für Benutzer")?>
+    <?= _('Rollenverwaltung für Benutzer') ?>
 </h3>
-<form action="<?=$controller->url_for('role_admin/assign_role')?>" method="POST">
-Name der Person: <input type="text" name="usersearchtxt" size="25" value="<?= htmlReady($usersearchtxt) ?>" style="width: 300px;">
-<?= makeButton("suchen","input",_("Benutzer suchen"),"searchuserbtn") ?>
-<br>
 
-<? if (!empty($users)): ?>
-<table border="0" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-        <th align="left"><?= _("Benutzer auswählen")?>: </th>
-    </tr>
-    <tr class="steelgraulight">
-        <td>
-            <select size="1" name="usersel" style="min-width: 300px;">
-            <? foreach ($users as $user): ?>
-                <option value="<?= $user->getUserid()?>" <?=!empty($currentuser) && $currentuser->isSameUser($user) ? "selected" : ""?>><?= htmlReady($user->getGivenname()) . " " . htmlReady($user->getSurname()) . " (" . $user->getUsername() . ")"?></option>
-            <? endforeach; ?>
-            </select>
-            <?= makeButton("auswaehlen","input",_("Benutzer auswählen"),"seluserbtn") ?>
-            <?= makeButton("zuruecksetzen","input",_("Suche zurücksetzen"),"resetseluser") ?>
-        </td>
-    </tr>
-</table>
-<br>
-<? endif; ?>
-<? if (!empty($currentuser)): $assigned = $currentuser->getAssignedRoles(); ?>
-<table border="0" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-        <th><?= _(sprintf("Rollen für %s",$currentuser->getGivenname() . " " . $currentuser->getSurname()))?></th>
-        <th></th>
-        <th><?=_("Verfügbare Rollen")?></th>
-    </tr>
-    <tr class="steel1">
-        <td valign="top" align="right">
-            <select multiple name="assignedroles[]" size="10" style="width: 300px;">
-            <? foreach ($assigned as $assignedrole): ?>
-                <option value="<?= $assignedrole->getRoleid()?>"><?= $assignedrole->getRolename()?> <? if($assignedrole->getSystemtype()):?>[Systemrolle]<? endif; ?></option>
-            <? endforeach; ?>
-            </select>
-        </td>
-        <td valign="middle" align="center">
-        <input type="image" src="<?= Assets::image_path('move_left.gif') ?>" name="assignrolebtn" alt="<?= _("Markierte Rollen dem Benutzer zuweisen.") ?>">
-        <br><br>
-        <input type="image" src="<?= Assets::image_path('move_right.gif') ?>" name="deleteroleassignmentbtn" alt="<?= _("Markierte Rollen entfernen.") ?>">
-        </td>
-        <td valign="top">
-            <select size="10" name="rolesel[]" multiple style="width: 300px;">
-            <? foreach ($roles as $role): ?>
-                <option value="<?= $role->getRoleid()?>"><?=$role->getRolename() ?> <? if($role->getSystemtype()):?>[Systemrolle]<? endif; ?></option>
-            <? endforeach; ?>
-            </select>
-        </td>
-    </tr>
-</table>
-<br>
-
-<h3><?= _("Implizit zugewiesene Systemrollen")?></h3>
-<table border="0" width="100%" cellpadding="2" cellspacing="0">
-    <? foreach ($implicitroles as $key=>$role):?>
-    <tr class="<?=($key%2==0)?'steel1':'steelgraulight' ?>">
-        <td><?=$role ?></td>
-    </tr>
-    <? endforeach; ?>
-</table>
-<? endif; ?>
+<form action="<?= $controller->url_for('role_admin/assign_role') ?>" style="margin-bottom: 1em;" method="POST">
+    <? if (empty($users)): ?>
+        <?= _('Name der Person:') ?>
+        <input type="text" name="username" value="<?= htmlReady($username) ?>" style="width: 300px;">
+        <?= makeButton('suchen', 'input', _('Benutzer suchen'), 'search') ?>
+    <? else: ?>
+        <?= _('Benutzer:') ?>
+        <select name="usersel" style="min-width: 300px;">
+        <? foreach ($users as $user): ?>
+            <option value="<?= $user->getUserid() ?>" <?= isset($currentuser) && $currentuser->isSameUser($user) ? "selected" : "" ?>>
+                <?= htmlReady(sprintf('%s %s (%s)', $user->getGivenname(), $user->getSurname(), $user->getUsername())) ?>
+            </option>
+        <? endforeach ?>
+        </select>
+        <?= makeButton('auswaehlen', 'input', _('Benutzer auswählen'), 'select') ?>
+        <?= makeButton('zuruecksetzen', 'input', _('Suche zurücksetzen'), 'reset') ?>
+    <? endif ?>
 </form>
+
+<? if (isset($currentuser)): ?>
+    <form action="<?= $controller->url_for('role_admin/save_role') ?>" method="POST">
+        <input type="hidden" name="ticket" value="<?= get_ticket() ?>">
+        <input type="hidden" name="usersel" value="<?= $currentuser->getUserid() ?>">
+        <table class="default">
+            <tr>
+                <th style="text-align: center;">
+                    <?= sprintf(_('Rollen für %s'), htmlReady($currentuser->getGivenname() . ' ' . $currentuser->getSurname())) ?>
+                </th>
+                <th></th>
+                <th><?= _('Verfügbare Rollen') ?></th>
+            </tr>
+            <tr class="steel1">
+                <td style="text-align: right;">
+                    <select multiple name="assignedroles[]" size="10" style="width: 300px;">
+                        <? foreach ($assignedroles as $assignedrole): ?>
+                            <option value="<?= $assignedrole->getRoleid() ?>">
+                                <?= htmlReady($assignedrole->getRolename()) ?>
+                                <? if ($assignedrole->getSystemtype()): ?>[<?= _('Systemrolle') ?>]<? endif ?>
+                            </option>
+                        <? endforeach ?>
+                    </select>
+                </td>
+                <td style="text-align: center;">
+                    <input type="image" name="assign_role" src="<?= Assets::image_path('move_left.gif') ?>" title="<?= _('Markierte Rollen dem Benutzer zuweisen') ?>">
+                    <br>
+                    <br>
+                    <input type="image" name="remove_role" src="<?= Assets::image_path('move_right.gif') ?>" title="<?= _('Markierte Rollen entfernen') ?>">
+                </td>
+                <td>
+                    <select size="10" name="rolesel[]" multiple style="width: 300px;">
+                        <? foreach ($roles as $role): ?>
+                            <option value="<?= $role->getRoleid() ?>">
+                                <?= htmlReady($role->getRolename()) ?>
+                                <? if ($role->getSystemtype()): ?>[<?= _('Systemrolle') ?>]<? endif ?>
+                            </option>
+                        <? endforeach ?>
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <h3>
+        <?= _('Implizit zugewiesene Systemrollen') ?>
+    </h3>
+
+    <? foreach ($all_userroles as $role): ?>
+        <? if (!in_array($role, $assignedroles)): ?>
+            <?= htmlReady($role->getRolename()) ?><br>
+        <? endif ?>
+    <? endforeach ?>
+<? endif ?>
+
 <?
 $infobox_content = array(
-    array  ("kategorie"  => _("Aktionen:"),
-            "eintrag" => array  (
-                array ( "icon" => "link_intern.gif",
-                                "text"  => '<a href="'.$controller->url_for('role_admin/create_role').'">'._("Rollen verwalten").'</a>'
-                ),
-                array ( "icon" => "link_intern.gif",
-                                "text"  => '<a href="'.$controller->url_for('role_admin/assign_role').'">'._("Benutzerzuweisungen bearbeiten").'</a>'
-                ),
-                array ( "icon" => "link_intern.gif",
-                                "text"  => '<a href="'.$controller->url_for('role_admin/assign_plugin_role').'">'._("Pluginzuweisungen bearbeiten").'</a>'
-                ),
-                array ( "icon" => "link_intern.gif",
-                                "text"  => '<a href="'.$controller->url_for('role_admin/show_role').'">'._("Rollenzuweisungen anzeigen").'</a>'
-                ),
+    array(
+        'kategorie' => _('Aktionen:'),
+        'eintrag'   => array(
+            array(
+                'icon' => 'link_intern.gif',
+                'text' => '<a href="'.$controller->url_for('role_admin').'">'._('Rollen verwalten').'</a>'
+            ), array(
+                'icon' => 'link_intern.gif',
+                'text' => '<a href="'.$controller->url_for('role_admin/assign_role').'">'._('Benutzerzuweisungen bearbeiten').'</a>'
+            ), array(
+                'icon' => 'link_intern.gif',
+                'text' => '<a href="'.$controller->url_for('role_admin/assign_plugin_role').'">'._('Pluginzuweisungen bearbeiten').'</a>'
+            ), array(
+                'icon' => 'link_intern.gif',
+                'text' => '<a href="'.$controller->url_for('role_admin/show_role').'">'._('Rollenzuweisungen anzeigen').'</a>'
             )
-    ),
-    array  ("kategorie"  => _("Hinweise:"),
-        "eintrag" => array  (
-            array ( "icon" => "ausruf_small.gif",
-                            "text"  => _("Hier können Sie nach Benutzern suchen und Ihnen verschiedene Rollen zuweisen.")
+        )
+    ), array(
+        'kategorie' => _('Hinweise:'),
+        'eintrag'   => array(
+            array(
+                'icon' => 'ausruf_small.gif',
+                'text' => _('Hier können Sie nach Benutzern suchen und ihnen verschiedene Rollen zuweisen.')
             )
         )
     )
 );
+
 $infobox = array('picture' => 'modules.jpg', 'content' => $infobox_content);
 ?>

@@ -47,6 +47,7 @@ class PluginManager
     private function __construct ()
     {
         $this->readPluginInfos();
+        $this->plugin_cache = array();
         $this->rolemgmt = new RolePersistence();
     }
 
@@ -199,6 +200,31 @@ class PluginManager
     }
 
     /**
+     * Load a plugin class from the given file system path and
+     * return the ReflectionClass instance for the plugin.
+     *
+     * @param $class     plugin class name
+     * @param $path      plugin relative path
+     */
+    private function loadPlugin ($class, $path)
+    {
+        $basepath = get_config('PLUGINS_PATH');
+        $pluginfile = $basepath.'/'.$path.'/'.$class.'.class.php';
+
+        if (!file_exists($pluginfile)) {
+            $pluginfile = $basepath.'/'.$path.'/'.$class.'.php';
+
+            if (!file_exists($pluginfile)) {
+                return NULL;
+            }
+        }
+
+        require_once $pluginfile;
+
+        return new ReflectionClass($class);
+    }
+
+    /**
      * Determine the type of a plugin to be installed.
      *
      * @param $class     plugin class name
@@ -206,14 +232,10 @@ class PluginManager
      */
     private function getPluginType ($class, $path)
     {
-        $basepath = get_config('PLUGINS_PATH');
-        $pluginfile = $basepath.'/'.$path.'/'.$class.'.class.php';
+        $plugin_class = $this->loadPlugin($class, $path);
         $types = array();
 
-        if (file_exists($pluginfile)) {
-            require_once $pluginfile;
-
-            $plugin_class = new ReflectionClass($class);
+        if ($plugin_class) {
             $plugin_base = new ReflectionClass('StudIPPlugin');
             $interfaces = $plugin_class->getInterfaces();
 
@@ -294,7 +316,7 @@ class PluginManager
         $this->readPluginInfos();
 
         $db->exec("INSERT INTO roles_plugins (roleid, pluginid)
-                   SELECT roleid, $id FROM roles WHERE system = 'y' AND rolename != 'Nobody' ");
+                   SELECT roleid, $id FROM roles WHERE system = 'y' AND rolename != 'Nobody'");
 
         return $id;
     }
@@ -414,17 +436,11 @@ class PluginManager
             return $this->plugin_cache[$cache_key];
         }
 
-        $basepath = get_config('PLUGINS_PATH');
-        $pluginfile = $basepath.'/'.$path.'/'.$class.'.class.php';
+        $plugin_class = $this->loadPlugin($class, $path);
 
-        if (!file_exists($pluginfile)) {
-            return NULL;
+        if ($plugin_class) {
+            $plugin = $plugin_class->newInstance();
         }
-
-        require_once $pluginfile;
-
-        $plugin_class = new ReflectionClass($class);
-        $plugin = $plugin_class->newInstance();
 
         return $this->plugin_cache[$cache_key] = $plugin;
     }

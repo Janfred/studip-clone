@@ -1,7 +1,7 @@
 <form action="<?= $controller->url_for('plugin_admin/search') ?>" method="post" style="float: right;">
     <?= _('Suche nach Plugins:') ?>
-    <input name="search" type="text" size="20" value="<?= $search ?>">
-    <?= makeButton('suchen', 'input' , _('Plugin suchen')) ?>
+    <input name="search" type="text" size="20" value="<?= htmlReady($search) ?>">
+    <?= makeButton('suchen', 'input' , _('Suche starten')) ?>
     &nbsp;
     <a href="<?= $controller->url_for('plugin_admin/search') ?>">
         <?= makeButton('zuruecksetzen', 'img', _('Suche zurücksetzen')) ?>
@@ -19,7 +19,7 @@
 <? if (empty($search_results)): ?>
     <?= Messagebox::info(_('Es wurden keine Plugins gefunden.')) ?>
 <? else: ?>
-    <table class="plugin_admin">
+    <table class="default">
         <tr>
             <th class="plugin_image"><?= _('Bild')?></th>
             <th><?= _('Name und Beschreibung')?></th>
@@ -33,17 +33,17 @@
                 <td class="plugin_image">
                     <? if ($plugin['image']): ?>
                         <? if ($plugin['plugin_url']): ?>
-                            <a href="<?= htmlReady($plugin['plugin_url']) ?>" target="_blank">
-                                <img src="<?= $plugin['image'] ?>" class="plugin_preview">
+                            <a href="<?= htmlspecialchars($plugin['plugin_url']) ?>" target="_blank">
+                                <img src="<?= htmlspecialchars($plugin['image']) ?>" class="plugin_preview">
                             </a>
                         <? else: ?>
-                            <img src="<?= $plugin['image'] ?>" class="plugin_preview">
+                            <img src="<?= htmlspecialchars($plugin['image']) ?>" class="plugin_preview">
                         <? endif ?>
                     <? endif ?>
                 </td>
                 <td>
                     <? if ($plugin['plugin_url']): ?>
-                        <a href="<?= htmlReady($plugin['plugin_url']) ?>" target="_blank">
+                        <a href="<?= htmlspecialchars($plugin['plugin_url']) ?>" target="_blank">
                             <b><?= htmlspecialchars($name) ?></b>
                         </a>
                     <? else: ?>
@@ -62,9 +62,10 @@
                     <? endfor ?>
                 </td>
                 <td class="plugin_install">
-                    <a href="<?= $controller->url_for('plugin_admin/install/'.$name) ?>">
-                        <?= Assets::img('install.png', array('title' => _('Plugin installieren'))) ?>
-                    </a>
+                    <form action="<?= $controller->url_for('plugin_admin/install', $name) ?>" method="post">
+                        <input type="hidden" name="ticket" value="<?= get_ticket() ?>">
+                        <input type="image" name="install" src="<?= Assets::image_path('install.png') ?>" title="<?= _('Plugin installieren') ?>">
+                    </form>
                 </td>
             </tr>
         <? endforeach ?>
@@ -79,8 +80,9 @@
     <form action="<?= $controller->url_for('plugin_admin/install') ?>" enctype="multipart/form-data" method="post">
         <?= _('Plugin-Datei:') ?>
         <input name="upload_file" type="file" size="40">
+        <input type="hidden" name="ticket" value="<?= get_ticket() ?>">
 
-        <?= makeButton('hinzufuegen', 'input' , _('neues Plugin installieren')) ?><br>
+        <?= makeButton('hinzufuegen', 'input' , _('neues Plugin installieren')) ?>
     </form>
 <? endif ?>
 

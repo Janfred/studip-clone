@@ -168,6 +168,20 @@ td.toolbar {
     background-image: url('../images/steelblau.jpg');
 }
 
+table.default {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.default th {
+    padding: 3px;
+    text-align: left;
+}
+
+table.default td {
+    padding: 3px;
+}
+
 td.topicwrite {
     border:0px solid #000000;
     background-image: url('../images/fill1write.gif');
@@ -181,7 +195,9 @@ td.header {
 }
 
 td.angemeldet {
-    border-style: solid; border-color: #000000;    border-width: 1px;
+    border-style: solid;
+    border-color: #000000;
+    border-width: 1px;
 }
 
 td.rahmen_white {
@@ -1115,34 +1131,20 @@ form#quicksearch .autocomplete li {
 }
 
 /* --- Plugin Administration ---------------------------------------------------- */
-table.plugin_admin {
-    border-collapse: collapse;
-    width: 100%;
-}
-
-table.plugin_admin th {
-    padding: 3px;
-    text-align: left;
-}
-
-table.plugin_admin td {
-    padding: 3px;
-}
-
-table.plugin_admin .plugin_image {
+.plugin_image {
     text-align: center;
     width: 88px;
 }
 
-table.plugin_admin .plugin_score {
+.plugin_score {
     white-space: nowrap;
 }
 
-table.plugin_admin .plugin_install {
+.plugin_install {
     text-align: center;
 }
 
-table.plugin_admin img.plugin_preview {
+img.plugin_preview {
     height: 60px;
     width: 80px;
 }

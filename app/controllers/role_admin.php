@@ -31,6 +31,14 @@ class RoleAdminController extends AuthenticatedController
         Navigation::activateItem('/admin/tools/roles');
     }
 
+    private function check_ticket()
+    {
+        if (!check_ticket(Request::option('ticket'))) {
+            throw new InvalidArgumentException(_('Das Ticket für diese Aktion ist ungültig.'));
+        }
+
+    }
+
     /**
      * Sucht nach Benutzern
      *
@@ -47,11 +55,12 @@ class RoleAdminController extends AuthenticatedController
         $stmt->execute(array($searchtxt, $searchtxt, $searchtxt));
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $users = array();
-        foreach ($result as $row)
-        {
+
+        foreach ($result as $row) {
             $user = new StudIPUser($row["user_id"]);
             $users[$row["user_id"]] = $user;
         }
+
         return $users;
     }
 
@@ -61,8 +70,22 @@ class RoleAdminController extends AuthenticatedController
      */
     public function index_action()
     {
-        $this->roles = RolePersistence::getAllRoles();
-        $this->render_action('create_role');
+        $db = DBManager::get();
+        $roles = RolePersistence::getAllRoles();
+
+        foreach ($roles as $role) {
+            $roleid = $role->getRoleid();
+
+            $sql = "SELECT COUNT(*) FROM roles_user WHERE roleid = $roleid";
+            $users[$roleid] = $db->query($sql)->fetchColumn();
+
+            $sql = "SELECT COUNT(*) FROM roles_plugins WHERE roleid = $roleid";
+            $plugins[$roleid] = $db->query($sql)->fetchColumn();
+        }
+
+        $this->roles = $roles;
+        $this->users = $users;
+        $this->plugins = $plugins;
     }
 
     /**
@@ -71,32 +94,34 @@ class RoleAdminController extends AuthenticatedController
      */
     public function assign_plugin_role_action($pluginid = NULL)
     {
-        if (!isset($pluginid)) {
-            $pluginid = Request::int('pluginid');
-        }
+        $pluginid = Request::int('pluginid', $pluginid);
 
-        $selroles = Request::intArray('rolesel');
-        $delassignedrols = Request::intArray('assignedroles');
-
-        //action
-        if (Request::submitted('assignrolebtn'))
-        {
-            // assign roles
-            RolePersistence::assignPluginRoles($pluginid,$selroles);
-            $this->success = _('Die Rechteeinstellungen wurden erfolgreich gespeichert.');
-        }
-        if (Request::submitted('deleteroleassignmentbtn'))
-        {
-            // delete role assignment
-            RolePersistence::deleteAssignedPluginRoles($pluginid,$delassignedrols);
-            $this->success = _('Die Rechteeinstellungen wurden erfolgreich gespeichert.');
-        }
-
-        //view
         $this->plugins = PluginManager::getInstance()->getPluginInfos();
         $this->assigned = RolePersistence::getAssignedPluginRoles($pluginid);
         $this->roles = RolePersistence::getAllRoles();
         $this->pluginid = $pluginid;
+    }
+
+    /**
+     * Plugins Rollen zuweisen
+     *
+     */
+    public function save_plugin_role_action($pluginid)
+    {
+        $this->check_ticket();
+
+        if (Request::submitted('assign_role')) {
+            // assign roles
+            $selroles = Request::intArray('rolesel');
+            RolePersistence::assignPluginRoles($pluginid, $selroles);
+        } else if (Request::submitted('remove_role')) {
+            // delete role assignment
+            $delassignedrols = Request::intArray('assignedroles');
+            RolePersistence::deleteAssignedPluginRoles($pluginid, $delassignedrols);
+        }
+
+        $this->flash['success'] = _('Die Rechteeinstellungen wurden gespeichert.');
+        $this->redirect('role_admin/assign_plugin_role/'.$pluginid);
     }
 
     /**
@@ -105,27 +130,22 @@ class RoleAdminController extends AuthenticatedController
      */
     public function create_role_action()
     {
-        //action
-        if (Request::submitted('createrolebtn'))
-        {
-            $newrole = Request::get('newrole');
+        $this->check_ticket();
 
-            if ($newrole != '')
-            {
-                $role = new Role();
-                $role->setRolename($newrole);
-                RolePersistence::saveRole($role);
-                // create a new role
-                $this->success = sprintf(_('Die Rolle "%s" wurde erfolgreich angelegt.'), $newrole);
-            }
-            else
-            {
-                $this->error = _('Sie haben keine Rolle eingegeben.');
-            }
+        $name = Request::get('name');
+
+        if ($name != '') {
+            // create a new role
+            $role = new Role();
+            $role->setRolename($name);
+            RolePersistence::saveRole($role);
+
+            $this->flash['success'] = sprintf(_('Die Rolle "%s" wurde angelegt.'), htmlReady($name));
+        } else {
+            $this->flash['error'] = _('Sie haben keinen Namen eingegeben.');
         }
 
-        //view
-        $this->roles = RolePersistence::getAllRoles();
+        $this->redirect('role_admin');
     }
 
     /**
@@ -134,114 +154,82 @@ class RoleAdminController extends AuthenticatedController
      */
     public function remove_role_action()
     {
-        //action
-        if (Request::submitted('removerolebtn'))
-        {
-            if (count(Request::intArray('rolesel')))
-            {
-                $roles = RolePersistence::getAllRoles();
-                $rolesel = Request::intArray('rolesel');
-                foreach ($rolesel as $roleid)
-                {
-                    RolePersistence::deleteRole($roles[$roleid]);
-                }
-                $this->success = _('Die Rolle(n) und alle dazugehörigen Zuweisungen wurden erfolgreich gelöscht.');
-            }
-            else
-            {
-                $this->error = _('Bitte wählen sie eine Rolle zum Löschen aus.');
-            }
-        }
+        $this->check_ticket();
 
-        //view
-        $this->roles = RolePersistence::getAllRoles();
-        $this->render_action('create_role');
+        $roles = RolePersistence::getAllRoles();
+        $roleid = key(Request::intArray('delete'));
+        RolePersistence::deleteRole($roles[$roleid]);
+
+        $this->flash['success'] = _('Die Rolle und alle dazugehörigen Zuweisungen wurden gelöscht.');
+        $this->redirect('role_admin');
     }
 
     /**
      * Enter description here...
      *
      */
-    public function assign_role_action()
+    public function assign_role_action($userid = NULL)
     {
-        $roles = RolePersistence::getAllRoles();
-        $usersearchtxt = Request::get('usersearchtxt');
-        $usersel = Request::option('usersel');
-
-        // zurücksetzen
-        if (Request::submitted('resetseluser'))
-        {
-            unset($usersearchtxt);
-        }
-
         // benutzer gesucht
-        if (isset($usersearchtxt))
-        {
-            if ($usersearchtxt != '')
-            {
-                $founduser = $this->searchUser($usersearchtxt);
-                if (empty($founduser))
-                {
+        if (Request::submitted('search')) {
+            $username = Request::get('username');
+
+            if ($username == '') {
+                $this->error = _('Es wurde kein Suchwort eingegeben.');
+            } else {
+                $users = $this->searchUser($username);
+
+                if (empty($users)) {
                     $this->error = _('Es wurde kein Benutzer gefunden.');
                 }
-            }
-            else
-            {
-                $this->error = _('Es wurde kein Suchwort eingegeben.');
             }
         }
 
         // benutzer ausgewählt
-        if (isset($usersel) && isset($founduser[$usersel]))
-        {
-            $selecteduser = $founduser[$usersel];
+        if (!Request::submitted('reset')) {
+            $usersel = Request::option('usersel', $userid);
 
-            // Rollen zuweisen
-            if (Request::submitted('assignrolebtn'))
-            {
-                foreach (Request::intArray('rolesel') as $selroleid)
-                {
-                    $role = $roles[$selroleid];
-                    RolePersistence::assignRole($selecteduser,$role);
-                }
-                $this->success = _('Zuweisungen erfolgreich durchgeführt.');
-            }
-
-            // Rollen löschen
-            if (Request::submitted('deleteroleassignmentbtn'))
-            {
-                foreach (Request::intArray('assignedroles') as $roleid)
-                {
-                    $role = $roles[$roleid];
-                    RolePersistence::deleteRoleAssignment($selecteduser,$role);
-                }
-                $this->success = _('Rollenzuweisung erfolgreich gelöscht.');
-            }
-
-            $implicitroles = array();
-            foreach ($selecteduser->getAssignedRoles(true) as $assignedrole)
-            {
-                $found = false;
-                foreach ($selecteduser->getAssignedRoles() as $explassignedrole)
-                {
-                    if ($explassignedrole->getRoleid() == $assignedrole->getRoleid())
-                    {
-                        $found = true;
-                    }
-                }
-                if (!$found)
-                {
-                    $implicitroles[] = $assignedrole->getRolename();
-                }
+            if (isset($usersel)) {
+                $users[$usersel] = new StudIPUser($usersel);
+                $this->currentuser = $users[$usersel];
+                $this->assignedroles = $this->currentuser->getAssignedRoles();
+                $this->all_userroles = $this->currentuser->getAssignedRoles(true);
             }
         }
 
-        //view
-        $this->users = $founduser;
-        $this->currentuser = $selecteduser;
-        $this->implicitroles = $implicitroles;
-        $this->usersearchtxt = $usersearchtxt;
-        $this->roles = $roles;
+        $this->users = $users;
+        $this->username = $username;
+        $this->roles = RolePersistence::getAllRoles();
+    }
+
+    /**
+     * Enter description here...
+     *
+     */
+    public function save_role_action()
+    {
+        $roles = RolePersistence::getAllRoles();
+        $usersel = Request::option('usersel');
+        $selecteduser = new StudIPUser($usersel);
+
+        $this->check_ticket();
+
+        // Rollen zuweisen
+        if (Request::submitted('assign_role')) {
+            foreach (Request::intArray('rolesel') as $selroleid) {
+                $role = $roles[$selroleid];
+                RolePersistence::assignRole($selecteduser, $role);
+            }
+        // Rollen löschen
+        } else if (Request::submitted('remove_role')) {
+            foreach (Request::intArray('assignedroles') as $roleid) {
+                $role = $roles[$roleid];
+                RolePersistence::deleteRoleAssignment($selecteduser, $role);
+            }
+        }
+
+        $this->flash['success'] = _('Die Rollenzuweisungen wurden gespeichert.');
+        $this->redirect('role_admin/assign_role?usersel='.$usersel);
     }
 
     /**
@@ -255,54 +243,49 @@ class RoleAdminController extends AuthenticatedController
         $plugin_roles = RolePersistence::getAssignedPluginRoles($plugin['id']);
 
         foreach ($plugin_roles as $plugin_role) {
-            if ($plugin_role->getRoleid() === $role_id) {
+            if ($plugin_role->getRoleid() == $role_id) {
                 return true;
             }
         }
 
-        return $false;
+        return false;
     }
 
     /**
      * Zeigt alle Benutzer mit bestimmten Rollen an
      *
      */
-    public function show_role_action()
+    public function show_role_action($roleid = NULL)
     {
-        $roleid = Request::int('role');
+        $db = DBManager::get();
+        $roleid = Request::int('role', $roleid);
 
-        //action
-        if (!empty($roleid))
-        {
-            foreach (RolePersistence::getAllRoles() as $rolesel)
-            {
-                if ($roleid == $rolesel->getRoleid())
-                {
+        if (isset($roleid)) {
+            foreach (RolePersistence::getAllRoles() as $rolesel) {
+                if ($roleid == $rolesel->getRoleid()) {
                     $role = $rolesel;
                     break;
                 }
             }
-            //users
-            $users = DBManager::get()->query("SELECT a.user_id AS userid, a.username, a.Vorname, a.Nachname
-                                                FROM roles_user AS u LEFT JOIN auth_user_md5 AS a ON u.userid=a.user_id
-                                                WHERE u.roleid = '".$roleid."' ORDER BY a.Nachname")->fetchAll(PDO::FETCH_ASSOC);
 
-            //plugins
+            $sql = "SELECT * FROM auth_user_md5 JOIN roles_user ON userid = user_id
+                    WHERE roleid = '".$roleid."' ORDER BY Nachname, Vorname";
+
+            $users = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             $plugins = PluginManager::getInstance()->getPluginInfos();
 
-            foreach ($plugins as $id => $plugin)
-            {
+            foreach ($plugins as $id => $plugin) {
                 if (!$this->checkRoleAccess($plugin, $roleid)) {
                     unset($plugins[$id]);
                 }
             }
+
+            $this->users = $users;
+            $this->plugins = $plugins;
+            $this->role = $role;
+            $this->roleid = $roleid;
         }
 
-        //view
-        $this->users = $users;
-        $this->plugins = $plugins;
-        $this->role = $role;
-        $this->roleid = $roleid;
         $this->roles = RolePersistence::getAllRoles();
     }
 }

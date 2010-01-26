@@ -54,8 +54,18 @@ class PluginRepository
     {
         global $SOFTWARE_VERSION;
 
-        if (($metadata = @file_get_contents($url)) === false) {
-            throw new Exception(sprintf(_('Fehler beim Zugriff auf %s'), $url));
+        $cache = StudipCacheFactory::getCache();
+        $cache_key = 'plugin_metadata/'.$url;
+        $metadata = $cache->read($cache_key);
+
+        if ($metadata === false) {
+            $metadata = @file_get_contents($url);
+
+            if ($metadata === false) {
+                throw new Exception(sprintf(_('Fehler beim Zugriff auf %s'), $url));
+            }
+
+            $cache->write($cache_key, $metadata, 3600);
         }
 
         $xml = new SimpleXMLElement($metadata);

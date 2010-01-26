@@ -1,14 +1,14 @@
 <tr>
-  <th style="text-align: left; width: 40%;">
+  <th style="width: 40%;">
     <?= _('Name') ?>
   </th>
-  <th style="text-align: left; width: 35%;">
+  <th style="width: 35%;">
     <?= _('ID') ?>
   </th>
-  <th style="text-align: left; width: 15%;">
+  <th style="width: 15%;">
     <?= _('NutzerInnen') ?>
   </th>
-  <th style="text-align: left; width: 10%;">
+  <th style="width: 10%;">
     <?= _('Aktionen') ?>
   </th>
 </tr>
