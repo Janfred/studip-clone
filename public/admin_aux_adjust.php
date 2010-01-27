@@ -20,8 +20,6 @@
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-define ('CHECKED', ' checked="checked"');
-
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
 $auth->login_if($auth->auth["uid"] == "nobody");
 $perm->check($AUX_RULE_ADMIN_PERM ? $AUX_RULE_ADMIN_PERM : 'admin');
@@ -48,8 +46,6 @@ if ($header_object_id)
 	$CURRENT_PAGE = $header_line." - ".$CURRENT_PAGE;
 
 include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
-
-$sem_id = $SessionSemName[1];
 
 function mainView() {
 	global $zt;
@@ -87,14 +83,20 @@ function mainView() {
 	echo $zt->close();
 }
 
-function ruleView($state = 'change', $id = '') {
-	global $_REQUEST, $zt, $sem_id, $user;
-	if ($state == 'edit') {
-		$rule = AuxLockRules::getLockRuleByID($id);
-		$title = $rule['name']. _("ändern");
+function ruleView($rule_id = false) {
+	global $zt;
+
+	if ($rule_id) {
+		$rule = AuxLockRules::getLockRuleByID($rule_id);
+		$title = sprintf(_("Regel %s ändern"), $rule['name']);
 	} else {
+		$rule = array();
 		$title = _("Neue Regel definieren");
 	}
+
+	if (Request::get('name'))        $rule['name']        = Request::get('name');
+	if (Request::get('description')) $rule['description'] = Request::get('description');
+	if (Request::getArray('fields')) $rule['attributes']  = Request::getArray('fields');
 
 	echo '<form action="'.$PHP_SELF.'" method="post">';
 
@@ -106,22 +108,14 @@ function ruleView($state = 'change', $id = '') {
 	echo $zt->openRow();
 	echo $zt->cell('&nbsp;', array('class' => 'blank'));
 	echo $zt->cell('&nbsp;'. _("Name:"), array('width' => '80%'));
-	if ($state == 'edit') {
-		echo $zt->cell('<input type="text" name="name" value="'.$rule['name'].'">', array('colspan' => '3'));
-	} else {
-		echo $zt->cell('<input type="text" name="name">', array('colspan' => '3'));
-	}
+	echo $zt->cell('<input type="text" name="name" value="'. $rule['name'] .'">', array('colspan' => '3'));
 	echo $zt->cell('&nbsp;', array('class' => 'blank'));
 	echo $zt->closeRow();
 
 	echo $zt->openRow();
 	echo $zt->cell('&nbsp;', array('class' => 'blank'));
 	echo $zt->cell('&nbsp;'. _("Beschreibung:"));
-	if ($state == 'edit') {
-		echo $zt->cell('<textarea name="description" cols="40" rows="4">'.$rule['description'].'</textarea>', array('colspan' => '3'));
-	} else {
-		echo $zt->cell('<textarea name="description" cols="40" rows="4"></textarea>', array('colspan' => '3'));
-	}
+	echo $zt->cell('<textarea name="description" cols="40" rows="4">'. $rule['description'] .'</textarea>', array('colspan' => '3'));
 	echo $zt->cell('&nbsp;', array('class' => 'blank'));
 	echo $zt->closeRow();
 
@@ -149,13 +143,8 @@ function ruleView($state = 'change', $id = '') {
 		echo $zt->cell('&nbsp;'. $name);
 		$checked = '';
 		echo $zt->cell('<input type="text" max="3" size="3" name="order['.$id.']" value="'.(($z = $rule['order'][$id]) ? $z : '0').'">', $center);
-		if ($state == 'edit') {
-			echo $zt->cell('<input type="radio" name="fields['.$id.']" value="0"'.(($rule['attributes'][$id])?'':CHECKED).'>', $center);
-			echo $zt->cell('<input type="radio" name="fields['.$id.']" value="1"'.(($rule['attributes'][$id])?CHECKED:'').'>', $center);
-		} else {
-			echo $zt->cell('<input type="radio" name="fields['.$id.']" value="0"'.CHECKED.'>', $center);
-			echo $zt->cell('<input type="radio" name="fields['.$id.']" value="1">', $center);
-		}
+		echo $zt->cell('<input type="radio" name="fields['.$id.']" value="0"'. (($rule['attributes'][$id]) ? '' : 'checked="checked"') .'>', $center);
+		echo $zt->cell('<input type="radio" name="fields['.$id.']" value="1"'. (($rule['attributes'][$id]) ? 'checked="checked"' : '') .'>', $center);
 		echo $zt->cell('&nbsp;', array('class' => 'blank'));
 		echo $zt->closeRow();
 	}
@@ -180,13 +169,8 @@ function ruleView($state = 'change', $id = '') {
 			echo $zt->cell('&nbsp;'. $entry->getName());
 			$checked = '';
 			echo $zt->cell('<input type="text" max="3" size="3" name="order['.$id.']" value="'.(($z = $rule['order'][$id]) ? $z : '0').'">', $center);
-			if ($state == 'edit') {
-				echo $zt->cell('<input type="radio" name="fields['.$id.']" value="0"'.(($rule['attributes'][$id])?'':CHECKED).'>', $center);
-				echo $zt->cell('<input type="radio" name="fields['.$id.']" value="1"'.(($rule['attributes'][$id])?CHECKED:'').'>', $center);
-			} else {
-				echo $zt->cell('<input type="radio" name="fields['.$id.']" value="0"'.CHECKED.'>', $center);
-				echo $zt->cell('<input type="radio" name="fields['.$id.']" value="1">', $center);
-			}
+			echo $zt->cell('<input type="radio" name="fields['.$id.']" value="0"'.(($rule['attributes'][$id]) ? '' : 'checked="checked"').'>', $center);
+			echo $zt->cell('<input type="radio" name="fields['.$id.']" value="1"'.(($rule['attributes'][$id]) ? 'checked="checked"' : '').'>', $center);
 			echo $zt->cell('&nbsp;', array('class' => 'blank'));
 			echo $zt->closeRow();
 		}
@@ -204,7 +188,7 @@ function ruleView($state = 'change', $id = '') {
 	echo $zt->cell('<br>', array('colspan' => '20', 'class' => 'blank'));
 	echo $zt->close();
 
-	if ($state == 'edit') {
+	if ($rule_id) {
 		echo '<input type="hidden" name="id" value="'.$rule['lock_id'].'">', "\n";
 		echo '<input type="hidden" name="cmd" value="doEdit">', "\n";
 	} else {
@@ -220,9 +204,21 @@ switch ($_REQUEST['cmd']) {
 		break;
 
 	case 'doAdd':
-		AuxLockRules::createLockRule($_REQUEST['name'], $_REQUEST['description'], $_REQUEST['fields'], $_REQUEST['order']);
-		$msg[] = 'msg§'. sprintf(_("Die Regel %s wurde angelegt!"), $_REQUEST['name']);
-		$view = 'main';
+		if (!Request::get('name')) {
+			$msg['error'][] = sprintf(_("Bitte geben sie der Regel einen Namen!"));
+			$view = 'add';
+		} 
+
+		if (!AuxLockRules::checkLockRule(Request::getArray('fields'))) {
+			$msg['error'][] = sprintf(_("Bitte wählen Sie mindestens ein Feld aus der Kategorie \"Zusatzinformationen\" aus!"));
+			$view = 'add';
+		}
+		
+		if (!$view) {
+			AuxLockRules::createLockRule(Request::get('name'), Request::get('description'), Request::getArray('fields'), Request::getArray('order'));
+			$msg['success'][] = sprintf(_("Die Regel %s wurde angelegt!"), $_REQUEST['name']);
+			$view = 'main';
+		}
 		break;
 
 	case 'edit':
@@ -231,16 +227,29 @@ switch ($_REQUEST['cmd']) {
 		break;
 
 	case 'doEdit':
-		AuxLockRules::updateLockRule($_REQUEST['id'], $_REQUEST['name'], $_REQUEST['description'], $_REQUEST['fields'], $_REQUEST['order']);
-		$msg[] = 'msg§'. sprintf(_("Die Regel %s wurde geändert!"), $_REQUEST['name']);
-		$view = 'main';
+		$edit_id = Request::get('id');
+		if (!Request::get('name')) {
+			$msg['error'][] = sprintf(_("Bitte geben sie der Regel einen Namen!"));
+			$view = 'edit';
+		}
+
+		if (!AuxLockRules::checkLockRule(Request::getArray('fields'))) {
+			$msg['error'][] = sprintf(_("Bitte wählen Sie mindestens ein Feld aus der Kategorie \"Zusatzinformationen\" aus!"));
+			$view = 'edit';
+		} 
+		
+ 		if (!$view) {
+			AuxLockRules::updateLockRule(Request::get('id'), Request::get('name'), Request::get('description'), Request::getArray('fields'), Request::getArray('order'));
+			$msg['success'][] = sprintf(_("Die Regel %s wurde geändert!"), $_REQUEST['name']);
+			$view = 'main';
+		}
 		break;
 
 	case 'delete':
 		if (AuxLockRules::deleteLockRule($_REQUEST['id'])) {
-			$msg[] = 'msg§'. _("Die Regel wurde gelöscht!");
+			$msg['success'][] = _("Die Regel wurde gelöscht!");
 		} else {
-			$msg[] = 'error§'. _("Es können nur nicht verwendete Regeln gelöscht werden!");
+			$msg['error'][] = _("Es können nur nicht verwendete Regeln gelöscht werden!");
 		}
 		break;
 
@@ -253,8 +262,10 @@ $containerTable = new ContainerTable();
 echo $containerTable->openRow();
 echo $containerTable->openCell(array("colspan"=>"2"));
 if (is_array($msg)) {
-	foreach ($msg as $message) {
-		parse_msg($message);
+	foreach ($msg as $type => $messages) {
+		foreach ($messages as $message) {
+			echo MessageBox::$type($message);
+		}
 	}
 }
 
@@ -266,11 +277,11 @@ $zt = new ZebraTable(array('width' => '100%'));
 
 switch ($view) {
 	case 'add':
-		ruleView('add');
+		ruleView();
 		break;
 
 	case 'edit':
-		ruleView('edit', $edit_id);
+		ruleView($edit_id);
 		break;
 
 	default:
@@ -280,6 +291,5 @@ switch ($view) {
 
 echo $containerTable->close();
 
-	include 'lib/include/html_end.inc.php';
-	page_close();
-?>
+include 'lib/include/html_end.inc.php';
+page_close();

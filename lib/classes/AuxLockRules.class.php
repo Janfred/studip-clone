@@ -1,5 +1,5 @@
 <?
-# Lifter002: TODO
+# Lifter002: DONE
 # Lifter007: TODO
 # Lifter003: TODO
 /**
@@ -22,74 +22,98 @@
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-class AuxLockRules {
-	function _toArray($db) {
+class AuxLockRules
+{
+
+	static function _toArray($data) 
+	{
 		return array(
-			'lock_id' => $db->f('lock_id'),
-			'name' => $db->f('name'),
-			'description' => $db->f('description'),
-			'attributes' => unserialize($db->f('attributes')),
-			'order' => unserialize($db->f('sorting'))
+			'lock_id' => $data['lock_id'],
+			'name' => $data['name'],
+			'description' => $data['description'],
+			'attributes' => unserialize($data['attributes']),
+			'order' => unserialize($data['sorting'])
 		);
 	}
 
-	function getAllLockRules() {
-		$db = new DB_Seminar("SELECT * FROM aux_lock_rules");
-		while ($db->next_record()) {
-			$data[$db->f('lock_id')] = AuxLockRules::_toArray($db);
+	static function getAllLockRules() 
+	{
+		$ret = array();
+		$db = DBManager::get()->query("SELECT * FROM aux_lock_rules");
+		while ($data = $db->fetch(PDO::FETCH_ASSOC)) {
+			$ret[$data['lock_id']] = AuxLockRules::_toArray($data);
 		}
 
-		return $data;
+		return $ret;
 	}
 
-	function getLockRuleById($id) {
-		$db = new DB_Seminar("SELECT * FROM aux_lock_rules WHERE lock_id = '$id'");
-		$db->next_record();
-		return AuxLockRules::_toArray($db);
+	static function getLockRuleById($id) 
+	{
+		$stmt = DBManager::get()->prepare("SELECT * FROM aux_lock_rules WHERE lock_id = ?");
+		$stmt->execute(array($id));
+		$data = $stmt->fetch(PDO::FETCH_ASSOC);
+		return AuxLockRules::_toArray($data);
 	}
 
-	function getLockRuleBySemId($sem_id) {
-		$db = new DB_Seminar("SELECT aux_lock_rule FROM seminare WHERE Seminar_id = '$sem_id'");
-		if ($db->num_rows()) {
-			$db->next_record();
-			return AuxLockRules::getLockRuleById($db->f('aux_lock_rule'));
+	static function getLockRuleBySemId($sem_id) 
+	{
+		$stmt = DBManager::get()->prepare("SELECT aux_lock_rule FROM seminare WHERE Seminar_id = ?");
+		$stmt->execute(array($sem_id));
+		if ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			return AuxLockRules::getLockRuleById($data['aux_lock_rule']);
 		}
 		return NULL;
 	}
 
-	function createLockRule($name, $description, $fields, $order) {
+	static function createLockRule($name, $description, $fields, $order) 
+	{
 		$id = md5(uniqid(rand()));
 		$attributes = serialize($fields);
 		$sorting = serialize($order);
-		$db = new DB_Seminar();
-		$query = "INSERT INTO aux_lock_rules (lock_id, name, description, attributes, sorting) VALUES ('$id', '$name', '$description', '$attributes', '$sorting')";
-		//echo $query;die;
-		$db->query($query);
+		$stmt = DBManager::get()->prepare('INSERT INTO aux_lock_rules '
+					. '(lock_id, name, description, attributes, sorting) '
+			    . 'VALUES (?, ?, ?, ?, ?)');
+		$stmt->execute(array($id, $name, $description, $attributes, $sorting));
 		return $id;
 	}
 
-	function updateLockRule($id, $name, $description, $fields, $order) {
+	static function updateLockRule($id, $name, $description, $fields, $order) 
+	{
 		$attributes = serialize($fields);
 		$sorting = serialize($order);
-		$db = new DB_Seminar("UPDATE aux_lock_rules SET name = '$name', description = '$description', attributes = '$attributes', sorting = '$sorting' WHERE lock_id = '$id'");
-		return $db->affected_rows();
+		$stmt = DBManager::get()->prepare('UPDATE aux_lock_rules '
+					. 'SET name = ?, description = ?, attributes = ?, sorting = ? '
+					. 'WHERE lock_id = ?');
+		return $stmt->execute(array($name, $description, $attributes, $sorting, $id));
 	}
 
-	function deleteLockRule($id) {
-		$db = new DB_Seminar();
-		$db->query("SELECT COUNT(*) as c FROM seminare WHERE aux_lock_rule = '$id'");
-		$db->next_record();
-		if ($db->f('c') > 0) return FALSE;
-		$db->query("DELETE FROM aux_lock_rules WHERE lock_id = '$id'");
-		return TRUE;
+	static function deleteLockRule($id) 
+	{
+		$stmt = DBManager::get()->prepare('SELECT COUNT(*) as c FROM seminare WHERE aux_lock_rule = ?');
+		$stmt->execute(array($id));
+		if ($stmt->fetchColumn() > 0) return false;
+	
+		$stmt = DBManager::get()->prepare('DELETE FROM aux_lock_rules WHERE lock_id = ?');
+		return $stmt->execute(array($id));
 	}
 
-	function getSemFields() {
+	static function getSemFields() 
+	{
 		return array(
 			'vasemester' => 'Semester',
 			'vanr' => 'Veranstaltungsnummer',
 			'vatitle' => 'Veranstaltungstitel',
 			'vadozent' => 'Dozent'
 		);
+	}
+
+	static function checkLockRule($fields)
+	{
+		$entries = DataFieldStructure::getDataFieldStructures('usersemdata');
+		foreach ($entries as $id => $entry) {
+			if ($fields[$id] == 1) return true;
+		}
+
+		return false;
 	}
 }
