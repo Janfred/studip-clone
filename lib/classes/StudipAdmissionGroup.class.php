@@ -185,8 +185,8 @@ class StudipAdmissionGroup extends SimpleORMap {
 		$ret = array();
 		$db = DBManager::get();
 		foreach($this->getMemberIds() as $seminar_id){
-			$db->query("SELECT studiengang_id FROM admission_seminar_studiengang WHERE seminar_id = '$seminar_id' LIMIT 1");
-			if(!$db->fetchColumn()){
+			$rs = $db->query("SELECT studiengang_id FROM admission_seminar_studiengang WHERE seminar_id = '$seminar_id' LIMIT 1");
+			if(!$rs->fetchColumn()){
 				$affected_rows = $db->exec("INSERT INTO admission_seminar_studiengang (studiengang_id,quota,seminar_id) VALUES('all', '100', '$seminar_id')");
 				if($affected_rows) $ret[] = $seminar_id;
 			}
