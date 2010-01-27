@@ -516,11 +516,15 @@ class Course_StudygroupController extends AuthenticatedController {
 						// search for the user
 						$pdo = DBManager::get();
 						$search_for_member = $pdo->quote('%'. $search_for_member .'%');
-						$stmt = $pdo->query("SELECT user_id, {$GLOBALS['_fullname_sql']['full_rev']} as fullname, username, perms FROM auth_user_md5 
-							LEFT JOIN user_info USING (user_id)
-							WHERE username LIKE $search_for_member OR Vorname LIKE $search_for_member
-								OR Nachname LIKE $search_for_member
-							LIMIT 500");
+						$stmt = $pdo->query("SELECT user_id, {$GLOBALS['_fullname_sql']['full_rev']} as fullname, username, perms " .
+								"FROM auth_user_md5 " .
+								"LEFT JOIN user_info USING (user_id) " .
+								"WHERE " .
+								"perms  NOT IN ('root', 'admin') " .
+								"AND visible = 'yes' " .
+								"AND username LIKE $search_for_member OR Vorname LIKE $search_for_member " .
+								"OR Nachname LIKE $search_for_member " .
+								"LIMIT 500");
 						while ($data = $stmt->fetch()) {
 							$results_members[$data['user_id']] = array( 
 								'fullname' => $data['fullname'],

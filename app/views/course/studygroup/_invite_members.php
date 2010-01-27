@@ -7,7 +7,11 @@
 				<?= sizeof($results_choose_members) == 1 ? _("NutzerIn gefunden:") : _("NutzerInnen gefunden:") ?><br>
 				<select name="choose_member">
 					<? foreach ($results_choose_members as $user_id => $data) : ?>
-						<option value="<?= $data['username'] ?>" style="width:300px"><?= htmlReady(my_substr($data['fullname'],0,80)) ?></option>
+						<option value="<?= $data['username'] ?>" style="width:300px;
+								background: url(<?= Avatar::getAvatar($data['user_id'])->getURL(Avatar::SMALL)?>) 
+								no-repeat left center; padding-left: 25px;height:25px">
+								<?= htmlReady(my_substr($data['fullname'],0,40))." (".$data['username'] ?>)
+						</option>
 					<? endforeach; ?>
 				</select>
 				<input type="image" name="new_search" src="<?= Assets::image_path('rewind.gif') ?>" title="<?= _("neue Suche starten") ?>">
