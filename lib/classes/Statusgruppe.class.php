@@ -1,7 +1,7 @@
 <?php
 # Lifter002: TODO
 # Lifter007: TODO
-# Lifter003: TODO
+# Lifter003: TEST
 /*
 Statusgruppe.class.php - Statusgruppen-Klasse
 Copyright (C) 2008 Till Glöggler <tgloeggl@uos.de>
