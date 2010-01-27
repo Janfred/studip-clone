@@ -33,7 +33,7 @@
 							<select name="vather">
 								<option value="nochange"> -- <?= _("Keine Änderung") ?> -- </option>
 								<option value="root"> -- <?= _("Hauptebene") ?> -- </option>
-						 		<? Statusgruppe::displayOptionsForRoles($all_roles); ?>
+						 		<? Statusgruppe::displayOptionsForRoles($all_roles, $role->getId()); ?>
 							</select>
 						</font>
 					</td>

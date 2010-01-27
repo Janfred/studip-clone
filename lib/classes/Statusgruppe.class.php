@@ -321,12 +321,14 @@ class Statusgruppe {
 	 * * * S T A T I C   M E T H O D S * * *
 	 * * * * * * * * * * * * * * * * * * * */
 
-	static function displayOptionsForRoles($roles, $level = 0) {
+	static function displayOptionsForRoles($roles, $ommit_role = false, $level = 0) {
 		foreach ($roles as $role_id => $role) {
-			echo '<option value="'. $role_id .'">';
-			for ($i = 1; $i <= $level; $i++) echo '&nbsp;&nbsp;&nbsp;';
-			echo substr($role['role']->getName(), 0, 70).'</option>';
-			if ($role['child']) Statusgruppe::displayOptionsForRoles($role['child'], $level+1);
+			if ($ommit_role != $role_id) {
+				echo '<option value="'. $role_id .'">';
+				for ($i = 1; $i <= $level; $i++) echo '&nbsp; &nbsp;';
+				echo substr($role['role']->getName(), 0, 70).'</option>';
+			}
+			if ($role['child']) Statusgruppe::displayOptionsForRoles($role['child'], $ommit_role, $level+1);
 		}
 	}
 	 
