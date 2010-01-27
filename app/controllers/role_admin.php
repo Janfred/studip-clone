@@ -45,7 +45,7 @@ class RoleAdminController extends AuthenticatedController
      * @param string $searchtxt
      * @return array of StudIPUser
      */
-    private function searchUser($searchtxt)
+    private function search_user($searchtxt)
     {
         $searchtxt = "%" . $searchtxt . "%";
         $stmt = DBManager::get()->prepare(
@@ -65,27 +65,33 @@ class RoleAdminController extends AuthenticatedController
     }
 
     /**
+     * Get role statistics
+     */
+    private function get_role_stats($roles)
+    {
+        $db = DBManager::get();
+
+        foreach ($roles as $role) {
+            $roleid = $role->getRoleid();
+
+            $sql = "SELECT COUNT(*) FROM roles_user WHERE roleid = $roleid AND userid != 'nobody'";
+            $stats[$roleid]['users'] = $db->query($sql)->fetchColumn();
+
+            $sql = "SELECT COUNT(*) FROM roles_plugins WHERE roleid = $roleid";
+            $stats[$roleid]['plugins'] = $db->query($sql)->fetchColumn();
+        }
+
+        return $stats;
+    }
+
+    /**
      * Startfunktion
      *
      */
     public function index_action()
     {
-        $db = DBManager::get();
-        $roles = RolePersistence::getAllRoles();
-
-        foreach ($roles as $role) {
-            $roleid = $role->getRoleid();
-
-            $sql = "SELECT COUNT(*) FROM roles_user WHERE roleid = $roleid";
-            $users[$roleid] = $db->query($sql)->fetchColumn();
-
-            $sql = "SELECT COUNT(*) FROM roles_plugins WHERE roleid = $roleid";
-            $plugins[$roleid] = $db->query($sql)->fetchColumn();
-        }
-
-        $this->roles = $roles;
-        $this->users = $users;
-        $this->plugins = $plugins;
+        $this->roles = RolePersistence::getAllRoles();
+        $this->stats = $this->get_role_stats($this->roles);
     }
 
     /**
@@ -152,12 +158,24 @@ class RoleAdminController extends AuthenticatedController
      * Löscht Rollen aus der Datenbank
      *
      */
-    public function remove_role_action()
+    public function ask_remove_role_action($roleid)
+    {
+        $this->delete_role = $roleid;
+        $this->roles = RolePersistence::getAllRoles();
+        $this->stats = $this->get_role_stats($this->roles);
+
+        $this->render_action('index');
+    }
+
+    /**
+     * Löscht Rollen aus der Datenbank
+     *
+     */
+    public function remove_role_action($roleid)
     {
         $this->check_ticket();
 
         $roles = RolePersistence::getAllRoles();
-        $roleid = key(Request::intArray('delete'));
         RolePersistence::deleteRole($roles[$roleid]);
 
         $this->flash['success'] = _('Die Rolle und alle dazugehörigen Zuweisungen wurden gelöscht.');
@@ -177,7 +195,7 @@ class RoleAdminController extends AuthenticatedController
             if ($username == '') {
                 $this->error = _('Es wurde kein Suchwort eingegeben.');
             } else {
-                $users = $this->searchUser($username);
+                $users = $this->search_user($username);
 
                 if (empty($users)) {
                     $this->error = _('Es wurde kein Benutzer gefunden.');
@@ -238,7 +256,7 @@ class RoleAdminController extends AuthenticatedController
      * @param $plugin   plugin meta data
      * @param $role_id  role id of role
      */
-    private function checkRoleAccess($plugin, $role_id)
+    private function check_role_access($plugin, $role_id)
     {
         $plugin_roles = RolePersistence::getAssignedPluginRoles($plugin['id']);
 
@@ -275,7 +293,7 @@ class RoleAdminController extends AuthenticatedController
             $plugins = PluginManager::getInstance()->getPluginInfos();
 
             foreach ($plugins as $id => $plugin) {
-                if (!$this->checkRoleAccess($plugin, $roleid)) {
+                if (!$this->check_role_access($plugin, $roleid)) {
                     unset($plugins[$id]);
                 }
             }

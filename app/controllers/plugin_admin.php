@@ -163,8 +163,8 @@ class PluginAdminController extends AuthenticatedController
 
         $this->plugins       = $plugin_manager->getPluginInfos();
         $this->plugin_types  = $this->plugin_admin->getPluginTypes();
-        $this->delete_plugin = $this->plugins[$plugin_id];
         $this->update_info   = $this->plugin_admin->getUpdateInfo($this->plugins);
+        $this->delete_plugin = $this->plugins[$plugin_id];
 
         $this->render_action('index');
     }
