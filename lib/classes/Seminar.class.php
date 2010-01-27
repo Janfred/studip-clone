@@ -1049,7 +1049,7 @@ class Seminar {
 		// logging >>>>>>
 		if($new_id){
 			$cycle_info = $this->metadate->cycles[$new_id]->toString();
-			log_event("SEM_ADD_CYCLE", $this->getId(), $cycle_info, '<pre>'.print_r($data,true).'</pre>');
+			log_event("SEM_ADD_CYCLE", $this->getId(), NULL, $cycle_info, '<pre>'.print_r($data,true).'</pre>');
 		}
 		// logging <<<<<<
 		return $new_id;
@@ -1112,10 +1112,11 @@ class Seminar {
 		}
 
 		if ($do_changes) {
+			$change_from = $cycle->toString();
 			if ($this->metadate->editCycle($data)) {
 				if (!$same_time) {
 					// logging >>>>>>
-					log_event("SEM_CHANGE_TURNUS", $this->getId(), $cycle->toString());
+					log_event("SEM_CHANGE_CYCLE", $this->getId(), NULL, $change_from .' -> '. $cycle->toString());
 					// logging <<<<<<
 					$this->createMessage(sprintf(_("Die regelmäßige Veranstaltungszeit wurde auf \"%s\" für alle in der Zukunft liegenden Termine geändert!"), '<b>'.$cycle->toString().'</b>'));
 					$message = true;
@@ -1137,7 +1138,7 @@ class Seminar {
 	function deleteCycle($cycle_id) {
 		// logging >>>>>>
 		$cycle_info = $this->metadate->cycles[$cycle_id]->toString();
-		log_event("SEM_DELETE_CYCLE", $this->getId(), $cycle_info);
+		log_event("SEM_DELETE_CYCLE", $this->getId(), NULL, $cycle_info);
 		// logging <<<<<<
 		return $this->metadate->deleteCycle($cycle_id);
 	}
