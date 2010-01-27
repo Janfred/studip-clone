@@ -15,6 +15,7 @@ require_once 'lib/classes/Modules.class.php';
 require_once 'lib/classes/StudygroupAvatar.class.php';
 require_once 'app/models/studygroup.php';
 require_once 'lib/messaging.inc.php';
+require_once 'lib/user_visible.inc.php';
 
 // classes required for global-module-settings 
 require_once('lib/classes/AdminModules.class.php');
@@ -521,10 +522,10 @@ class Course_StudygroupController extends AuthenticatedController {
 								"LEFT JOIN user_info USING (user_id) " .
 								"WHERE " .
 								"perms  NOT IN ('root', 'admin') " .
-								"AND visible = 'yes' " .
+								"AND " . get_vis_query() ." ".
 								"AND username LIKE $search_for_member OR Vorname LIKE $search_for_member " .
 								"OR Nachname LIKE $search_for_member " .
-								"LIMIT 500");
+								" LIMIT 500");
 						while ($data = $stmt->fetch()) {
 							$results_members[$data['user_id']] = array( 
 								'fullname' => $data['fullname'],
