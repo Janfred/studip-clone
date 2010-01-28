@@ -621,17 +621,29 @@ class Course_StudygroupController extends AuthenticatedController {
 		// Nutzungsbedingungen
 		$terms = Config::GetInstance()->getValue('STUDYGROUP_TERMS');
 
+		if ($this->flash['institute']) $default_inst = $this->flash['institute'];
+		if ($this->flash['modules']) {
+			foreach ($this->flash['modules'] as $module => $status) {
+				$enabled[$module] = ($status == 'on') ? true : false;
+			}
+		}
+		if ($this->flash['terms']) $terms = $this->flash['terms'];
+
 		$GLOBALS['CURRENT_PAGE'] = _('Verwaltung studentischer Arbeitsgruppen');
 		Navigation::activateItem('/admin/config/studygroup');
 
+		$db = DBManager::get()->query("SELECT COUNT(*) as c FROM seminare 
+			WHERE status IN ('". implode("', '", studygroup_sem_types()) ."')");
+
 		// set variables for view
-		$this->current_page = _("Verwaltung erlaubter Module und Plugins für Studiengruppen");
-		$this->configured   = count(studygroup_sem_types()) > 0;
-		$this->modules      = $modules;
-		$this->enabled      = $enabled;
-		$this->institutes   = $institutes;
-		$this->default_inst = $default_inst;
-		$this->terms        = $terms;
+		$this->can_deactivate = ($db->fetchColumn() != 0) ? false : true;
+		$this->current_page   = _("Verwaltung erlaubter Module und Plugins für Studiengruppen");
+		$this->configured     = count(studygroup_sem_types()) > 0;
+		$this->modules        = $modules;
+		$this->enabled        = $enabled;
+		$this->institutes     = $institutes;
+		$this->default_inst   = $default_inst;
+		$this->terms          = $terms;
 	}
 	
 	/**
@@ -643,15 +655,29 @@ class Course_StudygroupController extends AuthenticatedController {
 		$perm->check("root");
 		$GLOBALS['HELP_KEYWORD'] = 'Admin.Studiengruppen';
 		
-		$err=0;
-		if (Request::quoted('institute')=='invalid') $err=1;
-		if (Request::quoted('terms')=='invalid') $err=1;
-		foreach ($_REQUEST['modules'] as $key => $value) 
-			if ($value=='invalid') $err=1;
+		foreach (Request::getArray('modules') as $key => $value) {
+			if ($value=='invalid') { 
+				$errors[] = _("Sie müssen sich bei jedem Module entscheiden, ob es zur Verfügung stehen soll oder nicht!");
+				break;
+			}
+		}
+
+		if (Request::quoted('institute') == 'invalid') {
+			$errors[] = _("Bitte wählen Sie eine Einrichtung aus, der die Studiengruppen zugeordnet werden sollen!");
+		}
 		
-		if ($err) {
-			$this->flash['error'] = _("Fehler beim Speichern der Einstellung!");
-		} else {				
+		if (!Request::quoted('terms') || Request::quoted('terms') == 'invalid') {
+			$errors[] = _("Bitte tragen Sie Nutzungsbedingungen ein!");
+		}
+
+		if ($errors) {
+			$this->flash['messages'] = array('error' => array('title' => 'Die Studiengruppen konnten nicht aktiviert werden!', 'details' =>  $errors));
+			$this->flash['institute'] = Request::get('institute');
+			$this->flash['modules']   = Request::getArray('modules');
+			$this->flash['terms']     = Request::get('terms');
+		}
+
+		if (!$errors) {				
 			$cfg=new Config("STUDYGROUPS_ENABLE");
 			if ($cfg->getValue()==FALSE && count(studygroup_sem_types()) > 0) {
 				$cfg->setValue(TRUE,"STUDYGROUPS_ENABLE","Studiengruppen");
