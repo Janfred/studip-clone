@@ -258,12 +258,12 @@ class AdminNewsController {
 		} else {
 			$date_offset = 1;
 		}
-		echo "\n<tr><td class=\"blank\" colspan=\"2\">" . _("Einstelldatum:") . " <select name=\"date\"><option value=\"".$news_date."\" selected>".strftime("%d.%m.%y", $news_date)."</option>";
+		echo "\n<tr><td class=\"blank\" colspan=\"2\">" . _("Einstelldatum:") . " <select id=\"starttime\" name=\"date\"><option value=\"".$news_date."\" selected>".strftime("%d.%m.%y", $news_date)."</option>";
 		for ($i = $date_offset; $i <= $date_offset+13; ++$i) {
 			$temp = mktime(0,0,0,strftime("%m",$aktuell),strftime("%d",$aktuell) + $i,strftime("%y",$aktuell));
 			echo "\n<option value=\"".$temp."\">".strftime("%d.%m.%y",$temp)."</option>";
 		}
-		echo "</select>&nbsp;&nbsp;&nbsp;" . _("G&uuml;ltigkeitsdauer:") . " <select name=\"expire\">";
+		echo "</select>&nbsp;&nbsp;&nbsp;" . _("G&uuml;ltigkeitsdauer:") . " <select id=\"expire\" name=\"expire\">";
 		if ($this->news_query["news_id"] != "new_entry"){
 			if ($date_offset){
 				$this->news_query["expire"] = ($this->news_query['date'] + $this->news_query["expire"]) - $news_date;
@@ -278,13 +278,28 @@ class AdminNewsController {
 		for ($i = 2; $i <= 24; $i += 2) {
 			$temp = mktime(23,59,59,strftime("%m",$news_date),strftime("%d",$news_date) + ($i * 7),strftime("%y",$news_date)) - $news_date;
 			echo "\n<option value=\"" . $temp . "\" ";
-			if ($this->news_query["expire"] == $temp)
+			if ($this->news_query["expire"] == $temp) {
 				echo"selected";
+			}
 			echo ">";
-			printf(_("%s Wochen (%s)"),$i ,strftime("%d.%m.%y",($temp + $news_date)));
+			printf(_("%s Wochen"),$i);
 			echo "</option>";
 		}
 		echo "</select></td></tr>";
+?>
+<script type="text/javascript">
+STUDIP.update_news_endtime = function() {
+	  var chosenoption = $('starttime').options[$('starttime').selectedIndex];
+	  for (i=1; i<13; i++) {
+		// chosenoption.value (in seconds) to milliseconds + 2 weeks interval * 2 * i
+		date = new Date(chosenoption.value * 1000 + 24 * 60 * 60 * 14 * 1000 * i);
+		$('expire').options[i].innerHTML = (i*2 + " Wochen (" + date.getDate() + "." + (date.getMonth()+1) + "." + date.getFullYear() +")");
+	  }
+}
+Event.observe('starttime', 'change', STUDIP.update_news_endtime);
+STUDIP.update_news_endtime();
+</script>
+<?
 		echo "<tr><td class=\"blank\">"._("Kommentare zulassen")."&nbsp;<input name=\"allow_comments\" value=\"1\" type=\"checkbox\" style=\"vertical-align:middle\"";
 		if ($this->news_query["allow_comments"]) print " checked";
 		echo "></td></tr>";
