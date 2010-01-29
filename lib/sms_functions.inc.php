@@ -266,7 +266,7 @@ function print_snd_message($psm) {
 	else
 		$attachment_icon = "";
 
-	$titel = "<a name=".$psm['message_id']."><a href=\"$link\" class=\"tree\" >".htmlready($psm['message_subject']).$attachment_icon."</a></a>";
+	$titel = "<a name=".$psm['message_id']."><a href=\"$link\" onclick=\"new Ajax.Request('dispatch.php/messages/get_msg_body/".$psm['message_id']."/".($open == 'open'? '0' : '1')."/".$psm['count']."', {asynchronous:true, evalScripts:false});return false;\" class=\"tree\" >".htmlready($psm['message_subject']).$attachment_icon."</a></a>";
 	$message_hovericon['titel'] = $psm['message_subject'];
 	// (hover) icon
 	$message_hovericon['openclose'] = $open;
@@ -284,7 +284,7 @@ function print_snd_message($psm) {
 		$tmp_line2 = "forumstrich.gif";
 	}
 	echo "<td class=\"blank\"><img src=\"".$GLOBALS['ASSETS_URL']."images/".$tmp_line1."\"></td>";
-	printhead(0, 0, $link, $open, FALSE, $icon, $titel, $zusatz, $psm['mkdate']);
+	printhead(0, 0, $link."\" onclick=\"new Ajax.Request('dispatch.php/messages/get_msg_body/".$psm['message_id']."/".($open == 'open'? '0' : '1')."/".$psm['count']."', {asynchronous:true, evalScripts:false});return false;", $open, FALSE, $icon, $titel, $zusatz, $psm['mkdate']);
 	echo "</tr></table>	";
 	// print content
 	if (($open == "open") || ($psm['sms_data_open'] == $psm['message_id'])) {
@@ -355,7 +355,7 @@ function print_rec_message($prm) {
 	else
 		$attachment_icon = "";
 
-	$titel = "<a name=".$prm['message_id']."><a href=\"$link\" class=\"tree\" >".htmlready($prm['message_subject']).$attachment_icon."</a></a>";
+	$titel = "<a name=".$prm['message_id']."><a href=\"$link\" class=\"tree\" onclick=\"new Ajax.Request('dispatch.php/messages/get_msg_body/".$prm['message_id']."/".($open == 'open'? '0' : '1')."/".$prm['count']."', {asynchronous:true, evalScripts:false});return false;\">".htmlready($prm['message_subject']).$attachment_icon."</a></a>";
 
 	if ($open == 'open'){
 		$content = formatReady($prm['message']);
@@ -432,9 +432,9 @@ function print_rec_message($prm) {
 
 	// if messages with priority are enabled, we pass a steelred css-class
 	if ($GLOBALS['MESSAGE_PRIORITY'] && ($prm['priority'] == 'high')) {
-		printhead(0, 0, $link, $open, $red, $icon, $titel, $zusatz, $prm['mkdate'],TRUE,'','age', 'steelred');
+		printhead(0, 0, $link."\" onclick=\"new Ajax.Request('dispatch.php/messages/get_msg_body/".$prm['message_id']."/".($open == 'open'? '0' : '1')."/".$prm['count']."', {asynchronous:true, evalScripts:false});return false;", $open, $red, $icon, $titel, $zusatz, $prm['mkdate'], '', 'age', 'steelred');
 	} else {
-		printhead(0, 0, $link, $open, $red, $icon, $titel, $zusatz, $prm['mkdate']);
+		printhead(0, 0, $link."\" onclick=\"new Ajax.Request('dispatch.php/messages/get_msg_body/".$prm['message_id']."/".($open == 'open'? '0' : '1')."/".$prm['count']."', {asynchronous:true, evalScripts:false});return false;", $open, $red, $icon, $titel, $zusatz, $prm['mkdate'], TRUE, "");
 	}
 	echo "</tr></table>	";
 	// print message content
@@ -483,7 +483,9 @@ function print_messages() {
 			$prm['priority'] = $db->f("priority");
 			$prm['num_attachments'] = $db->f("num_attachments");
 			ob_start();
+			echo '<div id="msg_item_'.$prm['message_id'].'">' ;
 			print_rec_message($prm);
+			echo '</div>';
 			ob_end_flush();
 		}
 	} else if ($sms_data['view'] == "out") { // postbox out
@@ -517,7 +519,9 @@ function print_messages() {
 			$psm['num_rec'] = $db->f("num_rec");
 			$psm['num_attachments'] = $db->f("num_attachments");
 			ob_start();
+			echo '<div id="msg_item_'.$psm['message_id'].'">' ;
 			print_snd_message($psm);
+			echo '</div>';
 			ob_end_flush();
 		}
 	}
@@ -527,6 +531,91 @@ function print_messages() {
 		parse_msg ($srch_result, "§", "steel1", 2, FALSE);
 		echo "</td></tr></table>";
 	}
+}
+
+function ajax_show_body($mid)	{
+	global  $my_messaging_settings, $user, $n, $count, $PHP_SELF, $sms_data, $query_time, $query_movetofolder,$sms_show, $query_time_sort, $_fullname_sql, $srch_result, $no_message_text, $count_timefilter;
+	
+	
+	$db = DBManager::get();
+	if ($query_time) $count = $count_timefilter;
+	$n = 0;
+	$user_id = $user->id;
+	
+	if ($sms_data['view'] == 'in')
+		{
+			$query = "SELECT message.*, folder,confirmed_read,answered,message_user.readed,dont_delete,Vorname,Nachname,username,count(dokument_id) as num_attachments FROM message_user
+					LEFT JOIN message USING (message_id) LEFT JOIN auth_user_md5 ON (autor_id=auth_user_md5.user_id)
+					LEFT JOIN dokumente ON range_id=message_user.message_id
+					WHERE message_user.user_id = '".$user_id."' AND message_user.snd_rec = 'rec'
+					AND message_user.deleted = 0 
+					AND message.message_id = '".$mid."' GROUP BY message_user.message_id";
+			$res = $db->query($query);
+			$tmp_move_to_folder = sizeof($sms_data['tmp']['move_to_folder']);
+			$row = $res->fetch();
+		
+			$prm['folder'] = $my_messaging_settings['folder']['active']['in'];
+			$prm['answered'] = $row["answered"];
+			$prm['vorname'] = $row["Vorname"];
+			$prm['nachname'] = $row["Nachname"];
+			$prm['readed'] = $row["readed"];
+			$prm['dont_delete'] = $row["dont_delete"];
+			$prm['priority'] = $row["priority"];
+			$prm['num_attachments'] = $row["num_attachments"];
+			$prm['count_2'] = $tmp_move_to_folder - ($n+1);
+			$prm['count'] = (int)$count;
+			$prm['message_id'] = $row["message_id"];
+			$prm['message'] = $row["message"];
+			$prm['message_reading_confirmation'] = $row["reading_confirmation"];
+			$prm['confirmed_read'] = $row["confirmed_read"];
+			$prm['uname_snd'] = $row["username"];
+			$prm['message_subject'] = $row["subject"];
+			$prm['mkdate'] = $row["mkdate"];
+			$prm['user_id_snd'] = $row["autor_id"];
+	
+			ob_start();
+			print_rec_message($prm, $f_open);
+			return ob_get_clean();
+		
+		}
+		elseif ($sms_data['view'] == "out") 
+		{
+			$query = "SELECT message. * , message_user.folder,message_user.dont_delete , auth_user_md5.user_id AS rec_uid,
+					auth_user_md5.vorname AS rec_vorname, auth_user_md5.nachname AS rec_nachname,
+					auth_user_md5.username AS rec_uname, count( mu.message_id )  AS num_rec,
+					count(dokument_id) as num_attachments
+					FROM message_user
+					LEFT  JOIN message_user AS mu ON ( message_user.message_id = mu.message_id AND mu.snd_rec =  'rec'  )
+					LEFT  JOIN message ON ( message.message_id = message_user.message_id )
+					LEFT  JOIN auth_user_md5 ON ( mu.user_id = auth_user_md5.user_id )
+					LEFT JOIN dokumente ON range_id=message_user.message_id
+					WHERE message_user.user_id = '".$user_id."'
+					AND message_user.snd_rec = 'snd' AND message_user.deleted = 0 
+					AND message.message_id = '".$mid."'
+					GROUP BY (message_user.message_id)";
+		$res = $db->query($query);
+
+		$tmp_move_to_folder = sizeof($sms_data['tmp']['move_to_folder']);
+		$row = $res->fetch();
+		$psm['count'] = $count;
+		$psm['count_2'] = $tmp_move_to_folder - ($n+1);
+		$psm['mkdate'] = $row["mkdate"];
+		$psm['folder'] = $my_messaging_settings['folder']['active']['out'];
+		$psm['message_id'] = $row["message_id"];
+		$psm['message_subject'] = $row["subject"];
+		$psm['message'] = $row["message"];
+		$psm['dont_delete'] = $row["dont_delete"];
+		$psm['rec_uid'] = $row["rec_uid"];
+		$psm['rec_vorname'] = $row["rec_vorname"];
+		$psm['rec_nachname'] = $row["rec_nachname"];
+		$psm['rec_uname'] = $row["rec_uname"];
+		$psm['num_rec'] = $row["num_rec"];
+		$psm['num_attachments'] = $row["num_attachments"];
+		
+		ob_start();
+		print_snd_message($psm, $f_open);
+		return ob_get_clean();
+		}
 }
 
 function show_nachrichtencount($count, $count_timefilter) {
