@@ -103,7 +103,7 @@ STUDIP.Forum.rate_template = new Template(
 ');
 </script>
 <?php 
-$_include_additional_header = ob_get_clean();
+$_include_additional_header .= ob_get_clean();
 
 // Start of Output
 	include ('lib/include/html_head.inc.php'); // Output of html head
