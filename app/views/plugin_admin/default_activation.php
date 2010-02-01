@@ -14,7 +14,7 @@
     <input type="hidden" name="ticket" value="<?= get_ticket() ?>">
     <select name="selected_inst[]" multiple size="20">
         <? foreach ($institutes as $id => $institute): ?>
-            <option value="<?= $id ?>" <?= in_array($id, $selected_inst) ? 'selected' : '' ?>>
+            <option style="font-weight: bold;" value="<?= $id ?>" <?= in_array($id, $selected_inst) ? 'selected' : '' ?>>
                 <?= htmlReady($institute['name']) ?>
             </option>
 
@@ -27,12 +27,6 @@
             <? endif ?>
         <? endforeach ?>
     </select>
-    <p>
-        <label>
-            <input type="checkbox" name="nodefault" value="1">
-            <?= _('keine Einrichtungen wählen') ?>
-        </label>
-    </p>
     <p>
         <?= makeButton('uebernehmen', 'input', _('Einstellungen speichern'), 'save') ?>
         &nbsp;
@@ -49,10 +43,7 @@ $infobox_content = array(
         'eintrag'   => array(
             array(
                 'icon' => 'ausruf_small.gif',
-                'text' => _('Wählen Sie die Einrichtungen, in deren Veranstaltungen das Plugin standardmäßig eingeschaltet werden soll.')
-            ), array(
-                'icon' => 'ausruf_small.gif',
-                'text' => _('Eine Mehrfachauswahl ist durch Drücken der Strg-Taste möglich.')
+                'text' => _('Eine Mehrfachauswahl in der Liste der Einrichtungen ist durch Drücken der Strg-Taste möglich.')
             )
         )
     )

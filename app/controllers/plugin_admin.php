@@ -278,22 +278,22 @@ class PluginAdminController extends AuthenticatedController
      */
     public function save_default_activation_action($plugin_id) {
         $plugin_manager = PluginManager::getInstance();
+        $selected_inst = Request::optionArray('selected_inst');
 
         $this->check_ticket();
 
-        if (Request::get('nodefault')) {
-            $selected_inst = array();
-            $this->flash['message'] = _('Die Voreinstellungen wurden gelöscht.');
+        // save selected institutes
+        $plugin_manager->setDefaultActivations($plugin_id, $selected_inst);
+
+        if (count($selected_inst) == 0) {
+            $this->flash['message'] = _('Die Default-Aktivierung wurde ausgeschaltet.');
         } else {
-            $selected_inst = Request::optionArray('selected_inst');
             $this->flash['message'] = ngettext(
                 'Für die ausgewählte Einrichtung wurde das Plugin standardmäßig aktiviert.',
                 'Für die ausgewählten Einrichtungen wurde das Plugin standardmäßig aktiviert.',
                 count($selected_inst));
         }
 
-        // save selected institutes
-        $plugin_manager->setDefaultActivations($plugin_id, $selected_inst);
         $this->redirect('plugin_admin/default_activation/'.$plugin_id);
     }
 }
