@@ -288,16 +288,17 @@ class AdminNewsController {
 		echo "</select></td></tr>";
 ?>
 <script type="text/javascript">
-STUDIP.update_news_endtime = function() {
-	  var chosenoption = $('starttime').options[$('starttime').selectedIndex];
-	  for (i=1; i<13; i++) {
-		// chosenoption.value (in seconds) to milliseconds + 2 weeks interval * 2 * i
-		date = new Date(chosenoption.value * 1000 + 24 * 60 * 60 * 14 * 1000 * i);
-		$('expire').options[i].innerHTML = (i*2 + " Wochen (" + date.getDate() + "." + (date.getMonth()+1) + "." + date.getFullYear() +")");
-	  }
-}
-Event.observe('starttime', 'change', STUDIP.update_news_endtime);
-STUDIP.update_news_endtime();
+(function () {
+	var update_news_endtime = function () {
+		  for (var i = 1; i < 13; i++) {
+			// chosenoption (in seconds) to milliseconds + 2 weeks interval * 2 * i
+			date = new Date($F('starttime') * 1000 + 24 * 60 * 60 * 14 * 1000 * i);
+			$('expire').options[i].innerHTML = (i*2 + " " + "<?= _("Wochen") ?>" + " (" + date.getDate() + "." + (date.getMonth()+1) + "." + date.getFullYear() +")");
+		  }
+	}
+	$('starttime').observe('change', update_news_endtime);
+	update_news_endtime();
+})();
 </script>
 <?
 		echo "<tr><td class=\"blank\">"._("Kommentare zulassen")."&nbsp;<input name=\"allow_comments\" value=\"1\" type=\"checkbox\" style=\"vertical-align:middle\"";
