@@ -141,7 +141,8 @@ class PluginRepository
         $result = array();
 
         foreach ($this->plugins as $name => $data) {
-            if (is_null($search) || is_int(stripos($name, $search)) ||
+            if ($search === NULL || $search === '' ||
+                is_int(stripos($name, $search)) ||
                 is_int(stripos($data['description'], $search))) {
                 $result[$name] = $data;
             }

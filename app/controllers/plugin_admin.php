@@ -44,6 +44,17 @@ class PluginAdminController extends AuthenticatedController
 
     }
 
+    private function get_update_info($plugins)
+    {
+        try {
+            return $this->plugin_admin->getUpdateInfo($plugins);
+        } catch (Exception $ex) {
+            $this->error = _('Informationen über Plugin-Updates sind nicht verfügbar.');
+            $this->error_detail = array($ex->getMessage());
+            return array();
+        }
+    }
+
     /**
      * Shows the plugins view and display all available plugin updates.
      */
@@ -55,8 +66,8 @@ class PluginAdminController extends AuthenticatedController
 
         $this->plugins       = $plugin_manager->getPluginInfos($type);
         $this->plugin_types  = $this->plugin_admin->getPluginTypes();
+        $this->update_info   = $this->get_update_info($this->plugins);
         $this->plugin_filter = $plugin_filter;
-        $this->update_info   = $this->plugin_admin->getUpdateInfo($this->plugins);
 
         foreach ($this->update_info as $id => $info) {
             if (isset($info['update']) && !$this->plugins[$id]['depends']) {
@@ -99,16 +110,16 @@ class PluginAdminController extends AuthenticatedController
 
     public function search_action()
     {
-        $repository = new PluginRepository();
         $search = Request::get('search');
 
-        // reset search if empty
-        if ($search === '') {
-            $search = NULL;
+        try {
+            // search for plugins in all repositories
+            $repository = new PluginRepository();
+            $search_results = $repository->getPlugins($search);
+        } catch (Exception $ex) {
+            $search_results = array();
         }
 
-        // search for plugins in all repositories
-        $search_results = $repository->getPlugins($search);
         $plugins = PluginManager::getInstance()->getPluginInfos();
 
         // filter out already installed plugins
@@ -163,7 +174,7 @@ class PluginAdminController extends AuthenticatedController
 
         $this->plugins       = $plugin_manager->getPluginInfos();
         $this->plugin_types  = $this->plugin_admin->getPluginTypes();
-        $this->update_info   = $this->plugin_admin->getUpdateInfo($this->plugins);
+        $this->update_info   = $this->get_update_info($this->plugins);
         $this->delete_plugin = $this->plugins[$plugin_id];
 
         $this->render_action('index');

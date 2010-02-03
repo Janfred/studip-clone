@@ -1,3 +1,7 @@
+<? if (isset($error)): ?>
+    <?= MessageBox::error($error, $error_detail) ?>
+<? endif ?>
+
 <? if (isset($flash['error'])): ?>
     <?= MessageBox::error($flash['error'], $flash['error_detail']) ?>
 <? elseif (isset($flash['message'])): ?>
