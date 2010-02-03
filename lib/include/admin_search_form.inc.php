@@ -585,7 +585,10 @@ if ($perm->have_perm("autor")) {	// Navigationsleiste ab status "Autor", autors 
 			echo "<td class=\"".$cssSw->getClass()."\" nowrap align=\"center\">";
 
 			if ($studygroup_mode) {
-				echo _("Studiengruppe") . sprintf("<br><a href=\"%s\">%s</a></font>", URLHelper::getLink('dispatch.php/course/studygroup/edit/' . $seminar_id . "?cid=" . $seminar_id), makeButton("bearbeiten"));
+				if($i_page != "admin_visibility.php") {
+					echo _("Studiengruppe") . sprintf("<br><a href=\"%s\">%s</a></font>", URLHelper::getLink('dispatch.php/course/studygroup/edit/' . $seminar_id . "?cid=" . $seminar_id), makeButton("bearbeiten"));
+				}
+				else echo '<input type="CHECKBOX" DISABLED/>';
 			} else {
 				//Kommandos fuer die jeweilgen Seiten
 				switch ($i_page) {
