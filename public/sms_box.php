@@ -60,6 +60,13 @@ $sess->register("sms_show");
 $msging = new messaging;
 $query_showfolder = $query_time_sort = $query_movetofolder = $query_time = '';
 
+// determine view
+if (Request::option('sms_inout')) {
+	$sms_data["view"] = Request::option('sms_inout');
+} else if ($sms_data["view"] == "") {
+	$sms_data["view"] = "in";
+}
+
 // need kontact to mothership
 $db = new DB_Seminar;
 $db6 = new DB_Seminar;
@@ -70,7 +77,7 @@ if ($change_view) {
 	Navigation::activateItem('/messaging/message/settings');
 } else {
 	$HELP_KEYWORD="Basis.InteraktionNachrichten";
-	Navigation::activateItem('/messaging/message/' . Request::get('sms_inout'));
+	Navigation::activateItem('/messaging/message/' . $sms_data['view']);
 }
 
 $CURRENT_PAGE = _("Systeminterne Nachrichten");
@@ -78,19 +85,6 @@ $CURRENT_PAGE = _("Systeminterne Nachrichten");
 // Output of html head and Stud.IP head
 include ('lib/include/html_head.inc.php');
 include ('lib/include/header.php');
-
-//
-if ($neux) {
-	$sms_data["view"] = "in";
-	$show_folder = "all";
-}
-
-// determine view
-if ($sms_inout && !$neux) {
-	$sms_data["view"] = $sms_inout;
-} else if ($sms_data["view"] == "") {
-	$sms_data["view"] = "in";
-}
 
 // check the messaging settings, avoids severals errors
 check_messaging_default();
@@ -166,6 +160,11 @@ if ($cmd == "mark_allsmsreaded") {
 
 // how many messages do we have
 $count_newsms = count_messages_from_user($sms_data['view'], "AND deleted='0' AND readed='0'");
+
+// open default folder if there are new messages
+if ($neux) {
+	$show_folder = "all";
+}
 
 // close open folder or open the selectet one
 if ($show_folder == "close") { // close folder

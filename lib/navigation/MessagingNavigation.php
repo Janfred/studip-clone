@@ -19,7 +19,7 @@ class MessagingNavigation extends Navigation
      */
     public function __construct()
     {
-        global $user;
+        global $user, $neux;
 
         parent::__construct(_('Post'), 'sms_box.php?sms_inout=in');
 
