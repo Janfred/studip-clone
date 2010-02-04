@@ -24,9 +24,8 @@
 </form>
 
 <? if (isset($currentuser)): ?>
-    <form action="<?= $controller->url_for('role_admin/save_role') ?>" method="POST">
+    <form action="<?= $controller->url_for('role_admin/save_role', $currentuser->getUserid()) ?>" method="POST">
         <input type="hidden" name="ticket" value="<?= get_ticket() ?>">
-        <input type="hidden" name="usersel" value="<?= $currentuser->getUserid() ?>">
         <table class="default">
             <tr>
                 <th style="text-align: center;">

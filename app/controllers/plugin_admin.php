@@ -18,7 +18,7 @@ class PluginAdminController extends AuthenticatedController
     private $plugin_admin;
 
     /**
-     * common tasks for all actions
+     * Common tasks for all actions.
      */
     public function before_filter(&$action, &$args)
     {
@@ -36,6 +36,12 @@ class PluginAdminController extends AuthenticatedController
         $this->plugin_admin = new PluginAdministration();
     }
 
+    /**
+     * Validate ticket (passed via request environment).
+     * This method always checks $_REQUEST['ticket'].
+     *
+     * @throws InvalidArgumentException  if ticket is not valid
+     */
     private function check_ticket()
     {
         if (!check_ticket(Request::option('ticket'))) {
@@ -44,6 +50,13 @@ class PluginAdminController extends AuthenticatedController
 
     }
 
+    /**
+     * Try to get update information for a list of plugins. If no
+     * update information is available, an error message is set in
+     * this controller and an empty array is returned.
+     *
+     * @param array     array of plugin meta data
+     */
     private function get_update_info($plugins)
     {
         try {
@@ -56,7 +69,8 @@ class PluginAdminController extends AuthenticatedController
     }
 
     /**
-     * Shows the plugins view and display all available plugin updates.
+     * Display the list of installed plugins and show all available
+     * updates (if any).
      */
     public function index_action()
     {
@@ -77,7 +91,7 @@ class PluginAdminController extends AuthenticatedController
     }
 
     /**
-     * User changed the configuration of plugins.
+     * Save the modified plugin configuration (status and position).
      */
     public function save_action()
     {
@@ -88,9 +102,10 @@ class PluginAdminController extends AuthenticatedController
 
         $this->check_ticket();
 
+        // update enabled/disabled status and position if set
         foreach ($plugins as $plugin){
-            $enabled = Request::int('enabled_' . $plugin['id'], 0);
-            $navpos = Request::int('position_' . $plugin['id']);
+            $enabled = Request::int('enabled_'.$plugin['id'], 0);
+            $navpos = Request::int('position_'.$plugin['id']);
 
             $plugin_manager->setPluginEnabled($plugin['id'], $enabled);
 
@@ -103,17 +118,24 @@ class PluginAdminController extends AuthenticatedController
         $this->redirect('plugin_admin?plugin_filter='.$plugin_filter);
     }
 
+    /**
+     * Compare two plugins by their score (used for sorting).
+     */
     private function compare_score($plugin1, $plugin2)
     {
         return $plugin2['score'] - $plugin1['score'];
     }
 
+    /**
+     * Search the list of available plugins or display the most
+     * recommended plugins if the user did not trigger a search.
+     */
     public function search_action()
     {
         $search = Request::get('search');
 
+        // search for plugins in all repositories
         try {
-            // search for plugins in all repositories
             $repository = new PluginRepository();
             $search_results = $repository->getPlugins($search);
         } catch (Exception $ex) {
@@ -143,6 +165,12 @@ class PluginAdminController extends AuthenticatedController
         $this->plugins        = $plugins;
     }
 
+    /**
+     * Install a given plugin, either by name (from the repository)
+     * or using a file uploaded by the administrator.
+     *
+     * @param string    name of plugin to install (optional)
+     */
     public function install_action($pluginname = NULL)
     {
         $this->check_ticket();
@@ -168,6 +196,11 @@ class PluginAdminController extends AuthenticatedController
         $this->redirect('plugin_admin');
     }
 
+    /**
+     * Ask for confirmation from the user before deleting a plugin.
+     *
+     * @param integer   id of plugin to delete
+     */
     public function ask_delete_action($plugin_id)
     {
         $plugin_manager = PluginManager::getInstance();
@@ -180,6 +213,11 @@ class PluginAdminController extends AuthenticatedController
         $this->render_action('index');
     }
 
+    /**
+     * Completely delete a plugin from the system.
+     *
+     * @param integer   id of plugin to delete
+     */
     public function delete_action($plugin_id)
     {
         $plugin_manager = PluginManager::getInstance();
@@ -195,11 +233,17 @@ class PluginAdminController extends AuthenticatedController
         $this->redirect('plugin_admin?plugin_filter='.$plugin_filter);
     }
 
+    /**
+     * Download a ZIP file containing the given plugin.
+     *
+     * @param integer   id of plugin to download
+     */
     public function download_action($plugin_id)
     {
         $plugin_manager = PluginManager::getInstance();
         $plugin = $plugin_manager->getPluginInfoById($plugin_id);
 
+        // prepare file name for download
         $pluginpath = get_config('PLUGINS_PATH').'/'.$plugin['path'];
         $manifest = $this->plugin_admin->getPluginManifest($pluginpath);
         $filename = $plugin['class'].'-'.$manifest['version'].'.zip';
@@ -231,6 +275,7 @@ class PluginAdminController extends AuthenticatedController
 
         $this->check_ticket();
 
+        // update each plugin in turn
         foreach ($update as $id) {
             if (isset($update_info[$id]['update'])) {
                 try {
@@ -242,6 +287,7 @@ class PluginAdminController extends AuthenticatedController
             }
         }
 
+        // collect and report errors
         if (isset($update_errors)) {
             $this->flash['error'] = ngettext(
                 'Beim Update ist ein Fehler aufgetreten:',
@@ -255,8 +301,8 @@ class PluginAdminController extends AuthenticatedController
     }
 
     /**
-     * Shows a page describing the plugin's functionality,
-     * dependence on other plugins, ...
+     * Show a page describing this plugin's meta data and description,
+     * if available.
      */
     public function manifest_action($plugin_id) {
         $plugin_manager = PluginManager::getInstance();
@@ -271,7 +317,7 @@ class PluginAdminController extends AuthenticatedController
     }
 
     /**
-     * Shows the standard configuration.
+     * Display the default activation set for this plugin.
      */
     public function default_activation_action($plugin_id) {
         $plugin_manager = PluginManager::getInstance();
@@ -285,7 +331,7 @@ class PluginAdminController extends AuthenticatedController
     }
 
     /**
-     * Shows the standard configuration.
+     * Change the default activation for this plugin.
      */
     public function save_default_activation_action($plugin_id) {
         $plugin_manager = PluginManager::getInstance();
@@ -293,7 +339,7 @@ class PluginAdminController extends AuthenticatedController
 
         $this->check_ticket();
 
-        // save selected institutes
+        // save selected institutes (if any)
         $plugin_manager->setDefaultActivations($plugin_id, $selected_inst);
 
         if (count($selected_inst) == 0) {

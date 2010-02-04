@@ -30,12 +30,14 @@ class PluginInstallationException extends Exception
 class PluginAdministration
 {
     /**
-     * Installs a new plugin. Grabs the uploaded file, unzips it, reads the
-     * manifest, creates the new plugin directory und finally registers it
-     * in the database.
-     * @param string $filename the name of the uploaded file
+     * Install a new plugin. Extracts the contents of the uploaded file,
+     * checks the manifest, creates the new plugin directory und finally
+     * registers the plugin in the database.
+     *
+     * @param string $filename path to the uploaded file
      */
-    public function installPlugin($filename) {
+    public function installPlugin($filename)
+    {
         global $SOFTWARE_VERSION;
 
         $packagedir = get_config('PLUGINS_PATH').'/tmp_'.md5($filename);
@@ -79,12 +81,11 @@ class PluginAdministration
                 $this->updateDBSchema($plugindir, $packagedir, $manifest);
             }
 
-            // delete the plugin directory, registration info will be updated automatically
             rmdirr($plugindir);
         }
 
         // move directory to final destination
-        if (!file_exists($basepath.'/'.$origin)){
+        if (!file_exists($basepath.'/'.$origin)) {
             mkdir($basepath.'/'.$origin);
         }
 
@@ -101,18 +102,18 @@ class PluginAdministration
             throw new PluginInstallationException(_('Das Plugin enthält keine gültige Plugin-Klasse.'));
         }
 
-        // do we have additional plugin classes in this package?
+        // register additional plugin classes in this package
         $additionalclasses = $manifest['additionalclasses'];
 
-        if (is_array($additionalclasses)){
-            foreach ($additionalclasses as $class){
+        if (is_array($additionalclasses)) {
+            foreach ($additionalclasses as $class) {
                 $plugin_manager->registerPlugin($class, $class, $pluginpath, $pluginid);
             }
         }
     }
 
     /**
-     * Downloads and installs a new plugin from the given URL.
+     * Download and install a new plugin from the given URL.
      *
      * @param string $plugin_url the URL of the plugin package
      */
@@ -129,8 +130,8 @@ class PluginAdministration
     }
 
     /**
-     * Downloads and installs a plugin with the given name from
-     * the plugin repository.
+     * Download and install a plugin with the given name from the
+     * plugin repository.
      *
      * @param string $pluginname name of the plugin to install
      */
@@ -147,11 +148,13 @@ class PluginAdministration
     }
 
     /**
-     * Does the uninstallation of a plugin.
+     * Uninstall the given plugin from the system. It will remove
+     * the database schema and all the plugin's files.
      *
-     * @param unknown_type $plugin
+     * @param array $plugin meta data of plugin
      */
-    public function uninstallPlugin($plugin){
+    public function uninstallPlugin($plugin)
+    {
         $plugin_manager = PluginManager::getInstance();
 
         // check if there are dependent plugins
@@ -168,15 +171,17 @@ class PluginAdministration
         // delete database if needed
         $this->deleteDBSchema($plugindir, $manifest);
 
-        // the old plugin directory has to be deleted
         rmdirr($plugindir);
     }
 
     /**
-     * Reads the manifest of the plugin in the given path
-     * @return array containing the manifest information
+     * Read the manifest of the plugin in the given directory.
+     * Returns NULL if the manifest cannot be found.
+     *
+     * @return array    containing the manifest information
      */
-    public function getPluginManifest($plugindir) {
+    public function getPluginManifest($plugindir)
+    {
         $manifest = @file($plugindir . '/plugin.manifest');
         $result = array();
 
@@ -189,6 +194,7 @@ class PluginAdministration
             $key = trim($key);
             $value = trim($value);
 
+            // skip empty lines and comments
             if ($key === '' || $key[0] === '#') {
                 continue;
             }
@@ -308,7 +314,9 @@ class PluginAdministration
     }
 
     /**
-     * Get a list of the types of all the installed plugins.
+     * Get a list of the types of all installed plugins.
+     *
+     * @return array    list of plugin types
      */
     public function getPluginTypes()
     {
@@ -326,8 +334,10 @@ class PluginAdministration
 
     /**
      * Fetch update information for a list of plugins. This method
-     * returns for each plugin: plugin name, current version and
+     * returns for each plugin: the plugin name, current version and
      * meta data of the plugin update, if available.
+     *
+     * @param array  $plugins    array of plugin meta data
      */
     public function getUpdateInfo($plugins)
     {

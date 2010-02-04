@@ -10,6 +10,8 @@
  * the License, or (at your option) any later version.
  */
 
+require_once 'lib/classes/StudipCacheFactory.class.php';
+
 /**
  * Class used to locate plugins available from a plugin repository.
  */
