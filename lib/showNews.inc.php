@@ -315,7 +315,9 @@ function show_news_item($news_item, $cmd_data, $show_admin) {
   	if ($auth->auth["uid"] == $news_item['user_id'] || $show_admin) {
   		$edit="<a href=\"".URLHelper::getLink("admin_news.php?cmd=edit&edit_news=".$id."&$admin_link")."\">" . makeButton("bearbeiten") . "</a>";
   		$edit.=" <a href=\"".URLHelper::getLink("?touch_news=".$id."#anker")."\">" . makeButton("aktualisieren") . "</a>";
-  		$edit.=" <a href=\"".URLHelper::getLink("admin_news.php?cmd=kill&kill_news=".$id."&$admin_link")."\">" . makeButton("loeschen") . "</a>";
+  		if ($auth->auth["uid"] == $news_item['user_id'] || $GLOBALS['perm']->have_perm('admin')) {
+			$edit.=" <a href=\"".URLHelper::getLink("admin_news.php?cmd=kill&kill_news=".$id."&$admin_link")."\">" . makeButton("loeschen") . "</a>";
+		}
   	}
 
   	//
