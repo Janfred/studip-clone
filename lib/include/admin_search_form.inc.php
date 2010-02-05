@@ -721,9 +721,9 @@ if ($perm->have_perm("autor")) {	// Navigationsleiste ab status "Autor", autors 
         //Traurige Meldung wenn nichts gefunden wurde oder sonst irgendwie nichts da ist
         if ($query && !$db->num_rows()) {
             if ($conditions) {
-                echo Messagebox::error(_("Leider wurden keine Veranstaltungen entsprechend Ihren Suchkriterien gefunden!"));
+                echo MessageBox::info(_("Leider wurden keine Veranstaltungen entsprechend Ihren Suchkriterien gefunden!"));
             } else {
-                echo Messagebox::error(_("Leider wurden keine Veranstaltungen gefunden!"));
+                echo MessageBox::info(_("Leider wurden keine Veranstaltungen gefunden!"));
             }
         }
 	}

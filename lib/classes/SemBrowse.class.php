@@ -538,7 +538,11 @@ class SemBrowse {
 		    if ($this->search_obj->found_rows === false) {
 				$details = array(_("Der Suchbegriff fehlt oder ist zu kurz"));
 			}
-			echo MessageBox::error(_("Ihre Suche ergab keine Treffer"), $details);
+			if (!isset($details)) {
+				echo MessageBox::info(_("Ihre Suche ergab keine Treffer"), $details);
+			} else {
+				echo MessageBox::error(_("Ihre Suche ergab keine Treffer"), $details);
+			}
 			$this->sem_browse_data["sset"] = 0;
 		}
 	ob_end_flush();
