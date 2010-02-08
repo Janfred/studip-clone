@@ -142,9 +142,6 @@ class StudipCacheFactory {
      */
     static function getCache()
     {
-        if (!$GLOBALS['CACHING_ENABLE']) {
-            return new StudipNullCache();
-        }
 
         if (is_null(self::$cache)) {
 
@@ -171,7 +168,11 @@ class StudipCacheFactory {
      */
     static function loadCacheClass()
     {
-        $cfg = self::getConfig();
+        if (!$GLOBALS['CACHING_ENABLE']) {
+            return 'StudipNullCache';
+        }
+
+    	$cfg = self::getConfig();
         $cache_class_file = $cfg->getValue('cache_class_file');
         $cache_class      = $cfg->getValue('cache_class');
 

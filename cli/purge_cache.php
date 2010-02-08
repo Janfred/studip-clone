@@ -11,7 +11,7 @@
 */
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
-// cleanup_log.php
+// purge_cache.php
 // 
 // Copyright (C) 2010 André Noack <noack@data-quest.de>
 // +---------------------------------------------------------------------------+
@@ -33,5 +33,6 @@ require_once 'lib/classes/StudipFileCache.class.php';
 
 $cache = new StudipFileCache();
 
-$cache->purge(false);
+$cache->purge($_SERVER['argv'][1] === '-q');
 
+exit(1);
