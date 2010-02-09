@@ -30108,7 +30108,7 @@ msgstr "Edit properties"
 #: ../lib/resources/views/links_resources.inc.php:90
 #: ../lib/resources/views/page_intros.inc.php:128
 msgid "Rechte bearbeiten"
-msgstr "Edit&nbsp;permissions"
+msgstr "Edit permissions"
 
 #: ../lib/resources/views/links_resources.inc.php:93
 msgid "Belegungsplan"
