@@ -120,7 +120,8 @@ $commentable = $GLOBALS['perm']->have_perm("autor") ? true : (bool) $commentable
                 </span>
             </a>
             <? if (($thread['Seminar_id'] !== $thread['user_id'] && $GLOBALS['perm']->have_studip_perm("tutor", $thread['Seminar_id']))
-                or ($thread['user_id'] === $GLOBALS['user']->id)) : ?>
+                or ($thread['user_id'] === $GLOBALS['user']->id)
+                or $GLOBALS['perm']->have_perm("root")) : ?>
                 <a href="#" class="edit icon" onClick="return false;">
                     <?= Icon::create('tools', 'inactive', ['title' => _('Bearbeiten')])->asImg(14) ?>
                 </a>

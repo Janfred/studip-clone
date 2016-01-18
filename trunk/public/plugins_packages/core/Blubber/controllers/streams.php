@@ -322,8 +322,9 @@ class StreamsController extends PluginController {
     public function get_source_action() {
         $posting = new BlubberPosting(Request::get("topic_id"));
         $thread = new BlubberPosting($posting['root_id']);
-        if (($thread['context_type'] === "course" && !$GLOBALS['perm']->have_studip_perm("autor", $posting['Seminar_id']))
-                or ($thread['context_type'] === "private" && !$thread->isRelated())) {
+        if ((($thread['context_type'] === "course" && !$GLOBALS['perm']->have_studip_perm("autor", $posting['Seminar_id']))
+                or ($thread['context_type'] === "private" && !$thread->isRelated()))
+                && !$GLOBALS['perm']->have_perm("root")) {
             throw new AccessDeniedException();
         }
         $this->render_text($posting['description']);
@@ -340,7 +341,8 @@ class StreamsController extends PluginController {
         $posting = new BlubberPosting(Request::get("topic_id"));
         $thread = new BlubberPosting($posting['root_id']);
         if (($posting['user_id'] !== $GLOBALS['user']->id)
-                && (!$GLOBALS['perm']->have_studip_perm("tutor", $posting['Seminar_id']))) {
+                && (!$GLOBALS['perm']->have_studip_perm("tutor", $posting['Seminar_id']))
+                && !$GLOBALS['perm']->have_perm("root")) {
             throw new AccessDeniedException();
         }
         $old_content = $posting['description'];
