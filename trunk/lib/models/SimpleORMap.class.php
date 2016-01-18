@@ -1658,10 +1658,7 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
         if ($this->applyCallbacks('before_store') === false) {
             return false;
         }
-        if ($this->isDirty() || $this->isNew()) {
-            if ($this->isDeleted()) {
-                throw new RuntimeException('trying to store a previously deleted object');
-            }
+        if (!$this->isDeleted() && ($this->isDirty() || $this->isNew())) {
             if ($this->isNew()) {
                 if ($this->applyCallbacks('before_create') === false) {
                     return false;
