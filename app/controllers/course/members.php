@@ -1500,10 +1500,10 @@ class Course_MembersController extends AuthenticatedController
                         $filtered_members['awaiting']->pluck('user_id')
                     );
                     $mp = MultiPersonSearch::get('add_waitlist' . $this->course_id)
-                        ->setLinkText(_('Neue/n Person auf Warteliste eintragen'))
+                        ->setLinkText(_('Neue Person(en) auf Warteliste eintragen'))
                         ->setDefaultSelectedUser($ignore)
                         ->setLinkIconPath('')
-                        ->setTitle(_('Neue/n Person auf Warteliste eintragen'))
+                        ->setTitle(_('Neue Person(en) auf Warteliste eintragen'))
                         ->setExecuteURL(URLHelper::getLink('dispatch.php/course/members/execute_multipersonsearch_waitlist'))
                         ->setSearchObject($searchType)
                         ->addQuickfilter(_('Mitglieder der Einrichtung'), $membersOfInstitute)
