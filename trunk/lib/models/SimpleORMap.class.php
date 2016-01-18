@@ -31,7 +31,11 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
      * @var boolean $is_new
      */
     protected $is_new = true;
-
+    /**
+     * deleted state of entry
+     * @var boolean $is_deleted
+     */
+    protected $is_deleted = false;
     /**
      * name of db table
      * @var string $db_table
@@ -1548,14 +1552,16 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
-     * check if object is empty
+     * check if object content is null
+     * @deprecated
      * @return bool true if at least one field is not null
      */
     function haveData()
     {
-        foreach ($this->content as $key => $content) {
-            // Not new objects must have at least their primary key fields set.
-            if (($this->isNew() || in_array($key, $this->pk)) && $content !== null) return true;
+        foreach ($this->content as $content) {
+            if ($content !== null) {
+                return true;
+            }
         }
         return false;
     }
@@ -1576,7 +1582,7 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
      */
     function isDeleted()
     {
-        return !$this->isNew() && !$this->haveData();
+        return $this->is_deleted;
     }
 
     /**
@@ -1649,68 +1655,67 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
      */
     function store()
     {
-        if (!$this->isDeleted()) {
-            if ($this->applyCallbacks('before_store') === false) {
-                return false;
-            }
-            if ($this->isDirty() || $this->isNew()) {
-                if ($this->isNew()) {
-                    if ($this->applyCallbacks('before_create') === false) {
-                        return false;
-                    }
-                } else {
-                    if ($this->applyCallbacks('before_update') === false) {
-                        return false;
-                    }
-                }
-                foreach ($this->db_fields as $field => $meta) {
-                    $value = $this->content[$field];
-                    if ($field == 'chdate' && !$this->isFieldDirty($field) && $this->isDirty()) {
-                        $value = time();
-                    }
-                    if ($field == 'mkdate') {
-                        if ($this->isNew()) {
-                            if (!$this->isFieldDirty($field)) {
-                                $value = time();
-                            }
-                        } else {
-                            continue;
-                        }
-                    }
-                    if ($value === null && $meta['null'] == 'NO') {
-                        throw new UnexpectedValueException($this->db_table . '.' . $field . ' must not be null.');
-                    }
-                    if (is_float($value)) {
-                        $value = str_replace(',', '.', $value);
-                    }
-                    $this->content[$field] = $value;
-                    $query_part[] = "`$field` = " . DBManager::get()->quote($value) . " ";
-                }
-                if (!$this->isNew()) {
-                    $where_query = $this->getWhereQuery();
-                    $query = "UPDATE `{$this->db_table}` SET "
-                        . implode(',', $query_part);
-                    $query .= " WHERE " . join(" AND ", $where_query);
-                } else {
-                    $query = "INSERT INTO `{$this->db_table}` SET "
-                        . implode(',', $query_part);
-                }
-                $ret = DBManager::get()->exec($query);
-                if ($this->isNew()) {
-                    $this->applyCallbacks('after_create');
-                } else {
-                    $this->applyCallbacks('after_update');
-                }
-            }
-            $rel_ret = $this->storeRelations();
-            $this->applyCallbacks('after_store');
-            if ($ret || $rel_ret) {
-                $this->restore();
-            }
-            return $ret + $rel_ret;
-        } else {
+        if ($this->applyCallbacks('before_store') === false) {
             return false;
         }
+        if ($this->isDirty() || $this->isNew()) {
+            if ($this->isDeleted()) {
+                throw new RuntimeException('trying to store a previously deleted object');
+            }
+            if ($this->isNew()) {
+                if ($this->applyCallbacks('before_create') === false) {
+                    return false;
+                }
+            } else {
+                if ($this->applyCallbacks('before_update') === false) {
+                    return false;
+                }
+            }
+            foreach ($this->db_fields as $field => $meta) {
+                $value = $this->content[$field];
+                if ($field == 'chdate' && !$this->isFieldDirty($field) && $this->isDirty()) {
+                    $value = time();
+                }
+                if ($field == 'mkdate') {
+                    if ($this->isNew()) {
+                        if (!$this->isFieldDirty($field)) {
+                            $value = time();
+                        }
+                    } else {
+                        continue;
+                    }
+                }
+                if ($value === null && $meta['null'] == 'NO') {
+                    throw new UnexpectedValueException($this->db_table . '.' . $field . ' must not be null.');
+                }
+                if (is_float($value)) {
+                    $value = str_replace(',', '.', $value);
+                }
+                $this->content[$field] = $value;
+                $query_part[] = "`$field` = " . DBManager::get()->quote($value) . " ";
+            }
+            if (!$this->isNew()) {
+                $where_query = $this->getWhereQuery();
+                $query = "UPDATE `{$this->db_table}` SET "
+                    . implode(',', $query_part);
+                $query .= " WHERE " . join(" AND ", $where_query);
+            } else {
+                $query = "INSERT INTO `{$this->db_table}` SET "
+                    . implode(',', $query_part);
+            }
+            $ret = DBManager::get()->exec($query);
+            if ($this->isNew()) {
+                $this->applyCallbacks('after_create');
+            } else {
+                $this->applyCallbacks('after_update');
+            }
+        }
+        $rel_ret = $this->storeRelations();
+        $this->applyCallbacks('after_store');
+        if ($ret || $rel_ret) {
+            $this->restore();
+        }
+        return $ret + $rel_ret;
     }
 
     /**
@@ -1812,6 +1817,7 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
                         . join(" AND ", $where_query);
                 $ret += DBManager::get()->exec($query);
             }
+            $this->is_deleted = true;
             $this->applyCallbacks('after_delete');
         }
         $this->setData(array(), true);
