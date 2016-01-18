@@ -178,6 +178,7 @@ class Course_AdmissionController extends AuthenticatedController
                         }
                         if ($num_moved) {
                             PageLayout::postMessage(MessageBox::success(sprintf(_("%s vorläufige Teilnehmer wurden entfernt."), $num_moved)));
+                            $this->course->resetRelation('admission_applicants');
                         }
                     }
                 }
@@ -257,8 +258,6 @@ class Course_AdmissionController extends AuthenticatedController
                 }
             }
             if (Request::submitted('change_admission_turnout_yes') || !$question) {
-                $this->course->admission_disable_waitlist = Request::int('admission_disable_waitlist') ? 0 : 1;
-                $this->course->admission_disable_waitlist_move = Request::int('admission_disable_waitlist_move') ? 0 : 1;
                 if ($this->course->admission_disable_waitlist && $this->course->getNumWaiting()) {
                     $removed_applicants = $this->course->admission_applicants->findBy('status', 'awaiting');
                 }
@@ -277,6 +276,7 @@ class Course_AdmissionController extends AuthenticatedController
                         $num_moved += $applicant->delete();
                     }
                     if ($num_moved) {
+                        $this->course->resetRelation('admission_applicants');
                         PageLayout::postMessage(MessageBox::success(sprintf(_("%s Wartende wurden entfernt."), $num_moved)));
                     }
                 }
@@ -363,6 +363,7 @@ class Course_AdmissionController extends AuthenticatedController
                         $num_moved += $applicant->delete();
                     }
                     if ($num_moved) {
+                        $this->course->resetRelation('admission_applicants');
                         PageLayout::postMessage(MessageBox::success(sprintf(_("%s Wartende wurden entfernt."), $num_moved)));
                     }
                 }

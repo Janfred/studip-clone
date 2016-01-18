@@ -3,7 +3,7 @@
 <? endforeach; ?>
 <form class="studip_form" action="<?= $controller->link_for() ?>" method="post">
 <?= CSRFProtection::tokenTag()?>
-<? foreach($request as $k => $v) : ?>
+<? foreach(array_filter($request, function ($r) {return $r !== false;}) as $k => $v) : ?>
     <?= addHiddenFields($k, $v) ?>
 <? endforeach ?>
 <div data-dialog-button>
