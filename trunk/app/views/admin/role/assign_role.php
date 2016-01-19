@@ -28,7 +28,7 @@ use Studip\Button, Studip\LinkButton;
 <? if (isset($currentuser)): ?>
     <form action="<?= $controller->url_for('admin/role/save_role', $currentuser->getUserid()) ?>" method="POST">
         <?= CSRFProtection::tokenTag() ?>
-        <input type="hidden" name="ticket" value="<?= get_ticket() ?>">
+        <input type="hidden" name="studip_ticket" value="<?= get_ticket() ?>">
         <table class="default nohover">
             <tr>
                 <th style="text-align: center;">
