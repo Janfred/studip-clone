@@ -22,7 +22,7 @@
     <?= $this->render_partial('course/timesrooms/_roomRequest.php') ?>
 <? endif; ?>
 
-<? if (Request::isXhr()): ?>
+<? if (Request::isXhr() && !$locked && Config::get()->RESOURCES_ENABLE && Config::get()->RESOURCES_ALLOW_ROOM_REQUESTS): ?>
     <div data-dialog-button>
     <?= Studip\LinkButton::create(_('Raumanfrage erstellen'), 
             $controller->url_for('course/room_requests/edit/' . $course->id,

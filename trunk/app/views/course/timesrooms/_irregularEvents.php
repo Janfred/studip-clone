@@ -9,6 +9,7 @@ $room_request_filter = function ($date) {
         <h1>
             <?= _('Unregelmäßige Termine / Blocktermine') ?>
         </h1>
+        <? if(!$locked) : ?>
         <nav>
             <a class="link-add"
                href="<?= $controller->link_for('course/timesrooms/createSingleDate/' . $course->id, $editParams) ?>"
@@ -22,6 +23,7 @@ $room_request_filter = function ($date) {
                 <?= _('Neuer Blocktermin') ?>
             </a>
         </nav>
+        <? endif ?>
     </header>
 
 <? if (!empty($single_dates)): ?>
@@ -32,9 +34,11 @@ $room_request_filter = function ($date) {
         <article id="singledate-<?= $semester_id ?>" class="<?= count($single_dates) === 1 ? 'open' :  ContentBoxHelper::classes('singledate-' . $semester_id) ?>">
             <header>
                 <h1>
-                    <input type="checkbox" class="date-proxy"
-                           data-proxyfor="#singledate-<?= $semester_id ?> .ids-irregular"
-                           data-activates=".actionForAllIrregular">
+                    <? if(!$locked) : ?>
+                        <input type="checkbox" class="date-proxy"
+                               data-proxyfor="#singledate-<?= $semester_id ?> .ids-irregular"
+                               data-activates=".actionForAllIrregular">
+                    <? endif ?>
                     <a href="<?= ContentBoxHelper::href('singledate-' . $semester_id) ?>">
                         <?= htmlReady(Semester::find($semester_id)->name) ?>
                     </a>
@@ -57,7 +61,9 @@ $room_request_filter = function ($date) {
             <section>
                 <table class="default nohover">
                     <colgroup>
-                        <col width="30px">
+                        <? if (!$locked) :?>
+                            <col width="30px">
+                        <? endif ?>
                         <col width="30%">
                         <col>
                         <col width="20%">
@@ -76,7 +82,7 @@ $room_request_filter = function ($date) {
             </section>
         </article>
     <? endforeach; ?>
-
+    <? if(!$locked) : ?>
         <table class="default nohover">
             <colgroup>
                 <col width="30px">
@@ -106,6 +112,7 @@ $room_request_filter = function ($date) {
                     </td>
                 </tr>
             </tfoot>
+            <? endif ?>
         </table>
     </form>
 <? else: ?>

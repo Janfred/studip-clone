@@ -3,14 +3,16 @@
         <h1>
             <?= _('Regelmäßige Termine') ?>
         </h1>
-        <nav>
-            <a class="link-add"
-               href="<?= $controller->link_for('course/timesrooms/createCycle', $editParams) ?>"
-               data-dialog="size=600"
-               title="<?= _('Regelmäßigen Termin hinzufügen') ?>">
-                <?= _('Regelmäßigen Termin hinzufügen') ?>
-            </a>
-        </nav>
+        <? if(!$locked) : ?>
+            <nav>
+                <a class="link-add"
+                   href="<?= $controller->link_for('course/timesrooms/createCycle', $editParams) ?>"
+                   data-dialog="size=600"
+                   title="<?= _('Regelmäßigen Termin hinzufügen') ?>">
+                    <?= _('Regelmäßigen Termin hinzufügen') ?>
+                </a>
+            </nav>
+        <? endif ?>
     </header>
 
 <? if (!empty($cycle_dates)) : ?>
@@ -47,6 +49,7 @@
                             <?= _('Einzel-Raumanfrage') ?>:
                             <?= htmlReady($course->getRequestsInfo($metadate_id)) ?>
                         </span>
+                        <? if(!$locked) :?>
                         <span>
                             <a href="<?= $controller->url_for('course/timesrooms/createCycle/' . $metadate_id) ?>"
                                data-dialog="size=big">
@@ -56,12 +59,15 @@
                                     ->asInput(['formaction' => $controller->url_for('course/timesrooms/deleteCycle/' . $metadate_id),
                                                'data-confirm' => _('Soll dieser Zeitraum wirklich gelöscht werden?')] + $linkAttributes) ?>
                         </span>
+                        <? endif ?>
                     </nav>
                 </header>
                 <section>
                     <table class="default nohover">
                         <colgroup>
-                            <col width="30px">
+                            <? if (!$locked): ?>
+                                <col width="30px">
+                            <? endif ?>
                             <col width="30%">
                             <col>
                             <col width="20%">
@@ -70,7 +76,7 @@
                     <? foreach ($cycle['dates'] as $semester_id => $termine) : ?>
                         <thead>
                             <tr>
-                                <th colspan="5"><?= htmlReady(Semester::find($semester_id)->name) ?></th>
+                                <th colspan="<?= !$locked ? 5 : 4?>"><?= htmlReady(Semester::find($semester_id)->name) ?></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -80,24 +86,26 @@
                         <? endforeach ?>
                         </tbody>
                     <? endforeach ?>
-                        <tfoot>
-                            <tr>
-                                <td colspan="2">
-                                    <label>
-                                        <input type="checkbox"
-                                                data-proxyfor=".ids-regular"
-                                                data-activates=".actionForAllRegular">
-                                        <?= _('Alle auswählen') ?>
-                                    </label>
-                                </td>
-                                <td colspan="3" class="actions">
-                                    <select name="method" class="actionForAllRegular">
-                                        <?= $this->render_partial('course/timesrooms/_stack_actions.php') ?>
-                                    </select>
-                                    <?= Studip\Button::create(_('Ausführen'), 'run', array('class' => 'actionForAllRegular','data-dialog' => 'size=big')) ?>
-                                </td>
-                            </tr>
-                        </tfoot>
+                        <? if(!$locked) : ?>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2">
+                                        <label>
+                                            <input type="checkbox"
+                                                    data-proxyfor=".ids-regular"
+                                                    data-activates=".actionForAllRegular">
+                                            <?= _('Alle auswählen') ?>
+                                        </label>
+                                    </td>
+                                    <td colspan="3" class="actions">
+                                        <select name="method" class="actionForAllRegular">
+                                            <?= $this->render_partial('course/timesrooms/_stack_actions.php') ?>
+                                        </select>
+                                        <?= Studip\Button::create(_('Ausführen'), 'run', array('class' => 'actionForAllRegular','data-dialog' => 'size=big')) ?>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        <? endif ?>
                     </table>
 
                 </section>

@@ -38,10 +38,19 @@ class Course_TimesroomsController extends AuthenticatedController
         if (Navigation::hasItem('course/admin/dates')) {
             Navigation::activateItem('course/admin/dates');
         }
+        $this->locked = false;
+
+        if(LockRules::Check($this->course->id, 'room_time')) {
+            $this->locked       = true;
+            $this->lock_rules   = LockRules::getObjectRule($this->course->id);
+            PageLayout::postMessage(MessageBox::info(_("Diese Seite ist für die Bearbeitung gesperrt. Sie können die Daten einsehen, jedoch nicht verändern.")
+                         . ($this->lock_rules['description'] ? '<br>' . formatLinks($this->lock_rules['description']) : '')));
+        }
+
         $this->show = array(
             'regular'     => true,
             'irregular'   => true,
-            'roomRequest' => true,
+            'roomRequest' => !$this->locked && Config::get()->RESOURCES_ENABLE && Config::get()->RESOURCES_ALLOW_ROOM_REQUESTS,
         );
 
         PageLayout::setHelpKeyword('Basis.Veranstaltungen');
@@ -893,8 +902,10 @@ class Course_TimesroomsController extends AuthenticatedController
      */
     public function cancel_action($termin_id)
     {
+        $this->params = array();
         if (Request::get('asDialog')) {
             $this->asDialog = true;
+            $this->params['data-dialog'] = 'size=big';
         }
         $this->termin = CourseDate::find($termin_id) ?: CourseExDate::find($termin_id);
     }
@@ -907,6 +918,10 @@ class Course_TimesroomsController extends AuthenticatedController
     public function saveComment_action($termin_id)
     {
         $termin = CourseExDate::find($termin_id);
+
+        if(is_null($termin)) {
+            $termin = CourseDate::find($termin_id);
+        }
         if (Request::get('cancel_comment') != $termin->content) {
             $termin->content = Request::get('cancel_comment');
             if ($termin->store()) {
@@ -932,9 +947,12 @@ class Course_TimesroomsController extends AuthenticatedController
      */
     private function setSidebar()
     {
-        $actions = new ActionsWidget();
-        $actions->addLink(_('Startsemester ändern'), $this->url_for('course/timesrooms/editSemester'), Icon::create('date', 'clickable'))->asDialog('size=400');
-        Sidebar::Get()->addWidget($actions);
+        if(!$this->locked) {
+            $actions = new ActionsWidget();
+            $actions->addLink(_('Startsemester ändern'), $this->url_for('course/timesrooms/editSemester'), Icon::create('date', 'clickable'))->asDialog('size=400');
+            Sidebar::Get()->addWidget($actions);
+        }
+
         $widget = new SelectWidget(_('Semesterfilter'), $this->url_for('course/timesrooms/index', array('cmd' => 'applyFilter')), 'newFilter');
         foreach ($this->selection as $item) {
             $element = new SelectElement($item['value'],
