@@ -2,7 +2,7 @@
 
 <form action="<?= $controller->url_for('admin/role/add') ?>" method="post" class="studip-form">
     <?= CSRFProtection::tokenTag() ?>
-    <input type="hidden" name="ticket" value="<?= get_ticket() ?>">
+    <input type="hidden" name="studip_ticket" value="<?= get_ticket() ?>">
 
     <section>
         <label for="name"><?= _('Name') ?>:</label>
