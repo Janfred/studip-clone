@@ -43,8 +43,8 @@ class Course_TimesroomsController extends AuthenticatedController
         if(LockRules::Check($this->course->id, 'room_time')) {
             $this->locked       = true;
             $this->lock_rules   = LockRules::getObjectRule($this->course->id);
-            PageLayout::postMessage(MessageBox::info(_("Diese Seite ist für die Bearbeitung gesperrt. Sie können die Daten einsehen, jedoch nicht verändern.")
-                         . ($this->lock_rules['description'] ? '<br>' . formatLinks($this->lock_rules['description']) : '')));
+            PageLayout::postInfo(_('Diese Seite ist für die Bearbeitung gesperrt. Sie können die Daten einsehen, jedoch nicht verändern.')
+                     . ($this->lock_rules['description'] ? '<br>' . formatLinks($this->lock_rules['description']) : ''));
         }
 
         $this->show = array(
