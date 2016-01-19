@@ -36,7 +36,7 @@ class IconClassTest extends PHPUnit_Framework_TestCase
     function testAssetsImgSVGWithAddition()
     {
         $this->assertEquals(
-            '<img width="16" height="16" src="images/icons/blue/add/vote.svg" alt="vote" class="icon-role-clickable icon-shape-add/vote">',
+            '<img width="16" height="16" src="images/icons/blue/add/vote.svg" alt="vote+add" class="icon-role-clickable icon-shape-vote+add">',
             Assets::img('icons/blue/add/vote.svg')
         );
     }
@@ -60,7 +60,7 @@ class IconClassTest extends PHPUnit_Framework_TestCase
     function testAssetsImgPNGWithAddition()
     {
         $this->assertEquals(
-            '<img width="16" height="16" src="images/icons/grey/add/info-circle.svg" alt="info-circle" class="icon-role-inactive icon-shape-add/info-circle">',
+            '<img width="16" height="16" src="images/icons/grey/add/info-circle.svg" alt="info-circle+add" class="icon-role-inactive icon-shape-info-circle+add">',
             Assets::img('icons/16/grey/add/info-circle.png')
         );
     }
@@ -181,19 +181,39 @@ class IconClassTest extends PHPUnit_Framework_TestCase
     function testIconIsImmutable()
     {
         $icon = Icon::create('upload', 'link', ['title' => _('a title')]);
-        $copy = $icon->assoc('role', 'clickable');
+        $copy = $icon->copyWithRole('clickable');
 
         $this->assertNotSame($icon, $copy);
     }
 
-    function testIconAssoc()
+    function testIconCopyWithRole()
     {
         $icon = Icon::create('upload', 'link', ['title' => _('a title')]);
-        $copy = $icon->assoc('role', 'clickable');
+        $copy = $icon->copyWithRole('clickable');
 
         $this->assertEquals($icon->getShape(),      $copy->getShape());
-        $this->assertEquals($icon->getAttributes(), $copy->getAttributes());
-
         $this->assertNotEquals($icon->getRole(),    $copy->getRole());
+        $this->assertEquals($icon->getAttributes(), $copy->getAttributes());
+    }
+
+    function testIconCopyWithShape()
+    {
+        $icon = Icon::create('upload', 'link', ['title' => _('a title')]);
+        $copy = $icon->copyWithShape('staple');
+
+        $this->assertNotEquals($icon->getShape(),   $copy->getShape());
+        $this->assertEquals($icon->getRole(),       $copy->getRole());
+        $this->assertEquals($icon->getAttributes(), $copy->getAttributes());
+    }
+
+    function testIconCopyWithAttributes()
+    {
+        $icon = Icon::create('upload', 'link', ['title' => _('a title')]);
+        $copy = $icon->copyWithAttributes(['title' => _('another title')]);
+
+        $this->assertEquals($icon->getShape(),         $copy->getShape());
+        $this->assertEquals($icon->getRole(),          $copy->getRole());
+        $this->assertNotEquals($icon->getAttributes(), $copy->getAttributes());
+
     }
 }
