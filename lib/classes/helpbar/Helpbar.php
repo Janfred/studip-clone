@@ -179,6 +179,24 @@ class Helpbar extends WidgetContainer
         $this->open = $state;
     }
     
+    /**
+     * Bugfix tickets #6022 and #6308.
+     * Method to avoid mentioning the Wiki's DB-Helptext and HelpTour-Widget
+     * in an unsuitable context. If the Wiki would be transformed to Trails,
+     * this method shall be deleted.
+     *
+     */
+    protected function condNonTrails($widget)
+    {
+    	$url = '';
+    	$url = parse_url($url ?: $_SERVER['REQUEST_URI']);
+    	$match = explode('view=', $url[query]);
+    	if (strcmp($match[1], 'show') === 0) {
+    		$this->loadContent();
+    		$this->addWidget($widget);
+    	}
+    }
+    
     public function shouldRender($state = true)
     {
         $this->should_render = $state;
@@ -195,15 +213,21 @@ class Helpbar extends WidgetContainer
      */
     public function render()
     {
-        $this->loadContent();
-
+        // bugfix ticket #6308
+        $route = get_route();
+        if (strcmp($route, 'wiki.php') !== 0)
+            $this->loadContent();
+        
         // add tour links
         if (Config::get()->TOURS_ENABLE) {
             $widget = new HelpbarTourWidget();
             if ($widget->hasElements()) {
-                $this->addWidget($widget);
-            }
-            $tour_data = $widget->tour_data;
+        	    if (strcmp($route, 'wiki.php') !== 0)
+        		    $this->addWidget($widget);
+        	    else
+        		    $this->condNonTrails($widget);
+        	}
+        	$tour_data = $widget->tour_data;
         }
 
         // add wiki link and remove it from navigation
