@@ -426,7 +426,7 @@
                 height = Math.max(200, height);
             }
             // Remove helper element
-//            helper.remove();
+            helper.remove();
         } else if (options.size && options.size === 'big') {
             width  = $('body').width() * 0.9;
             height = $('body').height() * 0.8;
