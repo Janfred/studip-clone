@@ -40,7 +40,7 @@ class Calendar_CalendarController extends AuthenticatedController
             URLHelper::bindLinkParam('category', $this->category);
         }
         $self = Request::option('self');
-     //   var_dump($_SESSION['SessSemName'], $self); exit;
+
         if (!$self && $_SESSION['SessSemName']['class'] == 'sem') {
             $this->range_id = Request::option('cid');
             Navigation::activateItem('/course/calendar');
