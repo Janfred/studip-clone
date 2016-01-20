@@ -613,8 +613,13 @@ class CourseSet
             $this->chdate = $data['chdate'];
         }
         // Load institute assigments.
-        $stmt = DBManager::get()->prepare(
-            "SELECT institute_id FROM `courseset_institute` WHERE set_id=?");
+        $stmt = DBManager::get()->prepare("
+            SELECT courseset_institute.institute_id
+            FROM `courseset_institute`
+                INNER JOIN Institute ON (courseset_institute.institute_id = Institute.Institut_id)
+            WHERE courseset_institute.set_id = ?
+            ORDER BY Institute.Name ASC
+        ");
         $stmt->execute(array($this->id));
         $this->institutes = array();
         while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
