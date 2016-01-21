@@ -33,7 +33,6 @@ class Icon
     private static $roles_to_colors = [
         'info'          => 'black',
         'clickable'     => 'blue',
-        'link'          => 'blue',
         'accept'        => 'green',
         'status-green'  => 'green',
         'inactive'      => 'grey',

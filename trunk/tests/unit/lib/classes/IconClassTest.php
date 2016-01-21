@@ -214,6 +214,11 @@ class IconClassTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($icon->getShape(),         $copy->getShape());
         $this->assertEquals($icon->getRole(),          $copy->getRole());
         $this->assertNotEquals($icon->getAttributes(), $copy->getAttributes());
+    }
 
+    function testStaticIcon()
+    {
+        $icon = Icon::create('https://i.imgur.com/kpTtTh.gif');
+        $this->assertEquals($icon->asImagePath(), 'https://i.imgur.com/kpTtTh.gif');
     }
 }
