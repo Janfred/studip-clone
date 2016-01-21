@@ -266,7 +266,7 @@ class QuestionnaireController extends AuthenticatedController
                     $url,
                     sprintf(_("%s hat an der Befragung '%s' teilgenommen."), get_fullname(), $this->questionnaire['title']),
                     "questionnaire_".$this->questionnaire->getId(),
-                    Icon::create('vote', 'clickable')->asImagePath(40)
+                    Icon::create('vote', 'clickable')
                 );
             }
 
