@@ -193,7 +193,7 @@ foreach ($available_modules as $category => $pluginlist) {
                                 ?>
                                 
                                 <a href="<?= $URL . "/" . $source ?>"
-                                   data-lightbox="<?= $pluginname ?>" data-title="<?= $title ?>">
+                                   data-dialog data-title="<?= $title ?>">
                                     <img class="big_thumb" src="<?= $URL . "/" . $source ?>"
                                          alt="<?= $pluginname ?>"/>
                                 </a>
@@ -225,7 +225,7 @@ foreach ($available_modules as $category => $pluginlist) {
                                              ?>
 
                                             <a href="<?= $URL . "/" . $source ?>"
-                                               data-lightbox="<?= $pluginname ?>"
+                                               data-dialog
                                                data-title="<?= $title ?>">
                                                 <img class="small_thumb"
                                                      src="<?= $URL . "/" . $source ?>"
