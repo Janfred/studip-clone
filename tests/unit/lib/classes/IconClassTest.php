@@ -116,40 +116,40 @@ class IconClassTest extends PHPUnit_Framework_TestCase
     function testIconCreateAsImg()
     {
         $this->assertEquals(
-            '<img width="16" height="16" src="images/icons/blue/vote.svg" alt="vote" class="icon-role-link icon-shape-vote">',
-            Icon::create('vote', 'link')->asImg()
+            '<img width="16" height="16" src="images/icons/blue/vote.svg" alt="vote" class="icon-role-clickable icon-shape-vote">',
+            Icon::create('vote', 'clickable')->asImg()
         );
     }
 
     function testIconCreateAsImgWithAddition()
     {
         $this->assertEquals(
-            '<img width="16" height="16" src="images/icons/blue/add/vote.svg" alt="vote+add" class="icon-role-link icon-shape-vote+add">',
-            Icon::create('vote+add', 'link')->asImg()
+            '<img width="16" height="16" src="images/icons/blue/add/vote.svg" alt="vote+add" class="icon-role-clickable icon-shape-vote+add">',
+            Icon::create('vote+add', 'clickable')->asImg()
         );
     }
 
     function testIconCreateAsImgWithSize()
     {
         $this->assertEquals(
-            '<img width="20" height="20" src="images/icons/blue/add/vote.svg" alt="vote+add" class="icon-role-link icon-shape-vote+add">',
-            Icon::create('vote+add', 'link')->asImg(20)
+            '<img width="20" height="20" src="images/icons/blue/add/vote.svg" alt="vote+add" class="icon-role-clickable icon-shape-vote+add">',
+            Icon::create('vote+add', 'clickable')->asImg(20)
         );
     }
 
     function testIconCreateAsImgWithTitle()
     {
         $this->assertEquals(
-            '<img title="Mit Anhang" width="20" height="20" src="images/icons/blue/vote.svg" alt="Mit Anhang" class="icon-role-link icon-shape-vote">',
-            Icon::create('vote', 'link', ['title' => _("Mit Anhang")])->asImg(20)
+            '<img title="Mit Anhang" width="20" height="20" src="images/icons/blue/vote.svg" alt="Mit Anhang" class="icon-role-clickable icon-shape-vote">',
+            Icon::create('vote', 'clickable', ['title' => _("Mit Anhang")])->asImg(20)
         );
     }
 
     function testIconCreateAsImgWithHspace()
     {
         $this->assertEquals(
-            '<img hspace="3" width="16" height="16" src="images/icons/blue/arr_2left.svg" alt="arr_2left" class="icon-role-link icon-shape-arr_2left">',
-            Icon::create('arr_2left', 'link')->asImg(['hspace' => 3])
+            '<img hspace="3" width="16" height="16" src="images/icons/blue/arr_2left.svg" alt="arr_2left" class="icon-role-clickable icon-shape-arr_2left">',
+            Icon::create('arr_2left', 'clickable')->asImg(['hspace' => 3])
         );
     }
 
@@ -173,14 +173,14 @@ class IconClassTest extends PHPUnit_Framework_TestCase
     function testIconCreateAsInput()
     {
         $this->assertEquals(
-            '<input type="image" class="text-bottom icon-role-link icon-shape-upload" width="20" height="20" src="images/icons/blue/upload.svg" alt="upload">',
-            Icon::create('upload', 'link')->asInput(20, ['class' => 'text-bottom'])
+            '<input type="image" class="text-bottom icon-role-clickable icon-shape-upload" width="20" height="20" src="images/icons/blue/upload.svg" alt="upload">',
+            Icon::create('upload', 'clickable')->asInput(20, ['class' => 'text-bottom'])
         );
     }
 
     function testIconIsImmutable()
     {
-        $icon = Icon::create('upload', 'link', ['title' => _('a title')]);
+        $icon = Icon::create('upload', 'clickable', ['title' => _('a title')]);
         $copy = $icon->copyWithRole('clickable');
 
         $this->assertNotSame($icon, $copy);
@@ -188,8 +188,8 @@ class IconClassTest extends PHPUnit_Framework_TestCase
 
     function testIconCopyWithRole()
     {
-        $icon = Icon::create('upload', 'link', ['title' => _('a title')]);
-        $copy = $icon->copyWithRole('clickable');
+        $icon = Icon::create('upload', 'clickable', ['title' => _('a title')]);
+        $copy = $icon->copyWithRole('info');
 
         $this->assertEquals($icon->getShape(),      $copy->getShape());
         $this->assertNotEquals($icon->getRole(),    $copy->getRole());
@@ -198,7 +198,7 @@ class IconClassTest extends PHPUnit_Framework_TestCase
 
     function testIconCopyWithShape()
     {
-        $icon = Icon::create('upload', 'link', ['title' => _('a title')]);
+        $icon = Icon::create('upload', 'clickable', ['title' => _('a title')]);
         $copy = $icon->copyWithShape('staple');
 
         $this->assertNotEquals($icon->getShape(),   $copy->getShape());
@@ -208,7 +208,7 @@ class IconClassTest extends PHPUnit_Framework_TestCase
 
     function testIconCopyWithAttributes()
     {
-        $icon = Icon::create('upload', 'link', ['title' => _('a title')]);
+        $icon = Icon::create('upload', 'clickable', ['title' => _('a title')]);
         $copy = $icon->copyWithAttributes(['title' => _('another title')]);
 
         $this->assertEquals($icon->getShape(),         $copy->getShape());
