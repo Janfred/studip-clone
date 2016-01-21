@@ -115,7 +115,7 @@
                                 ?>
                                 
                                 <a href="<?= $URL . "/" . $source ?>"
-                                   data-dialog data-title="<?= $title ?>">
+                                   data-lightbox="<?= $pluginname ?>" data-title="<?= $title ?>">
                                     <img class="big_thumb" src="<?= $URL . "/" . $source ?>"
                                          alt="<?= $pluginname ?>"/>
                                 </a>
@@ -147,7 +147,7 @@
                                              ?>
 
                                             <a href="<?= $URL . "/" . $source ?>"
-                                               data-dialog
+                                               data-lightbox="<?= $pluginname ?>"
                                                data-title="<?= $title ?>">
                                                 <img class="small_thumb"
                                                      src="<?= $URL . "/" . $source ?>"
