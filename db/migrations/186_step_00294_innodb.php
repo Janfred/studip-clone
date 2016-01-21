@@ -65,7 +65,7 @@ class StEP00294InnoDB extends Migration
              * in older versions.
              */
             if (version_compare($version, '5.6', '<')) {
-                $stmt_fulltext = DBManager::get()->prepare("SHOW INDEX FROM :database.:table WHERE Index_type = 'FULLTEXT'");
+                $stmt_fulltext = DBManager::get()->prepare("SHOW INDEX FROM `:database`.`:table` WHERE Index_type = 'FULLTEXT'");
                 foreach ($tables as $k => $t) {
                     $stmt_fulltext->bindParam(':table', $t, StudipPDO::PARAM_COLUMN);
                     $stmt_fulltext->bindParam(':database', $DB_STUDIP_DATABASE, StudipPDO::PARAM_COLUMN);
@@ -115,7 +115,7 @@ class StEP00294InnoDB extends Migration
             }
 
             // Prepare query for table conversion.
-            $stmt = DBManager::get()->prepare("ALTER TABLE :database.:table ROW_FORMAT=:rowformat ENGINE=:newengine");
+            $stmt = DBManager::get()->prepare("ALTER TABLE `:database`.`:table` ROW_FORMAT=:rowformat ENGINE=:newengine");
             $stmt->bindParam(':database', $DB_STUDIP_DATABASE, StudipPDO::PARAM_COLUMN);
             $stmt->bindParam(':rowformat', $rowformat, StudipPDO::PARAM_COLUMN);
             $newengine = 'InnoDB';
