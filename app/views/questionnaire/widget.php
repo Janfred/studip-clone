@@ -29,13 +29,13 @@
             <?= $this->render_partial("questionnaire/_widget_questionnaire", array('questionnaire' => $questionnaire, 'range_type' => $range_type, 'range_id' => $range_id)) ?>
         <? endforeach; ?>
     <? endif; ?>
-    <footer>
-        <? if ($allowed_to_add) : ?>
+    <? if ($allowed_to_add) : ?>
+        <footer>
             <? if (Request::get('questionnaire_showall')): ?>
                 <a href="<?= URLHelper::getLink('#questionnaire_area', array('questionnaire_showall' => 0)) ?>"><?= _('Abgelaufene Fragebögen ausblenden') ?></a>
             <? else: ?>
                 <a href="<?= URLHelper::getLink('#questionnaire_area', array('questionnaire_showall' => 1)) ?>"><?= _('Abgelaufene Fragebögen einblenden') ?></a>
             <? endif; ?>
-        <? endif ?>
-    </footer>
+        </footer>
+    <? endif ?>
 </section>
