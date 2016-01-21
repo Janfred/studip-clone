@@ -113,7 +113,8 @@ class PersonalNotifications extends SimpleORMap
      * @param null|string $html_id : id in the html-document. If user reaches
      *   this html-element the notification will be marked as read, so the user
      *   does not need to handle the information twice. Optional. Default: null
-     * @param string $avatar : URL of an image for the notification. Best size: 40px x 40px
+     * @param Icon|string $avatar : either an Icon or a URL of an
+     *   image for the notification. Best size: 40px x 40px
      * @return boolean : true on success
      */
     public static function add($user_ids, $url, $text, $html_id = null, $avatar = null)
@@ -128,7 +129,7 @@ class PersonalNotifications extends SimpleORMap
         $notification['html_id'] = $html_id;
         $notification['url']     = $url;
         $notification['text']    = $text;
-        $notification['avatar']  = $avatar;
+        $notification['avatar']  = $avatar instanceof Icon ? $avatar->asImagePath(40) : $avatar;
         $notification->store();
 
 

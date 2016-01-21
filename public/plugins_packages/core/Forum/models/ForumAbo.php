@@ -125,7 +125,7 @@ class ForumAbo {
                 ),
                 $notification,
                 "forumposting_" . $topic['topic_id'],
-                Icon::create('forum', 'clickable')->asImagePath(40)
+                Icon::create('forum', 'clickable')
             );
 
             if ($force_email) {

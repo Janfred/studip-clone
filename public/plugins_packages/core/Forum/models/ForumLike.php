@@ -37,7 +37,7 @@ class ForumLike {
         PersonalNotifications::add(
             $data['user_id'], PluginEngine::getURL('coreforum/index/index/' . $topic_id .'?highlight_topic='. $topic_id .'#'. $topic_id),
             $notification, $topic_id,
-            Icon::create('forum', 'clickable')->asImagePath(40)
+            Icon::create('forum', 'clickable')
         );
     }
     
