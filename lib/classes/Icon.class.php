@@ -229,12 +229,11 @@ class Icon
     /**
      * Returns a path to the SVG matching the icon.
      *
-     * @param int $size  Defines the size in px of the rendered icon
      * @return String containing the html representation for css backgrounds
      */
-    public function asImagePath($size = null)
+    public function asImagePath()
     {
-        return $this->prepareHTMLAttributes($size, [])['src'];
+        return $this->prepareHTMLAttributes(false, [])['src'];
     }
 
     /**
