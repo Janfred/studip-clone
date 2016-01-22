@@ -221,4 +221,36 @@ class IconClassTest extends PHPUnit_Framework_TestCase
         $icon = Icon::create('https://i.imgur.com/kpTtTh.gif');
         $this->assertEquals($icon->asImagePath(), 'https://i.imgur.com/kpTtTh.gif');
     }
+
+    function testIconCreateAsCSSWithSize()
+    {
+        $this->assertEquals(
+            'background-image:url(images/icons/17/blue/add/vote.png);background-image:none,url(images/icons/blue/add/vote.svg);background-size:17px 17px;',
+            Icon::create('vote+add', 'clickable')->asCSS(17)
+        );
+    }
+
+    function testIconCreateAsImagePath()
+    {
+        $this->assertEquals(
+            'images/icons/blue/add/vote.svg',
+            Icon::create('vote+add', 'clickable')->asImagePath()
+        );
+    }
+
+    function testIconCreateAsImgWithoutSize()
+    {
+        $this->assertEquals(
+            '<img src="images/icons/blue/vote.svg" alt="vote" class="icon-role-clickable icon-shape-vote">',
+            Icon::create('vote', 'clickable')->asImg(false)
+        );
+    }
+
+    function testIconCreateAsInputWithoutSize()
+    {
+        $this->assertEquals(
+            '<input type="image" src="images/icons/blue/upload.svg" alt="upload" class="icon-role-clickable icon-shape-upload">',
+            Icon::create('upload', 'clickable')->asInput(false)
+        );
+    }
 }
