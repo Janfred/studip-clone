@@ -50,6 +50,7 @@ $the_tree->open_ranges['root'] = true;
 if (Request::option('cmd')=="suche"){
     if (Request::get('search_name') && strlen(Request::get('search_name')) > 1){
         $view->params[0] = "%" . Request::quoted('search_name') . "%";
+        $view->params[1] = "%" . Request::quoted('search_name') . "%";
         $rs = $view->get_query("view:TREE_SEARCH_ITEM");
         while($rs->next_record()){
             $found_items[] = htmlReady($the_tree->tree->getItemPath($rs->f("item_id")));
