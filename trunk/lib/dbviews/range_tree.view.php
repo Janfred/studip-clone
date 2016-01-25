@@ -64,7 +64,7 @@ $_views["TREE_DEL_ITEM"] = array("query" => "DELETE FROM range_tree WHERE item_i
 $_views["TREE_SEARCH_INST"] = array("query" => "SELECT Name,Institut_id FROM Institute WHERE fakultaets_id!=Institut_id AND Name LIKE '%§%'");
 $_views["TREE_SEARCH_FAK"] = array("query" => "SELECT Name,Institut_id AS Fakultaets_id FROM Institute WHERE fakultaets_id=Institut_id AND Name LIKE '%§%'");
 $_views["TREE_SEARCH_ITEM"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
-                            "query"=>"SELECT a.item_id FROM range_tree a LEFT JOIN Institute b ON (a.studip_object_id = b.Institut_id) WHERE a.name LIKE ?");
+                            "query"=>"SELECT a.item_id FROM range_tree a LEFT JOIN Institute b ON (a.studip_object_id = b.Institut_id) WHERE a.name LIKE ? OR b.Name LIKE ? ");
 $_views["TREE_SEARCH_USER"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
                             "query"=>"SELECT rt.item_id FROM auth_user_md5 a LEFT JOIN user_inst b ON (a.user_id=b.user_id AND b.inst_perms!='user')
 LEFT JOIN range_tree rt ON (rt.studip_object_id=b.Institut_id ) WHERE NOT ISNULL(rt.item_id) AND (CONCAT(a.username,' ',a.Vorname,' ',a.Nachname) LIKE ? OR CONCAT(a.Nachname, ', ', a.Vorname) LIKE ?)");
