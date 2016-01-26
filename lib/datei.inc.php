@@ -1541,7 +1541,7 @@ function display_file_body($datei, $folder_id, $open, $change, $move, $upload, $
 
     if ($move == $datei["dokument_id"])
         $content.="<br>" . sprintf(_("Diese Datei wurde zum Verschieben / Kopieren markiert. Bitte wählen Sie das Einfügen-Symbol %s, um diese Datei in den gewünschten Ordner zu verschieben / kopieren. Wenn Sie diese Datei in eine andere Veranstaltung verschieben / kopieren möchten, wählen Sie die gewünschte Veranstaltung oben auf der Seite aus (sofern Sie Dozent oder Tutor in einer anderen Veranstaltung sind)."),
-                                   Icon::create('arr_2right', 'sort', ['title' => _("Klicken Sie dieses Symbol, um diese Datei in einen anderen Ordner einzufügen")]))->asImg();
+                                   Icon::create('arr_2right', 'sort', ['title' => _("Klicken Sie dieses Symbol, um diese Datei in einen anderen Ordner einzufügen")])->asImg());
 
     $content.= "\n";
 
