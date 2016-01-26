@@ -726,6 +726,7 @@ class Admin_CoursesController extends AuthenticatedController
 
         if (!empty($seminars)) {
             foreach ($seminars as $seminar_id => $seminar) {
+                $seminars[$seminar_id]['seminar_id'] = $seminar_id;
                 $dozenten = $this->getTeacher($seminar_id);
                 $seminars[$seminar_id]['dozenten'] = $dozenten;
 
