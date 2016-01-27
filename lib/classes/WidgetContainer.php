@@ -137,6 +137,16 @@ abstract class WidgetContainer
     }
 
     /**
+     * Returns all widgets of the container.
+     *
+     * @return array of Widget
+     */
+    public function getWidgets()
+    {
+        return $this->widgets;
+    }
+
+    /**
      * Removes the widget at the specified position.
      *
      * @param String $index Index/name of the widget to remove.
