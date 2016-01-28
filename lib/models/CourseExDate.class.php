@@ -152,11 +152,11 @@ class CourseExDate extends SimpleORMap
 
         //REMOVE content
         unset($ex_date['content']);
-        //REMOVE termin_id from ex_termin
-        unset($ex_date['termin_id']);
 
         $date = new CourseDate();
         $date->setData($ex_date);
+        $date->setId($date->getNewId());
+        
         if ($date->store()) {
             log_event('SEM_UNDELETE_SINGLEDATE', $this->termin_id, $this->range_id, 'Cycle_id: ' . $this->metadate_id);
             $this->delete();

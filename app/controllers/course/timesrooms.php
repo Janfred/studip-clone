@@ -258,15 +258,16 @@ class Course_TimesroomsController extends AuthenticatedController
         ) {
             $termin_values = $termin->toArray();
             $termin_info   = $termin->getFullname();
+            
             $termin->cancelDate();
             PageLayout::postInfo(sprintf(_('Der Termin %s wurde aus der Liste der regelmäßigen Termine'
                                            . ' gelöscht und als unregelmäßiger Termin eingetragen, da Sie die Zeiten des Termins verändert haben,'
                                            . ' so dass dieser Termin nun nicht mehr regelmäßig ist.'), $termin_info));
 
             $termin = new CourseDate();
-            unset($termin_values['termin_id']);
             unset($termin_values['metadate_id']);
             $termin->setData($termin_values);
+            $termin->setId($termin->getNewId());
         }
         $termin->date     = $date;
         $termin->end_time = $end_time;
