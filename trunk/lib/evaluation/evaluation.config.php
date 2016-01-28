@@ -133,9 +133,9 @@ define ("EVAL_PIC_TREE_ARROW",          Icon::create('arr_1right', 'clickable')-
 define ("EVAL_PIC_TREE_ARROW_ACTIVE",   Icon::create('arr_1down', 'clickable')->asImagePath());
 define ("EVAL_PIC_TREE_BLANC",          Assets::image_path('forumleer.gif'));
 define ("EVAL_PIC_TREE_ROOT",           Icon::create('vote', 'inactive')->asImagePath());
-define ("EVAL_PIC_TREE_GROUP",          Assets::image_path('eval_group.gif'));
+define ("EVAL_PIC_TREE_GROUP",          Icon::create('test', 'info')->asImagePath());
 define ("EVAL_PIC_TREE_GROUP_FILLED",   Assets::image_path('eval_group_filled.gif'));
-define ("EVAL_PIC_TREE_QUESTIONGROUP",  Assets::image_path('eval_qgroup.gif'));
+define ("EVAL_PIC_TREE_QUESTIONGROUP",  Icon::create('test', 'info')->asImagePath());
 define ("EVAL_PIC_TREE_QUESTIONGROUP_FILLED", Assets::image_path('eval_qgroup_filled.gif'));
 define ("EVAL_PIC_EXPORT_FILE",         Icon::create('file-xls', 'clickable')->asImagePath());
 define ("EVAL_PIC_YES",                 Icon::create('accept', 'accept')->asImagePath());
