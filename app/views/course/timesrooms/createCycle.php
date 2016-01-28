@@ -1,21 +1,23 @@
-<form action="<?= $controller->url_for('course/timesrooms/' . ($cycle->isNew() ? 'saveCycle' : 'editCycle/' . $cycle->id), $editParams) ?>"
+<form
+    action="<?= $controller->url_for('course/timesrooms/' . ($cycle->isNew() ? 'saveCycle' : 'editCycle/' . $cycle->id), $editParams) ?>"
     class="default" method="post"
     <?= Request::isXhr() ? 'data-dialog="size=big"' : '' ?>>
     <?= CSRFProtection::tokenTag() ?>
 
-<? if ($has_bookings): ?>
-    <?= MessageBox::error(_('Wenn Sie die regelmäßige Zeit auf %s ändern, verlieren Sie die Raumbuchungen für alle in der Zukunft liegenden Termine!'),
-        array(_('Sind Sie sicher, dass Sie die regelmäßige Zeit ändern möchten?'))) ?>
-<? endif; ?>
+    <? if ($has_bookings): ?>
+        <?= MessageBox::error(_('Wenn Sie die regelmäßige Zeit auf %s ändern, verlieren Sie die Raumbuchungen für alle in der Zukunft liegenden Termine!'),
+            array(_('Sind Sie sicher, dass Sie die regelmäßige Zeit ändern möchten?'))) ?>
+    <? endif; ?>
 
     <label>
         <?= _('Starttag') ?>
         <select name="day">
-        <? foreach (array(1, 2, 3, 4, 5, 6, 0) as $d): ?>
-            <option value="<?= $d ?>" <? if (Request::int('day', $cycle->weekday) === $d) echo 'selected'; ?>>
-                <?= getWeekday($d, false) ?>
-            </option>
-        <? endforeach; ?>
+            <? foreach (array(1, 2, 3, 4, 5, 6, 0) as $d): ?>
+                <option
+                    value="<?= $d ?>" <?= (Request::int('day') === $d) || (!is_null($cycle->start_time) && $cycle->weekday == $d) || ($d == 1) ? 'selected' : ''?>>
+                    <?= getWeekday($d, false) ?>
+                </option>
+            <? endforeach; ?>
         </select>
     </label>
 
@@ -42,13 +44,13 @@
     <label>
         <?= _('Turnus') ?>
         <select name="cycle">
-            <option value="0" <? if (Request::int('cycle', $cycle->cycle) === 0) echo 'selected'; ?>>
+            <option value="0" <?= (Request::int('cycle', $cycle->cycle) === 0) ? 'selected' : '' ?>>
                 <?= _('Wöchentlich') ?>
             </option>
-            <option value="1" <? if (Request::int('cycle', $cycle->cycle) === 1) echo 'selected'; ?>>
+            <option value="1" <?= (Request::int('cycle', $cycle->cycle) === 1) ? 'selected' : '' ?>>
                 <?= _('Zweiwöchentlich') ?>
             </option>
-            <option value="2" <? if (Request::int('cycle', $cycle->cycle) === 2) echo 'selected'; ?>>
+            <option value="2" <?= (Request::int('cycle', $cycle->cycle) === 2) ? 'selected' : '' ?>>
                 <?= _('Dreiwöchentlich') ?>
             </option>
         </select>
@@ -57,11 +59,12 @@
     <label>
         <?= _('Startwoche') ?>
         <select name="startWeek">
-        <? foreach ($start_weeks as $value => $data): ?>
-            <option value="<?= $value ?>" <? if (Request::get('startWeek', $cycle->week_offset) == $value) echo 'selected'; ?>>
-                <?= htmlReady($data['text']) ?>
-            </option>
-        <? endforeach; ?>
+            <? foreach ($start_weeks as $value => $data): ?>
+                <option
+                    value="<?= $value ?>" <?= (Request::get('startWeek', $cycle->week_offset) == $value) ? 'selected' : '' ?>>
+                    <?= htmlReady($data['text']) ?>
+                </option>
+            <? endforeach; ?>
         </select>
     </label>
 
@@ -69,11 +72,12 @@
         <?= _('Endwoche') ?>
         <select name="endWeek">
             <option value="0"><?= _('Ganzes Semester') ?></option>
-        <? foreach ($start_weeks as $value => $data): ?>
-            <option value="<?= $value + 1 ?>" <? if (Request::get('endWeek', $cycle->end_offset) == $value + 1) echo 'selected'; ?>>
-                <?= htmlReady($data['text']) ?>
-            </option>
-        <? endforeach; ?>
+            <? foreach ($start_weeks as $value => $data): ?>
+                <option
+                    value="<?= $value + 1 ?>" <?= (Request::get('endWeek', $cycle->end_offset) == $value + 1) ? 'selected' : '' ?>>
+                    <?= htmlReady($data['text']) ?>
+                </option>
+            <? endforeach; ?>
         </select>
     </label>
 
@@ -85,8 +89,8 @@
 
     <footer data-dialog-button>
         <?= Studip\Button::createAccept(_('Speichern'), 'save') ?>
-    <? if (Request::get('fromDialog') == 'true'): ?>
-        <?= Studip\LinkButton::create(_('Zurück zur Übersicht'), $controller->url_for('course/timesrooms/index'), array('data-dialog' => 'size=big')) ?>
-    <? endif; ?>
+        <? if (Request::get('fromDialog') == 'true'): ?>
+            <?= Studip\LinkButton::create(_('Zurück zur Übersicht'), $controller->url_for('course/timesrooms/index'), array('data-dialog' => 'size=big')) ?>
+        <? endif; ?>
     </footer>
 </form>
