@@ -23,14 +23,15 @@ class EvaluationsWidget extends StudIPPlugin implements PortalPlugin
         // include and show votes and tests
         if (get_config('VOTE_ENABLE')) {
             $controller = new PluginController(new StudipDispatcher());
-            $response = $controller->relay('questionnaire/widget/start')->body;
+            $response = $controller->relay('evaluation/display/start')->body;
+            $response .= $controller->relay('questionnaire/widget/start')->body;
 
 
             $template = $GLOBALS['template_factory']->open('shared/string');
             $template->content = $response;
 
             if ($GLOBALS['perm']->have_perm('root')) {
-                $navigation = new Navigation('', 'admin_vote.php', array('page' => 'overview', 'showrangeID' => 'studip'));
+                $navigation = new Navigation('', 'dispatch.php/questionnaire/overview');
                 $navigation->setImage(Icon::create('admin', 'clickable', ["title" => _('Umfragen bearbeiten')]));
                 $template->icons = array($navigation);
             }
