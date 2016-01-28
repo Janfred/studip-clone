@@ -17,28 +17,12 @@ class EvaluationController extends AuthenticatedController {
 
         // Bind some params
         URLHelper::bindLinkParam('show_expired', $null1);
-        URLHelper::bindLinkParam('preview', $null2);
-        URLHelper::bindLinkParam('revealNames', $null3);
-        URLHelper::bindLinkParam('sort', $null4);
 
         // Bind range_id
         $this->range_id = $range_id;
 
         $this->nobody = !$GLOBALS['user']->id || $GLOBALS['user']->id == 'nobody';
 
-        /*
-         * Insert vote
-         */
-        if ($vote = Request::get('vote')) {
-            $vote = new StudipVote($vote);
-            if (!$this->nobody && $vote && $vote->isRunning() && (!$vote->userVoted() || $vote->changeable)) {
-                try {
-                    $vote->insertVote(Request::getArray('vote_answers'), $GLOBALS['user']->id);
-                } catch (Exception $exc) {
-                    $GLOBALS['vote_message'][$vote->id] = MessageBox::error($exc->getMessage());
-                }
-            }
-        }
 
         // Check if we ned administration icons
         $this->admin = $range_id == $GLOBALS['user']->id || $GLOBALS['perm']->have_studip_perm('tutor', $range_id);
@@ -60,9 +44,6 @@ class EvaluationController extends AuthenticatedController {
 
         $this->visit();
 
-        if (!count($this->evaluations)) {
-            $this->render_nothing();
-        }
     }
 
     function visit()
@@ -76,19 +57,6 @@ class EvaluationController extends AuthenticatedController {
     {
         $this->visit();
         $this->render_nothing();
-    }
-
-    /**
-     * Determines if a vote should show its result
-     *
-     * @param StudipVote $vote the vote to check
-     * @return boolean true if result should be shown
-     */
-    public function showResult($vote) {
-        if (Request::submitted('change') && $vote->changeable) {
-            return false;
-        }
-        return $vote->userVoted() || in_array($vote->id, Request::getArray('preview'));
     }
 
 }
