@@ -94,7 +94,9 @@ echo $news;
 echo $dates;
 
 // Anzeige von Umfragen
-echo $votes;
+echo $evaluations;
+
+echo $questionnaires;
 
 // display plugins
 $plugins = PluginEngine::getPlugins('StandardPlugin', $course_id);
