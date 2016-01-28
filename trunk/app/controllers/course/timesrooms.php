@@ -335,6 +335,7 @@ class Course_TimesroomsController extends AuthenticatedController
      */
     public function createSingleDate_action()
     {
+        PageLayout::setTitle(Course::findCurrent()->getFullname() . " - " . _('Einzeltermin anlegen'));
         $this->restoreRequest(words('date start_time end_time room related_teachers related_statusgruppen freeRoomText dateType fromDialog'));
 
         $this->editParams = array('fromDialog' => Request::get('fromDialog'));
@@ -774,6 +775,7 @@ class Course_TimesroomsController extends AuthenticatedController
      */
     public function createCycle_action($cycle_id = null)
     {
+        PageLayout::setTitle(Course::findCurrent()->getFullname() . " - " . _('Regelmäßige Termine anlegen'));
         $this->restoreRequest(words('day start_time end_time description cycle startWeek teacher_sws fromDialog'));
 
         $this->editParams = array('fromDialog' => Request::get('fromDialog'));
@@ -834,8 +836,7 @@ class Course_TimesroomsController extends AuthenticatedController
 
             $this->course->createMessage(sprintf(_('Die regelmäßige Veranstaltungszeit %s wurde hinzugefügt!'), $cycle_info));
             $this->displayMessages();
-
-            if (Request::get('fromDialog') == 'true') {
+            if (Request::get('fromDialog')) {
                 $this->redirect('course/timesrooms/index');
             } else {
                 $this->relocate('course/timesrooms/index');
@@ -875,7 +876,11 @@ class Course_TimesroomsController extends AuthenticatedController
             PageLayout::postInfo(_('Es wurden keine Änderungen vorgenommen'));
         }
 
-        $this->redirect('course/timesrooms/index');
+        if (Request::get('fromDialog')) {
+            $this->redirect('course/timesrooms/index');
+        } else {
+            $this->relocate('course/timesrooms/index');
+        }
     }
 
     /**
@@ -1085,7 +1090,7 @@ class Course_TimesroomsController extends AuthenticatedController
                         $this->course->createMessage(sprintf(_('Sie haben den Termin %s gelöscht, dem ein Thema zugeorndet war.'
                                                                . ' Sie können das Thema in der %sExpertenansicht des Ablaufplans%s einem anderen Termin (z.B. einem Ausweichtermin) zuordnen.'),
                             $termin_date, '<a href="' . URLHelper::getLink('themen.php?cmd=changeViewMode&newFilter=expert') . '">', '</a>'));
-                    } elseif ($room) {
+                    } elseif ($termin_room) {
                         $this->course->createMessage(sprintf(_('Der Termin %s wurde gelöscht! Die Buchung für den Raum %s wurde gelöscht.'),
                             $termin_date, $termin_room));
                     } else {
