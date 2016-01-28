@@ -221,10 +221,11 @@ class CourseDate extends SimpleORMap
     public function cancelDate()
     {
         $date = $this->toArray();
-        unset($date['termin_id']);
-
+        
         $ex_date = new CourseExDate();
         $ex_date->setData($date);
+        $ex_date->setId($ex_date->getNewId());
+        
         if ($ex_date->store()) {
             $this->delete();
             return $ex_date;
