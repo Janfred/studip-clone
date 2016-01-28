@@ -59,7 +59,7 @@
                 <input style="display: inline" type="radio" name="action" value="room" checked="checked" />
             </label>
 
-            <select name="room" onFocus="jQuery('input[type=radio][name=action][value=room]').attr('checked', 'checked')">
+            <select name="room" onFocus="jQuery('input[type=radio][name=action][value=room]').prop('checked', 'checked')">
                 <option value="">-- <?= _('Raum auswählen') ?> --</option>
                 <? while ($res = $resList->next()) : ?>
                     <option value="<?= $res['resource_id'] ?>">
@@ -84,7 +84,7 @@
         </label>
         <input type="text" name="freeRoomText" maxlength="255" value="<?= $tpl['freeRoomText'] ?>"
                placeholder="<?= $placerholder ?>"
-               onFocus="jQuery('input[type=radio][name=action][value=freetext]').attr('checked', 'checked')" />
+               onFocus="jQuery('input[type=radio][name=action][value=freetext]').prop('checked', 'checked')" />
     </section>
     <? if (Config::get()->RESOURCES_ENABLE) : ?>
         <section>
