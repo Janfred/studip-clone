@@ -158,8 +158,11 @@ class ProfileController extends AuthenticatedController
 
         // include and show votes and tests
         if (get_config('VOTE_ENABLE') && $this->profile->checkVisibility('votes')) {
+            $response = $this->relay('evaluation/display/' . $this->current_user->user_id);
+            $this->evaluations = $response->body;
+
             $response = $this->relay('questionnaire/widget/' . $this->current_user->user_id . "/user");
-            $this->votes = $response->body;
+            $this->questionnaires = $response->body;
         }
 
         // Hier werden Lebenslauf, Hobbys, Publikationen und Arbeitsschwerpunkte ausgegeben:

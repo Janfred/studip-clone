@@ -39,6 +39,7 @@
 
 <?= $news ?>
 <?= $dates ?>
+<?= $evaluations ?>
 <?= $questionnaires ?>
 
 <?
