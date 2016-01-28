@@ -1,4 +1,4 @@
-<? if ($admin || $votes || $evaluations): ?>
+<? if ($admin || $evaluations): ?>
 <section class="contentbox">
     <header>
         <h1>
@@ -7,14 +7,14 @@
         </h1>
         <nav>
         <? if ($admin): ?>
-            <a href="<?= URLHelper::getLink('admin_evaluation.php', array('rangeID' => 'overview')) ?>">
+            <a href="<?= URLHelper::getLink('admin_evaluation.php', array('rangeID' => $range_id)) ?>">
                 <?= Icon::create('admin', 'clickable')->asImg(); ?>
             </a>
         <? endif; ?>
         </nav>
     </header>
 
-    <? if (!$votes && !$evaluations): ?>
+    <? if (!$evaluations): ?>
         <section>
             <?= _('Keine Evaluationen vorhanden. Um neue Umfragen zu erstellen, klicken Sie rechts auf die Zahnräder.') ?>
         </section>
