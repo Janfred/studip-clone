@@ -53,7 +53,7 @@
 
                             <span>
                                 <a href="<?= $controller->url_for('course/timesrooms/createCycle/' . $metadate_id) ?>"
-                                   data-dialog="size=big">
+                                   data-dialog="size=600">
                                     <?= Icon::create('edit', 'clickable', ['title' => _('Diesen Zeitraum bearbeiten')])->asImg() ?>
                                 </a>
                                 <?= Icon::create('trash', 'clickable', ['title' => _('Diesen Zeitraum löschen')])
@@ -83,7 +83,7 @@
                         <tbody>
                         <? foreach ($termine as $termin) : ?>
                             <?= $this->render_partial('course/timesrooms/_cycleRow.php',
-                                    array('termin' => $termin,'class_ids' => 'ids-regular')) ?>
+                                    array('termin' => $termin,'class_ids' => 'ids-regular_' . $metadate_id)) ?>
                         <? endforeach ?>
                         </tbody>
                     <? endforeach ?>
@@ -93,13 +93,13 @@
                                     <td colspan="2">
                                         <label>
                                             <input type="checkbox"
-                                                    data-proxyfor=".ids-regular"
-                                                    data-activates=".actionForAllRegular">
+                                                    data-proxyfor=".ids-regular_<?=$metadate_id?>"
+                                                    data-activates=".actionForAllRegular_<?= $metadate_id ?>">
                                             <?= _('Alle auswählen') ?>
                                         </label>
                                     </td>
                                     <td colspan="3" class="actions">
-                                        <select name="method" class="actionForAllRegular">
+                                        <select name="method" class="actionForAllRegular_<?= $metadate_id ?>">
                                             <?= $this->render_partial('course/timesrooms/_stack_actions.php') ?>
                                         </select>
                                         <?= Studip\Button::create(_('Ausführen'), 'run', array('class' => 'actionForAllRegular','data-dialog' => 'size=big')) ?>
