@@ -1,6 +1,6 @@
 <?
 // add skip link
-SkipLinks::addIndex(_("Wochenansicht"), 'main_content', 100);
+SkipLinks::addIndex(_('Wochenansicht'), 'main_content', 100);
 $at = date('G', $atime);
 if ($at >= $settings['start']
         && $at <= $settings['end'] || !$atime) {
@@ -65,10 +65,8 @@ if ($rowspan > 1) {
         <td colspan="<?= $colspan_2 ?>" style="vertical-align: middle; text-align: center;">
             <div style="text-align: left; width: 25%; display: inline-block; white-space: nowrap;">
                 <a href="<?= $controller->url_for('calendar/single/week', array('atime' => strtotime('-1 week', $atime))) ?>">
-                    <span style="vertical-align: middle;" <?= tooltip(_('eine Woche zurück')) ?>>
-                    <?= Icon::create('arr_1left', 'clickable')->asImg() ?>
-                    </span>
-                    <?= strftime(_('%V. Woche'), strtotime('-1 week', $atime)) ?>
+                    <?= Icon::create('arr_1left', 'clickable', ['title' => _('Eine Woche zurück')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
+                    <?= sprintf(_('%u. Woche'), strftime('%V', strtotime('-1 week', $atime))) ?>
                 </a>
             </div>
             <div style="display: inline-block; text-align: center;" class="calhead">
@@ -76,10 +74,8 @@ if ($rowspan > 1) {
             </div>
             <div style="width: 25%; text-align: right; display: inline-block; white-space: nowrap;">
                 <a href="<?= $controller->url_for('calendar/single/week', array('atime' => strtotime('+1 week', $atime))) ?>">
-                    <?= strftime(_('%V. Woche'), strtotime('+1 week', $atime)) ?>
-                    <span style="vertical-align: middle;" <?= tooltip(_('eine Woche vor')) ?>>
-                    <?= Icon::create('arr_1right', 'clickable')->asImg() ?>
-                    </span>
+                    <?= sprintf(_('%u. Woche'), strftime('%V', strtotime('+1 week', $atime))) ?>
+                    <?= Icon::create('arr_1right', 'clickable', ['title' => _('Eine Woche vor')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
                 </a>
             </div>
         </td>
@@ -88,7 +84,7 @@ if ($rowspan > 1) {
         <td style="text-align: center; white-space: nowrap;" <?= $colspan_1 ?>>
             <? if ($start > 0) : ?>
             <a href="<?= $controller->url_for('calendar/single/week', array('atime' => mktime($start - 1, 0, 0, date('n', $atime), date('j', $atime), date('Y', $atime)))) ?>">
-                <?= Icon::create('arr_1up', 'clickable', ['title' => _('zeig davor')])->asImg() ?>
+                <?= Icon::create('arr_1up', 'clickable', ['title' => _('Früher')])->asImg() ?>
             </a>
             <? endif ?>
         </td>
@@ -106,7 +102,7 @@ if ($rowspan > 1) {
         <td style="text-align: center; white-space: nowrap;" <?= $colspan_1 ?>>
             <? if ($start > 0) : ?>
             <a href="<?= $controller->url_for('calendar/single/week', array('atime' => mktime($start - 1, 0, 0, date('n', $calendars[0]->getStart()), date('j', $calendars[0]->getStart()), date('Y', $calendars[0]->getStart())))) ?>">
-                <?= Icon::create('arr_1up', 'clickable', ['title' => _('zeig davor')])->asImg() ?>
+                <?= Icon::create('arr_1up', 'clickable', ['title' => _('Früher')])->asImg() ?>
             </a>
             <? endif ?>
         </td>
@@ -183,7 +179,7 @@ if ($rowspan > 1) {
         <td<?= $colspan_1 ?> style="text-align:center;">
         <? if ($end < 23) : ?>
             <a href="<?= $controller->url_for('calendar/single/week', array('atime' => mktime($end + 1, 0, 0, date('n', $calendars[0]->getStart()), date('j', $calendars[0]->getStart()), date('Y', $calendars[0]->getStart())))) ?>">
-                <?= Icon::create('arr_1down', 'clickable', ['title' => _('zeig danach')])->asImg() ?>
+                <?= Icon::create('arr_1down', 'clickable', ['title' => _('Später')])->asImg() ?>
             </a>
         <? endif ?>
         </td>
@@ -191,7 +187,7 @@ if ($rowspan > 1) {
         <td<?= $colspan_1 ?> style="text-align:center;">
         <? if ($end < 23) : ?>
             <a href="<?= $controller->url_for('calendar/single/week', array('atime' => mktime($end + 1, 0, 0, date('n', $calendars[0]->getStart()), date('j', $calendars[0]->getStart()), date('Y', $calendars[0]->getStart())))) ?>">
-                <?= Icon::create('arr_1down', 'clickable', ['title' => _('zeig danach')])->asImg() ?>
+                <?= Icon::create('arr_1down', 'clickable', ['title' => _('Später')])->asImg() ?>
             </a>
         <? endif ?>
         </td>

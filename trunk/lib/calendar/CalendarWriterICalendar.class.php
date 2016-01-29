@@ -80,7 +80,7 @@ class CalendarWriteriCalendar extends CalendarWriter
      * @param object $event The event to export.
      * @return String iCalendar formatted data
      */
-    function write(&$event)
+    function write(Event &$event)
     {
 
         $match_pattern_1 = array('\\', '\n', ';', ',');
@@ -97,7 +97,7 @@ class CalendarWriteriCalendar extends CalendarWriter
             if ($name === 'SUMMARY') {
                 $value = $event->getTitle();
             }
-            if ($value === '') {
+            if ($value === '' || is_null($value)) {
                 continue;
             }
 
@@ -112,6 +112,7 @@ class CalendarWriteriCalendar extends CalendarWriter
                 case 'END':
                 case 'EVENT_TYPE':
                 case 'SEM_ID':
+                case 'STUDIP_GROUP_STATUS':
                     continue 2;
 
                 // text fields
@@ -284,6 +285,10 @@ class CalendarWriteriCalendar extends CalendarWriter
                 $attr_string = "$name$params_str:$value";
                 $result .= $this->_foldLine($attr_string) . $this->newline;
             }
+        }
+    //    if ($event->isGroupEvent()) {
+        if ($event instanceof CalendarEvent && $event->attendees->count() > 1) {
+            $result .= $this->_exportGroupEventProperties($event);
         }
         //  $result .= 'DTSTAMP:' . $this->_exportDateTime(time()) . $this->newline;
         $result .= "END:VEVENT" . $this->newline;
@@ -514,6 +519,86 @@ class CalendarWriteriCalendar extends CalendarWriter
         }
 
         return implode(',', $exdates);
+    }
+    
+    private function _exportGroupEventProperties(Event $event)
+    {
+        $organizer = User::find($event->getAuthorId());
+        if ($organizer) {
+            $properties = $this->_foldLine('ORGANIZER;CN="'
+                    . $organizer->getFullName()
+                    . '":mailto:' . $organizer->Email)
+                    . $this->newline;
+        } else {
+            $properties = $this->_foldLine('ORGANIZER;CN="'
+                    . _('unbekannt')
+                    . '":mailto:' . $GLOBALS['user']->email)
+                    . $this->newline;
+        }
+        foreach ($event->attendees as $event_member) {
+            if ($event->getAuthorId() == $event_member->user->id) {
+                if ($event_member->user) {
+                    $properties .= $this->_foldLine('ATTENDEE;'
+                            . 'ROLE=REQ-PARTICIPANT;'
+                            . 'CN="' . $event_member->user->getFullName()
+                            . '":mailto:' . $event_member->user->Email)
+                            . $this->newline;
+                } else {
+                    $properties = '';
+                    /*
+                    $properties .= $this->_foldLine('ATTENDEE;'
+                            . 'ROLE=REQ-PARTICIPANT;'
+                            . 'CN="' . _('unbekannt') . '"')
+                            . $this->newline;
+                     * 
+                     */
+                }
+            } else {
+                if ($event_member->user) {
+                    switch ($event_member->group_status) {
+                        case CalendarEvent::PARTSTAT_ACCEPTED :
+                            $attendee = 'ATTENDEE;ROLE=REQ-PARTICIPANT'
+                                . ';PARTSTAT=ACCEPTED';
+                            break;
+                        case CalendarEvent::PARTSTAT_DELEGATED :
+                            $attendee = 'ATTENDEE;ROLE=NON-PARTICIPANT'
+                                . ';PARTSTAT=ACCEPTED'
+                                . ';DELEGATED-TO="mailto:'
+                                . $this->getFacultyEmail($organizer->getId())
+                                . '"';
+                            break;
+                        case CalendarEvent::PARTSTAT_DECLINED :
+                            $attendee = 'ATTENDEE;ROLE=REQ-PARTICIPANT'
+                                . ';PARTSTAT=DECLINED';
+                            break;
+                        default :
+                            $attendee = 'ATTENDEE;ROLE=REQ-PARTICIPANT';
+                            $attendee .= ';PARTSTAT=TENTATIVE';
+                            $attendee .= ';RSVP=TRUE';
+
+                    }
+                    $attendee .= ';CN="' . $event_member->user->getFullName()
+                            . '":mailto:' . $event_member->user->Email;
+                    /*
+                } else {
+                    $attendee .= ';CN="' . _('unbekannt') . '"';
+                }
+                     * 
+                     */
+                    $properties .= $this->_foldLine($attendee) . $this->newline;
+                }
+            }
+        }
+        return $properties;
+    }
+
+    function getFacultyEmail($user_id)
+    {
+        $stmt = DBManager::get()->prepare('SELECT email FROM Institute i '
+                . 'LEFT JOIN user_inst ui USING(institut_id) '
+                . 'WHERE i.Institut_id = fakultaets_id AND user_id = ?');
+        $stmt->execute(array($user_id));
+        return $stmt->fetchColumn();
     }
     
     function _exportCategories($event)

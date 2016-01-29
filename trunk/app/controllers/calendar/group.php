@@ -1,6 +1,7 @@
 <?php
 
 require_once 'app/controllers/calendar/calendar.php';
+require_once 'app/controllers/authenticated_controller.php';
 require_once 'app/models/calendar/Calendar.php';
 require_once 'app/models/calendar/SingleCalendar.php';
 
@@ -101,7 +102,7 @@ class Calendar_GroupController extends Calendar_CalendarController {
                         array($this->range_id, $this->event->event_id))));
                 return null;
             }
-            $this->attendees = $this->event->getAttendees();
+            $this->attendees = $this->event->attendees;
             if (!Request::isXhr()) {
                 PageLayout::setTitle($this->getTitle($this->calendar, _('Termin bearbeiten')));
             }
@@ -121,7 +122,7 @@ class Calendar_GroupController extends Calendar_CalendarController {
                 . "OR CONCAT(Nachname,' ',Vorname) LIKE :input "
                 . "OR Nachname LIKE :input OR {$GLOBALS['_fullname_sql']['full_rev']} LIKE :input "
                 . ") ORDER BY fullname ASC",
-                _('Person suchen'), 'user_id');
+                _('Nutzer suchen'), 'user_id');
             $this->quick_search = QuickSearch::get('user_id', $search_obj)
                     ->fireJSFunctionOnSelect('STUDIP.Messages.add_adressee');
             
@@ -187,7 +188,8 @@ class Calendar_GroupController extends Calendar_CalendarController {
         foreach ($group->members as $member) {
             $calendar = new SingleCalendar($member->user_id);
             if ($calendar->havePermission(Calendar::PERMISSION_READABLE)) {
-                $this->calendars[] = SingleCalendar::getDayCalendar($calendar, $this->atime);
+                $this->calendars[] = SingleCalendar::getDayCalendar($calendar,
+                        $this->atime, null, $this->restrictions);
             }
         }
         
@@ -202,7 +204,7 @@ class Calendar_GroupController extends Calendar_CalendarController {
     }
     
     /**
-     * 
+     * Returns the Statusgruppe for the given calendar.
      * 
      * @param SingleCalendar The calendar of the group owner.
      * @return Statusgruppen The found group. 
@@ -234,8 +236,8 @@ class Calendar_GroupController extends Calendar_CalendarController {
         for ($i = 0; $i < $day_count; $i++) {
             // one calendar holds the events of one day
             $this->calendars[0][$i] =
-                    SingleCalendar::getDayCalendar(
-                            $GLOBALS['user']->id, $monday + $i * 86400);
+                    SingleCalendar::getDayCalendar($GLOBALS['user']->id,
+                            $monday + $i * 86400, null, $this->restrictions);
         }
         // check and get the group
         $group = $this->getGroup($this->calendars[0][0]);
@@ -246,7 +248,7 @@ class Calendar_GroupController extends Calendar_CalendarController {
                 for ($i = 0; $i < $day_count; $i++) {
                     $this->calendars[$n][$i] =
                             SingleCalendar::getDayCalendar($member->user_id,
-                                    $monday + $i * 86400);
+                                $monday + $i * 86400, null, $this->restrictions);
                 }
                 $n++;
             }
@@ -274,7 +276,7 @@ class Calendar_GroupController extends Calendar_CalendarController {
         // one calendar each day for the actual user
         for ($start_day = $this->first_day; $start_day <= $this->last_day; $start_day += 86400) {
             $this->calendars[0][] = SingleCalendar::getDayCalendar(
-                    $GLOBALS['user']->id, $start_day);
+                    $GLOBALS['user']->id, $start_day, null, $this->restrictions);
         }
         // check and get the group
         $group = $this->getGroup($this->calendars[0][0]);
@@ -285,7 +287,8 @@ class Calendar_GroupController extends Calendar_CalendarController {
             if ($calendar->havePermission(Calendar::PERMISSION_READABLE)) {
                 for ($start_day = $this->first_day; $start_day <= $this->last_day; $start_day += 86400) {
                     $this->calendars[$n][] =
-                            SingleCalendar::getDayCalendar($member->user_id, $start_day);
+                            SingleCalendar::getDayCalendar($member->user_id,
+                                    $start_day, null, $this->restrictions);
                 }
                 $n++;
             }

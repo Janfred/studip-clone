@@ -5,15 +5,11 @@
             <td colspan="8" style="text-align: center; vertical-align: middle;">
                 <div style="text-align: left; display: inline-block; white-space: nowrap; width: 33%;">
                     <a style="padding-right: 2em;" href="<?= $controller->url_for('calendar/single/month', array('atime' => strtotime('-1 year', $atime))) ?>">
-                        <span style="vertical-align: middle;" <?= tooltip(_('ein Jahr zurück')) ?>>
-                        <?= Icon::create('arr_2left', 'clickable')->asImg() ?>
-                        </span>
+                        <?= Icon::create('arr_2left', 'clickable', ['title' => _('Ein Jahr zurück')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
                         <?= strftime('%B %Y', strtotime('-1 year', $atime)) ?>
                     </a>
                     <a href="<?= $controller->url_for('calendar/single/month', array('atime' => strtotime('-1 month', $atime))) ?>">
-                        <span style="vertical-align: middle;" <?= tooltip(_('einen Monat zurück')) ?>>
-                        <?= Icon::create('arr_1left', 'clickable', ['title' => _('einen Monat zurück')])->asImg() ?>
-                        </span>
+                        <?= Icon::create('arr_1left', 'clickable', ['title' => _('Einen Monat zurück')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
                         <?= strftime('%B %Y', strtotime('-1 month', $atime)) ?>
                     </a>
                 </div>
@@ -23,15 +19,11 @@
                 <div style="text-align: right; display: inline-block; white-space: nowrap; width: 33%;">
                     <a style="padding-right: 2em;" href="<?= $controller->url_for('calendar/single/month', array('atime' => strtotime('+1 month', $atime))) ?>">
                         <?= strftime('%B %Y', strtotime('+1 month', $atime)) ?>
-                        <span style="vertical-align: middle;" <?= tooltip(_('einen Monat vor')) ?>>
-                        <?= Icon::create('arr_1right', 'clickable')->asImg() ?>
-                        </span>
+                        <?= Icon::create('arr_1right', 'clickable', ['title' => _('Einen Monat vor')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
                     </a>
                     <a href="<?= $controller->url_for('calendar/single/month', array('atime' => strtotime('+1 year', $atime))) ?>">
                         <?= strftime('%B %Y', strtotime('+1 year', $atime)) ?>
-                        <span style="vertical-align: middle;" <?= tooltip(_('ein Jahr vor')) ?>>
-                        <?= Icon::create('arr_2right', 'clickable')->asImg() ?>
-                        </span>
+                        <?= Icon::create('arr_2right', 'clickable', ['title' => _('Ein Jahr vor')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
                     </a>
                 </div>
             </td>

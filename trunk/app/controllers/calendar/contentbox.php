@@ -19,7 +19,7 @@ require_once 'app/models/calendar/SingleCalendar.php';
 class Calendar_ContentboxController extends StudipController {
 
     /**
-     * Widget controller to produce the formally known show_votes()
+     * Widget controller to produce the formally known show_dates()
      *
      * @param String $range_id range id (or array of range ids) of the news to get displayed
      * @return array() Array of votes
@@ -58,7 +58,7 @@ class Calendar_ContentboxController extends StudipController {
 
         // Forge title
         if ($this->termine) {
-            $this->title = sprintf(_("Termine für die Zeit vom %s bis zum %s"), strftime("%d. %B %Y", $this->start), strftime("%d. %B %Y", $this->start + $this->timespan));
+            $this->title = sprintf(_('Termine für die Zeit vom %s bis zum %s'), strftime("%d. %B %Y", $this->start), strftime("%d. %B %Y", $this->start + $this->timespan));
         } else {
             $this->title = _('Termine');
         }
@@ -107,7 +107,7 @@ class Calendar_ContentboxController extends StudipController {
         foreach ($events as $termin) {
             // Adjust title
             if (date("Ymd", $termin->getStart()) == date("Ymd", time())) {
-                $title = _("Heute") . date(", H:i", $termin->getStart());
+                $title = _('Heute') . date(", H:i", $termin->getStart());
             } else {
                 $title = substr(strftime("%a", $termin->getStart()), 0, 2);
                 $title .= date(". d.m.Y, H:i", $termin->getStart());

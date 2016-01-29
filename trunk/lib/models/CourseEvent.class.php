@@ -67,6 +67,7 @@ class CourseEvent extends CourseDate implements Event
         $stmt = DBManager::get()->prepare('SELECT termine.* FROM seminar_user '
                 . 'INNER JOIN termine ON seminar_id = range_id '
                 . 'WHERE user_id = :user_id '
+                . 'AND bind_calendar = 1 '
                 . 'AND date BETWEEN :start AND :end '
                 . "AND (IFNULL(metadate_id, '') = '' "
                 . 'OR metadate_id NOT IN ( '
@@ -79,14 +80,14 @@ class CourseEvent extends CourseDate implements Event
             ':end'     => $end->getTimestamp()
         ));
        $event_collection = array();
-        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
-            $event = new CourseEvent();
-            $event->setData($row);
-            $event->setNew(false);
-            // related persons (dozenten) or groups
-            if (self::checkRelated($event, $user_id)) {
-                $event_collection[] = $event;
-            }
+       foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+           $event = new CourseEvent();
+           $event->setData($row);
+           $event->setNew(false);
+           // related persons (dozenten) or groups
+           if (self::checkRelated($event, $user_id)) {
+               $event_collection[] = $event;
+           }
         }
         $event_collection = SimpleORMapCollection::createFromArray($event_collection, false);
         $event_collection->setClassName('Event');

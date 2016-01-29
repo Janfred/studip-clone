@@ -13,6 +13,6 @@
  * @category    Stud.IP
 */
 
-class CalendarExporttException extends Exception
+class CalendarExportException extends Exception
 {
 }

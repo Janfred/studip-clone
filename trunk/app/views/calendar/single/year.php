@@ -3,9 +3,7 @@
         <td colspan="3" style="text-align: center; vertical-align: middle;">
             <div style="text-align: left; display: inline-block; width: 20%; white-space: nowrap;">
                 <a href="<?= $controller->url_for('calendar/single/year', array('atime' => strtotime('-1 year', $atime))) ?>">
-                    <span style="vertical-align: middle;" <?= tooltip(_('ein Jahr zurück')) ?>>
-                        <?= Icon::create('arr_2left', 'clickable')->asImg() ?>
-                    </span>
+                    <?= Icon::create('arr_2left', 'clickable', ['title' => _('Ein Jahr zurück')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
                     <?= strftime('%Y', strtotime('-1 year', $atime)) ?>
                 </a>
             </div>
@@ -15,9 +13,7 @@
             <div style="text-align: right; display: inline-block; width: 20%; white-space: nowrap;">
                 <a href="<?= $controller->url_for('calendar/single/year', array('atime' => strtotime('+1 year', $atime))) ?>">
                     <?= strftime('%Y', strtotime('+1 year', $atime)) ?>
-                    <span style="vertical-align: middle;" <?= tooltip(_('ein Jahr vor')) ?>>
-                        <?= Icon::create('arr_2right', 'clickable')->asImg() ?>
-                    </span>
+                    <?= Icon::create('arr_2right', 'clickable', ['title' => _('Ein Jahr vor')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
                 </a>
             </div>
         </td>

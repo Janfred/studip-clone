@@ -4,10 +4,9 @@ if ($settings['step_day'] >= 3600) {
 } else {
     $rowspan_precol = ' rowspan="' . 3600 / $settings['step_day'] . '"';
 }
-
 ?>
 <tr>
-    <td class="precol1w" <?= $rowspan_precol ? ' colspan="2"' : '' ?>><?= _("Tag") ?></td>
+    <td class="precol1w" <?= $rowspan_precol ? ' colspan="2"' : '' ?>><?= _('Tag') ?></td>
     <?= $this->render_partial('calendar/single/_day_dayevents', array('em' => $em)); ?>
 </tr>
 <? for ($i = $start / $settings['step_day']; $i < $end / $settings['step_day'] + 3600 / $settings['step_day']; $i++) : ?>
