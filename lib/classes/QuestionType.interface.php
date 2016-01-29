@@ -12,7 +12,7 @@ interface QuestionType {
     /**
      * Returns a specific icon for this type of question. Note this is not bound to the
      * object but called staticly.
-     * @return string : URL or short string for assets class like 'icons/20/blue/vote'
+     * @return Icon the specific icon for this type of question
      */
     static public function getIcon($active = false, $add = false);
 

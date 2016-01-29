@@ -6,8 +6,7 @@ class Test extends QuestionnaireQuestion implements QuestionType
 {
     static public function getIcon($active = false, $add = false)
     {
-        return Icon::create(($add ?  "add/" : "")."test", $active ? "clickable" : "info");
-        return "icons/".($active ? "blue" : "black")."/20/".($add ? "add/" : "")."test";
+        return Icon::create($add ?  'test+add' : 'test', $active ? "clickable" : "info");
     }
 
     static public function getName()

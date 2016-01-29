@@ -139,7 +139,7 @@ foreach ($sem_browse_obj->group_by_fields as $i => $field){
     $grouping->addLink(
         $field['name'],
         URLHelper::getLink('?', array('group_by' => $i)),
-        $group_by == $i ? "icons/16/red/arr_1right" : ""
+        $group_by == $i ? Icon::create('arr_1right', 'attention') : null
     );
 }
 $sidebar->addWidget($grouping);
