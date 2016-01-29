@@ -1006,8 +1006,8 @@ function wikiEdit($keyword, $wikiData, $user_id, $backpage=NULL)
     $help = _('Der Editor dient zum Einfügen und Ändern von beliebigem Text.');
     $tip = _('Links entstehen automatisch aus Wörtern, die von zwei paar eckigen Klammern umgeben sind (Beispiel: [nop][[[/nop]%%Schlüsselwort%%[nop]]][/nop]');
     Helpbar::get()->addPlainText('', $help);
-    Helpbar::get()->addPlainText(_('Tip'), $tip, 'icons/16/white/info-circle.png');
-    
+    Helpbar::get()->addPlainText(_('Tip'), $tip, Icon::create('info-circle'));
+
     end_blank_table();
     echo "</td>"; // end of content area
     showPageFrameEnd();

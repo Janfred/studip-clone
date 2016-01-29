@@ -45,7 +45,7 @@
                             <label>
                                 <input type="checkbox" name="remove_inst[]" value="<?= htmlReady($assignment['range_id']) ?>" style="display: none;">
                                 <span><?= htmlReady(Institute::find($assignment['range_id'])->name) ?></span>
-                                <?= Assets::img("icons/16/blue/trash", array('class' => "text-bottom", 'title' => _("Zuweisung zur Einrichtung aufheben."))) ?>
+                                <?= Icon::create('trash', 'clickable', ['title' => _("Zuweisung zur Einrichtung aufheben.")])->asImg(['class' => "text-bottom"]) ?>
                             </label>
                         </li>
                     <? endif ?>

@@ -25,7 +25,7 @@ if (count($data['options']) > 0) {
 $users = array_unique($users);
 ?>
 <h3>
-    <?= Assets::img("icons/20/black/test", array('class' => "text-bottom")) ?>
+    <?= Icon::create('test', 'info')->asImg(20, ['class' => 'text-bottom']) ?>
     <?= formatReady($vote['questiondata']['question']) ?>
 </h3>
 <? if (count($vote->answers) > 0 && count($data['options']) > 0) : ?>
@@ -49,10 +49,10 @@ $users = array_unique($users);
 <? if (is_array($users) && in_array($GLOBALS['user']->id, $users)) : ?>
     <div style="max-height: none; opacity: 1; font-size: 1.4em; text-align: center;">
         <? if ($vote->correctAnswered()) : ?>
-            <?= Assets::img("icons/25/green/accept", array('class' => "text-bottom")) ?>
+            <?= Icon::create('accept', 'accept')->asImg(25, ['class' => 'text-bottom']) ?>
             <?= _("Richtig beantwortet!") ?>
         <? else : ?>
-            <?= Assets::img("icons/25/red/decline", array('class' => "text-bottom")) ?>
+            <?= Icon::create('decline', 'attention')->asImg(25, ['class' => 'text-bottom']) ?>
             <?= _("Falsch beantwortet!") ?>
         <? endif ?>
     </div>
@@ -67,9 +67,9 @@ $users = array_unique($users);
             <td style="text-align: right; background-size: <?= $percentage ?>% 100%; background-position: right center; background-image: url('<?= Assets::image_path("vote_lightgrey.png") ?>'); background-repeat: no-repeat;" width="50%">
                 <strong><?= formatReady($option) ?></strong>
                 <? if (in_array($key + 1, $data['correctanswer'])) : ?>
-                    <?= Assets::img("icons/16/green/checkbox-checked", array('class' => "text-bottom", 'title' =>  _("Diese Antwort ist richtig"))) ?>
+                    <?= Icon::create('checkbox-unchecked', 'accept', ['title' =>  _("Diese Antwort ist richtig")])->asImg( ['class' => 'text-bottom']) ?>
                 <? else : ?>
-                    <?= Assets::img("icons/16/grey/checkbox-unchecked", array('class' => "text-bottom", 'title' => _("Eine falsche Antwort"))) ?>
+                    <?= Icon::create('checkbox-unchecked', 'inactive', ['title' =>  _("Eine falsche Antwort")])->asImg( ['class' => 'text-bottom']) ?>
                 <? endif ?>
             </td>
             <td style="white-space: nowrap;">

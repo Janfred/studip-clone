@@ -126,6 +126,10 @@ class Helpbar extends WidgetContainer
             $content = sprintf('<p>%s</p>', formatReady($text));
         }
 
+        if ($icon instanceof \Icon) {
+            $icon = $icon->copyWithRole('info_alt');
+        }
+
         $widget = new HelpbarWidget();
         $widget->setIcon($icon);
         $widget->addElement(new WidgetElement($content));
