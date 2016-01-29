@@ -119,7 +119,9 @@ class AdminCourseFilter
 
         $this->settings['query']['select'] = array(
             'Institut' => "Institute.Name",
-            'teilnehmer' => "COUNT(seminar_user.user_id)",
+            'teilnehmer' => "(SELECT COUNT(seminar_id)
+                          FROM seminar_user
+                          WHERE seminar_id = seminare.Seminar_id AND status != 'dozent' AND status != 'tutor')",
             'prelim' => "(SELECT COUNT(seminar_id)
                           FROM admission_seminar_user
                           WHERE seminar_id = seminare.Seminar_id AND status = 'accepted')",
@@ -132,10 +134,6 @@ class AdminCourseFilter
             'Institute' => array(
                 'join' => "INNER JOIN",
                 'on' => "seminare.Institut_id = Institute.Institut_id"
-            ),
-            'seminar_user' => array(
-                'join' => "LEFT JOIN",
-                'on' => "seminare.seminar_id=seminar_user.seminar_id AND seminar_user.status != 'dozent' and seminar_user.status != 'tutor'"
             ),
             'sem_types' => array(
                 'join' => "LEFT JOIN",
