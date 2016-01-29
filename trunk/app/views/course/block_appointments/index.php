@@ -11,12 +11,12 @@
         <legend><?= _('Die Veranstaltung findet in folgendem Zeitraum statt') ?></legend>
         <label for="block_appointments_start_day">
             <?= _('Startdatum') ?>
-            <input type="text" class="size-m has-date-picker" id="block_appointments_start_day"
+            <input type="text" class="size-s has-date-picker" id="block_appointments_start_day"
                    name="block_appointments_start_day" value="<?= $request['block_appointments_start_day'] ?>">
         </label>
         <label for="block_appointments_end_day">
             <?= _('Enddatum') ?>
-            <input type="text" class="size-m has-date-picker" id="block_appointments_end_day"
+            <input type="text" class="size-s has-date-picker" id="block_appointments_end_day"
                    name="block_appointments_end_day" value="<?= $request['block_appointments_end_day'] ?>">
         </label>
     </fieldset>
@@ -25,13 +25,13 @@
         <legend><?= _('Die Veranstaltung findet zu folgenden Zeiten statt') ?></legend>
         <label for="block_appointments_start_time">
             <?= _('Startzeit') ?>
-            <input type="text" class="size-m has-time-picker" id="block_appointments_start_time"
+            <input type="text" class="size-s has-time-picker-select" id="block_appointments_start_time"
                    name="block_appointments_start_time" value="<?= $request['block_appointments_start_time'] ?>">
         </label>
 
         <label for="block_appointments_end_time">
             <?= _('Endzeit') ?>
-            <input type="text" class="size-m has-time-picker" id="block_appointments_end_time"
+            <input type="text" class="size-s has-time-picker-select size-s" id="block_appointments_end_time"
                    name="block_appointments_end_time" value="<?= $request['block_appointments_end_time'] ?>">
         </label>
 

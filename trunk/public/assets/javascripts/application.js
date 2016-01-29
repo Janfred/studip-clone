@@ -201,6 +201,9 @@ jQuery.ui.accordion.prototype.options.icons = {
     $(document).on('focus', '.has-time-picker', function () {
         $(this).removeClass('has-time-picker').timepicker();
     });
+    $(document).on('focus', '.has-time-picker-select', function () {
+        $(this).removeClass('has-time-picker-select').timepicker({controlType : 'select'});
+    });
 }(jQuery));
 
 

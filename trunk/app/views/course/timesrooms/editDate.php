@@ -2,17 +2,17 @@
     <legend><?= _('Zeitangaben') ?></legend>
     <label>
         <?= _('Datum') ?>
-        <input class="has-date-picker" type="text" name="date"
+        <input class="has-date-picker size-s" type="text" name="date"
                value="<?= $date->date ? strftime('%d.%m.%Y', $date->date) : '' ?>">
     </label>
     <label>
         <?= _('Startzeit') ?>
-        <input class="has-time-picker" type="text" name="start_time"
+        <input class="has-time-picker-select size-s" type="text" name="start_time"
                value="<?= $date->date ? strftime('%H:%M', $date->date) : '' ?>">
     </label>
     <label>
         <?= _('Endzeit') ?>
-        <input class="has-time-picker" type="text" name="end_time"
+        <input class="has-time-picker-select size-s" type="text" name="end_time"
                value="<?= $date->end_time ? strftime('%H:%M', $date->end_time) : '' ?>">
     </label>
     <label id="course_type">

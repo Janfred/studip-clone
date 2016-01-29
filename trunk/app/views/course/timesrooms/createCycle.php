@@ -23,14 +23,14 @@
 
     <label>
         <?= _('Startzeit') ?>
-        <input class="has-time-picker" type="text" name="start_time"
+        <input class="has-time-picker-select size-s" type="text" name="start_time"
                value="<?= htmlReady(Request::get('start_time', $cycle->start_time)) ?>"
                required placeholder="HH:mm">
     </label>
 
     <label>
         <?= _('Endzeit') ?>
-        <input class="has-time-picker" type="text" name="end_time"
+        <input class="has-time-picker-select size-s" type="text" name="end_time"
                value="<?= htmlReady(Request::get('end_time', $cycle->end_time)) ?>"
                required placeholder="HH:mm">
     </label>
@@ -83,7 +83,7 @@
 
     <label>
         <?= _('SWS Dozent') ?>
-        <input type="text" name="teacher_sws"
+        <input type="text" name="teacher_sws" class="size-s"
                value="<?= htmlReady(Request::get('teacher_sws', $cycle->sws)) ?>">
     </label>
 
