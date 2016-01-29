@@ -40,35 +40,41 @@ class Calendar_SingleController extends Calendar_CalendarController
         if ($calendar->havePermission(Calendar::PERMISSION_WRITABLE)) {
             $actions = new ActionsWidget();
             $actions->addLink(_('Termin anlegen'),
-                              $this->url_for('calendar/single/edit'),
-                              Icon::create('add', 'clickable'),
-                              array('data-dialog' => 'size=auto'));
-            if ($calendar->havePermission(Calendar::PERMISSION_OWN) && (get_config('CALENDAR_GROUP_ENABLE'))) {
-                $actions->addLink(_('Kalender freigeben'),
-                                  $this->url_for('calendar/single/manage_access'),
-                                  Icon::create('community', 'clickable'),
-                                  array('id' => 'calendar-open-manageaccess',
-                                        'data-dialog' => '',
-                                        'data-dialogname' => 'manageaccess'));
+                        $this->url_for('calendar/single/edit'),
+                        Icon::create('add', 'clickable'),
+                        array('data-dialog' => 'size=auto'));
+            if ($calendar->havePermission(Calendar::PERMISSION_OWN)) {
+                if (get_config('CALENDAR_GROUP_ENABLE')) {
+                    $actions->addLink(_('Kalender freigeben'),
+                            $this->url_for('calendar/single/manage_access'),
+                            Icon::create('community', 'clickable'),
+                            array('id' => 'calendar-open-manageaccess',
+                                'data-dialog' => '',
+                                'data-dialogname' => 'manageaccess'));
+                }
+                $actions->addLink(_('Veranstaltungstermine'),
+                        $this->url_for('calendar/single/seminar_events'),
+                        Icon::create('seminar', 'clickable'),
+                        array('data-dialog' => 'size=auto'));
             }
             $sidebar->addWidget($actions);
         }
         if ($calendar->havePermission(Calendar::PERMISSION_OWN)) {
             $export = new ExportWidget();
             $export->addLink(_('Termine exportieren'),
-                             $this->url_for('calendar/single/export_calendar'),
-                             Icon::create('download', 'clickable'),
-                             array('data-dialog' => 'size=auto'))
+                        $this->url_for('calendar/single/export_calendar'),
+                        Icon::create('download', 'clickable'),
+                        array('data-dialog' => 'size=auto'))
                     ->setActive($active == 'export_calendar');
             $export->addLink(_('Termine importieren'),
-                    $this->url_for('calendar/single/import'),
-                             Icon::create('upload', 'clickable'),
-                             array('data-dialog' => 'size=auto'))
+                        $this->url_for('calendar/single/import'),
+                        Icon::create('upload', 'clickable'),
+                        array('data-dialog' => 'size=auto'))
                     ->setActive($active == 'import');
             $export->addLink(_('Kalender teilen'),
-                    $this->url_for('calendar/single/share'),
-                             Icon::create('group2', 'clickable'),
-                             array('data-dialog' => 'size=auto'))
+                        $this->url_for('calendar/single/share'),
+                        Icon::create('group2', 'clickable'),
+                        array('data-dialog' => 'size=auto'))
                     ->setActive($active == 'share');
             $sidebar->addWidget($export);
         }
@@ -284,8 +290,7 @@ class Calendar_SingleController extends Calendar_CalendarController
                 $email_reg_exp = '/^([-.0-9=?A-Z_a-z{|}~])+@([-.0-9=?A-Z_a-z{|}~])+\.[a-zA-Z]{2,6}$/i';
                 if (preg_match($email_reg_exp, Request::get('email')) !== 0) {
                     $subject = '[' . get_config('UNI_NAME_CLEAN') . ']' . _('Exportadresse für Ihre Termine');
-                    $text .= _("Diese Email wurde vom Stud.IP-System verschickt. Sie können
-            auf diese Nachricht nicht antworten.") . "\n\n";
+                    $text .= _('Diese Email wurde vom Stud.IP-System verschickt. Sie können auf diese Nachricht nicht antworten.') . "\n\n";
                     $text .= _('Über diese Adresse erreichen Sie den Export für Ihre Termine:') . "\n\n";
                     $text .= $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'dispatch.php/ical/index/'
                             . IcalExport::getKeyByUser($GLOBALS['user']->id);
@@ -481,6 +486,66 @@ class Calendar_SingleController extends Calendar_CalendarController
                 array('group_filter' => Request::option('group_filter', 'list'))));
     }
     
+    public function seminar_events_action($order_by = null, $order = 'asc')
+    {
+        $config_sem = $GLOBALS['user']->cfg->MY_COURSES_SELECTED_CYCLE;
+        if (!Config::get()->MY_COURSES_ENABLE_ALL_SEMESTERS && $config_sem == 'all') {
+            $config_sem = 'future';
+        }
+        $this->sem_data = SemesterData::GetSemesterArray();
+        
+        $sem = ($config_sem && $config_sem != '0' ? $config_sem : Config::get()->MY_COURSES_DEFAULT_CYCLE);
+        if (Request::option('sem_select')) {
+            $sem = Request::get('sem_select', $sem);
+        }
+        if (!in_array($sem, words('future all last current')) && isset($sem)) {
+            Request::set('sem_select', $sem);
+        }
+        $this->group_field = 'sem_number';
+        // Needed parameters for selecting courses
+        $params = array('group_field'         => $this->group_field,
+                        'order_by'            => $order_by,
+                        'order'               => $order,
+                        'studygroups_enabled' => false,
+                        'deputies_enabled'    => false);
+
+        $this->sem_courses  = MyRealmModel::getPreparedCourses($sem, $params);
+
+        $semesters       = new SimpleCollection(Semester::getAll());
+        $this->sem       = $sem;
+        $this->semesters = $semesters->orderBy('beginn desc');
+        
+        $this->bind_calendar = SimpleCollection::createFromArray(
+                CourseMember::findBySQL('user_id = ? AND bind_calendar = 1',
+                    array($GLOBALS['user']->id)))->pluck('seminar_id');
+        
+    }
+    
+    public function store_selected_sem_action()
+    {
+        CSRFProtection::verifySecurityToken();
+        if (Request::submitted('store')) {
+            $selected_sems = Request::intArray('selected_sem');
+            $courses = SimpleORMapCollection::createFromArray(
+                    CourseMember::findBySQL('user_id = ? AND Seminar_id IN (?)',
+                    array($GLOBALS['user']->id, array_keys($selected_sems))));
+            $courses->each(function ($a) use ($selected_sems) {
+                $a->bind_calendar = $selected_sems[$a->seminar_id];
+                $a->store();
+            });
+            PageLayout::postMessage(MessageBox::success(
+                    _('Die Auswahl der Veranstaltungen wurde gespeichert.')));
+        }
+        $this->redirect($this->url_for('calendar/single/' . $this->last_view));
+    }
+    
+    /**
+     * Retrieve the title of the calendar depending on calendar owner (range).
+     * 
+     * @param SingleCalendar $calendar The calendar 
+     * @param string $title_end Additional text
+     * @return string The complete title for the headline
+     */
     protected function getTitle(SingleCalendar $calendar, $title_end)
     {
         $title = '';

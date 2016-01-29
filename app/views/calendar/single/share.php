@@ -17,7 +17,7 @@
             <td>
                 <?= _('Sie können sich eine Adresse generieren lassen, mit der Sie Termine aus Ihrem Stud.IP-Terminkalender in externen Terminkalendern einbinden können.') ?>
                 <div style="text-align: center;">
-                    <?= Button::create(_("Adresse generieren!"), 'new_id') ?>
+                    <?= Button::create(_('Adresse generieren!'), 'new_id') ?>
                 </div>
             </td>
         </tr>

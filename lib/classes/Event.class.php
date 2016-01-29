@@ -11,7 +11,9 @@ interface Event
     const PERMISSION_FORBIDDEN = 0;
     const PERMISSION_CONFIDENTIAL = 1;
     const PERMISSION_READABLE = 2;
+    const PERMISSION_DELETABLE = 3;
     const PERMISSION_WRITABLE = 4;
+    const PERMISSION_OWN = 5;
     
     /**
      * Returns a list of all categories the event belongs to.

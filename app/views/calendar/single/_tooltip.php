@@ -37,23 +37,45 @@
                 <b><?= _('Zugriff') ?>:</b> <?= htmlReady(mila($text, 50)) ?>
             </div>
         <? endif; ?>
-    <? endif; ?>
-    <? if ($text = $event->toStringRecurrence()) : ?>
-        <div>
-            <b><?= _('Wiederholung') ?>:</b> <?= htmlReady($text) ?>
-        </div>
+        <? if ($text = $event->toStringRecurrence()) : ?>
+            <div>
+                <b><?= _('Wiederholung') ?>:</b> <?= htmlReady($text) ?>
+            </div>
+        <? endif; ?>
     <? endif; ?>
     <? if ($event->havePermission(Event::PERMISSION_READABLE)) : ?>
         <? if ($event instanceof CalendarEvent
-                && get_config('CALENDAR_GROUP_ENABLE')) : ?>
-            <? $attendees = $event->getAttendees() ?>
-            <? $count_attendees = count(array_filter($attendees,
-                function ($att) use ($calendar) {
-                    return ($att->user->user_id != $calendar->getRangeId());
-                })) ?>
-            <? if ($count_attendees) : ?>
+                && get_config('CALENDAR_GROUP_ENABLE')
+                && $calendar->getRange() == Calendar::RANGE_USER) : ?>
+            <? $group_status = array(
+                    CalendarEvent::PARTSTAT_TENTATIVE => _('Abwartend'),
+                    CalendarEvent::PARTSTAT_ACCEPTED => _('Angenommen'),
+                    CalendarEvent::PARTSTAT_DECLINED => _('Abgelehnt'),
+                    CalendarEvent::PARTSTAT_DELEGATED => _('Angenommen (keine Teilnahme)'),
+                    CalendarEvent::PARTSTAT_NEEDS_ACTION => _('')) ?>
+            <? $show_members = $event->attendees->findOneBy('range_id',
+                    $calendar->getRangeId(), '!=') ?>
+            <? // Entkommentieren, wenn Mitglieder eines Termins sichtbar sein
+               // sollen, auch wenn man nicht selbst Mitglied ist und ... ?>
+            <? // $show_members_visiter = $event->attendees->findOneBy('range_id', $GLOBALS['user']->id) ?>
+            <? // folgende Zeile auskommentieren (siehe _attendees.php). ?>
+            <? $show_members_visiter = true; ?>
+            <? if ($show_members && $show_members_visiter) : ?>
             <div>
-                <b><?= _('Teilnehmer:') ?></b> <?= sizeof($attendees) ?>
+                <b><?= _('Teilnehmer:') ?></b>
+                    <?= implode(', ', $event->attendees->map(
+                        function ($att) use ($event, $group_status) {
+                            if ($event->havePermission(Event::PERMISSION_OWN, $att->owner->id)) {
+                                $ret = htmlReady($att->owner->getFullname())
+                                    . ' (' . _('Organisator') . ')';
+                            } else {
+                                $ret = htmlReady($att->owner->getFullname());
+                                if ($group_status[$att->group_status]) {
+                                    $ret .= ' (' . $group_status[$att->group_status] . ')';
+                                }
+                            }
+                            return $ret;
+                        })); ?>
             </div>
             <? endif; ?>
         <? endif; ?>

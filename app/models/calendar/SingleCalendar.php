@@ -127,21 +127,29 @@ class SingleCalendar
      */
     public function storeEvent(CalendarEvent $event, $attendee_ids = null)
     {
-        if (!sizeof($attendee_ids)) {
+        $attendee_ids = array_filter($attendee_ids, function($id) {
+            return trim($id) != '';
+        });
+        if (count($attendee_ids) == 1) {
             if (!$this->havePermission(Calendar::PERMISSION_WRITABLE)) {
                 return false;
             }
+            $is_new = $event->isNew();
             $stored = $event->store();
             if ($stored !== false && $this->getRange() == Calendar::RANGE_USER
                     && $this->getRangeId() != $GLOBALS['user']->id) {
-                $this->sendStoreMessage($event, $event->isNew());
+                $this->sendStoreMessage($event, $is_new);
             }
             return $stored;
         } else {
+            if (in_array($this->getRangeId(), $attendee_ids)) {
+                // set default status if the organizer is an attendee...
+                $event->group_status = CalendarEvent::PARTSTAT_TENTATIVE;
+            }
             if ($event->isNew()) {
                 return $this->storeAttendeeEvents($event, $attendee_ids);
             } else {
-                if ($event->havePermission(Event::PERMISSION_WRITABLE, $this->getRangeId())) {
+                if ($event->havePermission(Event::PERMISSION_WRITABLE)) {
                     return $this->storeAttendeeEvents($event, $attendee_ids);
                 }
             }
@@ -151,7 +159,7 @@ class SingleCalendar
     /**
      * Helper function for SingleCalendar::storeEvent().
      *
-     * @param CalendarEvent $event The ecent to store.
+     * @param CalendarEvent $event The event to store.
      * @param type $attendee_ids The user ids of the attendees.
      * @return bool|int The number of stored events or false if an error occured.
      */
@@ -159,28 +167,41 @@ class SingleCalendar
     {
         $ret = 0;
         $new_attendees = array();
+        $recipient_ids = array();
+        $is_new = false;
         foreach ($attendee_ids as $attendee_id) {
             if (trim($attendee_id)) {
                 $attendee_calendar = new SingleCalendar($attendee_id);
-                if ($attendee_calendar->havePermission(Calendar::PERMISSION_WRITABLE)) {
+                
+                // SEMBBS
+                // Gruppentermine können ab Calendar::PERMISSION_READABLE angelegt werden
+                // if ($attendee_calendar->havePermission(Calendar::PERMISSION_READABLE)) {
+                    
+                if ($attendee_calendar->havePermission(Calendar::PERMISSION_WRITABLE)
+                        || Config::get()->CALENDAR_GRANT_ALL_INSERT) {
                     $attendee_event = new CalendarEvent(
                             array($attendee_calendar->getRangeId(), $event->event_id));
                     $attendee_event->event = $event->event;
                     $is_new = $attendee_event->isNew();
+                    if ($is_new) {
+                        $attendee_event->group_status = $event->group_status;
+                    }
                     $stored = $attendee_event->store();
                     if ($stored !== false) {
                         // send message if not own calendar
                         if (!$attendee_calendar->havePermission(Calendar::PERMISSION_OWN)) {
-                            $this->sendStoreMessage($attendee_event, $is_new);
+                            $recipient_ids[] = $attendee_event->range_id;
                         }
                         $new_attendees[] = $attendee_event->range_id;
                         $ret += $stored;
-                    } else {
-                        return false;
                     }
                 }
             }
         }
+        if (count($recipient_ids)) {
+            $this->sendStoreMessage($attendee_event, $is_new, $recipient_ids);
+        }
+        
         $events_delete = CalendarEvent::findBySQL('event_id = ? AND range_id NOT IN(?)',
                 array($event->event_id, $new_attendees));
         foreach ($events_delete as $event_delete) {
@@ -318,6 +339,16 @@ class SingleCalendar
     }
 
     /**
+     * Returns the range object (user, course, institute) of this calendar.
+     * 
+     * @return int The object range.
+     */
+    public function getRangeObject()
+    {
+        return $this->range_object;
+    }
+    
+    /**
      * Returns the permission of the given user for this calendar.
      *
      * @param string $user_id User id.
@@ -454,19 +485,21 @@ class SingleCalendar
      *
      * @param CalendarEvent $event The new or updated event.
      * @param bool $is_new True if the event is new.
+     * @param null|array Array with user_ids of the recipients. If not set the 
+     * owner of the given event is used as recipient.
      */
-    protected function sendStoreMessage($event, $is_new)
+    protected function sendStoreMessage($event, $is_new, $recipient_ids = null)
     {
         $message = new messaging();
         $event_data = '';
 
-        if (!$is_new) {
-            $msg_text = sprintf(_("%s hat einen Termin in Ihrem Kalender geändert."), get_fullname());
-            $subject = strftime(_('Termin am %c geändert'), $event->getStart());
-            $msg_text .= "\n\n**";
-        } else {
+        if ($is_new) {
             $msg_text = sprintf(_("%s hat einen neuen Termin in Ihren Kalender eingetragen."), get_fullname());
             $subject = strftime(_('Neuer Termin am %c'), $event->getStart());
+            $msg_text .= "\n\n**";
+        } else {
+            $msg_text = sprintf(_("%s hat einen Termin in Ihrem Kalender geändert."), get_fullname());
+            $subject = strftime(_('Termin am %c geändert'), $event->getStart());
             $msg_text .= "\n\n**";
         }
         $msg_text .= _('Zeit:') . '** ' . strftime(' %c - ', $event->getStart())
@@ -487,8 +520,31 @@ class SingleCalendar
         if ($event_data = $event->toStringRecurrence()) {
             $msg_text .= '**' . _("Wiederholung:") . "** $event_data\n";
         }
+        if (get_config('CALENDAR_GROUP_ENABLE') && $event->attendees->count()) {
+            $msg_text .= '**' . _("Teilnehmer:") . '** ';
+            $msg_text .= implode(', ', $event->attendees->map(
+                function ($att) use ($event) {
+                    $att_name = $att->user->getFullname();
+                    if ($event->havePermission(Event::PERMISSION_OWN, $att->user->getId())) {
+                        $att_name .= ' (' . _('Organisator') . ')';
+                    } else {
+                        if ($event->toStringGroupStatus()) {
+                            $att_name .= ' (' . $att->toStringGroupStatus() . ')';
+                        }
+                    }
+                    return $att_name;
+                }));
+            $msg_text .= "\n";
+        }
+        $msg_text .= "\n\n" . _('Hier kommen Sie direkt zum Termin in Ihrem Kalender:') . "\n";
+                $msg_text .= URLHelper::getURL('dispatch.php/calendar/single/edit/'
+                    . implode('/', $event->getId()), false);
+        
+        $recipient_unames = is_array($recipient_ids)
+                ? array_map('get_username', $recipient_ids)
+                : array(get_username($event->range_id));
 
-        $message->insert_message($msg_text, get_username($event->range_id),
+        $message->insert_message($msg_text, $recipient_unames,
                 '____%system%____', '', '', '', '', $subject);
     }
 
@@ -501,11 +557,17 @@ class SingleCalendar
      */
     public function deleteEvent($calendar_event, $all = false)
     {
-        if ($this->havePermission(Calendar::PERMISSION_WRITABLE)) {
-            if (!is_object($calendar_event)) {
-                $calendar_event = CalendarEvent::find(
-                        array($this->getRangeId(), $calendar_event));
-            }
+        if (!is_object($calendar_event)) {
+            $calendar_event = CalendarEvent::find(
+                    array($this->getRangeId(), $calendar_event));
+        }
+        if (!$calendar_event
+            || !is_a($calendar_event, 'CalendarEvent')
+            || !$calendar_event->havePermission(Event::PERMISSION_DELETABLE)) {
+            return false;
+        }
+        if ($this->havePermission(Calendar::PERMISSION_WRITABLE)
+                || $calendar_event->havePermission(Event::PERMISSION_OWN)) {
 
             if (!($calendar_event
                     && $calendar_event->havePermission(Event::PERMISSION_WRITABLE))) {                
@@ -543,8 +605,10 @@ class SingleCalendar
      * by another user.
      *
      * @param CalendarEvent $event The deleted event.
+     * @param null|array Array with user_ids of the recipients. If not set the 
+     * owner of the given event is used as recipient.
      */
-    protected function sendDeleteMessage($event)
+    protected function sendDeleteMessage($event, $recipient_ids = null)
     {
         $message = new messaging();
         $event_data = '';
@@ -571,8 +635,10 @@ class SingleCalendar
         if ($event_data = $event->toStringRecurrence()) {
             $msg_text .= '**' . _("Wiederholung:") . "** $event_data\n";
         }
-
-        $message->insert_message($msg_text, get_username($event->range_id),
+        $recipient_unames = is_array($recipient_ids)
+                ? array_map('get_username', $recipient_ids)
+                : array(get_username($event->range_id));
+        $message->insert_message($msg_text, $recipient_unames,
                 '____%system%____', '', '', '', '', $subject);
     }
 
@@ -1121,15 +1187,14 @@ class SingleCalendar
         $properties = $event->getProperties();
         if (is_array($restrictions)) {
             foreach ($restrictions as $property_name => $restriction) {
-                if ($restriction != '') {
-                    if ($properties[strtoupper($property_name)] != $restriction) {
-                        return false;
-                    }
+                if (is_array($restriction)) {
+                    return in_array($properties[strtoupper($property_name)], $restriction);
+                } else if ($restriction != '') {
+                    return $properties[strtoupper($property_name)] == $restriction;
                 }
             }
             return true;
         }
-
         return true;
     }
 

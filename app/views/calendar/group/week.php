@@ -12,18 +12,18 @@ SkipLinks::addIndex(_('Wochenansicht'), 'main_content', 100);
     <tr>
         <td colspan="<?= $colspan_2 ?>" style="vertical-align: middle; text-align: center;">
             <div style="text-align: left; width: 25%; display: inline-block; white-space: nowrap;">
-                <a <?= tooltip(_('eine Woche zurück')) ?> href="<?= $controller->url_for('calendar/group/week', array('atime' => mktime(12, 0, 0, date('n', $atime), date('j', $atime) - 7, date('Y', $atime)))) ?>">
-                    <?= Icon::create('arr_1left', 'clickable')->asImg(16, ["style" => 'vertical-align: text-top;']) ?>
-                    <?= strftime(_('%V. Woche'), strtotime('-1 week', $atime)) ?>
+                <a href="<?= $controller->url_for('calendar/group/week', array('atime' => mktime(12, 0, 0, date('n', $atime), date('j', $atime) - 7, date('Y', $atime)))) ?>">
+                    <?= Icon::create('arr_1left', 'clickable', ['title' => _('Eine Woche zurück')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
+                    <?= sprintf(_('%u. Woche'), strftime('%V'), strtotime('-1 week', $atime)) ?>
                 </a>
             </div>
             <div style="display: inline-block; text-align: center;" class="calhead">
                 <? printf(_("%s. Woche vom %s bis %s"), strftime("%V", $calendars[0][0]->getStart()), strftime("%x", $calendars[0][0]->getStart()), strftime("%x", $calendars[0][$wlength]->getEnd())) ?>
             </div>
             <div style="width: 25%; text-align: right; display: inline-block; white-space: nowrap;">
-                <a <?= tooltip(_('eine Woche vor')) ?> href="<?= $controller->url_for('calendar/group/week', array('atime' => mktime(12, 0, 0, date('n', $atime), date('j', $atime) + 7, date('Y', $atime)))) ?>">
-                    <?= strftime(_('%V. Woche'), strtotime('+1 week', $atime)) ?>
-                    <?= Icon::create('arr_1right', 'clickable')->asImg(16, ["style" => 'vertical-align: text-top;']) ?>
+                <a href="<?= $controller->url_for('calendar/group/week', array('atime' => mktime(12, 0, 0, date('n', $atime), date('j', $atime) + 7, date('Y', $atime)))) ?>">
+                    <?= sprintf(_('%u. Woche'), strftime('%V', strtotime('+1 week', $atime))) ?>
+                    <?= Icon::create('arr_1right', 'clickable', ['title' => _('Eine Woche vor')])->asImg(16, ["style" => 'vertical-align: text-top;']) ?>
                 </a>
             </div>
         </td>
@@ -92,7 +92,7 @@ SkipLinks::addIndex(_('Wochenansicht'), 'main_content', 100);
                     <? for ($i = 0; $i < count($adapted['day_events']); $i++) : ?>
                         <? $js_events[] = $day->events[$adapted['day_map'][$i]]; ?>
                     <? endfor; ?>
-                    <? if ($day->havePermission(Calendar::PERMISSION_WRITABLE)) : ?>
+                    <? if (count($js_events) && $day->havePermission(Calendar::PERMISSION_WRITABLE)) : ?>
                         <td <?= count($js_events) ? 'data-tooltip ' : '' ?>style="text-align: right; width: <?= $width1 ?>%" class="calendar-day-edit <?= $css_class ?><?= count($js_events) ? ' calendar-group-events' : '' ?>">
                         <?= $this->render_partial('calendar/group/_tooltip', array('calendar' => $day, 'events' => $js_events)) ?>
                         <a title="<?= strftime(_('Neuer Tagestermin am %x'), $day->getStart()) ?>" href="<?= $controller->url_for('calendar/group/edit/' . $range_id, array('atime' => $day->getStart(), 'isdayevent' => '1', 'user_id' => $day->getRangeId())) ?>">+</a>

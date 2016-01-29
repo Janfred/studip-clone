@@ -10,10 +10,10 @@
                             &nbsp;
                         <? else : ?>
                             <a href="<?= $controller->url_for($href, array('imt' => mktime(12, 0, 0, date('n', $imt), 1, date('Y', $imt) - 1))) ?>">
-                               <?= Icon::create('arr_2left', 'clickable', ['title' => _("ein Jahr zurück")])->asImg() ?>
+                               <?= Icon::create('arr_2left', 'clickable', ['title' => _('Ein Jahr zurück')])->asImg() ?>
                             </a>
                             <a href="<?= $controller->url_for($href, array('imt' => mktime(12, 0, 0, date('n', $imt) - 1, 1, date('Y', $imt)))) ?>">
-                                <?= Icon::create('arr_1left', 'clickable', ['title' => _("einen Monat zurück")])->asImg() ?>
+                                <?= Icon::create('arr_1left', 'clickable', ['title' => _('Einen Monat zurück')])->asImg() ?>
                             </a>
                         <? endif; ?>
                         </div>
@@ -25,10 +25,10 @@
                             &nbsp;
                         <? else : ?>
                             <a href="<?= $controller->url_for($href, array('imt' => mktime(12, 0, 0, date('n', $imt) + 1, 1, date('Y', $imt)))) ?>">
-                                <?= Icon::create('arr_1right', 'clickable', ['title' => _("einen Monat vor")])->asImg() ?>
+                                <?= Icon::create('arr_1right', 'clickable', ['title' => _('Einen Monat vor')])->asImg() ?>
                             </a>
                             <a href="<?= $controller->url_for($href, array('imt' => mktime(12, 0, 0, date('n', $imt), 1, date('Y', $imt) + 1))) ?>">
-                                <?= Icon::create('arr_2right', 'clickable', ['title' => _("ein Jahr vor")])->asImg() ?>
+                                <?= Icon::create('arr_2right', 'clickable', ['title' => _('Ein Jahr vor')])->asImg() ?>
                             </a>
                         <? endif; ?>
                         </div>

@@ -1,6 +1,6 @@
 <?
 // add skip link
-SkipLinks::addIndex(_("Tagesansicht"), 'main_content', 100);
+SkipLinks::addIndex(_('Tagesansicht'), 'main_content', 100);
 ?>
 <div style="width: 100%; display: flex; flex-wrap: wrap;">
     <div style="flex-grow:2; flex-basis: 60%;">

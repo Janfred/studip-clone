@@ -64,8 +64,8 @@ class Step00283CalendarSorm extends Migration {
                 FROM calendar_events WHERE 1 GROUP BY `event_id`");
         DBManager::get()->execute(
                 "INSERT IGNORE INTO `calendar_event` 
-                (`range_id`, `event_id`, `chdate`)
-                SELECT `range_id`, `event_id`, `chdate`
+                (`range_id`, `event_id`, `group_status`, `chdate`)
+                SELECT `range_id`, `event_id`, `group_status`, `chdate`
                 FROM `calendar_events` WHERE 1");
         DBManager::get()->exec('DROP TABLE IF EXISTS calendar_events');
         

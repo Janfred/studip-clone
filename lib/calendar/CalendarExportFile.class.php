@@ -95,6 +95,7 @@ class CalendarExportFile extends CalendarExport
 
         if (!(is_dir($this->path))) {
             if (!mkdir($this->path)) {
+                var_dump($this->path); exit;
                 throw new CalendarExportException(_('Das Export-Verzeichnis konnte nicht angelegt werden!'));
             } else {
                 if (!chmod($this->path, 0777)) {
