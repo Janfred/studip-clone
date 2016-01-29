@@ -23,12 +23,5 @@
             <?= $this->render_partial('evaluation/_evaluation.php', array('evaluation' => $evaluation)); ?>
         <? endforeach; ?>
     <? endif; ?>
-        <footer>
-            <? if (Request::get('show_expired')): ?>
-                <a href="<?= URLHelper::getLink('', array('show_expired' => 0)) ?>"><?= _('Abgelaufene Evaluationen ausblenden') ?></a>
-            <? else: ?>
-                <a href="<?= URLHelper::getLink('', array('show_expired' => 1)) ?>"><?= _('Abgelaufene Evaluationen einblenden') ?></a>
-            <? endif; ?>
-        </footer>
 </section>
 <? endif; ?>
