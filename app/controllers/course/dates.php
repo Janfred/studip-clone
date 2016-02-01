@@ -1,7 +1,6 @@
 <?php
 
 require_once 'lib/raumzeit/raumzeit_functions.inc.php';
-require_once 'lib/raumzeit.inc.php';
 
 class Course_DatesController extends AuthenticatedController
 {
