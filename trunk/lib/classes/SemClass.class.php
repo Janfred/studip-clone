@@ -387,6 +387,7 @@ class SemClass implements ArrayAccess
                 "title_autor_plural = :title_autor_plural, " .
                 "admission_prelim_default = :admission_prelim_default, " .
                 "admission_type_default = :admission_type_default, " .
+                "show_raumzeit = :show_raumzeit, " .
                 "chdate = UNIX_TIMESTAMP() " .
             "WHERE id = :id ".
         "");
@@ -440,7 +441,8 @@ class SemClass implements ArrayAccess
                 ? $this->data['title_autor_plural']
                 : null,
             'admission_prelim_default' => (int)$this->data['admission_prelim_default'],
-            'admission_type_default' => (int)$this->data['admission_type_default']
+            'admission_type_default' => (int)$this->data['admission_type_default'],
+            'show_raumzeit' => (int) $this->data['show_raumzeit']
         ));
     }
 

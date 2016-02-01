@@ -158,7 +158,11 @@
             <td><label for="show_browse"><?= _("Zeige im Veranstaltungsbaum an.") ?></label></td>
             <td><input type="checkbox" id="show_browse" value="1"<?= $sem_class['show_browse'] ? " checked" : "" ?>></td>
         </tr>
-
+		<tr class="sub">
+            <td><label for="show_raumzeit"><?= _("Zeige Raum-Zeit-Seite an.") ?></label></td>
+            <td><input type="checkbox" id="show_raumzeit" value="1"<?= $sem_class['show_raumzeit'] ? " checked" : "" ?>></td>
+        </tr>
+        
         <tr>
             <td colspan="2"><h3><?= _("Sonstiges") ?></h3></td>
         </tr>
