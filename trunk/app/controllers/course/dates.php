@@ -176,7 +176,7 @@ class Course_DatesController extends AuthenticatedController
                         $date->end_time = $ende;
                         $date->date_typ = Request::get('dateType');                        
                     } else {
-                        raumzeit_editSingleDate($sem);
+                        //raumzeit_editSingleDate($sem);
                     }
                     
                     $date->store();
@@ -225,7 +225,7 @@ class Course_DatesController extends AuthenticatedController
     {
         $course = Course::findCurrent();
         $sem = Seminar::GetInstance($course->getId());
-        raumzeit_editSingleDate($sem);
+        //raumzeit_editSingleDate($sem);
         if (Request::isXhr()) {
             $this->render_nothing();
             header('X-Location: '.$this->url_for('course/dates'));
