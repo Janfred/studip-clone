@@ -4498,7 +4498,7 @@ table.calendar-week tbody tr td.calendar-category1,
 table.calendar-day tbody tr td.calendar-category1,
 table.calendar-week tbody tr td.calendar-course-category5,
 table.calendar-day tbody tr td.calendar-course-category5 {
-  background: linear-gradient(to right, #547452, #7a9379) repeat-x #7a9379;
+  background: linear-gradient(to right, #659C63, #96C895) repeat-x #659C63;
   border: solid 1px #008512;
   vertical-align: top;
   font-size: 11px;
@@ -4688,7 +4688,7 @@ table.calendar-day tbody tr td.calendar-category12 div:first-child {
 }
 table.calendar-week tbody tr td.calendar-category13,
 table.calendar-day tbody tr td.calendar-category13 {
-  background: linear-gradient(to right, #547452, #7a9379) repeat-x #7a9379;
+  background: linear-gradient(to right, #C91C0B, #E0665B) repeat-x #C91C0B;
   border: solid 1px #71c4bf;
   vertical-align: top;
   font-size: 11px;
@@ -4702,7 +4702,7 @@ table.calendar-day tbody tr td.calendar-category13 div:first-child {
 }
 table.calendar-week tbody tr td.calendar-category14,
 table.calendar-day tbody tr td.calendar-category14 {
-  background: linear-gradient(to right, #547452, #7a9379) repeat-x #7a9379;
+  background: linear-gradient(to right, #29AB9F, #5CC4B9) repeat-x #29AB9F;
   border: solid 1px #f7a866;
   vertical-align: top;
   font-size: 11px;
@@ -4718,7 +4718,7 @@ table.calendar-week tbody tr td.calendar-category15,
 table.calendar-day tbody tr td.calendar-category15,
 table.calendar-week tbody tr td.calendar-course-category7,
 table.calendar-day tbody tr td.calendar-course-category7 {
-  background: linear-gradient(to right, #547452, #7a9379) repeat-x #7a9379;
+  background: linear-gradient(to right, #8DB3D8, #ACC6DF) repeat-x #8DB3D8;
   border: solid 1px #cb9e8f;
   vertical-align: top;
   font-size: 11px;
