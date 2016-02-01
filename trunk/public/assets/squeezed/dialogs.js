@@ -1,1 +1,0 @@
-STUDIP.Dialogs={showConfirmDialog:function(b,c){var a=_.memoize(function(e){return _.template(jQuery("#"+e).html())});var d=a("confirm_dialog");$("body").append(d({question:b,confirm:c}));return false},closeConfirmDialog:function(){$("div.modaloverlay").remove()}};
