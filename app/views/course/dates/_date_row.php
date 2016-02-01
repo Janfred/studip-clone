@@ -6,7 +6,12 @@
             <?= htmlReady($date->getFullname()) ?>
             <?= tooltipIcon($date->content)?>
         <? else : ?>
-            <a href="<?= URLHelper::getLink('dispatch.php/course/dates/details/' . $date->getId()) ?>" data-dialog>
+        	<? if (!$show_raumzeit) {
+        	    $dialog_url = URLHelper::getLink('dispatch.php/course/dates/singledate/' . $date->getId());
+        	} else {
+        	    $dialog_url = URLHelper::getLink('dispatch.php/course/dates/details/' . $date->getId());
+        	} ?>
+            <a href="<?= $dialog_url ?>" data-dialog="size=auto">
                 <?= Icon::create($icon, 'clickable')->asImg(['class' => "text-bottom"]) ?>
                 <?= htmlReady($date->getFullname()) ?>
             </a>

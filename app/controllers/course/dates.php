@@ -1,6 +1,7 @@
 <?php
 
 require_once 'lib/raumzeit/raumzeit_functions.inc.php';
+require_once 'lib/raumzeit.inc.php';
 
 class Course_DatesController extends AuthenticatedController
 {
@@ -19,6 +20,7 @@ class Course_DatesController extends AuthenticatedController
         }
 
         PageLayout::addSqueezePackage('tablesorter');
+        PageLayout::addScript('raumzeit');
     }
 
     public function index_action()
@@ -49,15 +51,50 @@ class Course_DatesController extends AuthenticatedController
         $this->last_visitdate = object_get_visit(Course::findCurrent()->id, 'schedule');
         $this->dates = Course::findCurrent()->getDatesWithExdates();
         $this->lecturer_count = Course::findCurrent()->countMembersWithStatus('dozent');
+        
+        $semclass = $GLOBALS['SEM_TYPE'][Course::findCurrent()->status]['class'];
+        $this->show_raumzeit = $GLOBALS['SEM_CLASS'][$semclass]['show_raumzeit'];
+                
+        $sidebar = Sidebar::get();
+        $sidebar->setImage('sidebar/date-sidebar.png');
+        
+        $actions = new ActionsWidget();
+        
+        if (!$this->show_raumzeit) {
+            $actions->addLink(
+                _('Neuer Einzeltermin'),
+                $this->url_for('course/dates/singledate'),
+                Icon::create('add', 'clickable')
+            )->asDialog("size=auto");
+        }
+        
+        $actions->addLink(
+            _('Als Doc-Datei runterladen'),
+            $this->url_for('course/dates/export'),
+            Icon::create('file-word', 'clickable')
+        );
+        
+        $sidebar->addWidget($actions);
 
     }
 
+    
+    /**
+     * This method is called to show the dialog to edit a date for a course.
+     *
+     * @param String $termin_id    The id of the date
+     * @return void
+     */
     public function details_action($termin_id)
     {
         Navigation::activateItem('/course/schedule/dates');
         $this->date = new CourseDate($termin_id);
         $this->cancelled_dates_locked = LockRules::Check($this->date->range_id, 'cancelled_dates');
-        $this->dates_locked = LockRules::Check($this->date->range_id, 'room_time');
+        $this->dates_locked = LockRules::Check($this->date->range_id, 'room_time');  
+        
+        $sidebar = Sidebar::get();
+        $sidebar->setImage('sidebar/date-sidebar.png');   
+        
         if (Request::isXhr()) {
             $this->set_layout(null);
             $this->set_content_type('text/html;Charset=windows-1252');
@@ -65,6 +102,138 @@ class Course_DatesController extends AuthenticatedController
                 $this->date->getFullname()
             );
         }
+    }
+    
+    /**
+     * This method is called to show the dialog to edit a singledate for a studygroup.
+     *
+     * @param String $termin_id    The id of the date
+     * @return void
+     */
+    public function singledate_action($termin_id = null)
+    {
+        Navigation::activateItem('/course/schedule/dates');
+        $sidebar = Sidebar::get();
+        $sidebar->setImage('sidebar/date-sidebar.png');
+        
+        $course = Course::findCurrent();
+        $sem = Seminar::GetInstance($course->getId());
+
+        $date_submitted = (Request::get('startDate') 
+            && Request::get('start_stunde') && Request::get('start_minute') 
+            && Request::get('end_stunde') && Request::get('end_minute'));
+        
+        if (Request::submitted("editSingleDate_button") && $date_submitted) {
+                        
+            $dates = explode('.', Request::get('startDate'));
+            $start = mktime(Request::int('start_stunde'), Request::int('start_minute'), 0,$dates[1],$dates[0],$dates[2]);
+            $ende = mktime(Request::int('end_stunde'), Request::int('end_minute'), 0, $dates[1],$dates[0],$dates[2]);
+            $termin_id = Request::option('singleDateID');
+            $cycle_id  = Request::option('cycle_id', null);            
+            
+            $termin = $sem->getSingleDate($termin_id);
+            if ($termin && !$cycle_id) {                
+                
+                if ( !($start >= $termin->date && $ende <= $termin->end_time) 
+                    && !Request::submitted('approveChange') 
+                    && $termin->hasRoom()) {
+                        
+                    $zw_termin = new SingleDate();
+                    $zw_termin->date = $start;
+                    $zw_termin->end_time = $ende;
+                
+                    // parameters to be resent on positive answer
+                    foreach (words('startDate start_stunde start_minute end_stunde '
+                        . 'end_minute related_teachers room_sd freeRoomText_sd dateType cmd '
+                        . 'singleDateID cycle_id action related_statusgruppen') as $param) {
+                                
+                        $url_params[$param] = Request::get($param);
+                    }
+                                               
+                    $url_params['approveChange'] = true;
+                    $url_params['editSingleDate_button'] = true;
+        
+                    $question = createQuestion( sprintf(_("Wenn Sie den Termin am %s auf %s ändern,".
+                        " verlieren Sie die Raumbuchung. Sind Sie sicher, dass Sie diesen Termin ändern möchten?"),
+                        '**'. $termin->toString() .'**',  '**'. $zw_termin->toString() .'**'),
+                        $url_params, array(), $this->url_for('course/dates/singledate'));
+                    
+                    echo $question;
+        
+                    unset($zw_termin);
+                }
+            }
+            
+            if (!$question) {
+                
+                if ($termin_id) {
+                    $date = new CourseDate($termin_id);
+                    $date->raum = Request::get("freeRoomText_sd");
+
+                    if (!$termin) {                        
+                        $date->autor_id = User::findCurrent()->user_id;
+                        $date->range_id = $course->getId();
+                        $date->date = $start;
+                        $date->end_time = $ende;
+                        $date->date_typ = Request::get('dateType');                        
+                    } else {
+                        raumzeit_editSingleDate($sem);
+                    }
+                    
+                    $date->store();
+                    
+                }                
+                if (Request::isXhr()) {
+                    header('X-Location: '.$this->url_for('course/dates'));
+                } else {
+                    $this->redirect($this->url_for('course/dates'));
+                }
+            }            
+        }            
+        
+        if ($termin_id) {
+            $this->date = new CourseDate($termin_id);
+            $this->cancelled_dates_locked = LockRules::Check($this->date->range_id, 'cancelled_dates');
+            $this->dates_locked = LockRules::Check($this->date->range_id, 'room_time');
+            
+            $termin = new SingleDate($termin_id);
+            if ($termin) {
+                $this->room_sd = $termin->resource_id;
+                $this->related_teachers = implode(",", $termin->related_persons);
+                $this->related_groups = implode(",", $termin->related_groups);
+            }            
+            $xtitle = $this->date->getTypeName() . ": ". $this->date->getFullname();     
+            
+        } else {            
+            $this->date = new CourseDate(md5(uniqid()));
+            $xtitle = _('Einzeltermin anlegen');            
+        }       
+        
+        if (Request::isXhr()) {
+            $this->set_layout(null);
+            $this->set_content_type('text/html;Charset=windows-1252');
+            $this->response->add_header('X-Title', $xtitle);
+        }
+        
+    }
+        
+    /**
+     * This method is called to save a singledate for a studygroup.
+     *
+     * @return void
+     */
+    public function save_details_action()
+    {
+        $course = Course::findCurrent();
+        $sem = Seminar::GetInstance($course->getId());
+        raumzeit_editSingleDate($sem);
+        if (Request::isXhr()) {
+            $this->render_nothing();
+            header('X-Location: '.$this->url_for('course/dates'));
+        } else {
+            $this->redirect($this->url_for('course/dates'));
+        }
+    	
     }
 
     public function new_topic_action()
