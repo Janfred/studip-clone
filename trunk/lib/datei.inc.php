@@ -1856,7 +1856,7 @@ function display_folder_body($folder_id, $open, $change, $move, $upload, $refres
     if ($move == $result["folder_id"]){
         $content .= "<br>"
                   . sprintf(_("Dieser Ordner wurde zum Verschieben / Kopieren markiert. Bitte wählen Sie das Einfügen-Symbol %s, um ihn in den gewünschten Ordner zu verschieben."),
-                            Icon::create('arr_2right', 'sort', ['title' => _("Klicken Sie auf dieses Symbol, um diesen Ordner in einen anderen Ordner einzufügen.")]))->asImg();
+                            Icon::create('arr_2right', 'sort', ['title' => _("Klicken Sie auf dieses Symbol, um diesen Ordner in einen anderen Ordner einzufügen.")])->asImg());
         if ($rechte) {
             $content .= _("Wenn Sie den Ordner in eine andere Veranstaltung verschieben / kopieren möchten, wählen Sie die gewünschte Veranstaltung oben auf der Seite aus.");
         }
