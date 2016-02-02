@@ -44,7 +44,6 @@ class Course_CancelDatesController extends AuthenticatedController
             $this->course_id = $this->dates[0]->range_id;
         }
         if (!get_object_type($this->course_id, array('sem')) ||
-                SeminarCategories::GetBySeminarId($this->course_id)->studygroup_mode ||
                 !$perm->have_studip_perm("tutor", $this->course_id)) {
             throw new Trails_Exception(400);
         }
