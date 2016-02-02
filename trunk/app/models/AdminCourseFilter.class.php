@@ -234,9 +234,9 @@ class AdminCourseFilter
             'table' => "auth_user_md5",
             'on' => "dozenten.user_id = dozentendata.user_id"
         );
-        $this->settings['query']['where']['search'] = "(CONCAT(seminare.VeranstaltungsNummer, ' ', seminare.name, ' ', seminare.Untertitel, ' ', dozentendata.Nachname) LIKE :search
+        $this->settings['query']['where']['search'] = "(CONCAT_WS(' ', seminare.VeranstaltungsNummer, seminare.name, seminare.Untertitel, dozentendata.Nachname) LIKE :search
             OR CONCAT(dozentendata.Nachname, ', ', dozentendata.Vorname) LIKE :search
-            OR CONCAT(dozentendata.Vorname, ' ', dozentendata.Nachname) LIKE :search
+            OR CONCAT_WS(' ', dozentendata.Vorname, dozentendata.Nachname) LIKE :search
             OR dozentendata.Vorname LIKE :search
             OR dozentendata.Nachname LIKE :search
         )";
