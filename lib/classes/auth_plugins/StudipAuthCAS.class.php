@@ -33,7 +33,7 @@ class StudipAuthCAS extends StudipAuthSSO {
         parent::__construct();
 
         if (Request::option('sso')) {
-            $this->cas = new CASClient(CAS_VERSION_2_0,false,$this->host,$this->port,$this->uri,false);
+            $this->cas = new CAS_Client(CAS_VERSION_2_0, false, $this->host, $this->port, $this->uri, false);
 
             if (isset($this->cacert)) {
                 $this->cas->setCasServerCACert($this->cacert);
@@ -43,14 +43,22 @@ class StudipAuthCAS extends StudipAuthSSO {
         }
     }
 
-    function getUser(){
+    /**
+     * Return the current username.
+     */
+    function getUser()
+    {
         return $this->cas->getUser();
     }
 
-    function isAuthenticated($username, $password){
-        // do CASAuthentication
+    /**
+     * Validate the username passed to the auth plugin.
+     * Note: This triggers authentication if needed.
+     */
+    function verifyUsername($username)
+    {
         $this->cas->forceAuthentication();
-        return true;
+        return $this->getUser();
     }
 
     function getUserData($key){
@@ -70,6 +78,7 @@ class StudipAuthCAS extends StudipAuthSSO {
 
     function logout(){
         // do a global cas logout
+        $this->cas = new CAS_Client(CAS_VERSION_2_0, false, $this->host, $this->port, $this->uri, false);
         $this->cas->logout();
     }
 }

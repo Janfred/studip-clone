@@ -1,10 +1,159 @@
-This document duplicates reference information found at https://wiki.jasig.org/display/CASC/phpCAS+ChangeLog
-for interested parties, in the case the wiki wouldn't be available.
+Changes in version 1.3.4
+Security Fixes:
 
-----
+Bug Fixes:
+   * Mark auth call completed for post-auth callback [#131] (Daniel Frett)
+   * Remove typo CAS_TypeMismatchException [#133] (Gabrijel Gavranović)
+   * Fix SERVER_ADMIN error for alternate Webservers [#103] (Joachim Fritschi)
+   * Fix non-strict string comparision in _isHttps check [#139] (Brandon Peters)
+   * Fix setNoCasServerValidation for cURL 7.10 [#122] (Joachim Fritschi)
+   * Fix renew support [#93] (Joachim Fritschi)
+   * _getClientUrl() fixes with reverse proxies [#154] adongy
+   * Param type doc should be 'string' in CAS::logoutWithRedirectService() [#167] Chris McCafferty
+   * Fix broken class reference [#161] Joachim Fritschi
+
+
+Improvement:
+   * Add phpCAS::isInitialized() API method [#112] (Adam Franco)
+   * select temporary directory based on env vars [#136) (Geoffroy Desvernay)
+   * Add gitattributes to reduce unnecessary files from composer installs. [#141] (Jon Dufresne)
+   * Allow cas endpoint to be a 'get url' [#146] (flushbi)
+   * Add documentation for phpCAS::$_PHPCAS_CLIENT [#156] (Sylvain)
+   * Improve https check [#139] (Joachim Fritschi)
+   * Add time to trace [#158] (cwsterling)
+   * Add php5.6 tests, move to faster docker env [#169] (Florian Holzhauer)
+   * Introduce a setVerbose() toggle to prevent debug info leaking in production [#152 #147] (Joachim Fritschi)
+ 
+ 
+Changes in version 1.3.3
+Security Fixes:
+   * CVE-2014-4172 Urlencode all tickets [#125] (Marvin Addison)
+
+Bug Fixes:
+   * Fix CURL compatibility CURL >= 7.28.0 [#66] (adoy)
+   * Commit session before redirect [#79] (kakawait)
+   * Fix warnings for php => 5.5 [87] (fh)
+   * Update wrong wording in examples [#90] (misilot)
+   * Fixed bug in imap.php [#105] (echampet)
+   * Fix missing Server_Admin variable for nginex [#121](arianf)
+   * Fix error in TypeMismatchException [#123 ](Develle)
+   * Fix bug in https test [#126] (Florent Baldino)
+   
+
+Improvement:
+   * Fix grammar of documentation [#61] (frett)
+   * Improved testability of the phpCAS client [#7] (Adam Franco)
+   * Fixed typo [#70] (fh)
+   * Example for improved cookie hardening [#67] (Joachim Fritschi)
+   * Added support for X-Forwarded-Proto Header [#77] (Paul Donohue)
+   * Added composer support [#73] (dhyde)
+   * Travis for continuous integration [#82] (fh)
+   * Support for X-Forwared-Port [#100] (neopeak)
+   * Support for CAS 3.0 protocol [#116] (fredrik-w)
+
+
+Changes in version 1.3.2
+Security Fixes:
+   * CVE-2012-5583 Missing CN validation of CAS server certificate [#58] (Joachim Fritschi)
+
+Bug Fixes:
+   * Fix broken character encoding in Greek and French [#40] (Joachim Fritschi)
+   * Minor error corrections in a few example files [] (Joachim Fritschi)
+   * Remove erroneous break statement [#44] (jbittel)
+   * Use X-Forwarded-Port [#45] (Andrew Kirkpatrick)
+   * Stop autoloader using set_include_path [#51/#52] (drysdaleb)
+   * Fix undefined property in the rebroadcast code [#47] (Joachim Fritschi)
+
+Improvement:
+   * Enable getCookies on a proxied sevices [#56] (Adam Franco)
+
+Changes in version 1.3.1
+Bug Fixes:
+   * Readd PEAR support to the package [#30]  (Joachim Fritschi)
+   * fix a __autoload conflicts in the autoloader [#36] (Joachim Fritschi)
+   * fix PEAR code style errors [25] (Joachim Fritschi)
+   * properly unset variables during checkAuthenticate[#35] (Joachim Fritschi)
+
+Changes in version 1.3.0
+Improvements:
+   * enable single sign-out when session has already started [#29] (Benvii)
+
+Changes in version 1.3.0RC1
+
+Bug Fixes:
+   * the saml logout url should be parsed urlencoded [#24] (dlineate)
+   * fix a proxy mode bug introduced in a previous comitt [#16] (Adam Franco)
+   * Fix include_path order so that the phpCAS path takes precedence [#13] (Adam Franco)
+   * fix invalid characters in the php session naming [#17] (Joachim Fritschi)
+   * fix an initialisation problem introduced in the PGT storage [18] (Daniel Frett)
+   * make sure the PGTStorage object is initialized if a user is utilizing the createTable method [#4] (Daniel Frett)
+   * Fix error message in phpCAS::setCacheTimesForAuthRecheck() [PHPCAS-132/#1] (Bradley Froehle)
+   * Always return attributes in utf8 [PHPCAS-102]
+   * Fix warning during debugging if debug is set to false [PHPCAS-123] (Sean Watkins)
+
+New Features:
+    * Add a script to create the PGT db table in proxy mode [#11] (Joachim Fritschi)
+    * Switch to the Apache License [#5] (Adam Franco, Joachim Fritschi)
+    * Move to github and add all necessary file to package [#12] (Adam Franco)
+    * New build process for github [#12] (Adam Franco)
+    * Update unit tests to work with the lastest phpunit version [PHPCAS-128] (Adam Franco)
+    * Refacatoring of the protocol decision making to allow validation of proxied usage [PHPCAS-69] (Joachim Fritschi, Adam Franco)
+    * Rebroadcast of logout and pgtiou to support clustered phpcas [PHPCAS-100] (Matthew Selwood, Adam Franco)
+
+Improvements:
+    * Improved cookie handling [] (Adam Franco
+    * Indent, format and user name guidelines of PEAR [#14] (Joachim Fritschi)
+    * Add a class autoloading feature [PHPCAS-125/#8] (Joachim Fritschi)
+    * Remove global variables [PHPCAS-126] (Adam Franco)
+    * Implementation of an exception framework to allow gracefull termination [PHPCAS-109] (Joachim Fritschi)
+
+Security Fixes:
+    * CVE-2012-1104 validate proxied usage of a service [PHPCAS-69] (Joachim Fritschi, Adam Franco)
+    * CVE-2012-1105 change the default PGT save path to the session storage path and set proper permissions [#22] (Joachim Fritschi)
+
+Changes in version 1.2.2
+
+Bug Fixes:
+    * Improve compatibility with php < 5.3 for E_USER_DEPRECATED [PHPCAS-116] (Hugh Eaves)
+
+Changes in version 1.2.2RC1
+
+Bug Fixes:
+    * CASClient::getURL() cannot be private [PHPCAS-103] (Joachim Fritschi)
+    * CASClient::getServerServiceValidateURL() doesn't respect existing query strings [PHPCAS-104] (Bradley Froehle, Joachim Fritschi)
+    * CASClient::retrievePT() must be a public function [PHPCAS-107] (Joachim Fritschi)
+    * Expose setNoClearTicketsFromUrl() to the client [PHPCAS-108]  (Joachim Fritschi)
+    * Remove the PGT filestorage in xml format that is not implemented [PHPCAS-112] (Joachim Fritschi)
+    * Fix compatibility of the PGT db storage interface with postgres [PHPCAS-113] (Joachim Fritschi)
+
+Improvement
+    * Support for proxied POST requests. [PHPCAS-90] (Adam Franco)
+    * Add missing example for the new pgt-db storage [PHPCAS-101] (Joachim Fritschi)
+    * CASClient::getServerLoginURL(): Don't cache gateway/renew parameters [PHPCAS-105] (Bradley Froehle)
+    * fix parsing of cookies with special symbols in their values [PHPCAS-106] (Joachim Fritschi)
+    * Removal of the debug_backtrace hack for php4 [PHPCAS-110] (Joachim Fritschi)
+    * Clean up the naming structure of the classes [PHPCAS-111] (Joachim Fritschi)
+    * Better debug log output format [PHPCAS-114] (Joachim Fritschi)
+    * Many more examples and one central config. Improved code documentation [PHPCAS-86] (Joachim Fritschi, Adam Franco)
+
+Changes in version 1.2.1
+   * None
+
+Changes in version 1.2.1RC1
+Improvements
+   * add support for storing PGTs in a database [PHPCAS-94] (Daniel Frett)
+
+Bug Fixes
+   * phpCAS::setDebug(FALSE) should stop logging [PHPCAS-95] (Joachim Fritschi)
+   * fix checkAuthenticate return value documentation [PHPCAS-92] (Joachim Fritschi)
+   * fix PGTStorage contructor name [PHPCAS-93] (Daniel Frett)
+   * fix the PHPCAS_SERVICE_NOT_AVAILABLE constant [PHPCAS-91] (Daniel Frett)
+   * fix redirection with multiple proxies in HTTP_X_FORWARDED_HOST [PHPCAS-98] (Joachim Fritschi)
+   * fix some undefinde variable warnings in debug mode [PHPCAS-96] (Joachim Fritschi)
+
 Changes in version 1.2.0
    * None
-   
+
 Changes in version 1.2.0RC2
 Improvements
    * add callback hooks during authentication and single sign-out [PHPCAS-76] (Adam Franco)
@@ -24,7 +173,7 @@ Changes in version 1.2.0-beta1
 Bug Fixes
   * fix redirection behind a proxy. [PHPCAS-78] (Alex Barker)
   * remove the bogus setCasServerCert() function and clean up the curl ssl settings [PHPCAS-84] (Joachim Fritschi)
-  
+
 Improvements
    * mark the logout functions with an url parameter a deprecated [PHPCAS-85] (Joachim Fritschi)
    * add public/private modifier for all vars and functions [PHPCAS-77] (Joachim Fritschi)
@@ -34,7 +183,7 @@ Improvements
    * add support for attributes for the cas_2.0 protocol [PHPCAS-43] (Joachim Fritschi, Adam Franco)
    * removal of unused code and comments [PHPCAS-63] (Joachim Fritschi)
    * fix static function warnings for php 5.x [PHPCAS-46] (Joachim Fritschi)
-   
+
 Changes in version 1.1.3
   Bug Fixes
    * removal of the non functional pgt-db backend [PHPCAS-65] (Joachim Fritschi)
@@ -51,13 +200,13 @@ Changes in version 1.1.3RC1
    * fix missing exit() call during ticket validation [PHPCAS-76] (Igor Blanco,Joachim Fritschi)
    * fix a notice because REQUEST_URL is not defined on IIS [PHPCAS-81] (Iñaki Arenaza)
    * fix a typo in pgt-db.php [PHPCAS-75] (Julien Cochennec)
- 
+
  Improvements
    * upgrade domxml-php4-to-php5 to the newest version [PHPCAS-74] (Joachim Fritschi)
 
 Changes in version 1.1.2
    * None
-   
+
 Changes in version 1.1.2RC2
  Bug Fixes
     * Prevent domxml-php4-to-php5 to be inclueded twice [PHPCAS-48] (Brad Krane)
@@ -69,18 +218,18 @@ Security Issue
 
  Improvement
     * Debuglog contains phpCAS version information [PHPCAS-62] (Joachim Fritschi)
-    
- Bug Fixes   
+
+ Bug Fixes
     * Fix warnings for SAML responses without attributes [PHPCAS-59] (Joachim Fritschi)
     * Fix duplicate SAML debug output [PHPCAS-64] (Joachim Fritschi)
-    * Providing a new ST/PT/SA during an authenticated session will be ignored 
+    * Providing a new ST/PT/SA during an authenticated session will be ignored
       and a warning will be issued to the debug log. [PHPCAS-61] (Joachim Fritschi)
     * fix 2 undefinded variable notices in serviceWeb() [PHPCAS-68] (Joachim Fritschi)
 
 Changes in version 1.1.1
 Improvement
     * On Single Sign Out destroy any existing application session before deleting the phpcas session [PHPCAS-58] (Joachim Fritschi)
-    
+
 Changes in version 1.1.1RC2
 Bug fixes
     * Fix bug in handling urls containing parameters without values [PHPCAS-57] (Joe Lencioni)
@@ -89,7 +238,7 @@ Bug fixes
 Changes in version 1.1.1RC1
 Bug fixes
     * Fix bug in restoring an existing session [PHPCAS-55] (Joachim Fritschi)
-    
+
 Changes in version 1.1.0
 Improvement
     * Replace deprecated split() with explode(). [PHPCAS-42] (Joe Lencioni)
@@ -103,7 +252,7 @@ Bug fixes
 Changes in version 1.1.0RC7
 Security fixes
     * Fix XSS Vulnerability. Sanatize parameters before using the url submitted by a client [PHPCAS-52] (Joachim Fritschi)
-    
+
 Changes in version 1.1.0RC6
 Bug fixes
     * restore any possible old session before renaming the session [PHPCAS-50] (Joachim Fritschi)
@@ -147,16 +296,16 @@ Bug fixes
 
 Improvement
 
-    * added accept IP addresses for allowed clients [PHPCAS-37] (Arunas Stockus) 
+    * added accept IP addresses for allowed clients [PHPCAS-37] (Arunas Stockus)
 
 Changes in version 1.0.2RC1
 Bug fixes
 
-    * fix redirections masking error messages [PHPCAS-36] (Olivier Berger) 	 
-    * fixed validatePGT() failing on phpCAS::traceBegin() with newer domxml-php4-to-php5.php [PHPCAS-35] (Olivier Berger) 	 
+    * fix redirections masking error messages [PHPCAS-36] (Olivier Berger)
+    * fixed validatePGT() failing on phpCAS::traceBegin() with newer domxml-php4-to-php5.php [PHPCAS-35] (Olivier Berger)
     * Fixed missing exit() at end of callback() method [PHPCAS-34] (Olivier Berger)
-    * Update included domxml-php4-php5.php to most recent version now under LGPL [PHPCAS-30] (Olivier Berger) 	  
-    * fixed empty $target_service in CASClient:serviceMail [PHPCAS-22] (Julien Marchal).
+    * Update included domxml-php4-php5.php to most recent version now under LGPL [PHPCAS-30] (Olivier Berger)
+    * fixed empty $target_service in CAS_Client:serviceMail [PHPCAS-22] (Julien Marchal).
 
 Changes in version 1.0.1
 Bug fixes
@@ -252,7 +401,7 @@ New features
     * the service URL for the CAs server can be fixed with method phpCAS::setFixedServiceURL (Julien Marchal).
     * the callback URL used to receive PGTs can be fixed with method phpCAS::setFixedCallbackURL() (Julien Marchal).
 
-    * added a CASClient wrapper to class phpCAS for method retrievePGT() (Julien Marchal).
+    * added a CAS_Client wrapper to class phpCAS for method retrievePGT() (Julien Marchal).
 
 Changes in version 0.4.18
 Bug fixes
@@ -389,7 +538,7 @@ New features
 Changes in version 0.3.1
 Bug fixes
 
-    * syntax error in CAS/client.php (Julien Marchal)
+    * syntax error in CAS/Client.php (Julien Marchal)
 
 Changes in version 0.3
 New features
