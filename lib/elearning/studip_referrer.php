@@ -9,7 +9,7 @@
 *
 */
 
-/* ILIAS Version 4.3.x, 4.4.x */
+/* ILIAS Version 4.4.x */
 
 if(file_exists("./ilias.ini.php")){
     require_once("./Services/Init/classes/class.ilIniFile.php");
@@ -22,15 +22,19 @@ if(file_exists("./ilias.ini.php")){
         exit();
     }
 
+    $cookie_path = dirname($_SERVER['PHP_SELF']);
+    if (substr($cookie_path,-1) != "/") {
+        $cookie_path .= "/";
+    }
     if (isset($_GET['sess_id']))
     {
-        setcookie('PHPSESSID',$_GET['sess_id']);
+        setcookie('PHPSESSID',$_GET['sess_id'],0, $cookie_path);
         $_COOKIE['PHPSESSID'] = $_GET['sess_id'];
     }
 
     if (isset($_GET['client_id']))
     {
-        setcookie('ilClientId',$_GET['client_id']);
+        setcookie('ilClientId',$_GET['client_id'],0, $cookie_path);
         $_COOKIE['ilClientId'] = $_GET['client_id'];
     }
 
