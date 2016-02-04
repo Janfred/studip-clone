@@ -158,12 +158,14 @@ form.default {
             margin-top: 0;
         }
 
-        input[type=date], input[type=email], input[type=number],
-        input[type=password], input[type=text], input[type=url],
-        textarea, select {
-            display: inline-block;
-            margin-top: 0;
-            width: auto;
+        &, label:not(.undecorated) {
+            input[type=date], input[type=email], input[type=number],
+            input[type=password], input[type=text], input[type=url],
+            textarea, select {
+                display: inline-block;
+                margin-top: 0;
+                width: auto;
+            }
         }
     }
 
