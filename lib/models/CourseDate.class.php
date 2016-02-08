@@ -165,9 +165,10 @@ class CourseDate extends SimpleORMap
      */
     public function getRoomName()
     {
-        return $this->room_assignment->resource_id
-            ? $this->room_assignment->resource->getName()
-            : $this['raum'];
+        if (Config::get()->RESOURCES_ENABLE && $this->room_assignment->resource_id) {
+            return $this->room_assignment->resource->getName();
+        }
+        return $this['raum'];
     }
 
     /**
@@ -177,9 +178,10 @@ class CourseDate extends SimpleORMap
      */
     public function getRoom()
     {
-        return $this->room_assignment->resource_id
-            ? $this->room_assignment->resource
-            : null;
+        if (Config::get()->RESOURCE_ENABLE && $this->room_assignment->resource_id) {
+           return $this->room_assignment->resource;
+        }
+        return null;
     }
 
     /**
