@@ -221,8 +221,10 @@ class Course_TimesroomsController extends AuthenticatedController
         } else {
             $this->attributes['fromDialog'] = 'false';
         }
-
-        $this->resList = ResourcesUserRoomsList::getInstance($GLOBALS['user']->id, true, false, true);
+        
+        if (Config::get()->RESOURCE_ENABLE) {
+            $this->resList = ResourcesUserRoomsList::getInstance($GLOBALS['user']->id, true, false, true);
+        }
 
         //UMSTELLEN AUF COURSE
         $this->dozenten = $this->course->getMembers('dozent');
@@ -340,7 +342,9 @@ class Course_TimesroomsController extends AuthenticatedController
         $this->restoreRequest(words('date start_time end_time room related_teachers related_statusgruppen freeRoomText dateType fromDialog'));
 
         $this->editParams = array('fromDialog' => Request::get('fromDialog'));
-        $this->resList    = ResourcesUserRoomsList::getInstance($GLOBALS['user']->id, true, false, true);
+        if (Config::get()->RESOURCES_ENABLE) {
+            $this->resList    = ResourcesUserRoomsList::getInstance($GLOBALS['user']->id, true, false, true);
+        }
         $this->teachers   = $this->course->getMembers('dozent');
         $this->groups     = Statusgruppen::findBySeminar_id($this->course->id);
     }
