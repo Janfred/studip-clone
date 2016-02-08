@@ -164,8 +164,8 @@
             <? else: ?>
                 <?=
                 CourseAvatar::getAvatar($semid)->is_customized()
-                    ? CourseAvatar::getAvatar($semid)->getImageTag(Avatar::SMALL, array('title' => tooltip2(trim($values["Name"]))))
-                    : Icon::create('seminar', 'clickable', ['title' => trim($values["Name"])])->asImg(20) ?>
+                    ? CourseAvatar::getAvatar($semid)->getImageTag(Avatar::SMALL, array('title' => htmlReady(trim($values["Name"]))))
+                    : Icon::create('seminar', 'clickable', ['title' => htmlReady(trim($values["Name"]))])->asImg(20) ?>
             <? endif; ?>
             </td>
             <? if (in_array('number', $view_filter)) : ?>

@@ -612,7 +612,7 @@ class Admin_CoursesController extends AuthenticatedController
             ),
         );
 
-        if (Config::get()->RESOURCES_ALLOW_ROOM_REQUESTS) {
+        if (Config::get()->RESOURCES_ENABLE && Config::get()->RESOURCES_ALLOW_ROOM_REQUESTS) {
             $actions[4] = array(
                 'name'  => 'Raumanfragen',
                 'title' => _('Raumanfragen'),
