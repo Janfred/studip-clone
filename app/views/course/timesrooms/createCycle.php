@@ -5,7 +5,7 @@
     <?= CSRFProtection::tokenTag() ?>
 
     <? if ($has_bookings): ?>
-        <?= MessageBox::error(_('Wenn Sie die regelmäßige Zeit auf %s ändern, verlieren Sie die Raumbuchungen für alle in der Zukunft liegenden Termine!'),
+        <?= MessageBox::error(_('Wenn Sie die regelmäßige Zeit ändern, verlieren Sie die Raumbuchungen für alle in der Zukunft liegenden Termine!'),
             array(_('Sind Sie sicher, dass Sie die regelmäßige Zeit ändern möchten?'))) ?>
     <? endif; ?>
 
