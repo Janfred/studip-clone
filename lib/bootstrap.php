@@ -192,18 +192,22 @@ namespace {
 
     // Add paths to autoloader that were defined in config_local.inc.php and
     // may be optional
+    
     StudipAutoloader::addAutoloadPath($GLOBALS['STUDIP_BASE_PATH'] . '/' . $GLOBALS['RELATIVE_PATH_RESOURCES'] . '/lib');
-        require_once $GLOBALS['RELATIVE_PATH_RESOURCES'] . '/resourcesFunc.inc.php';
-        require_once $GLOBALS['RELATIVE_PATH_RESOURCES'] . '/lib/list_assign.inc.php';
+    require_once $GLOBALS['RELATIVE_PATH_RESOURCES'] . '/resourcesFunc.inc.php';
+    require_once $GLOBALS['RELATIVE_PATH_RESOURCES'] . '/lib/list_assign.inc.php';
+
     if (Config::get()->EXTERN_ENABLE) {
         StudipAutoloader::addAutoloadPath($GLOBALS['STUDIP_BASE_PATH'] . '/' . $GLOBALS['RELATIVE_PATH_EXTERN'] . '/lib');
         require_once $GLOBALS['STUDIP_BASE_PATH'] . '/' . $GLOBALS['RELATIVE_PATH_EXTERN'] . '/extern_config.inc.php';
         require_once $GLOBALS['STUDIP_BASE_PATH'] . '/' . $GLOBALS['RELATIVE_PATH_EXTERN'] . '/lib/extern_functions.inc.php';
     }
+
     if (Config::get()->CALENDAR_ENABLE) {
         StudipAutoloader::addAutoloadPath($GLOBALS['STUDIP_BASE_PATH'] . '/' . $GLOBALS['RELATIVE_PATH_CALENDAR'] . '/lib');
         require_once $GLOBALS['STUDIP_BASE_PATH'] . '/' . $GLOBALS['RELATIVE_PATH_CALENDAR'] . '/calendar_func.inc.php';
     }
+
     if (Config::get()->ELEARNING_INTERFACE_ENABLE) {
         StudipAutoloader::addAutoloadPath($GLOBALS['STUDIP_BASE_PATH'] . '/' . $GLOBALS['RELATIVE_PATH_ELEARNING_INTERFACE']);
     }
