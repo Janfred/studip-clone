@@ -107,7 +107,7 @@ class Admin_StatusgroupsController extends AuthenticatedController
             $group->name       = Request::get('name');
             $group->name_w     = Request::get('name_w');
             $group->name_m     = Request::get('name_m');
-            $group->size       = Request::int('size');
+            $group->size       = Request::int('size', 0);
             $group->range_id   = Request::option('range_id', $group->range_id);
             $group->position   = Request::int('position', $group->position);
             $group->selfassign = Request::int('selfassign', 0);

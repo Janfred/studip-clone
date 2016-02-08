@@ -362,7 +362,7 @@ class Statusgruppen extends SimpleORMap
 
     public function store()
     {
-        if ($this->isNew() && !$this->position) {
+        if ($this->position === null) {
             $sql = "SELECT MAX(position) + 1 FROM statusgruppen WHERE range_id = ?";
             $stmt = DBManager::get()->prepare($sql);
             $stmt->execute(array($this->range_id));
