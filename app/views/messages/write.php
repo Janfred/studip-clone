@@ -33,7 +33,7 @@
             . "OR CONCAT(Vorname,' ',Nachname) LIKE :input "
             . "OR CONCAT(Nachname,' ',Vorname) LIKE :input "
             . "OR CONCAT(Nachname,', ',Vorname) LIKE :input "
-            . "OR Nachname LIKE :input OR "
+            . "OR Nachname LIKE :input "
             . "OR Vorname LIKE :input"
             . " ORDER BY fullname ASC",
             _("Nutzer suchen"), "user_id");
