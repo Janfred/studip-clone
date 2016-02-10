@@ -5701,6 +5701,30 @@ ul.studygroup-gallery li {
 ul.studygroup-gallery li section {
   margin: 0 auto;
 }
+.studygroupmemberlist .member-avatar {
+  position: relative;
+}
+.studygroupmemberlist .member-avatar img {
+  margin-right: 5px;
+}
+.studygroupmemberlist .new-member .member-avatar::after {
+  background-repeat: no-repeat;
+  content: ' ';
+  display: inline-block;
+  height: 12px;
+  margin-left: 0;
+  background-image: url("../images/icons/red/star.svg");
+  -webkit-background-size: 12px 12px;
+  -moz-background-size: 12px 12px;
+  -o-background-size: 12px 12px;
+  background-size: 12px 12px;
+  vertical-align: text-top;
+  width: 12px;
+}
+.studygroupmemberlist .new-member .member-avatar::after {
+  position: absolute;
+  margin: -1px 0 0 -14px;
+}
 .studygroupmemberlist tr > .actions {
   text-align: right;
   white-space: nowrap;
