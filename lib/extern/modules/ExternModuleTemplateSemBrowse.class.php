@@ -713,7 +713,7 @@ class ExternModuleTemplateSemBrowse extends ExternModule {
                             $info = kill_format(trim($tree->tree_data[$kid]['info']));
                         } else {
                             $info = '';
-                            $content[$count]['SUBLEVEL' . $level]['SUBLEVEL_NO_INFO_' . $level] = true;
+                            $content['SUBLEVEL_' . $level][$count]['SUBLEVEL_NO_INFO_' . $level] = true;
                         }
                 //  }
                     $level_content = array(
