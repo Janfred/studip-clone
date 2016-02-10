@@ -18,7 +18,22 @@ ul.studygroup-gallery {
     }
 }
 
-.studygroupmemberlist tr > .actions {
-    text-align: right;
-    white-space: nowrap;
+.studygroupmemberlist {
+    .member-avatar {
+        position: relative;
+        img {
+            margin-right: 5px;
+        }
+    }
+    .new-member .member-avatar {
+        .icon('after', 'star', 'new', 12);
+        &::after {
+            position: absolute;
+            margin: -1px 0 0 -14px;
+        }
+    }
+    tr > .actions {
+        text-align: right;
+        white-space: nowrap;
+    }
 }

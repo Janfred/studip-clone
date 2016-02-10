@@ -6,12 +6,13 @@ require_once 'lib/user_visible.inc.php';
 /**
  * This controller realises the basal functionalities of a studygroup.
  *
+ * @license GPL2 or any later version
  */
 class Course_StudygroupController extends AuthenticatedController
 {
 
     // see Trails_Controller#before_filter
-    function before_filter(&$action, &$args)
+    public function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
 
@@ -33,22 +34,48 @@ class Course_StudygroupController extends AuthenticatedController
         }
 
         Sidebar::get()->setImage('sidebar/studygroup-sidebar.png');
+
+        $this->view = $this->getView($args[0]);
+    }
+
+    private function getView($course_id)
+    {
+        // Obtain user config
+        if (isset($GLOBALS['user']->cfg->STUDYGROUP_VIEWS)) {
+            $user_cfg = json_decode($GLOBALS['user']->cfg->STUDYGROUP_VIEWS, true);
+        } else {
+            $user_cfg = array();
+        }
+
+        // Obtain default view
+        $default_view = $user_cfg[$course_id] ?: 'gallery';
+        $view = Request::option('view', $default_view);
+        if (!in_array($view, words('gallery list'))) {
+            $view = 'gallery';
+        }
+
+        // Store default view
+        if ($view !== 'gallery') {
+            $user_cfg[$course_id] = $view;
+        } elseif (isset($user_cfg[$course_id])) {
+            unset($user_cfg[$course_id]);
+        }
+        $GLOBALS['user']->cfg->store('STUDYGROUP_VIEWS', json_encode($user_cfg));
+
+        return $view;
     }
 
     /**
      * shows details of a studygroup
      *
      * @param string id of a studygroup
-     *
      * @return void
      */
-    function details_action($id)
+    public function details_action($id)
     {
         global $perm;
         $studygroup = new Seminar($id);
         if (Request::isXhr()) {
-            $this->set_layout(null);
-            $this->response->add_header('Content-Type', 'text/html;charset=Windows-1252');
             header('X-Title: ' . _('Studiengruppendetails'));
         } else {
             PageLayout::setTitle(getHeaderLine($id) . ' - ' . _('Studiengruppendetails'));
@@ -60,11 +87,14 @@ class Course_StudygroupController extends AuthenticatedController
             $stmt->execute(array($GLOBALS['user']->id, $id));
             $data = $stmt->fetch();
 
-            if ($data['status'] == 'accepted') $membership_requested = true;
-            if (StudygroupModel::isInvited($GLOBALS['user']->id, $id)) $invited = true;
+            if ($data['status'] == 'accepted') {
+                $membership_requested = true;
+            }
+            if (StudygroupModel::isInvited($GLOBALS['user']->id, $id)) {
+                $invited = true;
+            }
 
             $participant = $perm->have_studip_perm('autor', $id);
-
 
             if (!preg_match('/^(' . preg_quote($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'], '/') . ')?([a-zA-Z0-9_-]+\.php)([a-zA-Z0-9_?&=-]*)$/', Request::get('send_from_search_page'))) {
                 $send_from_search_page = '';
@@ -121,7 +151,7 @@ class Course_StudygroupController extends AuthenticatedController
      *
      * @return void
      */
-    function new_action()
+    public function new_action()
     {
         PageLayout::setHelpKeyword('Basis.StudiengruppenAnlegen');
         closeObject();
@@ -157,7 +187,7 @@ class Course_StudygroupController extends AuthenticatedController
      *
      * @return void
      */
-    function create_action()
+    public function create_action()
     {
         global $perm;
 
@@ -381,7 +411,7 @@ class Course_StudygroupController extends AuthenticatedController
      *
      * @return void
      */
-    function edit_action($id)
+    public function edit_action($id)
     {
         global $perm;
 
@@ -448,7 +478,7 @@ class Course_StudygroupController extends AuthenticatedController
      *
      * @return void
      */
-    function update_action($id)
+    public function update_action($id)
     {
         global $perm;
         // if we are permitted to edit the studygroup get some data...
@@ -669,7 +699,7 @@ class Course_StudygroupController extends AuthenticatedController
      * @return void
      *
      */
-    function members_action()
+    public function members_action()
     {
         $id = $_SESSION['SessionSeminar'];
         PageLayout::setTitle(getHeaderLine($_SESSION['SessionSeminar']) . ' - ' . _("Teilnehmende"));
@@ -679,10 +709,10 @@ class Course_StudygroupController extends AuthenticatedController
         Request::set('choose_member_parameter', $this->flash['choose_member_parameter']);
 
         object_set_visit_module('participants');
-        $this->last_visitdate = object_get_visit($id, 'participants');
-        $sem                  = Course::find($id);
-        $this->anzahl         = StudygroupModel::countMembers($id);
+        $sem = Course::find($id);
 
+        $this->last_visitdate   = object_get_visit($id, 'participants');
+        $this->anzahl           = StudygroupModel::countMembers($id);
         $this->groupname        = $sem->getFullname();
         $this->sem_id           = $id;
         $this->groupdescription = $sem->beschreibung;
@@ -691,28 +721,43 @@ class Course_StudygroupController extends AuthenticatedController
         $this->autors           = $sem->getMembersWithStatus('autor');
         $this->accepted         = $sem->admission_applicants->findBy('status', 'accepted');
         $this->sem_class        = Course::findCurrent()->getSemClass();
+        $this->invitedMembers   = StudygroupModel::getInvitations($id);
+        $this->rechte           = $GLOBALS['perm']->have_studip_perm('tutor', $id);
 
-        $inviting_search = new SQLSearch("SELECT auth_user_md5.user_id, {$GLOBALS['_fullname_sql']['full_rev']} as fullname, username, perms "
-                                         . "FROM auth_user_md5 "
-                                         . "LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) "
-                                         . "LEFT JOIN seminar_user ON (auth_user_md5.user_id = seminar_user.user_id AND seminar_user.Seminar_id = '" . addslashes($id) . "') "
-                                         . "WHERE perms  NOT IN ('root', 'admin') "
-                                         . "AND " . get_vis_query()
-                                         . " AND (username LIKE :input OR Vorname LIKE :input "
-                                         . "OR CONCAT(Vorname,' ',Nachname) LIKE :input "
-                                         . "OR CONCAT(Nachname,' ',Vorname) LIKE :input "
-                                         . "OR Nachname LIKE :input OR {$GLOBALS['_fullname_sql']['full_rev']} LIKE :input) "
-                                         . "ORDER BY fullname ASC",
-            _("Nutzer suchen"), "user_id");
-        $this->rechte    = $GLOBALS['perm']->have_studip_perm("tutor", $id);
+        $this->setupMembersSidebar($sem);
+    }
 
+    /**
+     *
+     */
+    private function setupMembersSidebar(Course $course)
+    {
         $actions = new ActionsWidget();
         if ($this->rechte) {
-            $mp      = MultiPersonSearch::get('studygroup_invite_' . $id)
-                                        ->setLinkText(_('Neue Gruppenmitglieder-/innen einladen'))
-                                        ->setLinkIconPath("")
-                                        ->setTitle(_('Neue Gruppenmitglieder/-innen einladen'))
-                                        ->setExecuteURL($this->url_for('course/studygroup/execute_invite/' . $id, array('view' => Request::get('view'))))
+            $quoted_id = DBManager::get()->quote($course->id);
+            $vis_query = get_vis_query();
+
+            $query = "SELECT auth_user_md5.user_id,
+                             {$GLOBALS['_fullname_sql']['full_rev']} AS fullname,
+                             username, perms
+                      FROM auth_user_md5
+                      LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id)
+                      LEFT JOIN seminar_user ON (auth_user_md5.user_id = seminar_user.user_id AND seminar_user.Seminar_id = {$quoted_id})
+                      WHERE perms  NOT IN ('root', 'admin')
+                        AND {$vis_query}
+                        AND (username LIKE :input
+                          OR CONCAT(Vorname, ' ', Nachname) LIKE :input
+                          OR CONCAT(Nachname, ' ', Vorname) LIKE :input
+                          OR {$GLOBALS['_fullname_sql']['full_rev']} LIKE :input)
+                      ORDER BY fullname ASC";
+
+            $inviting_search = new SQLSearch($query, _('Nutzer suchen'), 'user_id');
+
+            $mp  = MultiPersonSearch::get('studygroup_invite_' . $course->id)
+                                    ->setLinkText(_('Neue Gruppenmitglieder-/innen einladen'))
+                                    ->setLinkIconPath('')
+                                    ->setTitle(_('Neue Gruppenmitglieder/-innen einladen'))
+                                        ->setExecuteURL($this->url_for('course/studygroup/execute_invite/' . $course->id, ['view' => $this->view]))
                                         ->setSearchObject($inviting_search)
                                         ->addQuickfilter(_('Adressbuch'), User::findCurrent()->contacts->pluck('user_id'))
                                         ->setNavigationItem('/course/members')
@@ -722,10 +767,10 @@ class Course_StudygroupController extends AuthenticatedController
             $actions->addElement($element);
         }
 
-        if ($this->rechte || $sem->getSemClass()['studygroup_mode']) {
+        if ($this->rechte || $course->getSemClass()['studygroup_mode']) {
             $actions->addLink(
                 _('Nachricht an alle Gruppenmitglieder verschicken'),
-                $this->url_for('course/studygroup/message/' . $id),
+                $this->url_for('course/studygroup/message/' . $course->id),
                 Icon::create('mail', 'clickable'),
                 array('data-dialog' => 1)
             );
@@ -734,7 +779,16 @@ class Course_StudygroupController extends AuthenticatedController
             Sidebar::get()->addWidget($actions);
         }
 
-        $this->invitedMembers = StudygroupModel::getInvitations($id);
+        $views = new ViewsWidget();
+        $views->addLink(
+            _('Galerie'),
+            $this->url_for('course/studygroup/members/' . $course->id, ['view' => 'gallery'])
+        )->setActive($this->view === 'gallery');
+        $views->addLink(
+            _('Liste'),
+            $this->url_for('course/studygroup/members/' . $course->id, ['view' => 'list'])
+        )->setActive($this->view === 'list');
+        Sidebar::get()->addWidget($views);
     }
 
     /**
@@ -746,7 +800,7 @@ class Course_StudygroupController extends AuthenticatedController
      *
      * @return void
      */
-    function edit_members_action($id, $action, $status = '', $studipticket = false)
+    public function edit_members_action($id, $action, $status = '', $studipticket = false)
     {
         global $perm;
 
@@ -795,7 +849,7 @@ class Course_StudygroupController extends AuthenticatedController
             if (Request::get('choose_member_parameter') && Request::get('choose_member_parameter') !== _("Nutzer suchen")) {
                 $this->flash['choose_member_parameter'] = Request::get('choose_member_parameter');
             }
-            $this->redirect($this->url_for('course/studygroup/members/' . $id, array('view' => 'list')));
+            $this->redirect($this->url_for('course/studygroup/members/' . $id, ['view' => $this->view]));
         } else {
             $this->redirect(URLHelper::getURL('seminar_main.php?auswahl=' . $id));
         }
@@ -804,7 +858,7 @@ class Course_StudygroupController extends AuthenticatedController
     /**
      * invites members to a studygroup.
      */
-    function execute_invite_action($id)
+    public function execute_invite_action($id)
     {
         // Security Check
         global $perm;
@@ -842,7 +896,7 @@ class Course_StudygroupController extends AuthenticatedController
             $this->flash['success'] = sprintf(_("%s wurden in die Studiengruppe eingeladen."), $addedUsers);
         }
 
-        $this->redirect($this->url_for('course/studygroup/members/' . $id, array('view' => Request::get('view'))));
+        $this->redirect($this->url_for('course/studygroup/members/' . $id, ['view' => $this->view]));
     }
 
     /**
@@ -855,7 +909,7 @@ class Course_StudygroupController extends AuthenticatedController
      * @return void
      *
      */
-    function delete_action($id, $approveDelete = false, $studipticket = false)
+    public function delete_action($id, $approveDelete = false, $studipticket = false)
     {
         global $perm;
         if ($perm->have_studip_perm('dozent', $id)) {
@@ -898,7 +952,7 @@ class Course_StudygroupController extends AuthenticatedController
      *
      * @return void
      */
-    function globalmodules_action()
+    public function globalmodules_action()
     {
         global $perm;
         $perm->check("root");
@@ -942,7 +996,7 @@ class Course_StudygroupController extends AuthenticatedController
      *
      * @return void
      */
-    function savemodules_action()
+    public function savemodules_action()
     {
         global $perm;
         $perm->check("root");
@@ -985,7 +1039,7 @@ class Course_StudygroupController extends AuthenticatedController
      *
      * @return void
      */
-    function deactivate_action()
+    public function deactivate_action()
     {
         global $perm;
         $perm->check("root");
@@ -1014,7 +1068,7 @@ class Course_StudygroupController extends AuthenticatedController
      * @return void
      */
 
-    function message_action($id)
+    public function message_action($id)
     {
         $sem = Course::find($id);
         if (studip_strlen($sem->getFullname()) > 32) {//cut subject if to long
