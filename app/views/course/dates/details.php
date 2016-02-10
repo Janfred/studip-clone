@@ -58,7 +58,7 @@
                             <a href="<?= $controller->link_for("profile", array('username' => $dozent['username'])) ?>"><?= Avatar::getAvatar($dozent['user_id'])->getImageTag(Avatar::SMALL)." ".htmlReady($dozent->getFullName()) ?></a>
                        
                       		<a href="javascript:" onClick="STUDIP.Raumzeit.removeLecturer('<?= $dozent['user_id'] ?>')">
-                               <?= Assets::img('icons/blue/trash') ?>
+                               <?= Icon::create('trash', 'clickable') ?>
                             </a>
                         </li>
                     <? endforeach ?>
@@ -76,7 +76,7 @@
                     </select>
                     
                     <a href="javascript:" onclick="STUDIP.Raumzeit.addLecturer()" title="<?= _("Dozent/in hinzufügen") ?>">
-                        <?= Assets::img('icons/yellow/arr_2up') ?>
+                        <?= Icon::create('arr_2up', 'sort')  ?>
                     </a>
                     
                 </td>
@@ -102,7 +102,7 @@
                         <li data-groupid="<?= htmlReady($group['id']) ?>" <?= $related_groups[$group_id] ? '' : 'style="display: none"'?>>
     	                    <?= htmlReady($group['name']) ?>
     	                    <a style="float: right;" href="javascript:" onClick="STUDIP.Raumzeit.removeGroup('<?= htmlReady($group['id']) ?>'),refreshUl()">
-                               <?= Assets::img('icons/blue/trash') ?>
+                               <?= Icon::create('trash', 'clickable')  ?>
                             </a>
                         </li>
                     <? endforeach ?>
@@ -122,7 +122,7 @@
                     <? endforeach ?>
                     </select> 
                     <a href="javascript:" onclick="STUDIP.Raumzeit.addGroup(),refreshUl()" title="<?= _('Gruppe hinzufügen') ?>">
-                        <?= Assets::img('icons/yellow/arr_2up') ?>
+                        <?= Icon::create('arr_2up', 'sort')  ?>
                     </a>
                     <script>
                         function refreshUl() {
