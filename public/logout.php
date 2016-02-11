@@ -42,6 +42,7 @@ if ($auth->auth["uid"]!="nobody")
     }
 
     $logout_user=$user->id;
+    $_language = $_SESSION['_language'];
 
     // TODO this needs to be generalized or removed
     //erweiterung cas
@@ -68,6 +69,6 @@ if ($auth->auth["uid"]!="nobody")
     page_close();
 }
 
-header("Location:" . URLHelper::getURL("index.php?logout=true&_language=$_language"));
+header("Location:" . URLHelper::getURL("index.php?logout=true&set_language=$_language"));
 
 ?>
