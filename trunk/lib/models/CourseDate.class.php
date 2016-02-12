@@ -129,6 +129,12 @@ class CourseDate extends SimpleORMap
         parent::configure($config);
     }
 
+    public function __construct($id = null)
+    {
+        parent::__construct($id);
+        $this->registerCallback('before_store after_create', 'cbStudipLog');
+    }
+
     /**
      * Adds a topic to this date.
      *
@@ -223,11 +229,11 @@ class CourseDate extends SimpleORMap
     public function cancelDate()
     {
         $date = $this->toArray();
-        
+
         $ex_date = new CourseExDate();
         $ex_date->setData($date);
         $ex_date->setId($ex_date->getNewId());
-        
+
         if ($ex_date->store()) {
             $this->delete();
             return $ex_date;
@@ -235,27 +241,20 @@ class CourseDate extends SimpleORMap
         return null;
     }
 
+
     /**
-     * Stores this date.
-     *
-     * @return bool indicating whether the date was stored or not
+     * @param $type string type of callback
      */
-    public function store()
+    protected function cbStudipLog($type)
     {
-        $old_entry = CourseDate::find($this->termin_id);
-        if ($this->isNew() && !isset($this->metadate_id) && parent::store()) {
-            log_event('SEM_ADD_SINGLEDATE', $this->range_id, $this->getFullname());
-            return true;
-        }
-        if (!$this->isNew() && !isset($this->metadate_id) && parent::store()) {
-            if ($old_entry->date != $this->date || $old_entry->end_time != $this->end_time) {
-                log_event('SINGLEDATE_CHANGE_TIME', $this->range_id, $old_entry->getFullname(), $old_entry->getFullname() . ' -> ' . $this->getFullname());
+        if (!$this->metadate_id) {
+            if ($type == 'after_create') {
+                StudipLog::log('SEM_ADD_SINGLEDATE', $this->range_id, $this->getFullname());
             }
-            return true;
+            if ($type == 'before_store' && ($this->isFieldDirty('date') || $this->isFieldDirty('end_time'))) {
+                $old_entry = self::build($this->content_db);
+                StudipLog::log('SINGLEDATE_CHANGE_TIME', $this->range_id, $this->getFullname(), $old_entry->getFullname() . ' -> ' . $this->getFullname());
+            }
         }
-        if (parent::store()) {
-            return true;
-        }
-        return false;
     }
 }
