@@ -86,6 +86,9 @@ if ($ASSETS_URL[0] === '/') {
 // absolute filesystem path to the plugin packages
 $PLUGINS_PATH = $ABSOLUTE_PATH_STUDIP . 'plugins_packages';
 
+// absolute filesystem path to the plugin assets
+$PLUGIN_ASSETS_PATH = $STUDIP_BASE_PATH . '/data/assets_cache';
+
 // path to uploaded documents (wwwrun needs write-perm there)
 $UPLOAD_PATH = $STUDIP_BASE_PATH . "/data/upload_doc";
 
