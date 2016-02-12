@@ -222,7 +222,7 @@ class Course_TimesroomsController extends AuthenticatedController
             $this->attributes['fromDialog'] = 'false';
         }
         
-        if (Config::get()->RESOURCE_ENABLE) {
+        if (Config::get()->RESOURCES_ENABLE) {
             $this->resList = ResourcesUserRoomsList::getInstance($GLOBALS['user']->id, true, false, true);
         }
 
