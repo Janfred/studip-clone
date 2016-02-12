@@ -40,9 +40,14 @@ if (!$type || !$id) {
     } else {
         // Output asset
         $asset = new Assets\PluginAsset($model);
-        $response->body = $asset->getContent();
+        try {
+            $response->body = $asset->getContent();
+        } catch (Exception $e) {
+            $response->body = false;
+        }
         if ($response->body === false) {
             // Could not obtain asset contents
+            $asset->delete();
             $response->status = 500;
         } else {
             // Set appropriate header
