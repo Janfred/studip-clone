@@ -66,7 +66,7 @@ class StatusgruppeUser extends SimpleORMap
             $sql = "SELECT MAX(position)+1 FROM statusgruppe_user WHERE statusgruppe_id = ?";
             $stmt = DBManager::get()->prepare($sql);
             $stmt->execute(array($this->statusgruppe_id));
-            $this->position = $stmt->fetchColumn();
+            $this->position = $stmt->fetchColumn() ?: 0;
         }
         return parent::store();
     }

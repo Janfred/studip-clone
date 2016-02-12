@@ -320,6 +320,8 @@ class Statusgruppen extends SimpleORMap
             $assoc[$member->id] = $member->user->nachname."_".$member->user->vorname;
         }
         asort($assoc);
+
+        $i = 0;
         foreach ($assoc as $key => $value) {
             $statusgruppenuser = new StatusgruppeUser(explode('_', $key));
             $statusgruppenuser->position = $i++;
