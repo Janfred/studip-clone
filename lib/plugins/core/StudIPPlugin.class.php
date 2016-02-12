@@ -178,8 +178,10 @@ abstract class StudIPPlugin {
      *
      * @param String $filename Name of the stylesheet (css or less) to include
      *                         (relative to plugin directory)
+     * @param Array  $variables Optional array of variables to pass to the
+     *                          LESS compiler
      */
-    protected function addStylesheet($filename)
+    protected function addStylesheet($filename, $variables = array())
     {
         if (substr($filename, -5) !== '.less') {
             $url = $this->getPluginURL() . '/' . $filename;
@@ -212,11 +214,10 @@ abstract class StudIPPlugin {
 
         // Compile asset if neccessary
         if ($asset->isNew()) {
-            $less = file_get_contents($less_file);
-            $css  = Assets\Compiler::compileLESS($less, array(
-                'plugin-path' => $this->getPluginURL(),
-            ));
+            $variables['plugin-path'] = $this->getPluginURL();
 
+            $less = file_get_contents($less_file);
+            $css  = Assets\Compiler::compileLESS($less, $variables);
             $asset->setContent($css);
         }
 
