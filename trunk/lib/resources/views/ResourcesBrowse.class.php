@@ -526,7 +526,7 @@ class ResourcesBrowse {
                         $this->showTimeRange();
                     if ($this->mode == "properties")
                         $this->showProperties();
-                    $this->showSearchList(($_SESSION['resources_data']["check_assigns"]) ? TRUE : FALSE);
+                    $this->showSearchList($this->check_assigns);
 
                 }
                 ?>

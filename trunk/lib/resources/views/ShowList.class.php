@@ -321,7 +321,7 @@ class ShowList extends ShowTreeRow{
             }
             if ($search_array['resources_search_range']) {
                 $query .= " AND b.resource_id IN (:resource_ids)";
-                $parameters[':resource_ids'] = $resource_ids ?: '';
+                $parameters[':resource_ids'] = $search_only ?: '';
             }
 
             if (!hasGlobalOccupationAccess()) {
