@@ -5,6 +5,7 @@ require_once 'lib/raumzeit/raumzeit_functions.inc.php';
 class Course_DatesController extends AuthenticatedController
 {
     protected $allow_nobody = true;
+    protected $utf8decode_xhr = true;
 
     public function before_filter(&$action, &$args)
     {
@@ -20,11 +21,13 @@ class Course_DatesController extends AuthenticatedController
 
         PageLayout::addSqueezePackage('tablesorter');
         PageLayout::addScript('raumzeit');
+        $this->show_raumzeit = $course->getSemClass()->offsetGet('show_raumzeit');
     }
 
     public function index_action()
     {
-        if (Request::isPost() && Request::option("termin_id") && Request::get("topic_title")) {
+        $course = Course::findCurrent();
+        if ($GLOBALS['perm']->have_studip_perm('tutor', $course->id) && Request::isPost() && Request::option("termin_id") && Request::get("topic_title")) {
             $date = new CourseDate(Request::option("termin_id"));
             $seminar_id = $date['range_id'];
             $title = Request::get("topic_title");
@@ -47,37 +50,34 @@ class Course_DatesController extends AuthenticatedController
         Navigation::activateItem('/course/schedule/dates');
 
         object_set_visit_module("schedule");
-        $this->last_visitdate = object_get_visit(Course::findCurrent()->id, 'schedule');
-        $this->dates = Course::findCurrent()->getDatesWithExdates();
-        $this->lecturer_count = Course::findCurrent()->countMembersWithStatus('dozent');
-        
-        $semclass = $GLOBALS['SEM_TYPE'][Course::findCurrent()->status]['class'];
-        $this->show_raumzeit = $GLOBALS['SEM_CLASS'][$semclass]['show_raumzeit'];
-                
+        $this->last_visitdate = object_get_visit($course->id, 'schedule');
+        $this->dates = $course->getDatesWithExdates();
+        $this->lecturer_count = $course->countMembersWithStatus('dozent');
+
         $sidebar = Sidebar::get();
         $sidebar->setImage('sidebar/date-sidebar.png');
-        
+
         $actions = new ActionsWidget();
-        
-        if (!$this->show_raumzeit) {
+
+        if (!$this->show_raumzeit && $GLOBALS['perm']->have_studip_perm('tutor', $course->id)) {
             $actions->addLink(
                 _('Neuer Einzeltermin'),
                 $this->url_for('course/dates/singledate'),
                 Icon::create('add', 'clickable')
             )->asDialog("size=auto");
         }
-        
+
         $actions->addLink(
             _('Als Doc-Datei runterladen'),
             $this->url_for('course/dates/export'),
             Icon::create('file-word', 'clickable')
         );
-        
+
         $sidebar->addWidget($actions);
 
     }
 
-    
+
     /**
      * This method is called to show the dialog to edit a date for a course.
      *
@@ -87,26 +87,21 @@ class Course_DatesController extends AuthenticatedController
     public function details_action($termin_id)
     {
         Navigation::activateItem('/course/schedule/dates');
+
         $this->date = new CourseDate($termin_id);
         $this->cancelled_dates_locked = LockRules::Check($this->date->range_id, 'cancelled_dates');
-        $this->dates_locked = LockRules::Check($this->date->range_id, 'room_time');  
-        
+        $this->dates_locked = LockRules::Check($this->date->range_id, 'room_time');
+        PageLayout::setTitle($this->date->getTypeName() . ": ".
+            $this->date->getFullname());
         $sidebar = Sidebar::get();
-        $sidebar->setImage('sidebar/date-sidebar.png');   
-        
-        if (Request::isXhr()) {
-            $this->set_layout(null);
-            $this->set_content_type('text/html;Charset=windows-1252');
-            $this->response->add_header('X-Title', $this->date->getTypeName() . ": ".
-                $this->date->getFullname()
-            );
-        }
+        $sidebar->setImage('sidebar/date-sidebar.png');
+
     }
-    
+
     /**
      * This method is called to show the dialog to edit a singledate for a studygroup.
      *
-     * @param String $termin_id    The id of the date
+     * @param String $termin_id The id of the date
      * @return void
      */
     public function singledate_action($termin_id = null)
@@ -114,93 +109,61 @@ class Course_DatesController extends AuthenticatedController
         Navigation::activateItem('/course/schedule/dates');
         $sidebar = Sidebar::get();
         $sidebar->setImage('sidebar/date-sidebar.png');
-        
+
         $course = Course::findCurrent();
 
-        $date_submitted = (Request::get('startDate') 
-            && Request::get('start_stunde') && Request::get('start_minute') 
-            && Request::get('end_stunde') && Request::get('end_minute'));
-        
-        if (Request::submitted("editSingleDate_button") && $date_submitted) {
-                        
-            $dates = explode('.', Request::get('startDate'));
-            $start = mktime(Request::int('start_stunde'), Request::int('start_minute'), 0,$dates[1],$dates[0],$dates[2]);
-            $ende = mktime(Request::int('end_stunde'), Request::int('end_minute'), 0, $dates[1],$dates[0],$dates[2]);
-            $termin_id = Request::option('singleDateID');           
-            
-            $termin = CourseDate::find($termin_id);
-            
-            if ($termin == null) {   
-                
-                $termin = new CourseDate($termin_id);
-                $termin->raum = utf8_decode(Request::get("freeRoomText_sd"));
-                $termin->autor_id = User::findCurrent()->user_id;
-                $termin->range_id = $course->getId();
-                $termin->date = $start;
-                $termin->end_time = $ende;
-                $termin->date_typ = Request::get('dateType');
-                $termin->store();      
-                
-            } else {   
-                
-                //time changed for regular date. create normal singledate and cancel the regular date
-                if (($termin->metadate_id != '' || isset($termin->metadate_id))
-                    && ($date != $termin->date || $end_time != $termin->end_time)
-                ) {
-                    $termin_values = $termin->toArray();
-                    $termin_info   = $termin->getFullname();
-            
-                    $termin->cancelDate();
-                    PageLayout::postInfo(sprintf(_('Der Termin %s wurde aus der Liste der regelmäßigen Termine'
-                        . ' gelöscht und als unregelmäßiger Termin eingetragen, da Sie die Zeiten des Termins verändert haben,'
-                        . ' so dass dieser Termin nun nicht mehr regelmäßig ist.'), $termin_info));
-            
-                    $termin = new CourseDate();
-                    unset($termin_values['metadate_id']);
-                    $termin->setData($termin_values);
-                    $termin->setId($termin->getNewId());
-                }    
-                
-                $termin->raum = utf8_decode(Request::get("freeRoomText_sd"));
-                $termin->date = $start;
-                $termin->end_time = $ende;
-                $termin->date_typ = Request::get('dateType');
-                $termin->store();                
-            }
-                   
-            if (Request::isXhr()) {
-                header('X-Location: '.$this->url_for('course/dates'));
-            } else {
-                $this->redirect($this->url_for('course/dates'));
-            }     
-        }            
-        
-        if ($termin_id) {
-            $this->date = new CourseDate($termin_id);
-            $this->cancelled_dates_locked = LockRules::Check($this->date->range_id, 'cancelled_dates');
-            $this->dates_locked = LockRules::Check($this->date->range_id, 'room_time');
-            
-            $termin = new SingleDate($termin_id);
-            if ($termin) {
-                $this->room_sd = $termin->resource_id;
-                $this->related_teachers = implode(",", $termin->related_persons);
-                $this->related_groups = implode(",", $termin->related_groups);
-            }            
-            $xtitle = $this->date->getTypeName() . ": ". $this->date->getFullname();     
-            
-        } else {            
-            $this->date = new CourseDate(md5(uniqid()));
-            $xtitle = _('Einzeltermin anlegen');            
-        }       
-        
-        if (Request::isXhr()) {
-            $this->set_layout(null);
-            $this->set_content_type('text/html;Charset=windows-1252');
-            $this->response->add_header('X-Title', $xtitle);
+        if (!$GLOBALS['perm']->have_studip_perm('tutor', $course->id)) {
+            throw new AccessDeniedException();
         }
-        
+
+        if (Request::submitted("editSingleDate_button")) {
+            CSRFProtection::verifyUnsafeRequest();
+
+            $start_date = strtotime(Request::get('startDate'));
+            $errors = array();
+            if (!$start_date) {
+                $errors[] = _('Bitte geben Sie ein korretes Datum an!');
+            } else {
+                $start_time = strtotime((Request::get('start_stunde') ?: '0') . ':' . (Request::get('start_minute') ?: '0'), $start_date);
+                $end_time = strtotime((Request::get('end_stunde') ?: '0') . ':' . (Request::get('end_minute') ?: '0'), $start_date);
+                if (!($start_time && $end_time && ($start_time < $end_time))) {
+                    $errors[] = _('Bitte geben Sie korrekte Werte für Start- und Endzeit an!');
+                }
+            }
+            $termin = CourseDate::find(Request::option('singleDateID'));
+            if ($termin == null) {
+                $termin = new CourseDate();
+            }
+            $termin->raum = Request::get("freeRoomText_sd");
+            $termin->autor_id = User::findCurrent()->user_id;
+            $termin->range_id = $course->getId();
+            $termin->date = $start_time;
+            $termin->end_time = $end_time;
+            $termin->date_typ = Request::int('dateType');
+            if (!count($errors)) {
+                if ($termin->store()) {
+                    PageLayout::postSuccess(_('Der Termin wurde geändert.'));
+                }
+                return $this->relocate('course/dates');
+            } else {
+                PageLayout::postError(_('Bitte korrigieren Sie Ihre Eingaben:'), $errors);
+                $this->date = $termin;
+            }
+        } else {
+            if ($termin_id) {
+                $this->date = new CourseDate($termin_id);
+                $xtitle = $this->date->getTypeName() . ": " . $this->date->getFullname();
+
+            } else {
+                $this->date = new CourseDate();
+                $xtitle = _('Einzeltermin anlegen');
+            }
+        }
+        $this->cancelled_dates_locked = LockRules::Check($this->date->range_id, 'cancelled_dates');
+        $this->dates_locked = LockRules::Check($this->date->range_id, 'room_time');
+        PageLayout::setTitle($xtitle);
     }
-        
+
     /**
      * This method is called to save a singledate for a studygroup.
      *
@@ -208,33 +171,34 @@ class Course_DatesController extends AuthenticatedController
      */
     public function save_details_action()
     {
-        
+        CSRFProtection::verifyUnsafeRequest();
+        if (!$GLOBALS['perm']->have_studip_perm("tutor", $_SESSION['SessionSeminar'])) {
+            throw new AccessDeniedException();
+        }
         $termin = CourseDate::find(Request::option('singleDateID'));
-        $termin->date_typ = Request::get('dateType');
-        
-        $related_groups        = Request::get('related_statusgruppen');
-        $termin->statusgruppen = array();
-        if (!empty($related_groups)) {
-            $related_groups        = explode(',', $related_groups);
-            $termin->statusgruppen = Statusgruppen::findMany($related_groups);
+        if ($termin) {
+            $termin->date_typ = Request::get('dateType');
+
+            $related_groups = Request::get('related_statusgruppen');
+            $termin->statusgruppen = array();
+            if (!empty($related_groups)) {
+                $related_groups = explode(',', $related_groups);
+                $termin->statusgruppen = Statusgruppen::findMany($related_groups);
+            }
+
+            $related_users = Request::get('related_teachers');
+            $termin->dozenten = array();
+            if (!empty($related_users)) {
+                $related_users = explode(',', $related_users);
+                $termin->dozenten = User::findMany($related_users);
+            }
+
+            if ($termin->store()) {
+                PageLayout::postSuccess(_('Der Termin wurde geändert.'));
+            }
+
         }
-        
-        $related_users    = Request::get('related_teachers');
-        $termin->dozenten = array();
-        if (!empty($related_users)) {
-            $related_users    = explode(',', $related_users);
-            $termin->dozenten = User::findMany($related_users);
-        }
-        
-        $termin->store();
-        
-        if (Request::isXhr()) {
-            $this->render_nothing();
-            header('X-Location: '.$this->url_for('course/dates'));
-        } else {
-            $this->redirect($this->url_for('course/dates'));
-        }
-    	
+        $this->relocate('course/dates');
     }
 
     public function new_topic_action()
