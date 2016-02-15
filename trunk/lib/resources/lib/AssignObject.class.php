@@ -681,7 +681,9 @@ class AssignObject {
 
     function delete() {
         $db = DBManager::get();
-
+        if ($this->isNewObject) {
+            return false;
+        }
         // LOGGING
         if ($this->assign_user_id) {
             $type = $this->getOwnerType();
