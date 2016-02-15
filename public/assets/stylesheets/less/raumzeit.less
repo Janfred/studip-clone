@@ -24,6 +24,45 @@ a.bookable_rooms_action {
 }
 
 .contentbox.timesrooms {
+    > form {
+        article {
+            border-color: @content-color-40;
+            border-style: solid;
+            border-width: 1px;
+            margin: 10px;
+
+            > section {
+                max-height: 0px;
+                opacity: 0;
+                padding: 0;
+                overflow: auto;
+                .transition(opacity 0.3s);
+            }
+
+            &:not(.open) header ~ * {
+                max-height: 0px;
+                opacity: 0;
+                overflow: auto;
+                .transition(opacity 0.3s);
+            }
+
+            &.open {
+                > p, > section, > footer, > div {
+                    max-height: none;
+                    opacity: 1;
+                    .transition(opacity 0.3s);
+                }
+
+                footer {
+                    border-top-style: solid;
+                }
+
+                header h1 a::before {
+                    .rotate(90deg);
+                }
+            }
+        }
+    }
     article header {
         &.red {
             border-left: 3px solid @red;
