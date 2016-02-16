@@ -813,9 +813,9 @@ class Course_TimesroomsController extends AuthenticatedController
             }
         }
         
-        if (!empty($room_assignments 
+        if (!empty($room_assignments)
                 && count($room_assignments) >= 
-                round(count($singledates) * Config::get()->RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE / 100))) 
+                round(count($singledates) * Config::get()->RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE / 100)) 
             {
             foreach ($singledates as $singledate) {
                 if (array_key_exists($singledate->termin_id, $room_assignments)) {
