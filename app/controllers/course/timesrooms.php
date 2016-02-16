@@ -831,9 +831,9 @@ class Course_TimesroomsController extends AuthenticatedController
             foreach ($singledates as $singledate) {
                 $singledate->store();
             }
-            if (!empty($room_assignments 
+            if (!empty($room_assignments) 
                 && count($room_assignments) < 
-                round(count($singledates) * Config::get()->RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE / 100))) 
+                round(count($singledates) * Config::get()->RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE / 100)) 
             { 
                 PageLayout::postError(sprintf(_('Der gewählte Raum ist bei mehr als %s %s der gewählten Termine bereits belegt und wird daher für für alle Termine nicht übernommen '), 
                         Config::get()->RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE,'Prozent'));
