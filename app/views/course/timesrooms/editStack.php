@@ -60,7 +60,7 @@
             </label>
 
             <select name="room" onFocus="jQuery('input[type=radio][name=action][value=room]').prop('checked', 'checked')">
-                <option value="">-- <?= _('Raum auswählen') ?> --</option>
+                <option value="0">-- <?= _('Raum auswählen') ?> --</option>
                 <? while ($res = $resList->next()) : ?>
                     <option value="<?= $res['resource_id'] ?>">
                         <?= my_substr(htmlReady($res["name"]), 0, 30) ?> <?= $seats[$res['resource_id']] ? '(' . $seats[$res['resource_id']] . ' ' . _('Sitzplätze') . ')' : '' ?>
