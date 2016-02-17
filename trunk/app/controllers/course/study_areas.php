@@ -31,6 +31,7 @@ class Course_StudyAreasController extends AuthenticatedController
 
         // Search for course object
         $this->course = Course::findCurrent();
+        $this->locked = LockRules::Check($this->course->id, 'sem_tree');
 
         // check course object and perms
         if (!is_null($this->course)
@@ -93,7 +94,9 @@ class Course_StudyAreasController extends AuthenticatedController
         if (Request::get('open_node')) {
             $this->values['StudyAreasWizardStep']['open_node'] = Request::get('open_node');
         }
-        $this->tree = $this->step->getStepTemplate($this->values, 0, 0);
+
+        $this->values['StudyAreasWizardStep']['locked'] = $this->locked;
+        $this->tree                                     = $this->step->getStepTemplate($this->values, 0, 0);
     }
 
     function ajax_action()
@@ -121,6 +124,10 @@ class Course_StudyAreasController extends AuthenticatedController
 
     function save_action()
     {
+        if($this->locked) {
+            throw new Trails_Exception(403);
+        }
+
         $params = array();
         if(Request::get('open_node')) {
             $params['open_node'] = Request::get('open_node');
