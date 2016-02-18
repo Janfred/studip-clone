@@ -56,7 +56,7 @@ class Admin_ConfigurationController extends AuthenticatedController
         // Search for specific entries?
         $needle = trim(Request::get('needle')) ?: null;
         if ($needle) {
-            $this->subtitle = _('Suchbegriff:') . ' "' . $needle . '"';
+            $this->subtitle = _('Suchbegriff:') . ' "' . htmlReady($needle) . '"';
         }
 
         // set variables for view
@@ -70,7 +70,7 @@ class Admin_ConfigurationController extends AuthenticatedController
         $this->has_sections = true;
 
         if ($needle && empty($this->sections)) {
-            $message = sprintf(_('Es wurden keine Ergebnisse zu dem Suchbegriff "%s" gefunden.'), $needle);
+            $message = sprintf(_('Es wurden keine Ergebnisse zu dem Suchbegriff "%s" gefunden.'), htmlReady($needle));
             PageLayout::postMessage(MessageBox::error($message));
             $this->redirect('admin/configuration/configuration');
         }
