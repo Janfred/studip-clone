@@ -29,6 +29,9 @@ class Course_BasicdataController extends AuthenticatedController
     public function view_action($course_id = null)
     {
         global $user, $perm, $_fullname_sql;
+        if (!$perm->have_studip_perm("tutor", $course_id)) {
+            throw new AccessDeniedException();
+        }
 
         $deputies_enabled = get_config('DEPUTIES_ENABLE');
 
