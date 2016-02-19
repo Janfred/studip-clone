@@ -89,12 +89,12 @@ use Studip\Button, Studip\LinkButton;
             <?= date('d.m.Y H:i:s', $log_event['time']) ?>
           </td>
           <td style="font-size: smaller;">
-            <?= $log_event['info'] ?>
+            <?= htmlReady($log_event['info']) ?>
             <? if ($format === 'detail' && $log_event['detail']): ?>
-              <br><?= _('Info:').' '.$log_event['detail'] ?>
+              <br><?= _('Info:').' '.htmlReady($log_event['detail']) ?>
             <? endif ?>
             <? if ($format === 'detail' && $log_event['debug']): ?>
-              <br><?= _('Debug:').' '.$log_event['debug'] ?>
+              <br><?= _('Debug:').' '.htmlReady($log_event['debug']) ?>
             <? endif ?>
           </td>
         </tr>
