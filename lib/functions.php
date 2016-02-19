@@ -2164,6 +2164,7 @@ function strtocamelcase($string, $ucfirst = false) {
  */
 function strtosnakecase($string) {
     $string = preg_replace('/\W+/', '_', $string);
+    $string = preg_replace('/(?<!^)[A-Z]/', '_$0', $string);
     $string = strtolower($string);
     return $string;
 }
