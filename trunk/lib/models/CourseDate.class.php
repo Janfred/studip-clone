@@ -235,12 +235,17 @@ class CourseDate extends SimpleORMap
         $ex_date->setId($ex_date->getNewId());
 
         if ($ex_date->store()) {
-            self::delete();
+            $this->delete();
             return $ex_date;
         }
         return null;
     }
     
+    /**
+     * saves this object and expires the cache 
+     * 
+     * @see SimpleORMap::store()
+     */
     public function store() 
     {
         $cache = StudipCacheFactory::getCache();
@@ -248,6 +253,11 @@ class CourseDate extends SimpleORMap
         return parent::store();
     }
     
+    /**
+     * deletes this object and expires the cache 
+     * 
+     * @see SimpleORMap::delete()
+     */
     public function delete()
     {
         $cache = StudipCacheFactory::getCache();
