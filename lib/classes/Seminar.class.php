@@ -1804,15 +1804,16 @@ class Seminar
     public function setStudyAreas($selected)
     {
         $old = $this->getStudyAreas();
+        $sem_tree = TreeAbstract::GetInstance("StudipSemTree");
         $removed = array_diff($old, $selected);
         $added = array_diff($selected, $old);
         $count_removed = 0;
         $count_added = 0;
         foreach($removed as $one){
-            $count_removed += StudipSemTree::DeleteSemEntries($one, $this->getId());
+            $count_removed += $sem_tree->DeleteSemEntries($one, $this->getId());
         }
         foreach($added as $one){
-            $count_added += StudipSemTree::InsertSemEntry($one, $this->getId());
+            $count_added += $sem_tree->InsertSemEntry($one, $this->getId());
         }
         if ($count_added || $count_removed) {
             NotificationCenter::postNotification("CourseDidChangeStudyArea", $this);
@@ -1894,7 +1895,8 @@ class Seminar
         }
 
         // Alle Eintraege aus dem Vorlesungsverzeichnis rauswerfen
-        $db_ar = StudipSemTree::DeleteSemEntries(null, $s_id);
+        $sem_tree = TreeAbstract::GetInstance('StudipSemTree');
+        $db_ar = $sem_tree->DeleteSemEntries(null, $s_id);
         if ($db_ar > 0) {
             $this->createMessage(sprintf(_("%s Zuordnungen zu Bereichen archiviert."), $db_ar));
         }
