@@ -301,7 +301,7 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
         $sql = "SELECT count(*) FROM `" .  $record->db_table . "` " . $sql;
         $st = $db->prepare($sql);
         $st->execute($params);
-        return $st->fetchColumn();
+        return (int)$st->fetchColumn();
     }
 
     /**
