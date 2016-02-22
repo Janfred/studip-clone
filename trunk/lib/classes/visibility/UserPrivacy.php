@@ -67,6 +67,7 @@ class UserPrivacy
                     if ($vis->name === $element['category']) {
                         foreach ($vis->children as $child) {
                             if ($child->identifier === $key) {
+                                $child->setDisplayed();
                                 $child->name = $element['name'];
                                 break 2;
                             }
