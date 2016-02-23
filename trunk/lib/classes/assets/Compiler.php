@@ -36,7 +36,7 @@ class Compiler
     {
         $less = self::getLESSPrefix() . $less;
 
-        $variables['image_path'] = '"' . Assets::url('images') . '"';
+        $variables['image-path'] = '"' . Assets::url('images') . '"';
 
         $parser = self::getLESSParser();
         $parser->setVariables($variables);
