@@ -89,7 +89,7 @@ class Vote extends QuestionnaireQuestion implements QuestionType
                     $count_nobodys++;
                     $user_id = _("unbekannt")." ".$count_nobodys;
                 }
-                if (in_array($key + 1, $answerdata['answers'])) {
+                if (in_array($key + 1, (array) $answerdata['answers'])) {
                     $answer_option[$user_id] = 1;
                 } else {
                     $answer_option[$user_id] = 0;
