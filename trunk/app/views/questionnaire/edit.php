@@ -18,7 +18,7 @@
         <?= $this->render_partial("questionnaire/_question.php", compact("question")) ?>
     <? endforeach ?>
 
-    <div style="text-align: right;">
+    <div style="text-align: right;" class="add_questions">
         <? foreach (get_declared_classes() as $class) :
             if (in_array('QuestionType', class_implements($class))) : ?>
                 <a href="" onClick="STUDIP.Questionnaire.addQuestion('<?= htmlReady($class) ?>'); return false;">
