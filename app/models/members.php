@@ -416,7 +416,7 @@ class MembersModel
                 $user = User::find($user_id);
                 $data = $user->toArray('user_id username vorname nachname email');
                 $data['fullname'] = $user->getFullname('full_rev');
-                $data['position'] = $p;
+                $data['position'] = $cs->hasAdmissionRule('LimitedAdmission') ? $p : '-';
                 $data['visible'] = 'unknown';
                 $data['status'] = 'claiming';
                 $claiming[] = $data;
