@@ -37,6 +37,24 @@ class QuestionnaireController extends AuthenticatedController
         }
     }
 
+    public function courseoverview_action()
+    {
+        if (!$GLOBALS['perm']->have_studip_perm("tutor", $_SESSION['SessionSeminar'])) {
+            throw new AccessDeniedException("Only for logged in users.");
+        }
+        Navigation::activateItem("/course/admin/questionnaires");
+        $this->questionnaires = Questionnaire::findBySQL("INNER JOIN questionnaire_assignments USING (questionnaire_id) WHERE questionnaire_assignments.range_id = ? AND questionnaire_assignments.range_type = 'course' ORDER BY questionnaires.mkdate DESC", array($_SESSION['SessionSeminar']));
+        foreach ($this->questionnaires as $questionnaire) {
+            if (!$questionnaire['visible'] && $questionnaire['startdate'] && $questionnaire['startdate'] <= time() && $questionnaire['stopdate'] > time()) {
+                $questionnaire->start();
+            }
+            if ($questionnaire['visible'] && $questionnaire['stopdate'] && $questionnaire['stopdate'] <= time()) {
+                $questionnaire->stop();
+            }
+        }
+        $this->render_action("overview");
+    }
+
     public function thank_you_action()
     {
 
