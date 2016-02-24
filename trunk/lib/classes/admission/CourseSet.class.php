@@ -863,6 +863,7 @@ class CourseSet
                 null, 'Entfernung von Anmeldeset', sprintf('Anmeldeset: %s', $row['set_id']));
                 //Delete priorities
                 AdmissionPriority::unsetAllPrioritiesForCourse($row['seminar_id']);
+                Course::buildExisting(array('seminar_id' => $row['seminar_id']))->triggerChdate();
             });
         //removed course assignments
         DBManager::get()->execute("DELETE FROM `seminar_courseset`
@@ -875,6 +876,7 @@ class CourseSet
                 null, 'Entfernung von Anmeldeset', sprintf('Anmeldeset: %s', $row['set_id']));
                 //Delete priorities
                 AdmissionPriority::unsetAllPrioritiesForCourse($row['seminar_id']);
+                Course::buildExisting(array('seminar_id' => $row['seminar_id']))->triggerChdate();
             });
         //Delete other associations, only one set possible
         DBManager::get()->execute("DELETE FROM `seminar_courseset`
@@ -888,6 +890,7 @@ class CourseSet
             if ($stmt->rowCount()) {
                 StudipLog::log('SEM_CHANGED_ACCESS', $course,
                 null, 'Zuordnung zu Anmeldeset', sprintf('Anmeldeset: %s', $this->id));
+                Course::buildExisting(array('seminar_id' => $course))->triggerChdate();
             }
         }
 
@@ -1052,6 +1055,7 @@ class CourseSet
         if ($ok) {
             StudipLog::log('SEM_CHANGED_ACCESS', $course_id,
                 null, 'Zuordnung zu Anmeldeset', sprintf('Anmeldeset: %s', $set_id));
+                Course::buildExisting(array('seminar_id' => $course_id))->triggerChdate();
         }
         return $ok;
     }
@@ -1065,6 +1069,7 @@ class CourseSet
                 null, 'Entfernung von Anmeldeset', sprintf('Anmeldeset: %s', $set_id));
             //Delete priorities
             AdmissionPriority::unsetAllPrioritiesForCourse($course_id);
+            Course::buildExisting(array('seminar_id' => $course_id))->triggerChdate();
         }
         return $ok;
     }
