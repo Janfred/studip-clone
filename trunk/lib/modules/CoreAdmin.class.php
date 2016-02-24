@@ -106,10 +106,10 @@ class CoreAdmin implements StudipModule {
 
             if ($GLOBALS['perm']->have_studip_perm('tutor', $course_id)) {
                 if (get_config('VOTE_ENABLE')) {
-                    $item = new Navigation(_('Umfragen und Tests'), 'admin_vote.php?view=vote_sem');
+                    $item = new Navigation(_('Fragebögen'), 'dispatch.php/questionnaire/courseoverview');
                     $item->setImage(Icon::create('vote', 'clickable'));
-                    $item->setDescription(_('Erstellen und bearbeiten von einfachen Umfragen und Tests.'));
-                    $navigation->addSubNavigation('vote', $item);
+                    $item->setDescription(_('Erstellen und bearbeiten von Fragebögen.'));
+                    $navigation->addSubNavigation('questionnaires', $item);
 
                     $item = new Navigation(_('Evaluationen'), 'admin_evaluation.php?view=eval_sem');
                     $item->setImage(Icon::create('evaluation', 'clickable'));
