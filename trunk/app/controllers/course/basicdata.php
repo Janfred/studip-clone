@@ -74,7 +74,7 @@ class Course_BasicdataController extends AuthenticatedController
             'type' => 'select',
             'value' => $data['status'],
             'locked' => LockRules::Check($course_id, 'status'),
-            'choices' => array_map('htmlReady', $sem_types)
+            'choices' => $sem_types
         );
         $this->attributes[] = array(
             'title' => _("Art der Veranstaltung"),
@@ -112,6 +112,29 @@ class Course_BasicdataController extends AuthenticatedController
             'type' => 'textarea',
             'value' => $data['description'],
             'locked' => LockRules::Check($course_id, 'Beschreibung')
+        );
+
+        $this->institutional = array();
+        $institutes = Institute::getMyInstitutes();
+        $this->institutional[] = array(
+            'title' => _("Heimat-Einrichtung"),
+            'name' => "course_institut_id",
+            'must' => true,
+            'type' => 'select',
+            'value' => $data['institut_id'],
+            'choices' => $this->instituteChoices($institutes),
+            'locked' => LockRules::Check($course_id, 'Institut_id')
+        );
+
+        $institutes = Institute::getInstitutes();
+        $sem_institutes = $sem->getInstitutes();
+        $this->institutional[] = array(
+            'title' => _("beteiligte Einrichtungen"),
+            'name' => "related_institutes[]",
+            'type' => 'multiselect',
+            'value' => array_diff($sem_institutes, array($sem->institut_id)),
+            'choices' => $this->instituteChoices($institutes),
+            'locked' => LockRules::Check($course_id, 'seminar_inst')
         );
 
         $this->descriptions = array();
@@ -187,6 +210,22 @@ class Course_BasicdataController extends AuthenticatedController
     }
 
     /**
+     * Helper function to populate the list of institute choices.
+     *
+     * @param array $institutes
+     */
+    private function instituteChoices($institutes)
+    {
+        $result = array();
+        foreach ($institutes as $inst) {
+            $indent = $inst['is_fak'] ? '' : '    ';
+            $result[$inst['Institut_id']] = $indent . $inst['Name'];
+        }
+
+        return $result;
+    }
+
+    /**
      * Zeigt die Grunddaten an. Man beachte, dass eventuell zuvor eine andere
      * Action wie Set ausgeführt wurde, von der hierher weitergeleitet worden ist.
      * Wichtige Daten dazu wurden dann über $this->flash übertragen.
@@ -227,51 +266,10 @@ class Course_BasicdataController extends AuthenticatedController
         $sem = Seminar::getInstance($this->course_id);
         $data = $sem->getData();
 
-        //Erster und vierter Reiter des Akkordions: Grundeinstellungen
+        //Erster, zweiter und vierter Reiter des Akkordions: Grundeinstellungen
         $this->setupInputFields($sem);
 
-        //Zweiter Reiter: Institute
-        $this->institutional = array();
-        $institute = Institute::getMyInstitutes();
-        $choices = array();
-        foreach ($institute as $inst) {
-            //$choices[$inst['Institut_id']] = $inst['Name'];
-            $choices[$inst['Institut_id']] =
-                ($inst['is_fak'] ? "<span style=\"font-weight: bold\">" : "&nbsp;&nbsp;&nbsp;&nbsp;") .
-                htmlReady($inst['Name']) .
-                ($inst['is_fak'] ? "</span>" : "");
-        }
-        $this->institutional[] = array(
-            'title' => _("Heimat-Einrichtung"),
-            'name' => "course_institut_id",
-            'must' => true,
-            'type' => 'select',
-            'value' => $data['institut_id'],
-            'choices' => $choices,
-            'locked' => LockRules::Check($this->course_id, 'Institut_id')
-        );
-        $institute = Institute::getInstitutes();
-        $choices = array();
-        foreach ($institute as $inst) {
-            $choices[$inst['Institut_id']] =
-                ($inst['is_fak'] ? "<span style=\"font-weight: bold\">" : "&nbsp;&nbsp;&nbsp;&nbsp;") .
-                htmlReady($inst['Name']) .
-                ($inst['is_fak'] ? "</span>" : "");
-        }
         $sem_institutes = $sem->getInstitutes();
-
-        $inst = array_flip($sem_institutes);
-        unset($inst[$sem->institut_id]);
-        $inst = array_flip($inst);
-        $this->institutional[] = array(
-            'title' => _("beteiligte Einrichtungen"),
-            'name' => "related_institutes[]",
-            'type' => 'multiselect',
-            'value' => $inst,
-            'choices' => $choices,
-            'locked' => LockRules::Check($this->course_id, 'seminar_inst')
-        );
-
         $this->dozent_is_locked = LockRules::Check($this->course_id, 'dozent');
         $this->tutor_is_locked = LockRules::Check($this->course_id, 'tutor');
 
@@ -387,7 +385,7 @@ class Course_BasicdataController extends AuthenticatedController
             $all_fields_types = DataFieldEntry::getDataFieldEntries($sem->id, 'sem', $sem->status);
             $datafield_values = Request::getArray('datafields');
 
-            foreach (array_merge($this->attributes, $this->descriptions) as $field) {
+            foreach (array_merge($this->attributes, $this->institutional, $this->descriptions) as $field) {
                 if (!$field['locked']) {
                     if ($field['type'] == 'datafield') {
                         $datafield_id = substr($field['name'], 10);
@@ -400,23 +398,26 @@ class Course_BasicdataController extends AuthenticatedController
                         } else {
                             $invalid_datafields[] = $datafield->getName();
                         }
+                    } else if ($field['type'] == 'multiselect') {
+                        // only related_institutes supported for now
+                        if ($sem->setInstitutes(Request::optionArray('related_institutes'))) {
+                            $changemade = true;
+                        }
                     } else {
+                        // format of input element name is "course_xxx"
                         $varname = substr($field['name'], 7);
                         $req_value = Request::get($field['name']);
 
                         if ($varname === "name" && !$req_value) {
                             $this->msg[] = array("error", _("Name der Veranstaltung darf nicht leer sein."));
-                        } elseif ($sem->{$varname} != $req_value) {
+                        } else if ($field['type'] == 'select' && !isset($field['choices'][$req_value])) {
+                            // illegal value - just ignore this
+                        } else if ($sem->{$varname} != $req_value) {
                             $sem->{$varname} = $req_value;
                             $changemade = true;
                         }
                     }
                 }
-            }
-            //seminar_inst:
-            if (!LockRules::Check($course_id, 'seminar_inst') &&
-                $sem->setInstitutes(Request::optionArray('related_institutes'))) {
-                $changemade = true;
             }
             //Datenfelder:
             if (count($invalid_datafields)) {
