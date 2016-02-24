@@ -2491,7 +2491,11 @@ class Seminar
             $info['description'] = _("Die Anmeldung zu dieser Veranstaltung folgt speziellen Regeln. Lesen Sie den Hinweistext.");
             $user_prio = AdmissionPriority::getPrioritiesByUser($courseset->getId(), $user_id);
             if (isset($user_prio[$this->getId()])) {
-                $info['description'] .= ' ' . sprintf(_("(Sie stehen auf der Anmeldeliste für die automatische Platzverteilung mit der Priorität %s.)"), $user_prio[$this->getId()]);
+                if ($courseset->hasAdmissionRule('LimitedAdmission')) {
+                    $info['description'] .= ' ' . sprintf(_("(Sie stehen auf der Anmeldeliste für die automatische Platzverteilung mit der Priorität %s.)"), $user_prio[$this->getId()]);
+                } else {
+                    $info['description'] .= ' ' . _("(Sie stehen auf der Anmeldeliste für die automatische Platzverteilung.)");
+                }
             }
             return $info;
         }
