@@ -76,7 +76,7 @@ class GarbageCollectorJob extends CronJob
         $removed = DBManager::get()->exec($query);
 
         if ($removed > 0 && $parameters['verbose']) {
-            printf(_('Gelöscht Server-Nonces: %u') . "\n", (int)$removed);
+            printf(_('Gelöschte Server-Nonces: %u') . "\n", (int)$removed);
         }
     }
 }
