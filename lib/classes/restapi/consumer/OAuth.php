@@ -32,8 +32,7 @@ class OAuth extends Base
 
             $req = new OAuthRequestVerifier(null, null, $parameters);
             // Check oauth timestamp and deny access if timestamp is outdated
-            $timestamp = $req->getParam('oauth_timestamp');
-            if ($timestamp && $timestamp < strtotime('-6 hours')) {
+            if ($req->getParam('oauth_timestamp') < strtotime('-6 hours')) {
                 return false;
             }
             $result = $req->verifyExtended('access');
