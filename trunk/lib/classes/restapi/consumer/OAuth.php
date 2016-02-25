@@ -31,6 +31,11 @@ class OAuth extends Base
                         : $GLOBALS['_' . $_SERVER['REQUEST_METHOD']];
 
             $req = new OAuthRequestVerifier(null, null, $parameters);
+            // Check oauth timestamp and deny access if timestamp is outdated
+            $timestamp = $req->getParam('oauth_timestamp');
+            if ($timestamp && $timestamp < strtotime('-6 hours')) {
+                return false;
+            }
             $result = $req->verifyExtended('access');
 
             // @todo
@@ -43,7 +48,7 @@ class OAuth extends Base
             $user_id = $statement->fetchColumn();
 
             if (!$user_id) {
-                return;
+                return false;
             }
 
             $consumer = reset(self::findByAuth_Key($result['consumer_key']));
