@@ -18,17 +18,17 @@ class GarbageCollectorJob extends CronJob
 
     public static function getDescription()
     {
-        return _('Entfernt endgültig gelöschte Nachrichten, nicht zugehörige Dateianhänge, abgelaufene Ankündigungen und veraltete Plugin-Assets');
+        return _('Entfernt endgültig gelöschte Nachrichten, nicht zugehörige Dateianhänge, abgelaufene Ankündigungen, veraltete Plugin-Assets sowie veraltete OAuth-Servernonces');
     }
 
     public static function getParameters()
     {
         return array(
             'verbose' => array(
-                    'type'        => 'boolean',
-                    'default'     => false,
-                    'status'      => 'optional',
-                    'description' => _('Sollen Ausgaben erzeugt werden (sind später im Log des Cronjobs sichtbar)'),
+                'type'        => 'boolean',
+                'default'     => false,
+                'status'      => 'optional',
+                'description' => _('Sollen Ausgaben erzeugt werden (sind später im Log des Cronjobs sichtbar)'),
             ),
         );
     }
@@ -69,5 +69,14 @@ class GarbageCollectorJob extends CronJob
 
         // Remove old plugin assets
         PluginAsset::deleteBySQL('chdate < ?', array(time() - PluginAsset::CACHE_DURATION));
+
+        // Remove expired oauth server nonces
+        $query = "DELETE FROM `oauth_server_nonce`
+                  WHERE `osn_timestamp` < UNIX_TIMESTAMP(NOW() - INTERVAL 6 HOUR)";
+        $removed = DBManager::get()->exec($query);
+
+        if ($removed > 0 && $parameters['verbose']) {
+            printf(_('Gelöscht Server-Nonces: %u') . "\n", (int)$removed);
+        }
     }
 }
