@@ -48,7 +48,7 @@ class Settings_PrivacyController extends Settings_SettingsController
         $this->email_visibility  = get_local_visibility_by_id($this->user->user_id, 'email');
 
         // Get default visibility for homepage elements.
-        $this->default_homepage_visibility = Visibility::get_default_homepage_visibility();
+        $this->default_homepage_visibility = Visibility::get_default_homepage_visibility($this->user->user_id);
 
         $this->NOT_HIDEABLE_FIELDS = $GLOBALS['NOT_HIDEABLE_FIELDS'];
         $this->user_perm           = $GLOBALS['perm']->get_perm($this->user->user_id);
@@ -58,7 +58,7 @@ class Settings_PrivacyController extends Settings_SettingsController
         $this->colCount = Visibility::getColCount();
         $this->colWidth = 67 / $this->colCount;
         $this->visibilities = Visibility::getVisibilities();
-        $this->homepage_elements = Visibility::getHTMLArgs(); 
+        $this->homepage_elements = Visibility::getHTMLArgs($this->user->user_id);
         
     }
 
@@ -138,8 +138,8 @@ class Settings_PrivacyController extends Settings_SettingsController
             $this->about->set_default_homepage_visibility(Request::int('default'));
         }
 
-        if ($visiblity = Request::int('all')) {
-            if (Visibility::setAllSettingsForUser($visiblity)) {
+        if ($visibility = Request::int('all')) {
+            if (Visibility::setAllSettingsForUser($visibility, $this->user->user_id)) {
                 $this->reportSuccess(_('Die Sichtbarkeit der Profilelemente wurde gespeichert.'));
                 return true;
             } else {

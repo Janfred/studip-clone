@@ -526,9 +526,9 @@ class Visibility
      *
      * @return array tree of settingelements
      */
-    public static function getHTMLArgs()
+    public static function getHTMLArgs($userid = null)
     {
-        $ps = new UserPrivacy();
+        $ps = new UserPrivacy($userid);
         return $ps->getHTMLArgs();
     }
 

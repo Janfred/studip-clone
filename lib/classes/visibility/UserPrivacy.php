@@ -21,6 +21,11 @@ class UserPrivacy
     private $userid;
 
     /**
+     * @var int Username that owns the privacy settings
+     */
+    private $username;
+
+    /**
      * @var array Privacysettingstree
      */
     private $profileSettings;
@@ -33,8 +38,10 @@ class UserPrivacy
     {
         if ($userid == null) {
             $this->userid = $GLOBALS['user']->user_id;
+            $this->username = $GLOBALS['user']->username;
         } else {
             $this->userid = $userid;
+            $this->username = User::find($userid)->username;
         }
     }
 
@@ -59,7 +66,7 @@ class UserPrivacy
                 }
             }
 
-            $about = new about($GLOBALS['user']->username, '');
+            $about = new about($this->username, '');
             $elements = $about->get_homepage_elements();
 
             foreach ($elements as $key => $element) {
