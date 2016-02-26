@@ -163,9 +163,7 @@ class Settings_StatusgruppenController extends Settings_SettingsController
             $value = $defaults[$datafield_id]->getValue();
         }
 
-        $entry = new DatafieldEntryModel($datafield_id);
-        $entry->range_id     = $this->user->user_id;
-        $entry->sec_range_id = $role_id;
+        $entry = new DatafieldEntryModel([$datafield_id, $this->user->user_id, $role_id]);
         $entry->content      = $value;
         $entry->store();
 
