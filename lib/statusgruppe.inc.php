@@ -269,19 +269,14 @@ function InsertPersonStatusgruppe ($user_id, $statusgruppe_id, $is_institute_gro
 
 function MakeDatafieldsDefault($user_id, $statusgruppe_id, $default = 'default_value')
 {
-    global $auth;
-    $fields = DataField::getDataFields('userinstrole');
-
-    $query = "SELECT datafield_id FROM datafields WHERE object_type = 'userinstrole'";
-    $ids = DBManager::get()->query($query)->fetchAll(PDO::FETCH_COLUMN);
-
     $query = "REPLACE INTO datafields_entries (datafield_id, range_id, content, sec_range_id, mkdate, chdate)
               VALUES (?, ?, ?, ?, UNIX_TIMESTAMP(), UNIX_TIMESTAMP())";
     $insert = DBManager::get()->prepare($query);
 
-    foreach ($ids as $id) {
-        if ($fields[$id]->editAllowed($auth->auth['perm'])) {
-            $insert->execute(array($id, $user_id, $default, $statusgruppe_id));
+    $fields = DataField::getDataFields('userinstrole');
+    foreach ($fields as $field) {
+        if ($field->editAllowed($GLOBALS['auth']->auth['perm'])) {
+            $insert->execute(array($field->id, $user_id, $default, $statusgruppe_id));
         }
     }
 }
