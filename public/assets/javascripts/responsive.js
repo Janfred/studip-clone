@@ -70,7 +70,7 @@
             $('<li id="sidebar-menu">').on('click', function () {
                 $('#responsive-toggle').prop('checked', false);
                 $('#layout-sidebar').toggleClass('visible-sidebar');
-            }).appendTo('#barBottomright ul');
+            }).appendTo('#barBottomright > ul');
 
             $('#responsive-toggle').on('change', function () {
                 $('#layout-sidebar').removeClass('visible-sidebar');
