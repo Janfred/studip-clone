@@ -12,15 +12,19 @@ class Helpbar extends WidgetContainer
     protected $open = false;
     protected $should_render = true;
     protected $variables = array();
-    
+    protected $ignore_db = false;
+
+    /**
+     * Constructs the helpbar
+     */
     public function __construct()
     {
         parent::__construct();
-        
+
         $this->json_directory = $GLOBALS['STUDIP_BASE_PATH'] . '/doc/helpbar';
         $this->help_admin = isset($GLOBALS['perm']) && ($GLOBALS['perm']->have_perm('root') || RolePersistence::isAssignedRole($GLOBALS['user']->id, 'Hilfe-Administrator(in)'));
     }
-    
+
     /**
      * load help content from db
      */
@@ -33,7 +37,7 @@ class Helpbar extends WidgetContainer
                                 $row['icon'] ? Icon::create($row['icon'], 'info_alt') : null,
                                 URLHelper::getURL('dispatch.php/help_content/edit/'.$row['content_id']),
                                 URLHelper::getURL('dispatch.php/help_content/delete/'.$row['content_id']));
-        }  
+        }
         if (!count($help_content) && $this->help_admin) {
             $this->addPlainText('',
                                 '',
@@ -43,17 +47,25 @@ class Helpbar extends WidgetContainer
                                 URLHelper::getURL('dispatch.php/help_content/edit/new'.'?help_content_route='.get_route()));
         }
     }
-    
+
     /**
      * set variables for help content
+     *
+     * @param Array $variables The variables to set
      */
     public function setVariables($variables)
     {
         $this->variables = $variables;
     }
-    
+
     /**
+     * Loads a help text from json files
+     * 
+     * @param String $identifier Help text identifier
+     * @param Array  $variables  Additonal variables for the text
+     * @param mixed  $language   Optional language (defaults to current)
      * @todo Adjust this to db BEFORE release
+     * @deprecated ?
      */
     public function load($identifier, $variables = array(), $language = null)
     {
@@ -81,7 +93,7 @@ class Helpbar extends WidgetContainer
         if ($json === null) {
             throw new RuntimeException('Helpbar content for identifier "' . $identifier . '" could not be loaded.');
         }
-        
+
         foreach ($json as $row) {
             if (!empty($row['icon'])) {
                 $icon = Icon::create($row['icon'], 'info_alt');
@@ -91,7 +103,19 @@ class Helpbar extends WidgetContainer
                                 $icon ?: null);
         }
     }
-    
+
+    /**
+     * Interpolates a string with variables.
+     *
+     * Essentially, the string "i am #{name}" with the variables
+     * ['name' => 'groot'] will be converted to "i am groot". I guess
+     * you get the principle.
+     *
+     * @param mixed $string    String to interpolate (an array of string
+     *                         may be passed as well)
+     * @param array $variables Variables to interpolate into the string(s)
+     * @return mixed Either an interpolated string or an array of such
+     */
     protected function interpolate($string, $variables = array())
     {
         if (is_array($string)) {
@@ -106,19 +130,29 @@ class Helpbar extends WidgetContainer
         return str_replace(array_keys($replaces), array_values($replaces), $string);
     }
 
+    /**
+     * Adds text entries to the helpbar.
+     *
+     * @param String $label       Label/category
+     * @param String $text        The text item itself
+     * @param mixed  $icon        An optional, additional icon
+     * @param mixed  $edit_link   Optional edit link if the user may do so
+     * @param mixed  $delete_link Optional delete link if the user may do so
+     * @param mixed  $add_link    Optional add link if the user may do so
+     */
     public function addPlainText($label, $text, $icon = null, $edit_link = null, $delete_link = null, $add_link = null)
     {
         if (is_array($text)) {
             $first = array_shift($text);
             $this->addPlainText($label, $first, $icon);
-            
+
             foreach ($text as $item) {
                 $this->addPlainText('', $item);
             }
 
             return;
         }
-        
+
         if ($label) {
             $content = sprintf('<strong>%s</strong><p>%s</p>',
                             htmlReady($label), formatReady($text));
@@ -140,14 +174,29 @@ class Helpbar extends WidgetContainer
         }
         $this->addWidget($widget);
     }
-    
+
+    /**
+     * Adds an entry from the database to the helpbar.
+     *
+     * @param String $label Label for the entry
+     * @param String $id    Id of the entry
+     */
     public function addText($label, $id)
     {
         $widget = new HelpbarWidget();
         $widget->addElement(new HelpbarTextElement($label, $id));
         $this->addWidget($widget, 'help-' . $id);
     }
-    
+
+    /**
+     * Adds a link to the helpbar
+     *
+     * @param String $label      Label of the link
+     * @param String $url        The link itself
+     * @param mixed  $icon       An optional, additional icon
+     * @param mixed  $target     The target attribute of the link element
+     * @param array  $attributes Additional attribute for the link element
+     */
     public function addLink($label, $url, $icon = false, $target = false, $attributes = array())
     {
         $id = md5($url);
@@ -162,7 +211,16 @@ class Helpbar extends WidgetContainer
 
         $this->addWidget($widget, 'help-' . $id);
     }
-    
+
+    /**
+     * Inserts a link to the helpbar before all other elements
+     *
+     * @param String $label      Label of the link
+     * @param String $url        The link itself
+     * @param mixed  $icon       An optional, additional icon
+     * @param mixed  $target     The target attribute of the link element
+     * @param array  $attributes Additional attribute for the link element
+     */
     public function insertLink($label, $url, $icon = false, $target = false, $attributes = array())
     {
         $id = md5($url);
@@ -177,35 +235,45 @@ class Helpbar extends WidgetContainer
 
         $this->insertWidget($widget, ':first', 'help-' . $id);
     }
-    
+
+    /**
+     * Tells the helpbar whether it should be open by default.
+     *
+     * @param bool $state Indicating whether the helpbar should be open
+     */
     public function open($state = true)
     {
         $this->open = $state;
     }
-    
+
     /**
-     * Bugfix tickets #6022 and #6308.
-     * Method to avoid mentioning the Wiki's DB-Helptext and HelpTour-Widget
-     * in an unsuitable context. If the Wiki would be transformed to Trails,
-     * this method shall be deleted.
+     * Tells the helpbar whether it should render.
      *
+     * @param bool $state Indicating whether the helpbar should render
      */
-    protected function condNonTrails($widget)
-    {
-    	$url = '';
-    	$url = parse_url($url ?: $_SERVER['REQUEST_URI']);
-    	$match = explode('view=', $url[query]);
-    	if (strcmp($match[1], 'show') === 0) {
-    		$this->loadContent();
-    		$this->addWidget($widget);
-    	}
-    }
-    
     public function shouldRender($state = true)
     {
         $this->should_render = $state;
     }
-    
+
+    /**
+     * Tells the helpbar to ignore any potentially stored contents from the
+     * database.
+     * This is neccessary for pages like the wiki where a helpbar entry is
+     * present in the database but since url parameters are currently
+     * ignored, the entry would apply for all pages of the wiki - which it
+     * shouldn't.
+     * This is just a makeshift solution until arbitrary routes can be
+     * handled.
+     *
+     * @param bool $state Indicating whether the contents should be ignored
+     * @todo remove this as soon as the helpbar can handle arbitrary routes
+     */
+    public function ignoreDatabaseContents($state = true)
+    {
+        $this->ignore_db = $state;
+    }
+
     /**
      * Renders the help bar.
      * The helpbar will only be rendered if it actually contains any widgets.
@@ -217,29 +285,23 @@ class Helpbar extends WidgetContainer
      */
     public function render()
     {
-        // bugfix ticket #6308
-        $route = get_route();
-        if (strcmp($route, 'wiki.php') !== 0)
+        if (!$this->ignore_db) {
             $this->loadContent();
-        
+        }
+
         // add tour links
         if (Config::get()->TOURS_ENABLE) {
             $widget = new HelpbarTourWidget();
             if ($widget->hasElements()) {
-        	    if (strcmp($route, 'wiki.php') !== 0)
-        		    $this->addWidget($widget);
-        	    else
-        		    $this->condNonTrails($widget);
-        	}
-        	$tour_data = $widget->tour_data;
+                $this->addWidget($widget);
+            }
+            $tour_data = $widget->tour_data;
         }
 
         // add wiki link and remove it from navigation
         $this->addLink(_('Weiterführende Hilfe'),
                        format_help_url(PageLayout::getHelpKeyword()), Icon::create('link-extern', 'info_alt'),
                        '_blank');
-
-        $content = '';
 
         NotificationCenter::postNotification('HelpbarWillRender', $this);
 

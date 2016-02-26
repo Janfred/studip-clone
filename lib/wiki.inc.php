@@ -603,16 +603,20 @@ function listPages($mode, $sortby = NULL) {
         $selfurl = "?view=listall";
         $sort = "ORDER by lastchange DESC"; // default sort order for "all pages"
         $nopages = _("In dieser Veranstaltung wurden noch keine WikiSeiten angelegt.");
-        // helptext for non-trails
+
+        // help texts
         $help = _('Zeigt eine tabellarische Übersicht aller Wiki-Seiten an.');
+        Helpbar::get()->ignoreDatabaseContents();
         Helpbar::get()->addPlainText('', $help);
     } else if ($mode=="new") {
         $lastlogindate = object_get_visit($SessSemName[1], "wiki");
         $selfurl = "?view=listnew";
         $sort = "ORDER by lastchange"; // default sort order for "new pages"
         $nopages = _("Seit Ihrem letzten Login gab es keine Änderungen.");
-        // helptext for non-trails
-        $help = _('Zeigt eine tabellarische Übersicht neu erstellter und neu bearbeiteter Wiki-Seiten an.');
+
+        // help texts
+        $help = _('Zeigt eine tabellarische Übersicht neu erstellter bzw. bearbeiteter Wiki-Seiten an.');
+        Helpbar::get()->ignoreDatabaseContents();
         Helpbar::get()->addPlainText('', $help);
     } else {
         throw new InvalidArgumentException(_('Fehler! Falscher Anzeigemodus:') . $mode);
@@ -1002,15 +1006,18 @@ function wikiEdit($keyword, $wikiData, $user_id, $backpage=NULL)
 
     printcontent(0, 0, $cont, '');
 
-    // helptext for non-trails
-    $help = _('Der Editor dient zum Einfügen und Ändern von beliebigem Text.');
-    $tip = _('Links entstehen automatisch aus Wörtern, die von zwei paar eckigen Klammern umgeben sind (Beispiel: [nop][[[/nop]%%Schlüsselwort%%[nop]]][/nop]');
-    Helpbar::get()->addPlainText('', $help);
-    Helpbar::get()->addPlainText(_('Tip'), $tip, Icon::create('info-circle'));
-
     end_blank_table();
     echo "</td>"; // end of content area
     showPageFrameEnd();
+
+    // help texts
+    Helpbar::get()->ignoreDatabaseContents();
+
+    $help = _('Der Editor dient zum Einfügen und Ändern von beliebigem Text.');
+    Helpbar::get()->addPlainText('', $help);
+
+    $tip = _('Links entstehen automatisch aus Wörtern, die von zwei paar eckigen Klammern umgeben sind (Beispiel: [nop][[[/nop]%%Schlüsselwort%%[nop]]][/nop]');
+    Helpbar::get()->addPlainText(_('Tip'), $tip, Icon::create('info-circle'));
 }
 
 /**
@@ -1564,10 +1571,6 @@ function end_blank_table() {
 function showDiffs($keyword, $versions_since) {
     global $SessSemName;
 
-    // helptext for non-trails
-    $help = _('Die Ansicht zeigt den Verlauf der Textänderungen in der Basis-Seite des Wikis.');
-    Helpbar::get()->addPlainText('', $help);
-    
     $query = "SELECT *
               FROM wiki
               WHERE keyword = ? AND range_id = ?
@@ -1613,6 +1616,11 @@ function showDiffs($keyword, $versions_since) {
 
     getDiffPageInfobox($keyword);
     showPageFrameEnd();
+
+    // help texts
+    $help = _('Die Ansicht zeigt den Verlauf der Textänderungen einer Wiki-Seite.');
+    Helpbar::get()->ignoreDatabaseContents();
+    Helpbar::get()->addPlainText('', $help);
 }
 
 /////////////////////////////////////////////////
@@ -1644,13 +1652,6 @@ function toDiffLineArray($lines, $who) {
 function showComboDiff($keyword, $db=NULL) {
     global $SessSemName;
 
-    // helptext for non-trails
-    $help = array(
-        _('Die Ansicht zeigt den Verlauf Ihrer Textänderungen in der Basis-Seite des Wikis '.
-    	  'mit einer Übersicht, welche Autor/-innen außer Ihnen noch Textänderungen ' .
-    	  'vorgenommen haben.'));
-    Helpbar::get()->addPlainText('', $help);
-    
     $version2=getLatestVersion($keyword, $SessSemName[1]);
     $version1=getFirstVersion($keyword, $SessSemName[1]);
     $version2=$version2["version"];
@@ -1731,6 +1732,14 @@ function showComboDiff($keyword, $db=NULL) {
     echo "</table>     ";
     getDiffPageInfobox($keyword);
     showPageFrameEnd();
+
+    // help texts
+    $help = array(
+        _('Die Ansicht zeigt den Verlauf der Textänderungen einer Wiki-Seite '.
+          'mit einer Übersicht, welche Autor/-innen welche Textänderungen ' .
+          'vorgenommen haben.'));
+    Helpbar::get()->ignoreDatabaseContents();
+    Helpbar::get()->addPlainText('', $help);
 }
 
 function create_color($index) {
