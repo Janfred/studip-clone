@@ -38,7 +38,9 @@
 <html class="no-js">
 <head>
     <meta charset="WINDOWS-1252">
-    <title><?= htmlReady(PageLayout::getTitle() . ' - ' . $GLOBALS['UNI_NAME_CLEAN']) ?></title>
+    <title data-original="<?= htmlReady(PageLayout::getTitle()) ?>">
+        <?= htmlReady(PageLayout::getTitle() . ' - ' . $GLOBALS['UNI_NAME_CLEAN']) ?>
+    </title>
     <?php
         // needs to be included in templates/layouts/base.php as well
         include 'app/views/WysiwygHtmlHeadBeforeJS.php';

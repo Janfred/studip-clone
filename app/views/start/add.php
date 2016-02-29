@@ -1,6 +1,4 @@
-<? if (!Request::isXhr()): ?>
-<h2><?= _('Neues Widget zur Startseite hinzufügen') ?></h2>
-<? endif; ?>
+<h2 class="hide-in-dialog"><?= _('Neues Widgets zur Startseite hinzufügen') ?></h2>
 <form action="<?= $controller->url_for('start/add') ?>" method="post">
     <input type="hidden" name="studip_ticket" value="<?= get_ticket() ?>">
     <input type="hidden" name="position" value="0">
@@ -10,7 +8,7 @@
         <? $metadata = $widget->getMetadata(); ?>
         <li>
             <label>
-                <input type="radio" name="widget_id" value="<?= $widget->getPluginId() ?>">
+                <input type="checkbox" name="widget_id[]" value="<?= $widget->getPluginId() ?>">
                 <?= htmlReady($widget->getPluginName()) ?>
             </label>
         <? if ($metadata['description']): ?>
