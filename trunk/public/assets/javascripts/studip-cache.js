@@ -1,3 +1,5 @@
+/*jslint browser: true */
+/*global STUDIP */
 /**
  * Stud.IP: Caching in JavaScript
  *
@@ -37,7 +39,7 @@
  *     cache.remove('World');
  *     console.log(cache.get('World', creator));
  *     // Will result in 'Hello World' both on the console and in cache
- * 
+ *
  * Cache instances may use prefixes to avoid conflicts with other js
  * functions (this is the single reason why the lib was designed to use a
  * getInstance() method).
@@ -61,7 +63,9 @@
  * @copyright Stud.IP core group
  * @since     Stud.IP 3.2
  */
-(function () {
+(function (STUDIP) {
+    'use strict';
+
     var caches = {
         local: window.localStorage || false,
         session: window.sessionStorage || false
@@ -117,7 +121,7 @@
             item;
         // Locate item in caches
         for (type in caches) {
-            if (caches[type].hasOwnProperty(index)) {
+            if (caches.hasOwnProperty(type) && caches[type].hasOwnProperty(index)) {
                 // Fetch item and decode it
                 item = JSON.parse(caches[type].getItem(index));
                 // Check expiration
@@ -142,7 +146,7 @@
      */
     Cache.prototype.set = function (index, value, expires) {
         // Remove old entry since we don't know where it might
-        // be stored (no prefix since locate() will add it)
+        // be stored (no prefix since remove() will add it)
         this.remove(index);
 
         // Prefix index
@@ -163,7 +167,7 @@
      * @return bool
      */
     Cache.prototype.has = function (index) {
-        return this.locate(index) !== false;
+        return this.locate(index) !== undefined;
     };
 
     /**
@@ -192,9 +196,15 @@
      * @param String index Key used to store the item
      */
     Cache.prototype.remove = function (index) {
-        var cache = this.locate(index);
-        if (cache) {
-            cache.removeItem(this.prefix + index);
+        var type;
+
+        index = this.prefix + index;
+
+        // Locate item in caches
+        for (type in caches) {
+            if (caches.hasOwnProperty(type) && caches[type].hasOwnProperty(index)) {
+                caches[type].removeItem(index);
+            }
         }
     };
 
@@ -206,14 +216,16 @@
         var type,
             key;
         for (type in caches) {
-            if (this.prefix) {
-                for (key in caches[type]) {
-                    if (key.indexOf(this.prefix) === 0) {
-                        caches[type].removeItem(key);
+            if (caches.hasOwnProperty(type)) {
+                if (this.prefix) {
+                    for (key in caches[type]) {
+                        if (caches[type].hasOwnProperty(key) && key.indexOf(this.prefix) === 0) {
+                            caches[type].removeItem(key);
+                        }
                     }
+                } else {
+                    caches[type].clear();
                 }
-            } else {
-                caches[type].clear();
             }
         }
     };
@@ -228,4 +240,4 @@
         }
     };
 
-}());
+}(STUDIP));
