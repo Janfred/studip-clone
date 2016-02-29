@@ -170,6 +170,10 @@ jQuery.ui.accordion.prototype.options.icons = {
     header: 'arrow_right',
     activeHeader: 'arrow_down'
 };
+jQuery.extend(jQuery.ui.dialog.prototype.options, {
+    closeText: 'Schliessen'.toLocaleString()
+});
+
 
 
 /* ------------------------------------------------------------------------

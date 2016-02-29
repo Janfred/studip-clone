@@ -19,6 +19,8 @@ $translations = array(
     // public/assets/javascripts/application.js
     'Blenden Sie die restlichen Termine aus' => _('Blenden Sie die restlichen Termine aus'),
     'Blenden Sie die restlichen Termine ein' => _('Blenden Sie die restlichen Termine ein'),
+    'Schliessen' => _('Schliessen'),
+    'Ihre Eingaben wurden bislang noch nicht gespeichert.' => _('Ihre Eingaben wurden bislang noch nicht gespeichert.'),
 
     // public/assets/javascripts/big-image-handler.js
     'Dieses Bild wird verkleinert dargestellt. Klicken Sie für eine größere Darstellung.' => _('Dieses Bild wird verkleinert dargestellt. Klicken Sie für eine größere Darstellung.'),
@@ -31,6 +33,10 @@ $translations = array(
     'Freitag' => _('Freitag'),
     'Samstag' => _('Samstag'),
     'Sonntag' => _('Sonntag'),
+
+    // public/assets/javascripts/file_system.js
+    'Objekt aufklappen' => _('Objekt aufklappen'),
+    'Objekt zuklappen' => _('Objekt zuklappen'),
 
     // public/assets/javascripts/forms.js
     'Bitte ändern Sie ihre Eingabe' => _('Bitte ändern Sie ihre Eingabe'),
@@ -91,22 +97,18 @@ $translations = array(
     // public/assets/javascripts/smiley-picker.js
     'Smileys' => _('Smileys'),
     'Zur Gesamtübersicht' => _('Zur Gesamtübersicht'),
-    'Schliessen' => _('Schliessen'),
 
     // public/assets/javascripts/studip-dialog.js
-    'Abbrechen' => _('Abbrechen'),
-
-    // public/assets/javascripts/studip-helper-attributes.js
-    'Wollen Sie die Aktion wirklich ausführen?' => _('Wollen Sie die Aktion wirklich ausführen?'),
+    'Schließen' => _('Schließen'),
     'Bitte bestätigen Sie die Aktion' => _('Bitte bestätigen Sie die Aktion'),
     'Ja' => _('Ja'),
     'Nein' => _('Nein'),
 
+    // public/assets/javascripts/studip-helper-attributes.js
+    'Wollen Sie die Aktion wirklich ausführen?' => _('Wollen Sie die Aktion wirklich ausführen?'),
+
     // public/assets/javascripts/studip-jquery.multi-select.tweaks.js
     'Die Person ist bereits eingetragen.' => _('Die Person ist bereits eingetragen.'),
-
-    // public/assets/javascripts/studip-secure-forms.js
-    'Ihre Eingaben wurden bislang noch nicht gespeichert.' => _('Ihre Eingaben wurden bislang noch nicht gespeichert.'),
 
     // public/assets/javascripts/studip-ui.js
     'schließen' => _('schließen'),
@@ -176,9 +178,6 @@ $translations = array(
     'Hervorhebung aufheben' => _('Hervorhebung aufheben'),
     'Thema hervorheben' => _('Thema hervorheben'),
 
-    // public/assets/javascripts/ckeditor/plugins/studip-quote/plugin.js
-    'Zitat einfügen' => _('Zitat einfügen'),
-    '%s hat geschrieben:' => _('%s hat geschrieben:'),
 );
 
 // translations have to be UTF8 for #json_encode
