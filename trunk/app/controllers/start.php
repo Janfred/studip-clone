@@ -72,12 +72,15 @@ class StartController extends AuthenticatedController
         $actions = new ActionsWidget();
 
         if (WidgetHelper::getAvailableWidgets($GLOBALS['user']->id)) {
-            $actions->addLink(_('Neues Widget hinzufügen'),
-                              $this->url_for('start/add'), Icon::create('add', 'clickable'))->asDialog();
+            $actions->addLink(_('Widgets hinzufügen'),
+                              $this->url_for('start/add'),
+                              Icon::create('add', 'clickable'))
+                    ->asDialog();
         }
 
         $actions->addLink(_('Standard wiederherstellen'),
-                          $this->url_for('start/reset'), Icon::create('accept', 'clickable'));
+                          $this->url_for('start/reset'),
+                          Icon::create('accept', 'clickable'));
         $sidebar->addWidget($actions);
 
         // Root may set initial positions
@@ -121,21 +124,27 @@ class StartController extends AuthenticatedController
     }
 
     /**
-     *  This actions adds a new widget to the start page
+     *  This action adds one or more new widgets to the start page
      *
      * @return void
      */
     public function add_action()
     {
+        PageLayout::setTitle(_('Widgets hinzufügen'));
+
         if (Request::isPost()) {
             $ticket   = Request::get('studip_ticket');
-            $widget   = Request::int('widget_id');
+            $widgets  = Request::intArray('widget_id');
             $position = Request::int('position');
 
             $post_url = '';
-            if (isset($widget) && check_ticket($ticket)) {
-                $id = WidgetHelper::addWidget($widget, $GLOBALS['user']->id);
-                $post_url = '#widget-' . $id;
+            if (check_ticket($ticket)) {
+                foreach ($widgets as $widget) {
+                    $id = WidgetHelper::addWidget($widget, $GLOBALS['user']->id);
+                    if (!$post_url) {
+                        $post_url = '#widget-' . $id;
+                    }
+                }
             }
             $this->redirect('start' . $post_url);
         }
@@ -156,6 +165,8 @@ class StartController extends AuthenticatedController
             throw new InvalidArgumentException('There is no such permission!');
         }
 
+        PageLayout::setTitle(sprintf(_('Standard-Startseite für "%s" bearbeiten'), ucfirst($permission)));
+
         $this->widgets = WidgetHelper::getAvailableWidgets();
         $this->permission = $permission;
 
@@ -173,7 +184,8 @@ class StartController extends AuthenticatedController
      *
      * @throws InvalidArgumentException
      */
-    function update_defaults_action($permission) {
+    public function update_defaults_action($permission)
+    {
         $GLOBALS['perm']->check('root');
 
         if (in_array($permission, array_keys($GLOBALS['perm']->permissions)) === false) {

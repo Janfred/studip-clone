@@ -257,7 +257,9 @@
     };
     // Handler for HTTP header X-Title: Set the dialog title
     STUDIP.Dialog.handlers.header['X-Title'] = function (title, options) {
-        options.title = title || options.title;
+        if (title !== $('title').data().original) {
+            options.title = title || options.title;
+        }
     };
     // Handler for HTTP header X-No-Buttons: Decide whether to show dialog buttons
     STUDIP.Dialog.handlers.header['X-No-Buttons'] = function (value, options) {

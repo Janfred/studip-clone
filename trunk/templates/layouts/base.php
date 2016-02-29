@@ -55,7 +55,7 @@ if ($infobox && is_array($infobox)) {
 <html class="no-js">
 <head>
     <meta charset="WINDOWS-1252">
-    <title>
+    <title data-original="<?= PageLayout::getTitle() ?>">
       <?= htmlReady(PageLayout::getTitle() . ' - ' . $GLOBALS['UNI_NAME_CLEAN']) ?>
     </title>
     <?php
