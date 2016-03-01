@@ -185,25 +185,25 @@
     <?= $this->render_partial("profile/seminare") ?>
 <? endif?>
 
-<?if($show_lit && $lit_list) :?>
+<?if ($show_lit && $lit_list) :?>
 <section class="contentbox">
     <header>
         <h1><?= _('Literaturlisten') ?></h1>
     </header>
     <section>
-        <?= formatReady($lit_list) ?>
+        <?= $lit_list ?>
     </section>
 </section>
 <?endif?>
 
-<? if(!empty($longDatafields)) :?>
+<? if (!empty($longDatafields)) :?>
     <? foreach ($longDatafields as $name => $entry) : ?>
         <section class="contentbox">
         <header>
             <h1><?= htmlReady($name .' '. $entry['visible']) ?></h1>
         </header>
         <section>
-            <?= formatReady($entry['content']) ?>
+            <?= $entry['content'] ?>
         </section>
     </section>
     <? endforeach ?>
