@@ -635,6 +635,6 @@ class StudygroupModel
                 get_fullname($user_id), $sem->getName(), URLHelper::getlink($GLOBALS['ABSOLUTE_URI_STUDIP'] . "dispatch.php/course/studygroup/members/" . $sem->id, array('cid' => $sem->id)));
         }
 
-        return $msging->insert_message($message, $recipients, "____%system%____", '', '', '', '', $subject);
+        return $msging->insert_message($message, $recipients, '', '', '', '1', '', $subject);
     }
 }
