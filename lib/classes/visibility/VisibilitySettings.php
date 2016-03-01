@@ -17,12 +17,24 @@
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
  */
+require_once 'visibilitySettings/Me.php';
+require_once 'visibilitySettings/Buddies.php';
+require_once 'visibilitySettings/Domain.php';
+require_once 'visibilitySettings/Studip.php';
+require_once 'visibilitySettings/Extern.php';
 
 /**
  * Groups all visibilitySettings
  */
 class VisibilitySettings
 {
+    public static $CLASSES = array(
+        'Visibility_Me',
+        'Visibility_Buddies',
+        'Visibility_Domain',
+        'Visibility_Studip',
+        'Visibility_Extern'
+    );
 
     /**
      * @var array all visibilitystates 
@@ -34,16 +46,6 @@ class VisibilitySettings
      */   
     private $names = array();
     
-     /**
-     * @var array all paths of all states
-     */   
-    private $require_path = array();
-    
-     /**
-     * @var VisibilitySettings Singleton pattern
-     */   
-    static private $instance = null;
-
     /**
      * I/O is expensive. Therefore we make the whole class sessionwide singleton
      * to save some I/O.
@@ -52,23 +54,13 @@ class VisibilitySettings
      */
     static public function getInstance() 
     {
-        if (!$_SESSION['VisibilitySettings']) {
-            self::$instance = new self;
-            $_SESSION['VisibilitySettings'] = serialize(new VisibilitySettings);
-        } else {
+        static $instance;
 
-            /*
-             * This part is really tricky. We serialize the class to be able to
-             * save it in the session BUT it will definetly need all the
-             * contained visibilitySetting. Maybe later we use runkit_method_add
-             * but at the moment we will not use an experimental method
-             */
-            $tmp = unserialize($_SESSION['VisibilitySettings']);
-            foreach ($tmp->require_path as $path) {
-                require_once $path;
-            }
+        if (!isset($instance)) {
+            $instance = new self;
         }
-        return unserialize($_SESSION['VisibilitySettings']);
+
+        return $instance;
     }
 
     /**
@@ -77,30 +69,14 @@ class VisibilitySettings
      */
     function __construct()
     {
-
-        $pathinfo = pathinfo(realpath(__FILE__));
-        $includepath = $pathinfo['dirname'];
-
-        // scan folder
-        if ($handle = opendir("$includepath/visibilitySettings")) {
-            while (false !== ($file = readdir($handle))) {
-                if ($file != "." && $file != ".." && substr($file, -4) != ".svn") {
-
-                    // load file and save everything needed
-                    $require_path = "$includepath/visibilitySettings/$file";
-                    require_once $require_path;
-                    $classname = "Visibility_" . substr($file, 0, -4);
-                    $tmp = new $classname;
-                    if ($tmp->isActivated()) {
-                        $this->states[$tmp->getIntRepresentation()] = $tmp;
-                        $this->names[$tmp->getIntRepresentation()] = $tmp->getDisplayName();
-                        $this->require_path[$tmp->getIntRepresentation()] = $require_path;
-                    }
-                }
+        foreach (self::$CLASSES as $classname) {
+            $tmp = new $classname;
+            if ($tmp->isActivated()) {
+                $this->states[$tmp->getIntRepresentation()] = $tmp;
+                $this->names[$tmp->getIntRepresentation()] = $tmp->getDisplayName();
             }
-            closedir($handle);
-            ksort($this->names);
         }
+        ksort($this->names);
     }
 
     /**
