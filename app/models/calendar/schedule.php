@@ -207,29 +207,25 @@ class CalendarScheduleModel
 
 
                 // check the settings for this entry
-                $stmt2 = DBManager::get()->prepare("SELECT sc.*, IF(su.user_id IS NULL, 'virtual', 'sem') as type
-                    FROM schedule_seminare as sc
-                    LEFT JOIN seminar_user as su ON (su.user_id = sc.user_id AND su.Seminar_id = sc.seminar_id)
-                    WHERE sc.seminar_id = ? AND sc.user_id = ? AND sc.metadate_id = ?");
-                $stmt2->execute(array($sem->getId(), $user_id, $cycle->getMetaDateId()));
+                $db = DBManager::get();
+                $stmt = $db->prepare('SELECT user_id FROM seminar_user WHERE Seminar_id = ? AND user_id = ?');
+                $stmt->execute(array($sem->getId(), $user_id));
+                $entry['type'] = $stmt->fetchColumn() ? 'sem' : 'virtual';
 
-                if ($details = $stmt2->fetch()) {
-                    if ($details['type'] == 'virtual') {
-                        $entry['color'] = $details['color'] ? $details['color'] : DEFAULT_COLOR_VIRTUAL;
-                        $entry['icons'][] = array(
-                            'image' => 'virtual.png',
-                            'title' => _("Dies ist eine vorgemerkte Veranstaltung")
-                        );
-                    } else {
-                        $entry['color'] = $details['color'] ? $details['color'] : DEFAULT_COLOR_SEM;
-                    }
-                    $entry['type']    = $details['type'];
-                    $entry['visible'] = $details['visible'];
+                $stmt = $db->prepare('SELECT * FROM schedule_seminare WHERE seminar_id = ? AND user_id = ? AND metadate_id = ?');
+                $stmt->execute(array($sem->getId(), $user_id, $cycle->getMetaDateId()));
+                $details = $stmt->fetch();
+
+                if ($entry['type'] == 'virtual') {
+                    $entry['color'] = $details['color'] ? $details['color'] : DEFAULT_COLOR_VIRTUAL;
+                    $entry['icons'][] = array(
+                        'image' => 'virtual.png',
+                        'title' => _("Dies ist eine vorgemerkte Veranstaltung")
+                    );
                 } else {
-                    $entry['type']    = 'sem';
-                    $entry['color']   = DEFAULT_COLOR_SEM;
-                    $entry['visible'] = 1;
+                    $entry['color'] = $details['color'] ? $details['color'] : DEFAULT_COLOR_SEM;
                 }
+                $entry['visible'] = $details ? $details['visible'] : 1;
 
                 // show an unhide icon if entry is invisible
                 if (!$entry['visible']) {
