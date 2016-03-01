@@ -151,7 +151,7 @@ class Admin_StatusgroupsController extends AuthenticatedController
      *
      * @param string group id
      */
-    public function memberAdd_action($group_id = null)
+    public function memberAdd_action($group_id)
     {
         $this->check('edit');
 
@@ -175,7 +175,7 @@ class Admin_StatusgroupsController extends AuthenticatedController
             PageLayout::postMessage(MessageBox::success($message));
         }
 
-        $this->redirect('admin/statusgroups');
+        $this->redirect('admin/statusgroups#group-' . $group_id);
     }
 
     /**
@@ -194,7 +194,7 @@ class Admin_StatusgroupsController extends AuthenticatedController
         $this->group->moveUser($user_id, $pos);
         $this->type['after_user_move']($user_id);
         $this->users = $this->group->members;
-        $this->afterFilter();
+        $this->renderGroupOrRedirect($group);
     }
 
     /**
@@ -210,7 +210,7 @@ class Admin_StatusgroupsController extends AuthenticatedController
         if (Request::submitted('confirm')) {
             $this->group->removeUser($user_id);
             $this->type['after_user_delete']($user_id);
-            $this->afterFilter();
+            $this->renderGroupOrRedirect($group_id);
         }
     }
 
@@ -248,7 +248,7 @@ class Admin_StatusgroupsController extends AuthenticatedController
         if (Request::submitted('confirm')) {
             CSRFProtection::verifySecurityToken();
             $this->group->sortMembersAlphabetic();
-            $this->redirect('admin/statusgroups/index');
+            $this->redirect('admin/statusgroups/index#group-' . $group_id);
         }
     }
 
@@ -294,12 +294,12 @@ class Admin_StatusgroupsController extends AuthenticatedController
     /*
      * Renders an action (ajax) or redirects to the statusgroup index page (no ajax).
      */
-    private function afterFilter()
+    private function renderGroupOrRedirect($group_id)
     {
         if (Request::isXhr()) {
             $this->render_action('_members');
         } else {
-            $this->redirect('admin/statusgroups');
+            $this->redirect('admin/statusgroups#group-' . $group_id);
         }
     }
 
