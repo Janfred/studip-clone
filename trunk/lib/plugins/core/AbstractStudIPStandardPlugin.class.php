@@ -103,7 +103,7 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin
         // $last_visit = object_get_visit($this->id, $sem_type, 'current');
 
         if ($this->isShownInOverview() && $this->hasNavigation()) {
-            $navigation = array_pop($this->getTabNavigation($course_id));
+            $navigation = clone array_pop($this->getTabNavigation($course_id));
 
             if ($this->hasChanged($last_visit)) {
                 $navigation->setImage($this->getChangeindicatoriconname(),
