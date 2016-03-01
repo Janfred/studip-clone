@@ -65,10 +65,10 @@ function AddNewStatusgruppe ($new_statusgruppe_name, $range_id, $new_statusgrupp
         $statusgruppe_id = MakeUniqueStatusgruppeID();
     }
 
-    $query = "SELECT position FROM statusgruppen WHERE range_id = ? ORDER BY position DESC";
+    $query = "SELECT position + 1 FROM statusgruppen WHERE range_id = ? ORDER BY position DESC";
     $statement = DBManager::get()->prepare($query);
     $statement->execute(array($range_id));
-    $position = 1 + $statement->fetchColumn();
+    $position = $statement->fetchColumn() ?: 0;
 
     $query = "INSERT INTO statusgruppen (statusgruppe_id, name, range_id, position, size,
                                          selfassign, calendar_group, mkdate, chdate)
@@ -252,7 +252,7 @@ function InsertPersonStatusgruppe ($user_id, $statusgruppe_id, $is_institute_gro
         return false;
     }
 
-    $position = CountMembersPerStatusgruppe($statusgruppe_id) + 1;
+    $position = CountMembersPerStatusgruppe($statusgruppe_id);
 
     $query = "INSERT INTO statusgruppe_user (statusgruppe_id, user_id, position)
               VALUES (?, ?, ?)";
@@ -502,10 +502,10 @@ function SubSortStatusgruppe($insert_father, $insert_daughter) {
     if ($insert_father == '' || $insert_daughter == '') return FALSE;
     if (isVatherDaughterRelation($insert_father, $insert_daughter)) return FALSE;
 
-    $query = "SELECT MAX(position) FROM statusgruppen WHERE range_id = ?";
+    $query = "SELECT MAX(position) + 1 FROM statusgruppen WHERE range_id = ?";
     $statement = DBManager::get()->prepare($query);
     $statement-execute(array($insert_daughter));
-    $position = $statement->fetchColumn() + 1;
+    $position = $statement->fetchColumn() ?: 0;
 
     $query = "UPDATE statusgruppen SET position = ?, range_id = ? WHERE statusgruppe_id = ?";
     $statement = DBManager::get()->prepare($query);
@@ -892,7 +892,7 @@ function sortStatusgruppeByName($statusgruppe_id)
               FROM statusgruppe_user
               LEFT JOIN auth_user_md5 USING (user_id)
               WHERE statusgruppe_id = ?
-              ORDER BY Nachname";
+              ORDER BY Nachname, Vorname";
     $statement = DBManager::get()->prepare($query);
     $statement->execute(array($statusgruppe_id));
     $users = $statement->fetchAll(PDO::FETCH_COLUMN);
@@ -903,7 +903,7 @@ function sortStatusgruppeByName($statusgruppe_id)
     $update = DBManager::get()->prepare($query);
 
     foreach ($users as $index => $user_id) {
-        $update->execute(array($index + 1, $user_id, $statusgruppe_id));
+        $update->execute(array($index, $user_id, $statusgruppe_id));
     }
 }
 

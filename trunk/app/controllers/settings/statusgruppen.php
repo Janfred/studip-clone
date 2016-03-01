@@ -239,13 +239,9 @@ class Settings_StatusgruppenController extends Settings_SettingsController
         if ($verified) {
             $this->check_ticket();
 
-            $query = "DELETE FROM statusgruppe_user WHERE user_id = ? AND statusgruppe_id = ?";
-            $statement = DBManager::get()->prepare($query);
-            $statement->execute(array($this->user->user_id, $id));
+            RemovePersonStatusgruppe($this->user->username, $id);
 
-            if ($statement->rowCount() > 0) {
-                $this->reportSuccess(_('Die Person wurde aus der ausgewählten Gruppe gelöscht!'));
-            }
+            $this->reportSuccess(_('Die Person wurde aus der ausgewählten Gruppe gelöscht!'));
         }
 
         $this->redirect('settings/statusgruppen');
