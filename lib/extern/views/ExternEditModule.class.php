@@ -298,12 +298,12 @@ $order[$i]}
 
             // name of group
             $out .= "<tr" . $this->css->getFullClass() . ">\n";
-            $out .= "<td nowrap=\"nowrap\"><font size=\"2\">&nbsp;" . htmlReady($name) . "</font></td>";
+            $out .= "<td nowrap=\"nowrap\" style=\"max-width: 40em; overflow: hidden; text-overflow: ellipsis;\" title=\"" . htmlReady($name) . "\"><font size=\"2\">&nbsp;" . htmlReady($name) . "</font></td>";
 
             // column headline
             $out .= '<td nowrap="nowrap"><input type="text" name="'
                     . $this->element_name . '_groupsalias[' . $id . ']"';
-            $out .= "\" size=\"25\" maxlength=\"150\" value=\"";
+            $out .= " size=\"25\" maxlength=\"150\" value=\"";
             $out .= $groups[$id] . "\">";
             if ($this->faulty_values[$this->element_name . "_groupsalias"][$id])
                     $out .= $this->error_sign;
