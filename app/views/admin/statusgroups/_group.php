@@ -8,7 +8,7 @@
         <col width="10%">
     </colgroup>
     <caption>
-        <?= formatReady($group->name) ?>
+        <?= htmlReady($group->name) ?>
         <? if ($type['needs_size']): ?>
             <?= $group->getPlaces() ?>
         <? endif; ?>
