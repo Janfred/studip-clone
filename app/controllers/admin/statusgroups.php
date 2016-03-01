@@ -13,6 +13,8 @@
  * @category    Stud.IP
  */
 
+require_once 'lib/statusgruppe.inc.php';
+
 class Admin_StatusgroupsController extends AuthenticatedController
 {
     /**
@@ -159,9 +161,7 @@ class Admin_StatusgroupsController extends AuthenticatedController
         $this->group = new Statusgruppen($group_id);
         $countAdded = 0;
         foreach ($mp->getAddedUsers() as $a) {
-            if (!$this->group->isMember(new User($a))) {
-                $new_user = new StatusgruppeUser(array($group_id, $a));
-                $new_user->store();
+            if (InsertPersonStatusgruppe($a, $group_id)) {
                 $this->type['after_user_add']($a);
                 $countAdded++;
             }
@@ -350,6 +350,7 @@ class Admin_StatusgroupsController extends AuthenticatedController
                         $user = new User($user_id);
                         $newInstUser->inst_perms = $user->perms;
                         if ($newInstUser->store()) {
+                            checkExternDefaultForUser($user->id);
                             StudipLog::INST_USER_ADD($_SESSION['SessionSeminar'], $user->id, $user->perms);
                         }
                     }
