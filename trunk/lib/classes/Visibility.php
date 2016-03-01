@@ -420,8 +420,10 @@ class Visibility
     public static function renamePrivacySetting($id, $new_name, $user = null)
     {
         $setting = User_Visibility_Settings::find($id, $user);
-        $setting->name = $new_name;
-        $setting->store();
+        if ($setting) {
+            $setting->name = $new_name;
+            $setting->store();
+        }
     }
 
     /**
