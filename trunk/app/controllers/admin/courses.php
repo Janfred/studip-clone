@@ -110,7 +110,7 @@ class Admin_CoursesController extends AuthenticatedController
         }
 
         $this->selected_action = $GLOBALS['user']->cfg->MY_COURSES_ACTION_AREA;
-        if (is_null($this->selected_action) || (is_string($this->selected_action) && !class_exists($this->selected_action))) {
+        if (is_null($this->selected_action) || (!is_numeric($this->selected_action) && !class_exists($this->selected_action))) {
             $this->selected_action = 1;
         }
 
