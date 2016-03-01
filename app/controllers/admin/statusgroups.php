@@ -153,6 +153,8 @@ class Admin_StatusgroupsController extends AuthenticatedController
      */
     public function memberAdd_action($group_id = null)
     {
+        $this->check('edit');
+
         $mp = MultiPersonSearch::load("add_statusgroup" . $group_id);
         $this->group = new Statusgruppen($group_id);
         $countAdded = 0;
@@ -344,7 +346,7 @@ class Admin_StatusgroupsController extends AuthenticatedController
                 'name' => _('Institut'),
                 'after_user_add' => function ($user_id) {
                     $newInstUser = new InstituteMember(array($user_id, $_SESSION['SessionSeminar']));
-                    if ($newInstUser->isNew()) {
+                    if ($newInstUser->isNew() || $newInstUser->inst_perms == 'user') {
                         $user = new User($user_id);
                         $newInstUser->inst_perms = $user->perms;
                         if ($newInstUser->store()) {
