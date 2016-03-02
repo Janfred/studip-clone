@@ -59,11 +59,23 @@
     <label>
         <?= _('Startwoche') ?>
         <select name="startWeek">
-            <? foreach ($start_weeks as $value => $data): ?>
-                <option
-                    value="<?= $value ?>" <?= (Request::get('startWeek', $cycle->week_offset) == $value) ? 'selected' : '' ?>>
-                    <?= htmlReady($data['text']) ?>
-                </option>
+            <? if (isset($end_semester_weeks['start'])) : ?>
+                <? foreach ($end_semester_weeks['start'] as $end_sem_week) : ?>
+                    <option value="<?= $end_sem_week['value'] ?>" 
+                        <?= (Request::get('startWeek', $cycle->week_offset) == $end_sem_week['value']) ? 'selected' : '' ?>>
+                            <?= htmlReady($end_sem_week['label']) ?></option>
+                <? endforeach; ?>
+            <? endif; ?>
+            
+            <? foreach ($clean_weeks as $semester => $weeks) : ?>
+                <optgroup label="<?= htmlReady($semester) ?>">
+                    <? foreach ($weeks as $value => $label) : ?>
+                        <option value="<?= $value ?>" 
+                            <?= (Request::get('startWeek', $cycle->week_offset) == $value) ? 'selected' : '' ?>>
+                                <?= htmlReady($label) ?>
+                        </option>
+                    <? endforeach; ?>
+                </optgroup>    
             <? endforeach; ?>
         </select>
     </label>
@@ -71,12 +83,30 @@
     <label>
         <?= _('Endwoche') ?>
         <select name="endWeek">
-            <option value="0"><?= _('Ganzes Semester') ?></option>
-            <? foreach ($start_weeks as $value => $data): ?>
-                <option
-                    value="<?= $value + 1 ?>" <?= (Request::get('endWeek', $cycle->end_offset) == $value + 1) ? 'selected' : '' ?>>
-                    <?= htmlReady($data['text']) ?>
-                </option>
+            <? if (isset($end_semester_weeks['ende'])) : ?>
+                <? foreach ($end_semester_weeks['ende'] as $end_sem_week) : ?>
+                    <option value="<?= $end_sem_week['value'] ?>" 
+                        <?= (Request::get('endWeek', $cycle->end_offset) == $end_sem_week['value']) ? 'selected' : '' ?>>
+                            <?= htmlReady($end_sem_week['label']) ?></option>
+                <? endforeach; ?>
+            <? endif; ?>
+            
+            <? if(count($end_semester_weeks['ende']) > 1) : ?>
+                <option value="<?= end(array_keys($clean_weeks[end(array_keys($clean_weeks))])) ?>"
+                    <?= (Request::get('endWeek', $cycle->end_offset) == end(array_keys($clean_weeks[end(array_keys($clean_weeks))]))) ? 'selected' : '' ?>>
+                        <?= _('Alle Semester') ?>
+                </option>    
+            <? endif; ?>
+            
+            <? foreach ($clean_weeks as $semester => $weeks) : ?>
+                <optgroup label="<?= htmlReady($semester) ?>">
+                    <? foreach ($weeks as $value => $label) : ?>
+                        <option value="<?= $value  ?>" 
+                            <?= (Request::get('endWeek', $cycle->end_offset) == $value) ? 'selected' : '' ?>>
+                                <?= htmlReady($label) ?>
+                        </option>
+                    <? endforeach; ?>
+                </optgroup>    
             <? endforeach; ?>
         </select>
     </label>
