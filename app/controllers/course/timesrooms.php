@@ -1006,11 +1006,17 @@ class Course_TimesroomsController extends AuthenticatedController
     {
         CSRFProtection::verifyRequest();
         $cycle = SeminarCycleDate::find($cycle_id);
-        $cycle_string = $cycle->toString();
-        if ($cycle !== null && $cycle->delete()) {
-            $this->course->createMessage(sprintf(_('Der regelmäßige Eintrag "%s" wurde gelöscht.'), '<b>' . $cycle_string . '</b>'));
+        if ($cycle === null) {
+            $message = sprintf(_('Es gibt keinen regelmäßigen Eintrag "%s".'), $cycle_id);
+            PageLayout::postError($message);
+        } else {
+            $cycle_string = $cycle->toString();
+            if ($cycle->delete()) {
+                $message = sprintf(_('Der regelmäßige Eintrag "%s" wurde gelöscht.'),
+                                   '<b>' . $cycle_string . '</b>');
+                PageLayout::postSuccess($message);
+            }
         }
-        $this->displayMessages();
 
         $this->redirect('course/timesrooms/index');
     }
