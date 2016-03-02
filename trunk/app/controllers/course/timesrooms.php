@@ -125,6 +125,7 @@ class Course_TimesroomsController extends AuthenticatedController
 
         // Get Cycles
         $this->cycle_dates = array();
+        
         foreach ($this->course->cycles as $cycle) {
             foreach ($cycle->getAllDates() as $val) {
                 foreach ($this->semester as $sem) {
@@ -869,14 +870,44 @@ class Course_TimesroomsController extends AuthenticatedController
             $this->has_bookings = $count > 0;
         }
 
+        
         $duration = $this->course->duration_time;
+        if($duration == -1 ) {
+            $end_semester = Semester::findBySQL('beginn >= :beginn ORDER BY beginn', 
+                    array(':beginn' => $this->course->start_semester->beginn));
+        } else if ($duration > 0) {
+            $end_semester = Semester::findBySQL('beginn >= :beginn AND ende <= :ende ORDER BY beginn', 
+                    array(':beginn' => $this->course->start_semester->beginn,
+                          ':ende' => $this->course->getEndSemester() + $duration));
+        } else {
+            $end_semester[] = $this->course->start_semester;
+        }
+        
         $this->start_weeks = $this->course->start_semester->getStartWeeks($duration);
-        array_walk($this->start_weeks, function (&$value, $key) {
-            $value = array(
-                'text'     => $value,
-                'selected' => $this->course->getStartWeek() == $key,
-            );
-        });
+        
+        if (!empty($end_semester)) {
+            $this->end_semester_weeks = array();
+            
+            foreach ($end_semester as $sem) {
+                
+                $sem_duration =  $sem->ende - $sem->beginn;
+                $weeks = $sem->getStartWeeks($sem_duration); 
+                
+                foreach($this->start_weeks as $key => $week) {
+                    if(strpos($week, substr($weeks[0], -15)) !== false) {
+                        $this->end_semester_weeks['start'][] = array('value' => $key, 'label' => sprintf(_('Anfang %s'), $sem->name));
+                    }
+                    if(strpos($week, substr($weeks[count($weeks)-1], -15)) !== false) {
+                        $this->end_semester_weeks['ende'][] = array('value' => $key+1, 'label' => sprintf(_('Ende %s'), $sem->name));
+                    }
+                    foreach ($weeks as $val) {
+                        if(strpos($week, substr($val, -15)) !== false) {
+                            $this->clean_weeks[$sem->name][$key] = $val;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -889,14 +920,19 @@ class Course_TimesroomsController extends AuthenticatedController
         $start = strtotime(Request::get('start_time'));
         $end   = strtotime(Request::get('end_time'));
 
+        
         if (date('H', $start) > date('H', $end)) {
             $this->storeRequest();
-
             PageLayout::postError(_('Die Zeitangaben sind nicht korrekt. Bitte überprüfen Sie diese!'));
             $this->redirect('course/timesrooms/createCycle');
             return;
+        } elseif (Request::int('startWeek') > Request::int('endWeek') ) {
+            $this->storeRequest();
+            PageLayout::postError(_('Die Endwoche liegt vor der Startwoche. Bitte überprüfen Sie diese Angabe!'));
+            $this->redirect('course/timesrooms/createCycle');
+            return;
         }
-
+        
         $cycle              = new SeminarCycleDate();
         $cycle->seminar_id  = $this->course->id;
         $cycle->weekday     = Request::int('day');
@@ -970,8 +1006,9 @@ class Course_TimesroomsController extends AuthenticatedController
     {
         CSRFProtection::verifyRequest();
         $cycle = SeminarCycleDate::find($cycle_id);
+        $cycle_string = $cycle->toString();
         if ($cycle !== null && $cycle->delete()) {
-            $this->course->createMessage(sprintf(_('Der regelmäßige Eintrag "%s" wurde gelöscht.'), '<b>' . $cycle->toString() . '</b>'));
+            $this->course->createMessage(sprintf(_('Der regelmäßige Eintrag "%s" wurde gelöscht.'), '<b>' . $cycle_string . '</b>'));
         }
         $this->displayMessages();
 
@@ -1075,6 +1112,8 @@ class Course_TimesroomsController extends AuthenticatedController
         }
 
         $course = Seminar::GetInstance($course_id);
+        $old_start_weeks = $this->course->start_semester->getStartWeeks($this->course->duration_time);
+        
         if ($start_semester == $end_semester) {
             $end_semester = 0;
         }
@@ -1101,16 +1140,13 @@ class Course_TimesroomsController extends AuthenticatedController
         }
 
         $course->store();
-
+        
+        $new_start_weeks = $this->course->start_semester->getStartWeeks($this->course->duration_time);
         SeminarCycleDate::removeOutRangedSingleDates($course->getStartSemester(), $course->getEndSemesterVorlesEnde(), $course->id);
         $cycles = SeminarCycleDate::findBySeminar_id($course->seminar_id);
         foreach ($cycles as $cycle) {
-            $new_dates = $cycle->createTerminSlots($start_semester->beginn);
-            foreach ($new_dates as $semester_id => $dates) {
-                foreach ($dates['dates'] as $date) {
-                    $date->store();
-                }
-            }
+            $cycle->end_offset = $this->getNewEndOffset($cycle, $old_start_weeks, $new_start_weeks);
+            $cycle->store();
         }
 
         $messages = $course->getStackedMessages();
@@ -1125,6 +1161,35 @@ class Course_TimesroomsController extends AuthenticatedController
         }
     }
 
+    /**
+     * Calculates new end_offset value for given SeminarCycleDate Object
+     * 
+     * @param object of SeminarCycleDate
+     * @param array 
+     * @param array
+     * @return int
+     */
+    
+    public function getNewEndOffset($cycle, $old_start_weeks, $new_start_weeks) 
+    {
+        if(is_null($cycle->end_offset)){
+            return count($new_start_weeks);
+        }
+        $old_offset_string = $old_start_weeks[$cycle->end_offset];
+        $new_offset_value = 0;
+        
+        foreach($new_start_weeks as $value => $label) {
+            if(strpos($label, substr($old_offset_string, -15)) !== false) {
+                $new_offset_value = $value;
+            }
+        }
+        if($new_offset_value == 0) {
+            return count($new_start_weeks);
+        }
+        
+        return $new_offset_value;
+    }
+    
     /**
      * Displays messages.
      *
