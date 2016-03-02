@@ -180,12 +180,13 @@ abstract class StudIPPlugin {
      *                         (relative to plugin directory)
      * @param Array  $variables Optional array of variables to pass to the
      *                          LESS compiler
+     * @param Array  $link_attr Attributes to pass to the link element
      */
-    protected function addStylesheet($filename, $variables = array())
+    protected function addStylesheet($filename, $variables = [], $link_attr = [])
     {
         if (substr($filename, -5) !== '.less') {
             $url = $this->getPluginURL() . '/' . $filename;
-            PageLayout::addStylesheet($url);
+            PageLayout::addStylesheet($url, $link_attr);
             return;
         }
 
@@ -224,13 +225,12 @@ abstract class StudIPPlugin {
         // Include asset in page by reference or directly
         $download_uri = $asset->getDownloadLink();
         if ($download_uri === false) {
-            PageLayout::addStyle($asset->getContent());
+            PageLayout::addStyle($asset->getContent(), $link_attr);
         } else {
-            PageLayout::addHeadElement('link', [
-                'rel'  => 'stylesheet',
-                'href' => $download_uri,
-                'type' => 'text/css',
-            ]);
+            $link_attr['rel']  = 'stylesheet';
+            $link_attr['href'] = $download_uri;
+            $link_attr['type'] = 'text/css';
+            PageLayout::addHeadElement('link', $link_attr);
         }
     }
 }
