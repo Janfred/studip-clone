@@ -184,7 +184,7 @@ class CourseDate extends SimpleORMap
      */
     public function getRoom()
     {
-        if (Config::get()->RESOURCE_ENABLE && $this->room_assignment->resource_id) {
+        if (Config::get()->RESOURCES_ENABLE && $this->room_assignment->resource_id) {
            return $this->room_assignment->resource;
         }
         return null;
