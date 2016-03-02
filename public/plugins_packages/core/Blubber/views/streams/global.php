@@ -2,7 +2,7 @@
 
 /*
  *  Copyright (c) 2012  Rasmus Fuhse <fuhse@data-quest.de>
- * 
+ *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License as
  *  published by the Free Software Foundation; either version 2 of
@@ -83,7 +83,7 @@
                             <? endforeach ?>
                         </div>
                         <? else : ?>
-                        <a href="<?= URLHelper::getLink("contact_statusgruppen.php") ?>"><?= _("Legen Sie eine Kontaktgruppe an, um an mehrere Kontakte zugleich zu blubbern.") ?></a>
+                        <a href="<?= URLHelper::getLink("dispatch.php/contact") ?>"><?= _("Legen Sie eine Kontaktgruppe an, um an mehrere Kontakte zugleich zu blubbern.") ?></a>
                         <? endif ?>
                         <br>
                         <?= _("Fügen Sie einzelne Personen mittels @Nutzernamen im Text der Nachricht oder der Kommentare hinzu.") ?>
