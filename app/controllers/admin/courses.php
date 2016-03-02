@@ -627,7 +627,7 @@ class Admin_CoursesController extends AuthenticatedController
                 'name'      => $plugin->getPluginName(),
                 'title'     => $plugin->getPluginName(),
                 'url'       => $plugin->getAdminActionURL(),
-                'attributes' => $plugin->getAdminActionAttributes(),
+                'attributes' => ['data-dialog' => 'size=big'],
                 'multimode' => $plugin->useMultimode()
             );
         }
