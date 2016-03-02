@@ -598,7 +598,7 @@ function getFormattedRooms($rooms, $link = false)
 
     if (is_array($rooms)) {
         foreach ($rooms as $room_id => $count) {
-            if ($room_id && Config::get()->RESOURCE_ENABLE) {
+            if ($room_id && Config::get()->RESOURCES_ENABLE) {
                 $resObj =& ResourceObject::Factory($room_id);
                 if ($link) {
                     $room_list[] = $resObj->getFormattedLink(TRUE, TRUE, TRUE,
