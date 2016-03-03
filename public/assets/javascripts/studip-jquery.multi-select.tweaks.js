@@ -63,6 +63,7 @@
             options.index = -1;
             delete options.disabled;
         }
+        options.text = this.escapeHTML(options.text);
         return originals.addOption.call(this, options);
     };
 
