@@ -1,4 +1,4 @@
-<? $allowed_to_add = ($range_id === $GLOBALS['user']->id && $range_type === "user") || ($range_id === "start" && $GLOBALS['perm']->have_perm("root")) || ($range_type === "course" && $GLOBALS['perm']->have_studip_perm("tutor", $range_id)) || ($range_type === "institute" && $GLOBALS['perm']->have_studip_perm("admin", $range_id)) ?>
+<? $allowed_to_add = ($range_id === $GLOBALS['user']->id && $range_type === "user") || ($range_id === "start" && $GLOBALS['perm']->have_perm("root")) || ($range_type === "course" && $GLOBALS['perm']->have_studip_perm("tutor", $range_id)) || ($range_type === "institute" && $GLOBALS['perm']->have_studip_perm("tutor", $range_id)) ?>
 <section class="contentbox questionnaire_widget" id="questionnaire_area">
     <header>
         <h1>
@@ -10,7 +10,7 @@
                 <a href="<?= URLHelper::getLink("dispatch.php/questionnaire/edit", array('range_id' => $range_id, 'range_type' => $range_type)) ?>" data-dialog title="<?= _('Fragebogen hinzufügen') ?>">
                     <?= Icon::create("add", "clickable")->asimg("16px", array('class' => "text-bottom")) ?>
                 </a>
-                <a href="<?= URLHelper::getLink("dispatch.php/questionnaire/overview") ?>" title="<?= _('Fragebögen verwalten') ?>">
+                <a href="<?= URLHelper::getLink("dispatch.php/questionnaire/" . ($range_type == 'course' || $range_type == 'institute' ? 'course' : ''). "overview") ?>" title="<?= _('Fragebögen verwalten') ?>">
                     <?= Icon::create("admin", "clickable")->asimg("16px", array('class' => "text-bottom")) ?>
                 </a>
             <? endif ?>
