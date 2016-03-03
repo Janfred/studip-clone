@@ -12,7 +12,7 @@ class QuestionnaireController extends AuthenticatedController
     function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
-        if (Navigation::hasItem("/tools/questionnaire")) {
+        if ($action != 'courseoverview' && Navigation::hasItem("/tools/questionnaire")) {
             Navigation::activateItem("/tools/questionnaire");
         }
         Sidebar::Get()->setImage(Assets::image_path("sidebar/evaluation-sidebar.png"));
@@ -39,11 +39,18 @@ class QuestionnaireController extends AuthenticatedController
 
     public function courseoverview_action()
     {
-        if (!$GLOBALS['perm']->have_studip_perm("tutor", $_SESSION['SessionSeminar'])) {
+        if ($GLOBALS['perm']->have_perm('admin')) {
+            if (!$GLOBALS['SessionSeminar']) {
+                Navigation::activateItem('/admin/institute/questionnaires');
+            }
+            require_once 'lib/admin_search.inc.php';
+        }
+        if (!$GLOBALS['perm']->have_studip_perm("tutor", $GLOBALS['SessionSeminar'])) {
             throw new AccessDeniedException("Only for logged in users.");
         }
         Navigation::activateItem("/course/admin/questionnaires");
-        $this->questionnaires = Questionnaire::findBySQL("INNER JOIN questionnaire_assignments USING (questionnaire_id) WHERE questionnaire_assignments.range_id = ? AND questionnaire_assignments.range_type = 'course' ORDER BY questionnaires.mkdate DESC", array($_SESSION['SessionSeminar']));
+        $this->range_type = Course::findCurrent() ? 'course' : 'institute';
+        $this->questionnaires = Questionnaire::findBySQL("INNER JOIN questionnaire_assignments USING (questionnaire_id) WHERE questionnaire_assignments.range_id = ? AND questionnaire_assignments.range_type = ? ORDER BY questionnaires.mkdate DESC", array($GLOBALS['SessionSeminar'], $this->range_type));
         foreach ($this->questionnaires as $questionnaire) {
             if (!$questionnaire['visible'] && $questionnaire['startdate'] && $questionnaire['startdate'] <= time() && $questionnaire['stopdate'] > time()) {
                 $questionnaire->start();
