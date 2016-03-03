@@ -31,7 +31,7 @@ $commentable = $GLOBALS['perm']->have_perm("autor") ? true : (bool) $commentable
                 if ($key > 0) {
                     $title .= ", ";
                 }
-                $title .= get_fullname($user_id);
+                $title .= htmlReady(get_fullname($user_id, 'no_title'));
             }
         }
         ?>
@@ -42,7 +42,7 @@ $commentable = $GLOBALS['perm']->have_perm("autor") ? true : (bool) $commentable
                     if ($key > 0) {
                         echo ", ";
                     }
-                    echo get_fullname($user_id);
+                    echo htmlReady(get_fullname($user_id, 'no_title'));
                 } ?>
                 <? if (count($related_users) > 3) : ?>
                     , ...
