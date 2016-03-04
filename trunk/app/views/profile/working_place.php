@@ -44,11 +44,13 @@
                 </table>
             <? endif; ?>
 
-            <? foreach ($inst_result['role'] as $role): ?>
-                <div>
-                    <?= Assets::img('forumgrau2.png') ?>
-                    <b><?=$role ?></b></div>
-            <? endforeach; ?>
+            <? if (!empty($inst_result['role'])): ?> 
+                <table cellpadding="0" cellspacing="0" border="0"> 
+                    <?= $inst_result['role'] ?> 
+                </table> 
+            <? else: ?> 
+                <br> 
+            <? endif; ?>
         </li>
     <? endforeach; ?>
 </ul>
