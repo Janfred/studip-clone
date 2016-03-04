@@ -136,6 +136,8 @@ class ProfileModel
     {
         $institutes = UserModel::getUserInstitute($this->current_user->user_id);
 
+        uasort($institutes, function($a, $b) { return $a['priority'] - $b['priority']; });
+
         foreach ($institutes as $id =>$inst_result) {
 
             if($inst_result['visible'] == 1) {
@@ -160,7 +162,12 @@ class ProfileModel
                         }
                     }
                 }
-                $institutes[$id]['role'] = Statusgruppen::getUserRoles($inst_result['Institut_id'], $this->current_user->user_id);
+
+                $groups             = GetAllStatusgruppen($inst_result['Institut_id'], $this->current_user->user_id);
+                $default_entries    = DataFieldEntry::getDataFieldEntries(array($this->current_user->user_id, $inst_result['Institut_id']));
+                $data               = get_role_data_recursive($groups, $this->current_user->user_id, $default_entries);
+
+                $institutes[$id]['role'] = $data['standard'];
             } else {
                 unset($institutes[$id]);
             }
