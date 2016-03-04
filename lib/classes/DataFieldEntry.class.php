@@ -424,7 +424,13 @@ abstract class DataFieldEntry
     /**
      * Returns whether the datafield is visible for the current user
      *
-     * @param bool $test_deep
+     * @param String $perm Permissions to test against (optional, default to
+     *                     the current user's permissions)
+     * @param bool $test_ownership Defines whether the ownership of the field
+     *                             should be taken into account; a field may
+     *                             be invisible for a user according to the
+     *                             permissions but since the datafield belongs
+     *                             to the user, it is visible.
      * @return boolean indicating whether the datafield is visible
      */
     public function isVisible($perm = null, $test_ownership = true)
