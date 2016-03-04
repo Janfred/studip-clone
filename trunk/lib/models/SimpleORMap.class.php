@@ -1429,17 +1429,17 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
         $field = strtolower($field);
         if (in_array($field, $this->known_slots)) {
             $value = $this->getValue($field);
-            return $value instanceOf SimpleORMapCollection ? count($value) : !is_null($value);
+            return $value instanceOf SimpleORMapCollection ? (bool)count($value) : !is_null($value);
         } else {
             return false;
-    }
+        }
     }
     /**
      * ArrayAccess: Check whether the given offset exists.
      */
     public function offsetExists($offset)
     {
-        return in_array(strtolower($offset), $this->known_slots);
+        return $this->__isset($offset);
     }
 
     /**
