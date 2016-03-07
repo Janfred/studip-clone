@@ -138,6 +138,16 @@ div.schedule_day {
     position: relative;
 }
 
+table#schedule_data {
+    width: 100%;
+    table-layout: fixed;
+
+}
+
+table#schedule_data th:first-child,table#schedule_data td:first-child {
+    width: 10%;
+}
+
 div.schedule_entry {
     position: absolute;
     margin: 0;
