@@ -95,6 +95,9 @@ class Calendar_InstscheduleController extends AuthenticatedController
 
         if (Request::option('printview')) {
             PageLayout::addStylesheet('print.css');
+
+            // remove all stylesheets that are not used for printing to have a more reasonable printing preview
+            PageLayout::addHeadElement('script', array(), "$('head link[media=screen]').remove();");            
         } else {
             PageLayout::addStylesheet('print.css', array('media' => 'print'));
         }
