@@ -18,10 +18,12 @@ class OAuth extends Base
      * Detects whether the request is authenticated via OAuth.
      *
      * @param mixed $request_type Type of request (optional; defaults to any)
+     * @param mixed $request_body Request body to use (optional, should be
+     *                            removed when Stud.IP requires PHP >= 5.6)
      * @return mixed Instance of self if authentication was detected, false
      *               otherwise
      */
-    public static function detect($request_type = null)
+    public static function detect($request_type = null, $request_body = null)
     {
         if (OAuthRequestVerifier::requestIsSigned() && $request_type !== 'request') {
             $user_id = false;
@@ -31,6 +33,10 @@ class OAuth extends Base
                         : $GLOBALS['_' . $_SERVER['REQUEST_METHOD']];
 
             $req = new OAuthRequestVerifier(null, null, $parameters);
+            if ($request_body !== null) {
+                $req->setBody($request_body);
+            }
+
             // Check oauth timestamp and deny access if timestamp is outdated
             if ($req->getParam('oauth_timestamp') < strtotime('-6 hours')) {
                 return false;

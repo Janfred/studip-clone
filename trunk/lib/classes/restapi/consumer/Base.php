@@ -116,11 +116,13 @@ abstract class Base extends \SimpleORMap
      *
      * @param mixed $type Name of the type (optional; defaults to all types)
      * @param mixed $request_type Type of request (optional; defaults to any)
+     * @param mixed $request_body Request body to use (optional, should be
+     *                            removed when Stud.IP requires PHP >= 5.6)
      * @return mixed Either the detected consumer or false if no consumer
      *               was detected
      * @throws Exception if type is invalid
      */
-    public static function detectConsumer($type = null, $request_type = null)
+    public static function detectConsumer($type = null, $request_type = null, $request_body = null)
     {
         $needles = $type === null
                  ? array_keys(self::$known_types)
@@ -130,7 +132,7 @@ abstract class Base extends \SimpleORMap
                 throw new Exception('Trying to detect consumer of unkown type "' . $needle . '"');
             }
             $consumer_class = self::$known_types[$needle];
-            if ($consumer = $consumer_class::detect($request_type)) {
+            if ($consumer = $consumer_class::detect($request_type, $request_body)) {
                 return $consumer;
             }
         }
