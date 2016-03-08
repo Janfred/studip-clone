@@ -141,10 +141,6 @@
             return this.instances.hasOwnProperty(id);
         },
         getInstance: function (id) {
-            if (this.stack.length === 0) {
-                this.disableScrolling();
-            }
-
             id = id || 'default';
             if (!this.hasInstance(id)) {
                 this.instances[id] = {
@@ -166,22 +162,12 @@
                 var index = this.stack.indexOf(id);
                 this.stack.splice(index, 1);
             }
-
-            if (this.stack.length === 0) {
-                this.enableScrolling();
-            }
         },
         shouldOpen: function () {
             return $(window).innerWidth() >= 800 && $(window).innerHeight() >= 400;
         },
         handlers: {
             header: {}
-        },
-        disableScrolling: function () {
-            $('html').css('overflow', 'hidden');
-        },
-        enableScrolling: function () {
-            $('html').css('overflow', '');
         }
     };
 
