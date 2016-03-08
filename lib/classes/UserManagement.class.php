@@ -1036,7 +1036,12 @@ class UserManagement
         StatusgruppeUser::deleteBySQL('user_id = ?', array($this->user_data['auth_user_md5.user_id']));
 
         // delete all blubber entrys
-        $query = "DELETE FROM blubber WHERE user_id = ?";
+        $query = "DELETE blubber, blubber_mentions, blubber_reshares, blubber_streams
+                  FROM blubber
+                  LEFT JOIN blubber_mentions USING (user_id)
+                  LEFT JOIN blubber_reshares USING (user_id)
+                  LEFT JOIN blubber_streams USING (user_id)
+                  WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($this->user_data['auth_user_md5.user_id']));
         if (($db_ar = $statement->rowCount()) > 0) {
@@ -1060,9 +1065,26 @@ class UserManagement
             "DELETE FROM schedule_seminare WHERE user_id = ?",
             "DELETE FROM termin_related_persons WHERE user_id = ?",
             "DELETE FROM user_userdomains WHERE user_id = ?",
+            "DELETE FROM priorities WHERE user_id = ?",
+            "DELETE FROM api_oauth_user_mapping WHERE user_id = ?",
+            "DELETE FROM api_user_permissions WHERE user_id = ?",
+            "DELETE FROM eval_user WHERE user_id = ?",
+            "DELETE FROM evalanswer_user WHERE user_id = ?",
+            "DELETE FROM help_tour_user WHERE user_id = ?",
+            "DELETE FROM personal_notifications_user WHERE user_id = ?",
         );
         foreach ($queries as $query) {
-            DBManager::get()->prepare($query)->execute(array($this->user_data['auth_user_md5.user_id']));
+            DBManager::get()->execute($query, [$this->user_data['auth_user_md5.user_id']]);
+        }
+
+        // Clean up orphaned items
+        $queries = [
+            "DELETE FROM personal_notifications WHERE personal_notification_id NOT IN (
+                SELECT personal_notification_id FROM personal_notifications_user
+            )",
+        ];
+        foreach ($queries as $query) {
+            DBManager::get()->exec($query);
         }
 
         object_kill_visits($this->user_data['auth_user_md5.user_id']);
