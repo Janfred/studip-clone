@@ -180,12 +180,19 @@ abstract class RouteMap
      * @param Array          $route  The matched route out of
      *                               Router::matchRoute; an array with keys
      *                               'handler', 'conditions' and 'source'
+     * @param mixed          $request_body Request body to use (optional,
+     *                                     should be removed when Stud.IP
+     *                                     requires PHP >= 5.6)
      */
-    public function init($router, $route)
+    public function init($router, $route, $request_body = null)
     {
         $this->router   = $router;
         $this->route    = $route;
         $this->response = new Response();
+
+        if ($request_body !== null) {
+            self::$_request_body = $request_body;
+        }
 
         if ($mediaType = $this->getRequestMediaType()) {
             $this->data = studip_utf8decode($this->parseRequestBody($mediaType));

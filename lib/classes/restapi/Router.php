@@ -340,6 +340,8 @@ class Router
      * @param mixed  $uri     URI to dispatch (defaults to `$_SERVER['PATH_INFO']`)
      * @param String $method  Request method (defaults to the method
      *                        of the actual HTTP request or "GET")
+     * @param mixed  $request_body Request body to use (optional, should be
+     *                             removed when Stud.IP requires PHP >= 5.6)
      *
      * @return Response  a Response object containing status, headers
      *                   and body
@@ -348,7 +350,7 @@ class Router
      *                          is one, but the consumer is not
      *                          authorized to it (403)
      */
-    public function dispatch($uri = null, $method = null)
+    public function dispatch($uri = null, $method = null, $request_body = null)
     {
         $this->setupRoutes();
         
@@ -363,7 +365,7 @@ class Router
         }
 
         try {
-            $response = $this->execute($route, $parameters);
+            $response = $this->execute($route, $parameters, $request_body);
         } catch(RouterHalt $halt) {
             $response = $halt->response;
         }
@@ -414,11 +416,12 @@ class Router
      * @param Array $parameters the matched parameters out of
      *                          Router::matchRoute; something like:
      *                          `array('user_id' => '23a21d...e78f')`
-     *
+     * @param mixed $request_body Request body to use (optional, should be
+     *                            removed when Stud.IP requires PHP >= 5.6)
      * @return Response  the resulting Response object which is then
      *                   polished in Router::dispatch
      */
-    protected function execute($route, $parameters)
+    protected function execute($route, $parameters, $request_body = null)
     {
         $handler = $route['handler'];
 
@@ -426,7 +429,7 @@ class Router
             throw new RuntimeException("Handler is not a method.");
         }
 
-        $handler[0]->init($this, $route);
+        $handler[0]->init($this, $route, $request_body);
 
         if (method_exists($handler[0], 'before')) {
             $handler[0]->before($this, $handler, $parameters);
