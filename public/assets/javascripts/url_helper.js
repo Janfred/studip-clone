@@ -63,7 +63,7 @@ STUDIP.URLHelper = {
 
         tmp = url.split("?");
         url = tmp[0];
-        query = tmp[1];
+        query = tmp[1] || '';
 
         if (url !== '') {
             url = STUDIP.URLHelper.resolveURL(url);
