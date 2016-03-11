@@ -117,7 +117,7 @@
 <? else: ?>
     <section>
         <p class="text-center">
-            <strong><?= _('Keine regelmäßige Termine vorhanden') ?></strong>
+            <strong><?= _('Keine regelmäßigen Termine vorhanden') ?></strong>
         </p>
     </section>
 <? endif; ?>
