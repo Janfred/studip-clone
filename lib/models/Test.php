@@ -101,10 +101,10 @@ class Test extends QuestionnaireQuestion implements QuestionType
                     $correct[$user_id] = ($correct[$user_id] && !in_array($key + 1, (array) $questiondata['correctanswer'])) ? 1: 0;
                 }
             }
-            $output[$this['questiondata']['question']." - ".$option] = $answer_option;
+            $output[$option] = $answer_option;
         }
 
-        $output[$this['questiondata']['question']." - "._("richtig?")] = $correct;
+        $output[_("richtig?")] = $correct;
         return $output;
     }
 

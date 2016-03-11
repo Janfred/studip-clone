@@ -95,7 +95,7 @@ class Vote extends QuestionnaireQuestion implements QuestionType
                     $answer_option[$user_id] = 0;
                 }
             }
-            $output[$this['questiondata']['question']." - ".$option] = $answer_option;
+            $output[$option] = $answer_option;
         }
         return $output;
     }
