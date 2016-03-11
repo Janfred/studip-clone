@@ -66,7 +66,7 @@ class Router
     }
 
     // All supported method need to be defined here
-    protected $supported_methods = array('get', 'post', 'put', 'delete');
+    protected $supported_methods = ['get', 'post', 'put', 'delete', 'patch', 'options', 'head'];
 
     // registered routes by method and uri template
     protected $routes = array();
