@@ -368,8 +368,7 @@ class Course_TimesroomsController extends AuthenticatedController
             NotificationCenter::postNotification('CourseDidChangeSchedule', $this->course);
         }
         $this->displayMessages();
-        $this->redirect($this->url_for('course/timesrooms/index#' . $termin->metadate_id,
-            array('contentbox_open' => $termin->metadate_id)));
+        $this->redirect($this->url_for('course/timesrooms/index', array('contentbox_open' => $termin->metadate_id)));
     }
 
 
