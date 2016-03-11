@@ -4,6 +4,11 @@
       <?= Request::isAjax() ? "data-dialog" : "" ?>
     >
     <fieldset>
+        <legend><?= _("URL zum Fragebogen") ?></legend>
+        <input type="text" aria-label="<?= _("URL zum Fragebogen (nur lesbar)") ?>" readonly value="<?= htmlReady($GLOBALS['ABSOLUTE_URI_STUDIP']."dispatch.php/questionnaire/answer/".$questionnaire->getId()) ?>">
+    </fieldset>
+    <fieldset>
+        <legend><?= _("Freigaben bearbeiten") ?></legend>
         <label>
             <input type="checkbox" name="user" value="1"<?= $profile ? " checked" : "" ?>>
             <?= _("Auf der persönlichen Profilseite") ?>
@@ -11,7 +16,6 @@
         <label>
             <input type="checkbox" name="public" value="1"<?= $public ? " checked" : "" ?>>
             <?= _("Als öffentlicher Link für unangemeldete Nutzer") ?>
-            <?= formatReady($GLOBALS['ABSOLUTE_URI_STUDIP']."dispatch.php/questionnaire/answer/".$questionnaire->getId()) ?>
         </label>
         <? if ($GLOBALS['perm']->have_perm("root")) : ?>
             <label>
