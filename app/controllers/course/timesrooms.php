@@ -1242,13 +1242,14 @@ class Course_TimesroomsController extends AuthenticatedController
             $seminar_id  = $termin->range_id;
             $termin_room = $termin->getRoom();
             $termin_date = $termin->getFullname();
+            $has_topics  = $termin->topics->count();
             if ($termin->delete()) {
                 log_event("SEM_DELETE_SINGLEDATE", $termin_id, $seminar_id, 'appointment cancelled');
                 if (Request::get('approveDelete')) {
-                    if (Config::get()->RESOURCES_ENABLE_EXPERT_SCHEDULE_VIEW) {
-                        $this->course->createMessage(sprintf(_('Sie haben den Termin %s gelöscht, dem ein Thema zugeorndet war.'
-                                                               . ' Sie können das Thema in der %sExpertenansicht des Ablaufplans%s einem anderen Termin (z.B. einem Ausweichtermin) zuordnen.'),
-                            $termin_date, '<a href="' . URLHelper::getLink('themen.php?cmd=changeViewMode&newFilter=expert') . '">', '</a>'));
+                    if ($has_topics) {
+                        $this->course->createMessage(sprintf(_('Sie haben den Termin %s gelöscht, dem ein Thema zugeordnet war.'
+                                                               . 'Sie können das Thema im Ablaufplan einem anderen Termin (z.B. einem Ausweichtermin) zuordnen.'),
+                            $termin_date, '<a href="' . URLHelper::getLink('dispatch.php/course/topics') . '">', '</a>'));
                     } elseif ($termin_room) {
                         $this->course->createMessage(sprintf(_('Der Termin %s wurde gelöscht! Die Buchung für den Raum %s wurde gelöscht.'),
                             $termin_date, $termin_room));
