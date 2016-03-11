@@ -223,15 +223,15 @@ class CourseDate extends SimpleORMap
     /**
      * Returns the full qualified name of this date
      * raumzeit_send_cancel_message needs the toString()-Method in this class
-     * 
+     *
      * @deprecated since version 3.4
      * @return String containing the full name of this date
      */
     public function toString()
     {
-        return self::getFullname();
+        return $this->getFullname();
     }
-    
+
     /**
      * Converts a CourseDate Entry to a CourseExDate Entry
      * returns instance of the new CourseExDate or NULL
@@ -252,22 +252,22 @@ class CourseDate extends SimpleORMap
         }
         return null;
     }
-    
+
     /**
-     * saves this object and expires the cache 
-     * 
+     * saves this object and expires the cache
+     *
      * @see SimpleORMap::store()
      */
-    public function store() 
+    public function store()
     {
         $cache = StudipCacheFactory::getCache();
         $cache->expire('course/undecorated_data/'. $this->range_id);
         return parent::store();
     }
-    
+
     /**
-     * deletes this object and expires the cache 
-     * 
+     * deletes this object and expires the cache
+     *
      * @see SimpleORMap::delete()
      */
     public function delete()
