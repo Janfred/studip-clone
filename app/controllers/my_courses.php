@@ -46,7 +46,7 @@ class MyCoursesController extends AuthenticatedController
             $this->performance_timer = Metrics::startTimer();
         }
 
-        URLHelper::bindLinkParam('from', $this->url_for('my_courses/index'));
+        URLHelper::addLinkParam('from', $this->url_for('my_courses/index'));
     }
 
     function after_filter($action, $args)
