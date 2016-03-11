@@ -349,7 +349,9 @@ STUDIP.CourseWizard = {
                     attr('type', 'checkbox').
                     attr('id', values.id);
                 var label = $('<label>').
-                    attr('for', values.id);
+                    attr('for', values.id).
+                    attr('onclick', "return STUDIP.CourseWizard.getTreeChildren('" +
+                        values.id + "', true)");
                 // Build link for opening the current node.
                 var link = $('div#studyareas').data('forward-url');
                 if (link.indexOf('?') > -1) {
@@ -358,9 +360,7 @@ STUDIP.CourseWizard = {
                     link += '?open_node=' + values.id;
                 }
                 var openLink = $('<a>').
-                    attr('href', link).
-                    attr('onclick', "return STUDIP.CourseWizard.getTreeChildren('" +
-                        values.id + "', true)");
+                    attr('href', link);
                 openLink.html(values.name);
                 label.append(openLink);
                 item.append(input);
