@@ -1,6 +1,10 @@
 <?php
 namespace RESTAPI\Consumer;
-use AuthUserMd5, DBManager, DBManagerException, PDO;
+
+use AuthUserMd5;
+use DBManager;
+use DBManagerException;
+use PDO;
 
 /**
  * Base consumer class for the rest api
@@ -25,6 +29,18 @@ abstract class Base extends \SimpleORMap
     abstract public static function detect();
 
     /* Concrete */
+
+    /**
+     * Configures the model.
+     *
+     * @param array $config Configuration array
+     */
+    protected static function configure($config = [])
+    {
+        $config['db_table'] = 'api_consumers';
+
+        parent::configure($config);
+    }
 
     /**
      * Stores all known consumer types
@@ -154,8 +170,6 @@ abstract class Base extends \SimpleORMap
      */
     public function __construct($id = null, $user = null)
     {
-        $this->db_table = 'api_consumers';
-
         parent::__construct($id);
 
         if ($user !== null) {
