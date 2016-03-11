@@ -754,9 +754,9 @@ class Course_StudygroupController extends AuthenticatedController
             $inviting_search = new SQLSearch($query, _('Nutzer suchen'), 'user_id');
 
             $mp  = MultiPersonSearch::get('studygroup_invite_' . $course->id)
-                                    ->setLinkText(_('Neue Gruppenmitglieder-/innen einladen'))
+                                    ->setLinkText(_('Neue Gruppenmitglieder einladen'))
                                     ->setLinkIconPath('')
-                                    ->setTitle(_('Neue Gruppenmitglieder/-innen einladen'))
+                                    ->setTitle(_('Neue Gruppenmitglieder einladen'))
                                         ->setExecuteURL($this->url_for('course/studygroup/execute_invite/' . $course->id, ['view' => $this->view]))
                                         ->setSearchObject($inviting_search)
                                         ->addQuickfilter(_('Adressbuch'), User::findCurrent()->contacts->pluck('user_id'))
