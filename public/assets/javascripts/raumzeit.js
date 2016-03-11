@@ -86,6 +86,25 @@
         var info = $.parseJSON(json);
         $('.course-admin #course-' + info.course_id + ' .raumzeit').html(info.html);
     };
+
+    $(document).on('dialog-update', function() {
+        console.log('dialog update');
+        $('#edit-cycle').on('change', function() {
+            var $start = $('input[name=start_time]', this);
+            var $end   = $('input[name=end_time]', this);
+
+            // check if new time exceeds the current one and add security question if necessary
+            if ($start.val() < $start.attr('value')
+                    || $end.val() > $end.attr('value')) {
+                $(this).attr('data-confirm', 'Wenn Sie die regelmäßige Zeit ändern, '
+                    + 'verlieren Sie die Raumbuchungen für alle in der Zukunft liegenden Termine! '
+                    + 'Sind Sie sicher, dass Sie die regelmäßige Zeit ändern möchten?'.toLocaleString());
+            } else {
+                // remove security question - not necessary (any more)
+                $(this).attr('data-confirm', null);
+            }
+        });
+    });
 }(jQuery, STUDIP));
 
 STUDIP.Raumzeit = {

@@ -1,13 +1,8 @@
-<form
+<form id="edit-cycle"
     action="<?= $controller->url_for('course/timesrooms/' . ($cycle->isNew() ? 'saveCycle' : 'editCycle/' . $cycle->id), $editParams) ?>"
     class="default" method="post"
     <?= Request::isXhr() ? 'data-dialog="size=big"' : '' ?>>
     <?= CSRFProtection::tokenTag() ?>
-
-    <? if ($has_bookings): ?>
-        <?= MessageBox::error(_('Wenn Sie die regelmäßige Zeit ändern, verlieren Sie die Raumbuchungen für alle in der Zukunft liegenden Termine!'),
-            array(_('Sind Sie sicher, dass Sie die regelmäßige Zeit ändern möchten?'))) ?>
-    <? endif; ?>
 
     <label class="col3">
         <?= _('Starttag') ?>
@@ -61,21 +56,21 @@
         <select name="startWeek">
             <? if (isset($end_semester_weeks['start'])) : ?>
                 <? foreach ($end_semester_weeks['start'] as $end_sem_week) : ?>
-                    <option value="<?= $end_sem_week['value'] ?>" 
+                    <option value="<?= $end_sem_week['value'] ?>"
                         <?= (Request::get('startWeek', $cycle->week_offset) == $end_sem_week['value']) ? 'selected' : '' ?>>
                             <?= htmlReady($end_sem_week['label']) ?></option>
                 <? endforeach; ?>
             <? endif; ?>
-            
+
             <? foreach ($clean_weeks as $semester => $weeks) : ?>
                 <optgroup label="<?= htmlReady($semester) ?>">
                     <? foreach ($weeks as $value => $label) : ?>
-                        <option value="<?= $value ?>" 
+                        <option value="<?= $value ?>"
                             <?= (Request::get('startWeek', $cycle->week_offset) == $value) ? 'selected' : '' ?>>
                                 <?= htmlReady($label) ?>
                         </option>
                     <? endforeach; ?>
-                </optgroup>    
+                </optgroup>
             <? endforeach; ?>
         </select>
     </label>
@@ -85,28 +80,28 @@
         <select name="endWeek">
             <? if (isset($end_semester_weeks['ende'])) : ?>
                 <? foreach ($end_semester_weeks['ende'] as $end_sem_week) : ?>
-                    <option value="<?= $end_sem_week['value'] ?>" 
+                    <option value="<?= $end_sem_week['value'] ?>"
                         <?= (Request::get('endWeek', $cycle->end_offset) == $end_sem_week['value']) ? 'selected' : '' ?>>
                             <?= htmlReady($end_sem_week['label']) ?></option>
                 <? endforeach; ?>
             <? endif; ?>
-            
+
             <? if(count($end_semester_weeks['ende']) > 1) : ?>
                 <option value="<?= end(array_keys($clean_weeks[end(array_keys($clean_weeks))])) ?>"
                     <?= (Request::get('endWeek', $cycle->end_offset) == end(array_keys($clean_weeks[end(array_keys($clean_weeks))]))) ? 'selected' : '' ?>>
                         <?= _('Alle Semester') ?>
-                </option>    
+                </option>
             <? endif; ?>
-            
+
             <? foreach ($clean_weeks as $semester => $weeks) : ?>
                 <optgroup label="<?= htmlReady($semester) ?>">
                     <? foreach ($weeks as $value => $label) : ?>
-                        <option value="<?= $value  ?>" 
+                        <option value="<?= $value  ?>"
                             <?= (Request::get('endWeek', $cycle->end_offset) == $value) ? 'selected' : '' ?>>
                                 <?= htmlReady($label) ?>
                         </option>
                     <? endforeach; ?>
-                </optgroup>    
+                </optgroup>
             <? endforeach; ?>
         </select>
     </label>
