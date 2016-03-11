@@ -16,11 +16,6 @@
                 $('#block_appointments_days_1').prop('checked', false);
             }
         });
-
-
-        $(".single_room").change(function () {
-            window.alert("Handler for .change() called.");
-        });
     });
 
     $(document).on('change', 'select[name=room_sd]', function () {
