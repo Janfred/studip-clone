@@ -4,7 +4,7 @@ form.default {
     @max-width-l: 100%;
 
     input[type=date], input[type=email], input[type=number],
-    input[type=password], input[type=text], input[type=url],
+    input[type=password], input[type=text], input[type=time], input[type=url],
     textarea, select {
         .box-sizing(border-box);
 
@@ -32,7 +32,7 @@ form.default {
         }
     }
 
-    input[type=date], input[type=time], input[type=number] {
+    input[type=date], input[type=number], input[type=time] {
         max-width: @max-width-s;
     }
 
@@ -47,11 +47,32 @@ form.default {
         text-indent: 0.25ex;
 
         input[type=date], input[type=email], input[type=number],
-        input[type=password], input[type=text], input[type=url],
+        input[type=password], input[type=text], input[type=time], input[type=url],
         textarea, select {
             display: block;
             margin-top: 1ex;
         }
+    }
+
+    label.col-4 {
+        display: inline-block;
+        min-width: 60%;
+        padding-right: 1em;
+        vertical-align: bottom;
+    }
+
+    label.col-3 {
+        display: inline-block;
+        min-width: 45%;
+        padding-right: 1em;
+        vertical-align: bottom;
+    }
+
+    label.col-2 {
+        display: inline-block;
+        min-width: 30%;
+        padding-right: 1em;
+        vertical-align: bottom;
     }
 
     fieldset {
@@ -160,7 +181,7 @@ form.default {
 
         &, label:not(.undecorated) {
             input[type=date], input[type=email], input[type=number],
-            input[type=password], input[type=text], input[type=url],
+            input[type=password], input[type=text], input[type=time], input[type=url],
             textarea, select {
                 display: inline-block;
                 margin-top: 0;
