@@ -31,9 +31,11 @@
             <? endif; ?>
             </td>
             <td class="actions">
-                <?= LinkButton::createCancel(_('App entfernen'),
-                                             $controller->url_for('api/authorizations/revoke', $consumer->id),
-                                             array('data-behaviour' => 'confirm')) ?>
+                <?= LinkButton::createCancel(
+                    _('App entfernen'),
+                    $controller->url_for('api/authorizations/revoke', $consumer->id),
+                    ['data-confirm' => _('Wollen Sie der App wirklich den Zugriff auf Ihre Daten untersagen?')]
+                ) ?>
             </td>
         </tr>
 <? endforeach; ?>

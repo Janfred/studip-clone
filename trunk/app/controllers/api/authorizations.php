@@ -52,7 +52,9 @@ class Api_AuthorizationsController extends AuthenticatedController
      **/
     public function revoke_action($id)
     {
-        RESTAPI\Consumer\Base::find($id)->revokeAccess($GLOBALS['user']->id);
+        $consumer = new RESTAPI\Consumer\OAuth($id);
+        $consumer->revokeAccess($GLOBALS['user']->id);
+
         PageLayout::postMessage(MessageBox::success(_('Der Applikation wurde der Zugriff auf Ihre Daten untersagt.')));
         $this->redirect('api/authorizations');
     }

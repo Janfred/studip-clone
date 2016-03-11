@@ -15,6 +15,18 @@ StudipAutoloader::addAutoloadPath($GLOBALS['STUDIP_BASE_PATH'] . DIRECTORY_SEPAR
 class OAuth extends Base
 {
     /**
+     * Configures the model.
+     *
+     * @param array $config Configuration array
+     */
+    protected static function configure($config = [])
+    {
+        $config['default_values']['consumer_type'] = 'oauth';
+
+        parent::configure($config);
+    }
+
+    /**
      * Detects whether the request is authenticated via OAuth.
      *
      * @param mixed $request_type Type of request (optional; defaults to any)
