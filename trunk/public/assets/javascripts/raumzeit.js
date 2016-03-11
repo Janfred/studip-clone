@@ -88,7 +88,6 @@
     };
 
     $(document).on('dialog-update', function() {
-        console.log('dialog update');
         $('#edit-cycle').on('change', function() {
             var $start = $('input[name=start_time]', this);
             var $end   = $('input[name=end_time]', this);
