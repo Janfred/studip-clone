@@ -9,12 +9,12 @@
         </label>
         <label>
             <?= _('Startzeit') ?>
-            <input class="has-time-picker size-s" type="text" name="start_time"
+            <input class="studip-timepicker size-s" type="text" name="start_time" placeholder="HH:mm"
                    value="<?= $date->date ? strftime('%H:%M', $date->date) : '' ?>">
         </label>
         <label>
             <?= _('Endzeit') ?>
-            <input class="has-time-picker size-s" type="text" name="end_time"
+            <input class="studip-timepicker size-s" type="text" name="end_time" placeholder="HH:mm"
                    value="<?= $date->end_time ? strftime('%H:%M', $date->end_time) : '' ?>">
         </label>
         <label id="course_type">

@@ -25,14 +25,16 @@
         <legend><?= _('Die Veranstaltung findet zu folgenden Zeiten statt') ?></legend>
         <label for="block_appointments_start_time">
             <?= _('Startzeit') ?>
-            <input type="text" class="size-s has-time-picker" id="block_appointments_start_time"
-                   name="block_appointments_start_time" value="<?= $request['block_appointments_start_time'] ?>">
+            <input type="text" class="size-s studip-timepicker" id="block_appointments_start_time"
+                   name="block_appointments_start_time" value="<?= $request['block_appointments_start_time'] ?>"
+                   placeholder="HH:mm">
         </label>
 
         <label for="block_appointments_end_time">
             <?= _('Endzeit') ?>
-            <input type="text" class="size-s has-time-picker size-s" id="block_appointments_end_time"
-                   name="block_appointments_end_time" value="<?= $request['block_appointments_end_time'] ?>">
+            <input type="text" class="size-s studip-timepicker" id="block_appointments_end_time"
+                   name="block_appointments_end_time" value="<?= $request['block_appointments_end_time'] ?>"
+                   placeholder="HH:mm">
         </label>
 
     </fieldset>
