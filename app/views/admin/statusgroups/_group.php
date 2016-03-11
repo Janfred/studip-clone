@@ -27,7 +27,7 @@
             <?= MultiPersonSearch::get("add_statusgroup" . $group->id)
                     ->setLinkText()
                     ->setDefaultSelectedUser($group->members->pluck('user_id'))
-                    ->setTitle(_('MitgliederInnen hinzufügen'))
+                    ->setTitle(_('Personen hinzufügen'))
                     ->setExecuteURL($controller->url_for("admin/statusgroups/memberAdd/{$group->id}"))
                     ->setSearchObject($searchType)
                     ->addQuickfilter(_("aktuelle Einrichtung"), $membersOfInstitute)
