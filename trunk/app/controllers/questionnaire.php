@@ -212,7 +212,11 @@ class QuestionnaireController extends AuthenticatedController
         }
         $this->questionnaire->delete();
         PageLayout::postMessage(MessageBox::success(_("Der Fragebogen wurde gelöscht.")));
-        $this->redirect("questionnaire/overview");
+        if (Request::get("redirect")) {
+            $this->redirect(Request::get("redirect"));
+        } else {
+            $this->redirect("questionnaire/overview");
+        }
     }
 
     public function add_question_action()
@@ -348,7 +352,11 @@ class QuestionnaireController extends AuthenticatedController
         $this->questionnaire->store();
 
         PageLayout::postMessage(MessageBox::success(_("Die Befragung wurde beendet.")));
-        $this->redirect("questionnaire/overview");
+        if (Request::get("redirect")) {
+            $this->redirect(Request::get("redirect"));
+        } else {
+            $this->redirect("questionnaire/overview");
+        }
     }
 
     public function start_action($questionnaire_id)
@@ -365,7 +373,11 @@ class QuestionnaireController extends AuthenticatedController
         $this->questionnaire->store();
 
         PageLayout::postMessage(MessageBox::success(_("Die Befragung wurde gestartet.")));
-        $this->redirect("questionnaire/overview");
+        if (Request::get("redirect")) {
+            $this->redirect(Request::get("redirect"));
+        } else {
+            $this->redirect("questionnaire/overview");
+        }
     }
 
     public function export_action($questionnaire_id)
