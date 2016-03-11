@@ -552,6 +552,11 @@ class QuestionnaireController extends AuthenticatedController
                 $questionnaire->stop();
             }
         }
+        if ($this->range_type === "course"
+                && !$GLOBALS['perm']->have_studip_perm("tutor", $_SESSION['SessionSeminar'])
+                && !count($this->questionnaires)) {
+            $this->render_nothing();
+        }
     }
 }
 
