@@ -114,8 +114,8 @@ jQuery(function ($) {
         $(this).closest('.loaded-details').prev().find('a.load-in-new-row').click();
         return false;
     });
-    
-    $(document).on('ready', function() {
+
+    $(document).on('ready', function () {
         var elements = $('.load-in-new-row-open');
         elements.click();
         if (elements.length > 0) {
@@ -175,7 +175,6 @@ jQuery.extend(jQuery.ui.dialog.prototype.options, {
 });
 
 
-
 /* ------------------------------------------------------------------------
  * jQuery timepicker
  * ------------------------------------------------------------------------ */
@@ -206,9 +205,24 @@ jQuery.extend(jQuery.ui.dialog.prototype.options, {
         $(this).removeClass('has-time-picker').timepicker();
     });
     $(document).on('focus', '.has-time-picker-select', function () {
-        $(this).removeClass('has-time-picker-select').timepicker({controlType : 'select'});
+        $(this).removeClass('has-time-picker-select').timepicker({controlType: 'select'});
     });
 }(jQuery));
+
+
+(function ($) {
+    $(document).on('focusout', '.studip-timepicker', function () {
+        var time = $(this).val();
+        if (time.length > 0 && time.length <= 2) {
+            $(this).val(time + ":00");
+        } else if (time.indexOf(':') === -1 && time.length > 2) {
+            var parts = time.split('');
+            parts.splice(-2, 0, ':');
+            time = parts.join('');
+            $(this).val(time);
+        }
+    });
+}(jQuery))
 
 
 jQuery(function ($) {
@@ -300,8 +314,8 @@ jQuery(function ($) {
 
         $(ui.dialog).on('dialogbeforeclose', securityHandlerDialog)
             .find('form:has(textarea[data-secure])').on('submit', function () {
-                $(this).closest('ui.dialog').off('dialogbeforeclose', securityHandlerDialog);
-            });
+            $(this).closest('ui.dialog').off('dialogbeforeclose', securityHandlerDialog);
+        });
     });
 
 }(jQuery));
