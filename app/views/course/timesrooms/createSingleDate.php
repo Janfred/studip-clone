@@ -9,15 +9,15 @@
 
     <label>
         <?= _('Startzeit') ?>
-        <input class="has-time-picker size-s" type="text" name="start_time"
-               value="<?= htmlReady(Request::get('start_time')) ?>" required>
+        <input class="studip-timepicker size-s" type="text" name="start_time"
+               value="<?= htmlReady(Request::get('start_time')) ?>" required placeholder="HH:mm">
     </label>
 
 
     <label>
         <?= _('Endzeit') ?>
-        <input class="has-time-picker size-s" type="text" name="end_time"
-               value="<?= htmlReady(Request::get('end_time')) ?>" required>
+        <input class="studip-timepicker size-s" type="text" name="end_time"
+               value="<?= htmlReady(Request::get('end_time')) ?>" required placeholder="HH:mm">
     </label>
 
     <? if (Config::get()->RESOURCES_ENABLE) : ?>

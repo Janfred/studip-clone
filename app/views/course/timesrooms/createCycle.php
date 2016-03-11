@@ -9,7 +9,7 @@
             array(_('Sind Sie sicher, dass Sie die regelmäßige Zeit ändern möchten?'))) ?>
     <? endif; ?>
 
-    <label>
+    <label class="col3">
         <?= _('Starttag') ?>
         <select name="day">
             <? foreach (array(1, 2, 3, 4, 5, 6, 0) as $d): ?>
@@ -21,16 +21,16 @@
         </select>
     </label>
 
-    <label>
+    <label class="col3">
         <?= _('Startzeit') ?>
-        <input class="has-time-picker size-s" type="text" name="start_time"
+        <input class="size-s studip-timepicker" type="text" name="start_time"
                value="<?= htmlReady(Request::get('start_time', $cycle->start_time)) ?>"
                required placeholder="HH:mm">
     </label>
 
-    <label>
+    <label class="col3">
         <?= _('Endzeit') ?>
-        <input class="has-time-picker size-s" type="text" name="end_time"
+        <input class="size-s studip-timepicker" type="text" name="end_time"
                value="<?= htmlReady(Request::get('end_time', $cycle->end_time)) ?>"
                required placeholder="HH:mm">
     </label>
