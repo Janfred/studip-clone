@@ -221,6 +221,18 @@ class CourseDate extends SimpleORMap
     }
 
     /**
+     * Returns the full qualified name of this date
+     * raumzeit_send_cancel_message needs the toString()-Method in this class
+     * 
+     * @deprecated since version 3.4
+     * @return String containing the full name of this date
+     */
+    public function toString()
+    {
+        return self::getFullname();
+    }
+    
+    /**
      * Converts a CourseDate Entry to a CourseExDate Entry
      * returns instance of the new CourseExDate or NULL
      *
