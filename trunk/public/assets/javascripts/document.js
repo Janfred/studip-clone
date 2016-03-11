@@ -11,6 +11,7 @@ jQuery(function ($) {
     $('[data-file]').draggable({
         axis: 'y',
         containment: 'parent',
+        handle: '.dragHandle',
         helper: helper_creator,
         start: function () {
             $(this).closest('table').addClass('dragging');
