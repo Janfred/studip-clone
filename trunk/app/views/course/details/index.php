@@ -354,3 +354,10 @@
             </tbody>
         </table>
     </section>
+
+
+<? if (Request::get('from')) : ?>
+    <footer data-dialog-button>
+        <?= \Studip\LinkButton::createCancel(_('Zurück'), URLHelper::getURL(Request::get('from')))?>
+    </footer>
+<? endif ?>
