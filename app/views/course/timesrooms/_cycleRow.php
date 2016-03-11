@@ -66,7 +66,7 @@
     </td>
     <td class="actions">
         <? if ($is_exTermin): ?>
-            <a class="load-in-new-row"
+            <a data-dialog="size=50%"
                href="<?= $controller->url_for('course/timesrooms/cancel/'
                                               . $termin->termin_id . ($termin->metadate_id ? '/' . $termin->metadate_id : ''), $editParams) ?>">
                 <?= Icon::create('edit', 'inactive', ['title' => _('Kommentar für diesen Termin bearbeiten')])->asImg() ?>
@@ -94,7 +94,7 @@
 
         <? else: ?>
             <? if(!$locked) : ?>
-                <a class="load-in-new-row"
+                <a data-dialog="size=50%"
                    href="<?= $controller->url_for('course/timesrooms/editDate/' . $termin->termin_id, $editParams) ?>">
                     <?= Icon::create('edit', 'clickable', ['title' => _('Diesen Termin bearbeiten')])->asImg() ?>
                 </a>
