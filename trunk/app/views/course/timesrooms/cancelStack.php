@@ -1,4 +1,4 @@
-<form method="post" action="<?= $controller->url_for('course/timesrooms/saveStack/' . $cycle_id, $editParams) ?>" class="studip-form" data-dialog="size=big">
+<form method="post" action="<?= $controller->url_for('course/timesrooms/saveStack/' . $cycle_id, $editParams) ?>" class="default" data-dialog="size=big">
     <input type="hidden" name="method" value="preparecancel">
 
     <?= $this->render_partial('course/timesrooms/_cancel_form.php') ?>

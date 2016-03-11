@@ -114,7 +114,7 @@
     <label>
         <?= _('SWS Dozent') ?>
         <input type="text" name="teacher_sws" class="size-s"
-               value="<?= htmlReady(Request::get('teacher_sws', $cycle->sws)) ?>">
+               value="<?= $cycle->sws ? htmlReady(Request::get('teacher_sws', $cycle->sws)) :'' ?>">
     </label>
 
     <footer data-dialog-button>

@@ -100,7 +100,7 @@ class Course_TimesroomsController extends AuthenticatedController
         Helpbar::get()->addPlainText(_('Grün'), _('Alle Termine haben eine Raumbuchung.'));
 
         $editParams = array(
-            'fromDialog' => Request::isXhr() ? 'true' : 'false',
+            'fromDialog' => Request::isXhr() ? 1 : 0,
         );
 
         $linkAttributes = array();
@@ -206,6 +206,7 @@ class Course_TimesroomsController extends AuthenticatedController
      */
     public function editDate_action($termin_id)
     {
+        PageLayout::setTitle(_('Einzeltermin bearbeiten'));
         $this->date       = CourseDate::find($termin_id) ?: CourseExDate::find($termin_id);
         $this->attributes = array();
 
@@ -1028,11 +1029,7 @@ class Course_TimesroomsController extends AuthenticatedController
      */
     public function cancel_action($termin_id)
     {
-        $this->params = array();
-        if (Request::get('asDialog')) {
-            $this->asDialog = true;
-            $this->params['data-dialog'] = 'size=big';
-        }
+        PageLayout::setTitle(_('Kommentar hinzufügen'));
         $this->termin = CourseDate::find($termin_id) ?: CourseExDate::find($termin_id);
     }
 
