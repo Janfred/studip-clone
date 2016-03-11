@@ -125,11 +125,14 @@ class SingleCalendar
      * @param array $attendee_ids The user ids of the attendees.
      * @return bool|int The number of stored events or false if an error occured.
      */
-    public function storeEvent(CalendarEvent $event, $attendee_ids = null)
+    public function storeEvent(CalendarEvent $event, $attendee_ids = array())
     {
         $attendee_ids = array_filter($attendee_ids, function($id) {
             return trim($id) != '';
         });
+        if (!$attendee_ids) {
+            $attendee_ids = array($GLOBALS['user']->id);
+        }
         if (count($attendee_ids) == 1) {
             if (!$this->havePermission(Calendar::PERMISSION_WRITABLE)) {
                 return false;
