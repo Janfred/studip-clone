@@ -5,10 +5,10 @@
     <?php endif ?>
     <?php if ($node->hasChildren()) : ?>
     <input type="checkbox" id="<?= htmlReady($node->id) ?>"<?= (in_array($node->id, $open_nodes) && $node->parent_id != $values['open_node']) ? ' checked="checked"' : '' ?>/>
-    <label for="<?= htmlReady($node->id) ?>">
+    <label onclick="return STUDIP.CourseWizard.getTreeChildren('<?= htmlReady($node->sem_tree_id) ?>', true)" 
+           for="<?= htmlReady($node->id) ?>">
         <a href="<?= URLHelper::getLink($no_js_url,
-            array('open_node' => $node->id)) ?>"
-           onclick="return STUDIP.CourseWizard.getTreeChildren('<?= htmlReady($node->sem_tree_id) ?>', true)">
+            array('open_node' => $node->id)) ?>">
     <?php endif ?>
         <?= htmlReady($node->name) ?>
     <?php if ($node->hasChildren()) : ?>
