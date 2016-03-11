@@ -22,18 +22,16 @@ class Course_TimesroomsController extends AuthenticatedController
         parent::before_filter($action, $args);
 
         // Try to find a valid course
-        if (Course::findCurrent()) {
-            $course_id = Course::findCurrent()->id;
-        } else {
+        if (!Course::findCurrent()) {
             throw new Trails_Exception(404, _('Es wurde keine Veranstaltung ausgewählt!'));
         }
 
-        if (!$GLOBALS['perm']->have_studip_perm('tutor', $course_id)) {
-            throw new Trails_Exception(400);
+        if (!$GLOBALS['perm']->have_studip_perm('tutor', Course::findCurrent()->id)) {
+            throw new AccessDeniedException();
         }
 
         // Get seminar instance
-        $this->course = Seminar::getInstance($course_id);
+        $this->course = new Seminar(Course::findCurrent());
 
         if (Navigation::hasItem('course/admin/dates')) {
             Navigation::activateItem('course/admin/dates');
@@ -61,14 +59,31 @@ class Course_TimesroomsController extends AuthenticatedController
 
         PageLayout::setTitle($title);
 
-        $_SESSION['raumzeitFilter'] = Request::get('newFilter');
 
-        // bind linkParams for chosen semester and opened dates
-        URLHelper::bindLinkParam('raumzeitFilter', $_SESSION['raumzeitFilter']);
+        URLHelper::bindLinkParam('semester_filter', $this->semester_filter);
 
-        $this->checkFilter();
+        if (empty($this->semester_filter)) {
+            if (!$this->course->hasDatesOutOfDuration() && $this->course->duration_time == 0) {
+                $this->semester_filter = $this->course->start_semester->id;
+            } else {
+                $this->semester_filter = 'all';
+            }
+        }
+        if ($this->semester_filter == 'all') {
+            $this->course->applyTimeFilter(0, 0);
+        } else {
+            $semester = Semester::find($this->semester_filter);
+            $this->course->applyTimeFilter($semester['beginn'], $semester['ende']);
+        }
 
-        $this->selection = $this->getSemestersForCourse($this->course, $_SESSION['raumzeitFilter']);
+        $selectable_semesters = new SimpleCollection(Semester::getAll());
+        $start = $this->course->start_time;
+        $end = $this->course->duration_time == -1 ? PHP_INT_MAX : $this->course->end_time;
+        $selectable_semesters = $selectable_semesters->findBy('beginn', [$start, $end], '>=<=')->toArray();
+        if (count($selectable_semesters) > 1 || (count($selectable_semesters) == 1 && $this->course->hasDatesOutOfDuration())) {
+            $selectable_semesters[] = ['name' => _('Alle Semester'), 'semester_id' => 'all'];
+        }
+        $this->selectable_semesters = array_reverse($selectable_semesters);
 
         if (!Request::isXhr()) {
             $this->setSidebar();
@@ -79,7 +94,7 @@ class Course_TimesroomsController extends AuthenticatedController
             }
             $this->response->add_header('X-Raumzeit-Update-Times', json_encode(studip_utf8encode(array(
                 'course_id' => $this->course->id,
-                'html'      => Seminar::GetInstance($this->course->id)->getDatesHTML(array(
+                'html'      => $this->course->getDatesHTML(array(
                     'semester_id' => $semester_id,
                     'show_room'   => true,
                 )) ?: _('nicht angegeben'),
@@ -125,12 +140,11 @@ class Course_TimesroomsController extends AuthenticatedController
 
         // Get Cycles
         $this->cycle_dates = array();
-        
+
         foreach ($this->course->cycles as $cycle) {
             foreach ($cycle->getAllDates() as $val) {
                 foreach ($this->semester as $sem) {
-                    if ($_SESSION['raumzeitFilter'] === $sem->id
-                        || ($sem->beginn != $_SESSION['raumzeitFilter'] && $_SESSION['raumzeitFilter'] !== 'all')
+                    if (!($this->semester_filter == 'all' || $this->semester_filter == $sem->id)
                     ) {
                         continue;
                     }
@@ -160,8 +174,7 @@ class Course_TimesroomsController extends AuthenticatedController
 
         foreach ($this->course->getDatesWithExdates() as $id => $val) {
             foreach ($this->semester as $sem) {
-                if ($_SESSION['raumzeitFilter'] == $sem->id
-                    || ($sem->beginn != $_SESSION['raumzeitFilter'] && $_SESSION['raumzeitFilter'] !== 'all')
+                if (!($this->semester_filter == 'all' || $this->semester_filter == $sem->id)
                 ) {
                     continue;
                 }
@@ -223,7 +236,7 @@ class Course_TimesroomsController extends AuthenticatedController
         } else {
             $this->attributes['fromDialog'] = 'false';
         }
-        
+
         if (Config::get()->RESOURCES_ENABLE) {
             $this->resList = ResourcesUserRoomsList::getInstance($GLOBALS['user']->id, true, false, true);
         }
@@ -262,7 +275,7 @@ class Course_TimesroomsController extends AuthenticatedController
         ) {
             $termin_values = $termin->toArray();
             $termin_info   = $termin->getFullname();
-            
+
             $termin->cancelDate();
             PageLayout::postInfo(sprintf(_('Der Termin %s wurde aus der Liste der regelmäßigen Termine'
                                            . ' gelöscht und als unregelmäßiger Termin eingetragen, da Sie die Zeiten des Termins verändert haben,'
@@ -296,7 +309,7 @@ class Course_TimesroomsController extends AuthenticatedController
             $room_id = Request::option('room_sd', '0');
 
             if ($room_id != '0' && $room_id != $termin->room_assignment->resource_id) {
-                
+
                 $resObj                  = new ResourceObject($room_id);
                 $room                    = new ResourceAssignment();
                 $room->assign_user_id    = $termin->termin_id;
@@ -304,7 +317,7 @@ class Course_TimesroomsController extends AuthenticatedController
                 $room->begin             = $termin->date;
                 $room->end               = $termin->end_time;
                 $room->repeat_end        = $termin->end_time;
-                
+
                 if ($resObj->getMultipleAssign()) {
                     $termin->raum = '';
                     ResourceAssignment::deleteBySQL('assign_user_id = :termin',
@@ -312,16 +325,16 @@ class Course_TimesroomsController extends AuthenticatedController
                     $this->course->createMessage(sprintf(_('Der Termin %s wurde geändert und der Raum %s gebucht, etwaige freie Ortsangaben wurden entfernt.'),
                             $termin->getFullname(), $resObj->getName()));
                     $room->store();
-                
+
                 } else {
                     $assignments = ResourceAssignment::findOneBySQL('(:tbegin BETWEEN begin AND end '
                             . 'OR :tend BETWEEN begin AND end '
                             . 'OR begin BETWEEN :tbegin AND :tend '
                             . 'OR end BETWEEN :tbegin AND :tend) '
                             . 'AND resource_id = :resource_id AND assign_user_id != :termin_id',
-                            array(':tbegin' => $termin->date, ':tend' => $termin->end_time, 
+                            array(':tbegin' => $termin->date, ':tend' => $termin->end_time,
                                   ':resource_id' => $resObj->id, ':termin_id' => $termin->termin_id));
-                    
+
                     if (is_null($assignments)) {
                         $termin->raum = '';
                         ResourceAssignment::deleteBySQL('assign_user_id = :termin',
@@ -329,13 +342,13 @@ class Course_TimesroomsController extends AuthenticatedController
                         $this->course->createMessage(sprintf(_('Der Termin %s wurde geändert und der Raum %s gebucht, etwaige freie Ortsangaben wurden entfernt.'),
                         $termin->getFullname(), $resObj->getName()));
                         $room->store();
-                        
+
                     } else {
                         $this->course->createError(sprintf(_('Der Raum %s konnte nicht für %s gebucht werden, da er schon belegt ist.'),
                                 $resObj->getName(), $termin->getFullname()));
                     }
                 }
-                
+
             } elseif ($room_id == '0') {
                 $this->course->createError(sprintf(_('Der angegebene Raum konnte für den Termin %s nicht gebucht werden!'), $termin->getFullname()));
             }
@@ -767,11 +780,11 @@ class Course_TimesroomsController extends AuthenticatedController
             $this->course->createMessage(_('Zugewiesene Gruppen für die Termine wurden geändert.'));
         }
 
-        
+
         $room_assignments = array();
         foreach ($singledates as $key => $singledate) {
             if (Request::option('action') == 'room' && Request::get('room') != 0) {
-                
+
                 //die('dasd'. $room_id);
                 $resObj                             = new ResourceObject(Request::get('room'));
                 $room                               = new ResourceAssignment();
@@ -780,7 +793,7 @@ class Course_TimesroomsController extends AuthenticatedController
                 $room->begin                        = $singledate->date;
                 $room->end                          = $singledate->end_time;
                 $room->repeat_end                   = $singledate->end_time;
-                
+
                 if ($resObj->getMultipleAssign()) {
                     $room_assignments[$singledate->termin_id] = $room;
                 } else {
@@ -789,7 +802,7 @@ class Course_TimesroomsController extends AuthenticatedController
                             . 'OR begin BETWEEN :tbegin AND :tend '
                             . 'OR end BETWEEN :tbegin AND :tend) '
                             . 'AND resource_id = :resource_id AND assign_user_id != :termin_id',
-                            array(':tbegin' => $singledate->date, ':tend' => $singledate->end_time, 
+                            array(':tbegin' => $singledate->date, ':tend' => $singledate->end_time,
                                   ':resource_id' => $resObj->id, ':termin_id' => $singledate->termin_id));
                     if (is_null($assignments)) {
                         $room_assignments[$singledate->termin_id] = $room;
@@ -797,7 +810,7 @@ class Course_TimesroomsController extends AuthenticatedController
                         $error[] = sprintf(_('Raum %s für %s'), $resObj->getName(), $singledate->getFullname());
                     }
                 }
-                
+
             } elseif (Request::option('action') == 'freetext') {
                 ResourceAssignment::deleteBySQL('assign_user_id = :termin',
                     array(':termin' => $singledate->termin_id));
@@ -806,25 +819,25 @@ class Course_TimesroomsController extends AuthenticatedController
                                                        . 'Raumbuchungen wurden entfernt und stattdessen der angegebene Freitext'
                                                        . ' eingetragen!'),
                     '<b>' . $singledate->getFullname() . '</b>'));
-            
-                
+
+
             } elseif (Request::option('action') == 'noroom') {
                 ResourceAssignment::deleteBySQL('assign_user_id = :termin',
                     array(':termin' => $singledate->termin_id));
                 $singledates[$key]->raum = '';
             }
         }
-        
+
         if (!empty($room_assignments)
-                && count($room_assignments) >= 
-                round(count($singledates) * Config::get()->RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE / 100)) 
+                && count($room_assignments) >=
+                round(count($singledates) * Config::get()->RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE / 100))
             {
             foreach ($singledates as $singledate) {
                 if (array_key_exists($singledate->termin_id, $room_assignments)) {
                     $singledate->raum = '';
-                    ResourceAssignment::deleteBySQL('assign_user_id = :termin', 
+                    ResourceAssignment::deleteBySQL('assign_user_id = :termin',
                             array(':termin' => $singledate->termin_id));
-                    
+
                     $room_assignments[$singledate->termin_id]->store();
                 }
                 $singledate->store();
@@ -833,19 +846,19 @@ class Course_TimesroomsController extends AuthenticatedController
             foreach ($singledates as $singledate) {
                 $singledate->store();
             }
-            if (!empty($room_assignments) 
-                && count($room_assignments) < 
-                round(count($singledates) * Config::get()->RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE / 100)) 
-            { 
-                PageLayout::postError(sprintf(_('Der gewählte Raum ist bei mehr als %s %s der gewählten Termine bereits belegt und wird daher für für alle Termine nicht übernommen '), 
+            if (!empty($room_assignments)
+                && count($room_assignments) <
+                round(count($singledates) * Config::get()->RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE / 100))
+            {
+                PageLayout::postError(sprintf(_('Der gewählte Raum ist bei mehr als %s %s der gewählten Termine bereits belegt und wird daher für für alle Termine nicht übernommen '),
                         Config::get()->RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE,'Prozent'));
             }
         }
-        
+
         if(isset($error)) {
             PageLayout::postError(_('Der gewählte Raum ist belegt und wurde für folgende Termine nicht gebucht: '),$error);
         }
-        
+
     }
 
     /**
@@ -871,29 +884,29 @@ class Course_TimesroomsController extends AuthenticatedController
             $this->has_bookings = $count > 0;
         }
 
-        
+
         $duration = $this->course->duration_time;
         if($duration == -1 ) {
-            $end_semester = Semester::findBySQL('beginn >= :beginn ORDER BY beginn', 
+            $end_semester = Semester::findBySQL('beginn >= :beginn ORDER BY beginn',
                     array(':beginn' => $this->course->start_semester->beginn));
         } else if ($duration > 0) {
-            $end_semester = Semester::findBySQL('beginn >= :beginn AND ende <= :ende ORDER BY beginn', 
+            $end_semester = Semester::findBySQL('beginn >= :beginn AND ende <= :ende ORDER BY beginn',
                     array(':beginn' => $this->course->start_semester->beginn,
                           ':ende' => $this->course->getEndSemester() + $duration));
         } else {
             $end_semester[] = $this->course->start_semester;
         }
-        
+
         $this->start_weeks = $this->course->start_semester->getStartWeeks($duration);
-        
+
         if (!empty($end_semester)) {
             $this->end_semester_weeks = array();
-            
+
             foreach ($end_semester as $sem) {
-                
+
                 $sem_duration =  $sem->ende - $sem->beginn;
-                $weeks = $sem->getStartWeeks($sem_duration); 
-                
+                $weeks = $sem->getStartWeeks($sem_duration);
+
                 foreach($this->start_weeks as $key => $week) {
                     if(strpos($week, substr($weeks[0], -15)) !== false) {
                         $this->end_semester_weeks['start'][] = array('value' => $key, 'label' => sprintf(_('Anfang %s'), $sem->name));
@@ -921,7 +934,7 @@ class Course_TimesroomsController extends AuthenticatedController
         $start = strtotime(Request::get('start_time'));
         $end   = strtotime(Request::get('end_time'));
 
-        
+
         if (date('H', $start) > date('H', $end)) {
             $this->storeRequest();
             PageLayout::postError(_('Die Zeitangaben sind nicht korrekt. Bitte überprüfen Sie diese!'));
@@ -933,7 +946,7 @@ class Course_TimesroomsController extends AuthenticatedController
             $this->redirect('course/timesrooms/createCycle');
             return;
         }
-        
+
         $cycle              = new SeminarCycleDate();
         $cycle->seminar_id  = $this->course->id;
         $cycle->weekday     = Request::int('day');
@@ -1076,11 +1089,11 @@ class Course_TimesroomsController extends AuthenticatedController
             Sidebar::Get()->addWidget($actions);
         }
 
-        $widget = new SelectWidget(_('Semesterfilter'), $this->url_for('course/timesrooms/index', array('cmd' => 'applyFilter')), 'newFilter');
-        foreach ($this->selection as $item) {
-            $element = new SelectElement($item['value'],
-                $item['linktext'],
-                $item['is_selected']);
+        $widget = new SelectWidget(_('Semesterfilter'), $this->url_for('course/timesrooms/index'), 'semester_filter');
+        foreach ($this->selectable_semesters as $item) {
+            $element = new SelectElement($item['semester_id'],
+                $item['name'],
+                $item['semester_id'] == $this->semester_filter);
             $widget->addElement($element);
         }
         Sidebar::Get()->addWidget($widget);
@@ -1116,7 +1129,7 @@ class Course_TimesroomsController extends AuthenticatedController
 
         $course = Seminar::GetInstance($course_id);
         $old_start_weeks = $this->course->start_semester->getStartWeeks($this->course->duration_time);
-        
+
         if ($start_semester == $end_semester) {
             $end_semester = 0;
         }
@@ -1143,7 +1156,7 @@ class Course_TimesroomsController extends AuthenticatedController
         }
 
         $course->store();
-        
+
         $new_start_weeks = $this->course->start_semester->getStartWeeks($this->course->duration_time);
         SeminarCycleDate::removeOutRangedSingleDates($course->getStartSemester(), $course->getEndSemesterVorlesEnde(), $course->id);
         $cycles = SeminarCycleDate::findBySeminar_id($course->seminar_id);
@@ -1166,21 +1179,21 @@ class Course_TimesroomsController extends AuthenticatedController
 
     /**
      * Calculates new end_offset value for given SeminarCycleDate Object
-     * 
+     *
      * @param object of SeminarCycleDate
-     * @param array 
+     * @param array
      * @param array
      * @return int
      */
-    
-    public function getNewEndOffset($cycle, $old_start_weeks, $new_start_weeks) 
+
+    public function getNewEndOffset($cycle, $old_start_weeks, $new_start_weeks)
     {
         if(is_null($cycle->end_offset)){
             return count($new_start_weeks);
         }
         $old_offset_string = $old_start_weeks[$cycle->end_offset];
         $new_offset_value = 0;
-        
+
         foreach($new_start_weeks as $value => $label) {
             if(strpos($label, substr($old_offset_string, -15)) !== false) {
                 $new_offset_value = $value;
@@ -1189,10 +1202,10 @@ class Course_TimesroomsController extends AuthenticatedController
         if($new_offset_value == 0) {
             return count($new_start_weeks);
         }
-        
+
         return $new_offset_value;
     }
-    
+
     /**
      * Displays messages.
      *
@@ -1250,79 +1263,6 @@ class Course_TimesroomsController extends AuthenticatedController
         }
     }
 
-    /**
-     * Checks and adjusts defined filters
-     */
-    private function checkFilter()
-    {
-        if (Request::option('cmd') == 'applyFilter') {
-            $_SESSION['raumzeitFilter'] = Request::get('newFilter');
-        }
-
-        if ($this->course->getEndSemester() == 0 && !$this->course->hasDatesOutOfDuration()) {
-            $_SESSION['raumzeitFilter'] = $this->course->getStartSemester();
-        }
-
-        // Zeitfilter anwenden
-        if ($_SESSION['raumzeitFilter'] == '') {
-            $_SESSION['raumzeitFilter'] = 'all';
-        }
-
-        if ($_SESSION['raumzeitFilter'] != 'all') {
-            if (($_SESSION['raumzeitFilter'] < $this->course->getStartSemester()) || ($_SESSION['raumzeitFilter'] > $this->course->getEndSemesterVorlesEnde())) {
-                $_SESSION['raumzeitFilter'] = $this->course->getStartSemester();
-            }
-            $semester       = new SemesterData();
-            $filterSemester = $semester->getSemesterDataByDate($_SESSION['raumzeitFilter']);
-            $this->course->applyTimeFilter($filterSemester['beginn'], $filterSemester['ende']);
-        }
-    }
-
-    /**
-     * Get all semesters that a course spans over.
-     *
-     * @param Seminar $course   The course as a Seminar object
-     * @param String  $selected Selected semester (can be updated)
-     */
-    private function getSemestersForCourse(Seminar $course, &$selected)
-    {
-        // Step 1: Get all matching semesters
-        $semesters = array_filter(Semester::getAll(), function (Semester $semester) use ($course) {
-            return $course->getStartSemester() <= $semester->vorles_beginn
-                && $course->getEndSemesterVorlesEnde() >= $semester->vorles_ende;
-        });
-
-        // Step 2: Add option 'all' if more than one semester is found or if
-        // there is any date outside of the semester range. Otherwise, adjust
-        // the $selected variable
-        $temp = array();
-        if (count($semesters) > 1 || $course->hasDatesOutOfDuration(true)) {
-            $temp['all'] = _('Alle Semester');
-        } elseif (count($semesters) === 1) {
-            $semester = reset($semesters);
-            $selected = $semester->beginn;
-        }
-
-        // Step 3: Normalize semesters array (with option 'all' this needs
-        // to be in a pretty simple format)
-        $result = array();
-        foreach (array_reverse($semesters) as $semester) {
-            $temp[$semester->beginn] = $semester->name;
-        }
-
-        // Step 4: Create required result array from normalized array
-        $result = array();
-        foreach ($temp as $key => $val) {
-            $result[] = array(
-                'url'         => '?cmd=applyFilter&newFilter=' . $key,
-                'value'       => $key,
-                'linktext'    => $val,
-                'is_selected' => $selected == $key,
-            );
-        }
-
-        return $result;
-    }
 
     /**
      * Redirects to another location.
