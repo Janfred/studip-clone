@@ -110,7 +110,7 @@ class Course_TimesroomsController extends AuthenticatedController
         );
 
         if (Request::isXhr()) {
-            $this->show                        = array(
+             $this->show = array(
                 'regular'     => true,
                 'irregular'   => true,
                 'roomRequest' => false,
