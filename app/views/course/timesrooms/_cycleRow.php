@@ -20,7 +20,7 @@
     <? elseif($locked) : ?>
         <?= htmlReady($termin->getFullname()) ?>
     <? else : ?>
-        <a class="load-in-new-row <?= $termin->id == Request::get('singleDateID') ? 'load-in-new-row-open' : ''?>"
+        <a data-dialog="size=50%"
            href="<?= $controller->url_for('course/timesrooms/editDate/' . $termin->termin_id, $editParams) ?>">
                 <?= htmlReady($termin->getFullname()) ?>
             </a>
