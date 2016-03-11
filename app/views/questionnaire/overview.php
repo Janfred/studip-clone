@@ -28,6 +28,11 @@
 <?
 
 $actions = new ActionsWidget();
-$actions->addLink(_("Fragebogen erstellen"), URLHelper::getURL("dispatch.php/questionnaire/edit"), Icon::create('add', 'info'), ['data-dialog' => "1"]);
+$actions->addLink(
+    _("Fragebogen erstellen"),
+    URLHelper::getURL("dispatch.php/questionnaire/edit", $range_type ? ['range_type' => $range_type, 'range_id' => $GLOBALS['SessionSeminar']]: []),
+    Icon::create('add', 'info'),
+    ['data-dialog' => "1"]
+);
 
 Sidebar::Get()->addWidget($actions);

@@ -45,10 +45,10 @@
             <?= \Studip\LinkButton::create(_("Kopieren"), URLHelper::getURL("dispatch.php/questionnaire/copy/".$questionnaire->getId()), array('data-dialog' => "1")) ?>
         <? endif ?>
         <? if ($questionnaire->isEditable() && !$questionnaire->isStarted()) : ?>
-            <?= \Studip\LinkButton::create(_("Starten"), URLHelper::getURL("dispatch.php/questionnaire/start/".$questionnaire->getId())) ?>
+            <?= \Studip\LinkButton::create(_("Starten"), URLHelper::getURL("dispatch.php/questionnaire/start/".$questionnaire->getId(), $range_type ? ['redirect' => "course/overview"] : [])) ?>
         <? endif ?>
         <? if ($questionnaire->isEditable() && $questionnaire->isStarted()) : ?>
-            <?= \Studip\LinkButton::create(_("Beenden"), URLHelper::getURL("dispatch.php/questionnaire/stop/".$questionnaire->getId())) ?>
+            <?= \Studip\LinkButton::create(_("Beenden"), URLHelper::getURL("dispatch.php/questionnaire/stop/".$questionnaire->getId(), $range_type ? ['redirect' => "course/overview"] : [])) ?>
         <? endif ?>
 
     </div>
