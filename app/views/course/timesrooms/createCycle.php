@@ -1,7 +1,7 @@
 <form id="edit-cycle"
     action="<?= $controller->url_for('course/timesrooms/' . ($cycle->isNew() ? 'saveCycle' : 'editCycle/' . $cycle->id), $linkAttributes) ?>"
     class="default" method="post"
-    <?= Request::isXhr() ? 'data-dialog="size=big"' : '' ?>>
+    <?= Request::int('fromDialog') ? 'data-dialog="size=big"' : '' ?>>
     <?= CSRFProtection::tokenTag() ?>
 
     <label class="col3">
