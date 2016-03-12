@@ -182,7 +182,7 @@ class Course_MembersController extends AuthenticatedController
                 $this->semAdmissionEnabled = 2;
                 $this->waiting_type = 'awaiting';
             } else {
-                $this->waitingTitle = sprintf(_("Anmeldeliste (Losverfahren am %s)"), strftime('%x %R', $distribution_time));
+                $this->waitingTitle = sprintf(_("Anmeldeliste (Platzverteilung am %s)"), strftime('%x %R', $distribution_time));
                 $this->semAdmissionEnabled = 1;
                 $this->awaiting = $this->claiming;
                 $this->waiting_type = 'claiming';

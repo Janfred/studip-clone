@@ -182,7 +182,7 @@ class LockRules {
         $attributes['sem']['leistungsnachweis'] = array('name' => _("Leistungsnachweis"), 'group' => 'misc');
         $attributes['sem']['room_time'] = array('name' => _("Zeiten/Räume"), 'group' => 'room_time');
         $attributes['sem']['cancelled_dates'] = array('name' => _("Termine ausfallen lassen"), 'group' => 'room_time');
-        $attributes['sem']['admission_endtime'] = array('name' => _("Zeit/Datum des Losverfahrens/Kontingentierung"), 'group' => 'access');
+        $attributes['sem']['admission_endtime'] = array('name' => _("Zeit/Datum der Platzverteilung/Kontingentierung"), 'group' => 'access');
         $attributes['sem']['admission_disable_waitlist'] = array('name' => _("Aktivieren/Deaktivieren der Warteliste"), 'group' => 'access');
         $attributes['sem']['admission_binding'] = array('name' => _("Verbindlichkeit der Anmeldung"), 'group' => 'access');
         $attributes['sem']['admission_type'] = array('name' => _("Typ des Anmeldeverfahrens"), 'group' => 'access');
