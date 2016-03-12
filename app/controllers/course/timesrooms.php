@@ -1246,7 +1246,7 @@ class Course_TimesroomsController extends AuthenticatedController
             $url = call_user_func_array([$this, 'url_for'], func_get_args());
             $this->redirect($url);
         } else {
-            parent::relocate($to);
+            call_user_func_array('parent::relocate', func_get_args());
         }
     }
 }

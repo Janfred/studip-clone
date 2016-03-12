@@ -4,7 +4,7 @@
     <?= Request::int('fromDialog') ? 'data-dialog="size=big"' : '' ?>>
     <?= CSRFProtection::tokenTag() ?>
 
-    <label class="col3">
+    <label class="col-2">
         <?= _('Starttag') ?>
         <select name="day">
             <? foreach (array(1, 2, 3, 4, 5, 6, 0) as $d): ?>
@@ -16,14 +16,14 @@
         </select>
     </label>
 
-    <label class="col3">
+    <label class="col-2">
         <?= _('Startzeit') ?>
         <input class="size-s studip-timepicker" type="text" name="start_time"
                value="<?= htmlReady(Request::get('start_time', $cycle->start_time)) ?>"
                required placeholder="HH:mm">
     </label>
 
-    <label class="col3">
+    <label class="col-2">
         <?= _('Endzeit') ?>
         <input class="size-s studip-timepicker" type="text" name="end_time"
                value="<?= htmlReady(Request::get('end_time', $cycle->end_time)) ?>"

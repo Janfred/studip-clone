@@ -8,29 +8,25 @@
     method="post">
 
     <fieldset>
-        <legend><?= _('Die Veranstaltung findet in folgendem Zeitraum statt') ?></legend>
-        <label for="block_appointments_start_day">
+        <legend><?= _('Zeitraum') ?></legend>
+        <label for="block_appointments_start_day" class="col-3">
             <?= _('Startdatum') ?>
             <input type="text" class="size-s has-date-picker" id="block_appointments_start_day"
                    name="block_appointments_start_day" value="<?= $request['block_appointments_start_day'] ?>">
         </label>
-        <label for="block_appointments_end_day">
+        <label for="block_appointments_end_day" class="col-3">
             <?= _('Enddatum') ?>
             <input type="text" class="size-s has-date-picker" id="block_appointments_end_day"
                    name="block_appointments_end_day" value="<?= $request['block_appointments_end_day'] ?>">
         </label>
-    </fieldset>
-
-    <fieldset>
-        <legend><?= _('Die Veranstaltung findet zu folgenden Zeiten statt') ?></legend>
-        <label for="block_appointments_start_time">
+        <label for="block_appointments_start_time" class="col-3">
             <?= _('Startzeit') ?>
             <input type="text" class="size-s studip-timepicker" id="block_appointments_start_time"
                    name="block_appointments_start_time" value="<?= $request['block_appointments_start_time'] ?>"
                    placeholder="HH:mm">
         </label>
 
-        <label for="block_appointments_end_time">
+        <label for="block_appointments_end_time" class="col-3">
             <?= _('Endzeit') ?>
             <input type="text" class="size-s studip-timepicker" id="block_appointments_end_time"
                    name="block_appointments_end_time" value="<?= $request['block_appointments_end_time'] ?>"
@@ -57,10 +53,7 @@
             <input type="text" name="block_appointments_room_text" id="block_appointments_room_text"
                    value="<?= $request['block_appointments_room_text'] ?>">
         </label>
-    </fieldset>
 
-    <fieldset class="collapsed">
-        <legend><?= _('Mehrere Termine parallel anlegen') ?></legend>
         <label for="block_appointments_date_count">
             <?= _('Anzahl') ?>
             <select name="block_appointments_date_count" id="block_appointments_date_count" class="size-s">
@@ -76,14 +69,14 @@
     <fieldset class="collapsed" id="block_appointments_days">
         <legend><?= _('Die Veranstaltung findet an folgenden Tagen statt') ?></legend>
         <label for="block_appointments_days_0" class="horizontal" style="font-weight:normal">
-            <input <?= !is_array($request['block_appointments_day']) ? '' : (in_array('everyday', $request['block_appointments_days']) ? 'checked ' : '') ?>
+            <input <?= !is_array($request['block_appointments_days']) ? '' : (in_array('everyday', $request['block_appointments_days']) ? 'checked ' : '') ?>
                 class="block_appointments_days"
                 name="block_appointments_days[]" id="block_appointments_days_0" type="checkbox" value="everyday">
             <?= _('Jeden Tag') ?>
         </label>
 
         <label for="block_appointments_days_1" class="horizontal" style="font-weight:normal">
-            <input <?= !is_array($request['block_appointments_day']) ? '' : (in_array('everyday', $request['block_appointments_days']) ? 'checked ' : '') ?>
+            <input <?= !is_array($request['block_appointments_days']) ? ( empty($request) ? 'checked' : (in_array('everyday', $request['block_appointments_days']) ? 'checked ' : '')) : '' ?>
                 class="block_appointments_days"
                 name="block_appointments_days[]" id="block_appointments_days_1" type="checkbox" value="weekdays">
             <?= _('Mo-Fr') ?>
@@ -91,7 +84,7 @@
         <? foreach (range(0, 6) as $d) : ?>
             <? $id = 2 + $d ?>
             <label for="block_appointments_days_<?= $id ?>" class="horizontal" style="font-weight: normal">
-                <input <?= !is_array($request['block_appointments_day']) ? '' : (in_array('everyday', $request['block_appointments_days']) ? 'checked ' : '') ?>
+                <input <?= !is_array($request['block_appointments_days']) ? '' : (in_array($d+1, $request['block_appointments_days']) ? 'checked ' : '') ?>
                     class="block_appointments_days"
                     name="block_appointments_days[]" id="block_appointments_days_<?= $id ?>" type="checkbox"
                     value="<?= $d + 1 ?>">
