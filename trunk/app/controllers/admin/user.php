@@ -906,6 +906,9 @@ class Admin_UserController extends AuthenticatedController
             if ($db->rowCount() == 1) {
                 log_event('INST_USER_DEL', $institut_id, $user_id);
                 checkExternDefaultForUser($user_id);
+                if (UserConfig::get($user_id)->MY_INSTITUTES_DEFAULT == $institut_id) {
+                    UserConfig::get($user_id)->delete('MY_INSTITUTES_DEFAULT');
+                }
                 PageLayout::postMessage(MessageBox::success(_('Die Zuordnung zur Einrichtung wurde gelöscht.')));
             } else {
                 PageLayout::postMessage(MessageBox::error(_('Die Zuordnung zur Einrichtung konnte nicht gelöscht werden.')));
