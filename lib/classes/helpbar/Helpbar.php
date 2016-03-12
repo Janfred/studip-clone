@@ -8,7 +8,6 @@
  */
 class Helpbar extends WidgetContainer
 {
-    protected $json_directory;
     protected $open = false;
     protected $should_render = true;
     protected $variables = array();
@@ -21,7 +20,6 @@ class Helpbar extends WidgetContainer
     {
         parent::__construct();
 
-        $this->json_directory = $GLOBALS['STUDIP_BASE_PATH'] . '/doc/helpbar';
         $this->help_admin = isset($GLOBALS['perm']) && ($GLOBALS['perm']->have_perm('root') || RolePersistence::isAssignedRole($GLOBALS['user']->id, 'Hilfe-Administrator(in)'));
     }
 
@@ -56,52 +54,6 @@ class Helpbar extends WidgetContainer
     public function setVariables($variables)
     {
         $this->variables = $variables;
-    }
-
-    /**
-     * Loads a help text from json files
-     * 
-     * @param String $identifier Help text identifier
-     * @param Array  $variables  Additonal variables for the text
-     * @param mixed  $language   Optional language (defaults to current)
-     * @todo Adjust this to db BEFORE release
-     * @deprecated ?
-     */
-    public function load($identifier, $variables = array(), $language = null)
-    {
-        $language = $language ?: substr($GLOBALS['user']->preferred_language, 0, 2);
-
-        $jsonfile = sprintf('%s/%s/%s.json',
-                            $this->json_directory,
-                            strtolower($language),
-                            $identifier);
-
-        if (!file_exists($jsonfile) && $language !== 'de') {
-            $language = 'de';
-            $jsonfile = sprintf('%s/%s/%s.json',
-                                $this->json_directory,
-                                strtolower($language),
-                                $identifier);
-
-        }
-
-        if (!file_exists($jsonfile) || !is_readable($jsonfile)) {
-            throw new InvalidArgumentException('Helpbar for identifier "' . $identifier . '" not found or not readable.');
-        }
-
-        $json = studip_utf8decode(json_decode(file_get_contents($jsonfile), true));
-        if ($json === null) {
-            throw new RuntimeException('Helpbar content for identifier "' . $identifier . '" could not be loaded.');
-        }
-
-        foreach ($json as $row) {
-            if (!empty($row['icon'])) {
-                $icon = Icon::create($row['icon'], 'info_alt');
-            }
-            $this->addPlainText($row['label'] ?: '',
-                                $this->interpolate($row['text'], $variables),
-                                $icon ?: null);
-        }
     }
 
     /**
