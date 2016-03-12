@@ -730,27 +730,7 @@ class Admin_CoursesController extends AuthenticatedController
                 $seminars[$seminar_id]['seminar_id'] = $seminar_id;
                 $dozenten = $this->getTeacher($seminar_id);
                 $seminars[$seminar_id]['dozenten'] = $dozenten;
-
-                if (in_array('teachers',  $params['view_filter'])) {
-
-                    if (SeminarCategories::getByTypeId($seminar['status'])->only_inst_user) {
-                        $search_template = "user_inst_not_already_in_sem";
-                    } else {
-                        $search_template = "user_not_already_in_sem";
-                    }
-                    $sem_helper = new Seminar(Course::buildExisting($seminar));
-                    $dozentUserSearch = new PermissionSearch(
-                        $search_template,
-                        sprintf(_("%s suchen"), get_title_for_status('dozent', 1, $seminar['status'])),
-                        "user_id",
-                        array('permission' => 'dozent',
-                              'seminar_id' => $this->course_id,
-                              'sem_perm' => 'dozent',
-                              'institute' => $sem_helper->getInstitutes()
-                        )
-                    );
-                }
-
+                
                 if (in_array('contents', $params['view_filter'])) {
                     $seminars[$seminar_id]['sem_class'] = $sem_types[$seminar['status']]->getClass();
                     $seminars[$seminar_id]['modules'] = $modules->getLocalModules($seminar_id, 'sem', $seminar['modules'], $seminar['status']);
