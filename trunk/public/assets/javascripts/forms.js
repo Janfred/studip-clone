@@ -69,7 +69,7 @@
 
     // Display a visible hint that indicates how many characters the user may
     // input if the element has a maxlength restriction.
-    $(document).on('ready', function () {
+    $(document).on('ready dialog-update', function () {
         $('form.default input[maxlength]').each(function () {
             var width   = $(this).outerWidth(true),
                 counter = $('<div class="length-hint">').hide(),
