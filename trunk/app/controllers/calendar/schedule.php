@@ -103,8 +103,13 @@ class Calendar_ScheduleController extends AuthenticatedController
 
         if (Request::option('semester_id')) {
             $this->current_semester = $semdata->getSemesterData(Request::option('semester_id'));
+            $schedule_settings['semester_id'] = Request::option('semester_id');
+            UserConfig::get($user->id)->store('SCHEDULE_SETTINGS',
+                $schedule_settings);
         } else {
-            $this->current_semester = $semdata->getCurrentSemesterData();
+            $this->current_semester = $schedule_settings['semester_id'] ?
+                $semdata->getSemesterData($schedule_settings['semester_id']) :
+                $semdata->getCurrentSemesterData();
         }
 
         // check type-safe if days is false otherwise sunday (0) cannot be chosen
@@ -501,6 +506,12 @@ class Calendar_ScheduleController extends AuthenticatedController
             'glb_days'       => $days,
             'converted'      => true
         );
+
+        if ($semester_id) {
+            $this->my_schedule_settings['semester_id'] = $semester_id;
+        } else if ($semester = UserConfig::get($GLOBALS['user']->id)->SCHEDULE_SETTINGS['semester_id']) {
+            $this->my_schedule_settings['semester_id'] = $semester;
+        }
 
         UserConfig::get($user->id)->store('SCHEDULE_SETTINGS', $this->my_schedule_settings);
 
