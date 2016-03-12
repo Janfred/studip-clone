@@ -280,7 +280,7 @@
                         <?= $template->render() ?>
                     <? else : ?>
                         <?=
-                        \Studip\LinkButton::createEdit(
+                        \Studip\LinkButton::create(
                             $actions[$selected_action]['title'],
                             URLHelper::getURL(sprintf($actions[$selected_action]['url'], $semid),
                                 ($actions[$selected_action]['params'] ? $actions[$selected_action]['params'] : array())),
@@ -289,7 +289,7 @@
                     <? endif ?>
                 <? else : ?>
                     <?=
-                    \Studip\LinkButton::createEdit(
+                    \Studip\LinkButton::create(
                         $actions[$selected_action]['title'],
                         URLHelper::getURL(sprintf($actions[$selected_action]['url'], $semid),
                             ($actions[$selected_action]['params'] ? $actions[$selected_action]['params'] : array())),
