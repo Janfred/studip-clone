@@ -32,6 +32,7 @@ class Course_RoomRequestsController extends AuthenticatedController
         $course_id = $args[0];
 
         $this->course_id = Request::option('cid', $course_id);
+        $pagetitle = '';
         if ($course_id != '-') {
             //Navigation in der Veranstaltung:
             Navigation::activateItem('/course/admin/room_requests');
@@ -43,9 +44,11 @@ class Course_RoomRequestsController extends AuthenticatedController
                 throw new Trails_Exception(400);
             }
 
-            PageLayout::setHelpKeyword("Basis.VeranstaltungenVerwaltenAendernVonZeitenUndTerminen");
-            PageLayout::setTitle(Course::find($this->course_id)->getFullname() . " - " . _("Verwaltung von Raumanfragen"));
+            PageLayout::setHelpKeyword('Basis.VeranstaltungenVerwaltenAendernVonZeitenUndTerminen');
+            $pagetitle .= Course::find($this->course_id)->getFullname() . ' - ';
         }
+        $pagetitle .= _('Verwalten von Raumanfrage');
+        PageLayout::setTitle($pagetitle);
     }
 
     /**
