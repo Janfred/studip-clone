@@ -18,7 +18,7 @@
         <? endforeach ?>
     </select>
 
-    <? if (!count($gruppen)) : ?>
+    <? if (count($gruppen)) : ?>
         <label>
             <?= _('Betrifft die Gruppen') ?>
             <select name="related_groups_action" id="related_groups_action">
