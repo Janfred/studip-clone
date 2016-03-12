@@ -1,6 +1,6 @@
 <form action="<?= $controller->url_for('course/timesrooms/saveDate/' . $date->termin_id) ?>"
       method="post" class="default collapsable" <?= Request::int('fromDialog') ? 'data-dialog="size=big"' : '' ?>>
-    <?=CSRFProtection::tokenTag()?>
+    <?= CSRFProtection::tokenTag() ?>
     <fieldset style="margin-top: 1ex">
         <legend><?= _('Zeitangaben') ?></legend>
         <label id="course_type" class=col-6>
@@ -71,16 +71,13 @@
 
             <ul class="termin_related teachers">
                 <? foreach ($dozenten as $related_person => $dozent) : ?>
-
-                    <? $related = false;
-                    if (in_array($related_person, $related_persons) !== false || empty($related_persons)) :
-                        $related = true;
-                    endif ?>
-
-                    <li data-lecturerid="<?= $related_person ?>" <?= $related ? '' : 'style="display: none"' ?>>
-                        <? $dozenten[$related_person]['hidden'] = $related ?>
+                    <? $related = true; ?>
+                    <? if (in_array($related_person, $related_persons) !== false) : ?>
+                        <? $related = false ?>
+                    <? endif ?>
+                    <li data-lecturerid="<?= $related_person ?>" <?= !$related ? '' : 'style="display: none"' ?>>
+                        <? $dozenten[$related_person]['hidden'] = !$related ?>
                         <?= htmlReady(User::find($related_person)->getFullname()); ?>
-
                         <a href="javascript:" onClick="STUDIP.Raumzeit.removeLecturer('<?= $related_person ?>')">
                             <?= Icon::create('trash', 'clickable')->asImg(16) ?>
                         </a>
@@ -111,16 +108,16 @@
     <? endif ?>
 
     <? if (!empty($gruppen)) : ?>
-        <fieldset>
+        <fieldset class="collapsed">
             <legend><?= _('Beteiligte Gruppen') ?></legend>
 
             <ul class="termin_related groups">
                 <? foreach ($gruppen as $index => $statusgruppe) : ?>
-                    <? $related = false ?>
-                    <? if (in_array($statusgruppe->getId(), $related_groups) || empty($related_groups)) : ?>
-                        <? $related = true; ?>
+                    <? $related = true ?>
+                    <? if (in_array($statusgruppe->getId(), $related_groups)) : ?>
+                        <? $related = false; ?>
                     <? endif ?>
-                    <li data-groupid="<?= htmlReady($statusgruppe->getId()) ?>" <?= $related ? '' : 'style="display: none"' ?>>
+                    <li data-groupid="<?= htmlReady($statusgruppe->getId()) ?>" <?= !$related ? '' : 'style="display: none"' ?>>
                         <?= htmlReady($statusgruppe['name']) ?>
                         <a href="javascript:" onClick="STUDIP.Raumzeit.removeGroup('<?= $statusgruppe->getId() ?>')">
                             <?= Icon::create('trash', 'clickable')->asImg() ?>
@@ -158,13 +155,13 @@
         <? if (Request::int('fromDialog')) : ?>
             <?= Studip\LinkButton::create(_('Zurück zur Übersicht'),
                                           $controller->url_for('course/timesrooms',
-                                                        array('fromDialog' => 1, 'contentbox_open' => $date->metadate_id)),
-                                          array('data-dialog' => 'size=big'))?>
+                                                               array('fromDialog' => 1, 'contentbox_open' => $date->metadate_id)),
+                                          array('data-dialog' => 'size=big')) ?>
         <? endif ?>
         <? if (Request::isXhr() && !$locked && Config::get()->RESOURCES_ENABLE && Config::get()->RESOURCES_ALLOW_ROOM_REQUESTS): ?>
             <?= Studip\LinkButton::create(_('Raumanfrage erstellen'),
                                           $controller->url_for('course/room_requests/edit/' . $course->id,
-                                                       array_merge($params, array('origin' => 'course_timesrooms'))),
+                                                               array_merge($params, array('origin' => 'course_timesrooms'))),
                                           array('data-dialog' => 'size=big')) ?>
         <? endif ?>
     </footer>
