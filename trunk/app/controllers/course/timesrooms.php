@@ -555,11 +555,7 @@ class Course_TimesroomsController extends AuthenticatedController
 
         unset($_SESSION['_checked_dates']);
 
-        if(Request::int('fromDialog')) {
-            $this->redirect($this->url_for('course/timesrooms/index', array('contentbox_open' => $cycle_id)));
-        } else {
-            $this->relocate('course/timesrooms/index', array('contentbox_open' => $cycle_id));
-        }
+        $this->relocate('course/timesrooms/index', ['contentbox_open' => $cycle_id]);
     }
 
     /**
@@ -583,11 +579,7 @@ class Course_TimesroomsController extends AuthenticatedController
         $this->displayMessages();
         unset($_SESSION['_checked_dates']);
 
-        if(Request::int('fromDialog')) {
-            $this->redirect($this->url_for('course/timesrooms/index', array('contentbox_open' => $cycle_id)));
-        } else {
-            $this->relocate('course/timesrooms/index', array('contentbox_open' => $cycle_id));
-        }
+        $this->relocate('course/timesrooms/index', ['contentbox_open' => $cycle_id]);
     }
 
     /**
@@ -610,11 +602,7 @@ class Course_TimesroomsController extends AuthenticatedController
 
         unset($_SESSION['_checked_dates']);
 
-        if(Request::int('fromDialog')) {
-            $this->redirect($this->url_for('course/timesrooms/index', array('contentbox_open' => $cycle_id)));
-        } else {
-            $this->relocate('course/timesrooms/index', array('contentbox_open' => $cycle_id));
-        }
+        $this->relocate('course/timesrooms/index', ['contentbox_open' => $cycle_id]);
     }
 
     /**
@@ -1244,6 +1232,22 @@ class Course_TimesroomsController extends AuthenticatedController
             foreach ($fields as $field) {
                 Request::set($field, $request[$field]);
             }
+        }
+    }
+
+    /**
+     * Relocstes to another location if not from dialog
+     *
+     * @param String $to New location
+     */
+    public function relocate($to)
+    {
+        $url = call_user_func_array([$this, 'url_for'], func_get_args());
+
+        if(Request::int('fromDialog')) {
+            $this->redirect($url);
+        } else {
+            parent::relocate($url);
         }
     }
 }
