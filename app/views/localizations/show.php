@@ -73,7 +73,8 @@ $translations = array(
     // public/assets/javascripts/raumzeit.js
     'Nicht buchbare Räume:' => _('Nicht buchbare Räume:'),
     'Alle Räume anzeigen' => _('Alle Räume anzeigen'),
-    'Jeder Termin muss mindestens eine Person haben, die ihn durchführt!' => _('Jeder Termin muss mindestens eine Person haben, die ihn durchführt!'),
+    'Wollen Sie die gewünschten Termine wirklich löschen?' => _('Wollen Sie die gewünschten Termine wirklich löschen?'),
+    'Sind Sie sicher, dass Sie die regelmäßige Zeit ändern möchten?' => _('Sind Sie sicher, dass Sie die regelmäßige Zeit ändern möchten?'),
     'Nur buchbare Räume anzeigen' => _('Nur buchbare Räume anzeigen'),
 
     // public/assets/javascripts/register.js
