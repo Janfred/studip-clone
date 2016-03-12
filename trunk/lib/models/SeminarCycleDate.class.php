@@ -256,9 +256,9 @@ class SeminarCycleDate extends SimpleORMap
         if (!parent::store()) {
             return false;
         }
-        
-        if (mktime($this->start_time) != mktime($old_cycle->start_time) 
-                || mktime($this->end_time) != mktime($old_cycle->end_time) 
+
+        if ($this->start_time != $old_cycle->start_time 
+                || $this->end_time != $old_cycle->end_time 
                 || $old_cycle->weekday != $this->weekday ) 
         {
             
