@@ -1,5 +1,6 @@
 <form action="<?= $controller->url_for('course/timesrooms/saveDate/' . $date->termin_id) ?>"
       method="post" class="default collapsable" <?= Request::int('fromDialog') ? 'data-dialog="size=big"' : '' ?>>
+    <?=CSRFProtection::tokenTag()?>
     <fieldset style="margin-top: 1ex">
         <legend><?= _('Zeitangaben') ?></legend>
         <label id="course_type" class=col-6>

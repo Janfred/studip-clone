@@ -30,7 +30,7 @@ $room_request_filter = function ($date) {
 <? if (!empty($single_dates)): ?>
     <form class="default collapsable" action="<?= $controller->url_for('course/timesrooms/stack', $linkAttributes) ?>"
           <?= Request::isXhr() ? 'data-dialog="size=big"' : ''?>  method="post">
-
+    <?= CSRFProtection::tokenTag() ?>
     <? foreach ($single_dates as $semester_id => $termine) : ?>
         <article id="singledate-<?= $semester_id ?>" class="<?= count($single_dates) === 1 ? 'open' :  ContentBoxHelper::classes('singledate-' . $semester_id) ?>">
             <header>
