@@ -640,7 +640,7 @@ class Course_TimesroomsController extends AuthenticatedController
                                 $singledate->dozenten[] = $person;
                             }
                         }
-                        if (count($singledate->dozenten) === count($persons)) {
+                        if (count($singledate->dozenten) === count($course_lectures)) {
                             $singledate->dozenten = array();
                         }
                     }
@@ -670,12 +670,13 @@ class Course_TimesroomsController extends AuthenticatedController
                     if (count($course_groups) === count($groups)) {
                         $singledate->statusgruppen = array();
                     } else {
+
                         foreach ($groups as $group) {
                             if (!count($singledate->statusgruppen->findBy('id', $group->id))) {
                                 $singledate->statusgruppen[] = $group;
                             }
                         }
-                        if (count($singledate->statusgruppen) === count($groups)) {
+                        if (count($singledate->statusgruppen) === count($course_groups)) {
                             $singledate->statusgruppen = array();
                         }
                     }
