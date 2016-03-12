@@ -6811,15 +6811,17 @@ option.faculty {
 option.sub_institute {
   padding-left: 15px;
 }
+div#wizard-participating,
 div#wizard-lecturers,
 div#wizard-deputies,
 div#wizard-tutors {
   margin-top: 5px;
   margin-left: 25px;
 }
-div#wizard-lecturersdiv.description,
-div#wizard-deputiesdiv.description,
-div#wizard-tutorsdiv.description {
+div#wizard-participating div.description,
+div#wizard-lecturers div.description,
+div#wizard-deputies div.description,
+div#wizard-tutors div.description {
   font-style: italic;
 }
 div#assigned {
