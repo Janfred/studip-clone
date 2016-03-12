@@ -97,7 +97,7 @@ class CoreAdmin implements StudipModule {
 
                 // show entry for simulated participant view
                 if (in_array($GLOBALS['perm']->get_studip_perm($course_id), words('tutor dozent'))) {
-                    $item = new Navigation('Studierendenansicht simulieren', 'dispatch.php/course/change_view?cid='.Request::option('cid'));
+                    $item = new Navigation('Studierendenansicht simulieren', 'dispatch.php/course/change_view/set_changed_view');
                     $item->setDescription(_('Hier können Sie sich die Veranstaltung aus der Sicht von Studierenden sehen.'));
                     $item->setImage(Icon::create('visibility-invisible', 'clickable'));
                     $main->addSubNavigation('change_view', $item);
