@@ -28,7 +28,7 @@ $room_request_filter = function ($date) {
     </header>
 
 <? if (!empty($single_dates)): ?>
-    <form class="default collapsable" action="<?= $controller->url_for('course/timesrooms/stack') ?>"
+    <form class="default collapsable" action="<?= $controller->url_for('course/timesrooms/stack', $linkAttributes) ?>"
           <?= Request::isXhr() ? 'data-dialog="size=big"' : ''?>  method="post">
 
     <? foreach ($single_dates as $semester_id => $termine) : ?>
