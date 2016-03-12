@@ -3534,13 +3534,25 @@ div.messagebox .messagebox_buttons a.details span {
   display: none;
 }
 div.messagebox .messagebox_buttons a.close {
-  background-image: url("../images/icons/32/blue/decline.png");
+  background-image: url("../images/icons/blue/decline.svg");
+  -webkit-background-size: 16px 16px;
+  -moz-background-size: 16px 16px;
+  -o-background-size: 16px 16px;
+  background-size: 16px 16px;
 }
 div.messagebox .messagebox_buttons a.details {
-  background-image: url("../images/messagebox/minimize_inv.png");
+  background-image: url("../images/icons/blue/arr_eol-down.svg");
+  -webkit-background-size: 16px 16px;
+  -moz-background-size: 16px 16px;
+  -o-background-size: 16px 16px;
+  background-size: 16px 16px;
 }
 div.messagebox.details_hidden .messagebox_buttons a.details {
-  background-image: url("../images/messagebox/maximize_inv.png");
+  background-image: url("../images/icons/blue/arr_eol-up.svg");
+  -webkit-background-size: 16px 16px;
+  -moz-background-size: 16px 16px;
+  -o-background-size: 16px 16px;
+  background-size: 16px 16px;
 }
 div.messagebox.details_hidden .messagebox_details {
   height: 0;
