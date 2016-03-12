@@ -1242,12 +1242,11 @@ class Course_TimesroomsController extends AuthenticatedController
      */
     public function relocate($to)
     {
-        $url = call_user_func_array([$this, 'url_for'], func_get_args());
-
         if(Request::int('fromDialog')) {
+            $url = call_user_func_array([$this, 'url_for'], func_get_args());
             $this->redirect($url);
         } else {
-            parent::relocate($url);
+            parent::relocate($to);
         }
     }
 }
