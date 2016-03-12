@@ -66,7 +66,7 @@
 
     <? if (!empty($dozenten)) : ?>
         <fieldset class="collapsed">
-            <legend><?= _('Durchführende Dozenten') ?></legend>
+            <legend><?= _('Durchführende Lehrende') ?></legend>
 
             <ul class="termin_related teachers">
                 <? foreach ($dozenten as $related_person => $dozent) : ?>
@@ -93,7 +93,7 @@
                     <?= _('Lehrenden auswählen') ?>
                 </span>
                 <select id="add_teacher" name="teachers" style="display: inline-block">
-                    <option value="none"><?= _('Dozent/in auswählen') ?></option>
+                    <option value="none"><?= _('Lehrende auswählen') ?></option>
                     <? foreach ($dozenten as $dozent) : ?>
                         <option
                             value="<?= htmlReady($dozent['user_id']) ?>" <?= $dozent['hidden'] ? 'style="display: none"' : '' ?>>
