@@ -1,20 +1,17 @@
 <form action="<?= $controller->url_for('course/timesrooms/saveSingleDate') ?>" method="post"
       class="default" <?= Request::int('fromDialog') ? 'data-dialog="size=big"' : '' ?>>
     <?= CSRFProtection::tokenTag() ?>
-    <label>
+    <label class="col-2">
         <?= _('Datum') ?>
         <input class="has-date-picker size-s" type="text" name="date"
                value="<?= htmlReady(Request::get('date')) ?>" required>
     </label>
-
-    <label>
+    <label class="col-2">
         <?= _('Startzeit') ?>
         <input class="studip-timepicker size-s" type="text" name="start_time"
                value="<?= htmlReady(Request::get('start_time')) ?>" required placeholder="HH:mm">
     </label>
-
-
-    <label>
+    <label class="col-2">
         <?= _('Endzeit') ?>
         <input class="studip-timepicker size-s" type="text" name="end_time"
                value="<?= htmlReady(Request::get('end_time')) ?>" required placeholder="HH:mm">
