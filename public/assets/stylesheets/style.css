@@ -8363,6 +8363,20 @@ div.info {
 .svg-input img {
   cursor: pointer;
 }
+a.new-member::after {
+  background-repeat: no-repeat;
+  content: ' ';
+  display: inline-block;
+  height: 8px;
+  margin-left: 0;
+  background-image: url("../images/icons/red/star.svg");
+  -webkit-background-size: 8px 8px;
+  -moz-background-size: 8px 8px;
+  -o-background-size: 8px 8px;
+  background-size: 8px 8px;
+  vertical-align: text-top;
+  width: 8px;
+}
 #barTopMenu li a,
 div#layout-sidebar div.sidebar-image img {
   filter: hue-rotate(0deg) saturate(100%) brightness(100%);

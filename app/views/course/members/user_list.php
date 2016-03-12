@@ -70,12 +70,10 @@
                 <? endif ?>
                 <td style="text-align: right"><?= (++$nr < 10) ? sprintf('%02d', $nr) : $nr ?></td>
                 <td>
-                    <a style="position: relative" href="<?= $controller->url_for(sprintf('profile?username=%s',$leser['username'])) ?>">
-                    <?= Avatar::getAvatar($leser['user_id'],$leser['username'])->getImageTag(Avatar::SMALL,
-                            array('style' => 'margin-right: 5px','title' => htmlReady($fullname))); ?>
-                    <?= $leser['mkdate'] >= $last_visitdate ? Assets::img('red_star',
-                        array('style' => 'position: absolute; margin: 0px 0px 0px -15px')) : '' ?>
-                    <?= htmlReady($fullname) ?>
+                    <a href="<?= $controller->url_for(sprintf('profile?username=%s',$leser['username'])) ?>" <? if ($leser['mkdate'] >= $last_visitdate) echo 'class="new-member"'; ?>>
+                        <?= Avatar::getAvatar($leser['user_id'],$leser['username'])->getImageTag(Avatar::SMALL,
+                                array('style' => 'margin-right: 5px','title' => htmlReady($fullname))); ?>
+                        <?= htmlReady($fullname) ?>
                     </a>
                 </td>
                 <? if($is_tutor) : ?>
