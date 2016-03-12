@@ -206,10 +206,7 @@
             <? if (in_array('teachers', $view_filter)) : ?>
                 <td>
                     <?= $this->render_partial_collection('my_courses/_dozent', $values['dozenten']) ?>
-                <? if ($values['teacher_search']): ?>
-                    <br>
-                    <?= $values['teacher_search']->render() ?>
-                <? endif; ?>
+
                 </td>
             <? endif ?>
             <? if (in_array('members', $view_filter)) : ?>

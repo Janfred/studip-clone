@@ -749,13 +749,6 @@ class Admin_CoursesController extends AuthenticatedController
                               'institute' => $sem_helper->getInstitutes()
                         )
                     );
-
-                    $seminars[$seminar_id]['teacher_search'] = MultiPersonSearch::get("add_member_dozent" . $seminar_id)
-                        ->setTitle(_('Mehrere Lehrende hinzufügen'))
-                        ->setSearchObject($dozentUserSearch)
-                        ->setDefaultSelectedUser(array_keys($dozenten))
-                        ->setDataDialogStatus(Request::isXhr())
-                        ->setExecuteURL(URLHelper::getLink('dispatch.php/course/basicdata/add_member/' . $seminar_id, array('from' => 'admin/courses')));
                 }
 
                 if (in_array('contents', $params['view_filter'])) {
