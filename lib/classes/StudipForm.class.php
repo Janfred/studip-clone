@@ -280,7 +280,7 @@ class StudipForm {
             $onclick .= "', 'InsertDate', ";
             $onClick .= "'dependent=yes, width=210, height=210, left=500, top=150'";
             $ret .= "&nbsp; ";
-            $ret .= Assets::img('popupcalendar.png', compact('onclick'));
+            $ret .= Icon::create('schedule', 'clickable', compact('onclick'));
         }
         $ret .= '</fieldset>';
         return $ret;

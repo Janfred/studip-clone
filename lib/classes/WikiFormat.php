@@ -119,7 +119,7 @@ class WikiFormat extends StudipFormat
             $comment = decodeHTML($comment); //because tooltip already escapes
             return sprintf(
                     '<a href="javascript:void(0);"%s">'.
-                        Assets::img("comment.png").
+                        Icon::create('chat2', 'status-yellow').
                     '</a>',
                 tooltip(sprintf("%s %s:\n%s", _("Kommentar von"), $from, $comment), TRUE, TRUE)
             );
