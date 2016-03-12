@@ -338,7 +338,7 @@ class Course_AdmissionController extends AuthenticatedController
             if ($cs) {
                 $priorities = AdmissionPriority::getPrioritiesByCourse($cs->getId(), $this->course_id);
                 if (count($priorities) && !Request::submitted('change_course_set_unassign_yes')) {
-                    $question = sprintf(_("In dieser Veranstaltung existiert eine Anmeldeliste (Losverfahren am %s). Die bestehende Anmeldeliste mit %s Einträgen wird gelöscht. Sind sie sicher?"), strftime('%x %R', $cs->getSeatDistributionTime()), count($priorities));
+                    $question = sprintf(_("In dieser Veranstaltung existiert eine Anmeldeliste (Platzverteilung am %s). Die bestehende Anmeldeliste mit %s Einträgen wird gelöscht. Sind sie sicher?"), strftime('%x %R', $cs->getSeatDistributionTime()), count($priorities));
                 }
             }
             if (!$question && $cs) {

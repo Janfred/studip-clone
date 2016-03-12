@@ -69,7 +69,7 @@
 
             <td style="wtext-align: center">
                 <? if ($wait["status"] == "claiming") : ?>
-                    <?= _("Los") ?>
+                    <?= _("Autom.") ?>
                 <? elseif ($wait["status"] == "accepted") : ?>
                     <?= _("Vorl.") ?>
                 <?

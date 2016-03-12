@@ -76,7 +76,7 @@ class ParticipantRestrictedAdmission extends AdmissionRule
      * subclass) does.
      */
     public static function getDescription() {
-        return _("Anmelderegeln dieses Typs legen fest, ob die zugeordneten Veranstaltungen eine maximale Teilnehmeranzahl haben. Die Platzverteilung erfolgt per Losverfahren.");
+        return _("Anmelderegeln dieses Typs legen fest, ob die zugeordneten Veranstaltungen eine maximale Teilnehmeranzahl haben. Die Platzverteilung erfolgt automatisiert.");
     }
 
     /**

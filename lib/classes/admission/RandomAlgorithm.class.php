@@ -226,7 +226,7 @@ class RandomAlgorithm extends AdmissionAlgorithm {
         foreach ($user_list as $chosen_one) {
             setTempLanguage($chosen_one);
             $message_title = sprintf(_('Teilnahme an der Veranstaltung %s'), $course->name);
-            $message_body = sprintf(_('Sie wurden leider im Losverfahren der Veranstaltung **%s** __nicht__ ausgelost. Für diese Veranstaltung wurde keine Warteliste vorgesehen.'),
+            $message_body = sprintf(_('Sie wurden leider bei der Platzverteilung der Veranstaltung **%s** __keinen__ Platz erhalten. Für diese Veranstaltung wurde keine Warteliste vorgesehen.'),
                                        $course->name);
             if ($prio) {
                 $message_body .= "\n" . sprintf(_("Sie hatten für diese Veranstaltung die Priorität %s gewählt."), $prio[$chosen_one]);
@@ -257,7 +257,7 @@ class RandomAlgorithm extends AdmissionAlgorithm {
             if ($new_admission_member->store()) {
                 setTempLanguage($chosen_one);
                 $message_title = sprintf(_('Teilnahme an der Veranstaltung %s'), $course->name);
-                $message_body = sprintf(_('Sie wurden leider im Losverfahren der Veranstaltung **%s** __nicht__ ausgelost. Sie wurden jedoch auf Position %s auf die Warteliste gesetzt. Das System wird Sie automatisch eintragen und benachrichtigen, sobald ein Platz für Sie frei wird.'),
+                $message_body = sprintf(_('Sie haben leider bei der Platzverteilung der Veranstaltung **%s** __keinen__ Platz erhalten. Sie wurden jedoch auf Position %s auf die Warteliste gesetzt. Das System wird Sie automatisch eintragen und benachrichtigen, sobald ein Platz für Sie frei wird.'),
                                            $course->name,
                                            $maxpos);
                 if ($prio) {
@@ -285,12 +285,12 @@ class RandomAlgorithm extends AdmissionAlgorithm {
             $message_title = sprintf(_('Teilnahme an der Veranstaltung %s'), $seminar->getName());
             if ($seminar->admission_prelim) {
                 if ($seminar->addPreliminaryMember($chosen_one)) {
-                    $message_body = sprintf (_('Sie wurden für die Veranstaltung **%s** ausgelost. Die endgültige Zulassung zu der Veranstaltung ist noch von weiteren Bedingungen abhängig, die Sie bitte der Veranstaltungsbeschreibung entnehmen.'),
+                    $message_body = sprintf (_('Sie haben bei der Platzvergabe der Veranstaltung **%s** einen vorläufigen Platz erhalten. Die endgültige Zulassung zu der Veranstaltung ist noch von weiteren Bedingungen abhängig, die Sie bitte der Veranstaltungsbeschreibung entnehmen.'),
                             $seminar->getName());
                 }
             } else {
                 if ($seminar->addMember($chosen_one, 'autor')) {
-                    $message_body = sprintf (_("Sie wurden für die  Veranstaltung **%s** ausgelost. Ab sofort finden Sie die Veranstaltung in der Übersicht Ihrer Veranstaltungen. Damit sind Sie auch für die Präsenzveranstaltung zugelassen."),
+                    $message_body = sprintf (_("Sie haben haben bei der Platzvergabe der Veranstaltung **%s** einen Platz erhalten. Ab sofort finden Sie die Veranstaltung in der Übersicht Ihrer Veranstaltungen. Damit sind Sie auch für die Präsenzveranstaltung zugelassen."),
                             $seminar->getName());
                 }
             }
