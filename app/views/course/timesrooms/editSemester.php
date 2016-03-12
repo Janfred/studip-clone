@@ -1,4 +1,4 @@
-<form action="<?= $controller->url_for('course/timesrooms/setSemester/' . $course->id, $params) ?>" method="post"
+<form action="<?= $controller->url_for('course/timesrooms/setSemester/' . $course->id) ?>" method="post"
       class="default" <?= Request::isXhr() ? 'data-dialog="size=big"' : '' ?>>
 
     <? if (!Request::isXhr()) : ?>
@@ -38,9 +38,9 @@
         </label>
         <? if (!Request::isXhr()) : ?>
         <footer style="margin-top: 1ex">
-            <?= Studip\Button::createAccept(_('Semester speichern'), 'save', $semesterFormParams) ?>
+            <?= Studip\Button::createAccept(_('Semester speichern'), 'save') ?>
             <? if (Request::isXhr()) : ?>
-                <?= Studip\Button::createAccept(_('Semester speichern & schließen'), 'save_close', $semesterFormParams) ?>
+                <?= Studip\Button::createAccept(_('Semester speichern & schließen'), 'save_close') ?>
             <? endif ?>
         </footer>
     </fieldset>

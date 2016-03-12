@@ -1,4 +1,5 @@
 <?php
+    // In den Controller
     $is_exTermin =  $termin instanceof CourseExDate;
 ?>
 <tr>
@@ -21,7 +22,7 @@
         <?= htmlReady($termin->getFullname()) ?>
     <? else : ?>
         <a data-dialog="size=50%"
-           href="<?= $controller->url_for('course/timesrooms/editDate/' . $termin->termin_id, $editParams) ?>">
+           href="<?= $controller->url_for('course/timesrooms/editDate/' . $termin->termin_id, $linkAttributes) ?>">
                 <?= htmlReady($termin->getFullname()) ?>
             </a>
     <? endif ?>
@@ -68,7 +69,7 @@
         <? if ($is_exTermin): ?>
             <a data-dialog="size=50%"
                href="<?= $controller->url_for('course/timesrooms/cancel/'
-                                              . $termin->termin_id . ($termin->metadate_id ? '/' . $termin->metadate_id : ''), $editParams) ?>">
+                                              . $termin->termin_id . ($termin->metadate_id ? '/' . $termin->metadate_id : ''), $linkAttributes) ?>">
                 <?= Icon::create('edit', 'inactive', ['title' => _('Kommentar für diesen Termin bearbeiten')])->asImg() ?>
             </a>
 
@@ -88,18 +89,18 @@
             <? endif ?>
 
             <a <?= Request::isXhr() ? 'data-dialog="size=big"' : '' ?> <? !empty($warning) ? 'data-confirm="' . implode("\n", $warning) . '"' : '' ?>
-                href="<?= $controller->url_for('course/timesrooms/undeleteSingle/' . $termin->termin_id, $editParams) ?>">
+                href="<?= $controller->url_for('course/timesrooms/undeleteSingle/' . $termin->termin_id) ?>">
                 <?= Icon::create('trash+decline', 'inactive', ['title' => _('Diesen Termin wiederherstellen')])->asImg() ?>
             </a>
 
         <? else: ?>
             <? if(!$locked) : ?>
                 <a data-dialog="size=50%"
-                   href="<?= $controller->url_for('course/timesrooms/editDate/' . $termin->termin_id, $editParams) ?>">
+                   href="<?= $controller->url_for('course/timesrooms/editDate/' . $termin->termin_id, $linkAttributes) ?>">
                     <?= Icon::create('edit', 'clickable', ['title' => _('Diesen Termin bearbeiten')])->asImg() ?>
                 </a>
                 <a data-confirm="<?= _('Wollen Sie diesen Termin wirklich löschen / ausfallen lassen?') ?>" <?= Request::isXhr() ? 'data-dialog="size=big"' : '' ?>
-                    href="<?= $controller->url_for('course/timesrooms/deleteSingle/' . $termin->termin_id, array('cycle_id' => $termin->metadate_id)) ?>" <? !empty($warning) ? 'data-confirm="' . implode("\n", $warning) . '"' : '' ?>>
+                    href="<?= $controller->url_for('course/timesrooms/deleteSingle/' . $termin->termin_id, array('cycle_id' => $termin->metadate_id) +  $linkAttributes) ?>" <? !empty($warning) ? 'data-confirm="' . implode("\n", $warning) . '"' : '' ?>>
                     <?= Icon::create('trash', 'clickable', ['title' => _('Diesen Termin löschen / ausfallen lassen')])->asImg() ?>
                 </a>
             <? endif?>

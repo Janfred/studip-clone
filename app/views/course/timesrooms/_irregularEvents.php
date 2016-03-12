@@ -1,4 +1,5 @@
 <?php
+// in den Controller
 $room_request_filter = function ($date) {
     return $date->room_request && !$date->room_request->isNew() && $date->room_request->closed < 2;
 };
@@ -12,12 +13,12 @@ $room_request_filter = function ($date) {
         <? if(!$locked) : ?>
         <nav>
             <a class="link-add"
-               href="<?= $controller->link_for('course/timesrooms/createSingleDate/' . $course->id, $editParams) ?>"
+               href="<?= $controller->link_for('course/timesrooms/createSingleDate/' . $course->id, $linkAttributes) ?>"
                data-dialog="size=600" title="<?= _('Einzeltermin hinzufügen') ?>">
                 <?= _('Neuer Einzeltermin') ?>
             </a>
             <a class="link-add"
-               href="<?= $controller->url_for('course/block_appointments/index/' . $course->id, $editParams) ?>"
+               href="<?= $controller->url_for('course/block_appointments/index/' . $course->id, $linkAttributes) ?>"
                data-dialog="size=600"
                title="<?= _('Blocktermin hinzufügen') ?>">
                 <?= _('Neuer Blocktermin') ?>
@@ -27,7 +28,7 @@ $room_request_filter = function ($date) {
     </header>
 
 <? if (!empty($single_dates)): ?>
-    <form class="default collapsable" action="<?= $controller->url_for('course/timesrooms/stack', $editParams) ?>"
+    <form class="default collapsable" action="<?= $controller->url_for('course/timesrooms/stack') ?>"
           <?= Request::isXhr() ? 'data-dialog="size=big"' : ''?>  method="post">
 
     <? foreach ($single_dates as $semester_id => $termine) : ?>

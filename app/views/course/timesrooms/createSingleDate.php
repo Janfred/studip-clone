@@ -1,5 +1,5 @@
-<form action="<?= $controller->url_for('course/timesrooms/saveSingleDate', $editParams) ?>" method="post"
-      class="default" <?= Request::isXhr() ? 'data-dialog=size=big"' : '' ?>>
+<form action="<?= $controller->url_for('course/timesrooms/saveSingleDate') ?>" method="post"
+      class="default" <?= Request::int('fromDialog') ? 'data-dialog="size=big"' : '' ?>>
     <?= CSRFProtection::tokenTag() ?>
     <label>
         <?= _('Datum') ?>
@@ -84,7 +84,7 @@
     </label>
     <footer data-dialog-button>
         <?= Studip\Button::createAccept(_('Speichern'), 'save') ?>
-        <? if (Request::get('fromDialog') == 'true') : ?>
+        <? if (Request::get('fromDialog')) : ?>
             <?= Studip\LinkButton::create(_('Zurück zur Übersicht'), $controller->url_for('course/timesrooms/index'), array('data-dialog' => 'size=big')) ?>
         <? endif ?>
     </footer>
