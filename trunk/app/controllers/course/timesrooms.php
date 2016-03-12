@@ -628,19 +628,19 @@ class Course_TimesroomsController extends AuthenticatedController
 
         // Update related persons
         if (in_array($action, words('add delete'))) {
-            $course_lectures    = $this->course->getMembers('dozent');
-            $persons            = User::findMany($persons);
+            $course_lectures = $this->course->getMembers('dozent');
+            $persons         = User::findMany($persons);
             foreach ($singledates as $singledate) {
                 if ($action === 'add') {
                     if (count($course_lectures) === count($persons)) {
                         $singledate->dozenten = array();
                     } else {
                         foreach ($persons as $person) {
-                            if(!count($singledate->dozenten->findBy('id', $person->id))) {
+                            if (!count($singledate->dozenten->findBy('id', $person->id))) {
                                 $singledate->dozenten[] = $person;
                             }
                         }
-                        if(count($singledate->dozenten) === count($persons)) {
+                        if (count($singledate->dozenten) === count($persons)) {
                             $singledate->dozenten = array();
                         }
                     }
@@ -663,19 +663,19 @@ class Course_TimesroomsController extends AuthenticatedController
         }
 
         if (in_array($group_action, words('add delete'))) {
-            $course_groups  = Statusgruppen::findBySeminar_id($this->course->id);
-            $groups         = Statusgruppen::findMany($groups);
+            $course_groups = Statusgruppen::findBySeminar_id($this->course->id);
+            $groups        = Statusgruppen::findMany($groups);
             foreach ($singledates as $singledate) {
                 if ($group_action === 'add') {
                     if (count($course_groups) === count($groups)) {
                         $singledate->statusgruppen = array();
                     } else {
                         foreach ($groups as $group) {
-                            if(!count($singledate->statusgruppen->findBy('id', $group->id))) {
+                            if (!count($singledate->statusgruppen->findBy('id', $group->id))) {
                                 $singledate->statusgruppen[] = $group;
                             }
                         }
-                        if(count($singledate->statusgruppen) === count($groups)) {
+                        if (count($singledate->statusgruppen) === count($groups)) {
                             $singledate->statusgruppen = array();
                         }
                     }
@@ -696,28 +696,30 @@ class Course_TimesroomsController extends AuthenticatedController
         }
 
 
-        foreach ($singledates as $key => $singledate) {
-            $date = new SingleDate($singledate);
-            if (Request::option('action') == 'room' && Request::option('room')) {
-                if (Request::option('room') != $singledate->room_assignment->resource_id) {
-                    if ($resObj = $date->bookRoom(Request::option('room'))) {
-                        $messages = $date->getMessages();
-                        $this->course->appendMessages($messages);
-                    } else {
-                        $this->course->createError(sprintf(_("Der angegebene Raum konnte für den Termin %s nicht gebucht werden!"),
-                                                           '<strong>' . $date->toString() . '</strong>'));
+        if (in_array(Request::get('option'))) {
+            foreach ($singledates as $key => $singledate) {
+                $date = new SingleDate($singledate);
+                if (Request::option('action') == 'room' && Request::option('room')) {
+                    if (Request::option('room') != $singledate->room_assignment->resource_id) {
+                        if ($resObj = $date->bookRoom(Request::option('room'))) {
+                            $messages = $date->getMessages();
+                            $this->course->appendMessages($messages);
+                        } else {
+                            $this->course->createError(sprintf(_("Der angegebene Raum konnte für den Termin %s nicht gebucht werden!"),
+                                                               '<strong>' . $date->toString() . '</strong>'));
+                        }
                     }
+                } elseif (Request::option('action') == 'freetext') {
+                    $date->setFreeRoomText(Request::get('freeRoomText'));
+                    $date->store();
+                    $date->killAssign();
+                    $date->course->createMessage(sprintf(_("Der Termin %s wurde geändert, etwaige Raumbuchung wurden entfernt und stattdessen der angegebene Freitext eingetragen!"),
+                                                         '<strong>' . $date->toString() . '</strong>'));
+                } elseif (Request::option('action') == 'noroom') {
+                    $date->killAssign();
+                    $this->course->createMessage(sprintf(_("Der Termin %s wurde geändert, etwaige freie Ortsangaben und Raumbuchungen wurden entfernt."),
+                                                         '<strong>' . $date->toString() . '</strong>'));
                 }
-            } elseif (Request::option('action') == 'freetext') {
-                $date->setFreeRoomText(Request::get('freeRoomText'));
-                $date->store();
-                $date->killAssign();
-                $date->course->createMessage(sprintf(_("Der Termin %s wurde geändert, etwaige Raumbuchung wurden entfernt und stattdessen der angegebene Freitext eingetragen!"),
-                                                     '<strong>' . $date->toString() . '</strong>'));
-            } elseif (Request::option('action') == 'noroom') {
-                $date->killAssign();
-                $this->course->createMessage(sprintf(_("Der Termin %s wurde geändert, etwaige freie Ortsangaben und Raumbuchungen wurden entfernt."),
-                                                     '<strong>' . $date->toString() . '</strong>'));
             }
         }
     }
