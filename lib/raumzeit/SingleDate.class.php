@@ -71,25 +71,32 @@ class SingleDate
     function SingleDate($data = '')
     {
         global $user, $id;
-        if (is_array($data)) {
-            if ($data['termin_id']) $termin_id = $data['termin_id'];
-            if ($data['seminar_id']) $id = $data['seminar_id'];
+        if ($data instanceOf CourseDate || $data instanceof CourseExDate) {
+            $single_date_data = $data->toArray();
+            $single_date_data['ex_termin'] = $data instanceOf CourseDate ? 0 : 1;
+            $this->fillValuesFromArray($single_date_data);
         } else {
-            $termin_id = $data;
-        }
-        if ($termin_id != '') {
-            $this->termin_id = $termin_id;
-            $this->update = true;
-            $this->restore();
-        } else {
-            $this->termin_id = md5(uniqid('SingleDate', 1));
-            $this->author_id = $user->id;
-            $this->range_id = $id;
-            $this->mkdate = time();
-            $this->chdate = time();
-            $this->update = false;
+            if (is_array($data)) {
+                if ($data['termin_id']) $termin_id = $data['termin_id'];
+                if ($data['seminar_id']) $id = $data['seminar_id'];
+            } else {
+                $termin_id = $data;
+            }
+            if ($termin_id != '') {
+                $this->termin_id = $termin_id;
+                $this->update = true;
+                $this->restore();
+            } else {
+                $this->termin_id = md5(uniqid('SingleDate', 1));
+                $this->author_id = $user->id;
+                $this->range_id = $id;
+                $this->mkdate = time();
+                $this->chdate = time();
+                $this->update = false;
+            }
         }
     }
+
 
     function getStartTime()
     {
