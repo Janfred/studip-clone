@@ -36,7 +36,7 @@
                 <input style="display: inline;" type="radio" name="room" value="room"
                        id="room" <?= $date->room_assignment->resource_id ? 'checked' : '' ?>>
 
-                <select name="room_sd" style="display: inline-block; width: 40%; margin-left: 40px" class="single_room">
+                <select name="room_sd" style="display: inline-block; width: 50%; margin-left: 40px" class="single_room">
                     <option value=""><?= _('Wählen Sie einen Raum aus') ?></option>
                     <? foreach ($resList->resources as $room_id => $room) : ?>
                         <option value="<?= $room_id ?>"
@@ -50,7 +50,7 @@
         <label class="horizontal">
             <input type="radio" name="room" value="freetext" <?= $date->raum ? 'checked' : '' ?>
                    style="display: inline">
-            <input style="margin-left: 40px; display: inline-block" type="text"
+            <input style="display: inline-block; width: 50%; margin-left: 40px" type="text"
                    name="freeRoomText_sd"
                    placeholder="<?= _('Freie Ortsangabe (keine Raumbuchung)') ?>"
                    value="<?= $date->raum ? htmlReady($date->raum) : '' ?>">
