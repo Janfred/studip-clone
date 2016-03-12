@@ -2,7 +2,7 @@
 <br />
 <a name="users"></a>
 
-<form action="<?= $controller->url_for('course/members/edit_accepted/') ?>" method="post" data-dialog="size=50%>
+<form action="<?= $controller->url_for('course/members/edit_accepted/') ?>" method="post" data-dialog="size=50%">
     <?= CSRFProtection::tokenTag() ?>
     <table class="default collapsable">
         <caption>
@@ -67,12 +67,11 @@
                 <? endif ?>
                 <td style="text-align: right"><?= (++$nr < 10) ? sprintf('%02d', $nr) : $nr ?></td>
                 <td>
-                    <a style="position: relative" href="<?= $controller->url_for(sprintf('profile?username=%s',$accept['username'])) ?>">
-                    <?= Avatar::getAvatar($accept['user_id'], $accept['username'])->getImageTag(Avatar::SMALL,
-                            array('style' => 'margin-right: 5px','title' => htmlReady($fullname))); ?>
-                    <?= $accept['mkdate'] >= $last_visitdate ? Assets::img('red_star',
-                        array('style' => 'position: absolute; margin: 0px 0px 0px -15px')) : '' ?>
-                    <?= htmlReady($fullname) ?>
+                    <a href="<?= $controller->url_for(sprintf('profile?username=%s',$accept['username'])) ?>" <? if ($accept['mkdate'] >= $last_visitdate) echo 'class="new-member"'; ?>>
+                        <?= Avatar::getAvatar($accept['user_id'], $accept['username'])->getImageTag(Avatar::SMALL,
+                                array('style' => 'margin-right: 5px','title' => htmlReady($fullname))); ?>
+
+                        <?= htmlReady($fullname) ?>
                     </a>
                     <? if ($accept['comment'] != '') : ?>
                         <?= tooltipIcon(sprintf('<strong>%s</strong><br>%s', _('Bemerkung'), htmlReady($accept['comment'])), false, true) ?>

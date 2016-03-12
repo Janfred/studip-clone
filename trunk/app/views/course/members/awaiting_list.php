@@ -1,7 +1,7 @@
 <? use \Studip\Button; ?>
 <br />
 <a name="awaiting"></a>
-<form action="<?= $controller->url_for('course/members/edit_awaiting/') ?>" method="post" data-dialog="size=50%>
+<form action="<?= $controller->url_for('course/members/edit_awaiting/') ?>" method="post" data-dialog="size=50%">
     <?= CSRFProtection::tokenTag() ?>
     <table class="default collapsable ">
         <caption>
@@ -66,12 +66,10 @@
                 </td>
                 <td style="text-align: right"><?= (++$nr < 10) ? sprintf('%02d', $nr) : $nr ?></td>
                 <td>
-                    <a style="position: relative" href="<?= $controller->url_for(sprintf('profile?username=%s',$waiting['username'])) ?>">
-                    <?= Avatar::getAvatar($waiting['user_id'], $waiting['username'])->getImageTag(Avatar::SMALL,
-                            array('style' => 'margin-right: 5px', 'title' => htmlReady($fullname))); ?>
-                    <?= $waiting['mkdate'] >= $last_visitdate ? Assets::img('red_star',
-                        array('style' => 'position: absolute; margin: 0px 0px 0px -15px')) : '' ?>
-                    <?= htmlReady($fullname) ?>
+                    <a href="<?= $controller->url_for(sprintf('profile?username=%s',$waiting['username'])) ?>" <? if ($waiting['mkdate'] >= $last_visitdate) echo 'class="new-member"'; ?>>
+                        <?= Avatar::getAvatar($waiting['user_id'], $waiting['username'])->getImageTag(Avatar::SMALL,
+                                array('style' => 'margin-right: 5px', 'title' => htmlReady($fullname))); ?>
+                        <?= htmlReady($fullname) ?>
                     </a>
                 </td>
                 <td>

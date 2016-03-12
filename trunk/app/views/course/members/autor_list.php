@@ -80,12 +80,10 @@
                 <? endif ?>
                 <td style="text-align: right"><?= (++$nr < 10) ? sprintf('%02d', $nr) : $nr ?></td>
                 <td>
-                    <a style="position: relative" href="<?= $controller->url_for(sprintf('profile?username=%s',$autor['username'])) ?>">
-                    <?= Avatar::getAvatar($autor['user_id'], $autor['username'])->getImageTag(Avatar::SMALL,
-                            array('style' => 'margin-right: 5px', 'title' => htmlReady($fullname))); ?>
-                    <?= $autor['mkdate'] >= $last_visitdate ? Assets::img('red_star',
-                        array('style' => 'position: absolute; margin: 0px 0px 0px -15px')) : '' ?>
-                    <?= htmlReady($fullname) ?>
+                    <a href="<?= $controller->url_for(sprintf('profile?username=%s',$autor['username'])) ?>" <? if ($autor['mkdate'] >= $last_visitdate) echo 'class="new-member"'; ?>>
+                        <?= Avatar::getAvatar($autor['user_id'], $autor['username'])->getImageTag(Avatar::SMALL,
+                                array('style' => 'margin-right: 5px', 'title' => htmlReady($fullname))); ?>
+                        <?= htmlReady($fullname) ?>
                     <? if ($user_id == $autor['user_id'] && $autor['visible'] == 'no') : ?>
                        (<?= _('unsichtbar') ?>)
                    <? endif ?>
