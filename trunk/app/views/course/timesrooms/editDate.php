@@ -2,24 +2,24 @@
       method="post" class="default collapsable" <?= Request::int('fromDialog') ? 'data-dialog="size=big"' : '' ?>>
     <fieldset style="margin-top: 1ex">
         <legend><?= _('Zeitangaben') ?></legend>
-        <label>
+        <label class="col-2">
             <?= _('Datum') ?>
             <input class="has-date-picker size-s" type="text" name="date"
                    value="<?= $date->date ? strftime('%d.%m.%Y', $date->date) : '' ?>">
         </label>
-        <label>
+        <label class="col-2">
             <?= _('Startzeit') ?>
             <input class="studip-timepicker size-s" type="text" name="start_time" placeholder="HH:mm"
                    value="<?= $date->date ? strftime('%H:%M', $date->date) : '' ?>">
         </label>
-        <label>
+        <label class="col-2">
             <?= _('Endzeit') ?>
             <input class="studip-timepicker size-s" type="text" name="end_time" placeholder="HH:mm"
                    value="<?= $date->end_time ? strftime('%H:%M', $date->end_time) : '' ?>">
         </label>
         <label id="course_type">
             <?= _('Art') ?>
-            <select name="course_type" id="course_type">
+            <select name="course_type" id="course_type" class="size-s">
                 <? foreach ($GLOBALS['TERMIN_TYP'] as $id => $value) : ?>
                     <option value="<?= $id ?>"
                         <?= $date->date_typ == $id ? 'selected' : '' ?>>
@@ -36,7 +36,7 @@
                 <input style="display: inline;" type="radio" name="room" value="room"
                        id="room" <?= $date->room_assignment->resource_id ? 'checked' : '' ?>>
 
-                <select name="room_sd" style="display: inline-block; margin-left: 40px" class="single_room">
+                <select name="room_sd" style="display: inline-block; width: 40%; margin-left: 40px" class="single_room">
                     <option value=""><?= _('Wählen Sie einen Raum aus') ?></option>
                     <? foreach ($resList->resources as $room_id => $room) : ?>
                         <option value="<?= $room_id ?>"
@@ -90,9 +90,9 @@
 
             <label for="add_teacher">
                 <span style="display: block">
-                    <?= _('Lehrenden auswählen') ?>
+                    <?= _('Lehrende auswählen') ?>
                 </span>
-                <select id="add_teacher" name="teachers" style="display: inline-block">
+                <select id="add_teacher" name="teachers" style="display: inline-block; width: 40%">
                     <option value="none"><?= _('Lehrende auswählen') ?></option>
                     <? foreach ($dozenten as $dozent) : ?>
                         <option
@@ -135,7 +135,7 @@
                     <?= _('Gruppe hinzufügen') ?>
                 </span>
 
-                <select name="groups" style="display: inline-block">
+                <select name="groups" style="display: inline-block; width: 40%">
                     <option value="none"><?= _('Gruppen auswählen') ?></option>
                     <? foreach ($gruppen as $gruppe) : ?>
                         <option value="<?= htmlReady($gruppe->getId()) ?>"

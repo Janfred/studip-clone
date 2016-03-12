@@ -95,7 +95,7 @@
 
         <? else: ?>
             <? if(!$locked) : ?>
-                <a data-dialog="size=50%"
+                <a data-dialog="size=fit"
                    href="<?= $controller->url_for('course/timesrooms/editDate/' . $termin->termin_id, $linkAttributes) ?>">
                     <?= Icon::create('edit', 'clickable', ['title' => _('Diesen Termin bearbeiten')])->asImg() ?>
                 </a>
