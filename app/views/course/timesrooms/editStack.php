@@ -6,7 +6,7 @@
         <?= _('Durchführende Lehrende') ?>
         <select name="related_persons_action" id="related_persons_action">
             <option value="">-- <?= _('Aktion auswählen') ?> --</option>
-            <option value="add"><?= _('hinzufügen') ?></option>
+            <option value="add">...<?= _('hinzufügen') ?></option>
             <option value="delete">...<?= _('entfernen') ?></option>
         </select>
     </label>
