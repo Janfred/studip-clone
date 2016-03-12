@@ -101,7 +101,7 @@
                                         </label>
                                     </td>
                                     <td colspan="3" class="actions">
-                                        <select name="method" class="actionForAllRegular_<?= $metadate_id ?>">
+                                        <select name="method" class="datesBulkActions actionForAllRegular_<?= $metadate_id ?>">
                                             <?= $this->render_partial('course/timesrooms/_stack_actions.php') ?>
                                         </select>
                                         <?= Studip\Button::create(_('Ausführen'), 'run', array('class' => 'actionForAllRegular','data-dialog' => 'size=big')) ?>

@@ -87,12 +87,23 @@
         $('.course-admin #course-' + info.course_id + ' .raumzeit').html(info.html);
     };
 
-    $(document).on('change', '#edit-cycle', function() {
+    $(document).on('change', '.datesBulkActions', function () {
+        var $button = $(this).next('button');
+        if ($(this).val() === 'delete') {
+            $button.attr('data-confirm', 'Wollen Sie die gewünschten Termine wirklich löschen?'.toLocaleString());
+        } else {
+            if ($button.attr('data-confirm')) {
+                $button.removeAttr('data-confirm');
+            }
+        }
+    });
+
+    $(document).on('change', '#edit-cycle', function () {
         var start = $('input[name=start_time]', this)[0],
-            end   = $('input[name=end_time]', this)[0],
+            end = $('input[name=end_time]', this)[0],
             changed = start.defaultValue
-                      && end.defaultValue
-                      && (start.value !== start.defaultValue || end.value !== end.defaultValue);
+                && end.defaultValue
+                && (start.value !== start.defaultValue || end.value !== end.defaultValue);
         // check if new time exceeds the current one and add security question if necessary
         if (changed && (start.value < start.defaultValue || end.value > end.defaultValue)) {
             $(this).attr('data-confirm', 'Wenn Sie die regelmäßige Zeit ändern, '
