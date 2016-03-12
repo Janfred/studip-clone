@@ -18,28 +18,51 @@
  * This controller realises a redirector for administrative pages
  *
  * @since 2.2
- * @author hackl
+ * @author Thomas Hackl <thomas.hackl@uni-passau.de>
  */
 class Course_ChangeViewController extends AuthenticatedController
 {
 
     // see Trails_Controller#before_filter
-    function before_filter(&$action, &$args) {
+    public function before_filter(&$action, &$args)
+    {
         parent::before_filter($action, $args);
 
-        $course_id = Request::option('cid');
-        if (isset($_SESSION['seminar_change_view_' . $course_id])) {
-            unset($_SESSION['seminar_change_view_' . $course_id]);
-            // Reset simulated view, redirect to administration page.
-            $this->redirect(URLHelper::getURL('dispatch.php/course/management'));
-        } elseif (get_object_type($course_id, array('sem'))
-        && !SeminarCategories::GetBySeminarId($course_id)->studygroup_mode
-        && in_array($GLOBALS['perm']->get_studip_perm($course_id), words('tutor dozent'))) {
-            // Set simulated view, redirect to overview page.
-            $_SESSION['seminar_change_view_' . $course_id] = 'autor';
-            $this->redirect(URLHelper::getURL('seminar_main.php'));
-        } else {
+        $this->course_id = Course::findCurrent()->id;
+
+    }
+
+    /**
+     * Sets the current course into participant view.
+     * Only available for tutor upwards.
+     *
+     * @throws Trails_Exception Someone with unfitting rights tried to call here.
+     */
+    public function set_changed_view_action()
+    {
+        if (!$GLOBALS['perm']->have_studip_perm('tutor', Course::findCurrent()->id)) {
             throw new Trails_Exception(400);
         }
+        $_SESSION['seminar_change_view_' . $this->course_id] = 'autor';
+        $this->relocate('course/overview');
+    }
+
+    /**
+     * Resets a course currently in participant view to normal view
+     * with real rights.
+     *
+     * @throws Trails_Exception Someone with unfitting rights tried to call here.
+     */
+    public function reset_changed_view_action()
+    {
+        /*
+         * We need to check the real database entry here because $perm would
+         * only return the simulated rights.
+         */
+        if (!CourseMember::findByCourseAndStatus(Course::findCurrent()->id, array('tutor', 'dozent'))) {
+            throw new Trails_Exception(400);
+        }
+        unset($_SESSION['seminar_change_view_' . $this->course_id]);
+        $this->relocate('course/management');
     }
 }
