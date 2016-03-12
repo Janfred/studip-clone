@@ -631,9 +631,14 @@ class Course_TimesroomsController extends AuthenticatedController
             $course_lectures = $this->course->getMembers('dozent');
             foreach ($singledates as $singledate) {
                 if ($action === 'add') {
-                    $singledate->dozenten = array();
-                    if (count($course_lectures) !== count($persons)) {
-                        $singledate->dozenten = User::findMany($persons);
+                    if (count($course_lectures) === count($persons)) {
+                        $singledate->dozenten = array();
+                    } else {
+                        foreach ($persons as $person_id) {
+                            if(!$singledate->dozenten->findOne($person_id)) {
+                                $singledate->dozenten[] = User::find($person_id);
+                            }
+                        }
                     }
                     $lecture_changed = true;
                 }
@@ -687,7 +692,7 @@ class Course_TimesroomsController extends AuthenticatedController
                         $this->course->appendMessages($messages);
                     } else {
                         $this->course->createError(sprintf(_("Der angegebene Raum konnte für den Termin %s nicht gebucht werden!"),
-                           '<strong>' . $date->toString() . '</strong>'));
+                                                           '<strong>' . $date->toString() . '</strong>'));
                     }
                 }
             } elseif (Request::option('action') == 'freetext') {
@@ -695,11 +700,11 @@ class Course_TimesroomsController extends AuthenticatedController
                 $date->store();
                 $date->killAssign();
                 $date->course->createMessage(sprintf(_("Der Termin %s wurde geändert, etwaige Raumbuchung wurden entfernt und stattdessen der angegebene Freitext eingetragen!"),
-                     '<strong>' . $date->toString() . '</strong>'));
+                                                     '<strong>' . $date->toString() . '</strong>'));
             } elseif (Request::option('action') == 'noroom') {
                 $date->killAssign();
                 $this->course->createMessage(sprintf(_("Der Termin %s wurde geändert, etwaige freie Ortsangaben und Raumbuchungen wurden entfernt."),
-                    '<strong>' . $date->toString() . '</strong>'));
+                                                     '<strong>' . $date->toString() . '</strong>'));
             }
         }
     }

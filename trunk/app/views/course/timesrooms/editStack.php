@@ -61,7 +61,7 @@
     <section>
     <input type="radio" name="action" value="freetext">
     <label style="display: inline;">
-        <input type="text" name="freeRoomText" style="display: inline;" maxlength="255" value="<?= $tpl['freeRoomText'] ?>"
+        <input type="text" name="freeRoomText" style="display: inline;" value="<?= $tpl['freeRoomText'] ?>"
                placeholder="<?= $placerholder ?>"
                onFocus="jQuery('input[type=radio][name=action][value=freetext]').prop('checked', 'checked')">
     </label>
