@@ -39,35 +39,31 @@
     <? if (Config::get()->RESOURCES_ENABLE && $resList->numberOfRooms()) : ?>
         <? $resList->reset() ?>
         <section>
-            <label style="width: 10%">
-                <input type="radio" name="action" value="room" checked="checked" />
-            </label>
-            <label>
-                <select class="size-l" name="room" onFocus="jQuery('input[type=radio][name=action][value=room]').prop('checked', 'checked')">
-                    <option value="0">-- <?= _('Raum auswählen') ?> --</option>
-                    <? while ($res = $resList->next()) : ?>
-                        <option value="<?= $res['resource_id'] ?>">
-                            <?= my_substr(htmlReady($res["name"]), 0, 30) ?> <?= $seats[$res['resource_id']] ? '(' . $seats[$res['resource_id']] . ' ' . _('Sitzplätze') . ')' : '' ?>
-                        </option>
-                    <? endwhile; ?>
-                </select>
-                <?= Icon::create('room-clear', 'inactive', ['title' => _("Nur buchbare Räume anzeigen")])->asImg(16, ["class" => 'bookable_rooms_action', "data-name" => 'bulk_action']) ?>
-            </label>
+        <input type="radio" name="action" value="room" checked="checked">
+        <label style="display: inline;">
+            <select name="room" style="display: inline; " onFocus="jQuery('input[type=radio][name=action][value=room]').prop('checked', 'checked')">
+                <option value="0">-- <?= _('Raum auswählen') ?> --</option>
+                <? while ($res = $resList->next()) : ?>
+                    <option value="<?= $res['resource_id'] ?>">
+                        <?= my_substr(htmlReady($res["name"]), 0, 30) ?> <?= $seats[$res['resource_id']] ? '(' . $seats[$res['resource_id']] . ' ' . _('Sitzplätze') . ')' : '' ?>
+                    </option>
+                <? endwhile; ?>
+            </select>
+            <?= Icon::create('room-clear', 'inactive', ['title' => _("Nur buchbare Räume anzeigen")])->asImg(16, ["class" => 'bookable_rooms_action', "data-name" => 'bulk_action']) ?>
+        </label>
         </section>
 
         <? $placerholder = _('Freie Ortsangabe (keine Raumbuchung):') ?>
     <? else : ?>
         <? $placerholder = _('Freie Ortsangabe:') ?>
     <? endif ?>
-    <section class="hgroup" style="margin: 10px 0px">
-        <label style="width:10%">
-            <input type="radio" name="action" value="freetext">
-        </label>
-        <label>
-            <input type="text" name="freeRoomText" class="size-l" maxlength="255" value="<?= $tpl['freeRoomText'] ?>"
-                   placeholder="<?= $placerholder ?>"
-                   onFocus="jQuery('input[type=radio][name=action][value=freetext]').prop('checked', 'checked')">
-        </label>
+    <section>
+    <input type="radio" name="action" value="freetext">
+    <label style="display: inline;">
+        <input type="text" name="freeRoomText" style="display: inline;" maxlength="255" value="<?= $tpl['freeRoomText'] ?>"
+               placeholder="<?= $placerholder ?>"
+               onFocus="jQuery('input[type=radio][name=action][value=freetext]').prop('checked', 'checked')">
+    </label>
     </section>
     <? if (Config::get()->RESOURCES_ENABLE) : ?>
         <label>
@@ -76,7 +72,7 @@
         </label>
     <? endif ?>
 
-    <label class="inline">
+    <label>
         <input type="radio" name="action" value="nochange" checked="checked">
         <?= _('Keine Änderungen an den Raumangaben vornehmen') ?>
     </label>
