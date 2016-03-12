@@ -1,6 +1,7 @@
 <form method="post" action="<?= $controller->url_for('course/timesrooms/saveStack/' . $cycle_id, $linkAttributes) ?>" class="default"
       data-dialog="size=big">
-    <input type="hidden" name="method" value="edit" />
+    <?= CSRFProtection::tokenTag()?>
+    <input type="hidden" name="method" value="edit">
 
     <label>
         <?= _('Durchführende Lehrende') ?>

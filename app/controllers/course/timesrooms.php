@@ -235,10 +235,10 @@ class Course_TimesroomsController extends AuthenticatedController
      */
     public function saveDate_action($termin_id)
     {
-        $termin = CourseDate::find($termin_id);
-
-        $date     = strtotime(sprintf('%s %s:00', Request::get('date'), Request::get('start_time')));
-        $end_time = strtotime(sprintf('%s %s:00', Request::get('date'), Request::get('end_time')));
+        CSRFProtection::verifyUnsafeRequest();
+        $termin     = CourseDate::find($termin_id);
+        $date       = strtotime(sprintf('%s %s:00', Request::get('date'), Request::get('start_time')));
+        $end_time   = strtotime(sprintf('%s %s:00', Request::get('date'), Request::get('end_time')));
 
         //time changed for regular date. create normal singledate and cancel the regular date
         if (($termin->metadate_id != '' || isset($termin->metadate_id))
@@ -364,7 +364,7 @@ class Course_TimesroomsController extends AuthenticatedController
      */
     public function saveSingleDate_action()
     {
-        CSRFProtection::verifyRequest();
+        CSRFProtection::verifyUnsafeRequest();
 
         $start_time = strtotime(sprintf('%s %s:00', Request::get('date'), Request::get('start_time')));
         $end_time   = strtotime(sprintf('%s %s:00', Request::get('date'), Request::get('end_time')));
@@ -439,6 +439,7 @@ class Course_TimesroomsController extends AuthenticatedController
      */
     public function deleteSingle_action($termin_id, $sub_cmd = 'delete')
     {
+        CSRFProtection::verifyUnsafeRequest();
         $cycle_id = Request::option('cycle_id');
         if ($cycle_id) {
             $sub_cmd = 'cancel';
@@ -589,12 +590,13 @@ class Course_TimesroomsController extends AuthenticatedController
      */
     public function saveStack_action($cycle_id = '')
     {
+        CSRFProtection::verifyUnsafeRequest();
         switch (Request::get('method')) {
             case 'edit':
-                $this->saveEditedStack($cycle_id);
+                $this->saveEditedStack();
                 break;
             case 'preparecancel':
-                $this->saveCanceledStack($cycle_id);
+                $this->saveCanceledStack();
                 break;
         }
 
@@ -610,7 +612,7 @@ class Course_TimesroomsController extends AuthenticatedController
      *
      * @param String $cycle_id Id of the canceled cycle to be saved.
      */
-    private function saveCanceledStack($cycle_id = '')
+    private function saveCanceledStack()
     {
         $msg           = _('Folgende Termine wurden gelöscht') . '<ul>';
         $deleted_dates = array();
@@ -642,7 +644,7 @@ class Course_TimesroomsController extends AuthenticatedController
      *
      * @param String $cycle_id Id of the edited cycle to be saved.
      */
-    private function saveEditedStack($cycle_id = '')
+    private function saveEditedStack()
     {
         $persons      = Request::getArray('related_persons');
         $action       = Request::get('related_persons_action');
