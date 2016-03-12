@@ -1,5 +1,5 @@
 <form id="edit-cycle"
-    action="<?= $controller->url_for('course/timesrooms/' . ($cycle->isNew() ? 'saveCycle' : 'editCycle/' . $cycle->id)) ?>"
+    action="<?= $controller->url_for('course/timesrooms/' . ($cycle->isNew() ? 'saveCycle' : 'editCycle/' . $cycle->id), $linkAttributes) ?>"
     class="default" method="post"
     <?= Request::isXhr() ? 'data-dialog="size=big"' : '' ?>>
     <?= CSRFProtection::tokenTag() ?>
@@ -19,14 +19,14 @@
     <label class="col3">
         <?= _('Startzeit') ?>
         <input class="size-s studip-timepicker" type="text" name="start_time"
-               value="<?= htmlReady(Request::get('start_time', strftime('%H:%M', strtotime($cycle->start_time)))) ?>"
+               value="<?= htmlReady(Request::get('start_time', $cycle->start_time)) ?>"
                required placeholder="HH:mm">
     </label>
 
     <label class="col3">
         <?= _('Endzeit') ?>
         <input class="size-s studip-timepicker" type="text" name="end_time"
-               value="<?= htmlReady(Request::get('end_time', strftime('%H:%M', strtotime($cycle->end_time)))) ?>"
+               value="<?= htmlReady(Request::get('end_time', $cycle->end_time)) ?>"
                required placeholder="HH:mm">
     </label>
 

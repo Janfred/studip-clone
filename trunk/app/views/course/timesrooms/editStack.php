@@ -1,4 +1,4 @@
-<form method="post" action="<?= $controller->url_for('course/timesrooms/saveStack/' . $cycle_id) ?>" class="default"
+<form method="post" action="<?= $controller->url_for('course/timesrooms/saveStack/' . $cycle_id, $linkAttributes) ?>" class="default"
       data-dialog="size=big">
     <input type="hidden" name="method" value="edit" />
 
@@ -82,7 +82,7 @@
     </label>
     <footer data-dialog-button>
         <?= Studip\Button::createAccept(_('Änderungen speichern'), 'save') ?>
-        <? if (Request::get('fromDialog') == 'true') : ?>
+        <? if (Request::int('fromDialog')) : ?>
             <?= Studip\LinkButton::create(_('Zurück zur Übersicht'), $controller->url_for('course/timesrooms/index'), array('data-dialog' => 'size=big')) ?>
         <? endif ?>
     </footer>

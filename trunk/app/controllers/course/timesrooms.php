@@ -75,7 +75,7 @@ class Course_TimesroomsController extends AuthenticatedController
             $semester = Semester::find($this->semester_filter);
             $this->course->applyTimeFilter($semester['beginn'], $semester['ende']);
         }
-        $this->linkAttributes   = array('fromDialog' => Request::isXhr() ? 1 : 0);
+
         $selectable_semesters   = new SimpleCollection(Semester::getAll());
         $start                  = $this->course->start_time;
         $end                    = $this->course->duration_time == -1 ? PHP_INT_MAX : $this->course->end_time;
@@ -121,7 +121,7 @@ class Course_TimesroomsController extends AuthenticatedController
                 'roomRequest' => false,
             );
         }
-
+        $this->linkAttributes   = array('fromDialog' => Request::isXhr() ? 1 : 0);
         $this->semester         = array_reverse(Semester::getAll());
         $this->current_semester = Semester::findCurrent();
         $this->cycle_dates      = array();
@@ -488,6 +488,8 @@ class Course_TimesroomsController extends AuthenticatedController
             $this->redirect($this->url_for('course/timesrooms/index', array('contentbox_open' => $cycle_id)));
             return;
         }
+        
+        $this->linkAttributes = array('fromDialog' => Request::int('fromDialog') ? 1 : 0);
 
         switch (Request::get('method')) {
             case 'edit':
@@ -553,7 +555,11 @@ class Course_TimesroomsController extends AuthenticatedController
 
         unset($_SESSION['_checked_dates']);
 
-        $this->redirect($this->url_for('course/timesrooms/index', array('contentbox_open' => $cycle_id)));
+        if(Request::int('fromDialog')) {
+            $this->redirect($this->url_for('course/timesrooms/index', array('contentbox_open' => $cycle_id)));
+        } else {
+            $this->relocate('course/timesrooms/index', array('contentbox_open' => $cycle_id));
+        }
     }
 
     /**
@@ -577,7 +583,11 @@ class Course_TimesroomsController extends AuthenticatedController
         $this->displayMessages();
         unset($_SESSION['_checked_dates']);
 
-        $this->redirect($this->url_for('course/timesrooms/index', array('contentbox_open' => $cycle_id)));
+        if(Request::int('fromDialog')) {
+            $this->redirect($this->url_for('course/timesrooms/index', array('contentbox_open' => $cycle_id)));
+        } else {
+            $this->relocate('course/timesrooms/index', array('contentbox_open' => $cycle_id));
+        }
     }
 
     /**
@@ -600,7 +610,11 @@ class Course_TimesroomsController extends AuthenticatedController
 
         unset($_SESSION['_checked_dates']);
 
-        $this->redirect($this->url_for('course/timesrooms/index', array('contentbox_open' => $cycle_id)));
+        if(Request::int('fromDialog')) {
+            $this->redirect($this->url_for('course/timesrooms/index', array('contentbox_open' => $cycle_id)));
+        } else {
+            $this->relocate('course/timesrooms/index', array('contentbox_open' => $cycle_id));
+        }
     }
 
     /**
@@ -642,7 +656,7 @@ class Course_TimesroomsController extends AuthenticatedController
      */
     private function saveEditedStack($cycle_id = '')
     {
-       $persons      = Request::getArray('related_persons');
+        $persons      = Request::getArray('related_persons');
         $action       = Request::get('related_persons_action');
         $groups       = Request::getArray('related_groups');
         $group_action = Request::get('related_groups_action');
