@@ -147,7 +147,7 @@ class Course_BlockAppointmentsController extends AuthenticatedController
             }
         }
 
-        if (Request::get('fromDialog') == 'true') {
+        if (Request::int('fromDialog')) {
             $this->redirect('course/timesrooms/index');
         } else {
             $this->relocate('course/timesrooms/index');
