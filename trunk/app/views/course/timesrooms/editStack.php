@@ -1,4 +1,4 @@
-<form method="post" action="<?= $controller->url_for('course/timesrooms/saveStack/' . $cycle_id, $editParams) ?>" class="default"
+<form method="post" action="<?= $controller->url_for('course/timesrooms/saveStack/' . $cycle_id) ?>" class="default"
       data-dialog="size=big">
     <input type="hidden" name="method" value="edit" />
 

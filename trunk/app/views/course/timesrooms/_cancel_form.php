@@ -1,4 +1,5 @@
 <?php
+// In den Controller
 $content = '';
 if ($termin instanceof CourseExDate && isset($termin->content)) {
     $content = $termin->content;
