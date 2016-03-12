@@ -109,7 +109,7 @@
     </label>
 
     <label>
-        <?= _('SWS Dozent') ?>
+        <?= _('SWS Lehrende') ?>
         <input type="text" name="teacher_sws" class="size-s"
                value="<?= $cycle->sws ? htmlReady(Request::get('teacher_sws', $cycle->sws)) :'' ?>">
     </label>
