@@ -628,28 +628,32 @@ class Course_TimesroomsController extends AuthenticatedController
 
         // Update related persons
         if (in_array($action, words('add delete'))) {
-            $course_lectures = $this->course->getMembers('dozent');
+            $course_lectures    = $this->course->getMembers('dozent');
+            $persons            = User::findMany($persons);
             foreach ($singledates as $singledate) {
                 if ($action === 'add') {
                     if (count($course_lectures) === count($persons)) {
                         $singledate->dozenten = array();
                     } else {
-                        foreach ($persons as $person_id) {
-                            if(!$singledate->dozenten->findOne($person_id)) {
-                                $singledate->dozenten[] = User::find($person_id);
+                        foreach ($persons as $person) {
+                            if(!count($singledate->dozenten->findBy('id', $person->id))) {
+                                $singledate->dozenten[] = $person;
                             }
                         }
+                        if(count($singledate->dozenten) === count($persons)) {
+                            $singledate->dozenten = array();
+                        }
                     }
+
                     $lecture_changed = true;
                 }
 
                 if ($action === 'delete') {
-                    foreach ($persons as $person_id) {
-                        $singledate->dozenten->unsetByPk($person_id);
+                    foreach ($persons as $person) {
+                        $singledate->dozenten->unsetBy('id', $person->id);
                     }
                     $lecture_changed = true;
                 }
-
                 $singledate->store();
             }
         }
@@ -659,18 +663,27 @@ class Course_TimesroomsController extends AuthenticatedController
         }
 
         if (in_array($group_action, words('add delete'))) {
-            $course_groups = Statusgruppen::findBySeminar_id($this->course->id);
+            $course_groups  = Statusgruppen::findBySeminar_id($this->course->id);
+            $groups         = Statusgruppen::findMany($groups);
             foreach ($singledates as $singledate) {
                 if ($group_action === 'add') {
-                    $singledate->statusgruppen = array();
-                    if (count($course_groups) !== count($groups)) {
-                        $singledate->statusgruppen = Statusgruppen::findMany($groups);
+                    if (count($course_groups) === count($groups)) {
+                        $singledate->statusgruppen = array();
+                    } else {
+                        foreach ($groups as $group) {
+                            if(!count($singledate->statusgruppen->findBy('id', $group->id))) {
+                                $singledate->statusgruppen[] = $group;
+                            }
+                        }
+                        if(count($singledate->statusgruppen) === count($groups)) {
+                            $singledate->statusgruppen = array();
+                        }
                     }
                     $groups_changed = true;
                 }
                 if ($group_action === 'delete') {
-                    foreach ($groups as $group_id) {
-                        $singledate->statusgruppen->unsetByPk($group_id);
+                    foreach ($groups as $group) {
+                        $singledate->statusgruppen->unsetByPk($group->id);
                     }
                     $groups_changed = true;
                 }
