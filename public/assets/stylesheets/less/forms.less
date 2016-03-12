@@ -214,18 +214,17 @@ form.default {
     }
 
     // Length hint display for input[maxlength]
-    .length-hint {
-        color: @light-gray-color;
-        text-align: right;
-    }
     .length-hint-wrapper {
-        .flex();
-        .flex-wrap(wrap);
+        position: relative;
+        white-space: nowrap;
+    }
+    .length-hint {
+        position: absolute;
+        bottom: 100%;
+        right: 0;
 
-        > * {
-            .box-sizing(border-box);
-            .flex-item(1, 0, 100%);
-        }
+        color: @light-gray-color;
+        font-size: 0.8em;
     }
 
     // Display small forms as inline

@@ -69,30 +69,28 @@
 
     // Display a visible hint that indicates how many characters the user may
     // input if the element has a maxlength restriction.
-    $(document).on('focus', 'form.default input[maxlength]', function () {
-        var counter = $(this).data('maxlength-counter'),
-            width   = $(this).outerWidth(true),
-            wrap;
-        if (counter === undefined) {
-            wrap = $('<div class="length-hint-wrapper">').width(width);
+    $(document).on('ready', function () {
+        $('form.default input[maxlength]').each(function () {
+            var width   = $(this).outerWidth(true),
+                counter = $('<div class="length-hint">').hide(),
+                wrap    = $('<div class="length-hint-wrapper">').width(width);
+
             $(this).wrap(wrap);
 
-            counter = $('<div class="length-hint">').hide();
             counter.text('Zeichen verbleibend: '.toLocaleString());
-            counter.width(width);
 
             counter.append('<span class="length-hint-counter">');
-            counter.insertAfter(this);
+            counter.insertBefore(this);
 
             $(this).data('maxlength-counter', counter);
-            window.setTimeout(function () {
-                $(this).focus();
-            }.bind(this), 0);
-        }
-        counter.finish().show('blind', {direction: 'up'}, 300);
+            $(this).keyup();
+        });
+    }).on('focus', 'form.default input[maxlength]', function () {
+        var counter = $(this).data('maxlength-counter');
+        counter.finish().show('slide', {direction: 'down'}, 300);
     }).on('blur', 'form.default input[maxlength]', function () {
         var counter = $(this).data('maxlength-counter');
-        counter.finish().hide('blind', {direction: 'up'}, 300);
+        counter.finish().hide('slide', {direction: 'down'}, 300);
     }).on('focus propertychange keyup', 'form.default input[maxlength]', function () {
         var counter = $(this).data('maxlength-counter'),
             count   = $(this).val().length,
