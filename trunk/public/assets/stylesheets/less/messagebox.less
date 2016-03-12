@@ -29,13 +29,19 @@ div.messagebox {
             &.close, &.details {
                 span { display: none; }
             }
-            &.close   { background-image: url("@{image-path}/icons/32/blue/decline.png"); }
-            &.details { background-image: url("@{image-path}/messagebox/minimize_inv.png"); }
+            &.close {
+                .background-icon('decline', 'clickable');
+            }
+            &.details {
+                .background-icon('arr_eol-down', 'clickable');
+            }
         }
     }
 
     &.details_hidden {
-        .messagebox_buttons a.details { background-image: url("@{image-path}/messagebox/maximize_inv.png"); }
+        .messagebox_buttons a.details {
+            .background-icon('arr_eol-up', 'clickable');
+        }
         .messagebox_details { height: 0; }
     }
 }
