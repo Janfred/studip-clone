@@ -1,19 +1,15 @@
 <?php if ($content) : ?>
     <form class="default" action="<?= $controller->url_for('course/wizard/process', $stepnumber, $temp_id) ?>" method="post">
         <?= $content ?>
-        <?php if (!Request::isXhr()) : ?>
-        <footer>
-        <?php endif ?>
+        <footer data-dialog-button>
             <input type="hidden" name="step" value="<?= $stepnumber ?>"/>
             <?php if (!$first_step) { ?>
                 <?= Studip\Button::create(_('Zurück'), 'back',
-                    $dialog ? array('data-dialog' => 'size=50%', 'data-dialog-button' => true) : array()) ?>
+                    $dialog ? array('data-dialog' => 'size=50%') : array()) ?>
             <?php } ?>
             <?= Studip\Button::create(_('Weiter'), 'next',
-                $dialog ? array('data-dialog' => 'size=50%', 'data-dialog-button' => true) : array()) ?>
-        <?php if (!Request::isXhr()) : ?>
+                $dialog ? array('data-dialog' => 'size=50%') : array()) ?>
         </footer>
-        <?php endif ?>
     </form>
 <?php else : ?>
     <?= Studip\LinkButton::createCancel(_('Zurück zu meiner Veranstaltungsübersicht'),
