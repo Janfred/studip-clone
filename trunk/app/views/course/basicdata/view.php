@@ -321,4 +321,5 @@ json_encode(preg_split('/[\s,;]+/', studip_utf8encode(Config::get()->PROPOSED_TE
 ?>
     });
 });
+STUDIP.MultiPersonSearch.init();
 </script>
