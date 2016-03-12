@@ -91,6 +91,7 @@ class CourseDate extends SimpleORMap
         $config['has_and_belongs_to_many']['statusgruppen'] = array(
             'class_name' => 'Statusgruppen',
             'thru_table' => 'termin_related_groups',
+            'order_by' => 'ORDER BY position',
             'on_delete' => 'delete',
             'on_store' => 'store'
         );
@@ -99,6 +100,7 @@ class CourseDate extends SimpleORMap
             'thru_table' => 'termin_related_persons',
             'foreign_key' => 'termin_id',
             'thru_key' => 'range_id',
+            'order_by' => 'ORDER BY Nachname, Vorname',
             'on_delete' => 'delete',
             'on_store' => 'store'
         );
