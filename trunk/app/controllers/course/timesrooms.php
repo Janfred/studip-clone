@@ -45,11 +45,11 @@ class Course_TimesroomsController extends AuthenticatedController
                      . ($this->lock_rules['description'] ? '<br>' . formatLinks($this->lock_rules['description']) : ''));
         }
 
-        $this->show = array(
+        $this->show = [
             'regular'     => true,
             'irregular'   => true,
             'roomRequest' => !$this->locked && Config::get()->RESOURCES_ENABLE && Config::get()->RESOURCES_ALLOW_ROOM_REQUESTS,
-        );
+        ];
 
         PageLayout::setHelpKeyword('Basis.Veranstaltungen');
         PageLayout::addSqueezePackage('raumzeit');
@@ -187,7 +187,7 @@ class Course_TimesroomsController extends AuthenticatedController
 
             return;
         }
-        $this->params           = array('origin' => Request::get('origin', 'course_timesrooms'));
+        $this->params           = ['origin' => Request::get('origin', 'course_timesrooms')];
         $this->semester         = array_reverse(Semester::getAll());
         $this->current_semester = Semester::findCurrent();
     }
@@ -201,12 +201,12 @@ class Course_TimesroomsController extends AuthenticatedController
     {
         PageLayout::setTitle(_('Einzeltermin bearbeiten'));
         $this->date       = CourseDate::find($termin_id) ?: CourseExDate::find($termin_id);
-        $this->attributes = array();
+        $this->attributes = [];
 
         if ($request = RoomRequest::findByDate($this->date->id)) {
-            $this->params = array('request_id' => $request->getId());
+            $this->params = ['request_id' => $request->getId()];
         } else {
-            $this->params = array('new_room_request_type' => 'date_' . $this->date->id);
+            $this->params = ['new_room_request_type' => 'date_' . $this->date->id];
         }
 
         if (Config::get()->RESOURCES_ENABLE) {
@@ -339,7 +339,7 @@ class Course_TimesroomsController extends AuthenticatedController
             NotificationCenter::postNotification('CourseDidChangeSchedule', $this->course);
         }
         $this->displayMessages();
-        $this->redirect($this->url_for('course/timesrooms/index', array('contentbox_open' => $termin->metadate_id)));
+        $this->redirect($this->url_for('course/timesrooms/index', ['contentbox_open' => $termin->metadate_id]));
     }
 
 
@@ -1099,9 +1099,9 @@ class Course_TimesroomsController extends AuthenticatedController
         }
 
         if (Request::submitted('save_close')) {
-            $this->relocate(str_replace('_', '/', Request::get('origin')), array('cid' => $course_id));
+            $this->relocate(str_replace('_', '/', Request::get('origin')), ['cid' => $course_id]);
         } else {
-            $this->redirect($this->url_for('course/timesrooms/index', array('cid' => $course_id)));
+            $this->redirect($this->url_for('course/timesrooms/index', ['cid' => $course_id]));
         }
     }
 

@@ -79,10 +79,12 @@
         <?= _('Endwoche') ?>
         <select name="endWeek">
             <? if (isset($end_semester_weeks['ende'])) : ?>
+                <? $selected = $cycle->end_offset ? : end($end_semester_weeks['ende'])['value'];?>
                 <? foreach ($end_semester_weeks['ende'] as $end_sem_week) : ?>
                     <option value="<?= $end_sem_week['value'] ?>"
-                        <?= (Request::get('endWeek', $cycle->end_offset) == $end_sem_week['value']) ? 'selected' : '' ?>>
-                            <?= htmlReady($end_sem_week['label']) ?></option>
+                        <?= (Request::get('endWeek', $selected) == $end_sem_week['value']) ? 'selected' : '' ?>>
+                        <?= htmlReady($end_sem_week['label']) ?>
+                    </option>
                 <? endforeach; ?>
             <? endif; ?>
 
@@ -97,7 +99,7 @@
                 <optgroup label="<?= htmlReady($semester) ?>">
                     <? foreach ($weeks as $value => $label) : ?>
                         <option value="<?= $value  ?>"
-                            <?= (Request::get('endWeek', $cycle->end_offset) == $value) ? 'selected' : '' ?>>
+                            <?= (Request::get('endWeek', $selected) == $value) ? 'selected' : '' ?>>
                                 <?= htmlReady($label) ?>
                         </option>
                     <? endforeach; ?>
