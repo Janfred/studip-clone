@@ -46,10 +46,12 @@
                                 <?= _('keiner') ?>
                             <? endif; ?>
                             </span>
-                            <span>
-                                <?= _('Einzel-Raumanfrage') ?>:
-                                <?= htmlReady($course->getRequestsInfo($metadate_id)) ?>
-                            </span>
+                            <?php if (Config::get()->RESOURCES_ALLOW_ROOM_REQUESTS) : ?>
+                                <span>
+                                    <?= _('Einzel-Raumanfrage') ?>:
+                                    <?= htmlReady($course->getRequestsInfo($metadate_id)) ?>
+                                </span>
+                            <?php endif ?>
 
                             <span>
                                 <a href="<?= $controller->url_for('course/timesrooms/createCycle/' . $metadate_id, $linkAttributes) ?>"
