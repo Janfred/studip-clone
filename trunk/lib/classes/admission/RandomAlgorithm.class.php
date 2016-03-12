@@ -226,7 +226,7 @@ class RandomAlgorithm extends AdmissionAlgorithm {
         foreach ($user_list as $chosen_one) {
             setTempLanguage($chosen_one);
             $message_title = sprintf(_('Teilnahme an der Veranstaltung %s'), $course->name);
-            $message_body = sprintf(_('Sie wurden leider bei der Platzverteilung der Veranstaltung **%s** __keinen__ Platz erhalten. Für diese Veranstaltung wurde keine Warteliste vorgesehen.'),
+            $message_body = sprintf(_('Sie haben leider bei der Platzverteilung der Veranstaltung **%s** __keinen__ Platz erhalten. Für diese Veranstaltung wurde keine Warteliste vorgesehen.'),
                                        $course->name);
             if ($prio) {
                 $message_body .= "\n" . sprintf(_("Sie hatten für diese Veranstaltung die Priorität %s gewählt."), $prio[$chosen_one]);
@@ -290,7 +290,7 @@ class RandomAlgorithm extends AdmissionAlgorithm {
                 }
             } else {
                 if ($seminar->addMember($chosen_one, 'autor')) {
-                    $message_body = sprintf (_("Sie haben haben bei der Platzvergabe der Veranstaltung **%s** einen Platz erhalten. Ab sofort finden Sie die Veranstaltung in der Übersicht Ihrer Veranstaltungen. Damit sind Sie auch für die Präsenzveranstaltung zugelassen."),
+                    $message_body = sprintf (_("Sie haben bei der Platzvergabe der Veranstaltung **%s** einen Platz erhalten. Ab sofort finden Sie die Veranstaltung in der Übersicht Ihrer Veranstaltungen. Damit sind Sie auch für die Präsenzveranstaltung zugelassen."),
                             $seminar->getName());
                 }
             }
