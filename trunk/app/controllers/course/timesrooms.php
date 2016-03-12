@@ -488,7 +488,7 @@ class Course_TimesroomsController extends AuthenticatedController
             $this->redirect($this->url_for('course/timesrooms/index', array('contentbox_open' => $cycle_id)));
             return;
         }
-        
+
         $this->linkAttributes = array('fromDialog' => Request::int('fromDialog') ? 1 : 0);
 
         switch (Request::get('method')) {
