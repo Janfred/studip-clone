@@ -2,6 +2,17 @@
       method="post" class="default collapsable" <?= Request::int('fromDialog') ? 'data-dialog="size=big"' : '' ?>>
     <fieldset style="margin-top: 1ex">
         <legend><?= _('Zeitangaben') ?></legend>
+        <label id="course_type" class=col-6>
+            <?= _('Art') ?>
+            <select name="course_type" id="course_type" class="size-s">
+                <? foreach ($GLOBALS['TERMIN_TYP'] as $id => $value) : ?>
+                    <option value="<?= $id ?>"
+                        <?= $date->date_typ == $id ? 'selected' : '' ?>>
+                        <?= htmlReady($value['name']) ?>
+                    </option>
+                <? endforeach; ?>
+            </select>
+        </label>
         <label class="col-2">
             <?= _('Datum') ?>
             <input class="has-date-picker size-s" type="text" name="date"
@@ -16,17 +27,6 @@
             <?= _('Endzeit') ?>
             <input class="studip-timepicker size-s" type="text" name="end_time" placeholder="HH:mm"
                    value="<?= $date->end_time ? strftime('%H:%M', $date->end_time) : '' ?>">
-        </label>
-        <label id="course_type">
-            <?= _('Art') ?>
-            <select name="course_type" id="course_type" class="size-s">
-                <? foreach ($GLOBALS['TERMIN_TYP'] as $id => $value) : ?>
-                    <option value="<?= $id ?>"
-                        <?= $date->date_typ == $id ? 'selected' : '' ?>>
-                        <?= htmlReady($value['name']) ?>
-                    </option>
-                <? endforeach; ?>
-            </select>
         </label>
     </fieldset>
     <fieldset class="collapsed">

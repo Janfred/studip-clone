@@ -88,14 +88,14 @@
                 <? $warning[] = _('Dieser Termin hat eine Raumbuchung, welche mit dem Termin gelöscht wird.'); ?>
             <? endif ?>
 
-            <a <?= Request::isXhr() ? 'data-dialog="size=big"' : '' ?> <? !empty($warning) ? 'data-confirm="' . implode("\n", $warning) . '"' : '' ?>
+            <a <?= Request::isXhr() ? 'data-dialog="size=auto"' : '' ?> <? !empty($warning) ? 'data-confirm="' . implode("\n", $warning) . '"' : '' ?>
                 href="<?= $controller->url_for('course/timesrooms/undeleteSingle/' . $termin->termin_id) ?>">
                 <?= Icon::create('trash+decline', 'inactive', ['title' => _('Diesen Termin wiederherstellen')])->asImg() ?>
             </a>
 
         <? else: ?>
             <? if(!$locked) : ?>
-                <a data-dialog="size=fit"
+                <a data-dialog="size=550x450"
                    href="<?= $controller->url_for('course/timesrooms/editDate/' . $termin->termin_id, $linkAttributes) ?>">
                     <?= Icon::create('edit', 'clickable', ['title' => _('Diesen Termin bearbeiten')])->asImg() ?>
                 </a>
