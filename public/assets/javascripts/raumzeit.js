@@ -107,20 +107,6 @@
 }(jQuery, STUDIP));
 
 STUDIP.Raumzeit = {
-    toggleRadio: function (radio_button) {
-
-    },
-    toggleCheckboxes: function (cycle_id) {
-        var checked = false;
-        jQuery('table[data-cycleid=' + cycle_id + '] input[name^=singledate]').each(function () {
-            if (jQuery(this).prop('checked')) {
-                checked = true;
-            }
-        });
-
-        jQuery('table[data-cycleid=' + cycle_id + '] input[name*=singledate]').prop('checked', !checked);
-    },
-
     addLecturer: function () {
         jQuery('select[name=teachers] option:selected').each(function () {
             var lecturer_id = jQuery(this).val();
@@ -137,19 +123,8 @@ STUDIP.Raumzeit = {
     },
 
     removeLecturer: function (lecturer_id) {
-        if (jQuery('ul.teachers li:visible').size() > 1) {
-            jQuery('li[data-lecturerid=' + lecturer_id + ']').hide();
-            //jQuery('li[data-lecturerid=' + lecturer_id + '] input').val('0');
-            jQuery('select[name=teachers] option[value=' + lecturer_id + ']').show();
-        } else {
-            if (jQuery('div.at_least_one_teacher').size() === 0) {
-                jQuery('ul.teachers').before('<div class="at_least_one_teacher" style="display: none"><i>' + 'Jeder Termin muss mindestens eine Person haben, die ihn durchführt!'.toLocaleString() + '</i><div>');
-                jQuery('div.at_least_one_teacher').slideDown().delay(3000).fadeOut(400, function () {
-                    jQuery(this).remove();
-                });
-                jQuery('li[data-lecturerid=' + lecturer_id + ']').effect('shake', 100);
-            }
-        }
+        jQuery('li[data-lecturerid=' + lecturer_id + ']').hide();
+        jQuery('select[name=teachers] option[value=' + lecturer_id + ']').show();
 
         STUDIP.Raumzeit.addFormLecturers();
     },
