@@ -38,7 +38,7 @@ use Studip\Button, Studip\LinkButton;
             <select name="object_class[]" id="object_class">
                 <option value="NULL"><?= _('alle') ?></option>
             <? foreach (SemClass::getClasses() as $key => $val): ?>
-                <option value="<?= $key ?>" <? if ($item->object_class === $key) echo 'selected'; ?>>
+                <option value="<?= $key ?>" <? if ($item->object_class == $key) echo 'selected'; ?>>
                     <?= htmlReady($val['name']) ?>
                 </option>
             <? endforeach; ?>
