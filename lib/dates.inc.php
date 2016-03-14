@@ -62,6 +62,38 @@ function getWeekday($day_num, $short = TRUE) {
     return $day;
 }
 
+/**
+ * getMonthName returns the localized name of a certain month in
+ * either the abbreviated form (default) or as the actual name.
+ *
+ * @param int  $month Month number
+ * @param bool $short Display the abbreviated version or the actual
+ *                    name of the month (defaults to abbreviated)
+ * @return String Month name
+ * @throws Exception when passed an invalid month number
+ */
+function getMonthName($month, $short = true) {
+    $month = (int)$month;
+
+    $months = [
+         1 => [_('Januar'),    _('Jan.')],
+         2 => [_('Februar'),   _('Feb.')],
+         3 => [_('März'),      _('März')],
+         4 => [_('April'),     _('Apr.')],
+         5 => [_('Mai'),       _('Mai')],
+         6 => [_('Juni'),      _('Juni')],
+         7 => [_('Juli'),      _('Juli')],
+         8 => [_('August'),    _('Aug.')],
+         9 => [_('September'), _('Sep.')],
+        10 => [_('Oktober'),   _('Okt.')],
+        11 => [_('November'),  _('Nov.')],
+        12 => [_('Dezember'),  _('Dez.')],
+    ];
+    if (!isset($months[$month])) {
+        throw new Exception("Invalid month '{$month}'");
+    }
+    return $months[$month][(int)$short];
+}
 
 function leadingZero($num) {
     if ($num == '') return '00';

@@ -11,10 +11,10 @@
             style="display: inline-block; vertical-align: bottom; width: auto;"
             <? if ($model->is_required) echo 'required'; ?>>
         <option value=""></option>
-    <? for ($i = 0; $i < 12; $i += 1): ?>
-        <option value="<?= $i + 1 ?>"
-                <? if ($value && date('n', $timestamp) == $i + 1) echo 'selected'; ?>>
-            <?= studip_utf8decode(strftime('%B', strtotime('January 1st +' . $i . ' months'))) ?>
+    <? for ($i = 1; $i <= 12; $i += 1): ?>
+        <option value="<?= $i ?>"
+                <? if ($value && date('n', $timestamp) == $i) echo 'selected'; ?>>
+            <?= getMonthName($i, false) ?>
         </option>
     <? endfor;?>
     </select>
