@@ -123,7 +123,16 @@ $result = array (
     'Type' => 'varchar(255)',
     'Null' => 'NO',
     'Key' => '',
-    'Default' => '',
+    'Default' => '1,3',
+    'Extra' => '',
+  ),
+  14 =>
+  array (
+    'Field' => 'jsondata',
+    'Type' => 'varchar(255)',
+    'Null' => 'NO',
+    'Key' => '',
+    'Default' => '[1,2]',
     'Extra' => '',
   ),
 );
