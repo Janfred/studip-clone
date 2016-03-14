@@ -82,6 +82,8 @@ class Admin_DatafieldsController extends AuthenticatedController
      */
     public function edit_action($datafield_id)
     {
+        PageLayout::setTitle(_('Datenfeld ändern'));
+
         $datafield = new DataField($datafield_id);
 
         if (Request::submitted('uebernehmen')) {
@@ -120,6 +122,8 @@ class Admin_DatafieldsController extends AuthenticatedController
      */
     public function new_action($type = null)
     {
+        PageLayout::setTitle(_('Neues Datenfeld anlegen'));
+
         if (Request::submitted('anlegen')) {
             if (Request::get('datafield_name')) {
                 $datafield = new DataField();
