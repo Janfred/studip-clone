@@ -271,7 +271,11 @@
         }
 
         options.origin = element;
-        options.title  = options.title || STUDIP.Dialog.getInstance(options.id).options.title || $(element).attr('title') || $(element).filter('a,button').text();
+        options.title  = options.title
+                      || STUDIP.Dialog.getInstance(options.id).options.title
+                      || $(element).attr('title')
+                      || $(element).find('[title]').first().attr('title')
+                      || $(element).filter('a,button').text();
         options.method = 'get';
         options.data   = {};
 
