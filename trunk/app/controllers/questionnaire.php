@@ -244,6 +244,7 @@ class QuestionnaireController extends AuthenticatedController
         if (!$this->questionnaire->isViewable()) {
             throw new AccessDeniedException("Der Fragebogen ist nicht einsehbar.");
         }
+        object_set_visit($questionnaire_id, 'vote');
         if (Request::isPost()) {
             $answered_before = $this->questionnaire->isAnswered();
             foreach ($this->questionnaire->questions as $question) {
@@ -332,6 +333,7 @@ class QuestionnaireController extends AuthenticatedController
         if (!$this->questionnaire->isViewable()) {
             throw new AccessDeniedException("Der Fragebogen ist nicht einsehbar.");
         }
+        object_set_visit($questionnaire_id, 'vote');
         PageLayout::setTitle(sprintf(_("Fragebogen: %s"), $this->questionnaire->title));
 
         if (Request::isAjax() && !$_SERVER['HTTP_X_DIALOG']) {
