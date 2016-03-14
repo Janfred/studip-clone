@@ -60,7 +60,8 @@
     </td>
     <td>
         <? $countedAnswers = $questionnaire->countAnswers() ?>
-        <?= htmlReady($countedAnswers) ?></td>
+        <?= htmlReady($countedAnswers) ?>
+    </td>
     <td style="white-space: nowrap;">
         <a href="<?= URLHelper::getLink("dispatch.php/questionnaire/evaluate/".$questionnaire->getId()) ?>" data-dialog title="<?= _("Auswertung") ?>">
             <?= Icon::create("stat", "clickable")->asimg("20px", array('class' => "text-bottom")) ?>
@@ -69,7 +70,7 @@
             <?= Icon::create("file-excel", "clickable")->asimg("20px", array('class' => "text-bottom")) ?>
         </a>
         <? if ($questionnaire->isStarted() && $countedAnswers) : ?>
-            <?= Icon::create("edit", "clickable")->asimg("20px", array('class' => "text-bottom", 'title' => _("Der Fragebogen wurde gestartet und kann nicht mehr bearbeitet werden."))) ?>
+            <?= Icon::create("edit", "inactive")->asimg("20px", array('class' => "text-bottom", 'title' => _("Der Fragebogen wurde gestartet und kann nicht mehr bearbeitet werden."))) ?>
         <? else : ?>
             <a href="<?= URLHelper::getLink("dispatch.php/questionnaire/edit/".$questionnaire->getId()) ?>" data-dialog title="<?= _("Fragebogen bearbeiten") ?>">
                 <?= Icon::create("edit", "clickable")->asimg("20px", array('class' => "text-bottom")) ?>
