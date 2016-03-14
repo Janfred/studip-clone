@@ -247,57 +247,59 @@ class QuestionnaireController extends AuthenticatedController
         object_set_visit($questionnaire_id, 'vote');
         if (Request::isPost()) {
             $answered_before = $this->questionnaire->isAnswered();
-            foreach ($this->questionnaire->questions as $question) {
-                $answer = $question->createAnswer();
-                if (!$answer['question_id']) {
-                    $answer['question_id'] = $question->getId();
-                }
-                $answer['user_id'] = $GLOBALS['user']->id;
-                if (!$answer['answerdata']) {
-                    $answer['answerdata'] = array();
+            if ($this->questionnaire->isAnswerable()) {
+                foreach ($this->questionnaire->questions as $question) {
+                    $answer = $question->createAnswer();
+                    if (!$answer['question_id']) {
+                        $answer['question_id'] = $question->getId();
+                    }
+                    $answer['user_id'] = $GLOBALS['user']->id;
+                    if (!$answer['answerdata']) {
+                        $answer['answerdata'] = array();
+                    }
+                    if ($this->questionnaire['anonymous']) {
+                        $answer['user_id'] = null;
+                        $answer['chdate'] = 1;
+                        $answer['mkdate'] = 1;
+                    }
+                    $answer->store();
                 }
                 if ($this->questionnaire['anonymous']) {
-                    $answer['user_id'] = null;
-                    $answer['chdate'] = 1;
-                    $answer['mkdate'] = 1;
+                    $anonymous_answer = new QuestionnaireAnonymousAnswer();
+                    $anonymous_answer['questionnaire_id'] = $this->questionnaire->getId();
+                    $anonymous_answer['user_id'] = $GLOBALS['user']->id;
+                    $anonymous_answer->store();
                 }
-                $answer->store();
-            }
-            if ($this->questionnaire['anonymous']) {
-                $anonymous_answer = new QuestionnaireAnonymousAnswer();
-                $anonymous_answer['questionnaire_id'] = $this->questionnaire->getId();
-                $anonymous_answer['user_id'] = $GLOBALS['user']->id;
-                $anonymous_answer->store();
-            }
-            if (!$answered_before && !$this->questionnaire['anonymous'] && ($this->questionnaire['user_id'] !== $GLOBALS['user']->id)) {
-                $url = URLHelper::getURL("dispatch.php/questionnaire/evaluate/".$this->questionnaire->getId(), array(), true);
-                foreach ($this->questionnaire->assignments as $assignment) {
-                    if ($assignment['range_type'] === "course") {
-                        $url = URLHelper::getURL("dispatch.php/course/overview#".$this->questionnaire->getId(), array(
-                            'cid' => $assignment['range_id'],
-                            'contentbox_type' => "vote",
-                            'contentbox_open' => $this->questionnaire->getId()
-                        ));
-                    } elseif ($assignment['range_type'] === "profile") {
-                        $url = URLHelper::getURL("dispatch.php/profile#".$this->questionnaire->getId(), array(
-                            'contentbox_type' => "vote",
-                            'contentbox_open' => $this->questionnaire->getId()
-                        ), true);
-                    } elseif ($assignment['range_type'] === "start") {
-                        $url = URLHelper::getURL("dispatch.php/start#".$this->questionnaire->getId(), array(
-                            'contentbox_type' => "vote",
-                            'contentbox_open' => $this->questionnaire->getId()
-                        ), true);
+                if (!$answered_before && !$this->questionnaire['anonymous'] && ($this->questionnaire['user_id'] !== $GLOBALS['user']->id)) {
+                    $url = URLHelper::getURL("dispatch.php/questionnaire/evaluate/" . $this->questionnaire->getId(), array(), true);
+                    foreach ($this->questionnaire->assignments as $assignment) {
+                        if ($assignment['range_type'] === "course") {
+                            $url = URLHelper::getURL("dispatch.php/course/overview#" . $this->questionnaire->getId(), array(
+                                'cid' => $assignment['range_id'],
+                                'contentbox_type' => "vote",
+                                'contentbox_open' => $this->questionnaire->getId()
+                            ));
+                        } elseif ($assignment['range_type'] === "profile") {
+                            $url = URLHelper::getURL("dispatch.php/profile#" . $this->questionnaire->getId(), array(
+                                'contentbox_type' => "vote",
+                                'contentbox_open' => $this->questionnaire->getId()
+                            ), true);
+                        } elseif ($assignment['range_type'] === "start") {
+                            $url = URLHelper::getURL("dispatch.php/start#" . $this->questionnaire->getId(), array(
+                                'contentbox_type' => "vote",
+                                'contentbox_open' => $this->questionnaire->getId()
+                            ), true);
+                        }
+                        break;
                     }
-                    break;
+                    PersonalNotifications::add(
+                        $this->questionnaire['user_id'],
+                        $url,
+                        sprintf(_("%s hat an der Befragung '%s' teilgenommen."), get_fullname(), $this->questionnaire['title']),
+                        "questionnaire_" . $this->questionnaire->getId(),
+                        Icon::create('vote', 'clickable')
+                    );
                 }
-                PersonalNotifications::add(
-                    $this->questionnaire['user_id'],
-                    $url,
-                    sprintf(_("%s hat an der Befragung '%s' teilgenommen."), get_fullname(), $this->questionnaire['title']),
-                    "questionnaire_".$this->questionnaire->getId(),
-                    Icon::create('vote', 'clickable')
-                );
             }
 
             if (Request::isAjax()) {
