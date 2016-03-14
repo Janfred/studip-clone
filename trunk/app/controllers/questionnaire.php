@@ -551,6 +551,7 @@ class QuestionnaireController extends AuthenticatedController
             if ($questionnaire['visible'] && $questionnaire['stopdate'] && $questionnaire['stopdate'] <= time()) {
                 $questionnaire->stop();
             }
+            object_set_visit($questionnaire->getId(), 'vote');
         }
         if ($this->range_type === "course"
                 && !$GLOBALS['perm']->have_studip_perm("tutor", $_SESSION['SessionSeminar'])
