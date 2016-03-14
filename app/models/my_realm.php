@@ -421,7 +421,7 @@ class MyRealmModel
 
         if (!empty($result)) {
             $count = $result['count'];
-            $neue  = $result['neue'];
+            $neue  = $result['new'];
 
             if (!is_null($result['last_modified']) && (int)$result['last_modified'] != 0) {
                 if ($my_obj['last_modified'] < $result['last_modified']) {
