@@ -70,7 +70,7 @@
     // Display a visible hint that indicates how many characters the user may
     // input if the element has a maxlength restriction.
     $(document).on('ready dialog-update', function () {
-        $('form.default input[maxlength]').each(function () {
+        $('form.default input[maxlength]:not(.no-hint)').each(function () {
             var width   = $(this).outerWidth(true),
                 counter = $('<div class="length-hint">').hide(),
                 wrap    = $('<div class="length-hint-wrapper">').width(width);
@@ -85,13 +85,13 @@
             $(this).data('maxlength-counter', counter);
             $(this).keyup();
         });
-    }).on('focus', 'form.default input[maxlength]', function () {
+    }).on('focus', 'form.default input[maxlength]:not(.no-hint)', function () {
         var counter = $(this).data('maxlength-counter');
         counter.finish().show('slide', {direction: 'down'}, 300);
-    }).on('blur', 'form.default input[maxlength]', function () {
+    }).on('blur', 'form.default input[maxlength]:not(.no-hint)', function () {
         var counter = $(this).data('maxlength-counter');
         counter.finish().hide('slide', {direction: 'down'}, 300);
-    }).on('focus propertychange keyup', 'form.default input[maxlength]', function () {
+    }).on('focus propertychange keyup', 'form.default input[maxlength]:not(.no-hint)', function () {
         var counter = $(this).data('maxlength-counter'),
             count   = $(this).val().length,
             max     = parseInt($(this).attr('maxlength'), 10);
