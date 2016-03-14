@@ -697,7 +697,7 @@ class Course_TimesroomsController extends AuthenticatedController
         }
 
 
-        if (in_array(Request::get('option'))) {
+        if (in_array(Request::get('action'), ['room', 'freetext', 'noroom'])) {
             foreach ($singledates as $key => $singledate) {
                 $date = new SingleDate($singledate);
                 if (Request::option('action') == 'room' && Request::option('room')) {
