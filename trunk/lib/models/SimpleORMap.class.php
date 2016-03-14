@@ -1309,7 +1309,7 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
                          $default_value = '';
                      }
                      if (strpos($meta['type'], 'int') !== false) {
-                         $default_value = 0;
+                         $default_value = '0';
                      }
                  }
              }
@@ -1872,8 +1872,9 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
     {
         $this->content = array();
         foreach (array_keys($this->db_fields) as $field) {
-            $this->content[$field] = $this->getDefaultValue($field);
+            $this->content[$field] = null;
             $this->content_db[$field] = null;
+            $this->setValue($field, $this->getDefaultValue($field));
         }
         foreach ($this->alias_fields as $alias => $field) {
             if (isset($this->db_fields[$field])) {

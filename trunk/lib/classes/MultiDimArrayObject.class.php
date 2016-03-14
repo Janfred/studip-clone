@@ -41,10 +41,10 @@ class MultiDimArrayObject extends StudipArrayObject
     public function exchangeArray($data)
     {
         if (!is_array($data) && !is_object($data)) {
-            throw new InvalidArgumentException('Passed variable is not an array or object, using empty array instead');
+            throw new InvalidArgumentException('Passed variable is not an array or object');
         }
 
-        if (is_object($data) && ($data instanceof \StudipArrayObject)) {
+        if ($data instanceof \StudipArrayObject) {
             $data = $data->getArrayCopy();
         }
         if (!is_array($data)) {
@@ -94,10 +94,14 @@ class MultiDimArrayObject extends StudipArrayObject
      */
     public function offsetSet($key, $value)
     {
-        if (is_null($key)) {
-            return $this->storage[] = $this->recursiveArrayToArrayObjects($value);
+        $new_value = $this->recursiveArrayToArrayObjects($value);
+        if (is_array($new_value)) {
+            $new_value = new static($new_value, $this->getFlags(), $this->getIteratorClass());
         }
-        $this->storage[$key] = $this->recursiveArrayToArrayObjects($value);
+        if (is_null($key)) {
+            return $this->storage[] = $new_value;
+        }
+        $this->storage[$key] = $new_value;
     }
 
     protected function recursiveArrayToArrayObjects($data)
@@ -110,7 +114,7 @@ class MultiDimArrayObject extends StudipArrayObject
             foreach ($data as $key => $value) {
                 $new_value = $this->recursiveArrayToArrayObjects($value);
                 if (is_array($new_value)) {
-                    $new_data[$key] = new self($new_value, $this->getFlags(), $this->getIteratorClass());
+                    $new_data[$key] = new static($new_value, $this->getFlags(), $this->getIteratorClass());
                 } else {
                     $new_data[$key] = $value;
                 }

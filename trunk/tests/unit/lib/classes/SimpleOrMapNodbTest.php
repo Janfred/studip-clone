@@ -16,7 +16,12 @@ require_once dirname(__FILE__) . '/../../bootstrap.php';
 require_once 'lib/models/SimpleORMap.class.php';
 require_once 'lib/classes/Config.class.php';
 require_once 'lib/classes/StudipCache.class.php';
+require_once 'lib/classes/StudipArrayObject.class.php';
+require_once 'lib/classes/MultiDimArrayObject.class.php';
 require_once 'lib/classes/CSVArrayObject.class.php';
+require_once 'lib/classes/JSONArrayObject.class.php';
+
+
 
 if (!class_exists('StudipArrayCache')) {
     class StudipArrayCache implements StudipCache {
@@ -49,6 +54,7 @@ class auth_user_md5 extends SimpleORMap
         $config['additional_fields']['additional']['get'] = function ($record, $field) {return $record->additional_dummy_data;};
         $config['additional_fields']['additional']['set'] = function ($record, $field, $data) {return $record->additional_dummy_data = $data;};
         $config['serialized_fields']['csvdata'] = 'CSVArrayObject';
+        $config['serialized_fields']['jsondata'] = 'JSONArrayObject';
         parent::configure($config);
     }
 
@@ -85,6 +91,7 @@ class SimpleOrMapNodbTest extends PHPUnit_Framework_TestCase
                     'name'    => $rs['Field'],
                     'null'    => $rs['Null'],
                     'default' => $rs['Default'],
+                    'type'    => $rs['Type'],
                     'extra'   => $rs['Extra']
                 );
                 if ($rs['Key'] == 'PRI'){
@@ -126,6 +133,19 @@ class SimpleOrMapNodbTest extends PHPUnit_Framework_TestCase
     /**
      * @depends testConstruct
      */
+    public function testDefaults($a)
+    {
+        $this->assertEquals(null, $a->email);
+        $this->assertEquals('unknown', $a->visible);
+        $this->assertEquals('', $a->validation_key);
+        $this->assertInstanceOf('CSVArrayObject', $a->csvdata);
+        $this->assertEquals('1,3', (string)$a->csvdata);
+        $this->assertInstanceOf('JSONArrayObject', $a->jsondata);
+    }
+
+    /**
+     * @depends testConstruct
+     */
     public function testGetterAndSetter($a)
     {
         $mail = 'noack@data-quest';
@@ -141,6 +161,14 @@ class SimpleOrMapNodbTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('CSVArrayObject', $a->csvdata);
         $this->assertEquals('1,2,3,4,5', (string)$a->csvdata);
         $this->assertEquals(range(1,5), $a['csvdata']->getArrayCopy());
+        $a->jsondata = [0 => 'test1', 1 => 'test2'];
+        $this->assertInstanceOf('JSONArrayObject', $a->jsondata);
+        $this->assertEquals('["test1","test2"]', (string)$a->jsondata);
+        $a->jsondata[] = [1,2,3];
+        $this->assertInstanceOf('JSONArrayObject', $a->jsondata[2]);
+        $this->assertEquals('["test1","test2",[1,2,3]]', (string)$a->jsondata);
+        $a->jsondata[2][] = array('test3' => 'test3');
+        $this->assertEquals('["test1","test2",[1,2,3,{"test3":"test3"}]]', (string)$a->jsondata);
     }
 
     /**
@@ -152,6 +180,12 @@ class SimpleOrMapNodbTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(true, $a->isFieldDirty('email'));
         $this->assertEquals(false, $a->isFieldDirty('vorname'));
         $this->assertEquals(true, $a->isFieldDirty('csvdata'));
+        $this->assertEquals(true, $a->isFieldDirty('jsondata'));
+        $a->csvdata[1] = '3';
+        unset($a->csvdata[2]);
+        unset($a->csvdata[3]);
+        unset($a->csvdata[4]);
+        $this->assertEquals(false, $a->isFieldDirty('csvdata'));
     }
 
     /**
@@ -162,6 +196,7 @@ class SimpleOrMapNodbTest extends PHPUnit_Framework_TestCase
         $a->revertValue('email');
         $a->revertValue('perms');
         $a->revertValue('csvdata');
+        $a->revertValue('jsondata');
         $this->assertEquals(false, $a->isDirty());
         $this->assertEquals(false, $a->isFieldDirty('email'));
     }
@@ -177,12 +212,14 @@ class SimpleOrMapNodbTest extends PHPUnit_Framework_TestCase
         $data['nachname'] = 'Fuhse';
         $data['USERNAME'] = 'krassmus';
         $data['csvdata'] = range(1,4);
+        $data['jsondata'] = [0 => [0 => [0 => 1]]];
         $a->setData($data, true);
         $this->assertEquals($data['vorname'], $a->vorname);
         $this->assertEquals($data['nachname'], $a->nachname);
         $this->assertEquals($data['email'], $a->email);
         $this->assertEquals($data['USERNAME'], $a->username);
         $this->assertEquals('1,2,3,4', (string)$a->csvdata);
+        $this->assertEquals('[[[1]]]', (string)$a->jsondata);
         $this->assertEquals(false, $a->isDirty());
 
         $data2['vorname'] = 'Krassmus';
@@ -235,7 +272,7 @@ class SimpleOrMapNodbTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('ok:user', $to_array['perms']);
         $this->assertEquals(range(1,4), $to_array['csvdata']);
         $this->assertArrayHasKey('visible', $to_array);
-        $this->assertCount(16, $to_array);
+        $this->assertCount(17, $to_array);
 
         $to_array = $a->toArray('id user_id additional perms');
         $this->assertEquals(2, $to_array['id']);
