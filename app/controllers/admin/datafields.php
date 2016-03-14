@@ -125,12 +125,12 @@ class Admin_DatafieldsController extends AuthenticatedController
                 $datafield = new DataField();
                 $datafield->name          = Request::get('datafield_name');
                 $datafield->object_type   = $type;
-                $datafield->object_class  = array_sum(Request::getArray('object_class'));
+                $datafield->object_class  = array_sum(Request::getArray('object_class')) ?: null;
                 $datafield->edit_perms    = Request::get('edit_perms');
                 $datafield->view_perms    = Request::get('visibility_perms');
                 $datafield->system        = Request::int('system') ?: 0;
                 $datafield->priority      = Request::int('priority') ?: 0;
-                $datafield->type          = Request::get('datafield_typ');
+                $datafield->type          = Request::get('datafield_type');
                 $datafield->is_userfilter = Request::int('is_userfilter') ?: 0;
                 if ($type === 'sem') {
                     $datafield->description = Request::get('description', '');
