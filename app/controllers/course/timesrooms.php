@@ -278,15 +278,16 @@ class Course_TimesroomsController extends AuthenticatedController
             $termin->dozenten = User::findMany($related_users);
         }
 
-        if ($termin->store()) {
-            NotificationCenter::postNotification('CourseDidChangeSchedule', $this->course);
-        }
         // Set Room
         $singledate = new SingleDate($termin);
         if (Request::option('room') == 'room') {
             $room_id = Request::option('room_sd');
 
-            if ($room_id && ($room_id != $termin->room_assignment->resource_id || $time_changed)) {
+            if ($room_id && ($room_id != $termin->room_assignment->resource_id 
+                    || $date < $termin->getPristineValue('date') 
+                    || $end_time > $termin->getPristineValue('end_time'))) 
+                {
+                    
                 if ($resObj = $singledate->bookRoom($room_id)) {
                     $messages = $singledate->getMessages();
                     if (isset($messages['error'])) {
@@ -308,6 +309,10 @@ class Course_TimesroomsController extends AuthenticatedController
             $this->course->createMessage(sprintf(_("Der Termin %s wurde geändert, etwaige freie Ortsangaben und Raumbuchungen wurden entfernt."), '<b>' . $singledate->toString() . '</b>'));
         }
 
+        if ($termin->store()) {
+            NotificationCenter::postNotification('CourseDidChangeSchedule', $this->course);
+        }
+        
         $this->displayMessages();
         $this->redirect($this->url_for('course/timesrooms/index', ['contentbox_open' => $termin->metadate_id]));
     }
