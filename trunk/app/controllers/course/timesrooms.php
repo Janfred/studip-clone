@@ -278,16 +278,22 @@ class Course_TimesroomsController extends AuthenticatedController
             $termin->dozenten = User::findMany($related_users);
         }
 
+        
+
+        
         // Set Room
         $singledate = new SingleDate($termin);
         if (Request::option('room') == 'room') {
             $room_id = Request::option('room_sd');
-
+            
             if ($room_id && ($room_id != $termin->room_assignment->resource_id 
-                    || $date < $termin->getPristineValue('date') 
-                    || $end_time > $termin->getPristineValue('end_time'))) 
+                    || $time_changed )) 
                 {
-                    
+                
+                if (!is_null($termin->room_assignment->resource_id)) {
+                    $singledate->resource_id = $room_id;
+                }
+                
                 if ($resObj = $singledate->bookRoom($room_id)) {
                     $messages = $singledate->getMessages();
                     if (isset($messages['error'])) {
