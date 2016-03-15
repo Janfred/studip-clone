@@ -443,7 +443,7 @@ class BasicDataWizardStep implements CourseWizardStep
         unset($data['participating'][$course->institut_id]);
         if (Config::get()->DEPUTIES_ENABLE) {
             $deputies = getDeputies($course->id);
-            $data['deputies'] = array_keys($deputies);
+            $data['deputies'] = array_flip(array_keys($deputies));
         }
         $values[__CLASS__] = $data;
         return $values;
