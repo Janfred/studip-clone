@@ -1,16 +1,5 @@
 <tr id="questionnaire_<?= $questionnaire->getId() ?>">
     <td>
-        <? if ($questionnaire->isStarted()) : ?>
-            <a href="<?= URLHelper::getLink("dispatch.php/questionnaire/stop/".$questionnaire->getId(), $range_type ? ['redirect' => "questionnaire/courseoverview"] : []) ?>" title="<?= _("Fragebogen beenden") ?>">
-                <?= Icon::create("stop", "clickable")->asimg("20px", array('class' => "text-bottom")) ?>
-            </a>
-        <? else : ?>
-            <a href="<?= URLHelper::getLink("dispatch.php/questionnaire/start/".$questionnaire->getId(), $range_type ? ['redirect' => "questionnaire/courseoverview"] : []) ?>" title="<?= _("Fragebogen starten") ?>">
-                <?= Icon::create("play", "clickable")->asimg("20px", array('class' => "text-bottom")) ?>
-            </a>
-        <? endif ?>
-    </td>
-    <td>
         <?= htmlReady($questionnaire['title']) ?>
         <span>
             <?
@@ -63,6 +52,15 @@
         <?= htmlReady($countedAnswers) ?>
     </td>
     <td style="white-space: nowrap;">
+        <? if ($questionnaire->isStarted()) : ?>
+            <a href="<?= URLHelper::getLink("dispatch.php/questionnaire/stop/".$questionnaire->getId(), $range_type ? ['redirect' => "questionnaire/courseoverview"] : []) ?>" title="<?= _("Fragebogen beenden") ?>">
+                <?= Icon::create("stop", "clickable")->asimg("20px", array('class' => "text-bottom")) ?>
+            </a>
+        <? else : ?>
+            <a href="<?= URLHelper::getLink("dispatch.php/questionnaire/start/".$questionnaire->getId(), $range_type ? ['redirect' => "questionnaire/courseoverview"] : []) ?>" title="<?= _("Fragebogen starten") ?>">
+                <?= Icon::create("play", "clickable")->asimg("20px", array('class' => "text-bottom")) ?>
+            </a>
+        <? endif ?>
         <a href="<?= URLHelper::getLink("dispatch.php/questionnaire/evaluate/".$questionnaire->getId()) ?>" data-dialog title="<?= _("Auswertung") ?>">
             <?= Icon::create("stat", "clickable")->asimg("20px", array('class' => "text-bottom")) ?>
         </a>

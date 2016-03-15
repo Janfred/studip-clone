@@ -1,7 +1,6 @@
 <table class="default" id="questionnaire_overview">
     <thead>
         <tr>
-            <th></th>
             <th><?= _("Fragebogen") ?></th>
             <th><?= _("Startet") ?></th>
             <th><?= _("Endet") ?></th>
