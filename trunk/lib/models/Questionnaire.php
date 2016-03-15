@@ -111,10 +111,13 @@ class Questionnaire extends SimpleORMap
         if (!$this->isViewable()) {
             return false;
         }
+        if ($this['anonymous'] && $this->isAnswered()) {
+            return false;
+        }
         if ($this->isEditable()) {
             return true;
         }
-        $this->answerable = (!$this['anonymous'] || !$this->isAnswered());
+        $this->answerable = true;
         NotificationCenter::postNotification("QuestionnaireWillAllowToAnswer", $this);
         return $this->answerable;
     }
@@ -174,11 +177,5 @@ class Questionnaire extends SimpleORMap
         return $this['resultvisibility'] === "always"
             || $this->isEditable()
             || ($this['resultvisibility'] === "afterending" && $this->isStopped());
-    }
-
-    public function toJSONRepresentation()
-    {
-        $json = $this->toRawArray();
-
     }
 }
