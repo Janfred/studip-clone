@@ -45,9 +45,12 @@ STUDIP.Questionnaire = {
             }
         } else {
             if (jQuery(".questionnaire_widget").length > 0 && data.widget_html) {
-                jQuery(".questionnaire_widget .noquestionnaires").remove();
                 jQuery(".ui-dialog-content").dialog("close");
-                jQuery(data.widget_html).hide().insertBefore(".questionnaire_widget > article:first-of-type, .questionnaire_widget > section:first-of-type").delay(300).fadeIn();
+                if (jQuery(".questionnaire_widget > article").length > 0) {
+                    jQuery(data.widget_html).hide().insertBefore(".questionnaire_widget > article:first-of-type, .questionnaire_widget > section:first-of-type").delay(300).fadeIn();
+                } else {
+                    jQuery(".questionnaire_widget .noquestionnaires").replaceWith(data.widget_html).hide().delay(300).fadeIn();
+                }
             } else {
                 if (data.message) {
                     jQuery("#layout_content").prepend(data.message);
