@@ -57,10 +57,10 @@ class MailQueueEntry extends SimpleORMap
      */
     static public function sendNew()
     {
-        $mail_queue_entries = self::findBySQL("tries = '0'");
-        foreach ($mail_queue_entries as $mail_queue_entry) {
-            $mail_queue_entry->send();
-        }
+        self::findEachBySQL(function ($m) {
+                $m->send();
+        },
+        "tries = '0' ORDER BY mkdate");
     }
 
     /**
@@ -72,14 +72,13 @@ class MailQueueEntry extends SimpleORMap
      */
     static public function sendAll($limit = null)
     {
-        $mail_queue_entries = self::findBySQL(
+        self::findEachBySQL(function ($m) {
+                $m->send();
+        },
             "tries = '0' " .
-            "OR (last_try > (UNIX_TIMESTAMP() - 60 * 60) AND tries < 25) ".
-            ($limit > 0 ? "LIMIT ". (int) $limit : "")
+            "OR (last_try > (UNIX_TIMESTAMP() - 60 * 60) AND tries < 25) ORDER BY mkdate".
+            ($limit > 0 ? " LIMIT ". (int) $limit : "")
         );
-        foreach ($mail_queue_entries as $mail_queue_entry) {
-            $mail_queue_entry->send();
-        }
     }
 
     /**
