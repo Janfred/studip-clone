@@ -725,7 +725,7 @@ class Course_TimesroomsController extends AuthenticatedController
                     $date->setFreeRoomText(Request::get('freeRoomText'));
                     $date->store();
                     $date->killAssign();
-                    $date->course->createMessage(sprintf(_("Der Termin %s wurde geändert, etwaige Raumbuchung wurden entfernt und stattdessen der angegebene Freitext eingetragen!"),
+                    $this->course->createMessage(sprintf(_("Der Termin %s wurde geändert, etwaige Raumbuchung wurden entfernt und stattdessen der angegebene Freitext eingetragen!"),
                                                          '<strong>' . $date->toString() . '</strong>'));
                 } elseif (Request::option('action') == 'noroom') {
                     $date->killAssign();
