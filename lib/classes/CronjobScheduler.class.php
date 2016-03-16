@@ -372,7 +372,9 @@ class CronjobScheduler
     private function sendMailToRoots($subject, $message)
     {
         $temp  = User::findByPerms('root');
-        $roots = SimpleORMapCollection::createFromArray($temp)->pluck('username');
+        $roots = SimpleORMapCollection::createFromArray($temp)
+            ->filter(function($r) { return $r->locked == 0; })
+            ->pluck('username');
 
         $msging = new messaging;
         $msging->insert_message($message, $roots, '____%system%____', null, null, null, null, $subject, false, 'high');
