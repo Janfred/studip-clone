@@ -316,7 +316,7 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
             . "%s AS fullname, aum.Nachname, aum.Vorname "
             . "FROM user_inst ui "
             . "LEFT JOIN Institute i USING(Institut_id) "
-            . "LEFT JOIN auth_user_md5 aum USING(user_id)"
+            . "LEFT JOIN auth_user_md5 aum USING(user_id) "
             . "LEFT JOIN user_info uin USING(user_id) "
             . "WHERE CONCAT(ui.user_id, ui.Institut_id) IN ('%s') "
             . "AND " . get_ext_vis_query()
@@ -487,7 +487,7 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
                     . "FROM user_inst ui "
                     . "WHERE ui.Institut_id = '%s' "
                     . "AND ui.inst_perms IN('%s') "
-                    . "AND ui.externdefault = 1"
+                    . "AND ui.externdefault = 1 "
                     . "AND " . get_ext_vis_query(),
                     $row['Institut_id'],
                     implode("','", $this->config->getValue('Main', 'instperms')));
