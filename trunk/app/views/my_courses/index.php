@@ -16,7 +16,7 @@
     <? SkipLinks::addIndex(_("Meine Veranstaltungen"), 'my_seminars') ?>
     <div id="my_seminars">
         <? foreach ($sem_courses as $sem_key => $course_group) : ?>
-            <table class="default collapsable">
+            <table class="default collapsable mycourses">
                 <caption>
                     <?= htmlReady($sem_data[$sem_key]['name']) ?>
                 </caption>
