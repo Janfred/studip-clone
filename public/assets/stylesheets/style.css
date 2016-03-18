@@ -389,6 +389,9 @@ td.tree-elbow-end svg {
 * + html .collapsable .collapsed .header-row {
   display: inline-block !important;
 }
+.mycourses > .collapsed .toggle-indicator ~ * {
+  text-indent: 0;
+}
 /* --- Table details -------------------------------------------------------- */
 .loaded-details > td {
   padding: 0 20px 5px 20px !important;
