@@ -389,9 +389,8 @@ td.tree-elbow-end svg {
 * + html .collapsable .collapsed .header-row {
   display: inline-block !important;
 }
-.mycourses > .collapsed .toggle-indicator ~ * {
-  text-indent: 0;
-}
+/* Special treatment for group headers under my courses */
+/* -> see https://develop.studip.de/trac/ticket/6491    */
 /* --- Table details -------------------------------------------------------- */
 .loaded-details > td {
   padding: 0 20px 5px 20px !important;
