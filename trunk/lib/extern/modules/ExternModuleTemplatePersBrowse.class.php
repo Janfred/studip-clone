@@ -265,6 +265,7 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
                 // get only users with status dozent in an visible seminar in the current semester
                 $query = sprintf("SELECT ui.Institut_id, ui.user_id "
                     . "FROM user_inst ui "
+                    . "INNER JOIN auth_user_md5 aum USING (user_id) "
                     . "LEFT JOIN seminar_user su USING(user_id) "
                     . "LEFT JOIN seminare s USING (seminar_id) "
                     . "WHERE ui.Institut_id = '%s' "
@@ -286,6 +287,7 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
                 // get only users with the given status
                 $query = sprintf("SELECT ui.Institut_id, ui.user_id "
                     . "FROM user_inst ui "
+                    . "INNER JOIN auth_user_md5 aum USING (user_id) "
                     . "WHERE ui.Institut_id = '%s' "
                     . "AND ui.inst_perms IN('%s') "
                     . "AND ui.externdefault = 1 "
@@ -485,6 +487,7 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
                 // get only users with the given status
                 $query = sprintf("SELECT COUNT(DISTINCT(ui.user_id)) AS count_user "
                     . "FROM user_inst ui "
+                    . "INNER JOIN auth_user_md5 aum USING (user_id) "
                     . "WHERE ui.Institut_id = '%s' "
                     . "AND ui.inst_perms IN('%s') "
                     . "AND ui.externdefault = 1 "
