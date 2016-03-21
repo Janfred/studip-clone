@@ -157,9 +157,9 @@
 
         // Positions: below or left'ish or right'ish to the triggering element
         &.below {
-            left: (-@width / 2 + 9);
+            left: (-@width + @arrow-height * 2);
             &:before {
-                left: 50%;
+                left: (@width - @arrow-height - 2);
             }
         }
         &.left {
