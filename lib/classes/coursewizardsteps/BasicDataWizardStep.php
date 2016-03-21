@@ -378,9 +378,11 @@ class BasicDataWizardStep implements CourseWizardStep
         }
         if ($course->store()) {
             StudipLog::log('SEM_CREATE', $course->id, null, 'Veranstaltung mit Assistent angelegt');
+            $institutes = array($values['institute']);
             if (isset($values['participating']) && is_array($values['participating'])) {
-                $seminar->setInstitutes(array_keys($values['participating']));
+                $institutes = array_merge($institutes, array_keys($values['participating']));
             }
+            $seminar->setInstitutes($institutes);
             if (isset($values['lecturers']) && is_array($values['lecturers'])) {
                 foreach (array_keys($values['lecturers']) as $user_id) {
                     $seminar->addMember($user_id, 'dozent');
