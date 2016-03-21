@@ -177,8 +177,25 @@ label[for="responsive-toggle"] {
         }
     }
 
-    #barBottomright #sidebar-menu {
-        display: inline-block;
+    #barBottomright {
+        #sidebar-menu {
+            display: inline-block;
+        }
+        .list {
+            @width: 300px;
+            @arrow-height: 10px;
+
+            margin-top: 2px;
+            width: @width;
+            max-width: @width;
+
+            &.below {
+                left: (-@width + @arrow-height * 2);
+                &:before {
+                    left: (@width - @arrow-height - 2);
+                }
+            }
+        }
     }
     #responsive-container {
         display: block;
