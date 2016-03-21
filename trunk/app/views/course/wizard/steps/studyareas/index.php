@@ -1,8 +1,9 @@
 <h1><?= _('Studienbereiche') ?></h1>
 <div id="assigned">
     <h2>
-        <?= _('Bereits zugewiesen') ?>
-        <span class="required">*</span>
+        <span class="required">
+            <?= _('Bereits zugewiesen') ?>
+        </span>
     </h2>
     <ul class="css-tree">
         <li class="sem-tree-assigned-root keep-node" data-id="root"<?=
