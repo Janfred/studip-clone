@@ -28,6 +28,9 @@
     // Reset json memory, used to delay polling if consecutive requests always
     // return the same result
     function resetJSONMemory(json) {
+        if (json.hasOwnProperty('server_timestamp')) {
+            delete json.server_timestamp;
+        }
         json = JSON.stringify(json);
         if (json !== lastJsonResult) {
             currentDelayFactor = 0;
