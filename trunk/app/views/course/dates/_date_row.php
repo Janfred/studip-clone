@@ -26,6 +26,19 @@
         <? endif ?>
     </td>
     <td><?= htmlReady($date->getTypeName()) ?></td>
+    <? if (count($course->statusgruppen)) : ?>
+        <td>
+            <? if (count($date->statusgruppen)) : ?>
+                <ul class="clean">
+                <? foreach ($date->statusgruppen as $statusgruppe) : ?>
+                    <li><?= htmlReady($statusgruppe['name']) ?></li>
+                <? endforeach ?>
+                </ul>
+            <? else : ?>
+                <?= _("alle") ?>
+            <? endif ?>
+        </td>
+    <? endif ?>
     <? if (!$date instanceof CourseExDate) : ?>
         <td>
             <div style="display: flex; flex-direction: row;">
