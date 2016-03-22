@@ -26,8 +26,8 @@ class Course_DatesController extends AuthenticatedController
 
     public function index_action()
     {
-        $course = Course::findCurrent();
-        if ($GLOBALS['perm']->have_studip_perm('tutor', $course->id) && Request::isPost() && Request::option("termin_id") && Request::get("topic_title")) {
+        $this->course = Course::findCurrent();
+        if ($GLOBALS['perm']->have_studip_perm('tutor', $this->course->id) && Request::isPost() && Request::option("termin_id") && Request::get("topic_title")) {
             $date = new CourseDate(Request::option("termin_id"));
             $seminar_id = $date['range_id'];
             $title = Request::get("topic_title");
@@ -50,16 +50,16 @@ class Course_DatesController extends AuthenticatedController
         Navigation::activateItem('/course/schedule/dates');
 
         object_set_visit_module("schedule");
-        $this->last_visitdate = object_get_visit($course->id, 'schedule');
-        $this->dates = $course->getDatesWithExdates();
-        $this->lecturer_count = $course->countMembersWithStatus('dozent');
+        $this->last_visitdate = object_get_visit($this->course->id, 'schedule');
+        $this->dates = $this->course->getDatesWithExdates();
+        $this->lecturer_count = $this->course->countMembersWithStatus('dozent');
 
         $sidebar = Sidebar::get();
         $sidebar->setImage('sidebar/date-sidebar.png');
 
         $actions = new ActionsWidget();
 
-        if (!$this->show_raumzeit && $GLOBALS['perm']->have_studip_perm('tutor', $course->id)) {
+        if (!$this->show_raumzeit && $GLOBALS['perm']->have_studip_perm('tutor', $this->course->id)) {
             $actions->addLink(
                 _('Neuer Einzeltermin'),
                 $this->url_for('course/dates/singledate'),

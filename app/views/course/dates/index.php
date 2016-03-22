@@ -23,16 +23,29 @@
 <? foreach ($allSemesters as $semester): ?>
 <table class="dates default" data-table-id="<?= htmlReady($semester->id) ?>">
     <caption><?= htmlReady($semester['name']) ?></caption>
-    <colgroup>
-        <col width="30%">
-        <col width="10%">
-        <col width="30%">
-        <col width="30%">
-    </colgroup>
+    <? if (count($course->statusgruppen)) : ?>
+        <colgroup>
+            <col width="30%">
+            <col width="10%">
+            <col width="20%">
+            <col width="20%">
+            <col width="20%">
+        </colgroup>
+    <? else : ?>
+        <colgroup>
+            <col width="30%">
+            <col width="10%">
+            <col width="30%">
+            <col width="30%">
+        </colgroup>
+    <? endif ?>
     <thead>
         <tr class="sortable">
             <th class="sortasc"><?= _('Zeit') ?></th>
             <th><?= _('Typ') ?></th>
+            <? if (count($course->statusgruppen)) : ?>
+                <th><?= _('Sichtbarkeit') ?></th>
+            <? endif ?>
             <th><?= _('Thema') ?></th>
             <th><?= _('Raum') ?></th>
         </tr>
@@ -48,7 +61,11 @@
                  }
                  echo $this->render_partial(
                     'course/dates/_date_row.php',
-                    array('date' => $date, 'is_next_date' => $is_next_date === $key)
+                    array(
+                        'date' => $date,
+                        'is_next_date' => $is_next_date === $key,
+                        'course' => $course
+                    )
                 );
             } elseif (!$dateSemester && !in_array($key, $lostDateKeys)) {
                 $lostDateKeys[] = $key;
