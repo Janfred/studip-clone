@@ -30,7 +30,7 @@
                 <col>
                 <col width="15%">
                 <? $cols = 6 ?>
-                <col width="25%">
+                <col width="35%">
                 <? $cols_foot = 6?>
             <? else : ?>
                 <col>
