@@ -3,10 +3,10 @@
     <?= _('Zeitpunkt der automatischen Platzverteilung') ?>:
 </label>
 <div class="form_group">
-    <input type="date" name="distributiondate" id="distributiondate" size="8"
+    <input type="text" name="distributiondate" id="distributiondate" size="12"
         value="<?= $rule->getDistributionTime() ? date('d.m.Y', $rule->getDistributionTime()) : '' ?>"/>
     &nbsp;&nbsp;
-    <input type="time" name="distributiontime" id="distributiontime" size="4"
+    <input type="text" name="distributiontime" id="distributiontime" size="5"
         value="<?= $rule->getDistributionTime() ? date('H:i', $rule->getDistributionTime()) : '23:59' ?>"/>
 </div>
 <? if ($rule->isFCFSallowed()) : ?>
