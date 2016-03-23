@@ -4,8 +4,7 @@ if ($inst_id != '' && $inst_id != '0') {
     // add skip links
     SkipLinks::addIndex(_("Mitarbeiterliste"), 'list_institute_members');
     ?>
-    <table class="default" id="list_institute_members" border="0" width="99%" cellpadding="0" cellspacing="0"
-           align="center">
+    <table class="default" id="list_institute_members">
         <caption><?= _('Mitarbeiterinnen und Mitarbeiter') ?></caption>
         <colgroup>
             <?
@@ -21,19 +20,13 @@ if ($inst_id != '' && $inst_id != '0') {
             <?
             $begin = TRUE;
             foreach ($table_structure as $key => $field) {
-                if ($begin) {
-                    printf("<th width=\"%s\">", $field["width"]);
-                    $begin = FALSE;
-                } else
-                    printf("<th width=\"%s\" align=\"left\" valign=\"bottom\" " . ($key == 'nachricht' ? 'colspan="2"' : '') . ">", $field["width"]);
+                printf('<th width="%s" ' . ($key == 'actions' ? 'class="actions"' : '') . '>', $field["width"]);
 
                 if ($field["link"]) {
-                    printf("<a href=\"%s\">", URLHelper::getLink($field["link"]));
-                    printf("<font size=\"-1\"><b>%s&nbsp;</b></font>\n", htmlReady($field["name"]));
-                    echo "</a>\n";
+                    printf('<a href="%s">%s</a>', URLHelper::getLink($field["link"]), htmlReady($field["name"]));
                 } else
-                    printf("<font size=\"-1\" color=\"black\"><b>%s&nbsp;</b></font>\n", htmlReady($field["name"]));
-                echo "</td>\n";
+                    echo htmlReady($field["name"]);
+                echo "</th>\n";
             }
             ?>
         </tr>

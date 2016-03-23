@@ -353,7 +353,11 @@ $LIT_IMPORT_PLUGINS[5] = array('name' => 'Citavi', 'visual_name' => _("Literatur
 $FLASHPLAYER_DEFAULT_CONFIG_MIN = "&amp;showstop=1&amp;showvolume=1&amp;bgcolor=A6B6C6&amp;bgcolor1=A6B6C6&amp;bgcolor2=7387AC&amp;playercolor=7387AC&amp;buttoncolor=254580&amp;buttonovercolor=E9EFFD&amp;slidercolor1=CAD7E1&amp;slidercolor2=A6B6C6&amp;sliderovercolor=E9EFFD&amp;loadingcolor=E9B21A&amp;buffer=5&amp;buffercolor=white&amp;buffershowbg=0&amp;playeralpha=90&amp;playertimeout=500&amp;shortcut=1&amp;phpstream=0&amp;onclick=playpause&amp;showloading=always";
 $FLASHPLAYER_DEFAULT_CONFIG_MAX = "&amp;showstop=1&amp;showvolume=1&amp;bgcolor=A6B6C6&amp;bgcolor1=A6B6C6&amp;bgcolor2=7387AC&amp;playercolor=7387AC&amp;buttoncolor=254580&amp;buttonovercolor=E9EFFD&amp;slidercolor1=CAD7E1&amp;slidercolor2=A6B6C6&amp;sliderovercolor=E9EFFD&amp;loadingcolor=E9B21A&amp;buffer=5&amp;buffercolor=white&amp;buffershowbg=0&amp;playeralpha=90&amp;playertimeout=500&amp;shortcut=1&amp;showtime=1&amp;showfullscreen=1&amp;showplayer=always&amp;phpstream=0&amp;onclick=playpause&amp;showloading=always";
 
-//Here you have to add the datafield_ids as elements. They will be shown in the standard / extended view on inst_admin.php
+/*
+ * use this to customize the fields shown in the standard/extended view on the instiute member page
+ * valid values are 'raum', 'sprechzeiten', 'telefon', 'email', 'homepage' and userinstrole datafield ids
+ * default for 'default' is to show all builtin fields except 'homepage', 'extended' shows all builtin fields
+ */
 $INST_ADMIN_DATAFIELDS_VIEW = array(
     'default' => array(),
     'extended' => array()

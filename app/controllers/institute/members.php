@@ -356,40 +356,40 @@ class Institute_MembersController extends AuthenticatedController
                 }
             }
 
+            $default_fields = array(
+                'raum'         => _('Raum'),
+                'sprechzeiten' => _('Sprechzeiten'),
+                'telefon'      => _('Telefon'),
+                'email'        => _('E-Mail'),
+                'homepage'     => _('Homepage')
+            );
+
             $this->datafields_list = DataField::getDataFields('userinstrole');
 
-            $dview = array();
             if ($this->extend == 'yes') {
-                if (is_array($GLOBALS['INST_ADMIN_DATAFIELDS_VIEW']['extended'])) {
-                    $dview = $GLOBALS['INST_ADMIN_DATAFIELDS_VIEW']['extended'];
-                }
-                else $dview = array();
+                $dview = $GLOBALS['INST_ADMIN_DATAFIELDS_VIEW']['extended'];
             } else {
-                if(is_array($GLOBALS['INST_ADMIN_DATAFIELDS_VIEW']['default'])) {
-                    $dview = $GLOBALS['INST_ADMIN_DATAFIELDS_VIEW']['default'];
-                }
-                else $dview = array();
+                $dview = $GLOBALS['INST_ADMIN_DATAFIELDS_VIEW']['default'];
             }
 
-            if (!is_array($dview) || sizeof($dview) == 0) {
-                $this->struct = array (
-                    "raum" => array("name" => _("Raum"), "width" => "10%"),
-                    "sprechzeiten" => array("name" => _("Sprechzeiten"), "width" => "10%"),
-                    "telefon" => array("name" => _("Telefon"), "width" => "10%"),
-                    "email" => array("name" => _("E-Mail"), "width" => "10%")
-                );
-
+            if (empty($dview)) {
+                $dview = array('raum', 'sprechzeiten', 'telefon', 'email');
                 if ($this->extend == 'yes') {
-                    $this->struct["homepage"] = array("name" => _("Homepage"), "width" => "10%");
+                    $dview[] = 'homepage';
                 }
-            } else {
-                foreach ($this->datafields_list as $entry) {
-                    if (in_array($entry->id, $dview) === TRUE) {
-                        $this->struct[$entry->id] = array (
-                            'name' => $entry->name,
-                            'width' => '10%'
-                        );
-                    }
+            }
+
+            foreach ($default_fields as $key => $name) {
+                if (in_array($key, $dview)) {
+                    $this->struct[$key] = array('name' => $name, 'width' => '10%');
+                }
+            }
+            foreach ($this->datafields_list as $entry) {
+                if (in_array($entry->id, $dview) === TRUE) {
+                    $this->struct[$entry->id] = array (
+                        'name' => $entry->name,
+                        'width' => '10%'
+                    );
                 }
             }
 
@@ -522,18 +522,14 @@ class Institute_MembersController extends AuthenticatedController
                 } // switch
             }
 
-            // StEP 154: Nachricht an alle Mitglieder der Gruppe; auch auf der inst_members.php
-            if ($this->admin_view OR $GLOBALS['perm']->have_studip_perm('autor', $GLOBALS['SessSemName'][1])) {
-                $nachricht['nachricht'] = array(
+            $this->table_structure = array_merge((array)$this->table_structure, (array)$this->struct);
+
+            if ($this->admin_view || $GLOBALS['perm']->have_studip_perm('autor', $GLOBALS['SessSemName'][1])) {
+                $this->table_structure['actions'] = array(
                     "name" => _("Aktionen"),
                     "width" => "5%"
                 );
             }
-
-            $this->table_structure = array_merge((array)$this->table_structure, (array)$this->struct);
-            $this->table_structure = array_merge((array)$this->table_structure, (array)$nachricht);
-
-            $this->colspan = sizeof($this->table_structure)+1;
 
             if ($this->show == "funktion") {
                 $all_statusgruppen = $this->groups;
@@ -574,7 +570,6 @@ class Institute_MembersController extends AuthenticatedController
 
                     if (count($institut_members) > 0) {
                         $template = $GLOBALS['template_factory']->open('institute/_table_body.php');
-                        $template->colspan = $this->colspan;
                         $template->th_title = _("keiner Funktion zugeordnet");
                         $template->members = $institut_members;
                         $template->range_id = $this->auswahl;
@@ -624,8 +619,6 @@ class Institute_MembersController extends AuthenticatedController
                         $template = $GLOBALS['template_factory']->open('institute/_table_body.php');
                         $template->mail_status = true;
                         $template->key = $key;
-                        $template->group_colspan = $this->colspan - 2;
-                        $template->colspan = $this->colspan;
                         $template->th_title = $permission;
                         $template->members = $institut_members;
                         $template->range_id = $this->auswahl;
@@ -723,7 +716,6 @@ class Institute_MembersController extends AuthenticatedController
 
                     if (count($institut_members) > 0) {
                         $template = $GLOBALS['template_factory']->open('institute/_table_body.php');
-                        $template->colspan = $this->colspan;
                         $template->members = $institut_members;
                         $template->range_id = $this->auswahl;
                         $template->struct = $this->struct;
@@ -793,10 +785,8 @@ class Institute_MembersController extends AuthenticatedController
                 // StEP 154: Nachricht an alle Mitglieder der Gruppe
                 if ($GLOBALS['perm']->have_studip_perm('autor', $GLOBALS['SessSemName'][1]) AND $GLOBALS["ENABLE_EMAIL_TO_STATUSGROUP"] == true) {
                     $template->mail_gruppe = true;
-                    $template->group_colspan = $this->colspan - 2;
                 }
                 $template->role_id = $role_id;
-                $template->colspan = $this->colspan;
                 $template->th_title = $zw_title;
                 $template->members = $institut_members;
                 $template->range_id = $this->auswahl;
