@@ -1,40 +1,37 @@
-<? use Studip\Button, Studip\LinkButton; ?>
-<?
-if ($inst_id != '' && $inst_id != '0') {
-    // add skip links
-    SkipLinks::addIndex(_("Mitarbeiterliste"), 'list_institute_members');
-    ?>
+<?php
+SkipLinks::addIndex(_('Mitarbeiterliste'), 'list_institute_members');    
+?>
+
+<? if ($inst_id): ?>
     <table class="default" id="list_institute_members">
         <caption><?= _('Mitarbeiterinnen und Mitarbeiter') ?></caption>
         <colgroup>
-            <?
-            foreach ($table_structure as $key => $field) {
-                if ($key != 'statusgruppe') {
-                    printf("<col width=\"%s\">", $field["width"]);
-                }
-            }
-            ?>
+        <? foreach ($table_structure as $key => $field): ?>
+            <? if ($key !== 'statusgruppe'): ?>
+                <col width="<?= $field['width'] ?>">
+            <? endif; ?>
+        <? endforeach; ?>
         </colgroup>
         <thead>
-        <tr>
-            <?
-            $begin = TRUE;
-            foreach ($table_structure as $key => $field) {
-                printf('<th width="%s" ' . ($key == 'actions' ? 'class="actions"' : '') . '>', $field["width"]);
-
-                if ($field["link"]) {
-                    printf('<a href="%s">%s</a>', URLHelper::getLink($field["link"]), htmlReady($field["name"]));
-                } else
-                    echo htmlReady($field["name"]);
-                echo "</th>\n";
-            }
-            ?>
-        </tr>
+            <tr>
+            <? foreach ($table_structure as $key => $field): ?>
+                <th <? if ($class === 'actions') echo 'class="actions"'; ?>>
+                <? if ($field['link']): ?>
+                    <a href="<?= URLHelper::getLink($field['link']) ?>">
+                        <?= htmlReady($field['name']) ?>
+                    </a>
+                <? else: ?>
+                    <?= htmlReady($field['name']) ?>
+                <? endif; ?>
+                </th>
+            <? endforeach; ?>
+            </tr>
         </thead>
         <?= $table_content ?>
     </table>
-<?
-}
+<? endif; ?>
+
+<?php
 $sidebar = Sidebar::get();
 $sidebar->setImage('sidebar/person-sidebar.png');
 $widget = new ViewsWidget();
