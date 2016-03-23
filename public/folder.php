@@ -878,7 +878,7 @@ if ($question) {
             echo _("Veranstaltung") .':';
             echo '</div></td><td class="blank" width="60%" style="white-space: nowrap;">';
             echo "\n" . Icon::create('arr_2right', 'sort', ['title' => _('In diese Veranstaltung verschieben / kopieren')])->asInput(array('name'=>'move_to_sem','id'=>'move_to_sem_arrow','class'=>'middle'));
-            echo "\n" . '<select id="sem_move_id" name="sem_move_id[]" style="width:60%">';
+            echo "\n" . '<select id="sem_move_id" name="sem_move_id[]" style="width:90%">';
             foreach ($my_sem as $id => $name){
                 echo "\n" . '<option value="'.$id.'">' . htmlReady(my_substr($name,0,70)) . '</option>';
             }
@@ -895,7 +895,7 @@ if ($question) {
             echo _("Einrichtung").':';
             echo '</div></td><td class="blank" width="60%" style="white-space: nowrap;">';
             echo "\n" . Icon::create('arr_2right', 'sort', ['title' => _('In diese Einrichtung verschieben / kopieren')])->asInput(array('name'=>'move_to_inst','id'=>'move_to_inst_arrow','class'=>'middle'));
-            echo "\n" . '<select id="inst_move_id" name="inst_move_id[]" style="width:60%">';
+            echo "\n" . '<select id="inst_move_id" name="inst_move_id[]" style="width:90%">';
             foreach ($my_inst as $id => $name){
                 echo "\n" . '<option value="'.$id.'">' . htmlReady(my_substr($name,0,70)) . '</option>';
             }
