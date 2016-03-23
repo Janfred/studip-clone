@@ -20,8 +20,8 @@
             <col width="20">
             <col width="20">
             <col>
-            <col width="25%">
             <col width="15%">
+            <col width="35%">
             <col width="80">
         </colgroup>
         <thead>
@@ -39,17 +39,17 @@
                         <?=_('Nachname, Vorname')?>
                     </a>
                 </th>
+                <th style="text-align: center" <?= ($sort_by == 'position' && $sort_status == $waiting_type) ?
+                    sprintf('class="sort%s"', $order) : '' ?>>
+                    <? ($sort_status != $waiting_type) ? $order = 'desc' : $order = $order ?>
+                    <a href="<?= URLHelper::getLink(sprintf('?sortby=position&sort_status='.$waiting_type.'&order=%s&toggle=%s',
+                            $order, ($sort_by == 'position'))) ?>#awaiting">
+                        <?= $waiting_type === 'awaiting' ? _('Position') : _('Priorität') ?>
+                    </a>
+                </th>
                 <th>
                     <?= _('Studiengang')  ?>
                 </th>
-                    <th style="text-align: center" <?= ($sort_by == 'position' && $sort_status == $waiting_type) ?
-                        sprintf('class="sort%s"', $order) : '' ?>>
-                        <? ($sort_status != $waiting_type) ? $order = 'desc' : $order = $order ?>
-                        <a href="<?= URLHelper::getLink(sprintf('?sortby=position&sort_status='.$waiting_type.'&order=%s&toggle=%s',
-                                $order, ($sort_by == 'position'))) ?>#awaiting">
-                            <?= $waiting_type === 'awaiting' ? _('Position') : _('Priorität') ?>
-                        </a>
-                    </th>
                 <th style="text-align: right"><?= _('Aktion') ?></th>
             </tr>
         </thead>
@@ -72,12 +72,12 @@
                         <?= htmlReady($fullname) ?>
                     </a>
                 </td>
+                <td style="text-align: center">
+                    <?= $waiting['position'] ?>
+                </td>
                 <td>
                     <?= $this->render_partial("course/members/_studycourse.php",
                         array('study_courses' => UserModel::getUserStudycourse($waiting['user_id']))) ?>
-                </td>
-                <td style="text-align: center">
-                    <?= $waiting['position'] ?>
                 </td>
                 <td style="text-align: right">
                     <? if($user_id != $waiting['user_id']) : ?>
