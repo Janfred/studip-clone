@@ -18,4 +18,4 @@
     </li>
 <? endforeach ?>
 </ul>
-<?=Studip\LinkButton::create(_('Abbrechen'), $controller->url_for('/assign_role/' . $user->id), array('rel' => 'close')) ?>
+<?=Studip\LinkButton::create(_('Schließen'), $controller->url_for('/assign_role/' . $user->id), array('rel' => 'close')) ?>
