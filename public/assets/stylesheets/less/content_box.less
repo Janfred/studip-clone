@@ -10,10 +10,6 @@ section.contentbox {
         .flex-wrap(wrap);
         .flex-justify-content(space-between);
         
-        h1, nav {
-            .flex-grow(1);
-        }
-        
         padding: 2px;
         background-color: @content-color-20;
 
@@ -25,22 +21,16 @@ section.contentbox {
             font-size: medium;
             > a {
                 img, svg {
-                    vertical-align: text-bottom;
                     margin-right: 5px;
                 }
             }
         }
 
         nav {
-            vertical-align: text-top;
-            padding: 2px 5px 0 5px;
             text-align: right;
-            line-height: inherit;
-            * {
-                padding: 3px;
-                padding-left: 2px;
-                padding-right: 0px;
-            }
+            padding: 2px;
+            display: flex;
+            align-items: center;
         }
     }
     
@@ -124,8 +114,10 @@ section.contentbox {
                 .icon('before', "arr_1right", 'clickable');
                 &:before {
                     .transition(all 200ms ease 0s);
-                    margin-top: 2px;
+                    margin-right: 2px;
                 }
+                display: flex;
+                align-items: center;
             }
             nav {
                 * {
@@ -141,6 +133,11 @@ section.contentbox {
                     display: inline-block;
                     border-right: 1px solid @content-color;
                     padding: 0px 5px;
+                }
+                a {
+                    padding-left: 5px;
+                    align-items: center;
+                    display: flex;
                 }
             }
         }
