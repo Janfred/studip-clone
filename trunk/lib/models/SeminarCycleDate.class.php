@@ -274,7 +274,7 @@ class SeminarCycleDate extends SimpleORMap
             || $old_cycle->cycle != $this->cycle )
         {
           
-            $update_count = $this->generateNewDates();
+            $update_count = $this->generateNewDates($old_cycle);
         }
         
         StudipLog::log('SEM_CHANGE_CYCLE', $this->seminar_id, NULL, 
@@ -296,7 +296,7 @@ class SeminarCycleDate extends SimpleORMap
             $date->end_time = mktime(date('G', strtotime($this->end_time)), date('i', strtotime($this->end_time)), 0, date('m', $toe), date('d', $toe), date('Y', $toe)) + $day * 24 * 60 * 60;
 
             if ($date instanceof CourseDate &&
-                    ($date->date > $tos || $date->end_time > $toe || $old_cycle->weekday != $this->weekday)) {
+                    ($date->date < $tos || $date->end_time > $toe || $old_cycle->weekday != $this->weekday)) {
 
                 if (!is_null($date->room_assignment)) {
                     $date->room_assignment->delete();
@@ -338,7 +338,7 @@ class SeminarCycleDate extends SimpleORMap
         return $update_count;
     }
     
-    private function generateNewDates()
+    private function generateNewDates($old_cycle)
     {
         $course = Course::find($this->seminar_id);
         $topics = array();
@@ -349,11 +349,10 @@ class SeminarCycleDate extends SimpleORMap
                 if (!empty($topics_tmp)) {
                     $topics[] = $topics_tmp;
                 }
-                //uncomment below
-                $date->delete();
-            } else if ($date->date < $course->start_semester->vorles_beginn + $this->week_offset * 7 * 24 * 60 * 60) {
-                $date->delete();
-            } else if ($date->date > $course->start_semester->vorles_beginn + $this->end_offset * 7 * 24 * 60 * 60) {
+            }
+            if ($date->date < $course->start_semester->vorles_beginn + $this->week_offset * 7 * 24 * 60 * 60 ||
+                $date->date > $course->start_semester->vorles_beginn + $this->end_offset * 7 * 24 * 60 * 60
+            ) {
                 $date->delete();
             }
         }
@@ -385,7 +384,7 @@ class SeminarCycleDate extends SimpleORMap
         }
         return $update_count;
     }
-    
+
     /**
      * generate single date objects for one cycle and all semester, existing dates are merged in
      *
