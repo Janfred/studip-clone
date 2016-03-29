@@ -300,7 +300,7 @@ class Course_TimesroomsController extends AuthenticatedController
                         $singledate->killAssign();
                     }
                     $this->course->appendMessages($messages);
-                } else {
+                } else if (!$singledate->ex_termin) {
                     $this->course->createError(sprintf(_("Der angegebene Raum konnte für den Termin %s nicht gebucht werden!"),
                                                        '<b>' . $singledate->toString() . '</b>'));
                 }
@@ -716,7 +716,7 @@ class Course_TimesroomsController extends AuthenticatedController
                         if ($resObj = $date->bookRoom(Request::option('room'))) {
                             $messages = $date->getMessages();
                             $this->course->appendMessages($messages);
-                        } else {
+                        } else if (!$date->ex_termin) {
                             $this->course->createError(sprintf(_("Der angegebene Raum konnte für den Termin %s nicht gebucht werden!"),
                                                                '<strong>' . $date->toString() . '</strong>'));
                         }
