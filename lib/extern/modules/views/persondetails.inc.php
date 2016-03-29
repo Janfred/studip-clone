@@ -562,7 +562,7 @@ function head (&$module, $row, $a) {
         if ($module->config->getValue("Main", "showimage")) {
             echo "<td" . $module->config->getAttributes("PersondetailsHeader", "picturetd") . ">";
             $avatar = Avatar::getAvatar($row['user_id']);
-            if ($avatar->is_customized()) {
+            if ($avatar->is_customized() && Visibility::verify('picture', $row['user_id'])) {
                 echo "<img src=\"".$avatar->getURL(Avatar::NORMAL) .
                      "\" alt=\"Foto " . htmlReady(trim($row['fullname'])) . "\"";
                 echo $module->config->getAttributes("PersondetailsHeader", "img") . "></td>";
