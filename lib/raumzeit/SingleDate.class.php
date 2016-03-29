@@ -74,6 +74,7 @@ class SingleDate
         if ($data instanceOf CourseDate || $data instanceof CourseExDate) {
             $single_date_data = $data->toArray();
             $single_date_data['ex_termin'] = $data instanceOf CourseDate ? 0 : 1;
+            $single_date_data['resource_id'] = $data->room_assignment->resource_id ?: '';
             $this->fillValuesFromArray($single_date_data);
         } else {
             if (is_array($data)) {
@@ -423,7 +424,7 @@ class SingleDate
         }
 
         // check permissions (is current user allowed to book the passed room?)
-        $resList = ResourcesUserRoomsList::getInstance($user_id, true, false, true);
+        $resList = ResourcesUserRoomsList::getInstance($GLOBALS['user']->id, true, false, true);
         if (in_array($roomID, array_keys($resList->resources)) === false) {
             return false;
         }
