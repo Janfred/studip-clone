@@ -215,15 +215,6 @@
             $(document).on('mousemove', userActivityHandler);
             $(window).on('blur focus', windowActivityHandler);
             registerNextPoll();
-
-            if (typeof Notification !== "undefined" && Notification.permission !== 'denied') {
-                Notification.requestPermission(function (permission) {
-                    // Whatever the user answers, we make sure we store the information
-                    if (!('permission' in Notification)) {
-                        Notification.permission = permission;
-                    }
-                });
-            }
         }
         active = true;
     };
