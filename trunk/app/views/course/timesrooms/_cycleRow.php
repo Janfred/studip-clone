@@ -39,19 +39,18 @@ $is_exTermin = $termin instanceof CourseExDate;
     </td>
     <td>
         <? if ($room_holiday = SemesterHoliday::isHoliday($termin->date, false)) : ?>
-            <? $room_holiday = sprintf('<span class="is_ex_termin">(%s)</span>', htmlReady($room_holiday['name'])) ?>
+            <? $room_holiday = '<span'.($is_exTermin ? ' class="is_ex_termin"' : '').'>('.
+                htmlReady($room_holiday['name']).')</span>' ?>
         <? endif ?>
 
         <? if ($is_exTermin && ($comment = $termin->content)) : ?>
             <span class="is_ex_termin" style="font-style: italic"><?= _("(fällt aus)") ?></span>
             <?= tooltipIcon($termin->content, false) ?>
-        <? elseif ($name = SemesterHoliday::isHoliday($termin->date, false)): ?>
-            <span <?= $is_exTermin ? 'class="is_ex_termin"' : '' ?>>
-            (<?= htmlReady($name['name']) ?>)
-        </span>
+        <? elseif ($name = SemesterHoliday::isHoliday($termin->date, false) && $is_exTermin): ?>
+            <?= $room_holiday ?>
         <? elseif ($room = $termin->getRoom()) : ?>
             <?= $room->getFormattedLink(true, true, true, 'view_schedule', 'no_nav', $termin->date, $room->getName()) ?>
-            <?= $room_holiday['name'] ?: '' ?>
+            <?= $room_holiday ?: '' ?>
         <? elseif ($freeTextRoom = $termin->getRoomName()) : ?>
             <?= sprintf('(%s)', htmlReady($freeTextRoom)) ?>
         <? else : ?>
