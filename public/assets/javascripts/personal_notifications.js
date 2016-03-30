@@ -26,6 +26,15 @@
 
                 changed = (changed || !(id in stack));
 
+                if (typeof Notification !== "undefined" && Notification.permission !== 'denied') {
+                    Notification.requestPermission(function (permission) {
+                        // Whatever the user answers, we make sure we store the information
+                        if (!('permission' in Notification)) {
+                            Notification.permission = permission;
+                        }
+                    });
+                }
+
                 if (typeof Notification !== "undefined" && Notification.permission === "granted") {
                     if (typeof sessionStorage !== "undefined" && !sessionStorage['desktop.notification.exists.' + notification.id]) {
                         // If it's okay let's create a notification
