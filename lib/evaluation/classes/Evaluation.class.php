@@ -446,10 +446,11 @@ class Evaluation extends EvaluationObject {
      $this->mkdate = $creationdate;
    }
 
-   /**umber);s ($filepointer, SEPERATOR);SEPERATOR);TOR);        $number .= 
-($this->getPosition () + 1).".";        $this->exportHeader ($filepointer);      
-          _("Kann nicht in die Datei schreiben."));    * @access  private    * 
-@param   integer  $changedate  The changedate.    * @throws  error
+   /**
+    * Sets the changedate
+    * @access  private
+    * @param   integer  $changedate  The changedate.
+    * @throws  error
     */
    function setChangedate ($changedate) {
      $this->chdate = $changedate;
