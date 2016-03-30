@@ -44,7 +44,25 @@
             $('form').bind("onFail", function (e, errors) {
                 $.each(errors, function () {
                     this.input.attr('aria-invalid', 'true');
+                    // get the fieldset that contains the invalid input
+                    var fieldset = $(this.input).closest('fieldset');
+                    // toggle the collapsed class if the fieldset is currently collapsed
+                    if (fieldset.hasClass('collapsed')) {
+                        fieldset.toggleClass('collapsed');
+                    }
+                    $.scrollTo(this.input);
                 });
+            });
+
+            // for browsers supporting native HTML5 form validation:
+            // add invalid-handler to every input and textarea on the page
+            $('input, textarea').on('invalid', function() {
+                // get the fieldset that contains the invalid input
+                var fieldset = $(this).closest('fieldset');
+                // toggle the collapsed class if the fieldset is currently collapsed
+                if (fieldset.hasClass('collapsed')) {
+                    fieldset.toggleClass('collapsed');
+                }
             });
 
             $(document).on("change", "form.default label.file-upload input[type=file]", function (ev) {
