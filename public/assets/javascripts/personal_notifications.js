@@ -9,7 +9,20 @@
         audio_notification = false
         directlydeleted = [];
 
-    var process_notifications = function (notifications) {
+    // Wrapper function that creates a desktop notification from given data
+    function create_desktop_notification(data) {
+        var notification = new Notification(STUDIP.STUDIP_SHORT_NAME, {
+            body: data.text,
+            icon: data.avatar,
+            tag: data.id
+        });
+        notification.addEventListener('click', function () {
+            location.href = STUDIP.URLHelper.getURL('dispatch.php/jsupdater/mark_notification_read/' + this.tag);
+        });
+    }
+
+    // Handler for all notifications received by an ajax request
+    function process_notifications (notifications) {
         var ul        = $('<ul/>'),
             changed   = false,
             new_stack = {};
@@ -26,29 +39,28 @@
 
                 changed = (changed || !(id in stack));
 
-                if (typeof Notification !== "undefined" && Notification.permission !== 'denied') {
+                // Check if notifications should be sent (depends on the
+                // Notification itself and session storage)
+                if (Notification === undefined
+                    || Notification.permission === 'denied'
+                    || sessionStorage === undefined
+                    || sessionStorage.hasOwnProperty('desktop.notification.exists.' + notification.id))
+                {
+                    return;
+                }
+
+                // If it's okay let's create a notification
+                if (Notification.permission === 'granted') {
+                    create_desktop_notification(notification);
+                } else {
                     Notification.requestPermission(function (permission) {
-                        // Whatever the user answers, we make sure we store the information
-                        if (!('permission' in Notification)) {
-                            Notification.permission = permission;
+                        if (permission === 'granted') {
+                            create_desktop_notification(notification);
                         }
                     });
                 }
 
-                if (typeof Notification !== "undefined" && Notification.permission === "granted") {
-                    if (typeof sessionStorage !== "undefined" && !sessionStorage['desktop.notification.exists.' + notification.id]) {
-                        // If it's okay let's create a notification
-                        var message = new Notification(STUDIP.STUDIP_SHORT_NAME, {
-                            "body": notification.text,
-                            "icon": notification.avatar,
-                            "tag": notification.id
-                        });
-                        message.addEventListener("click", function () {
-                            location.href = STUDIP.ABSOLUTE_URI_STUDIP + "dispatch.php/jsupdater/mark_notification_read/" + this.tag;
-                        });
-                        sessionStorage['desktop.notification.exists.' + notification.id] = 1;
-                    }
-                }
+                sessionStorage['desktop.notification.exists.' + notification.id] = 1;        
             }
         });
 
