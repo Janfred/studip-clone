@@ -152,6 +152,8 @@ class EvaluationDB extends EvaluationObjectDB {
     $stopdate  = $evalObject->getStopdate();
     $timespan  = $evalObject->getTimespan();
 
+    $evalObject->setChangedate(time());
+
     /* save evaluation ----------------------------------------------------- */
     if ($this->exists ($evalObject->getObjectID ())) {
 
