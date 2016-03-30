@@ -105,7 +105,10 @@ class Admin_StatusgroupsController extends AuthenticatedController
             $group = new Statusgruppen($group_id);
             if ($group->isNew()) {
                 $group->range_id = $_SESSION['SessionSeminar'];
+            } else {
+                DataFieldEntry::removeAll(array('', $group->statusgruppe_id));
             }
+
             $group->name       = Request::get('name');
             $group->name_w     = Request::get('name_w');
             $group->name_m     = Request::get('name_m');
@@ -231,6 +234,8 @@ class Admin_StatusgroupsController extends AuthenticatedController
 
             //remove users
             $this->group->removeAllUsers();
+            //remove datafields
+            DataFieldEntry::removeAll(array('', $this->group->statusgruppe_id));
 
             //goodbye group
             $this->group->delete();
