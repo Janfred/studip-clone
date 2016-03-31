@@ -1,5 +1,4 @@
 <?php
-require_once('lib/models/CourseMember.class.php');
 
 class Step00296AppointmentRequests extends Migration
 {
@@ -16,7 +15,7 @@ class Step00296AppointmentRequests extends Migration
             'value' => '0'
         )
     );
-    
+
     /**
      * short description of this migration
      */
@@ -26,7 +25,7 @@ class Step00296AppointmentRequests extends Migration
             . "another user's calendar as a requested appointment. "
             . "Displaying of course appointments is now optional.";
     }
-    
+
     /**
      * insert list of options into config table
      */
@@ -60,32 +59,20 @@ class Step00296AppointmentRequests extends Migration
             $stmt->execute(array('name' => $option['name']));
         }
     }
-    
+
     /**
      * perform this migration
      */
     public function up()
-    {/*
-        $model = new CourseMember();
-        $meta_data = $model->getTableMetadata();
-
-        if (!array_key_exists('bind_calendar', $meta_data['fields'])) {
-            $db = DBManager::get();
-            $db->exec("ALTER TABLE `seminar_user` ADD `bind_calendar` TINYINT( 1 ) NOT NULL DEFAULT '1'");
-        }
+    {
         $this->insertConfig($this->options_new);
-     * 
-     */
     }
-    
+
     /**
      * revert this migration
      */
     public function down()
     {
-        $db = DBManager::get();
-        $db->exec("ALTER TABLE `seminar_user` DROP `bind_calendar`");
         $this->deleteConfig($this->options_new);
     }
-    
 }
