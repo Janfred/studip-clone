@@ -39,7 +39,7 @@ echo $flash['message'];
                     <? if (Request::isXhr()) : ?>
                         <? $params['asDialog'] = true; ?>
                     <? endif ?>
-                    <a data-dialog="size=big"
+                    <a <?=($params['asDialog'] ? 'data-dialog="size=big"' : '')?>
                        href="<?= $controller->link_for('edit/' . $course_id, $params) ?>">
                         <?= Icon::create('edit', 'clickable', ['title' => _('Diese Anfrage bearbeiten')])->asImg(16) ?>
                     </a>
