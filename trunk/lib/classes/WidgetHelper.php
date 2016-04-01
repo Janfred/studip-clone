@@ -243,7 +243,9 @@ class WidgetHelper
     public static function addWidget($id, $range_id)
     {
         $db = DBManager::get();
-        $statement = $db->query('SELECT MAX(position) + 1 FROM widget_user');
+        $statement = $db->prepare('SELECT MAX(position) + 1 FROM widget_user WHERE range_id = :range_id');
+        $statement->bindValue(':range_id', $range_id);
+        $statement->execute();
         $position = $statement->fetchColumn() ?: 0;
 
         $statement = $db->prepare('INSERT INTO widget_user (pluginid, position, range_id) VALUES (:id, :position, :range_id)');
