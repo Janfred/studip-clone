@@ -88,7 +88,6 @@ javascripts:
     - javascripts/schedule.js
     - javascripts/skip_links.js
     - javascripts/forms.js
-    - javascripts/room_request_dialog.js
     - javascripts/calendar_dialog.js
     - javascripts/old_upload.js
     - javascripts/drag_and_drop_upload.js
