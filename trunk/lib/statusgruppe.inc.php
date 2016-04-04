@@ -884,10 +884,10 @@ function get_role_data_recursive($roles, $user_id, &$default_entries, $filter = 
 
         switch ($the_user->geschlecht) {
             case 2:
-                $role['name'] = $role['role']->getName_w();
+                $role['name'] = $role['role']->getName_w() ?: $role['role']->getName();
                 break;
             case 1:
-                $role['name'] = $role['role']->getName_m();
+                $role['name'] = $role['role']->getName_m() ?: $role['role']->getName();
                 break;
             default:
                 $role['name'] = $role['role']->getName();
