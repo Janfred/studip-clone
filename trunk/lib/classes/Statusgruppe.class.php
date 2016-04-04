@@ -64,7 +64,7 @@ class Statusgruppe {
   {
     if (substr($method, 0, 3) == 'get') {
         $variable = strtolower(substr($method, 3, strlen($method) -3));
-        if (isset($this->$variable)) {
+        if (property_exists($this, $variable)) {
             return $this->$variable;
         } else {
             throw new Exception(__CLASS__ ."::$method() does not exist!");
