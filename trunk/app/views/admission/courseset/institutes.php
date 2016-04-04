@@ -3,7 +3,7 @@
 <?= Icon::create('search', 'clickable', ['title' => _("Suche starten")])->asImg()?>
 
 <ul>
-    <?php foreach ($selectedInstitutes as $institute => $data) { ?>
+    <?php foreach (SimpleCollection::createFromArray($selectedInstitutes)->orderBy('Name') as $institute => $data) { ?>
     <li id="<?= $institute ?>">
         <input type="hidden" name="institutes[]" value="<?= $institute ?>" class="institute">
         <span class="hover_box">

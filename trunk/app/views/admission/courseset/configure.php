@@ -81,8 +81,8 @@ if ($flash['error']) {
             <?php } ?>
             </div>
         <? else : ?>
-            <? foreach (array_keys($selectedInstitutes) as $institute) : ?>
-                <?= htmlReady($myInstitutes[$institute]['Name']) ?>
+            <? foreach (SimpleCollection::createFromArray($selectedInstitutes)->orderBy('Name') as $institute) : ?>
+                <?= htmlReady($institute['Name']) ?>
                 <br>
             <?  endforeach ?>
         <?  endif ?>
@@ -130,10 +130,14 @@ if ($flash['error']) {
             <? if (count($courseIds) > 100) :?>
                 <?= sprintf(_("%s zugewiesene Veranstaltungen"), count($courseIds)) ?>
             <? else : ?>
-                <? foreach ($courseIds as $course_id) : ?>
-                    <?= htmlReady(Course::find($course_id)->name) ?>
-                    <br>
-                <?  endforeach ?>
+            <?
+            Course::findEachMany(function($c) {
+                echo htmlReady($c->getFullname('number-name-semester'));
+                echo '<br>';
+            },
+                $courseIds,
+                'ORDER BY start_time,VeranstaltungsNummer,Name');
+            ?>
             <? endif ?>
         <? endif ?>
     </fieldset>
