@@ -34,6 +34,8 @@ class Statusgruppe {
 
     var $statusgruppe_id;
     var $name = '';
+    var $name_m = '';
+    var $name_w = '';
     var $range_id = '';
     var $position = 0;
     var $size = 0;
@@ -388,6 +390,8 @@ class Statusgruppe {
 
         $statusgruppe->statusgruppe_id = $data['statusgruppe_id'];
         $statusgruppe->name = $data['name'];
+        $statusgruppe->name_m = $data['name_m'];
+        $statusgruppe->name_w = $data['name_w'];
         $statusgruppe->range_id = $data['range_id'];
         $statusgruppe->position = $data['position'];
         $statusgruppe->size = $data['size'];
