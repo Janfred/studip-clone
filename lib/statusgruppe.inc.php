@@ -880,7 +880,20 @@ function get_role_data_recursive($roles, $user_id, &$default_entries, $filter = 
     if (is_array($roles))
     foreach ($roles as $role_id => $role) {
 
-        $role['name'] = $role['role']->getName();
+        $the_user = User::find($user_id);
+
+        switch ($the_user->geschlecht) {
+            case 2:
+                $role['name'] = $role['role']->getName_w();
+                break;
+            case 1:
+                $role['name'] = $role['role']->getName_m();
+                break;
+            default:
+                $role['name'] = $role['role']->getName();
+                break;
+        }
+
         $out_zw = '';
 
         if ($pred != '') {
