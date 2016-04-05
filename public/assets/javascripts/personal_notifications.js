@@ -1,12 +1,13 @@
-/*jslint browser: true, white: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, newcap: true, immed: true, indent: 4, onevar: false */
-/*global window, $, jQuery, _, Notificon */
+/*jslint browser: true, nomen: true, unparam: true, newcap: true */
+/*global Notification, jQuery, STUDIP, _, Notificon */
 
 (function ($) {
+    'use strict';
 
     var stack = {},
         originalTitle,
         favicon_url,
-        audio_notification = false
+        audio_notification = false,
         directlydeleted = [];
 
     // Wrapper function that creates a desktop notification from given data
@@ -22,8 +23,9 @@
     }
 
     // Handler for all notifications received by an ajax request
-    function process_notifications (notifications) {
-        var ul        = $('<ul/>'),
+    function process_notifications(notifications) {
+        var cache = STUDIP.Cache.getInstance('desktop.notifications'),
+            ul        = $('<ul/>'),
             changed   = false,
             new_stack = {};
 
@@ -37,15 +39,11 @@
                     $("#" + notification.html_id).bind("mouseenter", STUDIP.PersonalNotifications.isVisited);
                 }
 
-                changed = (changed || !(id in stack));
+                changed = (changed || !stack.hasOwnProperty(id));
 
                 // Check if notifications should be sent (depends on the
                 // Notification itself and session storage)
-                if (Notification === undefined
-                    || Notification.permission === 'denied'
-                    || sessionStorage === undefined
-                    || sessionStorage.hasOwnProperty('desktop.notification.exists.' + notification.id))
-                {
+                if (Notification === undefined || Notification.permission === 'denied' || cache.has(notification.id)) {
                     return;
                 }
 
@@ -60,7 +58,8 @@
                     });
                 }
 
-                sessionStorage['desktop.notification.exists.' + notification.id] = 1;        
+                cache.set(id, true);
+//                sessionStorage['desktop.notification.exists.' + notification.id] = 1;
             }
         });
 
@@ -70,7 +69,7 @@
         }
         STUDIP.PersonalNotifications.update();
         directlydeleted = [];
-    };
+    }
 
     STUDIP.PersonalNotifications = {
         newNotifications: function () {},
@@ -81,9 +80,8 @@
             return false;
         },
         sendReadInfo: function (id, notification) {
-            $.ajax({
-                'url': STUDIP.ABSOLUTE_URI_STUDIP + "dispatch.php/jsupdater/mark_notification_read/" + id,
-                'success': function () {
+            $.get(STUDIP.URLHelper.getURL('dispatch.php/jsupdater/mark_notification_read/' + id)),
+                .then(function () {
                     if (notification) {
                         notification.toggle('blind', 'fast', function () {
                             delete stack[id];
@@ -91,8 +89,7 @@
                             $(this).remove();
                         });
                     }
-                }
-            });
+                });
         },
         update: function () {
             var count      = _.values(stack).length,
@@ -142,12 +139,10 @@
             }
             $('#notification_marker').data('seen', true);
 
-            $.ajax({
-                'url': STUDIP.ABSOLUTE_URI_STUDIP + "dispatch.php/jsupdater/notifications_seen",
-                'success': function (time) {
+            $.get(STUDIP.URLHelper.getURL('dispatch.php/jsupdater/notifications_seen'))
+                .then(function (time) {
                     $("#notification_marker").removeClass("alert").data("lastvisit", time);
-                }
-            });
+                });
         }
     };
 
