@@ -79,7 +79,7 @@
             return false;
         },
         sendReadInfo: function (id, notification) {
-            $.get(STUDIP.URLHelper.getURL('dispatch.php/jsupdater/mark_notification_read/' + id)),
+            $.get(STUDIP.URLHelper.getURL('dispatch.php/jsupdater/mark_notification_read/' + id))
                 .then(function () {
                     if (notification) {
                         notification.toggle('blind', 'fast', function () {
