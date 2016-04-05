@@ -59,7 +59,6 @@
                 }
 
                 cache.set(id, true);
-//                sessionStorage['desktop.notification.exists.' + notification.id] = 1;
             }
         });
 
