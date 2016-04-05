@@ -196,6 +196,35 @@
 
     <section class="contentbox">
         <header>
+            <h1><?= _('Teilnehmerzahlen') ?></h1>
+        </header>
+        <table class="default">
+            <colgroup>
+                <col width="40%">
+            </colgroup>
+            <tbody>
+            <tr>
+                <td><?= _("Aktuelle Anzahl der Teilnehmenden") ?></td>
+                <td><?= sprintf('%s', $course->getNumParticipants()) ?></td>
+            </tr>
+            <? if ($course->admission_turnout) : ?>
+                <tr>
+                    <td><?= $sem->isAdmissionEnabled() ? _("maximale Teilnehmeranzahl") : _("erwartete Teilnehmeranzahl")?></td>
+                    <td><?= sprintf('%s', $course->admission_turnout) ?></td>
+                </tr>
+            <? endif ?>
+            <? if ($sem->isAdmissionEnabled() && $course->getNumWaiting()) : ?>
+                <tr>
+                    <td><?= _("Wartelisteneinträge")?></td>
+                    <td><?= sprintf('%s', $course->getNumWaiting()) ?></td>
+                </tr>
+            <? endif ?>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="contentbox">
+        <header>
             <h1><?= _('Zeiten') ?></h1>
         </header>
         <section>
@@ -325,36 +354,6 @@
             </ul>
         </section>
     <? endif ?>
-
-    <section class="contentbox">
-        <header>
-            <h1><?= _('Teilnehmerzahlen') ?></h1>
-        </header>
-        <table class="default">
-            <colgroup>
-                <col width="40%">
-            </colgroup>
-            <tbody>
-            <tr>
-                <td><?= _("Aktuelle Anzahl der Teilnehmenden") ?></td>
-                <td><?= sprintf('%s', $course->getNumParticipants()) ?></td>
-            </tr>
-            <? if ($course->admission_turnout) : ?>
-                <tr>
-                    <td><?= $sem->isAdmissionEnabled() ? _("maximale Teilnehmeranzahl") : _("erwartete Teilnehmeranzahl")?></td>
-                    <td><?= sprintf('%s', $course->admission_turnout) ?></td>
-                </tr>
-            <? endif ?>
-            <? if ($sem->isAdmissionEnabled() && $course->getNumWaiting()) : ?>
-                <tr>
-                    <td><?= _("Wartelisteneinträge")?></td>
-                    <td><?= sprintf('%s', $course->getNumWaiting()) ?></td>
-                </tr>
-            <? endif ?>
-            </tbody>
-        </table>
-    </section>
-
 
 <? if (Request::get('from')) : ?>
     <footer data-dialog-button>
