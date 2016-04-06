@@ -115,6 +115,17 @@ class Course_TopicsController extends AuthenticatedController
         }
     }
 
+    public function allow_public_action()
+    {
+        if (!$GLOBALS['perm']->have_studip_perm("tutor", $_SESSION['SessionSeminar'])) {
+            throw new AccessDeniedException();
+        }
+        $this->course = Course::findCurrent();
+        $this->course['public_topics'] = $this->course['public_topics'] ? 0 : 1;
+        $this->course->store();
+        $this->redirect("course/topics");
+    }
+
     public function copy_action()
     {
         if (!$GLOBALS['perm']->have_studip_perm("tutor", $_SESSION['SessionSeminar'])) {

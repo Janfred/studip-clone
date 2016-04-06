@@ -111,14 +111,20 @@ $actions->addLink(_("Alle Themen aufklappen"),
 if ($GLOBALS['perm']->have_studip_perm("tutor", $_SESSION['SessionSeminar'])) {
     $actions->addLink(
         _("Neues Thema erstellen"),
-        URLHelper::getURL("dispatch.php/course/topics/edit"), Icon::create('add', 'clickable'),
+        URLHelper::getURL("dispatch.php/course/topics/edit"),
+        Icon::create('add', 'clickable'),
         array('data-dialog' => "buttons")
     );
     $actions->addLink(
         _("Themen aus Veranstaltung kopieren"),
-        URLHelper::getURL("dispatch.php/course/topics/copy"), Icon::create('topic+add', 'clickable'),
+        URLHelper::getURL("dispatch.php/course/topics/copy"),
+        Icon::create('topic+add', 'clickable'),
         array('data-dialog' => "buttons")
+    );
+    $actions->addLink(
+        _("Themen öffentlich einsehbar"),
+        URLHelper::getURL("dispatch.php/course/topics/allow_public"),
+        Icon::create(Course::findCurrent()->public_topics ? 'checkbox-checked' : 'checkbox-unchecked', 'clickable')
     );
 }
 $sidebar->addWidget($actions);
-
