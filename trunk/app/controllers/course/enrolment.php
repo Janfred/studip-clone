@@ -171,7 +171,7 @@ class Course_EnrolmentController extends AuthenticatedController {
                                 $status = 'autor';
                                 StudygroupModel::accept_user(get_username($user_id),$this->course_id);
                                 StudygroupModel::cancelInvitation(get_username($user_id),$this->course_id);
-                                $success = sprintf(_("Sie wurden in die Veranstaltung %s als %s eingetragen."), $course->getName(), get_title_for_status($status, 1));
+                                $success = sprintf(_("Sie wurden in die Veranstaltung %s als %s eingetragen."), $course->getName(), get_title_for_status($status, 1, $course->status));
                                 PageLayout::postMessage(MessageBox::success($success));
                             } else {
                                 $success = sprintf(_("Sie wurden auf die Anmeldeliste der Studiengruppe %s eingetragen. Die Moderatoren der Studiengruppe können Sie jetzt freischalten."), $course->getName());
@@ -186,7 +186,7 @@ class Course_EnrolmentController extends AuthenticatedController {
             } else {
                 $status = 'autor';
                 if ($course->addMember($user_id, $status)) {
-                    $success = sprintf(_("Sie wurden in die Veranstaltung %s als %s eingetragen."), $course->getName(), get_title_for_status($status, 1));
+                    $success = sprintf(_("Sie wurden in die Veranstaltung %s als %s eingetragen."), $course->getName(), get_title_for_status($status, 1, $course->status));
                     PageLayout::postMessage(MessageBox::success($success));
                     $this->enrol_user = true;
 
