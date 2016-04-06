@@ -4,9 +4,9 @@
 # Lifter007: TODO
 /**
 * kill_studip_user.php
-* 
-* 
-* 
+*
+*
+*
 *
 * @author       André Noack <noack@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @access       public
@@ -14,7 +14,7 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // kill_studip_user.php
-// 
+//
 // Copyright (C) 2006 André Noack <noack@data-quest.de>,
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
@@ -73,14 +73,12 @@ if (!is_array($kill_user)) {
     fwrite(STDOUT, 'No user from list found in database.' . chr(10));
     exit(0);
 }
-$umanager = new UserManagement();
+
 foreach($kill_user as $uname => $udetail){
     if (!KILL_ADMINS && ($udetail['perms'] == 'admin' || $udetail['perms'] == 'root')){
         fwrite(STDOUT, "user: $uname is '{$udetail['perms']}', NOT deleted". chr(10));
     } else {
-        $umanager->user_data = array();
-        $umanager->msg = '';
-        $umanager->getFromDatabase($udetail['user_id']);
+        $umanager = new UserManagement($udetail['user_id']);
         //wenn keine Email gewünscht, Adresse aus den Daten löschen
         if (!SEND_MAIL_ON_DELETE) $umanager->user_data['auth_user_md5.Email'] = '';
         if ($umanager->deleteUser()){
