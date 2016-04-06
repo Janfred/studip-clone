@@ -362,6 +362,7 @@ class BasicDataWizardStep implements CourseWizardStep
         // Studygroups: access and description.
         if (in_array($values['coursetype'], studygroup_sem_types())) {
             $course->visible = 1;
+            $course->duration_time = -1;
             switch ($values['access']) {
                 case 'all':
                     $course->admission_prelim = 0;
