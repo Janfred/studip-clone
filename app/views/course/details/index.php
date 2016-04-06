@@ -157,7 +157,7 @@
     <? if ($count_lecturers) : ?>
         <section class="contentbox">
             <header>
-                <h1><?= get_title_for_status('dozent', $count_lecturers) ?></h1>
+                <h1><?= get_title_for_status('dozent', $count_lecturers, $course->status) ?></h1>
             </header>
             <section>
                 <ul class="list-csv">
@@ -178,7 +178,7 @@
     <? if ($count_tutors) : ?>
         <section class="contentbox">
             <header>
-                <h1><?= get_title_for_status('tutor', $count_tutors) ?></h1>
+                <h1><?= get_title_for_status('tutor', $count_tutors, $course->status) ?></h1>
             </header>
             <section>
                 <ul class="list-csv">
