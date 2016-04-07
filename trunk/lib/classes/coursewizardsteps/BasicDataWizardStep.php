@@ -335,7 +335,6 @@ class BasicDataWizardStep implements CourseWizardStep
         }
         $values = $values[__CLASS__];
         $seminar = new Seminar($course);
-        $semclass = $seminar->getSemClass();
 
         if (isset($source)) {
             $course->setData($source->toArray('untertitel ort sonstiges art teilnehmer vorrausetzungen lernorga leistungsnachweis ects admission_turnout modules'));
@@ -354,6 +353,8 @@ class BasicDataWizardStep implements CourseWizardStep
         $course->veranstaltungsnummer = $values['number'];
         $course->beschreibung = $values['description'];
         $course->institut_id = $values['institute'];
+
+        $semclass = $seminar->getSemClass();
         $course->visible = $semclass['visible'];
         $course->admission_prelim = $semclass['admission_prelim_default'];
         $course->lesezugriff = $semclass['default_read_level'] ?: 1;
