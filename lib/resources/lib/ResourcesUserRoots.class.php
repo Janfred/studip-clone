@@ -95,7 +95,7 @@ class ResourcesUserRoots {
             $query = "SELECT resource_id, parent_id, root_id, level
                       FROM resources_objects
                       WHERE owner_id IN (?)
-                      ORDER BY level DESC";
+                      ORDER BY level DESC, name";
             $statement = DBManager::get()->prepare($query);
             $statement->execute(array(
                 array_keys($my_objects)
@@ -114,7 +114,7 @@ class ResourcesUserRoots {
                       FROM resources_user_resources
                       LEFT JOIN resources_objects USING (resource_id)
                       WHERE user_id IN ('all', ?)
-                      ORDER BY level DESC";
+                      ORDER BY level DESC, name";
             $statement = DBManager::get()->prepare($query);
             $statement->execute(array(
                 array_keys($my_objects)
@@ -164,8 +164,10 @@ class ResourcesUserRoots {
                     }
                 }
             }
+            if (is_array($this->my_roots)) {
+                $this->my_roots = DBManager::get()->fetchPairs("SELECT resource_id a, resource_id b FROM resources_objects WHERE resource_id IN (?) ORDER BY name", array($this->my_roots));
+            }
         }
-
     }
 
     //public

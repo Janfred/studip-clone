@@ -116,7 +116,7 @@ class ResourcesBrowse {
 
         $query = "SELECT name, parent_id, resource_id, owner_id
                   FROM resources_objects
-                  WHERE resource_id = ?";
+                  WHERE resource_id = ? ORDER BY name";
         $statement = DBManager::get()->prepare($query);
 
         $result_arr = array();
@@ -157,11 +157,11 @@ class ResourcesBrowse {
                 $result .=  $top_level_name;
                 $result .= '</a>';
             }
-                
+
             for ($i = sizeof($result_arr)-1; $i>=0; $i--) {
                 if (Request::option('view')) {
                     $result .= ' &gt; <a href="'.URLHelper::getLink(sprintf('?quick_view='.Request::option('view').'&quick_view_mode='.Request::option('view_mode').'&%s='.$result_arr[$i]["id"],(Request::option('view')=='search') ? "open_level" : "actual_object" ) );
-                        
+
                     $result .= '">'. htmlReady($result_arr[$i]["name"]) .'</a>';
                 } else {
                     $result.= sprintf (" &gt; %s", htmlReady($result_arr[$i]["name"]));
@@ -190,18 +190,18 @@ class ResourcesBrowse {
                         </td>
                         <td>
                             <?=_("Beginn")?>:
-                            &nbsp;<input type="text" style="font-size:8pt;" name="search_begin_hour" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_begin"]) ? date("H", $this->searchArray["search_assign_begin"]) : _("ss")?>">
-                            <input type="text" style="font-size:8pt;" name="search_begin_minute" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_begin"]) ? date("i", $this->searchArray["search_assign_begin"]) : _("mm")?>">&nbsp;<?=_("Uhr")?>
+                            &nbsp;<input type="text"  name="search_begin_hour" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_begin"]) ? date("H", $this->searchArray["search_assign_begin"]) : _("ss")?>">
+                            <input type="text"  name="search_begin_minute" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_begin"]) ? date("i", $this->searchArray["search_assign_begin"]) : _("mm")?>">&nbsp;<?=_("Uhr")?>
                             &nbsp;&nbsp;<?=_("Ende")?>:
-                            &nbsp;<input type="text" style="font-size:8pt;" name="search_end_hour" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_end"]) ? date("H", $this->searchArray["search_assign_end"]) : _("ss")?>">
-                            <input type="text" style="font-size:8pt;" name="search_end_minute" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_end"]) ? date("i", $this->searchArray["search_assign_end"]) : _("mm")?>">&nbsp;<?=_("Uhr")?>
+                            &nbsp;<input type="text"  name="search_end_hour" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_end"]) ? date("H", $this->searchArray["search_assign_end"]) : _("ss")?>">
+                            <input type="text"  name="search_end_minute" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_end"]) ? date("i", $this->searchArray["search_assign_end"]) : _("mm")?>">&nbsp;<?=_("Uhr")?>
                 <br>
                             <?=_("Datum")?>: &nbsp;
                             <input name="searchDate" id="searchDate" size="10" value="<?= $this->searchArray['search_assign_begin'] ? date('j.m.Y', $this->searchArray['search_assign_begin']) : '' ?>">
                             <script>
                                 jQuery('#searchDate').datepicker();
                             </script>
-                            &nbsp;&nbsp;&nbsp;&nbsp;    <input type="checkbox" style="font-size:8pt;" name="search_repeating" value="1" <?=($this->searchArray["search_repeating"]==1) ? "checked=checked" : ""?>> <?= _('für restliches Semester prüfen') ?>
+                            &nbsp;&nbsp;&nbsp;&nbsp;    <input type="checkbox" name="search_repeating" value="1" <?=($this->searchArray["search_repeating"]==1) ? "checked=checked" : ""?>> <?= _('für restliches Semester prüfen') ?>
                             <br>
                         </td>
                     </tr>
@@ -218,11 +218,11 @@ class ResourcesBrowse {
                             <td>
                     <br>
                 <?=_("Beginn")?>:
-                    &nbsp;<input type="text" style="font-size:8pt;" name="search_begin_hour_2" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_begin"]) ? date("H", $this->searchArray["search_assign_begin"]) : _("ss")?>">
-                    <input type="text" style="font-size:8pt;" name="search_begin_minute_2" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_begin"]) ? date("i", $this->searchArray["search_assign_begin"]) : _("mm")?>">&nbsp;<?=_("Uhr")?>
+                    &nbsp;<input type="text" name="search_begin_hour_2" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_begin"]) ? date("H", $this->searchArray["search_assign_begin"]) : _("ss")?>">
+                    <input type="text"  name="search_begin_minute_2" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_begin"]) ? date("i", $this->searchArray["search_assign_begin"]) : _("mm")?>">&nbsp;<?=_("Uhr")?>
                 &nbsp;&nbsp;<?=_("Ende")?>:
-                    &nbsp;<input type="text" style="font-size:8pt;" name="search_end_hour_2" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_end"]) ? date("H", $this->searchArray["search_assign_end"]) : _("ss")?>">
-                    <input type="text" style="font-size:8pt;" name="search_end_minute_2" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_end"]) ? date("i", $this->searchArray["search_assign_end"]) : _("mm")?>">&nbsp;<?=_("Uhr")?>
+                    &nbsp;<input type="text"  name="search_end_hour_2" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_end"]) ? date("H", $this->searchArray["search_assign_end"]) : _("ss")?>">
+                    <input type="text"  name="search_end_minute_2" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_end"]) ? date("i", $this->searchArray["search_assign_end"]) : _("mm")?>">&nbsp;<?=_("Uhr")?>
                 <br>
                 <?=_("Tag der Woche")?>:
                 <select name = 'search_day_of_week'>
@@ -249,7 +249,7 @@ class ResourcesBrowse {
                     $selected_semester["semester_id"] = $this->searchArray["search_semester"];
                 }
                     $this_sem = false;
-                    foreach($all_semester as $semester)
+                    foreach(array_reverse($all_semester) as $semester)
                     {
                         $this_sem = $selected_semester["semester_id"] == $semester["semester_id"];
 
@@ -386,7 +386,7 @@ class ResourcesBrowse {
         } else {
             $way_back=-1;
 
-            $resRoots = new ResourcesUserRoots($range_id);
+            $resRoots = new ResourcesUserRoots();
             $roots = $resRoots->getRoots();
 
             if (is_array($roots)) {
@@ -410,7 +410,7 @@ class ResourcesBrowse {
             $sublevels = false;
             if (count($elements)) {
                 $ids = array_map(function ($a) { return $a['resource_id']; }, $elements);
-                
+
                 $query = "SELECT 1 FROM resources_objects WHERE parent_id IN (?)";
                 $statement = DBManager::get()->prepare($query);
                 $statement->execute(array($ids));
