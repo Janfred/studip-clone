@@ -100,17 +100,17 @@ class Admin_SemClassesController extends AuthenticatedController
         }
         $sem_class = $GLOBALS['SEM_CLASS'][Request::int("sem_class_id")];
         foreach (Request::getArray("core_module_slots") as $slot => $module) {
-            $sem_class->setSlotModule($slot, studip_utf8decode($module));
+            $sem_class->setSlotModule($slot, $module);
         }
         $sem_class->setModules(Request::getArray("modules"));
         $sem_class->set('name', Request::get("sem_class_name"));
-        $sem_class->set('description', studip_utf8decode(Request::get("sem_class_description")));
-        $sem_class->set('title_dozent', Request::get("title_dozent") ? studip_utf8decode(Request::get("title_dozent")) : null);
-        $sem_class->set('title_dozent_plural', Request::get("title_dozent_plural") ? studip_utf8decode(Request::get("title_dozent_plural")) : null);
-        $sem_class->set('title_tutor', Request::get("title_tutor") ? studip_utf8decode(Request::get("title_tutor")) : null);
-        $sem_class->set('title_tutor_plural', Request::get("title_tutor_plural") ? studip_utf8decode(Request::get("title_tutor_plural")) : null);
-        $sem_class->set('title_autor', Request::get("title_autor") ? studip_utf8decode(Request::get("title_autor")) : null);
-        $sem_class->set('title_autor_plural', Request::get("title_autor_plural") ? studip_utf8decode(Request::get("title_autor_plural")) : null);
+        $sem_class->set('description', Request::get("sem_class_description"));
+        $sem_class->set('title_dozent', Request::get("title_dozent") ? Request::get("title_dozent") : null);
+        $sem_class->set('title_dozent_plural', Request::get("title_dozent_plural") ? Request::get("title_dozent_plural") : null);
+        $sem_class->set('title_tutor', Request::get("title_tutor") ? Request::get("title_tutor") : null);
+        $sem_class->set('title_tutor_plural', Request::get("title_tutor_plural") ? Request::get("title_tutor_plural") : null);
+        $sem_class->set('title_autor', Request::get("title_autor") ? Request::get("title_autor") : null);
+        $sem_class->set('title_autor_plural', Request::get("title_autor_plural") ? Request::get("title_autor_plural") : null);
         $sem_class->set('compact_mode', Request::int("compact_mode"));
         $sem_class->set('workgroup_mode', Request::int("workgroup_mode"));
         $sem_class->set('studygroup_mode', Request::int("studygroup_mode"));
@@ -124,7 +124,7 @@ class Admin_SemClassesController extends AuthenticatedController
         $sem_class->set('topic_create_autor', Request::int("topic_create_autor"));
         $sem_class->set('visible', Request::int("visible"));
         $sem_class->set('course_creation_forbidden', Request::int("course_creation_forbidden"));
-        $sem_class->set('create_description', studip_utf8decode(Request::get("create_description")));
+        $sem_class->set('create_description', Request::get("create_description"));
         $sem_class->set('admission_prelim_default', Request::int("admission_prelim_default"));
         $sem_class->set('admission_type_default', Request::int("admission_type_default"));
         $sem_class->set('show_raumzeit', Request::int("show_raumzeit"));
@@ -133,15 +133,14 @@ class Admin_SemClassesController extends AuthenticatedController
             $notice = "<br>"._("Beachten Sie, dass es noch keine Veranstaltungstypen gibt!");
         }
         $output = array(
-            'html' => studip_utf8encode((string) MessageBox::success(_("Änderungen wurden gespeichert."." ".'<a href="'.URLHelper::getLink("dispatch.php/admin/sem_classes/overview").'">'._("Zurück zur Übersichtsseite.").'</a>').$notice))
+            'html' => (string) MessageBox::success(_("Änderungen wurden gespeichert."." ".'<a href="'.URLHelper::getLink("dispatch.php/admin/sem_classes/overview").'">'._("Zurück zur Übersichtsseite.").'</a>').$notice)
         );
-        echo json_encode($output);
-        $this->render_nothing();
+        $this->render_json($output);
     }
 
     public function add_sem_type_action() {
         if (Request::get('name') && Request::get("sem_class") && count($_POST)) {
-            $name = studip_utf8decode(Request::get('name'));
+            $name = Request::get('name');
             $statement = DBManager::get()->prepare(
                 "INSERT INTO sem_types " .
                 "SET name = :name, " .
@@ -166,7 +165,7 @@ class Admin_SemClassesController extends AuthenticatedController
     public function rename_sem_type_action() {
         $sem_type = $GLOBALS['SEM_TYPE'][Request::get("sem_type")];
         if ($sem_type) {
-            $sem_type->set('name', studip_utf8decode(Request::get("name")));
+            $sem_type->set('name', Request::get("name"));
             $sem_type->store();
         }
         $this->render_nothing();
