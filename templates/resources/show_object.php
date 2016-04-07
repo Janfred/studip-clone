@@ -27,7 +27,7 @@
             <td>&nbsp;</td>
             <td colspan="2">
                 <b><?= _('Beschreibung:') ?></b><br>
-                <?= htmlReady($this->resObject->getDescription()) ?>
+                <?= formatReady($this->resObject->getDescription()) ?>
             </td>
         </tr>
         <tr>
