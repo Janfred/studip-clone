@@ -404,7 +404,7 @@ if ($change_object_schedules) {
     $select_change_resource = is_array($_REQUEST['select_change_resource'])
                             ? Request::optionArray('select_change_resource')
                             : Request::option('select_change_resource');
-    if ($ObjectPerms->havePerm("admin") && Request::submitted('send_change_resource') && !empty($select_change_resource)) {
+    if ($ObjectPerms->havePerm("tutor") && Request::submitted('send_change_resource') && !empty($select_change_resource)) {
         if (!is_array($select_change_resource)) {
             $ChangeObjectPerms = ResourceObjectPerms::Factory($select_change_resource);
             if ($ChangeObjectPerms->havePerm("tutor")) {
