@@ -3802,6 +3802,9 @@ input.quicksearchbox {
   padding: 0;
   vertical-align: text-bottom;
 }
+.ui-autocomplete {
+  z-index: 99999;
+}
 /* skiplink-area highlighting -------------------------------------------- */
 #skip_link_navigation {
   background-color: #fff;
