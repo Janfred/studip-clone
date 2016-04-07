@@ -5,9 +5,9 @@
 # Lifter010: TODO
 /**
 * RoomGroups.class.php
-* 
+*
 * class for a grouping of rooms
-* 
+*
 *
 * @author       André Noack <noack@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @access       public
@@ -19,7 +19,7 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // RoomGroups.class.php
-// 
+//
 // Copyright (C) 2005 André Noack <noack@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -37,10 +37,10 @@
 // +---------------------------------------------------------------------------+
 
 class RoomGroups {
-    
+
     private static $room_group_object;
     private $groups = array();
-    
+
     public static function GetInstance($refresh_cache = false){
         if ($refresh_cache){
             self::$room_group_object = null;
@@ -52,14 +52,14 @@ class RoomGroups {
             return self::$room_group_object;
         }
     }
-    
+
     function __construct(){
         $this->createConfigGroups();
         if (get_config('RESOURCES_ENABLE_VIRTUAL_ROOM_GROUPS')){
             $this->createVirtualGroups();
         }
     }
-    
+
     function createConfigGroups(){
         @include "config_room_groups.inc.php";
         if (is_array($room_groups)){
@@ -75,7 +75,7 @@ class RoomGroups {
             }
         }
     }
-    
+
     function createVirtualGroups(){
         $db = DBManager::get();
         $room_list = new ResourcesUserRoomsList($GLOBALS['user']->id, false, false, true);
@@ -91,30 +91,33 @@ class RoomGroups {
                     $res_obj->restore($parent_id);
                     $this->groups[$offset]['name'] = $res_obj->getPathToString(true);
                     foreach ($resource_ids as $resource_id){
-                        $this->groups[$offset]['resources'][] = $resource_id;  
+                        $this->groups[$offset]['resources'][] = $resource_id;
                     }
                     ++$offset;
                 }
             }
+            if (count($this->groups)) {
+                usort($this->groups, function($a, $b) { return strnatcasecmp($a["name"], $b["name"]);});
+            }
         }
     }
-    
+
     function getGroupName($id){
         return (isset($this->groups[$id]) ? $this->groups[$id]['name'] : false);
     }
-    
+
     function getGroupContent($id){
         return (isset($this->groups[$id]) ? $this->groups[$id]['resources'] : array());
     }
-    
+
     function getGroupCount($id){
         return count($this->getGroupContent($id));
     }
-    
+
     function getAvailableGroups(){
         return array_keys($this->groups);
     }
-    
+
     function isGroup($id){
         return array_key_exists($id, $this->groups);
     }
