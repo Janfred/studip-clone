@@ -56,7 +56,7 @@ class StudipNavigation extends Navigation
 
             // calendar and schedule page
             $this->addSubNavigation('calendar', new CalendarNavigation());
-            
+
             // search page
             $this->addSubNavigation('search', new SearchNavigation());
         }
@@ -73,10 +73,11 @@ class StudipNavigation extends Navigation
 
         // resource managment, if it is enabled
         if (get_config('RESOURCES_ENABLE')) {
+            require_once 'lib/resources/resourcesFunc.inc.php';
             //TODO: suboptimal, es sollte eine ResourcesNavigation geben
             $navigation = new Navigation(_('Ressourcen'), 'resources.php', array('view' => 'resources'));
 
-            if (is_object($user) && $perm->have_perm('admin')) {
+            if (is_object($user) && (getGlobalPerms($user->id)=='admin' || checkAvailableResources($user->id))) {
                 $navigation->setImage(Icon::create('resources', 'navigation', ["title" => _('Zur Ressourcenverwaltung')]));
             }
 
