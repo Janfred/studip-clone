@@ -16,6 +16,7 @@ class AllowTopicsToBePublic extends Migration
         DBManager::get()->exec("
             UPDATE `seminare` SET `public_topics` = '0'
         ");
+        SimpleORMap::expireTableScheme();
     }
 
     public function down()
@@ -23,6 +24,7 @@ class AllowTopicsToBePublic extends Migration
         DBManager::get()->execute('
             ALTER TABLE `seminare` DROP `public_topics`
         ');
+        SimpleORMap::expireTableScheme();
     }
 
 }
