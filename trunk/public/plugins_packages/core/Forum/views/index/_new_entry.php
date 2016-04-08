@@ -24,17 +24,16 @@
             <? endif; ?>
             </div>
 
-            <div class="postbody">
+            <div class="postbody forum_entry_input">
                 <textarea class="add_toolbar wysiwyg" data-textarea="new_entry" name="content" required tabindex="3"
                     placeholder="<?= _('Schreiben Sie hier Ihren Beitrag. Hilfe zu Formatierungen'
                         . ' finden Sie rechts neben diesem Textfeld.') ?>"><?= htmlReady($this->flash['new_entry_content']) ?></textarea>
+                <dl class="postprofile">
+                    <dt>
+                        <?= $this->render_partial('index/_smiley_favorites', array('textarea_id' => 'new_entry')) ?>
+                    </dt>
+                </dl>
             </div>
-
-            <dl class="postprofile">
-                <dt>
-                    <?= $this->render_partial('index/_smiley_favorites', array('textarea_id' => 'new_entry')) ?>
-                </dt>
-            </dl>
 
             <div class="buttons">
                 <div class="button-group">
