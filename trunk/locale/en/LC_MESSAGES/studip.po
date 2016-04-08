@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Stud.IP\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-12 20:42+0100\n"
+"POT-Creation-Date: 2016-04-08 13:26+0200\n"
 "PO-Revision-Date: 2015-07-11 19:27+0000\n"
 "Last-Translator: mbohnsack <bohnsack@me.com>\n"
 "Language-Team: English (http://www.transifex.com/p/studip/language/en/)\n"
@@ -33,151 +33,6 @@ msgstr ""
 "Content-Type: text/plain; charset=CP1252\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-#: ../app/models/siteinfo.php:34
-msgid ""
-"Benutzen Sie den Link »neue Rubrik anlegen« in der Infobox, um eine Rubrik "
-"anzulegen."
-msgstr ""
-"The link »Create new category« in the information box takes you to the set "
-"up of new categories."
-
-#: ../app/models/siteinfo.php:36
-msgid ""
-"Benutzen Sie den Link »neue Seite anlegen« in der Infobox, um eine Seite in "
-"dieser Rubrik anzulegen."
-msgstr ""
-"To create a new page in this category, follow the link »create new page« in "
-"the information box."
-
-#: ../app/models/siteinfo.php:40
-msgid ""
-"Der für diese Stud.IP-Installation verantwortliche Administrator muss hier "
-"noch Inhalte einfügen.\n"
-"(:rootlist:)"
-msgstr ""
-"The administrator in charge for the Stud.IP installation has to insert "
-"further contents here.\n"
-"(:rootlist:)"
-
-#: ../app/models/siteinfo.php:361
-msgid "die meisten Teilnehmer"
-msgstr "most participants"
-
-#: ../app/models/siteinfo.php:374
-msgid "zuletzt angelegt"
-msgstr "lastly created"
-
-#: ../app/models/siteinfo.php:385
-msgid "die meisten Materialien (Dokumente)"
-msgstr "the most material (documents)"
-
-#: ../app/models/siteinfo.php:398
-msgid "die aktivsten Veranstaltungen (Postings der letzten zwei Wochen)"
-msgstr ""
-"the most active courses (number of posting within in the last two weeks)"
-
-#: ../app/models/siteinfo.php:429
-msgid "die beliebtesten Profile (Besucher)"
-msgstr "the most favoured profiles (visitors)"
-
-#: ../app/models/siteinfo.php:461
-msgid "Aktive Veranstaltungen"
-msgstr "Active courses"
-
-#: ../app/models/siteinfo.php:462
-msgid "alle Veranstaltungen, die nicht archiviert wurden"
-msgstr "all courses not moved to the archive"
-
-#: ../app/models/siteinfo.php:464
-msgid "Archivierte Veranstaltungen"
-msgstr "Archived courses"
-
-#: ../app/models/siteinfo.php:465
-msgid "alle Veranstaltungen, die archiviert wurden"
-msgstr "all courses moved to the archive."
-
-#: ../app/models/siteinfo.php:467 ../app/views/course/details/index.php:45
-msgid "beteiligte Einrichtungen"
-msgstr "participating institutes"
-
-#: ../app/models/siteinfo.php:468
-msgid "alle Einrichtungen außer den Fakultäten"
-msgstr "all institutes except faculties"
-
-#: ../app/models/siteinfo.php:470
-msgid "beteiligte Fakultäten"
-msgstr "participating faculties"
-
-#: ../app/models/siteinfo.php:471
-msgid "alle Fakultäten"
-msgstr "all faculties"
-
-#: ../app/models/siteinfo.php:473
-msgid "registrierte Administratoren"
-msgstr "registered administrators"
-
-#: ../app/models/siteinfo.php:476
-msgid "registrierte Dozenten"
-msgstr "registered lecturers"
-
-#: ../app/models/siteinfo.php:479
-msgid "registrierte Tutoren"
-msgstr "registered tutors"
-
-#: ../app/models/siteinfo.php:482
-msgid "registrierte Autoren"
-msgstr "registered authors"
-
-#: ../app/models/siteinfo.php:485
-msgid "Dokumente"
-msgstr "Documents"
-
-#: ../app/models/siteinfo.php:488
-msgid "verlinkte Dateien"
-msgstr "linked files"
-
-#: ../app/models/siteinfo.php:491 ../app/views/profile/index.php:191
-msgid "Literaturlisten"
-msgstr "Reference lists"
-
-#: ../app/models/siteinfo.php:495 ../app/views/course/topics/edit.php:22
-#: ../app/views/course/topics/index.php:6
-msgid "Termine"
-msgstr "Appointments"
-
-#: ../app/models/siteinfo.php:498 ../app/views/news/display.php:8
-msgid "Ankündigungen"
-msgstr "Announcements"
-
-#: ../app/models/siteinfo.php:501 ../app/views/questionnaire/widget.php:6
-#, fuzzy
-msgid "Fragebögen"
-msgstr "Question/questions"
-
-#: ../app/models/siteinfo.php:505 ../app/views/evaluation/display.php:6
-msgid "Evaluationen"
-msgstr "Evaluations"
-
-#: ../app/models/siteinfo.php:509
-msgid "Wiki-Seiten"
-msgstr "Wiki pages"
-
-#: ../app/models/siteinfo.php:513
-msgid "Ressourcen-Objekte"
-msgstr "Resource objects"
-
-#: ../app/models/siteinfo.php:514
-msgid "von Stud.IP verwaltete Ressourcen wie Räume oder Geräte"
-msgstr "ressources administered via Stud.IP, e.g. rooms or equipment"
-
-#: ../app/models/siteinfo.php:525
-msgid "Forenbeiträge"
-msgstr "Postings"
-
-#: ../app/models/siteinfo.php:526
-msgid "Anzahl Beiträge aller verwendeten Foren"
-msgstr "Number of postings of all used forums."
 
 #: ../app/models/studygroup.php:624
 #, php-format
@@ -359,10 +214,7 @@ msgstr "Delete?"
 #: ../app/views/admin/studycourse/edit_profession.php:21
 #: ../app/views/admin/user/edit_institute.php:63
 #: ../app/views/course/basicdata/view.php:312
-#: ../app/views/course/change_view/index.php:57
-#: ../app/views/course/change_view/index.php:68
 #: ../app/views/course/room_requests/edit.php:17
-#: ../app/views/course/room_requests/edit_dialog.php:8
 #: ../app/views/course/studygroup/edit.php:108
 #: ../app/views/course/timesrooms/cancel.php:6
 #: ../app/views/course/timesrooms/cancelStack.php:8
@@ -420,7 +272,7 @@ msgstr "Use standard-authentification at login"
 #: ../app/views/admin/statusgroups/editGroup.php:59
 #: ../app/views/admin/statusgroups/sortGroups.php:17
 #: ../app/views/admin/user/edit.php:549 ../app/views/admin/user/new.php:163
-#: ../app/views/admission/courseset/configure.php:218
+#: ../app/views/admission/courseset/configure.php:222
 #: ../app/views/admission/courseset/configure_courses.php:53
 #: ../app/views/admission/rule/configure.php:9
 #: ../app/views/admission/rule_administration/check_activation.php:78
@@ -447,7 +299,7 @@ msgstr "Use standard-authentification at login"
 #: ../app/views/course/studygroup/new.php:121
 #: ../app/views/course/timesrooms/createCycle.php:118
 #: ../app/views/course/timesrooms/createSingleDate.php:83
-#: ../app/views/course/timesrooms/editDate.php:157
+#: ../app/views/course/timesrooms/editDate.php:154
 #: ../app/views/document/administration/edit.php:69
 #: ../app/views/document/files/edit.php:43
 #: ../app/views/document/folder/edit.php:22 ../app/views/event_log/admin.php:64
@@ -479,7 +331,6 @@ msgstr "Save"
 #: ../app/views/admin/domain/edit.php:34
 #: ../app/views/admin/holidays/edit.php:59 ../app/views/admin/role/add.php:14
 #: ../app/views/admin/role/add_plugin.php:23
-#: ../app/views/admin/role/assign_role_institutes.php:21
 #: ../app/views/admin/sem_classes/details.php:295
 #: ../app/views/admin/semester/edit.php:105
 #: ../app/views/admin/smileys/edit.php:51
@@ -497,7 +348,7 @@ msgstr "Save"
 #: ../app/views/admin/user/migrate.php:73 ../app/views/admin/user/new.php:164
 #: ../app/views/admin/webservice_access/index.php:47
 #: ../app/views/admin/webservice_access/test.php:21
-#: ../app/views/admission/courseset/configure.php:219
+#: ../app/views/admission/courseset/configure.php:223
 #: ../app/views/admission/rule/configure.php:10
 #: ../app/views/admission/rule/select_type.php:24
 #: ../app/views/admission/rule_administration/check_activation.php:79
@@ -525,7 +376,6 @@ msgstr "Save"
 #: ../app/views/course/members/import_autorlist.php:52
 #: ../app/views/course/members/select_course.php:24
 #: ../app/views/course/room_requests/edit.php:18
-#: ../app/views/course/room_requests/edit_dialog.php:6
 #: ../app/views/course/room_requests/new.php:27
 #: ../app/views/course/scm/edit.php:53 ../app/views/course/scm/edit.php:55
 #: ../app/views/course/studygroup/edit.php:109
@@ -662,8 +512,8 @@ msgstr "URL"
 #: ../app/views/admin/plugin/index.php:44
 #: ../app/views/admin/role/show_role.php:147
 #: ../app/views/admin/webservice_access/index.php:19
-#: ../app/views/course/dates/index.php:35
-#: ../app/views/course/dates/index.php:68
+#: ../app/views/course/dates/index.php:45
+#: ../app/views/course/dates/index.php:85
 #: ../app/views/course/wizard/steps/basicdata/index.php:8
 #: ../app/views/course/wizard/steps/basicdata/index_studygroup.php:8
 #: ../app/views/document/files/index.php:70
@@ -905,6 +755,7 @@ msgstr "Courses"
 #: ../app/views/admin/domain/domains.php:16
 #: ../app/views/admin/lockrules/index.php:21
 #: ../app/views/admin/plugin/index.php:48
+#: ../app/views/admin/role/assign_role.php:80
 #: ../app/views/admin/specification/index.php:27
 #: ../app/views/admission/courseset/index.php:19
 #: ../app/views/calendar/single/manage_access.php:47
@@ -914,7 +765,7 @@ msgstr "Courses"
 #: ../app/views/course/studygroup/members.php:101
 #: ../app/views/document/files/index.php:75
 #: ../app/views/my_courses/archive.php:83 ../app/views/online/index.php:17
-#: ../app/views/online/index.php:90 ../app/views/questionnaire/overview.php:10
+#: ../app/views/online/index.php:90 ../app/views/questionnaire/overview.php:9
 msgid "Aktionen"
 msgstr "Actions"
 
@@ -932,7 +783,7 @@ msgstr "Manually entering user domains to courses"
 
 #: ../app/views/admin/autoinsert/manual.php:53
 #: ../app/views/admin/plugin/search.php:19
-#: ../app/views/localizations/show.php:57
+#: ../app/views/localizations/show.php:77
 msgid "Suchergebnisse"
 msgstr "Search results"
 
@@ -1174,7 +1025,7 @@ msgid "Kommentar"
 msgstr "Comment"
 
 #: ../app/views/admin/configuration/edit_configuration.php:27
-#: ../app/views/institute/members/index.php:48
+#: ../app/views/institute/members/index.php:38
 msgid "Standard"
 msgstr "Standard"
 
@@ -1193,7 +1044,7 @@ msgstr "Standard"
 #: ../app/views/course/admission/_change_admission.php:10
 #: ../app/views/dialog/confirm_dialog.php:8
 #: ../app/views/evaluation/_evaluation.php:51
-#: ../app/views/localizations/show.php:105
+#: ../app/views/localizations/show.php:62
 msgid "Ja"
 msgstr "Yes"
 
@@ -1212,7 +1063,7 @@ msgstr "Yes"
 #: ../app/views/course/admission/_change_admission.php:11
 #: ../app/views/dialog/confirm_dialog.php:9
 #: ../app/views/evaluation/_evaluation.php:51
-#: ../app/views/localizations/show.php:106
+#: ../app/views/localizations/show.php:63
 msgid "Nein"
 msgstr "No"
 
@@ -1390,7 +1241,7 @@ msgid "Lehrende"
 msgstr "Lecturers: "
 
 #: ../app/views/admin/courses/courses.php:111
-#: ../app/views/admin/courses/courses.php:217
+#: ../app/views/admin/courses/courses.php:214
 #: ../app/views/course/details/index.php:95
 msgid "Teilnehmende"
 msgstr "Participants "
@@ -1417,11 +1268,11 @@ msgstr "Provisional"
 #: ../app/views/course/basicdata/view.php:106
 #: ../app/views/course/basicdata/view.php:180
 #: ../app/views/course/basicdata/view.php:241
-#: ../app/views/course/members/accepted_list.php:52
+#: ../app/views/course/members/accepted_list.php:55
 #: ../app/views/course/members/autor_list.php:67
 #: ../app/views/course/members/awaiting_list.php:53
-#: ../app/views/course/members/dozent_list.php:31
-#: ../app/views/course/members/tutor_list.php:63
+#: ../app/views/course/members/dozent_list.php:33
+#: ../app/views/course/members/tutor_list.php:59
 #: ../app/views/course/members/user_list.php:58
 #: ../app/views/document/administration/individual.php:54
 #: ../app/views/help_content/admin_overview.php:38
@@ -1452,12 +1303,12 @@ msgstr "(hidden)"
 msgid "nicht angegeben"
 msgstr "unspecified"
 
-#: ../app/views/admin/courses/courses.php:224
+#: ../app/views/admin/courses/courses.php:221
 #, fuzzy
 msgid "Teilnehmende auf der Warteliste"
 msgstr "Persons on waiting list."
 
-#: ../app/views/admin/courses/courses.php:231
+#: ../app/views/admin/courses/courses.php:228
 msgid "Vorläufige Anmeldungen"
 msgstr "Provisional registrations"
 
@@ -1556,7 +1407,7 @@ msgstr "Matched: %u of %u log entries"
 #: ../app/views/admin/user/edit_institute.php:10
 #: ../app/views/admin/user/index.php:27
 #: ../app/views/course/basicdata/view.php:199
-#: ../app/views/institute/members/index.php:78
+#: ../app/views/institute/members/index.php:68
 #: ../app/views/my_courses/archive.php:30 ../app/views/settings/deputies.php:36
 #: ../app/views/settings/statusgruppen/modify_institute.php:33
 msgid "Status"
@@ -1636,8 +1487,8 @@ msgstr "Delete log entry"
 #: ../app/views/admin/cronjobs/logs/index.php:145
 #: ../app/views/admin/cronjobs/schedules/index.php:165
 #: ../app/views/admin/cronjobs/tasks/index.php:75
-#: ../app/views/course/members/tutor_list.php:130
-#: ../app/views/course/members/user_list.php:119
+#: ../app/views/course/members/tutor_list.php:124
+#: ../app/views/course/members/user_list.php:117
 #: ../app/views/course/timesrooms/editStack.php:9
 #: ../app/views/course/timesrooms/editStack.php:25
 msgid "Aktion auswählen"
@@ -1660,7 +1511,6 @@ msgstr "Select action"
 #: ../app/views/calendar/single/_event_data.php:62
 #: ../app/views/calendar/single/edit.php:433
 #: ../app/views/contact/deleteGroup.php:7
-#: ../app/views/course/timesrooms/_stack_actions.php:4
 #: ../app/views/document/files/index.php:236
 #: ../app/views/help_content/delete.php:18
 #: ../app/views/help_content/delete.php:20
@@ -1675,11 +1525,11 @@ msgstr "Delete"
 #: ../app/views/admin/cronjobs/schedules/index.php:170
 #: ../app/views/admin/cronjobs/tasks/execute.php:11
 #: ../app/views/admin/cronjobs/tasks/index.php:80
-#: ../app/views/course/members/accepted_list.php:119
-#: ../app/views/course/members/autor_list.php:166
-#: ../app/views/course/members/awaiting_list.php:121
-#: ../app/views/course/members/tutor_list.php:136
-#: ../app/views/course/members/user_list.php:133
+#: ../app/views/course/members/accepted_list.php:124
+#: ../app/views/course/members/autor_list.php:164
+#: ../app/views/course/members/awaiting_list.php:119
+#: ../app/views/course/members/tutor_list.php:130
+#: ../app/views/course/members/user_list.php:131
 #: ../app/views/course/timesrooms/_irregularEvents.php:110
 #: ../app/views/course/timesrooms/_regularEvents.php:107
 msgid "Ausführen"
@@ -1700,7 +1550,7 @@ msgstr "Active"
 #: ../app/views/calendar/single/_event_data.php:40
 #: ../app/views/calendar/single/_tooltip.php:32
 #: ../app/views/calendar/single/edit.php:151
-#: ../app/views/course/members/awaiting_list.php:50
+#: ../app/views/course/members/awaiting_list.php:47
 msgid "Priorität"
 msgstr "Priority"
 
@@ -1759,43 +1609,43 @@ msgstr "Edit cronjob"
 
 #: ../app/views/admin/cronjobs/schedules/edit.php:5
 #: ../app/views/calendar/single/edit.php:237
-#: ../app/views/localizations/show.php:29
+#: ../app/views/localizations/show.php:43
 msgid "Montag"
 msgstr "Monday"
 
 #: ../app/views/admin/cronjobs/schedules/edit.php:6
 #: ../app/views/calendar/single/edit.php:238
-#: ../app/views/localizations/show.php:30
+#: ../app/views/localizations/show.php:44
 msgid "Dienstag"
 msgstr "Tuesday"
 
 #: ../app/views/admin/cronjobs/schedules/edit.php:7
 #: ../app/views/calendar/single/edit.php:239
-#: ../app/views/localizations/show.php:31
+#: ../app/views/localizations/show.php:45
 msgid "Mittwoch"
 msgstr "Wednesday"
 
 #: ../app/views/admin/cronjobs/schedules/edit.php:8
 #: ../app/views/calendar/single/edit.php:240
-#: ../app/views/localizations/show.php:32
+#: ../app/views/localizations/show.php:46
 msgid "Donnerstag"
 msgstr "Thursday"
 
 #: ../app/views/admin/cronjobs/schedules/edit.php:9
 #: ../app/views/calendar/single/edit.php:241
-#: ../app/views/localizations/show.php:33
+#: ../app/views/localizations/show.php:47
 msgid "Freitag"
 msgstr "Friday"
 
 #: ../app/views/admin/cronjobs/schedules/edit.php:10
 #: ../app/views/calendar/single/edit.php:242
-#: ../app/views/localizations/show.php:34
+#: ../app/views/localizations/show.php:48
 msgid "Samstag"
 msgstr "Saturday"
 
 #: ../app/views/admin/cronjobs/schedules/edit.php:11
 #: ../app/views/calendar/single/edit.php:243
-#: ../app/views/localizations/show.php:35
+#: ../app/views/localizations/show.php:42
 msgid "Sonntag"
 msgstr "Sunday"
 
@@ -2038,6 +1888,7 @@ msgstr "Course category"
 #: ../app/views/admin/user/index.php:32 ../app/views/admin/user/index.php:129
 #: ../app/views/admission/courseset/_institute_choose.php:34
 #: ../app/views/admission/courseset/instcourses.php:12
+#: ../app/views/course/dates/_date_row.php:38
 #: ../app/views/settings/statusgruppen/modify.php:75
 #: ../app/views/smileys/picker.php:13
 msgid "alle"
@@ -2062,7 +1913,8 @@ msgstr "Edit reference "
 #: ../app/views/admin/datafields/edit.php:86
 #: ../app/views/admin/datafields/new.php:77 ../app/views/admin/user/edit.php:67
 #: ../app/views/admission/courseset/configure.php:6
-#: ../app/views/localizations/show.php:166
+#: ../app/views/course/dates/index.php:47
+#: ../app/views/localizations/show.php:173
 msgid "Sichtbarkeit"
 msgstr "Visibility"
 
@@ -2089,7 +1941,7 @@ msgstr ""
 #: ../app/views/admin/datafields/new.php:100
 #: ../app/views/admin/plugin/index.php:47
 #: ../app/views/admin/statusgroups/editGroup.php:43
-#: ../app/views/course/members/awaiting_list.php:50
+#: ../app/views/course/members/awaiting_list.php:47
 msgid "Position"
 msgstr "Position"
 
@@ -2130,7 +1982,7 @@ msgstr "Accept changes"
 #: ../app/views/course/timesrooms/cancelStack.php:10
 #: ../app/views/course/timesrooms/createCycle.php:120
 #: ../app/views/course/timesrooms/createSingleDate.php:85
-#: ../app/views/course/timesrooms/editDate.php:159
+#: ../app/views/course/timesrooms/editDate.php:156
 #: ../app/views/course/timesrooms/editStack.php:83
 msgid "Zurück zur Übersicht"
 msgstr "Back to overview"
@@ -2214,7 +2066,6 @@ msgid "Neues Datenfeld anlegen"
 msgstr "Create new data field"
 
 #: ../app/views/admin/datafields/preview.php:18
-#: ../app/views/course/room_requests/index_assi.php:4
 #: ../app/views/course/scm/index.php:18
 #: ../app/views/course/timesrooms/_stack_actions.php:3
 #: ../app/views/course/topics/index.php:70
@@ -2279,7 +2130,6 @@ msgstr "List of user domains"
 #: ../app/views/admin/domain/edit.php:33
 #: ../app/views/admin/webservice_access/index.php:46
 #: ../app/views/course/room_requests/edit.php:17
-#: ../app/views/course/room_requests/edit_dialog.php:8
 #: ../app/views/course/timesrooms/editStack.php:81
 #: ../app/views/news/edit_news.php:270 ../app/views/settings/deputies.php:62
 #: ../app/views/settings/privacy.php:92 ../app/views/settings/privacy.php:180
@@ -2437,10 +2287,10 @@ msgstr "Save settings"
 
 #: ../app/views/admin/plugin/default_activation.php:35
 #: ../app/views/admin/plugin/manifest.php:38
-#: ../app/views/course/details/index.php:361
+#: ../app/views/course/details/index.php:377
 #: ../app/views/course/wizard/step.php:7
 #: ../app/views/course/wizard/summary.php:28
-#: ../app/views/event_log/show.php:111 ../app/views/localizations/show.php:116
+#: ../app/views/event_log/show.php:111 ../app/views/localizations/show.php:158
 msgid "Zurück"
 msgstr "Back"
 
@@ -2835,7 +2685,23 @@ msgstr "Assign marked roles to the user"
 msgid "Einrichtungszuordnungen"
 msgstr "Assignment to institutions"
 
-#: ../app/views/admin/role/assign_role.php:86
+#: ../app/views/admin/role/assign_role.php:78
+#, fuzzy
+msgid "Rolle"
+msgstr "Roles"
+
+#: ../app/views/admin/role/assign_role.php:79
+#: ../app/views/course/basicdata/view.php:58
+#: ../app/views/questionnaire/context.php:44
+msgid "Einrichtungen"
+msgstr "Institutes"
+
+#: ../app/views/admin/role/assign_role.php:94
+#, fuzzy
+msgid "Einrichtungszuordnung bearbeiten"
+msgstr "Assignment to institutions"
+
+#: ../app/views/admin/role/assign_role.php:103
 msgid "Implizit zugewiesene Systemrollen"
 msgstr "Implicitly assigned system roles"
 
@@ -2849,6 +2715,13 @@ msgstr "Institutional assignment for %s in role %s"
 #: ../app/views/admission/courseset/institutes.php:1
 msgid "Einrichtung hinzufügen"
 msgstr "Add institution"
+
+#: ../app/views/admin/role/assign_role_institutes.php:21
+#: ../app/views/admission/rule_administration/activate.php:9
+#: ../app/views/course/enrolment/apply.php:40
+#: ../app/views/localizations/show.php:150 ../app/views/news/edit_news.php:275
+msgid "Schließen"
+msgstr "Close"
 
 #: ../app/views/admin/role/index.php:8
 #, php-format
@@ -2948,7 +2821,7 @@ msgstr "%s courses"
 #: ../app/views/admin/sem_classes/_sem_type.php:26
 #: ../app/views/admin/sem_classes/overview.php:54
 #: ../app/views/admission/courseset/_institute_choose.php:38
-#: ../app/views/institute/members/index.php:81
+#: ../app/views/institute/members/index.php:71
 #: ../app/views/settings/general.php:3
 #: ../app/views/settings/statusgruppen/modify.php:71
 msgid "keine"
@@ -3061,7 +2934,7 @@ msgstr "Writeable to user"
 
 #: ../app/views/admin/sem_classes/details.php:121
 #: ../app/views/course/admission/index.php:138
-#: ../app/views/course/details/index.php:300
+#: ../app/views/course/details/index.php:329
 msgid "Anmeldemodus"
 msgstr "Registration mode"
 
@@ -3199,7 +3072,7 @@ msgstr "Inactive content elements"
 #: ../app/views/admin/sem_classes/details.php:282
 #: ../app/views/course/avatar/update.php:53
 #: ../app/views/course/topics/edit.php:87
-#: ../app/views/questionnaire/_overview_questionnaire.php:81
+#: ../app/views/questionnaire/_overview_questionnaire.php:80
 #: ../app/views/questionnaire/_question.php:9
 msgid "Wirklich löschen?"
 msgstr "Really delete?"
@@ -3595,7 +3468,7 @@ msgid "Gruppenname"
 msgstr "Group name"
 
 #: ../app/views/admin/statusgroups/editGroup.php:6
-#: ../app/views/institute/members/index.php:9
+#: ../app/views/institute/members/index.php:7
 msgid "Mitarbeiterinnen und Mitarbeiter"
 msgstr "Staff"
 
@@ -3964,10 +3837,10 @@ msgid "Neuer Studiengang"
 msgstr "New course of study"
 
 #: ../app/views/admin/user/edit.php:332
-#: ../app/views/course/members/accepted_list.php:51
+#: ../app/views/course/members/accepted_list.php:54
 #: ../app/views/course/members/autor_list.php:65
-#: ../app/views/course/members/awaiting_list.php:43
-#: ../app/views/course/members/tutor_list.php:61
+#: ../app/views/course/members/awaiting_list.php:51
+#: ../app/views/course/members/tutor_list.php:57
 #: ../app/views/course/members/user_list.php:56
 msgid "Studiengang"
 msgstr "Course of study"
@@ -4052,8 +3925,8 @@ msgstr "Edit institute details"
 
 #: ../app/views/admin/user/edit_institute.php:20
 #: ../app/views/calendar/contentbox/_termin.php:11
-#: ../app/views/course/dates/index.php:37
-#: ../app/views/course/dates/index.php:70
+#: ../app/views/course/dates/index.php:50
+#: ../app/views/course/dates/index.php:87
 #: ../app/views/course/timesrooms/_regularEvents.php:42
 #: ../app/views/course/timesrooms/createSingleDate.php:22
 msgid "Raum"
@@ -4343,7 +4216,7 @@ msgstr ""
 "set."
 
 #: ../app/views/admission/courseset/configure.php:18
-#: ../app/views/admission/courseset/configure.php:166
+#: ../app/views/admission/courseset/configure.php:170
 #: ../app/views/course/plus/index.php:16
 msgid "Diese Daten sind noch nicht gespeichert."
 msgstr "These entries have not been saved yet."
@@ -4421,41 +4294,41 @@ msgstr "Message to all enrolled members"
 msgid "%s zugewiesene Veranstaltungen"
 msgstr "%s assigned courses"
 
-#: ../app/views/admission/courseset/configure.php:141
+#: ../app/views/admission/courseset/configure.php:145
 #: ../app/views/course/admission/index.php:6
-#: ../app/views/course/details/index.php:284
+#: ../app/views/course/details/index.php:313
 msgid "Anmelderegeln"
 msgstr "admission settings"
 
-#: ../app/views/admission/courseset/configure.php:151
-#: ../app/views/localizations/show.php:16
+#: ../app/views/admission/courseset/configure.php:155
+#: ../app/views/localizations/show.php:108
 msgid "Sie haben noch keine Anmelderegeln festgelegt."
 msgstr "No admission settings defined."
 
-#: ../app/views/admission/courseset/configure.php:156
+#: ../app/views/admission/courseset/configure.php:160
 msgid "Anmelderegel hinzufügen"
 msgstr "Add admission settings."
 
-#: ../app/views/admission/courseset/configure.php:169
+#: ../app/views/admission/courseset/configure.php:173
 #: ../app/views/course/block_appointments/index.php:39
 msgid "Weitere Daten"
 msgstr "Further details"
 
-#: ../app/views/admission/courseset/configure.php:174
+#: ../app/views/admission/courseset/configure.php:178
 #, fuzzy
 msgid "Personenlisten zuordnen:"
 msgstr "Assign participant lists:"
 
-#: ../app/views/admission/courseset/configure.php:188
+#: ../app/views/admission/courseset/configure.php:192
 #, fuzzy
 msgid "Sie haben noch keine Personenlisten angelegt."
 msgstr "No list of participants created"
 
-#: ../app/views/admission/courseset/configure.php:193
+#: ../app/views/admission/courseset/configure.php:197
 msgid "Liste der Nutzer"
 msgstr "List of participants"
 
-#: ../app/views/admission/courseset/configure.php:212
+#: ../app/views/admission/courseset/configure.php:216
 msgid "Weitere Hinweise für die Teilnehmenden:"
 msgstr "Further details for the participants:"
 
@@ -4547,7 +4420,6 @@ msgstr "Number"
 
 #: ../app/views/admission/courseset/index.php:30
 #: ../app/views/course/room_requests/index.php:36
-#: ../app/views/course/room_requests/index_assi.php:13
 msgid "Weitere Informationen einblenden"
 msgstr "Display further information"
 
@@ -4632,12 +4504,6 @@ msgstr "More >>"
 #: ../app/views/admission/rule/validate.php:3
 msgid "Fehler:"
 msgstr "Error:"
-
-#: ../app/views/admission/rule_administration/activate.php:9
-#: ../app/views/course/enrolment/apply.php:40
-#: ../app/views/localizations/show.php:103 ../app/views/news/edit_news.php:275
-msgid "Schließen"
-msgstr "Close"
 
 #: ../app/views/admission/rule_administration/check_activation.php:7
 msgid "Regel ist aktiv"
@@ -4844,7 +4710,7 @@ msgstr "(%s participant(s))"
 
 #: ../app/views/calendar/group/_attendees.php:30
 #: ../app/views/evaluation/_evaluation.php:48
-#: ../app/views/questionnaire/overview.php:9
+#: ../app/views/questionnaire/overview.php:8
 msgid "Teilnehmer"
 msgstr "Participant(s)"
 
@@ -5475,62 +5341,62 @@ msgid "Jeden %s alle %s Monate"
 msgstr "Every %s every %s months"
 
 #: ../app/views/calendar/single/edit.php:316
-#: ../app/views/localizations/show.php:119
+#: ../app/views/localizations/show.php:19
 msgid "Januar"
 msgstr "January"
 
 #: ../app/views/calendar/single/edit.php:317
-#: ../app/views/localizations/show.php:120
+#: ../app/views/localizations/show.php:20
 msgid "Februar"
 msgstr "February"
 
 #: ../app/views/calendar/single/edit.php:318
-#: ../app/views/localizations/show.php:121
+#: ../app/views/localizations/show.php:159
 msgid "März"
 msgstr "March"
 
 #: ../app/views/calendar/single/edit.php:319
-#: ../app/views/localizations/show.php:122
+#: ../app/views/localizations/show.php:22
 msgid "April"
 msgstr "April"
 
 #: ../app/views/calendar/single/edit.php:320
-#: ../app/views/localizations/show.php:123
+#: ../app/views/localizations/show.php:23
 msgid "Mai"
 msgstr "May"
 
 #: ../app/views/calendar/single/edit.php:321
-#: ../app/views/localizations/show.php:124
+#: ../app/views/localizations/show.php:24
 msgid "Juni"
 msgstr "June"
 
 #: ../app/views/calendar/single/edit.php:322
-#: ../app/views/localizations/show.php:125
+#: ../app/views/localizations/show.php:25
 msgid "Juli"
 msgstr "July"
 
 #: ../app/views/calendar/single/edit.php:323
-#: ../app/views/localizations/show.php:126
+#: ../app/views/localizations/show.php:26
 msgid "August"
 msgstr "August"
 
 #: ../app/views/calendar/single/edit.php:324
-#: ../app/views/localizations/show.php:127
+#: ../app/views/localizations/show.php:27
 msgid "September"
 msgstr "September"
 
 #: ../app/views/calendar/single/edit.php:325
-#: ../app/views/localizations/show.php:128
+#: ../app/views/localizations/show.php:28
 msgid "Oktober"
 msgstr "October"
 
 #: ../app/views/calendar/single/edit.php:326
-#: ../app/views/localizations/show.php:129
+#: ../app/views/localizations/show.php:29
 msgid "November"
 msgstr "November"
 
 #: ../app/views/calendar/single/edit.php:327
-#: ../app/views/localizations/show.php:130
+#: ../app/views/localizations/show.php:30
 msgid "Dezember"
 msgstr "December"
 
@@ -5676,7 +5542,7 @@ msgid "[versteckt]"
 msgstr "[hidden]"
 
 #: ../app/views/calendar/single/seminar_events.php:76
-#: ../app/views/localizations/show.php:91
+#: ../app/views/localizations/show.php:81
 #: ../app/views/my_courses/_course.php:43
 msgid "Veranstaltungsdetails"
 msgstr "Course details"
@@ -5795,7 +5661,7 @@ msgid "Bitte geben Sie hier an, welche speziellen Anmelderegeln gelten sollen."
 msgstr "Please specify the admission settings."
 
 #: ../app/views/course/admission/index.php:12
-#: ../app/views/course/details/index.php:288
+#: ../app/views/course/details/index.php:317
 #, php-format
 msgid "Diese Veranstaltung gehört zum Anmeldeset \"%s\"."
 msgstr "The course is part of admission \"%s\"."
@@ -6008,7 +5874,7 @@ msgstr ""
 #: ../app/views/course/avatar/update.php:34
 #: ../app/views/course/overview/index.php:70
 #: ../app/views/institute/avatar/update.php:34
-#: ../app/views/localizations/show.php:160
+#: ../app/views/localizations/show.php:167
 msgid "oder"
 msgstr "or"
 
@@ -6030,11 +5896,6 @@ msgstr "Changes impossible"
 msgid "Fehlende Datenzeilen"
 msgstr "Missing data record"
 
-#: ../app/views/course/basicdata/view.php:58
-#: ../app/views/questionnaire/context.php:44
-msgid "Einrichtungen"
-msgstr "Institutes"
-
 #: ../app/views/course/basicdata/view.php:81
 msgid "Personal"
 msgstr "Staff"
@@ -6053,7 +5914,7 @@ msgstr "%s of the institute"
 
 #: ../app/views/course/basicdata/view.php:105
 #: ../app/views/course/basicdata/view.php:240
-#: ../app/views/institute/members/index.php:75
+#: ../app/views/institute/members/index.php:65
 msgid "Funktion"
 msgstr "Function"
 
@@ -6151,79 +6012,18 @@ msgstr ""
 "If you add a comment to the canceled appointments they will furthermore be "
 "displayed  in the schedule as well as in the calendar. "
 
-#: ../app/views/course/change_view/index.php:24
-msgid "Information"
-msgstr "Information"
-
-#: ../app/views/course/change_view/index.php:27
-#, fuzzy
-msgid ""
-"Hier können Sie festlegen, dass Sie die Veranstaltung aus der Sicht einer "
-"Person sehen wollen, die nicht Lehrende ist und somit überprüfen, wie für "
-"Ihre Teilnehmende die Veranstaltung aussieht."
-msgstr ""
-"Choose to display the course from a non-lecturers view and check how your "
-"participants see your course."
-
-#: ../app/views/course/change_view/index.php:41
-msgid "Ansicht simulieren"
-msgstr "Simulate view"
-
-#: ../app/views/course/change_view/index.php:49
-msgid ""
-"Veranstaltung anzeigen, wie sie für Teilnehmer mit folgender Berechtigung "
-"aussieht:"
-msgstr "Display course as it looks like for users with authorization:"
-
-#: ../app/views/course/change_view/index.php:51
-#: ../app/views/course/members/csv_manual_assignment.php:20
-#: ../app/views/course/room_requests/_form.php:135
-#: ../app/views/userfilter/field/configure.php:20
-msgid "bitte auswählen"
-msgstr "please select"
-
-#: ../app/views/course/change_view/index.php:57
-msgid "Ansicht der Veranstaltung zurücksetzen"
-msgstr "Reset course view"
-
-#: ../app/views/course/change_view/index.php:59
-#, fuzzy
-msgid ""
-"Wenn Sie hier eine Berechtigungsstufe auswählen, werden Sie die "
-"Veranstaltung genauso sehen wie Teilnehmendemit dieser Berechtigung."
-msgstr ""
-"By choosing an authorization level you can see the course exactly like a "
-"user with the selected authorization."
-
-#: ../app/views/course/change_view/index.php:63
-#, fuzzy
-msgid "Ihre gewohnte Ansicht können Sie auf dieser Seite wieder einstellen."
-msgstr "On this page you can switch back to the lecturer's view."
-
-#: ../app/views/course/change_view/index.php:66
-#, fuzzy
-msgid "Veranstaltung wieder auf die normale Ansicht für zurücksetzen:"
-msgstr "Switch back to the lecturer's view:"
-
-#: ../app/views/course/change_view/index.php:70
-#, fuzzy
-msgid ""
-"Durch Klick auf \"übernehmen\" sehen Sie die Veranstaltung wieder aus "
-"Lehrendensicht."
-msgstr "By clicking on \"apply\" you can switch back to lecturer's view."
-
 #: ../app/views/course/dates/_date_row.php:1
 msgid "Der nächste Termin"
 msgstr "Next appointment"
 
-#: ../app/views/course/dates/_date_row.php:38
+#: ../app/views/course/dates/_date_row.php:51
 #: ../app/views/course/dates/details.php:17
 msgid "Thema hinzufügen"
 msgstr "Add topic"
 
 #: ../app/views/course/dates/details.php:7
-#: ../app/views/course/dates/index.php:36
-#: ../app/views/course/dates/index.php:69
+#: ../app/views/course/dates/index.php:49
+#: ../app/views/course/dates/index.php:86
 #: ../app/views/course/dates/new_topic.php:10
 #: ../app/views/course/topics/index.php:5
 msgid "Thema"
@@ -6250,7 +6050,7 @@ msgstr "Add single appointment"
 
 #: ../app/views/course/dates/details.php:101
 #: ../app/views/course/timesrooms/createSingleDate.php:63
-#: ../app/views/course/timesrooms/editDate.php:115
+#: ../app/views/course/timesrooms/editDate.php:112
 msgid "Beteiligte Gruppen"
 msgstr "Participating groups"
 
@@ -6265,8 +6065,8 @@ msgid "-- Gruppen auswählen --"
 msgstr "Select group:"
 
 #: ../app/views/course/dates/details.php:141
-#: ../app/views/course/timesrooms/editDate.php:136
-#: ../app/views/course/timesrooms/editDate.php:148
+#: ../app/views/course/timesrooms/editDate.php:133
+#: ../app/views/course/timesrooms/editDate.php:145
 #, fuzzy
 msgid "Gruppe hinzufügen"
 msgstr "Enter/remove groups"
@@ -6281,13 +6081,13 @@ msgstr "Cancel"
 msgid "Keine Termine vorhanden"
 msgstr "No appointments available"
 
-#: ../app/views/course/dates/index.php:34
-#: ../app/views/course/dates/index.php:67 ../app/views/event_log/show.php:79
+#: ../app/views/course/dates/index.php:44
+#: ../app/views/course/dates/index.php:84 ../app/views/event_log/show.php:79
 #: ../app/views/messages/overview.php:36
 msgid "Zeit"
 msgstr "Time"
 
-#: ../app/views/course/dates/index.php:64
+#: ../app/views/course/dates/index.php:81
 msgid "Ohne Semester"
 msgstr "Without semester"
 
@@ -6327,6 +6127,10 @@ msgstr "General information"
 #: ../app/views/course/details/index.php:35
 msgid "Heimat-Einrichtung"
 msgstr "Home institute"
+
+#: ../app/views/course/details/index.php:45
+msgid "beteiligte Einrichtungen"
+msgstr "participating institutes"
 
 #: ../app/views/course/details/index.php:60
 #: ../app/views/public_courses/index.php:37
@@ -6374,33 +6178,53 @@ msgid "ECTS-Punkte"
 msgstr "ECTS points"
 
 #: ../app/views/course/details/index.php:199
+msgid "Teilnehmerzahlen"
+msgstr "attendance"
+
+#: ../app/views/course/details/index.php:207
+msgid "Aktuelle Anzahl der Teilnehmenden"
+msgstr "Current number of participants"
+
+#: ../app/views/course/details/index.php:212
+msgid "maximale Teilnehmeranzahl"
+msgstr "maximum number of participants"
+
+#: ../app/views/course/details/index.php:212
+msgid "erwartete Teilnehmeranzahl"
+msgstr "expected number of participants"
+
+#: ../app/views/course/details/index.php:218
+msgid "Wartelisteneinträge"
+msgstr "Entries on waiting list"
+
+#: ../app/views/course/details/index.php:228
 msgid "Zeiten"
 msgstr "Times"
 
-#: ../app/views/course/details/index.php:208
+#: ../app/views/course/details/index.php:237
 msgid "Veranstaltungsort"
 msgstr "Course location"
 
-#: ../app/views/course/details/index.php:218
+#: ../app/views/course/details/index.php:247
 msgid "Studienmodule"
 msgstr "Study modules"
 
-#: ../app/views/course/details/index.php:241
-#: ../app/views/course/details/index.php:254
+#: ../app/views/course/details/index.php:270
+#: ../app/views/course/details/index.php:283
 #: ../app/views/course/wizard/steps/studyareas/index.php:1
 msgid "Studienbereiche"
 msgstr "Fields of study"
 
-#: ../app/views/course/details/index.php:273
+#: ../app/views/course/details/index.php:302
 msgid "Kommentar/Beschreibung"
 msgstr "Comment/Description"
 
-#: ../app/views/course/details/index.php:303
+#: ../app/views/course/details/index.php:332
 msgid ""
 "Die Auswahl der Teilnehmenden wird nach der Eintragung manuell vorgenommen."
 msgstr "After enrolment, participants will manually be selected."
 
-#: ../app/views/course/details/index.php:308
+#: ../app/views/course/details/index.php:337
 #, fuzzy
 msgid ""
 "Nutzer/-innen, die sich für diese Veranstaltung eintragen möchten,\n"
@@ -6410,29 +6234,13 @@ msgstr ""
 "Users interested in enrolling in this course will obtain further information "
 "and then can still decide against enrolment."
 
-#: ../app/views/course/details/index.php:319
+#: ../app/views/course/details/index.php:348
 msgid "Zugelassenene Nutzerdomänen:"
 msgstr "Admissible user domains:"
 
-#: ../app/views/course/details/index.php:331
-msgid "Teilnehmerzahlen"
-msgstr "attendance"
-
-#: ../app/views/course/details/index.php:339
-msgid "Aktuelle Anzahl der Teilnehmenden"
-msgstr "Current number of participants"
-
-#: ../app/views/course/details/index.php:344
-msgid "maximale Teilnehmeranzahl"
-msgstr "maximum number of participants"
-
-#: ../app/views/course/details/index.php:344
-msgid "erwartete Teilnehmeranzahl"
-msgstr "expected number of participants"
-
-#: ../app/views/course/details/index.php:350
-msgid "Wartelisteneinträge"
-msgstr "Entries on waiting list"
+#: ../app/views/course/details/index.php:361
+msgid "Themen"
+msgstr "Topics"
 
 #: ../app/views/course/elearning/edit.php:2
 msgid "Lernmodule hinzufügen / entfernen"
@@ -6611,7 +6419,6 @@ msgstr "Drop selected courses here"
 
 #: ../app/views/course/enrolment/apply.php:15
 #: ../app/views/course/enrolment/apply.php:50
-#: ../app/views/course/room_requests/edit_dialog.php:4
 msgid "OK"
 msgstr "Ok"
 
@@ -6664,17 +6471,12 @@ msgstr "More courses of study"
 
 #: ../app/views/course/members/accepted_list.php:16
 #: ../app/views/course/members/autor_list.php:18
-#: ../app/views/course/members/dozent_list.php:11
+#: ../app/views/course/members/dozent_list.php:12
 #: ../app/views/course/members/tutor_list.php:17
 #: ../app/views/course/members/user_list.php:30
 #, fuzzy, php-format
 msgid "Nachricht mit Mailweiterleitung an alle %s versenden"
 msgstr "Send message to all %s"
-
-#: ../app/views/course/members/accepted_list.php:16
-#, fuzzy
-msgid "vorläufig akzeptierten Nutzer/-innen"
-msgstr "Provisionally accepted participant"
 
 #: ../app/views/course/members/accepted_list.php:19
 #, fuzzy
@@ -6683,121 +6485,111 @@ msgstr "Provisionally accepted participant"
 
 #: ../app/views/course/members/accepted_list.php:35
 #: ../app/views/course/members/autor_list.php:45
-#: ../app/views/course/members/tutor_list.php:42
+#: ../app/views/course/members/tutor_list.php:38
 #: ../app/views/course/members/user_list.php:38
 #, php-format
 msgid "Alle %s auswählen"
 msgstr "Select all %s"
 
-#: ../app/views/course/members/accepted_list.php:35
-#, fuzzy
-msgid "vorläufig akzeptierten NutzerInnen"
-msgstr "Provisionally enrolled participants"
-
-#: ../app/views/course/members/accepted_list.php:43
+#: ../app/views/course/members/accepted_list.php:45
 #: ../app/views/course/members/add_member.php:60
 #: ../app/views/course/members/autor_list.php:55
 #: ../app/views/course/members/awaiting_list.php:39
-#: ../app/views/course/members/dozent_list.php:28
+#: ../app/views/course/members/dozent_list.php:30
 #: ../app/views/course/members/import_autorlist.php:29
-#: ../app/views/course/members/tutor_list.php:51
+#: ../app/views/course/members/tutor_list.php:47
 #: ../app/views/course/members/user_list.php:46
 msgid "Nachname, Vorname"
 msgstr "Last name, first name"
 
-#: ../app/views/course/members/accepted_list.php:48
+#: ../app/views/course/members/accepted_list.php:51
 #: ../app/views/course/members/autor_list.php:62
-#: ../app/views/course/members/tutor_list.php:58
+#: ../app/views/course/members/tutor_list.php:54
 #: ../app/views/course/members/user_list.php:53
 msgid "Anmeldedatum"
 msgstr "Date of enrolment"
 
-#: ../app/views/course/members/accepted_list.php:61
+#: ../app/views/course/members/accepted_list.php:64
 #: ../app/views/course/members/autor_list.php:77
-#: ../app/views/course/members/tutor_list.php:72
+#: ../app/views/course/members/tutor_list.php:68
 #: ../app/views/course/members/user_list.php:67
 #, php-format
 msgid "%s auswählen"
 msgstr "Select %s"
 
-#: ../app/views/course/members/accepted_list.php:61
-#, fuzzy
-msgid "Vorläufig akzeptierte/n NutzerIn"
-msgstr "Provisionally accepted participant"
-
-#: ../app/views/course/members/accepted_list.php:73
+#: ../app/views/course/members/accepted_list.php:77
 #: ../app/views/course/members/add_comment.php:9
-#: ../app/views/course/members/autor_list.php:94
-#: ../app/views/course/members/dozent_list.php:47
-#: ../app/views/course/members/tutor_list.php:86
+#: ../app/views/course/members/autor_list.php:92
+#: ../app/views/course/members/dozent_list.php:49
+#: ../app/views/course/members/tutor_list.php:80
 msgid "Bemerkung"
 msgstr "Comment"
 
-#: ../app/views/course/members/accepted_list.php:85
-#: ../app/views/course/members/autor_list.php:110
-#: ../app/views/course/members/dozent_list.php:52
-#: ../app/views/course/members/tutor_list.php:101
+#: ../app/views/course/members/accepted_list.php:89
+#: ../app/views/course/members/autor_list.php:108
+#: ../app/views/course/members/dozent_list.php:54
+#: ../app/views/course/members/tutor_list.php:95
 msgid "Bemerkung hinzufügen"
 msgstr "add comment"
 
-#: ../app/views/course/members/accepted_list.php:96
-#: ../app/views/course/members/autor_list.php:122
-#: ../app/views/course/members/awaiting_list.php:93
-#: ../app/views/course/members/dozent_list.php:64
-#: ../app/views/course/members/tutor_list.php:113
-#: ../app/views/course/members/user_list.php:100
+#: ../app/views/course/members/accepted_list.php:100
+#: ../app/views/course/members/autor_list.php:120
+#: ../app/views/course/members/awaiting_list.php:91
+#: ../app/views/course/members/dozent_list.php:66
+#: ../app/views/course/members/tutor_list.php:107
+#: ../app/views/course/members/user_list.php:98
 #, fuzzy, php-format
 msgid "Nachricht mit Mailweiterleitung an %s senden"
 msgstr "Send message to all %s"
 
-#: ../app/views/course/members/accepted_list.php:101
-#: ../app/views/course/members/autor_list.php:128
-#: ../app/views/course/members/awaiting_list.php:99
-#: ../app/views/course/members/dozent_list.php:69
-#: ../app/views/course/members/tutor_list.php:118
-#: ../app/views/course/members/user_list.php:107
+#: ../app/views/course/members/accepted_list.php:106
+#: ../app/views/course/members/autor_list.php:126
+#: ../app/views/course/members/awaiting_list.php:97
+#: ../app/views/course/members/dozent_list.php:71
+#: ../app/views/course/members/tutor_list.php:112
+#: ../app/views/course/members/user_list.php:105
 #, php-format
 msgid "%s austragen"
 msgstr "sign out %s"
 
-#: ../app/views/course/members/accepted_list.php:112
-#: ../app/views/course/members/autor_list.php:148
-#: ../app/views/course/members/awaiting_list.php:110
-#: ../app/views/course/members/tutor_list.php:129
-#: ../app/views/course/members/user_list.php:118
+#: ../app/views/course/members/accepted_list.php:117
+#: ../app/views/course/members/autor_list.php:146
+#: ../app/views/course/members/awaiting_list.php:108
+#: ../app/views/course/members/tutor_list.php:123
+#: ../app/views/course/members/user_list.php:116
 msgid "Aktion ausführen"
 msgstr "Execute action"
 
-#: ../app/views/course/members/accepted_list.php:113
-#: ../app/views/course/members/autor_list.php:149
-#: ../app/views/course/members/awaiting_list.php:111
+#: ../app/views/course/members/accepted_list.php:118
+#: ../app/views/course/members/autor_list.php:147
+#: ../app/views/course/members/awaiting_list.php:109
 msgid "Aktion wählen"
 msgstr "Choose action"
 
-#: ../app/views/course/members/accepted_list.php:114
+#: ../app/views/course/members/accepted_list.php:119
 msgid "Akzeptieren"
 msgstr "Accept"
 
-#: ../app/views/course/members/accepted_list.php:115
-#: ../app/views/course/members/autor_list.php:160
-#: ../app/views/course/members/awaiting_list.php:116
-#: ../app/views/course/members/tutor_list.php:132
-#: ../app/views/course/members/user_list.php:126
+#: ../app/views/course/members/accepted_list.php:120
+#: ../app/views/course/members/autor_list.php:158
+#: ../app/views/course/members/awaiting_list.php:114
+#: ../app/views/course/members/tutor_list.php:126
+#: ../app/views/course/members/user_list.php:124
 msgid "Austragen"
 msgstr "Sign out"
 
-#: ../app/views/course/members/accepted_list.php:116
-#: ../app/views/course/members/autor_list.php:164
-#: ../app/views/course/members/awaiting_list.php:117
-#: ../app/views/course/members/tutor_list.php:133
-#: ../app/views/course/members/user_list.php:130
+#: ../app/views/course/members/accepted_list.php:121
+#: ../app/views/course/members/autor_list.php:162
+#: ../app/views/course/members/awaiting_list.php:115
+#: ../app/views/course/members/tutor_list.php:127
+#: ../app/views/course/members/user_list.php:128
 msgid "Nachricht senden"
 msgstr "Send message"
 
-#: ../app/views/course/members/accepted_list.php:117
-#: ../app/views/course/members/awaiting_list.php:118
-#: ../app/views/course/members/tutor_list.php:134
-#: ../app/views/course/members/user_list.php:131
+#: ../app/views/course/members/accepted_list.php:122
+#: ../app/views/course/members/awaiting_list.php:116
+#: ../app/views/course/members/tutor_list.php:128
+#: ../app/views/course/members/user_list.php:129
 msgid "In Seminar verschieben/kopieren"
 msgstr "Move/Copy to course"
 
@@ -6896,44 +6688,44 @@ msgstr "No additional information or participants."
 msgid "Keine einstellbaren Zusatzdaten vorhanden"
 msgstr "No additional information"
 
-#: ../app/views/course/members/autor_list.php:90
+#: ../app/views/course/members/autor_list.php:88
 #: ../app/views/course/wizard/steps/basicdata/index_studygroup.php:42
 #: ../app/views/settings/privacy.php:36 ../app/views/tour/admin_details.php:46
 #, php-format
 msgid "unsichtbar"
 msgstr "invisible"
 
-#: ../app/views/course/members/autor_list.php:139
+#: ../app/views/course/members/autor_list.php:137
 #, php-format
 msgid "%u unsichtbare %s"
 msgstr "%u invisible %s"
 
-#: ../app/views/course/members/autor_list.php:151
+#: ../app/views/course/members/autor_list.php:149
+#: ../app/views/course/members/awaiting_list.php:110
 #: ../app/views/course/members/awaiting_list.php:112
-#: ../app/views/course/members/awaiting_list.php:114
-#: ../app/views/course/members/user_list.php:120
+#: ../app/views/course/members/user_list.php:118
 #, php-format
 msgid "Zu %s hochstufen"
 msgstr "Promote to %s"
 
-#: ../app/views/course/members/autor_list.php:154
-#: ../app/views/course/members/tutor_list.php:131
+#: ../app/views/course/members/autor_list.php:152
+#: ../app/views/course/members/tutor_list.php:125
 #, php-format
 msgid "Zu %s herunterstufen"
 msgstr "Demote to %s"
 
-#: ../app/views/course/members/autor_list.php:157
-#: ../app/views/course/members/user_list.php:123
+#: ../app/views/course/members/autor_list.php:155
+#: ../app/views/course/members/user_list.php:121
 msgid "An den Anfang der Warteliste verschieben"
 msgstr "Move to top position of waiting list"
 
-#: ../app/views/course/members/autor_list.php:158
-#: ../app/views/course/members/user_list.php:124
+#: ../app/views/course/members/autor_list.php:156
+#: ../app/views/course/members/user_list.php:122
 msgid "Ans Ende der Warteliste verschieben"
 msgstr "Move to lowest position of waiting list"
 
-#: ../app/views/course/members/autor_list.php:162
-#: ../app/views/course/members/user_list.php:128
+#: ../app/views/course/members/autor_list.php:160
+#: ../app/views/course/members/user_list.php:126
 msgid "In andere Veranstaltung verschieben/kopieren"
 msgstr "Copy/move to other course"
 
@@ -6962,6 +6754,12 @@ msgid ""
 msgstr ""
 "The following %s could not have been <b>uniquely</b> identified. Please "
 "select from the respective hit list:"
+
+#: ../app/views/course/members/csv_manual_assignment.php:20
+#: ../app/views/course/room_requests/_form.php:135
+#: ../app/views/userfilter/field/configure.php:20
+msgid "bitte auswählen"
+msgstr "please select"
 
 #: ../app/views/course/members/index.php:3
 #, php-format
@@ -7245,20 +7043,11 @@ msgstr "Change room request"
 msgid "Speichern und zurück zur Übersicht"
 msgstr "Save and back to overview"
 
-#: ../app/views/course/room_requests/edit_dialog.php:4
-msgid "Speichern und schließen"
-msgstr "Save and close"
-
-#: ../app/views/course/room_requests/edit_dialog.php:6
-msgid "Abbrechen und schließen"
-msgstr "Cancel and close"
-
 #: ../app/views/course/room_requests/index.php:8
 msgid "Vorhandene Raumanfragen"
 msgstr "Existing room requests"
 
 #: ../app/views/course/room_requests/index.php:17
-#: ../app/views/course/room_requests/index_assi.php:3
 msgid "Art der Anfrage"
 msgstr "Type of request"
 
@@ -7267,7 +7056,6 @@ msgid "Anfragender"
 msgstr "Requester"
 
 #: ../app/views/course/room_requests/index.php:44
-#: ../app/views/course/room_requests/index_assi.php:17
 msgid "Diese Anfrage bearbeiten"
 msgstr "Resolve request"
 
@@ -7287,12 +7075,8 @@ msgstr "Now room requests exist for this course yet."
 msgid "Neue Raumanfrage erstellen"
 msgstr "Create new room request"
 
-#: ../app/views/course/room_requests/index_assi.php:21
-msgid "Diese Anfrage entfernen"
-msgstr "Remove this request"
-
 #: ../app/views/course/room_requests/new.php:2
-#: ../app/views/course/timesrooms/editDate.php:165
+#: ../app/views/course/timesrooms/editDate.php:162
 #: ../app/views/course/timesrooms/index.php:27
 msgid "Raumanfrage erstellen"
 msgstr "Create room request"
@@ -7569,26 +7353,26 @@ msgid ""
 "Benachrichtigung über ausfallende Termine an alle Teilnehmer verschicken"
 msgstr "Send notification of canceled appointments to all participants"
 
-#: ../app/views/course/timesrooms/_cycleRow.php:46
+#: ../app/views/course/timesrooms/_cycleRow.php:47
 msgid "(fällt aus)"
 msgstr "(cancelled)"
 
-#: ../app/views/course/timesrooms/_cycleRow.php:58
+#: ../app/views/course/timesrooms/_cycleRow.php:57
 #, fuzzy
 msgid "Keine Raumangabe"
 msgstr "no location details"
 
-#: ../app/views/course/timesrooms/_cycleRow.php:64
+#: ../app/views/course/timesrooms/_cycleRow.php:63
 #, fuzzy
 msgid "Für diesen Termin existiert eine Raumanfrage: "
 msgstr "For this appointment, a room request exists:"
 
-#: ../app/views/course/timesrooms/_cycleRow.php:73
+#: ../app/views/course/timesrooms/_cycleRow.php:72
 #, fuzzy
 msgid "Kommentar für diesen Termin bearbeiten"
 msgstr "Edit user in this role"
 
-#: ../app/views/course/timesrooms/_cycleRow.php:80
+#: ../app/views/course/timesrooms/_cycleRow.php:79
 #, fuzzy
 msgid ""
 "Diesem Termin ist im Ablaufplan ein Thema zugeordnet.\n"
@@ -7600,38 +7384,38 @@ msgstr ""
 "and description of the topic will be kept, in the expert view they can be "
 "associated with a different appointment."
 
-#: ../app/views/course/timesrooms/_cycleRow.php:83
+#: ../app/views/course/timesrooms/_cycleRow.php:82
 msgid "Diesem Termin ist ein Thema zugeordnet."
 msgstr "A topic has been associated with this appointment."
 
-#: ../app/views/course/timesrooms/_cycleRow.php:88
+#: ../app/views/course/timesrooms/_cycleRow.php:87
 msgid ""
 "Dieser Termin hat eine Raumbuchung, welche mit dem Termin gelöscht wird."
 msgstr ""
 "For this appointment there exists a room allocation. It will be deleted in "
 "case the former will be deleted."
 
-#: ../app/views/course/timesrooms/_cycleRow.php:94
+#: ../app/views/course/timesrooms/_cycleRow.php:93
 #, fuzzy
 msgid "Diesen Termin wiederherstellen?"
 msgstr "Appointment %s has been restored!"
 
-#: ../app/views/course/timesrooms/_cycleRow.php:100
+#: ../app/views/course/timesrooms/_cycleRow.php:99
 #, fuzzy
 msgid "Diesen Termin wiederherstellen"
 msgstr "Appointment %s has been restored!"
 
-#: ../app/views/course/timesrooms/_cycleRow.php:107
+#: ../app/views/course/timesrooms/_cycleRow.php:106
 #, fuzzy
 msgid "Diesen Termin bearbeiten"
 msgstr "Edit this test."
 
-#: ../app/views/course/timesrooms/_cycleRow.php:112
+#: ../app/views/course/timesrooms/_cycleRow.php:111
 #, fuzzy
 msgid "Wollen Sie diesen Termin wirklich löschen / ausfallen lassen?"
 msgstr "Are you sure to delete this appointment?"
 
-#: ../app/views/course/timesrooms/_cycleRow.php:119
+#: ../app/views/course/timesrooms/_cycleRow.php:118
 #, fuzzy
 msgid "Diesen Termin löschen / ausfallen lassen"
 msgstr "Cancel the following appointments:"
@@ -7822,7 +7606,7 @@ msgstr "seats"
 
 #: ../app/views/course/timesrooms/createSingleDate.php:35
 #: ../app/views/course/timesrooms/editStack.php:53
-#: ../app/views/localizations/show.php:78
+#: ../app/views/localizations/show.php:135
 msgid "Nur buchbare Räume anzeigen"
 msgstr "Display bookable rooms only"
 
@@ -7866,18 +7650,18 @@ msgstr "Select a font type."
 msgid "Kein Raum"
 msgstr "no room"
 
+#: ../app/views/course/timesrooms/editDate.php:91
 #: ../app/views/course/timesrooms/editDate.php:94
-#: ../app/views/course/timesrooms/editDate.php:97
 #, fuzzy
 msgid "Lehrende auswählen"
 msgstr "Select none"
 
-#: ../app/views/course/timesrooms/editDate.php:106
+#: ../app/views/course/timesrooms/editDate.php:103
 #, fuzzy
 msgid "Lehrenden hinzufügen"
 msgstr "Add users"
 
-#: ../app/views/course/timesrooms/editDate.php:140
+#: ../app/views/course/timesrooms/editDate.php:137
 #, fuzzy
 msgid "Gruppen auswählen"
 msgstr "Select group:"
@@ -7938,6 +7722,11 @@ msgstr "free location information:"
 #, fuzzy
 msgid "Keine Änderungen an den Raumangaben vornehmen"
 msgstr "no changes to location information"
+
+#: ../app/views/course/topics/edit.php:22
+#: ../app/views/course/topics/index.php:6
+msgid "Termine"
+msgstr "Appointments"
 
 #: ../app/views/course/topics/edit.php:50
 msgid "Themen-Dateiordner"
@@ -8003,9 +7792,14 @@ msgstr "Open all topics"
 msgid "Neues Thema erstellen"
 msgstr "Add a new topic"
 
-#: ../app/views/course/topics/index.php:118
+#: ../app/views/course/topics/index.php:119
 msgid "Themen aus Veranstaltung kopieren"
 msgstr "Copy topics from course"
+
+#: ../app/views/course/topics/index.php:125
+#, fuzzy
+msgid "Themen öffentlich einsehbar"
+msgstr "Publish your score"
 
 #: ../app/views/course/wizard/step.php:10 ../app/views/event_log/show.php:114
 msgid "Weiter"
@@ -8058,19 +7852,19 @@ msgstr "upon request"
 msgid "Nutzungsbedingungen"
 msgstr "Terms of use"
 
-#: ../app/views/course/wizard/steps/studyareas/index.php:4
+#: ../app/views/course/wizard/steps/studyareas/index.php:5
 msgid "Bereits zugewiesen"
 msgstr "Already assigned"
 
-#: ../app/views/course/wizard/steps/studyareas/index.php:23
+#: ../app/views/course/wizard/steps/studyareas/index.php:24
 msgid "Es wurde kein Suchergebnis gefunden."
 msgstr "No results."
 
-#: ../app/views/course/wizard/steps/studyareas/index.php:24
+#: ../app/views/course/wizard/steps/studyareas/index.php:25
 msgid "Alle Studienbereiche"
 msgstr "All fields of study"
 
-#: ../app/views/course/wizard/steps/studyareas/index.php:38
+#: ../app/views/course/wizard/steps/studyareas/index.php:39
 msgid "Alle Suchergebnisse zuweisen"
 msgstr "Assign all search results"
 
@@ -8510,13 +8304,17 @@ msgid "Evaluation auswerten"
 msgstr "Analyze evaluation"
 
 #: ../app/views/evaluation/_evaluation.php:51
-#: ../app/views/localizations/show.php:174
+#: ../app/views/localizations/show.php:181
 msgid "Anonym"
 msgstr "Anonymous"
 
 #: ../app/views/evaluation/_evaluation.php:54
 msgid "Unbekannt"
 msgstr "Unknown"
+
+#: ../app/views/evaluation/display.php:6
+msgid "Evaluationen"
+msgstr "Evaluations"
 
 #: ../app/views/evaluation/display.php:19
 #, fuzzy
@@ -8804,32 +8602,32 @@ msgstr "Change avatar picture."
 msgid "Infobild löschen"
 msgstr "Delete avatar picture."
 
-#: ../app/views/institute/members/index.php:5
+#: ../app/views/institute/members/index.php:2
 msgid "Mitarbeiterliste"
 msgstr "Staff list"
 
-#: ../app/views/institute/members/index.php:49
+#: ../app/views/institute/members/index.php:39
 msgid "Erweitert"
 msgstr "Extended"
 
-#: ../app/views/institute/members/index.php:57
+#: ../app/views/institute/members/index.php:47
 msgid "Personenverwaltung"
 msgstr "Administration"
 
-#: ../app/views/institute/members/index.php:65
+#: ../app/views/institute/members/index.php:55
 #, fuzzy
 msgid "Stud.IP Rundmail"
 msgstr "Group mail"
 
-#: ../app/views/institute/members/index.php:72
+#: ../app/views/institute/members/index.php:62
 msgid "Gruppierung"
 msgstr "Grouping"
 
-#: ../app/views/institute/members/index.php:85
+#: ../app/views/institute/members/index.php:75
 msgid "Nach Funktion gruppiert"
 msgstr "Grouped by function"
 
-#: ../app/views/institute/members/index.php:88
+#: ../app/views/institute/members/index.php:78
 msgid "Alphabetische Liste"
 msgstr "Alphabetic list"
 
@@ -9027,146 +8825,390 @@ msgid "Wirklich %s Nachrichten löschen?"
 msgstr "Really delete?"
 
 #: ../app/views/localizations/show.php:14
-msgid "Wird geladen"
-msgstr "Loading"
+#, fuzzy
+msgid "Die Person ist bereits eingetragen."
+msgstr "%s has already been added as substitute."
 
 #: ../app/views/localizations/show.php:15
-msgid "Anmelderegel konfigurieren"
-msgstr "Configure admission setting"
+#, fuzzy
+msgid "schlieÃŸen"
+msgstr "Close"
+
+#: ../app/views/localizations/show.php:16
+msgid "ZurÃ¼ck"
+msgstr ""
 
 #: ../app/views/localizations/show.php:17
-msgid "Sie haben noch niemanden hinzugefügt."
-msgstr "No-one added yet"
+msgid "Vor;"
+msgstr ""
 
-#: ../app/views/localizations/show.php:20
-msgid "Blenden Sie die restlichen Termine aus"
-msgstr "Hide remaining schedule."
+#: ../app/views/localizations/show.php:18
+#, fuzzy
+msgid "heute"
+msgstr "Today"
 
 #: ../app/views/localizations/show.php:21
-msgid "Blenden Sie die restlichen Termine ein"
-msgstr "Show the remaining appointments"
+msgid "MÃ¤rz"
+msgstr ""
 
-#: ../app/views/localizations/show.php:22
+#: ../app/views/localizations/show.php:31
+#, fuzzy
+msgid "Jan"
+msgstr "Yes"
+
+#: ../app/views/localizations/show.php:32
+#, fuzzy
+msgid "Feb"
+msgstr "February"
+
+#: ../app/views/localizations/show.php:33
+msgid "MÃ¤r"
+msgstr ""
+
+#: ../app/views/localizations/show.php:34
+#, fuzzy
+msgid "Apr"
+msgstr "April"
+
+#: ../app/views/localizations/show.php:35
+#, fuzzy
+msgid "Jun"
+msgstr "June"
+
+#: ../app/views/localizations/show.php:36
+#, fuzzy
+msgid "Jul"
+msgstr "July"
+
+#: ../app/views/localizations/show.php:37
+#, fuzzy
+msgid "Aug"
+msgstr "August"
+
+#: ../app/views/localizations/show.php:38
+#, fuzzy
+msgid "Sep"
+msgstr "Set"
+
+#: ../app/views/localizations/show.php:39
+#, fuzzy
+msgid "Okt"
+msgstr "Location"
+
+#: ../app/views/localizations/show.php:40
+#, fuzzy
+msgid "Nov"
+msgstr "Novice"
+
+#: ../app/views/localizations/show.php:41
+msgid "Dez"
+msgstr ""
+
+#: ../app/views/localizations/show.php:49
+msgid "So"
+msgstr "Sun."
+
+#: ../app/views/localizations/show.php:50
+msgid "Mo"
+msgstr "Mon."
+
+#: ../app/views/localizations/show.php:51
+msgid "Di"
+msgstr "Tue."
+
+#: ../app/views/localizations/show.php:52
+msgid "Mi"
+msgstr "Wed."
+
+#: ../app/views/localizations/show.php:53
+msgid "Do"
+msgstr "Thu."
+
+#: ../app/views/localizations/show.php:54
+msgid "Fr"
+msgstr "Fri."
+
+#: ../app/views/localizations/show.php:55
+msgid "Sa"
+msgstr "Sat."
+
+#: ../app/views/localizations/show.php:56
+#, fuzzy
+msgid "Wollen Sie die Aktion wirklich ausfÃ¼hren?"
+msgstr "Do you really want to execute this action?"
+
+#: ../app/views/localizations/show.php:57
+msgid "Smileys"
+msgstr "Smileys"
+
+#: ../app/views/localizations/show.php:58
+#, fuzzy
+msgid "Zur GesamtÃ¼bersicht"
+msgstr "Back to overview"
+
+#: ../app/views/localizations/show.php:59
 msgid "Schliessen"
 msgstr "Close"
 
-#: ../app/views/localizations/show.php:23
+#: ../app/views/localizations/show.php:60
+#, fuzzy
+msgid "SchlieÃŸen"
+msgstr "Close"
+
+#: ../app/views/localizations/show.php:61
+#, fuzzy
+msgid "Bitte bestÃ¤tigen Sie die Aktion"
+msgstr "Please enter the text here"
+
+#: ../app/views/localizations/show.php:64
+msgid "Bitte laden Sie die Seite neu, um fortzufahren"
+msgstr "To continue, please reload the page"
+
+#: ../app/views/localizations/show.php:65
+msgid "Neu laden"
+msgstr "Reload"
+
+#: ../app/views/localizations/show.php:66
+msgid "Sie sind nicht mehr im System angemeldet."
+msgstr "You are no longer logged in."
+
+#: ../app/views/localizations/show.php:67
+msgid "Objekt aufklappen"
+msgstr "Open object"
+
+#: ../app/views/localizations/show.php:68
+msgid "Objekt zuklappen"
+msgstr "Close object"
+
+#: ../app/views/localizations/show.php:69
+msgid "Dialog wird geladen..."
+msgstr "Loading dialog..."
+
+#: ../app/views/localizations/show.php:70
+msgid "Fehler beim Aufruf des News-Controllers"
+msgstr "Error accessing the news controller"
+
+#: ../app/views/localizations/show.php:71
+msgid "Sie haben nicht angegeben, wer die Nachricht empfangen soll!"
+msgstr "You did not "
+
+#: ../app/views/localizations/show.php:72
+msgid "Kein Ergebnis gefunden."
+msgstr "No results."
+
+#: ../app/views/localizations/show.php:73
+#, fuzzy
+msgid "Alle hinzufÃ¼gen"
+msgstr "Add all"
+
+#: ../app/views/localizations/show.php:74
+msgid "Alle entfernen"
+msgstr "Remove all"
+
+#: ../app/views/localizations/show.php:75
+#, fuzzy
+msgid "ausgewÃ¤hlt"
+msgstr "selected"
+
+#: ../app/views/localizations/show.php:76
+#, fuzzy
+msgid "Sie haben <%= count %> Personen ausgewÃ¤hlt"
+msgstr "You selected <%= count %> persons"
+
+#: ../app/views/localizations/show.php:78
+#, fuzzy
+msgid " Dieser Filter enthÃ¤lt keine (neuen) Personen."
+msgstr " This filter matches no users."
+
+#: ../app/views/localizations/show.php:79
+#, fuzzy
+msgid "Es wurden keine neuen Ergebnisse fÃ¼r \"<%= needle %>\" gefunden."
+msgstr "No results were found for \"<%= needle %>\"."
+
+#: ../app/views/localizations/show.php:80
+msgid "Neuen Termin eintragen"
+msgstr "Create new appointment"
+
+#: ../app/views/localizations/show.php:82
+msgid "Termindetails bearbeiten"
+msgstr "Edit appointment details"
+
+#: ../app/views/localizations/show.php:83
+msgid "Detaillierte Veranstaltungsliste"
+msgstr "Detailed list of courses"
+
+#: ../app/views/localizations/show.php:84
+#, fuzzy
+msgid "Bitte Ã¤ndern Sie ihre Eingabe"
+msgstr "Please modify your entries."
+
+#: ../app/views/localizations/show.php:85
+#, fuzzy
+msgid "Bitte wÃ¤hlen Sie einen Wert aus."
+msgstr "Please choose a value."
+
+#: ../app/views/localizations/show.php:86
+#, fuzzy
+msgid "Bitte geben Sie gÃ¼ltige E-Mail-Adresse ein"
+msgstr "Please enter a valid e-mail address"
+
+#: ../app/views/localizations/show.php:87
+msgid "Bitte geben Sie eine Zahl ein"
+msgstr "Please enter an integer"
+
+#: ../app/views/localizations/show.php:88
+#, fuzzy
+msgid "Bitte geben Sie eine gÃ¼ltige Web-Adresse ein"
+msgstr "Please enter a valid web address"
+
+#: ../app/views/localizations/show.php:89
+#, fuzzy
+msgid "Der eingegebene Wert darf nicht grÃ¶ÃŸer als $1 sein"
+msgstr "The enteres value must noch be larger than $1"
+
+#: ../app/views/localizations/show.php:90
+msgid "Der eingegebene Wert darf nicht kleiner als $1 sein"
+msgstr "The entered value must not be smaller than $1"
+
+#: ../app/views/localizations/show.php:91
+msgid "Dies ist ein erforderliches Feld"
+msgstr "This is a mandatory field"
+
+#: ../app/views/localizations/show.php:92
+msgid "Zeichen verbleibend: "
+msgstr "Remaining characters:"
+
+#: ../app/views/localizations/show.php:93
+msgid "Der Benutzername ist zu kurz, er sollte mindestens 4 Zeichen lang sein."
+msgstr "The username is too short - it must comprise at least 4 characters."
+
+#: ../app/views/localizations/show.php:94
+#, fuzzy
+msgid ""
+"Der Benutzername enthÃ¤lt unzulÃ¤ssige Zeichen, er darf keine Sonderzeichen "
+"oder Leerzeichen enthalten."
+msgstr ""
+"There are invalid characters in the username - it must not contain any "
+"special characters nor space characters."
+
+#: ../app/views/localizations/show.php:95
+msgid "Das Passwort ist zu kurz, es sollte mindestens 4 Zeichen lang sein."
+msgstr "The password is too short - it must comprise at least 4 characters."
+
+#: ../app/views/localizations/show.php:96
+#, fuzzy
+msgid "Das Passwort stimmt nicht mit dem BestÃ¤tigungspasswort Ã¼berein!"
+msgstr "Password and re-typed password don't match!"
+
+#: ../app/views/localizations/show.php:97
+#, fuzzy
+msgid "Bitte geben Sie Ihren tatsÃ¤chlichen Vornamen an."
+msgstr "Please enter your real first name."
+
+#: ../app/views/localizations/show.php:98
+#, fuzzy
+msgid "Bitte geben Sie Ihren tatsÃ¤chlichen Nachnamen an."
+msgstr "Please enter your real last name."
+
+#: ../app/views/localizations/show.php:99
+msgid "Die E-Mail-Adresse ist nicht korrekt!"
+msgstr "Invalid e-mail address!"
+
+#: ../app/views/localizations/show.php:100
+msgid ""
+"Dieses Bild wird verkleinert dargestellt. Klicken Sie fÃ¼r eine grÃ¶ÃŸere "
+"Darstellung."
+msgstr ""
+
+#: ../app/views/localizations/show.php:101
 msgid "Ihre Eingaben wurden bislang noch nicht gespeichert."
 msgstr "Your input has not been saved yet."
 
-#: ../app/views/localizations/show.php:26
+#: ../app/views/localizations/show.php:102
+msgid "Blenden Sie die restlichen Termine aus"
+msgstr "Hide remaining schedule."
+
+#: ../app/views/localizations/show.php:103
+msgid "Blenden Sie die restlichen Termine ein"
+msgstr "Show the remaining appointments"
+
+#: ../app/views/localizations/show.php:106
+msgid "Wird geladen"
+msgstr "Loading"
+
+#: ../app/views/localizations/show.php:107
+msgid "Anmelderegel konfigurieren"
+msgstr "Configure admission setting"
+
+#: ../app/views/localizations/show.php:109
+msgid "Sie haben noch niemanden hinzugefügt."
+msgstr "No-one added yet"
+
+#: ../app/views/localizations/show.php:112
 msgid ""
 "Dieses Bild wird verkleinert dargestellt. Klicken Sie für eine größere "
 "Darstellung."
 msgstr ""
 
-#: ../app/views/localizations/show.php:38
-msgid "Objekt aufklappen"
-msgstr "Open object"
-
-#: ../app/views/localizations/show.php:39
-msgid "Objekt zuklappen"
-msgstr "Close object"
-
-#: ../app/views/localizations/show.php:42
+#: ../app/views/localizations/show.php:115
 msgid "Bitte ändern Sie ihre Eingabe"
 msgstr "Please modify your entries."
 
-#: ../app/views/localizations/show.php:43
+#: ../app/views/localizations/show.php:116
 msgid "Bitte wählen Sie einen Wert aus."
 msgstr "Please choose a value."
 
-#: ../app/views/localizations/show.php:44
+#: ../app/views/localizations/show.php:117
 msgid "Bitte geben Sie gültige E-Mail-Adresse ein"
 msgstr "Please enter a valid e-mail address"
 
-#: ../app/views/localizations/show.php:45
-msgid "Bitte geben Sie eine Zahl ein"
-msgstr "Please enter an integer"
-
-#: ../app/views/localizations/show.php:46
+#: ../app/views/localizations/show.php:118
 msgid "Bitte geben Sie eine gültige Web-Adresse ein"
 msgstr "Please enter a valid web address"
 
-#: ../app/views/localizations/show.php:47
+#: ../app/views/localizations/show.php:119
 msgid "Der eingegebene Wert darf nicht größer als $1 sein"
 msgstr "The enteres value must noch be larger than $1"
 
-#: ../app/views/localizations/show.php:48
-msgid "Der eingegebene Wert darf nicht kleiner als $1 sein"
-msgstr "The entered value must not be smaller than $1"
-
-#: ../app/views/localizations/show.php:49
-msgid "Dies ist ein erforderliches Feld"
-msgstr "This is a mandatory field"
-
-#: ../app/views/localizations/show.php:50
-msgid "Zeichen verbleibend: "
-msgstr "Remaining characters:"
-
-#: ../app/views/localizations/show.php:53
-msgid "Sie haben nicht angegeben, wer die Nachricht empfangen soll!"
-msgstr "You did not "
-
-#: ../app/views/localizations/show.php:56
+#: ../app/views/localizations/show.php:122
 msgid "Sie haben <%= count %> Personen ausgewählt"
 msgstr "You selected <%= count %> persons"
 
-#: ../app/views/localizations/show.php:58
+#: ../app/views/localizations/show.php:123
 msgid "Alle hinzufügen"
 msgstr "Add all"
 
-#: ../app/views/localizations/show.php:59
-msgid "Alle entfernen"
-msgstr "Remove all"
-
-#: ../app/views/localizations/show.php:60
+#: ../app/views/localizations/show.php:124
 #, fuzzy
 msgid " Dieser Filter enthält keine (neuen) Personen."
 msgstr " This filter matches no users."
 
-#: ../app/views/localizations/show.php:61
+#: ../app/views/localizations/show.php:125
 msgid "Es wurden keine neuen Ergebnisse für \"<%= needle %>\" gefunden."
 msgstr "No results were found for \"<%= needle %>\"."
 
-#: ../app/views/localizations/show.php:64
+#: ../app/views/localizations/show.php:128
 msgid "ausgewählt"
 msgstr "selected"
 
-#: ../app/views/localizations/show.php:67
-msgid "Dialog wird geladen..."
-msgstr "Loading dialog..."
-
-#: ../app/views/localizations/show.php:68
-msgid "Fehler beim Aufruf des News-Controllers"
-msgstr "Error accessing the news controller"
-
-#: ../app/views/localizations/show.php:71
-msgid "Kein Ergebnis gefunden."
-msgstr "No results."
-
-#: ../app/views/localizations/show.php:74
+#: ../app/views/localizations/show.php:131
 msgid "Nicht buchbare Räume:"
 msgstr "Non-allocatable rooms:"
 
-#: ../app/views/localizations/show.php:75
+#: ../app/views/localizations/show.php:132
 msgid "Alle Räume anzeigen"
 msgstr "Show all rooms."
 
-#: ../app/views/localizations/show.php:76
+#: ../app/views/localizations/show.php:133
 #, fuzzy
 msgid "Wollen Sie die gewünschten Termine wirklich löschen?"
 msgstr "Are you sure to delete this appointment?"
 
-#: ../app/views/localizations/show.php:77
+#: ../app/views/localizations/show.php:134
 msgid "Sind Sie sicher, dass Sie die regelmäßige Zeit ändern möchten?"
 msgstr "Are you sure to change the periodic course appointments?"
 
-#: ../app/views/localizations/show.php:81
-msgid "Der Benutzername ist zu kurz, er sollte mindestens 4 Zeichen lang sein."
-msgstr "The username is too short - it must comprise at least 4 characters."
-
-#: ../app/views/localizations/show.php:82
+#: ../app/views/localizations/show.php:138
 msgid ""
 "Der Benutzername enthält unzulässige Zeichen, er darf keine Sonderzeichen "
 "oder Leerzeichen enthalten."
@@ -9174,213 +9216,86 @@ msgstr ""
 "There are invalid characters in the username - it must not contain any "
 "special characters nor space characters."
 
-#: ../app/views/localizations/show.php:83
-msgid "Das Passwort ist zu kurz, es sollte mindestens 4 Zeichen lang sein."
-msgstr "The password is too short - it must comprise at least 4 characters."
-
-#: ../app/views/localizations/show.php:84
+#: ../app/views/localizations/show.php:139
 msgid "Das Passwort stimmt nicht mit dem Bestätigungspasswort überein!"
 msgstr "Password and re-typed password don't match!"
 
-#: ../app/views/localizations/show.php:85
+#: ../app/views/localizations/show.php:140
 msgid "Bitte geben Sie Ihren tatsächlichen Vornamen an."
 msgstr "Please enter your real first name."
 
-#: ../app/views/localizations/show.php:86
+#: ../app/views/localizations/show.php:141
 #: ../app/views/settings/account/index.php:82
 msgid "Bitte geben Sie Ihren tatsächlichen Nachnamen an."
 msgstr "Please enter your real last name."
 
-#: ../app/views/localizations/show.php:87
-msgid "Die E-Mail-Adresse ist nicht korrekt!"
-msgstr "Invalid e-mail address!"
-
-#: ../app/views/localizations/show.php:90
-msgid "Neuen Termin eintragen"
-msgstr "Create new appointment"
-
-#: ../app/views/localizations/show.php:92
-msgid "Termindetails bearbeiten"
-msgstr "Edit appointment details"
-
-#: ../app/views/localizations/show.php:93
-msgid "Detaillierte Veranstaltungsliste"
-msgstr "Detailed list of courses"
-
-#: ../app/views/localizations/show.php:96
+#: ../app/views/localizations/show.php:144
 msgid "Die beiden Werte \"$1\" und \"$2\" stimmen nicht überein. "
 msgstr "Values \"$1\" and \"$2\" are not identical."
 
-#: ../app/views/localizations/show.php:99
-msgid "Smileys"
-msgstr "Smileys"
-
-#: ../app/views/localizations/show.php:100
+#: ../app/views/localizations/show.php:147
 msgid "Zur Gesamtübersicht"
 msgstr "Back to overview"
 
-#: ../app/views/localizations/show.php:104
+#: ../app/views/localizations/show.php:151
 #, fuzzy
 msgid "Bitte bestätigen Sie die Aktion"
 msgstr "Please enter the text here"
 
-#: ../app/views/localizations/show.php:109
+#: ../app/views/localizations/show.php:154
 msgid "Wollen Sie die Aktion wirklich ausführen?"
 msgstr "Do you really want to execute this action?"
 
-#: ../app/views/localizations/show.php:112
-#, fuzzy
-msgid "Die Person ist bereits eingetragen."
-msgstr "%s has already been added as substitute."
-
-#: ../app/views/localizations/show.php:115
+#: ../app/views/localizations/show.php:157
 msgid "schließen"
 msgstr "Close"
 
-#: ../app/views/localizations/show.php:117
-msgid "Vor;"
-msgstr ""
-
-#: ../app/views/localizations/show.php:118
-#, fuzzy
-msgid "heute"
-msgstr "Today"
-
-#: ../app/views/localizations/show.php:131
-#, fuzzy
-msgid "Jan"
-msgstr "Yes"
-
-#: ../app/views/localizations/show.php:132
-#, fuzzy
-msgid "Feb"
-msgstr "February"
-
-#: ../app/views/localizations/show.php:133
+#: ../app/views/localizations/show.php:160
 #, fuzzy
 msgid "Mär"
 msgstr "March"
 
-#: ../app/views/localizations/show.php:134
-#, fuzzy
-msgid "Apr"
-msgstr "April"
-
-#: ../app/views/localizations/show.php:135
-#, fuzzy
-msgid "Jun"
-msgstr "June"
-
-#: ../app/views/localizations/show.php:136
-#, fuzzy
-msgid "Jul"
-msgstr "July"
-
-#: ../app/views/localizations/show.php:137
-#, fuzzy
-msgid "Aug"
-msgstr "August"
-
-#: ../app/views/localizations/show.php:138
-#, fuzzy
-msgid "Sep"
-msgstr "Set"
-
-#: ../app/views/localizations/show.php:139
-#, fuzzy
-msgid "Okt"
-msgstr "Location"
-
-#: ../app/views/localizations/show.php:140
-#, fuzzy
-msgid "Nov"
-msgstr "Novice"
-
-#: ../app/views/localizations/show.php:141
-msgid "Dez"
-msgstr ""
-
-#: ../app/views/localizations/show.php:142
-msgid "So"
-msgstr "Sun."
-
-#: ../app/views/localizations/show.php:143
-msgid "Mo"
-msgstr "Mon."
-
-#: ../app/views/localizations/show.php:144
-msgid "Di"
-msgstr "Tue."
-
-#: ../app/views/localizations/show.php:145
-msgid "Mi"
-msgstr "Wed."
-
-#: ../app/views/localizations/show.php:146
-msgid "Do"
-msgstr "Thu."
-
-#: ../app/views/localizations/show.php:147
-msgid "Fr"
-msgstr "Fri."
-
-#: ../app/views/localizations/show.php:148
-msgid "Sa"
-msgstr "Sat."
-
-#: ../app/views/localizations/show.php:151
+#: ../app/views/localizations/show.php:163
 msgid "Fehler beim Aufruf des Tour-Controllers"
 msgstr "Error accessing the tour controller"
 
-#: ../app/views/localizations/show.php:154
-msgid "Bitte laden Sie die Seite neu, um fortzufahren"
-msgstr "To continue, please reload the page"
-
-#: ../app/views/localizations/show.php:155
-msgid "Neu laden"
-msgstr "Reload"
-
-#: ../app/views/localizations/show.php:156
-msgid "Sie sind nicht mehr im System angemeldet."
-msgstr "You are no longer logged in."
-
-#: ../app/views/localizations/show.php:159
+#: ../app/views/localizations/show.php:166
 msgid "Bedingung konfigurieren"
 msgstr "Configure condition"
 
-#: ../app/views/localizations/show.php:163
+#: ../app/views/localizations/show.php:170
 msgid "Vor wenigen Sekunden"
 msgstr "A few seconds ago"
 
-#: ../app/views/localizations/show.php:164
+#: ../app/views/localizations/show.php:171
 msgid "Vor einer Minute"
 msgstr "One minute ago"
 
-#: ../app/views/localizations/show.php:165
+#: ../app/views/localizations/show.php:172
 msgid "Vor <%= distance %> Minuten"
 msgstr "<%= distance %> minutes ago"
 
-#: ../app/views/localizations/show.php:169
+#: ../app/views/localizations/show.php:176
 msgid "Wenn Sie die Seite verlassen, gehen ihre Änderungen verloren!"
 msgstr "If you leave the page your changes will be lost!"
 
-#: ../app/views/localizations/show.php:170
+#: ../app/views/localizations/show.php:177
 msgid "Sind sie sicher, dass Sie diese Kategorie entfernen möchten? "
 msgstr "Are you sure to delete this category?"
 
-#: ../app/views/localizations/show.php:171
+#: ../app/views/localizations/show.php:178
 msgid "Alle Bereiche werden dann nach \"Allgemein\" verschoben!"
 msgstr "All areas will be moved to the category \"general\"!"
 
-#: ../app/views/localizations/show.php:172
+#: ../app/views/localizations/show.php:179
 msgid "Sind sie sicher, dass Sie diesen Bereich löschen möchten? "
 msgstr "Are you sure to delete this area?"
 
-#: ../app/views/localizations/show.php:173
+#: ../app/views/localizations/show.php:180
 msgid "Es werden auch alle Beiträge in diesem Bereich gelöscht!"
 msgstr "All postings in this area will be deleted as well!"
 
-#: ../app/views/localizations/show.php:175
+#: ../app/views/localizations/show.php:182
 msgid ""
 "Die Senderin/der Sender dieser Nachricht möchte Sie auf den folgenden "
 "Beitrag aufmerksam machen. "
@@ -9388,23 +9303,23 @@ msgstr ""
 "The sender of this message wants to call your attention to the following "
 "posting."
 
-#: ../app/views/localizations/show.php:176
+#: ../app/views/localizations/show.php:183
 msgid "Link zum Beitrag: "
 msgstr "Link to posting:"
 
-#: ../app/views/localizations/show.php:177
+#: ../app/views/localizations/show.php:184
 msgid "Thema schließen"
 msgstr "Close topic"
 
-#: ../app/views/localizations/show.php:178
+#: ../app/views/localizations/show.php:185
 msgid "Thema öffnen"
 msgstr "Open topic"
 
-#: ../app/views/localizations/show.php:179
+#: ../app/views/localizations/show.php:186
 msgid "Hervorhebung aufheben"
 msgstr "Delete mark"
 
-#: ../app/views/localizations/show.php:180
+#: ../app/views/localizations/show.php:187
 msgid "Thema hervorheben"
 msgstr "Mark topic"
 
@@ -9953,6 +9868,10 @@ msgstr "Delete marked announcement"
 msgid "Keine Ankündigungen vorhanden."
 msgstr "No announcements."
 
+#: ../app/views/news/display.php:8
+msgid "Ankündigungen"
+msgstr "Announcements"
+
 #: ../app/views/news/display.php:17
 msgid "RSS-Feed konfigurieren"
 msgstr "Configure rss feed"
@@ -10199,6 +10118,10 @@ msgstr "USER IS SUSPENDED!"
 msgid "Wo ich studiere:"
 msgstr "Where I study:"
 
+#: ../app/views/profile/index.php:191
+msgid "Literaturlisten"
+msgstr "Reference lists"
+
 #: ../app/views/profile/not_available.php:1
 msgid "Dieses Profil ist nicht verfügbar."
 msgstr "Profile not available."
@@ -10265,66 +10188,66 @@ msgstr ""
 msgid "Es gibt keine Veranstaltungen, die einen freien Zugriff erlauben!"
 msgstr "There are no courses that allow free access."
 
-#: ../app/views/questionnaire/_overview_questionnaire.php:4
-#, fuzzy
-msgid "Fragebogen beenden"
-msgstr "Edit details of vacation period"
-
-#: ../app/views/questionnaire/_overview_questionnaire.php:8
-#, fuzzy
-msgid "Fragebogen starten"
-msgstr "Start evaluation"
-
-#: ../app/views/questionnaire/_overview_questionnaire.php:29
-#: ../app/views/questionnaire/_overview_questionnaire.php:32
+#: ../app/views/questionnaire/_overview_questionnaire.php:18
+#: ../app/views/questionnaire/_overview_questionnaire.php:21
 #, fuzzy
 msgid "händisch"
 msgstr "English "
 
-#: ../app/views/questionnaire/_overview_questionnaire.php:40
+#: ../app/views/questionnaire/_overview_questionnaire.php:29
 #, fuzzy
 msgid "Stud.IP Startseite"
 msgstr "To the start page"
 
-#: ../app/views/questionnaire/_overview_questionnaire.php:43
+#: ../app/views/questionnaire/_overview_questionnaire.php:32
 #, fuzzy
 msgid "Öffentlich per Link"
 msgstr "Public"
 
-#: ../app/views/questionnaire/_overview_questionnaire.php:46
+#: ../app/views/questionnaire/_overview_questionnaire.php:35
 #, fuzzy
 msgid "Profilseite"
 msgstr "My profile"
 
-#: ../app/views/questionnaire/_overview_questionnaire.php:58
+#: ../app/views/questionnaire/_overview_questionnaire.php:47
 msgid "Nirgendwo"
 msgstr ""
 
-#: ../app/views/questionnaire/_overview_questionnaire.php:65
+#: ../app/views/questionnaire/_overview_questionnaire.php:56
+#, fuzzy
+msgid "Fragebogen beenden"
+msgstr "Edit details of vacation period"
+
+#: ../app/views/questionnaire/_overview_questionnaire.php:60
+#, fuzzy
+msgid "Fragebogen starten"
+msgstr "Start evaluation"
+
+#: ../app/views/questionnaire/_overview_questionnaire.php:64
 msgid "Auswertung"
 msgstr "Assessment"
 
-#: ../app/views/questionnaire/_overview_questionnaire.php:68
+#: ../app/views/questionnaire/_overview_questionnaire.php:67
 #, fuzzy
 msgid "Export als CSV"
 msgstr "Export"
 
-#: ../app/views/questionnaire/_overview_questionnaire.php:72
+#: ../app/views/questionnaire/_overview_questionnaire.php:71
 #, fuzzy
 msgid "Der Fragebogen wurde gestartet und kann nicht mehr bearbeitet werden."
 msgstr "The import file cannot be processed!"
 
-#: ../app/views/questionnaire/_overview_questionnaire.php:74
+#: ../app/views/questionnaire/_overview_questionnaire.php:73
 #, fuzzy
 msgid "Fragebogen bearbeiten"
 msgstr "Edit surveys."
 
-#: ../app/views/questionnaire/_overview_questionnaire.php:78
+#: ../app/views/questionnaire/_overview_questionnaire.php:77
 #, fuzzy
 msgid "Zuweisungen bearbeiten"
 msgstr "Edit plugin assignments"
 
-#: ../app/views/questionnaire/_overview_questionnaire.php:81
+#: ../app/views/questionnaire/_overview_questionnaire.php:80
 #, fuzzy
 msgid "Fragebogen löschen."
 msgstr "Delete vacation period"
@@ -10404,7 +10327,7 @@ msgid "Zuweisung zur Einrichtung aufheben."
 msgstr "Allocation to institute %s removed."
 
 #: ../app/views/questionnaire/edit.php:10
-#: ../app/views/questionnaire/overview.php:5
+#: ../app/views/questionnaire/overview.php:4
 #, fuzzy
 msgid "Fragebogen"
 msgstr "Question/questions"
@@ -10477,27 +10400,27 @@ msgstr "answered"
 msgid "Ergebnisse herunterladen"
 msgstr "Download folder"
 
-#: ../app/views/questionnaire/overview.php:6
+#: ../app/views/questionnaire/overview.php:5
 #, fuzzy
 msgid "Startet"
 msgstr "Start"
 
-#: ../app/views/questionnaire/overview.php:7
+#: ../app/views/questionnaire/overview.php:6
 #, fuzzy
 msgid "Endet"
 msgstr "End"
 
-#: ../app/views/questionnaire/overview.php:8
+#: ../app/views/questionnaire/overview.php:7
 #, fuzzy
 msgid "Eingebunden"
 msgstr "Show"
 
-#: ../app/views/questionnaire/overview.php:21
+#: ../app/views/questionnaire/overview.php:20
 #, fuzzy
 msgid "Sie haben noch keine Fragebögen erstellt."
 msgstr "No admission settings defined."
 
-#: ../app/views/questionnaire/overview.php:32
+#: ../app/views/questionnaire/overview.php:31
 #, fuzzy
 msgid "Fragebogen erstellen"
 msgstr "Create new survey"
@@ -10583,6 +10506,11 @@ msgstr "This option is not available."
 #, fuzzy
 msgid "Eine falsche Antwort"
 msgstr "Incorrect answer"
+
+#: ../app/views/questionnaire/widget.php:6
+#, fuzzy
+msgid "Fragebögen"
+msgstr "Question/questions"
 
 #: ../app/views/questionnaire/widget.php:10
 #, fuzzy
@@ -12142,6 +12070,165 @@ msgstr "and"
 #: ../app/views/userfilter/filter/configure.php:11
 msgid "Auswahlfeld hinzufügen"
 msgstr "Add select box"
+
+#~ msgid ""
+#~ "Benutzen Sie den Link »neue Rubrik anlegen« in der Infobox, um eine "
+#~ "Rubrik anzulegen."
+#~ msgstr ""
+#~ "The link »Create new category« in the information box takes you to the "
+#~ "set up of new categories."
+
+#~ msgid ""
+#~ "Benutzen Sie den Link »neue Seite anlegen« in der Infobox, um eine Seite "
+#~ "in dieser Rubrik anzulegen."
+#~ msgstr ""
+#~ "To create a new page in this category, follow the link »create new page« "
+#~ "in the information box."
+
+#~ msgid ""
+#~ "Der für diese Stud.IP-Installation verantwortliche Administrator muss "
+#~ "hier noch Inhalte einfügen.\n"
+#~ "(:rootlist:)"
+#~ msgstr ""
+#~ "The administrator in charge for the Stud.IP installation has to insert "
+#~ "further contents here.\n"
+#~ "(:rootlist:)"
+
+#~ msgid "die meisten Teilnehmer"
+#~ msgstr "most participants"
+
+#~ msgid "zuletzt angelegt"
+#~ msgstr "lastly created"
+
+#~ msgid "die meisten Materialien (Dokumente)"
+#~ msgstr "the most material (documents)"
+
+#~ msgid "die aktivsten Veranstaltungen (Postings der letzten zwei Wochen)"
+#~ msgstr ""
+#~ "the most active courses (number of posting within in the last two weeks)"
+
+#~ msgid "die beliebtesten Profile (Besucher)"
+#~ msgstr "the most favoured profiles (visitors)"
+
+#~ msgid "Aktive Veranstaltungen"
+#~ msgstr "Active courses"
+
+#~ msgid "alle Veranstaltungen, die nicht archiviert wurden"
+#~ msgstr "all courses not moved to the archive"
+
+#~ msgid "Archivierte Veranstaltungen"
+#~ msgstr "Archived courses"
+
+#~ msgid "alle Veranstaltungen, die archiviert wurden"
+#~ msgstr "all courses moved to the archive."
+
+#~ msgid "alle Einrichtungen außer den Fakultäten"
+#~ msgstr "all institutes except faculties"
+
+#~ msgid "beteiligte Fakultäten"
+#~ msgstr "participating faculties"
+
+#~ msgid "alle Fakultäten"
+#~ msgstr "all faculties"
+
+#~ msgid "registrierte Administratoren"
+#~ msgstr "registered administrators"
+
+#~ msgid "registrierte Dozenten"
+#~ msgstr "registered lecturers"
+
+#~ msgid "registrierte Tutoren"
+#~ msgstr "registered tutors"
+
+#~ msgid "registrierte Autoren"
+#~ msgstr "registered authors"
+
+#~ msgid "Dokumente"
+#~ msgstr "Documents"
+
+#~ msgid "verlinkte Dateien"
+#~ msgstr "linked files"
+
+#~ msgid "Wiki-Seiten"
+#~ msgstr "Wiki pages"
+
+#~ msgid "Ressourcen-Objekte"
+#~ msgstr "Resource objects"
+
+#~ msgid "von Stud.IP verwaltete Ressourcen wie Räume oder Geräte"
+#~ msgstr "ressources administered via Stud.IP, e.g. rooms or equipment"
+
+#~ msgid "Forenbeiträge"
+#~ msgstr "Postings"
+
+#~ msgid "Anzahl Beiträge aller verwendeten Foren"
+#~ msgstr "Number of postings of all used forums."
+
+#~ msgid "Information"
+#~ msgstr "Information"
+
+#, fuzzy
+#~ msgid ""
+#~ "Hier können Sie festlegen, dass Sie die Veranstaltung aus der Sicht einer "
+#~ "Person sehen wollen, die nicht Lehrende ist und somit überprüfen, wie für "
+#~ "Ihre Teilnehmende die Veranstaltung aussieht."
+#~ msgstr ""
+#~ "Choose to display the course from a non-lecturers view and check how your "
+#~ "participants see your course."
+
+#~ msgid "Ansicht simulieren"
+#~ msgstr "Simulate view"
+
+#~ msgid ""
+#~ "Veranstaltung anzeigen, wie sie für Teilnehmer mit folgender Berechtigung "
+#~ "aussieht:"
+#~ msgstr "Display course as it looks like for users with authorization:"
+
+#~ msgid "Ansicht der Veranstaltung zurücksetzen"
+#~ msgstr "Reset course view"
+
+#, fuzzy
+#~ msgid ""
+#~ "Wenn Sie hier eine Berechtigungsstufe auswählen, werden Sie die "
+#~ "Veranstaltung genauso sehen wie Teilnehmendemit dieser Berechtigung."
+#~ msgstr ""
+#~ "By choosing an authorization level you can see the course exactly like a "
+#~ "user with the selected authorization."
+
+#, fuzzy
+#~ msgid "Ihre gewohnte Ansicht können Sie auf dieser Seite wieder einstellen."
+#~ msgstr "On this page you can switch back to the lecturer's view."
+
+#, fuzzy
+#~ msgid "Veranstaltung wieder auf die normale Ansicht für zurücksetzen:"
+#~ msgstr "Switch back to the lecturer's view:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Durch Klick auf \"übernehmen\" sehen Sie die Veranstaltung wieder aus "
+#~ "Lehrendensicht."
+#~ msgstr "By clicking on \"apply\" you can switch back to lecturer's view."
+
+#, fuzzy
+#~ msgid "vorläufig akzeptierten Nutzer/-innen"
+#~ msgstr "Provisionally accepted participant"
+
+#, fuzzy
+#~ msgid "vorläufig akzeptierten NutzerInnen"
+#~ msgstr "Provisionally enrolled participants"
+
+#, fuzzy
+#~ msgid "Vorläufig akzeptierte/n NutzerIn"
+#~ msgstr "Provisionally accepted participant"
+
+#~ msgid "Speichern und schließen"
+#~ msgstr "Save and close"
+
+#~ msgid "Abbrechen und schließen"
+#~ msgstr "Cancel and close"
+
+#~ msgid "Diese Anfrage entfernen"
+#~ msgstr "Remove this request"
 
 #~ msgid "Zeitraum:"
 #~ msgstr "Period:"
@@ -16481,9 +16568,6 @@ msgstr "Add select box"
 #~ msgid "Die Einrichtung wurde entfernt."
 #~ msgstr "Institution canceled."
 
-#~ msgid "Rollen"
-#~ msgstr "Roles"
-
 #~ msgid "Rollen verwalten"
 #~ msgstr "Administering roles"
 
@@ -18199,9 +18283,6 @@ msgstr "Add select box"
 #~ msgid "Die Studiengruppen wurden deaktiviert."
 #~ msgstr "Study groups have been deactivated."
 
-#~ msgid "Themen"
-#~ msgstr "Topics"
-
 #~ msgid "Thema gelöscht."
 #~ msgstr "Topic deleted."
 
@@ -18947,9 +19028,6 @@ msgstr "Add select box"
 
 #~ msgid "Rangliste"
 #~ msgstr "High score list "
-
-#~ msgid "Ihren Wert veröffentlichen"
-#~ msgstr "Publish your score"
 
 #~ msgid "Ihr Wert wurde auf der Rangliste veröffentlicht."
 #~ msgstr "Your score has been published on the ranking list."
