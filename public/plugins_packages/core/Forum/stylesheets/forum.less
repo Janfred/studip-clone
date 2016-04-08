@@ -204,6 +204,9 @@ html.no-js #forum {
         margin: 5px 0 0 0;
         flex: 1;
         text-align: left;
+        &.forum_entry_input {
+            display: flex;
+        }
     }
 
     .buttons {
@@ -246,8 +249,9 @@ html.no-js #forum {
     }
 
     div#new_entry_box div.posting {
-        flex-wrap: wrap;
-        .postbody:first-child {
+        display: flex;
+        flex-direction: column;
+        .postprofile {
             flex: 0
         }
     }
