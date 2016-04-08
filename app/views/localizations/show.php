@@ -10,115 +10,15 @@ $translations = array(
     // app/views/messages/overview.php
     'Wirklich %s Nachrichten löschen?' => _('Wirklich %s Nachrichten löschen?'),
 
-    // public/assets/javascripts/admission.js
-    'Wird geladen' => _('Wird geladen'),
-    'Anmelderegel konfigurieren' => _('Anmelderegel konfigurieren'),
-    'Sie haben noch keine Anmelderegeln festgelegt.' => _('Sie haben noch keine Anmelderegeln festgelegt.'),
-    'Sie haben noch niemanden hinzugefügt.' => _('Sie haben noch niemanden hinzugefügt.'),
-
-    // public/assets/javascripts/application.js
-    'Blenden Sie die restlichen Termine aus' => _('Blenden Sie die restlichen Termine aus'),
-    'Blenden Sie die restlichen Termine ein' => _('Blenden Sie die restlichen Termine ein'),
-    'Schliessen' => _('Schliessen'),
-    'Ihre Eingaben wurden bislang noch nicht gespeichert.' => _('Ihre Eingaben wurden bislang noch nicht gespeichert.'),
-
-    // public/assets/javascripts/big-image-handler.js
-    'Dieses Bild wird verkleinert dargestellt. Klicken Sie für eine größere Darstellung.' => _('Dieses Bild wird verkleinert dargestellt. Klicken Sie für eine größere Darstellung.'),
-
-    // public/assets/javascripts/calendar.js
-    'Montag' => _('Montag'),
-    'Dienstag' => _('Dienstag'),
-    'Mittwoch' => _('Mittwoch'),
-    'Donnerstag' => _('Donnerstag'),
-    'Freitag' => _('Freitag'),
-    'Samstag' => _('Samstag'),
-    'Sonntag' => _('Sonntag'),
-
-    // public/assets/javascripts/file_system.js
-    'Objekt aufklappen' => _('Objekt aufklappen'),
-    'Objekt zuklappen' => _('Objekt zuklappen'),
-
-    // public/assets/javascripts/forms.js
-    'Bitte ändern Sie ihre Eingabe' => _('Bitte ändern Sie ihre Eingabe'),
-    'Bitte wählen Sie einen Wert aus.' => _('Bitte wählen Sie einen Wert aus.'),
-    'Bitte geben Sie gültige E-Mail-Adresse ein' => _('Bitte geben Sie gültige E-Mail-Adresse ein'),
-    'Bitte geben Sie eine Zahl ein' => _('Bitte geben Sie eine Zahl ein'),
-    'Bitte geben Sie eine gültige Web-Adresse ein' => _('Bitte geben Sie eine gültige Web-Adresse ein'),
-    'Der eingegebene Wert darf nicht größer als $1 sein' => _('Der eingegebene Wert darf nicht größer als $1 sein'),
-    'Der eingegebene Wert darf nicht kleiner als $1 sein' => _('Der eingegebene Wert darf nicht kleiner als $1 sein'),
-    'Dies ist ein erforderliches Feld' => _('Dies ist ein erforderliches Feld'),
-    'Zeichen verbleibend: ' => _('Zeichen verbleibend: '),
-
-    // public/assets/javascripts/messages.js
-    'Sie haben nicht angegeben, wer die Nachricht empfangen soll!' => _('Sie haben nicht angegeben, wer die Nachricht empfangen soll!'),
-
-    // public/assets/javascripts/multi_person_search.js
-    'Sie haben <%= count %> Personen ausgewählt' => _('Sie haben <%= count %> Personen ausgewählt'),
-    'Suchergebnisse' => _('Suchergebnisse'),
-    'Alle hinzufügen' => _('Alle hinzufügen'),
-    'Alle entfernen' => _('Alle entfernen'),
-    ' Dieser Filter enthält keine (neuen) Personen.' => _(' Dieser Filter enthält keine (neuen) Personen.'),
-    'Es wurden keine neuen Ergebnisse für "<%= needle %>" gefunden.' => _('Es wurden keine neuen Ergebnisse für "<%= needle %>" gefunden.'),
-
-    // public/assets/javascripts/multi_select.js
-    'ausgewählt' => _('ausgewählt'),
-
-    // public/assets/javascripts/news.js
-    'Dialog wird geladen...' => _('Dialog wird geladen...'),
-    'Fehler beim Aufruf des News-Controllers' => _('Fehler beim Aufruf des News-Controllers'),
-
-    // public/assets/javascripts/quick_search.js
-    'Kein Ergebnis gefunden.' => _('Kein Ergebnis gefunden.'),
-
-    // public/assets/javascripts/raumzeit.js
-    'Nicht buchbare Räume:' => _('Nicht buchbare Räume:'),
-    'Alle Räume anzeigen' => _('Alle Räume anzeigen'),
-    'Wollen Sie die gewünschten Termine wirklich löschen?' => _('Wollen Sie die gewünschten Termine wirklich löschen?'),
-    'Sind Sie sicher, dass Sie die regelmäßige Zeit ändern möchten?' => _('Sind Sie sicher, dass Sie die regelmäßige Zeit ändern möchten?'),
-    'Nur buchbare Räume anzeigen' => _('Nur buchbare Räume anzeigen'),
-
-    // public/assets/javascripts/register.js
-    'Der Benutzername ist zu kurz, er sollte mindestens 4 Zeichen lang sein.' => _('Der Benutzername ist zu kurz, er sollte mindestens 4 Zeichen lang sein.'),
-    'Der Benutzername enthält unzulässige Zeichen, er darf keine Sonderzeichen oder Leerzeichen enthalten.' => _('Der Benutzername enthält unzulässige Zeichen, er darf keine Sonderzeichen oder Leerzeichen enthalten.'),
-    'Das Passwort ist zu kurz, es sollte mindestens 4 Zeichen lang sein.' => _('Das Passwort ist zu kurz, es sollte mindestens 4 Zeichen lang sein.'),
-    'Das Passwort stimmt nicht mit dem Bestätigungspasswort überein!' => _('Das Passwort stimmt nicht mit dem Bestätigungspasswort überein!'),
-    'Bitte geben Sie Ihren tatsächlichen Vornamen an.' => _('Bitte geben Sie Ihren tatsächlichen Vornamen an.'),
-    'Bitte geben Sie Ihren tatsächlichen Nachnamen an.' => _('Bitte geben Sie Ihren tatsächlichen Nachnamen an.'),
-    'Die E-Mail-Adresse ist nicht korrekt!' => _('Die E-Mail-Adresse ist nicht korrekt!'),
-
-    // public/assets/javascripts/schedule.js
-    'Neuen Termin eintragen' => _('Neuen Termin eintragen'),
-    'Veranstaltungsdetails' => _('Veranstaltungsdetails'),
-    'Termindetails bearbeiten' => _('Termindetails bearbeiten'),
-    'Detaillierte Veranstaltungsliste' => _('Detaillierte Veranstaltungsliste'),
-
-    // public/assets/javascripts/settings.js
-    'Die beiden Werte "$1" und "$2" stimmen nicht überein. ' => _('Die beiden Werte "$1" und "$2" stimmen nicht überein. '),
-
-    // public/assets/javascripts/smiley-picker.js
-    'Smileys' => _('Smileys'),
-    'Zur Gesamtübersicht' => _('Zur Gesamtübersicht'),
-
-    // public/assets/javascripts/studip-dialog.js
-    'Schließen' => _('Schließen'),
-    'Bitte bestätigen Sie die Aktion' => _('Bitte bestätigen Sie die Aktion'),
-    'Ja' => _('Ja'),
-    'Nein' => _('Nein'),
-
-    // public/assets/javascripts/studip-helper-attributes.js
-    'Wollen Sie die Aktion wirklich ausführen?' => _('Wollen Sie die Aktion wirklich ausführen?'),
-
-    // public/assets/javascripts/studip-jquery.multi-select.tweaks.js
+    // base.jshrink.js
     'Die Person ist bereits eingetragen.' => _('Die Person ist bereits eingetragen.'),
-
-    // public/assets/javascripts/studip-ui.js
-    'schließen' => _('schließen'),
-    'Zurück' => _('Zurück'),
+    'schlieÃŸen' => _('schlieÃŸen'),
+    'ZurÃ¼ck' => _('ZurÃ¼ck'),
     'Vor;' => _('Vor;'),
     'heute' => _('heute'),
     'Januar' => _('Januar'),
     'Februar' => _('Februar'),
-    'März' => _('März'),
+    'MÃ¤rz' => _('MÃ¤rz'),
     'April' => _('April'),
     'Mai' => _('Mai'),
     'Juni' => _('Juni'),
@@ -130,7 +30,7 @@ $translations = array(
     'Dezember' => _('Dezember'),
     'Jan' => _('Jan'),
     'Feb' => _('Feb'),
-    'Mär' => _('Mär'),
+    'MÃ¤r' => _('MÃ¤r'),
     'Apr' => _('Apr'),
     'Jun' => _('Jun'),
     'Jul' => _('Jul'),
@@ -139,6 +39,13 @@ $translations = array(
     'Okt' => _('Okt'),
     'Nov' => _('Nov'),
     'Dez' => _('Dez'),
+    'Sonntag' => _('Sonntag'),
+    'Montag' => _('Montag'),
+    'Dienstag' => _('Dienstag'),
+    'Mittwoch' => _('Mittwoch'),
+    'Donnerstag' => _('Donnerstag'),
+    'Freitag' => _('Freitag'),
+    'Samstag' => _('Samstag'),
     'So' => _('So'),
     'Mo' => _('Mo'),
     'Di' => _('Di'),
@@ -146,14 +53,114 @@ $translations = array(
     'Do' => _('Do'),
     'Fr' => _('Fr'),
     'Sa' => _('Sa'),
-
-    // public/assets/javascripts/tour.js
-    'Fehler beim Aufruf des Tour-Controllers' => _('Fehler beim Aufruf des Tour-Controllers'),
-
-    // public/assets/javascripts/updater.js
+    'Wollen Sie die Aktion wirklich ausfÃ¼hren?' => _('Wollen Sie die Aktion wirklich ausfÃ¼hren?'),
+    'Smileys' => _('Smileys'),
+    'Zur GesamtÃ¼bersicht' => _('Zur GesamtÃ¼bersicht'),
+    'Schliessen' => _('Schliessen'),
+    'SchlieÃŸen' => _('SchlieÃŸen'),
+    'Bitte bestÃ¤tigen Sie die Aktion' => _('Bitte bestÃ¤tigen Sie die Aktion'),
+    'Ja' => _('Ja'),
+    'Nein' => _('Nein'),
     'Bitte laden Sie die Seite neu, um fortzufahren' => _('Bitte laden Sie die Seite neu, um fortzufahren'),
     'Neu laden' => _('Neu laden'),
     'Sie sind nicht mehr im System angemeldet.' => _('Sie sind nicht mehr im System angemeldet.'),
+    'Objekt aufklappen' => _('Objekt aufklappen'),
+    'Objekt zuklappen' => _('Objekt zuklappen'),
+    'Dialog wird geladen...' => _('Dialog wird geladen...'),
+    'Fehler beim Aufruf des News-Controllers' => _('Fehler beim Aufruf des News-Controllers'),
+    'Sie haben nicht angegeben, wer die Nachricht empfangen soll!' => _('Sie haben nicht angegeben, wer die Nachricht empfangen soll!'),
+    'Kein Ergebnis gefunden.' => _('Kein Ergebnis gefunden.'),
+    'Alle hinzufÃ¼gen' => _('Alle hinzufÃ¼gen'),
+    'Alle entfernen' => _('Alle entfernen'),
+    'ausgewÃ¤hlt' => _('ausgewÃ¤hlt'),
+    'Sie haben <%= count %> Personen ausgewÃ¤hlt' => _('Sie haben <%= count %> Personen ausgewÃ¤hlt'),
+    'Suchergebnisse' => _('Suchergebnisse'),
+    ' Dieser Filter enthÃ¤lt keine (neuen) Personen.' => _(' Dieser Filter enthÃ¤lt keine (neuen) Personen.'),
+    'Es wurden keine neuen Ergebnisse fÃ¼r "<%= needle %>" gefunden.' => _('Es wurden keine neuen Ergebnisse fÃ¼r "<%= needle %>" gefunden.'),
+    'Neuen Termin eintragen' => _('Neuen Termin eintragen'),
+    'Veranstaltungsdetails' => _('Veranstaltungsdetails'),
+    'Termindetails bearbeiten' => _('Termindetails bearbeiten'),
+    'Detaillierte Veranstaltungsliste' => _('Detaillierte Veranstaltungsliste'),
+    'Bitte Ã¤ndern Sie ihre Eingabe' => _('Bitte Ã¤ndern Sie ihre Eingabe'),
+    'Bitte wÃ¤hlen Sie einen Wert aus.' => _('Bitte wÃ¤hlen Sie einen Wert aus.'),
+    'Bitte geben Sie gÃ¼ltige E-Mail-Adresse ein' => _('Bitte geben Sie gÃ¼ltige E-Mail-Adresse ein'),
+    'Bitte geben Sie eine Zahl ein' => _('Bitte geben Sie eine Zahl ein'),
+    'Bitte geben Sie eine gÃ¼ltige Web-Adresse ein' => _('Bitte geben Sie eine gÃ¼ltige Web-Adresse ein'),
+    'Der eingegebene Wert darf nicht grÃ¶ÃŸer als $1 sein' => _('Der eingegebene Wert darf nicht grÃ¶ÃŸer als $1 sein'),
+    'Der eingegebene Wert darf nicht kleiner als $1 sein' => _('Der eingegebene Wert darf nicht kleiner als $1 sein'),
+    'Dies ist ein erforderliches Feld' => _('Dies ist ein erforderliches Feld'),
+    'Zeichen verbleibend: ' => _('Zeichen verbleibend: '),
+    'Der Benutzername ist zu kurz, er sollte mindestens 4 Zeichen lang sein.' => _('Der Benutzername ist zu kurz, er sollte mindestens 4 Zeichen lang sein.'),
+    'Der Benutzername enthÃ¤lt unzulÃ¤ssige Zeichen, er darf keine Sonderzeichen oder Leerzeichen enthalten.' => _('Der Benutzername enthÃ¤lt unzulÃ¤ssige Zeichen, er darf keine Sonderzeichen oder Leerzeichen enthalten.'),
+    'Das Passwort ist zu kurz, es sollte mindestens 4 Zeichen lang sein.' => _('Das Passwort ist zu kurz, es sollte mindestens 4 Zeichen lang sein.'),
+    'Das Passwort stimmt nicht mit dem BestÃ¤tigungspasswort Ã¼berein!' => _('Das Passwort stimmt nicht mit dem BestÃ¤tigungspasswort Ã¼berein!'),
+    'Bitte geben Sie Ihren tatsÃ¤chlichen Vornamen an.' => _('Bitte geben Sie Ihren tatsÃ¤chlichen Vornamen an.'),
+    'Bitte geben Sie Ihren tatsÃ¤chlichen Nachnamen an.' => _('Bitte geben Sie Ihren tatsÃ¤chlichen Nachnamen an.'),
+    'Die E-Mail-Adresse ist nicht korrekt!' => _('Die E-Mail-Adresse ist nicht korrekt!'),
+    'Dieses Bild wird verkleinert dargestellt. Klicken Sie fÃ¼r eine grÃ¶ÃŸere Darstellung.' => _('Dieses Bild wird verkleinert dargestellt. Klicken Sie fÃ¼r eine grÃ¶ÃŸere Darstellung.'),
+    'Ihre Eingaben wurden bislang noch nicht gespeichert.' => _('Ihre Eingaben wurden bislang noch nicht gespeichert.'),
+    'Blenden Sie die restlichen Termine aus' => _('Blenden Sie die restlichen Termine aus'),
+    'Blenden Sie die restlichen Termine ein' => _('Blenden Sie die restlichen Termine ein'),
+
+    // public/assets/javascripts/admission.js
+    'Wird geladen' => _('Wird geladen'),
+    'Anmelderegel konfigurieren' => _('Anmelderegel konfigurieren'),
+    'Sie haben noch keine Anmelderegeln festgelegt.' => _('Sie haben noch keine Anmelderegeln festgelegt.'),
+    'Sie haben noch niemanden hinzugefügt.' => _('Sie haben noch niemanden hinzugefügt.'),
+
+    // public/assets/javascripts/big-image-handler.js
+    'Dieses Bild wird verkleinert dargestellt. Klicken Sie für eine größere Darstellung.' => _('Dieses Bild wird verkleinert dargestellt. Klicken Sie für eine größere Darstellung.'),
+
+    // public/assets/javascripts/forms.js
+    'Bitte ändern Sie ihre Eingabe' => _('Bitte ändern Sie ihre Eingabe'),
+    'Bitte wählen Sie einen Wert aus.' => _('Bitte wählen Sie einen Wert aus.'),
+    'Bitte geben Sie gültige E-Mail-Adresse ein' => _('Bitte geben Sie gültige E-Mail-Adresse ein'),
+    'Bitte geben Sie eine gültige Web-Adresse ein' => _('Bitte geben Sie eine gültige Web-Adresse ein'),
+    'Der eingegebene Wert darf nicht größer als $1 sein' => _('Der eingegebene Wert darf nicht größer als $1 sein'),
+
+    // public/assets/javascripts/multi_person_search.js
+    'Sie haben <%= count %> Personen ausgewählt' => _('Sie haben <%= count %> Personen ausgewählt'),
+    'Alle hinzufügen' => _('Alle hinzufügen'),
+    ' Dieser Filter enthält keine (neuen) Personen.' => _(' Dieser Filter enthält keine (neuen) Personen.'),
+    'Es wurden keine neuen Ergebnisse für "<%= needle %>" gefunden.' => _('Es wurden keine neuen Ergebnisse für "<%= needle %>" gefunden.'),
+
+    // public/assets/javascripts/multi_select.js
+    'ausgewählt' => _('ausgewählt'),
+
+    // public/assets/javascripts/raumzeit.js
+    'Nicht buchbare Räume:' => _('Nicht buchbare Räume:'),
+    'Alle Räume anzeigen' => _('Alle Räume anzeigen'),
+    'Wollen Sie die gewünschten Termine wirklich löschen?' => _('Wollen Sie die gewünschten Termine wirklich löschen?'),
+    'Sind Sie sicher, dass Sie die regelmäßige Zeit ändern möchten?' => _('Sind Sie sicher, dass Sie die regelmäßige Zeit ändern möchten?'),
+    'Nur buchbare Räume anzeigen' => _('Nur buchbare Räume anzeigen'),
+
+    // public/assets/javascripts/register.js
+    'Der Benutzername enthält unzulässige Zeichen, er darf keine Sonderzeichen oder Leerzeichen enthalten.' => _('Der Benutzername enthält unzulässige Zeichen, er darf keine Sonderzeichen oder Leerzeichen enthalten.'),
+    'Das Passwort stimmt nicht mit dem Bestätigungspasswort überein!' => _('Das Passwort stimmt nicht mit dem Bestätigungspasswort überein!'),
+    'Bitte geben Sie Ihren tatsächlichen Vornamen an.' => _('Bitte geben Sie Ihren tatsächlichen Vornamen an.'),
+    'Bitte geben Sie Ihren tatsächlichen Nachnamen an.' => _('Bitte geben Sie Ihren tatsächlichen Nachnamen an.'),
+
+    // public/assets/javascripts/settings.js
+    'Die beiden Werte "$1" und "$2" stimmen nicht überein. ' => _('Die beiden Werte "$1" und "$2" stimmen nicht überein. '),
+
+    // public/assets/javascripts/smiley-picker.js
+    'Zur Gesamtübersicht' => _('Zur Gesamtübersicht'),
+
+    // public/assets/javascripts/studip-dialog.js
+    'Schließen' => _('Schließen'),
+    'Bitte bestätigen Sie die Aktion' => _('Bitte bestätigen Sie die Aktion'),
+
+    // public/assets/javascripts/studip-helper-attributes.js
+    'Wollen Sie die Aktion wirklich ausführen?' => _('Wollen Sie die Aktion wirklich ausführen?'),
+
+    // public/assets/javascripts/studip-ui.js
+    'schließen' => _('schließen'),
+    'Zurück' => _('Zurück'),
+    'März' => _('März'),
+    'Mär' => _('Mär'),
+
+    // public/assets/javascripts/tour.js
+    'Fehler beim Aufruf des Tour-Controllers' => _('Fehler beim Aufruf des Tour-Controllers'),
 
     // public/assets/javascripts/userfilter.js
     'Bedingung konfigurieren' => _('Bedingung konfigurieren'),
