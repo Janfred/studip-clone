@@ -88,11 +88,13 @@ class BasicDataWizardStep implements CourseWizardStep
                 $values['start_time'] = Semester::findCurrent()->beginn;
             }
         } else {
-            PageLayout::postError(formatReady(_('Veranstaltungen können nur ' .
+            $message = sprintf(_('Veranstaltungen können nur ' .
                 'im aktuellen oder in zukünftigen Semestern angelegt werden. ' .
                 'Leider wurde kein passendes Semester gefunden. Bitte wenden ' .
-                'Sie sich an [die Stud.IP-Administration]' .
-                URLHelper::getLink('dispatch.php/siteinfo/show') . ' .')));
+                'Sie sich an [die Stud.IP-Administration]%s .'),
+                URLHelper::getLink('dispatch.php/siteinfo/show')
+            );
+            PageLayout::postError(formatReady($message));
             return false;
         }
 
@@ -108,12 +110,14 @@ class BasicDataWizardStep implements CourseWizardStep
                 }
             }
         } else {
-            PageLayout::postError(formatReady(_('Um Veranstaltungen ' .
+            $message = sprintf(_('Um Veranstaltungen ' .
                 'anlegen zu können, muss Ihr Account der Einrichtung, ' .
                 'für die Sie eine Veranstaltung anlegen möchten, zugeordnet ' .
                 'werden. Bitte wenden Sie sich an [die ' .
-                'Stud.IP-Administration]' .
-                URLHelper::getLink('dispatch.php/siteinfo/show') . ' .')));
+                'Stud.IP-Administration]%s .'),
+                URLHelper::getLink('dispatch.php/siteinfo/show')
+            );
+            PageLayout::postError(formatReady($message));
             return false;
         }
 
