@@ -317,7 +317,8 @@ jQuery(function ($) {
                     "&#x2299", // ⊙ CIRCLED DOT OPERATOR
                 ]
             ),
-            on: { pluginsLoaded: onPluginsLoaded }
+            on: { pluginsLoaded: onPluginsLoaded },
+            title: false
         }); // CKEDITOR.replace(textarea[0], {
 
         CKEDITOR.on('instanceReady', function (event) {
