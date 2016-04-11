@@ -154,7 +154,7 @@ class Calendar_CalendarController extends AuthenticatedController
             // show information in dialog instead
             if (!$this->event->havePermission(Event::PERMISSION_WRITABLE)
                     || $this->event instanceof CourseEvent) {
-                if ($this->event->attendees->count() > 1) {
+                if (!$this->event instanceof CourseEvent && $this->event->attendees->count() > 1) {
                     if ($this->event->group_status) {
                         $this->redirect($this->url_for('calendar/single/edit_status/' . implode('/',
                             array($this->range_id, $this->event->event_id))));
