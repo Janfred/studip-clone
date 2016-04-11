@@ -16,8 +16,8 @@ class Events extends \RESTAPI\RouteMap
 {
     public function before($router, &$handler, &$parameters)
     {
-        require_once $GLOBALS['RELATIVE_PATH_CALENDAR'] . '/lib/sync/CalendarExportFile.class.php';
-        require_once $GLOBALS['RELATIVE_PATH_CALENDAR'] . '/lib/sync/CalendarWriterICalendar.class.php';
+        require_once $GLOBALS['RELATIVE_PATH_CALENDAR'] . '/CalendarExportFile.class.php';
+        require_once $GLOBALS['RELATIVE_PATH_CALENDAR'] . '/CalendarWriterICalendar.class.php';
     }
 
     /**
@@ -123,9 +123,9 @@ class Events extends \RESTAPI\RouteMap
                 'end'         => $date->getEndTime(),
                 'title'       => $date->toString(),
                 'description' => implode(', ', $issue_titles),
-                'categories'  => $data->getTypeName() ?: '',
+                'categories'  => $date->getTypeName() ?: '',
                 'room'        => $room ?: '',
-                'deleted'     => $data->isExTermin(),
+                'deleted'     => $date->isExTermin(),
                 'canceled'    => $date->isHoliday() ?: false,
             );
         }
