@@ -31,8 +31,12 @@ use Studip\Button, Studip\LinkButton;
                 <option <? if ($user['perm'] == 'tutor') echo 'selected'; ?>>tutor</option>
                 <option <? if ($user['perm'] == 'dozent') echo 'selected'; ?>>dozent</option>
                 <? if (!$prelim) : ?>
-                    <option <? if ($user['perm'] == 'admin') echo 'selected'; ?>>admin</option>
-                    <option <? if ($user['perm'] == 'root') echo 'selected'; ?>>root</option>
+                    <? if ($perm->is_fak_admin()) : ?>
+                        <option <? if ($user['perm'] == 'admin') echo 'selected'; ?>>admin</option>
+                    <? endif ?>
+                    <? if ($perm->have_perm('root')) : ?>
+                        <option <? if ($user['perm'] == 'root') echo 'selected'; ?>>root</option>
+                    <? endif ?>
                 <? endif ?>
             </select>
         </td>
