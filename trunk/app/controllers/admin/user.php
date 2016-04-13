@@ -469,7 +469,7 @@ class Admin_UserController extends AuthenticatedController
             $umdetails = explode('§', str_replace(array('msg§', 'info§', 'error§'), '', substr($um->msg, 0, -1)));
             $details = array_reverse(array_merge((array)$details,(array)$umdetails));
             PageLayout::postMessage(MessageBox::info(_('Hinweise:'), $details));
-            
+
             $this->redirect('admin/user/edit/' . $user_id);
         }
 
@@ -567,7 +567,11 @@ class Admin_UserController extends AuthenticatedController
                 //new user is added to an institute
                 if (Request::get('institute')
                     && $perm->have_studip_perm('admin', Request::get('institute'))
-                    && $UserManagement->user_data['auth_user_md5.perms'] != 'root') {
+                    && $UserManagement->user_data['auth_user_md5.perms'] != 'root'
+                    && ($UserManagement->user_data['auth_user_md5.perms'] != 'admin'
+                        || ($perm->is_fak_admin() && !Institute::find(Request::get('institute'))->isFaculty())
+                        || $perm->have_perm('root'))
+                    ) {
 
                     //log
                     log_event('INST_USER_ADD', Request::option('institute'), $user_id, $UserManagement->user_data['auth_user_md5.perms']);
