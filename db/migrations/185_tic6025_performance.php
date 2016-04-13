@@ -31,6 +31,8 @@ class Tic6025Performance extends Migration
         $this->tryExecute("ALTER TABLE termin_related_groups CHANGE statusgruppe_id statusgruppe_id VARCHAR(32) NOT NULL");
         $this->tryExecute("ALTER TABLE termin_related_groups ADD PRIMARY KEY( termin_id, statusgruppe_id)");
 
+        $this->tryExecute("ALTER TABLE `user_config` ADD INDEX (`field`, `value`(10))");
+
         SimpleORMap::expireTableScheme();
 
     }
