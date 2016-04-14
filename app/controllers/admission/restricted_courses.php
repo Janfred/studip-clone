@@ -89,9 +89,9 @@ class Admission_RestrictedCoursesController extends AuthenticatedController
                 $row[] = $course['course_name'];
                 $row[] = (int)$course['admission_turnout'];
                 $row[] = $course['count_teilnehmer'] + $course['count_prelim'];
+                $row[] = (int)$course['count_claiming'];
                 $row[] = (int)$course['count_prelim'];
                 $row[] = (int)$course['count_waiting'];
-                $row[] = (int)$course['count_claiming'];
                 $row[] = $course['distribution_time'] ? strftime('%x %R', $course['distribution_time']) : '';
                 $row[] = $course['start_time'] ? strftime('%x %R', $course['start_time']) : '';
                 $row[] = $course['end_time'] ? strftime('%x %R', $course['end_time']) : '';
