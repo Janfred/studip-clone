@@ -115,8 +115,8 @@ class Settings_AccountController extends Settings_SettingsController
             if ($this->shallChange('auth_user_md5.username', 'username', $new_username)) {
                 if (!$this->validator->ValidateUsername($new_username)) {
                     $errors[] = _('Der gewählte Benutzername ist nicht lang genug!');
-                } else if ($check_uname = StudipAuthAbstract::CheckUsername($new_username) && $check_uname['found']) {
-                    $errors[] =  _('Der Benutzername wird bereits von einem anderen Benutzer verwendet. Bitte wählen Sie einen anderen Usernamen!');
+                } else if (User::countBySql('username = ?', [$new_username]) > 0) {
+                    $errors[] =  _('Der Benutzername wird bereits von einem anderen Benutzer verwendet. Bitte wählen Sie einen anderen Benutzernamen!');
                 } else {
                     $this->user->username = $new_username;
                     $success[] = _('Ihr Benutzername wurde geändert!');
