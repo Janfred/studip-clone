@@ -124,7 +124,7 @@ class ProfileNavigation extends Navigation
                     $navigation->addSubNavigation('notification', new Navigation(_('Benachrichtigung'), 'dispatch.php/settings/notification'));
                 }
 
-                if (isDefaultDeputyActivated() && $perm->get_perm() == 'dozent') {
+                if (isDefaultDeputyActivated() && $perm->get_perm($current_user->user_id) == 'dozent') {
                     $navigation->addSubNavigation('deputies', new Navigation(_('Standardvertretung'), 'dispatch.php/settings/deputies'));
                 }
 
