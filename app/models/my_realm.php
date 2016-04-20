@@ -1002,6 +1002,7 @@ class MyRealmModel
         // load plugins, so they have a chance to register themselves as observers
         PluginEngine::getPlugins('StandardPlugin');
 
+        // Update news, votes and evaluations
         $query = "INSERT INTO object_user_visits
                     (object_id, user_id, type, visitdate, last_visitdate)
                   (
@@ -1009,8 +1010,8 @@ class MyRealmModel
                     FROM news_range
                     WHERE range_id = :id
                   ) UNION (
-                    SELECT vote_id, :user_id, 'vote', :timestamp, 0
-                    FROM vote
+                    SELECT questionnaire_id, :user_id, 'vote', :timestamp, 0
+                    FROM questionnaire_assignments
                     WHERE range_id = :id
                   ) UNION (
                     SELECT eval_id, :user_id, 'eval', :timestamp, 0
@@ -1021,16 +1022,15 @@ class MyRealmModel
         $statement = DBManager::get()->prepare($query);
         $statement->bindValue(':user_id', $user_id);
         $statement->bindValue(':timestamp', $timestamp ? : time());
+        $statement->bindValue('id', $object_id);
+        $statement->execute();
+
         // Update all activated modules
         foreach (words('forum documents schedule participants literature wiki scm elearning_interface') as $type) {
             if ($object['modules'][$type]) {
                 object_set_visit($object_id, $type);
             }
         }
-
-        // Update news, votes and evaluations
-        $statement->bindValue('id', $object_id);
-        $statement->execute();
 
         // Update object itself
         object_set_visit($object_id, $object['obj_type']);
