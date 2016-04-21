@@ -101,7 +101,7 @@ class BlubberPosting extends SimpleORMap {
                 'topic_id' => $posting['root_id'],
                 'extern' => is_a($user, "BlubberExternalContact") ? 1 : 0
             ));
-            return '['.$user->getName().']'.$user->getURL().' ';
+            return str_replace($matches[1], '['.$user->getName().']'.$user->getURL().' ', $matches[0]);
         } else {
             return $markup->quote($matches[0]);
         }
