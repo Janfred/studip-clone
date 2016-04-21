@@ -256,10 +256,7 @@ class StreamsController extends PluginController {
         $thread['description'] = studip_utf8decode(Request::get("content"));
         $thread->store();
 
-        BlubberPosting::$mention_posting_id = $thread->getId();
-        StudipTransformFormat::addStudipMarkup("mention1", '(?:^|\W)(@\"[^\n\"]*\")', "", "BlubberPosting::mention");
-        StudipTransformFormat::addStudipMarkup("mention2", '(?:^|\W)(@[^\s]*[\d\w_]+)', "", "BlubberPosting::mention");
-        $content = transformBeforeSave(studip_utf8decode(Request::get("content")));
+        $content = $this->transformMentions($thread['description'], $thread);
 
         if (strpos($content, "\n") !== false) {
             $thread['name'] = substr($content, 0, strpos($content, "\n"));
@@ -347,10 +344,9 @@ class StreamsController extends PluginController {
         }
         $old_content = $posting['description'];
         $messaging = new messaging();
-        BlubberPosting::$mention_posting_id = $posting->getId();
-        StudipTransformFormat::addStudipMarkup("mention1", '@\"[^\n\"]*\"', "", "BlubberPosting::mention");
-        StudipTransformFormat::addStudipMarkup("mention2", '@[^\s]*[\d\w_]+', "", "BlubberPosting::mention");
-        $new_content = transformBeforeSave(studip_utf8decode(Request::get("content")));
+
+        $new_content = studip_utf8decode(Request::get('content'));
+        $new_content = $this->transformMentions($new_content, $posting);
 
         if ($new_content && $old_content !== $new_content) {
             $posting['description'] = $new_content;
@@ -456,10 +452,8 @@ class StreamsController extends PluginController {
             $posting['description'] = studip_utf8decode(Request::get("content"));
             $posting->store();
 
-            BlubberPosting::$mention_posting_id = $posting->getId();
-            StudipTransformFormat::addStudipMarkup("mention1", '@\"[^\n\"]*\"', null, "BlubberPosting::mention");
-            StudipTransformFormat::addStudipMarkup("mention2", '@[^\s]*[\d\w_]+', null, "BlubberPosting::mention");
-            $content = transformBeforeSave(studip_utf8decode(Request::get("content")));
+            $content = studip_utf8decode(Request::get("content"));
+            $content = $this->transformMentions($content, $posting);
             $posting['description'] = $content;
             $posting->store();
 
@@ -966,5 +960,23 @@ class StreamsController extends PluginController {
             }
             Sidebar::get()->addWidget($cloud, 'tagcloud');
         }
+    }
+
+    private function transformMentions($content, BlubberPosting $source)
+    {
+        BlubberPosting::$mention_posting_id = $source->getId();
+        StudipTransformFormat::addStudipMarkup(
+            'mention1',
+            '(?:^|\W)(@\"[^\n\"]*\")',
+            '',
+            'BlubberPosting::mention'
+        );
+        StudipTransformFormat::addStudipMarkup(
+            'mention2',
+            '(?:^|\W)(@[^\s]*[\d\w_]+)',
+            '',
+            'BlubberPosting::mention'
+        );
+        return transformBeforeSave($content);
     }
 }
