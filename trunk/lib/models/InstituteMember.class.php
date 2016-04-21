@@ -105,8 +105,9 @@ class InstituteMember extends SimpleORMap
         $db = DbManager::get();
         return $db->fetchAll("SELECT user_inst.*, Institute.Name as institute_name
                              FROM user_inst
-                             LEFT JOIN Institute USING (institut_id)
-                             WHERE user_id = ? ORDER BY priority,Institute.Name",
+                             JOIN Institute USING (institut_id)
+                             WHERE user_id = ?
+                             ORDER BY priority, Institute.Name",
                              array($user_id),
                              __CLASS__ . '::buildExisting');
     }
