@@ -116,7 +116,7 @@ class ProfileModel
             $courses[$one['name']] =
                 $allcourses->filter(function ($c) use ($one) {
                     return $c->start_time <= $one['beginn'] &&
-                        ($one['beginn'] <= ($c->start_time + $c->duration_time) || $c->duration_time == -1);
+                        ($one['beginn'] <= ($c->start_time + $c->duration_time) || ($c->duration_time == -1 && ($c->start_time >= $one['beginn'] && $c->start_time <= $one['ende'])));
                 })->orderBy($field);
             if (!$courses[$one['name']]->count()) {
                 unset($courses[$one['name']]);
