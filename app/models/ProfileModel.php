@@ -104,8 +104,10 @@ class ProfileModel
      */
     function getDozentSeminars()
     {
-        $courses  = [];
-        $semester = array_reverse(SemesterData::GetSemesterArray());
+        $semester = $courses = array();
+        $semester[] = Semester::findNext();
+        $semester[] = Semester::findCurrent();
+        $semester[] = Semester::findByTimestamp(Semester::findCurrent()->beginn - 1);
         if (Config::get()->IMPORTANT_SEMNUMBER) {
             $field = 'veranstaltungsnummer';
         } else {
@@ -113,13 +115,13 @@ class ProfileModel
         }
         $allcourses = new SimpleCollection(Course::findBySQL("INNER JOIN seminar_user USING(Seminar_id) WHERE user_id=? AND seminar_user.status='dozent' AND seminare.visible=1", array($this->current_user->id)));
         foreach (array_filter($semester) as $one) {
-            $courses[$one['name']] =
+            $courses[$one->name] =
                 $allcourses->filter(function ($c) use ($one) {
-                    return $c->start_time <= $one['beginn'] &&
-                        ($one['beginn'] <= ($c->start_time + $c->duration_time) || ($c->duration_time == -1 && ($c->start_time >= $one['beginn'] && $c->start_time <= $one['ende'])));
+                    return $c->start_time <= $one->beginn &&
+                        ($one->beginn <= ($c->start_time + $c->duration_time) || $c->duration_time == -1);
                 })->orderBy($field);
-            if (!$courses[$one['name']]->count()) {
-                unset($courses[$one['name']]);
+            if (!$courses[$one->name]->count()) {
+                unset($courses[$one->name]);
             }
         }
         return $courses;
