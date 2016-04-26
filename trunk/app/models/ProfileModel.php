@@ -104,10 +104,8 @@ class ProfileModel
      */
     function getDozentSeminars()
     {
-        $semester = $courses = array();
-        $semester[] = Semester::findNext();
-        $semester[] = Semester::findCurrent();
-        $semester[] = Semester::findByTimestamp(Semester::findCurrent()->beginn - 1);
+        $courses = array();
+        $semester = array_reverse(Semester::getAll());
         if (Config::get()->IMPORTANT_SEMNUMBER) {
             $field = 'veranstaltungsnummer';
         } else {
@@ -117,8 +115,14 @@ class ProfileModel
         foreach (array_filter($semester) as $one) {
             $courses[$one->name] =
                 $allcourses->filter(function ($c) use ($one) {
-                    return $c->start_time <= $one->beginn &&
-                        ($one->beginn <= ($c->start_time + $c->duration_time) || $c->duration_time == -1);
+                    if($c->duration_time != -1) {
+                        return $c->start_time <= $one->beginn && ($one->beginn <= ($c->start_time + $c->duration_time));
+                    } else {
+                        if($one->getcurrent()) {
+                            return $c;
+                        }
+                    }
+
                 })->orderBy($field);
             if (!$courses[$one->name]->count()) {
                 unset($courses[$one->name]);
