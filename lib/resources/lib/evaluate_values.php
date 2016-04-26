@@ -651,12 +651,12 @@ if ($change_object_schedules) {
                                         $msg -> addMsg(22);
                                     }
                             break;
-                            case "w" : if ((($changeAssign->getRepeatEnd() - $changeAssign->getBegin()) / (60 * 60 * 24 *7) / $changeAssign->getRepeatInterval()) > 50) {
+                            case "w" : if ((($changeAssign->getRepeatEnd() - $changeAssign->getBegin()) / (60 * 60 * 24 *7) / $changeAssign->getRepeatInterval()) > 500) {
                                         $illegal_dates=TRUE;
                                         $msg -> addMsg(23);
                                     }
                             break;
-                            case "d" : if ((int)(($changeAssign->getRepeatEnd() - $changeAssign->getBegin()) / (60 * 60 * 24) / $changeAssign->getRepeatInterval()) > 100) {
+                            case "d" : if ((int)(($changeAssign->getRepeatEnd() - $changeAssign->getBegin()) / (60 * 60 * 24) / $changeAssign->getRepeatInterval()) > 1000) {
                                         $illegal_dates=TRUE;
                                         $msg -> addMsg(24);
                                     }
