@@ -73,6 +73,7 @@ $index_nobody_template = $GLOBALS['template_factory']->open('index_nobody');
 $cache = StudipCacheFactory::getCache();
 $stat = $cache->read('LOGINFORM_STATISTICS');
 if (!is_array($stat)) {
+    $stat = array();
     $stat['num_active_courses'] = Course::countBySQL();
     $stat['num_registered_users'] = User::countBySQL();
     $cache->write('LOGINFORM_STATISTICS', $stat, 3600);
