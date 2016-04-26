@@ -234,7 +234,7 @@ use Studip\Button,
                 <?=_("begrenzte Anzahl der Wiederholungen:")?><br>
                 <?
                 if (!$lockedAssign) :
-                    printf (_("max. %s Mal wiederholen"), "&nbsp;<input name=\"change_schedule_repeat_quantity\" value=\"".(($resAssign->getRepeatQuantity() != -1) ? $resAssign->getRepeatQuantity() : "")."\" size=\"2\" maxlength=\"2\">&nbsp;");
+                    printf (_("max. %s Mal wiederholen"), "&nbsp;<input name=\"change_schedule_repeat_quantity\" value=\"".(($resAssign->getRepeatQuantity() != -1) ? $resAssign->getRepeatQuantity() : "")."\" size=\"4\" maxlength=\"4\">&nbsp;");
                     if ($resAssign->getRepeatQuantity() == -1): ?>
                         <input type="hidden" name="change_schedule_repeat_quantity_infinity" value="TRUE">
                     <? endif; ?>
