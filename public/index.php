@@ -70,11 +70,15 @@ include 'lib/include/html_head.inc.php'; // Output of html head
 include 'lib/include/header.php';
 
 $index_nobody_template = $GLOBALS['template_factory']->open('index_nobody');
-
-$index_nobody_template->set_attributes(array(
-    'num_active_courses'   => count_table_rows('seminare'),
-    'num_registered_users' => count_table_rows('auth_user_md5'),
-    'num_online_users'     => get_users_online_count(10) // Should be the same value as in lib/navigation/CommunityNavigation.php
+$cache = StudipCacheFactory::getCache();
+$stat = $cache->read('LOGINFORM_STATISTICS');
+if (!is_array($stat)) {
+    $stat['num_active_courses'] = Course::countBySQL();
+    $stat['num_registered_users'] = User::countBySQL();
+    $cache->write('LOGINFORM_STATISTICS', $stat, 3600);
+}
+$index_nobody_template->set_attributes(array_merge($stat,
+    ['num_online_users'     => get_users_online_count(10)] // Should be the same value as in lib/navigation/CommunityNavigation.php
 ));
 
 if (Request::get('logout'))
