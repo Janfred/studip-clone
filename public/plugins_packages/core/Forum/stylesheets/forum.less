@@ -181,10 +181,13 @@ html.no-js #forum {
         margin: 0 0 0.75em 0;
         padding: 0;
         background-color: @forum_light;
-        display: flex;
         a {
             word-break: break-all;
         }
+    }
+
+    .real_posting {
+        display: flex;
     }
 
     @keyframes border-pulsate {
@@ -401,5 +404,15 @@ html.no-js #forum {
 
     li.selected {
         background-color: #DDDDFF;
+    }
+
+    #forum_new_entry {
+        display: flex;
+        flex-direction: row;
+        background-color: @forum_light;
+    }
+
+    div.posting.bg2 {
+        flex: 1;
     }
 }
