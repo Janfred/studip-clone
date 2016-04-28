@@ -115,6 +115,9 @@ class Course_DetailsController extends AuthenticatedController
                     $abo_msg = _("direkt zur Veranstaltung");
                 } else {
                     $abo_msg = _("Zugang zur Veranstaltung");
+                    if ($this->sem->admission_binding) {
+                        PageLayout::postMessage(MessageBox::info(_('Die Anmeldung ist verbindlich, Teilnehmende können sich nicht selbst austragen.')));
+                    }
                 }
                 $links->addLink($abo_msg,
                     URLHelper::getScriptLink("dispatch.php/course/enrolment/apply/" . $this->course->id), Icon::create('door-enter', 'clickable'),

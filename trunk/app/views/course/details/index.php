@@ -323,22 +323,29 @@
         </section>
     <? endif ?>
 
-    <? if ($course->admission_prelim == 1) : ?>
+    <? if ($course->admission_prelim == 1 || $course->admission_binding == 1) : ?>
         <section class="contentbox">
             <header>
                 <h1><?= _('Anmeldemodus') ?></h1>
             </header>
-            <section>
-                <p><?= _("Die Auswahl der Teilnehmenden wird nach der Eintragung manuell vorgenommen.") ?></p>
-                <? if ($course->admission_prelim_txt) : ?>
-                    <p><?= formatReady($course->admission_prelim_txt) ?></p>
-                <? else : ?>
-                        <p><?=
-                            _("Nutzer/-innen, die sich für diese Veranstaltung eintragen möchten,
-                    erhalten nähere Hinweise und können sich dann noch gegen eine Teilnahme entscheiden.")?>
-                        </p>
-                <? endif ?>
-            </section>
+            <? if ($course->admission_prelim == 1) : ?>
+                <section>
+                    <p><?= _("Die Auswahl der Teilnehmenden wird nach der Eintragung manuell vorgenommen.") ?></p>
+                    <? if ($course->admission_prelim_txt) : ?>
+                        <p><?= formatReady($course->admission_prelim_txt) ?></p>
+                    <? else : ?>
+                            <p><?=
+                                _("Nutzer/-innen, die sich für diese Veranstaltung eintragen möchten,
+                        erhalten nähere Hinweise und können sich dann noch gegen eine Teilnahme entscheiden.")?>
+                            </p>
+                    <? endif ?>
+                </section>
+            <? endif ?>
+            <? if ($course->admission_binding == 1) : ?>
+                <section>
+                    <p><?= _("Die Anmeldung ist verbindlich, Teilnehmende können sich nicht selbst austragen.") ?></p>
+                </section>
+            <? endif ?>
         </section>
     <? endif ?>
 
