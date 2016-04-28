@@ -54,10 +54,11 @@
                 <?= $this->render_partial('index/_smiley_favorites', array('textarea_id' => 'new_entry')) ?>
             </dt>
         </dl>
-        <?= $this->render_partial('index/_preview', array('preview_id' => 'new_entry_preview')) ?>
 
         <input type="hidden" name="parent" value="<?= $topic_id ?>">
         <input type="text" name="nixda" style="display: none;">
     </form>
+
+    <?= $this->render_partial('index/_preview', array('preview_id' => 'new_entry_preview')) ?>
     <br>
 </div>
