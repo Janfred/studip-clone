@@ -215,8 +215,8 @@ class Course_PlusController extends AuthenticatedController
         foreach (PluginEngine::getPlugins('StandardPlugin') as $plugin) {
 
             if ((!$this->sem_class && !$plugin->isCorePlugin())
-                || ($this->sem_class && !$this->sem_class->isModuleMandatory($plugin->getPluginname())
-                    && $this->sem_class->isModuleAllowed($plugin->getPluginname())
+                || ($this->sem_class && !$this->sem_class->isModuleMandatory(get_class($plugin))
+                    && $this->sem_class->isModuleAllowed(get_class($plugin))
                     && !$this->sem_class->isSlotModule(get_class($plugin)))
             ) {
 
