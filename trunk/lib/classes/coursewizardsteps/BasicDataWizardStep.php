@@ -165,7 +165,7 @@ class BasicDataWizardStep implements CourseWizardStep
             // Add your own default deputies if applicable.
             if ($deputies && Config::get()->DEPUTIES_DEFAULTENTRY_ENABLE) {
                 $values['deputies'] = array_merge($values['deputies'] ?: array(),
-                    array_keys(getDeputies($GLOBALS['user']->id)));
+                    array_flip(array_keys(getDeputies($GLOBALS['user']->id))));
             }
         }
         // Add lecturer from my courses filter.
@@ -174,7 +174,7 @@ class BasicDataWizardStep implements CourseWizardStep
             // Add this lecturer's default deputies if applicable.
             if ($deputies && Config::get()->DEPUTIES_DEFAULTENTRY_ENABLE) {
                 $values['deputies'] = array_merge($values['deputies'] ?: array(),
-                    array_keys(getDeputies($GLOBALS['user']->cfg->ADMIN_COURSES_TEACHERFILTER)));
+                    array_flip(array_keys(getDeputies($GLOBALS['user']->cfg->ADMIN_COURSES_TEACHERFILTER))));
             }
         }
         if (!$values['lecturers']) {
@@ -218,6 +218,10 @@ class BasicDataWizardStep implements CourseWizardStep
         $tpl->set_attribute('lsearch', $lsearch);
         $tpl->set_attribute('tsearch', $tsearch);
         $tpl->set_attribute('values', $values);
+        // AJAX URL needed for default deputy checking.
+        $tpl->set_attribute('ajax_url', $values['ajax_url'] ?: URLHelper::getLink('dispatch.php/course/wizard/ajax'));
+        $tpl->set_attribute('default_deputies_enabled',
+            ($deputies && Config::get()->DEPUTIES_DEFAULTENTRY_ENABLE) ? 1 : 0);
         return $tpl->render();
     }
 
@@ -247,6 +251,11 @@ class BasicDataWizardStep implements CourseWizardStep
             $values['lecturers'][Request::option('lecturer_id')] = true;
             unset($values['lecturer_id']);
             unset($values['lecturer_id_parameter']);
+            // Add default deputies if applicable.
+            if (Config::get()->DEPUTIES_ENABLE && Config::get()->DEPUTIES_DEFAULTENTRY_ENABLE) {
+                $values['deputies'] = array_merge($values['deputies'] ?: array(),
+                    array_flip(array_keys(Request::option('lecturer_id'))));
+            }
         }
         // Remove a lecturer.
         if ($remove = array_keys(Request::getArray('remove_lecturer'))) {
@@ -454,6 +463,29 @@ class BasicDataWizardStep implements CourseWizardStep
         }
         $values[__CLASS__] = $data;
         return $values;
+    }
+
+    /**
+     * Fetches the default deputies for a given person if the necessary
+     * config options are set.
+     * @param $user_id user whose default deputies to get
+     * @return Array Default deputy user_ids.
+     */
+    public function getDefaultDeputies($user_id)
+    {
+        if (Config::get()->DEPUTIES_ENABLE && Config::get()->DEPUTIES_DEFAULTENTRY_ENABLE) {
+            $deputies = getDeputies($user_id, 'full_rev_username');
+            $result = array();
+            foreach ($deputies as $d) {
+                $result[] = array(
+                    'id' => $d['user_id'],
+                    'name' => $d['fullname']
+                );
+            }
+            return $result;
+        } else {
+            return array();
+        }
     }
 
     public function getSearch($course_type, $institute_ids, $exclude_lecturers = array(),$exclude_tutors = array())

@@ -99,6 +99,8 @@ STUDIP.CourseWizard = {
     addLecturer: function(id, name)
     {
         STUDIP.CourseWizard.addPerson(id, name, 'lecturers', 'lecturer', 'wizard-lecturers', 'deputies');
+        // Add deputies if applicable.
+        STUDIP.CourseWizard.addDefaultDeputies(id);
     },
 
     /**
@@ -114,6 +116,33 @@ STUDIP.CourseWizard = {
     addTutor: function(id, name)
     {
         STUDIP.CourseWizard.addPerson(id, name, 'tutors', 'tutor', 'wizard-tutors', 'lecturers');
+    },
+
+    /**
+     * Adds the default deputies of given user to the course.
+     * @param id Stud.IP user ID
+     */
+    addDefaultDeputies: function(id)
+    {
+        var lecturerDiv = $('#wizard-lecturers');
+        if ($('input[name="deputy_id_parameter"]').length > 0 && lecturerDiv.data('default-enabled') == '1') {
+            var params = 'step=' + $('input[name="step"]').val() +
+                '&method=getDefaultDeputies' +
+                '&parameter[]=' + id;
+            $.ajax(
+                lecturerDiv.data('ajax-url'),
+                {
+                    data: params,
+                    success: function (data, status, xhr) {
+                        if (data.length > 0) {
+                            for (var i = 0 ; i < data.length ; i++) {
+                                STUDIP.CourseWizard.addDeputy(data[i].id, data[i].name);
+                            }
+                        }
+                    }
+                }
+            )
+        }
     },
 
     /**
