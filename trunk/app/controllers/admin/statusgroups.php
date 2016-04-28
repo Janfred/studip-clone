@@ -79,6 +79,10 @@ class Admin_StatusgroupsController extends AuthenticatedController
         $this->loadGroups();
 
         $this->membersOfInstitute = Institute::find($_SESSION['SessionSeminar'])->members->orderBy('nachname')->pluck('user_id');
+        $this->not_assigned = array_diff(
+            $this->membersOfInstitute,
+            GetAllSelected($_SESSION['SessionSeminar'])
+        );
 
         // Create multiperson search type
         $query = "SELECT auth_user_md5.user_id, CONCAT({$GLOBALS['_fullname_sql']['full']}, ' (', auth_user_md5.username, ')') as fullname

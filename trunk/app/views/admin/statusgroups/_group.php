@@ -31,6 +31,7 @@
                     ->setExecuteURL($controller->url_for("admin/statusgroups/memberAdd/{$group->id}"))
                     ->setSearchObject($searchType)
                     ->addQuickfilter(_("aktuelle Einrichtung"), $membersOfInstitute)
+                    ->addQuickfilter(_('Nicht zugeordnet'), $not_assigned)
                     ->render() ?>
             <a data-dialog="size=auto" title="<?= _('Gruppe löschen') ?>" href="<?= $controller->url_for("admin/statusgroups/deleteGroup/{$group->id}") ?>">
                 <?= Icon::create('trash', 'clickable', ['title' => _('Gruppe löschen')])->asImg() ?>
