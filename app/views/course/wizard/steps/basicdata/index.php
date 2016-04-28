@@ -103,7 +103,7 @@
     <?php if ($values['lecturer_id_parameter']) : ?>
         <?= Icon::create('arr_2down', 'sort')->asInput(["name" => 'add_lecturer', "value" => '1']) ?>
     <?php endif ?>
-    <div id="wizard-lecturers">
+    <div id="wizard-lecturers" data-ajax-url="<?= $ajax_url ?>" data-default-enabled="<?= $default_deputies_enabled ?>">
         <div class="description<?= count($values['lecturers']) ? '' : ' hidden-js' ?>">
             <?= _('bereits zugeordnet:') ?>
         </div>
