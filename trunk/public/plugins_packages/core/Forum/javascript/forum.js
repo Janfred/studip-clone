@@ -471,13 +471,18 @@ STUDIP.Forum = {
     },
 
     moveThreadDialog: function (topic_id) {
-        jQuery('tr[data-area-id=' + topic_id +'] td.areaentry').addClass('selected');
-        jQuery('#dialog_' + topic_id).dialog({
-            height: 400,
+        var element = jQuery('tr[data-area-id=' + topic_id +'] td.areaentry').addClass('selected'),
+            content = jQuery('#dialog_' + topic_id).html();
+
+        STUDIP.Dialog.show(content, {
+            title: 'Beitrag verschieben'.toLocaleString(),
             width: 400,
-            beforeClose: function() {
-                jQuery('tr[data-area-id=' + topic_id +'] td.areaentry').removeClass('selected');
-            }
+            height: 400,
+            origin: element
+        });
+
+        element.on('dialog-close', function () {
+            $(this).removeClass('selected').off('dialog-close');
         });
     },
 
