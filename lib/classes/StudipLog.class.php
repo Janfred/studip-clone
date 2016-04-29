@@ -30,18 +30,18 @@ class StudipLog
         $log_action_name = strtoupper($name);
         $log_action = LogAction::findByName($log_action_name);
         if ($log_action) {
-            return call_user_func_array('EventLog::log', $arguments);
+            return call_user_func_array('StudipLog::log', array_merge(array($log_action_name), $arguments));
         }
         throw new BadMethodCallException('Unknown method called: '
                 . $log_action_name);
     }
-    
+
     /**
     * Logs an event to the database after a certain action took place along with
     * the ids of the range object the action possibly affected. You can provide
     * additional info as well as debug information.
-    * 
-    * @param String $action_name     Name of the action that took place 
+    *
+    * @param String $action_name     Name of the action that took place
     * @param mixed  $affected   Range id that was affected by the action, if any
     * @param mixed  $coaffected Range id that was possibly affected as well
     * @param mixed  $info       Information to add to the event
@@ -55,7 +55,7 @@ class StudipLog
                 LogAction::findByName($action_name))->first();
         if (!$log_action) {
             // Action doesn't exist -> LOG_ERROR
-            $debug = sprintf('EventLog::log(%s,%s,%s,%s,%s) for user %s',
+            $debug = sprintf('StudipLog::log(%s,%s,%s,%s,%s) for user %s',
                     $log_action->name, $affected, $coaffected, $info,
                     $dbg_info, $user_id);
             self::log('LOG_ERROR', null, null, null, $debug);
@@ -78,14 +78,14 @@ class StudipLog
         }
         return false;
     }
-    
+
     /**
      * Registers a new log action in database.
      * Use this function to register log actions for Stud.IP core objects.
-     * 
+     *
      * @param string $name The name of the action.
      * @param string $description The action's description.
-     * @param string $info_template The template 
+     * @param string $info_template The template
      * @param string $class Name of the core class.
      */
     public static function registerAction($name, $description, $info_template,
@@ -99,14 +99,14 @@ class StudipLog
         $action->type = 'core';
         $action->store();
     }
-    
+
     /**
      * Registers a new log action in database.
      * Use this function to register log actions for plugin classes.
-     * 
+     *
      * @param string $name The name of the action.
      * @param string $description The action's description.
-     * @param string $info_template The template 
+     * @param string $info_template The template
      * @param string $plugin_class_name Name of the plugin class.
      */
     public static function registerActionPlugin($name, $description,
@@ -120,14 +120,14 @@ class StudipLog
         $action->type = 'plugin';
         $action->store();
     }
-    
+
     /**
      * Registers a new log action in database.
      * Use this function to register log actions for arbitrary objects.
-     * 
+     *
      * @param string $name The name of the action.
      * @param string $description The action's description.
-     * @param string $info_template The template 
+     * @param string $info_template The template
      * @param string $filename Path to the file with the class (relative
      * to Stud.IP root).
      * @param string $class Name of class to be logged.
@@ -150,11 +150,11 @@ class StudipLog
         $action->type = 'file';
         $action->store();
     }
-    
+
     /**
      * Removes the action from database.
      * Deletes all related log events also.
-     * 
+     *
      * @param string $name The name of the log action.
      * @return mixed Number of deleted objects or false if action is unknown.
      */
@@ -166,13 +166,13 @@ class StudipLog
         }
         return false;
     }
-    
+
     /**
      * Finds all seminars by given search string. Searches for the name of
      * existing or already deleted seminars.
-     * 
+     *
      * @param string $needle The needle to search for.
-     * @return array 
+     * @return array
      */
     public static function searchSeminar($needle)
     {
@@ -211,7 +211,7 @@ class StudipLog
     /**
      * Finds all institutes by given search string. Searches for the name of
      * existing or already deleted institutes.
-     * 
+     *
      * @param type $needle The needle to search for.
      * @return array
      */
@@ -244,7 +244,7 @@ class StudipLog
     /**
      * Finds all users by given search string. Searches for the users id,
      * part of the name or the username.
-     * 
+     *
      * @param type $needle The needle to search for.
      * @return array
      */
@@ -266,10 +266,10 @@ class StudipLog
         }
 
         // search for deleted users
-        // 
+        //
         // The name of the user is part of info field,
         // old id (still in DB) is in affected column.
-        // 
+        //
         // The log action "USER_DEL" was removed from the list of initially
         // registered log actions in the past.
         // Search for the user if it is still in database. If not, the search
@@ -288,11 +288,11 @@ class StudipLog
 
         return $result;
     }
-    
+
     /**
      * Finds all resources by given search string. The search string can be
      * either a resource id or part of the name.
-     * 
+     *
      * @param string $needle The needle to search for.
      * @return array
      */
@@ -310,14 +310,14 @@ class StudipLog
 
         return $result;
     }
-    
+
     /**
      * Finds all objects related to the given action by search string.
      * The search string can be either a part of the name or the id
      * of the object.
-     * 
+     *
      * Calls the method Loggable::logSearch() to retrieve the result.
-     * 
+     *
      * @param string $needle
      * @param type $action_id
      * @return type
@@ -325,7 +325,7 @@ class StudipLog
     public static function searchObjectByAction($needle, $action_id)
     {
         $action = LogAction::find($action_id);
-        
+
         if ($action) {
             switch ($action->type) {
                 case 'plugin':
