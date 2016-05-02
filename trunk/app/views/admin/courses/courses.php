@@ -170,16 +170,24 @@
             </td>
             <? if (in_array('number', $view_filter)) : ?>
                 <td>
-                    <a href="<?= URLHelper::getLink('seminar_main.php', array('auswahl' => $semid)) ?>">
+                    <? if ($GLOBALS['perm']->have_studip_perm("autor", $semid)) : ?>
+                        <a href="<?= URLHelper::getLink('seminar_main.php', array('auswahl' => $semid)) ?>">
+                    <? endif ?>
                         <?= htmlReady($values["VeranstaltungsNummer"]) ?>
-                    </a>
+                    <? if ($GLOBALS['perm']->have_studip_perm("autor", $semid)) : ?>
+                        </a>
+                    <? endif ?>
                 </td>
             <? endif ?>
             <? if (in_array('name', $view_filter)) : ?>
                 <td>
-                    <a href="<?= URLHelper::getLink('seminar_main.php', array('auswahl' => $semid)) ?>">
+                    <? if ($GLOBALS['perm']->have_studip_perm("autor", $semid)) : ?>
+                        <a href="<?= URLHelper::getLink('seminar_main.php', array('auswahl' => $semid)) ?>">
+                    <? endif ?>
                         <?= htmlReady(trim($values['Name'])) ?>
-                    </a>
+                    <? if ($GLOBALS['perm']->have_studip_perm("autor", $semid)) : ?>
+                        </a>
+                    <? endif ?>
                     <a data-dialog="buttons=false" href="<?= $controller->url_for(sprintf('course/details/index/%s', $semid)) ?>">
                         <? $params = tooltip2(_("Veranstaltungsdetails anzeigen")); ?>
                         <? $params['style'] = 'cursor: pointer'; ?>
@@ -253,29 +261,31 @@
             <? endif ?>
             <td style="text-align: right;" class="actions">
                 <? if ($actions[$selected_action]['multimode'] && is_numeric($selected_action)) : ?>
-                    <? switch ($selected_action) {
-                        case 8 :
-                            echo $this->render_partial('admin/courses/lock.php', compact('values', 'semid'));
-                            break;
-                        case 9:
-                            echo $this->render_partial('admin/courses/visibility.php', compact('values', 'semid'));
-                            break;
-                        case 10:
-                            echo $this->render_partial('admin/courses/aux-select.php', compact('values', 'semid'));
-                            break;
-                        case 16:
-                            echo $this->render_partial('admin/courses/add_to_archive', compact('values', 'semid'));
-                            break;
-                        case 17:
-                            echo $this->render_partial('admin/courses/admission_locked', compact('values', 'semid'));
-                            break;
-                    }?>
+                    <? if ($GLOBALS['perm']->have_studip_perm("tutor", $semid)) : ?>
+                        <? switch ($selected_action) {
+                            case 8 :
+                                echo $this->render_partial('admin/courses/lock.php', compact('values', 'semid'));
+                                break;
+                            case 9:
+                                echo $this->render_partial('admin/courses/visibility.php', compact('values', 'semid'));
+                                break;
+                            case 10:
+                                echo $this->render_partial('admin/courses/aux-select.php', compact('values', 'semid'));
+                                break;
+                            case 16:
+                                echo $this->render_partial('admin/courses/add_to_archive', compact('values', 'semid'));
+                                break;
+                            case 17:
+                                echo $this->render_partial('admin/courses/admission_locked', compact('values', 'semid'));
+                                break;
+                        } ?>
+                    <? endif ?>
                 <? elseif (!is_numeric($selected_action)) : ?>
                     <? $plugin = PluginManager::getInstance()->getPlugin($selected_action) ?>
                     <? $template = $plugin->getAdminCourseActionTemplate($semid, $values) ?>
                     <? if ($template) : ?>
                         <?= $template->render() ?>
-                    <? else : ?>
+                    <? elseif($GLOBALS['perm']->have_studip_perm("tutor", $semid)) : ?>
                         <?=
                         \Studip\LinkButton::create(
                             $actions[$selected_action]['title'],
@@ -284,7 +294,7 @@
                             ($actions[$selected_action]['attributes'] ? $actions[$selected_action]['attributes'] : array())
                         ) ?>
                     <? endif ?>
-                <? else : ?>
+                <? elseif($GLOBALS['perm']->have_studip_perm("tutor", $semid)) : ?>
                     <?=
                     \Studip\LinkButton::create(
                         $actions[$selected_action]['title'],
