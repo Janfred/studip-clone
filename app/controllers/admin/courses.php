@@ -37,10 +37,6 @@ class Admin_CoursesController extends AuthenticatedController
     {
         parent::before_filter($action, $args);
 
-        if (!$GLOBALS['perm']->have_perm('admin')) {
-            throw new AccessDeniedException();
-        }
-
         Navigation::activateItem('/browse/my_courses/list');
 
         // we are defintely not in an lecture or institute
@@ -297,31 +293,36 @@ class Admin_CoursesController extends AuthenticatedController
      */
     public function set_lockrule_action()
     {
+        if (!$GLOBALS['perm']->have_perm("admin")) {
+            throw new AccessDeniedException();
+        }
         $result = false;
         $courses = Request::getArray('lock_sem');
         $errors = array();
 
         if (!empty($courses)) {
             foreach ($courses as $course_id => $value) {
-                // force to pre selection
-                if (Request::get('lock_sem_all') && Request::submitted('all')) {
-                    $value = Request::get('lock_sem_all');
-                }
+                if ($GLOBALS['perm']->have_studip_perm("dozent", $course_id)) {
+                    // force to pre selection
+                    if (Request::get('lock_sem_all') && Request::submitted('all')) {
+                        $value = Request::get('lock_sem_all');
+                    }
 
-                $course = Course::find($course_id);
-                if ($value == 'none') {
-                    $value = null;
-                }
+                    $course = Course::find($course_id);
+                    if ($value == 'none') {
+                        $value = null;
+                    }
 
-                if ($course->lock_rule == $value) {
-                    continue;
-                }
+                    if ($course->lock_rule == $value) {
+                        continue;
+                    }
 
-                $course->setValue('lock_rule', $value);
-                if (!$course->store()) {
-                    $errors[] = $course->name;
-                } else {
-                    $result = true;
+                    $course->setValue('lock_rule', $value);
+                    if (!$course->store()) {
+                        $errors[] = $course->name;
+                    } else {
+                        $result = true;
+                    }
                 }
             }
 
@@ -348,28 +349,30 @@ class Admin_CoursesController extends AuthenticatedController
         $course_set_id = CourseSet::getGlobalLockedAdmissionSetId();
 
         foreach($all_courses as $course_id){
-            $set = CourseSet::getSetForCourse($course_id);
+            if ($GLOBALS['perm']->have_studip_perm("dozent", $course_id)) {
+                $set = CourseSet::getSetForCourse($course_id);
 
-            if(!is_null($set)) {
-                if(!$set->hasAdmissionRule('LockedAdmission')) {
-                    continue;
-                }
+                if (!is_null($set)) {
+                    if (!$set->hasAdmissionRule('LockedAdmission')) {
+                        continue;
+                    }
 
-                if($set->hasAdmissionRule('LockedAdmission') && !isset($admission_locked[$course_id])) {
-                    if(CourseSet::removeCourseFromSet($set->getId(), $course_id)) {
-                        $log_msg = _('Veranstaltung wurde entsperrt');
+                    if ($set->hasAdmissionRule('LockedAdmission') && !isset($admission_locked[$course_id])) {
+                        if (CourseSet::removeCourseFromSet($set->getId(), $course_id)) {
+                            $log_msg = _('Veranstaltung wurde entsperrt');
+                        }
                     }
                 }
-            }
 
-            if(is_null($set) && isset($admission_locked[$course_id])) {
-                if(CourseSet::addCourseToSet($course_set_id, $course_id)) {
-                    $log_msg = sprintf(_('Veranstaltung wurde gesperrt, set_id: %s'), $course_set_id);
+                if (is_null($set) && isset($admission_locked[$course_id])) {
+                    if (CourseSet::addCourseToSet($course_set_id, $course_id)) {
+                        $log_msg = sprintf(_('Veranstaltung wurde gesperrt, set_id: %s'), $course_set_id);
+                    }
                 }
-            }
 
-            if ($log_msg) {
-                StudipLog::log('SEM_CHANGED_ACCESS', $course_id, NULL, $log_msg);
+                if ($log_msg) {
+                    StudipLog::log('SEM_CHANGED_ACCESS', $course_id, NULL, $log_msg);
+                }
             }
         }
 
@@ -390,20 +393,22 @@ class Admin_CoursesController extends AuthenticatedController
 
         if (!empty($all_courses)) {
             foreach ($all_courses as $course_id) {
-                $course = Course::find($course_id);
+                if ($GLOBALS['perm']->have_studip_perm('tutor', $course_id)) {
+                    $course = Course::find($course_id);
 
-                $visibility = isset($visibilites[$course_id]) ? 1 : 0;
+                    $visibility = isset($visibilites[$course_id]) ? 1 : 0;
 
-                if ((int)$course->visible == $visibility) {
-                    continue;
-                }
+                    if ((int)$course->visible == $visibility) {
+                        continue;
+                    }
 
-                $course->setValue('visible', $visibility);
-                if (!$course->store()) {
-                    $errors[] = $course->name;
-                } else {
-                    $result = true;
-                    StudipLog::log($visibility ? 'SEM_VISIBLE' : 'SEM_INVISIBLE', $course->id);
+                    $course->setValue('visible', $visibility);
+                    if (!$course->store()) {
+                        $errors[] = $course->name;
+                    } else {
+                        $result = true;
+                        StudipLog::log($visibility ? 'SEM_VISIBLE' : 'SEM_INVISIBLE', $course->id);
+                    }
                 }
             }
 
@@ -429,28 +434,30 @@ class Admin_CoursesController extends AuthenticatedController
         $errors = array();
         if (!empty($courses)) {
             foreach ($courses as $course_id => $value) {
-                // force to pre selection
-                if (Request::submitted('all')) {
-                    $value = Request::get('lock_sem_all');
-                    $value_forced = Request::int('aux_all_forced');
-                } else {
-                    $value_forced = $lock_sem_forced[$course_id];
-                }
+                if ($GLOBALS['perm']->have_studip_perm('tutor', $course_id)) {
+                    // force to pre selection
+                    if (Request::submitted('all')) {
+                        $value = Request::get('lock_sem_all');
+                        $value_forced = Request::int('aux_all_forced');
+                    } else {
+                        $value_forced = $lock_sem_forced[$course_id];
+                    }
 
-                $course = Course::find($course_id);
+                    $course = Course::find($course_id);
 
-                if (!$value) {
-                    $value_forced = 0;
-                }
+                    if (!$value) {
+                        $value_forced = 0;
+                    }
 
-                $course->setValue('aux_lock_rule', $value);
-                $course->setValue('aux_lock_rule_forced', $value_forced);
+                    $course->setValue('aux_lock_rule', $value);
+                    $course->setValue('aux_lock_rule_forced', $value_forced);
 
-                $ok = $course->store();
-                if ($ok === false) {
-                    $errors[] = $course->name;
-                } elseif ($ok) {
-                    $result = true;
+                    $ok = $course->store();
+                    if ($ok === false) {
+                        $errors[] = $course->name;
+                    } elseif ($ok) {
+                        $result = true;
+                    }
                 }
             }
 
@@ -519,6 +526,9 @@ class Admin_CoursesController extends AuthenticatedController
      */
     public function toggle_complete_action($course_id)
     {
+        if (!$GLOBALS['perm']->have_studip_perm('tutor', $course_id)) {
+            throw new AccessDeniedException();
+        }
         $course = Course::find($course_id);
         $course->is_complete = !$course->is_complete;
         $course->store();
@@ -611,6 +621,16 @@ class Admin_CoursesController extends AuthenticatedController
                 'attributes' => ['data-dialog' => 'size=400'],
             ),
         );
+        if (!$GLOBALS['perm']->have_perm("admin")) {
+            unset($actions[8]);
+            if (!get_config('ALLOW_DOZENT_ARCHIV')) {
+                unset($actions[16]);
+            }
+        }
+        if (!$GLOBALS['perm']->have_perm("dozent")) {
+            unset($actions[11]);
+            unset($actions[16]);
+        }
 
         if (Config::get()->RESOURCES_ENABLE && Config::get()->RESOURCES_ALLOW_ROOM_REQUESTS) {
             $actions[4] = array(
@@ -800,7 +820,7 @@ class Admin_CoursesController extends AuthenticatedController
         $sidebar = Sidebar::Get();
         $list = new SelectWidget(_('Einrichtung'), $this->url_for('admin/courses/set_selection'), 'institute');
 
-        if ($GLOBALS['perm']->have_perm('root') || ($GLOBALS['perm']->have_perm('admin') && count($this->insts) > 1)) {
+        if ($GLOBALS['perm']->have_perm('root') || (count($this->insts) > 1)) {
             $list->addElement(new SelectElement(
                 'all',
                 $GLOBALS['perm']->have_perm('root') ? _('Alle') : _("Alle meine Einrichtungen"),
