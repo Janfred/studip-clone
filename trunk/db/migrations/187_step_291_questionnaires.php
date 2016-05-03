@@ -25,7 +25,7 @@ class Step291Questionnaires extends Migration
                 `mkdate` bigint(20) NOT NULL,
                 PRIMARY KEY (`questionnaire_id`),
                 KEY `user_id` (`user_id`)
-            )
+            ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC
         ");
         DBManager::get()->exec("
             CREATE TABLE IF NOT EXISTS `questionnaire_questions` (
@@ -38,7 +38,7 @@ class Step291Questionnaires extends Migration
                 `mkdate` bigint(20) NOT NULL,
                 PRIMARY KEY (`question_id`),
                 KEY `questionnaire_id` (`questionnaire_id`)
-            )
+            ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC
         ");
         DBManager::get()->exec("
             CREATE TABLE IF NOT EXISTS `questionnaire_assignments` (
@@ -53,7 +53,7 @@ class Step291Questionnaires extends Migration
                 KEY `questionnaire_id` (`questionnaire_id`),
                 KEY `range_id_range_type` (`range_id`,`range_type`),
                 KEY `user_id` (`user_id`)
-            )
+            ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC
         ");
         DBManager::get()->exec("
             CREATE TABLE IF NOT EXISTS `questionnaire_answers` (
@@ -66,7 +66,7 @@ class Step291Questionnaires extends Migration
                 PRIMARY KEY (`answer_id`),
                 KEY `question_id` (`question_id`),
                 KEY `user_id` (`user_id`)
-            )
+            ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC
         ");
         DBManager::get()->exec("
             CREATE TABLE IF NOT EXISTS `questionnaire_anonymous_answers` (
@@ -79,7 +79,7 @@ class Step291Questionnaires extends Migration
                 KEY `questionnaire_id` (`questionnaire_id`),
                 UNIQUE KEY `questionnaire_id_user_id` (`questionnaire_id`,`user_id`),
                 KEY `user_id` (`user_id`)
-            )
+            ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC
         ");
 
         //now import old data into new tables:

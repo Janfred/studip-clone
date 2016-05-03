@@ -142,7 +142,7 @@ class StEP00294InnoDB extends Migration
 
         // InnoDB not enabled, do nothing but show a message.
         } else {
-            $this->announce('The storage engine InnoDB is not enabled in your '.
+           throw new Exception('Migration 186: The storage engine InnoDB is not enabled in your '.
                 'database installation, tables cannot be converted.');
         }
 
