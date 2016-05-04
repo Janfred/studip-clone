@@ -301,17 +301,19 @@ function get_obj_clause($table_name, $range_field, $count_field, $if_clause,
     }
 
     return "SELECT " . ($add_fields ? $add_fields . ", " : "" ) . " my.object_id, COUNT($count_field) as count, COUNT(IF($if_clause, $count_field, NULL)) AS neue,
-    MAX(IF($if_clause, $max_field, 0)) AS last_modified FROM myobj_{$user_id} my INNER JOIN $table_name LEFT JOIN object_user_visits b ON (b.object_id = $object_field AND b.user_id = '$user_id' AND b.type $type_sql)
+    MAX(IF($if_clause, $max_field, 0)) AS last_modified
+    FROM myobj_{$user_id} my
+    INNER JOIN $table_name
+    LEFT JOIN object_user_visits b ON (b.object_id = $object_field AND b.user_id = '$user_id' AND b.type $type_sql)
     GROUP BY my.object_id ORDER BY NULL";
 }
 
 /**
  *
- * @param unknown_type $my_obj
- * @param unknown_type $user_id
- * @param unknown_type $modules
+ * @param array $my_obj : array of seminare-objects with index of seminar_id
+ * @param string $user_id
  */
-function get_my_obj_values (&$my_obj, $user_id, $modules = NULL)
+function get_my_obj_values (&$my_obj, $user_id)
 {
     $threshold = ($config = Config::get()->NEW_INDICATOR_THRESHOLD) ? strtotime("-{$config} days 0:00:00") : 0;
 
@@ -517,14 +519,33 @@ function get_my_obj_values (&$my_obj, $user_id, $modules = NULL)
 
     //Umfragen
     if (get_config('VOTE_ENABLE')) {
-        $db2->query(get_obj_clause('vote a','range_id','vote_id',"(chdate > IFNULL(b.visitdate, $threshold) AND a.author_id !='$user_id' AND a.state != 'stopvis')",
-                                    'vote', false , " AND a.state IN('active','stopvis')",'vote_id', $user_id));
-        while($db2->next_record()) {
-            $object_id = $db2->f('object_id');
-            $my_obj[$object_id]["neuevotes"] = $db2->f("neue");
-            $my_obj[$object_id]["votes"] = $db2->f("count");
-            if ($my_obj[$object_id]['last_modified'] < $db2->f('last_modified')){
-                $my_obj[$object_id]['last_modified'] = $db2->f('last_modified');
+        $statement = DBManager::get()->prepare("
+            SELECT my.object_id,
+                   COUNT(questionnaires.questionnaire_id) as count,
+                   COUNT(IF(questionnaires.startdate < UNIX_TIMESTAMP()
+                        AND (questionnaire.stopdate IS NULL OR questionnaire.stopdate > UNIX_TIMESTAMP())
+                        AND questionnaires.chdate IFNULL(b.visitdate, :threshold), questionnaires.questionnaire_id, NULL)) AS neue,
+                   MAX(IF(IF(questionnaires.startdate < UNIX_TIMESTAMP()
+                        AND (questionnaire.stopdate IS NULL OR questionnaire.stopdate > UNIX_TIMESTAMP())
+                        AND questionnaires.chdate IFNULL(b.visitdate, :threshold, chdate, 0)) AS last_modified
+            FROM questionnaires
+                INNER JOIN questionnaire_assign USING (questionnaire_id)
+                INNER JOIN `myobj_".$user_id."` AS my ON (my.object_id = questionnaire_assign.range_id AND questionnaire_assign.range_type = 'course')
+                LEFT JOIN object_user_visits b ON (b.object_id = questionnaires.questionnaire_id AND b.user_id = :user_id AND b.type 'vote')
+            WHERE questionnaires.visible = '1'
+            GROUP BY my.object_id ORDER BY NULL
+        ");
+        $statement->execute(array(
+            'user_id' => $user_id,
+            'treshold' => $threshold
+        ));
+
+        while($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+            $object_id = $row['object_id'];
+            $my_obj[$object_id]["neuevotes"] = $row["neue"];
+            $my_obj[$object_id]["votes"] = $row["count"];
+            if ($my_obj[$object_id]['last_modified'] < $row['last_modified']){
+                $my_obj[$object_id]['last_modified'] = $row['last_modified'];
             }
         }
 
@@ -543,10 +564,10 @@ function get_my_obj_values (&$my_obj, $user_id, $modules = NULL)
             $nav = new Navigation('vote', '#vote');
 
             if ($my_obj[$object_id]['neuevotes']) {
-                $nav->setImage(Icon::create('vote+new', 'attention', ["title" => sprintf(_('%s Umfrage(n), %s neue'),$my_obj[$object_id]['votes'],$my_obj[$object_id]['neuevotes'])]));
+                $nav->setImage(Icon::create('vote+new', 'attention', ["title" => sprintf(_('%s Fragebögen, %s neue'),$my_obj[$object_id]['votes'],$my_obj[$object_id]['neuevotes'])]));
                 $nav->setBadgeNumber($my_obj[$object_id]['neuevotes']);
             } else if ($my_obj[$object_id]['votes']) {
-                $nav->setImage(Icon::create('vote', 'inactive', ["title" => sprintf(_('%s Umfrage(n)'),$my_obj[$object_id]['votes'])]));
+                $nav->setImage(Icon::create('vote', 'inactive', ["title" => sprintf(_('%s Fragebögen'),$my_obj[$object_id]['votes'])]));
             }
 
             $my_obj[$object_id]['vote'] = $nav;
