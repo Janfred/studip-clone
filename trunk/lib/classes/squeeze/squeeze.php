@@ -57,6 +57,7 @@ namespace Studip\Squeeze {
                         $contents = file_get_contents($src);
                         if ($compress) {
                             $contents = $compressor->callCompressor($contents, 'css');
+                            $contents = preg_replace('/\s*\+\s*/', ' + ', $contents);
                         }
                         file_put_contents($dest, $contents);
                     }
