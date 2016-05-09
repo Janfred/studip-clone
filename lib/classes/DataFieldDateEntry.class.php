@@ -29,9 +29,11 @@ class DataFieldDateEntry extends DataFieldEntry
      */
     public function setValueFromSubmit($value)
     {
-        if (is_array($value) && count(array_filter($value)) === 3) {
-            $value = implode('-', array_reverse($value));
-            parent::setValueFromSubmit($value);
+        if (is_array($value)) {
+            $value = array_reverse($value);
+            $value = array_filter($value);
+            $date  = implode('-', $value);
+            parent::setValueFromSubmit($date);
         }
     }
 

@@ -317,6 +317,10 @@ class Settings_StatusgruppenController extends Settings_SettingsController
      */
     public function store_action($type, $id)
     {
+        $changed = false;
+        $success = [];
+        $errors  = [];
+
         if ($type === 'institute') {
             if ($status = Request::option('status')) {
                 $query = "SELECT inst_perms FROM user_inst WHERE user_id = ? AND Institut_id = ?";
@@ -335,7 +339,7 @@ class Settings_StatusgruppenController extends Settings_SettingsController
 
                     log_event('INST_USER_STATUS', $id, $this->user->user_id, $perms .' -> '. $status);
 
-                    $this->reportSuccess(_('Der Status wurde geändert!'));
+                    $success[] = _('Der Status wurde geändert!');
                 }
             }
 
@@ -353,7 +357,11 @@ class Settings_StatusgruppenController extends Settings_SettingsController
                     $this->user->user_id
                 ));
                 if ($statement->rowCount() > 0) {
-                    $this->reportSuccess(_('Ihre Daten an der Einrichtung %s wurden geändert.'), Request::get('name'));
+                    $changed = true;
+                    $success[] = sprintf(
+                        _('Ihre Daten an der Einrichtung %s wurden geändert.'),
+                        Request::get('name')
+                    );
 
                     setTempLanguage($this->user->user_id);
                     $this->postPrivateMessage(_("Ihre Daten an der Einrichtung %s wurden geändert.\n"), Request::get('name'));
@@ -380,14 +388,19 @@ class Settings_StatusgruppenController extends Settings_SettingsController
         }
         if (in_array($type, words('institute role'))) {
             if ($datafields = Request::getArray('datafields')) {
-                $errors = array();
-
                 foreach ($datafields as $key => $value) {
                     $struct = new DataField($key);
                     $entry  = DataFieldEntry::createDataFieldEntry($struct, array($this->user->user_id, $id));
                     $entry->setValueFromSubmit($value);
+
                     if ($entry->isValid()) {
-                        $entry->store();
+                        if ($entry->store() && !$changed && $type === 'institute') {
+                            $changed = true;
+                            $success[] = sprintf(
+                                _('Ihre Daten an der Einrichtung %s wurden geändert'),
+                                Institute::find($id)->name
+                            );
+                        }
                     } else {
                         $errors[] = sprintf(_('Fehlerhafter Eintrag im Feld <em>%s</em>: %s (Eintrag wurde nicht gespeichert)'),
                                             $entry->getName(),
@@ -395,11 +408,36 @@ class Settings_StatusgruppenController extends Settings_SettingsController
                     }
                 }
             }
-
-            if (!empty($errors)) {
-                $this->reportErrorWithDetails(_('Bitte überprüfen Sie Ihre Eingabe.'), $errors);
-            }
         }
+
+        // Output messages
+        $message = [];
+        $details = [];
+        $type    = 'Success';
+
+        if (count($success) > 0) {
+            $message[] = implode('<br>', $success);
+
+            if (count($errors) > 0) {
+                $message[] = '';
+                $message[] = _('Bei der Verarbeitung sind allerdings folgende Fehler aufgetreten');
+                $details = $errors;
+                $type = 'Info';
+            }
+        }  elseif (count($errors) === 1) {
+            $message = $errors;
+            $type = 'Error';
+        } elseif (count($errors) > 0) {
+            $message = _('Fehler bei der Speicherung Ihrer Daten. Bitte überprüfen Sie Ihre Angaben.');
+        }
+
+        if (count($message) > 0) {
+            call_user_func_array([$this, "report{$type}WithDetails"], [
+                implode('<br>', $message),
+                $details
+            ]);
+        }
+
         $this->redirect('settings/statusgruppen#' . $id);
     }
 }
