@@ -9,7 +9,7 @@ use Studip\Button, Studip\LinkButton;
     <?= MessageBox::info($flash['info']) ?>
 <? endif ?>
 
-<form action="<?= $controller->url_for('admin/specification/edit') ?><?= ($rule) ? '/' . $rule['lock_id'] : '' ?>" method="post">
+<form action="<?= $controller->url_for('admin/specification/edit'.(($rule) ? '/' . $rule['lock_id'] : '')) ?>" method="post">
     <?= CSRFProtection::tokenTag() ?>
     <table class="nohover default">
     <caption>
