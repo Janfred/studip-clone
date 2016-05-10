@@ -422,7 +422,7 @@ class Settings_StatusgruppenController extends Settings_SettingsController
                 $message[] = '';
                 $message[] = _('Bei der Verarbeitung sind allerdings folgende Fehler aufgetreten');
                 $details = $errors;
-                $type = 'Info';
+                $type = 'Warning';
             }
         }  elseif (count($errors) === 1) {
             $message = $errors;
@@ -438,6 +438,6 @@ class Settings_StatusgruppenController extends Settings_SettingsController
             ]);
         }
 
-        $this->redirect('settings/statusgruppen#' . $id);
+        $this->redirect('settings/statusgruppen');
     }
 }
