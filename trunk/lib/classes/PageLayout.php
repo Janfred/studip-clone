@@ -505,7 +505,7 @@ class PageLayout
      * @param bool   $close_details Show the details closed (optional,
      *                              defaults to false)
      */
-    public static function postSuccess($message, $details = array(), $close_details = false)
+    public static function postSuccess($message, $details = [], $close_details = false)
     {
         self::postMessage(MessageBox::success($message, $details, $close_details));
     }
@@ -518,7 +518,7 @@ class PageLayout
      * @param bool   $close_details Show the details closed (optional,
      *                              defaults to false)
      */
-    public static function postError($message, $details = array(), $close_details = false)
+    public static function postError($message, $details = [], $close_details = false)
     {
         self::postMessage(MessageBox::error($message, $details, $close_details));
     }
@@ -531,9 +531,22 @@ class PageLayout
      * @param bool   $close_details Show the details closed (optional,
      *                              defaults to false)
      */
-    public static function postInfo($message, $details = array(), $close_details = false)
+    public static function postInfo($message, $details = [], $close_details = false)
     {
         self::postMessage(MessageBox::info($message, $details, $close_details));
+    }
+
+    /**
+     * Convenience method: Post a warning message box.
+     *
+     * @param String $message       Warning message to diplay
+     * @param Array  $details       Additional details (optional)
+     * @param bool   $close_details Show the details closed (optional,
+     *                              defaults to false)
+     */
+    public static function postWarning($message, $details = [], $close_details = false)
+    {
+        self::postMessage(MessageBox::warning($message, $details, $close_details));
     }
 
     /**
@@ -544,7 +557,7 @@ class PageLayout
      * @param bool   $close_details Show the details closed (optional,
      *                              defaults to false)
      */
-    public static function postException($message, $details = array(), $close_details = false)
+    public static function postException($message, $details = [], $close_details = false)
     {
         self::postMessage(MessageBox::exception($message, $details, $close_details));
     }
