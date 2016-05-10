@@ -95,8 +95,8 @@ class MessageBox
     }
 
     /**
-     * This function returns an info message box. Use it to report neutral
-     * informations.
+     * This function returns a warning message box. Use it to report potentially
+     * wrong behaviour.
      *
      * @param string $message
      * @param array() $details (optional)
