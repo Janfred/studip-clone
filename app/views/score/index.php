@@ -51,9 +51,11 @@
             // News
             if ($news = $person['newscount']) {
                 $tmp = sprintf(ngettext('Eine persönliche Ankündigung', '%s persönliche Ankündigungen', $news), $news);
-                $content .= sprintf('<a href="%s">%s</a> ',
-                                    URLHelper::getLink('dispatch.php/profile', compact('username')),
-                                    Icon::create('news', 'clickable', ['title' => $tmp])->asImg());
+                $content .= sprintf(
+                    '<a href="%s">%s</a> ',
+                    URLHelper::getLink('dispatch.php/profile?username=' . $person['username']),
+                    Icon::create('news', 'clickable', ['title' => $tmp])->asImg()
+                );
             } else {
                 $content .= Assets::img('blank.gif', array('width' => 16)) . ' ';
             }
@@ -61,9 +63,11 @@
             // Votes
             if ($vote = $person['votecount']) {
                 $tmp = sprintf(ngettext('Eine Umfrage', '%s Umfragen', $vote), $vote);
-                $content .= sprintf('<a href="%s">%s</a> ',
-                                    URLHelper::getLink('dispatch.php/profile', compact('username')),
-                                    Icon::create('vote', 'clickable', ['title' => $tmp])->asImg());
+                $content .= sprintf(
+                    '<a href="%s">%s</a> ',
+                    URLHelper::getLink('dispatch.php/profile?username=' . $person['username'] . '#questionnaire_area'),
+                    Icon::create('vote', 'clickable', ['title' => $tmp])->asImg()
+                );
             } else {
                 $content .= Assets::img('blank.gif', array('width' => 16)) . ' ';
             }
@@ -71,9 +75,11 @@
             // Termine
             if ($termin = $person['eventcount']) {
                 $tmp = sprintf(ngettext('Ein Termin', '%s Termine', $termin), $termin);
-                $content .= sprintf('<a href="%s">%s</a> ',
-                                    URLHelper::getLink('dispatch.php/profile#a', compact('username')),
-                                    Icon::create('schedule', 'clickable', ['title' => $tmp])->asImg());
+                $content .= sprintf(
+                    '<a href="%s">%s</a> ',
+                    URLHelper::getLink('dispatch.php/profile?username=' . $person['username'] . '#a'),
+                    Icon::create('schedule', 'clickable', ['title' => $tmp])->asImg()
+                );
             } else {
                 $content .= Assets::img('blank.gif', array('width' => 16)) . ' ';
             }
@@ -81,9 +87,11 @@
             // Literaturangaben
             if ($lit = $person['litcount']) {
                 $tmp = sprintf(ngettext('Eine Literaturangabe', '%s Literaturangaben', $lit), $lit);
-                $content .= sprintf('<a href="%s">%s</a> ',
-                                    URLHelper::getLink('dispatch.php/profile', compact('username')),
-                                    Icon::create('literature', 'clickable', ['title' => $tmp])->asImg());
+                $content .= sprintf(
+                    '<a href="%s">%s</a> ',
+                    URLHelper::getLink('dispatch.php/profile?username=' . $person['username']),
+                    Icon::create('literature', 'clickable', ['title' => $tmp])->asImg()
+                );
             } else {
                 $content .= Assets::img('blank.gif', array('width' => 16)) . ' ';
             }
