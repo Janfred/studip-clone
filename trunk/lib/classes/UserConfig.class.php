@@ -200,7 +200,6 @@ class UserConfig extends Config
      */
     function store($field, $value)
     {
-
         $entry = UserConfigEntry::findByFieldAndUser($field, $this->user_id);
         if($entry === null) {
             $entry = new UserConfigEntry();
@@ -208,8 +207,15 @@ class UserConfig extends Config
             $entry->field = $field;
             $entry->comment = '';
         }
-        $metadata = Config::get()->getMetadata($field);
 
+        // Check if entry is default and if so, delete it
+        if (Config::get()->getValue($field) === $value) {
+            $entry->delete();
+            return 1;
+        }
+
+        // Otherwise convert it to an appropriate format and store it
+        $metadata = Config::get()->getMetadata($field);
         switch ($metadata['type']) {
             case 'integer':
             case 'boolean':
