@@ -240,7 +240,7 @@ class Settings_SettingsController extends AuthenticatedController
      */
     public function __call($method, $arguments)
     {
-        if (preg_match('/^report(Error|Info|Success)(WithDetails)?$/', $method, $match)) {
+        if (preg_match('/^report(Error|Warning|Info|Success)(WithDetails)?$/', $method, $match)) {
             $hash    = md5($method . serialize($arguments));
             $type    = strtolower($match[1]);
             $details = empty($match[2]) ? false : array_pop($arguments);
