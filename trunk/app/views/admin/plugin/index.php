@@ -136,17 +136,30 @@ $sidebar = Sidebar::Get();
 $sidebar->setTitle(_('Plugins'));
 $sidebar->setImage('sidebar/plugin-sidebar.png');
 
-
-
 if (get_config('PLUGINS_UPLOAD_ENABLE')) {
     $actions = new ActionsWidget();
     $actions->addLink(_('Weitere Plugins installieren'), $controller->url_for('admin/plugin/search'), Icon::create('add', 'clickable'));
     $actions->addLink(_('Plugin von URL installieren'), $controller->url_for('admin/plugin/edit_automaticupdate'), Icon::create('download', 'clickable'), array('data-dialog' => "true"));
+    $actions->addElement(new WidgetElement($this->render_partial('admin/plugin/upload-drag-and-drop')));
     $sidebar->addWidget($actions);
-
-    $widget = new SidebarWidget();
-    $widget->setTitle(_('Weitere Plugins installieren'));
-    $widget->addElement(new WidgetElement($this->render_partial('admin/plugin/upload-drag-and-drop')));
-    $sidebar->addWidget($widget);
 }
 
+$widget = new OptionsWidget();
+$widget->setTitle(_('Darstellungseinstellungen'));
+$widget->addSelect(_('Darstellung einschränken'), $controller->url_for('admin/plugin'), 'plugin_filter', array_merge(
+    ['' => _('Alle Plugin-Typen anzeigen')],
+    array_combine($plugin_types, $plugin_types)
+), $plugin_filter);
+$widget->addRadioButton(_('Alle Plugins anzeigen'), $controller->url_for('admin/plugin?core_filter=yes'), ($core_filter ?: 'yes') === 'yes');
+$widget->addRadioButton(_('Kern-Plugins ausblenden'), $controller->url_for('admin/plugin?core_filter=no'), $core_filter === 'no');
+$widget->addRadioButton(_('Nur Kern-Plugins anzeigen'), $controller->url_for('admin/plugin?core_filter=only'), $core_filter === 'only');
+if ($plugin_filter || ($core_filter ?: 'yes') !== 'yes') {
+    $widget->addElement(new WidgetElement('<hr>'));
+    $widget->addElement(new LinkElement(
+        _('Zurücksetzen'),
+        $controller->url_for('admin/plugin?reset_filter=1'),
+        Icon::create('refresh', 'clickable'),
+        ['class' => 'options-radio']
+    ));
+}
+$sidebar->addWidget($widget);

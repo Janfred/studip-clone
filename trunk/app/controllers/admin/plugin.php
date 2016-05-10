@@ -37,6 +37,23 @@ class Admin_PluginController extends AuthenticatedController
         Navigation::activateItem('/admin/config/plugins');
 
         $this->plugin_admin = new PluginAdministration();
+
+        // Extract display settings
+        $settings = $current = $GLOBALS['user']->cfg->PLUGINADMIN_DISPLAY_SETTINGS;
+        if (Request::int('reset_filter')) {
+            $settings = Config::get()->PLUGINADMIN_DISPLAY_SETTINGS;
+        } else {
+            foreach ($settings as $key => $value) {
+                $settings[$key] = Request::option($key, $settings[$key]) ?: null;
+            }
+        }
+
+        if ($settings !== $current) {
+            $GLOBALS['user']->cfg->store('PLUGINADMIN_DISPLAY_SETTINGS', $settings);
+        }
+
+        $this->plugin_filter = $settings['plugin_filter'];
+        $this->core_filter   = $settings['core_filter'];
     }
 
     /**
@@ -88,17 +105,24 @@ class Admin_PluginController extends AuthenticatedController
     {
         $plugin_manager = PluginManager::getInstance();
         $plugin_filter = Request::option('plugin_filter', '');
-        $type = $plugin_filter != '' ? $plugin_filter : NULL;
 
-        $this->plugins       = $plugin_manager->getPluginInfos($type);
+        $plugins = $plugin_manager->getPluginInfos($this->plugin_filter);
+
+        if ($this->core_filter && $this->core_filter !== 'yes') {
+            $plugins = array_filter($plugins, function ($plugin) {
+                return ($this->core_filter === 'no' && !$plugin['core'])
+                    || ($this->core_filter === 'only' && $plugin['core']);
+            });
+        }
+
+        $this->plugins       = $plugins;
         $this->plugin_types  = $this->plugin_admin->getPluginTypes();
         $this->update_info   = $this->get_update_info($this->plugins);
-        $this->plugin_filter = $plugin_filter;
         $this->migrations    = $this->plugin_admin->getMigrationInfo();
 
         foreach ($this->update_info as $id => $info) {
             if (isset($info['update']) && !$this->plugins[$id]['depends']) {
-                ++$this->num_updates;
+                $this->num_updates += 1;
             }
         }
     }
