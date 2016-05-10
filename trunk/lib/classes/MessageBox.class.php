@@ -95,6 +95,20 @@ class MessageBox
     }
 
     /**
+     * This function returns an info message box. Use it to report neutral
+     * informations.
+     *
+     * @param string $message
+     * @param array() $details (optional)
+     * @param boolean $close_details (optional)
+     * @return object MessageBox object
+     */
+    public static function warning($message, $details = array(), $close_details = false)
+    {
+        return new MessageBox('warning', $message, $details, $close_details);
+    }
+
+    /**
      * Initializes a new MessageBox object of the given class.
      *
      * @param string $class the type of this message
