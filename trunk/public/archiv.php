@@ -579,32 +579,33 @@ if ($_SESSION['archiv_data']["perform_search"]) {
                     while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
                         echo "<font size=\"-1\">".htmlReady($row['fullname']). " (" . _("Status:") . " ". $row['status']. ")</font>";
                         if ($row['status'] != "dozent") {
-                            echo "<a href=\"". URLHelper::getLink("?delete_user=".$row['user_id']."&d_sem_id=".$result['seminar_id']) ,"#anker\"><font size=\"-1\">&nbsp;" . _("Zugriffsberechtigung entfernen") . "</font> ";
+                            echo "<a href=\"". URLHelper::getLink("?delete_user=".$row['user_id']."&d_sem_id=".$result['seminar_id']) . "#anker\">";
                             echo Icon::create('trash', 'clickable', ['title' => _('Dieser Person die Zugriffsberechtigung entziehen')])->asImg();
                             echo '</a>';
                         }
                         echo "<br>";
                     }
-                    if ((Request::submitted('add_user')) && (!Request::submitted('new_search'))) {
-                        $query = "SELECT {$_fullname_sql['full']} AS fullname, username, user_id
+                    if (trim(Request::get('search_exp')) && (Request::submitted('add_user')) && (!Request::submitted('do_add_user'))) {
+                        $query = "SELECT {$_fullname_sql['full_rev']} AS fullname, username, user_id, perms
                                   FROM auth_user_md5
                                   LEFT JOIN user_info USING (user_id)
-                                  WHERE Vorname LIKE CONCAT('%', :needle, '%')
+                                  WHERE (Vorname LIKE CONCAT('%', :needle, '%')
                                      OR Nachname LIKE CONCAT('%', :needle, '%')
-                                     OR username LIKE CONCAT('%', :needle, '%')
+                                     OR username LIKE CONCAT('%', :needle, '%'))
+                                     AND perms IN ('autor','tutor','dozent')
                                   ORDER BY Nachname";
                         $statement = DBManager::get()->prepare($query);
-                        $statement->bindValue(':needle', trim($search_exp));
+                        $statement->bindValue(':needle', trim(Request::get('search_exp')));
                         $statement->execute();
                         $temp = $statement->fetchAll(PDO::FETCH_ASSOC);
 
                         if (count($temp)) {
-                            echo "<form action=\"". URLHelper::getLink() ."#anker\">";
+                            echo "<form action=\"". URLHelper::getLink() ."#anker\" method=\"post\">";
                             echo "<hr><b><font size=\"-1\">" . _("Person Berechtigung erteilen:") . " </font></b><br><br>";
                             echo "<b><font size=\"-1\">" . sprintf(_("Es wurden %s Personen gefunden"), count($temp)) . " </font></b><br>";
                             echo "<font size=\"-1\">" . _("Bitte wählen Sie die Person aus der Liste aus:") . "</font>&nbsp;<br><font size=\"-1\"><select name=\"add_user\">";
                             foreach ($temp as $row) {
-                                echo "<option value=\"".$row['user_id']."\">".htmlReady($row['fullname']). " (".$row['username'].") </option>";
+                                echo "<option value=\"".$row['user_id']."\">".htmlReady($row['fullname']). " (".$row['perms'].", ".$row['username'].") </option>";
                             }
                             echo "</select></font>";
                             echo Button::create(_('Diese Person Hinzufügen'), 'do_add_user');
@@ -614,9 +615,9 @@ if ($_SESSION['archiv_data']["perform_search"]) {
                         }
                     }
                     if ((Request::submitted('add_user') && !count($temp)) || !Request::submitted('add_user') || Request::submitted('new_search')) {
-                        echo "<form action=\"". URLHelper::getLink() ."#anker\">";
+                        echo "<form action=\"". URLHelper::getLink() ."#anker\" method=\"post\">";
                         echo "<hr><b><font size=\"-1\">" . _("Person Berechtigung erteilen:") . " </font></b><br>";
-                        if (Request::submitted('add_user') && !count($temp)  && !Request::submitted('new_search'))
+                        if (Request::submitted('search_exp') && !count($temp)  && !Request::submitted('do_add_user'))
                             echo "<br><b><font size=\"-1\">" . _("Es wurde keine Person zu dem eingegebenem Suchbegriff gefunden!") . "</font></b><br>";
                         echo "<font size=\"-1\">" . _("Bitte Namen, Vornamen oder Benutzernamen eingeben:") . "</font>&nbsp; ";
                         echo "<br><input type=\"TEXT\" size=20 maxlength=255 name=\"search_exp\">";
