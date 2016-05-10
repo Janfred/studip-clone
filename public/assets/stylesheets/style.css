@@ -4179,7 +4179,7 @@ div.clear {
 .js .drag-and-drop {
   border: 1px dotted #888;
   display: block;
-  margin: 0 1em 0 0;
+  margin: 0 20px 0 0;
   overflow: hidden;
   padding: 1em;
   position: relative;
