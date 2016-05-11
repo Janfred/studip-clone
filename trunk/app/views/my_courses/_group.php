@@ -21,8 +21,8 @@
 
                 <?= htmlReady($title) ?></a>
         </th>
-        <th class="responsive-hidden"></th>
-        <th class="responsive-hidden" colspan="2">
+        <th class="dont-hide responsive-hidden"></th>
+        <th class="dont-hide responsive-hidden" colspan="2">
             <? if ($last_modified) : ?>
                 <?= tooltipIcon(_('Letzte Änderung') . ': ' . strftime('%x, %H:%M', $last_modified), true) ?>
             <? endif ?>
