@@ -143,9 +143,13 @@
         <? if (count($courses) > 10): ?>
             <tr>
                 <th colspan="<?= $colspan ?>" style="text-align: right">
-                    <?= Studip\Button::createAccept(is_string($actions[$selected_action]['multimode'])
-                        ? $actions[$selected_action]['multimode']
-                        : $actions[$selected_action]['title'], 'save_action') ?>
+                    <? if (is_a($actions[$selected_action]['multimode'], "\\Studip\\Button")) : ?>
+                        <?= $actions[$selected_action]['multimode'] ?>
+                    <? else : ?>
+                        <?= Studip\Button::createAccept(is_string($actions[$selected_action]['multimode'])
+                            ? $actions[$selected_action]['multimode']
+                            : $actions[$selected_action]['title'], 'save_action') ?>
+                    <? endif ?>
                 </th>
             </tr>
         <? endif; ?>
@@ -311,11 +315,15 @@
     <tfoot>
         <tr>
             <td colspan="<?= $colspan ?>" style="text-align: right">
-                <?= Studip\Button::createAccept(
-                    is_string($actions[$selected_action]['multimode'])
-                        ? $actions[$selected_action]['multimode']
-                        : $actions[$selected_action]['title'],
-                    $actions[$selected_action]['name']) ?>
+                <? if (is_a($actions[$selected_action]['multimode'], "\\Studip\\Button")) : ?>
+                    <?= $actions[$selected_action]['multimode'] ?>
+                <? else : ?>
+                    <?= Studip\Button::createAccept(
+                        is_string($actions[$selected_action]['multimode'])
+                            ? $actions[$selected_action]['multimode']
+                            : $actions[$selected_action]['title'],
+                        $actions[$selected_action]['name']) ?>
+                <? endif ?>
             </td>
         </tr>
     </tfoot>
