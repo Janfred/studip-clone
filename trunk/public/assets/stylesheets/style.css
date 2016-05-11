@@ -447,6 +447,14 @@ td.tree-elbow-end svg {
 #settings-notifications .gruppe9 {
   width: 1px;
 }
+#my_seminars .mycourse_elements > img,
+#settings-notifications .mycourse_elements > img {
+  display: none;
+}
+#my_seminars .special_nav,
+#settings-notifications .special_nav {
+  float: right;
+}
 .grey {
   background: #bbb none;
 }

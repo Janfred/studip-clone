@@ -35,8 +35,53 @@
                 <?= _("[versteckt]") ?>
                 <?= tooltipicon($infotext) ?>
             <? endif ?>
+            <div class="mycourse_elements responsive-visible">
+                <? if (!empty($course['navigation'])) : ?>
+                    <? foreach (MyRealmModel::array_rtrim($course['navigation']) as $key => $nav)  : ?>
+                        <? if (isset($nav) && $nav->isVisible(true)) : ?>
+                            <a href="<?=
+                            UrlHelper::getLink('seminar_main.php',
+                                array('auswahl'     => $course['seminar_id'],
+                                    'redirect_to' => strtr($nav->getURL(), '?', '&'))) ?>" <?= $nav->hasBadgeNumber() ? 'class="badge" data-badge-number="' . intval($nav->getBadgeNumber()) . '"' : '' ?>>
+                                <?= $nav->getImage()->asImg(20, $nav->getLinkAttributes()) ?>
+                            </a>
+                        <? elseif (is_string($key)) : ?>
+                            <?=
+                            Assets::img('blank.gif', array('width'  => 20,
+                                'height' => 20)); ?>
+                        <? endif ?>
+                        <? echo ' ' ?>
+                    <? endforeach ?>
+                <? endif ?>
+                <div class="special_nav">
+                <? if (in_array($course["user_status"], array("dozent",
+                    "tutor"))
+                ) : ?>
+                    <? $adminmodule = $sem_class->getModule("admin"); ?>
+                    <? if ($adminmodule) : ?>
+                        <? $adminnavigation = $adminmodule->getIconNavigation($course['seminar_id'], 0, $GLOBALS['user']->id); ?>
+                    <? endif ?>
+
+                    <? if ($adminnavigation) : ?>
+                        <a href="<?= URLHelper::getLink($adminnavigation->getURL(), array('cid' => $course['seminar_id'])) ?>">
+                            <?= $adminnavigation->getImage()->asImg(20, $adminnavigation->getLinkAttributes()) ?>
+                        </a>
+                    <? endif ?>
+
+                <? elseif ($values["binding"]) : ?>
+                    <a href="<?= $controller->url_for('my_courses/decline_binding') ?>">
+                        <?= Icon::create('door-leave+decline', 'inactive', ['title' => _("Die Teilnahme ist bindend. Bitte wenden Sie sich an die Lehrenden.")])->asImg(20) ?>
+                    </a>
+                    <?
+                else : ?>
+                    <a href="<?= URLHelper::getLink(sprintf('dispatch.php/my_courses/decline/%s', $course['seminar_id']), array('cmd' => 'suppose_to_kill')) ?>">
+                        <?= Icon::create('door-leave', 'inactive', ['title' => _("aus der Veranstaltung abmelden")])->asImg(20) ?>
+                    </a>
+                <? endif ?>
+                </div>
+            </div>
         </td>
-        <td>
+        <td class="responsive-hidden">
             <? if (!$sem_class['studygroup_mode']) : ?>
                 <a data-dialog href="<?= $controller->url_for(sprintf('course/details/index/%s', $course['seminar_id']),
                                                               array('from' => $controller->url_for('my_courses/index'))) ?>">
@@ -48,7 +93,7 @@
                 <?= Assets::img('blank.gif', array('width'  => 20, 'height' => 20)); ?>
             <? endif ?>
         </td>
-        <td style="text-align: left; white-space: nowrap;">
+        <td style="text-align: left; white-space: nowrap;" class="responsive-hidden">
             <? if (!empty($course['navigation'])) : ?>
                 <? foreach (MyRealmModel::array_rtrim($course['navigation']) as $key => $nav)  : ?>
                     <? if (isset($nav) && $nav->isVisible(true)) : ?>
@@ -68,7 +113,7 @@
             <? endif ?>
 
         </td>
-        <td style="text-align: right">
+        <td style="text-align: right" class="responsive-hidden">
             <? if (in_array($course["user_status"], array("dozent",
                                                           "tutor"))
             ) : ?>
