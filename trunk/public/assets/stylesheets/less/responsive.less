@@ -151,10 +151,19 @@ label[for="responsive-toggle"] {
 }
 
 
+@media screen and (min-width: @small-screen-width) {
+    .responsive-visible {
+        display: none;
+    }
+}
+
 @media screen and (max-width: @small-screen-width) {
     #header, #barTopFont, #barTopMenu, #barBottomLeft .current_page, #barBottommiddle,
     #tabs, .sidebar-image, #sidebar-navigation, #quicksearch, #layout_footer {
         display: none !important;
+    }
+    .responsive-hidden {
+        display: none;
     }
     #notification_marker {
         display: inline-block;
