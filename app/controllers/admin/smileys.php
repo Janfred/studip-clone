@@ -271,21 +271,35 @@ class Admin_SmileysController extends AuthenticatedController
         $actions->addLink(_('Smiley-Übersicht öffnen'), URLHelper::getLink('dispatch.php/smileys'), Icon::create('smiley', 'clickable'))->asDialog();
         $sidebar->addWidget($actions);
 
-        $widget = new SidebarWidget();
-        $filter = $factory->render('selector', array(
-            'characters' => Smiley::getUsedCharacters(),
-            'controller' => $this,
-            'view'       => $view,
-        ));
-        $widget->setTitle(_('Filter'));
-        $widget->addElement(new WidgetElement($filter));
+        $widget = new SelectWidget('Filter', $this->url_for('admin/smileys/index'), 'view');
+        $group = new SelectGroupElement(_('Nach Buchstaben'));
+        foreach (Smiley::getUsedCharacters() as $character => $count) {
+            $option = new SelectElement($character, sprintf("%s (% 2u)", strtoupper($character), $count));
+            $option->setActive($view == $character ? true : false);
+            $group->addElement($option);
+        }
+        $widget->addElement($group);
+        
+        $groups = array(
+            'all' => _('Alle'),
+            'top20' => _('Top 20'),
+            'used' => _('Benutzte'),
+            'none' => _('Nicht benutzte'),
+            'short' => _('Nur mit Kürzel')
+        );
+        $group = new SelectGroupElement(_('Gruppiert'));
+        foreach ($groups as $key => $label) {
+            $option = new SelectElement($key, $label);
+            $option->setActive($view == $key ? true : false);
+            $group->addElement($option);
+        }
+        $widget->addElement($group);
         $sidebar->addWidget($widget);
-
+        
         $widget = new SidebarWidget();
         $statistics = $factory->render('statistics', Smiley::getStatistics());
         $widget->setTitle(_('Statistiken'));
         $widget->addElement(new WidgetElement($statistics));
         $sidebar->addWidget($widget);
-
     }
 }
