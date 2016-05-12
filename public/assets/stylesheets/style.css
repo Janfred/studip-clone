@@ -382,15 +382,13 @@ td.tree-elbow-end svg {
 .collapsable > .collapsed tr:not(.header-row) {
   display: none;
 }
-.collapsable > .collapsed .toggle-indicator ~ * {
+.collapsable > .collapsed .toggle-indicator ~ *:not(.dont-hide) {
   overflow: hidden;
-  text-indent: -100%;
+  text-indent: -200%;
 }
 * + html .collapsable .collapsed .header-row {
   display: inline-block !important;
 }
-/* Special treatment for group headers under my courses */
-/* -> see https://develop.studip.de/trac/ticket/6491    */
 /* --- Table details -------------------------------------------------------- */
 .loaded-details > td {
   padding: 0 20px 5px 20px !important;
@@ -2977,6 +2975,9 @@ section.contentbox header nav {
   padding: 2px;
   display: flex;
   align-items: center;
+}
+section.contentbox *:empty {
+  display: none !important;
 }
 section.contentbox footer {
   text-align: center;
