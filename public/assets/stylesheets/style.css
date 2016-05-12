@@ -3739,6 +3739,11 @@ a.message-tag::before {
   margin: 3px;
   padding: 10px;
 }
+.responsive_author {
+  margin: 0;
+  font-size: 0.8em;
+  color: #3d444f;
+}
 /* --- Quicksearch ---------------------------------------------------------- */
 form#quicksearch {
   display: inline;

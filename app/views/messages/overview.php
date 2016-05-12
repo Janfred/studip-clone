@@ -26,15 +26,15 @@
         </caption>
         <thead>
             <tr>
-                <th>
+                <th class="responsive-hidden">
                     <input type="checkbox" data-proxyfor="#bulk tbody :checkbox">
                 </th>
                 <th></th>
                 <th></th>
                 <th><?= _("Betreff") ?></th>
-                <th><?= $received ? _("Gesendet") : _("Empfänger") ?></th>
+                <th  class="responsive-hidden"><?= $received ? _("Gesendet") : _("Empfänger") ?></th>
                 <th><?= _("Zeit") ?></th>
-                <th><?= _("Schlagworte") ?></th>
+                <th class="responsive-hidden"><?= _("Schlagworte") ?></th>
             </tr>
         </thead>
 
