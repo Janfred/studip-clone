@@ -24,7 +24,7 @@
 <table class="dates default" data-table-id="<?= htmlReady($semester->id) ?>">
     <caption><?= htmlReady($semester['name']) ?></caption>
     <? if (count($course->statusgruppen)) : ?>
-        <colgroup>
+        <colgroup class="responsive-hidden">
             <col width="30%">
             <col width="10%">
             <col width="20%">
@@ -32,7 +32,7 @@
             <col width="20%">
         </colgroup>
     <? else : ?>
-        <colgroup>
+        <colgroup class="responsive-hidden">
             <col width="30%">
             <col width="10%">
             <col width="30%">
@@ -42,11 +42,11 @@
     <thead>
         <tr class="sortable">
             <th class="sortasc"><?= _('Zeit') ?></th>
-            <th><?= _('Typ') ?></th>
+            <th class="responsive-hidden"><?= _('Typ') ?></th>
             <? if (count($course->statusgruppen)) : ?>
-                <th><?= _('Sichtbarkeit') ?></th>
+                <th class="responsive-hidden"><?= _('Sichtbarkeit') ?></th>
             <? endif ?>
-            <th><?= _('Thema') ?></th>
+            <th class="responsive-hidden"><?= _('Thema') ?></th>
             <th><?= _('Raum') ?></th>
         </tr>
     </thead>
