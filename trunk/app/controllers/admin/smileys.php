@@ -271,26 +271,26 @@ class Admin_SmileysController extends AuthenticatedController
         $actions->addLink(_('Smiley-Übersicht öffnen'), URLHelper::getLink('dispatch.php/smileys'), Icon::create('smiley', 'clickable'))->asDialog();
         $sidebar->addWidget($actions);
 
-        $widget = new SelectWidget('Filter', $this->url_for('admin/smileys/index'), 'view');
+        $widget = new SelectWidget(_('Filter'), $this->url_for('admin/smileys/index'), 'view');
         $group = new SelectGroupElement(_('Nach Buchstaben'));
         foreach (Smiley::getUsedCharacters() as $character => $count) {
             $option = new SelectElement($character, sprintf("%s (% 2u)", strtoupper($character), $count));
-            $option->setActive($view == $character ? true : false);
+            $option->setActive($view == $character);
             $group->addElement($option);
         }
         $widget->addElement($group);
         
         $groups = array(
-            'all' => _('Alle'),
+            'all'   => _('Alle'),
             'top20' => _('Top 20'),
-            'used' => _('Benutzte'),
-            'none' => _('Nicht benutzte'),
+            'used'  => _('Benutzte'),
+            'none'  => _('Nicht benutzte'),
             'short' => _('Nur mit Kürzel')
         );
         $group = new SelectGroupElement(_('Gruppiert'));
         foreach ($groups as $key => $label) {
             $option = new SelectElement($key, $label);
-            $option->setActive($view == $key ? true : false);
+            $option->setActive($view == $key);
             $group->addElement($option);
         }
         $widget->addElement($group);
