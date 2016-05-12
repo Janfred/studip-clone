@@ -25,9 +25,9 @@
             } ?>)
         <? endif ?>
     </td>
-    <td><?= htmlReady($date->getTypeName()) ?></td>
+    <td class="responsive-hidden"><?= htmlReady($date->getTypeName()) ?></td>
     <? if (count($course->statusgruppen)) : ?>
-        <td>
+        <td class="responsive-hidden">
             <? if (count($date->statusgruppen)) : ?>
                 <ul class="clean">
                 <? foreach ($date->statusgruppen as $statusgruppe) : ?>
@@ -40,7 +40,7 @@
         </td>
     <? endif ?>
     <? if (!$date instanceof CourseExDate) : ?>
-        <td>
+        <td class="responsive-hidden">
             <div style="display: flex; flex-direction: row;">
                 <ul class="themen_list clean" style="">
                 <? foreach ($date->topics as $topic) : ?>
