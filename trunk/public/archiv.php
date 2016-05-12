@@ -57,6 +57,8 @@ $delete_id = Request::option('delete_id');
 $open = Request::option('open');
 $delete_user = Request::option('delete_user');
 $add_user = Request::option('add_user');
+$a_sem_id = Request::option('a_sem_id');
+
 //Daten des Suchformulars uebernehmen oder loeschen
 if (Request::option('suche')) {
     $_SESSION['archiv_data'] = array();
