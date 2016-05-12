@@ -4,9 +4,19 @@
 <? endforeach; ?>
     <select class="sidebar-selectlist" name="<?= htmlReady($name) ?>" <? if ($size) printf('size="%u"', $size); ?> <?= $attributes ?>>
     <? foreach ($elements as $element): ?>
-        <option value="<?= htmlReady($element->getid()) ?>" <? if ($element->isActive()) echo 'selected'; ?> style="text-indent: <?= $element->getIndentLevel() ?>ex;">
-            <?= htmlReady(my_substr($element->getLabel(), 0, 30)) ?>
-        </option>
+        <? if ($element instanceof SelectElement): ?>
+            <option value="<?= htmlReady($element->getid()) ?>" <? if ($element->isActive()) echo 'selected'; ?> style="text-indent: <?= $element->getIndentLevel() ?>ex;">
+                <?= htmlReady(my_substr($element->getLabel(), 0, 30)) ?>
+            </option>
+        <? elseif(count($element->getElements()) > 0): ?>
+            <optgroup label="<?= htmlReady($element->getLabel() ) ?>">
+            <? foreach ($element->getElements() as $option): ?>
+                <option value="<?= htmlReady($option->getid()) ?>" <? if ($option->isActive()) echo 'selected'; ?> style="text-indent: <?= $option->getIndentLevel() ?>ex;">
+                    <?= htmlReady(my_substr($option->getLabel(), 0, 30)) ?>
+                </option>
+            <? endforeach; ?>
+            </optgroup>
+        <? endif; ?>
     <? endforeach; ?>
     </select>
     <noscript>
