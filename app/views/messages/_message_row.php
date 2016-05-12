@@ -9,7 +9,7 @@
         <p class="responsive-visible responsive_author">
             <? if ($message['autor_id'] == "____%system%____") : ?>
                 <?= _("Systemnachricht") ?>
-            <? else : if(!$received): ?>
+            <? elseif (!$received): ?>
                 <? $num_recipients = $message->getNumRecipients() ?>
                 <? if ($num_recipients > 1) : ?>
                     <?= sprintf(_("%s Personen"), $num_recipients) ?>
@@ -19,13 +19,12 @@
             <? else: ?>
                     <?= htmlReady(get_fullname($message['autor_id'])) ?>
             <? endif; ?>
-            <? endif; ?>
         </p>
     </td>
     <td class="responsive-hidden">
     <? if ($message['autor_id'] == "____%system%____") : ?>
         <?= _("Systemnachricht") ?>
-    <? else : if(!$received): ?>
+    <? elseif (!$received): ?>
         <? $num_recipients = $message->getNumRecipients() ?>
         <? if ($num_recipients > 1) : ?>
             <?= sprintf(_("%s Personen"), $num_recipients) ?>
@@ -39,8 +38,7 @@
             <?= htmlReady(get_fullname($message['autor_id'])) ?>
         </a>
     <? endif; ?>
-    <? endif; ?>
-    </td>
+    </td> 
     <td><?= date("d.m.Y G:i", $message['mkdate']) ?></td>
     <td class="tag-container responsive-hidden">
     <? foreach ($message->getTags() as $tag) : ?>
