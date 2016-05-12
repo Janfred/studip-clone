@@ -484,42 +484,15 @@ div.info { padding-left: 1%; }
 
 /* --- online list --- */
 .online-list {
-    img {
-        vertical-align: text-top;
-    }
-    td[colspan="4"] {
-        text-align: center;
-    }
-}
-.online-list-double {
-    .clearfix;
-    table {
-        float: right;
-        width: 49.5%;
+    display: flex;
+    flex-wrap: wrap;
+    > div {
+        flex: 1;
+        flex-basis: 300px;
+        margin-left: 10px;
         &:first-child {
-            float: left;
+            margin-left: 0px;
         }
-    }
-}
-.online-config {
-    &, li {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-    li {
-        .clearfix;
-    }
-    li:first-child {
-        margin-bottom: 0.5em;
-    }
-    a {
-        float: left;
-        width: 20px;
-    }
-    span {
-        display: block;
-        margin-left: 20px;
     }
 }
 
