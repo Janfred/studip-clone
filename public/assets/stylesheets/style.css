@@ -7364,6 +7364,9 @@ label[for="responsive-toggle"]:before {
   #layout_content {
     min-width: inherit !important;
   }
+  #layout_content {
+    margin: 0px 4px;
+  }
   .visible-sidebar {
     right: 0 !important;
     -webkit-transition: right 300ms;
