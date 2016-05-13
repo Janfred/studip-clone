@@ -3,7 +3,7 @@
     <caption>
         <?= _("Anmelde- und Wartelisteneinträge") ?>
     </caption>
-    <colgroup>
+    <colgroup class="responsive-hidden">
         <col width="1px">
         <col width="65%">
         <col width="7%">
@@ -12,15 +12,18 @@
         <col width="15%">
         <col width="3%">
     </colgroup>
+    <colgroup class="responsive-visible">
+        <col width="1px">
+    </colgroup>
 
     <thead>
         <tr>
             <th></th>
             <th style="text-align: left"><?= _("Name") ?></th>
-            <th><?= _('Inhalt') ?></th>
+            <th class="responsive-hidden"><?= _('Inhalt') ?></th>
             <th style="text-align: center"><?= _("Datum") ?></th>
-            <th style="text-wrap: none; white-space: nowrap"><b><?= _("Position/Chance") ?></th>
-            <th><?= _("Art") ?></th>
+            <th class="responsive-hidden" style="text-wrap: none; white-space: nowrap"><b><?= _("Position/Chance") ?></th>
+            <th class="responsive-hidden"><?= _("Art") ?></th>
             <th></th>
         </tr>
     </thead>
@@ -52,7 +55,7 @@
                     <?= htmlReady($seminar_name) ?>
                 </a>
             </td>
-            <td>
+            <td class="responsive-hidden">
                 <a data-dialog="size=auto" href="<?= $controller->url_for(sprintf('course/details/index/%s', $wait['seminar_id'])) ?>">
                     <? $params = tooltip2(_("Veranstaltungsdetails anzeigen")); ?>
                     <? $params['style'] = 'cursor: pointer'; ?>
@@ -63,11 +66,11 @@
                 <?= $wait["status"] == "claiming" ? date("d.m.", $wait["admission_endtime"]) : "-" ?>
             </td>
 
-            <td style="text-align: center">
+            <td class="responsive-hidden" style="text-align: center">
                 <?= $wait["status"] == "claiming" ? ($wait['admission_chance'] . "%") : $wait["position"] ?>
             </td>
 
-            <td style="wtext-align: center">
+            <td class="responsive-hidden" style="wtext-align: center">
                 <? if ($wait["status"] == "claiming") : ?>
                     <?= _("Autom.") ?>
                 <? elseif ($wait["status"] == "accepted") : ?>
