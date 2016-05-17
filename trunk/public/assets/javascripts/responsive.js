@@ -53,7 +53,7 @@
         $('<input type="checkbox" id="responsive-toggle">').appendTo(wrapper);
         wrapper.append(menu);
 
-        wrapper.appendTo('#barBottomLeft');
+        $('#barBottomright ul').prepend($('<li>', {html: wrapper}));
     }
 
     // Responsifies the layout. Builds the responsive menu from existing
