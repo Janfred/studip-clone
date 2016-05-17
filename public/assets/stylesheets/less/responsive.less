@@ -52,9 +52,6 @@
 
 label[for="responsive-toggle"] {
     .icon('before', 'hamburger-icon', 'info_alt', 20);
-    &:before {
-        background-position: left 3px;
-    }
 }
 
 #responsive-toggle:checked + #responsive-navigation {
@@ -158,8 +155,8 @@ label[for="responsive-toggle"] {
 }
 
 @media screen and (max-width: @small-screen-width) {
-    #header, #barTopFont, #barTopMenu, #barBottomLeft .current_page, #barBottommiddle,
-    #tabs, .sidebar-image, #sidebar-navigation, #quicksearch, #layout_footer {
+    #header, #barTopFont, #barTopMenu, #barBottomLeft .current_page, #barBottommiddle, #barBottomLeft,
+    #tabs, .sidebar-image, #sidebar-navigation, #quicksearch, #layout_footer, li#quicksearch_item {
         display: none !important;
     }
     .responsive-hidden {
@@ -180,13 +177,10 @@ label[for="responsive-toggle"] {
 
     #barBottomright, #barBottomright ul {
         .box-sizing(border-box);
-
-        > li {
-            line-height: @header-bar-container-height;
-        }
     }
 
     #barBottomright {
+        flex: 1 !important;
         #sidebar-menu {
             display: inline-block;
         }
