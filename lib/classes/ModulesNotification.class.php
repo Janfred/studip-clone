@@ -366,7 +366,7 @@ class ModulesNotification extends Modules {
                     } else if ($r_data['neuecontentmodule'] > 0) {
                         $text = _("1 neues Content-Modul angelegt");
                     }
-                    $redirect = "&redirect_to=elearning_interface.php&seminar_id=$range_id&view=show";
+                    $redirect = "&redirect_to=dispatch.php/course/elearning/show";
                     $icon = Icon::create("learnmodule", "clickable");
                 }
                 break;
