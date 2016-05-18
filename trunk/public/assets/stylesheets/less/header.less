@@ -31,7 +31,7 @@
         padding-left: 15px;
         padding-right: 15px;
         white-space: nowrap;
-        flex: 0;
+        flex: 0 1 auto;
         // Adds an arrow at the end
         #arrow > .right(12px, @brand-color-lighter, 0);
         z-index: 2;
@@ -53,7 +53,7 @@
     }
 
     #barBottomright {
-        flex: 0;
+        flex: 0 1 auto;
         &:before {
             #gradient > .horizontal(fadeout(@brand-color-lighter, 100%), @brand-color-lighter);
             background-color: fadeout(@brand-color-lighter, 100%);
