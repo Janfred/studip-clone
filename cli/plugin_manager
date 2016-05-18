@@ -94,13 +94,8 @@ if ($args) {
             $plugin_manager = PluginManager::getInstance();
             $pluginregistered = $plugin_manager->getPluginInfo($pluginclass);
 
-            if ($pluginregistered /* && !isset($options['f'])*/ ) {
-                echo 'Dieses Plugin ist bereits registriert!', "\n";
-                exit(1);
-            }
-
             // create database schema if needed
-            if (isset($manifest['dbscheme']) && !$update) {
+            if (isset($manifest['dbscheme']) && !$pluginregistered) {
                 $schemafile = $plugindir . '/' . $manifest['dbscheme'];
                 $contents   = file_get_contents($schemafile);
                 $statements = preg_split("/;[[:space:]]*\n/", $contents, -1, PREG_SPLIT_NO_EMPTY);
