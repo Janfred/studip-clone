@@ -18,6 +18,7 @@
 
 .studip-widget {
     border: 1px solid @base-color-20;
+    transition: border-color 300ms ease-in-out;
 
     .widget-header {
         .box-sizing(border-box);
@@ -49,7 +50,9 @@
 }
 
 .studip-widget:hover {
-    border: 1px solid @brand-color-darker; 
+    border: 1px solid @brand-color-darker;
+    transition: border-color 300ms ease-in-out;
+
 }
 #widget_choices{
     border-right: 1px dashed @brand-color-darker;
