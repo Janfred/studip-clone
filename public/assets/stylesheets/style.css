@@ -6051,6 +6051,7 @@ a.bookable_rooms_action {
 }
 .studip-widget {
   border: 1px solid #d4dbe5;
+  transition: border-color 300ms ease-in-out;
 }
 .studip-widget .widget-header {
   -webkit-box-sizing: border-box;
@@ -6078,6 +6079,7 @@ a.bookable_rooms_action {
 }
 .studip-widget:hover {
   border: 1px solid #1f4171;
+  transition: border-color 300ms ease-in-out;
 }
 #widget_choices {
   border-right: 1px dashed #1f4171;
