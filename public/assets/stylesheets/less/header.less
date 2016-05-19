@@ -1,11 +1,4 @@
 /* --- header.css ----------------------------------------------------------- */
-#barBottom {
-    background-color: @brand-color-lighter;
-    left: 0;
-    position: absolute;
-    top: 100px;
-}
-
 #barBottomContainer {
     background-color: @brand-color-lighter;
     border: 1px @brand-color-darker;
@@ -25,13 +18,13 @@
     > div {
         display: flex;
         align-items: center;
+        flex: 0 1 auto;
     }
 
     #barBottomLeft {
         padding-left: 15px;
         padding-right: 15px;
         white-space: nowrap;
-        flex: 0 1 auto;
         // Adds an arrow at the end
         #arrow > .right(12px, @brand-color-lighter, 0);
         z-index: 2;
@@ -53,113 +46,6 @@
     }
 
     #barBottomright {
-        flex: 0 1 auto;
-        &:before {
-            #gradient > .horizontal(fadeout(@brand-color-lighter, 100%), @brand-color-lighter);
-            background-color: fadeout(@brand-color-lighter, 100%);
-            content: "";
-            left: -40px;
-            height: 24px;
-            position: absolute;
-            width: 40px;
-        }
-        .list {
-            // Creates an arrow pointing from the list to the triggering element
-            #arrow > .top(10px, #eee);
-
-            @width: 400px;
-            @arrow-height: 10px;
-
-            background-color: #eeeeee;
-            border: thin solid #666;
-            border-collapse: collapse;
-            .border-radius(3px);
-            color: #333333;
-            display: none;
-            font-size: 1em;
-            position: absolute;
-            width: @width;
-            max-width: @width;
-            padding: 4px;
-            .box-shadow(0 0 8px rgba(0, 0, 0, 0.5));
-
-
-            // Without this, buttons or message boxes would appear on top of the list
-            z-index: 2;
-
-            // Insert invisible padding on top of the arrow in order to try to
-            // close the "mouse trap gap" created by the arrow
-            &:after {
-                content: "";
-                display: block;
-                position: absolute;
-                top: -@arrow-height;
-                left: 0;
-                right: 0;
-                height: @arrow-height;
-                opacity: 0;
-            }
-
-            // Positions: below or left'ish or right'ish to the triggering element
-            &.below {
-                left: ((-@width) / 2 + 5px);
-            }
-            &.left {
-                right: 0px;
-                &:before {
-                    left: auto;
-                    right: 4px;
-                }
-            }
-            &.right {
-                left: 0px;
-                &:before { left: 4px; }
-            }
-
-            // List item
-            .item {
-                @padding: 4px;
-                .clearfix();
-                border-top: thin solid #333;
-                line-height: 20px;
-                display: block;
-                height: auto;
-                opacity: 0;
-                .transition(~"background-color 0.5s, opacity 0.8s");
-                padding-top: @padding;
-                padding-bottom: @padding;
-                white-space: normal;
-
-                &:hover { background-color: #ffffff; }
-
-                // First child: no top-border and but rounded corners
-                &:first-child {
-                    border-top: 0;
-                    .border-top-radius(5px);
-                }
-                // Last child: rounded corners
-                &:last-child { .border-bottom-radius(5px); }
-            }
-
-            a {
-                color: @brand-color-dark;
-                display: block;
-                padding: 0px;
-                &:hover { color: @active-color; }
-            }
-
-            .options {
-                cursor: pointer;
-                float: right;
-                padding-top: 4px;
-                > img {
-                    vertical-align: top;
-                }
-
-                &.hidden { visibility: hidden; }
-            }
-            .item:hover .options.hidden { visibility: visible; }
-        }
         > ul { padding-left: 0;
             justify-content: space-between;
             list-style-type: none;
@@ -176,6 +62,10 @@
             }
         }
     }
+}
+
+#barBottomArrow {
+
 }
 
 
@@ -242,6 +132,103 @@
             font-size: 0.8em;
             text-align: center;
         }
+    }
+    .list {
+        // Creates an arrow pointing from the list to the triggering element
+        #arrow > .top(10px, #eee);
+
+        @width: 400px;
+        @arrow-height: 10px;
+
+        background-color: #eeeeee;
+        border: thin solid #666;
+        border-collapse: collapse;
+        .border-radius(3px);
+        color: #333333;
+        display: none;
+        font-size: 1em;
+        position: absolute;
+        width: @width;
+        max-width: @width;
+        padding: 4px;
+        .box-shadow(0 0 8px rgba(0, 0, 0, 0.5));
+
+
+        // Without this, buttons or message boxes would appear on top of the list
+        z-index: 2;
+
+        // Insert invisible padding on top of the arrow in order to try to
+        // close the "mouse trap gap" created by the arrow
+        &:after {
+            content: "";
+            display: block;
+            position: absolute;
+            top: -@arrow-height;
+            left: 0;
+            right: 0;
+            height: @arrow-height;
+            opacity: 0;
+        }
+
+        // Positions: below or left'ish or right'ish to the triggering element
+        &.below {
+            left: ((-@width) / 2 + 5px);
+        }
+        &.left {
+            right: 0px;
+            &:before {
+                left: auto;
+                right: 4px;
+            }
+        }
+        &.right {
+            left: 0px;
+            &:before { left: 4px; }
+        }
+
+        // List item
+        .item {
+            @padding: 4px;
+            .clearfix();
+            border-top: thin solid #333;
+            line-height: 20px;
+            display: block;
+            height: auto;
+            opacity: 0;
+            .transition(~"background-color 0.5s, opacity 0.8s");
+            padding-top: @padding;
+            padding-bottom: @padding;
+            white-space: normal;
+
+            &:hover { background-color: #ffffff; }
+
+            // First child: no top-border and but rounded corners
+            &:first-child {
+                border-top: 0;
+                .border-top-radius(5px);
+            }
+            // Last child: rounded corners
+            &:last-child { .border-bottom-radius(5px); }
+        }
+
+        a {
+            color: @brand-color-dark;
+            display: block;
+            padding: 0px;
+            &:hover { color: @active-color; }
+        }
+
+        .options {
+            cursor: pointer;
+            float: right;
+            padding-top: 4px;
+            > img {
+                vertical-align: top;
+            }
+
+            &.hidden { visibility: hidden; }
+        }
+        .item:hover .options.hidden { visibility: visible; }
     }
 }
 #barTopFont {
