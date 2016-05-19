@@ -1800,12 +1800,6 @@ form.default.inline button {
   }
 }
 /* --- header.css ----------------------------------------------------------- */
-#barBottom {
-  background-color: #899bba;
-  left: 0;
-  position: absolute;
-  top: 100px;
-}
 #barBottomContainer {
   background-color: #899bba;
   border: 1px #1f4171;
@@ -1830,12 +1824,12 @@ form.default.inline button {
 #barBottomContainer > div {
   display: flex;
   align-items: center;
+  flex: 0 1 auto;
 }
 #barBottomContainer #barBottomLeft {
   padding-left: 15px;
   padding-right: 15px;
   white-space: nowrap;
-  flex: 0 1 auto;
   position: relative;
   margin-right: 0;
   z-index: 2;
@@ -1871,150 +1865,6 @@ form.default.inline button {
   height: 24px;
   margin-left: -30px;
   width: 25px;
-}
-#barBottomContainer #barBottomright {
-  flex: 0 1 auto;
-}
-#barBottomContainer #barBottomright:before {
-  background-color: #899bba;
-  background-image: -moz-linear-gradient(left, rgba(137, 155, 186, 0), #899bba);
-  background-image: -webkit-gradient(linear, 0 0, 100% 0, from(rgba(137, 155, 186, 0)), to(#899bba));
-  background-image: -webkit-linear-gradient(left, rgba(137, 155, 186, 0), #899bba);
-  background-image: -o-linear-gradient(left, rgba(137, 155, 186, 0), #899bba);
-  background-image: linear-gradient(to right, rgba(137, 155, 186, 0), #899bba);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00899bba', endColorstr='#ff899bba', GradientType=1);
-  background-color: rgba(137, 155, 186, 0);
-  content: "";
-  left: -40px;
-  height: 24px;
-  position: absolute;
-  width: 40px;
-}
-#barBottomContainer #barBottomright .list {
-  position: relative;
-  margin-top: 10px;
-  background-color: #eeeeee;
-  border: thin solid #666;
-  border-collapse: collapse;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
-  color: #333333;
-  display: none;
-  font-size: 1em;
-  position: absolute;
-  width: 400px;
-  max-width: 400px;
-  padding: 4px;
-  -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-  -moz-box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-  z-index: 2;
-}
-#barBottomContainer #barBottomright .list:before {
-  border: 10px solid rgba(238, 238, 238, 0);
-  content: "";
-  height: 0;
-  width: 0;
-  position: absolute;
-  pointer-events: none;
-  border-bottom-color: #eee;
-  bottom: 100%;
-  left: 50%;
-  margin-left: -10px;
-}
-#barBottomContainer #barBottomright .list:after {
-  content: "";
-  display: block;
-  position: absolute;
-  top: -10px;
-  left: 0;
-  right: 0;
-  height: 10px;
-  opacity: 0;
-}
-#barBottomContainer #barBottomright .list.below {
-  left: -195px;
-}
-#barBottomContainer #barBottomright .list.left {
-  right: 0px;
-}
-#barBottomContainer #barBottomright .list.left:before {
-  left: auto;
-  right: 4px;
-}
-#barBottomContainer #barBottomright .list.right {
-  left: 0px;
-}
-#barBottomContainer #barBottomright .list.right:before {
-  left: 4px;
-}
-#barBottomContainer #barBottomright .list .item {
-  *zoom: 1;
-  border-top: thin solid #333;
-  line-height: 20px;
-  display: block;
-  height: auto;
-  opacity: 0;
-  -webkit-transition: background-color 0.5s, opacity 0.8s;
-  -moz-transition: background-color 0.5s, opacity 0.8s;
-  -o-transition: background-color 0.5s, opacity 0.8s;
-  transition: background-color 0.5s, opacity 0.8s;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  white-space: normal;
-}
-#barBottomContainer #barBottomright .list .item:before,
-#barBottomContainer #barBottomright .list .item:after {
-  display: table;
-  content: "";
-  line-height: 0;
-}
-#barBottomContainer #barBottomright .list .item:after {
-  clear: both;
-}
-#barBottomContainer #barBottomright .list .item:hover {
-  background-color: #ffffff;
-}
-#barBottomContainer #barBottomright .list .item:first-child {
-  border-top: 0;
-  -webkit-border-top-right-radius: 5px;
-  -moz-border-radius-topright: 5px;
-  border-top-right-radius: 5px;
-  -webkit-border-top-left-radius: 5px;
-  -moz-border-radius-topleft: 5px;
-  border-top-left-radius: 5px;
-}
-#barBottomContainer #barBottomright .list .item:last-child {
-  -webkit-border-bottom-right-radius: 5px;
-  -moz-border-radius-bottomright: 5px;
-  border-bottom-right-radius: 5px;
-  -webkit-border-bottom-left-radius: 5px;
-  -moz-border-radius-bottomleft: 5px;
-  border-bottom-left-radius: 5px;
-}
-#barBottomContainer #barBottomright .list a {
-  color: #28497c;
-  display: block;
-  padding: 0px;
-}
-#barBottomContainer #barBottomright .list a:hover {
-  color: #d60000;
-}
-#barBottomContainer #barBottomright .list .options {
-  cursor: pointer;
-  float: right;
-  padding-top: 4px;
-}
-#barBottomContainer #barBottomright .list .options > img {
-  vertical-align: top;
-}
-#barBottomContainer #barBottomright .list .options.hidden {
-  visibility: hidden;
-}
-#barBottomContainer #barBottomright .list .item:hover .options.hidden {
-  visibility: visible;
 }
 #barBottomContainer #barBottomright > ul {
   padding-left: 0;
@@ -2104,6 +1954,131 @@ li#notification_container:hover .list {
 #notification_container #notification_list .more {
   font-size: 0.8em;
   text-align: center;
+}
+#notification_container .list {
+  position: relative;
+  margin-top: 10px;
+  background-color: #eeeeee;
+  border: thin solid #666;
+  border-collapse: collapse;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  color: #333333;
+  display: none;
+  font-size: 1em;
+  position: absolute;
+  width: 400px;
+  max-width: 400px;
+  padding: 4px;
+  -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  z-index: 2;
+}
+#notification_container .list:before {
+  border: 10px solid rgba(238, 238, 238, 0);
+  content: "";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-bottom-color: #eee;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -10px;
+}
+#notification_container .list:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: -10px;
+  left: 0;
+  right: 0;
+  height: 10px;
+  opacity: 0;
+}
+#notification_container .list.below {
+  left: -195px;
+}
+#notification_container .list.left {
+  right: 0px;
+}
+#notification_container .list.left:before {
+  left: auto;
+  right: 4px;
+}
+#notification_container .list.right {
+  left: 0px;
+}
+#notification_container .list.right:before {
+  left: 4px;
+}
+#notification_container .list .item {
+  *zoom: 1;
+  border-top: thin solid #333;
+  line-height: 20px;
+  display: block;
+  height: auto;
+  opacity: 0;
+  -webkit-transition: background-color 0.5s, opacity 0.8s;
+  -moz-transition: background-color 0.5s, opacity 0.8s;
+  -o-transition: background-color 0.5s, opacity 0.8s;
+  transition: background-color 0.5s, opacity 0.8s;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  white-space: normal;
+}
+#notification_container .list .item:before,
+#notification_container .list .item:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+#notification_container .list .item:after {
+  clear: both;
+}
+#notification_container .list .item:hover {
+  background-color: #ffffff;
+}
+#notification_container .list .item:first-child {
+  border-top: 0;
+  -webkit-border-top-right-radius: 5px;
+  -moz-border-radius-topright: 5px;
+  border-top-right-radius: 5px;
+  -webkit-border-top-left-radius: 5px;
+  -moz-border-radius-topleft: 5px;
+  border-top-left-radius: 5px;
+}
+#notification_container .list .item:last-child {
+  -webkit-border-bottom-right-radius: 5px;
+  -moz-border-radius-bottomright: 5px;
+  border-bottom-right-radius: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  -moz-border-radius-bottomleft: 5px;
+  border-bottom-left-radius: 5px;
+}
+#notification_container .list a {
+  color: #28497c;
+  display: block;
+  padding: 0px;
+}
+#notification_container .list a:hover {
+  color: #d60000;
+}
+#notification_container .list .options {
+  cursor: pointer;
+  float: right;
+  padding-top: 4px;
+}
+#notification_container .list .options > img {
+  vertical-align: top;
+}
+#notification_container .list .options.hidden {
+  visibility: hidden;
+}
+#notification_container .list .item:hover .options.hidden {
+  visibility: visible;
 }
 #barTopFont {
   color: #cccccc;
