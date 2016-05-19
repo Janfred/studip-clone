@@ -676,17 +676,27 @@ class MyCoursesController extends AuthenticatedController
     private function setSemesterWidget(&$sem)
     {
         $semesters       = new SimpleCollection(Semester::getAll());
-        $this->sem       = $sem;
-        $this->semesters = $semesters->orderBy('beginn desc');
+        $semesters = $semesters->orderBy('beginn desc');
 
         $sidebar = Sidebar::Get();
-        $widget  = new SidebarWidget();
-        $widget->setTitle(_('Semesterfilter'));
-        $this->render_template('my_courses/_semester_filter.php', null);
-        $html = $this->response->body;
-        $this->erase_response();
-
-        $widget->addElement(new WidgetElement($html));
+        
+        $widget = new SelectWidget(_('Semesterfilter'), $this->url_for('my_courses/set_semester'), 'sem_select');
+        $widget->setMaxLength(50);
+        $widget->addElement(new SelectElement('current', _('Aktuelles Semester'), $sem == 'current'));
+        $widget->addElement(new SelectElement('future', _('Aktuelles und nächstes Semester'), $sem == 'future'));
+        $widget->addElement(new SelectElement('last', _('Aktuelles und letztes Semester'), $sem == 'last'));
+        $widget->addElement(new SelectElement('lastandnext', _('Letztes, aktuelles, nächstes Semester'), $sem == 'lastandnext'));
+        if (Config::get()->MY_COURSES_ENABLE_ALL_SEMESTERS) {
+            $widget->addElement(new SelectElement('all', _('Alle Semester'), $sem == 'all'));
+        }
+        
+        if (!empty($semesters)) {
+            $group = new SelectGroupElement(_('Semester auswählen'));
+            foreach ($semesters as $semester) {
+                $group->addElement(new SelectElement($semester->id, htmlReady($semester->name), $sem == $semester->id));
+            }
+            $widget->addElement($group);
+        }
         $sidebar->addWidget($widget);
     }
 }
