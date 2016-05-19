@@ -61,10 +61,9 @@ class CommunityNavigation extends Navigation
         $this->addSubNavigation('contacts', $navigation);
 
         // study groups
-        if (get_config('STUDYGROUPS_ENABLE')) {
+        if (Config::get()->STUDYGROUPS_ENABLE) {
             $navigation = new Navigation(_('Studiengruppen'));
             $navigation->addSubNavigation('browse', new Navigation(_('Studiengruppensuche'), 'dispatch.php/studygroup/browse'));
-            $navigation->addSubNavigation('new', new Navigation(_('Neue Studiengruppe anlegen'), 'dispatch.php/course/wizard?studygroup=1'));
             if (Config::get()->MY_COURSES_ENABLE_STUDYGROUPS) {
                 $navigation->addSubNavigation('index', new Navigation(_('Meine Studiengruppen'), 'dispatch.php/my_studygroups'));
             }
@@ -72,7 +71,7 @@ class CommunityNavigation extends Navigation
         }
 
         // ranking
-        if (get_config('SCORE_ENABLE')) {
+        if (Config::get()->SCORE_ENABLE) {
             $navigation = new Navigation(_('Rangliste'), 'dispatch.php/score');
             $this->addSubNavigation('score', $navigation);
         }

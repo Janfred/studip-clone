@@ -1,23 +1,84 @@
-<?php
-# Lifter010: TODO
-use Studip\Button, Studip\LinkButton;
-
-$base_url = "studygroup/browse/1/";
-$link = "dispatch.php/studygroup/browse/%s/".$sort;
-
-?>
-<form action="<?= $controller->url_for('studygroup/browse') ?>" method=post>
-    <?= CSRFProtection::tokenTag() ?>
-    <div class="search_box" align="center">
-        <input name="searchtext" aria-label="<?= _("Geben Sie einen Suchbegriff für Studiengruppen ein.") ?>" type="text" size="45" style="vertical-align: middle;" value="<?= htmlReady($search) ?>" />
-        <?= Button::create(_('Suchen'))?>
-        <?= LinkButton::create(_('Zurücksetzen'), URLHelper::getURL('',array('action' => 'deny')), array('title' => _('Suche zurücksetzen')))?>
-    </div>
-</form>
-<br>
-
 <?= $this->render_partial("course/studygroup/_feedback") ?>
 
-<? if ($anzahl >= 1):?>
-    <?=$this->render_partial("studygroup/_overview", array('base_url' => $base_url, 'link' => $link))?>
-<? endif;?>
+<? if ($anzahl >= 1): ?>
+
+    <table class="default">
+        <thead>
+            <tr class="sortable" title="<?=_("Klicken, um die Sortierung zu ändern")?>">
+                <th class="nosort" width="1%"></th>
+                <th width="59%" <?= ($sort_type == 'name') ? 'class="sort'. $sort_order .'"' : '' ?>>
+                    <a href="<?= $controller->url_for('studygroup/browse/1/' . ($sort == 'name_asc' ? 'name_desc' : 'name_asc')) ?>"><?= _("Name") ?></a>
+                </th>
+                <th width="10%" <?= ($sort_type == 'founded') ? 'class="sort'. $sort_order .'"' : '' ?>>
+                    <a href="<?= $controller->url_for('studygroup/browse/1/' . ($sort == 'founded_asc' ? 'founded_desc' : 'founded_asc')) ?>"><?= _("gegründet") ?></a>
+                </th>
+                <th width="6%" <?= ($sort_type == 'member') ? 'class="sort'. $sort_order .'"' : '' ?>>
+                    <a href="<?= $controller->url_for('studygroup/browse/1/' . ($sort == 'member_asc' ? 'member_desc' : 'member_asc')) ?>"><?= _("Mitglieder") ?></a>
+                </th>
+                <th width="14%" <?= ($sort_type == 'founder') ? 'class="sort'. $sort_order .'"' : '' ?>>
+                    <a href="<?= $controller->url_for('studygroup/browse/1/' . ($sort == 'founder_asc' ? 'founder_desc' : 'founder_asc')) ?>"><?= _("GründerIn") ?></a>
+                </th>
+                <th width="5%" <?= ($sort_type == 'ismember') ? 'class="sort'. $sort_order .'"' : '' ?>>
+                    <a href="<?= $controller->url_for('studygroup/browse/1/' . ($sort == 'ismember_asc' ? 'ismember_desc' : 'ismember_asc')) ?>"><?= _("Mitglied") ?></a>
+                </th>
+                <th width="5%" <?= ($sort_type == 'access') ? 'class="sort'. $sort_order .'"' : '' ?>>
+                    <a href="<?= $controller->url_for('studygroup/browse/1/' . ($sort == 'access_asc' ? 'access_desc' : 'access_asc')) ?>"><?= _("Zugang") ?></a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        <? foreach ($groups as $group): ?>
+            <tr>
+                <td>
+                   <?=StudygroupAvatar::getAvatar($group['Seminar_id'])->getImageTag(Avatar::SMALL)?>
+                </td>
+                <td>
+                    <? if (StudygroupModel::isMember($this->userid,$group['Seminar_id'] )): ?>
+                        <a href="<?=URLHelper::getlink("seminar_main.php?auswahl=".$group['Seminar_id'])?>">
+                    <? else: ?>
+                       <a href="<?=URLHelper::getlink("dispatch.php/course/studygroup/details/".$group['Seminar_id'])?>">
+                    <? endif; ?>
+                       <?=htmlready($group['Name'])?></a> <?= $group['visible'] ? '' : "["._('versteckt')."]" ?>
+                 </td>
+                 <td><?=strftime('%x', $group['mkdate'])?>
+                </td>
+                <td align="center">
+                    <?=StudygroupModel::countMembers($group['Seminar_id'])?>
+                </td>
+                <td style="white-space:nowrap;">
+                    <? $founders = StudygroupModel::getFounder($group['Seminar_id']);
+                    foreach ($founders as $founder) : ?>
+                    <?=Avatar::getAvatar($founder['user_id'])->getImageTag(Avatar::SMALL)?>
+                    <a href="<?=URLHelper::getlink('dispatch.php/profile?username='.$founder['uname'])?>"><?=htmlready($founder['fullname'])?></a>
+                    <br>
+                    <? endforeach; ?>
+                </td>
+                <td align="center">
+                    <? if (StudygroupModel::isMember($this->userid,$group['Seminar_id'] )) :?>
+                        <?=Icon::create('person', 'inactive', ['title' => _('Sie sind Mitglied in dieser Gruppe')])->asImg()?>
+                    <? endif;?>
+                </td>
+                <td align="center">
+                    <? if ($group['admission_prelim'] == 1) :?>
+                        <?=Icon::create('lock-locked', 'inactive', ['title' => _('Mitgliedschaft muss beantragt werden')])->asImg()?>
+                    <? endif;?>
+                </td>
+            </tr>
+        <? endforeach ; ?>
+        </tbody>
+    <? if ($anzahl > 20) : ?>
+        <tfoot>
+            <tr>
+                <td colspan="7" class="actions">
+                    <?= $GLOBALS['template_factory']->render('shared/pagechooser', [
+                        'perPage'      => Config::get()->ENTRIES_PER_PAGE,
+                        'num_postings' => $anzahl,
+                        'page'         => $page,
+                        'pagelink'     => 'dispatch.php/studygroup/browse/%s/' . $sort,
+                    ]) ?>
+                </td>
+            </tr>
+        </tfoot>
+    <? endif; ?>
+    </table>
+<? endif; ?>

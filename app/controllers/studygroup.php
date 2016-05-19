@@ -27,7 +27,7 @@ class StudygroupController extends AuthenticatedController
         // add skip link
         SkipLinks::addIndex(Navigation::getItem('/community/studygroups/browse')->getTitle(), 'layout_content', 100);
 
-        Sidebar::get()->setImage('sidebar/studygroup-sidebar.png');
+        $this->setupSidebar();
     }
 
     /**
@@ -41,18 +41,19 @@ class StudygroupController extends AuthenticatedController
     {
         $this->sort = preg_replace('/\\W/', '', $sort);
         $this->page = intval($page);
-        $this->userid = $GLOBALS['auth']->auth['uid'];
+        $this->userid = $GLOBALS['user']->id;
         $this->search = Request::get("searchtext");
         $reset = false;
-        if (Request::get('action') == 'deny') {
+        if (Request::int('reset-search')) {
             unset($this->flash['searchterm']);
             unset($this->flash['info']);
+            $this->search = null;
             $this->page = 1;
             $this->sort = "founded_asc";
             $reset = true;
         }
 
-        $this->lower_bound = ($this->page - 1) * get_config('ENTRIES_PER_PAGE');
+        $this->lower_bound = ($this->page - 1) * Config::get()->ENTRIES_PER_PAGE;
         list ($this->sort_type, $this->sort_order) = explode('_', $this->sort);
 
         if (empty($this->search) && isset($this->flash['searchterm']))  {
@@ -81,5 +82,22 @@ class StudygroupController extends AuthenticatedController
             unset($this->flash['info']);
             if($this->page < 1 || $this->page > ceil($this->anzahl/get_config('ENTRIES_PER_PAGE'))) $this->page = 1;
         }
+    }
+
+    private function setupSidebar()
+    {
+        $sidebar = Sidebar::get();
+        $sidebar->setImage('sidebar/studygroup-sidebar.png');
+
+        $actions = new ActionsWidget();
+        $actions->addLink(_('Neue Studiengruppe anlegen'),
+                          URLHelper::getLink('dispatch.php/course/wizard', ['studygroup' => 1]),
+                          Icon::create('add', 'clickable'))
+                ->asDialog();
+        $sidebar->addWidget($actions);
+
+        $search = new SearchWidget($this->url_for('studygroup/browse'));
+        $search->addNeedle(_('Suchbegriff'), 'searchtext', true);
+        $sidebar->addWidget($search);
     }
 }
