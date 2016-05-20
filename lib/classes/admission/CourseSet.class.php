@@ -194,7 +194,7 @@ class CourseSet
             WHERE `set_id`=?");
         $stmt->execute(array($this->id));
         // Delete all rules...
-        foreach ($this->rules as $rule) {
+        foreach ($this->admissionRules as $rule) {
             $rule->delete();
         }
         // ... and their association to the current course set.
