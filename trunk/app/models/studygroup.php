@@ -212,7 +212,7 @@ class StudygroupModel
      *
      * @return string count
      */
-    function countGroups($search = null)
+    function countGroups($search = null, $closedGroups = null)
     {
         $status = studygroup_sem_types();
 
@@ -220,8 +220,12 @@ class StudygroupModel
                   FROM seminare
                   WHERE status IN (?)";
         if (!$GLOBALS['perm']->have_perm('root')) {
+            if (!$closedGroups) {
+                $query .= " AND admission_prelim = 0 ";
+            }
             $query .= "AND visible = 1";
         }
+
         $parameters = array($status);
 
         if (isset($search)) {
@@ -245,7 +249,7 @@ class StudygroupModel
      *
      * @return array studygroups
      */
-    function getAllGroups($sort = '', $lower_bound = 1, $elements_per_page = NULL, $search = null)
+    function getAllGroups($sort = '', $lower_bound = 1, $elements_per_page = NULL, $search = null, $closedGroups = null)
     {
         if (is_null($elements_per_page)) {
             $elements_per_page = get_config('ENTRIES_PER_PAGE');
@@ -259,11 +263,15 @@ class StudygroupModel
         if (!$GLOBALS['perm']->have_perm('root')) {
             $sql .= "AND visible = 1";
         }
+
         $parameters[] = array($status);
 
         if (isset($search)) {
             $sql .= " AND Name LIKE CONCAT('%', ?, '%')";
             $parameters[] = $search;
+            if (!$closedGroups) {
+                $sql .= " AND admission_prelim = 0 ";
+            }
         }
         $sort_order = (substr($sort, strlen($sort) - 3, 3) == 'asc') ? 'asc' : 'desc';
 

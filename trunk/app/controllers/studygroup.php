@@ -37,7 +37,7 @@ class StudygroupController extends AuthenticatedController
      * @param $page
      * @param $sort
      */
-    function browse_action($page = 1, $sort = "founded_asc")
+    function browse_action($page = 1, $sort = "founded_desc")
     {
         $this->sort = preg_replace('/\\W/', '', $sort);
         $this->page = intval($page);
@@ -49,7 +49,7 @@ class StudygroupController extends AuthenticatedController
             unset($this->flash['info']);
             $this->search = null;
             $this->page = 1;
-            $this->sort = "founded_asc";
+            $this->sort = "founded_desc";
             $reset = true;
         }
 
@@ -60,10 +60,10 @@ class StudygroupController extends AuthenticatedController
             $this->search = $this->flash['searchterm'];
         }
         if (!empty($this->search)) {
-            $groups = StudygroupModel::getAllGroups($this->sort, $this->lower_bound, get_config('ENTRIES_PER_PAGE'), $this->search);
+            $groups = StudygroupModel::getAllGroups($this->sort, $this->lower_bound, get_config('ENTRIES_PER_PAGE'), $this->search, Request::get('closedGroups'));
             $this->flash['searchterm'] = $this->search;
             $this->flash->keep('searchterm');
-            $this->anzahl = StudygroupModel::countGroups($this->search);
+            $this->anzahl = StudygroupModel::countGroups($this->search, Request::get('closedGroups'));
             $this->groups = $groups;
         }
         // let the user know that there is no studygroup for the searchterm
@@ -77,7 +77,7 @@ class StudygroupController extends AuthenticatedController
                 }
             }
             $this->anzahl = StudygroupModel::countGroups();
-            $this->groups = StudygroupModel::getAllGroups($this->sort, $this->lower_bound, get_config('ENTRIES_PER_PAGE'));
+            $this->groups = StudygroupModel::getAllGroups($this->sort, $this->lower_bound, get_config('ENTRIES_PER_PAGE'), Request::get('closedGroups'));
         } elseif (!$check || $this->groups) {
             unset($this->flash['info']);
             if($this->page < 1 || $this->page > ceil($this->anzahl/get_config('ENTRIES_PER_PAGE'))) $this->page = 1;
@@ -98,6 +98,7 @@ class StudygroupController extends AuthenticatedController
 
         $search = new SearchWidget($this->url_for('studygroup/browse'));
         $search->addNeedle(_('Suchbegriff'), 'searchtext', true);
+        $search->addFilter(_('Geschlossene Studiengruppen'), 'closedGroups');
         $sidebar->addWidget($search);
     }
 }
