@@ -1,3 +1,14 @@
+__30.04.2016 V 3.4__
+- Terminafrage und Abstimmung im Gruppenterminkalender
+- Umstellung auf InnoDB
+- Redesign der Raum-/Zeitseite
+- Komplette Neugestaltung von Umfragen und Tests
+- Erweiterung des Ablaufplans um Termine
+- Blubber umgestelt auf responsives Design
+- Performanceverbesserungen
+- Konsistenzanpassungen in Raum- und Rollenverwaltung
+- Neue Personenseite in Studiengruppen
+
 __30.11.2015 V 3.3__
 - Erweiterte Verwaltungsfunktionen von Teilnehmenden an Lehrveranstaltungen
 - Neuer Assistent zum Anlegen von Veranstaltungen
@@ -35,6 +46,7 @@ __14.09.2014 V 3.1__
 - Hilfetouren für beliebige Seiten
 - Persönlicher Dateibereich
 - Neue Startseite mit Widgetfunktionalität
+- Neue Übersichtsseite "Meine Veranstaltungen"
 
 __23.05.2014 V 3.0__
 - Neue Anmeldeverfahren mit modularem Aufbau und Härtefallberücksichtigung
