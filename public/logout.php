@@ -30,15 +30,12 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "
 require_once 'lib/messaging.inc.php';
 
 //nur wenn wir angemeldet sind sollten wir dies tun!
-if ($auth->auth["uid"]!="nobody")
-{
-    $sms = new messaging();
-
-    $my_messaging_settings = UserConfig::get($user->id)->MESSAGING_SETTINGS;
+if ($auth->auth["uid"]!="nobody") {
+    $my_messaging_settings = $GLOBALS['user']->cfg->MESSAGING_SETTINGS;
 
     //Wenn Option dafuer gewaehlt, alle ungelsesenen Nachrichten als gelesen speichern
     if ($my_messaging_settings["logout_markreaded"]) {
-        $sms->set_read_all_messages();
+        Message::markAllAs();
     }
 
     $logout_user=$user->id;
