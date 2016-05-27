@@ -112,6 +112,8 @@ if (($delete_id) && Request::submitted('delete_really')){
         if ($statement->rowCount()) {
             $message = sprintf(_('Die Veranstaltung "%s" wurde aus dem Archiv gelöscht'), htmlReady($seminar['name']));
             log_event("SEM_DELETE_FROM_ARCHIVE",$delete_id,NULL,$seminar['name']." (".$seminar['semester'].")"); // ...logging...
+            NotificationCenter::postNotification('ArchivedSeminarDidDelete', $delete_id, $seminar['name'].' ('.$seminar['semester'].')', $GLOBALS['user']->id); 
+
         }
 
         if ($seminar['archiv_file_id']) {

@@ -504,6 +504,7 @@ class MyCoursesController extends AuthenticatedController
                 $statement = DBManager::get()->prepare($query);
                 $statement->execute(array($GLOBALS['user']->id,
                     $course_id));
+                NotificationCenter::postNotification('UserDidLeaveWaitingList', $course_id, $GLOBALS['user']->id);
                 if ($statement->rowCount() || $prio_delete) {
                     //Warteliste neu sortieren
                     renumber_admission($course_id);

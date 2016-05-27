@@ -83,12 +83,15 @@ class RolePersistence
                                  "values (0, ?)");
             $stmt->execute(array($role->getRolename()));
             $roleid = $db->lastInsertId();
+            NotificationCenter::postNotification('RoleDidCreate', $roleid, $role->getRolename()); 
         }
         // role is already in database
         else {
             $roleid = $role->getRoleid();
             $stmt = $db->prepare("UPDATE roles SET rolename=? WHERE roleid=?");
             $stmt->execute(array($role->getRolename(), $roleid));
+            NotificationCenter::postNotification('RoleDidUpdate', $roleid, $role->getRolename()); 
+
         }
         return $roleid;
     }
@@ -102,7 +105,7 @@ class RolePersistence
     {
         $cache = StudipCacheFactory::getCache();
         $id = $role->getRoleid();
-
+        $name = $role->getRolename();
         // sweep roles cache
         $cache->expire(self::ROLES_CACHE_KEY);
         self::$user_roles = array();
@@ -127,6 +130,7 @@ class RolePersistence
             $stmt = $db->prepare("DELETE FROM roles_studipperms WHERE roleid=?");
             $stmt->execute(array($id));
         }
+        NotificationCenter::postNotification('RoleDidDelete', $id, $name); 
     }
 
     /**
@@ -148,6 +152,7 @@ class RolePersistence
         $stmt = DBManager::get()->prepare("REPLACE INTO roles_user ".
           "(roleid, userid, institut_id) VALUES (?, ?, ?)");
         $stmt->execute(array($roleid, $user->getUserid(), $institut_id));
+        NotificationCenter::postNotification('RoleAssignmentDidCreate', $roleid, $user->getUserid(), $institut_id); 
         self::$user_roles = array();
     }
 
@@ -219,6 +224,8 @@ class RolePersistence
             $stmt = DBManager::get()->prepare("DELETE FROM roles_user WHERE roleid=? AND userid=? AND institut_id=?");
             $stmt->execute(array($role->getRoleid(),$user->getUserid(),$institut_id));
         }
+        NotificationCenter::postNotification('RoleAssignmentDidDelete', $role>getRoleeid(), $user->getUserid(), $institut_id); 
+
         self::$user_roles = array();
     }
 
@@ -262,6 +269,8 @@ class RolePersistence
         $stmt = DBManager::get()->prepare("REPLACE INTO roles_plugins (roleid, pluginid) VALUES (?, ?)");
         foreach ($roleids as $roleid) {
             $stmt->execute(array($roleid, $pluginid));
+            NotificationCenter::postNotification('PluginRoleAssignmentDidCreate', $roleid, $pluginid); 
+
         }
     }
 
@@ -278,6 +287,8 @@ class RolePersistence
         $stmt = DBManager::get()->prepare("DELETE FROM roles_plugins WHERE roleid=? AND pluginid=?");
         foreach ($roleids as $roleid) {
             $stmt->execute(array($roleid, $pluginid));
+            NotificationCenter::postNotification('PluginRoleAssignmentDidDelete', $roleid, $pluginid); 
+
         }
     }
 

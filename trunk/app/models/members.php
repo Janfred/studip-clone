@@ -64,6 +64,7 @@ class MembersModel
 
                     log_event('SEM_CHANGED_RIGHTS', $this->course_id, $user_id, $next_status,
                             $this->getLogLevel($direction, $next_status));
+                    NotificationCenter::postNotification('CourseMemberStatusDidUpdate', $this->course_id, $user_id); 
 
                     if (is_null($next_pos)) {
                         $next_pos = 0;
@@ -133,6 +134,8 @@ class MembersModel
                                 '____%system%____', FALSE, FALSE, '1', FALSE, sprintf('%s %s', _('Systemnachricht:'),
                                         _("nicht zugelassen in Veranstaltung")), TRUE);
                 log_event('SEM_USER_DEL', $this->course_id, $user_id, 'Wurde aus der Veranstaltung rausgeworfen');
+                NotificationCenter::postNotification('UserDidLeaveCourse', $this->course_id, $user_id); 
+
                 $msgs[] = $temp_user['Vorname'] . ' ' . $temp_user['Nachname'];
             }
         }

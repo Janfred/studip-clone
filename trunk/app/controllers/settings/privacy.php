@@ -101,6 +101,7 @@ class Settings_PrivacyController extends Settings_SettingsController
             $this->user->user_id,
             $online, $search, $email
         ));
+        NotificationCenter::postNotification('UserVisibilityDidCreate', $GLOBALS['user']->id); 
 
         $this->reportSuccess(_('Ihre Sichtbarkeitseinstellungen wurden gespeichert.'));
         $this->redirect('settings/privacy');

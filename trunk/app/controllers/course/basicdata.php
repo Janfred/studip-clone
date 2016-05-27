@@ -443,6 +443,7 @@ class Course_BasicdataController extends AuthenticatedController
             if (sizeof($before) && sizeof($after)) {
                 foreach($before as $k => $v) $log_message .= "$k: $v => " . $after[$k] . " \n";
                 log_event('CHANGE_BASIC_DATA', $sem->getId(), " ", $log_message);
+                NotificationCenter::postNotification('SeminarBasicDataDidUpdate', $sem->id , $GLOBALS['user']->id); 
             }
             // end of logging
 

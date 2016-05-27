@@ -2163,6 +2163,8 @@ class Seminar
                 $tmp_instname= get_object_name($inst, 'inst');
                 StudipLog::log('CHANGE_INSTITUTE_DATA', $this->id, $inst, 'Die beteiligte Einrichtung "'. $tmp_instname['name'] .'" wurde gelöscht.');
                 $statement->execute(array($this->id, $inst));
+                NotificationCenter::postNotification('SeminarInstitutionDidDelete', $inst, $this->id); 
+
             }
 
             $toinsert = array_diff($institutes, $old_inst);
@@ -2174,6 +2176,7 @@ class Seminar
                 $tmp_instname= get_object_name($inst, 'inst');
                 StudipLog::log('CHANGE_INSTITUTE_DATA', $this->id, $inst, 'Die beteiligte Einrichtung "'. $tmp_instname['name'] .'" wurde hinzugefügt.');
                 $statement->execute(array($this->id, $inst));
+                NotificationCenter::postNotification('SeminarInstitutionDidCreate', $inst, $this->id); 
             }
             if ($todelete || $toinsert) {
                 NotificationCenter::postNotification("CourseDidChangeInstitutes", $this);

@@ -47,6 +47,7 @@ class Admin_SemClassesController extends AuthenticatedController
                 $statement = DBManager::get()->prepare(
                     "INSERT INTO sem_classes SET name = :name, mkdate = UNIX_TIMESTAMP(), chdate = UNIX_TIMESTAMP() " .
                 "");
+                NotificationCenter::postNotification('SeminarClassDidCreate', Request::get("add_name"), $GLOBALS['user']->id); 
                 $statement->execute(array('name' => Request::get("add_name")));
                 $id = DBManager::get()->lastInsertId();
                 if (Request::get("add_like")) {
@@ -152,6 +153,7 @@ class Admin_SemClassesController extends AuthenticatedController
                 'name' => $name,
                 'sem_class' => Request::get("sem_class")
             ));
+            NotificationCenter::postNotification('SeminarTypeDidCreate', $name, $GLOBALS['user']->id); 
             $id = DBManager::get()->lastInsertId();
             $GLOBALS['SEM_TYPE'] = SemType::refreshTypes();
             $this->sem_type = $GLOBALS['SEM_TYPE'][$id];
