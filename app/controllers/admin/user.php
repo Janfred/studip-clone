@@ -388,6 +388,7 @@ class Admin_UserController extends AuthenticatedController
                 $db = DbManager::get()->prepare("INSERT IGNORE INTO user_inst (user_id, Institut_id, inst_perms) "
                                                ."VALUES (?,?,'user')");
                 $db->execute(array($user_id, Request::option('new_student_inst')));
+                NotificationCenter::postNotification('UserInstitutionDidCreate', Request::option('new_student_inst'), $user_id); 
                 $details[] = _('Die Einrichtung wurde hinzugefügt.');
             }
 
@@ -400,6 +401,7 @@ class Admin_UserController extends AuthenticatedController
                 $db = DbManager::get()->prepare("REPLACE INTO user_inst (user_id, Institut_id, inst_perms) "
                                                ."VALUES (?,?,?)");
                 $db->execute(array($user_id, Request::option('new_inst'), $editPerms[0]));
+                NotificationCenter::postNotification('UserInstitutionDidUpdate', Request::option('new_inst'), $user_id); 
                 checkExternDefaultForUser($user_id);
                 $details[] = _('Die Einrichtung wurde hinzugefügt.');
             } elseif (Request::option('new_inst') != 'none' && Request::option('new_student_inst') == Request::option('new_inst') && $editPerms[0] != 'root') {
@@ -579,6 +581,7 @@ class Admin_UserController extends AuthenticatedController
                     //insert into database
                     $db = DBManager::get()->prepare("INSERT INTO user_inst (user_id, Institut_id, inst_perms) VALUES (?, ?, ?)");
                     $check = $db->execute(array($user_id, Request::option('institute'), $UserManagement->user_data['auth_user_md5.perms']));
+                    NotificationCenter::postNotification('UserInstitutionDidCreate', Request::option('institute'), $user_id); 
                     checkExternDefaultForUser($user_id);
 
                     //send email, if new user is an admin
@@ -909,6 +912,7 @@ class Admin_UserController extends AuthenticatedController
             $db->execute(array($user_id, $institut_id));
             if ($db->rowCount() == 1) {
                 log_event('INST_USER_DEL', $institut_id, $user_id);
+                NotificationCenter::postNotification('UserInstitutionDidDelete', $institut_id , $user_id); 
                 checkExternDefaultForUser($user_id);
                 if (UserConfig::get($user_id)->MY_INSTITUTES_DEFAULT == $institut_id) {
                     UserConfig::get($user_id)->delete('MY_INSTITUTES_DEFAULT');

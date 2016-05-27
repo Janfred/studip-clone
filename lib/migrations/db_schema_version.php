@@ -103,5 +103,7 @@ class DBSchemaVersion extends SchemaVersion
             $this->domain,
             $this->version
         ));
+        NotificationCenter::postNotification('SchemaVersionDidUpdate', $this->domain, $version); 
+
     }
 }

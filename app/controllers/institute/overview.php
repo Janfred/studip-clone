@@ -102,6 +102,8 @@ class Institute_OverviewController extends AuthenticatedController
                 ));
                 if ($statement->rowCount() > 0) {
                     log_event('INST_USER_ADD', $this->institute_id, $GLOBALS['user']->user_id, 'user');
+                    NotificationCenter::postNotification('UserInstitutionDidCreate', $this->institute_id, $GLOBALS['user']->user_id);
+
                     PageLayout::postMessage(MessageBox::success(_("Sie haben die Einrichtung abonniert.")));
                     header('Location: '.URLHelper::getURL('', array('cid' => $this->institute_id)));
                     die;
@@ -116,6 +118,7 @@ class Institute_OverviewController extends AuthenticatedController
                 ));
                 if ($statement->rowCount() > 0) {
                     log_event('INST_USER_DEL', $this->institute_id, $GLOBALS['user']->user_id, 'user');
+                    NotificationCenter::postNotification('UserInstitutionDidDelete', $this->institute_id, $GLOBALS['user']->user_id);
                     PageLayout::postMessage(MessageBox::success(_("Sie haben sich aus der Einrichtung ausgetragen.")));
                     header('Location: '.URLHelper::getURL('', array('cid' => $this->institute_id)));
                     die;

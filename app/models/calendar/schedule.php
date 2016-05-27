@@ -39,12 +39,16 @@ class CalendarScheduleModel
                 WHERE id = ?");
             $stmt->execute(array($data['start'], $data['end'], $data['day'], $data['title'],
                 $data['content'], $data['color'], $data['user_id'], $data['id']));
+            
+            NotificationCenter::postNotification('ScheduleDidUpdate', $GLOBALS['user']->id, array('values' => $data)); 
+
         } else {
             $stmt = DBManager::get()->prepare("INSERT INTO schedule
                 (start, end, day, title, content, color, user_id)
                 VALUES (?, ?, ?, ?, ?, ?, ?)");
             $stmt->execute(array($data['start'], $data['end'], $data['day'], $data['title'],
                 $data['content'], $data['color'], $data['user_id']));
+            NotificationCenter::postNotification('ScheduleDidCreate', $GLOBALS['user']->id, array('values' => $data));
         }
     }
 
@@ -60,6 +64,7 @@ class CalendarScheduleModel
             (seminar_id, user_id, metadate_id, color) VALUES(?, ? ,?, ?)");
 
         $stmt->execute(array($data['id'], $GLOBALS['user']->id, $data['cycle_id'], $data['color']));
+        NotificationCenter::postNotification('ScheduleSeminarDidCreate', $GLOBALS['user']->id, $data['cycle_id']);
     }
 
     /**
@@ -73,6 +78,7 @@ class CalendarScheduleModel
         $stmt = DBManager::get()->prepare("DELETE FROM schedule
             WHERE id = ? AND user_id = ?");
         $stmt->execute(array($id, $GLOBALS['user']->id));
+        NotificationCenter::postNotification('ScheduleDidDelete', $GLOBALS['user']->id, $id);
     }
 
 
@@ -273,6 +279,7 @@ class CalendarScheduleModel
         $stmt = DBManager::get()->prepare($query = "DELETE FROM schedule_seminare
             WHERE user_id = ? AND seminar_id = ?");
         $stmt->execute(array($user_id, $seminar_id));
+        NotificationCenter::postNotification('ScheduleSeminarDidDelete', $GLOBALS['user']->id, $seminar_id);
     }
 
     /**
@@ -623,6 +630,7 @@ class CalendarScheduleModel
             $stmt = DBManager::get()->prepare("DELETE FROM schedule_seminare
                 WHERE seminar_id = ? AND user_id = ?");
             $stmt->execute(array($seminar_id, $GLOBALS['user']->id));
+            NotificationCenter::postNotification('ScheduleSeminarDidDelete', $GLOBALS['user']->id, $seminar_id);
         }
     }
 

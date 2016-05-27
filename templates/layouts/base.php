@@ -1,6 +1,6 @@
 <?php
 # Lifter010: TODO
-
+NotificationCenter::postNotification('PageWillRender', $body_id ? : PageLayout::getBodyElementId());
 $navigation = PageLayout::getTabNavigation();
 $tab_root_path = PageLayout::getTabNavigationPath();
 if ($navigation) {
@@ -125,3 +125,4 @@ if ($infobox && is_array($infobox)) {
     <?= SkipLinks::getHTML() ?>
 </body>
 </html>
+<?php NotificationCenter::postNotification('PageDidRender', $body_id ? : PageLayout::getBodyElementId());

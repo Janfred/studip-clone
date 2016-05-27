@@ -156,6 +156,7 @@ class Institute_MembersController extends AuthenticatedController
             }
 
             log_event('INST_USER_DEL', $this->inst_id, $del_user_id);
+            NotificationCenter::postNotification('UserInstitutionDidDelete', $this->inst_id, $del_user_id);
             checkExternDefaultForUser($del_user_id);
         }
 
@@ -270,6 +271,8 @@ class Institute_MembersController extends AuthenticatedController
                             $statement->execute(array($u_id, $this->inst_id));
 
                             PageLayout::postMessage(MessageBox::info(sprintf(_("%s wurde als \"admin\" in die Einrichtung aufgenommen."), $Fullname)));
+                            NotificationCenter::postNotification('UserInstitutionDidCreate', $this->inst_id, $u_id);
+
                         } else {
                             PageLayout::postMessage(MessageBox::error(_("Sie haben keine Berechtigung einen Admin zu berufen!")));
                         }
@@ -284,6 +287,8 @@ class Institute_MembersController extends AuthenticatedController
                             $statement->execute(array($perms, $u_id, $this->inst_id));
 
                             log_event('INST_USER_STATUS', $this->inst_id ,$u_id, $perms);
+                            NotificationCenter::postNotification('UserInstitutionPermDidUpdate', $this->inst_id, $u_id); 
+
                         } else {
                             $query = "INSERT INTO user_inst (user_id, Institut_id, inst_perms)
                                       VALUES (?, ?, ?)";
@@ -294,6 +299,8 @@ class Institute_MembersController extends AuthenticatedController
                         }
                         if ($statement->rowCount()) {
                             PageLayout::postMessage(MessageBox::info(sprintf(_("%s wurde als \"%s\" in die Einrichtung aufgenommen. Um Rechte etc. zu ändern folgen Sie dem Link zu den Nutzerdaten der Person!"), $Fullname, $perms)));
+                            NotificationCenter::postNotification('UserInstitutionDidCreate', $this->inst_id, $u_id);
+
                         } else {
                             PageLayout::postMessage(MessageBox::error(sprintf(_("%s konnte nicht in die Einrichtung aufgenommen werden!"), $Fullname)));
                         }

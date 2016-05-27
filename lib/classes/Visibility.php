@@ -127,6 +127,7 @@ class Visibility
                    VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $db->prepare($sql);
         $stmt->execute(array($user, $parent, $category, $name, $default, $identifier, $pluginid));
+        NotificationCenter::postNotification('UserVisibilitySettingDidCreate', $user, $identifier); 
         return $db->lastInsertId();
     }
 
@@ -196,6 +197,7 @@ class Visibility
             WHERE `identifier`= ? );";
         $stmt = $db->prepare($sql);
         $stmt->execute(array($identifier, $category, $name, $pluginid, $parent_identifier));
+        NotificationCenter::postNotification('UserVisibilitySettingDidCreate', 'all', $identifier);
     }
 
     /**
@@ -382,6 +384,7 @@ class Visibility
         // now delete the value
         $sql = "DELETE FROM user_visibility_settings $where";
         $db->prepare($sql)->execute();
+        NotificationCenter::postNotification('UserVisibilitySettingDidDelete', $user, $id);
         return $lastState;
     }
 
@@ -394,6 +397,7 @@ class Visibility
     {
         $db = DBManager::get();
         $sql = "DELETE FROM user_visibility_settings WHERE `identifier`= " . $db->quote($ident);
+        NotificationCenter::postNotification('UserVisibilitySettingDidDelete', 'all', $ident);
         $db->exec($sql);
     }
 

@@ -108,6 +108,7 @@ class AdmissionPriority
         if ($ok) {
             StudipLog::log('SEM_USER_ADD', $courseId,
             $userId, 'Anmeldung zur Platzvergabe', sprintf('Prio: %s Anmeldeset: %s', $priority, $courseSetId));
+            NotificationCenter::postNotification('UserAdmissionPriorityDidCreate', $courseId, $userId); 
         }
         return $ok;
     }
@@ -132,6 +133,7 @@ class AdmissionPriority
             $db->execute("UPDATE priorities SET priority = @$priovar:=@$priovar+1 WHERE user_id=? AND set_id=? ORDER BY priority", array($userId, $courseSetId));
             StudipLog::log('SEM_USER_DEL', $courseId,
             $userId, 'Anmeldung zur Platzvergabe zurückgezogen', sprintf('Anmeldeset: %s', $courseSetId));
+            NotificationCenter::postNotification('UserAdmissionPriorityDidDelete', $courseId, $userId); 
         }
         return $deleted;
     }
