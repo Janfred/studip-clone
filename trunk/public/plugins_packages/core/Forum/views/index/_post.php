@@ -88,7 +88,7 @@
             
             <span data-show-topic="<?= $post['topic_id'] ?>" data-topic-content="<?= $post['topic_id'] ?>" <?= $edit_posting != $post['topic_id'] ? '' : 'style="display: none;"' ?>>
                 <?= ForumHelpers::highlight($post['content'], $highlight) ?>
-                <?= OpenGraph::extract(formatReady(ForumEntry::killAllQuotes($post['content_raw'])))->render() ?>
+                <?= OpenGraph::extract(formatReady(ForumEntry::removeQuotes($post['content_raw'])))->render() ?>
             </span>
         </div>
 
