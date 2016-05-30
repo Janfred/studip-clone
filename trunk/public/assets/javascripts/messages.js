@@ -44,17 +44,14 @@ STUDIP.Messages = {
     },
 
     add_adressees: function (form) {
-        //var user_ids = jQuery(form).find("select#add_adressees_selectbox").val();
-        jQuery(form).find(".ms-selection ul > li").each(function () {
-            if (jQuery(this).is(":visible")) {
-                var user_id = jQuery(this).attr("id").substr(0, 32);
-                var name = jQuery(this).text();
+        jQuery(form).find("#add_adressees_selectbox option:selected").each(function () {
+            var user_id = jQuery(this).val(),
+                name    = jQuery(this).text();
 
-                var new_adressee = jQuery("#template_adressee").clone();
-                new_adressee.find("input").val(user_id);
-                new_adressee.find(".visual").html(name);
-                new_adressee.removeAttr("id").appendTo("#adressees").fadeIn();
-            }
+            var new_adressee = jQuery("#template_adressee").clone();
+            new_adressee.find("input").val(user_id);
+            new_adressee.find(".visual").html(name);
+            new_adressee.removeAttr("id").appendTo("#adressees").fadeIn();
         });
         jQuery(form).closest(".ui-dialog-content").dialog("close");
         return false;
