@@ -157,7 +157,7 @@ jQuery(function ($) {
             width: textareaWidth,
             skin: 'studip,' + STUDIP.ASSETS_URL + 'stylesheets/ckeditor-skin/',
             // NOTE codemirror crashes when not explicitely loaded in CKEditor 4.4.7
-            extraPlugins: 'codemirror,confighelper,magicline,studip-floatbar,studip-quote,studip-settings,studip-wiki'
+            extraPlugins: 'codemirror,confighelper,magicline,studip-floatbar,studip-quote,studip-settings,studip-wiki,smiley'
                 // only enable uploads in courses with a file section
                 + ($('li#nav_course_files').length > 0 ? ',studip-upload' : ''),
             enterMode: CKEDITOR.ENTER_BR,
