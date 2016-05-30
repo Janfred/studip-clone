@@ -146,17 +146,17 @@ class ForumEntry {
     }
 
     /**
-     * Remove all quote blocks from a forum post.
+     * Remove all quote blocks AND the quoted text from a forum post.
      *
      * @param String $string The string to remove the quote blocks from
      * @return String the posting without the [quote]-blocks (not just tags!)
      */
-    public static function killAllQuotes($string)
+    public static function removeQuotes($description)
     {
-        if (strpos($string, '[quote') !== false) {
-            $string = preg_replace('/\[quote(=.*)\].*\[\/quote\]/is', '', $string);
+        if (strpos($description, '[quote') !== false) {
+            $description = preg_replace('/\[quote(=.*)\].*\[\/quote\]/is', '', $description);
         }
-        return $string;
+        return $description;
     }
 
 
