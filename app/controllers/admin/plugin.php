@@ -141,6 +141,11 @@ class Admin_PluginController extends AuthenticatedController
 
         // update enabled/disabled status and position if set
         foreach ($plugins as $plugin){
+            // Skip plugins that are currently not visible due to filter settings
+            if (!Request::submitted('position_' . $plugin['id'])) {
+                continue;
+            }
+
             $enabled = Request::int('enabled_' . $plugin['id'], 0);
             $navpos = Request::int('position_' . $plugin['id']);
 
