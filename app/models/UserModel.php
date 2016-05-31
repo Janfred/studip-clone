@@ -121,11 +121,16 @@ class UserModel
      */
     public static function getUsers($username = NULL, $vorname = NULL, $nachname = NULL,
                                     $email = NULL, $inaktiv = NULL, $perms = NULL,
-                                    $locked = NULL, $datafields= NULL, $userdomains = NULL, $auth_plugins = NULL,$sort = NULL, $order = 'DESC')
+                                    $locked = NULL, $datafields= NULL, $userdomains = NULL,
+                                    $auth_plugins = NULL,$sort = NULL, $order = 'DESC', $degree = NULL,
+                                    $studycourse = NULL, $institute = NULL)
     {
+
         // keine suchkriterien
         if (empty($username) && empty($email) && empty($vorname) && empty($nachname)
-            && empty($locked) && empty($inaktiv) && empty($datafields)) {
+            && empty($locked) && empty($inaktiv) && empty($datafields) && empty($degree) && empty($studycourse)
+            && empty($institute)
+        ) {
             return 0;
         }
 
@@ -147,6 +152,8 @@ class UserModel
                 ."LEFT JOIN user_info ui ON (au.user_id = ui.user_id) "
                 ."LEFT JOIN user_userdomains uud ON (au.user_id = uud.user_id) "
                 ."LEFT JOIN userdomains uds USING (userdomain_id) "
+                ."LEFT JOIN user_studiengang us ON us.user_id = au.user_id "
+                ."LEFT JOIN user_inst uis ON uis.user_id = au.user_id "
                 ."WHERE 1 ";
 
         if ($username) {
@@ -205,6 +212,19 @@ class UserModel
                 $query .= "AND userdomain_id = " . $db->quote($userdomains) . " ";
             }
         }
+
+        if($degree) {
+            $query .= "AND us.abschluss_id = " . $db->quote($degree). " ";
+        }
+
+        if($studycourse) {
+            $query .= "AND us.studiengang_id = " . $db->quote($studycourse). " ";
+        }
+
+        if($institute) {
+            $query .= "AND uis.Institut_id = " . $db->quote($institute) . " ";
+        }
+
         $query .= " GROUP BY au.user_id ";
         //sortieren
         switch ($sort) {
@@ -232,6 +252,7 @@ class UserModel
             default:
                 $query .= " ORDER BY au.username {$order}";
         }
+
 
         //ergebnisse zurückgeben
         return $db->query($query)->fetchAll(PDO::FETCH_ASSOC);
