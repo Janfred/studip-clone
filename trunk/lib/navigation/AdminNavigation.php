@@ -168,7 +168,9 @@ class AdminNavigation extends Navigation
 
             $navigation->addSubNavigation('admissionrules', new Navigation(_('Anmelderegeln'), 'dispatch.php/admission/ruleadministration'));
 
-            $navigation->addSubNavigation('api', new Navigation(_('API'), 'dispatch.php/admin/api'));
+            if (Config::get()->API_ENABLED) {
+                $navigation->addSubNavigation('api', new Navigation(_('API'), 'dispatch.php/admin/api'));
+            }
         }
         if ($perm->have_perm(Config::get()->AUX_RULE_ADMIN_PERM ? Config::get()->AUX_RULE_ADMIN_PERM : 'admin')) {
             $navigation->addSubNavigation('specification', new Navigation(_('Zusatzangaben'), 'dispatch.php/admin/specification'));
