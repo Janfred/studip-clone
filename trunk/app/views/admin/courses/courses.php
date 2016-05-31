@@ -25,13 +25,17 @@
         <? $colspan++ ?>
         <col width="30%">
     <? endif ?>
+    <? if (in_array('semester', $view_filter)) : ?>
+        <? $colspan++ ?>
+        <col width="10%">
+    <? endif ?>
     <? if (in_array('teachers', $view_filter)) : ?>
         <? $colspan++ ?>
-        <col width="15%">
+        <col width="10%">
     <? endif ?>
     <? if (in_array('members', $view_filter)) : ?>
         <? $colspan++ ?>
-        <col width="5%">
+        <col width="3%">
     <? endif ?>
     <? if (in_array('waiting', $view_filter)) : ?>
         <? $colspan++ ?>
@@ -99,6 +103,13 @@
         <? endif ?>
         <? if (in_array('room_time', $view_filter)) : ?>
             <th><?= _('Raum/Zeit') ?></th>
+        <? endif ?>
+        <? if (in_array('semester', $view_filter)) : ?>
+            <th <?= ($sortby == 'start_time') ? sprintf('class="sort%s"', strtolower($sortFlag)) : '' ?>>
+                <a href="<?= URLHelper::getLink('', array('sortby'   => 'start_time', 'sortFlag' => strtolower($sortFlag))) ?>">
+                    <?= _('Semester') ?>
+                </a>
+            </th>
         <? endif ?>
         <? if (in_array('teachers', $view_filter)) : ?>
             <th><?= _('Lehrende') ?></th>
@@ -215,6 +226,15 @@
                     )) ?: _('nicht angegeben') ?>
                 </td>
             <? endif ?>
+            <? if (in_array('semester', $view_filter)) : ?>
+                <td>
+                    <?= htmlReady(Seminar::GetInstance($semid)->start_semester->name) ?>
+
+                    <? if ((int)$values['duration_time'] > 0) : ?>
+                        <?= sprintf(' - %s', htmlReady(Seminar::GetInstance($semid)->end_semester->name)) ?>
+                    <? endif?>
+                </td>
+            <? endif?>
             <? if (in_array('teachers', $view_filter)) : ?>
                 <td>
                     <?= $this->render_partial_collection('my_courses/_dozent', $values['dozenten']) ?>
