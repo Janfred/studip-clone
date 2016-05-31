@@ -28,7 +28,7 @@ use Studip\Button, Studip\LinkButton;
 
             <select name="perm">
             <? foreach(words('alle user autor tutor dozent admin root') as $one): ?>
-                <option value="<?= $one ?>" <? if ($user['perm'] === $one) echo 'selected'; ?>>
+                <option value="<?= $one ?>" <?= ($user['perm'] === $one) ? 'selected' : '' ?>>
                     <?= ($one === 'alle') ? _('alle') : $one ?>
                 </option>
             <? endforeach; ?>
@@ -36,7 +36,7 @@ use Studip\Button, Studip\LinkButton;
         </label>
 
         <label>
-            <input type="checkbox" name="locked" value="1" <? if ($user['locked']) echo 'checked'; ?>>
+            <input type="checkbox" name="locked" value="1" <?=  ($user['locked']) ?  'checked' : '' ?>>
             <?= _('nur gesperrt') ?>
         </label>
 
@@ -56,7 +56,7 @@ use Studip\Button, Studip\LinkButton;
         <section class="hgroup size-m">
             <select name="inaktiv" class="size-s">
             <? foreach(array('<=' => '>=', '=' => '=', '>' => '<', 'nie' =>_('nie')) as $i => $one): ?>
-                <option value="<?= htmlready($i) ?>" <? if ($user['inaktiv'] === $i) echo 'selected'; ?>>
+                <option value="<?= htmlready($i) ?>" <?= ($user['inaktiv'] === $i) ? 'selected' : '' ?>>
                     <?= htmlReady($one) ?>
                 </option>
             <? endforeach; ?>
@@ -71,25 +71,52 @@ use Studip\Button, Studip\LinkButton;
 
     </fieldset>
 
-    <fieldset class="collapsable <? if (!$advanced) echo 'collapsed'; ?>">
+    <fieldset class="collapsable <?= (!$advanced) ?  'collapsed' : '' ?>">
         <legend><?= _('Erweiterte Suche') ?></legend>
-
+        <label for="institute">
+            <?=_('Einrichtung')?>
+            <select name="institute">
+                <option value=""><?= _('Alle')?></option>
+                <? foreach($institutes as $institute) : ?>
+                    <option value="<?= $institute['Institut_id']?>" <?= $user['institute'] == $institute['Institut_id'] ? 'selected' : ''?>>
+                        <?= htmlReady($institute['Name'])?>
+                    </option>
+                <? endforeach ?>
+            </select>
+        </label>
         <label>
             <?= _('Nutzerdomäne') ?>
 
             <select name="userdomains">
                 <option value=""><?= _('Alle') ?></option>
-                <option value="null-domain" <? if ($user['userdomains'] === 'null-domain') echo 'selected'; ?>>
+                <option value="null-domain" <?= ($user['userdomains'] === 'null-domain') ? 'selected' : '' ?>>
                     <?= _('Ohne Domäne') ?>
                 </option>
             <? foreach ($userdomains as $one): ?>
-                <option value="<?= htmlReady($one->getId()) ?>" <? if ($user['userdomains'] === $one->getId()) echo 'selected'; ?>>
+                <option value="<?= htmlReady($one->getId()) ?>" <?= ($user['userdomains'] === $one->getId()) ? 'selected' : ''?>>
                     <?= htmlReady($one->getName() ?: $one->getId()) ?>
                 </option>
             <? endforeach; ?>
             </select>
         </label>
-
+        <label>
+            <?=_('Abschluss')?>
+            <select name="degree">
+                <option value=""><?=_('Alle')?></option>
+                <? foreach($degrees as $degree) : ?>
+                    <option value="<?= $degree->id ?>" <?= $user['degree'] == $degree->id ? 'selected' : ''?>><?=htmlReady($degree->name)?></option>
+                <? endforeach ?>
+            </select>
+        </label>
+        <label>
+            <?=_('Fach')?>
+            <select name="studycourse">
+                <option value=""><?=_('Alle')?></option>
+                <? foreach($studycourses as $studycourse) : ?>
+                    <option value="<?= $studycourse->id ?>" <?= $user['studycourse'] == $studycourse->id ? 'selected' : ''?>><?=htmlReady($studycourse->name)?></option>
+                <? endforeach ?>
+            </select>
+        </label>
         <label>
             <?= _('Authentifizierung') ?>
 
@@ -97,13 +124,13 @@ use Studip\Button, Studip\LinkButton;
                <option value=""><?= _('Alle') ?></option>
                <option value="preliminary"><?= _('vorläufig')?></option>
            <? foreach ($available_auth_plugins as $one): ?>
-                <option <? if ($user['auth_plugins'] === $one) echo 'selected'; ?>>
+                <option <?= ($user['auth_plugins'] === $one) ? 'selected' : '' ?>>
                     <?= htmlReady($one) ?>
                 </option>
             <? endforeach; ?>
             </select>
         </label>
-    
+
     <? foreach ($datafields as $datafield): ?>
         <label>
             <?= htmlReady($datafield->name) ?>
@@ -111,15 +138,15 @@ use Studip\Button, Studip\LinkButton;
         <? if ($datafield->type === 'bool'): ?>
             <section class="hgroup size-m">
                 <label>
-                    <input type="radio" name="<?= $datafield->id ?>" value="" <? if (strlen($user[$datafield->id]) === 0) echo 'checked'; ?>>
+                    <input type="radio" name="<?= $datafield->id ?>" value="" <?= (strlen($user[$datafield->id]) === 0) ? 'checked' : '' ?>>
                     <?= _('egal') ?>
                 </label>
                 <label>
-                    <input type="radio" name="<?= $datafield->id ?>" value="1" <? if ($user[$datafield->id] === '1') echo 'checked'; ?>>
+                    <input type="radio" name="<?= $datafield->id ?>" value="1" <?= ($user[$datafield->id] === '1') ? 'checked' : '' ?>>
                     <?= _('ja') ?>
                 </label>
                 <label>
-                    <input type="radio" name="<?= $datafield->id ?>" value="0" <? if ($user[$datafield->id] === '0') echo 'checked'; ?>>
+                    <input type="radio" name="<?= $datafield->id ?>" value="0" <?= ($user[$datafield->id] === '0') ? 'checked' : '' ?>>
                     <?= _('nein') ?>
                 </label>
             </section>
