@@ -671,6 +671,7 @@ class Admin_CoursesController extends AuthenticatedController
             'name'        => _('Name'),
             'type'        => _('Veranstaltungstyp'),
             'room_time'   => _('Raum/Zeit'),
+            'semester'    => _('Semester'),
             'teachers'    => _('Lehrende'),
             'members'     => _('Teilnehmende'),
             'waiting'     => _('Personen auf Warteliste'),
