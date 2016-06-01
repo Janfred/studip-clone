@@ -23,6 +23,7 @@ class Settings_NotificationController extends Settings_SettingsController
      *
      * @param String $action Name of the action to be invoked
      * @param Array  $args   Arguments to be passed to the action method
+     *
      * @throws AccessDeniedException if notifications are not globally enabled
      *                               or if the user has no access to these
      *                               notifications (admin or root accounts).
@@ -53,15 +54,15 @@ class Settings_NotificationController extends Settings_SettingsController
      */
     public function index_action()
     {
-        $group_field = UserConfig::get($this->user->user_id)->MY_COURSES_GROUPING ?: 'not_grouped';
+        $group_field = 'sem_number';
 
         $add_fields = $add_query = '';
-        if ($group_field == 'sem_tree_id'){
+        if ($group_field == 'sem_tree_id') {
             $add_fields = ',sem_tree_id';
-            $add_query = "LEFT JOIN seminar_sem_tree sst ON (sst.seminar_id=seminare.Seminar_id)";
-        } else if ($group_field == 'dozent_id'){
+            $add_query  = "LEFT JOIN seminar_sem_tree sst ON (sst.seminar_id=seminare.Seminar_id)";
+        } else if ($group_field == 'dozent_id') {
             $add_fields = ', su1.user_id as dozent_id';
-            $add_query = "LEFT JOIN seminar_user as su1 ON (su1.seminar_id=seminare.Seminar_id AND su1.status='dozent')";
+            $add_query  = "LEFT JOIN seminar_user as su1 ON (su1.seminar_id=seminare.Seminar_id AND su1.status='dozent')";
         }
 
         $dbv = DbView::getView('sem_tree');
@@ -75,30 +76,31 @@ class Settings_NotificationController extends Settings_SettingsController
                   {$add_query}
                   WHERE seminar_user.user_id = ?";
         if (get_config('DEPUTIES_ENABLE')) {
-            $query .= " UNION ".getMyDeputySeminarsQuery('notification', $dbv->sem_number_sql, $dbv->sem_number_end_sql, $add_fields, $add_query);
+            $query .= " UNION " . getMyDeputySeminarsQuery('notification', $dbv->sem_number_sql, $dbv->sem_number_end_sql, $add_fields, $add_query);
         }
         $query .= " ORDER BY sem_nr ASC";
 
         $statement = DBManager::get()->prepare($query);
-        $statement->execute(array($this->user->user_id));
+        $statement->execute([$this->user->user_id]);
         $seminars = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         if (!count($seminars)) {
             $message = sprintf(_('Sie haben zur Zeit keine Veranstaltungen belegt. Bitte nutzen Sie %s<b>Veranstaltung suchen / hinzufügen</b>%s um sch für Veranstaltungen anzumdelden.'),
-                               '<a href="' . URLHelper::getLink('dispatch.php/search/courses') . '">', '</a>');
+                '<a href="' . URLHelper::getLink('dispatch.php/search/courses') . '">', '</a>');
             PageLayout::postMessage(MessageBox::info($message));
             $this->set_layout($GLOBALS['template_factory']->open('layouts/base_without_infobox'));
             $this->render_nothing();
+
             return;
         }
 
-        $modules = new ModulesNotification();
+        $modules         = new ModulesNotification();
         $enabled_modules = $modules->getGlobalEnabledNotificationModules('sem');
 
-        $groups = array();
-        $my_sem = array();
+        $groups = [];
+        $my_sem = [];
         foreach ($seminars as $seminar) {
-            $my_sem[$seminar['Seminar_id']] = array(
+            $my_sem[$seminar['Seminar_id']] = [
                 'obj_type'       => "sem",
                 'sem_nr'         => $seminar['sem_nr'],
                 'name'           => $seminar['Name'],
@@ -106,15 +108,15 @@ class Settings_NotificationController extends Settings_SettingsController
                 'gruppe'         => $seminar['gruppe'],
                 'sem_status'     => $seminar['sem_status'],
                 'sem_number'     => $seminar['sem_number'],
-                'sem_number_end' => $seminar['sem_number_end']
-            );
-            if ($group_field){
-                fill_groups($groups, $seminar[$group_field], array(
+                'sem_number_end' => $seminar['sem_number_end'],
+            ];
+            if ($group_field) {
+                fill_groups($groups, $seminar[$group_field], [
                     'seminar_id' => $seminar['Seminar_id'],
                     'sem_nr'     => $seminar['sem_nr'],
                     'name'       => $seminar['Name'],
-                    'gruppe'     => $seminar['gruppe']
-                ));
+                    'gruppe'     => $seminar['gruppe'],
+                ]);
             }
         }
 
@@ -125,22 +127,23 @@ class Settings_NotificationController extends Settings_SettingsController
         }
 
         sort_groups($group_field, $groups);
-        $group_names = get_group_names($group_field, $groups);
+        $group_names   = get_group_names($group_field, $groups);
         $notifications = $modules->getModuleNotification();
-        $open = UserConfig::get($this->user->user_id)->MY_COURSES_OPEN_GROUPS;
-        $checked = array();
-        foreach ($groups as $group_id => $group_members){
+        $open          = UserConfig::get($this->user->user_id)->MY_COURSES_OPEN_GROUPS;
+        $checked       = [];
+        foreach ($groups as $group_id => $group_members) {
             if ($group_id !== 'not_grouped' && !isset($open[$group_id])) {
                 continue;
             }
-            foreach ($group_members as $member){
-                $checked[$member['seminar_id']] = array();
+            foreach ($group_members as $member) {
+                $checked[$member['seminar_id']] = [];
                 foreach (array_values($enabled_modules) as $index => $m_data) {
                     $checked[$member['seminar_id']][$index] = $modules->isBit($notifications[$member['seminar_id']], $m_data['id']);
                 }
                 $checked[$member['seminar_id']]['all'] = count($enabled_modules) === count(array_filter($checked[$member['seminar_id']]));
             }
         }
+
 
         $this->modules       = $enabled_modules;
         $this->groups        = $groups;
@@ -173,7 +176,7 @@ class Settings_NotificationController extends Settings_SettingsController
      */
     public function open_action($id)
     {
-        $open = $this->config->MY_COURSES_OPEN_GROUPS;
+        $open      = $this->config->MY_COURSES_OPEN_GROUPS;
         $open[$id] = true;
         $this->config->store('MY_COURSES_OPEN_GROUPS', $open);
 
@@ -192,5 +195,20 @@ class Settings_NotificationController extends Settings_SettingsController
         $this->config->store('MY_COURSES_OPEN_GROUPS', $open);
 
         $this->redirect('settings/notification');
+    }
+
+    public function module_icon($area)
+    {
+        $mapping = [
+            'documents'           => 'files',
+            'elearning_interface' => 'learnmodule',
+            'scm'                 => 'infopage',
+            'votes'               => 'vote',
+            'basic_data'          => 'seminar',
+            'participants'        => 'persons',
+            'plugins'             => 'plugin',
+        ];
+
+        return $mapping[$area] ?: $area;
     }
 }
