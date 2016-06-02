@@ -52,6 +52,7 @@
         <div class="current_page"><?= _('Aktuelle Seite:') ?></div>
     <? endif; ?>
     </div>
+    <div id="barBottomArrow"></div>
     <div id="barBottommiddle">
         <?= ($current_page != "" ? htmlReady($current_page) : "") ?>
         <?= $public_hint ? '(' . htmlReady($public_hint) . ')' : '' ?>
