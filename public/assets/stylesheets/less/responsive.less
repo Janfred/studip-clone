@@ -155,7 +155,7 @@ label[for="responsive-toggle"] {
 }
 
 @media screen and (max-width: @small-screen-width) {
-    #header, #barTopFont, #barTopMenu, #barBottomLeft .current_page, #barBottommiddle, #barBottomLeft,
+    #header, #barTopFont, #barTopMenu, #barBottomLeft .current_page, #barBottommiddle, #barBottomLeft, #barBottomArrow,
     #tabs, .sidebar-image, #sidebar-navigation, #quicksearch, #layout_footer, li#quicksearch_item {
         display: none !important;
     }
@@ -177,6 +177,7 @@ label[for="responsive-toggle"] {
 
     #barBottomright, #barBottomright ul {
         .box-sizing(border-box);
+        flex: 1;
     }
 
     #barBottomright {

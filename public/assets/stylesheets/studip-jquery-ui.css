@@ -2464,7 +2464,7 @@ body .ui-tooltip {
 }
 /* --- textarea resizer ----------------------------------------------------- */
 textarea.ui-resizable-handle.ui-resizable-s {
-  background: #eeeeee url("../images/vendor/handle_background.png") no-repeat center;
+  background: #eee url("../images/vendor/handle_background.png") no-repeat center;
   bottom: 0;
   cursor: s-resize;
   height: 12px;
