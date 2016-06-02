@@ -1825,7 +1825,21 @@ form.default.inline button {
 }
 #barBottomContainer #barBottomLeft {
   padding: 0 15px;
+  position: relative;
+  margin-right: 0;
   z-index: 2;
+}
+#barBottomContainer #barBottomLeft:before {
+  border: 12px solid rgba(137, 155, 186, 0);
+  content: "";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-left-color: #899bba;
+  left: 100%;
+  top: 50%;
+  margin-top: -12px;
 }
 #barBottomContainer #barBottomArrow {
   background-color: #899bba;
@@ -1836,20 +1850,7 @@ form.default.inline button {
   background-image: linear-gradient(to right, #365a90, #899bba);
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff365a90', endColorstr='#ff899bba', GradientType=1);
-  position: relative;
-  margin-right: 0;
   width: 30px;
-}
-#barBottomContainer #barBottomArrow:before {
-  border: 12px solid rgba(137, 155, 186, 0);
-  content: "";
-  height: 0;
-  width: 0;
-  position: absolute;
-  pointer-events: none;
-  border-left-color: #899bba;
-  top: 50%;
-  margin-top: -12px;
 }
 #barBottomContainer #barBottommiddle {
   z-index: 1;
@@ -2131,10 +2132,11 @@ li#notification_container:hover .list {
   position: absolute;
   pointer-events: none;
   border-left-color: #d60000;
+  left: 100%;
   top: 50%;
   margin-top: -12px;
 }
-#barBottomContainer.public_course #barBottommiddle:before {
+#barBottomContainer.public_course #barBottomArrow {
   background-color: #d60000;
   background-image: -moz-linear-gradient(left, #a30000, #d60000);
   background-image: -webkit-gradient(linear, 0 0, 100% 0, from(#a30000), to(#d60000));
@@ -2398,6 +2400,7 @@ ul.widget-list > li {
   position: absolute;
   pointer-events: none;
   border-left-color: #7e92b0;
+  left: 100%;
   top: 50%;
   margin-top: -10px;
 }
@@ -2409,6 +2412,7 @@ ul.widget-list > li {
   position: absolute;
   pointer-events: none;
   border-left-color: #a9b6cb;
+  left: 100%;
   top: 50%;
   margin-top: -9px;
 }
@@ -2431,6 +2435,7 @@ ul.widget-list > li {
   position: absolute;
   pointer-events: none;
   border-left-color: #ffbd33;
+  left: 100%;
   top: 50%;
   margin-top: -10px;
 }
@@ -2442,6 +2447,7 @@ ul.widget-list > li {
   position: absolute;
   pointer-events: none;
   border-left-color: #ffe5ad;
+  left: 100%;
   top: 50%;
   margin-top: -9px;
 }
