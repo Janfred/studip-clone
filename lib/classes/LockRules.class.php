@@ -227,8 +227,8 @@ class LockRules {
         $attributes['user']['schwerp'] = array('name' => _("Publikationen"), 'group' => 'misc');
         $attributes['user']['institute_data'] = array('name' => _("Einrichtungsdaten"), 'group' => 'misc');
 
-        foreach(DataField::getDataFields($type) as $df_id => $df) {
-            $attributes[$type][$df_id] = array('name' => $df->data['name'], 'group' => 'misc');
+        foreach(DataField::getDataFields($type) as $df) {
+            $attributes[$type][$df->datafield_id] = array('name' => $df->name, 'group' => 'misc');
         }
 
         return array('groups' => $groups,'attributes' => $attributes[$type]);
