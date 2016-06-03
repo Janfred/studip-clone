@@ -252,12 +252,16 @@ class messaging
         // Now, let us send the message
         $mail = new StudipMail();
         $mail->setSubject($title)
-             ->addRecipient($to, $rec_fullname)
-             ->setReplyToEmail('')
-             ->setBodyText($mailmessage);
-        if (strlen($reply_to)) {
+            ->setReplyToEmail('')
+            ->addRecipient($to, $rec_fullname)
+            ->setBodyText($mailmessage);
+        if ($GLOBALS['MESSAGING_FORWARD_USE_REPLYTO']) {
+            $mail->setReplyToEmail($reply_to)
+                ->setReplyToName($snd_fullname);
+        } elseif (strlen($reply_to)) {
             $mail->setSenderEmail($reply_to)
-                 ->setSenderName($snd_fullname);
+                ->setSenderName($snd_fullname)
+                ->setReplyToEmail('');
         }
         $user_cfg = UserConfig::get($rec_user_id);
         if ($user_cfg->getValue('MAIL_AS_HTML')) {
