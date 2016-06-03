@@ -296,6 +296,7 @@ $MESSAGING_FORWARD_USE_REPLYTO = FALSE;                     //send forwarded mes
 $ENABLE_EMAIL_TO_STATUSGROUP = TRUE;                                // enable to send messages to whole status groups
 
 $ENABLE_EMAIL_ATTACHMENTS = TRUE;                               // enable attachment functions for internal and external messages
+$MAIL_ATTACHMENTS_MAX_SIZE = 10;                             //maximum size of attachments in MB
 
 /*advanced system settings
 ----------------------------------------------------------------

@@ -215,8 +215,8 @@ class messaging
      */
     function sendingEmail($rec_user_id, $snd_user_id, $message, $subject, $message_id)
     {
-        $receiver     = User::find($rec_user_id);
-        $to           = $receiver->Email;
+        $receiver = User::find($rec_user_id);
+        $to = $receiver->Email;
 
         // do not try to send mails to users without a mail address
         if (!$to) {
@@ -227,24 +227,38 @@ class messaging
 
         setTempLanguage($rec_user_id);
 
-        $title = "[Stud.IP - " . $GLOBALS['UNI_NAME_CLEAN'] . "] ".kill_format(str_replace(array("\r","\n"), '', $subject));
+        $title = "[Stud.IP - " . $GLOBALS['UNI_NAME_CLEAN'] . "] " . kill_format(str_replace(array("\r", "\n"), '', $subject));
 
         if ($snd_user_id != "____%system%____") {
             $sender = User::find($snd_user_id);
 
             $snd_fullname = $sender->getFullName();
-            $reply_to     = $sender->Email;
+            $reply_to = $sender->Email;
         }
-
+        $attachments = array();
+        if ($GLOBALS['ENABLE_EMAIL_ATTACHMENTS']) {
+            $attachments = get_message_attachments($message_id);
+            $size_of_attachments = array_sum(array_map(function ($a) {
+                return $a['filesize'];
+            }, $attachments));
+            //assume base64 takes 33% more space
+            $attachments_as_links = $size_of_attachments * 1.33 > $GLOBALS['MAIL_ATTACHMENTS_MAX_SIZE'] * 1024 * 1024;
+        }
         $template = $GLOBALS['template_factory']->open('mail/text');
         $template->set_attribute('message', kill_format($message));
         $template->set_attribute('rec_fullname', $rec_fullname);
+        if ($attachments_as_links) {
+            $template->set_attribute('attachments', $attachments);
+        }
         $mailmessage = $template->render();
 
         $template = $GLOBALS['template_factory']->open('mail/html');
         $template->set_attribute('lang', getUserLanguagePath($rec_user_id));
         $template->set_attribute('message', $message);
         $template->set_attribute('rec_fullname', $rec_fullname);
+        if ($attachments_as_links) {
+            $template->set_attribute('attachments', $attachments);
+        }
         $mailhtml = $template->render();
 
         restoreLanguage();
@@ -268,8 +282,8 @@ class messaging
             $mail->setBodyHtml($mailhtml);
         }
 
-        if ($GLOBALS['ENABLE_EMAIL_ATTACHMENTS']) {
-            foreach (get_message_attachments($message_id) as $attachment) {
+        if (count($attachments) && !$attachments_as_links) {
+            foreach ($attachments as $attachment) {
                 $mail->addStudipAttachment($attachment['dokument_id']);
             }
         }
