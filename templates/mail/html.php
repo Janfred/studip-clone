@@ -11,6 +11,19 @@
     <p>
       <?= formatReady($message, true, true) ?>
     </p>
+    <? if (is_array($attachments) && count($attachments)) : ?>
+    <hr>
+    <span class="minor"> 
+      <?=_("Dateianhänge:")?>
+        <ul> 
+        <? foreach($attachments as $one) : ?>
+       	  <li> 
+            <a href="<?=GetDownloadLink($one['dokument_id'], $one['filename'], 7, 'force')?>"><?= htmlReady($one['filename'] . ' (' . relsize($one['filesize'], false) . ')') ?></a> 
+          </li>
+        <? endforeach;?>
+     	</ul> 
+     </span>
+  	<? endif;?>
     <hr>
     <span class="minor">
       <?= sprintf(_("Diese E-Mail ist eine Kopie einer systeminternen Nachricht, die in Stud.IP an %s versendet wurde."), htmlReady($rec_fullname)) ?><br>
