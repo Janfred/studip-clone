@@ -291,6 +291,7 @@ $MAIL_VALIDATE_BOX = TRUE;                              //check for valid mail a
 
 $MESSAGING_FORWARD_AS_EMAIL = TRUE;                         //enable to forward every internal message to the user-mail (the user is able to deactivate this function in his personal settings)
 $MESSAGING_FORWARD_DEFAULT = 1;                             //the default setting: if 1, the user has to switch it on; if 2, every message will be forwarded; if 3 every message will be forwarded on request of the sender
+$MESSAGING_FORWARD_USE_REPLYTO = FALSE;                     //send forwarded messages as system user and add reply-to header
 
 $ENABLE_EMAIL_TO_STATUSGROUP = TRUE;                                // enable to send messages to whole status groups
 
