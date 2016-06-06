@@ -112,7 +112,7 @@ class AuxLockRules
     {
         $entries = DataField::getDataFields('usersemdata');
         foreach ($entries as $id => $entry) {
-            if ($fields[$id] == 1) return true;
+            if ($fields[$entry->datafield_id] == 1) return true;
         }
 
         return false;
