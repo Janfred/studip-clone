@@ -55,9 +55,16 @@ class Admin_AdditionalController extends AuthenticatedController
                 $stmt = DBManager::get()->prepare('DELETE FROM datafields_entries WHERE sec_range_id = ?');
                 $stmt->execute(array($this->course->id));
             }
-            $this->course->store();
+            
+            if ($this->course->store()) {
+                if (!is_null($this->course->aux_lock_rule)) {
+                    PageLayout::postSuccess(_('Zusatzangaben wurden erfolgreich zugeordnet'));
+                } else {
+                    PageLayout::postSuccess(_('Zuweisung der Zusatzangaben wurden aufgehoben'));
+                }
+            } 
         }
-
+  
         // Fetch data
         $stmt = DBManager::get()->prepare('SELECT COUNT(*) FROM datafields_entries WHERE sec_range_id = ?');
         $stmt->execute(array($this->course->id));
