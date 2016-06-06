@@ -1923,6 +1923,10 @@ li#notification_container:hover .list {
 #notification_container.hoverable:hover .list {
   display: block;
 }
+#notification_container #notification_list {
+  z-index: 1001;
+  margin-top: 8px;
+}
 #notification_container #notification_list ul {
   width: 100%;
   padding: 2px;
@@ -1972,10 +1976,12 @@ li#notification_container:hover .list {
   left: 0;
   right: 0;
   height: 10px;
-  opacity: 0;
+}
+#notification_container .list:before {
+  left: 288px;
 }
 #notification_container .list.below {
-  left: -195px;
+  left: -370px;
 }
 #notification_container .list.left {
   right: 0px;
@@ -1996,7 +2002,6 @@ li#notification_container:hover .list {
   line-height: 20px;
   display: block;
   height: auto;
-  opacity: 0;
   -webkit-transition: background-color 0.5s, opacity 0.8s;
   -moz-transition: background-color 0.5s, opacity 0.8s;
   -o-transition: background-color 0.5s, opacity 0.8s;

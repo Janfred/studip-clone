@@ -97,6 +97,8 @@
         .list { display: block; }
     }
     #notification_list {
+        z-index: 1001;
+        margin-top: 8px;
         ul {
             width: 100%;
             padding: 2px;
@@ -140,12 +142,15 @@
             left: 0;
             right: 0;
             height: @arrow-height;
-            opacity: 0;
+        }
+
+        &:before {
+            left: 288px;
         }
 
         // Positions: below or left'ish or right'ish to the triggering element
         &.below {
-            left: ((-@width) / 2 + 5px);
+            left: ((-@width) + 30px);
         }
         &.left {
             right: 0px;
@@ -167,7 +172,6 @@
             line-height: 20px;
             display: block;
             height: auto;
-            opacity: 0;
             .transition(~"background-color 0.5s, opacity 0.8s");
             padding-top: @padding;
             padding-bottom: @padding;
