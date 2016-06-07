@@ -159,7 +159,7 @@ class Admission_CoursesetController extends AuthenticatedController {
                 $this->selectedInstitutes = array();
                 $allCourses = array();
                 $selectedCourses = array();
-                $this->selectedSemester = Semester::findCurrent()->semester_id;
+                $this->selectedSemester = $_SESSION['_default_sem'] ?: Semester::findCurrent()->semester_id;
             }
             Config::get()->AJAX_AUTOCOMPLETE_DISABLED = false;
             $this->instSearch = QuickSearch::get("institute_id", new StandardSearch("Institut_id"))
@@ -185,7 +185,7 @@ class Admission_CoursesetController extends AuthenticatedController {
                     $this->selectedSemester = $this->courseset->getSemester();
                 }
             } else {
-                $this->selectedSemester = Semester::findCurrent()->semester_id;
+                $this->selectedSemester = $_SESSION['_default_sem'] ?: Semester::findCurrent()->semester_id;
                 $this->selectedInstitutes = $this->myInstitutes;
                 $allCourses = CoursesetModel::getInstCourses(array_keys($this->myInstitutes), $coursesetId, array(), $this->selectedSemester, $this->onlyOwnCourses);
                 $selectedCourses = array();
@@ -231,6 +231,9 @@ class Admission_CoursesetController extends AuthenticatedController {
             if ($this->flash['private']) {
                 $this->courseset->setPrivate($this->flash['private']);
             }
+            if ($this->flash['semester']) {
+                $this->selectedSemester = $this->flash['semester'];
+            }
         }
         // Fetch all lists with special user chances.
         $this->myUserlists = AdmissionUserList::getUserLists($GLOBALS['user']->id);
@@ -270,6 +273,7 @@ class Admission_CoursesetController extends AuthenticatedController {
             $this->flash['userlists'] = Request::getArray('userlists');
             $this->flash['infotext'] = Request::get('infotext');
             $this->flash['private'] = (bool) Request::get('private');
+            $this->flash['semester'] = Request::option('semester');
             if (Request::submitted('add_institute')) {
                 $this->flash['institutes'] = array_merge($this->flash['institutes'], array(Request::option('institute_id')));
             } else {
@@ -310,6 +314,9 @@ class Admission_CoursesetController extends AuthenticatedController {
                 $courseset->addAdmissionRule($rule);
             }
             $courseset->store();
+            if (Request::submitted('semester')) {
+                $_SESSION['_default_sem'] = Request::option('semester');
+            }
             PageLayout::postMessage(MessageBox::success(sprintf(_("Das Anmeldeset: %s wurde gespeichert"), htmlReady($courseset->getName()))));
             if ($this->instant_course_set_view) {
                 $this->redirect($this->url_for('course/admission'));
