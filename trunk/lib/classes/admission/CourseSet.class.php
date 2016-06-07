@@ -185,7 +185,7 @@ class CourseSet
      * Deletes the course set and all associated data.
      */
     public function delete() {
-        NotificationCenter::postNotification('CourseSetWillDelete', $this->id, $GLOBALS['user']->id); 
+        NotificationCenter::postNotification('CourseSetWillDelete', $this->id, $GLOBALS['user']->id);
         // Delete institute associations.
         $stmt = DBManager::get()->prepare("DELETE FROM `courseset_institute`
             WHERE `set_id`=?");
@@ -218,7 +218,7 @@ class CourseSet
         }
         //Delete priorities
         AdmissionPriority::unsetAllPriorities($this->getId());
-        NotificationCenter::postNotification('CourseSetDidDelete', $this->id, $GLOBALS['user']->id); 
+        NotificationCenter::postNotification('CourseSetDidDelete', $this->id, $GLOBALS['user']->id);
     }
 
     /**
@@ -245,12 +245,12 @@ class CourseSet
 
     public function setAlgorithmRun($state)
     {
-        NotificationCenter::postNotification('CourseSetAlgorithmWillStart', $state, $this->getId()); 
+        NotificationCenter::postNotification('CourseSetAlgorithmWillStart', $state, $this->getId());
         $this->hasAlgorithmRun = (bool)$state;
         $db = DbManager::get();
         $ok = $db->execute("UPDATE coursesets SET algorithm_run = ? WHERE set_id = ?", array($this->hasAlgorithmRun, $this->getId()));
         if ($ok) {
-            NotificationCenter::postNotification('CourseSetAlgorithmDidStart', $state, $this->getId()); 
+            NotificationCenter::postNotification('CourseSetAlgorithmDidStart', $state, $this->getId());
         }
         return $ok;
     }
@@ -512,7 +512,7 @@ class CourseSet
                  AND seminar_id IN(?)", array($this->getCourses()));
         $semester = Semester::findByTimestamp($timestamp);
         if (!$semester) {
-            $semester = Semester::findCurrent();
+            $semester = $_SESSION['_default_sem'] ? Semester::find($_SESSION['_default_sem']) : Semester::findCurrent();
         }
         return $semester->id;
     }
