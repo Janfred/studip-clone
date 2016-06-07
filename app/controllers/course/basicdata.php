@@ -139,7 +139,7 @@ class Course_BasicdataController extends AuthenticatedController
 
         $this->descriptions = array();
         $this->descriptions[] = array(
-            'title' => _("Teilnehmde"),
+            'title' => _("Teilnehmende"),
             'name' => "course_participants",
             'type' => 'textarea',
             'value' => $data['participants'],
