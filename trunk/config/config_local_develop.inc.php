@@ -463,6 +463,19 @@ $PHPASS_USE_PORTABLE_HASH = true;
 
 $ENABLE_FREE_ACCESS = TRUE;                         //if true, courses with public access are available
 
+// Login ip range check
+$ENABLE_ADMIN_IP_CHECK = false;
+$ENABLE_ROOT_IP_CHECK = false;
+$LOGIN_IP_RANGES =
+    [
+        'V4' => [
+            ['start' => '', 'end' => ''],
+        ]
+        ,
+        'V6' => [
+            ['start' => '', 'end' => ''],
+        ]
+    ];
 
 /*path generation
 -----------------------------------------------------------------
