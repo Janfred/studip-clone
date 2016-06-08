@@ -100,7 +100,7 @@ class StudipAuthAbstract {
     var $error_head;
 
     private static $plugin_instances;
-    
+
     /**
     * static method to instantiate and retrieve a reference to an object (singleton)
     *
@@ -135,7 +135,7 @@ class StudipAuthAbstract {
     * @param    string  the password to check
     * @return   array   structure: array('uid'=>'string <Stud.IP user id>','error'=>'string <error message>','is_new_user'=>'bool')
     */
-    static function CheckAuthentication($username,$password) 
+    static function CheckAuthentication($username, $password)
     {
 
         $plugins = StudipAuthAbstract::GetInstance();
@@ -146,22 +146,27 @@ class StudipAuthAbstract {
             if ($object instanceof StudipAuthSSO) {
                 continue;
             }
-            if ($user = $object->authenticateUser($username,$password)) {
+            if ($user = $object->authenticateUser($username, $password)) {
                 if ($user) {
                     $uid = $user->id;
                     $locked = $user['locked'];
                     $key = $user['validation_key'];
+                    $checkIPRange = ($GLOBALS['ENABLE_ADMIN_IP_CHECK'] && $user['perms'] === 'admin')
+                        || ($GLOBALS['ENABLE_ROOT_IP_CHECK'] && $user['perms'] === 'root');
 
                     $exp_d = UserConfig::get($user['user_id'])->EXPIRATION_DATE;
 
                     if ($exp_d > 0 && $exp_d < time()) {
-                        $error .= _("Dieses Benutzerkonto ist abgelaufen.<br> Wenden Sie sich bitte an die Administration.")."<BR>";
-                        return array('uid' => false,'error' => $error);
-                    }else if ($locked=="1") {
-                        $error .= _("Dieser Benutzer ist gesperrt! Wenden Sie sich bitte an die Administration.")."<BR>";
-                        return array('uid' => false,'error' => $error);
-                    }else if ($key != '') {
-                        return array('uid' => $uid, 'user' => $user, 'error' => $error,'need_email_activation' => $uid);
+                        $error .= _("Dieses Benutzerkonto ist abgelaufen.<br> Wenden Sie sich bitte an die Administration.") . "<BR>";
+                        return array('uid' => false, 'error' => $error);
+                    } else if ($locked == "1") {
+                        $error .= _("Dieser Benutzer ist gesperrt! Wenden Sie sich bitte an die Administration.") . "<BR>";
+                        return array('uid' => false, 'error' => $error);
+                    } else if ($key != '') {
+                        return array('uid' => $uid, 'user' => $user, 'error' => $error, 'need_email_activation' => $uid);
+                    } else if ($checkIPRange && !self::CheckIPRange()) {
+                        $error .= _("Der Login in Ihren Account ist aus diesem Netzwerk nicht erlaubt.") . "<BR>";
+                        return array('uid' => false, 'error' => $error);
                     }
                 }
                 return array('uid' => $uid, 'user' => $user, 'error' => $error, 'is_new_user' => $object->is_new_user);
@@ -169,7 +174,7 @@ class StudipAuthAbstract {
                 $error .= (($object->error_head) ? ("<b>" . $object->error_head . ":</b> ") : "") . $object->error_msg . "<br>";
             }
         }
-        return array('uid' => $uid,'error' => $error);
+        return array('uid' => $uid, 'error' => $error);
     }
 
     /**
@@ -217,6 +222,62 @@ class StudipAuthAbstract {
         return (is_object($plugin) ? $plugin->isMappedField($field_name) : false);
     }
 
+    /**
+     * static method to check if ip address belongs to allowed range
+     *
+     * @return   bool    true if the client ip address is within the valid range
+     */
+    static function CheckIPRange()
+    {
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $version = substr_count($ip, ':') > 1 ? 'V6' : 'V4'; // valid ip v6 addresses have atleast two colons
+        $method = 'CheckIPRange' . $version;
+        if (is_array($GLOBALS['LOGIN_IP_RANGES'][$version])) {
+         foreach ($GLOBALS['LOGIN_IP_RANGES'][$version] as $range) {
+                if (self::$method($ip, $range)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param $ip string IPv4 adress
+     * @param $range array assoc array with [start] & [end]
+     * @return bool
+     */
+    static function CheckIPRangeV4($ip, $range)
+    {
+        $ipv4 = ip2long($ip);
+        if ($ipv4 === false) {
+            return false; // invalid ip address
+        }
+
+        $start = ip2long($range['start']);
+        $end = ip2long($range['end']);
+
+        return $ipv4 >= $start && $ipv4 <= $end;
+    }
+
+    /**
+     * @param $ip string IPv6 address
+     * @param $range array assoc array with [start] & [end]
+     * @return bool
+     */
+    static function CheckIPRangeV6($ip, $range)
+    {
+        $ipv6 = inet_pton($ip);
+        if ($ipv6 === false) {
+            return false; // invalid ip address
+        }
+
+        $start = inet_pton($range['start']);
+        $end = inet_pton($range['end']);
+
+        return strlen($ipv6) === strlen($start)
+        && $ipv6 >= $start && $ipv6 <= $end;
+    }
 
     /**
     * Constructor
@@ -310,7 +371,7 @@ class StudipAuthAbstract {
      *
      * this method is invoked for one time, if a new user logs in ($this->is_new_user is true)
      * place special treatment of new users here
-     * 
+     *
      * @access private
      * @param
      *            User the user object
