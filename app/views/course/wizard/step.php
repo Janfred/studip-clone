@@ -1,5 +1,5 @@
 <?php if ($content) : ?>
-    <form class="default" data-secure action="<?= $controller->url_for('course/wizard/process', $stepnumber, $temp_id) ?>" method="post">
+    <form class="default course-wizard-step-<?= $stepnumber ?>" data-secure action="<?= $controller->url_for('course/wizard/process', $stepnumber, $temp_id) ?>" method="post">
         <?= $content ?>
         <footer data-dialog-button>
             <input type="hidden" name="step" value="<?= $stepnumber ?>"/>
