@@ -27,7 +27,7 @@ class AdvancedBasicDataWizardStep extends BasicDataWizardStep
      * @return String a Flexi template for getting needed data.
      */
     public function getStepTemplate($values, $stepnumber, $temp_id)
-    {        
+    {
         $values = $this->adjustValues($values);
 
        // We only need our own stored values here.
@@ -72,7 +72,14 @@ class AdvancedBasicDataWizardStep extends BasicDataWizardStep
     
     private function adjustValues($values)
     {
-        $values[get_parent_class($this)] = $values[__CLASS__];
+        $parent_class = get_parent_class($this);
+        
+        if (!isset($values[__CLASS__]) && isset($values[$parent_class])) {
+            $values[__CLASS__] = $values[$parent_class];
+        } else {
+            $values[$parent_class] = $values[__CLASS__];
+        }
+
         return $values;
     }
 }
