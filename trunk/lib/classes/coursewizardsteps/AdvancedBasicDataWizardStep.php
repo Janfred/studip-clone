@@ -38,17 +38,17 @@ class AdvancedBasicDataWizardStep extends BasicDataWizardStep
         // Load template from step template directory.
         $factory = new Flexi_TemplateFactory($GLOBALS['STUDIP_BASE_PATH'].'/app/views/course/wizard/steps');
         $template = $factory->open('advancedbasicdata/index');
-        
+
         return $this->setupTemplateAttributes($template, $values, $stepnumber, $temp_id)->render();
     }
-    
-    public function validate($values) 
+
+    public function validate($values)
     {
         $values = $this->adjustValues($values);
         return parent::validate($values);
     }
-    
-    public function storeValues($course, $values) 
+
+    public function storeValues($course, $values)
     {
         $values = $this->adjustValues($values);
         $course = parent::storeValues($course, $values);
@@ -60,20 +60,20 @@ class AdvancedBasicDataWizardStep extends BasicDataWizardStep
             if (!$course->store()) {
                 PageLayout::postError(sprintf(_('Es ist ein Fehler beim Speichern der Erweiterten-Einstellungen für %s aufgetreten. Kontrollieren Sie bitte:')
                         ,$course->name),
-                        array(_('Untertitel der Veranstalung'), 
-                            _('Art der Veranstaltung'), 
+                        array(_('Untertitel der Veranstalung'),
+                            _('Art der Veranstaltung'),
                             _('ECTS-Punkte der Veranstaltung'),
                             _('Max. Teilnehmerzahl der Veranstaltung')));
             }
-            return $course;            
+            return $course;
         }
         return false;
     }
-    
+
     private function adjustValues($values)
     {
         $parent_class = get_parent_class($this);
-        
+
         if (!isset($values[__CLASS__]) && isset($values[$parent_class])) {
             $values[__CLASS__] = $values[$parent_class];
         } else {
@@ -82,5 +82,24 @@ class AdvancedBasicDataWizardStep extends BasicDataWizardStep
 
         return $values;
     }
+
+    /**
+     * Copy values for basic data wizard step from given course.
+     * @param Course $course
+     * @param Array $values
+     */
+    public function copy($course, $values)
+    {
+        $values = parent::copy($course, $values);
+        $values = $this->adjustValues($values);
+
+        $values[__CLASS__] = array_merge($values[__CLASS__], [
+            'subtitle' => $course->untertitel,
+            'kind' => $course->art,
+            'ects' => $course->ects,
+            'maxmembers' => $course->admission_turnout,
+        ]);
+
+        return $values;
+    }
 }
-    
