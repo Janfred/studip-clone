@@ -227,13 +227,13 @@ class StudipAuthAbstract {
      *
      * @return   bool    true if the client ip address is within the valid range
      */
-    static function CheckIPRange()
+    public static function CheckIPRange()
     {
         $ip = $_SERVER['REMOTE_ADDR'];
         $version = substr_count($ip, ':') > 1 ? 'V6' : 'V4'; // valid ip v6 addresses have atleast two colons
         $method = 'CheckIPRange' . $version;
         if (is_array($GLOBALS['LOGIN_IP_RANGES'][$version])) {
-         foreach ($GLOBALS['LOGIN_IP_RANGES'][$version] as $range) {
+            foreach ($GLOBALS['LOGIN_IP_RANGES'][$version] as $range) {
                 if (self::$method($ip, $range)) {
                     return true;
                 }
@@ -247,7 +247,7 @@ class StudipAuthAbstract {
      * @param $range array assoc array with [start] & [end]
      * @return bool
      */
-    static function CheckIPRangeV4($ip, $range)
+    public static function CheckIPRangeV4($ip, $range)
     {
         $ipv4 = ip2long($ip);
         if ($ipv4 === false) {
@@ -265,7 +265,7 @@ class StudipAuthAbstract {
      * @param $range array assoc array with [start] & [end]
      * @return bool
      */
-    static function CheckIPRangeV6($ip, $range)
+    public static function CheckIPRangeV6($ip, $range)
     {
         $ipv6 = inet_pton($ip);
         if ($ipv6 === false) {
