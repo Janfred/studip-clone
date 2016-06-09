@@ -37,7 +37,11 @@ class Admin_CoursesController extends AuthenticatedController
     {
         parent::before_filter($action, $args);
 
-        Navigation::activateItem('/browse/my_courses/list');
+        if ($GLOBALS['perm']->have_perm("admin")) {
+            Navigation::activateItem('/browse/my_courses/list');
+        } else {
+            Navigation::activateItem('/browse/admincourses');
+        }
 
         // we are defintely not in an lecture or institute
         closeObject();
