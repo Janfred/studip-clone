@@ -70,14 +70,14 @@ class PreferentialAdmission extends AdmissionRule
      *      will be loaded from database.
      * @return AdmissionRule the current object (this).
      */
-    public function __construct($ruleId='') {
+    public function __construct($ruleId='')
+    {
         $this->id = $ruleId;
         if ($ruleId) {
             $this->load();
         } else {
             $this->id = $this->generateId('prefadmissions');
         }
-        return $this;
     }
 
     /**
@@ -86,7 +86,8 @@ class PreferentialAdmission extends AdmissionRule
      * @param  UserFilter condition
      * @return PreferentialAdmission
      */
-    public function addCondition($condition) {
+    public function addCondition($condition)
+    {
         $this->conditions[$condition->getId()] = $condition;
         return $this;
     }
@@ -95,7 +96,8 @@ class PreferentialAdmission extends AdmissionRule
      * Hook that can be called after the seat distribution on the courseset
      * has completed. User lists that were generated before are removed now.
      */
-    public function afterSeatDistribution(&$courseset) {
+    public function afterSeatDistribution($courseset)
+    {
         foreach ($this->userlists as $id) {
             $current = new AdmissionUserList($id);
             $courseset->removeUserList($id);
@@ -111,7 +113,8 @@ class PreferentialAdmission extends AdmissionRule
      *
      * @param CourseSet The courseset this rule belongs to.
      */
-    public function beforeSeatDistribution(&$courseset) {
+    public function beforeSeatDistribution($courseset)
+    {
         $this->courseset = $courseset;
         /*
          * First, we need to calculate the maximum of persons applying
@@ -130,7 +133,7 @@ class PreferentialAdmission extends AdmissionRule
         if (!$this->favorSemester) {
 
             $userlist = new AdmissionUserList();
-            $userlist->setUsers($users)->setFactor($maxcount + 1)->store();
+            $userlist->setUsers($users)->setFactor($this->bonus_difference + 1)->store();
             $this->userlists[] = $userlist->getId();
             $courseset->addUserList($userlist->getId());
 
@@ -170,7 +173,8 @@ class PreferentialAdmission extends AdmissionRule
     /**
      * Deletes the admission rule and all associated data.
      */
-    public function delete() {
+    public function delete()
+    {
         parent::delete();
         // Delete rule data.
         $stmt = DBManager::get()->prepare("DELETE FROM `prefadmissions`
@@ -192,7 +196,8 @@ class PreferentialAdmission extends AdmissionRule
      * @return Array An array containing IDs of users who are matched by
      *      this rule.
      */
-    public function getAffectedUsers() {
+    public function getAffectedUsers()
+    {
         $users = array();
         if ($this->conditions) {
             // Get users from all specified conditions.
@@ -210,7 +215,8 @@ class PreferentialAdmission extends AdmissionRule
      *
      * @return Array
      */
-    public function getConditions() {
+    public function getConditions()
+    {
         return $this->conditions;
     }
 
@@ -218,7 +224,8 @@ class PreferentialAdmission extends AdmissionRule
      * Gets some text that describes what this AdmissionRule (or respective
      * subclass) does.
      */
-    public static function getDescription() {
+    public static function getDescription()
+    {
         return _('Sie können hier festlegen, dass bestimmte Studiengänge, '.
             'Fachsemester etc. bei der Platzverteilung zu Veranstaltungen '.
             'bevorzugt behandelt werden sollen.');
@@ -229,14 +236,16 @@ class PreferentialAdmission extends AdmissionRule
      *
      * @return bool
      */
-    public function getFavorSemester() {
+    public function getFavorSemester()
+    {
         return $this->favorSemester;
     }
 
     /**
      * Return this rule's name.
      */
-    public static function getName() {
+    public static function getName()
+    {
         return _('Bevorzugte Anmeldung');
     }
 
@@ -251,7 +260,8 @@ class PreferentialAdmission extends AdmissionRule
      * @param array $exclude user IDs to exclude
      * @return array Users with their maximal semester of study.
      */
-    public function getSemesterGroups($users, $considerConditions, $exclude = array()) {
+    public function getSemesterGroups($users, $considerConditions, $exclude = array())
+    {
         /*
          * Get all selected condition values so that the study semester
          * can be matched against that data; we don't want some "general"
@@ -325,7 +335,8 @@ class PreferentialAdmission extends AdmissionRule
      *
      * @return String
      */
-    public function getTemplate() {
+    public function getTemplate()
+    {
         $factory = new Flexi_TemplateFactory(__DIR__.'/templates/');
         // Now open specific template for this rule and insert base template.
         $tpl = $factory->open('configure');
@@ -337,7 +348,8 @@ class PreferentialAdmission extends AdmissionRule
      * Helper function for loading data from DB. Generic AdmissionRule data is
      * loaded with the parent load() method.
      */
-    public function load() {
+    public function load()
+    {
         // Load basic data.
         $stmt = DBManager::get()->prepare("SELECT *
             FROM `prefadmissions` WHERE `rule_id`=? LIMIT 1");
@@ -362,7 +374,8 @@ class PreferentialAdmission extends AdmissionRule
      * @param  String conditionId
      * @return PreferentialAdmission
      */
-    public function removeCondition($conditionId) {
+    public function removeCondition($conditionId)
+    {
         $this->conditions[$conditionId]->delete();
         unset($this->conditions[$conditionId]);
         return $this;
@@ -376,8 +389,9 @@ class PreferentialAdmission extends AdmissionRule
      * @param String $courseId
      * @return Array Is the user allowed to register or are there any errors?
      */
-    function ruleApplies($userId, $courseId) {
-        $applies = array();
+    public function ruleApplies($userId, $courseId)
+    {
+        return array();
     }
 
     /**
@@ -388,7 +402,8 @@ class PreferentialAdmission extends AdmissionRule
      * @param Array $data
      * @return AdmissionRule This object.
      */
-    public function setAllData($data) {
+    public function setAllData($data)
+    {
         UserFilterField::getAvailableFilterFields();
         parent::setAllData($data);
         $this->favorSemester = (bool) $data['favor_semester'];
@@ -421,10 +436,10 @@ class PreferentialAdmission extends AdmissionRule
      *               <semester> => array(<user_id1>, <user_id2, ...))
      * @param $baseBonus basic bonus to start with, defaults to 0.
      */
-    public function setSemesterBonus(&$courseset, &$grouped, $baseBonus = 1) {
+    public function setSemesterBonus($courseset, $grouped, $baseBonus = 1)
+    {
         // Create user lists from each semester group.
         $bonus = $baseBonus;
-        $i = 0;
         foreach ($grouped as $semester => $members) {
             $userlist = new AdmissionUserList();
             $userlist->setUsers($members);
@@ -433,7 +448,6 @@ class PreferentialAdmission extends AdmissionRule
             $bonus = $bonus * ($this->bonus_difference + 1);
             $courseset->addUserList($userlist->getId());
             $this->userlists[] = $userlist->getId();
-            $i++;
         }
         return $bonus;
     }
@@ -441,7 +455,8 @@ class PreferentialAdmission extends AdmissionRule
     /**
      * Helper function for storing data to DB.
      */
-    public function store() {
+    public function store()
+    {
         // Store rule data.
         $stmt = DBManager::get()->prepare("INSERT INTO `prefadmissions`
             (`rule_id`, `favor_semester`, `mkdate`, `chdate`)
@@ -450,17 +465,15 @@ class PreferentialAdmission extends AdmissionRule
             `chdate`=VALUES(`chdate`)");
         $stmt->execute(array($this->id, $this->favorSemester, time(), time()));
         // Delete removed conditions from DB.
-        $stmt = DBManager::get()->prepare("SELECT `condition_id` FROM
-            `prefadmission_condition` WHERE `rule_id`=? AND `condition_id` NOT IN ('".
-            implode("', '", array_keys($this->conditions))."')");
-        $stmt->execute(array($this->id));
-        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $entry) {
+        $entries = DBManager::get()->fetchAll("SELECT `condition_id` FROM
+            `prefadmission_condition` WHERE `rule_id`=? AND `condition_id` NOT IN (?)",
+            array($this->id, array_keys($this->conditions)));
+        foreach ($entries as $entry) {
             $current = new UserFilter($entry['condition_id']);
             $current->delete();
         }
-        DBManager::get()->exec("DELETE FROM `prefadmission_condition`
-            WHERE `rule_id`='".$this->id."' AND `condition_id` NOT IN ('".
-            implode("', '", array_keys($this->conditions))."')");
+        DBManager::get()->execute("DELETE FROM `prefadmission_condition`
+            WHERE `rule_id`=? AND `condition_id` NOT IN (?)", array($this->id, array_keys($this->conditions)));
         // Store all conditions.
         $queries = array();
         $parameters = array();
@@ -474,11 +487,10 @@ class PreferentialAdmission extends AdmissionRule
                 $parameters[] = time();
             }
             // Store all assignments between rule and condition.
-            $stmt = DBManager::get()->prepare("INSERT INTO `prefadmission_condition`
+            $stmt = DBManager::get()->execute("INSERT INTO `prefadmission_condition`
                 (`rule_id`, `condition_id`, `mkdate`)
                 VALUES ".implode(",", $queries)." ON DUPLICATE KEY UPDATE
-                `condition_id`=VALUES(`condition_id`)");
-            $stmt->execute($parameters);
+                `condition_id`=VALUES(`condition_id`)", $parameters);
         }
         return $this;
     }
@@ -488,7 +500,8 @@ class PreferentialAdmission extends AdmissionRule
      *
      * @return String
      */
-    public function toString() {
+    public function toString()
+    {
         $factory = new Flexi_TemplateFactory(__DIR__.'/templates/');
         $tpl = $factory->open('info');
         $tpl->set_attribute('rule', $this);
@@ -502,7 +515,8 @@ class PreferentialAdmission extends AdmissionRule
      * @param  Array Request data
      * @return Array Error messages.
      */
-    public function validate($data) {
+    public function validate($data)
+    {
         $errors = parent::validate($data);
         if (!$data['conditions'] && !$data['favor_semester']) {
             $errors[] = _('Es muss mindestens eine Auswahlbedingung angegeben werden.');
@@ -511,5 +525,3 @@ class PreferentialAdmission extends AdmissionRule
     }
 
 } /* end of class PreferentialAdmission */
-
-?>

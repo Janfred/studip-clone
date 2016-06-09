@@ -1,34 +1,36 @@
-<h3><?= $rule->getName() ?></h3>
+<h3><?= htmlReady($rule->getName()) ?></h3>
 <label for="prefadmission_conditions" class="caption">
     <?= _('Folgende Personen bei der Platzverteilung bevorzugen:') ?>
 </label>
 <div id="prefadmission_conditions">
-    <?php if (!$rule->getConditions()) { ?>
+    <?php if (!$rule->getConditions()) : ?>
     <span class="nofilter">
         <i><?= _('Sie haben noch keine Auswahl festgelegt.'); ?></i>
     </span>
-    <?php } else { ?>
+    <?php else : ?>
     <div class="userfilter">
-        <?php foreach ($rule->getConditions() as $condition) { ?>
+        <?php foreach ($rule->getConditions() as $condition) :
+            $condition->show_user_count = true; ?>
             <div class="condition" id="condition_<?= $condition->getId() ?>">
                 <?= $condition->toString() ?>
                 <a href="#" onclick="return STUDIP.UserFilter.removeConditionField($(this).parent())"
                     class="conditionfield_delete">
-                    <?= Assets::img('icons/16/blue/trash.png'); ?></a>
+                    <?= Icon::create('trash', 'clickable')->asImg(); ?></a>
                 <input type="hidden" name="conditions[]" value="<?= htmlReady(serialize($condition)) ?>"/>
             </div>
-        <?php } ?>
+        <?php endforeach ?>
     </div>
-    <?php } ?>
-    <br/><br/>
-    <a href="<?= URLHelper::getURL('dispatch.php/userfilter/filter/configure/prefadmission_conditions') ?>" onclick="return STUDIP.UserFilter.configureCondition('condition', '<?= URLHelper::getURL('dispatch.php/userfilter/filter/configure/prefadmission_conditions') ?>')">
-        <?= Assets::img('icons/16/blue/add.png', array(
-            'alt' => _('Bedingung hinzufügen'),
-            'title' => _('Bedingung hinzufügen'))) ?><?= _('Bedingung hinzufügen') ?></a>
+    <?php endif ?>
+    <br><br>
+    <a href="<?= URLHelper::getURL('dispatch.php/userfilter/filter/configure/prefadmission_conditions') ?>"
+       onclick="return STUDIP.UserFilter.configureCondition('condition', '<?=
+            URLHelper::getLink('dispatch.php/userfilter/filter/configure/prefadmission_conditions') ?>')">
+        <?= Icon::create('add', 'clickable', ['title' => _('Bedingung hinzufügen')])->asImg(16, ["alt" => _('Bedingung hinzufügen')]) ?>
+        <?= _('Bedingung hinzufügen') ?>
+    </a>
 </div>
-<br/>
-<label for="favor_semester" class="caption">
-    <input type="checkbox" name="favor_semester"<?= $rule->getFavorSemester() ? ' checked="checked"' : '' ?>/>
+<br>
+<label class="caption">
+    <input type="checkbox" name="favor_semester"<?= $rule->getFavorSemester() ? ' checked' : '' ?>/>
     <?= _('Höhere Fachsemester bevorzugen') ?>
 </label>
-<br/>

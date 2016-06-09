@@ -1,20 +1,16 @@
 <?= _('Folgende Personenkreise werden bei der Platzverteilung bevorzugt:') ?>
 <br/>
-<ul id="prefadmission_conditions">
+<ul id="prefadmission_conditionlist">
     <?php
-    $i = 0;
-    foreach ($rule->getConditions() as $condition) {
+    foreach ($rule->getConditions() as $condition) :
         $condition->show_user_count = true;
     ?>
     <li class="condition" id="condition_<?= $condition->getId() ?>">
         <i><?= $condition->toString() ?></i>
     </li>
-    <?php
-        $i++;
-    }
-    ?>
+    <?php endforeach ?>
 </ul>
-<?php if ($rule->getFavorSemester()) { ?>
+<?php if ($rule->getFavorSemester()) : ?>
 <br/>
 <i><?= _('Höhere Fachsemester werden bevorzugt behandelt.') ?></i>
-<?php } ?>
+<?php endif ?>
