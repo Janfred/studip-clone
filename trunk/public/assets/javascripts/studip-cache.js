@@ -1,5 +1,5 @@
 /*jslint browser: true */
-/*global STUDIP */
+/*global STUDIP, jQuery */
 /**
  * Stud.IP: Caching in JavaScript
  *
@@ -63,7 +63,7 @@
  * @copyright Stud.IP core group
  * @since     Stud.IP 3.2
  */
-(function (STUDIP) {
+(function (STUDIP, $) {
     'use strict';
 
     var caches = {
@@ -240,4 +240,36 @@
         }
     };
 
-}(STUDIP));
+    /**
+     * Transfer session storage from one tab to another
+     * @see http://stackoverflow.com/a/32766809/982902
+     */
+    $(window).bind('storage', function (e) {
+        var event = e.originalEvent;
+
+        // do nothing if no value to work with
+        if (!event || !event.newValue) {
+            return;
+        }
+
+        // Another tabs ask for session storage, so we'll send it
+        if (event.key === 'getSessionStorage') {
+            caches.local.setItem('sendSessionStorage', JSON.stringify(caches.session));
+            caches.local.removeItem('sendSessionStorage');
+        }
+
+        // Another tab sent session storage, receive it
+        if (event.key === 'sendSessionStorage' && caches.session.length === 0) {
+            $.each($.parseJSON(event.newValue), function (key, value) {
+                caches.session.setItem(key, value);
+            });
+        }
+    });
+
+    // No data in session? Try to receive it from another tab
+    if (caches.session.length === 0) {
+        caches.local.setItem('getSessionStorage', true);
+        caches.local.removeItem('getSessionStorage', true);
+    }
+
+}(STUDIP, jQuery));
