@@ -26,7 +26,7 @@ class TIC6576PreferentialAdmission extends Migration
                 `mkdate` int(11) NOT NULL DEFAULT 0,
                 `chdate` int(11) NOT NULL DEFAULT 0,
                 PRIMARY KEY (`rule_id`)
-            ) ENGINE=InnoDB");
+            ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC");
 
         // Table for storing rule - condition relations.
         DBManager::get()->exec("CREATE TABLE IF NOT EXISTS `prefadmission_condition` (
@@ -35,7 +35,7 @@ class TIC6576PreferentialAdmission extends Migration
                 `chance` INT(4) NOT NULL DEFAULT 1,
                 `mkdate` int(11) NOT NULL DEFAULT 0,
                 PRIMARY KEY (`rule_id`,`condition_id`)
-            ) ENGINE=InnoDB");
+            ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC");
 
         // Install rule to database.
         DBManager::get()->exec("INSERT IGNORE INTO `admissionrules` (`id`, `ruletype`, `active`, `mkdate`)
