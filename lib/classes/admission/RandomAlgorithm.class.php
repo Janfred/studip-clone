@@ -157,7 +157,7 @@ class RandomAlgorithm extends AdmissionAlgorithm {
                 //give maximum bonus to users which were unlucky before
                 foreach (array_keys($current_claiming) as $user_id) {
                     if ($bonus_users[$user_id] > 0) {
-                        $current_claiming[$user_id] = $bonus_users[$user_id] * count($current_claiming) + 1;
+                        $current_claiming[$user_id] *= $bonus_users[$user_id] * count($current_claiming) + 1;
                         $bonus_users[$user_id]--;
                     }
                 }
