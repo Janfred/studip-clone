@@ -22,7 +22,8 @@ class Admission_RuleAdministrationController extends AuthenticatedController {
     /**
      * @see AuthenticatedController::before_filter
      */
-    public function before_filter(&$action, &$args) {
+    public function before_filter(&$action, &$args)
+    {
         parent::before_filter($action, $args);
 
         $GLOBALS['perm']->check('root');
@@ -87,7 +88,8 @@ class Admission_RuleAdministrationController extends AuthenticatedController {
      * 
      * @param String $ruleType Class name of the rule type to check.
      */
-    public function check_activation_action($ruleType) {
+    public function check_activation_action($ruleType)
+    {
         if (Request::isXhr()) {
             $this->response->add_header('X-Title', _('Verfügbarkeit der Anmelderegel'));
             $this->response->add_header('X-No-Buttons', 1);
@@ -115,7 +117,8 @@ class Admission_RuleAdministrationController extends AuthenticatedController {
      * 
      * @param  String $ruleType the class name of the rule type to activate.
      */
-    public function activate_action($ruleType) {
+    public function activate_action($ruleType)
+    {
         CSRFProtection::verifyUnsafeRequest();
         if (Request::submitted('submit')) {
             $success = false;
@@ -162,7 +165,8 @@ class Admission_RuleAdministrationController extends AuthenticatedController {
     /**
      * Installs a new admission rule.
      */
-    public function install_action() {
+    public function install_action()
+    {
         CSRFProtection::verifyUnsafeRequest();
         try {
             if ($this->flash['upload_file']) {
@@ -187,7 +191,8 @@ class Admission_RuleAdministrationController extends AuthenticatedController {
      * Deletes the given admission rule type from the system, including all
      * data belonging to it (especially saved values in DB!).
      */
-    public function uninstall_action($ruleType) {
+    public function uninstall_action($ruleType)
+    {
         if (Request::int('really')) {
             try {
                 $ruleAdmin = new RuleAdministrationModel();
@@ -208,7 +213,8 @@ class Admission_RuleAdministrationController extends AuthenticatedController {
      * @param String $ruleName Class name of the admission rule, is used for file name. 
      *   
      */
-    public function download_action($ruleName) {
+    public function download_action($ruleName)
+    {
         $dirname = $GLOBALS['ABSOLUTE_PATH_STUDIP'].'admissionrules/'.
             strtolower($ruleName);
         $filename = $ruleName.'.zip';
@@ -227,13 +233,14 @@ class Admission_RuleAdministrationController extends AuthenticatedController {
         unlink($filepath);
     }
 
-    public function save_compat_action() {
+    public function save_compat_action()
+    {
         CSRFProtection::verifyUnsafeRequest();
 
         // Iterate over existing entries and check which ones must be deleted.
         $matrix = AdmissionRuleCompatibility::getCompatibilityMatrix();
 
-        $values = Request::getArray('compat', array());
+        $values = Request::getArray('compat');
 
         $to_delete = array();
         $new = array();
@@ -314,7 +321,8 @@ class Admission_RuleAdministrationController extends AuthenticatedController {
      *
      * @throws InvalidArgumentException  if ticket is not valid
      */
-    private function check_ticket() {
+    private function check_ticket()
+    {
         if (!check_ticket(Request::option('ticket'))) {
             throw new InvalidArgumentException(_('Das Ticket für diese Aktion ist ungültig.'));
         }
@@ -322,5 +330,3 @@ class Admission_RuleAdministrationController extends AuthenticatedController {
     }
 
 }
-
-?>
