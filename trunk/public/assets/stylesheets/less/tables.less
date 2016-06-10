@@ -321,11 +321,15 @@ table.tree {
         a.link {
             padding-left: 5px;
             &.open   {
-                background: url("@{icon-path}/blue/arr_1down.png") left center no-repeat;
+                .background-icon('arr_1down', 'clickable');
+                background-position: left center;
+                background-repeat: no-repeat;
                 padding-left: 20px;
             }
             &.closed {
-                background: url("@{icon-path}/blue/arr_1right.png") left center no-repeat;
+                .background-icon('arr_1right', 'clickable');
+                background-position: left center;
+                background-repeat: no-repeat;
                 padding-left: 20px;
             }
         }

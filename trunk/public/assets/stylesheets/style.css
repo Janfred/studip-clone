@@ -655,11 +655,23 @@ table.tree .header > td a.link {
   padding-left: 5px;
 }
 table.tree .header > td a.link.open {
-  background: url("../images/icons/16/blue/arr_1down.png") left center no-repeat;
+  background-image: url("../images/icons/blue/arr_1down.svg");
+  -webkit-background-size: 16px 16px;
+  -moz-background-size: 16px 16px;
+  -o-background-size: 16px 16px;
+  background-size: 16px 16px;
+  background-position: left center;
+  background-repeat: no-repeat;
   padding-left: 20px;
 }
 table.tree .header > td a.link.closed {
-  background: url("../images/icons/16/blue/arr_1right.png") left center no-repeat;
+  background-image: url("../images/icons/blue/arr_1right.svg");
+  -webkit-background-size: 16px 16px;
+  -moz-background-size: 16px 16px;
+  -o-background-size: 16px 16px;
+  background-size: 16px 16px;
+  background-position: left center;
+  background-repeat: no-repeat;
   padding-left: 20px;
 }
 table.tree td.blank {
@@ -5078,13 +5090,21 @@ table.contact-header td.empty a {
   line-height: 1.5em;
 }
 .documents .bread-crumbs li a {
-  background-image: url("../images/icons/24/blue/folder-parent.png");
+  background-image: url("../images/icons/blue/folder-parent.svg");
+  -webkit-background-size: 24px 24px;
+  -moz-background-size: 24px 24px;
+  -o-background-size: 24px 24px;
+  background-size: 24px 24px;
   background-position: left center;
   background-repeat: no-repeat;
   padding-left: 30px;
 }
 .documents .bread-crumbs li:first-child a {
-  background-image: url("../images/icons/24/blue/folder-empty.png");
+  background-image: url("../images/icons/blue/folder-empty.svg");
+  -webkit-background-size: 24px 24px;
+  -moz-background-size: 24px 24px;
+  -o-background-size: 24px 24px;
+  background-size: 24px 24px;
 }
 .document-dialog {
   *zoom: 1;
