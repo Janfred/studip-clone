@@ -5846,6 +5846,17 @@ a.bookable_rooms_action {
 .contentbox.timesrooms form.default tfoot select {
   max-width: 30em;
 }
+.flex-row {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-box-flex;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: flex;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  width: 100%;
+}
 .opengraph-area {
   margin: 10px auto 5px;
   max-width: 700px;
@@ -6782,6 +6793,10 @@ div#studyareas {
   padding-left: 10px;
   width: calc(50% - 20px);
 }
+/*
+change order for AdvancedBasicDataWizardStep
+so we do not have to copy the basicdata/index.php
+*/
 form.course-wizard-step-0 {
   display: -ms-flexbox;
   display: -webkit-box;
