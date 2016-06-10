@@ -91,8 +91,12 @@ class OpenGraphURL extends SimpleORMap
     public function store()
     {
         if ($this->isNew() || $this->last_update < time() - self::EXPIRES_DURATION) {
-            $this->fetch();
+            // Store last update timestamp BEFORE fetching so another thread
+            // will not fetch again
             $this->last_update = time();
+            parent::store();
+
+            $this->fetch();
         }
 
         return parent::store();
