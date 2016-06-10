@@ -90,7 +90,7 @@ class Studip_Ws_Service {
       return NULL;
     }
     
-    return $this->api_methods[$name] =&
+    return $this->api_methods[$name] =
       new Studip_Ws_Method($this, $name, $expects, $returns, $description);
   }
   

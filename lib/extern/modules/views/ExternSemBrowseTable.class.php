@@ -45,7 +45,7 @@ class ExternSemBrowseTable extends SemBrowse {
     var $module;
     var $sem_types_position;
         
-    function ExternSemBrowseTable (&$module, $start_item_id) {
+    function __construct(&$module, $start_item_id) {
         
         global $SEM_TYPE,$SEM_CLASS;
         ob_start();

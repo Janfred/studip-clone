@@ -48,7 +48,7 @@ class ExternElementSelectSubjectAreas extends ExternElement {
     *
     * @param array config
     */
-    function ExternElementSelectSubjectAreas ($config = '') {
+    function __construct($config = '') {
         if ($config != '')
             $this->config = $config;
 

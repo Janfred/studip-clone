@@ -27,7 +27,7 @@ class ContentModuleView
     * @access public
     * @param string $cms system-type
     */ 
-    function ContentModuleView($cms)
+    function __construct($cms)
     {
         global $connected_cms;
         

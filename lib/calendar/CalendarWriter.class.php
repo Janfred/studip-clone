@@ -18,43 +18,36 @@
 
 class CalendarWriter
 {
-
     var $default_filename_suffix;
     var $format;
     var $client_identifier;
 
-    function CalendarWriter()
+    public function __construct()
     {
         // initialize error handler
         $GLOBALS['_calendar_error'] = new ErrorHandler();
     }
 
-    function write(&$event)
+    public function write(&$event)
     {
-
         return $event->properties;
     }
 
-    function writeHeader()
+    public function writeHeader()
     {
-
     }
 
-    function writeFooter()
+    public function writeFooter()
     {
-        
     }
 
-    function getDefaultFilenameSuffix()
+    public function getDefaultFilenameSuffix()
     {
-
         return $this->default_filename_suffix;
     }
 
-    function getFormat()
+    public function getFormat()
     {
-
         return $this->format;
     }
-
 }

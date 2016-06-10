@@ -47,7 +47,7 @@ class ExternElementBody extends ExternElement {
     *
     * @param array config
     */
-    function ExternElementBody ($config = "") {
+    function __construct($config = "") {
         if ($config)
             $this->config = $config;
         

@@ -18,21 +18,20 @@
 
 class CalendarParser
 {
-
     private $events = array();
-    private $components;
+    protected $components;
     private $type;
     private $number_of_events;
-    private $public_to_private = false;
-    private $client_identifier;
+    protected $public_to_private = false;
+    protected $client_identifier;
     private $time;
 
-    function CalendarParser()
+    public function __construct()
     {
         $this->client_identifier = '';
     }
 
-    function parse($data, $ignore = null)
+    public function parse($data, $ignore = null)
     {
         foreach ($data as $properties) {
             if ($this->public_to_private && $properties['CLASS'] == 'PUBLIC') {
@@ -97,28 +96,26 @@ class CalendarParser
         $event->expire = $props[''];
         $event->exceptions = $props[''];
         $event->importdate = $this->time;
-        
     }
 
-    function getType()
+    public function getType()
     {
         return $this->type;
     }
 
-    function &getObjects()
+    public function &getObjects()
     {
         return $objects =& $this->events;
     }
 
-    function changePublicToPrivate($value = true)
+    public function changePublicToPrivate($value = true)
     {
         $this->public_to_private = $value;
     }
 
-    function getClientIdentifier($data = null)
+    public function getClientIdentifier($data = null)
     {
         return $this->client_identifier;
     }
-
 }
 

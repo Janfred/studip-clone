@@ -48,7 +48,7 @@ class StudipRangeTree extends TreeAbstract {
     * do not use directly, call TreeAbstract::GetInstance("StudipRangeTree")
     * @access private
     */
-    function StudipRangeTree($args) {
+    function __construct($args) {
         DbView::addView('range_tree');
 
         $this->root_name = $GLOBALS['UNI_NAME_CLEAN'];
@@ -61,7 +61,7 @@ class StudipRangeTree extends TreeAbstract {
             $this->sem_status = array_map('intval', $args['sem_status']);
         }
         $this->visible_only = (int)$args['visible_only'];
-        parent::TreeAbstract(); //calling the baseclass constructor
+        parent::__construct(); //calling the baseclass constructor
         $this->sem_dates = SemesterData::GetSemesterArray();
     }
 

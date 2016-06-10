@@ -41,9 +41,9 @@ require_once $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/views/ScheduleWeek.class.ph
 class SemScheduleWeek  extends ScheduleWeek {
     
     //Kontruktor
-    function SemScheduleWeek ($start_hour = '', $end_hour = '', $show_days = '', $start_date = '') {
+    function __construct($start_hour = '', $end_hour = '', $show_days = '', $start_date = '') {
         
-        parent::ScheduleWeek($start_hour, $end_hour, $show_days, $start_date, false);
+        parent::__construct($start_hour, $end_hour, $show_days, $start_date, false);
 
         //the base_date have to be 0:00
         $first_monday = date("j",$this->start_date)  - (date("w", $this->start_date) - 1);

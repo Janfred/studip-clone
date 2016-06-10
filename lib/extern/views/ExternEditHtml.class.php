@@ -42,9 +42,9 @@ require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/views/ExternEditGeneric.class.ph
 
 class ExternEditHtml extends ExternEditGeneric {
 
-    function ExternEditHtml (&$config, $form_values = "", $faulty_values = "",
+    function __construct (&$config, $form_values = "", $faulty_values = "",
              $edit_element = "") {
-        parent::ExternEdit($config, $form_values, $faulty_values, $edit_element);
+        parent::__construct($config, $form_values, $faulty_values, $edit_element);
     }
 
     /**

@@ -36,18 +36,6 @@ class MyCoursesSearch extends StandardSearch
         $this->sql = $this->getSQL();
     }
 
-    /**
-     * returns an object of type SQLSearch with parameters to constructor
-     *
-     * @param string $search
-     * @param string $perm_level
-     *
-     * @return SQLSearch
-     */
-    static public function get($search, $perm_level = 'dozent', $parameters = array())
-    {
-        return new MyCoursesSearch($search, $perm_level, $parameters);
-    }
 
     /**
      * returns the title/description of the searchfield

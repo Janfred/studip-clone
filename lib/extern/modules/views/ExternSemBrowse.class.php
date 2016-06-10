@@ -46,7 +46,7 @@ class ExternSemBrowse extends SemBrowse {
     var $config;
     var $sem_types_position;
     
-    function ExternSemBrowse (&$module, $start_item_id) {
+    function __construct(&$module, $start_item_id) {
         
         global $SEM_TYPE,$SEM_CLASS;
         // prevent warnings if snapshot of database is empty

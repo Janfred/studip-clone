@@ -305,7 +305,7 @@ class RoomRequest extends SimpleORMap
 
     public function searchRooms($search_exp, $properties = FALSE, $limit_lower = 0, $limit_upper = 0, $only_rooms = TRUE, $permitted_resources = FALSE)
     {
-        $search_exp = mysql_escape_string($search_exp);
+        $search_exp = addslashes($search_exp);
         //create permitted resource clause
         if (is_array($permitted_resources)) {
             $permitted_resources_clause="AND a.resource_id IN ('".join("','",$permitted_resources)."')";
@@ -521,10 +521,12 @@ class RoomRequest extends SimpleORMap
         return parent::delete() || $properties_deleted;
     }
 
-    public function toArray()
+    public function toArray($only_these_fields = NULL)
     {
-        $ret = parent::toArray();
+        $ret = parent::toArray($only_these_fields);
+        if ($only_these_fields === null || isset($only_these_fields['properties'])) {
         $ret['properties'] = $this->getProperties();
+        }
         return $ret;
     }
 

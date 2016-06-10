@@ -48,9 +48,9 @@ class Ilias3ObjectXMLParser extends Ilias3SaxParser
     * @param    string      $a_subdir           subdirectory in import directory
     * @access   public
     */
-    function Ilias3ObjectXMLParser($a_xml_data = '')
+    function __construct($a_xml_data = '')
     {
-        parent::Ilias3SaxParser();
+        parent::__construct();
         $this->setXMLContent($a_xml_data);
     }
 

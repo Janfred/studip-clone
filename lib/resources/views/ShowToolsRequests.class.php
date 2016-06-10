@@ -58,7 +58,7 @@ class ShowToolsRequests
     var $faculty;
     var $tagged;
 
-    function ShowToolsRequests($semester_id, $resolve_requests_no_time = null, $sem_type = null, $faculty = null, $tagged = null)
+    function __construct($semester_id, $resolve_requests_no_time = null, $sem_type = null, $faculty = null, $tagged = null)
     {
         $this->semester_id = $semester_id ?: SemesterData::GetSemesterIdByDate(time());
         if (!is_null($resolve_requests_no_time)) {

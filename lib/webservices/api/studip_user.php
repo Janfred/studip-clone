@@ -36,7 +36,7 @@ class Studip_User {
 
 
     // Constructor
-    function Studip_User($user) {
+    function __construct($user) {
         $fields = self::get_fields();
 
         foreach ($fields as $field) {

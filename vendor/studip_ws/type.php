@@ -34,7 +34,7 @@ define('STUDIP_WS_TYPE_NULL',   'null');
  */
 
 class Studip_Ws_Type {
-  
+
 
   /**
    * <MethodDescription>
@@ -46,9 +46,9 @@ class Studip_Ws_Type {
   function translate($type) {
 
     # complex types
-    if (is_string($type) && class_exists($type))      
+    if (is_string($type) && class_exists($type))
       return array(STUDIP_WS_TYPE_STRUCT => $type);
-    
+
     # array types
     if (is_array($type)) {
       if (!sizeof($type)) {
@@ -63,7 +63,7 @@ class Studip_Ws_Type {
                       E_USER_ERROR);
         return array(STUDIP_WS_TYPE_NULL => NULL);
       }
-         
+
       return array(STUDIP_WS_TYPE_ARRAY =>
                    Studip_Ws_Type::translate($element_type));
     }
@@ -71,7 +71,7 @@ class Studip_Ws_Type {
     # basic types
     if (is_string($type))
       switch ($type) {
-      
+
         case 'int':
         case 'integer':
                         return array(STUDIP_WS_TYPE_INT => NULL);
@@ -106,7 +106,7 @@ class Studip_Ws_Type {
     foreach ($type_checkers as $function => $replacement)
       if ($function($type))
         return array($replacement => NULL);
-    
+
     trigger_error('"' . gettype($type) . '" is not a valid type.');
     return array(STUDIP_WS_TYPE_NULL => NULL);
   }
@@ -122,17 +122,17 @@ class Studip_Ws_Type {
    * @todo name ist falsch
    */
   function get_type($type) {
-  
+
     if (is_array($type))
       return key($type);
-    
+
     trigger_error(sprintf('$type has to be an array, but is: "%s"',
                           var_export($type, TRUE)),
-                  E_USER_ERROR);    
+                  E_USER_ERROR);
     return STUDIP_WS_TYPE_NULL;
   }
 
-  
+
   /**
    * <MethodDescription>
    *
@@ -147,7 +147,7 @@ class Studip_Ws_Type {
       return current($type);
     trigger_error(sprintf('\$type has to be an array, but is: "%s"',
                           var_export($type, TRUE)),
-                  E_USER_ERROR);    
+                  E_USER_ERROR);
     return STUDIP_WS_TYPE_NULL;
   }
 
@@ -176,7 +176,7 @@ class Studip_Ws_Type {
     return !Studip_Ws_Type::is_complex_type($type);
   }
 
-  
+
   /**
    * <MethodDescription>
    *
@@ -190,25 +190,25 @@ class Studip_Ws_Type {
     if (!class_exists($struct)) {
       trigger_error(sprintf('Class definition missing: "%s"', $struct),
                     E_USER_ERROR);
-      return NULL;      
+      return NULL;
     }
 
     $result = array();
-    
+
     # either a struct or a duck typing struct
     # (= responds to 'get_struct_elements')
     if (is_callable(array($struct, 'get_struct_elements'))) {
       $result = call_user_func(array($struct, 'get_struct_elements'), $struct);
     }
-    
+
     # just a class
     else {
       foreach (get_class_vars($struct) as $var_name => $var_value) {
-        $result[] =& new Studip_Ws_StructElement($var_name,
+        $result[] = new Studip_Ws_StructElement($var_name,
                                                  STUDIP_WS_TYPE_STRING);
       }
     }
-    
+
     return $result;
   }
 }

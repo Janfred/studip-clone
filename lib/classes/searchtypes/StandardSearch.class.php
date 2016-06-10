@@ -44,17 +44,6 @@ class StandardSearch extends SQLSearch
         $this->sql = $this->getSQL();
     }
 
-    /**
-     * returns an object of type SQLSearch with parameters to constructor
-     *
-     * @param string $search
-     *
-     * @return SQLSearch
-     */
-    static public function get($search)
-    {
-        return new StandardSearch($search);
-    }
 
     /**
      * returns the title/description of the searchfield

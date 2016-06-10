@@ -71,7 +71,8 @@ if (get_config('ELEARNING_INTERFACE_ENABLE')) {
 
         // refer to studip_referrer.php
         header("Location: ".$ELEARNING_INTERFACE_MODULES[$cms_select]["ABSOLUTE_PATH_ELEARNINGMODULES"] . $ELEARNING_INTERFACE_MODULES[$cms_select]["target_file"] . $parameters);
-        exit();
+        page_close();
+        die;
     }
 }
 ?>

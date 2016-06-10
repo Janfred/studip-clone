@@ -78,7 +78,7 @@ class Studip_Ws_Method {
    *
    * @return type <description>
    */
-	function Studip_Ws_Method(&$service, $name,
+	function __construct(&$service, $name,
 	                          $expects = NULL,
 	                          $returns = NULL,
 	                          $description = '') {

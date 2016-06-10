@@ -50,7 +50,7 @@ class ShowSemSchedules extends ShowSchedules {
     var $only_course_time = true;
 
     //Konstruktor
-    function ShowSemSchedules ($resource_id, $semester_id = null, $timespan = 'sem_time') {
+    function __construct($resource_id, $semester_id = null, $timespan = 'sem_time') {
         $sem = new SemesterData();
         if (!$semester_id){
             $this->semester = $sem->getCurrentSemesterData();
@@ -66,7 +66,7 @@ class ShowSemSchedules extends ShowSchedules {
             $this->start_time = $this->semester['vorles_beginn'];
             $this->end_time = $this->semester['vorles_ende'];
         }
-        parent::ShowSchedules($resource_id);
+        parent::__construct($resource_id);
     }
 
     function navigator ($print_view = false) {

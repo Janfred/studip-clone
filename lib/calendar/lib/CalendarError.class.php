@@ -17,7 +17,7 @@
  */
 
 
-class Error
+class CalendarError
 {
 
     var $status;
@@ -25,36 +25,31 @@ class Error
     var $file;
     var $line;
 
-    function Error($status, $message, $file = '', $line = '')
+    public function __construct($status, $message, $file = '', $line = '')
     {
-
         $this->status = $status;
         $this->message = $message;
         $this->file = $file;
         $this->line = $line;
     }
 
-    function getStatus()
+    public function getStatus()
     {
-
         return $this->status;
     }
 
-    function getMessage()
+    public function getMessage()
     {
-
         return $this->message;
     }
 
-    function getFile()
+    public function getFile()
     {
-
         return $this->file;
     }
 
-    function getLine()
+    public function getLine()
     {
-
         return $this->line;
     }
 

@@ -26,7 +26,7 @@ class ExternRangeLectureTree {
     *
     * @access public
     */
-    function ExternRangeLectureTree (&$config, $start_item_id, $sem_number = false, $sem_status = false)
+    function __construct(&$config, $start_item_id, $sem_number = false, $sem_status = false)
     {
         $this->config = $config;
 

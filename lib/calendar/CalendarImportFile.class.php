@@ -25,9 +25,9 @@ class CalendarImportFile extends CalendarImport
     /**
      *
      */
-    function CalendarImportFile(&$parser, $file, $path = '')
+    public function __construct(&$parser, $file, $path = '')
     {
-        parent::CalendarImport($parser);
+        parent::__construct($parser);
         $this->file = $file;
         $this->path = $path;
     }
@@ -35,7 +35,7 @@ class CalendarImportFile extends CalendarImport
     /**
      *
      */
-    function getContent()
+    public function getContent()
     {
         $data = '';
         if (!$file = @fopen($this->file['tmp_name'], 'rb')) {
@@ -54,7 +54,7 @@ class CalendarImportFile extends CalendarImport
     /**
      *
      */
-    function getFileName()
+    public function getFileName()
     {
         return $this->file['name'];
     }
@@ -62,7 +62,7 @@ class CalendarImportFile extends CalendarImport
     /**
      *
      */
-    function getFileType()
+    public function getFileType()
     {
         return $this->_parser->getType();
     }
@@ -70,7 +70,7 @@ class CalendarImportFile extends CalendarImport
     /**
      *
      */
-    function getFileSize()
+    public function getFileSize()
     {
         if (file_exists($this->file['tmp_name'])) {
             return filesize($this->file['tmp_name']);
@@ -81,7 +81,7 @@ class CalendarImportFile extends CalendarImport
     /**
      *
      */
-    function checkFile()
+    public function checkFile()
     {
         return true;
     }
@@ -89,7 +89,7 @@ class CalendarImportFile extends CalendarImport
     /**
      *
      */
-    function importIntoDatabase($range_id, $ignore = CalendarImport::IGNORE_ERRORS)
+    public function importIntoDatabase($range_id, $ignore = CalendarImport::IGNORE_ERRORS)
     {
         if ($this->checkFile()) {
             parent::importIntoDatabase($range_id, $ignore);
@@ -102,7 +102,7 @@ class CalendarImportFile extends CalendarImport
     /**
      *
      */
-    function importIntoObjects($ignore = CalendarImport::IGNORE_ERRORS)
+    public function importIntoObjects($ignore = CalendarImport::IGNORE_ERRORS)
     {
         global $_calendar_error;
 
@@ -116,7 +116,7 @@ class CalendarImportFile extends CalendarImport
     /**
      *
      */
-    function deleteFile()
+    public function deleteFile()
     {
         if (!unlink($this->file['tmp_name'])) {
             throw new CalendarExportException(_("Die Datei konnte nicht gelöscht werden!"));
@@ -128,7 +128,7 @@ class CalendarImportFile extends CalendarImport
     /**
      *
      */
-    function _getFileExtension()
+    public function _getFileExtension()
     {
         $i = strrpos($this->file['name'], '.');
         if (!$i) {
@@ -138,5 +138,4 @@ class CalendarImportFile extends CalendarImport
         $ext = substr($this->file['name'], $i + 1, $l);
         return $ext;
     }
-
 }

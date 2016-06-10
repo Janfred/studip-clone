@@ -48,7 +48,7 @@ class ExternElementTableParagraphSubHeadline extends ExternElement {
     *
     * @param array config
     */
-    function ExternElementTableParagraphSubHeadline ($config = "") {
+    function __construct($config = "") {
         if ($config)
             $this->config = $config;
         

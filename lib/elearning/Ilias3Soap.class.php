@@ -31,12 +31,12 @@ class Ilias3Soap extends StudipSoapClient
     * @access
     * @param string $cms system-type
     */
-    function Ilias3Soap($cms)
+    function __construct($cms)
     {
         global $ELEARNING_INTERFACE_MODULES, $connected_cms;
         $this->cms_type = $cms;
 
-        parent::StudipSoapClient($ELEARNING_INTERFACE_MODULES[$cms]["ABSOLUTE_PATH_SOAP"]);
+        parent::__construct($ELEARNING_INTERFACE_MODULES[$cms]["ABSOLUTE_PATH_SOAP"]);
         $this->user_type = "admin";
 
         $this->loadCacheData($cms);

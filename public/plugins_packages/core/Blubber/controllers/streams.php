@@ -15,7 +15,7 @@ class StreamsController extends PluginController {
 
     protected $max_threads = 10; //how many threads should be displayed in infinity-scroll-stream before it should reload
 
-    function before_filter($action, $args)
+    function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
         $this->assets_url = $this->plugin->getPluginURL() . '/assets/';

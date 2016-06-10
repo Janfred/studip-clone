@@ -44,9 +44,9 @@ require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/views/ExternEditHtml.class.php")
 
 class ExternEditModule extends ExternEditHtml {
 
-    function ExternEditModule (&$config, $form_values = "", $faulty_values = "",
+    function __construct (&$config, $form_values = "", $faulty_values = "",
              $edit_element = "") {
-        ExternEdit::ExternEdit($config, $form_values, $faulty_values, $edit_element);
+        parent::__construct($config, $form_values, $faulty_values, $edit_element);
     }
 
     function editMainSettings ($field_names, $hide_fields = "", $hide = "") {

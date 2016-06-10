@@ -3,7 +3,7 @@ class ForumController extends StudipController {
     var $lastlogin = 0;
 
     // customized #url_for for plugins
-    function url_for($to)
+    function url_for($to = '')
     {
         $args = func_get_args();
 

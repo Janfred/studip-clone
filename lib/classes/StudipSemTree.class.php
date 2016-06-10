@@ -48,7 +48,7 @@ class StudipSemTree extends TreeAbstract {
     * do not use directly, call TreeAbstract::GetInstance("StudipRangeTree")
     * @access private
     */
-    function StudipSemTree($args) {
+    function __construct($args) {
         DbView::addView('sem_tree');
 
         $this->root_name = $GLOBALS['UNI_NAME_CLEAN'];
@@ -75,7 +75,7 @@ class StudipSemTree extends TreeAbstract {
             $this->sem_status[] = -1;
         }
 
-        parent::TreeAbstract(); //calling the baseclass constructor
+        parent::__construct(); //calling the baseclass constructor
         if (isset($args['build_index']) ){
             $this->buildIndex();
         }

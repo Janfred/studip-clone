@@ -44,7 +44,7 @@ class ExternElementMainNews extends ExternElementMain {
     * Constructor
     *
     */
-    function ExternElementMainNews ($module_name, &$data_fields, &$field_names, &$config) {
+    function __construct($module_name, &$data_fields, &$field_names, &$config) {
         $this->attributes = array(
                 'name', 'order', 'visible', 'aliases', 'width',
                 'width_pp', 'sort', 'studiplink', 'wholesite', 'nameformat',
@@ -53,7 +53,7 @@ class ExternElementMainNews extends ExternElementMain {
         );
         $this->real_name = _("Grundeinstellungen");
         $this->description = _("In den Grundeinstellungen können Sie allgemeine Daten des Moduls ändern.");
-        parent::ExternElementMain($module_name, $data_fields, $field_names, $config);
+        parent::__construct($module_name, $data_fields, $field_names, $config);
     }
     
     /**

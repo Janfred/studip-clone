@@ -31,7 +31,7 @@ class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin implements
     /**
      *
      */
-    function AbstractStudIPHomepagePlugin()
+    function __construct()
     {
         parent::__construct();
 

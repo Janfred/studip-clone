@@ -50,7 +50,7 @@ class ExternElementTreeKids extends ExternElement {
     *
     * @param array config
     */
-    function ExternElementTreeKids ($config = "") {
+    function __construct($config = "") {
         if ($config)
             $this->config = $config;
         

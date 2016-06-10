@@ -47,7 +47,7 @@ class ExternElementTreePath extends ExternElement {
     *
     * @param array config
     */
-    function ExternElementTreePath ($config = "") {
+    function __construct($config = "") {
         if ($config)
             $this->config = $config;
         

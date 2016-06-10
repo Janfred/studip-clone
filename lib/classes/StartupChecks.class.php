@@ -51,7 +51,7 @@ class StartupChecks {
         "semesterDozent" => array("perm" => "dozent")
     );
 
-    function StartupChecks() {
+    function __construct() {
         $this->registered_checks["institutes"]["msg"] = _("Sie benötigen mindestens eine Einrichtung, an der Veranstaltungen angeboten werden können. Legen Sie bitte zunächst eine Einrichtung an.");
         $this->registered_checks["institutes"]["link"] = "dispatch.php/institute/basicdata/index?i_view=new";
         $this->registered_checks["institutes"]["link_name"] = _("neue Einrichtung anlegen");

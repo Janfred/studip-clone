@@ -14,7 +14,7 @@ class StudipSoapClient
     var $soap_client;
     var $error;
 
-    function StudipSoapClient($path)
+    function __construct($path)
     {
         try {
             $this->soap_client = new SoapClient($path, array('trace' => 0));

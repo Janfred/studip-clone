@@ -186,7 +186,7 @@ class Migrator {
    *
    * @return void
    */
-  function Migrator($migrations_path, $version, $verbose = FALSE) {
+  function __construct($migrations_path, $version, $verbose = FALSE) {
     $this->migrations_path = $migrations_path;
     $this->schema_version  = $version;
     $this->verbose         = $verbose;

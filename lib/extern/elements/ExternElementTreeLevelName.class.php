@@ -50,7 +50,7 @@ class ExternElementTreeLevelName extends ExternElement {
     *
     * @param array config
     */
-    function ExternElementTreeLevelName ($config = "") {
+    function __construct($config = "") {
         if ($config)
             $this->config = $config;
         

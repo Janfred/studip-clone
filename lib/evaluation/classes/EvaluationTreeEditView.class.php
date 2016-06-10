@@ -178,7 +178,7 @@ var $itemInstance;
  * @param  string  $itemID the item to display
  * @param  string  $evalID the evaluation of the item
  */
-function EvaluationTreeEditView ( $itemID = ROOT_BLOCK, $evalID = NULL ){
+function __construct( $itemID = ROOT_BLOCK, $evalID = NULL ){
     global $sess;
 
     $this->itemID = ($itemID) ? $itemID : ROOT_BLOCK;
@@ -1082,7 +1082,7 @@ function getItemMessage($itemID, $colspan = 1)
             $msg[1] = array_shift($details);
         }
 
-        return (string) MessageBox::$msg[0]($msg[1], $details);
+        return (string) MessageBox::{$msg[0]}($msg[1], $details);
     } else {
         return NULL;
     }
@@ -1139,17 +1139,17 @@ function getSelf ( $param = "", $with_start_item = true ){
 * @access  private
 */
 function parseCommand(){
-    
+
     if (Request::option('cmd') || Request::optionArray('cmd')){
         # extract the command from Request (array) =========================== #
-       
+
         if (Request::optionArray('cmd'))
             $exec_func = "execCommand" . key(Request::optionArray('cmd'));
         else
             $exec_func = "execCommand" . Request::option('cmd');
 
     } else {
-        
+
         # extract the command from the template-site ========================= #
         foreach( $_REQUEST as $key => $value ) {
             if( preg_match( "/template_(.*)_#(.*)_button?/", $key, $command ) ){
@@ -1164,7 +1164,7 @@ function parseCommand(){
                 break;
         }
        }
-       
+
 
         if ($command[1] == "create_question_answers")
             $exec_func = "execCommandQuestionAnswersCreate";
@@ -1423,7 +1423,7 @@ function execCommandDeleteItem(){
  */
 function execCommandAddGroup(){
 
-   
+
     $group = new EvaluationGroup();
     $group->setTitle( NEW_ARRANGMENT_BLOCK_TITLE);
     $group->setText("");
@@ -1941,7 +1941,7 @@ function execCommandMoveGroup(){
             $group->addChild ($newgroup);
             $group->save ();
 
-            
+
 
             if ($group->isError)
                 return EvalCommon::showErrorReport ($group,
@@ -2167,11 +2167,11 @@ function createButtonbar ( $show = ARRANGMENT_BLOCK ){
         $child->getTitle() == FIRST_ARRANGMENT_BLOCK_TITLE &&
         $child->getChildren() == NULL &&
         $child->getText == ""){
-        
-        $a_content = LinkButton::createCancel(_('Abbrechen'), 
+
+        $a_content = LinkButton::createCancel(_('Abbrechen'),
                 URLHelper::getURL(EVAL_FILE_ADMIN. "?evalID=").$this->tree->eval->getObjectID()."&abort_creation_button=1",
                 array('title' => _("Erstellung einer Evaluation abbrechen")));
-       
+
         $buttons .= $seperator
             . $a_content;
     $infotext .= "\n"
@@ -2277,11 +2277,11 @@ function createFormNew($show = ARRANGMENT_BLOCK){
 
 
         $cancel = $seperator ."&nbsp;";
-        
-        $a_content = LinkButton::createCancel(_('Abbrechen'), 
+
+        $a_content = LinkButton::createCancel(_('Abbrechen'),
                 URLHelper::getURL(EVAL_FILE_ADMIN . "?evalID=".$this->tree->eval->getObjectID()."&abort_creation_button=1"),
                 array('title' => _("Erstellung einer Evaluation abbrechen")));
-        
+
         $cancel .= $a_content;
 
         $td->addHTMLContent ($cancel);
@@ -3013,10 +3013,10 @@ function createImage ( $pic,
         $args['alt'] = $alt;
         $args['title'] = $alt;
         }
-    
+
     $args['border'] = 0;
     $args['style'] = "vertical-align:middle;";
-    
+
     $img = new HTMLempty ("img");
     $img->addString (tooltip($alt,TRUE,TRUE));
     $img->addAttr ("src",$pic);

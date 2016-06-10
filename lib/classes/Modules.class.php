@@ -55,8 +55,7 @@ class Modules {
         'resources' => array('id' => 21, 'const' => 'RESOURCES_ENABLE', 'sem' => true, 'inst' => true)
     );
 
-    function Modules() {
-
+    function __construct() {
     }
 
     function getStatus($modul, $range_id, $range_type = '') {

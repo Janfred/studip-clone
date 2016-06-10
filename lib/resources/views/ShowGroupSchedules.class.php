@@ -50,10 +50,10 @@ ShowSchedules - schedule view
 class ShowGroupSchedules extends ShowSemSchedules {
 
     //Konstruktor
-    function ShowGroupSchedules ($group_id, $semester_id = null, $timespan = 'sem_time', $dow = 1) {
+    function __construct($group_id, $semester_id = null, $timespan = 'sem_time', $dow = 1) {
         $this->dow = $dow;
         $this->group_id = $group_id;
-        parent::ShowSemSchedules(null, $semester_id, $timespan);
+        parent::__construct(null, $semester_id, $timespan);
     }
 
     function navigator ($print_view = false) {

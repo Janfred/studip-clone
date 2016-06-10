@@ -33,7 +33,7 @@ abstract class AccessControlledService extends Studip_Ws_Service
      * @return mixed if this method returns a Studip_Ws_Fault, further
      *               processing will be aborted
      */
-    function before_filter($name, &$args)
+    function before_filter(&$name, &$args)
     {
 
         $api_key = current($args);

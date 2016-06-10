@@ -49,7 +49,7 @@ ShowSchedules - schedule view
 class ShowSchedulesRequests extends ShowSchedules{
 
     //Konstruktor
-    function ShowSchedulesRequests ($resource_id='', $start_time = null) {
+    function __construct($resource_id='', $start_time = null) {
         $this->resource_id = $resource_id;
         if($start_time ){
             $this->start_time = strtotime('this monday', $start_time);

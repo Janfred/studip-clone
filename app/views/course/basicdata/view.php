@@ -17,7 +17,7 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
 ?>
 
 <? if (is_array($flash['msg'])) foreach ($flash['msg'] as $msg) : ?>
-    <?= MessageBox::$message_types[$msg[0]]($msg[1]) ?>
+    <?= MessageBox::{$message_types[$msg[0]]}($msg[1]) ?>
 <? endforeach ?>
 
 <form name="details" method="post" action="<?= $controller->url_for('course/basicdata/set', $course_id) ?>" <?= $dialog_attr ?> class="default collapsable">

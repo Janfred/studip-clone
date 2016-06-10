@@ -51,7 +51,7 @@ class AssignEvent {
     var $end;                   //end timestamp
 
     //Konstruktor
-    function AssignEvent($assign_id, $begin, $end, $resource_id, $assign_user_id, $user_free_name='') {
+    function __construct($assign_id, $begin, $end, $resource_id, $assign_user_id, $user_free_name='') {
         global $user;
         $this->user_id = $user->id;
 

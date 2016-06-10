@@ -18,8 +18,8 @@ class ViewsWidget extends LinksWidget
      * @param bool   $active Pass true if the link is currently active,
      *                       defaults to false
      */
-    public function &addLink($label, $url, $icon = null, $attributes = array())
+    public function &addLink($label, $url, $icon = null, $attributes = array(), $index = null)
     {
-        return parent::addLink($label, $url, null, $attributes);
+        return parent::addLink($label, $url, null, $attributes, $index);
     }
 }

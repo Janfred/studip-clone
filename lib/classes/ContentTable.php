@@ -47,7 +47,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  **/
 class ContentTable extends Table {
-    function ContentTable($styles="")
+    public function __construct($styles="")
     {
         Table::Table($styles);
         if (!@$styles["width"]) {

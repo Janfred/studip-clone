@@ -49,7 +49,7 @@ class ExternElementLinkInternTemplate extends ExternElementLinkIntern {
     *
     * @param array config
     */
-    function ExternElementLinkInternTemplate ($config = '') {
+    function __construct($config = '') {
         if ($config) {
             $this->config = $config;
         }

@@ -59,7 +59,7 @@ class Issue {
      *
      * returns NULL if both are unset
      */
-    function Issue($data = array()) {
+    function __construct($data = array()) {
         global $user;
 
         if ($data['issue_id']) {

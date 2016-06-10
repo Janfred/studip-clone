@@ -43,7 +43,7 @@ class StudipLitCatElement {
     var $classname = "StudipLitCatElement";
     var $persistent_slots = array("fields");
 
-    public function StudipLitCatElement($catalog_id = false, $with_form = false)
+    public function __construct($catalog_id = false, $with_form = false)
     {
         $this->dbv = DbView::getView('literatur');
         $this->init_form = $with_form;
@@ -264,14 +264,14 @@ class StudipLitCatElement {
             unset($this->fields['default_lit_list']);
             foreach($this->fields as $name => $detail){
                 $field_names[] = $name;
-                $field_values[] = mysql_escape_string(trim($detail['value']));
+                $field_values[] = addslashes(trim($detail['value']));
             }
             $sql = "INSERT INTO lit_catalog(" . join(",", $field_names) . ") VALUES ('" . join("','", $field_values) . "')";
             $msg = "msg§" . _("Ein neuer Datensatz wurde eingefügt.") . "§";
         } else {
             $this->fields['chdate']['value'] = time();
             foreach($this->fields as $name => $detail){
-                $field_upd[] = $name . "='" . mysql_escape_string(trim($detail['value'])) . "'";
+                $field_upd[] = $name . "='" . addslashes(trim($detail['value'])) . "'";
             }
             $sql = "UPDATE lit_catalog SET " . join(",", $field_upd) . " WHERE catalog_id='" . $this->fields['catalog_id']['value'] . "'";
             $msg = "msg§" . _("Die geänderten Daten wurden gespeichert.") ."§";
@@ -374,7 +374,7 @@ class StudipLitCatElement {
                 $plugin_name = $this->getValue("lit_plugin");
                 $link = StudipLitSearch::GetExternalLink($plugin_name);
                 if ($link){
-                    $ret = preg_replace('/({[a-z0-9_]+})/e', "\$this->getValue(substr('\\1',1,strlen('\\1')-2))", $link);
+                    $ret = preg_replace_callback('/({[a-z0-9_]+})/', function ($m) {return $this->getValue(substr($m[1],1,strlen($m[1])-2));}, $link);
                     if ($ret == preg_replace('/({[a-z0-9_]+})/', "", $link)) {
                         $ret = "";
                     }

@@ -10,7 +10,7 @@ class ExternSemLectureTree extends StudipSemTreeViewSimple {
     var $param;
     var $root_id;
     
-    function ExternSemLectureTree (&$config, $start_item_id = "", $sem_number = FALSE)
+    function __construct(&$config, $start_item_id = "", $sem_number = FALSE)
     {
         $this->config = $config;
 
@@ -22,7 +22,7 @@ class ExternSemLectureTree extends StudipSemTreeViewSimple {
         $this->start_item_id = ($start_item_id) ? $start_item_id : $this->root_id;
         $this->param = "range_id={$this->config->range_id}&module=Semlecturetree&config_id={$this->config->id}&";
         
-        parent::StudipSemTreeViewSimple($this->start_item_id, $sem_number);
+        parent::__construct($this->start_item_id, $sem_number);
     }
 
     function showSemTree () {

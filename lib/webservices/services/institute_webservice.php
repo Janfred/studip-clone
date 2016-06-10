@@ -20,7 +20,7 @@ require_once('lib/webservices/api/studip_institute.php');
 
 class InstituteService extends AccessControlledService
 {
-    function InstituteService()
+    function __construct()
     {
     $this->add_api_method('get_admins_for_institute',
                           array('string', 'string'),

@@ -40,9 +40,9 @@ require_once $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/views/ScheduleWeek.class.ph
 class ScheduleWeekRequests extends ScheduleWeek {
     
     //Kontruktor
-    function ScheduleWeekRequests ($start_hour = '', $end_hour = '', $show_days = '', $start_date = '', $show_dates = true) {
+    function __construct($start_hour = '', $end_hour = '', $show_days = '', $start_date = '', $show_dates = true) {
         
-        parent::ScheduleWeek($start_hour, $end_hour, $show_days, $start_date);
+        parent::__construct($start_hour, $end_hour, $show_days, $start_date);
         $this->categories[5] = array(
                                 "bg-picture"   => Assets::image_path('calendar/category12_small.jpg'),
                                 "border-color" => "#d082b0");

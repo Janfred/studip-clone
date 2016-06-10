@@ -51,7 +51,7 @@ class StudipDispatcher extends Trails_Dispatcher {
      * @param Exception $exception The exception that occured
      * @throws Exception
      */
-    public function trails_error(Exception $exception)
+    public function trails_error($exception)
     {
         throw $exception;
     }

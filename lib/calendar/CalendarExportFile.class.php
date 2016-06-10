@@ -19,16 +19,15 @@ require_once('lib/datei.inc.php');
 
 class CalendarExportFile extends CalendarExport
 {
-
     private $file_name = 'studip';
     private $tmp_file_name;
     private $path;
 
-    function CalendarExportFile(&$writer, $path = null, $file_name = null)
+    public function __construct(&$writer, $path = null, $file_name = null)
     {
         global $TMP_PATH;
 
-        parent::CalendarExport($writer);
+        parent::__construct($writer);
 
         if (!$file_name) {
             $this->tmp_file_name = $this->makeUniqueFilename();
@@ -45,21 +44,21 @@ class CalendarExportFile extends CalendarExport
         $this->_writer = $writer;
     }
 
-    function exportFromDatabase($range_id = null, $start = 0, $end = Calendar::CALENDAR_END, $event_types = null, $except = null)
+    public function exportFromDatabase($range_id = null, $start = 0, $end = Calendar::CALENDAR_END, $event_types = null, $except = null)
     {
         $this->_createFile();
         parent::exportFromDatabase($range_id, $start, $end, $event_types, $sem_ids, $except);
         $this->_closeFile();
     }
 
-    function exportFromObjects($events)
+    public function exportFromObjects($events)
     {
         $this->_createFile();
         parent::exportFromObjects($events);
         $this->_closeFile();
     }
 
-    function sendFile()
+    public function sendFile()
     {
         if (file_exists($this->path . $this->tmp_file_name)) {
             header('Location: ' . GetDownloadLink($this->tmp_file_name, $this->file_name, 2, 'force'));
@@ -68,28 +67,28 @@ class CalendarExportFile extends CalendarExport
         }
     }
 
-    function makeUniqueFileName()
+    public function makeUniqueFileName()
     {
         return md5(uniqid(rand() . "Stud.IP Calendar"));
     }
 
     // returns file handle
-    function getExport()
+    public function getExport()
     {
         return $this->export;
     }
 
-    function getFileName()
+    public function getFileName()
     {
         return $this->file_name;
     }
 
-    function getTempFileName()
+    public function getTempFileName()
     {
         return $this->tmp_file_name;
     }
 
-    function _createFile()
+    public function _createFile()
     {
         global $_calendar_error;
 
@@ -114,16 +113,13 @@ class CalendarExportFile extends CalendarExport
         }
     }
 
-    function _export($exp)
+    public function _export($exp)
     {
-
         fwrite($this->export, $exp);
     }
 
-    function _closeFile()
+    public function _closeFile()
     {
-
         fclose($this->export);
     }
-
 }

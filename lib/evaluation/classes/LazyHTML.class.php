@@ -35,35 +35,43 @@
 // +--------------------------------------------------------------------------+
 require_once 'HTML.class.php';
 
-class HTMpty extends HTMLempty {
+class HTMpty extends HTMLempty
+{
 
-  function attr( $name, $wert = NULL ) {
-      parent::addAttr( $name, $wert );
-  }
+    function attr($name, $wert = null)
+    {
+        parent::addAttr($name, $wert);
+    }
 
-  function stri( $string ) {
-      parent::addString( $string );
-  }
+    function stri($string)
+    {
+        parent::addString($string);
+    }
 
 }
 
-class HTM extends HTML {
+class HTM extends HTML
+{
 
-  function stri( $string ) {
-      parent::addString( $string );
-  }
+    function stri($string)
+    {
+        parent::addString($string);
+    }
 
-  function attr( $name, $wert = NULL ) {
-      parent::addAttr( $name, $wert );
-  }
+    function attr($name, $wert = null)
+    {
+        parent::addAttr($name, $wert);
+    }
 
-  function html ($_content) {
-      parent::addHTMLContent( $_content );
-  }
+    function html($_content)
+    {
+        parent::addHTMLContent($_content);
+    }
 
-  function cont ($_content) {
-      parent::addContent( $_content );
-  }
+    function cont($_content)
+    {
+        parent::addContent($_content);
+    }
 
 }
 

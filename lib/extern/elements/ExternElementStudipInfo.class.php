@@ -49,7 +49,7 @@ class ExternElementStudipInfo extends ExternElement {
     *
     * @param array config
     */
-    function ExternElementStudipInfo ($config = "") {
+    function __construct($config = "") {
         if ($config)
             $this->config = $config;
         

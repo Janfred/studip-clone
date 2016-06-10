@@ -26,12 +26,12 @@ class Ilias4ConnectedUser extends Ilias3ConnectedUser
      * @access
      * @param string $cms system-type
      */
-    function Ilias4ConnectedUser($cms, $user_id = false)
+    function __construct($cms, $user_id = false)
     {
         // get auth_plugin
         $user_id = $user_id ? $user_id : $GLOBALS['user']->id;
         $this->auth_plugin = DBManager::get()->query("SELECT IFNULL(auth_plugin, 'standard') FROM auth_user_md5 WHERE user_id = '" . $user_id . "'")->fetchColumn();
-        parent::Ilias3ConnectedUser($cms, $user_id);
+        parent::__construct($cms, $user_id);
     }
 
     /**
@@ -41,7 +41,7 @@ class Ilias4ConnectedUser extends Ilias3ConnectedUser
      * @access public
      * @return boolean returns false on error
      */
-    function newUser()
+    function newUser($ignore_encrypt_passwords = false)
     {
         global $connected_cms, $auth, $messages;
 

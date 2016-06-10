@@ -46,7 +46,7 @@ class Statusgruppe {
     private $has_folder;
     private $is_sem;
 
-    function Statusgruppe($statusgruppe_id = '') {
+    function __construct($statusgruppe_id = '') {
         if ($statusgruppe_id == '') {
             $this->new = true;
             $this->statusgruppe_id = md5(uniqid(rand()));

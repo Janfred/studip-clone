@@ -44,7 +44,7 @@ class ExternElementMainTemplatePersBrowse extends ExternElementMain {
     * Constructor
     *
     */
-    public function __construct ($module_name, &$data_fields, &$field_names, &$config) {
+    public function __construct($module_name, &$data_fields, &$field_names, &$config) {
         $this->attributes = array(
                 'name', 'sort', 'groupsalias', 'groupsvisible', 'grouping',
                 'nameformat', 'defaultadr', 'genericdatafields', 'onlylecturers', 'onlygrouped',
@@ -52,7 +52,7 @@ class ExternElementMainTemplatePersBrowse extends ExternElementMain {
         );
         $this->real_name = _("Grundeinstellungen");
         $this->description = _("In den Grundeinstellungen können Sie allgemeine Daten des Moduls ändern.");
-        parent::ExternElementMain($module_name, $data_fields, $field_names, $config);
+        parent::__construct($module_name, $data_fields, $field_names, $config);
         $this->edit_function = 'editSort';
     }
     

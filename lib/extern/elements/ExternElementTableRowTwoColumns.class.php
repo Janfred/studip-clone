@@ -50,7 +50,7 @@ class ExternElementTableRowTwoColumns extends ExternElement {
     *
     * @param array config
     */
-    function ExternElementTableRowTwoColumns ($config = "") {
+    function __construct($config = "") {
         if ($config)
             $this->config = $config;
         

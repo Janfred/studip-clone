@@ -130,7 +130,7 @@ class Settings_SettingsController extends AuthenticatedController
      *                  (Array)
      * @return String Generated url
      */
-    public function url_for($to/*, ...*/)
+    public function url_for($to = ''/*, ...*/)
     {
         $arguments  = func_get_args();
         $parameters = is_array(end($arguments)) ? array_pop($arguments) : array();

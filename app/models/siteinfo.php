@@ -214,19 +214,19 @@ class SiteinfoMarkupEngine {
     function __construct() {
         $this->db = DBManager::get();
         $this->template_factory = new Flexi_TemplateFactory($GLOBALS['STUDIP_BASE_PATH'].'/app/views/siteinfo/markup/');
-        $this->siteinfoMarkup("/\(:version:\)/e",'$this->version()');
-        $this->siteinfoMarkup("/\(:uniname:\)/e",'$this->uniName()');
-        $this->siteinfoMarkup("/\(:unicontact:\)/e",'$this->uniContact()');
-        $this->siteinfoMarkup("/\(:userinfo ([a-z_@\-]*):\)/e",'$this->userinfo(\'$1\')');
-        $this->siteinfoMarkup("/\(:userlink ([a-z_@\-]*):\)/e",'$this->userlink(\'$1\')');
-        $this->siteinfoMarkup("/\(:rootlist:\)/e",'$this->rootlist()');
-        $this->siteinfoMarkup("/\(:adminlist:\)/e",'$this->adminlist()');
-        $this->siteinfoMarkup("/\(:coregroup:\)/e",'$this->coregroup()');
-        $this->siteinfoMarkup("/\(:toplist ([a-z]*):\)/ei",'$this->toplist(\'$1\')');
-        $this->siteinfoMarkup("/\(:indicator ([a-z_\-]*):\)/ei",'$this->indicator(\'$1\')');
-        $this->siteinfoMarkup("/\(:history:\)/e",'$this->history()');
-        $this->siteinfoMarkup("/\(:terms:\)/e",'$this->termsOfUse()');
-        $this->siteinfoMarkup("'\[style=(&quot;)?(.*?)(&quot;)?\]\s*(.*?)\s*\[/style\]'es",'$this->style(\'$2\', \'$4\')');
+        $this->siteinfoMarkup("/\(:version:\)/", array($this, 'version'));
+        $this->siteinfoMarkup("/\(:uniname:\)/", array($this, 'uniName'));
+        $this->siteinfoMarkup("/\(:unicontact:\)/", array($this, 'uniContact'));
+        $this->siteinfoMarkup("/\(:userinfo ([a-z_@\-]*):\)/", function ($m) {return $this->userinfo($m[1]);});
+        $this->siteinfoMarkup("/\(:userlink ([a-z_@\-]*):\)/", function ($m) {return $this->userlink($m[1]);});
+        $this->siteinfoMarkup("/\(:rootlist:\)/", array($this, 'rootlist'));
+        $this->siteinfoMarkup("/\(:adminlist:\)/", array($this, 'adminlist'));
+        $this->siteinfoMarkup("/\(:coregroup:\)/", array($this, 'coregroup'));
+        $this->siteinfoMarkup("/\(:toplist ([a-z]*):\)/i", function ($m) {return $this->toplist($m[1]);});
+        $this->siteinfoMarkup("/\(:indicator ([a-z_\-]*):\)/i", function ($m) {return $this->indicator($m[1]);});
+        $this->siteinfoMarkup("/\(:history:\)/", array($this, 'history'));
+        $this->siteinfoMarkup("/\(:terms:\)/", array($this, 'termsOfUse'));
+        $this->siteinfoMarkup("'\[style=(&quot;)?(.*?)(&quot;)?\]\s*(.*?)\s*\[/style\]'s", function ($m) {return $this->style($m[2], $m[4]);});
     }
 
     function siteinfoMarkup($pattern, $replace) {
@@ -238,7 +238,7 @@ class SiteinfoMarkupEngine {
         //function to process registered markup
         if (is_array($this->siteinfo_directives)) {
             foreach ($this->siteinfo_directives as $direct) {
-                $str = preg_replace($direct[0],$direct[1],$str);
+                $str = preg_replace_callback($direct[0],$direct[1],$str);
             }
         }
         return $str;
@@ -570,8 +570,8 @@ class SiteinfoMarkupEngine {
 //functions for language filtering; used both in page-content and detail- and rubric-names
 
 function language_filter($input) {
-    return preg_replace("'\[lang=(\w*)\]\s*(.*?)\s*\[/lang\]'es",
-                        'stripforeignlanguage(\'$1\', \'$2\')',
+    return preg_replace_callback("'\[lang=(\w*)\]\s*(.*?)\s*\[/lang\]'s",
+                        function ($m) {return stripforeignlanguage($m[1], $m[2]);},
                         $input);
 }
 

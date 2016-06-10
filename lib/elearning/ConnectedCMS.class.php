@@ -53,7 +53,7 @@ class ConnectedCMS
     * @access
     * @param string $cms system-type
     */
-    function ConnectedCMS($cms = "")
+    function __construct($cms = "")
     {
         global $RELATIVE_PATH_ELEARNING_INTERFACE;
 

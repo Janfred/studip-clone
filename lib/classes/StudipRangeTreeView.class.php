@@ -42,9 +42,9 @@ class StudipRangeTreeView extends TreeView{
     *
     * @access public
     */
-    function StudipRangeTreeView(){
+    function __construct(){
         $this->root_content = $GLOBALS['UNI_INFO'];
-        parent::TreeView("StudipRangeTree"); //calling the baseclass constructor
+        parent::__construct("StudipRangeTree"); //calling the baseclass constructor
     }
 
     function getItemContent($item_id){

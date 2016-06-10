@@ -47,7 +47,7 @@ class ShowObject {
     var $resObject;     //Das Oject an dem gearbeitet wird
     
     //Konstruktor
-    function ShowObject($resource_id)
+    function __construct($resource_id)
     {
         $this->resObject = ResourceObject::Factory($resource_id);
         $this->cssSw = new cssClassSwitcher;

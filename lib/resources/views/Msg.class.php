@@ -48,7 +48,7 @@ class Msg {
     /** 
      * Constructor for resource-messages. Loads lib/resources/views/msg_resources.inc.php
      */
-    function Msg() {
+    function __construct() {
         global $RELATIVE_PATH_RESOURCES;
 
          include ($RELATIVE_PATH_RESOURCES."/views/msgs_resources.inc.php");

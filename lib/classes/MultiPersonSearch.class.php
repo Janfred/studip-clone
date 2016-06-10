@@ -66,7 +66,7 @@ class MultiPersonSearch {
      *
      * @param string name of the object and html ids
      */
-    public function MultiPersonSearch($name)
+    public function __construct($name)
     {
        $this->name = $name;
        $_SESSION['multipersonsearch'][$this->name]['lastUse'] = time();

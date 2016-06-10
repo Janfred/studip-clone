@@ -42,14 +42,14 @@ class StudipSemTreeView extends TreeView {
     *
     * @access public
     */
-    function StudipSemTreeView($start_item_id = "root", $sem_number = null){
+    function __construct($start_item_id = "root", $sem_number = null){
         $this->start_item_id = ($start_item_id) ? $start_item_id : "root";
         $this->root_content = $GLOBALS['UNI_INFO'];
         $args = null;
         if ($sem_number){
             $args = array('sem_number' => $sem_number);
         }
-        parent::TreeView("StudipSemTree", $args); //calling the baseclass constructor
+        parent::__construct("StudipSemTree", $args); //calling the baseclass constructor
     }
 
     /**

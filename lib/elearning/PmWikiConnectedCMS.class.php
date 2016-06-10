@@ -34,9 +34,9 @@ require_once 'clients/webservice_client.php';
 
 class PmWikiConnectedCMS extends ConnectedCMS
 {
-    function PmWikiConnectedCMS($cms)
+    function __construct($cms)
     {
-        parent::ConnectedCMS($cms);
+        parent::__construct($cms);
         $this->client = WebserviceClient::instance( $GLOBALS['ELEARNING_INTERFACE_MODULES'][$this->cms_type]['ABSOLUTE_PATH_SOAP'] .
                                                                                                 '?' . $GLOBALS['ELEARNING_INTERFACE_MODULES'][$this->cms_type]['URL_PARAMS'],
                                                                                                 $GLOBALS['ELEARNING_INTERFACE_MODULES'][$this->cms_type]['WEBSERVICE_CLASS']);

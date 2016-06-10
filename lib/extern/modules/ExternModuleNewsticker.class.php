@@ -46,8 +46,8 @@ class ExternModuleNewsticker extends ExternModule {
     /**
     *
     */
-    function ExternModuleNewsticker ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
-        parent::ExternModule($range_id, $module_name, $config_id, $set_config, $global_id);
+    function __construct($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
+        parent::__construct($range_id, $module_name, $config_id, $set_config, $global_id);
     }
     
     function setup () {}

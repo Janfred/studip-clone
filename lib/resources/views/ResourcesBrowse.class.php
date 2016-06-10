@@ -53,7 +53,7 @@ class ResourcesBrowse {
     var $searchArray;       //the array of search expressions (free search & properties)
     var $cssSw;         //the cssClassSwitcher
 
-    function ResourcesBrowse() {
+    function __construct() {
         $this->cssSw = new cssClassSwitcher();
         $this->list = new ShowList;
 

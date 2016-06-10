@@ -22,9 +22,9 @@ class StreamAvatar extends Avatar
      *
      * @return mixed   the streams's avatar.
      */
-    static function getAvatar($course_id)
+    static function getAvatar($id)
     {
-        return new StreamAvatar($course_id);
+        return new StreamAvatar($id);
     }
 
     /**

@@ -44,9 +44,9 @@ class ExternConfigIni extends ExternConfig {
     /**
     *
     */
-    function ExternConfigIni ($range_id, $module_name, $config_id = '') {
+    function __construct ($range_id, $module_name, $config_id = '') {
     
-        parent::ExternConfig ($range_id, $module_name, $config_id);
+        parent::__construct ($range_id, $module_name, $config_id);
         if ($this->id) {
             $this->file_name = $this->id . '.cfg';
         }

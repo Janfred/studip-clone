@@ -30,9 +30,9 @@ class ZebraTable extends Table {
     * Constructor for a HTML table.
     * @param    array   List of attribute/value pairs for html styles.
     **/
-    function ZebraTable($styles="", $switcherClass = "", $headerClass = "",$hovercolor = "",$nohovercolor = "")
+    function __construct($styles="", $switcherClass = "", $headerClass = "",$hovercolor = "",$nohovercolor = "")
     {
-        Table::Table($styles);
+        parent::__construct($styles);
 
         $this->classcnt = 0;                //Counter
         $this->JSenabled = $GLOBALS["auth"]->auth["jscript"];

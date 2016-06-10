@@ -45,7 +45,7 @@ class ExternModuleNews extends ExternModule {
     /**
     *
     */
-    function ExternModuleNews ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
+    function __construct($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
         $this->registered_elements = array(
                                 'Body',
                                 'TableHeader',
@@ -60,7 +60,7 @@ class ExternModuleNews extends ExternModule {
                 _("Datum/Autor"),
                 _("Nachricht")
         );
-        parent::ExternModule($range_id, $module_name, $config_id, $set_config, $global_id);
+        parent::__construct($range_id, $module_name, $config_id, $set_config, $global_id);
     }
     
     function setup () {

@@ -50,7 +50,7 @@ class ExternElementTreeBackLink extends ExternElement {
     *
     * @param array config
     */
-    function ExternElementTreeBackLink ($config = "") {
+    function __construct($config = "") {
         if ($config)
             $this->config = $config;
         

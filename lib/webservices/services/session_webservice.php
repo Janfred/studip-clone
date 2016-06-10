@@ -20,7 +20,7 @@ require_once('lib/webservices/api/studip_session.php');
 
 class SessionService extends AccessControlledService
 {
-    function SessionService()
+    function __construct()
     {
     $this->add_api_method('is_session_valid',
                           array('string', 'string'),

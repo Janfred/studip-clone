@@ -18,7 +18,7 @@ class Permission {
     var $perm;
 
 
-    function Permission($userid) {
+    function __construct($userid) {
         $this->userid = $userid;
         $this->perm = $GLOBALS['perm'];
     }

@@ -62,7 +62,7 @@ class ClipBoard {
 
 
 
-    function GetInstance($name){
+    public function GetInstance($name){
         static $instance;
         if (!is_object($instance[$name])){
             $instance[$name] = new ClipBoard($name);
@@ -70,13 +70,13 @@ class ClipBoard {
         return $instance[$name];
     }
 
-    function ClipBoard($name){
+    public function __construct($name){
         $this->form_name = $name."_clipboard_form";
         $this->db = new DB_Seminar();
         $this->elements =& $_SESSION["_".$this->form_name];
     }
 
-    function insertElement($id_to_insert, $object_type){
+    public function insertElement($id_to_insert, $object_type){
         if (!is_array($id_to_insert)){
             $id_to_insert = array($id_to_insert);
         }
@@ -96,7 +96,7 @@ class ClipBoard {
         return $inserted;
     }
 
-    function deleteElement($id_to_delete){
+    public function deleteElement($id_to_delete){
         if (!is_array($id_to_delete)){
             $id_to_delete = array($id_to_delete);
         }
@@ -116,15 +116,15 @@ class ClipBoard {
         return $deleted;
     }
 
-    function getNumElements(){
+    public function getNumElements(){
         return (is_array($this->elements)) ? count($this->elements) : 0;
     }
 
-    function isInClipboard($id_to_check){
+    public function isInClipboard($id_to_check){
         return isset($this->elements[$id_to_check]);
     }
 
-    function getElements(){
+    public function getElements(){
         $returned_elements = null;
         if (is_array($this->elements)){
             foreach($this->elements as $object_id=>$object_type) {
@@ -149,7 +149,7 @@ class ClipBoard {
         return $returned_elements;
     }
 
-    function getFormObject(){
+    public function getFormObject(){
         if (!is_object($this->form_obj)){
             $this->setFormObject();
         }
@@ -157,7 +157,7 @@ class ClipBoard {
         return $this->form_obj;
     }
 
-    function setDefaultValue(){
+    public function setDefaultValue(){
         if ($this->getNumElements() == 1 && is_object($this->form_obj)){
             reset($this->elements);
             $this->form_obj->form_fields['clip_content']['default_value'] = key($this->elements);
@@ -166,7 +166,7 @@ class ClipBoard {
         return false;
     }
 
-    function setFormObject(){
+    public function setFormObject(){
         $form_name = $this->form_name;
         $form_fields['clip_content'] = array('type' => 'select', 'multiple' => true, 'options_callback' => array($this, "getClipOptions"));
         $form_fields['clip_cmd'] = array('type' => 'select', 'options' => array(array('name' => _("Aus Merkliste löschen"), 'value' => 'del')));
@@ -179,7 +179,7 @@ class ClipBoard {
         return true;
     }
 
-    function getClipOptions($caller, $name){
+    public function getClipOptions($caller, $name){
         $options = array();
         $cols = 40;
         if ($elements = $this->getElements()){
@@ -193,7 +193,7 @@ class ClipBoard {
         return $options;
     }
 
-    function showClip($title = true, $width = '250px')
+    public function showClip($title = true, $width = '250px')
     {
         $this->getFormObject();
 
@@ -211,7 +211,7 @@ class ClipBoard {
         echo '</div>';
     }
 
-    function doClipCmd(){
+    public function doClipCmd(){
         $this->getFormObject();
         switch ($this->form_obj->getFormFieldValue("clip_cmd")){
             case "del":

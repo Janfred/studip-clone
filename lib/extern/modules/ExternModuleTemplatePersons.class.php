@@ -47,7 +47,7 @@ class ExternModuleTemplatePersons extends ExternModule {
     /**
     *
     */
-    function ExternModuleTemplatePersons ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
+    function __construct ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
         $this->data_fields = array(
                 'Nachname', 'Telefon', 'raum', 'Email', 'sprechzeiten'
         );

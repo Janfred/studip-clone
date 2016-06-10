@@ -31,9 +31,9 @@ class Ilias4Soap extends Ilias3Soap
      * @access
      * @param string $cms system-type
      */
-    function Ilias4Soap($cms)
+    function __construct($cms)
     {
-        parent::Ilias3Soap($cms);
+        parent::__construct($cms);
         $this->seperator_string = " / ";
     }
 

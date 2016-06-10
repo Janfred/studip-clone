@@ -61,7 +61,7 @@ class ResourcesUserRoomsList {
     }
     
     // Konstruktor
-    function ResourcesUserRoomsList ($user_id ='', $sort= TRUE, $return_objects = TRUE, $only_rooms = TRUE) {
+    function __construct($user_id ='', $sort= TRUE, $return_objects = TRUE, $only_rooms = TRUE) {
         $this->user_id = $user_id;
         if (!$this->user_id)
             $this->user_id = $GLOBALS['user']->id;

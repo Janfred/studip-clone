@@ -29,7 +29,7 @@ class StudipAuthCAS extends StudipAuthSSO {
     * @access public
     *
     */
-    function StudipAuthCAS() {
+    function __construct() {
         parent::__construct();
 
         if (Request::option('sso')) {

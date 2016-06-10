@@ -50,7 +50,7 @@ class ExternElementRangeTreeLevelContent extends ExternElement {
     *
     * @param array config
     */
-    function ExternElementRangeTreeLevelContent ($config = "") {
+    function __construct($config = "") {
         if ($config)
             $this->config = $config;
         

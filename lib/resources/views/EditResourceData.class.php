@@ -46,7 +46,7 @@ class EditResourceData {
     var $used_view;     //the used view
 
     //Konstruktor
-    function EditResourceData ($resource_id) {
+    function __construct($resource_id) {
         $this->resObject = ResourceObject::Factory($resource_id);
     }
 

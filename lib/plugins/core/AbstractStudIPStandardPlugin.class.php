@@ -22,7 +22,7 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin
     // relativer Name des Icons für Änderungen an diesem Plugin
     var $changeindicatoriconname;
 
-    function AbstractStudIPStandardPlugin() {
+    function __construct() {
         parent::__construct();
         $this->id = $GLOBALS['SessSemName'][1];
         $this->user->permission->setPoiid($this->id);
@@ -216,7 +216,7 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin
      *
      * @param $context   context range id
      */
-    function isActivated($context = NULL) {
+    function isActivated($context = NULL, $type = 'sem') {
         return parent::isActivated($context ? $context : $this->id);
     }
 

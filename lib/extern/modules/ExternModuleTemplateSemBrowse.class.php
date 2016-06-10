@@ -51,7 +51,7 @@ class ExternModuleTemplateSemBrowse extends ExternModule {
     var $module_params = array();
 
 
-    function ExternModuleTemplateSemBrowse ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
+    function __construct($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
 
         $this->data_fields = array('VeranstaltungsNummer', 'Name', 'Untertitel', 'status', 'Ort',
             'art', 'zeiten', 'dozent');
@@ -83,7 +83,7 @@ class ExternModuleTemplateSemBrowse extends ExternModule {
 
         $this->approved_params = array('start_item_id', 'sem', 'do_search', 'quick_search', 'show_result', 'title', 'sub_title', 'number', 'comment', 'lecturer', 'scope', 'combination', 'type', 'qs_choose', 'withkids', 'xls_export', 'group_by', 'start');
 
-        parent::ExternModule($range_id, $module_name, $config_id, $set_config, $global_id);
+        parent::__construct($range_id, $module_name, $config_id, $set_config, $global_id);
     }
 
     function setup () {

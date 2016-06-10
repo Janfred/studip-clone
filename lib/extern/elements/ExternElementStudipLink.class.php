@@ -48,7 +48,7 @@ class ExternElementStudipLink extends ExternElement {
     *
     * @param array config
     */
-    function ExternElementStudipLink ($config = "") {
+    function __construct($config = "") {
         if ($config)
             $this->config = $config;
 

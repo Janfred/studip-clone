@@ -48,7 +48,7 @@ class ExternElementTableParagraph extends ExternElement {
     *
     * @param array config
     */
-    function ExternElementTableParagraph ($config = "") {
+    function __construct($config = "") {
         if ($config)
             $this->config = $config;
         

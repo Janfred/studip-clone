@@ -52,7 +52,7 @@ class ShowList extends ShowTreeRow{
     var $supress_hierachy_levels;       //show only resources with a category or show also the hierarhy-levels (that are resources too)
     var $admin_buttons;         //show admin buttons or not
 
-    function ShowList() {
+    function __construct() {
         $this->recurse_levels=-1;
         $this->supress_hierachy_levels=FALSE;
         $this->simple_list=FALSE;

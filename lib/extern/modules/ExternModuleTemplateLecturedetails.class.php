@@ -50,7 +50,7 @@ class ExternModuleTemplateLecturedetails extends ExternModule {
     /**
     *
     */
-    function ExternModuleTemplateLecturedetails ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
+    function __construct($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
 
         $this->data_fields = array('subtitle', 'lecturer', 'art', 'status', 'description',
             'location', 'semester', 'time', 'number', 'teilnehmer', 'requirements',
@@ -81,7 +81,7 @@ class ExternModuleTemplateLecturedetails extends ExternModule {
                 _("ECTS-Punkte")
         );
 
-        parent::ExternModule($range_id, $module_name, $config_id, $set_config, $global_id);
+        parent::__construct($range_id, $module_name, $config_id, $set_config, $global_id);
     }
 
     function setup () {

@@ -34,8 +34,9 @@ class UserConfig extends Config
      * @param string $user_id
      * @return UserConfig
      */
-    public static function get($user_id)
+    public static function get()
     {
+        $user_id = func_get_arg(0);
         if (self::$instances[$user_id] === null) {
             $config = new UserConfig($user_id);
             self::$instances[$user_id] = $config;
@@ -50,8 +51,9 @@ class UserConfig extends Config
      * @param string $user_id
      * @param UserConfig $my_instance
      */
-    public static function set($user_id, $my_instance)
+    public static function set()
     {
+        list ($user_id, $my_instance) = func_get_args();
         self::$instances[$user_id] = $my_instance;
     }
 

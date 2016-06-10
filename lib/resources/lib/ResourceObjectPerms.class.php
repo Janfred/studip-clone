@@ -65,7 +65,7 @@ class ResourceObjectPerms {
     var $perm_weight= array("admin" => 4, "tutor" => 2, "autor" => 1);
 
 
-    function ResourceObjectPerms ($resource_id, $user_id='') {
+    function __construct($resource_id, $user_id='') {
         global $user, $perm;
 
         if ($user_id)

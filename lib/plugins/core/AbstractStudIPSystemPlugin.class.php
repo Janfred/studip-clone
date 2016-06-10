@@ -20,7 +20,7 @@ class AbstractStudIPSystemPlugin extends AbstractStudIPLegacyPlugin
 
         protected $display_type;
 
-    function AbstractStudIPSystemPlugin(){
+    function __construct(){
         parent::__construct();
         $this->display_type = SYSTEM_PLUGIN_TOOLBAR;
     }

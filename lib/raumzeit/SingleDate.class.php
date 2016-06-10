@@ -68,7 +68,7 @@ class SingleDate
 
     }
 
-    function SingleDate($data = '')
+    function __construct($data = '')
     {
         global $user, $id;
         if ($data instanceOf CourseDate || $data instanceof CourseExDate) {

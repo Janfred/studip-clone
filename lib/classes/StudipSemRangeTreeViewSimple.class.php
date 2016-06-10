@@ -47,7 +47,7 @@ class StudipSemRangeTreeViewSimple {
     *
     * @access public
     */
-    function StudipSemRangeTreeViewSimple($start_item_id = "root", $sem_number = false, $sem_status = false, $visible_only = false){
+    function __construct($start_item_id = "root", $sem_number = false, $sem_status = false, $visible_only = false){
         $this->start_item_id = ($start_item_id) ? $start_item_id : "root";
         $this->root_content = $GLOBALS['UNI_INFO'];
         $args = null;

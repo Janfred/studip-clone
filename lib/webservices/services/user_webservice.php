@@ -47,7 +47,7 @@ class UserService extends AccessControlledService {
        return join("\n", $ret);
    }
 
-   function UserService() {
+   function __construct() {
        $this->add_api_method('create_user',
            array('', 'Studip_User'),
            'Studip_User',
@@ -82,7 +82,7 @@ class UserService extends AccessControlledService {
     * @return mixed if this method returns a Studip_Ws_Fault, further
     *               processing will be aborted
     */
-   function before_filter($name, &$args) {
+   function before_filter(&$name, &$args) {
        global $auth, $user, $perm;
 
        $auth = new Seminar_Auth();

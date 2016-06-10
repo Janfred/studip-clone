@@ -41,8 +41,8 @@ require_once 'lib/dates.inc.php';
 
 class AdminModules extends ModulesNotification {
 
-    function AdminModules() {
-        parent::ModulesNotification();
+    public function __construct() {
+        parent::__construct();
         //please add here the special messages for modules you need consistency checks (defined below in this class)
         $this->registered_modules["forum"]["msg_warning"] = _("Wollen Sie wirklich das Forum deaktivieren?");
         //$this->registered_modules["forum"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren des Forums werden <b>%s</b> Postings ebenfalls gelöscht!");
@@ -101,14 +101,14 @@ class AdminModules extends ModulesNotification {
                                 Das Recht "Ordner erstellen" (f): Studierende können Unterordner anlegen'),
                 'icon' => Icon::create('files', 'info'),
                 'screenshots' => array(
-                    'path' => 'plus/screenshots/Dateiordnerberechtigung', 
-                    'pictures' => array( 
+                    'path' => 'plus/screenshots/Dateiordnerberechtigung',
+                    'pictures' => array(
                         0 => array(
-                            'source' => 'Ordner_zum_Hausaufgabenordner_umwandeln.jpg', 
+                            'source' => 'Ordner_zum_Hausaufgabenordner_umwandeln.jpg',
                             'title'  => _('Ordner zum Hausaufgabenordner umwandeln'),
                         )
                     )
-                ),              
+                ),
                 'description' => _('Mit den Einstellungen zur Dateiordnerberechtigung können Lehrende die Zugriffsrechte '.
                                     'für Ordner im Dateibereich verändern. Wird z. B. das Leserecht entfernt, entsteht ein '.
                                     'Hausaufgabenordner, in den Studierende Dateien zwar hochladen, aber nicht sehen können, '.
@@ -137,7 +137,7 @@ class AdminModules extends ModulesNotification {
         $this->registered_modules["resources"]["msg_deactivate"] = _("Sie können die Ressourcenseite jederzeit deaktivieren.");
     }
 
-    function getDocumentsExistingItems($range_id) { //getModuleDocumentsExistingItems
+    public function getDocumentsExistingItems($range_id) { //getModuleDocumentsExistingItems
         $query = "SELECT COUNT(dokument_id) FROM dokumente WHERE seminar_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($range_id));
@@ -149,13 +149,7 @@ class AdminModules extends ModulesNotification {
         return $items;
     }
 
-    /*function moduleDocumentsDeactivate($range_id) {
-        //delete_all_documents($range_id);
-        //Örgs, warum immer ich...
-        $this->clearBit($_SESSION['admin_modules_data']["changed_bin"], $this->registered_modules['documents_folder_permissions']['id']);
-    }*/
-
-    function moduleDocumentsActivate($range_id) {
+    public function moduleDocumentsActivate($range_id) {
         if ($this->getDocumentsExistingItems($range_id)) {
             return;
         }
@@ -166,56 +160,20 @@ class AdminModules extends ModulesNotification {
                       $range_id);
     }
 
-    /*function getModuleLiteratureExistingItems($range_id) {
-        $list_count = StudipLitList::GetListCountByRange($range_id);
-        return ($list_count["visible_list"] || $list_count["invisible_list"]) ? $list_count["visible_list"] . "/" . $list_count["invisible_list"] : false;
-    }*/
-
-    /*function moduleLiteratureDeactivate($range_id) {
-        //return StudipLitList::DeleteListsByRange($range_id);
-    }*/
-
-    function getModuleWikiExistingItems($range_id) {
+    public function getModuleWikiExistingItems($range_id) {
         $query = "SELECT COUNT(keyword) FROM wiki WHERE range_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($range_id));
         return $statement->fetchColumn();
     }
 
-    /*function moduleWikiDeactivate($range_id) {
-        DBManager::get()
-            ->prepare("DELETE FROM wiki WHERE range_id = ?")
-            ->execute(array($range_id));
-
-        DBManager::get()
-            ->prepare("DELETE FROM wiki_links WHERE range_id = ?")
-            ->execute(array($range_id));
-
-        DBManager::get()
-            ->prepare("DELETE FROM wiki_locks WHERE range_id = ?")
-            ->execute(array($range_id));
-
-    }*/
-
-    /*function getModuleScmExistingItems($range_id) {
-        $query = "SELECT COUNT(scm_id) FROM scm WHERE range_id = ?";
-        $statement = DBManager::get()->prepare($query);
-        $statement->execute(array($range_id));
-        return $statement->fetchColumn();
-    }*/
-
-    /*function moduleScmDeactivate($range_id) {
-        DBManager::get()
-            ->prepare("DELETE FROM scm WHERE range_id = ?")
-            ->execute(array($range_id));
-    }*/
 
     /**
      * prepares the database when activating the scm module.
      *
      * @param $range_id id
      */
-    function moduleScmActivate($range_id) {
+    public function moduleScmActivate($range_id) {
         // check if existing items are available
         $query = "SELECT COUNT(scm_id) FROM scm WHERE range_id = ?";
         $statement = DBManager::get()->prepare($query);
@@ -240,12 +198,12 @@ class AdminModules extends ModulesNotification {
             ));
     }
 
-    function getModuleElearning_interfaceExistingItems($range_id) {
+    public function getModuleElearning_interfaceExistingItems($range_id) {
         $object_connections = new ObjectConnections($range_id);
         return is_array($object_connections->getConnections()) ? count($object_connections->getConnections()) : 0;
     }
 
-    function moduleElearning_interfaceDeactivate($range_id) {
+    public function moduleElearning_interfaceDeactivate($range_id) {
         global $connected_cms;
         foreach(ObjectConnections::GetConnectedSystems($range_id) as $system){
             ELearningUtils::loadClass($system);
@@ -253,22 +211,22 @@ class AdminModules extends ModulesNotification {
         }
     }
 
-    function moduledocuments_folder_permissionsDeactivate($range_id){
+    public function moduledocuments_folder_permissionsDeactivate($range_id){
         $folder_tree = TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $range_id));
         foreach($folder_tree->getKidsKids('root') as $folder_id){
             $folder_tree->setDefaultPermission($folder_id);
         }
     }
 
-    function moduledocuments_folder_permissionsActivate($range_id){
+    public function moduledocuments_folder_permissionsActivate($range_id){
     }
 
-    function getModuledocuments_folder_permissionsExistingItems($range_id) {
+    public function getModuledocuments_folder_permissionsExistingItems($range_id) {
         $folder_tree = TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $range_id));
         return count($folder_tree->getUnreadableFolders('xxx', true));
     }
 
-    function moduledocuments_folder_permissionsPreconditions($range_id, $args){
+    public function moduledocuments_folder_permissionsPreconditions($range_id, $args){
         if (is_array($args)){
             $must_activate = array();
             foreach($args as $m){
@@ -283,9 +241,8 @@ class AdminModules extends ModulesNotification {
         return null;
     }
 
-    function getModuleCalendarExistingItems($range_id)
+    public function getModuleCalendarExistingItems($range_id)
     {
         return CalendarEvent::countBySql('range_id = ?', array($range_id));
     }
-
 }

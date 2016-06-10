@@ -20,7 +20,7 @@ require_once('lib/webservices/api/studip_contentmodule.php');
 
 class ContentmoduleService extends AccessControlledService
 {
-    function ContentmoduleService()
+    function __construct()
     {
     $this->add_api_method('find_seminars_using_contentmodule',
                           array('string', 'string', 'string'),

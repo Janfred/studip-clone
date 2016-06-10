@@ -44,7 +44,7 @@ class Table {
     * Constructor for a HTML table.
     * @param    array   List of attribute/value pairs for html styles.
     **/
-    function Table($styles = array()) 
+    function __construct($styles = array())
     {
         // properties for entire table
         $this->table_width   = @$styles['width'];

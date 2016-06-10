@@ -59,9 +59,9 @@ class EvaluationObjectDB extends DatabaseObject {
    * Constructor
    * @access   public
    */
-  function EvaluationObjectDB () {
+  function __construct () {
     /* Set default values -------------------------------------------------- */
-    parent::DatabaseObject ();
+    parent::__construct();
     $this->instanceof = INSTANCEOF_EVALDBOBJECT;
     /* --------------------------------------------------------------------- */
   }

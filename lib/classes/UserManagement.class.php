@@ -150,7 +150,7 @@ class UserManagement
     * @access   public
     * @param    string  $user_id    the user which should be retrieved
     */
-    function UserManagement($user_id = FALSE)
+    function __construct($user_id = FALSE)
     {
         $this->validator = new email_validation_class;
         $this->validator->timeout = 10;                 // How long do we wait for response of mailservers?

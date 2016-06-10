@@ -39,7 +39,7 @@ class EvalTemplateGUI {
 
   /* Define functions ------------------------------------------------------ */
 
-  function EvalTemplateGUI( ) {
+  function __construct( ) {
     $this->BR = new HTMpty( "br" );
     $this->command = $this->getPageCommand();
   }

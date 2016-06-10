@@ -25,7 +25,7 @@ class ObjectConnections
     * @access public
     * @param string $object_id object-id
     */ 
-    function ObjectConnections($object_id = "")
+    function __construct($object_id = "")
     {
         $this->id = $object_id;
         if ($object_id != "")

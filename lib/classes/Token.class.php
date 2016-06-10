@@ -17,7 +17,7 @@
 
 class Token
 {
-    function Token($user_id, $duration_validity = 30)
+    function __construct($user_id, $duration_validity = 30)
     {
         $this->user_id = $user_id;
         $this->duration_validity = $duration_validity;

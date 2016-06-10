@@ -23,7 +23,7 @@ class StudipAuthShib extends StudipAuthSSO
     /**
      * Constructor: read auth information from remote SP.
      */
-    function StudipAuthShib ()
+    function __construct()
     {
         parent::__construct();
 

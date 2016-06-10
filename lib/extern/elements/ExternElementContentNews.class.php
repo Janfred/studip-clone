@@ -49,7 +49,7 @@ class ExternElementContentNews extends ExternElement {
     *
     * @param array config
     */
-    function ExternElementContentNews ($config = "") {
+    function __construct($config = "") {
         if ($config)
             $this->config = $config;
         

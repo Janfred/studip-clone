@@ -36,9 +36,9 @@ class DBMigration extends Migration
      *
      * @param boolean $verbose verbose output (optional)
      */
-    function DBMigration ($verbose = TRUE)
+    function __construct($verbose = TRUE)
     {
-        parent::Migration($verbose);
+        parent::__construct($verbose);
         $this->db = new DB_Seminar();
     }
 }

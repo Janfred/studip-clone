@@ -42,7 +42,7 @@ class Studip_Ws_Fault {
    *
    * @return void
    */
-  function Studip_Ws_Fault($message) {
+  function __construct($message) {
     $this->message = (string) $message;
   }
 

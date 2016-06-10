@@ -49,7 +49,7 @@ class ExternElementTableHeadrow extends ExternElement {
     *
     * @param array config
     */
-    function ExternElementTableHeadrow ($config = "") {
+    function __construct($config = "") {
         if ($config)
             $this->config = $config;
         

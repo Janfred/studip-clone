@@ -65,7 +65,7 @@ abstract class AdmissionRule
      *
      * @param CourseSet $courseset Current courseset.
      */
-    public function afterSeatDistribution(&$courseset) {
+    public function afterSeatDistribution($courseset) {
         return true;
     }
 
@@ -256,7 +256,7 @@ abstract class AdmissionRule
      *
      * @param CourseSet The courseset this rule belongs to.
      */
-    public function beforeSeatDistribution(&$courseset) {
+    public function beforeSeatDistribution($courseset) {
         return true;
     }
 

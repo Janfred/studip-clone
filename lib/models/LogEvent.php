@@ -85,46 +85,65 @@ class LogEvent extends SimpleORMap
     {
         $text = $this->formatObject();
         $patterns = array(
-            '/%sem\(%affected\)/e',
-            '/%sem\(%coaffected\)/e',
-            '/%studyarea\(%affected\)/e',
-            '/%studyarea\(%coaffected\)/e',
-            '/%res\(%affected\)/e',
-            '/%res\(%coaffected\)/e',
-            '/%inst\(%affected\)/e',
-            '/%inst\(%coaffected\)/e',
-            '/%user\(%affected\)/e',
-            '/%user\(%coaffected\)/e',
-            '/%user/e',
-            '/%singledate\(%affected\)/e',
-            '/%semester\(%coaffected\)/e',
-            '/%plugin\(%coaffected\)/e',
             '/%affected/',
             '/%coaffected/',
             '/%info/',
             '/%dbg_info/'
         );
         $replacements = array(
-            "self::formatSeminar('affected_range_id')",
-            "self::formatSeminar('coaffected_range_id')",
-            "self::formatStudyarea('affected_range_id')",
-            "self::formatStudyarea('coaffected_range_id')",
-            "self::formatResource('affected_range_id')",
-            "self::formatResource('coaffected_range_id')",
-            "self::formatInstitute('affected_range_id')",
-            "self::formatInstitute('coaffected_range_id')",
-            "self::formatUsername('affected_range_id')",
-            "self::formatUsername('coaffected_range_id')",
-            "self::formatUsername('user_id')",
-            "self::formatSingledate('affected_range_id')",
-            "self::formatSemester('coaffected_range_id')",
-            "self::formatPlugin('coaffected_range_id')",
             $this->affected_range_id,
             $this->coaffected_range_id,
             htmlReady($this->info),
             htmlReady($this->dbg_info)
         );
+        $replace_callbacks = [
+            '/%sem\(%affected\)/',
+            '/%sem\(%coaffected\)/',
+            '/%studyarea\(%affected\)/',
+            '/%studyarea\(%coaffected\)/',
+            '/%res\(%affected\)/',
+            '/%res\(%coaffected\)/',
+            '/%inst\(%affected\)/',
+            '/%inst\(%coaffected\)/',
+            '/%user\(%affected\)/',
+            '/%user\(%coaffected\)/',
+            '/%user/',
+            '/%singledate\(%affected\)/',
+            '/%semester\(%coaffected\)/',
+            '/%plugin\(%coaffected\)/',
+        ];
+
+        $text = preg_replace_callback($replace_callbacks, [$this, 'formatCallback'], $text);
         return preg_replace($patterns, $replacements, $text);
+    }
+
+    /**
+     * @param $m
+     * @return string
+     */
+    protected function formatCallback($m)
+    {
+        $map = [
+            'sem'  => 'Seminar',
+            'res'  => 'Resource',
+            'inst' => 'Institute',
+            'user' => 'Username',
+        ];
+        $ret = '';
+        if (preg_match_all('/%([a-z]+)/', $m[0], $found)) {
+            if (isset($found[1][0])) {
+                $funcname = 'format' . (isset($map[$found[1][0]]) ? $map[$found[1][0]] : $found[1][0]);
+                if (isset($found[1][1])) {
+                    $param = $found[1][1] . '_range_id';
+                } else {
+                    $param = 'user_id';
+                }
+                if (is_callable([$this, $funcname])) {
+                    $ret = call_user_func([$this, $funcname], $param);
+                }
+            }
+        }
+        return $ret;
     }
 
     /**
@@ -274,16 +293,16 @@ class LogEvent extends SimpleORMap
                     }
                     break;
                 case 'file':
-                    if (!file_exists($action->filename)) {
-                        require_once($action->filename);
-                        $class_name = $action->class;
+                    if (!file_exists($this->action->filename)) {
+                        require_once($this->action->filename);
+                        $class_name = $this->action->class;
                         if ($class_name instanceof Loggable) {
                             return $class_name::logFormat($this);
                         }
                     }
                     break;
                 case 'core':
-                    $class_name = $action->class;
+                    $class_name = $this->action->class;
                     if ($class_name instanceof Loggable) {
                         return $class_name::logFormat($this);
                     }

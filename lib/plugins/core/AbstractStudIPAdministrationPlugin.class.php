@@ -16,7 +16,7 @@ class AbstractStudIPAdministrationPlugin extends AbstractStudIPLegacyPlugin
 
     var $topnavigation;
 
-    function AbstractStudIPAdministrationPlugin(){
+    function __construct(){
         parent::__construct();
 
         // Administration-Plugins only accessible by users with admin rights

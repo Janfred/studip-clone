@@ -23,7 +23,7 @@ require_once('lib/dates.inc.php');
 
 class LectureTreeService extends AccessControlledService
 {
-    function LectureTreeService()
+    function __construct()
     {
         $this->add_api_method('get_seminars_by_sem_tree_id',
                                                         array('string',

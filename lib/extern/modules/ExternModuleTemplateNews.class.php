@@ -51,7 +51,7 @@ class ExternModuleTemplateNews extends ExternModule {
     /**
     *
     */
-    function ExternModuleTemplateNews ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
+    function __construct($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
 
         $this->data_fields = array();
         $this->registered_elements = array(
@@ -60,7 +60,7 @@ class ExternModuleTemplateNews extends ExternModule {
         );
         $this->field_names = array();
 
-        parent::ExternModule($range_id, $module_name, $config_id, $set_config, $global_id);
+        parent::__construct($range_id, $module_name, $config_id, $set_config, $global_id);
     }
 
     function setup () {

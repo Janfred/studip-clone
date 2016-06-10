@@ -365,14 +365,6 @@ function kill_format ($text) {
     $pattern = array(
                     "'(^|\n)\!{1,4}(.+)$'m",      // Ueberschriften
                     "'(\n|\A)(-|=)+ (.+)$'m",     // Aufzaehlungslisten
-                    "'(^|\s)%(?!%)(\S+%)+'e",     // SL-kursiv
-                    "'(^|\s)\*(?!\*)(\S+\*)+'e",  // SL-fett
-                    "'(^|\s)_(?!_)(\S+_)+'e",     // SL-unterstrichen
-                    "'(^|\s)#(?!#)(\S+#)+'e",     // SL-diktengleich
-                    "'(^|\s)\+(?!\+)(\S+\+)+'e",  // SL-groesser
-                    "'(^|\s)-(?!-)(\S+-)+'e",     // SL-kleiner
-                    "'(^|\s)>(?!>)(\S+>)+'e",     // SL-hochgestellt
-                    "'(^|\s)<(?!<)(\S+<)+'e",     // SL-tiefgestellt
                     "'%%(\S|\S.*?\S)%%'s",        // ML-kursiv
                     "'\*\*(\S|\S.*?\S)\*\*'s",    // ML-fett
                     "'__(\S|\S.*?\S)__'s",        // ML-unterstrichen
@@ -394,23 +386,31 @@ function kill_format ($text) {
                     );
     $replace = array(
                     "\\1\\2", "\\1\\3",
-                    "'\\1'.substr(str_replace('%', ' ', '\\2'), 0, -1)",
-                    "'\\1'.substr(str_replace('*', ' ', '\\2'), 0, -1)",
-                    "'\\1'.substr(str_replace('_', ' ', '\\2'), 0, -1)",
-                    "'\\1'.substr(str_replace('#', ' ', '\\2'), 0, -1)",
-                    "'\\1'.substr(str_replace('+', ' ', '\\2'), 0, -1)",
-                    "'\\1'.substr(str_replace('-', ' ', '\\2'), 0, -1)",
-                    "'\\1'.substr(str_replace('>', ' ', '\\2'), 0, -1)",
-                    "'\\1'.substr(str_replace('<', ' ', '\\2'), 0, -1)",
                     "\\1", "\\1", "\\1", "\\1", "\\1", "\\1",
                     "\\1", "\\1", "\\1", "\n\\1\n", "", "\\1",'[nop] [/nop]',
                     //"\\2",
                     '$1 ($2)',
                      //"",
                       '$1$2');
+    $callback = function ($c) {
+        return function ($m) use ($c) {
+            return $m[1] . substr(str_replace($c, ' ', $m[2]), 0, -1);
+        };
+    };
+    $pattern_callback = array(
+        "'(^|\s)%(?!%)(\S+%)+'" => $callback('%'),     // SL-kursiv
+        "'(^|\s)\*(?!\*)(\S+\*)+'" => $callback('*') ,  // SL-fett
+        "'(^|\s)_(?!_)(\S+_)+'" => $callback('_'),     // SL-unterstrichen
+        "'(^|\s)#(?!#)(\S+#)+'" => $callback('#'),     // SL-diktengleich
+        "'(^|\s)\+(?!\+)(\S+\+)+'" => $callback('+'),  // SL-groesser
+        "'(^|\s)-(?!-)(\S+-)+'" => $callback('-'),     // SL-kleiner
+        "'(^|\s)>(?!>)(\S+>)+'" => $callback('>'),     // SL-hochgestellt
+        "'(^|\s)<(?!<)(\S+<)+'" => $callback('<'),     // SL-tiefgestellt);
+    );
 
     if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", $text, $matches)) {
         $text = preg_replace($pattern, $replace, $text);
+        $text = preg_replace_callback_array($pattern_callback, $text);
         $text = explode("[nop] [/nop]", $text);
         $i = 0;
         $all = '';
@@ -419,8 +419,9 @@ function kill_format ($text) {
 
         return $all;
     }
-
-    return preg_replace($pattern, $replace, $text);
+    $text = preg_replace($pattern, $replace, $text);
+    $text = preg_replace_callback_array($pattern_callback, $text);
+    return $text;
 }
 
 function isURL($url) {
@@ -878,7 +879,7 @@ function createQuestion2($question, $approveParams, $disapproveParams = array(),
  *                      included in the output (optional, defaults to false)
  * @return String The exception display either as plain text or html
  */
-function display_exception(Exception $exception, $as_html = false, $deep = false) {
+function display_exception(Throwable $exception, $as_html = false, $deep = false) {
     $result  = '';
     $result .= sprintf("%s: %s\n", _('Typ'), get_class($exception));
     $result .= sprintf("%s: %s\n", _('Nachricht'), $exception->getMessage());
@@ -930,4 +931,28 @@ function get_icon_for_mimetype($mime_type)
         return 'file-archive';
     }
     return 'file';
+}
+
+
+if (!function_exists('preg_replace_callback_array')) {
+    /**
+     * Perform a regular expression search and replace using callbacks
+     * @link http://php.net/manual/en/function.preg-replace-callback-array.php
+     * @param array $patterns_and_callbacks
+     * @param mixed $subject
+     * @param int $limit [optional]
+     * @param int $count [optional]
+     * @return array|NUll  <p>preg_replace_callback_array() returns an array if the subject parameter is an array, or a string otherwise. On errors the return value is NULL</p>
+     * <p>If matches are found, the new subject will be returned, otherwise subject will be returned unchanged.</p>
+     */
+    function preg_replace_callback_array(array $patterns_and_callbacks, $subject, $limit = -1, &$count = null)
+    {
+        $count = 0;
+        foreach ($patterns_and_callbacks as $pattern => &$callback) {
+            $subject = preg_replace_callback($pattern, $callback, $subject, $limit, $partial_count);
+            $count += $partial_count;
+        }
+        return preg_last_error() == PREG_NO_ERROR ? $subject : null;
+    }
+
 }

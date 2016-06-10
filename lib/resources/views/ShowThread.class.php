@@ -49,7 +49,7 @@ ShowThread, stellt Struktur mit Hilfe von printThread dar
 class ShowThread extends ShowTreeRow {
     var $lines;     //Uebersichtsarray der Struktur;
 
-    function ShowThread() {
+    function __construct() {
     }
 
     function showThreadLevel ($root_id, $level=0, $lines='')

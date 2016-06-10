@@ -46,7 +46,7 @@ class Studip_Ws_Dispatcher {
    *
    * @return void
    */
-  function Studip_Ws_Dispatcher($services = array() /*, ... */) {
+  function __construct($services = array() /*, ... */) {
 
     if (!is_array($services))
       $services = func_get_args();
@@ -79,7 +79,7 @@ class Studip_Ws_Dispatcher {
       return FALSE;
     }
 
-    $service =& new $service_name();
+    $service = new $service_name();
 
     $api_methods = $service->get_api_methods();
 

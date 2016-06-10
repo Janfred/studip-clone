@@ -38,7 +38,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  **/
 class ContainerTable extends Table {
-    function ContainerTable($styles="")
+
+    public function __construct($styles="")
     {
         Table::Table($styles);
         if (!@$styles["width"]) {
@@ -51,7 +52,7 @@ class ContainerTable extends Table {
         $this->cell_class="blank";
     }
 
-    function headerRow($header, $styles=array()) {
+    public function headerRow($header, $styles=array()) {
         if (!@$styles["class"]) {
             $styles["class"]="table_header_bold";
         }

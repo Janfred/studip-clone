@@ -21,22 +21,22 @@ class CalendarImport
 
     const IGNORE_ERRORS = 1;
 
-    private $_parser;
+    protected $_parser;
     private $data;
     private $public_to_private = false;
 
-    function CalendarImport(&$parser, $data = null)
+    public function __construct(&$parser, $data = null)
     {
         $this->_parser = $parser;
         $this->data = $data;
     }
 
-    function getContent()
+    public function getContent()
     {
         return $this->data;
     }
 
-    function importIntoDatabase($range_id, $ignore = CalendarImport::IGNORE_ERRORS)
+    public function importIntoDatabase($range_id, $ignore = CalendarImport::IGNORE_ERRORS)
     {
         $this->_parser->changePublicToPrivate($this->public_to_private);
         if ($this->_parser->parseIntoDatabase($range_id, $this->getContent(), $ignore)) {
@@ -46,7 +46,7 @@ class CalendarImport
         return false;
     }
 
-    function importIntoObjects($ignore = CalendarImport::IGNORE_ERRORS)
+    public function importIntoObjects($ignore = CalendarImport::IGNORE_ERRORS)
     {
         $this->_parser->changePublicToPrivate($this->public_to_private);
         if ($this->_parser->parseIntoObjects($this->getContent(), $ignore)) {
@@ -56,23 +56,22 @@ class CalendarImport
         return false;
     }
 
-    function getObjects()
+    public function getObjects()
     {
         return $objects =& $this->_parser->getObjects();
     }
 
-    function getCount()
+    public function getCount()
     {
-
         return $this->_parser->getCount($this->getContent());
     }
 
-    function changePublicToPrivate($value = TRUE)
+    public function changePublicToPrivate($value = TRUE)
     {
         $this->public_to_private = $value;
     }
 
-    function getClientIdentifier()
+    public function getClientIdentifier()
     {
         if (!$client_identifier = $this->_parser->getClientIdentifier()) {
             return $this->_parser->getClientIdentifier($this->getContent());
@@ -80,7 +79,7 @@ class CalendarImport
         return $client_identifier;
     }
 
-    function setImportSem($do_import)
+    public function setImportSem($do_import)
     {
         if ($do_import) {
             $this->_parser->import_sem = true;
