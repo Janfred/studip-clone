@@ -45,7 +45,7 @@ STUDIP.CalendarDialog = {
                 '<li><label>'
                 + '<input type="checkbox" name="del_exc_dates[]" value="<%- excdate %>" style="display: none">'
                 + '<span><%- excdate %><img src="'
-                + STUDIP.ASSETS_URL + "images/icons/16/blue/trash.png"
+                + STUDIP.ASSETS_URL + "images/icons/blue/trash.svg"
                 + '"></span></label>'
                 + '<input type="hidden" name="exc_dates[]" value="<%- excdate %>">'
                 + '</li>');

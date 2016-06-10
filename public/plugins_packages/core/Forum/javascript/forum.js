@@ -651,7 +651,7 @@ STUDIP.Forum = {
 
     openThreadFromOverview: function(topic_id, parent_topic_id, page) {
         var buttonText = "Thema schließen".toLocaleString();
-        jQuery('#closeButton-' + topic_id + ' img').attr('src', STUDIP.ASSETS_URL + 'images/icons/16/black/lock-locked.png');
+        jQuery('#closeButton-' + topic_id + ' img').attr('src', STUDIP.ASSETS_URL + 'images/icons/blue/lock-locked.svg');
         jQuery('#closeButton-' + topic_id + ' img').attr('title', buttonText);
         jQuery('#closeButton-' + topic_id).attr('onclick', 'STUDIP.Forum.closeThreadFromOverview("' + topic_id + '", "' + parent_topic_id + '", ' + page + '); return false;');
         jQuery('#img-locked-' + topic_id).hide();
@@ -663,7 +663,7 @@ STUDIP.Forum = {
         var buttonText = "Thema schließen".toLocaleString();
         jQuery('.closeButtons').text(buttonText);
         jQuery('.closeButtons').attr('onclick', 'STUDIP.Forum.closeThreadFromThread("' + topic_id + '", ' + page + '); return false;');
-        jQuery('.closeButtons').closest("li").css('background-image', "url(" + STUDIP.ASSETS_URL + 'images/icons/16/blue/lock-locked.png' + ")");
+        jQuery('.closeButtons').closest("li").css('background-image', "url(" + STUDIP.ASSETS_URL + 'images/icons/blue/lock-locked.svg' + ")");
         jQuery('.hideWhenClosed').show();
 
         STUDIP.Forum.openThread(topic_id, topic_id, page, true);
@@ -685,7 +685,7 @@ STUDIP.Forum = {
 
     closeThreadFromOverview: function(topic_id, parent_topic_id, page) {
         var buttonText = "Thema öffnen".toLocaleString();
-        jQuery('#closeButton-' + topic_id + ' img').attr('src', STUDIP.ASSETS_URL + 'images/icons/16/blue/lock-unlocked.png');
+        jQuery('#closeButton-' + topic_id + ' img').attr('src', STUDIP.ASSETS_URL + 'images/icons/blue/lock-unlocked.svg');
         jQuery('#closeButton-' + topic_id + ' img').attr('title', buttonText);
         jQuery('#closeButton-' + topic_id).attr('onclick', 'STUDIP.Forum.openThreadFromOverview("' + topic_id + '", ' + page + '); return false;');
 
@@ -698,7 +698,7 @@ STUDIP.Forum = {
         var buttonText = "Thema öffnen".toLocaleString();
         jQuery('.closeButtons').text(buttonText);
         jQuery('.closeButtons').attr('onclick', 'STUDIP.Forum.openThreadFromThread("' + topic_id + '", '+ page +'); return false;');
-        jQuery('.closeButtons').closest("li").css('background-image', "url(" + STUDIP.ASSETS_URL + 'images/icons/16/blue/lock-unlocked.png' + ")");
+        jQuery('.closeButtons').closest("li").css('background-image', "url(" + STUDIP.ASSETS_URL + 'images/icons/blue/lock-unlocked.svg' + ")");
         jQuery('.hideWhenClosed').hide();
         
         STUDIP.Forum.cancelNewEntry();

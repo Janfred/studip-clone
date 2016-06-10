@@ -120,10 +120,10 @@ class TreeView {
         // Klasse "Icon" verwendet werden.
         $this->pic_open        = $this->use_aging
                                ? 'forumgraurunt2.png'
-                               : 'icons/16/blue/arr_1down.png';
+                               : 'icons/blue/arr_1down.svg';
         $this->pic_close       = $this->use_aging
                                ? 'forumgrau2.png'
-                               : 'icons/16/blue/arr_1right.png';
+                               : 'icons/blue/arr_1right.svg';
 
         URLHelper::bindLinkParam('open_ranges', $this->open_ranges);
         URLHelper::bindLinkParam('open_items', $this->open_items);
