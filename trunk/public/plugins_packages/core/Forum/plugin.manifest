@@ -10,7 +10,7 @@ screenshot = plus/screenshots/Forum/Studentische_Sicht_-_Kategorien_mit_Bereiche
 screenshot = plus/screenshots/Forum/Einen_Forumsbeitrag_erstellen.jpg
 
 displayname = Forum
-icon = icons/16/black/forum.png
+icon = icons/black/forum.svg
 keywords = Möglichkeit zum intensiven, nachhaltigen textbasierten Austausch; (nachträgliche) Strukturierung der Beiträge; Editierfunktion für Lehrende
 category = Kommunikation und Zusammenarbeit
 descriptionshort = Veranstaltungsbegleitender Meinungsaustausch zu bestimmten Themen

@@ -84,7 +84,7 @@
 
                     if (format.icon) {
                         label = $('<img/>').attr('alt', format.label || name)
-                                           .attr('src', STUDIP.ASSETS_URL + "images/icons/16/blue/" + format.icon + '.png');
+                                           .attr('src', STUDIP.ASSETS_URL + "images/icons/blue/" + format.icon + '.svg');
                     }
 
                     button.html(label).button().click(function () {

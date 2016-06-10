@@ -184,11 +184,11 @@ STUDIP.News = {
         if (jQuery("#" + id + "_content").is(':visible')) {
             jQuery("#" + id + "_content").slideUp(400);
             jQuery("#" + id + " input[type=image]:first")
-                .attr('src', STUDIP.ASSETS_URL + "images/icons/16/blue/arr_1right.png");
+                .attr('src', STUDIP.ASSETS_URL + "images/icons/blue/arr_1right.svg");
         } else {
             jQuery("#" + id + "_content").slideDown(400);
             jQuery("#" + id + " input[type=image]:first")
-                .attr('src', STUDIP.ASSETS_URL + "images/icons/16/blue/arr_1down.png");
+                .attr('src', STUDIP.ASSETS_URL + "images/icons/blue/arr_1down.svg");
         }
     }
 };
