@@ -7,7 +7,7 @@
  * @license GPL2 or any later version
  * @since   Stud.IP 3.5
  *
- * @see https://develop.studip.de/trac/ticket/6576
+ * @see https://develop.studip.de/trac/ticket/6655
  */
 class TIC6655AdmissionRuleCompatibility extends Migration
 {
