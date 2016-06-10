@@ -3,8 +3,9 @@
 /**
  * Stud.IP: Caching in JavaScript
  *
- * Uses session storage or local storage for persistent storage across
- * browser sessions for items with a given expiry.
+ * Uses local storage for persistent storage across browser sessions
+ * for items with a given expiry or as a tab spanning session storage
+ * when no expiry is given.
  *
  * Example:
  *
@@ -66,35 +67,36 @@
 (function (STUDIP, $) {
     'use strict';
 
-    var caches = {
-        local: window.localStorage || false,
-        session: window.sessionStorage || false
-    };
+    // Define dummy storage as polyfill
+    function DummyStorage() {
+        this.length = 0;
+    }
+    DummyStorage.prototype.clear      = function () {};
+    DummyStorage.prototype.getItem    = function () { return undefined; };
+    DummyStorage.prototype.key        = function () { return undefined; };
+    DummyStorage.prototype.removeItem = function () {};
+    DummyStorage.prototype.setItem    = function () {};
 
-    // Create polyfills if neccessary
-    if (!caches.local || !caches.session) {
-        (function () {
-            var DummyStorage = function () {
-                return {
-                    length: 0,
-                    clear: function () {},
-                    getItem: function () {
-                        return undefined;
-                    },
-                    key: function () {
-                        return undefined;
-                    },
-                    removeItem: function () {},
-                    setItem: function () {}
-                };
-            };
-            if (!caches.local) {
-                caches.local = new DummyStorage();
-            }
-            if (!caches.session) {
-                caches.session = new DummyStorage();
-            }
-        }());
+    var session_id = (document.cookie.match(/cache_session=(\d+);?/) || [])[1],
+        cache      = window.localStorage || new DummyStorage();
+
+    // Initialized browser session?
+    if (session_id === undefined) {
+        session_id = (new Date()).getTime().toString();
+        document.cookie = 'cache_session=' + session_id + ';path=/';
+
+        if (cache === window.localStorage) {
+            $.each(cache, function (key) {
+                if (!cache.hasOwnProperty(key) || key.indexOf('studip.') !== 0) {
+                    return;
+                }
+
+                var item = JSON.parse(cache.getItem(key));
+                if (item.expires === false && item.session !== session_id) {
+                    cache.removeItem(key);
+                }
+            }.bind(this));
+        }
     }
 
     /**
@@ -117,21 +119,17 @@
         index = this.prefix + index;
 
         var now = (new Date()).getTime(),
-            type,
             item;
-        // Locate item in caches
-        for (type in caches) {
-            if (caches.hasOwnProperty(type) && caches[type].hasOwnProperty(index)) {
-                // Fetch item and decode it
-                item = JSON.parse(caches[type].getItem(index));
-                // Check expiration
-                if (!item.expires || item.expires > now) {
-                    return item.value;
-                }
-                // Expired, invalidate
-                caches[type].removeItem(index);
-                return undefined;
+        // Locate item in cache
+        if (cache.hasOwnProperty(index)) {
+            // Fetch item and decode it
+            item = JSON.parse(cache.getItem(index));
+            // Check expiration
+            if (!item.expires || item.expires > now) {
+                return item.value;
             }
+            // Expired, invalidate
+            cache.removeItem(index);
         }
         // Item not found
         return undefined;
@@ -153,10 +151,10 @@
         index = this.prefix + index;
 
         // Determine which cache to use and store the value
-        var type = expires ? 'local' : 'session';
-        caches[type].setItem(index, JSON.stringify({
+        cache.setItem(index, JSON.stringify({
             value: value,
-            expires: expires ? (new Date()).getTime() + expires * 1000 : false
+            expires: expires ? (new Date()).getTime() + expires * 1000 : false,
+            session: session_id
         }));
     };
 
@@ -196,15 +194,11 @@
      * @param String index Key used to store the item
      */
     Cache.prototype.remove = function (index) {
-        var type;
-
         index = this.prefix + index;
 
-        // Locate item in caches
-        for (type in caches) {
-            if (caches.hasOwnProperty(type) && caches[type].hasOwnProperty(index)) {
-                caches[type].removeItem(index);
-            }
+        // Locate item in cache
+        if (cache.hasOwnProperty(index)) {
+            cache.removeItem(index);
         }
     };
 
@@ -213,20 +207,15 @@
      * the prefixed items will be removed.
      */
     Cache.prototype.prune = function () {
-        var type,
-            key;
-        for (type in caches) {
-            if (caches.hasOwnProperty(type)) {
-                if (this.prefix) {
-                    for (key in caches[type]) {
-                        if (caches[type].hasOwnProperty(key) && key.indexOf(this.prefix) === 0) {
-                            caches[type].removeItem(key);
-                        }
-                    }
-                } else {
-                    caches[type].clear();
+        var key;
+        if (this.prefix) {
+            for (key in cache) {
+                if (cache.hasOwnProperty(key) && key.indexOf(this.prefix) === 0) {
+                    cache.removeItem(key);
                 }
             }
+        } else {
+            cache.clear();
         }
     };
 
@@ -239,37 +228,5 @@
             return new Cache(prefix);
         }
     };
-
-    /**
-     * Transfer session storage from one tab to another
-     * @see http://stackoverflow.com/a/32766809/982902
-     */
-    $(window).bind('storage', function (e) {
-        var event = e.originalEvent;
-
-        // do nothing if no value to work with
-        if (!event || !event.newValue) {
-            return;
-        }
-
-        // Another tabs ask for session storage, so we'll send it
-        if (event.key === 'getSessionStorage') {
-            caches.local.setItem('sendSessionStorage', JSON.stringify(caches.session));
-            caches.local.removeItem('sendSessionStorage');
-        }
-
-        // Another tab sent session storage, receive it
-        if (event.key === 'sendSessionStorage' && caches.session.length === 0) {
-            $.each($.parseJSON(event.newValue), function (key, value) {
-                caches.session.setItem(key, value);
-            });
-        }
-    });
-
-    // No data in session? Try to receive it from another tab
-    if (caches.session.length === 0) {
-        caches.local.setItem('getSessionStorage', true);
-        caches.local.removeItem('getSessionStorage', true);
-    }
 
 }(STUDIP, jQuery));
