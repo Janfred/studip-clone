@@ -25,7 +25,7 @@ class TIC6655AdmissionRuleCompatibility extends Migration
                 `mkdate` int(11) NOT NULL DEFAULT 0,
                 `chdate` int(11) NOT NULL DEFAULT 0,
                 PRIMARY KEY (`rule_type`, `compat_rule_type`)
-            ) ENGINE=InnoDB");
+            ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC");
 
         // Initial DB entries, taken from former class variables ($allowed_combinations).
         $compat = array(
