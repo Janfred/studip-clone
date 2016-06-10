@@ -233,7 +233,7 @@ $queries[] = array(
 );
 $queries[] = array(
     'desc'  => _("Anzahl der Umfragen"),
-    'query' => "SELECT COUNT(*) FROM vote WHERE author_id = ? GROUP BY author_id",
+    'query' => "SELECT COUNT(*) FROM questionnaires WHERE user_id = ? GROUP BY user_id",
 );
 $queries[] = array(
     'desc'  => _("Anzahl der Evaluationen"),
