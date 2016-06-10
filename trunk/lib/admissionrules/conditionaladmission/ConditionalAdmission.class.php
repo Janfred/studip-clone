@@ -25,8 +25,6 @@ class ConditionalAdmission extends AdmissionRule
      */
     public $conditions = array();
 
-    public $allowed_combinations = array('ParticipantRestrictedAdmission', 'LimitedAdmission','ConditionalAdmission','TimedAdmission','PasswordAdmission','CourseMemberAdmission','PreferentialAdmission');
-
     // --- OPERATIONS ---
 
     /**

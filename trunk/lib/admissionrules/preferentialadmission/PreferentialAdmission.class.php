@@ -50,17 +50,6 @@ class PreferentialAdmission extends AdmissionRule
      */
     public $courseset = null;
 
-    /**
-     * With which other rules can this one be combined?
-     */
-    public $allowed_combinations = array(
-        'ConditionalAdmission',
-        'CourseMemberAdmission',
-        'LimitedAdmission',
-        'ParticipantRestrictedAdmission',
-        'PasswordAdmission',
-        'TimedAdmission');
-
     // --- OPERATIONS ---
 
     /**
