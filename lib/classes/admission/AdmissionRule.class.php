@@ -52,13 +52,6 @@ abstract class AdmissionRule
      */
     public $courseSetId = '';
 
-    /**
-     * an array of AdmissionRules allowed to be combined with this rule
-     *
-     * @var array
-     */
-    public $allowed_combinations = array();
-
     // --- OPERATIONS ---
 
     public function __construct($ruleId='', $courseSetId = '') {
@@ -387,7 +380,7 @@ abstract class AdmissionRule
         if (is_object($admission_rule)) {
             $admission_rule = get_class($admission_rule);
         }
-        return in_array($admission_rule, $this->allowed_combinations);
+        return AdmissionRuleCompatibility::exists(array(get_class($this), $admission_rule));
     }
 
     public function __clone()

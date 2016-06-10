@@ -26,8 +26,6 @@ class ParticipantRestrictedAdmission extends AdmissionRule
 
     public $first_come_first_served_allowed = false;
 
-    public $allowed_combinations = array('LimitedAdmission','ConditionalAdmission','TimedAdmission','CourseMemberAdmission','PreferentialAdmission');
-
     public $minimum_timespan_to_distribution_time = 120;
 
 

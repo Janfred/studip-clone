@@ -24,6 +24,9 @@ class Admission_RuleAdministrationController extends AuthenticatedController {
      */
     public function before_filter(&$action, &$args) {
         parent::before_filter($action, $args);
+
+        $GLOBALS['perm']->check('root');
+
         if (Request::isXhr()) {
             $this->via_ajax = true;
             $this->set_layout(null);
@@ -35,17 +38,32 @@ class Admission_RuleAdministrationController extends AuthenticatedController {
             $this->via_ajax = false;
             $layout = $GLOBALS['template_factory']->open('layouts/base');
             $this->set_layout($layout);
-            PageLayout::setTitle(_('Verwaltung von Anmelderegeln'));
             Navigation::activateItem('/admin/config/admissionrules');
         }
         PageLayout::addSqueezePackage('admission');
         $this->set_content_type('text/html;charset=windows-1252');
+
+        $sidebar = Sidebar::Get();
+        $sidebar->setTitle(PageLayout::getTitle() ?: _('Anmelderegeln'));
+        //$sidebar->setImage('sidebar/roles-sidebar.png');
+
+        $views = new ViewsWidget();
+        $views->addLink(_('Installierte Anmelderegeln'),
+            $this->url_for('admission/ruleadministration'))
+            ->setActive($action === 'index');
+        $views->addLink(_('Regelkompatibilität'),
+            $this->url_for('admission/ruleadministration/compatibility'))
+            ->setActive($action === 'compatibility');
+        $sidebar->addWidget($views);
     }
 
     /**
      * Show overview of available admission rules.
      */
-    public function index_action() {
+    public function index_action()
+    {
+        PageLayout::setTitle(_('Verwaltung von Anmelderegeln'));
+
         $this->ruleTypes = RuleAdministrationModel::getAdmissionRuleTypes();
         // Available rule classes.
         $ruleClasses = array_map(function($s) { return strtolower($s); }, array_keys($this->ruleTypes));
@@ -53,6 +71,14 @@ class Admission_RuleAdministrationController extends AuthenticatedController {
         $ruleDirs = array_map(function($s) { return basename($s); }, glob($GLOBALS['STUDIP_BASE_PATH'].'/lib/admissionrules/*', GLOB_ONLYDIR));
         // Compare the two.
         $this->newRules = array_diff($ruleDirs, $ruleClasses);
+    }
+
+    public function compatibility_action()
+    {
+        PageLayout::setTitle(_('Anmelderegelkompatibilität'));
+
+        $this->ruletypes = RuleAdministrationModel::getAdmissionRuleTypes();
+        $this->matrix = AdmissionRuleCompatibility::getCompatibilityMatrix();
     }
 
     /**
@@ -199,6 +225,87 @@ class Admission_RuleAdministrationController extends AuthenticatedController {
 
         readfile($filepath);
         unlink($filepath);
+    }
+
+    public function save_compat_action() {
+        CSRFProtection::verifyUnsafeRequest();
+
+        // Iterate over existing entries and check which ones must be deleted.
+        $matrix = AdmissionRuleCompatibility::getCompatibilityMatrix();
+
+        $values = Request::getArray('compat', array());
+
+        $to_delete = array();
+        $new = array();
+        foreach ($matrix as $type => $compat) {
+            /*
+             * Get entries that are in database, but not in request.
+             * These must be removed from database as they are not
+             * set anymore.
+             */
+            $to_delete[$type] = array_diff($compat, $values[$type]);
+
+            /*
+             * Get entries that are in request data, but not in database.
+             * These must be inserted into DB.
+             */
+            $new[$type] = array_diff($values[$type], $compat);
+        }
+
+        // Get types that are set in request but not present at all in DB.
+        foreach (array_diff(array_keys($values), array_keys($matrix)) as $newtype) {
+            $new[$newtype] = $values[$newtype];
+        }
+
+        // Get types that are set in matrix but not present at all in request.
+        foreach (array_diff(array_keys($matrix), array_keys($values)) as $oldtype) {
+            $to_delete[$oldtype] = $matrix[$oldtype];
+        }
+
+        $success = 0;
+        $fail = array();
+
+        // Process the entries that will be deleted.
+        foreach ($to_delete as $type => $compat) {
+            foreach ($compat as $ctype) {
+                $entry = AdmissionRuleCompatibility::find(array($type, $ctype));
+
+                if ($entry->delete()) {
+                    $success++;
+                } else {
+                    $fail[] = $type . ' => ' . $entry;
+                }
+            }
+        }
+
+        // Process the new entries.
+        foreach ($new as $type => $entries) {
+            foreach ($entries as $entry) {
+                $a = new AdmissionRuleCompatibility();
+                $a->rule_type = $type;
+                $a->compat_rule_type = $entry;
+
+                if ($a->store()) {
+                    $success++;
+                } else {
+                    $fail[] = $type . ' => ' . $entry;
+                }
+            }
+
+        }
+
+        if ($success > 0 && count($fail) == 0) {
+            PageLayout::postSuccess(_('Die Einstellungen zur Regelkompatibilität wurden gespeichert.'));
+        } else if ($success > 0 && count($fail) > 0) {
+            PageLayout::postWarning(_('Die Einstellungen zur '.
+                'Regelkompatibilität konnten nicht vollständig gespeichert '.
+                'werden. Es sind Probleme bei folgenden Einträgen aufgetreten:'),
+                $fail);
+        } else if (count($fail) > 0) {
+            PageLayout::postError(_('Die Einstellungen zur Regelkompatibilität konnten nicht gespeichert werden.'));
+        }
+
+        $this->relocate('admission/ruleadministration/compatibility');
     }
 
     /**

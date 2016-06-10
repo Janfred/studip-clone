@@ -26,8 +26,6 @@ class CourseMemberAdmission extends AdmissionRule
     public $modus = '';
     public $default_message1 = '';
 
-    public $allowed_combinations = array('ParticipantRestrictedAdmission', 'LimitedAdmission','ConditionalAdmission', 'PasswordAdmission', 'TimedAdmission','CourseMemberAdmission','PreferentialAdmission');
-
     // --- OPERATIONS ---
 
     /**
