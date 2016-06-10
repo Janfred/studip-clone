@@ -171,12 +171,18 @@ if ($request_resource_id = $request->getResourceId()) :
             <div class="selectbox">
                 <fieldset>
                     <? foreach ($search_result as $key => $val)  : ?>
-                        <div>
-                            <input type="radio" name="select_room" value="<?= $key ?>">
-                            <label class="horizontal">
-                                <?= Icon::create('radiobutton-checked', $val['overlap_status']) ?>
+                        <div class="flex-row">
+                            <label class="horizontal" for="select_room_<?= $key ?>">
+                                <? if ($val['overlap_status'] === "status-green") : ?>
+                                    <?= Icon::create('accept', $val['overlap_status'])->asImg("20px", array('class' => "text-bottom")) ?>
+                                <? elseif($val['overlap_status'] === "status-red") : ?>
+                                    <?= Icon::create('decline', $val['overlap_status'])->asImg("20px", array('class' => "text-bottom")) ?>
+                                <? else : ?>
+                                    <?= Icon::create('question', $val['overlap_status'])->asImg("20px", array('class' => "text-bottom")) ?>
+                                <? endif ?>
                                 <?= htmlReady(my_substr($val['name'], 0, 50)); ?>
                             </label>
+                            <input type="radio" name="select_room" id="select_room_<?= $key ?>" value="<?= $key ?>">
                         </div>
                     <? endforeach ?>
                 </fieldset>
