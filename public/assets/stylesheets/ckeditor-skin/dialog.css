@@ -286,7 +286,7 @@ a.cke_dialog_tab_disabled
 /* The close button at the top of the dialog. */
 
 .cke_dialog_close_button {
-	background-image: url("../../images/icons/16/white/decline.png");
+	background-image: url("../../images/icons/white/decline.svg");
 	-webkit-background-size: 16px 16px;
 	-moz-background-size: 16px 16px;
 	-o-background-size: 16px 16px;
