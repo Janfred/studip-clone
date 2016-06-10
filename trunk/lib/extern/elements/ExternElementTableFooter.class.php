@@ -47,7 +47,7 @@ class ExternElementTableFooter extends ExternElement {
     *
     * @param array config
     */
-    function ExternElementTableFooter ($config = "") {
+    function __construct($config = "") {
         if ($config)
             $this->config = $config;
             

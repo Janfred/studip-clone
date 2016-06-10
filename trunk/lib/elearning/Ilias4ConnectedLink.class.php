@@ -26,9 +26,9 @@ class Ilias4ConnectedLink extends Ilias3ConnectedLink
      * @access
      * @param string $cms system-type
      */
-    function Ilias4ConnectedLink($cms)
+    function __construct($cms)
     {
-        parent::Ilias3ConnectedLink($cms);
+        parent::__construct($cms);
         $this->cms_link = "ilias3_referrer.php";
     }
 

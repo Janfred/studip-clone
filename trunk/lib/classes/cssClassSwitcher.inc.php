@@ -51,7 +51,7 @@ class cssClassSwitcher {
     * @param    string
     * @param    string
     */
-    function cssClassSwitcher($class = "",$headerClass = "",$hovercolor = "",$nohovercolor = ""){
+    public function __construct($class = "",$headerClass = "",$hovercolor = "",$nohovercolor = ""){
         if ($GLOBALS["auth"]->auth["jscript"]) $this->JSenabled = TRUE;
         if (is_array($class)) $this->class = $class;
         if ($headerClass) $this->headerClass = $headerClass;
@@ -59,18 +59,18 @@ class cssClassSwitcher {
         if (is_array($nohovercolor)) $this->nohovercolor = $nohovercolor;
     }
     
-    function enableHover($hovercolor = "",$nohovercolor = ""){
+    public function enableHover($hovercolor = "",$nohovercolor = ""){
         if (is_array($hovercolor)) $this->hovercolor = $hovercolor;
         if (is_array($nohovercolor)) $this->nohovercolor = $nohovercolor;   
         if ($this->JSenabled)
             $this->hoverenabled = TRUE;
     }
     
-    function disableHover(){
+    public function disableHover(){
         $this->hoverenabled = FALSE;
     }
     
-    function getHover(){
+    public function getHover(){
         if($this->hoverenabled && $this->JSenabled){
             $ret = $this->getFullClass();
             $ret .= " onMouseOver='doHover(this,\"".$this->nohovercolor[$this->classcnt]."\",\"".$this->hovercolor[$this->classcnt]."\")'".
@@ -79,30 +79,30 @@ class cssClassSwitcher {
         return $ret;
     }
     
-    function getFullClass(){
+    public function getFullClass(){
         $ret = ($this->hoverenabled) ?  " style=\"background-color:".$this->nohovercolor[$this->classcnt]."\" " : " class=\"" . $this->class[$this->classcnt] . "\" ";
         return $ret;
     }
     
-    function getClass() {
+    public function getClass() {
         return ($this->hoverenabled) ? "\"  style=\"background-color:".$this->nohovercolor[$this->classcnt]." " : $this->class[$this->classcnt];
     }
 
-    function getHeaderClass() {
+    public function getHeaderClass() {
         return $this->headerClass;
     }
 
-    function resetClass() {
+    public function resetClass() {
         return $this->classcnt = 0;
     }
 
-    function switchClass() {
+    public function switchClass() {
         $this->classcnt++;
         if ($this->classcnt >= sizeof($this->class))
             $this->classcnt = 0;
     }
     
-    function GetHoverJSFunction(){
+    public function GetHoverJSFunction(){
         static $is_called = FALSE;
         $ret = "";
         if($GLOBALS["auth"]->auth["jscript"] && !$is_called) {

@@ -103,10 +103,10 @@ class EvaluationAnswer extends EvaluationObject {
     * @param    object   $parentObject   The parent object if exists
     * @param    integer  $loadChildren   See const EVAL_LOAD_*_CHILDREN
     */
-   function EvaluationAnswer ($objectID = "", $parentObject = NULL, 
+   function __construct($objectID = "", $parentObject = NULL,
                               $loadChildren = EVAL_LOAD_NO_CHILDREN) {
     /* Set default values ------------------------------------------------- */
-    parent::EvaluationObject ($objectID, $parentObject, $loadChildren);
+    parent::__construct($objectID, $parentObject, $loadChildren);
     $this->instanceof      = INSTANCEOF_EVALANSWER;
     
     $this->value           = 0;

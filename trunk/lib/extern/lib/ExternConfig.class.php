@@ -59,7 +59,7 @@ class ExternConfig {
     /**
     *
     */
-    function ExternConfig ($range_id, $module_name, $config_id = '') {
+    function __construct ($range_id, $module_name, $config_id = '') {
         
         if ($config_id != '') {
             if ($configuration = ExternConfig::GetConfigurationMetaData($range_id, $config_id)) {

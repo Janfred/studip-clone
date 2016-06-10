@@ -42,8 +42,8 @@ class ExternConfigDb extends ExternConfig {
     /**
     *
     */
-    function ExternConfigDb ($range_id, $module_name, $config_id = '') {
-        parent::ExternConfig ($range_id, $module_name, $config_id);
+    function __construct ($range_id, $module_name, $config_id = '') {
+        parent::__construct ($range_id, $module_name, $config_id);
     }
 
     /**

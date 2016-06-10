@@ -48,7 +48,7 @@ class ExternElementReplaceTextSemType extends ExternElement {
     *
     * @param array config
     */
-    function ExternElementReplaceTextSemType ($config = "") {
+    function __construct($config = "") {
         if ($config) {
             $this->config = $config;
         }

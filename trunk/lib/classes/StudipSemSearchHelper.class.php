@@ -75,7 +75,7 @@ class StudipSemSearchHelper {
     
     public function doSearch(){
         if(!count($this->params)) return false;
-        $this->params = array_map('mysql_escape_string', $this->params);
+        $this->params = array_map('addslashes', $this->params);
         $clause = "";
         $and_clause = "";
         $this->search_result = new DbSnapshot();

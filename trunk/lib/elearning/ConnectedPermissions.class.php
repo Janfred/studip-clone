@@ -26,9 +26,8 @@ class ConnectedPermissions
     * @access public
     * @param string $cms system-type
     */ 
-    function ConnectedPermissions($cms)
+    function __construct($cms)
     {
-
         global $connected_cms, $RELATIVE_PATH_ELEARNING_INTERFACE, $ELEARNING_INTERFACE_MODULES;
 
         $this->cms_type = $cms;

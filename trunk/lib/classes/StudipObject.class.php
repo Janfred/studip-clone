@@ -79,10 +79,10 @@ class StudipObject extends AuthorObject {
     * @access   public
     * @param    string   $objectID   The ID of an existing object
     */
-   function StudipObject ($objectID = "") {
+   function __construct($objectID = "") {
 
      /* For good OOP: Call constructor ------------------------------------- */
-     parent::AuthorObject ();
+     parent::__construct();
      $this->instanceof = INSTANCEOF_STUDIPOBJECT;
      /* -------------------------------------------------------------------- */
 

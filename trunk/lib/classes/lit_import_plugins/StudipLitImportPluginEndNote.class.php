@@ -36,9 +36,9 @@ require_once 'StudipLitImportPluginAbstract.class.php';
 **/
 class StudipLitImportPluginEndNote extends StudipLitImportPluginAbstract {
     
-    function StudipLitImportPluginEndNote(){
+    function __construct(){
         // immer erst den parent-contructor aufrufen!
-        parent::StudipLitImportPluginAbstract();
+        parent::__construct();
     }
 
     function parse($data){

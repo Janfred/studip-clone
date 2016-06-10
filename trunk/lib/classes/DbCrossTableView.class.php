@@ -47,7 +47,7 @@ class DbCrossTableView extends DbView{
     var $pivot_field_names = array();
     var $pivot_field_table = "";
     
-    function DbCrossTableView($db_class_name = ""){
+    function __construct($db_class_name = ""){
         $base_class = strtolower(get_parent_class($this));
         //parent::$base_class($item_id); //calling the baseclass constructor 
         $this->$base_class($db_class_name); //calling the baseclass constructor PHP < 4.1.0
@@ -97,6 +97,7 @@ class DbCrossTableView extends DbView{
     }
     
     function doTransform(){
+        $transformers = '';
         if (!$this->query_to_transform){
             $this->halt("No query available!");
         }

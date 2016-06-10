@@ -41,7 +41,7 @@ class StudipLitSearchPluginAbstract {
     var $class_name;
     var $sess_var_name;
 
-    function StudipLitSearchPluginAbstract(){
+    function __construct(){
         global $sess;
         $this->class_name = strtolower(get_class($this));
         $this->sess_var_name = "_search_result_" . $this->class_name;

@@ -55,7 +55,7 @@ class ConnectedUser
     * @access public
     * @param string $cms system-type
     */ 
-    function ConnectedUser($cms, $user_id = false)
+    function __construct($cms, $user_id = false)
     {
         global $auth, $RELATIVE_PATH_ELEARNING_INTERFACE, $ELEARNING_INTERFACE_MODULES;
 
@@ -197,7 +197,7 @@ class ConnectedUser
     * @access public
     * @return boolean returns false
     */
-    function getLoginData()
+    function getLoginData($username)
     {
         return false;
     }

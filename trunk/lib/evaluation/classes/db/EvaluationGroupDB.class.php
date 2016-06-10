@@ -59,9 +59,9 @@ class EvaluationGroupDB extends EvaluationObjectDB {
    * Constructor
    * @access   public
    */
-  function EvaluationGroupDB () {
+  function __construct() {
     /* Set default values -------------------------------------------------- */
-    parent::EvaluationObjectDB ();
+    parent::__construct();
     $this->instanceof = INSTANCEOF_EVALGROUPDB;
     /* --------------------------------------------------------------------- */
   }

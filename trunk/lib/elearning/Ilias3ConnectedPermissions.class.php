@@ -46,11 +46,11 @@ class Ilias3ConnectedPermissions extends ConnectedPermissions
     * @access
     * @param string $cms system-type
     */
-    function Ilias3ConnectedPermissions($cms)
+    function __construct($cms)
     {
         global $connected_cms;
 
-        parent::ConnectedPermissions($cms);
+        parent::__construct($cms);
         $this->readData();
 
         if ($connected_cms[$this->cms_type]->user->isConnected())

@@ -45,7 +45,7 @@ class AssignObjectPerms {
     var $user_id;
     var $assign_id;
     
-    function AssignObjectPerms ($assign_id, $user_id='') {
+    function __construct ($assign_id, $user_id='') {
         global $user, $perm;
         
         if ($user_id)

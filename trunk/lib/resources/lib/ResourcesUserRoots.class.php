@@ -46,7 +46,7 @@ class ResourcesUserRoots {
     var $my_roots;                  //Alle meine Ressourcen-Staemme
 
     //Konstruktor
-    function ResourcesUserRoots($range_id='') {
+    function __construct($range_id='') {
         global $user, $perm, $auth;
 
         if($range_id){

@@ -37,8 +37,8 @@ class StudipLitSearchPluginZ3950Abstract_Aleph extends StudipLitSearchPluginZ395
     var $superCity = "";
     var $superPublisher = "";
 
-    function StudipLitSearchPluginZ3950Abstract_Aleph() {
-        parent::StudipLitSearchPluginZ3950Abstract();
+    function __construct() {
+        parent::__construct();
         $mapping =
                                    array('001' => array('field' => 'accession_number', 'callback' => 'idMap', 'cb_args' => FALSE),
                                          // übergeordneter Band

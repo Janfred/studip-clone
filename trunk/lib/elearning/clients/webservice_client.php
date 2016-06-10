@@ -7,7 +7,7 @@
 class WebserviceClient
 {
 
-    function WebserviceClient()
+    function __construct()
     {
         trigger_error("this class can't be instantiated");
     }

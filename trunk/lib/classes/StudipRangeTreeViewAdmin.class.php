@@ -65,10 +65,10 @@ class StudipRangeTreeViewAdmin extends TreeView{
     * calls the base class constructor, registers a session variable, calls the init function and the command parser
     * @access public
     */
-    function StudipRangeTreeViewAdmin(){
+    function __construct(){
 
         $this->root_content = $GLOBALS['UNI_INFO'];
-        parent::TreeView("StudipRangeTree"); //calling the baseclass constructor
+        parent::__construct("StudipRangeTree"); //calling the baseclass constructor
         $this->marked_item =& $_SESSION['_marked_item'];
 
         $this->initTreeStatus();
@@ -283,7 +283,7 @@ class StudipRangeTreeViewAdmin extends TreeView{
                 $priority = 0;
                 $rs = $view->get_query("SELECT * FROM Institute WHERE fakultaets_id <> Institut_id AND fakultaets_id = '$studip_object_id' ORDER BY Name");
                 while($rs->next_record()){
-                    $affected_rows += $this->tree->InsertItem(DbView::get_uniqid(),$item_id,mysql_escape_string($rs->f('name')),$priority++,'inst',$rs->f('Institut_id'));
+                    $affected_rows += $this->tree->InsertItem(DbView::get_uniqid(),$item_id,addslashes($rs->f('name')),$priority++,'inst',$rs->f('Institut_id'));
                 }
                 $this->msg[$item_id] = "msg§" . sprintf(_("%s Elemente wurden eingefügt."), $affected_rows);
                 $this->mode = "";
@@ -732,7 +732,7 @@ class StudipRangeTreeViewAdmin extends TreeView{
         return $content;
     }
 
-    function getSelf($param){
+    function getSelf($param = ''){
         $url_params = "foo=" . DbView::get_uniqid();
         if ($this->mode) $url_params .= "&mode=" . $this->mode;
         if ($param) $url_params .= '&' . $param;

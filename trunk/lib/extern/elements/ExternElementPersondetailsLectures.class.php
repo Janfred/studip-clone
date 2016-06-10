@@ -49,7 +49,7 @@ class ExternElementPersondetailsLectures extends ExternElement {
     *
     * @param array config
     */
-    function ExternElementPersondetailsLectures ($config = "") {
+    function __construct($config = "") {
         if ($config)
             $this->config = $config;
         

@@ -80,7 +80,7 @@ class Ilias3SaxParser
     * setup ILIAS global object
     * @access   public
     */
-    function Ilias3SaxParser($a_xml_file = '')
+    function __construct($a_xml_file = '')
     {
         global $ilias, $lng;
 

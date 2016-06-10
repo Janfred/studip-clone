@@ -72,7 +72,7 @@ class messaging
     /**
      * Konstruktor
      */
-    function messaging()
+    function __construct()
     {
         $this->sig_string="\n \n -- \n";
     }

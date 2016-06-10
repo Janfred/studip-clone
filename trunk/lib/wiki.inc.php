@@ -1773,7 +1773,7 @@ class line_diff
 {
     var $arr1,$arr2,$m,$n,$pos,$key,$plus,$minus,$equal,$reverse;
 
-    function line_diff($plus='+',$minus='-',$equal='=')
+    function __construct($plus='+',$minus='-',$equal='=')
     {
         $this->plus = $plus;
         $this->minus = $minus;
@@ -1955,7 +1955,7 @@ class DiffLine
     var $status;
     var $who; // who originally wrote this line?
 
-    function DiffLine($text, $who=NULL)
+    function __construct($text, $who=NULL)
     {
         $this->text = "$text\n";
         $this->status = array();

@@ -80,7 +80,7 @@ class PluginNavigation extends StudipPluginNavigation {
      *
      * @deprecated
      */
-    function addSubNavigation($name, PluginNavigation $navigation)
+    function addSubNavigation($name, Navigation $navigation)
     {
         parent::addSubNavigation($name, $navigation);
 

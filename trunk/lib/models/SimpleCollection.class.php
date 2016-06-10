@@ -222,7 +222,7 @@ class SimpleCollection extends StudipArrayObject
      * @param array $input
      * @return array
      */
-    function exchangeArray(Array $input)
+    function exchangeArray($input)
     {
         return parent::exchangeArray(array_map('SimpleCollection::arrayToArrayObject', $input));
     }

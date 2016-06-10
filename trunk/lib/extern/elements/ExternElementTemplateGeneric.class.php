@@ -51,7 +51,7 @@ class ExternElementTemplateGeneric extends ExternElement {
     *
     * @param array config
     */
-    function ExternElementTemplateGeneric ($config = '') {
+    function __construct($config = '') {
         if ($config)
             $this->config = $config;
 

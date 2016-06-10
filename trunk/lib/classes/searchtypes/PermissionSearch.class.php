@@ -38,12 +38,6 @@ class PermissionSearch extends SQLSearch {
         $this->avatarLike = in_array($avatarLike, words('user_id, username')) ? $avatarLike : 'user_id';
     }
 
-    /**
-     * returns an object of type SQLSearch with parameters to constructor
-     */
-    static public function get($search, $title = "", $avatarLike = "", $presets = array()) {
-        return new PermissionSearch($search, $title, $avatarLike, $presets);
-    }
 
     /**
      * returns the results of a search

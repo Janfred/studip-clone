@@ -43,7 +43,7 @@ class ExternError {
     /**
     *
     */
-    function ExternError ($error_location) {
+    function __construct($error_location) {
     }
 
     /**

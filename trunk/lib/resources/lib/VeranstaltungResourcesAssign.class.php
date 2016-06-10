@@ -47,7 +47,7 @@ class VeranstaltungResourcesAssign {
     var $dont_check;
 
     //Konstruktor
-    function VeranstaltungResourcesAssign ($seminar_id=FALSE)
+    function __construct($seminar_id=FALSE)
     {
         global $RELATIVE_PATH_RESOURCES;
         //make shure to load all the classes from resources, if this class is extern used °change if the classes are storen in own scripts

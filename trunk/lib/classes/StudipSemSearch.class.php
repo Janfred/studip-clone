@@ -67,7 +67,7 @@ class StudipSemSearch {
 
     var $visible_only = false;
 
-    function StudipSemSearch($form_name = "search_sem", $auto_search = true, $visible_only = false, $sem_class = 'all'){
+    function __construct($form_name = "search_sem", $auto_search = true, $visible_only = false, $sem_class = 'all'){
 
         $search_fields = array('title' => array('type' => 'text'),
                                 'sub_title' => array('type' => 'text'),

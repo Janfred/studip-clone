@@ -48,7 +48,7 @@ class Format
   * @param integer $index the XF index for the format.
   * @param array   $properties array with properties to be set on initialization.
   */
-    function Format($index = 0,$properties =  array())
+    function __construct($index = 0,$properties =  array())
     {
         $this->xf_index       = $index;
     

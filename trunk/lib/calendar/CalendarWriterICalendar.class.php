@@ -20,18 +20,17 @@ define('CALENDAR_WEEKSTART', 'MO');
 
 class CalendarWriteriCalendar extends CalendarWriter
 {
-
     var $newline = "\r\n";
 
-    function CalendarWriteriCalendar()
+    public function __construct()
     {
 
-        parent::CalendarWriter();
+        parent::__construct();
         $this->default_filename_suffix = "ics";
         $this->format = "iCalendar";
     }
 
-    function writeHeader()
+    public function writeHeader()
     {
 
         // Default values
@@ -68,9 +67,8 @@ class CalendarWriteriCalendar extends CalendarWriter
         return $header;
     }
 
-    function writeFooter()
+    public function writeFooter()
     {
-
         return "END:VCALENDAR" . $this->newline;
     }
 
@@ -80,7 +78,7 @@ class CalendarWriteriCalendar extends CalendarWriter
      * @param object $event The event to export.
      * @return String iCalendar formatted data
      */
-    function write(Event &$event)
+    public function write(Event &$event)
     {
 
         $match_pattern_1 = array('\\', '\n', ';', ',');
@@ -93,7 +91,7 @@ class CalendarWriteriCalendar extends CalendarWriter
         foreach ($event->getProperties() as $name => $value) {
             $params = array();
             $params_str = '';
-            
+
             if ($name === 'SUMMARY') {
                 $value = $event->getTitle();
             }
@@ -302,7 +300,7 @@ class CalendarWriteriCalendar extends CalendarWriter
      * @param array $value
      * @return String UTC offset field iCalendar formatted
      */
-    function _exportUtcOffset($value)
+    public function _exportUtcOffset($value)
     {
         $offset = $value['ahead'] ? '+' : '-';
         $offset .= sprintf('%02d%02d', $value['hour'], $value['minute']);
@@ -319,7 +317,7 @@ class CalendarWriteriCalendar extends CalendarWriter
      * @param array $value
      * @return String Period field iCalendar formatted
      */
-    function _exportPeriod($value)
+    public function _exportPeriod($value)
     {
         $period = $this->_exportDateTime($value['start']);
         $period .= '/';
@@ -337,7 +335,7 @@ class CalendarWriteriCalendar extends CalendarWriter
      * @param int $value Unix timestamp
      * @return String Date and time (UTC) iCalendar formatted
      */
-    function _exportDateTime($value, $utc = false)
+    public function _exportDateTime($value, $utc = false)
     {
 
 //      $TZOffset  = 3600 * substr(date('O', $value), 0, 3);
@@ -356,7 +354,7 @@ class CalendarWriteriCalendar extends CalendarWriter
      * @param int $value Unix timestamp
      * @return String Time (UTC) iCalendar formatted
      */
-    function _exportTime($value, $utc = false)
+    public function _exportTime($value, $utc = false)
     {
         $time = date("His", $value);
         if ($utc) {
@@ -369,7 +367,7 @@ class CalendarWriteriCalendar extends CalendarWriter
     /**
      * Export a Date field
      */
-    function _exportDate($value)
+    public function _exportDate($value)
     {
         return date("Ymd", $value);
     }
@@ -377,7 +375,7 @@ class CalendarWriteriCalendar extends CalendarWriter
     /**
      * Export a duration value
      */
-    function _exportDuration($value)
+    public function _exportDuration($value)
     {
         $duration = '';
         if ($value < 0) {
@@ -424,7 +422,7 @@ class CalendarWriteriCalendar extends CalendarWriter
     /**
      * Export a recurrence rule
      */
-    function _exportRecurrence($value)
+    public function _exportRecurrence($value)
     {
         $rrule = array();
         // the last day of week in a MONTHLY or YEARLY recurrence in the
@@ -494,7 +492,7 @@ class CalendarWriteriCalendar extends CalendarWriter
     /**
      * Return the Stud.IP calendar wdays attribute of a event recurrence
      */
-    function _exportWdays($value)
+    public function _exportWdays($value)
     {
         $wdays_map = array('1' => 'MO', '2' => 'TU', '3' => 'WE', '4' => 'TH', '5' => 'FR',
             '6' => 'SA', '7' => 'SU');
@@ -507,7 +505,7 @@ class CalendarWriteriCalendar extends CalendarWriter
         return implode(',', $wdays);
     }
 
-    function _exportExdate($value, $param)
+    public function _exportExdate($value, $param)
     {
         $exdates = array();
         $date_times = explode(',', $value);
@@ -520,7 +518,7 @@ class CalendarWriteriCalendar extends CalendarWriter
 
         return implode(',', $exdates);
     }
-    
+
     private function _exportGroupEventProperties(Event $event)
     {
         $organizer = User::find($event->getAuthorId());
@@ -550,7 +548,7 @@ class CalendarWriteriCalendar extends CalendarWriter
                             . 'ROLE=REQ-PARTICIPANT;'
                             . 'CN="' . _('unbekannt') . '"')
                             . $this->newline;
-                     * 
+                     *
                      */
                 }
             } else {
@@ -583,7 +581,7 @@ class CalendarWriteriCalendar extends CalendarWriter
                 } else {
                     $attendee .= ';CN="' . _('unbekannt') . '"';
                 }
-                     * 
+                     *
                      */
                     $properties .= $this->_foldLine($attendee) . $this->newline;
                 }
@@ -592,7 +590,7 @@ class CalendarWriteriCalendar extends CalendarWriter
         return $properties;
     }
 
-    function getFacultyEmail($user_id)
+    public function getFacultyEmail($user_id)
     {
         $stmt = DBManager::get()->prepare('SELECT email FROM Institute i '
                 . 'LEFT JOIN user_inst ui USING(institut_id) '
@@ -600,8 +598,8 @@ class CalendarWriteriCalendar extends CalendarWriter
         $stmt->execute(array($user_id));
         return $stmt->fetchColumn();
     }
-    
-    function _exportCategories($event)
+
+    public function _exportCategories($event)
     {
         return implode(',' ,$event->toStringCategories(true));
     }
@@ -609,7 +607,7 @@ class CalendarWriteriCalendar extends CalendarWriter
     /**
      * Return the folded version of a line
      */
-    function _foldLine($line)
+    public function _foldLine($line)
     {
         $line = preg_replace('/(\r\n|\n|\r)/', '\n', $line);
         if (strlen($line) > 75) {
@@ -628,5 +626,4 @@ class CalendarWriteriCalendar extends CalendarWriter
         }
         return $line;
     }
-
 }

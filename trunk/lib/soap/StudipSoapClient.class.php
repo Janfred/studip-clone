@@ -8,7 +8,7 @@ class StudipSoapClient
     var $soap_client;
     var $error;
 
-    function StudipSoapClient($path)
+    function __construct($path)
     {
         global $RELATIVE_PATH_SOAP, $SOAP_ENABLE;
         require_once("vendor/nusoap/nusoap.php");

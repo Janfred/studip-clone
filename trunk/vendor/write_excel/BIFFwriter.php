@@ -57,7 +57,7 @@ class BIFFWriter
 *
 * @access public
 */
-    function BIFFwriter()
+    function __construct()
     {
         // The byte order of this architecture. 0 => little endian, 1 => big endian
         $this->_byte_order = '';

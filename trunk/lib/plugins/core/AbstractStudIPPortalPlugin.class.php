@@ -13,7 +13,7 @@
 class AbstractStudIPPortalPlugin extends AbstractStudIPLegacyPlugin
   implements PortalPlugin {
 
-    function AbstractStudIPPortalPlugin(){
+    function __construct(){
         parent::__construct();
     }
 

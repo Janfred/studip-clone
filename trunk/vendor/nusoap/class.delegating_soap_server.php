@@ -45,8 +45,8 @@ class DelegatingSoapServer extends soap_server {
    *
    * @return void
    */
-  function DelegatingSoapServer(&$delegate, $wsdl = FALSE) {
-    parent::soap_server($wsdl);
+  function __construct(&$delegate, $wsdl = FALSE) {
+    parent::__construct($wsdl);
     $this->delegate =& $delegate;
   }
 

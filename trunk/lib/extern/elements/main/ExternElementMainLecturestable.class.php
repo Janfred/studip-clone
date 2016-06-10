@@ -43,7 +43,7 @@ class ExternElementMainLecturestable extends ExternElementMain {
     * Constructor
     *
     */
-    function ExternElementMainLecturestable ($module_name, &$data_fields, &$field_names, &$config) {
+    function __construct($module_name, &$data_fields, &$field_names, &$config) {
         $this->attributes = array(
                 'name', 'order', 'visible', 'aliases', 'width', 'widthpp',
                 'grouping', 'semstart', 'semrange', 'semswitch', 'allseminars', 'rangepathlevel',
@@ -53,7 +53,7 @@ class ExternElementMainLecturestable extends ExternElementMain {
         );
         $this->real_name = _("Grundeinstellungen");
         $this->description = _("In den Grundeinstellungen können Sie allgemeine Daten des Moduls ändern.");
-        parent::ExternElementMain($module_name, $data_fields, $field_names, $config);
+        parent::__construct($module_name, $data_fields, $field_names, $config);
     }
     
     /**

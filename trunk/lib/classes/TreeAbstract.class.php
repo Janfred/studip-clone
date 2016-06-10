@@ -125,7 +125,7 @@ class TreeAbstract {
     * do not use directly, call &GetInstance()
     * @access private
     */
-    function TreeAbstract() {
+    function __construct() {
         $this->view = new DbView();
         $this->init();
         }

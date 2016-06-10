@@ -16,7 +16,7 @@ class StudIPInstitute {
     var $name;
     var $childinstitutes;
 
-    function StudIPInstitute(){
+    function __construct(){
         $this->childinstitutes = array();
         $this->name = "";
     }

@@ -26,11 +26,11 @@ class LinkCloudWidget extends LinksWidget
      * @param bool   $active Pass true if the link is currently active,
      *                       defaults to false
      */
-    public function addLink($label, $url, $weight = 1)
+    public function &addLink($label, $url, $icon = null, $attributes = array(), $index = null)
     {
         $content = sprintf('<a href="%s" class="%s">%s</a>',
                            $url,
-                           'weigh-'.((int) $weight > 0 ? (int) $weight : 1),
+                           'weigh-'.((int) $icon > 0 ? (int) $icon : 1),
                            htmlReady($label));
 
         $element = new WidgetElement($content);

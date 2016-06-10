@@ -111,7 +111,7 @@ class TreeView {
     * @param    string  $tree_class_name    name of used tree class
     * @param    mixed   $args               argument passed to the tree class
     */
-    public function TreeView($tree_class_name,$args = null)
+    public function __construct($tree_class_name,$args = null)
     {
         $this->tree_class_name = $tree_class_name;
         $this->tree            = TreeAbstract::GetInstance($tree_class_name, $args);

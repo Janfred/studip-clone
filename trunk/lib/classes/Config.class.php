@@ -58,8 +58,9 @@ class Config implements ArrayAccess, Countable, IteratorAggregate
      * or to unset by passing null
      * @param Config $my_instance
      */
-    public static function set($my_instance)
+    public static function set()
     {
+        $my_instance = func_get_arg(0);
         self::$instance = $my_instance;
     }
 

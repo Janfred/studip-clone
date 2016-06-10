@@ -44,7 +44,7 @@ class StudipLitSearch {
     var $search_plugin;
 
 
-    function StudipLitSearch(){
+    function __construct(){
         global $sess, $_lit_search_plugins;
 
         URLHelper::bindLinkParam("_start_result",$this->start_result);

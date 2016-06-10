@@ -9,7 +9,7 @@ require_once("vendor/phpxmlrpc/xmlrpc.inc");
 
 class XML_RPC_WebserviceClient extends WebserviceClient
 {
-    function XML_RPC_WebserviceClient($webservice_url)
+    function __construct($webservice_url)
     {
         $this->client = new xmlrpc_client($webservice_url);
         #$this->client->verifyhost = true;

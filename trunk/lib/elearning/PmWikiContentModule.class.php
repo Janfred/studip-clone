@@ -39,9 +39,9 @@ class PmWikiContentModule extends ContentModule
     * @param string $cms_type system-type
     */ 
 
-    function PmWikiContentModule($module_id = "", $module_type, $cms_type)
+    function __construct($module_id = "", $module_type, $cms_type)
     {
-        parent::ContentModule($module_id, $module_type, $cms_type);
+        parent::__construct($module_id, $module_type, $cms_type);
         $this->link = $GLOBALS['connected_cms'][$this->cms_type]->ABSOLUTE_PATH_ELEARNINGMODULES.$this->id."/";
         $this->client = WebserviceClient::instance( $this->link. '?' . 
                                                     $GLOBALS['ELEARNING_INTERFACE_MODULES'][$this->cms_type]['URL_PARAMS'], 

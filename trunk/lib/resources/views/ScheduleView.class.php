@@ -47,7 +47,7 @@ class ScheduleView {
     var $start_date;            //the timestamp of the first day (monday) of the viewed week
     var $categories;
 
-    function ScheduleView ($start_hour = 8, $end_hour = 20, $show_columns = false,  $start_date = false) {
+    function __construct($start_hour = 8, $end_hour = 20, $show_columns = false,  $start_date = false) {
 
         $this->start_hour=$start_hour;
         $this->end_hour=$end_hour;

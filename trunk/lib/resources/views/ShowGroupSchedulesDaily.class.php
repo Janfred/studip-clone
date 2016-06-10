@@ -44,10 +44,10 @@ class ShowGroupSchedulesDaily extends ShowSemSchedules {
     var $group_id;
 
     //Konstruktor
-    function ShowGroupSchedulesDaily ($group_id, $start_time, $resources_groups = null) {
+    function __construct($group_id, $start_time, $resources_groups = null) {
         $this->dow = false;
         $this->group_id = $group_id;
-        parent::ShowSemSchedules(null, null, null);
+        parent::__construct(null, null, null);
         $this->start_time = $start_time ? strtotime('midnight', $start_time) : strtotime('today');
         $this->end_time = strtotime('tomorrow', $this->start_time) - 1;
         if(is_object($resources_groups)) $this->resources_groups = $resources_groups;

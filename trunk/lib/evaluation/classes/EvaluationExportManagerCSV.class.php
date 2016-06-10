@@ -89,11 +89,11 @@ class EvaluationExportManagerCSV extends EvaluationExportManager {
     * @access   public
     * @param    string   $evalID   The ID of the evaluation for export
     */
-   function EvaluationExportManagerCSV ($evalID) {
+   function __construct($evalID) {
     /* Set default values ------------------------------------------------- */
     register_shutdown_function(array(&$this, "_EvaluationExportManagerCSV"));
     ini_set('memory_limit', '256M');
-    parent::EvaluationExportManager ($evalID);
+    parent::__construct($evalID);
     $this->setAuthorEmail ("mail@AlexanderWillner.de");
     $this->setAuthorName ("Alexander Willner");
     $this->instanceof = INSTANCEOF_EVALEXPORTMANAGERCSV;

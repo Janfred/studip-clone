@@ -65,7 +65,7 @@ class StudipDocumentTree extends TreeAbstract {
     * do not use directly, call TreeAbstract::GetInstance("StudipDocumentTree")
     * @access private
     */ 
-    function StudipDocumentTree($args)
+    function __construct($args)
     {
         DbView::addView('core');
 
@@ -78,7 +78,7 @@ class StudipDocumentTree extends TreeAbstract {
         $this->must_have_perm = $this->entity_type == 'sem' ? 'tutor' : 'autor';
         $modules = new Modules();
         $this->permissions_activated = $modules->getStatus('documents_folder_permissions', $this->range_id, $this->entity_type);
-        parent::TreeAbstract(); //calling the baseclass constructor 
+        parent::__construct(); //calling the baseclass constructor
         $this->tree_data['root']['permission'] = $this->default_perm;
     }
 

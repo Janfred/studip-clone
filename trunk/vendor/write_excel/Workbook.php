@@ -50,9 +50,9 @@ class Workbook extends BIFFwriter
     *
     * @param string filename for storing the workbook. "-" for writing to stdout.
     */
-    function Workbook($filename)
+    function __construct($filename)
     {
-        $this->BIFFwriter(); // It needs to call its parent's constructor explicitly
+        parent::__construct();
     
         $this->_filename         = $filename;
         $this->parser            = new Parser($this->_byte_order);

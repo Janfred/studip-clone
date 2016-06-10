@@ -78,7 +78,7 @@ class AssignObject {
         return new AssignObject(func_get_args());
     }
 
-    function AssignObject($argv) {
+    function __construct($argv) {
         global $user;
 
         $this->user_id = $user->id;

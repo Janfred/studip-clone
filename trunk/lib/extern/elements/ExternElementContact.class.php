@@ -53,7 +53,7 @@ class ExternElementContact extends ExternElement {
     * Constructor
     *
     */
-    function ExternElementContact () {
+    function __construct() {
         $this->name = "Contact";
         $this->real_name = _("Name, Anschrift, Kontakt");
         $this->description = _("Allgemeine Angaben zum und Formatierung des Kontaktfeldes (Anschrift, Email, Homepage usw.).");

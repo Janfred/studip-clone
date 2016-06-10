@@ -32,9 +32,9 @@ class Ilias4ConnectedPermissions extends Ilias3ConnectedPermissions
      * @access
      * @param string $cms system-type
      */
-    function Ilias4ConnectedPermissions($cms)
+    function __construct($cms)
     {
-        parent::Ilias3ConnectedPermissions($cms);
+        parent::__construct($cms);
     }
 
     /**

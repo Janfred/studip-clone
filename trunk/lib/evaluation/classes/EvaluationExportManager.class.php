@@ -128,11 +128,11 @@ class EvaluationExportManager extends AuthorObject {
     * @access   public
     * @param    string   $evalID   The ID of the evaluation for export
     */
-   function EvaluationExportManager ($evalID) {
+   function __construct($evalID) {
     /* Set default values ------------------------------------------------- */
     register_shutdown_function(array(&$this, "_EvaluationExportManager"));
 
-    parent::AuthorObject ();
+    parent::__construct();
     $this->setAuthorEmail ("mail@AlexanderWillner.de");
     $this->setAuthorName ("Alexander Willner");
     $this->instanceof = INSTANCEOF_EVALEXPORTMANAGER;

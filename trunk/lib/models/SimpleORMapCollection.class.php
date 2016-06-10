@@ -69,7 +69,7 @@ class SimpleORMapCollection extends SimpleCollection
      * @param array $options relationship options
      * @param SimpleORMap $record related record
      */
-    function __construct(Closure $finder = null, Array $options = null, SimpleORMap $record = null)
+    public function __construct(Closure $finder = null, Array $options = null, SimpleORMap $record = null)
     {
         $this->relation_options = $options;
         $this->related_record = $record;
@@ -83,7 +83,7 @@ class SimpleORMapCollection extends SimpleCollection
      * @see ArrayObject::offsetSet()
      * @throws InvalidArgumentException if the given model does not fit (wrong type or id)
      */
-    function offsetSet($index, $newval)
+    public function offsetSet($index, $newval)
     {
         if (!is_null($index)) {
             $index = (int)$index;
@@ -108,7 +108,7 @@ class SimpleORMapCollection extends SimpleCollection
      * sets the allowed class name
      * @param string $class_name
      */
-    function setClassName($class_name)
+    public function setClassName($class_name)
     {
         $this->relation_options['class_name'] = strtolower($class_name);
         $this->deleted->relation_options['class_name'] = strtolower($class_name);
@@ -119,7 +119,7 @@ class SimpleORMapCollection extends SimpleCollection
      *
      * @param SimpleORMap $record
      */
-    function setRelatedRecord(SimpleORMap $record)
+    public function setRelatedRecord(SimpleORMap $record)
     {
         $this->related_record = $record;
     }
@@ -129,7 +129,7 @@ class SimpleORMapCollection extends SimpleCollection
      *
      * @return string
      */
-    function getClassName()
+    public function getClassName()
     {
         return strtolower($this->relation_options['class_name']);
     }
@@ -141,7 +141,7 @@ class SimpleORMapCollection extends SimpleCollection
      * @throws InvalidArgumentException
      * @return number of records after refresh
      */
-    function refresh()
+    public function refresh()
     {
         if (is_callable($this->finder)) {
             $data = call_user_func($this->finder, $this->related_record);
@@ -162,7 +162,7 @@ class SimpleORMapCollection extends SimpleCollection
      * @param string $value primary key value to search for
      * @return SimpleORMap
      */
-    function find($value)
+    public function find($value)
     {
         return $this->findOneBy('id', $value);
     }
@@ -180,7 +180,7 @@ class SimpleORMapCollection extends SimpleCollection
      * @param Closure $group_func closure to aggregate grouped entries
      * @return array assoc array
      */
-    function toGroupedArray($group_by = 'id', $only_these_fields = null, Closure $group_func = null)
+    public function toGroupedArray($group_by = 'id', $only_these_fields = null, Closure $group_func = null)
     {
         $result = array();
         foreach ($this as $record) {
@@ -204,7 +204,7 @@ class SimpleORMapCollection extends SimpleCollection
      * @param string $id primary key of element
      * @return  number of unsetted elements
      */
-    function unsetByPk($id)
+    public function unsetByPk($id)
     {
         return $this->unsetBy('id', $id);
     }
@@ -217,8 +217,9 @@ class SimpleORMapCollection extends SimpleCollection
      * @param SimpleORMapCollection $a_collection
      * @param string $mode 'replace' or 'ignore'
      */
-    function merge(SimpleORMapCollection $a_collection, $mode = 'replace')
+    public function merge(SimpleCollection $a_collection)
     {
+        $mode = func_get_arg(1);
         foreach ($a_collection as $element) {
             try {
                 $this[] = $element;

@@ -20,7 +20,7 @@ class SemBrowse {
     var $target_url;
     var $target_id;
 
-    function SemBrowse($sem_browse_data_init = array()){
+    function __construct($sem_browse_data_init = array()){
         global $SEM_CLASS,$SEM_TYPE;
 
         $this->group_by_fields = array( array('name' => _("Semester"), 'group_field' => 'sem_number'),

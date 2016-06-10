@@ -45,13 +45,13 @@ class ExternModuleSemLectureTree extends ExternModule {
     /**
     *
     */
-    function ExternModuleSemLectureTree ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
+    function __construct($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
         $this->registered_elements = array(
                 'Body', 'TreePath', 'TreeLevelName', 'TreeLevelContent', 'TreeKids',
                 'TreeBackLink'
         );
         $this->args = array('sem', 'start_item_id');
-        parent::ExternModule($range_id, $module_name, $config_id, $set_config, $global_id);
+        parent::__construct($range_id, $module_name, $config_id, $set_config, $global_id);
     }
     
     function printout ($args) {

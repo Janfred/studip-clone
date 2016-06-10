@@ -60,7 +60,7 @@ class ShowSchedules {
 
 
     //Konstruktor
-    function ShowSchedules ($resource_id='', $user_id='', $range_id='') {
+    function __construct($resource_id='', $user_id='', $range_id='') {
         $this->resource_id=$resource_id;
         $this->user_id=$user_id;
         $this->range_id=$range_id;

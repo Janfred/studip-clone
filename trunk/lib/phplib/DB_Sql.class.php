@@ -37,7 +37,7 @@ class DB_Sql {
     protected $resultSet;
 
     /* public: constructor */
-    function DB_Sql($query = "") {
+    function __construct($query = "") {
         $this->pdo = DBManager::get();
         $this->query($query);
     }

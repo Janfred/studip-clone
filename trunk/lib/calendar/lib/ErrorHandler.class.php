@@ -32,7 +32,7 @@ class ErrorHandler
     var $errors;
     var $status;
 
-    function ErrorHandler()
+    public function __construct()
     {
 
         $this->errors = array();
@@ -40,45 +40,40 @@ class ErrorHandler
         $this->_is_instantiated = true;
     }
 
-    function getStatus($status = NULL)
+    public function getStatus($status = NULL)
     {
-
         if ($status === NULL)
             return $this->status;
 
         return $status & $this->status;
     }
 
-    function getMaxStatus($status)
+    public function getMaxStatus($status)
     {
-
         if ($status <= $this->status)
             return true;
 
         return false;
     }
 
-    function getMinStatus($status)
+    public function getMinStatus($status)
     {
-
         if ($status >= $this->status)
             return true;
 
         return false;
     }
 
-    function getErrors($status = NULL)
+    public function getErrors($status = NULL)
     {
-
         if ($status === NULL)
             return $this->errors;
 
-        return $errors[$status];
+        return $this->errors[$status];
     }
 
-    function getAllErrors()
+    public function getAllErrors()
     {
-
         $status = array(ErrorHandler::ERROR_FATAL, ErrorHandler::ERROR_CRITICAL, ErrorHandler::ERROR_WARNING,
             ErrorHandler::ERROR_MESSAGE, ErrorHandler::ERROR_NORMAL);
         $errors = array();
@@ -90,7 +85,7 @@ class ErrorHandler
         return $errors;
     }
 
-    function nextError($status)
+    public function nextError($status)
     {
 
         if (is_array($this->errors[$status]) &&
@@ -103,10 +98,9 @@ class ErrorHandler
         return false;
     }
 
-    function throwError($status, $message, $file = '', $line = '')
+    public function throwError($status, $message, $file = '', $line = '')
     {
-
-        $this->errors[$status][] = new Error($status, $message, $file, $line);
+        $this->errors[$status][] = new CalendarError($status, $message, $file, $line);
         $this->status |= $status;
         reset($this->errors[$status]);
         if ($status == ErrorHandler::ERROR_FATAL) {
@@ -120,7 +114,7 @@ class ErrorHandler
         }
     }
 
-    function throwSingleError($index, $status, $message, $file = '', $line = '')
+    public function throwSingleError($index, $status, $message, $file = '', $line = '')
     {
         static $index_list = array();
 
@@ -129,5 +123,4 @@ class ErrorHandler
             $index_list[$index] = 1;
         }
     }
-
 }

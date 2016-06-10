@@ -379,7 +379,7 @@ class Seminar_Session
                 $this->that->ac_halt("Session: freeze() failed.");
             }
         }
-        return $r;
+        return true;
     }
 
     /**
@@ -390,7 +390,7 @@ class Seminar_Session
         if ($this->module == 'user') {
             return $this->that->ac_get_value(session_id(), $this->name);
         }
-        return true;
+        return '';
     }
 
     /**
@@ -410,7 +410,8 @@ class Seminar_Session
             if (empty($this->gc_time)) {
                 $this->gc_time = ini_get("session.gc_maxlifetime");
             }
-            return $this->that->ac_gc($this->gc_time, $this->name);
+            return (bool)$this->that->ac_gc($this->gc_time, $this->name);
         }
+        return true;
     }
 }

@@ -94,7 +94,7 @@ class AuthorObject {
    * Constructor
    * @access   public
    */
-  function AuthorObject () {
+  public function __construct () {
 
     /* For good OOP: Set errorhandler and destruktor ----------------------- */
 
@@ -118,7 +118,7 @@ class AuthorObject {
    * usefull!
    * @access   public
    */
-  function finalize () {
+  public function finalize () {
     // ((not very usefull in PHP 4))
     // restore_error_handler ();
   }
@@ -131,7 +131,7 @@ class AuthorObject {
    * @access  public
    * @param   string $email The emailaddress
    */
-  function setAuthorEmail ($email) {
+  public function setAuthorEmail ($email) {
     $this->authorEmail = $email;
   }
 
@@ -140,7 +140,7 @@ class AuthorObject {
    * @access  public
    * @return  string The emailaddress
    */
-  function getAuthorEmail () {
+  public function getAuthorEmail () {
     return $this->authorEmail;
   }
 
@@ -149,7 +149,7 @@ class AuthorObject {
    * @access  public
    * @param   string $name The name
    */
-  function setAuthorName ($name) {
+  public function setAuthorName ($name) {
     $this->authorNmae = $name;
   }
 
@@ -158,7 +158,7 @@ class AuthorObject {
    * @access  public
    * @return  string The name
    */
-  function getAuthorName () {
+  public function getAuthorName () {
     return $this->authorName;
   }
 
@@ -167,7 +167,7 @@ class AuthorObject {
    * @access  public
    * @return  string The type of object. See INSTANCEOF_*
    */
-  function x_instanceof () {
+  public function x_instanceof () {
     // Anmerkung: Es existiert bereits die Funktion "is_a" und
     //            "is_subclass_of" in PHP !
     return $this->instanceof;
@@ -178,7 +178,7 @@ class AuthorObject {
    * @access public
    * @return boolean True if an error exists
    */
-  function isError () {
+  public function isError () {
     return (count($this->errorArray) != 0);
   }
 
@@ -187,7 +187,7 @@ class AuthorObject {
    * @access  public
    * @return  array  The errors as an Array like "1" => "Could not open DB"
    */
-  function getErrors () {
+  public function getErrors () {
     return $this->errorArray;
   }
 
@@ -195,7 +195,7 @@ class AuthorObject {
    * Resets the errorcodes and descriptions
    * @access public
    */
-  function resetErrors () {
+  public function resetErrors () {
     $this->errorArray = array ();
   }
 
@@ -208,7 +208,7 @@ class AuthorObject {
    * @param   string  $errfile    The file
    * @param   integer $errtype    Defines wheter the error is critical
    */
-  function throwError ($errcode, $errstring, $errline = 0, $errfile = 0,
+  public function throwError ($errcode, $errstring, $errline = 0, $errfile = 0,
                $errtype = ERROR_NORMAL) {
     if (!is_array ($this->errorArray))
       $this->errorArray = array ();
@@ -237,7 +237,7 @@ class AuthorObject {
    * @access  private
    * @param   object   $class   The class with the error
    */
-  function throwErrorFromClass (&$class) {
+  public function throwErrorFromClass (&$class) {
     $this->errorArray = $class->getErrors ();
     $class->resetErrors ();
   }
@@ -259,7 +259,7 @@ class AuthorObject {
    * @param   int    $line Linenumber
    * @param   array  $ctx  All variables
    */
-  function errorHandler ($no, $str, $file, $line, $ctx) {
+  public function errorHandler ($no, $str, $file, $line, $ctx) {
     if (!($no & error_reporting ())) return;
     $this->throwError ($no, $str, $line, $file, ERROR_CRITICAL);
     echo createErrorReport ($this, "Schwerer PHP-Laufzeitfehler");

@@ -173,7 +173,7 @@ class about extends messaging
     var $default_url = "http://www"; //default fuer private URL
 
 
-    function about($username,$msg) {  // Konstruktor, prüft die Rechte
+    function __construct($username,$msg) {  // Konstruktor, prüft die Rechte
         global $perm;
 
         $this->get_auth_user($username);

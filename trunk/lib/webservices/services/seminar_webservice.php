@@ -20,7 +20,7 @@ require_once('lib/webservices/api/studip_seminar.php');
 
 class SeminarService extends AccessControlledService
 {
-    function SeminarService()
+    function __construct()
     {
     $this->add_api_method('get_participants',
                           array('string', 'string'),

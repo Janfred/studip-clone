@@ -32,7 +32,7 @@ class PHPlot_Data extends PHPlot
     /*!
      * Constructor
      */
-    function PHPlot_Data($which_width=600, $which_height=400, $which_output_file=NULL, $which_input_file=NULL)
+    function __construct($which_width=600, $which_height=400, $which_output_file=NULL, $which_input_file=NULL)
     {
         if (! isset($this->img)) {
             $this->PHPlot($which_width, $which_height, $which_output_file, $which_input_file);

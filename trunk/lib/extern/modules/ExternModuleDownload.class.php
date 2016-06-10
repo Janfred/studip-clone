@@ -55,7 +55,7 @@ class ExternModuleDownload extends ExternModule {
     /**
     *
     */
-    function ExternModuleDownload ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
+    function __construct($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
         $this->field_names = array
         (
                 _("Icon"),
@@ -65,7 +65,7 @@ class ExternModuleDownload extends ExternModule {
                 _("Größe"),
                 _("Upload durch")
         );
-        parent::ExternModule($range_id, $module_name, $config_id, $set_config, $global_id);
+        parent::__construct($range_id, $module_name, $config_id, $set_config, $global_id);
     }
 
     function setup () {

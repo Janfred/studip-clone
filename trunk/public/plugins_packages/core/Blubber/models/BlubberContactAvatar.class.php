@@ -20,8 +20,8 @@ class BlubberContactAvatar extends Avatar {
     /**
      * Gets an BlubberContactAvatar-object for that user.
      */
-    static function getAvatar($user_id) {
-        return new BlubberContactAvatar($user_id);
+    static function getAvatar($id) {
+        return new BlubberContactAvatar($id);
     }
     
     /**

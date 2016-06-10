@@ -38,7 +38,7 @@ class Migration {
    *
    * @param boolean $verbose verbose output (default FALSE)
    */
-  function Migration($verbose = FALSE) {
+  function __construct($verbose = FALSE) {
     $this->verbose = (bool) $verbose;
   }
 

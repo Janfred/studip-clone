@@ -55,7 +55,7 @@ class ExternElementPersondetailsHeader extends ExternElement {
     *
     * @param array config
     */
-    function ExternElementPersondetailsHeader ($config = "") {
+    function __construct($config = "") {
         if ($config)
             $this->config = $config;
         

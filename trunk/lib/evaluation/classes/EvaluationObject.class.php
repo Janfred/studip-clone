@@ -151,11 +151,11 @@ class EvaluationObject extends StudipObject {
    * @param    integer           $loadChildren   See const EVAL_LOAD_*_CHILDREN
    * @access   public
    */
-  function EvaluationObject ($objectID = "", $parentObject = NULL, 
+  function __construct($objectID = "", $parentObject = NULL, 
                               $loadChildren = EVAL_LOAD_NO_CHILDREN) {
 
     /* Set default values -------------------------------------------------- */
-    parent::StudipObject ($objectID);
+    parent::__construct($objectID);
     $this->setAuthorEmail ("mail@AlexanderWillner.de");
     $this->setAuthorName ("Alexander Willner");
     $this->instanceof = INSTANCEOF_EVALOBJECT;

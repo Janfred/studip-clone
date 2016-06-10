@@ -58,7 +58,7 @@ class StudipLitListViewAdmin extends TreeView
     * calls the base class constructor
     * @access public
     */
-    function StudipLitListViewAdmin($range_id){
+    function __construct($range_id){
         $this->use_aging = true;
         $this->format_info = _("Felder müssen in geschweiften Klammern (z.B. {dc_title}) angegeben werden.\n")
                             . _("Felder und Text, der zwischen senkrechten Strichen steht, wird nur angezeigt, wenn das angegebene Feld nicht leer ist. (z.B. |Anmerkung: {note}|)\n")
@@ -85,7 +85,7 @@ class StudipLitListViewAdmin extends TreeView
                             . _("Anmerkung - note\n")
                             . _("link in externes Bibliothekssystem - external_link\n");
 
-        parent::TreeView("StudipLitList", $range_id); //calling the baseclass constructor
+        parent::__construct("StudipLitList", $range_id); //calling the baseclass constructor
         $this->clip_board = StudipLitClipBoard::GetInstance();
     }
 

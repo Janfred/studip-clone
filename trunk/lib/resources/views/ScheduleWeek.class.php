@@ -43,9 +43,9 @@ class ScheduleWeek extends ScheduleView {
     var $show_dates;            //If setted, the dates of each day will be shown
     
     //Kontruktor
-    function ScheduleWeek ($start_hour = '', $end_hour = '', $show_days = '', $start_date = '', $show_dates = false) {
+    function __construct($start_hour = '', $end_hour = '', $show_days = '', $start_date = '', $show_dates = false) {
         
-        parent::ScheduleView($start_hour, $end_hour, $show_days, $start_date);
+        parent::__construct($start_hour, $end_hour, $show_days, $start_date);
         
         $this->show_dates = $show_dates;
         

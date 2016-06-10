@@ -43,8 +43,8 @@ class ModulesNotification extends Modules {
     var $registered_notification_modules = array();
     var $subject;
 
-    function ModulesNotification () {
-        parent::Modules();
+    function __construct () {
+        parent::__construct();
         $this->registered_notification_modules['news'] = array(
                 'id' => 25, 'const' => '', 'sem' => TRUE, 'inst' => TRUE,
                 'mes' => TRUE, 'name' => _("Ankündigungen"));

@@ -100,7 +100,7 @@ class OLEwriter
     *
     * @param string $OLEfilename the name of the file for the OLE stream
     */
-    function OLEwriter($OLEfilename)
+    function __construct($OLEfilename)
     {
         $this->_OLEfilename  = $OLEfilename;
         $this->_filehandle   = "";

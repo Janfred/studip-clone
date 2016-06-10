@@ -69,7 +69,7 @@ class ResourceObject {
     var $my_state = null;
     
     //Konstruktor
-    function ResourceObject($argv) {
+    function __construct($argv) {
         global $user;
         
         $this->user_id = $user->id;

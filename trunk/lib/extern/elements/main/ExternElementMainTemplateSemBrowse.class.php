@@ -38,7 +38,7 @@
 
 class ExternElementMainTemplateSemBrowse extends ExternElementMain {
 
-    function ExternElementMainTemplateSemBrowse ($module_name, &$data_fields, &$field_names, &$config) {
+    function __construct($module_name, &$data_fields, &$field_names, &$config) {
         $this->attributes = array(
             'name', 'includeurl', 'grouping', 'semstart', 'semrange', 'semswitch', 'allseminars', 'rangepathlevel',
             'time', 'lecturer', 'semclasses', 'aliasesgrouping', 'nameformat',
@@ -47,7 +47,7 @@ class ExternElementMainTemplateSemBrowse extends ExternElementMain {
         );
         $this->real_name = _("Grundeinstellungen");
         $this->description = _("In den Grundeinstellungen können Sie allgemeine Daten des Moduls ändern.");
-        parent::ExternElementMain($module_name, $data_fields, $field_names, $config);
+        parent::__construct($module_name, $data_fields, $field_names, $config);
     }
     
     function getDefaultConfig () {

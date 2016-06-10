@@ -72,7 +72,7 @@ class ExternModule {
     /**
     * The constructor of a child class has to call this parent constructor!
     */
-    function ExternModule ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
+    function __construct($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
 
         foreach ($GLOBALS["EXTERN_MODULE_TYPES"] as $type => $module) {
             if ($module["module"] == $module_name) {

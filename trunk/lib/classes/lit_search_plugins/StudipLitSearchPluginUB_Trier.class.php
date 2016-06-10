@@ -28,8 +28,8 @@ require_once 'StudipLitSearchPluginZ3950Abstract_Aleph.class.php';
 
 class StudipLitSearchPluginUB_Trier extends StudipLitSearchPluginZ3950Abstract_Aleph{
 
-    function StudipLitSearchPluginUB_Trier() {
-        parent::StudipLitSearchPluginZ3950Abstract_Aleph();
+    function __construct() {
+        parent::__construct();
         $this->description = "Universitätsbibliothek Trier";
         //$this->z_host = "tcp:ub-a18t.uni-trier.de:9991/TRI01";
         $this->z_host = "tcp:ub-a18.uni-trier.de:9991/TRI01";

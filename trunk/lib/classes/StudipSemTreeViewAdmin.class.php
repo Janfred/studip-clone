@@ -49,10 +49,10 @@ class StudipSemTreeViewAdmin extends TreeView {
     *
     * @access public
     */
-    function StudipSemTreeViewAdmin($start_item_id = "root"){
+    function __construct($start_item_id = "root"){
         $this->start_item_id = ($start_item_id) ? $start_item_id : "root";
         $this->root_content = $GLOBALS['UNI_INFO'];
-        parent::TreeView("StudipSemTree"); //calling the baseclass constructor
+        parent::__construct("StudipSemTree"); //calling the baseclass constructor
         $this->studienmodulmanagement = PluginEngine::getPlugin('StudienmodulManagement');
         URLHelper::bindLinkParam("_marked_item", $this->marked_item);
         $this->marked_sem =& $_SESSION['_marked_sem'];
@@ -290,8 +290,8 @@ class StudipSemTreeViewAdmin extends TreeView {
             $new_item_id = md5($item_to_copy . $seed);
             $parent_id = $item_id;
             $num_copy = $this->tree->InsertItem($new_item_id,$parent_id,
-            mysql_escape_string($this->tree->tree_data[$item_to_copy]['name']),
-            mysql_escape_string($this->tree->tree_data[$item_to_copy]['info']),
+            addslashes($this->tree->tree_data[$item_to_copy]['name']),
+            addslashes($this->tree->tree_data[$item_to_copy]['info']),
             $this->tree->getMaxPriority($parent_id)+1,
             ($this->tree->tree_data[$item_to_copy]['studip_object_id'] ? $this->tree->tree_data[$item_to_copy]['studip_object_id'] : null),
             $this->tree->tree_data[$item_to_copy]['type']);
@@ -300,8 +300,8 @@ class StudipSemTreeViewAdmin extends TreeView {
                     for ($i = 0; $i < count($items_to_copy); ++$i){
                         $num_copy += $this->tree->InsertItem(md5($items_to_copy[$i] . $seed),
                         md5($this->tree->tree_data[$items_to_copy[$i]]['parent_id'] . $seed),
-                        mysql_escape_string($this->tree->tree_data[$items_to_copy[$i]]['name']),
-                        mysql_escape_string($this->tree->tree_data[$items_to_copy[$i]]['info']),
+                        addslashes($this->tree->tree_data[$items_to_copy[$i]]['name']),
+                        addslashes($this->tree->tree_data[$items_to_copy[$i]]['info']),
                         $this->tree->tree_data[$items_to_copy[$i]]['priority'],
                         ($this->tree->tree_data[$items_to_copy[$i]]['studip_object_id'] ? $this->tree->tree_data[$items_to_copy[$i]]['studip_object_id'] : null),
                         $this->tree->tree_data[$item_to_copy]['type']);

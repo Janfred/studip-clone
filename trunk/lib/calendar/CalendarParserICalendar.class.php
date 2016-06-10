@@ -18,13 +18,12 @@
 
 class CalendarParserICalendar extends CalendarParser
 {
-
+    var $type  = '';
     var $count = null;
 
-    function CalendarParserICalendar()
+    function __construct()
     {
-
-        parent::CalendarParser();
+        parent::__construct();
         $this->type = 'iCalendar';
     }
 
@@ -147,7 +146,7 @@ class CalendarParserICalendar extends CalendarParser
                             }
                             $properties[$tag] = implode(',', $categories);
                             break;
-                        
+
                         // Date fields
                         case 'DCREATED': // vCalendar property name for "CREATED"
                             $tag = "CREATED";
@@ -264,7 +263,7 @@ class CalendarParserICalendar extends CalendarParser
 
                         // Geo fields
                         case 'GEO':
-                            $floats = split(';', $value);
+                            $floats = explode(';', $value);
                             $value['latitude'] = floatval($floats[0]);
                             $value['longitude'] = floatval($floats[1]);
                             $properties[$tag] = $value;
@@ -315,7 +314,7 @@ class CalendarParserICalendar extends CalendarParser
                     $properties['STUDIP_CATEGORY'] = $studip_categories[$properties['CATEGORIES']];
                     $properties['CATEGORIES'] = '';
                 }
-                 * 
+                 *
                  */
 
                 $this->components[] = $properties;
@@ -354,7 +353,7 @@ class CalendarParserICalendar extends CalendarParser
      */
     function _parsePeriod($text)
     {
-        $matches = split('/', $text);
+        $matches = explode('/', $text);
 
         $start = $this->_parseDateTime($matches[0]);
 
@@ -370,7 +369,7 @@ class CalendarParserICalendar extends CalendarParser
      */
     function _parseDateTime($text)
     {
-        $dateParts = split('T', $text);
+        $dateParts = explode('T', $text);
         if (count($dateParts) != 2 && !empty($text)) {
             // not a date time field but may be just a date field
             if (!$date = $this->_parseDate($text)) {
@@ -601,7 +600,7 @@ class CalendarParserICalendar extends CalendarParser
     function _qp_decode($value)
     {
 
-        return preg_replace("/=([0-9A-F]{2})/e", "chr(hexdec('\\1'))", $value);
+        return preg_replace_callback("/=([0-9A-F]{2})/", function ($m) {return chr(hexdec($m[1]));}, $value);
     }
 
     function _parseClientIdentifier(&$data)
@@ -621,7 +620,7 @@ class CalendarParserICalendar extends CalendarParser
         }
         return true;
     }
-    
+
     function getClientIdentifier($data = null)
     {
         if (!is_null($data)) {

@@ -45,7 +45,7 @@ class MetaDate
      * Constructor
      * @param string $seminar_id
      */
-    function MetaDate($seminar_id = '')
+    function __construct($seminar_id = '')
     {
         if ($seminar_id != '') {
             $this->seminar_id = $seminar_id;

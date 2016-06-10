@@ -36,9 +36,9 @@ require_once 'StudipLitImportPluginAbstract.class.php';
 **/
 class StudipLitImportPluginCSV extends StudipLitImportPluginAbstract {
     
-    function StudipLitImportPluginCSV(){
+    function __construct(){
         // immer erst den parent-contructor aufrufen!
-        parent::StudipLitImportPluginAbstract();
+        parent::__construct();
     }
 
     function parse($data){

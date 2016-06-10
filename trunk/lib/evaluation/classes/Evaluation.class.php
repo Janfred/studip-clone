@@ -124,10 +124,10 @@ class Evaluation extends EvaluationObject {
     * @param    object   $parentObject   The parent object if exists
     * @param    integer  $loadChildren   See const EVAL_LOAD_*_CHILDREN
     */
-   function Evaluation ($objectID = "", $parentObject = null, 
+   function __construct($objectID = "", $parentObject = null,
                         $loadChildren = EVAL_LOAD_NO_CHILDREN) {
     /* Set default values ------------------------------------------------- */
-    parent::EvaluationObject ($objectID, $parentObject, $loadChildren);
+    parent::__construct($objectID, $parentObject, $loadChildren);
     $this->setAuthorEmail ("mail@AlexanderWillner.de");
     $this->setAuthorName ("Alexander Willner");
     $this->instanceof = INSTANCEOF_EVAL;

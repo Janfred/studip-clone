@@ -49,7 +49,7 @@ class ExternElementTableRow extends ExternElement {
     *
     * @param array config
     */
-    function ExternElementTableRow ($config = "") {
+    function __construct($config = "") {
         if ($config)
             $this->config = $config;
         

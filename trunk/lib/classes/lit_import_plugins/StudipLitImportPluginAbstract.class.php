@@ -43,7 +43,7 @@ class StudipLitImportPluginAbstract {
     var $xmlfile_size;
     var $xmlfile_name;
 
-    function StudipLitImportPluginAbstract(){
+    function __construct(){
         $this->class_name = strtolower(get_class($this));
         $this->data = FALSE;
         $this->num_entries = 0;

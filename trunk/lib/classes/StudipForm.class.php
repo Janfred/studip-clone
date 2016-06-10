@@ -59,7 +59,7 @@ class StudipForm {
     static function SQLDateToTimestamp($sqldate){
         $date_values = explode("-", $sqldate); //YYYY-MM-DD
         if (checkdate((int)$date_values[1],(int)$date_values[2],(int)$date_values[0])){
-            return mktime(12,0,0,$date_values[1],$date_values[2],$date_values[0], 0);
+            return mktime(12,0,0,$date_values[1],$date_values[2],$date_values[0]);
         } else {
             return false;
         }

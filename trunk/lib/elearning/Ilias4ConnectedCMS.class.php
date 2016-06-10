@@ -26,10 +26,10 @@ class Ilias4ConnectedCMS extends Ilias3ConnectedCMS
      * @access public
      * @param string $cms system-type
      */
-    function Ilias4ConnectedCMS($cms)
+    function __construct($cms)
     {
         global $messages, $SessSemName;
-        parent::Ilias3ConnectedCMS($cms);
+        parent::__construct($cms);
         if (ELearningUtils::getConfigValue("user_category_id", $cms)) {
             $this->user_category_node_id = ELearningUtils::getConfigValue("user_category_id", $cms);
         } else {

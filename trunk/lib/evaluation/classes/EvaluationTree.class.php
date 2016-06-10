@@ -73,7 +73,7 @@ class EvaluationTree extends TreeAbstract {
     * @access   public
     * @param    array  the eval's ID (optional - if not given, it must be in $_REQUEST).
     */
-  function EvaluationTree( $args ) {
+  function __construct( $args ) {
       
       
       if (isset($args['evalID']))
@@ -88,7 +88,7 @@ class EvaluationTree extends TreeAbstract {
       }
 
       /* ------------------------------------------------------------------- */
-      parent::TreeAbstract();
+      parent::__construct();
   }
 # =========================================== end: constructor and destructor #
 

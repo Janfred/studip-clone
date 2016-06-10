@@ -46,7 +46,7 @@ class StudipLitClipBoard {
         return $instance[0];
     }
 
-    function StudipLitClipBoard(){
+    function __construct(){
         $this->dbv = DbView::getView('literatur');
         $this->elements =& $_SESSION["_lit_clipboard_elements"];
     }

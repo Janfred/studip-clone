@@ -181,13 +181,13 @@ namespace {
      */
     class DB_Seminar extends DB_Sql
     {
-        function DB_Seminar($query = false)
+        public function __construct($query = false)
         {
             $this->Host = $GLOBALS['DB_STUDIP_HOST'];
             $this->Database = $GLOBALS['DB_STUDIP_DATABASE'];
             $this->User = $GLOBALS['DB_STUDIP_USER'];
             $this->Password = $GLOBALS['DB_STUDIP_PASSWORD'];
-            parent::DB_Sql($query);
+            parent::__construct($query);
         }
     }
 

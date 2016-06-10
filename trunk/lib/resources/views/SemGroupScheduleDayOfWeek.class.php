@@ -42,12 +42,12 @@ class SemGroupScheduleDayOfWeek extends ScheduleView {
     var $categories;
 
     //Kontruktor
-    function SemGroupScheduleDayOfWeek ($start_hour = '', $end_hour = '', $rooms_to_show = array(), $start_date = '', $dow = 1) {
+    function __construct($start_hour = '', $end_hour = '', $rooms_to_show = array(), $start_date = '', $dow = 1) {
 
         foreach ($rooms_to_show as $id => $room_id){
             $show_columns[$id+1] = $room_id;
         }
-        parent::ScheduleView($start_hour, $end_hour, $show_columns, $start_date);
+        parent::__construct($start_hour, $end_hour, $show_columns, $start_date);
 
         $this->dow = $dow;
         if($this->dow !== false){

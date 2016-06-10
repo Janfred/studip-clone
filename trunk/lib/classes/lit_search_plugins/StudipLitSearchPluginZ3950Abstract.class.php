@@ -51,8 +51,8 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
     var $z_record_encoding = 'latin1';
     var $z_sort = '';
 
-    function StudipLitSearchPluginZ3950Abstract(){
-        parent::StudipLitSearchPluginAbstract();
+    function __construct(){
+        parent::__construct();
         $this->z_hits =& $this->search_result['z_hits'];
         // UNIMARC mapping
         $this->mapping['UNIMARC'] = array('001' => array('field' => 'accession_number', 'callback' => 'simpleMap', 'cb_args' => ''),

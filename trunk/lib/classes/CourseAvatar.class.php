@@ -31,9 +31,9 @@ class CourseAvatar extends Avatar
      *
      * @return mixed   the course's avatar.
      */
-    static function getAvatar($course_id)
+    static function getAvatar($id)
     {
-        return new CourseAvatar($course_id);
+        return new CourseAvatar($id);
     }
 
     /**

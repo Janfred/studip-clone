@@ -26,11 +26,11 @@ class Ilias3ConnectedUser extends ConnectedUser
     * @access
     * @param string $cms system-type
     */
-    function Ilias3ConnectedUser($cms, $user_id = false)
+    function __construct($cms, $user_id = false)
     {
         global $connected_cms, $perm;
 
-        parent::ConnectedUser($cms, $user_id);
+        parent::__construct($cms, $user_id);
         // create account automatically if it doesn't exist
         if (! $this->isConnected() AND ($connected_cms[$this->cms_type]->USER_AUTO_CREATE == true))
         {

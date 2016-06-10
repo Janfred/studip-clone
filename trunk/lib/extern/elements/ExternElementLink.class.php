@@ -47,7 +47,7 @@ class ExternElementLink extends ExternElement {
     *
     * @param array config
     */
-    function ExternElementLink ($config = "") {
+    function __construct($config = "") {
         if ($config)
             $this->config = $config;
         

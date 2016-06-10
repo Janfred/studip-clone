@@ -65,9 +65,11 @@ class SQLSearch extends SearchType
      *
      * @return SQLSearch
      */
-    static public function get($query, $title = "", $avatarLike = "")
+    static public function get()
     {
-        return new SQLSearch($query, $title, $avatarLike);
+        $class = get_called_class();
+        $ref = new ReflectionClass($class);
+        return $ref->newInstanceArgs(func_get_args());
     }
 
     /**

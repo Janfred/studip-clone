@@ -84,7 +84,7 @@ function AddNewStatusgruppe ($new_statusgruppe_name, $range_id, $new_statusgrupp
         Request::get('is_cal_group') ? 1 : 0,
     ));
     if ($statement->rowCount() && $new_doc_folder) {
-        create_folder(mysql_escape_string(_("Dateiordner der Gruppe:") . ' ' . $new_statusgruppe_name), mysql_escape_string(_("Ablage für Ordner und Dokumente dieser Gruppe")), $statusgruppe_id, 15);
+        create_folder(addslashes(_("Dateiordner der Gruppe:") . ' ' . $new_statusgruppe_name), addslashes(_("Ablage für Ordner und Dokumente dieser Gruppe")), $statusgruppe_id, 15);
     }
     return $statusgruppe_id;
 }
@@ -237,7 +237,7 @@ function EditStatusgruppe ($new_statusgruppe_name, $new_statusgruppe_size, $edit
     ));
 
     if ($new_doc_folder) {
-        create_folder(mysql_escape_string(_("Dateiordner der Gruppe:") . ' '. $new_statusgruppe_name), mysql_escape_string(_("Ablage für Ordner und Dokumente dieser Gruppe")), $edit_id, 15);
+        create_folder(addslashes(_("Dateiordner der Gruppe:") . ' '. $new_statusgruppe_name), addslashes(_("Ablage für Ordner und Dokumente dieser Gruppe")), $edit_id, 15);
     }
 }
 

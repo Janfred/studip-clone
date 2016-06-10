@@ -3,9 +3,9 @@ class HelpbarWidget extends Widget
 {
     public $icon = false;
     
-    public function addElement(WidgetElement $element)
+    public function addElement(WidgetElement $element, $index = null)
     {
-        parent::addElement($element);
+        parent::addElement($element, $index);
     }
 
     public function setIcon($icon)

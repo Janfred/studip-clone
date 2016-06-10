@@ -84,7 +84,7 @@ class EvalOverview {
      * @param    object  User $user  The user object
      */
 
-    function EvalOverview($db, $perm, $user) {
+    function __construct($db, $perm, $user) {
         /* Set default values ------------------------------------------------- */
         $this->db = $db;
         $this->perm = $perm;

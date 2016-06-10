@@ -50,7 +50,7 @@ class ExternElementLecturesInnerTable extends ExternElement {
     *
     * @param array config
     */
-    function ExternElementLecturesInnerTable ($config = "") {
+    function __construct($config = "") {
         if ($config)
             $this->config = $config;
         

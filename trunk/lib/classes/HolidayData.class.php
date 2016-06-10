@@ -47,7 +47,7 @@ class HolidayData
         return SemesterHoliday::getAll();
     }
 
-    function HolidayData() {
+    function __construct() {
     }
 
     function getAllHolidays() {

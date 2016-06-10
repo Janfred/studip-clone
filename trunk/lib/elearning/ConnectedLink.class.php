@@ -28,7 +28,7 @@ class ConnectedLink
     * @access public
     * @param string $cms system-type
     */
-    function ConnectedLink($cms)
+    function __construct($cms)
     {
         global $ELEARNING_INTERFACE_MODULES;
 

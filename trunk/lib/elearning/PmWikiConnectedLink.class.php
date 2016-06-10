@@ -32,9 +32,9 @@ require_once 'lib/webservices/api/studip_seminar.php';
 
 class PmWikiConnectedLink extends ConnectedLink
 {
-    function PmWikiConnectedLink($cms)
+    function __construct($cms)
     {
-        parent::ConnectedLink($cms);
+        parent::__construct($cms);
         $this->cms_link = "pmwiki_referrer.php";
     }
 

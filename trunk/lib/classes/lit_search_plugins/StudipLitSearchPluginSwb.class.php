@@ -38,8 +38,8 @@ require_once 'StudipLitSearchPluginZ3950Abstract.class.php';
 class StudipLitSearchPluginSwb extends StudipLitSearchPluginZ3950Abstract{
     
     
-    function StudipLitSearchPluginSwb(){
-        parent::StudipLitSearchPluginZ3950Abstract();
+    function __construct(){
+        parent::__construct();
         $this->description = "SWB-Online-Katalog";
         $this->z_host = "193.197.31.10:210/swblite";
         //$this->z_options = array('user' => '999', 'password' => 'abc');

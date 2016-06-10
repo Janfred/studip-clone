@@ -43,8 +43,8 @@ class RangeTreeObjectFak extends RangeTreeObject {
     * @access private
     * @param    string  $item_id
     */
-    function RangeTreeObjectFak($item_id) {
-        parent::RangeTreeObject($item_id); //calling the baseclass constructor 
+    function __construct($item_id) {
+        parent::__construct($item_id); //calling the baseclass constructor
         $this->initItemDetail();
         $this->item_data_mapping = array('Strasse' => _("Straße"), 'Plz' => _("Ort"), 'telefon' => _("Tel."), 'fax' => _("Fax"),
                                         'url' => _("Homepage"), 'email' => _("Kontakt"));

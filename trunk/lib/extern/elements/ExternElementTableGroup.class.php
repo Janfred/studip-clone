@@ -49,7 +49,7 @@ class ExternElementTableGroup extends ExternElement {
     *
     * @param array config
     */
-    function ExternElementTableGroup ($config = "") {
+    function __construct ($config = "") {
         if ($config)
             $this->config = $config;
         
