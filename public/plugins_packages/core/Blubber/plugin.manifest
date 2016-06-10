@@ -12,7 +12,7 @@ screenshots = assets/images/screenshots
 screenshots.Blubbern.png = Blubbern
 
 displayname = Blubber
-icon = ../../../assets/images/icons/16/black/blubber.png
+icon = ../../../assets/images/icons/black/blubber.svg
 keywords = Informationen über neue Nachrichten per E-Mail; Antworten ebenfalls per E-Mail möglich; Einfach Text schreiben und mit <Enter> abschicken; Private und öffentliche bzw. veranstaltungsbezogene Blubberstreams; Direktes Kontaktieren anderer Stud.IP-NutzerInnen (@Vorname Nachname); Setzen von und Suche nach Stichworten über Hashtags (#Stichwort); Einbinden von Dateien per drag and drop
 category = Kommunikation und Zusammenarbeit
 descriptionshort = Schneller und einfacher Austausch von Informationen in Gesprächsform
