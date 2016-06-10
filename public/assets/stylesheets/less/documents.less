@@ -43,13 +43,13 @@
             line-height: 1.5em;
 
             a {
-                background-image: url("@{image-path}/icons/24/blue/folder-parent.png");
+                .background-icon('folder-parent', 'clickable', 24);
                 background-position: left center;
                 background-repeat: no-repeat;
                 padding-left: 30px;
             }
             &:first-child a {
-                background-image: url("@{image-path}/icons/24/blue/folder-empty.png");
+                .background-icon('folder-empty', 'clickable', 24);
             }
         }
     }
