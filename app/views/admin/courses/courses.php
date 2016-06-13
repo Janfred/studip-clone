@@ -171,31 +171,29 @@
         <tr id="course-<?= $semid ?>">
             <td>
             <? if (Config::get()->ADMIN_COURSES_SHOW_COMPLETE): ?>
-                <? if ($GLOBALS['perm']->have_studip_perm("tutor", $semid)) : ?>
+                <? if ($GLOBALS['perm']->have_studip_perm('tutor', $semid)) : ?>
                     <a href="<?= $controller->url_for('admin/courses/toggle_complete/' . $semid) ?>"
                        class="course-completion <? if ($values['is_complete']) echo 'course-complete'; ?>"
                        title="<?= _('Bearbeitungsstatus ändern') ?>">
                            <?= _('Bearbeitungsstatus ändern') ?>
                     </a>
                 <? else : ?>
-                    <?= Icon::create("radiobutton-checked", $values['is_complete'] ? "status-green" : "status-red")->asImg("16px", array(
-                        'title' => _("Bearbeitungsstatus kann nicht von Ihnen geändert werden.")
-                    )) ?>
+                    <?= Icon::create('radiobutton-checked', $values['is_complete'] ? 'status-green' : 'status-red', ['title' => _('Bearbeitungsstatus kann nicht von Ihnen geändert werden.')])->asImg() ?>
                 <? endif ?>
             <? else: ?>
                 <?=
                 CourseAvatar::getAvatar($semid)->is_customized()
-                    ? CourseAvatar::getAvatar($semid)->getImageTag(Avatar::SMALL, array('title' => htmlReady(trim($values["Name"]))))
-                    : Icon::create('seminar', 'clickable', ['title' => htmlReady(trim($values["Name"]))])->asImg(20) ?>
+                    ? CourseAvatar::getAvatar($semid)->getImageTag(Avatar::SMALL, array('title' => htmlReady(trim($values['Name']))))
+                    : Icon::create('seminar', 'clickable', ['title' => htmlReady(trim($values['Name']))])->asImg(20) ?>
             <? endif; ?>
             </td>
             <? if (in_array('number', $view_filter)) : ?>
                 <td>
-                    <? if ($GLOBALS['perm']->have_studip_perm("autor", $semid)) : ?>
+                    <? if ($GLOBALS['perm']->have_studip_perm('autor', $semid)) : ?>
                         <a href="<?= URLHelper::getLink('seminar_main.php', array('auswahl' => $semid)) ?>">
                     <? endif ?>
                         <?= htmlReady($values["VeranstaltungsNummer"]) ?>
-                    <? if ($GLOBALS['perm']->have_studip_perm("autor", $semid)) : ?>
+                    <? if ($GLOBALS['perm']->have_studip_perm('autor', $semid)) : ?>
                         </a>
                     <? endif ?>
                 </td>
@@ -291,7 +289,7 @@
             <? endif ?>
             <td style="text-align: right;" class="actions">
                 <? if ($actions[$selected_action]['multimode'] && is_numeric($selected_action)) : ?>
-                    <? if ($GLOBALS['perm']->have_studip_perm("tutor", $semid)) : ?>
+                    <? if ($GLOBALS['perm']->have_studip_perm('tutor', $semid)) : ?>
                         <? switch ($selected_action) {
                             case 8 :
                                 echo $this->render_partial('admin/courses/lock.php', compact('values', 'semid'));
@@ -315,7 +313,7 @@
                     <? $template = $plugin->getAdminCourseActionTemplate($semid, $values) ?>
                     <? if ($template) : ?>
                         <?= $template->render() ?>
-                    <? elseif($GLOBALS['perm']->have_studip_perm("tutor", $semid)) : ?>
+                    <? elseif ($GLOBALS['perm']->have_studip_perm('tutor', $semid)) : ?>
                         <?=
                         \Studip\LinkButton::create(
                             $actions[$selected_action]['title'],
@@ -324,7 +322,7 @@
                             ($actions[$selected_action]['attributes'] ? $actions[$selected_action]['attributes'] : array())
                         ) ?>
                     <? endif ?>
-                <? elseif($GLOBALS['perm']->have_studip_perm("tutor", $semid)) : ?>
+                <? elseif ($GLOBALS['perm']->have_studip_perm('tutor', $semid)) : ?>
                     <?=
                     \Studip\LinkButton::create(
                         $actions[$selected_action]['title'],
