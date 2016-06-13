@@ -323,13 +323,24 @@
                         ) ?>
                     <? endif ?>
                 <? elseif ($GLOBALS['perm']->have_studip_perm('tutor', $semid)) : ?>
-                    <?=
-                    \Studip\LinkButton::create(
-                        $actions[$selected_action]['title'],
-                        URLHelper::getURL(sprintf($actions[$selected_action]['url'], $semid),
-                            ($actions[$selected_action]['params'] ? $actions[$selected_action]['params'] : array())),
-                        ($actions[$selected_action]['attributes'] ? $actions[$selected_action]['attributes'] : array())
+                    <? $lockrules = array(
+                        '2' => "sem_tree",
+                        '3' => "room_time",
+                        '11' => "seminar_copy",
+                        '14' => "admission_type",
+                        '16' => "seminar_archive",
+                        '17' => "admission_type",
+                        '18' => 'room_time'
                     ) ?>
+                    <? if ($GLOBALS['perm']->have_studip_perm("admin", $semid) || !isset($lockrules[$selected_action]) || !LockRules::Check($semid, $lockrules[$selected_action])) : ?>
+                        <?=
+                        \Studip\LinkButton::create(
+                            $actions[$selected_action]['title'],
+                            URLHelper::getURL(sprintf($actions[$selected_action]['url'], $semid),
+                                ($actions[$selected_action]['params'] ? $actions[$selected_action]['params'] : array())),
+                            ($actions[$selected_action]['attributes'] ? $actions[$selected_action]['attributes'] : array())
+                        ) ?>
+                    <? endif ?>
                 <? endif ?>
             </td>
         </tr>
