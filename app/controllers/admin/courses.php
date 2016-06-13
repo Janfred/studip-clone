@@ -162,7 +162,7 @@ class Admin_CoursesController extends AuthenticatedController
         $this->setCourseTypeWidget($config_my_course_type_filter);
         $this->setActionsWidget($this->selected_action);
 
-        if ($this->sem_create_perm) {
+        if ($GLOBALS['perm']->have_perm($this->sem_create_perm)) {
             $actions = new ActionsWidget();
             $actions->addLink(_('Neue Veranstaltung anlegen'),
                               URLHelper::getLink('dispatch.php/course/wizard'),
