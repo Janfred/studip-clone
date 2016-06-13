@@ -171,11 +171,17 @@
         <tr id="course-<?= $semid ?>">
             <td>
             <? if (Config::get()->ADMIN_COURSES_SHOW_COMPLETE): ?>
-                <a href="<?= $controller->url_for('admin/courses/toggle_complete/' . $semid) ?>"
-                   class="course-completion <? if ($values['is_complete']) echo 'course-complete'; ?>"
-                   title="<?= _('Bearbeitungsstatus ändern') ?>">
-                       <?= _('Bearbeitungsstatus ändern') ?>
-                </a>
+                <? if ($GLOBALS['perm']->have_studip_perm("tutor", $semid)) : ?>
+                    <a href="<?= $controller->url_for('admin/courses/toggle_complete/' . $semid) ?>"
+                       class="course-completion <? if ($values['is_complete']) echo 'course-complete'; ?>"
+                       title="<?= _('Bearbeitungsstatus ändern') ?>">
+                           <?= _('Bearbeitungsstatus ändern') ?>
+                    </a>
+                <? else : ?>
+                    <?= Icon::create("radiobutton-checked", $values['is_complete'] ? "status-green" : "status-red")->asImg("16px", array(
+                        'title' => _("Bearbeitungsstatus kann nicht von Ihnen geändert werden.")
+                    )) ?>
+                <? endif ?>
             <? else: ?>
                 <?=
                 CourseAvatar::getAvatar($semid)->is_customized()
