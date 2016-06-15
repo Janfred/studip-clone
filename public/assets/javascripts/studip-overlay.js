@@ -22,6 +22,9 @@
             }
             if (containment !== 'body') {
                 element.addClass('modal-overlay-local');
+            } else {
+                // Blur background
+                $('#layout_wrapper').addClass('has-overlay');
             }
             element.appendTo(containment);
         }
@@ -30,6 +33,8 @@
         if (element !== null) {
             element.remove();
             element = null;
+
+            $('#layout_wrapper').removeClass('has-overlay');
         }
     };
 
