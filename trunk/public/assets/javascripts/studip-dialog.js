@@ -547,10 +547,17 @@
             STUDIP.Dialog.removeInstance(options.id);
 
             // Remove background blur
-            $('#layout_wrapper').css({
-                WebkitFilter: 'blur(' + STUDIP.Dialog.stack.length + 'px)',
-                filter: 'blur(' + STUDIP.Dialog.stack.length + 'px)'
-            });
+            if (STUDIP.Dialog.stack.length > 0) {
+                $('#layout_wrapper').css({
+                    WebkitFilter: 'blur(' + STUDIP.Dialog.stack.length + 'px)',
+                    filter: 'blur(' + STUDIP.Dialog.stack.length + 'px)'
+                });
+            } else {
+                $('#layout_wrapper').css({
+                    WebkitFilter: '',
+                    filter: ''
+                });
+            }
         }
 
         if (options['reload-on-close']) {

@@ -6628,6 +6628,10 @@ div.available-widgets .studip-widget {
 .modal-overlay-ajax.modal-overlay-dark {
   background-image: none, url("../images/ajax-indicator-black.svg");
 }
+#layout_wrapper.has-overlay {
+  -webkit-filter: blur(1px);
+  filter: blur(1px);
+}
 .ui-dialog.studip-confirmation {
   min-width: 30em;
 }
