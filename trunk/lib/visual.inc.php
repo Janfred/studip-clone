@@ -879,7 +879,7 @@ function createQuestion2($question, $approveParams, $disapproveParams = array(),
  *                      included in the output (optional, defaults to false)
  * @return String The exception display either as plain text or html
  */
-function display_exception(Throwable $exception, $as_html = false, $deep = false) {
+function display_exception($exception, $as_html = false, $deep = false) {
     $result  = '';
     $result .= sprintf("%s: %s\n", _('Typ'), get_class($exception));
     $result .= sprintf("%s: %s\n", _('Nachricht'), $exception->getMessage());
