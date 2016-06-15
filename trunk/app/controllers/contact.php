@@ -33,6 +33,7 @@ class ContactController extends AuthenticatedController
             }
         }
 
+        PageLayout::setTitle(_('Kontakte'));
     }
 
     /**
