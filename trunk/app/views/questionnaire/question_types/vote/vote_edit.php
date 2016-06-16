@@ -1,6 +1,6 @@
 <label>
     <?= _("Frage") ?>
-    <textarea name="questions[<?= $vote->getId() ?>][questiondata][question]" class="size-l"><?=
+    <textarea name="questions[<?= $vote->getId() ?>][questiondata][question]" class="size-l" required><?=
         isset($vote['questiondata']['question']) ? htmlReady($vote['questiondata']['question']) : ""
         ?></textarea>
 </label>
