@@ -288,6 +288,15 @@ jQuery(function () {
 
     /*********** dragging the messages to the tags ***********/
 
+    jQuery("#messages > tbody").on("mouseover touchstart", function () {
+        if (Modernizr.mq("screen and (max-width:800px)")
+                || jQuery("#messages-tags ul > li").length === 0) {
+            jQuery("#messages > tbody").addClass("dragdisabled");
+        } else {
+            jQuery("#messages > tbody").removeClass("dragdisabled");
+        }
+    });
+
     jQuery("#messages > tbody > tr").draggable({
         //cursor: "move",
         distance: 10,
@@ -300,13 +309,9 @@ jQuery(function () {
         revertDuration: "200",
         appendTo: 'body',
         zIndex: 1000,
+        cancel: "#messages > tbody.dragdisabled > tr",
         start: function () {
-            if (Modernizr.mq("screen and (max-width:800px)")
-                    || jQuery("#messages-tags ul > li").length === 0) {
-                return false; //prevent dragging in mobile version or when there are no tags yet.
-            } else {
-                jQuery('#messages-tags').addClass('dragging');
-            }
+            jQuery('#messages-tags').addClass('dragging');
         },
         stop: function () {
             jQuery('#messages-tags').removeClass('dragging');
