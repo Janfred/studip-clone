@@ -301,7 +301,12 @@ jQuery(function () {
         appendTo: 'body',
         zIndex: 1000,
         start: function () {
-            jQuery('#messages-tags').addClass('dragging');
+            if (Modernizr.mq("screen and (max-width:800px)")
+                    || jQuery("#messages-tags ul > li").length === 0) {
+                return false; //prevent dragging in mobile version or when there are no tags yet.
+            } else {
+                jQuery('#messages-tags').addClass('dragging');
+            }
         },
         stop: function () {
             jQuery('#messages-tags').removeClass('dragging');
