@@ -10,7 +10,7 @@
         <legend><?= _("Fragebogen") ?></legend>
         <label>
             <?= _("Titel des Fragebogens") ?>
-            <input type="text" name="questionnaire[title]" value="<?= htmlReady($questionnaire['title']) ?>" class="size-l">
+            <input type="text" name="questionnaire[title]" value="<?= htmlReady($questionnaire['title']) ?>" class="size-l" required>
         </label>
     </fieldset>
 
