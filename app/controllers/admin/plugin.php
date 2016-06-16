@@ -38,14 +38,14 @@ class Admin_PluginController extends AuthenticatedController
 
         $this->plugin_admin = new PluginAdministration();
 
+        if (Request::int('reset_filter')) {
+            $GLOBALS['user']->cfg->delete('PLUGINADMIN_DISPLAY_SETTINGS');
+        }
         // Extract display settings
         $settings = $current = $GLOBALS['user']->cfg->PLUGINADMIN_DISPLAY_SETTINGS;
-        if (Request::int('reset_filter')) {
-            $settings = Config::get()->PLUGINADMIN_DISPLAY_SETTINGS;
-        } else {
-            foreach ((array) $settings as $key => $value) {
-                $settings[$key] = Request::option($key, $settings[$key]) ?: null;
-            }
+
+        foreach ((array)$settings as $key => $value) {
+            $settings[$key] = Request::option($key, $settings[$key]) ?: null;
         }
 
         if ($settings !== $current) {
