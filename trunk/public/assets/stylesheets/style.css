@@ -7435,7 +7435,6 @@ label[for="responsive-toggle"]::before {
     top: 35px;
     right: -276px;
     bottom: 0;
-    height: 100%;
     width: 270px;
     overflow: hidden;
     overflow-y: auto;
