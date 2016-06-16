@@ -43,7 +43,7 @@ class Admin_PluginController extends AuthenticatedController
         if (Request::int('reset_filter')) {
             $settings = Config::get()->PLUGINADMIN_DISPLAY_SETTINGS;
         } else {
-            foreach ($settings as $key => $value) {
+            foreach ((array) $settings as $key => $value) {
                 $settings[$key] = Request::option($key, $settings[$key]) ?: null;
             }
         }
