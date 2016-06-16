@@ -211,7 +211,7 @@ class UserConfig extends Config
         }
 
         // Check if entry is default and if so, delete it
-        if (Config::get()->getValue($field) === $value) {
+        if (Config::get()->getValue($field) == $value) {
             $entry->delete();
             return 1;
         }
