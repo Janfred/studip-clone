@@ -19,7 +19,7 @@
         </tr>
     </thead>
     <? foreach ($studycourses as $fach_id => $studycourse): ?>
-    <tbody class="<?= count($studycourse['degree'])?'':'empty' ?> collapsed">
+    <tbody class="<?= count($studycourse['degree']) ? 'collapsed' : 'empty' ?>">
     <tr class="table_header header-row" valign="bottom">
         <th class="toggle-indicator"><? if (count($studycourse['degree']) < 1): ?><?=$fach_id+1 ?>. <?= htmlReady($studycourse['name']) ?> <? else: ?> <a class="toggler" href="#"><?=$fach_id+1 ?>. <?= htmlReady($studycourse['name']) ?></a><? endif; ?></th>
         <th><?= $studycourse['count_user'] ?> </th>
