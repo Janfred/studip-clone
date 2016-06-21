@@ -7,12 +7,12 @@
 class WebserviceClient
 {
 
-    function __construct()
+    public function __construct()
     {
         trigger_error("this class can't be instantiated");
     }
 
-    function instance($webservice_url, $classname)
+    public function instance($webservice_url, $classname)
     {
         static $instances = array();
 
@@ -24,7 +24,7 @@ class WebserviceClient
         return $instances[$classname.$webservice_url];
     }
 
-    function &call($method_name, &$args)
+    public function &call($method_name, &$args)
     {
         trigger_error("WebserviceCaller::WebserviceCaller::  call not defined");
     }

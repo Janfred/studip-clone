@@ -9,7 +9,7 @@ require_once("vendor/phpxmlrpc/xmlrpc.inc");
 
 class XML_RPC_WebserviceClient extends WebserviceClient
 {
-    function __construct($webservice_url)
+    public function __construct($webservice_url)
     {
         $this->client = new xmlrpc_client($webservice_url);
         #$this->client->verifyhost = true;
@@ -20,7 +20,7 @@ class XML_RPC_WebserviceClient extends WebserviceClient
 
     }
 
-    function call($method_name, &$args)
+    public function &call($method_name, &$args)
     {
         $xmlrpc_args = array();
         foreach ($args as $arg)
