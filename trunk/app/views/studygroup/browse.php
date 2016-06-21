@@ -66,7 +66,7 @@
             </tr>
         <? endforeach ; ?>
         </tbody>
-    <? if ($anzahl > 20) : ?>
+    <? if ($anzahl > Config::get()->ENTRIES_PER_PAGE) : ?>
         <tfoot>
             <tr>
                 <td colspan="7" class="actions">
