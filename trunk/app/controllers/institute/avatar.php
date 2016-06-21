@@ -27,8 +27,7 @@ class Institute_AvatarController extends AuthenticatedController
         $this->institute_id = current($args);
         if ($this->institute_id === '' || !in_array(get_object_type($this->institute_id), words('inst fak'))
             || !$GLOBALS['perm']->have_studip_perm("admin", $this->institute_id)) {
-            $this->set_status(403);
-            return FALSE;
+            throw new AccessDeniedException();
         }
 
         $this->body_id = 'custom_avatar';

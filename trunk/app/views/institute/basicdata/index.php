@@ -152,9 +152,11 @@
 $sidebar = Sidebar::get();
 $sidebar->setImage('sidebar/institute-sidebar.png');
 
-$widget = new ActionsWidget();
-$widget->addLink(_('Infobild ändern'), URLHelper::getLink('dispatch.php/institute/avatar/update/' . $institute->id), Icon::create('edit', 'clickable'));
-if (InstituteAvatar::getAvatar($institute->id)->is_customized()) {
-    $widget->addLink(_('Infobild löschen'), URLHelper::getLink('dispatch.php/institute/avatar/delete/' . $institute->id), Icon::create('trash', 'clickable'));
+if (!$institute->isNew()) {
+    $widget = new ActionsWidget();
+    $widget->addLink(_('Infobild ändern'), URLHelper::getLink('dispatch.php/institute/avatar/update/' . $institute->id), Icon::create('edit', 'clickable'));
+    if (InstituteAvatar::getAvatar($institute->id)->is_customized()) {
+        $widget->addLink(_('Infobild löschen'), URLHelper::getLink('dispatch.php/institute/avatar/delete/' . $institute->id), Icon::create('trash', 'clickable'));
+    }
+    $sidebar->addWidget($widget);
 }
-$sidebar->addWidget($widget);
