@@ -9,13 +9,13 @@ require_once 'vendor/nusoap/nusoap.php';
 
 class Soap_WebserviceClient extends WebserviceClient
 {
-    function __construct($webservice_url)
+    public function __construct($webservice_url)
     {
         $this->client = new soap_client($webservice_url);
         $this->client->response_timeout = 7600;
     }
 
-    function call($method_name, &$args)
+    public function &call($method_name, &$args)
     {
         return $this->client->call($method_name, $args);
     }
