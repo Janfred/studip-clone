@@ -374,7 +374,9 @@ class StudipLitCatElement {
                 $plugin_name = $this->getValue("lit_plugin");
                 $link = StudipLitSearch::GetExternalLink($plugin_name);
                 if ($link){
-                    $ret = preg_replace_callback('/({[a-z0-9_]+})/', function ($m) {return $this->getValue(substr($m[1],1,strlen($m[1])-2));}, $link);
+                    $ret = preg_replace_callback('/({[a-z0-9_]+})/', function ($m) {
+                        return $this->getValue(substr($m[1], 1 ,strlen($m[1]) - 2));
+                    }, $link);
                     if ($ret == preg_replace('/({[a-z0-9_]+})/', "", $link)) {
                         $ret = "";
                     }
