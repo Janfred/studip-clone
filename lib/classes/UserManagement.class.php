@@ -793,29 +793,33 @@ class UserManagement
             }
         }
 
-        $status = studygroup_sem_types();
-
         // active dozent?
-        if (empty($status)) {
-            $active_count = 0;
-        } else {
-            $query = "SELECT SUM(c) AS count FROM (
-                          SELECT COUNT(*) AS c
-                          FROM seminar_user AS su1
-                          INNER JOIN seminar_user AS su2 ON (su1.seminar_id = su2.seminar_id AND su2.status = 'dozent')
-                          INNER JOIN seminare ON (su1.seminar_id = seminare.seminar_id AND seminare.status NOT IN (?))
-                          WHERE su1.user_id = ? AND su1.status = 'dozent'
-                          GROUP BY su1.seminar_id
-                          HAVING c = 1
-                          ORDER BY NULL
-                      ) AS sub";
-            $statement = DBManager::get()->prepare($query);
-            $statement->execute(array(
-                studygroup_sem_types(),
-                $this->user_data['auth_user_md5.user_id'],
-            ));
-            $active_count = $statement->fetchColumn();
-        }
+        $query = "SELECT COUNT(*)
+                  FROM (
+                      SELECT 1
+                      FROM `seminar_user` AS `su1`
+                      -- JOIN seminar_user to check for other teachers
+                      INNER JOIN `seminar_user` AS `su2`
+                        ON (`su1`.`seminar_id` = `su2`.`seminar_id` AND `su2`.`status` = 'dozent')
+                      -- JOIN seminare to check the status for studygroup mode
+                      INNER JOIN `seminare`
+                        ON (`su1`.`seminar_id` = `seminare`.`seminar_id`)
+                      WHERE `su1`.`user_id` = :user_id
+                        AND `su1`.`status` = 'dozent'
+                        AND `seminare`.`status` NOT IN (
+                            -- Select all status ids for studygroups
+                            SELECT `id`
+                            FROM `sem_classes`
+                            WHERE `studygroup_mode` = 1
+                        )
+                      GROUP BY `su1`.`seminar_id`
+                      HAVING COUNT(*) = 1
+                      ORDER BY NULL
+                  ) AS `sub`";
+        $statement = DBManager::get()->prepare($query);
+        $statement->bindValue(':user_id', $this->user_data['auth_user_md5.user_id']);
+        $statement->execute();
+        $active_count = $statement->fetchColumn() ?: 0;
 
         if ($active_count) {
             $this->msg .= sprintf("error§" . _("<em>%s</em> ist Lehrkraft in %s aktiven Veranstaltungen und kann daher nicht gelöscht werden.") . "§", $this->user_data['auth_user_md5.username'], $active_count);
@@ -835,7 +839,7 @@ class UserManagement
                 $statement = DBManager::get()->prepare($query);
                 $statement->execute(array(
                     $this->user_data['auth_user_md5.user_id'],
-                    studygroup_sem_types(),
+                    $status,
                 ));
                 $group_ids = $statement->fetchAll(PDO::FETCH_COLUMN);
             }
