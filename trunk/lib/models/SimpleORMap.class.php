@@ -1361,7 +1361,7 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
              } elseif (array_key_exists($field, $this->relations)) {
                  $options = $this->getRelationOptions($field);
                  if ($options['type'] === 'has_one' || $options['type'] === 'belongs_to') {
-                     if (strtolower(get_class($value) === $options['class_name'])) {
+                     if (is_a($value, $options['class_name'])) {
                          $this->relations[$field] = $value;
                          if ($options['type'] == 'has_one') {
                              $foreign_key_value = call_user_func($options['assoc_func_params_func'], $this);
@@ -1382,7 +1382,7 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
                          $new_ids = array();
                          $old_ids = $this->{$field}->pluck('id');
                          foreach ($value as $current) {
-                             if (strtolower(get_class($current) !== $options['class_name'])) {
+                             if (!is_a($current, $options['class_name'])) {
                                  throw new InvalidArgumentException(sprintf('relation %s expects object of type: %s', $field, $options['class_name']));
                              }
                              if ($options['type'] == 'has_many') {
