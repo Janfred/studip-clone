@@ -71,7 +71,7 @@
         // parse options
         foreach($params AS $opt => $names){
             if(is_string($names)){
-                $names = explode(' +', $names);
+                $names = preg_split('/ +/', $names);
             }
             if(!is_array($names) || count($names) < 2){
                 trigger_error('Invalid type/name(s) to param "'.$opt.'"', E_USER_ERROR);
