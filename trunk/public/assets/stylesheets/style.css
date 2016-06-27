@@ -1990,7 +1990,7 @@ li#notification_container:hover .list {
   height: 10px;
 }
 #notification_container .list:before {
-  left: 288px;
+  left: 379px;
 }
 #notification_container .list.below {
   left: -370px;
@@ -8389,8 +8389,7 @@ a.new-member::after {
   vertical-align: text-top;
   width: 8px;
 }
-#barTopMenu li a img,
-#barTopMenu li a canvas,
+#barTopMenu li a,
 div#layout-sidebar div.sidebar-image img {
   filter: hue-rotate(0deg) saturate(100%) brightness(100%);
 }
