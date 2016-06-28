@@ -655,11 +655,23 @@ table.tree .header > td a.link {
   padding-left: 5px;
 }
 table.tree .header > td a.link.open {
-  background: url("../images/icons/16/blue/arr_1down.png") left center no-repeat;
+  background-image: url("../images/icons/blue/arr_1down.svg");
+  -webkit-background-size: 16px 16px;
+  -moz-background-size: 16px 16px;
+  -o-background-size: 16px 16px;
+  background-size: 16px 16px;
+  background-position: left center;
+  background-repeat: no-repeat;
   padding-left: 20px;
 }
 table.tree .header > td a.link.closed {
-  background: url("../images/icons/16/blue/arr_1right.png") left center no-repeat;
+  background-image: url("../images/icons/blue/arr_1right.svg");
+  -webkit-background-size: 16px 16px;
+  -moz-background-size: 16px 16px;
+  -o-background-size: 16px 16px;
+  background-size: 16px 16px;
+  background-position: left center;
+  background-repeat: no-repeat;
   padding-left: 20px;
 }
 table.tree td.blank {
@@ -5078,13 +5090,21 @@ table.contact-header td.empty a {
   line-height: 1.5em;
 }
 .documents .bread-crumbs li a {
-  background-image: url("../images/icons/24/blue/folder-parent.png");
+  background-image: url("../images/icons/blue/folder-parent.svg");
+  -webkit-background-size: 24px 24px;
+  -moz-background-size: 24px 24px;
+  -o-background-size: 24px 24px;
+  background-size: 24px 24px;
   background-position: left center;
   background-repeat: no-repeat;
   padding-left: 30px;
 }
 .documents .bread-crumbs li:first-child a {
-  background-image: url("../images/icons/24/blue/folder-empty.png");
+  background-image: url("../images/icons/blue/folder-empty.svg");
+  -webkit-background-size: 24px 24px;
+  -moz-background-size: 24px 24px;
+  -o-background-size: 24px 24px;
+  background-size: 24px 24px;
 }
 .document-dialog {
   *zoom: 1;
@@ -5846,6 +5866,17 @@ a.bookable_rooms_action {
 .contentbox.timesrooms form.default tfoot select {
   max-width: 30em;
 }
+.flex-row {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-box-flex;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: flex;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  width: 100%;
+}
 .opengraph-area {
   margin: 10px auto 5px;
   max-width: 700px;
@@ -6597,6 +6628,10 @@ div.available-widgets .studip-widget {
 .modal-overlay-ajax.modal-overlay-dark {
   background-image: none, url("../images/ajax-indicator-black.svg");
 }
+#layout_wrapper.has-overlay {
+  -webkit-filter: blur(1px);
+  filter: blur(1px);
+}
 .ui-dialog.studip-confirmation {
   min-width: 30em;
 }
@@ -6781,6 +6816,69 @@ div#studyareas {
   float: left;
   padding-left: 10px;
   width: calc(50% - 20px);
+}
+/*
+change order for AdvancedBasicDataWizardStep
+so we do not have to copy the basicdata/index.php
+*/
+form.course-wizard-step-0 {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-box-flex;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  -moz-box-direction: normal;
+  -moz-box-orient: vertical;
+  -webkit-box-orient: vertical;
+  flex-direction: column;
+}
+form.course-wizard-step-0 > * {
+  order: 1;
+}
+form.course-wizard-step-0 section:nth-of-type(2) {
+  order: 2;
+}
+form.course-wizard-step-0 section:nth-of-type(3) {
+  order: 3;
+}
+form.course-wizard-step-0 section:nth-of-type(4) {
+  order: 5;
+}
+form.course-wizard-step-0 section:nth-of-type(5) {
+  order: 9;
+}
+form.course-wizard-step-0 section:nth-of-type(6) {
+  order: 10;
+}
+form.course-wizard-step-0 section:nth-of-type(7) {
+  order: 11;
+}
+form.course-wizard-step-0 section:nth-of-type(8) {
+  order: 12;
+}
+form.course-wizard-step-0 section:nth-of-type(9) {
+  order: 13;
+}
+form.course-wizard-step-0 section:nth-of-type(10) {
+  order: 11;
+}
+form.course-wizard-step-0 section:nth-of-type(11) {
+  order: 4;
+}
+form.course-wizard-step-0 section:nth-of-type(12) {
+  order: 6;
+}
+form.course-wizard-step-0 section:nth-of-type(13) {
+  order: 7;
+}
+form.course-wizard-step-0 section:nth-of-type(14) {
+  order: 8;
+}
+form.course-wizard-step-0 footer {
+  order: 100;
 }
 .smiley-tabs {
   display: -ms-flexbox;
@@ -7351,7 +7449,6 @@ label[for="responsive-toggle"]::before {
     top: 35px;
     right: -276px;
     bottom: 0;
-    height: 100%;
     width: 270px;
     overflow: hidden;
     overflow-y: auto;
@@ -8306,7 +8403,8 @@ a.new-member::after {
   vertical-align: text-top;
   width: 8px;
 }
-#barTopMenu li a,
+#barTopMenu li a img,
+#barTopMenu li a canvas,
 div#layout-sidebar div.sidebar-image img {
   filter: hue-rotate(0deg) saturate(100%) brightness(100%);
 }
