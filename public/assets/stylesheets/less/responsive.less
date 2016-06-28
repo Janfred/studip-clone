@@ -201,6 +201,22 @@ label[for="responsive-toggle"] {
             }
         }
     }
+    #notification_list {
+        width: 100% !important;
+        position: absolute !important;
+        left: 0 !important;
+        box-sizing: border-box !important;
+        max-width: inherit !important;
+        &:before {
+            display: none !important;
+            opacity: 0;
+        }
+    }
+
+    #notification_container {
+        position: inherit !important;
+    }
+
     #responsive-container {
         display: block;
     }
