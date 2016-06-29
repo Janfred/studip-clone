@@ -42,34 +42,65 @@ class AdvancedBasicDataWizardStep extends BasicDataWizardStep
         return $this->setupTemplateAttributes($template, $values, $stepnumber, $temp_id)->render();
     }
 
+    /**
+     * Validates if given values are sufficient for completing the current
+     * course wizard step and switch to another one. If not, all errors are
+     * collected and shown via PageLayout::postMessage.
+     *
+     * @param mixed $values Array of stored values
+     * @return bool Everything ok?
+     */
     public function validate($values)
     {
         $values = $this->adjustValues($values);
         return parent::validate($values);
     }
 
+    /**
+     * Stores the given values to the given course.
+     *
+     * @param Course $course the course to store values for
+     * @param Array $values values to set
+     * @return Course The course object with updated values.
+     */
     public function storeValues($course, $values)
     {
         $values = $this->adjustValues($values);
         $course = parent::storeValues($course, $values);
-        if ($course) {
-            $course->Untertitel = $values[__CLASS__]['subtitle'];
-            $course->art = $values[__CLASS__]['kind'];
-            $course->ects = $values[__CLASS__]['ects'];
-            $course->admission_turnout = $values[__CLASS__]['maxmembers'];
-            if (!$course->store()) {
-                PageLayout::postError(sprintf(_('Es ist ein Fehler beim Speichern der Erweiterten-Einstellungen für %s aufgetreten. Kontrollieren Sie bitte:')
-                        ,$course->name),
-                        array(_('Untertitel der Veranstalung'),
-                            _('Art der Veranstaltung'),
-                            _('ECTS-Punkte der Veranstaltung'),
-                            _('Max. Teilnehmerzahl der Veranstaltung')));
-            }
+
+        // There probably was an error upon storing
+        if (!$course) {
+            return false;
+        }
+
+        // Studygroup? -> nothing to do here
+        if ($values[__CLASS__]['studygroup']) {
             return $course;
         }
-        return false;
+
+        // Add advanced data
+        $course->Untertitel = $values[__CLASS__]['subtitle'];
+        $course->art = $values[__CLASS__]['kind'];
+        $course->ects = $values[__CLASS__]['ects'];
+        $course->admission_turnout = $values[__CLASS__]['maxmembers'];
+        if (!$course->store()) {
+            PageLayout::postError(sprintf(_('Es ist ein Fehler beim Speichern der Erweiterten-Einstellungen für %s aufgetreten. Kontrollieren Sie bitte:')
+                    ,$course->name),
+                    array(_('Untertitel der Veranstalung'),
+                        _('Art der Veranstaltung'),
+                        _('ECTS-Punkte der Veranstaltung'),
+                        _('Max. Teilnehmerzahl der Veranstaltung')));
+        }
+        return $course;
     }
 
+    /**
+     * This method will adjust the given values from parent class
+     * or use previously set values from this class.
+     *
+     * @param array $values Array of values
+     * @return array of adjusted values
+     */
     private function adjustValues($values)
     {
         $parent_class = get_parent_class($this);
