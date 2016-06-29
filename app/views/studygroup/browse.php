@@ -28,12 +28,13 @@
         </thead>
         <tbody>
         <? foreach ($groups as $group): ?>
+            <? $is_member = $user->course_memberships->findBy('seminar_id', $group['Seminar_id'])->count(); ?>
             <tr>
                 <td>
-                   <?=StudygroupAvatar::getAvatar($group['Seminar_id'])->getImageTag(Avatar::SMALL)?>
+                   <?=StudygroupAvatar::getAvatar($group['Seminar_id'])->getImageTag(Avatar::SMALL, array('title' => htmlready($group['Name'])))?>
                 </td>
                 <td>
-                    <? if (StudygroupModel::isMember($this->userid,$group['Seminar_id'] )): ?>
+                    <? if ($is_member): ?>
                         <a href="<?=URLHelper::getlink("seminar_main.php?auswahl=".$group['Seminar_id'])?>">
                     <? else: ?>
                        <a href="<?=URLHelper::getlink("dispatch.php/course/studygroup/details/".$group['Seminar_id'])?>">
@@ -48,13 +49,13 @@
                 <td style="white-space:nowrap;">
                     <? $founders = StudygroupModel::getFounder($group['Seminar_id']);
                     foreach ($founders as $founder) : ?>
-                    <?=Avatar::getAvatar($founder['user_id'])->getImageTag(Avatar::SMALL)?>
+                    <?=Avatar::getAvatar($founder['user_id'])->getImageTag(Avatar::SMALL, array('title' => $founder['fullname']))?>
                     <a href="<?=URLHelper::getlink('dispatch.php/profile?username='.$founder['uname'])?>"><?=htmlready($founder['fullname'])?></a>
                     <br>
                     <? endforeach; ?>
                 </td>
                 <td align="center">
-                    <? if (StudygroupModel::isMember($this->userid,$group['Seminar_id'] )) :?>
+                    <? if ($is_member) :?>
                         <?=Icon::create('person', 'inactive', ['title' => _('Sie sind Mitglied in dieser Gruppe')])->asImg()?>
                     <? endif;?>
                 </td>

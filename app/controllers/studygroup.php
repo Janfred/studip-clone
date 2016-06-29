@@ -20,7 +20,7 @@ class StudygroupController extends AuthenticatedController
     public function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
-        
+
         PageLayout::setTitle(_('Studiengruppen suchen'));
         Navigation::activateItem('/community/studygroups/browse');
         PageLayout::setHelpKeyword('Basis.SuchenStudiengruppen');
@@ -41,7 +41,7 @@ class StudygroupController extends AuthenticatedController
     {
         $this->sort = preg_replace('/\\W/', '', $sort);
         $this->page = intval($page);
-        $this->userid = $GLOBALS['user']->id;
+        $this->user = $GLOBALS['user'];
         $this->search = Request::get("searchtext");
         $reset = false;
         if (Request::int('reset-search')) {
