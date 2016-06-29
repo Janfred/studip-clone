@@ -24,7 +24,7 @@ class StudygroupModel
      *
      * @return array modules a set of all plugins
      */
-    function getInstalledPlugins()
+    public static function getInstalledPlugins()
     {
         $modules = array();
 
@@ -43,7 +43,7 @@ class StudygroupModel
      *
      * @return array modules
      */
-    function getInstalledModules()
+    public static function getInstalledModules()
     {
         $modules = array();
 
@@ -64,7 +64,7 @@ class StudygroupModel
      *
      * @return array enabled plugins
      */
-    function getEnabledPlugins($id)
+    public static function getEnabledPlugins($id)
     {
         $enabled = array();
 
@@ -82,7 +82,7 @@ class StudygroupModel
      *
      * @return array institutes
      */
-    function getInstitutes()
+    public static function getInstitutes()
     {
         $institutes = array();
 
@@ -120,7 +120,7 @@ class StudygroupModel
      *
      * @return void
      */
-    function accept_user($username, $sem_id)
+    public static function accept_user($username, $sem_id)
     {
         $query     = "SELECT user_id
                   FROM admission_seminar_user AS asu
@@ -153,7 +153,7 @@ class StudygroupModel
      *
      * @return void
      */
-    function deny_user($username, $sem_id)
+    public static function deny_user($username, $sem_id)
     {
         $query     = "DELETE FROM admission_seminar_user
                   WHERE user_id = ? AND seminar_id = ?";
@@ -173,7 +173,7 @@ class StudygroupModel
      *
      * @return void
      */
-    function promote_user($username, $sem_id, $perm)
+    public static function promote_user($username, $sem_id, $perm)
     {
         $query     = "UPDATE seminar_user
                   SET status = ?
@@ -194,7 +194,7 @@ class StudygroupModel
      *
      * @return void
      */
-    function remove_user($username, $sem_id)
+    public static function remove_user($username, $sem_id)
     {
         $query     = "DELETE FROM seminar_user
                   WHERE Seminar_id = ? AND user_id = ?";
@@ -212,7 +212,7 @@ class StudygroupModel
      *
      * @return string count
      */
-    function countGroups($search = null, $closedGroups = null)
+    public static function countGroups($search = null, $closedGroups = null)
     {
         $status = studygroup_sem_types();
 
@@ -249,7 +249,7 @@ class StudygroupModel
      *
      * @return array studygroups
      */
-    function getAllGroups($sort = '', $lower_bound = 1, $elements_per_page = NULL, $search = null, $closedGroups = null)
+    public static function getAllGroups($sort = '', $lower_bound = 1, $elements_per_page = NULL, $search = null, $closedGroups = null)
     {
         if (is_null($elements_per_page)) {
             $elements_per_page = get_config('ENTRIES_PER_PAGE');
@@ -354,7 +354,7 @@ class StudygroupModel
      *
      * @return int count
      */
-    function countMembers($semid)
+    public static function countMembers($semid)
     {
         $sql = "SELECT COUNT(user_id) FROM `seminar_user` WHERE Seminar_id = ?";
 
@@ -373,20 +373,16 @@ class StudygroupModel
      * @return array founder
      *
      */
-    function getFounder($semid)
+    public static function getFounder($semid)
     {
-        $sql  = "SELECT user_id FROM `seminar_user` WHERE Seminar_id = ? AND status = 'dozent'";
-        $stmt = DBManager::get()->prepare($sql);
-        $stmt->execute(array($semid));
-        while ($user = $stmt->fetch()) {
+        foreach (CourseMember::findByCourseAndStatus($semid, 'dozent') as $user) {
             $founder[] = array(
-                'user_id'  => $user['user_id'],
-                'fullname' => get_fullname($user['user_id']),
-                'uname'    => get_username($user['user_id'])
+                'user_id'  => $user->user_id,
+                'fullname' => $user->getUserFullname(),
+                'uname'    => $user->username
             );
         }
-
-        return $founder;
+        return (array)$founder;
     }
 
     /**
@@ -397,7 +393,7 @@ class StudygroupModel
      *
      * @return boolean membership
      */
-    function isMember($userid, $semid)
+    public static function isMember($userid, $semid)
     {
         $sql = "SELECT 1 FROM `seminar_user` WHERE Seminar_id = ? AND user_id = ?";
 
@@ -415,7 +411,7 @@ class StudygroupModel
      *
      * @return void
      */
-    function addFounder($username, $sem_id)
+    public static function addFounder($username, $sem_id)
     {
         $stmt = DBManager::get()->prepare("INSERT IGNORE INTO seminar_user "
                                           . "(Seminar_id, user_id, status) VALUES (?, ?, 'dozent')");
@@ -430,7 +426,7 @@ class StudygroupModel
      *
      * @return void
      */
-    function removeFounder($username, $sem_id)
+    public static function removeFounder($username, $sem_id)
     {
         $stmt = DBManager::get()->prepare("DELETE FROM seminar_user "
                                           . "WHERE Seminar_id = ? AND user_id = ?");
@@ -444,7 +440,7 @@ class StudygroupModel
      *
      * @return array founders
      */
-    function getFounders($sem_id)
+    public static function getFounders($sem_id)
     {
         $query = "SELECT username, perms, " . $GLOBALS['_fullname_sql']['full_rev'] . " as fullname FROM seminar_user "
                  . "LEFT JOIN auth_user_md5 USING (user_id) "
@@ -466,7 +462,7 @@ class StudygroupModel
      *
      * @return array members
      */
-    function getMembers($sem_id, $lower_bound = 1, $elements_per_page = NULL)
+    public static function getMembers($sem_id, $lower_bound = 1, $elements_per_page = NULL)
     {
         if (is_null($elements_per_page)) {
             $elements_per_page = get_config('ENTRIES_PER_PAGE');
@@ -485,7 +481,7 @@ class StudygroupModel
 
         return DBManager::get()->fetchGrouped($query, array($sem_id));
     }
-    
+
     /**
      * invites a member to a given studygroup.
      *
@@ -494,13 +490,13 @@ class StudygroupModel
      *
      * @return void
      */
-    function inviteMember($user_id, $sem_id)
+    public static function inviteMember($user_id, $sem_id)
     {
         $stmt = DBManager::get()->prepare("REPLACE INTO studygroup_invitations "
                                           . "(sem_id, user_id, mkdate) VALUES (?, ?, ?)");
         $stmt->execute(array($sem_id, $user_id, time()));
     }
-    
+
     /**
      * cancels invitation.
      *
@@ -509,7 +505,7 @@ class StudygroupModel
      *
      * @return void
      */
-    function cancelInvitation($username, $sem_id)
+    public static function cancelInvitation($username, $sem_id)
     {
         $query     = "DELETE FROM studygroup_invitations
                   WHERE sem_id = ? AND user_id = ?";
@@ -519,7 +515,7 @@ class StudygroupModel
             get_userid($username)
         ));
     }
-    
+
     /**
      * returns invited member of a given studygroup.
      *
@@ -527,7 +523,7 @@ class StudygroupModel
      *
      * @return array invited members
      */
-    function getInvitations($sem_id)
+    public static function getInvitations($sem_id)
     {
         $query = "SELECT username,user_id, " . $GLOBALS['_fullname_sql']['full_rev']
                  . " as fullname, studygroup_invitations.mkdate FROM studygroup_invitations "
@@ -541,7 +537,7 @@ class StudygroupModel
 
         return $stmt->fetchAll();
     }
-    
+
     /**
      * checks if a user is already invited.
      *
@@ -550,7 +546,7 @@ class StudygroupModel
      *
      * @return array invited members
      */
-    function isInvited($user_id, $sem_id)
+    public static function isInvited($user_id, $sem_id)
     {
         $query = "SELECT count(*) as count FROM studygroup_invitations "
                  . "WHERE user_id = ? AND sem_id = ?";
@@ -558,7 +554,7 @@ class StudygroupModel
         $stmt = DBManager::get()->prepare($query);
         $stmt->execute(array($user_id, $sem_id));
         $result = $stmt->fetch();
-        
+
         return ($result['count'] != 0) ? true : false;
     }
 
@@ -570,7 +566,7 @@ class StudygroupModel
      *
      * return int ordering
      */
-    function compare_status($a, $b)
+    public static function compare_status($a, $b)
     {
         if ($a['status'] == $b['status']) return strnatcmp($a['fullname'], $b['fullname']);
         elseif ($a['status'] == 'dozent') {
@@ -592,7 +588,7 @@ class StudygroupModel
      *
      * @return  array studygroup
      */
-    function isStudygroup($sem_id)
+    public static function isStudygroup($sem_id)
     {
         $sql  = "SELECT *
                 FROM seminare
@@ -616,7 +612,7 @@ class StudygroupModel
      *
      * @return int                 number of recipients
      */
-    function applicationNotice($sem_id, $user_id)
+    public static function applicationNotice($sem_id, $user_id)
     {
         $sem        = new Seminar($sem_id);
         $dozenten   = $sem->getMembers();
@@ -632,7 +628,7 @@ class StudygroupModel
             $subject = sprintf(_("[Studiengruppe: %s...]"), studip_substr($sem->getName(), 0, 30));
         else
             $subject = sprintf(_("[Studiengruppe: %s]"), $sem->getName());
-        
+
         if (StudygroupModel::isInvited($user_id, $sem_id)) {
             $subject .= " " . _("Einladung akzeptiert");
             $message = sprintf(_("%s hat die Einladung zur Studiengruppe %s akzeptiert. Klicken Sie auf den untenstehenden Link, um direkt zur Studiengruppe zu gelangen.\n\n [Direkt zur Studiengruppe]%s"),
