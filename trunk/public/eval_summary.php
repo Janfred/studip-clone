@@ -196,7 +196,7 @@ function freetype_answers($parent_id, $anz_nutzer)
     echo "        <tr><td colspan=\"2\" class=\"blank\"><font size=\"-1\"><b>"._("Antworten")."</b></font></td></tr>\n";
 
     $counter = 1;
-    while ($answer = $statement->fetchColumn()) {
+    while (false !== ($answer = $statement->fetchColumn())) {
         echo "      <tr>\n";
         echo "        <td width=\"1%\" valign=\"TOP\"><font size=\"-1\"><b>".$counter.".</b></font></td><td><font size=\"-1\">".formatReady($answer)."</font></td>\n";
         echo "      </tr>\n";
