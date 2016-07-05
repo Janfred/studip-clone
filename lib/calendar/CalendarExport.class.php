@@ -46,12 +46,6 @@ class CalendarExport
         }
         $this->count = sizeof($calendar->events);
 
-        if ($this->count == 0) {
-            $message =  _('Es wurden keine Termine exportiert.');
-        } else {
-            $message = sprintf(ngettext('Es wurde 1 Termin exportiert', 'Es wurden %s Termine exportiert', $export_driver->getCount()), $export_driver->getCount());
-        }
-        
         $this->_export($this->_writer->writeFooter());
     }
 
