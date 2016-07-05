@@ -84,7 +84,7 @@ class DatafieldCondition extends UserFilterField
         return $this->datafield_name;
     }
 
-    public function getUsers()
+    public function getUsers($restrictions = array())
     {
         $db = DBManager::get();
         $users = array();
@@ -105,7 +105,7 @@ class DatafieldCondition extends UserFilterField
      * @param  Array additional conditions that are required for check.
      * @return The value(s) for this user.
      */
-    public function getUserValues($userId)
+    public function getUserValues($userId, $additional = null)
     {
         $result = DBManager::get()->fetchColumn(
             "SELECT content FROM datafields_entries
