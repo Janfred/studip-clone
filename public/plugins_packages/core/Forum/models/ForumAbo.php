@@ -15,7 +15,8 @@
 
 require_once('lib/messaging.inc.php');
 
-class ForumAbo {
+class ForumAbo
+{
     /**
      * add the passed user as a watcher for the passed topic (including all 
      * current and future childs)
@@ -23,7 +24,7 @@ class ForumAbo {
      * @param string $topic_id
      * @param string $user_id
      */
-    static function add($topic_id, $user_id = null)
+    public static function add($topic_id, $user_id = null)
     {
         if (!$user_id) $user_id = $GLOBALS['user']->id;
 
@@ -39,7 +40,7 @@ class ForumAbo {
      * @param string $topic_id
      * @param string $user_id
      */
-    static function delete($topic_id, $user_id = null)
+    public static function delete($topic_id, $user_id = null)
     {
         if (!$user_id) $user_id = $GLOBALS['user']->id;
 
@@ -57,7 +58,8 @@ class ForumAbo {
      *
      * @return boolean returns true if user is watching, false otherwise
      */
-    static function has($topic_id, $user_id = null) {
+    public static function has($topic_id, $user_id = null)
+    {
         if (!$user_id) $user_id = $GLOBALS['user']->id;
 
         $stmt = DBManager::get()->prepare("SELECT COUNT(*) FROM forum_abo_users
@@ -73,7 +75,7 @@ class ForumAbo {
      *
      * @param string $topic_id
      */
-    static function notify($topic_id)
+    public static function notify($topic_id)
     {
         // send message to all abo-users
         $db = DBManager::get();
@@ -158,5 +160,28 @@ class ForumAbo {
         }
 
         $messaging->bulkSend();
+    }
+
+    /**
+     * Removes all abos for a given course and user
+     *
+     * @param String $course_id Id of the course
+     * @param String $user_id   Id of the user
+     * @return int number of removed abos
+     */
+    public static function removeForCourseAndUser($course_id, $user_id)
+    {
+        $query = "DELETE FROM `forum_abo_users`
+                  WHERE `user_id` = :user_id
+                  AND `topic_id` IN (
+                      SELECT `topic_id`
+                      FROM `forum_entries`
+                      WHERE `seminar_id` = :course_id
+                  )";
+        $statement = DBManager::get()->prepare($query);
+        $statement->bindValue(':course_id', $course_id);
+        $statement->bindValue(':user_id', $user_id);
+        $statement->execute();
+        return $statement->rowCount();
     }
 }
