@@ -28,15 +28,16 @@ class BasicDataWizardStep implements CourseWizardStep
     public function getStepTemplate($values, $stepnumber, $temp_id)
     {
         // Load template from step template directory.
-        $factory = new Flexi_TemplateFactory($GLOBALS['STUDIP_BASE_PATH'].'/app/views/course/wizard/steps');
+        $factory = new Flexi_TemplateFactory($GLOBALS['STUDIP_BASE_PATH'] . '/app/views/course/wizard/steps');
         if ($values[__CLASS__]['studygroup']) {
             $tpl = $factory->open('basicdata/index_studygroup');
             $values[__CLASS__]['lecturers'][$GLOBALS['user']->id] = 1;
         } else {
             $tpl = $factory->open('basicdata/index');
         }
-
-        return $this->setupTemplateAttributes($tpl, $values, $stepnumber, $temp_id)->render();
+        if ($this->setupTemplateAttributes($tpl, $values, $stepnumber, $temp_id)) {
+            return $tpl->render();
+        }
     }
 
     protected function setupTemplateAttributes($tpl, $values, $stepnumber, $temp_id)
@@ -227,10 +228,10 @@ class BasicDataWizardStep implements CourseWizardStep
         $tpl->set_attribute('ajax_url', $values['ajax_url'] ?: URLHelper::getLink('dispatch.php/course/wizard/ajax'));
         $tpl->set_attribute('default_deputies_enabled',
             ($deputies && Config::get()->DEPUTIES_DEFAULTENTRY_ENABLE) ? 1 : 0);
-        
+
         return $tpl;
     }
-    
+
     /**
      * The function only needs to handle person adding and removing
      * as other actions are handled by normal request processing.
