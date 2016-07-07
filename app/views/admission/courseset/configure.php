@@ -220,7 +220,13 @@ if ($flash['error']) {
         <div class="submit_wrapper" data-dialog-button>
             <?= CSRFProtection::tokenTag() ?>
             <?= Button::createAccept(_('Speichern'), 'submit', $instant_course_set_view ? array('data-dialog' => '') : array()) ?>
-            <?= LinkButton::createCancel(_('Abbrechen'), $controller->url_for('admission/courseset')) ?>
+            <?php if (Request::option('is_copy')) : ?>
+                <?= LinkButton::createCancel(_('Abbrechen'),
+                    URLHelper::getURL('dispatch.php/admission/courseset/delete/' . $courseset->getId(),
+                    array('really' => 1))) ?>
+            <?php else : ?>
+                <?= LinkButton::createCancel(_('Abbrechen'), $controller->url_for('admission/courseset')) ?>
+            <?php endif ?>
         </div>
 
 </form>

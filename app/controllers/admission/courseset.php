@@ -620,7 +620,8 @@ class Admission_CoursesetController extends AuthenticatedController {
                 PageLayout::postMessage(MessageBox::info(sprintf(_("Der Gültigkeitszeitraum der Regel %s endet in der Vergangenheit!"), $rule->getName())));
             }
         }
-        $this->redirect($this->url_for('/configure/' . $cloned_courseset->getId()));
+        $this->redirect(URLHelper::getURL('dispatch.php/admission/courseset/configure/' .
+            $cloned_courseset->getId(), array('is_copy' => 1)));
     }
 
     /**
