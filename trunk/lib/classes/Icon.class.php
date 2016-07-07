@@ -364,7 +364,7 @@ class Icon
     {
         $result = array();
         foreach ($options as $key => $value) {
-            $result[] = sprintf('%s="%s"', $key, htmlReady($value, '"'));
+            $result[] = sprintf('%s="%s"', $key, htmlReady($value));
         }
         return join(' ', $result);
     }
