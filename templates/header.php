@@ -21,15 +21,27 @@
                     $image = $nav->getImage();
                     $link_attributes = $nav->getLinkAttributes();
 
+                    // Add access key to link attributes
                     if ($accesskey_enabled) {
-                        $accesskey      = ++$accesskey % 10;
-                        $accesskey_attr = 'accesskey="' . $accesskey . '"';
-                        $link_attributes['title'] .= "  [ALT] + $accesskey";
+                        $accesskey = ++$accesskey % 10;
+                        $link_attributes['accesskey'] = $accesskey;
+                        $link_attributes['title']    .= "  [ALT] + $accesskey";
+                    }
+
+                    // Add badge number to link attributes
+                    if ($nav->getBadgeNumber()) {
+                        $link_attributes['data-badge'] = (int)$nav->getBadgeNumber();
+                    }
+
+                    // Convert link attributes array to proper attribute string
+                    $attr_str = '';
+                    foreach ($link_attributes as $key => $value) {
+                        $attr_str .= sprintf(' %s="%s"', htmlReady($key), htmlReady($value));
                     }
 
                     ?>
                     <li id="nav_<?= $path ?>"<? if ($nav->isActive()) : ?> class="active"<? endif ?>>
-                        <a href="<?= URLHelper::getLink($nav->getURL(), $link_params) ?>" title="<?= $link_attributes['title'] ?>" <?= $accesskey_attr ?> data-badge="<?= (int)$nav->getBadgeNumber() ?>">
+                        <a href="<?= URLHelper::getLink($nav->getURL(), $link_params) ?>" <?= $attr_str ?>>
                             <?= $image->asImg(['class' => 'headericon original']) ?>
                             <br>
                             <?= htmlReady($nav->getTitle()) ?>
