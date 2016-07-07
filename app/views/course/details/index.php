@@ -231,6 +231,22 @@
         </section>
     </section>
 
+    <? if ($course['public_topics'] && count($course->topics)) : ?>
+        <section class="contentbox">
+            <header>
+                <h1><?= _("Themen") ?></h1>
+            </header>
+            <section>
+                <? foreach ($course->topics as $key => $topic) {
+                    if ($key > 0) {
+                        echo ", ";
+                    }
+                    echo " ".htmlReady($topic['title']);
+                } ?>
+            </section>
+        </section>
+    <? endif ?>
+
     <section class="contentbox">
         <header>
             <h1><?= _('Veranstaltungsort') ?></h1>
@@ -358,22 +374,6 @@
                     <li><?= htmlReady($domain->getName()) ?></li>
                 <? endforeach ?>
             </ul>
-        </section>
-    <? endif ?>
-
-    <? if ($course['public_topics'] && count($course->topics)) : ?>
-        <section class="contentbox">
-            <header>
-                <h1><?= _("Themen") ?></h1>
-            </header>
-            <section>
-                <? foreach ($course->topics as $key => $topic) {
-                    if ($key > 0) {
-                        echo ", ";
-                    }
-                    echo " ".htmlReady($topic['title']);
-                } ?>
-            </section>
         </section>
     <? endif ?>
 
