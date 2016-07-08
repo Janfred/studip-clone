@@ -99,7 +99,7 @@ class PluginAsset extends SimpleORMap
     private function getFilepath()
     {
         $assets_path = $GLOBALS['PLUGIN_ASSETS_PATH'];
-        if ((!file_exists($assets_path) && !mkdir($assets_path)) || !is_dir($assets_path)) {
+        if (!is_dir($assets_path) || !is_writable($assets_path)) {
             throw new Exception('Unable to access assets directory');
         }
 
