@@ -541,6 +541,17 @@ STUDIP.Blubber = {
             }
         });
     },
+    unshareBlubber: function (thread_id) {
+        var panel_open = false;
+        jQuery.ajax({
+            'url': STUDIP.ABSOLUTE_URI_STUDIP + jQuery("#base_url").val() + "/unshare/" + thread_id,
+            'type': "POST",
+            'success': function (output) {
+                jQuery("#posting_" + thread_id + " .reshares").removeClass("reshared").html(jQuery(output).find(".reshares").html());
+                jQuery("#blubber_public_panel").dialog("close");
+            }
+        });
+    },
     showPublicPanel: function () {
         var thread_id = jQuery(this).closest(".thread").attr("id");
         thread_id = thread_id.substr(thread_id.lastIndexOf("_") + 1);

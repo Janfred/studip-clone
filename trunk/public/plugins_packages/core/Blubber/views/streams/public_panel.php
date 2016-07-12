@@ -27,8 +27,12 @@
     <? endif ?>
 </ul>
 <? if (!$i_shared) : ?>
-<p>
-    <?= _("Klicken Sie auf das Plus, um den Blubber weiterzusagen.") ?>
-</p>
+    <p>
+        <?= _("Klicken Sie auf das Plus, um den Blubber weiterzusagen.") ?>
+    </p>
+<? else : ?>
+    <div style="text-align: center">
+        <?= \Studip\LinkButton::create(_("Weitersagen rückgängig machen"), '#', array('onClick' => "STUDIP.Blubber.unshareBlubber('".$thread->getId()."'); return false;")) ?>
+    </div>
 <? endif ?>
 <br><br>
