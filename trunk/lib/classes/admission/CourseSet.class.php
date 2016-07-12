@@ -1009,7 +1009,7 @@ class CourseSet
             return true;
         }
         if ($perm->have_perm('admin', $user_id) || ($perm->have_perm('dozent', $user_id) && get_config('ALLOW_DOZENT_COURSESET_ADMIN'))) {
-            foreach ($this->getInstituteIds() as $one) {
+            foreach (array_keys($this->getInstituteIds()) as $one) {
                 if ($perm->have_studip_perm('dozent', $one, $user_id)) {
                     return true;
                 }
