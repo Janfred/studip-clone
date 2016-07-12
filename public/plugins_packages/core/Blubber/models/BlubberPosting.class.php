@@ -548,12 +548,12 @@ class BlubberPosting extends SimpleORMap {
      */
     public function unreshare($user_id = null, $external_user = 0) {
         $user_id or $user_id = $GLOBALS['user']->id;
-        $unshare = DBManager::get()->prepare(
-            "DELETE FROM blubber_reshares " .
-            "WHERE topic_id = :topic_id " .
-                "AND user_id = :user_id ",
-                "AND external_contact = :external_contact " .
-        "");
+        $unshare = DBManager::get()->prepare("
+            DELETE FROM blubber_reshares 
+            WHERE topic_id = :topic_id 
+                AND user_id = :user_id 
+                AND external_contact = :external_contact 
+        ");
         $success = $unshare->execute(array(
             'topic_id' => $this['root_id'],
             'user_id' => $user_id,

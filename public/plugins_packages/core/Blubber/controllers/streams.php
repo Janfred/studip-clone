@@ -911,6 +911,20 @@ class StreamsController extends PluginController {
         $this->render_text($output);
     }
 
+    public function unshare_action($thread_id) {
+        if (!Request::isPost()) {
+            throw new Exception("Wrong method for this action - use POST instead");
+        }
+        $this->thread = new BlubberPosting($thread_id);
+        $success = $this->thread->unreshare();
+
+        $template = $this->get_template_factory()->open("streams/_blubber.php");
+        $template->set_attributes($this->get_assigned_variables());
+        $template->set_layout(null);
+        $output = $template->render();
+        $this->render_text($output);
+    }
+
     public function public_panel_action() {
         $thread_id = Request::option("thread_id");
         $this->thread = new BlubberPosting($thread_id);
