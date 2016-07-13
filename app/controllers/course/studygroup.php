@@ -102,10 +102,11 @@ class Course_StudygroupController extends AuthenticatedController
                 $send_from_search_page = Request::get('send_from_search_page');
             }
 
-            $icon = Icon::create('schedule', 'info');
+            $icon = Icon::create('schedule', 'clickable');
             if ($GLOBALS['perm']->have_studip_perm('autor', $studygroup->getId()) || $membership_requested) {
                 $action = _("Persönlicher Status:");
                 if ($membership_requested) {
+                    $icon = $icon->copyWithRole('info');
                     $infotext = _("Mitgliedschaft bereits beantragt!");
                 } else {
                     $infolink = URLHelper::getURL('seminar_main.php?auswahl=' . $studygroup->getId());
