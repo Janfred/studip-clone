@@ -3697,6 +3697,29 @@ a.message-tag::before {
   font-size: 0.8em;
   color: #3d444f;
 }
+.message-search-wrapper {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-box-flex;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: flex;
+  -webkit-justify-content: flex-start;
+  justify-content: flex-start;
+}
+.message-search-wrapper > * {
+  margin-right: 1em;
+}
+ul.message-options {
+  list-style: none;
+  margin: 1em 0 0;
+  padding: 0;
+  text-align: center;
+}
+ul.message-options > li {
+  display: inline-block;
+  min-width: 70px;
+}
 /* --- Quicksearch ---------------------------------------------------------- */
 form#quicksearch {
   display: flex;
