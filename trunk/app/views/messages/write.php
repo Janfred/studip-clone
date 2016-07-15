@@ -20,6 +20,7 @@
             </li>
             <? endforeach ?>
         </ul>
+        <div class="message-search-wrapper">
         <?= QuickSearch::get("user_id", new StandardSearch("user_id"))
             ->fireJSFunctionOnSelect("STUDIP.Messages.add_adressee")
             ->withButton()
@@ -52,6 +53,7 @@
         }
         echo $mps->render();
         ?>
+        </div>
         <script>
             STUDIP.MultiPersonSearch.init();
         </script>
@@ -69,9 +71,9 @@
         </label>
     </div>
     <div>
-        <ul style="list-style-type: none; margin: 0; padding: 0; text-align: center;">
+        <ul class="message-options">
         <? if ($GLOBALS['ENABLE_EMAIL_ATTACHMENTS']): ?>
-            <li style="display: inline-block; min-width: 70px;">
+            <li>
                 <a href="" onClick="STUDIP.Messages.toggleSetting('attachments'); return false;">
                     <?= Icon::create('staple', 'clickable')->asImg(40) ?>
                     <br>
@@ -79,21 +81,21 @@
                 </a>
             </li>
         <? endif; ?>
-            <li style="display: inline-block; min-width: 70px;">
+            <li>
                 <a href="" onClick="STUDIP.Messages.toggleSetting('tags'); return false;">
                     <?= Icon::create('star', 'clickable')->asImg(40) ?>
                     <br>
                     <strong><?= _("Schlagworte") ?></strong>
                 </a>
             </li>
-            <li style="display: inline-block; min-width: 70px;">
+            <li>
                 <a href="" onClick="STUDIP.Messages.toggleSetting('settings'); return false;">
                     <?= Icon::create('admin', 'clickable')->asImg(40) ?>
                     <br>
                     <strong><?= _("Optionen") ?></strong>
                 </a>
             </li>
-            <li style="display: inline-block; min-width: 70px;">
+            <li>
                 <a href="" onClick="STUDIP.Messages.toggleSetting('preview'); STUDIP.Messages.previewComposedMessage(); return false;">
                     <?= Icon::create('visibility-visible', 'clickable')->asImg(40) ?>
                     <br>
