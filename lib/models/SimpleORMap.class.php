@@ -1978,6 +1978,9 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
         if ($this->relations[$relation] === null) {
             $options = $this->getRelationOptions($relation);
             $to_call = array($options['class_name'], $options['assoc_func']);
+            if (!is_callable($to_call)) {
+                throw new RuntimeException('assoc_func: ' . join('::', $to_call) . ' is not callable.' );
+            }
             $params = $options['assoc_func_params_func'];
             if ($options['type'] === 'has_many') {
                 $records = function($record) use ($to_call, $params, $options) {$p = (array)$params($record); return call_user_func_array($to_call, array_merge(count($p) ? $p : array(null), array($options['order_by'])));};
