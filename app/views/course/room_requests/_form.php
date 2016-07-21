@@ -40,7 +40,7 @@ if ($request_resource_id = $request->getResourceId()) :
         <p>
             <strong><?= htmlReady($resObject->getName()) ?></strong>
         	<?= Icon::create('trash', 'clickable', ['title' => _('den ausgewählten Raum löschen')])->asInput(['type' => 'image', 'style' => 'vertical-align:middle', 'name' => 'reset_resource_id']) ?>
-            <? if(!empty($resObject->getPlainProperties(false, true))): ?>
+            <? if($resObject->getPlainProperties(false, true)): ?>
             <?= tooltipIcon(_('Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:') . " \n" . $resObject->getPlainProperties(false, true)) ?>
             <? endif; ?>
         </p>
