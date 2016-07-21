@@ -52,11 +52,11 @@ class MessageUser extends SimpleORMap
 
     function __construct($id = null)
     {
-        $this->registerCallback('after_store after_delete', 'cleanUp');
+        $this->registerCallback('after_store after_delete', 'cleanUpTags');
         parent::__construct($id);
     }
 
-    function cleanUp($callback)
+    function cleanUpTags($callback)
     {
         $query = "DELETE FROM message_tags
                       WHERE message_id = :message_id AND user_id = :user_id";
