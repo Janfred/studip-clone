@@ -678,6 +678,14 @@ if ($change_object_schedules) {
 
                     if ((Request::option('change_schedule_assign_user_id')) || (Request::get('change_schedule_user_free_name'))) {
                         $overlaps = $changeAssign->checkOverlap(FALSE);
+
+                        if (Request::submitted('ignore_holidays')) {
+                            $holidays = false;
+                            $storeAssign = true;
+                        } else {
+                            $holidays = $changeAssign->checkHoliday();
+                        }
+
                         $locks = $changeAssign->checkLock();
                     }
                     // show hint, that either a user or a free text must be provided
@@ -685,11 +693,12 @@ if ($change_object_schedules) {
                         $msg->addMsg(46);
                     }
 
-                    if ((!$overlaps) && (!$locks)) {
+                    if (!$overlaps && !$locks && !$holidays) {
                         if ($storeAssign && $changeAssign->create()) {
                             $_SESSION['resources_data']["actual_assign"]=$changeAssign->getId();
                             $msg->addMsg(3);
                             $_SESSION['new_assign_object']='';
+                            unset($_SESSION['assign_object_has_holidays'][$changeAssign->id]);
                         } else {
                             $_SESSION['new_assign_object']=serialize($changeAssign);  // store the submitted form-data
 
@@ -702,6 +711,11 @@ if ($change_object_schedules) {
                         if ($storeAssign) {
                             if ($overlaps) {  // add error message an store the submitted form-data
                                 $msg->addMsg(11);
+                                $_SESSION['new_assign_object']=serialize($changeAssign);
+                            }
+
+                            if ($holidays) {  // add error message an store the submitted form-data
+                                $_SESSION['assign_object_has_holidays'][$changeAssign->id] = $holidays;
                                 $_SESSION['new_assign_object']=serialize($changeAssign);
                             }
 
@@ -720,25 +734,37 @@ if ($change_object_schedules) {
                 else {
                     if ((Request::option('change_schedule_assign_user_id')) || (Request::get('change_schedule_user_free_name'))) {
                         $overlaps = $changeAssign->checkOverlap(FALSE);
+
+                        if (Request::submitted('ignore_holidays')) {
+                            $holidays = false;
+                            $storeAssign = true;
+                        } else {
+                            $holidays = $changeAssign->checkHoliday();
+                        }
+
                         $locks = $changeAssign->checkLock();
                     }
 
-                    if ((!$overlaps) && (!$locks)) {
-                        $changeAssign->chng_flag=TRUE;
+                    if (!$overlaps && !$locks && !$holidays) {
+                        $changeAssign->chng_flag = true;
                         if ($changeAssign->store()) {
                             $msg->addMsg(4);
                             $_SESSION['new_assign_object']='';
                         }
                         $_SESSION['resources_data']["actual_assign"]=$changeAssign->getId();
-                    } else {
-                        if ($overlaps)
+                        unset($_SESSION['assign_object_has_holidays'][$changeAssign->id]);
+                    } elseif (!$holidays) {
+                        if ($overlaps) {
                             $msg->addMsg(11);
+                        }
                         if ($locks) {
                             foreach ($locks as $val)
                                 $locks_txt.=date("d.m.Y, H:i",$val["lock_begin"])." - ".date("d.m.Y, H:i",$val["lock_end"])."<br>";
                             $msg->addMsg(44, array($locks_txt));
                         }
                         $changeAssign->restore();
+                    } else {  // add error message an store the submitted form-data
+                        $_SESSION['assign_object_has_holidays'][$changeAssign->id] = $holidays;
                     }
 
                 }
@@ -746,6 +772,11 @@ if ($change_object_schedules) {
         }
     } else {
         $msg->addMsg(1);
+    }
+
+    if (Request::submitted("no_ignore_holidays")) {
+        unset($_SESSION['assign_object_has_holidays'][$changeAssign->id]);
+        $changeAssign->restore();
     }
 }
 
@@ -762,6 +793,7 @@ if ($change_object_properties && Request::isPost()) {
 
         if (getGlobalPerms($user->id) == "admin") {
             $changeObject->setMultipleAssign(Request::int('change_multiple_assign'));
+            $changeObject->setRequestable(Request::int('change_requestable'));
         }
 
         //Properties loeschen
@@ -931,6 +963,30 @@ if ((Request::quoted('add_type')) || (Request::option('delete_type')) || (Reques
                 }
             }
         }
+
+        $protected = Request::optionArray('protected');
+        if (is_array($protected)) {
+            $query = "UPDATE resources_categories_properties
+                      SET protected = ?
+                      WHERE category_id = ? AND property_id = ?";
+            $statement = DBManager::get()->prepare($query);
+
+            foreach ($protected as $key => $val) {
+                if (strpos($protected[$key - 1], 'id1_') &&  strpos($protected[$key], 'id2_')) {
+                    if ($protected[$key + 1] === 'on') {
+                        $req_num = 1;
+                    } else {
+                        $req_num = 0;
+                    }
+                    $statement->execute(array(
+                        $req_num,
+                        substr($protected[$key - 1], 5),
+                        substr($protected[$key], 5)
+                    ));
+                }
+            }
+        }
+
     } else {
         $msg->addMsg(25);
     }
@@ -957,14 +1013,15 @@ if (Request::submittedSome('_add_property', '_send_property_type') || Request::o
             $id = md5(uniqid('Regen2002', 1));
 
             $query = "INSERT INTO resources_properties
-                        (property_id, options, name, type)
-                      VALUES (?, ?, ?, ?)";
+                        (property_id, options, name, type, info_label)
+                      VALUES (?, ?, ?, ?, ?)";
             $statement = DBManager::get()->prepare($query);
             $statement->execute(array(
                 $id,
                 $options,
                 Request::get('add_property'),
-                Request::get('add_property_type')
+                Request::get('add_property_type'),
+                Request::get('info_label_visible')
             ));
         }
 
@@ -973,9 +1030,10 @@ if (Request::submittedSome('_add_property', '_send_property_type') || Request::o
             $send_property_type = Request::optionArray('send_property_type');
             $send_property_select_opt = Request::getArray('send_property_select_opt');
             $send_property_bool_desc = Request::optionArray('send_property_bool_desc');
+            $info_label_visible = Request::optionArray('info_label_visible');
 
             $query = "UPDATE resources_properties
-                      SET name = ?, options = ?, type = ?
+                      SET name = ?, options = ?, type = ?, info_label = ?
                       WHERE property_id = ?";
             $statement = DBManager::get()->prepare($query);
 
@@ -994,6 +1052,7 @@ if (Request::submittedSome('_add_property', '_send_property_type') || Request::o
                     $change_property_name[$key],
                     $options,
                     $send_property_type[$key],
+                    $info_label_visible[$key],
                     $key
                 ));
             }
@@ -1038,6 +1097,8 @@ if (Request::option('change_global_settings')) {
         write_config("RESOURCES_LOCKING_ACTIVE", Request::option('locking_active',false));
         write_config("RESOURCES_ASSIGN_LOCKING_ACTIVE", Request::option('assign_locking_active',false));
         write_config("RESOURCES_ALLOW_ROOM_REQUESTS", Request::option('allow_requests',false));
+        write_config("RESOURCES_ALLOW_REQUESTABLE_ROOM_REQUESTS", Request::option('allow_requestable_requests',false));
+        write_config("RESOURCES_DIRECT_ROOM_REQUESTS_ONLY", Request::option('direct_requests_only',false));
         write_config("RESOURCES_ALLOW_CREATE_ROOMS", Request::option('allow_create_resources'));
         write_config("RESOURCES_INHERITANCE_PERMS_ROOMS", Request::option('inheritance_rooms'));
         write_config("RESOURCES_INHERITANCE_PERMS", Request::option('inheritance'));

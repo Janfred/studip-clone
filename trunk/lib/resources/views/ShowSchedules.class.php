@@ -47,7 +47,8 @@ $cssSw = new cssClassSwitcher;
 ShowSchedules - schedule view
 /*****************************************************************************/
 
-class ShowSchedules {
+class ShowSchedules
+{
     var $ressource_id;      //viewed ressource object
     var $user_id;           //viewed user
     var $range_id;          //viewed range
@@ -60,48 +61,63 @@ class ShowSchedules {
 
 
     //Konstruktor
-    function __construct($resource_id='', $user_id='', $range_id='') {
+    public function __construct($resource_id = '', $user_id = '', $range_id = '')
+    {
         $this->resource_id=$resource_id;
         $this->user_id=$user_id;
         $this->range_id=$range_id;
     }
 
-    function setLengthFactor ($value) {
+    public function setLengthFactor ($value)
+    {
         $this->length_factor = $value;
     }
 
-    function setLengthUnit ($value) {
+    public function setLengthUnit ($value)
+    {
         $this->length_unit = $value;
     }
 
-    function setStartTime ($value) {
+    public function setStartTime ($value)
+    {
         $this->start_time = $value;
     }
 
-    function setEndTime ($value) {
+    public function setEndTime ($value)
+    {
         $this->end_time = $value;
     }
 
-    function setWeekOffset ($value) {
+    public function setWeekOffset ($value)
+    {
         $this->week_offset = $value;
     }
 
-    function setUsedView($value) {
+    public function setUsedView($value)
+    {
         $this->used_view = $value;
     }
 
-    function navigator()
+    public function navigator()
     {
         global $cssSw, $view_mode;
 
         //match start_time & end_time for a whole week
-        $dow = date ("w", $this->start_time);
-        if (date ("w", $this->start_time) >1)
-            $offset = 1 - date ("w", $this->start_time);
-        if (date ("w", $this->start_time) <1)
+        $dow = date("w", $this->start_time);
+        if ($dow > 1) {
+            $offset = 1 - $dow;
+        }
+        if ($dow < 1) {
             $offset = -6;
-        $start_time = mktime (0, 0, 0, date("n",$this->start_time), date("j", $this->start_time)+$offset+($this->week_offset*7), date("Y", $this->start_time));
-        $end_time = mktime (23, 59, 0, date("n",$start_time), date("j", $start_time)+6, date("Y", $start_time));
+        }
+        $start_time = mktime(0, 0, 0,
+                             date('n', $this->start_time),
+                             date('j', $this->start_time) + $offset + $this->week_offset * 7,
+                             date('Y', $this->start_time));
+        $end_time = mktime(23, 59, 0,
+                           date('n', $start_time),
+                           date('j', $start_time) + 6,
+                           date('Y', $start_time));
 
         ?>
         <table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
@@ -145,15 +161,16 @@ class ShowSchedules {
     <?
     }
 
-    function showScheduleList($print_view = false) {
+    public function showScheduleList($print_view = false)
+    {
         global $cssSw, $view_mode;
 
-         //select view to jump from the schedule
-         if ($this->used_view == "openobject_schedule")
-            $view = "openobject_assign";
-         else
-            $view = "edit_object_assign";
-
+        //select view to jump from the schedule
+        if ($this->used_view === 'openobject_schedule') {
+           $view = 'openobject_assign';
+        } else {
+           $view = 'edit_object_assign';
+        }
         ?>
         <table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
             <tr>
@@ -216,34 +233,55 @@ class ShowSchedules {
     <?
     }
 
-    function showScheduleGraphical($print_view = false) {
-        global $RELATIVE_PATH_RESOURCES, $cssSw, $view_mode, $ActualObjectPerms;
-
-        $categories["na"] = 4;
-        $categories["sd"] = 4;
-        $categories["y"] = 3;
-        $categories["m"] = 3;
-        $categories["w"] = 0;
-        $categories["d"] = 2;
+    /**
+     * Returns the event categories.
+     * @return array categories
+     */
+    private function getCategories()
+    {
+        $categories['na'] = 4;
+        $categories['sd'] = 4;
+        $categories['y']  = 3;
+        $categories['m']  = 3;
+        $categories['w']  = 0;
+        $categories['d']  = 2;
 
         //an assign for a date corresponding to a (seminar-)metadate
-        $categories["meta"] = 1;
+        $categories['meta'] = 1;
+
+        return $categories;
+    }
+
+    public function showScheduleGraphical($print_view = false)
+    {
+        global $RELATIVE_PATH_RESOURCES, $cssSw, $view_mode, $ActualObjectPerms;
+
+        $categories = $this->getCategories();
 
         //match start_time & end_time for a whole week
         $dow = date ("w", $this->start_time);
-        if (date ("w", $this->start_time) >1)
-            $offset = 1 - date ("w", $this->start_time);
-        if (date ("w", $this->start_time) <1)
+        if ($dow > 1) {
+            $offset = 1 - $dow;
+        }
+        if ($dow < 1) {
             $offset = -6;
+        }
 
-         //select view to jump from the schedule
-         if ($this->used_view == "openobject_schedule")
-            $view = "openobject_assign";
-         else
-            $view = "edit_object_assign";
+        //select view to jump from the schedule
+        if ($this->used_view === 'openobject_schedule') {
+            $view = 'openobject_assign';
+        } else {
+            $view = 'edit_object_assign';
+        }
 
-        $start_time = mktime (0, 0, 0, date("n",$this->start_time), date("j", $this->start_time)+$offset+($this->week_offset*7), date("Y", $this->start_time));
-        $end_time = mktime (23, 59, 59, date("n",$start_time), date("j", $start_time)+6, date("Y", $start_time));
+        $start_time = mktime(0, 0, 0,
+                             date('n', $this->start_time),
+                             date('j', $this->start_time) + $offset + $this->week_offset * 7,
+                             date('Y', $this->start_time));
+        $end_time = mktime(23, 59, 59,
+                           date('n', $start_time),
+                           date('j', $start_time) + 6,
+                           date('Y', $start_time));
 
         if ($_SESSION['resources_data']["schedule_time_range"] == -1) {
             $start_hour = 0;
@@ -258,8 +296,9 @@ class ShowSchedules {
 
         $schedule = new ScheduleWeek($start_hour, $end_hour, FALSE, $start_time, true);
 
-        if ($ActualObjectPerms->havePerm("autor"))
+        if ($ActualObjectPerms->havePerm('autor')) {
             $schedule->add_link = "resources.php?cancel_edit_assign=1&quick_view=$view&quick_view_mode=".$view_mode."&add_ts=";
+        }
 
         //fill the schedule
         $assign_events=new AssignEventList ($start_time, $end_time, $this->resource_id, '', '', TRUE, $_SESSION['resources_data']["show_repeat_mode"]);
@@ -354,19 +393,61 @@ class ShowSchedules {
     <?
     }
 
-    function showSemWeekNumber($start_time){
+    /**
+     * Displays the event category legend as a SidebarWidget
+     */
+    public function ShowLegend()
+    {
+        $schedule = new ScheduleWeek();
+        $cats = $schedule->categories;
+        $eventcat_names = array(
+            'na'   => _('Keine'),
+            'd'    => _('Täglich'),
+            'w'    => ucfirst(_('wöchentlich')),
+            'sd'   => _('Mehrtägig'),
+            'm'    => _('Monatlich'),
+            'y'    => _('Jährlich'),
+            'meta' => _('Einzeltermin zu regelmäßigen Veranstaltungszeiten')
+        );
+        $sidebar = Sidebar::get();
+        $legende_widget = new SidebarWidget();
+        $legende_widget->setTitle(_('Art der Wiederholung'));
+        $html = '<div class="legende">';
+        foreach ($this->getCategories() as $event_cat => $schedule_cat) {
+            $cat = $cats[$schedule_cat];
+            $html .= '<div style="
+                                    background-color: ' . $cat['border-color'] . ';
+                                    background-image: url(' . $cat['bg-picture'] . ');
+                                    height: 8px; width: 16px;
+                                    border-style: solid;
+                                    border-width: 1px;
+                                    border-top-width: 5px;
+                                    border-color: ' . $cat['border-color'] . ';
+                                    display: inline-block;
+                    " ></div>';
+            $html .= '<div style="margin-left: 5px; display: inline-block; width: calc(100% - 23px); vertical-align: top;">'
+                  . htmlReady(!empty($eventcat_names[$event_cat])?$eventcat_names[$event_cat]: $event_cat)
+                  . '</div>';
+            $html .= '<br>';
+        }
+        $html .= '</div>';
+        $legende_widget->addElement(new WidgetElement($html));
+        $sidebar->addWidget($legende_widget);
+    }
+
+    public function showSemWeekNumber($start_time)
+    {
         $semester = Semester::FindByTimestamp($start_time);
         if ($semester) {
             echo htmlready($semester['name']) . ' - ';
             $sem_week_number = $semester->getSemWeekNumber($start_time);
-            if(is_int($sem_week_number)){
-                printf(_("%s. Vorlesungswoche"), $sem_week_number);
+            if (is_int($sem_week_number)) {
+                printf(_('%s. Vorlesungswoche'), $sem_week_number);
             } else {
-                echo _("vorlesungsfreie Zeit");
+                echo _('vorlesungsfreie Zeit');
             }
         } else {
-            echo _("kein Semester verfügbar");
+            echo _('kein Semester verfügbar');
         }
     }
 }
-?>

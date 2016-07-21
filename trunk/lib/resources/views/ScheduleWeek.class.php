@@ -5,10 +5,10 @@
 # Lifter010: TODO
 /**
 * ScheduleWeek.class.php
-* 
+*
 * creates a grafical schedule view for different purposes, ie. a personal timetable
 * or a timetable for a ressource like a room, a device or a building
-* 
+*
 *
 * @author       Cornelis Kater <ckater@gwdg.de>
 * @access       public
@@ -39,33 +39,61 @@
 
 require_once $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/views/ScheduleView.class.php";
 
-class ScheduleWeek extends ScheduleView {
-    var $show_dates;            //If setted, the dates of each day will be shown
-    
+class ScheduleWeek extends ScheduleView
+{
+    var $show_dates; // If set, the dates of each day will be shown
+
     //Kontruktor
-    function __construct($start_hour = '', $end_hour = '', $show_days = '', $start_date = '', $show_dates = false) {
-        
+    public function __construct($start_hour = '', $end_hour = '', $show_days = '', $start_date = '', $show_dates = false)
+    {
         parent::__construct($start_hour, $end_hour, $show_days, $start_date);
-        
+
         $this->show_dates = $show_dates;
-        
-        if ((!$show_dates) && ($start_date))
-            $this->show_dates=TRUE; 
+
+        if (!$show_dates && $start_date) {
+            $this->show_dates = true;
+        }
     }
 
-
-    function addEvent ($name, $start_time, $end_time, $link='', $add_info='', $category=0) {
-        $week_day=date("w", $start_time);
-        if ($week_day == 0) $week_day = 7;
+    public function addEvent ($name, $start_time, $end_time, $link = '', $add_info = '', $category = 0)
+    {
+        $week_day = date('w', $start_time);
+        if ($week_day == 0) {
+            $week_day = 7;
+        }
         parent::AddEvent($week_day, $name, $start_time, $end_time, $link, $add_info, $category);
     }
-    
-    function getColumnName($id){
-        $ts = mktime (0,0,0,date("n",$this->start_date), date("j",$this->start_date)+$id-1, date("Y",$this->start_date));
-        $out = strftime("%A", $ts);
-        if ($this->show_dates) $out .= "<br><font size=\"-1\">" . date("d.m.y", $ts) . "</font>\n";;
+
+    public function getColumnName($id)
+    {
+        $ts = mktime(0, 0, 0,
+                     date('n', $this->start_date),
+                     date('j', $this->start_date) + $id - 1,
+                     date('Y', $this->start_date));
+        $out = strftime('%A', $ts);
+        if ($this->show_dates) {
+            $out .= "<br><font size=\"-1\">" . date("d.m.y", $ts) . "</font>\n";
+            $holiday = $this->getHoliday($id);
+            if (!empty($holiday)) {
+               $out .= "<br><font size=\"-1\">" . htmlReady($holiday['name']) . "</font>\n";
+            }
+        }
         return $out;
     }
-    
+
+    /**
+     * Returns if a given calendar colum is a holiday.
+     * @param string $id
+     * @return mixed false if no holiday was found, an array with the name and
+     *               the "col" value of the holiday otherwise
+     */
+    public function getHoliday($id)
+    {
+        $ts = mktime(0, 0, 0, 
+                     date('n', $this->start_date),
+                     date('j', $this->start_date) + $id - 1,
+                     date('Y', $this->start_date));
+        $holiday_info = SemesterHoliday::isHoliday($ts, false);
+        return $holiday_info['col'] > 2 ? $holiday_info : false;
+    }
 }
-?>

@@ -37,7 +37,8 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-class ScheduleView {
+class ScheduleView
+{
     var $events = array();              //the events that will be shown
     var $cell_allocations;          //internal Array
     var $start_hour;            //First hour to display from
@@ -47,50 +48,60 @@ class ScheduleView {
     var $start_date;            //the timestamp of the first day (monday) of the viewed week
     var $categories;
 
-    function __construct($start_hour = 8, $end_hour = 20, $show_columns = false,  $start_date = false) {
-
-        $this->start_hour=$start_hour;
-        $this->end_hour=$end_hour;
+    public function __construct($start_hour = 8, $end_hour = 20, $show_columns = false,  $start_date = false)
+    {
+        $this->start_hour = $start_hour;
+        $this->end_hour   = $end_hour;
 
         if (!$show_columns) {
-            for($i = 1; $i < 8; ++$i) $this->show_columns[$i] = true;
-        } else
+            for ($i = 1; $i < 8; ++$i) {
+                $this->show_columns[$i] = true;
+            }
+        } else {
             $this->show_columns = $show_columns;
+        }
 
-        if ($start_date)
+        if ($start_date) {
             $this->start_date = $start_date;
-        else
+        } else {
             $this->start_date = time();
+        }
 
         //the base_date have to be 0:00
-        $this->base_date = mktime(0, 0, 0, date("n", $this->start_date), date("j",$this->start_date),  date("Y",$this->start_date));
+        $this->base_date = strtotime('today 0:00:00', $this->start_date);
 
         //the categories configuration (color's and bg-image)
         $this->categories = array(
-            "0" => array("bg-picture"   => Assets::image_path('calendar/category3_small.jpg'),
-                         "border-color" => "#5C2D64"),  // is now obsolete
-            "1" => array("bg-picture"   => Assets::image_path('calendar/category5_small.jpg'),
-                         "border-color" => "#505064"),
-            "2" => array("bg-picture"   => Assets::image_path('calendar/category9_small.jpg'),
-                         "border-color" => "#957C29"),
-            "3" => array("bg-picture"   => Assets::image_path('calendar/category11_small.jpg'),
-                         "border-color" => "#66954F"),
-            "4" => array("bg-picture"   => Assets::image_path('calendar/category13_small.jpg'),
-                         "border-color" => "#951408"));
+            "0" => array('bg-picture'   => Assets::image_path('calendar/category3_small.jpg'),
+                         'border-color' => '#5C2D64'),  // is now obsolete
+            "1" => array('bg-picture'   => Assets::image_path('calendar/category5_small.jpg'),
+                         'border-color' => '#505064'),
+            "2" => array('bg-picture'   => Assets::image_path('calendar/category9_small.jpg'),
+                         'border-color' => '#957C29'),
+            "3" => array('bg-picture'   => Assets::image_path('calendar/category11_small.jpg'),
+                         'border-color' => '#66954F'),
+            "4" => array('bg-picture'   => Assets::image_path('calendar/category13_small.jpg'),
+                         'border-color' => '#951408'),
+        );
     }
 
-    function addEvent($column, $name, $start_time, $end_time, $link='', $add_info='', $category=0) {
+    public function addEvent($column, $name, $start_time, $end_time, $link = '', $add_info = '', $category = 0)
+    {
 
         // if the date ends before the starting hour of the schedule, do not add it or the schedule will break
         if (date('G', $end_time) < $this->start_hour
-            || (date('G', $end_time) == $this->start_hour &&  date('i', $end_time) == 0)) return;
+            || (date('G', $end_time) == $this->start_hour &&  date('i', $end_time) == 0))
+        {
+            return;
+        }
 
 
         if (date ("G", $end_time) > $this->end_hour) {
             $rows = ((($this->end_hour - date("G", $start_time))+1) *4);
             $rows = $rows - (int)(date("i", $start_time) / 15);
-        } else
+        } else {
             $rows = ceil(((date("G", $end_time) - date("G", $start_time)) * 4) + ((date("i", $end_time) - date("i", $start_time)) / 15));
+        }
 
         if (date ("G", $start_time) < $this->start_hour) {
             $rows = $rows - (($this->start_hour - date ("G", $start_time)) *4);
@@ -121,98 +132,104 @@ class ScheduleView {
         }
     }
 
-    function checkCollision($index,$category){
+    public function checkCollision($index, $category)
+    {
         $first_id = false;
         foreach ($this->events as $id => $event){
-            if ($index == $event['sort_index']
-                && $category == $event['category']){
-                if (!$first_id) $first_id = $id;
+            if ($index == $event['sort_index'] && $category == $event['category']) {
+                if (!$first_id) {
+                    $first_id = $id;
+                }
             }
         }
         return $first_id;
     }
 
-    //private
-    function createCellAllocation() {
+    private function createCellAllocation()
+    {
         if (is_array($this->events)) {
             foreach ($this->events as $ms) {
-                $m=1;
+                $m = 1;
                 $idx_tmp = $ms["sort_index"];
                 if ($ms["rows"]>0) {
-                    for ($m; $m<=$ms["rows"]; $m++) {
-                        if ($m==1)
-                            $start_cell=TRUE;
-                        else
-                            $start_cell=FALSE;
-                    $this->cell_allocations[$idx_tmp][$ms["id"]] = $start_cell;
-                    list($hour,$row,$col) = explode('-', $idx_tmp);
-                    ++$row;
-                    if ($row == 4){
-                        $row = 0;
-                        ++$hour;
-                    }
-                    $idx_tmp = $hour . '-' . $row . '-' . $col;
-                    }
-                } else
-                    $this->cell_allocations[$idx_tmp][$ms["id"]] = TRUE;
-            }
-        }
-    }
-
-
-
-    //private
-    function handleOverlaps() {
-
-        foreach($this->show_columns as $i => $foo) {
-            for ($n = $this->start_hour; $n<$this->end_hour+1; $n++) {
-                for ($l=0; $l<4; $l++) {
-                    $idx = $n . '-' . $l . '-' . $i;
-                    if ($this->cell_allocations[$idx])
-                        if (sizeof($this->cell_allocations[$idx])>0) {
-                            $rows=0;
-                            $start_idx = $idx;
-                            while ($cs = each ($this->cell_allocations [$idx]))
-                                if ($cs[1])
-                                    if ($this->events[$cs[0]]["rows"]>$rows) $rows=$this->events[$cs[0]]["rows"];
-                            reset ($this->cell_allocations[$idx]);
-                            if ($rows>1) {
-                                $s=2;
-                                for ($s; $s<=$rows; $s++) {
-                                    $l++;
-                                    if ($l>=4) {
-                                        $l=0;
-                                        $n++;
-                                    }
-                                    $idx = $n . '-' . $l . '-' . $i;
-                                    //workaround
-                                    if (is_array($this->cell_allocations[$idx])){
-                                        while ($cs = each ($this->cell_allocations[$idx]))
-                                            if ($cs[1]) {
-                                                $this->cell_allocations[$idx][$cs[0]]=FALSE;
-                                                $this->cell_allocations[$start_idx][$cs[0]]=TRUE;
-                                                if ($this->events[$cs[0]]["rows"] > $rows -$s +1)
-                                                    $rows=$rows+($this->events[$cs[0]]["rows"]-($rows-$s +1));
-                                            }
-                                        reset ($this->cell_allocations[$idx]);
-                                    }
-                                }
-                            }
-                            $cs = each (array_slice ($this->cell_allocations[$start_idx], 0));
-                            reset ($this->cell_allocations[$start_idx]);
-                            $this->events[$cs[0]]["rows"] = $rows;
+                    for ($m; $m <= $ms["rows"]; $m++) {
+                        $start_cell = $m == 1;
+                        $this->cell_allocations[$idx_tmp][$ms['id']] = $start_cell;
+                        list($hour, $row, $col) = explode('-', $idx_tmp);
+                        $row += 1;
+                        if ($row == 4){
+                            $row = 0;
+                            $hour += 1;
                         }
+                        $idx_tmp = $hour . '-' . $row . '-' . $col;
+                    }
+                } else {
+                    $this->cell_allocations[$idx_tmp][$ms['id']] = true;
                 }
             }
         }
     }
 
-    function getColumnName($id, $print_view = false){
-        return htmlReady($id . " Column");
+    private function handleOverlaps()
+    {
+
+        foreach ($this->show_columns as $i => $foo) {
+            for ($n = $this->start_hour; $n < $this->end_hour + 1; $n++) {
+                for ($l = 0; $l < 4; $l++) {
+                    $idx = $n . '-' . $l . '-' . $i;
+                    if ($this->cell_allocations[$idx]) {
+                        if (sizeof($this->cell_allocations[$idx])>0) {
+                            $rows=0;
+                            $start_idx = $idx;
+                            while ($cs = each($this->cell_allocations[$idx])) {
+                                if ($cs[1]) {
+                                    if ($this->events[$cs[0]]['rows'] > $rows) {
+                                        $rows = $this->events[$cs[0]]['rows'];
+                                    }
+                                }
+                            }
+                            reset ($this->cell_allocations[$idx]);
+                            if ($rows > 1) {
+                                $s = 2;
+                                for ($s; $s <= $rows; $s++) {
+                                    $l += 1;
+                                    if ($l >= 4) {
+                                        $l = 0;
+                                        $n += 1;
+                                    }
+                                    $idx = $n . '-' . $l . '-' . $i;
+                                    //workaround
+                                    if (is_array($this->cell_allocations[$idx])){
+                                        while ($cs = each ($this->cell_allocations[$idx])) {
+                                            if ($cs[1]) {
+                                                $this->cell_allocations[$idx][$cs[0]] = false;
+                                                $this->cell_allocations[$start_idx][$cs[0]] = true;
+                                                if ($this->events[$cs[0]]["rows"] > $rows -$s +1) {
+                                                    $rows += $this->events[$cs[0]]['rows'] - ($rows - $s + 1);
+                                                }
+                                            }
+                                        }
+                                        reset ($this->cell_allocations[$idx]);
+                                    }
+                                }
+                            }
+                            $cs = each(array_slice($this->cell_allocations[$start_idx], 0));
+                            reset($this->cell_allocations[$start_idx]);
+                            $this->events[$cs[0]]['rows'] = $rows;
+                        }
+                    }
+                }
+            }
+        }
     }
 
-        //private
-    function createHtmlOutput($print_view=false) {
+    public function getColumnName($id, $print_view = false)
+    {
+        return htmlReady($id . ' Column');
+    }
+
+    private function createHtmlOutput($print_view = false)
+    {
         $glb_colspan = count($this->show_columns);
         ?>
         <table width ="100%" align="center" cellspacing=1 cellpadding=1 border=0>
@@ -222,7 +239,8 @@ class ScheduleView {
                 <?php
                 foreach($this->show_columns as $column_id => $column_value){
                     ?>
-                    <td width="<?echo round (95/$glb_colspan)."%"?>" align="center" class="rahmen_table_row_odd">
+                    <td <?= ($this instanceof ScheduleWeek && !empty($this->getHoliday($column_id))) ? 'style="background-color: #ffb;"' : '' ; ?>
+                    width="<?echo round (95/$glb_colspan)."%"?>" align="center" class="rahmen_table_row_odd">
                     <?=$this->getColumnName($column_id, $print_view);?>
                     </td>
                     <?
@@ -234,32 +252,38 @@ class ScheduleView {
         //Aufbauen der eigentlichen Tabelle
         $i = $this->start_hour;
 
-        for ($i; $i < ($this->end_hour+1); $i++) {
-            $k=0;
-            for ($k; $k<4; $k++) {
-                if ($k==0)  {
+        for ($i; $i < $this->end_hour + 1; $i++) {
+            $k = 0;
+            for ($k; $k < 4; $k++) {
+                if ($k == 0)  {
                     echo "<tr><td align=\"center\" class=\"rahmen_table_row_odd\" rowspan=4>";
-                    if ($i<10) echo "0";
+                    if ($i<10) {
+                        echo '0';
+                    }
                     echo $i, ":00 </td>";
+                } else {
+                    echo "<tr>";
                 }
-                else echo "<tr>";
 
-                foreach($this->show_columns as $l => $bla){
-
+                foreach ($this->show_columns as $l => $bla)
+                {
                     $idx = $i . '-' . $k . '-' . $l;
 
                     unset($cell_content);
                     $m=0;
-                    if ($this->cell_allocations[$idx])
-                        while ($cs = each ($this->cell_allocations [$idx]))
+                    if ($this->cell_allocations[$idx]) {
+                        while ($cs = each ($this->cell_allocations [$idx])) {
                             $cell_content[]=array("id"=>$cs[0], "start_cell"=>$cs[1]);
-                    if ((!$this->cell_allocations[$idx]) || ($cell_content[0]["start_cell"]))
-                        echo "<td ";
-                    $u=0;
-                    if (($this->cell_allocations[$idx]) && ($cell_content[0]["start_cell"])) {
-                        $r=0;
+                        }
+                    }
+                    if (!$this->cell_allocations[$idx] || $cell_content[0]['start_cell']) {
+                        echo '<td ';
+                    }
+                    $u = 0;
+                    if ($this->cell_allocations[$idx] && $cell_content[0]['start_cell']) {
+                        $r = 0;
                         foreach ($cell_content as $cc) {
-                            if (!$print_view){
+                            if (!$print_view) {
                                 $font_color = '#FFFFFF';
                                 $cc_border_color = $this->categories[$this->events[$cc["id"]]["category"]]["border-color"];
                                 $cc_bg_picture = $this->categories[$this->events[$cc["id"]]["category"]]["bg-picture"];
@@ -276,12 +300,14 @@ class ScheduleView {
                                     $print_view ? "background-color:#FFFFFF;border-style:solid; border-width:1px; border-color:#FFFFFF" : "background-image:url($cc0_bg_picture); border-style:solid; border-width:1px; border-color:$cc0_border_color;"
                                     , $this->events[$cell_content[0]["id"]]["rows"]);
                                 echo "<table width=\"100%\" cellspacing=0 cellpadding=0 border=0><tr>";
-                            } else
+                            } else {
                                 echo "</td></tr><tr>";
+                            }
                             printf ("<td style=\"vertical-align:top; font-size:10px; height:15px; color:$font_color; %s\" >",
                                 $print_view ? "background-color:#FFFFFF;" : "background-image:url($cc0_bg_picture); border-style:solid; border-width:1px; border-color:$cc0_border_color;");
-                            if (($print_view) && ($r!=0))
+                            if ($print_view && $r != 0) {
                                 echo "<hr width=\"100%\">";
+                            }
                             $r++;
                             printf ("<div style=\"font-size:10px; height:15px; color:$font_color; background-color:%s; ",
                                 $cc_border_color);
@@ -312,8 +338,6 @@ class ScheduleView {
             echo "<td align=\"right\">";
             echo Assets::img('logos/logo2b.png');
             echo "</td></tr></tr>";
-        } else {;
-            //print view bottom
         }
         ?>
             </td>
@@ -322,7 +346,8 @@ class ScheduleView {
     <?
     }
 
-    function getAddLink($l,$i){
+    public function getAddLink($l, $i)
+    {
         $add_link_timestamp = $this->base_date + (($l-1) * 24 * 60 * 60) + ($i * 60 * 60);
         return sprintf("class=\"table_row_even\" align=\"right\" valign=\"bottom\"><a href=\"%s%s\">%s</a></td>",
                        $this->add_link,
@@ -334,58 +359,88 @@ class ScheduleView {
 
     }
 
-    function getEventName($id,$font_color,$print_view){
+    public function getEventName($id, $font_color, $print_view)
+    {
         $out = "\n<div style=\"margin-left:2px;margin-right:2px;\"><font size=\"-1\">";
-        if (!is_array($this->events[$id]['collisions'])){
-            if (!$print_view) $out.= "\n<a style=\"color:$font_color;\" href=\"".$this->events[$id]["link"]."\">";
-            $out .= $this->getShortName($this->events[$id]["name"], $print_view);
-            if ($this->events[$id]["add_info"]) $out.= "\n<br>" . $this->events[$id]["add_info"];
-            if (!$print_view) $out.= "\n</a>";
+        if (!is_array($this->events[$id]['collisions'])) {
+            if (!$print_view) {
+                $out .= "\n<a style=\"color:$font_color;\" href=\"".$this->events[$id]["link"]."\">";
+            }
+            $out .= $this->getShortName($this->events[$id]['name'], $print_view);
+            if ($this->events[$id]['add_info']) {
+                $out.= "\n<br>" . htmlReady($this->events[$id]['add_info']);
+            }
+            if (!$print_view) {
+                $out.= "\n</a>";
+            }
         } else {
-            if(count($this->events[$id]['collisions']) < 3){
-                if (!$print_view) $out.= "\n<a style=\"color:$font_color;\" href=\"".$this->events[$id]["link"]."\">";
-                $out .= $this->getShortName($this->events[$id]["name"], $print_view);
-                if ($this->events[$id]["add_info"]) $out.= "\n<br>" . $this->events[$id]["add_info"];
-                if (!$print_view) $out.= "\n</a>";
-                foreach($this->events[$id]['collisions'] as $event){
-                    if (!$print_view) $out.= "\n<a style=\"color:$font_color;\" href=\"".$event["link"]."\">";
-                    $out .= "\n<br>" . $this->getShortName($event["name"], $print_view);
-                    if ($event["add_info"]) $out.= "<br>" . $event["add_info"];
-                    if (!$print_view) $out.= "\n</a>";
+            if(count($this->events[$id]['collisions']) < 3) {
+                if (!$print_view) {
+                    $out.= "\n<a style=\"color:$font_color;\" href=\"".$this->events[$id]["link"]."\">";
+                }
+                $out .= $this->getShortName($this->events[$id]['name'], $print_view);
+                if ($this->events[$id]['add_info']) {
+                    $out.= "\n<br>" . htmlReady($this->events[$id]["add_info"]);
+                }
+                if (!$print_view) {
+                    $out.= "\n</a>";
+                }
+                foreach ($this->events[$id]['collisions'] as $event) {
+                    if (!$print_view) {
+                        $out.= "\n<a style=\"color:$font_color;\" href=\"".$event["link"]."\">";
+                    }
+                    $out .= "\n<br>" . $this->getShortName($event['name'], $print_view);
+                    if ($event['add_info']) {
+                        $out.= "<br>" . htmlReady($event['add_info']);
+                    }
+                    if (!$print_view) {
+                        $out.= "\n</a>";
+                    }
                 }
             } else {
-                if (!$print_view) $out.= "<a style=\"color:$font_color;\" href=\"".$this->events[$id]["link"]."\"
+                if (!$print_view) {
+                    $out .= "<a style=\"color:$font_color;\" href=\"".$this->events[$id]["link"]."\"
                                             title=\"".htmlReady($this->events[$id]["name"])."\">";
-                $out .= htmlReady(substr($this->events[$id]["name"], 0, strpos($this->events[$id]["name"],':')));
-                if (!$print_view) $out.= "</a>";
-                foreach($this->events[$id]['collisions'] as $event){
-                    if (!$print_view) $out.= "<a style=\"color:$font_color;\" href=\"".$event["link"]."\"
+                }
+                $out .= htmlReady(substr($this->events[$id]['name'], 0, strpos($this->events[$id]['name'],':')));
+                if (!$print_view) {
+                    $out .= '</a>';
+                }
+                foreach ($this->events[$id]['collisions'] as $event) {
+                    if (!$print_view) {
+                        $out.= "<a style=\"color:$font_color;\" href=\"".$event["link"]."\"
                                             title=\"".htmlReady($event["name"])."\">, ";
-                    $out .= htmlReady(substr($event["name"], 0, strpos($event["name"],':')));
-                    if (!$print_view) $out.= "</a>";
+                    }
+                    $out .= htmlReady(substr($event['name'], 0, strpos($event['name'],':')));
+                    if (!$print_view) {
+                        $out.= '</a>';
+                    }
                 }
             }
         }
         return $out . "</font></div>";
     }
 
-    function getShortName($name, $print_view){
-        $out = htmlReady(substr($name, 0,50));
-        if (strlen($name)>50) $out.= "...";
-        if ($print_view){
-            $out = preg_replace('/EB[0-9]+/', '<b>\0</b>', htmlready($name,false,false));
+    public function getShortName($name, $print_view)
+    {
+        $out = htmlReady(substr($name, 0, 50));
+        if (strlen($name) > 50) {
+            $out.= "...";
+        }
+        if ($print_view) {
+            $out = preg_replace('/EB[0-9]+/', '<b>\0</b>', htmlready($name, false, false));
         }
         return nl2br($out);
     }
 
-    function showSchedule($mode="html", $print_view=false) {
+    public function showSchedule($mode = 'html', $print_view = false)
+    {
         $this->createCellAllocation();
         $this->handleOverlaps();
         switch ($mode) {
-            case "html":
+            case 'html':
             default:
                 $this->createHtmlOutput($print_view);
         }
     }
 }
-?>
