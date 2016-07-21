@@ -41,7 +41,8 @@ require_once 'lib/log_events.inc.php';
 /*****************************************************************************
 AssignObject, zentrale Klasse der Objekte der Belegung
 /*****************************************************************************/
-class AssignObject {
+class AssignObject
+{
     var $id;                    //Id des Belegungs-Objects
     var $resource_id;           //resource_id des verknuepten Objects;
     var $assign_user_id;        //id des verknuepten Benutzers der Ressource
@@ -60,8 +61,9 @@ class AssignObject {
     var $chng_flag;
     var $events;
 
-    function Factory(){
-        static $assign_object_pool;
+    public static function Factory()
+    {
+        static $assign_object_pool = [];
 
         $argn = func_num_args();
 
@@ -78,14 +80,15 @@ class AssignObject {
         return new AssignObject(func_get_args());
     }
 
-    function __construct($argv) {
+    public function __construct($argv)
+    {
         global $user;
 
         $this->user_id = $user->id;
 
-        if($argv && !is_array($argv)) {
+        if ($argv && !is_array($argv)) {
             $id = $argv;
-            if (!$this->restore($id)){
+            if (!$this->restore($id)) {
                 $this->isNewObject = true;
             }
         }
@@ -114,11 +117,13 @@ class AssignObject {
         }
     }
 
-    function createId() {
+    public function createId()
+    {
         $this->id = md5(uniqid("BartSimpson",1));
     }
 
-    function create() {
+    public function create()
+    {
         $db = DBManager::get();
         $query = sprintf("SELECT assign_id FROM resources_assign WHERE assign_id ='%s' ", $this->id);
         $result = $db->query($query);
@@ -129,15 +134,18 @@ class AssignObject {
             return $this->store(TRUE);
     }
 
-    function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    function getAssignUserId() {
+    public function getAssignUserId()
+    {
         return $this->assign_user_id;
     }
 
-    function GetOwnerName($explain=FALSE, $event_obj = null) {
+    public function GetOwnerName($explain = false, $event_obj = null)
+    {
         global $TERMIN_TYP;
         $db = DBManager::get();
         if (is_null($event_obj)){
@@ -199,123 +207,148 @@ class AssignObject {
         }
     }
 
-    function getUsername($use_free_name=TRUE, $explain=true) {
-        if ($this->assign_user_id)
-            return $this->getOwnerName($explain)."\n".$this->getUserFreeName();
-        elseif ($use_free_name)
-            return $this->getUserFreeName(). ($explain ? " (" . _("direkter Eintrag") . ")" : "");
-        else
-            return FALSE;
+    public function getUsername($use_free_name = true, $explain = true)
+    {
+        if ($this->assign_user_id) {
+            return $this->getOwnerName($explain) . "\n" . $this->getUserFreeName();
+        }
+        if ($use_free_name) {
+            return $this->getUserFreeName(). ($explain ? ' (' . _('direkter Eintrag') . ')' : '');
+        }
+        return false;
     }
 
-    function getOwnerType() {
+    public function getOwnerType()
+    {
         return get_object_type($this->getAssignUserId());
     }
 
-    function getResourceId() {
+    public function getResourceId()
+    {
         return $this->resource_id;
     }
 
-    function getUserFreeName() {
+    public function getUserFreeName()
+    {
         return $this->user_free_name;
     }
 
-    function getBegin() {
-        if (!$this->begin)
+    public function getBegin()
+    {
+        if (!$this->begin) {
             return time();
-        else
-            return $this->begin;
+        }
+        return $this->begin;
     }
 
-    function getEnd() {
-        if (!$this->end)
-            return time()+3600;
-        else
+    public function getEnd()
+    {
+        if (!$this->end) {
+            return time() + 60 * 60;
+        }
+        return $this->end;
+    }
+
+    public function getRepeatEnd()
+    {
+        if (!$this->repeat_end) {
             return $this->end;
+        }
+        return $this->repeat_end;
     }
 
-    function getRepeatEnd() {
-        if (!$this->repeat_end)
-            return $this->end;
-        else
-            return $this->repeat_end;
-    }
-
-    function getRepeatQuantity() {
+    public function getRepeatQuantity()
+    {
         return $this->repeat_quantity;
     }
 
-    function getRepeatInterval() {
+    public function getRepeatInterval()
+    {
         return $this->repeat_interval;
     }
 
-    function getRepeatMonthOfYear() {
-        return $this->repeat_month_of_year ;
+    public function getRepeatMonthOfYear()
+    {
+        return $this->repeat_month_of_year;
     }
 
-    function getRepeatDayOfMonth() {
+    public function getRepeatDayOfMonth()
+    {
         return $this->repeat_day_of_month;
     }
 
-    function getRepeatWeekOfMonth() {
+    public function getRepeatWeekOfMonth()
+    {
         return $this->repeat_week_of_month;
     }
 
-    function getRepeatDayOfWeek() {
+    public function getRepeatDayOfWeek()
+    {
         return $this->repeat_day_of_week;
     }
 
-    function getRepeatMode() {
-        if ((!$this->repeat_month_of_year) && (!$this->repeat_week_of_month) && (!$this->repeat_day_of_month) && (!$this->repeat_day_of_week) && (!$this->repeat_quantity)) {
-            if ( $this->repeat_end && date("z", $this->repeat_end) != date("z", $this->begin) )
-                return "sd";
-            else
-                return "na";
-        } elseif ($this->repeat_month_of_year)
-            return "y";
-        elseif ($this->repeat_week_of_month || $this->repeat_day_of_month)
-            return "m";
-        elseif ($this->repeat_day_of_week)
-            return "w";
-        else
-            return "d";
+    public function getRepeatMode()
+    {
+        if (!$this->repeat_month_of_year && !$this->repeat_week_of_month && !$this->repeat_day_of_month && !$this->repeat_day_of_week && !$this->repeat_quantity) {
+            if ($this->repeat_end && date('z', $this->repeat_end) !== date('z', $this->begin)) {
+                return 'sd';
+            } else {
+                return 'na';
+            }
+        } elseif ($this->repeat_month_of_year) {
+            return 'y';
+        } elseif ($this->repeat_week_of_month || $this->repeat_day_of_month) {
+            return 'm';
+        } elseif ($this->repeat_day_of_week) {
+            return 'w';
+        } else {
+            return 'd';
+        }
     }
 
-    function getRepeatEndByQuantity() {
+    public function getRepeatEndByQuantity()
+    {
         create_assigns($this, $this, -1, -1);
 
         $max_date = 0;
         if(is_array($this->events)){
             foreach ($this->events as $val) {
-                if ($val->getEnd() > $max_date)
+                if ($val->getEnd() > $max_date) {
                     $max_date = $val->getEnd();
+                }
             }
         }
         return $max_date;
     }
 
-    function getEvents() {
+    public function getEvents()
+    {
         $this->events = array();
         create_assigns($this, $this);
         return $this->events;
     }
 
-    function isNew() {
+    public function isNew()
+    {
         return $this->isNewObject;
     }
 
-    function isRepeatEndSemEnd() {
+    public function isRepeatEndSemEnd()
+    {
         $semester = new SemesterData;
         $all_semester = $semester->getAllSemesterData();
 
-        foreach ($all_semester as $a)
-            if (($this->begin >= $a["beginn"]) &&($this->begin <= $a["ende"]))
-                if ($this->repeat_end==$a["vorles_ende"])
+        foreach ($all_semester as $a) {
+            if ($this->begin >= $a['beginn'] && $this->begin <= $a['ende']) {
+                if ($this->repeat_end == $a['vorles_ende']) {
                     return true;
+                }
+            }
+        }
         return false;
     }
 
-    function checkLock()
+    public function checkLock()
     {
         global $user;
 
@@ -340,15 +373,35 @@ class AssignObject {
         }
     }
 
-    function checkOverlap($check_locks = TRUE) {
+    
+    /**
+     * This method checks the events on conflicting holidays.
+     *
+     * @return mixed false if no holidays were found, an array with the name and
+     *               date of the holidays otherwise
+     */
+    public function checkHoliday()
+    {
+        foreach ($this->events as $event) {
+            $holiday = SemesterHoliday::isHoliday($event->begin, false);
+            if (!empty($holiday) && $holiday['col'] > 2)  {
+                $holidays[] = $holiday['name'] . ' (' . date('d.m.Y', $event->begin) . ')';
+            }
+        }
+        return !empty($holidays) ? $holidays : false;
+    }
+
+    public function checkOverlap($check_locks = true)
+    {
         global $user;
         $resObject = ResourceObject::Factory($this->resource_id);
         //we check overlaps always for a whole day
         $start = mktime (0,0,0, date("n", $this->begin), date("j", $this->begin), date("Y", $this->begin));
-        if ($this->repeat_end)
+        if ($this->repeat_end) {
             $end = mktime (23,59,59, date("n", $this->repeat_end), date("j", $this->repeat_end), date("Y", $this->repeat_end));
-        else
+        } else {
             $end = mktime (23,59,59, date("n", $this->end), date("j", $this->end), date("Y", $this->end));
+        }
 
         //load the events of the actual assign...
         $events = $this->getEvents();
@@ -398,171 +451,185 @@ class AssignObject {
         }
     }
 
-    function getFormattedShortInfo() {
-        $info = strftime("%A", $this->begin);
-        $info = strftime("%A", $this->end);
-        $info.= ", ".date("d.m.Y", $this->begin);
-        if ((date("d", $this->begin) != date("d", $this->repeat_end)) &&
-            (date("m", $this->begin) != date("m", $this->repeat_end)) &&
-            (date("Y", $this->begin) != date("Y", $this->repeat_end)) &&
-             $this->repeat_end)
-            $info.= " - ". date("d.m.Y", $this->repeat_end);
-        $info.=", ".date("H:i", $this->begin)." - ".date("H:i", $this->end);
-        if (($this->getRepeatMode() != "na") && ($this->getRepeatMode() != "sd"))
-            $info.=", ".$this->getFormattedRepeatMode();
+    public function getFormattedShortInfo()
+    {
+        $info = strftime('%A', $this->end);
+        $info .= ', ' . date('d.m.Y', $this->begin);
+        if ($this->repeat_end && date('Ymd', $this->begin) !== date('Ymd', $this->repeat_end)) {
+            $info.= ' - ' . date('d.m.Y', $this->repeat_end);
+        }
+        $info .= ', ' . date('H:i', $this->begin) . ' - ' . date('H:i', $this->end);
+        if ($this->getRepeatMode() !== 'na' && $this->getRepeatMode() !== 'sd') {
+            $info .= ', ' . $this->getFormattedRepeatMode();
+        }
         return $info;
     }
 
-    function getFormattedRepeatMode() {
+    public function getFormattedRepeatMode()
+    {
         switch ($this->getRepeatMode()) {
-            case "d":
-                $str[1]= _("jeden Tag");
-                $str[2]= _("jeden zweiten Tag");
-                $str[3]= _("jeden dritten Tag");
-                $str[4]= _("jeden vierten Tag");
-                $str[5]= _("jeden fünften Tag");
-                $str[6]= _("jeden sechsten Tag");
-                $max=6;
+            case 'd':
+                $str[1] = _('jeden Tag');
+                $str[2] = _('jeden zweiten Tag');
+                $str[3] = _('jeden dritten Tag');
+                $str[4] = _('jeden vierten Tag');
+                $str[5] = _('jeden fünften Tag');
+                $str[6] = _('jeden sechsten Tag');
             break;
-            case "w":
-                $str[1]= _("jede Woche");
-                $str[2]= _("jede zweite Woche");
-                $str[3]= _("jede dritte Woche");
-                $max=3;
+            case 'w':
+                $str[1] = _('jede Woche');
+                $str[2] = _('jede zweite Woche');
+                $str[3] = _('jede dritte Woche');
             break;
-            case "m":
-                $str[1]= _("jeden Monat");
-                $str[2]= _("jeden zweiten Monat");
-                $str[3]= _("jeden dritten Monat");
-                $str[4]= _("jeden vierten Monat");
-                $str[5]= _("jeden fünften Monat");
-                $str[6]= _("jeden sechsten Monat");
-                $str[7]= _("jeden siebten Monat");
-                $str[8]= _("jeden achten Monat");
-                $str[9]= _("jeden neunten Monat");
-                $str[10]= _("jeden zehnten Monat");
-                $str[11]= _("jeden elften Monat");
-                $max=11;
+            case 'm':
+                $str[1] = _('jeden Monat');
+                $str[2] = _('jeden zweiten Monat');
+                $str[3] = _('jeden dritten Monat');
+                $str[4] = _('jeden vierten Monat');
+                $str[5] = _('jeden fünften Monat');
+                $str[6] = _('jeden sechsten Monat');
+                $str[7] = _('jeden siebten Monat');
+                $str[8] = _('jeden achten Monat');
+                $str[9] = _('jeden neunten Monat');
+                $str[10] = _('jeden zehnten Monat');
+                $str[11] = _('jeden elften Monat');
             break;
-            case "y":
-                $str[1]= _("jedes Jahr");
-                $str[2]= _("jedes zweite Jahr");
-                $str[3]= _("jedes dritte Jahr");
-                $str[4]= _("jedes vierte Jahr");
-                $str[5]= _("jedes fünfte Jahr");
-                $max=5;
+            case 'y':
+                $str[1] = _('jedes Jahr');
+                $str[2] = _('jedes zweite Jahr');
+                $str[3] = _('jedes dritte Jahr');
+                $str[4] = _('jedes vierte Jahr');
+                $str[5] = _('jedes fünfte Jahr');
             break;
         }
         return $str[$this->getRepeatInterval()];
     }
 
-    function setResourceId($value) {
-        $this->resource_id=$value;
-        $this->chng_flag=TRUE;
+    public function setResourceId($value)
+    {
+        $this->resource_id = $value;
+        $this->chng_flag = true;
     }
 
-    function setUserFreeName($value) {
-        $this->user_free_name=$value;
-        $this->chng_flag=TRUE;
+    public function setUserFreeName($value)
+    {
+        $this->user_free_name = $value;
+        $this->chng_flag = true;
     }
 
-    function setAssignUserId($value) {
-        $this->assign_user_id=$value;
-        $this->chng_flag=TRUE;
+    public function setAssignUserId($value)
+    {
+        $this->assign_user_id = $value;
+        $this->chng_flag = true;
     }
 
-    function setBegin($value) {
-        $this->begin=$value;
-        $this->chng_flag=TRUE;
+    public function setBegin($value)
+    {
+        $this->begin = $value;
+        $this->chng_flag = true;
     }
 
-    function setEnd($value) {
-        $this->end=$value;
-        $this->chng_flag=TRUE;
+    public function setEnd($value)
+    {
+        $this->end = $value;
+        $this->chng_flag = true;
     }
 
-    function setRepeatEnd($value) {
-        $this->repeat_end=$value;
-        $this->chng_flag=TRUE;
+    public function setRepeatEnd($value)
+    {
+        $this->repeat_end = $value;
+        $this->chng_flag = true;
     }
 
-    function setRepeatQuantity($value) {
-        $this->repeat_quantity=$value;
-        $this->chng_flag=TRUE;
+    public function setRepeatQuantity($value)
+    {
+        $this->repeat_quantity = $value;
+        $this->chng_flag = true;
     }
 
-    function setRepeatInterval($value) {
-        $this->repeat_interval=$value;
-        $this->chng_flag=TRUE;
+    public function setRepeatInterval($value)
+    {
+        $this->repeat_interval = $value;
+        $this->chng_flag = true;
     }
 
-    function setRepeatMonthOfYear($value) {
-        $this->repeat_month_of_year=$value;
-        $this->chng_flag=TRUE;
+    public function setRepeatMonthOfYear($value)
+    {
+        $this->repeat_month_of_year = $value;
+        $this->chng_flag = true;
     }
 
-    function setRepeatDayOfMonth($value) {
-        $this->repeat_day_of_month=$value;
-        $this->chng_flag=TRUE;
+    public function setRepeatDayOfMonth($value)
+    {
+        $this->repeat_day_of_month = $value;
+        $this->chng_flag = true;
     }
 
-    function setRepeatWeekOfMonth($value) {
-        $this->repeat_week_of_month=$value;
-        $this->chng_flag=TRUE;
+    public function setRepeatWeekOfMonth($value)
+    {
+        $this->repeat_week_of_month = $value;
+        $this->chng_flag = true;
     }
 
-    function setRepeatDayOfWeek($value) {
-        $this->repeat_day_of_week=$value;
-        $this->chng_flag=TRUE;
+    public function setRepeatDayOfWeek($value)
+    {
+        $this->repeat_day_of_week = $value;
+        $this->chng_flag = true;
     }
 
-    function setCommentInternal($value) {
+    public function setCommentInternal($value)
+    {
         $this->comment_internal = $value;
-        $this->chng_flag = TRUE;
+        $this->chng_flag = true;
     }
 
-    function getCommentInternal() {
+    public function getCommentInternal()
+    {
         return $this->comment_internal;
     }
 
-    function restore($id='') {
-        $db = DBManager::get();
-        if(func_num_args() == 1){
-            if (!$id){
+    public function restore($id = '')
+    {
+        if (func_num_args() == 1) {
+            if (!$id) {
                 return false;
             }
         } else {
-            if (!$this->id){
+            if (!$this->id) {
                 return false;
             }
             $id = $this->id;
         }
-        $query = sprintf("SELECT * FROM resources_assign WHERE assign_id='%s' ",$id);
-        $result = $db->query($query);
 
-        if($res = $result->fetch()) {
-            $this->id = $id;
-            $this->resource_id = $res["resource_id"];
-            $this->assign_user_id = $res["assign_user_id"];
-            $this->user_free_name = $res["user_free_name"];
-            $this->begin = (int)$res["begin"];
-            $this->end =  (int)$res["end"];
-            $this->repeat_end =  (int)$res["repeat_end"];
-            $this->repeat_quantity =  (int)$res["repeat_quantity"];
-            $this->repeat_interval =  (int)$res["repeat_interval"];
-            $this->repeat_month_of_year  = (int)$res["repeat_month_of_year"];
-            $this->repeat_day_of_month = (int)$res["repeat_day_of_month"];
-            $this->repeat_month = (int)$res["repeat_month"];
-            $this->repeat_week_of_month = (int)$res["repeat_week_of_month"];
-            $this->repeat_day_of_week = (int)$res["repeat_day_of_week"];
-            $this->repeat_week = (int)$res["repeat_week"];
-            $this->comment_internal = $res["comment_internal"];
-            return TRUE;
+        $query = "SELECT * FROM resources_assign WHERE assign_id = :id";
+        $statement = DBManager::get()->prepare($query);
+        $statement->bindValue(':id', $id);
+        $statement->execute();
+
+        if ($res = $statement->fetch(PDO::FETCH_ASSOC)) {
+            $this->id                   = $id;
+            $this->resource_id          = $res['resource_id'];
+            $this->assign_user_id       = $res['assign_user_id'];
+            $this->user_free_name       = $res['user_free_name'];
+            $this->begin                = (int)$res['begin'];
+            $this->end                  = (int)$res['end'];
+            $this->repeat_end           = (int)$res['repeat_end'];
+            $this->repeat_quantity      = (int)$res['repeat_quantity'];
+            $this->repeat_interval      = (int)$res['repeat_interval'];
+            $this->repeat_month_of_year = (int)$res['repeat_month_of_year'];
+            $this->repeat_day_of_month  = (int)$res['repeat_day_of_month'];
+            $this->repeat_month         = (int)$res['repeat_month'];
+            $this->repeat_week_of_month = (int)$res['repeat_week_of_month'];
+            $this->repeat_day_of_week   = (int)$res['repeat_day_of_week'];
+            $this->repeat_week          = (int)$res['repeat_week'];
+            $this->comment_internal     = $res['comment_internal'];
+            return true;
         }
-        return FALSE;
+        return false;
     }
 
-    function store($create=''){
+    public function store($create = '')
+    {
         $db = DBManager::get();
         // save only, if changes were made or the object is new and a assign_user_id or a user_free_name is given
         if (($this->chng_flag || $create) && ($this->assign_user_id || $this->user_free_name) && $this->resource_id) {
@@ -572,7 +639,7 @@ class AssignObject {
             //insert NULL instead of nothing
             $tmp_assign_user_id = $this->assign_user_id ?: null;
 
-            if($create) {
+            if ($create) {
                 $stmt = $db->prepare("INSERT INTO resources_assign SET resource_id = ?,
                     assign_user_id = ?, user_free_name = ?, begin = ?, end = ?, repeat_end = ?,
                     repeat_quantity = ?, repeat_interval = ?, repeat_month_of_year = ?, repeat_day_of_month = ?,
@@ -632,8 +699,6 @@ class AssignObject {
                 $this->updateResourcesTemporaryEvents();
 
                 return true;
-            } else {
-                return false;
             }
         }
         return false;
@@ -641,8 +706,11 @@ class AssignObject {
 
     /**
      * update the table resources_temporary_events for this assign
+     *
+     * @todo the second should be rewritten as prepared statement
      */
-    function updateResourcesTemporaryEvents() {
+    public function updateResourcesTemporaryEvents()
+    {
         // delete old events
         $stmt = DBManager::get()->prepare("DELETE FROM resources_temporary_events
             WHERE assign_id = ?");
@@ -650,26 +718,27 @@ class AssignObject {
 
         // get the events and keep resources_temporary_events up-to-date under all circumstances
         $events = $this->getEvents();
-        $sql = Array();
+        $sql = array();
         $now = time();
 
-        foreach($events as $event) {
+        foreach ($events as $event) {
             $sql[] = "('" . $event->id ."','$this->resource_id', '".$this->id."', ".$event->getBegin().", ".$event->getEnd().", $now)";
         }
 
-        if (sizeof($sql) > 0) {
+        if (count($sql) > 0) {
             $query = "INSERT INTO resources_temporary_events (event_id ,resource_id, assign_id,begin,end,mkdate) VALUES " . join(",",$sql);
             DBManager::get()->query($query);
         }
     }
 
-    function syncronizeMetaDates(){
+    public function syncronizeMetaDates()
+    {
         $changed = false;
-        if ($this->getOwnerType() == "sem") {
+        if ($this->getOwnerType() === 'sem') {
             $sem = Seminar::GetInstance($this->getAssignUserId());
-            if (!$sem->is_new){
+            if (!$sem->is_new) {
                 $key = $sem->getMetaDatesKey($this->begin, $this->end);
-                if (!is_null($key)){
+                if (!is_null($key)) {
                     $sem->setMetaDateValue($key, 'resource_id', $this->resource_id);
                     $sem->setMetaDateValue($key, 'room_description', '');
                     $changed = $sem->store();
@@ -679,7 +748,8 @@ class AssignObject {
         return $changed;
     }
 
-    function delete() {
+    public function delete()
+    {
         $db = DBManager::get();
         if ($this->isNewObject) {
             return false;
@@ -706,12 +776,14 @@ class AssignObject {
 
         // delete entry from resources_assign
         $query = sprintf("DELETE FROM resources_assign WHERE assign_id='%s'", $this->id);
-        if($db->exec($query))
-            return TRUE;
-        return FALSE;
+        if($db->exec($query)) {
+            return true;
+        }
+        return false;
     }
 
-    function getCopyForResource($resource_id){
+    public function getCopyForResource($resource_id)
+    {
         $new_assign = new AssignObject(array(null, $resource_id));
         foreach(array(  'assign_user_id',
                         'user_free_name',
@@ -725,7 +797,7 @@ class AssignObject {
                         'repeat_day_of_month',
                         'repeat_week_of_month',
                         'repeat_day_of_week',
-                        'comment_internal') as $prop){
+                        'comment_internal') as $prop) {
             $new_assign->$prop = $this->$prop;
         }
         return $new_assign;

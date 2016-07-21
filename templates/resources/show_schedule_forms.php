@@ -19,6 +19,17 @@ use Studip\Button,
     <tbody>
         <tr>
             <td colspan="3" align="center">
+            <? if (!empty($_SESSION['assign_object_has_holidays'][$resAssign->id])) : ?>
+        		<?  $holidays = "<br>" . htmlReady(implode(', ', $_SESSION['assign_object_has_holidays'][$resAssign->id])) . "<br>";    	        
+        	        if (count($_SESSION['assign_object_has_holidays'][$resAssign->id]) > 1) {
+        	            $msg = sprintf(_("Die Belegung überschneidet sich mit folgenden Feiertagen: %s Wollen Sie die Belegung dennoch speichern?"), $holidays);
+        	        } else {
+        	            $msg = sprintf(_("Die Belegung überschneidet sich mit folgendem Feiertag: %s Wollen Sie die Belegung dennoch speichern?"), $holidays);
+        	        }
+                ?>                
+                <?= MessageBox::error($msg . "<br>". Button::createAccept(_('JA!'), 'ignore_holidays') . ' ' . Button::createCancel(_('NEIN!'), 'no_ignore_holidays')) ?>
+            <? endif; ?>
+            
             <? if ($resAssign->isNew()) : ?>
                 <?= MessageBox::info(_("Sie erstellen eine neue Belegung")) ?>
             <? endif; ?>

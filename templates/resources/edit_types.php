@@ -109,8 +109,9 @@
                 <table class="default zebra-hover" style="width: 90%">
                     <colgroup>
                         <col width="32%">
-                        <col width="32%">
-                        <col width="20%">
+                        <col width="30%">
+                        <col width="12%">
+                        <col width="10%">
                         <col width="6%">
                     </colgroup>
                     <tbody>
@@ -142,6 +143,12 @@
                                 &nbsp;
                             <? endif; ?>
                             </td>
+                            <td>
+                                <input type="hidden" name="protected[]" value="_id1_<?= $type['category_id'] ?>">
+                                <input type="hidden" name="protected[]" value="_id2_<?= $property['property_id'] ?>">
+                                <input type="checkbox" name="protected[]" <? if ($property['protected']) echo 'checked'; ?>>
+                                <?= _('geschützt') ?>
+                            </td>
                             <td style="text-align: right;">
                             <? if (!$property['system']):  ?>
                                 <a href="<?= URLHelper::getLink('?delete_type_property_id=' . $property['property_id']
@@ -158,7 +165,7 @@
                     <tfoot>
                         <tr>
                         <? if (count($properties) != count($tmp_resvis)): ?>
-                            <td colspan="4">
+                            <td colspan="5">
                                 <select name="add_type_property_id[<?= $type['category_id'] ?>]">
                             <? //Noch nicht vergebene Properties zum Vergeben anbieten
                                foreach ($properties as $property): ?>

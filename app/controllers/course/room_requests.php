@@ -331,6 +331,13 @@ class Course_RoomRequestsController extends AuthenticatedController
                         $checker->checkOverlap($events, $check_result, "assign_id");
                     }
                     foreach ($tmp_search_result as $room_id => $name) {
+
+                        //show only rooms with the requestable property
+                        $raum_object = ResourceObject::Factory($room_id);
+                        if (Config::get()->RESOURCES_ALLOW_REQUESTABLE_ROOM_REQUESTS && !$raum_object->requestable) {
+                            continue;
+                        }
+
                         if (isset($check_result[$room_id])) {
                             $details = $check_result[$room_id];
                             if (count($details) >= round(count($events) * Config::get()->RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE / 100)) {

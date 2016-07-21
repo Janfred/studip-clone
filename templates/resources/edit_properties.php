@@ -49,6 +49,15 @@ $types = array(
                 </select>
             </td>
         </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>
+                <label for="info_label_visible"><?= _('in Info-Label sichtbar:') ?></label>
+            </td>
+            <td>
+                <input id="info_label_visible" name="info_label_visible" type="checkbox">
+            </td>
+        </tr>
     </tbody>
     <tfoot>
         <tr class="table_footer">
@@ -75,15 +84,16 @@ $types = array(
     <colgroup>
         <col width="4%">
         <col width="25%">
-        <col width="35%">
-        <col width="30%">
+        <col width="25%">
+        <col width="25%">
+        <col width="15%">
         <col width="6%">
     </colgroup>
     <thead>
         <tr>
             <th>&nbsp;</th>
             <th><?= _('Eigenschaft') ?></th>
-            <th colspan="2"><?= _('Art der Eigenschaft') ?></th>
+            <th colspan="3"><?= _('Art der Eigenschaft') ?></th>
             <th style="text-align: center;"><?= _('X') ?></th>
         </tr>
     </thead>
@@ -148,6 +158,12 @@ $types = array(
                 <? endif; ?>
                 </label>
             </td>
+            <td style="vertical-align: top;">
+                <label>
+                    <?= _('in Info-Label sichtbar:') ?> <br>
+                	<input name="info_label_visible[<?= $property['property_id'] ?>]" type="checkbox" <?= $property['info_label'] ? 'checked' : '' ?> value=1 > <?= _('sichtbar') ?>
+                </label>
+            </td>
             <td valign="bottom" align="center">
                 <?= _('diese Eigenschaft') ?><br>
             <? if (($property['depTyp']==0) && !$type['system']): ?>
@@ -161,7 +177,7 @@ $types = array(
     </tbody>
     <tfoot>
         <tr class="table_footer">
-            <td colspan="5" style="text-align: center;">
+            <td colspan="6" style="text-align: center;">
                 <?= Button::createAccept(_('Übernehmen'), '_send_property_type') ?>
             </td>
         </tr>

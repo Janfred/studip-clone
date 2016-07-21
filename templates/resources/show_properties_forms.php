@@ -104,6 +104,7 @@ use Studip\Button, Studip\LinkButton;
     <? endif; ?>
 <? if ($resObject->getCategoryId()) : ?>
     <? foreach ($EditResourceData->selectProperties() as $property): ?>
+    	<? $protected_property = getGlobalPerms($user->id) != 'admin' && $property['protected']; ?>
         <tr>
             <td>&nbsp;</td>
             <td>
@@ -116,22 +117,22 @@ use Studip\Button, Studip\LinkButton;
             <? if ($property['type'] == 'bool'): ?>
                 <label>
                     <input id="property_<?= $property['property_id'] ?>" type="checkbox"
-                           name="change_property_val[]" <? if ($property['state']) echo 'checked'; ?>>
+                           name="change_property_val[]" <? if ($property['state']) echo 'checked'; ?><? if ($protected_property) echo ' disabled '; ?>>
                         <?= htmlReady($property['options']) ?>
                 </label>
             <? elseif ($property['type'] == 'num' && $property['system'] == 2): ?>
                 <input id="property_<?= $property['property_id'] ?>" type="text"
                        name="change_property_val[]" value="<?= htmlReady($property['state']) ?>"
-                       size="5" maxlength="10">
+                       size="5" maxlength="10" <? if ($protected_property) echo ' disabled '; ?>>
             <? elseif ($property['type'] == 'num'): ?>
                 <input id="property_<?= $property['property_id'] ?>" type="text"
                        name="change_property_val[]" value="<?= htmlReady($property['state']) ?>"
-                       size="30" maxlength="255">
+                       size="30" maxlength="255" <? if ($protected_property) echo ' disabled '; ?>>
             <? elseif ($property['type'] == 'text'): ?>
-                <textarea id="property_<?= $property['property_id'] ?>" name="change_property_val[]"
-                          cols="30" rows="2"><?= htmlReady($property['state']) ?></textarea>
+                <textarea id="property_<?= $property['property_id'] ?>" name="change_property_val[]" 
+                          cols="30" rows="2" <? if ($protected_property) echo ' disabled '; ?>><?= htmlReady($property['state']) ?></textarea>
             <? elseif ($property['type'] == 'select'): ?>
-                <select id="property_<?= $property['property_id'] ?>" name="change_property_val[]">
+                <select id="property_<?= $property['property_id'] ?>" name="change_property_val[]" <? if ($protected_property) echo ' disabled '; ?>>
                 <? foreach (explode(';', $property['options']) as $option): ?>
                     <option value="<?= $option ?>" <? if ($property['state'] == $option) echo 'selected'; ?>>
                         <?= htmlReady($option) ?>
@@ -165,6 +166,23 @@ use Studip\Button, Studip\LinkButton;
                        <? if ($resObject->getMultipleAssign()) echo 'checked'; ?>>
             </td>
         </tr>
+        <? if ($resObject->isRoom()): ?>
+        <tr>
+            <td>&nbsp;</td>
+            <td>
+                <b><?= _('wünschbar') ?></b><br>
+                <br>
+                <label for="change_requestable">
+                    <?= _('legt fest ob ein Raum wünschbar ist') ?>
+                </label>
+            </td>
+            <td>
+                <input type="checkbox" id="change_requestable" name="change_requestable" value="1"
+                       <? if ($resObject->getRequestable()) echo 'checked'; ?>>
+            </td>
+        </tr>
+        <? endif; ?>
+        
     <? endif; ?>
         <tr>
             <td>&nbsp;</td>

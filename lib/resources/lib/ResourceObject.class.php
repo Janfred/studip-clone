@@ -5,9 +5,9 @@
 # Lifter010: TODO
 /**
 * ResourceObject.class.php
-* 
+*
 * class for a resource-object
-* 
+*
 *
 * @author       Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @access       public
@@ -39,14 +39,15 @@
 /*****************************************************************************
 ResourceObject, zentrale Klasse der Ressourcen Objekte
 /*****************************************************************************/
-class ResourceObject {
-    
-    function Factory(){
+class ResourceObject
+{
+    public static function Factory()
+    {
         static $ressource_object_pool;
         $argn = func_num_args();
-        if ($argn == 1){
-            if ( ($id = func_get_arg(0)) ){
-                if (is_object($ressource_object_pool[$id]) && $ressource_object_pool[$id]->getId() == $id){
+        if ($argn == 1) {
+            if ($id = func_get_arg(0)) {
+                if (is_object($ressource_object_pool[$id]) && $ressource_object_pool[$id]->getId() == $id) {
                     return $ressource_object_pool[$id];
                 } else {
                     $ressource_object_pool[$id] = new ResourceObject($id);
@@ -56,7 +57,7 @@ class ResourceObject {
         }
         return new ResourceObject(func_get_args());
     }
-    
+
     var $id;                //resource_id des Objects;
     var $name;              //Name des Objects
     var $description;           //Beschreibung des Objects;
@@ -67,14 +68,15 @@ class ResourceObject {
     var $is_room = null;
     var $is_parent = null;
     var $my_state = null;
-    
+
     //Konstruktor
-    function __construct($argv) {
+    public function __construct($argv)
+    {
         global $user;
-        
+
         $this->user_id = $user->id;
-        
-        if($argv && !is_array($argv)) {
+
+        if ($argv && !is_array($argv)) {
             $id = $argv;
             $this->restore($id);
         } elseif (count($argv) == 7) {
@@ -85,23 +87,23 @@ class ResourceObject {
             $this->parent_id = $argv[4];
             $this->category_id = $argv[5];
             $this->owner_id = $argv[6];
-            if (!$this->id)
-                $this->id=$this->createId();
+            if (!$this->id) {
+                $this->id = $this->createId();
+            }
             if (!$this->root_id) {
                 $this->root_id = $this->id;
                 $this->parent_id = "0";
             }
             $this->chng_flag=FALSE;
-
         }
     }
-    
-    function createId()
+
+    public function createId()
     {
         return md5(uniqid("DuschDas",1));
     }
 
-    function create()
+    public function create()
     {
         $query = "SELECT resource_id FROM resources_objects WHERE resource_id = ?";
         $statement = DBManager::get()->prepare($query);
@@ -109,29 +111,33 @@ class ResourceObject {
         $check = $statement->fetchColumn();
 
         if ($check) {
-            $this->chng_flag = TRUE;
+            $this->chng_flag = true;
             return $this->store();
         }
 
-        return $this->store(TRUE);
-    }
-    
-    function setName($name){
-        $this->name= $name;
-        $this->chng_flag = TRUE;
+        return $this->store(true);
     }
 
-    function setDescription($description){
-        $this->description= $description;
-        $this->chng_flag = TRUE;
+    public function setName($name)
+    {
+        $this->name      = $name;
+        $this->chng_flag = true;
     }
 
-    function setCategoryId($category_id){
-        $this->category_id=$category_id;
-        $this->chng_flag = TRUE;
+    public function setDescription($description)
+    {
+        $this->description = $description;
+        $this->chng_flag   = true;
     }
 
-    function setMultipleAssign($value){
+    public function setCategoryId($category_id)
+    {
+        $this->category_id = $category_id;
+        $this->chng_flag   = true;
+    }
+
+    public function setMultipleAssign($value)
+    {
         if ($value) {
             $this->multiple_assign = true;
         } else {
@@ -140,111 +146,155 @@ class ResourceObject {
                 // update the table resources_temporary_events or bad things will happen
                 $this->updateAllAssigns();
             }
-            
+
             $this->multiple_assign = false;
         }
-        
-        $this->chng_flag = TRUE;
+
+        $this->chng_flag = true;
     }
 
-    function setParentBind($parent_bind){
-        if ($parent_bind==on)
-            $this->parent_bind=TRUE;
-        else
-            $this->parent_bind=FALSE;
-        $this->chng_flag = TRUE;
-    }
-
-    function setLockable($lockable){
-        if ($lockable == on)
-            $this->lockable=TRUE;
-        else
-            $this->lockable=FALSE;
-        $this->chng_flag = TRUE;
-    }
-
-    function setOwnerId($owner_id){
-        $old_value = $this->owner_id;
-        $this->owner_id=$owner_id;
-        $this->chng_flag = TRUE;
-        if ($old_value != $owner_id)
-            return TRUE;
-        else
-            return FALSE;
-    }
     
-    function setInstitutId($institut_id){
-        $this->institut_id=$institut_id;
-        $this->chng_flag = TRUE;
+    /**
+     * Set wether the ResourceObject is requestable or not
+     *
+     * @param bool $value
+     */
+    public function setRequestable($value)
+    {
+        if ($value) {
+            $this->requestable = true;
+        } else {
+            // requests where allowed and are not allowed anymore - update
+            if ($this->requestable) {
+                // update the table resources_temporary_events or bad things will happen
+                $this->updateAllAssigns();
+            }
+
+            $this->requestable = false;
+        }
+
+        $this->chng_flag = true;
     }
 
+    public function setParentBind($parent_bind)
+    {
+        $this->parent_bind = $parent_bind === 'on';
+        $this->chng_flag   = true;
+    }
 
-    function getId() {
+    public function setLockable($lockable)
+    {
+        $this->lockable  = $lockable === 'on';
+        $this->chng_flag = true;
+    }
+
+    public function setOwnerId($owner_id)
+    {
+        $old_value = $this->owner_id;
+
+        $this->owner_id  = $owner_id;
+        $this->chng_flag = true;
+
+        return $old_value !== $owner_id;
+    }
+
+    public function setInstitutId($institut_id)
+    {
+        $this->institut_id = $institut_id;
+        $this->chng_flag   = true;
+    }
+
+    public function getId()
+    {
         return $this->id;
     }
 
-    function getRootId() {
+    public function getRootId()
+    {
         return $this->root_id;
     }
 
-    function getParentId() {
+    public function getParentId()
+    {
         return $this->parent_id;
     }
 
-    function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
-    function getCategoryName() {
+    public function getCategoryName()
+    {
         return $this->category_name;
     }
 
-    function getCategoryIconnr() {
+    public function getCategoryIconnr()
+    {
         return $this->category_iconnr;
     }
 
-    function getCategoryId() {
+    public function getCategoryId()
+    {
         return $this->category_id;
     }
 
-    function getDescription() {
+    public function getDescription()
+    {
         return $this->description;
     }
 
-    function getOwnerId() {
+    public function getOwnerId()
+    {
         return $this->owner_id;
     }
 
-    function getInstitutId() {
+    public function getInstitutId()
+    {
         return $this->institut_id;
     }
-    
-    function getMultipleAssign() {
+
+    public function getMultipleAssign()
+    {
         return $this->multiple_assign;
     }
-    
-    function getParentBind() {
+
+    /**
+     * Get wether the ResourceObject is requestable or not
+     *
+     * @return bool
+     */
+    public function getRequestable()
+    {
+        return $this->requestable;
+    }
+
+    public function getParentBind()
+    {
         return $this->parent_bind;
     }
-    
-    function getOwnerType($id='') {
-        if (!$id)
-            $id=$this->owner_id;
 
-        //Is it a global?
-        if ($id == "global"){
-            return "global";
-        } else if ($id == "all"){
-            return "all";
-        } else {
-            $type = get_object_type($id);
-            return ($type == "fak") ? "inst" : $type;
-        }
-    }
-    
-    function getOrgaName ($explain=FALSE, $id='') {
+    public function getOwnerType($id = '')
+    {
         if (!$id) {
-            $id=$this->institut_id;
+            $id = $this->owner_id;
+        }
+
+        if ($id === 'global') {
+            return 'global';
+        }
+        if ($id === 'all'){
+            return 'all';
+        }
+
+        $type = get_object_type($id);
+        return $type === 'fak' ? 'inst' : $type;
+    }
+
+    public function getOrgaName ($explain = false, $id = '')
+    {
+        if (!$id) {
+            $id = $this->institut_id;
         }
 
         $query = "SELECT Name FROM Institute WHERE Institut_id = ?";
@@ -258,34 +308,36 @@ class ResourceObject {
                 : $name;
         }
     }
-    
-    function getOwnerName($explain=FALSE, $id='') {
-        if (!$id)
-            $id=$this->owner_id;
+
+    public function getOwnerName($explain = false, $id = '')
+    {
+        if (!$id) {
+            $id = $this->owner_id;
+        }
 
         switch ($this->getOwnerType($id)) {
-            case "all":
-                if (!$explain)
-                    return _("jederR");
-                else
-                    return _("jedeR (alle Nutzenden)");
+            case 'all':
+                if ($explain) {
+                    return _('jedeR (alle Nutzenden)');
+                }
+                return _('jederR');
             break;
-            case "global":
-                if (!$explain)
-                    return _("Global");
-                else
-                    return _("Global (zentral verwaltet)");
+            case 'global':
+                if ($explain) {
+                    return _('Global (zentral verwaltet)');
+                }
+                return _('Global');
             break;
-            case "user":
-                if (!$explain)
-                    return get_fullname($id,'full');
-                else
-                    return get_fullname($id,'full')." ("._("NutzerIn").")";
+            case 'user':
+                if ($explain) {
+                    return get_fullname($id, 'full') . ' (' . _('NutzerIn') . ')';
+                }
+                return get_fullname($id, 'full');
             break;
-            case "inst":
+            case 'inst':
                 return $this->getOrgaName($explain, $id);
             break;
-            case "sem":
+            case 'sem':
                 $query = "SELECT Name FROM seminare WHERE Seminar_id = ?";
                 $statement = DBManager::get()->prepare($query);
                 $statement->execute(array($id));
@@ -299,7 +351,7 @@ class ResourceObject {
             break;
         }
     }
-    
+
     /**
      * This function creates a link to show an room in a new window/tab/popup. This function should not be used from outside of this class anymore
      *
@@ -310,28 +362,30 @@ class ResourceObject {
      *
      * @return string href-part of a link
      */
-    private function getLink($quick_view = FALSE, $view ="view_schedule", $view_mode = "no_nav", $timestamp = FALSE) {
+    private function getLink($quick_view = false, $view ="view_schedule", $view_mode = "no_nav", $timestamp = false)
+    {
         if (func_num_args() == 1) {
             $timestamp = func_get_arg(0);
         }
-        return URLHelper::getLink(sprintf ("resources.php?actual_object=%s&%sview=%s&%sview_mode=%s%s", $this->id, ($quick_view) ? "quick_" : "", $view, ($quick_view) ? "quick_" : "", $view_mode, ($timestamp > 0) ? "&start_time=".$timestamp : ""));
+        return URLHelper::getLink(sprintf ('resources.php?actual_object=%s&%sview=%s&%sview_mode=%s%s', $this->id, ($quick_view) ? 'quick_' : '', $view, ($quick_view) ? 'quick_' : '', $view_mode, ($timestamp > 0) ? '&start_time='.$timestamp : ''));
     }
-    
-    function getFormattedLink($javaScript = TRUE, $target_new = TRUE, $quick_view = TRUE, $view ="view_schedule", $view_mode = "no_nav", $timestamp = FALSE, $link_text = FALSE) {
+
+    public function getFormattedLink($javaScript = true, $target_new = true, $quick_view = true, $view = 'view_schedule', $view_mode = 'no_nav', $timestamp = false, $link_text = false)
+    {
         global $auth;
-        
+
         if (func_num_args() == 1) {
             $timestamp = func_get_arg(0);
-            $javaScript = TRUE;
+            $javaScript = true;
         }
 
         if (func_num_args() == 2) {
             $timestamp = func_get_arg(0);
             $link_text = func_get_arg(1);
-            $javaScript = TRUE;
+            $javaScript = true;
         }
 
-        
+
         if ($this->id) {
             if (self::isScheduleViewAllowed($this->id)) {
                 if ((!$javaScript) || (!$auth->auth["jscript"])) {
@@ -342,41 +396,43 @@ class ResourceObject {
             } else {
                 return (($link_text) ? $link_text : $this->getName());
             }
-        } else
-            return FALSE;
-    }
-    
-    function getOrgaLink ($id='') {
-        if (!$id)
-            $id=$this->institut_id;
-        
-        return  sprintf ("dispatch.php/institute/overview?auswahl=%s",$id);   
+        }
+        return false;
     }
 
-    
-    function getOwnerLink($id='') {
-        
-        if (!$id)
-            $id=$this->owner_id;
+    public function getOrgaLink ($id = '')
+    {
+        if (!$id) {
+            $id = $this->institut_id;
+        }
+
+        return sprintf('dispatch.php/institute/overview?auswahl=%s',$id);
+    }
+
+    public function getOwnerLink($id  ='')
+    {
+        if (!$id) {
+            $id = $this->owner_id;
+        }
         switch ($this->getOwnerType($id)) {
-            case "global":
+            case 'global':
                 return '#a';
-            case "all":
+            case 'all':
                 return '#a';
             break;
-            case "user":
-                return  sprintf ("dispatch.php/profile?username=%s",get_username($id));
+            case 'user':
+                return sprintf('dispatch.php/profile?username=%s', get_username($id));
             break;
-            case "inst":
-                return  sprintf ("dispatch.php/institute/overview?auswahl=%s",$id);
+            case 'inst':
+                return sprintf('dispatch.php/institute/overview?auswahl=%s', $id);
             break;
-            case "sem":
-                return  sprintf ("seminar_main.php?auswahl=%s",$id);
+            case 'sem':
+                return sprintf('seminar_main.php?auswahl=%s', $id);
             break;
         }
     }
-    
-    function getPlainProperties($only_requestable = FALSE)
+
+    public function getPlainProperties($only_requestable = false, $only_info_label_visible = false)
     {
         $query = "SELECT b.name, a.state, b.type, b.options
                   FROM resources_objects_properties AS a
@@ -385,6 +441,9 @@ class ResourceObject {
                   WHERE resource_id = ? AND c.category_id = ?";
         if ($only_requestable) {
             $query .= " AND requestable = 1";
+        }
+        if ($only_info_label_visible) {
+            $query .= " AND b.info_label = 1";
         }
         $query .= " ORDER BY b.name";
         $statement = DBManager::get()->prepare($query);
@@ -405,7 +464,7 @@ class ResourceObject {
         return implode(" \n", $temp);
     }
 
-    function getSeats()
+    public function getSeats()
     {
         if (is_null($this->my_state)) {
             $query = "SELECT a.state
@@ -424,17 +483,17 @@ class ResourceObject {
         return $this->my_state ?: false;
     }
 
-    function isUnchanged()
+    public function isUnchanged()
     {
         return $this->mkdate == $this->chdate;
     }
 
-    function isDeletable()
+    public function isDeletable()
     {
-        return (!$this->isParent() && !$this->isAssigned());
+        return !$this->isParent() && !$this->isAssigned();
     }
 
-    function isParent()
+    public function isParent()
     {
         if (is_null($this->is_parent)) {
             $query = "SELECT 1
@@ -447,8 +506,8 @@ class ResourceObject {
         }
         return (!is_null($this->is_parent));
     }
-    
-    function isAssigned()
+
+    public function isAssigned()
     {
         if (is_null($this->is_assigned)) {
             $query = "SELECT 1
@@ -461,8 +520,8 @@ class ResourceObject {
         }
         return (!is_null($this->is_assigned));
     }
-    
-    function isRoom()
+
+    public function isRoom()
     {
         if (is_null($this->is_room)) {
             $query = "SELECT is_room
@@ -475,18 +534,18 @@ class ResourceObject {
         }
         return (!is_null($this->is_room));
     }
-    
-    function isLocked()
+
+    public function isLocked()
     {
         return $this->isRoom() && $this->isLockable() && isLockPeriod('edit');
     }
 
-    function isLockable()
+    public function isLockable()
     {
         return $this->lockable;
     }
-    
-    function flushProperties()
+
+    public function flushProperties()
     {
         $query = "DELETE FROM resources_objects_properties
                   WHERE resource_id = ?";
@@ -494,8 +553,8 @@ class ResourceObject {
         $statement->execute(array($this->id));
         return $statement->rowCount() > 0;
     }
-    
-    function storeProperty ($property_id, $state)
+
+    public function storeProperty($property_id, $state)
     {
         $query = "INSERT INTO resources_objects_properties
                     (resource_id, property_id, state)
@@ -508,8 +567,8 @@ class ResourceObject {
         ));
         return $statement->rowCount() > 0;
     }
-    
-    function deletePerms ($user_id)
+
+    public function deletePerms($user_id)
     {
         $query = "DELETE FROM resources_user_resources
                   WHERE user_id = ? AND resource_id = ?";
@@ -520,12 +579,12 @@ class ResourceObject {
         ));
         return $statement->rowCount() > 0;
     }
-    
-    function storePerms ($user_id, $perms = '')
+
+    public function storePerms ($user_id, $perms = '')
     {
         //User_id zwingend notwendig
         if (!$user_id) {
-            return FALSE;
+            return false;
         }
 
         $query = "SELECT 1
@@ -538,7 +597,7 @@ class ResourceObject {
         ));
         $check = $statement->fetchColumn();
 
-        //neuer Eintrag 
+        //neuer Eintrag
         if (!$check) {
             if (!$perms) {
                 $perms = 'autor';
@@ -553,7 +612,7 @@ class ResourceObject {
                 $this->id
             ));
             return $statement->rowCount() > 0;
-        } 
+        }
 
         //alter Eintrag wird veraendert
         if ($perms) {
@@ -569,10 +628,10 @@ class ResourceObject {
             return $statement->rowCount() > 0;
         }
 
-        return FALSE;
+        return false;
     }
-    
-    function restore($id='')
+
+    public function restore($id='')
     {
         if (func_num_args() == 0) {
             $id = $this->id;
@@ -585,7 +644,7 @@ class ResourceObject {
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($id));
         $row = $statement->fetch(PDO::FETCH_ASSOC);
-        
+
         if (!$row) {
             return false;
         }
@@ -601,6 +660,7 @@ class ResourceObject {
         $this->parent_id       = $row['parent_id'];
         $this->lockable        = $row['lockable'];
         $this->multiple_assign = $row['multiple_assign'];
+        $this->requestable     = $row['requestable'];
         $this->root_id         = $row['root_id'];
         $this->mkdate          = $row['mkdate'];
         $this->chdate          = $row['chdate'];
@@ -609,12 +669,13 @@ class ResourceObject {
         return true;
     }
 
-    function store($create=''){
+    public function store($create = '')
+    {
         // Natuerlich nur Speichern, wenn sich was gaendert hat oder das Object neu angelegt wird
         if ($this->chng_flag || $create) {
             $chdate = time();
             $mkdate = time();
-            
+
             if ($create) {
                 //create level value
                 if (!$this->parent_id) {
@@ -628,9 +689,9 @@ class ResourceObject {
 
                 $query = "INSERT INTO resources_objects
                             (resource_id, root_id, parent_id, category_id,
-                             owner_id, institut_id, level, name, description, 
-                             lockable, multiple_assign, mkdate, chdate)
-                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+                             owner_id, institut_id, level, name, description,
+                             lockable, multiple_assign, requestable, mkdate, chdate)
+                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
                                   UNIX_TIMESTAMP(), UNIX_TIMESTAMP())";
                 $statement = DBManager::get()->prepare($query);
                 $statement->execute(array(
@@ -644,14 +705,16 @@ class ResourceObject {
                     $this->name,
                     $this->description,
                     $this->lockable,
-                    $this->multiple_assign 
+                    $this->multiple_assign,
+                    $this->requestable
                 ));
                 $affected_rows = $statement->rowCount();
             } else {
                 $query = "UPDATE resources_objects
                           SET root_id = ?, parent_id = ?, category_id = ?,
                               owner_id = ?, institut_id = ?, name = ?,
-                              description = ?, lockable = ?, multiple_assign = ?
+                              description = ?, lockable = ?, multiple_assign = ?,
+                              requestable = ?
                           WHERE resource_id = ?";
                 $statement = DBManager::get()->prepare($query);
                 $statement->execute(array(
@@ -664,10 +727,11 @@ class ResourceObject {
                     $this->description,
                     $this->lockable,
                     $this->multiple_assign,
+                    $this->requestable,
                     $this->id
                 ));
                 $affected_rows = $statement->rowCount();
-                
+
                 if ($affected_rows) {
                     $query = "UPDATE resources_objects
                               SET chdate = UNIX_TIMESTAMP()
@@ -679,18 +743,17 @@ class ResourceObject {
 
             return $affected_rows > 0;
         }
-        return FALSE;
+        return false;
     }
 
-    function delete()
+    public function delete()
     {
         $this->deleteResourceRecursive ($this->id);
     }
-    
+
     //delete section, very privat :)
-    
-    //private
-    function deleteAllAssigns($id='')
+
+    private function deleteAllAssigns($id = '')
     {
         if (!$id) {
             $id = $this->id;
@@ -706,10 +769,11 @@ class ResourceObject {
 
     /**
      * update all assigns for this resource
-     * 
-     * @throws Exception 
+     *
+     * @throws Exception
      */
-    function updateAllAssigns() {
+    public function updateAllAssigns()
+    {
         if (!$this->id) {
             throw new Exception('Missing resource-ID!');
         }
@@ -717,14 +781,13 @@ class ResourceObject {
         $query = "SELECT assign_id FROM resources_assign WHERE resource_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($this->id));
-        
+
         while ($assign_id = $statement->fetchColumn()) {
             AssignObject::Factory($assign_id)->updateResourcesTemporaryEvents();
         }
     }
 
-    //private
-    function deleteAllPerms($id='')
+    private function deleteAllPerms($id='')
     {
         if (!$id) {
             $id = $this->id;
@@ -735,7 +798,7 @@ class ResourceObject {
         $statement->execute(array($id));
     }
 
-    function deleteResourceRecursive($id)
+    public function deleteResourceRecursive($id)
     {
         //subcurse to subordinated resource-levels
         $query = "SELECT resource_id FROM resources_objects WHERE parent_id = ?";
@@ -754,8 +817,8 @@ class ResourceObject {
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($id));
     }
-    
-    function getPathArray($include_self = false)
+
+    public function getPathArray($include_self = false)
     {
         $result_arr = array();
 
@@ -777,16 +840,16 @@ class ResourceObject {
             if (!$temp) {
                 break;
             }
-            
+
             $id = $temp['parent_id'];
             $result_arr[$temp['resource_id']] = $temp['name'];
         }
         return $result_arr;
     }
-    
-    function getPathToString($include_self = false, $delimeter = '/')
+
+    public function getPathToString($include_self = false, $delimiter = '/')
     {
-        return join($delimeter, array_reverse(array_values($this->getPathArray($include_self))));
+        return join($delimiter, array_reverse(array_values($this->getPathArray($include_self))));
     }
 
     /**

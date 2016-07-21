@@ -39,12 +39,10 @@ if ($request_resource_id = $request->getResourceId()) :
 
         <p>
             <strong><?= htmlReady($resObject->getName()) ?></strong>
-        </p>
-
-        <p><?= _("verantwortlich:") ?>
-            <a href="<?= $resObject->getOwnerLink() ?>"><?= htmlReady($resObject->getOwnerName()) ?></a>
-            <?= Icon::create('trash', 'clickable', ['title' => _('den ausgewählten Raum löschen')])->asInput(["type" => "image", "style" => "vertical-align:middle", "name" => "reset_resource_id"]) ?>
-            <?= tooltipIcon(_('Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:') . " \n" . $resObject->getPlainProperties(true)) ?>
+        	<?= Icon::create('trash', 'clickable', ['title' => _('den ausgewählten Raum löschen')])->asInput(['type' => 'image', 'style' => 'vertical-align:middle', 'name' => 'reset_resource_id']) ?>
+            <? if(!empty($resObject->getPlainProperties(false, true))): ?>
+            <?= tooltipIcon(_('Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:') . " \n" . $resObject->getPlainProperties(false, true)) ?>
+            <? endif; ?>
         </p>
         <input type="hidden" name="selected_room" value="<?= htmlready($request_resource_id) ?>">
     </section>
@@ -52,6 +50,7 @@ if ($request_resource_id = $request->getResourceId()) :
 
 
 <section class="times-rooms-grid ">
+	<? if (!Config::get()->RESOURCES_DIRECT_ROOM_REQUESTS_ONLY) : ?>
     <section>
         <h2>
             <?= _("Raumeigenschaften angeben:") ?>
@@ -158,6 +157,7 @@ if ($request_resource_id = $request->getResourceId()) :
             </section>
         <? endif ?>
     </section>
+    <? endif; ?>
     <section>
         <h2>
             <?= _('Raum suchen') ?>
@@ -171,6 +171,7 @@ if ($request_resource_id = $request->getResourceId()) :
             <div class="selectbox">
                 <fieldset>
                     <? foreach ($search_result as $key => $val)  : ?>
+                    	<? $resObject = ResourceObject::Factory($key); ?>
                         <div class="flex-row">
                             <label class="horizontal" for="select_room_<?= $key ?>">
                                 <? if ($val['overlap_status'] === "status-green") : ?>
@@ -181,6 +182,9 @@ if ($request_resource_id = $request->getResourceId()) :
                                     <?= Icon::create('question', $val['overlap_status'])->asImg("20px", array('class' => "text-bottom")) ?>
                                 <? endif ?>
                                 <?= htmlReady(my_substr($val['name'], 0, 50)); ?>
+                                <? if(!empty($resObject->getPlainProperties(false, true))): ?>
+                                <?= tooltipIcon(_('Der gefundene Raum bietet folgende Eigenschaften:') . " \n" . $resObject->getPlainProperties(false, true)) ?>
+                                <? endif; ?>
                             </label>
                             <input type="radio" name="select_room" id="select_room_<?= $key ?>" value="<?= $key ?>">
                         </div>

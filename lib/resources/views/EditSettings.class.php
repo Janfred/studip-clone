@@ -80,12 +80,12 @@ class EditSettings
     private function selectProperties($category_id = null)
     {
         if ($category_id === null) {
-            $query = "SELECT property_id, name, type, system, options
+            $query = "SELECT property_id, name, type, system, options, info_label
                       FROM resources_properties
                       ORDER BY name";
             $statement = DBManager::get()->query($query);
         } else {
-            $query = "SELECT property_id, name, type, rp.system, category_id, requestable, options
+            $query = "SELECT property_id, name, type, rp.system, category_id, requestable, protected, options, info_label
                       FROM resources_categories_properties
                       LEFT JOIN resources_properties AS rp USING (property_id)
                       WHERE category_id = ?

@@ -26,6 +26,34 @@
         <tr>
             <td>&nbsp;</td>
             <td>
+                <b><?= _('Nur wünschbare <i>Räume</i>')?></b><br>
+                <br>
+                <label>
+                    &nbsp;&nbsp;&nbsp;
+                    <input type="checkbox" name="allow_requestable_requests"
+                           <? if (Config::get()->RESOURCES_ALLOW_REQUESTABLE_ROOM_REQUESTS) echo 'checked'; ?>>
+                    <?= _('NutzerInnen können im Rahmen der Veranstaltungsverwaltung nur wünschbare Räume wünschen.') ?>
+                </label>
+                <br>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>
+                <b><?= _('Nur konkrete <i>Räume</i> wünschbar')?></b><br>
+                <br>
+                <label>
+                    &nbsp;&nbsp;&nbsp;
+                    <input type="checkbox" name="direct_requests_only"
+                           <? if (Config::get()->RESOURCES_DIRECT_ROOM_REQUESTS_ONLY) echo 'checked'; ?>>
+                    <?= _('NutzerInnen können im Rahmen der Veranstaltungsverwaltung nur konkrete Räume wünschen.') ?>
+                </label>
+                <br>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>
                 <b><?= _('Sperrzeiten für die Bearbeitung von <i>Raum</i>belegungen') ?></b><br>
                 <br>
                 <?= _('Die <b>Bearbeitung</b> von Belegungen soll für alle lokalen Ressourcen-Administratoren zu folgenden Bearbeitungszeiten geblockt werden:') ?><br>
