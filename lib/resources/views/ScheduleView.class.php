@@ -239,8 +239,8 @@ class ScheduleView
                 <?php
                 foreach($this->show_columns as $column_id => $column_value){
                     ?>
-                    <td <?= ($this instanceof ScheduleWeek && !empty($this->getHoliday($column_id))) ? 'style="background-color: #ffb;"' : '' ; ?>
-                    width="<?echo round (95/$glb_colspan)."%"?>" align="center" class="rahmen_table_row_odd">
+                    <td <?= ($this instanceof ScheduleWeek && $this->getHoliday($column_id)) ? 'style="background-color: #ffb;"' : '' ; ?>
+                    width="<?= round (95/$glb_colspan)."%"?>" align="center" class="rahmen_table_row_odd">
                     <?=$this->getColumnName($column_id, $print_view);?>
                     </td>
                     <?
