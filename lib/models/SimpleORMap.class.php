@@ -2149,4 +2149,22 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
          }
          return $this->content[$field];
      }
+
+     /**
+      * Cleans up this object. This essentially reset all relations of
+      * this object and marks them as unused so that the garbage collector may
+      * remove the objects.
+      *
+      * Use this function when you ran into memory problems and need to free
+      * some memory;
+      */
+     public function cleanup()
+     {
+         foreach ($this->relations as $relation => $object) {
+             if ($object instanceof SimpleORMap || $object instanceof SimpleORMapCollection) {
+                 $this->relations[$relation]->cleanup();
+             }
+             $this->resetRelation($relation);
+         }
+     }
 }
