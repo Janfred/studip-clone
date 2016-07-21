@@ -182,7 +182,7 @@ if ($request_resource_id = $request->getResourceId()) :
                                     <?= Icon::create('question', $val['overlap_status'])->asImg("20px", array('class' => "text-bottom")) ?>
                                 <? endif ?>
                                 <?= htmlReady(my_substr($val['name'], 0, 50)); ?>
-                                <? if(!empty($resObject->getPlainProperties(false, true))): ?>
+                                <? if($resObject->getPlainProperties(false, true)): ?>
                                 <?= tooltipIcon(_('Der gefundene Raum bietet folgende Eigenschaften:') . " \n" . $resObject->getPlainProperties(false, true)) ?>
                                 <? endif; ?>
                             </label>
