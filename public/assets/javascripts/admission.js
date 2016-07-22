@@ -40,7 +40,7 @@ STUDIP.Admission = {
             width: '450',
             title: 'Anmelderegel konfigurieren'.toLocaleString(),
             id: 'configurerule',
-            data: {rule : $('#rule_data_' + ruleId + ' input[name="rules[]"]').val()},
+            data: {ruleId : ruleId, rules : _.pluck($('#rules input[name="rules[]"]'), 'value')},
         });
 
         return false;

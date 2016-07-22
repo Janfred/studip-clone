@@ -15,7 +15,8 @@
  * @since       3.0
  */
 
-class RandomAlgorithm extends AdmissionAlgorithm {
+class RandomAlgorithm extends AdmissionAlgorithm
+{
 
     /**
      * Runs the algorithm, thus distributing course seats.
@@ -24,7 +25,8 @@ class RandomAlgorithm extends AdmissionAlgorithm {
      * that seats shall be distributed for.
      * @see CourseSet
      */
-    public function run($courseSet) {
+    public function run($courseSet)
+    {
         if ($courseSet->hasAdmissionRule('LimitedAdmission')) {
             return $this->distributeByPriorities($courseSet);
         } else {
@@ -43,48 +45,85 @@ class RandomAlgorithm extends AdmissionAlgorithm {
     private function distributeByCourses($courseSet)
     {
         Log::DEBUG('start seat distribution for course set: ' . $courseSet->getId());
+        $groups_quota = array();
+        $conditional_rule = $courseSet->getAdmissionRule('ConditionalAdmission');
+        $conditiongroups = $conditional_rule ? $conditional_rule->getConditionGroups() : array();
+        if (count($conditiongroups)) {
+            foreach (array_keys($conditiongroups) as $group_id) {
+                $groups_quota[$group_id] = $conditional_rule->getQuota($group_id);
+            }
+        } else {
+            $groups_quota[] = 100;
+        }
         foreach ($courseSet->getCourses() as $course_id) {
+            $waiting_users = array();
             $course = Course::find($course_id);
-            $free_seats = $course->getFreeSeats();
-            $claiming_users = AdmissionPriority::getPrioritiesByCourse($courseSet->getId(), $course->id);
-            $factored_users = $courseSet->getUserFactorList();
-            //apply bonus/malus to users, exclude participants
-            foreach(array_keys($claiming_users) as $user_id) {
-                if (!$course->getParticipantStatus($user_id)) {
-                    $claiming_users[$user_id] = 1;
-                    if (isset($factored_users[$user_id])) {
-                        $claiming_users[$user_id] *= $factored_users[$user_id];
+            $free_seats_course = $course->getFreeSeats();
+            foreach ($groups_quota as $group_id => $quota) {
+                $claiming_users = AdmissionPriority::getPrioritiesByCourse($courseSet->getId(), $course->id);
+                if (isset($conditiongroups[$group_id])) {
+                    Log::DEBUG(sprintf('found conditiongroup %s with quota %s', $group_id, $quota));
+                    foreach(array_keys($claiming_users) as $user_id) {
+                        $condition_ok = true;
+                        foreach ($conditiongroups[$group_id] as $condition) {
+                            if ($condition->isFulfilled($user_id)) {
+                                $condition_ok = true;
+                                break;
+                            }
+                            $condition_ok = false;
+                        }
+                        if (!$condition_ok) {
+                            unset($claiming_users[$user_id]);
+                        }
                     }
-                    Log::DEBUG(sprintf('user %s gets factor %s', $user_id, $claiming_users[$user_id]));
-                } else {
-                    unset($claiming_users[$user_id]);
-                    Log::DEBUG(sprintf('user %s is already %s, ignoring', $user_id, $course->getParticipantStatus($user_id)));
+                }
+                $factored_users = $courseSet->getUserFactorList();
+                //apply bonus/malus to users, exclude participants
+                foreach(array_keys($claiming_users) as $user_id) {
+                    if (!$course->getParticipantStatus($user_id)) {
+                        $claiming_users[$user_id] = 1;
+                        if (isset($factored_users[$user_id])) {
+                            $claiming_users[$user_id] *= $factored_users[$user_id];
+                        }
+                        Log::DEBUG(sprintf('user %s gets factor %s', $user_id, $claiming_users[$user_id]));
+                    } else {
+                        unset($claiming_users[$user_id]);
+                        Log::DEBUG(sprintf('user %s is already %s, ignoring', $user_id, $course->getParticipantStatus($user_id)));
+                    }
+                }
+                $free_seats = round($free_seats_course * $quota / 100, 0, PHP_ROUND_HALF_DOWN);
+                Log::DEBUG(sprintf('distribute %s seats on %s claiming in course %s %s', $free_seats, count($claiming_users), $course->id, ($group_id ? 'conditiongroup ' . $group_id . ' quota ' . $quota : '')));
+                $claiming_users = $this->rollTheDice($claiming_users);
+                Log::DEBUG('the die is cast: ' . print_r($claiming_users,1));
+                $chosen_ones = array_slice(array_keys($claiming_users),0 , $free_seats);
+                Log::DEBUG('chosen ones: ' . print_r($chosen_ones,1));
+                $this->addUsersToCourse($chosen_ones, $course);
+                foreach ($chosen_ones as $one) unset($waiting_users[$one]);
+                if ($free_seats < count($claiming_users)) {
+                    $remaining_ones = array_slice(array_keys($claiming_users), $free_seats);
+                    foreach ($remaining_ones as $one) {
+                        $waiting_users[$one] = $claiming_users[$one];
+                    }
                 }
             }
-            Log::DEBUG(sprintf('distribute %s seats on %s claiming in course %s', $free_seats, count($claiming_users), $course->id));
-            $claiming_users = $this->rollTheDice($claiming_users);
-            Log::DEBUG('the die is cast: ' . print_r($claiming_users,1));
-            $chosen_ones = array_slice(array_keys($claiming_users),0 , $free_seats);
-            Log::DEBUG('chosen ones: ' . print_r($chosen_ones,1));
-            $this->addUsersToCourse($chosen_ones, $course);
-            if ($free_seats < count($claiming_users)) {
+            if (count($waiting_users)) {
+                $waiting_users = $this->rollTheDice($waiting_users);
                 if (!$course->admission_disable_waitlist) {
-                    $free_seats_waitlist = $course->admission_waitlist_max ?: count($claiming_users) - $free_seats;
-                    $waiting_list_ones = array_slice(array_keys($claiming_users),$free_seats , $free_seats_waitlist);
+                    $free_seats_waitlist = $course->admission_waitlist_max ?: count($waiting_users);
+                    $waiting_list_ones = array_slice(array_keys($waiting_users), 0, $free_seats_waitlist);
                     Log::DEBUG('waiting list ones: ' . print_r($waiting_list_ones, 1));
                     $this->addUsersToWaitlist($waiting_list_ones, $course);
                 } else {
                     $free_seats_waitlist = 0;
                 }
-                if (($free_seats_waitlist + $free_seats) < count($claiming_users)) {
-                    $remaining_ones = array_slice(array_keys($claiming_users),$free_seats_waitlist + $free_seats);
+                if ($free_seats_waitlist < count($waiting_users)) {
+                    $remaining_ones = array_slice(array_keys($waiting_users),$free_seats_waitlist);
                     Log::DEBUG('remaining ones: ' . print_r($remaining_ones, 1));
                     $this->notifyRemainingUsers($remaining_ones, $course);
                 }
             }
         }
     }
-
 
     /**
      * Distribute seats for several courses in a course set using the given
@@ -125,6 +164,18 @@ class RandomAlgorithm extends AdmissionAlgorithm {
             };
             return array_filter(array_map($mapper, array_intersect_key($claiming_users, array_flip($users))));
         };
+
+        $groups_quota = array();
+        $conditional_rule = $courseSet->getAdmissionRule('ConditionalAdmission');
+        $conditiongroups = $conditional_rule ? $conditional_rule->getConditionGroups() : array();
+        if (count($conditiongroups)) {
+            foreach (array_keys($conditiongroups) as $group_id) {
+                $groups_quota[$group_id] = $conditional_rule->getQuota($group_id);
+            }
+        } else {
+            $groups_quota[] = 100;
+        }
+
         //sort courses by highest count of prio 1 applicants
         $stats = AdmissionPriority::getPrioritiesStats($courseSet->getId());
         $courses = array_map(function ($a) {return $a['h'];},$stats);
@@ -136,46 +187,61 @@ class RandomAlgorithm extends AdmissionAlgorithm {
         //walk through all prios with all courses
         foreach(range(1, $max_prio) as $current_prio) {
             foreach (array_keys($courses) as $course_id) {
-                $current_claiming = array();
                 $course = Course::find($course_id);
-                $free_seats = $course->getFreeSeats();
-                //find users with current prio for this course, if they still need a place
-                foreach ($claiming_users as $user_id => $prio_courses) {
-                    if ($prio_courses[$course_id] == $current_prio
-                        && $distributed_users[$user_id] < $max_seats_users[$user_id]) {
-                        //exclude participants
-                        if (!$course->getParticipantStatus($user_id)) {
-                            $current_claiming[$user_id] = 1;
-                            if (isset($factored_users[$user_id])) {
-                                $current_claiming[$user_id] *= $factored_users[$user_id];
+                $free_seats_course = $course->getFreeSeats();
+                foreach ($groups_quota as $group_id => $quota) {
+                    $current_claiming = array();
+                    //find users with current prio for this course, if they still need a place
+                    foreach ($claiming_users as $user_id => $prio_courses) {
+                        $condition_ok = true;
+                        if (isset($conditiongroups[$group_id])) {
+                            Log::DEBUG(sprintf('found conditiongroup %s with quota %s', $group_id, $quota));
+                            foreach ($conditiongroups[$group_id] as $condition) {
+                                if ($condition->isFulfilled($user_id)) {
+                                    $condition_ok = true;
+                                    break;
+                                }
+                                $condition_ok = false;
                             }
-                        } else {
-                            Log::DEBUG(sprintf('user %s is already %s in course %s, ignoring', $user_id, $course->getParticipantStatus($user_id), $course->id));
+                        }
+
+                        if ($condition_ok && $prio_courses[$course_id] == $current_prio
+                            && $distributed_users[$user_id] < $max_seats_users[$user_id]) {
+                            //exclude participants
+                            if (!$course->getParticipantStatus($user_id)) {
+                                $current_claiming[$user_id] = 1;
+                                if (isset($factored_users[$user_id])) {
+                                    $current_claiming[$user_id] *= $factored_users[$user_id];
+                                }
+                            } else {
+                                Log::DEBUG(sprintf('user %s is already %s in course %s, ignoring', $user_id, $course->getParticipantStatus($user_id), $course->id));
+                            }
                         }
                     }
-                }
-                //give maximum bonus to users which were unlucky before
-                foreach (array_keys($current_claiming) as $user_id) {
-                    if ($bonus_users[$user_id] > 0) {
-                        $current_claiming[$user_id] *= $bonus_users[$user_id] * count($current_claiming) + 1;
-                        $bonus_users[$user_id]--;
+                    //give maximum bonus to users which were unlucky before
+                    foreach (array_keys($current_claiming) as $user_id) {
+                        if ($bonus_users[$user_id] > 0) {
+                            $current_claiming[$user_id] *= $bonus_users[$user_id] * count($current_claiming) + 1;
+                            $bonus_users[$user_id]--;
+                        }
                     }
-                }
-                Log::DEBUG(sprintf('distribute %s seats on %s claiming with prio %s in course %s', $free_seats, count($current_claiming),$current_prio, $course->id));
-                Log::DEBUG('users to distribute: ' . print_r($current_claiming,1));
-                $current_claiming = $this->rollTheDice($current_claiming);
-                Log::DEBUG('the die is cast: ' . print_r($current_claiming,1));
-                $chosen_ones = array_slice(array_keys($current_claiming),0 , $free_seats);
-                Log::DEBUG('chosen ones: ' . print_r($chosen_ones,1));
-                $this->addUsersToCourse($chosen_ones, $course, $prio_mapper($chosen_ones, $course->id));
-                foreach ($chosen_ones as $one) {
-                    $distributed_users[$one]++;
-                }
-                if ($free_seats < count($current_claiming)) {
-                    $remaining_ones = array_slice(array_keys($current_claiming), $free_seats);
-                    foreach ($remaining_ones as $one) {
-                        $bonus_users[$one]++;
-                        $waiting_users[$current_prio][$course_id][] = $one;
+                    $free_seats = round($free_seats_course * $quota / 100, 0, PHP_ROUND_HALF_DOWN);
+                    Log::DEBUG(sprintf('distribute %s seats on %s claiming with prio %s in course %s %s', $free_seats, count($current_claiming),$current_prio, $course->id, ($group_id ? 'conditiongroup ' . $group_id . ' quota ' . $quota : '')));
+                    Log::DEBUG('users to distribute: ' . print_r($current_claiming,1));
+                    $current_claiming = $this->rollTheDice($current_claiming);
+                    Log::DEBUG('the die is cast: ' . print_r($current_claiming,1));
+                    $chosen_ones = array_slice(array_keys($current_claiming),0 , $free_seats);
+                    Log::DEBUG('chosen ones: ' . print_r($chosen_ones,1));
+                    $this->addUsersToCourse($chosen_ones, $course, $prio_mapper($chosen_ones, $course->id));
+                    foreach ($chosen_ones as $one) {
+                        $distributed_users[$one]++;
+                    }
+                    if ($free_seats < count($current_claiming)) {
+                        $remaining_ones = array_slice(array_keys($current_claiming), $free_seats);
+                        foreach ($remaining_ones as $one) {
+                            $bonus_users[$one]++;
+                            $waiting_users[$current_prio][$course_id][] = $one;
+                        }
                     }
                 }
             }
@@ -186,29 +252,29 @@ class RandomAlgorithm extends AdmissionAlgorithm {
             foreach ($current_prio_waiting_courses as $course_id => $users) {
                 $users = array_filter($users, function($user_id) use ($distributed_users, $max_seats_users) {
                     return $distributed_users[$user_id] < $max_seats_users[$user_id];});
-                $course = Course::find($course_id);
-                Log::DEBUG(sprintf('distribute waitlist of %s with prio %s in course %s', count($users), $current_prio, $course->id));
-                if (!$course->admission_disable_waitlist) {
-                    if ($course->admission_waitlist_max) {
-                        $free_seats_waitlist = $course->admission_waitlist_max - $course->getNumWaiting();
-                        $free_seats_waitlist = $free_seats_waitlist < 0 ? 0 : $free_seats_waitlist;
+                    $course = Course::find($course_id);
+                    Log::DEBUG(sprintf('distribute waitlist of %s with prio %s in course %s', count($users), $current_prio, $course->id));
+                    if (!$course->admission_disable_waitlist) {
+                        if ($course->admission_waitlist_max) {
+                            $free_seats_waitlist = $course->admission_waitlist_max - $course->getNumWaiting();
+                            $free_seats_waitlist = $free_seats_waitlist < 0 ? 0 : $free_seats_waitlist;
+                        } else {
+                            $free_seats_waitlist = count($users);
+                        }
+                        $waiting_list_ones = array_slice($users, 0, $free_seats_waitlist);
+                        Log::DEBUG('waiting list ones: ' . print_r($waiting_list_ones, 1));
+                        $this->addUsersToWaitlist($waiting_list_ones, $course, $prio_mapper($waiting_list_ones, $course->id));
+                        foreach ($waiting_list_ones as $one) {
+                            $distributed_users[$one]++;
+                        }
                     } else {
-                        $free_seats_waitlist = count($users);
+                        $free_seats_waitlist = 0;
                     }
-                    $waiting_list_ones = array_slice($users, 0, $free_seats_waitlist);
-                    Log::DEBUG('waiting list ones: ' . print_r($waiting_list_ones, 1));
-                    $this->addUsersToWaitlist($waiting_list_ones, $course, $prio_mapper($waiting_list_ones, $course->id));
-                    foreach ($waiting_list_ones as $one) {
-                        $distributed_users[$one]++;
+                    if ($free_seats_waitlist < count($users)) {
+                        $remaining_ones = array_slice($users, $free_seats_waitlist);
+                        Log::DEBUG('remaining ones: ' . print_r($remaining_ones, 1));
+                        $this->notifyRemainingUsers($remaining_ones, $course, $prio_mapper($remaining_ones, $course->id));
                     }
-                } else {
-                    $free_seats_waitlist = 0;
-                }
-                if ($free_seats_waitlist < count($users)) {
-                    $remaining_ones = array_slice($users, $free_seats_waitlist);
-                    Log::DEBUG('remaining ones: ' . print_r($remaining_ones, 1));
-                    $this->notifyRemainingUsers($remaining_ones, $course, $prio_mapper($remaining_ones, $course->id));
-                }
             }
         }
     }
@@ -337,5 +403,3 @@ class RandomAlgorithm extends AdmissionAlgorithm {
     }
 
 }
-
-?>

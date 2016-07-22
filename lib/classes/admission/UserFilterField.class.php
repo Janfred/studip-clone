@@ -185,6 +185,16 @@ class UserFilterField
     }
 
     /**
+     * Which compare operator is set?
+     *
+     * @return String
+     */
+    public function getCompareOperatorAsText()
+    {
+        return $this->getValidCompareOperators()[$this->compareOperator];
+    }
+
+    /**
      * Field ID.
      *
      * @return String
