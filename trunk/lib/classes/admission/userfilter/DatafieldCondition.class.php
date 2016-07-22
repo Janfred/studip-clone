@@ -37,8 +37,8 @@ class DatafieldCondition extends UserFilterField
         $this->validCompareOperators = array(
             '>=' => _('mindestens'),
             '<=' => _('höchstens'),
-            '=' => _('gleich'),
-            '!=' => _('ungleich')
+            '=' => _('ist'),
+            '!=' => _('ist nicht')
         );
         if ($fieldId) {
             $this->id = $fieldId;

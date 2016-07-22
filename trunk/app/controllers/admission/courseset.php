@@ -16,6 +16,7 @@
 
 require_once 'app/models/courseset.php';
 require_once 'app/models/rule_administration.php';
+require_once 'lib/admission.inc.php';
 
 class Admission_CoursesetController extends AuthenticatedController {
 

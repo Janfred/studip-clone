@@ -7,6 +7,8 @@
 
 STUDIP.UserFilter = {
 
+    new_group_nr: 1,
+
     configureCondition: function (targetId, targetUrl) {
         STUDIP.Dialog.fromURL(targetUrl, {
             title: 'Bedingung konfigurieren'.toLocaleString(),
@@ -40,17 +42,58 @@ STUDIP.UserFilter = {
             dataType: 'html',
             success: function (data, textStatus, jqXHR) {
                 var result = '';
-                if ($('#' + containerId).children('.nofilter').length > 0) {
-                    $('#' + containerId).children('.nofilter').remove();
-                    $('#' + containerId).prepend('<div class="userfilter"></div>');
-                } else {
+                if ($('#' + containerId).children('.nofilter:visible').length > 0) {
+                    $('#' + containerId).children('.nofilter').hide();
+                    $('#' + containerId).children('.userfilter').show();
+                } else if ($('#' + containerId).children('.ungrouped_conditions .condition_list').length > 0) {
                     result += '<b>' + 'oder'.toLocaleString() + '</b>';
                 }
                 result += data;
-                $('#' + containerId).find('.userfilter').append(result);
+                $('#' + containerId).find('.userfilter .ungrouped_conditions .condition_list').append(result);
+                if ($('#no_conditiongroups').length > 0) {
+                    $('.userfilter .ungrouped_conditions .condition_list input[type=checkbox]').hide();
+                }
+                $('.userfilter .group_conditions').show();
             }
         });
         STUDIP.Dialog.close({id: 'configurecondition'});
+    },
+
+    /**
+     * groups selected conditions
+     */
+    groupConditions: function () {
+        var selected = $('.userfilter input:checked').parent('div');
+        var group_template = $('.grouped_conditions:first').clone();
+        if (selected.length > 0) {
+            $('.userfilter input[type=checkbox]:checked').prop('checked', false).hide();
+            $('.userfilter').append(group_template.show());
+            selected.find('input[name^=conditiongroup_]').prop('value', STUDIP.UserFilter.new_group_nr);
+            $('.condition_list:last').append(selected);
+            $('.condition_list:last input[name=quota]').prop('name', 'quota_'+STUDIP.UserFilter.new_group_nr);
+            $('.grouped_conditions:last').prop('id', 'new_conditiongroup_'+STUDIP.UserFilter.new_group_nr);
+            STUDIP.UserFilter.new_group_nr++;
+        }
+        if ($('.userfilter .ungrouped_conditions .condition_list .condition').length == 0) {
+            $('.userfilter .group_conditions').hide();
+        }
+        return false;
+    },
+
+    /**
+     * removes group for conditions
+     */
+    ungroupConditions: function (element) {
+        var selected = $(element).parents('.grouped_conditions').find('.condition');
+        var empty_group = $(element).parents('.grouped_conditions');
+        if (selected.length > 0) {
+            selected.find('input[name^=conditiongroup_]').prop('value', '');
+            $('.ungrouped_conditions .condition_list').append(selected);
+            $('.ungrouped_conditions input[type=checkbox]:not(:visible)').show();
+            empty_group.remove();
+        }
+        $('.userfilter .group_conditions').show();
+        return false;
     },
 
     getConditionFieldConfiguration: function (element, targetUrl) {
