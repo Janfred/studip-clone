@@ -43,18 +43,6 @@ interface StudipModule {
      */
     function getTabNavigation($course_id);
 
-    /**
-     * return a list of ContentElement-objects, conatinging 
-     * everything new in this module
-     *
-     * @param  string   $course_id   the course-id to get the new stuff for
-     * @param  int      $last_visit  when was the last time the user visited this module
-     * @param  string   $user_id     the user to get the notifcation-objects for
-     *
-     * @return array an array of ContentElement-objects
-     */
-    function getNotificationObjects($course_id, $since, $user_id);
-
     /** 
      * Provides metadata like a descriptional text for this module that
      * is shown on the course "+" page to inform users about what the

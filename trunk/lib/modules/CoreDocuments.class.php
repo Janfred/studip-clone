@@ -26,62 +26,6 @@ class CoreDocuments implements StudipModule {
         return array('files' => $navigation);
     }
 
-    function getNotificationObjects($course_id, $since, $user_id)
-    {
-        $items = array();
-        $type = get_object_type($course_id, array('sem', 'inst', 'fak'));
-        
-        if ($type == 'sem') {
-            $query = 'SELECT dokumente.*, seminare.Name, '. $GLOBALS['_fullname_sql']['full'] .' as fullname
-                FROM dokumente
-                JOIN auth_user_md5 USING (user_id)
-                JOIN user_info USING (user_id)
-                JOIN seminar_user USING (Seminar_id)
-                JOIN seminare USING (Seminar_id)
-                WHERE seminar_user.user_id = ? AND Seminar_id = ? 
-                    AND dokumente.chdate > ?';
-        } else {
-            $query = 'SELECT dokumente.*, Institute.Name, '. $GLOBALS['_fullname_sql']['full'] .' as fullname
-                FROM dokumente
-                JOIN auth_user_md5 USING (user_id)
-                JOIN user_info USING (user_id)
-                JOIN user_inst ON (seminar_id = Institut_id)
-                JOIN Institute USING (Institut_id)
-                WHERE user_inst.user_id = ? AND Institut_id = ? 
-                    AND dokumente.chdate > ?';
-        }
-
-        $stmt = DBManager::get()->prepare($query);
-        $stmt->execute(array($user_id, $course_id, $since));
-        
-        while ($row = $stmt->fetch()) {
-            $folder_tree = TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $row['seminar_id']));
-
-            if ($folder_tree->isDownloadFolder($row['range_id'], $user_id)) {
-                // use correct text depending on type of object
-                if ($type == 'sem') {
-                    $summary = sprintf('%s hat im Dateibereich der Veranstaltung "%s" die Datei "%s" hochgeladen.',
-                        $row['fullname'], $row['Name'], $row['name']);
-                } else {
-                    $summary = sprintf('%s hat im Dateibereich der Einrichtung "%s" die Datei "%s" hochgeladen.',
-                        $row['fullname'], $row['Name'], $row['name']);
-                }
-                
-                // create ContentElement
-                $items[] = new ContentElement(
-                    _('Datei') . ': ' . $row['name'], $summary, 
-                    formatReady(GetDownloadLink($row['dokument_id'], $row['name'])),
-                    $row['user_id'], $row['fullname'],
-                    URLHelper::getLink('folder.php#anker',
-                        array('cid' => $row['seminar_id'], 'cmd' => 'tree', 'open' => $row['dokument_id'])),
-                    $row['chdate']
-                );
-            }
-        }
-
-        return $items;
-    }
-
     /** 
      * @see StudipModule::getMetadata()
      */ 

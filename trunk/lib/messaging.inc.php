@@ -475,6 +475,8 @@ class messaging
             Icon::create('mail', 'clickable')
         );
 
+        NotificationCenter::postNotification('MessageDidSend', $tmp_message_id, compact('user_id', 'rec_id'));
+
         return sizeof($rec_id);
     }
 

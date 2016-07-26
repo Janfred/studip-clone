@@ -742,19 +742,20 @@ class ForumEntry {
      * Get the latest forum entries for the passed entries childs
      *
      * @param string $parent_id
-     * @param int $since  timestamp
+     * @param int $start_date  timestamp
+     * @param int $end_date    timestamp
      *
      * @return array list of postings
      */
-    function getLatestSince($parent_id, $since)
+    function getLatestSince($parent_id, $start_date, $end_date)
     {
         $constraint = ForumEntry::getConstraints($parent_id);
 
         $stmt = DBManager::get()->prepare("SELECT SQL_CALC_FOUND_ROWS * FROM forum_entries
             WHERE lft > ? AND rgt < ? AND seminar_id = ?
-                AND mkdate >= ?
+                AND mkdate BETWEEN ? AND ?
             ORDER BY name ASC");
-        $stmt->execute(array($constraint['lft'], $constraint['rgt'], $constraint['seminar_id'], $since));
+        $stmt->execute(array($constraint['lft'], $constraint['rgt'], $constraint['seminar_id'], $start_date, $end_date));
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -951,6 +952,8 @@ class ForumEntry {
         $parent_id = ForumEntry::getParentTopicId($topic_id);
         DBManager::get()->exec("UPDATE forum_entries SET latest_chdate = UNIX_TIMESTAMP()
             WHERE topic_id = '" . $parent_id . "'");
+
+         NotificationCenter::postNotification('ForumAfterUpdate', $topic_id, $name, $content);
     }
 
     /**

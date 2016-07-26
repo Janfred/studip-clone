@@ -23,27 +23,6 @@ require_once 'lib/classes/JSONArrayObject.class.php';
 
 
 
-if (!class_exists('StudipArrayCache')) {
-    class StudipArrayCache implements StudipCache {
-        public $data = array();
-
-        function expire($key)
-        {
-            unset($this->data);
-        }
-
-        function read($key)
-        {
-            return $this->data[$key];
-        }
-
-        function write($name, $content, $expire = 43200)
-        {
-            return ($this->data[$name] = $content);
-        }
-    }
-}
-
 class auth_user_md5 extends SimpleORMap
 {
     public $additional_dummy_data = null;
@@ -78,38 +57,12 @@ class SimpleOrMapNodbTest extends PHPUnit_Framework_TestCase
 {
     function setUp()
     {
-        SimpleORMap::expireTableScheme();
-        $testconfig = new Config(array('cache_class' => 'StudipArrayCache'));
-        Config::set($testconfig);
-        StudipCacheFactory::setConfig($testconfig);
-        $GLOBALS['CACHING_ENABLE'] = true;
-        $cache = StudipCacheFactory::getCache(false);
-        foreach (array('auth_user_md5') as $db_table) {
-            include TEST_FIXTURES_PATH."simpleormap/$db_table.php";
-            foreach ($result as $rs) {
-                $db_fields[strtolower($rs['Field'])] = array(
-                    'name'    => $rs['Field'],
-                    'null'    => $rs['Null'],
-                    'default' => $rs['Default'],
-                    'type'    => $rs['Type'],
-                    'extra'   => $rs['Extra']
-                );
-                if ($rs['Key'] == 'PRI'){
-                    $pk[] = strtolower($rs['Field']);
-                }
-            }
-            $schemes[$db_table]['db_fields'] = $db_fields;
-            $schemes[$db_table]['pk'] = $pk;
-        }
-        $cache->write('DB_TABLE_SCHEMES', serialize($schemes));
+        StudipTestHelper::set_up_tables(array('auth_user_md5'));
     }
 
     function tearDown()
     {
-        SimpleORMap::expireTableScheme();
-        Config::set(null);
-        StudipCacheFactory::setConfig(null);
-        $GLOBALS['CACHING_ENABLE'] = false;
+        StudipTestHelper::tear_down_tables();
     }
 
     public function testConstruct()

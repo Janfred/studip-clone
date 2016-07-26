@@ -72,12 +72,34 @@ class User extends AuthUserMd5
     /**
      * Returns the currently authenticated user.
      *
-     * @return mixed User
+     * @return User User
      */
     public static function findCurrent()
     {
         if (is_object($GLOBALS['user'])) {
             return $GLOBALS['user']->getAuthenticatedUser();
+        }
+    }
+
+    /**
+     * Returns user object including user_info
+     *
+     * @return User User
+     */
+    public static function findFull($id)
+    {
+        $sql = "SELECT * FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE auth_user_md5.user_id = ?";
+        $data = DbManager::get()->fetchOne($sql, array($id));
+        if ($data) {
+            $user = new User();
+            $user->info = new UserInfo();
+            $user->setData($data);
+            $user->setNew(false);
+            foreach (array_keys($user->db_fields) as $field) {
+                $user->content_db[$field] = $user->content[$field];
+            }
+            $user->info = UserInfo::buildExisting($data);
+            return $user;
         }
     }
 

@@ -214,8 +214,8 @@ class BlubberStream extends SimpleORMap {
      * @param integer $since : unix-timestamp
      * @return array of \BlubberPosting
      */
-    public function fetchNewPostings($since) {
-        list($sql, $parameters) = $this->getNewPostingsSql($since);
+    public function fetchNewPostings($since, $from) {
+        list($sql, $parameters) = $this->getNewPostingsSql($since, $from);
         $statement = DBManager::get()->prepare($sql);
         $statement->execute($parameters);
         $posting_data = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -305,12 +305,14 @@ class BlubberStream extends SimpleORMap {
      * Returns an array with sql and parameter for a PDO-statement that fetches
      * all blubber-postings of this stream newer than $since.
      * @param integer $since : unix-timestamp
+     * @param integer $from : unix-timestamp
      * @return array : array(string $sql, array $parameter)
      */
-    protected function getNewPostingsSql($since) {
+    protected function getNewPostingsSql($since, $from) {
         list($pool_sql, $filter_sql, $parameters) = $this->getSqlParts();
-        $filter_sql[] = "comment.chdate > :since ";
+        $filter_sql[] = "comment.chdate BETWEEN :since AND :from ";
         $parameters['since'] = $since;
+        $parameters['from'] = $from;
 
         $sql =
             "SELECT comment.* " .
