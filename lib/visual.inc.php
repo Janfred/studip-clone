@@ -810,6 +810,8 @@ function tooltipIcon($text, $important = false, $html = false)
 * @return   string  text with convertes internal links
 */
 function TransformInternalLinks($str){
+    $str = trim($str);
+    $str = strpos($str, 'http') === false ? $GLOBALS['ABSOLUTE_URI_STUDIP'] . $str : $str;
     if (is_array($GLOBALS['STUDIP_DOMAINS']) && count($GLOBALS['STUDIP_DOMAINS']) > 1) {
         if (!isset($GLOBALS['TransformInternalLinks_domainData'])){
             $domain_data['domains'] = '';
