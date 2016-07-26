@@ -81,13 +81,19 @@ class Activity extends \RESTAPI\RouteMap
             if ($scrollfrom > $max_age){
                 $end = $scrollfrom;
                 $start = strtotime('-1 day', $end);
+                $data = array();
 
                 $backtrack = 1;
-                do {
+
+                while (empty($data)) {
                     $filter->setStartDate($start);
                     $filter->setEndDate($end);
 
                     $data = $this->getStreamData($contexts, $filter);
+
+                    if ($start < $max_age) {
+                        break;
+                    }
 
                     // move "watch-window" back one day at a time
                     $end = $start - 1;
@@ -95,8 +101,7 @@ class Activity extends \RESTAPI\RouteMap
 
                     // enforce maximum "watch-window", currently 2 weeks
                     $backtrack = min (14, $backtrack + 1);
-                } while (empty($data) && $start >= $max_age);
-
+                }
             } else {
                 $data = false;
             }
