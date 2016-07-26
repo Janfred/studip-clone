@@ -1,14 +1,14 @@
 <?php
 /**
- * @author      Andr√© Kla√üen <klassen@elan-ev.de>
- * @author      Till Gl√∂ggler <tgloeggl@uos.de>
+ * @author      AndrÈ Klaﬂen <klassen@elan-ev.de>
+ * @author      Till Glˆggler <tgloeggl@uos.de>
  * @license     GPL 2 or later
  */
 class ActivityFeed extends StudIPPlugin implements PortalPlugin
 {
     public function getPluginName()
     {
-        return _('Aktivit√§ten');
+        return _('Aktivit‰ten');
     }
 
     public function getPortalTemplate()
@@ -48,7 +48,7 @@ class ActivityFeed extends StudIPPlugin implements PortalPlugin
 
         if (count($errors) > 0) {
             PageLayout::postInfo(
-                _('Das Aktivit√§ten-Plugin konnte nicht vollst√§ndig aktiviert werden.'),
+                _('Das Aktivit‰ten-Plugin konnte nicht vollst‰ndig aktiviert werden.'),
                 $errors
             );
         }
