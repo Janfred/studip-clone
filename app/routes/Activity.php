@@ -27,8 +27,12 @@ class Activity extends \RESTAPI\RouteMap
         }
 
         // failsafe einbauen - falls es keine älteren Aktivitäten mehr im System gibt, Abbruch!
-        $oldest_activity = \Studip\Activity\Activity::getOldestActivity();
-        $max_age = array_pop($oldest_activity)->mkdate;
+
+        if ($oldest_activity = \Studip\Activity\Activity::getOldestActivity()) {
+            $max_age = array_pop($oldest_activity)->mkdate;
+        } else {
+            $max_age = time();
+        }
 
 
         $contexts = array();

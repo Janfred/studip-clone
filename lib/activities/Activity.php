@@ -172,10 +172,13 @@ class Activity extends \SimpleORMap
         $cache_key = 'activity/oldest_activity';
 
         if (!$activity = unserialize($cache->read($cache_key))) {
-
-
             $activity = self::findBySQL('1 ORDER BY mkdate ASC LIMIT 1');
-            $cache->write($cache_key, serialize($activity));
+
+            if (!empty($activity)) {
+                $cache->write($cache_key, serialize($activity));
+            } else {
+                return false;
+            }
         }
 
         return $activity;
