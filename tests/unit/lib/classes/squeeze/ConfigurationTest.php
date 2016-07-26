@@ -18,6 +18,10 @@ use \Studip\Squeeze\Configuration;
 
 class SqueezeConfigurationTest extends \PHPUnit_Framework_TestCase
 {
+    function setUp()
+    {
+        \Assets::set_assets_url($GLOBALS['ASSETS_URL']);
+    }
 
    function testShouldLoadFile()
     {

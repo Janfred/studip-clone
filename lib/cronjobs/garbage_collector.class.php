@@ -18,7 +18,7 @@ class GarbageCollectorJob extends CronJob
 
     public static function getDescription()
     {
-        return _('Entfernt endgültig gelöschte Nachrichten, nicht zugehörige Dateianhänge, abgelaufene Ankündigungen, veraltete Plugin-Assets sowie veraltete OAuth-Servernonces');
+        return _('Entfernt endgültig gelöschte Nachrichten, nicht zugehörige Dateianhänge, abgelaufene Ankündigungen, alte Aktivitäten, veraltete Plugin-Assets sowie veraltete OAuth-Servernonces');
     }
 
     public static function getParameters()
@@ -66,6 +66,8 @@ class GarbageCollectorJob extends CronJob
         }
 
         PersonalNotifications::doGarbageCollect();
+
+        \Studip\Activity\Activity::doGarbageCollect();
 
         // Remove old plugin assets
         PluginAsset::deleteBySQL('chdate < ?', array(time() - PluginAsset::CACHE_DURATION));

@@ -40,11 +40,6 @@ class CoreLiterature implements StudipModule {
         }
     }
 
-    function getNotificationObjects($course_id, $since, $user_id)
-    {
-        return null;
-    }
-
     /** 
      * @see StudipModule::getMetadata()
      */ 

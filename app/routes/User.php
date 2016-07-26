@@ -31,6 +31,7 @@ class User extends \RESTAPI\RouteMap
     public static function getNamesOfUser($user)
     {
         $name = array(
+            'username'  => $user->username,
             'formatted' => $user->getFullName(),
             'family'    => $user->nachname,
             'given'     => $user->vorname,
@@ -56,7 +57,7 @@ class User extends \RESTAPI\RouteMap
     {
         $user_id = $user_id ?: $GLOBALS['user']->id;
 
-        $user = \User::find($user_id);
+        $user = \User::findFull($user_id);
         if (!$user) {
             $this->halt(404, sprintf('User %s not found', $user_id));
         }

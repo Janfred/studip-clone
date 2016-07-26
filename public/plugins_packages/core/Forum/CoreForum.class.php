@@ -15,10 +15,16 @@
 
 require_once 'app/models/smiley.php';
 require_once 'controllers/forum_controller.php';
+require_once 'lib/activities/Activity.php';
+require_once 'models/ForumEntry.php';
 
 // Notifications
 NotificationCenter::addObserver('CoreForum', 'overviewDidClear', "OverviewDidClear");
 NotificationCenter::addObserver('CoreForum', 'removeAbosForUserAndCourse', 'UserDidLeaveCourse');
+
+NotificationCenter::addObserver('ForumActivity', 'newEntry', 'ForumAfterInsert');
+NotificationCenter::addObserver('ForumActivity', 'updateEntry', 'ForumAfterUpdate');
+NotificationCenter::addObserver('ForumActivity', 'deleteEntry', 'ForumBeforeDelete');
 
 class CoreForum extends StudipPlugin implements ForumModule
 {
@@ -26,10 +32,10 @@ class CoreForum extends StudipPlugin implements ForumModule
      * This method dispatches all actions.
      *
      * @param string $unconsumed_path  part of the dispatch path that was not consumed
-     */    
+     */
     public function perform($unconsumed_path) {
         $this->setupAutoload();
-        
+
         // Add JS and StyleSheet to header
         PageLayout::addScript($this->getPluginURL() . '/javascript/forum.js');
         self::addStylesheet('stylesheets/forum.less');
@@ -46,14 +52,14 @@ class CoreForum extends StudipPlugin implements ForumModule
             });
         }
     }
-    
+
     /* interface method */
     public function getTabNavigation($course_id)
     {
         if (!$this->isActivated($course_id)) {
             return;
         }
-        
+
         $this->setupAutoload();
 
         $navigation = new Navigation(_('Forum'), PluginEngine::getURL($this, array(), 'index'));
@@ -84,7 +90,7 @@ class CoreForum extends StudipPlugin implements ForumModule
         }
 
         $this->setupAutoload();
-        
+
         if ($GLOBALS['perm']->have_studip_perm('user', $course_id)) {
             $num_entries = ForumVisit::getCount($course_id, ForumVisit::getVisit($course_id));
             $text = ForumHelpers::getVisitText($num_entries, $course_id);
@@ -104,41 +110,6 @@ class CoreForum extends StudipPlugin implements ForumModule
 
         return $navigation;
     }
-
-    /* interface method */
-    function getNotificationObjects($course_id, $since, $user_id)
-    {
-        $this->setupAutoload();
-        
-        if (ForumPerm::has('view', $course_id, $user_id)) {
-            $postings = ForumEntry::getLatestSince($course_id, $since);
-            
-            $contents = array();
-            foreach ($postings as $post) {
-                $obj = get_object_name($course_id, 'sem');
-
-                $summary = sprintf(_('%s hat im Forum der Veranstaltung "%s" einen Forenbeitrag verfasst.'), 
-                    get_fullname($post['user_id']),
-                    $obj['name']
-                ); 
- 
-                $contents[] = new ContentElement(
-                    _('Forum: ') . $obj['name'],
-                    $summary,
-                    formatReady($post['content']),
-                    $post['user_id'],
-                    $post['author'],
-                    PluginEngine::getURL($this, array(), 'index/index/' . $post['topic_id'] 
-                            .'?cid='. $course_id
-                            .'#'. $post['topic_id']),
-                    $post['mkdate']
-                );
-            }
-        }
-        
-        return $contents;
-    }
-
 
     /**
      * This method is called, whenever an user clicked to clear the visit timestamps
@@ -180,7 +151,7 @@ class CoreForum extends StudipPlugin implements ForumModule
     function getLinkToThread($issue_id)
     {
         $this->setupAutoload();
-        
+
         if ($topic_id = ForumIssue::getThreadIdForIssue($issue_id)) {
             return PluginEngine::getLink($this, array(), '/index/index/' . $topic_id);
         }
@@ -191,21 +162,21 @@ class CoreForum extends StudipPlugin implements ForumModule
     function setThreadForIssue($issue_id, $title, $content)
     {
         $this->setupAutoload();
-        
+
         ForumIssue::setThreadForIssue($GLOBALS['SessSemName'][1], $issue_id, $title, $content);
     }
 
     function getNumberOfPostingsForUser($user_id, $seminar_id = null)
     {
         $this->setupAutoload();
-        
+
         return ForumEntry::countUserEntries($user_id, $seminar_id);
     }
 
     function getNumberOfPostingsForIssue($issue_id)
     {
         $this->setupAutoload();
-        
+
         $topic_id = ForumIssue::getThreadIdForIssue($issue_id);
 
         return $topic_id ? ForumEntry::countEntries($topic_id) : 0;
@@ -214,14 +185,14 @@ class CoreForum extends StudipPlugin implements ForumModule
     function getNumberOfPostingsForSeminar($seminar_id)
     {
         $this->setupAutoload();
-        
+
         return floor(ForumEntry::countEntries($seminar_id));
     }
 
     function getNumberOfPostings()
     {
         $this->setupAutoload();
-        
+
         return ForumEntry::countAllEntries();
     }
 
@@ -239,28 +210,28 @@ class CoreForum extends StudipPlugin implements ForumModule
     function getTopTenSeminars()
     {
         $this->setupAutoload();
-        
+
         return ForumEntry::getTopTenSeminars();
     }
 
     function migrateUser($user_from, $user_to)
     {
         $this->setupAutoload();
-        
+
         return ForumEntry::migrateUser($user_from, $user_to);
     }
 
     function deleteContents($seminar_id)
     {
         $this->setupAutoload();
-        
+
         return ForumEntry::delete($seminar_id);
     }
 
     function getDump($seminar_id)
     {
         $this->setupAutoload();
-        
+
         return ForumEntry::getDump($seminar_id);
     }
 

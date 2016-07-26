@@ -18,6 +18,7 @@
  */
 class Visibility
 {
+    private static $verified;
 
     /**
      * Basic visibilitycheck to find out if a given user (or the current logged
@@ -43,6 +44,9 @@ class Visibility
         // check if visiting user is given
         self::getUser($userid);
 
+        if (isset(self::$verified[$visibilityid][$ownerid][$userid])) {
+            return self::$verified[$visibilityid][$ownerid][$userid];
+        }
         // load the possible visibilities
         $vs = VisibilitySettings::getInstance();
 
@@ -57,11 +61,11 @@ class Visibility
 
         // if we got a record we verify if the calling user is allowed to see what he wants to see
         if ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            return $vs->verify($result['user_id'], $userid, $result['state']);
+            return self::$verified[$visibilityid][$ownerid][$userid] = $vs->verify($result['user_id'], $userid, $result['state']);
         }
 
         // if db query fails something went wrong anyway so we use the default setting
-        return $vs->verify($result['user_id'], $userid, constant(get_config('HOMEPAGE_VISIBILITY_DEFAULT')));
+        return self::$verified[$visibilityid][$ownerid][$userid] = $vs->verify($result['user_id'], $userid, constant(get_config('HOMEPAGE_VISIBILITY_DEFAULT')));
     }
 
     /**

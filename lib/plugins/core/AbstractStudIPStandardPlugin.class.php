@@ -126,10 +126,6 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin
         return NULL;
     }
 
-    function getNotificationObjects($course_id, $since, $user_id) {
-        return null;
-    }
-
     /**
      * Gehen beim Deaktivieren des Plugins Daten verloren?
      *

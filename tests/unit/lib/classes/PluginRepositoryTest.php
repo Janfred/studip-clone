@@ -18,6 +18,7 @@ class PluginRepositoryTest extends PHPUnit_Framework_TestCase
     public function setUp ()
     {
         $GLOBALS['SOFTWARE_VERSION'] = '1.9.0';
+        $GLOBALS['CACHING_ENABLE'] = false;
 
         $url = 'file://'.dirname(__FILE__).'/plugin_repository_test.xml';
         $this->repository = new PluginRepository($url);

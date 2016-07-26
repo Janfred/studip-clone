@@ -46,7 +46,7 @@ class Blubber extends StudIPPlugin implements StandardPlugin, SystemPlugin {
                 }
                 $last_check = $data['Blubber']['last_check'] ? $data['Blubber']['last_check'] : (time() - 5 * 60);
 
-                $new_postings = $stream->fetchNewPostings($last_check);
+                $new_postings = $stream->fetchNewPostings($last_check, time());
 
                 $factory = new Flexi_TemplateFactory($this->getPluginPath()."/views");
                 foreach ($new_postings as $new_posting) {
@@ -100,12 +100,12 @@ class Blubber extends StudIPPlugin implements StandardPlugin, SystemPlugin {
             Navigation::insertItem("/community/blubber", $nav, "online");
             Navigation::getItem("/community")->setURL($nav->getURL());
         }
-        
-        if (Navigation::hasItem("/profile") && 
-                $this->isActivated(get_userid(Request::username('username', 
+
+        if (Navigation::hasItem("/profile") &&
+                $this->isActivated(get_userid(Request::username('username',
                 $GLOBALS['auth']->auth['uname'])), 'user')) {
-            $nav = new AutoNavigation(_("Blubber"), PluginEngine::getURL($this, 
-                array('user_id' => get_userid(Request::get("username"))), 
+            $nav = new AutoNavigation(_("Blubber"), PluginEngine::getURL($this,
+                array('user_id' => get_userid(Request::get("username"))),
                 "streams/profile"));
             Navigation::addItem("/profile/blubber", $nav);
         }
@@ -175,31 +175,6 @@ class Blubber extends StudIPPlugin implements StandardPlugin, SystemPlugin {
             $icon->setImage(Icon::create('blubber', 'inactive', ["title" => $this->getDisplayTitle()]));
         }
         return $icon;
-    }
-
-    /**
-     * Needed function to return notification-objects.
-     * @param string $course_id
-     * @param int $since
-     * @param string $user_id
-     * @return array of type ContentElement
-     */
-    public function getNotificationObjects($course_id, $since, $user_id)
-    {
-        $blubber = BlubberStream::getCourseStream($course_id)->fetchNewPostings($since);
-        $contents = array();
-        foreach ($blubber as $blubb) {
-            $contents[] = new ContentElement(
-                $blubb['name'],
-                $blubb['name'],
-                $blubb['description'],
-                $blubb['user_id'],
-                get_fullname($blubb['user_id']),
-                PluginEngine::getURL($this, array(), 'streams/thread/'.$blubb['root_id']),
-                $blubb['mkdate']
-            );
-        }
-        return $contents;
     }
 
     /**

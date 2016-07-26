@@ -41,61 +41,6 @@ class CoreScm implements StudipModule {
             return null;
         }
     }
- 
-    function getNotificationObjects($course_id, $since, $user_id)
-    {
-        $items = array();
-        $type = get_object_type($course_id, array('sem', 'inst', 'fak'));
-        
-        if ($type == 'sem') {
-            $query = 'SELECT scm.*, seminare.Name, '. $GLOBALS['_fullname_sql']['full'] .' as fullname
-                FROM scm
-                JOIN auth_user_md5 USING (user_id)
-                JOIN user_info USING (user_id)
-                JOIN seminar_user ON (range_id = Seminar_id)
-                JOIN seminare USING (Seminar_id)
-                WHERE seminar_user.user_id = ? AND Seminar_id = ? 
-                    AND scm.chdate > ?';
-        } else {
-            $query = 'SELECT scm.*, Institute.Name, '. $GLOBALS['_fullname_sql']['full'] .' as fullname
-                FROM scm
-                JOIN auth_user_md5 USING (user_id)
-                JOIN user_info USING (user_id)
-                JOIN user_inst ON (range_id = Institut_id)
-                JOIN Institute USING (Institut_id)
-                WHERE user_inst.user_id = ? AND Institut_id = ? 
-                    AND scm.chdate > ?';
-        }
-        
-        $stmt = DBManager::get()->prepare($query);
-        $stmt->execute(array($user_id, $course_id, $since));
-        
-        while ($row = $stmt->fetch()) {
-            // use correct text depending on type of object
-            if ($type == 'sem') {
-                $summary = sprintf('%s hat in der Veranstaltung "%s" die Informationsseite "%s" geändert.',
-                    $row['fullname'], $row['Name'], $row['tab_name']);
-            } else {
-                $summary = sprintf('%s hat in der Einreichtung "%s" die Informationsseite "%s" geändert.',
-                    $row['fullname'], $row['Name'], $row['tab_name']);
-            }
-
-            $link = URLHelper::getLink('dispatch.php/course/scm/' . $row['scm_id'],
-                                       array('cid' => $row['range_id']));
-
-            $items[] = new ContentElement(
-                'Freie Informationsseite: ' . $row['tab_name'],
-                $summary,
-                formatReady($row['content']),
-                $row['user_id'],
-                $row['fullname'],
-                $link,
-                $row['chdate']
-            );
-        }
-
-        return $items;
-    }
 
     /** 
      * @see StudipModule::getMetadata()

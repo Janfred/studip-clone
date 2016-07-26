@@ -49,11 +49,6 @@ class CoreOverview implements StudipModule {
         return array('main' => $navigation);
     }
 
-    function getNotificationObjects($course_id, $since, $user_id)
-    {
-        return null;
-    }
-
     /**
      * @see StudipModule::getMetadata()
      */

@@ -35,6 +35,7 @@ class SqueezeCompressorTest extends \PHPUnit_Framework_TestCase
     function setUp()
     {
         $this->skipTestWithoutJava();
+        $GLOBALS['CACHING_ENABLE'] = false;
 
         $this->STUDIP_BASE_PATH = $GLOBALS['STUDIP_BASE_PATH'];
         $GLOBALS['STUDIP_BASE_PATH'] = realpath(dirname(__FILE__) . '/../../../../../');

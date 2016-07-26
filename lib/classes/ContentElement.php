@@ -22,7 +22,7 @@ class ContentElement
     private $creatorid;
     private $url;
     private $date;
-    
+
     /**
      * create a new ContentElement
      *
@@ -37,14 +37,14 @@ class ContentElement
     function __construct($title, $summary, $content, $creatorid, $creator, $url, $date)
     {
         $this->title     = $title;
-        $this->summary   = $summary;
+        $this->summary   = isset($summary) ? $summary : '';
         $this->content   = $content;
         $this->creator   = $creator;
         $this->creatorid = $creatorid;
         $this->url       = $url;
         $this->date      = (int)$date;
     }
-    
+
     /**
      * implements getters for all object-variables
     */
@@ -66,7 +66,7 @@ class ContentElement
     public function toJSON()
     {
         $json_array = array();
-        
+
         foreach (get_object_vars($this) as $name => $value) {
             $json_array[$name] = studip_utf8encode($value);
         }

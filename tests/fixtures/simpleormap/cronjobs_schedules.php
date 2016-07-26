@@ -1,174 +1,174 @@
 <?php
 $result = array (
-  0 => 
+  0 =>
   array (
-    'Field' => 'schedule_id',
-    'Type' => 'char(32)',
-    'Null' => 'NO',
-    'Key' => 'PRI',
-    'Default' => '',
-    'Extra' => '',
+    'name' => 'schedule_id',
+    'type' => 'char(32)',
+    'null' => 'NO',
+    'key' => 'PRI',
+    'default' => '',
+    'extra' => '',
   ),
-  1 => 
+  1 =>
   array (
-    'Field' => 'task_id',
-    'Type' => 'char(32)',
-    'Null' => 'NO',
-    'Key' => 'MUL',
-    'Default' => '',
-    'Extra' => '',
+    'name' => 'task_id',
+    'type' => 'char(32)',
+    'null' => 'NO',
+    'key' => 'MUL',
+    'default' => '',
+    'extra' => '',
   ),
-  2 => 
+  2 =>
   array (
-    'Field' => 'active',
-    'Type' => 'tinyint(1)',
-    'Null' => 'NO',
-    'Key' => '',
-    'Default' => '0',
-    'Extra' => '',
+    'name' => 'active',
+    'type' => 'tinyint(1)',
+    'null' => 'NO',
+    'key' => '',
+    'default' => '0',
+    'extra' => '',
   ),
-  3 => 
+  3 =>
   array (
-    'Field' => 'title',
-    'Type' => 'varchar(255)',
-    'Null' => 'NO',
-    'Key' => '',
-    'Default' => '',
-    'Extra' => '',
+    'name' => 'title',
+    'type' => 'varchar(255)',
+    'null' => 'NO',
+    'key' => '',
+    'default' => '',
+    'extra' => '',
   ),
-  4 => 
+  4 =>
   array (
-    'Field' => 'description',
-    'Type' => 'varchar(4096)',
-    'Null' => 'YES',
-    'Key' => '',
-    'Default' => NULL,
-    'Extra' => '',
+    'name' => 'description',
+    'type' => 'varchar(4096)',
+    'null' => 'YES',
+    'key' => '',
+    'default' => NULL,
+    'extra' => '',
   ),
-  5 => 
+  5 =>
   array (
-    'Field' => 'parameters',
-    'Type' => 'text',
-    'Null' => 'YES',
-    'Key' => '',
-    'Default' => '',
-    'Extra' => '',
+    'name' => 'parameters',
+    'type' => 'text',
+    'null' => 'YES',
+    'key' => '',
+    'default' => '',
+    'extra' => '',
   ),
-  6 => 
+  6 =>
   array (
-    'Field' => 'priority',
-    'Type' => 'enum(\'low\',\'normal\',\'high\')',
-    'Null' => 'NO',
-    'Key' => '',
-    'Default' => 'normal',
-    'Extra' => '',
+    'name' => 'priority',
+    'type' => 'enum(\'low\',\'normal\',\'high\')',
+    'null' => 'NO',
+    'key' => '',
+    'default' => 'normal',
+    'extra' => '',
   ),
-  7 => 
+  7 =>
   array (
-    'Field' => 'type',
-    'Type' => 'enum(\'periodic\',\'once\')',
-    'Null' => 'NO',
-    'Key' => '',
-    'Default' => 'periodic',
-    'Extra' => '',
+    'name' => 'type',
+    'type' => 'enum(\'periodic\',\'once\')',
+    'null' => 'NO',
+    'key' => '',
+    'default' => 'periodic',
+    'extra' => '',
   ),
-  8 => 
+  8 =>
   array (
-    'Field' => 'minute',
-    'Type' => 'tinyint(2)',
-    'Null' => 'YES',
-    'Key' => '',
-    'Default' => NULL,
-    'Extra' => '',
+    'name' => 'minute',
+    'type' => 'tinyint(2)',
+    'null' => 'YES',
+    'key' => '',
+    'default' => NULL,
+    'extra' => '',
   ),
-  9 => 
+  9 =>
   array (
-    'Field' => 'hour',
-    'Type' => 'tinyint(2)',
-    'Null' => 'YES',
-    'Key' => '',
-    'Default' => NULL,
-    'Extra' => '',
+    'name' => 'hour',
+    'type' => 'tinyint(2)',
+    'null' => 'YES',
+    'key' => '',
+    'default' => NULL,
+    'extra' => '',
   ),
-  10 => 
+  10 =>
   array (
-    'Field' => 'day',
-    'Type' => 'tinyint(2)',
-    'Null' => 'YES',
-    'Key' => '',
-    'Default' => NULL,
-    'Extra' => '',
+    'name' => 'day',
+    'type' => 'tinyint(2)',
+    'null' => 'YES',
+    'key' => '',
+    'default' => NULL,
+    'extra' => '',
   ),
-  11 => 
+  11 =>
   array (
-    'Field' => 'month',
-    'Type' => 'tinyint(2)',
-    'Null' => 'YES',
-    'Key' => '',
-    'Default' => NULL,
-    'Extra' => '',
+    'name' => 'month',
+    'type' => 'tinyint(2)',
+    'null' => 'YES',
+    'key' => '',
+    'default' => NULL,
+    'extra' => '',
   ),
-  12 => 
+  12 =>
   array (
-    'Field' => 'day_of_week',
-    'Type' => 'tinyint(1) unsigned',
-    'Null' => 'YES',
-    'Key' => '',
-    'Default' => NULL,
-    'Extra' => '',
+    'name' => 'day_of_week',
+    'type' => 'tinyint(1) unsigned',
+    'null' => 'YES',
+    'key' => '',
+    'default' => NULL,
+    'extra' => '',
   ),
-  13 => 
+  13 =>
   array (
-    'Field' => 'next_execution',
-    'Type' => 'int(11) unsigned',
-    'Null' => 'YES',
-    'Key' => '',
-    'Default' => NULL,
-    'Extra' => '',
+    'name' => 'next_execution',
+    'type' => 'int(11) unsigned',
+    'null' => 'YES',
+    'key' => '',
+    'default' => NULL,
+    'extra' => '',
   ),
-  14 => 
+  14 =>
   array (
-    'Field' => 'last_execution',
-    'Type' => 'int(11) unsigned',
-    'Null' => 'YES',
-    'Key' => '',
-    'Default' => NULL,
-    'Extra' => '',
+    'name' => 'last_execution',
+    'type' => 'int(11) unsigned',
+    'null' => 'YES',
+    'key' => '',
+    'default' => NULL,
+    'extra' => '',
   ),
-  15 => 
+  15 =>
   array (
-    'Field' => 'last_result',
-    'Type' => 'text',
-    'Null' => 'YES',
-    'Key' => '',
-    'Default' => '',
-    'Extra' => '',
+    'name' => 'last_result',
+    'type' => 'text',
+    'null' => 'YES',
+    'key' => '',
+    'default' => '',
+    'extra' => '',
   ),
-  16 => 
+  16 =>
   array (
-    'Field' => 'execution_count',
-    'Type' => 'bigint(20) unsigned',
-    'Null' => 'NO',
-    'Key' => '',
-    'Default' => 0,
-    'Extra' => '',
+    'name' => 'execution_count',
+    'type' => 'bigint(20) unsigned',
+    'null' => 'NO',
+    'key' => '',
+    'default' => 0,
+    'extra' => '',
   ),
-  17 => 
+  17 =>
   array (
-    'Field' => 'mkdate',
-    'Type' => 'int(11) unsigned',
-    'Null' => 'NO',
-    'Key' => '',
-    'Default' => 0,
-    'Extra' => '',
+    'name' => 'mkdate',
+    'type' => 'int(11) unsigned',
+    'null' => 'NO',
+    'key' => '',
+    'default' => 0,
+    'extra' => '',
   ),
-  18 => 
+  18 =>
   array (
-    'Field' => 'chdate',
-    'Type' => 'int(11) unsigned',
-    'Null' => 'NO',
-    'Key' => '',
-    'Default' => 0,
-    'Extra' => '',
+    'name' => 'chdate',
+    'type' => 'int(11) unsigned',
+    'null' => 'NO',
+    'key' => '',
+    'default' => 0,
+    'extra' => '',
   ),
 );
