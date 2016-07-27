@@ -803,15 +803,21 @@ function tooltipIcon($text, $important = false, $html = false)
 }
 
 /**
-* detects internal links in a given string and convert used domain to the domain
-* actually used (only necessary if more than one domain exists)
-*
-* @param    string  text to convert
-* @return   string  text with convertes internal links
+ * detects internal links in a given string and convert used domain to the domain
+ * actually used (only necessary if more than one domain exists), relative URLs are
+ * converted to absolute URLs
+ *
+ * @param    string  $str URL/Link to convert
+ * @return   string  converted URL/Link
 */
 function TransformInternalLinks($str){
     $str = trim($str);
-    $str = strpos($str, 'http') === false ? $GLOBALS['ABSOLUTE_URI_STUDIP'] . $str : $str;
+    if (strpos($str, 'http') === false) {
+        if ($str[0] === '/') {
+            $str = substr($str, strlen($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']));
+        }
+        $str = $GLOBALS['ABSOLUTE_URI_STUDIP'] . $str;
+    }
     if (is_array($GLOBALS['STUDIP_DOMAINS']) && count($GLOBALS['STUDIP_DOMAINS']) > 1) {
         if (!isset($GLOBALS['TransformInternalLinks_domainData'])){
             $domain_data['domains'] = '';
