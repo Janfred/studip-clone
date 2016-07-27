@@ -937,9 +937,9 @@ class ForumEntry {
      */
     static function update($topic_id, $name, $content)
     {
-        $topic = ForumEntry::getConstraints($topic_id);
+        $post = ForumEntry::getConstraints($topic_id);
 
-        if (time() - $topic['mkdate'] > 5 * 60) {
+        if (time() - $post['mkdate'] > 5 * 60) {
             $content = ForumEntry::appendEdit($content);
         }
 
@@ -953,7 +953,10 @@ class ForumEntry {
         DBManager::get()->exec("UPDATE forum_entries SET latest_chdate = UNIX_TIMESTAMP()
             WHERE topic_id = '" . $parent_id . "'");
 
-         NotificationCenter::postNotification('ForumAfterUpdate', $topic_id, $name, $content);
+        $post['name']    = $name;
+        $post['content'] = $content;
+
+         NotificationCenter::postNotification('ForumAfterUpdate', $topic_id, $post);
     }
 
     /**
@@ -965,16 +968,16 @@ class ForumEntry {
      */
     function delete($topic_id)
     {
-        NotificationCenter::postNotification('ForumBeforeDelete', $topic_id);
+        $post   = ForumEntry::getConstraints($topic_id);
+        $parent = ForumEntry::getConstraints(ForumEntry::getParentTopicId($topic_id));
 
-        $constraints = ForumEntry::getConstraints($topic_id);
-        $parent      = ForumEntry::getConstraints(ForumEntry::getParentTopicId($topic_id));
+        NotificationCenter::postNotification('ForumBeforeDelete', $topic_id, $post);
 
         // #TODO: Zusammenfassen in eine Transaktion!!!
         // get all entry-ids to delete them from the category-reference-table
         $stmt = DBManager::get()->prepare("SELECT topic_id FROM forum_entries
             WHERE seminar_id = ? AND lft >= ? AND rgt <= ? AND depth = 1");
-        $stmt->execute(array($constraints['seminar_id'], $constraints['lft'], $constraints['rgt']));
+        $stmt->execute(array($post['seminar_id'], $post['lft'], $post['rgt']));
         $ids = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
         if ($ids != false && !is_array($ids)) $ids = array($ids);
@@ -990,17 +993,17 @@ class ForumEntry {
         $stmt = DBManager::get()->prepare("DELETE FROM forum_entries
             WHERE seminar_id = ? AND lft >= ? AND rgt <= ?");
 
-        $stmt->execute(array($constraints['seminar_id'], $constraints['lft'], $constraints['rgt']));
+        $stmt->execute(array($post['seminar_id'], $post['lft'], $post['rgt']));
 
         // update lft and rgt
-        $diff = $constraints['rgt'] - $constraints['lft'] + 1;
+        $diff = $post['rgt'] - $post['lft'] + 1;
         $stmt = DBManager::get()->prepare("UPDATE forum_entries SET lft = lft - $diff
             WHERE lft > ? AND seminar_id = ?");
-        $stmt->execute(array($constraints['rgt'], $constraints['seminar_id']));
+        $stmt->execute(array($post['rgt'], $post['seminar_id']));
 
         $stmt = DBManager::get()->prepare("UPDATE forum_entries SET rgt = rgt - $diff
             WHERE rgt > ? AND seminar_id = ?");
-        $stmt->execute(array($constraints['rgt'], $constraints['seminar_id']));
+        $stmt->execute(array($post['rgt'], $post['seminar_id']));
 
 
         // set the latest_chdate to the latest child's chdate
