@@ -81,6 +81,24 @@
                     $('.provider_circle').unbind( "click" ).click(function() {
                         $(this).parent().parent().children('.activity-content').toggle();
                     });
+
+                    $("#toggle-all-activities").unbind( "click" ).click(function() {
+                        $('.activity-content').toggle();
+                        if( $("#toggle-all-activities").data('toggled') == 'true') {
+                            $("#toggle-all-activities").data('toggled', 'false').attr('src', STUDIP.ASSETS_URL + "images/icons/blue/no-activity.svg");
+                        } else {
+                            $("#toggle-all-activities").data('toggled', 'true').attr('src', STUDIP.ASSETS_URL + "images/icons/blue/activity.svg");
+                        }
+                    });
+
+                    $("#toggle-user-activities").unbind( "click" ).click(function() {
+                        $('span.right').parent().parent().toggle();
+                        if( $("#toggle-user-activities").data('toggled') == 'true') {
+                            $("#toggle-user-activities").data('toggled', 'false').attr('src', STUDIP.ASSETS_URL + "images/icons/blue/visibility-visible/headache.svg");
+                        } else {
+                            $("#toggle-user-activities").data('toggled', 'true').attr('src', STUDIP.ASSETS_URL + "images/icons/blue/visibility-invisible/headache.svg");
+                        }
+                    });
                 }
             });
 

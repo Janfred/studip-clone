@@ -22,6 +22,16 @@ class ActivityFeed extends StudIPPlugin implements PortalPlugin
         $template->user_id = $GLOBALS['user']->id;
         $template->scrolledfrom = strtotime('+1 day');
 
+        $navigation = new Navigation('', '#');
+        $navigation->setImage(Icon::create('headache+visibility-visible', 'clickable', ["title" => _('Eigene Aktivitäten ausblenden'), "id" => "toggle-user-activities", "data-toggled" => "false"]));
+        $icons[] = $navigation;
+
+        $navigation = new Navigation('', '#');
+        $navigation->setImage(Icon::create('no-activity', 'clickable', ["title" => _('Aktivitätsdetails ausblenden'), "id" => "toggle-all-activities", "data-toggled" => "false"]));
+        $icons[] = $navigation;
+
+        $template->icons = $icons;
+
         return $template;
     }
 
