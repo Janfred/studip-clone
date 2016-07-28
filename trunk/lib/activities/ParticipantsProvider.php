@@ -15,16 +15,12 @@ class ParticipantsProvider implements ActivityProvider
      * posts an activity for a given notification event
      *
      * @param String $event a notification for an activity
-     * @param mixed  $course_or_id
-     * @param String $user_id
+     * @param String  $course_id
+     * @param String  $user_id
      */
-    public function postActivity($event, $course_or_id, $user_id)
+    public function postActivity($event, $course_id, $user_id)
     {
-        if (!is_object($course_or_id)) {
-            $course = \Course::find($course_or_id);
-        } else {
-            $course = $course_or_id;
-        }
+        $course = \Course::find($course_id);
 
         if ($event == 'UserDidEnterCourse') {
             $verb = 'created';
@@ -34,24 +30,20 @@ class ParticipantsProvider implements ActivityProvider
             $verb = 'voided';
             $summary = _('%s wurde aus der Veranstaltung "%s" ausgetragen.');
             $summary = sprintf($summary, get_fullname($user_id), $course->name);
-        } elseif ($event = 'CourseDidGetMember') {
-            $verb = 'experienced';
-            $summary = _('%s wurde in die Veranstaltung "%s" eingetragen.');
-            $summary = sprintf($summary, get_fullname($user_id), $course->name);
         }
 
-        $type = get_object_type($course->id);
+        $type = get_object_type($course_id);
 
         $activity = Activity::create(
             array(
                 'provider'     => __CLASS__,
                 'context'      => ($type == 'sem') ? 'course' : 'institute',
-                'context_id'   => $course->id,
+                'context_id'   => $course_id,
                 'content'      => $summary,
                 'actor_type'   => 'user',               // who initiated the activity?
                 'actor_id'     => $GLOBALS['user']->id, // id of initiator
                 'verb'         => $verb,                // the activity type
-                'object_id'    => $course->id,           // the id of the referenced object
+                'object_id'    => $course_id,           // the id of the referenced object
                 'object_type'  => 'participants',       // type of activity object
                 'mkdate'       =>  time(),
             )
