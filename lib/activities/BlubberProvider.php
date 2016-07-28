@@ -13,6 +13,10 @@ require_once 'public/plugins_packages/core/Blubber/models/BlubberPosting.class.p
 
 class BlubberProvider implements ActivityProvider
 {
+    // This stores all already handled blubber items
+    // (for this script execution)
+    private static $handled = [];
+
     /**
      * get the details for the passed activity
      *
@@ -43,9 +47,12 @@ class BlubberProvider implements ActivityProvider
      * @param String $context
      * @param String $context_id
      * @param String  $blubb
+     * @param bool   $is_new
      */
-    private static function doPostActivity($context, $context_id, $blubb)
+    private static function doPostActivity($context, $context_id, $blubb, $is_new)
     {
+        $verb = $is_new ? 'created' : 'edited';
+
         $activity = Activity::create(
             array(
                 'provider'     => __CLASS__,
@@ -55,7 +62,7 @@ class BlubberProvider implements ActivityProvider
                 'content'      => NULL,
                 'actor_type'   => 'user',             // who initiated the activity?
                 'actor_id'     => $blubb['user_id'],  // id of initiator
-                'verb'         => 'created',          // the activity type
+                'verb'         => $verb,              // the activity type
                 'object_id'    => $blubb['topic_id'], // the id of the referenced object
                 'object_type'  => 'blubber',          // type of activity object
                 'mkdate'       => $blubb['chdate']
@@ -69,24 +76,33 @@ class BlubberProvider implements ActivityProvider
      *
      * @param String $event a notication for an activity
      * @param String  $blubb
+     * @param bool   $is_new
      */
-    public static function postActivity($event, $blubb)
+    public static function postActivity($event, $blubb, $is_new)
     {
+        // Check if this blubb was already handled
+        if (in_array($blubb->id, self::$handled)) {
+            return;
+        }
+
         switch($blubb['context_type']) {
             case 'private':
                 foreach ($blubb->getRelatedUsers() as $context_id) {
-                    self::doPostActivity('user', $context_id, $blubb);
+                    self::doPostActivity('user', $context_id, $blubb, $is_new);
                 }
             break;
 
             case 'course':
-                self::doPostActivity('course', $blubb['Seminar_id'], $blubb);
+                self::doPostActivity('course', $blubb['Seminar_id'], $blubb, $is_new);
             break;
 
             case 'public':
-                self::doPostActivity('system', 'system', $blubb);
+                self::doPostActivity('system', 'system', $blubb, $is_new);
             break;
         }
+
+        // Stored id as handled
+        self::$handled[] = $blubb->id;
     }
 
     /**

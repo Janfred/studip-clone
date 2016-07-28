@@ -386,10 +386,12 @@ class BlubberPosting extends SimpleORMap {
      * @return integer: 1 if posting successfully stored, else 0.
      */
     public function store() {
+        $is_new = $this->isNew();
+
         NotificationCenter::postNotification("PostingWillSave", $this);
         $success = parent::store();
         if ($success) {
-            NotificationCenter::postNotification("PostingHasSaved", $this);
+            NotificationCenter::postNotification("PostingHasSaved", $this, $is_new);
         }
         return $success;
     }
