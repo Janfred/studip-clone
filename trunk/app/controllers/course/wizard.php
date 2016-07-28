@@ -258,6 +258,7 @@ class Course_WizardController extends AuthenticatedController
         $course = new Course();
         $course->visible = 0;
         $course->store();
+        $course_id = $course->id;
         // Each (required) step stores its own values at the course object.
         for ($i = 0; $i < sizeof($this->steps) ; $i++) {
             $step = $this->getStep($i);
@@ -273,12 +274,12 @@ class Course_WizardController extends AuthenticatedController
         }
         // Check if "documents" module is activated and create "General" folder.
         $m = new Modules();
-        if ($m->getStatus('documents', $course->id)) {
+        if ($m->getStatus('documents', $course_id)) {
             $f = new DocumentFolder();
             $f->name = _('Allgemeiner Dateiordner');
             $f->description = _('Ablage für allgemeine Ordner und Dokumente der Veranstaltung');
-            $f->range_id = $course->id;
-            $f->seminar_id = $course->id;
+            $f->range_id = $course_id;
+            $f->seminar_id = $course_id;
             $f->user_id = $GLOBALS['user']->id;
             $f->permission = 7;
             $f->store();
