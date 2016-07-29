@@ -170,3 +170,25 @@
   81%  { transform: scale(1.3); }
   100% { transform: scale(1); }
 }
+
+// Mixin that replaces the navigation icon tags with css images
+.navigation-icon(@default-icon-name, @toggled-icon-name) {
+    img { display: none; }
+
+    display: inline-block;
+
+    .background-icon(@default-icon-name, 'clickable');
+    .hide-text();
+    .square(16px);
+
+    &.toggled {
+        .background-icon(@toggled-icon-name, 'clickable');
+    }
+}
+
+#toggle-all-activities {
+    .navigation-icon('no-activity', 'activity');
+}
+#toggle-user-activities {
+    .navigation-icon('visibility-invisible/headache', 'visibility-visible/headache');
+}
