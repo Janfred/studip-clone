@@ -68,6 +68,7 @@
                         user_id       :  STUDIP.ActivityFeed.user_id
                     }));
 
+                    STUDIP.ActivityFeed.setToggleStatus();
 
                     STUDIP.ActivityFeed.initial = false;
                     STUDIP.ActivityFeed.polling = false;
@@ -82,22 +83,28 @@
                         $(this).parent().parent().children('.activity-content').toggle();
                     });
 
-                    $("#toggle-all-activities").unbind( "click" ).click(function() {
-                        $('.activity-content').toggle();
+                    $("#toggle-all-activities").parent().unbind( "click" ).click(function() {
                         if( $("#toggle-all-activities").data('toggled') == 'true') {
                             $("#toggle-all-activities").data('toggled', 'false').attr('src', STUDIP.ASSETS_URL + "images/icons/blue/no-activity.svg");
                         } else {
                             $("#toggle-all-activities").data('toggled', 'true').attr('src', STUDIP.ASSETS_URL + "images/icons/blue/activity.svg");
                         }
+
+                        STUDIP.ActivityFeed.setToggleStatus();
+
+                        return false;
                     });
 
-                    $("#toggle-user-activities").unbind( "click" ).click(function() {
-                        $('span.right').parent().parent().toggle();
+                    $("#toggle-user-activities").parent().unbind( "click" ).click(function() {
                         if( $("#toggle-user-activities").data('toggled') == 'true') {
                             $("#toggle-user-activities").data('toggled', 'false').attr('src', STUDIP.ASSETS_URL + "images/icons/blue/visibility-visible/headache.svg");
                         } else {
                             $("#toggle-user-activities").data('toggled', 'true').attr('src', STUDIP.ASSETS_URL + "images/icons/blue/visibility-invisible/headache.svg");
                         }
+
+                        STUDIP.ActivityFeed.setToggleStatus();
+
+                        return false;
                     });
                 }
             });
@@ -107,6 +114,22 @@
         update : function(html) {
             $('#afeed').replaceWith(html);
 
+        },
+
+        setToggleStatus: function() {
+            // update toggle status fir activity contents
+            if( $("#toggle-all-activities").data('toggled') == 'true') {
+                $('.activity-content').show();
+            } else {
+                $('.activity-content').hide();
+            }
+
+            // update toggle status for user's own activities
+            if( $("#toggle-user-activities").data('toggled') == 'true') {
+                $('span.right').parent().parent().hide();
+            } else {
+                $('span.right').parent().parent().show();
+            }
         }
     };
 })(jQuery, STUDIP);

@@ -27,7 +27,7 @@ class ActivityFeed extends StudIPPlugin implements PortalPlugin
         $icons[] = $navigation;
 
         $navigation = new Navigation('', '#', array('cid' => null));
-        $navigation->setImage(Icon::create('no-activity', 'clickable', ["title" => _('Aktivitätsdetails ausblenden'), "id" => "toggle-all-activities", "data-toggled" => "false"]));
+        $navigation->setImage(Icon::create('no-activity', 'clickable', ["title" => _('Aktivitätsdetails ein-/ausblenden'), "id" => "toggle-all-activities", "data-toggled" => "false"]));
         $icons[] = $navigation;
 
         $template->icons = $icons;
