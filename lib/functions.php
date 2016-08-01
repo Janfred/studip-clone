@@ -1716,6 +1716,40 @@ function studip_utf8decode($data)
 }
 
 /**
+ * Special stud.ip version of json_decode() that also converts the data
+ * from utf8 and creates an associative array by default (this differs
+ * from the default behavior of json_decode() !).
+ *
+ * @param String $json
+ * @param bool   $assoc
+ * @param int    $depth
+ * @param int    $options
+ */
+function studip_json_decode($json, $assoc = true, $depth = 512, $options = 0)
+{
+    $data = json_decode($json, $assoc, $depth, $options);
+    $data = studip_utf8decode($data);
+
+    return $data;
+}
+
+/**
+ * Special stud.ip version of json_decode() that also converts the data
+ * to utf8.
+ *
+ * @param mixed $data
+ * @param int   $options
+ * @param int   $depth
+ */
+function studip_json_encode($data, $options = 0, $depth = 512)
+{
+    $data = studip_utf8encode($data);
+    $json = json_encode($data, $options, $depth);
+
+    return $json;
+}
+
+/**
  * Get the title used for the given status ('dozent', 'tutor' etc.) for the
  * specified SEM_TYPE. Alternative titles can be defined in the config.inc.php.
  *

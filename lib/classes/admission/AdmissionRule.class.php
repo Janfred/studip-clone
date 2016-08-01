@@ -17,6 +17,39 @@
 
 abstract class AdmissionRule
 {
+    /**
+     * Factory method that creates a new derived AdmissionRule object from
+     * the given data. This is a replacement for serialize()/unserialize()
+     * since the serialized data is exposed to the user.
+     *
+     * @param mixed $data Rule data (either as array or json encoded string)
+     */
+    public static function createFromRequest($data)
+    {
+        if (!is_array($data)) {
+            $data = studip_json_decode($data);
+        }
+
+        $class = $data['__class__'];
+
+        if (!class_exists($class) || !is_a($class, 'AdmissionRule', true)) {
+            throw new Exception('No valid admission rule class detected.');
+        }
+
+        $reflected = new ReflectionClass($class);
+        $rule = $reflected->newInstanceWithoutConstructor();
+
+        $properties = $reflected->getProperties();
+        foreach ($properties as $property) {
+            if (array_key_exists($property->name, $data)) {
+                $property->setAccessible(true);
+                $property->setValue($rule, $data[$property->name]);
+            }
+        }
+
+        return $rule;
+    }
+
     // --- ATTRIBUTES ---
 
     /**
@@ -453,6 +486,27 @@ abstract class AdmissionRule
     {
         $this->id = md5(uniqid(get_class($this)));
         $this->courseSetId = null;
+    }
+
+    /**
+     * Returns all properties (public, protected and private) from this
+     * object as associative array.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        $reflection = new ReflectionClass(get_class($this));
+        $properties  = $reflection->getProperties();
+
+        $variables = [];
+        foreach ($properties as $property) {
+            $variables[$property->name] = $this->{$property->name};
+        }
+
+        $variables['__class__'] = get_class($this);
+
+        return $variables;
     }
 
 } /* end of abstract class AdmissionRule */

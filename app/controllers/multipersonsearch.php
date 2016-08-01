@@ -123,8 +123,8 @@ class MultipersonsearchController extends AuthenticatedController {
         $this->selectedUsers = array();
         $this->search = Request::get("freesearch");
         $this->additionHTML = $mp->getAdditionHTML();
-        $previousSelectableUsers = studip_utf8decode(json_decode(Request::get('search_persons_selectable_hidden')), true);
-        $previousSelectedUsers = studip_utf8decode(json_decode(Request::get('search_persons_selected_hidden')), true);
+        $previousSelectableUsers = studip_json_decode(Request::get('search_persons_selectable_hidden'));
+        $previousSelectedUsers = studip_json_decode(Request::get('search_persons_selected_hidden'));
 
         // restore quickfilter
         $this->quickfilterIDs = $mp->getQuickfilterIds();
