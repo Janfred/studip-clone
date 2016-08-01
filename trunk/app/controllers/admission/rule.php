@@ -56,7 +56,7 @@ class Admission_RuleController extends AuthenticatedController
             $rules = Request::getArray('rules');
             if (is_array($rules)) {
                 foreach($rules as $index => $rule) {
-                    $current_rule = unserialize($rule);
+                    $current_rule = AdmissionRule::createFromRequest($rule);
                     if ($ruleType == get_class($current_rule) && $current_rule->getId() == Request::get('ruleId')) {
                         $this->rule = $current_rule;
                     } else {
@@ -69,7 +69,7 @@ class Admission_RuleController extends AuthenticatedController
             }
             $this->rule->setSiblings($rule_siblings);
         } elseif (Request::get('rule')) {
-            $rule = unserialize(Request::get('rule'));
+            $rule = Admission::createFromRequest(Request::get('rule'));
             if ($ruleType == get_class($rule)) {
                 $this->rule = $rule;
             }
@@ -91,11 +91,9 @@ class Admission_RuleController extends AuthenticatedController
         $this->ruleTypes = AdmissionRule::getAvailableAdmissionRules();
         $this->courseset = new CourseSet($cs_id);
         $this->courseset->clearAdmissionRules();
-        foreach (Request::getArray('rules') as $rule) {
-            $rule = unserialize($rule);
-            if ($rule instanceof AdmissionRule) {
-                $this->courseset->addAdmissionRule($rule);
-            }
+        foreach (Request::getArray('rules') as $rule_data) {
+            $rule = AdmissionRule::createFromRequest($rule_data);
+            $this->courseset->addAdmissionRule($rule);
         }
     }
 

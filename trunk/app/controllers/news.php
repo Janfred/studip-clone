@@ -213,15 +213,15 @@ class NewsController extends StudipController
         // if form sent, get news data by post vars
         if (Request::get('news_isvisible')) {
             // visible categories, selected areas, topic, and body are utf8 encoded when sent via ajax
-            $this->news_isvisible = studip_utf8decode(json_decode(Request::get('news_isvisible')));
+            $this->news_isvisible = studip_json_decode(Request::get('news_isvisible'));
             if (Request::isXhr()) {
-                $this->area_options_selected = studip_utf8decode(json_decode(Request::get('news_selected_areas')), true);
-                $this->area_options_selectable = studip_utf8decode(json_decode(Request::get('news_selectable_areas')), true);
+                $this->area_options_selected = studip_json_decode(Request::get('news_selected_areas'));
+                $this->area_options_selectable = studip_json_decode(Request::get('news_selectable_areas'));
                 $topic = studip_utf8decode(Request::get('news_topic'));
                 $body = transformBeforeSave(Studip\Markup::purifyHtml(studip_utf8decode(Request::get('news_body'))));
             } else {
-                $this->area_options_selected = studip_utf8decode(json_decode(Request::get('news_selected_areas')), true);
-                $this->area_options_selectable = studip_utf8decode(json_decode(Request::get('news_selectable_areas')));
+                $this->area_options_selected = studip_json_decode(Request::get('news_selected_areas'));
+                $this->area_options_selectable = studip_json_decode(Request::get('news_selectable_areas'));
                 $topic = Request::get('news_topic');
                 $body = transformBeforeSave(Studip\Markup::purifyHtml(Request::get('news_body')));
             }
