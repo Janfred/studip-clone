@@ -18,6 +18,9 @@ require_once 'controllers/forum_controller.php';
 require_once 'lib/activities/Activity.php';
 require_once 'models/ForumEntry.php';
 
+// Setup autoloader
+StudipAutoloader::addAutoloadPath(__DIR__ . '/models');
+
 // Notifications
 NotificationCenter::addObserver('CoreForum', 'overviewDidClear', "OverviewDidClear");
 NotificationCenter::addObserver('CoreForum', 'removeAbosForUserAndCourse', 'UserDidLeaveCourse');
@@ -34,23 +37,11 @@ class CoreForum extends StudipPlugin implements ForumModule
      * @param string $unconsumed_path  part of the dispatch path that was not consumed
      */
     public function perform($unconsumed_path) {
-        $this->setupAutoload();
-
         // Add JS and StyleSheet to header
         PageLayout::addScript($this->getPluginURL() . '/javascript/forum.js');
         self::addStylesheet('stylesheets/forum.less');
 
         parent::perform($unconsumed_path);
-    }
-
-    private function setupAutoload() {
-        if (class_exists("StudipAutoloader")) {
-            StudipAutoloader::addAutoloadPath(__DIR__ . '/models');
-        } else {
-            spl_autoload_register(function ($class) {
-                include_once __DIR__ . $class . '.php';
-            });
-        }
     }
 
     /* interface method */
@@ -59,8 +50,6 @@ class CoreForum extends StudipPlugin implements ForumModule
         if (!$this->isActivated($course_id)) {
             return;
         }
-
-        $this->setupAutoload();
 
         $navigation = new Navigation(_('Forum'), PluginEngine::getURL($this, array(), 'index'));
         $navigation->setImage(Icon::create('forum', 'info_alt'));
@@ -88,8 +77,6 @@ class CoreForum extends StudipPlugin implements ForumModule
         if (!$this->isActivated($course_id)) {
             return;
         }
-
-        $this->setupAutoload();
 
         if ($GLOBALS['perm']->have_studip_perm('user', $course_id)) {
             $num_entries = ForumVisit::getCount($course_id, ForumVisit::getVisit($course_id));
@@ -150,8 +137,6 @@ class CoreForum extends StudipPlugin implements ForumModule
 
     function getLinkToThread($issue_id)
     {
-        $this->setupAutoload();
-
         if ($topic_id = ForumIssue::getThreadIdForIssue($issue_id)) {
             return PluginEngine::getLink($this, array(), '/index/index/' . $topic_id);
         }
@@ -161,22 +146,16 @@ class CoreForum extends StudipPlugin implements ForumModule
 
     function setThreadForIssue($issue_id, $title, $content)
     {
-        $this->setupAutoload();
-
         ForumIssue::setThreadForIssue($GLOBALS['SessSemName'][1], $issue_id, $title, $content);
     }
 
     function getNumberOfPostingsForUser($user_id, $seminar_id = null)
     {
-        $this->setupAutoload();
-
         return ForumEntry::countUserEntries($user_id, $seminar_id);
     }
 
     function getNumberOfPostingsForIssue($issue_id)
     {
-        $this->setupAutoload();
-
         $topic_id = ForumIssue::getThreadIdForIssue($issue_id);
 
         return $topic_id ? ForumEntry::countEntries($topic_id) : 0;
@@ -184,15 +163,11 @@ class CoreForum extends StudipPlugin implements ForumModule
 
     function getNumberOfPostingsForSeminar($seminar_id)
     {
-        $this->setupAutoload();
-
         return floor(ForumEntry::countEntries($seminar_id));
     }
 
     function getNumberOfPostings()
     {
-        $this->setupAutoload();
-
         return ForumEntry::countAllEntries();
     }
 
@@ -209,29 +184,21 @@ class CoreForum extends StudipPlugin implements ForumModule
 
     function getTopTenSeminars()
     {
-        $this->setupAutoload();
-
         return ForumEntry::getTopTenSeminars();
     }
 
     function migrateUser($user_from, $user_to)
     {
-        $this->setupAutoload();
-
         return ForumEntry::migrateUser($user_from, $user_to);
     }
 
     function deleteContents($seminar_id)
     {
-        $this->setupAutoload();
-
         return ForumEntry::delete($seminar_id);
     }
 
     function getDump($seminar_id)
     {
-        $this->setupAutoload();
-
         return ForumEntry::getDump($seminar_id);
     }
 
