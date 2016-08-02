@@ -357,7 +357,7 @@ class ConditionalAdmission extends AdmissionRule
         $this->conditiongroups = array();
         $this->quota = array();
         foreach ($data['conditions'] as $ser_con) {
-            $condition = unserialize($ser_con);
+            $condition = ObjectBuilder::build($ser_con, 'UserFilter');
             $this->addCondition($condition, $data['conditiongroup_'.$condition->getId()], $data['quota_'.$data['conditiongroup_'.$condition->getId()]]);
         }
         foreach ($this->getConditiongroups() as $conditiongroup_id => $conditions) {
@@ -496,7 +496,7 @@ class ConditionalAdmission extends AdmissionRule
         $ungrouped = 0;
         $no_quota = 0;
         foreach ($data['conditions'] as $ser_con) {
-            $condition = unserialize($ser_con);
+            $condition = ObjectBuilder::build($ser_con, 'UserFilter');
             if ($data['conditiongroup_'.$condition->getId()]) {
                 $grouped++;
             } else {

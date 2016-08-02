@@ -720,7 +720,8 @@ class CourseSet
     public function setAdmissionRules($newRules) {
         $this->admissionRules = array();
         foreach ($newRules as $newRule) {
-            $this->addAdmissionRule(unserialize(html_entity_decode($newRule)));
+            $rule = Request::buildObjectFromArray($newRule, 'AdmissionRule');
+            $this->addAdmissionRule($rule);
         }
         return $this;
     }

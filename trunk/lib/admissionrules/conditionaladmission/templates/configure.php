@@ -40,13 +40,13 @@ use Studip\Button, Studip\LinkButton;
                 <? $condition->show_user_count = true; ?>
                 <div class="condition" id="condition_<?= $condition->getId() ?>">
                 <? if ($rule->conditiongroupsAllowed()): ?>
-                    <input type="checkbox" name="conditions_checkbox[]" value="<?= htmlReady(serialize($condition)) ?>">
+                    <input type="checkbox" name="conditions_checkbox[]" value="<?= htmlReady(ObjectBuilder::exportAsJson($condition)) ?>">
                 <? endif; ?>
                     <?= $condition->toString() ?>
                     <a href="#" onclick="return STUDIP.UserFilter.removeConditionField($(this).parent())"
                         class="conditionfield_delete">
                     <?= Assets::img('icons/16/blue/trash.png'); ?></a>
-                    <input type="hidden" name="conditions[]" value="<?= htmlReady(serialize($condition)) ?>">
+                    <input type="hidden" name="conditions[]" value="<?= htmlReady(ObjectBuilder::exportAsJson($condition)) ?>">
                     <input type="hidden" name="conditiongroup_<?=$condition->getId()?>" value="">
                 </div>
             <? endforeach; ?>
@@ -61,12 +61,12 @@ use Studip\Button, Studip\LinkButton;
                     <? foreach ($conditiongroup as $condition): ?>
                         <? $condition->show_user_count = true; ?>
                         <div class="condition" id="condition_<?= $condition->getId() ?>">
-                            <input type="checkbox" name="conditions_checkbox[]" value="<?= htmlReady(serialize($condition)) ?>"/ style="display: none">
+                            <input type="checkbox" name="conditions_checkbox[]" value="<?= htmlReady(ObjectBuilder::exportAsJson($condition)) ?>" style="display: none">
                             <?= $condition->toString() ?>
                             <a href="#" onclick="return STUDIP.UserFilter.removeConditionField($(this).parent())"
                                         class="conditionfield_delete">
                             <?= Assets::img('icons/16/blue/trash.png'); ?></a>
-                            <input type="hidden" name="conditions[]" value="<?= htmlReady(serialize($condition)) ?>">
+                            <input type="hidden" name="conditions[]" value="<?= htmlReady(ObjectBuilder::exportAsJson($condition)) ?>">
                             <input type="hidden" name="conditiongroup_<?=$condition->getId()?>" value="<?= $conditiongroup_id ?>">
                         </div>
                     <? endforeach; ?>

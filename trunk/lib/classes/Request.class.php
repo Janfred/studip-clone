@@ -557,4 +557,55 @@ class Request implements ArrayAccess, IteratorAggregate
     {
         return self::isXhr() && isset($_SERVER['HTTP_X_DIALOG']);
     }
+
+    /**
+     * Returns an object that has previously been serialized using the
+     * ObjectBuilder.
+     *
+     * @param String $param         parameter name
+     * @param mixed $expected_class Expected class name of object (optional)
+     * @param bool   $allow_null    If true, return null on error; otherwise an
+     *                              exception is thrown
+     * @return mixed Object of arbitrary type or null on error and $allow_null
+     * @throws Exception when an error occurs and $allow_null = false
+     * @see ObjectBuilder
+     */
+    public static function getObject($param, $expected_class = null, $allow_null = true)
+    {
+        try {
+            return ObjectBuilder::build(Request::get($param), $expected_class);
+        } catch (Exception $e) {
+            if ($allow_null) {
+                return null;
+            }
+
+            throw $e;
+        }
+    }
+
+    /**
+     * Returns a collection of objects that have previously been serialized
+     * using the ObjectBuilder.
+     *
+     * @param String $param         parameter name
+     * @param mixed $expected_class Expected class name of objects (optional)
+     * @param bool   $allow_null    If true, return empty array on error;
+     *                              otherwise an exception is thrown
+     * @return array as collection of objects
+     * @throws Exception when an error occurs and $allow_null = false
+     * @see ObjectBuilder
+     */
+    public static function getManyObjects($param, $expected_class = null, $allow_null = true)
+    {
+        try {
+            $request = self::getInstance();
+            return ObjectBuilder::build($request[$param] ?: null, $expected_class);
+        } catch (Exception $e) {
+            if ($allow_null) {
+                return [];
+            }
+
+            throw $e;
+        }
+    }
 }

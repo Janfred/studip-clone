@@ -53,15 +53,11 @@ class Admission_RuleController extends AuthenticatedController
         // Check if rule data has been given via request.
         if (Request::getArray('rules')) {
             $rule_siblings = array();
-            $rules = Request::getArray('rules');
-            if (is_array($rules)) {
-                foreach($rules as $index => $rule) {
-                    $current_rule = AdmissionRule::createFromRequest($rule);
-                    if ($ruleType == get_class($current_rule) && $current_rule->getId() == Request::get('ruleId')) {
-                        $this->rule = $current_rule;
-                    } else {
-                        $rule_siblings[$current_rule->getId()] = $current_rule;
-                    }
+            foreach (Request::getManyObjects('rules', 'AdmissionRule') as $rule) {
+                if ($ruleType == get_class($rule) && $rule->getId() == Request::get('ruleId')) {
+                    $this->rule = $rule;
+                } else {
+                    $rule_siblings[$rule->getId()] = $rule;
                 }
             }
             if (!$this->rule && in_array($ruleType, array_keys($this->ruleTypes))) {
@@ -69,7 +65,7 @@ class Admission_RuleController extends AuthenticatedController
             }
             $this->rule->setSiblings($rule_siblings);
         } elseif (Request::get('rule')) {
-            $rule = Admission::createFromRequest(Request::get('rule'));
+            $rule = Request::getObject('rule', 'AdmissionRule');
             if ($ruleType == get_class($rule)) {
                 $this->rule = $rule;
             }
@@ -91,8 +87,7 @@ class Admission_RuleController extends AuthenticatedController
         $this->ruleTypes = AdmissionRule::getAvailableAdmissionRules();
         $this->courseset = new CourseSet($cs_id);
         $this->courseset->clearAdmissionRules();
-        foreach (Request::getArray('rules') as $rule_data) {
-            $rule = AdmissionRule::createFromRequest($rule_data);
+        foreach (Request::getManyObjects('rules', 'AdmissionRule') as $rule) {
             $this->courseset->addAdmissionRule($rule);
         }
     }
