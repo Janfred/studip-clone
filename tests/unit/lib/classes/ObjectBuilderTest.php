@@ -65,7 +65,7 @@ class ObjectBuilderTest extends PHPUnit_Framework_TestCase
     public function testExpectedType()
     {
         $this->assertInstanceOf(
-            ObjectBuilderTestMock::class,
+            'ObjectBuilderTestMock',
             ObjectBuilder::build(
                 $this->simple_array_definition,
                 'ObjectBuilderTestMock'
@@ -74,7 +74,7 @@ class ObjectBuilderTest extends PHPUnit_Framework_TestCase
 
         // Derived classes
         $this->assertInstanceOf(
-            ObjectBuilderTestMock::class,
+            'ObjectBuilderTestMock',
             ObjectBuilder::build(
                 $this->another_simple_array_definition,
                 'AnotherObjectBuilderTestMock'
@@ -87,7 +87,7 @@ class ObjectBuilderTest extends PHPUnit_Framework_TestCase
      */
     public function testExceptionOnExpectedType()
     {
-        $this->assertInstanceOf(ObjectBuilderTestMock::class, ObjectBuilder::build([
+        $this->assertInstanceOf('ObjectBuilderTestMock', ObjectBuilder::build([
             ObjectBuilder::OBJECT_IDENTIFIER => 'AnotherObjectBuilderTestMock',
         ], 'FooBar'));
     }
@@ -240,8 +240,8 @@ class ObjectBuilderTest extends PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $restored);
         $this->assertCount(2, $restored);
 
-        $this->assertInstanceOf(ObjectBuilderTestMock::class, $restored[0]);
-        $this->assertInstanceOf(AnotherObjectBuilderTestMock::class, $restored[1]);
+        $this->assertInstanceOf('ObjectBuilderTestMock', $restored[0]);
+        $this->assertInstanceOf('AnotherObjectBuilderTestMock', $restored[1]);
     }
 }
 
