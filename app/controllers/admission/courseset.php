@@ -310,8 +310,7 @@ class Admission_CoursesetController extends AuthenticatedController {
                 $courseset->setInfoText(Request::get('infotext'));
             }
             $courseset->clearAdmissionRules();
-            foreach (Request::getArray('rules') as $serialized) {
-                $rule = unserialize($serialized);
+            foreach (Request::getManyObjects('rules', 'AdmissionRule') as $rule) {
                 $courseset->addAdmissionRule($rule);
             }
             $courseset->store();

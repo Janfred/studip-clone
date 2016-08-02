@@ -16,7 +16,7 @@
                 <a href="#" onclick="return STUDIP.UserFilter.removeConditionField($(this).parent())"
                     class="conditionfield_delete">
                     <?= Icon::create('trash', 'clickable')->asImg(); ?></a>
-                <input type="hidden" name="conditions[]" value="<?= htmlReady(serialize($condition)) ?>"/>
+                <input type="hidden" name="conditions[]" value="<?= htmlReady(ObjectBuilder::exportAsJson($condition)) ?>"/>
             </div>
         <?php endforeach ?>
     </div>
