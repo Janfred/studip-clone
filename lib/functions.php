@@ -1741,10 +1741,10 @@ function studip_json_decode($json, $assoc = true, $depth = 512, $options = 0)
  * @param int   $options
  * @param int   $depth
  */
-function studip_json_encode($data, $options = 0, $depth = 512)
+function studip_json_encode($data, $options = 0)
 {
     $data = studip_utf8encode($data);
-    $json = json_encode($data, $options, $depth);
+    $json = json_encode($data, $options);
 
     return $json;
 }
