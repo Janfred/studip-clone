@@ -176,7 +176,8 @@ class ObjectBuilderTest extends PHPUnit_Framework_TestCase
         $array = ObjectBuilder::export($this->another_changed_object);
 
         $this->assertArrayHasKey('foo', $array);
-        $this->assertArraySubset(['foo' => 23], $array);
+        $this->assertEquals(23, $array['foo']);
+        // $this->assertArraySubset(['foo' => 23], $array);
 
         $this->assertArrayNotHasKey('bar', $array);
         $this->assertArrayNotHasKey('baz', $array);
