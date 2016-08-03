@@ -81,11 +81,14 @@ class ObjectBuilder
             if (self::isSerializedObject($value)) {
                 $value = self::build($value);
             } elseif (is_array($value)) {
-                foreach ($value as $index => $item) {
+                $array_walker = function (&$item) use (&$array_walker) {
                     if (self::isSerializedObject($item)) {
-                        $value[$index] = self::build($item);
+                        $item = self::build($item);
+                    } elseif (is_array($item)) {
+                        array_walk($item, $array_walker);
                     }
-                }
+                };
+                array_walk($value, $array_walker);
             }
 
             // Enable access to property and set value
@@ -185,11 +188,13 @@ class ObjectBuilder
             if (is_object($value)) {
                 $value = self::export($value);
             } elseif (is_array($value)) {
-                foreach ($value as $index => $item) {
-                    if (is_object($item)) {
-                        $value[$index] = self::export($item);
+                array_walk_recursive($value,
+                    function (&$item) {
+                        if (is_object($item)) {
+                            $item = self::export($item);
+                        }
                     }
-                }
+                );
             }
 
             // Store serialized value

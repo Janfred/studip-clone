@@ -2,9 +2,9 @@
 
 /**
  * SemesterOfStudyCondition.class.php
- * 
+ *
  * All conditions concerning the semester of study in Stud.IP can be specified here.
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
@@ -75,11 +75,11 @@ class SemesterOfStudyCondition extends UserFilterField
 
     /**
      * Gets the value for the given user that is relevant for this
-     * condition field. Here, this method looks up the semester of study 
+     * condition field. Here, this method looks up the semester of study
      * for the user. If the user studies more than one subject, these values
      * can be different for each entry, so as additional context a subject
      * or a degree or both can be given.
-     * 
+     *
      * @param  String $userId User to check.
      * @param  Array additional conditions that are required for check.
      * @return The value(s) for this user.
@@ -88,19 +88,19 @@ class SemesterOfStudyCondition extends UserFilterField
         $result = array();
         $query = "SELECT DISTINCT `".$this->userDataDbField."` ".
             "FROM `".$this->userDataDbTable."` ".
-            "WHERE `user_id`=?"; 
+            "WHERE `user_id`=?";
         $parameters = array($userId);
         // Additional requirements given...
         if (is_array($additional)) {
             // .. such as subject of study...
-            if ($array['studiengang_id']) {
+            if ($additional['studiengang_id']) {
                 $query .= " AND studiengang_id=?";
-                $parameters[] = $array['studiengang_id'];
+                $parameters[] = $additional['studiengang_id'];
             }
             // ... or degree.
-            if ($array['abschluss_id']) {
+            if ($additional['abschluss_id']) {
                 $query .= " AND abschluss_id=?";
-                $parameters[] = $array['abschluss_id'];
+                $parameters[] = $additional['abschluss_id'];
             }
         }
         // Get semester of study for user.
