@@ -599,7 +599,7 @@ class Request implements ArrayAccess, IteratorAggregate
     {
         try {
             $request = self::getInstance();
-            return ObjectBuilder::build($request[$param] ?: null, $expected_class);
+            return ObjectBuilder::buildMany($request[$param] ?: null, $expected_class);
         } catch (Exception $e) {
             if ($allow_null) {
                 return [];

@@ -122,7 +122,7 @@ class ObjectBuilder
         }
 
         $result = [];
-        foreach ($array as $index => $row) {
+        foreach (array_filter($array) as $index => $row) {
             $result[$index] = self::build($row, $expected_class);
         }
         return $result;
