@@ -17,7 +17,7 @@ class DatafieldCondition extends UserFilterField
 {
     public static $isParameterized = true;
 
-    public $datafield_id;
+    public $datafield_id, $null_yields, $datafield_name;
 
     public static function getParameterizedTypes()
     {

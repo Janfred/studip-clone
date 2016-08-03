@@ -1,7 +1,7 @@
 <?php
 /**
  * ObjectBuilderTest.php - unit tests for the object builder class
- * 
+ *
  * @author  Jan-Hendrik Willms <tleilax+studip@gmail.com>
  * @license GPL2 or any later version
  */
@@ -221,11 +221,11 @@ class ObjectBuilderTest extends PHPUnit_Framework_TestCase
     public function testNestedObjectInArray()
     {
         $object = new ObjectBuilderTestMock();
-        $object->foo = [new ObjectBuilderTestMock()];
+        $object->foo = ['bar' => [new ObjectBuilderTestMock()]];
 
         $restored_object = ObjectBuilder::build(array_merge(
             $this->simple_array_definition,
-            ['foo' => [$this->simple_array_definition]]
+            ['foo' => ['bar' => [$this->simple_array_definition]]]
         ));
 
         $this->assertEquals($object, $restored_object);
