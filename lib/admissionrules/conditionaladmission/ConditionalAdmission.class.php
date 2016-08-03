@@ -43,7 +43,7 @@ class ConditionalAdmission extends AdmissionRule
     /**
      * Are condition groups allowed?
      */
-    public $conditiongroups_allowed = false;
+    public $conditiongroups_allowed = null;
 
     /**
      * courseset siblings of this rule
@@ -253,10 +253,12 @@ class ConditionalAdmission extends AdmissionRule
      */
     public function conditiongroupsAllowed()
     {
-        foreach ($this->getSiblings() as $rule) {
-            if (get_class($rule) == 'ParticipantRestrictedAdmission') {
-                if ($rule->getDistributionTime() > time()) {
-                    $this->conditiongroups_allowed = true;
+        if ($this->conditiongroups_allowed === null) {
+            foreach ($this->getSiblings() as $rule) {
+                if (get_class($rule) == 'ParticipantRestrictedAdmission') {
+                    if ($rule->getDistributionTime() > time()) {
+                        $this->conditiongroups_allowed = true;
+                    }
                 }
             }
         }
@@ -370,6 +372,9 @@ class ConditionalAdmission extends AdmissionRule
                 $this->quota[$group] = $this->quota[$conditiongroup_id];
                 unset($this->quota[$conditiongroup_id]);
             }
+        }
+        if (count($this->getConditiongroups()) && $data['conditiongroups_allowed']) {
+            $this->conditiongroups_allowed = true;
         }
 
         return $this;
@@ -548,6 +553,12 @@ class ConditionalAdmission extends AdmissionRule
             }
         }
         $this->conditiongroups = $cloned_conditions;
+    }
+
+    public function setSiblings($siblings = array())
+    {
+        parent::setSiblings($siblings);
+        $this->conditiongroups_allowed = null;
     }
 
 } /* end of class ConditionalAdmission */
