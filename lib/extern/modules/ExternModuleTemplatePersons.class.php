@@ -272,7 +272,7 @@ class ExternModuleTemplatePersons extends ExternModule {
                     $content['PERSONS']['GROUP'][$i]['PERSON'][$j]['PERSONDETAIL-HREF'] = $this->elements['LinkInternTemplate']->createUrl(array('link_args' => 'username=' . $db_out['username']));
                     $content['PERSONS']['GROUP'][$i]['PERSON'][$j]['USERNAME'] = $db_out['username'];
 
-                    if (is_element_visible_externally( $row['user_id'], $user_perm, 'picture', $visibilities['picture'])) {
+                    if (Visibility::verify('picture', $row['user_id']) == 5) {
                         $avatar = Avatar::getAvatar($db_out['user_id']);
                     } else {
                         $avatar = Avatar::getNobody();
