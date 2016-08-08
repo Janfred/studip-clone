@@ -31,11 +31,11 @@ class UserStudyCourse extends SimpleORMap
     {
         $db = DbManager::get();
         $st = $db->prepare("SELECT user_studiengang.*, abschluss.name as degree_name,
-                            studiengaenge.name as studycourse_name
+                            fach.name as studycourse_name
                             FROM user_studiengang
                             LEFT JOIN abschluss USING (abschluss_id)
-                            LEFT JOIN studiengaenge USING (studiengang_id)
-                            WHERE user_id = ? ORDER BY studycourse_name");
+                            LEFT JOIN fach USING (fach_id)
+                            WHERE user_id = ? ORDER BY studycourse_name,degree_name");
         $st->execute(array($user_id));
         $ret = array();
         while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
@@ -46,7 +46,7 @@ class UserStudyCourse extends SimpleORMap
 
     public static function findByStudyCourseAndDegree($study_course_id, $degree_id)
     {
-        return self::findBySql("studiengang_id = ? AND abschluss_id = ?", array($study_course_id, $degree_id));
+        return self::findBySql("fach_id = ? AND abschluss_id = ?", array($study_course_id, $degree_id));
     }
 
     protected static function configure($config = array())
@@ -57,12 +57,12 @@ class UserStudyCourse extends SimpleORMap
             'foreign_key' => 'user_id',
         );
         $config['belongs_to']['degree'] = array(
-            'class_name' => 'Degree',
+            'class_name' => 'Abschluss',
             'foreign_key' => 'abschluss_id',
         );
         $config['belongs_to']['studycourse'] = array(
-            'class_name' => 'StudyCourse',
-            'foreign_key' => 'studiengang_id',
+            'class_name' => 'Fach',
+            'foreign_key' => 'fach_id',
         );
         $config['additional_fields']['degree_name'] = array();
         $config['additional_fields']['studycourse_name'] = array();

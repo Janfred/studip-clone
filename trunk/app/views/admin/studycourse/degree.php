@@ -8,47 +8,47 @@
 <? elseif (isset($flash['success'])): ?>
     <?= MessageBox::success($flash['success'], $flash['success_detail']) ?>
 <? elseif (isset($flash['delete'])): ?>
-    <?= createQuestion(sprintf(_('Wollen Sie den Abschluss "%s" wirklich löschen?'), $flash['delete'][0]['name']), array('delete' => 1), array('back' => 1), $controller->url_for('admin/studycourse/delete_degree') .'/'. $flash['delete'][0]['abschluss_id']); ?>
+    <?= createQuestion2(sprintf(_('Wollen Sie den Abschluss "%s" wirklich löschen?'), $flash['delete']['name']), array(), array(), $controller->url_for('/delete_degree', $flash['delete']['abschluss_id'])); ?>
 <? endif; ?>
 <table class="default collapsable">
     <tr>
-        <th><a href="<?= $controller->url_for('admin/studycourse/degree/') ?>?sortby=name"><b> <?=_("Name der Abschlüsse")?></b> <?= (Request::get('sortby', 'name') == 'name') ? Assets::img('dreieck_down.png'): ''?></a></th>
-        <th><a href="<?= $controller->url_for('admin/studycourse/degree/') ?>?sortby=users"><b> <?=_("Nutzer")?></b> <?= (Request::get('sortby') == 'users') ? Assets::img('dreieck_down.png'): ''?></a></th>
-        <th colspan="3"><b> <?=_("Aktion")?></b></th>
+        <th><a href="<?= $controller->url_for('/degree', array('sortby' => 'name')) ?>"><b> <?= _('Name der Abschlüsse') ?></b> <?= (Request::get('sortby', 'name') == 'name') ? Assets::img('dreieck_down.png'): ''?></a></th>
+        <th><a href="<?= $controller->url_for('/degree', array('sortby' => 'users')) ?>"><b> <?= _('Nutzer') ?></b> <?= (Request::get('sortby') == 'users') ? Assets::img('dreieck_down.png'): ''?></a></th>
+        <th colspan="3"><b> <?= _('Aktion') ?></b></th>
     </tr>
-    <? foreach ($studydegrees as $abschluss_id => $studydegree) : ?>
-    <tbody class="<?= count($studydegree['profession'])?'':'empty' ?> collapsed ">
+    <? foreach ($studydegrees as $index_a => $studydegree) : ?>
+    <tbody class="<?= count($studydegree->professions) ? '' : 'empty' ?> collapsed ">
     <tr class="table_header header-row">
-        <td class="toggle-indicator"><? if (count($studydegree['profession']) < 1): ?><?=$abschluss_id+1 ?>. <?= htmlReady($studydegree['name']) ?> <? else: ?> <a class="toggler" href="#"><?=$abschluss_id+1 ?>. <?= htmlReady($studydegree['name']) ?> </a><? endif; ?></td>
-        <td> <?= $studydegree['count_user'] ?> </td>
-        <td width="20">
-            <? if ($studydegree['count_user'] > 0): ?><a href="<?=URLHelper::getLink("dispatch.php/messages/write?sd_id=".$studydegree['abschluss_id']."&emailrequest=1&default_subject="._("Informationen zum Studienabschluss:")." ". $studydegree['name']) ?>">
-                <?= Icon::create('mail', 'clickable', ['title' => _('Nachricht an alle Nutzer schicken'), 'class' => 'text-top'])->asImg() ?>
+        <td class="toggle-indicator"><? if (count($studydegree->professions) < 1): ?><?= $index_a + 1 ?>. <?= htmlReady($studydegree->name) ?> <? else: ?> <a class="toggler" href="#"><?= $index_a + 1 ?>. <?= htmlReady($studydegree->name) ?> </a><? endif; ?></td>
+        <td> <?= $studydegree->count_user ?> </td>
+        <td style="width: 20px;" class="dont-hide">
+            <? if ($studydegree->count_user > 0): ?><a href="<?=URLHelper::getLink('dispatch.php/messages/write', array('sd_id' => $studydegree->id, 'emailrequest' => '1', 'default_subject' => _('Informationen zum Studienabschluss:') . ' ' . $studydegree->name)) ?>">
+                <?= Icon::create('mail', 'clickable', ['title' => _('Nachricht an alle Nutzer schicken')])->asImg() ?>
             </a><? endif;?>
         </td>
-        <td width="20">
-            <a href="<?=$controller->url_for('admin/studycourse/edit_degree/'.$studydegree['abschluss_id'])?>">
-                <?= Icon::create('edit', 'clickable', ['title' => _('Abschluss bearbeiten'), 'class' => 'text-top'])->asImg() ?>
+        <td style="width: 20px;" class="dont-hide">
+            <a href="<?=$controller->url_for('/edit_degree', $studydegree->id)?>">
+                <?= Icon::create('edit', 'clickable', ['title' => _('Abschluss bearbeiten')])->asImg() ?>
             </a>
         </td>
-        <td width="20">
-            <? if ($studydegree['count_user'] == 0): ?><a href="<?=$controller->url_for('admin/studycourse/delete_degree')?>/<?= $studydegree['abschluss_id'] ?>">
-                <?= Icon::create('trash', 'clickable', ['title' => _('Abschluss löschen'), 'class' => 'text-top'])->asImg() ?>
+        <td style="width: 20px;" class="dont-hide">
+            <? if ($studydegree->count_user == 0): ?><a href="<?=$controller->url_for('/delete_degree', $studydegree->id) ?>">
+                <?= Icon::create('trash', 'clickable', ['title' => _('Abschluss löschen')])->asImg() ?>
             </a><? endif; ?>
         </td>
     </tr>
-    <?php foreach ($studydegree['profession'] as $index => $studycourse): ?>
-    <tr class="<?= TextHelper::cycle('table_row_even', 'table_row_odd') ?>">
+    <?php foreach ($studydegree->professions as $index_s => $studycourse): ?>
+    <tr>
         <td class="label-cell">
-           <?=$abschluss_id + 1 ?>.<?=$index + 1 ?>
-           <?= htmlReady($studycourse['name']) ?>
+           <?= $index_a + 1 ?>.<?= $index_s + 1 ?>
+           <?= htmlReady($studycourse->name) ?>
         </td>
-        <td><?= $studycourse['count_user'] ?></td>
-        <td><a href="<?=URLHelper::getLink("sms_send.php?sms_source_page=sms_box.php&prof_id=".$studycourse['studiengang_id']."&deg_id=".$studydegree['abschluss_id']."&emailrequest=1&subject="._("Informationen zum Studiengang:")." ". htmlReady($studycourse['name']))." (".htmlReady($studydegree['name']).")" ?>"><?= Icon::create('mail', 'clickable', ['title' => _('Eine Nachricht an alle Nutzer schicken')])->asImg() ?></a> </td>
+        <td><?= $studycourse->countUserByDegree($studydegree->id) ?></td>
+        <td><a href="<?= URLHelper::getLink('sms_send.php', ['sms_source_page' => 'sms_box.php', 'prof_id' => $studycourse->id, 'deg_id' => $studydegree->id, 'emailrequest' => '1', 'subject' => _('Informationen zum Studiengang:') . ' ' . htmlReady($studycourse->name) . ' (' . htmlReady($studydegree->name) . ')']) ?>"><?= Icon::create('mail', 'clickable', ['title' => _('Eine Nachricht an alle Nutzer schicken')])->asImg() ?></a> </td>
         <td></td>
         <td></td>
     </tr>
-    <? endforeach; TextHelper::reset_cycle(); ?>
+    <? endforeach; ?>
     </tbody>
     <? endforeach; ?>
  </table>

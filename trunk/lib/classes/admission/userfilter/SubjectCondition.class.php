@@ -19,11 +19,11 @@
 class SubjectCondition extends UserFilterField
 {
     // --- ATTRIBUTES ---
-    public $valuesDbTable = 'studiengaenge';
-    public $valuesDbIdField = 'studiengang_id';
+    public $valuesDbTable = 'fach';
+    public $valuesDbIdField = 'fach_id';
     public $valuesDbNameField = 'name';
     public $userDataDbTable = 'user_studiengang';
-    public $userDataDbField = 'studiengang_id';
+    public $userDataDbField = 'fach_id';
 
     // --- OPERATIONS ---
 

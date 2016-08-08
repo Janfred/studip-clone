@@ -66,8 +66,18 @@ class Admin_DatafieldsController extends AuthenticatedController
                 'user'         => DataField::getDataFields('user'),
                 'userinstrole' => DataField::getDataFields('userinstrole'),
                 'usersemdata'  => DataField::getDataFields('usersemdata'),
-                'roleinstdata' => DataField::getDataFields('roleinstdata'),
+                'roleinstdata' => DataField::getDataFields('roleinstdata')
             );
+            
+            // is the module administration enabled?
+            if (PluginEngine::getPlugin('MVVPlugin')) {
+                $this->datafields_list['moduldeskriptor'] =
+                        DataField::getDataFields('moduldeskriptor');
+                $this->datafields_list['modulteildeskriptor'] =
+                        DataField::getDataFields('modulteildeskriptor');
+            }
+            
+            
         }
 
         // set variables for view
@@ -90,7 +100,13 @@ class Admin_DatafieldsController extends AuthenticatedController
             $datafield = new DataField($datafield_id);
             if (Request::get('datafield_name')) {
                 $datafield->name          = Request::get('datafield_name');
-                $datafield->object_class  = array_sum(Request::getArray('object_class')) ?: null;
+                if ($datafield->object_type === 'moduldeskriptor'
+                        || $datafield->object_type === 'modulteildeskriptor') {
+                    $object_class = implode(',', Request::getArray('object_class'));
+                    $datafield->object_class  = (trim($object_class) && $object_class != 'NULL') ? $object_class : null;
+                } else {
+                    $datafield->object_class  = array_sum(Request::getArray('object_class')) ?: null;
+                }
                 $datafield->edit_perms    = Request::get('edit_perms');
                 $datafield->view_perms    = Request::get('visibility_perms');
                 $datafield->system        = Request::int('system') ?: 0;
@@ -129,7 +145,12 @@ class Admin_DatafieldsController extends AuthenticatedController
                 $datafield = new DataField();
                 $datafield->name          = Request::get('datafield_name');
                 $datafield->object_type   = $type;
-                $datafield->object_class  = array_sum(Request::getArray('object_class')) ?: null;
+                if ($type === 'moduldeskriptor' || $type === 'modulteildeskriptor') {
+                    $object_class = implode(',', Request::getArray('object_class'));
+                    $datafield->object_class  = (trim($object_class) && $object_class != 'NULL') ? $object_class : null;
+                } else {
+                    $datafield->object_class  = array_sum(Request::getArray('object_class')) ?: null;
+                }
                 $datafield->edit_perms    = Request::get('edit_perms');
                 $datafield->view_perms    = Request::get('visibility_perms');
                 $datafield->system        = Request::int('system') ?: 0;

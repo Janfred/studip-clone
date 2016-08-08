@@ -54,7 +54,29 @@ use Studip\Button, Studip\LinkButton;
                 </option>
             <? endforeach; ?>
             </select>
-        <? else: ?>
+        <? elseif ($item->object_type === 'moduldeskriptor'): ?>
+            <?= _('Sprache') ?>:
+            
+            <select multiple name="object_class[]" id="object_class" required>
+                <option value="NULL" <? if ($item->object_class === null) echo 'selected'; ?>><?= _('alle') ?></option>
+            <? foreach ((array) $GLOBALS['MVV_MODUL_DESKRIPTOR']['SPRACHE']['values'] as $key => $value) : ?>
+                <option value="<?= htmlReady($key) ?>" <? if (strpos($item->object_class, $key) !== false) echo 'selected'; ?>>
+                    <?= htmlReady($value['name']) ?>
+                </option>
+            <? endforeach; ?>
+            </select>
+        <? elseif ($item->object_type === 'modulteildeskriptor'): ?>
+            <?= _('Sprache') ?>:
+            
+            <select multiple name="object_class[]" id="object_class" required>
+                <option value="NULL" <? if ($item->object_class === null) echo 'selected'; ?>><?= _('alle') ?></option>
+            <? foreach ((array) $GLOBALS['MVV_MODULTEIL_DESKRIPTOR']['SPRACHE']['values'] as $key => $value) : ?>
+                <option value="<?= htmlReady($key) ?>" <? if (strpos($item->object_class, $key) !== false) echo 'selected'; ?>>
+                    <?= htmlReady($value['name']) ?>
+                </option>
+            <? endforeach; ?>
+            </select>
+        <? else : ?>
             <?= _('Nutzerstatus') ?>:
 
             <select multiple size="<?= count($controller->user_status) ?>" name="object_class[]" id="object_class" required>

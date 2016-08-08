@@ -8,49 +8,50 @@
 <? elseif (isset($flash['success'])): ?>
     <?= MessageBox::success($flash['success'], $flash['success_detail']) ?>
 <? elseif (isset($flash['delete'])): ?>
-    <?= createQuestion(sprintf(_('Wollen Sie den Studiengang "%s" wirklich löschen?'), $flash['delete'][0]['name']), array('delete' => 1), array('back' => 1), $controller->url_for('admin/studycourse/delete_profession/'. $flash['delete'][0]['studiengang_id'])) ?>
+    <?= createQuestion2(sprintf(_('Wollen Sie das Fach "%s" wirklich löschen?'), $flash['delete']['name']), array(), array(), $controller->url_for('/delete_profession', $flash['delete']['fach_id'])) ?>
 <? endif; ?>
 <table class="default collapsable">
     <thead>
         <tr>
-        <th><a href="<?= $controller->url_for('admin/studycourse/profession/') ?>?sortby=name"><b> <?=_("Name des Studienganges")?></b> <?= (Request::get('sortby', 'name') == 'name') ? Assets::img('dreieck_down.png'): ''?></a></th>
-        <th><a href="<?= $controller->url_for('admin/studycourse/profession/') ?>?sortby=users"><b> <?=_("Nutzer")?></b> <?= (Request::get('sortby') == 'users') ? Assets::img('dreieck_down.png'): ''?></a></th>
+        <th><a href="<?= $controller->url_for('/profession', array('sortby' => 'name')) ?>"><b> <?=_('Name des Studienganges')?></b> <?= (Request::get('sortby', 'name') == 'name') ? Assets::img('dreieck_down.png'): ''?></a></th>
+        <th><a href="<?= $controller->url_for('/profession', array('sortby' => 'users')) ?>"><b> <?= _('Nutzer') ?></b> <?= (Request::get('sortby') == 'users') ? Assets::img('dreieck_down.png'): ''?></a></th>
         <th colspan="3"><b> <?=_("Aktion")?></b></th>
         </tr>
     </thead>
-    <? foreach ($studycourses as $fach_id => $studycourse): ?>
-    <tbody class="<?= count($studycourse['degree']) ? 'collapsed' : 'empty' ?>">
+    <? foreach ($studycourses as $index_s => $studycourse): ?>
+    <tbody class="<?= count($studycourse->degrees) ? 'collapsed' : 'empty' ?>">
     <tr class="table_header header-row" valign="bottom">
-        <th class="toggle-indicator"><? if (count($studycourse['degree']) < 1): ?><?=$fach_id+1 ?>. <?= htmlReady($studycourse['name']) ?> <? else: ?> <a class="toggler" href="#"><?=$fach_id+1 ?>. <?= htmlReady($studycourse['name']) ?></a><? endif; ?></th>
-        <th><?= $studycourse['count_user'] ?> </th>
-        <th width="20">
-            <? if ($studycourse['count_user'] > 0): ?><a href="<?=URLHelper::getLink("dispatch.php/messages/write?sp_id=".$studycourse['studiengang_id']."&emailrequest=1&default_subject="._("Informationen zum Studiengang:")." ". $studycourse['name']) ?>">
+        <th class="toggle-indicator"><? if (count($studycourse->degrees) < 1): ?><?= $index_s + 1 ?>. <?= htmlReady($studycourse->name) ?> <? else: ?> <a class="toggler" href="#"><?= $index_s + 1 ?>. <?= htmlReady($studycourse->name) ?></a><? endif; ?></th>
+        <? $count_user = $studycourse->count_user; ?>
+        <th class="dont-hide"><?= $count_user ?> </th>
+        <th style="width: 20px;" class="dont-hide">
+            <? if ($count_user > 0): ?><a href="<?=URLHelper::getLink('dispatch.php/messages/write', array('sp_id' => $studycourse->id, 'emailrequest' => '1', 'default_subject' => _('Informationen zum Studiengang:') . " " . $studycourse->name)) ?>">
                 <?= Icon::create('mail', 'clickable', ['title' => _('Nachricht an alle Benutzer schicken'), 'class' => 'text-top'])->asImg() ?>
             </a><? endif;?>
         </th>
-        <th width="20">
-            <a href="<?=$controller->url_for('admin/studycourse/edit_profession/'.$studycourse['studiengang_id'])?>">
-                <?= Icon::create('edit', 'clickable', ['title' => _('Studiengang bearbeiten'), 'class' => 'text-top'])->asImg() ?>
+        <th style="width: 20px;" class="dont-hide">
+            <a href="<?=$controller->url_for('/edit_profession', $studycourse->id)?>">
+                <?= Icon::create('edit', 'clickable', ['title' => _('Studiengang bearbeiten')])->asImg() ?>
             </a>
         </th>
-        <th width="20">
-            <? if ($studycourse['count_user'] == 0): ?> <a href="<?=$controller->url_for('admin/studycourse/delete_profession/' . $studycourse['studiengang_id']) ?>">
-                <?= Icon::create('trash', 'clickable', ['title' => _('Studiengang löschen'), 'class' => 'text-top'])->asImg() ?>
+        <th style="width: 20px;" class="dont-hide">
+            <? if ($count_user == 0): ?> <a href="<?=$controller->url_for('/delete_profession', $studycourse->id) ?>">
+                <?= Icon::create('trash', 'clickable', ['title' => _('Studiengang löschen')])->asImg() ?>
             </a><? endif;?>
         </th>
     </tr>
-    <? foreach ($studycourse['degree'] as $index => $degree): ?>
+    <? foreach ($studycourse->degrees as $index_d => $degree): ?>
     <tr>
         <td class="label-cell">
-           <?= $fach_id + 1 ?>.<?= $index + 1 ?>
+           <?= $index_s + 1 ?>.<?= $index_d + 1 ?>
            <?= htmlReady($degree['name']) ?>
         </td>
-        <td><?= $degree['count_user'] ?></td>
-        <td><a href="<?=URLHelper::getLink("sms_send.php?sms_source_page=sms_box.php&prof_id=".$studycourse['studiengang_id']."&deg_id=".$degree['abschluss_id']."&emailrequest=1&subject="._("Informationen zum Studiengang:")." ". $studycourse['name'])." (".$degree['name'].")"?>"><?= Icon::create('mail', 'clickable', ['title' => 'Nachricht an alle Nutzer schicken'])->asImg() ?></a></td>
+        <td><?= $degree->countUserByStudycourse($studycourse->id) ?></td>
+        <td><a href="<?= URLHelper::getLink('sms_send.php', array('sms_source_page' => 'sms_box.php', 'prof_id' => $studycourse->fach_id, 'deg_id' => $degree->abschluss_id, 'emailrequest' => '1', 'subject' => _('Informationen zum Studiengang:') . " " . $studycourse->name . " (" . $degree->name . ")"))?>"><?= Icon::create('mail', 'clickable', ['title' => _('Nachricht an alle Nutzer schicken')])->asImg() ?></a></td>
         <td></td>
         <td></td>
     </tr>
-    <? endforeach; TextHelper::reset_cycle(); ?>
+    <? endforeach; ?>
     </tbody>
     <? endforeach ?>
 </table>

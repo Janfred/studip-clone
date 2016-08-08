@@ -33,6 +33,8 @@ use Studip\Button, Studip\LinkButton;
             <?= _('Veranstaltungskategorie') ?>
         <? elseif ($object_typ === 'inst'): ?>
             <?= _('Einrichtungstyp') ?>
+        <? elseif ($object_typ === 'moduldeskriptor' || $object_type === 'modulteildeskriptor') : ?>
+            <?= _('Sprache') ?>
         <? else: ?>
             <?= _('Nutzerstatus') ?>
         <? endif; ?>
@@ -52,6 +54,18 @@ use Studip\Button, Studip\LinkButton;
                 <option value="<?= $key ?>">
                     <?= htmlReady($val['name']) ?>
                 </option>
+            <? endforeach; ?>
+        <? elseif ($object_typ === 'moduldeskriptor') : ?>
+            <select multiple name="object_class[]" required>
+                <option value="NULL" selected><?= _('alle') ?></option>
+            <? foreach ((array) $GLOBALS['MVV_MODUL_DESKRIPTOR']['SPRACHE']['values'] as $key => $value) : ?>
+                <option value="<?= htmlReady($key) ?>"><?= htmlReady($value['name']) ?></option>
+            <? endforeach; ?>
+        <? elseif ($object_typ === 'modulteildeskriptor') : ?>
+            <select multiple name="object_class[]" required>
+                <option value="NULL" selected><?= _('alle') ?></option>
+            <? foreach ((array) $GLOBALS['MVV_MODULTEIL_DESKRIPTOR']['SPRACHE']['values'] as $key => $value) : ?>
+                <option value="<?= htmlReady($key) ?>"><?= htmlReady($value['name']) ?></option>
             <? endforeach; ?>
         <? else: ?>
              <select multiple size="7" name="object_class[]" required>

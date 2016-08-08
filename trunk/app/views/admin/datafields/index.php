@@ -31,7 +31,7 @@
             <th rowspan="2"><?= _('Feldtyp') ?></th>
             <th rowspan="2" style="word-wrap: nowrap">
                 <?= _('Typ') ?>
-                <?= tooltipIcon(_('Veranstaltungskategorie, Einrichtungstyp bzw. Nutzerstatus')) ?>
+                <?= tooltipIcon(_('Veranstaltungskategorie, Einrichtungstyp, Sprache bzw. Nutzerstatus')) ?>
             </th>
             <th colspan="2" style="text-align: center">
                 <?= _('benötigter Status') ?>
@@ -103,6 +103,10 @@
                 <?= $val->object_class !== null ? htmlReady($GLOBALS['SEM_CLASS'][$val->object_class]['name']) : _('alle')?>
             <? elseif ($key == 'inst'): ?>
                 <?=  $val->object_class !== null ? htmlReady($GLOBALS['INST_TYPE'][$val->object_class]['name']) : _('alle')?>
+            <? elseif ($key === 'moduldeskriptor' || $key === 'modulteildeskriptor') : ?>
+                <?=  $val->object_class !== null ? htmlReady(implode(', ', array_map(function ($class) {
+                    return $GLOBALS['MVV_MODULTEIL_DESKRIPTOR']['SPRACHE']['values'][$class]['name'];
+                }, explode(',', $val->object_class)))) : _('alle')?>
             <? else: ?>
                 <?= $val->object_class !== null ? DataField::getReadableUserClass($val->object_class) : _('alle')?>
             <? endif; ?>

@@ -217,18 +217,11 @@ class about extends messaging
                 $this->user_info['Home'] = $this->default_url;
             }
         }
-
-       $query = "SELECT studiengang_id, abschluss_id, semester,
-                        studiengaenge.name AS fname, abschluss.name AS aname
-                 FROM user_studiengang
-                 LEFT JOIN studiengaenge USING (studiengang_id)
-                 LEFT JOIN abschluss USING (abschluss_id)
-                 WHERE user_id = ?
-                 ORDER BY fname, aname";
-        $statement = DBManager::get()->prepare($query);
-        $statement->execute(array($this->auth_user['user_id']));
-        $this->user_fach_abschluss = $statement->fetchAll(PDO::FETCH_ASSOC);
-
+        
+        $this->user_fach_abschluss = array_map(function ($user_stc) {
+            return $user_stc->toArray();
+        }, UserStudyCourse::findByUser($this->auth_user['user_id']));
+        
         $this->user_userdomains = UserDomain::getUserDomainsForUser($this->auth_user['user_id']);
 
         $query = "SELECT Institut_id, inst_perms, sprechzeiten, raum,
@@ -279,14 +272,12 @@ class about extends messaging
      */
     public function select_studiengang()
     {
-        $query = "SELECT studiengang_id, name FROM studiengaenge ORDER BY name";
-        $statement = DBManager::get()->query($query);
-        $studiengaenge = $statement->fetchGrouped(PDO::FETCH_COLUMN);
+        $faecher = Fach::findBySQL('1 ORDER BY name');
 
         echo '<select name="new_studiengang" id="new_studiengang" aria-label="'._('-- Bitte Fach auswählen --').'">'."\n";
         echo '<option selected value="none">' . _('-- Bitte Fach auswählen --') . '</option>'."\n";
-        foreach ($studiengaenge as $id => $name) {
-            printf('<option value="%s">%s</option>' . "\n", $id, htmlReady(my_substr($name, 0, 50)));
+        foreach ($faecher as $fach) {
+            printf('<option value="%s">%s</option>' . "\n", $fach->id, htmlReady(my_substr($fach->name, 0, 50)));
         }
         echo "</select>\n";
     }

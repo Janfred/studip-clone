@@ -39,6 +39,9 @@ class DatafieldEntryModel extends SimpleORMap
     {
         $mask = array("user" => 1, "autor" => 2, "tutor" => 4, "dozent" => 8, "admin" => 16, "root" => 32);
 
+        // is the module administration enabled?
+        $mv_plugin = PluginEngine::getPlugin('MVVPlugin');
+        
         if (is_a($model, "Course")) {
             $object_class = SeminarCategories::GetByTypeId($model->status)->id;
             $object_type = 'sem';
@@ -61,6 +64,14 @@ class DatafieldEntryModel extends SimpleORMap
             $object_type = 'userinstrole';
             $range_id = $model->user_id;
             $sec_range_id = $model->institut_id;
+        } elseif ($mv_plugin && is_a($model, 'ModulDeskriptor')) {
+            $object_class = $model->sprache;
+            $object_type = 'moduldeskriptor';
+            $range_id = $model->deskriptor_id;
+        } elseif ($mv_plugin && is_a($model, 'ModulteilDeskriptor')) {
+            $object_class = $model->sprache;
+            $object_type = 'modulteildeskriptor';
+            $range_id = $model->deskriptor_id;
         }
 
         if (!$object_type) {
@@ -69,17 +80,31 @@ class DatafieldEntryModel extends SimpleORMap
         if ($datafield_id !== null) {
             $one_datafield = " AND a.datafield_id = " .DBManager::get()->quote($datafield_id);
         }
+        
         $query = "SELECT a.*, b.*,a.datafield_id,b.datafield_id as isset_content ";
         $query .= "FROM datafields a LEFT JOIN datafields_entries b ON (a.datafield_id=b.datafield_id AND range_id = ? AND sec_range_id = ?) ";
-        $query .= "WHERE object_type = ? AND ((object_class & ?) OR object_class IS NULL) $one_datafield ORDER BY priority";
-
+        $query .= "WHERE object_type = ? ";
+        
+        if ($object_type === 'moduldeskriptor' || $object_type === 'modulteildeskriptor') {
+            // find datafields by language (string)
+            $query .= "AND (LOCATE(?, object_class) OR object_class IS NULL) $one_datafield ORDER BY priority";
+            $params = array(
+                (string) $range_id,
+                (string) $sec_range_id,
+                $object_type,
+                (string) $object_class);
+        } else {
+            // find datafields by perms or status (int)
+            $query .= "AND ((object_class & ?) OR object_class IS NULL) $one_datafield ORDER BY priority";
+            $params = array(
+                (string) $range_id,
+                (string) $sec_range_id,
+                $object_type,
+                (int) $object_class);
+        }
+        
         $st = DBManager::get()->prepare($query);
-        $st->execute(array(
-            (string) $range_id,
-            (string) $sec_range_id,
-            $object_type,
-            (int) $object_class
-        ));
+        $st->execute($params);
         $ret = array();
         $c = 0;
         $df_entry = new DatafieldEntryModel();
