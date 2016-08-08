@@ -25,6 +25,47 @@ class Degree extends SimpleORMap
     protected static function configure($config = array())
     {
         $config['db_table'] = 'abschluss';
+        
+        $config['has_and_belongs_to_many']['professions'] = array(
+            'class_name' => 'StudyCourse',
+            'thru_table' => 'user_studiengang',
+            'thru_key' => 'abschluss_id',
+            'thru_assoc_key' => 'fach_id',
+            'order_by' => 'GROUP BY fach_id ORDER BY name'
+        );
+        
+        $config['additional_fields']['count_user']['get'] = 'countUser';
+        
         parent::configure($config);
     }
+    
+    public function countUser()
+    {
+        $stmt = DBManager::get()->prepare('SELECT COUNT(DISTINCT user_id) '
+                . 'FROM user_studiengang WHERE abschluss_id = ?');
+        $stmt->execute(array($this->id));
+        return $stmt->fetchColumn();
+    }
+    
+    public function countUserByStudycourse($studycourse_id)
+    {
+        $stmt = DBManager::get()->prepare('SELECT COUNT(DISTINCT user_id) '
+                . 'FROM user_studiengang '
+                . 'WHERE fach_id = ? AND abschluss_id = ?');
+        $stmt->execute(array($studycourse_id, $this->id));
+        return $stmt->fetchColumn();
+    }
+    
+    public function store()
+    {
+        if ($this->isNew() || $this->isDirty()) {
+            $this->editor_id = $GLOBALS['user']->id;
+            if (!$this->getPristineValue('author_id')) {
+                $this->author_id = $GLOBALS['user']->id;
+            }
+        }
+        
+        return parent::store();
+    }
+    
 }

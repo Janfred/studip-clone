@@ -84,6 +84,52 @@ class Course_DetailsController extends AuthenticatedController
             });
         }
 
+        // Ausgabe der Modulzuordnung MVV
+        $mvv_plugin = PluginEngine::getPlugin('MVVPlugin');
+        if ($mvv_plugin) {
+            if ($this->course->getSemClass()->offsetGet('module')) {
+
+                // set filter to show only pathes with valid semester data
+                ModuleManagementModelTreeItem::setObjectFilter('Modul', function ($modul, $parameter) {
+                    $modul_start_sem = Semester::find($modul->start);
+                    $modul_end_sem = Semester::find($modul->end);
+                    $course_start_sem = Semester::find($parameter[0]);
+                    $course_end_sem = Semester::find($parameter[1]);
+
+                    if (($modul_start_sem->beginn <= $course_end_sem->beginn && $modul_end_sem->beginn >= $course_start_sem->beginn)
+                        || ($course_end_sem == null && $modul_end_sem->beginn >= $course_start_sem->beginn)
+                        || ($modul_end_sem == null && $modul_start_sem->beginn <= $course_end_sem->beginn)
+                        || ($course_end_sem == null && $modul_end_sem == null)) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }, array(
+                    $this->course->start_semester->id,
+                    $this->course->end_semester ? $this->course->end_semester->id : null
+                ));
+
+                $trail_classes = array('Modulteil', 'StgteilabschnittModul', 'StgteilAbschnitt', 'StgteilVersion');
+                $mvv_object_pathes = MvvCourse::get($this->course->getId())->getTrails($trail_classes);
+                if ($mvv_object_pathes) {
+                    foreach ($mvv_object_pathes as $mvv_object_path) {
+                        // show only complete pathes
+                        if (count($mvv_object_path) == 4) {
+                            $mvv_object_names = array();
+                            $modul_id = '';
+                            foreach ($mvv_object_path as $mvv_object) {
+                                if ($mvv_object instanceof StgteilabschnittModul) {
+                                    $modul_id = $mvv_object->modul_id;
+                                }
+                                $mvv_object_names[] = $mvv_object->getDisplayName();
+                            }
+                            $this->mvv_pathes[] = array($modul_id => $mvv_object_names);
+                        }
+                    }
+                }
+            }
+        }
+
         if (Request::isXhr()) {
             $this->set_layout(null);
             $this->response->add_header('Content-Type', 'text/html;charset=Windows-1252');

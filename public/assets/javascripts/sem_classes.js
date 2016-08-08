@@ -87,6 +87,7 @@ STUDIP.admin_sem_class = {
                 'default_read_level': jQuery("#default_read_level").val(),
                 'default_write_level': jQuery("#default_write_level").val(),
                 'bereiche': jQuery("#bereiche").is(":checked") ? 1 : 0,
+                'module': jQuery("#module").is(":checked") ? 1 : 0,
                 'show_browse': jQuery("#show_browse").is(":checked") ? 1 : 0,
                 'write_access_nobody': jQuery("#write_access_nobody").is(":checked") ? 1 : 0,
                 'topic_create_autor': jQuery("#topic_create_autor").is(":checked") ? 1 : 0,

@@ -250,7 +250,7 @@ final class UserLookup
      */
     protected static function fachFilter($needles)
     {
-        $db_result = self::arrayQuery("SELECT user_id FROM user_studiengang WHERE studiengang_id IN (??)", $needles);
+        $db_result = self::arrayQuery("SELECT user_id FROM user_studiengang WHERE fach_id IN (??)", $needles);
         return $db_result->fetchAll(PDO::FETCH_COLUMN);
     }
 
@@ -260,7 +260,7 @@ final class UserLookup
      */
     protected static function fachValues()
     {
-        $db_result = DBManager::get()->query("SELECT studiengang_id, name FROM studiengaenge ORDER BY name ASC");
+        $db_result = DBManager::get()->query("SELECT fach_id, name FROM fach ORDER BY name ASC");
         $result = $db_result->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_COLUMN);
         return array_map('reset', $result);
     }

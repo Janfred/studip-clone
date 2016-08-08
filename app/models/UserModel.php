@@ -64,20 +64,23 @@ class UserModel
     /**
      * Return the studycourses of an user.
      *
-     * @param md5 $user_id
+     * @param string $user_id
      * @return array() list of studycourses
      */
     public static function getUserStudycourse($user_id)
     {
-        $sql = "SELECT s.name AS fach, a.name AS abschluss, us.studiengang_id AS fach_id, "
-             . "us.abschluss_id AS abschluss_id, us.semester "
-             . "FROM user_studiengang AS us "
-             . "LEFT JOIN studiengaenge AS s ON us.studiengang_id = s.studiengang_id "
-             . "LEFT JOIN abschluss AS a ON us.abschluss_id = a.abschluss_id "
-             . "WHERE user_id=? ORDER BY fach";
-        $db = DBManager::get()->prepare($sql);
-        $db->execute(array($user_id));
-        return $db->fetchAll(PDO::FETCH_ASSOC);
+        $user_scs = array();
+        foreach (UserStudyCourse::findByUser($user_id) as $u_stc) {
+            $user_scs[] = [
+                'fach'         => $u_stc->studycourse_name,
+                'abschluss'    => $u_stc->degree_name,
+                'fach_id'      => $u_stc->fach_id,
+                'abschluss_id' => $u_stc->abschluss_id,
+                'semester'     => $u_stc->semester,
+                'version_id'   => $u_stc->version_id
+            ];
+        }
+        return $user_scs;
     }
 
     /**
@@ -218,7 +221,7 @@ class UserModel
         }
 
         if($studycourse) {
-            $query .= "AND us.studiengang_id = " . $db->quote($studycourse). " ";
+            $query .= "AND us.fach_id = " . $db->quote($studycourse). " ";
         }
 
         if($institute) {
@@ -359,7 +362,7 @@ class UserModel
             $statement->execute(array($new_id, $old_id));
 
             // Studiengänge
-            self::removeDoubles('user_studiengang', 'studiengang_id', $new_id, $old_id);
+            self::removeDoubles('user_studiengang', 'fach_id', $new_id, $old_id);
             $query = "UPDATE IGNORE user_studiengang SET user_id = ? WHERE user_id = ?";
             $statement = DBManager::get()->prepare($query);
             $statement->execute(array($new_id, $old_id));

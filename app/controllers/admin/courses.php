@@ -624,7 +624,18 @@ class Admin_CoursesController extends AuthenticatedController
                 'url'        => 'dispatch.php/course/timesrooms/editSemester?cid=%s&origin=admin_courses',
                 'attributes' => ['data-dialog' => 'size=400'],
             ),
+            19 => array(
+                'name'       => _('LV-Gruppen'),
+                'title'      => _('LV-Gruppen'),
+                'url'        => 'plugins.php/mvvplugin/lvgselector?cid=%s&from=admin/courses',
+                'attributes' => ['data-dialog' => 'size=big'],
+            ),
         );
+
+        if (!PluginEngine::getPlugin('MVVPlugin') || !PluginEngine::getPlugin('MVVPlugin')->isVisible()) {
+            unset($actions[19]);
+        }
+
         if (!$GLOBALS['perm']->have_perm('admin')) {
             unset($actions[8]);
             if (!get_config('ALLOW_DOZENT_ARCHIV')) {

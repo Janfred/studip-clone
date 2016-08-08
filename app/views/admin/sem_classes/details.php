@@ -183,6 +183,10 @@
             <td><input type="checkbox" id="bereiche" value="1"<?= $sem_class['bereiche'] ? " checked" : "" ?>></td>
         </tr>
         <tr class="sub">
+            <td><label for="module"><?= _("Kann Modulen zugeordnet werden.") ?></label></td>
+            <td><input type="checkbox" id="module" value="1"<?= $sem_class['module'] ? " checked" : "" ?>></td>
+        </tr>
+        <tr class="sub">
             <td><label for="course_creation_forbidden"><?= _("Anlegeassistent für diesen Typ sperren.") ?></label></td>
             <td><input type="checkbox" id="course_creation_forbidden" value="1"<?= $sem_class['course_creation_forbidden'] ? " checked" : "" ?>></td>
         </tr>

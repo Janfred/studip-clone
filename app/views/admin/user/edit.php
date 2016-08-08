@@ -334,6 +334,24 @@ use Studip\Button, Studip\LinkButton;
         <td>
             <?= htmlReady($studiengang['fach']) ?>,
             <?= htmlReady($studiengang['abschluss']) ?>,
+            <? if (PluginEngine::getPlugin('MVVPlugin')) : ?>
+                <? $versionen = StgteilVersion::findByFachAbschluss($studiengang['fach_id'], $studiengang['abschluss_id']); ?>
+                <? $versionen = array_filter($versionen, function ($ver) {
+                    return $ver->hasPublicStatus('genehmigt');
+                }); ?>
+                <? if (count($versionen)) : ?><br>
+                <select name="change_version[<?= $studiengang['fach_id'] ?>][<?= $studiengang['abschluss_id'] ?>]" aria-labelledby="version_label">
+                    <option value=""><?= _('-- Bitte Version auswählen --') ?></option>
+                <? foreach ($versionen as $version) : ?>
+                    <option<?= $version->getId() == $studiengang['version_id'] ? ' selected' : '' ?> value="<?= htmlReady($version->getId()) ?>">
+                        <?= htmlReady($version->getDisplayName()) ?>
+                    </option>
+                <? endforeach; ?>
+                </select>,<br>
+                <? else : ?>
+                <?= tooltipIcon(_('Keine Version in der gewählten Fach-Abschluss-Kombination verfügbar.'), true) ?>
+                <? endif; ?>
+            <? endif; ?>
             <?= $studiengang['semester'] ?>. <?= _('Fachsemester') ?>
         </td>
         <td align="right">

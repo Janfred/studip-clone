@@ -361,6 +361,7 @@ class SemClass implements ArrayAccess
                 "default_read_level = :default_read_level, " .
                 "default_write_level = :default_write_level, " .
                 "bereiche = :bereiche, " .
+                "module = :module, " .
                 "show_browse = :show_browse, " .
                 "write_access_nobody = :write_access_nobody, " .
                 "topic_create_autor = :topic_create_autor, " .
@@ -404,6 +405,7 @@ class SemClass implements ArrayAccess
             'default_read_level' => (int) $this->data['default_read_level'],
             'default_write_level' => (int) $this->data['default_write_level'],
             'bereiche' => (int) $this->data['bereiche'],
+            'module' => (int) $this->data['module'],
             'show_browse' => (int) $this->data['show_browse'],
             'write_access_nobody' => (int) $this->data['write_access_nobody'],
             'topic_create_autor' => (int) $this->data['topic_create_autor'],

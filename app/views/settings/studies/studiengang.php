@@ -7,10 +7,12 @@
     <input type="hidden" name="studipticket" value="<?= get_ticket() ?>">
     <?= CSRFProtection::tokenTag() ?>
 <? endif; ?>
+<? $modulemanagement_enabled = PluginEngine::getPlugin('MVVPlugin'); ?>
 <table class="default" id="select_fach_abschluss">
     <colgroup>
         <col>
         <col>
+        <?= $modulemanagement_enabled ? '<col>' : '' ?>
         <col width="100px">
         <col width="100px">
     </colgroup>
@@ -18,6 +20,9 @@
         <tr>
             <th><?= _('Fach') ?></th>
             <th><?= _('Abschluss') ?></th>
+            <? if ($modulemanagement_enabled) : ?>
+            <th id="version_label"><?= _('Versionen') ?></th>
+            <? endif; ?>
             <th id="fachsemester_label"><?= _('Fachsemester') ?></th>
             <th style="text-align:center;" id="austragen_label">
             <? if ($allow_change['sg']): ?>
@@ -31,7 +36,7 @@
     <tbody>
     <? if (count($about->user_fach_abschluss) === 0 && $allow_change['sg']): ?>
         <tr>
-            <td colspan="4" style="background: inherit;">
+            <td colspan="<?= $modulemanagement_enabled ? '5' : '4' ?>" style="background: inherit;">
                 <strong><?= _('Sie haben sich noch keinem Studiengang zugeordnet.') ?></strong><br>
                 <br>
                 <?= _('Tragen Sie bitte hier die Angaben aus Ihrem Studierendenausweis ein!') ?>
@@ -40,18 +45,38 @@
     <? endif; ?>
     <? foreach ($about->user_fach_abschluss as $details): ?>
         <tr>
-            <td><?= htmlReady($details['fname']) ?></td>
-            <td><?= htmlReady($details['aname']) ?></td>
+            <td><?= htmlReady($details['studycourse_name']) ?></td>
+            <td><?= htmlReady($details['degree_name']) ?></td>
         <? if ($allow_change['sg']): ?>
+            <? if ($modulemanagement_enabled) : ?>
             <td>
-                <select name="change_fachsem[<?= $details['studiengang_id'] ?>][<?= $details['abschluss_id'] ?>]" aria-labelledby="fachsemester_label">
+                <? $versionen = StgteilVersion::findByFachAbschluss($details['fach_id'], $details['abschluss_id']); ?>
+                <? $versionen = array_filter($versionen, function ($ver) {
+                    return $ver->hasPublicStatus('genehmigt');
+                }); ?>
+                <? if (count($versionen)) : ?>
+                <select name="change_version[<?= $details['fach_id'] ?>][<?= $details['abschluss_id'] ?>]" aria-labelledby="version_label">
+                    <option value=""><?= _('-- Bitte Version auswählen --') ?></option>
+                <? foreach ($versionen as $version) : ?>
+                    <option<?= $version->getId() == $details['version_id'] ? ' selected' : '' ?> value="<?= htmlReady($version->getId()) ?>">
+                        <?= htmlReady($version->getDisplayName()) ?>
+                    </option>
+                <? endforeach; ?>
+                </select>
+                <? else : ?>
+                <?= tooltipIcon(_('Keine Version in der gewählten Fach-Abschluss-Kombination verfügbar.'), true) ?>
+                <? endif; ?>
+            </td>
+            <? endif; ?>
+            <td>
+                <select name="change_fachsem[<?= $details['fach_id'] ?>][<?= $details['abschluss_id'] ?>]" aria-labelledby="fachsemester_label">
                 <? for ($i = 0; $i <= 50; $i += 1): ?>
                     <option <? if ($i == $details['semester']) echo 'selected'; ?>><?= $i ?></option>
                 <? endfor; ?>
                 </select>
             </td>
             <td style="text-align:center">
-                <input type="checkbox" aria-labelledby="austragen_label" name="fach_abschluss_delete[<?= $details['studiengang_id'] ?>]" value="<?= $details['abschluss_id'] ?>">
+                <input type="checkbox" aria-labelledby="austragen_label" name="fach_abschluss_delete[<?= $details['fach_id'] ?>]" value="<?= $details['abschluss_id'] ?>">
             </td>
         <? else: ?>
             <td><?= htmlReady($details['semester']) ?></td>
@@ -64,7 +89,7 @@
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="4">
+            <td colspan="<?= $modulemanagement_enabled ? '5' : '4' ?>">
             <? if ($allow_change['sg']): ?>
                 <p>
                     <?= _('Wählen Sie die Fächer, Abschlüsse und Fachsemester in der folgenden Liste aus:') ?>

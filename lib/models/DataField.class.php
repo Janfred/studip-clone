@@ -110,12 +110,14 @@ class DataField extends SimpleORMap
     public static function getDataClass()
     {
         return array(
-            'sem'          => _('Veranstaltungen'),
-            'inst'         => _('Einrichtungen'),
-            'user'         => _('Benutzer'),
-            'userinstrole' => _('Benutzerrollen in Einrichtungen'),
-            'usersemdata'  => _('Benutzer-Zusatzangaben in VA'),
-            'roleinstdata' => _('Rollen in Einrichtungen')
+            'sem'                 => _('Veranstaltungen'),
+            'inst'                => _('Einrichtungen'),
+            'user'                => _('Benutzer'),
+            'userinstrole'        => _('Benutzerrollen in Einrichtungen'),
+            'usersemdata'         => _('Benutzer-Zusatzangaben in VA'),
+            'roleinstdata'        => _('Rollen in Einrichtungen'),
+            'moduldeskriptor'     => _('Moduldeskriptor'),
+            'modulteildeskriptor' => _('Modulteildeskriptor')
         );
     }
 

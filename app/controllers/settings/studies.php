@@ -62,19 +62,11 @@ class Settings_StudiesController extends Settings_SettingsController {
 
         $fach_abschluss_delete = Request::getArray('fach_abschluss_delete');
         if (count($fach_abschluss_delete) > 0) {
-            $query = "DELETE FROM user_studiengang
-                      WHERE user_id = ? AND studiengang_id = ? AND abschluss_id IN (?)";
-            $statement = DBManager::get()->prepare($query);
-
-            foreach ($fach_abschluss_delete as $studiengang_id => $abschluesse) {
-                $statement->execute(array(
-                    $this->user->user_id,
-                    $studiengang_id,
-                    $abschluesse
-                ));
-                if ($statement->rowCount() > 0) {
-                    $any_change = true;
-                }
+            foreach ($fach_abschluss_delete as $fach_id => $abschluesse) {
+                $row_count = UserStudyCourse::deleteBySQL(
+                        'user_id = ? AND fach_id = ? AND abschluss_id IN (?)',
+                        array($this->user->user_id, $fach_id, $abschluesse));
+                $any_change = $row_count > 0;
                 
                 // if we have no studies anymore we delete the visibilitysetting
                 if (!$this->hasStudiengang()) {
@@ -84,22 +76,16 @@ class Settings_StudiesController extends Settings_SettingsController {
         }
 
         if (!$any_change) {
-            $query = "UPDATE IGNORE user_studiengang
-                      SET semester = ?
-                      WHERE user_id = ? AND studiengang_id = ? AND abschluss_id = ?";
-            $statement = DBManager::get()->prepare($query);
-
             $change_fachsem = Request::getArray('change_fachsem');
-            foreach ($change_fachsem as $studiengang_id => $abschluesse) {
+            foreach ($change_fachsem as $fach_id => $abschluesse) {
                 foreach ($abschluesse as $abschluss_id => $semester) {
-                    $statement->execute(array(
-                        $semester,
+                    $user_stc = UserStudyCourse::find(array(
                         $this->user->user_id,
-                        $studiengang_id,
-                        $abschluss_id
-                    ));
-                    if ($statement->rowCount() > 0) {
-                        $any_change = true;
+                        $fach_id,
+                        $abschluss_id));
+                    if ($user_stc) {
+                        $user_stc->semester = $semester;
+                        $any_change = (bool) $user_stc->store() != false;
                     }
                 }
             }
@@ -109,18 +95,32 @@ class Settings_StudiesController extends Settings_SettingsController {
                 if (!$this->hasStudiengang()) {
                     Visibility::addPrivacySetting(_("Wo ich studiere"), 'studying', 'studdata');
                 }
-                $query = "INSERT IGNORE INTO user_studiengang
-                            (user_id, studiengang_id, abschluss_id, semester)
-                          VALUES (?, ?, ?, ?)";
-                $statement = DBManager::get()->prepare($query);
-                $statement->execute(array(
-                    $this->user->user_id,
-                    $new_studiengang,
-                    Request::option('new_abschluss'),
-                    Request::int('fachsem')
-                ));
-                if ($statement->rowCount() > 0) {
-                    $any_change = true;
+                $any_change = !is_null(UserStudyCourse::create([
+                    'user_id'      => $this->user->user_id,
+                    'fach_id'      => $new_studiengang,
+                    'semester'     => Request::int('fachsem'),
+                    'abschluss_id' => Request::option('new_abschluss')
+                ]));
+            }
+            
+            // store versions if module management is enabled
+            if (PluginEngine::getPlugin('MVVPlugin')) {
+                $change_versions = Request::getArray('change_version');
+                foreach ($change_versions as $fach_id => $abschluesse) {
+                    foreach ($abschluesse as $abschluss_id => $version_id) {
+                        $version = reset(StgteilVersion::findByFachAbschluss(
+                                $fach_id, $abschluss_id, $version_id));
+                        if ($version && $version->hasPublicStatus('genehmigt')) {
+                            $user_stc = UserStudyCourse::find(array(
+                                $this->user->user_id,
+                                $fach_id,
+                                $abschluss_id));
+                            if ($user_stc) {
+                                $user_stc->version_id = $version->getId();
+                                $any_change = (bool) $user_stc->store() != false;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -193,12 +193,7 @@ class Settings_StudiesController extends Settings_SettingsController {
 
     private function hasStudiengang()
     {
-        $query = "SELECT * FROM user_studiengang
-                      WHERE user_id = ?";
-        $statement = DBManager::get()->prepare($query);
-        $statement->execute(array(
-            $this->user->user_id
-        ));
-        return $statement->rowCount() > 0;
+        $count = UserStudyCourse::countBySql('user_id = ?', array($this->user->user_id));
+        return $count > 0;
     }
 }

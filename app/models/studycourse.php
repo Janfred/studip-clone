@@ -15,12 +15,14 @@
  * @category    Stud.IP
  * @package     studycourses
  * @since       2.0
+ * @deprecated since version 3.5 use SORM models instead
  */
 
 /**
  * @uses        DBManager
  *
  */
+
 class StudycourseModel
 {
 

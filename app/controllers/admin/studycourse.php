@@ -49,14 +49,13 @@ class Admin_StudycourseController extends AuthenticatedController
         PageLayout::setTitle(_('Verwaltung der Studiengänge'));
 
         //get data
-        $this->studycourses = StudycourseModel::getStudyCourses();
+        $this->studycourses = Fach::findBySQL('1 ORDER BY name');
+        
         $this->infobox = $this->setSidebar();
 
         //sorting
         if(Request::get('sortby') == 'users') {
             usort($this->studycourses, array('Admin_StudycourseController', 'sortByUsers'));
-        } elseif (Request::get('sortby') == 'seminars') {
-            usort($this->studycourses, array('Admin_StudycourseController', 'sortBySeminars'));
         }
     }
 
@@ -69,7 +68,7 @@ class Admin_StudycourseController extends AuthenticatedController
         PageLayout::setTitle(_('Gruppierung von Studienabschlüssen'));
 
         //get data
-        $this->studydegrees = StudycourseModel::getStudyDegrees();
+        $this->studydegrees = Abschluss::findBySQL('1 ORDER BY name');
         $this->infobox = $this->setSidebar();
 
         //sorting
@@ -84,22 +83,27 @@ class Admin_StudycourseController extends AuthenticatedController
      */
     public function edit_profession_action($prof_id)
     {
+        $this->edit = Fach::find($prof_id);
+        if (!$this->edit) {
+            $this->flash['error'] = _('Unbekanntes Fach!');
+            $this->redirect('admin/studycourse/profession');
+        }
         //save changes
         if (Request::submitted('uebernehmen')) {
-            if (Request::get('professionname')) {
-                $prof_name = Request::get('professionname');
-                $prof_desc = Request::get('description');
-                StudycourseModel::saveEditProfession($prof_id, $prof_name, $prof_desc);
-                $this->flash['success'] = sprintf(_('Das Studienfach "%s" wurde erfolgreich aktualisiert!'), htmlReady($prof_name));
-                $this->flash['success_detail'] = array(_("Beschreibung: ") . htmlReady($prof_desc));
+            CSRFProtection::verifyUnsafeRequest();
+            if ($this->edit && trim(Request::get('professionname'))) {
+                $this->edit->name = trim(Request::get('professionname'));
+                $this->edit->beschreibung = trim(Request::get('description'));
+                $this->edit->store();
+                $this->flash['success'] = sprintf(_('Das Studienfach "%s" wurde erfolgreich aktualisiert!'), htmlReady($this->edit->name));
+                $this->flash['success_detail'] = array(_('Beschreibung: ') . htmlReady($this->edit->beschreibung));
                 $this->redirect('admin/studycourse/profession');
             } else {
-                $this->flash['error'] = _("Bitte geben Sie mindestens einen Namen für das Fach ein!");
+                $this->flash['error'] = _('Bitte geben Sie mindestens einen Namen für das Fach ein!');
             }
         }
 
-        PageLayout::setTitle(_("Fächer editieren"));
-        $this->edit = StudycourseModel::getStudyCourseInfo($prof_id);
+        PageLayout::setTitle(_('Fach bearbeiten'));
         $this->infobox = $this->setSidebar();
     }
 
@@ -109,21 +113,26 @@ class Admin_StudycourseController extends AuthenticatedController
      */
     public function edit_degree_action($deg_id)
     {
+        $this->edit = Abschluss::find($deg_id);
+        if (!$this->edit) {
+            $this->flash['error'] = _('Unbekannter Abschluss!');
+            $this->redirect('admin/studycourse/degree');
+        }
         if (Request::submitted('uebernehmen')) {
-            if (Request::get('degreename')) {
-                $deg_name = Request::get('degreename');
-                $deg_desc = Request::get('description');
-                StudycourseModel::saveEditDegree($deg_id, $deg_name, $deg_desc);
-                $this->flash['success'] = sprintf(_('Der Abschluss "%s" wurde erfolgreich aktualisiert!'), htmlReady($deg_name));
-                $this->flash['success_detail'] = array(_("Beschreibung: ") . htmlReady($deg_desc));
+            CSRFProtection::verifyUnsafeRequest();
+            if ($this->edit && trim(Request::get('degreename'))) {
+                $this->edit->name = trim(Request::get('degreename'));
+                $this->edit->beschreibung = trim(Request::get('description'));
+                $this->edit->store();
+                $this->flash['success'] = sprintf(_('Der Abschluss "%s" wurde erfolgreich aktualisiert!'), htmlReady($this->edit->name));
+                $this->flash['success_detail'] = array(_('Beschreibung: ') . htmlReady($this->edit->beschreibung));
                 $this->redirect('admin/studycourse/degree');
             } else {
-                $this->flash['error'] = _("Bitte geben Sie mindestens einen Namen für den Abschluss ein!");
+                $this->flash['error'] = _('Bitte geben Sie mindestens einen Namen für den Abschluss ein!');
             }
         }
 
-        PageLayout::setTitle(_("Abschlüsse editieren"));
-        $this->edit = StudycourseModel::getStudyDegreeInfo($deg_id);
+        PageLayout::setTitle(_('Abschluss bearbeiten'));
         $this->infobox = $this->setSidebar();
     }
 
@@ -135,22 +144,28 @@ class Admin_StudycourseController extends AuthenticatedController
      */
     function delete_profession_action($prof_id)
     {
-        if (Request::int('delete') == 1) {
-            $profession = StudycourseModel::getStudyCourses($prof_id);
-            //Check ob studiengang leer ist
-            if ($profession[0]['count_user'] == 0) {
-                if (StudycourseModel::deleteStudyCourse($prof_id)) {
-                    $this->flash['success'] = _("Der Studiengang wurde erfolgreich gelöscht!");
+        $profession = Fach::find($prof_id);
+        if (!$profession) {
+            $this->flash['error'] = _('Unbekannter Abschluss!');
+            $this->redirect('admin/studycourse/profession');
+        } else {
+            if (Request::submitted('yes')) {
+                CSRFProtection::verifyUnsafeRequest();
+                //Check ob studiengang leer ist
+                if ($profession->count_user == 0) {
+                    if ($profession->delete()) {
+                        $this->flash['success'] = _("Der Studiengang wurde erfolgreich gelöscht!");
+                    } else {
+                        $this->flash['error'] = _("Interner Fehler im Löschvorgang! Bitte probieren Sie es erneut.");
+                    }
                 } else {
-                    $this->flash['error'] = _("Interner Fehler im Löschvorgang! Bitte probieren Sie es erneut.");
+                    $this->flash['error']=_("Zu löschende Studiengänge müssen leer sein!");
                 }
-            } else {
-                $this->flash['error']=_("Zu löschende Studiengänge müssen leer sein!");
+            } elseif (!Request::get('back')) {
+                $this->flash['delete'] = array('name' => $profession->name, 'studiengang_id' => $profession->id);
             }
-        } elseif (!Request::get('back')) {
-            $this->flash['delete'] = StudycourseModel::getStudyCourses($prof_id);
+            $this->redirect('admin/studycourse/profession');
         }
-        $this->redirect('admin/studycourse/profession');
     }
 
     /**
@@ -161,22 +176,28 @@ class Admin_StudycourseController extends AuthenticatedController
      */
     function delete_degree_action($deg_id)
     {
-        if (Request::int('delete') == 1) {
-            $degree = StudycourseModel::getStudyDegrees($deg_id);
-            //Check ob Abschluss leer ist
-            if ($degree[0][count_user] == 0) {
-                if (StudycourseModel::deleteStudyDegree($deg_id)) {
-                    $this->flash['success'] = _("Der Abschluss wurde erfolgreich gelöscht!");
+        $degree = Abschluss::find($deg_id);
+        if (!$degree) {
+            $this->flash['error'] = _('Unbekannter Abschluss!');
+            $this->redirect('admin/studycourse/degree');
+        } else {
+            if (Request::submitted('yes')) {
+                CSRFProtection::verifyUnsafeRequest();
+                //Check ob Abschluss leer ist
+                if ($degree->count_user == 0) {
+                    if ($degree->delete()) {
+                        $this->flash['success'] = _('Der Abschluss wurde erfolgreich gelöscht!');
+                    } else {
+                        $this->flash['error'] = _('Interner Fehler im Löschvorgang! Bitte probieren Sie es erneut.');
+                    }
                 } else {
-                    $this->flash['error'] = _("Interner Fehler im Löschvorgang! Bitte probieren Sie es erneut.");
+                    $this->flash['error'] = _('Zu löschende Abschlüsse müssen leer sein!');
                 }
-            } else {
-                $this->flash['error'] = _("Zu löschende Abschlüsse müssen leer sein!");
+            } elseif (!Request::isPost()) {
+                $this->flash['delete'] = array('name' => $degree->name, 'abschluss_id' => $degree->id);
             }
-        } elseif (!Request::get('back')) {
-            $this->flash['delete'] = StudycourseModel::getStudyDegrees($deg_id);
+            $this->redirect('admin/studycourse/degree');
         }
-        $this->redirect('admin/studycourse/degree');
     }
 
     /**
@@ -185,22 +206,27 @@ class Admin_StudycourseController extends AuthenticatedController
     function newprofession_action()
     {
         if (Request::submitted('anlegen')) {
-            if (Request::get('professionname')) {
-                $prof_name = Request::get('professionname');
-                $prof_desc = Request::get('description');
-                if (!StudycourseModel::checkProfession($prof_name)) {
-                    StudycourseModel::saveNewProfession($prof_name, $prof_desc);
-                    $this->flash['success'] = sprintf(_('Das Studienfach "%s" wurde erfolgreich angelegt!'), htmlReady($prof_name));
-                    $this->redirect('admin/studycourse/profession');
+            CSRFProtection::verifyUnsafeRequest();
+            $this->prof_name = trim(Request::get('professionname'));
+            $this->prof_desc = trim(Request::get('description'));
+            if ($this->prof_name) {
+                $prof_exists = Fach::findOneBySQL('name = ?', [$this->prof_name]);
+                if ($prof_exists) {
+                    $this->flash['error'] = sprintf(_('Ein Studienfach mit dem Namen "%s" existiert bereits!'), htmlReady($this->prof_name));
                 } else {
-                    $this->flash['error'] = sprintf(_('Ein Studienfach mit dem Namen "%s" existiert bereits!'), htmlReady($prof_name));
+                    $profession = new Fach();
+                    $profession->name = $this->prof_name;
+                    $profession->beschreibung = $this->prof_desc;
+                    $profession->store();
+                    $this->flash['success'] = sprintf(_('Das Studienfach "%s" wurde erfolgreich angelegt!'), htmlReady($this->prof_name));
+                    $this->redirect('admin/studycourse/profession');
                 }
             } else {
-                $this->flash['error'] = _("Bitte geben Sie eine mindestens einen Namen für das Fach ein!");
+                $this->flash['error'] = _('Bitte geben Sie mindestens einen Namen für das Studienfach ein!');
             }
         }
 
-        PageLayout::setTitle(_("Anlegen von Studienfächern"));
+        PageLayout::setTitle(_('Neues Studienfach anlegen'));
         $this->infobox = $this->setSidebar();
     }
 
@@ -210,23 +236,27 @@ class Admin_StudycourseController extends AuthenticatedController
     function newdegree_action()
     {
         if (Request::submitted('anlegen')) {
-            if (Request::get('degreename')) {
-                $deg_name = Request::get('degreename');
-                $deg_desc = Request::get('description');
-                if (!StudycourseModel::checkDegree($deg_name)) {
-                    StudycourseModel::saveNewDegree($deg_name, $deg_desc);
-                    $this->flash['success'] = sprintf(_('Der Studienabschluss "%s" wurde erfolgreich angelegt!'), htmlReady($deg_name));
-                    $this->redirect('admin/studycourse/degree');
+            CSRFProtection::verifyUnsafeRequest();
+            $this->degree_name = trim(Request::get('degreename'));
+            $this->degree_desc = trim(Request::get('description'));
+            if ($this->degree_name) {
+                $degree_exists = Abschluss::findOneBySQL('name = ?', [$this->degree_name]);
+                if ($degree_exists) {
+                    $this->flash['error'] = sprintf(_('Ein Studienabschluss mit dem Namen "%s" existiert bereits!'), htmlReady($this->degree_name));
                 } else {
-                    $this->flash['error'] = sprintf(_('Ein Studienabschluss mit dem Namen "%s" existiert bereits!'), htmlReady($deg_name));
+                    $degree = new Abschluss();
+                    $degree->name = $this->degree_name;
+                    $degree->beschreibung = $this->degree_desc;
+                    $degree->store();
+                    $this->flash['success'] = sprintf(_('Der Studienabschluss "%s" wurde erfolgreich angelegt!'), htmlReady($this->degree_name));
+                    $this->redirect('admin/studycourse/degree');
                 }
             } else {
                 $this->flash['error'] = _("Bitte geben Sie mindestens einen Namen für den Abschluss ein!");
             }
         }
 
-        PageLayout::setTitle(_("Anlegen von Studienabschlüssen"));
-
+        PageLayout::setTitle(_('Anlegen von Studienabschlüssen'));
         $this->infobox = $this->setSidebar();
     }
 
@@ -240,26 +270,18 @@ class Admin_StudycourseController extends AuthenticatedController
         $sidebar->setImage('sidebar/admin-sidebar.png');
 
         $links = new ActionsWidget();
-        $links->addLink(_('Gruppierung nach Fächer'), $this->url_for('admin/studycourse/profession'), Icon::create('visibility-visible', 'clickable'));
-        $links->addLink(_('Gruppierung nach Abschlüssen'), $this->url_for('admin/studycourse/degree'), Icon::create('visibility-visible', 'clickable'));
-        $links->addLink(_('Neue Fächer anlegen'), $this->url_for('admin/studycourse/newprofession'), Icon::create('add', 'clickable'));
-        $links->addLink(_('Neue Abschlüsse anlegen'), $this->url_for('admin/studycourse/newdegree'), Icon::create('add', 'clickable'));
+        $links->addLink(_('Gruppierung nach Fächer'), $this->url_for('/profession'), Icon::create('visibility-visible', 'clickable'));
+        $links->addLink(_('Gruppierung nach Abschlüssen'), $this->url_for('/degree'), Icon::create('visibility-visible', 'clickable'));
+        $links->addLink(_('Neues Studienfach anlegen'), $this->url_for('/newprofession'), Icon::create('add', 'clickable'));
+        $links->addLink(_('Neuen Studienabschluss anlegen'), $this->url_for('/newdegree'), Icon::create('add', 'clickable'));
         $sidebar->addWidget($links);
     }
 
     private static function sortByUsers($a, $b)
     {
-        if ($a['count_user'] == $b['count_user']) {
+        if ($a->count_user == $b->count_user) {
             return 0;
         }
-        return ($a['count_user'] > $b['count_user']) ? -1 : 1;
-    }
-
-    private static function sortBySeminars($a, $b)
-    {
-        if ($a['count_sem'] == $b['count_sem']) {
-            return 0;
-        }
-        return ($a['count_sem'] > $b['count_sem']) ? -1 : 1;
+        return ($a->count_user > $b->count_user) ? -1 : 1;
     }
 }

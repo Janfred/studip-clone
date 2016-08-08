@@ -1,0 +1,7 @@
+pluginclassname=MVVPlugin
+pluginname=Modulverwaltung
+origin=core
+version=1.0
+summary=Modulverwaltung
+displayname=Modulverwaltung
+icon = ../../../assets/images/icons/16/black/module.png

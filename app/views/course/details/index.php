@@ -311,6 +311,27 @@
         </section>
     <? endif ?>
 
+    <?
+    // Ausgabe der Modulzuordnung MVV
+    if ($mvv_pathes) : ?>
+        <section class="contentbox">
+            <header>
+                <h1><?= _('Modulzuordnungen') ?></h1>
+            </header>
+            <section>
+                <ul class="list-unstyled">
+                    <? foreach ($mvv_pathes as $mvv_path) : ?>
+                    <li>
+                        <a data-dialog href="<?= URLHelper::getScriptLink('plugins.php/mvvplugin/search/module/overview/' . reset(array_keys($mvv_path)) . '/', array('sem_select' => $mvv_end_semester_id)) ?>">
+                            <?= htmlReady(implode(' > ', reset(array_values($mvv_path)))) ?>
+                        </a>
+                    </li>
+                    <? endforeach; ?>
+                </ul>
+            </section>
+        </section>
+    <? endif; ?>
+
     <? if ($course->beschreibung) : ?>
         <section class="contentbox">
             <header>
