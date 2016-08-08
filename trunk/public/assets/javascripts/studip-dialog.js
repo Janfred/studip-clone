@@ -567,7 +567,7 @@
 
     // Specialized confirmation dialog
     STUDIP.Dialog.confirm = function (question, yes_callback, no_callback) {
-        STUDIP.Dialog.show(question, {
+        STUDIP.Dialog.show($('<div/>').text(question || '').html(), {
             id: 'confirmation-dialog',
             title: 'Bitte bestätigen Sie die Aktion'.toLocaleString(),
             size: 'fit',
