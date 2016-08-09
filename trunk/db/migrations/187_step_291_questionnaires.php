@@ -90,7 +90,7 @@ class Step291Questionnaires extends Migration
             'never' => 'never'
         );
         $all_votes = DBManager::get()->prepare("
-            SELECT * FROM vote
+            SELECT vote.* FROM vote INNER JOIN auth_user_md5 ON user_id = author_id
         ");
         $all_votes->execute();
         while ($vote = $all_votes->fetch(PDO::FETCH_ASSOC)) {
