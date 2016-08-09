@@ -24,6 +24,7 @@
  * @property string position database column
  * @property string size database column
  * @property string selfassign database column
+ * @property string selfassign_start database column
  * @property string mkdate database column
  * @property string chdate database column
  * @property string calendar_group database column
@@ -43,6 +44,13 @@ class Statusgruppen extends SimpleORMap
             'assoc_foreign_key' => 'statusgruppe_id',
             'on_delete'         => 'delete',
             'order_by'          => 'ORDER BY position ASC',
+        );
+        $config['has_and_belongs_to_many']['dates'] = array(
+            'class_name' => 'CourseDate',
+            'thru_table' => 'termin_related_groups',
+            'order_by' => 'ORDER BY date',
+            'on_delete' => 'delete',
+            'on_store' => 'store'
         );
         $config['belongs_to']['parent'] = array(
             'class_name' => 'Statusgruppen',
@@ -110,6 +118,20 @@ class Statusgruppen extends SimpleORMap
     {
         $user_id || $user_id = $GLOBALS['user']->id;
         return self::findBySQL("range_id = ?", array($user_id));
+    }
+
+    /**
+     * Find all groups belonging to the given range_id that may be joined
+     * by the given user.
+     *
+     * @param String $range_id range_id the groups shall belong to
+     * @param String $user_id user to check
+     * @return array
+     */
+    public static function findJoinableGroups($range_id, $user_id)
+    {
+        $groups = self::findByRange_id($range_id);
+        return array_filter($groups, function ($g) use ($user_id) { return $g->userMayJoin($user_id); });
     }
 
     /**
@@ -190,6 +212,16 @@ class Statusgruppen extends SimpleORMap
     }
 
     /**
+     * Gets the folder assigned to this statusgroup.
+     *
+     * @return DocumentFolder|null
+     */
+    public function getFolder()
+    {
+        return DocumentFolder::findOneByRange_id($this->id);
+    }
+
+    /**
      * Delete or create a filder
      * 
      * @param boolean $set <b>true</b> Create a folder
@@ -203,6 +235,38 @@ class Statusgruppen extends SimpleORMap
         if (!$this->hasFolder() && $set) {
             create_folder((_("Dateiordner der Gruppe:") . ' ' . $this->name), (_("Ablage für Ordner und Dokumente dieser Gruppe")), $this->id, 15);
         }
+    }
+
+    /**
+     * Finds CourseTopics assigned to this group via course dates.
+     * @return array
+     */
+    public function findTopics()
+    {
+        $topics = array();
+        foreach ($this->dates as $d) {
+            foreach ($d->topics as $t) {
+                // Assign topics with ID as key so we get unique entries.
+                $topics[$t->id] = $t;
+            }
+        }
+        return $topics;
+    }
+
+    /**
+     * Finds Lecturers assigned to this group via course dates.
+     * @return array
+     */
+    public function findLecturers()
+    {
+        $lecturers = array();
+        foreach ($this->dates as $d) {
+            foreach ($d->dozenten as $d) {
+                // Assign topics with ID as key so we get unique entries.
+                $lecturers[$d->id] = $d;
+            }
+        }
+        return $lecturers;
     }
 
     /**
@@ -336,7 +400,10 @@ class Statusgruppen extends SimpleORMap
      */
     public function hasSpace()
     {
-        return $this->selfassign && ($this->size || count($this->members) < $this->size);
+        return $this->selfassign &&
+            ($this->selfassign_start <= time()) &&
+            ($this->selfassign_end == 0 || $this->selfassign_end >= time()) &&
+            ($this->size == 0 || count($this->members) < $this->size);
     }
 
     /**
