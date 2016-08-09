@@ -226,7 +226,7 @@ class MessagesController extends AuthenticatedController {
         if (Request::option('prof_id') && Request::option('deg_id') && $GLOBALS['perm']->have_perm('root')) {
             $query = "SELECT DISTINCT user_id,'rec' as snd_rec
             FROM user_studiengang
-            WHERE studiengang_id = ? AND abschluss_id = ?";
+            WHERE fach_id = ? AND abschluss_id = ?";
             $this->default_message->receivers = DBManager::get()->fetchAll($query, array(
                 Request::option('prof_id'),
                 Request::option('deg_id')
@@ -245,7 +245,7 @@ class MessagesController extends AuthenticatedController {
         if (Request::option('sp_id') && $GLOBALS['perm']->have_perm('root')) {
             $query = "SELECT DISTINCT user_id,'rec' as snd_rec
             FROM user_studiengang
-            WHERE studiengang_id = ?";
+            WHERE fach_id = ?";
             $this->default_message->receivers = DBManager::get()->fetchAll($query, array(
                 Request::option('sp_id')
             ), 'MessageUser::build');

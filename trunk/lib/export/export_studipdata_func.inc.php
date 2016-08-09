@@ -593,7 +593,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
                           LEFT JOIN auth_user_md5 AS aum USING (user_id)
                           LEFT JOIN user_info AS ui USING (user_id)
                           LEFT JOIN user_studiengang USING (user_id)
-                          LEFT JOIN studiengaenge AS sg USING(studiengang_id)
+                          LEFT JOIN fach AS sg USING(fach_id)
                           LEFT JOIN abschluss AS a USING (abschluss_id)
                           WHERE seminar_id = :seminar_id
                           GROUP BY aum.user_id
@@ -607,7 +607,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
                           LEFT JOIN auth_user_md5 AS aum USING (user_id)
                           LEFT JOIN user_info AS ui USING (user_id)
                           LEFT JOIN user_studiengang USING(user_id)
-                          LEFT JOIN studiengaenge AS sg USING(studiengang_id)
+                          LEFT JOIN fach AS sg USING(fach_id)
                           LEFT JOIN abschluss AS a USING (abschluss_id)
                           WHERE statusgruppe_id = :statusgruppe_id AND seminar_id = :seminar_id
                           GROUP BY aum.user_id
@@ -624,7 +624,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
                       LEFT JOIN user_info AS ui USING (user_id)
                       LEFT JOIN auth_user_md5 AS aum USING (user_id)
                       LEFT JOIN user_studiengang USING (user_id)
-                      LEFT JOIN studiengaenge AS sg ON (user_studiengang.studiengang_id = sg.studiengang_id)
+                      LEFT JOIN fach AS sg ON (user_studiengang.fach_id = sg.fach_id)
                       LEFT JOIN abschluss AS a USING (abschluss_id)
                       WHERE seminar_id = :seminar_id AND asu.status = 'accepted'
                       GROUP BY aum.user_id
@@ -638,7 +638,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
                         LEFT JOIN user_info AS ui USING(user_id)
                         LEFT JOIN auth_user_md5 AS aum USING(user_id)
                         LEFT JOIN user_studiengang USING(user_id)
-                        LEFT JOIN studiengaenge AS sg ON (user_studiengang.studiengang_id = sg.studiengang_id)
+                        LEFT JOIN fach AS sg ON (user_studiengang.fach_id = sg.fach_id)
                         LEFT JOIN abschluss AS a USING (abschluss_id)
                         WHERE asu.seminar_id = :seminar_id AND asu.status != 'accepted'
                         GROUP BY aum.user_id ORDER BY position";
@@ -656,7 +656,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
                         FROM auth_user_md5 AS aum
                         INNER JOIN user_info AS ui USING(user_id)
                         LEFT JOIN user_studiengang USING(user_id)
-                        LEFT JOIN studiengaenge AS sg ON (user_studiengang.studiengang_id = sg.studiengang_id)
+                        LEFT JOIN fach AS sg ON (user_studiengang.fach_id = sg.fach_id)
                         LEFT JOIN abschluss AS a USING (abschluss_id)
                         WHERE aum.user_id IN (:users)
                         GROUP BY aum.user_id ORDER BY Nachname";
@@ -667,7 +667,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
                       LEFT JOIN auth_user_md5 AS aum USING ( user_id )
                       LEFT JOIN user_info AS ui USING ( user_id )
                       LEFT JOIN user_studiengang AS us USING(user_id)
-                      LEFT JOIN studiengaenge AS sg USING (studiengang_id)
+                      LEFT JOIN fach AS sg USING (fach_id)
                       LEFT JOIN abschluss AS a USING (abschluss_id)
                       WHERE seminar_id = :seminar_id AND su.status = :status
                       GROUP BY aum.user_id
@@ -717,10 +717,10 @@ function export_teilis($inst_id, $ex_sem_id = "no")
     $data_object .= xml_close_tag($xml_groupnames_person['group']);
 
     if (!in_array($filter, words('status awaiting accepted'))) {
-        $query = "SELECT CONCAT_WS(',', studiengaenge.name, abschluss.name) AS name, COUNT(*) AS c
+        $query = "SELECT CONCAT_WS(',', fach.name, abschluss.name) AS name, COUNT(*) AS c
                   FROM seminar_user
                   INNER JOIN user_studiengang USING (user_id)
-                  LEFT JOIN studiengaenge USING (studiengang_id)
+                  LEFT JOIN fach USING (fach_id)
                   LEFT JOIN abschluss USING (abschluss_id)
                   WHERE seminar_id = ?
                   GROUP BY name";

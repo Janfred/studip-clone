@@ -3,9 +3,9 @@
 
 /**
  * SubjectConditionAny.class.php
- * 
+ *
  * All conditions concerning the study subject in Stud.IP can be specified here.
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
@@ -21,11 +21,11 @@ require_once realpath(__DIR__ . '/..') . '/UserFilterField.class.php';
 class SubjectConditionAny extends UserFilterField
 {
     // --- ATTRIBUTES ---
-    public $valuesDbTable = 'studiengaenge';
-    public $valuesDbIdField = 'studiengang_id';
+    public $valuesDbTable = 'fach';
+    public $valuesDbIdField = 'fach_id';
     public $valuesDbNameField = 'name';
     public $userDataDbTable = 'user_studiengang';
-    public $userDataDbField = 'studiengang_id';
+    public $userDataDbField = 'fach_id';
 
     // --- OPERATIONS ---
 

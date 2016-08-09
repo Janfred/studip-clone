@@ -16,7 +16,6 @@
  * @since       2.0
  */
 
-require_once 'app/models/studycourse.php';
 
 /**
  *
@@ -50,7 +49,7 @@ class Admin_StudycourseController extends AuthenticatedController
 
         //get data
         $this->studycourses = Fach::findBySQL('1 ORDER BY name');
-        
+
         $this->infobox = $this->setSidebar();
 
         //sorting
