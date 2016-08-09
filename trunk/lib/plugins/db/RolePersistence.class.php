@@ -224,7 +224,7 @@ class RolePersistence
             $stmt = DBManager::get()->prepare("DELETE FROM roles_user WHERE roleid=? AND userid=? AND institut_id=?");
             $stmt->execute(array($role->getRoleid(),$user->getUserid(),$institut_id));
         }
-        NotificationCenter::postNotification('RoleAssignmentDidDelete', $role>getRoleid(), $user->getUserid(), $institut_id); 
+        NotificationCenter::postNotification('RoleAssignmentDidDelete', $role->getRoleid(), $user->getUserid(), $institut_id); 
 
         self::$user_roles = array();
     }
