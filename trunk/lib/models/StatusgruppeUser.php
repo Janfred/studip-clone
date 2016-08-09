@@ -45,8 +45,8 @@ class StatusgruppeUser extends SimpleORMap
      *
      * @return string Fullname if visible else string for invisible user
      */
-    public function name() {
-        return $this->user->nachname . ', '. $this->user->vorname;
+    public function name($format = 'full_rev') {
+        return $this->user->getFullname($format);
     }
 
     /**

@@ -2922,7 +2922,7 @@ section.contentbox header h1 > a img,
 section.contentbox header h1 > a svg {
   margin-right: 5px;
 }
-section.contentbox header nav {
+section.contentbox header > nav {
   text-align: right;
   padding: 2px;
   display: flex;
@@ -3026,7 +3026,8 @@ section.contentbox > article header h1 a:before {
   transition: all 200ms ease 0s;
   margin-right: 2px;
 }
-section.contentbox > article header nav * {
+section.contentbox > article header nav a,
+section.contentbox > article header nav span {
   display: inline-block;
   vertical-align: middle;
 }
@@ -3147,6 +3148,150 @@ section.contentbox > article.new header h1 a::before {
   -webkit-box-shadow: black 0px 1px 3px;
   -moz-box-shadow: black 0px 1px 3px;
   box-shadow: black 0px 1px 3px;
+}
+.action-menu {
+  display: inline-block;
+  position: relative;
+  text-align: right;
+}
+.action-menu .action-menu-icon {
+  width: 20px;
+  height: 20px;
+  z-index: 3;
+  position: relative;
+  cursor: pointer;
+}
+.action-menu .action-menu-content {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  padding: 4px 28px 4px 8px;
+  z-index: 2;
+  background: white;
+  box-shadow: 1px 1px 1px #8b8f95;
+  text-align: left;
+  white-space: nowrap;
+}
+.action-menu .action-menu-title {
+  font-weight: bold;
+  margin: 0.2em 0 0.3em;
+}
+.action-menu .action-menu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.action-menu .action-menu-item {
+  padding: 3px 0;
+}
+.action-menu .action-menu-item a {
+  padding-left: 0;
+}
+.action-menu .action-menu-item img,
+.action-menu .action-menu-item svg,
+.action-menu .action-menu-item .action-menu-no-icon {
+  margin: 0 0.25em;
+}
+.action-menu .action-menu-item img,
+.action-menu .action-menu-no-icon {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: bottom;
+}
+.action-menu:not(.active) .action-menu-content {
+  display: none;
+}
+.action-menu:not(.active) .action-menu-icon {
+  z-index: 1;
+}
+.no-js .action-menu:hover .action-menu-content {
+  display: initial;
+}
+.no-js .action-menu:hover .action-menu-icon {
+  z-index: 3;
+}
+html.csstransforms .action-menu .action-menu-icon div {
+  width: 5px;
+  height: 5px;
+  -webkit-transform: translate(-2.5px, 0);
+  -moz-transform: translate(-2.5px, 0);
+  -ms-transform: translate(-2.5px, 0);
+  -o-transform: translate(-2.5px, 0);
+  transform: translate(-2.5px, 0);
+  -webkit-transition: all 0.25s ease-in-out;
+  -moz-transition: all 0.25s ease-in-out;
+  -o-transition: all 0.25s ease-in-out;
+  transition: all 0.25s ease-in-out;
+  display: block;
+  position: absolute;
+  background: #28497c;
+  border-radius: 50%;
+  opacity: 1;
+  left: 50%;
+}
+html.csstransforms .action-menu .action-menu-icon div:nth-child(1) {
+  top: 0px;
+}
+html.csstransforms .action-menu .action-menu-icon div:nth-child(2) {
+  top: 10px;
+  -webkit-transform: translate(-2.5px, -2.5px);
+  -moz-transform: translate(-2.5px, -2.5px);
+  -ms-transform: translate(-2.5px, -2.5px);
+  -o-transform: translate(-2.5px, -2.5px);
+  transform: translate(-2.5px, -2.5px);
+}
+html.csstransforms .action-menu .action-menu-icon div:nth-child(3) {
+  bottom: 0;
+}
+html.csstransforms .action-menu.active .action-menu-icon div,
+html.no-js .action-menu:hover .action-menu-icon div {
+  border-radius: 0;
+}
+html.csstransforms .action-menu.active .action-menu-icon div:nth-child(1),
+html.no-js .action-menu:hover .action-menu-icon div:nth-child(1) {
+  left: 0;
+  -webkit-transform: rotate(45deg) translate(5.5px, 5.5px);
+  -moz-transform: rotate(45deg) translate(5.5px, 5.5px);
+  -ms-transform: rotate(45deg) translate(5.5px, 5.5px);
+  -o-transform: rotate(45deg) translate(5.5px, 5.5px);
+  transform: rotate(45deg) translate(5.5px, 5.5px);
+  width: 100%;
+}
+html.csstransforms .action-menu.active .action-menu-icon div:nth-child(2),
+html.no-js .action-menu:hover .action-menu-icon div:nth-child(2) {
+  opacity: 0;
+}
+html.csstransforms .action-menu.active .action-menu-icon div:nth-child(3),
+html.no-js .action-menu:hover .action-menu-icon div:nth-child(3) {
+  left: 0;
+  -webkit-transform: rotate(-45deg) translate(5px, -5px);
+  -moz-transform: rotate(-45deg) translate(5px, -5px);
+  -ms-transform: rotate(-45deg) translate(5px, -5px);
+  -o-transform: rotate(-45deg) translate(5px, -5px);
+  transform: rotate(-45deg) translate(5px, -5px);
+  width: 100%;
+}
+html:not(.csstransforms) .action-menu .action-menu-icon {
+  background-image: url("../images/icons/blue/mobile-sidebar.svg");
+  -webkit-background-size: 20px 20px;
+  -moz-background-size: 20px 20px;
+  -o-background-size: 20px 20px;
+  background-size: 20px 20px;
+}
+html:not(.csstransforms) .action-menu .action-menu-icon div {
+  display: none;
+}
+html:not(.csstransforms) .action-menu.active .action-menu-icon,
+html.no-js:not(.csstransforms) .action-menu:hover .action-menu-icon {
+  background-image: url("../images/icons/blue/decline.svg");
+  -webkit-background-size: 20px 20px;
+  -moz-background-size: 20px 20px;
+  -o-background-size: 20px 20px;
+  background-size: 20px 20px;
+}
+.force-visible-overflow {
+  overflow: visible !important;
 }
 /* --- AJAX indicator ------------------------------------------------------- */
 #ajax_notification {
@@ -6040,6 +6185,53 @@ a.bookable_rooms_action {
   display: inline-block;
   float: left;
   margin-right: 10px;
+}
+section.course-statusgroups article header h1 a {
+  display: inline;
+}
+section.course-statusgroups article header h1 a.no-contentbox-link::before {
+  background-image: none;
+  width: 0;
+}
+section.course-statusgroups article header h1 a img {
+  vertical-align: bottom;
+}
+section.course-statusgroups article input.groupselector {
+  float: left;
+}
+section.course-statusgroups article section {
+  border-left: 1px solid #e7ebf1;
+  border-right: 1px solid #e7ebf1;
+}
+section.course-statusgroups article section table thead tr th {
+  background-color: #e7ebf1;
+}
+section.course-statusgroups article section table tbody tr td span.member-invisible {
+  font-style: italic;
+  color: #6d737b;
+}
+section.course-statusgroups article section table tbody tr td.memberactions {
+  text-align: right;
+}
+section.course-statusgroups article section table tfoot tr td {
+  background-color: #e7ebf1;
+  padding-left: 5px;
+  padding-right: 0;
+}
+section.course-statusgroups article section table tfoot tr td.memberactions {
+  text-align: right;
+}
+section.course-statusgroups article section div.statusgroup-no-members {
+  font-style: italic;
+  margin: 15px;
+}
+section.course-statusgroups footer {
+  background-color: #e7ebf1;
+  border-top: 1px solid #000000;
+  font-size: medium;
+  padding: 5px;
+  padding-left: 18px;
+  text-align: left;
 }
 #sort1,
 #sort0,

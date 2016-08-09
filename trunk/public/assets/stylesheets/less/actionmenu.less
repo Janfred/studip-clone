@@ -1,0 +1,146 @@
+@import url(../mixins/colors.less);
+
+.action-menu {
+    @icon-size: 20px;
+    @shadow: 1px 1px 1px @dark-gray-color-60;
+
+    display: inline-block;
+    position: relative;
+    text-align: right;
+
+    .action-menu-icon {
+        .square(@icon-size);
+        z-index: 3;
+
+        position: relative;
+        cursor: pointer;
+    }
+
+    .action-menu-content {
+        position: absolute;
+        top: -4px;
+        right: -4px;
+
+        padding: 4px 28px 4px 8px;
+        z-index: 2;
+
+        background: white;
+        box-shadow: @shadow;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    .action-menu-title {
+        font-weight: bold;
+        margin: 0.2em 0 0.3em;
+    }
+
+    .action-menu-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .action-menu-item {
+        padding: 3px 0;
+        a {
+            padding-left: 0;
+        }
+
+        img, svg, .action-menu-no-icon {
+            margin: 0 0.25em;
+        }
+    }
+
+    .action-menu-item img, .action-menu-no-icon {
+        .square(@icon-size);
+        display: inline-block;
+        vertical-align: bottom;
+    }
+
+    &:not(.active) {
+        .action-menu-content {
+            display: none;
+        }
+        .action-menu-icon {
+            z-index: 1;
+        }
+    }
+
+    .no-js &:hover {
+        .action-menu-content {
+            display: initial;
+        }
+        .action-menu-icon {
+            z-index: 3;
+        }
+    }
+
+    // Create animated icon that changes to close icon on activation/hover
+    html.csstransforms & {
+        .action-menu-icon div {
+            .square((@icon-size / 4));
+            .translate((-(@icon-size / 8)), 0);
+            .transition(all .25s ease-in-out);
+
+            display: block;
+            position: absolute;
+            background:  @base-color;
+            border-radius: 50%;
+            opacity: 1;
+            left: 50%;
+
+            &:nth-child(1) {
+                top: 0px;
+            }
+
+            &:nth-child(2) {
+                top: (@icon-size / 2);
+                .translate((-(@icon-size / 8)), (-(@icon-size / 8)));
+            }
+
+            &:nth-child(3) {
+                bottom: 0;
+            }
+        }
+    }
+    html.csstransforms &.active, html.no-js &:hover {
+        .action-menu-icon div {
+            border-radius: 0;
+
+            &:nth-child(1) {
+                left: 0;
+                .transform(rotate(45deg), translate(((@icon-size / 4) + 0.5), ((@icon-size / 4) + 0.5)));
+                width: 100%;
+            }
+
+            &:nth-child(2) {
+                opacity: 0;
+            }
+
+            &:nth-child(3) {
+                left: 0;
+                .transform(rotate(-45deg), translate((@icon-size / 4), (-(@icon-size / 4))));
+                width: 100%;
+            }
+        }
+    }
+
+    // Icon file fallback for old browsers
+    html:not(.csstransforms) & .action-menu-icon {
+        .background-icon('mobile-sidebar', 'clickable', @icon-size);
+
+        div {
+            display: none;
+        }
+    }
+    html:not(.csstransforms) &.active, html.no-js:not(.csstransforms) &:hover {
+        .action-menu-icon {
+            .background-icon('decline', 'clickable', @icon-size);
+        }
+    }
+
+}
+.force-visible-overflow {
+    overflow: visible !important;
+}

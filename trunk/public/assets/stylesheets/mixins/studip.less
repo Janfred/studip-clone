@@ -27,6 +27,14 @@
 .transition(@transition1, @transition2) {
     .transition(~"@{transition1}, @{transition2}");
 }
+// Double transform
+.transform(@transformation1, @transformation2) {
+    -webkit-transform: @transformation1 @transformation2;
+       -moz-transform: @transformation1 @transformation2;
+        -ms-transform: @transformation1 @transformation2;
+         -o-transform: @transformation1 @transformation2;
+            transform: @transformation1 @transformation2;
+}
 
 // Gradients
 #gradient {

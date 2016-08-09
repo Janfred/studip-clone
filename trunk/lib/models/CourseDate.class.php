@@ -74,6 +74,21 @@ class CourseDate extends SimpleORMap
     }
 
     /**
+     * Returns course dates by issue id.
+     *
+     * @param String $issue_id Id of the issue
+     * @return array with the associated dates
+     */
+    public static function findByStatusgruppe_id($group_id)
+    {
+        return self::findBySQL("INNER JOIN `termin_related_groups` USING (`termin_id`)
+            WHERE `termin_related_groups`.`statusgruppe_id` = ?
+            ORDER BY `date` ASC",
+            array($group_id)
+        );
+    }
+
+    /**
      * Configures this model.
      *
      * @param Array $config Configuration array

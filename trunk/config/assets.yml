@@ -43,7 +43,7 @@ javascripts:
     - javascripts/sidebar.js
 
   statusgroups: &statusgroups
-    - javascripts/app_admin_statusgroups.js
+    - javascripts/statusgroups.js
     - javascripts/jquery/jquery.nestable-4f93032cfa.js
 
   tablesorter: &tablesorter
@@ -106,6 +106,7 @@ javascripts:
     - javascripts/smiley.js
     - javascripts/big-image-handler.js
     - javascripts/opengraph.js
+    - javascripts/actionmenu.js
 
     - javascripts/studip-secure-forms.js
     - javascripts/studip-css.js

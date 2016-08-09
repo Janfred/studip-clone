@@ -6,7 +6,7 @@
 
     var ajax_endpoint = false;
 
-    STUDIP.statusgroups = {
+    STUDIP.Statusgroups = {
         apply: function () {
             $('.movable tbody').sortable({
                 axis: 'y',
@@ -36,16 +36,32 @@
                         async: false
                     }).done(function (data) {
                         $('tbody', table).html(data);
-                        STUDIP.statusgroups.apply();
+                        STUDIP.Statusgroups.apply();
                     });
                 }
             });
+        },
+
+        initInputs: function () {
+            //$('input[name="selfassign_start"]').datetimepicker();
+            if (!$('input[name="selfassign"]').attr('checked')) {
+                $('input[name="exclusive"]').closest($('section')).hide();
+                $('input[name="selfassign_start"]').closest($('section')).hide();
+                $('input[name="selfassign_end"]').closest($('section')).hide();
+            }
+            //$('input[name="selfassign_end"]').datetimepicker();
+            $('input[name="selfassign"]').on('click', function() {
+                $('input[name="exclusive"]').closest($('section')).toggle();
+                $('input[name="selfassign_start"]').closest($('section')).toggle();
+                $('input[name="selfassign_end"]').closest($('section')).toggle();
+            });
         }
+
     };
 
     $(document).ready(function () {
         ajax_endpoint = $('meta[name="statusgroups-ajax-movable-endpoint"]').attr('content');
-        STUDIP.statusgroups.apply();
+        STUDIP.Statusgroups.apply();
     }).on('ready dialog-open dialog-update', function () {
         $('.nestable').nestable({
             rootClass: 'nestable'

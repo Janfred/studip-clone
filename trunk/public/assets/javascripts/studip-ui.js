@@ -26,6 +26,11 @@
         return;
     }
 
+    // Exit if datetimepicker is undefined (which it should never be)
+    if ($.ui.timepicker === undefined) {
+        return;
+    }
+
     // Setup defaults and default locales (localizable by Stud.IP's JS
     // localization method through String.toLocaleString())
     var defaults = {},
@@ -199,20 +204,133 @@
         }
     };
 
+    STUDIP.UI.DateTimepicker = {
+        selector: '.has-datetime-picker,[data-datetime-picker]',
+        // Initialize all datetimepickers that not yet been initialized (e.g. in dialogs)
+        init: function () {
+            $(this.selector).filter(function () {
+                return $(this).data().dateTimePickerInit === undefined;
+            }).each(function () {
+                $(this).data('datetime-picker-init', true).datetimepicker();
+            });
+        },
+        // Apply registered handlers. Take care: This happens upon before a
+        // picker is shown as well as after a date has been selected.
+        refresh: function () {
+            $(this.selector).each(function () {
+                var element = this,
+                    options = $(element).data().datetimePicker;
+                if (options) {
+                    $.each(options, function (key, value) {
+                        if (STUDIP.UI.DateTimepicker.dataHandlers.hasOwnProperty(key)) {
+                            STUDIP.UI.DateTimepicker.dataHandlers[key].call(element, value);
+                        }
+                    });
+                }
+            });
+        }
+    };
+
+    // Define handlers for any data-datepicker option
+    STUDIP.UI.DateTimepicker.dataHandlers = {
+        // Ensure this date is not later (<=) than another date by setting
+        // the maximum allowed date the other date.
+        // This will also set this date to the maximum allowed date if it
+        // currently later than the allowed maximum date.
+        '<=': function (selector, offset) {
+            var this_date = $(this).datetimepicker('getDate'),
+                max_date = null;
+
+            // Get max date by either actual dates or maxDate options on
+            // all matching elements
+            $(selector).each(function () {
+                var date = $(this).datetimepicker('getDate') || $(this).datetimepicker('option', 'maxDate');
+                if (date && (!max_date || date < max_date)) {
+                    max_date = new Date(date);
+                }
+            });
+
+            // Set max date and adjust current date if neccessary
+            if (max_date) {
+                max_date.setTime(max_date.getTime() - (offset || 0) * 24 * 60 * 60 * 1000);
+
+                if (this_date && this_date > max_date) {
+                    $(this).datetimepicker('setDate', max_date);
+                }
+
+                $(this).datetimepicker('option', 'maxDate', max_date);
+            } else {
+                $(this).datetimepicker('option', 'maxDate', null);
+            }
+        },
+        // Ensure this date is earlier (<) than another date by setting the
+        // maximum allowed date to the other date - 1 day.
+        // This will also set this date to the maximum allowed date - 1 day
+        // if it is currently later than the allowed maximum date.
+        '<': function (selector) {
+            STUDIP.UI.DateTimepicker.dataHandlers['<='].call(this, selector, 1);
+        },
+        // Ensure this date is not earlier (>=) than another date by setting
+        // the minimum allowed date to the other date.
+        // This will also set this date to the minimum allowed date if it is
+        // currently earlier than the allowed minimum date.
+        '>=': function (selector, offset) {
+            var this_date = $(this).datetimepicker('getDate'),
+                min_date = null;
+
+            // Get min date by either actual dates or minDate options on
+            // all matching elements
+            $(selector).each(function () {
+                var date = $(this).datetimepicker('getDate') || $(this).datetimepicker('option', 'minDate');
+                if (date && (!min_date || date > min_date)) {
+                    min_date = new Date(date);
+                }
+            });
+
+            // Set min date and adjust current date if neccessary
+            if (min_date) {
+                min_date.setTime(min_date.getTime() + (offset || 0) * 24 * 60 * 60 * 1000);
+
+                if (this_date && this_date < min_date) {
+                    $(this).datetimepicker('setDate', min_date);
+                }
+
+                $(this).datetimepicker('option', 'minDate', min_date);
+            } else {
+                $(this).datetimepicker('option', 'minDate', null);
+            }
+        },
+        // Ensure this date is later (>) than another date by setting the
+        // minimum allowed date to the other date + 1 day.
+        // This will also set this date to the minimum allowed date + 1 day
+        // if it is currently earlier than the allowed minimum date.
+        '>': function (selector) {
+            STUDIP.UI.DateTimepicker.dataHandlers['>='].call(this, selector, 1);
+        }
+    };
+
     // Apply defaults including date picker handlers
     defaults = $.extend(locale, {
         beforeShow: function () {
             STUDIP.UI.Datepicker.refresh();
+            STUDIP.UI.DateTimepicker.refresh();
         },
         onSelect: function () {
             STUDIP.UI.Datepicker.refresh();
+            STUDIP.UI.DateTimepicker.refresh();
         }
     });
     $.datepicker.setDefaults(defaults);
+    $.timepicker.setDefaults(defaults);
 
     // Attach global focus handler on date picker elements
     $(document).on('focus', STUDIP.UI.Datepicker.selector, function () {
         STUDIP.UI.Datepicker.init();
+    });
+
+    // Attach global focus handler on datetime picker elements
+    $(document).on('focus', STUDIP.UI.DateTimepicker.selector, function () {
+        STUDIP.UI.DateTimepicker.init();
     });
 
 }(jQuery, STUDIP));
