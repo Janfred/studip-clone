@@ -38,8 +38,8 @@ class SemesterOfStudyCondition extends UserFilterField
                 'foreign_field' => 'abschluss_id'
             ),
             'SubjectCondition' => array(
-                'local_field' => 'studiengang_id',
-                'foreign_field' => 'studiengang_id'
+                'local_field' => 'fach_id',
+                'foreign_field' => 'fach_id'
             )
         );
         $this->validCompareOperators = array(
@@ -93,9 +93,9 @@ class SemesterOfStudyCondition extends UserFilterField
         // Additional requirements given...
         if (is_array($additional)) {
             // .. such as subject of study...
-            if ($additional['studiengang_id']) {
-                $query .= " AND studiengang_id=?";
-                $parameters[] = $additional['studiengang_id'];
+            if ($additional['fach_id']) {
+                $query .= " AND fach_id=?";
+                $parameters[] = $additional['fach_id'];
             }
             // ... or degree.
             if ($additional['abschluss_id']) {

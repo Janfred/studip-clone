@@ -2,9 +2,9 @@
 
 /**
  * DegreeCondition.class.php
- * 
+ *
  * All conditions concerning the study degree in Stud.IP can be specified here.
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
@@ -31,8 +31,8 @@ class DegreeCondition extends UserFilterField
         parent::__construct($fieldId);
         $this->relations = array(
             'SubjectCondition' => array(
-                'local_field' => 'studiengang_id',
-                'foreign_field' => 'studiengang_id'
+                'local_field' => 'fach_id',
+                'foreign_field' => 'fach_id'
             )
         );
     }

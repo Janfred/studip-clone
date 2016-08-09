@@ -48,10 +48,10 @@ class HelpTour extends SimpleORMap {
 
     /**
      * get visible tours for helpbar
-     * 
+     *
      * @return array                  set of tours
      */
-    public static function GetHelpbarTourData() 
+    public static function GetHelpbarTourData()
     {
         $visible_tours = array();
         $route = get_route();
@@ -71,9 +71,9 @@ class HelpTour extends SimpleORMap {
                 }
             }
         }
-        //if there is an active tour, initialize it 
-        if ($_SESSION['active_tour']['tour_id'] AND 
-                (($_SESSION['active_tour']['last_route'] == $route) OR 
+        //if there is an active tour, initialize it
+        if ($_SESSION['active_tour']['tour_id'] AND
+                (($_SESSION['active_tour']['last_route'] == $route) OR
                 ($_SESSION['active_tour']['next_route'] == $route))) {
             $active_tour = new HelpTour($_SESSION['active_tour']['tour_id']);
             $step_nr = $_SESSION['active_tour']['step_nr'];
@@ -88,10 +88,10 @@ class HelpTour extends SimpleORMap {
         }
         return array('tours' => $visible_tours, 'active_tour_id' => $active_tour_id, 'active_tour_step_nr' => $active_tour_step_nr);
     }
-    
+
     /**
      * fetches set of tours from database for given route
-     * 
+     *
      * @param string $route           route for tours to begin
      * @param boolean $as_objects     include HelpTour objects in result array
      * @return array                  set of tours
@@ -115,7 +115,7 @@ class HelpTour extends SimpleORMap {
 
     /**
      * fetches set of tours from database filtered by parameters
-     * 
+     *
      * @param string $term            search term for tour name
      * @param boolean $as_objects     include HelpTour objects in result array
      * @return array                  set of tours
@@ -124,7 +124,7 @@ class HelpTour extends SimpleORMap {
     {
         $params = array();
         $condition = '';
-        if (strlen(trim($term)) >= 3) { 
+        if (strlen(trim($term)) >= 3) {
             $condition =  "WHERE name LIKE CONCAT('%', ?, '%')";
             $params[] = $term;
         }
@@ -141,7 +141,7 @@ class HelpTour extends SimpleORMap {
 
     /**
      * fetches tour conflicts
-     * 
+     *
      * @return array                  set of tour objects
      */
     public static function GetConflicts()
@@ -168,10 +168,10 @@ class HelpTour extends SimpleORMap {
         }
         return $conflicts;
     }
-    
+
     /**
      * builds tour objects for given set of tour data
-     * 
+     *
      * @param array $tour_result      tour set
      * @return array                  set of tour objects
      */
@@ -212,10 +212,10 @@ class HelpTour extends SimpleORMap {
             'on_delete' => 'delete',
             'on_store' => 'store',
         );
-        
+
         parent::configure($config);
     }
-    
+
     /**
      * checks if tour is visible for current user
      */
@@ -232,23 +232,23 @@ class HelpTour extends SimpleORMap {
             return false;
         foreach ($this->audiences as $audience) {
             switch ($audience->type) {
-                case 'inst': 
+                case 'inst':
                     $table_name = 'user_inst';
                     $field_name = 'Institut_id';
                 break;
-                case 'sem': 
+                case 'sem':
                     $table_name = 'seminar_user';
                     $field_name = 'Seminar_id';
                 break;
-                case 'studiengang': 
+                case 'studiengang':
                     $table_name = 'user_studiengang';
-                    $field_name = 'studiengang_id';
+                    $field_name = 'fach_id';
                 break;
-                case 'abschluss': 
+                case 'abschluss':
                     $table_name = 'user_studiengang';
                     $field_name = 'abschluss_id';
                 break;
-                case 'userdomain': 
+                case 'userdomain':
                     $table_name = 'user_userdomains';
                     $field_name = 'userdomain_id';
                 break;
@@ -273,7 +273,7 @@ class HelpTour extends SimpleORMap {
         }
         return true;
     }
-    
+
     /**
      * adds step to the tour and rearranges existing steps
      */
@@ -325,7 +325,7 @@ class HelpTour extends SimpleORMap {
 
     /**
      * checks, if basic tour data is complete
-     * 
+     *
      * @return boolean true or false
      */
     function validate() {

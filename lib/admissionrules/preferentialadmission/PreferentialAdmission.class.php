@@ -279,7 +279,7 @@ class PreferentialAdmission extends AdmissionRule
                             if ($queryPart) {
                                 $queryPart .= " AND ";
                             }
-                            $queryPart .= "`studiengang_id`".$field->getCompareOperator()."?";
+                            $queryPart .= "`fach_id`".$field->getCompareOperator()."?";
                             $values[] = $field->getValue() ?: '';
                             break;
                         case 'SemesterOfStudyCondition':
