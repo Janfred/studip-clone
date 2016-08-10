@@ -94,6 +94,9 @@ class ResourceObject
                 $this->root_id = $this->id;
                 $this->parent_id = "0";
             }
+            if (!$this->requestable) {
+                $this->requestable = "0";
+            }
             $this->chng_flag=FALSE;
         }
     }
