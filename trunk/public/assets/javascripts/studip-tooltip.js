@@ -100,7 +100,7 @@
      * @param {string} content - Content of the tooltip (may be html)
      */
     Tooltip.prototype.update = function (content) {
-        this.element.html(content);
+        this.element.text(content);
     };
 
     // Threshold used for "edge detection" (imagine a padding along the edges)
