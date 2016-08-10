@@ -1021,7 +1021,7 @@ if (Request::submittedSome('_add_property', '_send_property_type') || Request::o
                 $options,
                 Request::get('add_property'),
                 Request::get('add_property_type'),
-                Request::get('info_label_visible')
+                Request::get('info_label_visible', 0)
             ));
         }
 
