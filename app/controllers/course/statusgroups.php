@@ -61,7 +61,7 @@ class Course_StatusgroupsController extends AuthenticatedController
 
         // Get all course members (needed for mkdate).
         $allmembers = SimpleCollection::createFromArray(
-            CourseMember::findByCourseAndStatus($this->course_id, array('user', 'autor')));
+            CourseMember::findBySeminar_id($this->course_id));
 
         // Find all statusgroups for this course.
         $groups = SimpleCollection::createFromArray(
@@ -135,7 +135,7 @@ class Course_StatusgroupsController extends AuthenticatedController
             _('Teilnehmende der Veranstaltung suchen'),
             'user_id',
             array('seminar_id' => $this->course_id,
-                'sem_perm' => array('user', 'autor')
+                'sem_perm' => array('user', 'autor', 'tutor', 'dozent')
             )
         );
 

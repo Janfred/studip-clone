@@ -83,28 +83,27 @@
                                 'title' => _('Nachricht an alle nicht zugeordneten Personen schicken')
                         ])->asImg(20) ?></a>
                 <?php endif ?>
-            <?php else : ?>
-                <?php if ($group->id != 'nogroup' && $group->userMayJoin($GLOBALS['user']->id)) : ?>
-                    <a href="<?= $controller->url_for('course/statusgroups/join', $group->id) ?>">
-                        <?= Icon::create('door-enter', 'clickable',
-                            array('title' => sprintf(_('Mitglied von Gruppe %s werden'),
-                                htmlReady($group->name)))) ?></a>
-                <?php elseif ($group->id != 'nogroup' && $group->selfassign &&
-                    $group->selfassign_start > time()) : ?>
-                        <?= Icon::create('door-enter', 'inactive',
-                            array('title' => sprintf(_('Der Eintrag in diese Gruppe ist möglich ab %s.'),
-                                date('d.m.Y H:i', $group->selfassign_start)))) ?>
-                <?php elseif ($group->id != 'nogroup' && $group->selfassign &&
-                    $group->selfassign_end && $group->selfassign_end < time()) : ?>
-                        <?= Icon::create('door-enter', 'inactive',
-                            array('title' => sprintf(_('Der Eintrag in diese Gruppe war möglich bis %s.'),
-                                date('d.m.Y H:i', $group->selfassign_end)))) ?>
-                <?php elseif ($group->id != 'nogroup' && $group->isMember($GLOBALS['user']->id)) : ?>
-                    <a href="<?= $controller->url_for('course/statusgroups/leave', $group->id) ?>">
-                        <?= Icon::create('door-leave', 'clickable',
-                            array('title' => sprintf(_('Aus Gruppe %s austragen'),
-                                htmlReady($group->name)))) ?></a>
-                <?php endif ?>
+            <?php endif ?>
+            <?php if ($group->id != 'nogroup' && $group->userMayJoin($GLOBALS['user']->id)) : ?>
+                <a href="<?= $controller->url_for('course/statusgroups/join', $group->id) ?>">
+                    <?= Icon::create('door-enter', 'clickable',
+                        array('title' => sprintf(_('Mitglied von Gruppe %s werden'),
+                            htmlReady($group->name)))) ?></a>
+            <?php elseif ($group->id != 'nogroup' && $group->selfassign &&
+                $group->selfassign_start > time()) : ?>
+                <?= Icon::create('door-enter', 'inactive',
+                    array('title' => sprintf(_('Der Eintrag in diese Gruppe ist möglich ab %s.'),
+                        date('d.m.Y H:i', $group->selfassign_start)))) ?>
+            <?php elseif ($group->id != 'nogroup' && $group->selfassign &&
+                $group->selfassign_end && $group->selfassign_end < time()) : ?>
+                <?= Icon::create('door-enter', 'inactive',
+                    array('title' => sprintf(_('Der Eintrag in diese Gruppe war möglich bis %s.'),
+                        date('d.m.Y H:i', $group->selfassign_end)))) ?>
+            <?php elseif ($group->id != 'nogroup' && $group->isMember($GLOBALS['user']->id)) : ?>
+                <a href="<?= $controller->url_for('course/statusgroups/leave', $group->id) ?>">
+                    <?= Icon::create('door-leave', 'clickable',
+                        array('title' => sprintf(_('Aus Gruppe %s austragen'),
+                            htmlReady($group->name)))) ?></a>
             <?php endif ?>
         </nav>
     </header>
