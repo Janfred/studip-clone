@@ -66,4 +66,3 @@ class StudipLitSearchPluginRkhan extends StudipLitSearchPluginGvk {
     }
 }
 ?>
-

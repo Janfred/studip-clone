@@ -47,4 +47,3 @@ class StudipLitSearchPluginGvkPlus extends StudipLitSearchPluginGvk
     }
 }
 ?>
-

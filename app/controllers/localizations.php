@@ -1,4 +1,3 @@
-
 <?php
 # Lifter010: TODO
 /*
