@@ -1,4 +1,3 @@
- 
 <?
 class Step00284HelpEditor extends DBMigration {
 

@@ -1,4 +1,3 @@
- 
 <?
 class Step00126EmbeddingFlashMovies extends DBMigration {
 

@@ -83,4 +83,3 @@ function check_terms($userid, $_language_path) {
     }
 }
 ?>
-

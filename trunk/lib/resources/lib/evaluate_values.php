@@ -2348,4 +2348,3 @@ if (Request::option('edit_object')) {
 }
 
 ?>
-
