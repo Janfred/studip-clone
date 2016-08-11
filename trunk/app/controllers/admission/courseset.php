@@ -51,9 +51,12 @@ class Admission_CoursesetController extends AuthenticatedController {
         PageLayout::addSqueezePackage('admission');
         $this->set_content_type('text/html;charset=windows-1252');
 
-        $views = new ViewsWidget();
-        $views->setTitle(_('Aktionen'));
-        $views->addLink(_('Anmeldeset anlegen'),$this->url_for('admission/courseset/configure'))->setActive($action == 'configure');
+        $views = new ActionsWidget();
+        $views->addLink(
+            _('Anmeldeset anlegen'),
+            $this->url_for('admission/courseset/configure'),
+            Icon::create('add', 'clickable')
+        )->setActive($action == 'configure');
         Sidebar::Get()->addWidget($views);
 
     }
