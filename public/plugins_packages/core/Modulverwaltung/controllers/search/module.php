@@ -19,7 +19,7 @@ class Search_ModuleController extends MVVController
 {
     private $drill_down_filter = array();
     
-    public function before_filter($action, $args)
+    public function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
         // set navigation
