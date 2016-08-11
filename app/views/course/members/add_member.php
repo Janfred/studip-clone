@@ -24,7 +24,7 @@
                     <input type="hidden" name="cid" value="<?= $course_id ?>">
                 </td>
                 <td style="width: 20%; text-align: center">
-                    
+
                 </td>
                 <td style="width: 20%; text-align: right">
                     <?= Button::createAccept(_('Eintragen'), 'add_autor', array('title' => sprintf(_("als %s eintragen"), $decoratedStatusGroups['autor']) )) ?>
@@ -49,11 +49,11 @@
             <td>
                 <?=_('Eingabeformat')?>:
 
-                <?= tooltipIcon(sprintf(_('In das Textfeld <strong>Teilnehmerliste übernehmen</strong> können Sie eine Liste mit Namen von %s eingeben,
+                <?= tooltipHtmlIcon(sprintf(_('In das Textfeld <strong>Teilnehmerliste übernehmen</strong> können Sie eine Liste mit Namen von %s eingeben,
                     die in die Veranstaltung aufgenommen werden sollen. Wählen Sie in der Auswahlbox das gewünschte Format, in dem Sie die Namen eingeben möchten.<br />
                     <strong>Eingabeformat</strong><br/>
                     <strong>Nachname, Vorname &crarr;</strong><br />Geben Sie dazu in jede Zeile den Nachnamen und (optional) den Vornamen getrennt durch ein Komma oder ein Tabulatorzeichen ein.<br />
-                    <strong>Nutzername &crarr;</strong><br />Geben Sie dazu in jede Zeile den Stud.IP Nutzernamen ein.'),$status_groups['autor']),false, true);?>
+                    <strong>Nutzername &crarr;</strong><br />Geben Sie dazu in jede Zeile den Stud.IP Nutzernamen ein.'), htmlReady($status_groups['autor'])));?>
             </td>
             <td colspan="2">
                 <select name="csv_import_format">
@@ -67,7 +67,7 @@
                 </select>
             </td>
         </tr>
-        
+
         <tr>
             <td style="width: 30%"><?= sprintf(_('<strong>%s</strong> in die Veranstaltung eintragen'), htmlReady($decoratedStatusGroups['autor']))?></td>
             <td style="width: 50%">

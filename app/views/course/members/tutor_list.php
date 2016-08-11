@@ -77,7 +77,7 @@
                         <?= htmlReady($fullname) ?>
                     </a>
                     <? if ($is_tutor && $tutor['comment'] != '') : ?>
-                        <?= tooltipIcon(sprintf('<strong>%s</strong><br>%s', _('Bemerkung'), htmlReady($tutor['comment'])), false, true) ?>
+                        <?= tooltipHtmlIcon(sprintf('<strong>%s</strong><br>%s', _('Bemerkung'), htmlReady($tutor['comment']))) ?>
                     <? endif ?>
                 </td>
                 <? if($is_dozent) : ?>
