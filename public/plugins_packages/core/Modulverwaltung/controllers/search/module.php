@@ -538,7 +538,7 @@ class Search_ModuleController extends MVVController
         $this->redirect('search/module/index');
     }
     
-    protected function reset_search()
+    protected function reset_search($action = '')
     {
         //parent::reset_search();
         unset($this->sterm);
