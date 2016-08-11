@@ -7,7 +7,7 @@
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * @author      Peter Thienel <thienel@data-quest.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
@@ -22,29 +22,29 @@ class Dokument extends ModuleManagementModel
      * @var int
      */
     private $count_zuordnungen;
-    
+
     protected static function configure($config = array())
     {
         $config['db_table'] = 'mvv_dokument';
-        
+
         $config['has_many']['assignments'] = array(
             'class_name' => 'DokumentZuord',
             'assoc_foreign_key' => 'dokument_id',
             'on_delete' => 'delete'
         );
-        
+
         $config['additional_fields']['count_zuordnungen']['get'] =
             function($dokument) { return $dokument->count_zuordnungen; };
-        
+
         parent::configure($config);
     }
-    
+
     public function __construct($id = null)
     {
         parent::__construct($id);
         $this->object_real_name = _('Dokument');
     }
-    
+
     /**
      * @see ModuleManagementModel::getClassDisplayName
      */
@@ -52,10 +52,10 @@ class Dokument extends ModuleManagementModel
     {
         return _('Dokument');
     }
-    
+
     /**
      * Finds all documents related to the given object.
-     * 
+     *
      * @param string $object A MVV object
      * @return array Array of documents.
      */
@@ -70,10 +70,10 @@ class Dokument extends ModuleManagementModel
                 . 'ORDER BY mdz.position'
                 , array($object->id));
     }
-    
+
     /**
      * Finds all documents related to objects of given type.
-     * 
+     *
      * @param string $object_type The type of the objects.
      * @return array Array of documents.
      */
@@ -84,12 +84,12 @@ class Dokument extends ModuleManagementModel
                 . 'LEFT JOIN mvv_dokument_zuord mdz USING(dokument_id)'
                 . 'WHERE mdz.object_type = ?', array($object_type));
     }
-    
+
     /**
      * Returns all or a specified (by row count and offset) number of
      * documents sorted and filtered by given parameters and enriched with
      * some additional fields. This function is mainly used in the list view.
-     * 
+     *
      * @param string $sortby Field name to order by.
      * @param string $order ASC or DESC direction of order.
      * @param array $filter Key-value pairs of filed names and values
@@ -111,10 +111,10 @@ class Dokument extends ModuleManagementModel
                 . 'GROUP BY mvv_dokument.dokument_id '
                 . 'ORDER BY ' . $sortby, array(), $row_count, $offset);
     }
-    
+
     /**
      * Returns the number of Documents comply with the given filter parameters.
-     * 
+     *
      * @param array $filter Array of filter parameters
      * @see ModuleManagementModel::getFilterSql()
      * @return int The number of Documents.
@@ -130,11 +130,11 @@ class Dokument extends ModuleManagementModel
                 . 'LEFT JOIN mvv_dokument_zuord USING(dokument_id)'
                 , $filter);
     }
-    
+
     /**
      * Find Documents by given search term.
      * Used as search function in list view.
-     * 
+     *
      * @param type $term The search term.
      * @param type $filter Optional filter parameters.
      * @return array An array of Dokument ids.
@@ -147,10 +147,10 @@ class Dokument extends ModuleManagementModel
                 . "WHERE name LIKE " . $quoted_term
                 . " OR url LIKE " . $quoted_term);
     }
-    
+
     /**
      * Returns all relations of this document grouped by object types.
-     * 
+     *
      * @return Array Relations ordered by object types
      */
     public function getRelations()
@@ -166,10 +166,10 @@ class Dokument extends ModuleManagementModel
         }
         return $zuordnungen;
     }
-    
+
     /**
      * Returns the number of assignments to other MVV objects.
-     * 
+     *
      * @return int Number of assignments.
      */
     public function getCountRelations()
@@ -182,10 +182,10 @@ class Dokument extends ModuleManagementModel
         $result = $stmt->fetchColumn();
         return ($result ? $result : 0);
     }
-    
+
     /**
      * Returns all assignemnt to objects for this document.
-     * 
+     *
      * @param string $object_id The id of the object.
      * @param string $object_type The type (class name by get_class())
      * of the object.
@@ -196,11 +196,11 @@ class Dokument extends ModuleManagementModel
         return DokumentZuord::get(
                 array($this->getId(), $object_id, $object_type));
     }
-    
+
     /**
      * Returns all relations of the documents specified by the given ids.
      * The returned array is ordered by the types of the referenced objects.
-     * 
+     *
      * @param array $dokument_ids Ids of the documents.
      * @return array References ordered by object types.
      */
@@ -224,10 +224,10 @@ class Dokument extends ModuleManagementModel
         }
         return $zuordnungen;
     }
-    
+
     /**
      * Updates the assignment of documents to the given object.
-     * 
+     *
      * @param Object $object Assigns the documents to this object.
      * @param array $dokument_ids Array of document object ids.
      * @param array $annotations Array of annotations to the assignment.
@@ -257,7 +257,7 @@ class Dokument extends ModuleManagementModel
         $object->document_assignments->unsetBy('dokument_id', $removed_documents);
         $object->document_assignments->orderBy('position', SORT_NUMERIC);
     }
-    
+
     /**
      * Removes all assignments of this Dokument.
      */
@@ -270,10 +270,10 @@ class Dokument extends ModuleManagementModel
             $object->is_dirty = true;
         }
     }
-    
+
     /**
      * Returns a ready to use quick search widget.
-     * 
+     *
      * @param array $exclude Ids of documents excluded from search.
      * @return array Array with quick search id and quick search html.
      */
@@ -290,14 +290,14 @@ class Dokument extends ModuleManagementModel
                 ->noSelectbox();
         return ['id' => $qs_id, 'html' => $qs_html];
     }
-    
+
     public function validate()
     {
         $ret = parent::validate();
         if ($this->isDirty()) {
             $rejected = false;
             $messages = array();
-            
+
             // The name of the Dokument must be longer than 4 characters
             if (strlen($this->name) < 4) {
                 $ret['name'] = true;
@@ -321,7 +321,7 @@ class Dokument extends ModuleManagementModel
                 $messages[] = _('Geben Sie einen Text ein, der mit dem Dokument verlinkt wird (min. 3 Zeichen).');
                 $rejected = true;
             }
-            
+
             if ($rejected) {
                 throw new InvalidValuesException(join("\n", $messages), $ret);
             }

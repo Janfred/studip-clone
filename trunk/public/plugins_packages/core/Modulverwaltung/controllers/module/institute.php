@@ -6,7 +6,7 @@
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * @author      Peter Thienel <thienel@data-quest.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
@@ -17,21 +17,21 @@ require_once dirname(__FILE__) . '/module.php';
 
 class Module_InstituteController extends Module_ModuleController
 {
-    
+
     public $institut_id;
-    
-    public function before_filter($action, $args)
+
+    public function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
         URLHelper::bindLinkParam('institut_id', $this->institut_id);
-        
+
         if (Request::isXhr()) {
             $this->response->add_header('Content-Type',
                     'text/html; charset=WINDOWS-1252');
             $this->set_layout(null);
         }
     }
-    
+
     /**
      * Lists all institutes responsible for modules.
      */
@@ -41,7 +41,7 @@ class Module_InstituteController extends Module_ModuleController
 
         $this->initPageParams();
         $this->initSearchParams('module');
-        
+
         $search_result = $this->getSearchResult('Modul');
 
         // Nur Module von verantwortlichen Einrichtungen an denen der User
@@ -61,7 +61,7 @@ class Module_InstituteController extends Module_ModuleController
         $this->show_sidebar_filter = true;
         $this->setSidebar();
     }
-    
+
     /**
      * Shows all modules by a given institute that is responsible for them.
      */
@@ -72,7 +72,7 @@ class Module_InstituteController extends Module_ModuleController
         if (!$institut) {
             throw new Exception(_('Unbekannte Einrichtung.'));
         }
-        
+
         $this->inst_id = $institut->id;
         if ($modul_id) {
             $this->modul = Modul::find($modul_id);
@@ -98,7 +98,7 @@ class Module_InstituteController extends Module_ModuleController
         } else {
             $institute_filter = $this->inst_id;
         }
-        
+
         $filter = array_merge(
                 (array) $this->filter,
                 array(
@@ -114,8 +114,8 @@ class Module_InstituteController extends Module_ModuleController
                 $this->render_template('module/institute/details');
             }
         } else {
-            $this->perform_relayed('index');
+            $this->redirect($this->url_for('/index'));
         }
     }
-    
+
 }

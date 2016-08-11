@@ -18,26 +18,26 @@ require_once dirname(__FILE__) . '/BreadCrumb.class.php';
 
 class Search_AngebotController extends MVVController
 {
-    
-    public function before_filter($action, $args)
+
+    public function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
         // set navigation
         Navigation::activateItem('/search/module/angebot');
         $this->breadCrumb = new BreadCrumb();
-        
+
         if (Request::isXhr()) {
             $this->response->add_header('Content-Type',
                     'text/html; charset=WINDOWS-1252');
             $this->set_layout(null);
         }
     }
-    
+
     protected function isVisible()
     {
         return $this->plugin->isVisibleSearch();
     }
-    
+
     public function index_action()
     {
         $status_filter = [];
@@ -64,15 +64,15 @@ class Search_AngebotController extends MVVController
 
             $chars[$char] = $char;
         }
-        
+
         function link_chars(&$char,
                 $key,
                 $pattern) {
             $char = sprintf($pattern, $key, ucfirst($key));
         }
-        
+
         array_walk($chars, 'link_chars', '<a href="#%s">%s</a>');
-        
+
         $this->breadCrumb->init();
         $this->breadCrumb->append(_('Studienangebot von A bis Z'));
         $this->faecher = $result;
@@ -128,7 +128,7 @@ class Search_AngebotController extends MVVController
         $this->breadCrumb->append($this->fach->getDisplayName()
                 . ' (' . $this->abschluss->getDisplayName() . ')');
         $this->url = 'search/angebot/studiengang';
-        
+
         if ($this->abschluss && $studiengang_id) {
             $studiengang = Studiengang::get($studiengang_id);
             $this->studiengangName = $studiengang->getDisplayName();
@@ -136,7 +136,7 @@ class Search_AngebotController extends MVVController
             $this->info = $studiengang->beschreibung;
         }
     }
-    
+
     public function studiengang_action($studiengang_id)
     {
         $this->verlauf_url = 'search/angebot/verlauf';
@@ -144,7 +144,7 @@ class Search_AngebotController extends MVVController
         $this->content = $response->body;
         $this->render_template('shared/content', $this->layout);
     }
-    
+
     public function info_action($studiengang_id)
     {
         $this->studiengang = Studiengang::find($studiengang_id);
@@ -152,7 +152,7 @@ class Search_AngebotController extends MVVController
             throw new Exception('Unbekannter Studiengang!');
         }
     }
-    
+
     public function verlauf_action($stgteil_id, $stgteil_bez_id = null,
             $studiengang_id = null)
     {

@@ -7,7 +7,7 @@
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * @author      Peter Thienel <thienel@data-quest.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
@@ -20,11 +20,11 @@ class StudiengangTeil extends ModuleManagementModelTreeItem
     private $count_versionen;
     private $fach_name;
     private $count_fachberater;
-    
+
     protected static function configure($config = array())
     {
         $config['db_table'] = 'mvv_stgteil';
-        
+
         $config['has_many']['versionen'] = array(
             'class_name' => 'StgteilVersion',
             'assoc_foreign_key' => 'stgteil_id',
@@ -63,28 +63,28 @@ class StudiengangTeil extends ModuleManagementModelTreeItem
             'on_delete' => 'delete',
             'on_store' => 'store'
         );
-        
-        
+
+
         $config['additional_fields']['count_versionen']['get'] =
             function($stgteil) { return $stgteil->count_versionen; };
         $config['additional_fields']['fach_name']['get'] =
             function($stgteil) { return $stgteil->fach_name; };
         $config['additional_fields']['count_fachberater']['get'] =
             function($stgteil) { return $stgteil->count_fachberater; };
-        
+
         parent::configure($config);
     }
-    
+
     function __construct($id = null)
     {
         parent::__construct($id);
         $this->object_real_name = _('Studiengangteil');
     }
-    
+
     /**
      * Assignes fachberater to this Studiengangteil.
      * Returns true only if all given user ids are valid.
-     * 
+     *
      * @param String[]/Object[] Array of user ids or user objects.
      * @return boolean True if fachbereiche was successfully assigned.
      */
@@ -116,11 +116,11 @@ class StudiengangTeil extends ModuleManagementModelTreeItem
                     SimpleORMapCollection::createFromArray($all_fachberater);
         return true;
     }
-    
+
     /**
      * Assignes a Fach to this Studiengangteil.
      * Returns true only if the given fach id is valid.
-     * 
+     *
      * @param String Id of the Fach to assign.
      * @return boolean True if the fach was successfully assigned.
      */
@@ -141,9 +141,11 @@ class StudiengangTeil extends ModuleManagementModelTreeItem
         }
         return false;
     }
-    
-    public function getDisplayName($with_fach = true)
+
+    public function getDisplayName(/*$with_fach = true*/)
     {
+        $args = func_get_args();
+        $with_fach = array_key_exists(0, $args)? $args[0] : true;
         if ($this->isNew()) {
             return '';
         }
@@ -156,7 +158,7 @@ class StudiengangTeil extends ModuleManagementModelTreeItem
         $name .= $this->zusatz ? $this->zusatz  : '';
         return trim($name);
     }
-    
+
     /**
      * @see MvvTreeItem::getTrailParentId()
      */
@@ -172,7 +174,7 @@ class StudiengangTeil extends ModuleManagementModelTreeItem
     {
         return Fach::get($this->getTrailParentId());
     }
-    
+
     /**
      * @see MvvTreeItem::getChildren()
      */
@@ -180,7 +182,7 @@ class StudiengangTeil extends ModuleManagementModelTreeItem
     {
         return StgteilVersion::findByStgteil($this->getId());
     }
-    
+
     /**
      * @see MvvTreeItem::getParents()
      */
@@ -188,11 +190,11 @@ class StudiengangTeil extends ModuleManagementModelTreeItem
     {
         return Studiengang::findByStgTeil($this->getId());
     }
-    
+
     /**
      * Retrieves the Studiengangteil and all related data and some
      * additional fields.
-     * 
+     *
      * @param string $stgteil_id The id of the Studiengangteil.
      * @return StudiengangTeil The Studiengangteil with additional data or a
      * new StudiengangTeil.
@@ -212,13 +214,13 @@ class StudiengangTeil extends ModuleManagementModelTreeItem
         }
         return self::get();
     }
-    
+
     /**
      * Returns all or a specified (by row count and offset) number of
      * Studiengangteile sorted and filtered by given parameters and enriched
      * with some additional fields.
      * This function is mainly used in the list view.
-     * 
+     *
      * @param string $sortby Field names to order by.
      * @param string $order ASC or DESC direction of order.
      * @param array $filter Key-value pairs of filed names and values
@@ -248,10 +250,10 @@ class StudiengangTeil extends ModuleManagementModelTreeItem
                 . 'GROUP BY mst.stgteil_id '
                 . 'ORDER BY ' . $sortby, array(), $row_count, $offset);
     }
-    
+
     /**
      * Returns the number of Studienagngteile optional filtered by $filter.
-     * 
+     *
      * @param array $filter Key-value pairs of filed names and values
      * to filter the result set.
      * @return int The number of Studiengangteile
@@ -268,10 +270,10 @@ class StudiengangTeil extends ModuleManagementModelTreeItem
         $db = DBManager::get()->query($query);
         return $db->fetchColumn(0);
     }
-    
+
     /**
      * Retrieves all Studienganteile assigned to the given Studiengang.
-     * 
+     *
      * @param string $studiengang_id The id of a Studiengang.
      * @param string $sort Field names to order by.
      * @param string $order ASC or DESC direction of order.
@@ -292,11 +294,11 @@ class StudiengangTeil extends ModuleManagementModelTreeItem
                 . 'WHERE studiengang_id = ? '
                 . 'ORDER BY ' . $sort, array($studiengang_id));
     }
-    
+
     /**
      * Retrieves all Studiengangteile by Fach. Optionally filtered by given
      * filter parameter.
-     * 
+     *
      * @param string $fach_id The id of a Fach.
      * @param array $filter Key-value pairs of filed names and values
      * to filter the result set.
@@ -316,12 +318,12 @@ class StudiengangTeil extends ModuleManagementModelTreeItem
                 . self::getFilterSql($filter)
                 . 'ORDER BY ' . $sort, $params);
     }
-    
+
     /**
      * Retrieves all Studiengangteile by given Fachbereich. The Fachbereich is
      * the responsible institute of a Fach. The Fach is assigned to
      * Studiengangteile.
-     * 
+     *
      * @param string $fachbereich_id The id of an institute.
      * @param array $filter Key-value pairs of filed names and values
      * to filter the result set.
@@ -343,11 +345,11 @@ class StudiengangTeil extends ModuleManagementModelTreeItem
                 . self::getFilterSql($filter)
                 . 'ORDER BY ' . $sort, $params);
     }
-    
+
     /**
      * Returns an array of all Fachbereiche assigned through Fächer to
      * Studiengangteile.
-     * 
+     *
      * @param string $sortby Field names to order by.
      * @param string $order ASC or DESC direction of order.
      * @param array $filter Key-value pairs of filed names and values
@@ -376,11 +378,11 @@ class StudiengangTeil extends ModuleManagementModelTreeItem
         }
         return $fachbereiche;
     }
-    
+
     /**
      * Retrieves all Studiengangteile by Studiengang and Studiengangteil-
      * Bezeichnung in the case of Mehrfach-Studiengaenge.
-     * 
+     *
      * @param string $studiengang_id The id of a Studiengang.
      * @param string $stgteil_bez_id The id of a Studiengangteil-Bezeichnung.
      * @return SimpleORMapCollection A collection of Studiengangteile.
@@ -396,10 +398,10 @@ class StudiengangTeil extends ModuleManagementModelTreeItem
                 . 'ORDER BY position, chdate',
                 array($studiengang_id, $stgteil_bez_id));
     }
-    
+
     /**
      * Returns the number of Studiengangteile optional filtered by $filter.
-     * 
+     *
      * @param array $filter Key-value pairs of filed names and values
      * to filter the result set.
      * @return int The number of Studiengangteile.
@@ -416,7 +418,7 @@ class StudiengangTeil extends ModuleManagementModelTreeItem
                 . self::getFilterSql($filter)
                 . 'GROUP BY stgteil_id ORDER BY `name`', array($term, $term));
     }
-    
+
     /**
      * @see ModuleManagementModel::getClassDisplayName
      */
@@ -424,10 +426,10 @@ class StudiengangTeil extends ModuleManagementModelTreeItem
     {
         return _('Studiengangteil');
     }
-    
+
     /**
      * Returns the number of Faecher which are assigned to Studiengangteile.
-     * 
+     *
      * @return int the number of assigned Faecher
      */
     public static function getCountAssignedFaecher($filter = null)
@@ -438,7 +440,7 @@ class StudiengangTeil extends ModuleManagementModelTreeItem
                 . self::getFilterSql($filter, true));
         return $result->fetchColumn();
     }
-    
+
     public function validate()
     {
         $ret = parent::validate();
@@ -456,7 +458,7 @@ class StudiengangTeil extends ModuleManagementModelTreeItem
                 $messages[] = _('Es müssen Kredit-Punkte angegeben werden.');
                 $rejected = true;
             }
-             * 
+             *
              */
             if ($this->semester < 1) {
                 $ret['semester'] = true;
@@ -481,5 +483,5 @@ class StudiengangTeil extends ModuleManagementModelTreeItem
             return new Institute($fb['institut_id']);
         }, self::getAssignedFachbereiche('name', 'ASC', array('ms.stgteil_id' => $this->getId())));
     }
-    
+
 }

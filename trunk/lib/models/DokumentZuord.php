@@ -8,7 +8,7 @@
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * @author      Peter Thienel <thienel@data-quest.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
@@ -17,27 +17,27 @@
 
 class DokumentZuord extends ModuleManagementModel
 {
-    
+
     protected static function configure($config = array())
     {
         $config['db_table'] = 'mvv_dokument_zuord';
-        
+
         $config['has_one']['document'] = array(
             'class_name' => 'Dokument',
             'foreign_key' => 'dokument_id'
         );
-        
+
         parent::configure($config);
     }
-    
+
     public function __construct($id = null)
     {
         parent::__construct($id);
     }
-    
+
     /**
      * Inherits the status of the related object.
-     * 
+     *
      * @return string the status of the related object
      */
     public function getStatus()
@@ -49,10 +49,10 @@ class DokumentZuord extends ModuleManagementModel
         }
         return parent::getStatus();
     }
-    
+
     /**
      * Retrieves all assignments of Dokumente for the given MVV Object)
-     * 
+     *
      * @param SimpleORMap $object
      * @return type
      */
@@ -65,5 +65,5 @@ class DokumentZuord extends ModuleManagementModel
         $sql = 'range_id = ? AND object_type = ? ORDER BY position,mkdate';
         return self::findBySQL($sql, array($object->getId(), get_class($object)));
     }
-    
+
 }

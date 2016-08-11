@@ -7,7 +7,7 @@
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * @author      Peter Thienel <thienel@data-quest.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
@@ -18,22 +18,22 @@ class Modul extends ModuleManagementModelTreeItem
 {
     /**
      * The default language of the deskriptor (defined in config).
-     * 
-     * @var string 
+     *
+     * @var string
      */
     private $default_language;
-    
+
     /**
      * The number of modulteile.
-     * 
-     * @var int 
+     *
+     * @var int
      */
     private $count_modulteile;
-    
+
     protected static function configure($config = array())
     {
         $config['db_table'] = 'mvv_modul';
-        
+
         $config['has_many']['deskriptoren'] = array(
             'class_name' => 'ModulDeskriptor',
             'on_delete' => 'delete',
@@ -99,26 +99,26 @@ class Modul extends ModuleManagementModelTreeItem
             'on_delete' => 'delete',
             'on_store' => 'store'
         );
-        
+
         $config['additional_fields']['count_modulteile']['get'] =
                 function ($modul) { return $modul->count_modulteile; };
         $config['additional_fields']['count_modulteile']['set'] = false;
         $config['additional_fields']['languagesofinstruction']['get'] =
                 function ($modul) { return $modul->languages; };
         $config['additional_fields']['languagesofinstruction']['set'] = false;
-        
+
         $config['alias_fields']['flexnow_id'] = 'flexnow_modul';
-        
+
         parent::configure($config);
     }
-    
+
     function __construct($id = null)
     {
         parent::__construct($id);
         $this->object_real_name = _('Modul');
         $this->setDefaultLanguage();
     }
-    
+
     /**
      * @see ModuleManagementModel::getClassDisplayName
      */
@@ -129,7 +129,7 @@ class Modul extends ModuleManagementModelTreeItem
 
     /**
      * Retrieves the module and all related data and some additional fields.
-     * 
+     *
      * @param string $modul_id The id of the module.
      * @return object The module with additional data or a new module.
      */
@@ -150,18 +150,18 @@ class Modul extends ModuleManagementModelTreeItem
                 . 'WHERE mvv_modul.modul_id = ?',
                 array($GLOBALS['MVV_MODUL_DESKRIPTOR']['SPRACHE']['default'],
                     'hauptverantwortlich', $modul_id));
-                
+
         if (sizeof($modul)) {
             return $modul[$modul_id];
         }
         return self::get();
     }
-    
+
     /**
      * Returns all or a specified (by row count and offset) number of
      * Module sorted and filtered by given parameters and enriched with some
      * additional fields. This function is mainly used in the list view.
-     * 
+     *
      * @param string $sortby Field name to order by.
      * @param string $order ASC or DESC direction of order.
      * @param int $row_count The max number of objects to return.
@@ -197,10 +197,10 @@ class Modul extends ModuleManagementModelTreeItem
                 . "GROUP BY modul_id "
                 . 'ORDER BY ' . $sortby, array('hauptverantwortlich'), $row_count, $offset);
     }
-    
+
     /**
      * Returns the number of modules optional filtered by $filter.
-     * 
+     *
      * @param array $filter Key-value pairs of filed names and values
      * to filter the result set.
      * @return int The number of modules
@@ -221,7 +221,7 @@ class Modul extends ModuleManagementModelTreeItem
         $db->execute(array('hauptverantwortlich'));
         return $db->fetchColumn(0);
     }
-    
+
     /**
      * @see MvvTreeItem::getTrailParentId()
      */
@@ -237,7 +237,7 @@ class Modul extends ModuleManagementModelTreeItem
     {
         return Abschluss::get($this->getTrailParentId());
     }
-    
+
     /**
      * @see MvvTreeItem::getChildren()
      */
@@ -250,7 +250,7 @@ class Modul extends ModuleManagementModelTreeItem
                 . 'LEFT JOIN mvv_modulteil USING(modulteil_id) '
                 . 'WHERE modul_id = ? ', array($this->getId()));
     }
-    
+
     /**
      * @see MvvTreeItem::hasChildren()
      */
@@ -258,7 +258,7 @@ class Modul extends ModuleManagementModelTreeItem
     {
         return count($this->getChildren()) > 0;
     }
-    
+
     /**
      * @see MvvTreeItem::getParents()
      */
@@ -267,17 +267,19 @@ class Modul extends ModuleManagementModelTreeItem
         return StgteilabschnittModul::findBySQL('modul_id = ?', [$this->id]);
     }
 
-    public function getDisplayName($with_code = true /* ,$hide_semester = false */) {
+    public function getDisplayName(/*$with_code = true, $hide_semester = false */) {
+
+        $args = func_get_args();
+        $with_code = array_key_exists(0, $args)? $args[0] : true;
+        $hide_semester = array_key_exists(1, $args)? $args[1] : false;
         if ($this->isNew()) {
             return '';
         }
-        $num_args = func_num_args();
-        
+
         $name = $with_code ? $this->code . ' - ' : '';
         $name .= $this->getDeskriptor()->bezeichnung;
-        
-        $args = func_get_args();
-        if (!$args[1]) {
+
+        if ($hide_semester) {
             $sem_validity = $this->getDisplaySemesterValidity();
             if ($sem_validity) {
                 $name .= ', ' . $sem_validity;
@@ -285,10 +287,10 @@ class Modul extends ModuleManagementModelTreeItem
         }
         return trim($name);
     }
-    
+
     /**
      * Returns a string representation of this module's validity by semesters.
-     * 
+     *
      * @return string The string with the validity by semesters.
      */
     public function getDisplaySemesterValidity()
@@ -311,7 +313,7 @@ class Modul extends ModuleManagementModelTreeItem
         }
         return $ret;
     }
-    
+
     /**
      * Sets the default language for the module descriptor. Takes the language
      * previously set by ApplicationSimpleORMap::setLanguage() or the one
@@ -327,22 +329,22 @@ class Modul extends ModuleManagementModelTreeItem
                     $GLOBALS['MVV_MODUL_DESKRIPTOR']['SPRACHE']['default'];
         }
     }
-    
+
     /**
      * Returns the default language for the module descriptor.
-     * 
+     *
      * @return string Short name of language (see mvv_config.php)
      */
     public function getDefaultLanguage()
     {
         return $this->default_language;
     }
-    
+
     /**
      * Returns the Deskriptor in the given language. A Modul has always a
      * Deskriptor in the default language. If the given language is unknown, the
      * method returns the deskriptor in the default language.
-     * 
+     *
      * @param string $language The id of the language
      * @param bool If true returns always a new descriptor
      * @return object The Deskriptor.
@@ -368,16 +370,16 @@ class Modul extends ModuleManagementModelTreeItem
         }
         return $deskriptor;
     }
-    
+
     /**
      * Assigns the responsible institute to this Modul.
      * A Modul has only one (but always one) responsible institute.
-     * 
+     *
      * @param string $institut_id The id of the institute to assign.
      * @return boolean True if institute was successfully assigned.
      */
     public function assignResponsibleInstitute($institut_id) {
-        
+
         $institute = Fachbereich::find($institut_id);
         if (!$institute) {
             return false;
@@ -393,10 +395,10 @@ class Modul extends ModuleManagementModelTreeItem
         $this->assigned_institutes->unsetBy('institut_id', $institute->id);
         return true;
     }
-    
+
     /**
      * Assigns other institutes (by id) to this module.
-     * 
+     *
      * @param array $institut_ids Array of institute ids.
      */
     public function assignInstitutes($institut_ids) {
@@ -411,15 +413,15 @@ class Modul extends ModuleManagementModelTreeItem
         }
         $this->assigned_institutes = SimpleORMapCollection::createFromArray($institutes);
     }
-    
+
     /**
      * Assigns users in their groups to this module.
-     * 
+     *
      * @param array $grouped_user_ids Array of user ids grouped by usergroup.
      */
     public function assignUsers($grouped_user_ids) {
         $assigned_users = array();
-        
+
         foreach (array_keys($GLOBALS['MVV_MODUL']['PERSONEN_GRUPPEN']['values']) as $group) {
             $position = 1;
             foreach ((array) $grouped_user_ids[$group] as $user_id) {
@@ -441,11 +443,11 @@ class Modul extends ModuleManagementModelTreeItem
         }
         $this->assigned_users = SimpleOrMapCollection::createFromArray($assigned_users);
     }
-    
+
     /**
      * Returns an associative array with all assigned users grouped by
      * their functions.
-     * 
+     *
      * @return array Array with group name as key and array of users as value.
      */
     public function getGroupedAssignedUsers()
@@ -460,10 +462,10 @@ class Modul extends ModuleManagementModelTreeItem
         }
         return $grouped_users;
     }
-    
+
     /**
      * Assignes languages of instruction to this part-module.
-     * 
+     *
      * @param type $languages An array of language keys defined in mvv_config.php.
      */
     public function assignLanguagesOfInstruction($languages)
@@ -482,13 +484,13 @@ class Modul extends ModuleManagementModelTreeItem
                 $assigned_languages[] = $language;
             }
         }
-        
+
         $this->languages = SimpleORMapCollection::createFromArray(
                 $assigned_languages);
     }
-    
+
     public function getResponsibleInstitutes()
-    {   
+    {
         if ($this->responsible_institute) {
             $inst = Institute::find($this->responsible_institute->institut_id);
             if ($inst) {
@@ -497,10 +499,10 @@ class Modul extends ModuleManagementModelTreeItem
         }
         return parent::getResponsibleInstitutes();
     }
-    
+
     /**
      * Returns a "deep" copy of this object.
-     * 
+     *
      * @param boolean $deep Copy all assigned modulteile if true
      * @return Modul A copy of this module.
      */
@@ -525,7 +527,7 @@ class Modul extends ModuleManagementModelTreeItem
             $deskriptoren[] = $cloned_deskriptor;
         }
         $copy->deskriptoren = SimpleORMapCollection::createFromArray($deskriptoren);
-        
+
         $institutes = [];
         foreach ($this->assigned_institutes as $assigned_institute) {
             $cloned_inst = clone $assigned_institute;
@@ -534,7 +536,7 @@ class Modul extends ModuleManagementModelTreeItem
             $institutes[] = $cloned_inst;
         }
         $copy->assigned_institutes = SimpleORMapCollection::createFromArray($institutes);
-        
+
         $users = [];
         foreach ($this->assigned_users as $user) {
             $position = 1;
@@ -544,7 +546,7 @@ class Modul extends ModuleManagementModelTreeItem
             $users[] = $cloned_user;
         }
         $copy->assigned_users = SimpleORMapCollection::createFromArray($users);
-        
+
         $languages = [];
         foreach ($this->languages as $assigned_language) {
             $cloned_language = clone $assigned_language;
@@ -552,7 +554,7 @@ class Modul extends ModuleManagementModelTreeItem
             $languages[] = $cloned_language;
         }
         $copy->languages = SimpleORMapCollection::createFromArray($languages);
-        
+
         if ($deep) {
             $modulteile = [];
             $position = 1;
@@ -565,7 +567,7 @@ class Modul extends ModuleManagementModelTreeItem
         }
         return $copy;
     }
-    
+
     public static function findBySearchTerm($term, $filter = null)
     {
         $term = '%' . $term . '%';
@@ -580,10 +582,10 @@ class Modul extends ModuleManagementModelTreeItem
                 . 'ORDER BY name',
                 array($term, $term));
     }
-    
+
     /**
      * Returns all modules assigned to the given Studiengangteil-Abschnitt.
-     * 
+     *
      * @param string $abschnitt_id The id of a Studiengangteil-Abschnitt
      * @param array $filter Key-value pairs of filed names and values
      * to filter the result set.
@@ -602,16 +604,16 @@ class Modul extends ModuleManagementModelTreeItem
                 . self::getFilterSql($filter)
                 . ' ORDER BY position, mkdate', array($abschnitt_id));
     }
-    
+
     /**
      * Primarily to find Module by Institute. Possible filters are all fields
      * of the tables mvv_modul, mvv_modulteil, mvv_modul_inst and
      * mvv_modul_deskriptor.
-     * 
+     *
      * Possible fileds to sort by are count_modulteile, bezeichnung (the name
      * of the modul dereived from the descriptor in the default language) and
      * all fields of table mvv_modul.
-     * 
+     *
      * @param string $sortby
      * @param string $order
      * @param array $filter
@@ -638,11 +640,11 @@ class Modul extends ModuleManagementModelTreeItem
                 . 'GROUP BY modul_id '
                 . 'ORDER BY ' . $sortby, array(), $row_count, $offset);
     }
-    
+
     /**
      * Returns all modules the given LV-Gruppe is assigned to at least
      * one Modulteile.
-     * 
+     *
      * @param string $lvgruppe_id The id of a LV-Gruppe.
      * @return object A SimpleORMapCollection of modules.
      */
@@ -655,10 +657,10 @@ class Modul extends ModuleManagementModelTreeItem
                 . 'WHERE mlm.lvgruppe_id = ? '
                 , array($lvgruppe_id));
     }
-    
+
     /**
      * Returns all Institutes assigned to the given modules.
-     * 
+     *
      * @param string $sortby Field to sort by.
      * @param string $order Order of sorting (ASC or DESC).
      * @param array $modul_ids Ids of modules.
@@ -670,11 +672,11 @@ class Modul extends ModuleManagementModelTreeItem
         return self::getAllAssignedInstitutes($sortby, $order,
                 array('mvv_modul.modul_id' => $modul_ids));
     }
-    
+
     /**
      * Returns all institutes assigned to Module. Sorted and filtered by
      * optional parameters.
-     * 
+     *
      * @param string $sortby DB field to sort by.
      * @param string $order ASC or DESC
      * @param array $filter Array of filter.
@@ -697,12 +699,12 @@ class Modul extends ModuleManagementModelTreeItem
                 . 'GROUP BY institut_id ORDER BY ' . $sortby
                 , array(), $row_count, $offset);
     }
-    
+
     /**
      * Returns an array with all types of status found by given
      * modul ids as key and the number of associated module as
      * value.
-     * 
+     *
      * @see mvv_config.php for defined status.
      * @param array $modul_ids
      * @return array An array with status key as key and an array of name of
@@ -724,7 +726,7 @@ class Modul extends ModuleManagementModelTreeItem
                 . 'FROM mvv_modul GROUP BY stat');
             $stmt->execute();
         }
-        
+
         $result = array();
         foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $status) {
             $result[$status['stat']] = array(
@@ -734,12 +736,12 @@ class Modul extends ModuleManagementModelTreeItem
         }
         return $result;
     }
-    
+
     /**
      * Returns an array with ids of all modules found by the given filter.
      * The fields from tables mvv_modul and mvv_modul_inst are possible filter
      * options.
-     * 
+     *
      * @see ModuleManagementModel::getFilterSql()
      * @param array $filter Key-value pairs of filed names and values
      * to filter the result set.
@@ -757,10 +759,10 @@ class Modul extends ModuleManagementModelTreeItem
         $stmt->execute();
         return $stmt->fetchAll();
     }
-    
+
     /**
      * Retrieves all modules this module ia a variant of.
-     * 
+     *
      * @return array An array of all variants.
      */
     public function getVariants()
@@ -772,11 +774,11 @@ class Modul extends ModuleManagementModelTreeItem
         }
         return $variants;
     }
-    
+
     /**
      * Search modules by search term. This function is used in the
      * search frontend for modules.
-     * 
+     *
      * @param string $search_term
      * @param boolean $only_public If true search only for modules
      * with public status.
@@ -812,7 +814,7 @@ class Modul extends ModuleManagementModelTreeItem
         }
         return array();
     }
-    
+
     public function validate()
     {
         $ret = parent::validate();

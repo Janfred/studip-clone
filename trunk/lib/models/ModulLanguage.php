@@ -8,7 +8,7 @@
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * @author      Peter Thienel <thienel@data-quest.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
@@ -17,24 +17,24 @@
 
 class ModulLanguage extends ModuleManagementModel
 {
-    
+
     protected static function configure($config = array())
     {
         $config['db_table'] = 'mvv_modul_language';
-    
+
         $config['belongs_to']['modul'] = array(
             'class_name' => 'Modul',
             'foreign_key' => 'modul_id'
         );
-        
+
         $config['alias_fields']['language'] = 'lang';
-        
+
         parent::configure($config);
     }
-    
+
     /**
      * Retrieves all languages assigned to the given module.
-     * 
+     *
      * @param string $modul_id The id of a module.
      * @return SimpleORMapCollection Collection of language assignments.
      */
@@ -49,12 +49,12 @@ class ModulLanguage extends ModuleManagementModel
         }
         return $languages;
     }
-    
+
     public function getDisplayName()
     {
         return $GLOBALS['MVV_MODUL']['SPRACHE']['values'][$this->lang]['name'];
     }
-    
+
     public function validate()
     {
         $ret = parent::validate();
@@ -66,10 +66,10 @@ class ModulLanguage extends ModuleManagementModel
         }
         return $ret;
     }
-    
+
     /**
      * Inherits the status of the parent module.
-     * 
+     *
      * @return string The status (see mvv_config.php)
      */
     public function getStatus()
@@ -82,5 +82,5 @@ class ModulLanguage extends ModuleManagementModel
         }
         return parent::getStatus();
     }
-    
+
 }
