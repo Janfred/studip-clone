@@ -6,7 +6,7 @@
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * @author      Peter Thienel <thienel@data-quest.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
@@ -191,12 +191,12 @@ class Fachabschluss_KategorienController extends MVVController
             if (!MvvPerm::get('AbschlussZuord')->haveFieldPerm('position')) {
                 throw new Trails_Exception(403);
             }
-            list(, $kategorie_id) = split('_', $list);
+            list(, $kategorie_id) = explode('_', $list);
             $abschluss_kategorie = AbschlussKategorie::find($kategorie_id);
             if ($abschluss_kategorie) {
                 $i = 1;
                 foreach ($orderedIds as $id) {
-                    list(, $abschluss_id) = split('_', $id);
+                    list(, $abschluss_id) = explode('_', $id);
                     if ($abschluss_kategorie->abschluesse->find($abschluss_id)) {
                         $abschluss_zuord = new AbschlussZuord($abschluss_id);
                         if ($abschluss_zuord->position != $i) {

@@ -7,7 +7,7 @@
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * @author      Peter Thienel <thienel@data-quest.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
@@ -19,25 +19,25 @@ class Fachbereich extends ModuleManagementModelTreeItem
 
     private $count_objects;
     private $count_module;
-    
+
     protected static function configure($config = array())
     {
         $config['db_table'] = 'Institute';
-    
+
         $config['additional_fields']['count_objects']['get'] =
             function($fb) { return $fb->count_objects; };
         $config['additional_fields']['count_module']['get'] =
             function($fb) { return $fb->count_module; };
-        
+
         parent::configure($config);
     }
-    
+
     public function __construct($id = null)
     {
         parent::__construct($id);
         $this->object_real_name = _('Verantwortliche Einrichtung');
     }
-    
+
     /**
      * @see ModuleManagementModel::getClassDisplayName
      */
@@ -45,13 +45,13 @@ class Fachbereich extends ModuleManagementModelTreeItem
     {
         return _('Verantwortliche Einrichtung');
     }
-    
+
     /**
      * Retrieves all Fachbereiche which are implicitly related to the given
      * modules. The relation is done through the hole MVV structure. If an
      * object has a status field, the status has to be public. Otherwise the
      * related Fachbereich will not be retrieved.
-     * 
+     *
      * @param array $module_ids An array of module ids.
      */
     public static function findByModule($module_ids)
@@ -73,12 +73,12 @@ class Fachbereich extends ModuleManagementModelTreeItem
                 Studiengang::getPublicStatus(), Modul::getPublicStatus());
         return parent::getEnrichedByQuery($query, $params);
     }
-    
+
     /**
      * Retrieves all modules this Fachbereich is related to. The relation is
      * done through the hole MVV structure. Optional filtered by given module
      * ids.
-     * 
+     *
      * @param boolean $only_public If true, all objects with a status field has to
      * be public.
      * @param array $modul_ids An array with module ids. Only these modules will
@@ -118,7 +118,7 @@ class Fachbereich extends ModuleManagementModelTreeItem
         $stmt->execute($params);
         return $stmt->fetchAll(PDO::FETCH_COLUMN);
     }
-    
+
     /**
      * @see MvvTreeItem::getTrailParentId()
      */
@@ -130,7 +130,7 @@ class Fachbereich extends ModuleManagementModelTreeItem
             $this->getValue('fakultaets_id');
         }
     }
-    
+
     /**
      * @see MvvTreeItem::getTrailParent()
      */
@@ -142,7 +142,7 @@ class Fachbereich extends ModuleManagementModelTreeItem
             return new Fachbereich($this->getValue('fakultaets_id'));
         }
     }
-    
+
     /**
      * @see MvvTreeItem::getParents()
      */
@@ -150,12 +150,12 @@ class Fachbereich extends ModuleManagementModelTreeItem
     {
         return array();
     }
-    
+
     /**
      * @see MvvTreeItem::getChildren()
      */
     public function getChildren()
-    {        
+    {
         $_SESSION['MVV/AbschlussKategorie/trail_parent_id'] =  $this->getId();
         return AbschlussKategorie::getEnrichedByQuery('SELECT mak.* '
             . 'FROM Institute ins '
@@ -165,9 +165,9 @@ class Fachbereich extends ModuleManagementModelTreeItem
             . 'WHERE ins.Institut_id = ? OR ins.fakultaets_id = ? '
             . 'ORDER BY mak.name', array($this->getId(),
                 $this->getValue('fakultaets_id')));
-       
+
     }
-    
+
     /**
      * @see MvvTreeItem::hasChildren()
      */
@@ -175,9 +175,11 @@ class Fachbereich extends ModuleManagementModelTreeItem
     {
         return count($this->getChildren()) > 0;
     }
-    
-    public function getDisplayName($without_faculty = false)
+
+    public function getDisplayName(/*$without_faculty = false*/)
     {
+        $args = func_get_args();
+        $without_faculty = array_key_exists(0, $args)? $args[0] : false;
         if ($this->isFaculty()) {
             return $this->getValue('Name');
         }
@@ -187,19 +189,19 @@ class Fachbereich extends ModuleManagementModelTreeItem
             return (Fachbereich::get($this->getValue('fakultaets_id'))->getShortName()
                 . ' - ' . $this->name);
         }
-        
+
     }
-    
+
     /**
      * Returns whether this Fachbereich is a faculty.
-     * 
+     *
      * @return boolean True, if the Fachbereich is a faculty.
      */
     public function isFaculty()
     {
         return $this->getId() == $this->getValue('fakultaets_id');
     }
-    
+
     public static function getFilterStudiengaengeEinrichtung($studiengang_ids = array())
     {
         return parent::getEnrichedByQuery('SELECT Institute.*, '
@@ -219,11 +221,11 @@ class Fachbereich extends ModuleManagementModelTreeItem
                 . 'GROUP BY inst.Institut_id '
                 . 'ORDER BY is_fak DESC, fak_name ASC, inst_name ASC');
     }
-    
+
     /**
      * Returns a collection of all Fachbereiche where a
      * Studiengangteil is assigned to.
-     * 
+     *
      * @param string $sortby The result is sorted by these fields.
      * @param string $order The direction of sorting.
      * @return Object SimplORMapCollection of all Fachbereiche
@@ -243,20 +245,20 @@ class Fachbereich extends ModuleManagementModelTreeItem
                 . 'GROUP BY Institut_id '
                 . 'ORDER BY ' . $sortby, array());
     }
-    
+
     /**
      * Gießener Spezialität: Kurzbezeichnungen für Fakultäten.
      * Returns the short name of the faculty. If short name is not set returns
      * the display name.
-     * 
+     *
      * @return string The (short) name of the faculty.
      */
     public function getShortName()
     {
         // Gießen
         //return $this->jlug_fak ? $this->jlug_fak : $this->getDisplayName();
-        
+
         return $this->getDisplayName();
     }
-    
+
 }

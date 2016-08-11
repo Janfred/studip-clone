@@ -17,18 +17,19 @@ require_once dirname(__FILE__) . '/../MVV.class.php';
 
 class Seminar_DetailsController extends MVVController
 {
-    
-    public function before_filter($action, $args) {
+
+    public function before_filter(&$action, &$args)
+    {
         parent::before_filter($action, $args);
         ModuleManagementModel::setLanguage($GLOBALS['_language']);
-        
+
         if (Request::isXhr()) {
             $this->response->add_header('Content-Type',
                     'text/html; charset=WINDOWS-1252');
             $this->set_layout(null);
         }
     }
-    
+
     public function show_module_pathes_action($seminar_id)
     {
         $trail_classes = array(
@@ -38,5 +39,5 @@ class Seminar_DetailsController extends MVVController
             'StgteilVersion');
         $this->mvv_pathes = MvvCourse::get($seminar_id)->getTrails($trail_classes);
     }
-    
+
 }

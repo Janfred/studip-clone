@@ -7,7 +7,7 @@
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * @author      Peter Thienel <thienel@data-quest.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
@@ -19,11 +19,11 @@ class StgteilVersion extends ModuleManagementModelTreeItem
 
     private $count_abschnitte;
     private $count_dokumente;
-    
+
     protected static function configure($config = array())
     {
         $config['db_table'] = 'mvv_stgteilversion';
-        
+
         $config['belongs_to']['studiengangteil'] = array(
             'class_name' => 'StudiengangTeil',
             'foreign_key' => 'stgteil_id'
@@ -49,21 +49,21 @@ class StgteilVersion extends ModuleManagementModelTreeItem
             'on_delete' => 'delete',
             'on_store' => 'store'
         );
-        
+
         $config['additional_fields']['count_abschnitte']['get'] =
             function($version) { return $version->count_abschnitte; };
         $config['additional_fields']['count_dokumente']['get'] =
             function($version) { return $version->count_dokumente; };
-        
+
         parent::configure($config);
     }
-    
+
     public function __construct($id = null)
     {
         $this->object_real_name = _('Studiengangteil-Version');
         parent::__construct($id);
     }
-    
+
     /**
      * @see ModuleManagementModel::getClassDisplayName
      */
@@ -72,11 +72,11 @@ class StgteilVersion extends ModuleManagementModelTreeItem
         return ($long ? _('Studiengangteil-Version')
             : _('Version'));
     }
-    
+
     /**
      * Retrieves the Studiengangteil-Version and all related data and some
      * additional fields.
-     * 
+     *
      * @param string $version_id The id of the Studiengangteil-Version.
      * @return object The Studiengangteil-Version with additional data or a new
      * Studiengangteil-Version.
@@ -96,13 +96,13 @@ class StgteilVersion extends ModuleManagementModelTreeItem
         }
         return self::get();
     }
-    
+
     /**
      * Returns all or a specified (by row count and offset) number of
      * Studiengangteil-Versionen sorted and filtered by given parameters and
      * enriched with some additional fields.
      * This function is mainly used in the list view.
-     * 
+     *
      * @param string $sortby Field names to order by.
      * @param string $order ASC or DESC direction of order.
      * @param array $filter Key-value pairs of filed names and values
@@ -133,11 +133,11 @@ class StgteilVersion extends ModuleManagementModelTreeItem
                 . 'GROUP BY version_id '
                 . 'ORDER BY ' . $sortby, array(), $row_count, $offset);
     }
-    
+
     /**
      * Returns the number of Studiengangteil-Versionen optional filtered
      * by $filter.
-     * 
+     *
      * @param array $filter Key-value pairs of filed names and values
      * to filter the result set.
      * @return int The number of Studiengangteil-Versionen.
@@ -154,12 +154,12 @@ class StgteilVersion extends ModuleManagementModelTreeItem
         $db = DBManager::get()->query($query);
         return $db->fetchColumn(0);
     }
-    
+
     /**
      * Retrieves all Studiengangteil-Versionen of the given Studiengangteil.
      * sorted and filtered by given parameters and enriched with some
      * additional fields.
-     * 
+     *
      * @param string $stgteil_id The id of a Studiengangteil.
      * @param string $sortby Field names to order by.
      * @param string $order ASC or DESC direction of order.
@@ -174,11 +174,11 @@ class StgteilVersion extends ModuleManagementModelTreeItem
                     ['mvv_stgteilversion.stgteil_id' => $stgteil_id]);
         return self::getAllEnriched($sortby, $order, $filter);
     }
-    
+
     /**
      * Returns an array with ids of all Studiengangteil-Versionen found by the
      * given filter.
-     * 
+     *
      * @see ModuleManagementModel::getFilterSql()
      * @param array $filter Key-value pairs of filed names and values
      * to filter the result set.
@@ -196,10 +196,10 @@ class StgteilVersion extends ModuleManagementModelTreeItem
         $stmt->execute();
         return $stmt->fetchAll();
     }
-    
+
     /**
      * Returns Version by Studiengangteilabschnitt.
-     * 
+     *
      * @param string $abschnitt_id
      * @return null|object
      */
@@ -215,10 +215,10 @@ class StgteilVersion extends ModuleManagementModelTreeItem
         }
         return null;
     }
-    
+
     /**
      * Returns Versions by given Fach and Abschluss  ordered by cp and start semester.
-     * 
+     *
      * @param string $fach_id Id of Fach.
      * @param string $abschluss_id Id of Abschluss.
      * @param string $version_id Only this version.
@@ -234,7 +234,7 @@ class StgteilVersion extends ModuleManagementModelTreeItem
                 . ($version_id ? 'WHERE msv.version_id = ? AND mst.fach_id = ? AND msg.abschluss_id = ? '
                                : 'WHERE mst.fach_id = ? AND msg.abschluss_id = ? ')
                 . 'ORDER BY mst.kp DESC, sem_start.beginn';
-        
+
         return DBManager::get()->fetchAll($stmt,
                 ($version_id
                     ? [$version_id, $fach_id, $abschluss_id]
@@ -244,15 +244,16 @@ class StgteilVersion extends ModuleManagementModelTreeItem
                     return $version;
                 });
     }
-    
-    public function getDisplayName($with_stgteil = true /*, $with_fach = true*/)
+
+    public function getDisplayName(/*$with_stgteil = true , $with_fach = true*/)
     {
         if ($this->isNew()) {
             return '';
         }
-        
+
         $args = func_get_args();
-        $args[1] = $args[1] !== false;
+        $with_stgteil = array_key_exists(0, $args)? $args[0] : true;
+        $with_fach = array_key_exists(1, $args)? $args[1] : true;
         $start_sem = Semester::find($this->start_sem);
         $end_sem = Semester::find($this->end_sem);
         $fassung_nr = $this->fassung_nr ? $this->fassung_nr
@@ -277,16 +278,16 @@ class StgteilVersion extends ModuleManagementModelTreeItem
             }
         }
         if ($with_stgteil) {
-            return StudiengangTeil::get($this->stgteil_id)->getDisplayName($args[1])
+            return StudiengangTeil::get($this->stgteil_id)->getDisplayName($with_fach)
                     . ', ' . $name;
         } else {
             return $name;
         }
     }
-    
+
     /**
      * Returns a string representation of this version's validity by semesters.
-     * 
+     *
      * @return string The string with the validity by semesters.
      */
     public function getDisplaySemesterValidity()
@@ -309,10 +310,10 @@ class StgteilVersion extends ModuleManagementModelTreeItem
         }
         return $ret;
     }
-    
+
     /**
      * Makes a deep copy of this version.
-     * 
+     *
      * @return bool|object Returns the new version or false on failure;
      */
     public function copy()
@@ -351,7 +352,7 @@ class StgteilVersion extends ModuleManagementModelTreeItem
             });
         return ($success ? $new_version : false);
     }
-    
+
     /**
      * @see MvvTreeItem::getTrailParentId()
      */
@@ -367,7 +368,7 @@ class StgteilVersion extends ModuleManagementModelTreeItem
     {
         return StudiengangTeil::get($this->getTrailParentId());
     }
-    
+
     /**
      * @see MvvTreeItem::getChildren()
      */
@@ -376,7 +377,7 @@ class StgteilVersion extends ModuleManagementModelTreeItem
         $_SESSION['MVV/StgteilAbschnitt/trail_parent_id'] =  $this->getId();
         return StgteilAbschnitt::findByStgteilVersion($this->getId());
     }
-    
+
     /**
      * @see MvvTreeItem::getParents()
      */
@@ -384,7 +385,7 @@ class StgteilVersion extends ModuleManagementModelTreeItem
     {
         return array(StudiengangTeil::get($this->getValue('stgteil_id')));
     }
-    
+
     /**
      * @see MvvTreeItem::hasChildren()
      */
@@ -392,7 +393,7 @@ class StgteilVersion extends ModuleManagementModelTreeItem
     {
         return count($this->getChildren()) > 0;
     }
-    
+
     public function validate()
     {
         $ret = parent::validate();

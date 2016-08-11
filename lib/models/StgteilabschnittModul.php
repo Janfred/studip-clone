@@ -8,7 +8,7 @@
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * @author      Peter Thienel <thienel@data-quest.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
@@ -21,7 +21,7 @@ class StgteilabschnittModul extends ModuleManagementModelTreeItem
     protected static function configure($config = array())
     {
         $config['db_table'] = 'mvv_stgteilabschnitt_modul';
-        
+
         $config['belongs_to']['modul'] = array(
             'class_name' => 'Modul',
             'foreign_key' => 'modul_id'
@@ -30,17 +30,17 @@ class StgteilabschnittModul extends ModuleManagementModelTreeItem
             'class_name' => 'StgteilAbschnitt',
             'foreign_key' => 'abschnitt_id'
         );
-        
+
         parent::configure($config);
     }
-    
+
     function __construct($id = null)
     {
         parent::__construct($id);
         $this->object_real_name =
                 _('Zuordnung Modul zu Studiengangteil-Abschnitt');
     }
-    
+
     /**
      * @see ModuleManagementModel::getClassDisplayName
      */
@@ -49,24 +49,26 @@ class StgteilabschnittModul extends ModuleManagementModelTreeItem
         return ($long ? _('Zuordnung Modul zu Studiengangteil-Abschnitt')
             : _('Modul'));
     }
-    
-    public function getDisplayName($with_code = false)
+
+    public function getDisplayName(/*$with_code = false*/)
     {
+        $args = func_get_args();
+        $with_code = array_key_exists(0, $args)? $args[0] : false;
         if ($this->isNew()) {
             return parent::getDisplayName();
         }
-        
+
         /* Augsburg
         return ($this->bezeichnung ? $this->bezeichnung . ': ' : '')
             . $this->getModul()->getDisplayName();
-         * 
+         *
          */
-        
+
         $start_sem = Semester::find($this->modul->start);
         $end_sem = Semester::find($this->modul->end);
-        
+
         $code = trim($this->modulcode) ?: trim($this->modul->code);
-        
+
         $name = ($with_code && $code) ? $code . ' - ' : '';
         $name .= trim($this->bezeichnung) ?: trim($this->modul->getDeskriptor()->bezeichnung);
         if ($end_sem || $start_sem) {
@@ -77,13 +79,13 @@ class StgteilabschnittModul extends ModuleManagementModelTreeItem
                 $name .= sprintf(_(', gültig ab %s'), $start_sem->name);
             }
         }
-        
+
         return $name;
     }
-    
+
     /**
      * Retrieves all Modul assignments to the given Studiengangteil-Abschnitt.
-     * 
+     *
      * @param type $abschnitt_id The id of a Studiengangteil-Abschnitt.
      * @return array Array of Modul assignments.
      */
@@ -93,27 +95,27 @@ class StgteilabschnittModul extends ModuleManagementModelTreeItem
          . 'LEFT JOIN semester_data start_sem '
          . 'ON (mvv_modul.start = start_sem.semester_id) '
          . 'LEFT JOIN semester_data end_sem '
-         . 'ON (mvv_modul.end = end_sem.semester_id) '        
+         . 'ON (mvv_modul.end = end_sem.semester_id) '
          . 'LEFT JOIN mvv_stgteilabschnitt '
          . 'ON (mvv_stgteilabschnitt.abschnitt_id = mvv_stgteilabschnitt_modul.abschnitt_id) '
          . 'LEFT JOIN mvv_stgteilversion '
-         . 'ON (mvv_stgteilabschnitt.version_id = mvv_stgteilversion.version_id) '        
+         . 'ON (mvv_stgteilabschnitt.version_id = mvv_stgteilversion.version_id) '
          . 'WHERE mvv_stgteilabschnitt_modul.abschnitt_id = ? '
          . self::getFilterSql($filter)
-         . ' ORDER BY position, mkdate', array($abschnitt_id));                
-        
+         . ' ORDER BY position, mkdate', array($abschnitt_id));
+
         /*
         return parent::findBySql('abschnitt_id = '
                 . DbManager::get()->quote($abschnitt_id)
                 . ' ORDER BY position, chdate ASC');
-         * 
+         *
          */
     }
 
     /**
      * Returns the assigned Fachsemester. If the given Fachsemester is not
      * assigned, it returns null.
-     * 
+     *
      * @param string $modulteil_id
      * @param string $fachsemester
      * @return null|object
@@ -123,10 +125,10 @@ class StgteilabschnittModul extends ModuleManagementModelTreeItem
         return ModulteilStgteilabschnitt::find(
                 array($modulteil_id, $this->abschnitt_id, $fachsemester));
     }
-    
+
     /**
      * Returns an array of all assigned Fachsemester.
-     * 
+     *
      * @param string $modulteil_id
      * @return array Array of objects of assigned Fachsemester
      */
@@ -142,7 +144,7 @@ class StgteilabschnittModul extends ModuleManagementModelTreeItem
         }
         return $ret;
     }
-    
+
     /**
      * @see SimpleORMap::delete();
      */
@@ -155,10 +157,10 @@ class StgteilabschnittModul extends ModuleManagementModelTreeItem
                     . ' AND abschnitt_id = '
                     . DBManager::get()->quote($this->abschnitt_id));
         }
-        
+
         return parent::delete();
     }
-    
+
     /**
      * @see MvvTreeItem::getTrailParentId()
      */
@@ -166,7 +168,7 @@ class StgteilabschnittModul extends ModuleManagementModelTreeItem
     {
         return $this->abschnitt_id;
     }
-    
+
     /**
      * @see MvvTreeItem::getTrailParent()
      */
@@ -174,11 +176,11 @@ class StgteilabschnittModul extends ModuleManagementModelTreeItem
     {
         /* Augsburg
         return Abschluss::get($this->getTrailParentId());
-         * 
+         *
          */
         return StgteilAbschnitt::get($this->getTrailParentId());
     }
-    
+
     /**
      * @see MvvTreeItem::getChildren()
      */
@@ -194,7 +196,7 @@ class StgteilabschnittModul extends ModuleManagementModelTreeItem
                 . 'WHERE modul_id = ? ', array($this->modul_id));
         return $ret;
     }
-    
+
     /**
      * @see MvvTreeItem::hasChildren()
      */
@@ -202,7 +204,7 @@ class StgteilabschnittModul extends ModuleManagementModelTreeItem
     {
         return count($this->getChildren()) > 0;
     }
-    
+
     /**
      * @see MvvTreeItem::getParents()
      */
@@ -210,10 +212,10 @@ class StgteilabschnittModul extends ModuleManagementModelTreeItem
     {
         return array(StgteilAbschnitt::find($this->abschnitt_id));
     }
-    
+
      /**
      * Inherits the status of the parent StgteilAbschnitt.
-     * 
+     *
      * @return string the status of parent StgteilAbschnitt
      */
     public function getStatus()
