@@ -84,7 +84,7 @@ class Modulteil extends ModuleManagementModelTreeItem
     /**
      * @see ModuleManagementModel::getClassDisplayName
      */
-    public static function getClassDisplayName()
+    public static function getClassDisplayName($long = false)
     {
         return _('Modulteil');
     }
