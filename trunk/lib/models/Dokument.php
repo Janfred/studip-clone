@@ -59,7 +59,7 @@ class Dokument extends ModuleManagementModel
      * @param string $object A MVV object
      * @return array Array of documents.
      */
-    public static function findByObject($object)
+    public static function findByObject(SimpleORMap $object)
     {
         return parent::getEnrichedByQuery('SELECT md.*, mdz.position, '
                 . 'mdz.kommentar, mdz.kommentar_en, mdz.mkdate, mdz.chdate '
