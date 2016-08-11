@@ -56,8 +56,12 @@ class DokumentZuord extends ModuleManagementModel
      * @param SimpleORMap $object
      * @return type
      */
-    public static function findByObject(ModuleManagementModel $object)
+    public static function findByObject(SimpleORMap $object)
     {
+        if (!($object instanceof ModuleManagementModel)) {
+            throw new UnexpectedValueException();
+        }
+
         $sql = 'range_id = ? AND object_type = ? ORDER BY position,mkdate';
         return self::findBySQL($sql, array($object->getId(), get_class($object)));
     }
