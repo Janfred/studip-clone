@@ -23,7 +23,7 @@ class Module_ModuleController extends MVVController
     protected $show_sidebar_search = false;
     protected $show_sidebar_filter = false;
 
-    public function before_filter($action, $args)
+    public function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
         // set navigation
