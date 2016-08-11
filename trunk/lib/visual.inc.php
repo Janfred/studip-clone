@@ -793,11 +793,27 @@ function tooltip2($text, $with_alt = TRUE, $with_popup = FALSE) {
 /**
  * returns a html-snippet with an icon and a tooltip on it
  *
- * @param type $text
+ * @param string $text tooltip text, html gets encoded
+ * @param bool $important render icon in "important" style
  */
-function tooltipIcon($text, $important = false, $html = false)
+function tooltipIcon($text, $important = false)
 {
     // render tooltip
+    $html = false;
+    $template = $GLOBALS['template_factory']->open('shared/tooltip');
+    return $template->render(compact('text', 'important', 'html'));
+}
+
+/**
+ * returns a html-snippet with an icon and a tooltip on it
+ *
+ * @param string $text tooltip text, html is rendered as is
+ * @param bool $important render icon in "important" style
+ */
+function tooltipHtmlIcon($text, $important = false)
+{
+    // render tooltip
+    $html = true;
     $template = $GLOBALS['template_factory']->open('shared/tooltip');
     return $template->render(compact('text', 'important', 'html'));
 }

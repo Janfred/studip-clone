@@ -46,7 +46,7 @@
                     <?= htmlReady($fullname) ?>
                 </a>
                 <? if ($is_tutor && $dozent['comment'] != '') : ?>
-                    <?= tooltipIcon(sprintf('<strong>%s</strong><br>%s', _('Bemerkung'), htmlReady($dozent['comment'])), false, true) ?>
+                    <?= tooltipHtmlIcon(sprintf('<strong>%s</strong><br>%s', _('Bemerkung'), htmlReady($dozent['comment']))) ?>
                 <? endif ?>
             </td>
             <td style="text-align: right">

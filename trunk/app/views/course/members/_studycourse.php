@@ -15,7 +15,7 @@
                                       htmlReady(trim($course['fach'] . ' ' . $course['abschluss'])),
                                       htmlReady($course['semester'])) ?>
         <? endforeach ?>
-        <?= tooltipIcon('<strong>' . _('Weitere Studiengänge') . '</strong><br>' . $course_res, false, true) ?>
+        <?= tooltipHtmlIcon('<strong>' . _('Weitere Studiengänge') . '</strong><br>' . $course_res) ?>
         <? unset($course_res); ?>
     <? endif ?>
 <? endif ?>

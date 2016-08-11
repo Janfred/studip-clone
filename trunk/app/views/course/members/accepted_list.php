@@ -74,7 +74,7 @@
                         <?= htmlReady($fullname) ?>
                     </a>
                     <? if ($accept['comment'] != '') : ?>
-                        <?= tooltipIcon(sprintf('<strong>%s</strong><br>%s', _('Bemerkung'), htmlReady($accept['comment'])), false, true) ?>
+                        <?= tooltipIcon(sprintf('<strong>%s</strong><br>%s', _('Bemerkung'), htmlReady($accept['comment']))) ?>
                     <? endif ?>
                 </td>
                 <td>
