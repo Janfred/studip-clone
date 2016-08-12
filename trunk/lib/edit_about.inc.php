@@ -319,7 +319,7 @@ class about extends messaging
      */
     function select_inst()
     {
-        $query = "SELECT a.Institut_id, a.Name
+        $query = "SELECT a.Institut_id, a.Name, a.Institut_id = a.fakultaets_id AS is_fak
                   FROM Institute AS a
                   LEFT JOIN user_inst AS b ON (b.user_id = ? AND a.Institut_id = b.Institut_id)
                   WHERE b.Institut_id IS NULL
@@ -328,12 +328,17 @@ class about extends messaging
         $statement->execute(array(
             $this->auth_user['user_id']
         ));
-        $institutes = $statement->fetchGrouped(PDO::FETCH_COLUMN);
+        $institutes = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        echo '<select name="new_inst" id="select_new_inst">' . "\n";
-        echo '<option selected value=""> ' . _("-- Bitte Einrichtung auswählen --") . ' </option>'."\n";
-        foreach ($institutes as $id => $name) {
-            printf('<option value="%s">%s</option>' . "\n", $id, htmlReady(my_substr($name, 0, 50)));
+        echo '<select name="new_inst" id="select_new_inst" class="nested-select">' . "\n";
+        echo '<option value="" class="is-placeholder"> ' . _("-- Bitte Einrichtung auswählen --") . ' </option>'."\n";
+        foreach ($institutes as $institute) {
+            printf(
+                '<option value="%s" class="%s">%s</option>' . "\n",
+                $institute['Institut_id'],
+                $institute['is_fak'] ? 'nested-item-header' : 'nested-item',
+                htmlReady(my_substr($institute['Name'], 0, 50))
+            );
         }
         echo "</select>\n";
     }
