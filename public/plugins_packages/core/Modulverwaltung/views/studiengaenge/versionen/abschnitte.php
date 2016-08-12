@@ -10,12 +10,7 @@
             <td class="toggle-indicator">
                 <a class="mvv-load-in-new-row" href="<?= $controller->url_for('/details_abschnitt', $abschnitt->id) ?>"><?= htmlReady($abschnitt->name) ?></a>
             </td>
-            <td class="dont-hide actions" style="white-space: nowrap;">
-            <? if (MvvPerm::haveFieldPermMvv_modul($version, MvvPerm::PERM_CREATE)) : ?>
-                 <a class="mvv-load-in-new-row" href="<?= $controller->url_for('/details_abschnitt', $abschnitt->id) ?>">
-                    <?= Icon::create('add', 'clickable', array('title' => _('Modul hinzufügen')))->asImg(); ?>
-                </a>
-            <? endif; ?>
+            <td class="dont-hide actions" style="white-space: nowrap;">            
             <? if (MvvPerm::havePermWrite($version)) : ?>
                 <a data-dialog title="<?= _('Studiengangteil-Abschnitt bearbeiten') ?>" href="<?= $controller->url_for('/abschnitt', $abschnitt->id) ?>">
                     <?= Icon::create('edit', 'clickable', array())->asImg(); ?>
