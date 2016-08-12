@@ -81,15 +81,17 @@ use Studip\Button, Studip\LinkButton;
             <td>
             <? if ($ObjectPerms->havePerm('admin')) : ?>
                 <br>
-                <select name="change_institut_id">
-                    <option value="0">&lt;<?= _('keine Zuordnung') ?>&gt;</option>
+                <select name="change_institut_id" class="nested-select">
+                    <option value="" class="is-placeholder">
+                        &lt;<?= _('keine Zuordnung') ?>&gt;
+                    </option>
                 <? foreach ($EditResourceData->selectFaculties() as $institute_id => $faculty): ?>
-                    <option style="font-weight:bold;" value="<?= $institute_id ?>"
+                    <option class="nested-item-header" value="<?= $institute_id ?>"
                             <? if ($institute_id == $resObject->getInstitutId()) echo 'selected'; ?>>
                         <?= htmlReady(my_substr($faculty['Name'], 0, 50)) ?>
                     </option>
                     <? foreach ($faculty['institutes'] as $institute_id => $name): ?>
-                        <option style="padding-left: 1.5em;" value="<?= $institute_id ?>"
+                        <option class="nested-item" value="<?= $institute_id ?>"
                                 <? if ($institute_id == $resObject->getInstitutId()) echo 'selected'; ?>>
                             <?= htmlReady(my_substr($name, 0, 50)) ?>
                         </option>

@@ -3,20 +3,20 @@
     <div style="font-weight:bold">
     <?=_("Einrichtung:")?>
     </div>
-    <select name="choose_institut_id" style="vertical-align:middle;">
-    <? while (list($institut_id,$institute) = each($myInstitutes)) : ?>
-    <option <?=($current_institut_id == $institut_id ? 'selected' : '')?> <?=($institute["is_fak"] ? 'style="font-weight:bold;"' : "") ?> value="<?= $institut_id?>">
-    <?= htmlReady(my_substr($institute["name"] . ' (' . $institute["num_sets"] . ')',0,100));?>
-    </option>
-    <? if ($institute["is_fak"] == 'all') : ?>
-        <? $num_inst = $institute["num_inst"]; for ($i = 0; $i < $num_inst; ++$i) : ?>
+    <select name="choose_institut_id" class="nested-select">
+<? while (list($institut_id,$institute) = each($myInstitutes)) : ?>
+        <option value="<?= $institut_id ?>" <?=($current_institut_id == $institut_id ? 'selected' : '')?> class="<?= $institute['is_fak'] ? 'nested-item-header' : 'nested-item' ?>">
+            <?= htmlReady(my_substr($institute["name"] . ' (' . $institute["num_sets"] . ')',0,100));?>
+        </option>
+    <? if ($institute['is_fak'] === 'all') : ?>
+        <? $num_inst = $institute['num_inst']; for ($i = 0; $i < $num_inst; ++$i) : ?>
             <? list($institut_id,$institute) = each($myInstitutes);?>
-            <option <?=($current_institut_id == $institut_id ? 'selected' : '')?> value="<?= $institut_id?>">
-            &nbsp;&nbsp;<?= htmlReady(my_substr($institute["name"] . ' (' . $institute["num_sets"] . ')',0,100));?>
+            <option value="<?= $institut_id?>" <?=($current_institut_id == $institut_id ? 'selected' : '')?> class="nested-item">
+                <?= htmlReady(my_substr($institute["name"] . ' (' . $institute["num_sets"] . ')',0,100));?>
             </option>
         <? endfor ?>
     <? endif ?>
-    <? endwhile ?>
+<? endwhile ?>
     </select>
     <br/><br/>
     <div style="font-weight:bold">

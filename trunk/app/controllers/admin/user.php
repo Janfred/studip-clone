@@ -425,7 +425,7 @@ class Admin_UserController extends AuthenticatedController
 
             //change institute for studiendaten
             if (in_array($editPerms[0], array('autor', 'tutor', 'dozent'))
-                    && Request::option('new_student_inst') != 'none'
+                    && Request::option('new_student_inst')
                     && Request::option('new_student_inst') != Request::option('new_inst')
                     && $GLOBALS['perm']->have_studip_perm("admin", Request::option('new_student_inst'))) {
                 log_event('INST_USER_ADD', Request::option('new_student_inst'), $user_id, 'user');
@@ -437,7 +437,7 @@ class Admin_UserController extends AuthenticatedController
             }
 
             //change institute
-            if (Request::option('new_inst') != 'none'
+            if (Request::option('new_inst')
                     && Request::option('new_student_inst') != Request::option('new_inst')
                     && $editPerms[0] != 'root'
                     && $GLOBALS['perm']->have_studip_perm("admin", Request::option('new_inst'))) {

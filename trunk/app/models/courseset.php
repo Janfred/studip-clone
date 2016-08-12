@@ -142,8 +142,9 @@ class CoursesetModel {
             $num_sets = $cs_count_all_statement->fetchColumn();
 
             $my_inst['all'] = array(
-                    'name'    => _('alle'),
-                    'num_sets' => $num_sets
+                'name'     => _('alle'),
+                'is_fak'   => true,
+                'num_sets' => $num_sets
             );
             $top_insts = Institute::findBySQL('Institut_id = fakultaets_id ORDER BY Name');
         } else {

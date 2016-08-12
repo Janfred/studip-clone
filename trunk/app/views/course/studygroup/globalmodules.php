@@ -42,17 +42,19 @@ use Studip\Button, Studip\LinkButton;
             <?= _("Alle Studiengruppen werden folgender Einrichtung zugeordnet:") ?><br>
         </td>
         <td>
-            <select name="institute">
+            <select name="institute" class="nested-select">
             <? if (!Config::getInstance()->getValue('STUDYGROUPS_ENABLE')):?>
-                <option value='invalid' selected><?= _("-- bitte auswählen --")?></option>
+                <option value="" class="is-placeholder">
+                    <?= _('-- Bitte auswählen --') ?>
+                </option>
             <? endif ?>
             <? foreach ($institutes as $fak_id => $faculty) : ?>
-                <option value="<?= $fak_id ?>" style="font-weight: bold"
+                <option value="<?= $fak_id ?>" class="nested-item-header"
                     <?= ($fak_id == $default_inst) ? 'selected="selected"' : ''?>>
                     <?= htmlReady(my_substr($faculty['name'], 0, 60)) ?>
                 </option>
                 <? foreach ($faculty['childs'] as $inst_id => $inst_name) : ?>
-                <option value="<?= $inst_id ?>"
+                <option value="<?= $inst_id ?>" class="nested-item"
                     <?= ($inst_id == $default_inst) ? 'selected="selected"' : ''?>>
                     <?= htmlReady(my_substr($inst_name, 0, 60)) ?>
                 </option>

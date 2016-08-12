@@ -50,7 +50,7 @@ $export_pagecontent .= "<form method=\"POST\" action=\"" . URLHelper::getURL() .
 
 $export_pagecontent .= CSRFProtection::tokenTag();
 
-$export_pagecontent .="<br><b>". _("Bitte wählen Sie eine Einrichtung: ") .  "</b><br><select name=\"range_id\">";
+$export_pagecontent .="<br><b>". _("Bitte wählen Sie eine Einrichtung: ") .  "</b><br><select name=\"range_id\" class=\"nested-select\">";
 
 // Prepare institutes statement for faculty
 $query = "SELECT Institut_id, Name
@@ -68,7 +68,7 @@ $statement = DBManager::get()->query($query);
 $faculties = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 foreach ($faculties as $faculty) {
-    $export_pagecontent .= "<option style=\"font-weight:bold;\" ";
+    $export_pagecontent .= "<option class=\"nested-item-header\" ";
 
     if ($range_id == $faculty['fakultaets_id']) {
         $export_pagecontent .= " selected";
@@ -78,17 +78,17 @@ foreach ($faculties as $faculty) {
 
     $inst_statement->execute(array($faculty['Institut_id']));
     while ($institute = $inst_statement->fetch(PDO::FETCH_ASSOC)) {
-        $export_pagecontent .= sprintf("<option value=\"%s\"", $institute['Institut_id']);
+        $export_pagecontent .= sprintf("<option value=\"%s\" class=\"nested-item\"", $institute['Institut_id']);
         if ($range_id == $institute['Institut_id'] && $range_id != $faculty['Institut_id']) {
             $export_pagecontent .= " selected";
         }
-        $export_pagecontent .= sprintf(">&nbsp;&nbsp;&nbsp;&nbsp;%s </option>\n", htmlReady(my_substr($institute['Name'], 0, 60)));
+        $export_pagecontent .= sprintf(">%s </option>\n", htmlReady(my_substr($institute['Name'], 0, 60)));
     }
     $inst_statement->closeCursor();
 }
 
 if ($perm->have_perm("root")) {
-    $export_pagecontent .= "<option style=\"font-weight:bold;\" value=\"root\">Alle Einrichtungen";
+    $export_pagecontent .= "<option class=\"nested-item-header\" value=\"root\">Alle Einrichtungen";
 }
 
 $export_pagecontent .= "</select><br><br>";

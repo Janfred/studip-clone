@@ -210,7 +210,7 @@ $the_tree->showSemTree();
     </p>
     <form action="<?=URLHelper::getLink($the_tree->getSelf("cmd=MarkList"))?>" method="post">
     <?= CSRFProtection::tokenTag() ?>
-    <select multiple size="20" name="sem_mark_list[]" style="font-size:8pt;width:100%">
+    <select multiple size="20" name="sem_mark_list[]" style="font-size:8pt;width:100%" class="nested-select">
     <?
     $cols = 50;
     if (is_array($_SESSION['_marked_sem']) && count($_SESSION['_marked_sem'])){
@@ -218,12 +218,14 @@ $the_tree->showSemTree();
         $entries = new DbSnapshot($view->get_query("view:SEMINAR_GET_SEMDATA"));
         $sem_data = $entries->getGroupedResult("seminar_id");
         $sem_number = -1;
-        foreach($sem_data as $seminar_id => $data){
+        foreach ($sem_data as $seminar_id => $data) {
             if (key($data['sem_number']) != $sem_number){
+                if ($sem_numer !== -1) {
+                    echo '</optgroup>';
+                }
+
                 $sem_number = key($data['sem_number']);
-                echo "\n<option value=\"0\" style=\"font-weight:bold;color:red;\">&nbsp;</option>";
-                echo "\n<option value=\"0\" style=\"font-weight:bold;color:red;\">" . $the_tree->tree->sem_dates[$sem_number]['name'] . ":</option>";
-                echo "\n<option value=\"0\" style=\"font-weight:bold;color:red;\">" . str_repeat("¯",floor($cols * .8)) . "</option>";
+                echo "\n<optgroup label=\"" . $the_tree->tree->sem_dates[$sem_number]['name'] . "\">";
             }
             $sem_name = key($data["Name"]);
             $sem_number_end = key($data["sem_number_end"]);
@@ -235,6 +237,7 @@ $the_tree->showSemTree();
             $tooltip = $sem_name . " (" . join(",",array_keys($data["doz_name"])) . ")";
             echo "\n<option value=\"$seminar_id\" " . tooltip($tooltip,false) . ">$line</option>";
         }
+        echo '</optgroup>';
     }
     ?>
     </select><br>&nbsp;<br><select name="mark_list_aktion" style="font-size:8pt;width:100%;">

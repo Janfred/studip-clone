@@ -60,6 +60,8 @@ javascripts:
     - javascripts/vendor/chartist.min.js
     - javascripts/init.js
 
+    - javascripts/vendor/select2-4.0.3.min.js
+
     - javascripts/studip-ui.js
     - javascripts/studip-helper-attributes.js
 

@@ -834,12 +834,17 @@ class Admin_CoursesController extends AuthenticatedController
     private function setInstSelector()
     {
         $sidebar = Sidebar::Get();
-        $list = new SelectWidget(_('Einrichtung'), $this->url_for('admin/courses/set_selection'), 'institute');
+        $list = new SelectWidget(
+            _('Einrichtung'),
+            $this->url_for('admin/courses/set_selection'),
+            'institute'
+        );
+        $list->class = 'institute-list';
 
         if ($GLOBALS['perm']->have_perm('root') || (count($this->insts) > 1)) {
             $list->addElement(new SelectElement(
                 'all',
-                $GLOBALS['perm']->have_perm('root') ? _('Alle') : _("Alle meine Einrichtungen"),
+                $GLOBALS['perm']->have_perm('root') ? _('Alle') : _('Alle meine Einrichtungen'),
                 $GLOBALS['user']->cfg->MY_INSTITUTES_DEFAULT === 'all'),
                 'select-all'
             );
@@ -849,15 +854,14 @@ class Admin_CoursesController extends AuthenticatedController
             $list->addElement(
                 new SelectElement(
                     $institut['Institut_id'],
-                    (!$institut['is_fak'] ? "  " : "") . $institut['Name'],
+                    (!$institut['is_fak'] ? ' ' : '') . $institut['Name'],
                     $GLOBALS['user']->cfg->MY_INSTITUTES_DEFAULT === $institut['Institut_id']
                 ),
                 'select-' . $institut['Name']
             );
         }
 
-
-        $sidebar->addWidget($list, "filter_institute");
+        $sidebar->addWidget($list, 'filter_institute');
     }
 
     /**
@@ -868,7 +872,7 @@ class Admin_CoursesController extends AuthenticatedController
         $semesters = array_reverse(Semester::getAll());
         $sidebar = Sidebar::Get();
         $list = new SelectWidget(_('Semester'), $this->url_for('admin/courses/set_selection'), 'sem_select');
-        $list->addElement(new SelectElement("all", _("Alle")), 'sem_select-all');
+        $list->addElement(new SelectElement('all', _('Alle')), 'sem_select-all');
         foreach ($semesters as $semester) {
             $list->addElement(new SelectElement(
                 $semester->id,
@@ -877,7 +881,7 @@ class Admin_CoursesController extends AuthenticatedController
             ), 'sem_select-' . $semester->id);
         }
 
-        $sidebar->addWidget($list, "filter_semester");
+        $sidebar->addWidget($list, 'filter_semester');
     }
 
 
@@ -912,13 +916,42 @@ class Admin_CoursesController extends AuthenticatedController
         $this->types = array();
         $this->selected = $selected;
 
-        $this->render_template('admin/courses/filters/course_type_filter.php', null);
-        $html = $this->response->body;
-        $this->erase_response();
-        $widget = new SidebarWidget();
-        $widget->setTitle(_('Veranstaltungstyp-Filter'));
-        $widget->addElement(new WidgetElement($html));
-        $sidebar->addWidget($widget, 'filter_coursetypes');
+        $list = new SelectWidget(
+            _('Veranstaltungstyp-Filter'),
+            $this->url_for('admin/courses/set_course_type'),
+            'course-type'
+        );
+        $list->addElement(new SelectElement(
+            'all', _('Alle'), $selected === 'all'
+        ), 'course-type-all');
+        foreach ($GLOBALS['SEM_CLASS'] as $class_id => $class) {
+            if ($class['studygroup_mode']) {
+                continue;
+            }
+
+            $element = new SelectElement(
+                $class_id,
+                $class['name'],
+                $selected === $class_id
+            );
+            $list->addElement(
+                $element->setAsHeader(),
+                'course-type-' . $class_id
+            );
+
+            foreach ($class->getSemTypes() as $id => $result) {
+                $element = new SelectElement(
+                    $class_id . '_' . $id,
+                    $result['name'],
+                    $selected === $class_id . '_' . $id
+                );
+                $list->addElement(
+                    $element->setIndentLevel(1),
+                    'course-type-' . $class_id . '_' . $id
+                );
+            }
+        }
+        $sidebar->addWidget($list, 'filter-course-type');
     }
 
     /**
