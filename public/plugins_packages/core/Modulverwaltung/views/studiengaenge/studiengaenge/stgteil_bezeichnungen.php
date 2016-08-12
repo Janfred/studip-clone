@@ -15,13 +15,7 @@
                     <?= htmlReady($bez_stgteil->name) ?>
                 <? endif; ?>
                 </td>
-                <td class="dont-hide actions">
-                <? if (MvvPerm::haveFieldPermStudiengangteil($studiengang, MVVPerm::PERM_CREATE)) : ?>
-                    <a class="mvv-load-in-new-row" href="<?= $controller->url_for('/details', $studiengang->id, $bez_stgteil->id) ?>">
-                   <?= Icon::create('add', 'clickable', array('title' => _('Studiengangteil zuordnen')))->asImg(); ?>
-                    </a>
-                <? endif; ?>
-                </td>
+                <td class="dont-hide actions"></td>
             </tr>
             <? if ($stg_stgbez_id == $studiengang->id . '_' . $bez_stgteil->id) : ?>
             <tr class="loaded-details nohover">
