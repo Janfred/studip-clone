@@ -123,7 +123,7 @@
 
     // Use select2 for crossbrowser compliant select styling and
     // handling
-    $(window).on('load dialog-update', function () {
+    $(document).on('ready dialog-update', function () {
         $('select.nested-select:not(:has(optgroup))').each(function () {
             var select_classes = $(this).attr('class'),
                 option         = $('<option>'),
