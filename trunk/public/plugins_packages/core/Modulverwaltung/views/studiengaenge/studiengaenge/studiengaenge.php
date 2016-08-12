@@ -26,18 +26,7 @@
                 <a data-dialog="title='<?= $studiengang->getDisplayName() ?>'" href="<?= $controller->url_for('/approve', $studiengang->id) ?>">
                     <?= Icon::create('accept', 'clickable', ['title' => _('Studiengang genehmigen')]) ?>
                 </a>
-            <? endif; ?>
-            <? if ($perm->haveFieldPerm('studiengangteile', MvvPerm::PERM_CREATE)) : ?>
-                <? if ($studiengang->typ == 'mehrfach') : ?>
-                <a class="mvv-load-in-new-row" href="<?= $controller->url_for('/details', $studiengang->id) ?>">
-                    <?= Icon::create('add', 'clickable', ['title' => _('Studiengangteil hinzufügen')]) ?>
-                </a>
-                <? else : ?>
-                <a class="mvv-load-in-new-row" href="<?= $controller->url_for('/details', $studiengang->id) ?>">
-                    <?= Icon::create('add', 'clickable', ['title' => _('Studiengangteil hinzufügen')]) ?>
-                </a>
-                <? endif; ?>
-            <? endif; ?>
+            <? endif; ?>            
             <? if ($perm->havePerm(MvvPerm::PERM_WRITE)) : ?>
                 <a href="<?= $controller->url_for('/studiengang', $studiengang->id) ?>">
                     <?= Icon::create('edit', ['title' => _('Studiengang bearbeiten')]) ?>

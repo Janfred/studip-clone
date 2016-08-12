@@ -6,10 +6,10 @@
         </colgroup>
         <? foreach ($modul->modulteile as $modulteil) : ?>
         <? $perm = MvvPerm::get($modulteil) ?>
-        <tbody class="<?= (count($modulteil->lvgruppen) ? '' : 'empty ') ?><?= ($modulteil_id == $modulteil->getId() ? 'not-collapsed' : 'collapsed') ?><?= $perm->haveFieldPerm('position') ? ' sort_items' : '' ?>" id="<?= $modulteil->getId() ?>">
+        <tbody class="<?= ($modulteil_id == $modulteil->getId() ? 'not-collapsed' : 'collapsed') ?><?= $perm->haveFieldPerm('position') ? ' sort_items' : '' ?>" id="<?= $modulteil->getId() ?>">
             <tr class="header-row">
                 <td class="toggle-indicator">
-                <? if (count($modulteil->lvgruppen)) : ?>
+                <? if (count($modulteil->lvgruppen) || $perm->haveFieldPermLvgruppen(MvvPerm::PERM_CREATE)) : ?>
                         <a class="mvv-load-in-new-row" href="<?= $controller->url_for('/modulteil_lvg', $modulteil->id) ?>"><?= htmlReady($modulteil->getDisplayName()) ?></a>
                 <? else : ?>
                         <?= htmlReady($modulteil->getDisplayName()) ?>
@@ -25,14 +25,7 @@
                     <? endforeach; ?>
                 <? endif; ?>
                 </td>
-                <td class="dont-hide actions" style="white-space: nowrap;">
-                <? if ($perm->haveFieldPermLvgruppen(MvvPerm::PERM_CREATE)) : ?>
-                    <? if (!count($modulteil->lvgruppen)) : ?>
-                        <a class="mvv-load-in-new-row" href="<?= $controller->url_for('/modulteil_lvg', $modulteil->id) ?>">
-                            <?= Icon::create('add', 'clickable', array('title' => _('LV-Gruppe hinzufügen/bearbeiten')))->asImg(); ?>
-                        </a>
-                    <? endif; ?>
-                <? endif; ?>
+                <td class="dont-hide actions" style="white-space: nowrap;">                
                 <? if(MvvPerm::havePermCreate('Lvgruppe')
                             && $perm->haveFieldPermLvgruppen(MvvPerm::PERM_CREATE)) : ?>
                     <a data-dialog="title='<?= _('Neue LV-Gruppe anlegen') ?>'" href="<?= $controller->url_for('/new_lvgruppe', $modulteil->id) ?>">
