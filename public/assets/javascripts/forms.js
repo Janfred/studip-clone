@@ -123,12 +123,14 @@
 
     // Use select2 for crossbrowser compliant select styling and
     // handling
-    $(document).on('ready dialog-update', function () {
+    $(window).on('load dialog-update', function () {
         $('select.nested-select:not(:has(optgroup))').each(function () {
             var select_classes = $(this).attr('class'),
                 option         = $('<option>'),
                 wrapper        = $('<div class="select2-wrapper">'),
                 placeholder;
+
+            $(this).css('width', $(this).outerWidth(true));
 
             if ($('.is-placeholder', this).length > 0) {
                 placeholder = $('.is-placeholder', this).text();
@@ -165,10 +167,10 @@
                     }
 
                     return result;
-                }
+                },
+                width: 'style'
             });
 
-            wrapper.width($(this).next().width());
             $(this).next().andSelf().wrapAll(wrapper);
         });
 
