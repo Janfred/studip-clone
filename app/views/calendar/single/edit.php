@@ -96,10 +96,12 @@
                     </label>
                 </td>
                 <td colspan="2">
-                    <select name="category_intern" id="category-intern" size="1">
-                        <? foreach ($GLOBALS['PERS_TERMIN_KAT'] as $key => $category) : ?>
-                        <option value="<?= $key ?>" style="color: <?= $category['color'] ?>"<?= $key == $event->getCategory() ? ' selected' : '' ?>><?= $category['name'] ?></option>
-                        <? endforeach; ?>
+                    <select name="category_intern" id="category-intern" size="1" class="nested-select">
+                    <? foreach ($GLOBALS['PERS_TERMIN_KAT'] as $key => $category) : ?>
+                        <option value="<?= $key ?>" <?= $key == $event->getCategory() ? 'selected' : '' ?> data-text-color="<?= $category['color'] ?>">
+                            <?= htmlReady($category['name']) ?>
+                        </option>
+                    <? endforeach; ?>
                     </select>
                     <input type="text" size="40" name="categories" value="<?= htmlReady($event->getUserDefinedCategories()) ?>">
                     <?= tooltipicon(_('Sie können beliebige Kategorien in das Freitextfeld eingeben. Trennen Sie einzelne Kategorien bitte durch ein Komma.')) ?>

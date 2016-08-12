@@ -73,7 +73,7 @@
         <? if ($perm_institutes !== false) : ?>
         <label>
             <?= _('Verantw. Einrichtung:') ?><br>
-            <select name="institut_filter" class="sidebar-selectlist" onchange="document.getElementById('index_filter').submit();">
+            <select name="institut_filter" class="sidebar-selectlist nested-select" onchange="document.getElementById('index_filter').submit();">
                 <option value=""><?= _('-- Einrichtung wählen --') ?></option>
                 <? $fak = '' ?>
                 <? foreach ($institute as $institut) : ?>
@@ -85,14 +85,14 @@
                             echo '<option value="' . $institut->getId()
                                 . ($institut->getId() == $selected_institut ?
                                         '" selected' : '"')
-                                . ' style="font-weight: bold;">'
+                                . ' class="nested-item-header">'
                                 . htmlReady($institut->name
                                 . ' (' . $institut->count_objects . ')') . '</option>';
                         } else {
                             /*
                             if ($fak != $institut->fakultaets_id) {
                                 $fak = $institut->fakultaets_id;
-                                echo '<option value="" disabled style="font-weight: bold; color:#aaaaaa;">'
+                                echo '<option value="" disabled class="nested-item-header">'
                                     . htmlReady($institut->faculty_name)
                                     . '</option>';
                             }
@@ -101,7 +101,7 @@
                             echo '<option value="' . $institut->getId()
                                 . ($institut->getId() == $selected_institut ?
                                     '" selected' : '"')
-                                . ' style="padding-left: 1em;">'
+                                . ' class="nested-item">'
                                 . htmlReady($institut->name
                                 . ' (' . $institut->count_objects . ')')
                                 . '</option>';

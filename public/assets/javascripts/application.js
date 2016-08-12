@@ -399,7 +399,6 @@ jQuery(document).on('click', '.course-admin td .course-completion', function () 
     return false;
 });
 
-
 jQuery(document).on('dialog-update', function (event) {
     jQuery('.add_toolbar').addToolbar();
 

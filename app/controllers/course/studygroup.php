@@ -1003,12 +1003,12 @@ class Course_StudygroupController extends AuthenticatedController
         $perm->check("root");
         PageLayout::setHelpKeyword('Admin.Studiengruppen');
 
-        if (Request::quoted('institute') == 'invalid') {
-            $errors[] = _("Bitte wählen Sie eine Einrichtung aus, der die Studiengruppen zugeordnet werden sollen!");
+        if (!Request::get('institute')) {
+            $errors[] = _('Bitte wählen Sie eine Einrichtung aus, der die Studiengruppen zugeordnet werden sollen!');
         }
 
-        if (!Request::quoted('terms') || Request::quoted('terms') == 'invalid') {
-            $errors[] = _("Bitte tragen Sie Nutzungsbedingungen ein!");
+        if (!trim(Request::get('terms'))) {
+            $errors[] = _('Bitte tragen Sie Nutzungsbedingungen ein!');
         }
 
         if ($errors) {
@@ -1025,8 +1025,8 @@ class Course_StudygroupController extends AuthenticatedController
             }
 
             if (Request::get('institute')) {
-                $cfg->store('STUDYGROUP_DEFAULT_INST', Request::quoted('institute'));
-                $cfg->store('STUDYGROUP_TERMS', Request::quoted('terms'));
+                $cfg->store('STUDYGROUP_DEFAULT_INST', Request::get('institute'));
+                $cfg->store('STUDYGROUP_TERMS', Request::get('terms'));
                 $this->flash['success'] = _("Die Einstellungen wurden gespeichert!");
             } else {
                 $this->flash['error'] = _("Fehler beim Speichern der Einstellung!");

@@ -214,8 +214,9 @@ class Admission_RestrictedCoursesController extends AuthenticatedController
             $num_sem = $statement->fetchColumn();
 
             $_my_inst['all'] = array(
-                    'name'    => _('alle'),
-                    'num_sem' => $num_sem
+                'name'    => _('alle'),
+                'is_fak'  => true,
+                'num_sem' => $num_sem,
             );
             $query = "SELECT a.Institut_id, a.Name, 1 AS is_fak, COUNT(courseset_rule.type) AS num_sem
             FROM Institute AS a

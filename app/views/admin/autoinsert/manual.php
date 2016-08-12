@@ -54,7 +54,7 @@ use Studip\Button, Studip\LinkButton;
             </tr>
         </thead>
         <tbody>
-            <tr class="<?= TextHelper::cycle('hover_odd', 'hover_even') ?>">
+            <tr>
                 <td>
                     <label for="sem_id"><?= _('Veranstaltung:') ?></label>
                 </td>
@@ -69,7 +69,7 @@ use Studip\Button, Studip\LinkButton;
                 </td>
             </tr>
         <? if (count($filtertype) != count($available_filtertypes)): ?>
-            <tr class="<?= TextHelper::cycle('hover_odd', 'hover_even') ?>">
+            <tr>
                 <td>
                     <legend for="add_filtertype"><?= _('Filterkriterien') ?>:</legend>
                 </td>
@@ -89,26 +89,26 @@ use Studip\Button, Studip\LinkButton;
 
         <!-- #2 Auswahllisten anzeigen -->
     <? if (!empty($filtertype)): ?>
-        <tbody class="default filter_selection">
+        <tbody class="default filter_selection" style="vertical-align: top;">
             <tr>
                 <th colspan="3"><?= _('Ausgewählte Filterkriterien') ?></th>
             </tr>
         <? $index = 0; foreach ($filtertype as $type): ?>
           <? if ($index%2 == 0): ?>
             <? if ($index != 0): ?></tr><? endif ?>
-            <tr class="<?= TextHelper::cycle('hover_odd', 'hover_even') ?>">
+            <tr>
           <? endif ?>
                 <td colspan="<?= $index % 2 ? 1 : 2 ?>">
                     <label for="<?= $type ?>"><b><?= $available_filtertypes[$type] ?></b></label>
                     <?= Icon::create('remove', 'clickable', ['title' => _('Filter entfernen')])->asInput(["type" => "image", "class" => "middle", "name" => "remove_filter[".$type."]"]) ?>
                     <br>
 
-                    <select name="filter[<?= $type ?>][]" multiple="multiple" size="5">
+                    <select name="filter[<?= $type ?>][]" multiple size="5" class="nested-select">
                     <? foreach ($values[$type] as $key => $value): ?>
                      <? if (is_array($value)): ?>
-                        <option value="<?= $key ?>" style="font-weight: bold;" <?= in_array($key, (array)@$filter[$type]) ? 'selected="selected"' : '' ?>><?= htmlReady($value['name']) ?></option>
+                        <option value="<?= $key ?>" class="nested-item-header" <?= in_array($key, (array)@$filter[$type]) ? 'selected="selected"' : '' ?>><?= htmlReady($value['name']) ?></option>
                       <? foreach ($value['values'] as $k => $v): ?>
-                        <option value="<?= $k ?>" style="padding-left: 10px;" <?= in_array($k, (array)@$filter[$type]) ? 'selected="selected"' : '' ?>><?= htmlReady($v) ?></option>
+                        <option value="<?= $k ?>" class="nested-item" <?= in_array($k, (array)@$filter[$type]) ? 'selected="selected"' : '' ?>><?= htmlReady($v) ?></option>
                       <? endforeach; ?>
                      <? else: ?>
                         <option value="<?= $key ?>" <?= in_array($key, (array)@$filter[$type]) ? 'selected="selected"' : '' ?>><?= htmlReady($value) ?></option>

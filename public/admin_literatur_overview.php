@@ -170,7 +170,7 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
                 </tr>
                 <tr>
                     <td class="table_row_even">
-                    <font size=-1><select name="_inst_id" size="1" style="vertical-align:middle">
+                        <select name="_inst_id" class="nested-select">
                     <?
                     // Prepare inner statement that obtains all institutes
                     // for a given faculty
@@ -227,11 +227,11 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
                     $statement->execute($parameters);
                     $institutes = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-                    printf ("<option value=\"-1\">%s</option>\n", _("-- bitte Einrichtung auswählen --"));
+                    printf ("<option value=\"\" class=\"is-placeholder\">%s</option>\n", _("-- Bitte Einrichtung auswählen --"));
                     foreach ($institutes as $institute) {
-                        printf("<option value=\"%s\" style=\"%s\" %s>%s </option>\n",
+                        printf("<option value=\"%s\" class=\"%s\" %s>%s </option>\n",
                                $institute['Institut_id'],
-                               $institute['is_fak'] ? 'font-weight:bold;' : '',
+                               $institute['is_fak'] ? 'nested-item-header' : 'nested-item',
                                $institute['Institut_id'] == Request::option('_inst_id') ? ' selected ' : '',
                                htmlReady(substr($institute['Name'], 0, 70)) . ' (' . $institute['anzahl'] . ')');
                         if ($institute['is_fak']) {
@@ -241,7 +241,7 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
 
                             $institute_statement->execute(array($institute['Institut_id']));
                             while ($row = $institute_statement->fetch(PDO::FETCH_ASSOC)) {
-                                printf("<option value=\"%s\" %s>&nbsp;&nbsp;&nbsp;&nbsp;%s </option>\n",
+                                printf("<option value=\"%s\" %s class=\"nested-item\">%s </option>\n",
                                        $row['Institut_id'],
                                        $row['Institut_id'] == Request::option('_inst_id') ? ' selected ' : '',
                                        htmlReady(substr($row['Name'], 0, 70)) . ' (' . $row['anzahl'] . ')');

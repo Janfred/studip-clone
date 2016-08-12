@@ -77,7 +77,20 @@ class SelectWidget extends SidebarWidget
         }
         $this->template_variables['attributes'] = implode(' ', $attributes) ?: '';
 
+        $variables['__is_nested'] = $this->hasNestedElements();
 
         return parent::render($variables);
+    }
+
+    protected function hasNestedElements()
+    {
+        foreach ($this->elements as $element) {
+            if ($element instanceof SelectElement
+                && ($element->isHeader() || $element->getIndentLevel() > 0))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -312,13 +312,17 @@ class ExternEditHtml extends ExternEditGeneric {
         $out .= "<select name=\"_{$form_name}\" ";
         $out .= "onChange=\"document.edit_form.{$form_name}.value=document.edit_form._{$form_name}.";
         $out .= "options[document.edit_form._{$form_name}.selectedIndex].value;\" ";
-        $out .= ">\n";
+        $out .= " class=\"nested-select\">\n";
         foreach ($colors as $color_name => $color_value) {
-            if ($value == $color_value)
+            if ($value == $color_value) {
                 $out .= "<option selected=\"selected\" ";
-            else
+            } else {
                 $out .= "<option ";
-            $out .= "style=\"color:$color_value;\" value=\"$color_value\">";
+            }
+            if (!$color_value) {
+                $out .= ' class="is-placeholder"';
+            }
+            $out .= "data-text-color=\"$color_value\" value=\"$color_value\">";
             $out .= $color_name . "</option>";
         }
         $out .= "</select>\n";

@@ -14,15 +14,15 @@ use Studip\Button, Studip\LinkButton;
 <form action="<?= $controller->url_for('admin/plugin/save_default_activation', $plugin_id) ?>" method="post">
     <?= CSRFProtection::tokenTag() ?>
     <input type="hidden" name="studip_ticket" value="<?= get_ticket() ?>">
-    <select name="selected_inst[]" multiple size="20">
+    <select name="selected_inst[]" multiple size="20" class="nested-select" style="width: 100%">
         <? foreach ($institutes as $id => $institute): ?>
-            <option style="font-weight: bold;" value="<?= $id ?>" <?= in_array($id, $selected_inst) ? 'selected' : '' ?>>
+            <option class="nested-item-header" value="<?= $id ?>" <?= in_array($id, $selected_inst) ? 'selected' : '' ?>>
                 <?= htmlReady($institute['name']) ?>
             </option>
 
             <? if (isset($institute['children'])): ?>
                 <? foreach ($institute['children'] as $id => $child): ?>
-                    <option style="padding-left: 1em;" value="<?= $id ?>" <?= in_array($id, $selected_inst) ? 'selected' : '' ?>>
+                    <option class="nested-item" value="<?= $id ?>" <?= in_array($id, $selected_inst) ? 'selected' : '' ?>>
                         <?= htmlReady($child['name']) ?>
                     </option>
                 <? endforeach ?>

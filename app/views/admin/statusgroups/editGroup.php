@@ -48,7 +48,7 @@
     </noscript>
     <label class="caption">
         <?= _('Einordnen unter') ?>
-        <select name="range_id">
+        <select name="range_id" class="nested-select">
             <option value="<?= htmlReady($_SESSION['SessionSeminar']) ?>">
                 - <?= _('Hauptebene') ?> -
             </option>
