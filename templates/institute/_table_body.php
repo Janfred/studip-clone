@@ -119,7 +119,7 @@ use Studip\Button, Studip\LinkButton;
                     echo '<td>';
 
                     if ($admin_view) {
-                        echo '<a href="'.URLHelper::getLink('admin_statusgruppe.php?role_id='.$id.'&cmd=displayRole').'">'.htmlReady($group_list[$id]).'</a>';
+                        echo '<a href="'.URLHelper::getLink('dispatch.php/admin/statusgroups/editGroup/'.$id).'">'.htmlReady($group_list[$id]).'</a>';
                     } else {
                         echo htmlReady($group_list[$id]);
                     }
