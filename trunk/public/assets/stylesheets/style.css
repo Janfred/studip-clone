@@ -6970,7 +6970,7 @@ select:not([multiple]):focus {
 }
 select:not([multiple]):not([size]) {
   height: 30px;
-  line-height: 30px;
+  line-height: 1;
 }
 select[multiple] {
   padding-right: 8px;
