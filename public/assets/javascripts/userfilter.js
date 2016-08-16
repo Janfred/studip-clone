@@ -64,14 +64,15 @@ STUDIP.UserFilter = {
      */
     groupConditions: function () {
         var selected = $('.userfilter input:checked').parent('div');
-        var group_template = $('.grouped_conditions:first').clone();
+        var group_template = $('.grouped_conditions_template').clone();
         if (selected.length > 0) {
             $('.userfilter input[type=checkbox]:checked').prop('checked', false).hide();
-            $('.userfilter').append(group_template.show());
+            $('.userfilter .group_conditions').after(group_template.show());
             selected.find('input[name^=conditiongroup_]').prop('value', STUDIP.UserFilter.new_group_nr);
-            $('.condition_list:last').append(selected);
-            $('.condition_list:last input[name=quota]').prop('name', 'quota_'+STUDIP.UserFilter.new_group_nr);
-            $('.grouped_conditions:last').prop('id', 'new_conditiongroup_'+STUDIP.UserFilter.new_group_nr);
+            $('.grouped_conditions_template:last .condition_list').append(selected);
+            $('.grouped_conditions_template:last .condition_list input[name=quota]').prop('name', 'quota_'+STUDIP.UserFilter.new_group_nr);
+            $('.grouped_conditions_template:last').prop('id', 'new_conditiongroup_'+STUDIP.UserFilter.new_group_nr);
+            $('.grouped_conditions_template:last').prop('class', 'grouped_conditions');
             STUDIP.UserFilter.new_group_nr++;
         }
         if ($('.userfilter .ungrouped_conditions .condition_list .condition').length == 0) {
