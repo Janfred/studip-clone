@@ -129,11 +129,16 @@ select {
     }
 
     .select2-selection--multiple {
+        padding-right: unit((@select-arrow-size + 5), px);
+        .background-icon('arr_1down', 'clickable', @select-arrow-size);
+        background-position: right 4px top unit((@select-height-default / 2 - 4), px);
+        background-repeat: no-repeat;
+
         .select2-selection__choice__remove {
             .background-icon('decline', 'clickable', @select-arrow-size);
             background-position: right center;
             background-repeat: no-repeat;
-            color: transparent;
+            color: transparent !important;
             display: inline-block;
             float: none;
             width: unit((@select-arrow-size + 5), px);
@@ -153,6 +158,9 @@ select {
                 order: 2;
             }
         }
+    }
+    &.select2-container--open .select2-selection--multiple {
+        .background-icon('arr_1up', 'clickable', @select-arrow-size);
     }
 
     .select2-selection__arrow {

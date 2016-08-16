@@ -7543,6 +7543,16 @@ select.has-no-value:not(:focus) {
 .select2-container--default .select2-selection--single .select2-selection__rendered .select2-selection__clear {
   order: 2;
 }
+.select2-container--default .select2-selection--multiple {
+  padding-right: 15px;
+  background-image: url("../images/icons/blue/arr_1down.svg");
+  -webkit-background-size: 10px 10px;
+  -moz-background-size: 10px 10px;
+  -o-background-size: 10px 10px;
+  background-size: 10px 10px;
+  background-position: right 4px top 11px;
+  background-repeat: no-repeat;
+}
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
   background-image: url("../images/icons/blue/decline.svg");
   -webkit-background-size: 10px 10px;
@@ -7551,7 +7561,7 @@ select.has-no-value:not(:focus) {
   background-size: 10px 10px;
   background-position: right center;
   background-repeat: no-repeat;
-  color: transparent;
+  color: transparent !important;
   display: inline-block;
   float: none;
   width: 15px;
@@ -7585,6 +7595,13 @@ select.has-no-value:not(:focus) {
 }
 .select2-container--default .select2-selection--multiple .select2-selection__choice .select2-selection__choice__remove {
   order: 2;
+}
+.select2-container--default.select2-container--open .select2-selection--multiple {
+  background-image: url("../images/icons/blue/arr_1up.svg");
+  -webkit-background-size: 10px 10px;
+  -moz-background-size: 10px 10px;
+  -o-background-size: 10px 10px;
+  background-size: 10px 10px;
 }
 .select2-container--default .select2-selection__arrow {
   background-image: url("../images/icons/blue/arr_1down.svg");
