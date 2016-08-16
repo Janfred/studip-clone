@@ -123,6 +123,36 @@
 
     // Use select2 for crossbrowser compliant select styling and
     // handling
+    $.fn.select2.amd.define("select2/i18n/de", [], function() {
+        return {
+            inputTooLong: function(e) {
+                var t = e.input.length - e.maximum;
+                return 'Bitte %u Zeichen weniger eingeben'.toLocaleString().replace('%u', t);
+            },
+            inputTooShort: function(e) {
+                var t = e.minimum - e.input.length;
+                return 'Bitte %u Zeichen mehr eingeben'.toLocaleString().replace('%u', t);
+            },
+            loadingMore: function() {
+                return 'Lade mehr Ergebnisse...'.toLocaleString();
+            },
+            maximumSelected: function(e) {
+                var t = [
+                    'Sie können nur %u Eintrag auswählen'.toLocaleString(),
+                    'Sie können nur %u Einträge auswählen'.toLocaleString()
+                ];
+                return t[e.maximum === 1 ? 0 : 1].replace('%u', e.maximum);
+            },
+            noResults: function() {
+                return 'Keine Übereinstimmungen gefunden'.toLocaleString();
+            },
+            searching: function() {
+                return 'Suche...'.toLocaleString();
+            }
+        };
+    });
+    $.fn.select2.defaults.set('language', 'de');
+
     $(document).on('ready dialog-update', function () {
         $('select.nested-select:not(:has(optgroup))').each(function () {
             var select_classes = $(this).attr('class'),
