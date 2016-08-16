@@ -24,7 +24,7 @@ use Studip\Button, Studip\LinkButton;
     </span>
     <div class="userfilter" style="<?=(!$rule->getUngroupedConditions() || !$rule->getConditiongroups()) ? '' : 'display: none'?>">
         <? if ($rule->conditiongroupsAllowed()): ?>
-        <div class="grouped_conditions" id="new_conditiongroup" style="margin-bottom: 5px; display: none">
+        <div class="grouped_conditions_template" id="new_conditiongroup" style="margin-bottom: 5px; display: none">
             <div class="condition_list">
                 <?=_('Kontingent:')?> <input type="text" name="quota" size="5"> <?=_('Prozent')?>
             </div>
