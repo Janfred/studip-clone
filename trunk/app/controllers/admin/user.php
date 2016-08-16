@@ -1014,16 +1014,16 @@ class Admin_UserController extends AuthenticatedController
         $actions = new ActionsWidget();
 
         if (in_array('Standard', $GLOBALS['STUDIP_AUTH_PLUGIN'])) {
-            $actions->addLink(_('Neue Person anlegen'),
+            $actions->addLink(_('Neues Konto anlegen'),
                               $this->url_for('admin/user/new'),
                               Icon::create('person+add', 'clickable'))
                     ->asDialog();
         }
-        $actions->addLink(_('Neuen Personenaccount vorläufig anlegen'),
+        $actions->addLink(_('Vorläufiges Konto anlegen'),
                           $this->url_for('admin/user/new/prelim'),
                           Icon::create('date+add', 'clickable'))
                 ->asDialog();
-        $actions->addLink(_('Personenaccounts zusammenführen'),
+        $actions->addLink(_('Konten zusammenführen'),
                           $this->url_for('admin/user/migrate/' . (($this->user && is_array($this->user)) ? $this->user['user_id'] : '')),
                           Icon::create('persons+new', 'clickable'));
 
