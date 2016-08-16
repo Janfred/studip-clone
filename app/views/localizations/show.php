@@ -48,6 +48,13 @@ $translations = array(
     'Der eingegebene Wert darf nicht kleiner als $1 sein' => _('Der eingegebene Wert darf nicht kleiner als $1 sein'),
     'Dies ist ein erforderliches Feld' => _('Dies ist ein erforderliches Feld'),
     'Zeichen verbleibend: ' => _('Zeichen verbleibend: '),
+    'Bitte %u Zeichen weniger eingeben' => _('Bitte %u Zeichen weniger eingeben'),
+    'Bitte %u Zeichen mehr eingeben' => _('Bitte %u Zeichen mehr eingeben'),
+    'Lade mehr Ergebnisse...' => _('Lade mehr Ergebnisse...'),
+    'Sie können nur %u Eintrag auswählen' => _('Sie können nur %u Eintrag auswählen'),
+    'Sie können nur %u Einträge auswählen' => _('Sie können nur %u Einträge auswählen'),
+    'Keine Übereinstimmungen gefunden' => _('Keine Übereinstimmungen gefunden'),
+    'Suche...' => _('Suche...'),
 
     // public/assets/javascripts/messages.js
     'Sie haben nicht angegeben, wer die Nachricht empfangen soll!' => _('Sie haben nicht angegeben, wer die Nachricht empfangen soll!'),
@@ -174,10 +181,16 @@ $translations = array(
     'Anonym' => _('Anonym'),
     'Die Senderin/der Sender dieser Nachricht möchte Sie auf den folgenden Beitrag aufmerksam machen. ' => _('Die Senderin/der Sender dieser Nachricht möchte Sie auf den folgenden Beitrag aufmerksam machen. '),
     'Link zum Beitrag: ' => _('Link zum Beitrag: '),
+    'Beitrag verschieben' => _('Beitrag verschieben'),
     'Thema schließen' => _('Thema schließen'),
     'Thema öffnen' => _('Thema öffnen'),
     'Hervorhebung aufheben' => _('Hervorhebung aufheben'),
     'Thema hervorheben' => _('Thema hervorheben'),
+
+    // public/plugins_packages/core/Modulverwaltung/public/javascripts/mvv.js
+    'hinzufügen' => _('hinzufügen'),
+    'Suche zurücksetzen' => _('Suche zurücksetzen'),
+    'Keine Angabe beim Fach' => _('Keine Angabe beim Fach'),
 
 );
 
