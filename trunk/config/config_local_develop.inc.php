@@ -256,7 +256,8 @@ $DEFAULT_TIMEZONE = 'Europe/Berlin';
 
 $INSTALLED_LANGUAGES["de_DE"] = array ("path"=>"de", "picture"=>"lang_de.gif", "name"=>"Deutsch");
 $INSTALLED_LANGUAGES["en_GB"] = array ("path"=>"en", "picture"=>"lang_en.gif", "name"=>"English");
-
+$CONTENT_LANGUAGES['de_DE'] = array('picture' => 'lang_de.gif', 'name' => 'Deutsch');
+$CONTENT_LANGUAGES['en_GB'] = array('picture' => 'lang_en.gif', 'name' => 'English');
 $DEFAULT_LANGUAGE = "de_DE";  // which language should we use if we can gather no information from user?
 
 $_language_domain = "studip";  // the name of the language file. Should not be changed except in cases of individual translations or special terms.
