@@ -38,7 +38,7 @@ class I18NString
     {
         if (isset($_SESSION['_language'])
             && $_SESSION['_language'] != $GLOBALS['DEFAULT_LANGUAGE']
-            && !empty($this->translation($_SESSION['_language']))
+            && $this->translation($_SESSION['_language'])
         ) {
             return $this->translation($_SESSION['_language']);
         }
