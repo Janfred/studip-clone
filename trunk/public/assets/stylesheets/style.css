@@ -8321,6 +8321,12 @@ label[for="responsive-toggle"]::before {
   #barBottomright .list.below:before {
     left: 288px;
   }
+  #barBottomright > ul > li {
+    flex: 1 auto;
+  }
+  #barBottomright > ul > li:first-child {
+    flex: 1 1 100%;
+  }
   #notification_list {
     width: 100% !important;
     position: absolute !important;

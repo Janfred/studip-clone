@@ -90,7 +90,7 @@
     }
 
     // Engage
-    $(document).on('ready', function () {
+    $(document).ready(function () {
         STUDIP.Sidebar.setSticky();
     });
 

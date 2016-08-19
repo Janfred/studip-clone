@@ -101,6 +101,7 @@
         if (media_query.matches) {
             responsify();
             STUDIP.HeaderMagic.disable();
+            STUDIP.Sidebar.setSticky(false);
         } else {
             media_query.addListener(responsify);
         }
@@ -108,8 +109,10 @@
         media_query.addListener(function () {
             if (media_query.matches) {
                 STUDIP.HeaderMagic.disable();
+                STUDIP.Sidebar.setSticky(false);
             } else {
                 STUDIP.HeaderMagic.enable();
+                STUDIP.Sidebar.setSticky(true);
             }
         });
     });
