@@ -537,7 +537,7 @@ function get_my_obj_values (&$my_obj, $user_id)
         ");
         $statement->execute(array(
             'user_id' => $user_id,
-            'treshold' => $threshold
+            'threshold' => $threshold
         ));
 
         while($row = $statement->fetch(PDO::FETCH_ASSOC)) {
