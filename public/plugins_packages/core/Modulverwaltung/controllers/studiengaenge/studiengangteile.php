@@ -292,8 +292,10 @@ class Studiengaenge_StudiengangteileController extends SharedVersionController
      */
     private function sidebar_search()
     {
-        $query = "SELECT ms.stgteil_id, CONCAT(mf.name, ' ', ms.zusatz, ' (', "
-                . "ms.kp, ' CP', ')') AS name "
+        $query = "SELECT ms.stgteil_id, "
+                . "IF(ISNULL(ms.kp), CONCAT(mf.name, ' ', ms.zusatz),"
+                . "CONCAT(mf.name, ' ', ms.zusatz, ' (', "
+                . "ms.kp, ' CP', ')')) AS name "
                 . 'FROM mvv_stgteil ms '
                 . 'LEFT JOIN fach mf USING(fach_id) '
                 . 'WHERE ms.zusatz LIKE :input '
