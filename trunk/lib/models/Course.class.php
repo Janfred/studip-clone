@@ -203,6 +203,11 @@ class Course extends SimpleORMap
         $config['notification_map']['before_store'] = 'CourseWillUpdate';
         $config['notification_map']['after_delete'] = 'CourseDidDelete';
         $config['notification_map']['before_delete'] = 'CourseWillDelete';
+
+        $config['i18n_fields']['name'] = true;
+        $config['i18n_fields']['untertitel'] = true;
+        $config['i18n_fields']['beschreibung'] = true;
+        $config['i18n_fields']['art'] = true;
         parent::configure($config);
     }
 

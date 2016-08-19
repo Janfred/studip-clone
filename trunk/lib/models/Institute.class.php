@@ -196,6 +196,7 @@ class Institute extends SimpleORMap
             'on_store'          => 'store',
             'order_by'          => 'ORDER BY position ASC',
         );
+        $config['i18n_fields']['name'] = true;
         parent::configure($config);
     }
 

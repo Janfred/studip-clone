@@ -326,6 +326,8 @@ $DEFAULT_TIMEZONE = 'Europe/Berlin';
 
 $INSTALLED_LANGUAGES["de_DE"] = array ("path"=>"de", "picture"=>"lang_de.gif", "name"=>"Deutsch");
 $INSTALLED_LANGUAGES["en_GB"] = array ("path"=>"en", "picture"=>"lang_en.gif", "name"=>"English");
+$CONTENT_LANGUAGES['de_DE'] = array('picture' => 'lang_de.gif', 'name' => 'Deutsch');
+//$CONTENT_LANGUAGES['en_GB'] = array('picture' => 'lang_en.gif', 'name' => 'English');
 
 $DEFAULT_LANGUAGE = "de_DE";  // which language should we use if we can gather no information from user?
 
@@ -560,3 +562,6 @@ $LOGIN_IP_RANGES =
 //create the html-version of $UNI_NAME clean
 $UNI_NAME = htmlspecialchars($UNI_NAME_CLEAN, ENT_QUOTES, 'cp1252');
 
+// Content languages
+$CONTENT_LANGUAGES['de_DE'] = array('picture' => 'lang_de.gif', 'name' => 'Deutsch');
+//$CONTENT_LANGUAGES['en_GB'] = array('picture' => 'lang_en.gif', 'name' => 'English');
