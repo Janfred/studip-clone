@@ -39,7 +39,8 @@ class QuestionnaireController extends AuthenticatedController
 
     public function courseoverview_action()
     {
-        if ($GLOBALS['perm']->have_perm('admin')) {
+        $this->range_type = Course::findCurrent() ? 'course' : 'institute';
+        if (($this->range_type === "institute") && $GLOBALS['perm']->have_perm('admin')) {
             if (!$GLOBALS['SessionSeminar']) {
                 Navigation::activateItem('/admin/institute/questionnaires');
             }
@@ -49,7 +50,6 @@ class QuestionnaireController extends AuthenticatedController
             throw new AccessDeniedException("Only for logged in users.");
         }
         Navigation::activateItem("/course/admin/questionnaires");
-        $this->range_type = Course::findCurrent() ? 'course' : 'institute';
         $this->questionnaires = Questionnaire::findBySQL("INNER JOIN questionnaire_assignments USING (questionnaire_id) WHERE questionnaire_assignments.range_id = ? AND questionnaire_assignments.range_type = ? ORDER BY questionnaires.mkdate DESC", array($GLOBALS['SessionSeminar'], $this->range_type));
         foreach ($this->questionnaires as $questionnaire) {
             if (!$questionnaire['visible'] && $questionnaire['startdate'] && $questionnaire['startdate'] <= time() && $questionnaire['stopdate'] > time()) {
