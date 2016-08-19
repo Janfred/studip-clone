@@ -53,7 +53,7 @@ class SemScheduleWeek  extends ScheduleWeek {
         $this->base_date = mktime(0, 0, 0, date("n", $this->start_date), $first_monday ,  date("Y", $this->start_date));
     }
     
-    function getColumnName($id){
+    function getColumnName($id, $print_view = false){
         $ts = mktime (0,0,0,date("n",$this->base_date), date("j",$this->base_date)+$id-1, date("Y",$this->base_date));
         $out = strftime("%A", $ts);
         return $out;

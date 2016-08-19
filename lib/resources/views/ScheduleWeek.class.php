@@ -55,7 +55,7 @@ class ScheduleWeek extends ScheduleView
         }
     }
 
-    public function addEvent ($name, $start_time, $end_time, $link = '', $add_info = '', $category = 0)
+    public function addEvent ($column, $name, $start_time, $end_time, $link = '', $add_info = '', $category = 0)
     {
         $week_day = date('w', $start_time);
         if ($week_day == 0) {
@@ -64,7 +64,7 @@ class ScheduleWeek extends ScheduleView
         parent::AddEvent($week_day, $name, $start_time, $end_time, $link, $add_info, $category);
     }
 
-    public function getColumnName($id)
+    public function getColumnName($id, $print_view = false)
     {
         $ts = mktime(0, 0, 0,
                      date('n', $this->start_date),
