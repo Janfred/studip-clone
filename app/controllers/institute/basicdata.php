@@ -167,7 +167,7 @@ class Institute_BasicdataController extends AuthenticatedController
         $create_institute = $i_id === 'new';
         
         $institute = new Institute($create_institute ? null : $i_id);
-        $institute->name            = trim(Request::get('Name', $institute->name));
+        $institute->name            = Request::i18n('Name', $institute->name)->trim();
         $institute->fakultaets_id   = Request::option('Fakultaet', $institute->fakultaets_id);
         $institute->strasse         = Request::get('strasse', $institute->strasse);
         // Beware: Despite the name, this contains both zip code AND city name
@@ -179,7 +179,6 @@ class Institute_BasicdataController extends AuthenticatedController
         $institute->type            = Request::int('type', $institute->type);
         $institute->lit_plugin_name = Request::get('lit_plugin_name', $institute->lit_plugin_name);
         $institute->lock_rule       = Request::option('lock_rule', $institute->lock_rule);
-
 
         // Do we have all necessary data?
         if (!$institute->name) {

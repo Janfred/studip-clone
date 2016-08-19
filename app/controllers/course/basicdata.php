@@ -38,6 +38,7 @@ class Course_BasicdataController extends AuthenticatedController
             'name' => "course_name",
             'must' => true,
             'type' => 'text',
+            'i18n' => true,
             'value' => $data['name'],
             'locked' => LockRules::Check($course_id, 'Name')
         );
@@ -45,6 +46,7 @@ class Course_BasicdataController extends AuthenticatedController
             'title' => _("Untertitel der Veranstaltung"),
             'name' => "course_subtitle",
             'type' => 'text',
+            'i18n' => true,
             'value' => $data['subtitle'],
             'locked' => LockRules::Check($course_id, 'Untertitel')
         );
@@ -80,6 +82,7 @@ class Course_BasicdataController extends AuthenticatedController
             'title' => _("Art der Veranstaltung"),
             'name' => "course_form",
             'type' => 'text',
+            'i18n' => true,
             'value' => $data['form'],
             'locked' => LockRules::Check($course_id, 'art')
         );
@@ -110,6 +113,7 @@ class Course_BasicdataController extends AuthenticatedController
             'title' => _("Beschreibung"),
             'name' => "course_description",
             'type' => 'textarea',
+            'i18n' => true,
             'value' => $data['description'],
             'locked' => LockRules::Check($course_id, 'Beschreibung')
         );
@@ -406,7 +410,11 @@ class Course_BasicdataController extends AuthenticatedController
                     } else {
                         // format of input element name is "course_xxx"
                         $varname = substr($field['name'], 7);
-                        $req_value = Request::get($field['name']);
+                        if ($field['i18n']) {
+                            $req_value = Request::i18n($field['name']);
+                        } else {
+                            $req_value = Request::get($field['name']);
+                        }
 
                         if ($varname === "name" && !$req_value) {
                             $this->msg[] = array("error", _("Name der Veranstaltung darf nicht leer sein."));

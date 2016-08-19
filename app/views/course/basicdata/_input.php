@@ -1,8 +1,14 @@
 <?php
 # Lifter010: TODO
 $is_locked = $input['locked'] ? 'disabled readonly' : '';
+$is_locked_array = $input['locked'] ? array('disabled' => true, 'readonly' => true) : array();
+$is_required_array = $input['must'] ? array('required' => true) : array();
 if ($input['type'] === "text") : ?>
-    <input <?=$is_locked ?> type="text" name="<?= $input['name'] ?>" value="<?= htmlReady($input['value']) ?>" <? if ($input['must']) echo 'required'; ?>>
+    <? if ($input['i18n']) : ?>
+        <?= I18N::input($input['name'], $input['value'], $is_locked_array + $is_required_array) ?>
+    <? else : ?>
+        <input <?=$is_locked ?> type="text" name="<?= $input['name'] ?>" value="<?= htmlReady($input['value']) ?>" <? if ($input['must']) echo 'required'; ?>>
+    <? endif ?>
 <? endif;
 
 if ($input['type'] === "number") : ?>
@@ -10,9 +16,13 @@ if ($input['type'] === "number") : ?>
 <? endif; 
 
 if ($input['type'] === "textarea") : ?>
-    <textarea <?=$is_locked ?> name="<?= $input['name'] ?>" <? if ($input['must']) echo 'required'; ?>><?=
-        htmlReady($input['value'])
-    ?></textarea>
+    <? if ($input['i18n']) : ?>
+        <?= I18N::textarea($input['name'], $input['value'], $is_required_array) ?>
+    <? else : ?>
+        <textarea <?=$is_locked ?> name="<?= $input['name'] ?>" <? if ($input['must']) echo 'required'; ?>><?=
+            htmlReady($input['value'])
+            ?></textarea>
+    <? endif ?>
 <? endif;
 
 if ($input['type'] === "select") : ?>

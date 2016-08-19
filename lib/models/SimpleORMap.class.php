@@ -68,7 +68,7 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
      * db table metadata
      * @var array $schemes;
      */
-    protected static $schemes = null;
+    public static $schemes = null;
 
     /**
      * configuration data for subclasses
@@ -83,6 +83,13 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
      * @var array $alias_fields
      */
     protected $alias_fields = array();
+
+    /**
+     * multi-language fields
+     * name => boolean
+     * @var array $i18n_fields
+     */
+    protected $i18n_fields = array();
 
     /**
      * additional computed fields
@@ -206,7 +213,7 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
      * @param string $db_table
      * @return bool true if metadata could be fetched
      */
-    protected static function tableScheme($db_table)
+    public static function tableScheme($db_table)
     {
         if (self::$schemes === null) {
             $cache = StudipCacheFactory::getCache();
@@ -790,6 +797,13 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
         if (count($this->notification_map)) {
             $this->registerCallback(array_keys($this->notification_map), 'cbNotificationMapper');
         }
+        if (I18N::isEnabled()) {
+            if (count($this->i18n_fields)) {
+                $this->registerCallback(['before_store', 'after_delete'], 'cbI18N');
+            }
+        } else {
+            $this->i18n_fields = array();
+        }
 
         $this->known_slots = array_merge(array_keys($this->db_fields), array_keys($this->alias_fields), array_keys($this->additional_fields), array_keys($this->relations));
 
@@ -1143,7 +1157,7 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
             }, $only_these_fields));
             $fields = array_intersect($only_these_fields, $fields);
         }
-        foreach($fields as $field) {
+        foreach ($fields as $field) {
             $ret[$field] = $this->getValue($field);
             if ($ret[$field] instanceof StudipArrayObject) {
                 $ret[$field] = $ret[$field]->getArrayCopy();
@@ -1174,8 +1188,12 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
             }, $only_these_fields));
             $fields = array_intersect($only_these_fields, $fields);
         }
-        foreach($fields as $field) {
-            $ret[$field] = (string)$this->content[$field];
+        foreach ($fields as $field) {
+            if ($this->content[$field] instanceof I18NString) {
+                $ret[$field] = $this->content[$field]->original();
+            } else {
+                $ret[$field] = (string)$this->content[$field];
+            }
         }
         return $ret;
     }
@@ -1347,6 +1365,8 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
              if (array_key_exists($field, $this->content)) {
                  if (array_key_exists($field, $this->serialized_fields)) {
                      $ret = $this->setSerializedValue($field, $value);
+                 } elseif ($this->isI18nField($field)) {
+                         $ret = $this->setI18nValue($field, $value);
                  } else {
                      $ret = ($this->content[$field] = $value);
                  }
@@ -1521,6 +1541,17 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
+     * check if given column is a multi-language field
+     * @param string $field
+     * @return boolean
+     */
+    function isI18nField($field)
+    {
+        $field = strtolower($field);
+        return isset($this->i18n_fields[$field]);
+    }
+
+    /**
      * set multiple column values
      * if second param is set, existing data in object will be
      * discarded and dirty state is cleared,
@@ -1552,8 +1583,7 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
         }
         if ($reset) {
             foreach (array_keys($this->db_fields) as $field) {
-                if (isset($this->serialized_fields[$field])
-                && $this->content[$field] instanceof $this->serialized_fields[$field]) {
+                if (is_object($this->content[$field])) {
                     $this->content_db[$field] = clone $this->content[$field];
                 } else {
                     $this->content_db[$field] = $this->content[$field];
@@ -1929,6 +1959,8 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
         $field = strtolower($field);
         if ($this->content[$field] === null || $this->content_db[$field] === null) {
             return $this->content[$field] !== $this->content_db[$field];
+        } else if ($this->content[$field] instanceof I18NString || $this->content_db[$field] instanceof I18NString) {
+            return $this->content[$field] != $this->content_db[$field];
         } else {
             return (string)$this->content[$field] !== (string)$this->content_db[$field];
         }
@@ -2025,7 +2057,7 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
         foreach ($this->registered_callbacks[$type] as $cb) {
             if ($cb instanceof Closure) {
                 $function =  $cb;
-                $params = array($this, $type);
+                $params = array($this, $type, $cb);
             } else {
                 $function = array($this, $cb);
                 $params = array($type);
@@ -2137,7 +2169,8 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
      * ArrayObjects
      *
      * @param string $field column name
-     * @param string $value value
+     * @param mixed $value value
+     * @return mixed
      */
      protected function setSerializedValue($field, $value)
      {
@@ -2149,6 +2182,75 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
          }
          return $this->content[$field];
      }
+
+    /**
+     * default setter used to proxy I18N fields with
+     * I18NString
+     *
+     * @param string $field column name
+     * @param mixed $value value
+     * @return mixed
+     */
+    protected function setI18nValue($field, $value)
+    {
+        $meta = ['object_id' => $this->getId(),
+                 'table'     => $this->db_table,
+                 'field'     => $field];
+        if ($value instanceof I18NString) {
+            $value->setMetadata($meta);
+            $this->content[$field] = $value;
+        } else {
+            $this->content[$field] = new I18NString($value, null, $meta);
+        }
+        return $this->content[$field];
+    }
+
+    /**
+     * default callback for tables with I18N fields
+     * @param $type
+     * @return bool
+     */
+    protected function cbI18N($type)
+    {
+
+        if ($type == 'before_store') {
+            $i18ncontent = array();
+            foreach (array_keys($this->i18n_fields) as $field) {
+                if ($this->content[$field] instanceof I18NString) {
+                    $i18ncontent[$field] = $this->content[$field];
+                    $this->content[$field] = $this->content[$field]->original();
+                    $this->content_db[$field] = $this->content_db[$field]->original();
+                }
+            }
+            if (count($i18ncontent)) {
+                $after_store = function($that, $type, $myself) use ($i18ncontent) {
+                    foreach ($i18ncontent as $field => $one) {
+                        $meta = ['object_id' => $this->getId(),
+                                 'table'     => $this->db_table,
+                                 'field'     => $field];
+                        $one->setMetadata($meta);
+                        $one->storeTranslations();
+                        if (!$this->content[$field] instanceof I18NString) {
+                            $this->content[$field] = $one;
+                            $this->content_db[$field] = clone $one;
+                        }
+                    }
+                    $this->unregisterCallback('after_store', $myself);
+                };
+                $this->registerCallback('after_store', $after_store);
+            }
+
+        }
+
+        if ($type == 'after_delete') {
+            foreach (array_keys($this->i18n_fields) as $field) {
+                if ($this->content[$field] instanceof I18NString) {
+                    $this->content[$field]->removeTranslations();
+                }
+            }
+        }
+        return true;
+    }
 
      /**
       * Cleans up this object. This essentially reset all relations of

@@ -7,10 +7,7 @@
 
         <label>
             <?= _('Name') ?>
-
-            <input type="text" name="Name"
-                   required value="<?= htmlReady(Request::get('Name', $institute->Name)) ?>"
-                   <? if (LockRules::Check($institute->id, 'name')) echo 'readonly disabled'; ?>>
+            <?= I18N::input('Name', $institute->Name, LockRules::Check($institute->id, 'name') ? array('readonly' => true, 'disabled' => true) : []); ?>
         </label>
 
         <label>
