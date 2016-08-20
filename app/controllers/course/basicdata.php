@@ -216,8 +216,10 @@ class Course_BasicdataController extends AuthenticatedController
                 ];
                 $faculty_id = $inst['Institut_id'];
             } elseif (!isset($result[$inst['fakultaets_id'] ?: $faculty_id])) {
-                var_dump($institutes);die;
-                throw new Exception('Invalid order of institute data (sub-institute before faculty)');
+                $result[] = [
+                    'label'    => false,
+                    'children' => [$inst['Institut_id'] => $inst['Name']],
+                ];
             } else {
                 $result[$inst['fakultaets_id'] ?: $faculty_id]['children'][$inst['Institut_id']] = $inst['Name'];
             }
