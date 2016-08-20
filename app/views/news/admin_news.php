@@ -106,20 +106,36 @@
                                 <td><?= htmlReady($news['object']->author) ?></td>
                                 <td><?= strftime("%d.%m.%y", $news['object']->date) ?></td>
                                 <td><?= strftime("%d.%m.%y", $news['object']->date + $news['object']->expire) ?></td>
-                                <td>
-                                    <a href="<?= URLHelper::getURL('dispatch.php/news/edit_news/' . $news['object']->news_id) ?>" rel="get_dialog" target="_blank" <?= tooltip(_('Ankündigung bearbeiten')) ?>>
-                                        <?= Icon::create('edit', 'clickable')->asImg() ?>
-                                    </a>
-                                    <a href="<?= URLHelper::getURL('dispatch.php/news/edit_news/new/template/' . $news['object']->news_id) ?>" rel="get_dialog" target="_blank" aria-label="<?= _('Kopieren, um neue Ankündigung zu erstellen') ?>" <?= tooltip(_('Kopieren, um neue Ankündigung zu erstellen')) ?>>
-                                        <?= Icon::create('news+export', 'clickable')->asImg() ?>
-                                    </a>
-                                    <? if ($news['object']->havePermission('unassign', $news['range_id'])) : ?>
-                                        <?= Icon::create('remove', 'clickable', ['title' => _('Ankündigung aus diesem Bereich entfernen')])
-                                                ->asInput(array('name' => 'news_remove_'.$news['object']->news_id.'_'.$news['range_id'])) ?>
-                                    <? else : ?>
-                                        <?= Icon::create('trash', 'clickable', ['title' => _('Ankündigung löschen')])
-                                                ->asInput(array('name' => 'news_remove_'.$news['object']->news_id.'_'.$news['range_id'])) ?>
-                                    <? endif ?>
+                                <td class="actions">
+                                <?
+                                    $menu = ActionMenu::get(); 
+                                    $menu->addLink(
+                                        $controller->url_for('news/edit_news/' . $news['object']->news_id),
+                                        _('Ankündigung bearbeiten'),
+                                        Icon::create('edit', 'clickable'),
+                                        ['rel' => 'get_dialog', 'target' => '_blank']
+                                    );
+                                    $menu->addLink(
+                                        $controller->url_for('news/edit_news/new/template/' . $news['object']->news_id),
+                                        _('Kopieren, um neue Ankündigung zu erstellen'),
+                                        Icon::create('news+export', 'clickable'),
+                                        ['rel' => 'get_dialog', 'target' => '_blank']
+                                    );
+                                    if ($news['object']->havePermission('unassign', $news['range_id'])) {
+                                        $menu->addButton(
+                                            'news_remove_' . $news['object']->news_id . '_' . $news['range_id'],
+                                            _('Ankündigung aus diesem Bereich entfernen'),
+                                            Icon::create('remove', 'clickable')
+                                        );
+                                    } else {
+                                        $menu->addButton(
+                                            'news_remove_' . $news['object']->news_id . '_' . $news['range_id'],
+                                            _('Ankündigung löschen'),
+                                            Icon::create('trash', 'clickable')
+                                        );
+                                    }
+                                    echo $menu->render();
+                                ?>
                                 </td>
                             </tr>
                         <? endforeach ?>

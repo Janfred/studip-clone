@@ -3192,11 +3192,21 @@ section.contentbox > article.new header h1 a::before {
 }
 .action-menu .action-menu-item img,
 .action-menu .action-menu-item svg,
-.action-menu .action-menu-item .action-menu-no-icon {
+.action-menu .action-menu-item .action-menu-no-icon,
+.action-menu .action-menu-item input[type="image"] {
   margin: 0 0.25em;
 }
+.action-menu .action-menu-item > label {
+  color: #28497c;
+  cursor: pointer;
+}
+.action-menu .action-menu-item > label:hover {
+  color: #d60000;
+}
 .action-menu .action-menu-item img,
-.action-menu .action-menu-no-icon {
+.action-menu .action-menu-item svg,
+.action-menu .action-menu-no-icon,
+.action-menu .action-menu-item input[type="image"] {
   width: 20px;
   height: 20px;
   display: inline-block;
