@@ -101,14 +101,14 @@ class CycleDataDB
         }
 
         if ($ret) {
-            usort($ret, array('CycleDataDB', 'sort_dates'));
+            usort($ret, 'CycleDataDB::sort_dates');
             return $ret;
         }
 
         return FALSE;
     }
 
-    function sort_dates($a, $b)
+    public static function sort_dates($a, $b)
     {
         if ($a['date'] == $b['date']) return 0;
         return ($a['date'] < $b['date']) ? -1 : 1;
