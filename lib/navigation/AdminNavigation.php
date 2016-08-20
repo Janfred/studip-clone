@@ -116,8 +116,7 @@ class AdminNavigation extends Navigation
             if (Config::get()->EXTERN_ENABLE) {
                 $navigation->addSubNavigation('external', new Navigation(_('Externe Seiten'), 'admin_extern.php?list=TRUE&view=extern_global'));
             }
-
-            $navigation->addSubNavigation('studycourse', new Navigation(_('Studiengänge'), 'dispatch.php/admin/studycourse/profession'));
+            
             $navigation->addSubNavigation('sem_classes', new Navigation(_('Veranstaltungskategorien'), 'dispatch.php/admin/sem_classes/overview'));
         }
         $this->addSubNavigation('locations', $navigation);
