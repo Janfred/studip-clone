@@ -89,6 +89,7 @@ javascripts:
     - javascripts/calendar.js
     - javascripts/schedule.js
     - javascripts/skip_links.js
+    - javascripts/i18n_input.js
     - javascripts/forms.js
     - javascripts/calendar_dialog.js
     - javascripts/old_upload.js
@@ -108,7 +109,6 @@ javascripts:
     - javascripts/smiley.js
     - javascripts/big-image-handler.js
     - javascripts/opengraph.js
-    - javascripts/i18n_input.js
     - javascripts/actionmenu.js
 
     - javascripts/studip-secure-forms.js

@@ -22,9 +22,11 @@ class I18N
 
         $languages = $GLOBALS['CONTENT_LANGUAGES'];
         $base_lang = $GLOBALS['DEFAULT_LANGUAGE'];
-        $value instanceOf I18NString or $value = new I18NString($value);
+        if (!($value instanceof I18NString)) {
+            $value = new I18NString($value);
+        }
 
-        $result = "<div class=\"i18n_group " . (!self::isEnabled() ? 'single_lang' : '') . "\">";
+        $result = "<div class=\"i18n_group normal-input " . (!self::isEnabled() ? 'single_lang' : '') . "\">";
         foreach ($languages as $locale => $lang) {
             if ($locale === $base_lang) {
                 $attr = array(
@@ -77,7 +79,7 @@ class I18N
         $base_lang = $GLOBALS['DEFAULT_LANGUAGE'];
         $value instanceOf I18NString or $value = new I18NString($value);
 
-        $result = "<div class=\"i18n_group " . (!self::isEnabled() ? 'single_lang' : '') . "\">";
+        $result = "<div class=\"i18n_group textarea-input " . (!self::isEnabled() ? 'single_lang' : '') . "\">";
         foreach ($languages as $locale => $lang) {
             if ($locale === $base_lang) {
                 $attr = array(

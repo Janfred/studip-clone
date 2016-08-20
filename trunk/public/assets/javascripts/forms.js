@@ -82,7 +82,10 @@
 
     // Allow fieldsets to collapse
     $(document).on('click', 'form.default fieldset.collapsable legend,form.default.collapsable fieldset legend', function () {
-        $(this).closest('fieldset').toggleClass('collapsed');
+        if ($(this).closest('fieldset').toggleClass('collapsed').is('.collapsed')) {
+            var elements = $(this).closest('fieldset').find(':input');
+            $(this).closest('form').data('validator').reset(elements);
+        }
     });
 
     // Display a visible hint that indicates how many characters the user may
@@ -155,12 +158,8 @@
 
     function createSelect2(element) {
         if ($(element).data('select2')) {
-            console.log('select2 data present, skipping', element);
             return;
         }
-
-        console.log(element);
-        console.log($(element).outerWidth(true));
 
         var select_classes = $(element).removeClass('select2-awaiting').attr('class'),
             option         = $('<option>'),
