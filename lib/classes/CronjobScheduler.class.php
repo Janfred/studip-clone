@@ -344,8 +344,10 @@ class CronjobScheduler
                 $message .= display_exception($e) . "\n";
 
                 $message .= _('Für weiterführende Informationen klicken Sie bitten den folgenden Link:') . "\n";
-                $message .= $GLOBALS['ABSOLUTE_URI_STUDIP']
-                          . URLHelper::getURL('dispatch.php/admin/cronjobs/logs/schedule/' . $schedule->schedule_id);
+
+                $old = URLHelper::setBaseURL($GLOBALS['ABSOLUTE_URI_STUDIP']);
+                $message .= URLHelper::getURL('dispatch.php/admin/cronjobs/logs/schedule/' . $schedule->schedule_id);
+                URLHelper::setBaseURL($old);
 
                 $this->sendMailToRoots($subject, $message);
             }
