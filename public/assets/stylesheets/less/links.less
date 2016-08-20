@@ -14,6 +14,9 @@ a, a:link, a:visited {
 a[href] {
     .transition(color 0.3s);
 }
+a[disabled] {
+    pointer-events: none;
+}
 
 a:hover, a:active, a:hover.index, a:active.index, a:hover.tree {
     color: @active-color;
