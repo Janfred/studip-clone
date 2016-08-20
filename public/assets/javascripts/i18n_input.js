@@ -9,8 +9,12 @@
         STUDIP.i18n.startFormSubmitHandler();
     });
 
+    $(document).on('dialog-update', function (event, data) {
+        STUDIP.i18n.init(data.dialog);
+    });
+
     STUDIP.i18n = {
-        init: function () {
+        init: function (root) {
             $('div.i18n_group:not(.single_lang)').each(function () {
                 var languages = $(this).find('input, textarea'),
                     select    = $('<select tabindex="-1">').addClass('i18n').css('background-image', $(languages).first().css('background-image'));
@@ -21,7 +25,7 @@
                     languages.eq(index).show().focus();
                     $(this).css('background-image', opt.css('background-image'));
 
-                    if (event.hasOwnProperty('originalEvent')) {
+                    if (event.hasOwnProperty('originalEvent') && $(this).closest('form').data('validator')) {
                         // Reset validator on not programmatically changed select
                         $(this).closest('form').data('validator').reset($(this).siblings());
                     }

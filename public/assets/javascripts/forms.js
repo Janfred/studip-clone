@@ -263,7 +263,12 @@
     }).on('change', 'select:not([multiple])', function () {
         $(this).toggleClass('has-no-value', this.value === '').blur();
     }).on('dialog-close', function (event, data) {
-        $('select.nested-select:not(:has(optgroup))', data.dialog).select2('close');
+        $('select.nested-select:not(:has(optgroup))', data.dialog).each(function () {
+            if (!$(this).data('select2')) {
+                return;
+            }
+            $(this).select2('close');
+        });
     });
 
 }(jQuery, STUDIP));
