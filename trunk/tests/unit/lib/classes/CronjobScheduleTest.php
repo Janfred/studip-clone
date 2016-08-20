@@ -19,12 +19,6 @@ require_once 'lib/models/CronjobSchedule.class.php';
 
 class CronjobTestSchedule extends SimpleORMap
 {
-    protected static function configure()
-    {
-        parent::configure();
-    }
-
-    function __construct(){parent::__construct(null);}
 }
 
 class ScheduleTest extends PHPUnit_Framework_TestCase
