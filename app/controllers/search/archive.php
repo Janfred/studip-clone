@@ -77,17 +77,17 @@ class Search_ArchiveController extends AuthenticatedController
                 }
                 
             }
-            
-            $sidebar = Sidebar::get();
-            $checkboxWidget = new OptionsWidget();
-            $checkboxWidget->addCheckbox(
-                _('Nur eigene Veranstaltungen anzeigen'),
-                (bool)Request::get('myCoursesOnly', false),
-                URLHelper::getUrl('dispatch.php/search/archive', array('search' => $this->archivedCourseName, 'myCoursesOnly' => '1')),
-                URLHelper::getUrl('dispatch.php/search/archive', array('search' => $this->archivedCourseName))
-            );
-            
-            $sidebar->addWidget($checkboxWidget);
         }
+        
+        $sidebar = Sidebar::get();
+        $checkboxWidget = new OptionsWidget();
+        $checkboxWidget->addCheckbox(
+            _('Nur eigene Veranstaltungen anzeigen'),
+            (bool)Request::get('myCoursesOnly', false),
+            URLHelper::getUrl('dispatch.php/search/archive', array('search' => $this->archivedCourseName, 'myCoursesOnly' => '1')),
+            URLHelper::getUrl('dispatch.php/search/archive', array('search' => $this->archivedCourseName))
+        );
+        
+        $sidebar->addWidget($checkboxWidget);
     }
 }

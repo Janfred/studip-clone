@@ -2,17 +2,17 @@
     <?= MessageBox::error($errorMessage); ?>
 <? endif ?>
 
-<section class="contentbox">
-<header><?= _('Suche im Veranstaltungsarchiv'); ?></header>
 <form class="default" method="get" action="<?= URLHelper::getLink(); ?>">
-    <label>
-        <?= _('Suche nach') . ':'; ?>
-        <input type="text" minlength="4" name="search"
-            value="<?= htmlReady($archivedCourseName) ?>">
-    </label>
-    <?= \Studip\Button::create(_('Suchen'), ''); ?>
+    <fieldset>
+        <legend><?= _('Suche im Veranstaltungsarchiv'); ?></legend>
+        <label>
+            <?= _('Suche nach') . ':'; ?>
+            <input type="text" minlength="4" name="search"
+                value="<?= htmlReady($archivedCourseName) ?>">
+        </label>
+        <?= \Studip\Button::create(_('Suchen'), ''); ?>
+    </fieldset>
 </form>
-</section>
 
 <? if ($foundCourses) : ?>
     <? if (count($foundCourses) == 1) : ?>
