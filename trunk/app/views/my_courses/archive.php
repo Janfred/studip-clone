@@ -36,13 +36,13 @@ if ($message) parse_msg($message);
             <? foreach ($rows as $row): ?>
                 <tr>
                     <td>
-                        <a href="<?= URLHelper::getLink('dispatch.php/archive/overview/' . $row['seminar_id']) ?>" target="_blank">
+                        <a href="<?= URLHelper::getLink('dispatch.php/archive/overview/' . $row['seminar_id']) ?>" data-dialog>
                             <?= htmlReady($row['name']) ?>
                         </a>
                     </td>
                     <td align="center">
                         <? if ($row['forumdump']): ?>
-                            <a href="<?= URLHelper::getLink('dispatch.php/archive/forum/' . $row['seminar_id']) ?>" target="_blank">
+                            <a href="<?= URLHelper::getLink('dispatch.php/archive/forum/' . $row['seminar_id']) ?>" data-dialog>
                                 <?= Icon::create('forum', 'clickable', ['title' => _('Beiträge des Forums der Veranstaltung')])->asImg(20) ?>
                             </a>
                         <? else: ?>
@@ -53,14 +53,14 @@ if ($message) parse_msg($message);
                             $filename = _('Dateisammlung') . '-' . substr($row['name'], 0, 200) . '.zip';
                             ?>
                             <a href="<?= URLHelper::getLink(GetDownloadLink($row['archiv_file_id'], $filename, 1)) ?>">
-                                <?= Icon::create('download', 'clickable', ['title' => _('Dateisammlung der Veranstaltung herunterladen')])->asImg(20) ?>
+                                <?= Icon::create('file-archive', 'clickable', ['title' => _('Dateisammlung der Veranstaltung herunterladen')])->asImg(20) ?>
                             </a>
                         <? else: ?>
-                            <?= Icon::create('download', 'inactive')->asImg(20, ["style" => 'visibility: hidden;']) ?>
+                            <?= Icon::create('file-archive', 'inactive')->asImg(20, ["style" => 'visibility: hidden;']) ?>
                         <? endif; ?>
 
                         <? if ($row['wikidump']): ?>
-                            <a href="<?= URLHelper::getLink('dispatch.php/archive/wiki/' . $row['seminar_id']) ?>" target="_blank">
+                            <a href="<?= URLHelper::getLink('dispatch.php/archive/wiki/' . $row['seminar_id']) ?>" data-dialog>
                                 <?= Icon::create('wiki', 'clickable', ['title' => _('Beiträge des Wikis der Veranstaltung')])->asImg(20) ?>
                             </a>
                         <? else: ?>
