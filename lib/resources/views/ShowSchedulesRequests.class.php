@@ -155,7 +155,7 @@ class ShowSchedulesRequests extends ShowSchedules{
                 }
                 $add_info = '(' . join(', ', $sem_doz_names) . ')';
             }
-            $schedule->addEvent($event->getName(get_config('RESOURCES_SCHEDULE_EXPLAIN_USER_NAME')), $event->getBegin(), $event->getEnd(),
+            $schedule->addEvent(null, $event->getName(get_config('RESOURCES_SCHEDULE_EXPLAIN_USER_NAME')), $event->getBegin(), $event->getEnd(),
                         URLHelper::getLink('?show_object='.$this->resource_id.'&cancel_edit_assign=1&quick_view=edit_object_assign&edit_assign_object='.$event->getAssignId()), $add_info, $categories[$repeat_mode]);
         }
         foreach($_SESSION['resources_data']["requests_working_on"] as $req){
@@ -222,7 +222,7 @@ class ShowSchedulesRequests extends ShowSchedules{
                     }
                     $overlaps_info = ShowToolsRequests::showOverlapStatus(count($overlaps) ? $overlaps : null, count($current_events), count($overlaps));
                     $add_info .= '</a>&nbsp;' .$overlaps_info['html'] . '<a>';
-                    $schedule->addEvent($name, $event->getBegin(), $event->getEnd(),
+                    $schedule->addEvent(null, $name, $event->getBegin(), $event->getEnd(),
                         URLHelper::getLink('?view=edit_request&edit='.$req["request_id"]), $add_info, $color);
                     $requested_events++;
                 }
