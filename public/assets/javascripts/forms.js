@@ -15,48 +15,13 @@
                 $(this).data('message', $(this).attr('title'));
             });
 
-            //localized messages
-            $.tools.validator.localize('de', {
-                '*'          : 'Bitte ändern Sie ihre Eingabe'.toLocaleString(),
-                ':radio'     : 'Bitte wählen Sie einen Wert aus.'.toLocaleString(),
-                ':email'     : 'Bitte geben Sie gültige E-Mail-Adresse ein'.toLocaleString(),
-                ':number'    : 'Bitte geben Sie eine Zahl ein'.toLocaleString(),
-                ':url'       : 'Bitte geben Sie eine gültige Web-Adresse ein'.toLocaleString(),
-                '[max]'      : 'Der eingegebene Wert darf nicht größer als $1 sein'.toLocaleString(),
-                '[min]'      : 'Der eingegebene Wert darf nicht kleiner als $1 sein'.toLocaleString(),
-                '[required]' : 'Dies ist ein erforderliches Feld'.toLocaleString()
-            });
-
-            $('form').validator({
-                position   : 'bottom left',
-                offset     : [8, 0],
-                message    : '<div><div class="arrow"/></div>',
-                lang       : 'de',
-                inputEvent : 'change'
-            });
-
-            $('form').bind("onBeforeValidate", function () {
-                $("input").each(function () {
-                    $(this).removeAttr('aria-invalid');
-                });
-            });
-
-            $('form').bind("onFail", function (e, errors) {
-                $.each(errors, function () {
-                    this.input.attr('aria-invalid', 'true');
-                    // get the fieldset that contains the invalid input
-                    var fieldset = $(this.input).closest('fieldset');
-                    // toggle the collapsed class if the fieldset is currently collapsed
-                    if (fieldset.hasClass('collapsed')) {
-                        fieldset.toggleClass('collapsed');
-                    }
-                    $.scrollTo(this.input);
-                });
-            });
-
             // for browsers supporting native HTML5 form validation:
             // add invalid-handler to every input and textarea on the page
             $('input, textarea').on('invalid', function() {
+                $(this).attr('aria-invalid', 'true').change(function () {
+                    $(this).removeAttr('aria-invalid');
+                });
+
                 // get the fieldset that contains the invalid input
                 var fieldset = $(this).closest('fieldset');
                 // toggle the collapsed class if the fieldset is currently collapsed
@@ -82,10 +47,7 @@
 
     // Allow fieldsets to collapse
     $(document).on('click', 'form.default fieldset.collapsable legend,form.default.collapsable fieldset legend', function () {
-        if ($(this).closest('fieldset').toggleClass('collapsed').is('.collapsed')) {
-            var elements = $(this).closest('fieldset').find(':input');
-            $(this).closest('form').data('validator').reset(elements);
-        }
+        $(this).closest('fieldset').toggleClass('collapsed');
     });
 
     // Display a visible hint that indicates how many characters the user may

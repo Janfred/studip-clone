@@ -3,24 +3,6 @@
 
 (function ($) {
 
-    // 
-    $.tools.validator.fn('input[data-must-equal]', function (el, value) {
-        var target = $(el).data().mustEqual,
-            labels = $.map([target, el], function (element) { 
-                var label = $(element).closest('label').text();
-                label = label || $('label[for="' + $(element).attr('id') + '"]').text();
-                return $.trim(label.split(':')[0]);
-            }),
-            error_message = 'Die beiden Werte "$1" und "$2" stimmen nicht überein. '.toLocaleString(),
-            matches = error_message.match(/\$\d/g);
-
-        $.each(matches, function (i) {
-            error_message = error_message.replace(this, labels[i]);
-        });
-
-        return ($(target).val() === value) ? true : error_message;
-    });
-
     // Copy elements value to another element on change
     // Used for title choosers
     $(document).on('change', '[data-target]', function () {

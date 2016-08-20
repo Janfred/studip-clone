@@ -128,4 +128,28 @@
     $(document).on('click', 'a[data-confirm],input[data-confirm],button[data-confirm]', confirmation_handler);
     $(document).on('submit', 'form[data-confirm]', confirmation_handler);
 
+
+    //
+
+    $(document).on('change', 'input[data-must-equal]', function () {
+        var value  = $(this).val(),
+            rel    = $(this).data().mustEqual,
+            other  = $(rel).val(),
+            labels = $.map([this, rel], function (element) {
+                var label = $(element).closest('label').text();
+                label = label || $('label[for="' + $(element).attr('id') + '"]').text();
+                return $.trim(label.split(':')[0]);
+            }),
+            error_message = 'Die beiden Werte "$1" und "$2" stimmen nicht überein. '.toLocaleString(),
+            matches = error_message.match(/\$\d/g);
+
+        $.each(matches, function (i) {
+            error_message = error_message.replace(this, labels[i]);
+        });
+
+        if (value !== other) {
+            this.setCustomValidity(error_message);
+        }
+    });
+
 }(jQuery, STUDIP));
