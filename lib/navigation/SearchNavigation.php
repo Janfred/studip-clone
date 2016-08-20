@@ -50,7 +50,7 @@ class SearchNavigation extends Navigation
         $this->addSubNavigation('courses', $navigation);
 
         // search archive
-        $navigation = new Navigation(_('Archiv'), 'archiv.php');
+        $navigation = new Navigation(_('Archiv'), 'dispatch.php/search/archive');
         $this->addSubNavigation('archive', $navigation);
 
         // search users

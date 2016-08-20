@@ -36,13 +36,13 @@ if ($message) parse_msg($message);
             <? foreach ($rows as $row): ?>
                 <tr>
                     <td>
-                        <a href="<?= URLHelper::getLink('archiv.php?dump_id=' . $row['seminar_id']) ?>" target="_blank">
+                        <a href="<?= URLHelper::getLink('dispatch.php/archive/overview/' . $row['seminar_id']) ?>" target="_blank">
                             <?= htmlReady($row['name']) ?>
                         </a>
                     </td>
                     <td align="center">
                         <? if ($row['forumdump']): ?>
-                            <a href="<?= URLHelper::getLink('archiv.php?forum_dump_id=' . $row['seminar_id']) ?>" target="_blank">
+                            <a href="<?= URLHelper::getLink('dispatch.php/archive/forum/' . $row['seminar_id']) ?>" target="_blank">
                                 <?= Icon::create('forum', 'clickable', ['title' => _('Beiträge des Forums der Veranstaltung')])->asImg(20) ?>
                             </a>
                         <? else: ?>
@@ -60,7 +60,7 @@ if ($message) parse_msg($message);
                         <? endif; ?>
 
                         <? if ($row['wikidump']): ?>
-                            <a href="<?= URLHelper::getLink('archiv.php?wiki_dump_id=' . $row['seminar_id']) ?>" target="_blank">
+                            <a href="<?= URLHelper::getLink('dispatch.php/archive/wiki/' . $row['seminar_id']) ?>" target="_blank">
                                 <?= Icon::create('wiki', 'clickable', ['title' => _('Beiträge des Wikis der Veranstaltung')])->asImg(20) ?>
                             </a>
                         <? else: ?>
@@ -81,7 +81,7 @@ $sidebar->setTitle(_('Meine archivierten Veranstaltungen'));
 
 $links = new LinksWidget();
 $links->setTitle(_('Aktionen'));
-$links->addLink(_('Suche im Archiv'),URLHelper::getLink('archiv.php'), Icon::create('search', 'info'));
+$links->addLink(_('Suche im Archiv'),URLHelper::getLink('dispatch.php/search/archive'), Icon::create('search', 'info'));
 
 $sidebar->addWidget($links, 'actions');
 ?>
