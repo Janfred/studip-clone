@@ -40,14 +40,15 @@ class MvvTreeRoot implements MvvTreeItem
     public function getChildren()
     {
         $institute = array();
-        $stmt = DBManager::get()->prepare('SELECT DISTINCT fakultaets_id '
+        $stmt = DBManager::get()->prepare('SELECT DISTINCT inst.fakultaets_id '
                 . 'FROM mvv_modul_inst mmi '
                 . 'INNER JOIN mvv_modul USING(modul_id) '
                 . 'INNER JOIN mvv_modulteil USING(modul_id) '
                 . 'INNER JOIN mvv_lvgruppe_modulteil USING(modulteil_id) '
-                . 'LEFT JOIN Institute USING(institut_id) '
-                . 'WHERE mmi.gruppe = ?'
-                . 'ORDER BY Institute.name ASC');
+                . 'LEFT JOIN Institute inst USING(institut_id) '
+                . 'LEFT JOIN Institute fak ON (fak.institut_id = inst.fakultaets_id) '
+                . 'WHERE mmi.gruppe = ? '
+                . 'ORDER BY fak.name ASC');
         
         $stmt->execute(array('hauptverantwortlich'));
         foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $institut) {
