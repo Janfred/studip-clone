@@ -51,7 +51,7 @@
         <? $countedAnswers = $questionnaire->countAnswers() ?>
         <?= htmlReady($countedAnswers) ?>
     </td>
-    <td style="white-space: nowrap;">
+    <td class="actions">
         <? if ($questionnaire->isStarted() && $countedAnswers) : ?>
             <?= Icon::create("edit", "inactive")->asimg("20px", array('title' => _("Der Fragebogen wurde gestartet und kann nicht mehr bearbeitet werden."))) ?>
         <? else : ?>
