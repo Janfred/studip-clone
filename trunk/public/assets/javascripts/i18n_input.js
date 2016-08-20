@@ -18,17 +18,12 @@
             $('div.i18n_group:not(.single_lang)').each(function () {
                 var languages = $(this).find('input, textarea'),
                     select    = $('<select tabindex="-1">').addClass('i18n').css('background-image', $(languages).first().css('background-image'));
-                select.change(function (event) {
+                select.change(function () {
                     var opt   = $(this).find('option:selected'),
                         index = opt.index();
                     languages.not(':eq(' + index + ')').hide();
                     languages.eq(index).show().focus();
                     $(this).css('background-image', opt.css('background-image'));
-
-                    if (event.hasOwnProperty('originalEvent') && $(this).closest('form').data('validator')) {
-                        // Reset validator on not programmatically changed select
-                        $(this).closest('form').data('validator').reset($(this).siblings());
-                    }
                 });
                 languages.each(function (id, lang) {
                     select.append($('<option>', {text: $(lang).data().lang_desc}).css('background-image', $(lang).css('background-image')));
