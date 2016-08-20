@@ -52,33 +52,51 @@
         <?= htmlReady($countedAnswers) ?>
     </td>
     <td style="white-space: nowrap;">
-        <? if ($questionnaire->isStarted()) : ?>
-            <a href="<?= URLHelper::getLink("dispatch.php/questionnaire/stop/".$questionnaire->getId(), $range_type ? ['redirect' => "questionnaire/courseoverview"] : []) ?>" title="<?= _("Fragebogen beenden") ?>">
-                <?= Icon::create("stop", "clickable")->asimg("20px", array('class' => "text-bottom")) ?>
-            </a>
-        <? else : ?>
-            <a href="<?= URLHelper::getLink("dispatch.php/questionnaire/start/".$questionnaire->getId(), $range_type ? ['redirect' => "questionnaire/courseoverview"] : []) ?>" title="<?= _("Fragebogen starten") ?>">
-                <?= Icon::create("play", "clickable")->asimg("20px", array('class' => "text-bottom")) ?>
-            </a>
-        <? endif ?>
-        <a href="<?= URLHelper::getLink("dispatch.php/questionnaire/evaluate/".$questionnaire->getId()) ?>" data-dialog title="<?= _("Auswertung") ?>">
-            <?= Icon::create("stat", "clickable")->asimg("20px", array('class' => "text-bottom")) ?>
-        </a>
-        <a href="<?= URLHelper::getLink("dispatch.php/questionnaire/export/".$questionnaire->getId()) ?>" title="<?= _("Export als CSV") ?>">
-            <?= Icon::create("file-excel", "clickable")->asimg("20px", array('class' => "text-bottom")) ?>
-        </a>
         <? if ($questionnaire->isStarted() && $countedAnswers) : ?>
-            <?= Icon::create("edit", "inactive")->asimg("20px", array('class' => "text-bottom", 'title' => _("Der Fragebogen wurde gestartet und kann nicht mehr bearbeitet werden."))) ?>
+            <?= Icon::create("edit", "inactive")->asimg("20px", array('title' => _("Der Fragebogen wurde gestartet und kann nicht mehr bearbeitet werden."))) ?>
         <? else : ?>
             <a href="<?= URLHelper::getLink("dispatch.php/questionnaire/edit/".$questionnaire->getId()) ?>" data-dialog title="<?= _("Fragebogen bearbeiten") ?>">
-                <?= Icon::create("edit", "clickable")->asimg("20px", array('class' => "text-bottom")) ?>
+                <?= Icon::create("edit", "clickable")->asimg("20px", array()) ?>
             </a>
         <? endif ?>
         <a href="<?= URLHelper::getLink("dispatch.php/questionnaire/context/".$questionnaire->getId()) ?>" data-dialog title="<?= _("Zuweisungen bearbeiten") ?>">
-            <?= Icon::create("group2", "clickable")->asimg("20px", array('class' => "text-bottom")) ?>
+            <?= Icon::create("group2", "clickable")->asimg("20px", array()) ?>
         </a>
-        <a href="<?= URLHelper::getLink("dispatch.php/questionnaire/delete/".$questionnaire->getId()) ?>" onClick="return window.confirm('<?= _("Wirklich löschen?") ?>');" title="<?= _("Fragebogen löschen.") ?>">
-            <?= Icon::create("trash", "clickable")->asimg("20px", array('class' => "text-bottom")) ?>
-        </a>
+
+        <?
+        $menu = ActionMenu::get();
+        if ($questionnaire->isStarted()) {
+            $menu->addLink(
+                URLHelper::getLink("dispatch.php/questionnaire/stop/".$questionnaire->getId(), $range_type ? ['redirect' => "questionnaire/courseoverview"] : []),
+                _("Fragebogen beenden"),
+                Icon::create("pause", "clickable")
+            );
+        } else {
+            $menu->addLink(
+                URLHelper::getLink("dispatch.php/questionnaire/start/".$questionnaire->getId(), $range_type ? ['redirect' => "questionnaire/courseoverview"] : []),
+                _("Fragebogen starten"),
+                Icon::create("play", "clickable")
+            );
+        }
+        $menu->addLink(
+            URLHelper::getLink("dispatch.php/questionnaire/evaluate/".$questionnaire->getId()),
+            _("Auswertung"),
+            Icon::create("stat", "clickable"),
+            array('data-dialog' => 1)
+        );
+        $menu->addLink(
+            URLHelper::getLink("dispatch.php/questionnaire/export/".$questionnaire->getId()),
+            _("Export als CSV"),
+            Icon::create("file-excel", "clickable"),
+            array('data-dialog' => 1)
+        );
+        $menu->addLink(
+            URLHelper::getLink("dispatch.php/questionnaire/delete/".$questionnaire->getId()),
+            _("Fragebogen löschen"),
+            Icon::create("trash", "clickable"),
+            array('onClick' => "return window.confirm('". _("Wirklich löschen?") . "');")
+        );
+        echo $menu;
+        ?>
     </td>
 </tr>
