@@ -357,7 +357,8 @@
                         is_string($actions[$selected_action]['multimode'])
                             ? $actions[$selected_action]['multimode']
                             : $actions[$selected_action]['title'],
-                        $actions[$selected_action]['name']) ?>
+                        $actions[$selected_action]['name'],
+                        $selected_action == 16 ? array('data-dialog' => 1) : null) ?>
                 <? endif ?>
             </td>
         </tr>

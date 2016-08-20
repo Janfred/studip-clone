@@ -118,6 +118,8 @@ javascripts:
     - javascripts/studip-selection-helper.js
     - javascripts/studip-cache.js
     - javascripts/application.js
+    
+    - javascripts/course_archive.js
 
   raumzeit:
     - javascripts/raumzeit.js
