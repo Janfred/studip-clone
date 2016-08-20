@@ -522,12 +522,19 @@ function get_my_obj_values (&$my_obj, $user_id)
         $statement = DBManager::get()->prepare("
             SELECT my.object_id,
                    COUNT(questionnaires.questionnaire_id) as count,
-                   COUNT(IF(questionnaires.startdate < UNIX_TIMESTAMP()
+                   COUNT(IF(
+                        questionnaires.startdate < UNIX_TIMESTAMP()
                         AND (questionnaire.stopdate IS NULL OR questionnaire.stopdate > UNIX_TIMESTAMP())
-                        AND questionnaires.chdate >= IFNULL(b.visitdate, :threshold), questionnaires.questionnaire_id, NULL)) AS neue,
-                   MAX(IF(IF(questionnaires.startdate < UNIX_TIMESTAMP()
-                        AND (questionnaire.stopdate IS NULL OR questionnaire.stopdate > UNIX_TIMESTAMP())
-                        AND questionnaires.chdate >= IFNULL(b.visitdate, :threshold, chdate, 0)) AS last_modified
+                        AND questionnaires.chdate >= IFNULL(b.visitdate, :threshold), 
+                        questionnaires.questionnaire_id, 
+                        NULL
+                   )) AS neue,
+                   MAX(IF(
+                       questionnaires.startdate < UNIX_TIMESTAMP()
+                       AND (questionnaire.stopdate IS NULL OR questionnaire.stopdate > UNIX_TIMESTAMP())
+                       AND questionnaires.chdate >= IFNULL(b.visitdate, :threshold), 
+                       chdate, 0
+                   )) AS last_modified
             FROM questionnaires
                 INNER JOIN questionnaire_assign USING (questionnaire_id)
                 INNER JOIN `myobj_".$user_id."` AS my ON (my.object_id = questionnaire_assign.range_id AND questionnaire_assign.range_type = 'course')
