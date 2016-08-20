@@ -58,7 +58,7 @@
                     <?= Icon::create('file-archive', 'clickable')->asImg('16px') ?>
                 </a>
                 <? endif ?>
-                
+                <? if(archiv_check_perm($course->id)) : ?>
                 <a href="<?= $controller->url_for(
                                 'archive/forum',
                                 $course->id
@@ -71,6 +71,7 @@
                                 ); ?>" data-dialog>
                     <?= Icon::create('wiki', 'clickable')->asImg('16px') ?>
                 </a>
+                <? endif ?>
             </td>
         </tr>
         <tr class="details nohover">
