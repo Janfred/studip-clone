@@ -138,6 +138,9 @@ a[href] {
   -o-transition: color 0.3s;
   transition: color 0.3s;
 }
+a[disabled] {
+  pointer-events: none;
+}
 a:hover,
 a:active,
 a:hover.index,
