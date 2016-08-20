@@ -27,7 +27,7 @@ class auth_user_md5 extends SimpleORMap
 {
     public $additional_dummy_data = null;
 
-    protected static function configure()
+    protected static function configure($config = [])
     {
         $config['db_table'] = 'auth_user_md5';
         $config['additional_fields']['additional']['get'] = function ($record, $field) {return $record->additional_dummy_data;};
