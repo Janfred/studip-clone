@@ -533,7 +533,8 @@ function get_my_obj_values (&$my_obj, $user_id)
                        questionnaires.startdate < UNIX_TIMESTAMP()
                        AND (questionnaires.stopdate IS NULL OR questionnaires.stopdate > UNIX_TIMESTAMP())
                        AND questionnaires.chdate >= IFNULL(b.visitdate, :threshold), 
-                       chdate, 0
+                       questionnaires.chdate, 
+                       0
                    )) AS last_modified
             FROM questionnaires
                 INNER JOIN questionnaire_assignments USING (questionnaire_id)
