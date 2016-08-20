@@ -1,3 +1,16 @@
+04.08.2016 v 3.4.2
+https://develop.studip.de/trac/query?milestone=Stud.IP+3.4.2
+- Anzeigefehler bei Questionaire (Ergebnisse an Teilnehmer) [#6758]
+
+04.08.2016 v 3.3.3
+https://develop.studip.de/trac/query?milestone=Stud.IP+3.3.3
+- Einer Veranstaltungskategorie zugeordnete Datenfelder nicht administrierbar [#4110]
+- Nachrichtensystem: Text hängt im Nirgendwo [#6433]
+- SORM gibt Speicher nicht vernünftig frei [#6761]
+- unserialize() entfernen [#6775]
+- Fatal Error beim Austragen aus Veranstaltung [#6786]
+- keine Anzeige Profilfoto in externen Seiten mit Template "Personenliste" [#6789]
+
 08.07.2016 v 3.4.1
 https://develop.studip.de/trac/query?milestone=Stud.IP+3.4.1
 - Feiertage werden bei Änderung einer regelmäßigen Zeit nicht immer korrekt berechnet [#6528]
