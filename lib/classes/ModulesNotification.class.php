@@ -239,7 +239,7 @@ class ModulesNotification extends Modules {
                         $sem_class = $GLOBALS['SEM_CLASS'][$GLOBALS['SEM_TYPE'][$s_data['sem_status']]["class"]];
                         if (is_object($sem_class)) {
                             foreach (PluginEngine::getPlugins('StandardPlugin', $seminar_id) as $plugin) {
-                                if (!$sem_class->isSlotModule($plugin)) {
+                                if (!$sem_class->isSlotModule(get_class($plugin))) {
                                     $data = $this->getPluginText($plugin, $seminar_id, $s_data, 'plugins');
                                     if ($data) {
                                         $n_data[] = $data;
