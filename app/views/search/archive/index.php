@@ -52,7 +52,7 @@
                         <a href="<?= $controller->url_for(
                                         'archive/overview',
                                         $course->id
-                                        ); ?>">
+                                        ); ?>" data-dialog>
                             <?= _('Übersicht der Veranstaltungsinhalte'); ?>
                         </a>
                     </li>
@@ -60,7 +60,7 @@
                         <a href="<?= $controller->url_for(
                                         'archive/forum',
                                         $course->id
-                                        ); ?>">
+                                        ); ?>" data-dialog>
                             <?= _('Beiträge des Forums'); ?>
                         </a>
                     </li>
@@ -68,7 +68,7 @@
                         <a href="<?= $controller->url_for(
                                         'archive/wiki',
                                         $course->id
-                                        ); ?>">
+                                        ); ?>" data-dialog>
                             <?= _('Wikiseiten'); ?>
                         </a>
                     </li>
