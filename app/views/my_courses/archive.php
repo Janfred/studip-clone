@@ -41,7 +41,7 @@ if ($message) parse_msg($message);
                         </a>
                     </td>
                     <td align="center">
-                        <? if ($row['forumdump']): ?>
+                        <? if ($row['forumdump'] and archiv_check_perm($row['seminar_id'])) : ?>
                             <a href="<?= URLHelper::getLink('dispatch.php/archive/forum/' . $row['seminar_id']) ?>" data-dialog>
                                 <?= Icon::create('forum', 'clickable', ['title' => _('Beiträge des Forums der Veranstaltung')])->asImg(20) ?>
                             </a>
@@ -65,7 +65,7 @@ if ($message) parse_msg($message);
                             <?= Icon::create('file-archive', 'inactive')->asImg(20, ["style" => 'visibility: hidden;']) ?>
                         <? endif; ?>
 
-                        <? if ($row['wikidump']): ?>
+                        <? if ($row['wikidump'] and archiv_check_perm($row['seminar_id'])) : ?>
                             <a href="<?= URLHelper::getLink('dispatch.php/archive/wiki/' . $row['seminar_id']) ?>" data-dialog>
                                 <?= Icon::create('wiki', 'clickable', ['title' => _('Beiträge des Wikis der Veranstaltung')])->asImg(20) ?>
                             </a>
