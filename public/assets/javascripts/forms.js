@@ -126,9 +126,11 @@
         var select_classes = $(element).removeClass('select2-awaiting').attr('class'),
             option         = $('<option>'),
             width          = $(element).outerWidth(true),
-            wrapper        = $('<div class="select2-wrapper">').css('display', $(element).clone().css('display')),
+            cloned         = $(element).clone().css('opacity', 0).appendTo('body'),
+            wrapper        = $('<div class="select2-wrapper">').css('display', cloned.css('display')),
             placeholder;
 
+        cloned.remove();
         $(wrapper).add(element).css('width', width);
 
         if ($('.is-placeholder', element).length > 0) {
