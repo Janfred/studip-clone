@@ -18,19 +18,8 @@ class Search_ArchiveController extends AuthenticatedController
     {
         PageLayout::setTitle(_('Suche im Veranstaltungsarchiv'));
         
-        $sidebar = Sidebar::get();
         
-        $search = new SearchWidget(URLHelper::getUrl('dispatch.php/search/archive'));
-        
-        $search->addNeedle(
-            _('Suche im Veranstaltungsarchiv'),
-            'archivedCourseName',
-            _('Name der archivierten Veranstaltung')
-        );
-        
-        $sidebar->addWidget($search);
-        
-        if(Request::get('archivedCourseName')) {
+        if(Request::get('search')) {
             /* 
                 A search form was sent here:
                 We have to make lookups in the database.
@@ -39,8 +28,8 @@ class Search_ArchiveController extends AuthenticatedController
             $this->searchRequested = true;
             
             //read parameters from HTTP POST, if they exist:
-            $this->onlyMyCourses = Request::get('onlyMyCourses', false);
-            $this->archivedCourseName = trim(Request::get('archivedCourseName', '')); //strip whitespaces here
+            $this->myCoursesOnly = Request::get('myCoursesOnly', false);
+            $this->archivedCourseName = trim(Request::get('search', '')); //strip whitespaces here
             
             //mb_strlen is used for unicode compatibility
             if(mb_strlen($this->archivedCourseName) < 4) {
@@ -50,13 +39,11 @@ class Search_ArchiveController extends AuthenticatedController
             else
             {
                 
-                if($this->onlyMyCourses) {
+                if($this->myCoursesOnly) {
                     /*
                         If the user wants to see only his courses 
                         we have to filter the courses:
                     */
-                    
-                    
                     
                     $user = User::findCurrent();
                     
@@ -88,7 +75,19 @@ class Search_ArchiveController extends AuthenticatedController
                     
                     $this->foundCourses = ArchivedCourse::findBySQL($sql, $queryParameters);
                 }
+                
             }
+            
+            $sidebar = Sidebar::get();
+            $checkboxWidget = new OptionsWidget();
+            $checkboxWidget->addCheckbox(
+                _('Nur eigene Veranstaltungen anzeigen'),
+                (bool)Request::get('myCoursesOnly', false),
+                URLHelper::getUrl('dispatch.php/search/archive', array('search' => $this->archivedCourseName, 'myCoursesOnly' => '1')),
+                URLHelper::getUrl('dispatch.php/search/archive', array('search' => $this->archivedCourseName))
+            );
+            
+            $sidebar->addWidget($checkboxWidget);
         }
     }
 }
