@@ -524,14 +524,14 @@ function get_my_obj_values (&$my_obj, $user_id)
                    COUNT(questionnaires.questionnaire_id) as count,
                    COUNT(IF(
                         questionnaires.startdate < UNIX_TIMESTAMP()
-                        AND (questionnaire.stopdate IS NULL OR questionnaire.stopdate > UNIX_TIMESTAMP())
+                        AND (questionnaires.stopdate IS NULL OR questionnaires.stopdate > UNIX_TIMESTAMP())
                         AND questionnaires.chdate >= IFNULL(b.visitdate, :threshold), 
                         questionnaires.questionnaire_id, 
                         NULL
                    )) AS neue,
                    MAX(IF(
                        questionnaires.startdate < UNIX_TIMESTAMP()
-                       AND (questionnaire.stopdate IS NULL OR questionnaire.stopdate > UNIX_TIMESTAMP())
+                       AND (questionnaires.stopdate IS NULL OR questionnaires.stopdate > UNIX_TIMESTAMP())
                        AND questionnaires.chdate >= IFNULL(b.visitdate, :threshold), 
                        chdate, 0
                    )) AS last_modified
