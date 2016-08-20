@@ -87,6 +87,8 @@ class ScheduleView
 
     public function addEvent($column, $name, $start_time, $end_time, $link = '', $add_info = '', $category = 0)
     {
+        $start_time = (int)$start_time;
+        $end_time   = (int)$end_time;
 
         // if the date ends before the starting hour of the schedule, do not add it or the schedule will break
         if (date('G', $end_time) < $this->start_hour
