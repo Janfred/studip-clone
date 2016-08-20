@@ -23,10 +23,11 @@
     
     <table class="default withdetails">
         <tr>
-            <th><?= _('Name'); ?></th>
-            <th><?= _('Lehrende'); ?></th>
-            <th><?= _('Einrichtungen'); ?></th>
-            <th><?= _('Semester'); ?></th>
+            <th><?= _('Name') ?></th>
+            <th><?= _('Lehrende') ?></th>
+            <th><?= _('Einrichtungen') ?></th>
+            <th><?= _('Semester') ?></th>
+            <th><?= _('Aktionen') ?></th>
         </tr>
     <? foreach ($foundCourses as $course) : ?>
         <tr <? if (count($foundCourses) == 1) : ?>class="open"<? endif ?> >
@@ -36,6 +37,41 @@
             <td><?= htmlReady($course->dozenten); ?></td>
             <td><?= htmlReady($course->institute); ?></td>
             <td><?= htmlReady($course->semester); ?></td>
+            <td>
+                <a href="<?= $controller->url_for(
+                                'archive/overview',
+                                $course->id
+                                ); ?>" data-dialog>
+                    <?= Icon::create('info-circle', 'clickable')->asImg('16px') ?>
+                </a>
+                
+                <? if ($course->archiv_file_id and archiv_check_perm($course->id)) : 
+                    $filename = _('Dateisammlung') . '-' . substr($course->name, 0, 200) . '.zip';
+                ?>
+                <a href="<?= URLHelper::getLink(GetDownloadLink($course->archiv_file_id, $filename, 1)) ?>">
+                    <?= Icon::create('file-archive', 'clickable')->asImg('16px') ?>
+                </a>
+                <? elseif ($course->archiv_protected_file_id and (archiv_check_perm($course->id) == 'admin')) :
+                    $filename = _('Dateisammlung') . '-' . substr($course->name, 0, 200) . '.zip';
+                ?>
+                <a href="<?= URLHelper::getLink(GetDownloadLink($course->archiv_protected_file_id, $filename, 1)) ?>">
+                    <?= Icon::create('file-archive', 'clickable')->asImg('16px') ?>
+                </a>
+                <? endif ?>
+                
+                <a href="<?= $controller->url_for(
+                                'archive/forum',
+                                $course->id
+                                ); ?>" data-dialog>
+                    <?= Icon::create('forum', 'clickable')->asImg('16px') ?>
+                </a>
+                <a href="<?= $controller->url_for(
+                                'archive/wiki',
+                                $course->id
+                                ); ?>" data-dialog>
+                    <?= Icon::create('wiki', 'clickable')->asImg('16px') ?>
+                </a>
+            </td>
         </tr>
         <tr class="details nohover">
             <td colspan="4" class="detailscontainer">
@@ -47,30 +83,6 @@
                     <li>
                         <strong><?= _('Bereich')  . ':'; ?></strong>
                         <?= htmlReady($course->studienbereiche); ?>
-                    </li>
-                    <li>
-                        <a href="<?= $controller->url_for(
-                                        'archive/overview',
-                                        $course->id
-                                        ); ?>" data-dialog>
-                            <?= _('Übersicht der Veranstaltungsinhalte'); ?>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="<?= $controller->url_for(
-                                        'archive/forum',
-                                        $course->id
-                                        ); ?>" data-dialog>
-                            <?= _('Beiträge des Forums'); ?>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="<?= $controller->url_for(
-                                        'archive/wiki',
-                                        $course->id
-                                        ); ?>" data-dialog>
-                            <?= _('Wikiseiten'); ?>
-                        </a>
                     </li>
                 </ul>
             </td>
