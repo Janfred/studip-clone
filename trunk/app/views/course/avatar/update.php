@@ -23,8 +23,8 @@ use Studip\Button, Studip\LinkButton;
 
     <p class="quiet">
         <?= Icon::create('info-circle', 'inactive')->asImg(16, ["style" => 'vertical-align: middle;']) ?>
-        <? printf(_("Die Bilddatei darf max. %d KB groß sein, es sind nur Dateien mit den Endungen %s, %s oder %s erlaubt!"),
-                  Avatar::MAX_FILE_SIZE / 1024,
+        <? printf(_("Die Bilddatei darf maxs. %s groß sein, es sind nur Dateien mit den Endungen %s, %s oder %s erlaubt!"),
+                  (Avatar::MAX_FILE_SIZE > 1024000) ? ((Avatar::MAX_FILE_SIZE / 1024 / 1024)._(" MB")) : ((Avatar::MAX_FILE_SIZE / 1024 )._(" KB")),
                   '<b>.jpg</b>', '<b>.png</b>', '<b>.gif</b>') ?>
     </p>
 
