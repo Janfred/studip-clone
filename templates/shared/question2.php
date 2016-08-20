@@ -6,10 +6,17 @@
     <div class="create-question-dialog ui-widget-content ui-dialog studip-confirmation">
         <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
             <span><?= _('Bitte bestätigen Sie die Aktion') ?></span>
-            <a href="<?= $disapprovalLink ?>" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close">
-                <span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span>
-                <span class="ui-button-text"><?= _('Schliessen') ?></span>
-            </a>
+            <form action="<?= $approvalLink ?>" method="post">
+                <?= CSRFProtection::tokenTag() ?> 
+                <?= $this->render_partial('shared/question2-parameters.php', array(
+                        'parameters' => $disapproveParams
+                )) ?>
+
+                <button href="<?= $disapprovalLink ?>" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close">
+                    <span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span>
+                    <span class="ui-button-text"><?= _('Schliessen') ?></span>
+                </button>
+            </form>
         </div>
         <div class="content ui-widget-content ui-dialog-content studip-confirmation">
             <?= formatReady($question) ?>
