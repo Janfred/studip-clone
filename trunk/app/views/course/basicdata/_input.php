@@ -65,16 +65,18 @@ if ($input['type'] === 'nested-select'): ?>
         <?= _("Keine Änderung möglich") ?>
 <? else: ?>
     <select <?= $is_locked ?> name="<?= $input['name'] ?>" class="nested-select" <? if ($input['must']) echo 'required'; ?> <? if ($input['multiple']) echo 'multiple'; ?>>
-    <? foreach ($input['choices'] as $outer_id => $group): ?>
+  <? foreach ($input['choices'] as $outer_id => $group): ?>
+    <? if ($group['label'] !== false): ?>
         <option value="<?= htmlReady($outer_id) ?>" class="nested-item-header" <? if (in_array($outer_id, (array)$input['value'])) echo 'selected'; ?>>
             <?= htmlReady($group['label']) ?>
         </option>
-      <? foreach ($group['children'] as $inner_id => $inner_label): ?>
+    <? endif; ?>
+    <? foreach ($group['children'] as $inner_id => $inner_label): ?>
         <option value="<?= htmlReady($inner_id) ?>" class="nested-item" <? if (in_array($inner_id, (array)$input['value'])) echo 'selected'; ?>>
             <?= htmlReady($inner_label) ?>
         </option>
-      <? endforeach; ?>
     <? endforeach; ?>
+  <? endforeach; ?>
     </select>
 <? endif; 
 endif; 
