@@ -47,12 +47,19 @@
             padding-left: 0;
         }
 
-        img, svg, .action-menu-no-icon {
+        img, svg, .action-menu-no-icon, input[type="image"] {
             margin: 0 0.25em;
+        }
+        > label {
+            color: @base-color;
+            cursor: pointer;
+            &:hover {
+                color: @active-color;
+            }
         }
     }
 
-    .action-menu-item img, .action-menu-no-icon {
+    .action-menu-item img, .action-menu-item svg, .action-menu-no-icon, .action-menu-item input[type="image"] {
         .square(@icon-size);
         display: inline-block;
         vertical-align: bottom;

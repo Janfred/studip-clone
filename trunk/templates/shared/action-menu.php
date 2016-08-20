@@ -1,3 +1,4 @@
+
 <?php
 $attributes = function (array $attributes) {
     $result = [];
@@ -33,6 +34,16 @@ $attributes = function (array $attributes) {
                 <? endif; ?>
                     <?= htmlReady($action['label']) ?>
                 </a>
+            <? elseif ($action['type'] === 'button'): ?>
+                <label>
+                <? if ($action['icon']): ?>
+                    <?= $action['icon']->asInput(['name' => $action['name']]) ?>
+                <? else: ?>
+                    <span class="action-menu-no-icon"></span>
+                    <button type="submit" name="<?= htmlReady($action['name']) ?>" style="display: none;"></button>
+                <? endif; ?>
+                    <?= htmlReady($action['label']) ?>
+                </label>
             <? elseif ($action['type'] === 'multi-person-search'): ?>
                 <?= $action['object']->render() ?>
             <? endif; ?>

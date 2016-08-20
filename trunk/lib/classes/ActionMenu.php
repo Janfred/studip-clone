@@ -104,6 +104,30 @@ class ActionMenu
     }
 
     /**
+     * Adds a button to the list of actions.
+     *
+     * @param String $name       Button name
+     * @param String $label      Textual representation of the name
+     * @param mixed  $icon       Optional icon (as Icon object)
+     * @param array  $attributes Optional attributes to add to the <a> tag
+     * @return ActionMenu instance to allow chaining
+     */
+    public function addButton($name, $label, Icon $icon = null, array $attributes = [])
+    {
+        if ($this->checkCondition()) {
+            $this->actions[] = [
+                'type'       => 'button',
+                'name'       => $name,
+                'icon'       => $icon,
+                'label'      => $label,
+                'attributes' => $attributes,
+            ];
+        }
+
+        return $this;
+    }
+
+    /**
      * Adds a MultiPersonSearch object to the list of actions.
      *
      * @param MultiPersonSearch $mp MultiPersonSearch object
