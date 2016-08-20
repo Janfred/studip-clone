@@ -2,20 +2,17 @@
     <?= MessageBox::error($errorMessage); ?>
 <? endif ?>
 
-<p><?= _('Bitte geben Sie hier ihren Suchbegriff ein') . ':'; ?></p>
-<form class="default" method="post" action="<?= URLHelper::getLink(); ?>">
+<section class="contentbox">
+<header><?= _('Suche im Veranstaltungsarchiv'); ?></header>
+<form class="default" method="get" action="<?= URLHelper::getLink(); ?>">
     <label>
         <?= _('Suche nach') . ':'; ?>
-        <input type="text" minlength="4" maxlength="255" name="archivedCourseName"
+        <input type="text" minlength="4" name="search"
             value="<?= htmlReady($archivedCourseName) ?>">
     </label>
-    <label>
-        <?= _('Nur Veranstaltungen anzeigen, an denen ich teilgenommen habe') . ':'; ?>
-        <input type="checkbox" name="onlyMyCourses"
-            <?= $onlyMyCourses ? 'checked="checked"' : '' ?> >
-    </label>
-    <?= \Studip\Button::create(_('Suchen'), 'searchRequested', array('value' => '1')); ?>
+    <?= \Studip\Button::create(_('Suchen'), ''); ?>
 </form>
+</section>
 
 <? if ($foundCourses) : ?>
     <? if (count($foundCourses) == 1) : ?>
