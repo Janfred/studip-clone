@@ -538,7 +538,7 @@ function get_my_obj_values (&$my_obj, $user_id)
             FROM questionnaires
                 INNER JOIN questionnaire_assign USING (questionnaire_id)
                 INNER JOIN `myobj_".$user_id."` AS my ON (my.object_id = questionnaire_assign.range_id AND questionnaire_assign.range_type = 'course')
-                LEFT JOIN object_user_visits b ON (b.object_id = questionnaires.questionnaire_id AND b.user_id = :user_id AND b.type 'vote')
+                LEFT JOIN object_user_visits b ON (b.object_id = questionnaires.questionnaire_id AND b.user_id = :user_id AND b.type = 'vote')
             WHERE questionnaires.visible = '1'
             GROUP BY my.object_id ORDER BY NULL
         ");
