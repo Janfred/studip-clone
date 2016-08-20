@@ -1,13 +1,13 @@
 <?php
 /**
  * MvvPerm.php
- * 
+ *
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * @author      Peter Thienel <thienel@data-quest.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
@@ -15,42 +15,42 @@
  */
 
 class MvvPerm {
-    
+
     /**
      * Permission to read the value of the designated field.
      */
     const PERM_READ = 1;
-    
+
     /**
      * Permission to read and write the value of the designated field.
      */
     const PERM_WRITE = 3;
-    
+
     /**
      * Permission to read, write/create and delete the value
      * of the dsignated field.
      */
     const PERM_CREATE = 7;
-    
+
     private static $privileges;
-    
+
     private static $roles;
-    
+
     private static $user_role_institutes;
-    
+
     private $mvv_object;
-    
+
     private $variant;
-    
+
     public function __construct(ModuleManagementModel $mvv_object)
     {
         $this->mvv_object = $mvv_object;
     }
-    
+
     public static function get($mvv_object)
     {
         static $perm_objects;
-        
+
         if (is_object($mvv_object)) {
             $id = $mvv_object->getId();
             $index = get_class($mvv_object) . (is_array($id) ? join('', $id) : $id);
@@ -67,16 +67,16 @@ class MvvPerm {
                 throw new InvalidArgumentException('Wrong object type. Only MVV '
                         . 'objects of type ModuleManagementModel are allowed.');
             }
-        
+
             $perm_objects[$index] = new MvvPerm($mvv_object);
         }
         return $perm_objects[$index];
     }
-    
+
     public static function __callStatic($name, $arguments)
     {
         $name = strtolower($name);
-        
+
         if (strpos($name, 'haveperm') === 0) {
             $perm = 'PERM_' . strtoupper(substr($name, 8));
             if (defined('self::' . $perm)) {
@@ -86,27 +86,27 @@ class MvvPerm {
                 throw new InvalidArgumentException('Undefined Permission.');
             }
         }
-        
+
         if (strpos($name, 'getfieldperm') === 0) {
             $field = strtolower(substr($name, 12));
             return self::get($arguments[0])->getFieldPerm($field,
                     $arguments[1], $arguments[2]);
         }
-        
+
         if (strpos($name, 'havefieldperm') === 0) {
             $field = strtolower(substr($name, 13));
             return self::get($arguments[0])->haveFieldPerm($field, $arguments[1],
                     $arguments[2], $arguments[3]);
         }
-        
+
         throw new BadMethodCallException('Method '
                 . get_called_class() . "::$name not found");
     }
-    
+
     public function __call($name, $arguments)
     {
         $name = strtolower($name);
-        
+
         if (strpos($name, 'haveperm') === 0) {
             $perm = 'PERM_' . strtoupper(substr($name, 8));
             if (defined('self::' . $perm)) {
@@ -116,34 +116,34 @@ class MvvPerm {
                 throw new InvalidArgumentException('Undefined Permission.');
             }
         }
-        
+
         if (strpos($name, 'getfieldperm') === 0) {
             $field = strtolower(substr($name, 12));
             return $this->getFieldPerm($field,
                     $arguments[1], $arguments[2]);
         }
-        
+
         if (strpos($name, 'havefieldperm') === 0) {
             $field = strtolower(substr($name, 13));
             return $this->haveFieldPerm($field, $arguments[0],
                     $arguments[1], $arguments[2]);
         }
-        
+
         throw new BadMethodCallException('Method '
                 . get_called_class() . "::$name not found");
     }
-    
+
     public function setVariant($variant)
     {
         $this->variant = $variant;
         return $this;
     }
-    
+
     /**
      * Retrieves the permission for the table or object.
      * Returns the (max) perm the given or current user has globally.
      * If the institute is set, checks for the perm in the context of this institute.
-     * 
+     *
      * @param object|string $object An mvv object or its class name.
      * @param string $status Constrain the permission to this status of the object.
      * @param string $user_id The ID of the user. If not set the ID of the
@@ -168,6 +168,9 @@ class MvvPerm {
             throw new InvalidArgumentException('Wrong object type. Only MVV objects of type ApplicationSimpleORMap are allowed.');
         }
         $user_id = is_null($user_id) ? $GLOBALS['user']->id : $user_id;
+        if ($GLOBALS['perm']->get_perm($user_id) == 'root' ) {
+            return self::PERM_CREATE;
+        }
         if (is_null($institut_id)) {
             $inst_ids = array();
             foreach ($mvv_object->getResponsibleInstitutes() as $inst) {
@@ -217,22 +220,22 @@ class MvvPerm {
                     $priv = intval(self::$privileges[$mvv_table]['table'][$status][$role->rolename]);
                 }
             }
-            
+
             if ($priv > $perm) {
                 $perm = $priv;
             }
         }
         return $perm;
     }
-    
+
     public final function havePerm($perm, $status = null,
             $user_id = null, $institut_id = null)
     {
         $user_perm = self::getPerm($this->mvv_object, $status, $user_id,
                 $institut_id, $this->variant);
-        return ($user_perm >= $perm); 
+        return ($user_perm >= $perm);
     }
-    
+
     public function haveObjectPerm($perm, $user_id = null)
     {
         $institute_ids = SimpleORMapCollection::createFromArray(
@@ -240,7 +243,7 @@ class MvvPerm {
         return $this->havePerm($perm, $this->mvv_object->getStatus(), $user_id,
                 $institute_ids, $this->variant);
     }
-    
+
     public function haveDfEntryPerm($df_entry, $perm)
     {
         $field = 'datafields';
@@ -248,12 +251,12 @@ class MvvPerm {
         $field_perm = $this->getFieldPerm(array($field, $df_id));
         return $field_perm >= $perm;
     }
-    
+
     /**
      * Retrieves the permission for the table or object.
      * Returns the (max) perm the given or current user have globally.
      * If the institute is set, checks for the perm in the context of this institute.
-     * 
+     *
      * @param string|array Name of field or an array with name of field and
      * related entry (usefull in the case of relations to datafields).
      * @param string $user_id The ID of the user. If not set the ID of the
@@ -265,7 +268,9 @@ class MvvPerm {
     public final function getFieldPerm($field, $user_id = null, $institut_id = null)
     {
         $user_id = is_null($user_id) ? $GLOBALS['user']->id : $user_id;
-        
+        if ($GLOBALS['perm']->get_perm($user_id) == 'root' ) {
+            return self::PERM_CREATE;
+        }
         $roles = self::getRoles($user_id);
         $table_meta = $this->mvv_object->getTableMetadata();
         $mvv_table = $table_meta['table']
@@ -279,7 +284,7 @@ class MvvPerm {
         }
         $status = $this->mvv_object->getStatus();
         self::getPrivileges($mvv_table);
-        
+
         $perm = 0;
         foreach ($roles as $role) {
             if ($role->rolename === 'MVVAdmin') {
@@ -324,21 +329,21 @@ class MvvPerm {
         }
         return $perm;
     }
-    
+
     public final function haveFieldPerm($field, $perm = null, $user_id = null, $institut_id = null)
     {
         $perm = intval($perm) ?: MvvPerm::PERM_WRITE;
         $user_perm = $this->getFieldPerm($field, $user_id, $institut_id);
         return ($user_perm >= $perm);
     }
-    
+
     public function disable($field, $perm = null, $user_id = null, $institut_id = null)
     {
         $perm = intval($perm) ?: MvvPerm::PERM_WRITE;
         return $this->haveFieldPerm($field, $perm, $user_id, $institut_id)
                 ? '' : ' readonly ';
     }
-    
+
     public static function getRoles($user_id)
     {
         if (!self::$roles[$user_id]) {
@@ -354,7 +359,7 @@ class MvvPerm {
         }
         return self::$roles[$user_id];
     }
-    
+
     /**
      * Retrieves all privileges from config files.
      */
@@ -364,7 +369,7 @@ class MvvPerm {
             $cache = StudipCacheFactory::getCache();
             self::$privileges = unserialize($cache->read('MvvPlugin/privileges'));
         }
-        
+
         if (self::$privileges[$mvv_table] === null) {
             $plugin_info = PluginManager::getInstance()->getPluginInfo('MvvPlugin');
             $config_dir = realpath($GLOBALS['PLUGINS_PATH'] . '/'
@@ -381,17 +386,17 @@ class MvvPerm {
         }
         return isset(self::$privileges[$mvv_table]);
     }
-    
+
     public static function refreshPrivileges($mvv_table){
         self::$privileges[$mvv_table] = null;
         return self::getPrivileges($mvv_table);
     }
-    
+
     /**
      * Returns all ids of institutes the user is assigned with at least one role.
      * Have the user at least one role globally an empty array is returned.
      * If the user has no role at any institute false is returned.
-     * 
+     *
      * @param string $user_id Optional. The actual user if not set.
      * @param array $mvv_roles Optional. An array of roles. All MvvPlugin-Roles if not set.
      * @return array An array of institute ids or an empty array.
@@ -409,11 +414,11 @@ class MvvPerm {
                 }
             }
         }
-        
-        if (self::$user_role_institutes[$user] === null) {
+
+        if (self::$user_role_institutes[$user_id] === null) {
             $institutes = array();
             foreach ($roles as $role) {
-                if ($role->rolename === 'MVVAdmin') {
+                if ($role->rolename === 'MVVAdmin' || $GLOBALS['perm']->have_perm('root')) {
                     $institutes = array();
                     break;
                 }
@@ -434,12 +439,12 @@ class MvvPerm {
                         . 'FROM Institute WHERE Institut_id IN (:inst_ids) '
                         . 'OR fakultaets_id IN (:inst_ids)');
                 $stmt->execute(array('inst_ids' => $institutes));
-                self::$user_role_institutes[$user] = $stmt->fetchAll(PDO::FETCH_COLUMN);
+                self::$user_role_institutes[$user_id] = $stmt->fetchAll(PDO::FETCH_COLUMN);
             } else {
-                self::$user_role_institutes[$user] = array();
+                self::$user_role_institutes[$user_id] = array();
             }
         }
-        return self::$user_role_institutes[$user];
+        return self::$user_role_institutes[$user_id];
     }
-    
+
 }

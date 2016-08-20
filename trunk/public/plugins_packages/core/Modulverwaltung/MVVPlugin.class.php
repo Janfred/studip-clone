@@ -143,9 +143,9 @@ class MVVPlugin extends StudipPlugin implements SystemPlugin, Loggable {
     }
 
     public function isVisible() {
-        if ($GLOBALS['perm']->have_perm('admin')
+        if ($GLOBALS['perm']->have_perm('root') || ($GLOBALS['perm']->have_perm('admin')
                 && RolePersistence::isAssignedRole(
-                        $GLOBALS['user']->id, 'MVVAdmin')) {
+                        $GLOBALS['user']->id, 'MVVAdmin'))) {
             return true;
         }
         if (RolePersistence::isAssignedRole(
