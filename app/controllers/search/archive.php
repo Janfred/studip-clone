@@ -17,7 +17,9 @@ class Search_ArchiveController extends AuthenticatedController
     public function index_action()
     {
         PageLayout::setTitle(_('Suche im Veranstaltungsarchiv'));
-        
+        if(Navigation::hasItem('/search/archive')) {
+            Navigation::activateItem('/search/archive');
+        }
         
         if(Request::get('search')) {
             /* 
