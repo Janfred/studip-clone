@@ -81,7 +81,7 @@
                             <th><?= _("Autor") ?></th>
                             <th><?= _("Einstelldatum") ?></th>
                             <th><?= _("Ablaufdatum") ?></th>
-                            <th><?= _("Aktion") ?></th>
+                            <th class="actions"><?= _("Aktion") ?></th>
                         </tr>
                         </thead>
                         <tbody>

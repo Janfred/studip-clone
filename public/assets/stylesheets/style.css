@@ -774,6 +774,7 @@ table.default > tfoot > tr > td {
 table.default .actions {
   float: right;
   text-align: right;
+  white-space: nowrap;
 }
 table.default .actions img,
 table.default .actions svg {
@@ -3156,6 +3157,7 @@ section.contentbox > article.new header h1 a::before {
   display: inline-block;
   position: relative;
   text-align: right;
+  vertical-align: middle;
 }
 .action-menu .action-menu-icon {
   width: 20px;
