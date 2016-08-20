@@ -75,7 +75,7 @@ class CoreAdmin implements StudipModule {
                     }
 
                     if (get_config('ALLOW_DOZENT_ARCHIV') || $GLOBALS['perm']->have_perm('admin')) {
-                        $item = new Navigation(_('Veranstaltung archivieren'), 'archiv_assi.php');
+                        $item = new Navigation(_('Veranstaltung archivieren'), 'dispatch.php/course/archive/confirm');
                         $item->setImage(Icon::create('seminar+remove', 'clickable'));
                         $main->addSubNavigation('archive', $item);
                     }
