@@ -177,7 +177,7 @@ class ShowSemSchedules extends ShowSchedules {
                 $add_info .= ($repeat_mode == 'w' && $event['repeat_interval'] == 1 ? '('._("wöchentlich").')' : '');
                 $add_info .= ($repeat_mode == 'w' && $event['repeat_interval'] > 1 ? '('.$event['repeat_interval'].'-'._("wöchentlich").')' : '');
                 $name = $event['name'];
-                $schedule->addEvent($name, $event['begin'], $event['end'],
+                $schedule->addEvent(null, $name, $event['begin'], $event['end'],
                             URLHelper::getLink('?cancel_edit_assign=1&quick_view='.$view.'&quick_view_mode='.$view_mode.'&edit_assign_object='.$event['assign_id']), $add_info, $categories[$repeat_mode]);
             }
             $num_rep_events = count($events);

@@ -312,7 +312,7 @@ class ShowSchedules
                 $sem_doz_names = array_map(create_function('$a', 'return $a["Nachname"];'), array_slice($dozenten,0,3, true));
                 $add_info = '(' . join(', ', $sem_doz_names) . ')';
             }
-            $schedule->addEvent($event->getName(get_config('RESOURCES_SCHEDULE_EXPLAIN_USER_NAME')), $event->getBegin(), $event->getEnd(),
+            $schedule->addEvent(null, $event->getName(get_config('RESOURCES_SCHEDULE_EXPLAIN_USER_NAME')), $event->getBegin(), $event->getEnd(),
                         URLHelper::getLink('?cancel_edit_assign=1&quick_view=' . $view . '&quick_view_mode='.$view_mode.'&edit_assign_object='.$event->getAssignId()), $add_info, $categories[$repeat_mode]);
         }
         ?>
