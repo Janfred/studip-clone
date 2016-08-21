@@ -160,6 +160,31 @@ class BlubberPosting extends SimpleORMap {
         return $statement->fetchAll(PDO::FETCH_COLUMN, 0);
     }
 
+    protected static function configure($config = [])
+    {
+        $config['db_table'] = 'blubber';
+        $config['additional_fields']['discussion_time'] = [
+            'get' => function($posting) {
+                if ($posting['topic_id'] === $posting['root_id']) {
+                    $db = DBManager::get();
+                    return $db->query(
+                        "SELECT GREATEST(MAX(blubber.mkdate),  IFNULL(MAX(blubber_reshares.chdate), 0)) " .
+                        "FROM blubber " .
+                            "LEFT JOIN blubber_reshares ON (blubber_reshares.topic_id = blubber.root_id) " .
+                        "WHERE root_id = ".$db->quote($posting->getId())." " .
+                        "GROUP BY blubber.root_id DESC " .
+                        "LIMIT 1 " .
+                    "")->fetch(PDO::FETCH_COLUMN, 0);
+                } else {
+                    return $posting['mkdate'];
+                }
+            },
+            'set' => false,
+        ];
+
+        parent::configure($config);
+    }
+
 
     /**
      * Overrides the contructor of SimpleORMap and is used in the exact same way.
@@ -168,24 +193,9 @@ class BlubberPosting extends SimpleORMap {
      * @param null|string $id
      */
     public function __construct($id = null) {
-        $this->additional_fields['discussion_time']['get'] = function($posting) {
-            if ($posting['topic_id'] === $posting['root_id']) {
-                $db = DBManager::get();
-                return $db->query(
-                    "SELECT GREATEST(MAX(blubber.mkdate),  IFNULL(MAX(blubber_reshares.chdate), 0)) " .
-                    "FROM blubber " .
-                        "LEFT JOIN blubber_reshares ON (blubber_reshares.topic_id = blubber.root_id) " .
-                    "WHERE root_id = ".$db->quote($posting->getId())." " .
-                    "GROUP BY blubber.root_id DESC " .
-                    "LIMIT 1 " .
-                "")->fetch(PDO::FETCH_COLUMN, 0);
-            } else {
-                return $posting['mkdate'];
-            }
-        };
-        $this->db_table = "blubber";
-        $this->registerCallback('after_store', 'synchronizeHashtags');
         parent::__construct($id);
+
+        $this->registerCallback('after_store', 'synchronizeHashtags');
     }
 
     /**
