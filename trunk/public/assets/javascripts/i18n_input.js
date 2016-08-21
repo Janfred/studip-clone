@@ -6,7 +6,6 @@
 
     $(document).ready(function () {
         STUDIP.i18n.init();
-        STUDIP.i18n.startFormSubmitHandler();
     });
 
     $(document).on('dialog-update', function (event, data) {
@@ -30,36 +29,14 @@
                 });
                 $(this).prepend(select);
                 languages.css('background-image', '').not(':eq(0)').hide();
-            });
-        },
-        startFormSubmitHandler: function () {
-            $(document).on('submit', 'form:has(div.i18n_group:not(.single_lang))', function () {
-                var all = $();
 
-                $('div.i18n_group:has(.i18n[required])', this).each(function () {
-                    var invalid = $('.i18n[required]:not(select)', this).filter(':not([value]),[value=""]').first();
-                    if (invalid.length === 0) {
+                $('.i18n[required]').on('invalid', function () {
+                    if ($(this).siblings('.i18n[required]:visible').is(':invalid')) {
                         return;
                     }
-                    // Show invalid element, hide others
-                    invalid.show().siblings(':not(select)').hide();
-
-                    // Adjust select
-                    $(invalid).siblings('select').val($(invalid).data().lang_desc).change();
-
-                    // Store invalid element
-                    all = all.add(invalid);
+                    $(this).show().siblings('.i18n[required]').hide();
+                    $(this).siblings('select').val($(this).data().lang_desc).change();
                 });
-
-                // No invalid element, bail out
-                if (all.length === 0) {
-                    return true;
-                }
-
-                // Focus on first invalid element
-                all.first().focus();
-                $(window).trigger('resize');
-                return false;
             });
         }
     };
