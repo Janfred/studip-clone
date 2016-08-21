@@ -46,8 +46,8 @@ class PersonalNotifications extends SimpleORMap
     {
         $config['db_table'] = 'personal_notifications';
         $config['additional_fields']['more_unseen'] = array(
-            'get' => false,
-            'set' => false,
+            'get' => 'getmore_unseen',
+            'set' => 'setmore_unseen',
         );
 
         $config['notification_map'] = array(
