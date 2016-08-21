@@ -8,6 +8,24 @@
 (function ($, STUDIP) {
     'use strict';
 
+    $.extend($.expr[':'], {
+        invalid : function (elem, index, match) {
+            var invalids = document.querySelectorAll(':invalid'),
+                result = false,
+                len = invalids.length || 0,
+                i;
+
+            for (i = 0; i < len; i += 1) {
+                if (elem === invalids[i]) {
+                    result = true;
+                    break;
+                }
+            }
+
+            return result;
+        }
+    });
+
     STUDIP.Forms = {
         initialize : function () {
             $("input[required],textarea[required]").attr('aria-required', true);
@@ -30,6 +48,7 @@
                 }
             });
 
+            // TODO: This handler will probably called multiple times
             $(document).on("change", "form.default label.file-upload input[type=file]", function (ev) {
                 var selected_file = ev.target.files[0],
                     filename;

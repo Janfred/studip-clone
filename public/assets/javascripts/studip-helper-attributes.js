@@ -128,9 +128,7 @@
     $(document).on('click', 'a[data-confirm],input[data-confirm],button[data-confirm]', confirmation_handler);
     $(document).on('submit', 'form[data-confirm]', confirmation_handler);
 
-
-    //
-
+    // Ensures an element has the same value as another element.
     $(document).on('change', 'input[data-must-equal]', function () {
         var value  = $(this).val(),
             rel    = $(this).data().mustEqual,
@@ -149,6 +147,8 @@
 
         if (value !== other) {
             this.setCustomValidity(error_message);
+        } else {
+            this.setCustomValidity('');
         }
     });
 
