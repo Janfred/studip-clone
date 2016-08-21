@@ -29,6 +29,9 @@ class MailQueueEntry extends SimpleORMap
     protected static function configure($config = array())
     {
         $config['db_table'] = 'mail_queue_entries';
+        $config['registered_callbacks']['before_store'][] = 'cbSerializeMail';
+        $config['registered_callbacks']['after_store'][] = 'cbUnserializeMail';
+        $config['registered_callbacks']['after_initialize'][] = 'cbUnserializeMail';
         parent::configure($config);
     }
 
@@ -79,17 +82,6 @@ class MailQueueEntry extends SimpleORMap
             "OR (last_try > (UNIX_TIMESTAMP() - 60 * 60) AND tries < 25) ORDER BY mkdate".
             ($limit > 0 ? " LIMIT ". (int) $limit : "")
         );
-    }
-
-    /**
-     * Constructor. Just like any SimpleORMap-constructor. See there for details.
-     * @param string|null $id : id of a queue-entry or null.
-     */
-    public function __construct($id = null)
-    {
-        $this->registerCallback('before_store', 'cbSerializeMail');
-        $this->registerCallback('after_store after_initialize', 'cbUnserializeMail');
-        parent::__construct($id);
     }
 
     /**
