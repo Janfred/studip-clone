@@ -154,7 +154,7 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
      * reserved indentifiers, fields with those names must not have an explicit getXXX() method
      * @var array $reserved_slots
      */
-    protected $reserved_slots = array('value','newid','iterator','tablemetadata', 'relationvalue','wherequery','relationoptions','data','new','id');
+    protected static $reserved_slots = array('value','newid','iterator','tablemetadata', 'relationvalue','wherequery','relationoptions','data','new','id');
 
     /**
      * assoc array used to map SORM callback to NotificationCenter
@@ -173,6 +173,13 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
     protected $additional_data = array();
 
     /**
+     * assoc array for mapping get/set Methods
+     *
+     * @var array $getter_setter_map
+     */
+    protected $getter_setter_map = array();
+
+    /**
      * set configuration data from subclass
      *
      * @param array $config configuration data
@@ -180,6 +187,31 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
      */
     protected static function configure($config = array())
     {
+        $class = get_called_class();
+
+        if (empty($config['db_table'])) {
+            $config['db_table'] = strtolower($class);
+        }
+
+        if (!isset($config['db_fields'])) {
+            if (self::TableScheme($config['db_table'])) {
+                $config['db_fields'] = self::$schemes[$config['db_table']]['db_fields'];
+                $config['pk'] = self::$schemes[$config['db_table']]['pk'];
+            }
+        }
+
+        if (isset($config['pk'])
+            && !isset($config['db_fields']['id'])
+            && !isset($config['alias_fields']['id'])
+            && !isset($config['additional_fields']['id'])
+        ) {
+            if (count($config['pk']) === 1) {
+                $config['alias_fields']['id'] = $config['pk'][0];
+            } else {
+                $config['additional_fields']['id'] = array('get' => '_getId',
+                                                           'set' => '_setId');
+            }
+        }
         if (isset($config['additional_fields'])) {
             foreach ($config['additional_fields'] as $a_field => $a_config) {
                 if (is_array($a_config) && !(isset($a_config['get']) || isset($a_config['set']))) {
@@ -190,9 +222,9 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
                     if (!$relation_field || !$relation) {
                         throw new UnexpectedValueException('no relation found for autoget/set additional field: ' . $a_field);
                     }
-                    $config['additional_fields'][$a_field] = array('get' => '_getAdditionalValueFromRelation',
-                                                                   'set' => '_setAdditionalValue',
-                                                                   'relation' => $relation,
+                    $config['additional_fields'][$a_field] = array('get'            => '_getAdditionalValueFromRelation',
+                                                                   'set'            => '_setAdditionalValue',
+                                                                   'relation'       => $relation,
                                                                    'relation_field' => $relation_field);
                 }
             }
@@ -204,7 +236,46 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
                 }
             }
         }
-        self::$config[get_called_class()] = $config;
+
+        foreach (array('has_many', 'belongs_to', 'has_one', 'has_and_belongs_to_many') as $type) {
+            if (is_array($config[$type])) {
+                foreach (array_keys($config[$type]) as $one) {
+                    $config['relations'][$one] = null;
+                }
+            }
+        }
+        if ($config['db_fields'][$config['pk'][0]]['extra'] == 'auto_increment') {
+            $config['registered_callbacks']['before_store'][] = 'cbAutoIncrementColumn';
+            $config['registered_callbacks']['after_create'][] = 'cbAutoIncrementColumn';
+        } elseif (count($config['pk']) === 1) {
+            $config['registered_callbacks']['before_store'][] = 'cbAutoKeyCreation';
+        }
+        if (is_array($config['notification_map'])) {
+            foreach (array_keys($config['notification_map']) as $cb) {
+                $config['registered_callbacks'][$cb][] = 'cbNotificationMapper';
+            }
+        }
+        if (I18N::isEnabled()) {
+            if (count($config['i18n_fields'])) {
+                $config['registered_callbacks']['before_store'][] = 'cbI18N';
+                $config['registered_callbacks']['after_delete'][] = 'cbI18N';
+            }
+        } else {
+            $config['i18n_fields'] = array();
+        }
+        $config['registered_callbacks']['after_initialize'][] = 'cbAfterInitialize';
+        $config['known_slots'] = array_merge(array_keys($config['db_fields']), array_keys($config['alias_fields'] ?: []), array_keys($config['additional_fields'] ?: []), array_keys($config['relations'] ?: []));
+
+        foreach (array_map('strtolower', get_class_methods($class)) as $method) {
+            if (in_array(substr($method, 0, 3), ['get', 'set'])) {
+                $verb = substr($method, 0, 3);
+                $name = substr($method, 3);
+                if (in_array($name, $config['known_slots']) && !in_array($name, static::$reserved_slots) && !isset($config['additional_fields'][$name][$verb])) {
+                    $config['getter_setter_map'][$name][$verb] = $method;
+                }
+            }
+        }
+        self::$config[$class] = $config;
     }
 
     /**
@@ -424,15 +495,14 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
             $sql = 'WHERE ' . $sql;
         }
         $sql = "SELECT `" . $record->db_table . "`.* FROM `" .  $record->db_table . "` " . $sql;
-        $st = $db->prepare($sql);
-        $st->execute($params);
         $ret = array();
-        $c = 0;
-        while($row = $st->fetch(PDO::FETCH_ASSOC)) {
-            $ret[$c] = new $class();
-            $ret[$c]->setData($row, true);
-            $ret[$c]->setNew(false);
-            ++$c;
+        $stmt = DBManager::get()->prepare($sql);
+        $stmt->execute($params);
+        $stmt->setFetchMode(PDO::FETCH_INTO , $record);
+        $record->setNew(false);
+        while ($record = $stmt->fetch()) {
+            $record->applyCallbacks('after_initialize');
+            $ret[] = clone $record;
         }
         return $ret;
     }
@@ -514,12 +584,11 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
         $st = $db->prepare($sql);
         $st->execute(array($foreign_key_value));
         $ret = array();
-        $c = 0;
-        while($row = $st->fetch(PDO::FETCH_ASSOC)) {
-            $ret[$c] = new $class();
-            $ret[$c]->setData($row, true);
-            $ret[$c]->setNew(false);
-            ++$c;
+        $st->setFetchMode(PDO::FETCH_INTO , $record);
+        $record->setNew(false);
+        while ($record = $st->fetch()) {
+            $record->applyCallbacks('after_initialize');
+            $ret[] = clone $record;
         }
         return $ret;
     }
@@ -544,12 +613,12 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
         $sql = "SELECT `" . $record->db_table . "`.* FROM `" .  $record->db_table . "` " . $sql;
         $st = $db->prepare($sql);
         $st->execute($params);
+        $st->setFetchMode(PDO::FETCH_INTO , $record);
         $ret = 0;
-        while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
-            $current = new $class();
-            $current->setData($row, true);
-            $current->setNew(false);
-            $callable($current);
+        $record->setNew(false);
+        while ($record = $st->fetch()) {
+            $record->applyCallbacks('after_initialize');
+            $callable($record);
             ++$ret;
         }
         return $ret;
@@ -749,7 +818,7 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
         $class = get_class($this);
         //initialize configuration for subclass, only one time
         if (!array_key_exists($class, self::$config)) {
-            static::configure();
+            static::configure(['db_table' => $this->db_table]);
         }
         //if configuration data for subclass is found, point internal properties to it
         if (self::$config[$class] !== null) {
@@ -764,48 +833,6 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
                 }
             }
         }
-
-        if (!$this->db_table) {
-            $this->db_table = strtolower($class);
-        }
-
-        if (!$this->db_fields) {
-            $this->getTableScheme();
-        }
-
-        if (!isset($this->db_fields['id'])
-            && !isset($this->alias_fields['id'])
-            && !isset($this->additional_fields['id'])) {
-            if (count($this->pk) === 1) {
-                $this->alias_fields['id'] = $this->pk[0];
-            } else {
-                $this->additional_fields['id'] = array('get' => '_getId',
-                                                        'set' => '_setId');
-            }
-        }
-
-        foreach(array('has_many', 'belongs_to', 'has_one', 'has_and_belongs_to_many') as $type) {
-            foreach (array_keys($this->{$type}) as $one) {
-                $this->relations[$one] = null;
-            }
-        }
-        if ($this->hasAutoIncrementColumn()) {
-            $this->registerCallback('before_store after_create', 'cbAutoIncrementColumn');
-        } elseif (count($this->pk) === 1) {
-            $this->registerCallback('before_store', 'cbAutoKeyCreation');
-        }
-        if (count($this->notification_map)) {
-            $this->registerCallback(array_keys($this->notification_map), 'cbNotificationMapper');
-        }
-        if (I18N::isEnabled()) {
-            if (count($this->i18n_fields)) {
-                $this->registerCallback(['before_store', 'after_delete'], 'cbI18N');
-            }
-        } else {
-            $this->i18n_fields = array();
-        }
-
-        $this->known_slots = array_merge(array_keys($this->db_fields), array_keys($this->alias_fields), array_keys($this->additional_fields), array_keys($this->relations));
 
         if ($id) {
             $this->setId($id);
@@ -1272,8 +1299,8 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
     {
         $field = strtolower($field);
         if (in_array($field, $this->known_slots)) {
-            if (!in_array($field, $this->reserved_slots) && !$this->additional_fields[$field]['get'] && method_exists($this, 'get' . $field)) {
-                return call_user_func(array($this, 'get' . $field));
+            if (isset($this->getter_setter_map[$field]['get'])) {
+                return call_user_func(array($this, $this->getter_setter_map[$field]['get']));
             }
             if (array_key_exists($field, $this->content)) {
                 return  $this->content[$field];
@@ -1283,10 +1310,8 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
             } elseif (isset($this->additional_fields[$field]['get'])) {
                 if ($this->additional_fields[$field]['get'] instanceof Closure) {
                     return call_user_func_array($this->additional_fields[$field]['get'], array($this, $field));
-                } elseif (method_exists($this, $this->additional_fields[$field]['get'])) {
-                    return call_user_func(array($this, $this->additional_fields[$field]['get']), $field);
                 } else {
-                    throw new BadMethodCallException('Did not find getter for' . $field);
+                    return call_user_func(array($this, $this->additional_fields[$field]['get']), $field);
                 }
             }
         } else {
@@ -1359,8 +1384,8 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
          $field = strtolower($field);
          $ret = false;
          if (in_array($field, $this->known_slots)) {
-             if (!in_array($field, $this->reserved_slots) && !$this->additional_fields[$field]['set'] && method_exists($this, 'set' . $field)) {
-                 return call_user_func(array($this, 'set' . $field), $value);
+             if (isset($this->getter_setter_map[$field]['set'])) {
+                 return call_user_func(array($this, $this->getter_setter_map[$field]['set']), $value);
              }
              if (array_key_exists($field, $this->content)) {
                  if (array_key_exists($field, $this->serialized_fields)) {
@@ -1373,10 +1398,8 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
              } elseif (isset($this->additional_fields[$field]['set'])) {
                  if ($this->additional_fields[$field]['set'] instanceof Closure) {
                      return call_user_func_array($this->additional_fields[$field]['set'], array($this, $field, $value));
-                 } elseif (method_exists($this, $this->additional_fields[$field]['set'])) {
-                     return call_user_func(array($this, $this->additional_fields[$field]['set']), $field, $value);
                  } else {
-                     throw new BadMethodCallException('Did not find setter for' . $field);
+                     return call_user_func(array($this, $this->additional_fields[$field]['set']), $field, $value);
                  }
              } elseif (array_key_exists($field, $this->relations)) {
                  $options = $this->getRelationOptions($field);
@@ -1582,13 +1605,6 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
             }
         }
         if ($reset) {
-            foreach (array_keys($this->db_fields) as $field) {
-                if (is_object($this->content[$field])) {
-                    $this->content_db[$field] = clone $this->content[$field];
-                } else {
-                    $this->content_db[$field] = $this->content[$field];
-                }
-            }
             $this->applyCallbacks('after_initialize');
         }
         return $count;
@@ -1671,16 +1687,21 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
     {
         $where_query = $this->getWhereQuery();
         if ($where_query) {
-            $query = "SELECT * FROM `{$this->db_table}` WHERE "
-                    . join(" AND ", $where_query);
-            $rs = DBManager::get()->query($query)->fetchAll(PDO::FETCH_ASSOC);
-            if (isset($rs[0])) {
-                if ($this->setData($rs[0], true)){
-                    $this->setNew(false);
-                    return true;
-                }
+            if ($this->applyCallbacks('before_initialize') === false) {
+                return false;
             }
             $id = $this->getId();
+            $this->initializeContent();
+            $query = "SELECT * FROM `{$this->db_table}` WHERE "
+                    . join(" AND ", $where_query);
+            $st = DBManager::get()->prepare($query);
+            $st->execute();
+            $st->setFetchMode(PDO::FETCH_INTO , $this);
+            if ($st->fetch()) {
+                $this->setNew(false);
+                $this->applyCallbacks('after_initialize');
+                return true;
+            }
         }
         $this->setData(array(), true);
         $this->setNew(true);
@@ -2160,6 +2181,23 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
                 }
             } catch (NotificationVetoException $e) {
                 return false;
+            }
+        }
+    }
+
+    /**
+     * default callback used to map specific callbacks to NotificationCenter
+     *
+     * @param string $cb_type callback type
+     * @return boolean
+     */
+    protected function cbAfterInitialize($cb_type)
+    {
+        foreach (array_keys($this->db_fields) as $field) {
+            if (is_object($this->content[$field])) {
+                $this->content_db[$field] = clone $this->content[$field];
+            } else {
+                $this->content_db[$field] = $this->content[$field];
             }
         }
     }
