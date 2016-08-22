@@ -28,6 +28,19 @@ class BlubberStream extends SimpleORMap {
     public $user_id = null;
     public $max_age = null;
 
+    protected static function configure($config = [])
+    {
+        $config['db_table'] = 'blubber_streams';
+
+        $config['registered_callbacks']['before_store'][] = 'serializeData';
+        $config['registered_callbacks']['after_store'][] = 'unserializeData';
+        $config['registered_callbacks']['after_initialize'][] = 'unserializeData';
+
+        $config['default_values']['user_id'] = $GLOBALS['user']->id;
+
+        parent::configure($config);
+    }
+
     static public function create($pool = array(), $filter = array()) {
         $stream = new BlubberStream();
         foreach ($pool as $key => $pool_variable) {
@@ -101,18 +114,6 @@ class BlubberStream extends SimpleORMap {
         $stream = new BlubberStream();
         $stream->filter_threads = is_array($topic_id) ? $topic_id : array($topic_id);
         return $stream;
-    }
-
-    /**
-     * constructor
-     * @param string/null $id : id of blubber-stream
-     */
-    public function __construct($id = null) {
-        $this->db_table = "blubber_streams";
-        $this->registerCallback('before_store', 'serializeData');
-        $this->registerCallback('after_store after_initialize', 'unserializeData');
-        $this->user_id = $GLOBALS['user']->id;
-        parent::__construct($id);
     }
 
     /**
