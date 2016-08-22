@@ -21,75 +21,107 @@ class Search_ArchiveController extends AuthenticatedController
             Navigation::activateItem('/search/archive');
         }
         
-        if(Request::get('search')) {
-            /* 
-                A search form was sent here:
-                We have to make lookups in the database.
-            */
-            
-            $this->searchRequested = true;
-            
-            //read parameters from HTTP POST, if they exist:
-            $this->myCoursesOnly = Request::get('myCoursesOnly', false);
-            $this->archivedCourseName = trim(Request::get('search', '')); //strip whitespaces here
-            
-            //mb_strlen is used for unicode compatibility
-            if(mb_strlen($this->archivedCourseName) < 4) {
-                //search keyword too short
-                $this->errorMessage = sprintf(_('Suchbegriff muss mindestens %s Zeichen lang sein!'), 4);
-            }
-            else
-            {
-                
-                if($this->myCoursesOnly) {
-                    /*
-                        If the user wants to see only his courses 
-                        we have to filter the courses:
-                    */
-                    
-                    $user = User::findCurrent();
-                    
-                    $allUserEntries = ArchivedCourseMember::findBySQL(
-                        "user_id = :userId", array('userId' => $user->id));
-                    
-                    $this->foundCourses = array();
-                    
-                    foreach($allUserEntries as $userEntry) {
-                        
-                        $this->foundCourses[] = $userEntry->course;
-                    }
-                    
-                }
-                else
-                {
-                    $queryParameters = array('criteria' => $this->archivedCourseName);
-                    //get courses where at least one field matches the search criteria
-                    
-                    $sql = "name LIKE CONCAT('%', :criteria, '%') "
-                        . "OR untertitel LIKE CONCAT('%', :criteria, '%') "
-                        . "OR beschreibung LIKE CONCAT('%', :criteria, '%') "
-                        . "OR dozenten LIKE CONCAT('%', :criteria, '%') "
-                        . "OR institute LIKE CONCAT('%', :criteria, '%') "
-                        . "OR semester LIKE CONCAT('%', :criteria, '%') "
-                        
-                        //order:
-                        . "ORDER BY start_time DESC, name DESC ";
-                    
-                    $this->foundCourses = ArchivedCourse::findBySQL($sql, $queryParameters);
-                }
-                
-            }
-        }
         
+        $this->criteria = trim(Request::get('criteria', '')); //strip whitespaces here
+        $this->selectedSemester = Request::get('selectedSemester', '');
+        $this->selectedDepartment = Request::get('selectedDepartment', '');
+        //the optional parameter myCoursesOnly says that
+        //only the courses of the current user shall be searched
+        //with the search criteria
+        $this->myCoursesOnly = Request::get('myCoursesOnly', false);
+        
+        $this->searchRequested = Request::get('searchRequested');
+        
+        
+        //build sidebar:
         $sidebar = Sidebar::get();
         $checkboxWidget = new OptionsWidget();
         $checkboxWidget->addCheckbox(
             _('Nur eigene Veranstaltungen anzeigen'),
             (bool)Request::get('myCoursesOnly', false),
-            URLHelper::getUrl('dispatch.php/search/archive', array('search' => $this->archivedCourseName, 'myCoursesOnly' => '1')),
-            URLHelper::getUrl('dispatch.php/search/archive', array('search' => $this->archivedCourseName))
+            URLHelper::getUrl(
+                'dispatch.php/search/archive',
+                [
+                    'criteria' => $this->criteria,
+                    'selectedSemester' => $this->selectedSemester,
+                    'selectedDepartment' => $this->selectedDepartment,
+                    'myCoursesOnly' => '1'
+                ]
+            ),
+            URLHelper::getUrl(
+                'dispatch.php/search/archive',
+                [
+                    'criteria' => $this->criteria,
+                    'selectedSemester' => $this->selectedSemester,
+                    'selectedDepartment' => $this->selectedDepartment
+                ]
+            )
         );
-        
         $sidebar->addWidget($checkboxWidget);
+        
+        //get available semesters:
+        
+        $this->availableSemesters = Semester::getAll();
+        $this->availableDepartments = Institute::findBySql('TRUE');
+        
+        
+        if($this->searchRequested) {
+            //check if at least one search criteria was given:
+            if(!$this->criteria and !$this->selectedSemester and !$this->selectedDepartment) {
+                //no search criteria was set
+                PageLayout::postError(_('Es wurde kein Suchkriterium ausgewählt!'));
+                return;
+                $this->errorOccured = true;
+            }
+            
+            
+            //mb_strlen is used for unicode compatibility
+            if(mb_strlen($this->criteria) < 4) {
+                //search keyword is too short
+                PageLayout::postError(sprintf(_('Der Name der Veranstaltung muss mindestens %s Zeichen lang sein!'), 4));
+                return;
+                $this->errorOccured = true;
+            }
+            
+            //ok, checks are done: build SQL query:
+            
+            $sql = "(name LIKE CONCAT('%', :criteria, '%') "
+                    . "OR untertitel LIKE CONCAT('%', :criteria, '%') "
+                    . "OR beschreibung LIKE CONCAT('%', :criteria, '%') "
+                    . "OR dozenten LIKE CONCAT('%', :criteria, '%')) ";
+            $sqlArray = ['criteria' => $this->criteria];
+            
+            if($this->myCoursesOnly) {
+                /*
+                    If the user wants to see only his courses 
+                    we have to filter the courses by user-ID:
+                */
+                $sql .= "AND (user_id = :userId) ";
+                $sqlArray['userId'] = User::findCurrent()->id;
+            }
+            
+            if($this->selectedDepartment) {
+                $sql .= "AND (institute = :selectedDepartment) ";
+                $sqlArray['selectedDepartment'] = $this->selectedDepartment;
+            }
+            
+            if($this->selectedSemester) {
+                $sql .= "AND (semester = :selectedSemester) ";
+                $sqlArray['selectedSemester'] = $this->selectedSemester;
+            }
+            
+            //database entry order:
+            $sql .= "ORDER BY start_time DESC, name DESC ";
+            
+            //first we count the courses: if there are too many
+            //we won't collect them!
+            $this->amountOfCourses = ArchivedCourse::countBySql($sql, $sqlArray);
+            if($this->amountOfCourses > 150) {
+                $this->tooManyCourses = true;
+            }
+            
+            //get courses:
+            $this->foundCourses = ArchivedCourse::findBySQL($sql, $sqlArray);
+        }
     }
 }
