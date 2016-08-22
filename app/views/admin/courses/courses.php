@@ -46,6 +46,10 @@
         <? $colspan++ ?>
         <col width="8%">
     <? endif ?>
+    <? if (in_array('last_activity', $view_filter)) : ?>
+        <? $colspan++ ?>
+        <col width="8%">
+    <? endif ?>
         <col width="15%">
     </colgroup>
     <caption>
@@ -140,6 +144,11 @@
         <? if (in_array('contents', $view_filter)) : ?>
             <th style="width: <?= $nav_elements * 27 ?>px">
                 <?= _('Inhalt') ?>
+            </th>
+        <? endif ?>
+        <? if (in_array('last_activity', $view_filter)) : ?>
+            <th style="width: <?= $nav_elements * 27 ?>px">
+                <?= _('letzte Aktivität') ?>
             </th>
         <? endif ?>
         <th style="text-align: center" class="actions">
@@ -282,6 +291,13 @@
                         <? echo ' ' ?>
                     <? endforeach ?>
                 <? endif ?>
+                </td>
+            <? endif ?>
+            <? if (in_array('last_activity', $view_filter)) : ?>
+                <td style="text-align: center;">
+                    <span title="<?=_('Datum der letzten Aktivität in dieser Veranstaltung')?>">
+                        <?= htmlReady(date('d.m.Y', $values['last_activity'])); ?>
+                    </span>
                 </td>
             <? endif ?>
             <td style="text-align: right;" class="actions">
