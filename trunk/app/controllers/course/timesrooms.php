@@ -272,15 +272,13 @@ class Course_TimesroomsController extends AuthenticatedController
 
         $related_users    = Request::get('related_teachers');
         $dozenten         = $this->course->getMembers('dozent');
+        
         $termin->dozenten = array();
         $related_users    = explode(',', $related_users);
         if (!empty($related_users) && count($dozenten) !== count($related_users)) {
             $termin->dozenten = User::findMany($related_users);
         }
 
-        
-
-        
         // Set Room
         $singledate = new SingleDate($termin);
         if (Request::option('room') == 'room') {
@@ -369,15 +367,12 @@ class Course_TimesroomsController extends AuthenticatedController
         $termin->date_typ  = Request::get('dateType');
 
         $teachers = $this->course->getMembers('dozent');
-        foreach (Request::getArray('related_teachers') as $dozent_id) {
-            if (in_array($dozent_id, array_keys($teachers))) {
-                $related_persons[] = User::find($dozent_id);
-            }
+        if (!empty(Request::getArray('related_teachers')) 
+                && count($teachers) !== count(Request::getArray('related_teachers'))) {
+            
+            $termin->dozenten = User::findMany(Request::getArray('related_teachers'));
         }
-        if (isset($related_persons)) {
-            $termin->dozenten = $related_persons;
-        }
-
+        
         foreach (Request::getArray('related_statusgruppen') as $statusgruppe_id) {
             $related_groups[] = Statusgruppen::find($statusgruppe_id);
         }
