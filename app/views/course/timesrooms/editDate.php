@@ -72,7 +72,7 @@
             <ul class="termin_related teachers">
                 <? foreach ($dozenten as $related_person => $dozent) : ?>
                     <? $related = true; ?>
-                    <? if (in_array($related_person, $related_persons)) : ?>
+                    <? if (in_array($related_person, $related_persons) || empty($related_persons)) : ?>
                         <? $related = false ?>
                     <? endif ?>
                     <li data-lecturerid="<?= $related_person ?>" <?= !$related ? '' : 'style="display: none"' ?>>
@@ -87,9 +87,6 @@
             <input type="hidden" name="related_teachers" value="<?= implode(',', $related_persons) ?>" />
 
             <label for="add_teacher">
-                <span style="display: block">
-                    <?= _('Lehrende auswählen') ?>
-                </span>
                 <select id="add_teacher" name="teachers" style="display: inline-block; width: 40%">
                     <option value="none"><?= _('Lehrende auswählen') ?></option>
                     <? foreach ($dozenten as $dozent) : ?>
@@ -114,7 +111,7 @@
             <ul class="termin_related groups">
                 <? foreach ($gruppen as $index => $statusgruppe) : ?>
                     <? $related = true ?>
-                    <? if (in_array($statusgruppe->getId(), $related_groups)) : ?>
+                    <? if (in_array($statusgruppe->getId(), $related_groups) || empty($related_groups)) : ?>
                         <? $related = false; ?>
                     <? endif ?>
                     <li data-groupid="<?= htmlReady($statusgruppe->getId()) ?>" <?= !$related ? '' : 'style="display: none"' ?>>

@@ -187,10 +187,12 @@ class Course_DatesController extends AuthenticatedController
             }
 
             $related_users = Request::get('related_teachers');
-            $termin->dozenten = array();
-            if (!empty($related_users)) {
-                $related_users = explode(',', $related_users);
+            $related_users = explode(',', $related_users);
+            $related_dozenten = $termin->course->getMembersWithStatus('dozent');
+            if (!empty($related_users) || count($related_dozenten) != count($related_users)) {
                 $termin->dozenten = User::findMany($related_users);
+            } else {
+                $termin->dozenten = array();
             }
 
             if ($termin->store()) {
