@@ -62,7 +62,7 @@ class Search_ArchiveController extends AuthenticatedController
         //get available semesters:
         
         $this->availableSemesters = Semester::getAll();
-        $this->availableDepartments = Institute::findBySql('TRUE');
+        $this->availableDepartments = Institute::findBySql('fakultaets_id = institut_id ORDER BY fakultaets_id');
         
         
         if($this->searchRequested) {
@@ -76,8 +76,8 @@ class Search_ArchiveController extends AuthenticatedController
             
             
             //mb_strlen is used for unicode compatibility
-            if(mb_strlen($this->criteria) < 4) {
-                //search keyword is too short
+            if((mb_strlen($this->criteria) > 0) and (mb_strlen($this->criteria) < 4)) {
+                //search keyword is set and too short
                 PageLayout::postError(sprintf(_('Der Name der Veranstaltung muss mindestens %s Zeichen lang sein!'), 4));
                 return;
                 $this->errorOccured = true;

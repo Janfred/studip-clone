@@ -19,13 +19,21 @@
             </select>
         </label>
         <label>
-            <?= _('Einrichtung') . ':'; ?>
-            <select name="selectedDepartment">
+            <div style="margin-top: 1ex; margin-bottom: 1ex;"><?= _('Einrichtung') . ':'; ?></div>
+            <select name="selectedDepartment" class="nested-select">
                 <? foreach($availableDepartments as $department) : ?>
                 <option value="<?= htmlReady($department->name) ?>"
+                    class="nested-item-header"
                     <?= ($selectedDepartment == $department->name) ? 'selected="selected"' : '' ?>>
                     <?= htmlReady($department->name) ?>
                 </option>
+                    <? foreach($department->sub_institutes as $subDepartment) : ?>
+                    <option value="<?= htmlReady($subDepartment->name) ?>"
+                        class="nested-item nested-item-level-1"
+                        <?= ($selectedDepartment == $subDepartment->name) ? 'selected="selected"' : '' ?>>
+                        <?= htmlReady($subDepartment->name) ?>
+                    </option>
+                    <? endforeach ?>
                 <? endforeach ?>
             </select>
         </label>
@@ -115,7 +123,7 @@
     <? endforeach ?>
     </table>
 <? else : ?>
-    <? if (!$errorOccured and !$tooManyCourses) : ?>
+    <? if (!$errorOccured and !$tooManyCourses and $searchRequested) : ?>
             <?= MessageBox::info(_('Es wurde keine Veranstaltung gefunden!')) ?>
     <? endif ?>
 <? endif ?>
