@@ -24,12 +24,131 @@
  */
 require_once 'lib/meine_seminare_func.inc.php';
 require_once 'lib/object.inc.php';
+require_once 'lib/archiv.inc.php'; //for lastActivity in getCourses method
 
 require_once 'lib/archiv.inc.php'; //for lastActivity in getCourses() method
 
 
 class Admin_CoursesController extends AuthenticatedController
 {
+    
+    private function buildSidebar($courseTypeFilterConfig = null)
+    {
+        /*
+            TIC6701: Depending on the elements the user has selected
+            some of the following elements may not be presented
+            in the sidebar.
+            
+            To find out what elements the user has selected we're
+            accessing the user configuration and check if the
+            right configuration keys are stored in there.
+        */
+        $userConfig = UserConfig::get(User::findCurrent()->id);
+        
+        $userSelectedElements = $userConfig->getValue('ADMIN_COURSES_SIDEBAR_ACTIVE_ELEMENTS');
+        
+        $visibleElements = array();
+        
+        if($userSelectedElements) {
+            /*
+                The array of user-selected elements is a JSON array:
+                Decode it and set the visibleElements array.
+            */
+            $visibleElements = json_decode($userSelectedElements);
+            
+        } else {
+           /*
+                The user hasn't made a selection of sidebar elements.
+                So the default selection is set:
+            */
+            
+            $visibleElements = [
+                'search',
+                'institute',
+                'semester',
+                'courseType',
+                'viewFilter'
+                ];
+        }
+        
+        $sidebar = Sidebar::get();
+        $sidebar->setImage("sidebar/seminar-sidebar.png");
+        
+        //navigation was already drawn!
+        
+        /*
+            Order of elements:
+            * Navigation
+            * selected filters (configurable)
+            * selected actions widget
+            * actions
+            * view filter (configurable)
+            * export
+        */
+        
+        /*
+            Now draw the configurable elements according
+            to the values inside the visibleElements array.
+        */
+        if(in_array('search', $visibleElements)) {
+            $this->setSearchWiget();
+        }
+        if(in_array('institute', $visibleElements)) {
+            $this->setInstSelector();
+        }
+        if(in_array('semester', $visibleElements)) {
+            $this->setSemesterSelector();
+        }
+        if(in_array('courseType', $visibleElements)) {
+            $this->setCourseTypeWidget($courseTypeFilterConfig);
+        }
+        if(in_array('teacher', $visibleElements)) {
+            $this->setTeacherWidget();
+        }
+        
+        //this shall be visible in every case:
+        $this->setActionsWidget($this->selected_action);
+        
+        
+        //actions: always visible, too
+        if ($GLOBALS['perm']->have_perm($this->sem_create_perm)) {
+            $actions = new ActionsWidget();
+            $actions->addLink(_('Neue Veranstaltung anlegen'),
+                              URLHelper::getLink('dispatch.php/course/wizard'),
+                              Icon::create('seminar+add', 'clickable'))->asDialog('size=50%');
+            //for TIC6701:
+            $actions->addLink(
+                _('Diese Seitenleiste konfigurieren'),
+                URLHelper::getLink('dispatch.php/admin/courses/sidebar'),
+                Icon::create('admin', 'clickable')
+                )->asDialog();
+            
+            
+            $sidebar->addWidget($actions, 'links');
+        }
+        
+        //the view filter's visibility is configurable:
+        if(in_array('viewFilter', $visibleElements)) {
+            $this->setViewWidget($this->view_filter);
+        }
+        
+        
+        //"export as Excel" is always visible:
+        if ($this->sem_create_perm) {
+            $params = array();
+
+            if ($GLOBALS['user']->cfg->ADMIN_COURSES_SEARCHTEXT) {
+                $params['search'] = $GLOBALS['user']->cfg->ADMIN_COURSES_SEARCHTEXT;
+            }
+            $export = new ExportWidget();
+            $export->addLink(_('Als Excel exportieren'),
+                             URLHelper::getLink('dispatch.php/admin/courses/export_csv', $params),
+                             Icon::create('file-excel', 'clickable'));
+            $sidebar->addWidget($export);
+        }
+    }
+    
+    
     /**
      * Common tasks for all actions
      *
@@ -152,50 +271,121 @@ class Admin_CoursesController extends AuthenticatedController
             )),
             AuxLockRules::getAllLockRules()
         );
-
-
-        $sidebar = Sidebar::get();
-        $sidebar->setImage("sidebar/seminar-sidebar.png");
-
-
-        $this->setSearchWiget();
-        $this->setInstSelector();
-        $this->setSemesterSelector();
-        $this->setTeacherWidget();
-        $this->setCourseTypeWidget($config_my_course_type_filter);
-        $this->setActionsWidget($this->selected_action);
-
-        if ($GLOBALS['perm']->have_perm($this->sem_create_perm)) {
-            $actions = new ActionsWidget();
-            $actions->addLink(_('Neue Veranstaltung anlegen'),
-                              URLHelper::getLink('dispatch.php/course/wizard'),
-                              Icon::create('seminar+add', 'clickable'))->asDialog('size=50%');
-            $sidebar->addWidget($actions, 'links');
-        }
-
-        $this->setViewWidget($this->view_filter);
-
-        if ($this->sem_create_perm) {
-            $params = array();
-
-            if ($GLOBALS['user']->cfg->ADMIN_COURSES_SEARCHTEXT) {
-                $params['search'] = $GLOBALS['user']->cfg->ADMIN_COURSES_SEARCHTEXT;
+        
+        
+        //build the sidebar:
+        $this->buildSidebar($config_my_course_type_filter);
+        
+    }
+    
+    
+    /**
+        The sidebar action is responsible for showing a dialog
+        that lets the user configure the sidebar.
+    */
+    public function sidebar_action()
+    {
+        if(Request::get('updateConfig', false)) {
+            /*
+                The user has changed the configuration.
+                Collect the activated elements:
+            */
+            
+            $searchActive = Request::get('searchActive');
+            $instituteActive = Request::get('instituteActive');
+            $semesterActive = Request::get('semesterActive');
+            $courseTypeActive = Request::get('courseTypeActive');
+            $teacherActive = Request::get('teacherActive');
+            $viewFilterActive = Request::get('viewFilterActive');
+            
+            echo "searchActive = " . $searchActive;
+            
+            //check for the standard configuration:
+            if($searchActive and $instituteActive and $semesterActive and $courseTypeActive
+                and (!$teacherActive) and (!$actionAreaActive) and $viewFilterActive) {
+                /*
+                    It is the standard configuration:
+                    Remove the entry from the user configuration table,
+                    if it exists.
+                */
+                
+                $userConfig = UserConfig::get(User::findCurrent()->id);
+                $userConfig->delete('ADMIN_COURSES_SIDEBAR_ACTIVE_ELEMENTS');
+                $this->redirect('admin/courses/index');
+                
+            } else {
+                /*
+                    It's not the standard configuration:
+                    Update or create an entry for the current user
+                    in the user configuration table.
+                */
+                $activeArray = array();
+                if($searchActive) {
+                    $activeArray[] = 'search';
+                }
+                if($instituteActive) {
+                    $activeArray[] = 'institute';
+                }
+                if($semesterActive) {
+                    $activeArray[] = 'semester';
+                }
+                if($courseTypeActive) {
+                    $activeArray[] = 'courseType';
+                }
+                if($teacherActive) {
+                    $activeArray[] = 'teacher';
+                }
+                if($viewFilterActive) {
+                    $activeArray[] = 'viewFilter';
+                }
+                
+                //the array is filled: now convert it to JSON:
+                $activeArray = json_encode(studip_utf8encode($activeArray));
+                
+                //store the configuration value:
+                $userConfig = UserConfig::get(User::findCurrent()->id);
+                $success = $userConfig->store(
+                    'ADMIN_COURSES_SIDEBAR_ACTIVE_ELEMENTS',
+                    $activeArray
+                );
+                    
+                
+                /*
+                    We're done: redirect to the index page
+                    to see the new sidebar in all of its glory!
+                */
+                $this->redirect('admin/courses/index');
             }
-            $export = new ExportWidget();
-            $export->addLink(_('Als Excel exportieren'),
-                             URLHelper::getLink('dispatch.php/admin/courses/export_csv', $params),
-                             Icon::create('file-excel', 'clickable'));
-            $sidebar->addWidget($export);
+        } else {
+            /*
+                The user accesses the page to check the current configuration.
+            */
+            
+            $userSelectedElements = UserConfig::get(User::findCurrent()->id)->getValue('ADMIN_COURSES_SIDEBAR_ACTIVE_ELEMENTS');
+            if($userSelectedElements) {
+                // The array of selected elements is a JSON array: decode it!
+                $this->userSelectedElements = json_decode($userSelectedElements);
+            } else {
+                /*
+                    The user hasn't got his own sidebar configuration:
+                    Use the default settings.
+                */
+                $this->userSelectedElements = [
+                    'search',
+                    'institute',
+                    'semester',
+                    'courseType',
+                    'viewFilter'
+                    ];
+            }
             
             //add the last activity for each Course object:
             $this->lastActivities = array();
-            foreach ($this->courses as &$course) {
-                $course['lastActivity'] = date("d.m.Y, G:i", lastActivity($course['seminar_id']));
-            }
-
+            
         }
     }
-
+    
+    
     /**
      * Export action
      */
@@ -706,7 +896,7 @@ class Admin_CoursesController extends AuthenticatedController
             'waiting'       => _('Personen auf Warteliste'),
             'preliminary'   => _('Vorläufige Anmeldungen'),
             'contents'      => _('Inhalt'),
-            'last_activity' => _('letzte Aktivität')
+            'last_activity' => _('letzte Aktivität'),
         );
     }
 
@@ -773,7 +963,7 @@ class Admin_CoursesController extends AuthenticatedController
             $sem_types = SemType::getTypes();
             $modules = new Modules();
         }
-
+        
         $seminars = array_map('reset', $courses);
 
         if (!empty($seminars)) {
@@ -786,6 +976,10 @@ class Admin_CoursesController extends AuthenticatedController
                     $seminars[$seminar_id]['sem_class'] = $sem_types[$seminar['status']]->getClass();
                     $seminars[$seminar_id]['modules'] = $modules->getLocalModules($seminar_id, 'sem', $seminar['modules'], $seminar['status']);
                     $seminars[$seminar_id]['navigation'] = MyRealmModel::getAdditionalNavigations($seminar_id, $seminars[$seminar_id], $seminars[$seminar_id]['sem_class'], $GLOBALS['user']->id);
+                }
+                //TIC6701: last activity:
+                if (in_array('last_activity', $params['view_filter'])) {
+                    $seminars[$seminar_id]['last_activity'] = lastActivity($seminar_id);
                 }
                 if ($this->selected_action == 17) {
                     $seminars[$seminar_id]['admission_locked'] = false;
