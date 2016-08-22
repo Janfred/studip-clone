@@ -24,7 +24,7 @@
             </td>
         </tr>
         <tr class="details nohover">
-            <td>
+            <td colspan="2">
                 <div class="detailscontainer">
                     <dl class="default nohover">
                         <dt><?= _('Untertitel') . ':' ?></dt>
