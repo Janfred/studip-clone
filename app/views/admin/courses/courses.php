@@ -1,8 +1,5 @@
 <? $colspan = 2 ?>
 <? if ($actions[$selected_action]['multimode']) : ?>
-    <? if ($selected_action == 16) : ?>
-        <?= MessageBox::error(_('Achtung: Das Archivieren ist ein Schritt, der nicht rückgängig gemacht werden kann!')) ?>
-    <? endif ?>
     <form action="<?= URLHelper::getLink($actions[$selected_action]['url']) ?>" method="post">
 <? endif ?>
 <?= CSRFProtection::tokenTag() ?>
