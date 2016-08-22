@@ -188,8 +188,8 @@ class Course_DatesController extends AuthenticatedController
 
             $related_users = Request::get('related_teachers');
             $related_users = explode(',', $related_users);
-            $related_dozenten = $termin->course->getMembersWithStatus('dozent');
-            if (!empty($related_users) || count($related_dozenten) != count($related_users)) {
+            $current_count = CourseMember::countByCourseAndStatus($termin->course->id, 'dozent');
+            if ($related_users && count($related_users) != $current_count) {
                 $termin->dozenten = User::findMany($related_users);
             } else {
                 $termin->dozenten = array();
