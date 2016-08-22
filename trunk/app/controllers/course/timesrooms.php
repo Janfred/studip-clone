@@ -366,11 +366,10 @@ class Course_TimesroomsController extends AuthenticatedController
         $termin->autor_id  = $GLOBALS['user']->id;
         $termin->date_typ  = Request::get('dateType');
 
-        $teachers = $this->course->getMembers('dozent');
-        if (!empty(Request::getArray('related_teachers')) 
-                && count($teachers) !== count(Request::getArray('related_teachers'))) {
-            
-            $termin->dozenten = User::findMany(Request::getArray('related_teachers'));
+        $current_count = CourseMember::countByCourseAndStatus($this->course->id, 'dozent');
+        $related_ids   = Request::optionArray('related_teachers');
+        if ($related_ids && count($related_ids) !== $current_count) {
+            $termin->dozenten = User::findMany($related_ids);
         }
         
         foreach (Request::getArray('related_statusgruppen') as $statusgruppe_id) {
