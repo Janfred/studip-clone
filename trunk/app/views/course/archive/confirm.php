@@ -1,8 +1,8 @@
 <? if ($courses) : ?>
     <? if(count($courses) == 1) : ?>
-        <?= MessageBox::info(_('Sie sind im Begriff, die folgende Veranstaltung zu archivieren. Dieser Schritt kann nicht rückgängig gemacht werden!')) ?>
+        <?= MessageBox::warning(_('Sie sind im Begriff, die folgende Veranstaltung zu archivieren. Dieser Schritt kann nicht rückgängig gemacht werden!')) ?>
     <? else : ?>
-        <?= MessageBox::info(_('Sie sind im Begriff, die aufgelisteten Veranstaltungen zu archivieren. Dieser Schritt kann nicht rückgängig gemacht werden!')) ?>
+        <?= MessageBox::warning(_('Sie sind im Begriff, die aufgelisteten Veranstaltungen zu archivieren. Dieser Schritt kann nicht rückgängig gemacht werden!')) ?>
     <? endif ?>
 <table class="default withdetails">
     <thead>
