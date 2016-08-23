@@ -331,7 +331,7 @@ class User extends AuthUserMd5
      */
     public function isFriendOf($another_user)
     {
-        return $this->contacts->findOneBy('user_id', $another_user['user_id']) !== null;
+        return (bool)DBManager::get()->fetchColumn("SELECT 1 FROM contact WHERE owner_id=? AND user_id=?", array($this->user_id, $another_user->user_id));
     }
 
     /**

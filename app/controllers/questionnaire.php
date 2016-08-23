@@ -542,22 +542,20 @@ class QuestionnaireController extends AuthenticatedController
             'range_id' => $this->range_id,
             'range_type' => $this->range_type
         ));
-        $this->questionnaires = array();
-        foreach ($statement->fetchAll(PDO::FETCH_ASSOC) as $questionnaire_data) {
-            $this->questionnaires[] = Questionnaire::buildExisting($questionnaire_data);
-        }
-        foreach ($this->questionnaires as $questionnaire) {
+        $this->questionnaire_data = $statement->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($this->questionnaire_data as $i => $questionnaire) {
             if (!$questionnaire['visible'] && $questionnaire['startdate'] && $questionnaire['startdate'] <= time()) {
-                $questionnaire->start();
+                Questionnaire::buildExisting($questionnaire)->start();
             }
             if ($questionnaire['visible'] && $questionnaire['stopdate'] && $questionnaire['stopdate'] <= time()) {
-                $questionnaire->stop();
+                Questionnaire::buildExisting($questionnaire)->stop();
+                unset($this->questionnaire_data[$i]);
             }
-            object_set_visit($questionnaire->getId(), 'vote');
+            object_set_visit($questionnaire['questionnaire_id'], 'vote');
         }
         if ($this->range_type === "course"
                 && !$GLOBALS['perm']->have_studip_perm("tutor", $_SESSION['SessionSeminar'])
-                && !count($this->questionnaires)) {
+                && !count($this->questionnaire_data)) {
             $this->render_nothing();
         }
     }

@@ -71,12 +71,14 @@ rsort($ordered_results);
             </td>
             <td width="50%">
                 <? if (!$vote->questionnaire['anonymous'] && $results[$key]) : ?>
+                <? $users = SimpleCollection::createFromArray(User::findMany($results_users[$key])); ?>
                 <? foreach ($results_users[$key] as $index => $user_id) : ?>
-                    <? if ($user_id && $user_id !== "nobody") : ?>
-                        <a href="<?= URLHelper::getLink("dispatch.php/profile", array('username' => get_username($user_id))) ?>">
-                            <?= Avatar::getAvatar($user_id, get_username($user_id))->getImageTag(Avatar::SMALL, array('title' => htmlReady(get_fullname($user_id)))) ?>
+                    <? $user = $users->findOneBy('user_id', $user_id); ?>
+                    <? if ($user) : ?>
+                        <a href="<?= URLHelper::getLink("dispatch.php/profile", array('username' => $user->username)) ?>">
+                            <?= Avatar::getAvatar($user_id, $user->username)->getImageTag(Avatar::SMALL, array('title' => htmlReady($user->getFullname('no_title')))) ?>
                             <? if (count($results_users[$key]) < 4) : ?>
-                                <?= htmlReady(get_fullname($user_id)) ?>
+                                <?= htmlReady($user->getFullname('no_title')) ?>
                             <? endif ?>
                         </a>
                     <? endif ?>
