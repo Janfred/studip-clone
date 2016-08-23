@@ -14,10 +14,10 @@
                     <?= ($selectedSemester == '') ? 'selected="selected"' : '' ?>>
                     <?= _('alle') ?>
                 </option>
-                <? foreach($availableSemesters as $semester) : ?>
-                <option value="<?= htmlReady($semester->name) ?>"
-                    <?= ($selectedSemester == $semester->name) ? 'selected="selected"' : '' ?>>
-                    <?= htmlReady($semester->name) ?>
+                <? foreach($availableSemesterNames as $semesterName) : ?>
+                <option value="<?= htmlReady($semesterName[0]) ?>"
+                    <?= ($selectedSemester == $semesterName[0]) ? 'selected="selected"' : '' ?>>
+                    <?= htmlReady($semesterName[0]) ?>
                 </option>
                 <? endforeach ?>
             </select>
