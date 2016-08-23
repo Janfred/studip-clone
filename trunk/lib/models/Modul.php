@@ -933,4 +933,28 @@ class Modul extends ModuleManagementModelTreeItem
         }
         return $ret;
     }
+
+    /**
+    * checks if modules with public status are available
+    *
+    * @return boolean true if modules with public status available
+    */
+    public static function publicModulesAvailable()
+    {
+        $public_status = ModuleManagementModel::getPublicStatus('Modul');
+        if (count($public_status)) {
+            $stmt = DBManager::get()->prepare('SELECT 1 '
+                . 'FROM mvv_modul mm '
+                . 'INNER JOIN mvv_modul_deskriptor mmd USING(modul_id) '
+                . 'INNER JOIN mvv_stgteilabschnitt_modul msm ON mmd.modul_id = msm.modul_id '
+                . 'INNER JOIN mvv_stgteilabschnitt USING(abschnitt_id) '
+                . 'INNER JOIN mvv_stgteilversion msv USING(version_id) '
+                . 'WHERE mm.stat IN (:stat) '
+                . 'AND msv.stat IN (:stat) LIMIT 1'
+                );
+            $stmt->execute(array(':term' => $term, ':stat' => $public_status));
+            return (bool)$stmt->fetchColumn();
+        }
+        return false;
+    }
 }

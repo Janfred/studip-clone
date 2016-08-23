@@ -179,7 +179,7 @@ class MVVPlugin extends StudipPlugin implements SystemPlugin, Loggable {
 
     public function isVisibleSearch()
     {
-        return $GLOBALS['perm']->have_perm('autor');
+        return $GLOBALS['perm']->have_perm('autor') && Modul::publicModulesAvailable();
     }
 
     public function isVisibleAdminCourse()
