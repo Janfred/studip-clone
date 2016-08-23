@@ -132,7 +132,7 @@ STUDIP.Forum = {
         // reset the input field with the unchanged name
         jQuery('table[data-category-id=' + category_id + '] span.heading_edit input[type=text]').val(
             jQuery('table[data-category-id=' + category_id + '] span.category_name').text().trim()
-        ); // .closest('form').data('validator').reset();
+        );
     },
 
     saveCategoryName: function (category_id) {
@@ -376,7 +376,6 @@ STUDIP.Forum = {
         jQuery('#new_entry_box').hide();
 
         jQuery('#new_entry_box textarea, #new_entry_box input[name=name]').val('');
-        jQuery('#forum_new_entry').data('validator').reset();
 
         // hide and clear preview-window (if any);
         jQuery('#new_entry_preview').parent().hide();
