@@ -180,10 +180,13 @@ class Course_DatesController extends AuthenticatedController
             $termin->date_typ = Request::get('dateType');
 
             $related_groups = Request::get('related_statusgruppen');
-            $termin->statusgruppen = array();
-            if (!empty($related_groups)) {
-                $related_groups = explode(',', $related_groups);
+            $related_groups = explode(',', $related_groups);
+            $group_count = Statusgruppen::countBySQL('range_id = :seminar_id', 
+                    array('seminar_id' => $termin->course->seminar_id));
+            if (!empty($related_groups) && count($related_groups) !== $group_count) {
                 $termin->statusgruppen = Statusgruppen::findMany($related_groups);
+            } else {
+                $termin->statusgruppen = array();
             }
 
             $related_users = Request::get('related_teachers');

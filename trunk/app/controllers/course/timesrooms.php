@@ -372,13 +372,12 @@ class Course_TimesroomsController extends AuthenticatedController
             $termin->dozenten = User::findMany($related_ids);
         }
         
-        foreach (Request::getArray('related_statusgruppen') as $statusgruppe_id) {
-            $related_groups[] = Statusgruppen::find($statusgruppe_id);
+        $groups = Statusgruppen::findBySeminar_id($this->course->id);
+        $related_groups = Request::getArray('related_statusgruppen');
+        if ($related_groups && count($related_groups) !== count($groups)) {
+            $related_groups = Statusgruppen::findMandy($related_groups);
         }
-        if (isset($related_groups)) {
-            $termin->statusgruppen = $related_groups;
-        }
-
+        
         if (!Request::get('room') || Request::get('room') === 'nothing') {
             $termin->raum = Request::get('freeRoomText');
             $termin->store();
