@@ -111,7 +111,6 @@
                                }
                             }
                         ?>
-
                         <ul class="termin_related groups clean" style="width: 319px">
                         <? foreach ($course_groups as $group) : ?>
                             <? $group_id = $group['id']; ?>

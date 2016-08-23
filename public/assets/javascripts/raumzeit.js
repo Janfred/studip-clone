@@ -151,7 +151,9 @@ STUDIP.Raumzeit = {
     addFormGroups: function () {
         var data = [];
         jQuery('ul.groups li:visible').each(function () {
-            data.push(jQuery(this).data('groupid'));
+            if(jQuery(this).data('groupid') !== '') {
+                data.push(jQuery(this).data('groupid'));
+            }
         });
         jQuery('input[name=related_statusgruppen]').val(data.join(','));
     },

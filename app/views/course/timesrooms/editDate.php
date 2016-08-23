@@ -126,10 +126,6 @@
             <input type="hidden" name="related_statusgruppen" value="<?= implode(',', $related_groups) ?>">
 
             <label>
-                <span style="display:block;">
-                    <?= _('Gruppe hinzufügen') ?>
-                </span>
-
                 <select name="groups" style="display: inline-block; width: 40%">
                     <option value="none"><?= _('Gruppen auswählen') ?></option>
                     <? foreach ($gruppen as $gruppe) : ?>
