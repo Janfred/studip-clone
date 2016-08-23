@@ -62,7 +62,7 @@ class Search_ArchiveController extends AuthenticatedController
         //get available semesters:
         
         $this->availableSemesters = Semester::getAll();
-        $this->availableDepartments = Institute::findBySql('fakultaets_id = institut_id ORDER BY fakultaets_id');
+        $this->availableDepartments = Institute::findBySql('fakultaets_id = institut_id ORDER BY Name');
         
         
         if($this->searchRequested) {
