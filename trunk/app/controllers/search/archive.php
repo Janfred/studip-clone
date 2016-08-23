@@ -117,11 +117,21 @@ class Search_ArchiveController extends AuthenticatedController
             //we won't collect them!
             $this->amountOfCourses = ArchivedCourse::countBySql($sql, $sqlArray);
             if($this->amountOfCourses > 150) {
-                $this->tooManyCourses = true;
+                PageLayout::postError(sprintf(_('Es wurden %s Veranstaltungen gefunden. Bitte grenzen sie die Suchkriterien weiter ein!'), $this->amountOfCourses));
+            } else {
+                //less than 151 courses: we can display them
+                $this->foundCourses = ArchivedCourse::findBySQL($sql, $sqlArray);
+                
+                if($this->foundCourses) {
+                    if(count($this->foundCourses) == 1){
+                        PageLayout::postInfo(_('Es wurde eine Veranstaltung gefunden!'));
+                    } else {
+                        PageLayout::postInfo(sprintf(_('Es wurden %s Veranstaltungen gefunden!'), $this->amountOfCourses));
+                    }
+                } else {
+                    PageLayout::postInfo(_('Es wurde keine Veranstaltung gefunden!'));
+                }
             }
-            
-            //get courses:
-            $this->foundCourses = ArchivedCourse::findBySQL($sql, $sqlArray);
         }
     }
 }

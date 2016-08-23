@@ -10,6 +10,10 @@
         <label>
             <?= _('Semester') . ':'; ?>
             <select name="selectedSemester">
+                <option value=""
+                    <?= ($selectedSemester == '') ? 'selected="selected"' : '' ?>>
+                    <?= _('alle') ?>
+                </option>
                 <? foreach($availableSemesters as $semester) : ?>
                 <option value="<?= htmlReady($semester->name) ?>"
                     <?= ($selectedSemester == $semester->name) ? 'selected="selected"' : '' ?>>
@@ -21,6 +25,10 @@
         <label>
             <div style="margin-top: 1ex; margin-bottom: 1ex;"><?= _('Einrichtung') . ':'; ?></div>
             <select name="selectedDepartment" class="nested-select">
+                <option value="" class="nested-item-header"
+                    <?= ($selectedDepartment == '') ? 'selected="selected"' : '' ?>>
+                    <?= _('alle') ?>
+                </option>
                 <? foreach($availableDepartments as $department) : ?>
                 <option value="<?= htmlReady($department->name) ?>"
                     class="nested-item-header"
@@ -40,16 +48,7 @@
         <?= \Studip\Button::create(_('Suchen'), ''); ?>
     </fieldset>
 </form>
-<? if ($tooManyCourses) : ?>
-    <?= MessageBox::error(sprintf(_('Es wurden %s Veranstaltungen gefunden. Bitte grenzen sie die Suchkriterien weiter ein!'), $amountOfCourses)) ?>
-<? endif ?>
-
-<? if ($foundCourses and !$tooManyCourses) : ?>
-    <? if (count($foundCourses) == 1) : ?>
-        <?= MessageBox::info(_('Es wurde eine Veranstaltung gefunden!')); ?>
-    <? else : ?>
-        <?= MessageBox::info(sprintf(_('Es wurden %s Veranstaltungen gefunden!'), $amountOfCourses)) ?>
-    <? endif ?>
+<? if ($foundCourses) : ?>
     
     <table class="default withdetails">
         <tr>
@@ -122,8 +121,4 @@
         </tr>
     <? endforeach ?>
     </table>
-<? else : ?>
-    <? if (!$errorOccured and !$tooManyCourses and $searchRequested) : ?>
-            <?= MessageBox::info(_('Es wurde keine Veranstaltung gefunden!')) ?>
-    <? endif ?>
 <? endif ?>
