@@ -12,11 +12,11 @@ if ($questiondata['randomize']) {
 ?>
 
 <ul class="clean">
+    <? $answer = $vote->getMyAnswer() ?>
+    <? $answerdata = $answer['answerdata'] ? $answer['answerdata']->getArrayCopy() : array() ?>
     <? foreach ($map as $index) : ?>
         <li>
             <label>
-                <? $answer = $vote->getMyAnswer() ?>
-                <? $answerdata = $answer['answerdata'] ? $answer['answerdata']->getArrayCopy() : array() ?>
                 <? if ($questiondata['multiplechoice']) : ?>
                     <input type="checkbox" name="answers[<?= $vote->getId() ?>][answerdata][answers][]" value="<?= $index + 1 ?>"<?= in_array($index + 1, (array) $answerdata['answers']) ? " checked" : "" ?>>
                 <? else : ?>

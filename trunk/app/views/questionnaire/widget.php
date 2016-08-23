@@ -17,7 +17,7 @@
         </nav>
     </header>
 
-    <? if (!count($questionnaires)): ?>
+    <? if (!count($questionnaire_data)): ?>
         <section class="noquestionnaires">
             <?= _('Es sind keine Fragebögen vorhanden.') ?>
             <? if ($allowed_to_add) : ?>
@@ -25,8 +25,8 @@
             <? endif ?>
         </section>
     <? else: ?>
-        <? foreach ($questionnaires as $questionnaire): ?>
-            <?= $this->render_partial("questionnaire/_widget_questionnaire", array('questionnaire' => $questionnaire, 'range_type' => $range_type, 'range_id' => $range_id)) ?>
+        <? foreach ($questionnaire_data as $questionnaire): ?>
+            <?= $this->render_partial("questionnaire/_widget_questionnaire", array('questionnaire' => Questionnaire::buildExisting($questionnaire), 'range_type' => $range_type, 'range_id' => $range_id)) ?>
         <? endforeach; ?>
     <? endif; ?>
     <? if ($allowed_to_add) : ?>
