@@ -61,7 +61,12 @@ class Search_ArchiveController extends AuthenticatedController
         
         //get available semesters:
         
-        $this->availableSemesters = Semester::getAll();
+        $db = DBManager::get();
+        
+        $this->availableSemesterNames = $db->query('SELECT DISTINCT semester from archiv;');
+        
+        $db = null; //close connection
+        
         $this->availableDepartments = Institute::findBySql('fakultaets_id = institut_id ORDER BY Name');
         
         
