@@ -187,9 +187,11 @@ class StudipAutoloader
                 continue;
             }
 
-            $filename = self::resolvePathAndFilename($item['path'], $class_file);
-            if ($filename !== false) {
-                return $filename;
+            $base =  $item['path'] . DIRECTORY_SEPARATOR . $class_file;
+            foreach (self::$file_extensions as $extension) {
+                if (file_exists($base . $extension)) {
+                    return $base . $extension;
+                }
             }
         }
     }
@@ -214,45 +216,8 @@ class StudipAutoloader
 
         // Convert namespace into directory structure
         $namespaced = str_replace('\\', DIRECTORY_SEPARATOR, $class);
-        $filename   = dirname($namespaced) . DIRECTORY_SEPARATOR . basename($namespaced);
+        $filename   = strtolower(dirname($namespaced)) . DIRECTORY_SEPARATOR . basename($namespaced);
 
         return $filename;
-    }
-
-    /**
-     * Resolves a path and class filename to the actual filename on disk.
-     * If the given path does not exist, we will try to resolve it
-     * case-insenitive-ish (we will try to lowercase version but not all
-     * combinations, so rather pseudo case-insensitive).
-     *
-     * @param String $path       Path to file
-     * @param String $class_file Base name of the class
-     * @return mixed Fully qualified filename or false if no match was found
-     */
-    private static function resolvePathAndFilename($path, $class_file)
-    {
-        // Path is invalid? Try to resolve it step by step.
-        if (!is_dir($path)) {
-            $temp_path = '';
-
-            $chunks = array_filter(explode(DIRECTORY_SEPARATOR, $path));
-            foreach ($chunks as $chunk) {
-                if (!is_dir($path . DIRECTORY_SEPARATOR . $chunk)) {
-                    $chunk = strtolower($chunk);
-                }
-                if (!is_dir($path . DIRECTORY_SEPARATOR . $chunk)) {
-                    return false;
-                }
-                $path .= DIRECTORY_SEPARATOR . $chunk;
-            }
-        }
-
-        $base = $path . DIRECTORY_SEPARATOR . $class_file;
-        foreach (self::$file_extensions as $extension) {
-            if (file_exists($base . $extension)) {
-                return $base . $extension;
-            }
-        }
-        return false;
     }
 }
