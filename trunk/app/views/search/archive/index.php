@@ -1,5 +1,5 @@
 <form class="default" method="post" action="<?= URLHelper::getLink(); ?>">
-    <input type="hidden" name="searchRequested" value="1" >
+    <input type="hidden" name="myCoursesOnly" value="<?= Request::get('myCoursesOnly') ?>">
     <fieldset>
         <legend><?= _('Suche im Veranstaltungsarchiv'); ?></legend>
         <label>
@@ -45,7 +45,7 @@
                 <? endforeach ?>
             </select>
         </label>
-        <?= \Studip\Button::create(_('Suchen'), ''); ?>
+        <?= \Studip\Button::create(_('Suchen'), '') ?>
     </fieldset>
 </form>
 <? if ($foundCourses) : ?>
@@ -106,7 +106,7 @@
             </td>
         </tr>
         <tr class="details nohover">
-            <td colspan="4" class="detailscontainer">
+            <td colspan="5" class="detailscontainer">
                 <ul class="default nohover">
                     <li>
                         <strong><?= _('Fakultät') . ':' ?></strong>

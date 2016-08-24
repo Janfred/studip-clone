@@ -70,72 +70,85 @@ class Search_ArchiveController extends AuthenticatedController
         $this->availableDepartments = Institute::findBySql('fakultaets_id = institut_id ORDER BY Name');
         
         
-        if($this->searchRequested) {
-            //check if at least one search criteria was given:
-            if(!$this->criteria and !$this->selectedSemester and !$this->selectedDepartment) {
-                //no search criteria was set
-                PageLayout::postError(_('Es wurde kein Suchkriterium ausgewählt!'));
-                return;
-                $this->errorOccured = true;
-            }
-            
-            
-            //mb_strlen is used for unicode compatibility
-            if((mb_strlen($this->criteria) > 0) and (mb_strlen($this->criteria) < 4)) {
-                //search keyword is set and too short
-                PageLayout::postError(sprintf(_('Der Name der Veranstaltung muss mindestens %s Zeichen lang sein!'), 4));
-                return;
-                $this->errorOccured = true;
-            }
-            
-            //ok, checks are done: build SQL query:
-            
+        //check if at least one search criteria was given:
+        if(!$this->criteria and !$this->selectedSemester and !$this->selectedDepartment) {
+            //no search criteria was set
+            return;
+        }
+        
+        
+        //mb_strlen is used for unicode compatibility
+        if((mb_strlen($this->criteria) > 0) and (mb_strlen($this->criteria) < 4)) {
+            //search keyword is set and too short
+            PageLayout::postError(sprintf(_('Der Name der Veranstaltung muss mindestens %s Zeichen lang sein!'), 4));
+            return;
+            $this->errorOccured = true;
+        }
+        
+        $sql = '';
+        $sqlArray = [];
+        
+        //ok, checks are done: build SQL query:
+        if($this->criteria) {
             $sql = "(name LIKE CONCAT('%', :criteria, '%') "
                     . "OR untertitel LIKE CONCAT('%', :criteria, '%') "
-                    . "OR beschreibung LIKE CONCAT('%', :criteria, '%') "
-                    . "OR dozenten LIKE CONCAT('%', :criteria, '%')) ";
-            $sqlArray = ['criteria' => $this->criteria];
-            
-            if($this->myCoursesOnly) {
-                /*
-                    If the user wants to see only his courses 
-                    we have to filter the courses by user-ID:
-                */
-                $sql .= "AND (user_id = :userId) ";
-                $sqlArray['userId'] = User::findCurrent()->id;
-            }
-            
-            if($this->selectedDepartment) {
-                $sql .= "AND (institute = :selectedDepartment) ";
-                $sqlArray['selectedDepartment'] = $this->selectedDepartment;
-            }
-            
-            if($this->selectedSemester) {
-                $sql .= "AND (semester = :selectedSemester) ";
-                $sqlArray['selectedSemester'] = $this->selectedSemester;
-            }
-            
-            //database entry order:
-            $sql .= "ORDER BY start_time DESC, name DESC ";
-            
-            //first we count the courses: if there are too many
-            //we won't collect them!
-            $this->amountOfCourses = ArchivedCourse::countBySql($sql, $sqlArray);
-            if($this->amountOfCourses > 150) {
-                PageLayout::postError(sprintf(_('Es wurden %s Veranstaltungen gefunden. Bitte grenzen sie die Suchkriterien weiter ein!'), $this->amountOfCourses));
+                    . "OR beschreibung LIKE CONCAT('%', :criteria, '%')) ";
+            $sqlArray['criteria'] = $this->criteria;
+        }
+        
+        if($this->myCoursesOnly) {
+            /*
+                If the user wants to see only his courses 
+                we have to filter the courses by user-ID:
+            */
+            if($this->criteria) {
+                $sql .= "AND (dozenten LIKE CONCAT('%', :userName, '%')) ";
             } else {
-                //less than 151 courses: we can display them
-                $this->foundCourses = ArchivedCourse::findBySQL($sql, $sqlArray);
+                $sql .= "(dozenten LIKE CONCAT('%', :userName, '%')) ";
+            }
+            $sqlArray['userName'] = User::findCurrent()->getFullName();
+        }
+        
+        if($this->selectedDepartment) {
+            if($this->criteria or $this->myCoursesOnly) {
+                $sql .= "AND (institute = :selectedDepartment) ";
+            } else {
+                $sql .= "(institute = :selectedDepartment) ";
+            }
+            $sqlArray['selectedDepartment'] = $this->selectedDepartment;
+        }
+        
+        if($this->selectedSemester) {
+            if($this->criteria or $this->myCoursesOnly or $this->selectedDepartment) {
+                $sql .= "AND (semester = :selectedSemester) ";
+            } else {
+                $sql .= "(semester = :selectedSemester) ";
+            }
+            $sqlArray['selectedSemester'] = $this->selectedSemester;
+        }
+        
+        //database entry order:
+        $sql .= "ORDER BY start_time DESC, name DESC ";
+        
+        
+        //first we count the courses: if there are too many
+        //we won't collect them!
+        $this->amountOfCourses = ArchivedCourse::countBySql($sql, $sqlArray);
+        if($this->amountOfCourses > 150) {
+            PageLayout::postError(sprintf(_('Es wurden %s Veranstaltungen gefunden. Bitte grenzen sie die Suchkriterien weiter ein!'), $this->amountOfCourses));
+        } else {
+            //less than 151 courses: we can display them
+            $this->foundCourses = ArchivedCourse::findBySQL($sql, $sqlArray);
+            
+            if($this->foundCourses) {
                 
-                if($this->foundCourses) {
-                    if(count($this->foundCourses) == 1){
-                        PageLayout::postInfo(_('Es wurde eine Veranstaltung gefunden!'));
-                    } else {
-                        PageLayout::postInfo(sprintf(_('Es wurden %s Veranstaltungen gefunden!'), $this->amountOfCourses));
-                    }
+                if(count($this->foundCourses) == 1){
+                    PageLayout::postInfo(_('Es wurde eine Veranstaltung gefunden!'));
                 } else {
-                    PageLayout::postInfo(_('Es wurde keine Veranstaltung gefunden!'));
+                    PageLayout::postInfo(sprintf(_('Es wurden %s Veranstaltungen gefunden!'), $this->amountOfCourses));
                 }
+            } else {
+                PageLayout::postInfo(_('Es wurde keine Veranstaltung gefunden!'));
             }
         }
     }
