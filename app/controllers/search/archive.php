@@ -63,7 +63,7 @@ class Search_ArchiveController extends AuthenticatedController
         
         $db = DBManager::get();
         
-        $this->availableSemesterNames = $db->query('SELECT DISTINCT semester from archiv ORDER BY semester DESC;');
+        $this->availableSemesterNames = $db->query('SELECT semester from archiv GROUP BY semester ORDER BY MAX(start_time) DESC;');
         
         $db = null; //close connection
         
