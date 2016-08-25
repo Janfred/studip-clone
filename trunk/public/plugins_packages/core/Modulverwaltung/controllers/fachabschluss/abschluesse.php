@@ -152,7 +152,7 @@ class Fachabschluss_AbschluesseController extends MVVController
             }
         }
         if (!Request::isPost()) {
-            $this->flash_set('dialog', sprintf(_('Wollen Sie wirklich den Abschluss "%s" loeschen?'),
+            $this->flash_set('dialog', sprintf(_('Wollen Sie wirklich den Abschluss "%s" löschen?'),
                             $abschluss->name),
                     '/delete/' . $abschluss->id, '/index');
         }
