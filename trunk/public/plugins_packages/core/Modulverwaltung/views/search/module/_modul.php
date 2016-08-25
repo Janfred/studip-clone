@@ -5,7 +5,7 @@
                     <?= htmlReady($modul->getDisplayName(true, true)) ?>
                 </a> 
                 <a style="display: inline; background-image: none; padding-left: 5px; "
-                	data-dialog title="<?= htmlReady($modul->getDisplayName(true, true)) . ' (' . _('VollstÃ¤ndige Modulbeschreibung') . ')' ?>" href="<?= $controller->url_for('shared/modul/description/' . $modul->id) ?>">
+                	data-dialog title="<?= htmlReady($modul->getDisplayName(true, true)) . ' (' . _('Vollständige Modulbeschreibung') . ')' ?>" href="<?= $controller->url_for('shared/modul/description/' . $modul->id) ?>">
                     <?= Assets::img('icons/16/blue/info-circle.png') ?>
                 </a>
             </td>
