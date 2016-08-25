@@ -242,7 +242,7 @@ class Lvgruppen_LvgruppenController extends MVVController
             }
         }
         if (!Request::isPost()) {
-            $this->flash_set('dialog', sprintf(_('Wollen Sie wirklich die Lehrveranstaltungsgruppe "%s" loeschen?'),
+            $this->flash_set('dialog', sprintf(_('Wollen Sie wirklich die Lehrveranstaltungsgruppe "%s" löschen?'),
                             $lvgruppe->getDisplayName()),
                     '/delete/'
                     . $lvgruppe->getId(),

@@ -184,7 +184,7 @@ class Materialien_DokumenteController extends MVVController
                         $dokument->name, $relations),
                         '/delete/' . $dokument->id, '/index');
             } else {
-                $this->flash_set('dialog', sprintf(_('Wollen Sie das Dokument "%s" wirklich loeschen?'),
+                $this->flash_set('dialog', sprintf(_('Wollen Sie das Dokument "%s" wirklich löschen?'),
                                 $dokument->name),
                         '/delete/' . $dokument->getId() . '/1',
                         '/index');

@@ -163,7 +163,7 @@ class Fachabschluss_FaecherController extends MVVController
             }
         }
         if (!Request::isPost()) {
-            $this->flash_set('dialog', sprintf(_('Wollen Sie wirklich das Fach "%s" loeschen?'),
+            $this->flash_set('dialog', sprintf(_('Wollen Sie wirklich das Fach "%s" löschen?'),
                             $fach->name),
                     '/delete/' . $fach->id,
                     '/index');
