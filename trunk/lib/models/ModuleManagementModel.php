@@ -14,8 +14,6 @@
  * @since       3.5
  */
 
-require_once 'InvalidValuesException.php';
-
 abstract class ModuleManagementModel extends SimpleORMap
 {
 
