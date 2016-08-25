@@ -1,12 +1,22 @@
-<? $modulDeskriptor = $modul->getDeskriptor(); ?>
+<? $modulDeskriptor = $modul->getDeskriptor($display_language); ?>
 <table class="mvv-modul-details default nohover" data-mvv-id="<?= $modul->getId(); ?>" data-mvv-type="modul">
     <thead>
         <tr>
             <th class="mvv-modul-details-head" data-mvv-field="mvv_modul.code" style="width: 20%;"><?= htmlReady($modul->code) ?></th>
-            <th class="mvv-modul-details-head" data-mvv-field="mvv_modul.kp" style="width: 80%;"><?= sprintf("%d CP", $modul->kp) ?></th>
+            <th class="mvv-modul-details-head" data-mvv-field="mvv_modul.kp" style="width: 70%;"><?= sprintf("%d CP", $modul->kp) ?></th>
+            <th class="mvv-modul-details-head" data-mvv-field="mvv_modul.deskriptoren" style="width: 10%; text-align: right;">           
+                <? if (count($modul->deskriptoren) > 1): ?>
+                    <? foreach ($modul->deskriptoren->pluck('sprache') as $language) : ?>
+                    <? $lang = $GLOBALS['MVV_MODUL_DESKRIPTOR']['SPRACHE']['values'][$language]; ?>
+                    <a data-dialog="size=auto;title='<?= $modul->getDisplayName() ?>'" href="<?= $controller->url_for('/description/' . $modul->id . '/', array('display_language' => $language)) ?>">
+                        <img src="<?= Assets::image_path('languages/lang_' . strtolower($language) . '.gif') ?>" alt="<?= $lang['name'] ?>" title="<?= $lang['name'] ?>">
+                    </a>
+                    <? endforeach; ?>   
+                <? endif; ?>         
+            </th>
         </tr>
         <tr>
-            <td colspan="2">
+            <td colspan="3">
                 <? if ($show_synopse) : ?>
                 <?=
                 sprintf(_('In der Fassung des <b>%s</b>. Beschlusses vom <b>%s</b> (<b>%s</b>) / Version <b>%s</b>.'),

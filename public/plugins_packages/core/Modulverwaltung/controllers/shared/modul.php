@@ -143,7 +143,9 @@ class Shared_ModulController extends MVVController
         } else {
             $currentSemester = SemesterData::getSemesterData(Request::get('sem_select'));
         }
-
+        
+        $display_language = Request::get('display_language', null);
+        
         $modulVerantwortung = array();
         foreach ($modul->assigned_users as $users) {
             foreach ($users as $user) {
@@ -164,7 +166,7 @@ class Shared_ModulController extends MVVController
         $nummer_modulteil = 1;
         foreach ($modul->modulteile as $modulTeil) {
 
-            $deskriptor = $modulTeil->getDeskriptor();
+            $deskriptor = $modulTeil->getDeskriptor($display_language);
             // Für die Kenntlichmachung der Modulteile in Listen die Nummer des
             // Modulteils und den ausgewählten Namen verwenden.
             // Ist keine Nummer vorhanden, dann Durchnummerieren und Standard-
@@ -220,7 +222,7 @@ class Shared_ModulController extends MVVController
         $this->semesterSelector = SemesterData::GetSemesterSelector(null, $currentSemester['semester_id'], 'semester_id', false);
         $this->modul = $modul;
         $this->pruefungsEbene = $GLOBALS['MVV_MODUL']['PRUEF_EBENE']['values'][$modul->pruef_ebene]['name'];
-        $this->modulDeskriptor = $modul->getDeskriptor();
+        $this->modulDeskriptor = $modul->getDeskriptor($display_language);
         $this->startSemester = SemesterData::getSemesterData($modul->start);
         if ($modul->responsible_institute) {
             if ($modul->responsible_institute->institute) {
@@ -235,6 +237,7 @@ class Shared_ModulController extends MVVController
         $this->modulTeile = $modul->modulteile;
         $this->modulUser = $modul->assigned_users;
         $this->semester = $currentSemester;
+        $this->display_language = $display_language;
     }
     
 }
