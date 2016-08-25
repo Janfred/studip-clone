@@ -28,7 +28,12 @@ class BlubberProvider implements ActivityProvider
 
         $activity->content = formatReady($blubb->description);
 
-        $url = \PluginEngine::getURL('Blubber', array(), 'streams/thread/'.$activity->object_id);
+        $url = \PluginEngine::getURL(
+            'Blubber',
+            [],
+            'streams/thread/' . $blubb->parent_id . '#posting_' . $activity->object_id,
+            true
+        );
 
         $route = \URLHelper::getURL('api.php/blubber/posting/' . $activity->object_id, NULL, true);
 
