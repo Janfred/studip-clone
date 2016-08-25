@@ -120,6 +120,25 @@ class LVGroupsWizardStep implements CourseWizardStep
         $children = $mvvobj->getChildren();
         
         foreach ($children as $c) {
+            
+            if (isset($c->stat)) {
+                if ($c->stat != 'genehmigt') {
+                    continue;
+                } elseif (isset($c->start)) {                
+                    $course = Course::findCurrent();
+                    $mvv_start = Semester::find($c->start);
+                    $mvv_end = Semester::find($c->end);
+                    
+                    if (!($mvv_start->beginn <= $course->end_time && $mvv_end->beginn >= $course->start_time)
+                        || ($course->end_time == null && $mvv_end->beginn >= $course->start_time)
+                        || ($mvv_end == null && $mvv_start->beginn <= $mvv_end->beginn)
+                        || ($course->end_time == null && $mvv_end == null)) 
+                    {
+                        continue;
+                    }
+                }    
+            }  
+                        
             $level[] = array(
                 'id' => $c->getId().'-'.$mvvid[0],
                 'name' => studip_utf8encode($c->getDisplayname()),
