@@ -15,7 +15,18 @@ require_once __DIR__ . '/BlubberContactAvatar.class.php';
  * Entity for external contacts that write something in blubber. In most cases
  * this is for anonymous writers.
  */
-class BlubberExternalContact extends SimpleORMap implements BlubberContact {
+class BlubberExternalContact extends SimpleORMap implements BlubberContact
+{
+    protected static function configure($config = [])
+    {
+        $config['db_table'] = 'blubber_external_contact';
+
+        $config['registered_callbacks']['before_store'][] = 'cbSerializeData';
+        $config['registered_callbacks']['after_store'][] = 'cbUnserializeData';
+        $config['registered_callbacks']['after_initialize'][] = 'cbUnserializeData';
+
+        parent::configure($config);
+    }
 
     /**
      * Finds a user by it's ID, but returns a class BlubberExternalContact or
@@ -91,18 +102,6 @@ class BlubberExternalContact extends SimpleORMap implements BlubberContact {
             $url
         );
         StudipMail::sendMessage($this['mail_identifier'], _("Sie wurden erwähnt."), $message);
-    }
-
-    /**
-     * Constructor of SimpleORMap. Defines the table-name and (un)serializes the $this->data
-     * @param string|null $id
-     */
-    function __construct($id = null)
-    {
-        $this->db_table = 'blubber_external_contact';
-        $this->registerCallback('before_store', 'cbSerializeData');
-        $this->registerCallback('after_store after_initialize', 'cbUnserializeData');
-        parent::__construct($id);
     }
 
     /**

@@ -182,20 +182,9 @@ class BlubberPosting extends SimpleORMap {
             'set' => false,
         ];
 
+        $config['registered_callbacks']['after_store'][] = 'synchronizeHashtags';
+
         parent::configure($config);
-    }
-
-
-    /**
-     * Overrides the contructor of SimpleORMap and is used in the exact same way.
-     * Adds a virtual field to the posting giving the time of the newest comment
-     * to the thread (or the thread.mkdate if no comment exists).
-     * @param null|string $id
-     */
-    public function __construct($id = null) {
-        parent::__construct($id);
-
-        $this->registerCallback('after_store', 'synchronizeHashtags');
     }
 
     /**
