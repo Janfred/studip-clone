@@ -46,19 +46,21 @@
  */
 class HelpTourStep extends SimpleORMap
 {
-
-    function __construct($id = array())
+    protected static function configure($config = [])
     {
-        $this->db_table = 'help_tour_steps';
-        $this->belongs_to = array('help_tour' => array('class_name' => 'HelpTours',
-                                                    'foreign_key' => 'tour_id')
-        );
-        parent::__construct($id);
+        $config['db_table'] = 'help_tour_steps';
+        $config['belongs_to']['help_tour'] = [
+            'class_name'  => 'HelpTour',
+            'foreign_key' => 'tour_id',
+        ];
+        
+        parent::configure($config);
     }
 
     /**
      * checks, if tour step data is complete
      * 
+     * @todo Das Model sollte nix über PageLayout wissen, das sollte anders raus transportiert werden
      * @return boolean true or false
      */
     function validate() {
@@ -77,4 +79,4 @@ class HelpTourStep extends SimpleORMap
         return true;
     }
 }
-?>
+

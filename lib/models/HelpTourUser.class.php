@@ -38,10 +38,10 @@
  */
 class HelpTourUser extends SimpleORMap
 {
-    function __construct($id = array())
+    protected static function configure($config = [])
     {
-        $this->db_table = 'help_tour_user';
-        parent::__construct($id);
+        $config['db_table'] = 'help_tour_user';
+
+        parent::configure($config);
     }
 }
-?>

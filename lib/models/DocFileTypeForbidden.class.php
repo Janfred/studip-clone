@@ -1,25 +1,19 @@
 <?php
-
 class DocFileTypeForbidden extends SimpleORMap
 {
-    public function __construct($id = null)
+    protected static function configure($config = [])
     {
-        $this->db_table = 'doc_filetype_forbidden';
+        $config['db_table'] = 'doc_filetype_forbidden';
         
-        $this->belongs_to['userConfig'] = array(
+        $config['belongs_to']['userConfig'] = [
             'class_name'  => 'DocUsergroupConfig',
             'foreign_key' => 'usergroup',
-        );
-        
-        $this->belongs_to['filetype'] = array(
+        ];
+        $config['belongs_to']['filetype'] = [
             'class_name'  => 'DocFiletype',
             'foreign_key' => 'dateityp_id',
-        );
+        ];
 
-        
-        
-        
-        parent::__construct($id);
-
+        parent::configure($config);
     }
 }

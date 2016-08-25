@@ -61,29 +61,27 @@ class PersonalNotifications extends SimpleORMap
             'before_update' => 'PersonalNotificationsWillUpdate'
         );
 
+        $config['registered_callbacks']['after_store'][] = 'cbExpireCache';
+        $config['registered_callbacks']['before_delete'][] = 'cbExpireCache';
+
         parent::configure($config);
     }
 
     protected $unseen = null;
 
-    public function __construct($id = null)
-    {
-        parent::__construct($id);
+    protected function cbExpireCache($notification) {
+        $query = "SELECT user_id
+                  FROM personal_notifications_user
+                  WHERE personal_notification_id = :id";
+        $statement = DBManager::get()->prepare($query);
+        $statement->bindValue(':id', $notification->id);
+        $statement->execute();
 
-        $this->registerCallback('after_store before_delete', function ($notification) {
-            $query = "SELECT user_id
-                      FROM personal_notifications_user
-                      WHERE personal_notification_id = :id";
-            $statement = DBManager::get()->prepare($query);
-            $statement->bindValue(':id', $notification->id);
-            $statement->execute();
+        $user_ids = $statement->fetchAll(PDO::FETCH_COLUMN);
 
-            $user_ids = $statement->fetchAll(PDO::FETCH_COLUMN);
-
-            foreach ($user_ids as $user_id) {
-                PersonalNotifications::expireCache($user_id);
-            }
-        });
+        foreach ($user_ids as $user_id) {
+            PersonalNotifications::expireCache($user_id);
+        }
     }
 
     /**

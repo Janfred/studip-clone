@@ -26,15 +26,6 @@ abstract class ModuleManagementModel extends SimpleORMap
     public $object_real_name = '';
 
     /**
-     *
-     * @param string $id primary key of table
-     */
-    function __construct($id = null)
-    {
-        parent::__construct($id);
-    }
-
-    /**
      * Returns a collection of a MVV object type found by search term optionally
      * filtered.
      *
