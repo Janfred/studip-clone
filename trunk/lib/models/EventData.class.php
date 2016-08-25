@@ -35,15 +35,11 @@ class EventData extends SimpleORMap
 
         $config['default_values']['linterval'] = 0;
         $config['default_values']['sinterval'] = 0;
-        
+
+        $config['registered_callbacks']['before_create'][] = 'cbDefaultValues';
+
         parent::configure($config);
 
-    }
-
-    function __construct($id = null)
-    {
-        parent::__construct($id);
-        $this->registerCallback('before_create', 'cbDefaultValues');
     }
 
     public function delete()

@@ -70,6 +70,11 @@ class CronjobSchedule extends SimpleORMap
             'on_delete'  => 'delete',
             'on_store'   => 'store',
         );
+
+        $config['registered_callbacks']['before_store'][]     = 'cbJsonifyParameters';
+        $config['registered_callbacks']['after_store'][]      = 'cbJsonifyParameters';
+        $config['registered_callbacks']['after_initialize'][] = 'cbJsonifyParameters';
+
         parent::configure($config);
     }
 
@@ -117,22 +122,7 @@ class CronjobSchedule extends SimpleORMap
         return $this->content['title'] ?: $this->task->name;
     }
 
-    /**
-     * Defines the associated database table, relations to the task and logs
-     * and appropriate callbacks to encode/decode the parameters.
-     *
-     * @param mixed $id Id of the schedule entry in question or null for a new
-     *                  entry
-     */
-    public function __construct($id = null)
-    {
-
-        $this->registerCallback('before_store after_store after_initialize', 'cbJsonifyParameters');
-
-        parent::__construct($id);
-    }
-
-    function cbJsonifyParameters($type)
+    protected function cbJsonifyParameters($type)
     {
         if ($type === 'before_store' && !is_string($this->parameters)) {
             $this->parameters = json_encode($this->parameters ?: null);

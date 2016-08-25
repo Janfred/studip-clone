@@ -49,22 +49,15 @@ class CronjobLog extends SimpleORMap
             'foreign_key' => 'schedule_id',
         );
 
+        $config['registered_callbacks']['before_store'][]     = 'cbSerializeException';
+        $config['registered_callbacks']['after_store'][]      = 'cbSerializeException';
+        $config['registered_callbacks']['after_initialize'][] = 'cbSerializeException';
+
         parent::configure($config);
+
     }
 
-    /**
-     * Defines the associated database table, relation to the schedule
-     * and appropriate callbacks to encode/decode a possible exception.
-     *
-     * @param mixed $id Id of the log entry in question or null for a new entry
-     */
-    public function __construct($id = null)
-    {
-        $this->registerCallback('before_store after_store after_initialize', 'cbSerializeException');
-        parent::__construct($id);
-    }
-
-    function cbSerializeException($type)
+    protected function cbSerializeException($type)
     {
         if ($type === 'before_store' && !is_string($this->exception)) {
             $this->exception = serialize($this->exception ?: null);
