@@ -828,7 +828,7 @@ function tooltipHtmlIcon($text, $important = false)
 */
 function TransformInternalLinks($str){
     $str = trim($str);
-    if (strpos($str, 'http') === false) {
+    if (strpos($str, 'http') !== 0) {
         if ($str[0] === '/') {
             $str = substr($str, strlen($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']));
         }
