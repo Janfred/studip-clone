@@ -158,27 +158,7 @@ class Search_ModuleController extends MVVController
         if (count($drill_down['institutes']['objects'])
                 || count($drill_down['studiengaenge']['objects'])
                 || count($drill_down['faecher']['objects'])) {
-            $drill_down['studiengaenge']['name'] =
-                    _('Studiengänge');
-            $drill_down['faecher']['name'] =
-                    _('Fächer');
-            $drill_down['institutes']['name'] =
-                    _('Verantwortliche Einrichtungen');
-            $template = $this->get_template_factory()
-                    ->open('search/module/_drill_down_list');
-            $template->set_attribute('lists', $drill_down);
-            $template->set_attribute('act_list', $active_list);
-            $template->set_attribute('controller', $this);
-            $template->set_attribute('drill_down_id', $this->drill_down_id);
-
-            /*
-            $widget  = new SidebarWidget();
-            $widget->setTitle('Treffer im Bereich:');
-            $widget->addElement(new WidgetElement($template->render()));
-            $sidebar->addWidget($widget, 'Treffer');
-            */
-
-
+            
             $widget = new SelectWidget(_('Studiengänge'),
                 $this->url_for('',array('sterm' => $this->sterm, 'type' => 'Studiengang')), 'id');
             $options = array(0 => 'Alle');
@@ -206,17 +186,23 @@ class Search_ModuleController extends MVVController
 
 
             $widget = new SelectWidget(_('Verantwortliche Einrichtungen'),
-                $this->url_for('',array('sterm' => $this->sterm, 'type' => 'Einrichtung')), 'id');
+                $this->url_for('',array('sterm' => $this->sterm, 'type' => 'Fachbereich')), 'id');                       
+            $widget->class = 'institute-list';    
             $options = array(0 => 'Alle');
+            $widget->addElement(new SelectElement(0, _('Alle')), 'select-all');
             if(!empty($drill_down['institutes']['objects'])){
                 foreach ($drill_down['institutes']['objects'] as $institut) {
-                    $options[$institut->institut_id] = $institut->name;
+                    $widget->addElement(
+                        new SelectElement(
+                            $institut->institut_id,
+                            ($institut->institut_id != $institut->fakultaets_id ? ' ' : '') . $institut->name
+                            , $institut->institut_id === $this->drill_down_id
+                            ),
+                        'select-' . $institut->name
+                        );
                 }
-            }
-            $widget->setOptions($options, null);
-            $widget->setMaxLength(100);
+            }            
             $sidebar->addWidget($widget, 'institutes_filter');
-
 
         }
 
@@ -263,8 +249,8 @@ class Search_ModuleController extends MVVController
                         }
                     }
                     break;
-                case 'Einrichtung':
-                    foreach (Fachbereich::findByModule($modul->id) as $fab) {
+                case 'Fachbereich':                       
+                    foreach ($modul->getResponsibleInstitutes() as $fab){
                         if ($fab->id == $filter_id) {
                             $found = true;
                             break;
@@ -511,7 +497,14 @@ class Search_ModuleController extends MVVController
     private function drilldown_institutes($modul_ids)
     {
         if (count($modul_ids)) {
-            return Fachbereich::findByModule($module_ids);
+            $fabs = array();
+            foreach ($modul_ids as $modul_id) {
+                $modul = Modul::find($modul_id);
+                foreach ($modul->getResponsibleInstitutes() as $fab) {
+                    $fabs[$fab->id] = Fachbereich::find($fab->id);
+                }
+            }
+            return SimpleORMapCollection::createFromArray($fabs);
         }
         return array();
     }
