@@ -128,7 +128,7 @@ jQuery(function () {
         }
         event.preventDefault();
     });
-    jQuery(document).on("blur", ".questionnaire_edit .options > li:last-child input", function (ui) {
+    jQuery(document).on("blur", ".questionnaire_edit .options > li:last-child input:text", function (event) {
         if (this.value) {
             jQuery(this).closest(".options").append(jQuery(this).closest(".options").data("optiontemplate"));
             jQuery(this).closest(".options").find("li:last-child input").focus();
@@ -146,7 +146,7 @@ jQuery(function () {
     });
     jQuery(document).on("click", ".questionnaire_edit .options .add", function () {
         jQuery(this).closest(".options").append(jQuery(this).closest(".options").data("optiontemplate"));
-        jQuery(this).closest(".options").find("li:last-child input").focus();
+        jQuery(this).closest(".options").find("li:last-child input:text").focus();
         STUDIP.Questionnaire.Test.updateCheckboxValues();
     });
 });
