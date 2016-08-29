@@ -88,7 +88,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
         $this->field_names = array();
         $this->args = array('username', 'seminar_id');
 
-        parent::ExternModule($range_id, $module_name, $config_id, $set_config, $global_id);
+        parent::__construct($range_id, $module_name, $config_id, $set_config, $global_id);
 
     }
 
@@ -158,7 +158,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
         $markers['TemplateMain'][] = array('###CV###', _("Lebenslauf"));
         $markers['TemplateMain'][] = array('###PUBLICATIONS###', '');
         $markers['TemplateMain'][] = array('###OFFICE-HOURS###', '');
-        
+
         $markers['TemplateMain'][] = array('<!-- BEGIN ALL-INST -->', '');
         $markers['TemplateMain'][] = array('<!-- BEGIN SINGLE-INST -->', '');
         $markers['TemplateMain'][] = array('###SINGLE-INST-NAME###', '');
@@ -179,7 +179,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
         $markers['TemplateMain'][] = array('###SINGLE-INST-OFFICE-HOURS###', '');
         $markers['TemplateMain'][] = array('<!-- END SINGLE-INST -->', '');
         $markers['TemplateMain'][] = array('<!-- END ALL-INST -->', '');
-        
+
         $this->insertDatafieldMarkers('user', $markers, 'TemplateMain');
         $this->insertPluginMarkers('HomepagePlugin', $markers, 'TemplateMain');
         $markers['TemplateMain'][] = array('###LECTURES###', _("Inhalt aus dem Template für Veranstaltungen"));
@@ -440,7 +440,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
                 , $GLOBALS['_fullname_sql'][$nameformat]));
         $stm->execute(array($username));
         $allRows = $stm->fetchAll();
-        
+
         $this->user_id = $row['user_id'];
 
         $this->user_perm = $visibilities['perms'];
@@ -456,7 +456,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
             $content['PERSONDETAILS']['STATUSGROUPS'] = ExternModule::ExtHtmlReady(join(', ', array_values($statusgroups)));
         }
         $content['PERSONDETAILS']['USERNAME'] = $row['username'];
-        
+
         $content['PERSONDETAILS']['IMAGE-HREF'] = Avatar::getAvatar($this->user_id)->getURL(Avatar::NORMAL);
 
         $gruppen = GetRoleNames(GetAllStatusgruppen($this->config->range_id, $row['user_id']));
@@ -497,7 +497,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
             $content['PERSONDETAILS']['ALL-INST']['SINGLE-INST'][$j]['SINGLE-INST-OFFICE-HOURS'] = ExternModule::ExtHtmlReady($curRow['sprechzeiten']);
             $j++;
         }
-        
+
         // generic data fields
         if ($generic_datafields = $this->config->getValue('Main', 'genericdatafields')) {
             $localEntries = DataFieldEntry::getDataFieldEntries($this->user_id, 'user');
