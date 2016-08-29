@@ -65,7 +65,7 @@ class ExternModuleTemplatePersons extends ExternModule {
                 _("Sprechzeiten")
         );
 
-        parent::ExternModule($range_id, $module_name, $config_id, $set_config, $global_id);
+        parent::__construct($range_id, $module_name, $config_id, $set_config, $global_id);
     }
 
     function setup () {
