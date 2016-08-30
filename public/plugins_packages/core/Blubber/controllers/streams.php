@@ -751,7 +751,7 @@ class StreamsController extends PluginController {
             $this->stream['name'] = Request::get("name");
             $this->stream['user_id'] = $GLOBALS['user']->id;
             $this->stream['sort'] = Request::get("sort");
-            $this->stream['defaultstream'] = Request::int("defaultstream");
+            $this->stream['defaultstream'] = Request::int("defaultstream", 0);
 
             //Pool-rules
             $this->stream['pool_courses'] = Request::get("pool_courses_check")
