@@ -25,7 +25,6 @@ require_once __DIR__ . '/StreamAvatar.class.php';
 class BlubberStream extends SimpleORMap {
 
     public $filter_threads = array();
-    public $user_id = null;
     public $max_age = null;
 
     protected static function configure($config = [])
