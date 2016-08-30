@@ -26,7 +26,7 @@
             $overview_url = URLHelper::getURL("plugins.php/blubber/streams/forum", array('cid' => $thread['Seminar_id']));
             break;
         case "public":
-            $overview_url = URLHelper::getURL("plugins.php/blubber/streams/profile", array('user_id' => $thread['user_id'], 'extern' => $thread['external_contact'] ? $thread['external_contact'] : null));
+            $overview_url = URLHelper::getURL("plugins.php/blubber/streams/profile", array('user_id' => $thread['user_id'], 'username' =>  get_username($thread['user_id']), 'extern' => $thread['external_contact'] ? $thread['external_contact'] : null));
             break;
         default:
             $overview_url = URLHelper::getURL("plugins.php/blubber/streams/global");
