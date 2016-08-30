@@ -321,7 +321,7 @@ class Course_StatusgroupsController extends AuthenticatedController
              * Check if a valid end time was given.
              */
             if (Request::int('selfassign', 0)) {
-                $endtime = strtotime(Request::get('selfassign_end'), 'now');
+                $endtime = strtotime(Request::get('selfassign_end', 'now'));
                 $starttime = strtotime(Request::get('selfassign_start', 'now'));
                 if ($endtime <= $starttime) {
                     $endtime = 0;
