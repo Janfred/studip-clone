@@ -94,10 +94,10 @@ class Admin_UserController extends AuthenticatedController
         //wenn suche durchgeführt
         if (isset($request)) {
             //suche mit datafields
-            foreach ($datafields as $id => $datafield) {
-                if (strlen($request[$id]) > 0
-                    && !(in_array($datafield->type, words('selectbox radio')) && $request[$id] === '---ignore---')) {
-                    $search_datafields[$id] = $request[$id];
+            foreach ($this->datafields as $datafield) {
+                if (strlen($request[$datafield->id]) > 0
+                    && !(in_array($datafield->type, words('selectbox radio')) && $request[$datafield->id] === '---ignore---')) {
+                    $search_datafields[$datafield->id] = $request[$datafield->id];
                 }
             }
 
@@ -124,6 +124,7 @@ class Admin_UserController extends AuthenticatedController
                 PageLayout::postMessage(MessageBox::info(_('Es wurden keine Personen mit diesen Suchkriterien gefunden.')));
             } else {
                 $_SESSION['admin']['user']['results'] = true;
+                PageLayout::postMessage(MessageBox::info(sprintf(_('Es wurden %s Personen mit diesen Suchkriterien gefunden.'), count($this->users))));
             }
             if (is_array($this->users) && Request::submitted('export')) {
                 $tmpname = md5(uniqid('tmp'));
@@ -398,7 +399,7 @@ class Admin_UserController extends AuthenticatedController
                     }
                 }
             }
-            
+
             // change version of studiengang if module management is enabled
             if (PluginEngine::getPlugin('MVVPlugin') && in_array($editPerms[0], array('autor', 'tutor', 'dozent'))) {
                 $change_versions = Request::getArray('change_version');

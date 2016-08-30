@@ -67,7 +67,7 @@ use Studip\Button, Studip\LinkButton;
                 $tooltxt .= "\n" .  _("Nutzer ist gesperrt!");
             }
             ?>
-           <?= tooltipicon($tooltxt) ?>
+           <?= tooltipHtmlIcon(htmlReady($tooltxt, true, true)) ?>
         </td>
         <td>
             <?= $user['perms'] ?>
