@@ -67,9 +67,9 @@ $users = array_unique($users);
             <td style="text-align: right; background-size: <?= $percentage ?>% 100%; background-position: right center; background-image: url('<?= Assets::image_path("vote_lightgrey.png") ?>'); background-repeat: no-repeat;" width="50%">
                 <strong><?= formatReady($option) ?></strong>
                 <? if (in_array($key + 1, $data['correctanswer'])) : ?>
-                    <?= Icon::create('checkbox-unchecked', 'accept', ['title' =>  _("Diese Antwort ist richtig")])->asImg( ['class' => 'text-bottom']) ?>
+                    <?= Icon::create('accept', 'accept', ['title' =>  _("Diese Antwort ist richtig")])->asImg( ['class' => 'text-bottom']) ?>
                 <? else : ?>
-                    <?= Icon::create('checkbox-unchecked', 'inactive', ['title' =>  _("Eine falsche Antwort")])->asImg( ['class' => 'text-bottom']) ?>
+                    <?= Icon::create('decline', 'attention', ['title' =>  _("Eine falsche Antwort")])->asImg( ['class' => 'text-bottom']) ?>
                 <? endif ?>
             </td>
             <td style="white-space: nowrap;">
