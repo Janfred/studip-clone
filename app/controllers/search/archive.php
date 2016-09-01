@@ -89,24 +89,31 @@ class Search_ArchiveController extends AuthenticatedController
         $sqlArray = [];
         
         //ok, checks are done: build SQL query:
-        if($this->criteria) {
-            $sql = "(name LIKE CONCAT('%', :criteria, '%') "
-                    . "OR untertitel LIKE CONCAT('%', :criteria, '%') "
-                    . "OR beschreibung LIKE CONCAT('%', :criteria, '%')) ";
-            $sqlArray['criteria'] = $this->criteria;
-        }
-        
         if($this->myCoursesOnly) {
             /*
                 If the user wants to see only his courses 
                 we have to filter the courses by user-ID:
             */
+            
+            $sql = "INNER JOIN archiv_user on archiv.seminar_id = archiv_user.seminar_id "
+                    . "WHERE (archiv_user.user_id = :userId) ";
+            $sqlArray['userId'] = User::findCurrent()->id;
+            
             if($this->criteria) {
-                $sql .= "AND (dozenten LIKE CONCAT('%', :userName, '%')) ";
-            } else {
-                $sql .= "(dozenten LIKE CONCAT('%', :userName, '%')) ";
+                $sql .= "AND (name LIKE CONCAT('%', :criteria, '%') "
+                    . "OR untertitel LIKE CONCAT('%', :criteria, '%') "
+                    . "OR beschreibung LIKE CONCAT('%', :criteria, '%')) ";
+                $sqlArray['criteria'] = $this->criteria;
             }
-            $sqlArray['userName'] = User::findCurrent()->getFullName();
+            
+            
+        } else {
+            if($this->criteria) {
+                $sql = "(name LIKE CONCAT('%', :criteria, '%') "
+                        . "OR untertitel LIKE CONCAT('%', :criteria, '%') "
+                        . "OR beschreibung LIKE CONCAT('%', :criteria, '%')) ";
+                $sqlArray['criteria'] = $this->criteria;
+            }
         }
         
         if($this->selectedDepartment) {
