@@ -120,7 +120,7 @@
                 <strong><?= _('Kommentar Status') ?></strong>
             </td>
             <td colspan="2" data-mvv-field="mvv_studiengang.schlagworte">
-                <?= htmlReady($studiengang->kommentar_status) ?>
+                <?= formatReady($studiengang->kommentar_status) ?>
             </td>
         </tr>
         <tr>
