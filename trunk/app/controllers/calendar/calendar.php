@@ -459,15 +459,23 @@ class Calendar_CalendarController extends AuthenticatedController
         if (Request::int('isdayevent')) {
             $dt_string = Request::get('start_date') . ' 00:00:00';
         } else {
-            $dt_string = Request::get('start_date') . ' ' . Request::int('start_hour')
-                    . ':' . Request::int('start_minute');
+            $dt_string = sprintf(
+                '%s %u:%02u',
+                Request::get('start_date'),
+                Request::int('start_hour'),
+                Request::int('start_minute')
+            );
         }
         $event->setStart($this->parseDateTime($dt_string));
         if (Request::int('isdayevent')) {
             $dt_string = Request::get('end_date') . ' 23:59:59';
         } else {
-            $dt_string = Request::get('end_date') . ' ' . Request::int('end_hour')
-                    . ':' . Request::int('end_minute');
+            $dt_string = sprintf(
+                '%s %u:%02u',
+                Request::get('end_date'),
+                Request::int('end_hour'),
+                Request::int('end_minute')
+            );
         }
         $event->setEnd($this->parseDateTime($dt_string));
         if ($event->getStart() > $event->getEnd()) {
