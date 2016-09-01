@@ -225,28 +225,6 @@ class Document_DownloadController extends AuthenticatedController
         }
     }
 
-    /**
-     * Sanitizes a filename by translating all umlauts to ascii characters,
-     * compressing dashes and whitespace and removing all invalid characters.
-     *
-     * @param String $filename "Dirty" filename
-     * @return String Sanitized filename
-     */
-    protected function sanitizeFilename($filename)
-    {
-        // Remove umlauts, seems hackish but works great
-        // Taken from http://stackoverflow.com/a/5950598
-        $filename = htmlentities($filename, ENT_QUOTES, 'ISO-8859-1');
-        $filename = html_entity_decode(preg_replace('~&([a-z]{1,2})(?:acute|cedil|circ|grave|lig|orn|ring|slash|tilde|uml);~i', '$1', $filename), ENT_QUOTES, 'ISO-8859-1');
-
-        // Combine dashes and whitespace
-        $filename = preg_replace('/[\s-]+/', '-', $filename);
-        
-        // Remove all characters that are not dashes, dots or alphanumeric
-        $filename = preg_replace('/[^0-9a-z_\-\.]/i', '', $filename);
-
-        return $filename;
-    }
 
     /**
      * Initiates the download. Sets correct headers and prepares the download
@@ -273,7 +251,7 @@ class Document_DownloadController extends AuthenticatedController
 
         $dispositon = sprintf('%s;filename="%s"',
                               $inline ? 'inline' : 'attachment',
-                              urlencode($this->sanitizeFilename($filename)));
+                              urlencode(FileHelper::sanitizeFilename($filename)));
         $response->add_header('Content-Disposition', $dispositon);
         $response->add_header('Content-Description', 'File Transfer');
         $response->add_header('Content-Transfer-Encoding' , 'binary');

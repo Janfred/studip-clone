@@ -882,7 +882,7 @@ class Studiengaenge_StudiengaengeController extends MVVController
             } else {
                 $content = studip_utf8encode($template->render());
                 $this->response->add_header('Content-type', 'application/msword');
-                $this->response->add_header('Content-Disposition', 'attachment; filename="' . $studiengang->getDisplayName() . '.doc"');
+                $this->response->add_header('Content-Disposition', 'attachment; filename="' . FileHelper::sanitizeFilename($studiengang->getDisplayName()). '.doc"');
                 $this->render_text($content);
             }
         }
