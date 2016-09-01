@@ -32,7 +32,7 @@
             <? endif; ?>
         </label>
     </fieldset>
-    <footer>
+    <footer data-dialog-button>
         <? if ($lvgruppe->isNew()) : ?>
             <? if ($perm->havePermCreate()) : ?>
             <?= Button::createAccept(_('anlegen'), 'store', array('title' => _('Lehrveranstaltungsgruppe anlegen'))) ?>
