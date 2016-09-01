@@ -35,11 +35,11 @@
             <td><strong><?= _('Beschreibung') ?></strong></td>
             <td data-mvv-field="mvv_stgteilversion.beschreibung">
                 <img src="<?= Assets::image_path('languages/lang_de.gif') ?>" alt="<?= _('deutsch') ?>" style="vertical-align: top;">
-                <?= htmlReady($version->beschreibung) ?>
+                <?= formatReady($version->beschreibung) ?>
             </td>
             <td data-mvv-field="mvv_stgteilversion.beschreibung_en">
                 <img src="<?= Assets::image_path('languages/lang_en.gif') ?>" alt="<?= _('englisch') ?>" style="vertical-align: top;">                
-                <?= htmlReady($version->beschreibung_en) ?>
+                <?= formatReady($version->beschreibung_en) ?>
             </td>    
         </tr>
         <tr>
@@ -48,7 +48,7 @@
                 <?= $GLOBALS['MVV_STGTEILVERSION']['STATUS']['values'][$version->stat]['name'] ?>
             </td>
             <td>
-                <?= htmlReady($version->kommentar_status) ?>
+                <?= formatReady($version->kommentar_status) ?>
             </td>
         </tr>
     </tbody>
