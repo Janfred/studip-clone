@@ -1,4 +1,4 @@
-<h3><?= $stgteil->getDisplayName() ?></h3>
+<h3><?= htmlReady($stgteil->getDisplayName()) ?></h3>
 <table class="default mvv-modul-details" id="<?= $stgteil->getId() ?>" data-mvv-id="<?= $stgteil->getId(); ?>" data-mvv-type="stgteil">
     <colgroup>
         <col style="width: 20%;">
