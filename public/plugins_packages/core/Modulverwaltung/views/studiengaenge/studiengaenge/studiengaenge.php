@@ -23,7 +23,7 @@
             </td>
             <td class="actions dont-hide">
             <? if ($studiengang->stat == 'planung' && MvvPerm::haveFieldPermStat($studiengang)) : ?>
-                <a data-dialog="title='<?= $studiengang->getDisplayName() ?>'" href="<?= $controller->url_for('/approve', $studiengang->id) ?>">
+                <a data-dialog="title='<?= htmlReady($studiengang->getDisplayName()) ?>'" href="<?= $controller->url_for('/approve', $studiengang->id) ?>">
                     <?= Icon::create('accept', 'clickable', ['title' => _('Studiengang genehmigen')]) ?>
                 </a>
             <? endif; ?>            
