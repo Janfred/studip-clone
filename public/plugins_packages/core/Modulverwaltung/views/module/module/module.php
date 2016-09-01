@@ -34,12 +34,12 @@
     </td>
     <td class="dont-hide actions" style="white-space: nowrap;">
     <? if ($modul->stat == 'planung' && $perm->haveFieldPerm('stat')) : ?>
-        <a data-dialog="title='<?= $modul->getDisplayName() ?>'" href="<?= $controller->url_for('/approve', $modul->id) ?>">
+        <a data-dialog="title='<?= htmlReady($modul->getDisplayName()) ?>'" href="<?= $controller->url_for('/approve', $modul->id) ?>">
             <?= Icon::create('accept', 'clickable', array('title' => _('Modul genehmigen')))->asImg(); ?>
         </a>
     <? endif; ?>
     <? if ($perm->havePermRead()) : ?>
-        <a data-dialog="size=auto;title='<?= $modul->getDisplayName() ?>'" href="<?= $controller->url_for('/description', $modul->id) ?>">
+        <a data-dialog="size=auto;title='<?= htmlReady($modul->getDisplayName()) ?>'" href="<?= $controller->url_for('/description', $modul->id) ?>">
             <?= Icon::create('log', 'clickable', array('title' => _('Modulbeschreibung ansehen')))->asImg(); ?>
         </a>
     <? endif; ?>
