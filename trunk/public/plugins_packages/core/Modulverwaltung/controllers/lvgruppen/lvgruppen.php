@@ -287,6 +287,7 @@ class Lvgruppen_LvgruppenController extends MVVController
         }
 
         $this->response->add_header('Content-type', 'application/vnd.ms-excel');
+        $this->response->add_header('Content-Disposition', 'attachment; filename="lvgruppen.xls"');
         $this->render_template('lvgruppen/lvgruppen/export_xls', null);
     }
 
