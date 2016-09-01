@@ -1,4 +1,4 @@
-<h2><?= $version->getDisplayName() ?></h2>
+<h2><?= htmlReady($version->getDisplayName()) ?></h2>
 <table class="default  mvv-modul-details" id="<?= $version->id ?>" data-mvv-id="<?= $version->id; ?>" data-mvv-type="stgteilversion">
     <tbody>
         <tr>
