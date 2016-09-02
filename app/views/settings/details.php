@@ -65,13 +65,6 @@
                                value="<?= htmlReady($config->SKYPE_NAME) ?>">
                     </label>
                 </td>
-                <td>
-                    <label>
-                        <?= _('Skype Online Status anzeigen:') ?><br>
-                        <input type="checkbox" name="skype_online_status" value="1"
-                               <? if ($config->SKYPE_ONLINE_STATUS) echo 'checked'; ?>>
-                    </label>
-                </td>
             </tr>
         <? endif; ?>
             <tr>

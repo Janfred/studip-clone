@@ -576,9 +576,6 @@ class about extends messaging
         if (Config::get()->ENABLE_SKYPE_INFO) {
             if ($GLOBALS['user']->cfg->getValue('SKYPE_NAME') && !$NOT_HIDEABLE_FIELDS[$this->auth_user['perms']]['skype_name']) {
                 $homepage_elements["skype_name"] = array("name" => _("Skype Name"), "visibility" => $homepage_visibility["skype_name"] ?: get_default_homepage_visibility($this->auth_user['user_id']), 'category' => 'Private Daten');
-                if ($GLOBALS['user']->cfg->getValue('SKYPE_ONLINE_STATUS')) {
-                    $homepage_elements["skype_online_status"] = array("name" => _("Skype Online Status"), "visibility" => $homepage_visibility["skype_online_status"] ?: get_default_homepage_visibility($this->auth_user['user_id']), 'category' => 'Private Daten');
-                }
             }
         }
         if ($my_data["privatnr"] && !$NOT_HIDEABLE_FIELDS[$this->auth_user['perms']]['Private Daten_phone'])

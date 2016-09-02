@@ -73,12 +73,6 @@ class Settings_DetailsController extends Settings_SettingsController
                 Visibility::updatePrivacySettingWithTest(Request::get('skype_name'), _("Skype Name"), "skype_name", 'privatedata', 1, $this->user->user_id);
                 $changed = true;
             }
-
-            if (Request::int('skype_online_status') != $this->config->SKYPE_ONLINE_STATUS) {
-                $this->config->store('SKYPE_ONLINE_STATUS', Request::int('skype_online_status'));
-                Visibility::updatePrivacySettingWithTest(Request::int('skype_online_status'), _("Skype Online Status"), "skype_online_status", 'skype_name', 1, $this->user->user_id);
-                $changed = true;
-            }
         }
 
         $mapping = array(
