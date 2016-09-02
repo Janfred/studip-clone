@@ -162,51 +162,6 @@ class SeminarDB
         return $statement->fetchColumn();
     }
 
-    /**
-     * @deprecated since 3.4 use SeminarCycleDate::removeOutRangedSingleDates($start, $end, $seminar_id)
-     * 
-     * removes all singleDates which are NOT between $start and $end
-     */
-    function removeOutRangedSingleDates($start, $end, $seminar_id)
-    {
-        $query = "SELECT termin_id
-                  FROM termine
-                  WHERE range_id = ? AND (`date` NOT BETWEEN ? AND ?)
-                    AND NOT (metadate_id IS NULL OR metadate_id = '')";
-        $statement = DBManager::get()->prepare($query);
-        $statement->execute(array($seminar_id, $start, $end));
-        $ids = $statement->fetchAll(PDO::FETCH_COLUMN);
-
-        foreach ($ids as $id) {
-            $termin = new SingleDate($id);
-            $termin->delete();
-            unset($termin);
-        }
-
-        if (count($ids) > 0) {
-            // remove all assigns for the dates in question
-            $query = "SELECT assign_id FROM resources_assign WHERE assign_user_id IN (?)";
-            $statement = DBManager::get()->prepare($query);
-            $statement->execute(array($ids));
-
-            while ($id = $statement->fetchColumn()) {
-                AssignObject::Factory($assign_id)->delete();
-            }
-        }
-
-        // $query = "DELETE FROM termine
-        //           WHERE range_id = ? AND (`date` NOT BETWEEN ? AND ?)
-        //             AND NOT (metadate_id IS NULL OR metadate_id = '')";
-        // $statement = DBManager::get()->prepare($query);
-        // $statement->execute(array($seminar_id, $start, $end));
-
-        $query = "DELETE FROM ex_termine
-                  WHERE range_id = ? AND (`date` NOT BETWEEN ? AND ?)
-                    AND NOT (metadate_id IS NULL OR metadate_id = '')";
-        $statement = DBManager::get()->prepare($query);
-        $statement->execute(array($seminar_id, $start, $end));
-    }
-
     function hasDatesOutOfDuration($start, $end, $seminar_id)
     {
         $query = "SELECT COUNT(*)

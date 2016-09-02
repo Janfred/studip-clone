@@ -506,7 +506,11 @@ class Seminar
 
     public function removeAndUpdateSingleDates()
     {
-        SeminarDB::removeOutRangedSingleDates($this->semester_start_time, $this->getEndSemesterVorlesEnde(), $this->id);
+        SeminarCycleDate::removeOutRangedSingleDates(
+            $this->semester_start_time,
+            $this->getEndSemesterVorlesEnde(),
+            $this->id
+        );
 
         foreach ($this->metadate->cycles as $key => $val) {
             $this->metadate->cycles[$key]->readSingleDates();
@@ -546,7 +550,11 @@ class Seminar
                 // logging <<<<<<
                 $this->semester_duration_time = -1;
                 $this->metadate->setSeminarDurationTime(-1);
-                SeminarDB::removeOutRangedSingleDates($this->semester_start_time, $this->getEndSemesterVorlesEnde(), $this->id);
+                SeminarCycleDate::removeOutRangedSingleDates(
+                    $this->semester_start_time,
+                    $this->getEndSemesterVorlesEnde(),
+                    $this->id
+                );
             } else {                                    // the seminar takes place  between the selected start~ and end-semester
                 // logging >>>>>>
                 StudipLog::log("SEM_SET_ENDSEMESTER", $this->getId(), $end);
