@@ -155,7 +155,7 @@ class Institute_MembersController extends AuthenticatedController
                                    User::findByUsername($username)->getFullName())));
             }
 
-            log_event('INST_USER_DEL', $this->inst_id, $del_user_id);
+            StudipLog::log('INST_USER_DEL', $this->inst_id, $del_user_id);
             NotificationCenter::postNotification('UserInstitutionDidDelete', $this->inst_id, $del_user_id);
             checkExternDefaultForUser($del_user_id);
         }
@@ -262,7 +262,7 @@ class Institute_MembersController extends AuthenticatedController
                                 PageLayout::postMessage(MessageBox::info(sprintf(_("Es wurden ingesamt %s Mails an die %s der Einrichtung geschickt."),$mails_sent,$wem)));
                             }
 
-                            log_event('INST_USER_ADD', $this->inst_id ,$u_id, 'admin');
+                            StudipLog::log('INST_USER_ADD', $this->inst_id ,$u_id, 'admin');
 
                             // als admin aufnehmen
                             $query = "INSERT INTO user_inst (user_id, Institut_id, inst_perms)
@@ -286,7 +286,7 @@ class Institute_MembersController extends AuthenticatedController
                             $statement = DBManager::get()->prepare($query);
                             $statement->execute(array($perms, $u_id, $this->inst_id));
 
-                            log_event('INST_USER_STATUS', $this->inst_id ,$u_id, $perms);
+                            StudipLog::log('INST_USER_STATUS', $this->inst_id ,$u_id, $perms);
                             NotificationCenter::postNotification('UserInstitutionPermDidUpdate', $this->inst_id, $u_id); 
 
                         } else {
@@ -295,7 +295,7 @@ class Institute_MembersController extends AuthenticatedController
                             $statement = DBManager::get()->prepare($query);
                             $statement->execute(array($u_id, $this->inst_id, $perms));
 
-                            log_event('INST_USER_ADD', $this->inst_id ,$u_id, $perms);
+                            StudipLog::log('INST_USER_ADD', $this->inst_id ,$u_id, $perms);
                         }
                         if ($statement->rowCount()) {
                             PageLayout::postMessage(MessageBox::info(sprintf(_("%s wurde als \"%s\" in die Einrichtung aufgenommen. Um Rechte etc. zu ändern folgen Sie dem Link zu den Nutzerdaten der Person!"), $Fullname, $perms)));

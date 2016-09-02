@@ -211,10 +211,10 @@ class Settings_StatusgruppenController extends Settings_SettingsController
                 $statement->execute(array($range_id, $this->user->user_id, $globalperms));
 
                 if ($statement->rowCount() == 1) {
-                    log_event('INST_USER_ADD', $range_id, $this->user->user_id, $globalperms);
+                    StudipLog::log('INST_USER_ADD', $range_id, $this->user->user_id, $globalperms);
                     NotificationCenter::postNotification('UserInstitutionDidCreate', $range_id, $this->user->user_id);
                 } else if ($statement->rowCount() == 2) {
-                    log_event('INST_USER_STATUS', $range_id, $this->user->user_id, $globalperms);
+                    StudipLog::log('INST_USER_STATUS', $range_id, $this->user->user_id, $globalperms);
                     NotificationCenter::postNotification('UserInstitutionPermDidUpdate', $id, $this->user->user_id);
 
                 }
@@ -341,7 +341,7 @@ class Settings_StatusgruppenController extends Settings_SettingsController
                         $id
                     ));
 
-                    log_event('INST_USER_STATUS', $id, $this->user->user_id, $perms .' -> '. $status);
+                    StudipLog::log('INST_USER_STATUS', $id, $this->user->user_id, $perms .' -> '. $status);
                     NotificationCenter::postNotification('UserInstitutionPermDidUpdate', $id, $this->user->user_id);
 
                     $success[] = _('Der Status wurde geändert!');

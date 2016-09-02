@@ -36,8 +36,6 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once 'lib/log_events.inc.php';
-
 /*****************************************************************************
 AssignObject, zentrale Klasse der Objekte der Belegung
 /*****************************************************************************/
@@ -667,29 +665,29 @@ class AssignObject
                                 . ' - ' . $this->GetOwnerName();
 
                     if ($type == 'date') {
-                        log_event("RES_ASSIGN_SEM", $this->resource_id, Seminar::GetSemIdByDateId($this->assign_user_id),
+                        StudipLog::log("RES_ASSIGN_SEM", $this->resource_id, Seminar::GetSemIdByDateId($this->assign_user_id),
                             sprintf(($create ? _('%s Neue Buchung') : _('%s, Buchungsupdate')), $this->getFormattedShortInfo()), $debug);
                     } else if ($type == 'sem') {
-                        log_event("RES_ASSIGN_SEM", $this->resource_id, $this->assign_user_id,
+                        StudipLog::log("RES_ASSIGN_SEM", $this->resource_id, $this->assign_user_id,
                             sprintf(($create ? _('%s Neue Buchung') : _('%s, Buchungsupdate')), $this->getFormattedShortInfo()), $debug);
                     } else if ($type == 'user') {
                         $message = sprintf(($create
                                 ? _('%s, Neue Buchung, eingetrageneR NutzerIn: %s (%s)')
                                 : _('%s, Buchungsupdate, eingetrageneR NutzerIn: %s (%s)')) ,
                             $this->getFormattedShortInfo(), get_username($this->assign_user_id), $this->assign_user_id);
-                        log_event("RES_ASSIGN_SINGLE", $this->resource_id, null, $message, $debug);
+                        StudipLog::log("RES_ASSIGN_SINGLE", $this->resource_id, null, $message, $debug);
                     } else if ($type == 'inst' || $type == 'fak') {
                         $message = sprintf(($create
                                 ? _('%s, Neue Buchung, eingetrageneR NutzerIn: %s (%s)')
                                 : _('%s, Buchungsupdate, eingetrageneR NutzerIn: %s (%s)')) ,
                             $this->getFormattedShortInfo(), get_username($this->assign_user_id), $this->assign_user_id);
-                        log_event("RES_ASSIGN_SINGLE", $this->resource_id, null, $message, $debug);
+                        StudipLog::log("RES_ASSIGN_SINGLE", $this->resource_id, null, $message, $debug);
                     } else {
                         $semid = null;
                         error_log("unknown type of assign_user_id {$this->assign_user_id}");
                     }
                 } else {
-                    log_event("RES_ASSIGN_SINGLE", $this->resource_id, NULL,
+                    StudipLog::log("RES_ASSIGN_SINGLE", $this->resource_id, NULL,
                             $this->getFormattedShortInfo(). ($create ? ", Neue Buchung" : ", Buchungsupdate"), $debug);
                 }
                 $query = sprintf("UPDATE resources_assign SET chdate='%s' WHERE assign_id='%s' ", $chdate, $this->id);
@@ -765,9 +763,9 @@ class AssignObject
                 $semid = null;
                 error_log("unknown type of assign_user_id {$this->assign_user_id}");
             }
-            log_event("RES_ASSIGN_DEL_SEM",$this->resource_id,$semid,$this->getFormattedShortInfo(),"",$GLOBALS['user']->id);
+            StudipLog::log("RES_ASSIGN_DEL_SEM",$this->resource_id,$semid,$this->getFormattedShortInfo(),"",$GLOBALS['user']->id);
         } else {
-            log_event("RES_ASSIGN_DEL_SINGLE",$this->resource_id,NULL,$this->getFormattedShortInfo(),NULL,$GLOBALS['user']->id);
+            StudipLog::log("RES_ASSIGN_DEL_SINGLE",$this->resource_id,NULL,$this->getFormattedShortInfo(),NULL,$GLOBALS['user']->id);
         }
 
         // delete entries from resources_temporary_events to keep it consistent

@@ -387,11 +387,11 @@ abstract class ModuleManagementModel extends SimpleORMap
                     if ($name == 'author_id' || $name == 'editor_id' || $name == 'mkdate' || $name == 'chdate' ) continue;
                     if ($this->isFieldDirty($name)) {
                         $info = ($num_index == 3) ? $debuginfo.';'.$value : $value;
-                        log_event($logging, $aff, $coaff, $this->db_table.'.'.$name, $info, $editor_id);
+                        StudipLog::log($logging, $aff, $coaff, $this->db_table.'.'.$name, $info, $editor_id);
                     }
                 }
             } else {
-                log_event($logging, $aff, $coaff, $this->db_table, $debuginfo, $editor_id);
+                StudipLog::log($logging, $aff, $coaff, $this->db_table, $debuginfo, $editor_id);
             }
 
             return true;

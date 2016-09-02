@@ -29,7 +29,6 @@ require_once 'lib/statusgruppe.inc.php';    // remove user from statusgroups
 require_once 'lib/dates.inc.php';   // remove appointments of user
 require_once 'lib/messaging.inc.php';   // remove messages send or recieved by user
 require_once 'lib/object.inc.php';
-require_once 'lib/log_events.inc.php';  // Event logging
 
 /**
  * Adapter to fake user_data property in UserManagement
@@ -199,7 +198,7 @@ class UserManagement
     {
         if ($this->user->isNew()) {
             if ($this->user->store()) {
-                log_event("USER_CREATE", $this->user->id, null, join(';', $this->user->toArray('username vorname nachname perms email')));
+                StudipLog::log("USER_CREATE", $this->user->id, null, join(';', $this->user->toArray('username vorname nachname perms email')));
                 return true;
             } else {
                 return false;
@@ -252,27 +251,27 @@ class UserManagement
                 $value = $this->user->getValue($field);
                 switch ($field) {
                     case 'username':
-                        log_event("USER_CHANGE_USERNAME",$this->user->id,NULL,$old_value." -> ".$value);
+                        StudipLog::log("USER_CHANGE_USERNAME",$this->user->id,NULL,$old_value." -> ".$value);
                         break;
                     case 'vorname':
-                        log_event("USER_CHANGE_NAME",$this->user->id,NULL,"Vorname: ".$old_value." -> ".$value);
+                        StudipLog::log("USER_CHANGE_NAME",$this->user->id,NULL,"Vorname: ".$old_value." -> ".$value);
                         break;
                     case 'nachname':
-                        log_event("USER_CHANGE_NAME",$this->user->id,NULL,"Nachname: ".$old_value." -> ".$value);
+                        StudipLog::log("USER_CHANGE_NAME",$this->user->id,NULL,"Nachname: ".$old_value." -> ".$value);
                         break;
                     case 'perms':
-                        log_event("USER_CHANGE_PERMS",$this->user->id,NULL,$old_value." -> ".$value);
+                        StudipLog::log("USER_CHANGE_PERMS",$this->user->id,NULL,$old_value." -> ".$value);
                         break;
                     case 'email':
-                        log_event("USER_CHANGE_EMAIL",$this->user->id,NULL,$old_value." -> ".$value);
+                        StudipLog::log("USER_CHANGE_EMAIL",$this->user->id,NULL,$old_value." -> ".$value);
                         break;
                     case 'title_front':
-                        log_event("USER_CHANGE_TITLE",$this->user->id,NULL,"title_front: ".$old_value." -> ".$value);
+                        StudipLog::log("USER_CHANGE_TITLE",$this->user->id,NULL,"title_front: ".$old_value." -> ".$value);
                         break;
                     case 'title_rear':
-                        log_event("USER_CHANGE_TITLE",$this->user->id,NULL,"title_rear: ".$old_value." -> ".$value);
+                        StudipLog::log("USER_CHANGE_TITLE",$this->user->id,NULL,"title_rear: ".$old_value." -> ".$value);
                     case 'password':
-                        log_event("USER_CHANGE_PASSWORD",$this->user->id,NULL,"password: ".$old_value." -> ".$value);
+                        StudipLog::log("USER_CHANGE_PASSWORD",$this->user->id,NULL,"password: ".$old_value." -> ".$value);
                         break;
                 }
             }
@@ -707,7 +706,7 @@ class UserManagement
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($user_id));
         while ($institute_id = $statement->fetchColumn()) {
-            log_event('INST_USER_DEL', $institute_id, $user_id);
+            StudipLog::log('INST_USER_DEL', $institute_id, $user_id);
         }
     }
     /**
@@ -760,7 +759,7 @@ class UserManagement
 
         // send mail
         StudipMail::sendMessage($this->user_data['auth_user_md5.Email'],$subject, $mailbody);
-        log_event("USER_NEWPWD",$this->user_data['auth_user_md5.user_id']);
+        StudipLog::log("USER_NEWPWD",$this->user_data['auth_user_md5.user_id']);
         return TRUE;
     }
 
@@ -1143,7 +1142,7 @@ class UserManagement
         } else {
             $this->msg .= "msg§" . sprintf(_("Benutzer \"%s\" gelöscht."), $this->user_data['auth_user_md5.username']) . "§";
         }
-        log_event("USER_DEL",$this->user_data['auth_user_md5.user_id'],NULL,sprintf("%s %s (%s)", $this->user_data['auth_user_md5.Vorname'], $this->user_data['auth_user_md5.Nachname'], $this->user_data['auth_user_md5.username'])); //log with Vorname Nachname (username) as info string
+        StudipLog::log("USER_DEL",$this->user_data['auth_user_md5.user_id'],NULL,sprintf("%s %s (%s)", $this->user_data['auth_user_md5.Vorname'], $this->user_data['auth_user_md5.Nachname'], $this->user_data['auth_user_md5.username'])); //log with Vorname Nachname (username) as info string
 
         // Can we reach the email?
         if ($this->checkMail($this->user_data['auth_user_md5.Email'])) {

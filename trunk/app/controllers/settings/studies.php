@@ -154,7 +154,7 @@ class Settings_StudiesController extends Settings_SettingsController {
                     $institute_id
                 ));
                 if ($statement->rowCount() > 0) {
-                    log_event('INST_USER_DEL', $institute_id, $this->user->user_id);
+                    StudipLog::log('INST_USER_DEL', $institute_id, $this->user->user_id);
                     NotificationCenter::postNotification('UserInstitutionDidDelete', $institute_id, $this->user->user_id);
                     $delete = true;
                 }
@@ -173,7 +173,7 @@ class Settings_StudiesController extends Settings_SettingsController {
                 $new_inst
             ));
             if ($statement->rowCount() > 0) {
-                log_event('INST_USER_ADD', $new_inst, $this->user->user_id, 'user');
+                StudipLog::log('INST_USER_ADD', $new_inst, $this->user->user_id, 'user');
                 NotificationCenter::postNotification('UserInstitutionDidCreate', $new_inst, $this->user->user_id);
 
                 $new = true;
