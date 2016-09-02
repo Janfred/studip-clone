@@ -160,7 +160,10 @@ class Banner extends SimpleORMap
             return URLHelper::getLink('dispatch.php/profile', array('username' => $this->target));
         }
         if ($this->target_type === 'inst') {
-            return URLHelper::getLink('institut_main.php', array('auswahl' => $this->target));
+            return URLHelper::getLink(
+                'dispatch.php/institute/overview',
+                ['auswahl' => $this->target]
+            );
         }
 
         return '';
