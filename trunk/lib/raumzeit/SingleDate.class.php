@@ -348,7 +348,7 @@ class SingleDate
 
     function isHoliday()
     {
-        foreach (HolidayData::GetAllHolidaysArray() as $val) {
+        foreach (SemesterHoliday::getAll() as $val) {
             if (($val['beginn'] <= $this->date) && ($val['ende'] >= $this->end_time)) {
                 $name = $val['name'];
             }
