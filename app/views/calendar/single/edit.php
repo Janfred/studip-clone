@@ -414,7 +414,9 @@
                         </li>
                         <? endforeach; ?>
                     </ul>
-                    <input style="vertical-align: top; opacity: 0.8;" type="text" size="12" name="exc_date" id="exc-date" value="<?= strftime('%x', $atime) ?>">
+                    <input style="vertical-align: top; opacity: 0.8;"
+                           type="text" size="12" name="exc_date" id="exc-date" value=""
+                           placeholder="<?= _("Datum eingeben") ?>">
                     <span style="vertical-align: top;" onclick="STUDIP.CalendarDialog.addException(); return false;">
                         <?= Icon::create('add', 'clickable', ['title' => _('Ausnahme hinzufügen')])->asInput(['class' => 'text-bottom']) ?>
                     </span>
