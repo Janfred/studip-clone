@@ -47,35 +47,11 @@ class Studiengaenge_StgteilbezeichnungenController extends MVVController
         $this->stgteilbezeichnung = StgteilBezeichnung::get($bezeichnung_id);
         if ($this->stgteilbezeichnung->isNew()) {
             PageLayout::setTitle(_('Neue Studiengangteil-Bezeichnung anlegen'));
-            $success_message = ('Die Studiengangteil-Bezeichnung "%s" wurde angelegt.');
         } else {
             $this->bezeichnung_id = $this->stgteilbezeichnung->getId();
             PageLayout::setTitle(_('Studiengangteil-Bezeichnung bearbeiten'));
-            $success_message = _('Die Studiengangteil-Bezeichnung "%s" wurde geändert.');
         }
-        if (Request::submitted('store')) {
-            $stored = false;
-            $this->stgteilbezeichnung->name = trim(Request::get('name'));
-            $this->stgteilbezeichnung->name_en = trim(Request::get('name_en'));
-            $this->stgteilbezeichnung->name_kurz = trim(Request::get('name_kurz'));
-            $this->stgteilbezeichnung->name_kurz_en = trim(Request::get('name_kurz_en'));
-            try {
-                $stored = $this->stgteilbezeichnung->store();
-            } catch (InvalidValuesException $e) {
-                PageLayout::postError(htmlReady($e->getMessage()));
-            }
-            if ($stored !== false) {
-                if ($stored) {
-                    PageLayout::postSuccess(sprintf($success_message,
-                            htmlReady($this->stgteilbezeichnung->name)));
-                } else {
-                    PageLayout::postInfo(_('Es wurden keine Änderungen vorgenommen.'));
-                }
-                $this->relocate($this->url_for('/index'));
-            }
-        }
-        $this->cancel_url = $this->url_for('/index');
-
+       
         $this->setSidebar();
         if (!$this->stgteilbezeichnung->isNew()) {
             $sidebar = Sidebar::get();
@@ -86,31 +62,54 @@ class Studiengaenge_StgteilbezeichnungenController extends MVVController
         }
 
     }
+    
+    /**
+     * Store a Studiengangteil-Bezeichnung
+     * @param null $bezeichnung_id
+     */
+    public function store_action($bezeichnung_id = null) {
+        CSRFProtection::verifyUnsafeRequest();
+        $stgteilbezeichnung = StgteilBezeichnung::get($bezeichnung_id);
+        if ($stgteilbezeichnung->isNew()) {
+            $success_message = ('Die Studiengangteil-Bezeichnung "%s" wurde angelegt.');
+        } else {
+            $success_message = _('Die Studiengangteil-Bezeichnung "%s" wurde geändert.');
+        }
+        $stored = false;
+        $stgteilbezeichnung->name = trim(Request::get('name'));
+        $stgteilbezeichnung->name_en = trim(Request::get('name_en'));
+        $stgteilbezeichnung->name_kurz = trim(Request::get('name_kurz'));
+        $stgteilbezeichnung->name_kurz_en = trim(Request::get('name_kurz_en'));
+        try {
+            $stored = $stgteilbezeichnung->store();
+        } catch (InvalidValuesException $e) {
+            PageLayout::postError(htmlReady($e->getMessage()));
+        }
+    
+        if ($stored !== false) {
+            if ($stored) {
+                PageLayout::postSuccess(sprintf($success_message, htmlReady($stgteilbezeichnung->name)));
+            } else {
+                PageLayout::postInfo(_('Es wurden keine Änderungen vorgenommen.'));
+            }
+        }
+        $this->relocate('studiengaenge/stgteilbezeichnungen');
+    }
 
     /**
      * Deletes a Abschluss-Kategorie
      */
     function delete_action($stgteilbezeichnung_id, $delete = null)
     {
+        CSRFProtection::verifyUnsafeRequest();
         $stgteilbezeichnung = StgteilBezeichnung::get($stgteilbezeichnung_id);
-        if ($stgteilbezeichnung->isNew()) {
-             PageLayout::postError( _('Unbekannte Studiengangteil-Bezeichnung'));
+        if ($stgteilbezeichnung->count_studiengaenge) {
+            PageLayout::postError( sprintf(_('Löschen nicht möglich! Die Studiengangteil-Bezeichnung "%s" wird bereits verwendet!'),
+                htmlReady($stgteilbezeichnung->name)));
         } else {
-            if (!is_null($delete)) {
-                if ($stgteilbezeichnung->count_studiengaenge) {
-                    PageLayout::postError( sprintf(_('Löschen nicht möglich! Die Studiengangteil-Bezeichnung "%s" wird bereits verwendet!'),
-                            htmlReady($stgteilbezeichnung->name)));
-                } else {
-                    PageLayout::postSuccess(sprintf(_('Studiengangteil-Bezeichnung "%s" gelöscht!'),
-                            htmlReady($stgteilbezeichnung->name)));
-                    $stgteilbezeichnung->delete();
-                }
-            } else {
-                $this->flash_set('dialog', sprintf(_('Wollen Sie wirklich die Studiengangteil-Bezeichnung "%s" löschen?'),
-                                $stgteilbezeichnung->name),
-                        '/delete', $stgteilbezeichnung->getId() . '/1',
-                        'studiengaenge/stgteilbezeichnungen');
-            }
+            PageLayout::postSuccess(sprintf(_('Studiengangteil-Bezeichnung "%s" gelöscht!'),
+                htmlReady($stgteilbezeichnung->name)));
+            $stgteilbezeichnung->delete();
         }
         $this->redirect('studiengaenge/stgteilbezeichnungen');
     }
@@ -139,7 +138,12 @@ class Studiengaenge_StgteilbezeichnungenController extends MVVController
         $this->set_status(200);
         $this->render_nothing();
     }
-
+    
+    /**
+     * Display details
+     * @param $bezeichnung_id
+     * @return bool
+     */
     public function details_action($bezeichnung_id)
     {
         $this->stgteilbezeichnung = StgteilBezeichnung::get($bezeichnung_id);
@@ -160,9 +164,9 @@ class Studiengaenge_StgteilbezeichnungenController extends MVVController
 
         if (MvvPerm::havePermCreate('StgteilBezeichnung')) {
             $widget  = new ActionsWidget();
-            $widget->addLink( _('Neue Studiengangteil-Bezeichnung anlegen'),
+            $widget->addLink( _('Neue Studiengangteil-Bezeichnung'),
                             $this->url_for('/stgteilbezeichnung'),
-                            Icon::create('file+add', 'clickable'));
+                            Icon::create('add', 'clickable'))->asDialog('size=auto');
             $sidebar->addWidget($widget);
         }
         $helpbar = Helpbar::get();
