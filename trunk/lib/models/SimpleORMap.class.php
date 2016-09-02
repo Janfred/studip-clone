@@ -1611,21 +1611,6 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
-     * check if object content is null
-     * @deprecated
-     * @return bool true if at least one field is not null
-     */
-    function haveData()
-    {
-        foreach ($this->content as $content) {
-            if ($content !== null) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * check if object exists in database
      * @return boolean
      */
