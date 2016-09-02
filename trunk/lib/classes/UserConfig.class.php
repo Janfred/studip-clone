@@ -22,6 +22,7 @@ class UserConfig extends Config
      * @var array
      */
     private static $instances;
+
     /**
      * user_id
      * @var string
@@ -66,8 +67,9 @@ class UserConfig extends Config
      */
     function __construct($user_id = null, $data = null)
     {
-        if($user_id !== null) {
-            $this->setUserId($user_id ? $user_id : $GLOBALS['user']->id, $data);
+        $this->user_id = $user_id;
+        if ($user_id !== null || $data !== null) {
+            $this->fetchData($data);
         }
     }
 
@@ -103,18 +105,6 @@ class UserConfig extends Config
                 $this->data[$row['field']] = $value ;
             }
         }
-    }
-
-    /**
-     * kept for compatibility, should be private
-     *
-     * @deprecated
-     * @param string $user_id
-     */
-    function setUserId($user_id)
-    {
-        $this->user_id = $user_id;
-        $this->fetchData();
     }
 
     /**
