@@ -39,28 +39,6 @@
 require_once 'lib/statusgruppe.inc.php';
 
 /**
-* Converts special charakters into unicode format.
-*
-* This function converts special charakters in the given sring into unicode format UTF-8.
-*
-* @access   public
-* @deprecated
-* @param        string  $xml_string string to be converted
-* @return       string  converted string
-*/
-function string_to_unicode ($xml_string)
-{
-    for ($x=0; $x<strlen($xml_string); $x++)
-    {
-        $char = substr($xml_string, $x, 1);
-        $dosc = ord($char);
-        if($dosc < 32 && $dosc != 10) continue;
-        $ret .= ($dosc > 127) ? "&#".$dosc.";" : $char;
-    }
-    return $ret;
-}
-
-/**
 * Writes the xml-stream into a file or to the screen.
 *
 * This function writes the xml-stream $object_data into a file or to the screen,
