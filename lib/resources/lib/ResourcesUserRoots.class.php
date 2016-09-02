@@ -60,7 +60,7 @@ class ResourcesUserRoots {
             //load the global perms in the resources-system (check if the user ist resources-root)
             $this->resources_global_perm=getGlobalPerms($this->range_id);
             //load the global studip perms (check, if user id root)
-            $this->user_global_perm=get_global_perm($this->range_id);
+            $this->user_global_perm = $GLOBALS['perm']->get_perm($this->range_id);
 
             if ($this->resources_global_perm == "admin")
                 $global_perm="root";

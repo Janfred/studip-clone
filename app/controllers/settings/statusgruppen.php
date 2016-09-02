@@ -202,7 +202,7 @@ class Settings_StatusgruppenController extends Settings_SettingsController
             }
 
             if (InsertPersonStatusgruppe($this->user->user_id, $role_id)) {
-                $globalperms = get_global_perm($this->user->user_id);
+                $globalperms = $GLOBALS['perm']->get_perm($this->user->user_id);
 
                 $query = "INSERT IGNORE INTO user_inst (Institut_id, user_id, inst_perms)
                           VALUES (?, ?, ?)

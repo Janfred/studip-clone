@@ -535,27 +535,6 @@ function my_substr($what, $start, $end)
 }
 
 /**
- * The function gives the global perm of an user
- *
- * It ist recommended to use $auth->auth["perm"] for this query,
- * but the function is useful, if you want to query an user_id from another user
- * (which ist not the current user)
- *
- * @deprecated   use $GLOBALS['perm']->get_perm($user_id)
- *
- * @param string $user_id if omitted, current user_id is used
- *
- * @return string  the perm level or an error msg
- *
- */
-function get_global_perm($user_id = "")
-{
-    global $perm;
-    $status = $perm->get_perm($user_id);
-    return (!$status) ? _("Fehler!") : $status;
-}
-
-/**
  * Returns permission for given range_id and user_id
  *
  * Function works for Veranstaltungen, Einrichtungen, Fakultaeten.
