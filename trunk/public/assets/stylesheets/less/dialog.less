@@ -4,7 +4,7 @@
     position: fixed;
 }
 
-.ui-dialog {
+.ui-dialog.ui-widget.ui-widget-content {
     border: 3px solid white;
     padding: 0;
     .box-shadow(0px 0px 8px rgba(0,0,0,0.5));
@@ -16,6 +16,7 @@
     .ui-dialog-titlebar {
         background: @brand-color-darker;
         border: 0;
+        color: @contrast-content-white;
         font-size:1.3em;
         font-weight: normal;
     }
@@ -43,9 +44,9 @@
             display:inline-block;
             margin: 0;
 
-            position: relative;
-            left: 1px;
-            top: 1px;
+            left: 50%;
+            top: 50%;
+            .translate(-50%, -50%);
 
             &:hover{
               .background-icon('decline', 'info_alt');
@@ -67,6 +68,7 @@
         }
         .ui-button {
             .button(); // Include button mixin
+            font-weight: bold;
 
             &.accept, &.cancel {
                 padding-right: 23px;

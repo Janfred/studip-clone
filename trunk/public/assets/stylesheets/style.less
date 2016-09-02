@@ -269,8 +269,16 @@ div.overdiv {
         .right { float: right; }
 
         .ui-button {
+            background: @dark-gray-color-15;
             display: inline-block;
-            height: 2.3em;
+            height: 1.4em;
+            line-height: 1.4;
+            padding: 0.4em 1em;
+            
+            &:hover {
+                background-color: @base-color-60;
+                color: @contrast-content-white;
+            }
         }
     }
 }

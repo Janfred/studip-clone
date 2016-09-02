@@ -3490,8 +3490,8 @@ button.button[disabled]:hover {
 .button.edit,
 .button.move-up,
 .button.move-down,
-.ui-dialog .ui-dialog-buttonpane .ui-button.accept,
-.ui-dialog .ui-dialog-buttonpane .ui-button.cancel {
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.accept,
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.cancel {
   white-space: nowrap;
 }
 .button-with-empty-icon:before,
@@ -3500,8 +3500,8 @@ button.button[disabled]:hover {
 .button.edit:before,
 .button.move-up:before,
 .button.move-down:before,
-.ui-dialog .ui-dialog-buttonpane .ui-button.accept:before,
-.ui-dialog .ui-dialog-buttonpane .ui-button.cancel:before {
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.accept:before,
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.cancel:before {
   background: no-repeat;
   content: " ";
   float: left;
@@ -6642,23 +6642,24 @@ div.available-widgets .studip-widget {
   opacity: 1;
   position: fixed;
 }
-.ui-dialog {
+.ui-dialog.ui-widget.ui-widget-content {
   border: 3px solid white;
   padding: 0;
   -webkit-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
   -moz-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
 }
-.ui-dialog .hide-in-dialog {
+.ui-dialog.ui-widget.ui-widget-content .hide-in-dialog {
   display: none;
 }
-.ui-dialog .ui-dialog-titlebar {
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-titlebar {
   background: #1f4171;
   border: 0;
+  color: #ffffff;
   font-size: 1.3em;
   font-weight: normal;
 }
-.ui-dialog .ui-dialog-titlebar-close {
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-titlebar-close {
   width: 32px;
   height: 32px;
   background: inherit;
@@ -6668,7 +6669,7 @@ div.available-widgets .studip-widget {
   padding: 0;
   text-align: center;
 }
-.ui-dialog .ui-dialog-titlebar-close:hover {
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-titlebar-close:hover {
   width: 32px;
   height: 32px;
   background: inherit;
@@ -6676,7 +6677,7 @@ div.available-widgets .studip-widget {
   margin-top: -16px;
   padding: 0;
 }
-.ui-dialog .ui-dialog-titlebar-close .ui-icon {
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-titlebar-close .ui-icon {
   width: 16px;
   height: 16px;
   background-image: url("../images/icons/white/decline.svg");
@@ -6687,30 +6688,34 @@ div.available-widgets .studip-widget {
   background-position: 0;
   display: inline-block;
   margin: 0;
-  position: relative;
-  left: 1px;
-  top: 1px;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
-.ui-dialog .ui-dialog-titlebar-close .ui-icon:hover {
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-titlebar-close .ui-icon:hover {
   background-image: url("../images/icons/white/decline.svg");
   -webkit-background-size: 16px 16px;
   -moz-background-size: 16px 16px;
   -o-background-size: 16px 16px;
   background-size: 16px 16px;
 }
-.ui-dialog.no-close .ui-dialog-titlebar-close {
+.ui-dialog.ui-widget.ui-widget-content.no-close .ui-dialog-titlebar-close {
   display: none;
 }
-.ui-dialog .ui-dialog-buttonpane {
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane {
   padding: 0.5em 0.4em;
   margin: 0 1em;
   border-color: #d4dbe5;
 }
-.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-dialog-buttonset {
   text-align: center;
   float: none;
 }
-.ui-dialog .ui-dialog-buttonpane .ui-button {
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button {
   background: white;
   border: 1px solid #28497c;
   -webkit-box-sizing: border-box;
@@ -6736,21 +6741,22 @@ div.available-widgets .studip-widget {
   -moz-transition: none;
   -o-transition: none;
   transition: none;
+  font-weight: bold;
 }
-.ui-dialog .ui-dialog-buttonpane .ui-button:hover,
-.ui-dialog .ui-dialog-buttonpane .ui-button:active {
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button:hover,
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button:active {
   background: #28497c;
   color: white;
   outline: 0;
 }
-.ui-dialog .ui-dialog-buttonpane .ui-button:focus {
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button:focus {
   outline: dotted 1px #000;
 }
-.ui-dialog .ui-dialog-buttonpane .ui-button::-moz-focus-inner {
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button::-moz-focus-inner {
   border: 0;
 }
-.ui-dialog .ui-dialog-buttonpane .ui-button.disabled,
-.ui-dialog .ui-dialog-buttonpane .ui-button[disabled] {
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.disabled,
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button[disabled] {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
@@ -6758,50 +6764,50 @@ div.available-widgets .studip-widget {
   cursor: default;
   opacity: 0.65;
 }
-.ui-dialog .ui-dialog-buttonpane .ui-button.disabled:hover,
-.ui-dialog .ui-dialog-buttonpane .ui-button[disabled]:hover {
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.disabled:hover,
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button[disabled]:hover {
   color: #28497c;
 }
-.ui-dialog .ui-dialog-buttonpane .ui-button.accept,
-.ui-dialog .ui-dialog-buttonpane .ui-button.cancel {
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.accept,
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.cancel {
   padding-right: 23px;
 }
-.ui-dialog .ui-dialog-buttonpane .ui-button:last-child {
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button:last-child {
   margin-right: 0;
 }
-.ui-dialog .ui-dialog-buttonpane .ui-button.accept:before {
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.accept:before {
   background-image: url("../images/icons/blue/accept.svg");
   -webkit-background-size: 16px 16px;
   -moz-background-size: 16px 16px;
   -o-background-size: 16px 16px;
   background-size: 16px 16px;
 }
-.ui-dialog .ui-dialog-buttonpane .ui-button.accept:hover:before {
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.accept:hover:before {
   background-image: url("../images/icons/white/accept.svg");
   -webkit-background-size: 16px 16px;
   -moz-background-size: 16px 16px;
   -o-background-size: 16px 16px;
   background-size: 16px 16px;
 }
-.ui-dialog .ui-dialog-buttonpane .ui-button.cancel:before {
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.cancel:before {
   background-image: url("../images/icons/blue/decline.svg");
   -webkit-background-size: 16px 16px;
   -moz-background-size: 16px 16px;
   -o-background-size: 16px 16px;
   background-size: 16px 16px;
 }
-.ui-dialog .ui-dialog-buttonpane .ui-button.cancel:hover:before {
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.cancel:hover:before {
   background-image: url("../images/icons/white/decline.svg");
   -webkit-background-size: 16px 16px;
   -moz-background-size: 16px 16px;
   -o-background-size: 16px 16px;
   background-size: 16px 16px;
 }
-.ui-dialog .ui-dialog-buttonpane .ui-button:before {
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button:before {
   margin-left: -5px;
   margin-top: 2px;
 }
-.ui-dialog .ui-dialog-buttonpane .ui-button-text-only .ui-button-text {
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button-text-only .ui-button-text {
   padding: 0;
   white-space: nowrap;
 }
@@ -9094,8 +9100,15 @@ div.overdiv div.content {
   float: right;
 }
 .editor_toolbar .buttons .ui-button {
+  background: #e2e3e5;
   display: inline-block;
-  height: 2.3em;
+  height: 1.4em;
+  line-height: 1.4;
+  padding: 0.4em 1em;
+}
+.editor_toolbar .buttons .ui-button:hover {
+  background-color: #7e92b0;
+  color: #ffffff;
 }
 /* --- Plugin Administration ------------------------------------------------ */
 .plugin_image {

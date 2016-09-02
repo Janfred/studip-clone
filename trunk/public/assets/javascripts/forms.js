@@ -191,7 +191,7 @@
             width: 'style'
         });
 
-        $(element).next().andSelf().wrapAll(wrapper);
+        $(element).next().addBack().wrapAll(wrapper);
     }
 
     $(document).on('ready dialog-update', function () {

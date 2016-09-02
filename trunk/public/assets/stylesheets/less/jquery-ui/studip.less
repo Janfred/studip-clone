@@ -127,6 +127,25 @@
     color: white;
 }
 
+.ui-autocomplete {
+    border: 1px solid @dark-gray-color-45;
+    padding: 1px;
+
+    .ui-menu-item {
+        .ui-menu-item-wrapper {
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            &.ui-state-active {
+                background: @base-color;
+                border: 0;
+                margin: 0;
+            }
+        }
+    }
+}
+
 /* --- textarea resizer ----------------------------------------------------- */
 textarea.ui-resizable-handle.ui-resizable-s {
     background: #eee url("@{image-path}/vendor/handle_background.png") no-repeat center;
