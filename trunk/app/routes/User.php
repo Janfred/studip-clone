@@ -103,12 +103,7 @@ class User extends \RESTAPI\RouteMap
         $user['skype'] = $statement->fetchColumn() ?: '';
         $statement->closeCursor();
 
-        if ($user['skype']) {
-            $statement->execute(array('SKYPE_ONLINE_STATUS', $user_id));
-            $user['skype_show'] = (bool)$statement->fetchColumn();
-        } else {
-            $user['skype_show'] = false;
-        }
+        $user['skype_show'] = null;
 
         // Data fields
         $datafields = array();

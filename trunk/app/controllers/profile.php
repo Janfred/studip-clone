@@ -103,8 +103,6 @@ class ProfileController extends AuthenticatedController
         // skype informations
         if (get_config('ENABLE_SKYPE_INFO') && $this->profile->checkVisibility('skype_name')) {
             $this->skype_name   = UserConfig::get($this->current_user->user_id)->SKYPE_NAME;
-            $this->skype_status = UserConfig::get($this->current_user->user_id)->SKYPE_ONLINE_STATUS
-                                  && $this->profile->checkVisibility('skype_online_status');
         }
 
         // get generic datafield entries

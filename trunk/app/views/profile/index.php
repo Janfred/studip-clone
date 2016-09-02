@@ -100,11 +100,6 @@
 
             <? if(!empty($skype_name)) : ?>
                 <b><?= _("Skype:") ?></b>
-                <? if($skype_status) : ?>
-                    <img src="http://mystatus.skype.com/smallicon/<?= htmlReady($skype_name) ?>" style="vertical-align:middle;" width="16" height="16" alt="My status">
-                <? else :?>
-                    <?= Icon::create('skype', 'info')->asImg(16); ?>
-                <?endif?>
                 <?= htmlReady($skype_name) ?>
                 <br />
             <?endif?>
