@@ -86,22 +86,17 @@ class AutoInsert {
      * @return array 'added' Namen der Seminare in die der User eingetragen wurde
      *         array 'removed' Namen der Seminare aus denen der User ausgetragen wurde
      */
-    public function saveUser($user_id, $status = FALSE) {
-
-
-
+    public function saveUser($user_id, $status = FALSE)
+    {
         $domains = array();
-        if (!$status)
-        {
-            $status = get_global_perm($user_id);
+        if (!$status) {
+            $status = $GLOBALS['perm']->get_perm($user_id);
         }
         foreach (UserDomain::getUserDomainsForUser($user_id) as $d) {
             $domains [] = $d->getID(); //Domains des Users
         }
 
-
-        if (count($domains) == 0)
-        {
+        if (count($domains) === 0) {
             $domains [] = 'keine';
         }
         $settings = array();

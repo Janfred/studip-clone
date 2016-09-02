@@ -2198,7 +2198,7 @@ class Seminar
     public function addMember($user_id, $status = 'autor', $force = false)
     {
 
-        if (in_array(get_global_perm($user_id), array("admin", "root"))) {
+        if (in_array($GLOBALS['perm']->get_perm($user_id), array("admin", "root"))) {
             $this->createError(_("Admin und Root dürfen nicht Mitglied einer Veranstaltung sein."));
             return false;
         }
