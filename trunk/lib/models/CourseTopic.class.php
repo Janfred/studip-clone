@@ -87,16 +87,6 @@ class CourseTopic extends SimpleORMap {
     }
 
     /**
-    *
-    * @deprecated
-    */
-    public function createFolder()
-    {
-        $this->connectWithDocumentFolder();
-        return $this->folder;
-    }
-
-    /**
     * set or update connection with document folder
     */
     function connectWithDocumentFolder()
