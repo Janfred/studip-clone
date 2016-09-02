@@ -414,17 +414,6 @@ class Seminar
         return sizeof($this->metadate->cycles);
     }
 
-    /**
-     * always 1 since Stud.IP 1.6
-     *
-     * @deprecated
-     * @return number
-     */
-    public function getMetaDateType()
-    {
-        return 1;
-    }
-
     public function getMetaDateValue($key, $value_name)
     {
         return $this->metadate->cycles[$key]->$value_name;
