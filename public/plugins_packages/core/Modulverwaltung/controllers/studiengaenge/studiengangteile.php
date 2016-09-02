@@ -61,9 +61,6 @@ class Studiengaenge_StudiengangteileController extends SharedVersionController
                     $this->sortby, $this->order,
                     $filter, self::$items_per_page,
                     self::$items_per_page * ($this->page - 1));
-            if (sizeof($this->stgteile) == 0) {
-                PageLayout::postInfo(_('Es wurden noch keine Studiengangteile angelegt.'));
-            }
             $this->count = StudiengangTeil::getCount($filter);
         }
 
@@ -163,32 +160,26 @@ class Studiengaenge_StudiengangteileController extends SharedVersionController
         }
         $this->perform_relayed('stgteil');
     }
-
-    public function delete_action($stgteil_id, $delete = null)
+    
+    /**
+     * Delete Studiengangteil
+     * @param $stgteil_id
+     */
+    public function delete_action($stgteil_id)
     {
-        $stgteil = StudiengangTeil::find($stgteil_id);
-        if (!$stgteil) {
-             PageLayout::postError( _('Unbekannter Studiengangteil.'));
+        CSRFProtection::verifyUnsafeRequest();
+        $stgteil        = StudiengangTeil::find($stgteil_id);
+        $stg_stgteile   = StudiengangStgteil::findBySql('stgteil_id = ' . DBManager::get()->quote($stgteil->getId()));
+        
+        if (count($stg_stgteile)) {
+            PageLayout::postInfo(_('Der Studiengangteil kann nicht gelöscht werden, da er Studiengängen zugeordnet ist.'));
         } else {
-            if (!is_null($delete)) {
-                PageLayout::postSuccess(sprintf(_('Studiengangteil "%s" gelöscht!'),
-                        htmlReady($stgteil->getDisplayName())));
-                $stgteil->delete();
-                $this->sessDelete();
-            } else {
-                $stg_stgteile = StudiengangStgteil::findBySql('stgteil_id = '
-                        . DBManager::get()->quote($stgteil->getId()));
-                if (count($stg_stgteile)) {
-                    PageLayout::postInfo(_('Der Studiengangteil kann nicht gelöscht werden, da er Studiengängen zugeordnet ist.'));
-                } else {
-                    $this->flash_dialog(
-                            sprintf(_('Wollen Sie wirklich den Studiengangteil "%s" löschen?'),
-                                    $stgteil->getDisplayName()),
-                            array('/delete', $stgteil->id, '1'),
-                            array('/index'));
-                }
-            }
+            PageLayout::postSuccess(sprintf(_('Studiengangteil "%s" gelöscht!'),
+                htmlReady($stgteil->getDisplayName())));
+            $stgteil->delete();
+            $this->sessDelete();
         }
+        
         $this->redirect($this->url_for('/index'));
     }
 
