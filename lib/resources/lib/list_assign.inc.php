@@ -107,7 +107,7 @@ function create_assigns($assign_object, &$assEvtLst, $begin=0, $end=0, $filter =
     $temp_ts=0;
 
     // fetch all Holidays
-    $all_holidays = HolidayData::GetAllHolidaysArray();
+    $all_holidays = SemesterHoliday::getAll();
 
     //if no begin/end-date submitted, we create all the assigns from the given assign-object
     if (!$begin)

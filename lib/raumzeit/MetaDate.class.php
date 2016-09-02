@@ -593,10 +593,6 @@ class MetaDate
 
         $turnus = $this->cycles[$metadate_id]->cycle;
 
-        // HolidayData is used to decide wether a date is during a holiday an should be created as an ex_termin.
-        // Additionally, it is used to show which type of holiday we've got.
-        $holiday = new HolidayData();
-
         // This variable is used to check if a given singledate shall be created in a bi-weekly seminar.
         if ($start_woche == -1) $start_woche = 0;
 
@@ -678,7 +674,7 @@ class MetaDate
 
                 $termin = new SingleDate(array('seminar_id' => $this->seminar_id));
 
-                $all_holiday = $holiday->getAllHolidays(); // fetch all Holidays
+                $all_holiday = SemesterHoliday::getAll(); // fetch all Holidays
                 foreach ($all_holiday as $val2) {
                     if (($val2["beginn"] <= $start_time) && ($start_time <= $val2["ende"])) {
                         $termin->setExTermin(true);

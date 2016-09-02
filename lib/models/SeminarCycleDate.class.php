@@ -286,7 +286,6 @@ class SeminarCycleDate extends SimpleORMap
     private function updateExistingDates($old_cycle) 
     {
         $update_count = 0;
-        $holiday = new HolidayData();
         foreach ($this->getAllDates() as $date) {
             $tos = $date->date;
             $toe = $date->end_time;
@@ -304,7 +303,7 @@ class SeminarCycleDate extends SimpleORMap
             }
 
             if ($old_cycle->weekday != $this->weekday) {
-                $all_holiday = $holiday->getAllHolidays(); // fetch all Holidays
+                $all_holiday = SemesterHoliday::getAll(); // fetch all Holidays
                 $holiday_date = false;
                 foreach ($all_holiday as $val2) {
                     if (($val2["beginn"] <= $date->date) && ($date->date <= $val2["ende"])) {
@@ -454,9 +453,6 @@ class SeminarCycleDate extends SimpleORMap
         $existingSingleDates =& $this->getAllDates();
         
         $start_woche = $this->week_offset;
-        // HolidayData is used to decide wether a date is during a holiday an should be created as an ex_termin.
-        // Additionally, it is used to show which type of holiday we've got.
-        $holiday = new HolidayData();
 
         // This variable is used to check if a given singledate shall be created in a bi-weekly seminar.
         if ($start_woche == -1) {
@@ -518,7 +514,7 @@ class SeminarCycleDate extends SimpleORMap
             if (!$dateExists) {
                 $termin = new CourseDate();
 
-                $all_holiday = $holiday->getAllHolidays(); // fetch all Holidays
+                $all_holiday = SemesterHoliday::getAll(); // fetch all Holidays
                 foreach ($all_holiday as $val2) {
                     if (($val2["beginn"] <= $start_time) && ($start_time <= $val2["ende"])) {
                         $termin = new CourseExDate();
