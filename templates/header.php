@@ -112,7 +112,7 @@
                     print QuickSearch::get("search_sem_quick_search", new SeminarSearch())
                         ->setAttributes(array(
                             "title" => sprintf(_('Nach Veranstaltungen suchen (%s)'), htmlready($search_semester_name)),
-                            "class" => "quicksearchbox"
+                            "class" => "quicksearchbox expand-to-left"
                         ))
                         ->fireJSFunctionOnSelect("selectSem")
                         ->noSelectbox()

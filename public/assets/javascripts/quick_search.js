@@ -52,6 +52,14 @@ STUDIP.QuickSearch = {
                         $(this).focus();
                     }
                 },
+                position: $('#' + name).is('.expand-to-left') ? {
+                    my: 'right top',
+                    at: 'right bottom'
+                } : {
+                    my: 'left top',
+                    at: 'left bottom',
+                    collision: 'none'
+                },
                 source: function (input, add) {
                     //get the variables that should be sent:
                     var send_vars = jQuery('#' + name).closest('form').serializeArray();
