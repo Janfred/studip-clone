@@ -45,7 +45,6 @@
                         <td class="dont-hide" style="text-align: center;"><?= $stgteil->count_versionen ?> </td>
                         <td class="dont-hide actions" style="white-space: nowrap;">
                             <? $actionMenu = ActionMenu::get() ?>
-
                             <? if (MvvPerm::havePermCreate('StgteilVersion')) : ?>
                                 <? $actionMenu->addLink(
                                         $controller->url_for('/version', $stgteil->getId()),
@@ -77,7 +76,7 @@
                                                  'data-confirm' => sprintf(_('Wollen Sie wirklich den Studiengangteil "%s" löschen?'), htmlReady($stgteil->getDisplayName()))]))
                                 ?>
                             <? endif; ?>
-                                <?= $actionMenu->render() ?>
+                            <?= $actionMenu->render() ?>
                         </td>
                     </tr>
                     <? if ($stgteil_id == $stgteil->getId()) : ?>
