@@ -8,7 +8,9 @@
     <?= sprintf(_('Studiengangteil-Bezeichnung: %s'), htmlReady($stgteilbezeichnung->name)) ?>
     <? endif; ?>
 </h3>
-<form class="mvv-form default" action="<?= $controller->url_for('studiengaenge/stgteilbezeichnungen/stgteilbezeichnung/' . $stgteilbezeichnung->getId()) ?>" method="post"<?= Request::isXhr() ? ' data-dialog' : '' ?>>
+<form class="mvv-form default"
+      action="<?= $controller->url_for('studiengaenge/stgteilbezeichnungen/store'. ($stgteilbezeichnung->getId() ? '/' . $stgteilbezeichnung->getId() : '')) ?>"
+      method="post"<?= Request::isXhr() ? ' data-dialog' : '' ?>>
     <?= CSRFProtection::tokenTag() ?>
     <fieldset>
         <legend><?= _('Studiengangteil-Bezeichnung') ?></legend>
