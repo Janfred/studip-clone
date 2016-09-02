@@ -30,26 +30,6 @@ if ($navigation) {
         }
     }
 }
-
-// TODO: Remove this after sidebar migration has been completed
-if ($infobox && is_array($infobox)) {
-    $sidebar = Sidebar::get();
-    if (!$sidebar->getImage()) {
-        $sidebar->setImage(is_object($infobox['picture']) ? $infobox['picture']->getURL(Avatar::NORMAL) : $infobox['picture']);
-    }
-    foreach ($infobox['content'] as $entry) {
-        $widget = new InfoboxWidget();
-        $widget->setTitle($entry['kategorie']);
-        if (isset($entry['eintrag']) && is_array($entry['eintrag'])) {
-            foreach (@$entry['eintrag'] as $row) {
-                $icon = is_string($row['icon']) ? Icon::create2(str_replace('/black/', '/blue/', $row['icon'])) : $row['icon'];
-                $widget->addElement(new InfoboxElement($row['text'], $icon));
-            }
-        }
-        $sidebar->addWidget($widget);
-    }
-    unset($infobox);
-}
 ?>
 <!DOCTYPE html>
 <html class="no-js">
