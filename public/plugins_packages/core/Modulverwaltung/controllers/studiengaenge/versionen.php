@@ -212,6 +212,7 @@ class Studiengaenge_VersionenController extends SharedVersionController
     {
         $stgteil_id = Request::option('id',
                 $stgteil_id ?: $this->chooser_filter['stgteil']);
+        
         if ($stgteil_id) {
             $this->stgteil = StudiengangTeil::find($stgteil_id);
             if (!$this->stgteil) {
