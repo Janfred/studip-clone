@@ -1,6 +1,4 @@
 <?php
-require_once 'lib/log_events.inc.php';
-
 /**
  * RoomRequest.class.php - model class for table resources_requests
  *
@@ -492,18 +490,18 @@ class RoomRequest extends SimpleORMap
                 $props="--";
             }
             if ($is_new) {
-                log_event("RES_REQUEST_NEW",$this->seminar_id,$this->resource_id,"Termin: $this->termin_id, Metadate: $this->metadate_id, Properties: $props, Kommentar: $this->comment",$query);
+                StudipLog::log("RES_REQUEST_NEW",$this->seminar_id,$this->resource_id,"Termin: $this->termin_id, Metadate: $this->metadate_id, Properties: $props, Kommentar: $this->comment",$query);
             } else {
                 if($properties_changed && !$stored) {
                     $this->triggerChdate();
                 }
                 if ($stored) {
                     if ($this->closed==1 || $this->closed==2) {
-                        log_event("RES_REQUEST_RESOLVE",$this->seminar_id,$this->resource_id,"Termin: {$this->termin_id}, Metadate: $this->metadate_id, Properties: $props, Status: ".$this->closed,$query);
+                        StudipLog::log("RES_REQUEST_RESOLVE",$this->seminar_id,$this->resource_id,"Termin: {$this->termin_id}, Metadate: $this->metadate_id, Properties: $props, Status: ".$this->closed,$query);
                     } else if ($this->closed==3) {
-                        log_event("RES_REQUEST_DENY",$this->seminar_id,$this->resource_id,"Termin: {$this->termin_id}, Metadate: $this->metadate_id, Properties: $props, Status: ".$this->closed,$query);
+                        StudipLog::log("RES_REQUEST_DENY",$this->seminar_id,$this->resource_id,"Termin: {$this->termin_id}, Metadate: $this->metadate_id, Properties: $props, Status: ".$this->closed,$query);
                     } else {
-                        log_event("RES_REQUEST_UPDATE",$this->seminar_id,$this->resource_id,"Termin: {$this->termin_id}, Metadate: $this->metadate_id, Properties: $props, Status: ".$this->closed,$query);
+                        StudipLog::log("RES_REQUEST_UPDATE",$this->seminar_id,$this->resource_id,"Termin: {$this->termin_id}, Metadate: $this->metadate_id, Properties: $props, Status: ".$this->closed,$query);
                     }
                 }
             }
@@ -517,7 +515,7 @@ class RoomRequest extends SimpleORMap
         $query = "DELETE FROM resources_requests_properties WHERE request_id=". $db->quote($this->getId());
         $properties_deleted = $db->exec($query);
         // LOGGING
-        log_event("RES_REQUEST_DEL",$this->seminar_id,$this->resource_id,"Termin: $this->termin_id, Metadate: $this->metadate_id","");
+        StudipLog::log("RES_REQUEST_DEL",$this->seminar_id,$this->resource_id,"Termin: $this->termin_id, Metadate: $this->metadate_id","");
         return parent::delete() || $properties_deleted;
     }
 

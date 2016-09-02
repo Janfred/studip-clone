@@ -476,10 +476,10 @@ class Course_PlusController extends AuthenticatedController
                         $changes = true;
                         // logging
                         if ($activated) {
-                            log_event('PLUGIN_ENABLE', $seminar_id, $plugin_id, $GLOBALS['user']->id);
+                            StudipLog::log('PLUGIN_ENABLE', $seminar_id, $plugin_id, $GLOBALS['user']->id);
                             NotificationCenter::postNotification('PluginForSeminarDidEnabled', $seminar_id, $plugin_id);
                         } else {
-                            log_event('PLUGIN_DISABLE', $seminar_id, $plugin_id, $GLOBALS['user']->id);
+                            StudipLog::log('PLUGIN_DISABLE', $seminar_id, $plugin_id, $GLOBALS['user']->id);
                             NotificationCenter::postNotification('PluginForSeminarDidDisabled', $seminar_id, $plugin_id);
                         }
                     }

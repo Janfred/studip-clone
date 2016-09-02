@@ -232,7 +232,7 @@ class StudipSemTree extends TreeAbstract {
         $view->params = array($item_id,$parent_id,$item_name,$priority,$item_info,$studip_object_id, $type);
         $rs = $view->get_query("view:SEM_TREE_INS_ITEM");
         // Logging
-        log_event("STUDYAREA_ADD",$item_id);
+        StudipLog::log("STUDYAREA_ADD",$item_id);
         NotificationCenter::postNotification("StudyAreaDidCreate", $item_id, $GLOBALS['user']->id); 
 
         return $rs->affected_rows();
@@ -257,7 +257,7 @@ class StudipSemTree extends TreeAbstract {
         $deleted['entries'] = $rs->affected_rows();
         // Logging
         foreach ($items_to_delete as $item_id) {
-            log_event("STUDYAREA_DELETE",$item_id);
+            StudipLog::log("STUDYAREA_DELETE",$item_id);
             NotificationCenter::postNotification("StudyAreaDidDelete", $item_id, $GLOBALS['user']->id);
          }
         return $deleted;
@@ -273,7 +273,7 @@ class StudipSemTree extends TreeAbstract {
             // Logging
             foreach ($sem_tree_ids as $range) {
                 foreach ($seminar_ids as $sem) {
-                    log_event("SEM_DELETE_STUDYAREA",$sem,$range);
+                    StudipLog::log("SEM_DELETE_STUDYAREA",$sem,$range);
                 }
             }
             if($ret){
@@ -290,7 +290,7 @@ class StudipSemTree extends TreeAbstract {
             $view->params[0] = (is_array($item_ids)) ? $item_ids : array($item_ids);
             // Logging
             foreach ($view->params[0] as $range) {
-                log_event("SEM_DELETE_STUDYAREA","all",$range);
+                StudipLog::log("SEM_DELETE_STUDYAREA","all",$range);
             }
             $rs = $view->get_query("view:SEMINAR_SEM_TREE_DEL_RANGE");
             $ret = $rs->affected_rows();
@@ -298,7 +298,7 @@ class StudipSemTree extends TreeAbstract {
             $view->params[0] = (is_array($sem_entries)) ? $sem_entries : array($sem_entries);
             // Logging
             foreach ($view->params[0] as $sem) {
-                log_event("SEM_DELETE_STUDYAREA",$sem,"all");
+                StudipLog::log("SEM_DELETE_STUDYAREA",$sem,"all");
             }
             $rs = $view->get_query("view:SEMINAR_SEM_TREE_DEL_SEMID_RANGE");
             $ret = $rs->affected_rows();
@@ -316,7 +316,7 @@ class StudipSemTree extends TreeAbstract {
         $rs = $view->get_query("view:SEMINAR_SEM_TREE_INS_ITEM");
         if($ret = $rs->affected_rows()){
             // Logging
-            log_event("SEM_ADD_STUDYAREA",$seminar_id,$sem_tree_id);
+            StudipLog::log("SEM_ADD_STUDYAREA",$seminar_id,$sem_tree_id);
             $studyarea = StudipStudyArea::find($sem_tree_id);
             if($studyarea->isModule()){
                 NotificationCenter::postNotification('CourseAddedToModule', $studyarea, array('module_id' => $sem_tree_id, 'course_id' => $seminar_id));

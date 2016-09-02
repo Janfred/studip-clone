@@ -170,7 +170,7 @@ class CourseExDate extends SimpleORMap
         $date->setId($date->getNewId());
 
         if ($date->store()) {
-            log_event('SEM_UNDELETE_SINGLEDATE', $this->termin_id, $this->range_id, 'Cycle_id: ' . $this->metadate_id);
+            StudipLog::log('SEM_UNDELETE_SINGLEDATE', $this->termin_id, $this->range_id, 'Cycle_id: ' . $this->metadate_id);
             $this->delete();
             return $date;
         }

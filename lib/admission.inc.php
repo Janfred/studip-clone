@@ -89,7 +89,7 @@ function insert_seminar_user($seminar_id, $user_id, $status, $copy_studycourse =
     if (!$log_message) {
         $log_message = 'Wurde in die Veranstaltung eingetragen, admission_status: '. $admission_status . ' Kontingent: ' . $contingent;
     }
-    log_event('SEM_USER_ADD', $seminar_id, $user_id, $status, $log_message);
+    StudipLog::log('SEM_USER_ADD', $seminar_id, $user_id, $status, $log_message);
 
     // actually insert the user into the seminar
     $stmt = DBManager::get()->prepare('INSERT IGNORE INTO seminar_user

@@ -268,7 +268,7 @@ class Institute_BasicdataController extends AuthenticatedController
 
         if ($create_institute) {
             // Log creation of institute
-            log_event('INST_CREATE', $institute->id, null, null, ''); // logging
+            StudipLog::log('INST_CREATE', $institute->id, null, null, ''); // logging
 
             // Further initialize modules (the modules class setup is in
             // no way expensive, so it can be constructed twice, don't worry)
@@ -358,11 +358,11 @@ class Institute_BasicdataController extends AuthenticatedController
             $details = array();
 
             // logging - put institute's name in info - it's no longer derivable from id afterwards
-            log_event('INST_DEL', $i_id, NULL, $i_name);
+            StudipLog::log('INST_DEL', $i_id, NULL, $i_name);
 
             // set a suitable default institute for each user
             foreach ($user_ids as $user_id) {
-                log_event('INST_USER_DEL', $i_id, $user_id);
+                StudipLog::log('INST_USER_DEL', $i_id, $user_id);
                 checkExternDefaultForUser($user_id);
             }
             if (count($user_ids)) {
