@@ -77,7 +77,7 @@ class ELearningUtils
     function setConfigValue($name, $value, $cms)
     {
         if ($cms != "")
-            write_config("ELEARNING_INTERFACE_" . $cms . "_" . $name, $value);
+            Config::get()->store('ELEARNING_INTERFACE_' . $cms . '_' . $name, $value);
     }
 
     /**

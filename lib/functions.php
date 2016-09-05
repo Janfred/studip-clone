@@ -854,34 +854,6 @@ function check_and_set_date($tag, $monat, $jahr, $stunde, $minute, &$arr, $field
     return $check;
 }
 
-/**
- * writes an entry into the studip configuration table
- *
- * @deprecated
- * @param string $key the key for the config entry
- * @param string $val the value that should be set
- * @param array  $arr an array with key=>value to write into config
- *
- * @return bool  true if date was valid, else false
- */
-function write_config ($key, $val, $arr = null)
-{
-    if (is_null($arr)) {
-        $arr[$key] = $val;
-    }
-    $config = Config::get();
-    if (is_array($arr)) {
-        foreach ($arr as $key => $val) {
-            if (isset($config->$key)) {
-                $config->store($key, $val);
-            } else {
-                $config->create($key, array('value' => $val, 'type' => 'string'));
-            }
-            $GLOBALS[$key] = $config->$key;
-        }
-    }
-
-}
 
 /**
  * gets an entry from the studip configuration table
