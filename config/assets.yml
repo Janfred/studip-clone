@@ -73,7 +73,6 @@ javascripts:
     - javascripts/url_helper.js
     - javascripts/updater.js
     - javascripts/study_area_selection.js
-    - javascripts/dialog_box.js
     - javascripts/file_system.js
     - javascripts/arbeitsgruppen.js
     - javascripts/news.js
