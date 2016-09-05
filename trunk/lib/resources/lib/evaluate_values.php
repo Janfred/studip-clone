@@ -1094,18 +1094,19 @@ change settings
 //change settings
 if (Request::option('change_global_settings')) {
     if ($globalPerm == "admin") { //check for resources root or global root
-        write_config("RESOURCES_LOCKING_ACTIVE", Request::option('locking_active',false));
-        write_config("RESOURCES_ASSIGN_LOCKING_ACTIVE", Request::option('assign_locking_active',false));
-        write_config("RESOURCES_ALLOW_ROOM_REQUESTS", Request::option('allow_requests',false));
-        write_config("RESOURCES_ALLOW_REQUESTABLE_ROOM_REQUESTS", Request::option('allow_requestable_requests',false));
-        write_config("RESOURCES_DIRECT_ROOM_REQUESTS_ONLY", Request::option('direct_requests_only',false));
-        write_config("RESOURCES_ALLOW_CREATE_ROOMS", Request::option('allow_create_resources'));
-        write_config("RESOURCES_INHERITANCE_PERMS_ROOMS", Request::option('inheritance_rooms'));
-        write_config("RESOURCES_INHERITANCE_PERMS", Request::option('inheritance'));
-        write_config("RESOURCES_ENABLE_ORGA_CLASSIFY", Request::option('enable_orga_classify',false));
-        write_config("RESOURCES_ENABLE_ORGA_ADMIN_NOTICE", Request::option('enable_orga_admin_notice',false));
-        write_config("RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE", Request::option('allow_single_assign_percentage'));
-        write_config("RESOURCES_ALLOW_SINGLE_DATE_GROUPING", Request::option('allow_single_date_grouping'));
+        $config = Config::get();
+        $config->store('RESOURCES_LOCKING_ACTIVE', Request::option('locking_active',false));
+        $config->store('RESOURCES_ASSIGN_LOCKING_ACTIVE', Request::option('assign_locking_active',false));
+        $config->store('RESOURCES_ALLOW_ROOM_REQUESTS', Request::option('allow_requests',false));
+        $config->store('RESOURCES_ALLOW_REQUESTABLE_ROOM_REQUESTS', Request::option('allow_requestable_requests',false));
+        $config->store('RESOURCES_DIRECT_ROOM_REQUESTS_ONLY', Request::option('direct_requests_only',false));
+        $config->store('RESOURCES_ALLOW_CREATE_ROOMS', Request::option('allow_create_resources'));
+        $config->store('RESOURCES_INHERITANCE_PERMS_ROOMS', Request::option('inheritance_rooms'));
+        $config->store('RESOURCES_INHERITANCE_PERMS', Request::option('inheritance'));
+        $config->store('RESOURCES_ENABLE_ORGA_CLASSIFY', Request::option('enable_orga_classify',false));
+        $config->store('RESOURCES_ENABLE_ORGA_ADMIN_NOTICE', Request::option('enable_orga_admin_notice',false));
+        $config->store('RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE', Request::option('allow_single_assign_percentage'));
+        $config->store('RESOURCES_ALLOW_SINGLE_DATE_GROUPING', Request::option('allow_single_date_grouping'));
     } else {
         $msg->addMsg(25);
     }
