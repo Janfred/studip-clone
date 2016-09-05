@@ -49,12 +49,19 @@
 
     <? if (count($teachers)) : ?>
         <label for="related_teachers"><?= _('Durchführende Lehrende') ?>
-            <select id="related_teachers" name="related_teachers[]" multiple class="multiple">
-                <? foreach ($teachers as $dozent) : ?>
-                    <option <?= in_array($dozent['user_id'], Request::getArray('related_teachers')) ? 'selected' : '' ?>
-                        value="<?= $dozent['user_id'] ?>"><?= htmlReady($dozent['fullname']) ?></option>
-                <? endforeach; ?>
-            </select>
+            <? if (count($teachers) > 1) : ?>
+                <select id="related_teachers" name="related_teachers[]" multiple class="multiple">
+                    <? foreach ($teachers as $dozent) : ?>
+                        <option <?= in_array($dozent['user_id'], Request::getArray('related_teachers')) ? 'selected' : '' ?>
+                            value="<?= $dozent['user_id'] ?>"><?= htmlReady($dozent['fullname']) ?></option>
+                    <? endforeach; ?>
+                </select>
+            <? else : ?>
+                <p style="margin-left: 15px">
+                    <? $dozent = array_pop($teachers) ?>
+                    <?= htmlReady($dozent['fullname']) ?>
+                </p>
+            <? endif; ?>
         </label>
     <? endif; ?>
 
