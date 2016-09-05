@@ -70,18 +70,14 @@ if (get_config('ELEARNING_INTERFACE_ENABLE'))
     } else {
         unset($cms_select);
     }
-
+    
     if ($messages["error"] != "")
     {
-        echo "<table>";
-        my_error($messages["error"]);
-        echo "</table>";
+        PageLayout::postError($messages["error"]);
     }
     if ($messages["info"] != "")
     {
-        echo "<table>";
-        my_info($messages["info"]);
-        echo "</table>";
+       PageLayout::postInfo($messages["info"]);
     }
 
     echo "<font size=\"-1\">";
