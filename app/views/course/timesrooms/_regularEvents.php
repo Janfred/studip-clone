@@ -104,7 +104,10 @@
                                         <select name="method" class="datesBulkActions actionForAllRegular_<?= $metadate_id ?>">
                                             <?= $this->render_partial('course/timesrooms/_stack_actions.php') ?>
                                         </select>
-                                        <?= Studip\Button::create(_('Ausführen'), 'run', array('class' => 'actionForAllRegular','data-dialog' => 'size=big')) ?>
+                                        <?= Studip\Button::create(_('Ausführen'), 'run', array(
+                                            'class' => sprintf('actionForAllRegular_%s', $metadate_id),
+                                            'data-dialog' => 'size=big',
+                                            )) ?>
                                     </td>
                                 </tr>
                             </tfoot>
