@@ -87,10 +87,8 @@ class Lvgruppen_LvgruppenController extends MVVController
                 $this->semester_filter);
         if (!empty($this->filter)) {
             $this->search_result['Lvgruppe'] = $this->lvgruppen->pluck('id');
-        } else if (sizeof($this->lvgruppen) == 0) {
-            PageLayout::postInfo(_('Es wurden keine Lehrveranstaltungsgruppen gefunden.'));
         }
-                
+        
         $this->count = count(Lvgruppe::getAllEnriched(
                 $this->sortby,
                 $this->order,

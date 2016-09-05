@@ -162,33 +162,15 @@ class Materialien_DokumenteController extends MVVController
      */
     function delete_action($dokument_id)
     {
+        CSRFProtection::verifyUnsafeRequest();
         $dokument = Dokument::get($dokument_id);
-        if (Request::submitted('yes')) {
+        if ($dokument->isNew()) {
+            PageLayout::postError( _('Das Dokument kann nicht gelöscht werden (unbekanntes Dokument).'));
+        } else {
             CSRFProtection::verifyUnsafeRequest();
-            if ($dokument->isNew()) {
-                PageLayout::postError( _('Das Dokument kann nicht gelöscht werden (unbekanntes Dokument).'));
-            } else {
-                CSRFProtection::verifyUnsafeRequest();
-                $name = $dokument->name;
-                $dokument->delete();
-                PageLayout::postSuccess(sprintf(_('Das Dokument "%s" wurde gelöscht.'), htmlReady($name)));
-            }
-        }
-        if (!Request::isPost()) {
-            $relations = $dokument->getCountRelations();
-            if ($relations) {
-                $this->flash_set('dialog', sprintf(_('Wollen Sie das Dokument "%s" wirklich löschen?')
-                        . ' '
-                        . ngettext('Dieses Dokument wird von einem Objekt referenziert.',
-                                'Dieses Dokument wird von %s Objekten referenziert.', $relations),
-                        $dokument->name, $relations),
-                        '/delete/' . $dokument->id, '/index');
-            } else {
-                $this->flash_set('dialog', sprintf(_('Wollen Sie das Dokument "%s" wirklich löschen?'),
-                                $dokument->name),
-                        '/delete/' . $dokument->getId() . '/1',
-                        '/index');
-            }
+            $name = $dokument->name;
+            $dokument->delete();
+            PageLayout::postSuccess(sprintf(_('Das Dokument "%s" wurde gelöscht.'), htmlReady($name)));
         }
         $this->redirect($this->url_for('/index'));
     }
