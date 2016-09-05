@@ -54,11 +54,11 @@
                             ?>
                         <? endif; ?>
                         <? if ($perm->havePermCreate()) : ?>
-                            <? $actionMenu->addLink(
-                                    $controller->url_for('/delete_modulteil/' . $modulteil->id),
-                                    _('Modulteil löschen'),
-                                    Icon::create('trash', 'clickable', ['title' => _('Modulteil löschen')]))
-                            ?>
+                                <? $actionMenu->addLink(
+                                        $controller->url_for('/delete_modulteil/' . $modulteil->id),
+                                        _('Modulteil löschen'),
+                                        Icon::create('trash', 'clickable', ['title' => _('Modulteil löschen')]))
+                                ?>
                         <? endif; ?>
                         <?= $actionMenu->render() ?>
                     </td>
