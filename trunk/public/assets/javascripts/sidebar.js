@@ -69,7 +69,7 @@
                 }
             };
 
-        $(document).on('ready', function () {
+        $(document).ready(function () {
             doc_height = $(document).height();
         });
 

@@ -7,6 +7,14 @@
 (function ($, STUDIP) {
     'use strict';
 
+    function connectProxyAndProxied() {
+        $(':checkbox[data-proxyfor]').each(function () {
+            var proxied = $(this).data('proxyfor');
+            // The following seems like a hack but works perfectly fine.
+            $(proxied).attr('data-proxiedby', true).data('proxiedby', this);
+        }).trigger('update.proxy');
+    }
+
     // Use a checkbox as a proxy for a set of other checkboxes. Define
     // proxied elements by a css selector in attribute "data-proxyfor".
     $(document).on('change', ':checkbox[data-proxyfor]', function (event, force) {
@@ -28,13 +36,10 @@
     }).on('change', ':checkbox[data-proxiedby]', function () {
         var proxy = $(this).data('proxiedby');
         $(proxy).trigger('update.proxy');
-    }).on('ready dialog-update', function () {
-        $(':checkbox[data-proxyfor]').each(function () {
-            var proxied = $(this).data('proxyfor');
-            // The following seems like a hack but works perfectly fine.
-            $(proxied).attr('data-proxiedby', true).data('proxiedby', this);
-        }).trigger('update.proxy');
     });
+    
+    $(document).ready(connectProxyAndProxied);
+    $(document).on('dialog-update', connectProxyAndProxied);
 
     // Use a checkbox as a toggle switch for the disabled attribute of another
     // element. Define element to disable if checkbox is neither :checked nor

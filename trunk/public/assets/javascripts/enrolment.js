@@ -96,7 +96,7 @@ STUDIP.enrollment = function () {
             }
         }
     });
-    $('#enrollment input[name="filter"]').bind('keyup', function () {
+    $('#enrollment input[name="filter"]').on('keyup', function () {
         var $this = $(this);
         var list = $this.next('ul');
         filterList($this.val(), list);

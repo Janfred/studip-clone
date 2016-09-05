@@ -36,7 +36,7 @@
                 var id = $('.notification:last', ul).data().id;
                 new_stack[id] = notification;
                 if (notification.html_id) {
-                    $("#" + notification.html_id).bind("mouseenter", STUDIP.PersonalNotifications.isVisited);
+                    $("#" + notification.html_id).on("mouseenter", STUDIP.PersonalNotifications.isVisited);
                 }
 
                 changed = (changed || !stack.hasOwnProperty(id));

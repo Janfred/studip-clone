@@ -12,7 +12,7 @@ STUDIP.DragAndDropUpload = {
 
         // The drag event handling is seriously messed up
         // see http://www.quirksmode.org/blog/archives/2009/09/the_html5_drag.html
-        jQuery(form).bind('dragover dragleave', function (event) {
+        jQuery(form).on('dragover dragleave', function (event) {
             jQuery(this).toggleClass('hovered', event.type === 'dragover');
             return false;
         });

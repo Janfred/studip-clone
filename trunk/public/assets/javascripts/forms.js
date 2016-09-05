@@ -7,7 +7,7 @@
 
 (function ($, STUDIP) {
     'use strict';
-
+    
     $.extend($.expr[':'], {
         invalid : function (elem, index, match) {
             var invalids = document.querySelectorAll(':invalid'),
@@ -71,7 +71,7 @@
 
     // Display a visible hint that indicates how many characters the user may
     // input if the element has a maxlength restriction.
-    $(document).on('ready dialog-update', function () {
+    function createLengthHint() {
         $('form.default input[maxlength]:not(.no-hint)').each(function () {
             if ($(this).data('length-hint')) {
                 return;
@@ -103,7 +103,9 @@
 
             $(this).trigger('change');
         });
-    });
+    }
+    
+    $(document).ready(createLengthHint).on('dialog-update', createLengthHint);
 
     // Use select2 for crossbrowser compliant select styling and
     // handling
@@ -194,7 +196,8 @@
         $(element).next().addBack().wrapAll(wrapper);
     }
 
-    $(document).on('ready dialog-update', function () {
+    function prepareSelect2() {
+
         // Well, this is really nasty: Select2 can't determine the select
         // element's width if it is hidden (by itself or by it's parent).
         // This is due to the fact that elements are not rendered when hidden
@@ -243,7 +246,12 @@
         $('select:not([multiple])').each(function () {
             $(this).toggleClass('has-no-value', this.value === '').blur();
         });
-    }).on('change', 'select:not([multiple])', function () {
+    }
+
+    $(document).ready(prepareSelect2);
+    $(document).on('dialog-update', prepareSelect2);
+
+    $(document).on('change', 'select:not([multiple])', function () {
         $(this).toggleClass('has-no-value', this.value === '').blur();
     }).on('dialog-close', function (event, data) {
         $('select.nested-select:not(:has(optgroup))', data.dialog).each(function () {

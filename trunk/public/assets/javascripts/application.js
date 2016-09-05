@@ -115,7 +115,7 @@ jQuery(function ($) {
         return false;
     });
 
-    $(document).on('ready', function () {
+    $(document).ready(function () {
         var elements = $('.load-in-new-row-open');
         elements.click();
         if (elements.length > 0) {
@@ -258,7 +258,7 @@ jQuery(document).ready(function ($) {
 
 // Fix horizontal scroll issue on domready, window load and window resize.
 // This also makes the header and footer sticky regarding horizontal scrolling.
-jQuery(document).on('ready', function () {
+jQuery(document).ready(function () {
     var page_margin = ($('#layout_page').outerWidth(true) - $('#layout_page').width()) / 2,
         content_margin = $('#layout_content').outerWidth(true) - $('#layout_content').innerWidth(),
         sidebar_width = $('#layout-sidebar').outerWidth(true);
