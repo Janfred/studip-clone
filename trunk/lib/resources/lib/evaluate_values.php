@@ -1095,18 +1095,63 @@ change settings
 if (Request::option('change_global_settings')) {
     if ($globalPerm == "admin") { //check for resources root or global root
         $config = Config::get();
-        $config->store('RESOURCES_LOCKING_ACTIVE', Request::option('locking_active',false));
-        $config->store('RESOURCES_ASSIGN_LOCKING_ACTIVE', Request::option('assign_locking_active',false));
-        $config->store('RESOURCES_ALLOW_ROOM_REQUESTS', Request::option('allow_requests',false));
-        $config->store('RESOURCES_ALLOW_REQUESTABLE_ROOM_REQUESTS', Request::option('allow_requestable_requests',false));
-        $config->store('RESOURCES_DIRECT_ROOM_REQUESTS_ONLY', Request::option('direct_requests_only',false));
-        $config->store('RESOURCES_ALLOW_CREATE_ROOMS', Request::option('allow_create_resources'));
+    
+        try {
+            $config->store('RESOURCES_LOCKING_ACTIVE', Request::option('locking_active',false));
+        } catch (InvalidArgumentException $e) {
+            $config->create('RESOURCES_LOCKING_ACTIVE', ['value' => Request::option('locking_active',false), 'type' => 'string']);
+        }
+        try {
+            $config->store('RESOURCES_ALLOW_ROOM_REQUESTS', Request::option('allow_requests',false));
+        } catch (InvalidArgumentException $e) {
+            $config->create('RESOURCES_ALLOW_ROOM_REQUESTS', ['value' => Request::option('allow_requests',false), 'type' => 'string']);
+        }
+        try {
+            $config->store('RESOURCES_ALLOW_REQUESTABLE_ROOM_REQUESTS', Request::option('allow_requestable_requests',false));
+        } catch (InvalidArgumentException $e) {
+            $config->create('RESOURCES_ALLOW_REQUESTABLE_ROOM_REQUESTS', ['value' => Request::option('allow_requestable_requests',false), 'type' => 'string']);
+        }
+        try {
+            $config->store('RESOURCES_DIRECT_ROOM_REQUESTS_ONLY', Request::option('direct_requests_only',false));
+        } catch (InvalidArgumentException $e) {
+            $config->create('RESOURCES_DIRECT_ROOM_REQUESTS_ONLY', ['value' => Request::option('direct_requests_only',false), 'type' => 'string']);
+        }
+        try {
+            $config->store('RESOURCES_ALLOW_CREATE_ROOMS', Request::option('allow_create_resources',false));
+        } catch (InvalidArgumentException $e) {
+            $config->create('RESOURCES_ALLOW_CREATE_ROOMS', ['value' => Request::option('allow_create_resources',false), 'type' => 'string']);
+        }
+        try {
+            $config->store('RESOURCES_INHERITANCE_PERMS_ROOMS', Request::option('inheritance_rooms',false));
+        } catch (InvalidArgumentException $e) {
+            $config->create('RESOURCES_INHERITANCE_PERMS_ROOMS', ['value' => Request::option('inheritance_rooms',false), 'type' => 'string']);
+        }
+        try {
+            $config->store('RESOURCES_INHERITANCE_PERMS', Request::option('inheritance',false));
+        } catch (InvalidArgumentException $e) {
+            $config->create('RESOURCES_INHERITANCE_PERMS', ['value' => Request::option('inheritance',false), 'type' => 'string']);
+        }
+        try {
+            $config->store('RESOURCES_ENABLE_ORGA_CLASSIFY', Request::option('enable_orga_classify',false));
+        } catch (InvalidArgumentException $e) {
+            $config->create('RESOURCES_ENABLE_ORGA_CLASSIFY', ['value' => Request::option('enable_orga_classify',false), 'type' => 'string']);
+        }
+        try {
+            $config->store('RESOURCES_ENABLE_ORGA_ADMIN_NOTICE', Request::option('enable_orga_admin_notice',false));
+        } catch (InvalidArgumentException $e) {
+            $config->create('RESOURCES_ENABLE_ORGA_ADMIN_NOTICE', ['value' => Request::option('enable_orga_admin_notice',false), 'type' => 'string']);
+        }
+        try {
+            $config->store('RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE', Request::option('allow_single_assign_percentage',false));
+        } catch (InvalidArgumentException $e) {
+            $config->create('RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE', ['value' => Request::option('allow_single_assign_percentage',false), 'type' => 'string']);
+        }
+        try {
+            $config->store('RESOURCES_ALLOW_SINGLE_DATE_GROUPING', Request::option('allow_single_date_grouping',false));
+        } catch (InvalidArgumentException $e) {
+            $config->create('RESOURCES_ALLOW_SINGLE_DATE_GROUPING', ['value' => Request::option('allow_single_date_grouping',false), 'type' => 'string']);
+        }
         $config->store('RESOURCES_INHERITANCE_PERMS_ROOMS', Request::option('inheritance_rooms'));
-        $config->store('RESOURCES_INHERITANCE_PERMS', Request::option('inheritance'));
-        $config->store('RESOURCES_ENABLE_ORGA_CLASSIFY', Request::option('enable_orga_classify',false));
-        $config->store('RESOURCES_ENABLE_ORGA_ADMIN_NOTICE', Request::option('enable_orga_admin_notice',false));
-        $config->store('RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE', Request::option('allow_single_assign_percentage'));
-        $config->store('RESOURCES_ALLOW_SINGLE_DATE_GROUPING', Request::option('allow_single_date_grouping'));
     } else {
         $msg->addMsg(25);
     }
