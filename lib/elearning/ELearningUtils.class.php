@@ -76,8 +76,13 @@ class ELearningUtils
     */
     function setConfigValue($name, $value, $cms)
     {
-        if ($cms != "")
-            Config::get()->store('ELEARNING_INTERFACE_' . $cms . '_' . $name, $value);
+        if ($cms != "") {
+            try {
+                Config::get()->store('ELEARNING_INTERFACE_' . $cms . '_' . $name, $value);
+            } catch(InvalidArgumentException $e) {
+                Config::get()->create('ELEARNING_INTERFACE_' . $cms . '_' . $name, ['value' => $value, 'type' => 'string']);
+            }
+        }
     }
 
     /**
