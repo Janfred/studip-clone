@@ -296,7 +296,7 @@ STUDIP.Blubber = {
     makeTextareasAutoresizable: function () {
         jQuery("#blubber_threads textarea:not(.autoresize), #new_posting:not(.autoresize)")
         .addClass("autoresize")
-            .bind('dragover dragleave', function (event) {
+            .on('dragover dragleave', function (event) {
             jQuery(this).toggleClass('hovered', event.type === 'dragover');
             return false;
         }).autoResize({
@@ -681,25 +681,25 @@ jQuery(function () {
             STUDIP.Blubber.makeTextareasAutoresizable();
         });
     });
-    jQuery("#threadwriter .context_selector .click").bind("click", STUDIP.Blubber.showContextWindow);
+    jQuery("#threadwriter .context_selector .click").on("click", STUDIP.Blubber.showContextWindow);
 
     //for editing custom streams:
-    jQuery("#edit_stream select, #edit_stream input").bind("change", STUDIP.Blubber.update_streams_threadnumber);
-    jQuery("#edit_stream td .checkicons").bind("click", function () {
+    jQuery("#edit_stream select, #edit_stream input").on("change", STUDIP.Blubber.update_streams_threadnumber);
+    jQuery("#edit_stream td .checkicons").on("click", function () {
         if (jQuery(this).closest("td").is(".selected")) {
             jQuery(this).closest("td").removeClass("selected").find("input[type=checkbox]").prop("checked", false);
         } else {
             jQuery(this).closest("td").addClass("selected").find("input[type=checkbox]").prop("checked", true);
         }
     });
-    jQuery("#edit_stream td .label").bind("click", function () {
+    jQuery("#edit_stream td .label").on("click", function () {
         if (!jQuery(this).closest("td").is(".selected")) {
             jQuery(this).closest("td").addClass("selected").find("input[type=checkbox]").prop("checked", true);
         } else {
             jQuery(this).closest("td").removeClass("selected").find("input[type=checkbox]").prop("checked", false);
         }
     });
-    jQuery("#edit_stream .selector").bind("click", function () {
+    jQuery("#edit_stream .selector").on("click", function () {
         if (!jQuery(this).closest("td").is(".selected")) {
             jQuery(this).closest("td").addClass("selected").find("input[type=checkbox]").prop("checked", true);
         }
@@ -709,7 +709,7 @@ jQuery(function () {
 
 
 //Infinity-scroll:
-jQuery(window.document).bind('scroll', _.throttle(function (event) {
+jQuery(document).on('scroll', _.throttle(function (event) {
     if ((jQuery(window).scrollTop() + jQuery(window).height() > jQuery(window.document).height() - 500)
             && (jQuery("#blubber_threads > li.more").length > 0)) {
         //nachladen

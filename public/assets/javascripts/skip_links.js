@@ -128,9 +128,9 @@ STUDIP.SkipLinks = {
 
 };
 
-jQuery(window.document).bind('keyup', STUDIP.SkipLinks.showSkipLinkNavigation);
-jQuery(window.document).bind('ready', STUDIP.SkipLinks.initialize);
-jQuery(window.document).bind('click', function (event) {
+jQuery(document).on('keyup', STUDIP.SkipLinks.showSkipLinkNavigation);
+jQuery(document).ready(STUDIP.SkipLinks.initialize);
+jQuery(document).on('click', function (event) {
     if (!jQuery(event.target).is('#skip_link_navigation a')) {
         STUDIP.SkipLinks.moveSkipLinkNavigationOut();
     }

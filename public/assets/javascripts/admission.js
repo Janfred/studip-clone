@@ -190,7 +190,7 @@ STUDIP.Admission = {
             'plugins': [ 'html_data', 'themes', 'types', 'checkbox', 'ui' ]
         };
         config.types = {'types': typesData};
-        $('#' + elementId).bind('loaded.jstree', function (event, data) {
+        $('#' + elementId).on('loaded.jstree', function (event, data) {
             // Show checked checkboxes.
             var checkedItems = $('#' + elementId).find('.jstree-checked');
             checkedItems.removeClass('jstree-unchecked');

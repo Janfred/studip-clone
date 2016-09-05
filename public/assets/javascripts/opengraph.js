@@ -4,7 +4,7 @@
 (function ($, _) {
     'use strict';
 
-    $(document).on('dialog-update ready ajaxComplete', function () {
+    function handleOpenGraphSections() {
         $('.opengraph-area:not(.handled)').each(function () {
             var items = $('.opengraph', this),
                 switcher;
@@ -19,7 +19,12 @@
 
             $(this).addClass('handled');
         });
-    }).on('click', '.opengraph-area .switcher button', function (event) {
+    }
+
+    $(document).ready(handleOpenGraphSections);
+    $(document).on('dialog-update ajaxComplete', handleOpenGraphSections);
+
+    $(document).on('click', '.opengraph-area .switcher button', function (event) {
         var direction = $(this).is('.switch-left') ? 'left' : 'right',
             current   = $(this).closest('.opengraph-area').find('.opengraph:visible'),
             switcher  = $(this).closest('.switcher'),

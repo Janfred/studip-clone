@@ -143,7 +143,7 @@ STUDIP.Messages = {
             error: function(jqxhr, status, errorThrown) {
                 statusbar.find(".progress").addClass("progress-error").attr("title", errorThrown);
                 statusbar.find(".progresstext").html(errorThrown);
-                statusbar.bind("click", function() { jQuery(this).fadeOut(300, function () { jQuery(this).remove(); })});
+                statusbar.on("click", function() { jQuery(this).fadeOut(300, function () { jQuery(this).remove(); })});
             }
         });
     },
@@ -250,7 +250,7 @@ jQuery(function () {
 
     /*********** infinity-scroll in the overview ***********/
     if (jQuery("#messages").length > 0) {
-        jQuery(window.document).bind('scroll', _.throttle(function (event) {
+        jQuery(window.document).on('scroll', _.throttle(function (event) {
 
             if ((jQuery(window).scrollTop() + jQuery(window).height() > jQuery(window.document).height() - 500)
                 && (jQuery("#reloader").hasClass("more"))) {

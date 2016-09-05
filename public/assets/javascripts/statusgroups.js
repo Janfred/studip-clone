@@ -50,7 +50,7 @@
                 $('input[name="selfassign_end"]').closest($('section')).hide();
             }
             //$('input[name="selfassign_end"]').datetimepicker();
-            $('input[name="selfassign"]').on('click', function() {
+            $('input[name="selfassign"]').on('click', function () {
                 $('input[name="exclusive"]').closest($('section')).toggle();
                 $('input[name="selfassign_start"]').closest($('section')).toggle();
                 $('input[name="selfassign_end"]').closest($('section')).toggle();
@@ -62,7 +62,11 @@
     $(document).ready(function () {
         ajax_endpoint = $('meta[name="statusgroups-ajax-movable-endpoint"]').attr('content');
         STUDIP.Statusgroups.apply();
-    }).on('ready dialog-open dialog-update', function () {
+
+        $('.nestable').nestable({
+            rootClass: 'nestable'
+        });
+    }).on('dialog-open dialog-update', function () {
         $('.nestable').nestable({
             rootClass: 'nestable'
         });
