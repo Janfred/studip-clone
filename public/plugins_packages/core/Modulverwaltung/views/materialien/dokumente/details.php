@@ -33,13 +33,13 @@
                         <? if (strlen($dokument->beschreibung)) : ?>
                         <div>
                             <img src="<?= Assets::image_path('languages/lang_de.gif') ?>" alt="<?= _('deutsch') ?>">
-                            <?= htmlReady($dokument->beschreibung) ?>
+                            <?= formatReady($dokument->beschreibung) ?>
                         </div>
                         <? endif; ?>
                         <? if ($dokument->beschreibung_en) : ?>
                         <div style="margin-top:10px;">
                             <img src="<?= Assets::image_path('languages/lang_en.gif') ?>" alt="<?= _('englisch') ?>">
-                            <?= htmlReady($dokument->beschreibung_en) ?>
+                            <?= formatReady($dokument->beschreibung_en) ?>
                         </div>
                         <? endif; ?>
                     <? endif; ?>
