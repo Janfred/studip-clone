@@ -828,7 +828,7 @@ class Course_TimesroomsController extends AuthenticatedController
 
         if ($cycle->store()) {
             $cycle_info = $cycle->toString();
-            NotificationCenter::postNotification('CourseDidChangeSchedule', $this);
+            NotificationCenter::postNotification('CourseDidChangeSchedule', $this->course);
 
             $this->course->createMessage(sprintf(_('Die regelmäßige Veranstaltungszeit %s wurde hinzugefügt!'), $cycle_info));
             $this->displayMessages();
