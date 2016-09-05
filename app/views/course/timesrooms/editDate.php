@@ -68,7 +68,7 @@
     <? if (!empty($dozenten)) : ?>
         <fieldset class="collapsed">
             <legend><?= _('Durchführende Lehrende') ?></legend>
-
+            <? if (count($dozenten) > 1) : ?>
             <ul class="termin_related teachers">
                 <? foreach ($dozenten as $related_person => $dozent) : ?>
                     <? $related = true; ?>
@@ -100,6 +100,12 @@
                    title="<?= _('Lehrenden hinzufügen') ?>">
                     <?= Icon::create('arr_2up', 'sort')->asImg(16) ?>
                 </a>
+                <? else : ?>
+                    <? $dozent = array_pop($dozenten)?>
+                    <p style="margin-left: 15px;">
+                        <?= htmlReady($dozent['fullname']) ?>
+                    </p>
+                <? endif; ?>
             </label>
         </fieldset>
     <? endif ?>

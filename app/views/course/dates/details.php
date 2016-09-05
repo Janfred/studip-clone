@@ -46,8 +46,10 @@
                 <td><strong><?= _("Durchführende Dozenten") ?></strong></td>
                 <td>
                     <? $dozenten = $date->dozenten->pluck('user_id') ?>
-                    <? if ($GLOBALS['perm']->have_studip_perm("tutor", $date['range_id'])) : ?>
-                        <? $course_dozenten = array_map(function ($m) { return $m->user; }, (Course::findCurrent()->getMembersWithStatus("dozent"))) ?>
+                    <? $course_dozenten = array_map(function ($m) { return $m->user; }, (Course::findCurrent()->getMembersWithStatus("dozent"))) ?>
+                    <? if ($GLOBALS['perm']->have_studip_perm("tutor", $date['range_id']) 
+                            && count($course_dozenten) > 1) : ?>
+                        
                         <?
                             $related_doz = array();
                             foreach ($course_dozenten as $dozent) {
@@ -85,15 +87,25 @@
                             <?= Icon::create('arr_2up', 'sort')  ?>
                         </a>
                     <? else : ?>
-                        <? count($dozenten) > 0 || $dozenten = array_map(function ($m) { return $m->user; }, (Course::findCurrent()->getMembersWithStatus("dozent"))) ?>
-                        <ul class="dozenten_list clean">
-                            <? foreach ($dozenten as $dozent) : ?>
-                                <li>
-                                    <a href="<?= URLHelper::getLink("dispatch.php/profile", array('username' => $dozent['username'])) ?>"><?= Avatar::getAvatar($dozent['user_id'])->getImageTag(Avatar::SMALL)." ".htmlReady($dozent->getFullName()) ?></a>
-                                </li>
-                            <? endforeach ?>
-                        </ul>
-                    <? endif ?>
+                        <? if ($dozenten || $course_dozenten) : ?>
+                            <ul class="dozenten_list clean">
+                                <? if (count($dozenten) > 0) : ?> 
+                                    <? foreach ($dozenten as $dozent) : ?>
+                                        <li>
+                                            <a href="<?= URLHelper::getLink("dispatch.php/profile", array('username' => $dozent['username'])) ?>"><?= Avatar::getAvatar($dozent['user_id'])->getImageTag(Avatar::SMALL) . " " . htmlReady($dozent->getFullName()) ?></a>
+                                        </li>
+                                    <? endforeach ?>
+
+                                <? elseif (count($course_dozenten) > 0) : ?>
+                                    <? foreach ($course_dozenten as $dozent) : ?>
+                                        <li>
+                                            <a href="<?= URLHelper::getLink("dispatch.php/profile", array('username' => $dozent['username'])) ?>"><?= Avatar::getAvatar($dozent['user_id'])->getImageTag(Avatar::SMALL) . " " . htmlReady($dozent->getFullName()) ?></a>
+                                        </li>
+                                    <? endforeach ?>
+                                <? endif; ?>
+                            </ul>
+                        <? endif; ?>
+                    <? endif; ?>
                 </td>
             </tr>
             <tr>
