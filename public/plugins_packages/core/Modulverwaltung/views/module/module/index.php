@@ -20,15 +20,15 @@
             <th style="text-align: right;">
                 <?= _('Ausgabesprachen') ?>
             </th>
-            <th> </th>
+            <th></th>
         </tr>
     </thead>
     <?= $this->render_partial('module/module/module') ?>
-    <tfoot>
-        <tr>
-            <td colspan="6" style="text-align: right;">
-            <? if ($count > MVVController::$items_per_page) : ?>
-                <?
+    <? if ($count > MVVController::$items_per_page) : ?>
+        <tfoot>
+            <tr>
+                <td colspan="6" style="text-align: right;">
+                    <?
                     $pagination = $GLOBALS['template_factory']->open('shared/pagechooser');
                     $pagination->clear_attributes();
                     $pagination->set_attribute('perPage', MVVController::$items_per_page);
@@ -37,9 +37,9 @@
                     $page_link = reset(explode('?', $controller->url_for('/index'))) . '?page_module=%s';
                     $pagination->set_attribute('pagelink', $page_link);
                     echo $pagination->render('shared/pagechooser');
-                ?>
-            <? endif; ?>
-            </td>
-        </tr>
-    </tfoot>
+                    ?>
+                </td>
+            </tr>
+        </tfoot>
+    <? endif; ?>
 </table>
