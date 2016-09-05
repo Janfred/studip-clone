@@ -24,13 +24,15 @@ if (($o_mode != "direct") AND ($o_mode != "passthrough"))
     Navigation::activateItem('/tools/export');
  ?>
 <?
-
-                if (isset($export_error))
-                    my_error($export_error);
-                if (isset($export_msg))
-                    my_msg($export_msg);
-                if (isset($export_info))
-                    my_info($export_info);
+    if (isset($export_error)) {
+        PageLayout::postError($export_error);
+    }
+    if (isset($export_msg)) {
+        PageLayout::postSuccess($export_msg);
+    }
+    if (isset($export_info)) {
+        PageLayout::postInfo($export_info);
+    }
 ?>
             <?
             echo $export_pagecontent;
