@@ -73,23 +73,22 @@ function edit_email($user, $email, $force=False) {
                     $email_restriction_msg_part .= '@' . trim($email_restriction_parts[$email_restriction_count]) . ',<br>';
                 }
             }
-            $msg.= 'error§'
-                .sprintf(_("Die E-Mail-Adresse fehlt, ist falsch geschrieben oder gehört nicht zu folgenden Domains:%s"),
-                            '<br>' . $email_restriction_msg_part);
+            PageLayout::postError(sprintf(_("Die E-Mail-Adresse fehlt, ist falsch geschrieben oder gehört nicht zu folgenden Domains:%s"),
+                '<br>' . $email_restriction_msg_part));
         } else {
-            $msg.= "error§" . _("Die E-Mail-Adresse fehlt oder ist falsch geschrieben!") . "§";
+            PageLayout::postError(_("Die E-Mail-Adresse fehlt oder ist falsch geschrieben!"));
         }
-        return array(False, $msg);        // E-Mail syntaktisch nicht korrekt oder fehlend
+        return false;
     }
 
     if (!$validator->ValidateEmailHost($email)) {     // Mailserver nicht erreichbar, ablehnen
-        $msg.=  "error§" . _("Der Mailserver ist nicht erreichbar. Bitte überprüfen Sie, ob Sie E-Mails mit der angegebenen Adresse verschicken können!") . "§";
-        return array(False, $msg);
+        PageLayout::postError(_("Der Mailserver ist nicht erreichbar. Bitte überprüfen Sie, ob Sie E-Mails mit der angegebenen Adresse verschicken können!"));
+        return false;
     } else {       // Server ereichbar
         if (!$validator->ValidateEmailBox($email)) {    // aber user unbekannt. Mail an abuse!
             StudipMail::sendAbuseMessage("edit_about", "Emailbox unbekannt\n\nUser: ". $username ."\nEmail: $email\n\nIP: $REMOTE_ADDR\nZeit: $Zeit\n");
-            $msg.=  "error§" . _("Die angegebene E-Mail-Adresse ist nicht erreichbar. Bitte überprüfen Sie Ihre Angaben!") . "§";
-            return array(False, $msg);
+            PageLayout::postError(_("Die angegebene E-Mail-Adresse ist nicht erreichbar. Bitte überprüfen Sie Ihre Angaben!"));
+            return false;
         }
     }
 
@@ -100,18 +99,12 @@ function edit_email($user, $email, $force=False) {
     $statement->execute(array($email, $user->user_id));
     $row = $statement->fetch(PDO::FETCH_ASSOC);
     if ($row) {
-        $msg.=  "error§" . sprintf(_("Die angegebene E-Mail-Adresse wird bereits von einem anderen Benutzer (%s %s) verwendet. Bitte geben Sie eine andere E-Mail-Adresse an."), htmlReady($row['Vorname']), htmlReady($row['Nachname'])) . "§";
-        return array(False, $msg);
+        PageLayout::postError(sprintf(_("Die angegebene E-Mail-Adresse wird bereits von einem anderen Benutzer (%s %s) verwendet. Bitte geben Sie eine andere E-Mail-Adresse an."), htmlReady($row['Vorname']), htmlReady($row['Nachname'])));
+        return false;
     }
-
-    // This already moved to the controller
-//    $query = "UPDATE auth_user_md5 SET Email = ? WHERE user_id = ?";
-//    $statement = DBManager::get()->prepare($query);
-//    $statement->execute(array($email, $uid));
-
+    
     if (StudipAuthAbstract::CheckField("auth_user_md5.validation_key", $auth_plugin)) {
-        $msg.= "msg§" . _("Ihre E-Mail-Adresse wurde geändert!") . "§";
-        return array(True, $msg);
+        PageLayout::postSuccess(_("Ihre E-Mail-Adresse wurde geändert!"));
     } else {
         // auth_plugin does not map validation_key (what if...?)
 
@@ -149,10 +142,10 @@ function edit_email($user, $email, $force=False) {
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($user->validation_key, $user->user_id));
 
-        $msg.= "info§<b>" . sprintf(_('An Ihre neue E-Mail-Adresse <b>%s</b> wurde ein Aktivierungslink geschickt, dem Sie folgen müssen bevor Sie sich das nächste mal einloggen können.'), $email). '</b>§';
-        StudipLog::log("USER_NEWPWD",$user->user_id); // logging
+        PageLayout::postInfo(sprintf(_('An Ihre neue E-Mail-Adresse <b>%s</b> wurde ein Aktivierungslink geschickt, dem Sie folgen müssen bevor Sie sich das nächste mal einloggen können.'), $email));
+        StudipLog::log("USER_NEWPWD",$user->user_id);
     }
-    return array(True, $msg);
+    return true;
 }
 
 // class definition
