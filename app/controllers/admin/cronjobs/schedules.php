@@ -44,13 +44,6 @@ class Admin_Cronjobs_SchedulesController extends AuthenticatedController
         Navigation::activateItem('/admin/config/cronjobs');
         PageLayout::setTitle(_('Cronjob-Verwaltung') . ' - ' . _('Cronjobs'));
 
-        if (Request::isXhr()) {
-            $this->set_layout(null);
-            $this->set_content_type('text/html;Charset=windows-1252');
-        } else {
-            $this->set_layout($GLOBALS['template_factory']->open('layouts/base'));
-        }
-
         if (empty($_SESSION['cronjob-filter'])) {
             $_SESSION['cronjob-filter'] = array(
                 'where'  => '1',
