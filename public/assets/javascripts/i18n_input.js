@@ -14,7 +14,7 @@
 
     STUDIP.i18n = {
         init: function (root) {
-            $('div.i18n_group:not(.single_lang)').each(function () {
+            $('div.i18n_group:not(.single_lang)', root).each(function () {
                 var languages = $(this).find('input, textarea'),
                     select    = $('<select tabindex="-1">').addClass('i18n').css('background-image', $(languages).first().css('background-image'));
                 select.change(function () {
