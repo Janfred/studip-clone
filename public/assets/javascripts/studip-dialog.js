@@ -107,8 +107,7 @@
      */
     function extractButtons(element) {
         var buttons = {};
-        // TODO: Remove the rel selector after Stud.IP 3.2 or 3.3 has been released
-        $('[rel~="lightbox-button"],[rel~="option"],[data-dialog-button]', element).hide().find('a,button').addBack().filter('a,button').each(function () {
+        $('[data-dialog-button]', element).hide().find('a,button').addBack().filter('a,button').each(function () {
             var label = $(this).text(),
                 cancel = $(this).is('.cancel'),
                 handler;
@@ -643,19 +642,5 @@
 
     // Extra: Expose parseOptions to STUDIP object
     STUDIP.parseOptions = parseOptions;
-
-    // Legacy handler
-    // TODO: Remove this after Stud.IP 3.2 or 3.3 has been released
-    function legacyDialogHandler(event) {
-        var rel  = $(event.target).attr('rel');
-        if (/\blightbox(\s|\[|$)/.test(rel)) {
-            if (STUDIP.Dialog.fromElement(event.target, parseOptions(rel, 'lightbox'))) {
-                event.preventDefault();
-            }
-        }
-    }
-    $(document)
-        .on('click', 'a[rel*=lightbox],button[rel*=lightbox]', legacyDialogHandler)
-        .on('submit', 'form[rel*=lightbox]', legacyDialogHandler);
 
 }(jQuery, STUDIP));
