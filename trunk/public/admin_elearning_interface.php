@@ -44,7 +44,7 @@ ob_start();
 
 $cms_select = Request::get('cms_select');
 
-if (get_config('ELEARNING_INTERFACE_ENABLE'))
+if (Config::get()->ELEARNING_INTERFACE_ENABLE)
 {
 
     if ($cms_select != "" && isset($ELEARNING_INTERFACE_MODULES[$cms_select]))
@@ -211,9 +211,9 @@ if (get_config('ELEARNING_INTERFACE_ENABLE'))
 }
 else
 {
-    // Start of Output
-    parse_window ("error§" . _("Die Schnittstelle für die Integration von Lernmodulen ist nicht aktiviert. Damit Lernmodule verwendet werden können, muss die Verbindung zu einem LCM-System in der Konfigurationsdatei von Stud.IP hergestellt werden. Wenden Sie sich bitte an den/die AdministratorIn."), "§",
-                _("E-Learning-Schnittstelle nicht eingebunden"));
+   PageLayout::postError(_("Die Schnittstelle für die Integration von Lernmodulen ist nicht aktiviert.
+    Damit Lernmodule verwendet werden können, muss die Verbindung zu einem LCM-System in der Konfigurationsdatei von Stud.IP hergestellt werden. 
+    Wenden Sie sich bitte an den/die AdministratorIn."));
 }
 
 
