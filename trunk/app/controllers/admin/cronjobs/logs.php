@@ -49,13 +49,6 @@ class Admin_Cronjobs_LogsController extends AuthenticatedController
                 'values' => array(),
             );
         }
-
-        if (Request::isXhr()) {
-            $this->set_layout(null);
-            $this->set_content_type('text/html;Charset=windows-1252');
-        } else {
-            $this->set_layout($GLOBALS['template_factory']->open('layouts/base'));
-        }
     }
 
     /**
