@@ -14,35 +14,28 @@
  * @since       3.0
  */
 
-class Userfilter_FieldController extends AuthenticatedController {
+class Userfilter_FieldController extends AuthenticatedController
+{
+    protected $utf8decode_xhr = true;
 
     /**
      * @see AuthenticatedController::before_filter
      */
-    public function before_filter(&$action, &$args) {
+    public function before_filter(&$action, &$args)
+    {
         parent::before_filter($action, $args);
-        if (Request::isXhr()) {
-            $this->via_ajax = true;
-            $this->set_layout(null);
-            $request = Request::getInstance();
-            foreach ($request as $key => $value) {
-                $request[$key] = studip_utf8decode($value);
-            }
-        } else {
-            $layout = $GLOBALS['template_factory']->open('layouts/base');
-            $this->set_layout($layout);
-            PageLayout::setTitle(_('Bedingung'));
-            Navigation::activateItem('/tools/coursesets');
-        }
+
+        PageLayout::setTitle(_('Bedingung'));
+        Navigation::activateItem('/tools/coursesets');
         PageLayout::addSqueezePackage('userfilter');
-        $this->set_content_type('text/html;charset=windows-1252');
     }
 
     /**
      * Gets the configuration settings for a userfilter field. The type of the
      * field is set via the request.
      */
-    public function configure_action() {
+    public function configure_action()
+    {
         $this->conditionFields = UserFilterField::getAvailableFilterFields();
         if ($className = Request::option('fieldtype')) {
             list($fieldType, $param) = explode('_', $className);
@@ -50,7 +43,4 @@ class Userfilter_FieldController extends AuthenticatedController {
             $this->field = new $fieldType($param);
         }
     }
-
 }
-
-?>

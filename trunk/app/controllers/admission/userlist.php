@@ -15,28 +15,20 @@
  * @category    Stud.IP
  */
 
-class Admission_UserListController extends AuthenticatedController {
+class Admission_UserListController extends AuthenticatedController
+{
+    protected $utf8decode_xhr = true;
 
     /**
      * @see AuthenticatedController::before_filter
      */
-    public function before_filter(&$action, &$args) {
+    public function before_filter(&$action, &$args)
+    {
         parent::before_filter($action, $args);
-        if (Request::isXhr()) {
-            $this->via_ajax = true;
-            $this->set_layout(null);
-            $request = Request::getInstance();
-            foreach ($request as $key => $value) {
-                $request[$key] = studip_utf8decode($value);
-            }
-        } else {
-            $layout = $GLOBALS['template_factory']->open('layouts/base');
-            $this->set_layout($layout);
-            PageLayout::setTitle(_('Personenlisten'));
-            Navigation::activateItem('/tools/coursesets/userlists');
-        }
+
+        PageLayout::setTitle(_('Personenlisten'));
+        Navigation::activateItem('/tools/coursesets/userlists');
         PageLayout::addSqueezePackage('admission');
-        $this->set_content_type('text/html;charset=windows-1252');
 
         $views = new ViewsWidget();
         $views->setTitle(_('Aktionen'));

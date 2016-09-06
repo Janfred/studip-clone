@@ -26,6 +26,8 @@ require_once 'lib/user_visible.inc.php';
 
 class NewsController extends StudipController
 {
+    protected $with_session = true;
+
     /**
      * Callback function being called before an action is executed.
      */
@@ -33,38 +35,24 @@ class NewsController extends StudipController
     {
         parent::before_filter($action, $args);
 
-        // open session
-        page_open(array('sess' => 'Seminar_Session',
-                        'auth' => 'Seminar_Default_Auth',
-                        'perm' => 'Seminar_Perm',
-                        'user' => 'Seminar_User'));
-
-        // set up user session
-        include 'lib/seminar_open.php';
-
-        $this->set_content_type('text/html; charset=windows-1252');
-
         $this->area_structure = [
             'global' => [
                 'title' => _('Stud.IP (systemweit)'),
-                'icon' => 'home'],
+                'icon'  => 'home',
+            ],
             'inst' => [
                 'title' => _('Einrichtungen'),
-                'icon' => 'institute'],
+                'icon'  => 'institute',
+            ],
             'sem' => [
                 'title' => _('Veranstaltungen'),
-                'icon' => 'seminar'],
+                'icon'  => 'seminar',
+            ],
             'user' => [
                 'title' => _('Profile'),
-                'icon' => 'person']];
-    }
-
-    /**
-     * Callback function being called after an action is executed.
-     */
-    function after_filter($action, $args)
-    {
-        page_close();
+                'icon'  => 'person',
+            ],
+        ];
     }
 
     /**

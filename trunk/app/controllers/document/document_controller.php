@@ -49,8 +49,8 @@ class DocumentController extends AuthenticatedController
         $layout = $this->get_template_factory()->open('document/dialog-layout.php');
         $layout->icon = $icon;
 
-        if (!Request::isXhr()) {
-            $layout->set_layout($GLOBALS['template_factory']->open('layouts/base'));
+        if (!Request::isXhr() && $this->layout) {
+            $layout->set_layout($this->layout);
         }
 
         $this->set_layout($layout);

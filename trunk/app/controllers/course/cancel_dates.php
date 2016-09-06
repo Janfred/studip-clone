@@ -15,6 +15,8 @@
 
 class Course_CancelDatesController extends AuthenticatedController
 {
+    protected $utf8decode_xhr = true;
+
     /**
      * common tasks for all actions
      */
@@ -49,15 +51,6 @@ class Course_CancelDatesController extends AuthenticatedController
         }
         PageLayout::setHelpKeyword("Basis.VeranstaltungenVerwaltenAendernVonZeitenUndTerminen");
         PageLayout::setTitle(Course::findCurrent()->getFullname()." - " . _("Veranstaltungstermine absagen"));
-        $this->set_content_type('text/html;charset=windows-1252');
-        if (Request::isXhr()) {
-            $this->set_layout(null);
-            $this->response->add_header('X-Title', PageLayout::getTitle());
-            $request = Request::getInstance();
-            foreach ($request as $key => $value) {
-                $request[$key] = studip_utf8decode($value);
-            }
-        }
     }
 
     function index_action()

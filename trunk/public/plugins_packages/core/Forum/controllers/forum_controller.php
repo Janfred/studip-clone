@@ -18,8 +18,8 @@ class ForumController extends StudipController {
         $args[0] = $to;
 
         return PluginEngine::getURL($this->dispatcher->current_plugin, $params, join('/', $args));
-    } 
-    
+    }
+
     /* * * * * * * * * * * * * * * * * * * * * * * * * */
     /* * * * * H E L P E R   F U N C T I O N S * * * * */
     /* * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -27,7 +27,7 @@ class ForumController extends StudipController {
     {
         return ForumHelpers::getSeminarId();
     }
-    
+
     /**
      * Common code for all actions: set default layout and page title.
      *
@@ -40,16 +40,7 @@ class ForumController extends StudipController {
 
         parent::before_filter($action, $args);
 
-        // set correct encoding if this is an ajax-call
-        if (Request::isAjax()) {
-            header('Content-Type: text/html; charset=Windows-1252');
-        }
-        
         $this->flash = Trails_Flash::instance();
-
-        // set default layout
-        $layout = $GLOBALS['template_factory']->open('layouts/base');
-        $this->set_layout($layout);
 
         // Set help keyword for Stud.IP's user-documentation and page title
         PageLayout::setHelpKeyword('Basis.Forum');
@@ -78,7 +69,7 @@ class ForumController extends StudipController {
         if (Request::int('page')) {
             ForumHelpers::setPage(Request::int('page'));
         }
-        
+
         $this->seminar_id = $this->getId();
-    }   
+    }
 }

@@ -30,9 +30,7 @@ class OnlineController extends AuthenticatedController
         Navigation::activateItem('/community/online');
         SkipLinks::addIndex(_('Wer ist online?'), 'layout_content', 100);
 
-        $this->set_layout($GLOBALS['template_factory']->open('layouts/base'));
-
-        $this->settings    = $GLOBALS['user']->cfg->MESSAGING_SETTINGS;
+        $this->settings = $GLOBALS['user']->cfg->MESSAGING_SETTINGS;
 
         // If "show_groups" setting is not set, default it to whether the
         // user has organized his buddies in groups
@@ -44,7 +42,6 @@ class OnlineController extends AuthenticatedController
 
             $this->settings['show_groups'] = $has_contact_groups;
         }
-
     }
 
     /**

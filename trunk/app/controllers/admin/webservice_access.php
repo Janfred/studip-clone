@@ -31,10 +31,6 @@ class Admin_WebserviceAccessController extends AuthenticatedController
             throw new AccessDeniedException(_("Die Webservices sind in diesem System nicht aktiviert."));
         }
 
-
-        $layout = $template_factory->open('layouts/base');
-        $this->set_layout($layout);
-
         PageLayout::setTitle(_('Verwaltung der Zugriffsregeln für Webservices'));
         Navigation::activateItem('/admin/config/webservice_access');
 

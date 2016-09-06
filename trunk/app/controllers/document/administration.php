@@ -15,12 +15,6 @@ class Document_AdministrationController extends AuthenticatedController {
         parent::before_filter($action, $args);
         Navigation::activateItem('/admin/config/document_area');
         PageLayout::setTitle(_('Dateibereich') . ' - ' . _('Administration'));
-         if (Request::isXhr()) {
-            $this->set_layout(null);
-            $this->set_content_type('text/html;Charset=windows-1252');
-        } else {
-            $this->set_layout($GLOBALS['template_factory']->open('layouts/base'));
-        }
         if(empty($_SESSION['document_config_filter'])){
             $_SESSION['document_config_filter'] = 'all';
         }

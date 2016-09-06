@@ -31,7 +31,7 @@ class JsupdaterController extends AuthenticatedController
         parent::before_filter($action, $args);
 
         // Check for a valid logged in user (only when an ajax request occurs)
-        if (Request::isXHR() && (!is_object($GLOBALS['user']) || $GLOBALS['user']->id === 'nobody')) {
+        if (Request::isXhr() && (!is_object($GLOBALS['user']) || $GLOBALS['user']->id === 'nobody')) {
             $this->response->set_status(403);
             $action = 'nop';
         }

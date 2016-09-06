@@ -32,9 +32,6 @@ class EventLogController extends AuthenticatedController
         $perm->check('root');
 
         // set page title and navigation
-        $layout = $template_factory->open('layouts/base_without_infobox');
-        $this->set_layout($layout);
-
         if ($action === 'show') {
             PageLayout::setTitle(_('Anzeige der Log-Events'));
             Navigation::activateItem('/admin/log/show');

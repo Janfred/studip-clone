@@ -20,9 +20,10 @@
 * notification. The course's ID is transmitted as
 * subject of the notification.
 */
-class Course_EnrolmentController extends AuthenticatedController {
-
+class Course_EnrolmentController extends AuthenticatedController
+{
     protected $allow_nobody = true;
+    protected $utf8decode_xhr = true;
 
     /**
     * common tasks for all actions
@@ -60,17 +61,8 @@ class Course_EnrolmentController extends AuthenticatedController {
         PageLayout::setTitle($course->getFullname() . " - " . _("Veranstaltungsanmeldung"));
         PageLayout::addSqueezePackage('enrolment');
         if (Request::isXhr()) {
-            $this->set_layout(null);
             $this->response->add_header('X-No-Buttons', 1);
-            $this->response->add_header('X-Title', PageLayout::getTitle());
-            $request = Request::getInstance();
-            foreach ($request as $key => $value) {
-                $request[$key] = studip_utf8decode($value);
-            }
-        } else {
-            $this->set_layout($GLOBALS['template_factory']->open('layouts/base'));
         }
-        $this->set_content_type('text/html;charset=windows-1252');
         if (Request::submitted('cancel')) {
             $this->redirect(URLHelper::getURL('dispatch.php/course/details/', array('sem_id' => $this->course_id)));
         }

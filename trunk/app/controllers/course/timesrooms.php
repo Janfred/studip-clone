@@ -93,13 +93,16 @@ class Course_TimesroomsController extends AuthenticatedController
             if ($semester_id === 'all') {
                 $semester_id = '';
             }
-            $this->response->add_header('X-Raumzeit-Update-Times', json_encode(studip_utf8encode(array(
-                                                                                                     'course_id' => $this->course->id,
-                                                                                                     'html'      => $this->course->getDatesHTML(array(
-                                                                                                                                                    'semester_id' => $semester_id,
-                                                                                                                                                    'show_room'   => true,
-                                                                                                                                                )) ?: _('nicht angegeben'),
-                                                                                                 ))));
+            $this->response->add_header(
+                'X-Raumzeit-Update-Times',
+                json_encode(studip_utf8encode([
+                    'course_id' => $this->course->id,
+                    'html'      => $this->course->getDatesHTML([
+                        'semester_id' => $semester_id,
+                        'show_room'   => true,
+                    ]) ?: _('nicht angegeben'),
+                ]))
+            );
         }
     }
 

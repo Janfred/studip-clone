@@ -21,7 +21,8 @@
 
 class HelpContentController extends AuthenticatedController
 {
-    
+    protected $utf8decode_xhr = true;
+
     /**
      * Callback function being called before an action is executed.
      */
@@ -29,20 +30,6 @@ class HelpContentController extends AuthenticatedController
     {
         parent::before_filter($action, $args);
 
-        // AJAX request, so no page layout.
-        if (Request::isXhr()) {
-            $this->via_ajax = true;
-            $this->set_layout(null);
-            $request = Request::getInstance();
-            foreach ($request as $key => $value) {
-                $request[$key] = studip_utf8decode($value);
-            }
-        // Open base layout for normal view
-        } else {
-            $layout = $GLOBALS['template_factory']->open('layouts/base');
-            $this->set_layout($layout);
-        }
-        $this->set_content_type('text/html;charset=windows-1252');
         $this->help_admin = $GLOBALS['perm']->have_perm('root') || RolePersistence::isAssignedRole($GLOBALS['user']->id, 'Hilfe-Administrator(in)');
     }
 
@@ -80,7 +67,7 @@ class HelpContentController extends AuthenticatedController
 
         // load help content
         $this->help_contents = HelpContent::GetContentByFilter($this->help_content_searchterm);
-        
+
         // save settings
         if (Request::submitted('save_help_content_settings')) {
             foreach($this->help_contents as $help_content_id => $help_content) {
@@ -112,11 +99,11 @@ class HelpContentController extends AuthenticatedController
         PageLayout::setHelpKeyword('Basis.HelpContentAdmin');
         // set navigation
         Navigation::activateItem('/admin/config/help_content');
-        
+
         // load help content
         $this->conflicts = HelpContent::GetConflicts();
     }
-        
+
     /**
      * resolves help content conflict
      *
@@ -129,7 +116,7 @@ class HelpContentController extends AuthenticatedController
             throw new AccessDeniedException();
         }
         $GLOBALS['perm']->check('root');
-        
+
         $this->help_content = HelpContent::GetContentByID($id);
         if ($mode == 'accept') {
             $this->help_content->studip_version    = $GLOBALS['SOFTWARE_VERSION'];
@@ -140,7 +127,7 @@ class HelpContentController extends AuthenticatedController
         }
         $this->redirect('help_content/admin_conflicts');
     }
-    
+
     /**
      * edit help content
      *
@@ -153,6 +140,8 @@ class HelpContentController extends AuthenticatedController
         }
         CSRFProtection::verifySecurityToken();
         if ($id == 'new') {
+            PageLayout::setTitle(_('Hilfe-Text erstellen'));
+
             $this->help_content = new HelpContent();
             $this->help_content->global_content_id = $this->content_id = md5(uniqid('help_content',1));
             $this->help_content->studip_version    = $GLOBALS['SOFTWARE_VERSION'];
@@ -160,15 +149,12 @@ class HelpContentController extends AuthenticatedController
             $this->help_content->custom            = 1;
             $this->help_content->language          = Request::get('help_content_language') ?: substr($GLOBALS['user']->preferred_language, 0, 2);
             $this->help_content->route             = Request::get('help_content_route');
-            if ($this->via_ajax) {
-                header('X-Title: ' . _('Hilfe-Text erstellen'));
-            }
         } else {
+            PageLayout::setTitle(_('Hilfe-Text bearbeiten'));
+
             $this->help_content = HelpContent::GetContentByID($id);
-            if ($this->via_ajax) {
-                header('X-Title: ' . _('Hilfe-Text bearbeiten'));
-            }
         }
+
         if (is_object($this->help_content)) {
             if (Request::submitted('save_help_content')) {
                 if ($id != 'new' AND $this->help_content->isNew())
@@ -183,7 +169,7 @@ class HelpContentController extends AuthenticatedController
                     $old_id = $this->help_content->getId();
                     $this->help_content->setNew(true);
                     $this->help_content->setId($this->help_content->getNewId());
-                    $this->help_content->content_id = $this->help_content->getId(); 
+                    $this->help_content->content_id = $this->help_content->getId();
                     if ($this->help_content->store()) {
                         $delete_help_content = HelpContent::GetContentByID($old_id);
                         //$delete_help_content->delete();
@@ -192,7 +178,8 @@ class HelpContentController extends AuthenticatedController
                 }*/
                 $this->help_content->installation_id = $GLOBALS['STUDIP_INSTALLATION_ID'];
                 $this->help_content->store();
-                header('X-Dialog-Close: 1');
+
+                $this->response->add_header('X-Dialog-Close', '1');
             }
         }
 
@@ -202,7 +189,7 @@ class HelpContentController extends AuthenticatedController
 
     /**
      * delete help content
-     * 
+     *
      * @param String $id         id of help content
      */
     function delete_action($id)
@@ -210,11 +197,10 @@ class HelpContentController extends AuthenticatedController
         if (!$this->help_admin) {
             return $this->render_nothing();
         }
-        // Output as dialog (Ajax-Request) or as Stud.IP page?
-        if ($this->via_ajax) {
-            header('X-Title: ' . _('Hilfe-Text löschen'));
-        }
+
         CSRFProtection::verifySecurityToken();
+        PageLayout::setTitle(_('Hilfe-Text löschen'));
+
         $this->help_content = HelpContent::GetContentByID($id);
         if (is_object($this->help_content)) {
             if (Request::submitted('delete_help_content')) {

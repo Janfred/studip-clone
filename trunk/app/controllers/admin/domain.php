@@ -28,11 +28,7 @@ class Admin_DomainController extends AuthenticatedController
         # user must have root permission
         $perm->check('root');
 
-        # set page title and navigation
-        $layout = $template_factory->open('layouts/base');
-        $layout->infobox = $this->set_sidebar();
-        $this->set_layout($layout);
-
+        # set page title
         PageLayout::setTitle(_('Verwaltung der Nutzerdomänen'));
         PageLayout::setHelpKeyword('Admins.Nutzerdomaenen');
         Navigation::activateItem('/admin/user/user_domains');

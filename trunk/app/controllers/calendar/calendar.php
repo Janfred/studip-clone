@@ -15,11 +15,6 @@
 
 class Calendar_CalendarController extends AuthenticatedController
 {
-
-    public function __construct($dispatcher) {
-        parent::__construct($dispatcher);
-    }
-
     public function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);

@@ -20,7 +20,6 @@ class Document_ClosedController  extends AuthenticatedController
         parent::before_filter($action, $args);
         //Configurations for the Documentarea for this user
         $this->userConfig = DocUsergroupConfig::getUserConfig($GLOBALS['user']->id);
-        $this->set_layout($GLOBALS['template_factory']->open('layouts/base'));
         PageLayout::setTitle(_('Dateiverwaltung'));
         PageLayout::setHelpKeyword('Basis.Dateien');
         Navigation::activateItem('/document/files');

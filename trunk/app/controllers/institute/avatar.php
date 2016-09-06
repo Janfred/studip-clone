@@ -34,10 +34,6 @@ class Institute_AvatarController extends AuthenticatedController
         PageLayout::setTitle(getHeaderLine($this->institute_id) . ' - ' . _('Bild ändern'));
 
         Navigation::activateItem('/admin/institute/details');
-
-        # choose base layout w/o infobox and set tabs
-        $layout = $GLOBALS['template_factory']->open('layouts/base_without_infobox');
-        $this->set_layout($layout);
     }
 
     /**

@@ -37,8 +37,7 @@ class LocalizationsController extends Trails_Controller {
         // invalid language?
         if (!isset($GLOBALS['INSTALLED_LANGUAGES'][$action])) {
             $action = "not_acceptable";
-        }
-        else {
+        } else {
             $action = "show";
         }
     }

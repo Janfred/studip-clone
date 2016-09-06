@@ -61,12 +61,6 @@ class Course_ScmController extends StudipController
                                    && $GLOBALS['auth']->auth['uid'] == 'nobody');
         $this->priviledged = $GLOBALS['perm']->have_studip_perm('tutor', $GLOBALS['SessSemName'][1]);
 
-        if (Request::isXhr()) {
-            $this->set_content_type('text/html;charset=Windows-1252');
-        } else {
-            $this->set_layout($GLOBALS['template_factory']->open('layouts/base'));
-        }
-
         if (!in_array($action, words('index create edit move delete'))) {
             array_unshift($args, $action);
             $action = 'index';

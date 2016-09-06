@@ -41,8 +41,6 @@ class Course_StudyAreasController extends AuthenticatedController
             return FALSE;
         }
 
-        $this->set_content_type('text/html; charset=windows-1252');
-
         // Init Studyareas-Step for
         $this->step = new StudyAreasWizardStep();
         $this->values = array();
