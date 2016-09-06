@@ -1,8 +1,3 @@
-<?
-// TODO: This should be removed when archive_assi uses PageLayout::postMessage()
-if ($message) parse_msg($message);
-?>
-
 <? if (empty($seminars)): ?>
     <?= MessageBox::info(_('Es befinden sich zur Zeit keine Veranstaltungen im Archiv, an denen Sie teilgenommen haben.')) ?>
 <? else: ?>
