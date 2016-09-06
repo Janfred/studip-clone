@@ -22,13 +22,6 @@ class MessagesController extends AuthenticatedController {
 
         PageLayout::setTitle(_("Nachrichten"));
         PageLayout::setHelpKeyword("Basis.InteraktionNachrichten");
-
-        if (Request::isXhr()&& Request::isGet()) {
-            $request = Request::getInstance();
-            foreach(words('default_body default_subject') as $key) {
-                $request[$key] = Request::removeMagicQuotes($_GET[$key]);
-            }
-        }
     }
 
     public function overview_action($message_id = null)

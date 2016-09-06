@@ -26,11 +26,7 @@ class Request implements ArrayAccess, IteratorAggregate
      */
     private function __construct()
     {
-        $params = array_merge($_GET, $_POST);
-
-        foreach ($params as $key => $value) {
-            $this->params[$key] = self::removeMagicQuotes($value);
-        }
+        $this->params = array_merge($_GET, $_POST);
     }
 
     /**
@@ -437,30 +433,6 @@ class Request implements ArrayAccess, IteratorAggregate
             }
         } else {
             $value = addslashes($value);
-        }
-
-        return $value;
-    }
-
-    /**
-     * Strip magic quotes from a given string or array. If the PHP setting
-     * "magic_quotes_gpc" is enabled, stripslashes() is used on the value.
-     * If the parameter is an array, magic quoting is stripped recursively.
-     *
-     * @param mixed $value    string or array value to be unquoted
-     *
-     * @return mixed  unquoted string or array
-     */
-    public static function removeMagicQuotes($value)
-    {
-        if (get_magic_quotes_gpc()) {
-            if (is_array($value)) {
-                foreach ($value as $key => $val) {
-                    $value[$key] = self::removeMagicQuotes($val);
-                }
-            } else {
-                $value = stripslashes($value);
-            }
         }
 
         return $value;
