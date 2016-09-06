@@ -1,6 +1,3 @@
-<? if ($msg) : ?>
-    <?= parse_msg($msg) ?>
-<? endif ?>
 <table class="default nohover">
     <tr>
         <td valign="top">
