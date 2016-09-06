@@ -41,8 +41,6 @@ use Studip\Button, Studip\LinkButton;
 
 require_once 'lib/msg.inc.php';
 
-echo "<table class=\"blank\" border=\"0\" width=\"100%\" ";
-echo "align=\"left\" cellspacing=\"0\" cellpadding=\"0\">\n";
 // it's forbidden to use the command "new" with a given config_id
 if (Request::option('com') == 'new') {
     $config_id = '';
@@ -57,15 +55,15 @@ if (Request::option('com') == 'new') {
                 $module = ExternModule::GetInstance($range_id, $type['module'], '', 'NEW');
             }
             else {
-                $message = sprintf(_("Es wurden bereits %s Konfigurationen angelegt. Sie können für dieses Module keine weiteren Konfigurationen anlegen.")
-, $GLOBALS['EXTERN_MAX_CONFIGURATIONS']);
-                my_error($message, "blank", 1);
-                echo "<tr><td class=\"blank\" align=\"center\">\n";
+                echo MessageBox::error(sprintf(_('Es wurden bereits %s Konfigurationen angelegt. Sie können für dieses Module keine weiteren Konfigurationen anlegen.')
+                    , $GLOBALS['EXTERN_MAX_CONFIGURATIONS']));
+                
                 echo LinkButton::create("<< " . _("Zurück"), URLHelper::getURL('?list=TRUE'));
-                echo "</td></tr>\n</table>\n";
-                print_footer();
+                $template = $GLOBALS['template_factory']->open('layouts/base.php');
+                $template->content_for_layout = ob_get_clean();
+                echo $template->render();
                 page_close();
-                exit;
+                die;
             }
         }
     }
@@ -111,7 +109,6 @@ foreach ($elements as $element) {
     }
 }
 if (Request::option('com') == 'new' || Request::option('com') == 'edit' || Request::option('com') == 'open' || Request::option('com') == 'close') {
-    echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
     $module->printoutEdit($edit_open, $_POST, "", $edit);
 }
 
@@ -121,10 +118,7 @@ if (Request::option('com') == 'store') {
     $fault = FALSE;
     foreach ($faulty_values as $faulty) {
         if (in_array(TRUE, $faulty)) {
-            $message = sprintf(_("Bitte korrigieren Sie die mit %s gekennzeichneten Werte!"),
-                    "<font color=\"#ff0000\" size=\"+1\"><b>*</b></font>");
-            my_info($message);
-            echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
+            echo MessageBox::info(_("Bitte korrigieren Sie die mit * gekennzeichneten Werte!"));
             $module->printoutEdit($edit_open, $_POST,
                     $faulty_values, $edit);
             $fault = TRUE;
@@ -138,46 +132,29 @@ if (Request::option('com') == 'store') {
         if ($edit == "Main" && $_POST["Main_name"] != $module->config->config_name) {
             if (!ExternConfig::ChangeName($module->config->range_id, $module->getType(), $module->config->getId(),
                     $module->config->config_name, $_POST["Main_name"])) {
-                $message = _("Der Konfigurationsname wurde bereits für eine Konfiguration dieses Moduls vergeben. Bitte geben Sie einen anderen Namen ein.");
-                my_error($message, "blank", 1);
-                echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
+                PageLayout::postError(_('Der Konfigurationsname wurde bereits für eine Konfiguration dieses Moduls vergeben. Bitte geben Sie einen anderen Namen ein.'));
                 $module->printoutEdit($edit_open, "$_POST", "", $edit);
             }
             $module->store($edit, $_POST);
-            $message = _("Die eingegebenen Werte wurden übernommen und der Name der Konfiguration geändert.");
-            my_msg($message, "blank", 1);
-            echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
+            PageLayout::postSuccess(_('Die eingegebenen Werte wurden übernommen und der Name der Konfiguration geändert.'));
             $module->printoutEdit($edit_open, "", "", $edit);
         } else {
             $module->store($edit, $_POST);
-            $message = _("Die eingegebenen Werte wurden übernommen.");
-            my_msg($message, "blank", 1);
-            echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
+            PageLayout::postSuccess(_('Die eingegebenen Werte wurden übernommen.'));
             $module->printoutEdit($edit_open, "", "", $edit);
         }
     }
 }
 
-echo "</td></tr>\n";
+
 if (!$edit_open[$edit]) {
-    echo "<tr><td class=\"blank\">&nbsp;</td></tr>\n";
-    echo "<tr><td class=\"blank\" align=\"center\">";
-
-    echo LinkButton::create("<< " . _("Zurück"), URLHelper::getURL('?list=TRUE'));
-
-    echo "</td></tr>\n";
+    echo  LinkButton::create("<< " . _("Zurück"), URLHelper::getURL('?list=TRUE'));;
 }
-echo "</table></td></tr></table>\n</td>\n<td width=\"10%\" class=\"blank\" valign=\"top\">\n";
-echo "<table class=\"blank\" border=\"0\" width=\"100%\" ";
-echo "align=\"left\" cellspacing=\"0\" cellpadding=\"5\">\n";
-echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
 
-$info_edit_element = _("Um die Werte eines einzelnen Elements zu ändern, klicken Sie bitte den &quot;Übernehmen&quot;-Button innerhalb des jeweiligen Elements.");
+Helpbar::get()->addPlainText(_('Information'), _('Um die Werte eines einzelnen Elements zu ändern, klicken Sie bitte den "Übernehmen"-Button innerhalb des jeweiligen Elements.'));
+
 // the type of this module is not Global
 if ($module->getType() != 0) {
-    $info_preview = _("Um eine Vorschau der Seite zu erhalten, klicken Sie bitte hier:");
-    $info_preview .= "<br>&nbsp;<div align=\"center\">";
-
     $url = sprintf("%sextern.php?module=%s&range_id=%s&preview=1&config_id=%s",
                    $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'],
                    $module->getName(),
@@ -187,37 +164,10 @@ if ($module->getType() != 0) {
     if ($global_config = ExternConfig::GetGlobalConfiguration($module->config->range_id)) {
         $url .= "&global_id=$global_config";
     }
-
-    $info_preview .= LinkButton::create(_("Vorschau"), $url, array("target" => "_blank"));
-    $info_preview .= "</div><br>";
-
-    $info_preview .= _("Die Vorschau wird in einem neuen Fenster geöffnet.") . "<br>";
-    $info_preview .= _("Es werden eventuell nicht alle Einstellungen in der Vorschau angezeigt.");
-
-    $info_content = array(
-            array("kategorie" => "Information:",
-                        "eintrag" => array(
-                            array("icon" => Icon::create('info', 'clickable'),
-                                        "text" => $info_edit_element
-                            )
-            )),
-            array("kategorie" => "Aktion:",
-                    "eintrag" => array(
-                            array("icon" => Icon::create('info', 'clickable'),
-                                        "text" => $info_preview,
-                            )
-            )));
-}
-// the type is Global -> no preview
-else {
-    $info_content = array(
-            array("kategorie" => "Information:",
-                        "eintrag" => array(
-                            array("icon" => Icon::create('info', 'clickable'),
-                                        "text" => $info_edit_element
-                            )
-            )));
+    
+    $actions = new ActionsWidget();
+    $actions->addLink(_('Vorschau'), $url, Icon::create('question-circle', 'clickable', ['title' => _('Vorschau')]), ['target' => '_blank']);
+    Sidebar::get()->addWidget($actions);
 }
 
-print_infobox($info_content, "sidebar/institute-sidebar.png");
 ?>
