@@ -111,15 +111,11 @@ if (Config::get()->ELEARNING_INTERFACE_ENABLE)
 
     if ($messages["info"] != "")
     {
-        echo "<table>";
-        my_info($messages["info"]);
-        echo "</table>";
+        MessageBox::info($messages["info"]);
     }
     if ($messages["error"] != "")
     {
-        echo "<table>";
-        my_error($messages["error"]);
-        echo "</table>";
+        echo MessageBox::error($messages['error']);
     }
 
     ?>
