@@ -22,6 +22,10 @@ class MessagesController extends AuthenticatedController {
 
         PageLayout::setTitle(_("Nachrichten"));
         PageLayout::setHelpKeyword("Basis.InteraktionNachrichten");
+
+        // The default body and/or subject passed via GET url parameters
+        // should not be utf8decoded and thus need to be restored in their
+        // pristine values
         if (Request::isXhr() && Request::isGet()) {
             $request = Request::getInstance();
             foreach (words('default_body default_subject') as $key) {
