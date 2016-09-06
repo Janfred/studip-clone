@@ -111,7 +111,7 @@ if (Config::get()->ELEARNING_INTERFACE_ENABLE)
 
     if ($messages["info"] != "")
     {
-        MessageBox::info($messages["info"]);
+        echo MessageBox::info($messages["info"]);
     }
     if ($messages["error"] != "")
     {
