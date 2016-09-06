@@ -29,7 +29,6 @@ require '../lib/bootstrap.php';
 ob_start();
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", 'user' => "Seminar_User"));
 $perm->check("autor");
-require_once 'lib/msg.inc.php';
 include 'lib/seminar_open.php'; // initialise Stud.IP-Session
 
 if (Config::get()->ELEARNING_INTERFACE_ENABLE) {

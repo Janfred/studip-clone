@@ -39,7 +39,6 @@ if (!$perm->is_fak_admin()){
 }
 
 include 'lib/seminar_open.php'; // initialise Stud.IP-Session
-include 'lib/msg.inc.php';
 
 PageLayout::setTitle($UNI_NAME_CLEAN . " - " . _("Veranstaltungshierachie bearbeiten"));
 Navigation::activateItem('/admin/locations/sem_tree');
@@ -76,16 +75,16 @@ if (is_array($_possible_open_items)) {
 
 if ($search_obj->search_done){
     if ($search_obj->search_result->numRows > 50){
-        $_msg = "error§" . _("Es wurden mehr als 50 Veranstaltungen gefunden! Bitte schränken Sie Ihre Suche weiter ein.");
+        PageLayout::postError(_("Es wurden mehr als 50 Veranstaltungen gefunden! Bitte schränken Sie Ihre Suche weiter ein."));
     } elseif ($search_obj->search_result->numRows > 0){
-        $_msg = "msg§" .sprintf(_("Es wurden %s Veranstaltungen gefunden, und in Ihre Merkliste eingefügt"),$search_obj->search_result->numRows);
+        PageLayout::postSuccess(sprintf(_("Es wurden %s Veranstaltungen gefunden, und in Ihre Merkliste eingefügt"),$search_obj->search_result->numRows));
         if (is_array($_SESSION['_marked_sem']) && count($_SESSION['_marked_sem'])){
             $_SESSION['_marked_sem'] = array_merge((array)$_SESSION['_marked_sem'], (array)$search_obj->search_result->getDistinctRows("seminar_id"));
         } else {
             $_SESSION['_marked_sem'] = $search_obj->search_result->getDistinctRows("seminar_id");
         }
     } else {
-        $_msg = "info§" . _("Es wurden keine Veranstaltungen gefunden, auf die Ihre Suchkriterien zutreffen.");
+        PageLayout::postInfo(_("Es wurden keine Veranstaltungen gefunden, auf die Ihre Suchkriterien zutreffen."));
     }
 }
 
@@ -100,7 +99,7 @@ if (Request::option('cmd') == "MarkList"){
                     unset($_SESSION['_marked_sem'][$sem_mark_list[$i]]);
                 }
             }
-            $_msg .= "msg§" . sprintf(_("%s Veranstaltung(en) wurde(n) aus Ihrer Merkliste entfernt."),$count_del);
+            PageLayout::postSuccess(sprintf(_("%s Veranstaltung(en) wurde(n) aus Ihrer Merkliste entfernt."),$count_del));
         } else {
             $tmp = explode("_",Request::quoted('mark_list_aktion'));
             $item_ids[0] = $tmp[1];
@@ -120,8 +119,9 @@ if (Request::option('cmd') == "MarkList"){
                 }
                 $_msg .= sprintf(_("%s Veranstaltung(en) in <b>" .htmlReady($the_tree->tree->tree_data[$item_ids[$i]]['name']) . "</b> eingetragen.<br>"), $count_ins);
             }
-            if ($_msg)
-                $_msg = "msg§" . $_msg;
+            if ($_msg) {
+                PageLayout::postSuccess($_msg);
+            }
             $the_tree->tree->init();
         }
     }
@@ -135,12 +135,12 @@ if ($the_tree->mode == "MoveItem" || $the_tree->mode == "CopyItem"){
     } else {
         $text = _("Der Kopiermodus ist aktiviert. Bitte wählen Sie ein Einfügesymbol %s aus, um das Element <b>%s</b> an diese Stelle zu kopieren.%s");
     }
-    $_msg .= "info§" . sprintf($text ,
-                                Icon::create('arr_2right', 'sort', ['title' => _('Einfügesymbol')])->asImg(),
-                                htmlReady($the_tree->tree->tree_data[$the_tree->move_item_id]['name']),
-                                "<div align=\"right\">"
-                                .LinkButton::createCancel(_('Abbrechen'), $the_tree->getSelf("cmd=Cancel&item_id=$the_tree->move_item_id"), array('title' => _("Verschieben / Kopieren abbrechen")))
-                                ."</div>");
+    PageLayout::postInfo(sprintf($text ,
+            Icon::create('arr_2right', 'sort', ['title' => _('Einfügesymbol')])->asImg(),
+            htmlReady($the_tree->tree->tree_data[$the_tree->move_item_id]['name']),
+            "<div align=\"right\">"
+            .LinkButton::createCancel(_('Abbrechen'), $the_tree->getSelf("cmd=Cancel&item_id=$the_tree->move_item_id"), array('title' => _("Verschieben / Kopieren abbrechen")))
+            ."</div>"));
 }
 
 
@@ -149,16 +149,7 @@ if ($the_tree->mode == "MoveItem" || $the_tree->mode == "CopyItem"){
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
     <tr>
     <td class="blank" width="75%" align="left" valign="top">
-    <?
-if ($_msg)  {
-    echo "\n<table width=\"99%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">";
-    parse_msg ($_msg,"§","blank",1,false);
-    echo "\n</table>";
-} else {
-    echo "<br><br>";
-}
-$the_tree->showSemTree();
-    ?>
+    <? $the_tree->showSemTree(); ?>
     </td>
     <td class="blank" align="left" valign="top">
     <div>

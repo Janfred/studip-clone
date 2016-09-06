@@ -28,8 +28,6 @@ require_once('lib/messaging.inc.php');
 require_once('lib/evaluation/classes/db/EvaluationDB.class.php');
 
 function edit_email($user, $email, $force=False) {
-    $msg = '';
-
     $query = "SELECT email, username, auth_plugin
               FROM auth_user_md5
               WHERE user_id = ?";
@@ -42,15 +40,15 @@ function edit_email($user, $email, $force=False) {
     $auth_plugin = $row['auth_plugin'];
 
     if ($email_cur == $email && !$force) {
-        return array(True, $msg);
+        return true;
     }
 
     if (StudipAuthAbstract::CheckField("auth_user_md5.Email", $auth_plugin) || LockRules::check($user->user_id, 'email')) {
-        return array(False, $msg);
+        return false;
     }
 
     if (!$GLOBALS['ALLOW_CHANGE_EMAIL']) {
-        return array(False, $msg);
+        return false;
     }
 
     $validator = new email_validation_class; ## Klasse zum Ueberpruefen der Eingaben
@@ -135,7 +133,7 @@ function edit_email($user, $email, $force=False) {
         $mail = StudipMail::sendMessage($email, $subject, $mailbody);
 
         if(!$mail) {
-            return array(True, $msg);
+            return true;
         }
 
         $query = "UPDATE auth_user_md5 SET validation_key = ? WHERE user_id = ?";
@@ -334,48 +332,7 @@ class about extends messaging
         }
         echo "</select>\n";
     }
-
-    //Displays Errosmessages (kritischer Abbruch, Symbol "X")
-
-    function my_error($msg)
-    {
-        echo '<tr><td>';
-        echo MessageBox::error($msg);
-        echo '</td></tr>';
-    }
-
-
-    //Displays  Successmessages (Information über erfolgreiche Aktion, Symbol Haken)
-
-    function my_msg($msg)
-    {
-        echo '<tr><td>';
-        echo MessageBox::success($msg);
-        echo '</td></tr>';
-    }
-
-    //Displays  Informationmessages  (Hinweisnachrichten, Symbol Ausrufungszeichen)
-
-    function my_info($msg)
-    {
-        echo '<tr><td>';
-        echo MessageBox::info($msg);
-        echo '</td></tr>';
-    }
-
-    function parse_msg($long_msg,$separator="§") {
-
-        $msg = explode ($separator,$long_msg);
-        for ($i=0; $i < count($msg); $i=$i+2) {
-            switch ($msg[$i]) {
-                case "error" : $this->my_error($msg[$i+1]); break;
-                case "info" : $this->my_info($msg[$i+1]); break;
-                case "msg" : $this->my_msg($msg[$i+1]); break;
-            }
-        }
-        return;
-    }
-
+    
     /**
      * Changes visibility settings for the current user.
      *

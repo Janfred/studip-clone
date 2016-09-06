@@ -107,9 +107,6 @@ if (Request::option('com') == "do_upload_config") {
 
 ob_start();
 
-require_once 'lib/msg.inc.php'; //Funktionen für Nachrichtenmeldungen
-
-
 // copy existing configuration
 if (Request::option('com') == 'copyconfig') {
     if (Request::option('copyinstid') && Request::option('copyconfigid')) {

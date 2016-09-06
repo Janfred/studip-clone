@@ -34,8 +34,6 @@ $perm->check("root");
 include 'lib/seminar_open.php'; // initialise Stud.IP-Session
 // -- here you have to put initialisations for the current page
 
-require_once 'lib/msg.inc.php';
-
 PageLayout::setHelpKeyword("Basis.Ilias");
 PageLayout::setTitle(_("Verwaltung der Lernmodul-Schnittstelle"));
 Navigation::activateItem('/admin/config/elearning');

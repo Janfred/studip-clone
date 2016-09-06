@@ -43,7 +43,6 @@ object_set_visit_module('documents');
 
 // -- here you have to put initialisations for the current page
 require_once 'lib/datei.inc.php';
-require_once 'lib/msg.inc.php';
 
 $open = Request::option('open');
 $close = Request::option('close');
