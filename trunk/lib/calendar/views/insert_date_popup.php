@@ -346,7 +346,7 @@ if ($mcount > 3) {
     $atimex = getdate($imt);
     $i = 0;
     if (!$kalender && $preset_error != '') {
-        parse_window('infoß' . $preset_error, 'ß', '', '<div align="center">'. LinkButton::createCancel(_('schlieﬂen'), 'javascript:window.close();') .'</div>');
+        echo MessageBox::info($preset_error, ['<div align="center">'. LinkButton::createCancel(_('schlieﬂen'), 'javascript:window.close();') .'</div>']);
     } else {
         echo '<table class="blank" border=0 align="center"><tr valign=top>', "\n";
         while ($kalender && ($i < $mcount)) {

@@ -67,15 +67,6 @@ function parse_msg($long_msg,$separator="§", $class="blank", $colspan=2, $add_ro
     return;
 }
 
-function parse_msg_array($msg, $class = "blank", $colspan = 2, $add_row='', $small='')
-{
-    if (is_array($msg)) {
-        foreach($msg as $one_msg) {
-            list($type, $content) = $one_msg;
-            call_user_func('my_' . $type, $content, $class, $colspan);
-        }
-    }
-}
 
 //Kombinierte Nachrichten zerlegen und in eigenem Fenster anzeigen
 function parse_window($long_msg, $separator="§", $titel, $add_msg="")
