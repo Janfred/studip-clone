@@ -139,14 +139,13 @@ if (Request::submitted('download_selected')) {
     SkipLinks::addIndex(Navigation::getItem('/course/files/tree')->getTitle(), 'main_content', 100);
 $folder_tree = TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessSemName[1]));
 
-$question = $msg = '';
+$question = '';
+$msgs = [];
 
 if($zip_file_id === false){
-    $msg = 'error§'
-    . sprintf(_("Der Zip Download ist fehlgeschlagen. Bitte beachten Sie das Limit von maximal %s Dateien und die maximale Größe der zu zippenden Dateien von %s MB."),
+    $msgs['error'][] = sprintf(_("Der Zip Download ist fehlgeschlagen. Bitte beachten Sie das Limit von maximal %s Dateien und die maximale Größe der zu zippenden Dateien von %s MB."),
     (int)Config::GetInstance()->getValue('ZIP_DOWNLOAD_MAX_FILES'),
-    (int)Config::GetInstance()->getValue('ZIP_DOWNLOAD_MAX_SIZE') )
-    . '§';
+    (int)Config::GetInstance()->getValue('ZIP_DOWNLOAD_MAX_SIZE'));
 }
 
 //obskuren id+_?_ string zerpflücken
@@ -274,17 +273,17 @@ if ($rechte || $owner || $create_folder_perm) {
     //Loeschen von Dateien im wirklich-ernst Mode
     if ($open_cmd == 'rm') {
         if (delete_document($open_id))
-            $msg.="msg§" . _("Die Datei wurde gelöscht") . "§";
+            $msgs['success'][] = _("Die Datei wurde gelöscht");
         else
-            $msg.="error§" . _("Die Datei konnte nicht gelöscht werden") . "§";
+            $msgs['error'][] = _("Die Datei konnte nicht gelöscht werden");
         }
 
     //Loeschen von verlinkten Dateien im wirklich-ernst Mode
     if ($open_cmd == 'rl') {
         if (delete_link($open_id))
-            $msg.="msg§" . _("Die Verlinkung wurde gelöscht") . "§";
+            $msgs['success'][] = _("Die Verlinkung wurde gelöscht");
         else
-            $msg.="error§" . _("Die Verlinkung konnte nicht gelöscht werden") . "§";
+            $msgs['error'][] = _("Die Verlinkung konnte nicht gelöscht werden");
     }
 
     //wurde Code fuer Aendern des Namens und der Beschreibung von Ordnern oder Dokumenten ubermittelt (=id+"_c_"), wird entsprechende Funktion aufgerufen
@@ -564,17 +563,17 @@ if ($rechte && Request::submittedSome('move_to_sem', 'move_to_inst', 'move_to_to
             if ($folder_system_data["mode"] == 'move'){
                 $done = move_item($folder_system_data["move"], $new_range_id, $sid);
                 if (!$done){
-                    $msg .= "error§" . _("Verschiebung konnte nicht durchgeführt werden. Eventuell wurde im Ziel der Allgemeine Dateiordner nicht angelegt.") . "§";
+                    $msgs['error'][] =  _("Verschiebung konnte nicht durchgeführt werden. Eventuell wurde im Ziel der Allgemeine Dateiordner nicht angelegt.");
                 } else {
-                    $msg .= "msg§" . sprintf(_("%s Ordner, %s Datei(en) wurden verschoben."), $done[0], $done[1]) . '§';
+                    $msgs['success'][] = sprintf(_("%s Ordner, %s Datei(en) wurden verschoben."), $done[0], $done[1]);
                 }
             } else {
                 $done = copy_item($folder_system_data["move"], $new_range_id, $sid);
                 if (!$done){
-                    $msg .= "error§" . _("Kopieren konnte nicht durchgeführt werden. Eventuell wurde im Ziel der Allgemeine Dateiordner nicht angelegt.") . "§";
+                    $msgs['error'][] =  _("Kopieren konnte nicht durchgeführt werden. Eventuell wurde im Ziel der Allgemeine Dateiordner nicht angelegt.");
                 } else {
                     $s_name = get_object_name($sid, Request::submitted('move_to_sem') ? "sem" : "inst");
-                    $msg .= "msg§" . $s_name['name'] . ": " . sprintf(_("%s Ordner, %s Datei(en) wurden kopiert."), $done[0], $done[1]) . '§';
+                    $msgs['success'][] =  $s_name['name'] . ": " . sprintf(_("%s Ordner, %s Datei(en) wurden kopiert."), $done[0], $done[1]);
                 }
             }
         }
@@ -588,16 +587,16 @@ if ($open_cmd == 'md' && $folder_tree->isWritable($open_id, $user->id) && !Reque
     if ($folder_system_data["mode"] == 'move'){
         $done = move_item($folder_system_data["move"], $open_id);
         if (!$done){
-            $msg .= "error§" . _("Verschiebung konnte nicht durchgeführt werden.") . "§";
+            $msgs['error'][] =  _("Verschiebung konnte nicht durchgeführt werden.");
         } else {
-            $msg .= "msg§" . sprintf(_("%s Ordner, %s Datei(en) wurden verschoben."), $done[0], $done[1]) . '§';
+            $msgs['success'][] =  sprintf(_("%s Ordner, %s Datei(en) wurden verschoben."), $done[0], $done[1]);
         }
     } else {
         $done = copy_item($folder_system_data["move"], $open_id);
         if (!$done){
-            $msg .= "error§" . _("Kopieren konnte nicht durchgeführt werden.") . "§";
+            $msgs['error'][] =  _("Kopieren konnte nicht durchgeführt werden.");
         } else {
-            $msg .= "msg§" . sprintf(_("%s Ordner, %s Datei(en) wurden kopiert."), $done[0], $done[1]) . '§';
+            $msgs['success'][] = sprintf(_("%s Ordner, %s Datei(en) wurden kopiert."), $done[0], $done[1]);
         }
     }
     $folder_system_data["move"]='';
@@ -654,7 +653,7 @@ if ($rechte && Request::submitted('delete') && count(Request::optionArray('downl
         $deleted += delete_document($one);
     }
     if ($deleted) {
-        $msg .= "msg§" . sprintf(_("Es wurden %s Dateien gelöscht."), $deleted) . '§';
+        $msgs['success'][] = sprintf(_("Es wurden %s Dateien gelöscht."), $deleted);
     }
 
 }
@@ -823,15 +822,19 @@ ob_start();
 JS_for_upload();
 //we need this <body> tag, sad but true :)
 echo "\n<body onUnLoad=\"STUDIP.OldUpload.upload_end()\">";
+if (!empty($msgs)) {
+    foreach($msgs as $type => $messages) {
+        if(!empty($messages)){
+            foreach($messages as $message) {
+                echo MessageBox::$type($message);
+            }
+        }
+    }
+}
 ?>
 <table cellspacing="0" cellpadding="0" border="0" width="100%" id="main_content">
 
 <?
-if ($msg) {
-    echo "<tr><td class='blank' colspan=3>&nbsp;";
-    parse_msg($msg);
-    echo "</td></tr>";
-}
 if ($question) {
     echo $question;
 }
@@ -1218,8 +1221,7 @@ div.droppable.hover {
             }
         } else {
             //Infomeldung, wenn keine Dateien existieren:
-            $msg = _("Es existieren noch keine Dateien in dieser Veranstaltung.");
-            echo MessageBox::info($msg, $rechte ? array(sprintf(_("Klicken Sie auf %sOrdneransicht%s, um welche hochzuladen oder zu verlinken."), "<a href=\"".URLHelper::getLink('?cmd=tree')."\">", "</a>")) : array());
+            echo MessageBox::info(_("Es existieren noch keine Dateien in dieser Veranstaltung."), $rechte ? array(sprintf(_("Klicken Sie auf %sOrdneransicht%s, um welche hochzuladen oder zu verlinken."), "<a href=\"".URLHelper::getLink('?cmd=tree')."\">", "</a>")) : array());
         }
     }
 

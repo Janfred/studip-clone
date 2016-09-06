@@ -1088,17 +1088,19 @@ function getFileExtension($str) {
  * @return Can the given file be uploaded to Stud.IP?
  */
 function validate_upload($the_file, $real_file_name='') {
-    global $UPLOAD_TYPES, $msg, $SessSemName, $user, $auth;
+    global $UPLOAD_TYPES, $SessSemName;
 
     $the_file_size = $the_file['size'];
     $the_file_name = $the_file['name'];
-
+    $result = true;
     if (!$the_file) { # haben wir eine Datei?
-        $emsg.= "error§" . _("Sie haben keine Datei zum Hochladen ausgewählt!") . "§";
+        PageLayout::postError(_("Sie haben keine Datei zum Hochladen ausgewählt!"));
     } else { # pruefen, ob der Typ stimmt
         if (match_route("dispatch.php/messages/upload_attachment")) {
-            if (!$GLOBALS["ENABLE_EMAIL_ATTACHMENTS"] == true)
-                    $emsg.= "error§" . _("Dateianhänge für Nachrichten sind in dieser Installation nicht erlaubt!") . "§";
+            if (!$GLOBALS["ENABLE_EMAIL_ATTACHMENTS"] == true) {
+                PageLayout::postError(_("Dateianhänge für Nachrichten sind in dieser Installation nicht erlaubt!"));
+                $result = false;
+            }
             $active_upload_type = "attachments";
             $sem_status = $GLOBALS['perm']->get_perm();
         } else {
@@ -1124,6 +1126,8 @@ function validate_upload($the_file, $real_file_name='') {
             $doc=TRUE;
 
         //Erweiterung mit Regelliste in config.inc.php vergleichen
+        $exts = '';
+        $errors = [];
         if ($UPLOAD_TYPES[$active_upload_type]["type"] == "allow") {
             $t=TRUE;
             $i=1;
@@ -1137,17 +1141,18 @@ function validate_upload($the_file, $real_file_name='') {
                 }
             if (!$t) {
                 if ($i==2)
-                    $emsg.= "error§" . sprintf(_("Die Datei konnte nicht übertragen werden: Sie dürfen den Dateityp %s nicht hochladen!"), trim($exts)) . "§";
+                    $errors[] = sprintf(_("Die Datei konnte nicht übertragen werden: Sie dürfen den Dateityp %s nicht hochladen!"), trim($exts));
                 else
-                    $emsg.= "error§" . sprintf(_("Die Datei konnte nicht übertragen werden: Sie dürfen die Dateitypen %s nicht hochladen!"), trim($exts)) . "§";
+                    $errors[] = sprintf(_("Die Datei konnte nicht übertragen werden: Sie dürfen die Dateitypen %s nicht hochladen!"), trim($exts));
                 if ($doc) {
                     $help_url = format_help_url("Basis.DateienUpload");
-                    $emsg.= "info§" . sprintf(_("%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."), "<a target=\"_blank\" href=\"".$help_url."\">", "</a>") . "§";
+                    $errors[] = sprintf(_("%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."), "<a target=\"_blank\" href=\"".$help_url."\">", "</a>");
                 }
                 }
         } else {
             $t=FALSE;
             $i=1;
+            
             foreach ($UPLOAD_TYPES[$active_upload_type]["file_types"] as $ft) {
                 if ($pext == $ft)
                     $t=TRUE;
@@ -1158,26 +1163,33 @@ function validate_upload($the_file, $real_file_name='') {
                 }
             if (!$t) {
                 if ($i==2)
-                    $emsg.= "error§" . sprintf(_("Die Datei konnte nicht übertragen werden: Sie dürfen nur den Dateityp %s hochladen!"), trim($exts)) . "§";
+                    $errors[] =  sprintf(_("Die Datei konnte nicht übertragen werden: Sie dürfen nur den Dateityp %s hochladen!"), trim($exts));
                 else
-                    $emsg.= "error§" . sprintf(_("Die Datei konnte nicht übertragen werden: Sie dürfen nur die Dateitypen %s hochladen!"), trim($exts)) . "§";
+                    $errors[] =  sprintf(_("Die Datei konnte nicht übertragen werden: Sie dürfen nur die Dateitypen %s hochladen!"), trim($exts));
                 if ($doc) {
                     $help_url = format_help_url("Basis.DateienUpload");
-                    $emsg.= "info§" . sprintf(_("%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."), "<a target=\"_blank\" href=\"".$help_url."\">", "</a>") . "§";
+                    $errors[] =  sprintf(_("%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."), "<a target=\"_blank\" href=\"".$help_url."\">", "</a>");
                 }
             }
         }
 
+        if(!empty($errors)) {
+            $result = false;
+            PageLayout::postError(_('Bitte beachten Sie;'), $errors);
+        }
+            
         //pruefen ob die Groesse stimmt.
         if ($the_file['error'] ===  UPLOAD_ERR_INI_SIZE || $the_file_size > $max_filesize) {
-            $emsg.= "error§" . sprintf(_("Die Datei konnte nicht übertragen werden: Die maximale Größe für einen Upload (%s Megabyte) wurde überschritten!"), $max_filesize / 1048576);
+            $result = false;
+            PageLayout::postError(sprintf(_("Die Datei konnte nicht übertragen werden: Die maximale Größe für einen Upload (%s Megabyte) wurde überschritten!"), $max_filesize / 1048576));
         } elseif ($the_file_size == 0) {
-            $emsg.= "error§" . _("Sie haben eine leere Datei zum Hochladen ausgewählt!") . "§";
+            $result = false;
+            PageLayout::postError(_("Sie haben eine leere Datei zum Hochladen ausgewählt!"));
         }
+       
     }
 
-    if ($emsg) {
-        $msg .= $emsg;
+    if (!$result) {
         return false;
     } else {
         return true;
@@ -1187,7 +1199,7 @@ function validate_upload($the_file, $real_file_name='') {
 //der eigentliche Upload
 function upload($the_file, $refresh, $range_id)
 {
-    global $dokument_id, $msg;
+    global $dokument_id;
 
     if (!validate_upload($the_file)) {
         return FALSE;
@@ -1197,14 +1209,14 @@ function upload($the_file, $refresh, $range_id)
 
     $doc = StudipDocument::createWithFile($the_file['tmp_name'], $data);
     if ($doc === null) {
-        $msg.= "error§" . _("Dateiübertragung gescheitert!");
+        PageLayout::postError(_("Dateiübertragung gescheitert!"));
         return false;
     }
 
     // wird noch in folder.php gebraucht
     $dokument_id = $doc->getId();
 
-    $msg = "msg§" . _("Die Datei wurde erfolgreich auf den Server übertragen!");
+    PageLayout::postSuccess(_("Die Datei wurde erfolgreich auf den Server übertragen!"));
     return TRUE;
 }
 
@@ -2479,8 +2491,6 @@ dies muss das aufrufende Script sicherstellen.
 
 function delete_folder($folder_id, $delete_subfolders = false)
 {
-    global $msg;
-
     if ($delete_subfolders){
         list($subfolders, $num_subfolders) = getFolderChildren($folder_id);
         if ($num_subfolders){
@@ -2512,16 +2522,16 @@ function delete_folder($folder_id, $delete_subfolders = false)
         $statement->execute(array($folder_id));
         if ($statement->rowCount()) {
             if ($deleted) {
-                $msg.="info§" . sprintf(_("Der Dateiordner <b>%s</b> und %s Dokument(e) wurden gelöscht"), htmlReady($foldername), $deleted) . "§";
+                PageLayout::postSuccess(sprintf(_("Der Dateiordner <b>%s</b> und %s Dokument(e) wurden gelöscht"), htmlReady($foldername), $deleted));
             } else {
-                $msg.="info§" . sprintf(_("Der Dateiordner <b>%s</b> wurde gelöscht"),htmlReady($foldername)) . "§";
+                PageLayout::postSuccess(sprintf(_("Der Dateiordner <b>%s</b> wurde gelöscht"),htmlReady($foldername)));
                 return TRUE;
             }
         } else {
             if ($deleted){
-                $msg.="error§" . sprintf(_("Probleme beim Löschen des Ordners <b>%s</b>. %u Dokument(e) wurden gelöscht"),htmlReady($foldername), $deleted) . "§";
+                PageLayout::postWarning(sprintf(_("Probleme beim Löschen des Ordners <b>%s</b>. %u Dokument(e) wurden gelöscht"),htmlReady($foldername), $deleted));
             }else{
-                $msg.="error§" . sprintf(_("Probleme beim Löschen des Ordners <b>%s</b>"),htmlReady($foldername)) . "§";
+                PageLayout::postError(sprintf(_("Probleme beim Löschen des Ordners <b>%s</b>"),htmlReady($foldername)));
             }
             return FALSE;
         }
@@ -2672,28 +2682,26 @@ function unzip_file($file_name, $dir_name = '', $testonly = false){
 }
 
 function upload_zip_item() {
-    global $msg;
-
     if(!$_FILES['the_file']['name']) {
-        $msg .= "error§" . _("Sie haben keine Datei zum Hochladen ausgewählt!") . "§";
+        PageLayout::postError(_("Sie haben keine Datei zum Hochladen ausgewählt!"));
         return FALSE;
     }
     $ext = strtolower(getFileExtension($_FILES['the_file']['name']));
     if($ext != "zip") {
-        $msg .= "error§" . _("Die Datei kann nicht entpackt werden: Sie dürfen nur den Dateityp .ZIP hochladen!") . "§";
+        PageLayout::postError(_("Die Datei kann nicht entpackt werden: Sie dürfen nur den Dateityp .ZIP hochladen!"));
         return FALSE;
     }
     $tmpname = md5(uniqid('zipupload',1));
     if (move_uploaded_file($_FILES['the_file']['tmp_name'], $GLOBALS['TMP_PATH'] . '/' . $tmpname)){
         if(unzip_file($GLOBALS['TMP_PATH'] . '/' . $tmpname, false, true)) {
-            $msg .= "error§" . _("Die ZIP-Datei kann nicht geöffnet werden!") . "§";
+            PageLayout::postError( _("Die ZIP-Datei kann nicht geöffnet werden!"));
             @unlink($GLOBALS['TMP_PATH'] . '/' . $tmpname);
             return FALSE;
         }
         $tmpdirname = $GLOBALS['TMP_PATH'] . '/' . md5(uniqid('zipupload',1));
         @mkdir($tmpdirname);
         if (unzip_file($GLOBALS['TMP_PATH'] . '/' . $tmpname , $tmpdirname)){
-            $msg .= "error§" . _("Die ZIP-Datei kann nicht geöffnet werden!") . "§";
+            PageLayout::postError(_("Die ZIP-Datei kann nicht geöffnet werden!"));
             @rmdirr($tmpdirname);
             @unlink($GLOBALS['TMP_PATH'] . '/' . $tmpname);
             return FALSE;
@@ -2710,10 +2718,11 @@ function upload_zip_item() {
                 $errors[] = sprintf(_('Maximale Verzeichnistiefe von %u in Zip-Archiv erreicht.'),
                                     Config::get()->ZIP_UPLOAD_MAX_DIRS);
             }
-            $msg .= 'error§' . _('Bitte beachten Sie:') . '<br><ul><li>' . implode('</li><li>', $errors) . '</ul>§';
+            PageLayout::postError( _('Bitte beachten Sie:'), $errors);
+            
         }
         if ($ret['files'] || $ret['subdirs']) {
-            $msg .= 'msg§' . sprintf(_("Es wurden %d Dateien und %d Ordner erfolgreich entpackt."),$ret['files'], $ret['subdirs'] ) . '§';
+            PageLayout::postSuccess(sprintf(_("Es wurden %d Dateien und %d Ordner erfolgreich entpackt."),$ret['files'], $ret['subdirs']));
             @rmdirr($tmpdirname);
             @unlink($GLOBALS['TMP_PATH'] . '/' . $tmpname);
             return (int)$ret['files'];
@@ -2721,7 +2730,7 @@ function upload_zip_item() {
     }
     @rmdirr($tmpdirname);
     @unlink($GLOBALS['TMP_PATH'] . '/' . $tmpname);
-    $msg .= "error§" . _("Die Datei konnte nicht entpackt werden. Möglicherweise ist sie zu groß.") . "§";
+    PageLayout::postError(_("Die Datei konnte nicht entpackt werden. Möglicherweise ist sie zu groß."));
     return false;
 }
 
