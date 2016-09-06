@@ -167,9 +167,13 @@
         color: black;
         text-align: left;
     }
-    .ui-dialog-titlebar-close .ui-icon {
-        &, &:hover {
+    .ui-dialog-titlebar-close {
+        background: transparent;
+        border: 0;
+
+        .ui-icon, .ui-icon:hover {
             .background-icon('decline', 'clickable');
+            background-position: 0;
         }
     }
 
@@ -183,7 +187,15 @@
         padding: 15px 15px 15px 55px;
         text-align: left;
     }
-    .ui-dialog-buttonset > * {
-        display: inline-block;
+
+    .ui-dialog-buttonpane {
+        text-align: center;
+
+        .ui-dialog-buttonset {
+            float: none;
+            > * {
+                display: inline-block;
+            }
+        }
     }
 }

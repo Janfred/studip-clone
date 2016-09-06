@@ -6876,6 +6876,10 @@ div.available-widgets .studip-widget {
   color: black;
   text-align: left;
 }
+.ui-dialog.studip-confirmation .ui-dialog-titlebar-close {
+  background: transparent;
+  border: 0;
+}
 .ui-dialog.studip-confirmation .ui-dialog-titlebar-close .ui-icon,
 .ui-dialog.studip-confirmation .ui-dialog-titlebar-close .ui-icon:hover {
   background-image: url("../images/icons/blue/decline.svg");
@@ -6883,6 +6887,7 @@ div.available-widgets .studip-widget {
   -moz-background-size: 16px 16px;
   -o-background-size: 16px 16px;
   background-size: 16px 16px;
+  background-position: 0;
 }
 .ui-dialog.studip-confirmation .ui-dialog-content {
   -webkit-box-sizing: border-box;
@@ -6900,7 +6905,13 @@ div.available-widgets .studip-widget {
   padding: 15px 15px 15px 55px;
   text-align: left;
 }
-.ui-dialog.studip-confirmation .ui-dialog-buttonset > * {
+.ui-dialog.studip-confirmation .ui-dialog-buttonpane {
+  text-align: center;
+}
+.ui-dialog.studip-confirmation .ui-dialog-buttonpane .ui-dialog-buttonset {
+  float: none;
+}
+.ui-dialog.studip-confirmation .ui-dialog-buttonpane .ui-dialog-buttonset > * {
   display: inline-block;
 }
 ul,
