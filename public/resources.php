@@ -27,16 +27,15 @@ $perm->check("autor");
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 PageLayout::setHelpKeyword("Basis.Ressourcen");// META:in resourcesControl.inc.php verlagern,wenn detaillierter vorhanden
 
-if (get_config('RESOURCES_ENABLE')) {
+if (Config::get()->RESOURCES_ENABLE) {
     //Steuerung der Ressourcenverwaltung einbinden
     include ("$RELATIVE_PATH_RESOURCES/resourcesControl.inc.php");
 } else {
-    // Start of Output
-    include ('lib/include/html_head.inc.php'); // Output of html head
-    include ('lib/include/header.php');   // Output of Stud.IP head
-    include ('lib/include/deprecated_tabs_layout.php');
-    require_once ('lib/msg.inc.php');
-    //TODO use MessageBox or Exception
-    parse_window ("error§" . _("Die Ressourcenverwaltung ist nicht eingebunden. Bitte aktivieren Sie sie in den Systemeinstellungen, oder wenden Sie sich an die Systemadministratoren."), "§",
-                _("Ressourcenverwaltung nicht eingebunden"));
+    ob_start();
+    PageLayout::postError(_("Die Ressourcenverwaltung ist nicht eingebunden. Bitte aktivieren Sie sie in den Systemeinstellungen, oder wenden Sie sich an die Systemadministratoren."), [_("Ressourcenverwaltung nicht eingebunden")]);
+    
+    $template = $GLOBALS['template_factory']->open('layouts/base.php');
+    $template->content_for_layout = ob_get_clean();
+    $template->infobox = $infobox ? array('content' => $infobox) : null;
+    echo $template->render();
 }
