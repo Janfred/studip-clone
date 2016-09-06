@@ -228,7 +228,7 @@ function first_decision($userid) {
     $GLOBALS['USER_VISIBILITY_CHECK'] = false;
 
     $template = $GLOBALS['template_factory']->open("../locale/$user_language/LC_HELP/visibility_decision.php");
-    $template->set_layout('layouts/base_without_infobox');
+    $template->set_layout('layouts/base.php');
 
     echo $template->render();
     page_close();

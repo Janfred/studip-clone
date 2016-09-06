@@ -600,7 +600,7 @@ if ($ausgabeformat == 2) {
     PageLayout::removeStylesheet('style.css');
     PageLayout::addStylesheet('print.css');
 }
-$layout = $GLOBALS['template_factory']->open('layouts/base_without_infobox');
+$layout = $GLOBALS['template_factory']->open('layouts/base.php');
 
 $layout->content_for_layout = ob_get_clean();
 

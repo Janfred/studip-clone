@@ -88,9 +88,7 @@ class Settings_NotificationController extends Settings_SettingsController
             $message = sprintf(_('Sie haben zur Zeit keine Veranstaltungen belegt. Bitte nutzen Sie %s<b>Veranstaltung suchen / hinzufügen</b>%s um sch für Veranstaltungen anzumdelden.'),
                 '<a href="' . URLHelper::getLink('dispatch.php/search/courses') . '">', '</a>');
             PageLayout::postMessage(MessageBox::info($message));
-            $this->set_layout($GLOBALS['template_factory']->open('layouts/base_without_infobox'));
             $this->render_nothing();
-
             return;
         }
 

@@ -414,7 +414,7 @@ if ($_SESSION['_user_activities']['details'] == 'files') {
 
 // Create, populate and display template
 $template = $GLOBALS['template_factory']->open('user_activities/index');
-$template->set_layout($GLOBALS['template_factory']->open('layouts/base_without_infobox'));
+$template->set_layout($GLOBALS['template_factory']->open('layouts/base.php'));
 
 $template->user    = User::find($user_id);
 $template->queries = $queries;

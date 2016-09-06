@@ -103,7 +103,7 @@ else if ($secret == $hash) {
 }
 
 $template = $GLOBALS['template_factory']->open('email-validation');
-$template->set_layout($GLOBALS['template_factory']->open('layouts/base_without_infobox'));
+$template->set_layout($GLOBALS['template_factory']->open('layouts/base.php'));
 $template->message = $message;
 echo $template->render();
 
