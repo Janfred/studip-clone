@@ -47,16 +47,19 @@ $perm->check("admin");
 PageLayout::setHelpKeyword("Basis.EinrichtungenVerwaltenExterneSeiten");
 PageLayout::setTitle(_("Verwaltung externer Seiten"));
 
-if (get_config('EXTERN_ENABLE')) {
+if (Config::get()->EXTERN_ENABLE) {
     include($GLOBALS['RELATIVE_PATH_EXTERN'] . "/admin_extern.inc.php");
 } else {
+    ob_start();
     // Start of Output
-    include ('lib/include/html_head.inc.php'); // Output of html head
-    include ('lib/include/header.php');   // Output of Stud.IP head
-    include ('lib/include/deprecated_tabs_layout.php');
-    require_once ('lib/msg.inc.php');
-    parse_window ("error§" . _("Die Verwaltung externer Seiten ist nicht eingebunden. Bitte aktivieren Sie diese in den Systemeinstellungen, oder wenden Sie sich an die Systemadministration."), "§",
-                _("Modul \"externe Seiten\" nicht eingebunden"));
+    PageLayout::postError(_('Die Verwaltung externer Seiten ist nicht eingebunden. Bitte aktivieren Sie diese in den Systemeinstellungen, oder wenden Sie sich an die Systemadministration.'),
+        [_("Modul \"externe Seiten\" nicht eingebunden")]);
+    $template = $GLOBALS['template_factory']->open('layouts/base.php');
+    $template->content_for_layout = ob_get_clean();
+    $template->infobox = $infobox ? array('content' => $infobox) : null;
+    echo $template->render();
+    
+    page_close();
 }
-page_close();
+
 ?>
