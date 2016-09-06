@@ -72,7 +72,7 @@ require_once $GLOBALS['PATH_EXPORT'] . '/export_config.inc.php';
 
 PageLayout::setHelpKeyword("Basis.Export");
 ob_start();
-if (get_config('EXPORT_ENABLE'))
+if (Config::get()->EXPORT_ENABLE)
 {
     $ex_sem_class = Request::intArray('ex_sem_class');
 
@@ -145,10 +145,9 @@ if (get_config('EXPORT_ENABLE'))
 }
 else
 {
-    //TODO: Globales Fehlertemplate erzeugen und nur die Fehlermeldung übergeben
-    // Start of Output
-    parse_window ("error§" . _("Das Exportmodul ist nicht eingebunden. Damit Daten im XML-Format exportiert werden können, muss das Exportmodul in den Systemeinstellungen freigeschaltet werden. Wenden Sie sich bitte an die Administratoren."), "§",
-                _("Exportmodul nicht eingebunden"));
+    PageLayout::postError(_("Das Exportmodul ist nicht eingebunden. Damit Daten im XML-Format exportiert werden können, muss das Exportmodul in den Systemeinstellungen freigeschaltet werden. 
+    Wenden Sie sich bitte an die Administratoren."), [_("Exportmodul nicht eingebunden")]);
+    
 }
 if (!in_array($o_mode, words('direct', 'passthrough'))) {
     $template = $GLOBALS['template_factory']->open('layouts/base.php');
