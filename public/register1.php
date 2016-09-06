@@ -30,29 +30,40 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-
-PageLayout::setHelpKeyword("Basis.AnmeldungRegistrierung");
-PageLayout::setTitle(_("Nutzungsbedingungen"));
-// Start of Output
-include 'lib/include/html_head.inc.php'; // Output of html head
-include 'lib/include/header.php';   // Output of Stud.IP head
-include 'lib/include/deprecated_tabs_layout.php';
-
-require_once 'lib/msg.inc.php';
-
 if (!$GLOBALS['ENABLE_SELF_REGISTRATION']){
-    parse_window ("error§" . _("In dieser Installation ist die Möglichkeit zur Registrierung ausgeschaltet."), "§",
-                _("Registrierung ausgeschaltet"),
-                '<div style="margin:10px">'.$UNI_LOGIN_ADD . '</div>'
-                ."<a href=\"index.php\"><b>&nbsp;" . sprintf(_("Hier%s geht es zur Startseite."), "</b></a>") . "<br>&nbsp;");
-page_close();
-die;
+    ob_start();
+    PageLayout::postError(_("Registrierung ausgeschaltet"),
+            [_("In dieser Installation ist die Möglichkeit zur Registrierung ausgeschaltet."),
+             '<a href="index.php">' . _("Hier geht es zur Startseite."). '</a>']);
+
+    $template = $GLOBALS['template_factory']->open('layouts/base.php');
+    $template->content_for_layout = ob_get_clean();
+    $template->infobox = $infobox ? array('content' => $infobox) : null;
+    echo $template->render();
+    page_close();
+    die;
 }
+
+
+
 if ($auth->is_authenticated() && $user->id != "nobody") {
-    parse_window ("error§" . _("Sie sind schon als BenutzerIn am System angemeldet!"), "§",
-                _("Bereits angemeldet"),
-                "<a href=\"index.php\"><b>&nbsp;" . sprintf(_("Hier%s geht es zur Startseite."), "</b></a>") . "<br>&nbsp;");
+    ob_start();
+    PageLayout::postError(_("Sie sind schon als BenutzerIn am System angemeldet!"), ['<a href="index.php">' . _("Hier geht es zur Startseite."). '</a>']);
+    $template = $GLOBALS['template_factory']->open('layouts/base.php');
+    $template->content_for_layout = ob_get_clean();
+    $template->infobox = $infobox ? array('content' => $infobox) : null;
+    echo $template->render();
+    page_close();
+    die;
 } else {
+    PageLayout::setHelpKeyword("Basis.AnmeldungRegistrierung");
+    PageLayout::setTitle(_("Nutzungsbedingungen"));
+    // Start of Output
+    include 'lib/include/html_head.inc.php'; // Output of html head
+    include 'lib/include/header.php';   // Output of Stud.IP head
+    include 'lib/include/deprecated_tabs_layout.php';
+
+    require_once 'lib/msg.inc.php';
     $auth->logout();
 ?>
 
