@@ -116,17 +116,10 @@ class Course_MembersController extends AuthenticatedController
     {
         global $perm, $PATH_EXPORT;
 
-        $sem = Seminar::getInstance($this->course_id);
-
-        // old message style
-        if ($_SESSION['sms_msg']) {
-            $this->msg = $_SESSION['sms_msg'];
-            unset($_SESSION['sms_msg']);
-        }
-
-        $this->sort_by = Request::option('sortby', 'nachname');
-        $this->order = Request::option('order', 'desc');
-        $this->sort_status = Request::get('sort_status');
+        $sem                = Seminar::getInstance($this->course_id);
+        $this->sort_by      = Request::option('sortby', 'nachname');
+        $this->order        = Request::option('order', 'desc');
+        $this->sort_status  = Request::get('sort_status');
 
         Navigation::activateItem('/course/members/view');
         if (Request::int('toggle')) {
@@ -189,7 +182,7 @@ class Course_MembersController extends AuthenticatedController
             }
         }
         // Set the infobox
-        $this->createSidebar($filtered_members, $course);
+        $this->createSidebar($filtered_members);
 
         if ($this->is_locked && $this->is_tutor) {
             $lockdata = LockRules::getObjectRule($this->course_id);
@@ -285,11 +278,10 @@ class Course_MembersController extends AuthenticatedController
         $course_member->comment = Request::get('comment');
 
         if ($course_member->store() !== false) {
-            PageLayout::postMessage(MessageBox::success(_('Bemerkung wurde erfolgreich gespeichert.')));
+            PageLayout::postSuccess(_('Bemerkung wurde erfolgreich gespeichert.'));
         } else {
-            PageLayout::postMessage(MessageBox::error(_('Bemerkung konnte nicht erfolgreich gespeichert werden.')));
+            PageLayout::postError(_('Bemerkung konnte nicht erfolgreich gespeichert werden.'));
         }
-
         $this->redirect('course/members/index');
     }
 
@@ -306,20 +298,21 @@ class Course_MembersController extends AuthenticatedController
 
         // load MultiPersonSearch object
         $mp = MultiPersonSearch::load("add_autor" . $this->course_id);
-        $sem = Seminar::GetInstance($this->course_id);
+//        $sem = Seminar::GetInstance($this->course_id);
 
         $countAdded = 0;
         foreach ($mp->getAddedUsers() as $a) {
-            $msg = $this->members->addMember($a, 'autor', Request::get('consider_contingent'));
-            $countAdded++;
+            if($this->members->addMember($a, 'autor', Request::get('consider_contingent'))) {
+                $countAdded++;
+            }
         }
-
+    
         if ($countAdded == 1) {
             $text = _("Es wurde eine neue Person hinzugefügt.");
         } else {
             $text = sprintf(_("Es wurden %s neue Personen hinzugefügt."), $countAdded);
         }
-        PageLayout::postMessage(MessageBox::success($text));
+        PageLayout::postSuccess($text);
         $this->redirect('course/members/index');
     }
 
@@ -336,18 +329,20 @@ class Course_MembersController extends AuthenticatedController
 
         // load MultiPersonSearch object
         $mp = MultiPersonSearch::load("add_dozent" . $this->course_id);
-        $fail = false;
+        $sem = Seminar::GetInstance($this->course_id);
+        $countAdded = 0;
         foreach ($mp->getAddedUsers() as $a) {
-            $result = $this->addDozent($a);
-            if ($result !== false) {
-                PageLayout::postMessage($result);
-            } else {
-                $fail = true;
+            if($this->addDozent($a)) {
+                $countAdded++;
             }
         }
-        // only show an error messagebox once.
-        if ($fail === true) {
-            PageLayout::postMessage(MessageBox::error(_('Die gewünschte Operation konnte nicht ausgeführt werden.')));
+        if($countAdded > 0) {
+            $status = get_title_for_status('dozent', $countAdded, $sem->status);
+            if ($countAdded == 1) {
+                PageLayout::postSuccess(sprintf(_('Ein %s wurde hinzugefügt.'), $status));
+            } else {
+                PageLayout::postSuccess(sprintf(_("Es wurden %s %s Personen hinzugefügt."), $countAdded, $status));
+            }
         }
 
         $this->redirect('course/members/index');
@@ -366,8 +361,6 @@ class Course_MembersController extends AuthenticatedController
 
         // load MultiPersonSearch object
         $mp = MultiPersonSearch::load('add_waitlist' . $this->course_id);
-        $sem = Seminar::GetInstance($this->course_id);
-
         $countAdded = 0;
         $countFailed = 0;
         foreach ($mp->getAddedUsers() as $a) {
@@ -379,15 +372,13 @@ class Course_MembersController extends AuthenticatedController
         }
 
         if ($countAdded) {
-            $text = sprintf(ngettext('Es wurde %u neue Person auf der Warteliste hinzugefügt.',
-                'Es wurden %u neue Personen auf der Warteliste hinzugefügt.', $countAdded), $countAdded);
-            PageLayout::postMessage(MessageBox::success($text));
+            PageLayout::postSuccess(sprintf(ngettext('Es wurde %u neue Person auf der Warteliste hinzugefügt.',
+                'Es wurden %u neue Personen auf der Warteliste hinzugefügt.', $countAdded), $countAdded));
         }
         if ($countFailed) {
-            $text = sprintf(ngettext('%u Person konnte nicht auf die Warteliste eingetragen werden.',
+            PageLayout::postError(sprintf(ngettext('%u Person konnte nicht auf die Warteliste eingetragen werden.',
                 '%u neue Personen konnten nicht auf die Warteliste eingetragen werden.', $countFailed),
-                $countFailed);
-            PageLayout::postMessage(MessageBox::error($text));
+                $countFailed));
         }
         $this->redirect('course/members/index');
     }
@@ -397,18 +388,17 @@ class Course_MembersController extends AuthenticatedController
      */
     private function addDozent($dozent)
     {
-        $deputies_enabled = get_config('DEPUTIES_ENABLE');
         $sem = Seminar::GetInstance($this->course_id);
         if ($sem->addMember($dozent, "dozent")) {
             // Only applicable when globally enabled and user deputies enabled too
-            if ($deputies_enabled) {
+            if (Config::get()->DEPUTIES_ENABLE) {
                 // Check whether chosen person is set as deputy
                 // -> delete deputy entry.
                 if (isDeputy($dozent, $this->course_id)) {
                     deleteDeputy($dozent, $this->course_id);
                 }
                 // Add default deputies of the chosen lecturer...
-                if (get_config('DEPUTIES_DEFAULTENTRY_ENABLE')) {
+                if (Config::get()->DEPUTIES_DEFAULTENTRY_ENABLE) {
                     $deputies = getDeputies($dozent);
                     $lecturers = $sem->getMembers('dozent');
                     foreach ($deputies as $deputy) {
@@ -420,13 +410,9 @@ class Course_MembersController extends AuthenticatedController
                     }
                 }
             }
-            // new dozent was successfully insert
-
-            return MessageBox::success(sprintf(_('%s wurde hinzugefügt.'), get_title_for_status('dozent', 1, $sem->status)));
+           return true;
         } else {
-            // sorry that was a fail
             return false;
-
         }
     }
 
@@ -443,9 +429,15 @@ class Course_MembersController extends AuthenticatedController
 
         // load MultiPersonSearch object
         $mp = MultiPersonSearch::load("add_tutor" . $this->course_id);
-
+        $sem = Seminar::GetInstance($this->course_id);
+        $countAdded = 0;
         foreach ($mp->getAddedUsers() as $a) {
-            $this->addTutor($a);
+            if ($this->addTutor($a)) {
+                $countAdded++;
+            }
+        }
+        if($countAdded) {
+            PageLayout::postMessage(MessageBox::success(sprintf(_('%s wurde hinzugefügt.'), get_title_for_status('tutor', $countAdded, $sem->status))));
         }
         $this->redirect('course/members/index');
     }
@@ -453,10 +445,9 @@ class Course_MembersController extends AuthenticatedController
     private function addTutor($tutor) {
         $sem = Seminar::GetInstance($this->course_id);
         if ($sem->addMember($tutor, "tutor")) {
-            PageLayout::postMessage(MessageBox::success(sprintf(_('%s wurde hinzugefügt.'), get_title_for_status('tutor', 1, $sem->status))));
+            return true;
         } else {
-            // sorry that was a fail
-            PageLayout::postMessage(MessageBox::error(_('Die gewünsche Operation konnte nicht ausgeführt werden')));
+            return false;
         }
     }
 
@@ -541,7 +532,7 @@ class Course_MembersController extends AuthenticatedController
                     $text = sprintf(_('%s Person(en) wurde(n) in die Zielveranstaltung eingetragen.'),
                         sizeof($msg['success']));
                 }
-                PageLayout::postMessage(MessageBox::success($text));
+                PageLayout::postSuccess($text);
             }
             if ($msg['existing']) {
                 if (sizeof($msg['existing']) == 1) {
@@ -552,7 +543,7 @@ class Course_MembersController extends AuthenticatedController
                         'und konnten daher nicht verschoben/kopiert werden.'),
                         sizeof($msg['existing']));
                 }
-                PageLayout::postMessage(MessageBox::info($text));
+                PageLayout::postInfo($text);
             }
             if ($msg['failed']) {
                 if (sizeof($msg['failed']) == 1) {
@@ -561,10 +552,10 @@ class Course_MembersController extends AuthenticatedController
                     $text = sprintf(_('%s Person(en) konnten nicht in die Zielveranstaltung eingetragen werden.'),
                             sizeof($msg['failed']));
                 }
-                PageLayout::postMessage(MessageBox::error($text));
+                PageLayout::postError($text);
             }
         } else {
-            PageLayout::postMessage(MessageBox::error(_('Bitte wählen Sie eine Zielveranstaltung.')));
+            PageLayout::postError(_('Bitte wählen Sie eine Zielveranstaltung.'));
         }
         $this->redirect('course/members/index');
     }
@@ -725,17 +716,15 @@ class Course_MembersController extends AuthenticatedController
 
         // no results
         if (!sizeof($csv_lines) && !sizeof($selected_users)) {
-            PageLayout::postMessage(MessageBox::error(_("Niemanden gefunden!")));
+            PageLayout::postError(_("Niemanden gefunden!"));
         }
 
         if ($csv_count_insert) {
-            PageLayout::postMessage(MessageBox::success(sprintf(_('%s Personen in die Veranstaltung
-                eingetragen!'), $csv_count_insert)));
+            PageLayout::postSuccess(sprintf(_('%s Personen in die Veranstaltung eingetragen!'), $csv_count_insert));
         }
 
         if ($csv_count_present) {
-            PageLayout::postMessage(MessageBox::info(sprintf(_('%s Personen waren bereits in der Veranstaltung
-                eingetragen!'), $csv_count_present)));
+            PageLayout::postMessage(MessageBox::info(sprintf(_('%s Personen waren bereits in der Veranstaltung eingetragen!'), $csv_count_present)));
         }
 
         // redirect to manual assignment
@@ -747,12 +736,12 @@ class Course_MembersController extends AuthenticatedController
             return;
         }
         if (count($csv_not_found) > 0) {
-            PageLayout::postMessage(MessageBox::error(sprintf(_('%s konnten <b>nicht</b> zugeordnet werden!'), htmlReady(join(',', $csv_not_found)))));
+            PageLayout::postError(sprintf(_('%s konnten <b>nicht</b> zugeordnet werden!'), htmlReady(join(',', $csv_not_found))));
         }
 
         if ($csv_count_contingent_full) {
-            PageLayout::postMessage(MessageBox::error(sprintf(_('%s Personen konnten <b>nicht</b> zugeordnet werden,
-                da das ausgewählte Kontingent keine freien Plätze hat.'), $csv_count_contingent_full)));
+            PageLayout::postError(sprintf(_('%s Personen konnten <b>nicht</b> zugeordnet werden, da das ausgewählte Kontingent keine freien Plätze hat.'),
+                $csv_count_contingent_full));
         }
 
         $this->redirect('course/members/index');
@@ -803,9 +792,9 @@ class Course_MembersController extends AuthenticatedController
         }
 
         if ($result > 0) {
-            PageLayout::postMessage(MessageBox::success(_('Ihre Sichtbarkeit wurde erfolgreich geändert.')));
+            PageLayout::postSuccess(_('Ihre Sichtbarkeit wurde erfolgreich geändert.'));
         } else {
-            PageLayout::postMessage(MessageBox::error(_('Leider ist beim Ändern der Sichtbarkeit ein Fehler aufgetreten. Die Einstellung konnte nicht vorgenommen werden.')));
+            PageLayout::postError(_('Leider ist beim Ändern der Sichtbarkeit ein Fehler aufgetreten. Die Einstellung konnte nicht vorgenommen werden.'));
         }
         $this->redirect('course/members/index');
     }
@@ -1054,13 +1043,13 @@ class Course_MembersController extends AuthenticatedController
                     }
                 }
 
-                PageLayout::postMessage(MessageBox::success($message));
+                PageLayout::postSuccess($message);
             } else {
                 $message = _("Es stehen keine weiteren Plätze mehr im Teilnehmerkontingent zur Verfügung.");
-                PageLayout::postMessage(MessageBox::error($message));
+                PageLayout::postError($message);
             }
         } else {
-            PageLayout::postMessage(MessageBox::error(_('Sie haben niemanden zum Hochstufen ausgewählt.')));
+            PageLayout::postError(_('Sie haben niemanden zum Hochstufen ausgewählt.'));
         }
 
         $this->redirect('course/members/index');
@@ -1095,13 +1084,15 @@ class Course_MembersController extends AuthenticatedController
                     // deleted authors
                     if (!empty($msgs)) {
                         if (count($msgs) <= 5) {
-                            PageLayout::postMessage(MessageBox::success(sprintf(_("%s %s wurde aus der Veranstaltung ausgetragen."), htmlReady($this->status_groups[$status]), htmlReady(join(', ', $msgs)))));
+                            PageLayout::postSuccess(sprintf(_("%s %s wurde aus der Veranstaltung ausgetragen."),
+                                htmlReady($this->status_groups[$status]),
+                                htmlReady(join(', ', $msgs))));
                         } else {
-                            PageLayout::postMessage(MessageBox::success(sprintf(_("%u %s wurden aus der Veranstaltung entfernt."), count($msgs), htmlReady($this->status_groups[$status]))));
+                            PageLayout::postSuccess(sprintf(_("%u %s wurden aus der Veranstaltung entfernt."), count($msgs), htmlReady($this->status_groups[$status])));
                         }
                     }
                 } else {
-                    PageLayout::postMessage(MessageBox::error(sprintf(_('Sie haben keine %s zum Austragen ausgewählt')), $this->status_groups[$status]));
+                    PageLayout::postWarning(sprintf(_('Sie haben keine %s zum Austragen ausgewählt'), $this->status_groups[$status]));
                 }
             } else {
                 if ($cmd == "singleuser") {
@@ -1160,16 +1151,18 @@ class Course_MembersController extends AuthenticatedController
             $msgs = $this->members->setMemberStatus($users, $status, $next_status, 'upgrade');
 
             if ($msgs['success']) {
-                PageLayout::postMessage(MessageBox::success(sprintf(_('Das Hochstufen auf den Status  %s von %s
-                    wurde erfolgreich durchgeführt'), htmlReady($this->decoratedStatusGroups[$next_status]), htmlReady(join(', ', $msgs['success'])))));
+                PageLayout::postSuccess(sprintf(_('Das Hochstufen auf den Status  %s von %s wurde erfolgreich durchgeführt'),
+                    htmlReady($this->decoratedStatusGroups[$next_status]),
+                    htmlReady(join(', ', $msgs['success']))));
             }
 
             if ($msgs['no_tutor']) {
-                PageLayout::postMessage(MessageBox::error(sprintf(_('Das Hochstufen auf den Status  %s von %s
-                   konnte wegen fehlender Rechte nicht durchgeführt werden.'), htmlReady($this->decoratedStatusGroups[$next_status]), htmlReady(join(', ', $msgs['no_tutor'])))));
+                PageLayout::postError(sprintf(_('Das Hochstufen auf den Status  %s von %s konnte wegen fehlender Rechte nicht durchgeführt werden.'),
+                    htmlReady($this->decoratedStatusGroups[$next_status]),
+                    htmlReady(join(', ', $msgs['no_tutor']))));
             }
         } else {
-            PageLayout::postMessage(MessageBox::error(sprintf(_('Sie haben keine %s zum Hochstufen ausgewählt'), htmlReady($this->status_groups[$status]))));
+            PageLayout::postError(sprintf(_('Sie haben keine %s zum Hochstufen ausgewählt'), htmlReady($this->status_groups[$status])));
         }
 
         $this->redirect('course/members/index');
@@ -1208,11 +1201,13 @@ class Course_MembersController extends AuthenticatedController
             $msgs = $this->members->setMemberStatus($users, $status, $next_status, 'downgrade');
 
             if ($msgs['success']) {
-                PageLayout::postMessage(MessageBox::success(sprintf(_('Der/die %s %s wurde auf den
-                    Status %s heruntergestuft.'), htmlReady($this->decoratedStatusGroups[$status]), htmlReady(join(', ', $msgs['success'])), $this->decoratedStatusGroups[$next_status])));
+                PageLayout::postSuccess(sprintf(_('Der/die %s %s wurde auf den Status %s heruntergestuft.'),
+                    htmlReady($this->decoratedStatusGroups[$status]),
+                    htmlReady(join(', ', $msgs['success'])),
+                    $this->decoratedStatusGroups[$next_status]));
             }
         } else {
-            PageLayout::postMessage(MessageBox::error(sprintf(_('Sie haben keine %s zum Herunterstufen ausgewählt'), htmlReady($this->status_groups[$status]))));
+            PageLayout::postError(sprintf(_('Sie haben keine %s zum Herunterstufen ausgewählt'), htmlReady($this->status_groups[$status])));
         }
 
         $this->redirect('course/members/index');
@@ -1234,23 +1229,21 @@ class Course_MembersController extends AuthenticatedController
         if (!empty($this->flash['users'])) {
             $users = array_keys(array_filter($this->flash['users']));
         }
-
-        $msg = array('success' => array(), 'errors' => array());
+        
         if (!empty($users)) {
             $msg = $this->members->moveToWaitlist($users, $which_end);
             if (count($msg['success'])) {
-                PageLayout::postMessage(MessageBox::success(sprintf(
-                    _('%s Person(en) wurden auf die Warteliste verschoben.'),
-                    count($msg['success'])), count($msg['success']) <= 5 ? $msg['success'] : array()));
+                PageLayout::postSuccess(sprintf(_('%s Person(en) wurden auf die Warteliste verschoben.'),
+                    count($msg['success'])),
+                    count($msg['success']) <= 5 ? $msg['success'] : []);
             }
             if (count($msg['errors'])) {
-                PageLayout::postMessage(MessageBox::success(sprintf(
-                    _('%s Person(en) konnten nicht auf die Warteliste verschoben werden.'),
-                    count($msg['errors'])), count($msg['error']) <= 5 ? $msg['error'] : array()));
+                PageLayout::postError(sprintf(_('%s Person(en) konnten nicht auf die Warteliste verschoben werden.'),
+                    count($msg['errors'])),
+                    count($msg['error']) <= 5 ? $msg['error'] : []);
             }
         } else {
-            PageLayout::postMessage(MessageBox::error(
-                _('Sie haben keine Personen zum Verschieben auf die Warteliste ausgewählt')));
+            PageLayout::postError(_('Sie haben keine Personen zum Verschieben auf die Warteliste ausgewählt'));
         }
 
         $this->redirect('course/members/index');
@@ -1291,7 +1284,6 @@ class Course_MembersController extends AuthenticatedController
      */
     public function additional_input_action()
     {
-
         // Activate the autoNavi otherwise we dont find this page in navi
         Navigation::activateItem('/course/members/additional');
 
