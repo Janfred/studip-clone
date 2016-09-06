@@ -62,8 +62,7 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
     include 'lib/include/html_head.inc.php'; // Output of html head
     include 'lib/include/header.php';   // Output of Stud.IP head
     include 'lib/include/deprecated_tabs_layout.php';
-
-    require_once 'lib/msg.inc.php';
+    
     $auth->logout();
 ?>
 

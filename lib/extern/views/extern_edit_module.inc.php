@@ -39,8 +39,6 @@
 
 use Studip\Button, Studip\LinkButton;
 
-require_once 'lib/msg.inc.php';
-
 // it's forbidden to use the command "new" with a given config_id
 if (Request::option('com') == 'new') {
     $config_id = '';

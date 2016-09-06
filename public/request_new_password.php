@@ -61,9 +61,6 @@ if (!($GLOBALS['ENABLE_REQUEST_NEW_PASSWORD_BY_USER'] && in_array('Standard', $G
     echo $template->render();
     die();
 }
-
-require_once('lib/msg.inc.php');
-
 $msg        = [];
 $email      = '';
 $admin_link = sprintf(_("Leider ist ein Fehler aufgetreten. Bitte fordern Sie gegebenenfalls %sper E-Mail%s ein neues Passwort an."), "<a href=\"mailto:{$GLOBALS['UNI_CONTACT']}?subject=" . rawurlencode("Stud.IP Passwort vergessen - {$GLOBALS['UNI_NAME_CLEAN']}") . "&amp;body=" . rawurlencode("Ich habe mein Passwort vergessen. Bitte senden Sie mir ein Neues.\nMein Nutzername: " . htmlReady($uname) . "\n") . "\">", "</a>");

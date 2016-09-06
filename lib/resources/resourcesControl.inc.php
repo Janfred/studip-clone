@@ -27,7 +27,7 @@ $quick_view_mode = Request::option('quick_view_mode');
 Requires & Registers
 /*****************************************************************************/
 
-require_once 'lib/msg.inc.php';
+
 require_once $GLOBALS['RELATIVE_PATH_RESOURCES'] . '/views/Msg.class.php';
 
 $_SESSION['resources_data'] = @unserialize($_SESSION['resources_data']);
