@@ -76,10 +76,11 @@ class StudipLitSearchPluginAbstract {
         if ($format == "clear"){
             return $this->error_msg;
         } else {
-        for ($i = 0; $i < count($this->error_msg); ++$i){
-            $ret .= $this->error_msg[$i]['type'] . "§" . htmlReady($this->error_msg[$i]['msg']) . "§";
-        }
-        return $ret;
+            $ret = '';
+            for ($i = 0; $i < count($this->error_msg); ++$i){
+                $ret .= $this->error_msg[$i]['type'] . "§" . htmlReady($this->error_msg[$i]['msg']) . "§";
+            }
+            return $ret;
         }
     }
 

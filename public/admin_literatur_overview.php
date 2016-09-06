@@ -151,13 +151,6 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
 
 ?>
 <table width="100%" cellspacing=0 cellpadding=0 border=0>
-    <?
-    if ($msg) {
-        echo "<tr> <td class=\"blank\" colspan=2><br>";
-        parse_msg ($msg);
-        echo "</td></tr>";
-    }
-    ?>
     <tr>
         <td class="blank" colspan=2>&nbsp;
             <form name="choose_institute" action="<?=URLHelper::getLink('?send=1')?>" method="POST">

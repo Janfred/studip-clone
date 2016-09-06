@@ -1,9 +1,4 @@
 <section id="lit_edit_element">
-    <? if ($msg) : ?>
-        <table width="99%" border="0" cellpadding="2" cellspacing="0">
-            <?= parse_msg($msg, '§', 'blank', 1, false) ?>
-        </table>
-    <? endif ?>
     <?= $form->getFormStart(URLHelper::getLink('dispatch.php/literature/edit_element?_catalog_id=' . $catalog_id),
         array('class' => 'studip-form', 'data-dialog' => '')) ?>
     <h1><?= ($element->isNewEntry()) ? _("Neuer Eintrag") : _('Eintrag') ?></h1>

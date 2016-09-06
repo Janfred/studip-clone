@@ -1,9 +1,3 @@
-<? if ($msg) : ?>
-    <table width="99%" border="0" cellpadding="2" cellspacing="0">
-        <?=parse_msg ($msg,"§","blank",1,false)?>
-    </table>
-    <br>
-<? endif ?>
 <? if (! $lists) : ?>
     <?= _('Sie haben noch keine Listen angelegt.') ?><br>
     <br>

@@ -45,14 +45,14 @@ class StudipLitImportPluginAbstract {
 
     function __construct(){
         $this->class_name = strtolower(get_class($this));
-        $this->data = FALSE;
+        $this->data = false;
         $this->num_entries = 0;
     }
 
     // Zum Starten der Plugins immer nur diese Methode aufrufen mit folgendem Kommando:
     // StudipLitImportPluginAbstract::use_lit_import_plugins($xmlfile, $xmlfile_size, $xmlfile_name, $plugin_name);
     function use_lit_import_plugins($xmlfile, $xmlfile_size, $xmlfile_name, $plugin_name = "EndNote", $range_id = false) {
-        global $_msg, $LIT_IMPORT_PLUGINS;
+        global $LIT_IMPORT_PLUGINS;
 
         if ($plugin_name){
             foreach ($LIT_IMPORT_PLUGINS as $plugin) {
@@ -74,8 +74,6 @@ class StudipLitImportPluginAbstract {
                             $object->importEntries($fields_arr, $range_id);
                         }
                     }
-                    $msg = &$_msg;
-                    $msg .= $object->getError("irgendwas");
                     break;
                 }
             }
@@ -85,53 +83,49 @@ class StudipLitImportPluginAbstract {
     // Kann bei Bedarf ueberschrieben werden
     // function upload_file($xmlfile, $xmlfile_size, $xmlfile_name) {
     function upload_file() {
-        global $TMP_PATH, $auth;
+        if (!$this->xmlfile_name) {
+            PageLayout::postError(_("Sie haben keine Datei zum Hochladen ausgewählt!"));
+            return false;
+        }
+        if ($this->xmlfile_size == 0) {
+            PageLayout::postError(_("Sie haben eine leere Datei zum Hochladen ausgewählt!"));
+            return false;
+        }
+        
+        //na dann kopieren wir mal...
+        $newfile = $GLOBALS['TMP_PATH'] . '/' . $this->xmlfile_name;
+        if(!@move_uploaded_file($this->xmlfile,$newfile)) {
+            @unlink($newfile);
+            PageLayout::postError(sprintf(_("Es ist ein Fehler beim Kopieren der Datei %s aufgetreten. Die Datei wurde nicht hochgeladen!"),$this->xmlfile));
+            return false;
+        } else {
+            // na dann lesen wir mal...
+            if (!($fp = fopen($newfile, "r"))) {
+                PageLayout::postError(_("Importdatei konnte nicht geöffnet werden"));
+                @unlink($newfile);
+                return false;
+            }
 
+            if($fp) {
+                 while (!feof($fp)) {
+                     $this->data .= fread($fp, 8192);
+                 }
+            }
+            fclose($fp);
+            @unlink($newfile);
 
-                if (!$this->xmlfile_name) {
-                        $this->addError("error","Error 1: " . _("Sie haben keine Datei zum Hochladen ausgewählt!"));
-                        return FALSE;
-                }
-                if ($this->xmlfile_size == 0) {
-                        $this->addError("error","Error 2: " . _("Sie haben eine leere Datei zum Hochladen ausgewählt!"));
-                        return FALSE;
-                }
-
-
-                //na dann kopieren wir mal...
-                $newfile = $TMP_PATH."/".$this->xmlfile_name;
-                if(!@move_uploaded_file($this->xmlfile,$newfile)) {
-                        @unlink($newfile);
-                        $this->addError("error","Error 3: " . sprintf(_("Es ist ein Fehler beim Kopieren der Datei %s aufgetreten. Die Datei wurde nicht hochgeladen!"),$this->xmlfile));
-                        return FALSE;
-                } else {
-                        // na dann lesen wir mal...
-                        if (!($fp = fopen($newfile, "r"))) {
-                                $this->addError("error","Error 4: "._("Importdatei konnte nicht geöffnet werden"));
-                                @unlink($newfile);
-                                return FALSE;
-                        }
-
-                        if($fp) {
-                                 while (!feof($fp))
-                                         $this->data .= fread($fp, 8192);
-                        }
-                        fclose($fp);
-                        @unlink($newfile);
-
-                        return $this->data;
-                }
-
+            return $this->data;
+        }
     }
 
     // Muss implementiert werden
     function parse(){
-        return FALSE;
+        return false;
     }
 
     // Muss implementiert werden
     function import(){
-        return FALSE;
+        return false;
     }
 
     // Sollte nicht ueberschrieben werden
@@ -160,22 +154,22 @@ class StudipLitImportPluginAbstract {
                     if ($num_elements > 0 ) {
                         $lit_list->init();
                         $this->num_entries = $num_elements;
-                        $this->addError("msg",sprintf(_("Neue Liste mit %s neuen Element(en) erzeugt"),$num_elements));
-                        return TRUE;
+                        PageLayout::postSuccess(sprintf(_("Neue Liste mit %s neuen Element(en) erzeugt"),$num_elements));
+                        return true;
                     } else {
-                        $this->addError("error",_("Konnte keine Elemente anlegen"));
-                        return FALSE;
+                        PageLayout::postError(_("Konnte keine Elemente anlegen"));
+                        return false;
                     }
                 } else {
-                    $this->addError("error",_("Konnte Liste nicht erzeugen"));
-                    return FALSE;
+                    PageLayout::postError(_("Konnte Liste nicht erzeugen"));
+                    return false;
                 }
             } else {
-                $this->addError("error",_("Keine Listeneinträge gefunden"));
-                return FALSE;
+                PageLayout::postError(_("Keine Listeneinträge gefunden"));
+                return false;
             }
         }
-        return FALSE;
+        return false;
     }
 
     function getNumEntries(){
@@ -186,6 +180,7 @@ class StudipLitImportPluginAbstract {
         if ($format == "clear"){
             return $this->error_msg;
         } else {
+            $ret = '';
             for ($i = 0; $i < count($this->error_msg); ++$i){
                 $ret .= $this->error_msg[$i]['type'] . "§" . htmlReady($this->error_msg[$i]['msg']) . "§";
             }

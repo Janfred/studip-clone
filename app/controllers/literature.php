@@ -16,8 +16,6 @@
  * @since    3.1
  */
 
-require_once 'lib/msg.inc.php';
-
 class LiteratureController extends AuthenticatedController
 {
     /**
@@ -47,13 +45,9 @@ class LiteratureController extends AuthenticatedController
      */
     public function import_list_action()
     {
-
         $this->return_range = Request::option('return_range');
-
         PageLayout::setTitle(_("Literatur importieren"));
-
-        $plugin = array();
-
+        $this->plugin = [];
         if (Request::get('plugin_name')) {
             foreach ($GLOBALS['LIT_IMPORT_PLUGINS'] as $p) {
                 if ($p["name"] == Request::get('plugin_name')) {
@@ -69,8 +63,6 @@ class LiteratureController extends AuthenticatedController
      */
     public function edit_list_action()
     {
-        global $_msg;
-
         if (Request::option('_range_id') == "self"){
             $this->_range_id = $GLOBALS['user']->id;
         } else if (Request::option('_range_id')){
@@ -110,7 +102,6 @@ class LiteratureController extends AuthenticatedController
         if ($cmd=="import_lit_list" && $xmlfile) {
             StudipLitImportPluginAbstract::use_lit_import_plugins($xmlfile, $xmlfile_size, $xmlfile_name, $this->plugin_name, $this->_range_id);
         }
-        $this->msg = $_msg;
 
         PageLayout::setTitle($_the_tree->root_name . " - " . PageLayout::getTitle());
 
@@ -156,16 +147,7 @@ class LiteratureController extends AuthenticatedController
                 'value' => 'ins_' . $this->lists[$i]);
             }
         }
-
-        $this->msg .= $_the_clipboard->msg;
-        if (is_array($_the_treeview->msg)){
-            foreach ($_the_treeview->msg as $t_msg){
-                if (!$this->msg || ($this->msg && (strpos($t_msg, $this->msg) === false))){
-                    $this->msg .= $t_msg . "§";
-                }
-            }
-        }
-
+        
         $this->lists = $_the_tree->getKids('root');
         if ($this->lists) {
             $this->list_count['visible'] = 0;
@@ -182,10 +164,10 @@ class LiteratureController extends AuthenticatedController
                 }
             }
         }
-        $this->treeview = $_the_treeview;
-        $this->tree = $_the_tree;
-        $this->clipboard = $_the_clipboard;
-        $this->clip_form = $_the_clip_form;
+        $this->treeview     = $_the_treeview;
+        $this->tree         = $_the_tree;
+        $this->clipboard    = $_the_clipboard;
+        $this->clip_form    = $_the_clip_form;
     }
 
     /**
@@ -285,10 +267,7 @@ class LiteratureController extends AuthenticatedController
             }
             $_the_clipboard->insertElement($catalog_id);
         }
-
-        $_msg .= $_the_search->search_plugin->getError("msg");
-
-        $this->msg = $_msg;
+        
         $this->search = $_the_search;
         $this->clipboard = $_the_clipboard;
         $this->clip_form = $_the_clip_form;
@@ -339,12 +318,11 @@ class LiteratureController extends AuthenticatedController
         if (Request::option('cmd') == 'clone_entry'){
             $_the_element = StudipLitCatElement::GetClonedElement($_catalog_id);
             if ($_the_element->isNewEntry()){
-                $_msg = "msg§" . _("Der Eintrag wurde kopiert, Sie können die Daten jetzt ändern.") . "§";
-                $_msg .= "info§" . _("Der kopierte Eintrag wurde noch nicht gespeichert.") . "§";
+                PageLayout::postWarning(_("Der Eintrag wurde kopiert, Sie können die Daten jetzt ändern."), [_("Der kopierte Eintrag wurde noch nicht gespeichert.")]);
                 //$old_cat_id = $_catalog_id;
                 $_catalog_id = $_the_element->getValue('catalog_id');
             } else {
-                $_msg = "error§" . _("Der Eintrag konnte nicht kopiert werden!.") . "§";
+                PageLayout::postError(_("Der Eintrag konnte nicht kopiert werden!."));
             }
         }
 
@@ -369,13 +347,11 @@ class LiteratureController extends AuthenticatedController
 
         if ($_the_form->IsClicked("delete") && $_catalog_id != "new_entry" && $_the_element->isChangeable()){
             if ($_the_element->reference_count){
-                $_msg = "info§" . sprintf(_("Sie können diesen Eintrag nicht löschen, da er noch in %s Literaturlisten referenziert wird."),$_the_element->reference_count) ."§";
+                PageLayout::postInfo(sprintf(_("Sie können diesen Eintrag nicht löschen, da er noch in %s Literaturlisten referenziert wird."),$_the_element->reference_count));
             } else {
-                $_msg = "info§" . _("Wollen Sie diesen Eintrag wirklich löschen?") . "<br>"
-                        .LinkButton::createAccept(_('Ja'), URLHelper::getURL('?cmd=delete_element&_catalog_id=' . $_catalog_id), array('title' =>  _('löschen')))
-                        . "&nbsp;"
-                        .LinkButton::createCancel(_('Abbrechen'), URLHelper::getURL('?_catalog_id=' . $_catalog_id), array('title' =>  _('abbrechen')))
-                        . "§";
+                PageLayout::postInfo(_("Wollen Sie diesen Eintrag wirklich löschen?"),
+                    [LinkButton::createAccept(_('Ja'), URLHelper::getURL('?cmd=delete_element&_catalog_id=' . $_catalog_id), array('title' =>  _('löschen')))
+                            .LinkButton::createCancel(_('Abbrechen'), URLHelper::getURL('?_catalog_id=' . $_catalog_id), array('title' =>  _('abbrechen')))]);
             }
         }
 
@@ -414,7 +390,7 @@ class LiteratureController extends AuthenticatedController
             }
             $content .= "</div>";
             $_the_element->setValue('lit_plugin', $lit_plugin_value);
-            $_msg = "info§" . $content . "§";
+            PageLayout::postInfo($content);
         }
 
         if ($_the_form->IsClicked("send")){
@@ -440,12 +416,11 @@ class LiteratureController extends AuthenticatedController
 
         $_catalog_id = $_the_element->getValue("catalog_id");
 
-        if (!$_the_element->isChangeable())
+        if (!$_the_element->isChangeable()) {
             PageLayout::postMessage(MessageBox::info(_('Sie haben diesen Eintrag nicht selbst vorgenommen, und dürfen ihn daher nicht verändern! Wenn Sie mit diesem Eintrag arbeiten wollen, können Sie sich eine persönliche Kopie erstellen.')));
-        $_msg .= $_the_element->msg;
-        $_msg .= $_the_clipboard->msg;
-
-        $this->msg = $_msg;
+        }
+        
+        
         $this->catalog_id = $_catalog_id;
         $this->element = $_the_element;
         $this->treeview = $_the_treeview;

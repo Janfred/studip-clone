@@ -267,14 +267,14 @@ class StudipLitCatElement {
                 $field_values[] = addslashes(trim($detail['value']));
             }
             $sql = "INSERT INTO lit_catalog(" . join(",", $field_names) . ") VALUES ('" . join("','", $field_values) . "')";
-            $msg = "msg§" . _("Ein neuer Datensatz wurde eingefügt.") . "§";
+            PageLayout::postSuccess(_("Ein neuer Datensatz wurde eingefügt."));
         } else {
             $this->fields['chdate']['value'] = time();
             foreach($this->fields as $name => $detail){
                 $field_upd[] = $name . "='" . addslashes(trim($detail['value'])) . "'";
             }
             $sql = "UPDATE lit_catalog SET " . join(",", $field_upd) . " WHERE catalog_id='" . $this->fields['catalog_id']['value'] . "'";
-            $msg = "msg§" . _("Die geänderten Daten wurden gespeichert.") ."§";
+            PageLayout::postSuccess(_("Die geänderten Daten wurden gespeichert."));
         }
         $rs = $this->dbv->get_query($sql);
         if ($this->init_form){
@@ -289,7 +289,6 @@ class StudipLitCatElement {
                                             'user_id' => $GLOBALS['user']->id,
                                             'note' => '', 'priority' => ($list->getMaxPriority($default_list_entry) + 1) ));
             }
-            $this->msg .= $msg;
         }
         return $rs->affected_rows();
     }
@@ -298,12 +297,12 @@ class StudipLitCatElement {
         $this->dbv->params[0] = $this->getValue("catalog_id");
         $rs = $this->dbv->get_query("view:LIT_DEL_ELEMENT");
         if ($rs->affected_rows()){
-            $this->msg = "msg§" . _("Der Datensatz wurde gelöscht.") . "§";
+            PageLayout::postSuccess(_("Der Datensatz wurde gelöscht."));
             $this->initFields();
             $this->getElementData("new_entry");
             return true;
         } else {
-            $this->msg = "error§" . _("Der Datensatz konnte nicht gelöscht werden") . "§";
+            PageLayout::postError(_("Der Datensatz konnte nicht gelöscht werden"));
             return false;
         }
     }
@@ -336,7 +335,7 @@ class StudipLitCatElement {
             }
         }
         if (is_array($missing_fields)){
-            $this->msg .= "error§" . sprintf(_("Bitte füllen Sie folgende Felder aus: %s"), "\"" . join("\", \"",$missing_fields)) ."\"§";
+            PageLayout::postError(sprintf(_("Bitte füllen Sie folgende Felder aus: %s"), "\"" . join("\", \"",$missing_fields)));
         }
         return is_array($missing_fields) ? false : true;
     }
