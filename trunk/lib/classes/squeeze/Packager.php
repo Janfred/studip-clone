@@ -72,11 +72,8 @@ class Packager
         $configTime = $configTime
             ?: filemtime($this->configuration['config_path']);
 
-        # TODO mlunzena: remove this as soon as closure object binding
-        #                is available in PHP 5.4
-        $packager = $this;
         return array_filter(array_keys($this->packages),
-            function ($name) use ($outputDir, $configTime, $packager) {
+            function ($name) use ($outputDir, $configTime) {
 
             # package is stale, because ...
 
@@ -95,9 +92,9 @@ class Packager
 
             # ... mtime of a file contained in the package
             #     is older than the mtime of cached package
-            $pack = $packager->packageFor($name);
+            $pack = $this->packageFor($name);
             foreach ($pack['paths'] as $path) {
-                $src = $packager->configuration['assets_root'] . "/$path";
+                $src = $this->configuration['assets_root'] . "/$path";
                 if (filemtime($src) > $since) {
                     return TRUE;
                 }
@@ -133,18 +130,14 @@ class Packager
             return $packages;
         }
 
-        # TODO mlunzena: remove this as soon as closure object binding
-        #                is available in PHP 5.4
-        $self = $this;
-
         foreach ($config as $name => $globs) {
             if (!$globs) {
                 $globs = array();
             }
 
-            $paths = array_map(function ($glob) use ($self) {
-                    return $self->globFiles($glob);
-                }, array_flatten($globs));
+            $paths = array_map(function ($glob) {
+                return $this->globFiles($glob);
+            }, array_flatten($globs));
 
             $paths = array_unique(array_flatten($paths));
 
