@@ -32,29 +32,30 @@ $perm->check("autor");
 require_once 'lib/msg.inc.php';
 include 'lib/seminar_open.php'; // initialise Stud.IP-Session
 
-if (get_config('ELEARNING_INTERFACE_ENABLE')) {
+if (Config::get()->ELEARNING_INTERFACE_ENABLE) {
     ELearningUtils::bench("start");
-
-
+    
     $cms_select = Request::quoted('cms_select');
     if (isset($ELEARNING_INTERFACE_MODULES[$cms_select]["name"])) {
-
         ELearningUtils::loadClass($cms_select);
         // init session now
         $sess_id = $connected_cms[$cms_select]->user->getSessionId();
         $connected_cms[$cms_select]->terminate();
         ob_end_clean();
         if (!$sess_id){
-            include ('lib/include/html_head.inc.php'); // Output of html head
-            include ('lib/include/header.php');   // Output of Stud.IP head
-            include ('lib/include/deprecated_tabs_layout.php');
-            parse_window('error§'
-                    . sprintf(_("Automatischer Login für das System <b>%s</b> (Nutzername:%s) fehlgeschlagen."), htmlReady($connected_cms[$cms_select]->getName()), $connected_cms[$cms_select]->user->getUsername()),'§'
-                    , _("Login nicht möglich")
-                    , '<div style="margin:10px">'
-                    ._("Dieser Fehler kann dadurch hervorgerufen werden, dass Sie Ihr Passwort geändert haben. In diesem Fall versuchen Sie bitte Ihren Account erneut zu verknüpfen.")
-                    .  '<br>' . sprintf(_("%sZurück%s zu Meine Lernmodule"), '<a href="'.URLHelper::getLink("dispatch.php/elearning/my_accounts").'"><b>', '</b></a>') . '</div>');
-            include ('lib/include/html_end.inc.php');
+            $message =  _("Login nicht möglich");
+            $details = [];
+            $details[]  = sprintf(_("Automatischer Login für das System <b>%s</b> (Nutzername:%s) fehlgeschlagen."),
+                htmlReady($connected_cms[$cms_select]->getName()),
+                $connected_cms[$cms_select]->user->getUsername());
+            $details[] = _("Dieser Fehler kann dadurch hervorgerufen werden, dass Sie Ihr Passwort geändert haben. In diesem Fall versuchen Sie bitte Ihren Account erneut zu verknüpfen.");
+            $details[] = sprintf(_("%sZurück%s zu Meine Lernmodule"), '<a href="'.URLHelper::getLink("dispatch.php/elearning/my_accounts").'"><b>', '</b></a>');
+
+            PageLayout::postError($message, $details);
+            $template = $GLOBALS['template_factory']->open('layouts/base.php');
+            $template->content_for_layout = ob_get_clean();
+            $template->infobox = $infobox ? array('content' => $infobox) : null;
+            echo $template->render();
             page_close();
             die;
         }
