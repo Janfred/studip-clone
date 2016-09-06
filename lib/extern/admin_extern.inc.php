@@ -95,11 +95,11 @@ if (Request::option('com') == "do_upload_config") {
     array_walk_recursive($jsonconfig, 'utf8Decode');
 
     if (!check_config($jsonconfig, Request::quoted('check_module'))) {
-        $msg ="error§". _("Die Konfigurationsdatei hat den falschen Modultyp!"). "§";
+        PageLayout::postError(_('Die Konfigurationsdatei hat den falschen Modultyp!'));
     } else if (!store_config($range_id, $config_id, $jsonconfig)) {
-        $msg ="error§". _("Die Konfigurationsdatei konnte nicht hochgeladen werden!"). "§";
+        PageLayout::postError(_('Die Konfigurationsdatei konnte nicht hochgeladen werden!'));
     } else {
-        $msg = "info§". _("Die Datei wurde erfolgreich übertragen!"). "§";
+        PageLayout::postSuccess(_('Die Datei wurde erfolgreich übertragen!'));
     }
 }
 
@@ -109,21 +109,15 @@ ob_start();
 
 require_once 'lib/msg.inc.php'; //Funktionen für Nachrichtenmeldungen
 
-echo "<table border=\"0\" class=\"blank\" align=\"center\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n";
-echo "<tr><td class=\"blank\" colspan=\"2\">&nbsp;</td></tr>\n";
-if (Request::option('com') != "info") {
-    echo "<tr><td class=\"blank\" align=\"center\" valign=\"top\" width=\"90%\">\n";
-} else {
-    echo "<tr><td class=\"blank\" align=\"center\" valign=\"top\" width=\"90%\" colspan=\"2\">\n";
-}
-echo "<table width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" border=\"0\">\n";
 
 // copy existing configuration
 if (Request::option('com') == 'copyconfig') {
     if (Request::option('copyinstid') && Request::option('copyconfigid')) {
         $config = ExternConfig::GetInstance(Request::option('copyinstid'), '', Request::option('copyconfigid'));
         $config_copy = $config->copy($range_id);
-        my_msg(sprintf(_("Die Konfiguration wurde als \"%s\" nach Modul \"%s\" kopiert."), htmlReady($config_copy->getConfigName()), htmlReady($GLOBALS['EXTERN_MODULE_TYPES'][$config_copy->getTypeName()]['name'])), 'blank', 1, false);
+        echo MessageBox::success(sprintf(_("Die Konfiguration wurde als \"%s\" nach Modul \"%s\" kopiert."),
+                htmlReady($config_copy->getConfigName()),
+                htmlReady($GLOBALS['EXTERN_MODULE_TYPES'][$config_copy->getTypeName()]['name'])));
     } else {
         Request::set('com','');
     }
@@ -132,13 +126,15 @@ if (Request::option('com') == 'copyconfig') {
 if (Request::option('com') == 'delete') {
     $config = ExternConfig::GetInstance($range_id, '', $config_id);
     if ($config->deleteConfiguration()) {
-        my_msg(sprintf(_("Konfiguration <strong>\"%s\"</strong> für Modul <strong>\"%s\"</strong> gelöscht!"), htmlReady($config->getConfigName()), htmlReady($GLOBALS['EXTERN_MODULE_TYPES'][$config->getTypeName()]['name'])), 'blank', 1, false);
+        echo MessageBox::success(sprintf(_("Konfiguration <strong>\"%s\"</strong> für Modul <strong>\"%s\"</strong> gelöscht!"),
+                htmlReady($config->getConfigName()),
+                htmlReady($GLOBALS['EXTERN_MODULE_TYPES'][$config->getTypeName()]['name'])));
     } else {
-        my_error(_("Konfiguration konnte nicht gelöscht werden"));
+        echo MessageBox::erro(_("Konfiguration konnte nicht gelöscht werden"));
     }
 }
 
-echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
+
 
 if (Request::option('com') == 'delete_sec') {
     $config = ExternConfig::GetConfigurationMetaData($range_id, $config_id);
@@ -148,8 +144,7 @@ if (Request::option('com') == 'delete_sec') {
     $message .= LinkButton::createAccept("JA", URLHelper::getURL('?com=delete&config_id='.$config_id));
     $message .= LinkButton::createCancel("NEIN", URLHelper::getURL('?list=TRUE&view=extern_inst'));
 
-    my_info($message, "blank", 1);
-    print_footer();
+    echo MessageBox::info($message);
 
     $template = $GLOBALS['template_factory']->open('layouts/base.php');
     $template->content_for_layout = ob_get_clean();
@@ -162,7 +157,6 @@ $css_switcher = new cssClassSwitcher();
 
 if (Request::option('com') == 'info') {
     include($RELATIVE_PATH_EXTERN . "/views/extern_info_module.inc.php");
-    print_footer();
 
     $template = $GLOBALS['template_factory']->open('layouts/base.php');
     $template->content_for_layout = ob_get_clean();
@@ -175,7 +169,7 @@ if (Request::option('com') == 'new' || Request::option('com') == 'edit' || Reque
         Request::option('com') == 'close' || Request::option('com') == 'store') {
 
     require_once($RELATIVE_PATH_EXTERN . "/views/extern_edit_module.inc.php");
-    print_footer();
+    
 
     $template = $GLOBALS['template_factory']->open('layouts/base.php');
     $template->content_for_layout = ob_get_clean();
@@ -198,19 +192,11 @@ if ($EXTERN_SRI_ENABLE_BY_ROOT && Request::option('com') == 'enable_sri'
     enable_sri($range_id, Request::quoted('sri_enable'));
 }
 
-echo "<table class=\"blank\" border=\"0\" width=\"95%\" ";
-echo "align=\"left\" cellspacing=\"0\" cellpadding=\"0\">\n";
-
-// messages
-echo "<tr><td class=\"blank\" colspan=\"0\">";
-echo parse_msg($msg);
-echo "</td></tr>";
 
 if ($EXTERN_SRI_ENABLE_BY_ROOT && $perm->have_perm('root')) {
-    echo "<tr><td class=\"blank\">\n";
     echo '<form method="post" action="' . URLHelper::getLink('?com=enable_sri') . '">';
     echo CSRFProtection::tokenTag();
-    echo '<blockquote><font size="2">';
+    echo '<blockquote>';
     echo _("SRI-Schnittstelle freigeben");
     echo ' <input type="checkbox" name="sri_enable" value="1"';
     if (sri_is_enabled($range_id)) {
@@ -220,11 +206,8 @@ if ($EXTERN_SRI_ENABLE_BY_ROOT && $perm->have_perm('root')) {
 
     echo Button::createAccept();
 
-    echo "</font></blockquote></form>\n</td></tr>\n";
-} else {
-    echo "<tr><td class=\"blank\">&nbsp;</td></tr>\n";
+    echo "</blockquote></form>";
 }
-echo "<tr><td class=\"blank\">\n";
 
 $configurations = ExternConfig::GetAllConfigurations($range_id);
 $module_types_ordered = ExternModule::GetOrderedModuleTypes();
@@ -250,7 +233,7 @@ if (isset($configurations[$GLOBALS['EXTERN_MODULE_TYPES'][0]["module"]])) {
 }
 
 if (Request::option('com') != 'copychoose') {
-    echo "<blockquote><font size=\"2\">";
+    echo "<blockquote>";
     echo _("Neue globale Konfiguration anlegen.") . " ";
     echo LinkButton::create(_("Neu anlegen"), URLHelper::getURL('?com=new&mod=Global'));
     echo "</blockquote>";
@@ -260,18 +243,18 @@ if ($choose_module_form != '') {
     if (Request::option('com') != 'copychoose') {
         echo '<form method="post" action="' . URLHelper::getLink('?com=new') . '">';
         echo CSRFProtection::tokenTag();
-        echo "<blockquote><font size=\"2\">";
+        echo "<blockquote>";
         $choose_module_form = "<select name=\"mod\">\n$choose_module_form</select>\n";
         printf(_("Neue Konfiguration für Modul %s anlegen.") . " ", $choose_module_form);
         echo Button::create(_("Neu anlegen"));
-        echo "</font></blockquote>\n";
+        echo "</blockquote>\n";
         echo "</form>\n";
 
         $conf_institutes = ExternConfig::GetInstitutesWithConfigurations(($GLOBALS['perm']->have_perm('root') && Request::option('view') == 'extern_global') ? 'global' : array('inst', 'fak'));
         if (sizeof($conf_institutes)) {
             echo '<form method="post" action="' . URLHelper::getLink('?com=copychoose') . '">';
             echo CSRFProtection::tokenTag();
-            echo "<blockquote><font size=\"2\">";
+            echo "<blockquote>";
             $choose_institute_copy = "<select name=\"copychooseinst\" class=\"nested-select\">\n";
             foreach ($conf_institutes as $conf_institute) {
                 $choose_institute_copy .= sprintf("<option value=\"%s\" class=\"%s\">%s</option>\n", $conf_institute['institut_id'], ($conf_institute['fakultaets_id'] == $conf_institute['institut_id'] ? 'nested-item-header' : 'nested-item'), htmlReady(strlen($conf_institute['name']) > 60 ? substr_replace($conf_institute['name'], '[...]', 30, -30) : $conf_institute['name']));
@@ -279,7 +262,7 @@ if ($choose_module_form != '') {
             $choose_institute_copy .= "</select>\n";
             printf(_("Konfiguration aus Einrichtung %s kopieren."), $choose_institute_copy);
             echo Button::create(_("Weiter") . " >>");
-            echo "</font></blockquote>\n";
+            echo "</blockquote>\n";
             echo "</form>\n";
         }
     } else {
@@ -302,11 +285,11 @@ if ($choose_module_form != '') {
 
             echo '<form method="post" action="' . URLHelper::getLink('?com=copyconfig') . '">';
             echo CSRFProtection::tokenTag();
-            echo "<blockquote><font size=\"2\">";
+            echo "<blockquote>";
             printf(_("Konfiguration %s aus Einrichtung kopieren."), $choose_module_select . '</select>');
             echo Button::create(_("Kopieren"));
             echo LinkButton::create("<< " . _("Zurück"), URLHelper::getURL('?list=TRUE&view=extern_inst'));
-            echo "</font></blockquote>\n";
+            echo "</blockquote>\n";
             echo "<input type=\"hidden\" name=\"copyinstid\" value=\"" . htmlReady(Request::quoted('copychooseinst')) . "\">\n";
             echo "</form>\n";
 
@@ -314,97 +297,87 @@ if ($choose_module_form != '') {
     }
 }
 else {
-    echo "<blockquote><font size=\"2\">";
+    echo "<blockquote>";
     echo _("Sie haben bereits für alle Module die maximale Anzahl von Konfigurationen angelegt. Um eine neue Konfiguration anzulegen, müssen Sie erst eine bestehende im gewünschten Modul löschen.");
-    echo "</font></blockquote>\n";
+    echo "</blockquote>\n";
 }
 
-echo "</td></tr>\n";
 
 if (!$have_config) {
-    echo "<tr><td class=\"blank\">\n<blockquote>\n<font size=\"2\">";
+    echo "<blockquote>\n";
     echo _("Es wurden noch keine Konfigurationen angelegt.");
-    echo "</font>\n</blockquote>\n</td></tr>\n";
+    echo "</blockquote>";
 } else {
-    echo "<tr><td height=\"20\" class=\"". $css_switcher->getHeaderClass() . "\" valign=\"bottom\">\n";
-    echo "<font size=\"2\"><b>&nbsp;";
+    echo "<table class=\"default\">\n";
+    echo "<caption>\n";
     echo _("Angelegte Konfigurationen");
-    echo "</b></font>\n</td></tr>\n";
-    $css_switcher->switchClass();
-    echo "<tr><td" . $css_switcher->getFullClass() . ">&nbsp;</td></tr>\n";
-    echo "<tr><td" . $css_switcher->getFullClass() . " valign=\"top\">\n";
-    echo "<table width=\"90%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n";
-    echo "<tr><td" . $css_switcher->getFullClass();
-    echo ">&nbsp;&nbsp;&nbsp;&nbsp;</td>\n";
-    echo "<td" . $css_switcher->getFullClass() . ">\n";
-
-    $css_switcher_2 = new CssClassSwitcher("", "table_header_bold");
-
+    echo "</caption>\n";
+    
     foreach ($module_types_ordered as $order) {
         $module_type = $GLOBALS['EXTERN_MODULE_TYPES'][$order];
         if (isset($configurations[$module_type["module"]])) {
-            $css_switcher_2->switchClass();
-            echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n";
-            echo "<tr>\n<td class=\"" . $css_switcher_2->getHeaderClass() . "\">";
-            echo "<font size=\"2\"><b>&nbsp; ";
-
+          
+            echo "<thead>\n";
+            echo "<tr>\n<th colspan=\"2\">";
+            
             if (isset($configurations[$module_type["module"]][$config_id])) {
                 echo "<a name=\"anker\"></a>\n";
             }
             echo $module_type["name"];
 
-            echo "</b></font>\n</td></tr>\n";
-            echo "<tr><td width=\"100%\" style=\"border-style:solid; border-width:1px; border-color:#000000;\">\n";
-
-            echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\">\n";
-            $css_switcher_2->resetClass();
+            echo "</th></tr>\n</thead>\n";
+            echo "<tbody>\n";
+            
 
             foreach ($configurations[$module_type["module"]] as $configuration) {
-                $css_switcher_2->switchClass();
-                echo "<tr><td" . $css_switcher_2->getFullClass() . " width=\"65%\"><font size=\"2\">";
-                echo "&nbsp;" . $configuration["name"] . "</font></td>\n";
+                echo "<tr><td style=\"width: 65%\">";
+                echo $configuration["name"] . "</td>\n";
+                $actionMenu = ActionMenu::get();
+                $actionMenu->addLink(
+                        URLHelper::getLink('?com=download_config&config_id='. $configuration['id'] .'&module='. $module_type['module']),
+                        _('Konfigurationsdatei herunterladen'),
+                        Icon::create('download', 'clickable', ['title' => _('Konfigurationsdatei herunterladen')]));
+                
+                $actionMenu->addLink(
+                        URLHelper::getLink('?com=upload_config&config_id='. $configuration['id']),
+                        _('Konfigurationsdatei hochladen'),
+                        Icon::create('upload', 'clickable', ['title' => _('Konfigurationsdatei hochladen')]));
+                $actionMenu->addLink(
+                        URLHelper::getLink('?com=info&config_id=' . $configuration['id']),
+                        _('weitere Informationen anzeigen'),
+                        Icon::create('infopage', 'clickable', ['title' => _('weitere Informationen anzeigen')]));
 
-                ?>
-                <td <?= $css_switcher_2->getFullClass() ?> width="5%">
-                    <a href="<?= URLHelper::getLink('?com=download_config&config_id='. $configuration['id'] .'&module='. $module_type["module"]) ?>">
-                        <?= Icon::create('download', 'clickable', ['title' => _("Konfigurationsdatei herunterladen")])->asImg(16, ["alt" => _("Konfigurationsdatei herunterladen")]) ?>
-                    </a>
-                </td>
-
-                <td <?= $css_switcher_2->getFullClass() ?> width="5%">
-                    <a href="<?= URLHelper::getLink('?com=upload_config&config_id='. $configuration['id']) ?>">
-                        <?= Icon::create('upload', 'clickable', ['title' => _("Konfigurationsdatei hochladen")])->asImg(16, ["alt" => _("Konfigurationsdatei hochladen")]) ?>
-                    </a>
-                </td>
-                <?
-
-                echo "<td" . $css_switcher_2->getFullClass() . " width=\"5%\">";
-                echo '<a href="' . URLHelper::getLink('?com=info&config_id=' . $configuration['id']) . '">';
-                echo Icon::create('infopage', 'clickable')->asImg(['class' => 'text-top', 'title' => _("weitere Informationen anzeigen")]);
-                echo "</a>\n</td>\n";
-                echo "<td" . $css_switcher_2->getFullClass() . " width=\"5%\">";
 
                 // Switching for the is_default option. Read the comment above.
                 if ($configuration["is_default"]) {
-                    echo '<a href="' . URLHelper::getLink('?com=unset_default&config_id=' . $configuration['id']) . '#anker">';
-                    echo Icon::create('checkbox-checked', 'clickable')->asImg(['class' => 'text-top', 'title' => _("Standard entziehen")]);
+                    $actionMenu->addLink(
+                            URLHelper::getLink('?com=unset_default&config_id=' . $configuration['id']) . '#anker',
+                            _('Standard entziehen'),
+                            Icon::create('checkbox-checked', 'clickable', ['title' => _('Standard entziehen')]));
                 } else {
-                    echo '<a href="' . URLHelper::getLink('?com=set_default&config_id=' . $configuration['id']) . '#anker">';
-                    echo Icon::create('checkbox-unchecked', 'clickable')->asImg(['class' => 'text-top', 'title' => _("Standard zuweisen")]);
+                    $actionMenu->addLink(
+                            URLHelper::getLink('?com=set_default&config_id=' . $configuration['id']) . '#anker',
+                            _('Standard zuweisen'),
+                            Icon::create('checkbox-checked', 'clickable', ['title' => _('Standard zuweisen')]));
                 }
 
-                echo "</a>\n</td>\n";
-                echo "<td" . $css_switcher_2->getFullClass() . " align=\"center\" width=\"5%\">\n";
-                echo '<a href="' . URLHelper::getLink('?com=delete_sec&config_id=' . $configuration['id']) . '#anker">';
-                echo  Icon::create('trash', 'clickable')->asImg(['class' => 'text-top', 'title' => _("Konfiguration löschen")]) . "</a>\n</td>\n";
-                echo "<td" . $css_switcher_2->getFullClass() . " align=\"right\" width=\"20%\" ";
+                $actionMenu->addLink(
+                        URLHelper::getLink('?com=delete_sec&config_id=' . $configuration['id']) . '#anker',
+                        _('Konfiguration löschen'),
+                        Icon::create('trash', 'clickable', ['title' => _('Konfiguration löschen')]));
+                $actionMenu->addLink(
+                        URLHelper::getURL('?com=edit&mod=' . $module_type['module'] . '&config_id=' . $configuration['id']),
+                        _('Konfiguration bearbeiten'),
+                        Icon::create('edit', 'clickable', ['title' => _('Konfiguration bearbeiten')]));
+                ?>
+                <?
+                echo "<td class=\"actions\" style=\"width: 20%\" ";
                 echo ">\n";
-                echo LinkButton::create(_("Konfiguration bearbeiten"), URLHelper::getURL('?com=edit&mod=' . $module_type['module'] . '&config_id=' . $configuration['id']));
+                echo $actionMenu->render();
                 echo "</td></tr>\n";
 
                 if (Request::option('com') == 'upload_config' && Request::option('config_id') == $configuration['id']) {
                     $template = $GLOBALS['template_factory']->open('extern/upload_form');
-                    $template->set_attribute('class', $css_switcher_2->getFullClass());
                     $template->set_attribute('module', $module_type['module']);
                     $template->set_attribute('config_id', $configuration['id']);
                     $template->set_attribute('max_filesize', 1024 * 100); // currently 100kb
@@ -412,67 +385,37 @@ if (!$have_config) {
                     echo $template->render();
                 }
             }
-
-            $css_switcher_2->resetClass();
-            echo "</table>\n";
-            echo "</td></tr>\n";
-            $css_switcher_2->switchClass();
-            echo "<tr><td" . $css_switcher_2->getFullClass() . ">&nbsp;</td></tr>";
-            echo "</table>\n";
         }
 
     }
-    echo "</td></tr>\n";
-    echo "</table>\n";
-    echo "</td></tr><tr><td" . $css_switcher->getFullClass() . " colspan=\"2\">&nbsp;</td></tr>\n";
 }
-echo "</table></td></tr>\n";
-echo "</table>\n</td>\n";
-echo "<td class=\"blank\" width=\"10%\" valign=\"top\">\n";
-echo "<table width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" border=\"0\">\n";
-echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
+echo "</table>\n";
+
 $info_max_configs = sprintf(_("Sie können pro Modul maximal %s Konfigurationen anlegen."),
         $EXTERN_MAX_CONFIGURATIONS);
 
+Helpbar::get()->addPlainText(_('Information'), sprintf(_("Sie können pro Modul maximal %s Konfigurationen anlegen."),
+        $EXTERN_MAX_CONFIGURATIONS));
+
 if (sizeof($configurations)) {
-    $info_set_default = _("Klicken Sie auf diesen Button, um eine Konfiguration zur Standard-Konfiguration zu erklären.");
-    $info_no_default = _("Wenn Sie keine Konfiguration als Standard ausgewählt haben, wird die Stud.IP-Konfiguration verwendet.");
-    $info_is_default = _("Dieses Symbol kennzeichnet die Standard-Konfiguration, die zur Formatierung herangezogen wird, wenn Sie beim Aufruf dieses Moduls keine Konfiguration angeben.");
-    $info_further_info = _("Klicken Sie auf diesen Button um weitere Informationen über diese Konfiguration zu erhalten. Hier finden Sie auch die Links, über die Sie die Module in Ihrer Website einbinden können.");
-    $info_content = array(
-                                    array("kategorie" => "Information:",
-                                                "eintrag" => array(
-                                                    array("icon" => Icon::create('info', 'clickable'),
-                                                                "text" => $info_max_configs
-                                                    ),
-                                                    array("icon" => Icon::create('checkbox-checked', 'clickable'),
-                                                                "text" => $info_is_default
-                                                    ),
-                                                    array("icon" => Icon::create('info', 'clickable'),
-                                                                "text" => $info_no_default
-                                                    )
-                                    )),
-                                    array("kategorie" => "Aktion:",
-                                            "eintrag" => array(
-                                                    array("icon" => Icon::create('infopage', 'clickable'),
-                                                                "text" => $info_further_info,
-                                                    ),
-                                                    array("icon" => Icon::create('checkbox-unchecked', 'clickable'),
-                                                                "text" => $info_set_default
-                                                    ))
-                                    ));
-} else {
-    $info_content = array(
-                                    array("kategorie" => "Information:",
-                                                "eintrag" => array(
-                                                    array("icon" => Icon::create('info', 'clickable'),
-                                                                "text" => $info_max_configs
-                                                    )
-                                    )));
+
+    Helpbar::get()->addPlainText(_('Standard-Konfiguration'),
+            _('Dieses Symbol kennzeichnet die Standard-Konfiguration, die zur Formatierung herangezogen wird, wenn Sie beim Aufruf dieses Moduls keine Konfiguration angeben.'),
+            Icon::create('checkbox-checked'));
+    Helpbar::get()->addPlainText(_('Keine Standard-Konfiguration'),
+            _('Wenn Sie keine Konfiguration als Standard ausgewählt haben, wird die Stud.IP-Konfiguration verwendet.'),
+            Icon::create('info'));
+    Helpbar::get()->addPlainText(_('Standard-Konfiguration zuweisen'),
+            _('Klicken Sie auf diesen Button, um eine Konfiguration zur Standard-Konfiguration zu erklären.'),
+            Icon::create('checkbox-unchecked'));
+    Helpbar::get()->addPlainText(_('Weitere Informationen'),
+            _('Klicken Sie auf diesen Button um weitere Informationen über diese Konfiguration zu erhalten. Hier finden Sie auch die Links, über die Sie die Module in Ihrer Website einbinden können.'),
+            Icon::create('infopage'));
+    
 }
 
-print_infobox($info_content, "sidebar/institute-sidebar.png");
-print_footer();
+
+//print_footer();
 
 $template = $GLOBALS['template_factory']->open('layouts/base.php');
 $template->content_for_layout = ob_get_clean();
