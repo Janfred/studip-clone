@@ -16,9 +16,6 @@ class Api_AuthorizationsController extends AuthenticatedController
 
         $GLOBALS['perm']->check('autor');
 
-        $layout = $GLOBALS['template_factory']->open('layouts/base');
-        $this->set_layout($layout);
-
         Navigation::activateItem('/profile/settings/api');
         PageLayout::setTitle(_('Applikationen'));
 

@@ -14,29 +14,21 @@
  * @since       3.0
  */
 
-class Userfilter_FilterController extends AuthenticatedController {
+class Userfilter_FilterController extends AuthenticatedController
+{
+    protected $utf8decode_xhr = true;
 
     /**
      * @see AuthenticatedController::before_filter
      */
-    public function before_filter(&$action, &$args) {
+    public function before_filter(&$action, &$args)
+    {
         parent::before_filter($action, $args);
         $this->conditionFields = UserFilterField::getAvailableFilterFields();
-        if (Request::isXhr()) {
-            $this->via_ajax = true;
-            $this->set_layout(null);
-            $request = Request::getInstance();
-            foreach ($request as $key => $value) {
-                $request[$key] = studip_utf8decode($value);
-            }
-        } else {
-            $layout = $GLOBALS['template_factory']->open('layouts/base');
-            $this->set_layout($layout);
-            PageLayout::setTitle(_('Auswahlbedingungen'));
-            Navigation::activateItem('/tools/coursesets');
-        }
+
+        PageLayout::setTitle(_('Auswahlbedingungen'));
+        Navigation::activateItem('/tools/coursesets');
         PageLayout::addSqueezePackage('userfilter');
-        $this->set_content_type('text/html;charset=windows-1252');
     }
 
     /**
@@ -45,7 +37,8 @@ class Userfilter_FilterController extends AuthenticatedController {
      * @param String $containerId Target HTML element
      * @param String $conditionId ID of an existiting UserFilter object
      */
-    public function configure_action($containerId, $conditionId='') {
+    public function configure_action($containerId, $conditionId = '')
+    {
         $this->containerId = $containerId;
         if ($conditionId) {
             $this->condition = new UserFilter($conditionId);
@@ -55,7 +48,8 @@ class Userfilter_FilterController extends AuthenticatedController {
     /**
      * Adds a condition.
      */
-    public function add_action() {
+    public function add_action()
+    {
         $condition = new UserFilter();
         $fields = Request::getArray('field');
         $compareOps = Request::getArray('compare_operator');
@@ -80,12 +74,11 @@ class Userfilter_FilterController extends AuthenticatedController {
      *
      * @param String $conditionId the UserFilter to delete.
      */
-    public function delete_action($conditionId) {
+    public function delete_action($conditionId)
+    {
         $condition = new UserFilter($conditionId);
         $condition->delete();
         $this->render_nothing();
     }
 
 }
-
-?>

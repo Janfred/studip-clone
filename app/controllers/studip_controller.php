@@ -45,6 +45,10 @@ abstract class StudipController extends Trails_Controller
             include 'lib/seminar_open.php';
         }
 
+        // Set generic attribute that indicates whether the request was sent
+        // via ajax or not
+        $this->via_ajax = Request::isXhr();
+
         # Set base layout
         #
         # If your controller needs another layout, overwrite your controller's

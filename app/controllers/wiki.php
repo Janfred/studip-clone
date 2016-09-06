@@ -10,25 +10,20 @@ require_once 'lib/wiki.inc.php';
 
 class WikiController extends AuthenticatedController
 {
+    protected $utf8decode_xhr = true;
+
     public function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
-        
+
         $this->keyword  = Request::get('keyword');
         $this->range_id = $GLOBALS['SessSemName'][1];
-        
-        if (Request::isXhr()) {
-            $this->keyword = studip_utf8decode($this->keyword);
-        }
     }
 
     public function store_action($version)
     {
         $body = Request::get('body');
-        if (Request::isXhr()) {
-            $body = studip_utf8decode($body);
-        }
-        
+
         submitWikiPage($this->keyword, $version, $body, $GLOBALS['user']->id, $this->range_id);
 
         $latest_version = getLatestVersion($this->keyword, $this->range_id);

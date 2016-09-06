@@ -40,20 +40,6 @@ class LiteratureController extends AuthenticatedController
         $this->attributes['date'] = array();
         $this->attributes['combo'] = array('style' => 'width:45%; display: inline;');
         $this->attributes['lit_select'] = array('style' => 'font-size:8pt;width:100%');
-
-        // on AJAX request set no page layout.
-        if (Request::isXhr()) {
-            $this->via_ajax = true;
-            $this->set_layout(null);
-            $request = Request::getInstance();
-            foreach ($request as $key => $value) {
-                $request[$key] = studip_utf8decode($value);
-            }
-        }
-        $this->set_content_type('text/html;charset=windows-1252');
-        /*      checkObject(); // do we have an open object?
-        checkObjectModule('literature');
-        object_set_visit_module('literature');/**/
     }
 
     /**

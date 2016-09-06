@@ -17,7 +17,9 @@
 
 require_once 'app/models/rule_administration.php';
 
-class Admission_RuleAdministrationController extends AuthenticatedController {
+class Admission_RuleAdministrationController extends AuthenticatedController
+{
+    protected $utf8decode_xhr = true;
 
     /**
      * @see AuthenticatedController::before_filter
@@ -28,21 +30,8 @@ class Admission_RuleAdministrationController extends AuthenticatedController {
 
         $GLOBALS['perm']->check('root');
 
-        if (Request::isXhr()) {
-            $this->via_ajax = true;
-            $this->set_layout(null);
-            $request = Request::getInstance();
-            foreach ($request as $key => $value) {
-                $request[$key] = studip_utf8decode($value);
-            }
-        } else {
-            $this->via_ajax = false;
-            $layout = $GLOBALS['template_factory']->open('layouts/base');
-            $this->set_layout($layout);
-            Navigation::activateItem('/admin/config/admissionrules');
-        }
+        Navigation::activateItem('/admin/config/admissionrules');
         PageLayout::addSqueezePackage('admission');
-        $this->set_content_type('text/html;charset=windows-1252');
 
         $sidebar = Sidebar::Get();
         $sidebar->setTitle(PageLayout::getTitle() ?: _('Anmelderegeln'));

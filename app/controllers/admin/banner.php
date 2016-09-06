@@ -24,12 +24,6 @@ class Admin_BannerController extends AuthenticatedController
 
         URLHelper::removeLinkParam('cid');
 
-        // ajax
-        if (Request::isXhr()) {
-            $this->via_ajax = true;
-            $this->set_layout(null);
-        }
-
         // user must have root permission
         $GLOBALS['perm']->check('root');
 

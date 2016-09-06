@@ -41,13 +41,6 @@ class Admin_UserController extends AuthenticatedController
         PageLayout::setHelpKeyword("Admins.Benutzerkonten");
         PageLayout::setTitle(_("Personenverwaltung"));
 
-        //ajax
-        if (Request::isXhr()) {
-            Header('Content-Type: text/plain;charset=windows-1252');
-            $this->via_ajax = true;
-            $this->set_layout(null);
-        }
-
         $this->action = $action;
         $this->args = $args;
 

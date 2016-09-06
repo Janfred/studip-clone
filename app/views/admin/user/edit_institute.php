@@ -1,7 +1,7 @@
 <? use Studip\Button, Studip\LinkButton; ?>
-<? if (empty($via_ajax)): ?>
-<h2><?= _("Bearbeiten der Einrichtungsdaten") ?></h2>
-<? endif; ?>
+<h2 class="hide-in-dialog">
+    <?= _('Bearbeiten der Einrichtungsdaten') ?>
+</h2>
 
 <form action="<?= $controller->url_for('admin/user/edit_institute/' . $user['user_id'] .'/' .$institute['Institut_id']) ?>" method=post>
     <?= CSRFProtection::tokenTag() ?>

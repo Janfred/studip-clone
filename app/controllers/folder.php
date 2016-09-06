@@ -1,16 +1,6 @@
 <?php
 class FolderController extends AuthenticatedController
 {
-    public function before_filter(&$action, &$args)
-    {
-        parent::before_filter($action, $args);
-        
-        if (Request::isXhr()) {
-            $this->set_layout(null);
-            $this->response->add_header('Content-Type', 'text/html;charset=windows-1252');
-        }
-    }
-
     public function create_action($id, $type)
     {
         checkObject();

@@ -93,8 +93,6 @@ class Settings_SettingsController extends AuthenticatedController
         }
 
         Sidebar::get()->setImage('sidebar/person-sidebar.png');
-
-        $this->set_layout($GLOBALS['template_factory']->open('layouts/base'));
     }
 
     /**

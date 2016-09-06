@@ -27,9 +27,6 @@ class Admin_LockrulesController extends AuthenticatedController
 
         $perm->check(Config::get()->LOCK_RULE_ADMIN_PERM ? Config::get()->LOCK_RULE_ADMIN_PERM : 'admin');
 
-        $layout = $template_factory->open('layouts/base');
-        $this->set_layout($layout);
-
         PageLayout::setTitle(_('Verwaltung der Sperrebenen'));
         Navigation::activateItem('/admin/locations/lock_rules');
 

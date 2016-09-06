@@ -28,9 +28,6 @@ class ProfileController extends AuthenticatedController
         URLHelper::removeLinkParam('cid');
         unset($_SESSION['SessionSeminar']);
 
-        $this->set_layout($GLOBALS['template_factory']->open('layouts/base_without_infobox'));
-
-
         Navigation::activateItem('/profile/index');
         URLHelper::addLinkParam('username', Request::username('username'));
         PageLayout::setHelpKeyword('Basis.Homepage');

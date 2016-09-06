@@ -21,7 +21,8 @@
 
 class TourController extends AuthenticatedController
 {
-    
+    protected $utf8decode_xhr = true;
+
     /**
      * Callback function being called before an action is executed.
      */
@@ -44,20 +45,6 @@ class TourController extends AuthenticatedController
             'RB' => _('rechts (unten)')
         );
         
-        // AJAX request, so no page layout.
-        if (Request::isXhr()) {
-            $this->via_ajax = true;
-            $this->set_layout(null);
-            $request = Request::getInstance();
-            foreach ($request as $key => $value) {
-                $request[$key] = studip_utf8decode($value);
-            }
-        // Open base layout for normal view
-        } else {
-            $layout = $GLOBALS['template_factory']->open('layouts/base');
-            $this->set_layout($layout);
-        }
-        $this->set_content_type('text/html;charset=windows-1252');
         $this->help_admin = $GLOBALS['perm']->have_perm('root') || RolePersistence::isAssignedRole($GLOBALS['user']->id, 'Hilfe-Administrator(in)');
         
     }

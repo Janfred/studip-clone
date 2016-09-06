@@ -13,6 +13,8 @@ require_once 'app/models/siteinfo.php';
 
 class SiteinfoController extends StudipController
 {
+    protected $with_session = true;
+
     private $si;
 
     /**
@@ -20,8 +22,6 @@ class SiteinfoController extends StudipController
      */
     public function before_filter (&$action, &$args)
     {
-        $this->with_session = true;
-
         parent::before_filter($action, $args);
 
         // Siteinfo-Class is defined in models/siteinfo.php

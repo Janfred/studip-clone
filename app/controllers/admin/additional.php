@@ -23,7 +23,7 @@ class Admin_AdditionalController extends AuthenticatedController
         parent::before_filter($action, $args);
 
         // Load the course
-        $this->course = new Course($_SESSION['SessionSeminar']);
+        $this->course = Course::findCurrent();
 
         // Check permissions to be on this site
         if (!$GLOBALS['perm']->have_studip_perm("tutor", $this->course->id)) {

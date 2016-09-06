@@ -19,18 +19,9 @@ require_once 'app/models/ical_export.php';
 
 class Calendar_SingleController extends Calendar_CalendarController
 {
-
-    public function __construct($dispatcher) {
-        parent::__construct($dispatcher);
-    }
-
     public function before_filter(&$action, &$args) {
         $this->base = 'calendar/single/';
         parent::before_filter($action, $args);
-        if (Request::isXhr()) {
-            $this->response->add_header('Content-Type', 'text/html; charset=windows-1252');
-            $this->layout = null;
-        }
     }
     
     protected function createSidebar($active = null, $calendar = null)

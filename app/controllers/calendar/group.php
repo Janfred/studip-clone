@@ -5,12 +5,8 @@ require_once 'app/controllers/authenticated_controller.php';
 require_once 'app/models/calendar/Calendar.php';
 require_once 'app/models/calendar/SingleCalendar.php';
 
-class Calendar_GroupController extends Calendar_CalendarController {
-
-    function __construct($dispatcher) {
-        parent::__construct($dispatcher);
-    }
-
+class Calendar_GroupController extends Calendar_CalendarController
+{
     public function before_filter(&$action, &$args)
     {
         $this->base = 'calendar/group/';

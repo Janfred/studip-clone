@@ -24,11 +24,6 @@ class StartController extends AuthenticatedController
     {
         parent::before_filter($action, $args);
 
-        if (Request::isXhr()) {
-            $this->set_layout(null);
-            $this->set_content_type('text/html;Charset=windows-1252');
-        }
-
         Navigation::activateItem('/start');
         PageLayout::setTabNavigation(NULL); // disable display of tabs
         PageLayout::setHelpKeyword("Basis.Startseite"); // set keyword for new help

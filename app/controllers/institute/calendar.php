@@ -17,24 +17,26 @@
 */
 class Institute_CalendarController extends AuthenticatedController
 {
-    
+
     private $calendar_settings = array();
     private $institute_id;
-    
+
     # see Trails_Controller#before_filter
     function before_filter(&$action, &$args)
     {
+        parent::before_filter($action, $args);
+
         $this->institute_id = Request::option('cid');
         $this->calendar_settings = Config::get()->getValue('CALENDAR_SETTINGS');
     }
-    
+
     public function index_action()
     {
         // switch to the view the user has selected in his personal settings
         $this->redirect('institute/calendar/'
                 . $this->calendar_settings['view']);
     }
-    
+
     public function showday_action($timestamp = null)
     {
         $calendar = Calendar::getInstance(Calendar::RANGE_INST,
@@ -43,9 +45,9 @@ class Institute_CalendarController extends AuthenticatedController
                 . ' - ' . _("Terminkalender - Tagesansicht"));
         $_SESSION['calendar_sess_control_data']['view_prv'] = 'showday';
         Navigation::activateItem("/course/calendar/day");
-        
+
         $atime = $timestamp ?: time();
-        
+
         $at = date('G', $atime);
         if ($at >= $this->calendar_settings['start']
                 && $at <= $this->calendar_settings['end'] || !$atime) {
@@ -65,8 +67,8 @@ class Institute_CalendarController extends AuthenticatedController
         $this->st = $st;
         $this->et = $et;
     }
-    
-    
+
+
     /**
     * @todo der include muss weg
     */
@@ -78,9 +80,9 @@ class Institute_CalendarController extends AuthenticatedController
                 . ' - ' . _("Terminkalender - Wochenansicht"));
         $_SESSION['calendar_sess_control_data']['view_prv'] = 'showweek';
         Navigation::activateItem("/course/calendar/week");
-        
+
         $atime = $timestamp ?: time();
-        
+
         $at = date('G', $atime);
         if ($at >= $this->calendar_settings['start']
                 && $at <= $this->calendar_settings['end'] || !$atime) {
@@ -101,37 +103,37 @@ class Institute_CalendarController extends AuthenticatedController
         $this->st = $st;
         $this->et = $et;
     }
-    
+
     public function showmonth_action($timestamp = null)
     {
-        
+
     }
-    
+
     public function showyear_action($timestamp = null)
     {
-        
+
     }
-    
+
     public function event_action($event_id = null)
     {
-        
+
     }
-    
+
     public function seminar_events_action()
     {
-        
+
     }
-    
+
     public function showexport_action()
     {
-        
+
     }
-    
+
     public function export_action()
     {
-        
+
     }
-    
-    
-    
+
+
+
 }

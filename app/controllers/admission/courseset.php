@@ -18,25 +18,18 @@ require_once 'app/models/courseset.php';
 require_once 'app/models/rule_administration.php';
 require_once 'lib/admission.inc.php';
 
-class Admission_CoursesetController extends AuthenticatedController {
+class Admission_CoursesetController extends AuthenticatedController
+{
+    protected $utf8decode_xhr = true;
 
     /**
      * Things to do before every page load.
      */
-    public function before_filter(&$action, &$args) {
+    public function before_filter(&$action, &$args)
+    {
         parent::before_filter($action, $args);
-        // AJAX request, so no page layout.
-        if (Request::isXhr()) {
-            $this->via_ajax = true;
-            $this->set_layout(null);
-            $request = Request::getInstance();
-            foreach ($request as $key => $value) {
-                $request[$key] = studip_utf8decode($value);
-            }
-        // Open base layout for normal
-        } else {
-            $layout = $GLOBALS['template_factory']->open('layouts/base');
-            $this->set_layout($layout);
+
+        if (!Request::isXhr()) {
             PageLayout::setTitle(_('Anmeldesets'));
             // Get only own courses if user doesn't have permission to edit institute-wide coursesets.
             $this->onlyOwnCourses = true;
@@ -49,7 +42,6 @@ class Admission_CoursesetController extends AuthenticatedController {
             }
         }
         PageLayout::addSqueezePackage('admission');
-        $this->set_content_type('text/html;charset=windows-1252');
 
         $views = new ActionsWidget();
         $views->addLink(

@@ -16,6 +16,7 @@
 
 class Admission_RuleController extends AuthenticatedController
 {
+    protected $utf8decode_xhr = true;
 
     /**
      * @see AuthenticatedController::before_filter
@@ -23,20 +24,9 @@ class Admission_RuleController extends AuthenticatedController
     public function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
-        if (Request::isXhr()) {
-            $this->via_ajax = true;
-            $this->set_layout(null);
-            $request = Request::getInstance();
-            foreach ($request as $key => $value) {
-                $request[$key] = studip_utf8decode($value);
-            }
-        } else {
-            $layout = $GLOBALS['template_factory']->open('layouts/base');
-            $this->set_layout($layout);
-            PageLayout::setTitle(_('Anmeldesets'));
-            Navigation::activateItem('/tools/coursesets');
-        }
-        $this->set_content_type('text/html;charset=windows-1252');
+
+        PageLayout::setTitle(_('Anmeldesets'));
+        Navigation::activateItem('/tools/coursesets');
     }
 
     /**

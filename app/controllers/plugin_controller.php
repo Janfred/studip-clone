@@ -8,18 +8,11 @@
  * the License, or (at your option) any later version.
  */
 
-class PluginController extends StudipController {
-
-    function __construct($dispatcher)
+class PluginController extends StudipController
+{
+    public function __construct($dispatcher)
     {
         parent::__construct($dispatcher);
         $this->plugin = $this->dispatcher->current_plugin;
     }
-
-    function before_filter(&$action, &$args)
-    {
-        $this->set_layout($GLOBALS['template_factory']->open('layouts/base'));
-        parent::before_filter($action, $args);
-    }
-
 }
