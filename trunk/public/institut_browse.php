@@ -84,12 +84,6 @@ if (Request::option('cmd')=="suche"){
 ?>
 <h1><?= _('Suche nach Einrichtungen') ?></h1>
 <?
-
-if ($msg)   {
-    echo "\n<table width=\"99%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">";
-    parse_msg ($msg,"§","blank",1,false);
-    echo "\n</table>";
-}
 $the_tree->showTree();
 
 $sidebar = Sidebar::get();
