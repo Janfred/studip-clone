@@ -1041,6 +1041,12 @@ function form($refresh = FALSE)
 function prepareFilename($filename, $shorten = FALSE, $checkfolder = false) {
     $bad_characters = array (":", chr(92), "/", "\"", ">", "<", "*", "|", "?", " ", "(", ")", "&", "[", "]", "#", chr(36), "'", "*", ";", "^", "`", "{", "}", "|", "~", chr(255));
     $replacements = array ("", "", "", "", "", "", "", "", "", "_", "", "", "+", "", "", "", "", "", "", "-", "", "", "", "", "-", "", "");
+    
+    //delete all ASCII control characters
+    for($i = 0; $i < 0x20; $i++) {
+        $bad_characters[] = chr($i);
+        $replacements[] = "";
+    }
 
     $filename=str_replace($bad_characters, $replacements, $filename);
 
