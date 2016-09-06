@@ -9,9 +9,13 @@ use Studip\Button, Studip\LinkButton;
 </style>
 <div class="index_container">
 <?if (sizeof($messages)):?>
-<table width="100%">
-    <?=parse_msg_array($messages, '', 1, false)?>
-</table>
+<? foreach($messages as $type => $_messages) {
+    if(!empty($_messages)) {
+        foreach($_messages as $message) {
+            echo MessageBox::$type($message);
+        }
+    }
+}?>
 <?endif;?>
 <table class="index_box logintable">
 <tr>
