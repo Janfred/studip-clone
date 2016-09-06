@@ -385,7 +385,9 @@ if ($mcount > 3) {
             echo '</tr></table></form>';
             echo '</td></tr>', "\n";
         } elseif ($preset_error != '') {
-            my_info($preset_error, 'blank', $mcounth, FALSE);
+            echo '<tr><td colspan="'.$mcounth.'">';
+            echo MessageBox::info($msg);
+            echo '</td></tr>';
         }
 
         // navigation arrows

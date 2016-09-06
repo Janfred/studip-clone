@@ -275,7 +275,9 @@ function export_inst($inst_id, $ex_sem_id = "all")
         break;
     default:
         echo "</td></tr>";
-        my_error(_("Der gewählte Exportmodus wird nicht unterstützt."));
+        echo '<tr><td>';
+        echo MessageBox::error(_('Der gewählte Exportmodus wird nicht unterstützt.'));
+        echo '</td></tr>';
         echo "</table></td></tr></table>";
         die();
     }
