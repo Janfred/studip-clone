@@ -341,10 +341,11 @@ class Institute_MembersController extends AuthenticatedController
                         . "FROM auth_user_md5 "
                         . "LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) "
                         . "WHERE "
-                        . "username LIKE :input OR Vorname LIKE :input "
+                        . "(username LIKE :input OR Vorname LIKE :input "
                         . "OR CONCAT(Vorname,' ',Nachname) LIKE :input "
                         . "OR CONCAT(Nachname,' ',Vorname) LIKE :input "
-                        . "OR Nachname LIKE :input OR {$GLOBALS['_fullname_sql']['full_rev']} LIKE :input "
+                        . "OR Nachname LIKE :input OR {$GLOBALS['_fullname_sql']['full_rev']} LIKE :input) "
+                        . "AND visible != 'never' "
                         . " ORDER BY fullname ASC",
                         _("Nutzer suchen"), "user_id");
 
