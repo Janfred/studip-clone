@@ -14,44 +14,41 @@ ob_start();
 page_open(array('sess' => 'Seminar_Session', 'auth' => 'Seminar_Default_Auth', 'perm' => 'Seminar_Perm', 'user' => 'Seminar_User'));
 
 function head($headline, $red=False) {
-$class = '';
-if($red)
-    $class = '_red';
-?>
-<div align="center">
-<table class="default" width="70%">
-    <tbody>
-        <tr>
-            <td class="table_header_bold<?=$class ?>" colspan=3 align="left">
-                <?=Icon::create('mail', 'info_alt')->asImg(['class' => 'text-top']) ?>
-                <b>&nbsp;<?= $headline; ?></b>
-            </td>
-        </tr>
-        <tr>
-            <td style="padding: 1.5em;">
-<?php
+    echo sprintf('<h1>%s</h1>', $headline);
 }
 
 function footer() {
-    echo '</td></tr></table></div> <br>';
 }
 
 function reenter_mail() {
-    echo _('Sollten Sie keine E-Mail erhalten haben, können Sie sich einen neuen Aktivierungsschlüssel zuschicken lassen. Geben Sie dazu Ihre gewünschte E-Mail-Adresse unten an:');
-    echo '<form action="' . URLHelper::getLink() . '" method="post">'
+    echo '<br>';
+    echo '<form action="' . URLHelper::getLink() . '" method="post" class="default">';
+    echo '<fieldset>';
+    echo '<legend>'._('Sollten Sie keine E-Mail erhalten haben, können Sie sich einen neuen Aktivierungsschlüssel zuschicken lassen. Geben Sie dazu Ihre gewünschte E-Mail-Adresse unten an') . '</legend>'
         . CSRFProtection::tokenTag()
         .'<input type="hidden" name="uid" value="'. htmlReady(Request::option('uid')) .'">'
-        .'<table><tr><td>'. _('E-Mail:') .'</td><td><input type="email" name="email1"></td></tr>'
-        .'<tr><td>'. _('Wiederholung:') . '</td><td><input type="email" name="email2"></td></tr></table>'
-        .Button::createAccept(). '</form>';
+        .'<label>' . _('E-Mail')
+        .'<input type="email" name="email1" required>'
+        .'</label>'
+        .'<label>' . _('Wiederholung')
+        .'<input type="email" name="email2" required>'
+        .'</label>';
+    echo '</fieldset>';
+    echo '<footer>' . Button::createAccept() . '</footer>';
+    echo '</form>';
 }
 
 function mail_explain() {
-    echo _('Sie haben Ihre E-Mail-Adresse geändert. Um diese frei zu schalten müssen Sie den Ihnen an Ihre neue Adresse zugeschickten Aktivierungs Schlüssel im unten stehenden Eingabefeld eintragen.');
-    echo '<br><form action="' . URLHelper::getLink() . '" method="post">'
-        . CSRFProtection::tokenTag()
-        .'<input type="text" name="key"><input name="uid" type="hidden" value="'.htmlReady(Request::option('uid')).'"><br>'
-        .Button::createAccept(). '</form><br><br>';
+    echo '<form action="' . URLHelper::getLink() . '" method="post" class="default">';
+    echo '<fieldset>';
+    echo '<legend>' .  _('Sie haben Ihre E-Mail-Adresse geändert. 
+    Um diese frei zu schalten müssen Sie den Ihnen an Ihre neue Adresse zugeschickten Aktivierungs Schlüssel im unten stehenden Eingabefeld eintragen.') . '</legend>';
+    echo CSRFProtection::tokenTag();
+    echo '<label>' . _('Aktivierungs Schlüssel')
+        .'<input type="text" name="key"><input name="uid" type="hidden" value="'.htmlReady(Request::option('uid')).'">';
+    echo '</fieldset>';
+    echo '<footer>' . Button::createAccept() . '</footer>';
+    echo '</form>';
 
 }
 
@@ -74,26 +71,22 @@ if(Request::get('key') !== null) {
     $sth->execute(array($uid));
     $result = $sth->fetch();
     $key = $result['validation_key'];
+    
     if(Request::quoted('key') == $key) {
         $sth = $db->prepare("UPDATE auth_user_md5 SET validation_key='' WHERE user_id=?");
         $sth->execute(array($uid));
         unset($_SESSION['semi_logged_in']);
         head(PageLayout::getTitle());
-        echo _('Ihre E-Mail-Adresse wurde erfolgreich geändert.');
+        PageLayout::postSuccess(_('Ihre E-Mail-Adresse wurde erfolgreich geändert.'));
         printf(' <a href="' . URLHelper::getLink('index.php') . '">%s</a>', _('Zum Login'));
-        footer();
     } else if ($key == '') {
         head(PageLayout::getTitle());
-        echo _('Ihre E-Mail-Adresse ist bereits geändert.');
+        PageLayout::postInfo(_('Ihre E-Mail-Adresse ist bereits geändert.'));
         printf(' <a href="' . URLHelper::getLink('index.php') . '">%s</a>', _('Zum Login'));
-        footer();
     } else {
         if (Request::get('key')) {
-            head(_('Warnung'), True);
-            echo _("Falscher Bestätigungscode.");
-            footer();
+            PageLayout::postError(_("Falscher Bestätigungscode."));
         }
-
         head(PageLayout::getTitle());
         mail_explain();
         if($_SESSION['semi_logged_in'] == Request::option('uid')) {
@@ -102,7 +95,6 @@ if(Request::get('key') !== null) {
             printf(_('Sie können sich %seinloggen%s und sich den Bestätigungscode neu oder an eine andere E-Mail-Adresse schicken lassen.'),
                     '<a href="' . URLHelper::getLink('index.php?again=yes') . '">', '</a>');
         }
-        footer();
     }
 
 // checking semi_logged_in is important to avoid abuse
@@ -113,33 +105,20 @@ if(Request::get('key') !== null) {
 
         $tmp_user = User::find(Request::option('uid'));
         $send = edit_email($tmp_user, Request::quoted('email1'), True);
-
-        if($send[0]) {
+        if($send) {
             $_SESSION['semi_logged_in'] = False;
-            head(PageLayout::getTitle());
-            printf(_('An %s wurde ein Aktivierungslink geschickt.'), Request::quoted('email1'));
-            footer();
-        } else {
-            head(_('Fehler'), True);
-            echo parse_msg($send[1]);
-            footer();
-
-            head(PageLayout::getTitle());
-            reenter_mail();
-            footer();
         }
+        
     } else {
-        head(PageLayout::getTitle());
-        printf('<b>%s</b>', _('Die eingegebenen E-Mail-Adressen stimmen nicht überein. Bitte überprüfen Sie Ihre Eingabe.'));
-        reenter_mail();
-        footer();
+        PageLayout::postError(_('Die eingegebenen E-Mail-Adressen stimmen nicht überein. Bitte überprüfen Sie Ihre Eingabe.'));
     }
+    mail_explain();
+    reenter_mail();
 } else {
     // this never happens unless someone manipulates urls (or the presented link within the mail is broken)
     head(PageLayout::getTitle());
-    echo _('Der Aktivierungsschlüssel, der übergeben wurde, ist nicht korrekt.');
     mail_explain();
-    footer();
+    reenter_mail();
 }
 
 $template = $GLOBALS['template_factory']->open('layouts/base.php');
