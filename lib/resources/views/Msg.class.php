@@ -100,7 +100,7 @@ class Msg {
             if ($view_mode == 'window') {
                 // template with studip-layout surrounding the message
                 $template = $GLOBALS['template_factory']->open('resources/msg_window');
-                $template->set_layout('layouts/base_without_infobox');
+                $template->set_layout('layouts/base');
 
                 // pass messages to template and render it
                 $template->set_attribute('messages', $messages);
@@ -131,7 +131,7 @@ class Msg {
 
             // template with studip-layout surrounding the message
             $template = $GLOBALS['template_factory']->open('resources/msg_window');
-            $template->set_layout('layouts/base_without_infobox');
+            $template->set_layout('layouts/base');
 
             // pass messages to template and render it
             $template->set_attribute('messages', $message );

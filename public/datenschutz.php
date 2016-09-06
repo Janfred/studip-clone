@@ -32,6 +32,6 @@ $USER_VISIBILITY_CHECK = false;
 PageLayout::setTitle(_('Erläuterungen zum Datenschutz'));
 
 $template = $template_factory->open('privacy');
-$template->set_layout('layouts/base_without_infobox');
+$template->set_layout('layouts/base.php');
 
 echo $template->render();

@@ -181,7 +181,7 @@ class SharedVersionController extends MVVController
             PageLayout::addStylesheet('print.css');
             $factory = $this->get_template_factory();
             $template = $factory->open('studiengaenge/versionen/diff');
-            $template->set_layout($GLOBALS['template_factory']->open('layouts/base_without_infobox'));
+            $template->set_layout($GLOBALS['template_factory']->open('layouts/base.php'));
             $template->set_attributes(
                     array(
                         'new_version' => $new_version,
