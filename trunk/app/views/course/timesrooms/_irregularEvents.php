@@ -11,19 +11,21 @@ $room_request_filter = function ($date) {
             <?= _('Unregelmäßige Termine / Blocktermine') ?>
         </h1>
         <? if(!$locked) : ?>
-        <nav>
-            <a class="link-add"
-               href="<?= $controller->link_for('course/timesrooms/createSingleDate/' . $course->id, $linkAttributes) ?>"
-               data-dialog="size=600" title="<?= _('Einzeltermin hinzufügen') ?>">
-                <?= _('Neuer Einzeltermin') ?>
-            </a>
-            <a class="link-add"
-               href="<?= $controller->url_for('course/block_appointments/index/' . $course->id, $linkAttributes) ?>"
-               data-dialog="size=600"
-               title="<?= _('Blocktermin hinzufügen') ?>">
-                <?= _('Neuer Blocktermin') ?>
-            </a>
-        </nav>
+            <? $actionMenu = ActionMenu::get()?>
+            <? $actionMenu->addLink(
+                    $controller->link_for('course/timesrooms/createSingleDate/' . $course->id, $linkAttributes),
+                    _('Einzeltermin hinzufügen'),
+                    Icon::create('date+add', 'clickable', ['title' => _('Einzeltermin hinzufügen')]),
+                    ['data-dialog' => 'size=600'])
+            ?>
+
+            <? $actionMenu->addLink(
+                    $controller->url_for('course/block_appointments/index/' . $course->id, $linkAttributes),
+                    _('Blocktermin hinzufügen'),
+                    Icon::create('timetable+add', 'clickable', ['title' => _('Blocktermin hinzufügen')]),
+                    ['data-dialog' => 'size=600'])
+            ?>
+            <?= $actionMenu->render() ?>
         <? endif ?>
     </header>
 <? if (!empty($single_dates)): ?>

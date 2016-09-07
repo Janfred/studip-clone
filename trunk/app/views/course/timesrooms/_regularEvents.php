@@ -36,10 +36,10 @@
                             <?= htmlReady($cycle['cycle']->toString('long')) ?>
                         </a>
                     </h1>
-                    <nav>
+                    <section>
                         <? if (!$locked) : ?>
                             <span>
-                                <?= _('Raum') ?>:
+                                <strong><?= _('Raum') ?></strong>:
                             <? if (count($cycle['room_request']) > 0): ?>
                                 <?= htmlReady(array_pop($cycle['room_request'])->name)?>
                             <? else : ?>
@@ -48,22 +48,29 @@
                             </span>
                             <?php if (Config::get()->RESOURCES_ALLOW_ROOM_REQUESTS) : ?>
                                 <span>
-                                    <?= _('Einzel-Raumanfrage') ?>:
+                                    <strong><?= _('Einzel-Raumanfrage') ?></strong>:
                                     <?= htmlReady($course->getRequestsInfo($metadate_id)) ?>
                                 </span>
                             <?php endif ?>
-
-                            <span>
-                                <a href="<?= $controller->url_for('course/timesrooms/createCycle/' . $metadate_id, $linkAttributes) ?>"
-                                   data-dialog="size=600">
-                                    <?= Icon::create('edit', 'clickable', ['title' => _('Diesen Zeitraum bearbeiten')])->asImg() ?>
-                                </a>
-                                <?= Icon::create('trash', 'clickable', ['title' => _('Diesen Zeitraum löschen')])
-                                        ->asInput(['formaction' => $controller->url_for('course/timesrooms/deleteCycle/' . $metadate_id, $linkAttributes),
-                                                   'data-confirm' => _('Soll dieser Zeitraum wirklich gelöscht werden?')]) ?>
-                            </span>
-                        <? endif ?>
-                    </nav>
+                            
+                    </section>
+                    <? $actionMenu = ActionMenu::get()?>
+                    <? $actionMenu->addLink(
+                            $controller->url_for('course/timesrooms/createCycle/' . $metadate_id, $linkAttributes),
+                            _('Diesen Zeitraum bearbeiten'),
+                            Icon::create('edit', 'clickable', ['title' => _('Diesen Zeitraum bearbeiten')]),
+                            ['data-dialog' => 'size=600'])
+                    ?>
+                    <? $actionMenu->addButton(
+                            'delete_cycle',
+                            _('Diesen Zeitraum löschen'),
+                            Icon::create('trash', 'clickable',
+                                    ['title'        => _('Diesen Zeitraum löschen'),
+                                     'formaction'   => $controller->url_for('course/timesrooms/deleteCycle/' . $metadate_id, $linkAttributes),
+                                     'data-confirm' => _('Soll dieser Zeitraum wirklich gelöscht werden?')]))
+                    ?>
+                    <?= $actionMenu->render() ?>
+                    <? endif ?>
                 </header>
                 <section>
                     <table class="default nohover">
