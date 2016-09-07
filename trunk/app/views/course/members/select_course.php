@@ -1,4 +1,4 @@
-<form class="studip-form" action="<?= $controller->url_for('course/members/select_course') ?>" method="post">
+<form class="default" action="<?= $controller->url_for('course/members/select_course') ?>" method="post">
     <section>
         <label class="caption" for="course_id">
             <?= _('Zielveranstaltung') ?>:
@@ -8,11 +8,11 @@
     <section>
         <label class="caption">
             <?= _('Sollen die gewählten Personen in die Zielveranstaltung verschoben oder kopiert werden?') ?>
-        </label>
-        <select name="move">
+            <select name="move">
                 <option value="1"><?= _('verschieben') ?></option>
                 <option value="0"><?= _('kopieren') ?></option>
-        </select>
+            </select>
+        </label>
     </section>
     <?php foreach ($users as $u) : ?>
         <input type="hidden" name="users[]" value="<?= htmlReady($u) ?>"/>
