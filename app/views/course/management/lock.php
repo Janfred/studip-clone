@@ -2,7 +2,7 @@
 <? if (!$GLOBALS['perm']->have_perm('root') && ($current_lock_rule['permission'] == 'admin' || $current_lock_rule['permission'] == 'root')) : ?>
     <?=MessageBox::info(sprintf(_('Die eingestellte Sperrebene "%s" dürfen Sie nicht ändern.'), htmlReady($current_lock_rule['name'])))?>
 <? else : ?>
-    <form action="<?= $controller->link_for('course/management/set_lock_rule') ?>" method="post" class="studip-form">
+    <form action="<?= $controller->link_for('course/management/set_lock_rule') ?>" method="post" class="default">
         <?= CSRFProtection::tokenTag() ?>
         <section>
             <select name="lock_sem" id="lock_sem" aria-labelledby="<?= _('Sperrebene auswählen')?>">
