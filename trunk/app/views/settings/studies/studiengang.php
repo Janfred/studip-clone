@@ -97,10 +97,20 @@
 
                 <p>
                     <a name="studiengaenge"></a>
-                    <?= $about->select_studiengang() ?>
+                    <select name="new_studiengang" id="new_studiengang" aria-label="<?= _('-- Bitte Fach auswählen --')?>">
+                        <option selected value="none"><?= _('-- Bitte Fach auswählen --')?></option>
+                        <? foreach ($faecher as $fach) :?>
+                            <?= sprintf('<option value="%s">%s</option>', $fach->id, htmlReady(my_substr($fach->name, 0, 50)));?>
+                        <? endforeach?>
+                    </select>
 
                     <a name="abschluss"></a>
-                    <?= $about->select_abschluss() ?>
+                    <select name="new_abschluss" id="new_abschluss" aria-label="<?= _('-- Bitte Abschluss auswählen --')?>">
+                        <option selected value="none"><?= _('-- Bitte Abschluss auswählen --')?></option>
+                        <? foreach ($abschluesse as $abschluss) :?>
+                            <?= sprintf('<option value="%s">%s</option>' . "\n", $abschluss->id, htmlReady(my_substr($abschluss->name, 0, 50)));?>
+                        <? endforeach?>
+                    </select>
 
                     <a name="semester"></a>
                     <select name="fachsem" aria-label="<?= _("Bitte Fachsemester wählen") ?>">

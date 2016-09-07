@@ -459,7 +459,7 @@ STUDIP.Tour = {
             jQuery('#tour_delete_step').hide();
         }
 
-        jQuery('#tour_delete_step').on('click', function () {
+        jQuery('#tour_delete_step').on('click', function (event) {
             STUDIP.Tour.deleteStep(STUDIP.Tour.id, (parseInt(STUDIP.Tour.options.route_step_nr, 10) + STUDIP.Tour.step));
             event.preventDefault();
         });
