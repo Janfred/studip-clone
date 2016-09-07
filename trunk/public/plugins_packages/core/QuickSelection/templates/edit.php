@@ -1,5 +1,5 @@
 <div id="quickSelectionEdit">
-    <form id="configure_quickselection" action="<?= PluginEngine::getURL($plugin, array(), 'save') ?>" method="post" class="studip_form" data-dialog>
+    <form id="configure_quickselection" action="<?= PluginEngine::getURL($plugin, array(), 'save') ?>" method="post" class="default" data-dialog>
         <fieldset>
             <legend><?= _("Inhalte des Schnellzugriff-Widget:") ?></legend>
             <fieldset>
