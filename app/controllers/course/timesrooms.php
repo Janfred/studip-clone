@@ -219,12 +219,11 @@ class Course_TimesroomsController extends AuthenticatedController
             $this->resList = ResourcesUserRoomsList::getInstance($GLOBALS['user']->id, true, false, true);
         }
 
-        $this->dozenten = $this->course->getMembers('dozent');
-        $this->gruppen  = Statusgruppen::findBySeminar_id($this->course->id);
+        $this->teachers          = $this->course->getMembersWithStatus('dozent');
+        $this->assigned_teachers = $this->date->dozenten;
 
-        $this->related_persons = $this->date->dozenten->pluck('user_id');
-
-        $this->related_groups = $this->date->statusgruppen->pluck('statusgruppe_id');
+        $this->groups          = $this->course->statusgruppen;
+        $this->assigned_groups = $this->date->statusgruppen;
     }
 
 
@@ -245,9 +244,7 @@ class Course_TimesroomsController extends AuthenticatedController
 
         $time_changed = ($date != $termin->date || $end_time != $termin->end_time);
         //time changed for regular date. create normal singledate and cancel the regular date
-        if (($termin->metadate_id != '' || isset($termin->metadate_id))
-            && $time_changed
-        ) {
+        if ($termin->metadate_id && $time_changed) {
             $termin_values = $termin->toArray();
             $termin_info   = $termin->getFullname();
 
@@ -265,36 +262,33 @@ class Course_TimesroomsController extends AuthenticatedController
         $termin->end_time = $end_time;
         $termin->date_typ = Request::get('course_type');
 
-        $related_groups        = Request::get('related_statusgruppen');
+        // Set assigned groups
+        $related_groups        = Request::optionArray('assigned_groups');
         $gruppen               = Statusgruppen::findBySeminar_id($this->course->id);
-        $termin->statusgruppen = array();
-        $related_groups        = explode(',', $related_groups);
-        if (!empty($related_groups) && count($gruppen) !== count($related_groups)) {
-            $termin->statusgruppen = Statusgruppen::findMany($related_groups);
-        }
+        $termin->statusgruppen = count($gruppen) !== count($related_groups)
+                               ? Statusgruppen::findMany($related_groups)
+                               : [];
 
-        $related_users    = Request::get('related_teachers');
+        // Set assigned teachers
+        $related_users    = Request::optionArray('assigned_teachers');
         $dozenten         = $this->course->getMembers('dozent');
-        
-        $termin->dozenten = array();
-        $related_users    = explode(',', $related_users);
-        if (!empty($related_users) && count($dozenten) !== count($related_users)) {
-            $termin->dozenten = User::findMany($related_users);
-        }
+        $termin->dozenten = count($dozenten) !== count($related_users)
+                          ? User::findMany($related_users)
+                          : [];
 
         // Set Room
         $singledate = new SingleDate($termin);
         if (Request::option('room') == 'room') {
             $room_id = Request::option('room_sd');
-            
-            if ($room_id && ($room_id != $termin->room_assignment->resource_id 
-                    || $time_changed )) 
+
+            if ($room_id && ($room_id != $termin->room_assignment->resource_id
+                    || $time_changed ))
                 {
-                
+
                 if (!is_null($termin->room_assignment->resource_id)) {
                     $singledate->resource_id = $room_id;
                 }
-                
+
                 if ($resObj = $singledate->bookRoom($room_id)) {
                     $messages = $singledate->getMessages();
                     if (isset($messages['error'])) {
@@ -319,7 +313,7 @@ class Course_TimesroomsController extends AuthenticatedController
         if ($termin->store()) {
             NotificationCenter::postNotification('CourseDidChangeSchedule', $this->course);
         }
-        
+
         $this->displayMessages();
         $this->redirect($this->url_for('course/timesrooms/index', ['contentbox_open' => $termin->metadate_id]));
     }
@@ -374,13 +368,13 @@ class Course_TimesroomsController extends AuthenticatedController
         if ($related_ids && count($related_ids) !== $current_count) {
             $termin->dozenten = User::findMany($related_ids);
         }
-        
+
         $groups = Statusgruppen::findBySeminar_id($this->course->id);
         $related_groups = Request::getArray('related_statusgruppen');
         if ($related_groups && count($related_groups) !== count($groups)) {
             $related_groups = Statusgruppen::findMany($related_groups);
         }
-        
+
         if (!Request::get('room') || Request::get('room') === 'nothing') {
             $termin->raum = Request::get('freeRoomText');
             $termin->store();
