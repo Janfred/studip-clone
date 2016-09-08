@@ -82,45 +82,29 @@ class EvalShow
           $td2->cont( $br );
       }
       $tr2->cont( $td2 );
-
-      $td2 = new HTM( "td" );
-      $td2->attr( "width", "250" );
-      $td2->attr( "valign", "top" );
-      $td2->html( EvalShow::createInfoBox( $eval, $votedNow || $votedEarlier ) );
-      $tr2->cont( $td2 );
-      $table2->cont( $tr2 );
+      $voted = $votedNow || $votedEarlier;
+      $message = new HTML('div');
+      $message->_content = [(string)MessageBox::info(EvalShow::getAnonymousText($eval, $voted))];
+      $table2->cont($message);
+      $message = new HTML('div');
+      $message->_content = [(string)EvalShow::getStopdateText( $eval, $voted)];
+      $table2->cont($message);
+    
+      if(!$voted && $GLOBALS["mandatories"] != 0) {
+          $message = new HTML('div');
+          $message->_content = [(string)sprintf(_("Mit %s gekennzeichnete Fragen müssen beantwortet werden."),
+              "<b><span class=\"eval_error\">**</span></b>")];
+          $table2->cont($message);
+      }
+    
+    
 
       $td->cont( $table2 );
       $tr->cont( $td );
 
       return $tr;
   }
-
-  /**
-   * creates the infobox
-   */
-  function createInfoBox( $eval, $voted ) {
-
-      $info1 =  array( "icon" => EVAL_PIC_EXCLAIM,
-               "text" => EvalShow::getAnonymousText( $eval, $voted ) );
-
-      $info2 =  array( "icon" => EVAL_PIC_TIME,
-               "text" => EvalShow::getStopdateText( $eval, $voted ) );
-
-      $info3 = array( "icon" => EVAL_PIC_HELP,
-              "text" => sprintf(_("Mit %s gekennzeichnete Fragen müssen beantwortet werden."),
-                    "<b><span class=\"eval_error\">**</span></b>") );
-
-      $infos = $voted || $GLOBALS["mandatories"] == 0
-      ? array ($info1, $info2)
-      : array ($info1, $info2, $info3);
-
-      $infobox = array( array( "kategorie" => _("Information:"),
-                   "eintrag"   => $infos ) );
-
-      return print_infobox ($infobox, NULL, YES);
-  }
-
+    
 
   /**
    * createEvaluation: generate the evaluation itself (questions and answers)

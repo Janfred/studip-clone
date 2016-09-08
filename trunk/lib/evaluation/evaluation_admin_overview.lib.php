@@ -549,31 +549,13 @@ class EvalOverview {
         return $form;
     }
 
-    /**
-     * Creates an infobox with image
-     * @access public
-     * @param  string  $imgLogo  The big logo at the top
-     */
-    function createInfoBox($imgLogo) {
-        /* Define infobox text ------------------------------------------------ */
-        $info1 = array("icon" => Icon::create('test', 'clickable'),
-            "text" => _("Auf dieser Seite haben Sie eine Übersicht aller in dem ausgewählten Bereich existierenden Evaluationen sowie Ihrer eigenen Evaluationsvorlagen."));
-
-        $info2 = array("icon" => Icon::create('info', 'clickable'),
-            "text" => _("Sie können eine Evaluation aufklappen und dann Bereichen zuordnen und ihre Laufzeit bestimmen."));
-
-
-        $infobox = array(array("kategorie" => _("Information:"),
-                "eintrag" => array($info1, $info2)));
-        /* ------------------------------------------------------- end: infobox */
-
-        return print_infobox($infobox, $imgLogo, YES);
-    }
 
     /**
      *
      */
     function createHeader($safeguard, $templates = NULL, $foundTable = "") {
+        Helpbar::Get()->addPlainText(_('Übersicht'), _('Auf dieser Seite haben Sie eine Übersicht aller in dem ausgewählten Bereich existierenden Evaluationen sowie Ihrer eigenen Evaluationsvorlagen.'));
+        Helpbar::Get()->addPlainText(_('Ansicht'), _("Sie können eine Evaluation aufklappen und dann Bereichen zuordnen und ihre Laufzeit bestimmen."));
         $table = new HTML("table");
         $table->addAttr("border", "0");
         $table->addAttr("align", "center");
@@ -604,12 +586,6 @@ class EvalOverview {
         $rows = 5;
         if ($foundTable)
             $rows++;
-#    if ($this->db->getGlobalPerm() != "autor")
-#       $rows+=2;
-        $td->addAttr("rowspan", $rows);
-        $td->addHTMLContent($this->createInfoBox(EVAL_PIC_LOGO));
-#    $td->addContent (EvalCommon::createImage (EVAL_PICTURE, EVAL_TITLE));
-        $tr->addContent($td);
         /* ----------------------------------------------------------- end: logo */
 
         $table->addContent($tr);

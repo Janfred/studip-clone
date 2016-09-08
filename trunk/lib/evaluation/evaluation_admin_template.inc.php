@@ -327,12 +327,7 @@ $tableA->attr ("cellspacing", "0");
 $tableA->attr ("cellpadding", "2");
 $tableA->attr ("width", "250");
 
-$trA = new HTM( "tr" );
-$tdA = new HTM( "td" );
-$tdA->attr( "class", "blank" );
-$tdA->html( $lib->createInfoBox($command) );
-$trA->cont( $tdA );
-$tableA->cont( $trA );
+$lib->createInfoBox();
 
 $trA = new HTM( "tr" );
 $tdA = new HTM( "td" );

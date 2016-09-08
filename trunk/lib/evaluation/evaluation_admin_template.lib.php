@@ -958,75 +958,31 @@ class EvalTemplateGUI {
    * creates the infobox
    *
    */
-  function createInfoBox ($command) {
+  function createInfoBox () {
       global $evalID, $rangeID;
-
-      $id = Request::option("itemID");
-
-      $level = EvaluationObjectDB::getType( $id );
-#      echo $level;
-
-      switch( $level ) {
-      case "0":
-      case "Evaluation":
-     $infoMain =  array ("icon" => Icon::create('test', 'info')->asImagePath(16),
-               "text" => _("Links können Sie die Grundattribute der Evaluation definieren und neue Gruppierungsblöcke anlegen."));
-     break;
-
-      case "EvaluationGroup":
-     $group = new EvaluationGroup( $id );
-
-     switch( $group->getChildType() ) {
-     case "":
-     case "EvaluationGroup":
-         $infoMain =  array ("icon" => EVAL_PIC_TREE_GROUP,
-              "text" => _("Links können Sie den ausgewählten Gruppierungsblock bearbeiten und darin Fragenblöcke oder weitere Gruppierungsblöcke anlegen."));
-         break;
-
-     case "EvaluationQuestion":
-         $infoMain =  array ("icon" => EVAL_PIC_TREE_QUESTIONGROUP,
-              "text" => _("Links können Sie den ausgewählten Fragenblock bearbeiten und darin Fragen des zugeordneten Vorlagentyps anlegen.<br>Sie können auch den Vorlagentyp ändern. Dies wirkt sich auf alle Fragen aus."));
-         break;
-     }
-      }
-
-      $previewLink = EvalCommon::createEvalShowLink( $evalID, _("Vorschau"), YES, NO );
-      $previewLink .= (" " . _("der Evaluation"));
-
-      $infoTemplates =  array ("icon" => Icon::create('info', 'info')->asImagePath(16),
-                "text" => _("Der rechte Bereich dient der Bearbeitung von Antwortenvorlagen."));
-
-      $infoPreview =  array ("icon" => Icon::create('question-circle', 'info')->asImagePath(16),
-              "text" => $previewLink);
-
-      if (get_Username($rangeID))
+      
+      if (get_Username($rangeID)) {
           $rangeID = get_Username($rangeID);
+      }
 
-      if (empty ($rangeID))
+      if (empty($rangeID)) {
           $rangeID = get_Username($user->id);
-
-      $infoOverviewText = sprintf(_("Zurück zur %s Evaluations-Verwaltung %s"),
-                  "<a href=\"". URLHelper::getLink('admin_evaluation.php?page=overview'
-                    ."&check_abort_creation_button=1&evalID=$evalID&rangeID=$rangeID") .
-                  "\">",
-                  "</a>");
-
-      $infoOverview =  array ("icon" => Icon::create('link-intern', 'info')->asImagePath(16),
-                "text" => $infoOverviewText);
-      if($command){
-      $infobox = array (array ("kategorie" => _("Aktionen:"),
-                "eintrag"   => array ($infoPreview, $infoOverview) ));
       }
-      else{
-      $infobox = array (array ("kategorie" => _("Information:"),
-                "eintrag"   => array ($infoMain, $infoTemplates,
-                       $infoPreview, $infoOverview) ));
-      }
-#      ob_start();
-      return print_infobox ($infobox, false, YES);
-#      $html = ob_get_contents();
-#      ob_end_clean();
-#      return $html;
+
+      $actions = new ActionsWidget();
+      $actions->addLink(_('Vorschau der Evaluation'),
+          URLHelper::getLink('show_evaluation.php',
+              ['evalID' => $evalID,
+               'isPreview' => YES]), Icon::create('question-circle', 'clickable'),
+          ['target' => $evalID,
+          'onClick' => "openEval('".$evalID."'); return false;"]);
+      $actions->addLink(_('Zurück zur Evaluations-Verwaltung'), URLHelper::getLink('admin_evaluation.php',
+          ['page' => 'overview',
+           'check_abort_creation_button' => '1',
+          'evalID' => $evalID,
+          'rangeID' => $rangeID]),
+          Icon::create('link-intern', 'clickable'));
+      Sidebar::Get()->addWidget($actions);
   }
 
 
