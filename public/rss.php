@@ -27,7 +27,7 @@ require '../lib/bootstrap.php';
 ob_end_clean();
 ob_start();
 require_once('lib/showNews.inc.php');
-if (get_config('NEWS_RSS_EXPORT_ENABLE')){
+if (Config::get()->NEWS_RSS_EXPORT_ENABLE){
     $range = StudipNews::GetRangeFromRssID(Request::option('id'));
     if (is_array($range)){
         Metrics::increment('core.news.rss_fetched');
