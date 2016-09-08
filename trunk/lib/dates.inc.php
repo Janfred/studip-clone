@@ -580,43 +580,6 @@ function getPresenceTypes() {
 }
 
 /**
-* TerminEingabeHilfe
-*
-* Liefert HTML-Code für Grafik und popup window für Kalender
-*
-* @param    int Werte von 1 bis 7, bestimmt welche Formularfeldnamen verwendet werden
-* @param    int counter wenn mehrere TerminFelder auf einer Seite
-* @param    string  ursprüngliche StartStunde
-* @param    string  ursprüngliche StartMinute
-* @param    string  ursprüngliche EndStunde
-* @param    string  ursprüngliche EndMinute
-* @return   string  html-code für popup window
-*
-*/
-function Termin_Eingabe_javascript ($t = 0, $n = 0, $atime=0, $ss = '', $sm = '', $es = '', $em = '', $bla = '') {
-    global $auth, $CANONICAL_RELATIVE_PATH_STUDIP, $RELATIVE_PATH_CALENDAR;
-
-    if (!$auth->auth["jscript"]) return '';
-
-    $km = ($auth->auth["xres"] > 650)? 8 : 6;
-    $kx = ($auth->auth["xres"] > 650)? 780 : 600;
-    $ky = ($auth->auth["yres"] > 490)? 500 : 480;
-    $sb = ($auth->auth["yres"] > 490)? '' : ',scrollbars=yes ';
-    $txt = '&nbsp;';
-    $at = ($atime)? '&atime='.$atime:'';
-    $q = ($ss !== '')? "&ss={$ss}&sm={$sm}&es={$es}&em={$em}":'';
-    $txt .= "<a href=\"javascript:window.open('";
-    $txt .= "termin_eingabe_dispatch.php?mcount={$km}&element_switch={$t}&c={$n}{$at}{$q}{$bla}', 'kalender', 'dependent=yes $sb, width=$kx, height=$ky');void(0);";
-    $txt .= '">';
-    $txt .= Icon::create('schedule', 'clickable', 
-                         tooltip2(_('Für eine Eingabehilfe zur einfacheren Terminwahl bitte hier klicken.')) +
-                         array('class' => 'middle'));
-    $txt .= '</a>';
-
-    return  $txt;
-}
-
-/**
  * Return an array of room snippets, possibly linked
  *
  * @param array $rooms  an associative array of rooms

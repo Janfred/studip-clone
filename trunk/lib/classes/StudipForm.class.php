@@ -255,37 +255,6 @@ class StudipForm {
         return $ret;
     }
 
-    function getFormFieldDate($name, $attributes, $default){
-        $date_values = explode("-", $default); //YYYY-MM-DD
-        $ret = '<fieldset id="' . $attributes['id'] .'" style="border:none;padding:0px;display:inline">';
-        unset($attributes['id']);
-        $ret .= $this->getFormFieldText($name . "_day", array_merge(array('size'=>2,'maxlength'=>2), (array)$attributes), $date_values[2]);
-        $ret .= "\n" . $this->form_fields[$name]['separator'];
-        $ret .= $this->getFormFieldText($name . "_month", array_merge(array('size'=>2,'maxlength'=>2), (array)$attributes), $date_values[1]);
-        $ret .= "\n" . $this->form_fields[$name]['separator'];
-        $ret .= $this->getFormFieldText($name . "_year", array_merge(array('size'=>4,'maxlength'=>4), (array)$attributes), $date_values[0]);
-        if ($this->form_fields[$name]['date_popup']) {
-            if(array_sum($date_values)){
-                $atime = mktime(12, 0, 0, $date_values[1], $date_values[2], $date_values[0]);
-            } else {
-                $atime = time();
-            }
-            $onclick  = "window.open('";
-            $onclick .= URLHelper::getLink('termin_eingabe_dispatch.php',
-                                           array(
-                                               'form_name' => $this->form_name,
-                                               'element_switch' => $this->form_name . '_' . $name,
-                                               'imt' => $atime,
-                                               'atime' => $atime));
-            $onclick .= "', 'InsertDate', ";
-            $onClick .= "'dependent=yes, width=210, height=210, left=500, top=150'";
-            $ret .= "&nbsp; ";
-            $ret .= Icon::create('schedule', 'clickable', compact('onclick'));
-        }
-        $ret .= '</fieldset>';
-        return $ret;
-    }
-
     function getFormFieldDatepicker($name, $attributes, $default)
     {
         $date_values = explode("-", $default); //YYYY-MM-DD
