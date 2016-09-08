@@ -159,24 +159,26 @@ function do_graph($data, $evalquestion_id)
         array("black") //Border Colors
     );
 
-    $max_x = max(array_map('next',$data));
-    $graph->SetPlotAreaWorld(NULL, 0); // y-achse bei 0 starten
-    $graph->SetPrecisionY(0); //anzahl kommastellen y-achse
-    $graph->SetYTickIncrement($max_x < 10 ? 1 : round($max_x/10));
-    $graph->SetPlotBgColor(array(222,222,222));
-    $graph->SetDataType("text-data");
-    $graph->SetFileFormat(Config::get()->EVAL_AUSWERTUNG_GRAPH_FORMAT);
-    $graph->SetOutputFile($tmp_path_export."/evalsum".$evalquestion_id.$auth->auth["uid"].".".Config::get()->EVAL_AUSWERTUNG_GRAPH_FORMAT);
-    $graph->SetIsInline(true);
-    $graph->SetDataValues($data);
-    $graph->SetPlotType($type);
-    $graph->SetXLabelAngle(count($data) < 10 ? 0 : 90);
-    //$graph->SetShading(0); // kein 3D
-
-    $graph->SetLineWidth(1);
-    $graph->SetDrawXDataLabels(true);
-    //Draw it
-    $graph->DrawGraph();
+    if(!empty($data)) {
+        $max_x = max(array_map('next',$data));
+        $graph->SetPlotAreaWorld(NULL, 0); // y-achse bei 0 starten
+        $graph->SetPrecisionY(0); //anzahl kommastellen y-achse
+        $graph->SetYTickIncrement($max_x < 10 ? 1 : round($max_x/10));
+        $graph->SetPlotBgColor(array(222,222,222));
+        $graph->SetDataType("text-data");
+        $graph->SetFileFormat(Config::get()->EVAL_AUSWERTUNG_GRAPH_FORMAT);
+        $graph->SetOutputFile($tmp_path_export."/evalsum".$evalquestion_id.$auth->auth["uid"].".".Config::get()->EVAL_AUSWERTUNG_GRAPH_FORMAT);
+        $graph->SetIsInline(true);
+        $graph->SetDataValues($data);
+        $graph->SetPlotType($type);
+        $graph->SetXLabelAngle(count($data) < 10 ? 0 : 90);
+        //$graph->SetShading(0); // kein 3D
+    
+        $graph->SetLineWidth(1);
+        $graph->SetDrawXDataLabels(true);
+        //Draw it
+        $graph->DrawGraph();
+    }
 }
 
 function freetype_answers($parent_id, $anz_nutzer)
