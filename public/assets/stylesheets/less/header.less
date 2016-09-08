@@ -76,7 +76,7 @@
     
     &.alert {
         border: thin solid white;
-        background-color: @public_course_bgcolor;
+        background-color: @public-course-bgcolor;
         color: white;
     }
 }
@@ -252,21 +252,21 @@
 /* --- public course marker ------------------------------------------------ */
 #barBottomContainer.public_course {
 
-    background-color: @public_course_bgcolor;
+    background-color: @public-course-bgcolor;
 
     #barBottommiddle, #barBottomright, #barBottomLeft {
-        background-color: @public_course_bgcolor;
+        background-color: @public-course-bgcolor;
     }
     #barBottomLeft {
         // Adds an arrow at the end
-        #arrow > .right(12px, @public_course_bgcolor, 0);
+        #arrow > .right(12px, @public-course-bgcolor, 0);
     }
     #barBottomArrow {
         // Adds the fading background to the left
-        #gradient > .horizontal(darken(@public_course_bgcolor, 10%), @public_course_bgcolor);
+        #gradient > .horizontal(darken(@public-course-bgcolor, 10%), @public-course-bgcolor);
     }
     #barBottomright:before {
-        #gradient > .horizontal(fadeout(@public_course_bgcolor, 100%), @public_course_bgcolor);
-        background-color: fadeout(@public_course_bgcolor, 100%);
+        #gradient > .horizontal(fadeout(@public-course-bgcolor, 100%), @public-course-bgcolor);
+        background-color: fadeout(@public-course-bgcolor, 100%);
     }
 }
