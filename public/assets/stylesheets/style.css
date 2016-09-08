@@ -3348,6 +3348,7 @@ html.no-js:not(.csstransforms) .action-menu:hover .action-menu-icon {
   color: #28497c;
   cursor: pointer;
   margin: 1px 0;
+  padding-right: 0.5em;
 }
 .studip-selection li.empty-placeholder {
   color: rgba(0, 0, 0, 0.7);
