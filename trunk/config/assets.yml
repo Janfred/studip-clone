@@ -109,6 +109,7 @@ javascripts:
     - javascripts/opengraph.js
     - javascripts/actionmenu.js
 
+    - javascripts/studip-selection.js
     - javascripts/studip-secure-forms.js
     - javascripts/studip-css.js
     - javascripts/studip-tooltip.js

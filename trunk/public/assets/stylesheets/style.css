@@ -3308,6 +3308,153 @@ html.no-js:not(.csstransforms) .action-menu:hover .action-menu-icon {
 .force-visible-overflow {
   overflow: visible !important;
 }
+.studip-selection {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-box-flex;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  -moz-box-direction: normal;
+  -moz-box-orient: horizontal;
+  -webkit-box-orient: horizontal;
+  flex-direction: row;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+.studip-selection > * {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 0 100%;
+  -ms-flex: 1 0 100%;
+  -moz-box-flex: 1;
+  flex: 1 0 100%;
+}
+.studip-selection > legend {
+  margin-bottom: 0 !important;
+}
+.studip-selection ul,
+.studip-selection li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.studip-selection li {
+  display: inline-block;
+}
+.studip-selection li:not(.empty-placeholder) {
+  color: #28497c;
+  cursor: pointer;
+  margin: 1px 0;
+}
+.studip-selection li.empty-placeholder {
+  color: rgba(0, 0, 0, 0.7);
+}
+.studip-selection li.empty-placeholder:not(:only-child) {
+  display: none;
+}
+.studip-selection .studip-selection-selectable li.empty-placeholder {
+  color: #000;
+  padding-left: 20px;
+  position: relative;
+}
+.studip-selection .studip-selection-selectable li.empty-placeholder::before {
+  background-repeat: no-repeat;
+  content: ' ';
+  display: inline-block;
+  height: 16px;
+  margin-right: 0;
+  background-image: url("../images/icons/black/info-circle.svg");
+  -webkit-background-size: 16px 16px;
+  -moz-background-size: 16px 16px;
+  -o-background-size: 16px 16px;
+  background-size: 16px 16px;
+  vertical-align: text-top;
+  width: 16px;
+}
+.studip-selection .studip-selection-selectable li.empty-placeholder::before {
+  position: absolute;
+  left: 0;
+  top: 3px;
+}
+.studip-selection .studip-selection-image img {
+  -webkit-transition: opacity 300ms;
+  -moz-transition: opacity 300ms;
+  -o-transition: opacity 300ms;
+  transition: opacity 300ms;
+}
+.studip-selection .studip-selection-selected .studip-selection-label::before {
+  background-repeat: no-repeat;
+  content: ' ';
+  display: inline-block;
+  height: 16px;
+  margin-right: 0;
+  background-image: url("../images/icons/blue/radiobutton-checked.svg");
+  -webkit-background-size: 16px 16px;
+  -moz-background-size: 16px 16px;
+  -o-background-size: 16px 16px;
+  background-size: 16px 16px;
+  vertical-align: text-top;
+  width: 16px;
+}
+.studip-selection .studip-selection-selectable .studip-selection-label::before {
+  background-repeat: no-repeat;
+  content: ' ';
+  display: inline-block;
+  height: 16px;
+  margin-right: 0;
+  background-image: url("../images/icons/blue/radiobutton-unchecked.svg");
+  -webkit-background-size: 16px 16px;
+  -moz-background-size: 16px 16px;
+  -o-background-size: 16px 16px;
+  background-size: 16px 16px;
+  vertical-align: text-top;
+  width: 16px;
+}
+.studip-selection .studip-selection-image + .studip-selection-label::before {
+  display: none;
+}
+.studip-selection .studip-selection-selected li:hover .studip-selection-image,
+.studip-selection .studip-selection-selected li:hover .studip-selection-label::before {
+  background-image: url("../images/icons/red/remove-circle-full.svg");
+  -webkit-background-size: 16px 16px;
+  -moz-background-size: 16px 16px;
+  -o-background-size: 16px 16px;
+  background-size: 16px 16px;
+}
+.studip-selection .studip-selection-selectable li:hover .studip-selection-image,
+.studip-selection .studip-selection-selectable li:hover .studip-selection-label::before {
+  background-image: url("../images/icons/green/add-circle-full.svg");
+  -webkit-background-size: 16px 16px;
+  -moz-background-size: 16px 16px;
+  -o-background-size: 16px 16px;
+  background-size: 16px 16px;
+}
+.studip-selection .studip-selection-selected,
+.studip-selection .studip-selection-selectable {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 300px;
+  -ms-flex: 1 1 300px;
+  -moz-box-flex: 1;
+  flex: 1 1 300px;
+  margin-top: 0;
+}
+.studip-selection .studip-selection-selected li:hover .studip-selection-image,
+.studip-selection .studip-selection-selectable li:hover .studip-selection-image {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.studip-selection .studip-selection-selected li:hover .studip-selection-image img,
+.studip-selection .studip-selection-selectable li:hover .studip-selection-image img {
+  opacity: 0;
+}
+.studip-selection .studip-selection-selected li:hover .studip-selection-label,
+.studip-selection .studip-selection-selectable li:hover .studip-selection-label {
+  text-decoration: underline;
+}
 /* --- AJAX indicator ------------------------------------------------------- */
 #ajax_notification {
   background-color: #7387ac;
@@ -8504,385 +8651,6 @@ label[for="responsive-toggle"]::before {
   #layout-sidebar .widget-links li.active:before,
   #layout-sidebar .widget-links li.active:after {
     display: none;
-  }
-}
-.studip_form .caption {
-  font-weight: bold;
-  color: #28497c;
-  font-size: 11pt;
-}
-.studip_form label {
-  display: block;
-}
-.studip_form label input[type=date],
-.studip_form label input[type=email],
-.studip_form label input[type=number],
-.studip_form label input[type=password],
-.studip_form label input[type=text],
-.studip_form label input[type=url],
-.studip_form label textarea,
-.studip_form label select {
-  display: block;
-  min-width: 24em;
-}
-.studip_form label input[type=number] {
-  min-width: 1ex !important;
-}
-.studip_form label textarea {
-  min-height: 6em;
-}
-.studip_form > fieldset {
-  position: relative;
-  padding-top: 3em;
-  border-color: #d4dbe5;
-  border-style: solid;
-  border-width: 1px;
-  margin-bottom: 10px;
-}
-.studip_form > fieldset > legend {
-  background-color: #e7ebf1;
-  color: #28497c;
-  position: absolute;
-  top: 0px;
-  padding: 0;
-  margin: 0;
-  border: none;
-  line-height: 2em;
-  width: 100%;
-  left: 0px;
-  font-size: 12pt;
-  font-weight: bold;
-  text-indent: 1ex;
-}
-.studip_form > fieldset > label,
-.studip_form > fieldset > div {
-  text-indent: 0.25ex;
-  padding: 1ex;
-}
-.studip_form > fieldset > button {
-  margin-left: 1ex;
-}
-.studip_form fieldset fieldset {
-  border: none;
-  margin: 1ex 0;
-}
-.studip_form fieldset fieldset legend {
-  font-weight: bold;
-  color: #28497c;
-  font-size: 11pt;
-}
-.studip_form fieldset fieldset label {
-  margin-left: 1ex;
-}
-.studip_form .required {
-  color: red;
-  font-size: 1.2em;
-}
-.studip_form div input[type=date],
-.studip_form div input[type=email],
-.studip_form div input[type=number],
-.studip_form div input[type=password],
-.studip_form div input[type=text],
-.studip_form div input[type=url],
-.studip_form div textarea,
-.studip_form div select {
-  display: inline;
-}
-.studip_form input[type=radio] {
-  margin-right: 1ex;
-}
-.studip_form input[type=date],
-.studip_form input[type=email],
-.studip_form input[type=number],
-.studip_form input[type=password],
-.studip_form input[type=text],
-.studip_form input[type=url],
-.studip_form textarea,
-.studip_form select {
-  display: block;
-  padding: 5px;
-  border: 1px solid #ccc;
-  color: #333;
-  margin-top: 1ex;
-  -webkit-transition: all 0.3s ease-out;
-  -moz-transition: all 0.3s ease-out;
-  -o-transition: all 0.3s ease-out;
-  transition: all 0.3s ease-out;
-}
-.studip_form input[type=date]:focus,
-.studip_form input[type=email]:focus,
-.studip_form input[type=number]:focus,
-.studip_form input[type=password]:focus,
-.studip_form input[type=text]:focus,
-.studip_form input[type=url]:focus,
-.studip_form textarea:focus,
-.studip_form select:focus {
-  outline: none;
-  border-color: #28497c;
-}
-.studip_form select {
-  height: 30px;
-}
-.studip_form .submit_wrapper {
-  padding: 0;
-  margin-left: 0.5ex;
-  background-color: #e2e3e5;
-  border-top: 1px solid #1f4171;
-  padding-left: 1.5ex;
-}
-.studip_form .studip_input_wrapper {
-  padding: 1ex;
-}
-.studip-form {
-  /* Default settings for possible input fields */
-  /* Quicksearch needs some extra treatment */
-  /* Footer is always as bottom, clearing floats */
-}
-.studip-form section {
-  margin-bottom: 15px;
-  margin-top: 10px;
-  /* Required values are marked at section level */
-}
-.studip-form section label:not(.svg-input) {
-  margin-bottom: 5px;
-  /* display vertically: label over input */
-  /* display horizontally: label over input */
-  font-weight: bold;
-}
-.studip-form section label:not(.svg-input),
-.studip-form section label:not(.svg-input).vertical {
-  display: block;
-}
-.studip-form section label:not(.svg-input).horizontal {
-  display: inline;
-}
-.studip-form section label:not(.svg-input) input:not([type="image"]):not(.horizontal) {
-  display: block;
-}
-.studip-form section.required label:not(.svg-input):after {
-  content: '*';
-  color: #ff0000;
-}
-.studip-form section div {
-  margin-bottom: 5px;
-}
-.studip-form section div div.description {
-  font-weight: bold;
-  font-style: italic;
-  margin-top: 10px;
-  margin-bottom: 2px;
-}
-.studip-form input[type="text"],
-.studip-form input[type="number"],
-.studip-form input[type="password"],
-.studip-form input[type="date"],
-.studip-form input[type="datetime"],
-.studip-form input[type="email"],
-.studip-form input[type="range"],
-.studip-form input[type="search"],
-.studip-form input[type="time"],
-.studip-form input[type="tel"],
-.studip-form input[type="url"],
-.studip-form div.quicksearch_frame input[type="text"],
-.studip-form select,
-.studip-form textarea {
-  border: 1px solid #a9b6cb;
-  height: 26px;
-  padding-left: 10px;
-  /* Darken border on focus */
-}
-.studip-form input[type="text"]:focus,
-.studip-form input[type="number"]:focus,
-.studip-form input[type="password"]:focus,
-.studip-form input[type="date"]:focus,
-.studip-form input[type="datetime"]:focus,
-.studip-form input[type="email"]:focus,
-.studip-form input[type="range"]:focus,
-.studip-form input[type="search"]:focus,
-.studip-form input[type="time"]:focus,
-.studip-form input[type="tel"]:focus,
-.studip-form input[type="url"]:focus,
-.studip-form div.quicksearch_frame input[type="text"]:focus,
-.studip-form select:focus,
-.studip-form textarea:focus {
-  border: 1px solid #28497c;
-  transition: border-color 0.5s;
-}
-.studip-form input[type="text"],
-.studip-form input[type="number"],
-.studip-form input[type="password"],
-.studip-form input[type="date"],
-.studip-form input[type="datetime"],
-.studip-form input[type="email"],
-.studip-form input[type="range"],
-.studip-form input[type="search"],
-.studip-form input[type="time"],
-.studip-form input[type="tel"],
-.studip-form input[type="url"] {
-  /* Extra small */
-  /* Small */
-  /* Medium size and default if not set for normal display */
-  /* Large */
-  /* X-Large and default for display in dialog */
-}
-.studip-form input[type="text"].size-xs,
-.studip-form input[type="number"].size-xs,
-.studip-form input[type="password"].size-xs,
-.studip-form input[type="date"].size-xs,
-.studip-form input[type="datetime"].size-xs,
-.studip-form input[type="email"].size-xs,
-.studip-form input[type="range"].size-xs,
-.studip-form input[type="search"].size-xs,
-.studip-form input[type="time"].size-xs,
-.studip-form input[type="tel"].size-xs,
-.studip-form input[type="url"].size-xs {
-  width: calc(10% - 1px);
-}
-.studip-form input[type="text"].size-s,
-.studip-form input[type="number"].size-s,
-.studip-form input[type="password"].size-s,
-.studip-form input[type="date"].size-s,
-.studip-form input[type="datetime"].size-s,
-.studip-form input[type="email"].size-s,
-.studip-form input[type="range"].size-s,
-.studip-form input[type="search"].size-s,
-.studip-form input[type="time"].size-s,
-.studip-form input[type="tel"].size-s,
-.studip-form input[type="url"].size-s {
-  width: calc(25% - 1px);
-}
-.studip-form input[type="text"],
-.studip-form input[type="number"],
-.studip-form input[type="password"],
-.studip-form input[type="date"],
-.studip-form input[type="datetime"],
-.studip-form input[type="email"],
-.studip-form input[type="range"],
-.studip-form input[type="search"],
-.studip-form input[type="time"],
-.studip-form input[type="tel"],
-.studip-form input[type="url"],
-.studip-form input[type="text"].size-m,
-.studip-form input[type="number"].size-m,
-.studip-form input[type="password"].size-m,
-.studip-form input[type="date"].size-m,
-.studip-form input[type="datetime"].size-m,
-.studip-form input[type="email"].size-m,
-.studip-form input[type="range"].size-m,
-.studip-form input[type="search"].size-m,
-.studip-form input[type="time"].size-m,
-.studip-form input[type="tel"].size-m,
-.studip-form input[type="url"].size-m {
-  width: calc(50% - 1px);
-}
-.studip-form input[type="text"].size-l,
-.studip-form input[type="number"].size-l,
-.studip-form input[type="password"].size-l,
-.studip-form input[type="date"].size-l,
-.studip-form input[type="datetime"].size-l,
-.studip-form input[type="email"].size-l,
-.studip-form input[type="range"].size-l,
-.studip-form input[type="search"].size-l,
-.studip-form input[type="time"].size-l,
-.studip-form input[type="tel"].size-l,
-.studip-form input[type="url"].size-l {
-  width: calc(75% - 1px);
-}
-.studip-form input[type="text"].size-xl,
-.studip-form input[type="number"].size-xl,
-.studip-form input[type="password"].size-xl,
-.studip-form input[type="date"].size-xl,
-.studip-form input[type="datetime"].size-xl,
-.studip-form input[type="email"].size-xl,
-.studip-form input[type="range"].size-xl,
-.studip-form input[type="search"].size-xl,
-.studip-form input[type="time"].size-xl,
-.studip-form input[type="tel"].size-xl,
-.studip-form input[type="url"].size-xl {
-  width: calc(100% - 1px);
-}
-.studip-form select,
-.studip-form textarea,
-.studip-form div.quicksearch_frame input[type="text"] {
-  /* Extra small */
-  /* Small */
-  /* Medium size and default if not set for normal display */
-  /* Large */
-  /* X-Large and default for display in dialog */
-}
-.studip-form select.size-xs,
-.studip-form textarea.size-xs,
-.studip-form div.quicksearch_frame input[type="text"].size-xs {
-  width: 10%;
-}
-.studip-form select.size-s,
-.studip-form textarea.size-s,
-.studip-form div.quicksearch_frame input[type="text"].size-s {
-  width: 25%;
-}
-.studip-form select,
-.studip-form textarea,
-.studip-form div.quicksearch_frame input[type="text"],
-.studip-form select.size-m,
-.studip-form textarea.size-m,
-.studip-form div.quicksearch_frame input[type="text"].size-m {
-  width: 50%;
-}
-.studip-form select.size-l,
-.studip-form textarea.size-l,
-.studip-form div.quicksearch_frame input[type="text"].size-l {
-  width: 75%;
-}
-.studip-form select.size-xl,
-.studip-form textarea.size-xl,
-.studip-form div.quicksearch_frame input[type="text"].size-xl {
-  width: 100%;
-}
-.studip-form input[type="text"],
-.studip-form input[type="number"],
-.studip-form input[type="password"],
-.studip-form input[type="date"],
-.studip-form input[type="datetime"],
-.studip-form input[type="email"],
-.studip-form input[type="range"],
-.studip-form input[type="search"],
-.studip-form input[type="time"],
-.studip-form input[type="tel"],
-.studip-form input[type="url"],
-.studip-form select,
-.studip-form div.quicksearch_frame input[type="text"] {
-  height: 26px;
-}
-.studip-form div.quicksearch_frame input[type="text"],
-.studip-form div.quicksearch_frame input[type="text"]:focus {
-  border-width: 1px 30px 1px 1px;
-  padding-left: 8px;
-}
-.studip-form select {
-  padding-left: 5px;
-}
-.studip-form footer {
-  clear: both;
-}
-/* Responsive display: 100% default width for input elements */
-@media screen and (max-width: 800px) {
-  .studip-form input[type="text"],
-  .studip-form input[type="number"],
-  .studip-form input[type="password"],
-  .studip-form input[type="date"],
-  .studip-form input[type="datetime"],
-  .studip-form input[type="email"],
-  .studip-form input[type="range"],
-  .studip-form input[type="search"],
-  .studip-form input[type="time"],
-  .studip-form input[type="tel"],
-  .studip-form input[type="url"] {
-    width: 96%;
-  }
-  .studip-form select,
-  .studip-form textarea,
-  .studip-form div.quicksearch_frame input[type="text"] {
-    width: 100%;
   }
 }
 .sr-only {

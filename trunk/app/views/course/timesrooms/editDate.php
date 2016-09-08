@@ -65,89 +65,107 @@
 
     </fieldset>
 
-    <? if (!empty($dozenten)) : ?>
-        <fieldset class="collapsed">
-            <legend><?= _('Durchführende Lehrende') ?></legend>
-            <? if (count($dozenten) > 1) : ?>
-            <ul class="termin_related teachers">
-                <? foreach ($dozenten as $related_person => $dozent) : ?>
-                    <? $related = true; ?>
-                    <? if (in_array($related_person, $related_persons) || empty($related_persons)) : ?>
-                        <? $related = false ?>
-                    <? endif ?>
-                    <li data-lecturerid="<?= $related_person ?>" <?= !$related ? '' : 'style="display: none"' ?>>
-                        <? $dozenten[$related_person]['hidden'] = !$related ?>
-                        <?= htmlReady(User::find($related_person)->getFullname()); ?>
-                        <a href="javascript:" onClick="STUDIP.Raumzeit.removeLecturer('<?= $related_person ?>')">
-                            <?= Icon::create('trash', 'clickable')->asImg(16) ?>
-                        </a>
-                    </li>
-                <? endforeach ?>
+<? if (count($teachers) > 1): ?>
+    <fieldset class="collapsed studip-selection" data-attribute-name="assigned_teachers">
+        <legend><?= _('Durchführende Lehrende') ?></legend>
+
+        <section class="studip-selection-selected">
+            <h2><?= _('Zugewiesene Lehrende') ?></h2>
+
+            <ul>
+            <? foreach ($assigned_teachers as $teacher): ?>
+                <li data-selection-id="<?= htmlReady($teacher->user_id) ?>">
+                    <input type="hidden" name="assigned_teachers[]"
+                           value="<?= htmlReady($teacher->user_id) ?>">
+
+                    <span class="studip-selection-image">
+                        <?= Avatar::getAvatar($teacher->user_id)->getImageTag(Avatar::SMALL) ?>
+                    </span>
+                    <span class="studip-selection-label">
+                        <?= htmlReady($teacher->getFullname()) ?>
+                    </span>
+                </li>
+            <? endforeach; ?>
+                <li class="empty-placeholder">
+                    <?= _('Kein spezieller Lehrender zugewiesen') ?>
+                </li>
             </ul>
-            <input type="hidden" name="related_teachers" value="<?= implode(',', $related_persons) ?>" />
+        </section>
 
-            <label for="add_teacher">
-                <select id="add_teacher" name="teachers" style="display: inline-block; width: 40%">
-                    <option value="none"><?= _('Lehrende auswählen') ?></option>
-                    <? foreach ($dozenten as $dozent) : ?>
-                        <option
-                            value="<?= htmlReady($dozent['user_id']) ?>" <?= $dozent['hidden'] ? 'style="display: none"' : '' ?>>
-                            <?= htmlReady($dozent['fullname']) ?>
-                        </option>
-                    <? endforeach; ?>
-                </select>
-                <a href="javascript:" onClick="STUDIP.Raumzeit.addLecturer()"
-                   title="<?= _('Lehrenden hinzufügen') ?>">
-                    <?= Icon::create('arr_2up', 'sort')->asImg(16) ?>
-                </a>
-                <? else : ?>
-                    <? $dozent = array_pop($dozenten)?>
-                    <p style="margin-left: 15px;">
-                        <?= htmlReady($dozent['fullname']) ?>
-                    </p>
-                <? endif; ?>
-            </label>
-        </fieldset>
-    <? endif ?>
+        <section class="studip-selection-selectable">
+            <h2><?= _('Lehrende der Veranstaltung') ?></h2>
 
-    <? if (!empty($gruppen)) : ?>
-        <fieldset class="collapsed">
-            <legend><?= _('Beteiligte Gruppen') ?></legend>
-
-            <ul class="termin_related groups">
-                <? foreach ($gruppen as $index => $statusgruppe) : ?>
-                    <? $related = true ?>
-                    <? if (in_array($statusgruppe->getId(), $related_groups) || empty($related_groups)) : ?>
-                        <? $related = false; ?>
-                    <? endif ?>
-                    <li data-groupid="<?= htmlReady($statusgruppe->getId()) ?>" <?= !$related ? '' : 'style="display: none"' ?>>
-                        <?= htmlReady($statusgruppe['name']) ?>
-                        <a href="javascript:" onClick="STUDIP.Raumzeit.removeGroup('<?= $statusgruppe->getId() ?>')">
-                            <?= Icon::create('trash', 'clickable')->asImg() ?>
-                        </a>
-                    </li>
-                <? endforeach ?>
+            <ul>
+        <? foreach ($teachers as $teacher): ?>
+            <? if (!$assigned_teachers->find($teacher->user_id)): ?>
+                <li data-selection-id="<?= htmlReady($teacher->user_id) ?>" >
+                    <span class="studip-selection-image">
+                        <?= Avatar::getAvatar($teacher->user_id)->getImageTag(Avatar::SMALL) ?>
+                    </span>
+                    <span class="studip-selection-label">
+                        <?= htmlReady($teacher->getUserFullname()) ?>
+                    </span>
+                </li>
+            <? endif; ?>
+        <? endforeach; ?>
+                <li class="empty-placeholder">
+                    <?= sprintf(
+                            _('Ihre Auswahl entspricht dem Zustand "%s" und wird beim Speichern zurückgesetzt'),
+                            _('Kein spezieller Lehrender zugewiesen')
+                    ) ?>
+                </li>
             </ul>
+        </section>
+    </fieldset>
+<? endif; ?>
 
-            <input type="hidden" name="related_statusgruppen" value="<?= implode(',', $related_groups) ?>">
+<? if (count($groups) > 1): ?>
+    <fieldset class="collapsed studip-selection" data-attribute-name="assigned_groups">
+        <legend><?= _('Beteiligte Gruppen') ?></legend>
 
-            <label>
-                <select name="groups" style="display: inline-block; width: 40%">
-                    <option value="none"><?= _('Gruppen auswählen') ?></option>
-                    <? foreach ($gruppen as $gruppe) : ?>
-                        <option value="<?= htmlReady($gruppe->getId()) ?>"
-                                style="<?= in_array($gruppe->getId(), $related_groups) ? 'display: none;' : '' ?>">
-                            <?= htmlReady($gruppe['name']) ?>
-                        </option>
-                    <? endforeach ?>
-                </select>
-                <a href="javascript:" onClick="STUDIP.Raumzeit.addGroup()" title="<?= _('Gruppe hinzufügen') ?>">
-                    <?= Icon::create('arr_2up', 'sort')->asImg(16) ?>
-                </a>
+        <section class="studip-selection-selected">
+            <h2><?= _('Zugewiesene Gruppen') ?></h2>
 
-            </label>
-        </fieldset>
-    <? endif ?>
+            <ul>
+            <? foreach ($assigned_groups as $group) : ?>
+                <li data-selection-id="<?= htmlReady($group->id) ?>">
+                    <input type="hidden" name="assigned_groups[]"
+                           value="<?= htmlReady($group->id) ?>">
+
+                    <span class="studip-selection-label">
+                        <?= htmlReady($group->name) ?>
+                    </span>
+                </li>
+            <? endforeach ?>
+                <li class="empty-placeholder">
+                    <?= _('Keine spezielle Gruppe zugewiesen') ?>
+                </li>
+            </ul>
+        </section>
+
+        <section class="studip-selection-selectable">
+            <h2><?= _('Gruppen der Veranstaltung') ?></h2>
+
+            <ul>
+        <? foreach ($groups as $group): ?>
+            <? if (!$assigned_groups->find($group->id)): ?>
+                <li data-selection-id="<?= htmlReady($group->id) ?>" >
+                    <span class="studip-selection-label">
+                        <?= htmlReady($group->name) ?>
+                    </span>
+                </li>
+            <? endif; ?>
+        <? endforeach; ?>
+                <li class="empty-placeholder">
+                    <?= sprintf(
+                            _('Ihre Auswahl entspricht dem Zustand "%s" und wird beim Speichern zurückgesetzt'),
+                            _('Keine spezielle Gruppe zugewiesen')
+                    ) ?>
+                </li>
+            </ul>
+        </section>
+    </fieldset>
+<? endif; ?>
 
     <footer data-dialog-button>
         <?= Studip\Button::createAccept(_('Speichern'), 'save_dates') ?>
