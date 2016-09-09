@@ -1,4 +1,4 @@
-<form class="studip_form" method="post">
+<form class="default" method="post">
     <fieldset>
         <legend><?= htmlReady($aux->name) ?></legend>
         <p><?= formatReady($aux->description) ?></p>
