@@ -1,19 +1,21 @@
-<? if(!empty($study_courses)) : ?>
-    <? if (count($study_courses) < 2) : ?>
+
+<? if(count($m->user->studycourses)) : ?>
+    
+    <? if (count($m->user->studycourses) < 2) : ?>
         <? for ($i = 0; $i < 1; $i++) : ?>
-            <?= htmlReady($study_courses[$i]['fach']) ?>
-            <?= htmlReady($study_courses[$i]['abschluss']) ?>
-            (<?= htmlReady($study_courses[$i]['semester']) ?>)
+            <?= htmlReady($m->user->studycourses[$i]->studycourse->name) ?>
+            <?= htmlReady($m->user->studycourses[$i]->degree->name) ?>
+            (<?= htmlReady($m->user->studycourses[$i]->semester) ?>)
         <? endfor ?>
     <? else : ?>
-        <?= htmlReady($study_courses[0]['fach']) ?>
-        <?= htmlReady($study_courses[0]['abschluss']) ?>
-        (<?= htmlReady($study_courses[0]['semester']) ?>)
+        <?= htmlReady($m->user->studycourses[0]->studycourse->name) ?>
+        <?= htmlReady($m->user->studycourses[0]->degree->name) ?>
+        (<?= htmlReady($m->user->studycourses[0]->semester) ?>)
         [...]
-        <? foreach($study_courses as $course) : ?>
+        <? foreach($m->user->studycourses as $studycourses) : ?>
             <? $course_res .= sprintf('- %s (%s)<br>',
-                                      htmlReady(trim($course['fach'] . ' ' . $course['abschluss'])),
-                                      htmlReady($course['semester'])) ?>
+                    htmlReady(trim($studycourses->studycourse->name . ' ' . $studycourses->degree->name)),
+                    htmlReady($studycourses->semester)) ?>
         <? endforeach ?>
         <?= tooltipHtmlIcon('<strong>' . _('Weitere Studiengänge') . '</strong><br>' . $course_res) ?>
         <? unset($course_res); ?>
