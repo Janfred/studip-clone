@@ -1304,6 +1304,29 @@ form.default.inline select,
 form.default.inline button {
   display: inline-block;
 }
+form.default label.packed {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-box-flex;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: flex;
+}
+form.default label.packed > * {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 100%;
+  -ms-flex: 1 1 100%;
+  -moz-box-flex: 1;
+  flex: 1 1 100%;
+}
+form.default label.packed button {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 0 auto;
+  -ms-flex: 1 0 auto;
+  -moz-box-flex: 1;
+  flex: 1 0 auto;
+  margin: 0;
+}
 .studip-checkbox {
   opacity: 0;
   position: absolute;

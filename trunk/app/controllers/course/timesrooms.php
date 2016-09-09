@@ -262,19 +262,16 @@ class Course_TimesroomsController extends AuthenticatedController
         $termin->end_time = $end_time;
         $termin->date_typ = Request::get('course_type');
 
-        // Set assigned groups
-        $related_groups        = Request::optionArray('assigned_groups');
-        $gruppen               = Statusgruppen::findBySeminar_id($this->course->id);
-        $termin->statusgruppen = count($gruppen) !== count($related_groups)
-                               ? Statusgruppen::findMany($related_groups)
-                               : [];
-
         // Set assigned teachers
-        $related_users    = Request::optionArray('assigned_teachers');
-        $dozenten         = $this->course->getMembers('dozent');
-        $termin->dozenten = count($dozenten) !== count($related_users)
-                          ? User::findMany($related_users)
+        $assigned_teachers = Request::optionArray('assigned_teachers');
+        $dozenten          = $this->course->getMembers('dozent');
+        $termin->dozenten  = count($dozenten) !== count($assigned_teachers)
+                          ? User::findMany($assigned_teachers)
                           : [];
+
+        // Set assigned groups
+        $assigned_groups       = Request::optionArray('assigned_groups');
+        $termin->statusgruppen = Statusgruppen::findMany($assigned_groups);
 
         // Set Room
         $singledate = new SingleDate($termin);

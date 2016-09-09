@@ -119,7 +119,7 @@
     </fieldset>
 <? endif; ?>
 
-<? if (count($groups) > 1): ?>
+<? if (count($groups) > 0): ?>
     <fieldset class="collapsed studip-selection" data-attribute-name="assigned_groups">
         <legend><?= _('Beteiligte Gruppen') ?></legend>
 
@@ -157,10 +157,7 @@
             <? endif; ?>
         <? endforeach; ?>
                 <li class="empty-placeholder">
-                    <?= sprintf(
-                            _('Ihre Auswahl entspricht dem Zustand "%s" und wird beim Speichern zurückgesetzt'),
-                            _('Keine spezielle Gruppe zugewiesen')
-                    ) ?>
+                    <?= _('Alle Gruppen wurden dem Termin zugewiesen') ?>
                 </li>
             </ul>
         </section>
