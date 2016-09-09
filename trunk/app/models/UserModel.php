@@ -310,20 +310,6 @@ class UserModel
     }
 
     /**
-     * Check if a user exists.
-     *
-     * @param md5 $user_id
-     * @return bool
-     */
-    public static function check($user_id)
-    {
-        $sql = "SELECT 1 FROM auth_user_md5 WHERE user_id = ?";
-        $db = DBManager::get()->prepare($sql);
-        $db->execute(array($user_id));
-        return $db->fetchColumn();
-    }
-
-    /**
      * Merge an user ($old_id) to another user ($new_id).  This is a part of the
      * old numit-plugin.
      *
