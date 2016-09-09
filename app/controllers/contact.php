@@ -124,6 +124,7 @@ class ContactController extends AuthenticatedController
 
     function remove_action($group = null)
     {
+        CSRFProtection::verifyRequest();
         $contact = Contact::find(array(User::findCurrent()->id, User::findByUsername(Request::username('user'))->id));
         if ($contact) {
             if ($group) {
@@ -159,11 +160,9 @@ class ContactController extends AuthenticatedController
 
     function deleteGroup_action()
     {
-        if (Request::submitted('delete')) {
-            CSRFProtection::verifyRequest();
-            $this->group->delete();
-            $this->redirect('contact/index');
-        }
+        CSRFProtection::verifyRequest();
+        $this->group->delete();
+        $this->redirect('contact/index');
     }
 
     function vcard_action($group = null)
