@@ -1,4 +1,4 @@
-<article id="<?= 'institutes' ?>" class="<?= ContentBoxHelper::classes('institutes') ?>">
+<section class="contentbox">
     <header>
         <h1>
             <a href="<?= ContentBoxHelper::href('institutes') ?>">
@@ -6,7 +6,6 @@
             </a>
         </h1>
     </header>
-
     <section>
         <table class="default">
             <colgroup>
@@ -55,4 +54,4 @@
             </tbody>
         </table>
     </section>
-</article>
+</section>

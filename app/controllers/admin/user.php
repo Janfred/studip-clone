@@ -1042,7 +1042,13 @@ class Admin_UserController extends AuthenticatedController
         
         
         $this->queries = $this->getActivities($user_id);
-        $memberships   = CourseMember::findByUser($user_id);
+        
+        $memberships = DbManager::get()->fetchAll("SELECT seminar_user.*, seminare.Name as course_name
+                             FROM seminar_user
+                             LEFT JOIN seminare USING (seminar_id)
+                             WHERE user_id = ? ORDER BY seminare.start_time DESC, seminare.Name",
+            [$user_id],
+            'CourseMember::buildExisting');
         
         $courses        = [];
         $course_files   = [];
@@ -1050,42 +1056,57 @@ class Admin_UserController extends AuthenticatedController
         $this->sections = [];
         
         foreach ($memberships as $membership) {
-            // count files for course
-            $count = StudipDocument::countBySql('user_id = ? AND seminar_id =?', [$user_id, $membership->seminar_id]);
-            
-            if ($count) {
-                if (!isset($course_files[$membership->seminar_id])) {
-                    $course_files[$membership->course->id]['course'] = $membership->course;
-                }
-                $course_files[$membership->course->id]['files'] = $count;
-            }
-            // check for closed courses
-            $closed_course
-                = $closed_course = DBManager::get()->fetchColumn('SELECT COUNT(sc.seminar_id) FROM seminar_courseset sc 
-                  INNER JOIN courseset_rule cr ON cr.set_id=sc.set_id AND cr.type="ParticipantRestrictedAdmission" 
-                  WHERE sc.seminar_id =?', [$membership->seminar_id]);
-            
-            if ((int)$closed_course) {
-                $closed_courses[$membership->course->id] = $membership;
-            } else {
-                $courses[$membership->course->id] = $membership;
-            }
-        }
-        
-        $institutes = Institute::getMyInstitutes($user_id);
-        if (!empty($institutes)) {
-            foreach ($institutes as $index => $institute) {
-                $count = StudipDocument::countBySql('user_id = ? AND seminar_id =?', [$user_id, $institute['Institut_id']]);
+            if (!Request::get('view') || Request::get('view') === 'files') {
+                // count files for course
+                $count = StudipDocument::countBySql('user_id = ? AND seminar_id =?', [$user_id, $membership->seminar_id]);
                 
                 if ($count) {
-                    $institutes[$index]['files'] = $count;
+                    if (!isset($course_files[$membership->seminar_id])) {
+                        $course_files[$membership->course->start_semester->name][$membership->course->id]['course'] = $membership->course;
+                    }
+                    $course_files[$membership->course->start_semester->name][$membership->course->id]['files'] = $count;
+                }
+            }
+            if (in_array(Request::get('view'), words('courses closed_courses'))) {
+                // check for closed courses
+                $closed_course
+                    = $closed_course = DBManager::get()->fetchColumn('SELECT COUNT(sc.seminar_id) FROM seminar_courseset sc 
+                  INNER JOIN courseset_rule cr ON cr.set_id=sc.set_id AND cr.type="ParticipantRestrictedAdmission" 
+                  WHERE sc.seminar_id =?', [$membership->seminar_id]);
+                
+                if ((int)$closed_course) {
+                    $closed_courses[$membership->course->start_semester->name][$membership->course->id] = $membership;
                 } else {
-                    unset($institutes[$index]);
+                    $courses[$membership->course->start_semester->name][$membership->course->id] = $membership;
                 }
             }
         }
+    
+        if (!Request::get('view') || Request::get('view') === 'files') {
+            $institutes = Institute::getMyInstitutes($user_id);
+            if (!empty($institutes)) {
+                foreach ($institutes as $index => $institute) {
+                    $count = StudipDocument::countBySql('user_id = ? AND seminar_id =?', [$user_id, $institute['Institut_id']]);
+                    
+                    if ($count) {
+                        $institutes[$index]['files'] = $count;
+                    } else {
+                        unset($institutes[$index]);
+                    }
+                }
+            }
+        }
+            
+        if(Request::get('view') == 'seminar_wait') {
+            // waiting list
+            $seminar_wait = AdmissionApplication::findByUser($user_id);
+        }
         
-        
+        if(Request::get('view') == 'priorities') {
+            // priorities
+            $priorities = DBManager::get()->fetchAll('SELECT * FROM `priorities` WHERE `user_id` = ?', [$user_id]);
+        }
+    
         if (!empty($course_files)) {
             $this->sections['course_files'] = $course_files;
         }
@@ -1093,21 +1114,16 @@ class Admin_UserController extends AuthenticatedController
             $this->sections['institutes'] = $institutes;
         }
         if (!empty($courses)) {
+            
             $this->sections['courses'] = $courses;
         }
         if (!empty($courses)) {
             $this->sections['closed_courses'] = $closed_courses;
         }
         
-        // waiting list
-        $seminar_wait = AdmissionApplication::findByUser($user_id);
-        
         if (count($seminar_wait)) {
             $this->sections['seminar_wait'] = $seminar_wait;
         }
-        
-        // priorities
-        $priorities = DBManager::get()->fetchAll('SELECT * FROM `priorities` WHERE `user_id` = ?', [$user_id]);
         
         if (!empty($priorities)) {
             $this->sections['priorities'] = $priorities;
@@ -1152,7 +1168,7 @@ class Admin_UserController extends AuthenticatedController
                   FROM seminar_user
                   WHERE user_id = ?
                   GROUP BY user_id",
-            'details' => "details=seminar",
+            'details' => "courses",
         ];
         $queries[] = [
             'desc'    => _('Eingetragen in geschlossenen Veranstaltungen (dozent / tutor / autor / user)'),
@@ -1163,7 +1179,7 @@ class Admin_UserController extends AuthenticatedController
                   INNER JOIN courseset_rule cr ON cr.set_id=sc.set_id AND cr.type='ParticipantRestrictedAdmission'
                   WHERE user_id = ?
                   GROUP BY user_id",
-            'details' => "details=seminar_closed",
+            'details' => "closed_courses",
         ];
         $queries[] = [
             'desc'    => _("Eingetragen in Wartelisten (wartend / vorläufig akzeptiert)"),
@@ -1171,7 +1187,7 @@ class Admin_UserController extends AuthenticatedController
                   FROM admission_seminar_user
                   WHERE user_id = ?
                   GROUP BY user_id",
-            'details' => "details=seminar_wait",
+            'details' => "seminar_wait",
         ];
         $queries[] = [
             'desc'    => _("Eingetragen in Anmeldelisten"),
@@ -1179,7 +1195,7 @@ class Admin_UserController extends AuthenticatedController
                   FROM priorities
                   WHERE user_id = ?
                   GROUP BY user_id",
-            'details' => "details=seminar_claiming",
+            'details' => "priorities",
         ];
         $queries[] = [
             'desc'  => _("Eingetragen in Einrichtungen (admin / dozent / tutor / autor)"),
@@ -1214,20 +1230,20 @@ class Admin_UserController extends AuthenticatedController
             'query' => "SELECT COUNT(*) FROM resources_objects WHERE owner_id = ? GROUP BY owner_id",
         ];
         $queries[] = [
-            'desc'    => _("Anzahl der Dateien (hochgeladen / verlinkt)"),
-            'query'   => "SELECT CONCAT_WS(' / ', COUNT(*) - COUNT(NULLIF(url,'')), COUNT(NULLIF(url,'')))
+            'desc'  => _("Anzahl der Dateien (hochgeladen / verlinkt)"),
+            'query' => "SELECT CONCAT_WS(' / ', COUNT(*) - COUNT(NULLIF(url,'')), COUNT(NULLIF(url,'')))
                   FROM dokumente
                   WHERE user_id = ?
                   GROUP BY user_id",
-            'details' => "details=files",
+            'details' => "files",
         ];
         $queries[] = [
-            'desc'    => _("Gesamtgröße der hochgeladenen Dateien (MB)"),
-            'query'   => "SELECT FORMAT(SUM(filesize)/1024/1024,2)
+            'desc'  => _("Gesamtgröße der hochgeladenen Dateien (MB)"),
+            'query' => "SELECT FORMAT(SUM(filesize)/1024/1024,2)
                   FROM dokumente
                   WHERE user_id = ? AND (url IS NULL OR url = '')
                   GROUP BY user_id",
-            'details' => "details=files",
+            'details' => "files",
         ];
         
         foreach (PluginEngine::getPlugins('ForumModule') as $plugin) {
