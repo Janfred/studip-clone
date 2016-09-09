@@ -10,11 +10,11 @@
     </div>
 </div>
 
-<form class="studip_form" id="order_form" action="<?= $controller->url_for('admin/statusgroups/sortGroups') ?>" method="POST">
+<form class="default" id="order_form" action="<?= $controller->url_for('admin/statusgroups/sortGroups') ?>" method="POST">
     <input type="hidden" name="ordering" id="ordering">
     
-    <div data-dialog-button>
+    <footer data-dialog-button>
         <?= Studip\Button::createAccept(_('Speichern'), 'order') ?>
         <?= Studip\LinkButton::createCancel(_('Abbrechen'), $controller->url_for('admin/statusgroups/index')) ?>
-    </div>
+    </footer>
 </form>
