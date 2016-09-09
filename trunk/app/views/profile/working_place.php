@@ -1,38 +1,38 @@
 <br><b><?= _('Wo ich arbeite:') ?></b><br>
 
 <ul>
-    <? foreach ($institutes as $inst_result): ?>
+    <? foreach ($institutes as $institute): ?>
         <li>
-            <a href="<?= URLHelper::getLink('dispatch.php/institute/overview', array('auswahl' => $inst_result['Institut_id'])) ?>">
-                <?= htmlReady($inst_result['Name']) ?>
+            <a href="<?= URLHelper::getLink('dispatch.php/institute/overview', ['auswahl' => $institute['Institut_id']]) ?>">
+                <?= htmlReady($institute['institute_name']) ?>
             </a>
-            <? if ($inst_result['raum'] != ''): ?>
+            <? if ($institute['raum'] != ''): ?>
                 <br>
                 <b><?= _('Raum:') ?></b>
-                <?= htmlReady($inst_result['raum']) ?>
+                <?= htmlReady($institute['raum']) ?>
             <? endif; ?>
 
-            <? if ($inst_result['sprechzeiten'] != ''): ?>
+            <? if ($institute['sprechzeiten'] != ''): ?>
                 <br>
                 <b><?= _('Sprechzeit:') ?></b>
-                <?= htmlReady($inst_result['sprechzeiten']) ?>
+                <?= htmlReady($institute['sprechzeiten']) ?>
             <? endif; ?>
 
-            <? if ($inst_result['Telefon'] != ''): ?>
+            <? if ($institute['Telefon'] != ''): ?>
                 <br>
                 <b><?= _('Telefon:') ?></b>
-                <?= htmlReady($inst_result['Telefon']) ?>
+                <?= htmlReady($institute['Telefon']) ?>
             <? endif; ?>
 
-            <? if ($inst_result['Fax'] != ''): ?>
+            <? if ($institute['Fax'] != ''): ?>
                 <br>
                 <b><?= _('Fax:') ?></b>
-                <?= htmlReady($inst_result['Fax']) ?>
+                <?= htmlReady($institute['Fax']) ?>
             <? endif; ?>
 
-            <? if (!empty($inst_result['datafield'])): ?>
+            <? if (!empty($institute['datafield'])): ?>
                 <table cellspacing="0" cellpadding="0" border="0">
-                    <? foreach ($inst_result['datafield'] as $datafield): ?>
+                    <? foreach ($institute['datafield'] as $datafield): ?>
                         <tr>
                             <td style="padding-right: 5px"><?= htmlReady($datafield['name']) ?>:</td>
                             <td>
@@ -44,12 +44,12 @@
                 </table>
             <? endif; ?>
 
-            <? if (!empty($inst_result['role'])): ?> 
-                <table cellpadding="0" cellspacing="0" border="0"> 
-                    <?= $inst_result['role'] ?> 
-                </table> 
-            <? else: ?> 
-                <br> 
+            <? if (!empty($institute['role'])): ?>
+                <table cellpadding="0" cellspacing="0" border="0">
+                    <?= $institute['role'] ?>
+                </table>
+            <? else: ?>
+                <br>
             <? endif; ?>
         </li>
     <? endforeach; ?>

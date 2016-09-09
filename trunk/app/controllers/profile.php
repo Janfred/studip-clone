@@ -107,7 +107,7 @@ class ProfileController extends AuthenticatedController
         $this->longDatafields   = $this->profile->getLongDatafields();
 
         // get working station of an user (institutes)
-        $this->institutes = $this->profile->getInstitutInformations();
+        $this->institutes = $this->getInstitutInformations();
 
         // get studying informations of an user
         if ($this->current_user->perms != 'dozent') {
@@ -263,6 +263,54 @@ class ProfileController extends AuthenticatedController
         PageLayout::postMessage(MessageBox::success(_('Der Nutzer wurde zu Ihren Kontakten hinzugefügt.')));
         $this->redirect('profile/index?username=' . $username);
     }
-
+    
+    
+    private function getInstitutInformations()
+    {
+        $institutes = $this->current_user->institute_memberships->filter(function($a) {
+            if($a->inst_perms != 'user') {
+                return $a->institute;
+            }
+        });
+        
+        $institutes = $institutes->orderBy('priority asc');
+        $institutes = $institutes->toArray();
+        
+        foreach ($institutes as $id => $institute) {
+            
+            if($institute['visible'] == 1) {
+                $entries = DataFieldEntry::getDataFieldEntries(array($this->current_user->user_id, $institute['institut_id']));
+                
+                if (!empty($entries)) {
+                    foreach ($entries as $entry) {
+                        $view = $entry->isVisible(null, false);
+                        $show_star = false;
+                        
+                        if (!$view && $entry->isVisible()) {
+                            $view = true;
+                            $show_star = true;
+                        }
+                        
+                        if (trim($entry->getValue()) && $view) {
+                            $institutes[$id]['datafield'][] = array(
+                                'name'      => $entry->getName(),
+                                'value'     => $entry->getDisplayValue(),
+                                'show_star' => $show_star,
+                            );
+                        }
+                    }
+                }
+                
+                $groups             = GetAllStatusgruppen($institute['institut_id'], $this->current_user->user_id);
+                $default_entries    = DataFieldEntry::getDataFieldEntries(array($this->current_user->user_id, $institute['institut_id']));
+                $data               = get_role_data_recursive($groups, $this->current_user->user_id, $default_entries);
+                
+                $institutes[$id]['role'] = $data['standard'];
+            } else {
+                unset($institutes[$id]);
+            }
+        }
+        return $institutes;
+    }
 }
 
