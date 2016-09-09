@@ -111,9 +111,11 @@ class ProfileController extends AuthenticatedController
 
         // get studying informations of an user
         if ($this->current_user->perms != 'dozent') {
-            $study_institutes = UserModel::getUserInstitute($this->current_user->user_id, true);
-
-            if (count($study_institutes) > 0 && $this->profile->checkVisibility('studying')) {
+            
+            if (count($this->current_user->institute_memberships) > 0 && $this->profile->checkVisibility('studying')) {
+                $study_institutes = $this->current_user->institute_memberships->filter(function($a) {
+                    return $a->inst_perms == 'user';
+                });
                 $this->study_institutes = $study_institutes;
             }
         }
