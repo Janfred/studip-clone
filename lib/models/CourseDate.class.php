@@ -35,6 +35,9 @@
 
 class CourseDate extends SimpleORMap
 {
+    const FORMAT_DEFAULT = 'default';
+    const FORMAT_VERBOSE = 'verbose';
+
     /**
      * Returns course dates by issue id.
      *
@@ -220,21 +223,26 @@ class CourseDate extends SimpleORMap
     /**
      * Returns the full qualified name of this date.
      *
-     * @param String $format Optional format type (only 'default' is
-     *                       supported by now)
+     * @param String $format Optional format type (only 'default' and
+     *                       'verbose' are supported by now)
      * @return String containing the full name of this date.
      */
     public function getFullname($format = 'default')
     {
-        if (!$this->date || $format !== 'default') {
+        if (!$this->date || !in_array($format, ['default', 'verbose'])) {
             return '';
         }
+
+        $latter_template = $format === 'verbose'
+                         ? _('%R Uhr')
+                         : '%R';
 
         if (($this->end_time - $this->date) / 60 / 60 > 23) {
             return strftime('%a., %x (' . _('ganztägig') . ')' , $this->date);
         }
 
-        return strftime('%a., %x, %R', $this->date) . ' - ' . strftime('%R', $this->end_time);
+        return strftime('%a., %x, %R', $this->date) . ' - '
+             . strftime($latter_template, $this->end_time);
     }
 
     /**
