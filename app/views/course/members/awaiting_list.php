@@ -77,7 +77,7 @@
                 </td>
                 <td>
                     <?= $this->render_partial("course/members/_studycourse.php",
-                        array('study_courses' => UserModel::getUserStudycourse($waiting['user_id']))) ?>
+                        array('studycourses' => new SimpleCollection(UserStudyCourse::findByUser_id($autor['user_id'])))) ?>
                 </td>
                 <td style="text-align: right">
                     <? if($user_id != $waiting['user_id']) : ?>

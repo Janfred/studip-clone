@@ -99,7 +99,8 @@
                         <? endif ?>
                     </td>
                     <td>
-                        <?= $this->render_partial("course/members/_studycourse.php", array('study_courses' => UserModel::getUserStudycourse($autor['user_id']))) ?>
+                        <?= $this->render_partial("course/members/_studycourse.php",
+                                array('studycourses' => new SimpleCollection(UserStudyCourse::findByUser_id($autor['user_id'])))) ?>
                     </td>
                 <? endif ?>
 
