@@ -96,14 +96,14 @@ class MembersModel
         foreach ($users as $user_id) {
             // delete member from seminar
             if ($sem->deleteMember($user_id)) {
-                $temp_user = UserModel::getUser($user_id);
+                $user = User::find($user_id);
                 setTempLanguage($user_id);
                 $message = sprintf(_("Ihre Anmeldung zur Veranstaltung **%s** wurde von Lehrenden  (%s) oder Admin aufgehoben."), $this->course_title, get_title_for_status('dozent', 1));
                 restoreLanguage();
-                $messaging->insert_message($message, $temp_user['username'],
+                $messaging->insert_message($message, $user->username,
                                 '____%system%____', FALSE, FALSE, '1', FALSE, sprintf('%s %s', _('Systemnachricht:'),
                                         _("Anmeldung aufgehoben")), TRUE);
-                $msgs[] = $temp_user['Vorname'] . ' ' . $temp_user['Nachname'];
+                $msgs[] = $user->getFullName();
             }
         }
 
@@ -117,7 +117,7 @@ class MembersModel
         $db = DBManager::get()->prepare($query);
         $cs = Seminar::GetInstance($this->course_id)->getCourseSet();
         foreach ($users as $user_id) {
-            $temp_user = UserModel::getUser($user_id);
+            $user = User::find($user_id);
             if ($cs) {
                 $prio_delete = AdmissionPriority::unsetPriority($cs->getId(), $user_id, $this->course_id);
             }
@@ -130,13 +130,13 @@ class MembersModel
                     $message = sprintf(_("Sie wurden von %s oder Admin aus der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), get_title_for_status('dozent', 1), $this->course_title);
                 }
                 restoreLanguage();
-                $messaging->insert_message($message, $temp_user['username'],
+                $messaging->insert_message($message, $user->username,
                                 '____%system%____', FALSE, FALSE, '1', FALSE, sprintf('%s %s', _('Systemnachricht:'),
                                         _("nicht zugelassen in Veranstaltung")), TRUE);
                 StudipLog::log('SEM_USER_DEL', $this->course_id, $user_id, 'Wurde aus der Veranstaltung rausgeworfen');
                 NotificationCenter::postNotification('UserDidLeaveCourse', $this->course_id, $user_id); 
 
-                $msgs[] = $temp_user['Vorname'] . ' ' . $temp_user['Nachname'];
+                $msgs[] = $user->getFullName();
             }
         }
         return $msgs;
@@ -147,8 +147,8 @@ class MembersModel
         $messaging = new messaging;
         foreach ($users as $user_id => $value) {
             if ($value) {
-                $temp_user = UserModel::getUser($user_id);
-                if ($temp_user) {
+                $user = User::find($user_id);
+                if ($user) {
                     $admission_user = insert_seminar_user($this->course_id, $user_id, $next_status,
                             ($accepted || $consider_contingent ? TRUE : FALSE), $consider_contingent);
 
@@ -172,10 +172,10 @@ class MembersModel
                             }
                         }
 
-                        $messaging->insert_message($message, $temp_user['username'],
+                        $messaging->insert_message($message, $user->username,
                                 '____%system%____', FALSE, FALSE, '1', FALSE, sprintf('%s %s', _('Systemnachricht:'),
                                         _('Eintragung in Veranstaltung')), TRUE);
-                        $msgs[] = $temp_user['Vorname'] . ' ' . $temp_user['Nachname'];
+                        $msgs[] = $user->getFullName();
                     }
                 }
             }
@@ -191,7 +191,7 @@ class MembersModel
     {
         global $perm, $SEM_CLASS, $SEM_TYPE;
 
-        $user = UserModel::getUser($user_id);
+        $user = User::find($user_id);
         $messaging = new messaging;
 
         $status = 'autor';
@@ -199,10 +199,7 @@ class MembersModel
         // insert
         $copy_course = ($accepted || $consider_contingent) ? TRUE : FALSE;
         $admission_user = insert_seminar_user($this->course_id, $user_id, $status, $copy_course, $consider_contingent, true);
-
-        // create fullname of user of given user informations
-        $fullname = $user['Vorname'] . ' ' . $user['Nachname'];
-
+        
         if ($admission_user) {
             setTempLanguage($user_id);
             if ($cmd == 'add_user') {
@@ -220,7 +217,7 @@ class MembersModel
                 }
             }
             restoreLanguage();
-            $messaging->insert_message($message, $user['username'],
+            $messaging->insert_message($message, $user->username,
                     '____%system%____', FALSE, FALSE, '1', FALSE, sprintf('%s %s', _('Systemnachricht:'),
                             _('Eintragung in Veranstaltung')), TRUE);
         }
@@ -229,16 +226,16 @@ class MembersModel
         renumber_admission($this->course_id);
 
         if ($admission_user) {
-            if ($cmd == "add_user") {
+            if ($cmd == 'add_user') {
                 $msg = MessageBox::success(sprintf(_('%s wurde in die Veranstaltung mit dem Status
-                    <b>%s</b> eingetragen.'), $fullname, $status));
+                    <b>%s</b> eingetragen.'), $user->getFullName(), $status));
             } else {
                 if (!$accepted) {
                     $msg = MessageBox::success(sprintf(_('%s wurde aus der Anmelde bzw. Warteliste
-                        mit dem Status <b>%s</b> in die Veranstaltung eingetragen.'), $fullname, $status));
+                        mit dem Status <b>%s</b> in die Veranstaltung eingetragen.'), $user->getFullName(), $status));
                 } else {
                     $msg = MessageBox::success(sprintf(_('%s wurde mit dem Status <b>%s</b>
-                        endg?ltig akzeptiert und damit in die Veranstaltung aufgenommen.'), $fullname, $status));
+                        endgültig akzeptiert und damit in die Veranstaltung aufgenommen.'), $user->getFullName(), $status));
                 }
             }
         } else if ($consider_contingent) {
