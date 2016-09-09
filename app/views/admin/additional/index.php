@@ -1,8 +1,9 @@
 <? if ($list): ?>
-    <form class='studip_form' method='post'>
+    <form class='default' method='post'>
         <fieldset>
             <legend><?= _('Zusatzangaben') ?></legend>
-            <label><?= _('Set') ?>
+            <label>
+                <?= _('Set') ?>
                 <select name='aux_data'>
                     <option value='0'>
                         <?= '-- '._('Keine Zusatzdaten')." --" ?>
@@ -14,7 +15,8 @@
                     <? endforeach ?>
                 </select>
             </label>
-            <label><?= _('Eingaben erzwingen') ?>
+            <label>
+                <?= _('Eingaben erzwingen') ?>
                 <input type='checkbox' name='forced' value='1' <?= $course->aux_lock_rule_forced ? "checked" : "" ?>>
             </label>
             <? if($count): ?>
@@ -23,8 +25,10 @@
                 <input type='checkbox' name='delete' value='1'>
             </label>
             <? endif; ?>
-            <?= Studip\Button::create(_('Übernehmen'), 'save') ?>
         </fieldset>
+        <footer>
+            <?= Studip\Button::create(_('Übernehmen'), 'save') ?>
+        </footer>
     </form>
 <? else: ?>
     <? _('Keine Zusatzangaben vorhanden') ?>
