@@ -1,20 +1,21 @@
-<? if (count($m->user->studycourses)) : ?>
-    <? $course_res = '' ?>
-    <? $counter = 0 ?>
-    <? foreach ($m->user->studycourses as $studycourses) : ?>
-        <? if ($counter < 1) : ?>
-            <?= htmlReady($studycourses->studycourse->name) ?>
-            <?= htmlReady($studycourses->degree->name) ?>
-            (<?= htmlReady($studycourses->semester) ?>)
-        <? endif ?>
-        <? if (count($m->user->studycourses) > 1) : ?>
-            <? $course_res .= sprintf('- %s (%s)<br>',
-                    htmlReady(trim($studycourses->studycourse->name . ' ' . $studycourses->degree->name)),
-                    htmlReady($studycourses->semester)) ?>
-        <? endif ?>
-        <? $counter++ ?>
-    <? endforeach ?>
-    <? if ($course_res != '') : ?>
-        [...]<?= tooltipHtmlIcon('<strong>' . _('Weitere Studiengänge') . '</strong><br>' . $course_res) ?>
-    <? endif ?>
-<? endif ?>
+<?php
+if ($count = count($studycourses)) {
+    $studycourse = $studycourses->first();
+    echo sprintf(
+        '%s (%s)',
+        htmlReady(trim($studycourse->studycourse->name . ' ' . $studycourse->degree->name)),
+        htmlReady($studycourse->semester)
+    );;
+    if ($count > 1) {
+        echo '[...]';
+        $course_res = implode('<br>', $studycourses->limit(1, PHP_INT_MAX)->map(function ($item) {
+            return sprintf(
+                '- %s (%s)<br>',
+                htmlReady(trim($item->studycourse->name . ' ' . $item->degree->name)),
+                htmlReady($item->semester)
+            );
+        }));
+        echo tooltipHtmlIcon('<strong>' . _('Weitere Studiengänge') . '</strong><br>' .$course_res);
+    }
+    
+};?>

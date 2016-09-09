@@ -83,7 +83,7 @@
                     <? endif ?>
                 </td>
                 <td>
-                    <?= $this->render_partial("course/members/_studycourse.php", array('study_courses' => UserModel::getUserStudycourse($accept['user_id']))) ?>
+                    <?= $this->render_partial("course/members/_studycourse.php", array('studycourses' => new SimpleCollection(UserStudyCourse::findByUser_id($autor['user_id'])))) ?>
                 </td>
                 <td style="text-align: right">
                     <a data-dialog title='<?= _('Bemerkung hinzufügen') ?>' href="<?=$controller->url_for('course/members/add_comment', $accept['user_id']) ?>">
