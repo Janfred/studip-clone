@@ -436,7 +436,7 @@ class Admin_UserController extends AuthenticatedController
                 && $GLOBALS['perm']->have_studip_perm("admin", Request::option('new_student_inst'))
             ) {
                 StudipLog::log('INST_USER_ADD', Request::option('new_student_inst'), $user_id, 'user');
-                $db = DbManager::get()->prepare("INSERT IGNORE INTO user_inst (user_id, Institut_id, inst_perms) "
+                $db = DBManager::get()->prepare("INSERT IGNORE INTO user_inst (user_id, Institut_id, inst_perms) "
                                                 . "VALUES (?,?,'user')");
                 $db->execute([$user_id, Request::option('new_student_inst')]);
                 NotificationCenter::postNotification('UserInstitutionDidCreate', Request::option('new_student_inst'), $user_id);
@@ -450,7 +450,7 @@ class Admin_UserController extends AuthenticatedController
                 && $GLOBALS['perm']->have_studip_perm("admin", Request::option('new_inst'))
             ) {
                 StudipLog::log('INST_USER_ADD', Request::option('new_inst'), $user_id, $editPerms[0]);
-                $db = DbManager::get()->prepare("REPLACE INTO user_inst (user_id, Institut_id, inst_perms) "
+                $db = DBManager::get()->prepare("REPLACE INTO user_inst (user_id, Institut_id, inst_perms) "
                                                 . "VALUES (?,?,?)");
                 $db->execute([$user_id, Request::option('new_inst'), $editPerms[0]]);
                 NotificationCenter::postNotification('UserInstitutionDidUpdate', Request::option('new_inst'), $user_id);
@@ -500,7 +500,7 @@ class Admin_UserController extends AuthenticatedController
             }
             
             if ($perm->have_perm('root') && Request::get('lock_rule')) {
-                $st = DbManager::get()->prepare("UPDATE user_info SET lock_rule=? WHERE user_id=?");
+                $st = DBManager::get()->prepare("UPDATE user_info SET lock_rule=? WHERE user_id=?");
                 $st->execute([(Request::option('lock_rule') == 'none' ? '' : Request::option('lock_rule')), $user_id]);
                 if ($st->rowCount()) {
                     $details[] = _("Die Sperrebene wurde geändert.");
@@ -1043,7 +1043,7 @@ class Admin_UserController extends AuthenticatedController
         
         $this->queries = $this->getActivities($user_id);
         
-        $memberships = DbManager::get()->fetchAll("SELECT seminar_user.*, seminare.Name as course_name
+        $memberships = DBManager::get()->fetchAll("SELECT seminar_user.*, seminare.Name as course_name
                              FROM seminar_user
                              LEFT JOIN seminare USING (seminar_id)
                              WHERE user_id = ? ORDER BY seminare.start_time DESC, seminare.Name",
