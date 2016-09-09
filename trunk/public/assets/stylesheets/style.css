@@ -3422,7 +3422,7 @@ html.no-js:not(.csstransforms) .action-menu:hover .action-menu-icon {
 }
 .studip-selection .studip-selection-selected li:hover .studip-selection-image,
 .studip-selection .studip-selection-selected li:hover .studip-selection-label::before {
-  background-image: url("../images/icons/red/remove-circle-full.svg");
+  background-image: url("../images/icons/blue/remove-circle-full.svg");
   -webkit-background-size: 16px 16px;
   -moz-background-size: 16px 16px;
   -o-background-size: 16px 16px;
@@ -3430,7 +3430,7 @@ html.no-js:not(.csstransforms) .action-menu:hover .action-menu-icon {
 }
 .studip-selection .studip-selection-selectable li:hover .studip-selection-image,
 .studip-selection .studip-selection-selectable li:hover .studip-selection-label::before {
-  background-image: url("../images/icons/green/add-circle-full.svg");
+  background-image: url("../images/icons/blue/add-circle-full.svg");
   -webkit-background-size: 16px 16px;
   -moz-background-size: 16px 16px;
   -o-background-size: 16px 16px;
