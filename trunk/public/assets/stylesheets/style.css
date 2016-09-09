@@ -2932,6 +2932,9 @@ section.contentbox header > nav {
   display: flex;
   align-items: center;
 }
+section.contentbox header > nav > *:not(:first-child) {
+  padding-left: 0.25em;
+}
 section.contentbox footer:empty {
   display: none !important;
 }
@@ -6104,7 +6107,6 @@ a.bookable_rooms_action {
   max-height: 0px;
   opacity: 0;
   padding: 0;
-  overflow: auto;
   -webkit-transition: opacity 0.3s;
   -moz-transition: opacity 0.3s;
   -o-transition: opacity 0.3s;
