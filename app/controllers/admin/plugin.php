@@ -474,13 +474,11 @@ class Admin_PluginController extends AuthenticatedController
             $this->redirect("admin/plugin/edit_automaticupdate/".$plugin_id);
         }
         if (Request::isXhr()) {
-            $this->set_layout(null);
             if ($plugin_id) {
                 $this->response->add_header('X-Title', sprintf(_("Automatisches Update für %s"), $this->plugin['name']));
             } else {
                 $this->response->add_header('X-Title', _("Plugin von URL installieren"));
             }
-            $this->set_content_type('text/html;charset=windows-1252');
         }
     }
 
