@@ -131,55 +131,6 @@ class ProfileModel
         return $courses;
     }
 
-    /*
-     * Get all informations about given user
-     *
-     * @return array
-     */
-    function getInstitutInformations()
-    {
-        $institutes = UserModel::getUserInstitute($this->current_user->user_id);
-
-        uasort($institutes, function($a, $b) { return $a['priority'] - $b['priority']; });
-
-        foreach ($institutes as $id =>$inst_result) {
-
-            if($inst_result['visible'] == 1) {
-                $entries = DataFieldEntry::getDataFieldEntries(array($this->current_user->user_id, $inst_result['Institut_id']));
-
-                if (!empty($entries)) {
-                    foreach ($entries as $entry) {
-                        $view = $entry->isVisible(null, false);
-                        $show_star = false;
-
-                        if (!$view && $entry->isVisible()) {
-                            $view = true;
-                            $show_star = true;
-                        }
-
-                        if (trim($entry->getValue()) && $view) {
-                            $institutes[$id]['datafield'][] = array(
-                                'name'      => $entry->getName(),
-                                'value'     => $entry->getDisplayValue(),
-                                'show_star' => $show_star,
-                            );
-                        }
-                    }
-                }
-
-                $groups             = GetAllStatusgruppen($inst_result['Institut_id'], $this->current_user->user_id);
-                $default_entries    = DataFieldEntry::getDataFieldEntries(array($this->current_user->user_id, $inst_result['Institut_id']));
-                $data               = get_role_data_recursive($groups, $this->current_user->user_id, $default_entries);
-
-                $institutes[$id]['role'] = $data['standard'];
-            } else {
-                unset($institutes[$id]);
-            }
-        }
-
-        return $institutes;
-    }
-
     /**
      * Collect user datafield informations
      *
