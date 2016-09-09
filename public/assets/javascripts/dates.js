@@ -1,4 +1,4 @@
-/*jslint browser: true, white: true, undef: true, nomen: true, plusplus: true, bitwise: true, newcap: true, indent: 4 */
+/*jslint browser: true, unparam: true */
 /*global jQuery, STUDIP */
 
 (function ($, STUDIP) {
@@ -7,7 +7,7 @@
     STUDIP.Dates = {
         addTopic: function () {
             var topic_name = $('#new_topic').val(),
-                termin_id  = $('#new_topic').closest('table[data-termin_id]').data('termin_id');
+                termin_id  = $('#new_topic').closest('[data-termin-id]').data().terminId;
             $.ajax({
                 url: STUDIP.URLHelper.getURL('dispatch.php/course/dates/add_topic'),
                 data: {
@@ -17,7 +17,7 @@
                 dataType: 'json',
                 type: 'post'
             }).done(function (response) {
-                $('#new_topic').closest('table').find('.themen_list').append(response.li);
+                $('#new_topic').closest('[data-termin-id]').find('.themen_list').append(response.li);
                 $('#date_' + termin_id).find('.themen_list').append(response.li);
             });
 
@@ -25,7 +25,7 @@
         },
         removeTopicFromIcon: function () {
             var topic_id  = $(this).closest('li').data('issue_id'),
-                termin_id = $(this).closest('[data-termin_id]').data('termin_id');
+                termin_id = $(this).closest('[data-termin-id]').data().terminId;
             STUDIP.Dates.removeTopic(termin_id, topic_id);
         },
         removeTopic: function (termin_id, topic_id) {
@@ -71,7 +71,7 @@
         }
 
         $('#course-dates-index .dates').tablesorter({
-            textExtraction: function(node) {
+            textExtraction: function (node) {
                 var $node = $(node);
                 return String($node.data('timestamp') || $node.text()).trim();
             },
