@@ -1,7 +1,7 @@
 <?
-class Step117StudienModule extends DBMigration
+class Step117StudienModule extends Migration
 {
-    var $sql_up = 
+    private $sql_up = 
 "
 -- 
 -- Tabellenstruktur für Tabelle `his_abschl`
@@ -233,30 +233,29 @@ CREATE TABLE `stm_instances_text` (
 ) ENGINE=MyISAM COMMENT='(mehrsprachige) Texte der instanziierten abstrakten Module';
 ";
 
-    var $sql_down = "DROP TABLE IF EXISTS `his_abschl`, `his_abstgv`, `his_pvers`, `his_stg`, `stm_abstract`, `stm_abstract_assign`, `stm_abstract_elements`, `stm_abstract_text`, `stm_abstract_types`, `stm_element_types`, `stm_instances`, `stm_instances_elements`, `stm_instances_text`;";
+    private $sql_down = "DROP TABLE IF EXISTS `his_abschl`, `his_abstgv`, `his_pvers`, `his_stg`, `stm_abstract`, `stm_abstract_assign`, `stm_abstract_elements`, `stm_abstract_text`, `stm_abstract_types`, `stm_element_types`, `stm_instances`, `stm_instances_elements`, `stm_instances_text`;";
     
-    function description ()
+    public function description ()
     {
         return 'modify db schema StEP00117 Studienmodulstrukturen; ';
     }
     
-    function up ()
+    public function up ()
     {
         $this->announce(get_class($this) . ": Creating db schema...");
         $statements = preg_split("/;[[:space:]]*\n/", $this->sql_up);
         foreach($statements as $sqlstatement) {
-            $this->db->query($sqlstatement);    
+            DBManager::get()->exec($sqlstatement);    
         }
     }
     
-    function down ()
+    public function down ()
     {
         $this->announce(get_class($this) . ": Deleting db schema...");
         $statements = preg_split("/;[[:space:]]*\n/", $this->sql_down);
         foreach($statements as $sqlstatement) {
-            $this->db->query($sqlstatement);    
+            DBManager::get()->exec($sqlstatement);    
         }
     }
 
 }
-?>

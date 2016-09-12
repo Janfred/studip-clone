@@ -1,11 +1,13 @@
-<?
-class DbOptimierungKontingentierung extends DBMigration {
-
-    function description () {
+<?php
+class DbOptimierungKontingentierung extends Migration
+{
+    public function description ()
+    {
         return 'adds keys in admission_seminar_studiengang, admission_seminar_user and seminar_user';
     }
 
-    function up () {
+    public function up ()
+    {
         $this->announce("add keys...");
 
         $db = DBManager::get();
@@ -19,7 +21,8 @@ class DbOptimierungKontingentierung extends DBMigration {
         $this->announce("done.");
     }
 
-    function down () {
+    public function down () 
+    {
         $this->announce("delete keys...");
 
         $db = DBManager::get();
@@ -33,4 +36,3 @@ class DbOptimierungKontingentierung extends DBMigration {
         $this->announce("done.");
     }
 }
-?>

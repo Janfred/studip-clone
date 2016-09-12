@@ -1,14 +1,16 @@
 <?
-class TableTokenClass extends DBMigration {
-
-    function description () {
+class TableTokenClass extends Migration
+{
+    public function description ()
+    {
         return 'creates table for Token class';
     }
 
-    function up () {
+    public function up ()
+    {
         $this->announce(" creating table...");
         
-        $this->db->query("CREATE TABLE IF NOT EXISTS `user_token` (
+        DBManager::get()->exec("CREATE TABLE IF NOT EXISTS `user_token` (
                                         `user_id` VARCHAR( 32 ) NOT NULL ,
                                         `token` VARCHAR( 32 ) NOT NULL ,
                                         `expiration` INT NOT NULL ,
@@ -22,14 +24,12 @@ class TableTokenClass extends DBMigration {
         
     }
     
-    function down () {
+    public function down ()
+    {
         $this->announce(" removing table...");
-        $this->db->query("
-      DROP TABLE `user_token` 
-        ");
+        DBManager::get()->exec("DROP TABLE `user_token`");
         
         $this->announce("done.");
         
     }
 }
-?>

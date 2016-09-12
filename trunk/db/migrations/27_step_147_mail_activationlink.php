@@ -12,17 +12,20 @@
  */
 
 
-class Step147MailActivationLink extends DBMigration {
+class Step147MailActivationLink extends Migration
+{
+    public function description()
+    {
+        return 'modify db schema for StEP00147 to provide validation key attribute';
+    }
 
-  function description() {
-    return 'modify db schema for StEP00147 to provide validation key attribute';
-  }
+    public function up()
+    {
+        DBManager::get()->exec("ALTER TABLE `auth_user_md5` ADD `validation_key` VARCHAR(10) NOT NULL AFTER `Email`");
+    }
 
-  function up() {
-    $this->db->query("ALTER TABLE `auth_user_md5` ADD `validation_key` VARCHAR(10) NOT NULL AFTER `Email`;");
-  }
-
-  function down() {
-    $this->db->query("ALTER TABLE `auth_user_md5` DROP `validation_key`;");
-  }
+    public function down()
+    {
+        DBManager::get()->exec("ALTER TABLE `auth_user_md5` DROP `validation_key`");
+    }
 }

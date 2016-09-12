@@ -1,7 +1,7 @@
 <?php
-class CreateOpenGraphDataTable extends DBMigration
+class CreateOpenGraphDataTable extends Migration
 {
-    function up() 
+    public function up() 
     {
         DBManager::get()->exec("
             CREATE TABLE IF NOT EXISTS `opengraphdata` (
@@ -40,13 +40,9 @@ class CreateOpenGraphDataTable extends DBMigration
         }
     }
     
-    function down() {
-        DBManager::get()->exec("
-            DROP TABLE TABLE IF EXISTS `opengraph`;
-        ");
-        DBManager::get()->exec(
-            "DELETE FROM config " .
-            "WHERE field = 'SKIPLINKS_ENABLE' " .
-        "");
+    public function down()
+    {
+        DBManager::get()->exec("DROP TABLE TABLE IF EXISTS `opengraph`");
+        DBManager::get()->exec("DELETE FROM config WHERE field = 'OPENGRAPH_ENABLE'");
     }
 }

@@ -13,7 +13,7 @@
  */
 
 
-class Tic4491HelpContent extends DBMigration
+class Tic4491HelpContent extends Migration
 {
     public function description()
     {

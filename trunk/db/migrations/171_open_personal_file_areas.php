@@ -8,7 +8,7 @@
  * @license GPL2 or any later version
  */
 
-class OpenPersonalFileAreas extends DBMigration
+class OpenPersonalFileAreas extends Migration
 {
     public function description()
     {
