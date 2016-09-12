@@ -1256,11 +1256,15 @@ class ExternModuleTemplateSemBrowse extends ExternModule {
         return in_array($this->sem_browse_data['show_class'], $this->classes_show_class);
     }
 
-    function get_sem_class(){
-        $db = new DB_Seminar("SELECT Seminar_id from seminare WHERE seminare.visible=1 AND seminare.status IN ('" . join("','", $this->sem_browse_data['sem_status']) . "')");
-        $snap = new DbSnapshot($db);
-        $sem_ids = $snap->getRows("Seminar_id");
-        if (is_array($sem_ids)){
+    function get_sem_class()
+    {
+        $query = "SELECT `Seminar_id`
+                  FROM `seminare`
+                  WHERE `status` IN (?)
+                    AND visible = 1";
+
+        $sem_ids = DBManager::get()->fetchAll(PDO::FETCH_COLUMN);
+        if (is_array($sem_ids)) {
             $this->sem_browse_data['search_result'] = array_flip($sem_ids);
         }
         $this->show_result = true;
@@ -1295,10 +1299,7 @@ class ExternModuleTemplateSemBrowse extends ExternModule {
             $stmt = $db->prepare("SELECT item_id FROM range_tree WHERE studip_object_id = ? AND parent_id = 'root'");
         }
         $stmt->execute(array($this->config->range_id));
-        if ($result = $stmt->fetch()) {
-            return $result['item_id'];
-        }
-        return false;
+        return $stmt->fetchColumn() ?: false;
     }
 
     function createResultXls () {
