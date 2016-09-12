@@ -449,7 +449,7 @@ class ResourcesBrowse {
                         </a><br>
                         <? $i++;
                     }
-                    print "</table>";
+                    print "</table>"; ?>
             <? endif; ?>
             </td>
         </tr>
