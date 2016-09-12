@@ -74,9 +74,7 @@ class Admin_CourseWizardStepsController extends AuthenticatedController
                 }
             }
         }
-        if (Request::isXhr()) {
-            $this->response->add_header('X-Title', $title);
-        }
+        PageLayout::setTitle($title);
     }
 
     /**
@@ -94,21 +92,19 @@ class Admin_CourseWizardStepsController extends AuthenticatedController
                 $step->number = Request::int('number');
                 $step->enabled = Request::option('enabled') ? 1 : 0;
                 if ($step->store()) {
-                    PageLayout::postMessage(MessageBox::success(_('Die Daten wurden gespeichert.')));
+                    PageLayout::postSuccess(_('Die Daten wurden gespeichert.'));
                 } else {
-                    PageLayout::postMessage(MessageBox::error(_('Die Daten konnten nicht gespeichert werden.')));
+                    PageLayout::postError(_('Die Daten konnten nicht gespeichert werden.'));
                 }
             } else {
                 $classname = Request::get('classname');
                 // Check if given class name can be found in system.
                 if (!class_exists($classname)) {
-                    PageLayout::postMessage(MessageBox::error(
-                        sprintf(_('Die angegebene PHP-Klasse "%s" wurde nicht gefunden.'), htmlReady($classname))));
+                    PageLayout::postError(sprintf(_('Die angegebene PHP-Klasse "%s" wurde nicht gefunden.'), htmlReady($classname)));
                 // Class found, now check if it implements the interface definition for wizard steps.
                 } else if (!in_array('CourseWizardStep', class_implements($classname) ?: array())) {
-                    PageLayout::postMessage(MessageBox::error(
-                        sprintf(_('Die angegebene PHP-Klasse "%s" implementiert nicht das Interface CourseWizardStep.'),
-                            htmlReady($classname))));
+                    PageLayout::postError(sprintf(_('Die angegebene PHP-Klasse "%s" implementiert nicht das Interface CourseWizardStep.'),
+                        htmlReady($classname)));
                 // All ok, create new database entry.
                 } else {
                     $step = new CourseWizardStepRegistry();
@@ -117,28 +113,16 @@ class Admin_CourseWizardStepsController extends AuthenticatedController
                     $step->number = Request::int('number');
                     $step->enabled = Request::option('enabled') ? 1 : 0;
                     if ($step->store()) {
-                        PageLayout::postMessage(MessageBox::success(_('Die Daten wurden gespeichert.')));
+                        PageLayout::postSuccess(_('Die Daten wurden gespeichert.'));
                     } else {
-                        PageLayout::postMessage(MessageBox::error(_('Die Daten konnten nicht gespeichert werden.')));
+                        PageLayout::postError(_('Die Daten konnten nicht gespeichert werden.'));
                     }
                 }
             }
         }
         $this->redirect($this->url_for('admin/coursewizardsteps'));
     }
-
-    /**
-     * Asks for confirmation on deleting a step.
-     * @param $id ID of the entry to delete
-     */
-    public function ask_delete_action($id)
-    {
-        if (Request::isXhr()) {
-            $this->response->add_header('X-Title', _('Schritt löschen?'));
-        }
-        $this->step = CourseWizardStepRegistry::find($id);
-    }
-
+    
     /**
      * Deletes the given entry from step registry.
      * @param $id ID of the entry to delete
@@ -146,17 +130,13 @@ class Admin_CourseWizardStepsController extends AuthenticatedController
     public function delete_action($id)
     {
         CSRFProtection::verifyUnsafeRequest();
-        if (Request::submitted('delete')) {
-            $step = CourseWizardStepRegistry::find($id);
-            if ($step) {
-                $name = $step->name;
-                if (CourseWizardStepRegistry::unregisterStep($id)) {
-                    PageLayout::postMessage(
-                        MessageBox::success(sprintf(_('Der Schritt "%s" wurde gelöscht.'), $name)));
-                } else {
-                    PageLayout::postMessage(
-                        MessageBox::error(sprintf(_('Der Schritt %s konnte nicht gelöscht werden.'), $name)));
-                }
+        $step = CourseWizardStepRegistry::find($id);
+        if ($step) {
+            $name = $step->name;
+            if (CourseWizardStepRegistry::unregisterStep($id)) {
+                PageLayout::postSuccess(sprintf(_('Der Schritt "%s" wurde gelöscht.'), $name));
+            } else {
+                PageLayout::postError(sprintf(_('Der Schritt %s konnte nicht gelöscht werden.'), $name));
             }
         }
         $this->redirect($this->url_for('admin/coursewizardsteps'));
