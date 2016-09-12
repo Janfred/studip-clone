@@ -61,10 +61,10 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
     // Start of Output
     include 'lib/include/html_head.inc.php'; // Output of html head
     include 'lib/include/header.php';   // Output of Stud.IP head
-    include 'lib/include/deprecated_tabs_layout.php';
     
     $auth->logout();
 ?>
+<div id="layout_page">
 
 <table width="100%" align="center" border=0 cellpadding=5 cellspacing=0>
 <tr><td class="table_header_bold"><?= Icon::create('door-enter', 'info_alt')->asImg() ?><b>&nbsp;<?=_("Nutzungsbedingungen")?></b></td></tr>
@@ -99,6 +99,8 @@ include("locale/$_language_path/LC_HELP/pages/nutzung.html");
 </td></tr>
 <tr><td class="blank">&nbsp;</td></tr>
 </table>
+
+</div>
 <?php
 }
 

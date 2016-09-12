@@ -58,9 +58,10 @@ PageLayout::setTitle(_("Registrierung erfolgreich"));
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
-include ('lib/include/deprecated_tabs_layout.php');
 
 ?>
+<div id="layout_page">
+
 <table width ="100%" border="0" cellspacing="0" cellpadding="5">
 <tr>
     <td class="table_header_bold"><b>&nbsp;<?=_("Herzlich Willkommen")?></b>
@@ -81,8 +82,7 @@ include ('lib/include/deprecated_tabs_layout.php');
 </tr>   
 </table>
 
+</div>
 <?php 
 include ('lib/include/html_end.inc.php');
 page_close();
-
-?>
