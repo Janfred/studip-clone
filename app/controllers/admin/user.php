@@ -153,7 +153,7 @@ class Admin_UserController extends AuthenticatedController
         $this->studycourses           = Fach::findBySQL('1 order by name');
         $this->userdomains            = UserDomain::getUserDomains();
         $this->institutes             = Institute::getInstitutes();
-        $this->available_auth_plugins = UserModel::getAvailableAuthPlugins();
+        $this->available_auth_plugins = User::getAvailableAuthPlugins();
         
         //show datafields search
         if ($advanced
@@ -299,7 +299,7 @@ class Admin_UserController extends AuthenticatedController
      */
     public function edit_action($user_id = null)
     {
-        global $perm, $auth;
+        global $auth;
         
         //check submitted user_id
         if (is_null($user_id)) {
@@ -546,9 +546,10 @@ class Admin_UserController extends AuthenticatedController
             });
         }
         
-        $this->available_institutes = Institute::getMyInstitutes();
-        $this->userfields           = DataFieldEntry::getDataFieldEntries($user_id, 'user');
-        $this->userdomains          = UserDomain::getUserDomainsForUser($user_id);
+        $this->available_auth_plugins = User::getAvailableAuthPlugins();
+        $this->available_institutes   = Institute::getMyInstitutes();
+        $this->userfields             = DataFieldEntry::getDataFieldEntries($user_id, 'user');
+        $this->userdomains            = UserDomain::getUserDomainsForUser($user_id);
         if (LockRules::CheckLockRulePermission($user_id) && LockRules::getObjectRule($user_id)->description) {
             PageLayout::postMessage(MessageBox::info(formatLinks(LockRules::getObjectRule($user_id)->description)));
         }
