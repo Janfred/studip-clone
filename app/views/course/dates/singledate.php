@@ -1,4 +1,4 @@
-<form name="single_termin" class="studip_form" action="<?= $controller->url_for("course/dates/singledate/" . htmlReady($date->getId())) ?>" method="POST" data-dialog="size=auto">
+<form name="single_termin" class="default" action="<?= $controller->url_for("course/dates/singledate/" . htmlReady($date->getId())) ?>" method="POST" data-dialog="size=auto">
 <?= CSRFProtection::tokenTag()?>
     <fieldset>
     	<legend><?= _("Termin findet am folgenden Tag zum folgenden Zeitpunkt statt") ?></legend>

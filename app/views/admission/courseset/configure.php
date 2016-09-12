@@ -19,7 +19,7 @@ if ($flash['error']) {
 </div>
 <?= $this->render_partial('dialog/confirm_dialog') ?>
 <h1><?= $courseset ? _('Anmeldeset bearbeiten') : _('Anmeldeset anlegen') ?></h1>
-<form class="studip_form" action="<?= $controller->url_for(!$instant_course_set_view ? 'admission/courseset/save/' . ($courseset ? $courseset->getId() : '') : 'course/admission/save_courseset/' . $courseset->getId()) ?>" method="post">
+<form class="default" action="<?= $controller->url_for(!$instant_course_set_view ? 'admission/courseset/save/' . ($courseset ? $courseset->getId() : '') : 'course/admission/save_courseset/' . $courseset->getId()) ?>" method="post">
     <fieldset>
         <legend><?= _('Grunddaten') ?></legend>
         <label for="name" class="caption">
