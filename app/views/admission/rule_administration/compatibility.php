@@ -1,4 +1,5 @@
 <form class="default" action="<?= $controller->url_for('admission/ruleadministration/save_compat') ?>" method="post">
+    <?= CSRFProtection::tokenTag() ?>
     <table class="default">
         <caption>
             <?= _('Welche Anmelderegeln sind wie miteinander kombinierbar?') ?>
@@ -41,9 +42,14 @@
                 </tr>
             <?php endforeach ?>
         </tbody>
+
+        <tfoot>
+            <tr>
+                <td colspan="<?= count($ruletypes) + 2 ?>">
+                    <?= Studip\Button::createAccept(_('Speichern'), 'save') ?>
+                </td>
+            </tr>
+        </tfoot>
     </table>
-    <?= CSRFProtection::tokenTag() ?>
-    <footer>
-        <?= Studip\Button::createAccept(_('Speichern'), 'save') ?>
-    </footer>
+  
 </form>
