@@ -8,29 +8,16 @@
  * @subpackage engine
  */
 
-class PluginEngine {
-    /**
-     * @deprecated
-     *
-     * @return int  returns the current plugin's ID
-     */
-    public static function getCurrentPluginId() {
-        $page = basename($_SERVER['PHP_SELF']);
-
-        if ($page == 'plugins.php' && isset($_SERVER['PATH_INFO'])) {
-            list($plugin_class) = self::routeRequest($_SERVER['PATH_INFO']);
-            $info = PluginManager::getInstance()->getPluginInfo($plugin_class);
-            return $info['id'];
-        }
-    }
-
+class PluginEngine 
+{
     /**
      * This function maps an incoming request to a tuple
      * (pluginclassname, unconsumed rest).
      *
      * @return array the above mentioned tuple
      */
-    public static function routeRequest($dispatch_to) {
+    public static function routeRequest($dispatch_to)
+    {
         $dispatch_to = ltrim($dispatch_to, '/');
         if (strlen($dispatch_to) === 0) {
             throw new PluginNotFoundException(_('Es wurde kein Plugin gewählt.'));
@@ -47,18 +34,13 @@ class PluginEngine {
      * (if user has admin status) and System. The exact type of plugins
      * loaded here may change in the future.
      */
-    public static function loadPlugins() {
+    public static function loadPlugins()
+    {
         global $user, $perm;
 
-        // load system plugins and run background tasks
-        foreach (self::getPlugins('SystemPlugin') as $plugin) {
-            if ($plugin instanceof AbstractStudIPSystemPlugin) {
-                if ($plugin->hasBackgroundTasks()) {
-                    $plugin->doBackgroundTasks();
-                }
-            }
-        }
-        
+        // load system plugins
+        self::getPlugins('SystemPlugin');
+
         // load homepage plugins
         self::getPlugins('HomepagePlugin');
 
@@ -78,7 +60,8 @@ class PluginEngine {
      *
      * @param $class   class name of plugin
      */
-    public static function getPlugin ($class) {
+    public static function getPlugin ($class)
+    {
         return PluginManager::getInstance()->getPlugin($class);
     }
 
@@ -90,7 +73,8 @@ class PluginEngine {
      * @param $type      plugin type or NULL (all types)
      * @param $context   context range id (optional)
      */
-    public static function getPlugins ($type, $context = NULL) {
+    public static function getPlugins ($type, $context = NULL)
+    {
         return PluginManager::getInstance()->getPlugins($type, $context);
     }
 
@@ -104,7 +88,8 @@ class PluginEngine {
      *
      * @return array      an array containing the return values
      */
-    public static function sendMessage($type, $method /* ... */) {
+    public static function sendMessage($type, $method /* ... */)
+    {
         $args = func_get_args();
         array_splice($args, 1, 0, array(NULL));
         return call_user_func_array(array(__CLASS__, 'sendMessageWithContext'), $args);
@@ -121,7 +106,8 @@ class PluginEngine {
      *
      * @return array      an array containing the return values
      */
-    public static function sendMessageWithContext($type, $context, $method /* ... */) {
+    public static function sendMessageWithContext($type, $context, $method /* ... */)
+    {
         $args = func_get_args();
         $args = array_slice($args, 3);
         $results = array();
@@ -139,7 +125,8 @@ class PluginEngine {
     * @param bool $ignore_registered_params do not add registered params
     * @return a link to the current plugin with the additional $params
     */
-    public static function getURL($plugin, $params = array(), $cmd = 'show', $ignore_registered_params = false) {
+    public static function getURL($plugin, $params = array(), $cmd = 'show', $ignore_registered_params = false)
+    {
         if (is_null($plugin)) {
             throw new InvalidArgumentException(_('Es wurde kein Plugin gewählt.'));
         } else if (is_object($plugin)) {
@@ -159,43 +146,8 @@ class PluginEngine {
     * @param bool $ignore_registered_params do not add registeredparams
     * @return a link to the current plugin with the additional $params
     */
-    public static function getLink($plugin, $params = array(), $cmd = 'show', $ignore_registered_params = false) {
+    public static function getLink($plugin, $params = array(), $cmd = 'show', $ignore_registered_params = false)
+    {
         return htmlReady(self::getURL($plugin, $params, $cmd, $ignore_registered_params));
-    }
-
-    /**
-     * Generates a link to the plugin administration which can be shown in user interfaces
-     *
-     * @deprecated
-     *
-     * @param   array   an optional array with name value pairs
-     * @param   string  an optional command defaulting to 'show'
-     *
-     * @return  string  a link to the administration plugin with the additional $params
-     */
-    public static function getLinkToAdministrationPlugin($params = array(), $cmd = 'show') {
-        return self::getLink('pluginadministrationplugin', $params, $cmd);
-    }
-
-    /**
-     * Saves a value to the global session
-     *
-     * @deprecated
-     *
-     * @param StudIPPlugin $plugin - the plugin for which the value should be saved
-     * @param string $key - a key for the value. has to be unique for the calling plugin
-     * @param string $value - the value, which should be saved into the session
-     */
-    public static function saveToSession($plugin,$key,$value) {
-        $_SESSION["PLUGIN_SESSION_SPACE"][strtolower(get_class($plugin))][$key] =serialize($value);
-    }
-
-    /**
-     * Retrieves the value to key from the global plugin session
-     *
-     * @deprecated
-     */
-    public static function getValueFromSession($plugin,$key) {
-        return unserialize($_SESSION["PLUGIN_SESSION_SPACE"][strtolower(get_class($plugin))][$key]);
     }
 }

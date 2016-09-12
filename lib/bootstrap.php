@@ -73,16 +73,13 @@ namespace {
     // Messy file names
     StudipAutoloader::addClassLookups(array(
         'email_validation_class' => $GLOBALS['STUDIP_BASE_PATH'] . '/lib/phplib/email_validation.class.php',
+        'messaging'              => $GLOBALS['STUDIP_BASE_PATH'] . '/lib/messaging.inc.php',
         'MediaProxy'             => $GLOBALS['STUDIP_BASE_PATH'] . '/app/models/media_proxy.php',
         'MyRealmModel'           => $GLOBALS['STUDIP_BASE_PATH'] . '/app/models/my_realm.php',
         'StudygroupModel'        => $GLOBALS['STUDIP_BASE_PATH'] . '/app/models/studygroup.php',
         'StudipPlugin'           => $GLOBALS['STUDIP_BASE_PATH'] . '/lib/plugins/core/StudIPPlugin.class.php',
-        'AbstractStudipPortalPlugin' => $GLOBALS['STUDIP_BASE_PATH'] . '/lib/plugins/core/AbstractStudIPPortalPlugin.class.php',
-        'AbstractStudipSystemPlugin' => $GLOBALS['STUDIP_BASE_PATH'] . '/lib/plugins/core/AbstractStudIPSystemPlugin.class.php',
-        'AbstractStudipHomepagePlugin' => $GLOBALS['STUDIP_BASE_PATH'] . '/lib/plugins/core/AbstractStudIPHomepagePlugin.class.php',
-        'AbstractStudipAdministrationPlugin' => $GLOBALS['STUDIP_BASE_PATH'] . '/lib/plugins/core/AbstractStudIPAdministrationPlugin.class.php',
-        'messaging'              => $GLOBALS['STUDIP_BASE_PATH'] . '/lib/messaging.inc.php',
         'Migration'              => $GLOBALS['STUDIP_BASE_PATH'] . '/lib/migrations/migration.php',
+        'PluginAdministration'  => $GLOBALS['STUDIP_BASE_PATH'] . '/app/models/plugin_administration.php',
     ));
 
     // Trails
