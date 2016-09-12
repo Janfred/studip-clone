@@ -391,17 +391,17 @@ use Studip\Button, Studip\LinkButton;
                     </td>
                 </tr>
                 <? if (count($student_institutes) > 0) : ?>
-                    <? foreach (array_values($student_institutes) as $i => $institute) : ?>
+                    <? foreach ($student_institutes as $i => $inst_membership) : ?>
                         <tr>
                             <td>
                                 <?= $i + 1 ?>. <?= _('Einrichtung') ?>
                             </td>
                             <td>
-                                <?= htmlReady($institute['Name']) ?>
+                                <?= htmlReady($inst_membership->institute->name) ?>
                             </td>
                             <td align="right">
-                                <? if ($GLOBALS['perm']->have_studip_perm("admin", $institute['Institut_id'])) : ?>
-                                    <a href="<?= $controller->url_for('admin/user/delete_institute/' . $user->user_id . '/' . $institute['Institut_id']) ?>">
+                                <? if ($GLOBALS['perm']->have_studip_perm('admin', $inst_membership->institut_id)) : ?>
+                                    <a href="<?= $controller->url_for('admin/user/delete_institute/' . $user->user_id . '/' . $inst_membership->institut_id) ?>">
                                         <?= Icon::create('trash', 'clickable')->asImg(['class' => 'text-top', 'title' => _('Diese Einrichtung löschen')]) ?>
                                     </a>
                                 <? endif; ?>
@@ -429,7 +429,7 @@ use Studip\Button, Studip\LinkButton;
                                 <?= _('-- Bitte Einrichtung auswählen --') ?>
                             </option>
                             <? foreach ($available_institutes as $i) : ?>
-                                <? if (!isset($institutes[$i['Institut_id']])
+                                <? if (InstituteMember::countBySql('user_id = ? AND institut_id = ?', [$user->user_id, $i['Institut_id']]) == 0
                                        && (!($i['is_fak'] && $user->perms == 'admin') || $GLOBALS['perm']->have_perm('root'))
                                 ) : ?>
                                     <option class="<?= $i['is_fak'] ? 'nested-item-header' : 'nested-item' ?>"
@@ -446,21 +446,21 @@ use Studip\Button, Studip\LinkButton;
                     </td>
                 </tr>
                 <? if (count($institutes) > 0) : ?>
-                    <? foreach (array_values($institutes) as $i => $institute) : ?>
+                    <? foreach ($institutes as $i => $inst_membership) : ?>
                         <tr>
                             <td>
                                 <?= $i + 1 ?>. <?= _('Einrichtung') ?>
                             </td>
                             <td>
-                                <?= htmlReady($institute['Name']) ?>
+                                <?= htmlReady($inst_membership->institute->name) ?>
                             </td>
                             <td class="actions">
-                                <? if ($GLOBALS['perm']->have_studip_perm("admin", $institute['Institut_id'])) : ?>
+                                <? if ($GLOBALS['perm']->have_studip_perm("admin", $inst_membership->institut_id)) : ?>
                                     <a class="load-in-new-row"
-                                       href="<?= $controller->url_for('admin/user/edit_institute/' . $user->user_id . '/' . $institute['Institut_id']) ?>">
+                                       href="<?= $controller->url_for('admin/user/edit_institute/' . $user->user_id . '/' . $inst_membership->institut_id) ?>">
                                         <?= Icon::create('edit', 'clickable')->asImg(['class' => 'text-top', 'title' => _('Diese Einrichtung bearbeiten')]) ?>
                                     </a>
-                                    <a href="<?= $controller->url_for('admin/user/delete_institute/' . $user->user_id . '/' . $institute['Institut_id']) ?>">
+                                    <a href="<?= $controller->url_for('admin/user/delete_institute/' . $user->user_id . '/' . $inst_membership->institut_id) ?>">
                                         <?= Icon::create('trash', 'clickable')->asImg(['class' => 'text-top', 'title' => _('Diese Einrichtung löschen')]) ?>
                                     </a>
                                 <? endif; ?>
