@@ -108,7 +108,6 @@ class Admin_UserController extends AuthenticatedController
             $request['vorname']    = ($request['vorname']) ? $request['vorname'] : null;
             $request['nachname']   = ($request['nachname']) ? $request['nachname'] : null;
             $request['inaktiv']    = $inaktiv;
-            $request['inaktiv']    = $inaktiv;
             $request['datafields'] = $search_datafields;
             $request['sort']       = $this->sortby;
             $request['order']      = $this->order;
