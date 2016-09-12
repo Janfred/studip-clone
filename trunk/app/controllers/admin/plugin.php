@@ -174,6 +174,9 @@ class Admin_PluginController extends AuthenticatedController
      */
     public function search_action()
     {
+        Helpbar::Get()->addPlainText(_('Empfohlene Plugins'), _('In der Liste "Empfohlene Plugins" finden Sie von anderen Betreibern empfohlene Plugins.'), Icon::create('info'));
+        Helpbar::Get()->addPlainText(_('Upload'), _('Alternativ können Plugins und Plugin-Updates auch als ZIP-Datei hochgeladen werden.'), Icon::create('info'));
+        
         $search = Request::get('search');
 
         // search for plugins in all repositories
@@ -206,6 +209,11 @@ class Admin_PluginController extends AuthenticatedController
         $this->search_results = $search_results;
         $this->plugins        = $plugins;
         $this->unknown_plugins = $this->plugin_admin->scanPluginDirectory();
+        
+        $actions = new ActionsWidget();
+        $actions->addLink(_('Pluginverwaltung'), $this->url_for('admin/plugin'), Icon::create('plugin', 'clickable'));
+        $actions->addLink(_('Alle Plugins im Plugin-Marktplatz'), 'http://plugins.studip.de/', Icon::create('export', 'clickable'), ['target' => '_blank']);
+        Sidebar::Get()->addWidget($actions);
     }
 
     /**
