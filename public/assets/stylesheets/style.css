@@ -1027,6 +1027,7 @@ form.default input[type=password],
 form.default input[type=text],
 form.default input[type=time],
 form.default input[type=url],
+form.default input[type=tel],
 form.default textarea,
 form.default select {
   -webkit-box-sizing: border-box;
@@ -1050,6 +1051,7 @@ form.default input[type=password]:focus,
 form.default input[type=text]:focus,
 form.default input[type=time]:focus,
 form.default input[type=url]:focus,
+form.default input[type=tel]:focus,
 form.default textarea:focus,
 form.default select:focus {
   border-color: #28497c;
@@ -1061,6 +1063,7 @@ form.default input[type=password].size-s,
 form.default input[type=text].size-s,
 form.default input[type=time].size-s,
 form.default input[type=url].size-s,
+form.default input[type=tel].size-s,
 form.default textarea.size-s,
 form.default select.size-s {
   max-width: 8em;
@@ -1072,13 +1075,15 @@ form.default input[type=password].size-l,
 form.default input[type=text].size-l,
 form.default input[type=time].size-l,
 form.default input[type=url].size-l,
+form.default input[type=tel].size-l,
 form.default textarea.size-l,
 form.default select.size-l {
   max-width: 100%;
 }
 form.default input[type=date],
 form.default input[type=number],
-form.default input[type=time] {
+form.default input[type=time],
+form.default input[type=tel] {
   max-width: 8em;
 }
 form.default textarea {
@@ -1096,6 +1101,7 @@ form.default label:not(.undecorated) input[type=number],
 form.default label:not(.undecorated) input[type=password],
 form.default label:not(.undecorated) input[type=text],
 form.default label:not(.undecorated) input[type=time],
+form.default label:not(.undecorated) input[type=tel],
 form.default label:not(.undecorated) input[type=url],
 form.default label:not(.undecorated) textarea,
 form.default label:not(.undecorated) select {
@@ -1239,6 +1245,8 @@ form.default .hgroup input[type=text],
 form.default .hgroup label:not(.undecorated) input[type=text],
 form.default .hgroup input[type=time],
 form.default .hgroup label:not(.undecorated) input[type=time],
+form.default .hgroup input[type=tel],
+form.default .hgroup label:not(.undecorated) input[type=tel],
 form.default .hgroup input[type=url],
 form.default .hgroup label:not(.undecorated) input[type=url],
 form.default .hgroup textarea,

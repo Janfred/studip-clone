@@ -49,6 +49,8 @@ class Settings_StudiesController extends Settings_SettingsController {
      */
     public function index_action()
     {
+        $this->faecher     = StudyCourse::findBySQL('1 ORDER BY name');
+        $this->abschluesse = Abschluss::findBySQL('1 ORDER by name');
     }
 
     /**

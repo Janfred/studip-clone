@@ -94,7 +94,6 @@
                 <p>
                     <?= _('Wählen Sie die Fächer, Abschlüsse und Fachsemester in der folgenden Liste aus:') ?>
                 </p>
-
                 <p>
                     <a name="studiengaenge"></a>
                     <select name="new_studiengang" id="new_studiengang" aria-label="<?= _('-- Bitte Fach auswählen --')?>">
