@@ -258,36 +258,6 @@ class about extends messaging
         return $allowed_status;
     }
     
-
-    /**
-     * Hilfsfunktion, erzeugt eine Auswahlbox mit noch auswählbaren Instituten
-     */
-    function select_inst()
-    {
-        $query = "SELECT a.Institut_id, a.Name, a.Institut_id = a.fakultaets_id AS is_fak
-                  FROM Institute AS a
-                  LEFT JOIN user_inst AS b ON (b.user_id = ? AND a.Institut_id = b.Institut_id)
-                  WHERE b.Institut_id IS NULL
-                  ORDER BY a.Name";
-        $statement = DBManager::get()->prepare($query);
-        $statement->execute(array(
-            $this->auth_user['user_id']
-        ));
-        $institutes = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-        echo '<select name="new_inst" id="select_new_inst" class="nested-select">' . "\n";
-        echo '<option value="" class="is-placeholder"> ' . _("-- Bitte Einrichtung auswählen --") . ' </option>'."\n";
-        foreach ($institutes as $institute) {
-            printf(
-                '<option value="%s" class="%s">%s</option>' . "\n",
-                $institute['Institut_id'],
-                $institute['is_fak'] ? 'nested-item-header' : 'nested-item',
-                htmlReady(my_substr($institute['Name'], 0, 50))
-            );
-        }
-        echo "</select>\n";
-    }
-    
     
     /**
      * Changes the visibility of all homepage elements to the given value.
