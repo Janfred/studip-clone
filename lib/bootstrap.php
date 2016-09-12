@@ -81,7 +81,8 @@ namespace {
         'AbstractStudipSystemPlugin' => $GLOBALS['STUDIP_BASE_PATH'] . '/lib/plugins/core/AbstractStudIPSystemPlugin.class.php',
         'AbstractStudipHomepagePlugin' => $GLOBALS['STUDIP_BASE_PATH'] . '/lib/plugins/core/AbstractStudIPHomepagePlugin.class.php',
         'AbstractStudipAdministrationPlugin' => $GLOBALS['STUDIP_BASE_PATH'] . '/lib/plugins/core/AbstractStudIPAdministrationPlugin.class.php',
-        'messaging'              => $GLOBALS['STUDIP_BASE_PATH'] . '/lib/messaging.inc.php'
+        'messaging'              => $GLOBALS['STUDIP_BASE_PATH'] . '/lib/messaging.inc.php',
+        'Migration'              => $GLOBALS['STUDIP_BASE_PATH'] . '/lib/migrations/migration.php',
     ));
 
     // Trails
