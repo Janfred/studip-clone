@@ -1,7 +1,7 @@
 <? foreach(PageLayout::getMessages() as $pm) : ?>
     <?= $pm ?>
 <? endforeach; ?>
-<form class="studip_form" action="<?= $controller->link_for() ?>" method="post">
+<form class="default" action="<?= $controller->link_for() ?>" method="post">
 <?= CSRFProtection::tokenTag()?>
 <input type="hidden" name="type" value="<?=htmlReady($type)?>">
 <input type="hidden" name="rule_id" value="<?=htmlReady($rule_id)?>">

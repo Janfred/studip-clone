@@ -1,4 +1,4 @@
-<form action="<?= URLHelper::getLink('folder.php?cid=' . $id . '&data[cmd]=tree#anker') ?>" method="post" class="studip_form">
+<form action="<?= URLHelper::getLink('folder.php?cid=' . $id . '&data[cmd]=tree#anker') ?>" method="post" class="default">
     <?= CSRFProtection::tokenTag() ?>
     <fieldset style="padding-top: 0;">
         <fieldset>
