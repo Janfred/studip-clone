@@ -104,14 +104,19 @@ class Admin_UserController extends AuthenticatedController
             if (Request::int('toggle')) {
                 $this->order = $this->order == 'desc' ? 'asc' : 'desc';
             }
-            $request['vorname']  = ($request['vorname']) ? $request['vorname'] : null;
-            $request['nachname'] = ($request['nachname']) ? $request['nachname'] : null;
+            
+            $request['vorname']    = ($request['vorname']) ? $request['vorname'] : null;
+            $request['nachname']   = ($request['nachname']) ? $request['nachname'] : null;
+            $request['inaktiv']    = $inaktiv;
+            $request['inaktiv']    = $inaktiv;
+            $request['datafields'] = $search_datafields;
+            $request['sort']       = $this->sortby;
+            $request['order']      = $this->order;
+            
             
             //Daten abrufen
-            $this->users = UserModel::getUsers($request['username'], $request['vorname'],
-                $request['nachname'], $request['email'], $inaktiv, $request['perm'],
-                $request['locked'], $search_datafields, $request['userdomains'], $request['auth_plugins'],
-                $this->sortby, $this->order, $request['degree'], $request['studycourse'], $request['institute']);
+            $this->users = User::search($request);
+            
             
             // Fehler abfangen
             if ($this->users === 0) {
