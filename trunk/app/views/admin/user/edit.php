@@ -4,7 +4,7 @@ use Studip\Button, Studip\LinkButton;
 
 ?>
 <? if ($flash['delete']) : ?>
-    <?= $this->render_partial("admin/user/_delete", ['data' => $flash['delete']]) ?>
+    <?= $this->render_partial('admin/user/_delete', ['data' => $flash['delete']]) ?>
 <? endif ?>
 
 <form method="post" action="<?= $controller->url_for('admin/user/edit/' . $user->id) ?>">
