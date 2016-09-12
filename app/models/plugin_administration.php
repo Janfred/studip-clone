@@ -12,16 +12,8 @@
  */
 
 require_once 'lib/datei.inc.php';
-require_once 'lib/migrations/db_migration.php';
 require_once 'lib/migrations/db_schema_version.php';
 require_once 'lib/migrations/migrator.php';
-
-/**
- * Exception class used to report plugin install errors.
- */
-class PluginInstallationException extends Exception
-{
-}
 
 /**
  * Model code for plugin administration tasks.
