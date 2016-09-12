@@ -887,35 +887,6 @@ class Admin_UserController extends AuthenticatedController
      */
     public function edit_institute_action($user_id, $institute_id)
     {
-        if (Request::submitted('uebernehmen') && $GLOBALS['perm']->have_studip_perm("admin", $institute_id)) {
-            //standard-values
-            $values = [];
-            foreach (words('inst_perms visible raum sprechzeiten Telefon Fax') as $param) {
-                $values[$param] = Request::get(strtolower($param), '');
-            }
-            foreach (words('externdefault visible') as $param) {
-                $values[$param] = Request::int($param, 0);
-            }
-            
-            //change datafields
-            $datafields = Request::getArray('datafields');
-            foreach ($datafields as $id => $data) {
-                $datafield = DataField::find($id);
-                $entry     = DataFieldEntry::createDataFieldEntry($datafield, [$user_id, $institute_id]);
-                $entry->setValueFromSubmit($data);
-                if ($entry->isValid()) {
-                    $entry->store();
-                }
-            }
-            
-            //store to database
-            UserModel::setInstitute($user_id, $institute_id, $values);
-            
-            //output
-            PageLayout::postSuccess(_('Die Einrichtungsdaten der Person wurden geändert.'));
-            $this->redirect('admin/user/edit/' . $user_id);
-        }
-        
         $this->user = User::find($user_id);
         if (count($this->user->institute_memberships)) {
             $institute = null;
@@ -931,6 +902,56 @@ class Admin_UserController extends AuthenticatedController
         $this->abschluesse = Abschluss::findBySQL('1 ORDER by name');
         $this->perms       = $this->user->getInstitutePerms();
         $this->datafields  = DataFieldEntry::getDataFieldEntries([$user_id, $institute_id], 'userinstrole');
+    }
+    
+    /**
+     * Set user institute information
+     * @param $user_id
+     * @param $institute_id
+     */
+    public function store_user_institute_action($user_id, $institute_id)
+    {
+        CSRFProtection::verifyRequest();
+        
+        $inst_membership = InstituteMember::findOneBySQL('user_id = ? AND institut_id = ?', [$user_id, $institute_id]);
+        
+        $values = [];
+        foreach (words('inst_perms visible raum sprechzeiten Telefon Fax') as $param) {
+            $values[$param] = Request::get(strtolower($param), '');
+        }
+        foreach (words('externdefault visible') as $param) {
+            $values[$param] = Request::int($param, 0);
+        }
+        
+        //change datafields
+        $datafields = Request::getArray('datafields');
+        foreach ($datafields as $id => $data) {
+            $datafield = DataField::find($id);
+            $entry     = DataFieldEntry::createDataFieldEntry($datafield, [$user_id, $institute_id]);
+            $entry->setValueFromSubmit($data);
+            if ($entry->isValid()) {
+                $entry->store();
+            }
+        }
+        
+        $old_membership = $inst_membership;
+        if ($old_membership->inst_perms != Request::get('inst_perms')) {
+            StudipLog::log('INST_USER_STATUS', $institute_id, $user_id, $old_membership->inst_perms .' -> '. Request::get('inst_perms'));
+            NotificationCenter::postNotification('UserInstitutionPermDidUpdate', $institute_id, $user_id);
+        }
+        
+        $inst_membership->inst_perms    = strtolower(Request::get('inst_perm', ''));
+        $inst_membership->visible       = Request::int('visible', 0);
+        $inst_membership->sprechzeiten  = Request::get('sprechzeiten', '');
+        $inst_membership->telefon       = Request::get('telefon', '');
+        $inst_membership->fax           = Request::get('fax', '');
+        $inst_membership->externdefault = Request::int('externdefault', 0);
+        $inst_membership->store();
+        
+        //output
+        PageLayout::postSuccess(_('Die Einrichtungsdaten der Person wurden geändert.'));
+        $this->relocate('admin/user/edit/' . $user_id);
+        return;
     }
     
     /**
