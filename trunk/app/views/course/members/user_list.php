@@ -20,12 +20,12 @@
             <?= $status_groups['user'] ?>
             <? if($is_tutor) :?>
             <span class="actions">
-                <a href="<?= URLHelper::getLink('dispatch.php/messages/write', array(
-                    'filter' => 'send_sms_to_all',
-                    'emailrequest' => 1,
-                    'who' => 'user',
-                    'course_id' => $course_id,
-                    'default_subject' => $subject)
+                <a href="<?= URLHelper::getLink('dispatch.php/messages/write',
+                        ['filter' => 'send_sms_to_all',
+                         'emailrequest' => 1,
+                         'who' => 'user',
+                         'course_id' => $course_id,
+                         'default_subject' => $subject]
                 ) ?>" data-dialog>
                        <?= Icon::create('inbox', 'clickable', ['title' => sprintf(_('Nachricht mit Mailweiterleitung an alle %s versenden'), $status_groups['user'])])->asImg() ?>
                 </a>
@@ -55,7 +55,7 @@
                 </th>
                 <th><?=_('Studiengang')?></th>
                 <? endif ?>
-                <th style="text-align: right"><?= _('Aktion') ?></th>
+                <th class="actions"><?= _('Aktion') ?></th>
             </tr>
         </thead>
         <tbody>
@@ -72,7 +72,7 @@
                 <td>
                     <a href="<?= $controller->url_for(sprintf('profile?username=%s',$leser['username'])) ?>" <? if ($leser['mkdate'] >= $last_visitdate) echo 'class="new-member"'; ?>>
                         <?= Avatar::getAvatar($leser['user_id'],$leser['username'])->getImageTag(Avatar::SMALL,
-                                array('style' => 'margin-right: 5px','title' => htmlReady($fullname))); ?>
+                                ['style' => 'margin-right: 5px','title' => htmlReady($fullname)]); ?>
                         <?= htmlReady($fullname) ?>
                     </a>
                 </td>
@@ -83,27 +83,27 @@
                         <? endif ?>
                     </td>
                     <td>
-                        <?= $this->render_partial("course/members/_studycourse.php", array('studycourses' => new SimpleCollection(UserStudyCourse::findByUser_id($autor['user_id'])))) ?>
+                        <?= $this->render_partial('course/members/_studycourse.php',
+                                ['studycourses' => new SimpleCollection(UserStudyCourse::findByUser_id($autor['user_id']))]) ?>
                     </td>
                 <? endif ?>
                 <td style="text-align: right">
+                    <? $actionMenu = ActionMenu::get() ?>
                     <? if($user_id != $leser['user_id']) : ?>
-                    <a href="<?= URLHelper::getLink('dispatch.php/messages/write',
-                            array('filter' => 'send_sms_to_all',
-                                'emailrequest' => 1,
-                                'rec_uname' => $leser['username'],
-                                'default_subject' => $subject))
-                            ?>
-                    " data-dialog>
-                        <?= Icon::create('mail', 'clickable', ['title' => sprintf(_('Nachricht mit Mailweiterleitung an %s senden'),htmlReady($fullname))])->asImg(16) ?>
-                    </a>
+                        <? $actionMenu->addLink(URLHelper::getLink('dispatch.php/messages/write',
+                                ['filter'           => 'send_sms_to_all',
+                                 'emailrequest'    => 1,
+                                 'rec_uname'       => $leser['username'],
+                                 'default_subject' => $subject]),
+                                _('Nachricht mit Mailweiterleitung senden'),
+                                Icon::create('mail', 'clickable', ['title' => sprintf('Nachricht mit Weiterleitung an %s senden', $fullname)]),
+                                ['data-dialog' => '1']) ?>
                     <? endif ?>
 
                     <? if ($is_tutor) : ?>
-                    <a href="<?= $controller->url_for(sprintf('course/members/cancel_subscription/singleuser/user/%s',
-                                $leser['user_id'])) ?>">
-                        <?= Icon::create('door-leave', 'clickable', ['title' => sprintf(_('%s austragen'),htmlReady($fullname))])->asImg(16) ?>
-                    </a>
+                        <? $actionMenu->addLink($controller->url_for('course/members/cancel_subscription/singleuser/user/' . $leser['user_id']),
+                                _('Aus Veranstaltung austragen'),
+                                Icon::create('door-leave', 'clickable', ['title' => sprintf(_('%s austragen'),htmlReady($fullname))])) ?>
                     <? endif ?>
                 </td>
             </tr>

@@ -8,11 +8,11 @@
         <? if($is_tutor) : ?>
             <span class="actions">
                 <a href="<?= URLHelper::getLink('dispatch.php/messages/write',
-                        array('filter' => 'send_sms_to_all',
-                            'who' => 'tutor',
-                            'emailrequest' => 1,
-                            'course_id' => $course_id,
-                            'default_subject' => $subject))
+                        ['filter'           => 'send_sms_to_all',
+                         'who'              => 'tutor',
+                         'emailrequest'     => 1,
+                         'course_id'        => $course_id,
+                         'default_subject'  => $subject])
                 ?>" data-dialog>
                     <?= Icon::create('inbox', 'clickable', ['title' => sprintf(_('Nachricht mit Mailweiterleitung an alle %s versenden'),$status_groups['tutor'])])->asImg(16)?>
                 </a>
@@ -56,7 +56,7 @@
                 </th>
                 <th><?=_('Studiengang')?></th>
                 <? endif ?>
-                <th style="text-align: right"><?= _('Aktion') ?></th>
+                <th class="actions"><?= _('Aktion') ?></th>
             </tr>
         </thead>
         <tbody>
@@ -73,7 +73,7 @@
                 <td>
                     <a href="<?= $controller->url_for(sprintf('profile?username=%s',$tutor['username'])) ?>" <? if ($tutor['mkdate'] >= $last_visitdate) echo 'class="new-member"'; ?>>
                         <?= Avatar::getAvatar($tutor['user_id'], $tutor['username'])->getImageTag(Avatar::SMALL,
-                                array('style' => 'margin-right: 5px', 'title' => htmlReady($fullname))); ?>
+                                ['style' => 'margin-right: 5px', 'title' => htmlReady($fullname)]); ?>
                         <?= htmlReady($fullname) ?>
                     </a>
                     <? if ($is_tutor && $tutor['comment'] != '') : ?>
@@ -87,31 +87,33 @@
                         <? endif ?>
                     </td>
                     <td>
-                        <?= $this->render_partial("course/members/_studycourse.php", array('studycourses' => new SimpleCollection(UserStudyCourse::findByUser_id($autor['user_id'])))) ?>
+                        <?= $this->render_partial('course/members/_studycourse.php', ['studycourses' => new SimpleCollection(UserStudyCourse::findByUser_id($autor['user_id']))]) ?>
                     </td>
                 <? endif ?>
-                <td style="text-align: right">
+                <td class="actions">
+                    <? $actionMenu = ActionMenu::get() ?>
                     <? if ($is_tutor) : ?>
-                        <a data-dialog title='<?= _('Bemerkung hinzufügen') ?>' href="<?=$controller->url_for('course/members/add_comment', $tutor['user_id']) ?>">
-                            <?= Icon::create('comment', 'clickable')->asImg() ?>
-                        </a>
+                        <? $actionMenu->addLink($controller->url_for('course/members/add_comment/' . $tutor['user_id']),
+                                _('Bemerkung hinzufügen'),
+                                Icon::create('comment', 'clickable'),
+                                ['data-dialog' => 'size=auto']) ?>
                     <? endif ?>
                     <? if($user_id != $tutor['user_id']) : ?>
-                    <a href="<?= URLHelper::getLink('dispatch.php/messages/write',
-                            array('filter' => 'send_sms_to_all',
-                                'emailrequest' => 1,
-                                'rec_uname' => $tutor['username'],
-                                'default_subject' => $subject))
-                            ?>
-                    " data-dialog>
-                        <?= Icon::create('mail', 'clickable', ['title' => sprintf(_('Nachricht mit Mailweiterleitung an %s senden'),htmlReady($fullname))])->asImg(16) ?>
-                    </a>
+                        <? $actionMenu->addLink(URLHelper::getLink('dispatch.php/messages/write',
+                                ['filter'           => 'send_sms_to_all',
+                                 'emailrequest'    => 1,
+                                 'rec_uname'       => $tutor['username'],
+                                 'default_subject' => $subject]),
+                                _('Nachricht mit Mailweiterleitung senden'),
+                                Icon::create('mail', 'clickable', ['title' => sprintf('Nachricht mit Weiterleitung an %s senden', $fullname)]),
+                                ['data-dialog' => '1']) ?>
                     <? endif ?>
                     <? if ($is_dozent && !$tutor_is_locked && $user_id != $tutor['user_id'] && count($tutoren) >= 1) : ?>
-                    <a href="<?= $controller->url_for(sprintf('course/members/cancel_subscription/singleuser/tutor/%s', $tutor['user_id'])) ?>">
-                        <?= Icon::create('door-leave', 'clickable', ['title' => sprintf(_('%s austragen'),htmlReady($fullname))])->asImg(16) ?>
-                    </a>
+                        <? $actionMenu->addLink($controller->url_for('course/members/cancel_subscription/singleuser/tutor/' . $tutor['user_id']),
+                                _('Aus Veranstaltung austragen'),
+                                Icon::create('door-leave', 'clickable', ['title' => sprintf(_('%s austragen'),htmlReady($fullname))])) ?>
                     <? endif ?>
+                    <?= $actionMenu->render() ?>
                 </td>
             </tr>
         <? endforeach ?>

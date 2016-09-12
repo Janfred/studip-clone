@@ -30,7 +30,7 @@
                     <?=_('Nachname, Vorname')?>
                 </a>
             </th>
-            <th style="text-align: right"><?= _('Aktion') ?></th>
+            <th class="actions"><?= _('Aktion') ?></th>
         </tr>
     </thead>
     <tbody>
@@ -49,7 +49,7 @@
                     <?= tooltipHtmlIcon(sprintf('<strong>%s</strong><br>%s', _('Bemerkung'), htmlReady($dozent['comment']))) ?>
                 <? endif ?>
             </td>
-            <td style="text-align: right">
+            <td class="actions">
                 <? $actionMenu = ActionMenu::get() ?>
                 <? if ($is_tutor) : ?>
                     <? $actionMenu->addLink($controller->url_for('course/members/add_comment/' . $dozent['user_id']),
@@ -67,11 +67,11 @@
                             Icon::create('mail', 'clickable', ['title' => sprintf('Nachricht mit Weiterleitung an %s senden', $fullname)]),
                             ['data-dialog' => '1']) ?>
                 <? endif ?>
-            <? if (!$dozent_is_locked && $is_dozent && $user_id != $dozent['user_id'] && count($dozenten) > 1) : ?>
-                <? $actionMenu->addLink($controller->url_for('course/members/cancel_subscription/singleuser/dozent/' . $dozent['user_id']),
-                    _('Aus Veranstaltung austragen'),
-                    Icon::create('door-leave', 'clickable', ['title' => sprintf(_('%s austragen'),htmlReady($fullname))])) ?>
-            <? endif ?>
+                <? if (!$dozent_is_locked && $is_dozent && $user_id != $dozent['user_id'] && count($dozenten) > 1) : ?>
+                    <? $actionMenu->addLink($controller->url_for('course/members/cancel_subscription/singleuser/dozent/' . $dozent['user_id']),
+                        _('Aus Veranstaltung austragen'),
+                        Icon::create('door-leave', 'clickable', ['title' => sprintf(_('%s austragen'),htmlReady($fullname))])) ?>
+                <? endif ?>
                 <?= $actionMenu->render() ?>
             </td>
         </tr>
