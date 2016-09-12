@@ -349,7 +349,7 @@ class Admin_UserController extends AuthenticatedController
             }
 
             //change password
-            if (($perm->have_perm('root') && Config::get()->ALLOW_ADMIN_USERACCESS) && (Request::get('pass_1') != '' || Request::get('pass_2') != '')) {
+            if (($GLOBALS['perm']->have_perm('root') && Config::get()->ALLOW_ADMIN_USERACCESS) && (Request::get('pass_1') != '' || Request::get('pass_2') != '')) {
                 if (Request::get('pass_1') == Request::get('pass_2')) {
                     if (strlen(Request::get('pass_1')) < 4) {
                         $details[] = _("Das Passwort ist zu kurz. Es sollte mindestens 4 Zeichen lang sein.");
@@ -499,7 +499,7 @@ class Admin_UserController extends AuthenticatedController
                 }
             }
 
-            if ($perm->have_perm('root') && Request::get('lock_rule')) {
+            if ($GLOBALS['perm']->have_perm('root') && Request::get('lock_rule')) {
                 $st = DBManager::get()->prepare("UPDATE user_info SET lock_rule=? WHERE user_id=?");
                 $st->execute([(Request::option('lock_rule') == 'none' ? '' : Request::option('lock_rule')), $user_id]);
                 if ($st->rowCount()) {
@@ -527,10 +527,8 @@ class Admin_UserController extends AuthenticatedController
             $this->redirect('admin/user/edit/' . $user_id);
         }
 
-        //get user informations
         
-        $this->perm   = $perm;
-        $this->prelim = $this->user['auth_plugin'] == 'preliminary';
+        $this->prelim = $this->user->auth_plugin == 'preliminary';
         if ($this->prelim) {
             $this->available_auth_plugins['preliminary'] = _("vorläufig");
         }
@@ -538,7 +536,7 @@ class Admin_UserController extends AuthenticatedController
             $this->available_auth_plugins[strtolower($ap)] = $ap;
         }
         $this->about                = new about($this->user['username'], '');
-        $this->studycourses         = UserModel::getUserStudycourse($user_id);
+        
         $this->student_institutes   = UserModel::getUserInstitute($user_id, true);
         $this->institutes           = UserModel::getUserInstitute($user_id);
         $this->available_institutes = Institute::getMyInstitutes();

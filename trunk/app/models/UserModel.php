@@ -61,27 +61,6 @@ class UserModel
         }
     }
 
-    /**
-     * Return the studycourses of an user.
-     *
-     * @param string $user_id
-     * @return array() list of studycourses
-     */
-    public static function getUserStudycourse($user_id)
-    {
-        $user_scs = array();
-        foreach (UserStudyCourse::findByUser($user_id) as $u_stc) {
-            $user_scs[] = [
-                'fach'         => $u_stc->studycourse_name,
-                'abschluss'    => $u_stc->degree_name,
-                'fach_id'      => $u_stc->fach_id,
-                'abschluss_id' => $u_stc->abschluss_id,
-                'semester'     => $u_stc->semester,
-                'version_id'   => $u_stc->version_id
-            ];
-        }
-        return $user_scs;
-    }
 
     /**
      * Return the Institutes of an user depending of the student-status.

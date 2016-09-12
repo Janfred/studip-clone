@@ -54,7 +54,7 @@ use Studip\Button, Studip\LinkButton;
                         <?= htmlReady($user->perms) ?>
                     <? else: ?>
                         <select name="perms[]" id="permission">
-                            <? foreach (array_keys($perm->permissions) as $permission): ?>
+                            <? foreach (array_keys($GLOBALS['perm']->permissions) as $permission): ?>
                                 <option <? if ($permission === $user->perms) echo 'selected'; ?>>
                                     <?= htmlReady($permission) ?>
                                 </option>
@@ -192,7 +192,8 @@ use Studip\Button, Studip\LinkButton;
             <? endif ?>
 
             <? if ($GLOBALS['perm']->have_perm('root')
-                   && Config::get()->ALLOW_ADMIN_USERACCESS && !StudipAuthAbstract::CheckField("auth_user_md5.password", $user->auth_plugin) && !$prelim) : ?>
+                   && Config::get()->ALLOW_ADMIN_USERACCESS && !StudipAuthAbstract::CheckField("auth_user_md5.password", $user->auth_plugin) && !$prelim
+            ) : ?>
                 <tr>
                     <td>
                         <label for="pass_1"><?= _('Neues Passwort') ?>:</label>
@@ -330,26 +331,27 @@ use Studip\Button, Studip\LinkButton;
                         </td>
                     </tr>
                 <? endif ?>
-                <? if (count($studycourses) > 0) : ?>
-                    <? foreach ($studycourses as $i => $studiengang) : ?>
+                <? if (count($user->studycourses)) : ?>
+                    <? foreach ($user->studycourses as $i => $usc) : ?>
                         <tr>
+                            <td><?= sprintf('%u %s', $i + 1, _('Studiengang')) ?></td>
                             <td>
-                                <?= $i + 1 ?>. <?= _('Studiengang') ?>
-                            </td>
-                            <td>
-                                <?= htmlReady($studiengang['fach']) ?>,
-                                <?= htmlReady($studiengang['abschluss']) ?>,
+                                <?= sprintf('%s, %s, %s. %s',
+                                        htmlReady($usc->studycourse->name),
+                                        htmlReady($usc->degree->name),
+                                        htmlReady($usc->semester),
+                                        _('Fachsemester')) ?>
                                 <? if (PluginEngine::getPlugin('MVVPlugin')) : ?>
-                                    <? $versionen = StgteilVersion::findByFachAbschluss($studiengang['fach_id'], $studiengang['abschluss_id']); ?>
+                                    <? $versionen = StgteilVersion::findByFachAbschluss($usc->fach_id, $usc->abschluss_id); ?>
                                     <? $versionen = array_filter($versionen, function ($ver) {
                                         return $ver->hasPublicStatus('genehmigt');
                                     }); ?>
                                     <? if (count($versionen)) : ?><br>
-                                        <select name="change_version[<?= $studiengang['fach_id'] ?>][<?= $studiengang['abschluss_id'] ?>]"
+                                        <select name="change_version[<?= $usc->fach_id ?>][<?= $usc->abschluss_id ?>]"
                                                 aria-labelledby="version_label">
                                             <option value=""><?= _('-- Bitte Version auswählen --') ?></option>
                                             <? foreach ($versionen as $version) : ?>
-                                                <option<?= $version->getId() == $studiengang['version_id'] ? ' selected' : '' ?>
+                                                <option<?= $version->getId() == $usc->version_id ? ' selected' : '' ?>
                                                         value="<?= htmlReady($version->getId()) ?>">
                                                     <?= htmlReady($version->getDisplayName()) ?>
                                                 </option>
@@ -358,11 +360,10 @@ use Studip\Button, Studip\LinkButton;
                                     <? else : ?>
                                         <?= tooltipIcon(_('Keine Version in der gewählten Fach-Abschluss-Kombination verfügbar.'), true) ?>
                                     <? endif; ?>
-                                <? endif; ?>
-                                <?= $studiengang['semester'] ?>. <?= _('Fachsemester') ?>
+                                <? endif ?>
                             </td>
                             <td align="right">
-                                <a href="<?= $controller->url_for('admin/user/delete_studycourse/' . $user->user_id . '/' . $studiengang['fach_id'] . '/' . $studiengang['abschluss_id']) ?>">
+                                <a href="<?= $controller->url_for('admin/user/delete_studycourse/' . $user->user_id . '/' . $usc->fach_id . '/' . $usc->abschluss_id) ?>">
                                     <?= Icon::create('trash', 'clickable')->asImg(['class' => 'text-top', 'title' => _('Diesen Studiengang löschen')]) ?>
                                 </a>
                             </td>
