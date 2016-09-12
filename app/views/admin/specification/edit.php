@@ -9,84 +9,72 @@ use Studip\Button, Studip\LinkButton;
     <?= MessageBox::info($flash['info']) ?>
 <? endif ?>
 
-<form action="<?= $controller->url_for('admin/specification/edit'.(($rule) ? '/' . $rule['lock_id'] : '')) ?>" method="post">
+<form action="<?= $controller->url_for('admin/specification/store' . (($rule) ? '/' . $rule['lock_id'] : '')) ?>"
+      method="post" class="default">
     <?= CSRFProtection::tokenTag() ?>
-    <table class="nohover default">
-    <caption>
-        <? if($rule) : ?>
-            <?= sprintf(_('Regel "%s" editieren'), htmlReady($rule['name'])) ?>
-        <? else : ?>
-            <?= _('Eine neue Regel definieren') ?>
-        <? endif ?>
-    </caption>
-    <tbody>
-       <tr>
-            <td><?= _("Name der Regel:") ?> <span style="color: red; font-size: 1.6em">*</span></td>
-            <td>
-                <input type="text" name="rulename" value="<?= htmlReady(Request::get('rulename', $rule['name'])) ?>" style="width: 350px;" required="required">
-            </td>
-        </tr>
-        <tr>
-            <td><?= _("Beschreibung:") ?> </td>
-            <td>
-                <textarea cols="60" rows="5" name="description" style="width: 350px;"><?= htmlReady(Request::get('description', $rule['description'])) ?></textarea>
-            </td>
-        </tr>
-    </tbody>
-    </table>
-    <table class="default">
-    <thead>
-        <tr>
-            <th><?= _("Feld:") ?></th>
-            <th><?= _("Sortierung:") ?></th>
-            <th><?= _("aktivieren:") ?></th>
-        </tr>
-    </thead>
-    <tbody>
-        <? if (count($entries_semdata) > 0) : ?>
-        <tr>
-            <th colspan="3"><b><?= _("Zusatzinformationen") ?></b></th>
-        </tr>
-        <? foreach ($entries_semdata as $id => $entry) : ?>
-            <?= $this->render_partial('admin/specification/_field', 
-                    array_merge(compact('rule'), array('id' => $entry->datafield_id,'name' => $entry->name), array('required' => true))) ?>
-        <? endforeach ?>
-        <? endif ?>
-        <? if (count($semFields) > 0) : ?>
-    </tbody>
-    <tbody>
-        <tr>
-            <th colspan="3"><b><?= _("Veranstaltungsinformationen") ?></b></th>
-        </tr>
-        <? foreach ($semFields as $id => $name) : ?>
-            <?= $this->render_partial('admin/specification/_field', compact('rule', 'id', 'name')) ?>
-        <? endforeach ?>
-        <? endif ?>
-        <? if(count($entries_user) > 0) : ?>
-    </tbody>
-    <tbody>
-        <tr>
-            <th colspan="3"><b><?= _("Personenbezogene Informationen") ?></b></th>
-        </tr>
-        <? foreach ($entries_user as $id => $entry) : ?>
-            <?= $this->render_partial('admin/specification/_field', 
-                    array_merge(compact('rule'), array('id' => $entry->datafield_id,'name' => $entry->name))) ?>
-        <? endforeach ?>
-        <? endif ?>
-    </tbody>
-    <tfoot>
-        <tr>
-            <td colspan="3" align="center">
-            <? if($rule) : ?>
-                <?= Button::createAccept(_('Übernehmen'), 'uebernehmen', array('title' => _('Änderungen übernehmen')))?>
+    <fieldset>
+        <legend>
+            <? if ($rule) : ?>
+                <?= sprintf(_('Regel "%s" editieren'), htmlReady($rule['name'])) ?>
             <? else : ?>
-                <?= Button::create(_('Erstellen'),'erstellen', array('title' => _('Neue Regel erstellen'))) ?>
+                <?= _('Eine neue Regel definieren') ?>
             <? endif ?>
-                <?= LinkButton::createCancel(_('Abbrechen'), $controller->url_for('admin/specification'), array('title' => _('Zurück zur Übersicht')))?>
-            </td>
-        </tr>
-    </tfoot>
-    </table>
+        </legend>
+        <label>
+            <span class="required">
+                <?= _('Name der Regel:') ?>
+            </span>
+            <input type="text" name="rulename" value="<?= htmlReady(Request::get('rulename', $rule['name'])) ?>"
+                   required="required">
+        </label>
+        <label>
+            <?= _('Beschreibung') ?>
+            <textarea cols="60" rows="5"
+                      name="description"><?= htmlReady(Request::get('description', $rule['description'])) ?></textarea>
+        </label>
+    </fieldset>
+    <? if (count($entries_semdata) > 0) : ?>
+        <fieldset>
+            <legend>
+                <?= _('Zusatzinformationen') ?>
+            </legend>
+            <? foreach ($entries_semdata as $id => $entry) : ?>
+                <?= $this->render_partial('admin/specification/_field',
+                        array_merge(compact('rule'), ['id' => $entry->datafield_id, 'name' => $entry->name], ['required' => true])) ?>
+            <? endforeach ?>
+        </fieldset>
+    <? endif ?>
+
+    <? if (count($semFields) > 0) : ?>
+        <fieldset>
+            <legend>
+                <?= _('Veranstaltungsinformationen') ?>
+            </legend>
+            <? foreach ($semFields as $id => $name) : ?>
+                <?= $this->render_partial('admin/specification/_field', compact('rule', 'id', 'name')) ?>
+            <? endforeach ?>
+        </fieldset>
+    <? endif ?>
+
+    <? if (count($entries_user) > 0) : ?>
+        <fieldset>
+            <legend>
+                <?= _('Personenbezogene Informationen') ?>
+            </legend>
+            <? foreach ($entries_user as $id => $entry) : ?>
+                <?= $this->render_partial('admin/specification/_field',
+                        array_merge(compact('rule'), ['id' => $entry->datafield_id, 'name' => $entry->name])) ?>
+            <? endforeach ?>
+        </fieldset>
+    <? endif ?>
+    <footer>
+        <? if ($rule) : ?>
+            <?= Button::createAccept(_('Übernehmen'), 'uebernehmen', ['title' => _('Änderungen übernehmen')]) ?>
+        <? else : ?>
+            <?= Button::create(_('Erstellen'), 'erstellen', ['title' => _('Neue Regel erstellen')]) ?>
+        <? endif ?>
+        <?= LinkButton::createCancel(_('Abbrechen'), $controller->url_for('admin/specification'), ['title' => _('Zurück zur Übersicht')]) ?>
+    </footer>
 </form>
 
 <?
