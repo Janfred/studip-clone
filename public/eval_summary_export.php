@@ -223,7 +223,7 @@ function answers ($parent_id, $anz_nutzer, $question_type) {
 }
 
 function groups ($parent_id) {
-    global $cssSw, $ausgabeformat, $fo_file, $auth, $global_counter, $local_counter, $tmp_path_export, $pattern, $replace;
+    global $ausgabeformat, $fo_file, $auth, $global_counter, $local_counter, $tmp_path_export, $pattern, $replace;
 
     $query = "SELECT group_type FROM eval_group_template WHERE evalgroup_id = ?";
     $type_statement = DBManager::get()->prepare($query);

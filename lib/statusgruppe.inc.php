@@ -812,7 +812,6 @@ function getAllChildIDs($range_id)
 function display_roles_recursive($roles, $level = 0, $pred = '') {
     if (is_array($roles))
     foreach ($roles as $role_id => $data) {
-        $css_rec = new cssClassSwitcher();
         if ($level > 0) {
             $title = $pred.' > '. $data['name'];
         } else {
@@ -823,11 +822,9 @@ function display_roles_recursive($roles, $level = 0, $pred = '') {
             $z = 1;
             if (is_array($persons))
             foreach ($persons as $p) {
-                $css_rec->switchClass();
-                $class = 'class="'.$css_rec->getClass().'"';
                 //echo '<tr><td '.$class.' width="20" align="center">'.$p['position'].'</td>';
-                echo '<tr><td '.$class.' width="20" align="center">'.$z.'&nbsp;</td>';
-                echo '<td '.$class.'><a href="'.URLHelper::getLink('dispatch.php/profile?username='.$p['username']).'">'.$p['fullname'].'</a></td>';
+                echo '<tr><td width="20" align="center">'.$z.'&nbsp;</td>';
+                echo '<td><a href="'.URLHelper::getLink('dispatch.php/profile?username='.$p['username']).'">'.$p['fullname'].'</a></td>';
                 $z++;
             }
         }

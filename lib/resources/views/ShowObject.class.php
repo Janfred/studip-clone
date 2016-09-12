@@ -50,7 +50,6 @@ class ShowObject {
     function __construct($resource_id)
     {
         $this->resObject = ResourceObject::Factory($resource_id);
-        $this->cssSw = new cssClassSwitcher;
 
         $this->list = new ShowList;
         $this->list->setRecurseLevels(0);

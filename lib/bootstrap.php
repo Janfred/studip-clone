@@ -73,7 +73,6 @@ namespace {
     // Messy file names
     StudipAutoloader::addClassLookups(array(
         'email_validation_class' => $GLOBALS['STUDIP_BASE_PATH'] . '/lib/phplib/email_validation.class.php',
-        'cssClassSwitcher'       => $GLOBALS['STUDIP_BASE_PATH'] . '/lib/classes/cssClassSwitcher.inc.php',
         'MediaProxy'             => $GLOBALS['STUDIP_BASE_PATH'] . '/app/models/media_proxy.php',
         'MyRealmModel'           => $GLOBALS['STUDIP_BASE_PATH'] . '/app/models/my_realm.php',
         'StudygroupModel'        => $GLOBALS['STUDIP_BASE_PATH'] . '/app/models/studygroup.php',

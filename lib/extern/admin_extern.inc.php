@@ -150,10 +150,8 @@ if (Request::option('com') == 'delete_sec') {
     die;
 }
 
-$css_switcher = new cssClassSwitcher();
-
 if (Request::option('com') == 'info') {
-    include($RELATIVE_PATH_EXTERN . "/views/extern_info_module.inc.php");
+    include $RELATIVE_PATH_EXTERN . '/views/extern_info_module.inc.php';
 
     $template = $GLOBALS['template_factory']->open('layouts/base.php');
     $template->content_for_layout = ob_get_clean();

@@ -40,8 +40,6 @@ require_once $GLOBALS['RELATIVE_PATH_RESOURCES'] . '/views/ScheduleWeekRequests.
 require_once $GLOBALS['RELATIVE_PATH_RESOURCES'] . '/views/ShowSchedules.class.php';
 require_once $GLOBALS['RELATIVE_PATH_RESOURCES'] . '/views/ShowToolsRequests.class.php';
 
-$cssSw = new cssClassSwitcher;
-
 /*****************************************************************************
 ShowSchedules - schedule view
 /*****************************************************************************/
@@ -57,7 +55,7 @@ class ShowSchedulesRequests extends ShowSchedules{
     }
 
     function navigator () {
-        global $cssSw, $view;
+        global $view;
 
         //match start_time & end_time for a whole week
         $dow = date ("w", $this->start_time);
@@ -70,38 +68,36 @@ class ShowSchedulesRequests extends ShowSchedules{
         $end_time = mktime (23, 59, 0, date("n",$start_time), date("j", $start_time)+6, date("Y", $start_time));
 
         ?>
-        <table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
-            <form method="POST" action="<?echo URLHelper::getLink('?navigate=TRUE&quick_view='.$view) ?>">
+        <form method="POST" action="<?= URLHelper::getLink('?navigate=TRUE&quick_view='.$view) ?>">
             <?= CSRFProtection::tokenTag() ?>
-            <tr>
-                <td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
-                </td>
-                <td class="<? echo $cssSw->getClass() ?>" width="96%" colspan="2"><font size=-1><b><?=_("Zeitraum:")?></b></font>
-                </td>
-            </tr>
-            <tr>
-                <td class="<? echo $cssSw->getClass() ?>" width="4%" rowspan="2">&nbsp;
-                </td>
-                <td class="<? echo $cssSw->getClass() ?>" width="30%" rowspan="2" valign="top"><font size=-1>
-                    <font size=-1>Beginn:
-                    <input type="text" name="schedule_begin_day" size=2 maxlength=2 value="<? if (!$start_time) echo date("d",time()); else echo date("d",$start_time); ?>">.
-                    <input type="text" name="schedule_begin_month" size=2 maxlength=2 value="<? if (!$start_time) echo date("m",time()); else echo date("m",$start_time); ?>">.
-                    <input type="text" name="schedule_begin_year" size=4 maxlength=4 value="<? if (!$start_time) echo date("Y",time()); else echo date("Y",$start_time); ?>"><br>
-                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;<?= Button::create(_('Auswählen'), 'jump') ?>
-                </td>
-                <td class="<? echo $cssSw->getClass() ?>">
-                &nbsp;
-                </td>
-            </tr>
 
+        <table class="default">
+            <thead>
+                <tr>
+                    <th><?= _('Zeitraum') ?>:</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <?= _('Beginn') ?>:
+                        <input type="text" name="schedule_begin_day" size=2 maxlength=2 value="<?= date('d', $start_time ?: time()) ?>">.
+                        <input type="text" name="schedule_begin_month" size=2 maxlength=2 value="<?= date('m', $start_time ?: time()) ?>">.
+                        <input type="text" name="schedule_begin_year" size=4 maxlength=4 value="<?= date('Y', $start_time ?: time()) ?>">
+                        <br>
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;<?= Button::create(_('Auswählen'), 'jump') ?>
+                    </td>
+                </tr>
+            </tbody>
         </table>
-    </form>
+
+        </form>
     <?
     }
 
 
     function showScheduleGraphical() {
-        global $RELATIVE_PATH_RESOURCES, $cssSw, $view_mode, $ActualObjectPerms;
+        global $RELATIVE_PATH_RESOURCES, $view_mode, $ActualObjectPerms;
 
         $categories["na"] = 4;
         $categories["sd"] = 4;
@@ -234,25 +230,33 @@ class ShowSchedulesRequests extends ShowSchedules{
         ?>
             <form method="POST" action="<?echo URLHelper::getLink()?>?quick_view=<?=$view?>">
         <?= CSRFProtection::tokenTag() ?>
-        <table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
+        <table class="default">
+            <colgroup>
+                <col width="4%">
+                <col width="10%">
+                <col width="76%">
+                <col width="10%">
+            </colgroup>
             <tr>
-                <td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;</td>
-                <td class="<? echo $cssSw->getClass() ?>"  width="10%" align="left">&nbsp;
-                    <a href="<? echo URLHelper::getLink('?quick_view='.$this->used_view.'&quick_view_mode='.$view_mode.'&previous_week=TRUE')?>"><?= Icon::create('arr_2left', 'clickable', ['title' => _("Vorherige Woche anzeigen")])->asImg(16, ["alt" => _("Vorherige Woche anzeigen"), "border" => 0]) ?></a>
+                <td >&nbsp;</td>
+                <td align="left">
+                    <a href="<?= URLHelper::getLink('?quick_view='.$this->used_view.'&quick_view_mode='.$view_mode.'&previous_week=TRUE')?>">
+                        <?= Icon::create('arr_2left', 'clickable', ['title' => _("Vorherige Woche anzeigen")])->asImg(16, ["alt" => _("Vorherige Woche anzeigen"), "border" => 0]) ?>
+                    </a>
                 </td>
-                <td class="<? echo $cssSw->getClass() ?>" width="76%" align="center" style="font-weight:bold">
-                    <? echo sprintf(_("Anzeige der Woche vom %s bis %s (KW %s)"), strftime("%x", $start_time), strftime("%x",$end_time), strftime("%V", $start_time));?>
+                <td align="center" style="font-weight:bold">
+                    <?= sprintf(_("Anzeige der Woche vom %s bis %s (KW %s)"), strftime("%x", $start_time), strftime("%x",$end_time), strftime("%V", $start_time));?>
                     <br>
-                    <?php
-                    $this->showSemWeekNumber($start_time);
-                    ?>
+                    <?php $this->showSemWeekNumber($start_time); ?>
                 </td>
-                <td class="<? echo $cssSw->getClass() ?>" width="10%" align="center">&nbsp;
-                    <a href="<? echo URLHelper::getLink('?quick_view='.$this->used_view.'&quick_view_mode='.$view_mode.'&next_week=TRUE')?>"><?= Icon::create('arr_2right', 'clickable', ['title' => _("Nächste Woche anzeigen")])->asImg(16, ["alt" => _("Nächste Woche anzeigen"), "border" => 0]) ?></a>
+                <td align="center">
+                    <a href="<?= URLHelper::getLink('?quick_view='.$this->used_view.'&quick_view_mode='.$view_mode.'&next_week=TRUE')?>">
+                        <?= Icon::create('arr_2right', 'clickable', ['title' => _("Nächste Woche anzeigen")])->asImg(16, ["alt" => _("Nächste Woche anzeigen"), "border" => 0]) ?>
+                    </a>
                 </td>
             </tr>
             <tr>
-                <td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%" align="center" valign="bottom">&nbsp;
+                <td align="center" valign="bottom">
                 <? if ((!$_SESSION['resources_data']["schedule_time_range"]) || ($_SESSION['resources_data']["schedule_time_range"] == 1)): ?>
                     <a href="<?= URLHelper::getLink('', array('quick_view' => $this->used_view,
                                                               'quick_view_mode' => $view_mode,
@@ -261,13 +265,13 @@ class ShowSchedulesRequests extends ShowSchedules{
                     </a>
                 <? endif; ?>
                 </td>
-                <td class="<? echo $cssSw->getClass() ?>" width="76%" colspan="2">
+                <td colspan="2">
                     <?
                     echo "&nbsp;"._("Anzahl der Belegungen in diesem Zeitraum:")." ". $assign_events->numberOfEvents()."<br>";
                     echo "&nbsp;"._("Anzahl der gwünschten Belegungen in diesem Zeitraum:")." ". (int)$requested_events;
                     ?>
                 </td>
-                <td class="<? echo $cssSw->getClass() ?>" width="20%" nowrap>
+                <td nowrap>
                     <?
                     print "<select style=\"font-size:10px;\" name=\"show_repeat_mode_requests\">";
                     printf ("<option style=\"font-size:10px;\" %s value=\"all\">"._("alle Anfragen")."</option>", ($_SESSION['resources_data']["show_repeat_mode_requests"] == "all") ? "selected" : "");
@@ -279,16 +283,13 @@ class ShowSchedulesRequests extends ShowSchedules{
                 </td>
             </tr>
             <tr>
-                <td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp;
-                </td>
-                <td class="<? echo $cssSw->getClass() ?>" width="96%" colspan="3">
-                    <?
-                    $schedule->showSchedule("html", $print_view);
-                    ?>
+                <td>&nbsp;</td>
+                <td colspan="3">
+                    <? $schedule->showSchedule("html", $print_view); ?>
                 </td>
             </tr>
             <tr>
-                <td class="<? echo $cssSw->getClass() ?>" width="4%" align="center" valign="bottom">&nbsp;
+                <td align="center" valign="bottom">
                 <? if ((!$_SESSION['resources_data']['schedule_time_range']) || ($_SESSION['resources_data']['schedule_time_range'] == -1)): ?>
                     <a href="<?= URLHelper::getLink('', array('quick_view' => $this->used_view,
                                                               'quick_view_mode' => $view_mode,
@@ -297,13 +298,11 @@ class ShowSchedulesRequests extends ShowSchedules{
                     </a>
                 <? endif; ?>
                 </td>
-                <td class="<? echo $cssSw->getClass() ?>" width="20%" nowrap colspan="3">
-                &nbsp;
-                </td>
+                <td colspan="3">&nbsp;</td>
             </tr>
         </table>
         </form>
     <?
     }
 }
-?>
+
