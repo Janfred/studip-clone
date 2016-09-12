@@ -524,6 +524,8 @@ class Admin_UserController extends AuthenticatedController
         foreach ($GLOBALS['STUDIP_AUTH_PLUGIN'] as $ap) {
             $this->available_auth_plugins[strtolower($ap)] = $ap;
         }
+        
+        
         $this->about = new about($this->user['username'], '');
         
         if (count($this->user->institute_memberships)) {
@@ -542,6 +544,12 @@ class Admin_UserController extends AuthenticatedController
         if (LockRules::CheckLockRulePermission($user_id) && LockRules::getObjectRule($user_id)->description) {
             PageLayout::postMessage(MessageBox::info(formatLinks(LockRules::getObjectRule($user_id)->description)));
         }
+        
+        $user_domains      = UserDomain::getUserDomainsForUser($this->user->user_id);
+        $all_domains       = UserDomain::getUserDomains();
+        $this->domains     = array_diff($all_domains, $user_domains);
+        $this->faecher     = Fach::findBySQL('1 ORDER BY name');
+        $this->abschluesse = Abschluss::findBySQL('1 ORDER BY name');
     }
     
     /*
@@ -936,7 +944,7 @@ class Admin_UserController extends AuthenticatedController
         
         $old_membership = $inst_membership;
         if ($old_membership->inst_perms != Request::get('inst_perms')) {
-            StudipLog::log('INST_USER_STATUS', $institute_id, $user_id, $old_membership->inst_perms .' -> '. Request::get('inst_perms'));
+            StudipLog::log('INST_USER_STATUS', $institute_id, $user_id, $old_membership->inst_perms . ' -> ' . Request::get('inst_perms'));
             NotificationCenter::postNotification('UserInstitutionPermDidUpdate', $institute_id, $user_id);
         }
         

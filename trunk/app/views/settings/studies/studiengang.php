@@ -113,7 +113,7 @@
 
                     <a name="semester"></a>
                     <select name="fachsem" aria-label="<?= _("Bitte Fachsemester wählen") ?>">
-                    <? for ($i = 0; $i <= 50; $i += 1): ?>
+                    <? for ($i = 1; $i <= 50; $i += 1): ?>
                         <option><?= $i ?></option>
                     <? endfor; ?>
                     </select>

@@ -321,12 +321,22 @@ use Studip\Button, Studip\LinkButton;
                             <label for="new_studiengang"><?= _('Neuer Studiengang') ?></label>
                         </td>
                         <td colspan="2">
-                            <? $about->select_studiengang() ?>
-                            <? $about->select_abschluss() ?>
-                            <select name="fachsem">
-                                <? for ($s = 1; $s < 51; $s++) : ?>
-                                    <option><?= $s ?></option>
-                                <? endfor ?>
+                            <select name="new_studiengang" id="new_studiengang" aria-label="<?= _('-- Bitte Fach auswählen --')?>">
+                                <option selected value="none"><?= _('-- Bitte Fach auswählen --')?></option>
+                                <? foreach ($faecher as $fach) :?>
+                                    <?= sprintf('<option value="%s">%s</option>', $fach->id, htmlReady(my_substr($fach->name, 0, 50)));?>
+                                <? endforeach?>
+                            </select>
+                            <select name="new_abschluss" id="new_abschluss" aria-label="<?= _('-- Bitte Abschluss auswählen --')?>">
+                                <option selected value="none"><?= _('-- Bitte Abschluss auswählen --')?></option>
+                                <? foreach ($abschluesse as $abschluss) :?>
+                                    <?= sprintf('<option value="%s">%s</option>' . "\n", $abschluss->id, htmlReady(my_substr($abschluss->name, 0, 50)));?>
+                                <? endforeach?>
+                            </select>
+                            <select name="fachsem" aria-label="<?= _("Bitte Fachsemester wählen") ?>">
+                                <? for ($i = 1; $i <= 50; $i += 1): ?>
+                                    <option><?= $i ?></option>
+                                <? endfor; ?>
                             </select>
                         </td>
                     </tr>
@@ -483,7 +493,14 @@ use Studip\Button, Studip\LinkButton;
                         <label for="new_userdomain"><?= _('Neue Nutzerdomäne') ?></label>
                     </td>
                     <td colspan="2">
-                        <? $about->select_userdomain() ?>
+                        <? if (!empty($domains)) : ?>
+                            <select name="new_userdomain" id="new_userdomain">
+                                <option selected value="none"><?= _('-- Bitte Nutzerdomäne auswählen --') ?></option>
+                                <? foreach ($domains as $domain) : ?>
+                                    <option value="<?= $domain->getID() ?>"><?= htmlReady(my_substr($domain->getName(), 0, 50)) ?></option>
+                                <? endforeach ?>
+                            </select>
+                        <? endif ?>
                     </td>
                 </tr>
                 <? if (count($userdomains) > 0): ?>

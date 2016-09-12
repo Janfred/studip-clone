@@ -241,7 +241,6 @@ class about extends messaging
     function allowedInstitutePerms() {
 
         // find out the allowed perms
-        var_dump($this->auth_user);
         $possible_perms=array("autor","tutor","dozent");
         $counter=0;
         if ($this->auth_user["perms"] == "admin")
@@ -258,38 +257,8 @@ class about extends messaging
 
         return $allowed_status;
     }
+    
 
-    /**
-     * Hilfsfunktion, erzeugt eine Auswahlbox mit noch auswählbaren Studiengängen
-     */
-    public function select_studiengang()
-    {
-        $faecher = Fach::findBySQL('1 ORDER BY name');
-
-        echo '<select name="new_studiengang" id="new_studiengang" aria-label="'._('-- Bitte Fach auswählen --').'">'."\n";
-        echo '<option selected value="none">' . _('-- Bitte Fach auswählen --') . '</option>'."\n";
-        foreach ($faecher as $fach) {
-            printf('<option value="%s">%s</option>' . "\n", $fach->id, htmlReady(my_substr($fach->name, 0, 50)));
-        }
-        echo "</select>\n";
-    }
-
-    /**
-     * Hilfsfunktion, erzeugt eine Auswahlbox mit noch auswählbaren Abschluesse
-     */
-   public function select_abschluss()
-   {
-       $query = "SELECT abschluss_id, name FROM abschluss ORDER BY name";
-       $statement = DBManager::get()->query($query);
-       $abschluesse = $statement->fetchGrouped(PDO::FETCH_COLUMN);
-       
-        echo '<select name="new_abschluss" aria-label="'._('-- Bitte Abschluss auswählen --').'">'."\n";
-        echo '<option selected value="none">'. _('-- Bitte Abschluss auswählen --') . '</option>'."\n";
-        foreach ($abschluesse as $id => $name) {
-            printf('<option value="%s">%s</option>' . "\n", $id, htmlReady(my_substr($name, 0, 50)));
-        }
-        echo "</select>\n";
-    }
 
     //Hilfsfunktion, erzeugt eine Auswahlbox mit noch auswählbaren Nutzerdomänen
     function select_userdomain()
@@ -335,57 +304,7 @@ class about extends messaging
         echo "</select>\n";
     }
     
-    /**
-     * Changes visibility settings for the current user.
-     *
-     * @param string $global global visibility of the account in Stud.IP
-     * @param string $online visiblity in "Who is online" list
-     * @param string $search visiblity in user search
-     * @param string $email visibility of the email address
-     * @return boolean All settings saved?
-     */
-    function change_global_visibility($global, $online, $search, $email, $foaf_show_identity)
-    {
-        // Globally visible or unknown -> set local visibilities accordingly.
-        if ($global != 'no') {
-            $online = $online ? 1 : 0;
-            $search = $search ? 1 : 0;
-            $email  = $email ? 1 : 0;
-            $foaf_show_identity = $foaf_show_identity ? 1 : 0;
-        // Globally invisible -> set all local fields to invisible.
-        } else {
-            $online = 0;
-            $search = 0;
-            $email  = get_config('DOZENT_ALLOW_HIDE_EMAIL') ? 0 : 1;
-            $success1 = $this->change_all_homepage_visibility(VISIBILITY_ME);
-            $foaf_show_identity = 0;
-        }
-        $user_cfg = UserConfig::get($this->auth_user["user_id"]);
-        $user_cfg->store("FOAF_SHOW_IDENTITY", $foaf_show_identity);
-
-        $query = "UPDATE auth_user_md5 SET visible = ? WHERE user_id = ?";
-        $statement = DBManager::get()->prepare($query);
-        $statement->execute(array(
-            $global,
-            $this->auth_user['user_id']
-        ));
-
-        $query = "INSERT INTO user_visibility
-                    (user_id, online, search, email, mkdate)
-                  VALUES (?, ?, ?, ?, ?, UNIX_TIMESTAMP())
-                  ON DUPLICATE KEY
-                    UPDATE online = VALUES(online),
-                           search = VALUES(search), email = VALUES(email)";
-        $statement = DBManager::get()->prepare($query);
-        $statement->execute(array(
-            $this->auth_user['user_id'],
-            $online,
-            $search,
-            $email
-        ));
-        return $statement->rowCount() > 0;
-    }
-
+    
     /**
      * Changes the visibility of all homepage elements to the given value.
      *
