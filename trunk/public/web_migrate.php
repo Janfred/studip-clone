@@ -16,7 +16,6 @@
 
 require '../lib/bootstrap.php';
 
-require_once 'lib/migrations/db_migration.php';
 require_once 'lib/migrations/db_schema_version.php';
 require_once 'lib/migrations/migrator.php';
 
@@ -74,4 +73,3 @@ $template->set_attribute('message', $message);
 echo $template->render();
 
 include 'lib/include/html_end.inc.php';
-?>
