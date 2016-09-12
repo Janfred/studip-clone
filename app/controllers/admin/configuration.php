@@ -70,8 +70,7 @@ class Admin_ConfigurationController extends AuthenticatedController
         $this->has_sections = true;
 
         if ($needle && empty($this->sections)) {
-            $message = sprintf(_('Es wurden keine Ergebnisse zu dem Suchbegriff "%s" gefunden.'), htmlReady($needle));
-            PageLayout::postMessage(MessageBox::error($message));
+            PageLayout::postError(sprintf(_('Es wurden keine Ergebnisse zu dem Suchbegriff "%s" gefunden.'), htmlReady($needle)));
             $this->redirect('admin/configuration/configuration');
         }
     }
@@ -94,9 +93,8 @@ class Admin_ConfigurationController extends AuthenticatedController
                 $comment = Request::get('comment');
 
                 Config::get()->store($field, compact(words('value section comment')));
-
-                $message = sprintf(_('Der Konfigurationseintrag "%s" wurde erfolgreich übernommen!'), $field);
-                PageLayout::postMessage(MessageBox::success($message));
+                
+                PageLayout::postSuccess(sprintf(_('Der Konfigurationseintrag "%s" wurde erfolgreich übernommen!'), $field));
 
                 $this->relocate('admin/configuration/configuration/' . $section);
             }
@@ -147,9 +145,8 @@ class Admin_ConfigurationController extends AuthenticatedController
             $value = Request::get('value');
             if ($this->validateInput($field, $value)) {
                 UserConfig::get($user_id)->store($field, $value);
-
-                $message = sprintf(_('Der Konfigurationseintrag: %s wurde erfolgreich geändert!'), $field);
-                PageLayout::postMessage(MessageBox::success($message));
+                
+                PageLayout::postSuccess(sprintf(_('Der Konfigurationseintrag: %s wurde erfolgreich geändert!'), $field));
 
                 $this->redirect('admin/configuration/user_configuration?user_id=' . $user_id);
             }
@@ -188,7 +185,7 @@ class Admin_ConfigurationController extends AuthenticatedController
             return true;
         }
 
-        PageLayout::postMessage(MessageBox::error($error));
+        PageLayout::postError($error);
 
         return false;
     }
