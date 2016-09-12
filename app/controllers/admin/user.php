@@ -176,10 +176,10 @@ class Admin_UserController extends AuthenticatedController
     {
         //deleting one user
         if (!is_null($user_id)) {
-            $user = UserModel::getUser($user_id);
+            $user = User::find($user_id);
             
             //check user
-            if (empty($user)) {
+            if (!count($user)) {
                 PageLayout::postError(_('Fehler! Zu löschende Person ist nicht vorhanden.'));
                 //antwort ja
             } elseif (!empty($user) && Request::submitted('delete')) {
@@ -201,10 +201,10 @@ class Admin_UserController extends AuthenticatedController
                 //delete
                 if ($umanager->deleteUser(Request::option('documents', false))) {
                     $details = explode('§', str_replace(['msg§', 'info§', 'error§'], '', substr($umanager->msg, 0, -1)));
-                    PageLayout::postSuccess(htmlReady(sprintf(_('"%s %s (%s)" wurde erfolgreich gelöscht.'), $user['Vorname'], $user['Nachname'], $user['username'])), $details);
+                    PageLayout::postSuccess(htmlReady(sprintf(_('"%s (%s)" wurde erfolgreich gelöscht.'), $user->getFullName(), $user->username)), $details);
                 } else {
                     $details = explode('§', str_replace(['msg§', 'info§', 'error§'], '', substr($umanager->msg, 0, -1)));
-                    PageLayout::postError(htmlReady(sprintf(_('Fehler! "%s %s (%s)" konnte nicht gelöscht werden.'), $user['Vorname'], $user['Nachname'], $user['username'])), $details);
+                    PageLayout::postError(htmlReady(sprintf(_('Fehler! "%s (%s)" konnte nicht gelöscht werden.'), $user->getFullName(), $user->username)), $details);
                 }
                 
                 //reavtivate messages
@@ -216,7 +216,7 @@ class Admin_UserController extends AuthenticatedController
             } elseif (!empty($user) && !Request::submitted('back')) {
                 
                 $this->flash['delete'] = [
-                    'question' => sprintf(_('Wollen Sie "%s %s (%s)" wirklich löschen?'), $user['Vorname'], $user['Nachname'], $user['username']),
+                    'question' => sprintf(_('Wollen Sie "%s (%s)" wirklich löschen?'), $user->getFullName(), $user->username),
                     'action'   => ($parent != '') ? $this->url_for('admin/user/delete/' . $user_id . '/' . $parent) : $this->url_for('admin/user/delete/' . $user_id),
                 ];
             }
@@ -232,7 +232,6 @@ class Admin_UserController extends AuthenticatedController
             }
             
             if (Request::submitted('delete')) {
-                
                 CSRFProtection::verifyUnsafeRequest();
                 
                 //deactivate message
@@ -243,7 +242,7 @@ class Admin_UserController extends AuthenticatedController
                 }
                 
                 foreach ($user_ids as $i => $user_id) {
-                    $users[$i] = UserModel::getUser($user_id);
+                    $users[$i] = User::find($user_id);
                     //preparing delete
                     $umanager = new UserManagement();
                     $umanager->getFromDatabase($user_id);
@@ -251,16 +250,10 @@ class Admin_UserController extends AuthenticatedController
                     //delete
                     if ($umanager->deleteUser(Request::option('documents', false))) {
                         $details = explode('§', str_replace(['msg§', 'info§', 'error§'], '', substr($umanager->msg, 0, -1)));
-                        PageLayout::postSuccess(htmlReady(sprintf(_('"%s %s (%s)" wurde erfolgreich gelöscht'),
-                            $users[$i]['Vorname'],
-                            $users[$i]['Nachname'],
-                            $users[$i]['username'])), $details);
+                        PageLayout::postSuccess(htmlReady(sprintf(_('"%s (%s)" wurde erfolgreich gelöscht'), $users[$i]->getFullName(), $users[$i]->username)), $details);
                     } else {
                         $details = explode('§', str_replace(['msg§', 'info§', 'error§'], '', substr($umanager->msg, 0, -1)));
-                        PageLayout::postError(htmlReady(sprintf(_('Fehler! "%s %s (%s)" konnte nicht gelöscht werden'),
-                            $users[$i]['Vorname'],
-                            $users[$i]['Nachname'],
-                            $users[$i]['username'])), $details);
+                        PageLayout::postError(htmlReady(sprintf(_('Fehler! "%s (%s)" konnte nicht gelöscht werden'), $users[$i]->getFullName(), $users[$i]->username)), $details);
                     }
                 }
                 
@@ -271,14 +264,10 @@ class Admin_UserController extends AuthenticatedController
                 
                 //sicherheitsabfrage
             } elseif (!Request::submitted('back')) {
-                $users = [];
-                foreach ($user_ids as $user_id) {
-                    $users[] = UserModel::getUser($user_id);
-                }
                 $this->flash['delete'] = [
                     'question' => _('Wollen Sie folgende Personen wirklich löschen?'),
                     'action'   => $this->url_for('admin/user/delete'),
-                    'users'    => $users,
+                    'users'    => $user_ids,
                 ];
             }
         }
@@ -927,7 +916,7 @@ class Admin_UserController extends AuthenticatedController
             $this->redirect('admin/user/edit/' . $user_id);
         }
         
-        $this->user       = UserModel::getUser($user_id, null, true);
+        $this->user       = User::find($user_id);
         $this->institute  = UserModel::getInstitute($user_id, $institute_id);
         $about            = new about($this->user['username'], '');
         $this->perms      = $about->allowedInstitutePerms();
