@@ -16,62 +16,64 @@
  */
 require_once 'settings.php';
 
-class Settings_StudiesController extends Settings_SettingsController {
-
+class Settings_StudiesController extends Settings_SettingsController
+{
+    
     /**
      * Set up this controller.
      *
      * @param String $action Name of the action to be invoked
-     * @param Array  $args   Arguments to be passed to the action method
+     * @param Array $args    Arguments to be passed to the action method
      */
-    public function before_filter(&$action, &$args) {
+    public function before_filter(&$action, &$args)
+    {
         parent::before_filter($action, $args);
-
+        
         if (!in_array($this->user->perms, words('autor tutor dozent'))) {
             throw new AccessDeniedException();
         }
-
+        
         PageLayout::setHelpKeyword('Basis.HomepageUniversitäreDaten');
         PageLayout::setTitle(_('Studiengang bearbeiten'));
         Navigation::activateItem('/profile/edit/studies');
         SkipLinks::addIndex(_('Fächer und Abschlüsse auswählen'), 'select_fach_abschluss');
         SkipLinks::addIndex(_('Zu Einrichtungen zuordnen'), 'select_institute');
-
-        $this->allow_change = array(
+        
+        $this->allow_change = [
             'sg' => !StudipAuthAbstract::CheckField('studiengang_id', $this->user->auth_plugin)
                     && (Config::get()->ALLOW_SELFASSIGN_STUDYCOURSE || $GLOBALS['perm']->have_perm('admin')),
             'in' => Config::get()->ALLOW_SELFASSIGN_INSTITUTE || $GLOBALS['perm']->have_perm('admin'),
-        );
+        ];
     }
-
+    
     /**
      * Displays the study information of a user.
      */
     public function index_action()
     {
-        $this->faecher               = StudyCourse::findBySQL('1 ORDER BY name');
-        $this->abschluesse           = Abschluss::findBySQL('1 ORDER by name');
-        $this->available_institutes  = Institute::getMyInstitutes();
-        $this->institutes         = $this->user->institute_memberships->filter(function ($a) {
-            return $a->inst_perms != 'user';
+        $this->faecher              = StudyCourse::findBySQL('1 ORDER BY name');
+        $this->abschluesse          = Abschluss::findBySQL('1 ORDER by name');
+        $this->available_institutes = Institute::getMyInstitutes();
+        $this->institutes           = $this->user->institute_memberships->filter(function ($a) {
+            return $a->inst_perms == 'user';
         });
     }
-
+    
     /**
      * Stores the study information of a user (subject and degree-wise).
      */
     public function store_sg_action()
     {
         $this->check_ticket();
-
+        
         $any_change = false;
-
+        
         $fach_abschluss_delete = Request::getArray('fach_abschluss_delete');
         if (count($fach_abschluss_delete) > 0) {
             foreach ($fach_abschluss_delete as $fach_id => $abschluesse) {
-                $row_count = UserStudyCourse::deleteBySQL(
-                        'user_id = ? AND fach_id = ? AND abschluss_id IN (?)',
-                        array($this->user->user_id, $fach_id, $abschluesse));
+                $row_count  = UserStudyCourse::deleteBySQL(
+                    'user_id = ? AND fach_id = ? AND abschluss_id IN (?)',
+                    [$this->user->user_id, $fach_id, $abschluesse]);
                 $any_change = $row_count > 0;
                 
                 // if we have no studies anymore we delete the visibilitysetting
@@ -80,22 +82,22 @@ class Settings_StudiesController extends Settings_SettingsController {
                 }
             }
         }
-
+        
         if (!$any_change) {
             $change_fachsem = Request::getArray('change_fachsem');
             foreach ($change_fachsem as $fach_id => $abschluesse) {
                 foreach ($abschluesse as $abschluss_id => $semester) {
-                    $user_stc = UserStudyCourse::find(array(
+                    $user_stc = UserStudyCourse::find([
                         $this->user->user_id,
                         $fach_id,
-                        $abschluss_id));
+                        $abschluss_id]);
                     if ($user_stc) {
                         $user_stc->semester = $semester;
-                        $any_change = (bool) $user_stc->store() != false;
+                        $any_change         = (bool)$user_stc->store() != false;
                     }
                 }
             }
-
+            
             $new_studiengang = Request::option('new_studiengang');
             if ($new_studiengang && $new_studiengang != 'none') {
                 if (!$this->hasStudiengang()) {
@@ -105,7 +107,7 @@ class Settings_StudiesController extends Settings_SettingsController {
                     'user_id'      => $this->user->user_id,
                     'fach_id'      => $new_studiengang,
                     'semester'     => Request::int('fachsem'),
-                    'abschluss_id' => Request::option('new_abschluss')
+                    'abschluss_id' => Request::option('new_abschluss'),
                 ]));
             }
             
@@ -115,50 +117,50 @@ class Settings_StudiesController extends Settings_SettingsController {
                 foreach ($change_versions as $fach_id => $abschluesse) {
                     foreach ($abschluesse as $abschluss_id => $version_id) {
                         $version = reset(StgteilVersion::findByFachAbschluss(
-                                $fach_id, $abschluss_id, $version_id));
+                            $fach_id, $abschluss_id, $version_id));
                         if ($version && $version->hasPublicStatus('genehmigt')) {
-                            $user_stc = UserStudyCourse::find(array(
+                            $user_stc = UserStudyCourse::find([
                                 $this->user->user_id,
                                 $fach_id,
-                                $abschluss_id));
+                                $abschluss_id]);
                             if ($user_stc) {
                                 $user_stc->version_id = $version->getId();
-                                $any_change = (bool) $user_stc->store() != false;
+                                $any_change           = (bool)$user_stc->store() != false;
                             }
                         }
                     }
                 }
             }
         }
-
+        
         if ($any_change) {
             $this->reportSuccess(_('Die Zuordnung zu Studiengängen wurde geändert.'));
-
+            
             setTempLanguage($this->user->user_id);
             $this->postPrivateMessage(_("Die Zuordnung zu Studiengängen wurde geändert!\n"));
             restoreLanguage();
         }
-
+        
         $this->redirect('settings/studies');
     }
-
+    
     /**
      * Stores the study information of a user (institute-wise).
      */
     public function store_in_action()
     {
         $this->check_ticket();
-
+        
         $inst_delete = Request::optionArray('inst_delete');
         if (count($inst_delete) > 0) {
-            $query = "DELETE FROM user_inst WHERE user_id = ? AND Institut_id = ?";
+            $query     = "DELETE FROM user_inst WHERE user_id = ? AND Institut_id = ?";
             $statement = DBManager::get()->prepare($query);
-
+            
             foreach ($inst_delete as $institute_id) {
-                $statement->execute(array(
+                $statement->execute([
                     $this->user->user_id,
-                    $institute_id
-                ));
+                    $institute_id,
+                ]);
                 if ($statement->rowCount() > 0) {
                     StudipLog::log('INST_USER_DEL', $institute_id, $this->user->user_id);
                     NotificationCenter::postNotification('UserInstitutionDidDelete', $institute_id, $this->user->user_id);
@@ -166,40 +168,41 @@ class Settings_StudiesController extends Settings_SettingsController {
                 }
             }
         }
-
+        
         $new_inst = Request::option('new_inst');
         if ($new_inst) {
-
-            $query = "INSERT IGNORE INTO user_inst
+            
+            $query
+                       = "INSERT IGNORE INTO user_inst
                         (user_id, Institut_id, inst_perms)
                       VALUES (?, ?, 'user')";
             $statement = DBManager::get()->prepare($query);
-            $statement->execute(array(
+            $statement->execute([
                 $this->user->user_id,
-                $new_inst
-            ));
+                $new_inst,
+            ]);
             if ($statement->rowCount() > 0) {
                 StudipLog::log('INST_USER_ADD', $new_inst, $this->user->user_id, 'user');
                 NotificationCenter::postNotification('UserInstitutionDidCreate', $new_inst, $this->user->user_id);
-
+                
                 $new = true;
             }
         }
-
+        
         if ($delete || $new) {
             $this->reportSuccess(_('Die Zuordnung zu Einrichtungen wurde geändert.'));
-
+            
             setTempLanguage($this->user->user_id);
             $this->postPrivateMessage(_("Die Zuordnung zu Einrichtungen wurde geändert!\n"));
             restoreLanguage();
         }
-
+        
         $this->redirect('settings/studies');
     }
-
+    
     private function hasStudiengang()
     {
-        $count = UserStudyCourse::countBySql('user_id = ?', array($this->user->user_id));
+        $count = UserStudyCourse::countBySql('user_id = ?', [$this->user->user_id]);
         return $count > 0;
     }
 }

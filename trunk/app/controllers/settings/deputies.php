@@ -35,7 +35,7 @@ class Settings_DeputiesController extends Settings_SettingsController
         Navigation::activateItem('/profile/settings/deputies');
         SkipLinks::addIndex(_('Standardvertretung'), 'main_content', 100);
 
-        $this->edit_about_enabled = get_config('DEPUTIES_EDIT_ABOUT_ENABLE');
+        $this->edit_about_enabled = Config::get()->DEPUTIES_EDIT_ABOUT_ENABLE;
     }
 
     /**
@@ -116,10 +116,10 @@ class Settings_DeputiesController extends Settings_SettingsController
         }
         // only show an error messagebox once.
         if (!empty($msg['error'])) {
-            PageLayout::postMessage(MessageBox::error(_('Die gewünschte Operation konnte nicht ausgeführt werden.'), $msg['error']));
+            PageLayout::postError(_('Die gewünschte Operation konnte nicht ausgeführt werden.'), $msg['error']);
         }
         if (!empty($msg['success'])) {
-            PageLayout::postMessage(MessageBox::success(_('Die gewünschten Personen wurden als Ihre Vertretung eingetragen!'), $msg['success']));
+            PageLayout::postSuccess(_('Die gewünschten Personen wurden als Ihre Vertretung eingetragen!'), $msg['success']);
         }
 
         $this->redirect('settings/deputies/index');

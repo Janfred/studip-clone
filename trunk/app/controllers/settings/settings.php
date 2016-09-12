@@ -48,11 +48,9 @@ class Settings_SettingsController extends AuthenticatedController
             $username = $user->username;
             URLHelper::addLinkParam('username', $username);
         }
-
-        $this->about = new about($username, null);
-        $this->about->get_user_details();
-
-        if (!$this->about->check) {
+        $this->user       = User::findByUsername($username);
+        
+        if (!$GLOBALS['perm']->get_profile_perm($this->user->user_id)) {
             $this->reportErrorWithDetails(_('Zugriff verweigert.'), array(
                 _("Wahrscheinlich ist Ihre Session abgelaufen. Bitte "
                  ."nutzen Sie in diesem Fall den untenstehenden Link, "
@@ -68,7 +66,7 @@ class Settings_SettingsController extends AuthenticatedController
             return;
         }
 
-        $this->user       = User::findByUsername($username);
+        
         $this->restricted = ($GLOBALS['perm']->get_profile_perm($this->user->user_id) !== 'user')
                             && ($username !== $GLOBALS['user']->username);
         $this->config     = UserConfig::get($this->user->user_id);
