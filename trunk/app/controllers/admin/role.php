@@ -173,7 +173,7 @@ class Admin_RoleController extends AuthenticatedController
      *
      * @param string    text to match agaist
      *
-     * @return array    list of StudIPUser objects
+     * @return array    list of User objects
      */
     private function search_user($searchtxt)
     {
@@ -184,14 +184,8 @@ class Admin_RoleController extends AuthenticatedController
           'ORDER BY Vorname, Nachname, username');
 
         $stmt->execute(array($searchtxt, $searchtxt, $searchtxt));
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $users = array();
-
-        foreach ($result as $row) {
-            $users[$row['user_id']] = new StudIPUser($row['user_id']);
-        }
-
-        return $users;
+        $ids = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        return User::findMany($ids);
     }
 
     /**
