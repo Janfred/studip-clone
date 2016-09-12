@@ -8,10 +8,10 @@
             <?= $waitingTitle ?>
             <span class="actions">
                     <a href="<?= URLHelper::getLink('dispatch.php/messages/write',
-                            array('filter' => $waiting_type,
-                                'emailrequest' => 1,
-                                'course_id' => $course_id,
-                                'default_subject' => $subject))?>" data-dialog>
+                            ['filter'               => $waiting_type,
+                             'emailrequest'         => 1,
+                             'course_id'            => $course_id,
+                             'default_subject'      => $subject])?>" data-dialog>
                         <?= Icon::create('inbox', 'clickable', ['title' =>  _('Nachricht mit Mailweiterleitung an alle Wartenden versenden')])->asImg()?>
                     </a>
             </span>
@@ -27,7 +27,8 @@
         <thead>
             <tr class="sortable">
                 <? if (!$is_locked) : ?>
-                <th><input aria-label="<?= _('NutzerInnen auswählen') ?>"
+                <th>
+                    <input aria-label="<?= _('NutzerInnen auswählen') ?>"
                             type="checkbox" name="all" value="1" data-proxyfor=":checkbox[name^=awaiting]" />
                 </th>
                 <? endif ?>
@@ -50,7 +51,7 @@
                 <th>
                     <?= _('Studiengang')  ?>
                 </th>
-                <th style="text-align: right"><?= _('Aktion') ?></th>
+                <th class="actions"><?= _('Aktion') ?></th>
             </tr>
         </thead>
         <tbody>
@@ -68,7 +69,8 @@
                 <td>
                     <a href="<?= $controller->url_for(sprintf('profile?username=%s',$waiting['username'])) ?>" <? if ($waiting['mkdate'] >= $last_visitdate) echo 'class="new-member"'; ?>>
                         <?= Avatar::getAvatar($waiting['user_id'], $waiting['username'])->getImageTag(Avatar::SMALL,
-                                array('style' => 'margin-right: 5px', 'title' => htmlReady($fullname))); ?>
+                                ['style' => 'margin-right: 5px',
+                                 'title' => htmlReady($fullname)]); ?>
                         <?= htmlReady($fullname) ?>
                     </a>
                 </td>
@@ -76,27 +78,26 @@
                     <?= $waiting['position'] ?>
                 </td>
                 <td>
-                    <?= $this->render_partial("course/members/_studycourse.php",
-                        array('studycourses' => new SimpleCollection(UserStudyCourse::findByUser_id($autor['user_id'])))) ?>
+                    <?= $this->render_partial('course/members/_studycourse.php',['studycourses' => new SimpleCollection(UserStudyCourse::findByUser_id($autor['user_id']))]) ?>
                 </td>
-                <td style="text-align: right">
+                <td class="actions">
+                    <? $actionMenu = ActionMenu::get() ?>
                     <? if($user_id != $waiting['user_id']) : ?>
-                        <a href="<?= URLHelper::getLink('dispatch.php/messages/write',
-                                array('filter' => 'send_sms_to_all',
-                                    'emailrequest' => 1,
-                                    'rec_uname' => $waiting['username'],
-                                    'default_subject' => $subject))
-                                ?>
-                        " data-dialog>
-                            <?= Icon::create('mail', 'clickable', ['title' => sprintf(_('Nachricht mit Mailweiterleitung an %s senden'),htmlReady($fullname))])->asImg(16) ?>
-                        </a>
+                        <? $actionMenu->addLink(URLHelper::getLink('dispatch.php/messages/write',
+                                ['filter'           => 'send_sms_to_all',
+                                 'emailrequest'    => 1,
+                                 'rec_uname'       => $waiting['username'],
+                                 'default_subject' => $subject]),
+                                _('Nachricht mit Mailweiterleitung senden'),
+                                Icon::create('mail', 'clickable', ['title' => sprintf('Nachricht mit Weiterleitung an %s senden', $fullname)]),
+                                ['data-dialog' => '1']) ?>
                     <? endif?>
                     <? if (!$is_locked) : ?>
-                    <a href="<?= $controller->url_for(sprintf("course/members/cancel_subscription/singleuser/$waiting_type/%s",
-                                $waiting['user_id'])) ?>">
-                        <?= Icon::create('door-leave', 'clickable', ['title' => sprintf(_('%s austragen'),htmlReady($fullname))])->asImg(16) ?>
-                    </a>
+                        <? $actionMenu->addLink($controller->url_for('course/members/cancel_subscription/singleuser/' . $waiting_type . '/' . $waiting['user_id']),
+                                _('Aus Veranstaltung austragen'),
+                                Icon::create('door-leave', 'clickable', ['title' => sprintf(_('%s austragen'),htmlReady($fullname))])) ?>
                     <? endif ?>
+                    <?= $actionMenu->render() ?>
                 </td>
             </tr>
         <? endforeach ?>
