@@ -236,10 +236,12 @@ class about extends messaging
      * This function returns the perms allowed for an institute for the current user
      *
      * @return array list of perms
+     * @deprecated
      */
     function allowedInstitutePerms() {
 
         // find out the allowed perms
+        var_dump($this->auth_user);
         $possible_perms=array("autor","tutor","dozent");
         $counter=0;
         if ($this->auth_user["perms"] == "admin")
