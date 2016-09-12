@@ -29,10 +29,6 @@ use Studip\Button, Studip\LinkButton;
 
 require_once 'vendor/idna_convert/idna_convert.class.php';
 
-if ($GLOBALS['ZIP_USE_INTERNAL']) {
-    include_once 'vendor/pclzip/pclzip.lib.php';
-}
-
 function readfile_chunked($filename, $start = null, $end = null) {
     if (isset($start) && $start < $end) {
         $chunksize = 1024 * 1024; // how many bytes per chunk
@@ -1041,7 +1037,7 @@ function form($refresh = FALSE)
 function prepareFilename($filename, $shorten = FALSE, $checkfolder = false) {
     $bad_characters = array (":", chr(92), "/", "\"", ">", "<", "*", "|", "?", " ", "(", ")", "&", "[", "]", "#", chr(36), "'", "*", ";", "^", "`", "{", "}", "|", "~", chr(255));
     $replacements = array ("", "", "", "", "", "", "", "", "", "_", "", "", "+", "", "", "", "", "", "", "-", "", "", "", "", "-", "", "");
-    
+
     //delete all ASCII control characters
     for($i = 0; $i < 0x20; $i++) {
         $bad_characters[] = chr($i);
@@ -1158,7 +1154,7 @@ function validate_upload($the_file, $real_file_name='') {
         } else {
             $t=FALSE;
             $i=1;
-            
+
             foreach ($UPLOAD_TYPES[$active_upload_type]["file_types"] as $ft) {
                 if ($pext == $ft)
                     $t=TRUE;
@@ -1183,7 +1179,7 @@ function validate_upload($the_file, $real_file_name='') {
             $result = false;
             PageLayout::postError(_('Bitte beachten Sie;'), $errors);
         }
-            
+
         //pruefen ob die Groesse stimmt.
         if ($the_file['error'] ===  UPLOAD_ERR_INI_SIZE || $the_file_size > $max_filesize) {
             $result = false;
@@ -1192,7 +1188,7 @@ function validate_upload($the_file, $real_file_name='') {
             $result = false;
             PageLayout::postError(_("Sie haben eine leere Datei zum Hochladen ausgewählt!"));
         }
-       
+
     }
 
     if (!$result) {
@@ -2629,12 +2625,16 @@ function rmdirr($dirname){
 }
 
 function create_zip_from_file($file_name, $zip_file_name){
-    if (strtolower(substr($zip_file_name, -3)) != 'zip' ) $zip_file_name = $zip_file_name . '.zip';
     if ($GLOBALS['ZIP_USE_INTERNAL']){
-        $archiv = new PclZip($zip_file_name);
-        $v_list = $archiv->create($file_name, PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_CB_PRE_ADD, 'pclzip_convert_filename_cb');
-        return $v_list;
+        $archive = Studip\ZipArchive::create($zip_file_name);
+        $localfilename = $archive->addFile($file_name);
+        $archive->close();
+        return [$localfilename];
     } else if (@file_exists($GLOBALS['ZIP_PATH']) || ini_get('safe_mode')){
+        if (strtolower(substr($zip_file_name, -3)) != 'zip' ) {
+            $zip_file_name = $zip_file_name . '.zip';
+        }
+
         exec($GLOBALS['ZIP_PATH'] . ' -q ' . $GLOBALS['ZIP_OPTIONS'] . " -j {$zip_file_name} $file_name", $output, $ret);
         return $ret;
     }
@@ -2643,13 +2643,17 @@ function create_zip_from_file($file_name, $zip_file_name){
     return false;
 }
 
-function create_zip_from_directory($fullpath, $zip_file_name){
-    if (strtolower(substr($zip_file_name, -3)) != 'zip' ) $zip_file_name = $zip_file_name . '.zip';
-    if ($GLOBALS['ZIP_USE_INTERNAL']){
-        $archiv = new PclZip($zip_file_name);
-        $v_list = $archiv->create($fullpath, PCLZIP_OPT_REMOVE_PATH, $fullpath, PCLZIP_CB_PRE_ADD, 'pclzip_convert_filename_cb');
-        return $v_list;
+function create_zip_from_directory($fullpath, $zip_file_name) {
+    if ($GLOBALS['ZIP_USE_INTERNAL']) {
+        $archive = Studip\ZipArchive::create($zip_file_name);
+        $added = $archive->addFromPath($fullpath);
+        $archive->close();
+        return $added;
     } else if (@file_exists($GLOBALS['ZIP_PATH']) || ini_get('safe_mode')){
+        if (strtolower(substr($zip_file_name, -3)) != 'zip' ) {
+            $zip_file_name = $zip_file_name . '.zip';
+        }
+
         //zip stuff
         $zippara = (ini_get('safe_mode')) ? ' -R ':' -r ';
         if (@chdir($fullpath)) {
@@ -2660,23 +2664,14 @@ function create_zip_from_directory($fullpath, $zip_file_name){
     }
 }
 
-function create_zip_from_newest_files() {
-    global $SessSemName;
-    $db = DBManager::get();
-    $result = $db->query("SELECT filename FROM dokumente WHERE chdate > ".object_get_visit($SessSemName[1], "documents")." OR mkdate > ".object_get_visit($SessSemName[1], "documents"))->fetchAll();
-}
-
-function unzip_file($file_name, $dir_name = '', $testonly = false){
-    $ret = true;
-    if ($GLOBALS['ZIP_USE_INTERNAL']){
-        $archive = new PclZip($file_name);
-        if ($testonly){
-            $prop = $archive->properties();
-            $ret = (!is_array($prop));
-        } else {
-            $ok = $archive->extract(PCLZIP_OPT_PATH, $dir_name, PCLZIP_CB_PRE_EXTRACT, 'pclzip_convert_filename_cb', PCLZIP_OPT_STOP_ON_ERROR);
-            $ret = (!is_array($ok));
+function extract_zip($file_name, $dir_name = '', $testonly = false) {
+    $ret = false;
+    if ($GLOBALS['ZIP_USE_INTERNAL']) {
+        if ($testonly) {
+            return Studip\ZipArchive::test($file_name);
         }
+
+        return Studip\ZipArchive::extractToPath($file_name, $dir_name);
     } else if (@file_exists($GLOBALS['UNZIP_PATH']) || ini_get('safe_mode')){
         if ($testonly){
             exec($GLOBALS['UNZIP_PATH'] . " -t -qq $file_name ", $output, $ret);
@@ -2685,6 +2680,12 @@ function unzip_file($file_name, $dir_name = '', $testonly = false){
         }
     }
     return $ret;
+}
+
+function unzip_file($file_name, $dir_name = '', $testonly = false) {
+    // This will recreate the old and very odd behaviour that unzip_file will
+    // return TRUE when the operation fails.
+    return !extract_zip($file_name, $dir_name, $testonly);
 }
 
 function upload_zip_item() {
@@ -2699,14 +2700,14 @@ function upload_zip_item() {
     }
     $tmpname = md5(uniqid('zipupload',1));
     if (move_uploaded_file($_FILES['the_file']['tmp_name'], $GLOBALS['TMP_PATH'] . '/' . $tmpname)){
-        if(unzip_file($GLOBALS['TMP_PATH'] . '/' . $tmpname, false, true)) {
+        if(!extract_zip($GLOBALS['TMP_PATH'] . '/' . $tmpname, false, true)) {
             PageLayout::postError( _("Die ZIP-Datei kann nicht geöffnet werden!"));
             @unlink($GLOBALS['TMP_PATH'] . '/' . $tmpname);
             return FALSE;
         }
         $tmpdirname = $GLOBALS['TMP_PATH'] . '/' . md5(uniqid('zipupload',1));
         @mkdir($tmpdirname);
-        if (unzip_file($GLOBALS['TMP_PATH'] . '/' . $tmpname , $tmpdirname)){
+        if (!extract_zip($GLOBALS['TMP_PATH'] . '/' . $tmpname , $tmpdirname)){
             PageLayout::postError(_("Die ZIP-Datei kann nicht geöffnet werden!"));
             @rmdirr($tmpdirname);
             @unlink($GLOBALS['TMP_PATH'] . '/' . $tmpname);
@@ -2725,7 +2726,7 @@ function upload_zip_item() {
                                     Config::get()->ZIP_UPLOAD_MAX_DIRS);
             }
             PageLayout::postError( _('Bitte beachten Sie:'), $errors);
-            
+
         }
         if ($ret['files'] || $ret['subdirs']) {
             PageLayout::postSuccess(sprintf(_("Es wurden %d Dateien und %d Ordner erfolgreich entpackt."),$ret['files'], $ret['subdirs']));
@@ -2865,18 +2866,6 @@ function upload_zip_file($dir_id, $file) {
     );
     $ret = StudipDocument::createWithFile($file, $data);
     return (int)$ret;
-}
-
-function pclzip_convert_filename_cb($p_event, &$p_header) {
-    if($p_event == PCLZIP_CB_PRE_EXTRACT){
-        $p_header['filename'] = iconv("IBM437", "ISO-8859-1", $p_header['filename']);
-        if (strpos($p_header['filename'], '../') !== false) {
-            return 0;
-        }
-    } elseif ($p_event == PCLZIP_CB_PRE_ADD) {
-        $p_header['stored_filename'] = iconv("ISO-8859-1", "IBM437", $p_header['stored_filename']);
-    }
-    return 1;
 }
 
 function get_flash_player ($document_id, $filename, $type) {
