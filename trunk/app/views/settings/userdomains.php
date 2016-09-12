@@ -7,7 +7,7 @@
     <input type="hidden" name="studipticket" value="<?= get_ticket() ?>">
     <?= CSRFProtection::tokenTag() ?>
 <? endif; ?>
-<table class="deafault" id="assigned_userdomains">
+<table class="default" id="assigned_userdomains">
     <colgroup>
         <col>
         <col width="100px">
@@ -53,7 +53,14 @@
                 <br>
                 
                 <a name="userdomains"></a>
-                <?= $about->select_userdomain() ?><br>
+                <? if (!empty($domains)) : ?>
+                    <select name="new_userdomain" id="new_userdomain">
+                        <option selected value="none"><?= _('-- Bitte Nutzerdomäne auswählen --') ?></option>
+                        <? foreach ($domains as $domain) : ?>
+                            <option value="<?= $domain->getID() ?>"><?= htmlReady(my_substr($domain->getName(), 0, 50)) ?></option>
+                        <? endforeach ?>
+                    </select>
+                <? endif ?>
                 <br>
                 
                 <?= _('Wenn Sie Nutzerdomänen wieder entfernen möchten, markieren '
