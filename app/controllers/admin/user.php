@@ -1353,7 +1353,7 @@ class Admin_UserController extends AuthenticatedController
             Icon::create('date+add', 'clickable'))
                 ->asDialog();
         $actions->addLink(_('Konten zusammenführen'),
-            $this->url_for('admin/user/migrate/' . (($this->user && is_array($this->user)) ? $this->user['user_id'] : '')),
+            $this->url_for('admin/user/migrate/' . (($this->user && is_array($this->user)) ? $this->user->user_id : '')),
             Icon::create('persons+new', 'clickable'));
         
         $search = new SearchWidget();
@@ -1374,15 +1374,15 @@ class Admin_UserController extends AuthenticatedController
             $sidebar->addWidget($export);
         }
         
-        if (!$this->user || !is_array($this->user)) {
+        if (!$this->user) {
             return;
         }
         
         $user_actions = new ActionsWidget();
-        $user_actions->setTitle(sprintf(_('Aktionen für "%s"'), $this->user['username']));
+        $user_actions->setTitle(sprintf(_('Aktionen für "%s"'), $this->user->username));
         
         $user_actions->addLink(_('Nachricht an Person verschicken'),
-            URLHelper::getLink('dispatch.php/messages/write?rec_uname=' . $this->user['username']),
+            URLHelper::getLink('dispatch.php/messages/write?rec_uname=' . $this->user->username),
             Icon::create('mail', 'clickable'))
                      ->asDialog();
         
@@ -1391,25 +1391,26 @@ class Admin_UserController extends AuthenticatedController
                 $this->url_for('admin/user/unlock/' . $this->user['user_id']),
                 Icon::create('lock-unlocked', 'clickable'));
         }
-        if ($this->user['auth_plugin'] !== 'preliminary' && ($GLOBALS['perm']->have_perm('root') || $GLOBALS['perm']->is_fak_admin() || !in_array($this->user['perms'], words('root admin')))) {
-            if (!StudipAuthAbstract::CheckField('auth_user_md5.password', $this->user['auth_plugin'])) {
+        
+        if ($this->user->auth_plugin !== 'preliminary' && ($GLOBALS['perm']->have_perm('root') || $GLOBALS['perm']->is_fak_admin() || !in_array($this->user->perms, words('root admin')))) {
+            if (!StudipAuthAbstract::CheckField('auth_user_md5.password', $this->user->auth_plugin)) {
                 $user_actions->addLink(_('Neues Passwort setzen'),
-                    $this->url_for('admin/user/change_password/' . $this->user['user_id']),
+                    $this->url_for('admin/user/change_password/' . $this->user->user_id),
                     Icon::create('key', 'clickable'));
             }
             $user_actions->addLink(_('Person löschen'),
-                $this->url_for('admin/user/delete/' . $this->user['user_id'] . '/edit'),
+                $this->url_for('admin/user/delete/' . $this->user->user_id . '/edit'),
                 Icon::create('trash', 'clickable'));
         }
-        if (Config::get()->MAIL_NOTIFICATION_ENABLE && CourseMember::findOneBySQL("user_id = ? AND notification <> 0", [$this->user['user_id']])) {
+        if (Config::get()->MAIL_NOTIFICATION_ENABLE && CourseMember::findOneBySQL("user_id = ? AND notification <> 0", [$this->user->user_id])) {
             $user_actions->addLink(_('Benachrichtigungen zurücksetzen'),
-                $this->url_for('admin/user/reset_notification/' . $this->user['user_id']),
+                $this->url_for('admin/user/reset_notification/' . $this->user->user_id),
                 Icon::create('refresh', 'clickable'));
         }
         
         if ($this->action == 'activities') {
             $user_actions->addLink(_('Alle Dateien als ZIP herunterladen'),
-                $this->url_for('admin/user/download_user_files/' . $this->user['user_id']),
+                $this->url_for('admin/user/download_user_files/' . $this->user->user_id),
                 Icon::create('folder-full', 'clickable'));
         }
         
@@ -1420,22 +1421,22 @@ class Admin_UserController extends AuthenticatedController
             $this->url_for('admin/user'))
               ->setActive(false);
         $views->addLink(_('Person verwalten'),
-            $this->url_for('admin/user/edit/' . $this->user['user_id']))
+            $this->url_for('admin/user/edit/' . $this->user->user_id))
               ->setActive($this->action == 'edit');
         $views->addLink(_('Zum Profil'),
-            URLHelper::getLink('dispatch.php/profile?username=' . $this->user['username']),
+            URLHelper::getLink('dispatch.php/profile?username=' . $this->user->username),
             Icon::create('person', 'clickable'));
         
         if ($GLOBALS['perm']->have_perm('root')) {
             $views->addLink(_('Datei- und Aktivitätsübersicht'),
-                $this->url_for('admin/user/activities/' . $this->user['user_id']),
+                $this->url_for('admin/user/activities/' . $this->user->user_id),
                 Icon::create('vcard', 'clickable'))
                   ->setActive($this->action == 'activities');
             
             
             if (Config::get()->LOG_ENABLE) {
                 $views->addLink(_('Personeneinträge im Log'),
-                    URLHelper::getLink('dispatch.php/event_log/show?search=' . $this->user['username'] . '&type=user&object_id=' . $this->user['user_id']),
+                    URLHelper::getLink('dispatch.php/event_log/show?search=' . $this->user->username . '&type=user&object_id=' . $this->user->user_id),
                     Icon::create('log', 'clickable'));
             }
         }
