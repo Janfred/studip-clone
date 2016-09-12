@@ -85,7 +85,7 @@ function export_form_sidebar($range_id, $ex_type = "", $filename = "", $format =
     global $output_formats, $PATH_EXPORT, $xslt_filename;
     $filename = $xslt_filename;
     require_once ($PATH_EXPORT . "/export_xslt_vars.inc.php");
-    $export_string .= "<form class=\"studip_form\" action=\"" .$GLOBALS['ABSOLUTE_URI_STUDIP']. "export.php\" method=\"post\">";
+    $export_string .= "<form class=\"default\" action=\"" .$GLOBALS['ABSOLUTE_URI_STUDIP']. "export.php\" method=\"post\">";
     $export_string .= CSRFProtection::tokenTag();
     $export_string .= "<select name=\"format\">";
     while (list($key, $val) = each($output_formats))

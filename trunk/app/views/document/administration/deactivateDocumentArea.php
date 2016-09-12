@@ -1,7 +1,7 @@
 <? use Studip\Button, Studip\LinkButton; ?>
 
 <form action="<?= $controller->url_for('document/administration/deactivateDocumentArea/' . $config_id) ?>"
-      method="post" class="studip_form">
+      method="post" class="default">
 <? if(isset($header)): ?>
     <h3><?= htmlReady($header) ?></h3>
 <? endif;?>

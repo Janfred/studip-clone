@@ -1,6 +1,6 @@
 <? use Studip\Button, Studip\LinkButton; ?>
 
-<form action="<?= $controller->url_for('document/administration/individual') ?>" method="post" class="studip_form">
+<form action="<?= $controller->url_for('document/administration/individual') ?>" method="post" class="default">
     <fieldset class="document-admin-search">
         <legend><?= _('Suche') ?></legend>
 

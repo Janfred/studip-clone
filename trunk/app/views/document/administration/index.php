@@ -1,6 +1,6 @@
 <? use Studip\Button, Studip\LinkButton; ?>
 
-<form action="<?= $controller->url_for('document/administration/filter') ?>" method="post" class="studip_form">
+<form action="<?= $controller->url_for('document/administration/filter') ?>" method="post" class="default">
     <fieldset>
         <legend><?= _('Vorhandene Konfigurationen') ?></legend>
 

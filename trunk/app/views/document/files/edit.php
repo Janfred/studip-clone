@@ -1,4 +1,4 @@
-<form method="post" action="<?= $controller->url_for('document/files/edit/' . $entry->id) ?>" class="studip_form">
+<form method="post" action="<?= $controller->url_for('document/files/edit/' . $entry->id) ?>" class="default">
     <input type="hidden" name="studip-ticket" value="<?= get_ticket() ?>">
     <?= CSRFProtection::tokenTag() ?>
 

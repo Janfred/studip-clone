@@ -1,6 +1,6 @@
 <? use Studip\Button, Studip\LinkButton; ?>
 
-<form action="<?= $controller->url_for('document/administration/store/' . $config_id . '/' . $isGroupConfig) ?>" class="studip_form">
+<form action="<?= $controller->url_for('document/administration/store/' . $config_id . '/' . $isGroupConfig) ?>" class="default">
 <? if(isset($head)): ?>
     <h3><?=$head?></h3>
 <? endif; ?>

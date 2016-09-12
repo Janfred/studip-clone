@@ -1,4 +1,4 @@
-<form class="studip_form">
+<form class="default">
     <h3><?=(_('Ihr Dateibereich ist gesperrt worden'))?></h3>
     <fieldset>
         <legend><?=(_('Grund:'))?></legend>
