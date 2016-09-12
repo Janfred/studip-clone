@@ -167,13 +167,20 @@ class SemBrowse {
         return in_array($this->sem_browse_data['show_class'], $this->classes_show_class);
     }
 
-    function get_sem_class(){
-        $db = new DB_Seminar("SELECT Seminar_id from seminare WHERE "
-                            . (!(is_object($GLOBALS['perm'] && $GLOBALS['perm']->have_perm(get_config('SEM_VISIBILITY_PERM')))) ? "seminare.visible=1 AND" : "" )
-                            . " seminare.status IN ('" . join("','", $this->sem_browse_data['sem_status']) . "')");
-        $snap = new DbSnapshot($db);
-        $sem_ids = $snap->getRows("Seminar_id");
-        if (is_array($sem_ids)){
+    function get_sem_class()
+    {
+        $query = "SELECT `Seminar_id`
+                  FROM `seminare`
+                  WHERE `status` IN (?)";
+
+        $show_all = is_object($GLOBALS['perm'])
+                 && $GLOBALS['perm']->have_perm(Config::get()->SEM_VISIBILITY_PERM);
+        if (!$show_all) {
+            $query .= " AND visible = 1";
+        }
+
+        $sem_ids = DBManager::get()->fetchAll(PDO::FETCH_COLUMN);
+        if (is_array($sem_ids)) {
             $this->sem_browse_data['search_result'] = array_flip($sem_ids);
         }
         $this->sem_browse_data['sset'] = true;

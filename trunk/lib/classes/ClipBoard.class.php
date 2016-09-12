@@ -38,7 +38,6 @@
 **/
 class ClipBoard {
 
-    var $db;
     var $elements = null;
     var $form_obj = null;
     var $object_types = null;
@@ -72,7 +71,6 @@ class ClipBoard {
 
     public function __construct($name){
         $this->form_name = $name."_clipboard_form";
-        $this->db = new DB_Seminar();
         $this->elements =& $_SESSION["_".$this->form_name];
     }
 

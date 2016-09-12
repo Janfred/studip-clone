@@ -34,24 +34,28 @@
 
 require_once dirname(__FILE__) . '/studip_cli_env.inc.php';
 require_once $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/lib/ResourceObject.class.php";
-require_once "lib/classes/DbSnapshot.class.php";
-$res_obj = ResourceObject::Factory();
-$snap = new DbSnapshot(new DB_Seminar("SELECT resource_id, parent_id FROM resources_objects INNER JOIN resources_categories USING(category_id) WHERE is_room = 1"));
-if ($snap->numRows){
+
+$query = "SELECT `parent_id`, `resource_id`
+          FROM `resources_objects`
+          INNER JOIN `resources_categories` USING(`category_id`)
+          WHERE `is_room` = 1";
+$resources = DBManager::get()->fetchGroupedPairs($query);
+
+if (count($resources) > 0) {
+    $res_obj = ResourceObject::Factory();
+
     fwrite(STDOUT, "<?php\n//copy to \$STUDIP_BASE_PATH/config/config_room_groups.inc.php\n//generated ". date('r') ."\n");
-    foreach($snap->getGroupedResult('parent_id') as $parent_id => $rooms){
-        if (is_array($rooms['resource_id'])){
+    foreach ($resources as $parent_id => $rooms){
+        if (is_array($rooms)){
             $res_obj->restore($parent_id);
             fwrite(STDOUT, "//--------------------------------------------------------------------\n");
             fwrite(STDOUT, "\$room_groups[\$c]['name'] = '" . $res_obj->getPathToString(true) . "';\n");
-            foreach (array_keys($rooms['resource_id']) as $room_id){
+            foreach ($rooms as $room_id){
                 $res_obj->restore($room_id);
                 fwrite(STDOUT, "\$room_groups[\$c]['rooms'][] = '$room_id';  //" . $res_obj->getPathToString(true) . "\n");
             }       
         }
     }
-    fwrite(STDOUT, "?>\n");
 } else {
     trigger_error('No rooms found in database.', E_USER_ERROR);
 }
-?>
