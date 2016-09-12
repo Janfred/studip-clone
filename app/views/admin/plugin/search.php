@@ -12,18 +12,19 @@ use Studip\Button, Studip\LinkButton;
     <?= LinkButton::create(_('Zurücksetzen'), $controller->url_for('admin/plugin/search'), array('title' => _('Suche zurücksetzen')))?>
 </form>
 
-<h3>
-    <? if ($search === NULL): ?>
-        <?= _('Empfohlene Plugins') ?>
-    <? else: ?>
-        <?= _('Suchergebnisse') ?>
-    <? endif ?>
-</h3>
+
 
 <? if (empty($search_results)): ?>
     <?= MessageBox::info(_('Es wurden keine Plugins gefunden.')) ?>
 <? else: ?>
     <table class="default">
+        <caption>
+            <? if ($search === NULL): ?>
+                <?= _('Empfohlene Plugins') ?>
+            <? else: ?>
+                <?= _('Suchergebnisse') ?>
+            <? endif ?>
+        </caption>
         <tr>
             <th class="plugin_image"><?= _('Bild')?></th>
             <th><?= _('Name und Beschreibung')?></th>
@@ -128,37 +129,3 @@ use Studip\Button, Studip\LinkButton;
     </form>
 <? endif ?>
 
-<?
-$infobox_content = array(
-    array(
-        'kategorie' => _('Aktionen:'),
-        'eintrag'   => array(
-            array(
-                'icon' => Icon::create('plugin', 'clickable'),
-                'text' => '<a href="'.$controller->url_for('admin/plugin').'">'._('Verwaltung von Plugins').'</a>'
-            )
-        )
-    ), array(
-        'kategorie' => _('Links:'),
-        'eintrag'   => array(
-            array(
-                'icon' => Icon::create('info', 'clickable'),
-                'text' => '<a href="http://plugins.studip.de/" target="_blank">'._('Alle Plugins im Plugin-Marktplatz').'</a>'
-            )
-        )
-    ), array(
-        'kategorie' => _('Hinweise:'),
-        'eintrag'   => array(
-            array(
-                "icon" => Icon::create('info', 'clickable'),
-                'text' => _('In der Liste "Empfohlene Plugins" finden Sie von anderen Betreibern empfohlene Plugins.')
-            ), array(
-                "icon" => Icon::create('info', 'clickable'),
-                'text' => _('Alternativ können Plugins und Plugin-Updates auch als ZIP-Datei hochgeladen werden.')
-            )
-        )
-    )
-);
-
-$infobox = array('picture' => 'sidebar/plugin-sidebar.png', 'content' => $infobox_content);
-?>
