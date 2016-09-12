@@ -136,11 +136,11 @@ class RolePersistence
     /**
      * Saves a role assignment to the database
      *
-     * @param StudIPUser $user
+     * @param User $user
      * @param Role $role
      * @param string $institut_id
      */
-    public static function assignRole($user, $role, $institut_id = '')
+    public static function assignRole(User $user, $role, $institut_id = '')
     {
         // role is not in database
         // save it to the database first
@@ -151,8 +151,13 @@ class RolePersistence
         }
         $stmt = DBManager::get()->prepare("REPLACE INTO roles_user ".
           "(roleid, userid, institut_id) VALUES (?, ?, ?)");
-        $stmt->execute(array($roleid, $user->getUserid(), $institut_id));
-        NotificationCenter::postNotification('RoleAssignmentDidCreate', $roleid, $user->getUserid(), $institut_id); 
+        $stmt->execute([$roleid, $user->id, $institut_id]);
+        NotificationCenter::postNotification(
+            'RoleAssignmentDidCreate',
+            $roleid,
+            $user->id,
+            $institut_id
+        ); 
         self::$user_roles = array();
     }
 
@@ -212,19 +217,24 @@ class RolePersistence
     /**
      * Deletes a role assignment from the database
      *
-     * @param StudIPUser[] $users
+     * @param User $user
      * @param Role $role
      */
-    public static function deleteRoleAssignment($user,$role, $institut_id = null)
+    public static function deleteRoleAssignment(User $user,$role, $institut_id = null)
     {
         if ($institut_id === null) {
             $stmt = DBManager::get()->prepare("DELETE FROM roles_user WHERE roleid=? AND userid=?");
-            $stmt->execute(array($role->getRoleid(),$user->getUserid()));
+            $stmt->execute(array($role->getRoleid(),$user->id));
         } else {
             $stmt = DBManager::get()->prepare("DELETE FROM roles_user WHERE roleid=? AND userid=? AND institut_id=?");
-            $stmt->execute(array($role->getRoleid(),$user->getUserid(),$institut_id));
+            $stmt->execute(array($role->getRoleid(),$user->id,$institut_id));
         }
-        NotificationCenter::postNotification('RoleAssignmentDidDelete', $role->getRoleid(), $user->getUserid(), $institut_id); 
+        NotificationCenter::postNotification(
+            'RoleAssignmentDidDelete',
+            $role->getRoleid(),
+            $user->id,
+            $institut_id
+        ); 
 
         self::$user_roles = array();
     }
@@ -233,27 +243,21 @@ class RolePersistence
      * Get's all Role-Assignments for a certain user.
      * If no user is set, all role assignments are returned.
      *
-     * @param StudIPUser $user
+     * @param User $user
      * @return array with roleids and the assigned userids
      */
-    public static function getAllRoleAssignments($user=null)
+    public static function getAllRoleAssignments($user = null)
     {
-        if ($user == null)
-        {
-            $result = DBManager::get()->query("SELECT * FROM roles_user");
-        }
-        else
-        {
-            $result = DBManager::get()->prepare("SELECT * FROM roles_user WHERE userid=?");
-            $result->execute(array($user->getUserid()));
+        if ($user == null) {
+            $query = "SELECT role_id, user_id FROM roles_user";
+            $result = DBManager::get()->query($query);
+        } else {
+            $query = "SELECT role_id, user_id FROM roles_user WHERE userid = ?";
+            $result = DBManager::get()->prepare($query);
+            $result->execute([$user->id]);
         }
 
-        $roles_user = array();
-        while (!$result->EOF)
-        {
-            $roles_user[$row["roleid"]] = $row["userid"];
-        }
-        return $roles_user;
+        return $statement->fetchPairs();
     }
 
     /**

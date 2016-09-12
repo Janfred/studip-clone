@@ -15,8 +15,8 @@ use Studip\Button, Studip\LinkButton;
         <?= _('Benutzer:') ?>
         <select name="usersel" style="min-width: 300px;">
         <? foreach ($users as $user): ?>
-            <option value="<?= $user->getUserid() ?>" <?= isset($currentuser) && $currentuser->isSameUser($user) ? "selected" : "" ?>>
-                <?= htmlReady(sprintf('%s %s (%s)', $user->getGivenname(), $user->getSurname(), $user->getUsername())) ?>
+            <option value="<?= $user->id ?>" <? if ($currentuser && $currentuser->id === $user->id) echo 'selected'; ?>>
+                <?= htmlReady(sprintf('%s %s (%s)', $user->vorname, $user->nachname, $user->username)) ?>
             </option>
         <? endforeach ?>
         </select>
@@ -26,13 +26,13 @@ use Studip\Button, Studip\LinkButton;
 </form>
 
 <? if (isset($currentuser)): ?>
-    <form action="<?= $controller->url_for('admin/role/save_role', $currentuser->getUserid()) ?>" method="POST">
+    <form action="<?= $controller->url_for('admin/role/save_role', $currentuser->id) ?>" method="POST">
         <?= CSRFProtection::tokenTag() ?>
         <input type="hidden" name="studip_ticket" value="<?= get_ticket() ?>">
         <table class="default nohover">
             <tr>
                 <th style="text-align: center;">
-                    <?= sprintf(_('Rollen für %s'), htmlReady($currentuser->getGivenname() . ' ' . $currentuser->getSurname())) ?>
+                    <? printf(_('Rollen für %s'), htmlReady($currentuser->vorname . ' ' . $currentuser->nachname)) ?>
                 </th>
                 <th></th>
                 <th><?= _('Verfügbare Rollen') ?></th>
@@ -73,29 +73,36 @@ use Studip\Button, Studip\LinkButton;
     </h3>
 
     <table class="default">
+        <colgroup>
+            <col width="50%">
+            <col>
+            <col width="24px">
+        </colgroup>
         <thead>
             <tr>
                 <th><?= _('Rolle')?> </th>
                 <th><?= _('Einrichtungen')?> </th>
-                <th><?= _('Aktionen')?> </th>
+                <th class="actions"><?= _('Aktionen')?> </th>
             </tr>
         </thead>
         <tbody>
-            <? foreach ($assignedroles as $assignedrole) : ?>
-                <? if(!$assignedrole->getSystemtype()) : ?>
-                    <tr>
-                        <td>
-                            <?= htmlReady($assignedrole->getRolename()) ?>
-                        </td>
-                        <td>
-                            <?= htmlReady(join(",\n", $assignedroles_institutes[$assignedrole->getRoleid()]))?>
-                        </td>
-                        <td>
-                            <a href="<?= $controller->link_for('/assign_role_institutes/' . $assignedrole->getRoleid() . '/' . $currentuser->getUserid()) ?>" data-dialog><?= Icon::create('edit', 'clickable')->asImg(array('title' => _('Einrichtungszuordnung bearbeiten'))) ?></a>
-                        </td>
-                    </tr>
-                <? endif ?>
-            <? endforeach ?>
+    <? foreach ($assignedroles as $assignedrole): ?>
+        <? if (!$assignedrole->getSystemtype()): ?>
+            <tr>
+                <td>
+                    <?= htmlReady($assignedrole->getRolename()) ?>
+                </td>
+                <td>
+                    <?= htmlReady(implode(",\n", $assignedroles_institutes[$assignedrole->getRoleid()]))?>
+                </td>
+                <td class="actions">
+                    <a href="<?= $controller->link_for('/assign_role_institutes/' . $assignedrole->getRoleid() . '/' . $currentuser->id) ?>" data-dialog="size=auto">
+                        <?= Icon::create('edit', 'clickable')->asImg(array('title' => _('Einrichtungszuordnung bearbeiten'))) ?>
+                    </a>
+                </td>
+            </tr>
+        <? endif; ?>
+    <? endforeach; ?>
         </tbody>
     </table>
 
