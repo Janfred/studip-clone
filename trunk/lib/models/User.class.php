@@ -171,7 +171,7 @@ class User extends AuthUserMd5
         $query = "SELECT DISTINCT IFNULL(auth_plugin, 'standard') as auth_plugin FROM auth_user_md5 ORDER BY auth_plugin='standard',auth_plugin";
         return DBManager::get()->query($query)->fetchAll(PDO::FETCH_COLUMN);
     }
-
+    
     /**
      *
      */
@@ -425,5 +425,25 @@ class User extends AuthUserMd5
             call_user_func($options['assoc_foreign_key_setter'], $result, $foreign_key_value);
             $this->relations[$relation] = $result;
         }
+    }
+    
+    /**
+     * This function returns the perms allowed for an institute for the current user
+     *
+     * @return array list of perms
+     */
+    public function getInstitutePerms()
+    {
+        if($this->perms === 'admin') {
+            return ['admin'];
+        }
+        $allowed_status = [];
+        $possible_status = words('autor tutor dozent');
+        
+        $pos = array_search($this->perms, $possible_status);
+        if($pos) {
+            $allowed_status = array_slice($possible_status, 0, $pos+1);
+        }
+        return $allowed_status;
     }
 }

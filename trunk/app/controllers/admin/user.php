@@ -916,12 +916,20 @@ class Admin_UserController extends AuthenticatedController
             $this->redirect('admin/user/edit/' . $user_id);
         }
         
-        $this->user        = User::find($user_id);
-        $this->institute   = UserModel::getInstitute($user_id, $institute_id);
-        $about             = new about($this->user['username'], '');
+        $this->user = User::find($user_id);
+        if (count($this->user->institute_memberships)) {
+            $institute = null;
+            $this->user->institute_memberships->filter(function ($a) use ($institute_id, &$institute) {
+                if ($a->institut_id === $institute_id) {
+                    $institute = $a;
+                }
+            });
+        }
+        
+        $this->institute   = $institute;
         $this->faecher     = StudyCourse::findBySQL('1 ORDER BY name');
         $this->abschluesse = Abschluss::findBySQL('1 ORDER by name');
-        $this->perms       = $about->allowedInstitutePerms();
+        $this->perms       = $this->user->getInstitutePerms();
         $this->datafields  = DataFieldEntry::getDataFieldEntries([$user_id, $institute_id], 'userinstrole');
     }
     
