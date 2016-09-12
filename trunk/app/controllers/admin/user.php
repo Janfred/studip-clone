@@ -823,7 +823,7 @@ class Admin_UserController extends AuthenticatedController
             //check existing users
             if (User::exists($old_id) && User::exists($new_id)) {
                 $identity = Request:: get('convert_ident');
-                $details  = UserModel::convert($old_id, $new_id, $identity);
+                $details  = User::convert($old_id, $new_id, $identity);
                 
                 //delete old user
                 if (Request::get('delete_old')) {
