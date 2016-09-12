@@ -23,68 +23,7 @@
  */
 class UserModel
 {
-    /**
-     * Return all informations of an user, otherwise the selected field of the
-     * databse-table auth_user_md5, if field is set.
-     *
-     * @param md5 $user_id
-     * @param string $field
-     * @param bool $full
-     *
-     * @return string (if field is set), otherwise array()
-     */
-    public static function getUser($user_id, $field = NULL, $full = false)
-    {
-        //single field
-        if(!is_null($field)) {
-            $dbquery = "SELECT *,IFNULL(auth_plugin, 'preliminary') as auth_plugin FROM auth_user_md5 au WHERE au.user_id = ?";
-
-            $db = DBManager::get()->prepare($dbquery);
-            $db->execute(array($user_id));
-            $row = $db->fetch(PDO::FETCH_ASSOC);
-            return $row[$field];
-
-        // all fields + optional user_info and user_online
-        } else {
-            if ($full) {
-                $dbquery = "SELECT ui.*,au.*, last_lifesign as changed_timestamp,IFNULL(auth_plugin, 'preliminary') as auth_plugin FROM auth_user_md5 au"
-                         . " LEFT JOIN user_info ui ON (au.user_id = ui.user_id)"
-                         . " LEFT JOIN user_online uo ON au.user_id = uo.user_id";
-            } else {
-                $dbquery = "SELECT * FROM auth_user_md5 au";
-            }
-            $dbquery .= " WHERE au.user_id = ?";
-
-            $db = DBManager::get()->prepare($dbquery);
-            $db->execute(array($user_id));
-            return $db->fetch(PDO::FETCH_ASSOC);
-        }
-    }
-
-
-    /**
-     * Return the Institutes of an user depending of the student-status.
-     *
-     * @param md5 $user_id
-     * @param bool $as_student
-     * @return array()
-     */
-    public static function getUserInstitute($user_id, $as_student = false)
-    {
-        $sql = "SELECT i.Institut_id, i.Name, ui.* FROM Institute AS i "
-             . "LEFT JOIN user_inst AS ui ON i.Institut_id = ui.Institut_id "
-             . "WHERE user_id=?";
-        if ($as_student) {
-            $sql .= " AND inst_perms = 'user'";
-        } else {
-             $sql .= " AND inst_perms <> 'user'";
-        }
-        $sql .= " ORDER BY priority ASC, Name ASC";
-        $db = DBManager::get()->prepare($sql);
-        $db->execute(array($user_id));
-        return $db->fetchGrouped(PDO::FETCH_ASSOC);
-    }
-
+   
     /**
      * Search for users, depending of the used parameters.
      *
@@ -239,24 +178,7 @@ class UserModel
         //ergebnisse zurückgeben
         return $db->query($query)->fetchAll(PDO::FETCH_ASSOC);
     }
-
-    /**
-     * Return the institute information, depending on the selected user and
-     * institute.
-     *
-     * @param md5 $user_id
-     * @param md5 $inst_id
-     *
-     * @return array()
-     */
-    public static function getInstitute($user_id, $inst_id)
-    {
-        $sql = "SELECT * FROM user_inst WHERE user_id = ? AND Institut_id = ?";
-        $db = DBManager::get()->prepare($sql);
-        $db->execute(array($user_id, $inst_id));
-        return $db->fetch(PDO::FETCH_ASSOC);
-    }
-
+    
 
     /**
      * Merge an user ($old_id) to another user ($new_id).  This is a part of the
@@ -523,23 +445,6 @@ class UserModel
         return $messages;
     }
 
-    /**
-     *  Return a list of free and available institutes of an user.
-     *
-     * @param md5 $user_id
-     * @return array() list of institutes
-     */
-    public static function getAvailableInstitutes($user_id)
-    {
-        $sql = "SELECT a.Institut_id, a.Name " .
-               "FROM Institute AS a " .
-                   "LEFT JOIN user_inst AS b ON (b.user_id=? AND a.Institut_id=b.Institut_id) " .
-                   (!$GLOBALS['perm']->have_perm("root") ? "INNER JOIN user_inst AS p ON (p.Institut_id = a.Institut_id AND p.user_id = ? AND p.inst_perms = 'admin') " : "") .
-               "WHERE b.Institut_id IS NULL ORDER BY a.Name ";
-        $db = DBManager::get()->prepare($sql);
-        $db->execute(array($user_id, ($GLOBALS['perm']->have_perm("root") ? null : $GLOBALS['user']->id)));
-        return $db->fetchAll(PDO::FETCH_ASSOC);
-    }
 
     /**
      * Delete double entries of the old and new user. This is a part of the old
