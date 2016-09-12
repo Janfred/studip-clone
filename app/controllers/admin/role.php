@@ -17,6 +17,8 @@
 
 class Admin_RoleController extends AuthenticatedController
 {
+    protected $utf8decode_xhr = true;
+    
     /**
      *
      */
@@ -35,12 +37,10 @@ class Admin_RoleController extends AuthenticatedController
      */
     public function before_filter(&$action, &$args)
     {
-        global $perm;
-
         parent::before_filter($action, $args);
 
         // user must have root permission
-        $perm->check('root');
+        $GLOBALS['perm']->check('root');
 
         // set page title and navigation
         PageLayout::setTitle(_('Verwaltung von Rollen'));
@@ -129,7 +129,7 @@ class Admin_RoleController extends AuthenticatedController
             } else {
                 $message = _('Sie haben keinen Namen eingegeben.');
             }
-            PageLayout::postMessage(MessageBox::success($message));
+            PageLayout::postSuccess($message);
 
             $this->redirect('admin/role');
         }
@@ -162,7 +162,7 @@ class Admin_RoleController extends AuthenticatedController
         RolePersistence::deleteRole($role);
 
         $message = _('Die Rolle und alle dazugehörigen Zuweisungen wurden gelöscht.');
-        PageLayout::postMessage(MessageBox::success($message));
+        PageLayout::postSuccess($message);
 
         $this->redirect('admin/role');
     }
@@ -221,10 +221,10 @@ class Admin_RoleController extends AuthenticatedController
 
         // a user was selected
         if (isset($usersel)) {
-            $this->users[$usersel] = new StudIPUser($usersel);
+            $this->users[$usersel] = User::find($usersel);
             $this->currentuser = $this->users[$usersel];
-            $this->assignedroles = $this->currentuser->getAssignedRoles();
-            $this->all_userroles = $this->currentuser->getAssignedRoles(true);
+            $this->assignedroles = $this->currentuser->getRoles();
+            $this->all_userroles = $this->currentuser->getRoles(true);
             $this->roles = RolePersistence::getAllRoles();
             foreach ($this->assignedroles as $role) {
                 $institutes = SimpleCollection::createFromArray(Institute::findMany(RolePersistence::getAssignedRoleInstitutes($usersel, $role->getRoleid())));
@@ -240,7 +240,7 @@ class Admin_RoleController extends AuthenticatedController
      */
     public function save_role_action($userid)
     {
-        $selecteduser = new StudIPUser($userid);
+        $selecteduser = User::find($userid);
 
         $this->check_ticket();
 
@@ -259,7 +259,7 @@ class Admin_RoleController extends AuthenticatedController
         }
 
         $message = _('Die Rollenzuweisungen wurden gespeichert.');
-        PageLayout::postMessage(MessageBox::success($message));
+        PageLayout::postSuccess($message);
 
         $this->redirect('admin/role/assign_role/'.$userid);
     }
@@ -299,7 +299,7 @@ class Admin_RoleController extends AuthenticatedController
         }
 
         $message = _('Die Rechteeinstellungen wurden gespeichert.');
-        PageLayout::postMessage(MessageBox::success($message));
+        PageLayout::postSuccess($message);
 
         $this->redirect('admin/role/assign_plugin_role/'.$pluginid);
     }
@@ -373,9 +373,9 @@ class Admin_RoleController extends AuthenticatedController
     {
         $role = self::getRole($role_id);
         $ids  = $this->getUsers($role_id, $user_id);
+        $users = User::findMany($ids);
 
-        foreach ($ids as $id) {
-            $user = new StudIPUser($id);
+        foreach ($users as $user) {
             RolePersistence::assignRole($user, $role);
         }
 
@@ -383,7 +383,7 @@ class Admin_RoleController extends AuthenticatedController
                              'Der Rolle wurden %u weitere Personen hinzugefügt.',
                              count($ids));
         $message = sprintf($template, count($ids));
-        PageLayout::postMessage(MessageBox::success($message));
+        PageLayout::postSuccess($message);
 
         $this->redirect('admin/role/show_role/' . $role_id);
     }
@@ -395,11 +395,11 @@ class Admin_RoleController extends AuthenticatedController
     {
         CSRFProtection::verifyUnsafeRequest();
 
-        $role = self::getRole($role_id);
-        $ids  = $this->getUsers($role_id, $user_id);
+        $role  = self::getRole($role_id);
+        $ids   = $this->getUsers($role_id, $user_id);
+        $users = User::findMany($ids);
 
-        foreach ($ids as $id) {
-            $user = new StudIPUser($id);
+        foreach ($users as $user) {
             RolePersistence::deleteRoleAssignment($user, $role);
         }
 
@@ -407,7 +407,7 @@ class Admin_RoleController extends AuthenticatedController
                              '%u Personen wurde die Rolle entzogen.',
                              count($ids));
         $message = sprintf($template, count($ids));
-        PageLayout::postMessage(MessageBox::success($message));
+        PageLayout::postSuccess($message);
 
         $this->redirect('admin/role/show_role/' . $role_id);
     }
@@ -433,7 +433,7 @@ class Admin_RoleController extends AuthenticatedController
                                      'Der Rolle wurden %u weitere Plugins hinzugefügt.',
                                      count($plugin_ids));
                 $message = sprintf($template, count($plugin_ids));
-                PageLayout::postMessage(MessageBox::success($message));
+                PageLayout::postSuccess($message);
             }
 
             $this->redirect('admin/role/show_role/' . $role_id);
@@ -467,7 +467,7 @@ class Admin_RoleController extends AuthenticatedController
                              '%u Plugins wurde die Rolle entzogen.',
                              count($ids));
         $message = sprintf($template, count($ids));
-        PageLayout::postMessage(MessageBox::success($message));
+        PageLayout::postSuccess($message);
 
         $this->redirect('admin/role/show_role/' . $role_id);
     }
@@ -533,30 +533,21 @@ class Admin_RoleController extends AuthenticatedController
             ->setSearchObject(new SQLSearch($query, _('Nutzer suchen'), 'user_id'));
     }
 
-    function assign_role_institutes_action($role_id,$user_id)
+    function assign_role_institutes_action($role_id, $user_id)
     {
-        if (Request::isXhr()) {
-            $this->set_layout(null);
-            $this->set_content_type('text/html;charset=windows-1252');
-            $this->response->add_header('X-No-Buttons', 1);
-            $this->response->add_header('X-Title', PageLayout::getTitle());
-            foreach (array_keys($_POST) as $param) {
-                Request::set($param, studip_utf8decode(Request::get($param)));
-            }
-        }
         if (Request::submitted('add_institute') && $institut_id = Request::option('institute_id')) {
             $roles = RolePersistence::getAllRoles();
             $role = $roles[$role_id];
-            $user = new StudIPUser($user_id);
+            $user = User::find($user_id);
             RolePersistence::assignRole($user, $role, Request::option('institute_id'));
-            PageLayout::postMessage(MessageBox::success(_("Die Einrichtung wurde zugewiesen.")));
+            PageLayout::postSuccess(_("Die Einrichtung wurde zugewiesen."));
         }
         if ($remove_institut_id = Request::option('remove_institute')) {
             $roles = RolePersistence::getAllRoles();
             $role = $roles[$role_id];
-            $user = new StudIPUser($user_id);
+            $user = User::find($user_id);
             RolePersistence::deleteRoleAssignment($user, $role, $remove_institut_id);
-            PageLayout::postMessage(MessageBox::success(_("Die Einrichtung wurde entfernt.")));
+            PageLayout::postSuccess(_("Die Einrichtung wurde entfernt."));
 
         }
         $roles = RolePersistence::getAllRoles();

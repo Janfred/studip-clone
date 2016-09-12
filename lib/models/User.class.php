@@ -341,6 +341,17 @@ class User extends AuthUserMd5
     }
 
     /**
+     * Returns the roles that were assigned to the user.
+     *
+     * @param boolean $with_implicit
+     * @return array
+     */
+    public function getRoles($with_implicit = false)
+    {
+        return RolePersistence::getAssignedRoles($this->user_id, $withimplicit);
+    }
+
+    /**
      * Returns whether the given user is stored in contacts.
      *
      * @param User $another_user
