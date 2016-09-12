@@ -353,12 +353,14 @@ class Admin_PluginController extends AuthenticatedController
      * Show a page describing this plugin's meta data and description,
      * if available.
      */
-    public function manifest_action($plugin_id) {
+    public function manifest_action($plugin_id)
+    {
+        
         $plugin_manager = PluginManager::getInstance();
         $plugin = $plugin_manager->getPluginInfoById($plugin_id);
-
+        PageLayout::setTitle(sprintf(_('Details von %s'), $plugin['name']));
         // retrieve manifest
-        $pluginpath = get_config('PLUGINS_PATH') . '/' . $plugin['path'];
+        $pluginpath = Config::get()->PLUGINS_PATH . '/' . $plugin['path'];
         $manifest = $plugin_manager->getPluginManifest($pluginpath);
 
         $this->plugin   = $plugin;
