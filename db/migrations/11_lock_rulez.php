@@ -1,14 +1,17 @@
 <?
-class LockRulez extends DBMigration {
+class LockRulez extends Migration
+{
 
-    function description () {
+    public function description ()
+    {
         return 'creates table for lock rules';
     }
 
-    function up () {
+    public function up ()
+    {
         $this->announce(" creating table...");
-        
-        $this->db->query( " 
+
+        DBManager::get()->exec( "
             CREATE TABLE `lock_rules` (
                 `lock_id` varchar(32) NOT NULL default '',
                 `name` varchar(255) NOT NULL default '',
@@ -17,24 +20,19 @@ class LockRulez extends DBMigration {
                 PRIMARY KEY  (`lock_id`)
             ) ENGINE=MyISAM");
 
-        $this->db->query( "
-            ALTER TABLE `seminare` ADD `lock_rule` VARCHAR( 32 ) NULL ; ");
+        DBManager::get()->exec("ALTER TABLE `seminare` ADD `lock_rule` VARCHAR( 32 ) NULL");
 
         $this->announce("done.");
-        
+
     }
-    
-    function down () {
-        $this->announce(" removing table...");
-        $this->db->query("
-      DROP TABLE `lock_rules` 
-        ");
 
-        $this->db->query("
-            ALTER TABLE `seminare` DROP `lock_rule`");
+    public function down ()
+    {
+        $this->announce(" removing table...");
+        DBManager::get()->exec("DROP TABLE `lock_rules`");
+        DBManager::get()->exec("ALTER TABLE `seminare` DROP `lock_rule`");
 
         $this->announce("done.");
-        
+
     }
 }
-?>

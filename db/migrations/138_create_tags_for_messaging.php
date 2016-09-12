@@ -1,5 +1,5 @@
 <?php
-class CreateTagsForMessaging extends DBMigration
+class CreateTagsForMessaging extends Migration
 {
     public function getDescription()
     {

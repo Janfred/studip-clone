@@ -9,37 +9,35 @@
  * the License, or (at your option) any later version.
  */
 
-class Step00138Studienbereichszuordnung extends DBMigration {
+class Step00138Studienbereichszuordnung extends Migration
+{
+    public function description() {
+        return 'Adds the new Value SEM_TREE_ALLOW_BRANCH_ASSIGN to table config.';
+    }
+
+    public function up()
+    {
+        $this->announce("add new value SEM_TREE_ALLOW_BRANCH_ASSIGN to table config");
+
+        $db = DBManager::get();
+        $db->exec("INSERT IGNORE INTO `config` ".
+                  "VALUES ('34f348c06bbd5d9fc7bb36a8d829e12e', '', ".
+                  "'SEM_TREE_ALLOW_BRANCH_ASSIGN', '1', 1, 'boolean', 'global', ".
+                  "'', 0, 1222947575, 1222947575, ".
+                  "'Diese Option beeinflusst die Möglichkeit, Veranstaltungen ".
+                  "entweder nur an die Blätter oder überall in der ".
+                  "Veranstaltungshierarchie einhängen zu dürfen.', '', '')");
+
+        $this->announce("done.");
+    }
 
 
-  function description() {
-    return 'Adds the new Value SEM_TREE_ALLOW_BRANCH_ASSIGN to table config.';
-  }
+    public function down()
+    {
+        $this->announce("remove value SEM_TREE_ALLOW_BRANCH_ASSIGN from table config");
 
+        DBManager::get()->exec("DELETE FROM `config` WHERE `field` = 'SEM_TREE_ALLOW_BRANCH_ASSIGN'");
 
-  function up() {
-    $this->announce("add new value SEM_TREE_ALLOW_BRANCH_ASSIGN to table config");
-
-    $db = DBManager::get();
-    $db->exec("INSERT IGNORE INTO `config` ".
-              "VALUES ('34f348c06bbd5d9fc7bb36a8d829e12e', '', ".
-              "'SEM_TREE_ALLOW_BRANCH_ASSIGN', '1', 1, 'boolean', 'global', ".
-              "'', 0, 1222947575, 1222947575, ".
-              "'Diese Option beeinflusst die Möglichkeit, Veranstaltungen ".
-              "entweder nur an die Blätter oder überall in der ".
-              "Veranstaltungshierarchie einhängen zu dürfen.', '', '')");
-
-    $this->announce("done.");
-  }
-
-
-  function down() {
-    $this->announce("remove value SEM_TREE_ALLOW_BRANCH_ASSIGN from table config");
-
-    $this->db->query("DELETE FROM `config` ".
-                     "WHERE config_id = '34f348c06bbd5d9fc7bb36a8d829e12e' ".
-                     "LIMIT 1");
-
-    $this->announce("done.");
-  }
+        $this->announce("done.");
+    }
 }

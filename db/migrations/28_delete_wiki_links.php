@@ -11,20 +11,19 @@
  * the License, or (at your option) any later version.
  */
 
-class DeleteWikiLinks extends DBMigration {
+class DeleteWikiLinks extends Migration
+{
+    public function description()
+    {
+        return 'clean up wiki_links table and remove orphaned backlinks';
+    }
 
-  function description() {
-    return 'clean up wiki_links table and remove orphaned backlinks';
-  }
-
-    function up () {
-        $this->db->query('
-            DELETE FROM wiki_links
-            USING wiki_links
-            LEFT JOIN wiki ON ( wiki_links.range_id = wiki.range_id
-            AND wiki_links.from_keyword = wiki.keyword )
-            WHERE wiki.keyword IS NULL
-        ');
+    public function up ()
+    {
+        DBManager::get()->exec("DELETE FROM wiki_links
+                                USING wiki_links
+                                LEFT JOIN wiki ON ( wiki_links.range_id = wiki.range_id
+                                                AND wiki_links.from_keyword = wiki.keyword )
+                                WHERE wiki.keyword IS NULL");
     }
 }
-?>

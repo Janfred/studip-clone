@@ -29,7 +29,7 @@
  */
 
 
-class files extends DBMigration
+class files extends Migration
 {
     public function description()
     {
