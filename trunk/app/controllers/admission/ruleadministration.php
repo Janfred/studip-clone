@@ -79,10 +79,7 @@ class Admission_RuleAdministrationController extends AuthenticatedController
      */
     public function check_activation_action($ruleType)
     {
-        if (Request::isXhr()) {
-            $this->response->add_header('X-Title', _('Verfügbarkeit der Anmelderegel'));
-            $this->response->add_header('X-No-Buttons', 1);
-        }
+        PageLayout::setTitle(_('Verfügbarkeit der Anmelderegel'));
         $this->ruleTypes = RuleAdministrationModel::getAdmissionRuleTypes();
         $this->type = $ruleType;
         $stmt = DBManager::get()->prepare("SELECT ai.`institute_id`
@@ -91,14 +88,16 @@ class Admission_RuleAdministrationController extends AuthenticatedController
             WHERE r.`ruletype`=?");
         $stmt->execute(array($ruleType));
         $this->activated = array();
-        $this->globally = true;
-        $this->atInst = false;
+        $globally = true;
+        $atInst = false;
         while ($current = $stmt->fetch(PDO::FETCH_ASSOC)) {
             if ($globally) $globally = false;
             if (!$atInst) $atInst = true;
             $institute = new Institute($current['institute_id']);
             $this->activated[$current['institute_id']] = $institute->name;
         }
+        $this->globally = $globally;
+        $this->atInst = $atInst;
     }
 
     /**
@@ -144,11 +143,12 @@ class Admission_RuleAdministrationController extends AuthenticatedController
                 }
             }
             if ($success) {
-                $this->successmsg = _('Ihre Einstellungen wurden gespeichert.');
+                PageLayout::postSuccess(_('Ihre Einstellungen wurden gespeichert.'));
             } else {
-                $this->errormsg = _('Ihre Einstellungen konnten nicht gespeichert werden.');
+                PageLayout::postError(_('Ihre Einstellungen konnten nicht gespeichert werden.'));
             }
         }
+        $this->redirect('admission/ruleadministration');
     }
 
     /**
@@ -165,13 +165,13 @@ class Admission_RuleAdministrationController extends AuthenticatedController
             }
             $ruleAdmin = new RuleAdministrationModel();
             $ruleAdmin->install($uploadFile);
-            $this->flash['success'] = _('Die Anmelderegel wurde erfolgreich installiert.');
+            PageLayout::postSuccess(_('Die Anmelderegel wurde erfolgreich installiert.'));
             if (isset($uploadFile)) {
                 unlink($uploadFile);
             }
             $this->redirect('admission/ruleadministration');
         } catch (Exception $e) {
-            $this->flash['error'] = $e->getMessage();
+            PageLayout::postError($e->getMessage());
             $this->redirect('admission/ruleadministration');
         }
     }
@@ -186,9 +186,9 @@ class Admission_RuleAdministrationController extends AuthenticatedController
             try {
                 $ruleAdmin = new RuleAdministrationModel();
                 $ruleAdmin->uninstall($ruleType);
-                $this->flash['success'] = _('Die Anmelderegel wurde erfolgreich gelöscht.');
+                PageLayout::postSuccess(_('Die Anmelderegel wurde erfolgreich gelöscht.'));
             } catch (AdmissionRuleInstallationException $e) {
-                $this->flash['error'] = $e->getMessage();
+                PageLayout::postError($e->getMessage());
             }
             $this->redirect($this->url_for('admission/ruleadministration'));
         }
