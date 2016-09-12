@@ -16,30 +16,31 @@ use Studip\Button, Studip\LinkButton;
         <label>
             <?= _('Globale Sichtbarkeit') ?>
             <?= tooltipIcon(_('Sie können wählen, ob Sie für andere NutzerInnen sichtbar sein '
-                .'und alle Kommunikationsfunktionen von Stud.IP nutzen können '
-                .'wollen, oder ob Sie unsichtbar sein möchten und dann nur '
-                .'eingeschränkte Kommunikationsfunktionen nutzen können.')) ?>
+                              . 'und alle Kommunikationsfunktionen von Stud.IP nutzen können '
+                              . 'wollen, oder ob Sie unsichtbar sein möchten und dann nur '
+                              . 'eingeschränkte Kommunikationsfunktionen nutzen können.')) ?>
             <div>
                 <? if ($global_visibility != 'always' && $global_visibility != 'never' &&
-                    ($user_perm != 'dozent' || !get_config('DOZENT_ALWAYS_VISIBLE'))):
+                       ($user_perm != 'dozent' || !get_config('DOZENT_ALWAYS_VISIBLE'))
+                ):
                     // only show selection if visibility can be changed
                     ?>
                     <select name="global_visibility" aria-describedby="global_vis_description" id="global_vis">
                         <?php
                         if (count($user_domains)) {
-                            printf ("<option %s value=\"global\">"._("sichtbar für alle Nutzer")."</option>", $global_visibility=='global' ? 'selected="selected"' : '');
+                            printf("<option %s value=\"global\">" . _("sichtbar für alle Nutzer") . "</option>", $global_visibility == 'global' ? 'selected="selected"' : '');
                             $visible_text = _('sichtbar für eigene Nutzerdomäne');
                         } else {
                             $visible_text = _('sichtbar');
                         }
-                        printf ("<option %s value=\"yes\">".$visible_text."</option>", ($global_visibility=='yes' || ($global_visibility=='unknown' && get_config('USER_VISIBILITY_UNKNOWN'))) ? 'selected' : '');
-                        printf ("<option %s value=\"no\">"._("unsichtbar")."</option>", ($global_visibility=='no' || ($global_visibility=='unknown' && !get_config('USER_VISIBILITY_UNKNOWN'))) ? 'selected' : '');
+                        printf("<option %s value=\"yes\">" . $visible_text . "</option>", ($global_visibility == 'yes' || ($global_visibility == 'unknown' && Config::get()->USER_VISIBILITY_UNKNOWN)) ? 'selected' : '');
+                        printf("<option %s value=\"no\">" . _("unsichtbar") . "</option>", ($global_visibility == 'no' || ($global_visibility == 'unknown' && !Config::get()->USER_VISIBILITY_UNKNOWN)) ? 'selected' : '');
                         ?>
                     </select>
                 <? else: ?>
                     <? if ($global_visibility == 'never'): ?>
                         <i><?= _('Ihre Kennung wurde von einem Administrator unsichtbar geschaltet.') ?></i>
-                    <? elseif ($user_perm == 'dozent' && get_config('DOZENT_ALWAYS_VISIBLE')): ?>
+                    <? elseif ($user_perm == 'dozent' && Config::get()->DOZENT_ALWAYS_VISIBLE): ?>
                         <i><?= _('Sie haben Dozentenrechte und sind daher immer global sichtbar.') ?></i>
                     <? else: ?>
                         <i><?= _('Sie sind immer global sichtbar.') ?></i>
@@ -50,38 +51,40 @@ use Studip\Button, Studip\LinkButton;
         </label>
 
         <? if (($global_visibility == 'yes' || $global_visibility == 'global' ||
-            ($global_visibility == 'unknown' && get_config('USER_VISIBILITY_UNKNOWN')) ||
-            ($user_perm == 'dozent' && get_config('DOZENT_ALWAYS_VISIBLE'))) &&
-        (!$NOT_HIDEABLE_FIELDS[$user_perm]['online'] ||
-            !$NOT_HIDEABLE_FIELDS[$user_perm]['search'] ||
-            !$NOT_HIDEABLE_FIELDS[$user_perm]['email'])) : ?>
+                ($global_visibility == 'unknown' && Config::get()->USER_VISIBILITY_UNKNOWN) ||
+                ($user_perm == 'dozent' && Config::get()->DOZENT_ALWAYS_VISIBLE)) &&
+               (!$NOT_HIDEABLE_FIELDS[$user_perm]['online'] ||
+                !$NOT_HIDEABLE_FIELDS[$user_perm]['search'] ||
+                !$NOT_HIDEABLE_FIELDS[$user_perm]['email'])
+        ) : ?>
             <div>
                 <?= _('Erweiterte Einstellungen') ?>
                 <?= tooltipIcon(
-                    _('Stellen Sie hier ein, in welchen Bereichen des Systems Sie erscheinen wollen.')
-                    .(!$NOT_HIDEABLE_FIELDS[$user_perm]['email']
-                        ?  _('Wenn Sie hier Ihre E-Mail-Adresse verstecken, wird stattdessen die E-Mail-Adresse Ihrer (Standard-)Einrichtung angezeigt.')
-                        : "")
+                        _('Stellen Sie hier ein, in welchen Bereichen des Systems Sie erscheinen wollen.')
+                        . (!$NOT_HIDEABLE_FIELDS[$user_perm]['email']
+                                ? _('Wenn Sie hier Ihre E-Mail-Adresse verstecken, wird stattdessen die E-Mail-Adresse Ihrer (Standard-)Einrichtung angezeigt.')
+                                : "")
                 ) ?>
 
                 <? if (!$NOT_HIDEABLE_FIELDS[$user_perm]['online']): ?>
                     <label>
                         <input type="checkbox" name="online" value="1"
-                            <? if ($online_visibility) echo 'checked'; ?>>
+                                <? if ($online_visibility) echo 'checked'; ?>>
                         <?= _('sichtbar in "Wer ist online"') ?>
                     </label>
                 <? endif; ?>
                 <? if (!$NOT_HIDEABLE_FIELDS[$user_perm]['search']): ?>
                     <label>
                         <input type="checkbox" name="search" value="1"
-                            <? if ($search_visibility) echo 'checked'; ?>>
+                                <? if ($search_visibility) echo 'checked'; ?>>
                         <?= _('auffindbar über die Personensuche') ?>
                     </label>
-                <? endif; ?>
+                <? endif;
+                  ?>
                 <? if (!$NOT_HIDEABLE_FIELDS[$user_perm]['email']): ?>
                     <label>
                         <input type="checkbox" name="email" value="1"
-                            <? if ($email_visibility) echo 'checked'; ?>>
+                                <? if ($email_visibility) echo 'checked'; ?>>
                         <?= _('eigene E-Mail Adresse sichtbar') ?>
                     </label>
                 <? endif; ?>
@@ -89,7 +92,7 @@ use Studip\Button, Studip\LinkButton;
         <? endif; ?>
     </fieldset>
     <footer>
-        <?= Button::create(_('Übernehmen'), 'store', array('title' =>  _('Änderungen speichern')))?>
+        <?= Button::create(_('Übernehmen'), 'store', ['title' => _('Änderungen speichern')]) ?>
     </footer>
 </form>
 
@@ -108,13 +111,13 @@ use Studip\Button, Studip\LinkButton;
         <table class="default">
             <colgroup>
                 <col width="34%">
-            <? for($i = 1; $i <= $colCount; $i++): ?>
-                <col width="<?= $colWidth ?>%">
-            <? endfor; ?>
+                <? for ($i = 1; $i <= $colCount; $i++): ?>
+                    <col width="<?= $colWidth ?>%">
+                <? endfor; ?>
             </colgroup>
             <thead>
                 <tr>
-                    <th ><?= _('Profil-Element'); ?></th>
+                    <th><?= _('Profil-Element'); ?></th>
                     <th style='text-align: center;' colspan="<?= $colCount++ ?>"><?= _('sichtbar für'); ?></th>
                 </tr>
             </thead>
@@ -140,8 +143,9 @@ use Studip\Button, Studip\LinkButton;
                             <? else: ?>
                                 <? foreach ($homepage_elements['states'] as $state): ?>
                                     <td>
-                                        <input type="radio" name="visibility_update[<?= $element['id'] ?>]" value="<?= $state ?>"
-                                               <? if ($element['state'] == $state) echo 'checked'; ?>>
+                                        <input type="radio" name="visibility_update[<?= $element['id'] ?>]"
+                                               value="<?= $state ?>"
+                                                <? if ($element['state'] == $state) echo 'checked'; ?>>
                                     </td>
                                 <? endforeach; ?>
                             <? endif; ?>
@@ -177,6 +181,6 @@ use Studip\Button, Studip\LinkButton;
     </fieldset>
 
     <footer>
-        <?= Button::create(_('Übernehmen'), 'store', array('title' =>  _('Änderungen speichern')))?>
+        <?= Button::create(_('Übernehmen'), 'store', ['title' => _('Änderungen speichern')]) ?>
     </footer>
 </form>
