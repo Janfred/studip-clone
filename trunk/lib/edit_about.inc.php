@@ -231,33 +231,6 @@ class about extends messaging
             return $result || ($item['inst_perms'] != 'user');
         }, false);
     }
-
-    /**
-     * This function returns the perms allowed for an institute for the current user
-     *
-     * @return array list of perms
-     * @deprecated
-     */
-    function allowedInstitutePerms() {
-
-        // find out the allowed perms
-        $possible_perms=array("autor","tutor","dozent");
-        $counter=0;
-        if ($this->auth_user["perms"] == "admin")
-            $allowed_status = array ('admin'); // einmal admin, immer admin...
-        else {
-            $allowed_status = array();
-            while ($counter <= 3 ) {
-                $allowed_status[] = $possible_perms[$counter];
-                if ($possible_perms[$counter] == $this->auth_user['perms'])
-                    break;
-                $counter++;
-            }
-        }
-
-        return $allowed_status;
-    }
-    
     
     /**
      * Changes the visibility of all homepage elements to the given value.

@@ -35,7 +35,7 @@
                         <td>
                         <? if ($GLOBALS['perm']->have_studip_perm('admin', $inst_id) && $institute['inst_perms'] != 'admin' && !$locked): ?>
                             <select name="status">
-                            <? foreach ($about->allowedInstitutePerms() as $cur_status): ?>
+                            <? foreach ($user->getInstitutePerms() as $cur_status): ?>
                                 <option <? if ($cur_status == $institute['inst_perms']) echo 'selected'; ?>><?= $cur_status ?></option>
                             <? endforeach; ?>
                             </select>
