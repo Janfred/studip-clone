@@ -8598,7 +8598,7 @@ label[for="responsive-toggle"]::before {
     left: 288px;
   }
   #barBottomright > ul > li {
-    flex: 1 auto;
+    flex: 1 0 auto;
   }
   #barBottomright > ul > li:first-child {
     flex: 1 1 100%;
