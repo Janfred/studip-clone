@@ -456,7 +456,7 @@ use Studip\Button, Studip\LinkButton;
                             </td>
                             <td class="actions">
                                 <? if ($GLOBALS['perm']->have_studip_perm("admin", $inst_membership->institut_id)) : ?>
-                                    <a data-dialog="size=50%"
+                                    <a data-dialog="size=auto"
                                        href="<?= $controller->url_for('admin/user/edit_institute/' . $user->user_id . '/' . $inst_membership->institut_id) ?>">
                                         <?= Icon::create('edit', 'clickable')->asImg(['class' => 'text-top', 'title' => _('Diese Einrichtung bearbeiten')]) ?>
                                     </a>

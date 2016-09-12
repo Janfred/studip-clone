@@ -51,7 +51,7 @@
             </label>
         <? endforeach ?>
     <? endif ?>
-    <footer>
+    <footer data-dialog-button>
         <?= Button::createAccept(_('Übernehmen'), 'uebernehmen', ['title' => _('Änderungen übernehmen')]) ?>
         <?= LinkButton::createCancel(_('Abbrechen'), $controller->url_for('admin/user/edit/' . $user['user_id']), ['class' => 'cancel']) ?>
     </footer>
