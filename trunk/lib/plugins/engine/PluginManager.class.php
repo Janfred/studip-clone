@@ -232,9 +232,9 @@ class PluginManager
         }
         $state = $this->plugins_activated_cache[$userId][$pluginId];
         if (!$state) {
-            $activated = get_config('HOMEPAGEPLUGIN_DEFAULT_ACTIVATION') ? true : false;
+            $activated = (bool) Config::get()->HOMEPAGEPLUGIN_DEFAULT_ACTIVATION;
         } else {
-            $activated = ($state === 'on');
+            $activated = $state === 'on';
         }
 
         return $activated;
@@ -304,7 +304,7 @@ class PluginManager
      */
     private function loadPlugin ($class, $path)
     {
-        $basepath = get_config('PLUGINS_PATH');
+        $basepath = Config::get()->PLUGINS_PATH;
         $pluginfile = $basepath.'/'.$path.'/'.$class.'.class.php';
 
         if (!file_exists($pluginfile)) {
@@ -324,8 +324,9 @@ class PluginManager
         return new ReflectionClass($class);
     }
 
-    private function isPluginCorePlugin($class, $path) {
-        return stripos($path, "core/") === 0;
+    private function isPluginCorePlugin($class, $path)
+    {
+        return stripos($path, 'core/') === 0;
     }
 
     /**

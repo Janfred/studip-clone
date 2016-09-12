@@ -5,11 +5,8 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  */
-require_once 'app/models/plugin_administration.php';
-
 class PluginsController extends StudipController
 {
-
     public function trigger_automaticupdate_action($class)
     {
         $output = array();
@@ -17,13 +14,12 @@ class PluginsController extends StudipController
             $plugin =  PluginManager::getInstance()->getPluginInfo($class);
             $low_cost_secret = md5($GLOBALS['STUDIP_INSTALLATION_ID'].$plugin['id']);
 
-            if ($plugin['automatic_update_url'] && ($low_cost_secret === \Request::option("s"))) {
+            if ($plugin['automatic_update_url'] && ($low_cost_secret === Request::option("s"))) {
                 if ($plugin['automatic_update_secret'] && !$this->verify_secret($plugin['automatic_update_secret'])) {
                     $output['error'] = "Incorrect payload.";
                 } else {
                     //everything fine, we can download and install the plugin
                     $update_url = $plugin['automatic_update_url'];
-                    require_once 'app/models/plugin_administration.php';
 
                     $plugin_admin = new PluginAdministration();
                     try {
@@ -44,7 +40,8 @@ class PluginsController extends StudipController
         $this->render_json($output);
     }
 
-    protected function verify_secret($secret) {
+    protected function verify_secret($secret)
+    {
         if (!isset($_SERVER['HTTP_X_HUB_SIGNATURE'])) {
             return false;
         }
