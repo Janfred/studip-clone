@@ -173,6 +173,136 @@ class User extends AuthUserMd5
     }
     
     /**
+     * Temporary migrate to User.class.php
+     *
+     * @param $attributes
+     * @return array
+     */
+    public static function search($attributes)
+    {
+        $params = [];
+        
+        $query = "SELECT au.* "
+                 ."FROM auth_user_md5 au "
+                 ."LEFT JOIN datafields_entries de ON de.range_id=au.user_id "
+                 ."LEFT JOIN user_online uo ON au.user_id = uo.user_id "
+                 ."LEFT JOIN user_info ui ON (au.user_id = ui.user_id) "
+                 ."LEFT JOIN user_userdomains uud ON (au.user_id = uud.user_id) "
+                 ."LEFT JOIN userdomains uds USING (userdomain_id) "
+                 ."LEFT JOIN user_studiengang us ON us.user_id = au.user_id "
+                 ."LEFT JOIN user_inst uis ON uis.user_id = au.user_id "
+                 ."WHERE 1 ";
+        if ($attributes['username']) {
+            $query .= "AND au.username like :username ";
+            $params[':username'] = '%'. $attributes['username'] . '%';
+        }
+        
+        if ($attributes['vorname']) {
+            $query .= "AND au.vorname like :vorname ";
+            $params[':username'] = '%'. $attributes['username'] . '%';
+        }
+        
+        if ($attributes['nachname']) {
+            $query .= "AND au.nachname like :nachname ";
+            $params[':nachname'] = '%'. $attributes['nachname']. '%';
+        }
+        
+        if ($attributes['email']) {
+            $query .= "AND au.Email like :email ";
+            $params[':email'] = '%'. $attributes['email'] . '%';
+        }
+    
+        //permissions
+        if (!is_null($attributes['perms']) && $attributes['perms'] != 'alle') {
+            $query .= "AND au.perms =  :perms ";
+            $params[':perms'] = $attributes['perms'];
+        }
+    
+        //locked user
+        if ((int)$attributes['locked'] == 1) {
+            $query .= "AND au.locked = 1 ";
+        }
+    
+        //inactivity
+        if (!is_null($attributes['inaktiv']) && $attributes['inaktiv'][0] != 'nie') {
+            $comp = in_array(trim($attributes['inaktiv'][0]), ['=', '>', '<=']) ? $attributes['inaktiv'][0] : '=';
+            $days = (int)$attributes['  inaktiv'][1];
+            $query .= "AND uo.last_lifesign {$comp} UNIX_TIMESTAMP(TIMESTAMPADD(DAY, -{$days}, NOW())) ";
+        } elseif (!is_null($attributes['inaktiv'])) {
+            $query .= "AND uo.last_lifesign IS NULL ";
+        }
+        
+        //datafields
+        if (!is_null($attributes['datafields']) && count($attributes['datafields']) > 0) {
+            foreach ($attributes['datafields'] as $id => $entry) {
+                $query .= "AND de.datafield_id = :df_id_". $id ." AND de.content = :df_content_". $id ." ";
+                $params[':df_id_' . $id] = $id;
+                $params[':df_content_' . $id] = $entry;
+            }
+        }
+    
+        if ($attributes['auth_plugins']) {
+            $query .= "AND IFNULL(auth_plugin, 'preliminary') = :auth_plugins ";
+            $params[':auth_plugins'] = $attributes['auth_plugins'];
+        }
+    
+        if ($attributes['userdomains']) {
+            if ($attributes['userdomains'] === 'null-domain') {
+                $query .= "AND userdomain_id IS NULL ";
+            } else {
+                $query .= "AND userdomain_id = :userdomains ";
+                $params[':userdomains'] = $attributes['userdomains'];
+            }
+        }
+    
+        if($attributes['degree']) {
+            $query .= "AND us.abschluss_id = :degree ";
+            $params[':degree'] = $attributes['degree'];
+        }
+    
+        if($attributes['studycourse']) {
+            $query .= "AND us.fach_id = :studycourse ";
+            $params[':studycourse'] = $attributes['studycourse'];
+        }
+    
+        if($attributes['institute']) {
+            $query .= "AND uis.Institut_id = :institute ";
+            $params[':institute'] = $attributes['institute'];
+        }
+    
+        $query .= " GROUP BY au.user_id ";
+        //sortieren
+        switch ($attributes['sort']) {
+            case "perms":
+                $query .= "ORDER BY au.perms {$attributes['order']}, au.username";
+                break;
+            case "Vorname":
+                $query .= "ORDER BY au.Vorname {$attributes['order']}, au.Nachname";
+                break;
+            case "Nachname":
+                $query .= "ORDER BY au.Nachname {$attributes['order']}, au.Vorname";
+                break;
+            case "Email":
+                $query .= "ORDER BY au.Email {$attributes['order']}, au.username";
+                break;
+            case "changed":
+                $query .= "ORDER BY uo.last_lifesign {$attributes['order']}, au.username";
+                break;
+            case "mkdate":
+                $query .= "ORDER BY ui.mkdate {$attributes['order']}, au.username";
+                break;
+            case "auth_plugin":
+                $query .= "ORDER BY auth_plugin {$attributes['order']}, au.username";
+                break;
+            default:
+                $query .= " ORDER BY au.username {$attributes['order']}";
+        }
+        
+        return DBManager::get()->fetchAll($query, $params, __CLASS__ . '::buildExisting');
+    }
+    
+    
+    /**
      *
      */
     protected static function configure($config = array())
@@ -457,4 +587,5 @@ class User extends AuthUserMd5
         }
         return $allowed_status;
     }
+    
 }
