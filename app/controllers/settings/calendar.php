@@ -27,7 +27,7 @@ class Settings_CalendarController extends Settings_SettingsController
      */
     public function before_filter(&$action, &$args)
     {
-        if (!get_config('CALENDAR_ENABLE')) {
+        if (!Config::get()->CALENDAR_ENABLE) {
             throw new AccessDeniedException(_('Der Kalender ist nicht aktiviert.'));
         }
 
