@@ -44,6 +44,9 @@ class Settings_UserdomainsController extends Settings_SettingsController
     {
         $this->allow_change = !StudipAuthAbstract::CheckField("userdomain_id", $this->user->auth_plugin)
                               && $GLOBALS['perm']->have_perm('admin');
+        $user_domains      = UserDomain::getUserDomainsForUser($this->user->user_id);
+        $all_domains       = UserDomain::getUserDomains();
+        $this->domains     = array_diff($all_domains, $user_domains);
     }
 
     /**

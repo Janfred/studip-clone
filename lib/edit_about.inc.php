@@ -259,22 +259,6 @@ class about extends messaging
     }
     
 
-
-    //Hilfsfunktion, erzeugt eine Auswahlbox mit noch auswählbaren Nutzerdomänen
-    function select_userdomain()
-    {
-        $user_domains = UserDomain::getUserDomainsForUser($this->auth_user['user_id']);
-        $all_domains  = UserDomain::getUserDomains();
-        $domains      = array_diff($all_domains, $user_domains);
-
-        echo '<select name="new_userdomain" id="new_userdomain">'."\n";
-        echo '<option selected value="none">' . _('-- Bitte Nutzerdomäne auswählen --') . '</option>'."\n";
-        foreach ($domains as $domain) {
-            printf('<option value="%s">%s</option>' . "\n", $domain->getID(), htmlReady(my_substr($domain->getName(), 0, 50)));
-        }
-        echo "</select>\n";
-    }
-
     /**
      * Hilfsfunktion, erzeugt eine Auswahlbox mit noch auswählbaren Instituten
      */
