@@ -1,4 +1,4 @@
-<form action="<?= $controller->url_for('document/folder/create/' . $parent_id) ?>" method="post" class="studip_form">
+<form action="<?= $controller->url_for('document/folder/create/' . $parent_id) ?>" method="post" class="default">
     <input type="hidden" name="studip-ticket" value="<?= get_ticket() ?>">
     <?= CSRFProtection::tokenTag() ?>
 
