@@ -314,7 +314,7 @@ class Admin_UserController extends AuthenticatedController
         }
 
         //get user
-        $this->user = UserModel::getUser($user_id, null, true);
+        $this->user = User::find($user_id);
 
         // Änderungen speichern
         if (Request::submitted('edit')) {
@@ -528,7 +528,7 @@ class Admin_UserController extends AuthenticatedController
         }
 
         //get user informations
-        $this->user   = UserModel::getUser($user_id, null, true);
+        
         $this->perm   = $perm;
         $this->prelim = $this->user['auth_plugin'] == 'preliminary';
         if ($this->prelim) {

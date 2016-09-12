@@ -235,9 +235,9 @@ use Studip\Button, Studip\LinkButton;
             <?= _('Zuletzt aktiv') ?>:
         </td>
         <td colspan="2">
-        <? if ($user["changed_timestamp"]): ?>
-            <abbr title="<?= strftime('%x %X', $user['changed_timestamp']) ?>">
-                <?= reltime($user['changed_timestamp'], true, 2) ?>
+        <? if ($user->online->last_lifesign): ?>
+            <abbr title="<?= strftime('%x %X', $user->online->last_lifesign) ?>">
+                <?= reltime($user->online->last_lifesign, true, 2) ?>
             </abbr>
         <? else: ?>
             <?= _('nie benutzt') ?>

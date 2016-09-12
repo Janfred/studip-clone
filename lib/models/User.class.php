@@ -65,7 +65,8 @@
  * @property SimpleORMapCollection datafields has_many DatafieldEntryModel
  * @property SimpleORMapCollection studycourses has_many UserStudyCourse
  * @property SimpleORMapCollection contacts has_many Contact
- * @property UserInfo info has_one UserInfo
+ * @property UserInfo   info   has_one UserInfo
+ * @property UserOnline online has_one UserOnline
  */
 class User extends AuthUserMd5
 {
@@ -223,6 +224,12 @@ class User extends AuthUserMd5
         );
         $config['has_one']['info'] = array(
             'class_name' => 'UserInfo',
+            'assoc_func' => 'find',
+            'on_delete' => 'delete',
+            'on_store' => 'store'
+        );
+        $config['has_one']['online'] = array(
+            'class_name' => 'UserOnline',
             'assoc_func' => 'find',
             'on_delete' => 'delete',
             'on_store' => 'store'
