@@ -257,36 +257,6 @@ class UserModel
         return $db->fetch(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Update the institute-informations of an user.
-     *
-     * @param md5 $user_id
-     * @param md5 $inst_id
-     * @param array() $values list of changed entries
-     */
-    public static function setInstitute($user_id, $inst_id, $values)
-    {
-        //change externdefault
-        if ($values['externdefault'] == 1) {
-            //first set all institutes externdefault to 0
-            $db = DBManager::get()->prepare("UPDATE user_inst SET externdefault = 0 WHERE user_id = ?");
-            $db->execute(array($user_id));
-        }
-
-        //logging
-        $old = self::getInstitute($user_id, $inst_id);
-        if ($old['inst_perms'] != $values['inst_perms']) {
-            StudipLog::log("INST_USER_STATUS", $inst_id, $user_id, $old['inst_perms'] .' -> '. $values['inst_perms']);
-            NotificationCenter::postNotification('UserInstitutionPermDidUpdate', $inst_id, $user_id);
-        }
-
-        //change values
-        foreach ($values as $index => $value) {
-            $sql = "UPDATE user_inst SET " . $index . "=? WHERE user_id=? AND Institut_id=?";
-            $db = DBManager::get()->prepare($sql);
-            $db->execute(array($value, $user_id, $inst_id));
-        }
-    }
 
     /**
      * Merge an user ($old_id) to another user ($new_id).  This is a part of the

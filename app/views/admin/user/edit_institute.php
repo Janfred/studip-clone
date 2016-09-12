@@ -3,7 +3,7 @@
     <?= _('Bearbeiten der Einrichtungsdaten') ?>
 </h2>
 
-<form action="<?= $controller->url_for('admin/user/edit_institute/' . $user->user_id . '/' . $institute->id) ?>"
+<form action="<?= $controller->url_for('admin/user/store_user_institute/' . $institute->user_id . '/' . $institute->institut_id) ?>"
       method="post" class="default">
     <?= CSRFProtection::tokenTag() ?>
     <label>
