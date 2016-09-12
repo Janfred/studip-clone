@@ -39,8 +39,6 @@
 
 use Studip\Button, Studip\LinkButton;
 
-$cssSw = new cssClassSwitcher;
-
 /**
 * ShowToolsRequests, room-management tool for room-admin
 *
@@ -50,7 +48,6 @@ $cssSw = new cssClassSwitcher;
 **/
 class ShowToolsRequests
 {
-    var $cssSw;         //the cssClassSwitcher
     var $requests;          //the requests i'am responsibel for
     var $semester_id;
     var $show_requests_no_time = false;
@@ -187,7 +184,6 @@ class ShowToolsRequests
         $template->display_faculty  = $this->faculty;//MOD_BREMEN
         $template->display_tagged  = $this->tagged;//MOD_BREMEN
         $template->rooms             = $this->getMyRequestedRooms();
-        $template->cssSw = $GLOBALS['cssSw'];
         echo $template->render();
     }
 
@@ -299,7 +295,7 @@ class ShowToolsRequests
      */
     function showRequest($request_id)
     {
-        global $cssSw, $perm;
+        global $perm;
 
         $reqObj = new RoomRequest($request_id);
         $semObj = new Seminar($reqObj->getSeminarId());
@@ -311,12 +307,16 @@ class ShowToolsRequests
         <form method="POST" action="<?echo URLHelper::getLink('?working_on_request=' . $request_id);?>">
         <?= CSRFProtection::tokenTag() ?>
         <input type="hidden" name="view" value="edit_request">
-        <table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
+        <table class="default">
+            <colgroup>
+                <col width="4%">
+                <col width="35%">
+                <col width="61%">
+            </colgroup>
             <tr>
-                <td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
-                </td>
-                <td class="<? echo $cssSw->getClass() ?>" colspan="2" width="96%" valign="top">
-                    <a href="<?=URLHelper::getLink($sem_link)?>">
+                <td>&nbsp;</td>
+                <td colspan="2" valign="top">
+                    <a href="<?= URLHelper::getLink($sem_link) ?>">
                         <b><?= $semObj->seminar_number ? htmlReady($semObj->seminar_number).':' : '' ?><?=htmlReady($semObj->getName())?></b>
                     </a>
                     <font size="-1">
@@ -346,10 +346,9 @@ class ShowToolsRequests
                 </td>
             </tr>
             <tr>
-                <td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
-                </td>
-                <td class="<? echo $cssSw->getClass() ?>" width="35%" valign="top">
-                    <font size="-1"><b><?=_("angeforderte Belegungszeiten")?>:</b><br><br>
+                <td>&nbsp;</td>
+                <td valign="top">
+                    <b><?=_("angeforderte Belegungszeiten")?>:</b><br><br>
                     <?
                     $dates = $semObj->getGroupedDates($reqObj->getTerminId(),$reqObj->getMetadateId());
                     if ($dates['first_event']) {
@@ -370,7 +369,6 @@ class ShowToolsRequests
                             print _("nicht angegeben");
                      }
                     ?>
-                    </font>
                 </td>
                 <td style="border-left:1px dotted black; background-color: #f3f5f8" width="51%" rowspan="4" valign="top">
                     <table cellpadding="2" cellspacing="0" border="0" width="90%">
@@ -706,10 +704,9 @@ class ShowToolsRequests
                 </td>
             </tr>
             <tr>
-                <td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
-                </td>
-                <td class="<? echo $cssSw->getClass() ?>" width="35%" valign="top">
-                    <font size="-1"><b><?=_("gewünschte Raumeigenschaften")?>:</b><br><br>
+                <td>&nbsp;</td>
+                <td valign="top">
+                    <b><?=_("gewünschte Raumeigenschaften")?>:</b><br><br>
                     <?
                     $properties = $reqObj->getProperties();
                     if (sizeof($properties)) {
@@ -721,9 +718,11 @@ class ShowToolsRequests
                             ?>
                             <tr>
                                 <td width="70%">
-                                    <li><font size="-1"><?=htmlReady($val["name"])?></font></li>
+                                    <ul>
+                                        <li><?= htmlReady($val["name"]) ?></li>
+                                    </ul>
                                 </td>
-                                <td width="30%"><font size="-1">
+                                <td width="30%">
                                 <?
                                 switch ($val["type"]) {
                                     case "bool":
@@ -741,7 +740,7 @@ class ShowToolsRequests
                                         }
                                     break;
                                 }
-                                ?></font>
+                                ?>
                                 </td>
                             </tr>
                             <?
@@ -752,32 +751,24 @@ class ShowToolsRequests
                     } else
                         print _("Es wurden keine Raumeigenschaften gewünscht.");
                     ?>
-                    </font>
                 </td>
             </tr>
             <tr>
-                <td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
-                </td>
-                <td class="<? echo $cssSw->getClass() ?>" width="35%" valign="top">
-                    <font size="-1"><b><?=_("Kommentar des Anfragenden")?>:</b><br><br>
+                <td>&nbsp;</td>
+                <td valign="top">
+                    <b><?=_("Kommentar des Anfragenden")?>:</b><br><br>
                     <?
                     if ($comment = $reqObj->getComment())
                         print $comment;
                     else
                         print _("Es wurde kein Kommentar eingegeben");
                     ?>
-                    </font>
                 </td>
-
             </tr>
             <tr>
-                <td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
-                </td>
-                <td class="<? echo $cssSw->getClass() ?>" width="35%" valign="top">
-
-                    <?
-                    $user_status_mkdate = $reqObj->getUserStatus($GLOBALS['user']->id);
-                    ?>
+                <td>&nbsp;</td>
+                <td valign="top">
+                    <? $user_status_mkdate = $reqObj->getUserStatus($GLOBALS['user']->id); ?>
                     <b><?=("Benachrichtigungen")?>:</b><br>
                     <input type="radio" onChange="jQuery(this).closest('form').submit()" name="reply_recipients" id="reply_recipients_requester" value="requester" checked>
                     <label for="reply_recipients_requester">
@@ -804,9 +795,8 @@ class ShowToolsRequests
             </tr>
 
             <tr>
-                <td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
-                </td>
-                <td class="<? echo $cssSw->getClass() ?>" colspan="2" width="96%" valign="top" align="center">
+                <td>&nbsp;</td>
+                <td colspan="2" valign="top" align="center">
                     <div class="button-group">
                 <?
                 // can we dec?

@@ -51,10 +51,8 @@ class ResourcesBrowse {
     var $open_object;       //where we stay
     var $mode;          //the search mode
     var $searchArray;       //the array of search expressions (free search & properties)
-    var $cssSw;         //the cssClassSwitcher
 
     function __construct() {
-        $this->cssSw = new cssClassSwitcher();
         $this->list = new ShowList;
 
         $this->list->setRecurseLevels(0);
@@ -91,7 +89,7 @@ class ResourcesBrowse {
     function searchForm() {
         ?>
         <tr>
-            <td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> align="center" <? echo ($this->mode == "browse") ? "colspan=\"2\"" : "" ?>>
+            <td align="center" <? echo ($this->mode == "browse") ? "colspan=\"2\"" : "" ?>>
                 <?=_("freie Suche")?>:&nbsp;
                     <select name="resources_search_range" style="vertical-align:middle">
                     <option value="0" selected><?=htmlReady($GLOBALS['UNI_NAME_CLEAN'])?></option>
@@ -175,13 +173,13 @@ class ResourcesBrowse {
         $colspan = $this->mode == 'browse' ? ' colspan="2" ' : '';
         ?>
         <tr>
-            <td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> >
+            <td>
                 <?=_("gefundene Ressourcen sollen zu folgender Zeit <u>nicht</u> belegt sein:")?>
             <br>
             </td>
         </tr>
         <tr>
-            <td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> >
+            <td>
             &nbsp;<br>
                 <table cellspacing="0" cellpadding="0" border="0" width="100%">
                     <tr>
@@ -209,7 +207,7 @@ class ResourcesBrowse {
                 </td>
                 </tr>
                 <tr>
-                <td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> >
+                <td>
                     <table cellspacing="0" cellpadding="0" border="0" width="100%">
                         <tr>
                             <td width="120">
@@ -294,13 +292,13 @@ class ResourcesBrowse {
         }
         ?>
         <tr>
-            <td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> >
+            <td>
                 <?=_("folgende Eigenschaften soll die Ressource besitzen (leer bedeutet egal):")?>
             <br>
             </td>
         </tr>
         <tr>
-            <td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> >
+            <td>
                 <table width="90%" cellpadding=5 cellspacing=0 border=0 align="center">
                     <?
                     foreach ($categories as $id => $category) {
@@ -419,28 +417,21 @@ class ResourcesBrowse {
         }
         ?>
         <tr>
-            <td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?>>
-                <?
-                echo $this->getHistory($this->open_object);
-                ?>
-            </td>
-            <td <? echo $this->cssSw->getFullClass() ?>width="15%" align="right" nowrap valign="top">
-                <?
-                if ($way_back>=0) : ?>
+            <td><?= $this->getHistory($this->open_object) ?></td>
+            <td width="15%" align="right" nowrap valign="top">
+            <? if ($way_back >= 0): ?>
                 <a href="<?= URLHelper::getLink('?view=search&quick_view_mode='. Request::option('view_mode')
                             . '&' . (!$way_back ? "reset=TRUE" : "open_level=$way_back")) ?>">
                     <?= Icon::create('arr_2left', 'clickable', ['title' => _('eine Ebene zurück')])->asImg(16, ["class" => 'text-top']) ?>
-                    </a>
-                <? endif ?>
+                </a>
+            <? endif; ?>
             </td>
         </tr>
         <tr>
-            <td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> align="left" colspan="2">
-                <?
-                if (count($elements) == 0 || !$sublevels) { ?>
-                    <?= MessageBox::info(_("Auf dieser Ebene existieren keine weiteren Unterebenen")) ?>
-                <? } else {
-                ?>
+            <td align="left" colspan="2">
+            <? if (count($elements) === 0 || !$sublevels): ?>
+                <?= MessageBox::info(_("Auf dieser Ebene existieren keine weiteren Unterebenen")) ?>
+            <?  else: ?>
                 <table width="90%" cellpadding=5 cellspacing=0 border=0 align="center">
                     <?
                     if (count($elements) % 2 == 1)
@@ -459,12 +450,11 @@ class ResourcesBrowse {
                         <? $i++;
                     }
                     print "</table>";
-                }
-                ?>
+            <? endif; ?>
             </td>
         </tr>
         <tr>
-            <td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> align="left" colspan="2">
+            <td align="left" colspan="2">
                 <?=_("Ressourcen auf dieser Ebene:")?>
             </td>
         </tr>

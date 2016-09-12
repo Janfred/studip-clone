@@ -41,7 +41,6 @@ use Studip\Button, Studip\LinkButton;
 
 class ExternEdit {
 
-    var $css;
     var $config;
     var $form_values = array();
     var $faulty_values = array();
@@ -55,7 +54,6 @@ class ExternEdit {
     function __construct(&$config, $form_values = "", $faulty_values = "",
              $edit_element = "") {
 
-        $this->css = new CssClassSwitcher("", "table_header_bold");
         $this->config =& $config;
         $this->form_values = $form_values;
         $this->edit_element = $edit_element;
@@ -170,11 +168,7 @@ class ExternEdit {
     }
 
     function editSubmit ($module_name, $config_id, $element_name = "", $hidden = NULL) {
-        $this->css->resetClass();
-        $this->css->switchClass();
-
-        $out = "<tr><td align=\"center\" colspan=\"2\" nowrap=\"nowrap\"";
-        $out .= $this->css->getFullClass() . ">&nbsp;";
+        $out = "<tr><td align=\"center\" colspan=\"2\" nowrap=\"nowrap\">&nbsp;";
         $out .= Button::createAccept(_("Übernehmen"), "submit"); 
         $out .= "&nbsp; &nbsp; &nbsp;";
         $out .= LinkButton::createCancel(_("Abbrechen"), URLHelper::getURL('?list=TRUE'));
@@ -197,12 +191,8 @@ class ExternEdit {
         $headline = "&nbsp; $headline";
 
         $out = "<table class=\"blank\" width=\"100%\" cellpadding=\"0\" ";
-        $out .= "cellspacing=\"0\" border=\"0\">\n<tr><td class=\"" . $this->css->getHeaderClass();
-        $out .= "\" width=\"100%\"><font size=\"2\"><b>$headline</b></font>";
+        $out .= "cellspacing=\"0\" border=\"0\">\n<tr><td class=\"table_header\" width=\"100%\"><font size=\"2\"><b>$headline</b></font>";
         $out .= "</td></tr>\n</table>\n";
-
-        $this->css->resetClass();
-        $this->css->switchClass();
 
         return $out;
     }
@@ -247,18 +237,10 @@ class ExternEdit {
         $out .= $body . "</table>\n</td></tr>\n</table>\n";
         $out .= "<!-- END ContentTable -->\n";
 
-        $this->css->resetClass();
-
         return $out;
     }
 
     function editContent ($content, $submit, $class = "") {
-        if (!$class) {
-            $this->css->resetClass();
-            $this->css->switchClass();
-            $class = $this->css->getClass();
-        }
-
         $out = "\n<!-- BEGIN Content -->\n";
         $out .= "<tr><td class=\"$class\" width=\"100%\" align=\"left\">\n";
         $out .= '<form name="edit_form" action="' . URLHelper::getLink('?com=store#anker') .  '" method="post">';
@@ -272,12 +254,6 @@ class ExternEdit {
     }
 
     function editBlankContent ($class = "") {
-        if (!$class) {
-            $this->css->resetClass();
-            $this->css->switchClass();
-            $class = $this->css->getClass();
-        }
-
         $out = "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
         $out .= "<tr><td class=\"$class\">&nbsp;</td></tr>\n";
         $out .= "</table>\n";
@@ -286,12 +262,6 @@ class ExternEdit {
     }
 
     function editBlankContentTable ($class = "") {
-        if (!$class) {
-            $this->css->resetClass();
-            $this->css->switchClass();
-            $class = $this->css->getClass();
-        }
-
         $out = "<tr><td>\n<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
         $out .= "<tr><td class=\"$class\">&nbsp;</td></tr>\n";
         $out .= "</table>\n</td></tr>\n";
@@ -300,12 +270,6 @@ class ExternEdit {
     }
 
     function editBlank ($class = "") {
-        if (!$class) {
-            $this->css->resetClass();
-            $this->css->switchClass();
-            $class = $this->css->getClass();
-        }
-
         $out = "<tr><td class=\"$class\" colspan=\"2\">&nbsp;</td></tr>\n";
         $out .= "</td></tr>\n";
 
@@ -313,12 +277,6 @@ class ExternEdit {
     }
 
     function editTextblock ($text, $class = "") {
-        if (!$class) {
-            $this->css->resetClass();
-            $this->css->switchClass();
-            $class = $this->css->getClass();
-        }
-
         $out = "<tr><td>\n<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">\n";
         $out .= "<tr><td class=\"$class\">$text</td></tr>\n";
         $out .= "</table>\n</td></tr>\n";
@@ -327,5 +285,3 @@ class ExternEdit {
     }
 
 }
-
-?>

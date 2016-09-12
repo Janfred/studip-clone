@@ -57,64 +57,64 @@ class ShowGroupSchedules extends ShowSemSchedules {
     }
 
     function navigator ($print_view = false) {
-        global $cssSw, $view_mode;
+        global $view_mode;
         if (!$print_view){
         ?>
-        <table border="0" celpadding="2" cellspacing="0" width="99%" align="center">
         <form method="POST" name="schedule_form" action="<?= URLHelper::getLink('?navigate=TRUE&quick_view=view_group_schedule&quick_view_mode='.$view_mode) ?>">
             <?= CSRFProtection::tokenTag() ?>
-            <tr>
-                <td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
-                </td>
-                <td class="<? echo $cssSw->getClass() ?>" width="96%" colspan="3"><font size=-1><b><?=_("Semester:")?></b></font>
-                </td>
-            </tr>
-            <tr>
-                <td class="<? echo $cssSw->getClass() ?>" width="4%" rowspan="2">&nbsp;
-                </td>
-                <td class="<? echo $cssSw->getClass() ?>" width="40%" valign="top">
-                    <?= SemesterData::GetSemesterSelector(array('name' => 'sem_schedule_choose', 'onChange' => 'document.schedule_form.submit()'), $this->semester['semester_id'],'semester_id',false)?>
-                    <?= Button::create(_('Ausw‰hlen'), 'jump') ?><br>
-                    <label>
-                    <input type="radio" onChange="document.schedule_form.submit()" style="vertical-align:bottom" <?=($this->timespan == 'course_time' ? 'checked' : '')?> name="sem_time_choose" value="course_time">
-                    <?=_("Vorlesungszeit")?>
-                    </label>
-                    <label>
-                    <input type="radio" onChange="document.schedule_form.submit()" style="vertical-align:bottom" <?=($this->timespan == 'sem_time' ? 'checked' : '')?> name="sem_time_choose" value="sem_time">
-                    <?=_("vorlesungsfreie Zeit")?>
-                    </label>
-                </td>
-                <td class="<? echo $cssSw->getClass() ?>" width="60%" valign="top">
-                    <?=_("Eine Raumgruppe ausw‰hlen")?>:<br>
-                    <select name="group_schedule_choose_group" onChange="document.schedule_form.submit()">
-                    <?
-                    $room_group = RoomGroups::GetInstance();
-                    foreach($room_group->getAvailableGroups() as $gid){
-                        echo '<option value="'.$gid.'" '
-                            . ($this->group_id == $gid ? 'selected' : '') . '>'
-                            .htmlReady(my_substr($room_group->getGroupName($gid),0,85))
-                            .' ('.$room_group->getGroupCount($gid).')</option>';
-                    }
-                    ?>
-                    </select>
-                    <?= Button::create(_('Ausw‰hlen')) ?>
-                </font>
-                </td>
-                <td class="<? echo $cssSw->getClass() ?>" valign="middle">
-                    
-                </td>                    
-            </tr>
-            <tr>
-                <td class="<? echo $cssSw->getClass() ?>" colspan="4"><font size="-1">&nbsp;</font>
-                </td>
-            </tr>
+        <table class="default">
+            <colgroup>
+                <col width="4%">
+                <col width="38%">
+                <col width="58%">
+                <col width="4%">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th colspan="3"><?= _('Semester:') ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td rowspan="2">&nbsp;</td>
+                    <td valign="top">
+                        <?= SemesterData::GetSemesterSelector(array('name' => 'sem_schedule_choose', 'onChange' => 'document.schedule_form.submit()'), $this->semester['semester_id'],'semester_id',false)?>
+                        <?= Button::create(_('Ausw‰hlen'), 'jump') ?><br>
+                        <label>
+                        <input type="radio" onChange="document.schedule_form.submit()" style="vertical-align:bottom" <?=($this->timespan == 'course_time' ? 'checked' : '')?> name="sem_time_choose" value="course_time">
+                        <?=_("Vorlesungszeit")?>
+                        </label>
+                        <label>
+                        <input type="radio" onChange="document.schedule_form.submit()" style="vertical-align:bottom" <?=($this->timespan == 'sem_time' ? 'checked' : '')?> name="sem_time_choose" value="sem_time">
+                        <?=_("vorlesungsfreie Zeit")?>
+                        </label>
+                    </td>
+                    <td valign="top">
+                        <?=_("Eine Raumgruppe ausw‰hlen")?>:<br>
+                        <select name="group_schedule_choose_group" onChange="document.schedule_form.submit()">
+                        <?
+                        $room_group = RoomGroups::GetInstance();
+                        foreach($room_group->getAvailableGroups() as $gid){
+                            echo '<option value="'.$gid.'" '
+                                . ($this->group_id == $gid ? 'selected' : '') . '>'
+                                .htmlReady(my_substr($room_group->getGroupName($gid),0,85))
+                                .' ('.$room_group->getGroupCount($gid).')</option>';
+                        }
+                        ?>
+                        </select>
+                        <?= Button::create(_('Ausw‰hlen')) ?>
+                    </td>
+                    <td>&nbsp;</td>
+                </tr>
+            </tfoot>
         </table>
     <?
         }
     }
 
     function showScheduleGraphical($print_view = false) {
-        global $RELATIVE_PATH_RESOURCES, $cssSw, $view_mode, $ActualObjectPerms;
+        global $RELATIVE_PATH_RESOURCES, $view_mode, $ActualObjectPerms;
 
         $categories["na"] = 4;
         $categories["sd"] = 4;
@@ -216,105 +216,105 @@ class ShowGroupSchedules extends ShowSemSchedules {
         }
         if(!$print_view){
         ?>
-        <table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
-            <tr>
-                <td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;</td>
-                <td class="<? echo $cssSw->getClass() ?>"  width="10%" align="left">&nbsp;
-                    <a href="<?= URLHelper::getLink('?quick_view='.$this->used_view.'&quick_view_mode='.$view_mode.'&previous_day=1') ?>">
-                    <?= Icon::create('arr_2left', 'clickable')->asImg(['class' => "middle", 'alt' => "Vorherigen Tag anzeigen", 'title' => "Vorherigen Tag anzeigen"]) ?>
-                    </a>
-                </td>
-                <td class="<? echo $cssSw->getClass() ?>" width="76%" align="center">
-                <b>
-                <? printf(_("Wochentag: %s"), htmlReady(strftime('%A', $schedule->base_date)));
-
-                echo '<br>' . htmlReady($this->semester['name']) . ' - ' . date ("d.m.Y", $start_time), " - ", date ("d.m.Y", $end_time);
-                ?>
-                </b>
-                <br>
-                </td>
-                <td class="<? echo $cssSw->getClass() ?>" width="10%" align="center">&nbsp;
-                    <a href="<?= URLHelper::getLink('?quick_view='.$this->used_view.'&quick_view_mode='.$view_mode.'&next_day=1') ?>">
-                    <?= Icon::create('arr_2right', 'clickable')->asImg(['class' => "middle", 'alt' => _("N‰chsten Tag anzeigen"), 'title' => _("N‰chsten Tag anzeigen")]) ?>
-                </td>
-            </tr>
-            <tr>
-                <td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%" align="center" valign="bottom">&nbsp;
-                <? if ((!$_SESSION['resources_data']["schedule_time_range"]) || ($_SESSION['resources_data']["schedule_time_range"] == 1)): ?>
-                    <a href="<?= URLHelper::getLink('', array('quick_view' => $this->used_view,
-                                                              'quick_view_mode' => $view_mode,
-                                                              'time_range' => $_SESSION['resources_data']['schedule_time_range'] ? 'FALSE' : -1)) ?>">
-                           <?= Icon::create('arr_2up', 'clickable', ['title' => _('Fr¸here Belegungen anzeigen')])->asImg(['class' => 'middle']) ?>
-                    </a>
-                <? endif; ?>
-                </td>
-                <td class="<? echo $cssSw->getClass() ?>" width="76%" colspan="2">
-                    <?
-
-                    if ($_SESSION['resources_data']["show_repeat_mode"] == 'repeated' || $_SESSION['resources_data']["show_repeat_mode"] == 'all'){
-                        echo "&nbsp;<font size=-1>"._("Anzahl der regelm‰ﬂigen Belegungen in diesem Zeitraum:")." ".$num_rep_events."</font><br>";
-                    }
-                    if ($_SESSION['resources_data']["show_repeat_mode"] == 'single' || $_SESSION['resources_data']["show_repeat_mode"] == 'all'){
-                        echo "&nbsp;<font size=-1>"._("Anzahl der Einzelbelegungen in diesem Zeitraum:")." ".$num_single_events."</font><br>";
-                    }
-                    ?>
-                    &nbsp;
-                </td>
-                <td class="<? echo $cssSw->getClass() ?>" width="20%" nowrap>
-                    <?
-                    print "<select style=\"font-size:10px;\" name=\"show_repeat_mode\">";
-                    printf ("<option style=\"font-size:10px;\" %s value=\"all\">"._("alle Belegungen")."</option>", ($_SESSION['resources_data']["show_repeat_mode"] == "all") ? "selected" : "");
-                    printf ("<option %s style=\"font-size:10px;\" value=\"single\">"._("nur Einzeltermine")."</option>", ($_SESSION['resources_data']["show_repeat_mode"] == "single") ? "selected" : "");
-                    printf ("<option %s style=\"font-size:10px;\" value=\"repeated\">"._("nur Wiederholungstermine")."</option>", ($_SESSION['resources_data']["show_repeat_mode"] == "repeated") ? "selected" : "");
-                    print "</select>";
-                    print "&nbsp;".Icon::create('accept', 'accept', ['title' => _('Ansicht umschalten')])->asInput(["type" => "image", "class" => "middle", "name" => "send_schedule_repeat_mode"]);
-                    ?>
-                </td>
-            </tr>
-            <tr>
-                <td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp;
-                </td>
-                <td class="<? echo $cssSw->getClass() ?>" width="96%" colspan="3">
-                    <?
-                    $schedule->showSchedule("html");
-                    ?>
-                </td>
-            </tr>
-            <tr>
-                <td class="<? echo $cssSw->getClass() ?>" width="4%" align="center" valign="bottom">&nbsp;
-                <? if ((!$_SESSION['resources_data']['schedule_time_range']) || ($_SESSION['resources_data']['schedule_time_range'] == -1)): ?>
-                    <a href="<?= URLHelper::getLink('', array('quick_view' => $this->used_view,
-                                                              'quick_view_mode' => $view_mode,
-                                                              'time_range' => $_SESSION['resources_data']['schedule_time_range'] ? 'FALSE' : 1)) ?>">
-                           <?= Icon::create('arr_2down', 'clickable', ['title' => _('Fr¸here Belegungen anzeigen')])->asImg(['class' => 'middle']) ?>
-                    </a>
-                <? endif; ?>
-                </td>
-                <td class="<? echo $cssSw->getClass() ?>" width="20%" nowrap colspan="3">
-                &nbsp;
-                </td>
-            </tr>
-            <?php
-            if (($_SESSION['resources_data']["show_repeat_mode"] == 'single' || $_SESSION['resources_data']["show_repeat_mode"] == 'all') && $num_single_events ){
-                ?>
+        <table class="default">
+            <colgroup>
+                <col width="4%">
+                <col width="10%">
+                <col width="76%">
+                <col width="10%">
+            </colgroup>
+            <thead>
                 <tr>
-                <td class="<? echo $cssSw->getClass() ?>" width="4%" align="center" valign="bottom">&nbsp;</td>
-                <td class="<? echo $cssSw->getClass() ?>" colspan="3">
-                <strong><?=_("Einzelbelegungen:")?></strong>
-                <br>
-                <?php
-                $num = 1;
-                foreach($single_assigns as $event) {
-                    echo LinkButton::create(_('Eigenschaften'), URLHelper::getURL('?show_object='
-                        . $event->getResourceId() . '&quick_view=' . $view . '&quick_view_mode=' 
-                        . $quick_view_mode . '&edit_assign_object=' . $event->getAssignId()));
-                    printf ("&nbsp; <font size=-1>"._("%s ist von <b>%s</b> bis <b>%s</b>, belegt von <b>%s</b>")."</font><br>",'EB'.$num++.': ' . htmlReady(getResourceObjectName($event->getResourceId())), strftime("%A, %d.%m.%Y %H:%M", $event->getBegin()), strftime("%A, %d.%m.%Y %H:%M", $event->getEnd()), $event->getName());
-                }
-                ?>
+                    <th>&nbsp;</th>
+                    <th>
+                        <a href="<?= URLHelper::getLink('?quick_view='.$this->used_view.'&quick_view_mode='.$view_mode.'&previous_day=1') ?>">
+                            <?= Icon::create('arr_2left', 'clickable')->asImg(['class' => "middle", 'alt' => "Vorherigen Tag anzeigen", 'title' => "Vorherigen Tag anzeigen"]) ?>
+                        </a>
+                    </th>
+                    <th align="center">
+                        <? printf(_("Wochentag: %s"), htmlReady(strftime('%A', $schedule->base_date))) ?>
+                        <br>
+                        <?= htmlReady($this->semester['name']) ?>
+                        -  <?= date ('d.m.Y', $start_time) ?>
+                        -  <?= date ('d.m.Y', $end_time) ?>
+                        ?>
+                    </th>
+                    <th align="center">
+                        <a href="<?= URLHelper::getLink('?quick_view='.$this->used_view.'&quick_view_mode='.$view_mode.'&next_day=1') ?>">
+                            <?= Icon::create('arr_2right', 'clickable')->asImg(['class' => "middle", 'alt' => _("N‰chsten Tag anzeigen"), 'title' => _("N‰chsten Tag anzeigen")]) ?>
+                        </a>
+                    </th>
                 </tr>
-                <?php
-            }
-            ?>
+            </thead>
+            <tbody>
+                <tr>
+                    <td align="center" valign="bottom">
+                    <? if ((!$_SESSION['resources_data']["schedule_time_range"]) || ($_SESSION['resources_data']["schedule_time_range"] == 1)): ?>
+                        <a href="<?= URLHelper::getLink('', array('quick_view' => $this->used_view,
+                                                                  'quick_view_mode' => $view_mode,
+                                                                  'time_range' => $_SESSION['resources_data']['schedule_time_range'] ? 'FALSE' : -1)) ?>">
+                               <?= Icon::create('arr_2up', 'clickable', ['title' => _('Fr¸here Belegungen anzeigen')])->asImg(['class' => 'middle']) ?>
+                        </a>
+                    <? endif; ?>
+                    </td>
+                    <td colspan="2">
+                        <?
+
+                        if ($_SESSION['resources_data']["show_repeat_mode"] == 'repeated' || $_SESSION['resources_data']["show_repeat_mode"] == 'all'){
+                            echo "&nbsp;<font size=-1>"._("Anzahl der regelm‰ﬂigen Belegungen in diesem Zeitraum:")." ".$num_rep_events."</font><br>";
+                        }
+                        if ($_SESSION['resources_data']["show_repeat_mode"] == 'single' || $_SESSION['resources_data']["show_repeat_mode"] == 'all'){
+                            echo "&nbsp;<font size=-1>"._("Anzahl der Einzelbelegungen in diesem Zeitraum:")." ".$num_single_events."</font><br>";
+                        }
+                        ?>
+                    </td>
+                    <td nowrap>
+                        <?
+                        print "<select style=\"font-size:10px;\" name=\"show_repeat_mode\">";
+                        printf ("<option style=\"font-size:10px;\" %s value=\"all\">"._("alle Belegungen")."</option>", ($_SESSION['resources_data']["show_repeat_mode"] == "all") ? "selected" : "");
+                        printf ("<option %s style=\"font-size:10px;\" value=\"single\">"._("nur Einzeltermine")."</option>", ($_SESSION['resources_data']["show_repeat_mode"] == "single") ? "selected" : "");
+                        printf ("<option %s style=\"font-size:10px;\" value=\"repeated\">"._("nur Wiederholungstermine")."</option>", ($_SESSION['resources_data']["show_repeat_mode"] == "repeated") ? "selected" : "");
+                        print "</select>";
+                        print "&nbsp;".Icon::create('accept', 'accept', ['title' => _('Ansicht umschalten')])->asInput(["type" => "image", "class" => "middle", "name" => "send_schedule_repeat_mode"]);
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td colspan="3">
+                        <? $schedule->showSchedule('html'); ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" valign="bottom">
+                    <? if ((!$_SESSION['resources_data']['schedule_time_range']) || ($_SESSION['resources_data']['schedule_time_range'] == -1)): ?>
+                        <a href="<?= URLHelper::getLink('', array('quick_view' => $this->used_view,
+                                                                  'quick_view_mode' => $view_mode,
+                                                                  'time_range' => $_SESSION['resources_data']['schedule_time_range'] ? 'FALSE' : 1)) ?>">
+                               <?= Icon::create('arr_2down', 'clickable', ['title' => _('Fr¸here Belegungen anzeigen')])->asImg(['class' => 'middle']) ?>
+                        </a>
+                    <? endif; ?>
+                    </td>
+                    <td colspan="3">&nbsp;</td>
+                </tr>
+            <? if (($_SESSION['resources_data']["show_repeat_mode"] == 'single' || $_SESSION['resources_data']["show_repeat_mode"] == 'all') && $num_single_events ): ?>
+                <tr>
+                    <td align="center" valign="bottom">&nbsp;</td>
+                    <td colspan="3">
+                        <strong><?=_("Einzelbelegungen:")?></strong>
+                        <br>
+                        <?php
+                        $num = 1;
+                        foreach($single_assigns as $event) {
+                            echo LinkButton::create(_('Eigenschaften'), URLHelper::getURL('?show_object='
+                                . $event->getResourceId() . '&quick_view=' . $view . '&quick_view_mode='
+                                . $quick_view_mode . '&edit_assign_object=' . $event->getAssignId()));
+                            printf ("&nbsp; <font size=-1>"._("%s ist von <b>%s</b> bis <b>%s</b>, belegt von <b>%s</b>")."</font><br>",'EB'.$num++.': ' . htmlReady(getResourceObjectName($event->getResourceId())), strftime("%A, %d.%m.%Y %H:%M", $event->getBegin()), strftime("%A, %d.%m.%Y %H:%M", $event->getEnd()), $event->getName());
+                        }
+                        ?>
+                </tr>
+            <? endif; ?>
+            </tbody>
         </table>
         </form>
     <?
