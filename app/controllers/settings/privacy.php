@@ -81,7 +81,7 @@ class Settings_PrivacyController extends Settings_SettingsController
         // Globally invisible -> set all local fields to invisible.
         } else {
             $online  = $search = $foaf_show_identity = 0;
-            $email   = get_config('DOZENT_ALLOW_HIDE_EMAIL') ? 0 : 1;
+            $email   = Config::get()->DOZENT_ALLOW_HIDE_EMAIL ? 0 : 1;
             $success = $this->about->change_all_homepage_visibility(VISIBILITY_ME);
         }
 
