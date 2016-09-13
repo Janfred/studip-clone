@@ -17,75 +17,99 @@
  */
 class Course_AvatarController extends AuthenticatedController
 {
-
-    # see Trails_Controller#before_filter
-    function before_filter(&$action, &$args) {
-
+    
+    public function before_filter(&$action, &$args)
+    {
+        
         parent::before_filter($action, $args);
-
-        $this->course_id = current($args);
+        
+        $this->course_id = Request::get('cid', current($args));
         if ($this->course_id === '' || get_object_type($this->course_id) !== 'sem'
-            || !$GLOBALS['perm']->have_studip_perm("tutor", $this->course_id)) {
+            || !$GLOBALS['perm']->have_studip_perm("tutor", $this->course_id)
+        ) {
             $this->set_status(403);
-            return FALSE;
+            return false;
         }
-
+        
         $this->body_id = 'custom_avatar';
         PageLayout::setTitle(Course::findCurrent()->getFullname() . ' - ' . _('Bild ändern'));
-
-        $sem = Seminar::getInstance($this->course_id);
-        $this->studygroup_mode = $sem->getSemClass()->offsetget("studygroup_mode");
-
+        
+        $sem                   = Seminar::getInstance($this->course_id);
+        $this->studygroup_mode = $sem->getSemClass()->offsetget('studygroup_mode');
+        
         if ($this->studygroup_mode) {
             $this->avatar = StudygroupAvatar::getAvatar($this->course_id);
         } else {
             $this->avatar = CourseAvatar::getAvatar($this->course_id);
         }
-
+        
+        $sidebar = Sidebar::get();
+        $sidebar->setImage('sidebar/admin-sidebar.png');
+        
+        if ($this->avatar->is_customized()) {
+            $actions = new ActionsWidget();
+            $actions->addLink(_('Bild löschen'),
+                $this->link_for('course/avatar/delete', $this->course_id), Icon::create('trash', 'clickable'),
+                ['data-confirm' => _('Wirklich löschen?')])->asDialog(false);
+            $sidebar->addWidget($actions);
+        }
+        
+        if ($GLOBALS['perm']->have_studip_perm('admin', $this->course_id)) {
+            $list = new SelectorWidget();
+            $list->setUrl("?#admin_top_links");
+            $list->setSelectParameterName("cid");
+            foreach (AdminCourseFilter::get()->getCoursesForAdminWidget() as $seminar) {
+                $list->addElement(new SelectElement($seminar['Seminar_id'], $seminar['Name']), 'select-' . $seminar['Seminar_id']);
+            }
+            $list->setSelection($this->course_id);
+            $sidebar->addWidget($list);
+        }
+        
         Navigation::activateItem('/course/admin/avatar');
     }
-
+    
     /**
      * This method is called to show the form to upload a new avatar for a
      * course.
      *
      * @return void
      */
-    function update_action()
+    public function update_action()
     {
         // nothing to do
     }
-
+    
     /**
      * This method is called to upload a new avatar for a course.
      *
      * @return void
      */
-    function put_action()
+    public function put_action()
     {
         try {
             CourseAvatar::getAvatar($this->course_id)->createFromUpload('avatar');
         } catch (Exception $e) {
-            $this->error = $e->getMessage();
+            $error = $e->getMessage();
+            PageLayout::postError($error);
         }
-        if (!$this->error) {
+        if (!$error) {
             PageLayout::postMessage(MessageBox::success(
-                _("Die Bilddatei wurde erfolgreich hochgeladen."),
-                array(_("Eventuell sehen Sie das neue Bild erst, nachdem Sie diese Seite neu geladen haben (in den meisten Browsern F5 drücken)."))
+                _('Die Bilddatei wurde erfolgreich hochgeladen.'),
+                [_('Eventuell sehen Sie das neue Bild erst, nachdem Sie diese Seite neu geladen haben (in den meisten Browsern F5 drücken).')]
             ));
         }
         $this->render_action("update");
     }
-
+    
     /**
      * This method is called to remove an avatar for a course.
      *
      * @return void
      */
-    function delete_action()
+    public function delete_action()
     {
         CourseAvatar::getAvatar($this->course_id)->reset();
-        PageLayout::postMessage(MessageBox::success(_("Veranstaltungsbild gelöscht.")));
+        PageLayout::postMessage(MessageBox::success(_('Veranstaltungsbild gelöscht.')));
         if ($this->studygroup_mode) {
             $this->redirect(URLHelper::getUrl('dispatch.php/course/studygroup/edit/' . $this->course_id));
         } else {
