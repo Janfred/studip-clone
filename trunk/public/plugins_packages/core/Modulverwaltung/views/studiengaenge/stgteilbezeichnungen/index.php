@@ -38,20 +38,28 @@
                             <?= $stgteilbezeichnung->count_studiengaenge ?>
                         </td>
                         <td class="dont-hide actions">
+                            <? $actionMenu = ActionMenu::get() ?>
                             <? if ($perm->havePermWrite()) : ?>
-                                <a data-dialog="size=auto"
-                                   href="<?= $controller->url_for('/stgteilbezeichnung/' . $stgteilbezeichnung->id) ?>">
-                                    <?= Icon::create('edit', 'clickable', ['title' => _('Studiengangteil-Bezeichnung bearbeiten')])->asImg(); ?>
-                                </a>
+                                <? $actionMenu->addLink(
+                                        $controller->url_for('/stgteilbezeichnung/' . $stgteilbezeichnung->id),
+                                        _('Studiengangteil-Bezeichnung bearbeiten'),
+                                        Icon::create('edit', 'clickable', ['title' => _('Studiengangteil-Bezeichnung bearbeiten')]),
+                                        ['data-dialog' => 'size=auto']
+                                ) ?>
                             <? endif; ?>
                             <? if ($perm->havePermCreate()) : ?>
                                 <? if ($stgteilbezeichnung->count_studiengangteile < 1) : ?>
-                                    <?= Icon::create('trash', 'clickable', ['title' => _('Studiengangteil-Bezeichnung löschen')])
-                                            ->asInput([
-                                                    'formaction'   => $controller->url_for('/delete/' . $stgteilbezeichnung->id),
-                                                    'data-confirm' => sprintf(_('Wollen Sie wirklich die Studiengangteil-Bezeichnung "%s" löschen?'), htmlReady($stgteilbezeichnung->name)),]) ?>
+                                    <? $actionMenu->addButton(
+                                            'delete_part_description',
+                                            _('Studiengangteil-Bezeichnung löschen'),
+                                            Icon::create('trash', 'clickable',
+                                                    ['title'        => _('Studiengangteil-Bezeichnung löschen'),
+                                                     'formaction'   => $controller->url_for('/delete/' . $stgteilbezeichnung->id),
+                                                     'data-confirm' => sprintf(_('Wollen Sie wirklich die Studiengangteil-Bezeichnung "%s" löschen?'), htmlReady($stgteilbezeichnung->name))]))
+                                    ?>
                                 <? endif; ?>
                             <? endif; ?>
+                            <?= $actionMenu->render() ?>
                         </td>
                     </tr>
                     <? if ($bezeichnung_id == $stgteilbezeichnung->getId()) : ?>
