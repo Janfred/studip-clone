@@ -215,36 +215,6 @@ class Settings_SettingsController extends AuthenticatedController
     }
 
     /**
-     * Enables methods like reportError, reportInfo or reportSuccess as
-     * a shortcut to post messages to the layout.
-     *
-     * @param String $method    Name of the called method
-     * @param Array  $arguments Arguments passed to the method
-     * @return Object Returns $this to allow chaining
-     * @throws BadMethodCallException when an unhandled method was called
-     */
-    public function __call($method, $arguments)
-    {
-        if (preg_match('/^report(Error|Warning|Info|Success)(WithDetails)?$/', $method, $match)) {
-            $hash    = md5($method . serialize($arguments));
-            $type    = strtolower($match[1]);
-            $details = empty($match[2]) ? false : array_pop($arguments);
-
-            $message = array_shift($arguments);
-            $message = vsprintf($message, $arguments);
-
-            $box     = $details
-                     ? MessageBox::$type($message, $details)
-                     : MessageBox::$type($message);
-
-            PageLayout::postMessage($box, $hash);
-            return $this;
-        }
-
-        throw new BadMethodCallException('Method "' . $method . '" does not exist.');
-    }
-
-    /**
      * Add to the private messages
      *
      * @param String $message Message to store
