@@ -1,13 +1,10 @@
 <?
 # Lifter010: TODO
 use Studip\Button, Studip\LinkButton;
-
 ?>
-<? if ($flash['delete']) : ?>
-<?= $this->render_partial("admin/user/_delete", array('data' => $flash['delete'])) ?>
-<? endif ?>
 
-<form action="<?= $controller->url_for('admin/user/') ?>" method="post" class="default">
+
+<form action="<?= $controller->url_for('admin/user') ?>" method="post" class="default">
     <?= CSRFProtection::tokenTag() ?>
 
     <fieldset>
@@ -15,12 +12,12 @@ use Studip\Button, Studip\LinkButton;
 
         <label>
             <?= _('Benutzername') ?>
-            <input name="username" type="text" value="<?= htmlReady($user['username']) ?>">
+            <input name="username" type="text" value="<?= htmlReady($request['username']) ?>">
         </label>
 
         <label>
             <?= _('E-Mail') ?>
-            <input name="email" type="text" value="<?= htmlReady($user['email']) ?>">
+            <input name="email" type="text" value="<?= htmlReady($request['email']) ?>">
         </label>
 
         <label>
@@ -28,7 +25,7 @@ use Studip\Button, Studip\LinkButton;
 
             <select name="perm">
             <? foreach(words('alle user autor tutor dozent admin root') as $one): ?>
-                <option value="<?= $one ?>" <?= ($user['perm'] === $one) ? 'selected' : '' ?>>
+                <option value="<?= $one ?>" <?= ($request['perm'] === $one) ? 'selected' : '' ?>>
                     <?= ($one === 'alle') ? _('alle') : $one ?>
                 </option>
             <? endforeach; ?>
@@ -36,18 +33,18 @@ use Studip\Button, Studip\LinkButton;
         </label>
 
         <label>
-            <input type="checkbox" name="locked" value="1" <?=  ($user['locked']) ?  'checked' : '' ?>>
+            <input type="checkbox" name="locked" value="1" <?=  ($request['locked']) ?  'checked' : '' ?>>
             <?= _('nur gesperrt') ?>
         </label>
 
         <label>
             <?= _('Vorname') ?>
-            <input name="vorname" type="text" value="<?= htmlReady($user['vorname']) ?>">
+            <input name="vorname" type="text" value="<?= htmlReady($request['vorname']) ?>">
         </label>
 
         <label>
             <?= _('Nachname') ?>
-            <input name="nachname" type="text" value="<?= htmlReady($user['nachname']) ?>">
+            <input name="nachname" type="text" value="<?= htmlReady($request['nachname']) ?>">
         </label>
 
         <label for="inactive">
@@ -64,7 +61,7 @@ use Studip\Button, Studip\LinkButton;
 
             <label>
                 <input name="inaktiv_tage" type="number" id="inactive"
-                       value="<?= htmlReady($user['inaktiv_tage']) ?>">
+                       value="<?= htmlReady($request['inaktiv_tage']) ?>">
                 <?= _('Tage') ?>
             </label>
         </section>
@@ -78,7 +75,7 @@ use Studip\Button, Studip\LinkButton;
             <select name="institute">
                 <option value=""><?= _('Alle')?></option>
                 <? foreach($institutes as $institute) : ?>
-                    <option value="<?= $institute['Institut_id']?>" <?= $user['institute'] == $institute['Institut_id'] ? 'selected' : ''?>>
+                    <option value="<?= $institute['Institut_id']?>" <?= $request['institute'] == $institute['Institut_id'] ? 'selected' : ''?>>
                         <?= htmlReady($institute['Name'])?>
                     </option>
                 <? endforeach ?>
@@ -89,11 +86,11 @@ use Studip\Button, Studip\LinkButton;
 
             <select name="userdomains">
                 <option value=""><?= _('Alle') ?></option>
-                <option value="null-domain" <?= ($user['userdomains'] === 'null-domain') ? 'selected' : '' ?>>
+                <option value="null-domain" <?= ($request['userdomains'] === 'null-domain') ? 'selected' : '' ?>>
                     <?= _('Ohne Domäne') ?>
                 </option>
             <? foreach ($userdomains as $one): ?>
-                <option value="<?= htmlReady($one->getId()) ?>" <?= ($user['userdomains'] === $one->getId()) ? 'selected' : ''?>>
+                <option value="<?= htmlReady($one->getId()) ?>" <?= ($request['userdomains'] === $one->getId()) ? 'selected' : ''?>>
                     <?= htmlReady($one->getName() ?: $one->getId()) ?>
                 </option>
             <? endforeach; ?>
@@ -104,7 +101,7 @@ use Studip\Button, Studip\LinkButton;
             <select name="degree">
                 <option value=""><?=_('Alle')?></option>
                 <? foreach($degrees as $degree) : ?>
-                    <option value="<?= $degree->id ?>" <?= $user['degree'] == $degree->id ? 'selected' : ''?>><?=htmlReady($degree->name)?></option>
+                    <option value="<?= $degree->id ?>" <?= $request['degree'] == $degree->id ? 'selected' : ''?>><?=htmlReady($degree->name)?></option>
                 <? endforeach ?>
             </select>
         </label>
@@ -113,7 +110,7 @@ use Studip\Button, Studip\LinkButton;
             <select name="studycourse">
                 <option value=""><?=_('Alle')?></option>
                 <? foreach($studycourses as $studycourse) : ?>
-                    <option value="<?= $studycourse->id ?>" <?= $user['studycourse'] == $studycourse->id ? 'selected' : ''?>><?=htmlReady($studycourse->name)?></option>
+                    <option value="<?= $studycourse->id ?>" <?= $request['studycourse'] == $studycourse->id ? 'selected' : ''?>><?=htmlReady($studycourse->name)?></option>
                 <? endforeach ?>
             </select>
         </label>
@@ -124,7 +121,7 @@ use Studip\Button, Studip\LinkButton;
                <option value=""><?= _('Alle') ?></option>
                <option value="preliminary"><?= _('vorläufig')?></option>
            <? foreach ($available_auth_plugins as $one): ?>
-                <option <?= ($user['auth_plugins'] === $one) ? 'selected' : '' ?>>
+                <option <?= ($request['auth_plugins'] === $one) ? 'selected' : '' ?>>
                     <?= htmlReady($one) ?>
                 </option>
             <? endforeach; ?>
@@ -138,15 +135,15 @@ use Studip\Button, Studip\LinkButton;
         <? if ($datafield->type === 'bool'): ?>
             <section class="hgroup size-m">
                 <label>
-                    <input type="radio" name="<?= $datafield->id ?>" value="" <?= (strlen($user[$datafield->id]) === 0) ? 'checked' : '' ?>>
+                    <input type="radio" name="<?= $datafield->id ?>" value="" <?= (strlen($request[$datafield->id]) === 0) ? 'checked' : '' ?>>
                     <?= _('egal') ?>
                 </label>
                 <label>
-                    <input type="radio" name="<?= $datafield->id ?>" value="1" <?= ($user[$datafield->id] === '1') ? 'checked' : '' ?>>
+                    <input type="radio" name="<?= $datafield->id ?>" value="1" <?= ($request[$datafield->id] === '1') ? 'checked' : '' ?>>
                     <?= _('ja') ?>
                 </label>
                 <label>
-                    <input type="radio" name="<?= $datafield->id ?>" value="0" <?= ($user[$datafield->id] === '0') ? 'checked' : '' ?>>
+                    <input type="radio" name="<?= $datafield->id ?>" value="0" <?= ($request[$datafield->id] === '0') ? 'checked' : '' ?>>
                     <?= _('nein') ?>
                 </label>
             </section>
@@ -156,13 +153,13 @@ use Studip\Button, Studip\LinkButton;
                 <option value="---ignore---"><?= _('alle') ?></option>
             <? foreach ($datafield_entry->type_param as $pkey => $pval) :?>
                 <? $value = $datafield_entry->is_assoc_param ? (string) $pkey : $pval; ?>
-                <option value="<?= $value ?>" <?= ($user[$datafield->id] === $value) ? 'selected' : '' ?>>
+                <option value="<?= $value ?>" <?= ($request[$datafield->id] === $value) ? 'selected' : '' ?>>
                     <?= htmlReady($pval) ?>
                 </option>
             <? endforeach ?>
             </select>
         <? else : ?>
-            <input type="text" name="<?= $datafield->id ?>" value="<?= htmlReady($user[$datafield->id]) ?>">
+            <input type="text" name="<?= $datafield->id ?>" value="<?= htmlReady($request[$datafield->id]) ?>">
         <? endif ?>
         </label>
     <? endforeach; ?>
