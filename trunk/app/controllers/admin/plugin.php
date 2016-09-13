@@ -376,7 +376,12 @@ class Admin_PluginController extends AuthenticatedController
     /**
      * Display the default activation set for this plugin.
      */
-    public function default_activation_action($plugin_id) {
+    public function default_activation_action($plugin_id)
+    {
+        Helpbar::Get()->addPlainText(_('Einrichtungen'), _('Wählen Sie die Einrichtungen, in deren Veranstaltungen das Plugin automatisch aktiviert sein soll.'), Icon::create('info'));
+        $actions = new ActionsWidget();
+        $actions->addLink(_('Pluginverwaltung'), $this->url_for('admin/plugin'), Icon::create('plugin', 'clickable'));
+        Sidebar::Get()->addWidget($actions);
         $plugin_manager = PluginManager::getInstance();
         $plugin = $plugin_manager->getPluginInfoById($plugin_id);
         $selected_inst = $plugin_manager->getDefaultActivations($plugin_id);
@@ -390,7 +395,8 @@ class Admin_PluginController extends AuthenticatedController
     /**
      * Change the default activation for this plugin.
      */
-    public function save_default_activation_action($plugin_id) {
+    public function save_default_activation_action($plugin_id)
+    {
         $plugin_manager = PluginManager::getInstance();
         $selected_inst = Request::optionArray('selected_inst');
 
