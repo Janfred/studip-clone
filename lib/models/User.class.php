@@ -852,14 +852,15 @@ class User extends AuthUserMd5
             }
             $this->validation_key = $key;
             
-            $activatation_url = $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'activate_email.php?uid=' . $user->user_id . '&key=' . $user->validation_key;
-            $mailbody = sprintf(_("Dies ist eine Informationsmail des Systems Stud.IP\n(Studienbegleitender Internetsupport von Präsenzlehre)\n- %s-\n\n
-                Um die Änderung Ihrer E-Mail Adresse abzuschließen,\nfolgen Sie bitte dem nachfolgendem Link:\n%s\n\nDer Aktivierungsschlüssel lautet:\n%s\n\n"),
-                $GLOBALS['UNI_NAME_CLEAN'],
-                $activatation_url,
-                $key);
-            
-            $mail = StudipMail::sendMessage($email, _('E-Mail-Änderung Stud.IP'), $mailbody);
+            $activatation_url = $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'activate_email.php?uid=' . $this->user_id . '&key=' . $this->validation_key;
+            // include language-specific subject and mailbody with fallback to german
+            $lang = $GLOBALS['_language_path']; // workaround
+            if($lang == '') {
+                $lang = 'de';
+            }
+            include_once("locale/$lang/LC_MAILS/change_self_mail.inc.php");
+    
+            $mail = StudipMail::sendMessage($email, $subject, $mailbody);
             
             if (!$mail) {
                 return true;
