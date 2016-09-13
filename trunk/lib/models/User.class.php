@@ -161,7 +161,7 @@ class User extends AuthUserMd5
         }
         return $ret;
     }
-    
+
     /**
      * Returns all available auth_plugins
      * @return array
@@ -171,7 +171,23 @@ class User extends AuthUserMd5
         $query = "SELECT DISTINCT IFNULL(auth_plugin, 'standard') as auth_plugin FROM auth_user_md5 ORDER BY auth_plugin='standard',auth_plugin";
         return DBManager::get()->query($query)->fetchAll(PDO::FETCH_COLUMN);
     }
-    
+
+    /**
+     * Wraps a search parameter in %..% if the parameter itself does not
+     * contain % or _.
+     *
+     * @param String $needle Search parameter
+     * @return String containing the wrapped needle if neccessary
+     */
+    private static function searchParam($needle)
+    {
+        if (preg_match('/[%_]/S', $needle)) {
+            return $needle;
+        }
+
+        return '%' . $needle . '%';
+    }
+
     /**
      * Temporary migrate to User.class.php
      *
@@ -181,7 +197,7 @@ class User extends AuthUserMd5
     public static function search($attributes)
     {
         $params = [];
-        
+
         $query = "SELECT au.* "
                  ."FROM auth_user_md5 au "
                  ."LEFT JOIN datafields_entries de ON de.range_id=au.user_id "
@@ -194,35 +210,35 @@ class User extends AuthUserMd5
                  ."WHERE 1 ";
         if ($attributes['username']) {
             $query .= "AND au.username like :username ";
-            $params[':username'] = '%'. $attributes['username'] . '%';
+            $params[':username'] = self::searchParam($attributes['username']);
         }
-        
+
         if ($attributes['vorname']) {
             $query .= "AND au.vorname like :vorname ";
-            $params[':username'] = '%'. $attributes['username'] . '%';
+            $params[':username'] = self::searchParam($attributes['username']);
         }
-        
+
         if ($attributes['nachname']) {
             $query .= "AND au.nachname like :nachname ";
-            $params[':nachname'] = '%'. $attributes['nachname']. '%';
+            $params[':nachname'] = self::searchParam($attributes['nachname']);
         }
-        
+
         if ($attributes['email']) {
             $query .= "AND au.Email like :email ";
-            $params[':email'] = '%'. $attributes['email'] . '%';
+            $params[':email'] = self::searchParam($attributes['email']);
         }
-    
+
         //permissions
         if (!is_null($attributes['perms']) && $attributes['perms'] != 'alle') {
             $query .= "AND au.perms =  :perms ";
             $params[':perms'] = $attributes['perms'];
         }
-    
+
         //locked user
         if ((int)$attributes['locked'] == 1) {
             $query .= "AND au.locked = 1 ";
         }
-    
+
         //inactivity
         if (!is_null($attributes['inaktiv']) && $attributes['inaktiv'][0] != 'nie') {
             $comp = in_array(trim($attributes['inaktiv'][0]), ['=', '>', '<=']) ? $attributes['inaktiv'][0] : '=';
@@ -231,7 +247,7 @@ class User extends AuthUserMd5
         } elseif (!is_null($attributes['inaktiv'])) {
             $query .= "AND uo.last_lifesign IS NULL ";
         }
-        
+
         //datafields
         if (!is_null($attributes['datafields']) && count($attributes['datafields']) > 0) {
             foreach ($attributes['datafields'] as $id => $entry) {
@@ -240,12 +256,12 @@ class User extends AuthUserMd5
                 $params[':df_content_' . $id] = $entry;
             }
         }
-    
+
         if ($attributes['auth_plugins']) {
             $query .= "AND IFNULL(auth_plugin, 'preliminary') = :auth_plugins ";
             $params[':auth_plugins'] = $attributes['auth_plugins'];
         }
-    
+
         if ($attributes['userdomains']) {
             if ($attributes['userdomains'] === 'null-domain') {
                 $query .= "AND userdomain_id IS NULL ";
@@ -254,22 +270,22 @@ class User extends AuthUserMd5
                 $params[':userdomains'] = $attributes['userdomains'];
             }
         }
-    
+
         if($attributes['degree']) {
             $query .= "AND us.abschluss_id = :degree ";
             $params[':degree'] = $attributes['degree'];
         }
-    
+
         if($attributes['studycourse']) {
             $query .= "AND us.fach_id = :studycourse ";
             $params[':studycourse'] = $attributes['studycourse'];
         }
-    
+
         if($attributes['institute']) {
             $query .= "AND uis.Institut_id = :institute ";
             $params[':institute'] = $attributes['institute'];
         }
-    
+
         $query .= " GROUP BY au.user_id ";
         //sortieren
         switch ($attributes['sort']) {
@@ -297,11 +313,11 @@ class User extends AuthUserMd5
             default:
                 $query .= " ORDER BY au.username {$attributes['order']}";
         }
-        
+
         return DBManager::get()->fetchAll($query, $params, __CLASS__ . '::buildExisting');
     }
-    
-    
+
+
     /**
      *
      */
@@ -567,7 +583,7 @@ class User extends AuthUserMd5
             $this->relations[$relation] = $result;
         }
     }
-    
+
     /**
      * This function returns the perms allowed for an institute for the current user
      *
@@ -580,14 +596,14 @@ class User extends AuthUserMd5
         }
         $allowed_status = [];
         $possible_status = words('autor tutor dozent');
-        
+
         $pos = array_search($this->perms, $possible_status);
         if($pos) {
             $allowed_status = array_slice($possible_status, 0, $pos+1);
         }
         return $allowed_status;
     }
-    
+
     /**
      * Builds an array containing all available elements that are part of a
      * user's homepage together with their visibility. It isn't sufficient to
@@ -607,15 +623,15 @@ class User extends AuthUserMd5
         } else {
             $homepage_visibility = array();
         }
-        
+
         // News
         $news = StudipNews::GetNewsByRange($this->id, true);
-        
+
         // Non-private dates.
         if (Config::get()->CALENDAR_ENABLE) {
             $dates = CalendarEvent::countBySql('range_id = ?', [$this->id]);
         }
-        
+
         // Votes
         if (Config::get()->VOTE_ENABLE) {
             $activeVotes  = Questionnaire::countBySQL("user_id = ? AND visible = '1'", [$this->id]);
@@ -629,17 +645,17 @@ class User extends AuthUserMd5
         // Free datafields
         $data_fields = DataFieldEntry::getDataFieldEntries($this->id, 'user');
         $homepageplugins = [];
-        
+
         // Now join all available elements with visibility settings.
         $homepage_elements = [];
-        
+
         if (Avatar::getAvatar($this->id)->is_customized() && !$GLOBALS['NOT_HIDEABLE_FIELDS'][$this->perms]['picture']) {
             $homepage_elements['picture'] = ['name'         => _('Eigenes Bild'),
                                               'visibility'  => $homepage_visibility['picture'] ?: get_default_homepage_visibility($this->id),
                                               'extern'      => true,
                                               'category'    => 'Allgemeine Daten'];
         }
-        
+
         if ($this->info->motto && !$GLOBALS['NOT_HIDEABLE_FIELDS'][$this->perms]['motto']) {
             $homepage_elements['motto'] = ['name'       => _('Motto'),
                                            'visibility' => $homepage_visibility['motto'] ?: get_default_homepage_visibility($this->id),
@@ -690,7 +706,7 @@ class User extends AuthUserMd5
                                            'visibility' => $homepage_visibility['votes'] ?: get_default_homepage_visibility($this->id),
                                            'category'   => 'Allgemeine Daten'];
         }
-        
+
         $query = "SELECT 1
                   FROM user_inst
                   LEFT JOIN Institute USING (Institut_id)
@@ -730,7 +746,7 @@ class User extends AuthUserMd5
                                              'extern'       => true,
                                              'category'     => 'Private Daten'];
         }
-        
+
         if ($data_fields) {
             foreach ($data_fields as $key => $field) {
                 if ($field->getValue() && $field->isEditable($this->perms) && !$GLOBALS['NOT_HIDEABLE_FIELDS'][$this->perms][$key]) {
@@ -744,7 +760,7 @@ class User extends AuthUserMd5
                 }
             }
         }
-        
+
         $query = "SELECT kategorie_id, name
                   FROM kategorien
                   WHERE range_id = ?
@@ -757,7 +773,7 @@ class User extends AuthUserMd5
                                                                     'extern'        => true,
                                                                     'category'      => 'Eigene Kategorien'];
         }
-        
+
         if ($homepageplugins) {
             foreach ($homepageplugins as $plugin) {
                 $homepage_elements['plugin_'.$plugin->getPluginId()] = ['name'          => $plugin->getPluginName(),
@@ -767,8 +783,8 @@ class User extends AuthUserMd5
         }
         return $homepage_elements;
     }
-    
-    
+
+
     /**
      * @param $user
      * @param $email
@@ -780,20 +796,20 @@ class User extends AuthUserMd5
         if ($this->email == $email && !$force) {
             return true;
         }
-    
+
         if (!$GLOBALS['ALLOW_CHANGE_EMAIL']) {
             return false;
         }
-        
+
         if (StudipAuthAbstract::CheckField('auth_user_md5.Email', $this->auth_plugin) || LockRules::check($this->user_id, 'email')) {
             return false;
         }
-        
+
         $validator          = new email_validation_class; ## Klasse zum Ueberpruefen der Eingaben
         $validator->timeout = 10;
         $REMOTE_ADDR        = $_SERVER['REMOTE_ADDR'];
         $Zeit               = date('H:i:s, d.m.Y', time());
-        
+
         // accept only registered domains if set
         $email_restriction = trim(Config::get()->EMAIL_DOMAIN_RESTRICTION);
         if (!$validator->ValidateEmailAddress($email, $email_restriction)) {
@@ -816,7 +832,7 @@ class User extends AuthUserMd5
             }
             return false;
         }
-        
+
         if (!$validator->ValidateEmailHost($email)) {     // Mailserver nicht erreichbar, ablehnen
             PageLayout::postError(_('Der Mailserver ist nicht erreichbar. Bitte überprüfen Sie, ob Sie E-Mails mit der angegebenen Adresse verschicken können!'));
             return false;
@@ -827,18 +843,18 @@ class User extends AuthUserMd5
                 return false;
             }
         }
-        
+
         if (self::countBySql('email = ? AND user_id != ?', [$email, $this->user_id])) {
             PageLayout::postError(sprintf(_('Die angegebene E-Mail-Adresse wird bereits von einem anderen Benutzer (%s) verwendet. Bitte geben Sie eine andere E-Mail-Adresse an.'),
                 htmlReady($this->getFullName())));
             return false;
         }
-        
+
         if (StudipAuthAbstract::CheckField('auth_user_md5.validation_key', $this->auth_plugin)) {
             PageLayout::postSuccess(_('Ihre E-Mail-Adresse wurde geändert!'));
         } else {
             // auth_plugin does not map validation_key (what if...?)
-            
+
             // generate 10 char activation key
             $key = '';
             mt_srand((double)microtime() * 1000000);
@@ -851,7 +867,7 @@ class User extends AuthUserMd5
                 $key .= chr($temp);
             }
             $this->validation_key = $key;
-            
+
             $activatation_url = $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'activate_email.php?uid=' . $this->user_id . '&key=' . $this->validation_key;
             // include language-specific subject and mailbody with fallback to german
             $lang = $GLOBALS['_language_path']; // workaround
@@ -859,23 +875,21 @@ class User extends AuthUserMd5
                 $lang = 'de';
             }
             include_once("locale/$lang/LC_MAILS/change_self_mail.inc.php");
-    
+
             $mail = StudipMail::sendMessage($email, $subject, $mailbody);
-            
+
             if (!$mail) {
                 return true;
             }
-            
+
             $this->store();
-            
+
             PageLayout::postInfo(sprintf(_('An Ihre neue E-Mail-Adresse <b>%s</b> wurde ein Aktivierungslink geschickt, dem Sie folgen müssen bevor Sie sich das nächste mal einloggen können.'), $email));
             StudipLog::log("USER_NEWPWD", $user->user_id);
         }
         return true;
     }
-    
-    
-    
+
     /**
      * Merge an user ($old_id) to another user ($new_id).  This is a part of the
      * old numit-plugin.
@@ -890,9 +904,9 @@ class User extends AuthUserMd5
     public static function convert($old_id, $new_id, $identity = false)
     {
         NotificationCenter::postNotification('UserWillMigrate', $old_id, $new_id);
-        
+
         $messages = array();
-        
+
         //Identitätsrelevante Daten migrieren
         if ($identity) {
             // Veranstaltungseintragungen
@@ -900,42 +914,42 @@ class User extends AuthUserMd5
             $query = "UPDATE IGNORE seminar_user SET user_id = ? WHERE user_id = ?";
             $statement = DBManager::get()->prepare($query);
             $statement->execute(array($new_id, $old_id));
-            
+
             self::removeDoubles('admission_seminar_user', 'seminar_id', $new_id, $old_id);
             $query = "UPDATE IGNORE admission_seminar_user SET user_id = ? WHERE user_id = ?";
             $statement = DBManager::get()->prepare($query);
             $statement->execute(array($new_id, $old_id));
-            
+
             // Persönliche Infos
             $query = "DELETE FROM user_info WHERE user_id = ?";
             $statement = DBManager::get()->prepare($query);
             $statement->execute(array($new_id));
-            
+
             $query = "UPDATE IGNORE user_info SET user_id = ? WHERE user_id = ?";
             $statement = DBManager::get()->prepare($query);
             $statement->execute(array($new_id, $old_id));
-            
+
             // Studiengänge
             self::removeDoubles('user_studiengang', 'fach_id', $new_id, $old_id);
             $query = "UPDATE IGNORE user_studiengang SET user_id = ? WHERE user_id = ?";
             $statement = DBManager::get()->prepare($query);
             $statement->execute(array($new_id, $old_id));
-            
+
             // Eigene Kategorien
             $query = "UPDATE IGNORE kategorien SET range_id = ? WHERE range_id = ?";
             $statement = DBManager::get()->prepare($query);
             $statement->execute(array($new_id, $old_id));
-            
+
             // Institute
             self::removeDoubles('user_inst', 'Institut_id', $new_id, $old_id);
             $query = "UPDATE IGNORE user_inst SET user_id = ? WHERE user_id = ?";
             $statement = DBManager::get()->prepare($query);
             $statement->execute(array($new_id, $old_id));
-            
+
             // Generische Datenfelder zusammenführen (bestehende Einträge des
             // "neuen" Nutzers werden dabei nicht überschrieben)
             $old_user = User::find($old_id);
-            
+
             $query = "INSERT INTO datafields_entries
                         (datafield_id, range_id, sec_range_id, content, mkdate, chdate)
                       VALUES (:datafield_id, :range_id, :sec_range_id, :content,
@@ -945,23 +959,23 @@ class User extends AuthUserMd5
                                chdate = UNIX_TIMESTAMP()";
             $statement = DBManager::get()->prepare($query);
             $statement->bindValue(':range_id', $new_id);
-            
+
             $old_user->datafields->each(function ($field) use ($new_id, $statement) {
                 $statement->bindValue(':datafield_id', $field->datafield_id);
                 $statement->bindValue(':sec_range_id', $field->sec_range_id);
                 $statement->bindValue(':content', $field->content);
                 $statement->execute();
             });
-            
+
             # Datenfelder des alten Nutzers leeren
             $old_user->datafields = array();
             $old_user->store();
-            
+
             //Buddys
             $query = "UPDATE IGNORE contact SET owner_id = ? WHERE owner_id = ?";
             $statement = DBManager::get()->prepare($query);
             $statement->execute(array($new_id, $old_id));
-            
+
             // Avatar
             $old_avatar = Avatar::getAvatar($old_id);
             $new_avatar = Avatar::getAvatar($new_id);
@@ -975,150 +989,150 @@ class User extends AuthUserMd5
                 }
                 $old_avatar->reset();
             }
-            
+
             $messages[] = _('Identitätsrelevante Daten wurden migriert.');
         }
-        
+
         // Restliche Daten übertragen
-        
+
         // ForumsModule migrieren
         foreach (PluginEngine::getPlugins('ForumModule') as $plugin) {
             $plugin->migrateUser($old_id, $new_id);
         }
-        
+
         // Dateieintragungen und Ordner
         // TODO (mlunzena) should post a notification
         $query = "UPDATE IGNORE dokumente SET user_id = ? WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         $query = "UPDATE IGNORE folder SET user_id = ? WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         //Kalender
         $query = "UPDATE IGNORE calendar_event SET range_id = ? WHERE range_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         $query = "UPDATE IGNORE calendar_user SET owner_id = ? WHERE owner_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         $query = "UPDATE IGNORE calendar_user SET user_id = ? WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         $query = "UPDATE IGNORE event_data SET author_id = ? WHERE author_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         $query = "UPDATE IGNORE event_data SET editor_id = ? WHERE editor_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         //Archiv
         self::removeDoubles('archiv_user', 'seminar_id', $new_id, $old_id);
         $query = "UPDATE IGNORE archiv_user SET user_id = ? WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         // Evaluationen
         $query = "UPDATE IGNORE eval SET author_id = ? WHERE author_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         self::removeDoubles('eval_user', 'eval_id', $new_id, $old_id);
         $query = "UPDATE IGNORE eval_user SET user_id = ? WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         $query = "UPDATE IGNORE evalanswer_user SET user_id = ? WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         // Kategorien
         $query = "UPDATE IGNORE kategorien SET range_id = ? WHERE range_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         // Literatur
         $query = "UPDATE IGNORE lit_catalog SET user_id = ? WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         $query = "UPDATE IGNORE lit_list SET range_id = ? WHERE range_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         // Nachrichten (Interne)
         $query = "UPDATE IGNORE message SET autor_id = ? WHERE autor_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         self::removeDoubles('message_user', 'message_id', $new_id, $old_id);
         $query = "UPDATE IGNORE message_user SET user_id = ? WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         // News
         $query = "UPDATE IGNORE news SET user_id = ? WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         $query = "UPDATE IGNORE news_range SET range_id = ? WHERE range_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         // Informationsseiten
         $query = "UPDATE IGNORE scm SET user_id = ? WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         // Statusgruppeneinträge
         self::removeDoubles('statusgruppe_user', 'statusgruppe_id', $new_id, $old_id);
         $query = "UPDATE IGNORE statusgruppe_user SET user_id = ? WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         // Termine
         $query = "UPDATE IGNORE termine SET autor_id = ? WHERE autor_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         //Votings
         $query = "UPDATE IGNORE vote SET author_id = ? WHERE author_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         $query = "UPDATE IGNORE vote SET range_id = ? WHERE range_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         self::removeDoubles('vote_user', 'vote_id', $new_id, $old_id);
         $query = "UPDATE IGNORE vote_user SET user_id = ? WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         self::removeDoubles('voteanswers_user', 'answer_id', $new_id, $old_id);
         $query = "UPDATE IGNORE voteanswers_user SET user_id = ? WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         //Wiki
         $query = "UPDATE IGNORE wiki SET user_id = ? WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         $query = "UPDATE IGNORE wiki_locks SET user_id = ? WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         //Adressbucheinträge
         $query = "UPDATE IGNORE contact SET owner_id = ? WHERE owner_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         //Blubber
         $query = "UPDATE IGNORE blubber SET user_id = ? WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
@@ -1135,14 +1149,14 @@ class User extends AuthUserMd5
         $query = "UPDATE IGNORE blubber_streams SET user_id = ? WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
-        
+
         NotificationCenter::postNotification('UserDidMigrate', $old_id, $new_id);
-        
+
         $messages[] = _('Dateien, Termine, Adressbuch, Nachrichten und weitere Daten wurden migriert.');
         return $messages;
     }
-    
-    
+
+
     /**
      * Delete double entries of the old and new user. This is a part of the old
      * numit-plugin.
@@ -1156,22 +1170,22 @@ class User extends AuthUserMd5
     private static function removeDoubles($table, $field, $new_id, $old_id)
     {
         $items = array();
-        
+
         $query = "SELECT a.{$field} AS field_item
                   FROM {$table} AS a, {$table} AS b
                   WHERE a.user_id = ? AND b.user_id = ? AND a.{$field} = b.{$field}";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
-        
+
         foreach ($results as $value) {
             array_push($items, $value['field_item']);
         }
-        
+
         if (!empty($items)) {
             $query = "DELETE FROM `{$table}`
                   WHERE user_id = :user_id AND `{$field}` IN (:items)";
-            
+
             $statement = DBManager::get()->prepare($query);
             $statement->bindValue(':user_id', $new_id);
             $statement->bindValue(':items', $items, StudipPDO::PARAM_ARRAY);
