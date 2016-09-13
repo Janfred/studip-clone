@@ -23,13 +23,7 @@
     if (is_array($dates['regular']['turnus_data']))
         foreach ($dates['regular']['turnus_data'] as $cycle) :
             $first_date = sprintf(_("ab %s"), strftime('%x', $cycle['first_date']['date']));
-            if ($cycle['cycle'] == 1) :
-                $cycle_output = $cycle['tostring'] . ' (' . $first_date . ')';
-            elseif ($cycle['cycle'] == 2) :
-                $cycle_output = $cycle['tostring'] . ' (' . $first_date . ')';
-            else :
-                $cycle_output = $cycle['tostring'] . ' (' . $first_date . ')';
-            endif;
+            $cycle_output = $cycle['tostring'] . ' (' . $first_date . ')';
             if ($cycle['desc'])
                 $cycle_output .= ', <i>' . htmlReady($cycle['desc']) . '</i>';
 
