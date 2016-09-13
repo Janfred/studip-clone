@@ -194,7 +194,7 @@ foreach ($folders as $folder) {
         continue;
     }
 
-    $log_if(!$only_filenames, '#{green:Scanning} %s', $reduce($folder));
+    $log_if($verbose && !$only_filenames, '#{green:Scanning} %s', $reduce($folder));
     if ($recursive) {
         $iterator = new RecursiveDirectoryIterator($folder, FilesystemIterator::FOLLOW_SYMLINKS | FilesystemIterator::UNIX_PATHS);
         $iterator = new RecursiveIteratorIterator($iterator);
@@ -203,17 +203,28 @@ foreach ($folders as $folder) {
     }
     $regexp_iterator = new RegexIterator($iterator, '/.*\.(?:php|tpl|inc)$/', RecursiveRegexIterator::MATCH);
 
+    $issues = [];
+
     foreach ($regexp_iterator as $file) {
         $filename = $file->getPathName();
         $log_if($verbose, "Checking #{magenta:%s}", $filename);
         if ($errors = $check($filename)) {
+            $issues[$filename] = $errors;
+        }
+    }
+
+    if (count($issues) > 0) {
+        $issue_count = array_sum(array_map('count', $issues));
+        $message = count($issues) === 1
+                 ? '#{red:%u issue found in} #{red,bold:%s}'
+                 : '#{red:%u issues found in} #{red,bold:%s}';
+        $log_if(!$only_filenames, $message, $issue_count, $reduce($folder));
+
+        foreach ($issues as $filename => $errors) {
             if ($only_filenames) {
                 $log($filename);
             } else {
-                $message = count($errors) === 1
-                         ? '%u issue found in #{green,bold:%s}'
-                         : '%u issue(s) found in #{green,bold:%s}';
-                $log($message, count($errors), $filename);
+                $log('> File #{green,bold:%s}', $reduce($filename));
                 foreach ($errors as $needle => $suggestion) {
                     $log('- #{cyan:%s} -> %s', $needle, $suggestion ?: '#{red:No suggestion available}');
                 }
