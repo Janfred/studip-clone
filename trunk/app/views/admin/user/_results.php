@@ -110,13 +110,21 @@ use Studip\Button, Studip\LinkButton;
                     </td>
                     <td><?= htmlReady($user['auth_plugin'] == 'preliminary' ? _('vorläufig') : $user->auth_plugin) ?></td>
                     <td class="actions" nowrap>
-                        <a href="<?= $controller->url_for('admin/user/edit/' . $user->user_id) ?>"
-                           title="<?= _('Detailansicht des Benutzers anzeigen') ?>">
-                            <?= Icon::create('edit', 'clickable', ['title' => _('Diesen Benutzer bearbeiten')])->asImg() ?>
-                        </a>
-                        <a href="<?= $controller->url_for('admin/user/delete/' . $user->user_id) ?>">
-                            <?= Icon::create('trash', 'clickable', ['title' => _('Diesen Benutzer löschen')])->asImg() ?>
-                        </a>
+                        <?
+                        $actionMenu = ActionMenu::get();
+                        $actionMenu->addLink(
+                                $controller->url_for('admin/user/edit/' . $user->user_id),
+                                _('Detailansicht des Benutzers anzeigen'),
+                                Icon::create('edit', 'clickable', ['title' => _('Diesen Benutzer bearbeiten')]));
+
+                        $actionMenu->addButton(
+                                'delete_user',
+                                _('Benutzer löschen'),
+                                Icon::create('trash', 'clickable',
+                                        ['title'      => _('Benutzer löschen'),
+                                         'formaction' => $controller->url_for('admin/user/bulk/' . $user->user_id, ['method' => 'delete'])]))
+                        ?>
+                        <?= $actionMenu->render() ?>
                     </td>
                 </tr>
             <? endforeach ?>
