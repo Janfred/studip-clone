@@ -7,58 +7,31 @@ use Studip\Button, Studip\LinkButton;
     <?= MessageBox::success($flash['message']) ?>
 <? endif ?>
 
-<h3>
-    <?= _('Standard-Aktivierung in Veranstaltungen') ?>: <?= htmlReady($plugin_name) ?>
-</h3>
+<form action="<?= $controller->url_for('admin/plugin/save_default_activation', $plugin_id) ?>" method="post" class="default">
+    <fieldset>
+        <legend><?= _('Standard-Aktivierung in Veranstaltungen') ?>: <?= htmlReady($plugin_name) ?></legend>
+        <?= CSRFProtection::tokenTag() ?>
+        <input type="hidden" name="studip_ticket" value="<?= get_ticket() ?>">
+        <select name="selected_inst[]" multiple size="20" class="nested-select" style="width: 100%">
+            <? foreach ($institutes as $id => $institute): ?>
+                <option class="nested-item-header" value="<?= $id ?>" <?= in_array($id, $selected_inst) ? 'selected' : '' ?>>
+                    <?= htmlReady($institute['name']) ?>
+                </option>
 
-<form action="<?= $controller->url_for('admin/plugin/save_default_activation', $plugin_id) ?>" method="post">
-    <?= CSRFProtection::tokenTag() ?>
-    <input type="hidden" name="studip_ticket" value="<?= get_ticket() ?>">
-    <select name="selected_inst[]" multiple size="20" class="nested-select" style="width: 100%">
-        <? foreach ($institutes as $id => $institute): ?>
-            <option class="nested-item-header" value="<?= $id ?>" <?= in_array($id, $selected_inst) ? 'selected' : '' ?>>
-                <?= htmlReady($institute['name']) ?>
-            </option>
-
-            <? if (isset($institute['children'])): ?>
-                <? foreach ($institute['children'] as $id => $child): ?>
-                    <option class="nested-item" value="<?= $id ?>" <?= in_array($id, $selected_inst) ? 'selected' : '' ?>>
-                        <?= htmlReady($child['name']) ?>
-                    </option>
-                <? endforeach ?>
-            <? endif ?>
-        <? endforeach ?>
-    </select>
-    <p>
+                <? if (isset($institute['children'])): ?>
+                    <? foreach ($institute['children'] as $id => $child): ?>
+                        <option class="nested-item" value="<?= $id ?>" <?= in_array($id, $selected_inst) ? 'selected' : '' ?>>
+                            <?= htmlReady($child['name']) ?>
+                        </option>
+                    <? endforeach ?>
+                <? endif ?>
+            <? endforeach ?>
+        </select>
+    </fieldset>
+    
+    <footer>
         <?= Button::create(_('Übernehmen'),'save', array('title' => _('Einstellungen speichern')))?>
         &nbsp;
         <?= LinkButton::create('<< ' . _("Zurück"), $controller->url_for('admin/plugin'), array('title' => _('Zurück zur Plugin-Verwaltung')))?>
-    </p>
+    </footer>
 </form>
-
-<?
-$infobox_content = array(
-    array(
-        'kategorie' => _('Aktionen:'),
-        'eintrag'   => array(
-            array(
-                'icon' => Icon::create('schedule', 'clickable'),
-                'text' => '<a href="'.$controller->url_for('admin/plugin').'">'._('Verwaltung von Plugins').'</a>'
-            )
-        )
-    ), array(
-        'kategorie' => _('Hinweise:'),
-        'eintrag'   => array(
-            array(
-                "icon" => Icon::create('info', 'clickable'),
-                'text' => _('Wählen Sie die Einrichtungen, in deren Veranstaltungen das Plugin automatisch aktiviert sein soll.')
-            ),
-            array(
-                "icon" => Icon::create('info', 'clickable'),
-                'text' => _('Eine Mehrfachauswahl in der Liste der Einrichtungen ist durch Drücken der Strg-Taste möglich.')
-            )
-        )
-    )
-);
-
-$infobox = array('picture' => 'sidebar/plugin-sidebar.png', 'content' => $infobox_content);
