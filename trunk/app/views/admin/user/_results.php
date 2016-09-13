@@ -6,7 +6,7 @@ use Studip\Button, Studip\LinkButton;
 
 <br>
 
-<form action="<?= $controller->url_for('admin/user/bulk') ?>" method="post" data-dialog>
+<form action="<?= $controller->url_for('admin/user/bulk') ?>" method="post" data-dialog="size=auto">
     <?= CSRFProtection::tokenTag() ?>
     <table class="default">
         <caption>
@@ -132,7 +132,7 @@ use Studip\Button, Studip\LinkButton;
                     <select name="method" class="bulkAction" required>
                         <option value=""><?= _('Bitte wählen') ?></option>
                         <option value="send_message"><?= _('Nachricht senden') ?></option>
-                        <option value="delete" data-confirm="<?=_('Wollen Sie die ausgewählten Nutzer wirklich löschen?')?>"><?= _('Löschen') ?></option>
+                        <option value="delete"><?= _('Löschen') ?></option>
                     </select>
                     <?= Button::create(_('Ausführen'),
                             ['title' => _('Ausgewählte Aktion ausführen'),

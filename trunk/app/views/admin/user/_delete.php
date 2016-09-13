@@ -3,42 +3,26 @@
 use Studip\Button;
 
 ?>
-<div class="modaloverlay">
-    <div class="messagebox">
-        <div class="content">
-            <?= formatReady($data['question']) ?>
-        </div>
-        <div class="content">
-            <form action="<?= $data['action'] ?>" method="post">
-                <?= CSRFProtection::tokenTag() ?>
-                <? if ($data['users']) : ?>
-                    <div style="margin-top: 0.5em; text-align: left;">
-                        <ul>
-                            <? foreach ($data['users'] as $user_id) : ?>
-                                <? $user = User::find($user_id); ?>
-                                <li>
-                                    <?= htmlReady($user->getFullName()) ?> (<?= htmlReady($user['username']) ?>)
-                                    <input type="hidden" name="user_ids[]" value="<?= $user['user_id'] ?>">
-                                </li>
-                            <? endforeach ?>
-                        </ul>
-                    </div>
-                <? endif ?>
-                <div style="margin-top: 0.5em; text-align: left;">
-                    <input id="documents" name="documents" value="1" checked type="checkbox">
-                    <label style="padding-left:0.5em" for="documents"><?= _('Dokumente löschen?') ?></label>
-                </div>
-                <div style="margin-top: 0.5em; text-align: left;">
-                    <input id="mail" name="mail" value="1" checked type="checkbox">
-                    <label style="padding-left:0.5em" for="mail"><?= _('Emailbenachrichtigung verschicken?') ?></label>
-                </div>
-                <div class="buttons">
-                    <?= Button::createAccept(_('JA!'), 'delete', ['title' => _('Benutzer löschen')]) ?>
-                    <span style="margin-left: 1em;">
-                        <?= Button::createCancel(_('NEIN!'), 'back') ?>
-                    </span>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+<form action="<?= $controller->url_for('admin/user/delete') ?>" method="post" class="default">
+    <?= CSRFProtection::tokenTag() ?>
+    <? if ($users) : ?>
+        <? $details = '' ?>
+        <? foreach ($users as $user) : ?>
+            <? $details .= sprintf('%s (%s)', htmlReady($user->getFullName()), htmlReady($user->username)) ?>
+            <input type="hidden" name="user_ids[]" value="<?= $user['user_id'] ?>">
+        <? endforeach ?>
+    <? endif ?>
+    <?= MessageBox::warning(_('Wollen Sie die folgenden Nutzer wirklich löschen?'), [$details]) ?>
+    <label>
+        <input id="documents" name="documents" value="1" checked type="checkbox">
+        <?= _('Dokumente löschen?') ?>
+    </label>
+    <label>
+        <input id="mail" name="mail" value="1" checked type="checkbox">
+        <?= _('Emailbenachrichtigung verschicken?') ?>
+    </label>
+    <footer data-dialog-button>
+        <?= Button::createAccept(_('JA!'), 'delete', ['title' => _('Benutzer löschen')]) ?>
+        <?= Button::createCancel(_('NEIN!'), 'back', ['title' => _('Abbrechen   ')]) ?>
+    </footer>
+</form>

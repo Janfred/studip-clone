@@ -98,7 +98,6 @@ class Admin_UserController extends AuthenticatedController
             }
 
             //Suchparameter
-            $this->user   = $request;
             $this->sortby = Request::option('sortby', 'username');
             $this->order  = Request::option('order', 'asc');
             if (Request::int('toggle')) {
@@ -176,11 +175,10 @@ class Admin_UserController extends AuthenticatedController
     public function bulk_action()
     {
         if (Request::get('method') == 'delete') {
-            $this->flash['delete'] = [
-                'question' => _('Wollen Sie folgende Personen wirklich löschen?'),
-                'action'   => $this->url_for('admin/user/delete'),
-                'users'    => Request::getArray('user_ids'),
-            ];
+            PageLayout::setTitle(_('Folgende Nutzer löschen'));
+            $this->users = User::findMany(Request::getArray('user_ids'));
+            $this->render_template('admin/user/_delete.php');
+            return;
         } else {
             $users = User::findMany(Request::getArray('user_ids'));
 
@@ -191,7 +189,7 @@ class Admin_UserController extends AuthenticatedController
 
             $_SESSION['sms_data'] = array();
             $_SESSION['sms_data']['p_rec'] = array_filter($users);
-            $this->redirect(URLHelper::getURL('dispatch.php/messages/write', array('default_subject' => '', 'tmpsavesnd' => 1)));
+            $this->redirect(URLHelper::getURL('dispatch.php/messages/write', ['default_subject' => '', 'tmpsavesnd' => 1]));
             return;
         }
         $this->relocate('admin/user');
@@ -573,8 +571,9 @@ class Admin_UserController extends AuthenticatedController
         $this->abschluesse = Abschluss::findBySQL('1 ORDER BY name');
     }
 
-    /*
+    /**
      * Adding a new user to Stud.IP
+     * @param bool $prelim
      */
     public function new_action($prelim = false)
     {
@@ -829,7 +828,7 @@ class Admin_UserController extends AuthenticatedController
     /**
      * Migrate 2 users to 1 account. This is a part of the old numit-plugin
      */
-    function migrate_action($user_id = null)
+    public function migrate_action($user_id = null)
     {
         //check submitted form
         if (Request::submitted('umwandeln')) {
@@ -1214,6 +1213,11 @@ class Admin_UserController extends AuthenticatedController
         $this->render_template('admin/user/list_files');
     }
 
+    /**
+     * Create array
+     * @param $user_id
+     * @return array
+     */
     private function getActivities($user_id)
     {
         $queries[] = [
@@ -1448,7 +1452,7 @@ class Admin_UserController extends AuthenticatedController
             URLHelper::getLink('dispatch.php/profile?username=' . $this->user->username),
             Icon::create('person', 'clickable'));
 
-        if ($GLOBALS['perm']->have_perm('root')) {
+        if ($GLOBALS['perm']->have_perm('root') && count($this->user)) {
             $views->addLink(_('Datei- und Aktivitätsübersicht'),
                 $this->url_for('admin/user/activities/' . $this->user->user_id),
                 Icon::create('vcard', 'clickable'))
