@@ -21,7 +21,7 @@ require_once 'settings.php';
 class Settings_DetailsController extends Settings_SettingsController
 {
     /**
-     * Set up this controller and define the infobox.
+     * Set up this controller
      *
      * @param String $action Name of the action to be invoked
      * @param Array  $args   Arguments to be passed to the action method
@@ -147,9 +147,9 @@ class Settings_DetailsController extends Settings_SettingsController
         }
 
         if (count($errors) > 0) {
-            $this->reportErrorWithDetails(_('Bitte überprüfen Sie Ihre Eingaben.'), $errors);
+            PageLayout::portError(_('Bitte überprüfen Sie Ihre Eingaben.'), $errors);
         } else if ($this->user->store() || $changed || $datafields_changed) {
-            $this->reportSuccess(_('Daten im Lebenslauf u.a. wurden geändert.'));
+            PageLayout::postSuccess(_('Daten im Lebenslauf u.a. wurden geändert.'));
 
             setTempLanguage($this->user->user_id);
             $this->postPrivateMessage(_('Daten im Lebenslauf u.a. wurden geändert.'));

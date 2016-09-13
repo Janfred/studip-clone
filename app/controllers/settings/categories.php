@@ -90,10 +90,10 @@ class Settings_CategoriesController extends Settings_SettingsController
         $category->priority = 0;
 
         if ($category->store()) {
-            $this->reportSuccess(_('Neue Kategorie angelegt.'));
+            PageLayout::postSuccess(_('Neue Kategorie angelegt.'));
             Visibility::addPrivacySetting($category->name, 'kat_' . $category->id, 'owncategory');
         } else {
-            $this->reportSuccess(_('Anlegen der Kategorie fehlgeschlagen.'));
+            PageLayout::postSuccess(_('Anlegen der Kategorie fehlgeschlagen.'));
         }
 
         $this->redirect('settings/categories');
@@ -112,7 +112,7 @@ class Settings_CategoriesController extends Settings_SettingsController
         $name     = $category->name;
 
         if ($category->range_id !== $GLOBALS['user']->user_id) {
-            $this->reportError(_('Sie haben leider nicht die notwendige Berechtigung für diese Aktion.'))
+            PageLayout::postError(_('Sie haben leider nicht die notwendige Berechtigung für diese Aktion.'))
                  ->redirect('settings/categories');
             return;
         }
@@ -123,10 +123,10 @@ class Settings_CategoriesController extends Settings_SettingsController
         }
 
         if ($category->delete()) {
-            $this->reportSuccess(_('Kategorie "%s" gelöscht!'), $name);
+            PageLayout::postSuccess(_('Kategorie "%s" gelöscht!'), $name);
             Visibility::removePrivacySetting('kat_' . $id);
         } else {
-            $this->reportError(_('Kategorie "%s" konnte nicht gelöscht werden!'), $name);
+            PageLayout::postError(_('Kategorie "%s" konnte nicht gelöscht werden!'), $name);
         }
 
         $this->redirect('settings/categories');
@@ -141,14 +141,14 @@ class Settings_CategoriesController extends Settings_SettingsController
         $categories = $request['categories'];
         foreach ($categories as $id => $data) {
             if (empty($data['name'])) {
-                $this->reportError(_('Kategorien ohne Namen können nicht gespeichert werden!'));
+                PageLayout::postError(_('Kategorien ohne Namen können nicht gespeichert werden!'));
                 continue;
             }
             $category = Kategorie::find($id);
             $category->name    = $data['name'];
             $category->content = $data['content'];
             if ($category->store()) {
-                $this->reportSuccess(_('Kategorien geändert!'));
+                PageLayout::postSuccess(_('Kategorien geändert!'));
                 Visibility::renamePrivacySetting('kat_' . $category->id, $category->name);
             }
         }
@@ -172,9 +172,9 @@ class Settings_CategoriesController extends Settings_SettingsController
         $category1->priority = $priorities - $category1->priority;
 
         if ($category0->store() && $category1->store()) {
-            $this->reportSuccess(_('Kategorien wurden neu geordnet'));
+            PageLayout::postSuccess(_('Kategorien wurden neu geordnet'));
         } else {
-            $this->reportError(_('Kategorien konnten nicht neu geordnet werden.'));
+            PageLayout::postError(_('Kategorien konnten nicht neu geordnet werden.'));
         }
 
         $this->redirect('settings/categories');

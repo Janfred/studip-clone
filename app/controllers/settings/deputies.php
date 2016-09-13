@@ -47,13 +47,13 @@ class Settings_DeputiesController extends Settings_SettingsController
             $this->check_ticket();
 
             if (isDeputy($deputy_id, $this->user->user_id)) {
-                $this->reportError(_('%s ist bereits als Vertretung eingetragen.'), get_fullname($deputy_id, 'full'));
+                PageLayout::postError(_('%s ist bereits als Vertretung eingetragen.'), get_fullname($deputy_id, 'full'));
             } else if ($deputy_id == $this->user->user_id) {
-                $this->reportError(_('Sie können sich nicht als Ihre eigene Vertretung eintragen!'));
+                PageLayout::postError(_('Sie können sich nicht als Ihre eigene Vertretung eintragen!'));
             } else if (addDeputy($deputy_id, $this->user->user_id)) {
-                $this->reportSuccess(_('%s wurde als Vertretung eingetragen.'), get_fullname($deputy_id, 'full'));
+                PageLayout::postSuccess(_('%s wurde als Vertretung eingetragen.'), get_fullname($deputy_id, 'full'));
             } else {
-                $this->reportError(_('Fehler beim Eintragen der Vertretung!'));
+                PageLayout::postError(_('Fehler beim Eintragen der Vertretung!'));
             }
             $this->redirect('settings/deputies');
             return;
@@ -78,7 +78,6 @@ class Settings_DeputiesController extends Settings_SettingsController
         $sidebar = Sidebar::Get();
         $sidebar->setTitle(PageLayout::getTitle());
         $actions = new ActionsWidget();
-        // add "add dozent" to infobox
         $mp = MultiPersonSearch::get('settings_add_deputy')
             ->setLinkText(_('Neue Standardvertretung festlegen'))
             ->setDefaultSelectedUser(array_keys($this->deputies))
@@ -136,12 +135,12 @@ class Settings_DeputiesController extends Settings_SettingsController
         if (count($delete) > 0) {
             $deleted = deleteDeputy($delete, $this->user->user_id);
             if ($deleted) {
-                $this->reportSuccess($deleted == 1
+                PageLayout::postSuccess($deleted == 1
                     ? _('Die Vertretung wurde entfernt.')
                     : _('Es wurden %s Vertretungen entfernt.'),
                     $deleted);
             } else {
-                $this->reportError(_('Fehler beim Entfernen der Vertretung(en).'));
+                PageLayout::postError(_('Fehler beim Entfernen der Vertretung(en).'));
             }
         }
 
@@ -159,9 +158,9 @@ class Settings_DeputiesController extends Settings_SettingsController
             }
 
             if ($success && $changed > 0) {
-                $this->reportSuccess(_('Die Einstellungen wurden gespeichert.'));
+                PageLayout::postSuccess(_('Die Einstellungen wurden gespeichert.'));
             } else if ($changed > 0) {
-                $this->reportError(_('Fehler beim Speichern der Einstellungen.'));
+                PageLayout::postError(_('Fehler beim Speichern der Einstellungen.'));
             }
         }
 

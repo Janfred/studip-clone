@@ -71,7 +71,7 @@ class Settings_CalendarController extends Settings_SettingsController
             'step_day_group'  => Request::option('cal_step_day_group')
         ));
 
-        $this->reportSuccess(_('Ihre Einstellungen wurden gespeichert'));
+        PageLayout::postSuccess(_('Ihre Einstellungen wurden gespeichert'));
         $this->redirect('settings/calendar');
     }
 }

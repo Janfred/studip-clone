@@ -19,7 +19,7 @@ require_once 'settings.php';
 class Settings_AccountController extends Settings_SettingsController
 {
     /**
-     * Set up this controller and define the infobox
+     * Set up this controller
      *
      * @param String $action Name of the action to be invoked
      * @param Array  $args   Arguments to be passed to the action method
@@ -147,11 +147,11 @@ class Settings_AccountController extends Settings_SettingsController
         }
 
         if (count($errors) > 0) {
-            $this->reportErrorWithDetails(_('Bitte überprüfen Sie Ihre Eingaben:'), $errors);
+            PageLayout::postError(_('Bitte überprüfen Sie Ihre Eingaben:'), $errors);
         } else if ($this->user->store()) {
-            $this->reportSuccessWithDetails(_('Ihre Nutzerdaten wurden geändert.'), $success);
+            PageLayout::postSuccess(_('Ihre Nutzerdaten wurden geändert.'), $success);
             if (count($info) > 0) {
-                $this->reportInfoWithDetails(_('Bitte beachten Sie:'), $info);
+                PageLayout::postInfo(_('Bitte beachten Sie:'), $info);
             }
         }
 

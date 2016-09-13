@@ -58,7 +58,7 @@ class Settings_AvatarController extends Settings_SettingsController
         if (Request::submitted('reset')) {
             Avatar::getAvatar($this->user->user_id)->reset();
             Visibility::removePrivacySetting('picture', $this->user->user_id);
-            $this->reportSuccess(_('Bild gelöscht.'));
+            PageLayout::postSuccess(_('Bild gelöscht.'));
         } elseif (Request::submitted('upload')) {
             try {
                 Avatar::getAvatar($this->user->user_id)->createFromUpload('imgfile');
@@ -68,14 +68,14 @@ class Settings_AvatarController extends Settings_SettingsController
                 $message = _('Die Bilddatei wurde erfolgreich hochgeladen. '
                             .'Eventuell sehen Sie das neue Bild erst, nachdem Sie diese Seite '
                             .'neu geladen haben (in den meisten Browsern F5 drücken).');
-                $this->reportSuccess($message);
+                PageLayout::postSuccess($message);
 
                 setTempLanguage($this->user->user_id);
                 $this->postPrivateMessage(_("Ein neues Bild wurde hochgeladen.\n"));
                 restoreLanguage();
                 Visibility::addPrivacySetting(_('Eigenes Bild'), 'picture', 'commondata', 1, $this->user->user_id);
             } catch (Exception $e) {
-                $this->reportError($e->getMessage());
+                PageLayout::postError($e->getMessage());
             }
         }
         $this->redirect('settings/avatar');

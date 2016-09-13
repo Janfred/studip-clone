@@ -51,7 +51,7 @@ class Settings_SettingsController extends AuthenticatedController
         $this->user       = User::findByUsername($username);
         
         if (!$GLOBALS['perm']->get_profile_perm($this->user->user_id)) {
-            $this->reportErrorWithDetails(_('Zugriff verweigert.'), array(
+            PageLayout::postError(_('Zugriff verweigert.'), array(
                 _("Wahrscheinlich ist Ihre Session abgelaufen. Bitte "
                  ."nutzen Sie in diesem Fall den untenstehenden Link, "
                  ."um zurück zur Anmeldung zu gelangen.\n\n"
@@ -87,7 +87,7 @@ class Settings_SettingsController extends AuthenticatedController
                                htmlReady($this->user->Nachname),
                                $username,
                                $this->user->perms);
-            $this->reportInfo($message);
+            PageLayout::postInfo($message);
         }
 
         Sidebar::get()->setImage('sidebar/person-sidebar.png');
@@ -104,17 +104,6 @@ class Settings_SettingsController extends AuthenticatedController
         if (!$ticket || !check_ticket($ticket)) {
             throw new InvalidSecurityTokenException();
         }
-    }
-
-    /**
-     * Switch layout if an infobox is used
-     */
-    protected function populateInfobox()
-    {
-        if (!isset($this->infobox)) {
-            $this->set_layout($GLOBALS['template_factory']->open('layouts/base'));
-        }
-        parent::populateInfobox();
     }
 
     /**

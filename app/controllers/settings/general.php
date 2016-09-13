@@ -71,7 +71,7 @@ class Settings_GeneralController extends Settings_SettingsController
             PersonalNotifications::deactivateAudioFeedback();
         }
 
-        $this->reportSuccess(_('Die Einstellungen wurden gespeichert.'));
+        PageLayout::postSuccess(_('Die Einstellungen wurden gespeichert.'));
         $this->redirect('settings/general');
     }
 }
