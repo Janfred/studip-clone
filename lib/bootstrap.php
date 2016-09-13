@@ -124,7 +124,8 @@ namespace {
     require_once 'lib/language.inc.php';
     require_once 'lib/visual.inc.php';
     require_once 'lib/deputies_functions.inc.php';
-
+    require_once('lib/evaluation/classes/db/EvaluationDB.class.php');
+    
     //setup default logger
     Log::get()->setHandler($GLOBALS['TMP_PATH'] . '/studip.log');
     if (Studip\ENV == 'development') {
