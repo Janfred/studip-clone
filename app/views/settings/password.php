@@ -23,6 +23,6 @@
                    id="new_password_confirm" name="new_password_confirm"
                    data-must-equal="#new_password">
         </label>
-        <footer><?= Button::create(_('Übernehmen'), 'store', ['title' => _('Änderungen übernehmen')]) ?></footer>
     </fieldset>
+    <footer><?= Button::create(_('Übernehmen'), 'store', ['title' => _('Änderungen übernehmen')]) ?></footer>
 </form>
