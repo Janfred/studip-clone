@@ -101,11 +101,8 @@ if(Request::get('key') !== null) {
 } else if(Request::get('email1') && Request::get('email2') && $_SESSION['semi_logged_in'] == Request::option('uid')) {
     if(Request::get('email1') == Request::get('email2')) {
         // change mail
-        require_once('lib/edit_about.inc.php');
-
         $tmp_user = User::find(Request::option('uid'));
-        $send = edit_email($tmp_user, Request::quoted('email1'), True);
-        if($send) {
+        if($tmp_user && $tmp_user->changeEmail(Request::quoted('email1'), true)) {
             $_SESSION['semi_logged_in'] = False;
         }
         

@@ -372,7 +372,7 @@ $INST_ADMIN_DATAFIELDS_VIEW = array(
 /*
  * Fields that may not be hidden by users in their privacy settings.
  * Can be configured per permission level.
- * @see lib/edit_about.inc.php in function get_homepage_elements for
+ * @see lib/models/User.class.php in function getHomepageElements for
  * available fields.
  * Entries look like "'field_name' => true".
  */
