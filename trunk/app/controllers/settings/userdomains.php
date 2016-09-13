@@ -77,7 +77,7 @@ class Settings_UserdomainsController extends Settings_SettingsController
         }
         
         if ($any_change) {
-            $this->reportSuccess(_('Die Zuordnung zu Nutzerdomänen wurde geändert.'));
+            PageLayout::postSuccess(_('Die Zuordnung zu Nutzerdomänen wurde geändert.'));
             
             setTempLanguage($this->user->user_id);
             $this->postPrivateMessage(_("Die Zuordnung zu Nutzerdomänen wurde geändert!\n"));

@@ -62,8 +62,8 @@ class Settings_MessagingController extends Settings_SettingsController
             $settings['request_mail_forward'] = Request::int('request_mail_forward', 0);
 
             $this->config->store('MESSAGING_SETTINGS', $settings);
-
-            $this->reportSuccess(_('Ihre Einstellungen wurden erfolgreich gespeichert.'));
+    
+            PageLayout::postSuccess(_('Ihre Einstellungen wurden erfolgreich gespeichert.'));
             $this->redirect('settings/messaging');
         }
 
@@ -106,13 +106,13 @@ class Settings_MessagingController extends Settings_SettingsController
 
                 $this->config->delete('MESSAGING_SETTINGS');
 
-                $this->reportSuccess(_('Ihre Einstellungen wurden erfolgreich zurückgesetzt.'));
+                PageLayout::postSuccess(_('Ihre Einstellungen wurden erfolgreich zurückgesetzt.'));
             } else if ($action === 'forward_receiver') {
                 $this->user->smsforward_rec  = '';
                 $this->user->smsforward_copy = 0;
                 $this->user->store();
 
-                $this->reportSuccess(_('Empfänger und Weiterleitung wurden erfolgreich gelöscht'));
+                PageLayout::postSuccess(_('Empfänger und Weiterleitung wurden erfolgreich gelöscht'));
             }
         }
         $this->redirect('settings/messaging');

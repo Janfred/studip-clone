@@ -19,7 +19,7 @@ require_once 'settings.php';
 class Settings_NotificationController extends Settings_SettingsController
 {
     /**
-     * Set up this controller and define the infobox
+     * Set up this controller
      *
      * @param String $action Name of the action to be invoked
      * @param Array  $args   Arguments to be passed to the action method
@@ -32,7 +32,7 @@ class Settings_NotificationController extends Settings_SettingsController
     {
         parent::before_filter($action, $args);
 
-        if (!get_config('MAIL_NOTIFICATION_ENABLE')) {
+        if (!Config::get()->MAIL_NOTIFICATION_ENABLE) {
             $message = _('Die Benachrichtigungsfunktion wurde in den Systemeinstellungen nicht freigeschaltet.');
             throw new AccessDeniedException($message);
         }
@@ -162,8 +162,8 @@ class Settings_NotificationController extends Settings_SettingsController
 
         $modules = new ModulesNotification();
         $modules->setModuleNotification(Request::getArray('m_checked'), 'sem');
-
-        $this->reportSuccess(_('Die Einstellungen wurden gespeichert.'));
+    
+        PageLayout::postSuccess(_('Die Einstellungen wurden gespeichert.'));
         $this->redirect('settings/notification');
     }
 

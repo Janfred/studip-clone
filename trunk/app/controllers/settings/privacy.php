@@ -104,7 +104,7 @@ class Settings_PrivacyController extends Settings_SettingsController
         ]);
         NotificationCenter::postNotification('UserVisibilityDidCreate', $GLOBALS['user']->id);
         
-        $this->reportSuccess(_('Ihre Sichtbarkeitseinstellungen wurden gespeichert.'));
+        PageLayout::postSuccess(_('Ihre Sichtbarkeitseinstellungen wurden gespeichert.'));
         $this->redirect('settings/privacy');
     }
     
@@ -135,21 +135,22 @@ class Settings_PrivacyController extends Settings_SettingsController
      * Saves user specified visibility settings for homepage elements.
      *
      * @param array $data all homepage elements with their visiblities in
-     * the form $name => $visibility
+     *                    the form $name => $visibility
      * @return int Number of affected database rows (hopefully 1).
      */
     private function change_homepage_visibility($data)
     {
-        $query = "INSERT INTO user_visibility
+        $query
+                   = "INSERT INTO user_visibility
                     (user_id, homepage, mkdate)
                   VALUES (?, ?, UNIX_TIMESTAMP())
                   ON DUPLICATE KEY
                     UPDATE homepage = VALUES(homepage)";
         $statement = DBManager::get()->prepare($query);
-        $statement->execute(array(
+        $statement->execute([
             $this->user->id,
-            json_encode($data)
-        ));
+            json_encode($data),
+        ]);
         return $statement->rowCount();
     }
     
@@ -162,16 +163,17 @@ class Settings_PrivacyController extends Settings_SettingsController
      */
     private function set_default_homepage_visibility($visibility)
     {
-        $query = "INSERT INTO user_visibility
+        $query
+                   = "INSERT INTO user_visibility
                     (user_id, default_homepage_visibility, mkdate)
                   VALUES (?, ?, UNIX_TIMESTAMP())
                   ON DUPLICATE KEY
                     UPDATE default_homepage_visibility = VALUES(default_homepage_visibility)";
         $statement = DBManager::get()->prepare($query);
-        $statement->execute(array(
+        $statement->execute([
             $this->user->id,
-            (int)$visibility
-        ));
+            (int)$visibility,
+        ]);
         return $statement->rowCount();
     }
     
@@ -187,9 +189,9 @@ class Settings_PrivacyController extends Settings_SettingsController
         if (!$this->bulk()) {
             $data = Request::getArray('visibility_update');
             if (Visibility::updateUserFromRequest($data)) {
-                $this->reportSuccess(_('Ihre Sichtbarkeitseinstellungen wurden gespeichert.'));
+                PageLayout::postSuccess(_('Ihre Sichtbarkeitseinstellungen wurden gespeichert.'));
             } else {
-                $this->reportError(_('Ihre Sichtbarkeitseinstellungen wurden nicht gespeichert!'));
+                PageLayout::postError(_('Ihre Sichtbarkeitseinstellungen wurden nicht gespeichert!'));
             }
         }
         $this->redirect('settings/privacy');
@@ -210,10 +212,10 @@ class Settings_PrivacyController extends Settings_SettingsController
         
         if ($visibility = Request::int('all')) {
             if (Visibility::setAllSettingsForUser($visibility, $this->user->user_id)) {
-                $this->reportSuccess(_('Die Sichtbarkeit der Profilelemente wurde gespeichert.'));
+                PageLayout::postSuccess(_('Die Sichtbarkeit der Profilelemente wurde gespeichert.'));
                 return true;
             } else {
-                $this->reportError(_('Die Sichtbarkeitseinstellungen der Profilelemente wurden nicht gespeichert!'));
+                PageLayout::postError(_('Die Sichtbarkeitseinstellungen der Profilelemente wurden nicht gespeichert!'));
             }
         }
         return false;

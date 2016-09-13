@@ -19,7 +19,7 @@ require_once 'settings.php';
 class Settings_StatusgruppenController extends Settings_SettingsController
 {
     /**
-     * Set up this controller and define the infobox
+     * Set up this controller
      *
      * @param String $action Name of the action to be invoked
      * @param Array $args    Arguments to be passed to the action method
@@ -130,8 +130,7 @@ class Settings_StatusgruppenController extends Settings_SettingsController
                 $institutes[$institute_membership->institut_id]['datafields'] = $datafields;
             }
         }
-        
-        // template for tree-view of roles, layout for infobox-location and content-variables
+            
         $this->institutes = $institutes;
         
         $this->verify_action = $verify_action;
@@ -144,7 +143,7 @@ class Settings_StatusgruppenController extends Settings_SettingsController
         if ($this->locked) {
             $message = LockRules::getObjectRule($this->user->user_id)->description;
             if ($message) {
-                $this->reportInfo($message);
+                PageLayout::postInfo($message);
             }
         }
     }
@@ -225,9 +224,9 @@ class Settings_StatusgruppenController extends Settings_SettingsController
                 checkExternDefaultForUser($this->user->user_id);
                 
                 $_SESSION['edit_about_data']['open'] = $role_id;
-                $this->reportSuccess(_('Die Person wurde in die ausgewählte Gruppe eingetragen!'));
+                PageLayout::postSuccess(_('Die Person wurde in die ausgewählte Gruppe eingetragen!'));
             } else {
-                $this->reportError(_('Fehler beim Eintragen in die Gruppe!'));
+                PageLayout::postError(_('Fehler beim Eintragen in die Gruppe!'));
             }
         }
         
@@ -247,7 +246,7 @@ class Settings_StatusgruppenController extends Settings_SettingsController
             
             RemovePersonStatusgruppe($this->user->username, $id);
             
-            $this->reportSuccess(_('Die Person wurde aus der ausgewählten Gruppe gelöscht!'));
+            PageLayout::postSuccess(_('Die Person wurde aus der ausgewählten Gruppe gelöscht!'));
         }
         
         $this->redirect('settings/statusgruppen');

@@ -1,13 +1,12 @@
 <? use Studip\Button; ?>
 
-<h3><?= _('Ich bin folgenden Nutzerdomänen zugeordnet:') ?></h3>
-
 <? if ($allow_change): ?>
 <form action="<?= $controller->url_for('settings/userdomains/store') ?>" method="post">
     <input type="hidden" name="studipticket" value="<?= get_ticket() ?>">
     <?= CSRFProtection::tokenTag() ?>
     <? endif; ?>
     <table class="default" id="assigned_userdomains">
+        <caption><?= _('Ich bin folgenden Nutzerdomänen zugeordnet:') ?></caption>
         <colgroup>
             <col>
             <col width="100px">
@@ -25,10 +24,10 @@
             </tr>
         </thead>
         <tbody>
-            <? if (count($domains) === 0 && $allow_change): ?>
+            <? if (count($user_domains) === 0): ?>
                 <tr>
-                    <td colspan="2">
-                        <strong><?= _('Sie sind noch keiner Nutzerdomäne zugeordnet.') ?></strong>
+                    <td colspan="2" style="text-align: center">
+                        <?= _('Sie sind noch keiner Nutzerdomäne zugeordnet.') ?>
                     </td>
                 </tr>
             <? endif; ?>
