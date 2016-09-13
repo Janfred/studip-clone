@@ -7,7 +7,7 @@ use Studip\Button, Studip\LinkButton;
     <?= MessageBox::error($error) ?>
 <? endif ?>
 
-<h1><?= _("Veranstaltungsbild hochladen") ?></h1>
+<h1><?= _('Veranstaltungsbild hochladen') ?></h1>
 
 <div style="float: left; padding: 0 1em 1em 0;">
     <?= $avatar->getImageTag(Avatar::NORMAL) ?>
@@ -23,9 +23,9 @@ use Studip\Button, Studip\LinkButton;
 
     <p class="quiet">
         <?= Icon::create('info-circle', 'inactive')->asImg(16, ["style" => 'vertical-align: middle;']) ?>
-        <? printf(_("Die Bilddatei darf max. %s groß sein, es sind nur Dateien mit den Endungen %s, %s oder %s erlaubt!"),
-                  relsize(Avatar::MAX_FILE_SIZE),
-                  '<b>.jpg</b>', '<b>.png</b>', '<b>.gif</b>') ?>
+        <? printf(_('Die Bilddatei darf max. %s groß sein, es sind nur Dateien mit den Endungen %s, %s oder %s erlaubt!'),
+                relsize(Avatar::MAX_FILE_SIZE),
+                '<b>.jpg</b>', '<b>.png</b>', '<b>.gif</b>') ?>
     </p>
 
     <p>
@@ -40,39 +40,3 @@ use Studip\Button, Studip\LinkButton;
         </span>
     </p>
 </form>
-
-<?php
-
-$sidebar = Sidebar::get();
-$sidebar->setImage('sidebar/admin-sidebar.png');
-
-if ($avatar->is_customized()) {
-    $actions = new ActionsWidget();
-    $actions->addLink(_('Bild löschen'),
-                      $controller->link_for('course/avatar/delete', $course_id), Icon::create('trash', 'info'),
-                      array('onclick' => sprintf('return confirm(\'%s\');', _('Wirklich löschen?'))))->asDialog(false);
-    $sidebar->addWidget($actions);
-}
-
-if ($adminList) {
-    $list = new SelectorWidget();
-    $list->setUrl('?#admin_top_links');
-    foreach ($adminList as $seminar) {
-        $list->addElement(new SelectElement($seminar['Seminar_id'], $seminar['name']), 'select-' . $seminar->Seminar_id);
-    }
-    $list->setSelection($course_id);
-    $sidebar->addWidget($list);
-}
-
-if ($adminList) {
-    $infobox[] = array(
-        "kategorie" => _("Veranstaltungsliste:"),
-        "eintrag"   =>
-            array(
-                array(
-                      "icon" => Icon::create('link-intern', 'clickable'),
-                      "text" => $adminList->render()
-                )
-            )
-    );
-}
