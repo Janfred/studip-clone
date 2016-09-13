@@ -35,31 +35,41 @@ echo $flash['message'];
                        href="<?= $controller->link_for('info/' . $rr->getId()) ?>">
                         <?= Icon::create('info', 'clickable', ['title' => _('Weitere Informationen einblenden')])->asImg(16) ?>
                     </a>
-                    <? $params = array('request_id' => $rr->getId()) ?>
+                    <? $actionMenu = ActionMenu::get() ?>
+
+                    <? $params = ['request_id' => $rr->getId()] ?>
+                    <? $dialog = []; ?>
                     <? if (Request::isXhr()) : ?>
                         <? $params['asDialog'] = true; ?>
+                        <? $dialog['data-dialog'] = 'size=big' ?>
                     <? endif ?>
-                    <a <?=($params['asDialog'] ? 'data-dialog="size=big"' : '')?>
-                       href="<?= $controller->link_for('edit/' . $course_id, $params) ?>">
-                        <?= Icon::create('edit', 'clickable', ['title' => _('Diese Anfrage bearbeiten')])->asImg(16) ?>
-                    </a>
+                    <? $actionMenu->addLink(
+                            $controller->link_for('edit/' . $course_id, $params),
+                            _('Diese Anfrage bearbeiten'),
+                            Icon::create('edit', 'clickable', ['title' => _('Diese Anfrage bearbeiten')]),
+                            $dialog) ?>
+
                     <? if (getGlobalPerms($GLOBALS['user']->id) == 'admin' || ($GLOBALS['perm']->have_perm('admin') && count(getMyRoomRequests(null, null, true, $rr->getId())))) : ?>
-                        <a href="<?= URLHelper::getLink('resources.php', array('view'           => 'edit_request',
-                                                                               'single_request' => $rr->getId()
-                        )) ?>">
-                            <?= Icon::create('admin', 'clickable', ['title' => _('Diese Anfrage selbst auflösen')])->asImg(16) ?>
-                        </a>
+                        <? $actionMenu->addLink(
+                                URLHelper::getLink('resources.php', ['view' => 'edit_request', 'single_request' => $rr->getId()]),
+                                _('Diese Anfrage selbst auflösen'),
+                                Icon::create('admin', 'clickable', ['title' => _('Diese Anfrage selbst auflösen')])
+                        ) ?>
                     <? endif ?>
-                    <a href="<?= $controller->link_for('delete/' . $course_id, array('request_id' => $rr->getId())) ?>">
-                        <?= Icon::create('trash', 'clickable', ['title' => _('Diese Anfrage zurückziehen')])->asImg(16) ?>
-                    </a>
+
+                    <? $actionMenu->addLink(
+                            $controller->link_for('delete/' . $course_id, ['request_id' => $rr->getId()]),
+                            _('Diese Anfrage zurückziehen'),
+                            Icon::create('trash', 'clickable', ['title' => _('Diese Anfrage zurückziehen')])
+                    ); ?>
+                    <?= $actionMenu->render() ?>
                 </td>
             </tr>
         <? endforeach ?>
         <? if ($request_id == $rr->getId()) : ?>
             <tr>
                 <td colspan="4">
-                    <?= $this->render_partial('course/room_requests/_request.php', array('request' => $rr)); ?>
+                    <?= $this->render_partial('course/room_requests/_request.php', ['request' => $rr]); ?>
                 </td>
             </tr>
         <? endif ?>
@@ -70,7 +80,7 @@ echo $flash['message'];
 
 <? if (Request::isXhr()) : ?>
     <div data-dialog-button>
-        <?= \Studip\LinkButton::createEdit(_('Neue Raumanfrage erstellen'), $controller->url_for('course/room_requests/new/' . $course_id, $url_params), array('data-dialog' => 'size=big')) ?>
+        <?= \Studip\LinkButton::createEdit(_('Neue Raumanfrage erstellen'), $controller->url_for('course/room_requests/new/' . $course_id, $url_params), ['data-dialog' => 'size=big']) ?>
     </div>
 <? endif ?>
 <?

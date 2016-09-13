@@ -194,7 +194,10 @@ class Course_RoomRequestsController extends AuthenticatedController
             if ($request->isNew()) {
                 $widget->addElement(new WidgetElement(_('Dies ist eine neue Raumanfrage.')));
             } else {
-                $info_txt = '<p>' . sprintf(_('Erstellt von: %s'), htmlReady(User::find($request->user_id)->getFullname())) . '</p>';
+                $info_txt = '';
+                if($request->user) {
+                    $info_txt .= '<p>' . sprintf(_('Erstellt von: %s'), htmlReady($request->user->getFullname())) . '</p>';
+                }
                 $info_txt .= '<p>' . sprintf(_('Erstellt am: %s'), htmlReady(strftime('%x %H:%M', $request->mkdate))) . '</p>';
                 $info_txt .= '<p>' . sprintf(_('Letzte Änderung: %s'), htmlReady(strftime('%x %H:%M', $request->chdate))) . '</p>';
                 $widget->addElement(new WidgetElement($info_txt));
