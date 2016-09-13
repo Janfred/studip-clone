@@ -129,8 +129,8 @@ use Studip\Button, Studip\LinkButton;
                 <td colspan="11" align="right">
                     <input class="middle" type="checkbox" name="check_all" title="<?= _('Alle Benutzer auswählen') ?>"
                            data-proxyfor=".check_all" data-activates=".bulkAction">
-                    <select name="method" class="bulkAction">
-                        <option value="0"><?= _('Bitte wählen') ?></option>
+                    <select name="method" class="bulkAction" required>
+                        <option value=""><?= _('Bitte wählen') ?></option>
                         <option value="send_message"><?= _('Nachricht senden') ?></option>
                         <option value="delete" data-confirm="<?=_('Wollen Sie die ausgewählten Nutzer wirklich löschen?')?>"><?= _('Löschen') ?></option>
                     </select>
