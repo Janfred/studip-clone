@@ -588,6 +588,187 @@ class User extends AuthUserMd5
         return $allowed_status;
     }
     
+    /**
+     * Builds an array containing all available elements that are part of a
+     * user's homepage together with their visibility. It isn't sufficient to
+     * just load the visibility settings from database, because if the user
+     * has added some data (e.g. CV) but not yet assigned a special visibility
+     * to that field, it wouldn't show up.
+     *
+     * @return array An array containing all available homepage elements
+     * together with their visibility settings in the form
+     * $name => $visibility.
+     */
+    public function getHomepageElements()
+    {
+        $homepage_visibility = get_local_visibility_by_id($this->id, 'homepage');
+        if (is_array(json_decode($homepage_visibility, true))) {
+            $homepage_visibility = json_decode($homepage_visibility, true);
+        } else {
+            $homepage_visibility = array();
+        }
+        
+        // News
+        $news = StudipNews::GetNewsByRange($this->id, true);
+        
+        // Non-private dates.
+        if (Config::get()->CALENDAR_ENABLE) {
+            $dates = CalendarEvent::countBySql('range_id = ?', [$this->id]);
+        }
+        
+        // Votes
+        if (Config::get()->VOTE_ENABLE) {
+            $activeVotes  = Questionnaire::countBySQL("user_id = ? AND visible = '1'", [$this->id]);
+            $stoppedVotes = Questionnaire::countBySQL("user_id = ? AND visible = '0'", [$this->id]);
+        }
+        // Evaluations
+        $evalDB = new EvaluationDB();
+        $activeEvals = $evalDB->getEvaluationIDs($this->id, EVAL_STATE_ACTIVE);
+        // Literature
+        $lit_list = StudipLitList::GetListsByRange($this->id);
+        // Free datafields
+        $data_fields = DataFieldEntry::getDataFieldEntries($this->id, 'user');
+        $homepageplugins = [];
+        
+        // Now join all available elements with visibility settings.
+        $homepage_elements = [];
+        
+        if (Avatar::getAvatar($this->id)->is_customized() && !$GLOBALS['NOT_HIDEABLE_FIELDS'][$this->perms]['picture']) {
+            $homepage_elements['picture'] = ['name'         => _('Eigenes Bild'),
+                                              'visibility'  => $homepage_visibility['picture'] ?: get_default_homepage_visibility($this->id),
+                                              'extern'      => true,
+                                              'category'    => 'Allgemeine Daten'];
+        }
+        
+        if ($this->info->motto && !$GLOBALS['NOT_HIDEABLE_FIELDS'][$this->perms]['motto']) {
+            $homepage_elements['motto'] = ['name'       => _('Motto'),
+                                           'visibility' => $homepage_visibility['motto'] ?: get_default_homepage_visibility($this->id),
+                                           'category'   => 'Private Daten'];
+        }
+        if (Config::get()->ENABLE_SKYPE_INFO) {
+            if ($GLOBALS['user']->cfg->getValue('SKYPE_NAME') && !$GLOBALS['NOT_HIDEABLE_FIELDS'][$this->perms]['skype_name']) {
+                $homepage_elements['skype_name'] = ['name'              => _('Skype Name'),
+                                                         'visibility'   => $homepage_visibility['skype_name'] ?: get_default_homepage_visibility($this->id),
+                                                         'category'     => 'Private Daten'];
+            }
+        }
+        if ($this->info->privatnr && !$GLOBALS['NOT_HIDEABLE_FIELDS'][$this->perms]['Private Daten_phone']) {
+            $homepage_elements['private_phone'] = ['name'       => _('Private Telefonnummer'),
+                                                   'visibility' => $homepage_visibility['private_phone'] ?: get_default_homepage_visibility($this->id),
+                                                   'category'   => 'Private Daten'];
+        }
+        if ($this->info->privatcell && !$GLOBALS['NOT_HIDEABLE_FIELDS'][$this->perms]['private_cell']) {
+            $homepage_elements['private_cell'] = ['name'        => _('Private Handynummer'),
+                                                  'visibility'  => $homepage_visibility['private_cell'] ?: get_default_homepage_visibility($this->id),
+                                                  'category'    => 'Private Daten'];
+        }
+        if ($this->info->privadr && !$GLOBALS['NOT_HIDEABLE_FIELDS'][$this->perms]['privadr']) {
+            $homepage_elements['privadr'] = ['name'         => _('Private Adresse'),
+                                             'visibility'   => $homepage_visibility['privadr'] ?: get_default_homepage_visibility($this->id),
+                                             'category'     => 'Private Daten'];
+        }
+        if ($this->info->home && !$GLOBALS['NOT_HIDEABLE_FIELDS'][$this->perms]['homepage']) {
+            $homepage_elements['homepage'] = ['name'        => _('Homepage-Adresse'),
+                                              'visibility'  => $homepage_visibility['homepage'] ?: get_default_homepage_visibility($this->id),
+                                              'extern'      => true,
+                                              'category'    => 'Private Daten'];
+        }
+        if ($news && !$GLOBALS['NOT_HIDEABLE_FIELDS'][$this->perms]['news']) {
+            $homepage_elements['news'] = ['name'        => _('Ankündigungen'),
+                                          'visibility'  => $homepage_visibility['news'] ?: get_default_homepage_visibility($this->id),
+                                          'extern'      => true,
+                                          'category'    => 'Allgemeine Daten'];
+        }
+        if (Config::get()->CALENDAR_ENABLE && $dates && !$GLOBALS['NOT_HIDEABLE_FIELDS'][$this->perms]['dates']) {
+            $homepage_elements['termine'] = ['name'        => _('Termine'),
+                                             'visibility'  => $homepage_visibility['termine'] ?: get_default_homepage_visibility($this->id),
+                                             'extern'      => true,
+                                             'category'    => 'Allgemeine Daten'];
+        }
+        if (Config::get()->VOTE_ENABLE && ($activeVotes || $stoppedVotes || $activeEvals) && !$GLOBALS['NOT_HIDEABLE_FIELDS'][$this->perms]['votes']) {
+            $homepage_elements['votes'] = ['name'       => _('Fragebögen'),
+                                           'visibility' => $homepage_visibility['votes'] ?: get_default_homepage_visibility($this->id),
+                                           'category'   => 'Allgemeine Daten'];
+        }
+        
+        $query = "SELECT 1
+                  FROM user_inst
+                  LEFT JOIN Institute USING (Institut_id)
+                  WHERE user_id = ? AND inst_perms = 'user'";
+        $statement = DBManager::get()->prepare($query);
+        $statement->execute([$this->id]);
+        if ($statement->fetchColumn() && !$GLOBALS['NOT_HIDEABLE_FIELDS'][$this->perms]['studying']) {
+            $homepage_elements['studying'] = ['name'        => _('Wo ich studiere'),
+                                              'visibility'  => $homepage_visibility['studying'] ?: get_default_homepage_visibility($this->id),
+                                              'category'    => 'Studien-/Einrichtungsdaten'];
+        }
+        if ($lit_list && !$GLOBALS['NOT_HIDEABLE_FIELDS'][$this->perms]['literature']) {
+            $homepage_elements["literature"] = ['name'          => _('Literaturlisten'),
+                                                'visibility'    => $homepage_visibility['literature'] ?: get_default_homepage_visibility($this->id),
+                                                'category'      => 'Allgemeine Daten'];
+        }
+        if ($this->info->lebenslauf && !$GLOBALS['NOT_HIDEABLE_FIELDS'][$this->perms]['lebenslauf']) {
+            $homepage_elements['lebenslauf'] = ['name'          => _('Lebenslauf'),
+                                                'visibility'    => $homepage_visibility['lebenslauf'] ?: get_default_homepage_visibility($this->id),
+                                                'extern'        => true,
+                                                'category'      => 'Private Daten'];
+        }
+        if ($this->info->hobby && !$GLOBALS['NOT_HIDEABLE_FIELDS'][$this->perms]['hobby']) {
+            $homepage_elements['hobby'] = ['name'            => _('Hobbies'),
+                                           'visibility'      => $homepage_visibility['hobby'] ?: get_default_homepage_visibility($this->id),
+                                           'category'        => 'Private Daten'];
+        }
+        if ($this->info->publi && !$GLOBALS['NOT_HIDEABLE_FIELDS'][$this->perms]['publi']) {
+            $homepage_elements['publi'] = ['name'           => _('Publikationen'),
+                                           'visibility'     => $homepage_visibility['publi'] ?: get_default_homepage_visibility($this->id),
+                                           'extern'         => true,
+                                           'category'       => 'Private Daten'];
+        }
+        if ($this->info->schwerp && !$GLOBALS['NOT_HIDEABLE_FIELDS'][$this->perms]['schwerp']) {
+            $homepage_elements['schwerp'] = ['name'         => _('Arbeitsschwerpunkte'),
+                                             'visibility'   => $homepage_visibility['schwerp'] ?: get_default_homepage_visibility($this->id),
+                                             'extern'       => true,
+                                             'category'     => 'Private Daten'];
+        }
+        
+        if ($data_fields) {
+            foreach ($data_fields as $key => $field) {
+                if ($field->getValue() && $field->isEditable($this->perms) && !$GLOBALS['NOT_HIDEABLE_FIELDS'][$this->perms][$key]) {
+                    $homepage_elements[$key] = [
+                        'name'       => $field->getName(),
+                        'visibility' => $homepage_visibility[$key]
+                            ?: get_default_homepage_visibility($this->id),
+                        'extern'     => true,
+                        'category'   => 'Zusätzliche Datenfelder'
+                    ];
+                }
+            }
+        }
+        
+        $query = "SELECT kategorie_id, name
+                  FROM kategorien
+                  WHERE range_id = ?
+                  ORDER BY priority";
+        $statement = DBManager::get()->prepare($query);
+        $statement->execute([$this->id]);
+        while ($category = $statement->fetch(PDO::FETCH_ASSOC)) {
+            $homepage_elements['kat_'.$category['kategorie_id']] = ['name'          => $category['name'],
+                                                                    'visibility'    => $homepage_visibility['kat_'.$category['kategorie_id']] ?: get_default_homepage_visibility($this->id),
+                                                                    'extern'        => true,
+                                                                    'category'      => 'Eigene Kategorien'];
+        }
+        
+        if ($homepageplugins) {
+            foreach ($homepageplugins as $plugin) {
+                $homepage_elements['plugin_'.$plugin->getPluginId()] = ['name'          => $plugin->getPluginName(),
+                                                                        'visibility'    => $homepage_visibility['plugin_'.$plugin->getPluginId()] ?: get_default_homepage_visibility($this->id),
+                                                                        'category'      => 'Plugins'];
+            }
+        }
+        return $homepage_elements;
+    }
+    
+    
     
     /**
      * Merge an user ($old_id) to another user ($new_id).  This is a part of the

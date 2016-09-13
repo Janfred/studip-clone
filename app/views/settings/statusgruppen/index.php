@@ -16,7 +16,7 @@
             <h1><?= _('Zuordnungen zu Einrichtungen') ?></h1>
         </header>
         <? foreach ($institutes as $inst_id => $institute): ?>
-            <article class="<?= ContentBoxHelper::classes($inst_id) ?><? if (Request::get('type') == 'institute' && Request::get('open') == $inst_id) : ?>open<? endif ?>">
+            <article class="<?= ContentBoxHelper::classes($inst_id) ?><? if (Request::get('type') == 'institute' && Request::get('open') == $role_id) : ?>open<? endif ?>">
                 <header>
                     <h1>
                         <a href="<?= ContentBoxHelper::href($inst_id) ?>">

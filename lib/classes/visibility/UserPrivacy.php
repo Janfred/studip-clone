@@ -14,17 +14,10 @@
  */
 class UserPrivacy
 {
-
     /**
-     * @var int Userid that owns the privacy settings
+     * @var User object
      */
-    private $userid;
-
-    /**
-     * @var int Username that owns the privacy settings
-     */
-    private $username;
-
+    private $user;
     /**
      * @var array Privacysettingstree
      */
@@ -37,11 +30,9 @@ class UserPrivacy
     public function __construct($userid = null)
     {
         if ($userid == null) {
-            $this->userid = $GLOBALS['user']->user_id;
-            $this->username = $GLOBALS['user']->username;
+            $this->user = $GLOBALS['user'];
         } else {
-            $this->userid = $userid;
-            $this->username = User::find($userid)->username;
+            $this->user = User::find($userid);
         }
     }
 
@@ -53,10 +44,10 @@ class UserPrivacy
     {
         if (!isset($this->profileSettings)) {
             // if the default categories have not been created, do this now
-            if (User_Visibility_Settings::countBySQL('user_id = ? AND category = 0', array($this->userid)) == 0) {
-                Visibility::createDefaultCategories($this->userid);
+            if (User_Visibility_Settings::countBySQL('user_id = ? AND category = 0', array($this->user->id)) == 0) {
+                Visibility::createDefaultCategories($this->user->id);
             }
-            $this->profileSettings = User_Visibility_Settings::findBySQL("user_id = ? AND parent_id = 0 AND identifier <> 'plugins'", array($this->userid));
+            $this->profileSettings = User_Visibility_Settings::findBySQL("user_id = ? AND parent_id = 0 AND identifier <> 'plugins'", array($this->user->id));
             foreach ($this->profileSettings as $i => $vis) {
                 $vis->loadChildren();
                 // remap child settings to default categories
@@ -66,8 +57,7 @@ class UserPrivacy
                 }
             }
 
-            $about = new about($this->username, '');
-            $elements = $about->get_homepage_elements();
+            $elements = $this->user->getHomepageElements();
 
             foreach ($elements as $key => $element) {
                 foreach ($this->profileSettings as $vis) {
@@ -82,7 +72,7 @@ class UserPrivacy
 
                         $child = $idmap[$key] ?: new User_Visibility_Settings();
                         $child->setData(array(
-                            'user_id'    => $this->userid,
+                            'user_id'    => $this->user->id,
                             'parent_id'  => $vis->id,
                             'category'   => 1,
                             'name'       => $element['name'],

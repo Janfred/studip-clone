@@ -529,9 +529,6 @@ class Admin_UserController extends AuthenticatedController
             $this->available_auth_plugins[strtolower($ap)] = $ap;
         }
         
-        
-        $this->about = new about($this->user['username'], '');
-        
         if (count($this->user->institute_memberships)) {
             $this->student_institutes = $this->user->institute_memberships->filter(function ($a) {
                 return $a->inst_perms == 'user';
