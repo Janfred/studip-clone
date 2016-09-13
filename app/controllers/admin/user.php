@@ -171,6 +171,35 @@ class Admin_UserController extends AuthenticatedController
     }
     
     /**
+     * Bulk action (delete users or send message to all)
+     */
+    public function bulk_action()
+    {
+        if (Request::get('method') == 'delete') {
+            $this->flash['delete'] = [
+                'question' => _('Wollen Sie folgende Personen wirklich löschen?'),
+                'action'   => $this->url_for('admin/user/delete'),
+                'users'    => Request::getArray('user_ids'),
+            ];
+        } else {
+            $users = User::findMany(Request::getArray('user_ids'));
+   
+            if($users) {
+                $users = new SimpleCollection($users);
+                $users = $users->pluck('username');
+            }
+           
+            $_SESSION['sms_data'] = array();
+            $_SESSION['sms_data']['p_rec'] = array_filter($users);
+            $this->redirect(URLHelper::getURL('dispatch.php/messages/write', array('default_subject' => '', 'tmpsavesnd' => 1)));
+            return;
+        }
+        $this->relocate('admin/user');
+        return;
+    }
+    
+    
+    /**
      * Deleting one or more users
      *
      * @param md5 $user_id
@@ -266,13 +295,6 @@ class Admin_UserController extends AuthenticatedController
                     StudipMail::setDefaultTransporter($default_mailer);
                 }
                 
-                //sicherheitsabfrage
-            } elseif (!Request::submitted('back')) {
-                $this->flash['delete'] = [
-                    'question' => _('Wollen Sie folgende Personen wirklich löschen?'),
-                    'action'   => $this->url_for('admin/user/delete'),
-                    'users'    => $user_ids,
-                ];
             }
         }
         

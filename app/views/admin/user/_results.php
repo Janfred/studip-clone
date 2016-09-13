@@ -6,7 +6,7 @@ use Studip\Button, Studip\LinkButton;
 
 <br>
 
-<form action="<?= $controller->url_for('admin/user/delete') ?>" method="post">
+<form action="<?= $controller->url_for('admin/user/bulk') ?>" method="post" data-dialog>
     <?= CSRFProtection::tokenTag() ?>
     <table class="default">
         <caption>
@@ -68,7 +68,7 @@ use Studip\Button, Studip\LinkButton;
                         if (!empty($userdomains)) {
                             $domains = [];
                             array_walk($userdomains, function ($a) use (&$domains) {
-                                if(!in_array($a->getName(), $domains)) {
+                                if (!in_array($a->getName(), $domains)) {
                                     $domains[] = $a->getName();
                                 }
                             });
@@ -128,8 +128,15 @@ use Studip\Button, Studip\LinkButton;
             <tr>
                 <td colspan="11" align="right">
                     <input class="middle" type="checkbox" name="check_all" title="<?= _('Alle Benutzer auswählen') ?>"
-                           data-proxyfor=".check_all">
-                    <?= Button::create(_('Löschen'), ['title' => _('Alle ausgewählten Benutzer löschen')]) ?>
+                           data-proxyfor=".check_all" data-activates=".bulkAction">
+                    <select name="method" class="bulkAction">
+                        <option value="0"><?= _('Bitte wählen') ?></option>
+                        <option value="send_message"><?= _('Nachricht senden') ?></option>
+                        <option value="delete" data-confirm="<?=_('Wollen Sie die ausgewählten Nutzer wirklich löschen?')?>"><?= _('Löschen') ?></option>
+                    </select>
+                    <?= Button::create(_('Ausführen'),
+                            ['title' => _('Ausgewählte Aktion ausführen'),
+                             'class' => 'bulkAction']) ?>
                 </td>
             </tr>
 
