@@ -13,8 +13,6 @@
  * @category    Stud.IP
  */
 
-require_once 'lib/edit_about.inc.php';
-
 /**
  * Navigation for the user's profile page. This page includes all
  * information about a user and allows editing this data.

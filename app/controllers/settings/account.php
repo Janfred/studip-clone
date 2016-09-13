@@ -139,8 +139,8 @@ class Settings_AccountController extends Settings_SettingsController
                 } else if ($email1 !== $email2) {
                     $errors[] = _('Die Wiederholung der E-Mail-Adresse stimmt nicht mit Ihrer Eingabe überein.');
                 } else {
-                    if (edit_email($this->user, $email1)) {
-                        $this->user->Email = $email1;
+                    if ($this->user->changeEmail($email1)) {
+                        $this->user->email = $email1;
                     }
                 }
             }

@@ -769,6 +769,111 @@ class User extends AuthUserMd5
     }
     
     
+    /**
+     * @param $user
+     * @param $email
+     * @param bool $force
+     * @return bool
+     */
+    public function changeEmail($email, $force = false)
+    {
+        if ($this->email == $email && !$force) {
+            return true;
+        }
+    
+        if (!$GLOBALS['ALLOW_CHANGE_EMAIL']) {
+            return false;
+        }
+        
+        if (StudipAuthAbstract::CheckField('auth_user_md5.Email', $this->auth_plugin) || LockRules::check($this->user_id, 'email')) {
+            return false;
+        }
+        
+        $validator          = new email_validation_class; ## Klasse zum Ueberpruefen der Eingaben
+        $validator->timeout = 10;
+        $REMOTE_ADDR        = $_SERVER['REMOTE_ADDR'];
+        $Zeit               = date('H:i:s, d.m.Y', time());
+        
+        // accept only registered domains if set
+        $email_restriction = trim(Config::get()->EMAIL_DOMAIN_RESTRICTION);
+        if (!$validator->ValidateEmailAddress($email, $email_restriction)) {
+            if ($email_restriction) {
+                $email_restriction_msg_part = '';
+                $email_restriction_parts    = explode(',', $email_restriction);
+                for ($email_restriction_count = 0; $email_restriction_count < count($email_restriction_parts); $email_restriction_count++) {
+                    if ($email_restriction_count == count($email_restriction_parts) - 1) {
+                        $email_restriction_msg_part .= '@' . trim($email_restriction_parts[$email_restriction_count]) . '<br>';
+                    } else if (($email_restriction_count + 1) % 3) {
+                        $email_restriction_msg_part .= '@' . trim($email_restriction_parts[$email_restriction_count]) . ', ';
+                    } else {
+                        $email_restriction_msg_part .= '@' . trim($email_restriction_parts[$email_restriction_count]) . ',<br>';
+                    }
+                }
+                PageLayout::postError(sprintf(_('Die E-Mail-Adresse fehlt, ist falsch geschrieben oder gehört nicht zu folgenden Domains:%s'),
+                    '<br>' . $email_restriction_msg_part));
+            } else {
+                PageLayout::postError(_('Die E-Mail-Adresse fehlt oder ist falsch geschrieben!'));
+            }
+            return false;
+        }
+        
+        if (!$validator->ValidateEmailHost($email)) {     // Mailserver nicht erreichbar, ablehnen
+            PageLayout::postError(_('Der Mailserver ist nicht erreichbar. Bitte überprüfen Sie, ob Sie E-Mails mit der angegebenen Adresse verschicken können!'));
+            return false;
+        } else {       // Server ereichbar
+            if (!$validator->ValidateEmailBox($email)) {    // aber user unbekannt. Mail an abuse!
+                StudipMail::sendAbuseMessage("edit_about", "Emailbox unbekannt\n\nUser: " . $this->username . "\nEmail: ".$email ."\n\nIP: " . $REMOTE_ADDR ." \nZeit: " . $Zeit . "\n");
+                PageLayout::postError(_('Die angegebene E-Mail-Adresse ist nicht erreichbar. Bitte überprüfen Sie Ihre Angaben!'));
+                return false;
+            }
+        }
+        
+        if (self::countBySql('email = ? AND user_id != ?', [$email, $this->user_id])) {
+            PageLayout::postError(sprintf(_('Die angegebene E-Mail-Adresse wird bereits von einem anderen Benutzer (%s) verwendet. Bitte geben Sie eine andere E-Mail-Adresse an.'),
+                htmlReady($this->getFullName())));
+            return false;
+        }
+        
+        if (StudipAuthAbstract::CheckField('auth_user_md5.validation_key', $this->auth_plugin)) {
+            PageLayout::postSuccess(_('Ihre E-Mail-Adresse wurde geändert!'));
+        } else {
+            // auth_plugin does not map validation_key (what if...?)
+            
+            // generate 10 char activation key
+            $key = '';
+            mt_srand((double)microtime() * 1000000);
+            for ($i = 1; $i <= 10; $i++) {
+                $temp = mt_rand() % 36;
+                if ($temp < 10)
+                    $temp += 48;   // 0 = chr(48), 9 = chr(57)
+                else
+                    $temp += 87;   // a = chr(97), z = chr(122)
+                $key .= chr($temp);
+            }
+            $this->validation_key = $key;
+            
+            $activatation_url = $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'activate_email.php?uid=' . $user->user_id . '&key=' . $user->validation_key;
+            $mailbody = sprintf(_("Dies ist eine Informationsmail des Systems Stud.IP\n(Studienbegleitender Internetsupport von Präsenzlehre)\n- %s-\n\n
+                Um die Änderung Ihrer E-Mail Adresse abzuschließen,\nfolgen Sie bitte dem nachfolgendem Link:\n%s\n\nDer Aktivierungsschlüssel lautet:\n%s\n\n"),
+                $GLOBALS['UNI_NAME_CLEAN'],
+                $activatation_url,
+                $key);
+            
+            $mail = StudipMail::sendMessage($email, _('E-Mail-Änderung Stud.IP'), $mailbody);
+            
+            if (!$mail) {
+                return true;
+            }
+            
+            $this->store();
+            
+            PageLayout::postInfo(sprintf(_('An Ihre neue E-Mail-Adresse <b>%s</b> wurde ein Aktivierungslink geschickt, dem Sie folgen müssen bevor Sie sich das nächste mal einloggen können.'), $email));
+            StudipLog::log("USER_NEWPWD", $user->user_id);
+        }
+        return true;
+    }
+    
+    
     
     /**
      * Merge an user ($old_id) to another user ($new_id).  This is a part of the
