@@ -34,15 +34,15 @@ class Visibilityapi extends Migration {
         $result = $db->query("SELECT value FROM config WHERE field = 'HOMEPAGE_VISIBILITY_DEFAULT' ORDER BY is_default LIMIT 1");
         $default_visibility = constant($result->fetchColumn());
 
-        $sql = "SELECT `username` FROM `auth_user_md5`";
+        $sql = "SELECT `user_id` FROM `auth_user_md5`";
         $stmt = $db->prepare($sql);
         $stmt->execute();
         while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $about = new about($result['username'], '');
-            Visibility::createDefaultCategories($about->auth_user['user_id']);
+            $user = User::find($result['user_id']);
+            Visibility::createDefaultCategories($user->user_id);
 
             //copy all homepage visibility
-            $elements = $about->get_homepage_elements();
+            $elements = $user->getHomepageElements();
             if (is_array($elements)) {
                 foreach ($elements as $key => $state) {
                     if ($state['visibility'] != $default_visibility) {
