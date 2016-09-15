@@ -42,7 +42,7 @@ class Settings_PrivacyController extends Settings_SettingsController
     public function index_action()
     {
         // Get visibility settings from database.
-        $this->global_visibility = get_global_visibility_by_id($this->user->user_id);
+        $this->global_visibility = $this->user->visible;
         $this->online_visibility = get_local_visibility_by_id($this->user->user_id, 'online');
         $this->search_visibility = get_local_visibility_by_id($this->user->user_id, 'search');
         $this->email_visibility  = get_local_visibility_by_id($this->user->user_id, 'email');
