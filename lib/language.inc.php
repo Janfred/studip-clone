@@ -191,15 +191,3 @@ function setLocaleEnv($language, $language_domain = ''){
     }
     return $ret;
 }
-
-function localePictureUrl($filename) {
-    return localeUrl($filename, 'LC_PICTURES');
-}
-
-function localeUrl($filename, $category) {
-    $path = sprintf('locale/%s/%s/%s',
-                    $GLOBALS['_language_path'],
-                    $category,
-                    $filename);
-    return Assets::image_path($path);
-}
