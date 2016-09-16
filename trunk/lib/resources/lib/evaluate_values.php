@@ -1762,7 +1762,7 @@ if (Request::submitted('save_state')) {
             if ($skipped_termin_ids) {
                 foreach ($skipped_termin_ids as $key=>$val) {
                     $skipped_msg="<br>"._("Belegungszeit:")."&nbsp;".date("d.m.Y, H:i", $dates_with_request[$key]["begin"]).(($dates_with_request[$key]["end"]) ? " - ".date("H:i", $dates_with_request[$key]["end"]) : "");
-                    $skipped_msg.=sprintf("&nbsp;"._("Status:")."&nbsp;<font color=\"%s\">%s</font>", ($dates_with_request[$key]["closed"] == 0) ? "red" : "green", ($dates_with_request[$key]["closed"] == 0) ? _("noch nicht bearbeitet") : _("bereits bearbeitet"));
+                    $skipped_msg.=sprintf("&nbsp;"._("Status:")."&nbsp;<span style=\"color:%s\">%s</span>", ($dates_with_request[$key]["closed"] == 0) ? "red" : "green", ($dates_with_request[$key]["closed"] == 0) ? _("noch nicht bearbeitet") : _("bereits bearbeitet"));
                     $skipped_objects++;
                 }
             }
