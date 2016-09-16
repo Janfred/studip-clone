@@ -8,7 +8,6 @@
  * the License, or (at your option) any later version.
  */
 
-require_once 'lib/sms_functions.inc.php';
 require_once 'lib/statusgruppe.inc.php';
 
 class MessagesController extends AuthenticatedController {

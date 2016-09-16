@@ -22,40 +22,8 @@
 
 require_once 'lib/user_visible.inc.php';
 require_once 'lib/datei.inc.php';
-require_once 'lib/sms_functions.inc.php';
 
-function CheckSelected($a, $b)
-{
-    if ($a == $b) {
-        return "selected";
-    } else {
-        return FALSE;
-    }
-}
-//
-function array_add_value($add, $array)
-{
-    foreach ($add as $a) {
-        if (!empty($array)) {
-            if (!in_array($a, $array)) {
-                $x = array_push($array, $a);
-            }
-        } else {
-            $array = array($a);
-        }
-    }
-    return $array;
-}
 
-//
-function array_delete_value($array, $value)
-{
-    for ($i=0;$i<count($array);$i++) {
-        if ($array[$i] == $value)
-            array_splice($array, $i, 1);
-        }
-    return $array;
-}
 
 
 class messaging
@@ -158,32 +126,7 @@ class messaging
             $this->delete_message($message_id, $user_id);
         }
     }
-
-    /**
-     * update messages as readed
-     *
-     * @param $message_id
-     */
-    function set_read_message($message_id)
-    {
-        $query = "UPDATE IGNORE message_user
-                  SET readed = 1
-                  WHERE user_id = ? AND message_id = ?";
-        $statement = DBManager::get()->prepare($query);
-        $statement->execute(array($GLOBALS['user']->id, $message_id));
-    }
-
-    /**
-     * delete all messages from user
-     */
-    function set_read_all_messages()
-    {
-        $query = "UPDATE IGNORE message_user
-                  SET readed = 1
-                  WHERE user_id = ? AND readed = '0' AND deleted = '0' AND snd_rec = 'rec'";
-        $statement = DBManager::get()->prepare($query);
-        $statement->execute(array($GLOBALS['user']->id));
-    }
+    
 
     /**
      *
@@ -294,25 +237,7 @@ class messaging
             MailQueueEntry::add($mail, $message_id, $rec_user_id);
         }
     }
-
-    /**
-     *
-     * @param $id
-     */
-    function get_forward_id($id)
-    {
-        return User::find($id)->smsforward_rec;
-    }
-
-    /**
-     *
-     * @param $id
-     */
-    function get_forward_copy($id)
-    {
-        return User::find($id)->smsforward_copy;
-    }
-
+    
     /**
      *
      * @param $message
@@ -426,7 +351,8 @@ class messaging
         // wir gehen das eben erstellt array durch und schauen, ob irgendwer was weiterleiten moechte.
         // diese user_id schreiben wir in ein tempraeres array
         foreach ($rec_id as $one) {
-            $tmp_forward_id = User::find($this->get_forward_id($one))->user_id;
+            $smsforward_rec = User::find($one)->smsforward_rec;
+            $tmp_forward_id = User::find($smsforward_rec)->user_id;
             if ($tmp_forward_id) {
                 $rec_id[] = $tmp_forward_id;
             }
