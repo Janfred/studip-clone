@@ -13,8 +13,6 @@
  * @category    Stud.IP
  */
 
-require_once 'lib/sms_functions.inc.php';
-
 class MessagingNavigation extends Navigation
 {
     /**
