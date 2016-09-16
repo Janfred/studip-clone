@@ -246,22 +246,19 @@ class ShowToolsRequests
 
                 if ($semObj->getName() != "") {
                     echo $zt->openRow();
-                    //echo "<font size=\"-1\">";
                     echo $zt->cell("&nbsp;");
-                    echo $zt->cell("<font size=\"-1\">$i.</font>");
+                    echo $zt->cell($i);
                     echo $zt->cell("<a href=\"resources.php?view=edit_request&edit=".$val['request_id']."\">".Icon::create('edit', 'clickable', ['title' => _("Anfrage bearbeiten")])->asImg()."</a>");
                     echo $zt->cell((($_SESSION['resources_data']['requests_open'][$val['request_id']]) ? '' : Icon::create('accept', 'accept')->asImg())."</font>");
-                    echo $zt->cell("<font size=\"-1\">".htmlReady($semObj->seminar_number)."</font>");
-                    echo $zt->cell("<font size=\"-1\"><a href=\"dispatch.php/course/details/?sem_id=".$semObj->getId()."&send_from_search=true&send_from_search_page=".urlencode($CANONICAL_RELATIVE_PATH_STUDIP."resources.php?view=list_requests")."\">".my_substr(htmlReady($semObj->getName()),0,50)."</a><br></font>");
+                    echo $zt->cell(htmlReady($semObj->seminar_number));
+                    echo $zt->cell("<a href=\"dispatch.php/course/details/?sem_id=".$semObj->getId()."&send_from_search=true&send_from_search_page=".urlencode($CANONICAL_RELATIVE_PATH_STUDIP."resources.php?view=list_requests")."\">".my_substr(htmlReady($semObj->getName()),0,50)."</a><br>");
                     echo $zt->openCell();
-                    echo "<font size=\"-1\">";
                     $k = false;
                     foreach ($semObj->getMembers('dozent') as $doz) {
                         if ($k) echo ", ";
                         echo "<a href=\"dispatch.php/profile?username={$doz['username']}\">".HtmlReady($doz['fullname'])."</a>";
                         $k = true;
                     }
-                    echo "</font>";
                     $this->selectSemInstituteNames($semObj->getInstitutId());
                     if (!$this->all_semester) {
                         $semester = new SemesterData();
@@ -274,10 +271,10 @@ class ShowToolsRequests
                     }
 
                     echo $zt->closeCell();
-                    echo $zt->cell("<font size=\"-1\"><a href=\"dispatch.php/profile?username=".get_username($reqObj->user_id)."\">".get_fullname($reqObj->user_id)."</a></font>");
-                    echo $zt->cell("<font size=\"-1\">$cursem</font>");
+                    echo $zt->cell("<a href=\"dispatch.php/profile?username=".get_username($reqObj->user_id)."\">".get_fullname($reqObj->user_id)."</a>");
+                    echo $zt->cell("$cursem");
                     if ($license_to_kill){
-                        echo $zt->cell("<font size=\"-1\"><input type=\"checkbox\" name=\"requests_marked_to_kill[]\" value=\"{$val['request_id']}\"></font>", array('align' => 'center'));
+                        echo $zt->cell("<input type=\"checkbox\" name=\"requests_marked_to_kill[]\" value=\"{$val['request_id']}\">", array('align' => 'center'));
                     }
                     echo $zt->closeRow();
                 }
@@ -319,7 +316,6 @@ class ShowToolsRequests
                     <a href="<?= URLHelper::getLink($sem_link) ?>">
                         <b><?= $semObj->seminar_number ? htmlReady($semObj->seminar_number).':' : '' ?><?=htmlReady($semObj->getName())?></b>
                     </a>
-                    <font size="-1">
                         <br>
                         <?
                         $names = $this->selectSemInstituteNames($semObj->getInstitutId());
@@ -342,7 +338,6 @@ class ShowToolsRequests
                         print "&nbsp;&nbsp;&nbsp;&nbsp;"._("verantwortliche Fakultät").": ".htmlReady($names['fak_name'])."<br>";
                         print "&nbsp;&nbsp;&nbsp;&nbsp;"._("aktuelle Teilnehmerzahl").": ".$semObj->getNumberOfParticipants('total').'<br>';
                         ?>
-                    </font>
                 </td>
             </tr>
             <tr>
@@ -374,7 +369,7 @@ class ShowToolsRequests
                     <table cellpadding="2" cellspacing="0" border="0" width="90%">
                         <tr>
                             <td width="70%">
-                                <font size="-1"><b><?=_("angeforderter Raum")?>:</b></font>
+                                <b><?=_("angeforderter Raum")?>:</b>
                             </td>
                             <?
                             unset($resObj);
@@ -386,7 +381,6 @@ class ShowToolsRequests
                                 }
                             ?>
                             <td width="29%" align="right">
-                                <!--<font style="font-size:10px;color:blue;"><?//=_("Kapazität")?></font>-->
                             </td>
                         </tr>
                         <tr>
@@ -454,11 +448,11 @@ class ShowToolsRequests
                             ?>
                         <tr>
                             <td style="border-top:1px solid;" width="100%" colspan="<?=$cols+2?>">
-                                <font size="-1"><b><?=_("Raumgruppe berücksichtigen")?>:</b></font>
+                                <b><?=_("Raumgruppe berücksichtigen")?>:</b>
                             </td>
                         </tr>
                         <tr>
-                        <td colspan="<?=$cols?>"><font size="-1">
+                        <td colspan="<?=$cols?>">
                         <select name="request_tool_choose_group">
                         <option <?=(is_null($group_id) ? 'selected' : '')?> value="-"><?=_("Keine Raumgruppe anzeigen")?></option>
                         <?
@@ -470,11 +464,9 @@ class ShowToolsRequests
                         }
                         ?>
                         </select>
-                        </font>
                         </td>
-                        <td colspan="2"><font size="-1">
+                        <td colspan="2">
                         <?= Button::create(_('Auswählen'), 'request_tool_group') ?><br>
-                        </font>
                         </td>
                         </tr>
                         <?
@@ -538,8 +530,7 @@ class ShowToolsRequests
                         ?>
                         <tr>
                             <td style="border-top:1px solid;" width="100%" colspan="<?=$cols+2?>">
-                                <font size="-1"><b><?=_("weitere passende Räume")?>:</b>
-                                </font>
+                                <b><?=_("weitere passende Räume")?>:</b>
                             </td>
                         </tr>
                         <?
@@ -615,7 +606,6 @@ class ShowToolsRequests
                             ?>
                         <tr>
                             <td colspan="<?=$cols+2?>" align="center">
-                                <font size="-1">
                                     <?=_("zeige Räume")?>
                                     <a href="<?=URLHelper::getLink('?dec_limit_low=1')?>">-</a>
                                     <input type="text" name="search_rooms_limit_low" size="1" value="<?=($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["search_limit_low"] + 1)?>">
@@ -627,7 +617,6 @@ class ShowToolsRequests
                                     <a href="<?=URLHelper::getLink('?inc_limit_high=1') ?>">+</a>
 
                                     <?= Icon::create('arr_2up', 'sort', ['title' => 'ausgewählten Bereich anzeigen'])->asInput(array('name'=>'matching_rooms_limit_submit',)) ?>
-                                </font>
                             </td>
                         </tr>
                             <?
@@ -639,7 +628,7 @@ class ShowToolsRequests
                         ?>
                         <tr>
                             <td style="border-top:1px solid;" width="100%" colspan="<?=$cols+2?>">
-                                <font size="-1"><b><?=_("Räume aus der Merkliste")?>:</b></font>
+                                <b><?=_("Räume aus der Merkliste")?>:</b>
                             </td>
                         </tr>
                         <?
