@@ -216,6 +216,7 @@ class messaging
     function sendingEmail($rec_user_id, $snd_user_id, $message, $subject, $message_id)
     {
         $receiver = User::find($rec_user_id);
+        $message  = Message::find($message_id);
         $to = $receiver->Email;
 
         // do not try to send mails to users without a mail address
@@ -237,10 +238,10 @@ class messaging
         }
         $attachments = array();
         if ($GLOBALS['ENABLE_EMAIL_ATTACHMENTS']) {
-            $attachments = get_message_attachments($message_id);
-            $size_of_attachments = array_sum(array_map(function ($a) {
-                return $a['filesize'];
-            }, $attachments));
+            $size_of_attachments = 0;
+            $message->attachments->filter(function($a) use (&$size_of_attachments){
+                $size_of_attachments += $a->filesize;
+            });
             //assume base64 takes 33% more space
             $attachments_as_links = $size_of_attachments * 1.33 > $GLOBALS['MAIL_ATTACHMENTS_MAX_SIZE'] * 1024 * 1024;
         }
@@ -364,10 +365,11 @@ class messaging
 
         // Setzen der Message-ID als Range_ID für angehängte Dateien
         if (isset($this->provisonal_attachment_id) && $GLOBALS['ENABLE_EMAIL_ATTACHMENTS']) {
-            $query = "UPDATE dokumente SET range_id = ?, description = '' WHERE dokument_id = ?";
-            $statement = DBManager::get()->prepare($query);
-            foreach (get_message_attachments($this->provisonal_attachment_id, true) as $attachment) {
-                $statement->execute(array($tmp_message_id, $attachment['dokument_id']));
+            $attachments = StudipDocument::find($this->provisonal_attachment_id);
+            foreach($attachments as $attachment) {
+                $attachment->range_id = $tmp_message_id;
+                $attachment->description = '';
+                $attachments->store();
             }
         }
 

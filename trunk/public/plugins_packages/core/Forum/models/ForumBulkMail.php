@@ -109,8 +109,9 @@ class ForumBulkMail extends Messaging {
                 }
 
                 if($GLOBALS["ENABLE_EMAIL_ATTACHMENTS"]){
-                    foreach(get_message_attachments($data['message_id']) as $attachment){
-                        $mail->addStudipAttachment($attachment['dokument_id']);
+                    $message = Message::find($data['message_id']);
+                    foreach($message->attachments as $attachment){
+                        $mail->addStudipAttachment($attachment->id);
                     }
                 }
                 $mail->send();
