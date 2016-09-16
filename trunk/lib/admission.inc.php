@@ -112,8 +112,8 @@ function insert_seminar_user($seminar_id, $user_id, $status, $copy_studycourse =
     if ($cs) {
         $prio_delete = AdmissionPriority::unsetPriority($cs->getId(), $user_id, $sem->getId());
     }
-
-    removeScheduleEntriesMarkedAsVirtual($user_id, $seminar_id);
+    
+    CalendarScheduleModel::deleteSeminarEntries($user_id, $seminar_id);
 
     // reload the seminar, the contingents have changed
     $sem->restore();
@@ -121,34 +121,6 @@ function insert_seminar_user($seminar_id, $user_id, $status, $copy_studycourse =
     return true;
 }
 
-/**
- * Removes entries marked in the schedule as virtual.
- * This function serves the following scenario:
- * If a user first added the dates of one seminar to his or her schedule and later did participate in the seminar
- * then the previously as 'virtual' added dates should be removed with this function.
- *
- * @param $user_id the id of the user the schedule belongs to
- * @param $seminar_id the id of the seminar the schedule belongs to
- */
-function removeScheduleEntriesMarkedAsVirtual($user_id, $seminar_id)
-{
-    CalendarScheduleModel::deleteSeminarEntries($user_id, $seminar_id);
-}
-
-/**
- * This function calculate the remaining places for the complete seminar
- *
- * This function calculate the remaining places for the complete seminar. It considers all the allocations
- * and it avoids rounding errors
- *
- * @param        string  seminar_id  the seminar_id of the seminar to calculate
- * @return       integer
- *
- */
-
-function get_free_admission ($seminar_id) {
-    return Seminar::GetInstance($seminar_id)->getFreeAdmissionSeats();
-}
 
 /**
  * This function numbers a waiting list
