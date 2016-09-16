@@ -208,7 +208,7 @@ namespace {
 
     if (Config::get()->CALENDAR_ENABLE) {
         StudipAutoloader::addAutoloadPath($GLOBALS['STUDIP_BASE_PATH'] . '/' . $GLOBALS['RELATIVE_PATH_CALENDAR'] . '/lib');
-        require_once $GLOBALS['STUDIP_BASE_PATH'] . '/' . $GLOBALS['RELATIVE_PATH_CALENDAR'] . '/calendar_func.inc.php';
+        require_once 'lib/calendar_functions.inc.php';
     }
 
     if (Config::get()->ELEARNING_INTERFACE_ENABLE) {
