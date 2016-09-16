@@ -220,114 +220,72 @@ class SemBrowse {
         }
     }
 
-    function print_qs(){
-        // add skip link
-        SkipLinks::addIndex(_("Suchformular"), 'search_sem_qs', 100);
-        // add a skip link for advanced search here
-     //   SkipLinks::addLink(_("Erweiterte Suche"), URLHelper::getLink('dispatch.php/search/courses', array('cmd' => 'xts', 'level' => 'f')), 120);
-        //Quicksort Formular... fuer die eiligen oder die DAUs....
-        echo $this->search_obj->getFormStart(URLHelper::getLink());
-        echo "<table id=\"search_sem_qs\" border=\"0\" align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
-        echo "<tr><td class=\"table_row_even\" align=\"center\" valign=\"middle\"><font size=\"-1\">";
-        echo '<label for="search_sem_qs_choose">' . _("Schnellsuche:") . "</label>&nbsp;";
-        echo $this->search_obj->getSearchField("qs_choose",array('style' => 'vertical-align:middle;font-size:9pt;', 'id' => 'search_sem_qs_choose'));
-        if ($this->sem_browse_data['level'] == "vv"){
+    /**
+     * Prints the quicksearch form.
+     */
+    private function printQuickSearch()
+    {
+        if ($this->sem_browse_data['level'] === 'vv') {
             $this->search_obj->sem_tree =& $this->sem_tree->tree;
-            if ($this->sem_tree->start_item_id != 'root'){
+            if ($this->sem_tree->start_item_id !== 'root') {
                 $this->search_obj->search_scopes[] = $this->sem_tree->start_item_id;
             }
-            echo "&nbsp;<label for=\"search_sem_scope_choose\">" . _("in:") . "</label>&nbsp;" . $this->search_obj->getSearchField("scope_choose",array('style' => 'vertical-align:middle;font-size:9pt;', 'id' => 'search_sem_scope_choose'),$this->sem_tree->start_item_id);
-            echo "\n<input type=\"hidden\" name=\"level\" value=\"vv\">";
-        }
-        if ($this->sem_browse_data['level'] == "ev"){
+        } elseif ($this->sem_browse_data['level'] === 'ev') {
             $this->search_obj->range_tree =& $this->range_tree->tree;
-            if ($this->range_tree->start_item_id != 'root'){
+            if ($this->range_tree->start_item_id !== 'root'){
                 $this->search_obj->search_ranges[] = $this->range_tree->start_item_id;
             }
-            echo "&nbsp;<label for=\"search_sem_range_choose\">" . _("in:") . "</label>&nbsp;" . $this->search_obj->getSearchField("range_choose",array('style' => 'vertical-align:middle;font-size:9pt;', 'id' => 'search_sem_range_choose'),$this->range_tree->start_item_id);
-            echo "\n<input type=\"hidden\" name=\"level\" value=\"ev\">";
         }
-        echo "&nbsp;<label for=\"search_sem_sem\">" . _("Semester:") . "</label>&nbsp;";
-        echo $this->search_obj->getSearchField("sem",array('style' => 'vertical-align:middle;font-size:9pt;', 'id' => 'search_sem_sem'),$this->sem_browse_data['default_sem']);
-        echo "&nbsp;";
-        echo $this->search_obj->getSemChangeButton(array('style' => 'vertical-align:middle'));
-        echo "</font></td></tr><tr><td class=\"table_row_even\" align=\"center\" valign=\"middle\">";
-        $quicksearch = QuickSearch::get($this->search_obj->form_name . "_quick_search", new SeminarSearch('number-name-lecturer'))
-                    ->setAttributes(array('aria-label' => _("Suchbegriff")))
-                    ->setInputStyle("vertical-align:middle;font-size:9pt;width:50%;")
-                    ->fireJSFunctionOnSelect("selectSem")
-                    ->noSelectbox()
-                    ->defaultValue($this->sem_browse_data['sset'] && strlen($this->sem_browse_data['sset']) ? $this->sem_browse_data['sset'] : '', $this->sem_browse_data['sset'] && strlen($this->sem_browse_data['sset']) ? $this->sem_browse_data['sset'] : '');
-        echo $quicksearch->render();
-        echo "&nbsp;";
-        echo $this->search_obj->getSearchButton(array('style' => 'vertical-align:middle', 'class' => "quicksearchbutton"), true);
-        echo \Studip\LinkButton::create(_('Zurücksetzen'), URLHelper::getURL('?reset_all=1'), array('title' => _("Zurücksetzen")));
-        echo "</td></tr>";
-        echo $this->search_obj->getFormEnd();
-        echo "</table>\n";
-        echo '<script type="text/javascript">jQuery(function () { jQuery("#' . $quicksearch->getId() . '").focus(); });</script>' . chr(10);
+
+        $template = $GLOBALS['template_factory']->open('sembrowse/quick-search.php');
+        $template->search_obj      = $this->search_obj;
+        $template->sem_browse_data = $this->sem_browse_data;
+        $template->sem_tree        = $this->sem_tree;
+        $template->range_tree      = $this->range_tree;
+        $template->quicksearch     = $this->getQuicksearch();
+
+        echo $template->render();
     }
 
-    function print_xts(){
-        // add skip link
-        SkipLinks::addIndex(_("Suchformular"), 'search_sem_xts', 100);
-        // add skip link for simple search here
-        SkipLinks::addLink(_("Schnellsuche"), URLHelper::getURL('dispatch.php/search/courses', array('cmd' => 'qs', 'level' => 'f')), 120);
-        $this->search_obj->attributes_default = array('style' => 'width:100%;font-size:10pt;');
-        $this->search_obj->search_fields['type']['size'] = 40 ;
-        echo "<table id=\"search_sem_xts\" border=\"0\" align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
-        echo $this->search_obj->getFormStart(URLHelper::getLink("?send=yes"));
-        echo "<tr><td class=\"table_row_even\" align=\"right\" width=\"15%\"><label for=\"search_sem_title\">" . _("Titel:") . "</label> </td>";
-        echo "<td class=\"table_row_even\" align=\"left\" width=\"35%\">";
-        echo $this->search_obj->getSearchField("title", array('id' => 'search_sem_title', 'style' => 'width:100%;font-size:10pt;'));
-        echo "</td><td class=\"table_row_even\" align=\"right\" width=\"15%\"><label for=\"search_sem_type\">" . _("Typ:") . "</label></td><td class=\"table_row_even\" align=\"left\" width=\"35%\">";
-        echo $this->search_obj->getSearchField("type",array('style' => 'width:*;font-size:10pt;', 'id' => 'search_sem_type'));
-        echo "</td></tr>\n";
-        echo "<tr><td class=\"table_row_even\" align=\"right\" width=\"15%\"><label for=\"search_sem_sub_title\">" . _("Untertitel:") . "</label> </td>";
-        echo "<td  class=\"table_row_even\" align=\"left\" width=\"35%\">";
-        echo $this->search_obj->getSearchField("sub_title", array('id' => 'search_sem_sub_title', 'style' => 'width:100%;font-size:10pt;'));
-        echo "</td><td class=\"table_row_even\" align=\"right\" width=\"15%\"><label for=\"search_sem_sem\">" . _("Semester:") . "</label> </td>";
-        echo "<td class=\"table_row_even\" align=\"left\" width=\"35%\">";
-        echo $this->search_obj->getSearchField("sem",array('style' => 'width:*;font-size:10pt;', 'id' => 'search_sem_sem'),$this->sem_browse_data['default_sem']);
-        echo "</td></tr>";
-        echo "<tr><td class=\"table_row_even\" align=\"right\" width=\"15%\"><label for=\"search_sem_number\">" . _("Nummer:") . "</label> </td>";
-        echo "<td class=\"table_row_even\" align=\"left\" width=\"35%\">";
-        echo $this->search_obj->getSearchField("number", array('id' => 'search_sem_number', 'style' => 'width:100%;font-size:10pt;'));
-        echo "</td><td class=\"table_row_even\" align=\"right\" width=\"15%\">&nbsp;</td><td class=\"table_row_even\" align=\"left\" width=\"35%\">&nbsp; </td></tr>\n";
-        echo "<tr><td class=\"table_row_even\" align=\"right\" width=\"15%\"><label for=\"search_sem_comment\">" . _("Kommentar:") . "</label> </td>";
-        echo "<td class=\"table_row_even\" align=\"left\" width=\"35%\">";
-        echo $this->search_obj->getSearchField("comment", array('id' => 'search_sem_comment', 'style' => 'width:100%;font-size:10pt;'));
-        echo "</td><td class=\"table_row_even\" align=\"right\" width=\"15%\">&nbsp;</td><td class=\"table_row_even\" align=\"left\" width=\"35%\">&nbsp; </td></tr>\n";
-        echo "<tr><td class=\"table_row_even\" align=\"right\" width=\"15%\"><label for=\"search_sem_lecturer\">" . _("Lehrende:") . "</label> </td>";
-        echo "<td class=\"table_row_even\" align=\"left\" width=\"35%\">";
-        echo $this->search_obj->getSearchField("lecturer", array('id' => 'search_sem_lecturer', 'style' => 'width:100%;font-size:10pt;'));
-        echo "</td><td class=\"table_row_even\" align=\"right\" width=\"15%\"><label for=\"search_sem_combination\">" . _("Verknüpfung:") . "</label> </td>";
-        echo "<td class=\"table_row_even\" align=\"left\" width=\"35%\">";
-        echo $this->search_obj->getSearchField("combination",array('style' => 'width:*;font-size:10pt;', 'id' => 'search_sem_combination'));
-        echo "</td></tr>\n";
-        if ($this->show_class()) {
-            echo "<tr><td class=\"table_row_even\" align=\"right\" width=\"15%\"><label for=\"search_sem_scope\">" . _("Bereich:") . "</label> </td>";
-            echo "<td class=\"table_row_even\" align=\"left\" width\"35%\">";
-            echo $this->search_obj->getSearchField("scope", array('id' => 'search_sem_scope', 'style' => 'width:100%;font-size:10pt;'));
-            echo "</td><td class=\"table_row_even\" colspan=\"2\">&nbsp</td></tr>";
-        }
-        echo "<tr><td class=\"table_row_even\" align=\"center\" colspan=\"4\">";
-        echo $this->search_obj->getSearchButton();
-        echo "&nbsp;";
-        echo \Studip\LinkButton::create(_('Zurücksetzen'), URLHelper::getURL('?cmd=xts&level=f&reset_all=1'), array('title' => _("Zurücksetzen")));
-        echo "&nbsp</td></tr>\n";
-        echo $this->search_obj->getFormEnd();
-        echo "</table>\n";
+    private function getQuicksearch()
+    {
+        $quicksearch = QuickSearch::get(
+            $this->search_obj->form_name . '_quick_search',
+            new SeminarSearch('number-name-lecturer')
+        );
+
+        $quicksearch->setAttributes([
+            'aria-label' => _('Suchbegriff'),
+            'autofocus'  => '',
+        ]);
+        $quicksearch->fireJSFunctionOnSelect('selectSem');
+        $quicksearch->noSelectbox();
+        $quicksearch->defaultValue(
+            $this->sem_browse_data['sset'] ?: '',
+            $this->sem_browse_data['sset'] ?: ''
+        );
+
+        return $quicksearch;
     }
 
-    function do_output(){
-        if ($this->sem_browse_data['cmd'] == "xts"){
-            $this->print_xts();
+    private function printExtendedSearch()
+    {
+        $template = $GLOBALS['template_factory']->open('sembrowse/extended-search.php');
+        $template->search_obj      = $this->search_obj;
+        $template->sem_browse_data = $this->sem_browse_data;
+        $template->show_class      = $this->show_class();
+        echo $template->render();
+    }
+
+    public function do_output()
+    {
+        if ($this->sem_browse_data['cmd'] == 'xts') {
+            $this->printExtendedSearch();
         } else {
-            $this->print_qs();
+            $this->printQuickSearch();
         }
         $this->print_level();
-        if ($this->show_result){
+        if ($this->show_result) {
             $this->print_result();
         }
     }
@@ -750,40 +708,43 @@ class SemBrowse {
         }
         $group_by_data = $snap->getGroupedResult($group_field, $data_fields);
         $sem_data = $snap->getGroupedResult("Seminar_id");
+
+//        var_dump($group_by_data, $sem_data, $snap->getGroupedResult('sem_number_end', ['sem_number', 'Seminar_id']));die;
+
         if ($this->sem_browse_data['group_by'] == 0){
             $group_by_duration = $snap->getGroupedResult("sem_number_end", array("sem_number","Seminar_id"));
-            foreach ($group_by_duration as $sem_number_end => $detail){
+            foreach ($group_by_duration as $sem_number_end => $detail) {
                 if ($sem_number_end != -1 && ($detail['sem_number'][$sem_number_end] && count($detail['sem_number']) == 1)){
                     continue;
-                } else {
-                    $current_semester_index = SemesterData::GetInstance()->GetSemesterIndexById(Semester::findCurrent()->semester_id);
-                    foreach ($detail['Seminar_id'] as $seminar_id => $foo){
-                        $start_sem = key($sem_data[$seminar_id]["sem_number"]);
-                        if ($sem_number_end == -1) {
-                            if ($this->sem_number === false) {
-                                $sem_number_end = $current_semester_index && isset($this->search_obj->sem_dates[$current_semester_index + 1]) ? $current_semester_index + 1 : count($this->search_obj->sem_dates)-1;
-                            } else {
-                                $sem_number_end = $this->sem_number[0];
-                            }
+                }
+
+                $current_semester_index = SemesterData::GetInstance()->GetSemesterIndexById(Semester::findCurrent()->semester_id);
+                foreach (array_keys($detail['Seminar_id']) as $seminar_id) {
+                    $start_sem = key($sem_data[$seminar_id]["sem_number"]);
+                    if ($sem_number_end == -1) {
+                        if ($this->sem_number === false) {
+                            $sem_number_end = $current_semester_index && isset($this->search_obj->sem_dates[$current_semester_index + 1]) ? $current_semester_index + 1 : count($this->search_obj->sem_dates)-1;
+                        } else {
+                            $sem_number_end = $this->sem_number[0];
                         }
-                        for ($i = $start_sem; $i <= $sem_number_end; ++$i){
-                            if ($this->sem_number === false || (is_array($this->sem_number) && in_array($i,$this->sem_number))){
-                                if ($group_by_data[$i] && !$tmp_group_by_data[$i]){
-                                    foreach($group_by_data[$i]['Seminar_id'] as $id => $bar){
-                                        $tmp_group_by_data[$i]['Seminar_id'][$id] = true;
-                                    }
+                    }
+                    for ($i = $start_sem; $i <= $sem_number_end; ++$i){
+                        if ($this->sem_number === false || is_array($this->sem_number) && in_array($i,$this->sem_number)) {
+                            if ($group_by_data[$i] && !$tmp_group_by_data[$i]) {
+                                foreach (array_keys($group_by_data[$i]['Seminar_id']) as $id) {
+                                    $tmp_group_by_data[$i]['Seminar_id'][$id] = true;
                                 }
-                                $tmp_group_by_data[$i]['Seminar_id'][$seminar_id] = true;
                             }
+                            $tmp_group_by_data[$i]['Seminar_id'][$seminar_id] = true;
                         }
                     }
                 }
             }
-            if (is_array($tmp_group_by_data)){
-                if ($this->sem_number !== false){
+            if (is_array($tmp_group_by_data)) {
+                if ($this->sem_number !== false) {
                     unset($group_by_data);
                 }
-                foreach ($tmp_group_by_data as $start_sem => $detail){
+                foreach ($tmp_group_by_data as $start_sem => $detail) {
                     $group_by_data[$start_sem] = $detail;
                 }
             }
@@ -796,42 +757,46 @@ class SemBrowse {
         foreach ($group_by_data as $group_field => $sem_ids){
             foreach ($sem_ids['Seminar_id'] as $seminar_id => $foo){
                 $name = strtolower(key($sem_data[$seminar_id]["Name"]));
-                $name = str_replace("ä","ae",$name);
-                $name = str_replace("ö","oe",$name);
-                $name = str_replace("ü","ue",$name);
+                $name = str_replace(['ä', 'ö', 'ü'], ['ae', 'oe', 'ue'], $name);
                 if (Config::get()->IMPORTANT_SEMNUMBER && key($sem_data[$seminar_id]['VeranstaltungsNummer'])) {
-                    $name = key($sem_data[$seminar_id]['VeranstaltungsNummer']).' '.$name;
+                    $name = key($sem_data[$seminar_id]['VeranstaltungsNummer']) . ' ' . $name;
                 }
                 $group_by_data[$group_field]['Seminar_id'][$seminar_id] = $name;
             }
             uasort($group_by_data[$group_field]['Seminar_id'], 'strnatcmp');
         }
 
-        switch ($this->sem_browse_data["group_by"]){
+        switch ($this->sem_browse_data['group_by']) {
             case 0:
-            krsort($group_by_data, SORT_NUMERIC);
+                krsort($group_by_data, SORT_NUMERIC);
             break;
 
             case 1:
-            uksort($group_by_data, create_function('$a,$b',
-            '$the_tree = TreeAbstract::GetInstance("StudipSemTree", false);
-            $the_tree->buildIndex();
-            return (int)($the_tree->tree_data[$a]["index"] - $the_tree->tree_data[$b]["index"]);
-            '));
+                uksort($group_by_data, function($a,$b) {
+                    $the_tree = TreeAbstract::GetInstance('StudipSemTree', false);
+                    $the_tree->buildIndex();
+                    return $the_tree->tree_data[$a]['index'] - $the_tree->tree_data[$b]['index'];
+                });
             break;
 
             case 3:
-            uksort($group_by_data, create_function('$a,$b',
-            'global $SEM_CLASS,$SEM_TYPE;
-            return strnatcasecmp($SEM_TYPE[$a]["name"]." (". $SEM_CLASS[$SEM_TYPE[$a]["class"]]["name"].")",
-            $SEM_TYPE[$b]["name"]." (". $SEM_CLASS[$SEM_TYPE[$b]["class"]]["name"].")");'));
+                uksort($group_by_data, function ($a,$b) {
+                    global $SEM_CLASS,$SEM_TYPE;
+                    return strnatcasecmp($SEM_TYPE[$a]['name'], $SEM_TYPE[$b]['name'])
+                        ?: strnatcasecmp(
+                               $SEM_CLASS[$SEM_TYPE[$a]['class']]['name'],
+                               $SEM_CLASS[$SEM_TYPE[$b]["class"]]['name']
+                           );
+                });
             break;
             default:
-            uksort($group_by_data, 'strnatcasecmp');
+                uksort($group_by_data, 'strnatcasecmp');
             break;
 
         }
+//        var_dump($group_by_data, $sem_data);die;
+
         return array($group_by_data, $sem_data);
     }
 }
-?>
+
