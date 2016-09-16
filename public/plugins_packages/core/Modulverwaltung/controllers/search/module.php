@@ -604,11 +604,6 @@ class Search_ModuleController extends MVVController
         }
     }
 
-    protected function initInfobox()
-    {
-        $this->setInfoBoxImage('infobox/board1.jpg');
-    }
-
     private function getSemesterCourses($modul)
     {
         $semester = Semester::getAll();

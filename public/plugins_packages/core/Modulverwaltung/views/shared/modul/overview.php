@@ -121,8 +121,8 @@
                         <ul>  
                             <? foreach ($gruppe['courses'] as $seminar_id => $course): ?>
                             	<li>
-                                    <a href="<?= URLHelper::getLink('details.php', array('sem_id' => $seminar_id)) ?>">
-                                    <?= $course['VeranstaltungsNummer'] . ' - ' . $course['Name'] ?>
+                                    <a href="<?= URLHelper::getLink('dispatch.php/course/details', ['sem_id' => $seminar_id]) ?>">
+                                    <?= htmlReady($course['VeranstaltungsNummer']) . ' - ' . htmlReady($course['Name']) ?>
                                     </a>
                                 </li>
                             <? endforeach; ?>
