@@ -2260,7 +2260,8 @@ class Seminar
             if ($cs) {
                 $prio_delete = AdmissionPriority::unsetPriority($cs->getId(), $user_id, $this->getId());
             }
-            removeScheduleEntriesMarkedAsVirtual($user_id, $this->getId());
+            
+            CalendarScheduleModel::deleteSeminarEntries($user_id, $this->getId());
             NotificationCenter::postNotification("CourseDidGetMember", $this, $user_id);
             NotificationCenter::postNotification('UserDidEnterCourse', $this->id, $user_id);
             StudipLog::log('SEM_USER_ADD', $this->id, $user_id, $status, 'Wurde in die Veranstaltung eingetragen');
