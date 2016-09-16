@@ -72,8 +72,12 @@ $rules = [
     'get_ampel_read' => false,
     'localePictureUrl' => false,
     'localeUrl' => false,
+    'isDatesMultiSem' => false,
+    'getMetadateCorrespondingDates' => false,
+    'getCorrespondingMetadates' => false,
 
     'get_message_attachments' => 'Use #{yellow:Message::attachments} attribute instead',
+    'view_turnus' => 'Use #{yellow:Seminar::getFormattedTurnus()} instead',
 ];
 
 
