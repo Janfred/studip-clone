@@ -168,7 +168,7 @@ function renumber_admission ($seminar_id, $send_message = TRUE)
                 setTempLanguage($user_id);
                 $message = sprintf(_('Sie sind in der Warteliste der Veranstaltung **%s (%s)** hochgestuft worden. Sie stehen zur Zeit auf Position %s.'),
                     $seminar->name,
-                    view_turnus($seminar->seminar_id),
+                    $seminar->getFormattedTurnus(),
                     $position);
                 $subject = sprintf(_('Ihre Position auf der Warteliste der Veranstaltung %s wurde verändert'), $seminar->name);
                 restoreLanguage();
