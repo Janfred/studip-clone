@@ -49,7 +49,7 @@
                                     <ul style="list-style-type:none;">
                                     <? foreach ($courses[$semester->id] as $course) : ?>
                                         <li>
-                                            <a href="<?= URLHelper::getLink('details.php', array('sem_id' => $course['seminar_id'])) ?>">
+                                            <a href="<?= URLHelper::getLink('dispatch.php/course/details', ['sem_id' => $course['seminar_id']]) ?>">
                                                 <?= htmlReady(($course['VeranstaltungsNummer'] ? $course['VeranstaltungsNummer'] . ' - ' : '') . $course['Name']) ?>
                                             </a>
                                         </li>

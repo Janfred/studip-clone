@@ -23,7 +23,7 @@ $rules = [
     'sms_send.php' => 'Link to #{yellow:dispatch.php/messages/write} instead',
 
     'get_global_perm' => 'Use #{yellow:$GLOBALS[\'perm\']->get_perm()} instead',
-    'log_event' => 'Use #{yellow:StudipLog::log()} instead',
+    'log_event(' => 'Use #{yellow:StudipLog::log()} instead',
     '->removeOutRangedSingleDates' => 'Use #{yellow:SeminarCycleDate::removeOutRangedSingleDates} instead',
 
     'HolidayData' => 'Use class #{yellow:SemesterHoliday} instead',
@@ -58,6 +58,22 @@ $rules = [
     'DbPermissions'    => false,
     
     'pclzip' => 'Use #{yellow:Studip\\ZipArchive} instead',
+    'get_global_visibility_by_id' => 'Use #{yellow:User::visible} attribute instead',
+
+    'getSeminarRoomRequest' => 'Use #{yellow:RoomRequest} model instead',
+    'getDateRoomRequest' => 'Use #{yellow:RoomRequest} model instead',
+
+    'ldate' => 'Use PHP\'s #{yellow:date()} or #{yellow:strftime()} function instead',
+    'day_diff' => 'Use PHP\'s #{yellow:DateTime::diff()} method instead',
+    'get_day_name' => 'Use PHP\'s #{yellow:strftime()} function with #{yellow:parameter \'%A\'} instead',
+
+    'get_ampel_state' => false,
+    'get_ampel_write' => false,
+    'get_ampel_read' => false,
+    'localePictureUrl' => false,
+    'localeUrl' => false,
+
+    'get_message_attachments' => 'Use #{yellow:Message::attachments} attribute instead',
 ];
 
 
