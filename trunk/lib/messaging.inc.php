@@ -181,10 +181,7 @@ class messaging
         }
         $attachments = array();
         if ($GLOBALS['ENABLE_EMAIL_ATTACHMENTS']) {
-            $size_of_attachments = 0;
-            $message->attachments->filter(function($a) use (&$size_of_attachments){
-                $size_of_attachments += $a->filesize;
-            });
+            $size_of_attachments = array_sum($message->attachments->pluck('filesize')) ?: 0;
             //assume base64 takes 33% more space
             $attachments_as_links = $size_of_attachments * 1.33 > $GLOBALS['MAIL_ATTACHMENTS_MAX_SIZE'] * 1024 * 1024;
         }

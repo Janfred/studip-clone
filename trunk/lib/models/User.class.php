@@ -885,7 +885,7 @@ class User extends AuthUserMd5
             $this->store();
 
             PageLayout::postInfo(sprintf(_('An Ihre neue E-Mail-Adresse <b>%s</b> wurde ein Aktivierungslink geschickt, dem Sie folgen müssen bevor Sie sich das nächste mal einloggen können.'), $email));
-            StudipLog::log("USER_NEWPWD", $user->user_id);
+            StudipLog::log("USER_NEWPWD", $this->user_id);
         }
         return true;
     }
