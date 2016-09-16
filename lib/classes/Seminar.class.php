@@ -1286,7 +1286,7 @@ class Seminar
     public function hasRoomRequest()
     {
         if (!$this->request_id) {
-            $this->request_id = getSeminarRoomRequest($this->id);
+            $this->request_id = RoomRequest::existsByCourse($this->is);
             if (!$this->request_id) return FALSE;
 
             $rD = new RoomRequest($this->request_id);
