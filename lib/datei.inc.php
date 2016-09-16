@@ -2678,6 +2678,7 @@ function extract_zip($file_name, $dir_name = '', $testonly = false) {
         } else {
             exec($GLOBALS['UNZIP_PATH'] . " -qq $file_name " . ($dir_name ? "-d $dir_name" : ""), $output, $ret);
         }
+        $ret = $ret === 0;
     }
     return $ret;
 }
