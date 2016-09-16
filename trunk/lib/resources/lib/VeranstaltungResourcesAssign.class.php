@@ -70,8 +70,8 @@ class VeranstaltungResourcesAssign {
         $this->deleteAssignedRooms();
 
         //Raumanfrage als bearbeitet markieren, wenn vorhanden
-        if(get_config('RESOURCES_ALLOW_ROOM_REQUESTS')){
-            $request = new RoomRequest(getSeminarRoomRequest($this->seminar_id));
+        if(Config::get()->RESOURCES_ALLOW_ROOM_REQUESTS){
+            $request = new RoomRequest(RoomRequest::existsByCourse($this->seminar_id));
             if (!$request->isNew()){
                 $request->checkOpen(true);
             }
@@ -260,8 +260,8 @@ class VeranstaltungResourcesAssign {
                 $changeAssign->store();
                 $result[$changeAssign->getId()]=array("overlap_assigns"=>FALSE, "resource_id"=>$resource_id, "termin_id"=>$termin_id);
                 //Raumanfrage als bearbeitet markieren, wenn vorhanden
-                if(get_config('RESOURCES_ALLOW_ROOM_REQUESTS')){
-                    $request = new RoomRequest(getDateRoomRequest($termin_id));
+                if(Config::get()->RESOURCES_ALLOW_ROOM_REQUESTS){
+                    $request = new RoomRequest(RoomRequest::existsByDate($termin_id));
                     if (!$request->isNew()){
                         $request->checkOpen(true);
                     }

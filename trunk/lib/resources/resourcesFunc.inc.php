@@ -272,7 +272,7 @@ function getFormattedResult($result, $mode="bad", $bad_message_text = '', $good_
         //the overlaps (show only the earliest here, plus a message when more)
         foreach ($overlaps as $val) {
             $resObj = ResourceObject::Factory($val["resource_id"]);
-            $bad_message.="<br><font size=\"-1\" color=\"black\">".htmlReady($resObj->getName()).": ";
+            $bad_message.="<br>".htmlReady($resObj->getName()).": ";
             //show the first overlap
             list(, $val2) = each($val["overlap_assigns"]);
             $bad_message.=date("d.m, H:i",$val2["begin"])." - ".date("H:i",$val2["end"]);
@@ -281,14 +281,13 @@ function getFormattedResult($result, $mode="bad", $bad_message_text = '', $good_
             $bad_message.= ", ".$resObj->getFormattedLink($val2["begin"], _("Raumplan anzeigen"));
             $i++;
         }
-        $bad_message.="</font>";
+        
         if ($locks) {
-            $bad_message.="<br><font size=\"+0\" color=\"red\">"._("Die gewünschten Belegungen kollidieren mit folgenden Sperrzeiten:")."</font>";
-            $bad_message.="<br><font size=\"-1\" color=\"black\">";
+            $bad_message.="<br><span style=\"color: red\">"._("Die gewünschten Belegungen kollidieren mit folgenden Sperrzeiten:")."</span>";
+            $bad_message.="<br>";
             foreach ($locks as $val) {
                 $bad_message.=date("d.m.Y, H:i",$val["begin"])." - ".date("d.m.Y, H:i",$val["end"])."<br>";
             }
-            $bad_message.="</font>";
         }
         $bad_message.="§";
     }
@@ -361,14 +360,6 @@ function getResourceObjectCategory($id)
     $statement = DBManager::get()->prepare($query);
     $statement->execute(array($id));
     return $statement->fetchColumn() ?: false;
-}
-
-function getDateRoomRequest($termin_id) {
-    return RoomRequest::existsByDate($termin_id);
-}
-
-function getSeminarRoomRequest($seminar_id) {
-    return RoomRequest::existsByCourse($seminar_id);
 }
 
 function getMyRoomRequests($user_id = '', $semester_id = null, $only_not_closed = true, $single_request = null, $sem_type = null, $faculty = null, $tagged = null)

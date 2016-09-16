@@ -575,7 +575,7 @@ class SingleDate
 
     function hasRoomRequest()
     {
-        if (getDateRoomRequest($this->termin_id)) {
+        if (RoomRequest::existsByDate($this->termin_id)) {
             if (!$this->request_id) {
                 $this->request_id = SingleDateDB::getRequestID($this->termin_id);
             }
