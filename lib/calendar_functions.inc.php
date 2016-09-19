@@ -36,51 +36,6 @@
 // +---------------------------------------------------------------------------+
 
 
-// Erzeugt aus einem Unix-Timestamp den Wochentag
-// Name entweder in Lang- ("LONG") oder Kurzform ("SHORT")
-
-function wday ($tmstamp = "", $mode = "LONG", $day_german = "") {
-    global $_language;
-
-    // translate german weekdays with strftime()
-    if (!$tmstamp) {
-        // timestamps of known weekdays
-        $tmstamps = array(
-            "MO" => 39092400,
-            "DI" => 39178800,
-            "MI" => 39265200,
-            "DO" => 39351600,
-            "FR" => 39438000,
-            "SA" => 39524400,
-            "SO" => 39610800
-        );
-        $tmstamp = $tmstamps[$day_german];
-    }
-
-    // If the setlocale is set to "de_DE" the short form of day names is a bit
-    // strange ;-), so it's better to use these:
-    if ($_language == "de_DE") {
-        $dayname_long = array("Sonntag", "Montag", "Dienstag", "Mittwoch",
-                                                "Donnerstag", "Freitag", "Samstag");
-        $dayname_short = array("So", "Mo", "Di", "Mi", "Do", "Fr", "Sa");
-
-        $dow = date("w", $tmstamp);
-
-
-        if($mode == "SHORT")
-            return $dayname_short[$dow];
-        return $dayname_long[$dow];
-    }
-
-    // For the rest of the world strftime() should be OK ;-)
-    if ($mode == "SHORT")
-        return htmlReady(strftime("%a", $tmstamp));
-    return htmlReady(strftime("%A", $tmstamp));
-
-}
-
-
-
 // Hier jezt die ultimative Feiertags-"Berechnung"
 // Zurueckgegeben wird ein Array mit Namen des Feiertages ("name") und
 // Faerbungsgrad ("col", 0 bis 2).
