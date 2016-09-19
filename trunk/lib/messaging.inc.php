@@ -186,7 +186,7 @@ class messaging
             $attachments_as_links = $size_of_attachments * 1.33 > $GLOBALS['MAIL_ATTACHMENTS_MAX_SIZE'] * 1024 * 1024;
         }
         $template = $GLOBALS['template_factory']->open('mail/text');
-        $template->set_attribute('message', kill_format($message));
+        $template->set_attribute('message', kill_format($message->message));
         $template->set_attribute('rec_fullname', $rec_fullname);
         if ($attachments_as_links) {
             $template->set_attribute('attachments', $attachments);
@@ -287,11 +287,11 @@ class messaging
 
         // Setzen der Message-ID als Range_ID für angehängte Dateien
         if (isset($this->provisonal_attachment_id) && $GLOBALS['ENABLE_EMAIL_ATTACHMENTS']) {
-            $attachments = StudipDocument::find($this->provisonal_attachment_id);
-            foreach($attachments as $attachment) {
+            $attachments = StudipDocument::findBySQL("range_id = 'provisional' AND description = ?", [$this->provisonal_attachment_id]);
+            foreach ($attachments as $attachment) {
                 $attachment->range_id = $tmp_message_id;
                 $attachment->description = '';
-                $attachments->store();
+                $attachment->store();
             }
         }
 
