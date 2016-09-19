@@ -130,7 +130,7 @@ class StudipPDO extends PDO
             case StudipPDO::PARAM_ARRAY:
                 return is_array($value) && count($value) ? join(',', array_map(array($this, 'quote'), $value)) : 'NULL';
             case StudipPDO::PARAM_COLUMN:
-                return preg_replace('/[^a-z0-9-_.]/i', '', $value);
+                return preg_replace('/\\W/', '', $value);
             default:
                 return parent::quote($value);
         }
