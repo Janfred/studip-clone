@@ -127,14 +127,21 @@ class Contacts extends \RESTAPI\RouteMap
         if ($GLOBALS['user']->id !== $user_id) {
             $this->error(401);
         }
-
+        
         if (!isset($this->data['name']) || !strlen($name = trim($this->data['name']))) {
             $this->error(400, 'Contact group name required.');
         }
-
-        $id = AddNewStatusgruppe($name, $GLOBALS['user']->id, $size = 0);
-
-        $this->redirect('contact_group/' . $id, 201, 'ok');
+        
+        $group = new \Statusgruppen();
+        $group->range_id        = $GLOBALS['user']->id;
+        $group->name            = $name;
+        $group->size            = 0;
+        $group->selfassign      = 0;
+        $group->calendar_group  = 0;
+        $group->mkdate          = time();
+        $group->chdate          = time();
+        $group->store();
+        $this->redirect('contact_group/' . $group->id, 201, 'ok');
     }
 
     /**
