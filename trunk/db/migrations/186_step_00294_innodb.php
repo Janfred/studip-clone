@@ -166,7 +166,7 @@ class StEP00294InnoDB extends Migration
             ));
 
         // Prepare query for table conversion.
-        $stmt = DBManager::get()->prepare("ALTER TABLE :database.:table ENGINE=:newengine");
+        $stmt = DBManager::get()->prepare("ALTER TABLE `:database`.`:table` ENGINE=:newengine");
         $stmt->bindParam(':database', $DB_STUDIP_DATABASE, StudipPDO::PARAM_COLUMN);
         $newengine = 'MyISAM';
         $stmt->bindParam(':newengine', $newengine, StudipPDO::PARAM_COLUMN);
