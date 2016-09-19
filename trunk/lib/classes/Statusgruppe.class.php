@@ -240,18 +240,6 @@ class Statusgruppe {
         
         $this->selfassign = SetSelfAssign($this->statusgruppe_id, (Request::quoted('new_selfassign') ? 1 : 0));
         
-        /*if (Request::quoted('new_selfassign')) {
-            if ($this->selfassign == 0) {
-                $this->selfassign = 1;
-            }
-        } else {
-            if ($this->selfassign == 2) {
-                if ($GLOBALS['SessSemName']) {
-                    SetSelfAssignExclusive($GLOBALS['SessSemName'][1], false);
-                }
-            }
-            $this->selfassign = 0;
-        }*/
 
         if (Request::get('groupfolder')) {
             // check if there already exists a folder

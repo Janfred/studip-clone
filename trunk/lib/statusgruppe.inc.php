@@ -57,78 +57,6 @@ function MakeUniqueStatusgruppeID ()
 }
 
 
-// Funktionen zum veraendern der Gruppen
-
-function AddNewStatusgruppe ($new_statusgruppe_name, $range_id, $new_statusgruppe_size, $new_selfassign = 0, $new_doc_folder = false, $statusgruppe_id = false)
-{
-    if (!$statusgruppe_id) {
-        $statusgruppe_id = MakeUniqueStatusgruppeID();
-    }
-
-    $query = "SELECT position + 1 FROM statusgruppen WHERE range_id = ? ORDER BY position DESC";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($range_id));
-    $position = $statement->fetchColumn() ?: 0;
-
-    $query = "INSERT INTO statusgruppen (statusgruppe_id, name, range_id, position, size,
-                                         selfassign, calendar_group, mkdate, chdate)
-              VALUES (?, ?, ?, ?, ?, ?, ?, UNIX_TIMESTAMP(), UNIX_TIMESTAMP())";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array(
-        $statusgruppe_id,
-        $new_statusgruppe_name,
-        $range_id,
-        $position,
-        $new_statusgruppe_size ?: 0,
-        $new_selfassign,
-        Request::get('is_cal_group') ? 1 : 0,
-    ));
-    if ($statement->rowCount() && $new_doc_folder) {
-        create_folder(addslashes(_("Dateiordner der Gruppe:") . ' ' . $new_statusgruppe_name), addslashes(_("Ablage für Ordner und Dokumente dieser Gruppe")), $statusgruppe_id, 15);
-    }
-    return $statusgruppe_id;
-}
-
-function CheckSelfAssign($statusgruppe_id)
-{
-    $query = "SELECT selfassign FROM statusgruppen WHERE statusgruppe_id = ?";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($statusgruppe_id));
-    return $statement->fetchColumn();
-}
-
-function CheckSelfAssignAll($seminar_id)
-{
-    $query = "SELECT SUM(selfassign), COUNT(IF(selfassign > 0, 1, NULL)), MIN(selfassign)
-              FROM statusgruppen
-              WHERE range_id = ?";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($seminar_id));
-    $temp = $statement->fetch(PDO::FETCH_NUM);
-
-    // TODO What do these flags represent? [tlx]
-    return array(
-        (bool)$temp[2],
-        $temp[1] && $temp[0] == $temp[1] * 2,
-    );
-}
-
-function CheckAssignRights($statusgruppe_id, $user_id, $seminar_id) {
-    global $perm;
-    list($self_assign_all, $self_assign_exclusive) = CheckSelfAssignAll($seminar_id);
-    if (CheckSelfAssign($statusgruppe_id)
-    && !CheckUserStatusgruppe($statusgruppe_id, $user_id)
-    && !$perm->have_perm("admin")
-    && $perm->have_perm("autor")
-    && ((GetStatusgruppeLimit($statusgruppe_id)==FALSE) || (GetStatusgruppeLimit($statusgruppe_id) > CountMembersPerStatusgruppe($statusgruppe_id)))
-    && !($self_assign_exclusive && in_array($user_id, GetAllSelected($seminar_id)))
-    )
-        $assign = TRUE;
-    else
-        $assign = FALSE;
-    return $assign;
-}
-
 /**
  * sets selfassign of a group to 0 or 1/2 dependend on the status of the other groups
  * @param statusgruppe_id:  id of statusgruppe in database
@@ -168,24 +96,6 @@ function SetSelfAssign ($statusgruppe_id, $flag="0") {
     return $flag;
 }
 
-function SetSelfAssignAll ($seminar_id, $flag = false)
-{
-    $query = "UPDATE statusgruppen SET selfassign = ? WHERE range_id = ?";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array((int)$flag, $seminar_id));
-    return $statement->rowCount();
-}
-
-function SetSelfAssignExclusive ($seminar_id, $flag = false)
-{
-    $query = "UPDATE statusgruppen SET selfassign = ? WHERE range_id = ? AND selfassign > 0";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array(
-        $flag ? 2 : 1,
-        $seminar_id,
-    ));
-    return $statement->rowCount();
-}
 
 function GetAllSelected ($range_id, $level = 0)
 {
@@ -220,25 +130,6 @@ function GetAllSelected ($range_id, $level = 0)
     }
 
     return array_keys($selected);
-}
-
-function EditStatusgruppe ($new_statusgruppe_name, $new_statusgruppe_size, $edit_id, $new_selfassign="0", $new_doc_folder = false)
-{
-    $query = "UPDATE statusgruppen
-              SET name = ?, size = ?, selfassign = ?, calendar_group = ?, chdate = UNIX_TIMESTAMP()
-              WHERE statusgruppe_id = ?";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array(
-        $new_statusgruppe_name,
-        $new_statusgruppe_size,
-        $new_selfassign,
-        Request::get('is_cal_group') ? 1 : 0,
-        $edit_id,
-    ));
-
-    if ($new_doc_folder) {
-        create_folder(addslashes(_("Dateiordner der Gruppe:") . ' '. $new_statusgruppe_name), addslashes(_("Ablage für Ordner und Dokumente dieser Gruppe")), $edit_id, 15);
-    }
 }
 
 function InsertPersonStatusgruppe ($user_id, $statusgruppe_id, $is_institute_group = true)
@@ -390,53 +281,6 @@ function DeleteStatusgruppe ($statusgruppe_id)
     $statement->execute(array($temp['range_id'], $temp['position']));
 }
 
-function MovePersonPosition ($username, $statusgruppe_id, $direction)
-{
-    $user = User::findByUsername($username);
-
-    $query = "SELECT position FROM statusgruppe_user WHERE statusgruppe_id = ? AND user_id = ?";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($statusgruppe_id, $user->user_id));
-    $position = $statement->fetchColumn();
-
-    if ($position !== false) {
-        $old_position = $position;
-
-        if ($direction == 'up') {
-            $position -= 1;
-        } else if ($direction == 'down') {
-            $position += 1;
-        }
-
-        $query = "UPDATE statusgruppe_user SET position = ? WHERE statusgruppe_id = ? AND position = ?";
-        $statement = DBManager::get()->prepare($query);
-        $statement->execute(array($old_position, $statusgruppe_id, $position));
-
-        $query = "UPDATE statusgruppe_user SET position = ? WHERE statusgruppe_id = ? AND user_id = ?";
-        $statement = DBManager::get()->prepare($query);
-        $statement->execute(array($position, $statusgruppe_id, $user->user_id));
-    }
-}
-
-/**
- * Sorts a person in statusgroup after the an other person
- * @param $user_id the user to be sorted
- * @param $after to user after which is sorted in
- * @param $role_id the id of the statusgroup the sorting is taking place
- */
-function SortPersonInAfter($user_id, $after, $role_id)
-{
-    $query = "SELECT SUM(position)
-              FROM statusgruppe_user
-              WHERE user_id IN (?, ?) AND statusgruppe_id = ?";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($user_id, $after, $role_id));
-    $position_sum = $statement->fetchColumn();
-
-    $query = "UPDATE statusgruppe_user SET position = ? - position WHERE statusgruppe_id = ? AND user_id IN (?, ?)";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($position_sum, $role_id, $user_id, $after));
-}
 
 function DeleteAllStatusgruppen ($range_id)
 {
@@ -480,69 +324,6 @@ function moveStatusgruppe($role_id, $up_down = 'up')
 }
 
 
-function SortStatusgruppe($insert_after, $insert_id)
-{
-    $query = "SELECT range_id, position FROM statusgruppen WHERE statusgruppe_id = ?";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($insert_after));
-    $temp = $statement->fetch(PDO::FETCH_ASSOC);
-
-    $query = "UPDATE statusgruppen SET position = position + 1 WHERE range_id = ? AND position > ?";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($temp['range_id'], $temp['position']));
-
-    $query = "UPDATE statusgruppen SET position = ? WHERE statusgruppe_id = ?";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($temp['position'] + 1, $insert_id));
-
-    resortStatusgruppeByRangeId($range_id);
-}
-
-function SubSortStatusgruppe($insert_father, $insert_daughter) {
-    if ($insert_father == '' || $insert_daughter == '') return FALSE;
-    if (isVatherDaughterRelation($insert_father, $insert_daughter)) return FALSE;
-
-    $query = "SELECT MAX(position) + 1 FROM statusgruppen WHERE range_id = ?";
-    $statement = DBManager::get()->prepare($query);
-    $statement-execute(array($insert_daughter));
-    $position = $statement->fetchColumn() ?: 0;
-
-    $query = "UPDATE statusgruppen SET position = ?, range_id = ? WHERE statusgruppe_id = ?";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($position, $insert_daughter, $insert_father));
-
-    return TRUE;
-}
-
-
-function resortStatusgruppeByRangeId($range_id)
-{
-    $query = "SELECT statusgruppe_id FROM statusgruppen WHERE range_id = ? ORDER BY position";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($range_id));
-    $ids = $statement->fetchAll(PDO::FETCH_COLUMN);
-
-    $query = "UPDATE statusgruppen SET position = ? WHERE statusgruppe_id = ?";
-    $update = DBManager::get()->prepare($query);
-
-    foreach ($ids as $index => $id) {
-        $update->execute(array($index, $id));
-    }
-}
-
-function SwapStatusgruppe ($statusgruppe_id)
-{
-    moveStatusgruppe($statusgruppe_id, 'down');
-}
-
-function CheckStatusgruppe ($range_id, $name)
-{
-    $query = "SELECT statusgruppe_id FROM statusgruppen WHERE range_id = ? AND name = ?";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($range_id, $name));
-    return $statement->fetchColumn();
-}
-
 function CheckUserStatusgruppe ($group_id, $object_id)
 {
     static $groups = null;
@@ -556,73 +337,6 @@ function CheckUserStatusgruppe ($group_id, $object_id)
     return in_array($group_id, $groups);
 }
 
-function GetRangeOfStatusgruppe ($statusgruppe_id)
-{
-    $has_parent = true;
-
-    $query = "SELECT range_id FROM statusgruppen WHERE statusgruppe_id = ?";
-    $statement = DBManager::get()->prepare($query);
-
-    $group = $statusgruppe_id;
-    while ($has_parent) {
-        $statement->execute(array($group));
-        $range_id = $statement->fetchColumn();
-        $statement->closeCursor();
-
-        if ($range_id) {
-            $group = $range_id;
-        } else {
-            $has_parent = false;
-        }
-    }
-
-    return $group;
-}
-
-
-/**
-* get all statusgruppen for one user and one range
-*
-* @access   public
-* @param    string  $course_id
-* @param    string  $user_id
-* @return   array   ( statusgruppe_id => name)
-*/
-function GetGroupsByCourseAndUser($course_id, $user_id)
-{
-    $st = DbManager::get()->prepare("SELECT statusgruppe_id, a.name
-                                     FROM statusgruppen a
-                                     INNER JOIN statusgruppe_user b USING (statusgruppe_id)
-                                     WHERE user_id = ? AND a.range_id = ?
-                                     ORDER BY a.position");
-    $st->execute(array($user_id, $course_id));
-    return $st->fetchGrouped(PDO::FETCH_COLUMN);
-}
-
-function getOptionsOfStGroups ($userID)
-{
-    $query = "SELECT statusgruppe_id, visible, inherit FROM statusgruppe_user WHERE user_id = ?";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($userID));
-    return $statement->fetchGrouped(PDO::FETCH_ASSOC);
-}
-
-
-// visible and inherit must be '0' or '1'
-function setOptionsOfStGroup ($groupID, $userID, $visible, $inherit='')
-{
-    $query = "REPLACE INTO statusgruppe_user (statusgruppe_id, user_id, visible, inherit)
-                SELECT statusgruppe_id, user_id, IFNULL(?, visible), IFNULL(?, inherit)
-                FROM statusgruppe_user
-                WHERE statusgruppe_id = ? AND user_id = ?";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array(
-        $visible !== '' ? ($visible == '1' ? 1 : 0) : null,
-        $inherit !== '' ? ($inherit == '1' ? 1 : 0) : null,
-        $groupID,
-        $user_id,
-    ));
-}
 
 
 /**
@@ -760,34 +474,6 @@ function GetStatusgruppeName ($group_id)
     return $statement->fetchColumn();
 }
 
-function GetStatusgruppeLimit ($group_id)
-{
-    $query = "SELECT size FROM statusgruppen WHERE statusgruppe_id = ?";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($group_id));
-    return $statement->fetchColumn();
-}
-
-function CheckStatusgruppeFolder($group_id)
-{
-    $query = "SELECT folder_id FROM folder WHERE range_id = ?";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($group_id));
-    return $statement->fetchColumn();
-}
-
-function CheckStatusgruppeMultipleAssigns($range_id)
-{
-    $query = "SELECT COUNT(statusgruppe_id) AS count, user_id, GROUP_CONCAT(name) AS gruppen
-              FROM statusgruppen
-              INNER JOIN statusgruppe_user USING (statusgruppe_id)
-              WHERE range_id = ? AND selfassign = 2
-              GROUP BY user_id
-              HAVING count > 1";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($range_id));
-    return $statement->fetchAll(PDO::FETCH_ASSOC);
-}
 
 function isVatherDaughterRelation($vather, $daughter) {
     $children = getAllChildIDs($vather);
@@ -982,115 +668,7 @@ function getPersonsForRole($role_id)
     return $statement->fetchGrouped(PDO::FETCH_ASSOC);
 }
 
-function sortStatusgruppeByName($statusgruppe_id)
-{
-    $query = "SELECT user_id
-              FROM statusgruppe_user
-              LEFT JOIN auth_user_md5 USING (user_id)
-              WHERE statusgruppe_id = ?
-              ORDER BY Nachname, Vorname";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($statusgruppe_id));
-    $users = $statement->fetchAll(PDO::FETCH_COLUMN);
 
-    $query = "UPDATE statusgruppe_user
-              SET position = ?
-              WHERE user_id = ? AND statusgruppe_id = ?";
-    $update = DBManager::get()->prepare($query);
-
-    foreach ($users as $index => $user_id) {
-        $update->execute(array($index, $user_id, $statusgruppe_id));
-    }
-}
-
-function getPersons($range_id, $type = false)
-{
-    global $_fullname_sql;
-
-    $bereitszugeordnet = GetAllSelected($range_id);
-
-    if ($type == 'sem') {
-        $query = "SELECT user_id, username, {$_fullname_sql['full_rev']} AS fullname, perms
-                  FROM seminar_user
-                  LEFT JOIN auth_user_md5 USING (user_id)
-                  LEFT JOIN user_info USING (user_id)
-                  WHERE Seminar_id = :range_id
-                  ORDER BY Nachname";
-    } else if ($type == 'sem_no_group') {
-        $query = "SELECT user_id, username, {$_fullname_sql['full_rev']} AS fullname, perms
-                  FROM seminar_user
-                  LEFT JOIN auth_user_md5 USING (user_id)
-                  LEFT JOIN user_info USING (user_id)
-                  WHERE Seminar_id = :range_id AND
-                  NOT EXISTS (SELECT * FROM statusgruppe_user, statusgruppen
-                              WHERE statusgruppe_user.statusgruppe_id = statusgruppen.statusgruppe_id AND
-                              range_id = seminar_user.Seminar_id AND
-                              seminar_user.user_id = statusgruppe_user.user_id)
-                  ORDER BY Nachname";
-    } else if ($type == 'inst') {
-        $query = "SELECT a.user_id, username, {$_fullname_sql['full_rev']} AS fullname, inst_perms, perms
-                  FROM seminar_inst d
-                  LEFT JOIN user_inst a USING (Institut_id)
-                  LEFT JOIN auth_user_md5 b USING (user_id)
-                  LEFT JOIN user_info USING (user_id)
-                  LEFT JOIN seminar_user c ON (c.user_id=a.user_id AND c.seminar_id = :range_id)
-                  WHERE d.seminar_id = :range_id AND a.inst_perms IN ('tutor','dozent') AND ISNULL(c.seminar_id)
-                  GROUP BY a.user_id
-                  ORDER BY Nachname";
-    } else {
-        $query = "SELECT user_inst.user_id, username, {$_fullname_sql['full_rev']} AS fullname, inst_perms AS perms
-                  FROM user_inst
-                  LEFT JOIN auth_user_md5 USING (user_id)
-                  LEFT JOIN user_info USING (user_id)
-                  WHERE Institut_id = :range_id AND inst_perms NOT IN ('user', 'admin')
-                  ORDER BY Nachname";
-    }
-
-    $statement = DBManager::get()->prepare($query);
-    $statement->bindParam(':range_id', $range_id);
-    $statement->execute();
-    $all_persons = $statement->fetchGrouped(PDO::FETCH_ASSOC);
-
-    foreach ($all_persons as $user_id => &$person) {
-        $person['hasgroup'] = in_array($user_id, $bereitszugeordnet);
-    }
-
-    return $all_persons;
-}
-
-function getSearchResults ($search_exp, $range_id, $type = 'inst')
-{
-    global $_fullname_sql;
-
-    if ($type == 'sem') {
-        $query = "SELECT username, {$_fullname_sql['full_rev']} AS fullname, perms
-                  FROM auth_user_md5 a
-                  LEFT JOIN user_info USING (user_id)
-                  LEFT JOIN seminar_user b ON (b.user_id = a.user_id AND b.seminar_id = :range_id)
-                  WHERE perms IN ('autor', 'tutor', 'dozent') AND ISNULL(b.seminar_id)
-                    AND (username LIKE CONCAT('%', :needle, '%')
-                         OR Vorname LIKE CONCAT('%', :needle, '%')
-                         OR Nachname LIKE CONCAT('%', :needle, '%'))
-                  ORDER BY Nachname";
-    } else {
-        $query = "SELECT DISTINCT {$_fullname_sql['full_rev']} AS fullname, username, perms
-                  FROM auth_user_md5
-                  LEFT JOIN user_info USING (user_id)
-                  LEFT JOIN user_inst ON (user_inst.user_id=auth_user_md5.user_id AND Institut_id = :range_id)
-                  WHERE perms NOT IN ('user', 'admin', 'root') AND (inst_perms = 'user' OR inst_perms IS NULL)
-                    AND (Vorname LIKE CONCAT('%', :needle, '%')
-                         OR Nachname LIKE CONCAT('%', :needle, '%')
-                         OR username LIKE CONCAT('%', :needle, '%'))
-                  ORDER BY Nachname ";
-    }
-
-    $statement = DBManager::get()->prepare($query);
-    $statement->bindParam(':range_id', $range_id);
-    $statement->bindParam(':needle', $search_exp);
-    $statement->execute();
-
-    return $statement->fetchAll(PDO::FETCH_ASSOC) ?: false;
-}
 
 /**
  * Ensure that a user has a valid default institute set if applicable,
@@ -1117,20 +695,4 @@ function getExternDefaultForUser($user_id) {
     $stmt = DBManager::get()->prepare("SELECT Institut_id FROM user_inst WHERE user_id = ? AND inst_perms != 'user' AND externdefault = 1");
     $stmt->execute(array($user_id));
     return $stmt->fetchColumn();
-}
-
-/**
- * Set the default institute for a user, if possible (i.e. user
- * is member of this institute and has at least 'autor' status).
- *
- * @param string $user_id       user id
- * @param string $user_id       institute id
- */
-function setExternDefaultForUser($user_id, $institute_id) {
-    if ($perm->have_studip_perm('autor', $institute_id, $user_id)) {
-        $stmt = DBManager::get()->prepare('UPDATE user_inst SET externdefault = 0 WHERE user_id = ? AND externdefault = 1');
-        $stmt->execute(array($user_id));
-        $stmt = DBManager::get()->prepare('UPDATE user_inst SET externdefault = 1 WHERE user_id = ? AND Institut_id = ?');
-        $stmt->execute(array($user_id, $institute_id));
-    }
 }
