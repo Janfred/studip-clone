@@ -83,6 +83,32 @@ $rules = [
 
     'get_message_attachments' => 'Use #{yellow:Message::attachments} attribute instead',
     'view_turnus' => 'Use #{yellow:Seminar::getFormattedTurnus()} instead',
+
+    'AddNewStatusgruppe' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
+    'CheckSelfAssign' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
+    'CheckSelfAssignAll' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
+    'CheckAssignRights' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
+    'SetSelfAssignAll' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
+    'SetSelfAssignExclusive' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
+    'EditStatusgruppe' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
+    'MovePersonPosition' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
+    'SortPersonInAfter' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
+    'SortStatusgruppe' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
+    'SubSortStatusgruppe' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
+    'resortStatusgruppeByRangeId' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
+    'SwapStatusgruppe' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
+    'CheckStatusgruppe' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
+    'GetRangeOfStatusgruppe' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
+    'GetGroupsByCourseAndUser' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
+    'getOptionsOfStGroups' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
+    'setOptionsOfStGroup' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
+    'GetStatusgruppeLimit' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
+    'CheckStatusgruppeFolder' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
+    'CheckStatusgruppeMultipleAssigns' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
+    'sortStatusgruppeByName' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
+    'getPersons(' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
+    'getSearchResults(' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
+    'setExternDefaultForUser' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
 ];
 
 
