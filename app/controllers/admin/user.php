@@ -1434,8 +1434,9 @@ class Admin_UserController extends AuthenticatedController
                     Icon::create('key', 'clickable'));
             }
             $user_actions->addLink(_('Person löschen'),
-                $this->url_for('admin/user/delete/' . $this->user->user_id . '/edit'),
-                Icon::create('trash', 'clickable'));
+                $this->url_for('admin/user/bulk/' . $this->user->user_id, ['method' => 'delete']),
+                Icon::create('trash', 'clickable'),
+                ['data-dialog' => 'size=auto']);
         }
         if (Config::get()->MAIL_NOTIFICATION_ENABLE && CourseMember::findOneBySQL("user_id = ? AND notification <> 0", [$this->user->user_id])) {
             $user_actions->addLink(_('Benachrichtigungen zurücksetzen'),
