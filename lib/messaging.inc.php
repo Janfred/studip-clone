@@ -158,9 +158,9 @@ class messaging
      */
     function sendingEmail($rec_user_id, $snd_user_id, $message, $subject, $message_id)
     {
+        $msg      = Message::find($message_id);
         $receiver = User::find($rec_user_id);
-        $message  = Message::find($message_id);
-        $to = $receiver->Email;
+        $to       = $receiver->Email;
 
         // do not try to send mails to users without a mail address
         if (!$to) {
@@ -181,12 +181,12 @@ class messaging
         }
         $attachments = array();
         if ($GLOBALS['ENABLE_EMAIL_ATTACHMENTS']) {
-            $size_of_attachments = array_sum($message->attachments->pluck('filesize')) ?: 0;
+            $size_of_attachments = array_sum($msg->attachments->pluck('filesize')) ?: 0;
             //assume base64 takes 33% more space
             $attachments_as_links = $size_of_attachments * 1.33 > $GLOBALS['MAIL_ATTACHMENTS_MAX_SIZE'] * 1024 * 1024;
         }
         $template = $GLOBALS['template_factory']->open('mail/text');
-        $template->set_attribute('message', kill_format($message->message));
+        $template->set_attribute('message', kill_format($message));
         $template->set_attribute('rec_fullname', $rec_fullname);
         if ($attachments_as_links) {
             $template->set_attribute('attachments', $attachments);
