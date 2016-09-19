@@ -109,6 +109,8 @@ $rules = [
     'getPersons(' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
     'getSearchResults(' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
     'setExternDefaultForUser' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
+
+    'GetStatusgruppeName' => 'Use #{yellow:Statusgruppen::find($id)->name} instead',
 ];
 
 
