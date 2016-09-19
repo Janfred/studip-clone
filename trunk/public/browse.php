@@ -192,21 +192,29 @@ if (count($filter)) {
     $statement->execute($parameters);
 
     while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-        if ($row['visible']) {
-            $userinfo = array(
-                'user_id'  => $row['user_id'],
-                'username' => $row['username'],
-                'fullname' => $row['fullname'],
-                'status'   => $row['status'] ?: $row['perms'],
-            );
-
-            if (isset($row['inst_perms'])) {
-                $gruppen = GetRoleNames(GetAllStatusgruppen($inst_id, $row['user_id']));
-                $userinfo['status'] = is_array($gruppen) ? join(', ', array_values($gruppen)) : _('keiner Funktion zugeordnet');
-            }
-
-            $users[] = $userinfo;
+        if (!$row['visible']) {
+            continue;
         }
+
+        $userinfo = array(
+            'user_id'  => $row['user_id'],
+            'username' => $row['username'],
+            'fullname' => $row['fullname'],
+            'status'   => $row['status'] ?: $row['perms'],
+        );
+
+        if (isset($row['inst_perms'])) {
+            $groups = [];
+            Statusgruppen::findEachBySql(function ($group) use ($row, &$groups) {
+                $groups = array_merge(
+                    $groups,
+                    $group->getFullGenderedPaths($row['user_id'])
+                );
+            }, 'range_id = ?', [$inst_id]);
+            $userinfo['status'] = implode(', ', $groups) ?: _('keiner Funktion zugeordnet');
+        }
+
+        $users[] = $userinfo;
     }
 
     $template->set_attribute('users', $users);
