@@ -66,6 +66,7 @@ $rules = [
     'ldate' => 'Use PHP\'s #{yellow:date()} or #{yellow:strftime()} function instead',
     'day_diff' => 'Use PHP\'s #{yellow:DateTime::diff()} method instead',
     'get_day_name' => 'Use PHP\'s #{yellow:strftime()} function with #{yellow:parameter \'%A\'} instead',
+    'wday(' => 'Use #{strftime("%a")} or #{strftime("%A")} instead',
 
     'get_ampel_state' => false,
     'get_ampel_write' => false,
@@ -75,6 +76,10 @@ $rules = [
     'isDatesMultiSem' => false,
     'getMetadateCorrespondingDates' => false,
     'getCorrespondingMetadates' => false,
+    'create_year_view' => false,
+    'javascript_hover_year' => false,
+    'js_hover' => false,
+    'info_icons' => false,
 
     'get_message_attachments' => 'Use #{yellow:Message::attachments} attribute instead',
     'view_turnus' => 'Use #{yellow:Seminar::getFormattedTurnus()} instead',
