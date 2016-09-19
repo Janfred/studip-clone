@@ -200,7 +200,7 @@ if ($rechte || $owner || $create_folder_perm) {
         } else if ($open_id == md5('new_top_folder')){
             $titel = Request::get('top_folder_name') ? Request::get('top_folder_name') : _("Neuer Ordner");
             $open_id = md5($SessSemName[1] . 'top_folder');
-        } elseif($titel = GetStatusgruppeName($open_id)) {
+        } elseif ($titel = Statusgruppen::find($open_id)->name) {
             $titel = _("Dateiordner der Gruppe:") . ' ' . $titel;
             $description = _("Ablage für Ordner und Dokumente dieser Gruppe");
             $permission = 15;

@@ -466,15 +466,6 @@ function GetAllStatusgruppen($parent, $check_user = null, $exclude = false)
 }
 
 
-function GetStatusgruppeName ($group_id)
-{
-    $query = "SELECT name FROM statusgruppen WHERE statusgruppe_id = ?";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($group_id));
-    return $statement->fetchColumn();
-}
-
-
 function isVatherDaughterRelation($vather, $daughter) {
     $children = getAllChildIDs($vather);
     return array_key_exists($daughter, $children);

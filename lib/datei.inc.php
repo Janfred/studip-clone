@@ -1824,7 +1824,7 @@ function display_folder_body($folder_id, $open, $change, $move, $upload, $refres
         $content .=  sprintf(
             _('Dieser Ordner gehört der Gruppe <b>%s</b>. Nur Mitglieder dieser Gruppe können diesen Ordner sehen.'
                 . ' Dieser Ordner kann nicht verschoben oder kopiert werden.'),
-            htmlReady(GetStatusgruppeName($result["range_id"]))
+            htmlReady(Statusgruppen::find($result['range_id'])->name)
         ) . '<hr>';
     }
     //Contentbereich erstellen
