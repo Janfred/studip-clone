@@ -6,7 +6,7 @@
         <td><?= htmlReady($user->name()) ?></td>
         <td class="actions">
             <? $actionMenu = ActionMenu::get() ?>
-            <? $actionMenu->addLink($controller->url_for('settings/statusgruppen/switch/' . $group->id . '/1', ['username' => $user->user->username]),
+            <? $actionMenu->addLink($controller->url_for('settings/statusgruppen/', ['open' => $group->id, 'type' => 'role', 'username' => $user->user->username]),
                     _('Benutzer in dieser Rolle bearbeiten'),
                     Icon::create('edit', 'clickable')) ?>
             <? if ($tutor) : ?>
