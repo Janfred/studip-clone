@@ -2198,7 +2198,7 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
      protected function setSerializedValue($field, $value)
      {
          $object_type = $this->serialized_fields[$field];
-         if ($value instanceof $object_type) {
+         if (is_null($value) || $value instanceof $object_type) {
              $this->content[$field] = $value;
          } else {
              $this->content[$field] = new $object_type($value);
