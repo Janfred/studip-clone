@@ -3,7 +3,7 @@
 <ul>
     <? foreach ($institutes as $institute): ?>
         <li>
-            <a href="<?= URLHelper::getLink('dispatch.php/institute/overview', ['auswahl' => $institute['Institut_id']]) ?>">
+            <a href="<?= URLHelper::getLink('dispatch.php/institute/overview', ['auswahl' => $institute['institut_id']]) ?>">
                 <?= htmlReady($institute['institute_name']) ?>
             </a>
             <? if ($institute['raum'] != ''): ?>
