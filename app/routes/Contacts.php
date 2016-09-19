@@ -133,13 +133,11 @@ class Contacts extends \RESTAPI\RouteMap
         }
         
         $group = new \Statusgruppen();
-        $group->range_id        = $GLOBALS['user']->id;
-        $group->name            = $name;
-        $group->size            = 0;
-        $group->selfassign      = 0;
-        $group->calendar_group  = 0;
-        $group->mkdate          = time();
-        $group->chdate          = time();
+        $group->range_id       = $GLOBALS['user']->id;
+        $group->name           = $name;
+        $group->size           = 0;
+        $group->selfassign     = 0;
+        $group->calendar_group = 0;
         $group->store();
         $this->redirect('contact_group/' . $group->id, 201, 'ok');
     }
