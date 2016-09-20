@@ -65,7 +65,7 @@ class HTML extends HTMLempty
     function addHTMLContent($_content)
     {
         if (is_object($_content)) {
-            $classname     = strtolower(get_class($_content));
+            $classname     = mb_strtolower(get_class($_content));
             $valid_classes = ['htmlempty', 'html', 'htm', 'htmpty', 'studip\button', 'studip\linkbutton'];
             if (in_array($classname, $valid_classes)) {
                 $this->_content[] = $_content;
@@ -156,7 +156,7 @@ class HTML extends HTMLempty
                 // der aktuelle Content ist ein Object
                 // also ein HTML-Element. Also geben
                 // wir es aus
-                $classname     = strtolower(get_class($content));
+                $classname     = mb_strtolower(get_class($content));
                 $valid_classes = ['studip\button', 'studip\linkbutton'];
                 if (in_array($classname, $valid_classes)) {
                     $output .= $content;

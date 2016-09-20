@@ -292,7 +292,7 @@ class StudipAuthAbstract {
     */
     function __construct()
     {
-        $this->plugin_name = strtolower(substr(get_class($this),10));
+        $this->plugin_name = mb_strtolower(substr(get_class($this),10));
         //get configuration array set in local inc
         $config_var = $GLOBALS["STUDIP_AUTH_CONFIG_" . mb_strtoupper($this->plugin_name)];
         //assign each key in the config array as a member of the plugin object
@@ -480,7 +480,7 @@ class StudipAuthAbstract {
     */
     function verifyUsername($username)
     {
-        if($this->username_case_insensitiv) $username = strtolower($username);
+        if($this->username_case_insensitiv) $username = mb_strtolower($username);
         if ($this->bad_char_regex){
             return preg_replace($this->bad_char_regex, '', $username);
         } else {

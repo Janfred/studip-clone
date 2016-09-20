@@ -485,7 +485,7 @@ if ($_SERVER['argv'][1] === 'export') {
     unset($messages['#']);
 
     // Get language
-    $language = strtolower($meta['Language']);
+    $language = mb_strtolower($meta['Language']);
 
     // Define db queries for each type (see comment block at the top of
     // this file, type is distinguished by the line number / 10000)

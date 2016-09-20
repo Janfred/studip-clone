@@ -110,8 +110,8 @@ class SimpleORMapCollection extends SimpleCollection
      */
     public function setClassName($class_name)
     {
-        $this->relation_options['class_name'] = strtolower($class_name);
-        $this->deleted->relation_options['class_name'] = strtolower($class_name);
+        $this->relation_options['class_name'] = mb_strtolower($class_name);
+        $this->deleted->relation_options['class_name'] = mb_strtolower($class_name);
     }
 
     /**
@@ -131,7 +131,7 @@ class SimpleORMapCollection extends SimpleCollection
      */
     public function getClassName()
     {
-        return strtolower($this->relation_options['class_name']);
+        return mb_strtolower($this->relation_options['class_name']);
     }
 
     /**

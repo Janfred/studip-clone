@@ -56,7 +56,7 @@ class Admission_RuleAdministrationController extends AuthenticatedController
 
         $this->ruleTypes = RuleAdministrationModel::getAdmissionRuleTypes();
         // Available rule classes.
-        $ruleClasses = array_map(function($s) { return strtolower($s); }, array_keys($this->ruleTypes));
+        $ruleClasses = array_map(function($s) { return mb_strtolower($s); }, array_keys($this->ruleTypes));
         // Found directories with rule definitions.
         $ruleDirs = array_map(function($s) { return basename($s); }, glob($GLOBALS['STUDIP_BASE_PATH'].'/lib/admissionrules/*', GLOB_ONLYDIR));
         // Compare the two.
@@ -205,7 +205,7 @@ class Admission_RuleAdministrationController extends AuthenticatedController
     public function download_action($ruleName)
     {
         $dirname = $GLOBALS['ABSOLUTE_PATH_STUDIP'].'admissionrules/'.
-            strtolower($ruleName);
+            mb_strtolower($ruleName);
         $filename = $ruleName.'.zip';
         $filepath = get_config('TMP_PATH').'/'.$filename;
 

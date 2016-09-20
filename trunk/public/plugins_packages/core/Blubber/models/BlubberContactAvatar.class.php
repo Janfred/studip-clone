@@ -77,7 +77,7 @@ class BlubberContactAvatar extends Avatar {
         } else {
             $contact = new BlubberExternalContact($this->user_id);
             $email = $contact['mail_identifier'];
-            $email_hash = md5(strtolower(trim($email)));
+            $email_hash = md5(mb_strtolower(trim($email)));
             $width = $this->getDimension($size);
             return URLHelper::getURL(
                 "http://www.gravatar.com/avatar/".$email_hash,

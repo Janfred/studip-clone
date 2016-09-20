@@ -130,7 +130,7 @@ class PluginEngine
         if (is_null($plugin)) {
             throw new InvalidArgumentException(_('Es wurde kein Plugin gewählt.'));
         } else if (is_object($plugin)) {
-            $plugin = strtolower(get_class($plugin)) . '/' . $cmd;
+            $plugin = mb_strtolower(get_class($plugin)) . '/' . $cmd;
         } else if (mb_strpos($plugin, '/') === false) {
             $plugin = $plugin . '/' . $cmd;
         }

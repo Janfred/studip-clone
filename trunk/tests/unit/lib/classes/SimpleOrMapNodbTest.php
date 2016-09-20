@@ -44,7 +44,7 @@ class auth_user_md5 extends SimpleORMap
 
     function setPerms($perm)
     {
-        return $this->content['perms'] = strtolower($perm);
+        return $this->content['perms'] = mb_strtolower($perm);
     }
 
     public function registerCallback($types, $cb)

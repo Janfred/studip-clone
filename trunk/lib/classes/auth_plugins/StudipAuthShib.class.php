@@ -116,7 +116,7 @@ class StudipAuthShib extends StudipAuthSSO
 
         foreach ($_SERVER as $key => $value) {
             if (substr($key, 0, 10) == 'HTTP_SHIB_') {
-                $key = strtolower(substr($key, 10));
+                $key = mb_strtolower(substr($key, 10));
                 $this->userdata[$key] = utf8_decode($value);
             }
         }

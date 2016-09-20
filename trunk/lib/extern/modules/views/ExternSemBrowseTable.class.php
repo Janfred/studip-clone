@@ -258,7 +258,7 @@ class ExternSemBrowseTable extends SemBrowse {
             
             foreach ($group_by_data as $group_field => $sem_ids){
                 foreach ($sem_ids['Seminar_id'] as $seminar_id => $foo){
-                    $name = strtolower(key($sem_data[$seminar_id]["Name"]));
+                    $name = mb_strtolower(key($sem_data[$seminar_id]["Name"]));
                     $name = str_replace("ä","ae",$name);
                     $name = str_replace("ö","oe",$name);
                     $name = str_replace("ü","ue",$name);

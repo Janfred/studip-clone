@@ -155,7 +155,7 @@ if ($args) {
             $plugins = $plugin_manager->getPluginInfos();
 
             foreach ($plugins as $plugin) {
-                if (strtolower($pluginname) == strtolower($plugin['name'])) {
+                if (mb_strtolower($pluginname) == mb_strtolower($plugin['name'])) {
                     $plugindir = get_config('PLUGINS_PATH') .'/'. $plugin['path'];
 
                     if (is_dir($plugindir . '/migrations')) {
@@ -201,7 +201,7 @@ if ($args) {
             $plugin_manager = PluginManager::getInstance();
             $plugins = $plugin_manager->getPluginInfos();
             foreach ($plugins as $plugin) {
-                if (strtolower($pluginname) == strtolower($plugin['name'])) {
+                if (mb_strtolower($pluginname) == mb_strtolower($plugin['name'])) {
                     $plugindir = get_config('PLUGINS_PATH') .'/'. $plugin['path'];
 
                     $plugin_manager->unregisterPlugin($plugin['id']);
@@ -235,7 +235,7 @@ if ($args) {
             $plugin_manager = PluginManager::getInstance();
             $plugins = $plugin_manager->getPluginInfos();
             foreach ($plugins as $plugin) {
-                if (strtolower($pluginname) == strtolower($plugin['name'])) {
+                if (mb_strtolower($pluginname) == mb_strtolower($plugin['name'])) {
                     $plugin_manager->setPluginEnabled($plugin['id'], ($command == 'activate'));
                     echo 'Das Plugin '. $plugin['name'] .' wurde ' . ($command == 'activate' ? 'aktiviert' : 'deaktiviert') . '.' . "\n";
                     exit(0);

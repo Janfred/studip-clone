@@ -60,7 +60,7 @@ $config_id = Request::option('config_id');
 $global_id = Request::option('global_id');
 // range_id and module are always necessary
 if ($range_id && $module) {
-    // $module = ucfirst(strtolower($module));
+    // $module = ucfirst(mb_strtolower($module));
     
     // Is it a valid module name?
     foreach ($GLOBALS['EXTERN_MODULE_TYPES'] as $module_type => $module_data) {

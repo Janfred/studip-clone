@@ -201,6 +201,6 @@ abstract class Interactable
      */
     private static function hyphenate($word)
     {
-        return strtolower(preg_replace('/(?<=\w)([A-Z])/', '-\\1', $word));
+        return mb_strtolower(preg_replace('/(?<=\w)([A-Z])/', '-\\1', $word));
     }
 }

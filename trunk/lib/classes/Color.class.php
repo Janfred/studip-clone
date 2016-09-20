@@ -213,9 +213,9 @@ class Color {
             $format = substr($color, 0, mb_strpos($color, "("));
             $func = $format."2array";
             $arr = self::$func($color);
-        } elseif (self::$colorstrings[strtolower($color)]) {
+        } elseif (self::$colorstrings[mb_strtolower($color)]) {
             $format = "rgb"; //we don't want colors as strings like "red"
-            $arr = self::$colorstrings[strtolower($color)];
+            $arr = self::$colorstrings[mb_strtolower($color)];
         }
         return array($arr, $format);
     }

@@ -1,6 +1,6 @@
 <th<?
 if ($controller->sortby == $field ) :
-    echo ' class="sort' . strtolower($controller->order) . '"';
+    echo ' class="sort' . mb_strtolower($controller->order) . '"';
 endif;
 foreach ($attributes as $key => $value) :
     if (in_array($key, array('style', 'colspan'))) :

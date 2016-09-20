@@ -114,7 +114,7 @@ class DbView
     
     public static function addView($view)
     {
-        $view = strtolower($view);
+        $view = mb_strtolower($view);
         if (!isset(self::$dbviewfiles[$view])) {
             self::$dbviewfiles[$view] = 0;
         }

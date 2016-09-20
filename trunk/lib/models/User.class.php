@@ -463,7 +463,7 @@ class User extends AuthUserMd5
         $replace_func['UCASE'] = 'mb_strtoupper';
         $replace_func['IF'] = '$if';
         $eval = strtr($sql, $replace_func);
-        $eval = strtr(strtolower($eval), $data);
+        $eval = strtr(mb_strtolower($eval), $data);
         return eval('return ' . $eval . ';');
     }
 
@@ -526,7 +526,7 @@ class User extends AuthUserMd5
      */
     public function isFieldDirty($field)
     {
-        $field = strtolower($field);
+        $field = mb_strtolower($field);
         return (array_key_exists($field, $this->content_db) ? parent::isFieldDirty($field) : $this->info->isFieldDirty($field));
     }
 
@@ -538,7 +538,7 @@ class User extends AuthUserMd5
      */
     public function revertValue($field)
     {
-        $field = strtolower($field);
+        $field = mb_strtolower($field);
         return (array_key_exists($field, $this->content_db) ? parent::revertValue($field) : $this->info->revertValue($field));
     }
 
@@ -551,7 +551,7 @@ class User extends AuthUserMd5
      */
     public function getPristineValue($field)
     {
-        $field = strtolower($field);
+        $field = mb_strtolower($field);
         return (array_key_exists($field, $this->content_db) ? parent::getPristineValue($field) : $this->info->getPristineValue($field));
     }
 

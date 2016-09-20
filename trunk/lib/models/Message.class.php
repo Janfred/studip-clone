@@ -263,7 +263,7 @@ class Message extends SimpleORMap
         return $statement->execute(array(
             'message_id' => $this->getId(),
             'user_id' => $user_id,
-            'tag' => strtolower($tag)
+            'tag' => mb_strtolower($tag)
         ));
     }
 
@@ -279,7 +279,7 @@ class Message extends SimpleORMap
         return $statement->execute(array(
             'message_id' => $this->getId(),
             'user_id' => $user_id,
-            'tag' => strtolower($tag)
+            'tag' => mb_strtolower($tag)
         ));
     }
 

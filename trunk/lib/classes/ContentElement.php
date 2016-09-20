@@ -51,7 +51,7 @@ class ContentElement
     public function __call($method, $args)
     {
         if (substr($method, 0, 3) == 'get') {
-            $variable = strtolower(substr($method, 3, mb_strlen($method) -3));
+            $variable = mb_strtolower(substr($method, 3, mb_strlen($method) -3));
             if (isset($this->$variable)) {
                 return $this->$variable;
             } else {

@@ -329,7 +329,7 @@ class messaging
                 $insert_tags->execute(array(
                     'message_id' => $tmp_message_id,
                     'user_id' => $snd_user_id,
-                    'tag' => strtolower($tag)
+                    'tag' => mb_strtolower($tag)
                 ));
             }
         }
@@ -379,7 +379,7 @@ class messaging
                     $insert_tags->execute(array(
                         'message_id' => $tmp_message_id,
                         'user_id' => $one,
-                        'tag' => strtolower($tag)
+                        'tag' => mb_strtolower($tag)
                     ));
                 }
             }

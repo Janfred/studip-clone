@@ -86,7 +86,7 @@ class Widget
     {
         $class = get_class($element);
         if ($class !== 'WidgetElement') {
-            $index = strtolower($class);
+            $index = mb_strtolower($class);
             $index = str_replace('element', '', $index);
             $index .= '-' . md5(serialize($element));
         } else {

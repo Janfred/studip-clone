@@ -44,7 +44,7 @@ class StudipLitImportPluginAbstract {
     var $xmlfile_name;
 
     function __construct(){
-        $this->class_name = strtolower(get_class($this));
+        $this->class_name = mb_strtolower(get_class($this));
         $this->data = false;
         $this->num_entries = 0;
     }
@@ -201,7 +201,7 @@ class StudipLitImportPluginAbstract {
         global $LIT_IMPORT_PLUGINS;
         $ret = false;
         for ($i = 0; $i < count($LIT_IMPORT_PLUGINS); ++$i){
-            if (substr(strtolower($this->class_name),21) == strtolower($LIT_IMPORT_PLUGINS[$i]['name'])){
+            if (substr(mb_strtolower($this->class_name),21) == mb_strtolower($LIT_IMPORT_PLUGINS[$i]['name'])){
                 $ret = $LIT_IMPORT_PLUGINS[$i]['name'];
                 break;
             }

@@ -121,9 +121,9 @@ class SimpleCollection extends StudipArrayObject
                     break;
                 case '%=':
                     $comp_func = function($a) use ($args) {
-                        $a = strtolower(SimpleCollection::translitLatin1($a));
+                        $a = mb_strtolower(SimpleCollection::translitLatin1($a));
                         $args = array_map('SimpleCollection::translitLatin1', $args);
-                        $args = array_map('strtolower', $args);
+                        $args = array_map('mb_strtolower', $args);
                         return in_array($a, $args);
                     };
                 break;
@@ -618,7 +618,7 @@ class SimpleCollection extends StudipArrayObject
                     $value2 = SimpleCollection::translitLatin1(substr($d2[$field], 0, 100));
                 }
                 $ret = $sort_func($value1, $value2);
-                if (strtolower($dir) == 'desc') $ret = $ret * -1;
+                if (mb_strtolower($dir) == 'desc') $ret = $ret * -1;
             } while ($ret === 0 && next($sorter));
 
             return $ret;

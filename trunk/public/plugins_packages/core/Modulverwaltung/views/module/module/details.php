@@ -22,7 +22,7 @@
                             <? foreach ($modulteil->deskriptoren->pluck('sprache') as $language) : ?>
                                 <? $lang = $GLOBALS['MVV_MODUL_DESKRIPTOR']['SPRACHE']['values'][$language]; ?>
                                 <a href="<?= $controller->url_for('/modulteil/' . join('/', [$modulteil->id, $institut_id]), ['display_language' => $language]) ?>">
-                                    <img src="<?= Assets::image_path('languages/lang_' . strtolower($language) . '.gif') ?>"
+                                    <img src="<?= Assets::image_path('languages/lang_' . mb_strtolower($language) . '.gif') ?>"
                                          alt="<?= $lang['name'] ?>" title="<?= $lang['name'] ?>">
                                 </a>
                             <? endforeach; ?>

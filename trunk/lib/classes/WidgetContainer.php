@@ -108,7 +108,7 @@ abstract class WidgetContainer
      */
     private function guessIndex(Widget $widget)
     {
-        $index = strtolower(get_class($widget));
+        $index = mb_strtolower(get_class($widget));
         $index = str_replace('widget', '', $index);
 
         $temp    = $index;
