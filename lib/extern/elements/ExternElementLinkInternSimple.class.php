@@ -157,7 +157,7 @@ class ExternElementLinkInternSimple extends ExternElement {
                 }
                 $link .= "page_url=" . $sri_link;
             } elseif ($extern_link) {
-                if (strrpos($extern_link, '?')) {
+                if (mb_strrpos($extern_link, '?')) {
                     $link = "$extern_link&module={$config_meta_data['module_name']}";
                 } else {
                     $link = "$extern_link?module={$config_meta_data['module_name']}";

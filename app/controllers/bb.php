@@ -32,7 +32,7 @@ class BbController extends AuthenticatedController {
                 $images[] = array(
                 'time'     => @filemtime($GLOBALS['DYNAMIC_CONTENT_PATH'] . '/user/'.$file),
                 'file'     => $file,
-                'user_id'  => substr($file, 0, strrpos($file, '_')));
+                'user_id'  => substr($file, 0, mb_strrpos($file, '_')));
             }
         }
         

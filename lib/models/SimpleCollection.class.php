@@ -150,7 +150,7 @@ class SimpleCollection extends StudipArrayObject
                 case '$=':
                     $comp_func = function($a) use ($args) {
                         foreach ($args as $arg) {
-                            $found = strrpos($a, $arg);
+                            $found = mb_strrpos($a, $arg);
                             if ($found !== false && ($found
                                 + mb_strlen($arg)) === mb_strlen($a)) {
                                 return true;

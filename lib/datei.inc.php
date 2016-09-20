@@ -1051,13 +1051,13 @@ function prepareFilename($filename, $shorten = FALSE, $checkfolder = false) {
 
     if ($shorten) {
         $ext = getFileExtension ($filename);
-        $filename = substr(substr($filename, 0, strrpos($filename,$ext)-1), 0, (30 - mb_strlen($ext))).".".$ext;
+        $filename = substr(substr($filename, 0, mb_strrpos($filename,$ext)-1), 0, (30 - mb_strlen($ext))).".".$ext;
     }
     if ($checkfolder !== false) {
         $c = 0;
         $ext = getFileExtension($filename);
         if ($ext) {
-          $name = substr($filename, 0, strrpos($filename,$ext)-1);
+          $name = substr($filename, 0, mb_strrpos($filename,$ext)-1);
         } else {
             $name = $filename;
 }
@@ -1070,7 +1070,7 @@ function prepareFilename($filename, $shorten = FALSE, $checkfolder = false) {
 
 //Diese Funktion dient zur Abfrage der Dateierweiterung
 function getFileExtension($str) {
-    $i = strrpos($str,".");
+    $i = mb_strrpos($str,".");
     if (!$i) { return ""; }
 
     $l = mb_strlen($str) - $i;
@@ -2829,7 +2829,7 @@ function upload_recursively($range_id, $dir) {
             break;
         }
         // Verzeichnis erstellen
-        $pos = strrpos($subdir, "/");
+        $pos = mb_strrpos($subdir, "/");
         $name = substr($subdir, $pos + 1, mb_strlen($subdir) - $pos);
         $dir_id = create_folder($name, "", $range_id);
         $count['subdirs']++;

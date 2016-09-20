@@ -358,7 +358,7 @@ class Admin_BannerController extends AuthenticatedController
         }
 
         //Dateiendung bestimmen
-        $dot = strrpos($img_name, '.');
+        $dot = mb_strrpos($img_name, '.');
         if ($dot) {
             $l   = mb_strlen($img_name) - $dot;
             $ext = strtolower(substr($img_name, $dot + 1, $l));
