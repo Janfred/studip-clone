@@ -235,31 +235,6 @@ function first_decision($userid) {
     die;
 }
 
-/**
- * Gets the global visibility for the given user ID.
- *
- * @param string $user_id user ID to check
- * @return string User visibility.
- */
-function get_global_visibility_by_id($user_id) {
-    $query = "SELECT visible FROM auth_user_md5 WHERE user_id = ?";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($user_id));
-    return $statement->fetchColumn();
-}
-
-/**
- * Gets the global visibility for a given username. This is just a wrapper
- * function for <code>get_global_visibility_by_id</code>, operating with a
- * usename instead of an ID.
- *
- * @param string $username username to check
- * @return string User visibility as returned by
- * <code>get_global_visibility_by_id</code>.
- */
-function get_global_visibility_by_username($username) {
-    return get_global_visibility_by_id(get_userid($username));
-}
 
 /**
  * Gets a user's visibility settings for special context. Valid contexts are
@@ -331,21 +306,6 @@ function get_local_visibility_by_id($user_id, $context, $return_user_perm=false)
     return $result;
 }
 
-/**
- * Wrapper function for checking a user's local visibility by username
- * instead of user ID.
- *
- * @param string $username username to check
- * @param string $context local visibility in which context?
- * @see get_local_visibility_by_id
- * @param boolean $return_user_perm return not only visibility, but also
- * the user's global permission level
- * @return mixed Visibility flag or array with visibility and user permission
- * level.
- */
-function get_local_visibility_by_username($username, $context, $return_user_perm=false) {
-    return get_local_visibility_by_id(get_userid($username), $context, $return_user_perm);
-}
 
 /**
  * Checks whether an element of a user homepage is visible for another user.
@@ -502,45 +462,3 @@ function get_visible_email($user_id) {
     return $result;
 }
 
-/**
- * Gets the visibility setting of a special element on a user's homepage.
- * The resulting value is one of the constants VISIBILITY_ME,
- * VISIBILITY_BUDDIES, VISIBILITY_DOMAIN, VISIBILITY_STUDIP and
- * VISIBILITY_EXTERN.
- *
- * @param string $user_id which user is required?
- * @param string $element_name unique name of the homepage element.
- * @return int Visibility of the given element or default system visibility
- * if the user hasn't set anything special.
- */
-function get_homepage_element_visibility($user_id, $element_name) {
-    $visibilities = get_local_visibility_by_id($user_id, 'homepage');
-    $visibilities = json_decode($visibilities, true);
-    if (isset($visibilities[$element_name])) {
-        return $visibilities[$element_name];
-    } else {
-        return get_default_homepage_visibility($user_id);
-    }
-}
-
-/**
- * Sets the visibility of a homepage element to the given value.
- *
- * @param string $user_id whose homepage is it?
- * @param string $element_name unique name of the homepage element to change
- * @param int $visibility new value for element visibility
- * @return int Number of affected database rows.
- */
-function set_homepage_element_visibility($user_id, $element_name, $visibility) {
-    $visibilities = get_local_visibility_by_id($user_id, 'homepage');
-    $visibilities = json_decode($visibilities, true);
-    $visibilities[$element_name] = $visibility;
-
-    $query = "UPDATE user_visibility SET homepage = ? WHERE user_id = ?";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array(
-        json_encode($visibilities),
-        $user_id,
-    ));
-    return $statement->rowCount();
-}

@@ -1122,7 +1122,8 @@ function get_users_online($active_time = 5, $name_format = 'full_rev')
 
     $query = "SELECT a.username AS temp, a.username, {$GLOBALS['_fullname_sql'][$name_format]} AS name,
                      ABS(CAST(UNIX_TIMESTAMP() AS SIGNED) - CAST(last_lifesign AS SIGNED)) AS last_action,
-                     a.user_id, IF(owner_id IS NOT NULL, 1, 0) AS is_buddy, " . get_vis_query('a', 'online') . " AS is_visible
+                     a.user_id, IF(owner_id IS NOT NULL, 1, 0) AS is_buddy, " . get_vis_query('a', 'online') . " AS is_visible,
+                     a.visible
               FROM user_online uo
               JOIN auth_user_md5 a ON (a.user_id = uo.user_id)
               LEFT JOIN user_info ON (user_info.user_id = uo.user_id)

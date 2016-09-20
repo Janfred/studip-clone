@@ -165,7 +165,7 @@ class OnlineController extends AuthenticatedController
             if ($user['is_visible']) {
                 continue;
             }
-            $global_visibility = get_global_visibility_by_id($user['user_id']);
+            $global_visibility = $user['visible'];
             $domains           = UserDomain::getUserDomainsForUser($user['user_id']);
             $same_domains      = array_intersect($domains, $my_domains);
 
