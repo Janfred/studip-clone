@@ -1529,7 +1529,7 @@ function showWikiPage($keyword, $version, $special="", $show_comments="icon", $h
             $cont=preg_replace("/\007\007/",$f,$cont,1);
         }
     }
-    $num_body_lines=substr_count($wikiData['body'], "\n");
+    $num_body_lines=mb_substr_count($wikiData['body'], "\n");
     if ($num_body_lines<15) {
         $cont .= "<p>";
         $cont .= str_repeat("&nbsp;<br>", 15-$num_body_lines);

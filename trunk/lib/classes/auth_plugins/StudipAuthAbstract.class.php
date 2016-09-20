@@ -230,7 +230,7 @@ class StudipAuthAbstract {
     public static function CheckIPRange()
     {
         $ip = $_SERVER['REMOTE_ADDR'];
-        $version = substr_count($ip, ':') > 1 ? 'V6' : 'V4'; // valid ip v6 addresses have atleast two colons
+        $version = mb_substr_count($ip, ':') > 1 ? 'V6' : 'V4'; // valid ip v6 addresses have atleast two colons
         $method = 'CheckIPRange' . $version;
         if (is_array($GLOBALS['LOGIN_IP_RANGES'][$version])) {
             foreach ($GLOBALS['LOGIN_IP_RANGES'][$version] as $range) {

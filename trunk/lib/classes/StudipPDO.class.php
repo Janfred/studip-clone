@@ -51,7 +51,7 @@ class StudipPDO extends PDO
      */
     protected static function replaceStrings($statement)
     {
-        $count = substr_count($statement, '"') + substr_count($statement, "'") + substr_count($statement, '\\');
+        $count = mb_substr_count($statement, '"') + mb_substr_count($statement, "'") + mb_substr_count($statement, '\\');
 
         // use fast preg_replace() variant if possible
         if ($count < 1000) {
