@@ -125,6 +125,9 @@
     #helpbar-sticky:checked + & {
         text-indent: 0;
         width: @helpbar-width;
+        .helpbar-title {
+            .background-icon('decline-circle', 'info_alt', 24);
+        }
         .helpbar-widgets {
             max-height: 1000px;
         }
