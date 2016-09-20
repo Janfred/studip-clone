@@ -460,39 +460,6 @@ function getAllChildIDs($range_id)
     return $zw;
 }
 
-function display_roles_recursive($roles, $level = 0, $pred = '') {
-    if (is_array($roles))
-    foreach ($roles as $role_id => $data) {
-        if ($level > 0) {
-            $title = $pred.' > '. $data['name'];
-        } else {
-            $title = $data['name'];
-        }
-        echo '<tr><td colspan="2" class="content_seperator"><b>'.$title.'</b></td></tr>';
-        if ($persons = getPersonsForRole($role_id)) {
-            $z = 1;
-            if (is_array($persons))
-            foreach ($persons as $p) {
-                //echo '<tr><td '.$class.' width="20" align="center">'.$p['position'].'</td>';
-                echo '<tr><td width="20" align="center">'.$z.'&nbsp;</td>';
-                echo '<td><a href="'.URLHelper::getLink('dispatch.php/profile?username='.$p['username']).'">'.$p['fullname'].'</a></td>';
-                $z++;
-            }
-        }
-        echo '<tr><td colspan="2" class="blank">&nbsp;</td></tr>';
-        echo '</tr>';
-        if ($data['child']) {
-            if ($level > 0) {
-                $zw = $pred . ' > '.$data['name'];
-            } else {
-                $pred = $data['name'];
-                $zw = $pred;
-            }
-            display_roles_recursive($data['child'], $level+1, $zw);
-        }
-    }
-}
-
 function GetRoleNames($roles, $level = 0, $pred = '', $all = false) {
     $out = array();
 
