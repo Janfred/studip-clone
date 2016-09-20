@@ -105,7 +105,7 @@ class UpdateInformation
             if (strpos($page, "?") !== false) {
                 $page = substr($page, 0, strpos($page, "?"));
             }
-            self::$collecting = (stripos($page, "dispatch.php/jsupdater/get") !== false);
+            self::$collecting = (mb_stripos($page, "dispatch.php/jsupdater/get") !== false);
 
             // If we are collecting, store the current timestamp
             if (self::$collecting) {

@@ -140,7 +140,7 @@ $commentable = $GLOBALS['perm']->have_perm("autor") ? true : (bool) $commentable
             <?= $thread->getContent() ?>
         </div>
         <div class="additional_tags"><? foreach ($thread->getTags() as $tag) : ?>
-                <? if (stripos($content, "#".$tag) === false) : ?>
+                <? if (mb_stripos($content, "#".$tag) === false) : ?>
                     <? $link = $thread['context_type'] === "course" ? URLHelper::getLink("plugins.php/blubber/streams/forum", array('cid' => $thread['Seminar_id'], 'hash' => $tag)) : URLHelper::getLink("plugins.php/blubber/streams/global", array('hash' => $tag)) ?>
                     <a href="<?= $link ?>"><?= htmlReady("#".$tag) ?></a>
                 <? endif ?>

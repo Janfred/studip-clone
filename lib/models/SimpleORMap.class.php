@@ -372,7 +372,7 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
         $class = get_called_class();
         $record = new $class();
         $db = DBManager::get();
-        $has_join = stripos($sql, 'JOIN ');
+        $has_join = mb_stripos($sql, 'JOIN ');
         if ($has_join === false || $has_join > 10) {
             $sql = 'WHERE ' . $sql;
         }
@@ -490,7 +490,7 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
         $class = get_called_class();
         $record = new $class();
         $db = DBManager::get();
-        $has_join = stripos($sql, 'JOIN ');
+        $has_join = mb_stripos($sql, 'JOIN ');
         if ($has_join === false || $has_join > 10) {
             $sql = 'WHERE ' . $sql;
         }
@@ -553,7 +553,7 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
      */
     public static function findOneBySQL($where, $params = array())
     {
-        if (stripos($where, 'LIMIT') === false) {
+        if (mb_stripos($where, 'LIMIT') === false) {
             $where .= " LIMIT 1";
         }
         $found = self::findBySQL($where, $params);
@@ -606,7 +606,7 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
         $class = get_called_class();
         $record = new $class();
         $db = DBManager::get();
-        $has_join = stripos($sql, 'JOIN ');
+        $has_join = mb_stripos($sql, 'JOIN ');
         if ($has_join === false || $has_join > 10) {
             $sql = 'WHERE ' . $sql;
         }

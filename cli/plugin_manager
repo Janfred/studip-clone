@@ -253,7 +253,7 @@ if ($args) {
             $plugin_manager = PluginManager::getInstance();
             $plugins = $plugin_manager->getPluginInfos();
             if ($pluginname) {
-                $plugins = array_filter($plugins, function($p) use ($pluginname) {return stripos($p['name'], $pluginname) !== false;});
+                $plugins = array_filter($plugins, function($p) use ($pluginname) {return mb_stripos($p['name'], $pluginname) !== false;});
             }
             $basepath = get_config('PLUGINS_PATH');
             foreach ($plugins as $plugin) {

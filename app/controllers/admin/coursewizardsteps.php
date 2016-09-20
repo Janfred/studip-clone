@@ -17,7 +17,7 @@
 
 $stepdir = "../lib/classes/coursewizardsteps";
 foreach (scandir($stepdir) as $file) {
-    if (stripos($file, ".php") !== false) {
+    if (mb_stripos($file, ".php") !== false) {
         require_once $stepdir . "/" . $file;
     }
 }

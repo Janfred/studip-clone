@@ -144,8 +144,8 @@ class PluginRepository
 
         foreach ($this->plugins as $name => $data) {
             if ($search === NULL || $search === '' ||
-                is_int(stripos($name, $search)) ||
-                is_int(stripos($data['description'], $search))) {
+                is_int(mb_stripos($name, $search)) ||
+                is_int(mb_stripos($data['description'], $search))) {
                 $result[$name] = $data;
             }
         }

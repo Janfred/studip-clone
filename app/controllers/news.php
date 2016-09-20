@@ -677,7 +677,7 @@ class NewsController extends StudipController
         } else {
             $tmp_result = search_range($term, true);
             // add users
-            if (stripos(get_fullname(), $term) !== false)
+            if (mb_stripos(get_fullname(), $term) !== false)
                 $tmp_result[$GLOBALS['auth']->auth['uid']] = array(
                     'name' => get_fullname(),
                     'type' => 'user');
@@ -700,7 +700,7 @@ class NewsController extends StudipController
         // workaround: apply search term (ignored by search_range below admin)
         if ((count($tmp_result)) AND (!$GLOBALS['perm']->have_perm('admin')) AND ($term))
             foreach ($tmp_result as $id => $data) {
-                if (stripos($data['name'], $term) === false)
+                if (mb_stripos($data['name'], $term) === false)
                     unset($tmp_result[$id]);
             }
         // prepare result

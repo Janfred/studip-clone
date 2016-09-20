@@ -294,12 +294,12 @@ class ExportPDF extends TCPDF implements ExportDocument {
                 } catch (Exception $e) {
                     $convurl = '';
                 }
-            } else if (stripos($url, 'dispatch.php/document/download') !== false) {
+            } else if (mb_stripos($url, 'dispatch.php/document/download') !== false) {
                 if (preg_match('#([a-f0-9]{32})#', $url, $matches)) {
                     $convurl = DirectoryEntry::find($matches[1])->file->getStorageObject()->getPath();
                 }
-            } else if (stripos($url, 'download') !== false
-                    || stripos($url, 'sendfile.php') !== false) {
+            } else if (mb_stripos($url, 'download') !== false
+                    || mb_stripos($url, 'sendfile.php') !== false) {
                 //// get file id
                 if (preg_match('#([a-f0-9]{32})#', $url, $matches)) {
                     $document = new StudipDocument($matches[1]);

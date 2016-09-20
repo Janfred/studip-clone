@@ -326,7 +326,7 @@ class PluginManager
 
     private function isPluginCorePlugin($class, $path)
     {
-        return stripos($path, 'core/') === 0;
+        return mb_stripos($path, 'core/') === 0;
     }
 
     /**

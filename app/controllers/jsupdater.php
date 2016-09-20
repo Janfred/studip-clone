@@ -119,7 +119,7 @@ class JsupdaterController extends AuthenticatedController
             }
         }
         $page_info = Request::getArray("page_info");
-        if (stripos(Request::get("page"), "dispatch.php/messages") !== false) {
+        if (mb_stripos(Request::get("page"), "dispatch.php/messages") !== false) {
             $messages = Message::findNew(
                 $GLOBALS["user"]->id,
                 $page_info['Messages']['received'],

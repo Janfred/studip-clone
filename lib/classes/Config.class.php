@@ -98,7 +98,7 @@ class Config implements ArrayAccess, Countable, IteratorAggregate
         }
         if ($name) {
             $temp = array_filter($temp, function ($a) use ($name) {
-                return stripos($a['field'], $name) !== false;
+                return mb_stripos($a['field'], $name) !== false;
             });
         }
 

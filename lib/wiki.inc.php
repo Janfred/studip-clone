@@ -887,7 +887,7 @@ function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch) 
         print($tdheadleft);
         // find all occurences
         while ($offset < strlen($result['body'])) {
-            $pos=stripos($result['body'], $searchfor,$offset);
+            $pos=mb_stripos($result['body'], $searchfor,$offset);
             if ($pos===FALSE) break;
             $offset=$pos+1;
             if (($ignore_next_hits--)>0) {
