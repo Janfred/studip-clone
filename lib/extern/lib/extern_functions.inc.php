@@ -218,7 +218,7 @@ function get_default_generic_datafields (&$default_config, $object_type) {
         foreach ($generic_datafields["ids"] as $datafield) {
             $default_config["genericdatafields"] .= "|" . $datafield;
             $default_config["visible"] .= "|0";
-            $default_config["order"] .= "|" . substr_count($default_config["order"], "|");
+            $default_config["order"] .= "|" . mb_substr_count($default_config["order"], "|");
             $default_config["aliases"] .= "|" . $generic_datafields["ids_names"][$datafield];
         }
 
