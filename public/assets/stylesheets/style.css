@@ -2918,6 +2918,13 @@ select.sidebar-selectlist {
   text-indent: 0;
   width: 250px;
 }
+#helpbar-sticky:checked + .helpbar .helpbar-title {
+  background-image: url("../images/icons/white/decline-circle.svg");
+  -webkit-background-size: 24px 24px;
+  -moz-background-size: 24px 24px;
+  -o-background-size: 24px 24px;
+  background-size: 24px 24px;
+}
 #helpbar-sticky:checked + .helpbar .helpbar-widgets {
   max-height: 1000px;
 }
