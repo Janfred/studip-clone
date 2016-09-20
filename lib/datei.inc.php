@@ -103,7 +103,7 @@ function parse_link($link, $level=0) {
 
         if (mb_strpos($url_parts["host"],"@")) {
             $url_parts["pass"] .= "@".substr($url_parts["host"],0,mb_strpos($url_parts["host"],"@"));
-            $url_parts["host"] = substr(strrchr($url_parts["host"],"@"),1);
+            $url_parts["host"] = substr(mb_strrchr($url_parts["host"],"@"),1);
         }
 
         if (preg_match('/[^a-z0-9_.-]/i',$url_parts['host'])){ // exists umlauts ?

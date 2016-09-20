@@ -344,7 +344,7 @@ class Assets
     {
 
         # add extension if not present
-        if ('' == substr(strrchr($source, "."), 1))
+        if ('' == substr(mb_strrchr($source, "."), 1))
             $source .= ".$ext";
 
         # if source is not absolute
