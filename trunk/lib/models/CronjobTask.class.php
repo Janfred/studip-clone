@@ -90,7 +90,7 @@ class CronjobTask extends SimpleORMap
      */
     public function isCore()
     {
-        return strpos($this->filename, 'plugins_packages') === false;
+        return mb_strpos($this->filename, 'plugins_packages') === false;
     }
 
     /**

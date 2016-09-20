@@ -91,7 +91,7 @@ function parse_link($link, $level=0) {
     if (mb_stripos($url_parts["host"], 'localhost') !== false
         || mb_stripos($url_parts["host"], 'loopback') !== false
         || (filter_var($url_parts["host"], FILTER_VALIDATE_IP) !== false
-            && (strpos($url_parts["host"],'127') === 0
+            && (mb_strpos($url_parts["host"],'127') === 0
                 || filter_var($url_parts["host"], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false)
             )
         ) {
@@ -101,8 +101,8 @@ function parse_link($link, $level=0) {
         // Parsing an FTF-Adress
         $documentpath = $url_parts["path"];
 
-        if (strpos($url_parts["host"],"@")) {
-            $url_parts["pass"] .= "@".substr($url_parts["host"],0,strpos($url_parts["host"],"@"));
+        if (mb_strpos($url_parts["host"],"@")) {
+            $url_parts["pass"] .= "@".substr($url_parts["host"],0,mb_strpos($url_parts["host"],"@"));
             $url_parts["host"] = substr(strrchr($url_parts["host"],"@"),1);
         }
 
@@ -207,7 +207,7 @@ function parse_link($link, $level=0) {
         $location_header = $parsed_link["Location"]
                         ?: $parsed_link["location"];
         if (in_array($parsed_link["response_code"], array(300,301,302,303,305,307)) && $location_header) {
-            if (strpos($location_header, 'http') !== 0) {
+            if (mb_strpos($location_header, 'http') !== 0) {
                 $location_header = $url_parts['scheme'] . '://' . $url_parts['host'] . '/' . $location_header;
             }
             $parsed_link = parse_link($location_header, $level + 1);
@@ -1530,11 +1530,11 @@ function display_file_body($datei, $folder_id, $open, $change, $move, $upload, $
                 $flash_player = get_flash_player($datei['dokument_id'], $datei['filename'], $type);
                 $content = "<div style=\"margin-bottom: 10px; height: {$flash_player['height']}; width: {$flash_player['width']};\">" . $flash_player['player'] . '</div>';
             }
-        } else if (strpos($media_type, 'video/') === 0 || $media_type == 'application/ogg') {
+        } else if (mb_strpos($media_type, 'video/') === 0 || $media_type == 'application/ogg') {
             $content = '<div class="preview">' . formatReady('[video]' . $media_url) . '<div>';
-        } else if (strpos($media_type, 'audio/') === 0) {
+        } else if (mb_strpos($media_type, 'audio/') === 0) {
             $content = '<div class="preview">' . formatReady('[audio]' . $media_url) . '<div>';
-        } else if (strpos($media_type, 'image/') === 0) {
+        } else if (mb_strpos($media_type, 'image/') === 0) {
             $content = '<div class="preview">' . formatReady('[img]' . $media_url) . '<div>';
         }
         if ($datei["description"]) {

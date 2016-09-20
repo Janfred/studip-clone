@@ -160,7 +160,7 @@ class UserFilterField
             require_once($file);
             // Try to auto-calculate class name from file name.
             $className = substr(basename($file), 0,
-                strpos(basename($file), '.class.php'));
+                mb_strpos(basename($file), '.class.php'));
             // Check if class is right.
             if (is_subclass_of($className, 'UserFilterField')) {
                 if ($className::$isParameterized) {

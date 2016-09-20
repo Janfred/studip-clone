@@ -153,7 +153,7 @@ class ForumEntry {
      */
     public static function removeQuotes($description)
     {
-        if (strpos($description, '[quote') !== false) {
+        if (mb_strpos($description, '[quote') !== false) {
             $description = preg_replace('/\[quote(=.*)\].*\[\/quote\]/is', '', $description);
         }
         return $description;

@@ -28,7 +28,7 @@ class BbController extends AuthenticatedController {
         $images = array();
         
         foreach (scandir($GLOBALS['DYNAMIC_CONTENT_PATH'] . '/user') as $file) {
-            if (strpos($file, '_normal.png') !== FALSE && $file !== 'nobody_normal.png') {
+            if (mb_strpos($file, '_normal.png') !== FALSE && $file !== 'nobody_normal.png') {
                 $images[] = array(
                 'time'     => @filemtime($GLOBALS['DYNAMIC_CONTENT_PATH'] . '/user/'.$file),
                 'file'     => $file,

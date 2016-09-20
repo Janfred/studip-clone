@@ -148,7 +148,7 @@ if($zip_file_id === false){
 }
 
 //obskuren id+_?_ string zerpflücken
-if (strpos($open, "_") !== false){
+if (mb_strpos($open, "_") !== false){
     list($open_id, $open_cmd) = explode('_', $open);
 }
 

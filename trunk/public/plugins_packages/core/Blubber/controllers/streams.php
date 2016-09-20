@@ -258,8 +258,8 @@ class StreamsController extends PluginController {
 
         $content = $this->transformMentions($thread['description'], $thread);
 
-        if (strpos($content, "\n") !== false) {
-            $thread['name'] = substr($content, 0, strpos($content, "\n"));
+        if (mb_strpos($content, "\n") !== false) {
+            $thread['name'] = substr($content, 0, mb_strpos($content, "\n"));
             $thread['description'] = $content;
         } else {
             if (mb_strlen($content) > 255) {
@@ -351,8 +351,8 @@ class StreamsController extends PluginController {
         if ($new_content && $old_content !== $new_content) {
             $posting['description'] = $new_content;
             if ($posting['topic_id'] === $posting['root_id']) {
-                if (strpos($new_content, "\n") !== false) {
-                    $posting['name'] = substr($new_content, 0, strpos($new_content, "\n"));
+                if (mb_strpos($new_content, "\n") !== false) {
+                    $posting['name'] = substr($new_content, 0, mb_strpos($new_content, "\n"));
                 } else {
                     if (mb_strlen($new_content) > 255) {
                         $posting['name'] = "";
@@ -613,9 +613,9 @@ class StreamsController extends PluginController {
 
                 if ($success) {
                     $type = null;
-                    strpos($file['type'], 'image') === false || $type = "img";
-                    strpos($file['type'], 'video') === false || $type = "video";
-                    if (strpos($file['type'], 'audio') !== false || strpos($document['filename'], '.ogg') !== false) {
+                    mb_strpos($file['type'], 'image') === false || $type = "img";
+                    mb_strpos($file['type'], 'video') === false || $type = "video";
+                    if (mb_strpos($file['type'], 'audio') !== false || mb_strpos($document['filename'], '.ogg') !== false) {
                          $type = "audio";
                     }
                     if ($type) {

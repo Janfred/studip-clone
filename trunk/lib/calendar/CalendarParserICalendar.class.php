@@ -98,7 +98,7 @@ class CalendarParserICalendar extends CalendarParser
 
                     // skip seminar events
                     if ((!$this->import_sem) && $tag == 'UID') {
-                        if (strpos($value, 'Stud.IP-SEM') === 0) {
+                        if (mb_strpos($value, 'Stud.IP-SEM') === 0) {
                             continue 2;
                         }
                     }

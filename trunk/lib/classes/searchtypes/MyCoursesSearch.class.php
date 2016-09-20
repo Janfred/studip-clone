@@ -66,7 +66,7 @@ class MyCoursesSearch extends StandardSearch
             $sql .= sprintf(' LIMIT %d, %d', $offset, $limit);
         }
         foreach ($this->parameters + $contextual_data as $name => $value) {
-            if ($name !== "input" && strpos($sql, ":".$name) !== false) {
+            if ($name !== "input" && mb_strpos($sql, ":".$name) !== false) {
                 if (is_array($value)) {
                     if (count($value)) {
                         $sql = str_replace(":".$name, implode(',', array_map(array($db, 'quote'), $value)), $sql);

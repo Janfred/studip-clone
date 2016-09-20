@@ -92,7 +92,7 @@ class StudipAuthShib extends StudipAuthSSO
             if ($_REQUEST['sso'] == 'shib') {
                 // force Shibboleth authentication (lazy session)
                 $shib_url = $this->session_initiator;
-                $shib_url .= strpos($shib_url, '?') === false ? '?' : '&';
+                $shib_url .= mb_strpos($shib_url, '?') === false ? '?' : '&';
                 $shib_url .= 'target='.urlencode($this->getURL());
 
                 // break redirection loop in case of misconfiguration
@@ -130,7 +130,7 @@ class StudipAuthShib extends StudipAuthSSO
     function getUserDomains ()
     {
         $user = $this->getUser();
-        $pos = strpos($user, '@');
+        $pos = mb_strpos($user, '@');
 
         if ($pos !== false) {
             return array(substr($user, $pos + 1));

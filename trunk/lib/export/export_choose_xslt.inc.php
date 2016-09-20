@@ -156,7 +156,7 @@ elseif (!isset($page) or ($page == 0)) // Seite 1 : Auswahl des Dateiformats
 
 elseif ($page == 1) // Seite 2 : Auswahl des XSLT-Scripts
 {
-    if (strpos($choose, $format) === false)
+    if (mb_strpos($choose, $format) === false)
         unset($choose);
     $export_pagename .= _("Auswahl des Ausgabemoduls");
 

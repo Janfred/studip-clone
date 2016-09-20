@@ -320,7 +320,7 @@ class ContentModule
         if (!$this->icon_file) {
             $this->icon_file = 'learnmodule';
         }
-        if (strpos('http', $this->icon_file) === 0) {
+        if (mb_strpos('http', $this->icon_file) === 0) {
             return "<img src=\"" . $this->icon_file . "\">";
         } else {
             return Icon::create($this->icon_file, 'inactive')->asImg();

@@ -79,7 +79,7 @@ class StudipLitImportPluginStudipLitList extends StudipLitImportPluginAbstract {
                     foreach ($_lit_search_plugins as $p) {
                         if ($p["link"]!="") {
                             $l = str_replace("{accession_number}","",$p["link"]);
-                            $pos = strpos ($parts[12], $l);
+                            $pos = mb_strpos ($parts[12], $l);
                             if (!($pos === false)) {
                                 $fields["lit_plugin"] = $p["name"];
                                 break;

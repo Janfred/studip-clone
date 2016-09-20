@@ -39,7 +39,7 @@ class email_validation_class
         }
         for($character=0;$character<mb_strlen($separator);$character++)
         {
-            if(GetType($position=strpos($string,$separator[$character]))=="integer")
+            if(GetType($position=mb_strpos($string,$separator[$character]))=="integer")
                 $found=(IsSet($found) ? min($found,$position) : $position);
         }
         if(IsSet($found))

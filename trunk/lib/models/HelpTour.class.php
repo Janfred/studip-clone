@@ -228,7 +228,7 @@ class HelpTour extends SimpleORMap {
         if ($language != $this->language)
             return false;
         $current_role = User::findCurrent() ? User::findCurrent()->perms : 'nobody';
-        if ((strpos($this->roles, $current_role) === false))
+        if ((mb_strpos($this->roles, $current_role) === false))
             return false;
         foreach ($this->audiences as $audience) {
             switch ($audience->type) {

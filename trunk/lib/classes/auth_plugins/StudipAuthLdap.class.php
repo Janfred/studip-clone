@@ -207,7 +207,7 @@ class StudipAuthLdap extends StudipAuthAbstract {
             if ($this->decode_utf8_values) {
                 $sn = studip_utf8decode($sn);
             }
-            $pos = strpos($ldap_field, $sn);
+            $pos = mb_strpos($ldap_field, $sn);
             if ($pos !== false){
                 $ret = trim(substr($ldap_field,0,$pos));
             }

@@ -548,7 +548,7 @@ function getParsedStudipUrl() {
 function isStudipMediaUrlPath($path) {
     list($path_head) = \explode('/', $path);
     $valid_paths = array('sendfile.php', 'download', 'assets', 'pictures');
-    return \strpos(\urldecode($path), '../') === false && \in_array($path_head, $valid_paths);
+    return \mb_strpos(\urldecode($path), '../') === false && \in_array($path_head, $valid_paths);
 }
 
 /**

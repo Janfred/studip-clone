@@ -89,7 +89,7 @@
                 $ty1 = $types_subtypes[$ty0][0];
             }else{
                 $ty1 = $ty[1];
-                if(strpos($types_subtypes[$ty0], $ty1) === false){
+                if(mb_strpos($types_subtypes[$ty0], $ty1) === false){
                     trigger_error('Invalid type to param "'.$opt.'"', E_USER_ERROR);
                 }
             }
@@ -141,7 +141,7 @@
             // this arg is an option!
             if($arg[1] == '-'){
                 // long option
-                $p = strpos($arg, '=');
+                $p = mb_strpos($arg, '=');
                 if($p !== false){
                     $next = $substr($arg, $p+1);
                     $arg = substr($arg, 2, $p-2);
@@ -172,7 +172,7 @@
                         if(($val = $get_arg($next,$args,$num)) === false){
                             $Oerr[] = 'Missing artument to option "'.$Earg.'"';
                         }else{
-                            $p = strpos($val, '=');
+                            $p = mb_strpos($val, '=');
                             if($p === false){
                                 $Oerr[] = 'Malformed artument to option "'.$Earg.'" (a "=" is missing)';
                             }else if(isset($Ores[$opt][substr($val, 0, $p)])){
@@ -220,7 +220,7 @@
                             if(($val = $get_arg($next,$args,$num)) === false){
                                 $Oerr[] = 'Missing artument to option "'.$Earg.'"';
                             }else{
-                                $p = strpos($val, '=');
+                                $p = mb_strpos($val, '=');
                                 if($p === false){
                                     $Oerr[] = 'Malformed artument to option "'.$Earg.'" (a "=" is missing)';
                                 }else if(isset($Ores[$opt][substr($val, 0, $p)])){

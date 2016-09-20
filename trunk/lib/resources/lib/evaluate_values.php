@@ -109,7 +109,7 @@ if ($view_mode)
 else //or... see above ;)
     $view_mode = $_SESSION['resources_data']["view_mode"];
 
-if (strpos($view, "openobject") !== FALSE) {
+if (mb_strpos($view, "openobject") !== FALSE) {
     $_SESSION['resources_data']["view_mode"] = "oobj";
     $view_mode = "oobj";
 }
@@ -949,7 +949,7 @@ if ((Request::quoted('add_type')) || (Request::option('delete_type')) || (Reques
             $statement = DBManager::get()->prepare($query);
 
             foreach ($requestable as $key=>$val) {
-                if ((strpos($requestable[$key-1], "id1_")) &&  (strpos($requestable[$key], "id2_"))) {
+                if ((mb_strpos($requestable[$key-1], "id1_")) &&  (mb_strpos($requestable[$key], "id2_"))) {
                     if ($requestable[$key+1] == "on") {
                         $req_num = 1;
                     } else {
@@ -972,7 +972,7 @@ if ((Request::quoted('add_type')) || (Request::option('delete_type')) || (Reques
             $statement = DBManager::get()->prepare($query);
 
             foreach ($protected as $key => $val) {
-                if (strpos($protected[$key - 1], 'id1_') &&  strpos($protected[$key], 'id2_')) {
+                if (mb_strpos($protected[$key - 1], 'id1_') &&  mb_strpos($protected[$key], 'id2_')) {
                     if ($protected[$key + 1] === 'on') {
                         $req_num = 1;
                     } else {

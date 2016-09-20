@@ -64,7 +64,7 @@
             <? foreach (["autor", "tutor", "dozent", "admin", "root"] as $role) : ?>
                 <label>
                     <input type="checkbox" name="tour_roles[]"
-                           value="<?= $role ?>"<?= (strpos($tour->roles, $role) !== false) ? ' checked' : '' ?>><?= $role ?>
+                           value="<?= $role ?>"<?= (mb_strpos($tour->roles, $role) !== false) ? ' checked' : '' ?>><?= $role ?>
                 </label>
             <? endforeach ?>
 

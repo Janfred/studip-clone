@@ -32,7 +32,7 @@ class StudipPDO extends PDO
      */
     protected function verify($statement)
     {
-        if (strpos($statement, ';') !== false) {
+        if (mb_strpos($statement, ';') !== false) {
             if (preg_match('/;\s*\S/', self::replaceStrings($statement))) {
                 throw new PDOException('multiple statement execution not allowed');
             }

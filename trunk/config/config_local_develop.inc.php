@@ -55,7 +55,7 @@ $ABSOLUTE_URI_STUDIP = "http://develop.studip.de/studip/";
 // automagically compute ABSOLUTE_URI_STUDIP if $_SERVER['SERVER_NAME'] is set
 if (isset($_SERVER['SERVER_NAME'])) {
     // work around possible bug in lighttpd
-    if (strpos($_SERVER['SERVER_NAME'], ':') !== false) {
+    if (mb_strpos($_SERVER['SERVER_NAME'], ':') !== false) {
         list($_SERVER['SERVER_NAME'], $_SERVER['SERVER_PORT']) =
             explode(':', $_SERVER['SERVER_NAME']);
     }

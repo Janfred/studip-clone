@@ -53,7 +53,7 @@ function jsReady ($what, $target) {
 function quotes_encode($description,$author)
 {
     if (preg_match("/%%\[editiert von/",$description)) { // wurde schon mal editiert
-        $postmp = strpos($description,"%%[editiert von");
+        $postmp = mb_strpos($description,"%%[editiert von");
         $description = substr_replace($description," ",$postmp);
     }
     $description = "[quote=".$author."]\n".$description."\n[/quote]";
@@ -236,7 +236,7 @@ function isLinkIntern($url) {
     return in_array($pum['scheme'], array('https', 'http', NULL), true)
         && in_array($pum['host'], array($_SERVER['SERVER_NAME'], NULL), true)
         && in_array($pum['port'], array($_SERVER['SERVER_PORT'], NULL), true)
-        && strpos($pum['path'], $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']) === 0;
+        && mb_strpos($pum['path'], $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']) === 0;
 }
 
 /**
@@ -631,7 +631,7 @@ function tooltipHtmlIcon($text, $important = false)
 */
 function TransformInternalLinks($str){
     $str = trim($str);
-    if (strpos($str, 'http') !== 0) {
+    if (mb_strpos($str, 'http') !== 0) {
         if ($str[0] === '/') {
             $str = substr($str, mb_strlen($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']));
         }
@@ -734,13 +734,13 @@ function display_exception($exception, $as_html = false, $deep = false) {
  */
 function get_icon_for_mimetype($mime_type)
 {
-    if (strpos($mime_type, 'image/') === 0) {
+    if (mb_strpos($mime_type, 'image/') === 0) {
         return 'file-pic';
     }
-    if (strpos($mime_type, 'audio/') === 0) {
+    if (mb_strpos($mime_type, 'audio/') === 0) {
         return 'file-audio';
     }
-    if (strpos($mime_type, 'video/') === 0) {
+    if (mb_strpos($mime_type, 'video/') === 0) {
         return 'file-video';
     }
     if ($mime_type === 'application/pdf') {

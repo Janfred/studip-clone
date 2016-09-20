@@ -194,7 +194,7 @@ if ($filesize && $type == 0 && !Request::int('zip')) {
         $c_start = $start;
         $c_end   = $end;
         list(, $range) = explode('=', $_SERVER['HTTP_RANGE'], 2);
-        if (strpos($range, ',') !== false) {
+        if (mb_strpos($range, ',') !== false) {
             header('HTTP/1.1 416 Requested Range Not Satisfiable');
             header("Content-Range: bytes $start-$end/$filesize");
             exit;

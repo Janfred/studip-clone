@@ -46,16 +46,16 @@ foreach ($dir as $fileinfo) {
         }
         $props = array_map(function($p) {return ' * ' . $p . "\n";}, $props);
         $file = file($fileinfo->getPathname());
-        foreach ($file as $n => $line) if (strpos($line, 'class') === 0) break;
+        foreach ($file as $n => $line) if (mb_strpos($line, 'class') === 0) break;
         if ($n < count($file)) {
             $classstart = $n;
             $propend = null;
             $propstart = null;
             $docend = null;
             for ($n; $n >= 0; --$n) {
-                if (!isset($docend) && strpos($file[$n], ' */') === 0) $docend = $n;
-                if (!isset($propend) && strpos($file[$n], ' * @property') === 0) $propend = $n;
-                if (isset($propend) && strpos($file[$n], ' * @property') === 0) $propstart = $n;
+                if (!isset($docend) && mb_strpos($file[$n], ' */') === 0) $docend = $n;
+                if (!isset($propend) && mb_strpos($file[$n], ' * @property') === 0) $propend = $n;
+                if (isset($propend) && mb_strpos($file[$n], ' * @property') === 0) $propstart = $n;
             }
             if (isset($docend)) {
                 if (isset($propstart)) {

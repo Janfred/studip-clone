@@ -126,6 +126,6 @@ class WebserviceAccessRule extends SimpleORMap
      */
     function checkMethodName($method)
     {
-        return ($method && (!$this->method || strpos($method, $this->method) !== false));
+        return ($method && (!$this->method || mb_strpos($method, $this->method) !== false));
     }
 }

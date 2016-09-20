@@ -294,7 +294,7 @@ function get_obj_clause($table_name, $range_field, $count_field, $if_clause,
     $type_sql = ($type) ? "='$type'" : "IN('sem','inst')";
     $object_field = ($object_field) ? $object_field : "my.object_id";
     $on_clause = " ON(my.object_id=a.{$range_field} $add_on) ";
-    if (strpos($table_name,'{ON_CLAUSE}') !== false){
+    if (mb_strpos($table_name,'{ON_CLAUSE}') !== false){
         $table_name = str_replace('{ON_CLAUSE}', $on_clause, $table_name);
     } else {
         $table_name .= $on_clause;

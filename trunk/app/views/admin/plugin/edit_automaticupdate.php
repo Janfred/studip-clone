@@ -1,5 +1,5 @@
 <?
-if (strpos($_SERVER['SERVER_NAME'], ':') !== false) {
+if (mb_strpos($_SERVER['SERVER_NAME'], ':') !== false) {
     list($_SERVER['SERVER_NAME'], $_SERVER['SERVER_PORT']) =
         explode(':', $_SERVER['SERVER_NAME']);
 }

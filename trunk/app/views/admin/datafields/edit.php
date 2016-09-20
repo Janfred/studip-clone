@@ -60,7 +60,7 @@ use Studip\Button, Studip\LinkButton;
             <select multiple name="object_class[]" id="object_class" required>
                 <option value="NULL" <? if ($item->object_class === null) echo 'selected'; ?>><?= _('alle') ?></option>
             <? foreach ((array) $GLOBALS['MVV_MODUL_DESKRIPTOR']['SPRACHE']['values'] as $key => $value) : ?>
-                <option value="<?= htmlReady($key) ?>" <? if (strpos($item->object_class, $key) !== false) echo 'selected'; ?>>
+                <option value="<?= htmlReady($key) ?>" <? if (mb_strpos($item->object_class, $key) !== false) echo 'selected'; ?>>
                     <?= htmlReady($value['name']) ?>
                 </option>
             <? endforeach; ?>
@@ -71,7 +71,7 @@ use Studip\Button, Studip\LinkButton;
             <select multiple name="object_class[]" id="object_class" required>
                 <option value="NULL" <? if ($item->object_class === null) echo 'selected'; ?>><?= _('alle') ?></option>
             <? foreach ((array) $GLOBALS['MVV_MODULTEIL_DESKRIPTOR']['SPRACHE']['values'] as $key => $value) : ?>
-                <option value="<?= htmlReady($key) ?>" <? if (strpos($item->object_class, $key) !== false) echo 'selected'; ?>>
+                <option value="<?= htmlReady($key) ?>" <? if (mb_strpos($item->object_class, $key) !== false) echo 'selected'; ?>>
                     <?= htmlReady($value['name']) ?>
                 </option>
             <? endforeach; ?>

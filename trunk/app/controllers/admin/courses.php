@@ -171,7 +171,7 @@ class Admin_CoursesController extends AuthenticatedController
         //delete all temporary permission changes
         if (is_array($_SESSION)) {
             foreach (array_keys($_SESSION) as $key) {
-                if (strpos($key, 'seminar_change_view_') !== false) {
+                if (mb_strpos($key, 'seminar_change_view_') !== false) {
                     unset($_SESSION[$key]);
                 }
             }

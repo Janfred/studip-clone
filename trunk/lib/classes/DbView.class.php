@@ -242,12 +242,12 @@ class DbView
                     if (!$spl)
                         $spl = mb_stristr($query[$j], "having");
                     if ($spl) {
-                        $pos = strpos($spl, "{" . $i . "}");
+                        $pos = mb_strpos($spl, "{" . $i . "}");
                         if (!$pos === false)
                             $repl_query = $this->get_temp_values($repl_query);
                     }
                     if (!$spl OR $pos === false) {
-                        $pos = strpos($query[$j], "{" . $i . "}");
+                        $pos = mb_strpos($query[$j], "{" . $i . "}");
                         if (!$pos === false)
                             $repl_query = $this->get_temp_table($repl_query);
                     }

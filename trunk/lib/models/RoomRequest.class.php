@@ -325,16 +325,16 @@ class RoomRequest extends SimpleORMap
                     if ($val) {
                         //let's create some possible wildcards
                         if (preg_match("/<=/", $val["state"])) {
-                            $val["state"] = trim(substr($val["state"], strpos($val["state"], "<")+2, mb_strlen($val["state"])));
+                            $val["state"] = trim(substr($val["state"], mb_strpos($val["state"], "<")+2, mb_strlen($val["state"])));
                             $linking = "<=";
                         } elseif (preg_match("/>=/", $val["state"])) {
-                            $val["state"] = trim(substr($val["state"], strpos($val["state"], "<")+2, mb_strlen($val["state"])));
+                            $val["state"] = trim(substr($val["state"], mb_strpos($val["state"], "<")+2, mb_strlen($val["state"])));
                             $linking = ">=";
                         } elseif (preg_match("/</", $val["state"])) {
-                            $val["state"] = trim(substr($val["state"], strpos($val["state"], "<")+1, mb_strlen($val["state"])));
+                            $val["state"] = trim(substr($val["state"], mb_strpos($val["state"], "<")+1, mb_strlen($val["state"])));
                             $linking = "<";
                         } elseif (preg_match("/>/", $val["state"])) {
-                            $val["state"] = trim(substr($val["state"], strpos($val["state"], "<")+1, mb_strlen($val["state"])));
+                            $val["state"] = trim(substr($val["state"], mb_strpos($val["state"], "<")+1, mb_strlen($val["state"])));
                             $linking = ">";
                         } elseif ($available_properties[$key]["system"] == "2") {
                             $linking = ">=";

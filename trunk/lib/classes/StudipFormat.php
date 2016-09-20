@@ -557,10 +557,10 @@ class StudipFormat extends TextFormat
         $pu = @parse_url($url);
         if (($pu['scheme'] == 'http' || $pu['scheme'] == 'https')
                 && ($pu['host'] == $_SERVER['HTTP_HOST'] || $pu['host'].':'.$pu['port'] == $_SERVER['HTTP_HOST'])
-                && strpos($pu['path'], $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']) === 0) {
+                && mb_strpos($pu['path'], $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']) === 0) {
             $intern = true;
             $checkpath = urldecode(substr($pu['path'], mb_strlen($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'])));
-            if (strpos($checkpath, '../') === false) {
+            if (mb_strpos($checkpath, '../') === false) {
                 list($pu['first_target']) = explode('/', $checkpath);
             } else {
                 $pu['first_target'] = false;
@@ -569,7 +569,7 @@ class StudipFormat extends TextFormat
         $LOAD_EXTERNAL_MEDIA = Config::GetInstance()->getValue('LOAD_EXTERNAL_MEDIA');
         if ($intern
             && !in_array($pu['first_target'], array('sendfile.php','download','assets','pictures'))
-            && !($pu['first_target'] === 'dispatch.php' && strpos($pu['path'], 'dispatch.php/document/download') !== false))
+            && !($pu['first_target'] === 'dispatch.php' && mb_strpos($pu['path'], 'dispatch.php/document/download') !== false))
         {
             return $matches[0];
         } elseif ((!$LOAD_EXTERNAL_MEDIA || $LOAD_EXTERNAL_MEDIA === 'deny') && !$intern) {

@@ -103,7 +103,7 @@ $highlight = function ($content, $variable) {
     
     $result = array();
     foreach ($lines as $index => $line) {
-        if (strpos($line, $variable) === false) {
+        if (mb_strpos($line, $variable) === false) {
             continue;
         }
         $result[$index + 1] = $line;

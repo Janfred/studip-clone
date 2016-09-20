@@ -1356,10 +1356,10 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
                  if (isset($meta['default'])) {
                      $default_value = $meta['default'];
                  } elseif ($meta['null'] == 'NO') {
-                     if (strpos($meta['type'], 'text') !== false || strpos($meta['type'], 'char') !== false) {
+                     if (mb_strpos($meta['type'], 'text') !== false || mb_strpos($meta['type'], 'char') !== false) {
                          $default_value = '';
                      }
-                     if (strpos($meta['type'], 'int') !== false) {
+                     if (mb_strpos($meta['type'], 'int') !== false) {
                          $default_value = '0';
                      }
                  }
