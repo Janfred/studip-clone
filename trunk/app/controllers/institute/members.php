@@ -286,7 +286,7 @@ class Institute_MembersController extends AuthenticatedController
     public function add_action($type)
     {
         $mp = MultiPersonSearch::load("inst_member_add" . $this->institute->id);
-        $additionalCheckboxes = $this->mp->getAdditionalOptionArray() ?: [];
+        $additionalCheckboxes = $mp->getAdditionalOptionArray() ?: [];
 
         $enable_mail_admin  = in_array('admins', $additionalCheckboxes);
         $enable_mail_dozent = in_array('dozenten', $additionalCheckboxes);
@@ -408,7 +408,7 @@ class Institute_MembersController extends AuthenticatedController
         $username = Request::username('username');
         $user     = User::findByUsername($username);
         $group    = Statusgruppen::find($group_id);
-        $result   = $group_id->removeUser($user->id);
+        $result   = $group->removeUser($user->id);
 
         if ($result) {
             PageLayout::postInfo(sprintf(
