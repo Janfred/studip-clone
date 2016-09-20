@@ -376,32 +376,6 @@ function CountMembersPerStatusgruppe ($group_id)
 }
 
 
-/**
-* Returns all statusgruppen for the given range.
-*
-* If there is no statusgruppe for the given range, it returns FALSE.
-*
-* @access public
-* @param  string  $range_id
-* @param  string  $user_id (optional)
-* @return array (tree)
-*/
-
-function GetStatusgruppenForUser($user_id, $group_list)
-{
-    if (empty($group_list)) {
-        return false;
-    }
-
-    $query = "SELECT statusgruppe_id
-              FROM statusgruppe_user
-              LEFT JOIN statusgruppen USING (statusgruppe_id)
-              WHERE user_id = ? AND statusgruppe_id IN (?)";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($user_id, $group_list));
-    return $statement->fetchAll(PDO::FETCH_COLUMN) ?: false;
-}
-
 
 /**
 * Returns all statusgruppen for the given range.
