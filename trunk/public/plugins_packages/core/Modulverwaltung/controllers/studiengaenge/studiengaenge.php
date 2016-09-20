@@ -667,23 +667,23 @@ class Studiengaenge_StudiengaengeController extends MVVController
         }
         // Status
         $this->filter['mvv_studiengang.stat']
-                = strlen(Request::get('status_filter'))
+                = mb_strlen(Request::get('status_filter'))
                 ? Request::option('status_filter') : null;
         // Abschluss
         $this->filter['abschluss.abschluss_id']
-                = strlen(Request::get('abschluss_filter'))
+                = mb_strlen(Request::get('abschluss_filter'))
                 ? Request::option('abschluss_filter') : null;
         // Abschluss-Kategorie
         $this->filter['mvv_abschl_zuord.kategorie_id']
-                = strlen(Request::get('kategorie_filter'))
+                = mb_strlen(Request::get('kategorie_filter'))
                 ? Request::option('kategorie_filter') : null;
         // Verantwortliche Einrichtung
         $this->filter['mvv_studiengang.institut_id']
-                = strlen(Request::get('institut_filter'))
+                = mb_strlen(Request::get('institut_filter'))
                 ? Request::option('institut_filter') : null;
         // Zugeordnete Fachbereiche
         $this->filter['mvv_fach_inst.institut_id']
-                = strlen(Request::get('fachbereich_filter'))
+                = mb_strlen(Request::get('fachbereich_filter'))
                 ? Request::option('fachbereich_filter') : null;
 
         // store filter

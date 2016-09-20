@@ -213,7 +213,7 @@ class messaging
         if ($GLOBALS['MESSAGING_FORWARD_USE_REPLYTO']) {
             $mail->setReplyToEmail($reply_to)
                 ->setReplyToName($snd_fullname);
-        } elseif (strlen($reply_to)) {
+        } elseif (mb_strlen($reply_to)) {
             $mail->setSenderEmail($reply_to)
                 ->setSenderName($snd_fullname)
                 ->setReplyToEmail('');

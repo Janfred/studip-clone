@@ -109,7 +109,7 @@ $safeguard = $lib->callSafeguard( $evalAction, $evalID, $rangeID,
 if ( $templates_search ) {
    $search = trim ($search);
    $evalIDArray = $db->getPublicTemplateIDs ($search);
-   if (strlen ($search) >= EVAL_MIN_SEARCHLEN && !empty ($evalIDArray) ) {
+   if (mb_strlen ($search) >= EVAL_MIN_SEARCHLEN && !empty ($evalIDArray) ) {
       $foundTable = new HTML ("table");
       $foundTable->addAttr ("border","0");
       $foundTable->addAttr ("align", "center");

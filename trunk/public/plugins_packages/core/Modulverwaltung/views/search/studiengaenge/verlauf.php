@@ -32,7 +32,7 @@
         <tbody>
             <? foreach ($abschnitteData as $abschnitt_id => $abschnitt): ?>
                 <? $displayedAbschnittName = false; ?>
-                <? $ueberschrift = (strlen($abschnitt['zwischenUeberschrift'])) ?>
+                <? $ueberschrift = (mb_strlen($abschnitt['zwischenUeberschrift'])) ?>
                 <?// if (!$ueberschrift): ?>
                 <? if ($ueberschrift): ?>
                 	<tr class="table_header">

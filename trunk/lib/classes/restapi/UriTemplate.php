@@ -37,7 +37,7 @@ class UriTemplate
         $parameters = array();
 
         // Split and normalize uri and template
-        $given = array_filter(explode('/', $uri), 'strlen');
+        $given = array_filter(explode('/', $uri), 'mb_strlen');
         $rules = array_filter(explode('/', $this->uri_template));
 
         // Leave if uri and template do not contain the same number of

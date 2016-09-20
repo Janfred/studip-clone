@@ -302,7 +302,7 @@ class IndexController extends ForumController
         }
         
         $this->searchfor = Request::get('searchfor');
-        if (strlen($this->searchfor) < 3) {
+        if (mb_strlen($this->searchfor) < 3) {
             $this->flash['messages'] = array('error' => _('Ihr Suchbegriff muss mindestens 3 Zeichen lang sein und darf nur Buchstaben und Zahlen enthalten!'));
         } else {
             // get search-results

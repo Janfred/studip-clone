@@ -1168,7 +1168,7 @@ class Module_ModuleController extends MVVController
     public function set_filter_action()
     {
         // Semester
-        $semester_id = strlen(Request::get('semester_filter'))
+        $semester_id = mb_strlen(Request::get('semester_filter'))
                 ? Request::option('semester_filter') : null;
         if ($semester_id) {
             $semester = Semester::find($semester_id);
@@ -1181,12 +1181,12 @@ class Module_ModuleController extends MVVController
 
         // Status
         $this->filter['mvv_modul.stat']
-                = strlen(Request::get('status_filter'))
+                = mb_strlen(Request::get('status_filter'))
                 ? Request::option('status_filter') : null;
 
         // verantwortliche Einrichtung
         $this->filter['mvv_modul_inst.institut_id']
-                = strlen(Request::get('institut_filter'))
+                = mb_strlen(Request::get('institut_filter'))
                 ? Request::option('institut_filter') : null;
 
         // store filter

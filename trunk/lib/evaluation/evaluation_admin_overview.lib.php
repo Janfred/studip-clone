@@ -875,7 +875,7 @@ class EvalOverview {
                 $search = trim($search);
                 $templates = $evalDB->getPublicTemplateIDs($search);
 
-                if (strlen($search) < EVAL_MIN_SEARCHLEN) {
+                if (mb_strlen($search) < EVAL_MIN_SEARCHLEN) {
                     $report = EvalCommon::createReportMessage(sprintf(_("Bitte einen Suchbegriff mit mindestens %d Buchstaben eingeben."), EVAL_MIN_SEARCHLEN), EVAL_PIC_ERROR, EVAL_CSS_ERROR);
                 } elseif (count($templates) == 0) {
                     $report = EvalCommon::createReportMessage(_("Es wurden keine passenden öffentlichen Evaluationsvorlagen gefunden."), EVAL_PIC_ERROR, EVAL_CSS_ERROR);

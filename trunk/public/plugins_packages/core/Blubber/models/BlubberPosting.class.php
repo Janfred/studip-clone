@@ -70,7 +70,7 @@ class BlubberPosting extends SimpleORMap {
                 $user = BlubberExternalContact::findByEmail($username);
             }
         } else {
-            $name = substr($username, 1, strlen($username) -2);
+            $name = substr($username, 1, mb_strlen($username) -2);
             $statement = DBManager::get()->prepare(
                 "SELECT user_id FROM auth_user_md5 WHERE CONCAT(Vorname, ' ', Nachname) = :name " .
             "");

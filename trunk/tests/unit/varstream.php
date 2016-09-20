@@ -52,16 +52,16 @@ class ArrayFileStream {
 
   function stream_read($count) {
     $ret = substr($this->open_file, $this->position, $count);
-    $this->position += strlen($ret);
+    $this->position += mb_strlen($ret);
     return $ret;
   }
 
   function stream_write($data) {
     $left  = substr($this->open_file, 0, $this->position);
-    $right = substr($this->open_file, $this->position + strlen($data));
+    $right = substr($this->open_file, $this->position + mb_strlen($data));
     $this->open_file = $left . $data . $right;
-    $this->position += strlen($data);
-    return strlen($data);
+    $this->position += mb_strlen($data);
+    return mb_strlen($data);
   }
 
   function stream_tell() {
@@ -69,14 +69,14 @@ class ArrayFileStream {
   }
 
   function stream_eof() {
-    return $this->position >= strlen($this->open_file);
+    return $this->position >= mb_strlen($this->open_file);
   }
 
   function stream_seek($offset, $whence) {
 
     switch ($whence) {
       case SEEK_SET:
-        if ($offset < strlen($this->open_file) && $offset >= 0) {
+        if ($offset < mb_strlen($this->open_file) && $offset >= 0) {
           $this->position = $offset;
           return true;
         }
@@ -96,8 +96,8 @@ class ArrayFileStream {
         break;
 
       case SEEK_END:
-        if (strlen($this->open_file) + $offset >= 0) {
-          $this->position = strlen($this->open_file) + $offset;
+        if (mb_strlen($this->open_file) + $offset >= 0) {
+          $this->position = mb_strlen($this->open_file) + $offset;
           return true;
         }
         else {
@@ -113,7 +113,7 @@ class ArrayFileStream {
   function stream_stat() {
     return array('size' => is_array($this->open_file)
                            ? sizeof($this->open_file)
-                           : strlen($this->open_file));
+                           : mb_strlen($this->open_file));
   }
 
   function unlink($path) {
@@ -156,7 +156,7 @@ class ArrayFileStream {
       'gid'     => function_exists('posix_getgid') ? posix_getgid() : 0,
       'rdev'    => 0,
       'size'    => $flags & STREAM_URL_STAT_QUIET
-                   ? @strlen($this->_pointer) : strlen($this->_pointer),
+                   ? @mb_strlen($this->_pointer) : mb_strlen($this->_pointer),
       'atime'   => $time,
       'mtime'   => $time,
       'ctime'   => $time,

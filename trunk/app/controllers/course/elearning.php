@@ -202,7 +202,7 @@ class Course_ElearningController extends AuthenticatedController
             }
             if ($this->search_key != "") {
                 ELearningUtils::loadClass($this->cms_select);
-                if ( strlen( trim($this->search_key) ) > 2)
+                if ( mb_strlen( trim($this->search_key) ) > 2)
                     $searchresult_content_modules = $connected_cms[$this->cms_select]->searchContentModules($this->search_key);
                 else
                     PageLayout::postMessage(MessageBox::error(_('Jeder Suchbegriff muss mindestens 3 Zeichen lang sein!')));

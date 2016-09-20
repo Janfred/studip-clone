@@ -500,14 +500,14 @@ class NewsController extends StudipController
         // apply filter
         if (Request::submitted('apply_news_filter')) {
             $this->news_isvisible['basic'] = $this->news_isvisible['basic'] ? false : true;
-            if (Request::get('news_searchterm') AND (strlen(trim(Request::get('news_searchterm'))) < 3))
+            if (Request::get('news_searchterm') AND (mb_strlen(trim(Request::get('news_searchterm'))) < 3))
                 PageLayout::postMessage(MessageBox::error(_('Der Suchbegriff muss mindestens 3 Zeichen lang sein.')));
             elseif ((Request::get('news_startdate') AND !$this->getTimeStamp(Request::get('news_startdate'), 'start')) OR (Request::get('news_enddate') AND !$this->getTimeStamp(Request::get('news_enddate'), 'end')))
                 PageLayout::postMessage(MessageBox::error(_('Ungültige Datumsangabe. Bitte geben Sie ein Datum im Format TT.MM.JJJJ ein.')));
             elseif (Request::get('news_enddate') AND Request::get('news_enddate') AND ($this->getTimeStamp(Request::get('news_startdate'), 'start') > $this->getTimeStamp(Request::get('news_enddate'), 'end')))
                 PageLayout::postMessage(MessageBox::error(_('Das Startdatum muss vor dem Enddatum liegen.')));
 
-            if (strlen(trim(Request::get('news_searchterm'))) >= 3)
+            if (mb_strlen(trim(Request::get('news_searchterm'))) >= 3)
                 $this->news_searchterm = Request::get('news_searchterm');
             $this->news_startdate = $this->getTimeStamp(Request::get('news_startdate'), 'start');
             $this->news_enddate = $this->getTimeStamp(Request::get('news_enddate'), 'end');
@@ -626,7 +626,7 @@ class NewsController extends StudipController
     function search_area($term) {
         global $perm;
         $result = array();
-        if (strlen($term) < 3) {
+        if (mb_strlen($term) < 3) {
             PageLayout::postMessage(MessageBox::error(_('Der Suchbegriff muss mindestens drei Zeichen lang sein.')));
             return $result;
         } elseif ($term == '__THIS_SEMESTER__') {

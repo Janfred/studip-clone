@@ -210,7 +210,7 @@ class StudipAutoloader
         }
 
         // Remove namespace prefix
-        $class = substr($class, strlen($prefix));
+        $class = substr($class, mb_strlen($prefix));
 
         // Convert namespace into directory structure
         $namespaced = str_replace('\\', DIRECTORY_SEPARATOR, $class);

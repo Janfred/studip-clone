@@ -8,12 +8,12 @@
             <tr>
                 <td><strong><?= _('Alternativtext:') ?></strong></td>
                 <td>
-                <? if (!strlen($lvgruppe->alttext) && !strlen($lvgruppe->alttext_en)) : ?>
+                <? if (!mb_strlen($lvgruppe->alttext) && !mb_strlen($lvgruppe->alttext_en)) : ?>
                     <span class="mvv-no-entry">
                     <?= _('Kein Alternativtext vorhanden.') ?>
                     </span>
                 <? else : ?>
-                    <? if (strlen($lvgruppe->alttext)) : ?>
+                    <? if (mb_strlen($lvgruppe->alttext)) : ?>
                     <div>
                         <img style="display: block;" src="<?= Assets::image_path('languages/lang_de.gif') ?>" alt="<?= _('deutsch') ?>">
                         <?= formatReady($lvgruppe->alttext) ?>

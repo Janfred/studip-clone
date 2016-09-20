@@ -322,11 +322,11 @@ function mila ($titel, $size = 60) {
 
     if ($auth->auth["jscript"] AND $size == 60) {
         //hier wird die maximale Laenge berechnet, nach der Abgeschnitten wird (JS dynamisch)
-        if (strlen ($titel) >$auth->auth["xres"] / 13)
+        if (mb_strlen ($titel) >$auth->auth["xres"] / 13)
             $titel=substr($titel, 0, $auth->auth["xres"] / 13)."... ";
     }
     else {
-        if (strlen ($titel) >$size)
+        if (mb_strlen ($titel) >$size)
             $titel=substr($titel, 0, $size)."... ";
     }
     return $titel;
@@ -633,7 +633,7 @@ function TransformInternalLinks($str){
     $str = trim($str);
     if (strpos($str, 'http') !== 0) {
         if ($str[0] === '/') {
-            $str = substr($str, strlen($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']));
+            $str = substr($str, mb_strlen($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']));
         }
         $str = $GLOBALS['ABSOLUTE_URI_STUDIP'] . $str;
     }

@@ -37,7 +37,7 @@ class email_validation_class
             $separator=$string;
             $string=$this->next_token;
         }
-        for($character=0;$character<strlen($separator);$character++)
+        for($character=0;$character<mb_strlen($separator);$character++)
         {
             if(GetType($position=strpos($string,$separator[$character]))=="integer")
                 $found=(IsSet($found) ? min($found,$position) : $position);
@@ -70,7 +70,7 @@ class email_validation_class
             if(feof($connection))
                 return(0);
             $line.=fgets($connection,100);
-            $length=strlen($line);
+            $length=mb_strlen($line);
             if($length>=2
             && substr($line,$length-2,2)=="\r\n")
             {
@@ -154,7 +154,7 @@ class email_validation_class
         else
         {
             if(strcmp($ip=@gethostbyname($domain),$domain)
-            && (strlen($this->exclude_address)==0
+            && (mb_strlen($this->exclude_address)==0
             || strcmp(@gethostbyname($this->exclude_address),$ip)))
                 $hosts[]=$domain;
         }
@@ -204,7 +204,7 @@ class email_validation_class
                     continue;
                 }
             }
-            if(strlen($this->exclude_address)
+            if(mb_strlen($this->exclude_address)
             && !strcmp(@gethostbyname($this->exclude_address),$ip))
             {
                 if($this->debug)

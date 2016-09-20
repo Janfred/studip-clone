@@ -599,7 +599,7 @@ namespace Studip\MarkupPrivate\Text;
  * @return boolean  TRUE if string starts with prefix.
  */
 function startsWith($string, $prefix) {
-    return \substr($string, 0, \strlen($prefix)) === $prefix;
+    return \substr($string, 0, \mb_strlen($prefix)) === $prefix;
 }
 
 /**
@@ -611,7 +611,7 @@ function startsWith($string, $prefix) {
  * @return boolean  TRUE if string ends with suffix.
  */
 function endsWith($string, $suffix) {
-    return \substr($string, \strlen($string) - \strlen($suffix)) === $suffix;
+    return \substr($string, \mb_strlen($string) - \mb_strlen($suffix)) === $suffix;
 }
 
 /**
@@ -625,5 +625,5 @@ function endsWith($string, $suffix) {
  * @return string String without prefix.
  */
 function removePrefix($string, $prefix) {
-    return startsWith($string, $prefix) ? \substr($string, \strlen($prefix)) : $string;
+    return startsWith($string, $prefix) ? \substr($string, \mb_strlen($prefix)) : $string;
 }

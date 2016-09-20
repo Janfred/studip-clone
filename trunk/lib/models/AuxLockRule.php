@@ -159,7 +159,7 @@ class AuxLockRule extends SimpleORMap
      */
      private function getDatafield($member, $fieldID)
      {
-         if (strlen($fieldID) == 32) {
+         if (mb_strlen($fieldID) == 32) {
              if (!array_key_exists($fieldID, $this->datafieldCache)) {
                  $this->datafieldCache[$fieldID] = DataField::find($fieldID);
              }

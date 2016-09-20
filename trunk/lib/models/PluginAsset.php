@@ -34,8 +34,8 @@ class PluginAsset extends SimpleORMap
         fputs($fp, $content);
         fclose($fp);
 
-        if (strlen($content) != $this->size) {
-            $this->size = strlen($content);
+        if (mb_strlen($content) != $this->size) {
+            $this->size = mb_strlen($content);
             $this->store();
         } else {
             $this->triggerChdate();

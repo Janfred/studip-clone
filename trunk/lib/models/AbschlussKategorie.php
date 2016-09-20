@@ -236,7 +236,7 @@ class AbschlussKategorie extends ModuleManagementModelTreeItem
             $rejected = false;
             if ($this->isNew() || $this->isDirty()) {
                 // The name of the Abschluss-Kategorie must be longer than 4 characters
-                if (strlen($this->name) < 4) {
+                if (mb_strlen($this->name) < 4) {
                     $ret['name'] = true;
                     $messages[] = _('Der Name der Abschluss-Kategorie ist zu kurz (mindestens 4 Zeichen).');
                     $rejected = true;

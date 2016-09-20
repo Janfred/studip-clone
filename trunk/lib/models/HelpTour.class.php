@@ -124,7 +124,7 @@ class HelpTour extends SimpleORMap {
     {
         $params = array();
         $condition = '';
-        if (strlen(trim($term)) >= 3) {
+        if (mb_strlen(trim($term)) >= 3) {
             $condition =  "WHERE name LIKE CONCAT('%', ?, '%')";
             $params[] = $term;
         }

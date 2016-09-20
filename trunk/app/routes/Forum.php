@@ -54,7 +54,7 @@ class Forum extends \RESTAPI\RouteMap
             $this->error(401);
         }
 
-        if (!isset($this->data['name']) || !strlen($name = trim($this->data['name']))) {
+        if (!isset($this->data['name']) || !mb_strlen($name = trim($this->data['name']))) {
             $this->error(400, 'Category name required.');
         }
 
@@ -98,7 +98,7 @@ class Forum extends \RESTAPI\RouteMap
             $this->error(401);
         }
 
-        if (!isset($this->data['name']) || !strlen($name = trim($this->data['name']))) {
+        if (!isset($this->data['name']) || !mb_strlen($name = trim($this->data['name']))) {
             $this->error(400, 'Category name required.');
         }
 
@@ -161,7 +161,7 @@ class Forum extends \RESTAPI\RouteMap
             $this->error(401);
         }
 
-        if (!isset($this->data['subject']) || !strlen($subject = trim($this->data['subject']))) {
+        if (!isset($this->data['subject']) || !mb_strlen($subject = trim($this->data['subject']))) {
             $this->error(400, 'Subject required.');
         }
 

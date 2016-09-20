@@ -32,7 +32,7 @@ class Course extends \RESTAPI\RouteMap
         // setting up semester to filter by
         $semester = null;
         $semester_id = \Request::get('semester');
-        if (strlen($semester_id)) {
+        if (mb_strlen($semester_id)) {
             $semester = \Semester::find($semester_id);
             if (!$semester) {
                 $this->error(400, "Semester not found.");

@@ -44,7 +44,7 @@ class Shared_ModulController extends MVVController
                 //$modulTeile = array_values($modulTeile);
                 $modulTeil = $modulTeile->first();//[0];
                 $type = 3;
-                if (strlen($modulTeil->getDisplayName()) > 0) {
+                if (mb_strlen($modulTeil->getDisplayName()) > 0) {
                     $type = 2;
                 }
             }

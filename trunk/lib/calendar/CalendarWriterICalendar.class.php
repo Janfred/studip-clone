@@ -610,7 +610,7 @@ class CalendarWriteriCalendar extends CalendarWriter
     public function _foldLine($line)
     {
         $line = preg_replace('/(\r\n|\n|\r)/', '\n', $line);
-        if (strlen($line) > 75) {
+        if (mb_strlen($line) > 75) {
             $foldedline = '';
             while (!empty($line)) {
                 $maxLine = substr($line, 0, 75);
@@ -620,7 +620,7 @@ class CalendarWriteriCalendar extends CalendarWriter
                         substr($line, 0, $cutPoint) :
                         $this->newline . ' ' . substr($line, 0, $cutPoint);
 
-                $line = (strlen($line) <= $cutPoint) ? '' : substr($line, $cutPoint);
+                $line = (mb_strlen($line) <= $cutPoint) ? '' : substr($line, $cutPoint);
             }
             return $foldedline;
         }

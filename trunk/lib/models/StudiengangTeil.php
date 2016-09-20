@@ -453,7 +453,7 @@ class StudiengangTeil extends ModuleManagementModelTreeItem
                 $rejected = true;
             }
             /*
-            if (!strlen($this->kp)) {
+            if (!mb_strlen($this->kp)) {
                 $ret['kp'] = true;
                 $messages[] = _('Es müssen Kredit-Punkte angegeben werden.');
                 $rejected = true;
@@ -465,7 +465,7 @@ class StudiengangTeil extends ModuleManagementModelTreeItem
                 $messages[] = _('Es muss die Anzahl der Semester angegeben werden.');
                 $rejected = true;
             }
-            if (strlen($this->zusatz) < 2) {
+            if (mb_strlen($this->zusatz) < 2) {
                 $ret['zusatz'] = true;
                 $messages[] = _('Der Titelzusatz ist zu kurz (mindestens 2 Zeichen).');
                 $rejected = true;

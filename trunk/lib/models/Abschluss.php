@@ -401,7 +401,7 @@ class Abschluss extends ModuleManagementModelTreeItem
                 }
             }
             // The name of the Abschluss must be longer than 4 characters
-            if (strlen($this->name) < 4) {
+            if (mb_strlen($this->name) < 4) {
                 $ret['name'] = true;
                 $messages[] = _('Der Name des Abschlusses ist zu kurz (mindestens 4 Zeichen).');
                 $rejected = true;

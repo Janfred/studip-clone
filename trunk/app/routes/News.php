@@ -105,14 +105,14 @@ class News extends \RESTAPI\RouteMap
         }
 
         if (isset($this->data['topic'])) {
-            if (!strlen(trim($topic = $this->data['topic']))) {
+            if (!mb_strlen(trim($topic = $this->data['topic']))) {
                 $this->error(400, 'Topic must not be empty.');
             }
             $news->topic = $topic;
         }
 
         if (isset($this->data['body'])) {
-            if (!strlen(trim($body = $this->data['body']))) {
+            if (!mb_strlen(trim($body = $this->data['body']))) {
                 $this->error(400, 'Body must not be empty.');
             }
             $news->body = $body;
@@ -226,7 +226,7 @@ class News extends \RESTAPI\RouteMap
             $this->error(409, 'Comments are not allowed');
         }
 
-        if (!isset($this->data['content']) || !strlen($content = trim($this->data['content']))) {
+        if (!isset($this->data['content']) || !mb_strlen($content = trim($this->data['content']))) {
             $this->error(400, 'Content required.');
         }
 

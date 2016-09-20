@@ -358,7 +358,7 @@ class EvaluationTreeShowUser {
         if( $question->getPosition() == 0 ) {
         $html .= " <tr>\n";
         $html .= "  <td width=\"60%\" style=\"border-bottom: $answerBorder; border-top: $answerBorder;\">";
-#       $html .= strlen( $group->getText() ) < 100 ? formatReady( $group->getText() ) : "&nbsp;";
+#       $html .= mb_strlen( $group->getText() ) < 100 ? formatReady( $group->getText() ) : "&nbsp;";
         $html .= "&nbsp;";
         $html .= "</td>\n";
         foreach( $answerArray as $answer ) {

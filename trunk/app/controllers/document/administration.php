@@ -64,7 +64,7 @@ class Document_AdministrationController extends AuthenticatedController {
     public function deactivateDocumentArea_action($config_id)
     {
         if (Request::submitted('store')) {
-            if(strlen(Request::get('reason_text'))>0){
+            if(mb_strlen(Request::get('reason_text'))>0){
                 DocUsergroupConfig::switchDocumentAreaStatus($config_id, Request::get('reason_text'));
             }else{
                 DocUsergroupConfig::switchDocumentAreaStatus($config_id);

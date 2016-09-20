@@ -48,7 +48,7 @@ $(function () {
                                     <label for="loginname"><?= _('Benutzername:') ?></label>
                                 </td>
                                 <td>
-                                    <input type="text" <?= strlen($uname) ? '' : 'autofocus' ?>
+                                    <input type="text" <?= mb_strlen($uname) ? '' : 'autofocus' ?>
                                            id="loginname" name="loginname"
                                            value="<?= htmlReady($uname) ?>"
                                            size="20" maxlength="63"
@@ -60,7 +60,7 @@ $(function () {
                                     <label for="password"><?= _('Passwort:') ?></label>
                                 </td>
                                 <td>
-                                    <input type="password" <?= strlen($uname) ? 'autofocus' : '' ?>
+                                    <input type="password" <?= mb_strlen($uname) ? 'autofocus' : '' ?>
                                            id="password" name="password" size="20">
                                 </td>
                             </tr>

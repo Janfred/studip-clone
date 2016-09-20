@@ -52,7 +52,7 @@ class SmileyFavorites
     function set($favorites = array())
     {
         $favorite_string = implode(',', $favorites);
-        if (strlen($favorite_string) > 255) {
+        if (mb_strlen($favorite_string) > 255) {
             throw new OutOfBoundsException;
         }
 

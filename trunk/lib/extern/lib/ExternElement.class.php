@@ -344,7 +344,7 @@ class ExternElement {
                 
                 if ($html_attribute != 'template') {
                     // Don't accept strings longer than 200 characters!
-                    if (strlen($value[$i]) > 200) {
+                    if (mb_strlen($value[$i]) > 200) {
                         $fault[$form_name][$i] = TRUE;
                         continue;
                     }

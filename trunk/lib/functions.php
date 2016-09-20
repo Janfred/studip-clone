@@ -68,7 +68,7 @@ function getHeaderLine($id, $object_name = null)
     }
     $header_line = $object_name['type'];
     if ($object_name['name']) $header_line.=": ";
-    if (studip_strlen($object_name['name']) > 60){
+    if (mb_strlen($object_name['name']) > 60){
             $header_line .= studip_substr($object_name['name'], 0, 60);
             $header_line .= "... ";
     } else {
@@ -526,8 +526,8 @@ function select_group($sem_start_time)
 function my_substr($what, $start, $end)
 {
     $length=$end-$start;
-    $what_length = studip_strlen($what);
-    // adding 5 because: strlen("[...]") == 5
+    $what_length = mb_strlen($what);
+    // adding 5 because: mb_strlen("[...]") == 5
     if ($what_length > $length + 5) {
         $what=studip_substr($what, $start, round(($length / 3) * 2))."[...]".studip_substr($what, $what_length - round($length / 3), $what_length);
     }
@@ -1546,15 +1546,15 @@ function text_excerpt($text, $phrase, $radius = 100, $length = 200,
     $start_pos = max($found_pos - $radius, 0);
   }
 
-  $end_pos = $start_pos + $length - strlen($excerpt_string);
+  $end_pos = $start_pos + $length - mb_strlen($excerpt_string);
   if ($start_pos !== 0) {
-    $end_pos -= strlen($excerpt_string);
+    $end_pos -= mb_strlen($excerpt_string);
   }
 
-  $end_pos = min($end_pos, strlen($text));
+  $end_pos = min($end_pos, mb_strlen($text));
 
   $prefix = $start_pos > 0 ? $excerpt_string : '';
-  $postfix = $end_pos < strlen($text) ? $excerpt_string : '';
+  $postfix = $end_pos < mb_strlen($text) ? $excerpt_string : '';
 
   return $prefix.substr($text, $start_pos, $end_pos - $start_pos).$postfix;
 }
@@ -1759,19 +1759,18 @@ function studip_substr($string, $offset, $length = false)
 }
 
 /**
- * Stud.IP encoding aware version of good ol' strlen(), treats numeric HTML-ENTITIES as one character
+ * Stud.IP encoding aware version of good ol' mb_strlen(), treats numeric HTML-ENTITIES as one character
  * use only if really necessary
  *
  * @param string $string the string to measure
  *
  * @return integer  the number of characters in string
+ *
+ * @deprecated
  */
 function studip_strlen($string)
 {
-    if(!preg_match("'&#[0-9]+;'", $string)){
-        return strlen($string);
-    }
-    return mb_strlen(studip_utf8encode($string), 'UTF-8');
+    return mb_strlen($string);
 }
 
 /**
@@ -2008,7 +2007,7 @@ function relsize($size, $verbose = true, $displayed_levels = 1, $glue = ', ', $t
  */
 function get_route($route = '')
 {
-    $route = substr(parse_url($route ?: $_SERVER['REQUEST_URI'], PHP_URL_PATH), strlen($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']));
+    $route = substr(parse_url($route ?: $_SERVER['REQUEST_URI'], PHP_URL_PATH), mb_strlen($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']));
     if (strpos($route, 'plugins.php/') !== false) {
         $trails = explode('plugins.php/', $route);
         $pieces = explode('/', $trails[1]);
@@ -2024,8 +2023,8 @@ function get_route($route = '')
             }
         }
     }
-    while (substr($route, strlen($route)-6, 6) == '/index') {
-        $route = substr($route, 0, strlen($route)-6);
+    while (substr($route, mb_strlen($route)-6, 6) == '/index') {
+        $route = substr($route, 0, mb_strlen($route)-6);
     }
     return $route;
 }

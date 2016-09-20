@@ -41,7 +41,7 @@ foreach ($abschnitte as $abschnitt) {
 <? foreach ($abschnitteData as $abschnitt_id => $abschnitt): ?>
     <span data-mvv-id="<?= $abschnitt_id; ?>" data-mvv-type="stgteilabschnitt">
     <? $displayedAbschnittName = false; ?>
-    <? $ueberschrift = (strlen($abschnitt['zwischenUeberschrift'])) ?>
+    <? $ueberschrift = (mb_strlen($abschnitt['zwischenUeberschrift'])) ?>
     <? if (!$ueberschrift): ?>
         <dt>
             <span data-mvv-field="mvv_stgteilabschnitt mvv_stgteilabschnitt.name"><?= $abschnitt['name'] ?></span> <span data-mvv-field="mvv_stgteilabschnitt.kp"><?= $abschnitt['creditPoints'] ? $abschnitt['creditPoints'] . 'CP' : '' ?></span>

@@ -27,7 +27,7 @@ class Document_ClosedController  extends AuthenticatedController
 
     public function index_action()
     {
-        if (empty($this->userConfig) || strlen($this->userConfig['area_close_text']) == 0) {
+        if (empty($this->userConfig) || mb_strlen($this->userConfig['area_close_text']) == 0) {
             $this->message = _('keine Begründung');
         } else {
             $this->message = $this->userConfig['area_close_text'];

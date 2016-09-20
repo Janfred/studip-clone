@@ -267,7 +267,7 @@ class CalendarEvent extends SimpleORMap implements Event
                     if ($r_rule['count']) {
                         $set_start_wday = false;
                         $wdays = array(0);
-                        for ($i = 0; $i < strlen($r_rule['wdays']); $i++) {
+                        for ($i = 0; $i < mb_strlen($r_rule['wdays']); $i++) {
                             $wdays[] = $r_rule['wdays']{$i};
                             if (!$set_start_wday && intval($r_rule['wdays']{$i}) >= intval(strftime('%u', $start))) {
                                 $start_wday = $r_rule['wdays']{$i};

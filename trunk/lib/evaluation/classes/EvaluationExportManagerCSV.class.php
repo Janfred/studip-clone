@@ -159,7 +159,7 @@ class EvaluationExportManagerCSV extends EvaluationExportManager {
                   $header .= ",";
                }
             }
-            $header = substr ($header, 0, strlen ($header) - 1);
+            $header = substr ($header, 0, mb_strlen ($header) - 1);
 
             $this->addCol ($header);
 

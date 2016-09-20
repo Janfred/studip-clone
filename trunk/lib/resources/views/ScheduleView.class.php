@@ -426,7 +426,7 @@ class ScheduleView
     public function getShortName($name, $print_view)
     {
         $out = htmlReady(substr($name, 0, 50));
-        if (strlen($name) > 50) {
+        if (mb_strlen($name) > 50) {
             $out.= "...";
         }
         if ($print_view) {

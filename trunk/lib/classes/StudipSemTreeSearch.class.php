@@ -124,16 +124,16 @@ class StudipSemTreeSearch {
         $paths=array();
         $currpath="";
         foreach ($parts as $part) {
-            if (strlen($part)>$cols) {
+            if (mb_strlen($part)>$cols) {
                 $p=my_substr($part, 0, $cols);
             } else {
                 $p = $part;
             }
-            if (strlen($currpath)+strlen($p)+3 > $cols) {
+            if (mb_strlen($currpath)+mb_strlen($p)+3 > $cols) {
                 $paths[]=htmlReady($currpath);
                 $currpath="   >> " . $p;
             } else {
-                if (count($paths)==0 && strlen($currpath)==0) {
+                if (count($paths)==0 && mb_strlen($currpath)==0) {
                     $currpath.=$p;
                 } else {
                     $currpath.=" > ".$p;
@@ -213,7 +213,7 @@ _do_search"]);
 
     function doSearch(){
         if (Request::submitted($this->form_name . "_do_search") || Request::submitted($this->form_name . "_send")){
-            if(strlen($_REQUEST[$this->form_name . "_search_field"]) > 2){
+            if(mb_strlen($_REQUEST[$this->form_name . "_search_field"]) > 2){
                 $this->view->params[0] = "%" . Request::quoted($this->form_name . "_search_field") . "%";
                 $this->view->params[1] = $this->sem_tree_ids;
                 $rs = $this->view->get_query("view:SEM_TREE_SEARCH_ITEM");

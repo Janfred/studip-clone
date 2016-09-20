@@ -47,7 +47,7 @@
                     <br>
                 <? endforeach ?>
                 <br>
-            <? elseif (strlen( trim($search_key) ) > 2) : ?>
+            <? elseif (mb_strlen( trim($search_key) ) > 2) : ?>
                 <br>
                 <b><font size="-1"><?=sprintf( _("Es gibt im System %s zu diesem Suchbegriff keine Lernmodule."),  $cms_name)?></font></b><br>
                 <br>

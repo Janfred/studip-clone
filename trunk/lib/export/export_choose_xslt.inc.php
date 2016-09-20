@@ -84,7 +84,7 @@ global $ex_type, $xml_file_id, $page, $o_mode, $format, $choose, $xslt_files, $e
 }
 
 $export_pagename = _("Konvertierung der Daten: ");
-$xslt_filename =  strlen(Request::get('xslt_filename')) ? basename(stripslashes(Request::get('xslt_filename'))) : $xslt_filename_default;
+$xslt_filename =  mb_strlen(Request::get('xslt_filename')) ? basename(stripslashes(Request::get('xslt_filename'))) : $xslt_filename_default;
 
 if (!CheckParamXSLT())
 {

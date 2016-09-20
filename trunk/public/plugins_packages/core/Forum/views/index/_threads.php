@@ -140,7 +140,7 @@
                 <?= _("am") ?> <?= strftime($time_format_string_short, (int)$entry['mkdate']) ?>
                 <br>
 
-                <? if ($entry['content_short'] && strlen($entry['content'] > strlen($entry['content_short']))) : ?>
+                <? if ($entry['content_short'] && mb_strlen($entry['content'] > mb_strlen($entry['content_short']))) : ?>
                     <?= $entry['content_short'] ?>...
                 <? else : ?>
                     <?= $entry['content_short'] ?>

@@ -53,7 +53,7 @@ class StudipLitImportPluginCSV extends StudipLitImportPluginAbstract {
             $fields_arr = array();
             $lines = explode("\n",$data);
             foreach ($lines as $line) {
-                if (strlen($line)>0) {
+                if (mb_strlen($line)>0) {
                     $parts = explode(";",$line);
                     /*
                         1. Titel

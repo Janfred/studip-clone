@@ -27,10 +27,10 @@
             <tr>
                 <td><strong><?= _('Beschreibung:') ?></strong></td>
                 <td>
-                    <? if (!strlen($dokument->beschreibung) && !strlen($dokument->beschreibung)) : ?>
+                    <? if (!mb_strlen($dokument->beschreibung) && !mb_strlen($dokument->beschreibung)) : ?>
                         <?= _('Keine Beschreibung vorhanden.') ?>
                     <? else : ?>
-                        <? if (strlen($dokument->beschreibung)) : ?>
+                        <? if (mb_strlen($dokument->beschreibung)) : ?>
                         <div>
                             <img src="<?= Assets::image_path('languages/lang_de.gif') ?>" alt="<?= _('deutsch') ?>">
                             <?= formatReady($dokument->beschreibung) ?>

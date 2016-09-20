@@ -351,7 +351,7 @@ class StudipMail
      */
     protected static function quoteString($string) {
         // list of reserved characters in RFC 2822
-        if (strcspn($string, '()<>[]:;@\\,.') < strlen($string)) {
+        if (strcspn($string, '()<>[]:;@\\,.') < mb_strlen($string)) {
             $string = '"' . addcslashes($string, "\r\"\\") . '"';
         }
         return $string;
@@ -406,7 +406,7 @@ class StudipMail
             ));
         }
         $error = $transporter->Send();
-        if (strlen($error) === 0) {
+        if (mb_strlen($error) === 0) {
             return true;
         } else {
             Log::error(get_class($transporter) . '::Send() - ' . $error);

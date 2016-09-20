@@ -145,7 +145,7 @@ class I18NString
             $deleted = $db->execute("DELETE FROM i18n WHERE object_id = ? AND `table` = ? AND field = ?", array($object_id, $table, $field));
             $i18nSQL = $db->prepare("INSERT INTO `i18n` (`object_id`, `table`, `field`, `lang`, `value`) VALUES (?,?,?,?,?)");
             foreach ($this->lang as $lang => $value) {
-                if (strlen($value)) {
+                if (mb_strlen($value)) {
                     $i18nSQL->execute(array($object_id, $table, $field, $lang, (string)$value));
                 }
             }

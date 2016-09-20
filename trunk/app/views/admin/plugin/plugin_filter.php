@@ -9,7 +9,7 @@
         </option>
         <? foreach ($plugin_types as $type): ?>
             <option value="<?= $type ?>" <?= $type == $plugin_filter ? 'selected' : '' ?>>
-                <?= strlen($type) > 20 ? substr($type, 0, 17) . '...' : $type ?>
+                <?= mb_strlen($type) > 20 ? substr($type, 0, 17) . '...' : $type ?>
             </option>
         <? endforeach ?>
     </select>

@@ -428,7 +428,7 @@ function getMyRoomRequests($user_id = '', $semester_id = null, $only_not_closed 
         while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
             $requests[$row['request_id']] = array(
                 'my_sem'      => true,
-                'my_res'      => strlen($row['resource_id']) > 0,
+                'my_res'      => mb_strlen($row['resource_id']) > 0,
                 'closed'      => $row['closed'],
                 'resource_id' => $row['resource_id'],
             );

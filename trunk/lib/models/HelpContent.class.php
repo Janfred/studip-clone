@@ -102,7 +102,7 @@ class HelpContent extends SimpleORMap {
     {
         $params = array();
         $condition = '';
-        if (strlen(trim($term)) >= 3) { 
+        if (mb_strlen(trim($term)) >= 3) { 
             $condition =  "WHERE content LIKE CONCAT('%', ?, '%')";
             $params[] = $term;
         }

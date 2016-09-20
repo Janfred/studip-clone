@@ -181,7 +181,7 @@ class Institute_BasicdataController extends AuthenticatedController
         $institute->lock_rule       = Request::option('lock_rule', $institute->lock_rule);
 
         // Do we have all necessary data?
-        if (!strlen($institute->name)) {
+        if (!mb_strlen($institute->name)) {
             PageLayout::postMessage(MessageBox::error(_('Bitte geben Sie eine Bezeichnung für die Einrichtung ein!')));
             return $this->redirect('institute/basicdata/index/' . $i_id);
         }

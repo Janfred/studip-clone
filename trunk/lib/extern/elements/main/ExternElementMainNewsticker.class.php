@@ -182,7 +182,7 @@ class ExternElementMainNewsticker extends ExternElementMain {
             case "starttext" :
             case "endtext" :
             case "nodatatext" :
-                return strlen($value) > 200;
+                return mb_strlen($value) > 200;
         }
 
         return FALSE;

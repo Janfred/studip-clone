@@ -145,7 +145,7 @@ class Router
 
         // Sanitize conditions
         foreach ($conditions as $var => $pattern) {
-            if ($pattern[0] !== $pattern[strlen($pattern) - 1] || ctype_alnum($pattern[0])) {
+            if ($pattern[0] !== $pattern[mb_strlen($pattern) - 1] || ctype_alnum($pattern[0])) {
                 $conditions[$var] = '/' . $pattern . '/';
             }
         }
@@ -528,7 +528,7 @@ class Router
         $parameters = array();
         if (isset($this->routes[$method])) {
             if ($content_renderer->extension() && strpos($uri, $content_renderer->extension()) !== false) {
-                $uri = substr($uri, 0, -strlen($content_renderer->extension()));
+                $uri = substr($uri, 0, -mb_strlen($content_renderer->extension()));
             }
 
             foreach ($this->routes[$method] as $uri_template => $route) {

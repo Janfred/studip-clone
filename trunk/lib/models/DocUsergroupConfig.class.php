@@ -207,7 +207,7 @@ class DocUsergroupConfig extends SimpleORMap
         $searchDataCount = 0;
         foreach ($searchData as $name => $wert) {
             $searchDataCount++;
-            if (strlen($wert) > 0) {
+            if (mb_strlen($wert) > 0) {
                 if ($stringCount > 0 && $searchDataCount <= count($searchData)) {
                     $stringCount++;
                     $searchString = ' AND ' . ' ' . $name . ' LIKE ' . $db->quote('%'.$wert.'%') . ' ';
@@ -218,7 +218,7 @@ class DocUsergroupConfig extends SimpleORMap
                 $searchQuery .= $searchString;
             }
         }
-        if (strlen($searchQuery) > 0) {
+        if (mb_strlen($searchQuery) > 0) {
             $user = User::findBySQL($searchQuery . ' ORDER BY Nachname');
             if (empty($user)) {
                 return array();

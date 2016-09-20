@@ -148,7 +148,7 @@ class SessionDecoder implements ArrayAccess, Countable, Iterator {
         $PS_UNDEF_MARKER = '!';
         $str = (string)$str;
 
-        $endptr = strlen($str);
+        $endptr = mb_strlen($str);
         $p = 0;
 
         $items = 0;

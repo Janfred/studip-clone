@@ -142,7 +142,7 @@ class MediaProxy
 
         while (!feof($handle)) {
             $buffer = fread($handle, 65536);
-            $length += strlen($buffer);
+            $length += mb_strlen($buffer);
 
             if ($cache) {
                 if ($length <= $this->cache_maxlength) {

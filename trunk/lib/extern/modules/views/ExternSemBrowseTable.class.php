@@ -352,9 +352,9 @@ class ExternSemBrowseTable extends SemBrowse {
                         //create Turnus field
                         $data["content"]["zeiten"] = Seminar::GetInstance($seminar_id)->getDatesExport(array('show_room' => true));
                         //Shorten, if string too long
-                        if (strlen($data["content"]["zeiten"]) >70) {
+                        if (mb_strlen($data["content"]["zeiten"]) >70) {
                             $data["content"]["zeiten"] = substr($data["content"]["zeiten"], 0,
-                                    strpos(substr($data["content"]["zeiten"], 70, strlen($data["content"]["zeiten"])), ",") +71);
+                                    strpos(substr($data["content"]["zeiten"], 70, mb_strlen($data["content"]["zeiten"])), ",") +71);
                             $data["content"]["zeiten"] .= "...";
                         }
                         $data["content"]["zeiten"] = htmlReady($data["content"]["zeiten"]);

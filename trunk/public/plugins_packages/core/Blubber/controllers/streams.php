@@ -262,7 +262,7 @@ class StreamsController extends PluginController {
             $thread['name'] = substr($content, 0, strpos($content, "\n"));
             $thread['description'] = $content;
         } else {
-            if (strlen($content) > 255) {
+            if (mb_strlen($content) > 255) {
                 $thread['name'] = "";
             } else {
                 $thread['name'] = $content;
@@ -354,7 +354,7 @@ class StreamsController extends PluginController {
                 if (strpos($new_content, "\n") !== false) {
                     $posting['name'] = substr($new_content, 0, strpos($new_content, "\n"));
                 } else {
-                    if (strlen($new_content) > 255) {
+                    if (mb_strlen($new_content) > 255) {
                         $posting['name'] = "";
                     } else {
                         $posting['name'] = $new_content;

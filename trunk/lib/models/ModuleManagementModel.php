@@ -547,7 +547,7 @@ abstract class ModuleManagementModel extends SimpleORMap
             }
         }
         $sql = implode(' AND ', $sql_parts);
-        if (strlen($sql)) {
+        if (mb_strlen($sql)) {
             if ($or_sql) {
                 $sql = '(' . $sql . ') OR (' . $or_sql . ')';
             }

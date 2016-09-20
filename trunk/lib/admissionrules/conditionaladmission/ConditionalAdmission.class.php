@@ -363,7 +363,7 @@ class ConditionalAdmission extends AdmissionRule
             $this->addCondition($condition, $data['conditiongroup_'.$condition->getId()], $data['quota_'.$data['conditiongroup_'.$condition->getId()]]);
         }
         foreach ($this->getConditiongroups() as $conditiongroup_id => $conditions) {
-            if (strlen($conditiongroup_id) < 32) {
+            if (mb_strlen($conditiongroup_id) < 32) {
                 $group = md5(uniqid('conditiongroups' . microtime(), true));
 
                 $this->conditiongroups[$group] = $this->conditiongroups[$conditiongroup_id];

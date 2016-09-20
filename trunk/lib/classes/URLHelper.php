@@ -187,7 +187,7 @@ class URLHelper
 
         $query_string = http_build_query($link_params);
 
-        if (strlen($query_string) || $url === '') {
+        if (mb_strlen($query_string) || $url === '') {
             $url .= '?'.$query_string;
         }
 
