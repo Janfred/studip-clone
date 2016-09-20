@@ -614,7 +614,7 @@ class CalendarWriteriCalendar extends CalendarWriter
             $foldedline = '';
             while (!empty($line)) {
                 $maxLine = substr($line, 0, 75);
-                $cutPoint = max(60, max(strrpos($maxLine, ';'), strrpos($maxLine, ':')) + 1);
+                $cutPoint = max(60, max(mb_strrpos($maxLine, ';'), mb_strrpos($maxLine, ':')) + 1);
 
                 $foldedline .= ( empty($foldedline)) ?
                         substr($line, 0, $cutPoint) :

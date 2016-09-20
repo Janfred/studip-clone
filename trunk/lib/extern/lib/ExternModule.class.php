@@ -341,7 +341,7 @@ class ExternModule {
             $global_param = '';
         }
         if ($this->config->config["Main"]["incdata"]) {
-            if (strrpos($sri_link, '?')) {
+            if (mb_strrpos($sri_link, '?')) {
                 $link = $sri_link . ($global_param != '' ? '&' : '') . $global_param;
             } else {
                 $link = $sri_link . ($global_param != '' ? '?' : '') . $global_param;

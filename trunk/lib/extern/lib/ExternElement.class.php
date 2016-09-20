@@ -463,7 +463,7 @@ class ExternElement {
         if ($this->config->getValue($args['main_module'], 'incdata')) {
             $link = $sri_link;
             if ($args['link_args']) {
-                if (strrpos($link, '?')) {
+                if (mb_strrpos($link, '?')) {
                     $link .= '&' . $args['link_args'];
                 } else {
                     $link .= '?' . $args['link_args'];
@@ -485,7 +485,7 @@ class ExternElement {
                 }
                 $link .= 'page_url=' . $sri_link;
             } elseif ($extern_link) {
-                if (strrpos($extern_link, '?')) {
+                if (mb_strrpos($extern_link, '?')) {
                     $link = "$extern_link&module=$module_name";
                 } else {
                     $link = "$extern_link?module=$module_name";

@@ -215,7 +215,7 @@ class Admin_SmileysController extends AuthenticatedController
 
         // Extract smiley information
         $smiley_file = $upload['name'];
-        $smiley_name = substr($smiley_file, 0, strrpos($smiley_file, '.'));
+        $smiley_name = substr($smiley_file, 0, mb_strrpos($smiley_file, '.'));
 
         // Replace smiley?
         $smiley = Smiley::getByName($smiley_name);
