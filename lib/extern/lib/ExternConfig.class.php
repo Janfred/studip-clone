@@ -314,7 +314,7 @@ class ExternConfig {
                 $all_config_names .= $configuration['name'];
         }
         
-        while(stristr($all_config_names, $config_name)) {
+        while(mb_stristr($all_config_names, $config_name)) {
             $config_name = $config_name_prefix . $config_name_suffix;
             $config_name_suffix++;
         }
