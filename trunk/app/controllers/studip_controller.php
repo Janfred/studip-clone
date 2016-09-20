@@ -194,12 +194,11 @@ abstract class StudipController extends Trails_Controller
      *
      * @return string  a URL to this route
      */
-    function url_for($to = ''/* , ... */)
+    public function url_for($to = ''/* , ... */)
     {
         $args = func_get_args();
-        if (is_array($args[1])) {
-            $params = $args[1];
-            unset($args[1]);
+        if (is_array(end($args))) {
+            $params = array_pop($args);
         } else {
             $params = array();
         }

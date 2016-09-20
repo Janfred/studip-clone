@@ -8,6 +8,7 @@
  */
 class ActionMenu
 {
+    const THRESHOLD = 1;
     const TEMPLATE_FILE_SINGLE   = 'shared/action-menu-single.php';
     const TEMPLATE_FILE_MULTIPLE = 'shared/action-menu.php';
 
@@ -71,8 +72,8 @@ class ActionMenu
     protected function checkCondition()
     {
         $result = $this->condition;
-        if ($this->conditionAll !== null) {
-            $result = $result && $this->conditionAll;
+        if ($this->condition_all !== null) {
+            $result = $result && $this->condition_all;
         }
 
         $this->condition = true;
@@ -159,7 +160,7 @@ class ActionMenu
             return '';
         }
         
-        $template_file = count($this->actions) === 1
+        $template_file = count($this->actions) <= self::THRESHOLD
                        ? self::TEMPLATE_FILE_SINGLE
                        : self::TEMPLATE_FILE_MULTIPLE;
         
