@@ -115,8 +115,8 @@ class StudipAuthShib extends StudipAuthSSO
         $this->userdata['username'] = $remote_user;
 
         foreach ($_SERVER as $key => $value) {
-            if (substr($key, 0, 10) == 'HTTP_SHIB_') {
-                $key = mb_strtolower(substr($key, 10));
+            if (mb_substr($key, 0, 10) == 'HTTP_SHIB_') {
+                $key = mb_strtolower(mb_substr($key, 10));
                 $this->userdata[$key] = utf8_decode($value);
             }
         }
@@ -133,7 +133,7 @@ class StudipAuthShib extends StudipAuthSSO
         $pos = mb_strpos($user, '@');
 
         if ($pos !== false) {
-            return array(substr($user, $pos + 1));
+            return array(mb_substr($user, $pos + 1));
         }
 
         return NULL;

@@ -63,14 +63,14 @@ class BlubberPosting extends SimpleORMap {
     static public function mention($markup, $matches) {
         $mention = $matches[1];
         $posting = new BlubberPosting(self::$mention_posting_id);
-        $username = stripslashes(substr($mention, 1));
+        $username = stripslashes(mb_substr($mention, 1));
         if ($username[0] !== '"') {
             $user = BlubberUser::findByUsername($username);
             if (!$user) {
                 $user = BlubberExternalContact::findByEmail($username);
             }
         } else {
-            $name = substr($username, 1, mb_strlen($username) -2);
+            $name = mb_substr($username, 1, mb_strlen($username) -2);
             $statement = DBManager::get()->prepare(
                 "SELECT user_id FROM auth_user_md5 WHERE CONCAT(Vorname, ' ', Nachname) = :name " .
             "");

@@ -92,7 +92,7 @@ function print_footer () {
 
 function mila_extern ($string, $length) {
     if ($length > 0 && mb_strlen($string) > $length) 
-        $string = substr($string, 0, $length) . "... ";
+        $string = mb_substr($string, 0, $length) . "... ";
     
     return $string;
 }
@@ -338,7 +338,7 @@ function indentJson($str) {
     $strOut = '';
     $identPos = 0;
     for($loop = 0;$loop<= mb_strlen($str) ;$loop++){
-        $_char = substr($str,$loop,1);
+        $_char = mb_substr($str,$loop,1);
         //part 1
         if($_char == '}' || $_char == ']'){
             $strOut .= "\n";

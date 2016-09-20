@@ -420,9 +420,9 @@ class CalendarParserICalendar extends CalendarParser
             return false;
         }
 
-        $date['year'] = intval(substr($text, 0, 4));
-        $date['month'] = intval(substr($text, 4, 2));
-        $date['mday'] = intval(substr($text, 6, 2));
+        $date['year'] = intval(mb_substr($text, 0, 4));
+        $date['month'] = intval(mb_substr($text, 4, 2));
+        $date['mday'] = intval(mb_substr($text, 6, 2));
 
         return $date;
     }

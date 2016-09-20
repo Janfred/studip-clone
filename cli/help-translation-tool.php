@@ -239,7 +239,7 @@ $force    = isset($options['f']) || isset($options['force']);
 $version  = @$options['version'] ?: @$options['v']
           ?: DBManager::get()->query("SELECT MAX(studip_version) FROM help_content LIMIT 1")->fetchColumn()
           ?: $GLOBALS['SOFTWARE_VERSION'];
-$language = @$options['language'] ?: @$options['l'] ?: substr($GLOBALS['DEFAULT_LANGUAGE'], 0, 2);
+$language = @$options['language'] ?: @$options['l'] ?: mb_substr($GLOBALS['DEFAULT_LANGUAGE'], 0, 2);
 
 // Remove option from arguments
 $remove = array();
@@ -436,7 +436,7 @@ if ($_SERVER['argv'][1] === 'export') {
             continue;
         }
         if ($row[0] === '#') {
-            $occurences = array_merge($occurences, explode(' ', substr($row, 2)));
+            $occurences = array_merge($occurences, explode(' ', mb_substr($row, 2)));
             $occurences = array_filter($occurences);
             $last = 'occurence';
         } elseif (preg_match('/^\msgctxt\\s+"(.*?)"$/', $row, $match)) {

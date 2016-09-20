@@ -67,16 +67,16 @@ class ForumHelpers {
         foreach ($treffer[0] as $taginfo) {
             $size = mb_strlen($taginfo[0]);
             if ($taginfo[1] != 0) {
-                $data[] = self::do_highlight(substr($text, $last_pos, $taginfo[1] - $last_pos), $highlight);
+                $data[] = self::do_highlight(mb_substr($text, $last_pos, $taginfo[1] - $last_pos), $highlight);
             }
 
-            $data[] = substr($text, $taginfo[1], $size);
+            $data[] = mb_substr($text, $taginfo[1], $size);
             $last_pos = $taginfo[1] + $size;
         }
 
         // don't miss the last portion of a posting
         if ($last_pos < mb_strlen($text)) {
-            $data[] = self::do_highlight(substr($text, $last_pos, mb_strlen($text) - $last_pos), $highlight);
+            $data[] = self::do_highlight(mb_substr($text, $last_pos, mb_strlen($text) - $last_pos), $highlight);
         }
 
         return implode('', $data);

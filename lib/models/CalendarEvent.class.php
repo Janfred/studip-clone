@@ -261,7 +261,7 @@ class CalendarEvent extends SimpleORMap implements Event
                 } else {
                     $ts = mktime(12, 0, 0, date('n', $start),
                             date('j', $start) + (7 - (strftime('%u', $start) - 1))
-                            - ((strftime('%u', $start) <= substr($r_rule['wdays'], -1)) ? 7 : 0),
+                            - ((strftime('%u', $start) <= mb_substr($r_rule['wdays'], -1)) ? 7 : 0),
                             date('Y', $start));
 
                     if ($r_rule['count']) {
@@ -274,7 +274,7 @@ class CalendarEvent extends SimpleORMap implements Event
                                 $set_start_wday = true;
                             }
                         }
-                        if (intval(strftime('%u', $start)) > intval(substr($r_rule['wdays'], -1))) {
+                        if (intval(strftime('%u', $start)) > intval(mb_substr($r_rule['wdays'], -1))) {
                             $start_wday = $r_rule['wdays']{0};
                         }
                         $expire_ts = $ts + ((($r_rule['count'] % (count($wdays) - 1)) >= 1) ? (($start_wday - 1) * 86400) : 0)
@@ -432,7 +432,7 @@ class CalendarEvent extends SimpleORMap implements Event
             _('Donnerstag') . ', ', _('Freitag') . ', ', _('Samstag') . ', ', _('Sonntag') . ', ');
         $search = array('1', '2', '3', '4', '5', '6', '7');
         $wdays = str_replace($search, $replace, $rrule['wdays']);
-        $wdays = substr($wdays, 0, -2);
+        $wdays = mb_substr($wdays, 0, -2);
 
         switch ($rrule['rtype']) {
             case 'DAILY':

@@ -898,7 +898,7 @@ function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch) 
             }
             // show max 80 chars
             $fragment = '';
-            $split_fragment = preg_split('/('.preg_quote($searchfor,'/').')/i', substr($result['body'],max(0, $pos-40), 80), -1, PREG_SPLIT_DELIM_CAPTURE);
+            $split_fragment = preg_split('/('.preg_quote($searchfor,'/').')/i', mb_substr($result['body'],max(0, $pos-40), 80), -1, PREG_SPLIT_DELIM_CAPTURE);
             for ($i = 0; $i < count($split_fragment); ++$i) {
                 if ($i % 2) {
                     $fragment .= '<span style="background-color:#FFFF88">';

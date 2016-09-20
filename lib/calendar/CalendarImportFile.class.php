@@ -135,7 +135,7 @@ class CalendarImportFile extends CalendarImport
             return '';
         }
         $l = mb_strlen($this->file['name']) - $i;
-        $ext = substr($this->file['name'], $i + 1, $l);
+        $ext = mb_substr($this->file['name'], $i + 1, $l);
         return $ext;
     }
 }

@@ -381,7 +381,7 @@ abstract class RouteMap
                     //noch zur letzten Zeile hinzuzählen
                     end($tmpheaders);
                     $lastkey = key($tmpheaders);
-                    $tmpheaders[$lastkey]['value'] .= " ".substr($headline, 1);
+                    $tmpheaders[$lastkey]['value'] .= " ".mb_substr($headline, 1);
                 }
             }
             foreach ($tmpheaders as $header) {
@@ -409,7 +409,7 @@ abstract class RouteMap
             preg_match("/name=([^;\s]*)/i", $headers['content-disposition'], $matches);
             $name = str_replace(array("'", '"'), '', $matches[1]);
             if (!$contentType) {
-                $data[$name] = substr($body, 0, mb_strlen($body) - 2);
+                $data[$name] = mb_substr($body, 0, mb_strlen($body) - 2);
             } else {
                 switch ($contentType) {
                     case 'application/json':
@@ -445,7 +445,7 @@ abstract class RouteMap
     {
         if ($contentType = $_SERVER['CONTENT_TYPE']) {
             foreach (preg_split('/\s*[;,]\s*/', $contentType) as $part) {
-                if (mb_strtolower(substr($part, 0, 8)) === "boundary") {
+                if (mb_strtolower(mb_substr($part, 0, 8)) === "boundary") {
                     $part = explode("=", $part);
                     return $part[1];
                 }

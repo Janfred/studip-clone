@@ -25,7 +25,7 @@ class PluginEngine
         $pos = mb_strpos($dispatch_to, '/');
         return $pos === FALSE
             ? array($dispatch_to, '')
-            : array(substr($dispatch_to, 0, $pos), substr($dispatch_to, $pos + 1));
+            : array(mb_substr($dispatch_to, 0, $pos), mb_substr($dispatch_to, $pos + 1));
     }
 
     /**

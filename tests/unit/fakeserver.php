@@ -95,7 +95,7 @@ function computeRelativePath() {
         );
     }
 
-    if (substr($CANONICAL_RELATIVE_PATH_STUDIP, -1) != '/') {
+    if (mb_substr($CANONICAL_RELATIVE_PATH_STUDIP, -1) != '/') {
         $CANONICAL_RELATIVE_PATH_STUDIP .= '/';
     }
 }

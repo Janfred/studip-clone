@@ -239,10 +239,10 @@ class Admin_UserController extends AuthenticatedController
 
                 //delete
                 if ($umanager->deleteUser(Request::option('documents', false))) {
-                    $details = explode('§', str_replace(['msg§', 'info§', 'error§'], '', substr($umanager->msg, 0, -1)));
+                    $details = explode('§', str_replace(['msg§', 'info§', 'error§'], '', mb_substr($umanager->msg, 0, -1)));
                     PageLayout::postSuccess(htmlReady(sprintf(_('"%s (%s)" wurde erfolgreich gelöscht.'), $user->getFullName(), $user->username)), $details);
                 } else {
-                    $details = explode('§', str_replace(['msg§', 'info§', 'error§'], '', substr($umanager->msg, 0, -1)));
+                    $details = explode('§', str_replace(['msg§', 'info§', 'error§'], '', mb_substr($umanager->msg, 0, -1)));
                     PageLayout::postError(htmlReady(sprintf(_('Fehler! "%s (%s)" konnte nicht gelöscht werden.'), $user->getFullName(), $user->username)), $details);
                 }
 
@@ -288,10 +288,10 @@ class Admin_UserController extends AuthenticatedController
 
                     //delete
                     if ($umanager->deleteUser(Request::option('documents', false))) {
-                        $details = explode('§', str_replace(['msg§', 'info§', 'error§'], '', substr($umanager->msg, 0, -1)));
+                        $details = explode('§', str_replace(['msg§', 'info§', 'error§'], '', mb_substr($umanager->msg, 0, -1)));
                         PageLayout::postSuccess(htmlReady(sprintf(_('"%s (%s)" wurde erfolgreich gelöscht'), $users[$i]->getFullName(), $users[$i]->username)), $details);
                     } else {
-                        $details = explode('§', str_replace(['msg§', 'info§', 'error§'], '', substr($umanager->msg, 0, -1)));
+                        $details = explode('§', str_replace(['msg§', 'info§', 'error§'], '', mb_substr($umanager->msg, 0, -1)));
                         PageLayout::postError(htmlReady(sprintf(_('Fehler! "%s (%s)" konnte nicht gelöscht werden'), $users[$i]->getFullName(), $users[$i]->username)), $details);
                     }
                 }
@@ -541,7 +541,7 @@ class Admin_UserController extends AuthenticatedController
                 StudipMail::setDefaultTransporter($default_mailer);
             }
             //get message
-            $umdetails = explode('§', str_replace(['msg§', 'info§', 'error§'], '', substr($um->msg, 0, -1)));
+            $umdetails = explode('§', str_replace(['msg§', 'info§', 'error§'], '', mb_substr($um->msg, 0, -1)));
             $details   = array_reverse(array_merge((array)$details, (array)$umdetails));
             PageLayout::postInfo(_('Hinweise:'), $details);
 
@@ -784,12 +784,12 @@ class Admin_UserController extends AuthenticatedController
                 }
 
                 //get message
-                $details = explode('§', str_replace(['msg§', 'info§', 'error§'], '', substr($UserManagement->msg, 0, -1)));
+                $details = explode('§', str_replace(['msg§', 'info§', 'error§'], '', mb_substr($UserManagement->msg, 0, -1)));
                 PageLayout::postSuccess(_('Person wurde angelegt.'), $details);
                 $this->redirect('admin/user/edit/' . $user_id);
             } else {
                 //get message
-                $details = explode('§', str_replace(['msg§', 'info§', 'error§'], '', substr($UserManagement->msg, 0, -1)));
+                $details = explode('§', str_replace(['msg§', 'info§', 'error§'], '', mb_substr($UserManagement->msg, 0, -1)));
                 PageLayout::postError(_('Person konnte nicht angelegt werden.'), $details);
             }
         }
@@ -863,7 +863,7 @@ class Admin_UserController extends AuthenticatedController
 
                     //delete
                     $umanager->deleteUser();
-                    $details = array_merge($details, explode('§', str_replace(['msg§', 'info§', 'error§'], '', substr($umanager->msg, 0, -1))));
+                    $details = array_merge($details, explode('§', str_replace(['msg§', 'info§', 'error§'], '', mb_substr($umanager->msg, 0, -1))));
 
                     //reactivate messaging
                     StudipMail::setDefaultTransporter($default_mailer);
@@ -891,7 +891,7 @@ class Admin_UserController extends AuthenticatedController
         if ($UserManagement->setPassword()) {
             PageLayout::postSuccess(_('Das Passwort wurde neu gesetzt.'));
         } else {
-            $details = explode('§', str_replace(['msg§', 'info§', 'error§'], '', substr($UserManagement->msg, 0, -1)));
+            $details = explode('§', str_replace(['msg§', 'info§', 'error§'], '', mb_substr($UserManagement->msg, 0, -1)));
             PageLayout::postError(_('Die Änderungen konnten nicht gespeichert werden.'), $details);
         }
         $this->redirect('admin/user/edit/' . $user_id);

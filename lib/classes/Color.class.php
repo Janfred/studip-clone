@@ -60,9 +60,9 @@ class Color {
      */
     static function hex2array($color) {
         $color = str_replace('#','',$color);
-        $arr[0] = hexdec(substr($color,0,2));
-        $arr[1] = hexdec(substr($color,2,2));
-        $arr[2] = hexdec(substr($color,4,2));
+        $arr[0] = hexdec(mb_substr($color,0,2));
+        $arr[1] = hexdec(mb_substr($color,2,2));
+        $arr[2] = hexdec(mb_substr($color,4,2));
         $arr[3] = 1.0;
         return $arr;
     }
@@ -210,7 +210,7 @@ class Color {
             $format = "hex";
             $arr = self::hex2array($color);
         } elseif (preg_match("/\(.*\)/", $color)) {
-            $format = substr($color, 0, mb_strpos($color, "("));
+            $format = mb_substr($color, 0, mb_strpos($color, "("));
             $func = $format."2array";
             $arr = self::$func($color);
         } elseif (self::$colorstrings[mb_strtolower($color)]) {

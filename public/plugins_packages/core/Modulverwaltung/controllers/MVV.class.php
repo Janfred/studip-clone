@@ -42,7 +42,7 @@ class MVVController extends StudipController
         self::$items_per_page = Config::get()->getValue('ENTRIES_PER_PAGE');
 
         $this->session_key = $this->me . '_'
-                . substr(get_class($this), 0, -10);
+                . mb_substr(get_class($this), 0, -10);
     }
 
     /**
@@ -172,7 +172,7 @@ class MVVController extends StudipController
     public function jsUrl($to = '', $params = array())
     {
         if($to === '') {
-            $to = str_replace('_', '/', substr(mb_strtolower(get_class($this)),
+            $to = str_replace('_', '/', mb_substr(mb_strtolower(get_class($this)),
                     0, -10)) . '/';
         }
         $url = PluginEngine::getUrl($this->plugin, $params, $to, true);

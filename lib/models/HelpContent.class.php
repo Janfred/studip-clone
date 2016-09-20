@@ -55,7 +55,7 @@ class HelpContent extends SimpleORMap {
      */
     public static function GetContentByRoute($route = '', $language = '')
     {
-        $language = $language ?: substr($GLOBALS['user']->preferred_language, 0, 2);
+        $language = $language ?: mb_substr($GLOBALS['user']->preferred_language, 0, 2);
         if (!$language)
             $language = 'de';
         $version = Config::get()->getValue('HELP_CONTENT_CURRENT_VERSION');

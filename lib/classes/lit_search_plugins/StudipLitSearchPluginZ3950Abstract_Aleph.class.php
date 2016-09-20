@@ -76,8 +76,8 @@ class StudipLitSearchPluginZ3950Abstract_Aleph extends StudipLitSearchPluginZ395
         //var_dump($cat_element);
         $tempcreator = $cat_element->getValue('dc_contributor');
         $temptitle = $cat_element->getValue('dc_title');
-        if(substr($temptitle, -1) == "-")
-            $temptitle = substr($temptitle, 0, -1);
+        if(mb_substr($temptitle, -1) == "-")
+            $temptitle = mb_substr($temptitle, 0, -1);
         $ok = $this->doZsearch($zid, "@attr 1=12 \"".$result."\"", 1, 1);
         if($ok){
             $super = $this->getZRecord($zid, 1);
@@ -93,7 +93,7 @@ class StudipLitSearchPluginZ3950Abstract_Aleph extends StudipLitSearchPluginZ395
     function idMap($cat_element, $data, $field, $args)
     {
         // NEU
-        //$cat_element->setValue($field, "IDN=".substr($data,3));
+        //$cat_element->setValue($field, "IDN=".mb_substr($data,3));
         $cat_element->setValue($field, "IDN=".$data);
 
         return;
@@ -127,8 +127,8 @@ class StudipLitSearchPluginZ3950Abstract_Aleph extends StudipLitSearchPluginZ395
 
         if($field == 'dc_title') {
             $temptitle = $cat_element->getValue('dc_title');
-            if(substr($temptitle, -1) == "-") {
-                $temptitle = substr($temptitle, 0, -1);
+            if(mb_substr($temptitle, -1) == "-") {
+                $temptitle = mb_substr($temptitle, 0, -1);
                 $cat_element->setValue('dc_title', $temptitle);
             }
         }

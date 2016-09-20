@@ -147,7 +147,7 @@ class HelpContentController extends AuthenticatedController
             $this->help_content->studip_version    = $GLOBALS['SOFTWARE_VERSION'];
             $this->help_content->position          = 1;
             $this->help_content->custom            = 1;
-            $this->help_content->language          = Request::get('help_content_language') ?: substr($GLOBALS['user']->preferred_language, 0, 2);
+            $this->help_content->language          = Request::get('help_content_language') ?: mb_substr($GLOBALS['user']->preferred_language, 0, 2);
             $this->help_content->route             = Request::get('help_content_route');
         } else {
             PageLayout::setTitle(_('Hilfe-Text bearbeiten'));

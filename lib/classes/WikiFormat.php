@@ -105,7 +105,7 @@ class WikiFormat extends StudipFormat
      */
     protected static function markupWikiComments($markup, $matches)
     {
-        $from = substr($matches[1], 1);
+        $from = mb_substr($matches[1], 1);
         $comment = $matches[2];
 
         if (Request::get("wiki_comments") === "all") {

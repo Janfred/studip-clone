@@ -77,10 +77,10 @@
                 else :
                     $string = implode(', ', $dates);
                     if (mb_strlen($string) > 222) :
-                        echo substr($string,0, 128);
+                        echo mb_substr($string,0, 128);
                         echo '<span class="more-dates-infos" style="display: none">';
-                        echo substr($string, -1, 1) != ','? ', ' : ' ';
-                        echo substr($string, 129);
+                        echo mb_substr($string, -1, 1) != ','? ', ' : ' ';
+                        echo mb_substr($string, 129);
                         echo '</span>';
                         echo '<span class="more-dates-digits"> ...</span>';
                         echo '<a class="more-dates" style="cursor: pointer; margin-left: 3px"

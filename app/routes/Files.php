@@ -101,7 +101,7 @@ class Files extends \RESTAPI\RouteMap
                 $GLOBALS['msg'] = '';
                 validate_upload($file);
                 if ($GLOBALS['msg']) {
-                    $this->error(400, decodeHTML(trim(substr($GLOBALS['msg'],6), '§')));
+                    $this->error(400, decodeHTML(trim(mb_substr($GLOBALS['msg'],6), '§')));
                 }
                 if ($file['size']) {
                     $document = array();
@@ -168,7 +168,7 @@ class Files extends \RESTAPI\RouteMap
                 $GLOBALS['msg'] = '';
                 validate_upload($file);
                 if ($GLOBALS['msg']) {
-                    $this->error(400, decodeHTML(trim(substr($GLOBALS['msg'],6), '§')));
+                    $this->error(400, decodeHTML(trim(mb_substr($GLOBALS['msg'],6), '§')));
                 }
                 if ($file['size']) {
                     $document['filename'] = mb_strtolower($file['name']);

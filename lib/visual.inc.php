@@ -197,7 +197,7 @@ function kill_format ($text) {
                       '$1$2');
     $callback = function ($c) {
         return function ($m) use ($c) {
-            return $m[1] . substr(str_replace($c, ' ', $m[2]), 0, -1);
+            return $m[1] . mb_substr(str_replace($c, ' ', $m[2]), 0, -1);
         };
     };
     $pattern_callback = array(
@@ -323,11 +323,11 @@ function mila ($titel, $size = 60) {
     if ($auth->auth["jscript"] AND $size == 60) {
         //hier wird die maximale Laenge berechnet, nach der Abgeschnitten wird (JS dynamisch)
         if (mb_strlen ($titel) >$auth->auth["xres"] / 13)
-            $titel=substr($titel, 0, $auth->auth["xres"] / 13)."... ";
+            $titel=mb_substr($titel, 0, $auth->auth["xres"] / 13)."... ";
     }
     else {
         if (mb_strlen ($titel) >$size)
-            $titel=substr($titel, 0, $size)."... ";
+            $titel=mb_substr($titel, 0, $size)."... ";
     }
     return $titel;
 }
@@ -475,8 +475,8 @@ function printcontent ($breite, $write = FALSE, $inhalt, $edit, $printout = TRUE
     if ($edit) {
         $print .= "<br><br><div align=\"center\">$edit</div>";
         if ($addon!="") {
-            if (substr($addon,0,5)=="open:") { // es wird der öffnen-Pfeil mit Link ausgegeben
-                $print .= "</td><td valign=\"middle\" class=\"table_row_even\" nowrap><a href=\"".substr($addon,5)."\">";
+            if (mb_substr($addon,0,5)=="open:") { // es wird der öffnen-Pfeil mit Link ausgegeben
+                $print .= "</td><td valign=\"middle\" class=\"table_row_even\" nowrap><a href=\"".mb_substr($addon,5)."\">";
                 $print .= Icon::create('arr_1left', 'clickable', ['title' => _('Bewertungsbereich öffnen')])->asImg();
                 $print .= "</a>&nbsp;";
             } else {              // es wird erweiterter Inhalt ausgegeben
@@ -633,7 +633,7 @@ function TransformInternalLinks($str){
     $str = trim($str);
     if (mb_strpos($str, 'http') !== 0) {
         if ($str[0] === '/') {
-            $str = substr($str, mb_strlen($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']));
+            $str = mb_substr($str, mb_strlen($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']));
         }
         $str = $GLOBALS['ABSOLUTE_URI_STUDIP'] . $str;
     }
@@ -642,7 +642,7 @@ function TransformInternalLinks($str){
             $domain_data['domains'] = '';
             foreach ($GLOBALS['STUDIP_DOMAINS'] as $studip_domain) $domain_data['domains'] .= '|' . preg_quote($studip_domain);
             $domain_data['domains'] = preg_replace("'\|[^/|]*'", '$0[^/]*?', $domain_data['domains']);
-            $domain_data['domains'] = substr($domain_data['domains'], 1);
+            $domain_data['domains'] = mb_substr($domain_data['domains'], 1);
             $domain_data['user_domain'] = preg_replace("'^({$domain_data['domains']})(.*)$'i", "\\1", $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
             $domain_data['user_domain_scheme'] = 'http' . (($_SERVER['HTTPS'] || $_SERVER['SERVER_PORT'] == 443) ? 's' : '') . '://';
             $GLOBALS['TransformInternalLinks_domainData'] = $domain_data;

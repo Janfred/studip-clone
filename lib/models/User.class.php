@@ -452,7 +452,7 @@ class User extends AuthUserMd5
         }
         if ($concat === null) {
             $concat = function() {return join('', func_get_args());};
-            $left = function($str, $c = 0) {return substr($str,0,$c);};
+            $left = function($str, $c = 0) {return mb_substr($str,0,$c);};
             $if = function($ok,$yes,$no) {return $ok ? $yes : $no;};
             $quote = function($str) {return "'" . addcslashes($str, "\\'\0") . "'";};
         }

@@ -51,14 +51,14 @@ class ArrayFileStream {
   }
 
   function stream_read($count) {
-    $ret = substr($this->open_file, $this->position, $count);
+    $ret = mb_substr($this->open_file, $this->position, $count);
     $this->position += mb_strlen($ret);
     return $ret;
   }
 
   function stream_write($data) {
-    $left  = substr($this->open_file, 0, $this->position);
-    $right = substr($this->open_file, $this->position + mb_strlen($data));
+    $left  = mb_substr($this->open_file, 0, $this->position);
+    $right = mb_substr($this->open_file, $this->position + mb_strlen($data));
     $this->open_file = $left . $data . $right;
     $this->position += mb_strlen($data);
     return mb_strlen($data);

@@ -404,7 +404,7 @@ class ScheduleView
                     $out .= "<a style=\"color:$font_color;\" href=\"".$this->events[$id]["link"]."\"
                                             title=\"".htmlReady($this->events[$id]["name"])."\">";
                 }
-                $out .= htmlReady(substr($this->events[$id]['name'], 0, mb_strpos($this->events[$id]['name'],':')));
+                $out .= htmlReady(mb_substr($this->events[$id]['name'], 0, mb_strpos($this->events[$id]['name'],':')));
                 if (!$print_view) {
                     $out .= '</a>';
                 }
@@ -413,7 +413,7 @@ class ScheduleView
                         $out.= "<a style=\"color:$font_color;\" href=\"".$event["link"]."\"
                                             title=\"".htmlReady($event["name"])."\">, ";
                     }
-                    $out .= htmlReady(substr($event['name'], 0, mb_strpos($event['name'],':')));
+                    $out .= htmlReady(mb_substr($event['name'], 0, mb_strpos($event['name'],':')));
                     if (!$print_view) {
                         $out.= '</a>';
                     }
@@ -425,7 +425,7 @@ class ScheduleView
 
     public function getShortName($name, $print_view)
     {
-        $out = htmlReady(substr($name, 0, 50));
+        $out = htmlReady(mb_substr($name, 0, 50));
         if (mb_strlen($name) > 50) {
             $out.= "...";
         }

@@ -214,11 +214,11 @@ class DataField extends SimpleORMap
      */
     public function __call($method, array $arguments)
     {
-        if (substr($method, 0, 3) === 'get') {
-            return $this->getValue(substr($method, 3));
+        if (mb_substr($method, 0, 3) === 'get') {
+            return $this->getValue(mb_substr($method, 3));
         }
-        if (substr($method, 0, 3) === 'set') {
-            return $this->setValue(substr($method, 3), $arguments[0]);
+        if (mb_substr($method, 0, 3) === 'set') {
+            return $this->setValue(mb_substr($method, 3), $arguments[0]);
         }
         throw new BadMethodCallException('Call to undefined method ' . __CLASS__ . '::' . $method);
     }

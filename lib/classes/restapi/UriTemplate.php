@@ -53,7 +53,7 @@ class UriTemplate
         foreach ($combined as $rule => $actual) {
             if ($rule[0] === ':') {
                 // Rule is a placeholder
-                $parameter_name = substr($rule, 1);
+                $parameter_name = mb_substr($rule, 1);
 
                 if (isset($this->conditions[$parameter_name])
                     && !preg_match($this->conditions[$parameter_name], $actual)) {
@@ -85,7 +85,7 @@ class UriTemplate
 
             // Rule is a placeholder
             if ($rule[0] === ':') {
-                $parameter_name = substr($rule, 1);
+                $parameter_name = mb_substr($rule, 1);
 
                 if (!isset($params[$parameter_name])) {
                     $reason = sprintf('UriTemplate parameter :%s missing.',

@@ -267,9 +267,9 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
         $config['known_slots'] = array_merge(array_keys($config['db_fields']), array_keys($config['alias_fields'] ?: []), array_keys($config['additional_fields'] ?: []), array_keys($config['relations'] ?: []));
 
         foreach (array_map('mb_strtolower', get_class_methods($class)) as $method) {
-            if (in_array(substr($method, 0, 3), ['get', 'set'])) {
-                $verb = substr($method, 0, 3);
-                $name = substr($method, 3);
+            if (in_array(mb_substr($method, 0, 3), ['get', 'set'])) {
+                $verb = mb_substr($method, 0, 3);
+                $name = mb_substr($method, 3);
                 if (in_array($name, $config['known_slots']) && !in_array($name, static::$reserved_slots) && !isset($config['additional_fields'][$name][$verb])) {
                     $config['getter_setter_map'][$name][$verb] = $method;
                 }
@@ -772,7 +772,7 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
         $where = '';
         $where_param = is_array($arguments[0]) ? $arguments[0] : words($arguments[0]);
         $prefix = mb_strstr($name, 'by', true);
-        $field = substr($name, mb_strlen($prefix)+2);
+        $field = mb_substr($name, mb_strlen($prefix)+2);
         switch ($prefix) {
             case 'findone':
                 $order = $arguments[1];

@@ -411,9 +411,9 @@ class ExternEditHtml extends ExternEditGeneric {
         $value = $this->getValue($attribute);
         $value_pp = "";
 
-        if (substr($value, -1) == "%") {
+        if (mb_substr($value, -1) == "%") {
             $value_pp = "%";
-            $value = substr($value, 0, -1);
+            $value = mb_substr($value, 0, -1);
         }
 
         if ($this->faulty_values[$form_name][0])

@@ -804,8 +804,8 @@ if ($change_object_properties && Request::isPost()) {
         $change_property_val = Request::getArray('change_property_val');
         if (is_array($change_property_val))
             foreach ($change_property_val as $key=>$val) {
-                if ((substr($val, 0, 4) == "_id_") && (substr($change_property_val[$key+1], 0, 4) != "_id_"))
-                    if ($changeObject->storeProperty(substr($val, 4, mb_strlen($val)), $change_property_val[$key+1]))
+                if ((mb_substr($val, 0, 4) == "_id_") && (mb_substr($change_property_val[$key+1], 0, 4) != "_id_"))
+                    if ($changeObject->storeProperty(mb_substr($val, 4, mb_strlen($val)), $change_property_val[$key+1]))
                         $props_changed=TRUE;
             }
 
@@ -957,8 +957,8 @@ if ((Request::quoted('add_type')) || (Request::option('delete_type')) || (Reques
                     }
                     $statement->execute(array(
                         $req_num,
-                        substr($requestable[$key - 1], 5),
-                        substr($requestable[$key], 5)
+                        mb_substr($requestable[$key - 1], 5),
+                        mb_substr($requestable[$key], 5)
                     ));
                 }
             }
@@ -980,8 +980,8 @@ if ((Request::quoted('add_type')) || (Request::option('delete_type')) || (Reques
                     }
                     $statement->execute(array(
                         $req_num,
-                        substr($protected[$key - 1], 5),
-                        substr($protected[$key], 5)
+                        mb_substr($protected[$key - 1], 5),
+                        mb_substr($protected[$key], 5)
                     ));
                 }
             }
@@ -1369,8 +1369,8 @@ if ($view == "search") {
         $search_property_val = Request::quotedArray('search_property_val');
         if (is_array($search_property_val))
             foreach ($search_property_val as $key=>$val) {
-                if ((substr($val, 0, 4) == "_id_") && (substr($search_property_val[$key+1], 0, 4) != "_id_") && ($search_property_val[$key+1]))
-                    $_SESSION['resources_data']["search_array"]["properties"][substr($val, 4, mb_strlen($val))]=$search_property_val[$key+1];
+                if ((mb_substr($val, 0, 4) == "_id_") && (mb_substr($search_property_val[$key+1], 0, 4) != "_id_") && ($search_property_val[$key+1]))
+                    $_SESSION['resources_data']["search_array"]["properties"][mb_substr($val, 4, mb_strlen($val))]=$search_property_val[$key+1];
         }
 
         //handle dates for searching resources that are free for this times

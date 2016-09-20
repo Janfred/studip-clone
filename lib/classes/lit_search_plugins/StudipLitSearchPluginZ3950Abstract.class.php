@@ -342,7 +342,7 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 
     function simpleFixFieldMap($cat_element, $data, $field, $args){
         if (is_array($args) && $data != "") {
-            if ($result = trim(substr($data,$args['start'],$args['length']))) {
+            if ($result = trim(mb_substr($data,$args['start'],$args['length']))) {
                 if ($args['template']){
                     $result = str_replace('{result}',$result, $args['template']);
                 }

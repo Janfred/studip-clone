@@ -400,7 +400,7 @@ class ForumEntry {
             // we throw away all formatting stuff, tags, etc, leaving the important bit of information
             $desc_short = ForumEntry::br2space(ForumEntry::killFormat(strip_tags($data['content'])));
             if (mb_strlen($desc_short) > (ForumEntry::THREAD_PREVIEW_LENGTH + 2)) {
-                $desc_short = substr($desc_short, 0, ForumEntry::THREAD_PREVIEW_LENGTH) . '...';
+                $desc_short = mb_substr($desc_short, 0, ForumEntry::THREAD_PREVIEW_LENGTH) . '...';
             } else {
                 $desc_short = $desc_short;
             }
@@ -564,7 +564,7 @@ class ForumEntry {
                 $text = ForumEntry::killFormat(ForumEntry::killQuotes($text));
 
                 if (mb_strlen($text) > 42) {
-                    $text = substr($text, 0, 40) . '...';
+                    $text = mb_substr($text, 0, 40) . '...';
                 }
 
                 $last_posting['text'] = $text;

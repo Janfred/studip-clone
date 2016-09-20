@@ -258,7 +258,7 @@ abstract class DataFieldEntry
     public function getType()
     {
         $class = mb_strtolower(get_class($this));
-        return substr($class, 9, mb_strpos($class, 'entry') - 9);
+        return mb_substr($class, 9, mb_strpos($class, 'entry') - 9);
     }
 
     /**

@@ -78,7 +78,7 @@ class MvvPerm {
         $name = mb_strtolower($name);
 
         if (mb_strpos($name, 'haveperm') === 0) {
-            $perm = 'PERM_' . mb_strtoupper(substr($name, 8));
+            $perm = 'PERM_' . mb_strtoupper(mb_substr($name, 8));
             if (defined('self::' . $perm)) {
                 return self::get($arguments[0])->havePerm(constant('self::' . $perm),
                         $arguments[1], $arguments[2], $arguments[3]);
@@ -88,13 +88,13 @@ class MvvPerm {
         }
 
         if (mb_strpos($name, 'getfieldperm') === 0) {
-            $field = mb_strtolower(substr($name, 12));
+            $field = mb_strtolower(mb_substr($name, 12));
             return self::get($arguments[0])->getFieldPerm($field,
                     $arguments[1], $arguments[2]);
         }
 
         if (mb_strpos($name, 'havefieldperm') === 0) {
-            $field = mb_strtolower(substr($name, 13));
+            $field = mb_strtolower(mb_substr($name, 13));
             return self::get($arguments[0])->haveFieldPerm($field, $arguments[1],
                     $arguments[2], $arguments[3]);
         }
@@ -108,7 +108,7 @@ class MvvPerm {
         $name = mb_strtolower($name);
 
         if (mb_strpos($name, 'haveperm') === 0) {
-            $perm = 'PERM_' . mb_strtoupper(substr($name, 8));
+            $perm = 'PERM_' . mb_strtoupper(mb_substr($name, 8));
             if (defined('self::' . $perm)) {
                 return $this->havePerm(constant('self::' . $perm),
                         $arguments[1], $arguments[2], $arguments[3]);
@@ -118,13 +118,13 @@ class MvvPerm {
         }
 
         if (mb_strpos($name, 'getfieldperm') === 0) {
-            $field = mb_strtolower(substr($name, 12));
+            $field = mb_strtolower(mb_substr($name, 12));
             return $this->getFieldPerm($field,
                     $arguments[1], $arguments[2]);
         }
 
         if (mb_strpos($name, 'havefieldperm') === 0) {
-            $field = mb_strtolower(substr($name, 13));
+            $field = mb_strtolower(mb_substr($name, 13));
             return $this->haveFieldPerm($field, $arguments[0],
                     $arguments[1], $arguments[2]);
         }

@@ -225,7 +225,7 @@ class WysiwygDocument
     
         $keys = array_keys($data);
         $column_names = implode(',', array_map(function($key) {
-            return substr($key, 1);
+            return mb_substr($key, 1);
         }, $keys));
     
         $query = 'INSERT INTO folder (' . $column_names

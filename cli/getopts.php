@@ -29,11 +29,11 @@
             trigger_error('Invalid raw option', E_USER_ERROR);
         }
     
-        // substr, which returns '' in case of an empty substr (usually false)
-        $substr = create_function(
+        // mb_substr, which returns '' in case of an empty mb_substr (usually false)
+        $mb_substr = create_function(
             '$string,$start,$length=NULL', // is not used, only for definition
 
-            '$ret = call_user_func_array(\'substr\', func_get_args());'.
+            '$ret = call_user_func_array(\'mb_substr\', func_get_args());'.
             'if($ret === false){'.
             '   return \'\';'.
             '}else{'.
@@ -143,11 +143,11 @@
                 // long option
                 $p = mb_strpos($arg, '=');
                 if($p !== false){
-                    $next = $substr($arg, $p+1);
-                    $arg = substr($arg, 2, $p-2);
+                    $next = $mb_substr($arg, $p+1);
+                    $arg = mb_substr($arg, 2, $p-2);
                 }else{
                     $next = true;
-                    $arg = substr($arg, 2);
+                    $arg = mb_substr($arg, 2);
                 }
                 if(!isset($long[$arg])){
                     $Oerr[] = 'Unknown option "--'.$arg.'"';
@@ -175,10 +175,10 @@
                             $p = mb_strpos($val, '=');
                             if($p === false){
                                 $Oerr[] = 'Malformed artument to option "'.$Earg.'" (a "=" is missing)';
-                            }else if(isset($Ores[$opt][substr($val, 0, $p)])){
-                                $Oerr[] = 'Duplicate key "'.substr($val, 0, $p).'" to option "'.$Earg.'"';
+                            }else if(isset($Ores[$opt][mb_substr($val, 0, $p)])){
+                                $Oerr[] = 'Duplicate key "'.mb_substr($val, 0, $p).'" to option "'.$Earg.'"';
                             }else{
-                                $Ores[$opt][substr($val, 0, $p)] = $substr($val, $p+1);
+                                $Ores[$opt][mb_substr($val, 0, $p)] = $mb_substr($val, $p+1);
                             }
                         }
                         break;
@@ -188,11 +188,11 @@
                 // short option(s)
                 for($i=1; $i<mb_strlen($arg); $i++){
                     $c = $arg[$i];
-                    $next = $substr($arg, $i+1);
+                    $next = $mb_substr($arg, $i+1);
                     if($next == ''){
                         $next = true;
                     }else if($next[0] == '='){
-                        $next = $substr($next, 1);
+                        $next = $mb_substr($next, 1);
                     }
                     if(!isset($short[$c])){
                         $Oerr[] = 'Unknown option "-'.$c.'"';
@@ -223,10 +223,10 @@
                                 $p = mb_strpos($val, '=');
                                 if($p === false){
                                     $Oerr[] = 'Malformed artument to option "'.$Earg.'" (a "=" is missing)';
-                                }else if(isset($Ores[$opt][substr($val, 0, $p)])){
-                                    $Oerr[] = 'Duplicate key "'.substr($val, 0, $p).'" to option "'.$Earg.'"';
+                                }else if(isset($Ores[$opt][mb_substr($val, 0, $p)])){
+                                    $Oerr[] = 'Duplicate key "'.mb_substr($val, 0, $p).'" to option "'.$Earg.'"';
                                 }else{
-                                    $Ores[$opt][substr($val, 0, $p)] = $substr($val, $p+1);
+                                    $Ores[$opt][mb_substr($val, 0, $p)] = $mb_substr($val, $p+1);
                                 }
                             }
                             $i = mb_strlen($arg);

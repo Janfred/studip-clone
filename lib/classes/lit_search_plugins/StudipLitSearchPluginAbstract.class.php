@@ -97,7 +97,7 @@ class StudipLitSearchPluginAbstract {
         global $_lit_search_plugins;
         $ret = false;
         for ($i = 0; $i < count($_lit_search_plugins); ++$i){
-            if (substr(mb_strtolower($this->class_name),21) == mb_strtolower($_lit_search_plugins[$i]['name'])){
+            if (mb_substr(strtolower($this->class_name),21) == mb_strtolower($_lit_search_plugins[$i]['name'])){
                 $ret = $_lit_search_plugins[$i]['name'];
                 break;
             }

@@ -72,8 +72,8 @@
     <? foreach ($message->attachments as $attachment) : ?>
     <li>
         <? $mime_type = get_mime_type($attachment['filename']) ?>
-        <h4><a href="<?= GetDownloadLink($attachment->getId(), $attachment['filename'], 7, 'force') ?>"><?= GetFileIcon(substr($attachment['filename'], mb_strrpos($attachment["filename"], ".") + 1))->asImg() ?><?= htmlReady($attachment['name']) ?></a></h4>
-        <? if (substr($mime_type, 0, 5) === "image") : ?>
+        <h4><a href="<?= GetDownloadLink($attachment->getId(), $attachment['filename'], 7, 'force') ?>"><?= GetFileIcon(mb_substr($attachment['filename'], mb_strrpos($attachment["filename"], ".") + 1))->asImg() ?><?= htmlReady($attachment['name']) ?></a></h4>
+        <? if (mb_substr($mime_type, 0, 5) === "image") : ?>
         <div><img src="<?= GetDownloadLink($attachment->getId(), $attachment['filename'], 7, 'normal') ?>" style="max-width: 400px;"></div>
         <? endif ?>
     </li>

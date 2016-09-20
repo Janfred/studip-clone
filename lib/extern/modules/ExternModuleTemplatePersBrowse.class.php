@@ -232,7 +232,7 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
                 . "AND ui.inst_perms = 'dozent' "
                 . "AND ui.externdefault = 1 "
                 . "AND " . get_ext_vis_query(),
-                substr($module_params['initiale'], 0, 1),
+                mb_substr($module_params['initiale'], 0, 1),
                 $dbv->sem_number_sql,
                 $current_semester,
                 $dbv->sem_number_sql,
@@ -251,7 +251,7 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
                     . "AND ui.Institut_id IN ('%s') "
                     . "AND ui.externdefault = 1 "
                     . "AND " . get_ext_vis_query(),
-                    substr($module_params['initiale'], 0, 1),
+                    mb_substr($module_params['initiale'], 0, 1),
                     implode("','", $this->config->getValue('Main', 'instperms')),
                     implode("','", $selected_item_ids));
             }
@@ -366,7 +366,7 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
         if (!$module_params['initiale']) {
             $this->global_markers['INSTNAME'] = $content['PERSONS']['PERSON'][0]['INSTNAME'];
         } else {
-            $this->global_markers['CHARACTER'] = substr($module_params['initiale'], 0, 1);
+            $this->global_markers['CHARACTER'] = mb_substr($module_params['initiale'], 0, 1);
         }
 
         return $content;

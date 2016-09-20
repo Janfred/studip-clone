@@ -108,7 +108,7 @@ class ExternConfigIni extends ExternConfig {
             foreach ($config as $element => $attributes) {
                 foreach ($attributes as $attribute => $value) {
                     if ($value{0} == '|') {
-                        $this->config[$element][$attribute] = explode('|', substr($value, 1));
+                        $this->config[$element][$attribute] = explode('|', mb_substr($value, 1));
                     } else {
                         $this->config[$element][$attribute] = $value;
                     }

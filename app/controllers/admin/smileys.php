@@ -202,7 +202,7 @@ class Admin_SmileysController extends AuthenticatedController
         }
 
         // Correct mime-type?
-        $no_image = !empty($upload['type']) && substr($upload['type'], 0, 5) != 'image';
+        $no_image = !empty($upload['type']) && mb_substr($upload['type'], 0, 5) != 'image';
         if (!$no_image) {
             $image_info = getimagesize($upload['tmp_name']); // Used later on!
             $no_gif = $image_info[2] != IMAGETYPE_GIF;
@@ -215,7 +215,7 @@ class Admin_SmileysController extends AuthenticatedController
 
         // Extract smiley information
         $smiley_file = $upload['name'];
-        $smiley_name = substr($smiley_file, 0, mb_strrpos($smiley_file, '.'));
+        $smiley_name = mb_substr($smiley_file, 0, mb_strrpos($smiley_file, '.'));
 
         // Replace smiley?
         $smiley = Smiley::getByName($smiley_name);

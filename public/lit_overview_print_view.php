@@ -62,13 +62,13 @@ if (is_array($_SESSION['_lit_data'])){
                 $estimated_p += $sem_data['admission_turnout'];
                 $participants += $sem_data['participants'];
             }
-            $content = substr($content,0,-2);
+            $content = mb_substr($content,0,-2);
             $content .= "<br>";
             $content .= "<b>" . _("Dozenten:") . "</b>&nbsp;&nbsp;";
             foreach ($_SESSION['_lit_data'][$cid]['doz_data'] as $doz_data){
                 $content .= htmlReady($doz_data["Nachname"]) . ", ";
             }
-            $content = substr($content,0,-2);
+            $content = mb_substr($content,0,-2);
             $content .= "<br>";
             $content .= "<b>" . _("Teilnehmeranzahl (erwartet/angemeldet):") . "</b>&nbsp;&nbsp;";
             $content .= ($estimated_p ? $estimated_p : _("unbekannt"));

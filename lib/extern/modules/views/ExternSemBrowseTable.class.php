@@ -353,8 +353,8 @@ class ExternSemBrowseTable extends SemBrowse {
                         $data["content"]["zeiten"] = Seminar::GetInstance($seminar_id)->getDatesExport(array('show_room' => true));
                         //Shorten, if string too long
                         if (mb_strlen($data["content"]["zeiten"]) >70) {
-                            $data["content"]["zeiten"] = substr($data["content"]["zeiten"], 0,
-                                    mb_strpos(substr($data["content"]["zeiten"], 70, mb_strlen($data["content"]["zeiten"])), ",") +71);
+                            $data["content"]["zeiten"] = mb_substr($data["content"]["zeiten"], 0,
+                                    mb_strpos(mb_substr($data["content"]["zeiten"], 70, mb_strlen($data["content"]["zeiten"])), ",") +71);
                             $data["content"]["zeiten"] .= "...";
                         }
                         $data["content"]["zeiten"] = htmlReady($data["content"]["zeiten"]);

@@ -153,12 +153,12 @@ class OpenGraphURL extends SimpleORMap
                 if ($tag->hasAttribute('property')
                     && mb_strpos($tag->getAttribute('property'), 'og:') === 0)
                 {
-                    $key = mb_strtolower(substr($tag->getAttribute('property'), 3));
+                    $key = mb_strtolower(mb_substr($tag->getAttribute('property'), 3));
                 }
                 if (!$key && $tag->hasAttribute('name')
                     && mb_strpos($tag->getAttribute('name'), 'og:') === 0)
                 {
-                    $key = mb_strtolower(substr($tag->getAttribute('name'), 3));
+                    $key = mb_strtolower(mb_substr($tag->getAttribute('name'), 3));
                 }
                 if ($key) {
                     $content = studip_utf8decode($tag->getAttribute('content'));
