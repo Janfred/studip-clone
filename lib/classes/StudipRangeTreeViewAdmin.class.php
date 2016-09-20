@@ -190,7 +190,7 @@ class StudipRangeTreeViewAdmin extends TreeView{
         $parent_id = Request::quoted('parent_id');
         $search_str = Request::quoted('edit_search');
         $view = DbView::getView('range_tree');
-        if(strlen($search_str) > 1){
+        if(mb_strlen($search_str) > 1){
             $view->params[0] = $search_str;
             $rs = $view->get_query("view:TREE_SEARCH_INST");
             while ($rs->next_record()){

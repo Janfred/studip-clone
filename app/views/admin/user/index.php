@@ -135,7 +135,7 @@ use Studip\Button, Studip\LinkButton;
         <? if ($datafield->type === 'bool'): ?>
             <section class="hgroup size-m">
                 <label>
-                    <input type="radio" name="<?= $datafield->id ?>" value="" <?= (strlen($request[$datafield->id]) === 0) ? 'checked' : '' ?>>
+                    <input type="radio" name="<?= $datafield->id ?>" value="" <?= (mb_strlen($request[$datafield->id]) === 0) ? 'checked' : '' ?>>
                     <?= _('egal') ?>
                 </label>
                 <label>

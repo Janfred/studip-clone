@@ -409,7 +409,7 @@ abstract class RouteMap
             preg_match("/name=([^;\s]*)/i", $headers['content-disposition'], $matches);
             $name = str_replace(array("'", '"'), '', $matches[1]);
             if (!$contentType) {
-                $data[$name] = substr($body, 0, strlen($body) - 2);
+                $data[$name] = substr($body, 0, mb_strlen($body) - 2);
             } else {
                 switch ($contentType) {
                     case 'application/json':
@@ -427,7 +427,7 @@ abstract class RouteMap
                         $filename = str_replace(array("'", '"'), '', $matches[1]);
                         $tmp_name = $GLOBALS['TMP_PATH']."/uploadfile_".md5(uniqid());
                         $handle = fopen($tmp_name, 'wb');
-                        $filesize = fwrite($handle, $body, (strlen($body) - 2));
+                        $filesize = fwrite($handle, $body, (mb_strlen($body) - 2));
                         fclose($handle);
                         $data['_FILES'][$name] = array(
                             'name' => $filename,

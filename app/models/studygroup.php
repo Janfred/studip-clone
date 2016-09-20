@@ -273,7 +273,7 @@ class StudygroupModel
                 $sql .= " AND admission_prelim = 0 ";
             }
         }
-        $sort_order = (substr($sort, strlen($sort) - 3, 3) == 'asc') ? 'asc' : 'desc';
+        $sort_order = (substr($sort, mb_strlen($sort) - 3, 3) == 'asc') ? 'asc' : 'desc';
 
         // add here the sortings
         if ($sort == 'name_asc') {
@@ -624,7 +624,7 @@ class StudygroupModel
             $recipients[] = $user['username'];
         }
 
-        if (studip_strlen($sem->getName()) > 32) //cut subject if to long
+        if (mb_strlen($sem->getName()) > 32) //cut subject if to long
             $subject = sprintf(_("[Studiengruppe: %s...]"), studip_substr($sem->getName(), 0, 30));
         else
             $subject = sprintf(_("[Studiengruppe: %s]"), $sem->getName());

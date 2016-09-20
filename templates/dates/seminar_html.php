@@ -76,7 +76,7 @@
                  title="' . _('Blenden Sie die restlichen Termine ein') . '">(' ._('mehr'). ')</a>';
                 else :
                     $string = implode(', ', $dates);
-                    if (strlen($string) > 222) :
+                    if (mb_strlen($string) > 222) :
                         echo substr($string,0, 128);
                         echo '<span class="more-dates-infos" style="display: none">';
                         echo substr($string, -1, 1) != ','? ', ' : ' ';

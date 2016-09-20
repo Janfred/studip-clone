@@ -69,7 +69,7 @@ function po_stringify($string) {
     $string = str_replace("\r", '', $string);
     $chunks = explode("\n", $string);
 
-    if (count($chunks) === 1 && strlen($chunks[0]) < MAX_LINE_LENGTH) {
+    if (count($chunks) === 1 && mb_strlen($chunks[0]) < MAX_LINE_LENGTH) {
         return '"' . po_escape($chunks[0]) . '"';
     }
 

@@ -43,7 +43,7 @@ function readfile_chunked($filename, $start = null, $end = null) {
                 $chunksize = $end - $p + 1;
             }
             $buffer = fread($handle, $chunksize);
-            $bytes += strlen($buffer);
+            $bytes += mb_strlen($buffer);
             echo $buffer;
         }
         fclose($handle);
@@ -70,7 +70,7 @@ function parse_header($header){
         $matches = preg_match('/^\S+:/', $header[$i], $parts);
         if ($matches){
             $key = trim(substr($parts[0],0,-1));
-            $value = trim(substr($header[$i], strlen($parts[0])));
+            $value = trim(substr($header[$i], mb_strlen($parts[0])));
             $ret[$key] = $value;
         } else {
             $ret[trim($header[$i])] = trim($header[$i]);
@@ -183,7 +183,7 @@ function parse_link($link, $level=0) {
             do {
                 $response .= fgets($socket, 128);
                 $info = stream_get_meta_data($socket);
-            } while (!feof($socket) && !$info['timed_out'] && strlen($response) < 1024);
+            } while (!feof($socket) && !$info['timed_out'] && mb_strlen($response) < 1024);
             fclose($socket);
         }
         $parsed_link = parse_header($response);
@@ -266,7 +266,7 @@ function createSelectedZip ($file_ids, $perm_check = TRUE, $size_check = false) 
                     $filename = prepareFilename($file['filename'], FALSE, $tmp_full_path);
                     if (@copy(get_upload_file_path($file['dokument_id']), $tmp_full_path.'/'.$filename)) {
                         TrackAccess($file['dokument_id'],'dokument');
-                        $filelist[] = array_merge($file, array('path' => substr($tmp_full_path.'/'.$filename, strlen("$TMP_PATH/$zip_file_id/"))));
+                        $filelist[] = array_merge($file, array('path' => substr($tmp_full_path.'/'.$filename, mb_strlen("$TMP_PATH/$zip_file_id/"))));
                     }
                 }
             }
@@ -385,7 +385,7 @@ function createTempFolder($folder_id, $tmp_full_path, $sem_id, $perm_check = TRU
         createTempFolder($row['folder_id'], $tmp_sub_full_path, $sem_id, $perm_check, true);
     }
     if ($in_recursion === false) {
-       array_walk($filelist, create_function('&$a', '$a["path"] = substr($a["path"], ' . (int)strlen($tmp_path) . ');'));
+       array_walk($filelist, create_function('&$a', '$a["path"] = substr($a["path"], ' . (int)mb_strlen($tmp_path) . ');'));
        return $filelist;
     } else {
         return true;
@@ -795,7 +795,7 @@ function edit_item($item_id, $type, $name, $description, $protected = 0, $url = 
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array(
             $description,
-            strlen($name) ? $name : null,
+            mb_strlen($name) ? $name : null,
             $item_id,
         ));
 
@@ -1047,11 +1047,11 @@ function prepareFilename($filename, $shorten = FALSE, $checkfolder = false) {
     $filename=str_replace($bad_characters, $replacements, $filename);
 
     if ($filename{0} == ".")
-        $filename = substr($filename, 1, strlen($filename));
+        $filename = substr($filename, 1, mb_strlen($filename));
 
     if ($shorten) {
         $ext = getFileExtension ($filename);
-        $filename = substr(substr($filename, 0, strrpos($filename,$ext)-1), 0, (30 - strlen($ext))).".".$ext;
+        $filename = substr(substr($filename, 0, strrpos($filename,$ext)-1), 0, (30 - mb_strlen($ext))).".".$ext;
     }
     if ($checkfolder !== false) {
         $c = 0;
@@ -1073,7 +1073,7 @@ function getFileExtension($str) {
     $i = strrpos($str,".");
     if (!$i) { return ""; }
 
-    $l = strlen($str) - $i;
+    $l = mb_strlen($str) - $i;
     $ext = substr($str,$i+1,$l);
 
     return $ext;
@@ -2830,7 +2830,7 @@ function upload_recursively($range_id, $dir) {
         }
         // Verzeichnis erstellen
         $pos = strrpos($subdir, "/");
-        $name = substr($subdir, $pos + 1, strlen($subdir) - $pos);
+        $name = substr($subdir, $pos + 1, mb_strlen($subdir) - $pos);
         $dir_id = create_folder($name, "", $range_id);
         $count['subdirs']++;
         // Verzeichnis hochladen.

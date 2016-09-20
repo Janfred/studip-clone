@@ -63,7 +63,7 @@ function should_skip_file($filename, $realfile) {
     // subdirectory.
     if ($skip) {
         foreach ($include as $pattern) {
-            if (fnmatch($pattern, $filename) && strlen($pattern) > strlen($matching_pattern)) {
+            if (fnmatch($pattern, $filename) && mb_strlen($pattern) > mb_strlen($matching_pattern)) {
                 $skip = false;
                 break;
             }

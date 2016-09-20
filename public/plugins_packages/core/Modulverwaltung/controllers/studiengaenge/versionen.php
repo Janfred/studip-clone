@@ -366,7 +366,7 @@ class Studiengaenge_VersionenController extends SharedVersionController
         }
         // Status
         $this->filter['mvv_stgteilversion.stat']
-                = strlen(Request::get('status_filter'))
+                = mb_strlen(Request::get('status_filter'))
                 ? Request::option('status_filter') : null;
 
         // store filter

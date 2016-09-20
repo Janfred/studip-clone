@@ -6,7 +6,7 @@
         <?= CSRFProtection::tokenTag() ?>
         <fieldset>
             <legend><?= _('Datei hochladen') ?></legend>
-            <?= strlen($plugin["description"]) > 0 ? Icon::create('info-circle', 'inactive')->asImg(16) : '' ?>
+            <?= mb_strlen($plugin["description"]) > 0 ? Icon::create('info-circle', 'inactive')->asImg(16) : '' ?>
             <?= formatReady($plugin["description"]) ?><br>
             <input type="hidden" name="cmd" value="import_lit_list">
             <input type="hidden" name="plugin_name" value="<?= htmlReady($plugin['name']) ?>">

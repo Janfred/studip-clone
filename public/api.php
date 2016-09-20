@@ -47,7 +47,7 @@ namespace RESTAPI {
                 throw new RouterException(400, 'Version not supported');
             }
 
-            $uri = substr($uri, strlen($match[0]));
+            $uri = substr($uri, mb_strlen($match[0]));
             header('X-API-Version: ' . VERSION);
         }
 

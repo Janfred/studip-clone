@@ -136,7 +136,7 @@ class StudipSemSearchHelper {
         }
         
         
-        if (isset($this->params['lecturer']) && strlen($this->params['lecturer']) > 2){
+        if (isset($this->params['lecturer']) && mb_strlen($this->params['lecturer']) > 2){
             $view->params[0] = "%".trim($this->params['lecturer'])."%";
             $view->params[1] = "%".trim($this->params['lecturer'])."%";
             $view->params[2] = "%".trim($this->params['lecturer'])."%";
@@ -164,10 +164,10 @@ class StudipSemSearchHelper {
             $and_clause = " AND c.seminar_id IN('" . join("','",$this->search_result->getRows("seminar_id")) ."')";
         }
         
-        if ((isset($this->params['title']) && strlen($this->params['title']) > 2) ||
-            (isset($this->params['sub_title']) && strlen($this->params['sub_title']) > 2) ||
-            (isset($this->params['number']) && strlen($this->params['number']) > 2) ||
-            (isset($this->params['comment']) && strlen($this->params['comment']) > 2)){
+        if ((isset($this->params['title']) && mb_strlen($this->params['title']) > 2) ||
+            (isset($this->params['sub_title']) && mb_strlen($this->params['sub_title']) > 2) ||
+            (isset($this->params['number']) && mb_strlen($this->params['number']) > 2) ||
+            (isset($this->params['comment']) && mb_strlen($this->params['comment']) > 2)){
 
             $toFilter = explode(" ", $this->params['title']);
             $search_for = "(Name LIKE '%" . implode("%' AND Name LIKE '%", $toFilter) . "%')";
@@ -194,7 +194,7 @@ class StudipSemSearchHelper {
             $and_clause = " AND c.seminar_id IN('" . join("','",$this->search_result->getRows("seminar_id")) ."')";
         }
         
-        if (isset($this->params['scope']) && strlen($this->params['scope']) > 2){
+        if (isset($this->params['scope']) && mb_strlen($this->params['scope']) > 2){
             $view->params[0] = $this->visible_only ? "c.visible=1" : "1";
             $view->params[1] = "%".trim($this->params['scope'])."%";
             $view->params[2] = $and_clause . $clause;

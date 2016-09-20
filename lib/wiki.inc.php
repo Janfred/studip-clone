@@ -765,7 +765,7 @@ function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch) 
     $result=NULL;
 
     // check for invalid search string
-    if (strlen($searchfor)<3) {
+    if (mb_strlen($searchfor)<3) {
         $invalid_searchstring=1;
     } else if ($localsearch && !$keyword) {
         $invalid_searchstring=1;
@@ -886,7 +886,7 @@ function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch) 
         $first_line=1; // don't print <br> before first hit
         print($tdheadleft);
         // find all occurences
-        while ($offset < strlen($result['body'])) {
+        while ($offset < mb_strlen($result['body'])) {
             $pos=mb_stripos($result['body'], $searchfor,$offset);
             if ($pos===FALSE) break;
             $offset=$pos+1;

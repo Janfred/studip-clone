@@ -869,7 +869,7 @@ class Modul extends ModuleManagementModelTreeItem
                 $messages[] = _('Bitte ein Startsemester angeben.');
                 $rejected = true;
             }
-            if (strlen($this->code) < 3) {
+            if (mb_strlen($this->code) < 3) {
                 $ret['code'] = true;
                 $messages[] = _('Der Modulcode ist zu kurz (mindestens 3 Zeichen).');
                 $rejected = true;

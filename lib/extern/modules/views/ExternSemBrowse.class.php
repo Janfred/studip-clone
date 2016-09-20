@@ -412,8 +412,8 @@ class ExternSemBrowse extends SemBrowse {
                             //create Turnus field
                             $temp_turnus_string = Seminar::GetInstance($seminar_id)->getDatesExport(array('show_room' => true));
                             //Shorten, if string too long (add link for details.php)
-                            if (strlen($temp_turnus_string) >70) {
-                                $temp_turnus_string = substr($temp_turnus_string, 0, strpos(substr($temp_turnus_string, 70, strlen($temp_turnus_string)), ',') +71);
+                            if (mb_strlen($temp_turnus_string) >70) {
+                                $temp_turnus_string = substr($temp_turnus_string, 0, strpos(substr($temp_turnus_string, 70, mb_strlen($temp_turnus_string)), ',') +71);
                                 $temp_turnus_string .= '...';
                             }
                             if ($show_time || $show_lecturer) {

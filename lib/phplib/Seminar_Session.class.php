@@ -224,7 +224,7 @@ class Seminar_Session
         session_cache_limiter("nocache");
         //check for illegal cookiename
         if (isset($_COOKIE[$this->name])) {
-            if (strlen($_COOKIE[$this->name]) != 32 || preg_match('/[^0-9a-f]+/', $_COOKIE[$this->name])) {
+            if (mb_strlen($_COOKIE[$this->name]) != 32 || preg_match('/[^0-9a-f]+/', $_COOKIE[$this->name])) {
                 session_id(md5(uniqid($this->name, 1)));
             }
         } else {

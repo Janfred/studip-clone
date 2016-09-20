@@ -417,7 +417,7 @@ class Course_AdmissionController extends AuthenticatedController
                         $another_rule->setAllData(Request::getInstance());
                         $errors = array_merge($errors, $another_rule->validate(Request::getInstance()));
                     }
-                    if (!strlen(trim(Request::get('instant_course_set_name')))) {
+                    if (!mb_strlen(trim(Request::get('instant_course_set_name')))) {
                         $errors[] = _("Bitte geben Sie einen Namen für die Anmelderegel ein!");
                     } else {
                         $course_set->setName(trim(Request::get('instant_course_set_name')));

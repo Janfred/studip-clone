@@ -171,7 +171,7 @@ class Admin_Cronjobs_SchedulesController extends AuthenticatedController
                 $schedule->hour        = $this->extractCronItem($temp['hour']);
                 $schedule->day         = $this->extractCronItem($temp['day']);
                 $schedule->month       = $this->extractCronItem($temp['month']);
-                $schedule->day_of_week = strlen($temp['day_of_week']['value'])
+                $schedule->day_of_week = mb_strlen($temp['day_of_week']['value'])
                                        ? (int)$temp['day_of_week']['value']
                                        : null;
 

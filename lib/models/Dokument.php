@@ -299,7 +299,7 @@ class Dokument extends ModuleManagementModel
             $messages = array();
 
             // The name of the Dokument must be longer than 4 characters
-            if (strlen($this->name) < 4) {
+            if (mb_strlen($this->name) < 4) {
                 $ret['name'] = true;
                 $messages[] = _('Der Name des Dokuments ist zu kurz (mindestens 4 Zeichen).');
                 $rejected = true;
@@ -316,7 +316,7 @@ class Dokument extends ModuleManagementModel
                     $rejected = true;
                 }
             }
-            if (strlen($this->linktext) < 3) {
+            if (mb_strlen($this->linktext) < 3) {
                 $ret['linktext'] = true;
                 $messages[] = _('Geben Sie einen Text ein, der mit dem Dokument verlinkt wird (min. 3 Zeichen).');
                 $rejected = true;

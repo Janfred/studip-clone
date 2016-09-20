@@ -252,7 +252,7 @@ if ($choose_module_form != '') {
             echo "<blockquote>";
             $choose_institute_copy = "<select name=\"copychooseinst\" class=\"nested-select\">\n";
             foreach ($conf_institutes as $conf_institute) {
-                $choose_institute_copy .= sprintf("<option value=\"%s\" class=\"%s\">%s</option>\n", $conf_institute['institut_id'], ($conf_institute['fakultaets_id'] == $conf_institute['institut_id'] ? 'nested-item-header' : 'nested-item'), htmlReady(strlen($conf_institute['name']) > 60 ? substr_replace($conf_institute['name'], '[...]', 30, -30) : $conf_institute['name']));
+                $choose_institute_copy .= sprintf("<option value=\"%s\" class=\"%s\">%s</option>\n", $conf_institute['institut_id'], ($conf_institute['fakultaets_id'] == $conf_institute['institut_id'] ? 'nested-item-header' : 'nested-item'), htmlReady(mb_strlen($conf_institute['name']) > 60 ? substr_replace($conf_institute['name'], '[...]', 30, -30) : $conf_institute['name']));
             }
             $choose_institute_copy .= "</select>\n";
             printf(_("Konfiguration aus Einrichtung %s kopieren."), $choose_institute_copy);

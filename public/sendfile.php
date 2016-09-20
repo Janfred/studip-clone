@@ -178,7 +178,7 @@ if ($type == 6) {
 } elseif ($type != 5){
     $filesize = @filesize($path_file);
 } else {
-    $filesize = strlen($the_data);
+    $filesize = mb_strlen($the_data);
 }
 // close session, download will mostly be a parallel action
 page_close();

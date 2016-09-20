@@ -97,11 +97,11 @@ class Messages extends \RESTAPI\RouteMap
      */
     public function createMessage()
     {
-        if (!strlen($subject = trim($this->data['subject'] ?: ''))) {
+        if (!mb_strlen($subject = trim($this->data['subject'] ?: ''))) {
             $this->error(400, 'No subject provided');
         }
 
-        if (!strlen($message = trim($this->data['message'] ?: ''))) {
+        if (!mb_strlen($message = trim($this->data['message'] ?: ''))) {
             $this->error(400, 'No message provided');
         }
 

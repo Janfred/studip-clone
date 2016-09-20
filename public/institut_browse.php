@@ -48,7 +48,7 @@ $view = DbView::getView('range_tree');
 $the_tree = new StudipRangeTreeView();
 $the_tree->open_ranges['root'] = true;
 if (Request::option('cmd')=="suche"){
-    if (Request::get('search_name') && strlen(Request::get('search_name')) > 1){
+    if (Request::get('search_name') && mb_strlen(Request::get('search_name')) > 1){
         $view->params[0] = "%" . Request::quoted('search_name') . "%";
         $view->params[1] = "%" . Request::quoted('search_name') . "%";
         $rs = $view->get_query("view:TREE_SEARCH_ITEM");
@@ -57,7 +57,7 @@ if (Request::option('cmd')=="suche"){
             $the_tree->openItem($rs->f("item_id"));
         }
     }
-    if (Request::get('search_user') && strlen(Request::get('search_user')) > 1){
+    if (Request::get('search_user') && mb_strlen(Request::get('search_user')) > 1){
         $view->params[0] = "%" . Request::quoted('search_user') . "%";
         $view->params[1] = "%" . Request::quoted('search_user') . "%";
         $rs = $view->get_query("view:TREE_SEARCH_USER");
@@ -66,7 +66,7 @@ if (Request::option('cmd')=="suche"){
             $the_tree->openItem($rs->f("item_id"));
         }
     }
-    if (Request::get('search_sem') && strlen(Request::get('search_sem')) > 1){
+    if (Request::get('search_sem') && mb_strlen(Request::get('search_sem')) > 1){
         $view->params[0] = "%" . Request::quoted('search_sem') . "%";
         $rs = $view->get_query("view:TREE_SEARCH_SEM");
         while($rs->next_record()){

@@ -60,7 +60,7 @@ class StudipAuthStandard extends StudipAuthAbstract
     function isAuthenticated($username, $password)
     {
         $user = User::findByUsername($username);
-        if (!$user || !$password || strlen($password) > 72) {
+        if (!$user || !$password || mb_strlen($password) > 72) {
             $this->error_msg= _("Ungültige Benutzername/Passwort-Kombination!") ;
             return false;
         } elseif ($user->username != $username) {
@@ -73,7 +73,7 @@ class StudipAuthStandard extends StudipAuthAbstract
             $pass = $user->password;   // Password is stored as a md5 hash
         }
         $hasher = UserManagement::getPwdHasher();
-        $old_style_check = (strlen($pass) == 32 && md5($password) == $pass);
+        $old_style_check = (mb_strlen($pass) == 32 && md5($password) == $pass);
         $migrated_check = $hasher->CheckPassword(md5($password), $pass);
         $check = $hasher->CheckPassword($password, $pass);
         if (!($check || $migrated_check || $old_style_check)) {

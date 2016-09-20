@@ -35,7 +35,7 @@ if (Request::get('set_language')) {
 // store user-specific language preference
 if ($auth->is_authenticated() && $user->id != 'nobody') {
     // store last language click
-    if (strlen($_SESSION['forced_language'])) {
+    if (mb_strlen($_SESSION['forced_language'])) {
         $query = "UPDATE user_info SET preferred_language = ? WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($_SESSION['forced_language'], $user->id));

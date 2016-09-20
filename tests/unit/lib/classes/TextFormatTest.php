@@ -22,7 +22,7 @@ function markupLine($markup, $matches)
 
 function markupHeading($markup, $matches)
 {
-    $level = max(1, 5 - strlen($matches[1]));
+    $level = max(1, 5 - mb_strlen($matches[1]));
 
     return sprintf('<h%d class="content">%s</h%d>', $level, $markup->format($matches[2]), $level);
 }
@@ -67,7 +67,7 @@ function markupSimple($markup, $matches)
 
 function markupImage($markup, $matches)
 {
-    if (strlen($matches[1]) > 1) {
+    if (mb_strlen($matches[1]) > 1) {
         $title = $markup->format(substr($matches[1], 1));
     } else {
         $title = '';
@@ -106,7 +106,7 @@ function markupList($markup, $matches)
 
     foreach ($rows as $row) {
         list($level, $text) = explode(' ', $row, 2);
-        $level = strlen($level);
+        $level = mb_strlen($level);
 
         if ($indent < $level) {
             for (; $indent < $level; ++$indent) {
@@ -156,7 +156,7 @@ function markupCode($markup, $matches)
 
 function markupQuote($markup, $matches, $contents)
 {
-    if (strlen($matches[1]) > 1) {
+    if (mb_strlen($matches[1]) > 1) {
         $title = sprintf(_('%s hat geschrieben:'), $markup->format(substr($matches[1], 1)));
     } else {
         $title = _('Zitat:');
@@ -167,7 +167,7 @@ function markupQuote($markup, $matches, $contents)
 
 function markupLink($markup, $matches)
 {
-    if (strlen($matches[1]) > 1) {
+    if (mb_strlen($matches[1]) > 1) {
         $text = $markup->format(substr($matches[1], 1, -1));
     } else {
         $text = $markup->quote($matches[2]);
@@ -178,7 +178,7 @@ function markupLink($markup, $matches)
 
 function markupMail($markup, $matches)
 {
-    if (strlen($matches[1]) > 1) {
+    if (mb_strlen($matches[1]) > 1) {
         $text = $markup->format(substr($matches[1], 1, -1));
     } else {
         $text = $markup->quote($matches[2]);

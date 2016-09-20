@@ -25,7 +25,7 @@ class Resources_HelpersController extends AuthenticatedController
             }
         }
         $select_options = Request::optionArray('rooms');
-        $rooms = array_filter($select_options, function($v) {return strlen($v) === 32;});
+        $rooms = array_filter($select_options, function($v) {return mb_strlen($v) === 32;});
         $events = array();
         $dates = array();
         $timestamps = array();

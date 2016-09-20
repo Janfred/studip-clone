@@ -172,7 +172,7 @@ if ($sem_id) {
 }
 
 // freie Suche
-if (strlen($name) > 2) {
+if (mb_strlen($name) > 2) {
     $name = str_replace('%', '\%', $name);
     $name = str_replace('_', '\_', $name);
     $filter[] = "CONCAT(Vorname, ' ', Nachname) LIKE CONCAT('%', :needle, '%')";

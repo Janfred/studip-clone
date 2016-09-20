@@ -416,7 +416,7 @@ class CalendarParserICalendar extends CalendarParser
      */
     private function _parseDate($text)
     {
-        if (strlen(trim($text)) !== 8) {
+        if (mb_strlen(trim($text)) !== 8) {
             return false;
         }
 

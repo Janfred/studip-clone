@@ -54,7 +54,7 @@ class StudipLitImportPluginStudipLitList extends StudipLitImportPluginAbstract {
             $lines = explode("\n",$data);
             $count = 0;
             foreach ($lines as $line) {
-                if (strlen($line)>0) {
+                if (mb_strlen($line)>0) {
                     $count++;
                     if ($count<3) continue;
                     $parts = explode("\t",$line);

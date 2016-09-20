@@ -57,9 +57,9 @@ class HelpContentController extends AuthenticatedController
             $this->help_content_searchterm = '';
         }
         if (Request::submitted('apply_help_content_filter')) {
-            if (Request::get('help_content_searchterm') AND (strlen(trim(Request::get('help_content_searchterm'))) < 3))
+            if (Request::get('help_content_searchterm') AND (mb_strlen(trim(Request::get('help_content_searchterm'))) < 3))
                 PageLayout::postMessage(MessageBox::error(_('Der Suchbegriff muss mindestens 3 Zeichen lang sein.')));
-            if (strlen(trim(Request::get('help_content_searchterm'))) >= 3) {
+            if (mb_strlen(trim(Request::get('help_content_searchterm'))) >= 3) {
                 $this->help_content_searchterm = htmlReady(Request::get('help_content_searchterm'));
                 $this->filter_text = sprintf(_('Angezeigt werden Hilfe-Texte zum Suchbegriff "%s".'), $this->help_content_searchterm);
             }

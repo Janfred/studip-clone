@@ -805,7 +805,7 @@ if ($change_object_properties && Request::isPost()) {
         if (is_array($change_property_val))
             foreach ($change_property_val as $key=>$val) {
                 if ((substr($val, 0, 4) == "_id_") && (substr($change_property_val[$key+1], 0, 4) != "_id_"))
-                    if ($changeObject->storeProperty(substr($val, 4, strlen($val)), $change_property_val[$key+1]))
+                    if ($changeObject->storeProperty(substr($val, 4, mb_strlen($val)), $change_property_val[$key+1]))
                         $props_changed=TRUE;
             }
 
@@ -1370,7 +1370,7 @@ if ($view == "search") {
         if (is_array($search_property_val))
             foreach ($search_property_val as $key=>$val) {
                 if ((substr($val, 0, 4) == "_id_") && (substr($search_property_val[$key+1], 0, 4) != "_id_") && ($search_property_val[$key+1]))
-                    $_SESSION['resources_data']["search_array"]["properties"][substr($val, 4, strlen($val))]=$search_property_val[$key+1];
+                    $_SESSION['resources_data']["search_array"]["properties"][substr($val, 4, mb_strlen($val))]=$search_property_val[$key+1];
         }
 
         //handle dates for searching resources that are free for this times

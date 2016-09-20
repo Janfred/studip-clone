@@ -98,7 +98,7 @@ class ForumBulkMail extends Messaging {
                 $mail->setReplyToEmail('')
                 ->setBodyText($data['text']);
 
-                if (strlen($data['reply_to'])) {
+                if (mb_strlen($data['reply_to'])) {
                     $mail->setSenderEmail($data['reply_to'])
                          ->setSenderName($snd_fullname);
                 }

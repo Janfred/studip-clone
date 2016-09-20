@@ -204,7 +204,7 @@ class Materialien_DokumenteController extends MVVController
     {
         // filtered by object type (Zuordnungen)
         $this->filter['mvv_dokument_zuord.object_type']
-                = strlen(Request::get('zuordnung_filter'))
+                = mb_strlen(Request::get('zuordnung_filter'))
                 ? Request::option('zuordnung_filter') : null;
         // store filter
         $this->reset_search();

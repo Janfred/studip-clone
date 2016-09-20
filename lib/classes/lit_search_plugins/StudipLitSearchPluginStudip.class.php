@@ -66,7 +66,7 @@ class StudipLitSearchPluginStudip extends StudipLitSearchPluginAbstract{
         if (is_array($search_values)){
             for ($i = 0 ; $i < count($search_values); ++$i){
                 $term = addslashes($search_values[$i]['search_term']);
-                if (strlen($term)){
+                if (mb_strlen($term)){
                     if ($search_values[$i]['search_truncate'] == "left"){
                         $term = '%' . $term;
                     } else if ($search_values[$i]['search_truncate'] == "right"){

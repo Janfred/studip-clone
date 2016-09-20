@@ -23,19 +23,19 @@
     <tr>
         <td colspan="3" style="padding: 0;">
             <table style="margin: -1px; padding: 0; border-collapse: collapse;">
-                <? if (strlen($teilnahmeVoraussetzung) > 0): ?>
+                <? if (mb_strlen($teilnahmeVoraussetzung) > 0): ?>
                     <tr>
                         <th width="20%"><?= _('Teilnahmevoraussetzungen') ?></th>
                         <td ><?= htmlReady($teilnahmeVoraussetzung) ?></td>
                     </tr>
                 <? endif; ?>
-                <? if (strlen($deskriptor->kommentar)) : ?>
+                <? if (mb_strlen($deskriptor->kommentar)) : ?>
                     <tr>
                         <th><?= _('Hinweise') ?></th>
                         <td><?= formatReady($deskriptor->kommentar) ?></td>
                     </tr>
                 <? endif; ?>
-                <? if (strlen($deskriptor->ersatztext) > 0): ?>
+                <? if (mb_strlen($deskriptor->ersatztext) > 0): ?>
                     <tr>
                         <th></th>
                         <td><?= formatReady($deskriptor->ersatztext) ?></td>
@@ -47,32 +47,32 @@
                             <th><?= _('Kapazität Modul') ?></th>
                             <td>
                                 <?= $modul->kapazitaet ?>
-                                <? if (strlen($deskriptor->kommentar_kapazitaet) > 0): ?>
+                                <? if (mb_strlen($deskriptor->kommentar_kapazitaet) > 0): ?>
                                     (<?= formatReady($deskriptor->kommentar_kapazitaet) ?>)
                                 <? endif; ?>
 
                             </td>
                         </tr>
                     <? endif; ?>
-                    <? if (strlen($pruef_ebene) > 0): ?>
+                    <? if (mb_strlen($pruef_ebene) > 0): ?>
                         <tr>
                             <th><?= _('Prüfungsebene') ?></th>
                             <td><?= $pruef_ebene ?></td>
                         </tr>
                     <? endif; ?>
-                    <? if (strlen($deskriptor->pruef_vorleistung)) : ?>
+                    <? if (mb_strlen($deskriptor->pruef_vorleistung)) : ?>
                         <tr>
                             <th><?= _('Prüfungsvorleistung Modul') ?></th>
                             <td><?= formatReady($deskriptor->pruef_vorleistung) ?></td>
                         </tr>
                     <? endif; ?>
-                    <? if (strlen($deskriptor->pruef_leistung)) : ?>
+                    <? if (mb_strlen($deskriptor->pruef_leistung)) : ?>
                         <tr>
                             <th><?= _('Prüfungsleistung Modul') ?></th>
                             <td><?= formatReady($deskriptor->pruef_leistung) ?></td>
                         </tr>
                     <? endif; ?>
-                    <? if (strlen($deskriptor->kompetenzziele)): ?>
+                    <? if (mb_strlen($deskriptor->kompetenzziele)): ?>
                         <tr>
                             <th><?= _('Kompetenzziele') ?></th>
                             <td><?= formatReady($deskriptor->kompetenzziele) ?></td>
@@ -100,14 +100,14 @@
                 <? if ($type === 1): ?>
                     <td>  
                         <b> <?= $lvGruppe['name'] ?> </b> 
-                        <? if (strlen($lvGruppe['kommentar']) > 0): ?>
+                        <? if (mb_strlen($lvGruppe['kommentar']) > 0): ?>
                             (<?= htmlReady($lvGruppe['kommentar']) ?>)
                         <? endif; ?>
                         <? if ($lvGruppe['kapazitaet'] > 0): ?>
                             <br/>
                             <b><?= _('Kapazität') ?>: </b> <?= htmlReady($lvGruppe['kapazitaet']) ?>
                         <? endif; ?>
-                        <? if (strlen($lvGruppe['voraussetzung']) > 0): ?>
+                        <? if (mb_strlen($lvGruppe['voraussetzung']) > 0): ?>
                             <br/>
                             <b><?= _('Teilnahmevoraussetzungen') ?>:</b> <?= htmlReady($lvGruppe['voraussetzung']) ?>
                         <? endif; ?>
@@ -116,7 +116,7 @@
 
                 <td  <? if ($type === 2): ?> colspan="3" <? endif; ?>>
                     <? foreach ($lvGruppe['lvGruppen'] as $gruppe): ?>
-                        <? if (strlen($gruppe['alt_texte']) > 0): ?>
+                        <? if (mb_strlen($gruppe['alt_texte']) > 0): ?>
                             <b><?= formatReady($gruppe['alt_texte']) ?></b>
                         <? endif; ?>
                         <ul>  
@@ -132,10 +132,10 @@
                 </td>
                 <? if ($type === 1): ?>
                     <td width="40%">
-                        <? if (strlen($lvGruppe['pruef_vorleistung']) > 0) : ?>
+                        <? if (mb_strlen($lvGruppe['pruef_vorleistung']) > 0) : ?>
                             <b><?= _('Prüfungsvorleistung') ?>:</b> <?= htmlReady($lvGruppe['pruef_vorleistung']) ?>
                         <? endif; ?>
-                        <? if (strlen($lvGruppe['pruef_leistung']) > 0) : ?>
+                        <? if (mb_strlen($lvGruppe['pruef_leistung']) > 0) : ?>
                             <b><?= _('Prüfungsform') ?>:</b> <br/><?= htmlReady($lvGruppe['pruef_leistung']) ?> (<?= htmlReady($lvGruppe['anteil_note']) ?> %)
                         <? endif; ?>
                     </td>

@@ -78,14 +78,14 @@
             }
             
             $ty = array_shift($names);
-            if(!is_string($ty) || strlen($ty) < 1 || strlen($ty) > 2){
+            if(!is_string($ty) || mb_strlen($ty) < 1 || mb_strlen($ty) > 2){
                 trigger_error('Invalid type to param "'.$opt.'"', E_USER_ERROR);
             }
             $ty0 = $ty[0];
             if(!isset($types_subtypes[$ty0])){
                 trigger_error('Invalid type to param "'.$opt.'"', E_USER_ERROR);
             }
-            if(strlen($ty) == 1){
+            if(mb_strlen($ty) == 1){
                 $ty1 = $types_subtypes[$ty0][0];
             }else{
                 $ty1 = $ty[1];
@@ -102,7 +102,7 @@
                 if(!preg_match('!^(-)?([0-9a-zA-Z]+)$!', $name, $r)){
                     trigger_error('Invalid name to param "'.$opt.'"', E_USER_ERROR);
                 }
-                if($r[1] == '-' || strlen($r[2]) > 1){
+                if($r[1] == '-' || mb_strlen($r[2]) > 1){
                     if(isset($long[$r[2]])){
                         trigger_error('Duplicate option name "'.$r[2].'"', E_USER_ERROR);
                     }
@@ -186,7 +186,7 @@
                 }
             }else{
                 // short option(s)
-                for($i=1; $i<strlen($arg); $i++){
+                for($i=1; $i<mb_strlen($arg); $i++){
                     $c = $arg[$i];
                     $next = $substr($arg, $i+1);
                     if($next == ''){
@@ -196,7 +196,7 @@
                     }
                     if(!isset($short[$c])){
                         $Oerr[] = 'Unknown option "-'.$c.'"';
-                        $i = strlen($arg);
+                        $i = mb_strlen($arg);
                     }else{
                         $opt = $short[$c];
                         $Earg = '-'.$c;
@@ -210,11 +210,11 @@
                             }else{
                                 $Ores[$opt][] = $val;
                             }
-                            $i = strlen($arg);
+                            $i = mb_strlen($arg);
                             break;
                         case 'O':
                             $Ores[$opt][] = $next;
-                            $i = strlen($arg);
+                            $i = mb_strlen($arg);
                             break;
                         case 'A':
                             if(($val = $get_arg($next,$args,$num)) === false){
@@ -229,7 +229,7 @@
                                     $Ores[$opt][substr($val, 0, $p)] = $substr($val, $p+1);
                                 }
                             }
-                            $i = strlen($arg);
+                            $i = mb_strlen($arg);
                             break;
                         }
                     }

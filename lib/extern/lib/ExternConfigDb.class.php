@@ -53,7 +53,7 @@ class ExternConfigDb extends ExternConfig {
         parent::store();
         $serialized_config = serialize($this->config);
 
-        if (strlen($serialized_config)) {
+        if (mb_strlen($serialized_config)) {
             $stmt = DBManager::get()->prepare("UPDATE extern_config 
                 SET config = ?, chdate = UNIX_TIMESTAMP()
                 WHERE config_id = ? AND range_id = ?");

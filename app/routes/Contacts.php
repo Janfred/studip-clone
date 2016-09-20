@@ -128,7 +128,7 @@ class Contacts extends \RESTAPI\RouteMap
             $this->error(401);
         }
         
-        if (!isset($this->data['name']) || !strlen($name = trim($this->data['name']))) {
+        if (!isset($this->data['name']) || !mb_strlen($name = trim($this->data['name']))) {
             $this->error(400, 'Contact group name required.');
         }
         

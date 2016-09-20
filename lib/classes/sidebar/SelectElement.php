@@ -148,7 +148,7 @@ class SelectElement extends WidgetElement
         if ($this->indent_level !== null) {
             return $this->indent_level;
         }
-        return strlen($this->label) - strlen(ltrim($this->label));
+        return mb_strlen($this->label) - mb_strlen(ltrim($this->label));
     }
 
     /**

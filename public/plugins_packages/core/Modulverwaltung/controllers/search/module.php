@@ -79,7 +79,7 @@ class Search_ModuleController extends MVVController
             $currentSemester['semester_id']));
 
         $do_search = Request::int('do_search');
-        if (strlen(trim(str_replace('%', '', $this->sterm))) < 3) {
+        if (mb_strlen(trim(str_replace('%', '', $this->sterm))) < 3) {
             if ($do_search) {
                 PageLayout::postInfo(_('Der Suchbegriff muss mindestens 3 Zeichen lang sein.'));
             }

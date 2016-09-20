@@ -90,7 +90,7 @@ class Admin_UserController extends AuthenticatedController
         if (!empty($request)) {
             //suche mit datafields
             foreach ($this->datafields as $datafield) {
-                if (strlen($request[$datafield->id]) > 0
+                if (mb_strlen($request[$datafield->id]) > 0
                     && !(in_array($datafield->type, words('selectbox radio')) && $request[$datafield->id] === '---ignore---')
                 ) {
                     $search_datafields[$datafield->id] = $request[$datafield->id];
@@ -372,7 +372,7 @@ class Admin_UserController extends AuthenticatedController
             //change password
             if (($GLOBALS['perm']->have_perm('root') && Config::get()->ALLOW_ADMIN_USERACCESS) && (Request::get('pass_1') != '' || Request::get('pass_2') != '')) {
                 if (Request::get('pass_1') == Request::get('pass_2')) {
-                    if (strlen(Request::get('pass_1')) < 4) {
+                    if (mb_strlen(Request::get('pass_1')) < 4) {
                         $details[] = _("Das Passwort ist zu kurz. Es sollte mindestens 4 Zeichen lang sein.");
                     } else {
                         $um->changePassword(Request::get('pass_1'));

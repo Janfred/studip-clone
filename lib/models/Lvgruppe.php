@@ -509,7 +509,7 @@ class Lvgruppe extends ModuleManagementModelTreeItem
             $rejected = false;
             
             // The name of the Fach must be longer than 4 characters
-            if (strlen($this->name) < 4) {
+            if (mb_strlen($this->name) < 4) {
                 $ret['name'] = true;
                 $messages[] = _('Der Name der Lehrveranstaltungsgruppe ist zu kurz (mindestens 4 Zeichen).');
                 $rejected = true;

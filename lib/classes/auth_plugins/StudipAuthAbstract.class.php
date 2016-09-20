@@ -275,7 +275,7 @@ class StudipAuthAbstract {
         $start = inet_pton($range['start']);
         $end = inet_pton($range['end']);
 
-        return strlen($ipv6) === strlen($start)
+        return mb_strlen($ipv6) === mb_strlen($start)
         && $ipv6 >= $start && $ipv6 <= $end;
     }
 

@@ -152,7 +152,7 @@ class SimpleCollection extends StudipArrayObject
                         foreach ($args as $arg) {
                             $found = strrpos($a, $arg);
                             if ($found !== false && ($found
-                                + strlen($arg)) === strlen($a)) {
+                                + mb_strlen($arg)) === mb_strlen($a)) {
                                 return true;
                             }
                         }

@@ -378,7 +378,7 @@ $order[$i]}
                 // name of column
                 $out .= "<tr" . $this->css->getFullClass() . ">\n";
                 $out .= "<td><font size=\"2\">&nbsp;";
-                if (strlen($SEM_TYPE[$order[$i]]["name"]) > 25) {
+                if (mb_strlen($SEM_TYPE[$order[$i]]["name"]) > 25) {
                     $out .= htmlReady(substr($SEM_TYPE[$order[$i]]["name"], 0, 22)
                             . "... ({$SEM_CLASS[$SEM_TYPE[$order[$i]]['class']]['name']})");
                 } else {

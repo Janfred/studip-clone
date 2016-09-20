@@ -222,7 +222,7 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
             $rpn_end = "";
             for ($i = 0 ; $i < count($search_values); ++$i){
                 $term = $search_values[$i]['search_term'];
-                if (strlen($term)){
+                if (mb_strlen($term)){
                     if ($this->convert_umlaute){
                         $term = $this->ConvertUmlaute($term);
                     }
@@ -260,7 +260,7 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
             }
         }
         $rpn = $rpn_front . $rpn_end;
-        return (strlen($rpn)) ? $rpn : false;
+        return (mb_strlen($rpn)) ? $rpn : false;
     }
 
     function getZRecord($zid, $rn){

@@ -97,7 +97,7 @@ function getMonthName($month, $short = true) {
 
 function leadingZero($num) {
     if ($num == '') return '00';
-    if (strlen($num) < 2) {
+    if (mb_strlen($num) < 2) {
         return '0'.$num;
     } else {
         return $num;

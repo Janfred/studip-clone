@@ -68,7 +68,7 @@ class Module_DownloadController extends MVVController
         if (count($modul->modulteile) == 1) {
             $modulTeil = $modul->modulteile->first();
             $type = 3;
-            if (strlen($modulTeil->getDisplayName()) > 0) {
+            if (mb_strlen($modulTeil->getDisplayName()) > 0) {
                 $type = 2;
             }
         }

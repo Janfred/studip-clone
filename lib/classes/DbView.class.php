@@ -317,7 +317,7 @@ class DbView
         if (count($tokens) > 1) {
             $types = [];
             $token = 0;
-            for ($i = 0; $i < strlen($query); $i++) {
+            for ($i = 0; $i < mb_strlen($query); $i++) {
                 switch ($query{$i}) {
                     case '?':
                         $types[$token++] = 1;

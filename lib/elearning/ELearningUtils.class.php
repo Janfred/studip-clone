@@ -253,7 +253,7 @@ class ELearningUtils
         ELearningUtils::loadClass($new_account_cms);
 
         //Password was sent, but is to short
-        if (isset($ext_password_2) AND ! Request::submitted('go_back') AND Request::submitted('next') AND (strlen($ext_password_2) < 6)) {
+        if (isset($ext_password_2) AND ! Request::submitted('go_back') AND Request::submitted('next') AND (mb_strlen($ext_password_2) < 6)) {
             PageLayout::postMessage(MessageBox::error(_("Das Passwort muss mindestens 6 Zeichen lang sein!")));
             $new_account_step--;
         //Passwords doesn't match password repeat

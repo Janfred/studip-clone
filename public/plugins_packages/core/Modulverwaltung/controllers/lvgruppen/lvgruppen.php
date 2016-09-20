@@ -401,11 +401,11 @@ class Lvgruppen_LvgruppenController extends MVVController
     {
         // Zugeordnete Fachbereiche
         $this->filter['mvv_modul_inst.institut_id']
-                = strlen(Request::get('fachbereich_filter'))
+                = mb_strlen(Request::get('fachbereich_filter'))
                 ? Request::option('fachbereich_filter') : null;
 
         // Semester
-        $this->semester_filter = strlen(Request::get('semester_filter'))
+        $this->semester_filter = mb_strlen(Request::get('semester_filter'))
                 ? Request::option('semester_filter') : null;
 
         // store filter
