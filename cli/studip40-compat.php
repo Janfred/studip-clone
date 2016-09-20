@@ -111,6 +111,7 @@ $rules = [
     'setExternDefaultForUser' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
 
     'GetStatusgruppeName' => 'Use #{yellow:Statusgruppen::find($id)->name} instead',
+    'GetStatusgruppenForUser' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
 ];
 
 
