@@ -593,7 +593,7 @@ abstract class ModuleManagementModel extends SimpleORMap
     protected static function createSortStatement($sort, $order = 'ASC',
             $standard_field = null, $additional_fields = array())
     {
-        $order = (strtoupper(trim($order)) != 'DESC' ? ' ASC' : ' DESC');
+        $order = (mb_strtoupper(trim($order)) != 'DESC' ? ' ASC' : ' DESC');
         if (!is_array($sort)) {
             $sort = explode(',', $sort);
         }
@@ -668,7 +668,7 @@ abstract class ModuleManagementModel extends SimpleORMap
      */
     public static final function setLanguage($language)
     {
-        $language = strtoupper(strstr($language, '_', true));
+        $language = mb_strtoupper(strstr($language, '_', true));
         if (isset($GLOBALS['MVV_LANGUAGES']['values'][$language])) {
             setLocaleEnv($GLOBALS['MVV_LANGUAGES']['values'][$language]['locale']);
             self::$language = $language;
@@ -740,7 +740,7 @@ abstract class ModuleManagementModel extends SimpleORMap
     public static function getPublicStatus($class_name = null)
     {
         $class_name = $class_name ?: get_called_class();
-        $class_name = 'MVV_' . strtoupper($class_name);
+        $class_name = 'MVV_' . mb_strtoupper($class_name);
         $public_status = array();
         if (is_array($GLOBALS[$class_name]['STATUS']['values'])) {
             foreach ($GLOBALS[$class_name]['STATUS']['values'] as $key => $status) {

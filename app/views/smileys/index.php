@@ -42,7 +42,7 @@ $data = array_filter($data);
 <? foreach (array_keys($characters) as $char): ?>
     <li <? if ($view === $char) echo 'class="current"'; ?>>
         <a href="<?= $controller->url_for('smileys/index', $char) ?>" data-dialog>
-            <?= strtoupper($char) ?>
+            <?= mb_strtoupper($char) ?>
         </a>
     </li>
 <? endforeach; ?>

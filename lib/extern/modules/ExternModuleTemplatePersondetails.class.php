@@ -526,7 +526,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
             $template = $plugin->getHomepageTemplate($this->user_id);
 
             if ($template) {
-                $keyname = 'PLUGIN_' . strtoupper($plugin->getPluginName());
+                $keyname = 'PLUGIN_' . mb_strtoupper($plugin->getPluginName());
                 $content['PERSONDETAILS'][$keyname] = $template->render();
             }
         }

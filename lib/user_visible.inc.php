@@ -129,7 +129,7 @@ function get_vis_query($table_alias = 'auth_user_md5', $context='') {
      *  should be used.
      */
     if ($context) {
-        $context_default = (int) get_config(strtoupper($context) . '_VISIBILITY_DEFAULT');
+        $context_default = (int) get_config(mb_strtoupper($context) . '_VISIBILITY_DEFAULT');
         $contextQuery = " AND (IFNULL(user_visibility.$context, ".
             "$context_default) = 1 OR $table_alias.visible = 'always')";
     }
@@ -307,7 +307,7 @@ function get_local_visibility_by_id($user_id, $context, $return_user_perm=false)
         $user_perm = $data['perm'];
         $data['perms'] = $user_perm;
 
-        $data[$context] = get_config(strtoupper($context) . '_VISIBILITY_DEFAULT');
+        $data[$context] = get_config(mb_strtoupper($context) . '_VISIBILITY_DEFAULT');
     }
     // Valid context given.
     if ($data[$context]) {

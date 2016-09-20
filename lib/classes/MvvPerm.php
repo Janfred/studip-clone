@@ -78,7 +78,7 @@ class MvvPerm {
         $name = strtolower($name);
 
         if (mb_strpos($name, 'haveperm') === 0) {
-            $perm = 'PERM_' . strtoupper(substr($name, 8));
+            $perm = 'PERM_' . mb_strtoupper(substr($name, 8));
             if (defined('self::' . $perm)) {
                 return self::get($arguments[0])->havePerm(constant('self::' . $perm),
                         $arguments[1], $arguments[2], $arguments[3]);
@@ -108,7 +108,7 @@ class MvvPerm {
         $name = strtolower($name);
 
         if (mb_strpos($name, 'haveperm') === 0) {
-            $perm = 'PERM_' . strtoupper(substr($name, 8));
+            $perm = 'PERM_' . mb_strtoupper(substr($name, 8));
             if (defined('self::' . $perm)) {
                 return $this->havePerm(constant('self::' . $perm),
                         $arguments[1], $arguments[2], $arguments[3]);

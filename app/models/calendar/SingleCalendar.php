@@ -1191,9 +1191,9 @@ class SingleCalendar
         if (is_array($restrictions)) {
             foreach ($restrictions as $property_name => $restriction) {
                 if (is_array($restriction)) {
-                    return in_array($properties[strtoupper($property_name)], $restriction);
+                    return in_array($properties[mb_strtoupper($property_name)], $restriction);
                 } else if ($restriction != '') {
-                    return $properties[strtoupper($property_name)] == $restriction;
+                    return $properties[mb_strtoupper($property_name)] == $restriction;
                 }
             }
             return true;

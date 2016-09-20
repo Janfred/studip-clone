@@ -412,7 +412,7 @@ class ExternModule {
         $plugin_manager = PluginManager::getInstance();
 
         foreach ($plugin_manager->getPluginInfos($plugin_type) as $plugin) {
-            $keyname = 'PLUGIN_' . strtoupper($plugin['name']);
+            $keyname = 'PLUGIN_' . mb_strtoupper($plugin['name']);
             $markers[$element_name][] = array("###$keyname###", $plugin['description']);
         }
     }

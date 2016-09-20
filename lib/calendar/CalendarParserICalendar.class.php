@@ -106,7 +106,7 @@ class CalendarParserICalendar extends CalendarParser
                     if (!empty($parts[2])) {
                         preg_match_all('/;(([^;=]*)(=([^;]*))?)/', $parts[2], $param_parts);
                         foreach ($param_parts[2] as $key => $param_name)
-                            $params[strtoupper($param_name)] = strtoupper($param_parts[4][$key]);
+                            $params[mb_strtoupper($param_name)] = mb_strtoupper($param_parts[4][$key]);
 
                         if ($params['ENCODING']) {
                             switch ($params['ENCODING']) {

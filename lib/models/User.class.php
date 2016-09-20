@@ -460,7 +460,7 @@ class User extends AuthUserMd5
         $data = array_map($quote, $this->toArray('vorname nachname username title_front title_rear motto perms'));
         $replace_func['CONCAT'] = '$concat';
         $replace_func['LEFT'] = '$left';
-        $replace_func['UCASE'] = 'strtoupper';
+        $replace_func['UCASE'] = 'mb_strtoupper';
         $replace_func['IF'] = '$if';
         $eval = strtr($sql, $replace_func);
         $eval = strtr(strtolower($eval), $data);

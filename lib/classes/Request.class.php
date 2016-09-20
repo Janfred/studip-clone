@@ -445,7 +445,7 @@ class Request implements ArrayAccess, IteratorAggregate
      */
     public static function method()
     {
-        return strtoupper($_SERVER['REQUEST_METHOD']);
+        return mb_strtoupper($_SERVER['REQUEST_METHOD']);
     }
 
     /**

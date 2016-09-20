@@ -274,7 +274,7 @@ class Admin_SmileysController extends AuthenticatedController
         $widget = new SelectWidget(_('Filter'), $this->url_for('admin/smileys/index'), 'view');
         $group = new SelectGroupElement(_('Nach Buchstaben'));
         foreach (Smiley::getUsedCharacters() as $character => $count) {
-            $option = new SelectElement($character, sprintf("%s (% 2u)", strtoupper($character), $count));
+            $option = new SelectElement($character, sprintf("%s (% 2u)", mb_strtoupper($character), $count));
             $option->setActive($view == $character);
             $group->addElement($option);
         }
