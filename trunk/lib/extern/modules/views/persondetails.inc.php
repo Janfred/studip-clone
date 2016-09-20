@@ -628,7 +628,7 @@ function kontakt ($module, $row, $separate = FALSE) {
             if ($module->config->getValue("Contact", "hideinstname") != '1') {
                 if ($module->config->getValue("Contact", "hideinstname") == 'link' && $row['url']) {
                     $url = htmlReady(trim($row['url']));
-                    if (!stristr($url, "http://"))
+                    if (!mb_stristr($url, "http://"))
                         $url = "http://$url";
                     $out .= "<br><br><a href=\"$url\" target=\"_blank\">";
                     $out .= htmlReady($row['Name'], TRUE) . "</a><br>";

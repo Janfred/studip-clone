@@ -238,9 +238,9 @@ class DbView
                 $query[$i]  = $this->parse_query($query[$i]);
                 $repl_query = (is_array($query[$i])) ? $query[$i][0] : $query[$i];
                 for ($j = 0; $j < $i; ++$j) {
-                    $spl = stristr($query[$j], "where");
+                    $spl = mb_stristr($query[$j], "where");
                     if (!$spl)
-                        $spl = stristr($query[$j], "having");
+                        $spl = mb_stristr($query[$j], "having");
                     if ($spl) {
                         $pos = strpos($spl, "{" . $i . "}");
                         if (!$pos === false)
