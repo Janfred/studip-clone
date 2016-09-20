@@ -98,15 +98,17 @@
             )
             ->condition(isset($role))
             ->addLink(
-                URLHelper::getLink("?cmd=removeFromGroup&username={$member->username}&role_id={$role->id}"),
+                $controller->link_for('institute/members/remove_from_group/' . $role->id, ['username' => $member->username]),
                 _('Person aus Gruppe austragen'),
-                Icon::create('door-leave', 'clickable')
+                Icon::create('door-leave', 'clickable'),
+                ['data-confirm' => _('Wollen Sie die Person wirklich aus der Gruppe austragen?')]
             )
             ->condition(!isset($role))
             ->addLink(
-                URLHelper::getLink("?cmd=removeFromInstitute&username={$member->username}"),
+                URLHelper::getLink("institute/members/remove_from_institute?username={$member->username}"),
                 _('Person aus Einrichtung austragen'),
-                Icon::create('door-leave', 'clickable')
+                Icon::create('door-leave', 'clickable'),
+                ['data-confirm' => _('Wollen Sie die Person wirklich aus der Einrichtung austragen?')]
             ) ?>
         </td>
     <? endif; ?>
