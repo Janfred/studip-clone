@@ -112,6 +112,13 @@ $rules = [
 
     'GetStatusgruppeName' => 'Use #{yellow:Statusgruppen::find($id)->name} instead',
     'GetStatusgruppenForUser' => 'Use class #{yellow:Statusgruppe} or model #{yellow:Statusgruppen} instead (yupp, this is still pretty fucked up).',
+
+    'get_global_visibility_by_id' => 'Use #{yellow:User::find($id)->visible} instead',
+    'get_global_visibility_by_username' => 'Use #{yellow:User::findByUsername($username)->visible} instead',
+
+    'get_local_visibility_by_username' => false,
+    'get_homepage_element_visibility' => false,
+    'set_homepage_element_visibility' => false,
 ];
 
 
