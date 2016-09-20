@@ -53,8 +53,7 @@ class Settings_StatusgruppenController extends Settings_SettingsController
     {
         $all_rights = false;
         if ($this->user->username != $GLOBALS['user']->username) {
-            $query
-                             = "SELECT Institut_id
+            $query = "SELECT Institut_id
                       FROM Institute
                       WHERE fakultaets_id = ? AND fakultaets_id != Institut_id
                       ORDER BY Name";
@@ -63,22 +62,19 @@ class Settings_StatusgruppenController extends Settings_SettingsController
             $parameters = [];
             if ($GLOBALS['perm']->have_perm('root')) {
                 $all_rights = true;
-                $query
-                            = "SELECT Institut_id, Name, 1 AS is_fak
+                $query = "SELECT Institut_id, Name, 1 AS is_fak
                           FROM Institute
                           WHERE Institut_id = fakultaets_id
                           ORDER BY Name";
             } elseif ($GLOBALS['perm']->have_perm('admin')) {
-                $query
-                              = "SELECT Institut_id, Name, b.Institut_id = b.fakultaets_id AS is_fak
+                $query = "SELECT Institut_id, Name, b.Institut_id = b.fakultaets_id AS is_fak
                           FROM user_inst AS a
                           LEFT JOIN Institute AS b USING (Institut_id)
                           WHERE a.user_id = ? AND a.inst_perms = 'admin'
                           ORDER BY is_fak, Name";
                 $parameters[] = $GLOBALS['user']->id;
             } else {
-                $query
-                              = "SELECT a.Institut_id, Name
+                $query = "SELECT a.Institut_id, Name
                           FROM user_inst AS a
                           LEFT JOIN Institute AS b USING (Institut_id)
                           WHERE inst_perms IN ('tutor', 'dozent') AND user_id = ?
@@ -116,7 +112,7 @@ class Settings_StatusgruppenController extends Settings_SettingsController
             if ($institute_membership->inst_perms != 'user') {
                 $institutes[$institute_membership->institut_id] = $institute_membership->toArray() + $institute_membership->institute->toArray();
                 
-                $roles                                                   = GetAllStatusgruppen($institute_membership->institut_id, $this->user->user_id, true);
+                $roles = GetAllStatusgruppen($institute_membership->institut_id, $this->user->user_id, true);
                 $institutes[$institute_membership->institut_id]['roles'] = $roles ?: [];
                 
                 $institutes[$institute_membership->institut_id]['flattened'] = array_filter(Statusgruppe::getFlattenedRoles($roles), function ($role) {
@@ -168,7 +164,7 @@ class Settings_StatusgruppenController extends Settings_SettingsController
         $entry->content = $value;
         $entry->store();
         
-        $this->redirect($this->url_for('settings/statusgruppen', ['open' => $role_id, 'type' => 'role']));
+        $this->redirect($this->url_for('settings/statusgruppen', ['contentbox_open' => $role_id, 'type' => 'role']));
     }
     
     /**
@@ -181,7 +177,7 @@ class Settings_StatusgruppenController extends Settings_SettingsController
     {
         MakeDatafieldsDefault($this->user->user_id, $role_id, $state ? 'default_value' : '');
         
-        $this->redirect($this->url_for('settings/statusgruppen', ['open' => $role_id, 'type' => 'role']));
+        $this->redirect($this->url_for('settings/statusgruppen', ['contentbox_open' => $role_id, 'type' => 'role']));
     }
     
     /**
@@ -340,8 +336,7 @@ class Settings_StatusgruppenController extends Settings_SettingsController
             }
             
             if ($this->shallChange('', 'institute_data')) {
-                $query
-                           = "UPDATE user_inst
+                $query = "UPDATE user_inst
                           SET raum = ?, sprechzeiten = ?, Telefon = ?, Fax = ?
                           WHERE Institut_id = ? AND user_id = ?";
                 $statement = DBManager::get()->prepare($query);
@@ -369,8 +364,7 @@ class Settings_StatusgruppenController extends Settings_SettingsController
                 $statement->execute([$this->user->user_id]);
             }
             
-            $query
-                       = "UPDATE user_inst
+            $query = "UPDATE user_inst
                       SET externdefault = ?, visible = ?
                       WHERE Institut_id = ? AND user_id = ?";
             $statement = DBManager::get()->prepare($query);
@@ -417,6 +411,6 @@ class Settings_StatusgruppenController extends Settings_SettingsController
         
         
         $this->redirect($this->url_for('settings/statusgruppen',
-            ['open' => $id, 'type' => strtolower($type)]));
+            ['contentbox_open' => $id, 'type' => strtolower($type)]));
     }
 }

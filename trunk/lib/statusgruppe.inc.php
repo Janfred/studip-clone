@@ -460,12 +460,14 @@ function getAllChildIDs($range_id)
     return $zw;
 }
 
+/**
+ * 
+ */
 function GetRoleNames($roles, $level = 0, $pred = '', $all = false) {
     $out = array();
 
     if (is_array($roles))
     foreach ($roles as $role_id => $role) {
-        if ($level == 0) $inst_id = $role_id;
         if (!$role['name']) $role['name'] = $role['role']->getName();
 
         if ($pred != '') {

@@ -37,6 +37,19 @@ class StatusgruppeUser extends SimpleORMap
             'class_name' => 'User',
             'foreign_key' => 'user_id',
         );
+        $config['has_many']['datafields'] = array(
+            'class_name' => 'DatafieldEntryModel',
+            'foreign_key' => function($group_member) {
+                return [$group_member];
+            },
+            'assoc_foreign_key' => function($model, $params) {
+                $model->setValue('range_id', $params[0]->user_id);
+                $model->setValue('sec_range_id', $params[0]->statusgruppe_id);
+            },
+            'assoc_func' => 'findByModel',
+            'on_delete' => 'delete',
+            'on_store'  => 'store',
+        );
         parent::configure($config);
     }
 

@@ -63,7 +63,7 @@ class Statusgruppen extends SimpleORMap
     public function getChildren()
     {
         $result = Statusgruppen::findBySQL('range_id = ? ORDER BY position', array($this->id));
-        return $result ? : array();
+        return $result ?: array();
     }
 
     public function getDatafields() 
@@ -85,12 +85,12 @@ class Statusgruppen extends SimpleORMap
      * @param string The course id
      * @return array Statusgroups
      */
-    static public function findBySeminar_id($course_id)
+    public static function findBySeminar_id($course_id)
     {
-        return self::findBySQL("range_id = ?", array($course_id));
+        return self::findByRange_id($course_id);
     }
 
-    static public function findByTermin_id($termin_id)
+    public static function findByTermin_id($termin_id)
     {
         $record = new Statusgruppen();
         $db = DBManager::get();
@@ -114,10 +114,9 @@ class Statusgruppen extends SimpleORMap
         return $ret;
     }
 
-    static public function findContactGroups($user_id = null)
+    public static function findContactGroups($user_id = null)
     {
-        $user_id || $user_id = $GLOBALS['user']->id;
-        return self::findBySQL("range_id = ?", array($user_id));
+        return self::findByRange_id($user_id ?: $GLOBALS['user']->id);
     }
 
     /**
@@ -145,7 +144,9 @@ class Statusgruppen extends SimpleORMap
     public function getFullGenderedPaths($user_id, $seperator = " > ", $pre = "")
     {
         $result = array();
-        $name = $pre ? $pre . $seperator . $this->getGenderedName($user_id) : $this->getGenderedName($user_id);
+        $name = $pre
+              ? $pre . $seperator . $this->getGenderedName($user_id)
+              : $this->getGenderedName($user_id);
         if ($this->isMember($user_id)) {
             $result[] = $name;
         }
@@ -158,6 +159,26 @@ class Statusgruppen extends SimpleORMap
     }
 
     /**
+     * Produces string of all statusgroups a user is in (upwards from the
+     * current group)
+     * 
+     * @param string $user_id The user_id
+     * @param string $seperator The sign between the full paths
+     * @return array String of full gendered paths separated by given separator
+     */
+    public function getFullGenderedName($user_id, $seperator = ' > ')
+    {
+        $result = [$this->getGenderedName($user_id)];
+
+        $item = $this;
+        while ($item = $item->parent) {
+            array_unshift($result, $item->getGenderedName($user_id));
+        }
+
+        return implode($seperator, $result);
+    }
+
+    /**
      * Returns the gendered name of a statusgroup
      * 
      * @param string $user_id The user_id
@@ -165,15 +186,14 @@ class Statusgruppen extends SimpleORMap
      */
     public function getGenderedName($user_id)
     {
-
-// We have to have at least 1 name gendered
+        // We have to have at least 1 name gendered
         if ($this->name_m || $this->name_w) {
             $userinfo = new UserInfo($user_id);
             switch ($userinfo->geschlecht) {
                 case UserInfo::GENDER_FEMALE:
-                    return $this->name_w ? : $this->name;
+                    return $this->name_w ?: $this->name;
                 case UserInfo::GENDER_MALE:
-                    return $this->name_m ? : $this->name;
+                    return $this->name_m ?: $this->name;
             }
         }
         return $this->name;
@@ -233,7 +253,12 @@ class Statusgruppen extends SimpleORMap
             delete_folder($this->hasFolder(), true);
         }
         if (!$this->hasFolder() && $set) {
-            create_folder((_("Dateiordner der Gruppe:") . ' ' . $this->name), (_("Ablage für Ordner und Dokumente dieser Gruppe")), $this->id, 15);
+            create_folder(
+                _('Dateiordner der Gruppe:') . ' ' . $this->name,
+                _('Ablage für Ordner und Dokumente dieser Gruppe'),
+                $this->id,
+                15
+            );
         }
     }
 
@@ -307,11 +332,13 @@ class Statusgruppen extends SimpleORMap
     }
 
     /**
-     * Remove one user of this group
+     * Remove one user from this group
      * 
      * @param string $user_id The user id
+     * @param bool   $deep    Remove user from children as well?
+     * @return bool
      */
-    public function removeUser($user_id)
+    public function removeUser($user_id, $deep = false)
     {
         // For performance issues we do this manually
         $db = DBManager::get();
@@ -319,17 +346,28 @@ class Statusgruppen extends SimpleORMap
         $query = "SELECT position FROM statusgruppe_user WHERE statusgruppe_id = ? AND user_id = ?";
         $statement = $db->prepare($query);
         $statement->execute(array($this->id, $user_id));
-        $position = $statement->fetchColumn() ? : 0;
+        $position = $statement->fetchColumn() ?: 0;
 
         // Delete user from statusgruppe
         $query = "DELETE FROM statusgruppe_user WHERE statusgruppe_id = ? AND user_id = ?";
         $statement = $db->prepare($query);
         $statement->execute(array($this->id, $user_id));
+        $result = (bool)$statement->rowCount();
 
-        // Resort members
-        $query = "UPDATE statusgruppe_user SET position = position - 1 WHERE statusgruppe_id = ? AND position > ?";
-        $statement = $db->prepare($query);
-        $statement->execute(array($this->id, $position));
+        if ($result) {
+            // Resort members
+            $query = "UPDATE statusgruppe_user SET position = position - 1 WHERE statusgruppe_id = ? AND position > ?";
+            $statement = $db->prepare($query);
+            $statement->execute(array($this->id, $position));
+
+            if ($deep) {
+                foreach ($this->children as $child) {
+                    $child->removeUser($user_id, true);
+                }
+            }
+        }
+
+        return $result;
     }
 
     /**
