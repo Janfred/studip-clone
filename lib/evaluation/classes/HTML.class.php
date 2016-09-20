@@ -176,7 +176,7 @@ class HTML extends HTMLempty
                     $text_area = false;
                     foreach ($zeilen as $zeile) {
                         
-                        if (strstr($zeile, "<textarea"))
+                        if (mb_strstr($zeile, "<textarea"))
                             $text_area = true;
                         
                         if ($text_area)
@@ -184,7 +184,7 @@ class HTML extends HTMLempty
                         else
                             $echo .= $str_indent . "    " . $zeile . "\n";
                         
-                        if (strstr($zeile, "</textarea"))
+                        if (mb_strstr($zeile, "</textarea"))
                             $text_area = false;
                     }
                 } else {

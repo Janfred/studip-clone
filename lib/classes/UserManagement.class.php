@@ -51,7 +51,7 @@ class UserDataAdapter implements ArrayAccess, Countable, IteratorAggregate
      */
     function adaptOffset($offset)
     {
-        $adapted = trim(strstr($offset, '.'), '.');
+        $adapted = trim(mb_strstr($offset, '.'), '.');
         return $adapted ?: $offset;
     }
 

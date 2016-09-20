@@ -96,7 +96,7 @@ class StudipAuthShib extends StudipAuthSSO
                 $shib_url .= 'target='.urlencode($this->getURL());
 
                 // break redirection loop in case of misconfiguration
-                if (strstr($_SERVER['HTTP_REFERER'], 'target=') == false) {
+                if (mb_strstr($_SERVER['HTTP_REFERER'], 'target=') == false) {
                     header('Location: '.$shib_url);
                     echo '<html></html>';
                     exit();

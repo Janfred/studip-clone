@@ -82,7 +82,7 @@ $template_multiple = Request::get('template_multiple',$template_multiple) ;
 $template_answers = Request::getArray('template_answers');
 $template_add_num_answers = Request::get('template_add_num_answers') ? Request::get('template_add_num_answers') : $template_add_num_answers;
 if( empty($template_answers) ) {
-    if( strstr( $command, "edit" ))
+    if( mb_strstr( $command, "edit" ))
    for( $i=0; $i<5; $i++ )
        $template_answers[$i] = $lib->makeNewAnswer();
     else

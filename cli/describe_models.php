@@ -4,7 +4,7 @@ require_once 'studip_cli_env.inc.php';
 
 $dir = new FilesystemIterator($STUDIP_BASE_PATH . '/lib/models');
 foreach ($dir as $fileinfo) {
-    $class = strstr($fileinfo->getFilename(), '.', true);
+    $class = mb_strstr($fileinfo->getFilename(), '.', true);
     if (!in_array($class, words('SimpleCollection SimpleORMap SimpleORMapCollection StudipArrayObject')) && class_exists($class)) {
         echo $class . "\n";
         $model = new $class;
