@@ -127,7 +127,7 @@ class Admin_StatusgroupsController extends AuthenticatedController
             $message = $group->isNew()
                      ? _('Die Gruppe wurde angelegt.')
                      : _('Die Gruppe wurde gespeichert');
-            PageLayout::postMessage(MessageBox::success($message));
+            PageLayout::postSuccess($message);
             $this->redirect('admin/statusgroups');
             return;
         }

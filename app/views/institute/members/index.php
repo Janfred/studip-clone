@@ -2,7 +2,7 @@
 SkipLinks::addIndex(_('Mitarbeiterliste'), 'list_institute_members');    
 ?>
 
-<? if ($inst_id): ?>
+<? if ($institute): ?>
     <table class="default" id="list_institute_members">
         <caption><?= _('Mitarbeiterinnen und Mitarbeiter') ?></caption>
         <colgroup>
@@ -15,7 +15,7 @@ SkipLinks::addIndex(_('Mitarbeiterliste'), 'list_institute_members');
         <thead>
             <tr>
             <? foreach ($table_structure as $key => $field): ?>
-                <th <? if ($class === 'actions') echo 'class="actions"'; ?>>
+                <th <? if ($key === 'actions') echo 'class="actions"'; ?>>
                 <? if ($field['link']): ?>
                     <a href="<?= URLHelper::getLink($field['link']) ?>">
                         <?= htmlReady($field['name']) ?>
@@ -41,7 +41,7 @@ $sidebar->addWidget($widget);
 
 if ($admin_view) {
 
-    if (!LockRules::Check($inst_id, 'participants')) {
+    if (!LockRules::Check($institute->id, 'participants')) {
 
         $edit = new SidebarWidget();
         $edit->setTitle(_('Personenverwaltung'));
@@ -82,6 +82,6 @@ if ($GLOBALS['perm']->have_perm("admin")) {
 $sidebar->addWidget($widget);
 if (get_config('EXPORT_ENABLE') && $GLOBALS['perm']->have_perm('tutor')) {
     $widget = new ExportWidget();
-    $widget->addElement(new WidgetElement(export_form_sidebar($auswahl, "person", $GLOBALS['SessSemName'][0])));
+    $widget->addElement(new WidgetElement(export_form_sidebar($institute->id, "person", $GLOBALS['SessSemName'][0])));
     $sidebar->addWidget($widget);
 }

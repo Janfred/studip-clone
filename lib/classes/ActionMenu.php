@@ -43,7 +43,7 @@ class ActionMenu
      */
     public function condition($state)
     {
-        $this->condition = $state;
+        $this->condition = (bool)$state;
 
         return $this;
     }
@@ -64,15 +64,16 @@ class ActionMenu
 
     /**
      * Checks the condition. Takes global and local (conditionAll() &
-     * condition()) conditions.
+     * condition()) conditions into account.
      *
      * @return bool indicating whether the condition is met or not
      */
     protected function checkCondition()
     {
-        $result = $this->condition_all !== null
-                ? $this->condition_all
-                : $this->condition;
+        $result = $this->condition;
+        if ($this->conditionAll !== null) {
+            $result = $result && $this->conditionAll;
+        }
 
         $this->condition = true;
 

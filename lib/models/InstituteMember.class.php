@@ -70,6 +70,7 @@ class InstituteMember extends SimpleORMap
         $config['additional_fields']['email'] = array('user', 'email');
         $config['additional_fields']['title_front'] = array('user', 'title_front');
         $config['additional_fields']['title_rear'] = array('user', 'title_rear');
+        $config['additional_fields']['user_info'] = array('user', 'info');
         $config['additional_fields']['institute_name'] = array();
         parent::configure($config);
     }
@@ -112,8 +113,20 @@ class InstituteMember extends SimpleORMap
                              __CLASS__ . '::buildExisting');
     }
 
-        function getUserFullname($format = "full")
+    public function getUserFullname($format = "full")
     {
         return User::build(array_merge(array('motto' => ''), $this->toArray('vorname nachname username title_front title_rear')))->getFullname($format);
+    }
+
+    public function delete()
+    {
+        $institute = $this->institute;
+        $user_id   = $this->user_id;
+
+        if ($result = parent::delete()) {
+            $institute->status_groups->removeUser($user_id, true);
+        }
+
+        return $result;
     }
 }

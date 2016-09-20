@@ -72,6 +72,11 @@ class DatafieldEntryModel extends SimpleORMap
             $object_class = $model->sprache;
             $object_type = 'modulteildeskriptor';
             $range_id = $model->deskriptor_id;
+        } elseif ($model instanceof StatusgruppeUser) {
+            $object_class = 255;
+            $object_type = 'userinstrole';
+            $range_id = $model->user_id;
+            $sec_range_id = $model->statusgruppe_id;
         }
 
         if (!$object_type) {
