@@ -25,7 +25,7 @@ class Blubber extends StudIPPlugin implements StandardPlugin, SystemPlugin {
         parent::__construct();
         if (UpdateInformation::isCollecting()) {
             $data = Request::getArray("page_info");
-            if (stripos(Request::get("page"), "plugins.php/blubber") !== false && isset($data['Blubber'])) {
+            if (mb_stripos(Request::get("page"), "plugins.php/blubber") !== false && isset($data['Blubber'])) {
                 $output = array();
                 switch ($data['Blubber']['stream']) {
                     case "global":

@@ -249,7 +249,7 @@ class Log
     public function __call($name, $arguments)
     {
         foreach ($this->log_level_names as $level_num => $level_name) {
-            if (stripos($level_name, $name) === 0) {
+            if (mb_stripos($level_name, $name) === 0) {
                 return $this->log($arguments[0], $level_num);
             }
         }

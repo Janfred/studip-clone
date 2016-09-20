@@ -180,8 +180,8 @@ class OpenGraphURL extends SimpleORMap
             }
             if (!$this['description'] && $isOpenGraph) {
                 foreach ($metatags as $tag) {
-                    if (stripos($tag->getAttribute('name'), "description") !== false
-                        || stripos($tag->getAttribute('property'), "description") !== false)
+                    if (mb_stripos($tag->getAttribute('name'), "description") !== false
+                        || mb_stripos($tag->getAttribute('property'), "description") !== false)
                     {
                         $this['description'] = studip_utf8decode($tag->getAttribute('content'));
                     }

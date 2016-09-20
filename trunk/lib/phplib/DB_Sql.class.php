@@ -74,7 +74,7 @@ class DB_Sql {
         if ($this->Debug) {
             printf("Debug: query = %s<br>\n", $Query_String);
         }
-        if(stripos($Query_String, 'select') === 0 || stripos($Query_String, 'show') === 0){
+        if(mb_stripos($Query_String, 'select') === 0 || mb_stripos($Query_String, 'show') === 0){
 
             $this->resultSet = $this->pdo->query($Query_String);
 

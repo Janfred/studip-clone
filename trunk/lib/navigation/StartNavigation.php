@@ -30,7 +30,7 @@ class StartNavigation extends Navigation
     {
         parent::initItem();
 
-        if (stripos($_SERVER['REQUEST_URI'], "web_migrate.php") === false && is_object($GLOBALS['user']) && $GLOBALS['user']->id != 'nobody') {
+        if (mb_stripos($_SERVER['REQUEST_URI'], "web_migrate.php") === false && is_object($GLOBALS['user']) && $GLOBALS['user']->id != 'nobody') {
             if (WidgetHelper::hasWidget($GLOBALS['user']->id, 'News')) {
                 $news = StudipNews::CountUnread();
             }

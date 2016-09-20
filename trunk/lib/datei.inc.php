@@ -88,8 +88,8 @@ function parse_link($link, $level=0) {
 
     $url_parts = @parse_url( $link );
     //filter out localhost and reserved or private IPs
-    if (stripos($url_parts["host"], 'localhost') !== false
-        || stripos($url_parts["host"], 'loopback') !== false
+    if (mb_stripos($url_parts["host"], 'localhost') !== false
+        || mb_stripos($url_parts["host"], 'loopback') !== false
         || (filter_var($url_parts["host"], FILTER_VALIDATE_IP) !== false
             && (strpos($url_parts["host"],'127') === 0
                 || filter_var($url_parts["host"], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false)
