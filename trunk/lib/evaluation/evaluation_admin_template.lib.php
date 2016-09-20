@@ -331,7 +331,7 @@ class EvalTemplateGUI {
      if( $onthefly ) {
     $tdA->html( _("<b>Freie Antworten definieren</b>") );
      } else {
-    $isCreate = strstr($this->getPageCommand(), "create");
+    $isCreate = mb_strstr($this->getPageCommand(), "create");
     $tdA->html("<b>");
     switch ($type){
       case EVALQUESTION_TYPE_MC:
@@ -748,7 +748,7 @@ class EvalTemplateGUI {
                 'template_save_button');
     }
 
-    if( !strstr($this->command, "create") ) {
+    if( !mb_strstr($this->command, "create") ) {
        $showDelete = YES;
        $input2 = Button::createAccept(_('Löschen'),
                 'template_delete_button');
@@ -806,7 +806,7 @@ class EvalTemplateGUI {
      $tdA = new HTM( "td" );
      $tdA->attr( "class", "table_header_bold" );
      $tdA->attr( "align","left" );
-     $tdA->html( "<b>" . ( strstr($this->getPageCommand(), "create")
+     $tdA->html( "<b>" . ( mb_strstr($this->getPageCommand(), "create")
                ? _("Freitextvorlage erstellen")
                : _("Freitextvorlage bearbeiten") ) . "</b>" );
      $trA->cont( $tdA );
@@ -892,7 +892,7 @@ class EvalTemplateGUI {
     //}
     //if($question->getParentID()==$myuserid){
     //   $loesch=1;
-    if( !strstr($this->command, "create") ) {
+    if( !mb_strstr($this->command, "create") ) {
         $showDelete = YES;
         $input2 = Button::createAccept(_('Löschen'),
                 'template_delete_button');
@@ -1072,12 +1072,12 @@ class EvalTemplateGUI {
       $text = $question->getText ();
 
       /* Add root tag if necessary ----------------------------------------- */
-      //if ($rootTag && $myuserid == "0" && !strstr ($text, EVAL_ROOT_TAG))
+      //if ($rootTag && $myuserid == "0" && !mb_strstr ($text, EVAL_ROOT_TAG))
       //   $question->setText ($text." ".EVAL_ROOT_TAG);
       /* ------------------------------------------------- end: add root tag */
 
       /* Remove root tag if necessary -------------------------------------- */
-      if ($myuserid != "0" && strstr ($text, EVAL_ROOT_TAG)) {
+      if ($myuserid != "0" && mb_strstr ($text, EVAL_ROOT_TAG)) {
          $question->setText  (trim(implode("", explode(EVAL_ROOT_TAG,$text))));
       }
       /* ---------------------------------------------- end: remove root tag */

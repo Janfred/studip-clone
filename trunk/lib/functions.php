@@ -1038,7 +1038,7 @@ function StringToFloat($str)
     $locale = localeconv();
     $from = ($locale["thousands_sep"] ? $locale["thousands_sep"] : ',');
     $to = ($locale["decimal_point"] ? $locale["decimal_point"] : '.');
-    if(strstr($str, $from)){
+    if(mb_strstr($str, $from)){
         $conv_str = str_replace($from, $to, $str);
         $my_float = (float)$conv_str;
         if ($conv_str === (string)$my_float) return $my_float;
