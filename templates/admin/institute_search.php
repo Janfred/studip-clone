@@ -1,9 +1,11 @@
 <form name="links_admin_search" action="<?= URLHelper::getLink(Request::path()) ?>" method="post">
     <?= CSRFProtection::tokenTag() ?>
 
+<? if ($GLOBALS['perm']->have_perm('admin')): ?>
     <legend>
         <?= _('Bitte wählen Sie die Einrichtung aus, die Sie bearbeiten wollen:') ?>
     </legend>
+<? endif; ?>
     <select name="cid" required class="nested-select">
         <option value="" class="is-placeholder">
             <?= _('-- Bitte Einrichtung auswählen --') ?>

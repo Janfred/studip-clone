@@ -1,7 +1,7 @@
-<tbody>
+<tbody style="vertical-align: top;">
 <? if ($th_title): ?>
     <tr>
-        <th colspan="<?= count($structure) - ($structure['actions'] ? 1 : 0) ?>">
+        <th colspan="<?= 1 + count($structure) - ($structure['actions'] ? 1 : 0) ?>">
             <?= htmlReady($th_title) ?>
         </th>
     <? if ($structure['actions']): ?>
@@ -9,7 +9,7 @@
         <?= ActionMenu::get()
             ->condition($mail_status)
             ->addLink(
-                URLHelper::getLink('dispatch.php/messages/write?filter=inst_status', [
+                $controller->link_for('messages/write?filter=inst_status', [
                     'who'             => $key,
                     'default_subject' => $GLOBALS['SessSemName'][0],
                     'course_id'       => $GLOBALS['SessSemName'][1],
@@ -20,8 +20,8 @@
             )
             ->condition($mail_gruppe)
             ->addLink(
-                URLHelper::getScriptLink('dispatch.php/messages/write', [
-                    'group_id'        => $role->id,
+                $controller->link_for('messages/write', [
+                    'group_id'        => $group->id,
                     'default_subject' => $GLOBALS['SessSemName'][0],
                 ]),
                 sprintf(_('Nachricht an alle Mitglieder der Gruppe %s verschicken'), $th_title),
@@ -33,20 +33,25 @@
     </tr>
 <? endif; ?>
 <? foreach ($members as $member):
-        $default_entries = DataFieldEntry::getDataFieldEntries(array($member->user_id, $range_id));
+        $default_entries = DataFieldEntry::getDataFieldEntries(array($member->user_id, $institute->id));
 
-        if ($role) {
-            $role_entries = DataFieldEntry::getDataFieldEntries(array($member->user_id, $role->id));
+        if ($group) {
+            $role_entries = DataFieldEntry::getDataFieldEntries(array($member->user_id, $group->id));
         }
 ?>
     <tr>
         <td>
+            <a href="<?= $controller->link_for('profile', ['username' => $member->username]) ?>">
+                <?= Avatar::getAvatar($member->user_id, $member->username)->getImageTag(Avatar::SMALL) ?>
+            </a>
+        </td>
+        <td>
         <? if ($admin_view): ?>
-            <a href="<?= URLHelper::getLink("dispatch.php/settings/statusgruppen?username={$member->username}&contentbox_open={$range_id}#{$range_id}") ?>">
+            <a href="<?= $controller->link_for("settings/statusgruppen#{$institute->id}", ['username' => $member->username, 'contentbox_open' => $institute->id]) ?>">
                 <?= htmlReady($member->getUserFullname('full_rev')) ?>
             </a>
         <? else: ?>
-            <a href="<?= URLHelper::getLink("dispatch.php/profile?username={$member->username}") ?>">
+            <a href="<?= $controller->link_for('profile', ['username' => $member->username]) ?>">
                 <?= htmlReady($member->getUserFullname('full_rev')) ?>
             </a>
         <? endif; ?>
@@ -85,27 +90,27 @@
         <td class="actions">
         <?= ActionMenu::get()
             ->addLink(
-                URLHelper::getLink("dispatch.php/messages/write?rec_uname={$member->username}"),
+                $controller->link_for("messages/write?rec_uname={$member->username}"),
                 _('Nachricht an Benutzer verschicken'),
                 Icon::create('mail', 'clickable'),
                 ['data-dialog' => '']
             )
             ->conditionAll(
-                $admin_view && !LockRules::Check($range_id, 'participants') // General permission check
+                $admin_view && !LockRules::Check($institute->id, 'participants') // General permission check
                 && ($member->inst_perms !== 'admin' // Don't delete admins
                     || ($GLOBALS['perm']->get_profile_perm($member->user_id) === 'admin' // unless you are a global admin yourself
                         && $member->user_id !== $GLOBALS['user']->id)) // but don't delete yourself
             )
-            ->condition(isset($role))
+            ->condition(isset($group))
             ->addLink(
-                $controller->link_for('institute/members/remove_from_group/' . $role->id, ['username' => $member->username]),
+                $controller->link_for('institute/members/remove_from_group', $group->id, $type, ['username' => $member->username]),
                 _('Person aus Gruppe austragen'),
                 Icon::create('door-leave', 'clickable'),
                 ['data-confirm' => _('Wollen Sie die Person wirklich aus der Gruppe austragen?')]
             )
-            ->condition(!isset($role))
+            ->condition(!isset($group))
             ->addLink(
-                $controller->link_for("institute/members/remove_from_institute?username={$member->username}"),
+                $controller->link_for('institute/members/remove_from_institute', $type, ['username' => $member->username]),
                 _('Person aus Einrichtung austragen'),
                 Icon::create('door-leave', 'clickable'),
                 ['data-confirm' => _('Wollen Sie die Person wirklich aus der Einrichtung austragen?')]
@@ -118,34 +123,16 @@
         $group_member = $group->members->findOneBy('user_id', $member->user_id);
     ?>
         <tr>
-            <td></td>
-        <? if ($structure['status']): ?>
-            <td></td>
-        <? endif; ?>
-            <td>
+            <td colspan="<?= 2 + (int)!empty($structure['status']) ?>"></td>
+            <td colspan="<?= 1 + count(array_filter(['raum', 'sprechzeiten', 'telefon', 'email', 'homepage'], function ($item) use ($structure) { return !empty($structure[$item]); })) ?>">
             <? if ($admin_view): ?>
-                <a href="<?= URLHelper::getLink('dispatch.php/admin/statusgroups/editGroup/' . $group->id) ?>">
+                <a href="<?= $controller->link_for('admin/statusgroups/editGroup/' . $group->id) ?>">
             <? endif; ?>
                 <?= htmlReady($group->getFullGenderedName($member->user_id)) ?>
             <? if ($admin_view): ?>
                 </a>
             <? endif; ?>
             </td>
-        <? if ($structure['raum']): ?>
-            <td></td>
-        <? endif; ?>
-        <? if ($structure['sprechzeiten']): ?>
-            <td></td>
-        <? endif; ?>
-        <? if ($structure['telefon']): ?>
-            <td></td>
-        <? endif; ?>
-        <? if ($structure['email']): ?>
-            <td></td>
-        <? endif; ?>
-        <? if ($structure['homepage']): ?>
-            <td></td>
-        <? endif; ?>
         <? foreach ($group_member->datafields->filter(function ($e) use ($dview) { return in_array($e->getId(), $dview); }) as $entry): ?>
             <td>
             <? if ($entry->getValue() === 'default_value'): ?>
@@ -158,17 +145,20 @@
         <? if ($structure['actions']): ?>
             <td class="actions">
             <?= ActionMenu::get()
-                ->conditionAll($admin_view && !LockRules::Check($range_id, 'participants'))
+                ->conditionAll($admin_view && !LockRules::Check($institute->id, 'participants'))
                 ->addLink(
-                    URLHelper::getLink("dispatch.php/settings/statusgruppen?username={$member->username}" .
-                                       "&contentbox_open={$group->id}#{$group->id}"),
+                    $controller->link_for("settings/statusgruppen#{$group->id}", [
+                        'username'        => $member->username,
+                        'contentbox_open' => $group->id,
+                    ]),
                     _('Gruppendaten bearbeiten'),
                     Icon::create('edit', 'clickable')
                 )
                 ->addLink(
-                    URLHelper::getLink("?cmd=removeFromGroup&username={$member->username}&role_id={$group->id}"),
+                    $controller->link_for('institute/members/remove_from_group', $group->id, $type, ['username' => $member->username]),
                     _('Person aus Gruppe austragen'),
-                    Icon::create('door-leave', 'clickable')
+                    Icon::create('door-leave', 'clickable'),
+                    ['data-confirm' => _('Wollen Sie die Person wirklich aus der Gruppe austragen?')]                    
                 ) ?>
             </td>
         <? endif; ?>
