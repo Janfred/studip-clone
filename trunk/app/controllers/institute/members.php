@@ -157,9 +157,11 @@ class Institute_MembersController extends AuthenticatedController
             }
         }
 
-        $this->table_structure = $this->getTableStructure($this->struct);
+        $this->structure = $this->getTableStructure($this->struct);
 
         // Actual display routines
+        $this->display_tables = [];
+        
         if ($this->type == 'function') {
             $this->display_recursive($this->institute->status_groups, $dview);
 
@@ -179,10 +181,11 @@ class Institute_MembersController extends AuthenticatedController
                     return !in_array($member->user_id, $assigned);
                 })->orderBy($this->sortby . ' ' . $this->direction);
 
-                $this->renderList($institut_members, [
+                $this->display_tables[] = [
+                    'members'     => $institut_members,
                     'dview'       => $dview,
                     'th_title'    => _('keiner Funktion zugeordnet'),
-                ]);
+                ];
             }
         } elseif ($this->type == 'status') {
             $inst_permissions = array(
@@ -201,12 +204,13 @@ class Institute_MembersController extends AuthenticatedController
                     return $member->inst_perms === $key;
                 })->orderBy($this->sortby . ' ' . $this->direction);
 
-                $this->renderList($institut_members, [
+                $this->display_tables[] = [
+                    'members'     => $institut_members,
                     'dview'       => $dview,
                     'mail_status' => true,
                     'key'         => $key,
                     'th_title'    => $permission,
-                ]);
+                ];
             }
         } else {
             $institut_members = $this->institute->members->filter(function ($member) {
@@ -227,17 +231,24 @@ class Institute_MembersController extends AuthenticatedController
                 return false;
             })->orderBy($this->sortby . ' ' . $this->direction);
 
-            $this->renderList($institut_members, ['dview' => $dview]);
+            $this->display_tables[] = [
+                'members' => $institut_members,
+                'dview'   => $dview,
+            ];
         }
+
+        $this->display_tables = array_filter($this->display_tables, function ($table) {
+            return count($table['members']) > 0;
+        });
     }
 
-    private function display_recursive($groups, $dview = [], $title = '')
+    private function display_recursive($groups, $dview = [], $all_title = '')
     {
         foreach ($groups as $group) {
-            if ($title == '') {
+            if ($all_title == '') {
                 $title = $group->name;
             } else {
-                $title .= ' > '. $group->name;
+                $title = $all_title . ' > '. $group->name;
             }
 
             // Find members
@@ -266,7 +277,8 @@ class Institute_MembersController extends AuthenticatedController
             };
 
             // output
-            $this->renderList($institut_members, [
+            $this->display_tables[] = [
+                'members'     => $institut_members,
                 'group'       => $group,
                 'th_title'    => $title,
                 'dview'       => $dview,
@@ -274,7 +286,7 @@ class Institute_MembersController extends AuthenticatedController
                 // StEP 154: Nachricht an alle Mitglieder der Gruppe
                 'mail_gruppe' => $GLOBALS['ENABLE_EMAIL_TO_STATUSGROUP']
                               && $GLOBALS['perm']->have_studip_perm('autor', $this->institute->id),
-            ]);
+            ];
 
             if ($group->children) {
                 $this->display_recursive($group->children, $dview, $title);
@@ -491,27 +503,6 @@ class Institute_MembersController extends AuthenticatedController
         }
 
         return $table_structure;
-    }
-
-    private function renderList($members, $further_variables = [])
-    {
-        if (count($members) === 0) {
-            return;
-        }
-
-        $template = $this->get_template_factory()->open('institute/members/_table_body.php');
-        $template->controller      = $this;
-        $template->institute       = $this->institute;
-        $template->structure       = $this->table_structure;
-        $template->datafields_list = $this->datafields_list;
-        $template->groups          = $this->groups;
-        $template->admin_view      = $this->admin_view;
-        $template->type            = $this->type;
-
-        $template->members = $members;
-        $template->set_attributes($further_variables);
-
-        $this->table_content .= $template->render();
     }
 
     private function setupSidebar()
