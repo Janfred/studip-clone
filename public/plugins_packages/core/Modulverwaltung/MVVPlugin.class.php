@@ -231,7 +231,7 @@ class MVVPlugin extends StudipPlugin implements SystemPlugin, Loggable {
             throw new AccessDeniedException();
         }
         $this->init();
-        if (strpos($unconsumed_path, 'lvgselector') === false) {
+        if (mb_strpos($unconsumed_path, 'lvgselector') === false) {
             // get rid of cid!
             UrlHelper::removeLinkParam('cid');
         }

@@ -62,7 +62,7 @@ class PermissionSearch extends SQLSearch {
             $presets = $this->presets + $contextual_data;
         }
         foreach ($presets as $name => $value) {
-            if ($name !== "input" && strpos($sql, ":".$name) !== false) {
+            if ($name !== "input" && mb_strpos($sql, ":".$name) !== false) {
                 if (is_array($value)) {
                     if (count($value)) {
                         $sql = str_replace(":".$name, implode(',', array_map(array($db, 'quote'), $value)), $sql);

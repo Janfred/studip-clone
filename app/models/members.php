@@ -394,7 +394,7 @@ class MembersModel
         foreach (words('user autor tutor dozent') as $status) {
             $filtered_members[$status] = $members->findBy('status', $status);
             if ($status == $sort_status) {
-                $filtered_members[$status]->orderBy($order_by, (strpos($order_by, 'nachname') === false ? SORT_NUMERIC : SORT_LOCALE_STRING));
+                $filtered_members[$status]->orderBy($order_by, (mb_strpos($order_by, 'nachname') === false ? SORT_NUMERIC : SORT_LOCALE_STRING));
             } else {
                 $filtered_members[$status]->orderBy(in_array($status, words('tutor dozent')) ? 'position,nachname' : 'nachname asc');
             }
@@ -437,7 +437,7 @@ class MembersModel
         foreach (words('awaiting accepted claiming') as $status) {
             $filtered_members[$status] = $application_members->findBy('status', $status);
             if ($status == $sort_status) {
-                $filtered_members[$status]->orderBy($order_by, (strpos($order_by, 'nachname') === false ? SORT_NUMERIC : SORT_LOCALE_STRING));
+                $filtered_members[$status]->orderBy($order_by, (mb_strpos($order_by, 'nachname') === false ? SORT_NUMERIC : SORT_LOCALE_STRING));
             }
         }
         return $filtered_members;

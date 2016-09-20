@@ -1,6 +1,6 @@
 <label for="message" class="caption">
     <?= _('Nachricht bei fehlgeschlagener Anmeldung') ?>:
-    <?= (strpos($rule->getMessage(),'%s') ? tooltipicon(_("Die Zeichen %s sind ein Platzhalter für änderbare Bedingungen")) : '')?>
+    <?= (mb_strpos($rule->getMessage(),'%s') ? tooltipicon(_("Die Zeichen %s sind ein Platzhalter für änderbare Bedingungen")) : '')?>
 </label>
 <textarea name="message" rows="4" cols="50"><?= htmlReady($rule->getMessage()) ?></textarea>
 <br/>

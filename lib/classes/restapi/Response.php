@@ -57,7 +57,7 @@ class Response implements \ArrayAccess
     public function output()
     {
         if (isset($this->status)) {
-            if (strpos(PHP_SAPI, 'cgi') === 0) {
+            if (mb_strpos(PHP_SAPI, 'cgi') === 0) {
                 $this->sendHeader(sprintf('Status: %d %s', $this->status, $this->reason()));
             } else {
                 $this->sendHeader(sprintf('HTTP/1.1 %d %s', $this->status, $this->reason()));

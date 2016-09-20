@@ -257,7 +257,7 @@
                                     <? $aday = $event->getRecurrence('wdays') ?: date('N', $event->getStart()) ?>
                                     <? foreach ($wdays as $key => $wday) : ?>
                                     <label style="white-space: nowrap;">
-                                        <input type="checkbox" name="wdays[]" value="<?= $key ?>"<?= strpos((string) $aday, (string) $key) !== false ? ' checked' : '' ?>>
+                                        <input type="checkbox" name="wdays[]" value="<?= $key ?>"<?= mb_strpos((string) $aday, (string) $key) !== false ? ' checked' : '' ?>>
                                         <?= $wday ?>
                                     </label>
                                     <? endforeach; ?>

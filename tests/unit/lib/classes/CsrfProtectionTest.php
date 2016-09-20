@@ -64,7 +64,7 @@ class CSRFProtectionTokenTest extends PHPUnit_Framework_TestCase
     function testTokenTag()
     {
         $token = CSRFProtection::token();
-        $this->assertTrue(strpos(CSRFProtection::tokenTag(), $token) !== FALSE);
+        $this->assertTrue(mb_strpos(CSRFProtection::tokenTag(), $token) !== FALSE);
     }
 }
 

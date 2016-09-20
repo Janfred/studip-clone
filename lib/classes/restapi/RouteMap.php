@@ -528,12 +528,12 @@ abstract class RouteMap
             $params['charset'] = 'windows-1252';
         }
 
-        if (strpos($mime_type, 'charset') !== FALSE) {
+        if (mb_strpos($mime_type, 'charset') !== FALSE) {
             unset($params['charset']);
         }
 
         if (sizeof($params)) {
-            $mime_type .= strpos($mime_type, ';') !== FALSE ? ', ' : ';';
+            $mime_type .= mb_strpos($mime_type, ';') !== FALSE ? ', ' : ';';
             $ps = array();
             foreach ($params as $k => $v) {
                 $ps[] = $k . '=' . $v;

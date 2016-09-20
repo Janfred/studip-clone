@@ -109,7 +109,7 @@ function computeAbsoluteURI() {
     // code copied from config/config_local.inc.php
     if (isset($_SERVER['SERVER_NAME'])) {
         // work around possible bug in lighttpd
-        if (strpos($_SERVER['SERVER_NAME'], ':') !== false) {
+        if (mb_strpos($_SERVER['SERVER_NAME'], ':') !== false) {
             list($_SERVER['SERVER_NAME'], $_SERVER['SERVER_PORT']) =
                 explode(':', $_SERVER['SERVER_NAME']);
         }

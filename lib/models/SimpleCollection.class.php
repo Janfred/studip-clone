@@ -130,7 +130,7 @@ class SimpleCollection extends StudipArrayObject
                 case '*=':
                     $comp_func = function($a) use ($args) {
                         foreach ($args as $arg) {
-                            if (strpos($a, $arg) !== false) {
+                            if (mb_strpos($a, $arg) !== false) {
                                 return true;
                             }
                         }
@@ -140,7 +140,7 @@ class SimpleCollection extends StudipArrayObject
                 case '^=':
                     $comp_func = function($a) use ($args) {
                         foreach ($args as $arg) {
-                            if (strpos($a, $arg) === 0) {
+                            if (mb_strpos($a, $arg) === 0) {
                                 return true;
                             }
                         }

@@ -184,10 +184,10 @@ class Ilias3ContentModule extends ContentModule
         $admin_operations = $connected_cms[$this->cms_type]->permissions->getOperationArray(array(OPERATION_VISIBLE, OPERATION_READ, OPERATION_WRITE));
         foreach ($local_roles as $key => $role_data){
             // check only if local role is il_crs_member, -tutor or -admin
-            if (strpos($role_data["title"], "il_crs_") === 0) {
-                if(strpos($role_data["title"], 'il_crs_member') === 0){
+            if (mb_strpos($role_data["title"], "il_crs_") === 0) {
+                if(mb_strpos($role_data["title"], 'il_crs_member') === 0){
                     $operations = $write_permission_autor ? $admin_operations : $member_operations;
-                } else if(strpos($role_data["title"], 'il_crs_tutor') === 0){
+                } else if(mb_strpos($role_data["title"], 'il_crs_tutor') === 0){
                     $operations = $write_permission_autor || $write_permission ? $admin_operations : $member_operations;
                 } else {
                     continue;

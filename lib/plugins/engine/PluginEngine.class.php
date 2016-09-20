@@ -22,7 +22,7 @@ class PluginEngine
         if (mb_strlen($dispatch_to) === 0) {
             throw new PluginNotFoundException(_('Es wurde kein Plugin gewählt.'));
         }
-        $pos = strpos($dispatch_to, '/');
+        $pos = mb_strpos($dispatch_to, '/');
         return $pos === FALSE
             ? array($dispatch_to, '')
             : array(substr($dispatch_to, 0, $pos), substr($dispatch_to, $pos + 1));
@@ -131,7 +131,7 @@ class PluginEngine
             throw new InvalidArgumentException(_('Es wurde kein Plugin gewählt.'));
         } else if (is_object($plugin)) {
             $plugin = strtolower(get_class($plugin)) . '/' . $cmd;
-        } else if (strpos($plugin, '/') === false) {
+        } else if (mb_strpos($plugin, '/') === false) {
             $plugin = $plugin . '/' . $cmd;
         }
 

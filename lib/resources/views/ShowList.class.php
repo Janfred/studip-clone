@@ -285,17 +285,17 @@ class ShowList extends ShowTreeRow{
                 // }
 
                 //let's create some possible wildcards
-                if (strpos($val, '<=') !== false) {
-                    $val     = (int) substr($val, strpos($val, '<=') + 2);
+                if (mb_strpos($val, '<=') !== false) {
+                    $val     = (int) substr($val, mb_strpos($val, '<=') + 2);
                     $linking = '<=';
-                } elseif (strpos($val, '>=') !== false) {
-                    $val     = (int) substr($val, strpos($val, '>=') + 2);
+                } elseif (mb_strpos($val, '>=') !== false) {
+                    $val     = (int) substr($val, mb_strpos($val, '>=') + 2);
                     $linking = '>=';
-                } elseif (strpos($val, '<') !== false) {
-                    $val     = (int) substr($val, strpos($val, '<') + 1);
+                } elseif (mb_strpos($val, '<') !== false) {
+                    $val     = (int) substr($val, mb_strpos($val, '<') + 1);
                     $linking = '<';
-                } elseif (strpos($val, '>') !== false) {
-                    $val     = (int) substr($val, strpos($val, '>') + 1);
+                } elseif (mb_strpos($val, '>') !== false) {
+                    $val     = (int) substr($val, mb_strpos($val, '>') + 1);
                     $linking = '>';
                 } else {
                     $linking = '=';

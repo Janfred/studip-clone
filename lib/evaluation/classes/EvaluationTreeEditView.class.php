@@ -1077,7 +1077,7 @@ function getItemMessage($itemID, $colspan = 1)
         if ($msg[0] == 'msg') {
             $msg[0] = 'success';
         }
-        if (strpos($msg[1], '<br>')) {
+        if (mb_strpos($msg[1], '<br>')) {
             $details = explode("<br>", $msg[1]);
             $msg[1] = array_shift($details);
         }

@@ -1537,7 +1537,7 @@ function text_excerpt($text, $phrase, $radius = 100, $length = 200,
     return '';
   }
 
-  $found_pos = strpos(strtolower($text), strtolower($phrase));
+  $found_pos = mb_strpos(strtolower($text), strtolower($phrase));
 
   if ($found_pos === FALSE) {
     $start_pos = 0;
@@ -1784,11 +1784,11 @@ function studip_strlen($string)
 function is_internal_url($url)
 {
     if (preg_match('%^[a-z]+:%', $url)) {
-        return strpos($url, $GLOBALS['ABSOLUTE_URI_STUDIP']) === 0;
+        return mb_strpos($url, $GLOBALS['ABSOLUTE_URI_STUDIP']) === 0;
     }
 
     if ($url[0] === '/') {
-        return strpos($url, $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']) === 0;
+        return mb_strpos($url, $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']) === 0;
     }
 
     return true;
@@ -2008,11 +2008,11 @@ function relsize($size, $verbose = true, $displayed_levels = 1, $glue = ', ', $t
 function get_route($route = '')
 {
     $route = substr(parse_url($route ?: $_SERVER['REQUEST_URI'], PHP_URL_PATH), mb_strlen($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']));
-    if (strpos($route, 'plugins.php/') !== false) {
+    if (mb_strpos($route, 'plugins.php/') !== false) {
         $trails = explode('plugins.php/', $route);
         $pieces = explode('/', $trails[1]);
         $route = 'plugins.php/' . $pieces[0] . ($pieces[1] ? '/' . $pieces[1] : '') . ($pieces[2] ? '/' . $pieces[2] : '');
-    } elseif (strpos($route, 'dispatch.php/') !== false) {
+    } elseif (mb_strpos($route, 'dispatch.php/') !== false) {
         $trails = explode('dispatch.php/', $route);
         $dispatcher = new StudipDispatcher();
         $pieces = explode('/', $trails[1]);

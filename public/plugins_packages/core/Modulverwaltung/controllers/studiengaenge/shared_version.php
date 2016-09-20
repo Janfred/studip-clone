@@ -695,7 +695,7 @@ class SharedVersionController extends MVVController
                     $i = 1;
                     foreach ($orderedIds as $modul_zuord_id) {
                         $modul_id = substr($modul_zuord_id,
-                                strpos($modul_zuord_id, '_') + 1);
+                                mb_strpos($modul_zuord_id, '_') + 1);
                         $abschnitt_modul = StgteilabschnittModul::find(
                                 array($abschnitt->getId(), $modul_id));
                         if ($abschnitt_modul) {

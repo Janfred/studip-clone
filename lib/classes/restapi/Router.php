@@ -177,7 +177,7 @@ class Router
         // through it's methods to find any defined route
         $ref      = new \ReflectionClass($map);
         $filename = $ref->getFilename();
-        $source   = strpos($filename, 'plugins_packages') !== false
+        $source   = mb_strpos($filename, 'plugins_packages') !== false
                   ? 'plugin'
                   : 'core';
 
@@ -527,7 +527,7 @@ class Router
         $matched    = null;
         $parameters = array();
         if (isset($this->routes[$method])) {
-            if ($content_renderer->extension() && strpos($uri, $content_renderer->extension()) !== false) {
+            if ($content_renderer->extension() && mb_strpos($uri, $content_renderer->extension()) !== false) {
                 $uri = substr($uri, 0, -mb_strlen($content_renderer->extension()));
             }
 

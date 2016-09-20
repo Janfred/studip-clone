@@ -59,7 +59,7 @@ class Assets
     {
         Assets::$assets_url = $url;
         Assets::$counter_cache = NULL;
-        Assets::$dynamic = strpos($url, '%d') !== FALSE;
+        Assets::$dynamic = mb_strpos($url, '%d') !== FALSE;
     }
 
 
@@ -348,7 +348,7 @@ class Assets
             $source .= ".$ext";
 
         # if source is not absolute
-        if (FALSE === strpos($source, ':')) {
+        if (FALSE === mb_strpos($source, ':')) {
 
             # add dir if url does not contain a path
             if ('/' !== $source[0])

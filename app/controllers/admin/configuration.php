@@ -35,7 +35,7 @@ class Admin_ConfigurationController extends AuthenticatedController
         // set navigation
         Navigation::activateItem('/admin/config/configuration');
 
-        $this->setupSidebar(strpos($action, 'user') !== false);
+        $this->setupSidebar(mb_strpos($action, 'user') !== false);
     }
 
     /**

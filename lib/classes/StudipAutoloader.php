@@ -205,7 +205,7 @@ class StudipAutoloader
     private static function convertClassToFilename($class, $prefix = '')
     {
         // Test whether the namespace prefix matches the class name, leave early if not
-        if ($prefix && strpos($class, $prefix) !== 0) {
+        if ($prefix && mb_strpos($class, $prefix) !== 0) {
             return false;
         }
 

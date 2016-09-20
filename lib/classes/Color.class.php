@@ -144,7 +144,7 @@ class Color {
                             + $color2[2] * (100 - $percentOfColor1)) / 100);
         $color_new[3] = ($color1[3] * $percentOfColor1
                             + $color2[3] * (100 - $percentOfColor1)) / 100;
-        $format = ((strpos($format2, "a") !== false) && (strpos($fotmat1, "a") === false))
+        $format = ((mb_strpos($format2, "a") !== false) && (mb_strpos($fotmat1, "a") === false))
                     ? $format2
                     : $format1;
         $func = "_array2" . $format;
@@ -210,7 +210,7 @@ class Color {
             $format = "hex";
             $arr = self::hex2array($color);
         } elseif (preg_match("/\(.*\)/", $color)) {
-            $format = substr($color, 0, strpos($color, "("));
+            $format = substr($color, 0, mb_strpos($color, "("));
             $func = $format."2array";
             $arr = self::$func($color);
         } elseif (self::$colorstrings[strtolower($color)]) {

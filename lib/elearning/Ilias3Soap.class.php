@@ -383,7 +383,7 @@ class Ilias3Soap extends StudipSoapClient
             {
                 if (($type != "") AND ($object_data["type"] != $type))
                     unset($objects[$index]);
-                elseif (! (strpos(strtolower($object_data["title"]), strtolower(trim($key)) ) === 0))
+                elseif (! (mb_strpos(strtolower($object_data["title"]), strtolower(trim($key)) ) === 0))
                     unset($objects[$index]);
             }
             reset($objects);
@@ -416,7 +416,7 @@ class Ilias3Soap extends StudipSoapClient
             {
                 if (($type != "") AND ($object_data["type"] != $type))
                     unset($objects[$index]);
-                elseif (strpos(strtolower($object_data["title"]), strtolower(trim($key)) ) === false)
+                elseif (mb_strpos(strtolower($object_data["title"]), strtolower(trim($key)) ) === false)
                     unset($objects[$index]);
             }
             if (sizeof($objects) > 0)

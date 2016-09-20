@@ -354,7 +354,7 @@ class ExternSemBrowseTable extends SemBrowse {
                         //Shorten, if string too long
                         if (mb_strlen($data["content"]["zeiten"]) >70) {
                             $data["content"]["zeiten"] = substr($data["content"]["zeiten"], 0,
-                                    strpos(substr($data["content"]["zeiten"], 70, mb_strlen($data["content"]["zeiten"])), ",") +71);
+                                    mb_strpos(substr($data["content"]["zeiten"], 70, mb_strlen($data["content"]["zeiten"])), ",") +71);
                             $data["content"]["zeiten"] .= "...";
                         }
                         $data["content"]["zeiten"] = htmlReady($data["content"]["zeiten"]);

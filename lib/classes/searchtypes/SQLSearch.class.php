@@ -152,7 +152,7 @@ class SQLSearch extends SearchType
         $data = array();
         if (is_array($contextual_data)) {
             foreach ($contextual_data as $name => $value) {
-                if ($name !== "input" && strpos($sql, ":".$name) !== false) {
+                if ($name !== "input" && mb_strpos($sql, ":".$name) !== false) {
                     $data[":".$name] = $value;
                 }
             }

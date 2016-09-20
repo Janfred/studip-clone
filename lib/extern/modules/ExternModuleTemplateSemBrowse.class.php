@@ -1426,7 +1426,7 @@ class ExternModuleTemplateSemBrowse extends ExternModule {
                         $temp_turnus_string = Seminar::GetInstance($seminar_id)->getFormattedTurnus(true);
                         //Shorten, if string too long (add link for details.php)
                         if (mb_strlen($temp_turnus_string) > 245) {
-                            $temp_turnus_string = substr($temp_turnus_string, 0, strpos(substr($temp_turnus_string, 245, mb_strlen($temp_turnus_string)), ",") + 246);
+                            $temp_turnus_string = substr($temp_turnus_string, 0, mb_strpos(substr($temp_turnus_string, 245, mb_strlen($temp_turnus_string)), ",") + 246);
                             $temp_turnus_string .= "...(mehr)";
                         }
                         $worksheet1->write_string($row, 1, $seminar_number, $data_format);

@@ -70,7 +70,7 @@ class DataFieldSelectboxEntry extends DataFieldEntry
         $is_assoc = false;
 
         foreach ($params as $i => $p) {
-            if (strpos($p, '=>') !== false) {
+            if (mb_strpos($p, '=>') !== false) {
                 $is_assoc = true;
 
                 list($key, $value) = array_map('trim', explode('=>', $p, 2));

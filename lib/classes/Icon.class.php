@@ -372,7 +372,7 @@ class Icon
     // an icon is static if it starts with 'http'
     private static function isStatic($shape)
     {
-        return strpos($shape, 'http') === 0;
+        return mb_strpos($shape, 'http') === 0;
     }
 
     // transforms a shape w/ possible additions (`shape+addition`) to a path `(addition/)?shape`
@@ -408,7 +408,7 @@ trait DeprecatedIcon {
         $source = str_replace(Assets::url('images/'), '', $source);
 
         // external icon
-        if (strpos($source, 'http') === 0) {
+        if (mb_strpos($source, 'http') === 0) {
             return new self($source, Icon::DEFAULT_ROLE, $attributes);
         }
 

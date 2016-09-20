@@ -94,7 +94,7 @@ class ExportPDF extends TCPDF implements ExportDocument {
             $url = $match[1];
 
             // Detect possible html entities in url and remove them
-            if (strpos($url, '&amp;') !== false) {
+            if (mb_strpos($url, '&amp;') !== false) {
                 $url = html_entity_decode($url);
             }
 
@@ -102,7 +102,7 @@ class ExportPDF extends TCPDF implements ExportDocument {
             if (Config::GetInstance()->LOAD_EXTERNAL_MEDIA) {
                 $parsed = parse_url($url);
                 // Detect media proxy
-                if (strpos($parsed['path'], 'media_proxy') !== false && strpos($parsed['query'], 'url=') !== false) {
+                if (mb_strpos($parsed['path'], 'media_proxy') !== false && mb_strpos($parsed['query'], 'url=') !== false) {
                     // Remove media proxy
                     parse_str($parsed['query'], $parameters);
                     $url = $parameters['url'];
@@ -281,8 +281,8 @@ class ExportPDF extends TCPDF implements ExportDocument {
         $convurl = $url;
         $url_elements = @parse_url($url);
         $url = $url_elements['path'].'?'.$url_elements['query'];
-        if (strpos(implode('#', $this->domains), $url_elements['host']) !== false) {
-            if (strpos($url, 'dispatch.php/media_proxy?url=') !== false) {
+        if (mb_strpos(implode('#', $this->domains), $url_elements['host']) !== false) {
+            if (mb_strpos($url, 'dispatch.php/media_proxy?url=') !== false) {
                 $targeturl = urldecode(substr($url, 4));
                 try {
                     // is file in cache?

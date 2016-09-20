@@ -60,11 +60,11 @@ class Ilias4ConnectedPermissions extends Ilias3ConnectedPermissions
         if (is_array($local_roles)) {
             foreach ($local_roles as $key => $role_data) {
                 // check only if local role is il_crs_member, -tutor or -admin
-                if (! (strpos($role_data["title"], "_crs_") === false)) {
+                if (! (mb_strpos($role_data["title"], "_crs_") === false)) {
                     if ( in_array( $role_data["obj_id"], $connected_cms[$this->cms_type]->user->getRoles() ) ) {
                         $active_role = $role_data["obj_id"];
                     }
-                    if ( strpos( $role_data["title"], $user_crs_role) > 0 ) {
+                    if ( mb_strpos( $role_data["title"], $user_crs_role) > 0 ) {
                         $proper_role = $role_data["obj_id"];
                     }
                 }

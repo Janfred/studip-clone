@@ -355,7 +355,7 @@ class StudipArrayObject implements IteratorAggregate, ArrayAccess, Serializable,
             return ;
         }
 
-        if (strpos($class, '\\') === 0) {
+        if (mb_strpos($class, '\\') === 0) {
             $class = '\\' . $class;
             if (class_exists($class)) {
                 $this->iteratorClass = $class;

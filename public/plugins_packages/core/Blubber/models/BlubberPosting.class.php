@@ -194,7 +194,7 @@ class BlubberPosting extends SimpleORMap {
     {
         if ($this->formatted_content === null) {
             $content = $this->description;
-            if ($this->isThread() && $this->name && strpos($this->description, $this->name) === false) {
+            if ($this->isThread() && $this->name && mb_strpos($this->description, $this->name) === false) {
                 $content = $this->name . "\n" . $content;
             }
 
