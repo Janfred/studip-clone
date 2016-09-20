@@ -105,7 +105,7 @@
             )
             ->condition(!isset($role))
             ->addLink(
-                URLHelper::getLink("institute/members/remove_from_institute?username={$member->username}"),
+                $controller->link_for("institute/members/remove_from_institute?username={$member->username}"),
                 _('Person aus Einrichtung austragen'),
                 Icon::create('door-leave', 'clickable'),
                 ['data-confirm' => _('Wollen Sie die Person wirklich aus der Einrichtung austragen?')]
