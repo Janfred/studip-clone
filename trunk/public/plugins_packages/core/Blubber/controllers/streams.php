@@ -259,7 +259,7 @@ class StreamsController extends PluginController {
         $content = $this->transformMentions($thread['description'], $thread);
 
         if (mb_strpos($content, "\n") !== false) {
-            $thread['name'] = substr($content, 0, mb_strpos($content, "\n"));
+            $thread['name'] = mb_substr($content, 0, mb_strpos($content, "\n"));
             $thread['description'] = $content;
         } else {
             if (mb_strlen($content) > 255) {
@@ -352,7 +352,7 @@ class StreamsController extends PluginController {
             $posting['description'] = $new_content;
             if ($posting['topic_id'] === $posting['root_id']) {
                 if (mb_strpos($new_content, "\n") !== false) {
-                    $posting['name'] = substr($new_content, 0, mb_strpos($new_content, "\n"));
+                    $posting['name'] = mb_substr($new_content, 0, mb_strpos($new_content, "\n"));
                 } else {
                     if (mb_strlen($new_content) > 255) {
                         $posting['name'] = "";
@@ -567,7 +567,7 @@ class StreamsController extends PluginController {
             $GLOBALS['msg'] = '';
             validate_upload($file);
             if ($GLOBALS['msg']) {
-                $output['errors'][] = $file['name'] . ': ' . decodeHTML(trim(substr($GLOBALS['msg'],6), '§'));
+                $output['errors'][] = $file['name'] . ': ' . decodeHTML(trim(mb_substr($GLOBALS['msg'],6), '§'));
                 continue;
             }
             if ($file['size']) {
@@ -766,7 +766,7 @@ class StreamsController extends PluginController {
             if (is_array($this->stream['pool_hashtags'])) {
                 $this->stream['pool_hashtags'] = array_map(function ($tag) {
                     while ($tag[0] === "#") {
-                        $tag = substr($tag, 1);
+                        $tag = mb_substr($tag, 1);
                     }
                     return $tag;
                 }, $this->stream['pool_hashtags']);
@@ -788,7 +788,7 @@ class StreamsController extends PluginController {
             if (is_array($this->stream['filter_hashtags'])) {
                 $this->stream['filter_hashtags'] = array_map(function ($tag) {
                     while ($tag[0] === "#") {
-                        $tag = substr($tag, 1);
+                        $tag = mb_substr($tag, 1);
                     }
                     return $tag;
                 }, $this->stream['filter_hashtags']);
@@ -799,7 +799,7 @@ class StreamsController extends PluginController {
             if (is_array($this->stream['filter_nohashtags'])) {
                 $this->stream['filter_nohashtags'] = array_map(function ($tag) {
                     while ($tag[0] === "#") {
-                        $tag = substr($tag, 1);
+                        $tag = mb_substr($tag, 1);
                     }
                     return $tag;
                 }, $this->stream['filter_nohashtags']);
@@ -855,7 +855,7 @@ class StreamsController extends PluginController {
         if (is_array($stream['pool_hashtags'])) {
             $stream['pool_hashtags'] = array_map(function ($tag) {
                 while ($tag[0] === "#") {
-                    $tag = substr($tag, 1);
+                    $tag = mb_substr($tag, 1);
                 }
                 return $tag;
             }, $stream['pool_hashtags']);
@@ -877,7 +877,7 @@ class StreamsController extends PluginController {
         if (is_array($stream['filter_hashtags'])) {
             $stream['filter_hashtags'] = array_map(function ($tag) {
                 while ($tag[0] === "#") {
-                    $tag = substr($tag, 1);
+                    $tag = mb_substr($tag, 1);
                 }
                 return $tag;
             }, $stream['filter_hashtags']);
@@ -888,7 +888,7 @@ class StreamsController extends PluginController {
         if (is_array($stream['filter_nohashtags'])) {
             $stream['filter_nohashtags'] = array_map(function ($tag) {
                 while ($tag[0] === "#") {
-                    $tag = substr($tag, 1);
+                    $tag = mb_substr($tag, 1);
                 }
                 return $tag;
             }, $stream['filter_nohashtags']);

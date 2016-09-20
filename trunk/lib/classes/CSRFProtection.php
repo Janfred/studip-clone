@@ -200,8 +200,8 @@ class CSRFProtection
                 $bytes .= hash('sha256', mt_rand() . $random_state, TRUE);
             }
         }
-        $output = substr($bytes, 0, $count);
-        $bytes = substr($bytes, $count);
+        $output = mb_substr($bytes, 0, $count);
+        $bytes = mb_substr($bytes, $count);
         return $output;
     }
 }

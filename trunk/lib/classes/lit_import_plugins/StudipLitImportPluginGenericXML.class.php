@@ -107,11 +107,11 @@ class StudipLitImportPluginGenericXML extends StudipLitImportPluginAbstract {
                     $dates .= $y->get_content().",";
                 }
                 
-                if ($fields["dc_identifier"]) $fields["dc_identifier"] = utf8_decode(substr($fields["dc_identifier"],0,-1));
-                if ($fields["dc_publisher"]) $fields["dc_publisher"] = utf8_decode(substr($fields["dc_publisher"],0,-1));
-                if ($fields["dc_title"]) $fields["dc_title"] = utf8_decode(substr($fields["dc_title"],0,-1));
-                if ($fields["dc_creator"]) $fields["dc_creator"] = utf8_decode(substr($fields["dc_creator"],0,-1));
-                if ($fields["dc_subject"]) $fields["dc_subject"] = utf8_decode(substr($fields["dc_subject"],0,-1));
+                if ($fields["dc_identifier"]) $fields["dc_identifier"] = utf8_decode(mb_substr($fields["dc_identifier"],0,-1));
+                if ($fields["dc_publisher"]) $fields["dc_publisher"] = utf8_decode(mb_substr($fields["dc_publisher"],0,-1));
+                if ($fields["dc_title"]) $fields["dc_title"] = utf8_decode(mb_substr($fields["dc_title"],0,-1));
+                if ($fields["dc_creator"]) $fields["dc_creator"] = utf8_decode(mb_substr($fields["dc_creator"],0,-1));
+                if ($fields["dc_subject"]) $fields["dc_subject"] = utf8_decode(mb_substr($fields["dc_subject"],0,-1));
                 
                 if (!trim($fields["dc_creator"])) $fields["dc_creator"] = "Unbekannt";
                 if (!trim($fields["dc_title"])) $fields["dc_title"] = "";

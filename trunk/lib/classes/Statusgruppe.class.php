@@ -62,15 +62,15 @@ class Statusgruppe {
      * * * * * * * * * * * * * * * * * * * */
     public function __call($method, $args)
   {
-    if (substr($method, 0, 3) == 'get') {
-        $variable = mb_strtolower(substr($method, 3, mb_strlen($method) -3));
+    if (mb_substr($method, 0, 3) == 'get') {
+        $variable = mb_strtolower(mb_substr($method, 3, mb_strlen($method) -3));
         if (property_exists($this, $variable)) {
             return $this->$variable;
         } else {
             throw new Exception(__CLASS__ ."::$method() does not exist!");
         }
-    } else if (substr($method, 0, 3) == 'set') {        
-        $variable = mb_strtolower(substr($method, 3, mb_strlen($method) -3));
+    } else if (mb_substr($method, 0, 3) == 'set') {        
+        $variable = mb_strtolower(mb_substr($method, 3, mb_strlen($method) -3));
         if (sizeof($args) != 1) {
             throw new Exception("wrong parameter count: ".__CLASS__ ."::$method() expects 1 parameter!");
         }
@@ -334,7 +334,7 @@ class Statusgruppe {
             if ($omit_role != $role_id) {
                 echo '<option value="'. $role_id .'">';
                 for ($i = 1; $i <= $level; $i++) echo '&nbsp; &nbsp;';
-                echo substr($role['role']->getName(), 0, 70).'</option>';
+                echo mb_substr($role['role']->getName(), 0, 70).'</option>';
             }
             if ($role['child']) Statusgruppe::displayOptionsForRoles($role['child'], $omit_role, $level+1);
         }

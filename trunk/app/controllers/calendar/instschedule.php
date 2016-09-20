@@ -148,8 +148,8 @@ class Calendar_InstscheduleController extends AuthenticatedController
             $this->seminars[$zw[0]] = Seminar::getInstance($zw[0]);
         }
 
-        $this->start = substr($start, 0, 2) .':'. substr($start, 2, 2);
-        $this->end   = substr($end, 0, 2) .':'. substr($end, 2, 2);
+        $this->start = mb_substr($start, 0, 2) .':'. mb_substr($start, 2, 2);
+        $this->end   = mb_substr($end, 0, 2) .':'. mb_substr($end, 2, 2);
 
         $day_names  = array(_("Montag"),_("Dienstag"),_("Mittwoch"),
             _("Donnerstag"),_("Freitag"),_("Samstag"),_("Sonntag"));

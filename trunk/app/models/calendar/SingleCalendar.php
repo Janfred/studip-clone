@@ -1022,7 +1022,7 @@ class SingleCalendar
                         }
                         $aday = strftime('%u', $lwst) - 1;
                         for ($i = 0; $i < mb_strlen($rep['wdays']); $i++) {
-                            $awday = (int) substr($rep['wdays'], $i, 1) - 1;
+                            $awday = (int) mb_substr($rep['wdays'], $i, 1) - 1;
                             if ($awday > $aday) {
                                 $lwst = $lwst + ($awday - $aday) * 86400;
                                 $hgst = $lwst + $duration * 86400;

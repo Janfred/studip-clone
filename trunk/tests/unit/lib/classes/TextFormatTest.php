@@ -68,7 +68,7 @@ function markupSimple($markup, $matches)
 function markupImage($markup, $matches)
 {
     if (mb_strlen($matches[1]) > 1) {
-        $title = $markup->format(substr($matches[1], 1));
+        $title = $markup->format(mb_substr($matches[1], 1));
     } else {
         $title = '';
     }
@@ -157,7 +157,7 @@ function markupCode($markup, $matches)
 function markupQuote($markup, $matches, $contents)
 {
     if (mb_strlen($matches[1]) > 1) {
-        $title = sprintf(_('%s hat geschrieben:'), $markup->format(substr($matches[1], 1)));
+        $title = sprintf(_('%s hat geschrieben:'), $markup->format(mb_substr($matches[1], 1)));
     } else {
         $title = _('Zitat:');
     }
@@ -168,7 +168,7 @@ function markupQuote($markup, $matches, $contents)
 function markupLink($markup, $matches)
 {
     if (mb_strlen($matches[1]) > 1) {
-        $text = $markup->format(substr($matches[1], 1, -1));
+        $text = $markup->format(mb_substr($matches[1], 1, -1));
     } else {
         $text = $markup->quote($matches[2]);
     }
@@ -179,7 +179,7 @@ function markupLink($markup, $matches)
 function markupMail($markup, $matches)
 {
     if (mb_strlen($matches[1]) > 1) {
-        $text = $markup->format(substr($matches[1], 1, -1));
+        $text = $markup->format(mb_substr($matches[1], 1, -1));
     } else {
         $text = $markup->quote($matches[2]);
     }

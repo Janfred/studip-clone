@@ -528,7 +528,7 @@ class Router
         $parameters = array();
         if (isset($this->routes[$method])) {
             if ($content_renderer->extension() && mb_strpos($uri, $content_renderer->extension()) !== false) {
-                $uri = substr($uri, 0, -mb_strlen($content_renderer->extension()));
+                $uri = mb_substr($uri, 0, -mb_strlen($content_renderer->extension()));
             }
 
             foreach ($this->routes[$method] as $uri_template => $route) {

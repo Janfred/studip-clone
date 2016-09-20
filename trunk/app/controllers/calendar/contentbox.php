@@ -109,13 +109,13 @@ class Calendar_ContentboxController extends StudipController {
             if (date("Ymd", $termin->getStart()) == date("Ymd", time())) {
                 $title = _('Heute') . date(", H:i", $termin->getStart());
             } else {
-                $title = substr(strftime("%a", $termin->getStart()), 0, 2);
+                $title = mb_substr(strftime("%a", $termin->getStart()), 0, 2);
                 $title .= date(". d.m.Y, H:i", $termin->getStart());
             }
 
             if ($termin->getStart() < $termin->getEnd()) {
                 if (date("Ymd", $termin->getStart()) < date("Ymd", $termin->getEnd())) {
-                    $title .= " - " . substr(strftime("%a", $termin->getEnd()), 0, 2);
+                    $title .= " - " . mb_substr(strftime("%a", $termin->getEnd()), 0, 2);
                     $title .= date(". d.m.Y, H:i", $termin->getEnd());
                 } else {
                     $title .= " - " . date("H:i", $termin->getEnd());

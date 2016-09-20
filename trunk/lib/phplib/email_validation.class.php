@@ -44,8 +44,8 @@ class email_validation_class
         }
         if(IsSet($found))
         {
-            $this->next_token=substr($string,$found+1);
-            return(substr($string,0,$found));
+            $this->next_token=mb_substr($string,$found+1);
+            return(mb_substr($string,0,$found));
         }
         else
         {
@@ -72,9 +72,9 @@ class email_validation_class
             $line.=fgets($connection,100);
             $length=mb_strlen($line);
             if($length>=2
-            && substr($line,$length-2,2)=="\r\n")
+            && mb_substr($line,$length-2,2)=="\r\n")
             {
-                $line=substr($line,0,$length-2);
+                $line=mb_substr($line,0,$length-2);
                 if($this->debug)
                     $this->OutputDebug("S $line");
                 return($line);

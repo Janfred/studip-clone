@@ -452,8 +452,8 @@ class ExternSemBrowseTemplate extends SemBrowse {
 
                         // shorten, if string too long
                         if (mb_strlen($sem_turnus) > 70) {
-                            $sem_turnus = substr($sem_turnus, 0,
-                                    mb_strpos(substr($sem_turnus, 70, mb_strlen($sem_turnus)), ",") +71);
+                            $sem_turnus = mb_substr($sem_turnus, 0,
+                                    mb_strpos(mb_substr($sem_turnus, 70, mb_strlen($sem_turnus)), ",") +71);
                             $sem_turnus .= "...";
                         }
                         $content['LECTURES']['GROUP'][$i]['LECTURE'][$j]['CYCLE'] = ExternModule::ExtHtmlReady($sem_turnus);

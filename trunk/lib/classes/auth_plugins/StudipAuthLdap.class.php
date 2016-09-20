@@ -209,7 +209,7 @@ class StudipAuthLdap extends StudipAuthAbstract {
             }
             $pos = mb_strpos($ldap_field, $sn);
             if ($pos !== false){
-                $ret = trim(substr($ldap_field,0,$pos));
+                $ret = trim(mb_substr($ldap_field,0,$pos));
             }
         }
         return $ret;

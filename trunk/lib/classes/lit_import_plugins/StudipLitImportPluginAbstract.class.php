@@ -201,7 +201,7 @@ class StudipLitImportPluginAbstract {
         global $LIT_IMPORT_PLUGINS;
         $ret = false;
         for ($i = 0; $i < count($LIT_IMPORT_PLUGINS); ++$i){
-            if (substr(mb_strtolower($this->class_name),21) == mb_strtolower($LIT_IMPORT_PLUGINS[$i]['name'])){
+            if (mb_substr(strtolower($this->class_name),21) == mb_strtolower($LIT_IMPORT_PLUGINS[$i]['name'])){
                 $ret = $LIT_IMPORT_PLUGINS[$i]['name'];
                 break;
             }

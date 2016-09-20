@@ -184,7 +184,7 @@ abstract class StudIPPlugin {
      */
     protected function addStylesheet($filename, $variables = [], $link_attr = [])
     {
-        if (substr($filename, -5) !== '.less') {
+        if (mb_substr($filename, -5) !== '.less') {
             $url = $this->getPluginURL() . '/' . $filename;
             PageLayout::addStylesheet($url, $link_attr);
             return;

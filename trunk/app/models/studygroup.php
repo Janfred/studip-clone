@@ -273,7 +273,7 @@ class StudygroupModel
                 $sql .= " AND admission_prelim = 0 ";
             }
         }
-        $sort_order = (substr($sort, mb_strlen($sort) - 3, 3) == 'asc') ? 'asc' : 'desc';
+        $sort_order = (mb_substr($sort, mb_strlen($sort) - 3, 3) == 'asc') ? 'asc' : 'desc';
 
         // add here the sortings
         if ($sort == 'name_asc') {

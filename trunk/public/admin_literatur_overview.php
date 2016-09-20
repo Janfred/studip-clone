@@ -226,7 +226,7 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
                                $institute['Institut_id'],
                                $institute['is_fak'] ? 'nested-item-header' : 'nested-item',
                                $institute['Institut_id'] == Request::option('_inst_id') ? ' selected ' : '',
-                               htmlReady(substr($institute['Name'], 0, 70)) . ' (' . $institute['anzahl'] . ')');
+                               htmlReady(mb_substr($institute['Name'], 0, 70)) . ' (' . $institute['anzahl'] . ')');
                         if ($institute['is_fak']) {
                             if ($institute['Institut_id'] == Request::option('_inst_id')){
                                 $_is_fak = true;
@@ -237,7 +237,7 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
                                 printf("<option value=\"%s\" %s class=\"nested-item\">%s </option>\n",
                                        $row['Institut_id'],
                                        $row['Institut_id'] == Request::option('_inst_id') ? ' selected ' : '',
-                                       htmlReady(substr($row['Name'], 0, 70)) . ' (' . $row['anzahl'] . ')');
+                                       htmlReady(mb_substr($row['Name'], 0, 70)) . ' (' . $row['anzahl'] . ')');
                             }
                             $institute_statement->closeCursor();
                         }
@@ -444,13 +444,13 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
                         $estimated_p += $sem_data['admission_turnout'];
                         $participants += $sem_data['participants'];
                     }
-                    $content = substr($content,0,-2);
+                    $content = mb_substr($content,0,-2);
                     $content .= "<br>";
                     $content .= "<b>" . _("Dozenten:") . "</b>&nbsp;&nbsp;";
                     foreach ($_SESSION['_lit_data'][$cid]['doz_data'] as $doz_data){
                         $content .= '<a href="dispatch.php/profile?username=' . $doz_data['username'] . '">' . htmlReady($doz_data["Nachname"]) . "</a>, ";
                     }
-                    $content = substr($content,0,-2);
+                    $content = mb_substr($content,0,-2);
                     $content .= "<br>";
                     $content .= "<b>" . _("Teilnehmeranzahl (erwartet/angemeldet):") . "</b>&nbsp;&nbsp;";
                     $content .= ($estimated_p ? $estimated_p : _("unbekannt"));

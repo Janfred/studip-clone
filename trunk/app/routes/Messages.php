@@ -47,7 +47,7 @@ class Messages extends \RESTAPI\RouteMap
     {
         $settings = \UserConfig::get($user_id)->MESSAGING_SETTINGS ?: array();
 
-        $type = substr($box, 0, -3);
+        $type = mb_substr($box, 0, -3);
         if ($folder_id != 0 && (
                 !isset($settings['folder'][$type][$folder_id])
                 || $settings['folder'][$type][$folder_id] === 'dummy'
@@ -217,7 +217,7 @@ class Messages extends \RESTAPI\RouteMap
         $folders['in'][0]  = _('Posteingang');
         $folders['out'][0] = _('Postausgang');
 
-        return self::filterDeleted($folders[substr($box, 0, -3)]);
+        return self::filterDeleted($folders[mb_substr($box, 0, -3)]);
     }
 
 

@@ -513,7 +513,7 @@ function select_group($sem_start_time)
  * The function shortens a string, but it uses the first 2/3 and the last 1/3
  *
  * The parts will be divided by a "[...]". The functions is to use like php's
- * substr function.
+ * mb_substr function.
  *
  * @param string  $what  the original string
  * @param integer $start start pos, 0 is the first pos
@@ -1034,7 +1034,7 @@ function get_seminars_user($user_id)
  */
 function StringToFloat($str)
 {
-    $str = substr((string)$str,0,13);
+    $str = mb_substr((string)$str,0,13);
     $locale = localeconv();
     $from = ($locale["thousands_sep"] ? $locale["thousands_sep"] : ',');
     $to = ($locale["decimal_point"] ? $locale["decimal_point"] : '.');
@@ -1557,7 +1557,7 @@ function text_excerpt($text, $phrase, $radius = 100, $length = 200,
   $prefix = $start_pos > 0 ? $excerpt_string : '';
   $postfix = $end_pos < mb_strlen($text) ? $excerpt_string : '';
 
-  return $prefix.substr($text, $start_pos, $end_pos - $start_pos).$postfix;
+  return $prefix.mb_substr($text, $start_pos, $end_pos - $start_pos).$postfix;
 }
 
 /**
@@ -1737,7 +1737,7 @@ function get_title_for_status($type, $count, $sem_type = NULL)
 }
 
 /**
- * Stud.IP encoding aware version of good ol' substr(), treats numeric HTML-ENTITIES as one character
+ * Stud.IP encoding aware version of good ol' mb_substr(), treats numeric HTML-ENTITIES as one character
  * use only if really necessary
  *
  * @param string  $string string to shorten
@@ -1749,7 +1749,7 @@ function get_title_for_status($type, $count, $sem_type = NULL)
 function studip_substr($string, $offset, $length = false)
 {
     if(!preg_match("'&#[0-9]+;'", $string)){
-        return substr($string, $offset, $length);
+        return mb_substr($string, $offset, $length);
     }
     $utf8string = studip_utf8encode($string);
     if ($length === false) {
@@ -2008,7 +2008,7 @@ function relsize($size, $verbose = true, $displayed_levels = 1, $glue = ', ', $t
  */
 function get_route($route = '')
 {
-    $route = substr(parse_url($route ?: $_SERVER['REQUEST_URI'], PHP_URL_PATH), mb_strlen($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']));
+    $route = mb_substr(parse_url($route ?: $_SERVER['REQUEST_URI'], PHP_URL_PATH), mb_strlen($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']));
     if (mb_strpos($route, 'plugins.php/') !== false) {
         $trails = explode('plugins.php/', $route);
         $pieces = explode('/', $trails[1]);
@@ -2024,8 +2024,8 @@ function get_route($route = '')
             }
         }
     }
-    while (substr($route, mb_strlen($route)-6, 6) == '/index') {
-        $route = substr($route, 0, mb_strlen($route)-6);
+    while (mb_substr($route, mb_strlen($route)-6, 6) == '/index') {
+        $route = mb_substr($route, 0, mb_strlen($route)-6);
     }
     return $route;
 }

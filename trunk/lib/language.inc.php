@@ -55,7 +55,7 @@ function get_accepted_languages() {
     if (is_array($accepted_languages) && count($accepted_languages)) {
         foreach ($accepted_languages as $temp_accepted_language) {
             foreach ($INSTALLED_LANGUAGES as $temp_language => $temp_language_settings) {
-                if (substr(trim($temp_accepted_language), 0, 2) == substr($temp_language, 0, 2)) {
+                if (mb_substr(trim($temp_accepted_language), 0, 2) == mb_substr($temp_language, 0, 2)) {
                     $_language = $temp_language;
                     break 2;
                 }

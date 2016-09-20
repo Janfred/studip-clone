@@ -69,8 +69,8 @@ function parse_header($header){
         if(trim($header[$i]) == "") break;
         $matches = preg_match('/^\S+:/', $header[$i], $parts);
         if ($matches){
-            $key = trim(substr($parts[0],0,-1));
-            $value = trim(substr($header[$i], mb_strlen($parts[0])));
+            $key = trim(mb_substr($parts[0],0,-1));
+            $value = trim(mb_substr($header[$i], mb_strlen($parts[0])));
             $ret[$key] = $value;
         } else {
             $ret[trim($header[$i])] = trim($header[$i]);
@@ -97,13 +97,13 @@ function parse_link($link, $level=0) {
         ) {
         return array('response' => 'HTTP/1.0 400 Bad Request', 'response_code' => 400);
     }
-    if (substr($link,0,6) == "ftp://") {
+    if (mb_substr($link,0,6) == "ftp://") {
         // Parsing an FTF-Adress
         $documentpath = $url_parts["path"];
 
         if (mb_strpos($url_parts["host"],"@")) {
-            $url_parts["pass"] .= "@".substr($url_parts["host"],0,mb_strpos($url_parts["host"],"@"));
-            $url_parts["host"] = substr(mb_strrchr($url_parts["host"],"@"),1);
+            $url_parts["pass"] .= "@".mb_substr($url_parts["host"],0,mb_strpos($url_parts["host"],"@"));
+            $url_parts["host"] = mb_substr(mb_strrchr($url_parts["host"],"@"),1);
         }
 
         if (preg_match('/[^a-z0-9_.-]/i',$url_parts['host'])){ // exists umlauts ?
@@ -266,7 +266,7 @@ function createSelectedZip ($file_ids, $perm_check = TRUE, $size_check = false) 
                     $filename = prepareFilename($file['filename'], FALSE, $tmp_full_path);
                     if (@copy(get_upload_file_path($file['dokument_id']), $tmp_full_path.'/'.$filename)) {
                         TrackAccess($file['dokument_id'],'dokument');
-                        $filelist[] = array_merge($file, array('path' => substr($tmp_full_path.'/'.$filename, mb_strlen("$TMP_PATH/$zip_file_id/"))));
+                        $filelist[] = array_merge($file, array('path' => mb_substr($tmp_full_path.'/'.$filename, mb_strlen("$TMP_PATH/$zip_file_id/"))));
                     }
                 }
             }
@@ -385,7 +385,7 @@ function createTempFolder($folder_id, $tmp_full_path, $sem_id, $perm_check = TRU
         createTempFolder($row['folder_id'], $tmp_sub_full_path, $sem_id, $perm_check, true);
     }
     if ($in_recursion === false) {
-       array_walk($filelist, create_function('&$a', '$a["path"] = substr($a["path"], ' . (int)mb_strlen($tmp_path) . ');'));
+       array_walk($filelist, create_function('&$a', '$a["path"] = mb_substr($a["path"], ' . (int)mb_strlen($tmp_path) . ');'));
        return $filelist;
     } else {
         return true;
@@ -1047,17 +1047,17 @@ function prepareFilename($filename, $shorten = FALSE, $checkfolder = false) {
     $filename=str_replace($bad_characters, $replacements, $filename);
 
     if ($filename{0} == ".")
-        $filename = substr($filename, 1, mb_strlen($filename));
+        $filename = mb_substr($filename, 1, mb_strlen($filename));
 
     if ($shorten) {
         $ext = getFileExtension ($filename);
-        $filename = substr(substr($filename, 0, mb_strrpos($filename,$ext)-1), 0, (30 - mb_strlen($ext))).".".$ext;
+        $filename = mb_substr(mb_substr($filename, 0, mb_strrpos($filename,$ext)-1), 0, (30 - mb_strlen($ext))).".".$ext;
     }
     if ($checkfolder !== false) {
         $c = 0;
         $ext = getFileExtension($filename);
         if ($ext) {
-          $name = substr($filename, 0, mb_strrpos($filename,$ext)-1);
+          $name = mb_substr($filename, 0, mb_strrpos($filename,$ext)-1);
         } else {
             $name = $filename;
 }
@@ -1074,7 +1074,7 @@ function getFileExtension($str) {
     if (!$i) { return ""; }
 
     $l = mb_strlen($str) - $i;
-    $ext = substr($str,$i+1,$l);
+    $ext = mb_substr($str,$i+1,$l);
 
     return $ext;
 }
@@ -2631,7 +2631,7 @@ function create_zip_from_file($file_name, $zip_file_name){
         $archive->close();
         return [$localfilename];
     } else if (@file_exists($GLOBALS['ZIP_PATH']) || ini_get('safe_mode')){
-        if (mb_strtolower(substr($zip_file_name, -3)) != 'zip' ) {
+        if (mb_strtolower(mb_substr($zip_file_name, -3)) != 'zip' ) {
             $zip_file_name = $zip_file_name . '.zip';
         }
 
@@ -2650,7 +2650,7 @@ function create_zip_from_directory($fullpath, $zip_file_name) {
         $archive->close();
         return $added;
     } else if (@file_exists($GLOBALS['ZIP_PATH']) || ini_get('safe_mode')){
-        if (mb_strtolower(substr($zip_file_name, -3)) != 'zip' ) {
+        if (mb_strtolower(mb_substr($zip_file_name, -3)) != 'zip' ) {
             $zip_file_name = $zip_file_name . '.zip';
         }
 
@@ -2830,7 +2830,7 @@ function upload_recursively($range_id, $dir) {
         }
         // Verzeichnis erstellen
         $pos = mb_strrpos($subdir, "/");
-        $name = substr($subdir, $pos + 1, mb_strlen($subdir) - $pos);
+        $name = mb_substr($subdir, $pos + 1, mb_strlen($subdir) - $pos);
         $dir_id = create_folder($name, "", $range_id);
         $count['subdirs']++;
         // Verzeichnis hochladen.
@@ -2920,7 +2920,7 @@ function get_upload_file_path ($document_id)
         return NULL;
     }
 
-    $directory = $UPLOAD_PATH.'/'.substr($document_id, 0, 2);
+    $directory = $UPLOAD_PATH.'/'.mb_substr($document_id, 0, 2);
 
     if (!file_exists($directory)) {
         mkdir($directory);

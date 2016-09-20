@@ -81,7 +81,7 @@ class ExportPDF extends TCPDF implements ExportDocument {
         if (count($matches[0])) {
             $endnote .= "<br><br>"._("Kommentare")."<hr>";
             for ($i=0; $i < count($matches[0]); $i++) {
-                $endnote .= ($i+1).") ".htmlReady(substr($matches[1][$i], 1)).": ".htmlReady($matches[2][$i])."<br>";
+                $endnote .= ($i+1).") ".htmlReady(mb_substr($matches[1][$i], 1)).": ".htmlReady($matches[2][$i])."<br>";
             }
         }
         $content = preg_replace_callback("#\[comment(=.*)?\](.*)\[/comment\]#msU", function ($m) {return $this->addEndnote($m[1], $m[2]);}, $content);
@@ -283,7 +283,7 @@ class ExportPDF extends TCPDF implements ExportDocument {
         $url = $url_elements['path'].'?'.$url_elements['query'];
         if (mb_strpos(implode('#', $this->domains), $url_elements['host']) !== false) {
             if (mb_strpos($url, 'dispatch.php/media_proxy?url=') !== false) {
-                $targeturl = urldecode(substr($url, 4));
+                $targeturl = urldecode(mb_substr($url, 4));
                 try {
                     // is file in cache?
                     if (!$metadata = $this->media_proxy->getMetaData($targeturl)) {

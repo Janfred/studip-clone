@@ -154,7 +154,7 @@ class StudipFileCache implements StudipCache {
      */
     private function getPathAndFile($key, $expire = null){
         $id = hash('md5', $key);
-        $path = $this->dir . substr($id,0,2);
+        $path = $this->dir . mb_substr($id,0,2);
         if(!is_dir($path)){
             if(!@mkdir($path, 0700)) throw new Exception('Could not create directory: ' .$path);
         }

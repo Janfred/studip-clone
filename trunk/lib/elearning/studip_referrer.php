@@ -23,7 +23,7 @@ if(file_exists("./ilias.ini.php")){
     }
 
     $cookie_path = dirname($_SERVER['PHP_SELF']);
-    if (substr($cookie_path,-1) != "/") {
+    if (mb_substr($cookie_path,-1) != "/") {
         $cookie_path .= "/";
     }
     if (isset($_GET['sess_id']))

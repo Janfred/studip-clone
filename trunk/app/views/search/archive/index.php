@@ -77,13 +77,13 @@
                 <? endif ?>
                 
                 <? if ($course->archiv_file_id and archiv_check_perm($course->id)) : 
-                    $filename = _('Dateisammlung') . '-' . substr($course->name, 0, 200) . '.zip';
+                    $filename = _('Dateisammlung') . '-' . mb_substr($course->name, 0, 200) . '.zip';
                 ?>
                 <a href="<?= URLHelper::getLink(GetDownloadLink($course->archiv_file_id, $filename, 1)) ?>">
                     <?= Icon::create('file-archive', 'clickable')->asImg('16px') ?>
                 </a>
                 <? elseif ($course->archiv_protected_file_id and in_array(archiv_check_perm($course->id), ['tutor', 'dozent', 'admin'])) :
-                    $filename = _('Dateisammlung') . '-' . substr($course->name, 0, 200) . '.zip';
+                    $filename = _('Dateisammlung') . '-' . mb_substr($course->name, 0, 200) . '.zip';
                 ?>
                 <a href="<?= URLHelper::getLink(GetDownloadLink($course->archiv_protected_file_id, $filename, 1)) ?>">
                     <?= Icon::create('file-archive', 'clickable')->asImg('16px') ?>

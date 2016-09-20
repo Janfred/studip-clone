@@ -6,7 +6,7 @@
     <? $i = 1 ?>
     <? foreach ($navigation as $nav) : ?>
         <li>
-        <? if (substr($url = $nav->getURL(), 0, 1) == '#') : ?>
+        <? if (mb_substr($url = $nav->getURL(), 0, 1) == '#') : ?>
             <a href="<?= $url ?>" onclick="STUDIP.SkipLinks.setActiveTarget('<?= $url ?>');"  tabindex="<?= $i++ ?>"><?= htmlReady($nav->getTitle()) ?></a>
         <? else : ?>
             <? if (is_internal_url($url)) : ?>

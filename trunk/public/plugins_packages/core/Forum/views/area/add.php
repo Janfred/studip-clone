@@ -28,7 +28,7 @@
                 </a>
                 <div class="areacontent" data-content="<?= htmlReady($entry['content_raw']) ?>">
                     <? $description = ForumEntry::killFormat(ForumEntry::killEdit($entry['content_raw'])) ?>
-                    <?= htmlReady(substr($description, 0, 150))
+                    <?= htmlReady(mb_substr($description, 0, 150))
                     ?><?= (mb_strlen($description) > 150) ? '&hellip;' : '' ?>
                 </div>
             </span>

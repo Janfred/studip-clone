@@ -84,7 +84,7 @@ use Studip\Button, Studip\LinkButton;
                 <td><?= $user['perms'] ?></td>
                 <td>
                 <? $institutes = join(', ', $user['institutes']); ?>
-                    <?= htmlReady(substr($institutes, 0, 60)) ?>
+                    <?= htmlReady(mb_substr($institutes, 0, 60)) ?>
                     <? if (mb_strlen($institutes) > 60): ?>
                     ...<?= tooltipIcon(join("\n", $user['institutes']))?>
                     <? endif ?>

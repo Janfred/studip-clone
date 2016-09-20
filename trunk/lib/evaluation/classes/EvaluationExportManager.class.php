@@ -244,7 +244,7 @@ class EvaluationExportManager extends AuthorObject {
 
          if (filemtime ($file) < (time () - EVALEXPORT_LIFETIME) &&
              $part["extension"] == $this->extension &&
-             substr ($part["basename"], 0, mb_strlen (EVALEXPORT_PREFIX)) == EVALEXPORT_PREFIX)
+             mb_substr ($part["basename"], 0, mb_strlen (EVALEXPORT_PREFIX)) == EVALEXPORT_PREFIX)
             unlink ($file);
       }
       $dirhandle->close();

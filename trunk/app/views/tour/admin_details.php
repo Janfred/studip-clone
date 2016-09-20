@@ -11,7 +11,7 @@
                    </span>
                     <select name="tour_language">
                         <? foreach ($GLOBALS['INSTALLED_LANGUAGES'] as $key => $language) : ?>
-                            <option value="<?= substr($key, 0, 2) ?>"<?= ($tour->language == substr($key, 0, 2)) ? ' selected' : '' ?>><?= $language['name'] ?></option>
+                            <option value="<?= mb_substr($key, 0, 2) ?>"<?= ($tour->language == mb_substr($key, 0, 2)) ? ' selected' : '' ?>><?= $language['name'] ?></option>
                         <? endforeach ?>
                     </select>
                 </label>

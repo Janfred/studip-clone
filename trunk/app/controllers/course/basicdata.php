@@ -391,7 +391,7 @@ class Course_BasicdataController extends AuthenticatedController
             foreach (array_merge($this->attributes, $this->institutional, $this->descriptions) as $field) {
                 if (!$field['locked']) {
                     if ($field['type'] == 'datafield') {
-                        $datafield_id = substr($field['name'], 10);
+                        $datafield_id = mb_substr($field['name'], 10);
                         $datafield = $all_fields_types[$datafield_id];
                         $datafield->setValueFromSubmit($datafield_values[$datafield_id]);
                         if ($datafield->isValid()) {
@@ -408,7 +408,7 @@ class Course_BasicdataController extends AuthenticatedController
                         }
                     } else {
                         // format of input element name is "course_xxx"
-                        $varname = substr($field['name'], 7);
+                        $varname = mb_substr($field['name'], 7);
                         if ($field['i18n']) {
                             $req_value = Request::i18n($field['name']);
                         } else {

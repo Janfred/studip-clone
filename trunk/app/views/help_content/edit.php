@@ -22,7 +22,7 @@
                 <span class="required"><?= _('Sprache des Textes:') ?></span>
                 <select name="help_content_language">
                     <? foreach ($GLOBALS['INSTALLED_LANGUAGES'] as $key => $language) : ?>
-                        <option value="<?= substr($key, 0, 2) ?>"<?= ($help_content->language == substr($key, 0, 2)) ? ' selected' : '' ?>><?= $language['name'] ?></option>
+                        <option value="<?= mb_substr($key, 0, 2) ?>"<?= ($help_content->language == mb_substr($key, 0, 2)) ? ' selected' : '' ?>><?= $language['name'] ?></option>
                     <? endforeach ?>
                 </select>
             </label>

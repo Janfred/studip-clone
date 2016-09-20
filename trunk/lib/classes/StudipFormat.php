@@ -470,7 +470,7 @@ class StudipFormat extends TextFormat
     protected static function markupQuote($markup, $matches, $contents)
     {
         if (mb_strlen($matches[1]) > 1) {
-            $title = sprintf(_('%s hat geschrieben:'), $markup->format(substr($matches[1], 1)));
+            $title = sprintf(_('%s hat geschrieben:'), $markup->format(mb_substr($matches[1], 1)));
             return sprintf('<blockquote><div class="author">%s</div>%s</blockquote>',
                        $title, trim($contents));
         } else {
@@ -494,7 +494,7 @@ class StudipFormat extends TextFormat
     {
         $codetype = "";
         if (mb_strlen($matches[1])) {
-            $codetype = " ".decodeHTML(trim(substr($matches[1], 1)), ENT_QUOTES);
+            $codetype = " ".decodeHTML(trim(mb_substr($matches[1], 1)), ENT_QUOTES);
         }
         $code = decodeHTML(trim($matches[2]), ENT_QUOTES);
         return sprintf('<pre class="usercode %1$s"><code class="%1$s">%2$s</code></pre>',
@@ -537,7 +537,7 @@ class StudipFormat extends TextFormat
                 } elseif(in_array($param, words("left center right"))) {
                     $position = $param;
                 } elseif($key === 0 && $param[0] === "=") {
-                    $title = substr($param, 1);
+                    $title = mb_substr($param, 1);
                 } elseif($key < count($params) - 1) {
                     $virtual_url = $param.":".$params[$key + 1];
                     if (isURL($virtual_url)) {
@@ -559,7 +559,7 @@ class StudipFormat extends TextFormat
                 && ($pu['host'] == $_SERVER['HTTP_HOST'] || $pu['host'].':'.$pu['port'] == $_SERVER['HTTP_HOST'])
                 && mb_strpos($pu['path'], $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']) === 0) {
             $intern = true;
-            $checkpath = urldecode(substr($pu['path'], mb_strlen($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'])));
+            $checkpath = urldecode(mb_substr($pu['path'], mb_strlen($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'])));
             if (mb_strpos($checkpath, '../') === false) {
                 list($pu['first_target']) = explode('/', $checkpath);
             } else {
@@ -603,7 +603,7 @@ class StudipFormat extends TextFormat
         }
 
         if ($tag === 'audio') {
-            $random_id = 'audio-' . substr(md5(uniqid('audio', true)), -8);
+            $random_id = 'audio-' . mb_substr(md5(uniqid('audio', true)), -8);
             $media = str_replace('<audio ', '<audio id="' . $random_id . '" onerror="STUDIP.Audio.handle(this);" ', $media);
         }
 

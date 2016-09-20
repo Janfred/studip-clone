@@ -59,7 +59,7 @@ abstract class Interactable
             # instantiate button from arguments
             $interactable = call_user_func_array(array(get_called_class(), 'create'), $args);
             # but customize with class from $name:
-            $class = self::hyphenate(substr($name, 6));
+            $class = self::hyphenate(mb_substr($name, 6));
 
             # a.) set name unless set
             if (!is_string(@$args[1])) {

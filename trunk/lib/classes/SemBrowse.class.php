@@ -435,12 +435,12 @@ class SemBrowse {
                         echo htmlReady($sem_name) . '</a><br>';
                         //create Turnus field
                         if ($studygroup_mode) {
-                            echo "<div style=\"font-size:smaller\">" . htmlReady(substr($seminar_obj->description,0,100)) . "</div>";
+                            echo "<div style=\"font-size:smaller\">" . htmlReady(mb_substr($seminar_obj->description,0,100)) . "</div>";
                         } else {
                             $temp_turnus_string = $seminar_obj->getDatesExport(array('short' => true, 'shrink' => true, 'semester_id' => $current_semester_id));
                             //Shorten, if string too long (add link for details.php)
                             if (mb_strlen($temp_turnus_string) > 70) {
-                                $temp_turnus_string = htmlReady(substr($temp_turnus_string, 0, mb_strpos(substr($temp_turnus_string, 70, mb_strlen($temp_turnus_string)), ",") + 71));
+                                $temp_turnus_string = htmlReady(mb_substr($temp_turnus_string, 0, mb_strpos(mb_substr($temp_turnus_string, 70, mb_strlen($temp_turnus_string)), ",") + 71));
                                 $temp_turnus_string .= " ... <a href=\"$send_from_search_link\">("._("mehr").")</a>";
                             } else {
                                 $temp_turnus_string = htmlReady($temp_turnus_string);
@@ -633,7 +633,7 @@ class SemBrowse {
                         $temp_turnus_string = $seminar_obj->getFormattedTurnus(true);
                         //Shorten, if string too long (add link for details.php)
                         if (mb_strlen($temp_turnus_string) > 245) {
-                            $temp_turnus_string = substr($temp_turnus_string, 0, mb_strpos(substr($temp_turnus_string, 245, mb_strlen($temp_turnus_string)), ",") + 246);
+                            $temp_turnus_string = mb_substr($temp_turnus_string, 0, mb_strpos(mb_substr($temp_turnus_string, 245, mb_strlen($temp_turnus_string)), ",") + 246);
                             $temp_turnus_string .= " ... ("._("mehr").")";
                         }
                         $worksheet1->write_string($row, 1, $seminar_number, $data_format);

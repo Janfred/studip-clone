@@ -200,7 +200,7 @@ if ($filesize && $type == 0 && !Request::int('zip')) {
             exit;
         }
         if ($range == '-') {
-            $c_start = $filesize - substr($range, 1);
+            $c_start = $filesize - mb_substr($range, 1);
         } else {
             $range  = explode('-', $range);
             $c_start = $range[0];

@@ -222,7 +222,7 @@ class HelpTour extends SimpleORMap {
     function isVisible() {
         if (!$this->settings->active)
             return false;
-        $language = substr($GLOBALS['user']->preferred_language, 0, 2);
+        $language = mb_substr($GLOBALS['user']->preferred_language, 0, 2);
         if (!$language)
             $language = 'de';
         if ($language != $this->language)

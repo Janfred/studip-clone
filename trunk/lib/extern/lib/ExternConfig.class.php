@@ -134,7 +134,7 @@ class ExternConfig {
         foreach ($config as $element_name => $element) {
             if (is_array($element)) foreach ($element as $attribute => $value) {
                 if ((string)$value{0} == '|') {
-                    $new_config[$element_name][$attribute] = explode('|', substr($value, 1));
+                    $new_config[$element_name][$attribute] = explode('|', mb_substr($value, 1));
                 } else {
                     $new_config[$element_name][$attribute] = $value;
                 }

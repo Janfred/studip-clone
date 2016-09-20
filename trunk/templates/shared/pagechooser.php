@@ -11,7 +11,7 @@
     sort($items);
 
     $last_page = reset($items) - 1;
-    $random_id = substr(md5(uniqid('pagination', true)), -8);
+    $random_id = mb_substr(md5(uniqid('pagination', true)), -8);
 ?>
 <p id="pagination-label-<?= $random_id ?>" class="audible">
     <?= _('Blättern') ?>

@@ -636,7 +636,7 @@ class Course_MembersController extends AuthenticatedController
             $csv_count_contingent_full = 0;
 
             foreach ($csv_lines as $csv_line) {
-                $csv_name = preg_split('/[,\t]/', substr($csv_line, 0, 100), -1, PREG_SPLIT_NO_EMPTY);
+                $csv_name = preg_split('/[,\t]/', mb_substr($csv_line, 0, 100), -1, PREG_SPLIT_NO_EMPTY);
                 $csv_nachname = trim($csv_name[0]);
                 $csv_vorname = trim($csv_name[1]);
 

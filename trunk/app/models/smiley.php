@@ -518,7 +518,7 @@ class Smiley
                 continue;
             }
 
-            $name = substr(basename($file), 0, mb_strrpos(basename($file), "."));
+            $name = mb_substr(basename($file), 0, mb_strrpos(basename($file), "."));
             //$name = basename($file, '.gif');
             $smiley = Smiley::getByName($name);
 

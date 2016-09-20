@@ -180,11 +180,11 @@ $order[$i]}
             $out .= "<tr" . $this->css->getFullClass() . ">\n";
             $out .= "<td><font size=\"2\">&nbsp;$title</font></td>";
             $out .= "<td colspan=\"$colspan\"><input type=\"radio\" name=\"{$this->element_name}_widthpp\" value=\"%\"";
-            if (substr($widths[0], -1) == "%")
+            if (mb_substr($widths[0], -1) == "%")
                 $out .= " checked=\"checked\"";
             $out .= "><font size=\"2\">" . _("Prozent") . "&nbsp; &nbsp;</font><input type=\"radio\" name=\"";
             $out .= "{$this->element_name}_widthpp\" value=\"\"";
-            if (substr($widths[0], -1) != "%")
+            if (mb_substr($widths[0], -1) != "%")
                 $out .= " checked=\"checked\"";
             $out .= "><font size=\"2\">" . _("Pixel") . "&nbsp; &nbsp;</font>\n";
             $out .= tooltipIcon($info);
@@ -379,7 +379,7 @@ $order[$i]}
                 $out .= "<tr" . $this->css->getFullClass() . ">\n";
                 $out .= "<td><font size=\"2\">&nbsp;";
                 if (mb_strlen($SEM_TYPE[$order[$i]]["name"]) > 25) {
-                    $out .= htmlReady(substr($SEM_TYPE[$order[$i]]["name"], 0, 22)
+                    $out .= htmlReady(mb_substr($SEM_TYPE[$order[$i]]["name"], 0, 22)
                             . "... ({$SEM_CLASS[$SEM_TYPE[$order[$i]]['class']]['name']})");
                 } else {
                     $out .= htmlReady($SEM_TYPE[$order[$i]]["name"]
@@ -518,7 +518,7 @@ $order[$i]}
                     $global_vars = FALSE;
                     $this->css->switchClass();
                 }
-                if (substr($mark, 0, 8) == '<!-- END') {
+                if (mb_substr($mark, 0, 8) == '<!-- END') {
                     $spacer--;
                     $this->css->switchClass();
                     $out .= '<tr' . $this->css->getFullClass() . ">\n";
@@ -529,7 +529,7 @@ $order[$i]}
                     $out .= htmlReady($mark) . '</td><td>' . htmlReady($description);
                     $out .= '</td>';
                 } else {
-                    if ($spacer > 0 && substr($mark, 0, 10) != '<!-- BEGIN') {
+                    if ($spacer > 0 && mb_substr($mark, 0, 10) != '<!-- BEGIN') {
                         $this->css->switchClass();
                         $out .= '<tr' . $this->css->getFullClass() . ">\n";
                         $out .= '<td colspan="2">&nbsp;</td>';

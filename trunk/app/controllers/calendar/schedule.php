@@ -337,8 +337,8 @@ class Calendar_ScheduleController extends AuthenticatedController
             $this->seminars[$zw[0]] = Seminar::getInstance($zw[0]);
         }
 
-        $this->timespan = substr($start, 0, 2) .':'. substr($start, 2, 2)
-                        . ' - '. substr($end, 0, 2) .':'. substr($end, 2, 2);
+        $this->timespan = mb_substr($start, 0, 2) .':'. mb_substr($start, 2, 2)
+                        . ' - '. mb_substr($end, 0, 2) .':'. mb_substr($end, 2, 2);
         $this->start    = $start;
         $this->end      = $end;
 
