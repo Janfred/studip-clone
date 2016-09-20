@@ -53,7 +53,7 @@ class BlubberExternalContact extends SimpleORMap implements BlubberContact
      * @return BlubberExternalContact
      */
     static public function findByEmail($email) {
-        $email = strtolower($email);
+        $email = mb_strtolower($email);
         $user = self::findBySQL("mail_identifier = ".DBManager::get()->quote($email));
         if (!count($user)) {
             $user = new BlubberExternalContact();

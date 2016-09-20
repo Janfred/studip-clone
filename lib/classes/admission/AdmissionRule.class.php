@@ -153,9 +153,9 @@ abstract class AdmissionRule
         while ($current = $data->fetch(PDO::FETCH_ASSOC)) {
             $className = $current['ruletype'];
             if (is_dir($GLOBALS['STUDIP_BASE_PATH'].
-                   '/lib/admissionrules/'.strtolower($className))) {
+                   '/lib/admissionrules/'.mb_strtolower($className))) {
                 require_once($GLOBALS['STUDIP_BASE_PATH'].'/lib/admissionrules/'.
-                    strtolower($className).'/'.$className.'.class.php');
+                    mb_strtolower($className).'/'.$className.'.class.php');
                 try {
                     $rule = new $className();
                     $rules[$className] = array(

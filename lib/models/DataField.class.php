@@ -160,7 +160,7 @@ class DataField extends SimpleORMap
     private function convertLegacyFields($field)
     {
         $field = preg_replace('/(?<=[a-z])([A-Z])/', '_$1', $field);
-        return strtolower($field);
+        return mb_strtolower($field);
     }
 
     /**

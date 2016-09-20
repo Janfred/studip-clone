@@ -554,7 +554,7 @@ class Admin_UserController extends AuthenticatedController
             $this->available_auth_plugins['preliminary'] = _("vorläufig");
         }
         foreach ($GLOBALS['STUDIP_AUTH_PLUGIN'] as $ap) {
-            $this->available_auth_plugins[strtolower($ap)] = $ap;
+            $this->available_auth_plugins[mb_strtolower($ap)] = $ap;
         }
 
         if (count($this->user->institute_memberships)) {
@@ -955,7 +955,7 @@ class Admin_UserController extends AuthenticatedController
 
         $values = [];
         foreach (words('inst_perms visible raum sprechzeiten Telefon Fax') as $param) {
-            $values[$param] = Request::get(strtolower($param), '');
+            $values[$param] = Request::get(mb_strtolower($param), '');
         }
         foreach (words('externdefault visible') as $param) {
             $values[$param] = Request::int($param, 0);
@@ -978,7 +978,7 @@ class Admin_UserController extends AuthenticatedController
             NotificationCenter::postNotification('UserInstitutionPermDidUpdate', $institute_id, $user_id);
         }
 
-        $inst_membership->inst_perms    = strtolower(Request::get('inst_perm', ''));
+        $inst_membership->inst_perms    = mb_strtolower(Request::get('inst_perm', ''));
         $inst_membership->visible       = Request::int('visible', 0);
         $inst_membership->sprechzeiten  = Request::get('sprechzeiten', '');
         $inst_membership->telefon       = Request::get('telefon', '');

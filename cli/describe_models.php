@@ -11,7 +11,7 @@ foreach ($dir as $fileinfo) {
         $meta = $model->getTableMetaData();
         $props = array();
         foreach ($meta['fields'] as $field => $info) {
-            $name = strtolower($field);
+            $name = mb_strtolower($field);
             $props[$name] = '@property string ' . $name;
             $props[$name] .= ' database column';
             if ($alias = array_search($name, $meta['alias_fields'])) {
@@ -20,7 +20,7 @@ foreach ($dir as $fileinfo) {
             }
         }
         foreach ($meta['additional_fields'] as $field => $info) {
-            $name = strtolower($field);
+            $name = mb_strtolower($field);
             $props[$name] = '@property string ' . $name;
             $props[$name] .= ' computed column';
             $getter = isset($info['get']) || method_exists($model, 'get' . $name);

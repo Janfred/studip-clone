@@ -170,7 +170,7 @@ class Settings_SettingsController extends AuthenticatedController
     public function shallChange($field, $attribute = null, $value = null)
     {
         $column = end(explode('.', $field));
-        $attribute = $attribute ?: strtolower($column);
+        $attribute = $attribute ?: mb_strtolower($column);
 
         $global_mapping = array(
             'email'    => 'ALLOW_CHANGE_EMAIL',

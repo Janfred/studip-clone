@@ -110,7 +110,7 @@ class LockRules {
     {
         $lr = self::getObjectRule($object_id);
         if ($lr) {
-            return $lr['attributes'][strtolower($attribute)] == 1 && self::CheckLockRulePermission($object_id);
+            return $lr['attributes'][mb_strtolower($attribute)] == 1 && self::CheckLockRulePermission($object_id);
         } else {
             return false;
         }

@@ -208,7 +208,7 @@ abstract class StudipController extends Trails_Controller
             $to = '/' . ($this->parent_controller ? $this->parent_controller->current_action : $this->current_action);
         }
         if ($to[0] === '/') {
-            $prefix = str_replace('_', '/', strtolower(mb_strstr(get_class($this->parent_controller ? $this->parent_controller : $this), 'Controller', true)));
+            $prefix = str_replace('_', '/', mb_strtolower(mb_strstr(get_class($this->parent_controller ? $this->parent_controller : $this), 'Controller', true)));
             $to = $prefix . $to;
         }
         $args[0] = $to;

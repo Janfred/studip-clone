@@ -55,7 +55,7 @@ class CalendarParserICalendar extends CalendarParser
         $studip_categories = array();
         $i = 1;
         foreach ($PERS_TERMIN_KAT as $cat) {
-            $studip_categories[strtolower($cat['name'])] = $i++;
+            $studip_categories[mb_strtolower($cat['name'])] = $i++;
         }
 
         // Unfold any folded lines
@@ -135,11 +135,11 @@ class CalendarParserICalendar extends CalendarParser
                             $categories = array();
                             $properties['STUDIP_CATEGORY'] = null;
                             foreach (explode(',', $value) as $category) {
-                                if (!$studip_categories[strtolower($category)]) {
+                                if (!$studip_categories[mb_strtolower($category)]) {
                                     $categories[] = $category;
                                 } else if (!$properties['STUDIP_CATEGORY']) {
                                     $properties['STUDIP_CATEGORY']
-                                            = $studip_categories[strtolower($category)];
+                                            = $studip_categories[mb_strtolower($category)];
                                 }
                             }
                             $properties[$tag] = implode(',', $categories);

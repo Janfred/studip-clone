@@ -110,7 +110,7 @@ class Files extends \RESTAPI\RouteMap
                             $document[$c] = $this->data[$c];
                         }
                     }
-                    $document['filename'] = strtolower($file['name']);
+                    $document['filename'] = mb_strtolower($file['name']);
                     $document['name'] = $document['name'] ?: $document['filename'];
                     $document['user_id'] = $GLOBALS['user']->id;
                     $document['author_name'] = get_fullname();
@@ -171,7 +171,7 @@ class Files extends \RESTAPI\RouteMap
                     $this->error(400, decodeHTML(trim(substr($GLOBALS['msg'],6), '§')));
                 }
                 if ($file['size']) {
-                    $document['filename'] = strtolower($file['name']);
+                    $document['filename'] = mb_strtolower($file['name']);
                     $document['user_id'] = $GLOBALS['user']->id;
                     $document['author_name'] = get_fullname();
                     $document['filesize'] = $file['size'];

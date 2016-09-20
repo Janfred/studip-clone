@@ -247,7 +247,7 @@ namespace {
     /*mail settings
     ----------------------------------------------------------------*/
     if ($GLOBALS['MAIL_TRANSPORT']) {
-        $mail_transporter_name = strtolower($GLOBALS['MAIL_TRANSPORT']) . '_message';
+        $mail_transporter_name = mb_strtolower($GLOBALS['MAIL_TRANSPORT']) . '_message';
     } else {
         $mail_transporter_name = 'smtp_message';
     }

@@ -246,7 +246,7 @@ class StudipAutoloader
             $path = '';
             foreach ($chunks as $chunk) {
                 if (!is_dir($path . DIRECTORY_SEPARATOR . $chunk)) {
-                    $chunk = strtolower($chunk);
+                    $chunk = mb_strtolower($chunk);
                 }
                 if (!is_dir($path . DIRECTORY_SEPARATOR . $chunk)) {
                     return false;

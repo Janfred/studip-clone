@@ -56,7 +56,7 @@ function fakeServerGlobals($uri) {
     $_SERVER['HTTPS'] = false;
     $_SERVER['SERVER_PORT'] = 80;
     if (isset($urlComponents['scheme'])
-        && strtolower($urlComponents['scheme']) == 'https'
+        && mb_strtolower($urlComponents['scheme']) == 'https'
     ) {
         $_SERVER['HTTPS'] = 'on';
         $_SERVER['SERVER_PORT'] = 443;

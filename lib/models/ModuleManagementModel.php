@@ -445,8 +445,8 @@ abstract class ModuleManagementModel extends SimpleORMap
                 }
                 $data_object = clone $model_object;
                 foreach ($data as $key => $value) {
-                    $data_object->content[strtolower($key)] = $value;
-                    $data_object->content_db[strtolower($key)] = $value;
+                    $data_object->content[mb_strtolower($key)] = $value;
+                    $data_object->content_db[mb_strtolower($key)] = $value;
                 }
                 $data_object->setId($pkey);
                 $data_object->setNew(false);

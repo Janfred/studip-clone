@@ -243,11 +243,11 @@ class DbSnapshot
             $sortfunc($sortfields, $stype);
         } else {
             uasort($sortfields, create_function('$a,$b', '
-                    $a = strtolower($a);
+                    $a = mb_strtolower($a);
                     $a = str_replace("ä","ae",$a);
                     $a = str_replace("ö","oe",$a);
                     $a = str_replace("ü","ue",$a);
-                    $b = strtolower($b);
+                    $b = mb_strtolower($b);
                     $b = str_replace("ä","ae",$b);
                     $b = str_replace("ö","oe",$b);
                     $b = str_replace("ü","ue",$b);

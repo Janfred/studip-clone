@@ -361,7 +361,7 @@ class Admin_BannerController extends AuthenticatedController
         $dot = mb_strrpos($img_name, '.');
         if ($dot) {
             $l   = mb_strlen($img_name) - $dot;
-            $ext = strtolower(substr($img_name, $dot + 1, $l));
+            $ext = mb_strtolower(substr($img_name, $dot + 1, $l));
         }
 
         //passende Endung ?

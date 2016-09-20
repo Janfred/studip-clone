@@ -172,7 +172,7 @@ class MediaProxy
         $response = parse_link($url);
 
         foreach ($response as $key => $value) {
-            $response[strtolower($key)] = $value;
+            $response[mb_strtolower($key)] = $value;
         }
         if ($response['response_code'] != 200) {
             throw new MediaProxyException($response['response']);

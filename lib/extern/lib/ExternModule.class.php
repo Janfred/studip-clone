@@ -458,7 +458,7 @@ class ExternModule {
         }
         $query_parts = array();
         if (is_array($params)) {
-            $param_key = 'ext_' . strtolower($this->name);
+            $param_key = 'ext_' . mb_strtolower($this->name);
             foreach ($params as $name => $value) {
                 $query_parts[] = "{$param_key}[{$name}]=" . $value;
             }
@@ -517,7 +517,7 @@ class ExternModule {
     }
 
     function getModuleParams ($params = null) {
-        $param_key = 'ext_' . strtolower($this->name);
+        $param_key = 'ext_' . mb_strtolower($this->name);
         if (is_array($_REQUEST[$param_key])) {
             $ret = array();
             if (is_null($params)) {

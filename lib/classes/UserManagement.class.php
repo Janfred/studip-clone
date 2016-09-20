@@ -1110,7 +1110,7 @@ class UserManagement
                     if ($cms->auth_necessary && ($cms->user instanceOf ConnectedUser)) {
                         $user_auto_create = $cms->USER_AUTO_CREATE;
                         $cms->USER_AUTO_CREATE = false;
-                        $userclass = strtolower(get_class($cms->user));
+                        $userclass = mb_strtolower(get_class($cms->user));
                         $connected_user = new $userclass($cms->cms_type, $this->user_data['auth_user_md5.user_id']);
                         if($ok = $connected_user->deleteUser()){
                             if($connected_user->is_connected){

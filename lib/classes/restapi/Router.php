@@ -128,7 +128,7 @@ class Router
     public function register($request_method, $uri_template, $handler, $conditions = array(), $source = 'unknown')
     {
         // Normalize method and test whether it's supported
-        $request_method = strtolower($request_method);
+        $request_method = mb_strtolower($request_method);
         if (!in_array($request_method, $this->supported_methods)) {
             throw new \Exception('Method "' . $request_method . '" is not supported.');
         }
@@ -480,7 +480,7 @@ class Router
 
     private function normalizeRequestMethod($method)
     {
-        return strtolower($method ?: $_SERVER['REQUEST_METHOD'] ?: 'get');
+        return mb_strtolower($method ?: $_SERVER['REQUEST_METHOD'] ?: 'get');
     }
 
     /**

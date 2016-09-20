@@ -1538,7 +1538,7 @@ function text_excerpt($text, $phrase, $radius = 100, $length = 200,
     return '';
   }
 
-  $found_pos = mb_strpos(strtolower($text), strtolower($phrase));
+  $found_pos = mb_strpos(mb_strtolower($text), mb_strtolower($phrase));
 
   if ($found_pos === FALSE) {
     $start_pos = 0;
@@ -2069,7 +2069,7 @@ function studip_default_exception_handler($exception) {
 
     // send exception to metrics backend
     if (class_exists('Metrics')) {
-        $exception_class = strtolower(
+        $exception_class = mb_strtolower(
             preg_replace(
                 '/(?<=\w)([A-Z])/',
                 '_\\1',
@@ -2130,12 +2130,12 @@ function studip_default_exception_handler($exception) {
  * @return String containing the converted input string
  */
 function strtocamelcase($string, $ucfirst = false) {
-    $string = strtolower($string);
+    $string = mb_strtolower($string);
     $chunks = preg_split('/\W+/', $string);
     $chunks = array_map('ucfirst', $chunks);
 
     if (!$ucfirst && count($chunks) > 0) {
-        $chunks[0] = strtolower($chunks[0]);
+        $chunks[0] = mb_strtolower($chunks[0]);
     }
 
     return implode($chunks);
@@ -2150,7 +2150,7 @@ function strtocamelcase($string, $ucfirst = false) {
 function strtosnakecase($string) {
     $string = preg_replace('/\W+/', '_', $string);
     $string = preg_replace('/(?<!^)[A-Z]/', '_$0', $string);
-    $string = strtolower($string);
+    $string = mb_strtolower($string);
     return $string;
 }
 

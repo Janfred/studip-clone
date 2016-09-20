@@ -54,7 +54,7 @@ class MVVController extends StudipController
      */
     public function paramSuffix($action = '')
     {
-        $param_suffix = strtolower(preg_filter(
+        $param_suffix = mb_strtolower(preg_filter(
                 array('/^.*_/', '/Controller$/'), '', get_called_class(), 1));
         return $action ? '_' . $param_suffix . '_' . $action : '_' . $param_suffix;
     }
@@ -172,7 +172,7 @@ class MVVController extends StudipController
     public function jsUrl($to = '', $params = array())
     {
         if($to === '') {
-            $to = str_replace('_', '/', substr(strtolower(get_class($this)),
+            $to = str_replace('_', '/', substr(mb_strtolower(get_class($this)),
                     0, -10)) . '/';
         }
         $url = PluginEngine::getUrl($this->plugin, $params, $to, true);

@@ -63,14 +63,14 @@ class Statusgruppe {
     public function __call($method, $args)
   {
     if (substr($method, 0, 3) == 'get') {
-        $variable = strtolower(substr($method, 3, mb_strlen($method) -3));
+        $variable = mb_strtolower(substr($method, 3, mb_strlen($method) -3));
         if (property_exists($this, $variable)) {
             return $this->$variable;
         } else {
             throw new Exception(__CLASS__ ."::$method() does not exist!");
         }
     } else if (substr($method, 0, 3) == 'set') {        
-        $variable = strtolower(substr($method, 3, mb_strlen($method) -3));
+        $variable = mb_strtolower(substr($method, 3, mb_strlen($method) -3));
         if (sizeof($args) != 1) {
             throw new Exception("wrong parameter count: ".__CLASS__ ."::$method() expects 1 parameter!");
         }

@@ -571,7 +571,7 @@ class StreamsController extends PluginController {
                 continue;
             }
             if ($file['size']) {
-                $document['name'] = $document['filename'] = studip_utf8decode(strtolower($file['name']));
+                $document['name'] = $document['filename'] = studip_utf8decode(mb_strtolower($file['name']));
                 $document['user_id'] = $GLOBALS['user']->id;
                 $document['author_name'] = get_fullname();
                 $document['seminar_id'] = $context;

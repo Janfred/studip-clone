@@ -277,7 +277,7 @@ class Avatar {
 
             // get extension
             $pathinfo = pathinfo($_FILES[$userfile]['name']);
-            $ext = strtolower($pathinfo['extension']);
+            $ext = mb_strtolower($pathinfo['extension']);
 
             // passende Endung ?
             if (!in_array($ext, words('jpg jpeg gif png'))) {

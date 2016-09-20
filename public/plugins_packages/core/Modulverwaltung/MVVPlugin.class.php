@@ -26,7 +26,7 @@ class MVVPlugin extends StudipPlugin implements SystemPlugin, Loggable {
         parent::__construct();
 
         $this->restoreConfig();
-        $this->me = strtolower(__CLASS__);
+        $this->me = mb_strtolower(__CLASS__);
         if ($this->isVisibleSearch()) {
             $this->setNavigationSearch();
         }

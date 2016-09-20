@@ -777,7 +777,7 @@ function export_pers($inst_id)
             if ($val == '') {
                 $val = $key;
             }
-            if (strtolower($key) == 'email') {
+            if (mb_strtolower($key) == 'email') {
                 $row[$key] = get_visible_email($row['user_id']);
             }
             if ($row[$key] != '') {

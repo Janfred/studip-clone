@@ -72,7 +72,7 @@ class Settings_PasswordController extends Settings_SettingsController
             $errors[] = _('Die Wiederholung Ihres Passworts stimmt nicht mit Ihrer Eingabe überein.');
         } else if ($password == $this->user['username']) {
             $errors[] = _('Das Passwort darf nicht mit dem Nutzernamen übereinstimmen.');
-        } else if (str_replace(['.', ' '], '', strtolower($password)) == 'studip') {
+        } else if (str_replace(['.', ' '], '', mb_strtolower($password)) == 'studip') {
             $errors[] = _('Aus Sicherheitsgründen darf das Passwort nicht "Stud.IP" oder eine Abwandlung davon sein.');
         }
         

@@ -301,7 +301,7 @@ abstract class RouteMap
     {
         if ($contentType = $_SERVER['CONTENT_TYPE']) {
             $contentTypeParts = preg_split('/\s*[;,]\s*/', $contentType);
-            return strtolower($contentTypeParts[0]);
+            return mb_strtolower($contentTypeParts[0]);
         }
     }
 
@@ -375,7 +375,7 @@ abstract class RouteMap
                 if (preg_match('/^[^\s]/', $headline)) {
                     $lineIsHeader = preg_match('/([^:]+):\s*(.*)$/', $headline, $matches);
                     if ($lineIsHeader) {
-                        $tmpheaders[] = array('index' => strtolower(trim($matches[1])), 'value' => trim($matches[2]));
+                        $tmpheaders[] = array('index' => mb_strtolower(trim($matches[1])), 'value' => trim($matches[2]));
                     }
                 } else {
                     //noch zur letzten Zeile hinzuzählen
@@ -391,7 +391,7 @@ abstract class RouteMap
             $contentType = "";
             if (isset($headers['content-type'])) {
                 preg_match("/^([^;\s]*)/", $headers['content-type'], $matches);
-                $contentType = strtolower($matches[1]);
+                $contentType = mb_strtolower($matches[1]);
             }
             switch ($headers["transfer-encoding"]) {
                 case "quoted-printable":
@@ -445,7 +445,7 @@ abstract class RouteMap
     {
         if ($contentType = $_SERVER['CONTENT_TYPE']) {
             foreach (preg_split('/\s*[;,]\s*/', $contentType) as $part) {
-                if (strtolower(substr($part, 0, 8)) === "boundary") {
+                if (mb_strtolower(substr($part, 0, 8)) === "boundary") {
                     $part = explode("=", $part);
                     return $part[1];
                 }

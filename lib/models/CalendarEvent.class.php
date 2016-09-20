@@ -775,11 +775,11 @@ class CalendarEvent extends SimpleORMap implements Event
                 $categories = array();
                 $i = 1;
                 foreach ($PERS_TERMIN_KAT as $pers_cat) {
-                    $categories[strtolower($pers_cat['name'])] = $i++;
+                    $categories[mb_strtolower($pers_cat['name'])] = $i++;
                 }
                 $cat_event = explode(',', $this->event->categories);
                 foreach ($cat_event as $cat) {
-                    $index = strtolower(trim($cat));
+                    $index = mb_strtolower(trim($cat));
                     if ($categories[$index]) {
                         $category = $categories[$index];
                         break;

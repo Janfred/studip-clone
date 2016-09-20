@@ -12,7 +12,7 @@ $engines = DBManager::get()->fetchAll("SHOW ENGINES");
 $innodb = false;
 foreach ($engines as $e) {
     // InnoDB is found and enabled.
-            if ($e['Engine'] == 'InnoDB' && in_array(strtolower($e['Support']), array('default', 'yes'))) {
+            if ($e['Engine'] == 'InnoDB' && in_array(mb_strtolower($e['Support']), array('default', 'yes'))) {
         $innodb = true;
         break;
     }
@@ -73,15 +73,15 @@ if ($innodb) {
         $data = DBManager::get()->fetchOne("SHOW VARIABLES LIKE 'innodb_file_format'");
         $file_format = $data['Value'];
 
-        if (strtolower($file_per_table) == 'on' && strtolower($file_format) == 'barracuda') {
+        if (mb_strtolower($file_per_table) == 'on' && mb_strtolower($file_format) == 'barracuda') {
             echo " yes.\n";
             $rowformat = 'DYNAMIC';
         } else {
             echo " no:\n";
-            if (strtolower($file_per_table) != 'on') {
+            if (mb_strtolower($file_per_table) != 'on') {
                 echo "\t- file_per_table not set\n";
             }
-            if (strtolower($file_format) != 'barracuda') {
+            if (mb_strtolower($file_format) != 'barracuda') {
                 echo "\t- file_format not set to Barracuda (but to " . $file_format . ")\n";
             }
             $rowformat = 'COMPACT';

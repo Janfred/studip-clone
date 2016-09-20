@@ -75,7 +75,7 @@ class MvvPerm {
 
     public static function __callStatic($name, $arguments)
     {
-        $name = strtolower($name);
+        $name = mb_strtolower($name);
 
         if (mb_strpos($name, 'haveperm') === 0) {
             $perm = 'PERM_' . mb_strtoupper(substr($name, 8));
@@ -88,13 +88,13 @@ class MvvPerm {
         }
 
         if (mb_strpos($name, 'getfieldperm') === 0) {
-            $field = strtolower(substr($name, 12));
+            $field = mb_strtolower(substr($name, 12));
             return self::get($arguments[0])->getFieldPerm($field,
                     $arguments[1], $arguments[2]);
         }
 
         if (mb_strpos($name, 'havefieldperm') === 0) {
-            $field = strtolower(substr($name, 13));
+            $field = mb_strtolower(substr($name, 13));
             return self::get($arguments[0])->haveFieldPerm($field, $arguments[1],
                     $arguments[2], $arguments[3]);
         }
@@ -105,7 +105,7 @@ class MvvPerm {
 
     public function __call($name, $arguments)
     {
-        $name = strtolower($name);
+        $name = mb_strtolower($name);
 
         if (mb_strpos($name, 'haveperm') === 0) {
             $perm = 'PERM_' . mb_strtoupper(substr($name, 8));
@@ -118,13 +118,13 @@ class MvvPerm {
         }
 
         if (mb_strpos($name, 'getfieldperm') === 0) {
-            $field = strtolower(substr($name, 12));
+            $field = mb_strtolower(substr($name, 12));
             return $this->getFieldPerm($field,
                     $arguments[1], $arguments[2]);
         }
 
         if (mb_strpos($name, 'havefieldperm') === 0) {
-            $field = strtolower(substr($name, 13));
+            $field = mb_strtolower(substr($name, 13));
             return $this->haveFieldPerm($field, $arguments[0],
                     $arguments[1], $arguments[2]);
         }
