@@ -174,7 +174,7 @@ class SearchWidget extends SidebarWidget
      */
     protected function hasData()
     {
-        if (!Request::method() === strtoupper($this->method)) {
+        if (!Request::method() === mb_strtoupper($this->method)) {
             return false;
         }
 

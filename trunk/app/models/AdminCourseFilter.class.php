@@ -253,7 +253,7 @@ class AdminCourseFilter
      */
     public function orderBy($attribute, $flag = 'ASC')
     {
-        $flag = strtoupper($flag);
+        $flag = mb_strtoupper($flag);
         if (!in_array($flag, words('ASC DESC'))) {
             throw new Exception("Sortierreihenfolge undefiniert.");
         }

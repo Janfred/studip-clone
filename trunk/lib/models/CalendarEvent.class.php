@@ -830,7 +830,7 @@ class CalendarEvent extends SimpleORMap implements Event
      */
     public function setAccessibility($class)
     {
-        $class = strtoupper($class);
+        $class = mb_strtoupper($class);
         if (in_array($class, array('PUBLIC', 'PRIVATE', 'CONFIDENTIAL'))) {
             $this->event->class = $class;
         } else {

@@ -83,7 +83,7 @@ class ContactController extends AuthenticatedController
         // Retrive first letter and store in that contactgroup
         $this->contacts = array();
         foreach ($contacts as $contact) {
-            $this->contacts[strtoupper(SimpleCollection::translitLatin1($contact->nachname[0]))][] = $contact;
+            $this->contacts[mb_strtoupper(SimpleCollection::translitLatin1($contact->nachname[0]))][] = $contact;
         }
 
         // Humans are a lot better with sorted results

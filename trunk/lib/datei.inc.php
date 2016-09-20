@@ -935,7 +935,7 @@ function form($refresh = FALSE)
                 foreach ($UPLOAD_TYPES[$SessSemName["art_num"]]["file_types"] as $ft) {
                     if ($i !=1)
                         $print.= ", ";
-                    $print.= strtoupper ($ft);
+                    $print.= mb_strtoupper ($ft);
                     $i++;
                     }
                 }
@@ -945,7 +945,7 @@ function form($refresh = FALSE)
                 foreach ($UPLOAD_TYPES[$SessSemName["art_num"]]["file_types"] as $ft) {
                     if ($i !=1)
                         $print.= ", ";
-                    $print.= strtoupper ($ft);
+                    $print.= mb_strtoupper ($ft);
                     $i++;
                     }
                 }
@@ -957,7 +957,7 @@ function form($refresh = FALSE)
                 foreach ($UPLOAD_TYPES["default"]["file_types"] as $ft) {
                     if ($i !=1)
                         $print.= ", ";
-                    $print.= strtoupper ($ft);
+                    $print.= mb_strtoupper ($ft);
                     $i++;
                     }
                 }
@@ -967,7 +967,7 @@ function form($refresh = FALSE)
                 foreach ($UPLOAD_TYPES["default"]["file_types"] as $ft) {
                     if ($i !=1)
                         $print.= ", ";
-                    $print.= strtoupper ($ft);
+                    $print.= mb_strtoupper ($ft);
                     $i++;
                     }
                 }
@@ -1138,7 +1138,7 @@ function validate_upload($the_file, $real_file_name='') {
                     $t=FALSE;
                 if ($i !=1)
                     $exts.=",";
-                $exts.=" ".strtoupper($ft);
+                $exts.=" ".mb_strtoupper($ft);
                 $i++;
                 }
             if (!$t) {
@@ -1160,7 +1160,7 @@ function validate_upload($the_file, $real_file_name='') {
                     $t=TRUE;
                 if ($i !=1)
                     $exts.=",";
-                $exts.=" ".strtoupper($ft);
+                $exts.=" ".mb_strtoupper($ft);
                 $i++;
                 }
             if (!$t) {

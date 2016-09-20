@@ -27,7 +27,7 @@ class StudipLog
      */
     public static function __callStatic($name, $arguments)
     {
-        $log_action_name = strtoupper($name);
+        $log_action_name = mb_strtoupper($name);
         $log_action = LogAction::findByName($log_action_name);
         if ($log_action) {
             return call_user_func_array('StudipLog::log', array_merge(array($log_action_name), $arguments));

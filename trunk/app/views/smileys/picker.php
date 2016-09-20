@@ -19,7 +19,7 @@
             <td <? if ($view === $char) echo 'class="active"'; ?>>
             <? if (isset($characters[$char])): ?>
                 <a href="<?= $controller->url_for('smileys/picker/'. $char) ?>">
-                    <?= strtoupper($char) ?>
+                    <?= mb_strtoupper($char) ?>
                 </a>
             <? else: ?>
                 <?= $char ?>

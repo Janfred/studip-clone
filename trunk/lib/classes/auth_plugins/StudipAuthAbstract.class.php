@@ -117,10 +117,10 @@ class StudipAuthAbstract {
             foreach($GLOBALS['STUDIP_AUTH_PLUGIN'] as $plugin) {
                 $plugin = "StudipAuth" . $plugin;
                 include_once "lib/classes/auth_plugins/" . $plugin . ".class.php";
-                self::$plugin_instances[strtoupper($plugin)] = new $plugin;
+                self::$plugin_instances[mb_strtoupper($plugin)] = new $plugin;
             }
         }
-        return ($plugin_name) ? self::$plugin_instances[strtoupper("StudipAuth" . $plugin_name)] : self::$plugin_instances;
+        return ($plugin_name) ? self::$plugin_instances[mb_strtoupper("StudipAuth" . $plugin_name)] : self::$plugin_instances;
     }
 
     /**
@@ -294,7 +294,7 @@ class StudipAuthAbstract {
     {
         $this->plugin_name = strtolower(substr(get_class($this),10));
         //get configuration array set in local inc
-        $config_var = $GLOBALS["STUDIP_AUTH_CONFIG_" . strtoupper($this->plugin_name)];
+        $config_var = $GLOBALS["STUDIP_AUTH_CONFIG_" . mb_strtoupper($this->plugin_name)];
         //assign each key in the config array as a member of the plugin object
         if (isset($config_var)) {
             foreach ($config_var as $key => $value) {
