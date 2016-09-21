@@ -123,9 +123,13 @@ class CalendarEvent extends SimpleORMap implements Event
      */
     public function __clone()
     {
-        $event = clone $this->event;
-        parent::__clone();
-        $this->event = $event;
+        if (is_object($this->event)) {
+            $event = clone $this->event;
+            parent::__clone();
+            $this->event = $event;
+        } else {
+            parent::__clone();
+        }
     }
 
     /**
