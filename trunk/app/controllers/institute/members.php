@@ -1,10 +1,10 @@
 <?php
-# Lifter010: TODO
-
 /**
  * @author Arne Schröder <schroeder@data-quest.de>
  * @author Jan-Hendrik Willms <tleilax+studip@gmail.com>
  * @license GPL2 or any later version
+ *
+ * @todo test datafields!
  */
 
 include_once $GLOBALS['PATH_EXPORT'] . '/export_linking_func.inc.php';
@@ -104,14 +104,7 @@ class Institute_MembersController extends AuthenticatedController
     public function index_action()
     {
         // Collect groups
-        $groups = [];
-        $group_collector = function ($group) use (&$groups, &$group_collector) {
-            $groups[] = $group;
-            array_map($group_collector, $group->children);
-        };
-
-        $this->institute->status_groups->each($group_collector);
-        $this->groups = SimpleCollection::createFromArray(array_flatten($groups));
+        $this->groups = $this->institute->all_status_groups;
 
         // Show lock rule information
         $lockrule = LockRules::getObjectRule($this->institute->id);

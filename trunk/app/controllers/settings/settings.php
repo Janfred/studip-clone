@@ -49,7 +49,7 @@ class Settings_SettingsController extends AuthenticatedController
             URLHelper::addLinkParam('username', $username);
         }
         $this->user       = User::findByUsername($username);
-        
+
         if (!$GLOBALS['perm']->get_profile_perm($this->user->user_id)) {
             PageLayout::postError(_('Zugriff verweigert.'), array(
                 _("Wahrscheinlich ist Ihre Session abgelaufen. Bitte "
@@ -66,7 +66,6 @@ class Settings_SettingsController extends AuthenticatedController
             return;
         }
 
-        
         $this->restricted = ($GLOBALS['perm']->get_profile_perm($this->user->user_id) !== 'user')
                             && ($username !== $GLOBALS['user']->username);
         $this->config     = UserConfig::get($this->user->user_id);
@@ -85,9 +84,10 @@ class Settings_SettingsController extends AuthenticatedController
             $message = sprintf(_('Daten von: %s %s (%s), Status: %s'),
                                htmlReady($this->user->Vorname),
                                htmlReady($this->user->Nachname),
-                               $username,
-                               $this->user->perms);
-            PageLayout::postInfo($message);
+                               htmlReady($username),
+                               htmlReady($this->user->perms));
+            $mbox = MessageBox::info($message);
+            PageLayout::postMessage($mbox, 'settings-user-anncouncement');
         }
 
         Sidebar::get()->setImage('sidebar/person-sidebar.png');

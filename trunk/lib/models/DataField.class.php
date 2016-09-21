@@ -52,16 +52,12 @@ class DataField extends SimpleORMap
         $config['db_table'] = 'datafields';
         $config['has_many']['entries'] = array(
             'class_name' => 'DatafieldEntryModel',
-            'on_delete'  => function ($df) {
-                return DatafieldEntryModel::deleteBySQL("datafield_id = ?", array($df->id));
-            },
+            'on_delete'  => 'delete',
         );
         $config['has_many']['visibility_settings'] = array(
             'class_name'        => 'User_Visibility_Settings',
             'assoc_foreign_key' => 'identifier',
-            'on_delete'         => function ($df) {
-                return User_Visibility_Settings::deleteBySQL("identifier = ?", array($df->id));
-            },
+            'on_delete'         => 'delete',
         );
         parent::configure($config);
     }

@@ -486,7 +486,9 @@ class MyCoursesController extends AuthenticatedController
                     NotificationCenter::postNotification('UserDidLeaveCourse', $course_id, $GLOBALS['user']->id);
 
                     // Delete from statusgroups
-                    RemovePersonStatusgruppeComplete(get_username(), $course_id);
+                    foreach (Statusgruppen::findBySeminar_id($course_id) as $group) {
+                        $group->removeUser($GLOBALS['user']->id, true);
+                    }
 
                     // Are successor available
                     update_admission($course_id);

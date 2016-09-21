@@ -970,7 +970,7 @@ class UserManagement
         }
 
         // delete user from Statusgruppen
-        if ($db_ar = RemovePersonFromAllStatusgruppen(get_username($this->user_data['auth_user_md5.user_id']))  > 0) {
+        if ($db_ar = StatusgruppenUser::deleteBySQL('user_id = ?', [$this->user_data['auth_user_md5.user_id']]) > 0) {
             $this->msg .= "info§" . sprintf(_("%s Einträge aus Funktionen / Gruppen gelöscht."), $db_ar) . "§";
         }
 

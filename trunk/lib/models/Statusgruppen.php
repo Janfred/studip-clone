@@ -36,6 +36,8 @@
  */
 class Statusgruppen extends SimpleORMap
 {
+    public $keep_children = false;
+
     protected static function configure($config = array())
     {
         $config['db_table'] = 'statusgruppen';
@@ -48,16 +50,29 @@ class Statusgruppen extends SimpleORMap
         $config['has_and_belongs_to_many']['dates'] = array(
             'class_name' => 'CourseDate',
             'thru_table' => 'termin_related_groups',
-            'order_by' => 'ORDER BY date',
-            'on_delete' => 'delete',
-            'on_store' => 'store'
+            'order_by'   => 'ORDER BY date',
+            'on_delete'  => 'delete', // TODO: This might cause trouble
+            'on_store'   => 'store'
         );
         $config['belongs_to']['parent'] = array(
-            'class_name' => 'Statusgruppen',
+            'class_name'  => 'Statusgruppen',
             'foreign_key' => 'range_id',
         );
         $config['additional_fields']['children'] = true;
         parent::configure($config);
+    }
+
+    public static function findAllByRangeId($range_id, $as_collection = false)
+    {
+        $groups = self::findBySQL('range_id IN (?)', [$range_id]);
+        if (count($groups) > 0) {
+            $ids = array_map(function ($group) { return $group->id; }, $groups);
+            $groups = array_merge($groups, self::findAllByRangeId($ids, false));
+        }
+
+        return $as_collection
+             ? SimpleCollection::createFromArray($groups)
+             : $groups;
     }
 
     public function getChildren()
@@ -92,26 +107,7 @@ class Statusgruppen extends SimpleORMap
 
     public static function findByTermin_id($termin_id)
     {
-        $record = new Statusgruppen();
-        $db = DBManager::get();
-        $sql = "
-            SELECT *
-            FROM `" .  $record->db_table . "`
-                INNER JOIN termin_related_groups USING (statusgruppe_id)
-            WHERE termin_related_groups.termin_id = ?
-            ORDER BY name ASC
-        ";
-        $st = $db->prepare($sql);
-        $st->execute(array($termin_id));
-        $ret = array();
-        $c = 0;
-        while($row = $st->fetch(PDO::FETCH_ASSOC)) {
-            $ret[$c] = new Statusgruppen();
-            $ret[$c]->setData($row, true);
-            $ret[$c]->setNew(false);
-            ++$c;
-        }
-        return $ret;
+        return self::findBySQL('INNER JOIN termin_related_groups USING (statusgruppe_id) WHERE termin_id = ?', [$termin_id]);
     }
 
     public static function findContactGroups($user_id = null)
@@ -242,7 +238,7 @@ class Statusgruppen extends SimpleORMap
     }
 
     /**
-     * Delete or create a filder
+     * Delete or create a folder
      * 
      * @param boolean $set <b>true</b> Create a folder
      * <b>false</b> Delete the folder
@@ -340,30 +336,13 @@ class Statusgruppen extends SimpleORMap
      */
     public function removeUser($user_id, $deep = false)
     {
-        // For performance issues we do this manually
-        $db = DBManager::get();
-        // Get user's position for later resorting
-        $query = "SELECT position FROM statusgruppe_user WHERE statusgruppe_id = ? AND user_id = ?";
-        $statement = $db->prepare($query);
-        $statement->execute(array($this->id, $user_id));
-        $position = $statement->fetchColumn() ?: 0;
-
         // Delete user from statusgruppe
-        $query = "DELETE FROM statusgruppe_user WHERE statusgruppe_id = ? AND user_id = ?";
-        $statement = $db->prepare($query);
-        $statement->execute(array($this->id, $user_id));
-        $result = (bool)$statement->rowCount();
+        $member = StatusgruppeUser::find([$this->id, $user_id]);
+        $result = $member !== null && $member->delete();
 
-        if ($result) {
-            // Resort members
-            $query = "UPDATE statusgruppe_user SET position = position - 1 WHERE statusgruppe_id = ? AND position > ?";
-            $statement = $db->prepare($query);
-            $statement->execute(array($this->id, $position));
-
-            if ($deep) {
-                foreach ($this->children as $child) {
-                    $child->removeUser($user_id, true);
-                }
+        if ($deep) {
+            foreach ($this->children as $child) {
+                $child->removeUser($user_id, true);
             }
         }
 
@@ -384,8 +363,7 @@ class Statusgruppen extends SimpleORMap
             return false;
         }
         $user = new StatusgruppeUser(array($this->id, $user_id));
-        $user->store();
-        return true;
+        return $user->store();
     }
 
     /**
@@ -396,7 +374,9 @@ class Statusgruppen extends SimpleORMap
      */
     public function userMayJoin($user_id)
     {
-        return !$this->isMember($user_id) && $this->hasSpace() && ($this->selfAssign != 2 || !$this->userHasExclusiveGroup($user_id));
+        return !$this->isMember($user_id)
+            && $this->hasSpace()
+            && ($this->selfAssign != 2 || !$this->userHasExclusiveGroup($user_id));
     }
 
     /**
@@ -478,4 +458,59 @@ class Statusgruppen extends SimpleORMap
         parent::store();
     }
 
+    /**
+     * Deletes a status group. Any associated child group will move upwards
+     * in the tree.
+     */
+    public function remove()
+    {
+        // get all child-statusgroups and put them as a child of the father, so they don't hang around without a parent
+        $children = $this->children->pluck('statusgruppe_id');
+        if (!empty($children)) {
+            $query = "UPDATE statusgruppen
+                      SET range_id = ?
+                      WHERE statusgruppe_id IN (?)";
+            $statement = DBManager::get()->prepare($query);
+            $statement->execute([$this->range_id, $children]);
+        }
+
+        $old = $this->keep_children;
+        $this->keep_children = true;
+
+        $result = $this->delete();
+
+        $this->keep_children = $old;
+
+        return $result;
+    }
+
+    /**
+     * Deletes a status group and all it's child groups.
+     *
+     * @return int number of deleted groups
+     */
+    public function delete()
+    {
+        $result = 0;
+        if (!$this->keep_children) {
+            $result += $this->children->delete();
+        }
+
+        // Resort groups
+        $query = "UPDATE statusgruppen
+                  SET position = position - 1
+                  WHERE range_id = ? AND position > ?";
+        $statement = DBManager::get()->prepare($query);
+        $statement->execute([$this->range_id, $this->position]);
+
+        // Remove datafields
+        $query = "DELETE FROM datafields_entries
+                  WHERE range_id = ?";
+        $statement = DBManager::get()->prepare($query);
+        $statement->execute([$this->id]);
+
+        $result += parent::delete();
+
+        return $result;
+    }
 }

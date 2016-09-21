@@ -147,7 +147,7 @@ class Statusgruppe {
     }
 
     function delete() {
-        DeleteStatusgruppe($this->statusgruppe_id);
+        Statusgruppen::find($this->statusgruppe_id)->remove();
     }
     
     /* * * * * * * * * * * * * * * * * * * *
@@ -238,7 +238,7 @@ class Statusgruppe {
 
         // check if we have to remove the self_assign_exclusive-flag
         
-        $this->selfassign = SetSelfAssign($this->statusgruppe_id, (Request::quoted('new_selfassign') ? 1 : 0));
+        $this->selfassign = SetSelfAssign($this->statusgruppe_id, Request::int('new_selfassign'));
         
 
         if (Request::get('groupfolder')) {

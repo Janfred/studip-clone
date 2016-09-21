@@ -78,10 +78,16 @@ class Admin_StatusgroupsController extends AuthenticatedController
         // Collect all groups
         $this->loadGroups();
 
-        $this->membersOfInstitute = Institute::find($_SESSION['SessionSeminar'])->members->orderBy('nachname')->pluck('user_id');
+        $institute = Institute::find($_SESSION['SessionSeminar']);
+
+        $this->membersOfInstitute = $institute->members->orderBy('nachname')->pluck('user_id');
+        $assigned = array_unique(array_flatten($institute->all_status_groups->map(function ($group) {
+            return $group->members->pluck('user_id');
+        })));
+
         $this->not_assigned = array_diff(
             $this->membersOfInstitute,
-            GetAllSelected($_SESSION['SessionSeminar'])
+            $assigned
         );
 
         // Create multiperson search type
@@ -168,7 +174,7 @@ class Admin_StatusgroupsController extends AuthenticatedController
         $this->group = new Statusgruppen($group_id);
         $countAdded = 0;
         foreach ($mp->getAddedUsers() as $a) {
-            if (InsertPersonStatusgruppe($a, $group_id)) {
+            if ($this->group->addUser($a)) {
                 $this->type['after_user_add']($a);
                 $countAdded++;
             }

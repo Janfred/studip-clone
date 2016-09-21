@@ -141,6 +141,7 @@ class Institute extends SimpleORMap
     {
         $config['db_table'] = 'Institute';
         $config['additional_fields']['is_fak']['get'] = 'isFaculty';
+
         $config['has_many']['members'] = array(
             'class_name' => 'InstituteMember',
             'assoc_func' => 'findByInstitute',
@@ -196,7 +197,12 @@ class Institute extends SimpleORMap
             'on_store'          => 'store',
             'order_by'          => 'ORDER BY position ASC',
         );
+        $config['additional_fields']['all_status_groups']['get'] = function ($institute) {
+            return Statusgruppen::findAllByRangeId($institute->id, true);
+        };
+
         $config['i18n_fields']['name'] = true;
+
         parent::configure($config);
     }
 
