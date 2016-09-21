@@ -163,7 +163,9 @@ class Contacts extends \RESTAPI\RouteMap
     public function destroyContactGroup($group_id)
     {
         $group = $this->requireContactGroup($group_id);
-        DeleteStatusgruppe($group_id);
+
+        $group->remove();
+
         $this->status(204);
     }
 

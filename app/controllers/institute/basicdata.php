@@ -398,7 +398,7 @@ class Institute_BasicdataController extends AuthenticatedController
             }
 
             // Statusgruppen entfernen
-            if ($db_ar = DeleteAllStatusgruppen($i_id) > 0) {
+            if ($db_ar = Statusgruppen::deleteBySQL('range_id = ?', [$i_id]) > 0) {
                 $details[] = sprintf(_('%s Funktionen/Gruppen gelöscht.'), $db_ar);
             }
 

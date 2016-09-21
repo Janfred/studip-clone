@@ -119,6 +119,22 @@ $rules = [
     'get_local_visibility_by_username' => false,
     'get_homepage_element_visibility' => false,
     'set_homepage_element_visibility' => false,
+
+    'InsertPersonStatusgruppe' => 'Use #{Statusgruppen::addUser()} instead',
+    'RemovePersonStatusgruppe(' => 'Use #{yellow:Statusgruppen::find($group_id)->removeUser($user_id)} instead',
+    'RemovePersonStatusgruppeComplete' => 'Use #{yellow:Statusgruppen::find($group_id)->removeUser($user_id, true)} instead. Maybe you will need to do this on a collection of groups for a course or institute.',
+    'RemovePersonFromAllStatusgruppen' => 'Use #{yellow:StatusgruppenUser::deleteBySQL("user_id = ?", [$user_id])} instead.',
+    'DeleteAllStatusgruppen' => 'Use #{yellow:Statusgruppen::deleteBySQL("range_id = ?", [$id]);} instead',
+    'DeleteStatusgruppe' => 'Use #{yellow:Statusgruppen::delete()} - or #{yellow:Statusgruppen::remove()} if you want to keep the child groups.',
+    'moveStatusgruppe' => false,
+    'CheckUserStatusgruppe' => 'Use #{yellow:StatusgruppenUser::exists([$group_id, $user_id])} instead.',
+    'CountMembersStatusgruppen' => false,
+    'CountMembersPerStatusgruppe' => false,
+    'MakeDatafieldsDefault' => 'No longer neccessary.',
+    'MakeUniqueStatusgruppeID' => 'No longer neccessary. SORM will create ids for you.',
+    'GetAllSelected' => 'Use #{yellow:Statusgruppen::findAllByRangeId()} instead.',
+    'getStatusgruppenIDS' => 'Use #{yellow:Statusgruppen::findByRange_id()} instead.',
+    'getAllStatusgruppenIDS' => 'Use #{yellow:Statusgruppen::findAllByRangeId()} instead.',
 ];
 
 

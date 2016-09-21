@@ -1886,9 +1886,9 @@ class Seminar
         }
 
         // user aus den Statusgruppen rauswerfen
-        $count = DeleteAllStatusgruppen($s_id);
+        $count = Statusgruppen::deleteBySQL('range_id = ?', [$s_id]);
         if ($count > 0) {
-            $this->createMessage(_("Einträge aus Funktionen / Gruppen gelöscht."));
+            $this->createMessage(sprintf(_('%s Funktionen/Gruppen gelöscht.'), $count));
         }
 
         // Alle Eintraege aus dem Vorlesungsverzeichnis rauswerfen
@@ -2337,7 +2337,12 @@ class Seminar
                     $statement->execute(array($termin_id, $user_id));
                 }
             }
-            RemovePersonStatusgruppeComplete(get_username($user_id), $this->id);
+
+            // Remove from associated status groups
+            foreach (Statusgruppen::findBySeminar_id($this->id) as $group) {
+                $group->removeUser($user_id, true);
+            }
+
             $this->createMessage(sprintf(_("Nutzer %s wurde aus der Veranstaltung entfernt."),
                 "<i>".htmlReady(get_fullname($user_id))."</i>"));
             NotificationCenter::postNotification("CourseDidChangeMember", $this, $user_id);
