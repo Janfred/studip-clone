@@ -161,7 +161,7 @@ class StudipDocumentTree extends TreeAbstract {
         if($this->isGroupFolder($folder_id)){
             $statusgruppe_id = $this->getValue($folder_id, 'parent_id');
             if(!isset($this->group_folders[$folder_id][$user_id])){
-                $this->group_folders[$folder_id][$user_id] = StatusgruppenUser::exists([$statusgruppe_id, $user_id]);
+                $this->group_folders[$folder_id][$user_id] = StatusgruppeUser::exists([$statusgruppe_id, $user_id]);
             }
             return $this->group_folders[$folder_id][$user_id];
         } else {
