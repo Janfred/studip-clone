@@ -135,6 +135,9 @@ $rules = [
     'GetAllSelected' => 'Use #{yellow:Statusgruppen::findAllByRangeId()} instead.',
     'getStatusgruppenIDS' => 'Use #{yellow:Statusgruppen::findByRange_id()} instead.',
     'getAllStatusgruppenIDS' => 'Use #{yellow:Statusgruppen::findAllByRangeId()} instead.',
+    'getPersonsForRole' => 'Use #{yellow::Statusgruppen::members} instead.',
+    'isVatherDaughterRelation' => false,
+    'SetSelfAssign(' => false,
 ];
 
 
