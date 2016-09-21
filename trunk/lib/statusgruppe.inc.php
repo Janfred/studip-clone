@@ -35,72 +35,6 @@
 // +---------------------------------------------------------------------------+
 
 /**
- * sets selfassign of a group to 0 or 1/2 dependend on the status of the other groups
- * @param statusgruppe_id:  id of statusgruppe in database
- * @param flag: 0 for users are not allowed to assign themselves to this group
- *                          or 1 / 2 to set selfassign to the value of the other statusgroups
- *                          of the same seminar for which selfassign is allowed. If no such
- *                          group exists, selfassign is set to the value of flag, 1 means
- *                          selfassigning is allowed and 2 it's only allowed for a maximum
- *                          of one group.
- */
-function SetSelfAssign ($statusgruppe_id, $flag="0") {
-    $db = DBManager::get();
-    if ($flag != 0) {
-        $query = "SELECT selfassign FROM statusgruppen WHERE selfassign = ? AND range_id = (
-                      SELECT range_id
-                      FROM statusgruppen
-                      WHERE statusgruppe_id = ?
-                  )";
-        $statement = DBManager::get()->prepare($query);
-
-        $statement->execute(array(2, $statusgruppe_id));
-        if ($temp = $statement->fetchColumn()) {
-            $flag = $temp;
-        } else {
-            $statement->execute(array(1, $statusgruppe_id));
-
-            if ($temp = $statement->fetchColumn()) {
-                $flag = $temp;
-            }
-        }
-    }
-
-    $query = "UPDATE statusgruppen SET selfassign = ? WHERE statusgruppe_id = ?";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($flag, $statusgruppe_id));
-
-    return $flag;
-}
-
-
-// find all "statusgruppen_ids" which are connected to a certain range_id
-function getStatusgruppenIDS($range_id)
-{
-    $query = "SELECT statusgruppe_id FROM statusgruppen WHERE range_id = ?";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($range_id));
-    return $statement->fetchAll(PDO::FETCH_COLUMN);
-}
-
-// find the complete "statusgruppen_id-hierarchy" associated with an range_id
-function getAllStatusgruppenIDS($range_id)
-{
-    $agenda =array($range_id);
-    $result = array();
-    while(sizeof($agenda)>0)
-    {
-        $current = array_pop($agenda);
-        $result[] =  $current;
-        $agenda = array_merge((array)getStatusgruppenIDS($current), (array)$agenda);
-    }
-    return $result;
-}
-
-
-
-
-/**
 * Returns all statusgruppen for the given range.
 *
 * If there is no statusgruppe for the given range, it returns FALSE.
@@ -160,12 +94,6 @@ function GetAllStatusgruppen($parent, $check_user = null, $exclude = false)
     }
 
     return is_array($childs) ? $childs : false;
-}
-
-
-function isVatherDaughterRelation($vather, $daughter) {
-    $children = getAllChildIDs($vather);
-    return array_key_exists($daughter, $children);
 }
 
 function getAllChildIDs($range_id)
@@ -309,22 +237,6 @@ function get_role_data_recursive($roles, $user_id, &$default_entries, $filter = 
 
     return array('standard' => $out, 'table' => $out_table);
 }
-
-function getPersonsForRole($role_id)
-{
-    global $_fullname_sql;
-
-    $query = "SELECT user_id, {$_fullname_sql['full_rev']} AS fullname, username, position
-              FROM statusgruppe_user
-              LEFT JOIN auth_user_md5 USING (user_id)
-              LEFT JOIN user_info USING (user_id)
-              WHERE statusgruppe_id = ?
-              ORDER BY position";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($role_id));
-    return $statement->fetchGrouped(PDO::FETCH_ASSOC);
-}
-
 
 
 /**
