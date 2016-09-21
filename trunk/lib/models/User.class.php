@@ -215,7 +215,7 @@ class User extends AuthUserMd5
 
         if ($attributes['vorname']) {
             $query .= "AND au.vorname like :vorname ";
-            $params[':username'] = self::searchParam($attributes['username']);
+            $params[':vorname'] = self::searchParam($attributes['vorname']);
         }
 
         if ($attributes['nachname']) {
