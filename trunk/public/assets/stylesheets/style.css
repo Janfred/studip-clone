@@ -6631,6 +6631,36 @@ div.available-widgets .studip-widget {
     max-width: 100%;
   }
 }
+.profile-view {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-box-flex;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: flex;
+}
+.profile-view-aside {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 0 auto;
+  -ms-flex: 1 0 auto;
+  -moz-box-flex: 1;
+  flex: 1 0 auto;
+}
+.profile-view-main {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 100%;
+  -ms-flex: 1 1 100%;
+  -moz-box-flex: 1;
+  flex: 1 1 100%;
+  padding: 0 1em;
+}
+.profile-view-actions {
+  padding-left: 0;
+  list-style: none;
+}
+.profile-view-actions img {
+  vertical-align: text-top;
+}
 @media only screen and (max-width: 768px) {
   #layout_wrapper {
     min-width: 0 !important;
