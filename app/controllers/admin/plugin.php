@@ -174,7 +174,7 @@ class Admin_PluginController extends AuthenticatedController
     {
         Helpbar::Get()->addPlainText(_('Empfohlene Plugins'), _('In der Liste "Empfohlene Plugins" finden Sie von anderen Betreibern empfohlene Plugins.'), Icon::create('info'));
         Helpbar::Get()->addPlainText(_('Upload'), _('Alternativ können Plugins und Plugin-Updates auch als ZIP-Datei hochgeladen werden.'), Icon::create('info'));
-        
+
         $search = Request::get('search');
 
         // search for plugins in all repositories
@@ -207,7 +207,7 @@ class Admin_PluginController extends AuthenticatedController
         $this->search_results = $search_results;
         $this->plugins        = $plugins;
         $this->unknown_plugins = $this->plugin_admin->scanPluginDirectory();
-        
+
         $actions = new ActionsWidget();
         $actions->addLink(_('Pluginverwaltung'), $this->url_for('admin/plugin'), Icon::create('plugin', 'clickable'));
         $actions->addLink(_('Alle Plugins im Plugin-Marktplatz'), 'http://plugins.studip.de/', Icon::create('export', 'clickable'), ['target' => '_blank']);
@@ -361,7 +361,7 @@ class Admin_PluginController extends AuthenticatedController
      */
     public function manifest_action($plugin_id)
     {
-        
+
         $plugin_manager = PluginManager::getInstance();
         $plugin = $plugin_manager->getPluginInfoById($plugin_id);
         PageLayout::setTitle(sprintf(_('Details von %s'), $plugin['name']));
@@ -487,12 +487,11 @@ class Admin_PluginController extends AuthenticatedController
             }
             $this->redirect("admin/plugin/edit_automaticupdate/".$plugin_id);
         }
-        if (Request::isXhr()) {
-            if ($plugin_id) {
-                $this->response->add_header('X-Title', sprintf(_("Automatisches Update für %s"), $this->plugin['name']));
-            } else {
-                $this->response->add_header('X-Title', _("Plugin von URL installieren"));
-            }
+
+        if ($plugin_id) {
+            PageLayout::setTitle(sprintf(_("Automatisches Update für %s"), $this->plugin['name']));
+        } else {
+            PageLayout::setTitle(_("Plugin von URL installieren"));
         }
     }
 

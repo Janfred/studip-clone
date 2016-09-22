@@ -111,7 +111,7 @@ class Course_TopicsController extends AuthenticatedController
         if (Request::isXhr()) {
             $this->set_layout(null);
             $this->set_content_type('text/html;Charset=windows-1252');
-            $this->response->add_header('X-Title', $topic_id ? _("Bearbeiten").": ".$this->topic['title'] : _("Neues Thema erstellen"));
+            PageLayout::setTitle($topic_id ? _("Bearbeiten").": ".$this->topic['title'] : _("Neues Thema erstellen"));
         }
     }
 
@@ -197,7 +197,7 @@ class Course_TopicsController extends AuthenticatedController
         if (Request::isXhr()) {
             $this->set_layout(null);
             $this->set_content_type('text/html;Charset=windows-1252');
-            $this->response->add_header('X-Title', _("Themen aus Veranstaltung kopieren"));
+            PageLayout::setTitle(_("Themen aus Veranstaltung kopieren"));
         }
     }
 

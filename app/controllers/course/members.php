@@ -249,7 +249,6 @@ class Course_MembersController extends AuthenticatedController
         $this->xhr = Request::isXhr();
         if ($this->xhr) {
             $this->set_layout(null);
-            header('X-Title: ' . PageLayout::getTitle());
         } else {
             Navigation::activateItem('/course/members/view');
         }
@@ -306,7 +305,7 @@ class Course_MembersController extends AuthenticatedController
                 $countAdded++;
             }
         }
-    
+
         if ($countAdded == 1) {
             $text = _("Es wurde eine neue Person hinzugefügt.");
         } else {
@@ -500,9 +499,8 @@ class Course_MembersController extends AuthenticatedController
                         $this->users[] = $user;
                     }
                 }
-                if (Request::isXhr()) {
-                    $this->response->add_header('X-Title', _('Zielveranstaltung auswählen'));
-                }
+
+                PageLayout::setTitle( _('Zielveranstaltung auswählen'));
             } else {
                 if (Request::isXhr()) {
                     $this->response->add_header('X-Dialog-Close', '1');
@@ -1229,7 +1227,7 @@ class Course_MembersController extends AuthenticatedController
         if (!empty($this->flash['users'])) {
             $users = array_keys(array_filter($this->flash['users']));
         }
-        
+
         if (!empty($users)) {
             $msg = $this->members->moveToWaitlist($users, $which_end);
             if (count($msg['success'])) {

@@ -76,7 +76,7 @@ class Course_StudygroupController extends AuthenticatedController
         global $perm;
         $studygroup = new Seminar($id);
         if (Request::isXhr()) {
-            header('X-Title: ' . _('Studiengruppendetails'));
+            PageLayout::setTitle(_('Studiengruppendetails'));
         } else {
             PageLayout::setTitle(getHeaderLine($id) . ' - ' . _('Studiengruppendetails'));
             PageLayout::setHelpKeyword('Basis.StudiengruppenAbonnieren');

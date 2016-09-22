@@ -11,7 +11,7 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // logs.php
-// 
+//
 // Copyright (C) 2013 Jan-Hendrik Willms <tleilax+studip@gmail.com>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -59,7 +59,7 @@ class Admin_Cronjobs_LogsController extends AuthenticatedController
     public function index_action($page = 1)
     {
         $filter = $_SESSION['cronlog-filter'];
-        
+
         $this->max_per_page   = Config::get()->ENTRIES_PER_PAGE;
         $this->total          = CronjobLog::countBySql();
         $this->total_filtered = CronjobLog::countBySql($filter['where']);
@@ -152,11 +152,8 @@ class Admin_Cronjobs_LogsController extends AuthenticatedController
 
         $title = sprintf(_('Logeintrag für Cronjob "%s" anzeigen'),
                          $this->log->schedule->title);
-        if (Request::isXhr()) {
-            header('X-Title: ' . $title);
-        } else {
-            PageLayout::setTitle($title);
-        }
+
+        PageLayout::setTitle($title);
     }
 
     /**

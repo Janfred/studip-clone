@@ -119,7 +119,8 @@ class Course_AdmissionController extends AuthenticatedController
     function change_admission_prelim_action()
     {
         CSRFProtection::verifyUnsafeRequest();
-        $this->response->add_header('X-Title', _('Anmeldemodus ändern'));
+        PageLayout::setTitle(_('Anmeldemodus ändern'));
+
         if (Request::submitted('change_admission_prelim')) {
             $request = Request::extract('admission_prelim int, admission_binding submitted, admission_prelim_txt');
             $request = array_diff_key($request, array_filter($this->is_locked));
@@ -234,7 +235,8 @@ class Course_AdmissionController extends AuthenticatedController
     function change_admission_turnout_action()
     {
         CSRFProtection::verifyUnsafeRequest();
-        $this->response->add_header('X-Title', _('Teilnehmeranzahl ändern'));
+        PageLayout::setTitle(_('Teilnehmeranzahl ändern'));
+
         if (Request::submitted('change_admission_turnout')) {
             $request = Request::extract('admission_turnout int, admission_disable_waitlist submitted, admission_disable_waitlist_move submitted, admission_waitlist_max int');
             $request = array_diff_key($request, array_filter($this->is_locked));
@@ -330,7 +332,8 @@ class Course_AdmissionController extends AuthenticatedController
             }
         }
         if (Request::submitted('change_course_set_unassign') && !LockRules::Check($this->course_id, 'admission_type')) {
-            $this->response->add_header('X-Title', _('Anmelderegeln aufheben'));
+            PageLayout::setTitle(_('Anmelderegeln aufheben'));
+
             if ($this->course->getNumWaiting() && !Request::submitted('change_course_set_unassign_yes')) {
                 $question = sprintf(_("In dieser Veranstaltung existiert eine Warteliste. Die bestehende Warteliste mit %s Einträgen wird gelöscht. Sind sie sicher?"), $this->course->getNumWaiting());
             }
@@ -392,7 +395,8 @@ class Course_AdmissionController extends AuthenticatedController
 
     function instant_course_set_action()
     {
-        $this->response->add_header('X-Title', _('Neue Anmelderegel'));
+        PageLayout::setTitle(_('Neue Anmelderegel'));
+
         list($type, $another_type) = explode('_', Request::option('type'));
         list($rule_id, $another_rule_id) = explode('_', Request::option('rule_id'));
         $rule_types = AdmissionRule::getAvailableAdmissionRules(true);

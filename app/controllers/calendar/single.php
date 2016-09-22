@@ -145,9 +145,8 @@ class Calendar_SingleController extends Calendar_CalendarController
 
     public function event_action($range_id = null, $event_id = null)
     {
-        if (Request::isXhr()) {
-            header('X-Title: ' . _('Termindaten'));
-        }
+        PageLayout::setTitle(_('Termindaten'));
+
         $this->range_id = $range_id ?: $this->range_id;
         $this->calendar = new SingleCalendar($this->range_id);
         $this->event = $this->calendar->getEvent($event_id);

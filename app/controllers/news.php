@@ -184,7 +184,7 @@ class NewsController extends StudipController
         // Output as dialog (Ajax-Request) or as Stud.IP page?
         if (Request::isXhr()) {
             $this->set_layout(null);
-            header('X-Title: ' . $this->title);
+            PageLayout::setTitle($this->title);
         } else {
             $this->set_layout($GLOBALS['template_factory']->open('layouts/base'));
         }

@@ -105,11 +105,8 @@ class Admin_Cronjobs_SchedulesController extends AuthenticatedController
         }
 
         $title = sprintf(_('Cronjob "%s" anzeigen'), $this->schedule->title);
-        if (Request::isXhr()) {
-            header('X-Title: ' . $title);
-        } else {
-            PageLayout::setTitle($title);
-        }
+
+        PageLayout::setTitle($title);
     }
 
     /**
@@ -325,7 +322,7 @@ class Admin_Cronjobs_SchedulesController extends AuthenticatedController
 
         $this->redirect('admin/cronjobs/schedules/index/' . $page);
     }
-    
+
     /**
      * Runs a schedule and returns the output.
      *
@@ -351,5 +348,5 @@ class Admin_Cronjobs_SchedulesController extends AuthenticatedController
         $this->render_nothing();
     }
 
-    
+
 }

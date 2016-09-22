@@ -10,7 +10,7 @@
 
 class Document_AdministrationController extends AuthenticatedController {
 
-    public function before_filter(&$action, &$args) 
+    public function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
         Navigation::activateItem('/admin/config/document_area');
@@ -23,39 +23,39 @@ class Document_AdministrationController extends AuthenticatedController {
         $this->getInfobox();
 
     }
-    
+
     public function index_action($configType = NULL)
     {
         $viewData['configs'] =  DocUsergroupConfig::getGroupConfigAll($configType);
         $this->viewData = $viewData;
     }
-    
+
     public function filter_action()
     {
         if(Request::submitted('filter')){
             $_SESSION['document_config_filter'] = Request::get('showFilter');
         }
         if($_SESSION['document_config_filter'] == 'group'){
-            $this->redirect('document/administration/index/1'); 
+            $this->redirect('document/administration/index/1');
         }else if($_SESSION['document_config_filter'] == 'individual'){
-            $this->redirect('document/administration/index/0'); 
+            $this->redirect('document/administration/index/0');
         }else{
-            $this->redirect('document/administration/index'); 
+            $this->redirect('document/administration/index');
         }
     }
-    
+
     public function activateUpload_action($config_id)
     {
         DocUsergroupConfig::switchUploadStatus($config_id);
         $this->redirect('document/administration/filter');
     }
-    
+
     public function deactivateUpload_action($config_id)
     {
         DocUsergroupConfig::switchUploadStatus($config_id);
         $this->redirect('document/administration/filter');
     }
-    
+
     public function activateDocumentArea_action($config_id)
     {
         DocUsergroupConfig::switchDocumentAreaStatus($config_id);
@@ -76,7 +76,7 @@ class Document_AdministrationController extends AuthenticatedController {
                 $this->config_id = $config_id;
                 $this->reason_text = $config['closed_text'];
                 if (Request::isXhr()) {
-                    header('X-Title: ' . _('Persönlichen Dateibereich für ' . $config['name'] . ' sperren'));
+                    PageLayout::setTitle(_('Persönlichen Dateibereich für ' . $config['name'] . ' sperren'));
                 } else {
                     $this->header = 'Persönlichen Dateibereich für ' . $config['name'] . ' sperren';
                 }
@@ -86,11 +86,11 @@ class Document_AdministrationController extends AuthenticatedController {
             }
         }
     }
-    
+
     public function edit_action($config_id = 0, $isGroupConfig = false)
     {
-        $this->types = DocFiletype::findBySQL('id IS NOT NULL ORDER BY type'); 
-        //Existing entry     
+        $this->types = DocFiletype::findBySQL('id IS NOT NULL ORDER BY type');
+        //Existing entry
         if($config_id != 0){
             $this->config_id = $config_id;
             $this->config = DocUsergroupConfig::getConfig($config_id);
@@ -104,7 +104,7 @@ class Document_AdministrationController extends AuthenticatedController {
                 $this->config['upload_quota']= $this->sizeInUnit($this->config['upload_quota'], $this->config['upload_unit']);
                 $this->config['quota']= $this->sizeInUnit($this->config['quota'], $this->config['quota_unit']);
                 if(Request::isXhr()){
-                    header('X-Title: ' . _('Persönlichen Dateibereich für ' . $this->config['name'] . ' konfigurieren'));
+                    PageLayout::setTitle(_('Persönlichen Dateibereich für ' . $this->config['name'] . ' konfigurieren'));
                 }else{
                     $this->head = 'Persönlichen Dateibereich für ' . $this->config['name'] . ' konfigurieren';
                 }
@@ -132,11 +132,11 @@ class Document_AdministrationController extends AuthenticatedController {
                 }
                 $this->groups = $groups;
                 if (Request::isXhr()) {
-                    header('X-Title: ' . _('Neue Gruppeneinstellung für den Persönlichen Dateibereich erstellen'));
+                    PageLayout::setTitle(_('Neue Gruppeneinstellung für den Persönlichen Dateibereich erstellen'));
                 } else {
                     $this->head = 'Neue Gruppeneinstellung für den Persönlichen Dateibereich erstellen';
                 }
-            //Configuration Entry for a User    
+            //Configuration Entry for a User
             }
             if($isGroupConfig != 'true' && $isGroupConfig != 'false'){
                 $user = new User($isGroupConfig);
@@ -145,14 +145,14 @@ class Document_AdministrationController extends AuthenticatedController {
                 $this->isGroupConfig = false;
                 $this->user_id = $isGroupConfig;
                 if (Request::isXhr()) {
-                    header('X-Title: ' . _('Neue Einstellung für '.$user->getFullName()));
+                    PageLayout::setTitle(_('Neue Einstellung für '.$user->getFullName()));
                 } else {
                     $this->head = 'Neue Einstellung für '.$user->getFullName();
                 }
             }
         }
     }
-    
+
     function store_action($config_id, $isGroupConfig)
     {
         if (Request::float('upload_size') && Request::float('quota_size')) {
@@ -176,7 +176,7 @@ class Document_AdministrationController extends AuthenticatedController {
                 $data['datetype_id'] = Request::intArray('datetype');
                 if(DocUsergroupConfig::setConfig($data)){
                     $message = 'Das Speichern der Einstellungen war erfolgreich. ';
-                    PageLayout::postMessage(MessageBox::success($message));     
+                    PageLayout::postMessage(MessageBox::success($message));
                 }else{
                     PageLayout::postMessage(MessageBox::error(_(
                             'Beim speichern der Einstellungen ist ein Fehler aufgetreten'.
@@ -189,10 +189,10 @@ class Document_AdministrationController extends AuthenticatedController {
         }else{
              PageLayout::postMessage(MessageBox::error(_(
                      'Es wurden fehlerhafte Werte für die Quota eingegeben.')));
-        } 
+        }
         $this->redirect('document/administration/filter');
     }
-    
+
     /*
      * $id represents the value for the primarykey in the Database
      * $type represents the kind of configuration. individual oder group-config
@@ -206,11 +206,11 @@ class Document_AdministrationController extends AuthenticatedController {
             DocUsergroupConfig::deleteBySQL('id = ' . $config_id);
             DocFileTypeForbidden::deleteBySQL('usergroup = ' . $db->quote($config['usergroup']));
         }
-        $this->redirect('document/administration/filter/'); 
-             
+        $this->redirect('document/administration/filter/');
+
     }
-    
-    public function individual_action($user_id = null) 
+
+    public function individual_action($user_id = null)
     {
         $users = array();
         if ($user_id != null) {
@@ -260,7 +260,7 @@ class Document_AdministrationController extends AuthenticatedController {
         $viewData['users'] = $userSetting;
         $this->viewData = $viewData;
     }
-    
+
     public function sizeInByte($size, $unit)
     {
         $byte = 0;
@@ -280,13 +280,13 @@ class Document_AdministrationController extends AuthenticatedController {
         }
         return $byte;
     }
-    
+
     /*
      * TODO
      * Wenn relsize() aus functions.php mit float umgehen kann
      * dann kommt diese Funktion raus
      */
-    public function sizeInUnit($byte, $unit) 
+    public function sizeInUnit($byte, $unit)
     {
         $size = 0;
         switch ($unit) {
@@ -305,14 +305,14 @@ class Document_AdministrationController extends AuthenticatedController {
         }
         return $size;
     }
-    
+
     //Infobox erstellen mit Navigation ->erweiterbarkeit
     function getInfobox()
     {
         $sidebar = Sidebar::get();
         $sidebar->setImage('sidebar/files-sidebar.png');
         $sidebar->setTitle(_('Persönlicher Dateibereich'));
-        
+
         $widget = new ActionsWidget();
 
         $widget->addLink(_('Neue Gruppeneinstellungen'),

@@ -384,9 +384,8 @@ class Admission_CoursesetController extends AuthenticatedController
      */
     public function configure_courses_action($set_id, $csv = null)
     {
-        if (Request::isXhr()) {
-            $this->response->add_header('X-Title', _('Ausgewählte Veranstaltungen konfigurieren'));
-        }
+        PageLayout::setTitle(_('Ausgewählte Veranstaltungen konfigurieren'));
+
         $courseset = new CourseSet($set_id);
         $this->set_id = $courseset->getId();
         $this->courses = Course::findMany($courseset->getCourses(), "ORDER BY VeranstaltungsNummer, Name");
@@ -523,9 +522,8 @@ class Admission_CoursesetController extends AuthenticatedController
      */
     public function factored_users_action($set_id)
     {
-        if (Request::isXhr()) {
-            $this->response->add_header('X-Title', _('Liste der Personen'));
-        }
+        PageLayout::setTitle(_('Liste der Personen'));
+
         $courseset = new CourseSet($set_id);
         $factored_users = $courseset->getUserFactorList();
         $applicants = AdmissionPriority::getPriorities($set_id);
@@ -542,9 +540,8 @@ class Admission_CoursesetController extends AuthenticatedController
      */
     public function applications_list_action($set_id, $csv = null)
     {
-        if (Request::isXhr()) {
-            $this->response->add_header('X-Title', _('Liste der Anmeldungen'));
-        }
+        PageLayout::setTitle(_('Liste der Anmeldungen'));
+
         $courseset = new CourseSet($set_id);
         $applicants = AdmissionPriority::getPriorities($set_id);
         $users = User::findMany(array_keys($applicants), 'ORDER BY Nachname');
