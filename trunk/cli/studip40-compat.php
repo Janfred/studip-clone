@@ -141,11 +141,8 @@ $rules = [
     'getExternDefaultForUser' => 'Use #{yellow:InstituteMember::getDefaultInstituteIdForUser($user_id)} instead.',
     'checkExternDefaultForUser' => 'Use #{yellow:InstituteMember::ensureDefaultInstituteIdForUser($user_id)} instead.',
     'getAllChildIDs' => false,
-    'AutoInsert::checkUserStatus' => false,
-    'AutoInsert::updateUserStatus' => false,
-    'AutoInsert::_saveUser' => false,
+
     'AutoInsert::existSeminars' => false,
-    'AutoInsert->checkUser' => false,
 ];
 
 
