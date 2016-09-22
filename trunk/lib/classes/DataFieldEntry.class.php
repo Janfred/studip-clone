@@ -65,7 +65,7 @@ abstract class DataFieldEntry
     public static function getDataFieldEntries($range_id, $object_type = '', $object_class_hint = '')
     {
         if (!$range_id) {
-            return false; // we necessarily need a range ID
+            return []; // we necessarily need a range ID
         }
 
         $parameters = array();
