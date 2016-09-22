@@ -9,7 +9,7 @@ jQuery(document).on('click', 'a[rel~="comment_dialog"]', function (event) {
     // has finished.
     container.load(href, function (response, status, xhr) {
         jQuery(this).dialog({
-            title:      xhr.getResponseHeader('X-Title') || '',
+            title:      decodeURIComponent(xhr.getResponseHeader('X-Title')) || '',
             width:      '40em',
             modal:      true,
             resizable:  false

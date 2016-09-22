@@ -242,6 +242,7 @@
     };
     // Handler for HTTP header X-Title: Set the dialog title
     STUDIP.Dialog.handlers.header['X-Title'] = function (title, options) {
+        title = decodeURIComponent(title);
         if (title !== $('title').data().original) {
             options.title = title || options.title;
         }

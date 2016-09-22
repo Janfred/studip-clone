@@ -140,7 +140,7 @@ abstract class StudipController extends Trails_Controller
         parent::after_filter($action, $args);
 
         if (Request::isXhr() && !isset($this->response->headers['X-Title']) && PageLayout::hasTitle()) {
-            $this->response->add_header('X-Title', PageLayout::getTitle());
+            $this->response->add_header('X-Title', rawurlencode(PageLayout::getTitle()));
         }
 
         if ($this->with_session) {
