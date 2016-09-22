@@ -96,20 +96,6 @@ function GetAllStatusgruppen($parent, $check_user = null, $exclude = false)
     return is_array($childs) ? $childs : false;
 }
 
-function getAllChildIDs($range_id)
-{
-    $query = "SELECT statusgruppe_id, name FROM statusgruppen WHERE range_id = ?";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($range_id));
-    $zw = $statement->fetchGrouped(PDO::FETCH_COLUMN);
-
-    $ids = array_keys($zw);
-    foreach (array_keys($zw) as $id) {
-        $zw = array_merge($zw, getAllChildIDs($id));
-    }
-
-    return $zw;
-}
 
 /**
  * 
