@@ -397,7 +397,7 @@ class Institute_MembersController extends AuthenticatedController
                     }
                 }
             }
-            checkExternDefaultForUser($u_id);
+            InstituteMember::ensureDefaultInstituteForUser($u_id);
         }
         $mp->clearSession();
 
@@ -450,7 +450,7 @@ class Institute_MembersController extends AuthenticatedController
 
             StudipLog::log('INST_USER_DEL', $this->institute->id, $user->id);
             NotificationCenter::postNotification('UserInstitutionDidDelete', $this->institute->id, $user->id);
-            checkExternDefaultForUser($user->id);
+            InstituteMember::ensureDefaultInstituteForUser($user->id);
         }
 
         $this->redirect('institute/members/'. $type);

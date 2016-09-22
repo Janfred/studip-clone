@@ -363,7 +363,7 @@ class Institute_BasicdataController extends AuthenticatedController
             // set a suitable default institute for each user
             foreach ($user_ids as $user_id) {
                 StudipLog::log('INST_USER_DEL', $i_id, $user_id);
-                checkExternDefaultForUser($user_id);
+                InstituteMember::ensureDefaultInstituteForUser($user_id);
             }
             if (count($user_ids)) {
                 $details[] = sprintf(_('%u Mitarbeiter gelöscht.'), count($user_ids));

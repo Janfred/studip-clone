@@ -475,7 +475,7 @@ class Admin_UserController extends AuthenticatedController
                                                 . "VALUES (?,?,?)");
                 $db->execute([$user_id, Request::option('new_inst'), $editPerms[0]]);
                 NotificationCenter::postNotification('UserInstitutionDidUpdate', Request::option('new_inst'), $user_id);
-                checkExternDefaultForUser($user_id);
+                InstituteMember::ensureDefaultInstituteForUser($user_id);
                 $details[] = _('Die Einrichtung wurde hinzugefügt.');
             } elseif (Request::option('new_inst') != 'none' && Request::option('new_student_inst') == Request::option('new_inst') && $editPerms[0] != 'root') {
                 $details[] = _('<b>Die Einrichtung wurde nicht hinzugefügt.</b> Sie können keine Person gleichzeitig als Studierende/-r und als Mitarbeiter/-in einer Einrichtung hinzufügen.');
@@ -666,7 +666,7 @@ class Admin_UserController extends AuthenticatedController
                     $db    = DBManager::get()->prepare("INSERT INTO user_inst (user_id, Institut_id, inst_perms) VALUES (?, ?, ?)");
                     $check = $db->execute([$user_id, Request::option('institute'), $UserManagement->user_data['auth_user_md5.perms']]);
                     NotificationCenter::postNotification('UserInstitutionDidCreate', Request::option('institute'), $user_id);
-                    checkExternDefaultForUser($user_id);
+                    InstituteMember::ensureDefaultInstituteForUser($user_id);
 
                     //send email, if new user is an admin
                     if ($check) {
@@ -1038,7 +1038,7 @@ class Admin_UserController extends AuthenticatedController
             if ($db->rowCount() == 1) {
                 StudipLog::log('INST_USER_DEL', $institut_id, $user_id);
                 NotificationCenter::postNotification('UserInstitutionDidDelete', $institut_id, $user_id);
-                checkExternDefaultForUser($user_id);
+                InstituteMember::ensureDefaultInstituteForUser($user_id);
                 if (UserConfig::get($user_id)->MY_INSTITUTES_DEFAULT == $institut_id) {
                     UserConfig::get($user_id)->delete('MY_INSTITUTES_DEFAULT');
                 }
