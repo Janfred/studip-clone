@@ -188,7 +188,7 @@ class ForumHelpers {
         static $online_status;
 
         // check if the corresponding user's profile is visible
-        if (Visibility::getVisibilityById($user_id) == false) {
+        if (get_visibility_by_id($user_id) == false) {
             return 'offline';
         }
 
