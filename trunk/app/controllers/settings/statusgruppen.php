@@ -215,7 +215,7 @@ class Settings_StatusgruppenController extends Settings_SettingsController
 
                 }
 
-                checkExternDefaultForUser($this->user->user_id);
+                InstituteMember::ensureDefaultInstituteForUser($this->user->user_id);
 
                 $_SESSION['edit_about_data']['open'] = $role_id;
                 PageLayout::postSuccess(_('Die Person wurde in die ausgewählte Gruppe eingetragen!'));

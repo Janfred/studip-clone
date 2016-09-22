@@ -138,6 +138,8 @@ $rules = [
     'getPersonsForRole' => 'Use #{yellow::Statusgruppen::members} instead.',
     'isVatherDaughterRelation' => false,
     'SetSelfAssign(' => false,
+    'getExternDefaultForUser' => 'Use #{yellow:InstituteMember::getDefaultInstituteIdForUser($user_id)} instead.',
+    'checkExternDefaultForUser' => 'Use #{yellow:InstituteMember::ensureDefaultInstituteIdForUser($user_id)} instead.',
 ];
 
 

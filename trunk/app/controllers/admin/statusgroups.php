@@ -365,7 +365,7 @@ class Admin_StatusgroupsController extends AuthenticatedController
                         $user = new User($user_id);
                         $newInstUser->inst_perms = $user->perms;
                         if ($newInstUser->store()) {
-                            checkExternDefaultForUser($user->id);
+                            InstituteMember::ensureDefaultInstituteForUser($user->id);
                             StudipLog::INST_USER_ADD($_SESSION['SessionSeminar'], $user->id, $user->perms);
                         }
                     }

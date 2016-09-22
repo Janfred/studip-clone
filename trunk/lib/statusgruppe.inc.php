@@ -237,31 +237,3 @@ function get_role_data_recursive($roles, $user_id, &$default_entries, $filter = 
 
     return array('standard' => $out, 'table' => $out_table);
 }
-
-
-/**
- * Ensure that a user has a valid default institute set if applicable,
- * i.e. he/she is member of at least one institute and has status 'autor'
- * or higher.
- *
- * @param string $user_id       user id
- */
-function checkExternDefaultForUser($user_id) {
-    if (!getExternDefaultForUser($user_id)) {
-        $stmt = DBManager::get()->prepare("UPDATE user_inst SET externdefault = 1 WHERE user_id = ? AND inst_perms != 'user' ORDER BY priority LIMIT 1");
-        $stmt->execute(array($user_id));
-    }
-}
-
-/**
- * Return the id of the default institute for a user (if set).
- *
- * @param string $user_id       user id
- *
- * @return string  institute id or FALSE
- */
-function getExternDefaultForUser($user_id) {
-    $stmt = DBManager::get()->prepare("SELECT Institut_id FROM user_inst WHERE user_id = ? AND inst_perms != 'user' AND externdefault = 1");
-    $stmt->execute(array($user_id));
-    return $stmt->fetchColumn();
-}
