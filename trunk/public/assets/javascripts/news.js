@@ -32,8 +32,8 @@ STUDIP.News = {
     get_dialog: function (id, route, from_x, from_y) {
         // initialize dialog
         jQuery('body').append('<div id="' + id + '"></div>');
-        jQuery('#' + id).dialog({ 
-            modal: true, 
+        jQuery('#' + id).dialog({
+            modal: true,
             resizable: false,
             width: 100,
             height: 40,
@@ -74,7 +74,7 @@ STUDIP.News = {
             'url': route,
             'dataType': 'HTML',
             'success': function (html, status, xhr) {
-                jQuery('#' + id).dialog('option', 'title', xhr.getResponseHeader('X-Title'));
+                jQuery('#' + id).dialog('option', 'title', decodeURIComponent(xhr.getResponseHeader('X-Title')));
                 jQuery('#' + id).dialog('widget').stop(true, true);
                 // set to full size (even if dialog.close was triggered before)
                 jQuery('#' + id).dialog('widget').animate({
@@ -88,7 +88,7 @@ STUDIP.News = {
                 });
                 jQuery('#' + id).html(html);
                 jQuery('#' + id + '_content').css({
-                    'height' : STUDIP.News.dialog_height - 120 + "px", 
+                    'height' : STUDIP.News.dialog_height - 120 + "px",
                     'maxHeight': STUDIP.News.dialog_height - 120 + "px"
                 });
                 jQuery('.ui-dialog-content').css({'padding-right' : '1px'});
@@ -102,7 +102,7 @@ STUDIP.News = {
                 }
 
                 jQuery('.add_toolbar').addToolbar();
-                
+
                 if (document.createElement('textarea').style.resize === undefined) {
                     jQuery('textarea.resizable').resizable({
                         handles: 's',
@@ -131,14 +131,14 @@ STUDIP.News = {
                     if (html.length > 0) {
                         jQuery('#' + id).html(html);
                         jQuery('#' + id + '_content').css({
-                            'height' : STUDIP.News.dialog_height - 120 + "px", 
+                            'height' : STUDIP.News.dialog_height - 120 + "px",
                             'maxHeight': STUDIP.News.dialog_height - 120 + "px"
                         });
                         // scroll to anker
                         var obj = jQuery('a[name=anker]');
                         if (obj.length > 0) {
                             jQuery('#' + id + '_content').scrollTop(obj.position().top);
-                        }                
+                        }
                     } else {
                         jQuery('#' + id).dialog('close');
                         var obj = jQuery('#admin_news_form');
@@ -174,7 +174,7 @@ STUDIP.News = {
             });
         }
     },
-    
+
     toggle_category_view: function (id) {
         if (jQuery("input[name=" + id + "_js]").val() === "toggle") {
             jQuery("input[name=" + id + "_js]").val("");
