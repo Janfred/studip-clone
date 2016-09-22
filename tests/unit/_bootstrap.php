@@ -115,7 +115,7 @@ if (!class_exists('StudipTestHelper')) {
             foreach ($tables as $db_table) {
                 include TEST_FIXTURES_PATH."simpleormap/$db_table.php";
                 foreach ($result as $rs) {
-                    $db_fields[mb_mb_strtolower($rs['name'])] = array(
+                    $db_fields[mb_strtolower($rs['name'])] = array(
                         'name'    => $rs['name'],
                         'null'    => $rs['null'],
                         'default' => $rs['default'],
@@ -123,7 +123,7 @@ if (!class_exists('StudipTestHelper')) {
                         'extra'   => $rs['extra']
                     );
                     if ($rs['key'] == 'PRI'){
-                        $pk[] = mb_mb_strtolower($rs['name']);
+                        $pk[] = mb_strtolower($rs['name']);
                     }
                 }
                 $schemes[$db_table]['db_fields'] = $db_fields;
