@@ -635,15 +635,4 @@ class MessagesController extends AuthenticatedController {
         PageLayout::postMessage(MessageBox::success(_('Schlagwort gelöscht!')));
         $this->redirect($this->url_for('messages/overview'));
     }
-
-    function after_filter($action, $args)
-    {
-        if (Request::isXhr()) {
-            if (PageLayout::getTitle()) {
-                $this->response->add_header('X-Title', PageLayout::getTitle());
-            }
-        }
-        parent::after_filter($action, $args);
-    }
-
 }

@@ -214,12 +214,12 @@ class MyCoursesController extends AuthenticatedController
 
         $this->title = _('Meine Veranstaltungen') . ' - ' . _('Farbgruppierungen');
 
+        PageLayout::setTitle($this->title);
+
         if (Request::isXhr()) {
             $this->set_layout(null);
             $this->response->add_header('Content-Type', 'text/html;charset=Windows-1252');
-            header('X-Title: ' . $this->title);
         } else {
-            PageLayout::setTitle($this->title);
             PageLayout::setHelpKeyword('Basis.VeranstaltungenOrdnen');
             Navigation::activateItem('/browse/my_courses/list');
         }

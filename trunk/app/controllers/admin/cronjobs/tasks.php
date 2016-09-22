@@ -188,6 +188,8 @@ class Admin_Cronjobs_TasksController extends AuthenticatedController
     {
         $this->task = new CronjobTask($task_id);
 
+        PageLayout::setTitle(_('Cronjob-Aufgabe ausführen'));
+
         if (Request::isPost()) {
             $parameters = Request::getArray('parameters');
             $parameters = $parameters[$this->task->id];
@@ -196,7 +198,6 @@ class Admin_Cronjobs_TasksController extends AuthenticatedController
             $this->task->engage(null, $parameters);
             $this->result = ob_get_clean();
         } else {
-            header('X-Title: ' . _('Cronjob-Aufgabe ausführen'));
             $this->schedule = new CronjobSchedule();
         }
     }

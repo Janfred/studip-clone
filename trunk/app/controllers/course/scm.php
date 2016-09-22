@@ -84,7 +84,7 @@ class Course_ScmController extends StudipController
         checkObject(); // do we have an open object?
         checkObjectModule('scm');
         object_set_visit_module('scm');
-        
+
         // Set sidebar image
         $sidebar = Sidebar::get();
         $sidebar->setImage('sidebar/info-sidebar.png');
@@ -231,10 +231,6 @@ class Course_ScmController extends StudipController
     public function after_filter($action, $args)
     {
         parent::after_filter($action, $args);
-
-        if (Request::isXhr()) {
-            $this->response->add_header('X-Title', PageLayout::getTitle());
-        }
 
         page_close();
     }
