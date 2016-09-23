@@ -41,8 +41,8 @@
         </div>
         <ul class="collapsable css-tree">
             <li class="sem-tree-root tree-loaded keep-node">
-                <input type="checkbox" id="root" checked="checked"/>
-                <label for="root">
+                <input type="checkbox" id="root" checked="checked">
+                <label for="root" class="undecorated">
                     <?= $GLOBALS['UNI_NAME'] ?>
                 </label>
                 <ul>
