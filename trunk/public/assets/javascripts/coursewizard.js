@@ -378,6 +378,7 @@ STUDIP.CourseWizard = {
                     attr('type', 'checkbox').
                     attr('id', values.id);
                 var label = $('<label>').
+                    addClass('undecorated').
                     attr('for', values.id).
                     attr('onclick', "return STUDIP.CourseWizard.getTreeChildren('" +
                         values.id + "', true)");
@@ -390,7 +391,7 @@ STUDIP.CourseWizard = {
                 }
                 var openLink = $('<a>').
                     attr('href', link);
-                openLink.html(values.name);
+                openLink.html($('<div/>').text(values.name).html());
                 label.append(openLink);
                 item.append(input);
                 item.append(label);
@@ -406,14 +407,14 @@ STUDIP.CourseWizard = {
                 if ($('#assigned li.sem-tree-assigned-' + values.id).length > 0) {
                     assign.css('display', 'none');
                 }
-                item.html(item.html() + values.name);
+                item.html(item.html() + $('<div/>').text(values.name).html());
                 item.addClass('tree-node');
             }
         // Node in "assigned study areas" tree.
         } else {
             var item = $('<li>').
                 addClass('sem-tree-assigned-' + values.id);
-            item.html(values.name);
+            item.html($('<div/>').text(values.name).html());
             if ((!values.has_children || values.assignable) && selected) {
                 var unassign = $('<input>').
                     attr('type', 'image').

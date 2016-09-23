@@ -5,7 +5,7 @@
     <?php endif ?>
     <?php if ($node->hasChildren()) : ?>
     <input type="checkbox" id="<?= htmlReady($node->id) ?>"<?= (in_array($node->id, $open_nodes) && $node->parent_id != $values['open_node']) ? ' checked="checked"' : '' ?>/>
-    <label onclick="return STUDIP.CourseWizard.getTreeChildren('<?= htmlReady($node->sem_tree_id) ?>', true)" 
+    <label onclick="return STUDIP.CourseWizard.getTreeChildren('<?= htmlReady($node->sem_tree_id) ?>', true)"
            for="<?= htmlReady($node->id) ?>" class="undecorated">
         <a href="<?= URLHelper::getLink($no_js_url,
             array('open_node' => $node->id)) ?>">
