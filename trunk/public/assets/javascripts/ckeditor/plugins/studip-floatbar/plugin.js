@@ -39,8 +39,10 @@
         // configure shared spaces plug to use our toolbar
         editor.config.sharedSpaces = { top: toolbar.attr('id') };
 
-        // add listener for later intialization tasks
-        CKEDITOR.on('instanceReady', onInstanceReady);
+        // add listener for later intialization tasks (don't activate inside a dialog)
+        if (!editor.element.$.closest('.ui-dialog')) {
+            CKEDITOR.on('instanceReady', onInstanceReady);
+        }
     }
 
     function onInstanceReady(event) {
