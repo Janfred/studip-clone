@@ -77,6 +77,8 @@ class Course_ArchiveController extends AuthenticatedController
     */
     public function confirm_action()
     {
+        PageLayout::setHelpKeyword('Veranstaltungen.Archivieren');
+        
         global $perm;
         
         /*
