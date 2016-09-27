@@ -144,7 +144,7 @@
         <strong><?= _('Wo ich studiere:') ?></strong>
         <br>
         <? foreach ($study_institutes as $inst_result) : ?>
-            <a href="<?= $controlle->link_for('institute/overview', ['auswahl' => $inst_result->institut_id]) ?>">
+            <a href="<?= $controller->link_for('institute/overview', ['auswahl' => $inst_result->institut_id]) ?>">
                 <?= htmlReady($inst_result->institute->name) ?>
             </a>
             <br>
