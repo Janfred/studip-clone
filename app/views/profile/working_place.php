@@ -2,8 +2,8 @@
 $fields = [
     'raum'         => _('Raum'),
     'sprechzeiten' => _('Sprechzeit'),
-    'Telefon'      => _('Telefon'),
-    'Fax'          => _('Fax'),
+    'telefon'      => _('Telefon'),
+    'fax'          => _('Fax'),
 ];
 ?>
 
