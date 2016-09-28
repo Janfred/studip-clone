@@ -40,7 +40,7 @@
 
             if (!STUDIP.Forms.initialized) {
                 // add invalid-handler to every input and textarea on the page
-                $(document).on('input, textarea').on('invalid', function() {
+                $(document).on('invalid', 'input, textarea', function() {
                     $(this).attr('aria-invalid', 'true').change(function () {
                         $(this).removeAttr('aria-invalid');
                     });
