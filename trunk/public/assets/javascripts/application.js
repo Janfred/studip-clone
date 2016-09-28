@@ -324,12 +324,14 @@ jQuery(document).on('click', '.course-admin td .course-completion', function () 
     return false;
 });
 
-jQuery(document).on('dialog-update', function (event) {
+jQuery(document).on('dialog-update', function (event, data) {
     jQuery('.add_toolbar').addToolbar();
 
+    STUDIP.Forms.initialize(data.dialog);
+
     /* notify MathJax about new content*/
-    if (typeof MathJax !== 'undefined') {
-        MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.dialog]);
+    if (MathJax !== undefined) {
+        MathJax.Hub.Queue(['Typeset', MathJax.Hub, data.dialog[0]]);
     }
 });
 
