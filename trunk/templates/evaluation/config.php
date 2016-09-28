@@ -119,23 +119,7 @@ $graphtypes = array(
 </form>
 
 <?
-$infobox = array(
-    'picture' => 'sidebar/evaluation-sidebar.png',
-    'content' => array(
-        array(
-            'kategorie' => _('Information:'),
-            'eintrag'   => array(
-                array(
-                    'icon' => Icon::create('vote', 'clickable'),
-                    'text' => _('Auf dieser Seite können Sie die Auswertung Ihrer Evaluation konfigurieren.')
-                ),
-                array(
-                    'icon' => Icon::create('info', 'clickable'),
-                    'text' => _('Wählen Sie Ihre Einstellungen und drücken Sie auf "Template speichern". '
-                               .'Anschließend kommen Sie mit dem Button unten links zurück zu Ihrer Evaluation.')
-                ),
-            ),
-        ),
-    ),
-);
+Helpbar::Get()->addPlainText(_('Information'), _('Auf dieser Seite können Sie die Auswertung Ihrer Evaluation konfigurieren.'));
+Helpbar::Get()->addPlainText(_('Information'), ('Wählen Sie Ihre Einstellungen und drücken Sie auf "Template speichern". '
+                                                .'Anschließend kommen Sie mit dem Button unten links zurück zu Ihrer Evaluation.'));
 ?>
