@@ -30,7 +30,7 @@
             <? if ($_SESSION['resources_data']['requests_open'][$val['request_id']] || !$_SESSION['resources_data']['skip_closed_requests']) : ?>
                 <?
                 $reqObj = new RoomRequest($val['request_id']);
-                $semObj = new Seminar($reqObj->getSeminarId());
+                $semObj = Seminar::GetInstance($reqObj->course->id)
                 ?>
                 <? if ($semObj->getName() != "")  : ?>
                     <tr>
@@ -48,27 +48,32 @@
                             <?= htmlReady($semObj->seminar_number) ?>
                         </td>
                         <td>
-                            <a href="dispatch.php/course/details/?sem_id=<?= $semObj->getId() ?>&send_from_search=true&send_from_search_page=<?= urlencode($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']) ?>resources.php?view=list_requests"><?= my_substr(htmlReady($semObj->getName()), 0, 50) ?></a>
+                            <a href="<?= URLHelper::getLink('dispatch.php/course/details/', ['sem_id'                => $semObj->id,
+                                                                                             'send_from_search'      => true,
+                                                                                             'send_from_search_page' => URLHelper::getLink('resources.php', ['view' => 'list_requests'])]) ?>">
+                        <?= my_substr(htmlReady($semObj->getFullName()), 0, 50) ?></a>
                         </td>
                         <td>
                             <?
                             $k = false;
                             foreach ($semObj->getMembers('dozent') as $doz) {
                                 if ($k) echo ", ";
-                                echo "<a href=\"dispatch.php/profile?username={$doz['username']}\">" . HtmlReady($doz['fullname']) . "</a>";
+                                echo "<a href=\"" . URLHelper::getLink('dispatch.php/profile', ['username' => $doz['username']]) . "\">" . HtmlReady($doz['fullname']) . "</a>";
                                 $k = true;
                             }
                             ?>
                         </td>
                         <td>
-                            <a href="dispatch.php/profile?username=<?= $reqObj->user->username ?>"> <?= htmlReady($reqObj->user->getFullName()) ?></a>
+                            <a href="<?= URLHelper::getLink('dispatch.php/profile', ['username' => $reqObj->user->username]) ?>
+                            "> <?= htmlReady($reqObj->user->getFullName()) ?></a>
                         </td>
                         <td>
                             <?= htmlReady($semObj->start_semester->name) ?>
                         </td>
                         <td class="actions">
-                            <a href="resources.php?view=edit_request&edit="<?= $val['request_id'] ?>">
-                            <?= Icon::create('edit', 'clickable', ['title' => _("Anfrage bearbeiten")])->asImg() ?>
+                            <a href="<?= URLHelper::getLink('resources.php', ['view' => 'edit_request',
+                                                                              'edit' => $val['request_id']]) ?>">
+                                <?= Icon::create('edit', 'clickable', ['title' => _("Anfrage bearbeiten")])->asImg() ?>
                             </a>
                             <?= (($_SESSION['resources_data']['requests_open'][$val['request_id']]) ? '' : Icon::create('accept', 'accept')->asImg()) ?>
                         </td>
