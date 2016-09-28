@@ -155,10 +155,38 @@ class Course_StudyAreasController extends AuthenticatedController
                 return;
             }
 
+            $added = array_diff($studyareas, $this->course->study_areas->pluck('sem_tree_id'));
+            $removed = array_diff($this->course->study_areas->pluck('sem_tree_id'), $studyareas);
+
             $this->course->study_areas = SimpleORMapCollection::createFromArray(StudipStudyArea::findMany($studyareas));
             try {
                 $msg = null;
                 $this->course->store();
+
+                if ($added || removed) {
+                    NotificationCenter::postNotification("CourseDidChangeStudyArea", $this);
+
+                    foreach ($added as $one) {
+                        StudipLog::log("SEM_ADD_STUDYAREA", $this->course->id, $one);
+
+                        $area = $this->course->study_areas->find($one);
+                        if ($area->isModule()) {
+                            NotificationCenter::postNotification('CourseAddedToModule', $area,
+                                array('module_id' => $one, 'course_id' => $this->course->id));
+                        }
+                    }
+
+                    foreach ($removed as $one) {
+                        StudipLog::log("SEM_DELETE_STUDYAREA", $this->course->id, $one);
+
+                        $area = StudipStudyArea::find($one);
+                        if ($area->isModule()) {
+                            NotificationCenter::postNotification('CourseAddedToModule', $area,
+                                array('module_id' => $one, 'course_id' => $this->course->id));
+                        }
+                    }
+                }
+
             } catch (UnexpectedValueException $e) {
                 $msg = $e->getMessage();
             }
