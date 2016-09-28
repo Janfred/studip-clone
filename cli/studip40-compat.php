@@ -143,6 +143,7 @@ $rules = [
     'getAllChildIDs' => false,
 
     'AutoInsert::existSeminars' => false,
+    'ZebraTable' => 'Time to refactor your plugin.',
 ];
 
 
