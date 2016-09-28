@@ -1,8 +1,8 @@
 <? if ($license_to_kill) : ?>
-    <form name="list_requests_form" method="post" action="<?= URLHelper::getLink() ?>">
+<form name="list_requests_form" method="post" action="<?= URLHelper::getLink() ?>">
     <?= CSRFProtection::tokenTag() ?>
-<? endif ?>
-<? $i = 0; ?>
+    <? endif ?>
+    <? $i = 0; ?>
     <table class="default">
         <caption>
             <?= _('Anfrageliste') ?>
@@ -51,17 +51,17 @@
                             <a href="<?= URLHelper::getLink('dispatch.php/course/details/', ['sem_id'                => $semObj->id,
                                                                                              'send_from_search'      => true,
                                                                                              'send_from_search_page' => URLHelper::getLink('resources.php', ['view' => 'list_requests'])]) ?>">
-                        <?= my_substr(htmlReady($semObj->getFullName()), 0, 50) ?></a>
+                                <?= my_substr(htmlReady($semObj->getFullName()), 0, 50) ?></a>
                         </td>
                         <td>
-                            <?
-                            $k = false;
-                            foreach ($semObj->getMembers('dozent') as $doz) {
-                                if ($k) echo ", ";
-                                echo "<a href=\"" . URLHelper::getLink('dispatch.php/profile', ['username' => $doz['username']]) . "\">" . HtmlReady($doz['fullname']) . "</a>";
-                                $k = true;
-                            }
-                            ?>
+                            <? $colon = false;
+                            foreach ($semObj->getMembers('dozent') as $doz)  : ?>
+                                <?= $colon ? ', ' : '' ?>
+                                <a href="<?= URLHelper::getLink('dispatch.php/profile', ['username' => $doz['username']]) ?>">
+                                    <?= htmlReady($doz['fullname']) ?>
+                                </a>
+                                <? $colon = true; ?>
+                            <? endforeach; ?>
                         </td>
                         <td>
                             <a href="<?= URLHelper::getLink('dispatch.php/profile', ['username' => $reqObj->user->username]) ?>
@@ -85,12 +85,12 @@
             <tfoot>
                 <tr>
                     <td colspan="8">
-                        <?= Button::create(_('Ausgewählte löschen'), 'do_delete_requests', ['title' => _('Ausgewählte Anfragen löschen')]) ?>
+                        <?= Studip\Button::create(_('Ausgewählte löschen'), 'do_delete_requests', ['title' => _('Ausgewählte Anfragen löschen')]) ?>
                     </td>
                 </tr>
             </tfoot>
         <? endif ?>
     </table>
-<? if ($license_to_kill) : ?>
-    </form>
+    <? if ($license_to_kill) : ?>
+</form>
 <? endif ?>
