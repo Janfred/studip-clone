@@ -167,7 +167,7 @@ class UserManagement
     {
         if ($attr === 'user_data') {
             if (!is_array($value)) {
-                throw InvalidArgumentException('user_data only accepts array');
+                throw new InvalidArgumentException('user_data only accepts array');
             }
             return $this->user_data->setData($value, true);
         }
