@@ -367,4 +367,52 @@ class Course extends SimpleORMap
         });
         return $dates;
     }
+
+    /**
+     * Sets this courses study areas to the given values.
+     *
+     * @param $ids the new study areas
+     * @return bool Changes successfully saved?
+     */
+    public function setStudyAreas($ids)
+    {
+        $old = $this->study_areas->pluck('sem_tree_id');
+        $added = array_diff($ids, $old);
+        $removed = array_diff($old, $ids);
+
+        if ($added || $removed) {
+
+            $this->study_areas = SimpleCollection::createFromArray(StudipStudyArea::findMany($ids));
+
+            if ($this->store()) {
+                NotificationCenter::postNotification("CourseDidChangeStudyArea", $this);
+                $success = true;
+
+                foreach ($added as $one) {
+                    StudipLog::log("SEM_ADD_STUDYAREA", $this->id, $one);
+
+                    $area = $this->study_areas->find($one);
+                    if ($area->isModule()) {
+                        NotificationCenter::postNotification('CourseAddedToModule', $area,
+                            array('module_id' => $one, 'course_id' => $this->id));
+                    }
+                }
+
+                foreach ($removed as $one) {
+                    StudipLog::log("SEM_DELETE_STUDYAREA", $this->id, $one);
+
+                    $area = StudipStudyArea::find($one);
+                    if ($area->isModule()) {
+                        NotificationCenter::postNotification('CourseAddedToModule', $area,
+                            array('module_id' => $one, 'course_id' => $this->id));
+                    }
+                }
+
+            }
+
+        }
+
+        return $success;
+    }
+
 }
