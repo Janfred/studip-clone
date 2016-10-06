@@ -96,7 +96,7 @@ class Course_BlockAppointmentsController extends AuthenticatedController
         } else {
 
             $dates = array();
-            $delta = ($end_time - $start_time) % (24 * 60 * 60);
+            $delta = ($end_time - $start_time - 3600) % (24 * 60 * 60);
             $last_day = strtotime(Request::get('block_appointments_start_time'), $end_day);
 
             if (in_array('everyday', $days)) {
