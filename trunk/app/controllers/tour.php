@@ -523,6 +523,7 @@ class TourController extends AuthenticatedController
         Navigation::activateItem('/admin/config/tour');
         
         $this->tour = new HelpTour($tour_id);
+        $this->tour->settings = new HelpTourSettings($tour_id);
         if ($tour_id AND $this->tour->isNew()) {
             throw new AccessDeniedException(_('Die Tour mit der angegebenen ID existiert nicht.'));
         }
