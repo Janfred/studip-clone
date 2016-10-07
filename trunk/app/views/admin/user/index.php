@@ -120,9 +120,9 @@ use Studip\Button, Studip\LinkButton;
             <select name="auth_plugins">
                <option value=""><?= _('Alle') ?></option>
                <option value="preliminary"><?= _('vorläufig')?></option>
-           <? foreach ($available_auth_plugins as $one): ?>
-                <option <?= ($request['auth_plugins'] === $one) ? 'selected' : '' ?>>
-                    <?= htmlReady($one) ?>
+           <? foreach ($available_auth_plugins as $key => $val): ?>
+                <option value="<?= $key ?>" <?= $request['auth_plugins'] === $key ? 'selected' : '' ?>>
+                    <?= htmlReady($val) ?>
                 </option>
             <? endforeach; ?>
             </select>

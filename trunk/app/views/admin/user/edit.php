@@ -268,8 +268,8 @@ use Studip\Button, Studip\LinkButton;
                 <td colspan="2">
                     <select name="auth_plugin" id="auth_plugin">
                         <? foreach ($available_auth_plugins as $key => $val): ?>
-                            <option value="<?= mb_strtolower($key) ?>" <? if (strcasecmp($key, $user->auth_plugin) == 0) echo 'selected'; ?>>
-                                <?= $val ?>
+                            <option value="<?= $key ?>" <? if (strcasecmp($key, $user->auth_plugin) == 0) echo 'selected'; ?>>
+                                <?= htmlReady($val) ?>
                             </option>
                         <? endforeach; ?>
                     </select>

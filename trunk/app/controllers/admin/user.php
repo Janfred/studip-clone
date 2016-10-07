@@ -162,7 +162,9 @@ class Admin_UserController extends AuthenticatedController
         $this->studycourses           = Fach::findBySQL('1 order by name');
         $this->userdomains            = UserDomain::getUserDomains();
         $this->institutes             = Institute::getInstitutes();
-        $this->available_auth_plugins = User::getAvailableAuthPlugins();
+        foreach ($GLOBALS['STUDIP_AUTH_PLUGIN'] as $ap) {
+            $this->available_auth_plugins[mb_strtolower($ap)] = $ap;
+        }
 
         //show datafields search
         if ($advanced
@@ -566,7 +568,6 @@ class Admin_UserController extends AuthenticatedController
             });
         }
 
-        $this->available_auth_plugins = User::getAvailableAuthPlugins();
         $this->available_institutes   = Institute::getMyInstitutes();
         $this->userfields             = DataFieldEntry::getDataFieldEntries($user_id, 'user');
         $this->userdomains            = UserDomain::getUserDomainsForUser($user_id);
