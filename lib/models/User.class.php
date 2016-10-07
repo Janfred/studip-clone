@@ -163,16 +163,6 @@ class User extends AuthUserMd5
     }
 
     /**
-     * Returns all available auth_plugins
-     * @return array
-     */
-    public static function getAvailableAuthPlugins()
-    {
-        $query = "SELECT DISTINCT IFNULL(auth_plugin, 'standard') as auth_plugin FROM auth_user_md5 ORDER BY auth_plugin='standard',auth_plugin";
-        return DBManager::get()->query($query)->fetchAll(PDO::FETCH_COLUMN);
-    }
-
-    /**
      * Wraps a search parameter in %..% if the parameter itself does not
      * contain % or _.
      *
