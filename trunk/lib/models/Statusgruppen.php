@@ -493,7 +493,10 @@ class Statusgruppen extends SimpleORMap
     {
         $result = 0;
         if (!$this->keep_children) {
-            $result += $this->children->delete();
+            foreach($this->children as $child) {
+                $result += $child->delete();
+            }
+            
         }
 
         // Resort groups
