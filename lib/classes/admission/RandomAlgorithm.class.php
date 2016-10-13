@@ -250,7 +250,7 @@ class RandomAlgorithm extends AdmissionAlgorithm
         Log::DEBUG('waiting list: ' . print_r($waiting_users, 1));
         foreach ($waiting_users as $current_prio => $current_prio_waiting_courses) {
             foreach ($current_prio_waiting_courses as $course_id => $users) {
-                $users = array_filter($users, function($user_id) use ($distributed_users, $max_seats_users) {
+                $users = array_filter(array_unique($users), function($user_id) use ($distributed_users, $max_seats_users) {
                     return $distributed_users[$user_id] < $max_seats_users[$user_id];});
                     $course = Course::find($course_id);
                     Log::DEBUG(sprintf('distribute waitlist of %s with prio %s in course %s', count($users), $current_prio, $course->id));
@@ -319,7 +319,12 @@ class RandomAlgorithm extends AdmissionAlgorithm
             $new_admission_member->user_id = $chosen_one;
             $new_admission_member->position = $maxpos;
             $new_admission_member->status = 'awaiting';
-            $course->admission_applicants[] = $new_admission_member;
+            try {
+                $course->admission_applicants[] = $new_admission_member;
+            } catch (InvalidArgumentException $e) {
+                Log::DEBUG($e->getMessage());
+                continue;
+            }
             if ($new_admission_member->store()) {
                 setTempLanguage($chosen_one);
                 $message_title = sprintf(_('Teilnahme an der Veranstaltung %s'), $course->name);
