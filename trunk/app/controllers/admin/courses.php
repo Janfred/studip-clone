@@ -32,6 +32,42 @@ require_once 'lib/archiv.inc.php'; //for lastActivity in getCourses() method
 class Admin_CoursesController extends AuthenticatedController
 {
     
+    /**
+        This helper method retrieves the values when the user has searched courses
+        for a specific value of a datafield.
+    **/
+    private function getDatafieldFilters()
+    {
+        //first get the active datafields of the user:
+        $userConfig = UserConfig::get(User::findCurrent()->id);
+        $userSelectedElements = json_decode($userConfig->getValue('ADMIN_COURSES_SIDEBAR_ACTIVE_ELEMENTS'), true);
+        
+        $activeDatafields = $userSelectedElements['datafields'];
+        
+        if(!$activeDatafields) {
+            return array();
+        }
+        
+        //Ok, we have a list of active datafields whose value may be searched for.
+        //We must check for the request parameters (df_$DATAFIELD_ID)
+        //and return their IDs with a value.
+        
+        $searchedDatafields = array();
+        
+        foreach($activeDatafields as $activeField) {
+            $requestParamValue = Request::get('df_'.$activeField);
+            if($requestParamValue) {
+                $searchedDatafields[$activeField] = $requestParamValue;
+            }
+        }
+        
+        return $searchedDatafields;
+    }
+    
+    
+    /**
+        This method returns the appropriate widget for the given datafield.
+    **/
     private function getDatafieldWidget(DataField $datafield)
     {
         if($datafield->accessAllowed()) {
@@ -46,8 +82,14 @@ class Admin_CoursesController extends AuthenticatedController
                 $checkboxWidget = new OptionsWidget($datafield->name);
                 $checkboxWidget->addCheckbox(
                     _('Feld gesetzt'),
-                    false,
-                    ''
+                    (bool)Request::get('df_'.$datafield->id, false),
+                    URLHelper::getLink(
+                        'dispatch.php/admin/courses/index',
+                        array('df_'.$datafield->id => '1')
+                    ),
+                    URLHelper::getLink(
+                        'dispatch.php/admin/courses/index'
+                    )
                 );
                 
                 return $checkboxWidget;
@@ -74,12 +116,17 @@ class Admin_CoursesController extends AuthenticatedController
                 }
                 
                 if($options) {
+                    $options = array_merge(
+                        array(' ' => _('(keine Auswahl)')),
+                        $options
+                    );
                     $selectWidget = new OptionsWidget($datafield->name);
                     $selectWidget->addSelect(
                         '',
                         '', //TODO
                         'df_'.$datafield->id,
-                        $options
+                        $options,
+                        Request::get('df_'.$datafield->id)
                     );
                     return $selectWidget;
                 }
@@ -338,7 +385,8 @@ class Admin_CoursesController extends AuthenticatedController
             'sortby'      => $this->sortby,
             'sortFlag'    => $this->sortFlag,
             'view_filter' => $this->view_filter,
-            'typeFilter'  => $config_my_course_type_filter
+            'typeFilter'  => $config_my_course_type_filter,
+            'datafields' => $this->getDatafieldFilters()
         ));
 
         if (in_array('contents', $this->view_filter)) {
@@ -1028,6 +1076,28 @@ class Admin_CoursesController extends AuthenticatedController
         }
 
         $filter = AdminCourseFilter::get(true);
+        
+        if($params['datafields']) {
+            //enable filtering by datafield values:
+            $filter->settings['query']['joins']['datafields_entries'] = array(
+                    'join' => "INNER JOIN",
+                    'on' => "seminare.seminar_id = datafields_entries.range_id"
+            );
+            
+            //and use the where-clause for each datafield:
+            
+            foreach($params['datafields'] as $fieldId => $fieldValue) {
+                $filter->where("datafields_entries.datafield_id = :fieldId "
+                    . "AND datafields_entries.content = :fieldValue",
+                    array(
+                        'fieldId' => $fieldId,
+                        'fieldValue' => $fieldValue
+                    )
+                );
+            }
+            
+        }
+        
         $filter->where("sem_classes.studygroup_mode = '0'");
 
         if (is_object($this->semester)) {
