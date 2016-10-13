@@ -97,6 +97,25 @@ class ForumAbo
         $stmt->bindParam(':user_id', $GLOBALS['user']->id);
         $stmt->execute();
 
+        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Check for course deputies.
+        if (Config::get()->DEPUTIES_ENABLE) {
+            // fetch all deputies to notify, exclude current user
+            $stmt = $db->prepare("SELECT DISTINCT fau.user_id
+            FROM forum_abo_users fau
+                JOIN forum_entries fe USING (topic_id)
+                JOIN deputies d ON (d.range_id = fe.seminar_id AND d.user_id = fau.user_id)
+            WHERE topic_id IN (:topic_ids)
+                AND fau.user_id != :user_id");
+
+            $stmt->bindParam(':topic_ids', array_keys($path), StudipPDO::PARAM_ARRAY);
+            $stmt->bindParam(':user_id', $GLOBALS['user']->id);
+            $stmt->execute();
+
+            $users = array_unique(array_merge($users, $stmt->fetchAll(PDO::FETCH_ASSOC)));
+        }
+
         // get details for topic
         $topic = ForumEntry::getConstraints($topic_id);
 
@@ -104,7 +123,7 @@ class ForumAbo
         $template = $template_factory->open('index/_mail_notification');
 
         // notify users
-        while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        foreach ($users as $data) {
             $user_id = $data['user_id'];
 
             // create subject and content
