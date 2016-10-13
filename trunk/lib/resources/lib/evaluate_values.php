@@ -1095,7 +1095,7 @@ change settings
 if (Request::option('change_global_settings')) {
     if ($globalPerm == "admin") { //check for resources root or global root
         $config = Config::get();
-    
+
         try {
             $config->store('RESOURCES_LOCKING_ACTIVE', Request::option('locking_active',false));
         } catch (InvalidArgumentException $e) {
@@ -1614,7 +1614,6 @@ if (is_array($selected_resource_id)) {
 
 // save the assigments in db
 if (Request::submitted('save_state')) {
-    require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
     require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
     require_once ("lib/classes/Seminar.class.php");
 
@@ -1840,8 +1839,6 @@ if (Request::submitted('suppose_decline_request')) {
 }
 
 if (Request::int('decline_request')) {
-    require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
-
     $reqObj = new RoomRequest($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["request_id"]);
 
     $_sendMessage['request_id'] = $reqObj->id;
@@ -1870,7 +1867,6 @@ if (Request::submitted('delete_request') || Request::quoted('approveDelete')) {
         }
 
     if(Request::quoted('approveDelete')){
-            require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
             $reqObj = new RoomRequest($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["request_id"]);//Request::quoted('request_id'));
             unset($_SESSION['resources_data']["requests_open"][$reqObj->getId()]);
             $reqObj->delete();
@@ -1973,7 +1969,6 @@ if (Request::get('reply_recipients') !== null) {
 if (Request::submitted('inc_request') || Request::submitted('dec_request')
     || $new_session_started || $marked_clip_ids || Request::submitted('save_state') || $auto_inc
     || $auto_dec || $_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["reload"]) {
-    require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
     require_once ($RELATIVE_PATH_RESOURCES."/lib/CheckMultipleOverlaps.class.php");
     require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
     require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesUserRoomsList.class.php");
