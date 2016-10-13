@@ -369,7 +369,7 @@ class Course_TimesroomsController extends AuthenticatedController
         $groups = Statusgruppen::findBySeminar_id($this->course->id);
         $related_groups = Request::getArray('related_statusgruppen');
         if ($related_groups && count($related_groups) !== count($groups)) {
-            $related_groups = Statusgruppen::findMany($related_groups);
+            $termin->statusgruppen = Statusgruppen::findMany($related_groups);
         }
 
         if (!Request::get('room') || Request::get('room') === 'nothing') {
