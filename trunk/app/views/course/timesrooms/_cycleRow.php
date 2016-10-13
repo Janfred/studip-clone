@@ -8,6 +8,7 @@ $is_exTermin = $termin instanceof CourseExDate;
             <label for="<?= htmlReady($termin->termin_id) ?>">
                 <input class="<?= $class_ids ?>" type="checkbox" id="<?= htmlReady($termin->termin_id) ?>"
                        value="<?= htmlReady($termin->termin_id) ?>"
+                       <?= !$is_exTermin && $termin->date > time() ? 'checked' : '' ?>
                        name="single_dates[]">
             </label>
         </td>
