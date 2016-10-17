@@ -403,7 +403,7 @@ class Course extends SimpleORMap
 
                     $area = StudipStudyArea::find($one);
                     if ($area->isModule()) {
-                        NotificationCenter::postNotification('CourseAddedToModule', $area,
+                        NotificationCenter::postNotification('CourseRemovedFromModule', $area,
                             array('module_id' => $one, 'course_id' => $this->id));
                     }
                 }
