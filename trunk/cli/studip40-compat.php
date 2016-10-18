@@ -15,6 +15,8 @@ $rules = [
     'deprecated_tabs_layout' => 'Don\'t use this. Use the global layout #{yellow:layouts/base.php} and #{yellow:Navigation} instead.',
     'setInfoBoxImage' => 'Replace with #{yellow:Sidebar}',
     'addToInfobox'    => 'Replace with #{yellow:Sidebar}',
+    'InfoboxElement'  => 'Replace with appropriate #{yellow:Sidebar} element',
+    'InfoboxWidget'   => 'Replace with appropriate #{yellow:Sidebar} widget',
 
     'details.php' => 'Link to #{yellow:dispatch.php/course/details} instead',
     'institut_main.php' => 'Link to #{yellow:dispatch.php/institute/overview} instead',
