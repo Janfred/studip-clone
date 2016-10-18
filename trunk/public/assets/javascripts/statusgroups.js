@@ -63,13 +63,21 @@
         ajax_endpoint = $('meta[name="statusgroups-ajax-movable-endpoint"]').attr('content');
         STUDIP.Statusgroups.apply();
 
-        $('.nestable').nestable({
-            rootClass: 'nestable'
+        $('.nestable').each(function() {
+            $(this).nestable({
+                    rootClass: 'nestable',
+                    maxDepth: $(this).data('max-depth') || 5
+                }
+            );
         });
     }).on('dialog-open dialog-update', function () {
-        $('.nestable').nestable({
-            rootClass: 'nestable'
-        });
+        $('.nestable').each(function() {
+            $(this).nestable({
+            rootClass: 'nestable',
+            maxDepth: $(this).data('max-depth') || 5
+            });
+        })
+
     }).on('submit', '#order_form', function () {
         var structure = $('.nestable').nestable('serialize'),
             json_data = JSON.stringify(structure);
