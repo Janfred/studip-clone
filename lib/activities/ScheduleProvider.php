@@ -35,13 +35,11 @@ class ScheduleProvider implements ActivityProvider
      * posts an activity for a given notification event
      *
      * @param String $event a notification for an activity
-     * @param Array  $info information which a relevant for the activity
+     * @param Array  $sem Seminar-class for the notification
      */
-    public function postActivity($event, $info)
+    public function postActivity($event, $sem)
     {
-        $info = $info->toArray();
-
-        $range_id = $info['seminar_id'];
+        $range_id = $sem->getId();
 
         $type = get_object_type($range_id);
         if ($type == 'sem') {
