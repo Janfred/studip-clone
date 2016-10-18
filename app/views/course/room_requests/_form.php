@@ -161,7 +161,7 @@ if ($request_resource_id = $request->getResourceId()) :
 
         <? if ($request->category_id) : ?>
             <section>
-                <?= Studip\Button::create('Passende Räume suchen', 'search_properties') ?>
+                <?= Studip\Button::create(_('Passende Räume suchen'), 'search_properties') ?>
             </section>
         <? endif ?>
     </section>
@@ -206,7 +206,7 @@ if ($request_resource_id = $request->getResourceId()) :
                 </p>
             <? endif ?>
         <? else : ?>
-            <? if($_REQUEST["search_exp_room"]) : ?>
+            <? if (Request::get('search_exp_room')) : ?>
                 <p><strong><?= _('Keinen') ?></strong> <?= _('Raum gefunden') ?></p>
             <? endif ?>
 
@@ -215,7 +215,7 @@ if ($request_resource_id = $request->getResourceId()) :
             <section>
 
                 <input id="search_exp_room" type="text" size="30" maxlength="255" name="search_exp_room"
-                       placeholder="Geben Sie zur Suche den Raumnamen ganz oder teilweise ein">
+                       placeholder="<?= _('Geben Sie zur Suche den Raumnamen ganz oder teilweise ein') ?>">
                 <?= Icon::create('search', 'clickable', ['title' => _('Suche starten')])->asInput( ["type" => "image", "class" => "middle", "name" => "search_room"]) ?>
             </section>
         <? endif ?>
@@ -239,6 +239,6 @@ if ($request_resource_id = $request->getResourceId()) :
     <h2><?= _('Nachricht an den Raumadministrator') ?></h2>
 
 
-        <textarea name="comment" cols="58" rows="4" placeholder="Weitere Wünsche oder Bemerkungen zur gewünschten Raumbelegung"
+        <textarea name="comment" cols="58" rows="4" placeholder="<?= _('Weitere Wünsche oder Bemerkungen zur gewünschten Raumbelegung') ?>"
                   style="width:90%"><?= htmlReady($request->getComment()); ?></textarea>
 </section>
