@@ -237,10 +237,10 @@ jQuery(function ($) {
         })
             .css({top: '-99px', position: 'absolute'})
             .appendTo('body')
-            .load(function () {
+            .on('load', (function () {
                 this.contentWindow.focus();
                 this.contentWindow.print();
-            });
+            }));
         return false;
     });
 });
