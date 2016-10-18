@@ -61,11 +61,10 @@ class Course_StatusgroupsController extends AuthenticatedController
 
         // Get all course members (needed for mkdate).
         $allmembers = SimpleCollection::createFromArray(
-            CourseMember::findBySeminar_id($this->course_id));
+            CourseMember::findByCourse($this->course_id));
 
         // Find all statusgroups for this course.
-        $groups = SimpleCollection::createFromArray(
-            Statusgruppen::findBySeminar_id($this->course_id))->orderBy('position asc, name asc');
+        $groups = Statusgruppen::findBySeminar_id($this->course_id);
 
         // Helper array for collecting all group members.
         $grouped_users = array();
@@ -104,9 +103,7 @@ class Course_StatusgroupsController extends AuthenticatedController
         }
 
         // Find course members who are in no group at all.
-        $ungrouped = $allmembers->filter(function($m) use ($grouped_users) {
-            return !in_array($m->user_id, $grouped_users);
-        });
+        $ungrouped = $allmembers->findBy('user_id', $grouped_users, '!=');
         if ($ungrouped) {
 
             if ($this->sort_group == 'nogroup') {
@@ -155,6 +152,10 @@ class Course_StatusgroupsController extends AuthenticatedController
                 $actions->addLink(_('Mehrere Gruppen anlegen'),
                     $this->url_for('course/statusgroups/create_groups'),
                     Icon::create('group2+add', 'clickable'))->asDialog('size=auto');
+                $actions->addLink(_('Gruppenreihenfolge ändern'),
+                    $this->url_for('course/statusgroups/sortgroups'),
+                    Icon::create('arr_2down', 'clickable'))->asDialog('size=auto');
+
                 $sidebar->addWidget($actions);
             }
             if (Config::get()->EXPORT_ENABLE) {
@@ -971,6 +972,29 @@ class Course_StatusgroupsController extends AuthenticatedController
             $this->relocate('course/statusgroups');
         } else {
             throw new Trails_Exception(403);
+        }
+    }
+
+    public function sortgroups_action()
+    {
+        if ($this->is_tutor && !$this->is_locked) {
+            if (Request::submitted('order')) {
+                $ordered = studip_json_decode(Request::get('ordering'));
+                if (is_array($ordered)) {
+                    $ok = false;
+                    foreach ($ordered as $p => $g) {
+                        if ($group = Statusgruppen::find($g['id'])) {
+                            $group->position = $p + 1;
+                            $ok += $group->store();
+                        }
+                    }
+                    if ($ok) {
+                        PageLayout::postSuccess(_('Die Gruppenreihenfolge wurde gespeichert.'));
+                    }
+                    return $this->redirect($this->url_for('/index'));
+                }
+            }
+            $this->groups = Statusgruppen::findBySeminar_id($this->course_id);
         }
     }
 }
