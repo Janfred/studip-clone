@@ -2,8 +2,8 @@
 <? if (isset($new_room_request_type)) : ?>
     <input type="hidden" name="new_room_request_type" value="<?= $new_room_request_type ?>">
 <? endif ?>
-<?= MessageBox::info(_('Sie haben die Möglichkeit, gewünschte Raumeigenschaften sowie einen konkreten Raum anzugeben.
-        Diese Raumwünsche werden von der zentralen Raumverwaltung bearbeitet.'),
+<?= MessageBox::info(_('Geben Sie den gewünschten Raum und/oder Raumeigenschaften an. Ihre Raumanfrage wird von der
+                    zuständigen Raumverwaltung bearbeitet.'),
     array(_('<b>Achtung:</b> Um später einen passenden Raum für Ihre Veranstaltung zu bekommen,
         geben Sie bitte <span style="text-decoration: underline">immer</span> die gewünschten Eigenschaften mit an!')
     )) ?>
@@ -39,7 +39,7 @@ if ($request_resource_id = $request->getResourceId()) :
 
         <p>
             <strong><?= htmlReady($resObject->getName()) ?></strong>
-        	<?= Icon::create('trash', 'clickable', ['title' => _('den ausgewählten Raum löschen')])->asInput(['type' => 'image', 'style' => 'vertical-align:middle', 'name' => 'reset_resource_id']) ?>
+            <?= Icon::create('trash', 'clickable', ['title' => _('den ausgewählten Raum löschen')])->asInput(['type' => 'image', 'style' => 'vertical-align:middle', 'name' => 'reset_resource_id']) ?>
             <? if($resObject->getPlainProperties(false, true)): ?>
             <?= tooltipIcon(_('Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:') . " \n" . $resObject->getPlainProperties(false, true)) ?>
             <? endif; ?>
@@ -50,7 +50,7 @@ if ($request_resource_id = $request->getResourceId()) :
 
 
 <section class="times-rooms-grid ">
-	<? if (!Config::get()->RESOURCES_DIRECT_ROOM_REQUESTS_ONLY) : ?>
+    <? if (!Config::get()->RESOURCES_DIRECT_ROOM_REQUESTS_ONLY) : ?>
     <section>
         <h2>
             <?= _("Raumeigenschaften angeben:") ?>
@@ -60,7 +60,9 @@ if ($request_resource_id = $request->getResourceId()) :
                 <label for="select_room_type">
                     <?= _('Gewählter Raumtyp') ?>
                 </label>
-                <select name="select_room_type" id="select_room_type">
+
+
+                <select name="select_room_type" id="select_room_type" style="width: auto;" >
                     <? foreach ($room_categories as $rc) : ?>
                         <?= sprintf('<option value="%s" %s>%s </option>',
                             $rc["category_id"],
@@ -75,39 +77,50 @@ if ($request_resource_id = $request->getResourceId()) :
                                    'name'  => "send_room_type",
                                    'value' => _("Raumtyp auswählen")]) ?>
                 <?= Icon::create('refresh', 'clickable', ['title' => _('alle Angaben zurücksetzen')])->asInput(["type" => "image", "style" => "vertical-align:middle", "name" => "reset_room_type"]) ?>
+
+
             <? endif ?>
             <? $props = $request->getAvailableProperties() ?>
             <? if (!empty($props)) : ?>
                 <h4><?= _('Folgende Eigenschaften sind wünschbar:') ?></h4>
                 <? foreach ($props as $index => $prop) : ?>
                     <section>
-                        <label for="<?= $prop['type'] ?>_<?= $index ?>">
-                            <?= htmlReady($prop["name"]) ?>
-                        </label>
+
+                        <? if ($prop['type'] != 'bool') : ?>
+                            <label for="<?= $prop['type'] ?>_<?= $index ?>">
+                                <?= htmlReady($prop["name"]) ?>
+                            </label>
+                        <? endif ?>
 
                         <? if ($prop['type'] == 'bool') : ?>
-                            <input type="checkbox" id="bool_<?= $index ?>"
-                                   name="request_property_val[<?= $prop["property_id"] ?>]"
-                                <?= $request->getPropertyState($prop["property_id"]) ? "checked" : "" ?>>
+
                             <label for="bool_<?= $index ?>" class="horizontal">
-                                <?= htmlReady($prop["options"]) ?>
+                                <input type="checkbox" id="bool_<?= $index ?>"
+                                       name="request_property_val[<?= $prop["property_id"] ?>]"
+                                    <?= $request->getPropertyState($prop["property_id"]) ? "checked" : "" ?>>
+                                <?= htmlReady($prop["name"]) ?>
                             </label>
+
+
                         <? elseif ($prop['type'] == 'num'): ?>
                             <? if ($prop['system'] == 2) : ?>
-                                <input type="text" id="num_<?= $index ?>"
+                                <input type="number" id="num_<?= $index ?>"
                                        name="request_property_val[<?= $prop["property_id"] ?>]"
-                                       value="<?= htmlReady($request->getPropertyState($prop["property_id"])) ?>">
+                                       value="<?= htmlReady($request->getPropertyState($prop["property_id"]))  ?>">
                                 <? if ($admission_turnout) : ?>
-                                    <br><input id="seats_are_admission_turnout" type="checkbox"
+                                    <br>
+                                    <label for="seats_are_admission_turnout">
+                                    <input id="seats_are_admission_turnout" type="checkbox"
                                                name="seats_are_admission_turnout"
                                         <?= ($request->getPropertyState($prop["property_id"]) == $admission_turnout && $admission_turnout > 0) ? "checked" : "" ?>>
-                                    <label for="seats_are_admission_turnout"
-                                           class="horizontal"><?= _('max. Teilnehmeranzahl übernehmen') ?></label>
+
+                                        <?= _('max. Teilnehmeranzahl übernehmen') ?>
+                                    </label>
                                 <? endif ?>
                             <? else : ?>
-                                <input id="num_<?= $index ?>" type="text"
+                                <input id="num_<?= $index ?>" type="text" size="4" maxlength="4"
                                        name="request_property_val[<?= $prop["property_id"] ?>]"
-                                       value="<?= htmlReady($request->getPropertyState($prop["property_id"])) ?>">
+                                       value="<?= htmlReady($request->getPropertyState($prop["property_id"]))  ?>">
                             <? endif ?>
                         <? elseif ($prop['type'] == 'text') : ?>
                             <textarea id="text_<?= $index ?>" name="request_property_val[<?= $prop["property_id"] ?>]"
@@ -123,6 +136,9 @@ if ($request_resource_id = $request->getResourceId()) :
                                 <? endforeach ?>
                             </select>
                         <? endif ?>
+
+
+
                     </section>
                 <? endforeach ?>
             <? endif ?>
@@ -130,7 +146,7 @@ if ($request_resource_id = $request->getResourceId()) :
             <label for="select_room_type">
                 <?= _('Bitte geben Sie zunächst einen Raumtyp an, der für Sie am besten geeignet ist') ?>
             </label>
-            <select name="select_room_type" id="select_room_type">
+            <select name="select_room_type" id="select_room_type" style="width:auto;">
                 <option value=""><?= _('bitte auswählen') ?></option>
                 <? foreach ($room_categories as $rc) : ?>
                     <option value="<?= $rc["category_id"] ?>"><?= htmlReady($rc["name"]) ?></option>
@@ -145,15 +161,7 @@ if ($request_resource_id = $request->getResourceId()) :
 
         <? if ($request->category_id) : ?>
             <section>
-                <label class="horizontal" for="search_rooms">
-                    <?= _('passende Räume suchen') ?>
-                </label>
-                <?= Icon::create("arr_2right", "status-yellow", ['title' => _('passende Räume suchen')])
-                        ->asInput(['type'  => "image",
-                                   'class' => "middle",
-                                   'id'    => 'search_rooms',
-                                   'name'  => "search_properties"]) ?>
-
+                <?= Studip\Button::create('Passende Räume suchen', 'search_properties') ?>
             </section>
         <? endif ?>
     </section>
@@ -171,7 +179,7 @@ if ($request_resource_id = $request->getResourceId()) :
             <div class="selectbox">
                 <fieldset>
                     <? foreach ($search_result as $key => $val)  : ?>
-                    	<? $resObject = ResourceObject::Factory($key); ?>
+                        <? $resObject = ResourceObject::Factory($key); ?>
                         <div class="flex-row">
                             <label class="horizontal" for="select_room_<?= $key ?>">
                                 <? if ($val['overlap_status'] === "status-green") : ?>
@@ -198,15 +206,16 @@ if ($request_resource_id = $request->getResourceId()) :
                 </p>
             <? endif ?>
         <? else : ?>
-            <p><strong><?= _('Keinen') ?></strong> <?= _('Raum gefunden') ?></p>
+            <? if($_REQUEST["search_exp_room"]) : ?>
+                <p><strong><?= _('Keinen') ?></strong> <?= _('Raum gefunden') ?></p>
+            <? endif ?>
+
         <? endif ?>
         <? if (!count($search_result)) : ?>
             <section>
-                <label for="search_exp_room">
-                    <?= _('Geben Sie zur Suche den Raumnamen ganz oder teilweise ein:'); ?>
-                </label>
 
-                <input id="search_exp_room" type="text" size="30" maxlength="255" name="search_exp_room">
+                <input id="search_exp_room" type="text" size="30" maxlength="255" name="search_exp_room"
+                       placeholder="Geben Sie zur Suche den Raumnamen ganz oder teilweise ein">
                 <?= Icon::create('search', 'clickable', ['title' => _('Suche starten')])->asInput( ["type" => "image", "class" => "middle", "name" => "search_room"]) ?>
             </section>
         <? endif ?>
@@ -217,17 +226,11 @@ if ($request_resource_id = $request->getResourceId()) :
     <section>
         <h2><?= _('Benachrichtigungen') ?></h2>
 
-        <p><?= _('Sie können hier angeben, welche Nutzer bei Ablehnung der Raumanfrage benachrichtigt werden sollen.') ?></p>
 
-        <input type="radio" name="reply_recipients" id="reply_recipients_requester" value="requester" checked>
-        <label for="reply_recipients_requester" class="horizontal">
-            <?= _('Der Ersteller der Anfrage') ?>
-        </label>
-
-        <input type="radio" name="reply_recipients" id="reply_recipients_lecturer"
-               value="lecturer" <?= ($request->reply_recipients == 'lecturer' ? 'checked' : '') ?>>
         <label for="reply_recipients_lecturer" class="horizontal">
-            <?= _('Der Ersteller der Anfrage und alle Lehrenden der zugehörigen Lehrveranstaltung') ?>
+            <input type="checkbox" name="reply_recipients" id="reply_recipients_lecturer"
+                   value="lecturer" <?= ($request->reply_recipients == 'lecturer' ? 'checked' : '') ?>>
+            <?= _('Benachrichtigung bei Ablehnung der Raumanfrage auch an alle Lehrenden der Veranstaltung senden') ?>
         </label>
     </section>
 <? endif ?>
@@ -235,8 +238,7 @@ if ($request_resource_id = $request->getResourceId()) :
 <section>
     <h2><?= _('Nachricht an den Raumadministrator') ?></h2>
 
-    <p><?= _('Sie können hier eine Nachricht an den Raumadministrator verfassen, um weitere Wünsche oder Bemerkungen zur gewünschten Raumbelegung anzugeben.') ?></p>
-        <textarea name="comment" cols="58" rows="4"
+
+        <textarea name="comment" cols="58" rows="4" placeholder="Weitere Wünsche oder Bemerkungen zur gewünschten Raumbelegung"
                   style="width:90%"><?= htmlReady($request->getComment()); ?></textarea>
 </section>
-
