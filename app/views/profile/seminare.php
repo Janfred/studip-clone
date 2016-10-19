@@ -1,4 +1,4 @@
-<section class="contentbox">
+<article class="studip">
     <header>
         <h1>
             <?= _('Veranstaltungen') ?>
@@ -19,4 +19,4 @@
         <?endforeach?>
     <?endforeach?>
     </section>
-</section>
+</article>

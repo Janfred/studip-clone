@@ -76,7 +76,7 @@
     <? for ($i = $search->start_result; $i <= $end_result; ++$i) : ?>
         <? $element = $search->getSearchResult($i); ?>
         <? if ($element) : ?>
-            <section class="contentbox">
+            <article class="studip">
                 <header>
                     <h1>
                         <? $link = URLHelper::getLink('', array('cmd'        => 'add_to_clipboard',
@@ -143,7 +143,7 @@
                         <?= LinkButton::create(_('In Merkliste'), $link); ?>
                     <? endif ?>
                 </footer>
-            </section>
+            </article>
         <? endif ?>
     <? endfor ?>
     <p style="text-align: right">

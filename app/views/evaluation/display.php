@@ -1,5 +1,5 @@
 <? if ($admin || $evaluations): ?>
-<section class="contentbox">
+<article class="studip">
     <header>
         <h1>
             <?= Icon::create('vote', 'info')->asImg(); ?>
@@ -23,5 +23,5 @@
             <?= $this->render_partial('evaluation/_evaluation.php', array('evaluation' => $evaluation)); ?>
         <? endforeach; ?>
     <? endif; ?>
-</section>
+</article>
 <? endif; ?>

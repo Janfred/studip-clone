@@ -1,6 +1,6 @@
 <?= $question ?>
 <? if ($perm || $news): ?>
-<section class="contentbox">
+<article class="studip">
     <header>
         <h1>
             <?= Icon::create('news', 'info')->asImg() ?>
@@ -28,7 +28,7 @@
     <? foreach ($news as $new): ?>
     <? $is_new = ($new['chdate'] >= object_get_visit($new->id, 'news', false, false))
             && ($new['user_id'] != $GLOBALS['user']->id); ?>
-    <article class="<?= ContentBoxHelper::classes($new->id, $is_new) ?>" id="<?= $new->id ?>" data-visiturl="<?=URLHelper::getScriptLink('dispatch.php/news/visit')?>">
+    <article class="studip toggle <?= ContentBoxHelper::classes($new->id, $is_new) ?>" id="<?= $new->id ?>" data-visiturl="<?=URLHelper::getScriptLink('dispatch.php/news/visit')?>">
         <header>
             <h1>
                 <a href="<?= ContentBoxHelper::href($new->id, array('contentbox_type' => 'news')) ?>">
@@ -68,5 +68,5 @@
             </footer>
             <? endif ?>
     <? endif; ?>
-</section>
+</article>
 <?endif;

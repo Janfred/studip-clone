@@ -1,3 +1,20 @@
+<style>
+    /* This should be done by an own class (maybe not table? maybe dd?) */
+    #tablefix {
+        padding: 0;
+    }
+    #tablefix > header {
+        margin: 0px;
+    }
+    #tablefix table {
+        margin-bottom: 0;
+        border-bottom: 0;
+    }
+    #tablefix table tbody tr:last-child td {
+        border-bottom: 0;
+    }
+</style>
+
 <? if (!Request::isXhr()) : ?>
     <h1>
         <?= htmlReady($course->name) ?>
@@ -6,7 +23,7 @@
         <? endif ?>
     </h1>
 <? endif ?>
-    <section class="contentbox">
+    <article class="studip" id="tablefix">
         <header>
             <h1><?= _('Allgemeine Informationen') ?></h1>
         </header>
@@ -178,12 +195,12 @@
             <? endif ?>
             </tbody>
         </table>
-    </section>
+    </article>
 
     <? $lecturers = $course->getMembersWithStatus('dozent'); ?>
     <? $count_lecturers = count($lecturers); ?>
     <? if ($count_lecturers) : ?>
-        <section class="contentbox">
+        <article class="studip">
             <header>
                 <h1><?= get_title_for_status('dozent', $count_lecturers, $course->status) ?></h1>
             </header>
@@ -198,13 +215,13 @@
                 <? endforeach ?>
                 </ul>
              </section>
-        </section>
+        </article>
     <? endif ?>
 
     <? $tutors = $course->getMembersWithStatus('tutor'); ?>
     <? $count_tutors = count($tutors); ?>
     <? if ($count_tutors) : ?>
-        <section class="contentbox">
+        <article class="studip">
             <header>
                 <h1><?= get_title_for_status('tutor', $count_tutors, $course->status) ?></h1>
             </header>
@@ -219,20 +236,20 @@
                 <? endforeach ?>
                 </ul>
              </section>
-        </section>
+        </article>
     <? endif ?>
 
-    <section class="contentbox">
+    <article class="studip">
         <header>
             <h1><?= _('Zeiten') ?></h1>
         </header>
         <section>
             <?= $sem->getDatesHTML() ?>
         </section>
-    </section>
+    </article>
 
     <? if ($course['public_topics'] && count($course->topics)) : ?>
-        <section class="contentbox">
+        <article class="studip">
             <header>
                 <h1><?= _("Themen") ?></h1>
             </header>
@@ -244,20 +261,20 @@
                     echo " ".htmlReady($topic['title']);
                 } ?>
             </section>
-        </section>
+        </article>
     <? endif ?>
 
-    <section class="contentbox">
+    <article class="studip">
         <header>
             <h1><?= _('Veranstaltungsort') ?></h1>
         </header>
         <section>
             <?= $sem->getDatesTemplate('dates/seminar_html_location', array('ort' => $course->ort)) ?>
         </section>
-    </section>
+    </article>
     <? if ($this->studymodules) : ?>
 
-        <section class="contentbox">
+        <article class="studip">
             <header>
                 <h1><?= _('Studienmodule') ?></h1>
             </header>
@@ -276,11 +293,11 @@
                     <? endforeach ?>
                 </ul>
             </section>
-        </section>
+        </article>
     <? endif ?>
 
     <? if ($studyAreaTree) : ?>
-        <section class="contentbox">
+        <article class="studip">
             <header>
                 <h1><?= _('Studienbereiche') ?></h1>
             </header>
@@ -289,11 +306,11 @@
                     <?= $this->render_partial('study_area/tree.php', array('node' => $studyAreaTree, 'open' => true, 'dont_open' => Config::get()->COURSE_SEM_TREE_CLOSED_LEVELS)) ?>
                 </ul>
             </section>
-        </section>
+        </article>
     <? endif ?>
 
     <? if ($study_areas && count($study_areas) > 0) : ?>
-        <section class="contentbox">
+        <article class="studip">
             <header>
                 <h1><?= _('Studienbereiche') ?></h1>
             </header>
@@ -308,7 +325,7 @@
                     <? endforeach ?>
                 </ul>
             </section>
-        </section>
+        </article>
     <? endif ?>
 
     <?
@@ -333,18 +350,18 @@
     <? endif; ?>
 
     <? if ($course->beschreibung) : ?>
-        <section class="contentbox">
+        <article class="studip">
             <header>
                 <h1><?= _("Kommentar/Beschreibung") ?></h1>
             </header>
             <section>
                 <?= formatLinks($course->beschreibung) ?>
             </section>
-        </section>
+        </article>
     <? endif ?>
 
     <? if ($courseset = $sem->getCourseSet()) : ?>
-        <section class="contentbox">
+        <article class="studip">
             <header>
                 <h1><?=_("Anmelderegeln")?></h1>
             </header>
@@ -356,11 +373,11 @@
                     <?= $courseset->toString(true) ?>
                 </div>
             </section>
-        </section>
+        </article>
     <? endif ?>
 
     <? if ($course->admission_prelim == 1 || $course->admission_binding == 1) : ?>
-        <section class="contentbox">
+        <article class="studip">
             <header>
                 <h1><?= _('Anmeldemodus') ?></h1>
             </header>
@@ -382,11 +399,11 @@
                     <p><?= _("Die Anmeldung ist verbindlich, Teilnehmende können sich nicht selbst austragen.") ?></p>
                 </section>
             <? endif ?>
-        </section>
+        </article>
     <? endif ?>
 
     <? if (!empty($course_domains)): ?>
-        <section class="contentbox">
+        <article class="studip">
             <header>
                 <h1><?= _("Zugelassenene Nutzerdomänen:") ?></h1>
             </header>
@@ -395,7 +412,7 @@
                     <li><?= htmlReady($domain->getName()) ?></li>
                 <? endforeach ?>
             </ul>
-        </section>
+        </article>
     <? endif ?>
 
 
