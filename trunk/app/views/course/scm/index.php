@@ -1,6 +1,6 @@
 <?= $verification ?>
 
-<section class="contentbox">
+<article class="studip">
     <header>
         <h1>
             <?= Icon::create('infopage', 'inactive')->asImg(['class' => 'text-top']) ?>
@@ -34,4 +34,4 @@
     <section>
         <?= $scm->content ? formatReady($scm->content) : MessageBox::info(_('In diesem Bereich wurden noch keine Inhalte erstellt.')) ?>
     </section>
-</section>
+</article>

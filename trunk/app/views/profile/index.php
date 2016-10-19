@@ -186,14 +186,14 @@
 
 <? if (!empty($ausgabe_inhalt)) : ?>
     <? foreach ($ausgabe_inhalt as $key => $inhalt) : ?>
-        <section class="contentbox">
+        <article class="studip">
             <header>
                 <h1><?= htmlReady($key) ?></h1>
             </header>
             <section>
                 <?= formatReady($inhalt) ?>
             </section>
-        </section>
+        </article>
     <? endforeach ?>
 <? endif ?>
 
@@ -202,26 +202,26 @@
 <? endif ?>
 
 <? if ($show_lit && $lit_list) : ?>
-    <section class="contentbox">
+    <article class="studip">
         <header>
             <h1><?= _('Literaturlisten') ?></h1>
         </header>
         <section>
             <?= $lit_list ?>
         </section>
-    </section>
+    </article>
 <? endif ?>
 
 <? if (!empty($longDatafields)) : ?>
     <? foreach ($longDatafields as $name => $entry) : ?>
-        <section class="contentbox">
+        <article class="studip">
             <header>
                 <h1><?= htmlReady($name . ' ' . $entry['visible']) ?></h1>
             </header>
             <section>
                 <?= $entry['content'] ?>
             </section>
-        </section>
+        </article>
     <? endforeach ?>
 <? endif ?>
 
@@ -229,13 +229,13 @@
 
 <? if (!empty($categories)) : ?>
     <? foreach ($categories as $cat) : ?>
-        <section class="contentbox">
+        <article class="studip">
             <header>
                 <h1><?= htmlReady($cat['head'] . $cat['zusatz']) ?></h1>
             </header>
             <section>
                 <?= formatReady($cat['content']) ?>
             </section>
-        </section>
+        </article>
     <? endforeach ?>
 <? endif; ?>

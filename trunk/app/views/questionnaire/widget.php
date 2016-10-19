@@ -1,5 +1,5 @@
 <? $allowed_to_add = ($range_id === $GLOBALS['user']->id && $range_type === "user") || ($range_id === "start" && $GLOBALS['perm']->have_perm("root")) || ($range_type === "course" && $GLOBALS['perm']->have_studip_perm("tutor", $range_id)) || ($range_type === "institute" && $GLOBALS['perm']->have_studip_perm("tutor", $range_id)) ?>
-<section class="contentbox questionnaire_widget" id="questionnaire_area">
+<article class="studip questionnaire_widget" id="questionnaire_area">
     <header>
         <h1>
             <?= Icon::create("evaluation", "info")->asimg("16px", array('class' => "text-bottom")) ?>
@@ -38,4 +38,4 @@
             <? endif; ?>
         </footer>
     <? endif ?>
-</section>
+</article>

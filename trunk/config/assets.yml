@@ -108,6 +108,7 @@ javascripts:
     - javascripts/big-image-handler.js
     - javascripts/opengraph.js
     - javascripts/actionmenu.js
+    - javascripts/article.js
 
     - javascripts/studip-selection.js
     - javascripts/studip-secure-forms.js

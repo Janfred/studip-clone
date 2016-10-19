@@ -1,4 +1,4 @@
-<article class="<?= ContentBoxHelper::classes($questionnaire->id, $is_new) ?> widget_questionnaire_<?= $questionnaire->getId() ?>"  data-questionnaire_id="<?= htmlReady($questionnaire->getId()) ?>">
+<article class="studip toggle <?= ContentBoxHelper::classes($questionnaire->id, $is_new) ?> widget_questionnaire_<?= $questionnaire->getId() ?>"  data-questionnaire_id="<?= htmlReady($questionnaire->getId()) ?>">
     <header>
         <h1>
             <a href="<?= ContentBoxHelper::switchhref($questionnaire->id, array('contentbox_type' => 'vote')) ?>">

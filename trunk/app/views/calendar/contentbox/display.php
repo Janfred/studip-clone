@@ -1,5 +1,5 @@
 <? if ($admin || $termine): ?>
-<section class="contentbox">
+<article class="studip">
     <header>
         <h1>
             <?= Icon::create('schedule', 'info')->asImg() ?>
@@ -33,5 +33,5 @@
     <? endif; ?>
     </section>
   <? endif; ?>
-</section>
+</article>
 <? endif; ?>
