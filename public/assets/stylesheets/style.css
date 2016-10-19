@@ -4633,6 +4633,9 @@ div.clear {
 .questionnaire_results .ct-series-e .ct-slice-pie {
   fill: #f26e00;
 }
+.questionnaire_results table tbody tr:last-child td {
+  border-bottom: 0;
+}
 .questionnaire_answer > article {
   padding: 7px;
   border: none;
