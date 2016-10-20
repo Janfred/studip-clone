@@ -126,7 +126,7 @@ class messaging
             $this->delete_message($message_id, $user_id);
         }
     }
-    
+
 
     /**
      *
@@ -234,7 +234,7 @@ class messaging
             MailQueueEntry::add($mail, $message_id, $rec_user_id);
         }
     }
-    
+
     /**
      *
      * @param $message
@@ -359,14 +359,14 @@ class messaging
         $rec_id = array_unique($rec_id);
 
         // hier gehen wir alle empfaenger durch, schreiben das in die db und schicken eine mail
-        $query  = "INSERT INTO message_user (message_id, user_id, snd_rec, mkdate)
-                   VALUES (?, ?, 'rec', UNIX_TIMESTAMP())";
+        $query  = "INSERT INTO message_user (message_id, user_id, readed, snd_rec, mkdate)
+                   VALUES (?, ?, ?, 'rec', UNIX_TIMESTAMP())";
         $insert = DBManager::get()->prepare($query);
         $snd_name = ($user_id != '____%system%____')
             ? User::find($user_id)->getFullName() . ' (' . User::find($user_id)->username . ')'
             : 'Stud.IP-System';
         foreach ($rec_id as $one) {
-            $insert->execute(array($tmp_message_id, $one));
+            $insert->execute(array($tmp_message_id, $one, $one == $snd_user_id ? 1 : 0));
             if ($GLOBALS['MESSAGING_FORWARD_AS_EMAIL']) {
                 // mail to original receiver
                 $mailstatus_original = $this->user_wants_email($one);
