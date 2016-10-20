@@ -96,7 +96,13 @@ class Course_BlockAppointmentsController extends AuthenticatedController
         } else {
 
             $dates = array();
-            $delta = ($end_time - $start_time - 3600) % (24 * 60 * 60);
+            /*
+             * Recalculate end hour of last day to first day, so we don't run
+             * into problems with daylight saving time which would add or
+             * remove an hour.
+             */
+            $delta = (strtotime(Request::get('block_appointments_start_day') . ' ' .
+                Request::get('block_appointments_end_time')) - $start_time) % (24 * 60 * 60);
             $last_day = strtotime(Request::get('block_appointments_start_time'), $end_day);
 
             if (in_array('everyday', $days)) {
