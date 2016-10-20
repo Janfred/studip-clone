@@ -108,7 +108,7 @@ use Studip\Button, Studip\LinkButton;
                     <td>
                         <?= ($user->mkdate) ? date("d.m.Y", $user->mkdate) : _('unbekannt') ?>
                     </td>
-                    <td><?= htmlReady($user['auth_plugin'] == 'preliminary' ? _('vorläufig') : $user->auth_plugin) ?></td>
+                    <td><?= htmlReady($user['auth_plugin'] === null ? _('vorläufig') : $user->auth_plugin) ?></td>
                     <td class="actions" nowrap>
                         <?
                         $actionMenu = ActionMenu::get();

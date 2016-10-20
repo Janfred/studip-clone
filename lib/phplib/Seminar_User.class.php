@@ -24,7 +24,7 @@ class Seminar_User
         if ($user instanceOf User) {
             $this->user = $user;
         } else {
-            $this->user = User::find($user);
+            $this->user = User::findFull($user);
         }
         if (!isset($this->user)) {
             $this->user = new User();

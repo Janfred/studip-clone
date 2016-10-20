@@ -83,6 +83,25 @@ class User extends AuthUserMd5
     }
 
     /**
+     * build object with given data and mark it as existing
+     *
+     * @param $data array assoc array of record
+     * @return User
+     */
+    public static function buildExisting($data)
+    {
+        $user = new User();
+        $user->info = new UserInfo();
+        $user->setData($data);
+        $user->setNew(false);
+        foreach (array_keys($user->db_fields) as $field) {
+            $user->content_db[$field] = $user->content[$field];
+        }
+        $user->info = UserInfo::buildExisting($data);
+        return $user;
+    }
+
+    /**
      * Returns user object including user_info
      *
      * @return User User
@@ -92,15 +111,7 @@ class User extends AuthUserMd5
         $sql = "SELECT * FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE auth_user_md5.user_id = ?";
         $data = DbManager::get()->fetchOne($sql, array($id));
         if ($data) {
-            $user = new User();
-            $user->info = new UserInfo();
-            $user->setData($data);
-            $user->setNew(false);
-            foreach (array_keys($user->db_fields) as $field) {
-                $user->content_db[$field] = $user->content[$field];
-            }
-            $user->info = UserInfo::buildExisting($data);
-            return $user;
+            return self::buildExisting($data);
         }
     }
 
@@ -188,7 +199,7 @@ class User extends AuthUserMd5
     {
         $params = [];
 
-        $query = "SELECT au.* "
+        $query = "SELECT au.*,ui.* "
                  ."FROM auth_user_md5 au "
                  ."LEFT JOIN datafields_entries de ON de.range_id=au.user_id "
                  ."LEFT JOIN user_online uo ON au.user_id = uo.user_id "
@@ -219,9 +230,9 @@ class User extends AuthUserMd5
         }
 
         //permissions
-        if (!is_null($attributes['perms']) && $attributes['perms'] != 'alle') {
+        if (!is_null($attributes['perm']) && $attributes['perm'] != 'alle') {
             $query .= "AND au.perms =  :perms ";
-            $params[':perms'] = $attributes['perms'];
+            $params[':perms'] = $attributes['perm'];
         }
 
         //locked user

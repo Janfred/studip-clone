@@ -119,8 +119,7 @@ use Studip\Button, Studip\LinkButton;
 
             <select name="auth_plugins">
                <option value=""><?= _('Alle') ?></option>
-               <option value="preliminary"><?= _('vorläufig')?></option>
-           <? foreach ($available_auth_plugins as $key => $val): ?>
+           <? foreach (array_merge(['preliminary' => _('vorläufig')], $available_auth_plugins) as $key => $val): ?>
                 <option value="<?= $key ?>" <?= $request['auth_plugins'] === $key ? 'selected' : '' ?>>
                     <?= htmlReady($val) ?>
                 </option>
@@ -173,5 +172,5 @@ use Studip\Button, Studip\LinkButton;
 </form>
 
 <? if (count($users) > 0 && $users != 0): ?>
-    <?= $this->render_partial('admin/user/_results', compact('users')) ?>
+    <?= $this->render_partial('admin/user/_results') ?>
 <? endif; ?>
