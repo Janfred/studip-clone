@@ -222,7 +222,6 @@ class RandomAlgorithm extends AdmissionAlgorithm
                     foreach (array_keys($current_claiming) as $user_id) {
                         if ($bonus_users[$user_id] > 0) {
                             $current_claiming[$user_id] *= $bonus_users[$user_id] * count($current_claiming) + 1;
-                            $bonus_users[$user_id]--;
                         }
                     }
                     $free_seats = round($free_seats_course * $quota / 100, 0, PHP_ROUND_HALF_DOWN);
@@ -235,6 +234,7 @@ class RandomAlgorithm extends AdmissionAlgorithm
                     $this->addUsersToCourse($chosen_ones, $course, $prio_mapper($chosen_ones, $course->id));
                     foreach ($chosen_ones as $one) {
                         $distributed_users[$one]++;
+                        $bonus_users[$one]--;
                     }
                     if ($free_seats < count($current_claiming)) {
                         $remaining_ones = array_slice(array_keys($current_claiming), $free_seats);
