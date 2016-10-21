@@ -1,10 +1,10 @@
 (function ($) {
-    $(document).on("click", "article.studip.toggle header h1", function (e) {
+    $(document).on("click", "article.studip.toggle header h1 a", function (e) {
                 e.preventDefault();
                 var article = $(this).closest('article');
 
                 // If the contentbox article is new send an ajax request
-                if (article.hasClass('new')) {
+                if (article.hasClass('new') && article.data('visiturl')) {
                     $.ajax({
                         type: 'POST',
                         url: STUDIP.URLHelper.getURL(decodeURIComponent(article.data('visiturl') + $(this).attr('href')))
