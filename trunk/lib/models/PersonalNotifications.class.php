@@ -112,7 +112,7 @@ class PersonalNotifications extends SimpleORMap
      *   image for the notification. Best size: 40px x 40px
      * @return boolean : true on success
      */
-    public static function add($user_ids, $url, $text, $html_id = null, $avatar = null)
+    public static function add($user_ids, $url, $text, $html_id = null, $avatar = null, $dialog = false)
     {
         if (!is_array($user_ids)) {
             $user_ids = array($user_ids);
@@ -125,6 +125,7 @@ class PersonalNotifications extends SimpleORMap
         $notification['url']     = $url;
         $notification['text']    = $text;
         $notification['avatar']  = $avatar instanceof Icon ? $avatar->asImagePath(40) : $avatar;
+        $notification['dialog']  = $dialog ? 1 : 0;
         $notification->store();
 
 
