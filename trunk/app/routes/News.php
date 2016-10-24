@@ -14,7 +14,7 @@ class News extends \RESTAPI\RouteMap
 {
     public static function before()
     {
-        require_once 'lib/classes/StudipNews.class.php';
+        require_once 'lib/models/StudipNews.class.php';
     }
 
     /**
