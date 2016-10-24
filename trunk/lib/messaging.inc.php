@@ -397,7 +397,8 @@ class messaging
             URLHelper::getUrl("dispatch.php/messages/read/$tmp_message_id", array('cid' => null)),
             sprintf(_('Sie haben eine Nachricht von %s erhalten!'), $snd_name),
             'message_'.$tmp_message_id,
-            Icon::create('mail', 'clickable')
+            Icon::create('mail', 'clickable'),
+            true
         );
 
         NotificationCenter::postNotification('MessageDidSend', $tmp_message_id, compact('user_id', 'rec_id'));
