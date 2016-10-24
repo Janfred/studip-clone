@@ -125,7 +125,9 @@ class Wiki extends \RESTAPI\RouteMap
             $json['content_html'] = wikiReady($page->body);
         }
         if (!in_array("user", $without)) {
-            $json['user'] = User::getMiniUser($this, $page->author);
+            if($page->author) {
+                $json['user'] = User::getMiniUser($this, $page->author);
+            }
         }
 
         foreach ($without as $key) {
