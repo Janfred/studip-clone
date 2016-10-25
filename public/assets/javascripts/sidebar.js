@@ -92,5 +92,23 @@
     // Engage
     $(document).ready(function () {
         STUDIP.Sidebar.setSticky();
+
+        // Submit marked select elements upon selecting an option by clicking
+        $('#layout-sidebar').on('click', 'select.submit-upon-select', function (event) {
+            $(event.target).data('shouldSubmit', true);
+        }).on('change', 'select.submit-upon-select', function (event) {
+            if ($(event.target).data('shouldSubmit')) {
+                $(event.target).blur();
+            }
+        }).on('blur keyup', 'select.submit-upon-select', function (event) {
+            var keycode      = event.keyCode || event.which,
+                shouldSubmit = (event.type !== 'keyup' && $(event.target).data('shouldSubmit')) || keycode === 13,
+                changed      = $('option:selected:not([defaultSelected])', event.target).length > 0;
+
+            if (shouldSubmit && changed) {
+                $(this).closest('form').submit();
+            }
+        });
     });
+
 }(jQuery, STUDIP));
