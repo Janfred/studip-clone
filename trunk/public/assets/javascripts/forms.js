@@ -258,7 +258,7 @@
     $(document).on('dialog-update', prepareSelect2);
 
     $(document).on('change', 'select:not([multiple])', function () {
-        $(this).toggleClass('has-no-value', this.value === '').blur();
+        $(this).toggleClass('has-no-value', this.value === '');
     }).on('dialog-close', function (event, data) {
         $('select.nested-select:not(:has(optgroup))', data.dialog).each(function () {
             if (!$(this).data('select2')) {
@@ -266,6 +266,8 @@
             }
             $(this).select2('close');
         });
+    }).on('select2:open', 'select', function () {
+        $(this).click();
     });
 
 }(jQuery, STUDIP));

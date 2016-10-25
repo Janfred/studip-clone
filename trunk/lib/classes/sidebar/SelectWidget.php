@@ -14,9 +14,6 @@ class SelectWidget extends SidebarWidget
     public function __construct($title, $url, $name, $method = 'get')
     {
         $this->template = 'sidebar/select-widget';
-        $this->template_variables['attributes'] = array(
-            'onchange' => '$(this).closest(\'form\').submit();',
-        );
 
         $this->setTitle($title);
         $this->setUrl($url);
@@ -78,6 +75,8 @@ class SelectWidget extends SidebarWidget
         $this->template_variables['attributes'] = implode(' ', $attributes) ?: '';
 
         $variables['__is_nested'] = $this->hasNestedElements();
+
+        $this->template_variables['class'] .= ' submit-upon-select';
 
         return parent::render($variables);
     }
