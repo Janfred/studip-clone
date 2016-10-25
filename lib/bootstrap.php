@@ -82,6 +82,7 @@ namespace {
         'StudipPlugin'           => $GLOBALS['STUDIP_BASE_PATH'] . '/lib/plugins/core/StudIPPlugin.class.php',
         'Migration'              => $GLOBALS['STUDIP_BASE_PATH'] . '/lib/migrations/migration.php',
         'PluginAdministration'  => $GLOBALS['STUDIP_BASE_PATH'] . '/app/models/plugin_administration.php',
+        'CalendarScheduleModel'  => $GLOBALS['STUDIP_BASE_PATH'] . '/app/models/calendar/schedule.php',
     ));
 
     // Trails

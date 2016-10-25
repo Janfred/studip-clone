@@ -1,8 +1,6 @@
 <?php
 namespace RESTAPI\Routes;
 
-require_once 'app/models/calendar/schedule.php';
-
 /**
  * @author  André Klaßen <andre.klassen@elan-ev.de>
  * @author  <mlunzena@uos.de>
