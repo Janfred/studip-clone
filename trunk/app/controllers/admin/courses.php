@@ -1066,7 +1066,6 @@ class Admin_CoursesController extends AuthenticatedController
                 $inst_ids[] = $a->Institut_id;
             });
         } else {
-            //TIC 7002:
             //We must check, if the institute ID belongs to a faculty
             //and has the string _i appended to it.
             //In that case we must display the courses of the faculty
@@ -1077,7 +1076,7 @@ class Admin_CoursesController extends AuthenticatedController
             
             $institut = new Institute($instituteIdFields[0]);
             
-            if(!$institut->isFaculty() || ($instituteIdFields[1] == 'i')) {
+            if(!$institut->isFaculty() || ($instituteIdFields[1] == 'withinst')) {
                 //The institute is not a faculty or the institute-ID had the string _i appended:
                 //Pick the institute IDs of the faculty/institute and of all sub-institutes.
                 $inst_ids[] = $instituteIdFields[0];
@@ -1260,7 +1259,7 @@ class Admin_CoursesController extends AuthenticatedController
                 'select-' . $institut['Name']
             );
             
-            //TIC 7002: check if the institute is a faculty.
+            //check if the institute is a faculty.
             //If true, then add another option to display all courses
             //from that faculty and all its institutes.
             
@@ -1268,9 +1267,9 @@ class Admin_CoursesController extends AuthenticatedController
             if($institut['fakultaets_id'] == $institut['Institut_id']) {
                 $list->addElement(
                     new SelectElement(
-                        $institut['Institut_id'] . '_i', //_i = with institutes
+                        $institut['Institut_id'] . '_withinst', //_withinst = with institutes
                         ' ' . $institut['Name'] . ' +' . _('Institute'),
-                        $GLOBALS['user']->cfg->MY_INSTITUTES_DEFAULT === $institut['Institut_id'] . '_i'
+                        $GLOBALS['user']->cfg->MY_INSTITUTES_DEFAULT === $institut['Institut_id'] . '_withinst'
                     ),
                     'select-' . $institut['Name'] . '-with_institutes'
                 );
