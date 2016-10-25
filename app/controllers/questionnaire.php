@@ -96,7 +96,8 @@ class QuestionnaireController extends AuthenticatedController
                 $questionnaire_data['visible'] = ($questionnaire_data['startdate'] <= time() && (!$questionnaire_data['stopdate'] || $questionnaire_data['stopdate'] >= time())) ? 1 : 0;
             }
             $this->questionnaire->setData($questionnaire_data);
-            foreach (Request::getArray("question_types") as $question_id => $question_type) {
+            $question_types_data = Request::getArray("question_types");
+            foreach ($question_types_data as $question_id => $question_type) {
                 $question = null;
                 foreach ($this->questionnaire->questions as $index => $q) {
                     if ($q->getId() === $question_id) {
@@ -111,6 +112,11 @@ class QuestionnaireController extends AuthenticatedController
                 }
                 $question['position'] = $index + 1;
                 $question->createDataFromRequest();
+            }
+            foreach ($this->questionnaire->questions as $q) {
+                if (!in_array($q->getId(), array_keys($question_types_data))) {
+                    $q->delete();
+                }
             }
             if (Request::submitted("questionnaire_store")) {
                 //save everything
