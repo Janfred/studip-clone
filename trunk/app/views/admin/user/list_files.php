@@ -44,3 +44,11 @@
 
     <? endforeach ?>
 </section>
+
+<? if (Request::int('from_index')) : ?>
+    <footer data-dialog-button>
+        <?= \Studip\LinkButton::create(_('Zurück zur Übersicht'),
+            $controller->url_for('admin/user/activities/' . $user->user_id, $params),
+            ['data-dialog' => 'size=50%']) ?>
+    </footer>
+<? endif ?>

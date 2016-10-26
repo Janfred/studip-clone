@@ -117,6 +117,14 @@ use Studip\Button, Studip\LinkButton;
                                 _('Detailansicht des Benutzers anzeigen'),
                                 Icon::create('edit', 'clickable', ['title' => _('Diesen Benutzer bearbeiten')]));
 
+                        if ($GLOBALS['perm']->have_perm('root')) {
+                            $actionMenu->addLink(
+                                $controller->url_for('admin/user/activities/' . $user->user_id, ['from_index' => 1]),
+                                _('Datei- und Aktivitätsübersicht'),
+                                Icon::create('vcard', 'clickable', ['title' => _('Datei- und Aktivitätsübersicht')]),
+                                ['data-dialog' => 'size=50%']
+                            );
+                        }
                         $actionMenu->addButton(
                                 'delete_user',
                                 _('Benutzer löschen'),
@@ -130,9 +138,7 @@ use Studip\Button, Studip\LinkButton;
             <? endforeach ?>
 
         </tbody>
-
         <tfoot>
-
             <tr>
                 <td colspan="11" align="right">
                     <input class="middle" type="checkbox" name="check_all" title="<?= _('Alle Benutzer auswählen') ?>"
@@ -147,8 +153,6 @@ use Studip\Button, Studip\LinkButton;
                              'class' => 'bulkAction']) ?>
                 </td>
             </tr>
-
         </tfoot>
-
     </table>
 </form>

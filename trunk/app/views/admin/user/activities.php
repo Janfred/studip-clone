@@ -19,7 +19,8 @@
                 </td>
                 <td>
                     <? if ($query['details']) : ?>
-                        <a href="<?= $controller->url_for('admin/user/activities/' . $user['user_id'], ['view' => $query['details']]) ?>">
+                        <a href="<?= $controller->url_for('admin/user/activities/' . $user['user_id'], ['view' => $query['details']] + $params) ?>"
+                            <?= Request::isXhr() ? 'data-dialog="size=50%"' :  ''?>>
                             <?= Icon::create('info-circle', 'clickable', ['title' => _('Übersicht anzeigen')])->asImg('16') ?>
                         </a>
                     <? endif ?>
@@ -63,4 +64,9 @@
     <? endif ?>
 <? endif ?>
 
-    
+
+<? if (Request::int('from_index')) : ?>
+    <footer data-dialog-button>
+        <?= \Studip\LinkButton::create(_('Zurück zur Übersicht'), $controller->url_for('admin/user')) ?>
+    </footer>
+<? endif ?>
