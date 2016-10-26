@@ -1,6 +1,7 @@
 <?php use Studip\Button, Studip\LinkButton;?>
 <form action="<?= $controller->url_for('profilemodules/update', compact('username')) ?>" method="post">
     <?= CSRFProtection::tokenTag() ?>
+    <input name="uebernehmen" value="1" type="hidden">
     <table class="default nohover plus" id="profile_modules">
         <!-- <caption><?=_("Inhaltselemente")?></caption> -->
         <tbody>
@@ -31,7 +32,8 @@
                 <div class="plus_basic">
 
                     <!-- checkbox -->
-                    <input type="checkbox" id="<?= $pluginname ?>" name="modules[]" value="<?= $plugin->getPluginId() ?>" <?= $val['activated'] ? 'checked' : '' ?>>
+                    <input type="checkbox" id="<?= $pluginname ?>" name="modules[]" value="<?= $plugin->getPluginId() ?>" <?= $val['activated'] ? 'checked' : '' ?>
+                    onClick="form.submit()">
 
                     <div class="element_header">
 
@@ -222,12 +224,5 @@
 
 
         </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="3">
-                    <?= Studip\Button::createAccept(_('Übernehmen'), 'submit') ?>
-                </td>
-            </tr>
-        </tfoot>
     </table>
 </form>
