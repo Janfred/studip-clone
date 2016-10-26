@@ -456,6 +456,7 @@ class Course_PlusController extends AuthenticatedController
         }
         if (!count($_SESSION['admin_modules_data']["conflicts"])) {
             $changes = false;
+            $anchor = "";
             // Inhaltselemente speichern
             if ($_SESSION['admin_modules_data']["orig_bin"] != $_SESSION['admin_modules_data']["changed_bin"]) {
                 $modules->writeBin($_SESSION['admin_modules_data']["range_id"], $_SESSION['admin_modules_data']["changed_bin"]);
@@ -469,6 +470,7 @@ class Course_PlusController extends AuthenticatedController
                     } else {
                         PageLayout::postSuccess(sprintf(_('"%s" wurde aktiviert.'), $mod['name']));
                     }
+                    $anchor = '#m_' . $mod['id'];
                 }
                 
                 $_SESSION['admin_modules_data']["orig_bin"] = $_SESSION['admin_modules_data']["changed_bin"];
@@ -496,12 +498,13 @@ class Course_PlusController extends AuthenticatedController
                             NotificationCenter::postNotification('PluginForSeminarDidDisabled', $seminar_id, $plugin_id);
                             PageLayout::postSuccess(sprintf(_('"%s" wurde deaktiviert.'), $plugin->getPluginName()));
                         }
+                        $anchor = '#p_' . $plugin->getPluginId();
                     }
                 }
                 $_SESSION['plugin_toggle'] = array();
             }
             if ($changes) {
-                $this->redirect('course/plus/index/' . $seminar_id);
+                $this->redirect($this->url_for('course/plus/index/' . $seminar_id . $anchor));
             }
         }
     }

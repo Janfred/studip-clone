@@ -23,10 +23,11 @@
             $info = $plugin->getMetadata();
             $pluginname = isset($info['displayname']) ? $info['displayname'] : $plugin->getPluginname();
             $URL = $plugin->getPluginURL();
+            $anchor = 'p_' . $plugin->getPluginId();
             //if(isset($info['complexity']) && isset($_SESSION['profile_plus']) && !$_SESSION['profile_plus']['Komplex'][$info['complexity']])continue;
     ?>
 
-        <tr class="<?= $pre_check != null ? ' quiet' : '' ?>">
+        <tr id="<?= htmlReady($anchor);?>" class="<?= $pre_check != null ? ' quiet' : '' ?>">
             <td colspan = 3>
 
                 <div class="plus_basic">
@@ -224,5 +225,12 @@
 
 
         </tbody>
+        <tfoot>
+            <tr class="hidden-js">
+                <td align="center" colspan="3">
+                    <?= Button::create(_('An- / Ausschalten'), 'uebernehmen') ?>
+                </td>
+            </tr>
+        </tfoot>
     </table>
 </form>
