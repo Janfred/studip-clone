@@ -1099,7 +1099,11 @@ class Admin_UserController extends AuthenticatedController
         $this->user     = User::find($user_id);
         $this->fullname = $this->user->getFullname();
         $this->user     = $this->user->toArray();
+        $this->params   = [];
 
+        if(Request::int('from_index')) {
+            $this->params['from_index'] = 1;
+        }
         if (is_null($this->user)) {
             throw new Exception(_('Nutzer nicht gefunden'));
         }
