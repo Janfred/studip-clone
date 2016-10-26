@@ -203,12 +203,16 @@ class ProfileModulesController extends AuthenticatedController
                 $updated = $manager->setPluginActivated($id, $this->user_id, $state_after, 'user');
 
                 $success = $success || $updated;
+                
+                if ($state_after) {
+                    PageLayout::postSuccess(sprintf(_('"%s" wurde aktiviert.'), $plugin->getPluginName()));
+                } else {
+                    PageLayout::postSuccess(sprintf(_('"%s" wurde deaktiviert.'), $plugin->getPluginName()));
+                }
             }
         }
 
-        if ($success === true) {
-            $message = MessageBox::success(_('Ihre Änderungen wurden gespeichert.'));
-        } elseif ($success === false) {
+        if ($success === false) {
             $message = MessageBox::error(_('Ihre Änderungen konnten nicht gespeichert werden.'));
         }
         if ($message) {

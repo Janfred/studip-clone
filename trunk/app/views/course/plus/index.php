@@ -18,7 +18,7 @@ use Studip\Button, Studip\LinkButton;
 
 <form action="<?= URLHelper::getLink($save_url) ?>" method="post">
 <?= CSRFProtection::tokenTag() ?>
-
+<input name="uebernehmen" value="1" type="hidden">
 <table class="default nohover plus">
 <!-- <caption><?=_("Inhaltselemente")?></caption> -->
 <tbody>
@@ -89,7 +89,8 @@ foreach ($available_modules as $category => $pluginlist) {
                 <div class="plus_basic">
 
                     <!-- checkbox -->
-                    <input type="checkbox" id="<?= $pluginname ?>" name="<?= $cb_name ?>" value="TRUE" <?= $cb_disabled ?> <?= $cb_checked ?>>
+                    <input type="checkbox" id="<?= $pluginname ?>" name="<?= $cb_name ?>" value="TRUE" <?= $cb_disabled ?> <?= $cb_checked ?>
+                    onClick="form.submit()">
 
                     <div class="element_header">
 
@@ -313,12 +314,5 @@ foreach ($available_modules as $category => $pluginlist) {
     }
 } ?>
 </tbody>
-<tfoot>
-<tr>
-    <td align="center" colspan="3">
-        <?= Button::create(_('An- / Ausschalten'), 'uebernehmen') ?>
-    </td>
-</tr>
-</tfoot>
 </table>
 </form>
