@@ -1098,7 +1098,6 @@ class Admin_UserController extends AuthenticatedController
     {
         $this->user     = User::find($user_id);
         $this->fullname = $this->user->getFullname();
-        $this->user     = $this->user->toArray();
         $this->params   = [];
 
         if(Request::int('from_index')) {
