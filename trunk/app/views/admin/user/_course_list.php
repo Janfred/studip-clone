@@ -18,11 +18,13 @@
                             <col style="width: 200px">
                             <col>
                             <col style="width: 15%">
+                            <col style="width: 15%">
                         </colgroup>
                         <thead>
                             <tr>
                                 <th><?= _('Veranstaltungsnummer') ?></th>
                                 <th><?= _('Veranstaltung') ?></th>
+                                <th><?= _('Typ') ?></th>
                                 <th><?= _('Status') ?></th>
                             </tr>
                         </thead>
@@ -36,8 +38,11 @@
                                     </td>
                                     <td>
                                         <a href="<?= URLHelper::getLink('seminar_main.php', ['auswahl' => $membership->course->id]) ?>">
-                                            <?= sprintf('%s (%s)', htmlReady($membership->course->getFullName('type-name')), htmlReady($membership->course->getFullName('sem-duration-name'))) ?>
+                                            <?= htmlReady($membership->course->name) ?>
                                         </a>
+                                    </td>
+                                    <td>
+                                        <?= htmlReady($membership->course->getSemType()['name'])?>
                                     </td>
                                     <td>
                                         <?= htmlReady($membership->status) ?>
