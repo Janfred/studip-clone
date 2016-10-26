@@ -191,6 +191,7 @@ class ProfileModulesController extends AuthenticatedController
         $modules = Request::optionArray('modules');
 
         $success = null;
+        $anchor = "";
         // Plugins
         foreach ($this->plugins as $plugin) {
             // Check local activation status.
@@ -209,6 +210,7 @@ class ProfileModulesController extends AuthenticatedController
                 } else {
                     PageLayout::postSuccess(sprintf(_('"%s" wurde deaktiviert.'), $plugin->getPluginName()));
                 }
+                $anchor = '#p_' . $plugin->getPluginId();
             }
         }
 
@@ -219,7 +221,7 @@ class ProfileModulesController extends AuthenticatedController
             PageLayout::postMessage($message);
         }
 
-        $this->redirect($this->url_for('profilemodules/index', array('username' => $this->username)));
+        $this->redirect($this->url_for('profilemodules/index' . $anchor, array('username' => $this->username)));
     }
 
     /**

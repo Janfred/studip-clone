@@ -42,6 +42,7 @@ foreach ($available_modules as $category => $pluginlist) {
             $info = $plugin->getMetadata();
 
             //Checkbox
+            $anchor = 'p_' . $plugin->getPluginId();
             $cb_name = 'plugin_' . $plugin->getPluginId();
             $cb_disabled = '';
             $cb_checked = $plugin_activated ? "checked" : "";
@@ -63,6 +64,7 @@ foreach ($available_modules as $category => $pluginlist) {
                 }
             }
 
+            $anchor = 'm_' . $modul['id'];
             $cb_name = $val['modulkey'] . '_value';
             $cb_disabled = $pre_check ? 'disabled' : '';
             $cb_checked = $modules->isBit($_SESSION['admin_modules_data']["changed_bin"], $modul["id"]) ? "checked" : "";
@@ -83,7 +85,7 @@ foreach ($available_modules as $category => $pluginlist) {
         //if(isset($info['complexity']) && isset($_SESSION['plus']) && !$_SESSION['plus']['Komplex'][$info['complexity']])continue;
         ?>
 
-        <tr class="<?= $pre_check != null ? ' quiet' : '' ?>">
+        <tr id="<?= htmlReady($anchor);?>" class="<?= $pre_check != null ? ' quiet' : '' ?>">
             <td colspan=3>
 
                 <div class="plus_basic">
@@ -314,5 +316,13 @@ foreach ($available_modules as $category => $pluginlist) {
     }
 } ?>
 </tbody>
+
+<tfoot>
+<tr class="hidden-js">
+    <td align="center" colspan="3">
+        <?= Button::create(_('An- / Ausschalten'), 'uebernehmen') ?>
+    </td>
+</tr>
+</tfoot>
 </table>
 </form>
