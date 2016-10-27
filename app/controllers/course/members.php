@@ -1346,7 +1346,7 @@ class Course_MembersController extends AuthenticatedController
         $result = Seminar::GetInstance($this->course_id)->getNumber();
 
         $subject = ($result == '') ? sprintf('[%s]', $this->course_title) :
-                sprintf('[%s] : %s', $result, $this->course_title);
+                sprintf('[%s : %s]', $result, $this->course_title);
 
         return $subject;
     }
