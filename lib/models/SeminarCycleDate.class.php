@@ -349,8 +349,22 @@ class SeminarCycleDate extends SimpleORMap
                     $topics[] = $topics_tmp;
                 }
             }
+
+            if($this->end_offset == null) {
+                // check if seminar is endless (duration_time == -1)
+                if($course->duration_time == -1) {
+                    $last_sem = Semester::findOneBySQL("1 ORDER BY vorles_ende DESC");
+                    $end_time_offset = $last_sem->vorles_ende;
+                } else {
+                    $end_time_offset = $course->end_semester->vorles_ende;
+                }
+            } else {
+                $end_time_offset = $course->start_semester->vorles_beginn + $this->end_offset * 7 * 24 * 60 * 60;
+            }
+
+
             if ($date->date < $course->start_semester->vorles_beginn + $this->week_offset * 7 * 24 * 60 * 60 ||
-                $date->date > $course->start_semester->vorles_beginn + $this->end_offset * 7 * 24 * 60 * 60
+                $date->date > $end_time_offset
             ) {
                 $date->delete();
             }
@@ -394,15 +408,26 @@ class SeminarCycleDate extends SimpleORMap
     {
         $course = Course::find($this->seminar_id);
         $ret = array();
-        
+
         if ($startAfterTimeStamp == 0) {
             $sem_begin = $course->start_semester->vorles_beginn;
         } else {
             $sem_begin = $startAfterTimeStamp;
         }
-        
-        $sem_end = $course->start_semester->vorles_beginn + $this->end_offset*7*24*60*60;
-        
+
+        // check if cycle has a fix end (end_offset == null -> endless)
+        if($this->end_offset == null) {
+            // check if seminar is endless (duration_time == -1)
+            if($course->duration_time == -1) {
+                $last_sem = Semester::findOneBySQL("1 ORDER BY vorles_ende DESC");
+                $sem_end = $last_sem->vorles_ende;
+            } else {
+                $sem_end = $course->end_semester->vorles_ende;
+            }
+        } else {
+            $sem_end = $course->start_semester->vorles_beginn + $this->end_offset * 7 * 24 * 60 * 60;
+        }
+
         $semester = Semester::findBySQL('beginn <= :ende AND ende >= :start',
                 array('start' => $sem_begin, 'ende' => $sem_end));
        
@@ -425,7 +450,7 @@ class SeminarCycleDate extends SimpleORMap
                 } else {
                     $start = $val['vorles_beginn'];
                 }
-                
+
                 $ret[$val['semester_id']] = $this->createSemesterTerminSlots($start, $val['vorles_ende'], $startAfterTimeStamp, $corr);
         }
         return $ret;
@@ -484,8 +509,19 @@ class SeminarCycleDate extends SimpleORMap
             date("Y", $stamp));                                 // Year
 
         $course = Course::find($this->seminar_id);
-        $end_time_offset = $course->start_semester->vorles_beginn + $this->end_offset*7*24*60*60;
-        
+
+        // check if cycle has a fix end (end_offset == null -> endless)
+        if($this->end_offset == null) {
+            // check if seminar is endless (duration_time == -1)
+            if($course->duration_time == -1) {
+                $last_sem = Semester::findOneBySQL("1 ORDER BY vorles_ende DESC");
+                $end_time_offset = $last_sem->vorles_ende;
+            } else {
+                $end_time_offset = $course->end_semester->vorles_ende;
+            }
+        } else {
+            $end_time_offset = $course->start_semester->vorles_beginn + $this->end_offset * 7 * 24 * 60 * 60;
+        }
         
         // loop through all possible singledates for this regular time-entry
         do {

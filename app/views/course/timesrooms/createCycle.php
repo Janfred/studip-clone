@@ -54,6 +54,7 @@
     <label>
         <?= _('Startwoche') ?>
         <select name="startWeek">
+            <!-- write down all Semesters as possible Start -->
             <? if (isset($end_semester_weeks['start'])) : ?>
                 <? foreach ($end_semester_weeks['start'] as $end_sem_week) : ?>
                     <option value="<?= $end_sem_week['value'] ?>"
@@ -62,6 +63,7 @@
                 <? endforeach; ?>
             <? endif; ?>
 
+            <!-- write down all weeks for all Semesters -->
             <? foreach ($clean_weeks as $semester => $weeks) : ?>
                 <optgroup label="<?= htmlReady($semester) ?>">
                     <? foreach ($weeks as $value => $label) : ?>
@@ -89,8 +91,8 @@
             <? endif; ?>
 
             <? if(count($end_semester_weeks['ende']) > 1) : ?>
-                <option value="<?= end(array_keys($clean_weeks[end(array_keys($clean_weeks))])) ?>"
-                    <?= (Request::get('endWeek', $cycle->end_offset) == end(array_keys($clean_weeks[end(array_keys($clean_weeks))]))) ? 'selected' : '' ?>>
+                <option value="-1"
+                    <?= ( $cycle->end_offset == null) ? 'selected' : '' ?>>
                         <?= _('Alle Semester') ?>
                 </option>
             <? endif; ?>
