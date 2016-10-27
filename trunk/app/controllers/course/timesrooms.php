@@ -130,6 +130,7 @@ class Course_TimesroomsController extends AuthenticatedController
         $this->current_semester = Semester::findCurrent();
         $this->cycle_dates      = array();
 
+
         foreach ($this->course->cycles as $cycle) {
             foreach ($cycle->getAllDates() as $val) {
                 foreach ($this->semester as $sem) {
@@ -746,14 +747,14 @@ class Course_TimesroomsController extends AuthenticatedController
 
 
         $duration = $this->course->duration_time;
-        if ($duration == -1) {
+        if ($duration == -1) { // course with endless lifespan
             $end_semester = Semester::findBySQL('beginn >= :beginn ORDER BY beginn',
                                                 array(':beginn' => $this->course->start_semester->beginn));
-        } else if ($duration > 0) {
+        } else if ($duration > 0) { // course over more than one semester
             $end_semester = Semester::findBySQL('beginn >= :beginn AND ende <= :ende ORDER BY beginn',
                                                 array(':beginn' => $this->course->start_semester->beginn,
                                                       ':ende'   => $this->course->getEndSemester() + $duration));
-        } else {
+        } else { // one semester course
             $end_semester[] = $this->course->start_semester;
         }
 
@@ -801,7 +802,8 @@ class Course_TimesroomsController extends AuthenticatedController
             $this->redirect('course/timesrooms/createCycle');
 
             return;
-        } elseif (Request::int('startWeek') > Request::int('endWeek')) {
+        } elseif (Request::int('startWeek') > Request::int('endWeek') && Request::int('endWeek', null) != NULL
+                    && Request::int('endWeek', null) != -1) {
             $this->storeRequest();
             PageLayout::postError(_('Die Endwoche liegt vor der Startwoche. Bitte überprüfen Sie diese Angabe!'));
             $this->redirect('course/timesrooms/createCycle');
@@ -816,9 +818,13 @@ class Course_TimesroomsController extends AuthenticatedController
         $cycle->sws         = round(Request::float('teacher_sws'), 1);
         $cycle->cycle       = Request::int('cycle');
         $cycle->week_offset = Request::int('startWeek');
-        $cycle->end_offset  = Request::int('endWeek') ?: null;
+        $cycle->end_offset  = Request::int('endWeek', null);
         $cycle->start_time  = date('H:i:00', $start);
         $cycle->end_time    = date('H:i:00', $end);
+
+        if($cycle->end_offset == -1) {
+            $cycle->end_offset = NULL;
+        }
 
         if ($cycle->store()) {
             $cycle_info = $cycle->toString();
@@ -852,7 +858,11 @@ class Course_TimesroomsController extends AuthenticatedController
         $cycle->sws         = Request::get('teacher_sws');
         $cycle->cycle       = Request::get('cycle');
         $cycle->week_offset = Request::get('startWeek');
-        $cycle->end_offset  = Request::int('endWeek') ?: null;
+        $cycle->end_offset  = Request::int('endWeek', null);
+
+        if($cycle->end_offset == -1) {
+            $cycle->end_offset = NULL;
+        }
 
         if ($cycle->isDirty()) {
             $cycle->chdate = time();
@@ -1041,8 +1051,9 @@ class Course_TimesroomsController extends AuthenticatedController
 
     public function getNewEndOffset($cycle, $old_start_weeks, $new_start_weeks)
     {
+        // if end_offset is null (endless lifespan) it should stay null
         if (is_null($cycle->end_offset)) {
-            return count($new_start_weeks);
+            return null;
         }
         $old_offset_string = $old_start_weeks[$cycle->end_offset];
         $new_offset_value  = 0;
