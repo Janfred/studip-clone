@@ -56,7 +56,7 @@
 
             $(this).children().addClass('draggable-topic-handle');
 
-            $(this).addClass('draggable-topic').data('table-id', table_id).draggable({
+            $(this).addClass('draggable-topic').data('table-id', table_id).attr('data-table-id', table_id).draggable({
                 axis: 'y',
                 containment: $(this).closest('tbody'),
                 handle: '.draggable-topic-handle',
@@ -89,10 +89,10 @@
                 activeClass: 'active',
                 hoverClass: 'hovered',
                 drop: function (event, ui) {
-                    var context = $(ui.draggable.context),
+                    var context = $(ui.draggable),
                         topic   = context.closest('li').data().issue_id,
-                        source  = context.closest('tr').data().termin_id,
-                        target  = $(this).closest('tr').data().termin_id,
+                        source  = context.closest('tr').data().terminId,
+                        target  = $(this).closest('tr').data().terminId,
                         path    = ['dispatch.php/course/dates/move_topic', topic, source, target].join('/'),
                         url     = STUDIP.URLHelper.getURL(path),
                         cell    = $(this);
