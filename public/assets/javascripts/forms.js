@@ -113,6 +113,40 @@
     
     $(document).ready(createLengthHint).on('dialog-update', createLengthHint);
 
+    // Automatic form submission handler when a select has changed it's value.
+    // Due to accessibility issues, an intuitive select[onchange=form.submit()]
+    // leads to terrible behaviour when invoked not by mouse. The form is
+    // submitted upon _every_ change, including key strokes.
+    // Thus, we need to overwrite this behaviour. Breakdown of this solution:
+    //
+    // - Only submit when the value has actually changed
+    // - Always submit when pressing enter (keycode 13)
+    // - Always check for change on blur event
+    //
+    // - Store whether the element was activated by click event
+    // - If so, submit upon next change event
+    // - Otherwise submit when enter has been pressed
+    //
+    // Be aware: All select[onchange*="submit()"] will be rewritten to
+    // select.submit-upon-select and have the onchange attribute removed.
+    // This might lead to unexpected behaviour.
+    $(document).on('focus', 'select[onchange*="submit()"]', function () {
+        $(this).remoteAttr('onchange').addClass('submit-upon-select');
+    }).on('click', 'select.submit-upon-select', function (event) {
+        $(this).data('shouldSubmit', true);
+    }).on('change', 'select.submit-upon-select', function (event) {
+        if ($(this).data('shouldSubmit')) {
+            $(this).blur();
+        }
+    }).on('blur keyup', 'select.submit-upon-select', function (event) {
+        var shouldSubmit = event.type === 'keyup' ? event.which === 13 : $(this).data('shouldSubmit'),
+            changed      = $(this).find('option:selected:not([defaultSelected])').length > 0;
+
+        if (shouldSubmit && changed) {
+            $(this).closest('form').submit();
+        }
+    });
+
     // Use select2 for crossbrowser compliant select styling and
     // handling
     $.fn.select2.amd.define("select2/i18n/de", [], function() {
