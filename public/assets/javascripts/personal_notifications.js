@@ -43,7 +43,7 @@
 
                 // Check if notifications should be sent (depends on the
                 // Notification itself and session storage)
-                if (Notification === undefined || Notification.permission === 'denied' || cache.has(notification.id)) {
+                if (!window.hasOwnProperty('Notification') || Notification.permission === 'denied' || cache.has(notification.id)) {
                     return;
                 }
 
