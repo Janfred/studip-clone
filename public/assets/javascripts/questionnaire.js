@@ -149,4 +149,14 @@ jQuery(function () {
         jQuery(this).closest(".options").find("li:last-child input:text").focus();
         STUDIP.Questionnaire.Test.updateCheckboxValues();
     });
+
+    /*
+     * This fixes the tab problem in chartist see:
+     * https://github.com/gionkunz/chartist-js/issues/119
+     */
+    jQuery(document).on("click", "article.studip .toggle", function (e, tab) {
+        jQuery(this).find('.ct-chart').each(function(i, e) {
+            e.__chartist__.update();
+        });
+    });
 });
