@@ -84,7 +84,7 @@ class ShowGroupSchedulesDaily extends ShowSemSchedules
                 </td>
                 <td valign="bottom">
                     <?= $view_mode == 'oobj' ? _('Eine Ressourcengruppe auswählen') : _('Eine Raumgruppe auswählen') ?>:<br>
-                    <select name="group_schedule_choose_group" onChange="document.schedule_form.submit()">
+                    <select name="group_schedule_choose_group" class="submit-upon-select">
                     <? foreach($this->resources_groups->getAvailableGroups() as $gid) :
                         echo '<option value="'.$gid.'" '
                             . ($this->group_id == $gid ? 'selected' : '') . '>'

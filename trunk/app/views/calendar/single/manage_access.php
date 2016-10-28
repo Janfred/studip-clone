@@ -12,7 +12,7 @@
             <span class="actions" style="font-size: 0.8em;">
                 <label>
                     <?= _('Auswahl') ?>:
-                    <select name="group_filter" size="1" onchange="jQuery('#calendar-group-submit').click();">
+                    <select name="group_filter" size="1" class="submit-upon-select">
                         <option value="list"<?= $group_filter_selected == 'list' ? ' selected' : '' ?>><?= _('Alle Personen anzeigen') ?></option>
                         <? foreach ($filter_groups as $filter_group) : ?>
                         <option value="<?= $filter_group->getId() ?>"<?= $group_filter_selected == $filter_group->getId() ? ' selected' : '' ?>><?= htmlReady($filter_group->name) ?></option>

@@ -91,7 +91,7 @@ class ShowSemSchedules extends ShowSchedules {
             <tr>
                 <td rowspan="2">&nbsp;</td>
                 <td valign="bottom">
-                    <?=SemesterData::GetSemesterSelector(array('name' => 'sem_schedule_choose', 'onChange' => 'document.schedule_form.submit()'), $this->semester['semester_id'],'semester_id',false)?>
+                    <?=SemesterData::GetSemesterSelector(array('name' => 'sem_schedule_choose', 'class' => 'submit-upon-select'), $this->semester['semester_id'],'semester_id',false)?>
                     <?= Button::create(_('Auswählen'), 'jump') ?>
                 </td>
                 <td valign="middle">

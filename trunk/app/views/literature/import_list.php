@@ -28,7 +28,7 @@
             <legend><?= _('Format wählen') ?></legend>
             <label for="plugin_name">
                 <?= _('Bitte wählen Sie eine Literaturverwaltung aus:'); ?>
-                <select name="plugin_name" size="1" onChange="jQuery('#lit_choose_plugin').click();">
+                <select name="plugin_name" size="1" class="submit-upon-select">
                     <? foreach ($GLOBALS['LIT_IMPORT_PLUGINS'] as $p) : ?>
                         <option value="<?= htmlReady($p["name"]) ?>">
                             <?= htmlReady($p["visual_name"]) ?>

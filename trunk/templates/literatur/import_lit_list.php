@@ -9,7 +9,7 @@ use Studip\Button, Studip\LinkButton;
         <legend><?= _("Literaturlisten importieren:") ?></legend>
         <label>
             <?= _("Bitte wählen Sie eine Literaturverwaltung aus:"); ?>
-            <select name="plugin_name" size="1" onChange="this.form.cmd='';this.form.submit();">
+            <select name="plugin_name" size="1" onChange="this.form.cmd='';" class="submit-upon-select">
                 <? foreach ($GLOBALS['LIT_IMPORT_PLUGINS'] as $p) : ?>
                     <option value="<?= $p["name"] ?>" <?= ($p["name"]==$plugin_name ? "selected" : "") ?>>
                         <?= $p["visual_name"] ?>

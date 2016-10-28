@@ -24,7 +24,7 @@
         <tr>
             <td>
                 <label for="status"><?= _('Status') ?></label>
-                <select name="filter[status]" id="status">
+                <select name="filter[status]" id="status" class="submit-upon-select">
                     <option value=""><?= _('Alle Logeinträge anzeigen') ?></option>
                     <option value="passed" <? if ($filter['status'] === 'passed') echo 'selected'; ?>>
                         <?= _('Nur fehlerfreie Logeinträge anzeigen') ?>
@@ -36,7 +36,7 @@
             </td>
             <td>
                 <label for="schedule_id"><?= _('Cronjob') ?></label>
-                <select name="filter[schedule_id]" id="schedule_id">
+                <select name="filter[schedule_id]" id="schedule_id" class="submit-upon-select">
                     <option value=""><?= _('Alle Logeinträge anzeigen') ?></option>
                 <? foreach ($schedules as $schedule): ?>
                     <option value="<?= $schedule->schedule_id ?>" <? if ($filter['schedule_id'] === $schedule->schedule_id) echo 'selected'; ?>>
@@ -47,7 +47,7 @@
             </td>
             <td>
                 <label for="task_id"><?= _('Aufgabe') ?></label>
-                <select name="filter[task_id]" id="task_id">
+                <select name="filter[task_id]" id="task_id" class="submit-upon-select">
                     <option value=""><?= _('Alle Aufgaben anzeigen') ?></option>
                 <? foreach ($tasks as $task): ?>
                     <option value="<?= $task->task_id ?>" <? if ($filter['task_id'] === $task->task_id) echo 'selected'; ?>>

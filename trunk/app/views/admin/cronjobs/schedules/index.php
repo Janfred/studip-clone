@@ -24,7 +24,7 @@
         <tr>
             <td>
                 <label for="type"><?= _('Typ') ?></label>
-                <select name="filter[type]" id="type">
+                <select name="filter[type]" id="type" class="submit-upon-select">
                     <option value=""><?= _('Alle Cronjobs anzeigen') ?></option>
                     <option value="once" <? if ($filter['type'] === 'once') echo 'selected'; ?>>
                         <?= _('Nur einmalige Cronjobs anzeigen') ?>
@@ -36,7 +36,7 @@
             </td>
             <td>
                 <label for="task_id"><?= _('Aufgabe') ?></label>
-                <select name="filter[task_id]" id="task_id">
+                <select name="filter[task_id]" id="task_id" class="submit-upon-select">
                     <option value=""><?= _('Alle Cronjobs anzeigen') ?></option>
                 <? foreach ($tasks as $task): ?>
                     <option value="<?= $task->task_id ?>" <? if ($filter['task_id'] === $task->task_id) echo 'selected'; ?>>
@@ -47,7 +47,7 @@
             </td>
             <td>
                 <label for="status"><?= _('Status') ?></label>
-                <select name="filter[status]" id="status">
+                <select name="filter[status]" id="status" class="submit-upon-select">
                     <option value=""><?= _('Alle Cronjobs anzeigen') ?></option>
                     <option value="active" <? if ($filter['status'] === 'active') echo 'selected'; ?>>
                         <?= _('Nur aktive Cronjobs anzeigen') ?>

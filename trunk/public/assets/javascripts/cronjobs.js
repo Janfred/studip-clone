@@ -1,7 +1,7 @@
-/*jslint browser: true, white: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, newcap: true, immed: true, indent: 4, onevar: false */
-/*global window, $, jQuery, _ */
-
-(function ($, STUDIP) {
+/*jslint browser: true */
+/*global jQuery, STUDIP */
+(function ($) {
+    'use strict';
 
     // Cron task: Change tbody class according to inherent input setting
     $(document).on('change', '.cron-task input', function () {
@@ -44,12 +44,6 @@
         }
     });
 
-    // Miscellaneous filters:
-    // Submit surrounding form on change
-    $(document).on('change', '.cronjob-filters select', function () {
-        $(this).closest('form').submit();
-    });
-
     // Active date and time picker as well as the Cron item selector on
     // document ready / page load.
     $(document).ready(function () {
@@ -60,4 +54,4 @@
         $('.cronjobs tfoot select').change();
     });
 
-}(jQuery, STUDIP));
+}(jQuery));

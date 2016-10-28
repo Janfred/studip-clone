@@ -19,11 +19,11 @@
                         <td>
                             <?= SemesterData::GetSemesterSelector(array(
                                     'name' => 'tools_requests_sem_choose',
-                                    'onChange' => 'document.tools_requests_form.submit()'
+                                    'class' => 'submit-upon-select'
                                 ), $this->semester_id, 'semester_id',false) ?>
                             <?= Button::create(_('Semester auswählen'), 'tools_requests_sem_choose_button') ?>
                             <br>
-                            <select name="tools_requests_sem_type_choose" onChange="document.tools_requests_form.submit()">
+                            <select name="tools_requests_sem_type_choose" class="submit-upon-select">
                             <option value=""><?= _("alle Veranstaltungen")?></option>
                             <?
                             foreach (SeminarCategories::getAll() as $sc) {
@@ -38,7 +38,7 @@
                            ?>
                            </select>
                            <br>
-                           <select name="tools_requests_faculty_choose" onChange="document.tools_requests_form.submit()">
+                           <select name="tools_requests_faculty_choose" class="submit-upon-select">
                            <option value=""><?= _("alle Veranstaltungen")?></option>
                            <?
                            foreach (Institute::findBySQL("fakultaets_id=Institut_id ORDER BY Name ASC") as $faculty) {
