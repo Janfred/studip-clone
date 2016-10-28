@@ -1,7 +1,7 @@
 <form data-dialog action="<?= $controller->url_for('calendar/single/seminar_events/')?>">
     <label>
         <?= _('Semesterfilter') ?>:
-        <select name="sem_select" onchange="jQuery(this).closest('form').submit();">
+        <select name="sem_select" class="submit-upon-select">
             <option <?= ($sem == 'current' ? 'selected' : '')?> value="current"><?= _('Aktuelles Semester') ?></option>
             <option <?= ($sem == 'future' ? 'selected' : '')?> value="future"><?= _('Aktuelles und nächstes Semester') ?></option>
             <option <?= ($sem == 'last' ? 'selected' : '')?> value="last"><?= _('Aktuelles und letztes Semester') ?></option>

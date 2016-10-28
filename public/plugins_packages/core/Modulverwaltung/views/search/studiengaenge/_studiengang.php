@@ -10,7 +10,7 @@
         <div style="width: 50%; float:left;">
             <form name="semesterSelect" action="<?= $controller->url_for('search/module/overview/' . $modul->getId() . '#' . $modul->getId()) ?>" method="GET">
                 <?= _('Semesterauswahl') ?>:
-                <select name="sem_select" onChange="jQuery(this).closest('form').submit();">
+                <select name="sem_select" class="submit-upon-select">
                 <? foreach ($semester_select as $sem) : ?>
                     <option value="<?= $sem->getId() ?>"<?= $sem->getId() == $selected_semester ? ' selected' : '' ?>>
                         <?= htmlReady($sem->name) ?>

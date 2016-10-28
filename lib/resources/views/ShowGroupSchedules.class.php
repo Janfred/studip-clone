@@ -79,7 +79,7 @@ class ShowGroupSchedules extends ShowSemSchedules {
                 <tr>
                     <td rowspan="2">&nbsp;</td>
                     <td valign="top">
-                        <?= SemesterData::GetSemesterSelector(array('name' => 'sem_schedule_choose', 'onChange' => 'document.schedule_form.submit()'), $this->semester['semester_id'],'semester_id',false)?>
+                        <?= SemesterData::GetSemesterSelector(array('name' => 'sem_schedule_choose', 'class' => 'submit-upon-select'), $this->semester['semester_id'],'semester_id',false)?>
                         <?= Button::create(_('Auswählen'), 'jump') ?><br>
                         <label>
                         <input type="radio" onChange="document.schedule_form.submit()" style="vertical-align:bottom" <?=($this->timespan == 'course_time' ? 'checked' : '')?> name="sem_time_choose" value="course_time">
@@ -92,7 +92,7 @@ class ShowGroupSchedules extends ShowSemSchedules {
                     </td>
                     <td valign="top">
                         <?=_("Eine Raumgruppe auswählen")?>:<br>
-                        <select name="group_schedule_choose_group" onChange="document.schedule_form.submit()">
+                        <select name="group_schedule_choose_group" class="submit-upon-select">
                         <?
                         $room_group = RoomGroups::GetInstance();
                         foreach($room_group->getAvailableGroups() as $gid){

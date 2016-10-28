@@ -5,7 +5,7 @@
                 <span style="font-size: small; color: #555555;">
                     <?= _('Kalender:') ?>
                 </span>
-                <select class="sidebar-selectlist" style="width: 16em;" name="range_id" onChange="document.select_calendars.submit();">
+                <select class="sidebar-selectlist submit-upon-select" style="width: 16em;" name="range_id">
                     <option value="user.<?= get_username() ?>"<?= (get_userid() == $calendar_id ? ' selected' : '') ?>>
                             <?= _("Eigener Kalender") ?>
                     </option>
