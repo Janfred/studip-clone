@@ -13,11 +13,11 @@ class OptionsWidget extends ListWidget
     public function __construct($title = null)
     {
         parent::__construct();
-        
+
         $this->addCSSClass('widget-options');
         $this->title = $title ?: _('Einstellungen');
     }
-    
+
     /**
      * @param String $label
      * @param bool   $state
@@ -34,7 +34,7 @@ class OptionsWidget extends ListWidget
                            htmlReady($label));
         $this->addElement(new WidgetElement($content));
     }
-    
+
     /**
      * @param String $label
      * @param String $url
@@ -48,7 +48,7 @@ class OptionsWidget extends ListWidget
                            htmlReady($label));
         $this->addElement(new WidgetElement($content));
     }
-    
+
     /**
      * Adds a select element to the widget.
      *
@@ -68,7 +68,11 @@ class OptionsWidget extends ListWidget
             $widget->addElement(new SelectElement($value, $option_label, $value === $selected_option));
         }
 
-        $widget->attributes = array_merge($widget->attributes, $attributes);
+        if (isset($widget->attributes) && is_array($widget->attributes)) {
+            $widget->attributes = array_merge($widget->attributes, $attributes);
+        } else {
+            $widget->attributes = $attributes;
+        }
 
         $content = $widget->render();
 
