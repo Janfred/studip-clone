@@ -8330,9 +8330,6 @@ form.course-wizard-step-0 footer {
 .smiley-toggle.ajax {
   background-image: url("../images/ajax_indicator_small.gif");
 }
-.smiley-select option.single {
-  font-family: monospace;
-}
 .smiley-statistics {
   margin: 0;
   padding: 0;

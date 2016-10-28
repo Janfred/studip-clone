@@ -4,10 +4,6 @@
 jQuery(function ($) {
     'use strict';
 
-    $('.smiley-select select').change(function () {
-        $(this).closest('form').submit();
-    });
-
     $(document).on('click', '.smiley-toggle', function (event) {
         var element = $(this);
 
