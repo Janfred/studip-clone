@@ -401,7 +401,8 @@ class RandomAlgorithm extends AdmissionAlgorithm
         };
         $db = DbManager::get();
         $db->fetchAll("SELECT user_id, COUNT(*) as c FROM seminar_user
-            WHERE seminar_id IN(?) AND user_id IN(?) GROUP BY user_id", array($course_ids, $user_ids), $sum);
+            WHERE seminar_id IN(?) AND user_id IN(?) AND status IN (?) GROUP BY user_id",
+            array($course_ids, $user_ids, array('user', 'autor')), $sum);
         $db->fetchAll("SELECT user_id, COUNT(*) as c FROM admission_seminar_user
             WHERE seminar_id IN(?) AND user_id IN(?) GROUP BY user_id", array($course_ids, $user_ids), $sum);
         return $distributed_users;
