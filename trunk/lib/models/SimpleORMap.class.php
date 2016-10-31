@@ -2180,15 +2180,7 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
     {
         foreach (array_keys($this->db_fields) as $field) {
             if (is_object($this->content[$field])) {
-                // Since there might be objects that cannot be cloned (like
-                // Exception), we need to check first and apply a different,
-                // nasty "clone" workaround if so
-                $reflection = new ReflectionClass($this->content[$field]);
-                if ($reflection->isCloneable()) {
-                    $this->content_db[$field] = clone $this->content[$field];
-                } else {
-                    $this->content_db[$field] = unserialize(serialize($this->content[$field]));
-                }
+                $this->content_db[$field] = clone $this->content[$field];
             } else {
                 $this->content_db[$field] = $this->content[$field];
             }
