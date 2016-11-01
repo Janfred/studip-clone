@@ -4,13 +4,15 @@
  */
 class StudipVersion
 {
-    private $version;
-
-    public function __construct()
+    /**
+     * Returns the current Stud.IP-version
+     *
+     * @return string
+     */
+    private static function getStudipVersion()
     {
-        $this->version = $GLOBALS['SOFTWARE_VERSION'];
+        return $GLOBALS['SOFTWARE_VERSION'];
     }
-
 
     /**
      * Returns true if passed version is newer than the current Stud.IP version
@@ -18,9 +20,9 @@ class StudipVersion
      * @param string $version
      * @return bool
      */
-    public function newerThan($version)
+    public static function newerThan($version)
     {
-        return (version_compare($this->version, $version, '>'));
+        return (version_compare(self::getStudipVersion(), $version, '>'));
     }
 
     /**
@@ -29,9 +31,9 @@ class StudipVersion
      * @param string $version
      * @return bool
      */
-    public function olderThan($version)
+    public static function olderThan($version)
     {
-        return (version_compare($this->version, $version, '<'));
+        return (version_compare(self::getStudipVersion(), $version, '<'));
     }
 
     /**
@@ -40,9 +42,9 @@ class StudipVersion
      * @param string $version
      * @return bool
      */
-    public function matches($version)
+    public static function matches($version)
     {
-        return (version_compare($this->version, $version, '='));
+        return (version_compare(self::getStudipVersion(), $version, '='));
     }
 
     /**
@@ -53,9 +55,9 @@ class StudipVersion
      *
      * @return bool
      */
-    public function range($from_version, $to_version)
+    public static function range($from_version, $to_version)
     {
-        return version_compare($this->version, $from_version, '>=')
-                && version_compare($this->version, $to_version, '<=');
+        return version_compare(self::getStudipVersion(), $from_version, '>=')
+                && version_compare(self::getStudipVersion(), $to_version, '<=');
     }
 }
