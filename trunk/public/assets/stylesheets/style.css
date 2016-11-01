@@ -1130,6 +1130,21 @@ form.default fieldset {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-box-flex;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  -moz-box-direction: normal;
+  -moz-box-orient: vertical;
+  -webkit-box-orient: vertical;
+  flex-direction: column;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
   border: solid 1px #d0d7e3;
   margin: 0 0 10px;
   padding: 10px;
@@ -1138,20 +1153,20 @@ form.default fieldset {
   break-before: column;
 }
 form.default fieldset > legend {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
   background-color: #e7ebf1;
-  border: none;
+  border: 1px solid #d0d7e3;
+  border-bottom: 0;
   color: #28497c;
-  float: left;
   font-size: 12pt;
   font-weight: bold;
   line-height: 2em;
-  margin: 0 -10px 1em -10px;
+  margin: 0 -11px;
   padding: 0;
   text-indent: 10px;
-  width: calc(100% + 20px);
-}
-form.default fieldset > legend + * {
-  clear: left;
+  width: calc(100% + 22px);
 }
 form.default fieldset > :first-child:not(legend),
 form.default fieldset > legend + * {

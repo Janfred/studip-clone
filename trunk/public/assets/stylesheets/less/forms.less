@@ -77,6 +77,9 @@ form.default {
 
     fieldset {
         .box-sizing(border-box);
+        .flex();
+        .flex-direction-column();
+        .flex-wrap(wrap);
 
         border: solid 1px @content-color-40;
         margin: 0 0 10px;
@@ -87,21 +90,18 @@ form.default {
         break-before: column;
 
         > legend {
+            .box-sizing(border-box);
             background-color: @fieldset-header;
-            border: none;
+            border: 1px solid @content-color-40;
+            border-bottom: 0;
             color: @brand-color-dark;
-            float: left;
             font-size: 12pt;
             font-weight: bold;
             line-height: 2em;
-            margin: 0 -10px 1em -10px;
+            margin: 0 -11px;
             padding: 0;
             text-indent: 10px;
-            width: calc(100% + 20px);
-            
-            + * {
-                clear: left;
-            }
+            width: calc(100% + 22px);
         }
 
         > :first-child:not(legend), > legend + * {
