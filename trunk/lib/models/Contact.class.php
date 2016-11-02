@@ -32,8 +32,7 @@ class Contact extends SimpleORMap {
             'class_name' => 'StatusgruppeUser',
             'foreign_key' => 'user_id',
             'assoc_foreign_key' => 'user_id',
-            'on_delete' => 'delete',
-            'on_store' => 'store',
+            'on_store' => 'store'
         );
 
 
