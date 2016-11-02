@@ -7,7 +7,7 @@
  * @license GPL2 or any later version
  * Date: 19.10.16
  */
-class AlterColumnsWeekEndOffsetToInt extends Migration
+class AlterColumnsWeekoffsetToInt extends Migration
 {
 
     function description()
