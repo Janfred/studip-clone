@@ -1,5 +1,7 @@
 <?php
 
+require_once 'lib/bootstrap-api.php';
+
 class AddActivities extends Migration
 {
 
@@ -28,12 +30,70 @@ class AddActivities extends Migration
             KEY `context_id` (`context_id`),
             KEY `mkdate` (`mkdate`)
         ) ENGINE = InnoDB ROW_FORMAT=DYNAMIC");
+
+
+        //CHECK IF API IS ENABLED
+        if (!Config::get()->API_ENABLED) {
+            Config::get()->store('API_ENABLED',
+                            array('value' => '1',
+                                  'section' => 'global',
+                                  'comment' => ''));
+        }
+        //SET PERMISSION FOR ROUTE
+        $permissions = RESTAPI\ConsumerPermissions::get('global');
+        $permissions->set('/user/:user_id/activitystream','get', true, true);
+        $permissions->store();
+
+        // Activate Widget
+        $classname = "ActivityFeed";
+        $navpos = $db->query("SELECT navigationpos FROM plugins
+            ORDER BY navigationpos DESC")->fetchColumn() + 1;
+
+        // insert plugin into db
+        $stmt = $db->prepare("INSERT INTO plugins
+            (pluginclassname, pluginpath, pluginname, plugintype, enabled, navigationpos)
+            VALUES (?, ?, ?, 'PortalPlugin', 'yes', ?)");
+        $stmt->execute(array($classname, 'core/'.$classname, $classname, $navpos));
+
+        // get id of newly created plugin (
+        $plugin_id = $db->query("SELECT pluginid FROM plugins
+            WHERE pluginclassname = '$classname'")->fetchColumn();
+
+        // set all default roles for the plugin
+        $stmt = $db->prepare("INSERT INTO roles_plugins
+            (roleid, pluginid) VALUES (?, ?)");
+        foreach (range(1, 6) as $role_id) {
+            $stmt->execute(array($role_id, $plugin_id));
+        }
     }
 
     public function down()
     {
+        //DEACTIVATE ROUTE
+
+        $permissions = RESTAPI\ConsumerPermissions::get('global');
+        $permissions->set('/user/:user_id/activitystream','get', false, true);
+        $permissions->store();
+
         $db = DBManager::get();
 
+        //REMOVE WIDGET
+        $widget_id = $db->query("SELECT pluginid FROM plugins
+            WHERE pluginclassname = 'ActivityFeed'")->fetchColumn();
+
+        $stmt = $db->prepare("DELETE FROM plugins WHERE pluginid = ?");
+        $stmt->execute(array($widget_id));
+
+        $stmt = $db->prepare("DELETE FROM widget_default WHERE pluginid = ?");
+        $stmt->execute(array($widget_id));
+
+        $stmt = $db->prepare("DELETE FROM widget_user WHERE pluginid = ?");
+        $stmt->execute(array($widget_id));
+
+        $stmt = $db->prepare("DELETE FROM roles_plugins WHERE pluginid = ?");
+        $stmt->execute(array($widget_id));
+
         $db->exec("DROP TABLE `activities`");
+
     }
 }
