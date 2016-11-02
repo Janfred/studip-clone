@@ -71,7 +71,7 @@
             <tbody>
                 <tr>
                     <td colspan="4" style="text-align: center">
-                        <?= _('Es sind keine Studiengangteil-Bezeichnugen vorhanden') ?>
+                        <?= _('Es sind keine Studiengangteil-Bezeichnungen vorhanden') ?>
                     </td>
                 </tr>
             </tbody>
