@@ -24,11 +24,16 @@ use Studip\Button, Studip\LinkButton;
 <tbody>
 <?
 foreach ($available_modules as $category => $pluginlist) {
-    if ($_SESSION['plus']['displaystyle'] != 'category' && $category != 'Funktionen von A-Z') continue;
-    if (isset($_SESSION['plus']) && !$_SESSION['plus']['Kategorie'][$category] && $category != 'Funktionen von A-Z') continue;
+    $visibility = "";
+    if ($_SESSION['plus']['displaystyle'] != 'category' && $category != 'Funktionen von A-Z') {
+        $visibility = "invisible";
+    }
+    if (isset($_SESSION['plus']) && !$_SESSION['plus']['Kategorie'][$category] && $category != 'Funktionen von A-Z') {
+        $visibility = "invisible";
+    }
 
     ?>
-    <tr>
+    <tr class="<?= $visibility; ?>">
         <th colspan=3>
             <?= htmlReady($category) ?>            
         </th>
@@ -85,7 +90,7 @@ foreach ($available_modules as $category => $pluginlist) {
         //if(isset($info['complexity']) && isset($_SESSION['plus']) && !$_SESSION['plus']['Komplex'][$info['complexity']])continue;
         ?>
 
-        <tr id="<?= htmlReady($anchor);?>" class="<?= $pre_check != null ? ' quiet' : '' ?>">
+        <tr id="<?= htmlReady($anchor);?>" class="<?= $visibility; ?> <?= $pre_check != null ? ' quiet' : '' ?>">
             <td colspan=3>
 
                 <div class="plus_basic">
