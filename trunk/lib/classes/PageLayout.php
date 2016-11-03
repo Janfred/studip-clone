@@ -75,6 +75,11 @@ class PageLayout
      */
     private static $squeeze_packages = array();
 
+    /*
+     * Custom quicksearch on the page
+     */
+    private static $customQuicksearch;
+
     /**
      * Compatibility lookup table (old file -> new file/squeeze package)
      *
@@ -683,5 +688,32 @@ class PageLayout
         }
 
         return $files;
+    }
+
+    /**
+     * Modifies the Quicksearch of Stud.IP
+     *
+     * @param $html HTML code for the custom quicksearch
+     */
+    public static function addCustomQuicksearch($html) {
+        self::$customQuicksearch = $html;
+    }
+
+    /**
+     * Check if a custom quicksearch was added to the layout
+     *
+     * @return bool TRUE if there is a custom quicksearch
+     */
+    public static function hasCustomQuicksearch() {
+        return isset(self::$customQuicksearch);
+    }
+
+    /**
+     * Retrieves the code of the custom quicksearch
+     *
+     * @return mixed Quicksearch code
+     */
+    public static function getCustomQuicksearch() {
+        return self::$customQuicksearch;
     }
 }
