@@ -229,7 +229,6 @@ class Course_PlusController extends AuthenticatedController
 
                     $key = isset($info['displayname']) ? $info['displayname'] : $plugin->getPluginname();
 
-
                     $list['Funktionen von A-Z'][mb_strtolower($key)]['object'] = $plugin;
                     $list['Funktionen von A-Z'][mb_strtolower($key)]['type'] = 'plugin';
 
@@ -241,13 +240,8 @@ class Course_PlusController extends AuthenticatedController
 
                     $key = isset($info['displayname']) ? $info['displayname'] : $plugin->getPluginname();
 
-                    if ($_SESSION['plus']['Kategorie'][$cat]
-                        || !isset($_SESSION['plus'])
-                    ) {
-
-                        $list[$cat][mb_strtolower($key)]['object'] = $plugin;
-                        $list[$cat][mb_strtolower($key)]['type'] = 'plugin';
-                    }
+                    $list[$cat][mb_strtolower($key)]['object'] = $plugin;
+                    $list[$cat][mb_strtolower($key)]['type'] = 'plugin';
                 }
             }
         }
@@ -268,7 +262,7 @@ class Course_PlusController extends AuthenticatedController
                 $indcat = isset($info['category']) ? $info['category'] : 'Sonstiges';
                 if(!array_key_exists($indcat, $cat_index)) array_push($cat_index, $indcat);
 
-                if($_SESSION['plus']['displaystyle'] != 'category'){
+                if($_SESSION['plus']['displaystyle'] != 'category') {
 
                     $list['Funktionen von A-Z'][mb_strtolower($val['name'])]['object'] = $val;
                     $list['Funktionen von A-Z'][mb_strtolower($val['name'])]['type'] = 'modul';
@@ -280,14 +274,10 @@ class Course_PlusController extends AuthenticatedController
 
                     if (!isset($_SESSION['plus']['Kategorie'][$cat])) $_SESSION['plus']['Kategorie'][$cat] = 1;
 
-                    if ($_SESSION['plus']['Kategorie'][$cat]
-                        || !isset($_SESSION['plus'])
-                    ) {
-
                         $list[$cat][mb_strtolower($val['name'])]['object'] = $val;
                         $list[$cat][mb_strtolower($val['name'])]['type'] = 'modul';
                         $list[$cat][mb_strtolower($val['name'])]['modulkey'] = $key;
-                    }
+
                 }
             }
         }

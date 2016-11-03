@@ -261,12 +261,10 @@ class ProfileModulesController extends AuthenticatedController
                  
                 $key = isset($info['displayname']) ? $info['displayname'] : $plugin->getPluginname();
                  
-                if (($_SESSION['profile_plus']['Komplex'][$metadata['complexity']] || !isset($metadata['complexity']))
-                        || !isset($_SESSION['profile_plus'])
-                ) {
-                    $list['Funktionen von A-Z'][mb_strtolower($key)]['object'] = $plugin;
-                    $list['Funktionen von A-Z'][mb_strtolower($key)]['activated'] = $activated;
-                }
+
+                $list['Funktionen von A-Z'][mb_strtolower($key)]['object'] = $plugin;
+                $list['Funktionen von A-Z'][mb_strtolower($key)]['activated'] = $activated;
+
                  
             } else {            
             
@@ -276,14 +274,9 @@ class ProfileModulesController extends AuthenticatedController
     
                 $key = isset($metadata['displayname']) ? $metadata['displayname'] : $plugin->getPluginname();
     
-                if ($_SESSION['profile_plus']['Kategorie'][$cat]
-                    && ($_SESSION['profile_plus']['Komplex'][$metadata['complexity']] || !isset($metadata['complexity']))
-                    || !isset($_SESSION['profile_plus'])
-                ) {
-    
-                    $list[$cat][mb_strtolower($key)]['object'] = $plugin;
-                    $list[$cat][mb_strtolower($key)]['activated'] = $activated;
-                }
+                $list[$cat][mb_strtolower($key)]['object'] = $plugin;
+                $list[$cat][mb_strtolower($key)]['activated'] = $activated;
+                
             }
         }
 
