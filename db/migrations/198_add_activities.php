@@ -44,6 +44,25 @@ class AddActivities extends Migration
         $permissions->set('/user/:user_id/activitystream','get', true, true);
         $permissions->store();
 
+        //CHECK IF OLD ACTIVITY-FEED-PLUGIN IS ACTIVE
+        $old_id = $db->query("SELECT pluginid FROM plugins
+            WHERE pluginclassname = 'ActivityFeed'
+            AND pluginpath NOT LIKE '%core%'")->fetchColumn();
+
+        if ($old_id !== false) {
+            $stmt = $db->prepare("DELETE FROM plugins WHERE pluginid = ?");
+            $stmt->execute(array($old_id));
+
+            $stmt = $db->prepare("DELETE FROM plugins_activated WHERE pluginid = ?");
+            $stmt->execute(array($old_id));
+
+            $stmt = $db->prepare("DELETE FROM plugins_default_activated WHERE pluginid = ?");
+            $stmt->execute(array($old_id));
+
+            $stmt = $db->prepare("DELETE FROM roles_plugins WHERE pluginid = ?");
+            $stmt->execute(array($old_id));
+        }
+
         // Activate Widget
         $classname = "ActivityFeed";
         $navpos = $db->query("SELECT navigationpos FROM plugins
@@ -70,7 +89,6 @@ class AddActivities extends Migration
     public function down()
     {
         //DEACTIVATE ROUTE
-
         $permissions = RESTAPI\ConsumerPermissions::get('global');
         $permissions->set('/user/:user_id/activitystream','get', false, true);
         $permissions->store();
