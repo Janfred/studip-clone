@@ -100,6 +100,9 @@
             </li>
         <? endif ?>
         <? if (isset($search_semester_nr)) : ?>
+        <? if(PageLayout::hasCustomQuicksearch()): ?>
+            <?= PageLayout::getCustomQuicksearch() ?>
+        <? else: ?>
             <li id="quicksearch_item">
                 <form id="quicksearch" role="search" action="<?= URLHelper::getLink('dispatch.php/search/courses', array('send' => 'yes', 'group_by' => '0') + $link_params) ?>" method="post">
                     <?= CSRFProtection::tokenTag() ?>
@@ -126,6 +129,7 @@
                     <?= Icon::create('search', 'info_alt', ['title' => sprintf(_('Nach Veranstaltungen suchen (%s)'),htmlready($search_semester_name))])->asInput(["type" => "image", "class" => "quicksearchbutton", "name" => "search_sem_do_search", "value" => "OK"]) ?>
                 </form>
             </li>
+            <? endif ?>
         <? endif ?>
         <? if (Navigation::hasItem('/links')): ?>
             <? foreach (Navigation::getItem('/links') as $nav): ?>
