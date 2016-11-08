@@ -66,9 +66,9 @@ class ProfileModulesController extends AuthenticatedController
                 htmlReady($current_user->Nachname),
                 htmlReady($current_user->username),
                 htmlReady($current_user->perms));
-            PageLayout::postMessage(MessageBox::info($message));
+            $mbox = MessageBox::info($message);
+            PageLayout::postMessage($mbox, 'settings-user-anncouncement');
         }
-
 
         $this->setupSidebar();
     }
