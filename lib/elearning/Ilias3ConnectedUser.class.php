@@ -86,6 +86,9 @@ class Ilias3ConnectedUser extends ConnectedUser
     {
         global $connected_cms;
 
+        if (!$username) {
+            return false;
+        }
         $user_id = $connected_cms[$this->cms_type]->soap_client->lookupUser($username);
 
         if ($user_id == false)
