@@ -7,8 +7,8 @@
 // This file is part of Stud.IP
 // core.view.class.php
 // Database views used within Stud.IP core
-// 
-// Copyright (c) 2003 André Noack <noack@data-quest.de> 
+//
+// Copyright (c) 2003 André Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -39,11 +39,11 @@ $_views["USER_INFO_INSERT"] = array("query" => "INSERT INTO user_info (user_id, 
 $_views["SEM_USER_INSERT"] = array("query" => "INSERT INTO seminar_user (Seminar_id, user_id, status, gruppe, mkdate) VALUES (?, ?, ?, §, UNIX_TIMESTAMP())");
 
 $_views["FOLDER_GET_DATA_BY_RANGE"] = array("pk"=>"folder_id","temp_table_type"=>"HEAP",
-                            "query"=>"SELECT * FROM folder WHERE range_id=? ORDER BY mkdate");
+                            "query"=>"SELECT * FROM folder WHERE range_id=? ORDER BY priority,name");
 $_views["FOLDER_GET_DATA_BY_THEMA"] = array("pk"=>"folder_id","temp_table_type"=>"HEAP",
-                            "query"=>"SELECT folder.* FROM themen INNER JOIN folder ON(issue_id=folder.range_id) WHERE themen.seminar_id=? ORDER BY priority");                 
+                            "query"=>"SELECT folder.* FROM themen INNER JOIN folder ON(issue_id=folder.range_id) WHERE themen.seminar_id=? ORDER BY themen.priority");
 $_views["FOLDER_GET_DATA_BY_GRUPPE"] = array("pk"=>"folder_id","temp_table_type"=>"HEAP",
-                            "query"=>"SELECT folder.* FROM statusgruppen INNER JOIN folder ON(statusgruppe_id=folder.range_id) WHERE statusgruppen.range_id=? ORDER BY position");                  
+                            "query"=>"SELECT folder.* FROM statusgruppen INNER JOIN folder ON(statusgruppe_id=folder.range_id) WHERE statusgruppen.range_id=? ORDER BY position");
 
 $_views["FOLDER_UPDATE_PERMISSION"] = array("query" => "UPDATE folder SET permission=? WHERE folder_id=?");
 $_views["FOLDER_UPDATE_CHDATE"] = array("query" => "UPDATE folder SET chdate=UNIX_TIMESTAMP() WHERE folder_id=?");
