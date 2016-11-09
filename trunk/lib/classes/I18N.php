@@ -48,8 +48,13 @@ class I18N
                 'data-lang_desc' => $lang['name']
             );
 
+            $attr = array_merge($attr, $attributes);
+            if (isset($attr['required']) && empty($attr['value']) && $locale !== $base_lang) {
+                unset($attr['required']);
+            }
+
             $result .= '<input type="text"';
-            foreach ($attr + $attributes as $key => $val) {
+            foreach ($attr as $key => $val) {
                 if ($val === true) {
                     $result .= sprintf(' %s', $key);
                 } else if (isset($val)) {
@@ -101,8 +106,13 @@ class I18N
                 'data-lang_desc' => $lang['name']
             );
 
+            $attr = array_merge($attr, $attributes);
+            if (isset($attr['required']) && empty($text) && $locale !== $base_lang) {
+                unset($attr['required']);
+            }
+
             $result .= '<textarea';
-            foreach ($attr + $attributes as $key => $val) {
+            foreach ($attr as $key => $val) {
                 if ($val === true) {
                     $result .= sprintf(' %s', $key);
                 } else if (isset($val)) {
