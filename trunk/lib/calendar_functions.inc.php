@@ -98,7 +98,7 @@ function holiday ($tmstamp, $mod = "") {
         case 358: $name = _("Hl. Abend"); $col = 1; break;
         case 359: $name = _("1. Weihnachtstag"); $col = 3; break;
         case 360: $name = _("2. Weihnachtstag"); $col = 3; break;
-        case 365: $name = _("Sylvester"); $col = 1; break;
+        case 365: $name = _("Silvester"); $col = 1; break;
     }
 
     // Die Sonntagsfeiertage
