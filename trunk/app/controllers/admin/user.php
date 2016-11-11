@@ -1479,6 +1479,17 @@ class Admin_UserController extends AuthenticatedController
                     URLHelper::getLink('dispatch.php/event_log/show?search=' . $this->user->username . '&type=user&object_id=' . $this->user->user_id),
                     Icon::create('log', 'clickable'));
             }
+
+            // Create link to role administration for this user
+            $extra = '';
+            if ($count = count($this->user->getRoles())) {
+                $extra = ' (' . $count . ')';
+            }
+            $views->addLink(
+                _('Zur Rollenverwaltung') . $extra,
+                $this->url_for('admin/role/assign_role/' . $this->user->id),
+                Icon::create('roles2', 'clickable')
+            );
         }
         $sidebar->insertWidget($views, 'user_actions', 'views');
     }
