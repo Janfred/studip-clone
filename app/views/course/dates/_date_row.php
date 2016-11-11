@@ -1,6 +1,6 @@
 <tr id="date_<?= $date->id ?>" class="<?= $date instanceof CourseExDate ? 'ausfall' : '' ?><?= $is_next_date ? 'nextdate' : ''?>" <?= $is_next_date ? 'title="' . _('Der nächste Termin') . '"' : '' ?> data-termin-id="<?= htmlReady($date->id) ?>">
 
-    <td data-timestamp="<?= htmlReady($date->date) ?>" class="date_name">
+    <td data-sort-value="<?= htmlReady($date->date) ?>" class="date_name">
     <? $icon = 'date+' . ($date->chdate > $last_visitdate ? 'new' : '');?>
     <? if ($date instanceof CourseExDate): ?>
         <?= Icon::create($icon, 'info')->asImg(['class' => 'text-bottom']) ?>

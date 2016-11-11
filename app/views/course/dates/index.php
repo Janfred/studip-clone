@@ -21,7 +21,7 @@
 ?>
 
 <? foreach ($allSemesters as $semester): ?>
-<table class="dates default" data-table-id="<?= htmlReady($semester->id) ?>">
+<table class="dates default sortable-table" data-sortlist="[[0, 0]]" data-table-id="<?= htmlReady($semester->id) ?>">
     <caption><?= htmlReady($semester['name']) ?></caption>
         <colgroup class="responsive-hidden">
         <? if (count($course->statusgruppen) > 0): ?>
@@ -38,14 +38,14 @@
         <? endif; ?>
         </colgroup>
     <thead>
-        <tr class="sortable">
-            <th class="sortasc"><?= _('Zeit') ?></th>
-            <th class="responsive-hidden"><?= _('Typ') ?></th>
+        <tr>
+            <th data-sort="htmldata"><?= _('Zeit') ?></th>
+            <th data-sort="text" class="responsive-hidden"><?= _('Typ') ?></th>
         <? if (count($course->statusgruppen)): ?>
-            <th class="responsive-hidden"><?= _('Sichtbarkeit') ?></th>
+            <th data-sort="text" class="responsive-hidden"><?= _('Sichtbarkeit') ?></th>
         <? endif; ?>
-            <th class="responsive-hidden"><?= _('Thema') ?></th>
-            <th><?= _('Raum') ?></th>
+            <th data-sort="text" class="responsive-hidden"><?= _('Thema') ?></th>
+            <th data-sort="text"><?= _('Raum') ?></th>
         </tr>
     </thead>
     <tbody>
@@ -75,15 +75,15 @@
 <? endforeach; ?>
 
 <? if (count($lostDateKeys)): ?>
-<table class="dates default" data-table-id="none">
+<table class="dates default sortable-table" data-sortlist="[[0, 0]]" data-table-id="none">
     <caption><?= _('Ohne Semester') ?></caption>
     <thead>
-        <tr class="sortable">
-            <th class="sortasc"><?= _('Zeit') ?></th>
-            <th><?= _('Typ') ?></th>
-            <th><?= _('Thema') ?></th>
-            <th><?= _('Raum') ?></th>
-        </tr>
+    <tr>
+        <th data-sort="htmldata"><?= _('Zeit') ?></th>
+        <th data-sort="text" class="responsive-hidden"><?= _('Typ') ?></th>
+        <th data-sort="text" class="responsive-hidden"><?= _('Thema') ?></th>
+        <th data-sort="text"><?= _('Raum') ?></th>
+    </tr>
     </thead>
     <tbody>
     <?php
