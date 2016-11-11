@@ -70,16 +70,6 @@
             return;
         }
 
-        $('#course-dates-index .dates').tablesorter({
-            textExtraction: function (node) {
-                var $node = $(node);
-                return String($node.data('timestamp') || $node.text()).trim();
-            },
-            cssAsc: 'sortasc',
-            cssDesc: 'sortdesc',
-            sortList: [[0, 0]]
-        });
-
         $(document).ajaxComplete(createDraggable);
 
         $('.themen_list').each(function () {
