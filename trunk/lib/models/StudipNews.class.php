@@ -132,16 +132,21 @@ class StudipNews extends SimpleORMap {
         $news_result = array();
         if ($limit <= 0)
             return $news_result;
-        $where_querypart = 'news.user_id = ?';
-        $query_vars = array($user_id);
+
         if ($startdate) {
-            $where_querypart .= " AND (date+expire) > ?";
+            $where_querypart = "(date+expire) > ?";
             $query_vars[] = $startdate;
         }
         if ($enddate) {
             $where_querypart .= " AND date < ?";
             $query_vars[] = $enddate;
         }
+
+        if(!$GLOBALS['perm']->have_perm('root') || $area !== 'global') {
+            $where_querypart = 'news.user_id = ?';
+            $query_vars = array($user_id);
+        }
+
         if ($term) {
             $where_querypart .= " AND topic LIKE CONCAT('%', ?, '%')";
             $query_vars[] = $term;
@@ -188,6 +193,7 @@ class StudipNews extends SimpleORMap {
                   FROM $from_querypart
                   WHERE $where_querypart
                   ORDER BY $order_querypart LIMIT 0, ?";
+
         $query_vars[] = $limit;
         $statement = DBManager::get()->prepare($query);
         $statement->execute($query_vars);

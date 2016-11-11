@@ -474,9 +474,9 @@ class NewsController extends StudipController
         } else {
             $this->news_startdate = time();
         }
-        if (is_array($this->area_structure[$area_type]))
+        if (is_array($this->area_structure[$area_type])) {
             $this->area_type = $area_type;
-        $this->set_layout($GLOBALS['template_factory']->open('layouts/base'));
+        }
         PageLayout::setTitle(_('Meine Ankündigungen'));
         PageLayout::setHelpKeyword('Basis.News');
         Navigation::activateItem('/tools/news');
@@ -500,55 +500,72 @@ class NewsController extends StudipController
         // apply filter
         if (Request::submitted('apply_news_filter')) {
             $this->news_isvisible['basic'] = $this->news_isvisible['basic'] ? false : true;
-            if (Request::get('news_searchterm') AND (mb_strlen(trim(Request::get('news_searchterm'))) < 3))
-                PageLayout::postMessage(MessageBox::error(_('Der Suchbegriff muss mindestens 3 Zeichen lang sein.')));
-            elseif ((Request::get('news_startdate') AND !$this->getTimeStamp(Request::get('news_startdate'), 'start')) OR (Request::get('news_enddate') AND !$this->getTimeStamp(Request::get('news_enddate'), 'end')))
-                PageLayout::postMessage(MessageBox::error(_('Ungültige Datumsangabe. Bitte geben Sie ein Datum im Format TT.MM.JJJJ ein.')));
-            elseif (Request::get('news_enddate') AND Request::get('news_enddate') AND ($this->getTimeStamp(Request::get('news_startdate'), 'start') > $this->getTimeStamp(Request::get('news_enddate'), 'end')))
-                PageLayout::postMessage(MessageBox::error(_('Das Startdatum muss vor dem Enddatum liegen.')));
+            if (Request::get('news_searchterm') AND (mb_strlen(trim(Request::get('news_searchterm'))) < 3)) {
+                PageLayout::postError(_('Der Suchbegriff muss mindestens 3 Zeichen lang sein.'));
+            }
+            elseif ((Request::get('news_startdate') AND !$this->getTimeStamp(Request::get('news_startdate'), 'start')) OR (Request::get('news_enddate') AND !$this->getTimeStamp(Request::get('news_enddate'), 'end'))) {
+                PageLayout::postError(_('Ungültige Datumsangabe. Bitte geben Sie ein Datum im Format TT.MM.JJJJ ein.'));
+            }
+            elseif (Request::get('news_enddate') AND Request::get('news_enddate') AND ($this->getTimeStamp(Request::get('news_startdate'), 'start') > $this->getTimeStamp(Request::get('news_enddate'), 'end'))) {
+                PageLayout::postError(_('Das Startdatum muss vor dem Enddatum liegen.'));
+            }
 
-            if (mb_strlen(trim(Request::get('news_searchterm'))) >= 3)
+            if (mb_strlen(trim(Request::get('news_searchterm'))) >= 3) {
                 $this->news_searchterm = Request::get('news_searchterm');
+            }
             $this->news_startdate = $this->getTimeStamp(Request::get('news_startdate'), 'start');
             $this->news_enddate = $this->getTimeStamp(Request::get('news_enddate'), 'end');
         }
         // fetch news list
         $this->news_items = StudipNews::getNewsRangesByFilter($GLOBALS["auth"]->auth["uid"], $this->area_type, $this->news_searchterm, $this->news_startdate, $this->news_enddate, true, $limit+1);
         // build area and filter description
-        if ($this->news_searchterm AND $this->area_type AND ($this->area_type != 'all')) {
-            if ($this->news_startdate AND $this->news_enddate)
-                $this->filter_text = sprintf(_('Angezeigt werden Ankündigungen im Bereich "%s" zum Suchbegriff "%s", die zwischen dem %s und dem %s sichtbar sind.'), $this->area_structure[$this->area_type]['title'], $this->news_searchterm, date('d.m.Y', $this->news_startdate), date('d.m.Y', $this->news_enddate));
-            elseif ($this->news_startdate)
+        if ($this->news_searchterm && $this->area_type && ($this->area_type != 'all')) {
+            if ($this->news_startdate && $this->news_enddate) {$this->filter_text = sprintf(_('Angezeigt werden Ankündigungen im Bereich "%s" zum Suchbegriff "%s", die zwischen dem %s und dem %s sichtbar sind.'), $this->area_structure[$this->area_type]['title'], $this->news_searchterm, date('d.m.Y', $this->news_startdate), date('d.m.Y', $this->news_enddate));}
+            elseif ($this->news_startdate) {
                 $this->filter_text = sprintf(_('Angezeigt werden Ankündigungen im Bereich "%s" zum Suchbegriff "%s", die ab dem %s sichtbar sind.'), $this->area_structure[$this->area_type]['title'], $this->news_searchterm, date('d.m.Y', $this->news_startdate));
-            elseif ($this->news_enddate)
+            }
+            elseif ($this->news_enddate) {
                 $this->filter_text = sprintf(_('Angezeigt werden Ankündigungen im Bereich "%s" zum Suchbegriff "%s", die vor dem %s sichtbar sind.'), $this->area_structure[$this->area_type]['title'], $this->news_searchterm, date('d.m.Y', $this->news_enddate));
-            else
+            }
+            else {
                 $this->filter_text = sprintf(_('Angezeigt werden Ankündigungen im Bereich "%s" zum Suchbegriff "%s".'), $this->area_structure[$this->area_type]['title'], $this->news_searchterm);
-        } elseif ($this->area_type AND ($this->area_type != 'all')) {
-            if ($this->news_startdate AND $this->news_enddate)
+            }
+        } elseif ($this->area_type && ($this->area_type != 'all')) {
+            if ($this->news_startdate && $this->news_enddate) {
                 $this->filter_text = sprintf(_('Angezeigt werden Ankündigungen im Bereich "%s", die zwischen dem %s und dem %s sichtbar sind.'), $this->area_structure[$this->area_type]['title'], date('d.m.Y', $this->news_startdate), date('d.m.Y', $this->news_enddate));
-            elseif ($this->news_startdate)
+            }
+            elseif ($this->news_startdate) {
                 $this->filter_text = sprintf(_('Angezeigt werden Ankündigungen im Bereich "%s", die ab dem %s sichtbar sind.'), $this->area_structure[$this->area_type]['title'], date('d.m.Y', $this->news_startdate));
-            elseif ($this->news_enddate)
+            }
+            elseif ($this->news_enddate) {
                 $this->filter_text = sprintf(_('Angezeigt werden Ankündigungen im Bereich "%s", die vor dem %s sichtbar sind.'), $this->area_structure[$this->area_type]['title'], date('d.m.Y', $this->news_enddate));
-            else
+            }
+            else {
                 $this->filter_text = sprintf(_('Angezeigt werden Ankündigungen im Bereich "%s".'), $this->area_structure[$this->area_type]['title']);
+            }
         } elseif ($this->news_searchterm) {
-            if ($this->news_startdate AND $this->news_enddate)
+            if ($this->news_startdate && $this->news_enddate) {
                 $this->filter_text = sprintf(_('Angezeigt werden Ankündigungen zum Suchbegriff "%s", die zwischen dem %s und dem %s sichtbar sind.'), $this->news_searchterm, date('d.m.Y', $this->news_startdate), date('d.m.Y', $this->news_enddate));
-            elseif ($this->news_startdate)
+            }
+            elseif ($this->news_startdate) {
                 $this->filter_text = sprintf(_('Angezeigt werden Ankündigungen zum Suchbegriff "%s", die ab dem %s sichtbar sind.'), $this->news_searchterm, date('d.m.Y', $this->news_startdate));
-            elseif ($this->news_enddate)
+            }
+            elseif ($this->news_enddate) {
                 $this->filter_text = sprintf(_('Angezeigt werden Ankündigungen zum Suchbegriff "%s", die vor dem %s sichtbar sind.'), $this->news_searchterm, date('d.m.Y', $this->news_enddate));
-            else
+            }
+            else {
                 $this->filter_text = sprintf(_('Angezeigt werden Ankündigungen zum Suchbegriff "%s".'), $this->news_searchterm);
-        } elseif ($this->news_startdate OR $this->news_enddate) {
-            if ($this->news_startdate AND $this->news_enddate)
+            }
+        } elseif ($this->news_startdate || $this->news_enddate) {
+            if ($this->news_startdate && $this->news_enddate) {
                 $this->filter_text = sprintf(_('Angezeigt werden Ankündigungen, die zwischen dem %s und dem %s sichtbar sind.'), date('d.m.Y', $this->news_startdate), date('d.m.Y', $this->news_enddate));
-            elseif ($this->news_startdate)
+            }
+            elseif ($this->news_startdate) {
                 $this->filter_text = sprintf(_('Angezeigt werden Ankündigungen, die ab dem %s sichtbar sind.'), date('d.m.Y', $this->news_startdate));
-            elseif ($this->news_enddate)
+            }
+            elseif ($this->news_enddate) {
                 $this->filter_text = sprintf(_('Angezeigt werden Ankündigungen, die vor dem %s sichtbar sind.'), date('d.m.Y', $this->news_enddate));
+            }
         }
 
         // check for delete-buttons and news limit
