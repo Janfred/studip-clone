@@ -1625,196 +1625,196 @@ if (Request::submitted('save_state')) {
     if ($reqObj->closed == null || $reqObj->closed == 2) {
         throw new Exception(_('Sie haben versucht eine bereits geschlossen Raumanfrage zu bearbeiten!'));
     } else {
-    //if not single date-mode, we have to load all termin_ids from other requests of this seminar, because these dates don't have to be touched (they have an own request!)
-    if (!$reqObj->getTerminId()) {
-        $query = "SELECT rr.termin_id, closed, date, end_time
-                  FROM resources_requests AS rr
-                  LEFT JOIN termine USING (termin_id)
-                  WHERE seminar_id = ? AND rr.termin_id != ''";
-        $statement = DBManager::get()->prepare($query);
-        $statement->execute(array($reqObj->getSeminarId()));
-        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-            $dates_with_request[$row['termin_id']] = array(
-                'closed' => $row['closed'],
-                'begin'  => $row['date'],
-                'end'    => $row['end_time']
-            );
-        }
-    }
-
-    //single date mode - just create one assign-object
-    if ($reqObj->getTerminId()) {
-        $dateRequest = TRUE;
-        $assignObjects[] = $semResAssign->getDateAssignObject($reqObj->getTerminId());
-    }
-
-    //multiple assign_objects (every date one assign-object or every metadate one assign-object)
-    elseif (is_array ($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["assign_objects"])) {
-        $i=0;
-        //check, if one assignment should assigned to a room, which is only particularly free - so we have treat every single date
-        if ($reqObj->getType() == 'cycle' ) {
-            $assignObjects = $semResAssign->getMetaDateAssignObjects($reqObj->getMetadateId());
-        } else if ($reqObj->getType() == 'course' ) {
-            $assignObjects = $semResAssign->getDateAssignObjects(TRUE);
-        }
-    }
-
-    //get the selected resources, save this informations and create the right msgs
-    if (is_array($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["selected_resources"])) {
-        //check all selected resources for perms
-        foreach ($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["selected_resources"] as $key=>$val) {
-            $resPerms = ResourceObjectPerms::Factory($val);
-            if (!$resPerms->havePerm("autor"))
-                $no_perm = TRUE;
-            $resPerms ='';
+        //if not single date-mode, we have to load all termin_ids from other requests of this seminar, because these dates don't have to be touched (they have an own request!)
+        if (!$reqObj->getTerminId()) {
+            $query = "SELECT rr.termin_id, closed, date, end_time
+                      FROM resources_requests AS rr
+                      LEFT JOIN termine USING (termin_id)
+                      WHERE seminar_id = ? AND rr.termin_id != ''";
+            $statement = DBManager::get()->prepare($query);
+            $statement->execute(array($reqObj->getSeminarId()));
+            while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+                $dates_with_request[$row['termin_id']] = array(
+                    'closed' => $row['closed'],
+                    'begin'  => $row['date'],
+                    'end'    => $row['end_time']
+                );
+            }
         }
 
-        if ($no_perm)
-            $msg->addMsg(25);
-        else {
-            // avoid warnings due to undefined result
-            $result = array();
+        //single date mode - just create one assign-object
+        if ($reqObj->getTerminId()) {
+            $dateRequest = TRUE;
+            $assignObjects[] = $semResAssign->getDateAssignObject($reqObj->getTerminId());
+        }
 
-            //single date mode
-            if ($reqObj->getTerminId()) {
-                reset($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["selected_resources"]);
-                list(,$res_id) = each($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["selected_resources"]);
-                $result = $semResAssign->changeDateAssign($reqObj->getTerminId(), $res_id);
+        //multiple assign_objects (every date one assign-object or every metadate one assign-object)
+        elseif (is_array ($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["assign_objects"])) {
+            $i=0;
+            //check, if one assignment should assigned to a room, which is only particularly free - so we have treat every single date
+            if ($reqObj->getType() == 'cycle' ) {
+                $assignObjects = $semResAssign->getMetaDateAssignObjects($reqObj->getMetadateId());
+            } else if ($reqObj->getType() == 'course' ) {
+                $assignObjects = $semResAssign->getDateAssignObjects(TRUE);
+            }
+        }
 
-            //grouped multiple dates mode
-            } else {
-                foreach ($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["selected_resources"] as $key=>$val) {
-                    $_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["groups"][$key]["resource_id"] = $val;
-                    foreach ($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["groups"][$key]["termin_ids"] as $key2 => $val2) {
-                        if (!$dates_with_request[$key2]) {
-                            $result = array_merge((array)$result, (array)$semResAssign->changeDateAssign($key2, $_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["selected_resources"][$key]));
-                            $result_termin_id[] = $key2;
-                        } else
-                            $skipped_termin_ids[$key2]=TRUE;
-                    }
-                }
-
-                // only close request, if number of booked entries matches number of bookable entries
-                $booked_entries = sizeof($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["selected_resources"]);
-                $bookable_entries = sizeof($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]['groups']);
-
-                // count the entries, that are any entries which are already completely booked
-                foreach ($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]['groups'] as $key => $group) {
-                    if ($group['complete'] && !isset($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["selected_resources"][$key])) {
-                        $booked_entries++;
-                    }
-                }
-
-                if ($booked_entries == $bookable_entries ) {
-                    $close_request = TRUE;
-                }
-
-                $semObj->store();
-            //normal metadate mode
+        //get the selected resources, save this informations and create the right msgs
+        if (is_array($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["selected_resources"])) {
+            //check all selected resources for perms
+            foreach ($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["selected_resources"] as $key=>$val) {
+                $resPerms = ResourceObjectPerms::Factory($val);
+                if (!$resPerms->havePerm("autor"))
+                    $no_perm = TRUE;
+                $resPerms ='';
             }
 
-            //---------------------------------------------- second part, msgs and some other operations
+            if ($no_perm)
+                $msg->addMsg(25);
+            else {
+                // avoid warnings due to undefined result
+                $result = array();
 
-            $succesful_assigned = 0;
-            //create msgs, single date mode
-            if ($reqObj->getTerminId()) {
-                $assign_ids = array_keys($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["assign_objects"]);
-                $resObj = ResourceObject::Factory($res_id);
+                //single date mode
+                if ($reqObj->getTerminId()) {
+                    reset($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["selected_resources"]);
+                    list(,$res_id) = each($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["selected_resources"]);
+                    $result = $semResAssign->changeDateAssign($reqObj->getTerminId(), $res_id);
 
-                if (!empty($result)){
-                    foreach ($result as $key=>$val) {
-                        if (!$val["overlap_assigns"]) {
-                            $_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["assign_objects"][$assign_ids[0]]["resource_id"] = $resObj->getId();
-                            $good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), $resObj->getFormattedLink( $assignObjects[0]->getBegin() ), $assignObjects[0]->getFormattedShortInfo());
-                            $succesful_assigned++;
-                        } else {
-                            $_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["assign_objects"][$assign_ids[0]]["resource_id"] = FALSE;
-                            $bad_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), $resObj->getFormattedLink( $assignObjects[0]->getBegin() ), $assignObjects[0]->getFormattedShortInfo());
+                //grouped multiple dates mode
+                } else {
+                    foreach ($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["selected_resources"] as $key=>$val) {
+                        $_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["groups"][$key]["resource_id"] = $val;
+                        foreach ($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["groups"][$key]["termin_ids"] as $key2 => $val2) {
+                            if (!$dates_with_request[$key2]) {
+                                $result = array_merge((array)$result, (array)$semResAssign->changeDateAssign($key2, $_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["selected_resources"][$key]));
+                                $result_termin_id[] = $key2;
+                            } else
+                                $skipped_termin_ids[$key2]=TRUE;
                         }
                     }
+
+                    // only close request, if number of booked entries matches number of bookable entries
+                    $booked_entries = sizeof($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["selected_resources"]);
+                    $bookable_entries = sizeof($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]['groups']);
+
+                    // count the entries, that are any entries which are already completely booked
+                    foreach ($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]['groups'] as $key => $group) {
+                        if ($group['complete'] && !isset($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["selected_resources"][$key])) {
+                            $booked_entries++;
+                        }
+                    }
+
+                    if ($booked_entries == $bookable_entries ) {
+                        $close_request = TRUE;
+                    }
+
+                    $semObj->store();
+                //normal metadate mode
                 }
 
-            //create msgs, grouped multi date mode
-            } else {
-                $i=0;
-                foreach ($result as $key => $val) {
-                    if($val["resource_id"]) {
-                        $resObj = ResourceObject::Factory($val["resource_id"]);
-                        $zw_msg = '<br>' . sprintf(_("%s, Belegungszeit: %s"),
-                            $resObj->getFormattedLink($assignObjects[$val['termin_id']]->getBegin()),
-                            $assignObjects[$val['termin_id']]->getFormattedShortInfo());
+                //---------------------------------------------- second part, msgs and some other operations
 
-                        if (!$val["overlap_assigns"]) {
-                            $good_msg .= $zw_msg;
-                        } else {
-                            $req_added_msg .= $zw_msg;
-                            $copyReqObj = clone $reqObj;
-                            $copyReqObj->copy();
-                            $copyReqObj->setTerminId($val["termin_id"]);
-                            $copyReqObj->store();
+                $succesful_assigned = 0;
+                //create msgs, single date mode
+                if ($reqObj->getTerminId()) {
+                    $assign_ids = array_keys($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["assign_objects"]);
+                    $resObj = ResourceObject::Factory($res_id);
+
+                    if (!empty($result)){
+                        foreach ($result as $key=>$val) {
+                            if (!$val["overlap_assigns"]) {
+                                $_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["assign_objects"][$assign_ids[0]]["resource_id"] = $resObj->getId();
+                                $good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), $resObj->getFormattedLink( $assignObjects[0]->getBegin() ), $assignObjects[0]->getFormattedShortInfo());
+                                $succesful_assigned++;
+                            } else {
+                                $_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["assign_objects"][$assign_ids[0]]["resource_id"] = FALSE;
+                                $bad_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), $resObj->getFormattedLink( $assignObjects[0]->getBegin() ), $assignObjects[0]->getFormattedShortInfo());
+                            }
                         }
+                    }
 
-                        $i++;
+                //create msgs, grouped multi date mode
+                } else {
+                    $i=0;
+                    foreach ($result as $key => $val) {
+                        if($val["resource_id"]) {
+                            $resObj = ResourceObject::Factory($val["resource_id"]);
+                            $zw_msg = '<br>' . sprintf(_("%s, Belegungszeit: %s"),
+                                $resObj->getFormattedLink($assignObjects[$val['termin_id']]->getBegin()),
+                                $assignObjects[$val['termin_id']]->getFormattedShortInfo());
+
+                            if (!$val["overlap_assigns"]) {
+                                $good_msg .= $zw_msg;
+                            } else {
+                                $req_added_msg .= $zw_msg;
+                                $copyReqObj = clone $reqObj;
+                                $copyReqObj->copy();
+                                $copyReqObj->setTerminId($val["termin_id"]);
+                                $copyReqObj->store();
+                            }
+
+                            $i++;
+                        }
+                    }
+
+                }
+
+                //create additional msgs for skipped dates (this ones have got an own request, so the generel request doesn't affect them)
+                $skipped_objects = 0;
+                if ($skipped_termin_ids) {
+                    foreach ($skipped_termin_ids as $key=>$val) {
+                        $skipped_msg="<br>"._("Belegungszeit:")."&nbsp;".date("d.m.Y, H:i", $dates_with_request[$key]["begin"]).(($dates_with_request[$key]["end"]) ? " - ".date("H:i", $dates_with_request[$key]["end"]) : "");
+                        $skipped_msg.=sprintf("&nbsp;"._("Status:")."&nbsp;<span style=\"color:%s\">%s</span>", ($dates_with_request[$key]["closed"] == 0) ? "red" : "green", ($dates_with_request[$key]["closed"] == 0) ? _("noch nicht bearbeitet") : _("bereits bearbeitet"));
+                        $skipped_objects++;
                     }
                 }
 
-            }
+                //set reload flag for this request (the next time the user skips to the request, we reload all data)
+                $_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["reload"] = TRUE;
 
-            //create additional msgs for skipped dates (this ones have got an own request, so the generel request doesn't affect them)
-            $skipped_objects = 0;
-            if ($skipped_termin_ids) {
-                foreach ($skipped_termin_ids as $key=>$val) {
-                    $skipped_msg="<br>"._("Belegungszeit:")."&nbsp;".date("d.m.Y, H:i", $dates_with_request[$key]["begin"]).(($dates_with_request[$key]["end"]) ? " - ".date("H:i", $dates_with_request[$key]["end"]) : "");
-                    $skipped_msg.=sprintf("&nbsp;"._("Status:")."&nbsp;<span style=\"color:%s\">%s</span>", ($dates_with_request[$key]["closed"] == 0) ? "red" : "green", ($dates_with_request[$key]["closed"] == 0) ? _("noch nicht bearbeitet") : _("bereits bearbeitet"));
-                    $skipped_objects++;
+                //create msg's
+                if ($good_msg) {
+                    $GLOBALS['messageForUsers'] = $good_msg;
+                    $msg->addMsg(33, array($good_msg));
+                }
+                if ($bad_msg)
+                    $msg->addMsg(34, array($bad_msg));
+                if ($req_added_msg)
+                    $msg->addMsg(35, array($req_added_msg));
+                if ($skipped_msg)
+                    $msg->addMsg(42, array($skipped_msg));
+
+            }
+        }
+
+        //set request to closed, if we have a room for every assign_object
+        $assigned_resources = 0;
+        foreach ($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["assign_objects"] as $val) {
+            if ($val["resource_id"])
+                $assigned_resources++;
+        }
+
+        if ((($assigned_resources + $skipped_objects) == sizeof($assignObjects)) || ($close_request)) {
+            $_sendMessage['request_id'] = $reqObj->id;
+            $_sendMessage['seminar_id'] = $reqObj->seminar_id;
+            $_sendMessage['type'] = 'closed';
+
+            $reqObj->setClosed(1);
+            $reqObj->store();
+            unset($_SESSION['resources_data']["requests_open"][$reqObj->getId()]);
+            if (sizeof($_SESSION['resources_data']["requests_open"]) == 0) {
+                $_SESSION['resources_data']["view"] = "requests_start";
+                $view = "requests_start";
+                Request::set('save_state', 1);
+            } else  {
+                if ($_SESSION['resources_data']["requests_working_pos"] == sizeof($_SESSION['resources_data']["requests_working_on"])-1) {
+                    $auto_dec = TRUE;
+                } else {
+                    $auto_inc = TRUE;
                 }
             }
-
-            //set reload flag for this request (the next time the user skips to the request, we reload all data)
-            $_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["reload"] = TRUE;
-
-            //create msg's
-            if ($good_msg) {
-                $GLOBALS['messageForUsers'] = $good_msg;
-                $msg->addMsg(33, array($good_msg));
-            }
-            if ($bad_msg)
-                $msg->addMsg(34, array($bad_msg));
-            if ($req_added_msg)
-                $msg->addMsg(35, array($req_added_msg));
-            if ($skipped_msg)
-                $msg->addMsg(42, array($skipped_msg));
-
         }
-    }
-
-    //set request to closed, if we have a room for every assign_object
-    $assigned_resources = 0;
-    foreach ($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["assign_objects"] as $val) {
-        if ($val["resource_id"])
-            $assigned_resources++;
-    }
-
-    if ((($assigned_resources + $skipped_objects) == sizeof($assignObjects)) || ($close_request)) {
-        $_sendMessage['request_id'] = $reqObj->id;
-        $_sendMessage['seminar_id'] = $reqObj->seminar_id;
-        $_sendMessage['type'] = 'closed';
-
-        $reqObj->setClosed(1);
-        $reqObj->store();
-        unset($_SESSION['resources_data']["requests_open"][$reqObj->getId()]);
-        if (sizeof($_SESSION['resources_data']["requests_open"]) == 0) {
-            $_SESSION['resources_data']["view"] = "requests_start";
-            $view = "requests_start";
-            Request::set('save_state', 1);
-        } else  {
-            if ($_SESSION['resources_data']["requests_working_pos"] == sizeof($_SESSION['resources_data']["requests_working_on"])-1) {
-                $auto_dec = TRUE;
-            } else {
-                $auto_inc = TRUE;
-            }
-        }
-    }
     }
 }
 
