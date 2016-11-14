@@ -1621,6 +1621,10 @@ if (Request::submitted('save_state')) {
     $semObj = Seminar::GetInstance($reqObj->getSeminarId());
     $semResAssign = new VeranstaltungResourcesAssign($semObj->getId());
 
+    // check if request has been closed by another process in the meantime
+    if ($reqObj->closed == null || $reqObj->closed == 2) {
+        throw new Exception(_('Sie haben versucht eine bereits geschlossen Raumanfrage zu bearbeiten!'));
+    } else {
     //if not single date-mode, we have to load all termin_ids from other requests of this seminar, because these dates don't have to be touched (they have an own request!)
     if (!$reqObj->getTerminId()) {
         $query = "SELECT rr.termin_id, closed, date, end_time
@@ -1810,6 +1814,7 @@ if (Request::submitted('save_state')) {
                 $auto_inc = TRUE;
             }
         }
+    }
     }
 }
 
