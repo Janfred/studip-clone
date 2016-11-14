@@ -242,6 +242,7 @@ class Calendar_SingleController extends Calendar_CalendarController
                 if (Request::get('import_as_private_imp')) {
                     $import->changePublicToPrivate();
                 }
+                $import->importIntoDatabase($range_id);
                 $import_count = $import->getCount();
                 PageLayout::postMessage(MessageBox::success(
                         sprintf('Es wurden %s Termine importiert.', $import_count)));
