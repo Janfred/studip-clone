@@ -49,8 +49,10 @@ class CalendarParser
 
     public function parseIntoDatabase($range_id, $data, $ignore)
     {
-        if ($this->parseIntoObjects($data, $ignore)) {
-            $database->writeObjectsIntoDatabase($this->events, 'REPLACE');
+        if ($this->parseIntoObjects($range_id, $data, $ignore)) {
+            foreach ($this->events as $event) {
+                $event->store();
+            }
             return true;
         }
 
@@ -62,13 +64,24 @@ class CalendarParser
         $this->time = time();
         if ($this->parse($data, $ignore)) {
             if (is_array($this->components)) {
-                foreach ($this->components as $props) {
-                    $event = CalendarEvent::findByUid($props['UID'], $range_id);
-                    if ($event) {
-                        $this->events[] = $this->setProperties($event->event, $props);
+                foreach ($this->components as $component) {
+                    $calendar_event = CalendarEvent::findByUid($component['UID'], $range_id);
+                    if ($calendar_event) {
+                        $this->setProperties($calendar_event, $component);
+                        $calendar_event->setRecurrence($component['RRULE']);
+                        $this->events[] = $calendar_event;
                     } else {
-                        $event = new CalendarEvent();
-                        $this->events[] = $this->setProperties($event->event, $props);
+                        $calendar_event = new CalendarEvent();
+                        $event = new EventData();
+                        $event->author_id = $GLOBALS['user']->id;
+                        $event->event_id = $event->getNewId();
+                        $event->uid = $component['UID'];
+                        $calendar_event->range_id = $range_id;
+                        $calendar_event->event_id = $event->event_id;
+                        $calendar_event->event = $event;
+                        $this->setProperties($calendar_event, $component);
+                        $calendar_event->setRecurrence($component['RRULE']);
+                        $this->events[] = $calendar_event;
                     }
                 }
             }
@@ -79,23 +92,21 @@ class CalendarParser
         return false;
     }
     
-    private function setProperties($event, $props)
+    private function setProperties($calendar_event, $component)
     {
-        $event->uid = $props['UID'];
-        $event->start = $props[''];
-        $event->end = $props[''];
-        $event->summary = $props[''];
-        $event->description = $props[''];
-        $event->class = $props[''];
-        $event->categories = $props[''];
-        $event->category_intern = $props[''];
-        $event->priority = $props[''];
-        $event->location = $props[''];
-        $event->duration = $props[''];
-        $event->count = $props[''];
-        $event->expire = $props[''];
-        $event->exceptions = $props[''];
-        $event->importdate = $this->time;
+        $calendar_event->setStart($component['DTSTART']);
+        $calendar_event->setEnd($component['DTEND']);
+        $calendar_event->setTitle($component['SUMMARY']);
+        $calendar_event->event->description = $component['DESCRIPTION'];
+        $calendar_event->setAccessibility($component['CLASS']);
+        $calendar_event->setUserDefinedCategories($component['CATEGORIES']);
+        $calendar_event->event->category_intern = $component['STUDIP_CATEGORY'] ?: 1;
+        $calendar_event->setPriority($component['PRIORITY']);
+        $calendar_event->event->location = $component['LOCATION'];
+        $calendar_event->setExceptions($component['EXDATE']);
+        $calendar_event->event->mkdate = $component['CREATED'];
+        $calendar_event->event->chdate = $component['LAST-MODIFIED'] ?: $component['CREATED'];
+        $calendar_event->event->importdate = $this->time;
     }
 
     public function getType()
