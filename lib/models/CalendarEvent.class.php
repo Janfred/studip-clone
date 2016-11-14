@@ -142,7 +142,7 @@ class CalendarEvent extends SimpleORMap implements Event
     {
         global $PERS_TERMIN_KAT;
 
-        $categories = array('bla');
+        $categories = array();
         if ($this->havePermission(Event::PERMISSION_READABLE,
                 $this->permission_user_id)) {
             if ($this->event->categories) {
@@ -152,7 +152,7 @@ class CalendarEvent extends SimpleORMap implements Event
                 array_unshift($categories,
                         $PERS_TERMIN_KAT[$this->event->category_intern]['name']);
             }
-        }$categories = array('bla');
+        }
         return $as_array ? $categories : implode(', ', $categories);
     }
     
