@@ -144,11 +144,11 @@ class CourseEvent extends CourseDate implements Event
      */
     public function toStringCategories($as_array = false)
     {
-        $caregory = '';
+        $category = '';
         if ($this->havePermission(Event::PERMISSION_READABLE)) {
             $category = $GLOBALS['TERMIN_TYP'][$this->getCategory()]['name'];
         }
-        return $as_array ? array($caregory) : $category;
+        return $as_array ? array($category) : $category;
     }
 
     /**
@@ -430,6 +430,7 @@ class CourseEvent extends CourseDate implements Event
                 'SUMMARY' => $this->getTitle(),
                 'DESCRIPTION' => $this->getDescription(),
                 'LOCATION' => $this->getLocation(),
+                'CATEGORIES' => $this->toStringCategories(),
                 'STUDIP_CATEGORY' => $this->getStudipCategory(),
                 'CREATED' => $this->mkdate,
                 'LAST-MODIFIED' => $this->chdate,

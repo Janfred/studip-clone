@@ -1036,7 +1036,7 @@ class CalendarEvent extends SimpleORMap implements Event
                 'DESCRIPTION' => stripslashes($this->getDescription()),
                 'UID' => $this->getUid(),
                 'CLASS' => $this->getAccessibility(),
-                'CATEGORIES' => $this->getUserDefinedCategories(),
+                'CATEGORIES' => $this->toStringCategories(),
                 'STUDIP_CATEGORY' => $this->getCategory(),
                 'PRIORITY' => $this->getPriority(),
                 'LOCATION' => stripslashes($this->getLocation()),

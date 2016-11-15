@@ -111,6 +111,7 @@ class CalendarWriteriCalendar extends CalendarWriter
                 case 'EVENT_TYPE':
                 case 'SEM_ID':
                 case 'STUDIP_GROUP_STATUS':
+                case 'STUDIP_CATEGORY':
                     continue 2;
 
                 // text fields
@@ -122,18 +123,6 @@ class CalendarWriteriCalendar extends CalendarWriter
                     break;
                 case 'LOCATION':
                     $value = str_replace($match_pattern_1, $replace_pattern_1, $event->getLocation());
-                    break;
-
-                case 'STUDIP_CATEGORY':
-                    if ($event instanceof CourseEvent) {
-                        $value = str_replace($match_pattern_1,
-                                $replace_pattern_1, $GLOBALS['TERMIN_TYP'][$value]['name']);
-                        // export studip category as iCalendar property "CATEGORIES"
-                        $name = 'CATEGORIES';
-                    } else {
-                        $name = '';
-                        $value = '';
-                    }
                     break;
 
                 case 'CATEGORIES':
