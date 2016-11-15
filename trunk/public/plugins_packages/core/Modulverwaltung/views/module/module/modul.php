@@ -33,7 +33,7 @@ if ($GLOBALS['MVV_MODUL']['SPRACHE']['default'] != $deskriptor->sprache) {
         </label>
         <label id="mvv-field-modul-code"><?= _('Modulcode') ?>
             <? if ($def_lang) : ?>
-            <input <?= $perm->disable("code") ?>  type="text" name="code" id="code" value="<?= htmlReady($modul->code) ?>" maxlength="250">
+            <input <?= $perm->disable('code') ?>  type="text" name="code" id="code" value="<?= htmlReady($modul->code) ?>" maxlength="250">
             <? else : ?>
             <?= $modul->code ? htmlReady($modul->code) : _('keine Angabe') ?>
             <? endif; ?>
@@ -60,7 +60,7 @@ if ($GLOBALS['MVV_MODUL']['SPRACHE']['default'] != $deskriptor->sprache) {
     <fieldset id="mvv-field-modul-variante">
         <legend><?= _('Ist Variante von') ?></legend>
         <? if ($def_lang) : ?>
-        <? if($perm->haveFieldPerm('modul_variante', MvvPerm::PERM_WRITE)): ?>
+        <? if ($perm->haveFieldPerm('modul_variante', MvvPerm::PERM_WRITE)) : ?>
         <div>
             <?= $search_modul->render(); ?>
             <? if (Request::submitted('search_modul')) : ?>
@@ -77,7 +77,7 @@ if ($GLOBALS['MVV_MODUL']['SPRACHE']['default'] != $deskriptor->sprache) {
                 <div class="mvv-item-list-text">
                     <?= htmlReady($modul->modul_variante->getDisplayName()) ?>
                 </div>
-                <? if($perm->haveFieldPerm('modul_variante', MvvPerm::PERM_WRITE)): ?>
+                <? if ($perm->haveFieldPerm('modul_variante', MvvPerm::PERM_WRITE)) : ?>
                 <div class="mvv-item-list-buttons">
                     <a href="#" class="mvv-item-remove"><?= Icon::create('trash', 'clickable', array('title' => _(' entfernen')))->asImg(); ?></a>
                 </div>
@@ -153,21 +153,22 @@ if ($GLOBALS['MVV_MODUL']['SPRACHE']['default'] != $deskriptor->sprache) {
             </label>
             <label for="mvv-field-modul-fassung_nr"><?= _('Fassung:') ?>
                 <section class="hgroup size-m">
-                    <select<?= $perm->disable('fassung_nr') ?> name="fassung_nr" id="mvv-field-modul-fassung_nr">
+                    <select<?= $perm->haveFieldPerm('fassung_nr') ? '' : ' disabled' ?> name="fassung_nr" id="mvv-field-modul-fassung_nr">
                         <option value="">--</option>
                     <? foreach (range(1, 30) as $nr) : ?>
                         <option<?= $nr == $modul->fassung_nr ? ' selected' : '' ?> value="<?= $nr ?>"><?= $nr ?>.</option>
                     <? endforeach; ?>
                     </select>
-                    <? if ($perm->haveFieldPerm('fassung_typ')):?>
-                    <select id="mvv-field-modul-fassung_typ" style="display: inline-block; max-width: 40em;" name="fassung_typ">
+                    <? if (!$perm->haveFieldPerm('fassung_nr')) : ?>
+                        <input type="hidden" name="fassung_nr" value="<?= $modul->fassung_nr ?>">
+                    <? endif; ?>
+                    <select<?= $perm->haveFieldPerm('fassung_typ') ? '' : ' disabled' ?> id="mvv-field-modul-fassung_typ" style="display: inline-block; max-width: 40em;" name="fassung_typ">
                         <option value="0">--</option>
                     <? foreach ($GLOBALS['MVV_MODUL']['FASSUNG_TYP'] as $key => $entry) : ?>
                         <option value="<?= $key ?>"<?= $key == $modul->fassung_typ ? ' selected' : '' ?>><?= htmlReady($entry['name']) ?></option>
                     <? endforeach; ?>
                     </select>
-                    <? else: ?>            
-                    <?= ($modul->fassung_typ == '0' ? '--' : $GLOBALS['MVV_MODUL']['FASSUNG_TYP'][$modul->fassung_typ]['name']) ?>
+                    <? if (!$perm->haveFieldPerm('fassung_typ')) : ?>
                     <input type="hidden" name="fassung_typ" value="<?= $modul->fassung_typ ?>">
                     <? endif; ?>
                 </section>
@@ -570,7 +571,8 @@ if ($GLOBALS['MVV_MODUL']['SPRACHE']['default'] != $deskriptor->sprache) {
             </label>
             <? endforeach; ?>
         <? else : ?>
-            <?= $GLOBALS['MVV_MODUL']['PRUEF_EBENE']['values'][$modul->pruef_ebene]['name'] ?>            
+            <?= $GLOBALS['MVV_MODUL']['PRUEF_EBENE']['values'][$modul->pruef_ebene]['name'] ?>
+            <input type="hidden" name="pruef_ebene" value="<?= $modul->pruef_ebene ?>">
         <? endif; ?>
     </fieldset>
     <fieldset>
@@ -614,14 +616,15 @@ if ($GLOBALS['MVV_MODUL']['SPRACHE']['default'] != $deskriptor->sprache) {
         <? endif; ?>
         </label>
         <? foreach ($deskriptor->datafields as $entry) : ?>
-        <? $df = $entry->getTypedDatafield(); ?>
-        <label><?= htmlReady($df->getName()) ?>
+            <? $df = $entry->getTypedDatafield(); ?>
             <? if ($perm_d->haveDfEntryPerm($entry, MvvPerm::PERM_WRITE)) : ?>
+            <label><?= htmlReady($df->getName()) ?>
                 <?= $df->getHTML('datafields'); ?>
+            </label>
             <? else : ?>
-                <?= $df->getDisplayValue(); ?>
+            <em><?= htmlReady($df->getName()) ?>:</em><br>
+            <?= $df->getDisplayValue(); ?>
             <? endif; ?>
-        </label>
         <? endforeach; ?>
     </fieldset>
     <fieldset id="mvv-field-modul-status">

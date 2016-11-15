@@ -206,7 +206,7 @@ class Module_ModuleController extends MVVController
             $stored = false;
             if ($this->def_lang) {
                 $this->modul->quelle = Request::option('quelle');
-                $this->modul->variante = Request::option('modul');
+                $this->modul->variante = Request::option('modul_item');
                 $this->modul->flexnow_modul = trim(Request::get('flexnow_modul'));
                 $this->modul->code = trim(Request::get('code'));
                 $this->modul->start = Request::option('start');
