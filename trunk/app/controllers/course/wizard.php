@@ -142,8 +142,8 @@ class Course_WizardController extends AuthenticatedController
                     $this->redirect($target);
                 } else {
                     PageLayout::postMessage(MessageBox::error(
-                        sprintf(_('Die Veranstaltung "%s" konnte nicht angelegt werden.'),
-                            $this->course->getFullname())));
+                        _('Die Veranstaltung konnte nicht angelegt werden.')));
+                    $this->redirect('course/wizard');
                 }
             } else {
                 PageLayout::postMessage(MessageBox::error(_('Die angegebene Veranstaltung wurde bereits angelegt.')));
@@ -180,6 +180,9 @@ class Course_WizardController extends AuthenticatedController
     {
         $this->stepnumber = $stepnumber;
         $this->temp_id = $temp_id;
+        if (empty($this->getValues())) {
+            throw new UnexpectedValueException('no data found');
+        }
         if (isset($_SESSION['coursewizard'][$this->temp_id]['source_id'])) {
             $this->source_course = Course::find($_SESSION['coursewizard'][$this->temp_id]['source_id']);
         }
@@ -254,10 +257,20 @@ class Course_WizardController extends AuthenticatedController
      */
     private function createCourse()
     {
+
+        foreach (array_keys($this->steps) as $n) {
+            $step = $this->getStep($n);
+            if ($step->isRequired($this->getValues())) {
+                if (!$step->validate($this->getValues())) {
+                    unset($_SESSION['coursewizard'][$this->temp_id]);
+                    return false;
+                }
+            }
+        }
         // Create a new (empty) course so that we get an ID.
         $course = new Course();
         $course->visible = 0;
-        $course->store();
+        $course->setId($course->getNewId());
         $course_id = $course->id;
         // Each (required) step stores its own values at the course object.
         for ($i = 0; $i < sizeof($this->steps) ; $i++) {
@@ -267,6 +280,7 @@ class Course_WizardController extends AuthenticatedController
                     $course = $stored;
                 } else {
                     $course = false;
+                    unset($_SESSION['coursewizard'][$this->temp_id]);
                     break;
                     //throw new Exception(_('Die Daten aus Schritt ' . $i . ' konnten nicht gespeichert werden, breche ab.'));
                 }
