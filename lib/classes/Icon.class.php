@@ -20,6 +20,20 @@ class Icon
     const DEFAULT_COLOR = 'blue';
     const DEFAULT_ROLE = 'clickable';
 
+    const ROLE_INFO          = 'info';
+    const ROLE_CLICKABLE     = 'clickable';
+    const ROLE_ACCEPT        = 'accept';
+    const ROLE_STATUS_GREEN  = 'status-green';
+    const ROLE_INACTIVE      = 'inactive';
+    const ROLE_NAVIGATION    = 'navigation';
+    const ROLE_NEW           = 'new';
+    const ROLE_ATTENTION     = 'attention';
+    const ROLE_STATUS_RED    = 'status-red';
+    const ROLE_INFO_ALT      = 'info_alt';
+    const ROLE_SORT          = 'sort';
+    const ROLE_STATUS_YELLOW = 'status-yellow';
+
+
     protected $shape;
     protected $role;
     protected $attributes = array();
@@ -29,18 +43,18 @@ class Icon
      * This is the magical Role to Color mapping.
      */
     private static $roles_to_colors = [
-        'info'          => 'black',
-        'clickable'     => 'blue',
-        'accept'        => 'green',
-        'status-green'  => 'green',
-        'inactive'      => 'grey',
-        'navigation'    => 'lightblue',
-        'new'           => 'red',
-        'attention'     => 'red',
-        'status-red'    => 'red',
-        'info_alt'      => 'white',
-        'sort'          => 'yellow',
-        'status-yellow' => 'yellow'
+        self::ROLE_INFO          => 'black',
+        self::ROLE_CLICKABLE     => 'blue',
+        self::ROLE_ACCEPT        => 'green',
+        self::ROLE_STATUS_GREEN  => 'green',
+        self::ROLE_INACTIVE      => 'grey',
+        self::ROLE_NAVIGATION    => 'lightblue',
+        self::ROLE_NEW           => 'red',
+        self::ROLE_ATTENTION     => 'red',
+        self::ROLE_STATUS_RED    => 'red',
+        self::ROLE_INFO_ALT      => 'white',
+        self::ROLE_SORT          => 'yellow',
+        self::ROLE_STATUS_YELLOW => 'yellow'
     ];
 
     // return the color associated to a role
