@@ -315,7 +315,7 @@ class MvvPerm {
                         : self::$privileges[$mvv_table]['fields'][$field][$status][$role->rolename];
                 if (is_null($priv)) {
                     $priv = is_array($field)
-                            ? self::$privileges[$mvv_table]['fields'][$field[0]]['default'][$tatus][$role->rolename]
+                            ? self::$privileges[$mvv_table]['fields'][$field[0]]['default'][$status][$role->rolename]
                             : self::$privileges[$mvv_table]['fields'][$field]['default'][$role->rolename];
                 }
                 if (is_null($priv)) {

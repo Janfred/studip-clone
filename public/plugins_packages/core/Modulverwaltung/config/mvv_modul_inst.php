@@ -86,10 +86,10 @@ $privileges = array(
         )
     ),
     'default_fields' => array(
-        'MVVEntwickler' => 1,
+        'MVVEntwickler' => 3,
         'MVVRedakteur'  => 1,
         'MVVTranslator' => 1,
-        'MVVFreigabe'   => 1
+        'MVVFreigabe'   => 3
     ),
     'fields' => array(
         'gruppe' => array(

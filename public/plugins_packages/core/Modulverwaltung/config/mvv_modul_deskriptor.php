@@ -371,6 +371,7 @@ $privileges = array(
                     'MVVFreigabe'   => 1
                 )
             ),
+            /* Use id of datafield as key :
             'da02d4d437c8bf08fd3f10d9974aca46' => array(
                 'planung' => array(
                     'MVVEntwickler' => 3,
@@ -385,6 +386,8 @@ $privileges = array(
                     'MVVFreigabe'   => 1
                 )
             )
+             * 
+             */
         )
     )
 );

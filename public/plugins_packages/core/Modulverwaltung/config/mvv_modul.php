@@ -92,8 +92,8 @@ $privileges = array(
     ),
     'fields' => array(
         'quelle' => array(
-            'default' => array(
-                'MVVEntwickler' => 1,
+            'planung' => array(
+                'MVVEntwickler' => 3,
                 'MVVRedakteur'  => 1,
                 'MVVTranslator' => 1,
                 'MVVFreigabe'   => 1
@@ -191,7 +191,7 @@ $privileges = array(
                 'MVVFreigabe'   => 3
             ),
             'genehmigt' => array(
-                'MVVEntwickler' => 1,
+                'MVVEntwickler' => 3,
                 'MVVRedakteur'  => 1,
                 'MVVTranslator' => 1,
                 'MVVFreigabe'   => 3
@@ -488,6 +488,28 @@ $privileges = array(
                 'MVVTranslator' => 1,
                 'MVVFreigabe'   => 7
             )
-        )
+        ),
+        'modul_quelle' => array(
+            'planung' => array(
+                'MVVEntwickler' => 3,
+                'MVVRedakteur'  => 1,
+                'MVVTranslator' => 1,
+                'MVVFreigabe'   => 1
+            )
+        ),
+        'modul_variante' => array(
+            'planung' => array(
+                'MVVEntwickler' => 3,
+                'MVVRedakteur'  => 1,
+                'MVVTranslator' => 1,
+                'MVVFreigabe'   => 3
+            ),
+            'genehmigt' => array(
+                'MVVEntwickler' => 1,
+                'MVVRedakteur'  => 1,
+                'MVVTranslator' => 1,
+                'MVVFreigabe'   => 3
+            )
+        ),
     )
 );

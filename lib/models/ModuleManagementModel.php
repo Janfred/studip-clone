@@ -125,13 +125,14 @@ abstract class ModuleManagementModel extends SimpleORMap
                                     if (!$perm->haveDfEntryPerm($entry, MvvPerm::PERM_WRITE)) {
                                         throw new Exception(sprintf(
                                             'Permission denied! The user is not '
-                                            . 'allowed to change value of field %s::datafields.', get_called_class()));
+                                            . 'allowed to change value of field %s::datafields[%s] ("%s").', get_called_class(), $entry->datafield->datafield_id, $entry->datafield->name));
                                     }
                                 }
                             }
-                        }
-                        foreach ($this->{$relation} as $r) {
-                            $this->checkRelation($relation, $r, $perm, $user_id);
+                        } else {
+                            foreach ($this->{$relation} as $r) {
+                                $this->checkRelation($relation, $r, $perm, $user_id);
+                            }
                         }
                     }
                 }
