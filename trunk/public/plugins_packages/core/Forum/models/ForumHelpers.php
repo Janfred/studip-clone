@@ -153,16 +153,16 @@ class ForumHelpers {
     static function getVisitText($num_entries, $topic_id)
     {
         if ($num_entries > 0) {
-            $text = sprintf(_('Seit ihrem letzten Besuch gibt es %s neue Beiträge'), $num_entries);
+            $text = sprintf(_('Seit Ihrem letzten Besuch gibt es %s neue Beiträge'), $num_entries);
         } else {
             $all_entries = max(ForumEntry::countEntries($topic_id) - 1, 0);
             if ($all_entries == 0) {
                 $text = sprintf(_('Es gibt bisher keine Beiträge.'));
             } else if ($all_entries == 1) {
-                $text = sprintf(_('Seit ihrem letzten Besuch gab es nichts neues.'
+                $text = sprintf(_('Seit Ihrem letzten Besuch gab es nichts Neues.'
                       . ' Es ist ein alter Beitrag vorhanden.'));
             } else {
-                $text = sprintf(_('Seit ihrem letzten Besuch gab es nichts neues.'
+                $text = sprintf(_('Seit Ihrem letzten Besuch gab es nichts Neues.'
                       . ' Es sind %s alte Beiträge vorhanden.'), $all_entries);
             }
         }
