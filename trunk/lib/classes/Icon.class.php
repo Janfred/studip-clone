@@ -11,8 +11,6 @@
  */
 class Icon
 {
-    use DeprecatedIcon;
-
     const SVG = 1;
     const PNG = 2;
     const CSS_BACKGROUND = 4;
@@ -343,9 +341,7 @@ class Icon
      */
     protected function get_size($size)
     {
-        // DEPRECATED
-        // TODO remove deprecatedSize in v3.6
-        $size = $size ?: $this->deprecatedSize ?: Icon::DEFAULT_SIZE;
+        $size = $size ?: Icon::DEFAULT_SIZE;
         if (isset($this->attributes['size'])) {
             list($size, $temp) = explode('@', $this->attributes['size'], 2);
             unset($this->attributes['size']);
@@ -382,101 +378,4 @@ class Icon
             ? $this->shape :
             join('/', array_reverse(explode('+', preg_replace('/\.(?:png|svg)$/', '', $this->shape))));
     }
-}
-
-
-// DEPRECATED
-// TODO remove this trait in v3.6
-trait DeprecatedIcon {
-
-    protected $deprecatedSize = null;
-
-    public static $icon_colors = array(
-        'black', 'blue', 'green', 'grey', 'lightblue', 'red', 'white', 'yellow',
-    );
-
-    /**
-     * @param String $source     Name of the icon, may contain a mixed definition
-     *                           like 'icons/16/blue/add/seminar.png' due to
-     *                           compatibility issues with Assets::img().
-     * @param Array  $attributes Additional attributes to pass the rendered
-     *                           output
-     * @return Icon object
-     */
-    public static function create2($source, $attributes = [])
-    {
-        $source = str_replace(Assets::url('images/'), '', $source);
-
-        // external icon
-        if (mb_strpos($source, 'http') === 0) {
-            return new self($source, Icon::DEFAULT_ROLE, $attributes);
-        }
-
-        $opts = self::rearrange($source);
-
-        $shape = $opts['icon'][0];
-
-        if (count($opts['icon']) === 2) {
-            $shape = $opts['icon'][1] . '+' . $shape;
-        }
-
-        // use the very first role matching this color
-        $role = current(self::colorToRoles($opts['color']));
-
-        $icon = new Icon($shape, $role, $attributes);
-
-        $icon->deprecatedSize = $opts['size'];
-
-        return $icon;
-    }
-
-    /**
-     * Renders the icon as svg, png or css background.
-     *
-     * @param int $type Defines in which manner the icon should be rendered,
-     *                  defaults to svg.
-     * @return String containing the rendered output
-     * @throws Exception if no valid type was passed
-     */
-    public function render($type = Icon::SVG)
-    {
-        if ($type & Icon::SVG || $type & Icon::PNG) {
-            return $type & Icon::INPUT ? $this->asInput() : $this->asImg();
-        }
-        if ($type & Icon::CSS_BACKGROUND) {
-            return $this->asCSS();
-        }
-        throw new \Exception('Unknown type');
-    }
-
-
-    /**
-     * Rearranges passed parameters. Tries to detect given size, color and
-     * extra icon.
-     *
-     * @param mixed $input    Either a relative or absolute url or an array
-     * @param Array $defaults Default values for size, color and extra icon
-     * @param mixed $extra    Extra icon to apply to the icon, defaults to none
-     * @return Array with the guessed values
-     */
-    protected static function rearrange($input)
-    {
-        $input = str_replace(Assets::url('images/'), '', $input);
-        $input = preg_replace('~^icons/~', '', $input);
-        $input = preg_replace('/\.(png|svg)$/', '', $input);
-
-        $result = [ 'size' => Icon::DEFAULT_SIZE, 'color' => Icon::DEFAULT_COLOR, 'icon' => [] ];
-
-        foreach (explode('/', $input) as $chunk) {
-            if (is_int($chunk) || ctype_digit($chunk)) {
-                $result['size'] = $chunk;
-            } elseif (in_array($chunk, self::$icon_colors)) {
-                $result['color'] = $chunk;
-            } else {
-                $result['icon'][] = $chunk;
-            }
-        }
-        return $result;
-    }
-
 }

@@ -5,11 +5,11 @@ class LinkElement extends WidgetElement implements ArrayAccess
      * Create link by parsing a html chunk.
      *
      * @param String $html HTML chunk to parse
-     * @param mixed  $icon Optional icon
+     * @param Icon $icon Optional icon
      * @return LinkElement Link element from parsed html
      * @throws Exception if html can not be parsed
      */
-    public static function fromHTML($html, $icon = null)
+    public static function fromHTML($html, \Icon $icon = null)
     {
         $matched = preg_match('~(<a(?P<attributes>(?:\s+\w+=".*?")+)>\s*(?P<label>.*?)\s*</a>)~s', $html, $match);
         if (!$matched) {
@@ -63,23 +63,19 @@ class LinkElement extends WidgetElement implements ArrayAccess
      *
      * @param String $label      Label/content of the link
      * @param String $url        URL/Location of the link
-     * @param Mixed  $icon       Icon for the link, should be an Icon
-     *                           object; until v3.6 this may be a string
+     * @param Icon $icon       Icon for the link
      * @param array  $attributes HTML-attributes for the a-tag in an associative array.
      */
-    public function __construct($label, $url, $icon = null, $attributes = array())
+    public function __construct($label, $url, \Icon $icon = null, $attributes = array())
     {
         parent::__construct();
 
         $this->label      = $label;
         $this->url        = $url;
         $this->attributes = $attributes;
-
-        // DEPRECATED
-        // TODO icon may be a string until v3.6
-        $this->icon = is_string($icon) ? Icon::create2($icon) : $icon;
+        $this->icon       = $icon;
     }
-    
+
     public function setActive($active = true)
     {
         $this->active = $active;

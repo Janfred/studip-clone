@@ -271,7 +271,7 @@
     opacity: 0.6;
 }
 #blubber_threads .content_column .permalink:hover {
-    .icon-before('grey/group.png', 14);
+    .icon('before', 'group', 'inactive', 14);
 }
 #blubber_threads .writer textarea.hovered, #new_posting.hovered, #blubber_threads textarea.corrector {
     background-color: @activity-color-40;
@@ -344,7 +344,7 @@
 
 #blubber_threads {
     li.more {
-        .icon-before('blue/arr_1right');
+        .icon('before', 'arr_1right', 'clickable');
         &.ajax::before {
             background-image: url("@{image-path}/ajax-indicator-black.svg");
         }

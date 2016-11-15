@@ -28,10 +28,6 @@
  *     # construct the URL for the image "blank.gif"
  *     $url = Assets::image_path('blank.gif');
  *
- *     # DEPRECATED use class Icon instead
- *     # construct html tag for the download icon in blue
- *     $img = Assets::img('icons/16/blue/download.png');
- *
  * @package   studip
  *
  * @author    mlunzena
@@ -149,10 +145,6 @@ class Assets
 
         $parts = explode('/', $source);
 
-        if (($pos = array_search('icons', $parts)) !== false) {
-            return Icon::create2($source, $opt)->render();
-        }
-
         $size = $opt['size'];
 
         $opt = Assets::parse_attributes($opt);
@@ -194,13 +186,6 @@ class Assets
         }
 
         $parts = explode('/', $source);
-
-        if (($pos = array_search('icons', $parts)) !== false) {
-            $source = mb_substr($source, 6);
-            $source = preg_replace('/\.png$/', '', $source);
-
-            return Icon::create2($source, $opt)->render(Icon::SVG | Icon::INPUT);
-        }
 
         $size = $opt['size'];
 
