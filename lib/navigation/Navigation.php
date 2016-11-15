@@ -359,16 +359,10 @@ class Navigation implements IteratorAggregate
      * @param Icon   $image            an instance of class Icon depicting this item
      * @param array  $link_attributes  additional link attributes
      */
-    public function setImage($image, $link_attributes = [])
+    public function setImage(\Icon $image, $linkAttributes = [])
     {
         $this->image = $image;
-        $this->setLinkAttributes($link_attributes);
-
-        // DEPRECATED
-        // TODO remove this case in v3.6
-        if (is_string($image)) {
-            $this->image = Icon::create2(Assets::image_path($image));
-        }
+        $this->setLinkAttributes($linkAttributes);
     }
 
     /**
@@ -380,16 +374,10 @@ class Navigation implements IteratorAggregate
      * @param Icon   $image            an instance of class Icon depicting this item
      * @param array  $link_attributes  additional link attributes
      */
-    public function setActiveImage($image, $link_attributes = [])
+    public function setActiveImage(\Icon $image, $linkAttributes = [])
     {
         $this->active_image = $image;
-        $this->setLinkAttributes($link_attributes);
-
-        // DEPRECATED
-        // TODO remove this case in v3.6
-        if (is_string($image)) {
-            $this->active_image = Icon::create2(Assets::image_path($image));
-        }
+        $this->setLinkAttributes($linkAttributes);
     }
 
     /**

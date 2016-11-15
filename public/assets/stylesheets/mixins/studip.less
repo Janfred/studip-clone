@@ -81,13 +81,8 @@
 }
 
 .background-icon(@icon, @role, @size: 16) {
-  .role2color(@role);
-  .retina-background-icon("@{color}/@{icon}", @size);
-}
-
-// DEPRECATED: will be removed in v3.6
-.retina-background-icon(@icon, @size: 16) {
-    @temp-icon: replace(@icon, "\.(png|svg)$", '', g);
+    .role2color(@role);
+    @temp-icon: replace("@{color}/@{icon}", "\.(png|svg)$", '', g);
     @svg: "@{image-path}/icons/@{temp-icon}.svg";
 
     background-image: url("@{svg}");
@@ -95,66 +90,28 @@
 }
 
 .icon(@position, @icon, @role, @size: 16, @padding: 0) when (@position = "before") {
-  .role2color(@role);
-  .icon-before("@{color}/@{icon}", @size, @padding);
+    &::before {
+        background-repeat: no-repeat;
+        content: ' ';
+        display: inline-block;
+        height: unit(@size, px);
+        margin-right: @padding;
+        .background-icon(@icon, @role, @size);
+        vertical-align: text-top;
+        width: unit(@size, px);
+    }
 }
 
 .icon(@position, @icon, @role, @size: 16, @padding: 0) when (@position = "after") {
-  .role2color(@role);
-  .icon-after("@{color}/@{icon}", @size, @padding);
-}
-
-// DEPRECATED: will be removed in v3.6
-// Icon 'before'
-.icon-before(@icon, @size: 16, @padding: 0) {
-    &::before {
-        background-repeat: no-repeat;
-        content: ' ';
-        display: inline-block;
-        height: unit(@size, px);
-        margin-right: @padding;
-        .retina-background-icon(@icon, @size);
-        vertical-align: text-top;
-        width: unit(@size, px);
-    }
-}
-.retina-image-before(@image0, @image1, @width: 100%, @height: @width, @padding: 0) {
-    &::before {
-        background-repeat: no-repeat;
-        content: ' ';
-        display: inline-block;
-        height: unit(@height, px);
-        margin-right: @padding;
-        .retina-background-image(@image0, @image1, @width, @height);
-        vertical-align: text-top;
-        width: unit(@width, px);
-    }
-}
-
-// DEPRECATED: will be removed in v3.6
-// Icon after
-.icon-after(@icon, @size: 16, @padding: 0) {
     &::after {
         background-repeat: no-repeat;
         content: ' ';
         display: inline-block;
         height: unit(@size, px);
         margin-left: @padding;
-        .retina-background-icon(@icon, @size);
+        .background-icon(@icon, @role, @size);
         vertical-align: text-top;
         width: unit(@size, px);
-    }
-}
-.retina-image-after(@image0, @image1, @width: 100%, @height: @width, @padding: 0) {
-    &::after {
-        background-repeat: no-repeat;
-        content: ' ';
-        display: inline-block;
-        height: unit(@height, px);
-        margin-left: @padding;
-        .retina-background-image(@image0, @image1, @width, @height);
-        vertical-align: text-top;
-        width: unit(@width, px);
     }
 }
 

@@ -73,13 +73,14 @@ a.bookable_rooms_action {
             border-left: 3px solid @green;
         }
         &.red .tooltip-icon {
-            .icon-before('red/radiobutton-checked.svg');
+            .icon('before', 'arr_1right', 'clickable');
+            .icon('before', 'radiobutton-checked', 'status-red');
         }
         &.yellow .tooltip-icon {
-            .icon-before('yellow/radiobutton-checked.svg');
+            .icon('before', 'radiobutton-checked', 'status-yellow');
         }
         &.green .tooltip-icon {
-            .icon-before('green/radiobutton-checked.svg');
+            .icon('before', 'radiobutton-checked', 'status-green');
         }
     }
     form.default {
