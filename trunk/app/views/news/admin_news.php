@@ -2,79 +2,73 @@
 <? if (!empty($flash['question_text'])) : ?>
     <?= createQuestion2($flash['question_text'],
         array_merge($flash['question_param'],
-            array('news_filter_term'  => htmlReady($news_searchterm),
-                  'news_filter_start' => $news_startdate,
-                  'news_filter_end'   => $news_enddate,
-                  'news_filter'       => 'set')),
-        array('news_filter_term'  => htmlReady($news_searchterm),
-              'news_filter_start' => $news_startdate,
-              'news_filter_end'   => $news_enddate,
-              'news_filter'       => 'set'),
+            ['news_filter_term'  => htmlReady($news_searchterm),
+             'news_filter_start' => $news_startdate,
+             'news_filter_end'   => $news_enddate,
+             'news_filter'       => 'set']),
+        ['news_filter_term'  => htmlReady($news_searchterm),
+         'news_filter_start' => $news_startdate,
+         'news_filter_end'   => $news_enddate,
+         'news_filter'       => 'set'],
         $controller->url_for('news/admin_news/' . $area_type)); ?>
 <? endif ?>
-<div class="news_admin">
 
-    <form action="<?= $controller->url_for('news/admin_news/' . $area_type) ?>" id="admin_news_form" method="POST">
-        <input type="hidden" name="news_filter" value="set">
-        <input type="hidden" name="news_filter_term" value="<?= htmlReady($news_searchterm) ?>">
-        <input type="hidden" name="news_filter_start" value="<?= $news_startdate ?>">
-        <input type="hidden" name="news_filter_end" value="<?= $news_enddate ?>">
-        <?= CSRFProtection::tokenTag(); ?>
-        <table class="default">
-            <caption><?= _('Meine Ankündigungen') ?></caption>
-            <thead>
-            <tr>
-                <th colspan="2">
-                    <label><?= _("Suchbegriff:") ?>
-                        <input type="text" name="news_searchterm" aria-label="<?= _('Suchbegriff') ?>" value="<?= htmlReady($news_searchterm) ?>"></label>
-                    &nbsp;&nbsp;
-                    <label><?= _("Anzeige von:") ?>
-                        <input class="news_date" type="text" size="12" name="news_startdate" aria-label="<?= _('Ankündigungen anzeigen, die ab diesem Datum sichtbar sind') ?>" value="<?= ($news_startdate) ? date('d.m.Y', $news_startdate) : '' ?>"></label>
-                    &nbsp;&nbsp;
-                    <label><?= _("bis:") ?>
-                        <input class="news_date" type="text" size="12" name="news_enddate" aria-label="<?= _('Ankündigungen anzeigen, die vor diesem Datum sichtbar sind') ?>" value="<?= ($news_enddate) ? date('d.m.Y', $news_enddate) : '' ?>"></label>
-                    &nbsp;&nbsp;
-                    <?= Button::create(_('Filter anwenden'), 'apply_news_filter', array('aria-label' => _('Liste mit Suchbegriff und/oder Zeitraum filtern'))) ?>
-                </th>
-            </tr>
-            </thead>
-            <? if ($filter_text) : ?>
-                <tfoot>
-                <tr>
-                    <td colspan="1">
-                        <?= htmlReady($filter_text) ?>
-                    </td>
-                    <td>
-                        <div class="news_reset_filter">
-                            <?= Button::create(_('Auswahl aufheben'), 'reset_filter') ?>
-                        </div>
-                    </td>
-                </tr>
-                </tfoot>
-            <? endif ?>
-        </table>
-        <? if (count($news_items)) : ?>
-            <? foreach ($area_structure as $type => $area_data) : ?>
-                <? $last_title = 'none' ?>
-                <? if (count($news_items[$type])) : ?>
-                    <br>
-                    <br>
-                    <table class="default">
-                        <? if (!$area_type) : ?>
-                            <caption>
-                                <?= Icon::create($area_data['icon'], 'inactive')->asImg(32, ['class' => 'news_area_icon']) ?>
-                                <div class="news_area_title"><?= htmlReady($area_data['title']) ?></div>
-                            </caption>
-                        <? endif ?>
-                        <colgroup>
-                            <col width="20">
-                            <col>
-                            <col width="25%">
-                            <col width="15%">
-                            <col width="15%">
-                            <col width="80">
-                        </colgroup>
-                        <thead>
+<form action="<?= $controller->url_for('news/admin_news/' . $area_type) ?>" id="admin_news_form" class="default"
+      method="post">
+    <input type="hidden" name="news_filter" value="set">
+    <input type="hidden" name="news_filter_term" value="<?= htmlReady($news_searchterm) ?>">
+    <input type="hidden" name="news_filter_start" value="<?= $news_startdate ?>">
+    <input type="hidden" name="news_filter_end" value="<?= $news_enddate ?>">
+    <?= CSRFProtection::tokenTag(); ?>
+    <fieldset>
+        <legend><?= _('Meine Ankündigungen') ?></legend>
+        <label>
+            <?= _("Suchbegriff") ?>
+            <input type="text" name="news_searchterm" aria-label="<?= _('Suchbegriff') ?>"
+                   value="<?= htmlReady($news_searchterm) ?>">
+        </label>
+        <label class="col-2">
+            <?= _("Anzeige von") ?>
+            <input class="has-date-picker" type="text" name="news_startdate"
+                   aria-label="<?= _('Ankündigungen anzeigen, die ab diesem Datum sichtbar sind') ?>"
+                   value="<?= ($news_startdate) ? date('d.m.Y', $news_startdate) : '' ?>">
+        </label>
+        <label class="col-2">
+            <?= _("Anzeige bis") ?>
+            <input class="has-date-picker" type="text" name="news_enddate"
+                   aria-label="<?= _('Ankündigungen anzeigen, die vor diesem Datum sichtbar sind') ?>"
+                   value="<?= ($news_enddate) ? date('d.m.Y', $news_enddate) : '' ?>">
+        </label>
+    </fieldset>
+    <footer>
+        <?= Button::create(_('Filter anwenden'), 'apply_news_filter', ['aria-label' => _('Liste mit Suchbegriff und/oder Zeitraum filtern')]) ?>
+        <? if ($filter_text) : ?>
+            <?= Button::create(_('Auswahl aufheben'), 'reset_filter') ?>
+        <? endif ?>
+    </footer>
+    <br>
+    <? if ($filter_text) : ?>
+        <?= MessageBox::info(htmlReady($filter_text) )?>
+    <? endif ?>
+    <? if (count($news_items)) : ?>
+        <? foreach ($area_structure as $type => $area_data) : ?>
+            <? $last_title = 'none' ?>
+            <? if (count($news_items[$type])) : ?>
+                <table class="default">
+                    <? if (!$area_type) : ?>
+                        <caption>
+                            <?= htmlReady($area_data['title']) ?>
+                        </caption>
+                    <? endif ?>
+                    <colgroup>
+                        <col width="20">
+                        <col>
+                        <col width="25%">
+                        <col width="10%">
+                        <col width="10%">
+                        <col width="80">
+                    </colgroup>
+                    <thead>
                         <tr>
                             <th></th>
                             <th><?= _("Überschrift") ?></th>
@@ -83,8 +77,8 @@
                             <th><?= _("Ablaufdatum") ?></th>
                             <th class="actions"><?= _("Aktion") ?></th>
                         </tr>
-                        </thead>
-                        <tbody>
+                    </thead>
+                    <tbody>
                         <? foreach ($news_items[$type] as $news) : ?>
                             <? $title = $news['title'] ?>
                             <? if ($title != $last_title) : ?>
@@ -92,14 +86,21 @@
                                 <? endif ?>
                                 <? if ($title) : ?>
                                     <tr>
-                                        <th colspan="6"><?= mila(htmlReady($news['title'])) . ' ' . htmlReady($news['semester']) ?></th>
+                                        <th>
+                                            <input type="checkbox"
+                                                   data-proxyfor=".news_<?= $news['range_id'] ?>"
+                                                   aria-labelledby="<?= _('Alle auswählen') ?>">
+                                        </th>
+                                        <th colspan="5"><?= mila(htmlReady($news['title'])) . ' ' . htmlReady($news['semester']) ?></th>
                                     </tr>
                                 <? endif ?>
                                 <? $last_title = $title ?>
                             <? endif ?>
                             <tr>
                                 <td>
-                                    <input type="CHECKBOX" name="mark_news[]" value="<?= $news['object']->news_id . '_' . $news['range_id'] ?>" aria-label="<?= _('Diese Ankündigung zum Entfernen vormerken') ?>" <?= tooltip(_("Diese Ankündigung zum Entfernen vormerken"), false) ?>>
+                                    <input type="checkbox" class="news_<?= $news['range_id'] ?>" name="mark_news[]"
+                                           value="<?= $news['object']->news_id . '_' . $news['range_id'] ?>"
+                                           aria-label="<?= _('Diese Ankündigung zum Entfernen vormerken') ?>" <?= tooltip(_("Diese Ankündigung zum Entfernen vormerken"), false) ?>>
                                 </td>
                                 <td><?= htmlReady($news['object']->topic) ?></td>
                                 <? list ($body, $admin_msg) = explode("<admin_msg>", $news['object']->body); ?>
@@ -107,8 +108,8 @@
                                 <td><?= strftime("%d.%m.%y", $news['object']->date) ?></td>
                                 <td><?= strftime("%d.%m.%y", $news['object']->date + $news['object']->expire) ?></td>
                                 <td class="actions">
-                                <?
-                                    $menu = ActionMenu::get(); 
+                                    <?
+                                    $menu = ActionMenu::get();
                                     $menu->addLink(
                                         $controller->url_for('news/edit_news/' . $news['object']->news_id),
                                         _('Ankündigung bearbeiten'),
@@ -135,30 +136,22 @@
                                         );
                                     }
                                     echo $menu->render();
-                                ?>
+                                    ?>
                                 </td>
                             </tr>
                         <? endforeach ?>
-                        </tbody>
-                    </table>
-                <? endif ?>
-            <? endforeach ?>
-            <br>
-            <br>
-            <table class="default">
-                <tfoot>
-                <tr>
-                    <td colspan="6">
-                        <?= Button::create(_('Alle markierten Ankündigungen entfernen'), 'remove_marked_news') ?>
-                    </td>
-                </tr>
-                </tfoot>
-            </table>
-        <? else : ?>
-            <?= MessageBox::info(_('Keine Ankündigungen vorhanden.')) ?>
-        <? endif ?>
-    </form>
-</div>
-<script>
-    jQuery('.news_date').datepicker();
-</script>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="6">
+                                <?= Button::create(_('Alle markierten Ankündigungen entfernen'), 'remove_marked_news') ?>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            <? endif ?>
+        <? endforeach ?>
+    <? else : ?>
+        <?= MessageBox::info(_('Keine Ankündigungen vorhanden.')) ?>
+    <? endif ?>
+</form>

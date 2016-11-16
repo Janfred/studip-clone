@@ -37,8 +37,8 @@ class NewsController extends StudipController
 
         $this->area_structure = [
             'global' => [
-                'title' => _('Stud.IP (systemweit)'),
-                'icon'  => 'home',
+                'title'     => _('Stud.IP (systemweit)'),
+                'icon'      => 'home',
             ],
             'inst' => [
                 'title' => _('Einrichtungen'),
@@ -53,6 +53,7 @@ class NewsController extends StudipController
                 'icon'  => 'person',
             ],
         ];
+        PageLayout::addSqueezePackage('tablesorter');
     }
 
     /**
@@ -517,7 +518,7 @@ class NewsController extends StudipController
             $this->news_enddate = $this->getTimeStamp(Request::get('news_enddate'), 'end');
         }
         // fetch news list
-        $this->news_items = StudipNews::getNewsRangesByFilter($GLOBALS["auth"]->auth["uid"], $this->area_type, $this->news_searchterm, $this->news_startdate, $this->news_enddate, true, $limit+1);
+        $this->news_items = StudipNews::getNewsRangesByFilter($GLOBALS['user']->id, $this->area_type, $this->news_searchterm, $this->news_startdate, $this->news_enddate, true, $limit+1);
         // build area and filter description
         if ($this->news_searchterm && $this->area_type && ($this->area_type != 'all')) {
             if ($this->news_startdate && $this->news_enddate) {$this->filter_text = sprintf(_('Angezeigt werden Ankündigungen im Bereich "%s" zum Suchbegriff "%s", die zwischen dem %s und dem %s sichtbar sind.'), $this->area_structure[$this->area_type]['title'], $this->news_searchterm, date('d.m.Y', $this->news_startdate), date('d.m.Y', $this->news_enddate));}
