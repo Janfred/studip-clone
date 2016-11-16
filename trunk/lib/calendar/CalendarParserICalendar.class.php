@@ -25,6 +25,8 @@ class CalendarParserICalendar extends CalendarParser
     {
         parent::__construct();
         $this->type = 'iCalendar';
+        // initialize error handler
+        $GLOBALS['_calendar_error'] = new ErrorHandler();
     }
 
     public function getCount($data)
