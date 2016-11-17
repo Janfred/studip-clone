@@ -133,7 +133,7 @@ class MembersModel
                 $messaging->insert_message($message, $user->username,
                                 '____%system%____', FALSE, FALSE, '1', FALSE, sprintf('%s %s', _('Systemnachricht:'),
                                         _("nicht zugelassen in Veranstaltung")), TRUE);
-                StudipLog::log('SEM_USER_DEL', $this->course_id, $user_id, 'Wurde aus der Veranstaltung rausgeworfen');
+                StudipLog::log('SEM_USER_DEL', $this->course_id, $user_id, 'Wurde aus der Veranstaltung entfernt');
                 NotificationCenter::postNotification('UserDidLeaveCourse', $this->course_id, $user_id); 
 
                 $msgs[] = $user->getFullName();
