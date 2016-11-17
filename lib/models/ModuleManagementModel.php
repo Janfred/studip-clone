@@ -97,8 +97,14 @@ abstract class ModuleManagementModel extends SimpleORMap
             }
         }
 
-        // check the permissions for every single field
-        foreach (array_keys($this->db_fields) as $field) {
+        // check the permissions for every single db field except primary keys
+        if ($this->isNew()) {
+            $fields = array_diff(array_keys($this->db_fields),
+                    array_values($this->pk));
+        } else {
+            $fields = array_keys($this->db_fields);
+        }
+        foreach ($fields as $field) {
             if ($this->isFieldDirty($field)
                     && !$perm->haveFieldPerm($field, MvvPerm::PERM_WRITE, $user_id)) {
                 throw new Exception(sprintf(

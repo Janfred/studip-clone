@@ -92,6 +92,20 @@ $privileges = array(
         'MVVFreigabe'   => 1
     ),
     'fields' => array(
+        'modul_id' => array(
+            'planung' => array(
+                'MVVEntwickler' => 3,
+                'MVVRedakteur'  => 1,
+                'MVVTranslator' => 1,
+                'MVVFreigabe'   => 3
+            ),
+            'genehmigt' => array(
+                'MVVEntwickler' => 1,
+                'MVVRedakteur'  => 1,
+                'MVVTranslator' => 1,
+                'MVVFreigabe'   => 3
+            )
+        ),
         'position' => array(
             'planung' => array(
                 'MVVEntwickler' => 3,
@@ -345,15 +359,13 @@ $privileges = array(
                 'MVVEntwickler'     => 1,
                 'MVVRedakteur'      => 1,
                 'MVVTranslator'     => 3,
-                'MVVFreigabe'       => 1,
-                'MVVLvGruppenAdmin' => 1
+                'MVVFreigabe'       => 1
             ),
             'planung' => array(
                 'MVVEntwickler'     => 7,
                 'MVVRedakteur'      => 7,
                 'MVVTranslator'     => 3,
-                'MVVFreigabe'       => 1,
-                'MVVLvGruppenAdmin' => 1
+                'MVVFreigabe'       => 1
             )
         ),
         'abschnitte' => array(
@@ -361,15 +373,13 @@ $privileges = array(
                 'MVVEntwickler'     => 1,
                 'MVVRedakteur'      => 1,
                 'MVVTranslator'     => 3,
-                'MVVFreigabe'       => 1,
-                'MVVLvGruppenAdmin' => 1
+                'MVVFreigabe'       => 1
             ),
             'planung' => array(
                 'MVVEntwickler'     => 7,
                 'MVVRedakteur'      => 7,
                 'MVVTranslator'     => 3,
-                'MVVFreigabe'       => 1,
-                'MVVLvGruppenAdmin' => 1
+                'MVVFreigabe'       => 1
             )
         ),
         'languages' => array(
@@ -377,15 +387,13 @@ $privileges = array(
                 'MVVEntwickler'     => 1,
                 'MVVRedakteur'      => 1,
                 'MVVTranslator'     => 1,
-                'MVVFreigabe'       => 1,
-                'MVVLvGruppenAdmin' => 1
+                'MVVFreigabe'       => 1
             ),
             'planung' => array(
                 'MVVEntwickler'     => 7,
                 'MVVRedakteur'      => 7,
                 'MVVTranslator'     => 1,
-                'MVVFreigabe'       => 1,
-                'MVVLvGruppenAdmin' => 1
+                'MVVFreigabe'       => 1
             )
         )
     )

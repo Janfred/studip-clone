@@ -481,24 +481,26 @@ if ($GLOBALS['MVV_MODUL']['SPRACHE']['default'] != $deskriptor->sprache) {
         </label>
     </fieldset>
     <fieldset>
-        <legend><?= _('Kapazität') ?></legend>
-        <label id="mvv-field-modul-kapazität"><?= _('Kapazität/Teilnahmezahl') ?>
+        <legend><?= _('Kapazität/Teilnahmezahl') ?></legend>
         <? if ($perm->haveFieldPerm('kapazitaet')): ?>
             <? if ($def_lang) : ?>
-                <input type="text" name="kapazitaet" id="kapazitaet" value="<?= htmlReady($modul->kapazitaet) ?>" maxlength="50"<?= $modul->kapazitaet == '' ? ' disabled' : ''; ?>>
-                <input type="checkbox" name="kap_unbegrenzt" value="1" class="check_disable"<?= $modul->kapazitaet == '' ? ' checked' : ''; ?>>
-                <?= _('unbegrenzt') ?>
+                <label id="mvv-field-modul-kapazität"><?= _('Teilnahmezahl') ?>
+                    <input type="text" name="kapazitaet" id="kapazitaet" value="<?= htmlReady($modul->kapazitaet) ?>" maxlength="50"<?= $modul->kapazitaet == '' ? ' disabled' : ''; ?>>
+                    <input type="checkbox" name="kap_unbegrenzt" value="1" class="check_disable"<?= $modul->kapazitaet === '' ? ' checked' : ''; ?>>
+                    <?= _('unbegrenzt') ?>
+                </label>
             <? else : ?>
+                <?= _('Teilnahmezahl') ?>:
                 <?= $modul->kapazitaet == '' ? _('unbegrenzt') : htmlReady($modul->kapazitaet) ?>
             <? endif; ?>
         <? else : ?>
+            <?= _('Teilnahmezahl') ?>:
             <?= $modul->kapazitaet == '' ? _('unbegrenzt') : htmlReady($modul->kapazitaet) ?>
             <input type="hidden" name="kapazitaet" id="kapazitaet" value="<?= htmlReady($modul->kapazitaet) ?>">
             <? if ($modul->kapazitaet == '') : ?>
             <input type="hidden" name="kap_unbegrenzt" value="1">
             <? endif; ?>
         <? endif; ?>
-        </label>
         <label id="mvv-field-modul-kommentar_kapazitaet"><?= _('Kommentar') ?>
         <? if($perm_d->haveFieldPerm('kommentar_kapazitaet', MvvPerm::PERM_WRITE)): ?>
             <textarea cols="60" rows="5" name="kommentar_kapazitaet" id="kommentar_kapazitaet" class="add_toolbar ui-resizable"><?= htmlReady($deskriptor->kommentar_kapazitaet) ?></textarea>

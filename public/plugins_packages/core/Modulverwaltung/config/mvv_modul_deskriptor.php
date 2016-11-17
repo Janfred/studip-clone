@@ -97,11 +97,31 @@ $privileges = array(
     'fields' => array(
         // wird beim Erstellen vorgegeben
         'sprache' => array(
-            'default' => array(
+            'planung' => array(
+                'MVVEntwickler' => 3,
+                'MVVRedakteur'  => 1,
+                'MVVTranslator' => 1,
+                'MVVFreigabe'   => 3
+            ),
+            'genehmigt' => array(
                 'MVVEntwickler' => 1,
                 'MVVRedakteur'  => 1,
                 'MVVTranslator' => 1,
-                'MVVFreigabe'   => 1
+                'MVVFreigabe'   => 3
+            )
+        ),
+        'modul_id' => array(
+            'planung' => array(
+                'MVVEntwickler' => 3,
+                'MVVRedakteur'  => 1,
+                'MVVTranslator' => 1,
+                'MVVFreigabe'   => 3
+            ),
+            'genehmigt' => array(
+                'MVVEntwickler' => 1,
+                'MVVRedakteur'  => 1,
+                'MVVTranslator' => 1,
+                'MVVFreigabe'   => 3
             )
         ),
         'verantwortlich' => array(
