@@ -1,34 +1,35 @@
 <?php
 /**
-* enrolment.php - enrolment in courses
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License as
-* published by the Free Software Foundation; either version 2 of
-* the License, or (at your option) any later version.
-*
-* @author      André Noack <noack@data-quest.de>
-* @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
-* @category    Stud.IP
-* @package     admin
-*/
+ * enrolment.php - enrolment in courses
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ *
+ * @author      André Noack <noack@data-quest.de>
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
+ * @category    Stud.IP
+ * @package     admin
+ */
 
 /**
-* @addtogroup notifications
-*
-* Enrolling in a course triggers a CourseDidEnroll
-* notification. The course's ID is transmitted as
-* subject of the notification.
-*/
+ * @addtogroup notifications
+ *
+ * Enrolling in a course triggers a CourseDidEnroll
+ * notification. The course's ID is transmitted as
+ * subject of the notification.
+ */
 class Course_EnrolmentController extends AuthenticatedController
 {
     protected $allow_nobody = true;
     protected $utf8decode_xhr = true;
 
     /**
-    * common tasks for all actions
-    */
-    function before_filter(&$action, &$args) {
+     * common tasks for all actions
+     */
+    function before_filter(&$action, &$args)
+    {
         parent::before_filter($action, $args);
         $this->course_id = $args[0];
 
@@ -44,7 +45,8 @@ class Course_EnrolmentController extends AuthenticatedController
         //Ist bereits Teilnehmer/Admin/freier Zugriff -> gleich weiter
         if ($enrolment_info['enrolment_allowed'] &&
             (in_array($enrolment_info['cause'], words('root courseadmin member'))
-                || ($enrolment_info['cause'] == 'free_access' && $GLOBALS['user']->id == 'nobody') )) {
+                || ($enrolment_info['cause'] == 'free_access' && $GLOBALS['user']->id == 'nobody'))
+        ) {
             $redirect_url = UrlHelper::getUrl('seminar_main.php', array('auswahl' => $this->course_id));
             if (Request::isXhr()) {
                 $this->response->add_header('X-Location', $redirect_url);
@@ -71,7 +73,8 @@ class Course_EnrolmentController extends AuthenticatedController
     /**
      * A person applies for a course.
      */
-    function apply_action() {
+    function apply_action()
+    {
         $user_id = $GLOBALS['user']->id;
         $courseset = CourseSet::getSetForCourse($this->course_id);
         $this->course_name = PageLayout::getTitle();
@@ -99,11 +102,16 @@ class Course_EnrolmentController extends AuthenticatedController
                             } else {
                                 if ($course->isWaitlistAvailable()) {
                                     $seminar = new Seminar($course);
-                                    if ($seminar->addToWaitlist($user_id, 'last')) {
+                                    if ($maxpos = $seminar->addToWaitlist($user_id, 'last')) {
+                                        $msg = _("Diese Veranstaltung ist teilnahmebeschränkt.");
                                         $msg_details[] = sprintf(_("Alle Plätze sind belegt, Sie wurden daher auf Platz %s der Warteliste gesetzt."), $maxpos);
                                     }
                                 } else {
-                                    $this->admission_error = MessageBox::error(_("Die Anmeldung war nicht erfolgreich. Alle Plätze sind belegt und es steht keine Warteliste zur Verfügung."));
+                                    if ($course->admission_disable_waitlist) {
+                                        $this->admission_error = MessageBox::error(_("Die Anmeldung war nicht erfolgreich. Alle Plätze sind belegt und es steht keine Warteliste zur Verfügung."));
+                                    } else {
+                                        $this->admission_error = MessageBox::error(_("Die Anmeldung war nicht erfolgreich. Alle Plätze sind belegt und es stehen keine Wartelistenplätze zur Verfügung, da die Warteliste voll ist."));
+                                    }
                                 }
                             }
                         } else {
@@ -134,7 +142,9 @@ class Course_EnrolmentController extends AuthenticatedController
                             $msg_details[] = _("Sie sind bereits für die Verteilung angemeldet.");
                         }
                     }
-                    $this->courseset_message = MessageBox::info($msg, $msg_details);
+                    if ($msg) {
+                        $this->courseset_message = MessageBox::info($msg, $msg_details);
+                    }
                 } else {
                     $enrol_user = true;
                 }
@@ -161,8 +171,8 @@ class Course_EnrolmentController extends AuthenticatedController
                             if (StudygroupModel::isInvited($user_id, $this->course_id)) {
                                 // an invitation exists, so accept the join request automatically
                                 $status = 'autor';
-                                StudygroupModel::accept_user(get_username($user_id),$this->course_id);
-                                StudygroupModel::cancelInvitation(get_username($user_id),$this->course_id);
+                                StudygroupModel::accept_user(get_username($user_id), $this->course_id);
+                                StudygroupModel::cancelInvitation(get_username($user_id), $this->course_id);
                                 $success = sprintf(_("Sie wurden in die Veranstaltung %s als %s eingetragen."), $course->getName(), get_title_for_status($status, 1, $course->status));
                                 PageLayout::postMessage(MessageBox::success($success));
                             } else {
@@ -184,7 +194,7 @@ class Course_EnrolmentController extends AuthenticatedController
 
                     if (StudygroupModel::isInvited($user_id, $this->course_id)) {
                         // delete an existing invitation
-                        StudygroupModel::cancelInvitation(get_username($user_id),$this->course_id);
+                        StudygroupModel::cancelInvitation(get_username($user_id), $this->course_id);
                     }
                 }
             }
@@ -196,7 +206,8 @@ class Course_EnrolmentController extends AuthenticatedController
     /**
      * Prioritize courses.
      */
-    function claim_action() {
+    function claim_action()
+    {
         CSRFProtection::verifyUnsafeRequest();
         $user_id = $GLOBALS['user']->id;
         $courseset = CourseSet::getSetForCourse($this->course_id);
@@ -208,7 +219,9 @@ class Course_EnrolmentController extends AuthenticatedController
                 }
                 $admission_prio = Request::getArray('admission_prio');
                 $max_prio = max($admission_prio);
-                $admission_prio = array_map(function($a) use (&$max_prio) {return $a > 0  ? $a : ++$max_prio;}, $admission_prio);
+                $admission_prio = array_map(function ($a) use (&$max_prio) {
+                    return $a > 0 ? $a : ++$max_prio;
+                }, $admission_prio);
                 if (count(array_unique($admission_prio)) != count(Request::getArray('admission_prio'))) {
                     PageLayout::postMessage(MessageBox::info(_("Sie dürfen jede Priorität nur einmal auswählen. Überprüfen Sie bitte Ihre Auswahl!")));
                 }
@@ -228,7 +241,10 @@ class Course_EnrolmentController extends AuthenticatedController
                 if ($delete = key(Request::getArray('admission_prio_delete'))) {
                     unset($admission_prio[$delete]);
                     $changed = 1;
-                    $admission_prio = array_map(function($a) {static $c = 1; return $c++;}, $admission_prio);
+                    $admission_prio = array_map(function ($a) {
+                        static $c = 1;
+                        return $c++;
+                    }, $admission_prio);
                 }
                 foreach ($admission_prio as $course_id => $p) {
                     $changed += AdmissionPriority::setPriority($courseset->getId(), $user_id, $course_id, $p);
