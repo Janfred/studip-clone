@@ -2347,7 +2347,7 @@ class Seminar
                 "<i>".htmlReady(get_fullname($user_id))."</i>"));
             NotificationCenter::postNotification("CourseDidChangeMember", $this, $user_id);
             NotificationCenter::postNotification('UserDidLeaveCourse', $this->id, $user_id);
-            StudipLog::log('SEM_USER_DEL', $this->id, $user_id, 'Wurde aus der Veranstaltung rausgeworfen');
+            StudipLog::log('SEM_USER_DEL', $this->id, $user_id, 'Wurde aus der Veranstaltung entfernt');
             $this->course->resetRelation('members');
             return $this;
         } else {
