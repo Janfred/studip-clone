@@ -107,7 +107,7 @@ class SendMailNotificationsJob extends CronJob
         $rs = DBManager::get()->query($query);
         while($r = $rs->fetch()){
             $user = new Seminar_User($r["user_id"]);
-            if ($user->locked) {
+            if ($user->locked || ($user->cfg->EXPIRATION_DATE > 0 && $user->cfg->EXPIRATION_DATE < time())) {
                 continue;
             }
             setTempLanguage('', $user->preferred_language);
