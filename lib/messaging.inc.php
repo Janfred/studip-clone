@@ -166,6 +166,11 @@ class messaging
         if (!$to) {
             return;
         }
+        // do not send mails when account is locked or expired
+        $expiration = UserConfig::get($receiver->id)->EXPIRATION_DATE;
+        if ($receiver->locked || ($expiration > 0 && $expiration < time())) {
+            return;
+        }
 
         $rec_fullname = $receiver->getFullName();
 
