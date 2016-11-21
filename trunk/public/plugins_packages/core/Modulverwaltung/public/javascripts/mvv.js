@@ -54,17 +54,6 @@ jQuery(function ($) {
         return false;
     });
 
-    $(document).on('change', '.check_disable', function() {
-        var cbox = $(this);
-
-        if (cbox.is('input:checked')) {
-
-            cbox.siblings().find('input:enabled').attr('disabled', 'disabled').val('');
-        } else {
-            cbox.siblings().find('input:disabled').removeAttr('disabled').val('0');
-        }
-    });
-
     $(document).on('click', 'a.mvv-new-tab', function(event) {
         MVV.Diff.openNewTab(this);
         return false;

@@ -54,7 +54,7 @@
                 <? if ($perm->haveFieldPerm('modulteile', MvvPerm::PERM_CREATE)) : ?>
                     <? $actionMenu->addLink(
                             $controller->url_for('/modulteil', ['modul_id' => $modul->id]),
-                            _('Modul genehmigen'),
+                            _('Modulteil anlegen'),
                             Icon::create('file+add', 'clickable', ['title' => _('Modulteil anlegen')]))
                     ?>
                 <? endif; ?>

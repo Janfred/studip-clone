@@ -187,32 +187,28 @@ if ($GLOBALS['MVV_MODULTEIL']['SPRACHE']['default'] != $deskriptor->sprache) {
     </fieldset>
     <fieldset>
         <legend><?= _('Kapazität/Teilnahmezahl Modulteil') ?></legend>
-        <? if ($perm->haveFieldPerm('kapazitaet')): ?>
-            <? if ($def_lang) : ?>
-                <label id="mvv-field-modulteil-kapazität"><?= _('Teilnahmezahl') ?>
-                    <input type="text" name="kapazitaet" id="kapazitaet" value="<?= htmlReady($modulteil->kapazitaet) ?>" maxlength="50"<?= $modulteil->kapazitaet == '' ? ' disabled' : ''; ?>>
-                    <input type="checkbox" name="kap_unbegrenzt" value="1" class="check_disable"<?= $modulteil->kapazitaet === '' ? ' checked' : ''; ?>>
-                    <?= _('unbegrenzt') ?>
-                </label>
-            <? else : ?>
-                <?= _('Teilnahmezahl') ?>:
-                <?= $modulteil->kapazitaet == '' ? _('unbegrenzt') : htmlReady($modulteil->kapazitaet) ?>
-            <? endif; ?>
-        <? else : ?>
-            <?= _('Teilnahmezahl') ?>:
-            <?= $modulteil->kapazitaet == '' ? _('unbegrenzt') : htmlReady($modulteil->kapazitaet) ?>
-            <input type="hidden" name="kapazitaet" id="kapazitaet" value="<?= htmlReady($modulteil->kapazitaet) ?>">
-            <? if ($modulteil->kapazitaet == '') : ?>
-            <input type="hidden" name="kap_unbegrenzt" value="1">
-            <? endif; ?>
-        <? endif; ?>
-            <label><?= _('Kommentar') ?>
-                <? if ($perm_d->haveFieldPerm('kommentar_kapazitaet', MvvPerm::PERM_WRITE)) : ?>
-                <textarea cols="60" rows="5" name="kommentar_kapazitaet" id="kommentar_kapazitaet" class="add_toolbar ui-resizable"><?= htmlReady($deskriptor->kommentar_kapazitaet) ?></textarea>
-                <? else : ?>
-                <textarea readonly cols="60" rows="5" name="kommentar_kapazitaet" id="kommentar_kapazitaet" class="ui-resizable"><?= htmlReady($deskriptor->kommentar_kapazitaet) ?></textarea>
-                <? endif; ?>
+        <section id="mvv-field-modulteil-kapazitaet" class="hgroup size-m">
+        <? if ($perm->haveFieldPerm('kapazitaet') && $def_lang): ?>
+            <label><?= _('Teilnahmezahl') ?>
+                <input type="text" name="kapazitaet" id="kapazitaet" value="<?= htmlReady($modulteil->kapazitaet) ?>" <?= $modulteil->kapazitaet == '' ? ' disabled' : ''; ?>>
             </label>
+            <label>
+                <input type="checkbox" name="kap_unbegrenzt" id="kap_unbegrenzt" value="1"<?= $modulteil->kapazitaet == '' ? ' checked' : ''; ?> onchange="jQuery('#kapazitaet').attr('disabled', function(foo, attr){ jQuery(this).val(attr ? '0' : ''); return !attr; }); return false;">
+                <?= _('unbegrenzt') ?>
+            </label>
+        <? else: ?>
+            <?= _('Teilnahmezahl') ?>: <?= $modulteil->kapazitaet == '' ? _('unbegrenzt') : htmlReady($modulteil->kapazitaet) ?>
+            <input type="hidden" name="kapazitaet" value="<?= htmlReady($modulteil->kapazitaet) ?>">
+            <input type="hidden" name="kap_unbegrenzt" value="<?= $modulteil->kapazitaet == '' ? '1' : ''; ?>">
+        <? endif; ?>
+        </section>
+        <label id="mvv-field-modulteil-kommentar_kapazitaet"><?= _('Kommentar') ?>
+            <? if ($perm_d->haveFieldPerm('kommentar_kapazitaet', MvvPerm::PERM_WRITE)) : ?>
+            <textarea cols="60" rows="5" name="kommentar_kapazitaet" id="kommentar_kapazitaet" class="add_toolbar ui-resizable"><?= htmlReady($deskriptor->kommentar_kapazitaet) ?></textarea>
+            <? else : ?>
+            <textarea readonly cols="60" rows="5" name="kommentar_kapazitaet" id="kommentar_kapazitaet" class="ui-resizable"><?= htmlReady($deskriptor->kommentar_kapazitaet) ?></textarea>
+            <? endif; ?>
+        </label>
     </fieldset>
     <fieldset>
         <legend><?= _('Semesterwochenstunden') ?></legend>
