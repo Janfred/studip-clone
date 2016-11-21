@@ -56,7 +56,7 @@ class AddActivities extends Migration
             $stmt = $db->prepare("DELETE FROM plugins_activated WHERE pluginid = ?");
             $stmt->execute(array($old_id));
 
-            $stmt = $db->prepare("DELETE FROM plugins_default_activated WHERE pluginid = ?");
+            $stmt = $db->prepare("DELETE FROM plugins_default_activations WHERE pluginid = ?");
             $stmt->execute(array($old_id));
 
             $stmt = $db->prepare("DELETE FROM roles_plugins WHERE pluginid = ?");
