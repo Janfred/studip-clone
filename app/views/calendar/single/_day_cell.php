@@ -22,7 +22,7 @@
                 </div>
                 <? endif ?>
                 <div class="calendar-day-event-title">
-                    <a title="<?= _('Termin bearbeiten') ?>" href="<?= $controller->url_for('calendar/single/edit/' . $calendar->getRangeId() . '/' . $event->event_id, array('evtype' => $event->getType())) ?>"><?= $event->getTitle() ?></a>
+                    <a title="<?= _('Termin bearbeiten') ?>" href="<?= $controller->url_for('calendar/single/edit/' . $calendar->getRangeId() . '/' . $event->event_id, array('atime' => $atime_new, 'evtype' => $event->getType())) ?>"><?= $event->getTitle() ?></a>
                     <?= $this->render_partial('calendar/single/_tooltip', array('event' => $mapped_event)) ?>
                 </div>
             </td>
