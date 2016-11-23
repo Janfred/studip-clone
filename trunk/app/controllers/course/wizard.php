@@ -180,7 +180,7 @@ class Course_WizardController extends AuthenticatedController
     {
         $this->stepnumber = $stepnumber;
         $this->temp_id = $temp_id;
-        if (empty($this->getValues())) {
+        if (!$this->getValues()) {
             throw new UnexpectedValueException('no data found');
         }
         if (isset($_SESSION['coursewizard'][$this->temp_id]['source_id'])) {
