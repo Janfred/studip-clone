@@ -131,7 +131,7 @@
     // select.submit-upon-select and have the onchange attribute removed.
     // This might lead to unexpected behaviour.
     $(document).on('focus', 'select[onchange*="submit()"]', function () {
-        $(this).remoteAttr('onchange').addClass('submit-upon-select');
+        $(this).removeAttr('onchange').addClass('submit-upon-select');
     }).on('click', 'select.submit-upon-select', function (event) {
         $(this).data('shouldSubmit', true);
     }).on('change', 'select.submit-upon-select', function (event) {
