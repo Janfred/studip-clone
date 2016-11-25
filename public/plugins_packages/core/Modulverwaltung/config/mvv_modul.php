@@ -155,7 +155,7 @@ $privileges = array(
                 'MVVFreigabe'   => 3
             )
         ),
-        'ende' => array(
+        'end' => array(
             'planung' => array(
                 'MVVEntwickler' => 3,
                 'MVVRedakteur'  => 1,
