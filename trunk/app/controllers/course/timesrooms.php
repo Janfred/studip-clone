@@ -458,15 +458,19 @@ class Course_TimesroomsController extends AuthenticatedController
 
         switch (Request::get('method')) {
             case 'edit':
+                PageLayout::setTitle(_('Termine bearbeiten'));
                 $this->editStack($cycle_id);
                 break;
             case 'preparecancel':
+                PageLayout::setTitle(_('Termine ausfallen lassen'));
                 $this->prepareCancel($cycle_id);
                 break;
             case 'delete':
+                PageLayout::setTitle(_('Termine löschen'));
                 $this->deleteStack($cycle_id);
                 break;
             case 'undelete':
+                PageLayout::setTitle(_('Termine stattfinden lassen'));
                 $this->unDeleteStack($cycle_id);
         }
     }
@@ -695,8 +699,7 @@ class Course_TimesroomsController extends AuthenticatedController
             $this->course->createMessage(_('Zugewiesene Gruppen für die Termine wurden geändert.'));
         }
 
-
-        if (in_array(Request::get('action'), ['room', 'freetext', 'noroom'])) {
+        if (in_array(Request::get('action'), ['room', 'freetext', 'noroom']) || Request::get('course_type')) {
             foreach ($singledates as $key => $singledate) {
                 $date = new SingleDate($singledate);
                 if (Request::option('action') == 'room' && Request::option('room')) {
@@ -719,6 +722,12 @@ class Course_TimesroomsController extends AuthenticatedController
                     $date->killAssign();
                     $this->course->createMessage(sprintf(_("Der Termin %s wurde geändert, etwaige freie Ortsangaben und Raumbuchungen wurden entfernt."),
                                                          '<strong>' . $date->toString() . '</strong>'));
+                }
+
+                if(Request::get('course_type')) {
+                    $date->setDateType(Request::get('course_type'));
+                    $date->store();
+                    $this->course->createMessage(sprintf(_("Der Art des Termins %s wurde geändert."), '<strong>' . $date->toString() . '</strong>'));
                 }
             }
         }
