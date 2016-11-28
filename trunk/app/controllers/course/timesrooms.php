@@ -836,6 +836,11 @@ class Course_TimesroomsController extends AuthenticatedController
         }
 
         if ($cycle->store()) {
+
+            if(Request::int('course_type')) {
+                $cycle->setSingleDateType(Request::int('course_type'));
+            }
+
             $cycle_info = $cycle->toString();
             NotificationCenter::postNotification('CourseDidChangeSchedule', $this->course);
 
@@ -871,6 +876,10 @@ class Course_TimesroomsController extends AuthenticatedController
 
         if($cycle->end_offset == -1) {
             $cycle->end_offset = NULL;
+        }
+
+        if(Request::int('course_type')) {
+            $cycle->setSingleDateType(Request::int('course_type'));
         }
 
         if ($cycle->isDirty()) {
