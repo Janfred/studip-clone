@@ -228,6 +228,23 @@ class SeminarCycleDate extends SimpleORMap
     }
 
     /**
+     * Set date-type for all dates
+     * @param $type
+     * @return int
+     */
+    public function setSingleDateType($type)
+    {
+        $result = 0;
+        if(count($this->dates)) {
+            foreach($this->dates as $date) {
+                $date->date_typ = $type;
+                $result += $date->store();
+            }
+        }
+        return $result;
+    }
+
+    /**
      * Stores this cycle.
      * @return int number of changed rows
      */
