@@ -132,6 +132,8 @@
     // This might lead to unexpected behaviour.
     $(document).on('focus', 'select[onchange*="submit()"]', function () {
         $(this).removeAttr('onchange').addClass('submit-upon-select');
+    }).on('focus', 'select.submit-upon-select', function () {
+        $(this).data('currentValue', $(this).val());
     }).on('click', 'select.submit-upon-select', function (event) {
         $(this).data('shouldSubmit', true);
     }).on('change', 'select.submit-upon-select', function (event) {
@@ -140,10 +142,11 @@
         }
     }).on('blur keyup', 'select.submit-upon-select', function (event) {
         var shouldSubmit = event.type === 'keyup' ? event.which === 13 : $(this).data('shouldSubmit'),
-            changed      = $(this).find('option:selected:not([defaultSelected])').length > 0;
+            changed      = $(this).val() !== $(this).data('currentValue');
 
         if (shouldSubmit && changed) {
             $(this).closest('form').submit();
+            return false;
         }
     });
 
