@@ -36,6 +36,17 @@
     <? endif ?>
 
 
+    <label>
+        <?= _('Art') ?>
+        <select name="course_type" id="course_type" class="size-s">
+            <option><?=_('Bitte wählen')?></option>
+            <? foreach ($GLOBALS['TERMIN_TYP'] as $id => $value) : ?>
+                <option value="<?= $id ?>"><?= htmlReady($value['name']) ?>
+                </option>
+            <? endforeach; ?>
+        </select>
+    </label>
+    <br>
     <p><strong><?= _('Raumangaben') ?></strong></p>
     <? if (Config::get()->RESOURCES_ENABLE && $resList->numberOfRooms()) : ?>
         <? $resList->reset() ?>
@@ -77,6 +88,7 @@
         <input type="radio" name="action" value="nochange" checked="checked">
         <?= _('Keine Änderungen an den Raumangaben vornehmen') ?>
     </label>
+
     <footer data-dialog-button>
         <?= Studip\Button::createAccept(_('Änderungen speichern'), 'save') ?>
         <? if (Request::int('fromDialog')) : ?>
