@@ -35,6 +35,20 @@ abstract class DataFieldEntry
     }
 
     /**
+     * Returns the according class for a given type.
+     *
+     * @param String $type Type of the datafield
+     * @return String class name
+     */
+    private static function getClassForType($type)
+    {
+        if ($type === 'selectboxmultiple') {
+            return 'DataFieldSelectboxMultipleEntry';
+        }
+        return 'DataField' . ucfirst($type) . 'Entry';
+    }
+
+    /**
      * Factory method that returns the appropriate datafield object
      * for the given parameters.
      *
@@ -50,7 +64,7 @@ abstract class DataFieldEntry
             return false;
         }
 
-        $entry_class = 'DataField' . ucfirst($type) . 'Entry';
+        $entry_class = self::getClassForType($type);
         return new $entry_class($datafield, $rangeID, $value);
     }
 
