@@ -8,12 +8,27 @@
  * @author   Moritz Strohm <strohm@data-quest.de>
  * @license  http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category Stud.IP
- * @since    3.5.alpha-svn
+ * @since    3.5
  */
 
+
+/**
+ * The Search_ArchiveController enables users with sufficient permissions
+ * to search the course archive.
+ */
 class Search_ArchiveController extends AuthenticatedController
 {
     
+    /**
+     * This action displays the main page of the archive search.
+     * It is also responsible for handling search requests and showing
+     * search results.
+     * 
+     * If a search returned more than 150 results a message is displayed
+     * informing the user that the search criteria must be more specific.
+     * 
+     * @return null This method does not return any value.
+     */
     public function index_action()
     {
         PageLayout::setHelpKeyword('Suche.Archiv');
