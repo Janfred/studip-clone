@@ -33,9 +33,15 @@ class Admin_CoursesController extends AuthenticatedController
 {
 
     /**
-        This helper method retrieves the values when the user has searched courses
-        for a specific value of a datafield.
-    **/
+     * This helper method retrieves the values of datafields when 
+     * the user started a search for courses matching a specific value of
+     * one or more datafields.
+     * This method also checks if a datafield is activated by the user 
+     * and will reject any value for datafields that aren't activated by the user.
+     * 
+     * @return Array Associative array, consisting of datafield names
+     * (as array keys) and values for those datafields.
+     */
     private function getDatafieldFilters()
     {
         //first get the active datafields of the user:
@@ -66,8 +72,12 @@ class Admin_CoursesController extends AuthenticatedController
 
 
     /**
-        This method returns the appropriate widget for the given datafield.
-    **/
+     * This method returns the appropriate widget for the given datafield.
+     * 
+     * @param DataField datafield The datafield whose widget is requested.
+     * 
+     * @return SidebarWidget|null Returns a SidebarWidget derivative or null in case of an error.
+     */
     private function getDatafieldWidget(DataField $datafield)
     {
         if($datafield->accessAllowed()) {
@@ -149,11 +159,20 @@ class Admin_CoursesController extends AuthenticatedController
         }
     }
 
-
+    /**
+     * This method is responsible for building the sidebar.
+     * 
+     * Depending on the sidebar elements the user has selected some of those
+     * elements are shown or not. To find out what elements 
+     * the user has selected the user configuration is accessed.
+     * 
+     * @param string courseTypeFilterConfig The selected value for the course type filter field, defaults to null.
+     * @return null This method does not return any value.
+     */
     private function buildSidebar($courseTypeFilterConfig = null)
     {
         /*
-            TIC6701: Depending on the elements the user has selected
+            Depending on the elements the user has selected
             some of the following elements may not be presented
             in the sidebar.
 
@@ -258,7 +277,6 @@ class Admin_CoursesController extends AuthenticatedController
             $actions->addLink(_('Neue Veranstaltung anlegen'),
                               URLHelper::getLink('dispatch.php/course/wizard'),
                               Icon::create('seminar+add', 'clickable'))->asDialog('size=50%');
-            //for TIC6701:
             $actions->addLink(
                 _('Diese Seitenleiste konfigurieren'),
                 URLHelper::getLink('dispatch.php/admin/courses/sidebar'),
@@ -423,9 +441,12 @@ class Admin_CoursesController extends AuthenticatedController
 
 
     /**
-        The sidebar action is responsible for showing a dialog
-        that lets the user configure the sidebar.
-    */
+     * The sidebar action is responsible for showing a dialog
+     * that lets the user configure what elements of the sidebar are visible
+     * and which will be invisible.
+     * 
+     * @return null This method does not return any value.
+     */
     public function sidebar_action()
     {
         if(Request::get('updateConfig', false)) {
@@ -1167,7 +1188,7 @@ class Admin_CoursesController extends AuthenticatedController
                     $seminars[$seminar_id]['modules'] = $modules->getLocalModules($seminar_id, 'sem', $seminar['modules'], $seminar['status']);
                     $seminars[$seminar_id]['navigation'] = MyRealmModel::getAdditionalNavigations($seminar_id, $seminars[$seminar_id], $seminars[$seminar_id]['sem_class'], $GLOBALS['user']->id);
                 }
-                //TIC6701: last activity:
+                //add last activity column:
                 if (in_array('last_activity', $params['view_filter'])) {
                     $seminars[$seminar_id]['last_activity'] = lastActivity($seminar_id);
                 }
