@@ -11,27 +11,29 @@
  * @author      Moritz Strohm <strohm@data-quest.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
- * @since       3.5.alpha-svn
+ * @since       3.5
  */
-
-//rewrite of /public/archiv_assi.php
 
 require_once('lib/archiv.inc.php'); //needed in archive_action
 
 
 /**
-    Course_ArchiveController is a controller that allows users
-    which have the required permissions to archive a course.
-    
-    This controller replaces the old script at /public/archiv_assi.php.
-*/
+ * Course_ArchiveController is a controller that allows users
+ * which have the required permissions to archive a course.
+ */
 class Course_ArchiveController extends AuthenticatedController
 {
     
     /**
-        This method checks if the current user has the required
-        permissions to archive a course.
-    */
+     * This method checks if the current user has the required
+     * permissions to archive a course.
+     * 
+     * @param string courseId The ID of the course that is going to be archived
+     * in case the user has sufficent permissions to do so.
+     * 
+     * @return bool True, if the user has the required permissions to archive
+     * a course, false otherwise.
+     */
     private function userHasPermission($courseId = null)
     {
         global $perm;
@@ -46,12 +48,18 @@ class Course_ArchiveController extends AuthenticatedController
     
     
     /**
-        A helper method that creates an HTML table out of the course's data.
-        This method exists for compatibility reasons with public/archiv.php
-        which creates the same output.
-        This method might become useful when public/archiv.php
-        is converted to a Trails controller.
-    */
+     * A helper method that creates an HTML table out of an 
+     * archived course's basic data.
+     * 
+     * The generated HTML table provides basic information about the
+     * archived course. It exists for compatibility reasons with public/archiv.php
+     * which creates the same output and can be used when the public/archiv.php
+     * script is converted to a Trails controller.
+     * 
+     * @param ArchivedCourse course The archived course whose HTML table shall be generated.
+     * 
+     * @return string The HTML code for the table that displays 
+     */
     private function createArchivedCourseHTMLTable($course = null)
     {
         $table = '<table class="default">'
@@ -73,8 +81,10 @@ class Course_ArchiveController extends AuthenticatedController
     
     
     /**
-        This action collects all required data about the course.
-    */
+     * This action collects all required data about the course.
+     * 
+     * @return null This method does not return any value.
+     */
     public function confirm_action()
     {
         PageLayout::setHelpKeyword('Veranstaltungen.Archivieren');
@@ -173,8 +183,10 @@ class Course_ArchiveController extends AuthenticatedController
     
     
     /**
-        This action does the actual archiving of a course.
-    */
+     * This action does the actual archiving of a course.
+     * 
+     * @return null This method does not return any value.
+     */
     public function archive_action()
     {
         global $perm;
