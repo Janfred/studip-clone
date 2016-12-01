@@ -40,8 +40,7 @@ $room_request_filter = function ($date) {
                 <h1>
                 <? if (!$locked): ?>
                     <input type="checkbox" class="date-proxy"
-                           data-proxyfor="#singledate-<?= $semester_id ?> .ids-irregular"
-                           data-activates=".actionForAllIrregular">
+                           data-proxyfor="#singledate-<?= $semester_id ?> .ids-irregular">
                 <? endif ?>
                     <a href="<?= ContentBoxHelper::href('singledate-' . $semester_id) ?>">
                         <?= htmlReady(Semester::find($semester_id)->name) ?>
