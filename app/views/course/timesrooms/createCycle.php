@@ -29,7 +29,7 @@
                value="<?= htmlReady(Request::get('end_time', $cycle->end_time)) ?>"
                required placeholder="HH:mm">
     </label>
-<? var_dump(Request::getInstance())?>
+
     <label>
         <?= _('Art') ?>
         <select name="course_type" id="course_type" class="size-s">
