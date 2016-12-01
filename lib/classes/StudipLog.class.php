@@ -180,7 +180,7 @@ class StudipLog
 
         // search for active seminars
         $courses = Course::findBySQL("VeranstaltungsNummer LIKE CONCAT('%', :needle, '%')
-                     OR seminare.Name LIKE CONCAT('%', :needle, '%')",
+                     OR seminare.Name LIKE CONCAT('%', :needle, '%') ORDER BY start_time DESC",
                 array(':needle' => $needle));
 
         foreach ($courses as $course) {
@@ -220,7 +220,7 @@ class StudipLog
         $result = array();
 
         $institutes = Institute::findBySQL(
-                "name LIKE CONCAT('%', ?, '%')", array($needle));
+                "name LIKE CONCAT('%', ?, '%') ORDER BY name", array($needle));
         foreach ($institutes as $institute) {
             $result[] = array($institute->getId(), my_substr($institute->name, 0, 28));
         }
@@ -257,7 +257,7 @@ class StudipLog
                      OR Vorname LIKE CONCAT('%', :needle, '%')
                      OR CONCAT(Nachname, ', ', Vorname) LIKE CONCAT('%', :needle, '%')
                      OR CONCAT(Vorname, ' ', Nachname) LIKE CONCAT('%', :needle, '%')
-                     OR username LIKE CONCAT('%', :needle, '%')",
+                     OR username LIKE CONCAT('%', :needle, '%') ORDER BY Nachname DESC",
                 array(':needle' => $needle));
         foreach ($users as $user) {
             $name = sprintf('%s (%s)', my_substr($user->getFullname(), 0, 20),
@@ -300,7 +300,7 @@ class StudipLog
     {
         $result = array();
 
-        $query = "SELECT resource_id, name FROM resources_objects WHERE name LIKE CONCAT('%', ?, '%')";
+        $query = "SELECT resource_id, name FROM resources_objects WHERE name LIKE CONCAT('%', ?, '%') ORDER by name";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($needle));
 
