@@ -323,7 +323,7 @@ class Course_TimesroomsController extends AuthenticatedController
     public function createSingleDate_action()
     {
         PageLayout::setTitle(Course::findCurrent()->getFullname() . " - " . _('Einzeltermin anlegen'));
-        $this->restoreRequest(words('date start_time end_time room related_teachers related_statusgruppen freeRoomText dateType fromDialog'));
+        $this->restoreRequest(words('date start_time end_time room related_teachers related_statusgruppen freeRoomText dateType fromDialog course_type'));
 
         if (Config::get()->RESOURCES_ENABLE) {
             $this->resList = ResourcesUserRoomsList::getInstance($GLOBALS['user']->id, true, false, true);
@@ -741,7 +741,7 @@ class Course_TimesroomsController extends AuthenticatedController
     public function createCycle_action($cycle_id = null)
     {
         PageLayout::setTitle(Course::findCurrent()->getFullname() . " - " . _('Regelmäßige Termine anlegen'));
-        $this->restoreRequest(words('day start_time end_time description cycle startWeek teacher_sws fromDialog'));
+        $this->restoreRequest(words('day start_time end_time description cycle startWeek teacher_sws fromDialog course_type'));
 
         $this->cycle = new SeminarCycleDate($cycle_id);
 

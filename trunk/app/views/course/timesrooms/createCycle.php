@@ -29,14 +29,13 @@
                value="<?= htmlReady(Request::get('end_time', $cycle->end_time)) ?>"
                required placeholder="HH:mm">
     </label>
-
+<? var_dump(Request::getInstance())?>
     <label>
         <?= _('Art') ?>
         <select name="course_type" id="course_type" class="size-s">
             <option><?=_('Bitte wählen')?></option>
             <? foreach ($GLOBALS['TERMIN_TYP'] as $id => $value) : ?>
-                <option value="<?= $id ?>"><?= htmlReady($value['name']) ?>
-                </option>
+                <option value="<?= $id ?>" <? if(Request::get('course_type') && Request::get('course_type') == $id) :?>selected="selected"<? endif?>><?= htmlReady($value['name']) ?></option>
             <? endforeach; ?>
         </select>
     </label>
