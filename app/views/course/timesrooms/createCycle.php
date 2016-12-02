@@ -19,14 +19,14 @@
     <label class="col-2">
         <?= _('Startzeit') ?>
         <input class="size-s studip-timepicker" type="text" name="start_time"
-               value="<?= htmlReady(Request::get('start_time', $cycle->start_time)) ?>"
+               value="<?= htmlReady(Request::get('start_time', ($cycle->start_time ? date('H:i', strtotime($cycle->start_time)) : ''))) ?>"
                required placeholder="HH:mm">
     </label>
 
     <label class="col-2">
         <?= _('Endzeit') ?>
         <input class="size-s studip-timepicker" type="text" name="end_time"
-               value="<?= htmlReady(Request::get('end_time', $cycle->end_time)) ?>"
+               value="<?= htmlReady(Request::get('end_time', ($cycle->end_time ? date('H:i', strtotime($cycle->end_time)) : ''))) ?>"
                required placeholder="HH:mm">
     </label>
 
