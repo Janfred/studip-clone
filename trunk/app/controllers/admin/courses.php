@@ -24,21 +24,18 @@
  */
 require_once 'lib/meine_seminare_func.inc.php';
 require_once 'lib/object.inc.php';
-require_once 'lib/archiv.inc.php'; //for lastActivity in getCourses method
-
 require_once 'lib/archiv.inc.php'; //for lastActivity in getCourses() method
-
 
 class Admin_CoursesController extends AuthenticatedController
 {
 
     /**
-     * This helper method retrieves the values of datafields when 
+     * This helper method retrieves the values of datafields when
      * the user started a search for courses matching a specific value of
      * one or more datafields.
-     * This method also checks if a datafield is activated by the user 
+     * This method also checks if a datafield is activated by the user
      * and will reject any value for datafields that aren't activated by the user.
-     * 
+     *
      * @return Array Associative array, consisting of datafield names
      * (as array keys) and values for those datafields.
      */
@@ -50,7 +47,7 @@ class Admin_CoursesController extends AuthenticatedController
 
         $activeDatafields = $userSelectedElements['datafields'];
 
-        if(!$activeDatafields) {
+        if (!$activeDatafields) {
             return array();
         }
 
@@ -60,9 +57,9 @@ class Admin_CoursesController extends AuthenticatedController
 
         $searchedDatafields = array();
 
-        foreach($activeDatafields as $activeField) {
+        foreach ($activeDatafields as $activeField) {
             $requestParamValue = Request::get('df_'.$activeField);
-            if($requestParamValue) {
+            if ($requestParamValue) {
                 $searchedDatafields[$activeField] = $requestParamValue;
             }
         }
@@ -73,20 +70,20 @@ class Admin_CoursesController extends AuthenticatedController
 
     /**
      * This method returns the appropriate widget for the given datafield.
-     * 
+     *
      * @param DataField datafield The datafield whose widget is requested.
-     * 
+     *
      * @return SidebarWidget|null Returns a SidebarWidget derivative or null in case of an error.
      */
     private function getDatafieldWidget(DataField $datafield)
     {
-        if($datafield->accessAllowed()) {
+        if ($datafield->accessAllowed()) {
             //The current user is allowed to see this datafield.
             //Now we must distinguish between the different types of data fields:
 
             $type = $datafield->type;
 
-            if($type == 'bool') {
+            if ($type == 'bool') {
                 //bool fields just need a checkbox for the states TRUE and FALSE
 
                 $checkboxWidget = new OptionsWidget($datafield->name);
@@ -104,7 +101,7 @@ class Admin_CoursesController extends AuthenticatedController
 
                 return $checkboxWidget;
 
-            } elseif(($type == 'selectbox') or ($type == 'radio')
+            } elseif (($type == 'selectbox') or ($type == 'radio')
                 or ($type == 'selectboxmultiple')) {
                 //these field's options are displayed as select box
 
@@ -121,11 +118,11 @@ class Admin_CoursesController extends AuthenticatedController
 
 
                 $options = array();
-                foreach($result as $row) {
+                foreach ($result as $row) {
                     $options[$row[0]] = $row[0];
                 }
 
-                if($options) {
+                if ($options) {
                     $options = array_merge(
                         array(' ' => _('(keine Auswahl)')),
                         $options
@@ -161,11 +158,11 @@ class Admin_CoursesController extends AuthenticatedController
 
     /**
      * This method is responsible for building the sidebar.
-     * 
+     *
      * Depending on the sidebar elements the user has selected some of those
-     * elements are shown or not. To find out what elements 
+     * elements are shown or not. To find out what elements
      * the user has selected the user configuration is accessed.
-     * 
+     *
      * @param string courseTypeFilterConfig The selected value for the course type filter field, defaults to null.
      * @return null This method does not return any value.
      */
@@ -186,7 +183,7 @@ class Admin_CoursesController extends AuthenticatedController
 
         $visibleElements = array();
 
-        if($userSelectedElements) {
+        if ($userSelectedElements) {
             /*
                 The array of user-selected elements is a JSON array:
                 Decode it and set the visibleElements array.
@@ -227,24 +224,24 @@ class Admin_CoursesController extends AuthenticatedController
             Now draw the configurable elements according
             to the values inside the visibleElements array.
         */
-        if($visibleElements['search']) {
+        if ($visibleElements['search']) {
             $this->setSearchWiget();
         }
-        if($visibleElements['institute']) {
+        if ($visibleElements['institute']) {
             $this->setInstSelector();
         }
-        if($visibleElements['semester']) {
+        if ($visibleElements['semester']) {
             $this->setSemesterSelector();
         }
-        if($visibleElements['courseType']) {
+        if ($visibleElements['courseType']) {
             $this->setCourseTypeWidget($courseTypeFilterConfig);
         }
-        if($visibleElements['teacher']) {
+        if ($visibleElements['teacher']) {
             $this->setTeacherWidget();
         }
 
         //if there are datafields in the list, draw their input fields, too:
-        if($visibleElements['datafields']) {
+        if ($visibleElements['datafields']) {
             //The datafields entry contains an array with datafield-IDs.
             //We must fetch them from the database and show an appropriate widget
             //for each datafield.
@@ -253,12 +250,12 @@ class Admin_CoursesController extends AuthenticatedController
 
             $datafields = DataField::getDataFields('sem');
 
-            if($datafields) {
-                foreach($datafields as $datafield) {
-                    if(in_array($datafield->id, $visibleDatafieldIds)) {
+            if ($datafields) {
+                foreach ($datafields as $datafield) {
+                    if (in_array($datafield->id, $visibleDatafieldIds)) {
                         $widget = $this->getDatafieldWidget($datafield);
 
-                        if($widget) {
+                        if ($widget) {
                             $sidebar->addWidget($widget);
                         }
                     }
@@ -288,7 +285,7 @@ class Admin_CoursesController extends AuthenticatedController
         }
 
         //the view filter's visibility is configurable:
-        if(in_array('viewFilter', $visibleElements)) {
+        if (in_array('viewFilter', $visibleElements)) {
             $this->setViewWidget($this->view_filter);
         }
 
@@ -339,7 +336,7 @@ class Admin_CoursesController extends AuthenticatedController
 
         $this->insts = Institute::getMyInstitutes($GLOBALS['user']->id);
 
-        if(empty($this->insts) && !$GLOBALS['perm']->have_perm('root')) {
+        if (empty($this->insts) && !$GLOBALS['perm']->have_perm('root')) {
             PageLayout::postMessage(MessageBox::error(_('Sie wurden noch keiner Einrichtung zugeordnet')));
         }
 
@@ -444,12 +441,12 @@ class Admin_CoursesController extends AuthenticatedController
      * The sidebar action is responsible for showing a dialog
      * that lets the user configure what elements of the sidebar are visible
      * and which will be invisible.
-     * 
+     *
      * @return null This method does not return any value.
      */
     public function sidebar_action()
     {
-        if(Request::get('updateConfig', false)) {
+        if (Request::get('updateConfig', false)) {
             /*
                 The user has changed the configuration.
                 Collect the activated elements:
@@ -466,7 +463,7 @@ class Admin_CoursesController extends AuthenticatedController
             //echo "searchActive = " . $searchActive;
 
             //check for the standard configuration:
-            if($searchActive and $instituteActive and $semesterActive and $courseTypeActive
+            if ($searchActive and $instituteActive and $semesterActive and $courseTypeActive
                 and (!$teacherActive) and (!$activeDatafields) and (!$actionAreaActive) and $viewFilterActive) {
                 /*
                     It is the standard configuration:
@@ -485,26 +482,26 @@ class Admin_CoursesController extends AuthenticatedController
                     in the user configuration table.
                 */
                 $activeArray = array();
-                if($searchActive) {
+                if ($searchActive) {
                     $activeArray['search'] = true;
                 }
-                if($instituteActive) {
+                if ($instituteActive) {
                     $activeArray['institute'] = true;
                 }
-                if($semesterActive) {
+                if ($semesterActive) {
                     $activeArray['semester'] = true;
                 }
-                if($courseTypeActive) {
+                if ($courseTypeActive) {
                     $activeArray['courseType'] = true;
                 }
-                if($teacherActive) {
+                if ($teacherActive) {
                     $activeArray['teacher'] = true;
                 }
-                if($viewFilterActive) {
+                if ($viewFilterActive) {
                     $activeArray['viewFilter'] = true;
                 }
 
-                if($activeDatafields) {
+                if ($activeDatafields) {
                     $activeArray['datafields'] = $activeDatafields;
                 }
 
@@ -534,7 +531,7 @@ class Admin_CoursesController extends AuthenticatedController
 
 
             $userSelectedElements = UserConfig::get(User::findCurrent()->id)->getValue('ADMIN_COURSES_SIDEBAR_ACTIVE_ELEMENTS');
-            if($userSelectedElements) {
+            if ($userSelectedElements) {
                 // The array of selected elements is a JSON array: decode it!
                 $this->userSelectedElements = json_decode($userSelectedElements, true);
             } else {
@@ -728,7 +725,7 @@ class Admin_CoursesController extends AuthenticatedController
 
         $course_set_id = CourseSet::getGlobalLockedAdmissionSetId();
 
-        foreach($all_courses as $course_id){
+        foreach ($all_courses as $course_id) {
             if ($GLOBALS['perm']->have_studip_perm('dozent', $course_id)) {
                 $set = CourseSet::getSetForCourse($course_id);
 
@@ -1092,12 +1089,12 @@ class Admin_CoursesController extends AuthenticatedController
             //In that case we must display the courses of the faculty
             //and all its institutes.
             //Otherwise we just display the courses of the faculty.
-            
+
             $instituteIdFields = explode('_', $GLOBALS['user']->cfg->MY_INSTITUTES_DEFAULT);
-            
+
             $institut = new Institute($instituteIdFields[0]);
-            
-            if(!$institut->isFaculty() || ($instituteIdFields[1] == 'withinst')) {
+
+            if (!$institut->isFaculty() || ($instituteIdFields[1] == 'withinst')) {
                 //The institute is not a faculty or the institute-ID had the string _i appended:
                 //Pick the institute IDs of the faculty/institute and of all sub-institutes.
                 $inst_ids[] = $instituteIdFields[0];
@@ -1115,7 +1112,7 @@ class Admin_CoursesController extends AuthenticatedController
 
         $filter = AdminCourseFilter::get(true);
 
-        if($params['datafields']) {
+        if ($params['datafields']) {
             //enable filtering by datafield values:
             $filter->settings['query']['joins']['datafields_entries'] = array(
                     'join' => "INNER JOIN",
@@ -1124,7 +1121,7 @@ class Admin_CoursesController extends AuthenticatedController
 
             //and use the where-clause for each datafield:
 
-            foreach($params['datafields'] as $fieldId => $fieldValue) {
+            foreach ($params['datafields'] as $fieldId => $fieldValue) {
                 $filter->where("datafields_entries.datafield_id = :fieldId "
                     . "AND datafields_entries.content = :fieldValue",
                     array(
@@ -1159,7 +1156,7 @@ class Admin_CoursesController extends AuthenticatedController
             $filter->orderBy(sprintf('sem_classes.name %s, sem_types.name %s, VeranstaltungsNummer', $params['sortFlag'], $params['sortFlag'], $params['sortFlag']), $params['sortFlag']);
         } elseif ($params['sortby'] === 'completion') {
             $filter->orderBy('is_complete', $params['sortFlag']);
-        } elseif($params['sortby']) {
+        } elseif ($params['sortby']) {
             $filter->orderBy($params['sortby'], $params['sortFlag']);
         }
         $filter->storeSettings();
@@ -1194,9 +1191,9 @@ class Admin_CoursesController extends AuthenticatedController
                 }
                 if ($this->selected_action == 17) {
                     $seminars[$seminar_id]['admission_locked'] = false;
-                    if($seminar['course_set']) {
+                    if ($seminar['course_set']) {
                         $set = new CourseSet($seminar['course_set']);
-                        if(!is_null($set) && $set->hasAdmissionRule('LockedAdmission')) {
+                        if (!is_null($set) && $set->hasAdmissionRule('LockedAdmission')) {
                             $seminars[$seminar_id]['admission_locked'] = 'locked';
                         } else {
                             $seminars[$seminar_id]['admission_locked'] = 'disable';
@@ -1279,13 +1276,13 @@ class Admin_CoursesController extends AuthenticatedController
                 ),
                 'select-' . $institut['Name']
             );
-            
+
             //check if the institute is a faculty.
             //If true, then add another option to display all courses
             //from that faculty and all its institutes.
-            
+
             //$institut is an array, we can't use the method isFaculty() here!
-            if($institut['fakultaets_id'] == $institut['Institut_id']) {
+            if ($institut['fakultaets_id'] == $institut['Institut_id']) {
                 $list->addElement(
                     new SelectElement(
                         $institut['Institut_id'] . '_withinst', //_withinst = with institutes
