@@ -1,4 +1,4 @@
-<form class="default" method="post" 
+<form class="default" method="post"
     action="<?= URLHelper::getLink('dispatch.php/admin/courses/sidebar'); ?>" >
     <input type="hidden" name="updateConfig" value="1">
     <fieldset>
@@ -9,7 +9,7 @@
                 >
             <?= _('Freie Suche'); ?>
         </label>
-        
+
         <label>
             <input name="instituteActive" type="checkbox" value="1"
                 <?= ($userSelectedElements['institute']) ? 'checked="checked"' : '' ?>
@@ -44,10 +44,10 @@
     <? if ($datafields): ?>
     <fieldset>
         <legend><?= _('Datenfelder') ?></legend>
-        <? foreach($datafields as $datafield): ?>
+        <? foreach ($datafields as $datafield): ?>
         <label>
-            <input name="activeDatafields[]" type="checkbox" value="<?= $datafield->id ?>"
-                <? if($userSelectedElements['datafields']) : ?>
+            <input name="activeDatafields[]" type="checkbox" value="<?= htmlReady($datafield->id) ?>"
+                <? if ($userSelectedElements['datafields']) : ?>
                 <?= in_array($datafield->id, $userSelectedElements['datafields']) ? 'checked="checked"' : '' ?>
                 <? endif ?>
                 >
