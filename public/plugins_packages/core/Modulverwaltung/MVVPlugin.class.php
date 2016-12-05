@@ -343,7 +343,7 @@ class MVVPlugin extends StudipPlugin implements SystemPlugin, Loggable {
             case 'mvv_modul_inst':
                 $modul = Modul::find($event->affected_range_id);
                 if ($modul) {
-                    $url = PluginEngine::getURL($mvv_plugin, array(), 'module/module/details_modul/' . $modul->getId(), true);
+                    $url = PluginEngine::getURL($mvv_plugin, array(), 'module/module/details/' . $modul->getId(), true);
                     $templ = str_replace('%modul(%affected)', '<a href="' . $url . '">' . htmlReady($modul->getDisplayName()) . '</a>', $templ);
                 }
                 break;
@@ -398,7 +398,7 @@ class MVVPlugin extends StudipPlugin implements SystemPlugin, Loggable {
                 $modul_desk = ModulDeskriptor::find($event->affected_range_id);
                 if ($modul_desk) {
                     $mod = Modul::find($modul_desk->modul_id);
-                    $url = PluginEngine::getURL($mvv_plugin, array(), 'module/module/details_modul/' . $mod->getId(), true);
+                    $url = PluginEngine::getURL($mvv_plugin, array(), 'module/module/details/' . $mod->getId(), true);
                     $templ = str_replace('%moduldesk(%affected)', 'in Modul <a href="' . $url . '">' . htmlReady($mod->getDisplayName()) . '</a>', $templ);
                 }
                 break;
@@ -406,7 +406,7 @@ class MVVPlugin extends StudipPlugin implements SystemPlugin, Loggable {
             case 'mvv_modul_language':
                 $modul = Modul::find($event->affected_range_id);
                 if ($modul) {
-                    $url = PluginEngine::getURL($mvv_plugin, array(), 'module/module/details_modul/' . $modul->getId(), true);
+                    $url = PluginEngine::getURL($mvv_plugin, array(), 'module/module/details/' . $modul->getId(), true);
                     $templ = str_replace('%modul(%affected)', '<a href="' . $url . '">' . htmlReady($modul->getDisplayName()) . '</a>', $templ);
                 }
                 $co_mlanguage = ModulLanguage::find(array(
@@ -443,7 +443,7 @@ class MVVPlugin extends StudipPlugin implements SystemPlugin, Loggable {
                 }
                 $co_modul = Modul::find($event->coaffected_range_id);
                 if ($co_modul) {
-                    $url = PluginEngine::getURL($mvv_plugin, array(), 'module/module/details_modul/' . $co_modul->getId(), true);
+                    $url = PluginEngine::getURL($mvv_plugin, array(), 'module/module/details/' . $co_modul->getId(), true);
                     $templ = str_replace('%modul(%coaffected)', '<a href="' . $url . '">' . htmlReady($co_modul->getDisplayName()) . '</a>', $templ);
                 }
                 break;

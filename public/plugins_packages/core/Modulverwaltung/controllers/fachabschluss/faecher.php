@@ -136,12 +136,12 @@ class Fachabschluss_FaecherController extends MVVController
                     ->fireJSFunctionOnSelect('MVV.Search.addSelected')
                     ->noSelectbox();
         
-        if (!$this->fach->isNew()) {
+        if (!$this->fach->isNew() && MvvPerm::havePermCreate($this->fach)) {
             $this->setSidebar();
             $sidebar = Sidebar::get();
             $action_widget = $sidebar->getWidget('actions');
             $action_widget->addLink(_('Log-Einträge dieses Faches'),
-                    $this->url_for('shared/log_event/show', $this->fach->getId()),
+                    $this->url_for('shared/log_event/show/Fach', $this->fach->getId()),
                     Icon::create('log', 'clickable'))->asDialog();
         }
     }

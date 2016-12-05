@@ -234,8 +234,8 @@ class Studiengaenge_StudiengaengeController extends MVVController
             }
 
             $action_widget->addLink( _('Log-Einträge dieses Studienganges'),
-                    $this->url_for('shared/log_event/show/', $this->studiengang->getId()),
-                    Icon::create('log', 'clickable'), array('data-dialog' => 'size=auto'));
+                    $this->url_for('shared/log_event/show/Studiengang', $this->studiengang->getId()),
+                    Icon::create('log', 'clickable'))->asDialog();
         }
 
         $this->render_template('studiengaenge/studiengaenge/studiengang', $this->layout);

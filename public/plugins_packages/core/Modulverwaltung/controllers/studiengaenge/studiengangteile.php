@@ -140,8 +140,8 @@ class Studiengaenge_StudiengangteileController extends SharedVersionController
             $sidebar = Sidebar::get();
             $action_widget = $sidebar->getWidget('actions');
             $action_widget->addLink( _('Log-Einträge dieses Studiengangteils'),
-                    $this->url_for('shared/log_event/show/' . $this->stgteil->getId()),
-                    Icon::create('log', 'clickable'), array('data-dialog' => 'size=auto'));
+                    $this->url_for('shared/log_event/show/StudiengangTeil', $this->stgteil->getId()),
+                    Icon::create('log', 'clickable'))->asDialog();
         }
 
         $this->render_template('studiengaenge/studiengangteile/stgteil', $this->layout);

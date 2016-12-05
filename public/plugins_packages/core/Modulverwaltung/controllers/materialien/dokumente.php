@@ -152,9 +152,9 @@ class Materialien_DokumenteController extends MVVController
         $this->setSidebar();
         $sidebar = Sidebar::get();
         $action_widget = $sidebar->getWidget('actions');
-        $action_widget->addLink( _('Log-Einträge dieses Dokumentes'),
-                $this->url_for('shared/log_event/show', $this->dokument->id),
-                Icon::create('log', 'clickable'), ['data-dialog' => '']);
+        $action_widget->addLink(_('Log-Einträge dieses Dokumentes'),
+                $this->url_for('shared/log_event/show/Dokument', $this->dokument->id),
+                Icon::create('log', 'clickable'))->asDialog();
     }
 
     /**

@@ -122,8 +122,8 @@ class Fachabschluss_KategorienController extends MVVController
         if (!$this->abschluss_kategorie->isNew()) {
             $sidebar = Sidebar::get();
             $action_widget = $sidebar->getWidget('actions');
-            $action_widget->addLink( _('Log-Einträge dieser Kategorie'),
-                    $this->url_for('shared/log_event/show/' . $this->abschluss_kategorie->getId()),
+            $action_widget->addLink(_('Log-Einträge dieser Kategorie'),
+                    $this->url_for('shared/log_event/show/AbschlussKategorie', $this->abschluss_kategorie->getId()),
                     Icon::create('log', 'clickable'))->asDialog();
         }
     }

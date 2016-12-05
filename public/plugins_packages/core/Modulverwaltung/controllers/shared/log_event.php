@@ -28,25 +28,33 @@ class Shared_LogEventController extends MVVController
         }
     }
     
-    public function show_action ($object_id, $object2_id = null)
-    {           
+    public function show_action($object_type, $object_id)
+    {
+        $this->object_type = $object_type;
+        $this->object_id = $object_id;
+        
+        // check permissions
+        $this->have_log_perm($this->object_type, $this->object_id);
+        
         $event_log = new EventLog();
                 
         $this->start = (int) Request::int('start');
         $this->format = Request::quoted('format');
         $this->num_entries = 0;
         $this->log_events = array();
-        $this->parameter = $object_id;
         
-        $this->num_entries += $event_log->count_log_events('all', $object_id);  
+        $this->num_entries += $event_log->count_log_events('all', $this->object_id);  
         if ($this->num_entries) {
-            $this->log_events = $event_log->get_log_events('all', $object_id, 0);
+            $this->log_events = $event_log->get_log_events('all', $this->object_id, 0);
         }
-                
-        if ($object2_id) {  
-            $this->parameter .= '/'.$object2_id;
-            $this->num_entries += $event_log->count_log_events('all', $object2_id);
-            $log_events = $event_log->get_log_events('all', $object2_id, 0);                
+        
+        $this->object2_type = Request::option('object2_type');
+        $this->object2_id = Request::option('object2_id');
+        if ($this->object2_type) {
+            // check permission
+            $this->have_log_perm($this->object2_type, $this->object2_id);
+            $this->num_entries += $event_log->count_log_events('all', $this->object2_id);
+            $log_events = $event_log->get_log_events('all', $this->object2_id, 0);                
             if ($log_events) {    
                 if (empty($this->log_events)){
                     $this->log_events = $log_events;                    
@@ -60,7 +68,18 @@ class Shared_LogEventController extends MVVController
         $this->log_events = $this->order_events_by_date($this->log_events);
     }
     
-    private function order_events_by_date ($event_array)
+    private function have_log_perm($object_type, $object_id)
+    {
+        if (is_subclass_of($object_type, 'ModuleManagementModel')) {
+            $object = $object_type::find($object_id);
+            if ($object && MvvPerm::get($object)->havePerm(MvvPerm::PERM_READ)) {
+                return true;
+            }
+        }
+        throw new AccessDeniedException();
+    }
+    
+    private function order_events_by_date($event_array)
     {
         $ordered_events = array();
         $log_events = array();        
@@ -74,7 +93,7 @@ class Shared_LogEventController extends MVVController
         
     }
     
-    public function get_log_autor_action ()
+    public function get_log_autor_action()
     {
         if (Request::isAjax()) {
             $mvv_id = Request::get('mvv_id',null);
