@@ -130,7 +130,7 @@ class Fachabschluss_AbschluesseController extends MVVController
             $sidebar = Sidebar::get();
             $action_widget = $sidebar->getWidget('actions');
             $action_widget->addLink( _('Log-Einträge dieses Abschlusses'),
-                    $this->url_for('shared/log_event/show/' . $this->abschluss->getId('size=80%')),
+                    $this->url_for('shared/log_event/show/Abschluss', $this->abschluss->getId()),
                     Icon::create('log', 'clickable'))->asDialog();
         }
     }

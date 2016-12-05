@@ -1,7 +1,11 @@
 <?
 use Studip\Button, Studip\LinkButton;
 ?>
-<form action="<?= $controller->url_for('shared/log_event/show', $parameter) ?>" method="post">
+<form action="<?= $controller->url_for('shared/log_event/show', $object_type, $object_id) ?>" method="post">
+  <? if ($object2_type) : ?>
+    <input type="hidden" name="object2_type" value="<?= htmlReady($object2_type) ?>">
+    <input type="hidden" name="object2_id" value="<?= htmlReady($object2_id) ?>">
+  <? endif; ?>
   <?= CSRFProtection::tokenTag() ?>
   <span style="float:left;"><h3><?= _('Anzeige der Log-Events') ?></h3></span>
   <span class="text-bottom" style="float:right; font-size: smaller;">
