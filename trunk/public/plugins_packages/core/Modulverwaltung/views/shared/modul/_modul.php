@@ -22,7 +22,7 @@
                 sprintf(_('In der Fassung des <b>%s</b>. Beschlusses vom <b>%s</b> (<b>%s</b>) / Version <b>%s</b>.'),
                     '<span data-mvv-field="mvv_modul.fassung_nr">' . htmlReady($modul->fassung_nr) . '</span>',
                     '<span data-mvv-field="mvv_modul.beschlussdatum">' . date('d.m.Y', $modul->beschlussdatum) . '</span>',
-                    '<span data-mvv-field="mvv_modul.fassung_typ">' . htmlReady($GLOBALS['MVV_STGTEILVERSION']['FASSUNG_TYP'][$modul->fassung_typ]['name']) . '</span>',
+                    '<span data-mvv-field="mvv_modul.fassung_typ">' . htmlReady($GLOBALS['MVV_MODUL']['FASSUNG_TYP'][$modul->fassung_typ]['name']) . '</span>',
                     '<span data-mvv-field="mvv_modul.version">' . htmlReady($modul->version) . '</span>'
                 )
                 ?>
