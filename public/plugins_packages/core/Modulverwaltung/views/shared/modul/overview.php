@@ -147,7 +147,7 @@
         <td colspan="3">
             <?=
             sprintf(_('In der Fassung des <b>%d</b>. Beschlusses vom <b>%s</b> (<b>%s</b>) / Version <b>%s</b>.')
-                    , $modul->fassung_nr, date('d.m.Y', $modul->beschlussdatum), $GLOBALS['MVV_STGTEILVERSION']['FASSUNG_TYP'][$modul->fassung_typ]['name'], $modul->version)
+                    , $modul->fassung_nr, date('d.m.Y', $modul->beschlussdatum), $GLOBALS['MVV_MODUL']['FASSUNG_TYP'][$modul->fassung_typ]['name'], $modul->version)
             ?>
         </td>
     </tr>

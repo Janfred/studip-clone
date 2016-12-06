@@ -59,7 +59,7 @@
                     <?= htmlReady($studiengang->fassung_nr) ?>.
                 </span>
                 <span data-mvv-field="mvv_studiengang.fassung_typ">
-                <?= ($studiengang->fassung_typ == '0' ? '--' : htmlReady($GLOBALS['MVV_STGTEILVERSION']['FASSUNG_TYP'][$studiengang->fassung_typ]['name'])) ?>
+                <?= ($studiengang->fassung_typ == '0' ? '--' : htmlReady($GLOBALS['MVV_STUDIENGANG']['FASSUNG_TYP'][$studiengang->fassung_typ]['name'])) ?>
                 </span>
             </td>
         </tr>
