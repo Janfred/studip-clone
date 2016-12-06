@@ -394,10 +394,9 @@ td.tree-elbow-end svg {
 }
 /* --- Table details -------------------------------------------------------- */
 .loaded-details > td {
-  padding: 0 20px 5px 20px !important;
+  padding: 0 0 5px 20px !important;
 }
 .loaded-details table {
-  border: 1px solid #888;
   border-top: 0;
 }
 /* --- Sonstige ------------------------------------------------------------- */
@@ -759,7 +758,7 @@ table.default > tbody > tr > td.dragHandle {
   background: #ffffff url("../images/anfasser_24.png") center no-repeat;
   cursor: move;
 }
-table.default > tbody > tr:last-child > td {
+table.default > tbody:last-of-type > tr:last-child > td {
   border-bottom: 1px solid #1f4171;
 }
 table.default:not(.nohover) > tbody:not(.nohover) > tr:not(.nohover):hover > td:not(.nohover) {
@@ -6354,6 +6353,20 @@ a.bookable_rooms_action {
 }
 .contentbox.timesrooms article header.green {
   border-left: 3px solid #6ead10;
+}
+.contentbox.timesrooms article header.red .tooltip-icon::before {
+  background-repeat: no-repeat;
+  content: ' ';
+  display: inline-block;
+  height: 16px;
+  margin-right: 0;
+  background-image: url("../images/icons/blue/arr_1right.svg");
+  -webkit-background-size: 16px 16px;
+  -moz-background-size: 16px 16px;
+  -o-background-size: 16px 16px;
+  background-size: 16px 16px;
+  vertical-align: text-top;
+  width: 16px;
 }
 .contentbox.timesrooms article header.red .tooltip-icon::before {
   background-repeat: no-repeat;
