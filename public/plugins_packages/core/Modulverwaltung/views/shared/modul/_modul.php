@@ -66,7 +66,7 @@
         <tr>
             <td><strong><?= _('Verwendet in Studiengängen / Semestern') ?></strong></td>
             <td>
-                <? $trails = $modul->getTrails(array('StgteilVersion', 'Studiengang')); ?>
+                <? $trails = $modul->getTrails(array('StgteilAbschnitt', 'StgteilVersion', 'Studiengang')); ?>
                 <? if (count($trails)) : ?>
                     <? if (count($trails) > 1) : ?>
                         <ul>

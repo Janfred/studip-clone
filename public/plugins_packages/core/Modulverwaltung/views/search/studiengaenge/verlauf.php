@@ -64,13 +64,13 @@
                                         <? $abschnitt_modul = new StgteilabschnittModul(array($abschnitt_id, $modul_id)) ?>   
                                         
                                         <? if($modul['veranstaltungen']):?>                          
-                                        <a data-dialog href="<?= $controller->url_for('shared/modul/overview', $modul_id, $active_sem->getId())  ?>">
+                                        <a data-dialog href="<?= $controller->url_for('shared/modul/overview', $modul_id, $active_sem->getId(), ['display_language' => ModuleManagementModel::getLanguage()])  ?>">
                                             <?= htmlReady($abschnitt_modul->getDisplayName(true)) ?>
                                         </a>
                                         <? else: ?>
                                             <?= htmlReady($abschnitt_modul->getDisplayName(true)) ?>
                                         <? endif; ?>
-                                        <a data-dialog title="<?= htmlReady($modul['name']) . ' (' . _('Vollständige Modulbeschreibung') . ')' ?>" href="<?= $controller->url_for('shared/modul/description/' . $modul_id) ?>">
+                                        <a data-dialog title="<?= htmlReady($modul['name']) . ' (' . _('Vollständige Modulbeschreibung') . ')' ?>" href="<?= $controller->url_for('shared/modul/description', $modul_id, ['display_language' => ModuleManagementModel::getLanguage()]) ?>">
                                             <?= Assets::img('icons/16/blue/info-circle.png') ?>
                                         </a>
                                     </td>

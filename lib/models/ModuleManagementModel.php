@@ -675,7 +675,7 @@ abstract class ModuleManagementModel extends SimpleORMap
      */
     public static final function setLanguage($language)
     {
-        $language = mb_strtoupper(mb_strstr($language, '_', true));
+        $language = mb_strtoupper(mb_strstr($language . '_', '_', true));
         if (isset($GLOBALS['MVV_LANGUAGES']['values'][$language])) {
             setLocaleEnv($GLOBALS['MVV_LANGUAGES']['values'][$language]['locale']);
             self::$language = $language;

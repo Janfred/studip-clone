@@ -87,6 +87,7 @@ class Course_DetailsController extends AuthenticatedController
         // Ausgabe der Modulzuordnung MVV
         $mvv_plugin = PluginEngine::getPlugin('MVVPlugin');
         if ($mvv_plugin) {
+            ModuleManagementModel::setLanguage($_SESSION['_language']);
             if ($this->course->getSemClass()->offsetGet('module')) {
 
                 // set filter to show only pathes with valid semester data

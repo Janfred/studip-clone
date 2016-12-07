@@ -157,7 +157,6 @@ class SharedVersionController extends MVVController
     {
         $new_version = StgteilVersion::find(Request::option('new_id', $new_id));
         $old_version = StgteilVersion::find(Request::option('old_id', $old_id));
-       // var_dump($new_version, $old_version); exit;
         if (!$new_version || !$old_version) {
             if ($new_version) {
                 PageLayout::postError( _('Unbekannte Version!'));

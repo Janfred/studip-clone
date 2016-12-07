@@ -6,23 +6,26 @@
     </tr>
     <tr>
         <td colspan="2">
-            <?= $modul->getDisplayName() ?><br>
-            <?= _('Lehrveranstaltungen') ?> <?= $semester['name'] ?>
+            <h3><?= htmlReady($deskriptor->bezeichnung) ?></h3>
+            <?= _('Lehrveranstaltungen') ?> <?= htmlReady($semester['name']) ?>
         </td>
         <td>
             <dl>
-            <? foreach ($modulVerantwortung as $gruppe): ?>
+            <? foreach ($GLOBALS['MVV_MODUL']['PERSONEN_GRUPPEN']['values'] as $key => $gruppe) : ?>
+                <? if ($gruppe['visible'] && is_array($modulVerantwortung[$key])) : ?>
                 <dt><?= $gruppe['name'] ?></dt>
-                <? foreach ($gruppe['users'] as $user): ?>
-                    <dd><?= ($user['name']) ?></dd>
-                <? endforeach; ?>
-                </dl>
+                    <? foreach ($modulVerantwortung[$key] as $modul_user): ?>
+                    <dd><?= htmlReady($modul_user->user->getFullName('no_title')) ?></dd>
+                    <? endforeach; ?>
+                <? endif; ?>
             <? endforeach; ?>
+            </dl>
+            <?= htmlReady($modul['verantwortlich']); ?>
         </td>
     </tr>
     <tr>
         <td colspan="3" style="padding: 0;">
-            <table class="default nohover" style="margin: -1px; padding: 0; border-collapse: collapse;">
+            <table class="default nohover">
                 <? if (mb_strlen($teilnahmeVoraussetzung) > 0): ?>
                     <tr>
                         <td style="width: 20%; font-weight: bold;"><?= _('Teilnahmevoraussetzungen') ?></td>
@@ -93,49 +96,49 @@
                 <th><?= _('Prüfungsleistung') ?></th>    
             <? endif; ?>
         </tr>
-        <? foreach ($modulTeile as $lvGruppe): ?>
+        <? foreach ($modulTeile as $modul_teil): ?>
             <tr>
                 <? if ($type === 1): ?>
-                    <td>  
-                        <b> <?= $lvGruppe['name'] ?> </b> 
-                        <? if (mb_strlen($lvGruppe['kommentar']) > 0): ?>
-                            (<?= $lvGruppe['kommentar'] ?>)
-                        <? endif; ?>
-                        <? /* if ($lvGruppe['kapazitaet'] > 0): ?>
-                            <br/>
-                            <b><?= _('Kapazität') ?>: </b> <?= $lvGruppe['kapazitaet'] ?>
-                        <? endif; */ ?>
-                        <? if (mb_strlen($lvGruppe['voraussetzung']) > 0): ?>
-                            <br/>
-                            <b><?= _('Teilnahmevoraussetzungen') ?>:</b> <?= $lvGruppe['voraussetzung'] ?>
-                        <? endif; ?>
-                    </td>
+                <td>  
+                    <b> <?= $modul_teil['name'] ?> </b> 
+                    <? if (mb_strlen($modul_teil['kommentar']) > 0): ?>
+                    <br>(<?= $modul_teil['kommentar'] ?>)
+                    <? endif; ?>
+                    <? /* if ($lvGruppe['kapazitaet'] > 0): ?>
+                        <br/>
+                        <b><?= _('Kapazität') ?>: </b> <?= $lvGruppe['kapazitaet'] ?>
+                    <? endif; */ ?>
+                    <? if (mb_strlen($modul_teil['voraussetzung']) > 0): ?>
+                        <br>
+                        <b><?= _('Teilnahmevoraussetzungen') ?>:</b> <?= $modul_teil['voraussetzung'] ?>
+                    <? endif; ?>
+                </td>
                 <? endif; ?>
                 <td  <? if ($type === 2): ?> colspan="3" <? endif; ?>>
-                    <? foreach ($lvGruppe['lvGruppen'] as $gruppe): ?>
-
-
+                    <? foreach ($modul_teil['lvGruppen'] as $gruppe): ?>
                         <? if (mb_strlen($gruppe['alt_texte']) > 0): ?>
-                            <b><?= formatReady($gruppe['alt_texte']) ?></b>
+                            <?= formatReady($gruppe['alt_texte']) ?>
                         <? endif; ?>
+                        <? if (count($gruppe['courses'])) : ?>
                         <ul>  
-                            <? foreach ($gruppe['courses'] as $seminar_id => $course): ?>
-                            	<li>
-                                    <a href="<?= URLHelper::getLink('dispatch.php/course/details', ['sem_id' => $seminar_id]) ?>">
-                                    <?= htmlReady($course['VeranstaltungsNummer']) . ' - ' . htmlReady($course['Name']) ?>
-                                    </a>
-                                </li>
-                            <? endforeach; ?>
+                        <? foreach ($gruppe['courses'] as $seminar_id => $course): ?>
+                            <li>
+                                <a href="<?= URLHelper::getLink('dispatch.php/course/details', ['sem_id' => $seminar_id]) ?>">
+                                <?= htmlReady($course['VeranstaltungsNummer']) . ' - ' . htmlReady($course['Name']) ?>
+                                </a>
+                            </li>
+                        <? endforeach; ?>
                         </ul>
+                        <? endif; ?>
                     <? endforeach; ?>
                 </td>
                 <? if ($type === 1): ?>
-                    <td width="40%">
-                        <? if (mb_strlen($lvGruppe['pruef_vorleistung']) > 0) : ?>
-                            <b><?= _('Prüfungsvorleistung') ?>:</b> <?= $lvGruppe['pruef_vorleistung'] ?>
+                    <td>
+                        <? if (mb_strlen($modul_teil['pruef_vorleistung']) > 0) : ?>
+                            <b><?= _('Prüfungsvorleistung') ?>:</b> <?= $modul_teil['pruef_vorleistung'] ?>
                         <? endif; ?>
-                        <? if (mb_strlen($lvGruppe['pruef_leistung']) > 0) : ?>
-                            <b><?= _('Prüfungsform') ?>:</b> <br/><?= $lvGruppe['pruef_leistung'] ?> (<?= $lvGruppe['anteil_note'] ?> %)
+                        <? if (mb_strlen($modul_teil['pruef_leistung']) > 0) : ?>
+                            <b><?= _('Prüfungsform') ?>:</b> <br/><?= $modul_teil['pruef_leistung'] ?> (<?= $modul_teil['anteil_note'] ?> %)
                         <? endif; ?>
                     </td>
                 <? endif; ?>
