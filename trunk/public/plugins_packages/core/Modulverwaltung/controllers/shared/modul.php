@@ -34,6 +34,9 @@ class Shared_ModulController extends MVVController
     
     public function overview_action($modul_id, $semester_id = null)
     {
+        $display_language = Request::option('display_language');
+        ModuleManagementModel::setLanguage($display_language);
+        
         $modul = Modul::find($modul_id);
         if ($modul) {
             $this->details_id = $modul->getId();
@@ -58,30 +61,17 @@ class Shared_ModulController extends MVVController
                 $currentSemester = SemesterData::GetInstance()->getSemesterData($semester_id);
             }    
             
-            $modulUser = ModulUser::findByModul($modul->getId());
-            $modulVerantwortung = array();
-
-            foreach ($modulUser as $users) {
-                foreach ($users as $user) {
-                    if (!isset($modulVerantwortung[$user->gruppe])) {
-                        $modulVerantwortung[$user->gruppe] = array(
-                            'name' => $GLOBALS['MVV_MODUL']['PERSONEN_GRUPPEN']['values'][$user->gruppe]['name'],
-                            'users' => array()
-                        );
-                    }
-                    $modulVerantwortung[$user->gruppe]['users'][] = array(
-                        'name' => get_fullname($user->user_id),
-                        'id' => $user->user_id
-                    );
-                }
+            $this->modulVerantwortung = array();
+            foreach ($modul->assigned_users as $user) {
+                $this->modulVerantwortung[$user->gruppe][] = $user;
             }
-
+            
             $sws = 0;
             $institut = new Institute($modul->responsible_institute->institut_id);
             $modulTeileData = array();
             foreach ($modulTeile as $modulTeil) {
 
-                $modulTeilDeskriptor = $modulTeil->getDeskriptor();
+                $modulTeilDeskriptor = $modulTeil->getDeskriptor($display_language);
 
                 $sws += (int) $modulTeil->sws;
 
@@ -113,8 +103,7 @@ class Shared_ModulController extends MVVController
                 }
             }
             $this->modulTeile = $modulTeileData;
-            $this->deskriptor = $modul->getDeskriptor();
-            $this->modulVerantwortung = $modulVerantwortung;
+            $this->deskriptor = $modul->getDeskriptor($display_language);
             $this->institut = $institut;
             $this->semester = $currentSemester;
             $this->sws = $sws;
@@ -145,6 +134,7 @@ class Shared_ModulController extends MVVController
         }
         
         $display_language = Request::get('display_language', null);
+        ModuleManagementModel::setLanguage($display_language);
         
         $modulVerantwortung = array();
         foreach ($modul->assigned_users as $users) {

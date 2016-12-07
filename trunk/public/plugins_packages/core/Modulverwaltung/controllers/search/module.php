@@ -22,6 +22,8 @@ class Search_ModuleController extends MVVController
     public function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
+        ModuleManagementModel::setLanguage($_SESSION['_language']);
+        
         // set navigation
         Navigation::activateItem('/search/module/modulsuche');
         $this->drill_down_type = Request::option('type');

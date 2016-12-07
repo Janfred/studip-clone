@@ -21,7 +21,7 @@ class Seminar_DetailsController extends MVVController
     public function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
-        ModuleManagementModel::setLanguage($GLOBALS['_language']);
+        ModuleManagementModel::setLanguage($_SESSION['_language']);
 
         if (Request::isXhr()) {
             $this->response->add_header('Content-Type',
