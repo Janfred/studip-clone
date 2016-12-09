@@ -40,16 +40,16 @@ class Shared_ModulController extends MVVController
         $modul = Modul::find($modul_id);
         if ($modul) {
             $this->details_id = $modul->getId();
-            $modulTeile = Modulteil::findByModul($modul->getId());
-            $type = 1;
             
-            if (count($modulTeile) == 1) {
-                //$modulTeile = array_values($modulTeile);
-                $modulTeil = $modulTeile->first();//[0];
+            $type = 1;
+            if (count($modul->modulteile) == 1) {
+                $modulteil = $modul->modulteile->first();
                 $type = 3;
-                if (mb_strlen($modulTeil->getDisplayName()) > 0) {
+                if (count($modulteil->lvgruppen) > 0) {
                     $type = 2;
                 }
+            } else if (count($modul->modulteile) == 0) {
+                $type = 3;
             }
             
             if (!$semester_id) {
@@ -69,7 +69,7 @@ class Shared_ModulController extends MVVController
             $sws = 0;
             $institut = new Institute($modul->responsible_institute->institut_id);
             $modulTeileData = array();
-            foreach ($modulTeile as $modulTeil) {
+            foreach ($modul->modulteile as $modulTeil) {
 
                 $modulTeilDeskriptor = $modulTeil->getDeskriptor($display_language);
 
@@ -121,10 +121,14 @@ class Shared_ModulController extends MVVController
     {
         $modul = Modul::find($id);
         $type = 1;
-        if (count($modul->modulteile) == 0) {
+        if (count($modul->modulteile) == 1) {
+            $modulteil = $modul->modulteile->first();
             $type = 3;
-        } else if (count($modul->modulteile) == 1) {
-            $type = 2;
+            if (count($modulteil->lvgruppen) > 0) {
+                $type = 2;
+            }
+        } else if (count($modul->modulteile) == 0) {
+            $type = 3;
         }
 
         if (!Request::get('sem_select')) {

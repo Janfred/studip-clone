@@ -66,11 +66,13 @@ class Module_DownloadController extends MVVController
 
         $type = 1;
         if (count($modul->modulteile) == 1) {
-            $modulTeil = $modul->modulteile->first();
+            $modulteil = $modul->modulteile->first();
             $type = 3;
-            if (mb_strlen($modulTeil->getDisplayName()) > 0) {
+            if (count($modulteil->lvgruppen) > 0) {
                 $type = 2;
             }
+        } else if (count($modul->modulteile) == 0) {
+            $type = 3;
         }
 
         if (!Request::get('sem_select')) {
@@ -187,7 +189,7 @@ class Module_DownloadController extends MVVController
                     'type' => $this->type,
                     'modulTeile' => $this->modulTeile,
                     'modulUser' => $this->modulUser,
-                    'semester' => $this->semeste,
+                    'semester' => $this->semester,
                     'download' => $this->download,
                     'detail_list_url' => $this->detail_list_url,
                     'download_detail_url' => $this->download_detail_url
