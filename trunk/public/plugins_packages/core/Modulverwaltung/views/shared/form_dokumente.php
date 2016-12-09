@@ -64,7 +64,7 @@
         <? else : ?>
         <li id="dokumente_<?= $dokument->dokument_id ?>">
             <div style="flex: 1;">
-                <?= htmlReady($dokument->name) ?>
+                <?= htmlReady($dokument->document->name) ?>
             </div>
             <input type="hidden" name="dokumente_items[]" value="<?= $dokument->dokument_id ?>">
         </li>
