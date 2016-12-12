@@ -1107,23 +1107,35 @@ form.default label:not(.undecorated) select {
   display: block;
   margin-top: 1ex;
 }
+form.default label.col-2,
+form.default label.col-3,
 form.default label.col-4 {
+  -webkit-align-self: flex-end;
+  -ms-align-self: flex-end;
+  align-self: flex-end;
   display: inline-block;
-  min-width: 60%;
   padding-right: 1em;
-  vertical-align: bottom;
-}
-form.default label.col-3 {
-  display: inline-block;
-  min-width: 45%;
-  padding-right: 1em;
-  vertical-align: bottom;
 }
 form.default label.col-2 {
-  display: inline-block;
-  min-width: 30%;
-  padding-right: 1em;
-  vertical-align: bottom;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 0 30%;
+  -ms-flex: 1 0 30%;
+  -moz-box-flex: 1;
+  flex: 1 0 30%;
+}
+form.default label.col-3 {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 0 45%;
+  -ms-flex: 1 0 45%;
+  -moz-box-flex: 1;
+  flex: 1 0 45%;
+}
+form.default label.col-4 {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 0 60%;
+  -ms-flex: 1 0 60%;
+  -moz-box-flex: 1;
+  flex: 1 0 60%;
 }
 form.default fieldset {
   -webkit-box-sizing: border-box;
@@ -1135,15 +1147,17 @@ form.default fieldset {
   display: -webkit-flex;
   display: -moz-box;
   display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
   -moz-box-direction: normal;
-  -moz-box-orient: vertical;
-  -webkit-box-orient: vertical;
-  flex-direction: column;
+  -moz-box-orient: horizontal;
+  -webkit-box-orient: horizontal;
+  flex-direction: row;
   -webkit-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
   border: solid 1px #d0d7e3;
   margin: 0 0 10px;
   padding: 10px;
@@ -1170,6 +1184,13 @@ form.default fieldset > legend {
 form.default fieldset > :first-child:not(legend),
 form.default fieldset > legend + * {
   margin-top: 10px;
+}
+form.default fieldset > * {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 0 100%;
+  -ms-flex: 1 0 100%;
+  -moz-box-flex: 1;
+  flex: 1 0 100%;
 }
 form.default .required {
   font-weight: bold;
@@ -1216,10 +1237,10 @@ form.default .hgroup {
   display: -webkit-flex;
   display: -moz-box;
   display: flex;
-  -webkit-align-items: flex-start;
-  -ms-flex-align: flex-start;
-  -moz-box-align: flex-start;
-  align-items: flex-start;
+  -webkit-align-items: flex-end;
+  -ms-flex-align: flex-end;
+  -moz-box-align: flex-end;
+  align-items: flex-end;
   max-width: 48em;
 }
 form.default .hgroup.size-s {
