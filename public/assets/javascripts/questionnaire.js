@@ -116,17 +116,22 @@ jQuery(function () {
         var event = ui.originalEvent;
         var text = event.clipboardData.getData("text");
         text = text.split(/[\n\t]/);
-        if (text[0]) {
-            this.value = text.shift().trim();
+        if (text.length > 1) {
+            if (text[0]) {
+                this.value += text.shift().trim();
+            }
+            var current = jQuery(this).closest("li");
+            for (var i in text) {
+                if (text[i].trim()) {
+                    var li = jQuery(jQuery(this).closest(".options").data("optiontemplate"));
+                    li.find("input").val(text[i].trim());
+                    li.insertAfter(current);
+                    current = li;
+                }
+            }
+            STUDIP.Questionnaire.Test.updateCheckboxValues();
+            event.preventDefault();
         }
-        var current = jQuery(this).closest("li");
-        for (var i in text) {
-            var li = jQuery(jQuery(this).closest(".options").data("optiontemplate"));
-            li.find("input").val(text[i].trim());
-            li.insertAfter(current);
-            current = li;
-        }
-        event.preventDefault();
     });
     jQuery(document).on("blur", ".questionnaire_edit .options > li:last-child input:text", function (event) {
         if (this.value) {
@@ -139,6 +144,7 @@ jQuery(function () {
         var icon = this;
         STUDIP.Dialog.confirm(jQuery(this).closest(".questionnaire_edit").find(".delete_question").text(), function () {
             jQuery(icon).closest("li").fadeOut(function() {
+                jQuery(this).remove();
                 jQuery(icon).remove();
                 STUDIP.Questionnaire.Test.updateCheckboxValues();
             });
