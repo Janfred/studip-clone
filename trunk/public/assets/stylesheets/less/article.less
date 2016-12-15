@@ -47,17 +47,25 @@ article.studip {
     }
 
     nav {
-      padding: 2px;
-      display: flex;
       align-items: center;
+      display: flex;
+      padding: 2px;
+      overflow: hidden;
+
       > * {
         border-right: 1px solid @content-color;
         padding-right: 4px;
         margin-right: 4px;
+        max-height: 2em;
+
         &:last-child {
           border-right: none;
           padding-right: 0;
           margin-right: 0;
+        }
+
+        &.nowrap {
+            white-space: nowrap;
         }
       }
 

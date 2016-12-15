@@ -23,10 +23,10 @@ if ($new['allow_comments']) :
     ?>
     <? if ($num): ?>
         <? if ($isnew): ?>
-            <span class="news_comments_indicator" title="<?= sprintf(_('%s neue(r) Kommentar(e)'), $isnew) ?>">
+            <span class="news_comments_indicator nowrap" title="<?= sprintf(_('%s neue(r) Kommentar(e)'), $isnew) ?>">
                 <?= Icon::create("chat", "new")->asImg() ?>
         <? else: ?>
-            <span class="news_comments_indicator" title="<?= sprintf(_('%s Kommentare'), $num) ?>">
+            <span class="news_comments_indicator nowrap" title="<?= sprintf(_('%s Kommentare'), $num) ?>">
                 <?= Icon::create("chat", "info")->asImg() ?>
         <? endif; ?>
                 <?= $num ?>
