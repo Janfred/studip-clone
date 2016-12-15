@@ -959,9 +959,10 @@ class User extends AuthUserMd5
                         UPDATE content = IF(content IN ('', 'default_value'), VALUES(content), content),
                                chdate = UNIX_TIMESTAMP()";
             $statement = DBManager::get()->prepare($query);
-            $statement->bindValue(':range_id', $new_id);
+
 
             $old_user->datafields->each(function ($field) use ($new_id, $statement) {
+                $statement->bindValue(':range_id', $new_id);
                 $statement->bindValue(':datafield_id', $field->datafield_id);
                 $statement->bindValue(':sec_range_id', $field->sec_range_id);
                 $statement->bindValue(':content', $field->content);
