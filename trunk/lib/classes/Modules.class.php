@@ -89,7 +89,7 @@ class Modules {
             $modules = $this->getDefaultBinValue($range_id, $range_type, $type);
         }
         if ($range_type == 'sem') {
-            $sem_class = $GLOBALS['SEM_CLASS'][$GLOBALS['SEM_TYPE'][$type]['class']];
+            $sem_class = $GLOBALS['SEM_CLASS'][$GLOBALS['SEM_TYPE'][$type]['class']] ?: SemClass::getDefaultSemClass();
         } else {
             $sem_class = SemClass::getDefaultInstituteClass($type);
         }
@@ -130,7 +130,7 @@ class Modules {
         }
 
         if ($range_type == 'sem') {
-            $sem_class = $SEM_CLASS[$SEM_TYPE[$type]['class']];
+            $sem_class = $SEM_CLASS[$SEM_TYPE[$type]['class']] ?: SemClass::getDefaultSemClass();
         } else {
             $sem_class = SemClass::getDefaultInstituteClass($type);
         }
