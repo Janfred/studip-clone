@@ -183,6 +183,14 @@ html.no-js #forum {
         background-color: @forum_light;
         a {
             word-break: break-all;
+
+            &.link-extern {
+                display: inline-block;
+                max-width: 50vw;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                vertical-align: top;
+            }
         }
     }
 
