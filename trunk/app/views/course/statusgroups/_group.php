@@ -20,6 +20,18 @@
             <?php endif ?>
         </h1>
         <nav>
+            <?php if ($is_autor && !$is_tutor && $group->id != 'nogroup' && $group->isMember($GLOBALS['user']->id)) : ?>
+                <a href="<?= $controller->url_for('messages/write', [
+                            'group_id' => $group->id,
+                            'default_subject' => htmlReady($course_title . ' (' . $group->name . ')'),
+                        ]) ?>" data-dialog="size=auto">
+                    <?= Icon::create('mail', 'clickable', ['title' => sprintf(
+                            _('Nachricht an alle Mitglieder der Gruppe %s schicken'),
+                            $group->name
+                        ),
+                    ]) ?>
+                </a>
+            <?php endif ?>
             <?php if ($group->id != 'nogroup' && $group->userMayJoin($GLOBALS['user']->id)) : ?>
                 <a href="<?= $controller->url_for('course/statusgroups/join', $group->id) ?>">
                     <?= Icon::create('door-enter', 'clickable',
