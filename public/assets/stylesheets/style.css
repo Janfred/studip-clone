@@ -7363,14 +7363,16 @@ select {
   vertical-align: baseline;
   border: 1px solid #c5c7ca;
   border-radius: 0;
-  overflow: hidden;
   padding: 1px 20px 1px 8px;
   position: relative;
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
 select::-ms-expand {
   display: none;
+}
+select:not([multiple]) {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 select:not([multiple]) {
   padding-right: 20px !important;
