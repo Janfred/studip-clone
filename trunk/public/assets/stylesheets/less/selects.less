@@ -20,11 +20,14 @@ select {
 
     border: @select-border;
     border-radius: @select-border-radius;
-    overflow: hidden;
     padding: 1px 20px 1px 8px;
     position: relative;
-    text-overflow: ellipsis;
     white-space: nowrap;
+
+    &:not([multiple]) {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
     &:not([multiple]) {
         // Allow all other paddings to be overwritten but the right padding
