@@ -49,8 +49,8 @@
             <tr>
                 <td><?= htmlReady($usc->studycourse->name) ?></td>
                 <td><?= htmlReady($usc->degree->name) ?></td>
-                <? if ($allow_change['sg']): ?>
-                    <? if ($modulemanagement_enabled) : ?>
+                <? if ($modulemanagement_enabled) : ?>
+                    <? if ($allow_change['sg']): ?>
                         <td>
                             <? $versionen = StgteilVersion::findByFachAbschluss($usc->fach_id, $ucs->abschluss_id); ?>
                             <? $versionen = array_filter($versionen, function ($ver) {
@@ -71,7 +71,16 @@
                                 <?= tooltipIcon(_('Keine Version in der gewählten Fach-Abschluss-Kombination verfügbar.'), true) ?>
                             <? endif; ?>
                         </td>
+                    <? else : ?>
+                        <? $version = StgteilVersion::find($ucs->version_id); ?>
+                        <td>
+                            <? if ($version && $version->hasPublicStatus('genehmigt')) : ?>
+                                <?= htmlReady($version->getDisplayName()); ?>
+                            <? endif; ?>
+                        </td>
                     <? endif; ?>
+                <? endif; ?>
+                <? if ($allow_change['sg']): ?>
                     <td>
                         <select name="change_fachsem[<?= $usc->fach_id?>][<?= $ucs->abschluss_id ?>]"
                                 aria-labelledby="fachsemester_label">
@@ -87,7 +96,7 @@
                     </td>
                 <? else: ?>
                     <td><?= htmlReady($ucs->semester) ?></td>
-                    <td>
+                    <td style="text-align: right;">
                         <?= Icon::create('accept', 'inactive')->asImg(['class' => 'text-top']) ?>
                     </td>
                 <? endif; ?>
