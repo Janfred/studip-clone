@@ -4,7 +4,7 @@
 you find here the basic system settings. You shouldn't have to touch much of them...
 please note the CONFIG.INC.PHP for the indivual settings of your installation!*/
 
-$UNI_NAME_CLEAN = 'Stud.IP 3.4';                           //the clean-name of your master-faculty (e.g. University of Göttingen), without html-entities (used for mail-system)
+$UNI_NAME_CLEAN = 'Stud.IP 3.5';                           //the clean-name of your master-faculty (e.g. University of Göttingen), without html-entities (used for mail-system)
 $STUDIP_INSTALLATION_ID='demo-installation';      //unique identifier for installation
 
 
@@ -142,7 +142,7 @@ enable or disable the Stud.IP internal modules, set and basic settings*/
 
 $XSLT_ENABLE = TRUE;
 $FOP_ENABLE = TRUE;
-$FOP_SH_CALL = "/usr/local/fop-0.20.5rc/fop.sh";                        //path to fop
+$FOP_SH_CALL = "/usr/bin/fop";                        //path to fop
 
 $EXTERN_SERVER_NAME = "";                               //define name, if you use special setup
 $EXTERN_SRI_ENABLE = TRUE;                              //allow the usage of SRI-interface (Stud.IP Remote Include)
@@ -157,8 +157,8 @@ $WEBSERVICES_ENABLE = FALSE;                            //Stud.IP module: webser
 $ELEARNING_INTERFACE_MODULES = array(
     "ilias4" => array(
         "name" => "ILIAS 4",
-        "ABSOLUTE_PATH_ELEARNINGMODULES" => "http://<your Ilias3 installation>/",
-        "ABSOLUTE_PATH_SOAP" => "http://<your Ilias3 installation>/webservice/soap/server.php?wsdl",
+        "ABSOLUTE_PATH_ELEARNINGMODULES" => "http://<your Ilias installation>/",
+        "ABSOLUTE_PATH_SOAP" => "http://<your Ilias installation>/webservice/soap/server.php?wsdl",
         "CLASS_PREFIX" => "Ilias4",
         "auth_necessary" => true,
         "USER_AUTO_CREATE" => true,
@@ -475,28 +475,6 @@ $STUDIP_AUTH_CONFIG_LDAP = array(       "host" => "localhost",
                                                 "auth_user_md5.Vorname" => array("callback" => "doLdapMap", "map_args" => "givenname")
                                                 )
                                         );
-$STUDIP_AUTH_CONFIG_STANDARDEXTERN = array( "db_host" => "localhost",
-                                        "db_username" => "extern",
-                                        "db_name" => "extern_studip",
-                                        "db_password" => "<password>",
-                                        "error_head" => "Stud.IP extern plugin",
-                                        "user_data_mapping" =>
-                                        array(  "auth_user_md5.username" => array("callback" => "dummy", "map_args" => ""),
-                                                "auth_user_md5.password" => array("callback" => "dummy", "map_args" => ""),
-                                                "auth_user_md5.Email" => array("callback" => "doExternMap", "map_args" => "Email"),
-                                                "auth_user_md5.Nachname" => array("callback" => "doExternMap", "map_args" => "Nachname"),
-                                                "auth_user_md5.Vorname" => array("callback" => "doExternMap", "map_args" => "Vorname"),
-                                                "auth_user_md5.perms" => array("callback" => "doExternMapPerms", "map_args" => "perms"),
-                                                "user_info.privatnr" => array("callback" => "doExternMap", "map_args" => "privatnr"),
-                                                "user_info.privadr" => array("callback" => "doExternMap", "map_args" => "privadr"),
-                                                "user_info.geschlecht" => array("callback" => "doExternMap", "map_args" => "geschlecht"),
-                                                "user_info.hobby" => array("callback" => "doExternMap", "map_args" => "hobby"),
-                                                "user_info.lebenslauf" => array("callback" => "doExternMap", "map_args" => "lebenslauf"),
-                                                "user_info.title_front" => array("callback" => "doExternMap", "map_args" => "title_front"),
-                                                "user_info.title_rear" => array("callback" => "doExternMap", "map_args" => "title_rear"),
-                                                "user_info.publi" => array("callback" => "doExternMap", "map_args" => "publi"),
-                                                "user_info.schwerp" => array("callback" => "doExternMap", "map_args" => "schwerp"),
-                                                "user_info.Home" => array("callback" => "doExternMap", "map_args" => "Home")));
 
 // create a config for your own user data mapping class
 $CASAbstractUserDataMapping_CONFIG = array();
@@ -561,7 +539,3 @@ $LOGIN_IP_RANGES =
 
 //create the html-version of $UNI_NAME clean
 $UNI_NAME = htmlspecialchars($UNI_NAME_CLEAN, ENT_QUOTES, 'cp1252');
-
-// Content languages
-$CONTENT_LANGUAGES['de_DE'] = array('picture' => 'lang_de.gif', 'name' => 'Deutsch');
-//$CONTENT_LANGUAGES['en_GB'] = array('picture' => 'lang_en.gif', 'name' => 'English');
