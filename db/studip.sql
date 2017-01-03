@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.6.29-76.2, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.6.34-79.1, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: studip_34
+-- Host: localhost    Database: studip_35
 -- ------------------------------------------------------
--- Server version	5.6.29-76.2-log
+-- Server version	5.6.34-79.1
 
 --
 -- Table structure for table `Institute`
@@ -38,10 +38,38 @@ DROP TABLE IF EXISTS `abschluss`;
 CREATE TABLE `abschluss` (
   `abschluss_id` char(32) NOT NULL DEFAULT '',
   `name` varchar(255) NOT NULL DEFAULT '',
+  `name_en` varchar(255) DEFAULT NULL,
+  `name_kurz` varchar(50) DEFAULT NULL,
+  `name_kurz_en` varchar(50) DEFAULT NULL,
   `beschreibung` text,
+  `beschreibung_en` text,
+  `author_id` varchar(32) NOT NULL,
+  `editor_id` varchar(32) NOT NULL,
   `mkdate` int(20) DEFAULT NULL,
   `chdate` int(20) DEFAULT NULL,
   PRIMARY KEY (`abschluss_id`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `activities`
+--
+
+DROP TABLE IF EXISTS `activities`;
+CREATE TABLE `activities` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `object_id` varchar(255) NOT NULL,
+  `context` enum('system','course','institute','user') NOT NULL,
+  `context_id` varchar(32) NOT NULL,
+  `provider` varchar(255) NOT NULL,
+  `actor_type` varchar(255) NOT NULL,
+  `actor_id` varchar(255) NOT NULL,
+  `verb` enum('answered','attempted','attended','completed','created','deleted','edited','experienced','failed','imported','interacted','passed','shared','sent','voided') NOT NULL DEFAULT 'experienced',
+  `content` text,
+  `object_type` varchar(255) NOT NULL,
+  `mkdate` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `context_id` (`context_id`),
+  KEY `mkdate` (`mkdate`)
 ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
@@ -52,8 +80,20 @@ DROP TABLE IF EXISTS `admission_condition`;
 CREATE TABLE `admission_condition` (
   `rule_id` varchar(32) NOT NULL,
   `filter_id` varchar(32) NOT NULL,
+  `conditiongroup_id` varchar(32) NOT NULL DEFAULT '',
   `mkdate` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`rule_id`,`filter_id`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `admission_conditiongroup`
+--
+
+DROP TABLE IF EXISTS `admission_conditiongroup`;
+CREATE TABLE `admission_conditiongroup` (
+  `conditiongroup_id` varchar(32) NOT NULL,
+  `quota` int(11) NOT NULL,
+  PRIMARY KEY (`conditiongroup_id`)
 ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
@@ -81,11 +121,24 @@ DROP TABLE IF EXISTS `admissionfactor`;
 CREATE TABLE `admissionfactor` (
   `list_id` varchar(32) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `factor` decimal(5,2) NOT NULL DEFAULT '1.00',
+  `factor` float NOT NULL DEFAULT '1',
   `owner_id` varchar(32) NOT NULL,
   `mkdate` int(11) NOT NULL DEFAULT '0',
   `chdate` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`list_id`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `admissionrule_compat`
+--
+
+DROP TABLE IF EXISTS `admissionrule_compat`;
+CREATE TABLE `admissionrule_compat` (
+  `rule_type` varchar(32) NOT NULL,
+  `compat_rule_type` varchar(32) NOT NULL,
+  `mkdate` int(11) NOT NULL DEFAULT '0',
+  `chdate` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`rule_type`,`compat_rule_type`)
 ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
@@ -112,7 +165,7 @@ CREATE TABLE `admissionrules` (
   `mkdate` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `ruletype` (`ruletype`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
 -- Table structure for table `api_consumer_permissions`
@@ -733,8 +786,8 @@ DROP TABLE IF EXISTS `datafields`;
 CREATE TABLE `datafields` (
   `datafield_id` varchar(32) NOT NULL DEFAULT '',
   `name` varchar(255) DEFAULT NULL,
-  `object_type` enum('sem','inst','user','userinstrole','usersemdata','roleinstdata') DEFAULT NULL,
-  `object_class` varchar(10) DEFAULT NULL,
+  `object_type` enum('sem','inst','user','userinstrole','usersemdata','roleinstdata','moduldeskriptor','modulteildeskriptor') DEFAULT NULL,
+  `object_class` varchar(255) DEFAULT NULL,
   `edit_perms` enum('user','autor','tutor','dozent','admin','root') DEFAULT NULL,
   `view_perms` enum('all','user','autor','tutor','dozent','admin','root') DEFAULT NULL,
   `priority` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -793,7 +846,7 @@ CREATE TABLE `doc_filetype` (
   `type` varchar(45) NOT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
 -- Table structure for table `doc_filetype_forbidden`
@@ -826,7 +879,21 @@ CREATE TABLE `doc_usergroup_config` (
   `area_close_text` text,
   `is_group_config` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`,`usergroup`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `document_licenses`
+--
+
+DROP TABLE IF EXISTS `document_licenses`;
+CREATE TABLE `document_licenses` (
+  `license_id` tinyint(4) NOT NULL DEFAULT '0',
+  `name` varchar(255) NOT NULL,
+  `protected` tinyint(4) NOT NULL,
+  `description` text NOT NULL,
+  `student_description` text NOT NULL,
+  PRIMARY KEY (`license_id`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
 -- Table structure for table `dokumente`
@@ -1102,6 +1169,27 @@ CREATE TABLE `extern_config` (
   `mkdate` int(20) NOT NULL DEFAULT '0',
   `chdate` int(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (`config_id`,`range_id`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `fach`
+--
+
+DROP TABLE IF EXISTS `fach`;
+CREATE TABLE `fach` (
+  `fach_id` varchar(32) NOT NULL DEFAULT '',
+  `name` varchar(255) NOT NULL,
+  `name_en` varchar(255) DEFAULT NULL,
+  `name_kurz` varchar(50) DEFAULT NULL,
+  `name_kurz_en` varchar(50) DEFAULT NULL,
+  `beschreibung` text,
+  `beschreibung_en` tinytext,
+  `schlagworte` text,
+  `author_id` varchar(32) NOT NULL,
+  `editor_id` varchar(32) NOT NULL,
+  `mkdate` int(20) NOT NULL DEFAULT '0',
+  `chdate` int(20) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`fach_id`)
 ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
@@ -1416,6 +1504,20 @@ CREATE TABLE `help_tours` (
 ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
+-- Table structure for table `i18n`
+--
+
+DROP TABLE IF EXISTS `i18n`;
+CREATE TABLE `i18n` (
+  `object_id` varchar(32) NOT NULL,
+  `table` varchar(255) NOT NULL,
+  `field` varchar(255) NOT NULL,
+  `lang` varchar(32) NOT NULL,
+  `value` text,
+  PRIMARY KEY (`object_id`,`table`,`field`,`lang`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
 -- Table structure for table `kategorien`
 --
 
@@ -1663,6 +1765,548 @@ CREATE TABLE `message_user` (
   PRIMARY KEY (`message_id`,`snd_rec`,`user_id`),
   KEY `user_id` (`user_id`,`snd_rec`,`deleted`,`readed`,`mkdate`),
   KEY `user_id_2` (`user_id`,`snd_rec`,`deleted`,`mkdate`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `mvv_abschl_kategorie`
+--
+
+DROP TABLE IF EXISTS `mvv_abschl_kategorie`;
+CREATE TABLE `mvv_abschl_kategorie` (
+  `kategorie_id` varchar(32) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `name_en` varchar(255) DEFAULT NULL,
+  `name_kurz` varchar(50) DEFAULT NULL,
+  `name_kurz_en` varchar(50) DEFAULT NULL,
+  `beschreibung` text,
+  `beschreibung_en` text,
+  `position` int(11) DEFAULT NULL,
+  `author_id` varchar(32) NOT NULL,
+  `editor_id` varchar(32) NOT NULL,
+  `mkdate` bigint(20) NOT NULL,
+  `chdate` bigint(20) NOT NULL,
+  PRIMARY KEY (`kategorie_id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `mvv_abschl_zuord`
+--
+
+DROP TABLE IF EXISTS `mvv_abschl_zuord`;
+CREATE TABLE `mvv_abschl_zuord` (
+  `abschluss_id` varchar(32) NOT NULL,
+  `kategorie_id` varchar(32) NOT NULL,
+  `position` int(4) NOT NULL DEFAULT '9999',
+  `author_id` varchar(32) NOT NULL,
+  `editor_id` varchar(32) NOT NULL,
+  `mkdate` bigint(20) NOT NULL,
+  `chdate` bigint(20) NOT NULL,
+  PRIMARY KEY (`abschluss_id`),
+  KEY `kategorie_id` (`kategorie_id`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `mvv_dokument`
+--
+
+DROP TABLE IF EXISTS `mvv_dokument`;
+CREATE TABLE `mvv_dokument` (
+  `dokument_id` varchar(32) NOT NULL,
+  `url` tinytext NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `name_en` varchar(255) DEFAULT NULL,
+  `linktext` varchar(255) NOT NULL,
+  `linktext_en` varchar(255) DEFAULT NULL,
+  `beschreibung` text,
+  `beschreibung_en` text,
+  `author_id` varchar(32) NOT NULL,
+  `editor_id` varchar(32) NOT NULL,
+  `mkdate` bigint(20) NOT NULL,
+  `chdate` bigint(20) NOT NULL,
+  PRIMARY KEY (`dokument_id`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `mvv_dokument_zuord`
+--
+
+DROP TABLE IF EXISTS `mvv_dokument_zuord`;
+CREATE TABLE `mvv_dokument_zuord` (
+  `dokument_id` varchar(32) NOT NULL,
+  `range_id` varchar(32) NOT NULL,
+  `object_type` varchar(50) NOT NULL,
+  `position` int(3) NOT NULL DEFAULT '999',
+  `kommentar` tinytext,
+  `kommentar_en` tinytext,
+  `author_id` varchar(32) NOT NULL,
+  `editor_id` varchar(32) NOT NULL,
+  `mkdate` bigint(20) NOT NULL,
+  `chdate` bigint(20) NOT NULL,
+  PRIMARY KEY (`dokument_id`,`range_id`,`object_type`),
+  KEY `range_id_object_type` (`range_id`,`object_type`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `mvv_fach_inst`
+--
+
+DROP TABLE IF EXISTS `mvv_fach_inst`;
+CREATE TABLE `mvv_fach_inst` (
+  `fach_id` varchar(32) NOT NULL,
+  `institut_id` varchar(32) NOT NULL,
+  `position` int(11) NOT NULL,
+  `author_id` varchar(32) NOT NULL,
+  `editor_id` varchar(32) NOT NULL,
+  `mkdate` bigint(20) NOT NULL,
+  `chdate` bigint(20) NOT NULL,
+  PRIMARY KEY (`fach_id`,`institut_id`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `mvv_fachberater`
+--
+
+DROP TABLE IF EXISTS `mvv_fachberater`;
+CREATE TABLE `mvv_fachberater` (
+  `stgteil_id` varchar(32) NOT NULL,
+  `user_id` varchar(32) NOT NULL,
+  `position` int(11) NOT NULL,
+  `author_id` varchar(32) NOT NULL,
+  `editor_id` varchar(32) NOT NULL,
+  `mkdate` bigint(20) NOT NULL,
+  `chdate` bigint(20) NOT NULL,
+  PRIMARY KEY (`stgteil_id`,`user_id`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `mvv_lvgruppe`
+--
+
+DROP TABLE IF EXISTS `mvv_lvgruppe`;
+CREATE TABLE `mvv_lvgruppe` (
+  `lvgruppe_id` varchar(32) NOT NULL,
+  `name` varchar(250) NOT NULL,
+  `name_en` varchar(250) DEFAULT NULL,
+  `alttext` tinytext,
+  `alttext_en` tinytext,
+  `author_id` varchar(32) NOT NULL,
+  `editor_id` varchar(32) NOT NULL,
+  `mkdate` bigint(20) NOT NULL,
+  `chdate` bigint(20) NOT NULL,
+  PRIMARY KEY (`lvgruppe_id`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `mvv_lvgruppe_modulteil`
+--
+
+DROP TABLE IF EXISTS `mvv_lvgruppe_modulteil`;
+CREATE TABLE `mvv_lvgruppe_modulteil` (
+  `lvgruppe_id` varchar(32) NOT NULL,
+  `modulteil_id` varchar(32) NOT NULL,
+  `position` int(11) NOT NULL DEFAULT '9999',
+  `fn_id` varchar(32) DEFAULT NULL,
+  `author_id` varchar(32) NOT NULL,
+  `editor_id` varchar(32) NOT NULL,
+  `mkdate` bigint(20) NOT NULL,
+  `chdate` bigint(20) NOT NULL,
+  PRIMARY KEY (`lvgruppe_id`,`modulteil_id`),
+  KEY `fn_id` (`fn_id`),
+  KEY `modulteil_id` (`modulteil_id`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `mvv_lvgruppe_seminar`
+--
+
+DROP TABLE IF EXISTS `mvv_lvgruppe_seminar`;
+CREATE TABLE `mvv_lvgruppe_seminar` (
+  `lvgruppe_id` varchar(32) NOT NULL,
+  `seminar_id` varchar(32) NOT NULL,
+  `author_id` varchar(32) DEFAULT NULL,
+  `editor_id` varchar(32) DEFAULT NULL,
+  `mkdate` bigint(20) NOT NULL,
+  `chdate` bigint(20) NOT NULL,
+  PRIMARY KEY (`lvgruppe_id`,`seminar_id`),
+  KEY `seminar_id` (`seminar_id`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `mvv_modul`
+--
+
+DROP TABLE IF EXISTS `mvv_modul`;
+CREATE TABLE `mvv_modul` (
+  `modul_id` varchar(32) NOT NULL,
+  `quelle` varchar(120) DEFAULT NULL,
+  `variante` varchar(32) DEFAULT NULL,
+  `flexnow_modul` varchar(250) DEFAULT NULL,
+  `code` varchar(250) DEFAULT NULL,
+  `start` varchar(32) DEFAULT NULL,
+  `end` varchar(32) DEFAULT NULL,
+  `beschlussdatum` int(11) DEFAULT NULL,
+  `fassung_nr` int(2) DEFAULT NULL,
+  `fassung_typ` varchar(32) DEFAULT NULL,
+  `version` varchar(120) NOT NULL DEFAULT '1',
+  `dauer` varchar(50) DEFAULT NULL,
+  `kapazitaet` varchar(50) NOT NULL DEFAULT '',
+  `kp` int(11) DEFAULT NULL,
+  `wl_selbst` int(11) DEFAULT NULL,
+  `wl_pruef` int(11) DEFAULT NULL,
+  `pruef_ebene` varchar(32) DEFAULT NULL,
+  `faktor_note` varchar(10) NOT NULL DEFAULT '1',
+  `stat` varchar(32) DEFAULT NULL,
+  `kommentar_status` text,
+  `verantwortlich` tinytext,
+  `author_id` varchar(32) NOT NULL,
+  `editor_id` varchar(32) NOT NULL,
+  `mkdate` bigint(20) NOT NULL,
+  `chdate` bigint(20) NOT NULL,
+  PRIMARY KEY (`modul_id`),
+  KEY `stat` (`stat`),
+  KEY `flexnow_modul` (`flexnow_modul`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `mvv_modul_deskriptor`
+--
+
+DROP TABLE IF EXISTS `mvv_modul_deskriptor`;
+CREATE TABLE `mvv_modul_deskriptor` (
+  `deskriptor_id` varchar(32) NOT NULL,
+  `modul_id` varchar(32) NOT NULL,
+  `sprache` varchar(32) NOT NULL,
+  `verantwortlich` tinytext,
+  `bezeichnung` tinytext,
+  `voraussetzung` text,
+  `kompetenzziele` text,
+  `inhalte` text,
+  `literatur` text,
+  `links` text,
+  `kommentar` text,
+  `turnus` tinytext,
+  `kommentar_kapazitaet` text,
+  `kommentar_sws` text,
+  `kommentar_wl_selbst` text,
+  `kommentar_wl_pruef` text,
+  `kommentar_note` text,
+  `pruef_vorleistung` text,
+  `pruef_leistung` text,
+  `pruef_wiederholung` text,
+  `ersatztext` text,
+  `author_id` varchar(32) DEFAULT NULL,
+  `editor_id` varchar(32) DEFAULT NULL,
+  `mkdate` bigint(20) NOT NULL,
+  `chdate` bigint(20) NOT NULL,
+  PRIMARY KEY (`deskriptor_id`),
+  UNIQUE KEY `modul_id` (`modul_id`,`sprache`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `mvv_modul_inst`
+--
+
+DROP TABLE IF EXISTS `mvv_modul_inst`;
+CREATE TABLE `mvv_modul_inst` (
+  `modul_id` varchar(32) NOT NULL,
+  `institut_id` varchar(32) NOT NULL,
+  `gruppe` varchar(32) NOT NULL,
+  `position` int(11) NOT NULL DEFAULT '9999',
+  `author_id` varchar(32) NOT NULL,
+  `editor_id` varchar(32) NOT NULL,
+  `mkdate` bigint(20) NOT NULL,
+  `chdate` bigint(20) NOT NULL,
+  PRIMARY KEY (`modul_id`,`institut_id`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `mvv_modul_language`
+--
+
+DROP TABLE IF EXISTS `mvv_modul_language`;
+CREATE TABLE `mvv_modul_language` (
+  `modul_id` varchar(32) NOT NULL,
+  `lang` varchar(32) NOT NULL,
+  `position` int(11) NOT NULL DEFAULT '9999',
+  `author_id` varchar(32) NOT NULL,
+  `editor_id` varchar(32) NOT NULL,
+  `mkdate` bigint(20) NOT NULL,
+  `chdate` bigint(20) NOT NULL,
+  PRIMARY KEY (`modul_id`,`lang`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `mvv_modul_user`
+--
+
+DROP TABLE IF EXISTS `mvv_modul_user`;
+CREATE TABLE `mvv_modul_user` (
+  `modul_id` varchar(32) NOT NULL,
+  `user_id` varchar(32) NOT NULL,
+  `gruppe` varchar(32) NOT NULL,
+  `position` int(11) NOT NULL DEFAULT '9999',
+  `author_id` varchar(32) NOT NULL,
+  `editor_id` varchar(32) NOT NULL,
+  `mkdate` bigint(20) NOT NULL,
+  `chdate` bigint(20) NOT NULL,
+  PRIMARY KEY (`modul_id`,`user_id`,`gruppe`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `mvv_modulteil`
+--
+
+DROP TABLE IF EXISTS `mvv_modulteil`;
+CREATE TABLE `mvv_modulteil` (
+  `modulteil_id` varchar(32) NOT NULL,
+  `modul_id` varchar(32) NOT NULL,
+  `position` int(11) NOT NULL DEFAULT '9999',
+  `flexnow_modul` varchar(250) DEFAULT NULL,
+  `nummer` varchar(20) DEFAULT NULL,
+  `num_bezeichnung` varchar(32) DEFAULT NULL,
+  `lernlehrform` varchar(32) DEFAULT NULL,
+  `semester` varchar(32) DEFAULT NULL,
+  `kapazitaet` varchar(50) DEFAULT NULL,
+  `kp` int(11) DEFAULT NULL,
+  `sws` int(11) DEFAULT NULL,
+  `wl_praesenz` int(11) DEFAULT NULL,
+  `wl_bereitung` int(11) DEFAULT NULL,
+  `wl_selbst` int(11) DEFAULT NULL,
+  `wl_pruef` int(11) DEFAULT NULL,
+  `anteil_note` int(11) DEFAULT NULL,
+  `ausgleichbar` int(1) NOT NULL DEFAULT '0',
+  `pflicht` int(2) NOT NULL DEFAULT '0',
+  `author_id` varchar(32) NOT NULL,
+  `editor_id` varchar(32) NOT NULL,
+  `mkdate` bigint(20) NOT NULL,
+  `chdate` bigint(20) NOT NULL,
+  PRIMARY KEY (`modulteil_id`),
+  KEY `modul_id` (`modul_id`),
+  KEY `flexnow_modul` (`flexnow_modul`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `mvv_modulteil_deskriptor`
+--
+
+DROP TABLE IF EXISTS `mvv_modulteil_deskriptor`;
+CREATE TABLE `mvv_modulteil_deskriptor` (
+  `deskriptor_id` varchar(32) NOT NULL,
+  `modulteil_id` varchar(32) NOT NULL,
+  `bezeichnung` tinytext NOT NULL,
+  `sprache` varchar(32) NOT NULL,
+  `voraussetzung` text,
+  `kommentar` text,
+  `kommentar_kapazitaet` text,
+  `kommentar_wl_praesenz` text,
+  `kommentar_wl_bereitung` text,
+  `kommentar_wl_selbst` text,
+  `kommentar_wl_pruef` text,
+  `pruef_vorleistung` text,
+  `pruef_leistung` text,
+  `kommentar_pflicht` text,
+  `author_id` varchar(32) NOT NULL,
+  `editor_id` varchar(32) NOT NULL,
+  `mkdate` bigint(20) NOT NULL,
+  `chdate` bigint(20) NOT NULL,
+  PRIMARY KEY (`deskriptor_id`),
+  UNIQUE KEY `modulteil_id` (`modulteil_id`,`sprache`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `mvv_modulteil_language`
+--
+
+DROP TABLE IF EXISTS `mvv_modulteil_language`;
+CREATE TABLE `mvv_modulteil_language` (
+  `modulteil_id` varchar(32) NOT NULL,
+  `lang` varchar(32) NOT NULL,
+  `position` int(11) NOT NULL DEFAULT '9999',
+  `author_id` varchar(32) NOT NULL,
+  `editor_id` varchar(32) NOT NULL,
+  `mkdate` bigint(20) NOT NULL,
+  `chdate` bigint(20) NOT NULL,
+  PRIMARY KEY (`modulteil_id`,`lang`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `mvv_modulteil_stgteilabschnitt`
+--
+
+DROP TABLE IF EXISTS `mvv_modulteil_stgteilabschnitt`;
+CREATE TABLE `mvv_modulteil_stgteilabschnitt` (
+  `modulteil_id` varchar(32) NOT NULL,
+  `abschnitt_id` varchar(32) NOT NULL,
+  `fachsemester` int(2) NOT NULL,
+  `differenzierung` varchar(100) NOT NULL,
+  `author_id` varchar(32) NOT NULL,
+  `editor_id` varchar(32) NOT NULL,
+  `mkdate` bigint(20) NOT NULL,
+  `chdate` bigint(20) NOT NULL,
+  PRIMARY KEY (`modulteil_id`,`abschnitt_id`,`fachsemester`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `mvv_stg_stgteil`
+--
+
+DROP TABLE IF EXISTS `mvv_stg_stgteil`;
+CREATE TABLE `mvv_stg_stgteil` (
+  `studiengang_id` varchar(32) NOT NULL,
+  `stgteil_id` varchar(32) NOT NULL,
+  `stgteil_bez_id` varchar(32) NOT NULL DEFAULT '',
+  `position` int(11) NOT NULL,
+  `author_id` varchar(32) NOT NULL,
+  `editor_id` varchar(32) NOT NULL,
+  `mkdate` bigint(20) NOT NULL,
+  `chdate` bigint(20) NOT NULL,
+  PRIMARY KEY (`studiengang_id`,`stgteil_id`,`stgteil_bez_id`),
+  KEY `stgteil_id` (`stgteil_id`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `mvv_stgteil`
+--
+
+DROP TABLE IF EXISTS `mvv_stgteil`;
+CREATE TABLE `mvv_stgteil` (
+  `stgteil_id` varchar(32) NOT NULL,
+  `fach_id` varchar(32) DEFAULT NULL,
+  `kp` varchar(50) DEFAULT NULL,
+  `semester` int(2) DEFAULT NULL,
+  `zusatz` varchar(200) NOT NULL,
+  `zusatz_en` varchar(200) DEFAULT NULL,
+  `author_id` varchar(32) NOT NULL,
+  `editor_id` varchar(32) NOT NULL,
+  `mkdate` bigint(20) NOT NULL,
+  `chdate` bigint(20) NOT NULL,
+  PRIMARY KEY (`stgteil_id`),
+  KEY `fach_id` (`fach_id`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `mvv_stgteil_bez`
+--
+
+DROP TABLE IF EXISTS `mvv_stgteil_bez`;
+CREATE TABLE `mvv_stgteil_bez` (
+  `stgteil_bez_id` varchar(32) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `name_en` varchar(100) NOT NULL,
+  `name_kurz` varchar(20) NOT NULL,
+  `name_kurz_en` varchar(20) NOT NULL,
+  `position` int(4) NOT NULL DEFAULT '9999',
+  `author_id` varchar(32) NOT NULL,
+  `editor_id` varchar(32) NOT NULL,
+  `mkdate` bigint(20) NOT NULL,
+  `chdate` bigint(20) NOT NULL,
+  PRIMARY KEY (`stgteil_bez_id`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `mvv_stgteilabschnitt`
+--
+
+DROP TABLE IF EXISTS `mvv_stgteilabschnitt`;
+CREATE TABLE `mvv_stgteilabschnitt` (
+  `abschnitt_id` varchar(32) NOT NULL,
+  `version_id` varchar(32) NOT NULL,
+  `position` int(11) NOT NULL DEFAULT '9999',
+  `name` varchar(200) NOT NULL,
+  `name_en` varchar(200) DEFAULT NULL,
+  `kommentar` varchar(200) DEFAULT NULL,
+  `kommentar_en` varchar(200) DEFAULT NULL,
+  `kp` int(11) DEFAULT NULL,
+  `ueberschrift` tinytext,
+  `ueberschrift_en` tinytext,
+  `author_id` varchar(32) NOT NULL,
+  `editor_id` varchar(32) NOT NULL,
+  `mkdate` bigint(20) NOT NULL,
+  `chdate` bigint(20) NOT NULL,
+  PRIMARY KEY (`abschnitt_id`),
+  KEY `version_id` (`version_id`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `mvv_stgteilabschnitt_modul`
+--
+
+DROP TABLE IF EXISTS `mvv_stgteilabschnitt_modul`;
+CREATE TABLE `mvv_stgteilabschnitt_modul` (
+  `abschnitt_id` varchar(32) NOT NULL,
+  `modul_id` varchar(32) NOT NULL,
+  `flexnow_modul` varchar(250) DEFAULT NULL,
+  `modulcode` varchar(250) DEFAULT NULL,
+  `position` int(11) NOT NULL DEFAULT '9999',
+  `bezeichnung` varchar(250) DEFAULT NULL,
+  `bezeichnung_en` varchar(250) DEFAULT NULL,
+  `author_id` varchar(32) NOT NULL,
+  `editor_id` varchar(32) NOT NULL,
+  `mkdate` bigint(20) NOT NULL,
+  `chdate` bigint(20) NOT NULL,
+  PRIMARY KEY (`abschnitt_id`,`modul_id`),
+  KEY `flexnow_modul` (`flexnow_modul`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `mvv_stgteilversion`
+--
+
+DROP TABLE IF EXISTS `mvv_stgteilversion`;
+CREATE TABLE `mvv_stgteilversion` (
+  `version_id` varchar(32) NOT NULL,
+  `stgteil_id` varchar(32) NOT NULL,
+  `start_sem` varchar(32) DEFAULT NULL,
+  `end_sem` varchar(32) DEFAULT NULL,
+  `code` varchar(100) DEFAULT NULL,
+  `beschlussdatum` int(11) DEFAULT NULL,
+  `fassung_nr` int(2) DEFAULT NULL,
+  `fassung_typ` varchar(32) DEFAULT NULL,
+  `beschreibung` text,
+  `beschreibung_en` text,
+  `stat` varchar(32) DEFAULT NULL,
+  `kommentar_status` text,
+  `author_id` varchar(32) NOT NULL,
+  `editor_id` varchar(32) NOT NULL,
+  `mkdate` bigint(20) NOT NULL,
+  `chdate` bigint(20) NOT NULL,
+  PRIMARY KEY (`version_id`),
+  KEY `stgteil_id` (`stgteil_id`),
+  KEY `stat` (`stat`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `mvv_studiengang`
+--
+
+DROP TABLE IF EXISTS `mvv_studiengang`;
+CREATE TABLE `mvv_studiengang` (
+  `studiengang_id` varchar(32) NOT NULL,
+  `abschluss_id` varchar(32) DEFAULT NULL,
+  `typ` enum('einfach','mehrfach') NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `name_kurz` varchar(50) DEFAULT NULL,
+  `name_kurz_en` varchar(50) DEFAULT NULL,
+  `name_en` varchar(255) DEFAULT NULL,
+  `beschreibung` text,
+  `beschreibung_en` text,
+  `institut_id` varchar(32) DEFAULT NULL,
+  `start` varchar(32) DEFAULT NULL,
+  `end` varchar(32) DEFAULT NULL,
+  `beschlussdatum` int(11) DEFAULT NULL,
+  `fassung_nr` int(2) DEFAULT NULL,
+  `fassung_typ` varchar(32) DEFAULT NULL,
+  `stat` varchar(32) DEFAULT NULL,
+  `kommentar_status` text,
+  `schlagworte` text,
+  `author_id` varchar(32) NOT NULL,
+  `editor_id` varchar(32) NOT NULL,
+  `mkdate` bigint(20) NOT NULL,
+  `chdate` bigint(20) NOT NULL,
+  PRIMARY KEY (`studiengang_id`),
+  KEY `abschluss_id` (`abschluss_id`),
+  KEY `institut_id` (`institut_id`)
 ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
@@ -2009,7 +2653,7 @@ CREATE TABLE `plugins` (
   `automatic_update_url` varchar(256) DEFAULT NULL,
   `automatic_update_secret` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`pluginid`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
 -- Table structure for table `plugins_activated`
@@ -2033,6 +2677,32 @@ CREATE TABLE `plugins_default_activations` (
   `pluginid` int(10) unsigned NOT NULL DEFAULT '0',
   `institutid` varchar(32) NOT NULL DEFAULT '',
   PRIMARY KEY (`pluginid`,`institutid`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `prefadmission_condition`
+--
+
+DROP TABLE IF EXISTS `prefadmission_condition`;
+CREATE TABLE `prefadmission_condition` (
+  `rule_id` varchar(32) NOT NULL,
+  `condition_id` varchar(32) NOT NULL,
+  `chance` int(4) NOT NULL DEFAULT '1',
+  `mkdate` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`rule_id`,`condition_id`)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `prefadmissions`
+--
+
+DROP TABLE IF EXISTS `prefadmissions`;
+CREATE TABLE `prefadmissions` (
+  `rule_id` varchar(32) NOT NULL DEFAULT '',
+  `favor_semester` tinyint(1) NOT NULL DEFAULT '0',
+  `mkdate` int(11) NOT NULL DEFAULT '0',
+  `chdate` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`rule_id`)
 ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
@@ -2214,6 +2884,7 @@ CREATE TABLE `resources_categories_properties` (
   `category_id` varchar(32) NOT NULL DEFAULT '',
   `property_id` varchar(32) NOT NULL DEFAULT '',
   `requestable` tinyint(4) NOT NULL DEFAULT '0',
+  `protected` tinyint(4) NOT NULL DEFAULT '0',
   `system` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`category_id`,`property_id`)
 ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
@@ -2248,6 +2919,7 @@ CREATE TABLE `resources_objects` (
   `description` text NOT NULL,
   `lockable` tinyint(4) DEFAULT NULL,
   `multiple_assign` tinyint(4) DEFAULT NULL,
+  `requestable` tinyint(4) NOT NULL DEFAULT '1',
   `mkdate` int(20) NOT NULL DEFAULT '0',
   `chdate` int(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (`resource_id`),
@@ -2283,6 +2955,7 @@ CREATE TABLE `resources_properties` (
   `type` set('bool','text','num','select') NOT NULL DEFAULT 'bool',
   `options` text NOT NULL,
   `system` tinyint(4) NOT NULL DEFAULT '0',
+  `info_label` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`property_id`)
 ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
@@ -2381,7 +3054,7 @@ CREATE TABLE `roles` (
   `rolename` varchar(80) NOT NULL DEFAULT '',
   `system` enum('y','n') NOT NULL DEFAULT 'n',
   PRIMARY KEY (`roleid`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
 -- Table structure for table `roles_plugins`
@@ -2494,6 +3167,7 @@ CREATE TABLE `sem_classes` (
   `default_read_level` int(11) NOT NULL,
   `default_write_level` int(11) NOT NULL,
   `bereiche` tinyint(4) NOT NULL,
+  `module` tinyint(4) NOT NULL,
   `show_browse` tinyint(4) NOT NULL,
   `write_access_nobody` tinyint(4) NOT NULL,
   `topic_create_autor` tinyint(4) NOT NULL,
@@ -2528,7 +3202,7 @@ CREATE TABLE `sem_classes` (
   `chdate` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=100 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
 -- Table structure for table `sem_tree`
@@ -2561,7 +3235,7 @@ CREATE TABLE `sem_types` (
   `mkdate` bigint(20) NOT NULL,
   `chdate` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=100 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
 -- Table structure for table `semester_data`
@@ -2729,6 +3403,7 @@ CREATE TABLE `seminare` (
   `admission_waitlist_max` int(10) unsigned NOT NULL DEFAULT '0',
   `admission_disable_waitlist_move` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `is_complete` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `public_topics` tinyint(2) NOT NULL DEFAULT '1',
   PRIMARY KEY (`Seminar_id`),
   KEY `Institut_id` (`Institut_id`),
   KEY `visible` (`visible`),
@@ -2760,7 +3435,7 @@ CREATE TABLE `siteinfo_details` (
   `name` varchar(255) NOT NULL,
   `content` text NOT NULL,
   PRIMARY KEY (`detail_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
 -- Table structure for table `siteinfo_rubrics`
@@ -2772,7 +3447,7 @@ CREATE TABLE `siteinfo_rubrics` (
   `position` tinyint(3) unsigned DEFAULT NULL,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`rubric_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
 -- Table structure for table `smiley`
@@ -2822,6 +3497,8 @@ CREATE TABLE `statusgruppen` (
   `position` int(20) NOT NULL DEFAULT '0',
   `size` int(20) NOT NULL DEFAULT '0',
   `selfassign` tinyint(4) NOT NULL DEFAULT '0',
+  `selfassign_start` int(11) NOT NULL DEFAULT '0',
+  `selfassign_end` int(11) NOT NULL DEFAULT '0',
   `mkdate` int(20) NOT NULL DEFAULT '0',
   `chdate` int(20) NOT NULL DEFAULT '0',
   `calendar_group` tinyint(2) unsigned NOT NULL DEFAULT '0',
@@ -2830,20 +3507,6 @@ CREATE TABLE `statusgruppen` (
   PRIMARY KEY (`statusgruppe_id`),
   KEY `range_id` (`range_id`),
   KEY `position` (`position`)
-) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
-
---
--- Table structure for table `studiengaenge`
---
-
-DROP TABLE IF EXISTS `studiengaenge`;
-CREATE TABLE `studiengaenge` (
-  `studiengang_id` varchar(32) NOT NULL DEFAULT '',
-  `name` varchar(255) DEFAULT NULL,
-  `beschreibung` text,
-  `mkdate` int(20) NOT NULL DEFAULT '0',
-  `chdate` int(20) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`studiengang_id`)
 ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
@@ -3056,11 +3719,12 @@ CREATE TABLE `user_online` (
 DROP TABLE IF EXISTS `user_studiengang`;
 CREATE TABLE `user_studiengang` (
   `user_id` varchar(32) NOT NULL DEFAULT '',
-  `studiengang_id` varchar(32) NOT NULL DEFAULT '',
+  `fach_id` varchar(32) NOT NULL DEFAULT '',
   `semester` tinyint(2) DEFAULT '0',
   `abschluss_id` char(32) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`user_id`,`studiengang_id`,`abschluss_id`),
-  KEY `studiengang_id` (`studiengang_id`)
+  `version_id` varchar(32) DEFAULT NULL,
+  PRIMARY KEY (`user_id`,`fach_id`,`abschluss_id`),
+  KEY `studiengang_id` (`fach_id`)
 ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
@@ -3218,7 +3882,7 @@ CREATE TABLE `widget_user` (
   `col` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `range_id` (`range_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
 
 --
 -- Table structure for table `wiki`
