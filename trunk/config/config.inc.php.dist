@@ -76,7 +76,7 @@ $UNI_URL = "http://www.studip.de";
 $UNI_LOGIN_ADD='';
 $UNI_LOGOUT_ADD=sprintf(_("Und hier geht's zur %sStud.IP Portalseite%s&nbsp;"), "<a href=\"http://www.studip.de\"><b>", "</b></a>");
 $UNI_CONTACT = "<please insert your general contact mail-adress here>";
-$UNI_INFO = "Stud.IP 3.4 - Studienbegleitender Internetsupport von Präsenzlehre";
+$UNI_INFO = "Stud.IP 3.5 - Studienbegleitender Internetsupport von Präsenzlehre";
 
 
 /* $SEM_CLASS and $SEM_TYPE configuration moved to database
@@ -251,20 +251,6 @@ $PERS_TERMIN_KAT[13]=array("name"=>_("Urlaub"), "color"=>"#70c3bf");
 $PERS_TERMIN_KAT[14]=array("name"=>_("Reise"), "color"=>"#f7a866");
 $PERS_TERMIN_KAT[15]=array("name"=>_("Vorlesung"), "color"=>"#ca9eaf");
 // more categories can be added here
-
-
-//standard times for date-begin and date-end
-$TIME_PRESETS = array ( //starthour, startminute, endhour, endminute
-        array ('07','45','09','15'), // 07:45 - 09:15
-        array ('09','30','11','00'), // 09:30 - 11:00
-        array ('11','15','12','45'), // 11:15 - 12:45
-        array ('13','30','15','00'), // 13:30 - 15:00
-        array ('15','15','16','45'), // 15:15 - 16:45
-        array ('17','00','18','30'), // 17:00 - 18:30
-        array ('18','45','20','15')  // 18:45 - 20:15
-        );
-//$TIME_PRESETS = false;
-
 
 //number of personal events each user can store in his calendar
 $CALENDAR_MAX_EVENTS = 1000;
