@@ -16,17 +16,17 @@
         </label>
         <label class="col-2">
             <?= _('Datum') ?>
-            <input class="has-date-picker size-s" type="text" name="date"
+            <input class="has-date-picker size-s" type="text" name="date" required
                    value="<?= $date->date ? strftime('%d.%m.%Y', $date->date) : '' ?>">
         </label>
         <label class="col-2">
             <?= _('Startzeit') ?>
-            <input class="studip-timepicker size-s" type="text" name="start_time" placeholder="HH:mm"
+            <input class="studip-timepicker size-s" type="text" name="start_time" required placeholder="HH:mm"
                    value="<?= $date->date ? strftime('%H:%M', $date->date) : '' ?>">
         </label>
         <label class="col-2">
             <?= _('Endzeit') ?>
-            <input class="studip-timepicker size-s" type="text" name="end_time" placeholder="HH:mm"
+            <input class="studip-timepicker size-s" type="text" name="end_time" required placeholder="HH:mm"
                    value="<?= $date->end_time ? strftime('%H:%M', $date->end_time) : '' ?>">
         </label>
     </fieldset>

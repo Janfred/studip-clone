@@ -20,7 +20,6 @@ class Course_TimesroomsController extends AuthenticatedController
      */
     public function before_filter(&$action, &$args)
     {
-        
         parent::before_filter($action, $args);
 
         // Try to find a valid course
@@ -244,13 +243,12 @@ class Course_TimesroomsController extends AuthenticatedController
         $date     = strtotime(sprintf('%s %s:00', Request::get('date'), Request::get('start_time')));
         $end_time = strtotime(sprintf('%s %s:00', Request::get('date'), Request::get('end_time')));
 
-        if (!$date || !$end_time || $date > $end_time) {
+        if ($date === false || $end_time === false || $date > $end_time) {
+            $date     = $termin->date;
+            $end_time = $termin->end_time;
             PageLayout::postError(_('Die Zeitangaben sind nicht korrekt. Bitte überprüfen Sie diese!'));
-            $this->redirect('course/timesrooms/editDate/' . $termin_id);
-
-            return;
         }
-        
+
         $time_changed = ($date != $termin->date || $end_time != $termin->end_time);
         //time changed for regular date. create normal singledate and cancel the regular date
         if ($termin->metadate_id && $time_changed) {
@@ -352,7 +350,7 @@ class Course_TimesroomsController extends AuthenticatedController
         $start_time = strtotime(sprintf('%s %s:00', Request::get('date'), Request::get('start_time')));
         $end_time   = strtotime(sprintf('%s %s:00', Request::get('date'), Request::get('end_time')));
 
-        if ($start_time > $end_time || !$start_time || !$end_time) {
+        if ($start_time === false || $end_time === false || $start_time > $end_time) {
             $this->storeRequest();
 
             PageLayout::postError(_('Die Zeitangaben sind nicht korrekt. Bitte überprüfen Sie diese!'));
@@ -812,8 +810,7 @@ class Course_TimesroomsController extends AuthenticatedController
         $start = strtotime(Request::get('start_time'));
         $end   = strtotime(Request::get('end_time'));
 
-
-        if (date('H', $start) > date('H', $end)) {
+        if ($start === false || $end === false || $start > $end) {
             $this->storeRequest();
             PageLayout::postError(_('Die Zeitangaben sind nicht korrekt. Bitte überprüfen Sie diese!'));
             $this->redirect('course/timesrooms/createCycle');
@@ -872,9 +869,16 @@ class Course_TimesroomsController extends AuthenticatedController
     {
         $cycle = SeminarCycleDate::find($cycle_id);
 
+        $start = strtotime(Request::get('start_time'));
+        $end   = strtotime(Request::get('end_time'));
+
         // Prepare Request for saving Request
-        $cycle->start_time  = date('H:i:00', strtotime(Request::get('start_time')));
-        $cycle->end_time    = date('H:i:00', strtotime(Request::get('end_time')));
+        if ($start === false || $end === false || $start > $end) {
+            PageLayout::postError(_('Die Zeitangaben sind nicht korrekt. Bitte überprüfen Sie diese!'));
+        } else {
+            $cycle->start_time  = date('H:i:00', $start);
+            $cycle->end_time    = date('H:i:00', $end);
+        }
         $cycle->weekday     = Request::int('day');
         $cycle->description = Request::get('description');
         $cycle->sws         = Request::get('teacher_sws');
