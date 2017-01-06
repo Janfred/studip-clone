@@ -188,14 +188,62 @@ class Course_TimesroomsController extends AuthenticatedController
      */
     public function editSemester_action()
     {
-        if (!Request::isXhr()) {
-            $this->redirect('course/timesrooms/index');
-
-            return;
-        }
-        $this->params           = ['origin' => Request::get('origin', 'course_timesrooms')];
-        $this->semester         = array_reverse(Semester::getAll());
+        URLHelper::addLinkParam('origin', Request::option('origin', 'course_timesrooms'));
+        $this->semester = array_reverse(Semester::getAll());
         $this->current_semester = Semester::findCurrent();
+        if (Request::submitted('save')) {
+            CSRFProtection::verifyUnsafeRequest();
+            $current_semester = Semester::findCurrent();
+            $start_semester = Semester::find(Request::get('startSemester'));
+            if (Request::int('endSemester') != -1) {
+                $end_semester = Semester::find(Request::get('endSemester'));
+            } else {
+                $end_semester = -1;
+            }
+
+            $course = $this->course;
+
+            if ($start_semester == $end_semester) {
+                $end_semester = 0;
+            }
+
+            if ($end_semester != 0 && $end_semester != -1 && $start_semester->beginn >= $end_semester->beginn) {
+                PageLayout::postError(_('Das Startsemester liegt nach dem Endsemester!'));
+            } else {
+
+                $course->setStartSemester($start_semester->beginn);
+                if ($end_semester != -1) {
+                    $course->setEndSemester($end_semester->beginn);
+                } else {
+                    $course->setEndSemester($end_semester);
+                }
+                $old_start_weeks = isset($course->start_semester) ? $course->start_semester->getStartWeeks($course->duration_time) : array();
+                // If the new duration includes the current semester, we set the semester-chooser to the current semester
+                if ($current_semester->beginn >= $course->getStartSemester() && $current_semester->beginn <= $course->getEndSemesterVorlesEnde()) {
+                    $course->setFilter($current_semester->beginn);
+                } else {
+                    // otherwise we set it to the first semester
+                    $course->setFilter($course->getStartSemester());
+                }
+
+
+                $course->store();
+
+                $new_start_weeks = $course->start_semester->getStartWeeks($course->duration_time);
+                SeminarCycleDate::removeOutRangedSingleDates($course->getStartSemester(), $course->getEndSemesterVorlesEnde(), $course->id);
+                $cycles = SeminarCycleDate::findBySeminar_id($course->seminar_id);
+                foreach ($cycles as $cycle) {
+                    $cycle->end_offset = $this->getNewEndOffset($cycle, $old_start_weeks, $new_start_weeks);
+                    $cycle->store();
+                }
+
+                $messages = $course->getStackedMessages();
+                foreach ($messages as $type => $msg) {
+                    PageLayout::postMessage(MessageBox::$type($msg['title'], $msg['details']));
+                }
+                $this->relocate(str_replace('_', '/', Request::option('origin')));
+            }
+        }
     }
 
     /**
@@ -1008,65 +1056,12 @@ class Course_TimesroomsController extends AuthenticatedController
     /**
      * Sets the start semester for the given course.
      *
-     * @param String $course_id Id of the course
      */
-    public function setSemester_action($course_id)
+    public function setSemester_action()
     {
-        $current_semester = Semester::findCurrent();
-        $start_semester   = Semester::find(Request::get('startSemester'));
-        if (Request::int('endSemester') != -1) {
-            $end_semester = Semester::find(Request::get('endSemester'));
-        } else {
-            $end_semester = -1;
-        }
 
-        $course          = Seminar::GetInstance($course_id);
-        $old_start_weeks = $this->course->start_semester->getStartWeeks($this->course->duration_time);
 
-        if ($start_semester == $end_semester) {
-            $end_semester = 0;
-        }
 
-        if ($end_semester != 0 && $end_semester != -1 && $start_semester->beginn >= $end_semester->beginn) {
-            PageLayout::postError(_('Das Startsemester liegt nach dem Endsemester!'));
-        } else {
-
-            $course->setStartSemester($start_semester->beginn);
-            if ($end_semester != -1) {
-                $course->setEndSemester($end_semester->beginn);
-            } else {
-                $course->setEndSemester($end_semester);
-            }
-
-            // If the new duration includes the current semester, we set the semester-chooser to the current semester
-            if ($current_semester->beginn >= $course->getStartSemester() && $current_semester->beginn <= $course->getEndSemesterVorlesEnde()) {
-                $course->setFilter($current_semester->beginn);
-            } else {
-                // otherwise we set it to the first semester
-                $course->setFilter($course->getStartSemester());
-            }
-        }
-
-        $course->store();
-
-        $new_start_weeks = $this->course->start_semester->getStartWeeks($this->course->duration_time);
-        SeminarCycleDate::removeOutRangedSingleDates($course->getStartSemester(), $course->getEndSemesterVorlesEnde(), $course->id);
-        $cycles = SeminarCycleDate::findBySeminar_id($course->seminar_id);
-        foreach ($cycles as $cycle) {
-            $cycle->end_offset = $this->getNewEndOffset($cycle, $old_start_weeks, $new_start_weeks);
-            $cycle->store();
-        }
-
-        $messages = $course->getStackedMessages();
-        foreach ($messages as $type => $msg) {
-            PageLayout::postMessage(MessageBox::$type($msg['title'], $msg['details']));
-        }
-
-        if (Request::submitted('save_close')) {
-            $this->relocate(str_replace('_', '/', Request::get('origin')), ['cid' => $course_id]);
-        } else {
-            $this->redirect($this->url_for('course/timesrooms/index', ['cid' => $course_id]));
-        }
     }
 
     /**
