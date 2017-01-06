@@ -164,7 +164,7 @@ class Module_ModuleController extends MVVController
             }
 
             $action_widget->addLink( _('Log-Einträge dieses Moduls'),
-                $this->url_for('shared/log_event/show', 'Modul', $this->modul->id,
+                $this->url_for('shared/log_event/show/Modul/' . $this->modul->id,
                         ['object2_type' => 'ModulDeskriptor', 'object2_id' => $this->deskriptor->id]),
                 Icon::create('log', 'clickable'))->asDialog();
 
@@ -701,7 +701,7 @@ class Module_ModuleController extends MVVController
 
         $action_widget = Sidebar::get()->getWidget('actions');
         $action_widget->addLink(_('Log-Einträge dieses Modulteils'),
-                $this->url_for('shared/log_event/show/Modulteil', $this->modulteil->id,
+                $this->url_for('shared/log_event/show/Modulteil/' . $this->modulteil->id,
                 ['object2_type' => 'ModulteilDeskriptor', 'object2_id' => $this->deskriptor->id]),
                 Icon::create('log', 'clickable'))->asDialog();
 
