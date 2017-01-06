@@ -61,24 +61,27 @@
             <input type="hidden" name="beschlussdatum" value="<?= ($version->beschlussdatum ? strftime('%d.%m.%Y', $version->beschlussdatum) : '') ?>">
             <? endif; ?>
         </label>
-        <label><?= _('Fassung:') ?></label>
-        <select<?= $perm->disable('fassung_nr') ?> name="fassung_nr" style="display: inline-block; width: 5em;">
-            <option value="">--</option>
-        <? foreach (range(1, 30) as $nr) : ?>
-            <option<?= $nr == $version->fassung_nr ? ' selected' : '' ?> value="<?= $nr ?>"><?= $nr ?>.</option>
-        <? endforeach; ?>
-        </select>
-        <? if ($perm->haveFieldPerm('fassung_typ')):?>
-        <select style="display: inline-block; max-width: 40em;" name="fassung_typ">
-            <option value="0">--</option>
-        <? foreach ($GLOBALS['MVV_STGTEILVERSION']['FASSUNG_TYP'] as $key => $entry) : ?>
-            <option value="<?= $key ?>"<?= $key == $version->fassung_typ ? ' selected' : '' ?>><?= htmlReady($entry['name']) ?></option>
-        <? endforeach; ?>
-        </select>
-        <? else: ?>            
-        <?= ($version->fassung_typ == '0' ? '--' : $GLOBALS['MVV_STGTEILVERSION']['FASSUNG_TYP'][$version->fassung_typ]['name']) ?>
-        <input type="hidden" name="fassung_typ" value="<?= $version->fassung_typ ?>">
-        <? endif; ?>
+        <label for="fassung_nr"><?= _('Fassung:') ?></label>
+        <section class="hgroup">
+            <select<?= $perm->haveFieldPerm('fassung_nr') ? '' : ' disabled' ?> name="fassung_nr" id="fassung_nr" class="size-s">
+                <option value="">--</option>
+            <? foreach (range(1, 30) as $nr) : ?>
+                <option<?= $nr == $version->fassung_nr ? ' selected' : '' ?> value="<?= $nr ?>"><?= $nr ?>.</option>
+            <? endforeach; ?>
+            </select>
+            <? if (!$perm->haveFieldPerm('fassung_nr')) : ?>
+            <input type="hidden" name="fassung_nr" value="<?= htmlReady($version->fassung_nr) ?>">
+            <? endif; ?>
+            <select<?= $perm->haveFieldPerm('fassung_typ') ? '' : ' disabled' ?> name="fassung_typ">
+                <option value="0">--</option>
+            <? foreach ($GLOBALS['MVV_STGTEILVERSION']['FASSUNG_TYP'] as $key => $entry) : ?>
+                <option value="<?= $key ?>"<?= $key == $version->fassung_typ ? ' selected' : '' ?>><?= htmlReady($entry['name']) ?></option>
+            <? endforeach; ?>
+            </select>
+            <? if (!$perm->haveFieldPerm('fassung_typ')) : ?>           
+            <input type="hidden" name="fassung_typ" value="<?= $version->fassung_typ ?>">
+            <? endif; ?>
+        </section>
     </fieldset>
     <fieldset>
         <legend><?= _('Code') ?></legend>

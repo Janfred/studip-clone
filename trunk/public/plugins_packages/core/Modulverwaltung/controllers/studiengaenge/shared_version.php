@@ -72,6 +72,9 @@ class SharedVersionController extends MVVController
             Dokument::updateDocuments($this->version,
                     Request::optionArray('dokumente_items'),
                     Request::getArray('dokumente_properties'));
+            
+            $this->version->verifyPermission();
+            
             try {
                 $stored = $this->version->store();
             } catch (InvalidValuesException $e) {
