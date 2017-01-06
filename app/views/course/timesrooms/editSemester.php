@@ -1,10 +1,6 @@
-<form action="<?= $controller->url_for('course/timesrooms/setSemester/' . $course->id) ?>" method="post"
-      class="default" <?= Request::isXhr() ? 'data-dialog="size=big"' : '' ?>>
-
-    <? if (!Request::isXhr()) : ?>
-    <fieldset>
-        <legend><?= _('Allgemeine Einstellungen') ?></legend>
-        <? endif ?>
+<form action="<?= $controller->url_for() ?>" method="post"
+      class="default" data-dialog>
+    <?=CSRFProtection::tokenTag()?>
         <label for="startSemester">
             <?= _('Startsemester') ?>
             <select name="startSemester" id="startSemester">
@@ -36,17 +32,7 @@
                     <?= _('Unbegrenzt') ?></option>
             </select>
         </label>
-        <? if (!Request::isXhr()) : ?>
-        <footer style="margin-top: 1ex">
+        <footer style="margin-top: 1ex" data-dialog-button>
             <?= Studip\Button::createAccept(_('Semester speichern'), 'save') ?>
-            <? if (Request::isXhr()) : ?>
-                <?= Studip\Button::createAccept(_('Semester speichern & schließen'), 'save_close') ?>
-            <? endif ?>
         </footer>
-    </fieldset>
-<? else : ?>
-    <div data-dialog-button>
-        <?= Studip\Button::createAccept(_('Semester speichern'), 'save_close') ?>
-    </div>
-<? endif ?>
 </form>
