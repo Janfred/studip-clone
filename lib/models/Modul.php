@@ -636,6 +636,10 @@ class Modul extends ModuleManagementModelTreeItem
                 . 'ON mvv_modul.modul_id = mvv_modul_inst.modul_id '
                 . 'LEFT JOIN mvv_modul_deskriptor '
                 . 'ON mvv_modul_deskriptor.modul_id =  mvv_modul.modul_id '
+                . 'LEFT JOIN semester_data start_sem '
+                . 'ON (mvv_modul.start = start_sem.semester_id) '
+                . 'LEFT JOIN semester_data end_sem '
+                . 'ON (mvv_modul.end = end_sem.semester_id) '
                 . self::getFilterSql($filter, true)
                 . 'GROUP BY modul_id '
                 . 'ORDER BY ' . $sortby, array(), $row_count, $offset);
@@ -695,6 +699,10 @@ class Modul extends ModuleManagementModelTreeItem
                 . 'INNER JOIN mvv_modul_inst '
                 . 'ON Institute.Institut_id = mvv_modul_inst.institut_id '
                 . 'INNER JOIN mvv_modul USING(modul_id) '
+                . 'LEFT JOIN semester_data start_sem '
+                . 'ON (mvv_modul.start = start_sem.semester_id) '
+                . 'LEFT JOIN semester_data end_sem '
+                . 'ON (mvv_modul.end = end_sem.semester_id) '
                 . Fachbereich::getFilterSql($filter, true)
                 . 'GROUP BY institut_id ORDER BY ' . $sortby
                 , array(), $row_count, $offset);
