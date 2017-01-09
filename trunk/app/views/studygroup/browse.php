@@ -30,7 +30,7 @@
                 <td class="hidden-small-down">
                     <?=StudygroupAvatar::getAvatar($group['Seminar_id'])->getImageTag(Avatar::SMALL, array('title' => htmlready($group['Name'])))?>
                 </td>
-                <td>
+                <td class="studygroup-title">
                     <? if ($is_member): ?>
                         <a href="<?=URLHelper::getlink("seminar_main.php?auswahl=".$group['Seminar_id'])?>">
                     <? else: ?>

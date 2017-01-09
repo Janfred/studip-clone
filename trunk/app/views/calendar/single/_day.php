@@ -25,14 +25,9 @@ $max_columns = $em['max_cols'] ?: 1;
         </a>
     </span>
 
-    <? ob_start() ?>
-    <span class="hidden-tiny-down"><?= strftime('%A, ', $atime) ?></span>
-    <?= strftime('%d.%m.%Y', $atime) ?>
-    <span class="hidden-medium-down" style="font-size: 12pt; color: #bbb; font-weight: bold;"><? $hd = holiday($atime); echo $hd['name']; ?></span>
-
     <?
     $calType = 'day';
-    $calLabel = ob_get_clean();
+    $calLabel = $this->render_partial('calendar/single/_calhead_label_day');
     ?>
 
     <?= $this->render_partial('calendar/single/_calhead', compact('calendar', 'atime', 'calType', 'calLabel')) ?>

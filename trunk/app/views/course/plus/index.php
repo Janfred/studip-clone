@@ -91,7 +91,7 @@ foreach ($available_modules as $category => $pluginlist) {
         ?>
 
         <tr id="<?= htmlReady($anchor);?>" class="<?= $visibility; ?> <?= $pre_check != null ? ' quiet' : '' ?>">
-            <td colspan=3>
+            <td class="element" colspan=3>
 
                 <div class="plus_basic">
 
