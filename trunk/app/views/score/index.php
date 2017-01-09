@@ -3,7 +3,7 @@
         <span class="actions" style="font-size: 0.9em;">
             <?= _('Ihre Punkte:') ?>
             <strong><?= number_format($this->current_user_score, 0, ',', '.') ?></strong>
-            <div class="responsive-hidden">(<?= Score::getTitel($this->current_user_score, $this->current_user->geschlecht) ?>)</div>
+            <div class="hidden-small-down">(<?= Score::getTitel($this->current_user_score, $this->current_user->geschlecht) ?>)</div>
         </span>
         <?= _('Stud.IP-Rangliste')?>
     </caption>
@@ -11,20 +11,20 @@
         <col width="3%">
         <col width="1%">
         <col width="50%">
-        <col class="responsive-hidden" width="15%">
+        <col class="hidden-small-down" width="15%">
         <col width="15%">
-        <col class="responsive-hidden" width="15%">
-        <col class="responsive-hidden" width="1%">
+        <col class="hidden-small-down" width="15%">
+        <col class="hidden-small-down" width="1%">
     </colgroup>
     <thead>
         <tr>
-            <th><div class="responsive-hidden"><?= _('Platz') ?></div></th>
+            <th><div class="hidden-small-down"><?= _('Platz') ?></div></th>
             <th></th>
             <th><?= _('Name') ?></th>
-            <th class="responsive-hidden" ></th>
+            <th class="hidden-small-down" ></th>
             <th><?= _('Punkte') ?></th>
-            <th class="responsive-hidden" ><?= _('Titel') ?></th>
-            <th class="responsive-hidden" ></th>
+            <th class="hidden-small-down" ><?= _('Titel') ?></th>
+            <th class="hidden-small-down" ></th>
         </tr>
     </thead>
     <tbody>
@@ -44,7 +44,7 @@
                 <?= Icon::create('crown', 'sort', ['title' => $text])->asImg(16, ["alt" => $text, "class" => 'text-top']) ?>
             <? endforeach ?>
             </td>
-            <td class="responsive-hidden" >
+            <td class="hidden-small-down" >
             <?
             $content = Assets::img('blank.gif', array('width' => 16)) . ' ';
 
@@ -100,8 +100,8 @@
             ?>
             </td>
             <td><?= number_format($person['score'], 0, ',', '.') ?></td>
-            <td class="responsive-hidden" ><?= Score::getTitel($person['score'], $person['geschlecht']) ?></td>
-            <td class="responsive-hidden"  style="text-align: right">
+            <td class="hidden-small-down" ><?= Score::getTitel($person['score'], $person['geschlecht']) ?></td>
+            <td class="hidden-small-down"  style="text-align: right">
             <? if($person['user_id'] == $GLOBALS['user']->id): ?>
                 <a href="<?= $controller->url_for('score/unpublish') ?>">
                     <?= Icon::create('trash', 'clickable', ['title' => _('Ihren Wert von der Liste löschen')])->asImg(16, ["class" => 'text-top']) ?>

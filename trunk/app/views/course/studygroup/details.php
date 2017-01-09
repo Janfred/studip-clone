@@ -16,3 +16,9 @@ foreach($all_mods as $mod) {
 <br>
 <b><?= _("Beschreibung:") ?></b><br>
 <?= formatLinks($studygroup->description) ?>
+
+<div class="hidden-medium-up">
+    <? foreach ($sidebarActions as $action) : ?>
+        <?= \Studip\LinkButton::create($action->label, $action->url) ?>
+    <? endforeach ?>
+</div>

@@ -104,6 +104,42 @@ p {
 .text-center {
   text-align: center;
 }
+.hidden-large-down {
+  display: none !important;
+}
+@media (min-width: 1200px) {
+  .hidden-large-up {
+    display: none !important;
+  }
+}
+@media (max-width: 1199px) {
+  .hidden-medium-down {
+    display: none !important;
+  }
+}
+@media (min-width: 768px) {
+  .hidden-medium-up {
+    display: none !important;
+  }
+}
+@media (max-width: 767px) {
+  .hidden-small-down {
+    display: none !important;
+  }
+}
+@media (min-width: 576px) {
+  .hidden-small-up {
+    display: none !important;
+  }
+}
+@media (max-width: 575px) {
+  .hidden-tiny-down {
+    display: none !important;
+  }
+}
+.hidden-tiny-up {
+  display: none !important;
+}
 /* --- Links ---------------------------------------------------------------- */
 a,
 a:link,
@@ -1019,6 +1055,15 @@ table#schedule_data tbody td:first-child {
   padding-right: 2px;
   padding: 0px;
 }
+.table-scrollbox-horizontal {
+  overflow: auto;
+  background: linear-gradient(90deg, white 30%, rgba(255, 255, 255, 0)), linear-gradient(90deg, rgba(255, 255, 255, 0), white 70%) 100% 0, radial-gradient(0 50%, farthest-side, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)), radial-gradient(100% 50%, farthest-side, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)) 100% 0;
+  background: linear-gradient(90deg, white 30%, rgba(255, 255, 255, 0)), linear-gradient(90deg, rgba(255, 255, 255, 0), white 70%) 100% 0, radial-gradient(farthest-side at 0 50%, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)) 100% 0;
+  background-repeat: no-repeat;
+  background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
+  /* Opera doesn't support this in the shorthand */
+  background-attachment: local, local, scroll, scroll;
+}
 form.default input[type=date],
 form.default input[type=email],
 form.default input[type=number],
@@ -1180,6 +1225,7 @@ form.default label.file-upload {
   background-size: 20px 20px;
   cursor: pointer;
   padding-left: 30px;
+  color: #28497c;
 }
 form.default label.file-upload input[type=file] {
   display: none;
@@ -1188,7 +1234,8 @@ form.default label.file-upload .filename {
   padding-left: 0.5em;
   color: #8b8f95;
 }
-form.default .hgroup {
+form.default .hgroup,
+form.default .hgroup-btn {
   display: -ms-flexbox;
   display: -webkit-box;
   display: -webkit-box-flex;
@@ -1201,13 +1248,16 @@ form.default .hgroup {
   align-items: flex-end;
   max-width: 48em;
 }
-form.default .hgroup.size-s {
+form.default .hgroup.size-s,
+form.default .hgroup-btn.size-s {
   max-width: 8em;
 }
-form.default .hgroup.size-l {
+form.default .hgroup.size-l,
+form.default .hgroup-btn.size-l {
   max-width: 100%;
 }
-form.default .hgroup > * {
+form.default .hgroup > *,
+form.default .hgroup-btn > * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -1217,38 +1267,81 @@ form.default .hgroup > * {
   -moz-box-flex: 1;
   flex: 1 0 auto;
 }
-form.default .hgroup > *:not(:first-child) {
+form.default .hgroup > *:not(:first-child),
+form.default .hgroup-btn > *:not(:first-child) {
   margin-left: 3px;
 }
-form.default .hgroup > *:not(:last-child) {
+form.default .hgroup > *:not(:last-child),
+form.default .hgroup-btn > *:not(:last-child) {
   margin-right: 3px;
 }
-form.default .hgroup label {
+form.default .hgroup label,
+form.default .hgroup-btn label {
   margin-top: 0;
 }
 form.default .hgroup input[type=date],
+form.default .hgroup-btn input[type=date],
 form.default .hgroup label:not(.undecorated) input[type=date],
+form.default .hgroup-btn label:not(.undecorated) input[type=date],
 form.default .hgroup input[type=email],
+form.default .hgroup-btn input[type=email],
 form.default .hgroup label:not(.undecorated) input[type=email],
+form.default .hgroup-btn label:not(.undecorated) input[type=email],
 form.default .hgroup input[type=number],
+form.default .hgroup-btn input[type=number],
 form.default .hgroup label:not(.undecorated) input[type=number],
+form.default .hgroup-btn label:not(.undecorated) input[type=number],
 form.default .hgroup input[type=password],
+form.default .hgroup-btn input[type=password],
 form.default .hgroup label:not(.undecorated) input[type=password],
+form.default .hgroup-btn label:not(.undecorated) input[type=password],
 form.default .hgroup input[type=text],
+form.default .hgroup-btn input[type=text],
 form.default .hgroup label:not(.undecorated) input[type=text],
+form.default .hgroup-btn label:not(.undecorated) input[type=text],
 form.default .hgroup input[type=time],
+form.default .hgroup-btn input[type=time],
 form.default .hgroup label:not(.undecorated) input[type=time],
+form.default .hgroup-btn label:not(.undecorated) input[type=time],
 form.default .hgroup input[type=tel],
+form.default .hgroup-btn input[type=tel],
 form.default .hgroup label:not(.undecorated) input[type=tel],
+form.default .hgroup-btn label:not(.undecorated) input[type=tel],
 form.default .hgroup input[type=url],
+form.default .hgroup-btn input[type=url],
 form.default .hgroup label:not(.undecorated) input[type=url],
+form.default .hgroup-btn label:not(.undecorated) input[type=url],
 form.default .hgroup textarea,
+form.default .hgroup-btn textarea,
 form.default .hgroup label:not(.undecorated) textarea,
+form.default .hgroup-btn label:not(.undecorated) textarea,
 form.default .hgroup select,
-form.default .hgroup label:not(.undecorated) select {
+form.default .hgroup-btn select,
+form.default .hgroup label:not(.undecorated) select,
+form.default .hgroup-btn label:not(.undecorated) select {
   display: inline-block;
   margin-top: 0;
   width: auto;
+}
+form.default .hgroup-btn {
+  -webkit-align-items: baseline;
+  -ms-flex-align: baseline;
+  -moz-box-align: baseline;
+  align-items: baseline;
+}
+form.default .hgroup-btn .form-control {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  -moz-box-flex: 1;
+  flex: 1;
+}
+form.default .hgroup-btn .button {
+  -webkit-box-flex: 0;
+  -webkit-flex: 0;
+  -ms-flex: 0;
+  -moz-box-flex: 0;
+  flex: 0;
 }
 .js form.default.collapsable fieldset legend,
 form.default fieldset.collapsable legend {
@@ -3826,6 +3919,7 @@ button.button[disabled]:hover {
 .button.edit,
 .button.move-up,
 .button.move-down,
+.button.add,
 .ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.accept,
 .ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.cancel {
   white-space: nowrap;
@@ -3836,6 +3930,7 @@ button.button[disabled]:hover {
 .button.edit:before,
 .button.move-up:before,
 .button.move-down:before,
+.button.add:before,
 .ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.accept:before,
 .ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.cancel:before {
   background: no-repeat;
@@ -3910,6 +4005,20 @@ button.button[disabled]:hover {
 }
 .button.move-down:hover:before {
   background-image: url("../images/icons/white/arr_1down.svg");
+  -webkit-background-size: 16px 16px;
+  -moz-background-size: 16px 16px;
+  -o-background-size: 16px 16px;
+  background-size: 16px 16px;
+}
+.button.add:before {
+  background-image: url("../images/icons/blue/add.svg");
+  -webkit-background-size: 16px 16px;
+  -moz-background-size: 16px 16px;
+  -o-background-size: 16px 16px;
+  background-size: 16px 16px;
+}
+.button.add:hover:before {
+  background-image: url("../images/icons/white/add.svg");
   -webkit-background-size: 16px 16px;
   -moz-background-size: 16px 16px;
   -o-background-size: 16px 16px;
@@ -4884,6 +4993,70 @@ a:link.calhead {
 a:hover.calhead {
   color: #e66666;
 }
+.calhead label {
+  cursor: pointer;
+}
+.calhead label:hover {
+  color: #a9b6cb;
+}
+@media (max-width: 767px) {
+  .calhead label {
+    background: white;
+    border: 1px solid #28497c;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    color: #28497c;
+    cursor: pointer;
+    display: inline-block;
+    font-family: "Lato", sans-serif;
+    font-size: 14px;
+    line-height: 130%;
+    margin: 0.8em 0.6em 0.8em 0;
+    min-width: 100px;
+    overflow: visible;
+    padding: 5px 15px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: auto;
+    -webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: none;
+    transition: none;
+  }
+  .calhead label:hover,
+  .calhead label:active {
+    background: #28497c;
+    color: white;
+    outline: 0;
+  }
+  .calhead label:focus {
+    outline: dotted 1px #000;
+  }
+  .calhead label::-moz-focus-inner {
+    border: 0;
+  }
+  .calhead label.disabled,
+  .calhead label[disabled] {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    background: #e2e3e5;
+    cursor: default;
+    opacity: 0.65;
+  }
+  .calhead label.disabled:hover,
+  .calhead label[disabled]:hover {
+    color: #28497c;
+  }
+  .calhead label img {
+    padding-left: 0.5em;
+    vertical-align: middle;
+  }
+}
 .celltoday {
   background-color: #f7cccc;
 }
@@ -4916,7 +5089,7 @@ table.calendar-month tr td {
   vertical-align: top;
 }
 td.month {
-  background-color: #e2e3e5;
+  background-color: rgba(213, 214, 216, 0.7);
   padding: 3px;
 }
 td.month div {
@@ -4926,7 +5099,7 @@ td.month div {
   text-overflow: ellipsis;
 }
 td.lightmonth {
-  background-color: #f5f6f6;
+  background-color: rgba(232, 233, 234, 0.7);
   padding: 3px;
 }
 td.lightmonth div {
@@ -4946,6 +5119,29 @@ td.weekdayevents {
 }
 table.calendar-week {
   width: 100%;
+}
+nav.calendar-nav {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-box-flex;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: flex;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  -moz-box-align: center;
+  align-items: center;
+  padding-bottom: 1em;
+}
+nav.calendar-nav > div {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 auto;
+  -ms-flex: 1 1 auto;
+  -moz-box-flex: 1;
+  flex: 1 1 auto;
+}
+nav.calendar-nav .calhead {
+  color: #28497c;
 }
 .calendar-day-edit {
   text-align: right;
@@ -4976,6 +5172,13 @@ table.calendar-week {
   font-size: 11px;
   color: #fff;
   padding: 0;
+}
+.calendar-single-year .calendar-single-year--table > thead th {
+  min-width: 5em;
+  text-align: left;
+}
+.calendar-single-year .calendar-single-year--table .yday {
+  white-space: nowrap;
 }
 table.calendar-week tbody tr td,
 table.calendar-day tbody tr td {
@@ -6216,6 +6419,11 @@ ul.studygroup-gallery li section {
   text-align: right;
   white-space: nowrap;
 }
+.studygroup-browse td:nth-child(2) a {
+  display: block;
+  max-width: 40em;
+  min-width: 15em;
+}
 div.wikitoc {
   font-size: 1em;
   margin-bottom: 5px;
@@ -6832,7 +7040,113 @@ div.available-widgets .studip-widget {
 .profile-view-actions img {
   vertical-align: text-top;
 }
-@media only screen and (max-width: 768px) {
+form.settings-avatar .avatar-normal {
+  padding: 2em;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+form.settings-avatar .file-upload {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 auto;
+  -ms-flex: 1 1 auto;
+  -moz-box-flex: 1;
+  flex: 1 1 auto;
+}
+form.settings-avatar .form-text {
+  color: initial;
+}
+form.settings-avatar footer {
+  padding-left: 40px;
+}
+@media (min-width: 576px) {
+  form.settings-avatar .form-group {
+    display: -ms-flexbox;
+    display: -webkit-box;
+    display: -webkit-box-flex;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: flex;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    -moz-box-align: center;
+    align-items: center;
+  }
+}
+@media (max-width: 575px) {
+  table.settings-privacy,
+  table.settings-privacy thead,
+  table.settings-privacy tbody,
+  table.settings-privacy th,
+  table.settings-privacy td,
+  table.settings-privacy tr {
+    display: block;
+  }
+  table.settings-privacy > tbody > tr > td {
+    border: none !important;
+    padding-left: 10%;
+  }
+  table.settings-privacy .visibility-homepage-element {
+    margin-top: 2em;
+  }
+  table.settings-privacy .visibility-homepage-element-name {
+    font-weight: 600;
+    margin-right: .75em;
+  }
+  table.settings-privacy tbody td,
+  table.settings-privacy tbody td:first-child {
+    width: auto;
+  }
+}
+#select_fach_abschluss {
+  margin: 1em 0;
+  min-width: 300px;
+}
+#select_fach_abschluss tbody td {
+  display: block;
+  white-space: nowrap;
+}
+#select_fach_abschluss tbody td:first-child {
+  padding-top: 2em;
+}
+#select_fach_abschluss tbody td:last-child {
+  padding-top: .5em;
+}
+#select_fach_abschluss tbody td:before {
+  content: attr(data-label) ": ";
+  font-weight: bold;
+  width: 6.5em;
+  display: inline-block;
+}
+#select_fach_abschluss tbody th,
+#select_fach_abschluss tbody td {
+  text-align: left;
+}
+#select_fach_abschluss > tbody > tr:last-child > td {
+  border-bottom: 1px solid #e2e3e5;
+}
+@media (min-width: 576px) {
+  #select_fach_abschluss tbody td:before {
+    display: none;
+  }
+  #select_fach_abschluss tbody th,
+  #select_fach_abschluss tbody td {
+    display: table-cell;
+    padding: .25em .5em;
+  }
+  #select_fach_abschluss tbody th:first-child,
+  #select_fach_abschluss tbody td:first-child {
+    padding-left: 0;
+  }
+  #select_fach_abschluss tbody th:last-child,
+  #select_fach_abschluss tbody td:last-child {
+    padding-right: 0;
+  }
+  #select_fach_abschluss tbody td:last-child {
+    text-align: center;
+  }
+}
+@media (max-width: 767px) {
   #layout_wrapper {
     min-width: 0 !important;
   }
@@ -6863,7 +7177,7 @@ div.available-widgets .studip-widget {
     text-align: center;
   }
 }
-@media only screen and (max-width: 480px) {
+@media (max-width: 575px) {
   #barTopStudip img {
     height: 33px;
     margin-top: 5px;
@@ -8068,6 +8382,9 @@ select.has-no-value:not(:focus) {
 .nested-select.institute-list .select2-results > ul > li:not(.nested-item) {
   font-weight: bold;
 }
+.plus tbody td {
+  padding-bottom: 2em;
+}
 .plus .element_header {
   display: inline-block;
   width: 250px;
@@ -8095,21 +8412,34 @@ select.has-no-value:not(:focus) {
   margin-left: 3px;
 }
 .plus .plus_expert {
-  display: inline-block;
   margin-left: 20px;
-  float: left;
   width: 97%;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-box-flex;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 .plus .screenshot_holder {
-  display: inline-block;
-  float: left;
   width: 250px;
+  -webkit-box-flex: 0 250px;
+  -webkit-flex: 0 250px;
+  -ms-flex: 0 250px;
+  -moz-box-flex: 0 250px;
+  flex: 0 250px;
+  margin-right: 5mm;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 .plus .big_thumb {
   max-width: 250px;
   max-height: 250px;
-  padding: 2mm;
-  float: left;
+  padding-top: 5mm;
 }
 .plus .small_thumb {
   margin-left: 2px;
@@ -8118,16 +8448,18 @@ select.has-no-value:not(:focus) {
 }
 .plus .thumb_holder {
   width: 250px;
-  float: left;
-  margin-left: 2mm;
   text-align: center;
   background-color: #e7ebf1;
   border-top: 1px solid rgba(137, 155, 186, 0.2);
   border-bottom: 1px solid rgba(137, 155, 186, 0.2);
 }
 .plus .descriptionbox {
-  display: block;
-  margin-left: 285px;
+  -webkit-box-flex: 1 305px;
+  -webkit-flex: 1 305px;
+  -ms-flex: 1 305px;
+  -moz-box-flex: 1 305px;
+  flex: 1 305px;
+  max-width: 45em;
 }
 .plus .keywords {
   padding: 5mm;
@@ -8743,12 +9075,13 @@ label[for="responsive-toggle"]::before {
   vertical-align: text-top;
   width: 20px;
 }
-@media screen and (min-width: 800px) {
+/* @deprecated use .hidden-medium-up */
+@media (min-width: 768px) {
   .responsive-visible {
     display: none;
   }
 }
-@media screen and (max-width: 800px) {
+@media (max-width: 767px) {
   #header,
   #barTopFont,
   #barTopMenu,
@@ -8764,6 +9097,7 @@ label[for="responsive-toggle"]::before {
   li#quicksearch_item {
     display: none !important;
   }
+  /* @deprecated use .hidden-small-down */
   .responsive-hidden {
     display: none;
   }

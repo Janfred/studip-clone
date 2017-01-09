@@ -1,4 +1,4 @@
-@media only screen and (max-width : 768px) {
+.media-breakpoint-small-down({
     #layout_wrapper { min-width: 0 !important; }
     .index_container {
         margin: none;
@@ -26,8 +26,9 @@
     .logintable table td[colspan="2"] {
         text-align: center;
     }
-}
-@media only screen and (max-width : 480px) {
+});
+
+.media-breakpoint-tiny-down({
     #barTopStudip img {
         height: 33px;
         margin-top: 5px;
@@ -42,4 +43,4 @@
     .logintable h1, .logintable p {
         display: none;
     }
-}
+});

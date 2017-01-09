@@ -35,7 +35,7 @@
                 <?= _("[versteckt]") ?>
                 <?= tooltipicon($infotext) ?>
             <? endif ?>
-            <div class="mycourse_elements responsive-visible">
+            <div class="mycourse_elements hidden-medium-up">
                 <? if (!empty($course['navigation'])) : ?>
                     <? foreach (MyRealmModel::array_rtrim($course['navigation']) as $key => $nav)  : ?>
                         <? if (isset($nav) && $nav->isVisible(true)) : ?>
@@ -81,7 +81,7 @@
                 </div>
             </div>
         </td>
-        <td class="responsive-hidden">
+        <td class="hidden-small-down">
             <? if (!$sem_class['studygroup_mode']) : ?>
                 <a data-dialog href="<?= $controller->url_for(sprintf('course/details/index/%s', $course['seminar_id']),
                                                               array('from' => $controller->url_for('my_courses/index'))) ?>">
@@ -93,7 +93,7 @@
                 <?= Assets::img('blank.gif', array('width'  => 20, 'height' => 20)); ?>
             <? endif ?>
         </td>
-        <td style="text-align: left; white-space: nowrap;" class="responsive-hidden">
+        <td style="text-align: left; white-space: nowrap;" class="hidden-small-down">
             <? if (!empty($course['navigation'])) : ?>
                 <? foreach (MyRealmModel::array_rtrim($course['navigation']) as $key => $nav)  : ?>
                     <? if (isset($nav) && $nav->isVisible(true)) : ?>
@@ -113,7 +113,7 @@
             <? endif ?>
 
         </td>
-        <td style="text-align: right" class="responsive-hidden">
+        <td style="text-align: right" class="hidden-small-down">
             <? if (in_array($course["user_status"], array("dozent",
                                                           "tutor"))
             ) : ?>

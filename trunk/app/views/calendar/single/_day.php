@@ -14,6 +14,39 @@ if ($at >= $settings['start']
 $em = $calendar->createEventMatrix($start, $end, $settings['step_day']);
 $max_columns = $em['max_cols'] ?: 1;
 ?>
+
+<nav class="calendar-nav">
+    <span style="white-space: nowrap;">
+        <a href="<?= $controller->url_for('calendar/single/day', array('atime' => strtotime('-1 day', $atime))) ?>">
+            <?= Icon::create('arr_1left', 'clickable', ['title' => _('Einen Tag zurück')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
+            <span class="hidden-tiny-down">
+                <?= strftime(_('%x'), strtotime('-1 day', $calendar->getStart())) ?>
+            </span>
+        </a>
+    </span>
+
+    <? ob_start() ?>
+    <span class="hidden-tiny-down"><?= strftime('%A, ', $atime) ?></span>
+    <?= strftime('%d.%m.%Y', $atime) ?>
+    <span class="hidden-medium-down" style="font-size: 12pt; color: #bbb; font-weight: bold;"><? $hd = holiday($atime); echo $hd['name']; ?></span>
+
+    <?
+    $calType = 'day';
+    $calLabel = ob_get_clean();
+    ?>
+
+    <?= $this->render_partial('calendar/single/_calhead', compact('calendar', 'atime', 'calType', 'calLabel')) ?>
+
+    <span style="white-space: nowrap;">
+        <a href="<?= $controller->url_for('calendar/single/day', array('atime' => strtotime('+1 day', $atime))) ?>">
+            <span class="hidden-tiny-down">
+                <?= strftime(_('%x'), strtotime('+1 day', $calendar->getStart())) ?>
+            </span>
+            <?= Icon::create('arr_1right', 'clickable', ['title' => _('Einen Tag vor')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
+        </a>
+    </span>
+</nav>
+
 <table class="calendar-day">
     <colgroup>
         <col style="max-width: 2em; width: 2em;">
@@ -27,26 +60,6 @@ $max_columns = $em['max_cols'] ?: 1;
         <col style="max-width: 0.8em; width: 0.8em;">
     </colgroup>
     <thead>
-        <tr>
-            <td class="blank" colspan="<?= $max_columns_head ?>" style="width: 100%; text-align: center; vertical-align: middle;">
-                <div style="text-align: left; width: 20%; display: inline-block; white-space: nowrap;">
-                    <a href="<?= $controller->url_for('calendar/single/day', array('atime' => strtotime('-1 day', $atime))) ?>">
-                        <?= Icon::create('arr_1left', 'clickable', ['title' => _('Einen Tag zurück')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
-                        <?= strftime(_('%x'), strtotime('-1 day', $calendar->getStart())) ?>
-                    </a>
-                </div>
-                <div class="calhead" style="width: 50%; display: inline-block;">
-                    <?= strftime('%A, %e. %B %Y', $atime) ?>
-                    <div style="text-align: center; font-size: 12pt; color: #bbb; height: auto; overflow: visible; font-weight: bold;"><? $hd = holiday($atime); echo $holiday['name']; ?></div>
-                </div>
-                <div style="text-align: right; width: 20%; display: inline-block; white-space: nowrap;">
-                    <a href="<?= $controller->url_for('calendar/single/day', array('atime' => strtotime('+1 day', $atime))) ?>">
-                        <?= strftime(_('%x'), strtotime('+1 day', $calendar->getStart())) ?>
-                        <?= Icon::create('arr_1right', 'clickable', ['title' => _('Einen Tag vor')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
-                    </a>
-                </div>
-            </td>
-        </tr>
         <? if ($start > 0) : ?>
         <tr>
             <td align="center"<?= $settings['step_day'] < 3600 ? ' colspan="2"' : '' ?>>

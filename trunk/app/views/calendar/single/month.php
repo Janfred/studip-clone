@@ -1,33 +1,39 @@
 <? $month = $calendar->view; ?>
+
+<nav class="calendar-nav" style="vertical-align: middle">
+    <span style="white-space: nowrap;">
+        <a class="hidden-medium-down" style="padding-right: 2em;" href="<?= $controller->url_for('calendar/single/month', array('atime' => strtotime('-1 year', $atime))) ?>">
+            <?= Icon::create('arr_2left', 'clickable', ['title' => _('Ein Jahr zurück')])->asImg(['style' => 'vertical-align: text-top;']) ?>
+            <?= strftime('%B %Y', strtotime('-1 year', $atime)) ?>
+        </a>
+        <a class="hidden-tiny-down" href="<?= $controller->url_for('calendar/single/month', array('atime' => strtotime('-1 month', $atime))) ?>">
+            <?= Icon::create('arr_1left', 'clickable', ['title' => _('Einen Monat zurück')])->asImg(['style' => 'vertical-align: text-top;']) ?>
+            <?= strftime('%B %Y', strtotime('-1 month', $atime)) ?>
+        </a>
+    </span>
+
+    <?
+    $calType = 'month';
+    $calLabel = htmlReady(strftime("%B ", $calendars[15]->getStart())) .' '. date('Y', $calendars[15]->getStart());
+    ?>
+
+    <?= $this->render_partial('calendar/single/_calhead', compact('calendar', 'atime', 'calType', 'calLabel')) ?>
+
+    <span style="text-align: right; white-space: nowrap;">
+        <a class="hidden-tiny-down" style="padding-right: 2em;" href="<?= $controller->url_for('calendar/single/month', array('atime' => strtotime('+1 month', $atime))) ?>">
+            <?= strftime('%B %Y', strtotime('+1 month', $atime)) ?>
+            <?= Icon::create('arr_1right', 'clickable', ['title' => _('Einen Monat vor')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
+        </a>
+        <a class="hidden-medium-down" href="<?= $controller->url_for('calendar/single/month', array('atime' => strtotime('+1 year', $atime))) ?>">
+            <?= strftime('%B %Y', strtotime('+1 year', $atime)) ?>
+            <?= Icon::create('arr_2right', 'clickable', ['title' => _('Ein Jahr vor')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
+        </a>
+    </span>
+</nav>
+
+<div class="table-scrollbox-horizontal">
 <table class="calendar-month">
     <thead>
-        <tr>
-            <td colspan="8" style="text-align: center; vertical-align: middle;">
-                <div style="text-align: left; display: inline-block; white-space: nowrap; width: 33%;">
-                    <a style="padding-right: 2em;" href="<?= $controller->url_for('calendar/single/month', array('atime' => strtotime('-1 year', $atime))) ?>">
-                        <?= Icon::create('arr_2left', 'clickable', ['title' => _('Ein Jahr zurück')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
-                        <?= strftime('%B %Y', strtotime('-1 year', $atime)) ?>
-                    </a>
-                    <a href="<?= $controller->url_for('calendar/single/month', array('atime' => strtotime('-1 month', $atime))) ?>">
-                        <?= Icon::create('arr_1left', 'clickable', ['title' => _('Einen Monat zurück')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
-                        <?= strftime('%B %Y', strtotime('-1 month', $atime)) ?>
-                    </a>
-                </div>
-                <div class="calhead" style="text-align: center; width: 33%; display: inline-block;">
-                    <?= htmlReady(strftime("%B ", $calendars[15]->getStart())) .' '. date('Y', $calendars[15]->getStart()); ?>
-                </div>
-                <div style="text-align: right; display: inline-block; white-space: nowrap; width: 33%;">
-                    <a style="padding-right: 2em;" href="<?= $controller->url_for('calendar/single/month', array('atime' => strtotime('+1 month', $atime))) ?>">
-                        <?= strftime('%B %Y', strtotime('+1 month', $atime)) ?>
-                        <?= Icon::create('arr_1right', 'clickable', ['title' => _('Einen Monat vor')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
-                    </a>
-                    <a href="<?= $controller->url_for('calendar/single/month', array('atime' => strtotime('+1 year', $atime))) ?>">
-                        <?= strftime('%B %Y', strtotime('+1 year', $atime)) ?>
-                        <?= Icon::create('arr_2right', 'clickable', ['title' => _('Ein Jahr vor')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
-                    </a>
-                </div>
-            </td>
-        </tr>
         <tr class="calendar-month-weekdays">
             <? $week_days = array(39092400, 39178800, 39265200, 39351600, 39438000, 39524400, 39610800); ?>
             <? foreach ($week_days as $week_day) : ?>
@@ -102,3 +108,4 @@
         </tr>
     </tbody>
 </table>
+</div>

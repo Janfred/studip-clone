@@ -27,9 +27,9 @@
                         <col width="10%">
                     <? endif ?>
                     <col>
-                    <col class="responsive-hidden" width="45px">
-                    <col class="responsive-hidden" width="<?= $nav_elements * 27 ?>px">
-                    <col class="responsive-hidden" width=45px>
+                    <col class="hidden-small-down" width="45px">
+                    <col class="hidden-small-down" width="<?= $nav_elements * 27 ?>px">
+                    <col class="hidden-small-down" width=45px>
                 </colgroup>
                 <thead>
                 <tr class="sortable">
@@ -48,9 +48,9 @@
                             <?= _("Name") ?>
                         </a>
                     </th>
-                    <th class="responsive-hidden"></th>
-                    <th class="responsive-hidden"><?= _("Inhalt") ?></th>
-                    <th class="responsive-hidden"></th>
+                    <th class="hidden-small-down"></th>
+                    <th class="hidden-small-down"><?= _("Inhalt") ?></th>
+                    <th class="hidden-small-down"></th>
                 </tr>
                 </thead>
                 <? if (strcmp($group_field, 'sem_number') !== 0) : ?>

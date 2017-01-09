@@ -10,8 +10,124 @@
 }
 .profile-view-actions {
     .list-unstyled();
-    
+
     img {
         vertical-align: text-top;
     }
 }
+
+form.settings-avatar {
+    .avatar-normal {
+        padding: 2em;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .file-upload {
+        .flex-item(1, 1);
+    }
+
+    .form-text {
+        color: initial;
+    }
+
+    footer {
+        padding-left: 40px;
+    }
+
+    .media-breakpoint-small-up({
+        .form-group {
+            .flex();
+            .flex-align-items(center);
+        }
+     });
+}
+
+.media-breakpoint-tiny-down({
+
+    table.settings-privacy {
+        &, thead, tbody, th, td, tr {
+            display: block;
+        }
+
+        > tbody > tr > td {
+            border: none !important;
+            padding-left: 10%;
+        }
+
+        .visibility-homepage-element {
+            margin-top: 2em;
+        }
+
+        .visibility-homepage-element-name {
+            font-weight: 600;
+            margin-right: .75em;
+        }
+
+        tbody td,
+        tbody td:first-child {
+            width: auto;
+        }
+    }
+});
+
+
+
+#select_fach_abschluss {
+    margin: 1em 0;
+    min-width: 300px;
+
+    tbody {
+        td {
+            display: block;
+            white-space: nowrap;
+
+            &:first-child {
+                padding-top: 2em;
+            }
+
+            &:last-child {
+                padding-top: .5em;
+            }
+
+            &:before {
+                content: attr(data-label) ": ";
+                font-weight: bold;
+                width: 6.5em;
+                display: inline-block;
+            }
+        }
+
+        th, td {
+            text-align: left;
+        }
+    }
+}
+
+#select_fach_abschluss > tbody > tr:last-child > td {
+    border-bottom: 1px solid @table-header-color;
+}
+
+.media-breakpoint-small-up({
+    #select_fach_abschluss tbody {
+        td:before {
+            display: none;
+        }
+
+        th, td {
+            display: table-cell;
+            padding: .25em .5em;
+        }
+        th:first-child, td:first-child {
+            padding-left: 0;
+        }
+        th:last-child, td:last-child {
+            padding-right: 0;
+        }
+
+        td:last-child {
+            text-align: center;
+        }
+    }
+});
