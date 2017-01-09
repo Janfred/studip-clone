@@ -99,7 +99,7 @@ class Studiengaenge_StgteilbezeichnungenController extends MVVController
     /**
      * Deletes a Abschluss-Kategorie
      */
-    function delete_action($stgteilbezeichnung_id, $delete = null)
+    function delete_action($stgteilbezeichnung_id)
     {
         CSRFProtection::verifyUnsafeRequest();
         $stgteilbezeichnung = StgteilBezeichnung::get($stgteilbezeichnung_id);
@@ -107,9 +107,26 @@ class Studiengaenge_StgteilbezeichnungenController extends MVVController
             PageLayout::postError( sprintf(_('Löschen nicht möglich! Die Studiengangteil-Bezeichnung "%s" wird bereits verwendet!'),
                 htmlReady($stgteilbezeichnung->name)));
         } else {
-            PageLayout::postSuccess(sprintf(_('Studiengangteil-Bezeichnung "%s" gelöscht!'),
-                htmlReady($stgteilbezeichnung->name)));
-            $stgteilbezeichnung->delete();
+            $perm = MvvPerm::get($stgteilbezeichnung);
+            if (!$perm->havePerm(MvvPerm::PERM_CREATE)) {
+                throw new Trails_Exception(403, _('Keine Berechtigung'));
+            }
+            if (Request::submitted('yes')) {
+                CSRFProtection::verifyUnsafeRequest();
+                if ($stgteilbezeichnung->count_studiengaenge) {
+                    PageLayout::postError( sprintf(_('Löschen nicht möglich! Die Studiengangteil-Bezeichnung "%s" wird bereits verwendet!'),
+                            htmlReady($stgteilbezeichnung->name)));
+                } else {
+                    PageLayout::postSuccess(sprintf(_('Studiengangteil-Bezeichnung "%s" gelöscht!'),
+                            htmlReady($stgteilbezeichnung->name)));
+                    $stgteilbezeichnung->delete();
+                }
+            }
+            if (!Request::isPost()) {
+                $this->flash_set('dialog', sprintf(_('Wollen Sie wirklich die Studiengangteil-Bezeichnung "%s" löschen?'),
+                                $stgteilbezeichnung->name),
+                        ['studiengaenge/stgteilbezeichnungen/delete', $stgteilbezeichnung->getId()]);
+            }
         }
         $this->redirect('studiengaenge/stgteilbezeichnungen');
     }
