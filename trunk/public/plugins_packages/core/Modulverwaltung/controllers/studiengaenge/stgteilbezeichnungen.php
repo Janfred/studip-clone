@@ -112,7 +112,6 @@ class Studiengaenge_StgteilbezeichnungenController extends MVVController
                 throw new Trails_Exception(403, _('Keine Berechtigung'));
             }
             if (Request::submitted('yes')) {
-                CSRFProtection::verifyUnsafeRequest();
                 if ($stgteilbezeichnung->count_studiengaenge) {
                     PageLayout::postError( sprintf(_('Löschen nicht möglich! Die Studiengangteil-Bezeichnung "%s" wird bereits verwendet!'),
                             htmlReady($stgteilbezeichnung->name)));
