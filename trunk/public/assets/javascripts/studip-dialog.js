@@ -454,7 +454,7 @@
             height:  height,
             dialogClass: options.dialogClass || dialog_options.dialogClass || '',
             buttons: options.buttons || {},
-            title:   $('<div>').text(options.title || '').html(), // kinda like htmlReady()
+            title:   options.title,
             modal:   true,
             resizable: options.hasOwnProperty('resize') ? options.resize : true,
             create: function (event) {
