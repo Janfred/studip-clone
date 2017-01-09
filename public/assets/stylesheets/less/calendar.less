@@ -66,6 +66,22 @@ a:hover.calhead {
     color: @red-60;
 }
 
+.calhead label {
+  cursor: pointer;
+  &:hover {
+    color: @base-color-40;
+  }
+
+  .media-breakpoint-small-down({
+    .button();
+
+    img {
+      padding-left: 0.5em;
+      vertical-align: middle;
+    }
+  })
+}
+
 .celltoday {
     background-color: @red-20;
 }
@@ -102,7 +118,7 @@ table.calendar-month {
 }
 
 td.month {
-    background-color: @dark-gray-color-15;
+    background-color: fadeout(darken(@dark-gray-color-15, 5), 30);
     padding: 3px;
     div {
         width: 90%;
@@ -113,7 +129,7 @@ td.month {
 }
 
 td.lightmonth {
-    background-color: @dark-gray-color-5;
+    background-color: fadeout(darken(@dark-gray-color-5, 5), 30);
     padding: 3px;
     div {
         width: 90%;
@@ -136,6 +152,20 @@ td.weekdayevents {
 
 table.calendar-week {
     width: 100%;
+}
+
+nav.calendar-nav {
+  .flex();
+  .flex-align-items(center);
+  padding-bottom: 1em;
+
+  > div {
+    .flex-item(1, 1);
+  }
+
+  .calhead {
+    color: @base-color;
+  }
 }
 
 .calendar-day-edit {
@@ -167,6 +197,20 @@ table.calendar-week {
     font-size: 11px;
     color: #fff;
     padding: 0;
+}
+
+.calendar-single-year {
+  .calendar-single-year--table {
+
+    > thead th {
+      min-width: 5em;
+      text-align: left;
+    }
+
+    .yday {
+      white-space: nowrap;
+    }
+  }
 }
 
 table.calendar-week, table.calendar-day {

@@ -1,12 +1,12 @@
 <tr id="message_<?= $message->getId() ?>" class="<?= $message->isRead() || $message['autor_id'] === $GLOBALS['user']->id ? "" : "unread" ?>">
-    <td class="responsive-hidden"><input type="checkbox" name="bulk[]" value="<?= htmlReady($message->getId()) ?>"></td>
+    <td class="hidden-small-down"><input type="checkbox" name="bulk[]" value="<?= htmlReady($message->getId()) ?>"></td>
     <td><?= $message->getNumAttachments() ? Icon::create('staple', 'info', ["title" => _("Mit Anhang")])->asImg(20) : "" ?></td>
     <td><?= $message->originator->answered ? Icon::create('outbox', 'info', ["title" => _("Beantwortet")])->asImg(20) : "" ?></td>
     <td class="title">
         <a href="<?= URLHelper::getLink("dispatch.php/messages/read/".$message->getId()) ?>" data-dialog>
             <?= $message['subject'] ? htmlReady($message['subject']) : htmlReady(mila($message['message'], 40)) ?>
         </a>
-        <p class="responsive-visible responsive_author">
+        <p class="hidden-medium-up responsive_author">
             <? if ($message['autor_id'] == "____%system%____") : ?>
                 <?= _("Systemnachricht") ?>
             <? elseif (!$received): ?>
@@ -21,7 +21,7 @@
             <? endif; ?>
         </p>
     </td>
-    <td class="responsive-hidden">
+    <td class="hidden-small-down">
     <? if ($message['autor_id'] == "____%system%____") : ?>
         <?= _("Systemnachricht") ?>
     <? elseif (!$received): ?>
@@ -40,7 +40,7 @@
     <? endif; ?>
     </td> 
     <td><?= date("d.m.Y G:i", $message['mkdate']) ?></td>
-    <td class="tag-container responsive-hidden">
+    <td class="tag-container hidden-small-down">
     <? foreach ($message->getTags() as $tag) : ?>
         <a href="<?= URLHelper::getLink("?", array('tag' => $tag)) ?>" class="message-tag" title="<?= _("Alle Nachrichten zu diesem Schlagwort") ?>">
             <?= htmlReady(ucfirst($tag)) ?>

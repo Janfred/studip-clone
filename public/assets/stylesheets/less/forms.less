@@ -137,6 +137,8 @@ form.default {
         background-size: 20px 20px;
         cursor: pointer;
         padding-left: 30px;
+        color: @base-color;
+
         input[type=file] {
             display: none;
         }
@@ -147,7 +149,7 @@ form.default {
     }
 
     // Group elements in a row
-    .hgroup {
+    .hgroup, .hgroup-btn {
         .flex();
         .flex-align-items(flex-end);
         max-width: @max-width-m;
@@ -183,6 +185,16 @@ form.default {
                 margin-top: 0;
                 width: auto;
             }
+        }
+    }
+
+    .hgroup-btn {
+        .flex-align-items(baseline);
+        .form-control {
+            .flex-item(1);
+        }
+        .button {
+            .flex-item(0);
         }
     }
 

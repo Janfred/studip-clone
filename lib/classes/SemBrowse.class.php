@@ -305,7 +305,7 @@ class SemBrowse {
                     printf(_(" / %sVorlesungsverzeichnis%s"),"<a href=\"".URLHelper::getLink('?level=vv&cmd=qs&sset=0')."\">","</a>");
                 }
             } else {
-                printf ("<table align=\"center\" cellspacing=\"10\"><tr><td nowrap align=\"center\"><a href=\"%s\"><b>%s</b><br><br>%s</a></td>",
+                printf ("<table class=\"hidden-medium-down\" align=\"center\" cellspacing=\"10\"><tr><td nowrap align=\"center\"><a href=\"%s\"><b>%s</b><br><br>%s</a></td>",
                         URLHelper::getLink('?level=ev&cmd=qs&sset=0'),
                         _("Suche in Einrichtungen"),
                         Assets::img('institute-search.png', array('size' => '260@100', 'alt' =>_("Suche im Einrichtungsverzeichnis"))));
@@ -318,6 +318,16 @@ class SemBrowse {
                 }
                 SkipLinks::addLink(_("Suche im Einrichtungsverzeichnis"), URLHelper::getLink('dispatch.php/search/courses', array('level' => 'ev', 'cmd' => 'qs', 'sset' => '0')));
                 printf ("</tr></table>");
+
+                ?>
+                <nav class="hidden-large-up button-group">
+                    <?= Studip\LinkButton::create(_("Suche in Einrichtungen"), URLHelper::getLink('?level=ev&cmd=qs&sset=0')) ?>
+
+                    <? if ($this->show_class()) { ?>
+                        <?= Studip\LinkButton::create(_("Suche im Vorlesungsverzeichnis"), URLHelper::getLink('?level=vv&cmd=qs&sset=0')) ?>
+                    <? } ?>
+                </nav>
+                <?
             }
             echo "</font></div>";
         }
@@ -405,7 +415,7 @@ class SemBrowse {
                             $sem_name .= ' ('. _("Studiengruppe");
                             if ($seminar_obj->admission_prelim) $sem_name .= ', '. _("Zutritt auf Anfrage");
                             $sem_name .= ')';
-                            echo '<td width="1%">';
+                            echo '<td width="1%" class="hidden-tiny-down">';
                             echo StudygroupAvatar::getAvatar($seminar_id)->getImageTag(Avatar::SMALL, array('title' => htmlReady($seminar_obj->getName())));
                             echo '</td>';
                         } else {
@@ -417,7 +427,7 @@ class SemBrowse {
                             } elseif ($this->sem_browse_data["group_by"]) {
                                 $sem_name .= " (" . $this->search_obj->sem_dates[$sem_number_start]['name'] . ")";
                             }
-                            echo '<td width="1%">';
+                            echo '<td width="1%" class="hidden-tiny-down">';
                             echo CourseAvatar::getAvatar($seminar_id)->getImageTag(Avatar::SMALL, array('title' => htmlReady($seminar_obj->getName())));
                             echo '</td>';
 

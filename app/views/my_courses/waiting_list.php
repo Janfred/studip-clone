@@ -3,7 +3,7 @@
     <caption>
         <?= _("Anmelde- und Wartelisteneinträge") ?>
     </caption>
-    <colgroup class="responsive-hidden">
+    <colgroup class="hidden-small-down">
         <col width="1px">
         <col width="65%">
         <col width="7%">
@@ -12,7 +12,7 @@
         <col width="15%">
         <col width="3%">
     </colgroup>
-    <colgroup class="responsive-visible">
+    <colgroup class="hidden-medium-up">
         <col width="1px">
     </colgroup>
 
@@ -20,10 +20,10 @@
         <tr>
             <th></th>
             <th style="text-align: left"><?= _("Name") ?></th>
-            <th class="responsive-hidden"><?= _('Inhalt') ?></th>
+            <th class="hidden-small-down"><?= _('Inhalt') ?></th>
             <th style="text-align: center"><?= _("Datum") ?></th>
-            <th class="responsive-hidden" style="text-wrap: none; white-space: nowrap"><b><?= _("Position/Chance") ?></th>
-            <th class="responsive-hidden"><?= _("Art") ?></th>
+            <th class="hidden-small-down" style="text-wrap: none; white-space: nowrap"><b><?= _("Position/Chance") ?></th>
+            <th class="hidden-small-down"><?= _("Art") ?></th>
             <th></th>
         </tr>
     </thead>
@@ -55,7 +55,7 @@
                     <?= htmlReady($seminar_name) ?>
                 </a>
             </td>
-            <td class="responsive-hidden">
+            <td class="hidden-small-down">
                 <a data-dialog="size=auto" href="<?= $controller->url_for(sprintf('course/details/index/%s', $wait['seminar_id'])) ?>">
                     <? $params = tooltip2(_("Veranstaltungsdetails anzeigen")); ?>
                     <? $params['style'] = 'cursor: pointer'; ?>
@@ -66,11 +66,11 @@
                 <?= $wait["status"] == "claiming" ? date("d.m.", $wait["admission_endtime"]) : "-" ?>
             </td>
 
-            <td class="responsive-hidden" style="text-align: center">
+            <td class="hidden-small-down" style="text-align: center">
                 <?= $wait["status"] == "claiming" ? ($wait['admission_chance'] . "%") : $wait["position"] ?>
             </td>
 
-            <td class="responsive-hidden" style="wtext-align: center">
+            <td class="hidden-small-down" style="wtext-align: center">
                 <? if ($wait["status"] == "claiming") : ?>
                     <?= _("Autom.") ?>
                 <? elseif ($wait["status"] == "accepted") : ?>

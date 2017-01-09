@@ -23,7 +23,7 @@
 <? foreach ($allSemesters as $semester): ?>
 <table class="dates default sortable-table" data-sortlist="[[0, 0]]" data-table-id="<?= htmlReady($semester->id) ?>">
     <caption><?= htmlReady($semester['name']) ?></caption>
-        <colgroup class="responsive-hidden">
+        <colgroup class="hidden-small-down">
         <? if (count($course->statusgruppen) > 0): ?>
             <col width="30%">
             <col width="10%">
@@ -40,11 +40,11 @@
     <thead>
         <tr>
             <th data-sort="htmldata"><?= _('Zeit') ?></th>
-            <th data-sort="text" class="responsive-hidden"><?= _('Typ') ?></th>
+            <th data-sort="text" class="hidden-small-down"><?= _('Typ') ?></th>
         <? if (count($course->statusgruppen)): ?>
-            <th data-sort="text" class="responsive-hidden"><?= _('Sichtbarkeit') ?></th>
+            <th data-sort="text" class="hidden-small-down"><?= _('Sichtbarkeit') ?></th>
         <? endif; ?>
-            <th data-sort="text" class="responsive-hidden"><?= _('Thema') ?></th>
+            <th data-sort="text" class="hidden-small-down"><?= _('Thema') ?></th>
             <th data-sort="text"><?= _('Raum') ?></th>
         </tr>
     </thead>
@@ -80,8 +80,8 @@
     <thead>
     <tr>
         <th data-sort="htmldata"><?= _('Zeit') ?></th>
-        <th data-sort="text" class="responsive-hidden"><?= _('Typ') ?></th>
-        <th data-sort="text" class="responsive-hidden"><?= _('Thema') ?></th>
+        <th data-sort="text" class="hidden-small-down"><?= _('Typ') ?></th>
+        <th data-sort="text" class="hidden-small-down"><?= _('Thema') ?></th>
         <th data-sort="text"><?= _('Raum') ?></th>
     </tr>
     </thead>

@@ -167,8 +167,9 @@ class StudipSemSearch {
         return $options;
     }
 
-    function getFormStart($action = ""){
-        return $this->form->getFormStart($action);
+    function getFormStart($action = "", $attributes = [])
+    {
+        return $this->form->getFormStart($action, $attributes);
     }
 
     function getFormEnd(){

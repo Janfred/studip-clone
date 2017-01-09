@@ -21,10 +21,10 @@
                 <th>
                     <?= _('Name') ?>
                 </th>
-                <th class="responsive-hidden">
+                <th class="hidden-small-down">
                     <?= _('Stud.IP') ?>
                 </th>
-                <th class="responsive-hidden">
+                <th class="hidden-small-down">
                     <?= _('E-Mail') ?>
                 </th>
                 <th class="actions">
@@ -45,13 +45,13 @@
                             <td>
                                 <?= ObjectdisplayHelper::avatarlink($contact) ?>
                             </td>
-                            <td class="responsive-hidden">
+                            <td class="hidden-small-down">
                                 <a data-dialog="button"
                                    href="<?= URLHelper::getLink('dispatch.php/messages/write', ['rec_uname' => $contact->username]) ?>">
                                     <?= htmlReady($contact->username) ?>
                                 </a>
                             </td>
-                            <td class="responsive-hidden">
+                            <td class="hidden-small-down">
                                 <a href="mailto:<?= htmlReady($contact->email) ?>">
                                     <?= htmlReady($contact->email) ?>
                                 </a>

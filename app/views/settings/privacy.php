@@ -108,44 +108,46 @@ use Studip\Button, Studip\LinkButton;
             <?= _('Eigenes Profil') ?>
         </legend>
 
-        <table class="default">
-            <colgroup>
-                <col width="34%">
-                <? for ($i = 1; $i <= $colCount; $i++): ?>
-                    <col width="<?= $colWidth ?>%">
-                <? endfor; ?>
-            </colgroup>
+        <table class="default settings-privacy">
             <thead>
                 <tr>
                     <th><?= _('Profil-Element'); ?></th>
-                    <th style='text-align: center;' colspan="<?= $colCount++ ?>"><?= _('sichtbar für'); ?></th>
+                    <th class="hidden-tiny-down" style='text-align: center;' colspan="<?= $colCount++ ?>"><?= _('sichtbar für'); ?></th>
+                </tr>
+
+                <tr class="hidden-tiny-down">
+                    <th style="background: white; width: 34%;">&nbsp;</th>
+                    <? foreach ($visibilities as $visibility): ?>
+                        <th style="background: white; width: <?= floor(66 / $colCount) ?>%;"><?= htmlReady($visibility) ?></th>
+                    <? endforeach; ?>
                 </tr>
             </thead>
             <tbody class="privacy">
-                <tr>
-                    <td>&nbsp;</td>
-                    <? foreach ($visibilities as $visibility): ?>
-                        <td><?= htmlReady($visibility) ?></td>
-                    <? endforeach; ?>
-                </tr>
                 <? foreach ($homepage_elements['entry'] as $element): ?>
                     <? if ($element['is_header']): ?>
-                        <tr>
+                        <tr class="visibility-homepage-elements-header">
                             <th colspan="<?= 1 + $colCount ?>">
                                 <?= htmlReady($element['name']) ?>
                             </th>
                         </tr>
                     <? else: ?>
                         <tr>
-                            <td style="padding-left: <?= $element['padding'] ?>"><?= htmlReady($element['name']) ?></td>
+                            <td class="visibility-homepage-element" style="padding-left: <?= $element['padding'] ?>">
+                                <span class="visibility-homepage-element-name"><?= htmlReady($element['name']) ?></span>
+                                <span class="hidden-small-up"><?= _('sichtbar für') ?></span>
+                            </td>
                             <? if ($element['is_category']): ?>
                                 <td colspan="<?= $colCount ?>"></td>
                             <? else: ?>
-                                <? foreach ($homepage_elements['states'] as $state): ?>
+                                <? foreach ($homepage_elements['states'] as $index => $state): ?>
                                     <td>
-                                        <input type="radio" name="visibility_update[<?= $element['id'] ?>]"
-                                               value="<?= $state ?>"
-                                                <? if ($element['state'] == $state) echo 'checked'; ?>>
+                                        <label style="white-space: nowrap;">
+                                            <input type="radio"
+                                                   name="visibility_update[<?= $element['id'] ?>]"
+                                                   value="<?= $state ?>"
+                                                   <? if ($element['state'] == $state) echo 'checked'; ?>>
+                                            <span class="hidden-small-up"><?=  $visibilities[$index + 1] ?></span>
+                                        </label>
                                     </td>
                                 <? endforeach; ?>
                             <? endif; ?>
@@ -154,7 +156,6 @@ use Studip\Button, Studip\LinkButton;
                 <? endforeach; ?>
             </tbody>
         </table>
-
         <label>
             <?= _('Neue Elemente') ?>
             <select name="default">

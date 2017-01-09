@@ -1,5 +1,10 @@
 .plus {
-    .element_header {
+
+  tbody td {
+    padding-bottom: 2em;
+  }
+
+  .element_header {
         display: inline-block;
         width: 250px;
         margin-left: 5px;
@@ -32,23 +37,24 @@
     }
 
     .plus_expert {
-        display: inline-block;
         margin-left: 20px;
-        float: left;
-        width: 97%
+        width: 97%;
+
+        .flex();
+        .flex-wrap(wrap);
     }
 
     .screenshot_holder {
-        display: inline-block;
-        float: left;
         width: 250px;
+        .flex-item(0 250px);
+        margin-right: 5mm;
+        .box-sizing(border-box);
     }
 
     .big_thumb {
         max-width: 250px;
         max-height: 250px;
-        padding: 2mm;
-        float: left;
+        padding-top: 5mm;
     }
 
     .small_thumb {
@@ -59,8 +65,6 @@
 
     .thumb_holder {
         width: 250px;
-        float: left;
-        margin-left: 2mm;
         text-align: center;
         background-color: @content-color-20;
         border-top: 1px solid fadeout(@brand-color-lighter, 80%);
@@ -68,8 +72,8 @@
     }
 
     .descriptionbox {
-        display: block;
-        margin-left: 285px;
+        .flex-item(1 305px);
+        max-width: 45em;
     }
 
     .keywords {

@@ -43,7 +43,7 @@
                         </label> :
                         <input style="text-align: right;" type="text" name="start_minute" value="<?= date('i', $event->getStart()) ?>" size="2" maxlength="2"<?= $event->isDayEvent() ? ' disabled' : '' ?>>
                     </span>
-                    <label style="white-space: nowrap;"><?= _('Ganztägig') ?>
+                    <label class="hidden-tiny-down" style="white-space: nowrap;"><?= _('Ganztägig') ?>
                         <input type="checkbox" name="isdayevent" value="1" <?= $event->isDayEvent() ? 'checked' : '' ?> onChange="jQuery(this).closest('tbody').find('input[size=\'2\']').prop('disabled', function (i,val) { return !val; });
                         ">
                     </label>
@@ -65,6 +65,18 @@
                         </label> :
                         <input style="text-align: right;" type="text" name="end_minute" value="<?= date('i', $event->getEnd()) ?>" size="2" maxlength="2"<?= $event->isDayEvent() ? ' disabled' : '' ?>>
                     </span>
+                </td>
+            </tr>
+            <tr class="hidden-small-up">
+                <td>
+                    <label for="isdayevent2">
+                        <?= _('Ganztägig') ?>
+                    </label>
+                </td>
+                <td colspan="2">
+                    <input id="isdayevent2" type="checkbox" name="isdayevent"
+                           value="1" <?= $event->isDayEvent() ? 'checked' : '' ?>
+                           onChange="jQuery(this).closest('tbody').find('input[size=\'2\']').prop('disabled', function (i,val) { return !val; });">
                 </td>
             </tr>
         </tbody>
