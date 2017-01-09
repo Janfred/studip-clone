@@ -89,14 +89,14 @@
                             <? endfor; ?>
                         </select>
                     </td>
-                    <td data-label="<?= _('austragen') ?>">
+                    <td data-label="<?= _('austragen:') ?>">
                         <input type="checkbox" aria-labelledby="austragen_label"
                                name="fach_abschluss_delete[<?= $usc->fach_id ?>]"
                                value="<?= $ucs->abschluss_id ?>">
                     </td>
                 <? else: ?>
-                    <td><?= htmlReady($ucs->semester) ?></td>
-                    <td style="text-align: right;">
+                    <td data-label="<?= _('Fachsemester:') ?>"><?= htmlReady($ucs->semester) ?></td>
+                    <td data-label="<?= _('austragen:') ?>" style="text-align: right;">
                         <?= Icon::create('accept', 'inactive')->asImg(['class' => 'text-top']) ?>
                     </td>
                 <? endif; ?>

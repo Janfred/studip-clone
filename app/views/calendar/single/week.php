@@ -49,14 +49,9 @@ if ($rowspan > 1) {
         </a>
     </span>
 
-    <? ob_start() ?>
-    <? printf(_("%s. Woche"), strftime("%V", $calendars[0]->getStart())) ?>
-    <span class="hidden-large-up"><?= date('Y', $calendars[0]->getStart()) ?></span>
-    <span class="hidden-medium-down"><? printf(_("vom %s bis %s"), strftime("%x", $calendars[0]->getStart()), strftime("%x", $calendars[$week_type - 1]->getStart())) ?></span>
-
     <?
     $calType = 'week';
-    $calLabel = ob_get_clean();
+    $calLabel = $this->render_partial('calendar/single/_calhead_label_week', compact('week_type'));
     ?>
 
     <?= $this->render_partial('calendar/single/_calhead', compact('calendar', 'atime', 'calType', 'calLabel')) ?>

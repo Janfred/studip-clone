@@ -6419,7 +6419,7 @@ ul.studygroup-gallery li section {
   text-align: right;
   white-space: nowrap;
 }
-.studygroup-browse td:nth-child(2) a {
+.studygroup-browse td.studygroup-title a {
   display: block;
   max-width: 40em;
   min-width: 15em;
@@ -7113,7 +7113,7 @@ form.settings-avatar footer {
   padding-top: .5em;
 }
 #select_fach_abschluss tbody td:before {
-  content: attr(data-label) ": ";
+  content: attr(data-label);
   font-weight: bold;
   width: 6.5em;
   display: inline-block;
@@ -8382,7 +8382,7 @@ select.has-no-value:not(:focus) {
 .nested-select.institute-list .select2-results > ul > li:not(.nested-item) {
   font-weight: bold;
 }
-.plus tbody td {
+.plus td.element {
   padding-bottom: 2em;
 }
 .plus .element_header {

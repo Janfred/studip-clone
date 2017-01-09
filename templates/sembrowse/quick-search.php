@@ -41,10 +41,15 @@ SkipLinks::addIndex(_('Suchformular'), 'search_sem_qs', 100);
             <?= $search_obj->getSemChangeButton([ ]) ?>
         </div>
     </label>
+
+    <label>
+         <?= _('Suchbegriff') ?>
+         <?= $quicksearch->render() ?>
+    </label>
+
 </fieldset>
 
 <footer>
-    <?= $quicksearch->render() ?>
     <span class="button-group">
         <?= $search_obj->getSearchButton(
             [
