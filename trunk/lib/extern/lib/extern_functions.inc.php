@@ -265,7 +265,7 @@ function sri_is_enabled ($i_id) {
  * @param string $module the config-type
  */
 function download_config($range_id, $config_id, $module) {
-    $extern = new ExternConfigDB($range_id, '',$config_id);
+    $extern = new ExternConfigDb($range_id, '',$config_id);
     
     // check, if we have an external configuration with the given ids
     $stmt = DBManager::get()->prepare("SELECT COUNT(*) as c FROM extern_config 
