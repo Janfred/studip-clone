@@ -657,8 +657,10 @@ class StreamsController extends PluginController {
             Navigation::getItem("/course/blubberforum")->setImage(Icon::create('blubber', 'info'));
             Navigation::activateItem('/course/blubberforum');
         } elseif($this->thread['context_type'] === "public") {
-            if (Navigation::hasItem('/profile')) {
+            if (Navigation::hasItem('/profile/blubber')) {
                 Navigation::activateItem('/profile/blubber');
+            } elseif (Navigation::hasItem('/community/blubber')) {
+                Navigation::activateItem('/community/blubber');
             }
         } else {
             if (Navigation::hasItem('/community/blubber')) {
