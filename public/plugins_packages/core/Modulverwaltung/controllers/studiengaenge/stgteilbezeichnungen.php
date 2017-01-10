@@ -80,6 +80,9 @@ class Studiengaenge_StgteilbezeichnungenController extends MVVController
         $stgteilbezeichnung->name_en = trim(Request::get('name_en'));
         $stgteilbezeichnung->name_kurz = trim(Request::get('name_kurz'));
         $stgteilbezeichnung->name_kurz_en = trim(Request::get('name_kurz_en'));
+        
+        $stgteilbezeichnung->verifyPermission();
+        
         try {
             $stored = $stgteilbezeichnung->store();
         } catch (InvalidValuesException $e) {
@@ -111,21 +114,9 @@ class Studiengaenge_StgteilbezeichnungenController extends MVVController
             if (!$perm->havePerm(MvvPerm::PERM_CREATE)) {
                 throw new Trails_Exception(403, _('Keine Berechtigung'));
             }
-            if (Request::submitted('yes')) {
-                if ($stgteilbezeichnung->count_studiengaenge) {
-                    PageLayout::postError( sprintf(_('Löschen nicht möglich! Die Studiengangteil-Bezeichnung "%s" wird bereits verwendet!'),
-                            htmlReady($stgteilbezeichnung->name)));
-                } else {
-                    PageLayout::postSuccess(sprintf(_('Studiengangteil-Bezeichnung "%s" gelöscht!'),
-                            htmlReady($stgteilbezeichnung->name)));
-                    $stgteilbezeichnung->delete();
-                }
-            }
-            if (!Request::isPost()) {
-                $this->flash_set('dialog', sprintf(_('Wollen Sie wirklich die Studiengangteil-Bezeichnung "%s" löschen?'),
-                                $stgteilbezeichnung->name),
-                        ['studiengaenge/stgteilbezeichnungen/delete', $stgteilbezeichnung->getId()]);
-            }
+            PageLayout::postSuccess(sprintf(_('Studiengangteil-Bezeichnung "%s" gelöscht!'),
+                    htmlReady($stgteilbezeichnung->name)));
+            $stgteilbezeichnung->delete();
         }
         $this->redirect('studiengaenge/stgteilbezeichnungen');
     }

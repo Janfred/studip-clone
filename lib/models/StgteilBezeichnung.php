@@ -19,7 +19,6 @@ class StgteilBezeichnung extends ModuleManagementModel
     
     private $count_stgteile;
     private $count_studiengaenge;
-    private $count_studiengangteile;
 
     protected static function configure($config = array())
     {
@@ -30,10 +29,7 @@ class StgteilBezeichnung extends ModuleManagementModel
         $config['additional_fields']['count_stgteile']['set'] = false;
         $config['additional_fields']['count_studiengaenge']['get'] =
             function($stg_bez) { return $stg_bez->count_studiengaenge; };
-        $config['additional_fields']['count_stgteile']['set'] = false;
-        $config['additional_fields']['count_studiengangteile']['get'] =
-            function($stg_bez) { return $stg_bez->count_studiengangteile; };
-        $config['additional_fields']['count_stgteile']['false'] = false;
+        $config['additional_fields']['count_studiengaenge']['set'] = false;
         
         parent::configure($config);
     }
@@ -61,9 +57,10 @@ class StgteilBezeichnung extends ModuleManagementModel
             $row_count = null, $offset = null)
     {
         $sortby = self::createSortStatement($sortby, $order, 'position',
-                array('count_studiengaenge'));
+                array('count_studiengaenge', 'count_stgteile'));
         return parent::getEnrichedByQuery('SELECT msb.*, '
-                . 'COUNT(DISTINCT studiengang_id) as `count_studiengaenge` '
+                . 'COUNT(DISTINCT studiengang_id) as `count_studiengaenge`, '
+                . 'COUNT(DISTINCT stgteil_id) as `count_stgteile` '
                 . 'FROM mvv_stgteil_bez msb '
                 . 'LEFT JOIN mvv_stg_stgteil USING(stgteil_bez_id) '
                 . 'LEFT JOIN mvv_studiengang USING(studiengang_id) '
@@ -93,7 +90,7 @@ class StgteilBezeichnung extends ModuleManagementModel
     public static function findByStudiengang($studiengang_id)
     {
         return parent::getEnrichedByQuery('SELECT msb.*, '
-                . 'COUNT(stgteil_id) AS `count_stgteile` '
+                . 'COUNT(DISTINCT stgteil_id) AS `count_stgteile` '
                 . 'FROM mvv_stgteil_bez msb '
                 . 'LEFT JOIN mvv_stg_stgteil mss USING(stgteil_bez_id) '
                 . 'WHERE mss.studiengang_id = ? '
