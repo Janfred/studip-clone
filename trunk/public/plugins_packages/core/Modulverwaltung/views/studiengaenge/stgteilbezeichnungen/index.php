@@ -48,7 +48,7 @@
                                 ) ?>
                             <? endif; ?>
                             <? if ($perm->havePermCreate()) : ?>
-                                <? if ($stgteilbezeichnung->count_studiengangteile < 1) : ?>
+                                <? if ($stgteilbezeichnung->count_stgteile < 1) : ?>
                                     <? $actionMenu->addButton(
                                             'delete_part_description',
                                             _('Studiengangteil-Bezeichnung löschen'),

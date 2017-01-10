@@ -108,6 +108,8 @@ class Modul extends ModuleManagementModelTreeItem
         $config['additional_fields']['languagesofinstruction']['set'] = false;
 
         $config['alias_fields']['flexnow_id'] = 'flexnow_modul';
+        
+        $config['default_values']['stat'] = $GLOBALS['MVV_MODUL']['STATUS']['default'];
 
         parent::configure($config);
     }

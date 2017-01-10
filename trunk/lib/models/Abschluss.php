@@ -143,13 +143,13 @@ class Abschluss extends ModuleManagementModelTreeItem
     public static function getCount($filter = null)
     {
         $query = 'SELECT COUNT(DISTINCT(abschluss_id)) '
-                . 'FROM abschluss a '
-                . 'LEFT JOIN mvv_abschl_zuord maz USING(abschluss_id) '
-                . 'LEFT JOIN mvv_abschl_kategorie mak USING(kategorie_id) '
-                . 'LEFT JOIN mvv_studiengang ms USING(abschluss_id) '
+                . 'FROM abschluss '
+                . 'LEFT JOIN mvv_abschl_zuord USING(abschluss_id) '
+                . 'LEFT JOIN mvv_abschl_kategorie USING(kategorie_id) '
+                . 'LEFT JOIN mvv_studiengang USING(abschluss_id) '
                 . 'LEFT JOIN mvv_stg_stgteil USING(studiengang_id) '
-                . 'LEFT JOIN mvv_stgteil mst USING(stgteil_id) '
-                . 'LEFT JOIN mvv_fach_inst mfi USING(fach_id) '
+                . 'LEFT JOIN mvv_stgteil USING(stgteil_id) '
+                . 'LEFT JOIN mvv_fach_inst USING(fach_id) '
                 . self::getFilterSql($filter, true);
         $db = DBManager::get()->prepare($query);
         $db->execute();
