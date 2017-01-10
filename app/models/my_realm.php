@@ -1143,7 +1143,7 @@ class MyRealmModel
             foreach ($collection as $course) {
                 if (!empty($course['sem_tree'])) {
                     foreach ($course['sem_tree'] as $tree) {
-                        $_tmp_courses[$sem_key][$tree['name']][$course['seminar_id']] = $course;
+                        $_tmp_courses[$sem_key][(string)$tree['name']][$course['seminar_id']] = $course;
                     }
                 } else {
                     $_tmp_courses[$sem_key][""][$course['seminar_id']] = $course;
