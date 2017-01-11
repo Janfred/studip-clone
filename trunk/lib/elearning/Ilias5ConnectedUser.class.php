@@ -1,9 +1,4 @@
 <?php
-# Lifter002: TODO
-# Lifter007: TODO
-# Lifter003: TODO
-# Lifter010: TODO
-
 /**
  * class to handle ILIAS 5.2 user-accounts
  *
@@ -17,22 +12,6 @@
  */
 class Ilias5ConnectedUser extends Ilias4ConnectedUser
 {
-    var $roles;
-    var $user_sid;
-    /**
-     * constructor
-     *
-     * init class.
-     * @access
-     * @param string $cms system-type
-     */
-    function __construct($cms, $user_id = false)
-    {
-        // get auth_plugin
-        $user_id = $user_id ? $user_id : $GLOBALS['user']->id;
-        $this->auth_plugin = DBManager::get()->query("SELECT IFNULL(auth_plugin, 'standard') FROM auth_user_md5 WHERE user_id = '" . $user_id . "'")->fetchColumn();
-        parent::__construct($cms, $user_id);
-    }
 
     /**
     * verify login data

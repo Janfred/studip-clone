@@ -17,17 +17,5 @@
  */
 class Ilias5ConnectedCMS extends Ilias4ConnectedCMS
 {
-    var $user_category_node_id;
-    var $ldap_enable;
-    /**
-     * constructor
-     *
-     * init class.
-     * @access public
-     * @param string $cms system-type
-     */
-    function __construct($cms)
-    {
-        parent::__construct($cms);
-    }
+
 }
