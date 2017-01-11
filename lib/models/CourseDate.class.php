@@ -139,6 +139,11 @@ class CourseDate extends SimpleORMap
             'foreign_key' => 'termin_id',
             'assoc_foreign_key' => 'assign_user_id',
             'on_delete' => 'delete',
+            'on_store' => function($date) {
+                $date->room_assignment->begin = $date->date;
+                $date->room_assignment->end = $date->end_time;
+                $date->room_assignment->store();
+            }
         );
         $config['has_one']['room_request'] = array(
             'class_name'        => 'RoomRequest',
