@@ -938,7 +938,7 @@ class Course_TimesroomsController extends AuthenticatedController
             $cycle->end_offset = NULL;
         }
 
-        if(Request::int('course_type')) {
+        if (Request::int('course_type')) {
             $cycle->setSingleDateType(Request::int('course_type'));
         }
 
