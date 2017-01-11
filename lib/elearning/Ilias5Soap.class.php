@@ -1,9 +1,4 @@
 <?php
-# Lifter002: TODO
-# Lifter007: TODO
-# Lifter003: TODO
-# Lifter010: TODO
-
 /**
  * class to use ILIAS-5-Webservices
  *
