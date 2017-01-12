@@ -139,11 +139,7 @@ class CourseDate extends SimpleORMap
             'foreign_key' => 'termin_id',
             'assoc_foreign_key' => 'assign_user_id',
             'on_delete' => 'delete',
-            'on_store' => function($date) {
-                $date->room_assignment->begin = $date->date;
-                $date->room_assignment->end = $date->end_time;
-                $date->room_assignment->store();
-            }
+            'on_store' => 'store'
         );
         $config['has_one']['room_request'] = array(
             'class_name'        => 'RoomRequest',
@@ -290,6 +286,9 @@ class CourseDate extends SimpleORMap
      */
     public function store()
     {
+        // load room-assignment, if any
+        $this->room_assignment;
+
         $cache = StudipCacheFactory::getCache();
         $cache->expire('course/undecorated_data/'. $this->range_id);
         return parent::store();
