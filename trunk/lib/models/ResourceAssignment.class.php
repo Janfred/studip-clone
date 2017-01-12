@@ -63,4 +63,65 @@ class ResourceAssignment extends SimpleORMap
         $old_assign_object->delete();
         return $ret;
     }
+
+    function store ()
+    {
+        // update start and end of assignment to match the dates start and end
+        if ($this->date) {
+            $this->begin = $this->date->date;
+            $this->end   = $this->date->end_time;
+        }
+
+        if ($this->isNew()) {
+            // create object and set (new) values
+            $assignObject = new AssignObject(array(
+                $this->id,
+                $this->resource_id,
+                $this->assign_user_id,
+                $this->user_free_name,
+                $this->begin,
+                $this->end,
+                $this->repeat_end,
+                $this->repeat_quantity,
+                $this->repeat_interval,
+                $this->repeat_month_of_year,
+                $this->repeat_day_of_month,
+                $this->repeat_week_of_month,
+                $this->repeat_day_of_week,
+                $this->comment_internal
+            ));
+
+            // isNewObject muss true sein
+        } else {
+            // create object and set values
+            $assignObject = new AssignObject(array(
+                $this->id,
+                $this->resource_id,
+                $this->assign_user_id,
+                $this->user_free_name,
+                $this->begin,
+                $this->end,
+                $this->repeat_end,
+                $this->repeat_quantity,
+                $this->repeat_interval,
+                $this->repeat_month_of_year,
+                $this->repeat_day_of_month,
+                $this->repeat_week_of_month,
+                $this->repeat_day_of_week,
+                $this->comment_internal
+            ));
+
+            // object is not new
+            $assignObject->isNewObject = false;
+
+            // set change flag if data has been changed
+            if ($this->isDirty()) {
+                $assignObject->chng_flag = true;
+            }
+        }
+        // speichern
+        $assignObject->store();
+
+        return parent::store();
+    }
 }
