@@ -559,7 +559,8 @@ class SeminarCycleDate extends SimpleORMap
             $date_values['metadate_id'] = $this->metadate_id;
             foreach ($existingSingleDates as $key => $val) {
                 // take only the singledate into account, that maps the current timepoint
-                if ($start_time > $startAfterTimeStamp && ($val->date == $start_time) && ($val->end_time == $end_time)) {
+                // only compare the week and year, because dates in the past may differ on time or day
+                if ($start_time > $startAfterTimeStamp && date('W Y', $val->date) == date('W Y', $start_time)) {
                     $dateExists = true;
                     if (isset($existingSingleDates[$key])) {
                         $dates[] = $val;
