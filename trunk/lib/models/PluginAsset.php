@@ -98,6 +98,15 @@ class PluginAsset extends SimpleORMap
      */
     private function getFilepath()
     {
+        if (!isset($GLOBALS['PLUGIN_ASSETS_PATH'])) {
+            throw new Exception(
+                'Configuration error: Path for assets is missing ' .
+                '(add "$PLUGIN_ASSETS_PATH = $STUDIP_BASE_PATH . \'/data/assets_cache\';" ' .
+                'to file "config/config_local.inc.php" ' .
+                'and be sure to have created this directory)'
+            );
+        }
+
         $assets_path = $GLOBALS['PLUGIN_ASSETS_PATH'];
         if (!is_dir($assets_path) || !is_writable($assets_path)) {
             throw new Exception('Unable to access assets directory');
