@@ -305,7 +305,7 @@ class Seminar_Session
             }
             $_SESSION = array();
         }
-        session_destroy();
+        $this->delete();
         $this->start();
         foreach ($keep_session_vars as $k) {
             $_SESSION[$k] = $keep[$k];
