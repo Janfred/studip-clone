@@ -618,7 +618,7 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
         $record->setNew(false);
         while ($record = $st->fetch()) {
             $record->applyCallbacks('after_initialize');
-            $callable($record);
+            $callable(clone $record);
             ++$ret;
         }
         return $ret;
