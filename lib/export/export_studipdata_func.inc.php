@@ -659,7 +659,12 @@ function export_teilis($inst_id, $ex_sem_id = "no")
         $statement = DBManager::get()->prepare($query);
         $statement->execute($parameters);
         $data = $statement->fetchAll(PDO::FETCH_ASSOC);
-
+        $course = Course::find($ex_sem_id);
+        if ($course->aux) {
+            $zusatzangaben = array_keys($course->aux->datafields);
+        } else {
+            $zusatzangaben = array();
+        }
         $data_object_tmp = '';
         $object_counter_tmp = $object_counter;
         if (count($data) > 0) {
@@ -682,7 +687,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
                     }
                     // freie Datenfelder ausgeben
                     $data_object_tmp .= export_datafields($row['user_id'], $xml_groupnames_person['childgroup1'], $xml_groupnames_person['childobject1'], 'user');
-
+                    $data_object_tmp .= export_datafields([$row['user_id'], $ex_sem_id] , 'zusatzangaben', 'zusatzangabe', 'usersemdata', null, $zusatzangaben);
                     $data_object_tmp .= xml_close_tag( $xml_groupnames_person['object'] );
                     $person_out[$row['user_id']] = true;
                 }
@@ -857,13 +862,18 @@ function export_persons($persons)
 * @param    string  $childgroup_tag name of outer tag
 * @param    string  $childobject_tag    name of inner tags
 */
-function export_datafields($range_id, $childgroup_tag, $childobject_tag, $object_type = null, $object_class_hint = null){
+function export_datafields($range_id, $childgroup_tag, $childobject_tag, $object_type = null, $object_class_hint = null, $only_these = null){
     $ret = '';
     $d_fields = false;
     $localEntries = DataFieldEntry::getDataFieldEntries($range_id, $object_type, $object_class_hint);
-    if(is_array($localEntries )){
+    if(is_array($localEntries)){
         foreach ($localEntries as $entry){
-            if ($entry->isVisible() && $entry->getDisplayValue()) {
+            if (is_array($only_these)) {
+                if (!in_array($entry->getId(), $only_these)) {
+                    continue;
+                }
+            }
+            if ($entry->isVisible(null, false) && $entry->getDisplayValue()) {
                 if (!$d_fields) $ret .= xml_open_tag( $childgroup_tag );
                 $ret .= xml_open_tag($childobject_tag , $entry->getName());
                 $ret .= xml_escape($entry->getDisplayValue(false));
