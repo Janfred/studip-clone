@@ -39,8 +39,11 @@ class UserContext extends Context
 
         if (!$this->provider) {
             $this->addProvider('Studip\Activity\NewsProvider');
-            $this->addProvider('Studip\Activity\BlubberProvider');
-            $this->addProvider('Studip\Activity\MessageProvider');
+
+            if ($this->user->id === $this->observer->id) {
+                $this->addProvider('Studip\Activity\MessageProvider');
+                $this->addProvider('Studip\Activity\BlubberProvider');
+            }
 
             if (get_config('LITERATURE_ENABLE')) {
                 $this->addProvider('Studip\Activity\LiteratureProvider');

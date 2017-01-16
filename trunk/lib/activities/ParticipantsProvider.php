@@ -60,7 +60,7 @@ class ParticipantsProvider implements ActivityProvider
     {
         $activity->content = $activity->content;
 
-        $url = \URLHelper::getUrl("dispatch.php/course/members/index?cid=/{$activity->context_id}", array('cid' => null));
+        $url = \URLHelper::getUrl("dispatch.php/course/members/index", array('cid' => $activity->context_id));
 
         $route = \URLHelper::getURL('api.php/course/' . $activity->context_id, NULL, true);
 

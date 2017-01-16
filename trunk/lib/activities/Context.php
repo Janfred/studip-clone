@@ -45,7 +45,7 @@ abstract class Context
 
     /**
      * Return user for who wants to watch his and related activities
-     * 
+     *
      * @return object  a user object
      */
     public function getObserver()
@@ -62,22 +62,20 @@ abstract class Context
      */
     public function getActivities(Filter $filter)
     {
-        $activities = Activity::findBySQL('context = ? AND context_id = ?  AND mkdate >= ? AND mkdate <= ? ORDER BY mkdate DESC',
-            array($this->getContextType(), $this->getRangeId(), $filter->getStartDate(), $filter->getEndDate()));
-        if (count($activities)) {
-            $providers = $this->filterProvider($this->getProvider(), $filter);
-            foreach ($activities as $key => $activity) {
+        $providers = $this->filterProvider($this->getProvider(), $filter);
+        $activities = Activity::findAndMapBySQL(
+            function ($activity) use ($providers) {
                 if (isset($providers[$activity->provider])) {                        // provider is available
                     $activity->setContextObject($this);
-                    if (!$providers[$activity->provider]->getActivityDetails($activity)) {
-                        unset($activities[$key]);
+                    if ($providers[$activity->provider]->getActivityDetails($activity)) {
+                        return $activity;
                     }
-                } else {
-                    unset($activities[$key]);
                 }
-            }
-        }
-        return array_flatten($activities);
+            },
+            'context = ? AND context_id = ?  AND mkdate >= ? AND mkdate <= ? ORDER BY mkdate DESC'
+            ,
+            array($this->getContextType(), $this->getRangeId(), $filter->getStartDate(), $filter->getEndDate()));
+        return array_filter($activities);
     }
 
     /**
