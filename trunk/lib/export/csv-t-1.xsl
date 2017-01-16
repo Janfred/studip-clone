@@ -6,7 +6,7 @@
 
 	<xsl:output method="text" encoding="WINDOWS-1252"/>
 
-	<xsl:key name="datafields-by-key" match="//datenfeld" use="@key"/>
+	<xsl:key name="datafields-by-key" match="//personen//datenfeld" use="@key"/>
 
 	<xsl:variable name="collect-datafields">
 		<xsl:for-each select="//datenfeld[generate-id(.) = generate-id(key('datafields-by-key', @key)[1])]">
@@ -18,7 +18,7 @@
 
 	<xsl:variable name="datafields" select="exsl:node-set($collect-datafields)/entry"/>
 
-	<xsl:key name="zusatzangaben-by-key" match="//zusatzangabe" use="@key"/>
+	<xsl:key name="zusatzangaben-by-key" match="//personen//zusatzangabe" use="@key"/>
 
 	<xsl:variable name="collect-zusatzangaben">
 		<xsl:for-each select="//zusatzangabe[generate-id(.) = generate-id(key('zusatzangaben-by-key', @key)[1])]">
