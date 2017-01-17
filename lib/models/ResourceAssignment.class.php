@@ -68,8 +68,9 @@ class ResourceAssignment extends SimpleORMap
     {
         // update start and end of assignment to match the dates start and end
         if ($this->date) {
-            $this->begin = $this->date->date;
-            $this->end   = $this->date->end_time;
+            $this->begin      = $this->date->date;
+            $this->end        = $this->date->end_time;
+            $this->repeat_end = $this->date->end_time;
         }
 
         // create object and set (new) values
@@ -102,7 +103,9 @@ class ResourceAssignment extends SimpleORMap
         }
 
         // speichern
-        $assignObject->store();
+        if ($this->isDirty() || $this->isNew()) {
+            $assignObject->store();
+        }
 
         return parent::store();
     }

@@ -313,8 +313,6 @@ class Course_TimesroomsController extends AuthenticatedController
             $termin->setData($termin_values);
             $termin->setId($termin->getNewId());
         }
-        $termin->date     = $date;
-        $termin->end_time = $end_time;
         $termin->date_typ = Request::get('course_type');
 
         // Set assigned teachers
@@ -328,29 +326,32 @@ class Course_TimesroomsController extends AuthenticatedController
         $assigned_groups       = Request::optionArray('assigned_groups');
         $termin->statusgruppen = Statusgruppen::findMany($assigned_groups);
 
+        if ($termin->store()) {
+            NotificationCenter::postNotification('CourseDidChangeSchedule', $this->course);
+        }
+
         // Set Room
+        $old_room_id = $termin->room_assignment->resource_id;
         $singledate = new SingleDate($termin);
+        if ($singledate->setTime($date, $end_time)) {
+            $singledate->store();
+        }
+
         if (Request::option('room') == 'room') {
             $room_id = Request::option('room_sd');
 
-            if ($room_id && ($room_id != $termin->room_assignment->resource_id
-                    || $time_changed ))
-                {
-
-                if (!is_null($termin->room_assignment->resource_id)) {
-                    $singledate->resource_id = $room_id;
-                }
-
-                if ($resObj = $singledate->bookRoom($room_id)) {
-                    $messages = $singledate->getMessages();
-                    if (isset($messages['error'])) {
-                        $singledate->killAssign();
+            if ($room_id) {
+                if ($room_id != $singledate->resource_id) {
+                    if ($resObj = $singledate->bookRoom($room_id)) {
+                        $messages = $singledate->getMessages();
+                        $this->course->appendMessages($messages);
+                    } else if (!$singledate->ex_termin) {
+                        $this->course->createError(sprintf(_("Der angegebene Raum konnte für den Termin %s nicht gebucht werden!"),
+                                                           '<b>' . $singledate->toString() . '</b>'));
                     }
-                    $this->course->appendMessages($messages);
-                } else if (!$singledate->ex_termin) {
-                    $this->course->createError(sprintf(_("Der angegebene Raum konnte für den Termin %s nicht gebucht werden!"),
-                                                       '<b>' . $singledate->toString() . '</b>'));
                 }
+            } else if ($old_room_id && !$singledate->resource_id) {
+                $this->course->createInfo(sprintf(_("Die Raumbuchung für den Termin %s wurde aufgehoben, da die neuen Zeiten außerhalb der alten liegen!"), '<b>'. $singledate->toString() .'</b>'));
             }
         } elseif (Request::option('room') == 'freetext') {
             $singledate->setFreeRoomText(Request::get('freeRoomText_sd'));
@@ -360,10 +361,6 @@ class Course_TimesroomsController extends AuthenticatedController
         } elseif (Request::option('room') == 'noroom') {
             $singledate->killAssign();
             $this->course->createMessage(sprintf(_("Der Termin %s wurde geändert, etwaige freie Ortsangaben und Raumbuchungen wurden entfernt."), '<b>' . $singledate->toString() . '</b>'));
-        }
-
-        if ($termin->store()) {
-            NotificationCenter::postNotification('CourseDidChangeSchedule', $this->course);
         }
 
         $this->displayMessages();
