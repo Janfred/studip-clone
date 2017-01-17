@@ -68,7 +68,7 @@
         */
 
         Tabs.prototype.uncompress = function () {
-            this.items.text(function () {
+            this.items && this.items.text(function () {
                 return $(this).data('orig-text');
             });
             return this;
