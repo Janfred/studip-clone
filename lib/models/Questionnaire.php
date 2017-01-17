@@ -18,6 +18,11 @@ class Questionnaire extends SimpleORMap
             'on_delete' => 'delete',
             'on_store' => 'store'
         );
+        $config['has_many']['anonymousanswers'] = array(
+            'class_name' => 'QuestionnaireAnonymousAnswer',
+            'on_delete' => 'delete',
+            'on_store' => 'store'
+        );
         parent::configure($config);
     }
 
@@ -145,6 +150,9 @@ class Questionnaire extends SimpleORMap
         }
         $this['visible'] = 1;
         $this->store();
+        foreach ($this->questions as $question) {
+            $question->onBeginning();
+        }
     }
 
     public function stop()

@@ -3,13 +3,13 @@
         <?= htmlReady($questionnaire['title']) ?>
         <span>
             <?
-            $icons = array();
+            $icons = [];
             foreach ($questionnaire->questions as $question) {
-                $class = $question['questiontype'];
+                $class = get_class($question);
                 $icons[$class] = $class::getIcon();
             }
             foreach ($icons as $class => $icon) {
-                echo $icon->asImg("20px", array('class' => "text-bottom", 'title' => $class::getName()));
+                echo $icon->asImg(20, ['class' => "text-bottom", 'title' => $class::getName()]);
             }
             ?>
         </span>

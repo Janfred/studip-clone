@@ -1,45 +1,61 @@
+<? $etask = $vote->etask; ?>
+
 <label>
-    <?= _("Frage") ?>
-    <textarea name="questions[<?= $vote->getId() ?>][questiondata][question]" class="size-l" required><?=
-        isset($vote['questiondata']['question']) ? htmlReady($vote['questiondata']['question']) : ""
-        ?></textarea>
+    <?= _('Frage') ?>
+    <textarea name="questions[<?= $vote->getId() ?>][description]"
+              class="size-l"
+              required><?= isset($etask->description) ? htmlReady($etask->description) : '' ?></textarea>
 </label>
 
-
-<ol class="clean options" data-optiontemplate="<?= htmlReady($this->render_partial("questionnaire/question_types/test/_option.php", array('vote' => $vote, 'option' => ""))) ?>"><?
-    if (isset($vote['questiondata']['options'])) {
-        foreach ($vote['questiondata']['options'] as $index => $option) {
-            echo $this->render_partial("questionnaire/question_types/test/_option.php", array('vote' => $vote, 'option' => $option, 'index' => $index));
+<? $emptyAnswerTemplate = $this->render_partial('questionnaire/question_types/test/_answer', [ 'vote' => $vote, 'answer' => [] ]) ?>
+<ol class="clean options" data-optiontemplate="<?= htmlReady($emptyAnswerTemplate) ?>">
+    <? if (isset($etask->task['answers'])) {
+        foreach ($etask->task['answers'] as $index => $answer) {
+            echo $this->render_partial('questionnaire/question_types/test/_answer', compact('vote', 'answer', 'index'));
         }
     }
-    echo $this->render_partial("questionnaire/question_types/test/_option.php", array('vote' => $vote, 'option' => "", 'index' => $index + 1, 'forcecorrect' => (!isset($vote['questiondata']['options']) || (count($vote['questiondata']['options']) === 0))));
-?></ol>
+    echo $this->render_partial(
+        'questionnaire/question_types/test/_answer',
+        [
+            'vote' => $vote,
+            'answer' => [],
+            'index' => $index + 1,
+            'forcecorrect' => !isset($etask->task['answers']) || empty($etask->task['answers'])
+        ]
+    ); ?>
+</ol>
 
 <div style="padding-left: 13px; margin-bottom: 20px;">
-    <?= tooltipIcon(_("Wählen Sie über die Auswahlboxen aus, welche Antwortmöglichkeit korrekt ist.")) ?>
+    <?= tooltipIcon(_('Wählen Sie über die Auswahlboxen aus, welche Antwortmöglichkeit korrekt ist.')) ?>
 </div>
 
 <label>
-    <input type="checkbox" name="questions[<?= $vote->getId() ?>][questiondata][multiplechoice]" value="1"<?= $vote->isNew() || $vote['questiondata']['multiplechoice'] ? " checked" : "" ?>>
-    <?= _("Mehrere Antworten sind erlaubt.") ?>
+    <input type="checkbox"
+           name="questions[<?= $vote->getId() ?>][task][type]"
+           value="multiple"
+           <?= $vote->isNew() || $etask->task['type'] === 'multiple' ? 'checked' : '' ?>>
+    <?= _('Mehrere Antworten sind erlaubt.') ?>
 </label>
 
 <label>
-    <input type="checkbox" name="questions[<?= $vote->getId() ?>][questiondata][randomize]" value="1"<?= !isset($vote['questiondata']['randomize']) || $vote['questiondata']['randomize'] ? " checked" : "" ?>>
-    <?= _("Antworten den Teilnehmenden zufällig präsentieren.") ?>
+    <input type="checkbox"
+           name="questions[<?= $vote->getId() ?>][options][randomize]"
+           value="1"
+           <?= isset($etask->options['randomize']) && $etask->options['randomize'] ? 'checked' : '' ?>>
+    <?= _('Antworten den Teilnehmenden zufällig präsentieren.') ?>
 </label>
 
-<div style="display: none" class="delete_question"><?= _("Diese Antwortmöglichkeit wirklich löschen?") ?></div>
+<div style="display: none" class="delete_question"><?= _('Diese Antwortmöglichkeit wirklich löschen?') ?></div>
 
 <script>
-    jQuery(function () {
-        jQuery(".options").sortable({
-            "axis": "y",
-            "containment": "parent",
-            "handle": ".move",
-            "update": function () {
-                STUDIP.Questionnaire.Test.updateCheckboxValues();
-            }
-        });
-    });
+ jQuery(function () {
+     jQuery('.options').sortable({
+         'axis': 'y',
+         'containment': 'parent',
+         'handle': '.move',
+         'update': function () {
+             STUDIP.Questionnaire.Test.updateCheckboxValues();
+         }
+     });
+ });
 </script>

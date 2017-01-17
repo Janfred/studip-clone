@@ -2,45 +2,85 @@
 
 require_once 'lib/classes/QuestionType.interface.php';
 
+use eTask\Task;
+
 class Test extends QuestionnaireQuestion implements QuestionType
 {
-    static public function getIcon($active = false, $add = false)
+    public static function getIcon($active = false, $add = false)
     {
-        return Icon::create($add ?  'test+add' : 'test', $active ? "clickable" : "info");
+        return Icon::create($add ?  'test+add' : 'test', $active ? 'clickable' : 'info');
     }
 
-    static public function getName()
+    public static function getName()
     {
-        return _("Test");
+        return _('Test');
     }
 
     public function getEditingTemplate()
     {
-        $tf = new Flexi_TemplateFactory(__DIR__."/../../app/views");
-        $template = $tf->open("questionnaire/question_types/test/test_edit.php");
+        $tf = new Flexi_TemplateFactory(realpath(__DIR__.'/../../app/views'));
+        $template = $tf->open('questionnaire/question_types/test/test_edit');
         $template->set_attribute('vote', $this);
         return $template;
     }
 
     public function createDataFromRequest()
     {
-        $questions = Request::getArray("questions");
-        $question_data = $questions[$this->getId()];
+        $questions = Request::getArray('questions');
+        $requestData = $questions[$this->getId()];
 
-        //now remove empty trailing options
-        $i = count($question_data['questiondata']['options']) - 1;
-        while ($i >= 0 && !trim($question_data['questiondata']['options'][$i])) {
-            unset($question_data['questiondata']['options'][$i]);
-            $i--;
+        // create a new eTask if this is a new question
+        if (!$this->etask) {
+            $this->etask = Task::create(
+                [
+                    'type' => 'multiple-choice',
+                    'user_id' => $GLOBALS['user']->id,
+                    'created' => date('c', time())
+                ]
+            );
         }
 
-        $this->setData($question_data);
+        // update description
+        $this->etask->description = $requestData['description'];
+
+        // update task's type (single|multiple)
+        $task = [
+            'type' => $requestData['task']['type'] === 'multiple' ? 'multiple' : 'single',
+            'answers' => []
+        ];
+
+        // update task's answers
+        $correct = isset($requestData['task']['correct']) ? $requestData['task']['correct'] : [];
+        foreach ($requestData['task']['answers'] as $index => $text) {
+            $trimmedText = trim($text);
+            if ($trimmedText === '') {
+                continue;
+            }
+
+            $task['answers'][] = [
+                'text' => $trimmedText,
+                'score' => array_key_exists($index, $correct) ? 1 : 0,
+                'feedback' => ''
+            ];
+        }
+
+        $this->etask->task = $task;
+
+        // update randomize option
+        if (isset($requestData['options']['randomize'])) {
+            $options = $this->etask->options;
+            $options['randomize'] = (bool) $requestData['options']['randomize'];
+            $this->etask->options = $options;
+        }
+
+        // store the eTask instance
+        $this->etask->store();
     }
 
     public function getDisplayTemplate()
     {
-        $tf = new Flexi_TemplateFactory(realpath(__DIR__."/../../app/views"));
-        $template = $tf->open("questionnaire/question_types/vote/vote_answer.php");
+        $factory = new Flexi_TemplateFactory(realpath(__DIR__.'/../../app/views'));
+        $template = $factory->open('questionnaire/question_types/vote/vote_answer');
         $template->set_attribute('vote', $this);
         return $template;
     }
@@ -48,9 +88,18 @@ class Test extends QuestionnaireQuestion implements QuestionType
     public function createAnswer()
     {
         $answer = $this->getMyAnswer();
-        $answers = Request::getArray("answers");
-        $answer_data = $answers[$this->getId()];
-        $answer->setData($answer_data);
+
+        $answers = Request::getArray('answers');
+        if (array_key_exists($this->getId(), $answers)) {
+            $userAnswer = $answers[$this->getId()]['answerdata']['answers'];
+            if (is_array($userAnswer)) {
+                $userAnswer = array_map('intval', $userAnswer);
+            }
+            else {
+                $userAnswer = (int) $userAnswer;
+            }
+        }
+        $answer->setData(['answerData' => ['answers' => $userAnswer ] ]);
         return $answer;
     }
 
@@ -64,8 +113,8 @@ class Test extends QuestionnaireQuestion implements QuestionType
                 }
             }
         }
-        $tf = new Flexi_TemplateFactory(realpath(__DIR__."/../../app/views"));
-        $template = $tf->open("questionnaire/question_types/test/test_evaluation.php");
+        $factory = new Flexi_TemplateFactory(realpath(__DIR__.'/../../app/views'));
+        $template = $factory->open('questionnaire/question_types/test/test_evaluation');
         $template->set_attribute('vote', $this);
         $template->set_attribute('answers', $answers);
         return $template;
@@ -74,76 +123,64 @@ class Test extends QuestionnaireQuestion implements QuestionType
     public function getResultArray()
     {
         $output = array();
-        $correct = array();
 
-        $questiondata = $this['questiondata']->getArrayCopy();
+        $taskAnswers = $this->etask->task['answers'];
 
-        foreach ($questiondata['options'] as $key => $option) {
-            $answer_option = array();
-            $count_nobodys = 0;
+        foreach ($taskAnswers as $key => $option) {
+            $answerOption = [];
+            $countNobodys = 0;
+
             foreach ($this->answers as $answer) {
-                $answerdata = $answer['answerdata']->getArrayCopy();
+                $answerData = $answer['answerdata']->getArrayCopy();
 
-                if ($answer['user_id']) {
-                    $user_id = $answer['user_id'];
+                if ($answer['user_id'] && $answer['user_id'] != 'nobody') {
+                    $userId = $answer['user_id'];
                 } else {
-                    $count_nobodys++;
-                    $user_id = _("unbekannt")." ".$count_nobodys;
+                    $countNobodys++;
+                    $userId = _('unbekannt').' '.$countNobodys;
                 }
-                if (!isset($correct[$user_id])) {
-                    $correct[$user_id] = 1;
-                }
-                if (in_array($key + 1, (array) $answerdata['answers'])) {
-                    $answer_option[$user_id] = 1;
-                    $correct[$user_id] = ($correct[$user_id] && in_array($key + 1, (array) $questiondata['correctanswer'])) ? 1: 0;
+
+                if (in_array($key, (array) $answerData['answers'])) {
+                    $answerOption[$userId] = 1;
                 } else {
-                    $answer_option[$user_id] = 0;
-                    $correct[$user_id] = ($correct[$user_id] && !in_array($key + 1, (array) $questiondata['correctanswer'])) ? 1: 0;
+                    $answerOption[$userId] = 0;
                 }
             }
-            $output[$option] = $answer_option;
+            $output[$option['text']] = $answerOption;
         }
-
-        $output[_("richtig?")] = $correct;
         return $output;
     }
 
-    public function onEnding()
+    public function correctAnswered($userId = null)
     {
+        $userId = $userId ?: $GLOBALS['user']->id;
+        $correctAnswered = true;
+        $task = $this->etask->task;
+        $numTaskAnswers = count($task['answers']);
+        $resultsUsers = array_fill(0, $numTaskAnswers, []);
 
-    }
-
-    public function correctAnswered($user_id = null)
-    {
-        $user_id || $user_id = $GLOBALS['user']->id;
-        $correct_answered = true;
-        $results_users = array();
-        $data = $this['questiondata']->getArrayCopy();
-        foreach ($data['options'] as $option) {
-            $results_users[] = array();
-        }
         foreach ($this->answers as $answer) {
-            if ($data['multiplechoice']) {
+            if ($task['type'] === 'multiple') {
                 foreach ($answer['answerdata']['answers'] as $a) {
-                    $results_users[(int) $a - 1][] = $answer['user_id'];
+                    $resultsUsers[(int) $a][] = $answer['user_id'];
                 }
             } else {
-                $results_users[(int) $answer['answerdata']['answers'] - 1][] = $answer['user_id'];
+                $resultsUsers[(int) $answer['answerdata']['answers']][] = $answer['user_id'];
             }
         }
-        foreach ($this['questiondata']['options'] as $key => $option) {
-            if (in_array($key + 1, $data['correctanswer'])) {
-                if (!in_array($GLOBALS['user']->id, $results_users[$key])) {
-                    $correct_answered = false;
+        foreach ($task['answers'] as $index => $option) {
+            if ($option['score']) {
+                if (!in_array($GLOBALS['user']->id, $resultsUsers[$index])) {
+                    $correctAnswered = false;
                     break;
                 }
             } else {
-                if (in_array($GLOBALS['user']->id, $results_users[$key])) {
-                    $correct_answered = false;
+                if (in_array($GLOBALS['user']->id, $resultsUsers[$index])) {
+                    $correctAnswered = false;
                     break;
                 }
             }
         }
-        return $correct_answered;
+        return $correctAnswered;
     }
 }
