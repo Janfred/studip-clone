@@ -104,7 +104,7 @@ class I18NString
             $object_id = $this->metadata['object_id'];
             $table = $this->metadata['table'];
             $field =  $this->metadata['field'];
-            if (!$object_id || !$table || !$field) {
+            if (!$table || !$field) {
                 throw new RuntimeException('fetching translations not possible, metadata is missing');
             }
             $this->lang = self::fetchDataForField($object_id, $table, $field);
