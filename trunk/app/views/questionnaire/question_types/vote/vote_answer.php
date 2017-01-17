@@ -1,28 +1,43 @@
-<h3>
-    <?= Icon::create((is_a($vote, "Test") ? "test" : "vote"), "info")->asimg("20px", array('class' => "text-bottom")) ?>
-    <?= formatReady($vote['questiondata']['question']) ?>
-</h3>
-
 <?
-$questiondata = $vote['questiondata']->getArrayCopy();
-$map = range(0, count($questiondata['options']) - 1);
-if ($questiondata['randomize']) {
-    shuffle($map);
+$etask = $vote->etask;
+
+$taskAnswers = $etask->task['answers'];
+$indexMap = range(0, count($taskAnswers) - 1);
+if ($etask->options['randomize']) {
+    shuffle($indexMap);
 }
+
+$response = $vote->getMyAnswer();
+$responseData = $response['answerdata'] ? $response['answerdata']->getArrayCopy() : array();
 ?>
 
+<h3>
+    <?= Icon::create(is_a($vote, 'Test') ? 'test' : 'vote', 'info')->asImg(20, ['class' => 'text-bottom']) ?>
+    <?= formatReady($etask->description) ?>
+</h3>
+
 <ul class="clean">
-    <? $answer = $vote->getMyAnswer() ?>
-    <? $answerdata = $answer['answerdata'] ? $answer['answerdata']->getArrayCopy() : array() ?>
-    <? foreach ($map as $index) : ?>
+    <? foreach ($indexMap as $index) : ?>
         <li>
             <label>
-                <? if ($questiondata['multiplechoice']) : ?>
-                    <input type="checkbox" name="answers[<?= $vote->getId() ?>][answerdata][answers][]" value="<?= $index + 1 ?>"<?= in_array($index + 1, (array) $answerdata['answers']) ? " checked" : "" ?>>
+
+                <? if ($etask->task['type'] === 'multiple') : ?>
+
+                    <input type="checkbox"
+                           name="answers[<?= $vote->getId() ?>][answerdata][answers][<?= $index ?>]"
+                           value="<?= $index ?>"
+                           <?= isset($responseData['answers']) && in_array($index, (array) $responseData['answers']) ? 'checked' : '' ?>>
+
                 <? else : ?>
-                    <input type="radio" name="answers[<?= $vote->getId() ?>][answerdata][answers]" value="<?= $index + 1 ?>"<?= $index + 1 == $answerdata['answers'] ? " checked" : "" ?>>
+
+                    <input type="radio"
+                           name="answers[<?= $vote->getId() ?>][answerdata][answers]"
+                           value="<?= $index ?>"
+                           <?= isset($responseData['answers']) && $index == $responseData['answers'] ? 'checked' : '' ?>>
                 <? endif ?>
-                <?= formatReady($questiondata['options'][$index]) ?>
+
+                <?= formatReady($taskAnswers[$index]['text']) ?>
+
             </label>
         </li>
     <? endforeach ?>

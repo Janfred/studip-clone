@@ -1,46 +1,84 @@
 <?php
-
 require_once 'lib/classes/QuestionType.interface.php';
+
+use eTask\Task;
 
 class Vote extends QuestionnaireQuestion implements QuestionType
 {
-    static public function getIcon($active = false, $add = false)
+    public static function getIcon($active = false, $add = false)
     {
-        return Icon::create(($add ?  "add/" : "")."vote", $active ? "clickable" : "info");
+        return Icon::create($add ?  'vote+add' : 'vote', $active ? 'clickable' : 'info');
     }
 
-    static public function getName()
+    public static function getName()
     {
-        return _("Frage");
+        return _('Frage');
     }
 
     public function getEditingTemplate()
     {
-        $tf = new Flexi_TemplateFactory(realpath(__DIR__."/../../app/views"));
-        $template = $tf->open("questionnaire/question_types/vote/vote_edit.php");
+        $tf = new Flexi_TemplateFactory(realpath(__DIR__.'/../../app/views'));
+        $template = $tf->open('questionnaire/question_types/vote/vote_edit');
         $template->set_attribute('vote', $this);
         return $template;
     }
 
     public function createDataFromRequest()
     {
-        $questions = Request::getArray("questions");
-        $question_data = $questions[$this->getId()];
+        $questions = Request::getArray('questions');
+        $data = $questions[$this->getId()];
 
-        //now remove empty trailing options
-        $i = count($question_data['questiondata']['options']) - 1;
-        while ($i >= 0 && !trim($question_data['questiondata']['options'][$i])) {
-            unset($question_data['questiondata']['options'][$i]);
-            $i--;
+        // create a new eTask if this is a new question
+        if (!$this->etask) {
+            $this->etask = Task::create(
+                [
+                    'type' => 'multiple-choice',
+                    'user_id' => $GLOBALS['user']->id,
+                    'created' => date('c', time())
+                ]
+            );
         }
 
-        $this->setData($question_data);
+        // update description
+        $this->etask->description = $data['description'];
+
+        // update task's type (single|multiple)
+        $task = [
+            'type' => $data['task']['type'] === 'multiple' ? 'multiple' : 'single',
+            'answers' => []
+        ];
+
+        // update task's answers
+        foreach ($data['task']['answers'] as $index => $text) {
+            $trimmedText = trim($text);
+            if ($trimmedText === '') {
+                continue;
+            }
+
+            $task['answers'][] = [
+                'text' => $trimmedText,
+                'score' => 0,
+                'feedback' => ''
+            ];
+        }
+
+        $this->etask->task = $task;
+
+        // update randomize option
+        if (isset($data['options']['randomize'])) {
+            $options = $this->etask->options;
+            $options['randomize'] = (bool) $data['options']['randomize'];
+            $this->etask->options = $options;
+        }
+
+        // store the eTask instance
+        $this->etask->store();
     }
 
     public function getDisplayTemplate()
     {
-        $tf = new Flexi_TemplateFactory(realpath(__DIR__."/../../app/views"));
-        $template = $tf->open("questionnaire/question_types/vote/vote_answer.php");
+        $factory = new Flexi_TemplateFactory(realpath(__DIR__.'/../../app/views'));
+        $template = $factory->open('questionnaire/question_types/vote/vote_answer');
         $template->set_attribute('vote', $this);
         return $template;
     }
@@ -48,9 +86,18 @@ class Vote extends QuestionnaireQuestion implements QuestionType
     public function createAnswer()
     {
         $answer = $this->getMyAnswer();
-        $answers = Request::getArray("answers");
-        $answer_data = $answers[$this->getId()];
-        $answer->setData($answer_data);
+
+        $answers = Request::getArray('answers');
+        if (array_key_exists($this->getId(), $answers)) {
+            $userAnswer = $answers[$this->getId()]['answerdata']['answers'];
+            if (is_array($userAnswer)) {
+                $userAnswer = array_map('intval', $userAnswer);
+            }
+            else {
+                $userAnswer = (int) $userAnswer;
+            }
+        }
+        $answer->setData(['answerData' => ['answers' => $userAnswer ] ]);
         return $answer;
     }
 
@@ -64,8 +111,8 @@ class Vote extends QuestionnaireQuestion implements QuestionType
                 }
             }
         }
-        $tf = new Flexi_TemplateFactory(realpath(__DIR__."/../../app/views"));
-        $template = $tf->open("questionnaire/question_types/vote/vote_evaluation.php");
+        $factory = new Flexi_TemplateFactory(realpath(__DIR__.'/../../app/views'));
+        $template = $factory->open('questionnaire/question_types/vote/vote_evaluation');
         $template->set_attribute('vote', $this);
         $template->set_attribute('answers', $answers);
         return $template;
@@ -75,33 +122,30 @@ class Vote extends QuestionnaireQuestion implements QuestionType
     {
         $output = array();
 
-        $questiondata = $this['questiondata']->getArrayCopy();
+        $taskAnswers = $this->etask->task['answers'];
 
-        foreach ($questiondata['options'] as $key => $option) {
-            $answer_option = array();
-            $count_nobodys = 0;
+        foreach ($taskAnswers as $key => $option) {
+            $answerOption = [];
+            $countNobodys = 0;
+
             foreach ($this->answers as $answer) {
-                $answerdata = $answer['answerdata']->getArrayCopy();
+                $answerData = $answer['answerdata']->getArrayCopy();
 
-                if ($answer['user_id']) {
-                    $user_id = $answer['user_id'];
+                if ($answer['user_id'] && $answer['user_id'] != 'nobody') {
+                    $userId = $answer['user_id'];
                 } else {
-                    $count_nobodys++;
-                    $user_id = _("unbekannt")." ".$count_nobodys;
+                    $countNobodys++;
+                    $userId = _('unbekannt').' '.$countNobodys;
                 }
-                if (in_array($key + 1, (array) $answerdata['answers'])) {
-                    $answer_option[$user_id] = 1;
+
+                if (in_array($key, (array) $answerData['answers'])) {
+                    $answerOption[$userId] = 1;
                 } else {
-                    $answer_option[$user_id] = 0;
+                    $answerOption[$userId] = 0;
                 }
             }
-            $output[$option] = $answer_option;
+            $output[$option['text']] = $answerOption;
         }
         return $output;
-    }
-
-    public function onEnding()
-    {
-
     }
 }

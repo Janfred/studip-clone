@@ -1,7 +1,3 @@
-<? if (get_class($question) !== $question['questiontype']) {
-    $class = $question['questiontype'];
-    $question = new $class($question->getId());
-} ?>
 <? $class = get_class($question) ?>
 <fieldset data-questiontype="<?= htmlReady($class) ?>" class="question <?= htmlReady(mb_strtolower($class)) ?>">
     <legend>

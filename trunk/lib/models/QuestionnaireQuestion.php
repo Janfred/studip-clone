@@ -1,5 +1,7 @@
 <?php
 
+use eTask\Task;
+
 class QuestionnaireQuestion extends SimpleORMap
 {
     protected static function configure($config = array())
@@ -10,12 +12,14 @@ class QuestionnaireQuestion extends SimpleORMap
             'foreign_key' => 'questionnaire_id'
         );
         $config['has_many']['answers'] = array(
-            'class_name' => 'QuestionnaireAnswer'
+            'class_name' => 'QuestionnaireAnswer',
+            'on_delete' => 'delete',
+            'on_store' => 'store'
         );
-        $config['has_many']['relations'] = array(
-            'class_name' => 'QuestionnaireRelation'
+        $config['belongs_to']['etask'] = array(
+            'class_name' => '\\eTask\\Task',
+            'foreign_key' => 'etask_task_id'
         );
-        $config['serialized_fields']['questiondata'] = "JSONArrayObject";
         parent::configure($config);
     }
 
@@ -31,7 +35,24 @@ class QuestionnaireQuestion extends SimpleORMap
         $data = $statement->fetchAll();
         $questions = array();
         foreach ($data as $questionnaire_data) {
-            $class = $questionnaire_data['questiontype'];
+
+            if (!$task = Task::find($questionnaire_data['etask_task_id'])) {
+                continue;
+            }
+
+            $class = $task->type;
+
+            if ($class === 'multiple-choice') {
+                $totalScore = array_reduce(
+                    isset($task->task['answers']) ? $task->task['answers']->getArrayCopy() : [],
+                    function ($totalScore, $answer) {
+                        return $totalScore + intval($answer['score'] ?: 0);
+                    },
+                    0
+                );
+                $class = $totalScore === 0 ? 'Vote' : 'Test';
+            }
+
             if (class_exists($class)) {
                 $questions[] = $class::buildExisting($questionnaire_data);
             }
@@ -67,5 +88,13 @@ class QuestionnaireQuestion extends SimpleORMap
             $answer['question_id'] = $this->getId();
             return $answer;
         }
+    }
+
+    public function onBeginning()
+    {
+    }
+
+    public function onEnding()
+    {
     }
 }
