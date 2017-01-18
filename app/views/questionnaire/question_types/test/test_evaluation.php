@@ -24,7 +24,7 @@ if ($numTaskAnswers > 0) {
 }
 
 $users = array_unique($users);
-$labels = array_map(function ($answer) { return $answer['text']; }, $taskAnswers->getArrayCopy());
+$labels = array_map(function ($answer) { return strip_tags(formatReady($answer['text'])); }, $taskAnswers->getArrayCopy());
 ?>
 
 <h3>

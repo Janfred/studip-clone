@@ -26,7 +26,7 @@ $ordered_answer_options = [];
 $ordered_users = [];
 foreach ($ordered_results as $index => $value) {
     if ($value > 0) {
-        $ordered_answer_options[] = $taskAnswers[$index]['text'];
+        $ordered_answer_options[] = strip_tags(formatReady($taskAnswers[$index]['text']));
     } else {
         unset($ordered_results[$index]);
     }
