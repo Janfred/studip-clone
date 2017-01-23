@@ -1758,6 +1758,9 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
         }
         $rel_ret = $this->storeRelations();
         $this->applyCallbacks('after_store');
+        if ($ret) {
+            NotificationCenter::postNotification("SimpleORMapDidStore", $this);
+        }
         if ($ret || $rel_ret) {
             $this->restore();
         }
@@ -1865,6 +1868,9 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
             }
             $this->is_deleted = true;
             $this->applyCallbacks('after_delete');
+            if ($ret) {
+                NotificationCenter::postNotification("SimpleORMapDidDelete", $this);
+            }
         }
         $this->setData(array(), true);
         return $ret;
