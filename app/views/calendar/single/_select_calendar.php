@@ -23,6 +23,9 @@
                     <? if (count($calendar_users)) : ?>
                         <optgroup style="font-weight:bold;" label="<?= _('Einzelkalender:') ?>">
                         <? foreach ($calendar_users as $calendar_user) : ?>
+                            <? if (!$calendar_user->owner) {
+                                continue;
+                            } ?>
                             <option value="<?= $calendar_user->owner_id ?>"<?= ($range_id == $calendar_user->owner_id ? ' selected' : '') ?>>
                                 <?= htmlReady($calendar_user->owner->getFullname()) ?>
                             </option>

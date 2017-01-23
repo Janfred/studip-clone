@@ -83,9 +83,23 @@ class CalendarUser extends SimpleORMap
         } else {
             $permission = array($permission);
         }
-        return SimpleORMapCollection::createFromArray(CalendarUser::findBySQL(
-                'user_id = ? AND permission IN(?)',
-                array($user_id, $permission)));
+        $statement = DBManager::get()->prepare("
+            SELECT *
+            FROM calendar_user
+                INNER JOIN auth_user_md5 ON (auth_user_md5.user_id = calendar_user.owner_id) 
+            WHERE calendar_user.user_id = :user_id
+                AND calendar_user.permission IN (:permission)
+            ORDER BY auth_user_md5.Nachname
+        ");
+        $statement->execute(array(
+            'user_id' => $user_id,
+            'permission' => $permission
+        ));
+        $calendar_users = array();
+        foreach ($statement->fetchAll(PDO::FETCH_ASSOC) as $data) {
+            $calendar_users[] = CalendarUser::buildExisting($data);
+        }
+        return SimpleORMapCollection::createFromArray($calendar_users);
         
     }
 }
