@@ -78,8 +78,8 @@ SQL
 CREATE TABLE IF NOT EXISTS `etask_assignments` (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
     `test_id` INT(11) NOT NULL,
-    `range_type` ENUM('course', 'global', 'group', 'institute', 'user') NOT NULL,
-    `range_id` CHAR(32) NOT NULL,
+    `range_type` ENUM('course', 'global', 'group', 'institute', 'user') NULL,
+    `range_id` CHAR(32) NULL,
     `type` VARCHAR(64) NOT NULL,
     `start` TIMESTAMP NULL,
     `end` TIMESTAMP NULL,
