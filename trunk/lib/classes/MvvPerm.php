@@ -165,7 +165,7 @@ class MvvPerm {
             $mvv_object = new $object;
         }
         if (!$mvv_object instanceof ModuleManagementModel) {
-            throw new InvalidArgumentException('Wrong object type. Only MVV objects of type ApplicationSimpleORMap are allowed.');
+            throw new InvalidArgumentException('Wrong object type. Only MVV objects of type ModuleManagementModel are allowed.');
         }
         $user_id = is_null($user_id) ? $GLOBALS['user']->id : $user_id;
         if ($GLOBALS['perm']->get_perm($user_id) == 'root' ) {

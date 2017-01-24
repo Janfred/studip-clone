@@ -418,22 +418,29 @@ class Studiengang extends ModuleManagementModelTreeItem
      * @see ModuleManagementModel::findBySearchTerm()
      */
     public static function findBySearchTerm($term, $filter = null)
-    {   
+    {
         $quoted_term = DBManager::get()->quote('%' . $term . '%');
-        return parent::getEnrichedByQuery('SELECT ms.*, '
-                . 'a.name as `abschluss_name`, mak.name as `kategorie_name`, '
-                . 'COUNT(mst.fach_id) as `count_faecher` '
-                . 'FROM mvv_studiengang ms '
-                . 'LEFT JOIN abschluss a USING(abschluss_id) '
+        return parent::getEnrichedByQuery('SELECT mvv_studiengang.*, '
+                . 'abschluss.name as `abschluss_name`, '
+                . 'mvv_abschl_kategorie.name as `kategorie_name`, '
+                . 'COUNT(mvv_stgteil.fach_id) as `count_faecher` '
+                . 'FROM mvv_studiengang '
+                . 'LEFT JOIN abschluss USING(abschluss_id) '
                 . 'LEFT JOIN mvv_abschl_zuord USING(abschluss_id) '
-                . 'LEFT JOIN mvv_abschl_kategorie mak USING(kategorie_id) '
+                . 'LEFT JOIN mvv_abschl_kategorie USING(kategorie_id) '
                 . 'LEFT JOIN mvv_stg_stgteil USING(studiengang_id) '
-                . 'LEFT JOIN mvv_stgteil mst USING(stgteil_id) '
-                . 'WHERE ms.name LIKE ' . $quoted_term
-                . ' OR ms.name_kurz LIKE ' . $quoted_term
-                . ' OR a.name LIKE ' . $quoted_term
-                . ' OR mak.name LIKE ' . $quoted_term
-                . ' OR mst.zusatz LIKE ' . $quoted_term
+                . 'LEFT JOIN mvv_stgteil USING(stgteil_id) '
+                . 'LEFT JOIN mvv_fach_inst USING(fach_id) '
+                . 'LEFT JOIN semester_data start_sem '
+                . 'ON (mvv_studiengang.start = start_sem.semester_id) '
+                . 'LEFT JOIN semester_data end_sem '
+                . 'ON (mvv_studiengang.end = end_sem.semester_id) '
+                . 'WHERE (mvv_studiengang.name LIKE ' . $quoted_term
+                . ' OR mvv_studiengang.name_kurz LIKE ' . $quoted_term
+                . ' OR abschluss.name LIKE ' . $quoted_term
+                . ' OR mvv_abschl_kategorie.name LIKE ' . $quoted_term
+                . ' OR mvv_stgteil.zusatz LIKE ' . $quoted_term . ') '
+                . self::getFilterSql($filter)
                 . ' GROUP BY studiengang_id ORDER BY `name`');
     }
     
@@ -507,6 +514,7 @@ class Studiengang extends ModuleManagementModelTreeItem
     
     /**
      * Returns an array with ids of all Studiengaenge found by the given filter.
+     * If no filter is set an empty array will be returned.
      * 
      * @see ModuleManagementModel::getFilterSql()
      * @param array $filter Key-value pairs of filed names and values
@@ -515,6 +523,10 @@ class Studiengang extends ModuleManagementModelTreeItem
      */
     public static function findByFilter($filter)
     {
+        $filter_sql = self::getFilterSql($filter, true);
+        if ($filter_sql == '') {
+            return [];
+        }
         $stmt = DBManager::get()->prepare('SELECT DISTINCT studiengang_id '
                 . 'FROM mvv_studiengang '
                 . 'LEFT JOIN abschluss USING(abschluss_id) '
@@ -527,9 +539,9 @@ class Studiengang extends ModuleManagementModelTreeItem
                 . 'ON (mvv_studiengang.start = start_sem.semester_id) '
                 . 'LEFT JOIN semester_data end_sem '
                 . 'ON (mvv_studiengang.end = end_sem.semester_id) '
-                . self::getFilterSql($filter, true));
+                . $filter_sql);
         $stmt->execute();
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
     }
     
     /**

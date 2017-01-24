@@ -119,7 +119,7 @@ class Dokument extends ModuleManagementModel
      * @see ModuleManagementModel::getFilterSql()
      * @return int The number of Documents.
      */
-    public static function getCountFilter($filter)
+    public static function getCount($filter)
     {
         if (empty($filter)) {
             return parent::getCount();
@@ -144,8 +144,10 @@ class Dokument extends ModuleManagementModel
         $quoted_term = DBManager::get()->quote('%' . $term . '%');
         return parent::getEnrichedByQuery('SELECT dokument_id '
                 . 'FROM mvv_dokument '
-                . "WHERE name LIKE " . $quoted_term
-                . " OR url LIKE " . $quoted_term);
+                . 'LEFT JOIN mvv_dokument_zuord USING(dokument_id) '
+                . 'WHERE (name LIKE ' . $quoted_term
+                . ' OR url LIKE ' . $quoted_term . ') '
+                . self::getFilterSql($filter));
     }
 
     /**
