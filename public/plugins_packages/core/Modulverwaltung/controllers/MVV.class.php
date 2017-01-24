@@ -234,7 +234,7 @@ class MVVController extends StudipController
             $search_id = null, $filter = null)
     {
         if (!sizeof($this->search_result)) {
-            $search_id = $search_id ? $search_id : $this->search_id;
+            $search_id = $search_id ?: $this->search_id;
             if ($search_id) {
                 $found_object = $class_name::find($search_id);
                 if ($found_object) {
@@ -248,15 +248,16 @@ class MVVController extends StudipController
                     $this->sessSet('search_id', $this->search_id);
                 }
             } else {
-                $search_term = $search_term ? $search_term : $this->search_term;
+                $search_term = $search_term ?: $this->search_term;
+                $filter = $filter ?: $this->filter;
                 if ($search_term) {
                     $this->search_result =
                             $class_name::findBySearchTerm($search_term, $filter)->pluck('id');
                     if ($this->current_action == 'search') {
-                        if (sizeof($this->search_result)) {
+                        if (count($this->search_result)) {
                             PageLayout::postInfo(
                                     sprintf(_('%s Treffer für die Suche nach "%s".'),
-                                            sizeof($this->search_result),
+                                            count($this->search_result),
                                             htmlReady($search_term)));
                             $this->search_term = $search_term;
                         } else {
@@ -283,7 +284,7 @@ class MVVController extends StudipController
     protected function getSearchResult($class_name)
     {
         $this->do_search($class_name);
-
+        
         return $this->search_result;
     }
 
@@ -296,9 +297,6 @@ class MVVController extends StudipController
     protected function reset_search($action = '')
     {
         $this->search_params_suffix = $this->paramSuffix($action);
-        // reset filter
-        $this->filter = array();
-        $this->sessRemove('filter');
 
         // reset search
         $this->search_result = array();

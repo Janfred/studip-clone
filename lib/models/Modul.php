@@ -573,14 +573,21 @@ class Modul extends ModuleManagementModelTreeItem
     public static function findBySearchTerm($term, $filter = null)
     {
         $term = '%' . $term . '%';
-        return parent::getEnrichedByQuery('SELECT mm.*, '
-                . "CONCAT(mmd.bezeichnung, ' (', code, ')') AS name "
-                . 'FROM mvv_modul mm '
-                . 'LEFT JOIN mvv_modul_deskriptor mmd USING(modul_id) '
-                . 'WHERE mmd.sprache = '
+        return parent::getEnrichedByQuery('SELECT mvv_modul.*, '
+                . "CONCAT(mvv_modul_deskriptor.bezeichnung, ' (', code, ')') AS name "
+                . 'FROM mvv_modul '
+                . 'LEFT JOIN mvv_modul_deskriptor USING(modul_id) '
+                . 'LEFT JOIN mvv_modul_inst '
+                . 'ON (mvv_modul.modul_id = mvv_modul_inst.modul_id) '
+                . 'LEFT JOIN semester_data as start_sem '
+                . 'ON (mvv_modul.start = start_sem.semester_id)  '
+                . 'LEFT JOIN semester_data as end_sem '
+                . 'ON (mvv_modul.end = end_sem.semester_id) '
+                . 'WHERE mvv_modul_deskriptor.sprache = '
                 . DBManager::get()->quote(
                         $GLOBALS['MVV_MODUL_DESKRIPTOR']['SPRACHE']['default'])
-                . ' AND (code LIKE ? OR mmd.bezeichnung LIKE ?) '
+                . ' AND (code LIKE ? OR mvv_modul_deskriptor.bezeichnung LIKE ?) '
+                . self::getFilterSql($filter)
                 . 'ORDER BY name',
                 array($term, $term));
     }
@@ -751,6 +758,7 @@ class Modul extends ModuleManagementModelTreeItem
      * Returns an array with ids of all modules found by the given filter.
      * The fields from tables mvv_modul and mvv_modul_inst are possible filter
      * options.
+     * If no filter is set an empty array will be returned.
      *
      * @see ModuleManagementModel::getFilterSql()
      * @param array $filter Key-value pairs of filed names and values
@@ -759,15 +767,24 @@ class Modul extends ModuleManagementModelTreeItem
      */
     public static function findByFilter($filter)
     {
-        if (count($filter) == 0) {
-            return array();
+        $filter_sql = self::getFilterSql($filter, true);
+        if ($filter_sql == '') {
+            return [];
         }
-        $stmt = DBManager::get()->prepare('SELECT DISTINCT modul_id '
-                . 'FROM mvv_modul LEFT JOIN mvv_modul_inst '
-                . 'USING(modul_id) '
-                . self::getFilterSql($filter, true));
+        $stmt = DBManager::get()->prepare('SELECT DISTINCT mvv_modul.modul_id '
+                . 'FROM mvv_modul '
+                . 'LEFT JOIN mvv_modulteil '
+                . 'ON mvv_modul.modul_id = mvv_modulteil.modul_id '
+                . 'LEFT JOIN mvv_modul_inst '
+                . 'ON (mvv_modul.modul_id = mvv_modul_inst.modul_id) '
+                . 'LEFT JOIN semester_data start_sem '
+                . 'ON (mvv_modul.start = start_sem.semester_id) '
+                . 'LEFT JOIN semester_data end_sem '
+                . 'ON (mvv_modul.end = end_sem.semester_id) '
+                . $filter_sql);
+
         $stmt->execute();
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
     }
 
     /**

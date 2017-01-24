@@ -11,7 +11,7 @@
     <label>
         <?= $semester_caption ?: _('Semester:') ?><br>
         <select name="semester_filter" class="sidebar-selectlist submit-upon-select">
-            <option value="all"><?= _('Keine Auswahl') ?></option>
+            <option value="all"<?= (!$sem['semester_id'] ? ' selected' : '') ?>><?= _('Alle Semester') ?></option>
             <? foreach ($semester as $sem) : ?>
             <option value="<?= $sem['semester_id'] ?>"<?= ($sem['semester_id'] == $selected_semester ? ' selected' : '') ?>><?= htmlReady($sem['name']) ?></option>
             <? endforeach; ?>
@@ -36,8 +36,10 @@
         <select name="status_filter" class="sidebar-selectlist submit-upon-select">
             <option value=""><?= _('-- Status wählen --') ?></option>
             <? foreach ($status_array as $key => $stat) : ?>
+            <? if ($status[$key]['count_objects']) : ?>
             <option value="<?= $key ?>"
                 <?= ($key == $selected_status ? ' selected' : '') ?>><?= htmlReady($stat['name']) . ' (' . ($status[$key] ? $status[$key]['count_objects'] : '0') . ')' ?></option>
+            <? endif; ?>
             <? endforeach; ?>
             <? if ($status['__undefined__']) : ?>
                 <option value="__undefined__"<?= $selected_status == '__undefined__' ? ' selected' : '' ?>><?= _('nicht angegeben')  . ' (' . ($stat['count_objects'] ?: '0') . ')' ?></option>
