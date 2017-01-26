@@ -113,7 +113,8 @@ class Shared_ModulController extends MVVController
             $this->type = $type;
             $this->self_url = $this->url_for('modul/show/' . $id);
             $this->detail_url = $this->url_for('modul/detail/' . $id);
-            $this->teilnahmeVoraussetzung = $modul->getDeskriptor()->voraussetzung;
+	    $this->teilnahmeVoraussetzung = $modul->getDeskriptor()->voraussetzung;
+	    PageLayout::setTitle($modul->getDisplayName());
         }
     }
     
@@ -231,7 +232,8 @@ class Shared_ModulController extends MVVController
         $this->modulTeile = $modul->modulteile;
         $this->modulUser = $modul->assigned_users;
         $this->semester = $currentSemester;
-        $this->display_language = $display_language;
+	$this->display_language = $display_language;
+	PageLayout::setTitle($modul->getDisplayName());
     }
     
 }
