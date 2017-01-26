@@ -15,7 +15,7 @@ if ($numTaskAnswers > 0) {
             }
         } else {
             $results[(int) $answer['answerdata']['answers']]++;
-            $results_users[(int) $answer['answerdata']['answers'] - 1][] = $answer['user_id'];
+            $results_users[(int) $answer['answerdata']['answers']][] = $answer['user_id'];
         }
     }
 }
