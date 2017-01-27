@@ -89,7 +89,8 @@ class ForumAbo
         $stmt = $db->prepare("SELECT DISTINCT fau.user_id
             FROM forum_abo_users fau
                 JOIN forum_entries fe USING (topic_id)
-                JOIN seminar_user su ON (su.seminar_id = fe.seminar_id AND su.user_id = fau.user_id)
+                LEFT JOIN seminar_user su ON (su.seminar_id = fe.seminar_id AND su.user_id = fau.user_id)
+                LEFT JOIN user_inst ui ON (ui.institut_id = fe.seminar_id AND ui.user_id = fau.user_id)
             WHERE topic_id IN (:topic_ids)
                 AND fau.user_id != :user_id");
 
