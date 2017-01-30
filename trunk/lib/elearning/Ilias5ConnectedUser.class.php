@@ -26,8 +26,15 @@ class Ilias5ConnectedUser extends Ilias4ConnectedUser
     {
         global $connected_cms, $messages;
         $result = $connected_cms[$this->cms_type]->soap_client->checkPassword($username, $password);
-        if (strpos($result, '::') > 0)
-            return true;
+        if (strpos($result, '::') > 0) {
+            return $this->getLoginData($username);
+        }
         return false;
+    }
+
+    function setConnection($user_type)
+    {
+        $this->external_password = '';
+        parent::setConnection($user_type, true);
     }
 }
