@@ -8834,7 +8834,7 @@ select.i18n option {
 .i18n_group:not(.single_lang) {
   position: relative;
 }
-.i18n_group:not(.single_lang) > select:first-child {
+.i18n_group:not(.single_lang) > select:last-child {
   border: 0;
   border-right: 1px solid #c5c7ca;
   border-radius: 0;
@@ -8856,13 +8856,13 @@ select.i18n option {
   -o-transition: all 0;
   transition: all 0;
 }
-.i18n_group:not(.single_lang).normal-input > select:first-child {
+.i18n_group:not(.single_lang).normal-input > select:last-child {
   bottom: 1px;
 }
 .i18n_group:not(.single_lang).normal-input > input[type=text] {
   padding-left: 34px !important;
 }
-.i18n_group:not(.single_lang).textarea-input > select:first-child {
+.i18n_group:not(.single_lang).textarea-input > select:last-child {
   border-bottom: 1px solid #c5c7ca;
 }
 .i18n_group:not(.single_lang).textarea-input > textarea {
