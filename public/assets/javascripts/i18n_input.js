@@ -27,7 +27,7 @@
                 languages.each(function (id, lang) {
                     select.append($('<option>', {text: $(lang).data().lang_desc}).css('background-image', $(lang).css('background-image')));
                 });
-                $(this).prepend(select);
+                $(this).append(select);
                 languages.css('background-image', '').not(':eq(0)').hide();
 
                 $('.i18n[required]').on('invalid', function () {
