@@ -12,6 +12,7 @@
                     </a>
                     <?= Icon::create('trash', 'clickable')->asInput(16,
                             ['formaction'   => $controller->url_for('contact/deleteGroup/' . $filter),
+                             'title'        => _('Gruppe löschen'),
                              'data-confirm' => sprintf(_('Gruppe %s wirklich löschen?'), htmlReady($title))]) ?>
                 <? endif; ?>
             </span>
@@ -64,8 +65,9 @@
                                 <? $actionMenu->addButton('remove_person',
                                         $filter ? _('Kontakt aus Gruppe entfernen') : _('Kontakt entfernen'),
                                         Icon::create('person+remove', 'clickable',
-                                                ['data-confirm' => sprintf(_('Wollen Sie %s wirklich der Liste entfernen'), htmlReady($contact->username)),
-                                                 'formaction'   => $controller->url_for('contact/remove/' . $filter, ['user' => $contact->username])])) ?>
+                                                ['data-confirm' => sprintf(_('Wollen Sie %s wirklich von der Liste entfernen'), htmlReady($contact->username)),
+                                                 'formaction'   => $controller->url_for('contact/remove/' . $filter, ['user' => $contact->username]),
+                                                 'style'       => 'margin: 0px'])) ?>
                                 <?= $actionMenu->render() ?>
                             </td>
                         </tr>

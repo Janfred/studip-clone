@@ -57,6 +57,14 @@ class Icon
         self::ROLE_STATUS_YELLOW => 'yellow'
     ];
 
+    /**
+     * These attributes need to bo applied to the button instead of
+     * input[type=image] in case of a formaction
+     */
+    private static $formaction_attributes = [
+        'formaction', 'title', 'data-confirm'
+    ];
+
     // return the color associated to a role
     private static function roleToColor($role)
     {
@@ -196,6 +204,7 @@ class Icon
         if (is_array($size)) {
             list($view_attributes, $size) = [$size, null];
         }
+
         return sprintf('<img %s>',
                        $this->tag_options($this->prepareHTMLAttributes($size, $view_attributes)));
     }
@@ -214,8 +223,27 @@ class Icon
         if (is_array($size)) {
             list($view_attributes, $size) = [$size, null];
         }
-        return sprintf('<input type="image" %s>',
-                       $this->tag_options($this->prepareHTMLAttributes($size, $view_attributes)));
+
+        $attributes = $this->prepareHTMLAttributes($size, $view_attributes);
+
+        // formaction does not work with input[type=image] in IE
+        if ($attributes['formaction']) {
+            // consider some attributes with need to be moved form the icon to the button
+            $button_attributes = array();
+            foreach (self::$formaction_attributes as $attr) {
+                if ($attributes[$attr]) {
+                    $button_attributes[$attr] = $attributes[$attr];
+                }
+            }
+
+            return sprintf('<button class="button-icon" %s>%s</button>',
+                $this->tag_options($button_attributes),
+                $this->asImg()
+            );
+        } else {
+            return sprintf('<input type="image" %s>',
+               $this->tag_options($attributes));
+       }
     }
 
     /**
