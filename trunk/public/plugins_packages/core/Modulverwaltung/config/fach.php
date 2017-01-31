@@ -62,8 +62,9 @@ $privileges = array(
         'MVVEntwickler' => 1,
         'MVVRedakteur'  => 1,
         'MVVTranslator' => 3,
-        'MVVFreigabe'   => 7
+        'MVVFreigabe'   => 3
     ),
+    /*
     'table' => array(
         'planung' => array(
             'MVVEntwickler' => 1,
@@ -84,6 +85,8 @@ $privileges = array(
             'MVVFreigabe'   => 1
         )
     ),
+     * 
+     */
     'default_fields' => array(
         'MVVEntwickler' => 1,
         'MVVRedakteur'  => 1,
