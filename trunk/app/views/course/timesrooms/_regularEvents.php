@@ -52,7 +52,7 @@
                                     <?= htmlReady($course->getRequestsInfo($metadate_id)) ?>
                                 </span>
                             <?php endif ?>
-                            
+
                     </section>
                     <? $actionMenu = ActionMenu::get()?>
                     <? $actionMenu->addLink(
@@ -67,7 +67,8 @@
                             Icon::create('trash', 'clickable',
                                     ['title'        => _('Diesen Zeitraum löschen'),
                                      'formaction'   => $controller->url_for('course/timesrooms/deleteCycle/' . $metadate_id, $linkAttributes),
-                                     'data-confirm' => _('Soll dieser Zeitraum wirklich gelöscht werden?')]))
+                                     'data-confirm' => _('Soll dieser Zeitraum wirklich gelöscht werden?'),
+                                     'style'        => 'margin: 0px']))
                     ?>
                     <?= $actionMenu->render() ?>
                     <? endif ?>

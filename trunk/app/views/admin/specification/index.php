@@ -38,7 +38,8 @@
                                     Icon::create('trash', 'clickable',
                                             ['title'        => _('Regel löschen'),
                                              'formaction'   => $controller->url_for('admin/specification/delete/' . $rule['lock_id']),
-                                             'data-confirm' => sprintf(_('Wollen Sie die Regel "%s" wirklich löschen?'), htmlReady($rule['name']))]))
+                                             'data-confirm' => sprintf(_('Wollen Sie die Regel "%s" wirklich löschen?'), htmlReady($rule['name'])),
+                                             'style'        => 'margin: 0px']))
                             ?>
                             <?= $actionMenu->render() ?>
                         </td>

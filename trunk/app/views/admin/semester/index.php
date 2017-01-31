@@ -67,7 +67,7 @@
             <td>
                 <?= $semester->absolute_seminars_count ?>
                 <?= sprintf(_('(+%u implizit)'),
-                            $semester->continuous_seminars_count + $semester->duration_seminars_count) ?> 
+                            $semester->continuous_seminars_count + $semester->duration_seminars_count) ?>
             </td>
             <td class="actions">
                 <a data-dialog="size=auto" href="<?= $controller->url_for('admin/semester/edit/' . $semester->id) ?>">
@@ -79,7 +79,7 @@
                 <?= Icon::create('trash', 'clickable', ['title' => _('Semester löschen')])
                         ->asInput(array(
                             'formaction' => $controller->url_for('admin/semester/delete/'.$semester->id),
-                            'data-confirm' => _('Soll das Semester wirklich gelöscht werden?'),)) ?>
+                            'data-confirm' => _('Soll das Semester wirklich gelöscht werden?'))) ?>
             <? endif; ?>
             </td>
         </tr>
