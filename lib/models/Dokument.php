@@ -119,7 +119,7 @@ class Dokument extends ModuleManagementModel
      * @see ModuleManagementModel::getFilterSql()
      * @return int The number of Documents.
      */
-    public static function getCount($filter)
+    public static function getCount($filter = null)
     {
         if (empty($filter)) {
             return parent::getCount();
