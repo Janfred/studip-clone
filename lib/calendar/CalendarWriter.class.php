@@ -28,7 +28,7 @@ class CalendarWriter
         $GLOBALS['_calendar_error'] = new ErrorHandler();
     }
 
-    public function write(&$event)
+    public function write(Event &$event)
     {
         return $event->properties;
     }
