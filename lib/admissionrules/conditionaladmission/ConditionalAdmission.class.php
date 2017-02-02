@@ -398,9 +398,7 @@ class ConditionalAdmission extends AdmissionRule
         // prepare condition data.
         $keys = array_keys($this->ungrouped_conditions);
         foreach ($this->conditiongroups as $conditiongroup_id => $conditions) {
-            foreach ($conditions as $condition) {
-                $keys = array_merge($keys, array_keys($conditions));
-            }
+            $keys = array_merge($keys, array_keys($conditions));
         }
 
         // Delete removed conditions from DB.
@@ -549,10 +547,10 @@ class ConditionalAdmission extends AdmissionRule
         foreach ($this->conditiongroups as $conditiongroup_id => $conditions) {
             foreach ($conditions as $condition) {
                 $dolly = clone $condition;
-                $cloned_conditions[$conditiongroup_id][$dolly->id] = $dolly;
+                $cloned_conditiongroups[$conditiongroup_id][$dolly->id] = $dolly;
             }
         }
-        $this->conditiongroups = $cloned_conditions;
+        $this->conditiongroups = $cloned_conditiongroups;
     }
 
     public function setSiblings($siblings = array())
