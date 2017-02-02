@@ -1,9 +1,13 @@
 <? $modulDeskriptor = $modul->getDeskriptor($display_language); ?>
 <table class="mvv-modul-details default nohover" data-mvv-id="<?= $modul->getId(); ?>" data-mvv-type="modul">
+    <colgroup>
+        <col width="30%">
+        <col width="70%">
+    </colgroup>
     <thead>
         <tr>
-            <th class="mvv-modul-details-head" data-mvv-field="mvv_modul.code" style="width: 30%;"><?= htmlReady($modul->code) ?></th>
-            <th class="mvv-modul-details-head" data-mvv-field="mvv_modul.kp" style="width: 70%; text-align: right;"><?= sprintf("%d CP", $modul->kp) ?></th>
+            <th class="mvv-modul-details-head" data-mvv-field="mvv_modul.code"><?= htmlReady($modul->code) ?></th>
+            <th class="mvv-modul-details-head" data-mvv-field="mvv_modul.kp" style="text-align: right;"><?= sprintf("%d CP", $modul->kp) ?></th>
         </tr>
         <tr>
             <th colspan="2" style="font-weight: normal;">
@@ -29,38 +33,37 @@
     </thead>
     <tbody>
         <tr>
-            <td style="width: 30%;"><strong><?= _('Modulbezeichnung') ?></strong></td>
-            <td style="width: 70%;" data-mvv-field="mvv_modul.bezeichnung"><?= htmlReady($modulDeskriptor->bezeichnung) ?></td>
+            <td><strong><?= _('Modulbezeichnung') ?></strong></td>
+            <td data-mvv-field="mvv_modul.bezeichnung"><?= htmlReady($modulDeskriptor->bezeichnung) ?></td>
         </tr>
         <? $deskriptor_en = $modul->getDeskriptor('EN'); ?>
         <? if (trim($descriptor_en->bezeichnung)) : ?>
         <tr>
-            <td style="width: 30%;"><strong><?= _('Modulbezeichnung englisch') ?></strong></td>
-            <td style="width: 70%;" data-mvv-field="mvv_modul_deskriptor.bezeichnung"><?= htmlReady($descriptor_en->bezeichnung) ?></td>
+            <td><strong><?= _('Modulbezeichnung englisch') ?></strong></td>
+            <td data-mvv-field="mvv_modul_deskriptor.bezeichnung"><?= htmlReady($descriptor_en->bezeichnung) ?></td>
         </tr>
         <? endif; ?>
         <tr>
-            <td style="width: 30%;"><strong><?= _('Modulcode') ?></strong></td>
-            <td style="width: 70%;" data-mvv-field="mvv_modul.code"><?= htmlReady($modul->code) ?></td>
+            <td><strong><?= _('Modulcode') ?></strong></td>
+            <td data-mvv-field="mvv_modul.code"><?= htmlReady($modul->code) ?></td>
         </tr>
         <tr>
-            <td style="width: 30%;"><strong><?= _('Semester der erstmaligen Durchführung') ?></strong></td>
-            <td style="width: 70%;" data-mvv-field="mvv_modul.start"><?= htmlReady($startSemester['name']) ?></td>
+            <td><strong><?= _('Semester der erstmaligen Durchführung') ?></strong></td>
+            <td data-mvv-field="mvv_modul.start"><?= htmlReady($startSemester['name']) ?></td>
         </tr>
         <? if ($instituteName) : ?>
         <tr>
-            <td style="width: 30%;"><strong><?= _('Fachbereich/Institut') ?></strong></td>
+            <td><strong><?= _('Fachbereich/Institut') ?></strong></td>
             <td data-mvv-field="mvv_modul_inst"><?= htmlReady($instituteName) ?></td>
         </tr>
         <? endif; ?>
         <tr>
-            <td style="width: 30%;"><strong><?= _('Verwendet in Studiengängen / Semestern') ?></strong></td>
-            <td style="width: 70%;">
+            <td><strong><?= _('Verwendet in Studiengängen / Semestern') ?></strong></td>
+            <td>
                 <? $trails = $modul->getTrails(array('StgteilAbschnitt', 'StgteilVersion', 'Studiengang')); ?>
                 <? if (count($trails)) : ?>
-                    <? if (count($trails) > 0) : ?>
-                        <ul>
-                        <? foreach ($modul->getPathes($trails, ' > ') as $i => $path) : ?>
+                    <ul>
+                    <? foreach ($modul->getPathes($trails, ' > ') as $i => $path) : ?>
                         <? $version = $trails[$i]['StgteilVersion']['version_id'];?>
                         <? $statement = DBManager::get()->prepare(
                                  'SELECT `mvv_stgteilabschnitt_modul`.`abschnitt_id`  '
@@ -73,17 +76,14 @@
                         <li data-mvv-field="mvv_stgteilabschnitt_modul" data-mvv-id="<?= $affect_id; ?>" data-mvv-cooid="<?= $modul->getId(); ?>">
                             <?= htmlReady($path) ?>
                         </li>
-                        <? endforeach; ?>
-                        </ul>
-                    <? else : ?>
-
-                    <? endif; ?>
+                    <? endforeach; ?>
+                    </ul>
                 <? endif; ?>
             </td>
         </tr>
         <tr>
-            <td style="width: 30%;"><strong><?= _('Modulverantwortliche/r') ?></strong></td>
-            <td style="width: 70%;">
+            <td><strong><?= _('Modulverantwortliche/r') ?></strong></td>
+            <td>
                 <?
                 $modulVerantwortung = array();
                 foreach (ModulUser::findByModul($modul->getId()) as $users) {
@@ -109,21 +109,21 @@
             </td>
         </tr>
         <tr>
-            <td style="width: 30%;"><strong><?= _('Teilnahmevoraussetzungen') ?></strong></td>
-            <td style="width: 70%;" data-mvv-field="mvv_modul_deskriptor.voraussetzung"><?= formatReady($modulDeskriptor->voraussetzung) ?></td>
+            <td><strong><?= _('Teilnahmevoraussetzungen') ?></strong></td>
+            <td data-mvv-field="mvv_modul_deskriptor.voraussetzung"><?= formatReady($modulDeskriptor->voraussetzung) ?></td>
         </tr>
         <tr>
-            <td style="width: 30%;"><strong><?= _('Kompetenzziele') ?></strong></td>
-            <td style="width: 70%;" data-mvv-field="mvv_modul_deskriptor.kompetenzziele"><?= formatReady($modulDeskriptor->kompetenzziele) ?></td>
+            <td><strong><?= _('Kompetenzziele') ?></strong></td>
+            <td data-mvv-field="mvv_modul_deskriptor.kompetenzziele"><?= formatReady($modulDeskriptor->kompetenzziele) ?></td>
         </tr>
         <tr>
-            <td style="width: 30%;"><strong><?= _('Modulinhalte') ?></strong></td>
-            <td style="width: 70%;" data-mvv-field="mvv_modul_deskriptor.inhalte"><?= formatReady($modulDeskriptor->inhalte) ?></td>
+            <td><strong><?= _('Modulinhalte') ?></strong></td>
+            <td data-mvv-field="mvv_modul_deskriptor.inhalte"><?= formatReady($modulDeskriptor->inhalte) ?></td>
         </tr>
         <? if ($type !== 3) : ?>
         <tr>
-            <td style="width: 30%;"><strong><?= ngettext('Lehrveranstaltungsform', 'Lehrveranstaltungsformen', count($modul->modulteile)) ?></strong></td>
-            <td style="width: 70%;" data-mvv-field="mvv_modulteil_deskriptor.lernlehrform">
+            <td><strong><?= ngettext('Lehrveranstaltungsform', 'Lehrveranstaltungsformen', count($modul->modulteile)) ?></strong></td>
+            <td data-mvv-field="mvv_modulteil_deskriptor.lernlehrform">
             <? foreach ($modul->modulteile as $modulteil) : ?>
                 <? if (trim($modulteil->lernlehrform)) : ?>
                 <?= $GLOBALS['MVV_MODULTEIL']['LERNLEHRFORM']['values'][$modulteil->lernlehrform]['name'] ?>
@@ -137,34 +137,34 @@
         </tr>
         <? endif; ?>
         <tr>
-            <td style="width: 30%;"><strong><?= ngettext('Unterrichtssprache', 'Unterrichtsprachen', sizeof($modul->languages)) ?></strong></td>
-            <td style="width: 70%;" data-mvv-field="mvv_modul_language">
+            <td><strong><?= ngettext('Unterrichtssprache', 'Unterrichtsprachen', sizeof($modul->languages)) ?></strong></td>
+            <td data-mvv-field="mvv_modul_language">
                 <?= htmlReady(implode(', ', $modul->languages->map(function ($m) { return $m->getDisplayName(); }))); ?>
             </td>
         </tr>
         <tr>
-            <td style="width: 30%;"><strong><?= _('Dauer in Semestern') ?></strong></td>
-            <td style="width: 70%;" data-mvv-field="mvv_modul.dauer"><?= htmlReady($modul->dauer) ?> <?= _('Semester') ?></td>
+            <td><strong><?= _('Dauer in Semestern') ?></strong></td>
+            <td data-mvv-field="mvv_modul.dauer"><?= htmlReady($modul->dauer) ?> <?= _('Semester') ?></td>
         </tr>
         <tr>
-            <td style="width: 30%;"><strong><?= _('Angebotsrhythmus Modul') ?></strong></td>
-            <td style="width: 70%;" data-mvv-field="mvv_modul_deskriptor.turnus"><?= htmlReady($modulDeskriptor->turnus) ?></td>
+            <td><strong><?= _('Angebotsrhythmus Modul') ?></strong></td>
+            <td data-mvv-field="mvv_modul_deskriptor.turnus"><?= htmlReady($modulDeskriptor->turnus) ?></td>
         </tr>
         <tr>
-            <td style="width: 30%;"><strong><?= _('Aufnahmekapazität Modul') ?></strong></td>
-            <td style="width: 70%;" data-mvv-field="mvv_modul.kapazitaet"><?= htmlReady(trim($modul->kapazitaet)) ?: _('unbegrenzt') ?> <?= MVVController::trim($modulDeskriptor->kommentar_kapazitaet) ? sprintf("(%s)", formatReady($modulDeskriptor->kommentar_kapazitaet)) : '' ?></td>
+            <td><strong><?= _('Aufnahmekapazität Modul') ?></strong></td>
+            <td data-mvv-field="mvv_modul.kapazitaet"><?= htmlReady(trim($modul->kapazitaet)) ?: _('unbegrenzt') ?> <?= MVVController::trim($modulDeskriptor->kommentar_kapazitaet) ? sprintf("(%s)", formatReady($modulDeskriptor->kommentar_kapazitaet)) : '' ?></td>
         </tr>
         <tr>
-            <td style="width: 30%;"><strong><?= _('Prüfungsebene') ?></strong></td>
-            <td style="width: 70%;" data-mvv-field="mvv_modul.pruef_ebene"><?= htmlReady($pruefungsEbene) ?></td>
+            <td><strong><?= _('Prüfungsebene') ?></strong></td>
+            <td data-mvv-field="mvv_modul.pruef_ebene"><?= htmlReady($pruefungsEbene) ?></td>
         </tr>
         <tr>
-            <td style="width: 30%;"><strong><?= _('Credit-Points') ?></strong></td>
-            <td style="width: 70%;" data-mvv-field="mvv_modul.kp"><?= sprintf("%d CP", htmlReady($modul->kp)) ?></td>
+            <td><strong><?= _('Credit-Points') ?></strong></td>
+            <td data-mvv-field="mvv_modul.kp"><?= sprintf("%d CP", htmlReady($modul->kp)) ?></td>
         </tr>
         <tr>
-            <td style="width: 30%;"><strong><?= _('Modulabschlussnote') ?></strong></td>
-            <td style="width: 70%;">
+            <td><strong><?= _('Modulabschlussnote') ?></strong></td>
+            <td>
                 <? if ($type !== 3) : ?>
                     <? $nummer_modulteil = 1; ?>
                     <? $note = array(); ?>
@@ -200,20 +200,20 @@
             </td>
         </tr>
         <tr>
-            <td style="width: 30%;"><strong><?= _('Faktor der Modulnote für die Endnote des Studiengangs') ?></strong></td>
-            <td style="width: 70%;" data-mvv-field="mvv_modul.faktor_note"><?= htmlReady($modul->faktor_note) ?></td>
+            <td><strong><?= _('Faktor der Modulnote für die Endnote des Studiengangs') ?></strong></td>
+            <td data-mvv-field="mvv_modul.faktor_note"><?= htmlReady($modul->faktor_note) ?></td>
         </tr>
         <? if (trim($modulDeskriptor->kommentar)) : ?>
         <tr>
-            <td style="width: 30%;"><strong><?= _('Hinweise') ?></strong></td>
-            <td style="width: 70%;" data-mvv-field="mvv_modul_deskriptor.kommentar"><?= formatReady($modulDeskriptor->kommentar) ?></td>
+            <td><strong><?= _('Hinweise') ?></strong></td>
+            <td data-mvv-field="mvv_modul_deskriptor.kommentar"><?= formatReady($modulDeskriptor->kommentar) ?></td>
         </tr>
         <? endif; ?>
         <? foreach ($modulDeskriptor->datafields as $entry) : ?>
         <? $df = $entry->getTypedDatafield(); ?>
         <tr>
-            <td style="width: 30%;"><strong><?= htmlReady($df->getName()) ?></strong></td>
-            <td style="width: 70%;"><?= htmlReady($df->getDisplayValue()); ?></td>
+            <td><strong><?= htmlReady($df->getName()) ?></strong></td>
+            <td><?= htmlReady($df->getDisplayValue()); ?></td>
         </tr>
         <? endforeach; ?>
     </tbody>
