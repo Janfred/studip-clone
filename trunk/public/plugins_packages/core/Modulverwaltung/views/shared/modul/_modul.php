@@ -58,7 +58,7 @@
             <td style="width: 70%;">
                 <? $trails = $modul->getTrails(array('StgteilAbschnitt', 'StgteilVersion', 'Studiengang')); ?>
                 <? if (count($trails)) : ?>
-                    <? if (count($trails) > 1) : ?>
+                    <? if (count($trails) > 0) : ?>
                         <ul>
                         <? foreach ($modul->getPathes($trails, ' > ') as $i => $path) : ?>
                         <? $version = $trails[$i]['StgteilVersion']['version_id'];?>
