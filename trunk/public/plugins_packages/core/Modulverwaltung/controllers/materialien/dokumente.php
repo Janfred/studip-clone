@@ -147,11 +147,13 @@ class Materialien_DokumenteController extends MVVController
         }
 
         $this->setSidebar();
-        $sidebar = Sidebar::get();
-        $action_widget = $sidebar->getWidget('actions');
-        $action_widget->addLink(_('Log-Einträge dieses Dokumentes'),
-                $this->url_for('shared/log_event/show/Dokument', $this->dokument->id),
-                Icon::create('log', 'clickable'))->asDialog();
+        if (!$this->dokument->isNew()) {
+            $sidebar = Sidebar::get();
+            $action_widget = $sidebar->getWidget('actions');
+            $action_widget->addLink(_('Log-Einträge dieses Dokumentes'),
+                    $this->url_for('shared/log_event/show/Dokument', $this->dokument->id),
+                    Icon::create('log', 'clickable'))->asDialog();
+        }
     }
 
     /**
@@ -246,14 +248,14 @@ class Materialien_DokumenteController extends MVVController
 
         $sidebar = Sidebar::get();
         $sidebar->setImage(Assets::image_path('sidebar/learnmodule-sidebar.png'));
-
+        
+        $widget  = new ActionsWidget();
         if (MvvPerm::get('Dokument')->havePermCreate()) {
-            $widget  = new ActionsWidget();
             $widget->addLink( _('Neues Dokument anlegen'),
                             $this->url_for('/dokument'),
                             Icon::create('file+add', 'clickable'));
-            $sidebar->addWidget($widget);
         }
+        $sidebar->addWidget($widget);
 
         if ($this->show_sidebar_search) {
             $this->sidebar_search();
