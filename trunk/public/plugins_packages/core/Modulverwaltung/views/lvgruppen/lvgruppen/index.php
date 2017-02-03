@@ -40,7 +40,7 @@
                         ?>
 
                         <? $actionMenu->addLink(
-                                $controller->url_for('shared/log_event/show/' . $lvgruppe->id),
+                                $controller->url_for('shared/log_event/show/Lvgruppe/' . $lvgruppe->id),
                                 _('Log-Einträge dieser Lehrveranstaltungsgruppe'),
                                 Icon::create('log', 'clickable', ['title' => _('Log-Einträge dieser Lehrveranstaltungsgruppe')]),
                                 ['data-dialog' => 'size=auto'])
