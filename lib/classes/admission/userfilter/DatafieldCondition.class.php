@@ -62,7 +62,7 @@ class DatafieldCondition extends UserFilterField
             unset($this->validCompareOperators['!=']);
             $this->null_yields = 0;
         } else if ($typed_df instanceof DataFieldSelectboxEntry) {
-            list($valid_values, $is_assoc) = $typed_df->getParams();
+            list($valid_values, $is_assoc) = $typed_df->getParameters();
             if (!$is_assoc) {
                 $valid_values = array_combine($valid_values, $valid_values);
             }
