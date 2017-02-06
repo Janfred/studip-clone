@@ -61,7 +61,7 @@ class DataFieldSelectboxEntry extends DataFieldEntry
      *
      * @return array containing the individual type parameters
      */
-    protected function getParameters()
+    public function getParameters()
     {
         $params = explode("\n", $this->model->typeparam);
         $params = array_map('trim', $params);
