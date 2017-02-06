@@ -422,7 +422,7 @@ class Course_BasicdataController extends AuthenticatedController
 
                         if ($varname === "name" && !$req_value) {
                             $this->msg[] = array("error", _("Name der Veranstaltung darf nicht leer sein."));
-                        } else if ($field['type'] == 'select' && !isset($field['choices'][$req_value])) {
+                        } else if ($field['type'] == 'select' && !in_array($req_value, array_flatten(array_values(array_map('array_keys', $field['choices']))))) {
                             // illegal value - just ignore this
                         } else if ($sem->{$varname} != $req_value) {
                             $sem->{$varname} = $req_value;
