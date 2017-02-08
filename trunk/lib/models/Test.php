@@ -151,15 +151,19 @@ class Test extends QuestionnaireQuestion implements QuestionType
         return $output;
     }
 
-    public function correctAnswered($userId = null)
+    public function correctAnswered($userId = null,  $answersToCheck = null)
     {
         $userId = $userId ?: $GLOBALS['user']->id;
         $correctAnswered = true;
         $task = $this->etask->task;
         $numTaskAnswers = count($task['answers']);
         $resultsUsers = array_fill(0, $numTaskAnswers, []);
+        if ($answersToCheck && !is_array($answersToCheck)) {
+            $answersToCheck = array($answersToCheck);
+        }
+        $answersToCheck = is_array($answersToCheck) ? $answersToCheck : $this->answers->findBy('user_id', $userId);
 
-        foreach ($this->answers as $answer) {
+        foreach ($answersToCheck as $answer) {
             if ($task['type'] === 'multiple') {
                 foreach ($answer['answerdata']['answers'] as $a) {
                     $resultsUsers[(int) $a][] = $answer['user_id'];
@@ -170,12 +174,12 @@ class Test extends QuestionnaireQuestion implements QuestionType
         }
         foreach ($task['answers'] as $index => $option) {
             if ($option['score']) {
-                if (!in_array($GLOBALS['user']->id, $resultsUsers[$index])) {
+                if (!in_array($userId, $resultsUsers[$index])) {
                     $correctAnswered = false;
                     break;
                 }
             } else {
-                if (in_array($GLOBALS['user']->id, $resultsUsers[$index])) {
+                if (in_array($userId, $resultsUsers[$index])) {
                     $correctAnswered = false;
                     break;
                 }

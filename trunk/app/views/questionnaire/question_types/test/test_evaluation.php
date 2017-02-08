@@ -62,14 +62,13 @@ $labels = array_map(function ($answer) { return strip_tags(formatReady($answer['
     });
     </script>
 <? endif ?>
-<? if (in_array($GLOBALS['user']->id, $users)) : ?>
+<? if (in_array($GLOBALS['user']->id, $users) || is_array($anonAnswers)) : ?>
+<? $correctAnswered = is_array($anonAnswers) ? $vote->correctAnswered('anonymous', $anonAnswers) : $vote->correctAnswered()?>
     <div style="max-height: none; opacity: 1; font-size: 1.4em; text-align: center;">
-        <? if ($vote->correctAnswered()) : ?>
-            <?= Icon::create('accept', 'status-green')->asImg(25, ['class' => 'text-bottom']) ?>
-            <?= _("Richtig beantwortet!") ?>
+        <? if ($correctAnswered) : ?>
+            <?= MessageBox::success(_("Richtig beantwortet!")) ?>
         <? else : ?>
-            <?= Icon::create('decline', 'status-red')->asImg(25, ['class' => 'text-bottom']) ?>
-            <?= _("Falsch beantwortet!") ?>
+            <?= MessageBox::error(_("Falsch beantwortet!")) ?>
         <? endif ?>
     </div>
 <? endif ?>
@@ -77,12 +76,17 @@ $labels = array_map(function ($answer) { return strip_tags(formatReady($answer['
 <table class="default nohover">
     <tbody>
         <? $countAnswers = $vote->questionnaire->countAnswers() ?>
+        <? $userAnswer = is_array($anonAnswers) ? @$anonAnswers[0]['answerdata'] : @$answers->findBy('user_id', $GLOBALS['user']->id)->first()->answerdata ?>
+        <? if ($userAnswer instanceOf StudipArrayObject) $userAnswer = $userAnswer->getArrayCopy() ?>
         <? foreach ($taskAnswers as $key => $answer) : ?>
           <tr class="<?= $data['correctanswer'] ? 'correct' : 'incorrect' ?>">
             <? $percentage = $countAnswers ? round((int) $results[$key] / $countAnswers * 100) : 0 ?>
 
             <td style="text-align: right; background-size: <?= $percentage ?>% 100%; background-position: right center; background-image: url('<?= Assets::image_path("vote_lightgrey.png") ?>'); background-repeat: no-repeat;" width="50%">
                 <strong><?= formatReady($answer['text']) ?></strong>
+                <? if ($userAnswer) : ?>
+                    <?= Icon::create(in_array($key, $userAnswer['answers']) ? 'checkbox-checked' : 'checkbox-unchecked', 'info')->asImg( ['class' => 'text-bottom']) ?>
+                <? endif ?>
                 <? if ($answer['score'] > 0) : ?>
                     <?= Icon::create('accept', 'status-green', ['title' => _('Diese Antwort ist richtig')])->asImg( ['class' => 'text-bottom']) ?>
                 <? else : ?>
