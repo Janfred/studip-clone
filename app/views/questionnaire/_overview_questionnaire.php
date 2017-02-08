@@ -52,7 +52,7 @@
         <?= htmlReady($countedAnswers) ?>
     </td>
     <td class="actions">
-        <? if ($questionnaire->isStarted() && $countedAnswers) : ?>
+        <? if ($questionnaire->isRunning() && $countedAnswers) : ?>
             <?= Icon::create("edit", "inactive")->asimg("20px", array('title' => _("Der Fragebogen wurde gestartet und kann nicht mehr bearbeitet werden."))) ?>
         <? else : ?>
             <a href="<?= URLHelper::getLink("dispatch.php/questionnaire/edit/".$questionnaire->getId()) ?>" data-dialog title="<?= _("Fragebogen bearbeiten") ?>">

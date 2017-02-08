@@ -4,7 +4,7 @@
         <? foreach ($questionnaire->questions as $question) : ?>
             <article class="question_<?= $question->getId() ?>">
                 <? $template = $question->getResultTemplate() ?>
-                <?= $template ? $template->render() : _("Ergebnisse konnten nicht ausgewertet werden.") ?>
+                <?= $template ? $template->render(['anonAnswers' => $anonAnswers]) : _("Ergebnisse konnten nicht ausgewertet werden.") ?>
             </article>
         <? endforeach ?>
     <? else : ?>
