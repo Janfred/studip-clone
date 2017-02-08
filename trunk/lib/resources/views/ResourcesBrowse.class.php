@@ -88,22 +88,33 @@ class ResourcesBrowse {
     //private
     function searchForm() {
         ?>
-        <tr>
-            <td align="center" <? echo ($this->mode == "browse") ? "colspan=\"2\"" : "" ?>>
-                <?=_("freie Suche")?>:&nbsp;
-                    <select name="resources_search_range" style="vertical-align:middle">
+        <fieldset>
+            <legend>
+                <?= _('Suche nach Ressourcen'); ?>
+            </legend>
+            <label>
+                <?= _('Bezeichnung') . ":"; ?>
+                <input name="search_exp" type="text" placeholder="<?= _('Ressource suchen') ?>" autofocus
+                       value="<? echo htmlReady(stripslashes($this->searchArray["search_exp"])); ?>">
+            </label>
+            <label>
+                <?= _('Freie Suche') . ":"; ?>
+                <select>
                     <option value="0" selected><?=htmlReady($GLOBALS['UNI_NAME_CLEAN'])?></option>
                     <?if ($this->open_object){
                         $res = ResourceObject::Factory($this->open_object);
                         ?>
                         <option value="<?=$this->open_object?>" selected><?=htmlReady($res->getName())?></option>
                     <?}?>
-                    </select>
-                <input name="search_exp" type="text" style="vertical-align: middle;" size=35 maxlength=255 value="<? echo htmlReady(stripslashes($this->searchArray["search_exp"])); ?>">
-                <?= Button::create(_('Suchen'), 'start_search') ?>
-                <?= LinkButton::create(_('Neue Suche'), URLHelper::getURL('?view=search&quick_view_mode=' . Request::option('view_mode') . '&reset=TRUE')) ?>
-            </td>
-        </tr>
+                </select>
+            </label>
+        </fieldset>
+
+        <footer>
+            <?= Button::create(_('Suchen'), 'start_search') ?>
+            <?= LinkButton::create(_('Zurücksetzen'), URLHelper::getURL('?view=search&quick_view_mode=' .
+                Request::option('view_mode') . '&reset=TRUE')) ?>
+        </footer>
         <?
     }
 
@@ -449,7 +460,8 @@ class ResourcesBrowse {
                         </a><br>
                         <? $i++;
                     }
-                    print "</table>"; ?>
+                    ?>
+                </table>
             <? endif; ?>
             </td>
         </tr>
@@ -492,7 +504,7 @@ class ResourcesBrowse {
     //private
     function showSearch() {
         ?>
-        <form method="post" action="<?= URLHelper::getLink('?search_send=yes&quick_view=search&quick_view_mode='. Request::option('view_mode')) ?>">
+        <form class="default" method="post" action="<?= URLHelper::getLink('?search_send=yes&quick_view=search&quick_view_mode='. Request::option('view_mode')) ?>">
             <?= CSRFProtection::tokenTag() ?>
             <table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
                 <?
