@@ -11,6 +11,19 @@ use Studip\Button, Studip\LinkButton;
         <legend>
             <?= _('Suche nach Personen') ?>
         </legend>
+
+        <!-- form zur freien Suche -->
+        <label>
+            <?= _('Name:') ?>
+            <?= QuickSearch::get('name', $search_object)
+                ->setInputStyle('width: 400px')
+                ->setAttributes(array('autofocus' => ''))
+                ->defaultValue('', $name)
+                ->fireJSFunctionOnSelect('STUDIP.Browse.selectUser')
+                ->noSelectbox()
+                ->render() ?>
+        </label>
+
         <? if (count($institutes)): ?>
             <label>
                 <?= _('Einrichtung:') ?>
@@ -44,22 +57,10 @@ use Studip\Button, Studip\LinkButton;
                 </select>
             </label>
         <? endif ?>
-
-        <!-- form zur freien Suche -->
-        <label>
-            <?= _('Name:') ?>
-            <?= QuickSearch::get('name', $search_object)
-                           ->setInputStyle('width: 400px')
-                           ->setAttributes(array('autofocus' => ''))
-                           ->defaultValue('', $name)
-                           ->fireJSFunctionOnSelect('STUDIP.Browse.selectUser')
-                           ->noSelectbox()
-                           ->render() ?>
-        </label>
     </fieldset>
 
     <footer>
-        <?= Button::createAccept(_('Suchen'), 'send')?>
+        <?= Button::create(_('Suchen'), 'send')?>
         <?= Button::create(_('Zurücksetzen'), 'reset')?>
     </footer>
 </form>
