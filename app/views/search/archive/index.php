@@ -4,8 +4,8 @@
         <legend><?= _('Suche im Veranstaltungsarchiv'); ?></legend>
         <label>
             <?= _('Name der Veranstaltung') . ':'; ?>
-            <input type="text" minlength="4" name="criteria"
-                value="<?= htmlReady($criteria) ?>">
+            <input type="text" minlength="4" name="criteria" placeholder="<?= _('Veranstaltung suchen') ?>"
+                   value="<?= htmlReady($criteria) ?>" autofocus>
         </label>
         <label>
             <?= _('Semester') . ':'; ?>
@@ -45,8 +45,11 @@
                 <? endforeach ?>
             </select>
         </label>
-        <?= \Studip\Button::create(_('Suchen'), '') ?>
     </fieldset>
+    <footer>
+        <?= \Studip\Button::create(_('Suchen'), '') ?>
+        <?= Studip\LinkButton::create(_('Zurücksetzen'), URLHelper::getURL('dispatch.php/search/archive')) ?>
+    </footer>
 </form>
 <? if ($foundCourses) : ?>
     
