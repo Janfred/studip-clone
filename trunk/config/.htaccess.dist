@@ -16,7 +16,7 @@ php_value post_max_size 8M
 php_value memory_limit 64M
 php_value max_execution_time 300
 php_flag short_open_tag On
-php_admin_flag allow_url_fopen On
+php_flag allow_url_fopen On
 php_value max_input_vars 10000
 #PHP Konstanten sind hier nicht verfügbar
 # 22519 = E_ALL & ~(E_NOTICE|E_DEPRECATED) PHP 5.3.x
