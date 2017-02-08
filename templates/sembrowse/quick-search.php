@@ -10,6 +10,11 @@ SkipLinks::addIndex(_('Suchformular'), 'search_sem_qs', 100);
     </legend>
 
     <label>
+        <?= _('Suchbegriff') ?>
+        <?= $quicksearch->render() ?>
+    </label>
+
+    <label>
         <?= _('Schnellsuche') ?>
         <?= $search_obj->getSearchField('qs_choose', [ 'id' => 'search_sem_qs_choose' ]) ?>
     </label>
@@ -42,11 +47,6 @@ SkipLinks::addIndex(_('Suchformular'), 'search_sem_qs', 100);
         </div>
     </label>
 
-    <label>
-         <?= _('Suchbegriff') ?>
-         <?= $quicksearch->render() ?>
-    </label>
-
 </fieldset>
 
 <footer>
@@ -58,7 +58,7 @@ SkipLinks::addIndex(_('Suchformular'), 'search_sem_qs', 100);
             ],
             true
         ) ?>
-        <?= Studip\LinkButton::createCancel(
+        <?= Studip\LinkButton::create(
             _('Zurücksetzen'),
             URLHelper::getURL('?reset_all=1'),
             ['title' => _('Zurücksetzen')]
