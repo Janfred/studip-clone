@@ -319,6 +319,7 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
     {
         StudipCacheFactory::getCache()->expire('DB_TABLE_SCHEMES');
         self::$schemes = null;
+        self::$config = array();
     }
 
     /**
