@@ -114,16 +114,16 @@
             <td style="text-align: center">
                 <input type="checkbox" name="ids[]" value="<?= $logs[$i]->log_id ?>">
             </td>
-            <td><?= date('d.m.Y H:i:s', $logs[$i]->executed) ?></td>
-            <td><?= date('d.m.Y H:i:s', $logs[$i]->scheduled) ?></td>
+            <td><?= strftime('%x %X', $logs[$i]->executed) ?></td>
+            <td><?= strftime('%x %X', $logs[$i]->scheduled) ?></td>
             <td><?= htmlReady($logs[$i]->schedule->title ?: $logs[$i]->schedule->task->name) ?></td>
             <td>
             <? if ($logs[$i]->duration == -1): ?>
                 <?= Icon::create('question', 'inactive', ['title' => _('Läuft noch')])->asImg() ?>
             <? elseif ($logs[$i]->exception === null): ?>
-                <?= Icon::create('accept', 'accept', ['title' => _('Ja')])->asImg() ?>
+                <?= Icon::create('accept', 'status-green', ['title' => _('Ja')])->asImg() ?>
             <? else: ?>
-                <?= Icon::create('decline', 'attention', ['title' => _('Nein')])->asImg() ?>
+                <?= Icon::create('decline', 'status-red', ['title' => _('Nein')])->asImg() ?>
             <? endif; ?>
             </td>
             <td style="text-align: right">

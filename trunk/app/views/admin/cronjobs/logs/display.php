@@ -27,6 +27,12 @@
 
 <? if ($log->exception !== null): ?>
     <dt><?= _('Fehler') ?></dt>
-    <dd><?= display_exception($log->exception, true) ?></dd>
+    <dd>
+    <? if ($log->exception instanceof Exception): ?>
+        <?= display_exception($log->exception, true) ?>
+    <? else: ?>
+        <?= nl2br($log->exception) ?>
+    <? endif; ?>
+    </dd>
 <? endif; ?>
 </dl>
