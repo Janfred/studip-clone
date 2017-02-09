@@ -55,17 +55,24 @@ class CronjobLog extends SimpleORMap
 
     public function getException()
     {
-        return @unserialize($this->content['exception']) ?: null;
+        if ($this->content['exception'] === 'N;') {
+            return null;
+        }
+        if (preg_match('/^O:\d+:/', $this->content['exception'])) {
+            return @unserialize($this->content['exception']) ?: null;
+        }
+        return $this->content['exception'];
     }
 
     public function setException($exception_or_string)
     {
-        if (is_null($exception_or_string) || $exception_or_string instanceof Exception) {
-            return $this->content['exception'] = serialize($exception_or_string);
+        if ($exception_or_string instanceof Exception) {
+            $exception_as_string = display_exception($exception_or_string, false, true);
+            return $this->content['exception'] = $exception_as_string;
         } elseif (is_string($exception_or_string)) {
             return $this->content['exception'] = $exception_or_string;
         } else {
-            return $this->content['exception'] = 'N;';
+            return $this->content['exception'] = null;
         }
     }
 
