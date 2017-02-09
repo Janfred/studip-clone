@@ -954,19 +954,17 @@ class User extends AuthUserMd5
             $query = "INSERT INTO datafields_entries
                         (datafield_id, range_id, sec_range_id, content, mkdate, chdate)
                       VALUES (:datafield_id, :range_id, :sec_range_id, :content,
-                              UNIX_TIMESTAMP(), UNIX_TIMESTAMP())
+                              :mkdate, :chdate)
                       ON DUPLICATE KEY
                         UPDATE content = IF(content IN ('', 'default_value'), VALUES(content), content),
                                chdate = UNIX_TIMESTAMP()";
-            $statement = DBManager::get()->prepare($query);
 
-
-            $old_user->datafields->each(function ($field) use ($new_id, $statement) {
-                $statement->bindValue(':range_id', $new_id);
-                $statement->bindValue(':datafield_id', $field->datafield_id);
-                $statement->bindValue(':sec_range_id', $field->sec_range_id);
-                $statement->bindValue(':content', $field->content);
-                $statement->execute();
+            $old_user->datafields->each(function ($field) use ($new_id, $query) {
+                if (!$field->isNew() && $field->content !== null) {
+                    $data = $field->toArray('datafield_id sec_range_id content mkdate chdate');
+                    $data['range_id'] = $new_id;
+                    DBManager::get()->execute($query, $data);
+                }
             });
 
             # Datenfelder des alten Nutzers leeren
@@ -1103,21 +1101,25 @@ class User extends AuthUserMd5
         $statement->execute(array($new_id, $old_id));
 
         //Votings
-        $query = "UPDATE IGNORE vote SET author_id = ? WHERE author_id = ?";
+        $query = "UPDATE IGNORE questionnaires SET user_id = ? WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
 
-        $query = "UPDATE IGNORE vote SET range_id = ? WHERE range_id = ?";
+        $query = "UPDATE IGNORE questionnaire_assignments SET range_id = ? WHERE range_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
 
-        self::removeDoubles('vote_user', 'vote_id', $new_id, $old_id);
-        $query = "UPDATE IGNORE vote_user SET user_id = ? WHERE user_id = ?";
+        $query = "UPDATE IGNORE questionnaire_assignments SET user_id = ? WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
 
-        self::removeDoubles('voteanswers_user', 'answer_id', $new_id, $old_id);
-        $query = "UPDATE IGNORE voteanswers_user SET user_id = ? WHERE user_id = ?";
+        self::removeDoubles('questionnaire_anonymous_answers', 'anonymous_answer_id', $new_id, $old_id);
+        $query = "UPDATE IGNORE questionnaire_anonymous_answers SET user_id = ? WHERE user_id = ?";
+        $statement = DBManager::get()->prepare($query);
+        $statement->execute(array($new_id, $old_id));
+
+        self::removeDoubles('questionnaire_answers', 'answer_id', $new_id, $old_id);
+        $query = "UPDATE IGNORE questionnaire_answers SET user_id = ? WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
 
