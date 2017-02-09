@@ -91,7 +91,7 @@ class QuestionnaireController extends AuthenticatedController
                 ? (strtotime($questionnaire_data['startdate']) ?: time())
                 : null;
             $questionnaire_data['stopdate'] = strtotime($questionnaire_data['stopdate']) ?: null;
-            $questionnaire_data['anonymous'] = (int) $questionnaire_data['copyable'];
+            $questionnaire_data['copyable'] = (int) $questionnaire_data['copyable'];
             $questionnaire_data['anonymous'] = (int) $questionnaire_data['anonymous'];
             $questionnaire_data['editanswers'] = $questionnaire_data['anonymous'] ? 0 : (int) $questionnaire_data['editanswers'];
             if ($this->questionnaire->isNew()) {
