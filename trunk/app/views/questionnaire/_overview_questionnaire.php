@@ -65,15 +65,15 @@
 
         <?
         $menu = ActionMenu::get();
-        if ($questionnaire->isStarted()) {
+        if ($questionnaire->isRunning()) {
             $menu->addLink(
-                URLHelper::getLink("dispatch.php/questionnaire/stop/".$questionnaire->getId(), $range_type ? ['redirect' => "questionnaire/courseoverview"] : []),
+                URLHelper::getLink("dispatch.php/questionnaire/stop/".$questionnaire->getId(), in_array($range_type, ['course', 'institute']) ? ['redirect' => "questionnaire/courseoverview"] : []),
                 _("Fragebogen beenden"),
                 Icon::create("pause", "clickable")
             );
         } else {
             $menu->addLink(
-                URLHelper::getLink("dispatch.php/questionnaire/start/".$questionnaire->getId(), $range_type ? ['redirect' => "questionnaire/courseoverview"] : []),
+                URLHelper::getLink("dispatch.php/questionnaire/start/".$questionnaire->getId(), in_array($range_type, ['course', 'institute']) ? ['redirect' => "questionnaire/courseoverview"] : []),
                 _("Fragebogen starten"),
                 Icon::create("play", "clickable")
             );
