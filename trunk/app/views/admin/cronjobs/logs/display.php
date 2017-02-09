@@ -28,11 +28,7 @@
 <? if ($log->exception !== null): ?>
     <dt><?= _('Fehler') ?></dt>
     <dd>
-    <? if ($log->exception instanceof Exception): ?>
-        <?= display_exception($log->exception, true) ?>
-    <? else: ?>
-        <?= nl2br($log->exception) ?>
-    <? endif; ?>
+        <?= nl2br(htmlReady($log->exception)) ?>
     </dd>
 <? endif; ?>
 </dl>
