@@ -143,6 +143,11 @@ class Questionnaire extends SimpleORMap
         return false;
     }
 
+    public function isCopyable()
+    {
+        return ($this->copyable && $GLOBALS['perm']->have_perm('autor') && $this->isViewable()) || $this->isEditable();
+    }
+
     public function start()
     {
         if (!$this['startdate']) {
