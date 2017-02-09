@@ -140,14 +140,14 @@
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="3" class="printhead">
+            <td colspan="3">
                 <select name="action" data-activates="button[name=bulk]">
                     <option value="">- <?= _('Aktion auswählen') ?></option>
                     <option value="delete"><?= _('Löschen') ?></option>
                 </select>
                 <?= Button::createAccept(_('Ausführen'), 'bulk') ?>
             </td>
-            <td colspan="3" class="printhead" style="text-align: right; vertical-align: middle;">
+            <td colspan="3" style="text-align: right; vertical-align: middle;">
             <?
                 $pagination = $GLOBALS['template_factory']->open('shared/pagechooser');
                 $pagination->set_attributes(array(
