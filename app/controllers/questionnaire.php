@@ -91,6 +91,7 @@ class QuestionnaireController extends AuthenticatedController
                 ? (strtotime($questionnaire_data['startdate']) ?: time())
                 : null;
             $questionnaire_data['stopdate'] = strtotime($questionnaire_data['stopdate']) ?: null;
+            $questionnaire_data['anonymous'] = (int) $questionnaire_data['copyable'];
             $questionnaire_data['anonymous'] = (int) $questionnaire_data['anonymous'];
             $questionnaire_data['editanswers'] = $questionnaire_data['anonymous'] ? 0 : (int) $questionnaire_data['editanswers'];
             if ($this->questionnaire->isNew()) {
@@ -184,10 +185,10 @@ class QuestionnaireController extends AuthenticatedController
 
     public function copy_action($from)
     {
-        if (!$GLOBALS['perm']->have_perm("autor")) {
-            throw new AccessDeniedException("Only for logged in users.");
+        $this->old_questionnaire = Questionnaire::find($from);
+        if (!$this->old_questionnaire->isCopyable()) {
+            throw new AccessDeniedException("Reproduction and copy forbidden");
         }
-        $this->old_questionnaire = new Questionnaire($from);
         $this->questionnaire = new Questionnaire();
         $this->questionnaire->setData($this->old_questionnaire->toArray());
         $this->questionnaire->setId($this->questionnaire->getNewId());

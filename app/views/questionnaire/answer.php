@@ -46,7 +46,7 @@
         <? if ($questionnaire->isEditable() && (!$questionnaire->isRunning() || !$questionnaire->countAnswers())) : ?>
             <?= \Studip\LinkButton::create(_("Bearbeiten"), URLHelper::getURL("dispatch.php/questionnaire/edit/".$questionnaire->getId()), array('data-dialog' => "1")) ?>
         <? endif ?>
-        <? if ($GLOBALS['perm']->have_perm('autor')) : ?>
+        <? if ($questionnaire->isCopyable()) : ?>
             <?= \Studip\LinkButton::create(_("Kopieren"), URLHelper::getURL("dispatch.php/questionnaire/copy/".$questionnaire->getId()), array('data-dialog' => "1")) ?>
         <? endif ?>
         <? if ($questionnaire->isEditable() && (!$questionnaire->isRunning())) : ?>
