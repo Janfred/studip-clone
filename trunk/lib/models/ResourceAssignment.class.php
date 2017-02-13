@@ -58,13 +58,15 @@ class ResourceAssignment extends SimpleORMap
 
     function delete()
     {
-        $old_assign_object = new AssignObject($this->id);
-        $ret = parent::delete();
-        $old_assign_object->delete();
-        return $ret;
+        if (!$this->isDeleted() && !$this->isNew()) {
+            $old_assign_object = new AssignObject($this->id);
+            $ret = parent::delete();
+            $old_assign_object->delete();
+            return $ret;
+        }
     }
 
-    function store ()
+    function store()
     {
         // update start and end of assignment to match the dates start and end
         if ($this->date) {
