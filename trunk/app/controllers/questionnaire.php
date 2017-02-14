@@ -546,7 +546,7 @@ class QuestionnaireController extends AuthenticatedController
                 INNER JOIN questionnaire_assignments ON (questionnaires.questionnaire_id = questionnaire_assignments.questionnaire_id)
             WHERE questionnaire_assignments.range_id = :range_id
                 AND questionnaire_assignments.range_type = :range_type
-                ".(Request::get("questionnaire_showall") ? "AND startdate <= UNIX_TIMESTAMP()" : "AND visible = 1")."
+                ".(!Request::get("questionnaire_showall") ? "AND (stopdate > UNIX_TIMESTAMP() OR stopdate IS NULL)" : " AND startdate <= UNIX_TIMESTAMP() ")."
             ORDER BY questionnaires.mkdate DESC
         ");
         $statement->execute(array(
