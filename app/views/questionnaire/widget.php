@@ -29,7 +29,6 @@
             <?= $this->render_partial("questionnaire/_widget_questionnaire", array('questionnaire' => Questionnaire::buildExisting($questionnaire), 'range_type' => $range_type, 'range_id' => $range_id)) ?>
         <? endforeach; ?>
     <? endif; ?>
-    <? if ($allowed_to_add) : ?>
         <footer>
             <? if (Request::get('questionnaire_showall')): ?>
                 <a href="<?= URLHelper::getLink('#questionnaire_area', array('questionnaire_showall' => 0)) ?>"><?= _('Abgelaufene Fragebögen ausblenden') ?></a>
@@ -37,5 +36,4 @@
                 <a href="<?= URLHelper::getLink('#questionnaire_area', array('questionnaire_showall' => 1)) ?>"><?= _('Abgelaufene Fragebögen einblenden') ?></a>
             <? endif; ?>
         </footer>
-    <? endif ?>
 </article>
