@@ -81,6 +81,9 @@
     <tr>
         <th data-sort="htmldata"><?= _('Zeit') ?></th>
         <th data-sort="text" class="hidden-small-down"><?= _('Typ') ?></th>
+        <? if (count($course->statusgruppen)): ?>
+            <th data-sort="text" class="hidden-small-down"><?= _('Sichtbarkeit') ?></th>
+        <? endif; ?>
         <th data-sort="text" class="hidden-small-down"><?= _('Thema') ?></th>
         <th data-sort="text"><?= _('Raum') ?></th>
     </tr>
