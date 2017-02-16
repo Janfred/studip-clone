@@ -190,9 +190,8 @@ class StudipSemTreeSearch {
 
     function getSearchButton($attributes = array())
     {
-        $ret = Icon::create('search', 'clickable', ['title' => _('Suche nach Studienbereichen starten')])->asInput(["type" => "image", "class" => "middle", "name" => "{
-$this->form_name}
-_do_search"]);
+        $ret = Icon::create('search', 'clickable', ['title' => _('Suche nach Studienbereichen starten')])
+                ->asInput(["type" => "image", "class" => "middle", "name" => $this->form_name . "_do_search"]);
 
         return $ret;
     }
