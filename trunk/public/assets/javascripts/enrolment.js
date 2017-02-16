@@ -91,6 +91,10 @@ STUDIP.enrollment = function () {
             canHideElement = valid;
         },
         stop: function (event, ui) {
+            ui.helper.css({
+                    "width" : "auto",
+                    "height" : "20px"
+            });
             if (canHideElement) {
                 element.removeClass('visible').hide();
             }
