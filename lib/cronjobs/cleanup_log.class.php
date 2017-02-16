@@ -59,13 +59,13 @@ class CleanupLogJob extends CronJob
         return array(
             'cronjobs' => array(
                 'type'        => 'boolean',
-                'default'     => false,
+                'default'     => true,
                 'status'      => 'optional',
                 'description' => _('Sollen die Logeinträge für Cronjobs auch gelöscht werden'),
             ),
             'cronjobs-success' => array(
                 'type'        => 'integer',
-                'default'     => 1,
+                'default'     => 7,
                 'status'      => 'optional',
                 'description' => _('Nach wievielen Tagen sollen Logeinträge für '
                                   .'erfolgreiche Cronjobs gelöscht werden (0 für nie)'),
