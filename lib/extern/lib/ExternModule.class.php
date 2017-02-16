@@ -100,8 +100,10 @@ class ExternModule {
 
         // the "Main"-element is included in every module and needs information
         // about the data this module handles with
-        $this->elements["Main"] = ExternElementMain::GetInstance($module_name,
-                $this->data_fields, $this->field_names, $this->config);
+        $this->elements["Main"] = ExternElementMain::GetInstance(
+            $this->config, $module_name,
+            $this->data_fields, $this->field_names
+        );
 
         // instantiate the registered elements
         foreach ($this->registered_elements as $name => $registered_element) {
