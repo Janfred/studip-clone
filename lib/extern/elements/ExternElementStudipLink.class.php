@@ -117,7 +117,7 @@ class ExternElementStudipLink extends ExternElement {
         return  $element_headline . $out;
     }
 
-    function toString ($args) {
+    function toString ($args = null) {
         $out = "<table width=\"{$args['width']}\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n";
         $out .= "<tr>";
         $out .= "<td height=\"{$args['height']}\" width=\"100%\" align=\""

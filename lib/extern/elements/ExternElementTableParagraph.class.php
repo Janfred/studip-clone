@@ -57,7 +57,7 @@ class ExternElementTableParagraph extends ExternElement {
         $this->description = _("Der Absatz wird mit Hilfe einer Tabelle aufgebaut.");
     }
     
-    function toString ($args) {
+    function toString ($args = null) {
         return "\n" . $this->config->getTag($this->name, "table") . $args["content"]
                 . "</table>";
     }

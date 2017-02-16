@@ -93,7 +93,7 @@ class ExternElementList extends ExternElement {
             return !preg_match("|^\d{0,3}$|", $value);
     }
     
-    function toString ($args) {
+    function toString ($args = null) {
         if ($args["level"] == "list") {
             if ($this->config->getValue($this->name, "margin")) {
                 $out = "\n<div style=\"margin-left:" . $this->config->getValue($this->name, "margin");

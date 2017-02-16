@@ -132,7 +132,7 @@ class ExternElementLecturesInnerTable extends ExternElement {
         return $out;
     }
     
-    function toString ($args) {
+    function toString ($args = null) {
         static $zebra = 0;
         
         $show_time = $this->config->getValue("Main", "time");

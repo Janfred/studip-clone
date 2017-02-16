@@ -92,7 +92,7 @@ class ExternElementContentNews extends ExternElement {
         return $out;
     }
     
-    function toString ($args) {
+    function toString ($args = null) {
         $font_topic = $this->config->getAttributes($this->name, "fonttopic");
         $font_body = $this->config->getAttributes($this->name, "fontbody");
         

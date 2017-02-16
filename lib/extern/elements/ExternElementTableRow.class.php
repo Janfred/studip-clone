@@ -58,7 +58,7 @@ class ExternElementTableRow extends ExternElement {
         $this->description = _("Angaben zur Formatierung einer Datenzeile.");
     }
     
-    function toString ($args) {
+    function toString ($args = null) {
         static $i = 0;
         static $j = 0;
         

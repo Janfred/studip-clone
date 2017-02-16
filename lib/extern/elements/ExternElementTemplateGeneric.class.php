@@ -108,7 +108,7 @@ class ExternElementTemplateGeneric extends ExternElement {
         return  $element_headline . $out;
     }
 
-    function toString ($args) {
+    function toString ($args = null) {
         $template = $this->config->getValue($this->getName(), 'template');
         $template = preg_replace(
             array('/###([\w-]+)###/', '/<!--\s+BEGIN\s+([\w-]+)\s+-->/', '/<!--\s+END\s+[\w-]+\s+-->/'),
