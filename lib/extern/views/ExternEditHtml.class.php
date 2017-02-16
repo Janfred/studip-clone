@@ -65,7 +65,7 @@ class ExternEditHtml extends ExternEditGeneric {
             $error_sign = "";
 
         $out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
-        $out .= "<tr" . $this->css->getFullClass() . "><td{$this->width_1}>";
+        $out .= "<tr><td{$this->width_1}>";
         $out .= "<font size=\"2\">";
         $out .= _("Zeilenhöhe:");
         $out .= "</font></td>\n";
@@ -74,7 +74,6 @@ class ExternEditHtml extends ExternEditGeneric {
         $out .= "</font>";
         $out .= tooltipIcon($info);
         $out .= "$error_sign</td></tr>\n</table>\n</td></tr>\n";
-        $this->css->switchClass();
 
         return $out;
     }
@@ -97,7 +96,7 @@ class ExternEditHtml extends ExternEditGeneric {
             $error_sign = "";
 
         $out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
-        $out .= "<tr" . $this->css->getFullClass() . "><td{$this->width_1}>";
+        $out .= "<tr><td{$this->width_1}>";
         $out .= "<font size=\"2\">";
         $out .= _("Rahmendicke:");
         $out .= "</font></td>\n";
@@ -106,7 +105,6 @@ class ExternEditHtml extends ExternEditGeneric {
         $out .= "</font>";
         $out .= tooltipIcon($info);
         $out .= "$error_sign</td></tr>\n</table>\n</td></tr>\n";
-        $this->css->switchClass();
 
         return $out;
     }
@@ -303,7 +301,7 @@ class ExternEditHtml extends ExternEditGeneric {
             $error_sign = "";
 
         $out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
-        $out .= "<tr" . $this->css->getFullClass() . "><td{$this->width_1}>";
+        $out .= "<tr><td{$this->width_1}>";
         $out .= "<font size=\"2\">$title</font></td>\n";
         $out .= "<td{$this->width_2} nowrap=\"nowrap\">\n";
         $out .= "<input type=\"text\" name=\"$form_name\" size=\"20\"";
@@ -329,7 +327,6 @@ class ExternEditHtml extends ExternEditGeneric {
 
         $out .= tooltipIcon($info);
         $out .= "$error_sign</td></tr>\n</table>\n</td></tr>\n";
-        $this->css->switchClass();
 
         return $out;
     }
@@ -352,7 +349,7 @@ class ExternEditHtml extends ExternEditGeneric {
             $error_sign = "";
 
         $out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
-        $out .= "<tr" . $this->css->getFullClass() . "><td{$this->width_1}>";
+        $out .= "<tr><td{$this->width_1}>";
         $out .= "<font size=\"2\">";
         $out .= _("Cellpadding:");
         $out .= "</font></td>\n";
@@ -361,7 +358,6 @@ class ExternEditHtml extends ExternEditGeneric {
         $out .= "</font>";
         $out .= tooltipIcon($info);
         $out .= "$error_sign</td></tr>\n</table>\n</td></tr>\n";
-        $this->css->switchClass();
 
         return $out;
     }
@@ -384,7 +380,7 @@ class ExternEditHtml extends ExternEditGeneric {
             $error_sign = "";
 
         $out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
-        $out .= "<tr" . $this->css->getFullClass() . "><td{$this->width_1}>";
+        $out .= "<tr><td{$this->width_1}>";
         $out .= "<font size=\"2\">";
         $out .= _("Cellspacing:");
         $out .= "</font></td>\n";
@@ -393,7 +389,6 @@ class ExternEditHtml extends ExternEditGeneric {
         $out .= "</font>";
         $out .= tooltipIcon($info);
         $out .= "$error_sign</td></tr>\n</table>\n</td></tr>\n";
-        $this->css->switchClass();
 
         return $out;
     }
@@ -422,7 +417,7 @@ class ExternEditHtml extends ExternEditGeneric {
             $error_sign = "";
 
         $out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
-        $out .= "<tr" . $this->css->getFullClass() . "><td{$this->width_1}><font size=\"2\">";
+        $out .= "<tr><td{$this->width_1}><font size=\"2\">";
         $out .= _("Breite:");
         $out .= "</font></td>\n";
         $out .= "<td{$this->width_2} nowrap=\"nowrap\"><input type=\"text\" name=\"$form_name\" size=\"3\"";
@@ -442,7 +437,6 @@ class ExternEditHtml extends ExternEditGeneric {
         $out .= "&nbsp; &nbsp;</font>\n";
         $out .= tooltipIcon($info);
         $out .= "$error_sign</td></tr>\n</table>\n</td></tr>\n";
-        $this->css->switchClass();
 
         return $out;
     }
@@ -471,7 +465,7 @@ class ExternEditHtml extends ExternEditGeneric {
             $error_sign = "";
 
         $out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
-        $out .= "<tr" . $this->css->getFullClass() . "><td{$this->width_1}><font size=\"2\">";
+        $out .= "<tr><td{$this->width_1}><font size=\"2\">";
         $out .= _("horizontale Ausrichtung:");
         $out .= "</font></td>\n";
         $out .= "<td{$this->width_2} nowrap=\"nowrap\"><select name=\"$form_name\" size=\"1\">\n";
@@ -486,7 +480,6 @@ class ExternEditHtml extends ExternEditGeneric {
         $out .= "</select>\n";
         $out .= tooltipIcon($info);
         $out .= "$error_sign</td></tr>\n</table>\n</td></tr>\n";
-        $this->css->switchClass();
 
         return $out;
     }
@@ -515,7 +508,7 @@ class ExternEditHtml extends ExternEditGeneric {
             $error_sign = "";
 
         $out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
-        $out .= "<tr" . $this->css->getFullClass() . "><td{$this->width_1}><font size=\"2\">";
+        $out .= "<tr><td{$this->width_1}><font size=\"2\">";
         $out .= _("vertikale Ausrichtung:");
         $out .= "</font></td>\n";
         $out .= "<td{$this->width_2} nowrap=\"nowrap\"><select name=\"$form_name\" size=\"1\">\n";
@@ -530,7 +523,6 @@ class ExternEditHtml extends ExternEditGeneric {
         $out .= "</select>\n";
         $out .= tooltipIcon($info);
         $out .= "$error_sign</td></tr>\n</table>\n</td></tr>\n";
-        $this->css->switchClass();
 
         return $out;
     }
