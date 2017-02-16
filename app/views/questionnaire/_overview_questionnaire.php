@@ -1,6 +1,8 @@
 <tr id="questionnaire_<?= $questionnaire->getId() ?>">
     <td>
-        <?= htmlReady($questionnaire['title']) ?>
+        <a href="<?= URLHelper::getLink("dispatch.php/questionnaire/evaluate/".$questionnaire->getId()) ?>" data-dialog>
+            <?= htmlReady($questionnaire['title']) ?>
+        </a>
         <span>
             <?
             $icons = [];
