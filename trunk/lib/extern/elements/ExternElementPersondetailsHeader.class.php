@@ -150,7 +150,7 @@ class ExternElementPersondetailsHeader extends ExternElement {
         return $element_headline . $out;
     }
     
-    function toString ($args) {
+    function toString ($args = null) {
         if (!$args["main_module"])
             $args["main_module"] = "Main";
         

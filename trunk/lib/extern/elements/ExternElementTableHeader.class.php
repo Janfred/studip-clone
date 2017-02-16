@@ -58,7 +58,7 @@ class ExternElementTableHeader extends ExternElement {
         $this->description = _("Angaben zur Gestaltung der Tabelle.");
     }
     
-    function toString ($args) {
+    function toString ($args = null) {
         $out = "\n" . $this->config->getTag($this->name, "table") . "\n";
         $out .= $args["content"] . "</table>\n";
         

@@ -90,7 +90,7 @@ class ExternElementTableParagraphSubHeadline extends ExternElement {
         return  $element_headline . $out;
     }
     
-    function toString ($args) {
+    function toString ($args = null) {
         $out = $args["content"];
         if ($attributes_font = $this->config->getAttributes($this->name, "font"))
             $out = "<font$attributes_font>$out</font>";

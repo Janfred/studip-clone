@@ -58,7 +58,7 @@ class ExternElementTableGroup extends ExternElement {
         $this->description = _("Gruppenüberschriften sind Tabellenzeilen, die eine neue Gruppe einleiten.");
     }
     
-    function toString ($args) {
+    function toString ($args = null) {
         if (!$args["main_module"])
             $args["main_module"] = "Main";
         if (isset($args["colspan"]))

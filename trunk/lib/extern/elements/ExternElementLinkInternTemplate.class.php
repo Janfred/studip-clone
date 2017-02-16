@@ -84,7 +84,7 @@ class ExternElementLinkInternTemplate extends ExternElementLinkIntern {
         return $element_headline . $out;
     }
     
-    function toString ($args) {
+    function toString ($args = null) {
         
         return $this->createUrl($args);
     }

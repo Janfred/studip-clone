@@ -56,7 +56,7 @@ class ExternElementBody extends ExternElement {
         $this->description = _("Eigenschaften des Seitenkörpers (HTML-Tag &gt;body&lt;).");
     }
     
-    function toString ($args) {
+    function toString ($args = null) {
         $out = "\n" . $this->config->getTag($this->name, "body");
         $out .= $args["content"] . "</body>\n";
         

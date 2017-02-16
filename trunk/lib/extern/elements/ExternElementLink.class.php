@@ -56,7 +56,7 @@ class ExternElementLink extends ExternElement {
         $this->description = _("Eigenschaften der Schrift für Links.");
     }
     
-    function toString ($args) {
+    function toString ($args = null) {
         // to set the color of the font in the style-attribute of the a-tag
         if ($color = $this->config->getValue($this->name, "font_color")) {
             $style = $this->config->getValue($this->name, "a_style");

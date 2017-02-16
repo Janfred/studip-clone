@@ -131,7 +131,7 @@ class ExternElementLinkInternSimple extends ExternElement {
             return preg_match("|^https?://.*$|i", $value);
     }
     
-    function toString ($args) {
+    function toString ($args = null) {
         if (!$args["main_module"]) {
             $args["main_module"] = "Main";
         }
