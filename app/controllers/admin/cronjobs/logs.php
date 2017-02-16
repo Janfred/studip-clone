@@ -99,8 +99,8 @@ class Admin_Cronjobs_LogsController extends AuthenticatedController
 
         if (!empty($filter['status'])) {
             $conditions[] = ($filter['status'] === 'passed')
-                          ? "IFNULL(exception, 'N;') = 'N;'"
-                          : "IFNULL(exception, 'N;') != 'N;'";
+                          ? "exception IS NULL"
+                          : "exception IS NOT NULL";
         }
 
         if (!empty($filter['schedule_id'])) {
