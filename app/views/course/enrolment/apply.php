@@ -12,7 +12,7 @@
     <form name="apply_admission" action="<?= $controller->link_for('/apply/' . $course_id) ?>" method="post">
         <?= $admission_form ?>
         <div data-dialog-button>
-        <?= Studip\Button::createAccept(_("OK"), 'apply', array('data-dialog' => '')) ?>
+        <?= Studip\Button::createAccept(_("OK"), 'apply', array('data-dialog' => 'size=big')) ?>
         <?= Studip\Button::createCancel(_("Abbrechen"), 'cancel') ?>
         </div>
         <?= CSRFProtection::tokenTag() ?>
@@ -23,13 +23,13 @@
     <? if (is_array($priocourses)): ?>
         <?= $this->render_partial('course/enrolment/_priocourses.php') ?>
         <div data-dialog-button>
-        <?= Studip\Button::createAccept(_("Speichern"), 'claim', array('data-dialog' => '')) ?>
+            <?= Studip\Button::createAccept(_("Speichern"), 'claim', array('data-dialog' => 'size=big')) ?>
         </div>
     <? else : ?>
         <? if (!$already_claimed) :?>
-            <?= \Studip\Button::createAccept(_("Zur Platzverteilung anmelden"), 'claim', array('data-dialog' => '')); ?>
+                <?= \Studip\Button::createAccept(_("Zur Platzverteilung anmelden"), 'claim', array('data-dialog' => 'size=big')); ?>
         <? else : ?>
-            <?= \Studip\Button::createCancel(_("Von der Platzverteilung abmelden"), 'claim', array('data-dialog' => '')); ?>
+                <?= \Studip\Button::createCancel(_("Von der Platzverteilung abmelden"), 'claim', array('data-dialog' => 'size=big')); ?>
         <? endif ?>
         <input type="hidden" name="courseset_claimed" value="<?= ($already_claimed ? '0' : '1') ?>" >
         <div>

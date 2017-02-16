@@ -168,7 +168,7 @@ class Course_DetailsController extends AuthenticatedController
                 }
                 $links->addLink($abo_msg,
                     URLHelper::getScriptLink("dispatch.php/course/enrolment/apply/" . $this->course->id), Icon::create('door-enter', 'clickable'),
-                    array('data-dialog' => ''));
+                    array('data-dialog' => 'size=big'));
 
             }
 

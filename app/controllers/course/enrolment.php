@@ -62,9 +62,6 @@ class Course_EnrolmentController extends AuthenticatedController
         }
         PageLayout::setTitle($course->getFullname() . " - " . _("Veranstaltungsanmeldung"));
         PageLayout::addSqueezePackage('enrolment');
-        if (Request::isXhr()) {
-            $this->response->add_header('X-No-Buttons', 1);
-        }
         if (Request::submitted('cancel')) {
             $this->redirect(URLHelper::getURL('dispatch.php/course/details/', array('sem_id' => $this->course_id)));
         }
