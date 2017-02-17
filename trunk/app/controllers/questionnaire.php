@@ -121,8 +121,10 @@ class QuestionnaireController extends AuthenticatedController
             }
             if (Request::submitted("questionnaire_store")) {
                 //save everything
-                $this->questionnaire['user_id'] = $GLOBALS['user']->id;
                 $is_new = $this->questionnaire->isNew();
+                if ($is_new) {
+                    $this->questionnaire['user_id'] = $GLOBALS['user']->id;
+                }
                 $this->questionnaire->store();
 
                 if ($is_new && Request::get("range_id") && Request::get("range_type")) {
@@ -148,20 +150,16 @@ class QuestionnaireController extends AuthenticatedController
                     $this->questionnaire->restore();
                     $this->questionnaire->resetRelation("assignments");
                     $output = array(
-                        'func' => "STUDIP.Questionnaire.updateOverviewQuestionnaire",
-                        'payload' => array(
                             'questionnaire_id' => $this->questionnaire->getId(),
                             'overview_html' => $this->render_template_as_string("questionnaire/_overview_questionnaire.php"),
                             'widget_html' => $this->questionnaire->isStarted()
                                 ? $this->render_template_as_string("questionnaire/_widget_questionnaire.php")
                                 : "",
-                            'message' => $this->questionnaire->isStarted()
-                                ? ""
-                                : $message->__toString()
-                        )
+                            'message' => $message->__toString()
                     );
                     $this->response->add_header("X-Dialog-Close", 1);
-                    $this->response->add_header("X-Dialog-Execute", json_encode(studip_utf8encode($output)));
+                    $this->response->add_header("X-Dialog-Execute", "STUDIP.Questionnaire.updateOverviewQuestionnaire");
+                    $this->render_json($output);
                 } else {
                     PageLayout::postMessage($message);
                     if (Request::get("range_type") === "user") {
@@ -175,6 +173,7 @@ class QuestionnaireController extends AuthenticatedController
                     }
                 }
             }
+            return;
         }
         if ($this->questionnaire->isNew() && count($this->questionnaire->questions) === 0) {
             $question = new Vote();

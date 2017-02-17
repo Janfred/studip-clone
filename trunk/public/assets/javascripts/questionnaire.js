@@ -34,6 +34,7 @@ STUDIP.Questionnaire = {
                 jQuery("#questionnaire_overview .noquestionnaires").remove();
             }
             if (data.message) {
+                jQuery(".messagebox").hide();
                 jQuery("#layout_content").prepend(data.message);
             }
         }
@@ -53,6 +54,7 @@ STUDIP.Questionnaire = {
                 }
             } else {
                 if (data.message) {
+                    jQuery(".messagebox").hide();
                     jQuery("#layout_content").prepend(data.message);
                     jQuery.scrollTo("#layout_content", 400);
                 }
