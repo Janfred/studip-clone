@@ -388,7 +388,7 @@ class Seminar_Session
     function thaw()
     {
         if ($this->module == 'user') {
-            return $this->that->ac_get_value(session_id(), $this->name);
+            return $this->that->ac_get_value(session_id(), $this->name) ?: '';
         }
         return '';
     }
