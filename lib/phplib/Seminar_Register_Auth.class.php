@@ -27,14 +27,7 @@ class Seminar_Register_Auth extends Seminar_Auth
      */
     function auth_registerform()
     {
-        // set up dummy user environment
-        if ($GLOBALS['user']->id !== 'nobody') {
-            $GLOBALS['user'] = new Seminar_User('nobody');
-            $GLOBALS['perm'] = new Seminar_Perm();
-            $GLOBALS['auth'] = $this;
-        }
-        // set up user session
-        include 'lib/seminar_open.php';
+        $this->check_environment();
 
         if (!$_COOKIE[get_class($GLOBALS['sess'])]) {
             $register_template = $GLOBALS['template_factory']->open('nocookies');
@@ -69,16 +62,9 @@ class Seminar_Register_Auth extends Seminar_Auth
      */
     function auth_doregister()
     {
-        global $_language_path;
+        $this->check_environment();
 
         $this->error_msg = "";
-
-        // check for direct link to register2.php
-        if (!$_SESSION['_language'] || $_SESSION['_language'] == "") {
-            $_SESSION['_language'] = get_accepted_languages();
-        }
-
-        $_language_path = init_i18n($_SESSION['_language']);
 
         $this->auth["uname"] = Request::username('username'); // This provides access for "crcregister.ihtml"
 
@@ -187,7 +173,7 @@ class Seminar_Register_Auth extends Seminar_Auth
      *
      * @param User $user a user-object or id of the user
      *                   to resend the validation mail for
-     * 
+     *
      * @return void
      */
     public static function sendValidationMail($user){
