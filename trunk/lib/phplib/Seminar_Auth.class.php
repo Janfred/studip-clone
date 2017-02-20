@@ -283,6 +283,8 @@ class Seminar_Auth
         // is Single Sign On activated?
         if (($provider = Request::option('sso'))) {
 
+            $this->check_environment();
+
             Metrics::increment('core.sso_login.attempted');
 
             // then do login
@@ -320,28 +322,8 @@ class Seminar_Auth
             }
             throw new AccessDeniedException();
         }
-        // first of all init I18N because seminar_open is not called here...
-        global $_language_path;
 
-        // set up dummy user environment
-        if ($GLOBALS['user']->id !== 'nobody') {
-            $GLOBALS['user'] = new Seminar_User('nobody');
-            $GLOBALS['perm'] = new Seminar_Perm();
-            $GLOBALS['auth'] = $this;
-        }
-
-        if (!($_SESSION['_language'])) {
-            $_SESSION['_language'] = get_accepted_languages();
-        }
-        if (!$_SESSION['_language']) {
-            $_SESSION['_language'] = $GLOBALS['DEFAULT_LANGUAGE'];
-        }
-        // init of output via I18N
-        $_language_path = init_i18n($_SESSION['_language']);
-        include 'config.inc.php';
-
-        // load the default set of plugins
-        PluginEngine::loadPlugins();
+        $this->check_environment();
 
         if (Request::get('loginname') && !$_COOKIE[get_class($GLOBALS['sess'])]) {
             $login_template = $GLOBALS['template_factory']->open('nocookies');
@@ -375,20 +357,12 @@ class Seminar_Auth
      */
     function auth_validatelogin()
     {
-        global $_language_path;
-
         //prevent replay attack
         if (!Seminar_Session::check_ticket(Request::option('login_ticket'))) {
             return false;
         }
 
-        // check for direct link
-        if (!($_SESSION['_language']) || $_SESSION['_language'] == "") {
-            $_SESSION['_language'] = get_accepted_languages();
-        }
-
-        $_language_path = init_i18n($_SESSION['_language']);
-        include 'config.inc.php';
+        $this->check_environment();
 
         $this->auth["uname"] = Request::get('loginname'); // This provides access for "loginform.ihtml"
         $this->auth["jscript"] = Request::get('resolution') != "";
@@ -437,5 +411,28 @@ class Seminar_Auth
             // we found a stored setting for preferred language
             $_SESSION['_language'] = $user->preferred_language;
         }
+    }
+
+    /**
+     * setup dummy user environment
+     */
+    function check_environment()
+    {
+        global $_language_path;
+
+        if ($GLOBALS['user']->id !== 'nobody') {
+            $GLOBALS['user'] = new Seminar_User('nobody');
+            $GLOBALS['perm'] = new Seminar_Perm();
+            $GLOBALS['auth'] = $this;
+        }
+
+        $_SESSION['_language'] = $_SESSION['_language'] ?: get_accepted_languages();
+
+        // init of output via I18N
+        $_language_path = init_i18n($_SESSION['_language']);
+        include 'config.inc.php';
+
+        // load the default set of plugins
+        PluginEngine::loadPlugins();
     }
 }
