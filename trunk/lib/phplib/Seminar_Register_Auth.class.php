@@ -158,6 +158,8 @@ class Seminar_Register_Auth extends Seminar_Auth
         if ($new_user->user_id) {
             self::sendValidationMail($new_user);
             $this->auth["perm"] = $new_user->perms;
+            $this->auth["uname"] = $new_user->username;
+            $this->auth["auth_plugin"] = $new_user->auth_plugin;
             return $new_user->user_id;
         }
     }
