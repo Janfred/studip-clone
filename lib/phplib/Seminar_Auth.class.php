@@ -122,6 +122,7 @@ class Seminar_Auth
                     $this->auth["uid"] = $uid;
                     $sess->regenerate_session_id(array('auth', '_language', 'phpCAS'));
                     $sess->freeze();
+                    $GLOBALS['user'] = new Seminar_User($this->auth['uid']);
                     return true;
                 }
 
@@ -171,6 +172,7 @@ class Seminar_Auth
                             $this->auth["uid"] = $uid;
                             $sess->regenerate_session_id(array('auth', 'forced_language', '_language'));
                             $sess->freeze();
+                            $GLOBALS['user'] = new Seminar_User($this->auth['uid']);
                             return true;
                         } else {
                             $this->auth_loginform();
@@ -182,6 +184,7 @@ class Seminar_Auth
                     case "reg":
                         if ($uid = $this->auth_doregister()) {
                             $this->auth["uid"] = $uid;
+                            $GLOBALS['user'] = new Seminar_User($this->auth['uid']);
                             return true;
                         } else {
                             $this->auth_registerform();
@@ -245,9 +248,6 @@ class Seminar_Auth
             $this->nobody = false; # We are forcing login, so default auth is
             # disabled
             $this->start(); # Call authentication code
-            if (is_object($GLOBALS['user'])) {
-                $GLOBALS['user'] = new Seminar_User($this->auth['uid']);
-            }
         }
         return true;
     }
