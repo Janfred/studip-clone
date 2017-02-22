@@ -324,6 +324,8 @@ class Seminar_Auth
         }
 
         $this->check_environment();
+        // load the default set of plugins
+        PluginEngine::loadPlugins();
 
         if (Request::get('loginname') && !$_COOKIE[get_class($GLOBALS['sess'])]) {
             $login_template = $GLOBALS['template_factory']->open('nocookies');
@@ -432,7 +434,6 @@ class Seminar_Auth
         $_language_path = init_i18n($_SESSION['_language']);
         include 'config.inc.php';
 
-        // load the default set of plugins
-        PluginEngine::loadPlugins();
+
     }
 }
