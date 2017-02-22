@@ -97,6 +97,8 @@ if ($auth->is_authenticated() && is_object($user) && $user->id != "nobody") {
             $seminar_open_redirected = TRUE;
         }
         $user_did_login = true;
+        //reinit navigation because plugins during login procedure eventually done this as nobody
+        Navigation::setRootNavigation(new StudipNavigation(''));
     }
 }
 
