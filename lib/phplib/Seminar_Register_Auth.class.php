@@ -28,6 +28,8 @@ class Seminar_Register_Auth extends Seminar_Auth
     function auth_registerform()
     {
         $this->check_environment();
+        // load the default set of plugins
+        PluginEngine::loadPlugins();
 
         if (!$_COOKIE[get_class($GLOBALS['sess'])]) {
             $register_template = $GLOBALS['template_factory']->open('nocookies');
