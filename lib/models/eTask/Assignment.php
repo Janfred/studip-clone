@@ -31,7 +31,7 @@ class Assignment extends \SimpleORMap
         ];
 
         $config['has_many']['attempts'] = [
-            'class_name' => $config['relationTypes']['Assignment'],
+            'class_name' => $config['relationTypes']['Attempt'],
             'assoc_foreign_key' => 'assignment_id',
             'on_delete' => 'delete',
             'on_store' => 'store'
