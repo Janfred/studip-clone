@@ -35,7 +35,7 @@ SQL
         $db->exec(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `etask_task_tags` (
     `task_id` INT(11) NOT NULL,
-    `user_id` INT(11) NULL,
+    `user_id` CHAR(32) NOT NULL,
     `tag` VARCHAR(64) NOT NULL,
     PRIMARY KEY (`task_id`, `user_id`, `tag`)) ENGINE=InnoDB ROW_FORMAT=DYNAMIC
 SQL
@@ -57,7 +57,7 @@ SQL
         $db->exec(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `etask_test_tags` (
     `test_id` INT(11) NOT NULL,
-    `user_id` CHAR(32) NULL,
+    `user_id` CHAR(32) NOT NULL,
     `tag` VARCHAR(64) NOT NULL,
     PRIMARY KEY (`test_id`, `user_id`, `tag`)) ENGINE=InnoDB ROW_FORMAT=DYNAMIC
 SQL
@@ -91,11 +91,11 @@ SQL
 
         $db->exec(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `etask_assignment_ranges` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `assignment_id` int(11) NOT NULL,
-  `range_type` enum('course','global','group','institute','user') COLLATE latin1_german2_ci NOT NULL,
-  `range_id` char(32) COLLATE latin1_german2_ci NOT NULL,
-  `options` text COLLATE latin1_german2_ci NOT NULL,
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `assignment_id` INT(11) NOT NULL,
+  `range_type` ENUM('course','global','group','institute','user') NOT NULL,
+  `range_id` CHAR(32) NOT NULL,
+  `options` TEXT NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `assignment_id` (`assignment_id`,`range_type`,`range_id`)
 ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
