@@ -93,7 +93,9 @@ SQL
         $stmt = $this->db->prepare('SELECT * FROM  `questionnaire_questions`');
         $stmt->execute();
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        while ($record = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            yield $record;
+        }
     }
 
     private function findOwner($questionID)
@@ -112,7 +114,7 @@ SQL
         return $stmt->fetchColumn();
     }
 
-    private function migrateMCAnswers()
+    private function fetchMCAnswers()
     {
         $stmt = $this->db->prepare(<<<'SQL'
 SELECT answer_id, answerdata
@@ -121,9 +123,13 @@ WHERE answerdata LIKE  '%{"answers":%'
 SQL
         );
         $stmt->execute([]);
-        $answers = $stmt->fetchAll(PDO::FETCH_NUM);
+        while ($record = $stmt->fetch(PDO::FETCH_NUM)) {
+            yield $record;
+        }
+    }
 
-
+    private function migrateMCAnswers()
+    {
         $updateStmt = $this->db->prepare(<<<'SQL'
 UPDATE  questionnaire_answers SET answerdata = ? WHERE answer_id = ?
 SQL
@@ -133,7 +139,7 @@ SQL
             return  intval($item) - 1;
         };
 
-        foreach ($answers as $answer) {
+        foreach ($this->fetchMCAnswers() as $answer) {
             list($answerID, $answerData) = $answer;
 
             $data = studip_utf8decode((array)json_decode($answerData, true));
