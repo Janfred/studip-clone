@@ -121,9 +121,9 @@
                         <? endif; ?>
                         <? if (count($gruppe['courses'])) : ?>
                         <ul>  
-                        <? foreach ($gruppe['courses'] as $seminar_id => $course): ?>
+                        <? foreach ($gruppe['courses'] as $course): ?>
                             <li>
-                                <a href="<?= URLHelper::getLink('dispatch.php/course/details', ['sem_id' => $seminar_id]) ?>">
+                                <a href="<?= URLHelper::getLink('dispatch.php/course/details', ['sem_id' => $course->id]) ?>">
                                 <?= htmlReady($course['VeranstaltungsNummer']) . ' - ' . htmlReady($course['Name']) ?>
                                 </a>
                             </li>
