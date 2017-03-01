@@ -30,14 +30,14 @@
                    value="<?= $date->end_time ? strftime('%H:%M', $date->end_time) : '' ?>">
         </label>
     </fieldset>
-    <fieldset class="collapsed">
+    <fieldset>
         <legend><?= _('Raumangaben') ?></legend>
         <? if (Config::get()->RESOURCES_ENABLE && $resList->numberOfRooms()) : ?>
             <label>
-                <input style="display: inline;" type="radio" name="room" value="room"
+                <input type="radio" name="room" value="room"
                        id="room" <?= $date->room_assignment->resource_id ? 'checked' : '' ?>>
 
-                <select name="room_sd" style="display: inline-block; width: 50%; margin-left: 40px" class="single_room">
+                <select name="room_sd" style="display: inline-block; width: 50%;" class="single_room">
                     <option value=""><?= _('Wählen Sie einen Raum aus') ?></option>
                     <? foreach ($resList->resources as $room_id => $room) : ?>
                         <option value="<?= $room_id ?>"
@@ -49,18 +49,17 @@
             </label>
         <? endif; ?>
         <label class="horizontal">
-            <input type="radio" name="room" value="freetext" <?= $date->raum ? 'checked' : '' ?>
-                   style="display: inline">
-            <input style="display: inline-block; width: 50%; margin-left: 40px" type="text"
+            <input type="radio" name="room" value="freetext" <?= $date->raum ? 'checked' : '' ?>>
+            <input style="display: inline-block; width: 50%;" type="text"
                    name="freeRoomText_sd"
                    placeholder="<?= _('Freie Ortsangabe (keine Raumbuchung)') ?>"
                    value="<?= $date->raum ? htmlReady($date->raum) : '' ?>">
         </label>
 
         <label>
-            <input type="radio" name="room" style="display:inline;" value="noroom"
+            <input type="radio" name="room" value="noroom"
                 <?= (!empty($date->room_assignment->resource_id) || !empty($date->raum) ? '' : 'checked') ?>>
-            <span style="display: inline-block; margin-left: 40px"><?= _('Kein Raum') ?></span>
+            <span style="display: inline-block;"><?= _('Kein Raum') ?></span>
         </label>
 
     </fieldset>

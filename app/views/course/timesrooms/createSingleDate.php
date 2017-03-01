@@ -17,6 +17,16 @@
                value="<?= htmlReady(Request::get('end_time')) ?>" required placeholder="HH:mm">
     </label>
 
+    <label for="dateType">
+        <?= _('Art'); ?>
+        <select id="dateType" name="dateType">
+            <? foreach ($GLOBALS['TERMIN_TYP'] as $key => $val) : ?>
+                <option <?= Request::get('dateType') == $key ? 'selected' : '' ?>
+                    value="<?= $key ?>"><?= htmlReady($val['name']) ?></option>
+            <? endforeach ?>
+        </select>
+    </label>
+
     <? if (Config::get()->RESOURCES_ENABLE) : ?>
         <label>
             <?= _('Raum') ?>
@@ -77,15 +87,6 @@
         </label>
     <? endif; ?>
 
-    <label for="dateType">
-        <?= _('Art'); ?>
-        <select id="dateType" name="dateType">
-            <? foreach ($GLOBALS['TERMIN_TYP'] as $key => $val) : ?>
-                <option <?= Request::get('dateType') == $key ? 'selected' : '' ?>
-                    value="<?= $key ?>"><?= htmlReady($val['name']) ?></option>
-            <? endforeach ?>
-        </select>
-    </label>
     <footer data-dialog-button>
         <?= Studip\Button::createAccept(_('Speichern'), 'save') ?>
         <? if (Request::get('fromDialog')) : ?>
