@@ -1615,8 +1615,8 @@ class Seminar
         } else {    // we have a single date
             $termin = new SingleDate($singledate);
             $groups[0]['termin_ids'][$termin->getSingleDateID()] = TRUE;
-            $info[0]['name'] = $termin->toString();
-            $info[0]['raum'] = $termin->resource_id;
+            $info[0]['name']   = $this->getDatesTemplate('dates/date_html', array('date' => $termin));
+            $info[0]['raum']   = $termin->resource_id;
             $info[0]['weekend'] = (date('w', $termin->getStartTime()) == 6 || date('w', $termin->getStartTime()) == 0);
             $first_event = $termin->getStartTime();
         }
