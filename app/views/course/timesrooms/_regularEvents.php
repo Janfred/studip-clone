@@ -26,7 +26,7 @@
                 <header class="<?= $course->getCycleColorClass($metadate_id) ?>">
                     <h1>
                     <? if ($info = $course->getBookedRoomsTooltip($metadate_id)) : ?>
-                        <?= tooltipIcon($info); ?>
+                        <?= tooltipHtmlIcon($info) ?>
                     <? elseif ($course->getCycleColorClass($metadate_id) === 'red'): ?>
                         <?= tooltipIcon(_('Keine Raumbuchungen vorhanden')) ?>
                     <? else: ?>
