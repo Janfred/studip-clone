@@ -725,6 +725,15 @@ class Course_MembersController extends AuthenticatedController
             PageLayout::postMessage(MessageBox::info(sprintf(_('%s Personen waren bereits in der Veranstaltung eingetragen!'), $csv_count_present)));
         }
 
+        if (count($csv_not_found) > 0) {
+            PageLayout::postError(sprintf(_('%s Personen konnten <b>nicht</b> zugeordnet werden!'), htmlReady(join(',', $csv_not_found))));
+        }
+
+        if ($csv_count_contingent_full) {
+            PageLayout::postError(sprintf(_('%s Personen konnten <b>nicht</b> zugeordnet werden, da das ausgewählte Kontingent keine freien Plätze hat.'),
+                $csv_count_contingent_full));
+        }
+
         // redirect to manual assignment
         if ($csv_mult_founds) {
             PageLayout::postMessage(MessageBox::info(sprintf(_('%s Personen konnten <b>nicht eindeutig</b>
@@ -732,14 +741,6 @@ class Course_MembersController extends AuthenticatedController
             $this->flash['csv_mult_founds'] = $csv_mult_founds;
             $this->redirect('course/members/csv_manual_assignment');
             return;
-        }
-        if (count($csv_not_found) > 0) {
-            PageLayout::postError(sprintf(_('%s konnten <b>nicht</b> zugeordnet werden!'), htmlReady(join(',', $csv_not_found))));
-        }
-
-        if ($csv_count_contingent_full) {
-            PageLayout::postError(sprintf(_('%s Personen konnten <b>nicht</b> zugeordnet werden, da das ausgewählte Kontingent keine freien Plätze hat.'),
-                $csv_count_contingent_full));
         }
 
         $this->redirect('course/members/index');
@@ -753,6 +754,9 @@ class Course_MembersController extends AuthenticatedController
     public function csv_manual_assignment_action()
     {
         global $perm;
+
+        Navigation::activateItem('/course/members/view');
+
         // Security. If user not autor, then redirect to index
         if (!$perm->have_studip_perm('tutor', $this->course_id)) {
             throw new AccessDeniedException('Sie sind nicht berechtigt auf diesen Bereich von Stud.IP zuzugreifen.');
