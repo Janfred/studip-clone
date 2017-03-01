@@ -112,13 +112,6 @@ class ExternModuleTemplateNews extends ExternModule {
         $markers['TemplateGeneric'][] = array('###TITLEREAR###', _("Titel des Autors (nachgestellt)."));
         $markers['TemplateGeneric'][] = array('###PERSONDETAIL-HREF###', '');
         $markers['TemplateGeneric'][] = array('###USERNAME###', '');
-        $markers['TemplateGeneric'][] = array('<!-- BEGIN PERSONDETAIL-LINK -->');
-        $markers['TemplateGeneric'][] = array('###LINK_PERSONDETAIL-HREF###', '');
-        $markers['TemplateGeneric'][] = array('###LINK_FULLNAME###', '');
-        $markers['TemplateGeneric'][] = array('###LINK_LASTNAME###', '');
-        $markers['TemplateGeneric'][] = array('###LINK_FIRSTNAME###', '');
-        $markers['TemplateGeneric'][] = array('###LINK_TITLEFRONT###', '');
-        $markers['TemplateGeneric'][] = array('###LINK_TITLEREAR###', '');
         $markers['TemplateGeneric'][] = array('<!-- END SINGLE-NEWS -->', '');
         $markers['TemplateGeneric'][] = array('<!-- END ALL-NEWS -->', _('Ende aller sichtbaren News'));
 
@@ -138,13 +131,6 @@ class ExternModuleTemplateNews extends ExternModule {
         $markers['TemplateGeneric'][] = array('###ARCHIV_TITLEREAR###', _("Titel des Autors (nachgestellt)."));
         $markers['TemplateGeneric'][] = array('###ARCHIV_PERSONDETAIL-HREF###', '');
         $markers['TemplateGeneric'][] = array('###ARCHIV_USERNAME###', '');
-        $markers['TemplateGeneric'][] = array('<!-- BEGIN ARCHIV_PERSONDETAIL-LINK -->');
-        $markers['TemplateGeneric'][] = array('###ARCHIV_LINK_PERSONDETAIL-HREF###', '');
-        $markers['TemplateGeneric'][] = array('###ARCHIV_LINK_FULLNAME###', '');
-        $markers['TemplateGeneric'][] = array('###ARCHIV_LINK_LASTNAME###', '');
-        $markers['TemplateGeneric'][] = array('###ARCHIV_LINK_FIRSTNAME###', '');
-        $markers['TemplateGeneric'][] = array('###ARCHIV_LINK_TITLEFRONT###', '');
-        $markers['TemplateGeneric'][] = array('###ARCHIV_LINK_TITLEREAR###', '');
         $markers['TemplateGeneric'][] = array('<!-- END SINGLE-ARCHIVE-NEWS -->', '');
         $markers['TemplateGeneric'][] = array('<!-- END ALL-ARCHIV-NEWS -->', _('Ende aller archivierten News'));
         $markers['TemplateGeneric'][] = array('<!-- END NEWS -->', '');
@@ -183,9 +169,10 @@ class ExternModuleTemplateNews extends ExternModule {
         $show_date_author = $this->config->getValue("Main", "showdateauthor");
         $i = 1;
         $j = 1;
+        $now = time();
         foreach ($news as $news_id => $news_detail) {
             //aktuelle News ausgeben
-            if (($news_detail['date'] + $news_detail['expire']) >= time())
+            if ($news_detail['date'] < $now && $news_detail['date'] + $news_detail['expire'] > $now)
                 {
                 list($news_content, $admin_msg) = explode("<admin_msg>", $news_detail['body']);
                 if ($news_detail['chdate_uid']){
@@ -222,20 +209,11 @@ class ExternModuleTemplateNews extends ExternModule {
                     $content['NEWS']['ALL-NEWS']['SINGLE-NEWS'][$i]['TITLEREAR'] = ExternModule::ExtHtmlReady($temp['title_rear']);
                     $content['NEWS']['ALL-NEWS']['SINGLE-NEWS'][$i]['USERNAME'] = $temp['username'];
                     $content['NEWS']['ALL-NEWS']['SINGLE-NEWS'][$i]['PERSONDETAIL-HREF'] = $this->elements['LinkInternTemplate']->createUrl(array('link_args' => 'username=' . $temp['username']));
-
-                    if (GetAllStatusgruppen($this->config->range_id, $temp['user_id'], true)) {
-                        $content['NEWS']['ALL-NEWS']['SINGLE-NEWS'][$i]['PERSONDETAIL-LINK']['LINK_PERSONDETAIL-HREF'] = $this->elements['LinkInternTemplate']->createUrl(array('link_args' => 'username=' . $temp['username']));
-                        $content['NEWS']['ALL-NEWS']['SINGLE-NEWS'][$i]['PERSONDETAIL-LINK']['LINK_FULLNAME'] = ExternModule::ExtHtmlReady($temp['fullname']);
-                        $content['NEWS']['ALL-NEWS']['SINGLE-NEWS'][$i]['PERSONDETAIL-LINK']['LINK_FIRSTNAME'] = ExternModule::ExtHtmlReady($temp['Vorname']);
-                        $content['NEWS']['ALL-NEWS']['SINGLE-NEWS'][$i]['PERSONDETAIL-LINK']['LINK_LASTNAME'] = ExternModule::ExtHtmlReady($temp['Nachname']);
-                        $content['NEWS']['ALL-NEWS']['SINGLE-NEWS'][$i]['PERSONDETAIL-LINK']['LINK_TITLEFRONT'] = ExternModule::ExtHtmlReady($temp['title_front']);
-                        $content['NEWS']['ALL-NEWS']['SINGLE-NEWS'][$i]['PERSONDETAIL-LINK']['LINK_TITLEREAR'] = ExternModule::ExtHtmlReady($temp['title_rear']);
-                    }
                 }
                 $i++;
             }
             //archivierte News ausgeben
-            elseif(($news_detail['date'] + $news_detail['expire']) < time())
+            else if ($news_detail['date'] < $now)
             {
                 list($news_content, $admin_msg) = explode("<admin_msg>", $news_detail['body']);
                 if ($news_detail['chdate_uid']){
@@ -272,15 +250,6 @@ class ExternModuleTemplateNews extends ExternModule {
                     $content['NEWS']['ALL-ARCHIV-NEWS']['SINGLE-ARCHIVE-NEWS'][$j]['ARCHIV_TITLEREAR'] = ExternModule::ExtHtmlReady($temp['title_rear']);
                     $content['NEWS']['ALL-ARCHIV-NEWS']['SINGLE-ARCHIVE-NEWS'][$j]['ARCHIV_USERNAME'] = $temp['username'];
                     $content['NEWS']['ALL-ARCHIV-NEWS']['SINGLE-ARCHIVE-NEWS'][$j]['ARCHIV_PERSONDETAIL-HREF'] = $this->elements['LinkInternTemplate']->createUrl(array('link_args' => 'username=' . $temp['username']));
-
-                    if (GetAllStatusgruppen($this->config->range_id, $temp['user_id'], true)) {
-                        $content['NEWS']['ALL-ARCHIV-NEWS']['SINGLE-ARCHIVE-NEWS'][$j]['ARCHIV_PERSONDETAIL-LINK']['ARCHIV_LINK_PERSONDETAIL-HREF'] = $this->elements['LinkInternTemplate']->createUrl(array('link_args' => 'username=' . $temp['username']));
-                        $content['NEWS']['ALL-ARCHIV-NEWS']['SINGLE-ARCHIVE-NEWS'][$j]['ARCHIV_PERSONDETAIL-LINK']['ARCHIV_LINK_FULLNAME'] = ExternModule::ExtHtmlReady($temp['fullname']);
-                        $content['NEWS']['ALL-ARCHIV-NEWS']['SINGLE-ARCHIVE-NEWS'][$j]['ARCHIV_PERSONDETAIL-LINK']['ARCHIV_LINK_FIRSTNAME'] = ExternModule::ExtHtmlReady($temp['Vorname']);
-                        $content['NEWS']['ALL-ARCHIV-NEWS']['SINGLE-ARCHIVE-NEWS'][$j]['ARCHIV_PERSONDETAIL-LINK']['ARCHIV_LINK_LASTNAME'] = ExternModule::ExtHtmlReady($temp['Nachname']);
-                        $content['NEWS']['ALL-ARCHIV-NEWS']['SINGLE-ARCHIVE-NEWS'][$j]['ARCHIV_PERSONDETAIL-LINK']['ARCHIV_LINK_TITLEFRONT'] = ExternModule::ExtHtmlReady($temp['title_front']);
-                        $content['NEWS']['ALL-ARCHIV-NEWS']['SINGLE-ARCHIVE-NEWS'][$j]['ARCHIV_PERSONDETAIL-LINK']['ARCHIV_LINK_TITLEREAR'] = ExternModule::ExtHtmlReady($temp['title_rear']);
-                    }
                 }
                 $j++;
             }
