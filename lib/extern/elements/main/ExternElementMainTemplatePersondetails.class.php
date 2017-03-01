@@ -118,7 +118,7 @@ class ExternElementMainTemplatePersondetails extends ExternElementMain {
         $names = array(_("keine Auswahl"), _("Deutsch"), _("Englisch"));
         $table .= $edit_form->editOptionGeneric("language", $title, $info, $values, $names);
 
-        if (in_array(get_object_type($this->config->range_id), array('fak', 'global'))) {
+        if (in_array(get_object_type($this->config->range_id), array('global'))) {
             $title = _("Nur Lehrende:");
             $info = _("Es werden nur Personen angezeigt, die in einer sichtbaren Veranstaltung des aktuellen Semesters Dozent sind.");
             $values = '1';

@@ -82,7 +82,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
                 'TemplateOwnCategories' => 'TemplateGeneric'
             );
         }
-        if (in_array(get_object_type($range_id), array('fak', 'global'))) {
+        if (in_array(get_object_type($range_id), array('global'))) {
             array_unshift($this->registered_elements, 'SelectInstitutes');
         }
         $this->field_names = array();
@@ -107,7 +107,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
         }
         $this->elements['TemplateLitList']->real_name = _("Template für Literaturlisten");
         $this->elements['TemplateOwnCategories']->real_name = _("Template für eigene Kategorien");
-        if (in_array(get_object_type($this->config->range_id), array('fak', 'global'))) {
+        if (in_array(get_object_type($this->config->range_id), array('global'))) {
             $this->elements['SelectInstitutes']->real_name = _("Einschränkung auf Institute/Einrichtungen");
         }
     }
@@ -264,15 +264,14 @@ class ExternModuleTemplatePersondetails extends ExternModule {
         $row = false;
         $global_view = false;
         $dbv = new DbView();
-        if (in_array(get_object_type($this->config->range_id), array('fak', 'global'))) {
+        if (in_array(get_object_type($this->config->range_id), array('global'))) {
             $global_view = true;
             $selected_item_ids = $this->config->getValue('SelectInstitutes', 'institutesselected');
             // at least one institute has to be selected in the configuration
             if (!is_array($selected_item_ids)) {
-                return array();
-            }
-            // is user lecturer ?
-            if ($this->config->getValue('Main', 'onlylecturers')) {
+                // default to always show user for now
+            } else if ($this->config->getValue('Main', 'onlylecturers')) {
+                // is user lecturer ?
                 $current_semester = get_sem_num(time());
                 $stm = DBManager::get()->prepare(sprintf(
                     "SELECT aum.user_id "
