@@ -282,7 +282,7 @@ switch ($view) {
         $widget = new ActionsWidget();
         $widget->addLink(_('Ressourcen suchen'),
                          URLHelper::getLink('resources.php?view=search&quick_view_mode=no_nav'), Icon::create('search', 'clickable'),
-                         array('onclick' => "windows.open(this.href, '', 'scrollbars=yes,left=10,top=10,width=1000,height=680,resizable=yes');return false;"));
+                         array('onclick' => "window.open(this.href, '', 'scrollbars=yes,left=10,top=10,width=1000,height=680,resizable=yes');return false;"));
         $widget->addLink(_('Nachrichten zu zugewiesenen Anfragen versenden'),
                          URLHelper::getLink('?snd_closed_request_sms=TRUE'), Icon::create('mail', 'clickable'));
         $sidebar->addWidget($widget);
