@@ -78,7 +78,7 @@
     // Display a visible hint that indicates how many characters the user may
     // input if the element has a maxlength restriction.
     function createLengthHint() {
-        $('form.default input[maxlength]:not(.no-hint)').each(function () {
+        $('form.default input[maxlength]:not(.no-hint), form.default textarea[maxlength]:not(.no-hint)').each(function () {
             if ($(this).data('length-hint')) {
                 return;
             }

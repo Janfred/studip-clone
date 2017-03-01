@@ -274,7 +274,7 @@ class Course_MembersController extends AuthenticatedController
         if (!Request::submitted('save') || is_null($course_member)) {
             throw new Trails_Exception(400);
         }
-        $course_member->comment = Request::get('comment');
+        $course_member->comment = preg_replace("/\r\n?/", "\n", Request::get('comment'));
 
         if ($course_member->store() !== false) {
             PageLayout::postSuccess(_('Bemerkung wurde erfolgreich gespeichert.'));
