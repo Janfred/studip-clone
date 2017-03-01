@@ -2168,6 +2168,8 @@ function display_folder ($folder_id, $open, $change, $move, $upload, $refresh=FA
     if ($isissuefolder) {
         $issue_id = $db->query("SELECT range_id FROM folder WHERE folder_id = ".$db->quote($folder_id))->fetch();
         $dates_for_issue = IssueDB::getDatesforIssue($issue_id['range_id']);
+        $issue = new Issue(array('issue_id' => $issue_id['range_id']));
+        $tmp_titel = htmlReady(mila($issue->getTitle()));
         $dates_title = array();
         foreach ($dates_for_issue as $date) {
             $dates_title[] .= date('d.m.y, H:i', $date['date']).' - '.date('H:i', $date['end_time']);
