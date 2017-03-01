@@ -24,14 +24,18 @@
             var proxied = $(this).data('proxyfor');
             $(proxied).filter(':not(:disabled)')
                       .prop('checked', this.checked)
+                      .prop('indeterminate', false)
                       .filter('[data-proxyfor]').trigger('change', [true]);
         }
     }).on('update.proxy', ':checkbox[data-proxyfor]', function () {
         var proxied = $(this).data('proxyfor'),
             $proxied = $(proxied).filter(':not(:disabled)'),
-            $checked = $proxied.filter(':checked');
+            $checked = $proxied.filter(':checked'),
+            $indeterminate = $proxied.filter(function() {
+                return $(this).prop('indeterminate');
+            });
         $(this).prop('checked', $proxied.length > 0 && $proxied.length === $checked.length);
-        $(this).prop('indeterminate', $checked.length > 0 && $checked.length < $proxied.length);
+        $(this).prop('indeterminate', $checked.length > 0 && $checked.length < $proxied.length || $indeterminate.length > 0);
         $(this).trigger('change');
     }).on('change', ':checkbox[data-proxiedby]', function () {
         var proxy = $(this).data('proxiedby');
