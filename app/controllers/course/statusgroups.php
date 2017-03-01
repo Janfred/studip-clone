@@ -591,7 +591,24 @@ class Course_StatusgroupsController extends AuthenticatedController
 
                         $counter = 0;
                         foreach ($cycles as $c) {
-                            $group = StatusgroupsModel::updateGroup('', $c->toString(),
+                            $cd = new CycleData($c);
+
+                            $name = $c->toString();
+
+                            // Append description to group title if applicable.
+                            if ($c->description) {
+                                $name .= ' ' . mila($c->description, 30);
+                            }
+
+                            // Get name of most used room and append to group title.
+                            if ($rooms = $cd->getPredominantRoom()) {
+                                $room_name = DBManager::get()->fetchOne(
+                                    "SELECT `name` FROM `resources_objects` WHERE `resource_id` = ?",
+                                    array(array_pop(array_keys($rooms))));
+                                $name .= ' ' . $room_name['name'];
+                            }
+
+                            $group = StatusgroupsModel::updateGroup('', $name,
                                 $counter + 1, $this->course_id, Request::int('size', 0),
                                 Request::int('selfassign', 0) + Request::int('exclusive', 0),
                                 strtotime(Request::get('selfassign_start', 'now')),
@@ -611,7 +628,19 @@ class Course_StatusgroupsController extends AuthenticatedController
                         $dates = CourseDate::findBySeminar_id($this->course_id);
                         $singledates = array_filter($dates, function ($d) { return !((bool) $d->metadate_id); });
                         foreach ($singledates as $d) {
-                            $group = StatusgroupsModel::updateGroup('', $d->toString(),
+                            $name = $d->toString();
+
+                            // Append description to group title if applicable.
+                            if ($d->description) {
+                                $name .= ' ' . mila($d->description, 30);
+                            }
+
+                            // Get room name and append to group title.
+                            if ($room = $d->getRoomName()) {
+                                $name .= ' (' . $room . ')';
+                            }
+
+                            $group = StatusgroupsModel::updateGroup('', $name,
                                 $counter + 1, $this->course_id, Request::int('size', 0),
                                 Request::int('selfassign', 0) + Request::int('exclusive', 0),
                                 strtotime(Request::get('selfassign_start', 'now')),
