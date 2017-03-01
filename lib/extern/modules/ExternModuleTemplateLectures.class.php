@@ -311,7 +311,7 @@ class ExternSemBrowseTemplate extends SemBrowse {
 
             $dbv = DbView::getView('sem_tree');
 
-            $query = "SELECT seminare.*
+            $query = "SELECT seminare.Seminar_id, seminare.Name, seminare.Untertitel, seminare.VeranstaltungsNummer, seminare.status, seminare.art
                 , Institute.Name AS Institut,Institute.Institut_id,
                 seminar_sem_tree.sem_tree_id AS bereich, " . $GLOBALS['_fullname_sql'][$nameformat] ." AS fullname, auth_user_md5.username, Vorname, Nachname, title_front, title_rear,
                 " . $dbv->sem_number_sql . " AS sem_number, " . $dbv->sem_number_end_sql . " AS sem_number_end,
