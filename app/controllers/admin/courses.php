@@ -1274,7 +1274,7 @@ class Admin_CoursesController extends AuthenticatedController
                     (!$institut['is_fak'] ? ' ' : '') . $institut['Name'],
                     $GLOBALS['user']->cfg->MY_INSTITUTES_DEFAULT === $institut['Institut_id']
                 ),
-                'select-' . $institut['Name']
+                'select-' . $institut['Institut_id']
             );
 
             //check if the institute is a faculty.
