@@ -33,6 +33,33 @@
                    placeholder="HH:mm">
         </label>
 
+        <div id="block_appointments_days">
+            <label><?= _('Die Veranstaltung findet an folgenden Tagen statt') ?></label>
+            <label for="block_appointments_days_0" class="col-2">
+                <input <?= empty($request['block_appointments_days']) || in_array('everyday', $request['block_appointments_days']) ? 'checked' : '' ?>
+                    class="block_appointments_days"
+                    name="block_appointments_days[]" id="block_appointments_days_0" type="checkbox" value="everyday">
+                <?= _('Jeden Tag') ?>
+            </label>
+
+            <label for="block_appointments_days_1" class="col-2">
+                <input <?= in_array('weekdays', (array) $request['block_appointments_days']) ? 'checked ' : '' ?>
+                    class="block_appointments_days"
+                    name="block_appointments_days[]" id="block_appointments_days_1" type="checkbox" value="weekdays">
+                <?= _('Mo-Fr') ?>
+            </label>
+            <? foreach (range(0, 6) as $d) : ?>
+                <? $id = 2 + $d ?>
+                <label for="block_appointments_days_<?= $id ?>" class="col-2">
+                    <input <?= in_array($d+1, (array) $request['block_appointments_days']) ? 'checked ' : '' ?>
+                        class="block_appointments_days"
+                        name="block_appointments_days[]" id="block_appointments_days_<?= $id ?>" type="checkbox"
+                        value="<?= $d + 1 ?>">
+                    <?= strftime('%A', strtotime("+$d day", $start_ts)) ?>
+                </label>
+            <? endforeach ?>
+        </div>
+
     </fieldset>
 
     <fieldset class="collapsed">
@@ -64,33 +91,6 @@
             </select>
         </label>
 
-    </fieldset>
-
-    <fieldset class="collapsed" id="block_appointments_days">
-        <legend><?= _('Die Veranstaltung findet an folgenden Tagen statt') ?></legend>
-        <label for="block_appointments_days_0" class="horizontal" style="font-weight:normal">
-            <input <?= !is_array($request['block_appointments_days']) ? '' : (in_array('everyday', $request['block_appointments_days']) ? 'checked ' : '') ?>
-                class="block_appointments_days"
-                name="block_appointments_days[]" id="block_appointments_days_0" type="checkbox" value="everyday">
-            <?= _('Jeden Tag') ?>
-        </label>
-
-        <label for="block_appointments_days_1" class="horizontal" style="font-weight:normal">
-            <input <?= !is_array($request['block_appointments_days']) ? ( empty($request) ? 'checked' : (in_array('everyday', $request['block_appointments_days']) ? 'checked ' : '')) : '' ?>
-                class="block_appointments_days"
-                name="block_appointments_days[]" id="block_appointments_days_1" type="checkbox" value="weekdays">
-            <?= _('Mo-Fr') ?>
-        </label>
-        <? foreach (range(0, 6) as $d) : ?>
-            <? $id = 2 + $d ?>
-            <label for="block_appointments_days_<?= $id ?>" class="horizontal" style="font-weight: normal">
-                <input <?= !is_array($request['block_appointments_days']) ? '' : (in_array($d+1, $request['block_appointments_days']) ? 'checked ' : '') ?>
-                    class="block_appointments_days"
-                    name="block_appointments_days[]" id="block_appointments_days_<?= $id ?>" type="checkbox"
-                    value="<?= $d + 1 ?>">
-                <?= strftime('%A', strtotime("+$d day", $start_ts)) ?>
-            </label>
-        <? endforeach ?>
     </fieldset>
 
     <footer data-dialog-button>
