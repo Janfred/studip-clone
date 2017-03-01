@@ -54,7 +54,7 @@ class ConnectedUser
     * init class. don't call directly, class is loaded by ConnectedCMS.
     * @access public
     * @param string $cms system-type
-    */ 
+    */
     function __construct($cms, $user_id = false)
     {
         global $auth, $RELATIVE_PATH_ELEARNING_INTERFACE, $ELEARNING_INTERFACE_MODULES;
@@ -63,7 +63,7 @@ class ConnectedUser
         $this->cms_type = $cms;
 
         if ($ELEARNING_INTERFACE_MODULES[$this->cms_type]["RELATIVE_PATH_DB_CLASSES"] != false)
-        {   
+        {
             require_once($RELATIVE_PATH_ELEARNING_INTERFACE . "/" . $ELEARNING_INTERFACE_MODULES[$this->cms_type]["RELATIVE_PATH_DB_CLASSES"] . "/" . $ELEARNING_INTERFACE_MODULES[$this->cms_type]["db_classes"]["user"]["file"] );
             $classname = $ELEARNING_INTERFACE_MODULES[$this->cms_type]["db_classes"]["user"]["classname"];
             $this->db_class = new $classname();
@@ -115,8 +115,8 @@ class ConnectedUser
 
         $query = "SELECT username, password, title_front, title_rear, Vorname, 
                          Nachname, Email, privatnr, privadr, geschlecht
-                  FROM user_info
-                  LEFT JOIN auth_user_md5 USING (user_id)
+                  FROM auth_user_md5
+                  LEFT JOIN  user_info USING (user_id)
                   WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($this->studip_id));
@@ -150,7 +150,6 @@ class ConnectedUser
         if ($this->title_rear != '') {
             $this->title .= $this->title_rear;
         }
-
         return true;
     }
 

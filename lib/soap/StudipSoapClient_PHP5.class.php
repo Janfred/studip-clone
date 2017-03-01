@@ -23,7 +23,7 @@ class StudipSoapClient
         }
     }
 
-    function call($method, $params)
+    function _call($method, $params)
     {
         $result = false;
         if ($this->soap_client instanceOf SoapClient) {

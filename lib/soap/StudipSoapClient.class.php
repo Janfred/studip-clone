@@ -21,7 +21,7 @@ class StudipSoapClient
             $this->error = "<b>Soap Constructor Error</b><br>" . $err . "<br><br>";
     }
 
-    function call($method, $params)
+    function _call($method, $params)
     {
         $this->faultstring = "";
         $result = $this->soap_client->call($method, $params);
