@@ -70,7 +70,7 @@ class LiteratureProvider implements ActivityProvider
             } else {
                 $summary = _('Die Literaturliste %s wurde von %s in der Einrichtung "%s" geändert.');
             }
-        } elseif ($event == 'LitListDidInsert') {
+        } elseif ($event == 'LitListDidCreate') {
             $verb = 'created';
             if ($type == 'sem') {
                 $summary = _('Die Literaturliste %s wurde von %s in der Veranstaltung "%s" erstellt.');

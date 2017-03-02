@@ -13,7 +13,7 @@ class ActivityObserver
 {
     /**
      * Register for Notifications the providers shall respond to
-     * 
+     *
      */
     public static function initialize()
     {
@@ -41,7 +41,7 @@ class ActivityObserver
         \NotificationCenter::addObserver('\Studip\Activity\ScheduleProvider', 'postActivity','CourseDidChangeSchedule');
 
         //Notifications for LiteratureProvider
-        \NotificationCenter::addObserver('\Studip\Activity\LiteratureProvider', 'postActivity','LitListDidInsert');
+        \NotificationCenter::addObserver('\Studip\Activity\LiteratureProvider', 'postActivity','LitListDidCreate');
         \NotificationCenter::addObserver('\Studip\Activity\LiteratureProvider', 'postActivity','LitListDidUpdate');
         \NotificationCenter::addObserver('\Studip\Activity\LiteratureProvider', 'postActivity','LitListDidDelete');
         \NotificationCenter::addObserver('\Studip\Activity\LiteratureProvider', 'postActivity','LitListElementDidInsert');
