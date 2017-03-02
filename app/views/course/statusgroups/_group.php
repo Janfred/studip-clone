@@ -73,15 +73,17 @@
                           ->conditionAll(!$is_locked)
                           ->addMultiPersonSearch(
                               MultiPersonSearch::get('add_statusgroup_member' . $group->id)
-                                  ->setTitle(_('Teilnehmende der Veranstaltung hinzufügen'))
+                                  ->setTitle(_('Personen hinzufügen'))
                                   ->setLinkText(_('Personen hinzufügen'))
                                   ->setSearchObject($memberSearch)
                                   ->setDefaultSelectedUser($group->members->pluck('user_id'))
                                   ->setDataDialogStatus(Request::isXhr())
                                   ->setJSFunctionOnSubmit(Request::isXhr() ?
                                                 'STUDIP.Dialog.close();' : false)
-                                   ->setExecuteURL($controller->url_for('course/statusgroups/add_member/' .
+                                  ->setExecuteURL($controller->url_for('course/statusgroups/add_member/' .
                                                 $group->id))
+                                  ->addQuickfilter(_('Veranstaltungsteilnehmende'),
+                                                $allmembers ? $allmembers->pluck('user_id') : array())
                                   ->addQuickfilter(_('Keiner Gruppe zugeordnete Personen'),
                                                 $no_group ? $no_group['members']->pluck('user_id') : array())
                           )

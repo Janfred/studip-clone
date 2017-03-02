@@ -60,7 +60,7 @@ class Course_StatusgroupsController extends AuthenticatedController
         $this->sort_group = Request::get('sort_group', '');
 
         // Get all course members (needed for mkdate).
-        $allmembers = SimpleCollection::createFromArray(
+        $this->allmembers = SimpleCollection::createFromArray(
             CourseMember::findByCourse($this->course_id));
 
         // Find all statusgroups for this course.
@@ -83,11 +83,11 @@ class Course_StatusgroupsController extends AuthenticatedController
             $groupmembers = $g->members->pluck('user_id');
             if ($this->sort_group == $g->id) {
                 $sorted = StatusgroupsModel::sortGroupMembers(
-                    $allmembers->findBy('user_id', $groupmembers),
+                    $this->allmembers->findBy('user_id', $groupmembers),
                     $this->sort_by, $this->order);
             } else {
                 $sorted = StatusgroupsModel::sortGroupMembers(
-                    $allmembers->findBy('user_id', $groupmembers));
+                    $this->allmembers->findBy('user_id', $groupmembers));
             }
 
             $this->groups[] = array(
@@ -103,7 +103,7 @@ class Course_StatusgroupsController extends AuthenticatedController
         }
 
         // Find course members who are in no group at all.
-        $ungrouped = $allmembers->findBy('user_id', $grouped_users, '!=');
+        $ungrouped = $this->allmembers->findBy('user_id', $grouped_users, '!=');
         if ($ungrouped) {
 
             if ($this->sort_group == 'nogroup') {
@@ -128,11 +128,12 @@ class Course_StatusgroupsController extends AuthenticatedController
 
         // Prepare search object for MultiPersonSearch.
         $this->memberSearch = new PermissionSearch(
-            'user_in_sem',
-            _('Teilnehmende der Veranstaltung suchen'),
+            'user',
+            _('Personen suchen'),
             'user_id',
-            array('seminar_id' => $this->course_id,
-                'sem_perm' => array('user', 'autor', 'tutor', 'dozent')
+            array(
+                'permission' => array('user', 'autor', 'tutor', 'dozent'),
+                'exclude_user' => array()
             )
         );
 
@@ -239,6 +240,15 @@ class Course_StatusgroupsController extends AuthenticatedController
         $fail = 0;
 
         foreach ($mp->getAddedUsers() as $a) {
+
+            if (!CourseMember::exists(array($this->course_id, $a))) {
+                $m = new CourseMember();
+                $m->seminar_id = $this->course_id;
+                $m->user_id = $a;
+                $m->status = User::find($a)->perms == 'user' ? 'user' : 'autor';
+                $m->store();
+            }
+
             $s = new StatusgruppeUser();
             $s->statusgruppe_id = $group_id;
             $s->user_id = $a;
