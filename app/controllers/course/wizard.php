@@ -123,18 +123,18 @@ class Course_WizardController extends AuthenticatedController
                         $message = MessageBox::success(
                             sprintf(_('Die Studien-/Arbeitsgruppe "%s" wurde angelegt. ' .
                                 'Sie können Sie direkt hier weiter verwalten.'),
-                                $this->course->name));
+                                htmlReady($this->course->name)));
                         $target = $this->url_for('course/studygroup/edit/' . $this->course->id . '?cid=' . $this->course->id);
                         // "Normal" course.
                     } else {
                         if (Request::int('dialog')) {
                             $message = MessageBox::success(
-                                sprintf(_('Die Veranstaltung "%s" wurde angelegt.'), $this->course->getFullname()));
+                                sprintf(_('Die Veranstaltung "%s" wurde angelegt.'), htmlReady($this->course->getFullname())));
                             $target = $this->url_for('admin/courses');
                         } else {
                             $message = MessageBox::success(
                                 sprintf(_('Die Veranstaltung "%s" wurde angelegt. Sie können Sie direkt hier weiter verwalten.'),
-                                    $this->course->getFullname()));
+                                    htmlReady($this->course->getFullname())));
                             $target = $this->url_for('course/management?cid=' . $this->course->id);
                         }
                     }
