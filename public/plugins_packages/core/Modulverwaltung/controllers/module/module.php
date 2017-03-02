@@ -211,7 +211,7 @@ class Module_ModuleController extends MVVController
                 $this->modul->flexnow_modul = trim(Request::get('flexnow_modul'));
                 $this->modul->code = trim(Request::get('code'));
                 $this->modul->start = Request::option('start');
-                $this->modul->end = Request::option('end');
+                $this->modul->end = Request::option('end') ?: null;
                 $this->modul->beschlussdatum = strtotime(trim(Request::get('beschlussdatum')));
                 $this->modul->assignLanguagesOfInstruction(
                         Request::optionArray('language_items'));

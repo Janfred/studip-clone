@@ -144,7 +144,7 @@ class Studiengaenge_StudiengaengeController extends MVVController
             $this->institut = Institute::find($this->studiengang->institut_id);
             $this->studiengang->typ = Request::option('stg_typ');
             $this->studiengang->start = Request::option('start');
-            $this->studiengang->end = Request::option('end');
+            $this->studiengang->end = Request::option('end') ?: null;
             $this->studiengang->beschlussdatum =
                     strtotime(trim(Request::get('beschlussdatum')));
             $this->studiengang->fassung_nr = Request::int('fassung_nr');

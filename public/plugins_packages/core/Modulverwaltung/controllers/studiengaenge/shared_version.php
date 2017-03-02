@@ -59,7 +59,7 @@ class SharedVersionController extends MVVController
             $stored = false;
             $this->version->stgteil_id = $this->stgteil->getId();
             $this->version->start_sem = Request::option('start_sem');
-            $this->version->end_sem = Request::option('end_sem');
+            $this->version->end_sem = Request::option('end_sem') ?: null;
             $this->version->code = trim(Request::get('code'));
             $this->version->beschlussdatum =
                     strtotime(trim(Request::get('beschlussdatum')));
