@@ -24,7 +24,7 @@ class ObjectConnections
     * init class.
     * @access public
     * @param string $object_id object-id
-    */ 
+    */
     function __construct($object_id = "")
     {
         $this->id = $object_id;
@@ -41,7 +41,7 @@ class ObjectConnections
     function readData()
     {
         global $ELEARNING_INTERFACE_MODULES;
-        
+
         $this->object_connections = "";
 
         $query = "SELECT system_type, module_type, module_id, chdate
@@ -85,32 +85,37 @@ class ObjectConnections
     {
         return $this->object_connections;
     }
-    
+
     /**
     * get connection-status
     *
     * returns true, if object has connections
     * @access public
-    * @param string $object_id object-id (optional)
     * @return boolean connection-status
     */
-    function isConnected($object_id = NULL)
+    function isConnected()
     {
-        // function call as part of the object
-        if ($this instanceof ObjectConnections)
-        {
-            return (boolean) $this->object_connections;
-        }
-        // direct functioncall without existing instance
+        return (boolean) $this->object_connections;
+    }
+
+    /**
+     * get connection-status
+     *
+     * returns true, if object has connections
+     * @access public
+     * @param string $object_id object-id (optional)
+     * @return boolean connection-status
+     */
+    public static function isObjectConnected($object_id = null)
+    {
         if (isset($object_id)) {
             $query = "SELECT 1 FROM object_contentmodules WHERE object_id = ?";
             $statement = DBManager::get()->prepare($query);
             $statement->execute(array($object_id));
             return (bool)$statement->fetchColumn();
         }
-        return false;
     }
-    
+
     /**
     * get module-id
     *
@@ -247,7 +252,7 @@ class ObjectConnections
         $statement->execute(array($object_id));
         return $statement->fetchAll(PDO::FETCH_COLUMN);
     }
-    
+
     function DeleteAllConnections($object_id, $cms_type)
     {
         $query = "DELETE FROM object_contentmodules

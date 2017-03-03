@@ -32,7 +32,7 @@ class Ilias5ConnectedUser extends Ilias4ConnectedUser
         return false;
     }
 
-    function setConnection($user_type)
+    function setConnection($user_type, $ignore_encrypted_passwords = false)
     {
         $this->external_password = '';
         parent::setConnection($user_type, true);
