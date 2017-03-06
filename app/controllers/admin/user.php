@@ -15,6 +15,7 @@
  * @since       2.1
  */
 require_once 'vendor/email_message/blackhole_message.php';
+require_once 'lib/statusgruppe.inc.php';
 
 /**
  *
