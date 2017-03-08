@@ -434,7 +434,7 @@ class RoomRequest extends SimpleORMap
         //metadate request
         } elseif ($this->metadate_id){
             $query = sprintf("SELECT count(termin_id)=count(assign_id) FROM termine LEFT JOIN resources_assign ON(termin_id=assign_user_id)
-                    WHERE metadate_id=%s" , $db->quote($this->seminar_id));
+                    WHERE metadate_id=%s" , $db->quote($this->metadate_id));
         //seminar request
         } else {
             $query = sprintf("SELECT count(termin_id)=count(assign_id) FROM termine LEFT JOIN resources_assign ON(termin_id=assign_user_id)
