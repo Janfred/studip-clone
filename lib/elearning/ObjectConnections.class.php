@@ -42,7 +42,7 @@ class ObjectConnections
     {
         global $ELEARNING_INTERFACE_MODULES;
 
-        $this->object_connections = "";
+        $this->object_connections = array();
 
         $query = "SELECT system_type, module_type, module_id, chdate
                   FROM object_contentmodules
