@@ -26,77 +26,54 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-use Studip\Button, Studip\LinkButton;
-
 require '../lib/bootstrap.php';
 
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+page_open(array(
+    "sess" => "Seminar_Session",
+    "auth" => "Seminar_Auth",
+    "perm" => "Seminar_Perm",
+    "user" => "Seminar_User"
+));
+
 $perm->check('user');
 
-include ('lib/seminar_open.php'); // initialise Stud.IP-Session
-
+require_once ('lib/seminar_open.php'); // initialise Stud.IP-Session
 require_once ('lib/visual.inc.php');
 
 PageLayout::setHelpKeyword("Basis.SuchenEinrichtungen");
 PageLayout::setTitle(_("Einrichtungssuche"));
 Navigation::activateItem('/search/institutes');
 
+$template = $GLOBALS['template_factory']->open('institute_browse');
+$template->set_layout('layouts/base');
+
 // Start of Output
 ob_start();
-
 $view = DbView::getView('range_tree');
 $the_tree = new StudipRangeTreeView();
 $the_tree->open_ranges['root'] = true;
-if (Request::option('cmd')=="suche"){
-    if (Request::get('search_name') && mb_strlen(Request::get('search_name')) > 1){
-        $view->params[0] = "%" . Request::quoted('search_name') . "%";
-        $view->params[1] = "%" . Request::quoted('search_name') . "%";
-        $rs = $view->get_query("view:TREE_SEARCH_ITEM");
-        while($rs->next_record()){
-            $found_items[] = htmlReady($the_tree->tree->getItemPath($rs->f("item_id")));
-            $the_tree->openItem($rs->f("item_id"));
+$template->tree_view = $the_tree;
+
+// reset the search and show StudipRangeTree
+if (Request::submitted('reset')) {
+    $the_tree->open_ranges['root'] = true;
+} elseif (Request::submitted('search')) {
+    $search_text = Request::get('search_text');
+    if ($search_text && mb_strlen($search_text) > 3){
+        $view->params[0] = "%" . Request::quoted('search_text') . "%";
+        $view->params[1] = "%" . Request::quoted('search_text') . "%";
+        $search_results = $view->get_query("view:TREE_SEARCH_ITEM");
+        $template->search_results = $search_results;
+        while ($search_results->next_record()) {
+            $range_tree_object = new RangeTreeObject($search_results->f("item_id"));
+            $tree_item_ids[] = $range_tree_object->tree_item_id;
         }
+        $template->tree_item_ids = $tree_item_ids;
+        $template->tree = $range_tree_object->tree;
     }
-    if (Request::get('search_user') && mb_strlen(Request::get('search_user')) > 1){
-        $view->params[0] = "%" . Request::quoted('search_user') . "%";
-        $view->params[1] = "%" . Request::quoted('search_user') . "%";
-        $rs = $view->get_query("view:TREE_SEARCH_USER");
-        while($rs->next_record()){
-            $found_items[] = htmlReady($the_tree->tree->getItemPath($rs->f("item_id")));
-            $the_tree->openItem($rs->f("item_id"));
-        }
-    }
-    if (Request::get('search_sem') && mb_strlen(Request::get('search_sem')) > 1){
-        $view->params[0] = "%" . Request::quoted('search_sem') . "%";
-        $rs = $view->get_query("view:TREE_SEARCH_SEM");
-        while($rs->next_record()){
-            $found_items[] = htmlReady($the_tree->tree->getItemPath($rs->f("item_id")));
-            $the_tree->openItem($rs->f("item_id"));
-        }
-    }
-    if (count($found_items)){
-        $message = MessageBox::info(_('Gefundene Einrichtungen:'), $found_items);
-    } else {
-        $message = MessageBox::info(_('Es konnte keine Einrichtung gefunden werden, die Ihrer Suchanfrage entspricht.'));
-    }
-    PageLayout::postMessage($message);
+    $template->search_text = $search_text;
 }
-?>
-<h1><?= _('Suche nach Einrichtungen') ?></h1>
-<?
-$the_tree->showTree();
 
-$sidebar = Sidebar::get();
-$sidebar->setImage('sidebar/institute-sidebar.png');
-
-$search = new SearchWidget('?cmd=suche');
-$search->addNeedle(_('Name der Einrichtung'), 'search_name');
-$search->addNeedle(_('Einrichtung dieses Mitarbeiters'), 'search_user');
-$search->addNeedle(_('Einrichtung dieser Veranstaltung'), 'search_sem');
-$sidebar->addWidget($search);
-
-$template = $GLOBALS['template_factory']->open('layouts/base.php');
-$template->content_for_layout = ob_get_clean();
+// render view
 echo $template->render();
-
 page_close();

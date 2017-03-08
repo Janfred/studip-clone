@@ -4400,6 +4400,25 @@ input.quicksearchbox {
 .ui-autocomplete {
   z-index: 99999;
 }
+#institute_result {
+  background: #e7ebf1;
+  border-top: 1px solid #1f4171;
+  padding: 10px;
+  margin-top: 15px;
+  width: 100%;
+}
+#institute_tree {
+  margin-top: 15px;
+}
+#institute_tree table td.printcontent {
+  padding: 0 10px 20px 10px;
+}
+#institute_result {
+  background: #e7ebf1;
+  border-top: 1px solid #1f4171;
+  padding: 10px;
+  width: 100%;
+}
 /* skiplink-area highlighting -------------------------------------------- */
 #skip_link_navigation {
   background-color: #fff;
