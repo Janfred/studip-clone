@@ -110,61 +110,25 @@ class Step291Questionnaires extends Migration
 
             $questionnaire->store();
 
-            //Tests und Umfragen anlegen
-            if ($vote['type'] === "vote") {
-                $question = new Vote();
-                $question['questiontype'] = "Vote";
-            } else {
-                $question = new Test();
-                $question['questiontype'] = "Test";
-            }
-            $questiondata = array();
-            $question['questionnaire_id'] = $questionnaire->getId();
-            $question['chdate'] = $vote['chdate'];
-            $question['mkdate'] = $vote['mkdate'];
-            $questiondata['multiplechoice'] = $vote['multiplechoice'];
-            $questiondata['question'] = $vote['question'];
-            $question['position'] = 1;
-
-            //Antwortmöglichkeiten vorsehen:
-            $options_statement = DBManager::get()->prepare("
-                SELECT *
-                FROM voteanswers
-                WHERE vote_id = ?
-                ORDER BY position ASC
-            ");
-            $options_statement->execute(array($vote['vote_id']));
-            $options = $options_statement->fetchAll(PDO::FETCH_ASSOC);
-            $mapping = array();
-            $counter = array();
-            foreach ($options as $key => $option) {
-                $questiondata['options'][] = $option['answer'];
-                $mapping[$option['answer_id']] = $key + 1;
-                $counter[$option['answer_id']] = $option['counter'];
-                if (($vote['type'] === "test") && $option['correct']) {
-                    $questiondata['correctanswer'][] = $key + 1;
-                }
-            }
-            $question['questiondata'] = $questiondata;
-            $question->store();
+            $question = $this->createQuestion($questionnaire->id, $vote);
 
             //Bestehende Antworten migrieren
             if ($questionnaire['anonymous']) {
-                foreach ($counter as $answer_id => $count) {
+                foreach ($question['counter'] as $answer_id => $count) {
                     for ($i = 0; $i < $count; $i++) {
                         $answer = new QuestionnaireAnswer();
                         $answer['user_id'] = null;
                         $answer['chdate'] = 1; //damit man nicht aus dem chdate auf die user_id schließen kann
                         $answer['mkdate'] = 1; //mkdate genauso
-                        $answer['question_id'] = $question->getId();
+                        $answer['question_id'] = $question['id'];
                         $answerdata = array();
                         $answers = array($answer_id);
                         foreach ($answers as $key => $answer_data) {
-                            $answers[$key] = $mapping[$answer_data];
+                            $answers[$key] = $question['mapping'][$answer_data];
                         }
                         sort($answers);
                         $answerdata['answers'] = $answers;
-                        if (!$questiondata['multiplechoice']) {
+                        if (!$question['multiplechoice']) {
                             $answerdata['answers'] = $answerdata['answers'][0];
                         }
                         $answer['answerdata'] = $answerdata;
@@ -196,21 +160,21 @@ class Step291Questionnaires extends Migration
                     WHERE answer_id IN (?)
                     GROUP BY user_id
                 ");
-                $statement->execute(array(array_keys($mapping)));
+                $statement->execute(array(array_keys($question['mapping'])));
                 foreach ($statement->fetchAll(PDO::FETCH_ASSOC) as $answer_data) {
                     $answer = new QuestionnaireAnswer();
                     $answer['user_id'] = $answer_data['user_id'];
                     $answer['chdate'] = $answer_data['votedate'];
                     $answer['mkdate'] = $answer_data['votedate'];
-                    $answer['question_id'] = $question->getId();
+                    $answer['question_id'] = $question['id'];
                     $answerdata = array();
                     $answers = explode(" ", $answer_data['answers']);
                     foreach ($answers as $key => $answer_data) {
-                        $answers[$key] = $mapping[$answer_data];
+                        $answers[$key] = $question['mapping'][$answer_data];
                     }
                     sort($answers);
                     $answerdata['answers'] = $answers;
-                    if (!$questiondata['multiplechoice']) {
+                    if (!$question['multiplechoice']) {
                         $answerdata['answers'] = $answerdata['answers'][0];
                     }
                     $answer['answerdata'] = $answerdata;
@@ -253,4 +217,59 @@ class Step291Questionnaires extends Migration
         DBManager::get()->exec("DROP TABLE IF EXISTS `questionnaires`");
     }
 
+
+    private function createQuestion($questionnaireId, $vote)
+    {
+        $database = DBManager::get();
+
+        $data = array(
+            'questionnaire_id' => $questionnaireId,
+            'questiontype' => $vote['type'] === "vote" ? "Vote" : "Test",
+            'position' => 1,
+            'chdate' => $vote['chdate'],
+            'mkdate' => $vote['mkdate']
+        );
+
+        $questiondata = array(
+            'multiplechoice' => $vote['multiplechoice'],
+            'question' => $vote['question'],
+        );
+
+        //Antwortmöglichkeiten vorsehen:
+        $optionsStatement = $database->prepare("
+                SELECT *
+                FROM voteanswers
+                WHERE vote_id = ?
+                ORDER BY position ASC
+            ");
+        $optionsStatement->execute(array($vote['vote_id']));
+        $options = $optionsStatement->fetchAll(PDO::FETCH_ASSOC);
+        $mapping = array();
+        $counter = array();
+        foreach ($options as $key => $option) {
+            $questiondata['options'][] = $option['answer'];
+            $mapping[$option['answer_id']] = $key + 1;
+            $counter[$option['answer_id']] = $option['counter'];
+            if (($vote['type'] === "test") && $option['correct']) {
+                $questiondata['correctanswer'][] = $key + 1;
+            }
+        }
+
+        $data['questiondata'] = json_encode(studip_utf8encode($questiondata));
+
+        $insertStmt = $database->prepare("
+          INSERT INTO questionnaire_questions
+            (questionnaire_id, questiontype, questiondata, position, chdate, mkdate)
+          VALUES (:questionnaire_id, :questiontype, :questiondata, :position, :chdate, :mkdate)
+        ");
+        $insertStmt->execute($data);
+        $questionId = $database->lastInsertId();
+
+        return array(
+            'id' => $questionId,
+            'multiplechoice' => $questiondata['multiplechoice'],
+            'mapping' => $mapping,
+            'counter' => $counter
+        );
+    }
 }
