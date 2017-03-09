@@ -17,7 +17,6 @@ namespace eTask;
 class Task extends \SimpleORMap
 {
     use ConfigureTrait;
-    use CreatedChangedTrait;
 
     /**
      * {@inheritdoc}

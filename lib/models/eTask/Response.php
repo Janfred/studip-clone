@@ -20,7 +20,6 @@ namespace eTask;
 class Response extends \SimpleORMap
 {
     use ConfigureTrait;
-    use CreatedChangedTrait;
 
     protected static function configure($config = [])
     {

@@ -14,7 +14,6 @@ namespace eTask;
 class Test extends \SimpleORMap
 {
     use ConfigureTrait;
-    use CreatedChangedTrait;
 
     protected static function configure($config = [])
     {

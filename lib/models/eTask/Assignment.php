@@ -17,7 +17,6 @@ namespace eTask;
 class Assignment extends \SimpleORMap
 {
     use ConfigureTrait;
-    use CreatedChangedTrait;
 
     protected static function configure($config = [])
     {
@@ -54,15 +53,5 @@ class Assignment extends \SimpleORMap
         $config['serialized_fields']['options'] = 'JSONArrayObject';
 
         parent::configure($config);
-    }
-
-    public function getStart()
-    {
-        return date('c', strtotime($this->content['start']));
-    }
-
-    public function getEnd()
-    {
-        return date('c', strtotime($this->content['end']));
     }
 }
