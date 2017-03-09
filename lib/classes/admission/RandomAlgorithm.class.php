@@ -314,6 +314,9 @@ class RandomAlgorithm extends AdmissionAlgorithm
     {
         $maxpos = $course->admission_applicants->findBy('status', 'awaiting')->orderBy('position desc')->val('position');
         foreach ($user_list as $chosen_one) {
+            if ($course->getParticipantStatus($chosen_one)) {
+                continue;
+            }
             $maxpos++;
             $new_admission_member = new AdmissionApplication();
             $new_admission_member->user_id = $chosen_one;
@@ -350,7 +353,7 @@ class RandomAlgorithm extends AdmissionAlgorithm
      */
     private function addUsersToCourse($user_list, $course, $prio = null)
     {
-        $seminar = new Seminar($course->id);
+        $seminar = new Seminar($course);
         foreach ($user_list as $chosen_one) {
             setTempLanguage($chosen_one);
             $message_title = sprintf(_('Teilnahme an der Veranstaltung %s'), $seminar->getName());
