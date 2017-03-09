@@ -5086,7 +5086,6 @@ table.calendar-week,
 table.calendar-day {
   border-spacing: 0;
   table-layout: fixed;
-  width: 100%;
 }
 table.calendar-week td,
 table.calendar-day td {
@@ -5128,9 +5127,6 @@ table.calendar-month td.calendar-month-week {
 }
 td.weekdayevents {
   width: 90px;
-}
-table.calendar-week {
-  width: 100%;
 }
 nav.calendar-nav {
   display: -ms-flexbox;
