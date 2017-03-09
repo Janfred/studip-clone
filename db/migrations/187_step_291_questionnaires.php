@@ -223,6 +223,7 @@ class Step291Questionnaires extends Migration
         $database = DBManager::get();
 
         $data = array(
+            'question_id' => md5(uniqid('questionnaire_questions', 1)),
             'questionnaire_id' => $questionnaireId,
             'questiontype' => $vote['type'] === "vote" ? "Vote" : "Test",
             'position' => 1,
@@ -259,14 +260,13 @@ class Step291Questionnaires extends Migration
 
         $insertStmt = $database->prepare("
           INSERT INTO questionnaire_questions
-            (questionnaire_id, questiontype, questiondata, position, chdate, mkdate)
-          VALUES (:questionnaire_id, :questiontype, :questiondata, :position, :chdate, :mkdate)
+            (question_id, questionnaire_id, questiontype, questiondata, position, chdate, mkdate)
+          VALUES (:question_id, :questionnaire_id, :questiontype, :questiondata, :position, :chdate, :mkdate)
         ");
         $insertStmt->execute($data);
-        $questionId = $database->lastInsertId();
 
         return array(
-            'id' => $questionId,
+            'id' => $data['question_id'],
             'multiplechoice' => $questiondata['multiplechoice'],
             'mapping' => $mapping,
             'counter' => $counter
