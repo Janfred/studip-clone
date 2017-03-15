@@ -410,6 +410,7 @@ class MyRealmModel
             WHERE questionnaire_assignments.range_id = :course_id
                 AND questionnaire_assignments.range_type = 'course'
                 AND questionnaires.visible = '1'
+                AND (questionnaires.stopdate IS NULL OR questionnaires.stopdate > UNIX_TIMESTAMP())
             GROUP BY questionnaire_assignments.range_id
         ");
         $statement->execute(array(
