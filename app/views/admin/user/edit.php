@@ -174,23 +174,6 @@ use Studip\Button, Studip\LinkButton;
                     <a class="toggler"><b><?= _('Registrierungsdaten') ?></b></a>
                 </th>
             </tr>
-
-            <? if (!$user->locked) : ?>
-                <tr>
-                    <td>
-                        <label for="locked"><?= _('Benutzer sperren') ?>:</label>
-                    </td>
-                    <td colspan="2">
-                        <input type="checkbox" name="locked" id="locked" value="1"
-                               data-activates=".user_form[name=locked_comment]">
-                        <label>
-                            <?= _('Kommentar') ?>:
-                            <input class="user_form" name="locked_comment" type="text">
-                        </label>
-                    </td>
-                </tr>
-            <? endif ?>
-
             <? if ($GLOBALS['perm']->have_perm('root')
                    && Config::get()->ALLOW_ADMIN_USERACCESS && !StudipAuthAbstract::CheckField("auth_user_md5.password", $user->auth_plugin) && !$prelim
             ) : ?>
