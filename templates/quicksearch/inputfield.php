@@ -10,7 +10,7 @@
     <input type=hidden id="<?= $id ?>_realvalue" name="<?= $name ?>" value="<?= htmlReady($defaultID) ?>">
     <input<?
         foreach ($withAttributes as $attr_name => $attr_value) {
-            print ' '.$attr_name.'="'.$attr_value.'"';
+            print ' '.$attr_name.'="'.htmlReady($attr_value).'"';
         }
         ?> id="<?= $id ?>"<?= $clear_input ?: '' ?> type="text" name="<?=
             $name ?>_parameter" value="<?= htmlReady($defaultName) ?>" placeholder="<?= $beschriftung && !$defaultID ? htmlReady($beschriftung) : '' ?>">
