@@ -548,7 +548,7 @@ use Studip\Button, Studip\LinkButton;
                                     <?= htmlReady($entry->getName()) ?>:
                                 </label>
                                 <? if (!$entry->isVisible($user->perms)): ?>
-                                    <?= tooltipIcon(_('Systemfeld (für die Person selbst nicht sichtbar)'), true) ?>
+                                    <?= tooltipIcon(_('Systemfeld (für die Person selbst nicht sichtbar)')) ?>
                                 <? endif; ?>
                             </td>
                             <td colspan="2">

@@ -60,6 +60,9 @@ use Studip\Button, Studip\LinkButton;
                            title="<?= _('Profil des Benutzers anzeigen') ?>">
                             <?= $user->username ?>
                         </a>
+                        <?  if ($user->locked) :?>
+                            <?= Icon::create('lock-locked','info', tooltip2(sprintf(_('%s ist gesperrt'), $user->getFullname())))?>
+                        <?endif?>
                     </td>
                     <td>
                         <?
