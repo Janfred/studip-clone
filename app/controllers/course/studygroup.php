@@ -231,9 +231,16 @@ class Course_StudygroupController extends AuthenticatedController
             }
 
             if (is_array($results_founders)) {
-                $this->flash['success'] = sizeof($results_founders) == 1 ? sprintf(_("Es wurde %s Person gefunden:"), sizeof($results_founders)) : sprintf(_("Es wurden %s Personen gefunden:"), sizeof($results_founders));
+                $this->flash['success'] = sprintf(
+                    ngettext(
+                        'Es wurde %s Person gefunden:',
+                        'Es wurden %s Personen gefunden:',
+                        sizeof($results_founders)
+                    ),
+                    sizeof($results_founders)
+                );
             } else {
-                $this->flash['info'] = _("Es wurden kein Personen gefunden.");
+                $this->flash['info'] = _("Es wurden keine Personen gefunden.");
             }
 
             $this->flash['create']                  = true;
