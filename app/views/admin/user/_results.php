@@ -61,7 +61,7 @@ use Studip\Button, Studip\LinkButton;
                             <?= $user->username ?>
                         </a>
                         <?  if ($user->locked) :?>
-                            <?= Icon::create('lock-locked','info', tooltip2(sprintf(_('%s ist gesperrt'), $user->getFullname())))?>
+                            <?= Icon::create('lock-locked','info', tooltip2(sprintf(_('%s ist gesperrt'), htmlReady($user->getFullname()))))?>
                         <?endif?>
                     </td>
                     <td>

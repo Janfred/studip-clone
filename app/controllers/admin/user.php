@@ -899,7 +899,7 @@ class Admin_UserController extends AuthenticatedController
     public function lock_comment_action($user_id)
     {
         $this->user = User::find($user_id);
-        PageLayout::setTitle(sprintf(_('%s sperren'), $this->user->getFullname()));
+        PageLayout::setTitle(sprintf(_('%s sperren'), htmlReady($this->user->getFullname())));
 
         $this->params = [];
         if (Request::int('from_index')) {
@@ -921,7 +921,7 @@ class Admin_UserController extends AuthenticatedController
 
 
         if($user->store()) {
-            PageLayout::postSuccess(sprintf(_('%s wurde gesperrt.'), $user->getFullname()));
+            PageLayout::postSuccess(sprintf(_('%s wurde gesperrt.'), htmlReady($user->getFullname())));
         }
 
 
@@ -945,9 +945,9 @@ class Admin_UserController extends AuthenticatedController
         $user->locked_by    = null;
 
         if ($user->store()) {
-            PageLayout::postSuccess(sprintf(_('%s wurde entsperrt.'), $user->getFullname()));
+            PageLayout::postSuccess(sprintf(_('%s wurde entsperrt.'), htmlReady($user->getFullname())));
         } else {
-            PageLayout::postError(sprintf(_('%s konnte nicht entsperrt werden.'), $user->getFullname()));
+            PageLayout::postError(sprintf(_('%s konnte nicht entsperrt werden.'), htmlReady($user->getFullname())));
         }
 
         if(Request::int('from_index')) {
