@@ -152,10 +152,8 @@ abstract class AdmissionRule
             " ORDER BY `id` ASC");
         while ($current = $data->fetch(PDO::FETCH_ASSOC)) {
             $className = $current['ruletype'];
-            if (is_dir($GLOBALS['STUDIP_BASE_PATH'].
-                   '/lib/admissionrules/'.mb_strtolower($className))) {
-                require_once($GLOBALS['STUDIP_BASE_PATH'].'/lib/admissionrules/'.
-                    mb_strtolower($className).'/'.$className.'.class.php');
+            if (is_dir($GLOBALS['STUDIP_BASE_PATH'] . DIRECTORY_SEPARATOR . $current['path'])) {
+                StudipAutoloader::addAutoloadPath($GLOBALS['STUDIP_BASE_PATH'] . DIRECTORY_SEPARATOR . $current['path']);
                 try {
                     $rule = new $className();
                     $rules[$className] = array(
