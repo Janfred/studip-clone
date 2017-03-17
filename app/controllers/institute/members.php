@@ -603,7 +603,7 @@ class Institute_MembersController extends AuthenticatedController
             ->setTitle(_('Personen in die Einrichtung eintragen'))
             ->setExecuteURL($this->link_for('institute/members/add', $this->type, ['admin_view' => 1]))
             ->setSearchObject($search_obj)
-            ->setAdditionalHTML('<p><strong>' . _('Nur bei Zuordnung eines Admins:') .' </strong> <label>Benachrichtigung der <input name="additional[]" value="admins" type="checkbox">' . _('Admins') .'</label>
-                             <label><input name="additional[]" value="dozenten" type="checkbox">' . _('Dozenten') . '</label></p>');
+            ->setAdditionalHTML('<p><strong>' . _('Nur bei Zuordnung eines Admins:') .' </strong> <label><input name="additional[]" value="admins" type="checkbox">' . _('Benachrichtigung der Admins') . '</label>
+                             <label><input name="additional[]" value="dozenten" type="checkbox">' . _('Benachrichtigung der Dozenten') . '</label></p>');
     }
 }
