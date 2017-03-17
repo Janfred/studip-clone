@@ -100,9 +100,7 @@ class Questionnaire extends SimpleORMap
         foreach ($this->assignments as $assignment) {
             if ($assignment['range_id'] === "public") {
                 return true;
-            } elseif ($assignment['range_id'] === "start" && $GLOBALS['perm']->have_perm("user")) {
-                return true;
-            } elseif ($assignment['range_type'] === "user" && $GLOBALS['perm']->have_perm("user")) {
+            } elseif (in_array($assignment['range_type'], ["start", "user", "institute"]) && $GLOBALS['perm']->have_perm("user")) {
                 return true;
             } elseif($GLOBALS['perm']->have_studip_perm("user", $assignment['range_id'])) {
                 return true;
