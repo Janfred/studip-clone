@@ -23,7 +23,7 @@
     <section>
         <label>
             <?= _('Selbsteintrag erlaubt ab') ?>
-            <input type="text" size="20" name="selfassign_start" value="<?= $selfassign_start != -1 ?
+            <input type="text" data-datetime-picker id="selfassign_start"  size="20" name="selfassign_start" value="<?= $selfassign_start != -1 ?
                 $selfassign_start : date('d.m.Y H:i') ?>">
             <?= $selfassign_start == -1 ? '(' . _('verschiedene Werte') . ')' : '' ?>
         </label>
@@ -31,7 +31,7 @@
     <section>
         <label>
             <?= _('Selbsteintrag erlaubt bis') ?>
-            <input type="text" size="20" name="selfassign_end" value="<?= $selfassign_end != -1 ?
+            <input type="text" data-datetime-picker='{">":"#selfassign_start"}' size="20" name="selfassign_end" value="<?= $selfassign_end != -1 ?
                 $selfassign_end : date('d.m.Y H:i') ?>">
             <?= $selfassign_end == -1 ? '(' . _('verschiedene Werte') . ')' : '' ?>
         </label>

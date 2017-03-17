@@ -82,13 +82,13 @@
         <section>
             <label>
                 <?= _('Selbsteintrag erlaubt ab') ?>
-                <input type="text" size="20" name="selfassign_start" value="<?= date('d.m.Y H:i') ?>">
+                <input type="text" data-datetime-picker id="selfassign_start"  size="20" name="selfassign_start" value="<?= date('d.m.Y H:i') ?>">
             </label>
         </section>
         <section>
             <label>
                 <?= _('Selbsteintrag erlaubt bis') ?>
-                <input type="text" size="20" name="selfassign_end" value="">
+                <input type="text" data-datetime-picker='{">":"#selfassign_start"}' size="20" name="selfassign_end" value="">
             </label>
         </section>
         <section>
