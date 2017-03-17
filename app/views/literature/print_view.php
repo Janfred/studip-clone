@@ -9,7 +9,7 @@
 <table width=100% border=0 cellpadding=2 cellspacing=0>
     <tr>
         <td>
-            <i><font size=-1><?=_("Stand:") . " ".date("d.m.y, G:i",time())?></font></i>
+            <i><font size=-1><?=_("Stand:") . " ".date("d.m.y, H:i",time())?></font></i>
         </td>
         <td align="right">
             <font size=-2>

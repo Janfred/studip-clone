@@ -2354,7 +2354,7 @@ if ((in_array("1", $msg->codes)) || (in_array("25", $msg->codes))) {
     $forbiddenObject = ResourceObject::Factory($_SESSION['resources_data']["actual_object"]);
     if ($forbiddenObject->isLocked()) {
         $lock_ts = getLockPeriod("edit");
-        $msg->addMsg(31, array(date("d.m.Y, G:i", $lock_ts[0]), date("d.m.Y, G:i", $lock_ts[1])));
+        $msg->addMsg(31, array(date("d.m.Y, H:i", $lock_ts[0]), date("d.m.Y, H:i", $lock_ts[1])));
     }
     $msg->displayAllMsg("window");
     die;

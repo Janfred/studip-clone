@@ -27,8 +27,8 @@ $author_url = $author->getURL();
     </div>
     <div class="content_column">
         <div class="timer">
-            <span class="time" data-timestamp="<?= (int) $posting['mkdate'] ?>" title="<?= date("j.n.Y G:i", $posting['mkdate']) ?>">
-                <?= (date("j.n.Y", $posting['mkdate']) == date("j.n.Y")) ? sprintf(_("%s Uhr"), date("G:i", $posting['mkdate'])) : date("j.n.Y", $posting['mkdate']) ?>
+            <span class="time" data-timestamp="<?= (int) $posting['mkdate'] ?>" title="<?= date("j.n.Y H:i", $posting['mkdate']) ?>">
+                <?= (date("j.n.Y", $posting['mkdate']) == date("j.n.Y")) ? sprintf(_("%s Uhr"), date("H:i", $posting['mkdate'])) : date("j.n.Y", $posting['mkdate']) ?>
             </span>
             <? if ($GLOBALS['perm']->have_studip_perm("tutor", $posting['Seminar_id']) or ($posting['user_id'] === $GLOBALS['user']->id) or $GLOBALS['perm']->have_perm("root")) : ?>
             <a href="#" class="edit" onClick="return false;" style="vertical-align: middle; opacity: 0.6;">

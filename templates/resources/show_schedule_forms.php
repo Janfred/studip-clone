@@ -132,7 +132,7 @@ use Studip\Button,
                 <?=_("Beginn/Ende:")?><br>
             <?
             if ($lockedAssign) :
-                echo "<b>".date("G:i",$resAssign->getBegin())." - ".date("G:i",$resAssign->getEnd())." </b>";
+                echo "<b>".date("H:i",$resAssign->getBegin())." - ".date("H:i",$resAssign->getEnd())." </b>";
             else : ?>
                 <input name="change_schedule_start_hour" value="<? echo date("G",$resAssign->getBegin()); ?>" size=2 maxlength="2">
                 :<input name="change_schedule_start_minute" value="<? echo date("i",$resAssign->getBegin()); ?>" size=2 maxlength="2"><?=_("Uhr")?>

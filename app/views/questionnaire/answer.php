@@ -32,7 +32,7 @@
             <?= _("Sie können Ihre Antworten nachträglich ändern.") ?>
         <? endif ?>
         <? if ($questionnaire['stopdate']) : ?>
-            <?= sprintf(_("Sie können den Fragebogen beantworten bis zum %s um %s Uhr."), date("d.m.Y", $questionnaire['stopdate']), date("G:i", $questionnaire['stopdate'])) ?>
+            <?= sprintf(_("Sie können den Fragebogen beantworten bis zum %s um %s Uhr."), date("d.m.Y", $questionnaire['stopdate']), date("H:i", $questionnaire['stopdate'])) ?>
         <? endif ?>
     </div>
 

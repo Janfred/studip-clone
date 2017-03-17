@@ -114,9 +114,9 @@ $commentable = $GLOBALS['perm']->have_perm("autor") ? true : (bool) $commentable
         <div class="timer">
             <a href="<?= URLHelper::getLink('plugins.php/blubber/streams/thread/' . $thread->getId(), array('cid' => $thread['Seminar_id'])) ?>"
                    class="permalink"
-                   title="<?= date("j.n.Y G:i", $thread['mkdate']) ?>">
+                   title="<?= date("j.n.Y H:i", $thread['mkdate']) ?>">
                 <span class="time" data-timestamp="<?= (int) $thread['mkdate'] ?>">
-                    <?= (date("j.n.Y", $thread['mkdate']) == date("j.n.Y")) ? sprintf(_("%s Uhr"), date("G:i", $thread['mkdate'])) : date("j.n.Y", $thread['mkdate']) ?>
+                    <?= (date("j.n.Y", $thread['mkdate']) == date("j.n.Y")) ? sprintf(_("%s Uhr"), date("H:i", $thread['mkdate'])) : date("j.n.Y", $thread['mkdate']) ?>
                 </span>
             </a>
             <? if (($thread['Seminar_id'] !== $thread['user_id'] && $GLOBALS['perm']->have_studip_perm("tutor", $thread['Seminar_id']))

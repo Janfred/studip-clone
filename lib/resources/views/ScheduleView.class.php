@@ -336,7 +336,7 @@ class ScheduleView
         }
 
         if ($print_view) {
-            echo "<tr><td colspan=$glb_colspan><i>"._("Erstellt am")." ",date("d.m.y")," um ", date("G:i")," Uhr.</i></td>";
+            echo "<tr><td colspan=$glb_colspan><i>"._("Erstellt am")." ",date("d.m.y")," um ", date("H:i")," Uhr.</i></td>";
             echo "<td align=\"right\">";
             echo Assets::img('logos/logo2b.png');
             echo "</td></tr></tr>";
