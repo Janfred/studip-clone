@@ -1,4 +1,4 @@
-<form action="<?=$controller->url_for('admin/user/lock/' . $user->id)?>" method="post" class="default">
+<form action="<?=$controller->url_for('admin/user/lock/' . $user->id, $params)?>" method="post" class="default">
     <?= CSRFProtection::tokenTag()?>
     <label>
         <span class="required"><?= _('Kommentar') ?>:</span>

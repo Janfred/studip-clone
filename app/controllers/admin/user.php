@@ -900,6 +900,11 @@ class Admin_UserController extends AuthenticatedController
     {
         $this->user = User::find($user_id);
         PageLayout::setTitle(sprintf(_('%s sperren'), $this->user->getFullname()));
+
+        $this->params = [];
+        if (Request::int('from_index')) {
+            $this->params['from_index'] = 1;
+        }
     }
 
     /**
@@ -914,11 +919,17 @@ class Admin_UserController extends AuthenticatedController
         $user->lock_comment = Request::get('lock_comment');
         $user->locked_by = $GLOBALS['user']->id;
 
+
         if($user->store()) {
-            PageLayout::postSuccess(_('Person wurde gesperrt.'));
+            PageLayout::postSuccess(sprintf(_('%s wurde gesperrt.'), $user->getFullname()));
         }
 
-        $this->redirect('admin/user/edit/' . $user_id);
+
+        if(Request::int('from_index')) {
+            $this->redirect('admin/user');
+        } else {
+            $this->redirect('admin/user/edit/' . $user_id);
+        }
     }
 
     /**
@@ -934,11 +945,16 @@ class Admin_UserController extends AuthenticatedController
         $user->locked_by    = null;
 
         if ($user->store()) {
-            PageLayout::postSuccess(_('Person wurde entsperrt.'));
+            PageLayout::postSuccess(sprintf(_('%s wurde entsperrt.'), $user->getFullname()));
         } else {
-            PageLayout::postError(_('Person konnte nicht entsperrt werden.'));
+            PageLayout::postError(sprintf(_('%s konnte nicht entsperrt werden.'), $user->getFullname()));
         }
-        $this->redirect('admin/user/edit/' . $user_id);
+
+        if(Request::int('from_index')) {
+            $this->redirect('admin/user');
+        } else {
+            $this->redirect('admin/user/edit/' . $user_id);
+        }
     }
 
 
