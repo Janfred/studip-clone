@@ -24,6 +24,15 @@
                 </button>
             <? endif ?>
         </caption>
+        <colgroup>
+            <col>
+            <col>
+            <col>
+            <col>
+            <col>
+            <col style="width: 120px">
+            <col>
+        </colgroup>
         <thead>
             <tr>
                 <th class="hidden-small-down">
