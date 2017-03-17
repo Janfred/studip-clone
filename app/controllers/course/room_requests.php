@@ -104,6 +104,7 @@ class Course_RoomRequestsController extends AuthenticatedController
             $request = new RoomRequest();
             $request->seminar_id = $this->course_id;
             $request->user_id = $GLOBALS['user']->id;
+
             list($new_type, $id) = explode('_', Request::option('new_room_request_type'));
             if ($new_type == 'course') {
                 if ($existing_request = RoomRequest::existsByCourse($this->course_id)) {
@@ -123,6 +124,10 @@ class Course_RoomRequestsController extends AuthenticatedController
             }
         } else {
             $request = RoomRequest::find(Request::option('request_id'));
+
+            if($request->user_id != $GLOBALS['user']->id) {
+                $request->last_modified_by = $GLOBALS['user']->id;
+            }
         }
 
         $admission_turnout = Seminar::getInstance($this->course_id)->admission_turnout;
