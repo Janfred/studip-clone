@@ -1766,7 +1766,14 @@ class EvalOverview {
                 if ($timeSpan == $secs)
                     $html .= "selected";
                 $html .= ">";
-                $html .= sprintf($i == 1 ? _("%s Woche") : _("%s Wochen"), $i);
+                $html .= sprintf(
+                    ngettext(
+                        '%d Woche',
+                        '%d Wochen',
+                        $i
+                    ),
+                    $i
+                );
                 $html .= "</option>";
             }
             $html .= "</select>";
