@@ -380,11 +380,11 @@ function groups($parent_id)
                 if ($ausgabeformat==1 && !$freetype) {
                     if ($group_type === 'normal') {
                         echo '<a href="' . URLHelper::getLink('?eval_id=' . $eval_id . '&evalgroup_id=' . $group['evalgroup_id'] . '&group_type=table&cmd=change_group_type#anker') . '">';
-                        echo Icon::create('vote-stopped', 'clickable', ['title' => sprintf(_('Zum Darstellungstyp %s wechseln'), _('Tabelle'))])->asImg();
+                        echo Icon::create('vote-stopped', 'clickable', ['title' => _('Zum Darstellungstyp Tabelle wechseln')])->asImg();
                         echo '</a>';
                     } else {
                         echo '<a href="' . URLHelper::getLink('?eval_id=' . $eval_id . '&evalgroup_id=' . $group['evalgroup_id'] . '&group_type=normal&cmd=change_group_type#anker') . '">';
-                        echo Icon::create('vote', 'clickable', ['title' => sprintf(_('Zum Darstellungstyp %s wechseln'), _('Normal'))])->asImg();
+                        echo Icon::create('vote', 'clickable', ['title' => _('Zum Darstellungstyp Normal wechseln')])->asImg();
                     }
                 } else {
                     echo '&nbsp;';
