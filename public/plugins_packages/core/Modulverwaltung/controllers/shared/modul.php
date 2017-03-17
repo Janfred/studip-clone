@@ -93,7 +93,7 @@ class Shared_ModulController extends MVVController
                 $lvGruppen = Lvgruppe::findByModulteil($modulTeil->getId());
                 foreach ($lvGruppen as $lvGruppe) {
                     $ids = array_column($lvGruppe->getAssignedCoursesBySemester($currentSemester['semester_id']), 'seminar_id');
-                    $courses = Course::findMany($ids);
+                    $courses = Course::findMany($ids,'order by Veranstaltungsnummer, Name');
                     $modulTeileData[$modulTeil->getId()]['lvGruppen'][$lvGruppe->getId()] = array(
                         'courses' => $courses,
                         'alt_texte' => $lvGruppe->alttext
