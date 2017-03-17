@@ -284,9 +284,25 @@ class MessagesController extends AuthenticatedController {
                 $message .= "\n" . _("Von") . ": " . get_fullname($old_message['autor_id']);
                 $num_recipients = $old_message->getNumRecipients();
                 if ($GLOBALS['user']->id == $old_message->autor_id) {
-                    $message .= "\n" . _("An") . ": " . ($num_recipients == 1 ? _('Eine Person') : sprintf(_('%s Personen'), $num_recipients));
+                    $message .= "\n" . ($num_recipients == 1 ? _('An: Eine Person') : sprintf(_('An: %d Personen'), $num_recipients));
                 } else {
-                    $message .= "\n" . _("An") . ": " . $GLOBALS['user']->getFullname() . ($num_recipients > 1 ? ' ' . sprintf(_('(und %d weitere)'), $num_recipients) : '');
+                    $message .= "\n";
+                    if($num_recipients > 1) {
+                        $message .= sprintf(
+                            ngettext(
+                                'An: %1$s (und %2$d weitere/n)',
+                                'An: %1$s (und %2$d weitere)',
+                                $num_recipients
+                            ),
+                            $GLOBALS['user']->getFullName(),
+                            $num_recipients
+                        );
+                    } else {
+                        $message .= sprintf(
+                            _('An: %s'),
+                            $GLOBALS['user']->getFullName()
+                        );
+                    }
                 }
                 $message .= "\n\n";
                 if (Studip\Markup::isHtml($old_message['message'])) {
