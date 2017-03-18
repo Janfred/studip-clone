@@ -4,6 +4,7 @@
 you find here the basic system settings. You shouldn't have to touch much of them...
 please note the CONFIG.INC.PHP in the system folder for the indivual settings of your installation!*/
 
+$UNI_NAME_CLEAN = "Stud.IP Entwicklungs- und Anwendungsforum";                          //the clean-name of your master-faculty (e.g. University of Göttingen), without html-entities (used for mail-system)
 $STUDIP_INSTALLATION_ID = 'develop';      //unique identifier for installation
 
 
@@ -117,6 +118,9 @@ $UNZIP_PATH = "/usr/bin/unzip";
 
 // media proxy settings
 $MEDIA_CACHE_PATH = $STUDIP_BASE_PATH . '/data/media_cache';
+$MEDIA_CACHE_MAX_LENGTH = 1000000;
+$MEDIA_CACHE_LIFETIME = 86400;
+$MEDIA_CACHE_MAX_FILES = 3000;
 
 //path to Stud.IP modules (this folders only have to exist, if the corresponcing module is active)
 $RELATIVE_PATH_RESOURCES = "lib/resources";                         //Stud.IP module: resourge management
@@ -137,9 +141,21 @@ $CACHE_IS_SESSION_STORAGE = false;                 //store session data in cache
 ----------------------------------------------------------------
 enable or disable the Stud.IP internal modules, set and basic settings*/
 
+$CALENDAR_DRIVER = "MySQL";                                 //calendar driver: database to use (MySQL in default installation)*/
+
+$XSLT_ENABLE = TRUE;
+$FOP_ENABLE = TRUE;
 $FOP_SH_CALL = "JAVACMD=/usr/bin/java /opt/fop-0.20.5/fop.sh";                       //path to fop
 
 $EXTERN_SERVER_NAME = "";                               //define name, if you use special setup
+$EXTERN_SRI_ENABLE = TRUE;                              //allow the usage of SRI-interface (Stud.IP Remote Include)
+$EXTERN_SRI_ENABLE_BY_ROOT = FALSE;                         //only root allows the usage of SRI-interface for specific institutes
+$EXTERN_ALLOW_ACCESS_WITHOUT_CONFIG = FALSE;                        //free access to external pages (without the need of a configuration), independent of SRI settings above
+
+$SOAP_ENABLE = TRUE;
+$SOAP_USE_PHP5 = TRUE;
+
+$WEBSERVICES_ENABLE = TRUE;
 
 $PLUGINS_UPLOAD_ENABLE = TRUE;                  //Upload of Plugins is enabled
 
@@ -209,6 +225,32 @@ $ENABLE_EMAIL_TO_STATUSGROUP = TRUE;                                // enable to
 $ENABLE_EMAIL_ATTACHMENTS = TRUE;                               // enable attachment functions for internal and external messages
 $MAIL_ATTACHMENTS_MAX_SIZE = 10;                             //maximum size of attachments in MB
 
+/*advanced system settings
+----------------------------------------------------------------
+this are some settings to activate some special features, special
+behaviour of some features and other advanced options. Change on your
+own risk :) */
+
+$ALLOW_GROUPING_SEMINARS = TRUE;                            //if true, administrators can group seminars - students
+                                            //will only be able to register for one of the grouped seminars
+
+$ALLOW_SELFASSIGN_STUDYCOURSE = TRUE;                           //if true, students are allowed to set or change
+                                            //their studycourse (studiengang)
+
+$SHOW_TERMS_ON_FIRST_LOGIN = TRUE;                         //if true, the user has to accept the terms on his first login
+                                            //(this feature makes only sense, if you use disable $ENABLE_SELF_REGISTRATION).
+
+$USER_VISIBILITY_CHECK = TRUE;             // enable presentation of visibility decision texts for users after first login
+                                            // see lib/include/header.php and lib/user_visible.inc.php for further info
+
+$CONVERT_IDNA_URL = TRUE;                               //if true, urls with german "umlauts" are converted
+
+$USERNAME_REGULAR_EXPRESSION = '/^([a-zA-Z0-9_@.-]{4,})$/'; //regex for allowed characters in usernames
+
+/*timezone
+----------------------------------------------------------------*/
+$DEFAULT_TIMEZONE = 'Europe/Berlin';
+
 /*language settings
 ----------------------------------------------------------------*/
 
@@ -216,6 +258,7 @@ $INSTALLED_LANGUAGES["de_DE"] = array ("path"=>"de", "picture"=>"lang_de.gif", "
 $INSTALLED_LANGUAGES["en_GB"] = array ("path"=>"en", "picture"=>"lang_en.gif", "name"=>"English");
 $CONTENT_LANGUAGES['de_DE'] = array('picture' => 'lang_de.gif', 'name' => 'Deutsch');
 $CONTENT_LANGUAGES['en_GB'] = array('picture' => 'lang_en.gif', 'name' => 'English');
+$DEFAULT_LANGUAGE = "de_DE";  // which language should we use if we can gather no information from user?
 
 $_language_domain = "studip";  // the name of the language file. Should not be changed except in cases of individual translations or special terms.
 
@@ -235,40 +278,40 @@ $_lit_search_plugins[] = array('name' => "Studip",'display_name' =>'Katalog der 
 /* Gemeinsamer Verbundkatalog - GVK */
 $_lit_search_plugins[] = array('name' => "Gvk",'display_name' =>'Gemeinsamer Verbundkatalog', 'link' => 'http://gso.gbv.de/DB=2.1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
-/* Nieders?chsische Staats- und Universit?tsbibliothek G?ttingen, OPAC */
-$_lit_search_plugins[] = array('name' => "SUBGoeOpac",'display_name' => "Opac der SUB G?ttingen" , 'link' => 'http://goopc4.sub.uni-goettingen.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
+/* Niedersächsische Staats- und Universitätsbibliothek Göttingen, OPAC */
+$_lit_search_plugins[] = array('name' => "SUBGoeOpac",'display_name' => "Opac der SUB Göttingen" , 'link' => 'http://goopc4.sub.uni-goettingen.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
-/* G?ttinger Gesamtkatalog (Regionalkatalog G?ttingen) */
-$_lit_search_plugins[] = array('name' => 'Rkgoe', 'display_name' =>'Regionalkatalog G?ttingen', 'link' => 'http://gso.gbv.de/DB=2.90/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
+/* Göttinger Gesamtkatalog (Regionalkatalog Göttingen) */
+$_lit_search_plugins[] = array('name' => 'Rkgoe', 'display_name' =>'Regionalkatalog Göttingen', 'link' => 'http://gso.gbv.de/DB=2.90/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
-/* Bibliotheken der Wirtschafts- und Sozialwiss. Fakult?ten Goettingen" */
+/* Bibliotheken der Wirtschafts- und Sozialwiss. Fakultäten Goettingen" */
 //$_lit_search_plugins[] = array('name' => 'WisoFak', 'link' => 'http://goopc4.sub.uni-goettingen.de:8080/DB=2/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
-/* Technische Informationsbibliothek / Universit?tsbibliothek Hannover, OPAC */
+/* Technische Informationsbibliothek / Universitätsbibliothek Hannover, OPAC */
 //$_lit_search_plugins[] = array('name' => 'TIBUBOpac', 'link' => 'http://opc4.tib.uni-hannover.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}', 'display_name' => "UB Katalog");
 
 /* Hannover Gesamtkatalog (Regionalkatalog Hannover) */
 //$_lit_search_plugins[] = array('name' => 'Rkhan', 'link' => 'http://gso.gbv.de/DB=2.92/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}', 'display_name' => "Gesamtkatalog Hannover");
 
-/* Bibliotheken der Fachhochschule Hildesheim/Holzminden/G?ttingen */
+/* Bibliotheken der Fachhochschule Hildesheim/Holzminden/Göttingen */
 //$_lit_search_plugins[] = array('name' => 'FHHIOpac', 'link' => 'http://hidbs2.bib.uni-hildesheim.de:8080/DB=2/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
-/* Th?ringer Universit?ts- und Landesbibliothek Jena */
+/* Thüringer Universitäts- und Landesbibliothek Jena */
 //$_lit_search_plugins[] = array('name' => 'ThULB_Jena', 'link' => 'http://jenopc4.thulb.uni-jena.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
 /* Bibliothek der Fachhochschule Jena */
 //$_lit_search_plugins[] = array('name' => 'FH_Jena', 'link' => 'http://jenopc4.thulb.uni-jena.de:8080/DB=2/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
-/* Universit?tsbibliothek der Bauhaus-Universit?t Weimar */
+/* Universitätsbibliothek der Bauhaus-Universität Weimar */
 //$_lit_search_plugins[] = array('name' => 'UB_Weimar', 'link' => 'http://weias.ub.uni-weimar.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
 /* Herzogin Anna Amalia Bibliothek Weimar */
 //$_lit_search_plugins[] = array('name' => 'HAAB_Weimar', 'link' => 'http://weias.ub.uni-weimar.de:8080/DB=2/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
-/* Bibliothek der Hochschule f?r Musik Franz Liszt Weimar */
+/* Bibliothek der Hochschule für Musik Franz Liszt Weimar */
 //$_lit_search_plugins[] = array('name' => 'HSfMFL_Weimar', 'link' => 'http://weias.ub.uni-weimar.de:8080/DB=3/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
-/* Universit?tsbibliothek Erfurt */
+/* Universitätsbibliothek Erfurt */
 //$_lit_search_plugins[] = array('name' => 'UB_Erfurt', 'link' => 'http://opac.uni-erfurt.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
 /* Bibliothek der Fachhochschule Erfurt */
@@ -277,13 +320,13 @@ $_lit_search_plugins[] = array('name' => 'Rkgoe', 'display_name' =>'Regionalkata
 /* Bibliothek der Fachhochschule Nordhausen */
 //$_lit_search_plugins[] = array('name' => 'FH_Nordhausen', 'link' => 'http://opac.uni-erfurt.de:8080/DB=5/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
-/* Universit?tsbibliothek Ilmenau */
+/* Universitätsbibliothek Ilmenau */
 //$_lit_search_plugins[] = array('name' => 'UB_Ilmenau', 'link' => 'http://ilmopc4.bibliothek.tu-ilmenau.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
 /* Bibliothek der Fachhochschule Schmalkalden */
 //$_lit_search_plugins[] = array('name' => 'FH_Schmalkalden', 'link' => 'http://ilmopc4.bibliothek.tu-ilmenau.de:8080/DB=2/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
-/* Universit?ts- und Landesbibliothek Sachsen-Anhalt Halle */
+/* Universitäts- und Landesbibliothek Sachsen-Anhalt Halle */
 //$_lit_search_plugins[] = array('name' => "Ulb", 'link' => 'http://haweb1.bibliothek.uni-halle.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
 /* FB Technik ULB Halle und FH Merseburg  */
@@ -292,10 +335,10 @@ $_lit_search_plugins[] = array('name' => 'Rkgoe', 'display_name' =>'Regionalkata
 /* Deutsche Akademie der Naturforscher Leopoldina */
 //$_lit_search_plugins[] = array('name' => "Leopoldina", 'link' => 'http://haweb1.bibliothek.uni-halle.de:8080/DB=4/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
-/* Universit?tsbibliothek Trier */
-//$_lit_search_plugins[] = array('name' => 'UB_Trier', 'display_name' =>'BIB-KAT Universit?t Trier', 'link' => 'http://bibkat.uni-trier.de/F/?func=find-c&local_base=tri01&ccl_term={accession_number}');
+/* Universitätsbibliothek Trier */
+//$_lit_search_plugins[] = array('name' => 'UB_Trier', 'display_name' =>'BIB-KAT Universität Trier', 'link' => 'http://bibkat.uni-trier.de/F/?func=find-c&local_base=tri01&ccl_term={accession_number}');
 
-/* S?dwestdeutscher Bibliotheksverbund SWB Online */
+/* Südwestdeutscher Bibliotheksverbund SWB Online */
 //$_lit_search_plugins[] = array('name' => "Swb", 'display_name' => "SWB Online Katalog", 'link' => 'http://swb.bsz-bw.de/DB=2.1/SET=1/TTL=2/CLK?IKT=12&TRM={accession_number}');
 
 /* IWF Campusmedien */
@@ -409,6 +452,18 @@ $STUDIP_AUTH_CONFIG_STANDARDEXTERN = array( "db_host" => "localhost",
 //some additional authification-settings
 //NOTE: you MUST enable Standard authentication-plugin for this settings to take effect!
 
+$ALLOW_CHANGE_USERNAME = TRUE;                          //if true, users are allowed to change their username
+$ALLOW_CHANGE_EMAIL = TRUE;                         //if true, users are allowed to change their email-address
+$ALLOW_CHANGE_NAME = TRUE;                          //if true, users are allowed to change their name
+$ALLOW_CHANGE_TITLE = TRUE;                         //if true, users are allowed to change their titles
+$ENABLE_SELF_REGISTRATION = TRUE;               //should it be possible for an user to register himself
+
+$ENABLE_REQUEST_NEW_PASSWORD_BY_USER = TRUE;            //if true, users are able to request a new password themselves
+$REQUEST_NEW_PASSWORD_SECRET = 'jh896fajsb974b4850aMhlf'; // if the above feature is used, set this to somthing different!!!
+$PHPASS_USE_PORTABLE_HASH = true;
+
+$ENABLE_FREE_ACCESS = TRUE;                         //if true, courses with public access are available
+
 // Login ip range check
 $ENABLE_ADMIN_IP_CHECK = false;
 $ENABLE_ROOT_IP_CHECK = false;
@@ -426,3 +481,8 @@ $LOGIN_IP_RANGES =
 /*path generation
 -----------------------------------------------------------------
 (end of user defined settings)*/
+
+
+//create the html-version of $UNI_NAME clean
+$UNI_NAME = htmlspecialchars($UNI_NAME_CLEAN, ENT_QUOTES, 'cp1252');
+
