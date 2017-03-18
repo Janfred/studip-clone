@@ -3,7 +3,11 @@
         if (!$size) {
             $tip = _('Keine Einträge');
         } else {
-            $template = $size == 1 ? _('%d Eintrag') : _('%d Einträge');
+            $template = ngettext(
+                '%d Eintrag',
+                '%d Einträge',
+                $size
+            );
             $tip = sprintf($template, $size);
         }
         return tooltip($tip, false);
