@@ -35,53 +35,11 @@ $DB_STUDIP_SLAVE_DATABASE = "studip-slave";
 #      #    #   #   #    #  ####
 
 
-// ABSOLUTE_PATH_STUDIP should end with a '/'
-$ABSOLUTE_PATH_STUDIP = $STUDIP_BASE_PATH . '/public/';
-
-
-// CANONICAL_RELATIVE_PATH_STUDIP should end with a '/'
-$CANONICAL_RELATIVE_PATH_STUDIP = dirname($_SERVER['PHP_SELF']);
-if (DIRECTORY_SEPARATOR != '/') {
-    $CANONICAL_RELATIVE_PATH_STUDIP = str_replace(DIRECTORY_SEPARATOR, '/', $CANONICAL_RELATIVE_PATH_STUDIP);
-}
-
-if (substr($CANONICAL_RELATIVE_PATH_STUDIP,-1) != "/"){
-    $CANONICAL_RELATIVE_PATH_STUDIP .= "/";
-}
-
-// ABSOLUTE_URI_STUDIP: insert the absolute URL to your Stud.IP installation; it should end with a '/'
-$ABSOLUTE_URI_STUDIP = "http://develop.studip.de/studip/";
-
-// automagically compute ABSOLUTE_URI_STUDIP if $_SERVER['SERVER_NAME'] is set
-if (isset($_SERVER['SERVER_NAME'])) {
-    // work around possible bug in lighttpd
-    if (mb_strpos($_SERVER['SERVER_NAME'], ':') !== false) {
-        list($_SERVER['SERVER_NAME'], $_SERVER['SERVER_PORT']) =
-            explode(':', $_SERVER['SERVER_NAME']);
-    }
-
-    $ABSOLUTE_URI_STUDIP = $_SERVER['HTTPS'] == 'on' ? 'https' : 'http';
-    $ABSOLUTE_URI_STUDIP .= '://'.$_SERVER['SERVER_NAME'];
-
-    if ($_SERVER['HTTPS'] == 'on' && $_SERVER['SERVER_PORT'] != 443 ||
-        $_SERVER['HTTPS'] != 'on' && $_SERVER['SERVER_PORT'] != 80) {
-        $ABSOLUTE_URI_STUDIP .= ':'.$_SERVER['SERVER_PORT'];
-    }
-
-    $ABSOLUTE_URI_STUDIP .= $CANONICAL_RELATIVE_PATH_STUDIP;
-}
-
-// default ASSETS_URL, customize if required
-$ASSETS_URL = $ABSOLUTE_URI_STUDIP . 'assets/';
-
-// construct absolute URL for ASSETS_URL
-if ($ASSETS_URL[0] === '/') {
-    $host = preg_replace('%^([a-z]+:/*[^/]*).*%', '$1', $ABSOLUTE_URI_STUDIP);
-    $ASSETS_URL = $host . $ASSETS_URL;
-} else if (!preg_match('/^[a-z]+:/', $ASSETS_URL)) {
-    $ASSETS_URL = $ABSOLUTE_URI_STUDIP . $ASSETS_URL;
-}
-
+//ABSOLUTE_PATH_STUDIP should end with a '/'
+//$ABSOLUTE_PATH_STUDIP = $STUDIP_BASE_PATH . '/public/';
+//$CANONICAL_RELATIVE_PATH_STUDIP
+//$ABSOLUTE_URI_STUDIP
+//$ASSETS_URL
 
 // absolute filesystem path to the plugin packages
 $PLUGINS_PATH = $ABSOLUTE_PATH_STUDIP . 'plugins_packages';
@@ -118,15 +76,6 @@ $UNZIP_PATH = "/usr/bin/unzip";
 
 // media proxy settings
 $MEDIA_CACHE_PATH = $STUDIP_BASE_PATH . '/data/media_cache';
-$MEDIA_CACHE_MAX_LENGTH = 1000000;
-$MEDIA_CACHE_LIFETIME = 86400;
-$MEDIA_CACHE_MAX_FILES = 3000;
-
-//path to Stud.IP modules (this folders only have to exist, if the corresponcing module is active)
-$RELATIVE_PATH_RESOURCES = "lib/resources";                         //Stud.IP module: resourge management
-$RELATIVE_PATH_CALENDAR = "lib/calendar";                           //Stud.IP module: calendar
-$RELATIVE_PATH_EXTERN = "lib/extern";                           //Stud.IP module: SRI-System for including Stud.IP data in other websites
-
 
 //caching
 $CACHING_ENABLE = true;
@@ -137,33 +86,15 @@ $CACHE_IS_SESSION_STORAGE = false;                 //store session data in cache
 ----------------------------------------------------------------
 enable or disable the Stud.IP internal modules, set and basic settings*/
 
-$CALENDAR_DRIVER = "MySQL";                                 //calendar driver: database to use (MySQL in default installation)*/
-
-$XSLT_ENABLE = TRUE;
-$FOP_ENABLE = TRUE;
 $FOP_SH_CALL = "JAVACMD=/usr/bin/java /opt/fop-0.20.5/fop.sh";                       //path to fop
 
 $EXTERN_SERVER_NAME = "";                               //define name, if you use special setup
-$EXTERN_SRI_ENABLE = TRUE;                              //allow the usage of SRI-interface (Stud.IP Remote Include)
-$EXTERN_SRI_ENABLE_BY_ROOT = FALSE;                         //only root allows the usage of SRI-interface for specific institutes
-$EXTERN_ALLOW_ACCESS_WITHOUT_CONFIG = FALSE;                        //free access to external pages (without the need of a configuration), independent of SRI settings above
-
-$SOAP_ENABLE = TRUE;
-$SOAP_USE_PHP5 = TRUE;
-
-$WEBSERVICES_ENABLE = TRUE;
 
 $PLUGINS_UPLOAD_ENABLE = TRUE;                  //Upload of Plugins is enabled
 
 $PLUGIN_REPOSITORIES = array(
     'http://plugins.studip.de/plugins.xml',
 );
-
-/*system functions
-----------------------------------------------------------------
-activate or deactivate some basic system-functions here*/
-
-$SMILEY_COUNTER = TRUE;                             //enable Smiley-counter
 
 /*domain name and path translation
 ----------------------------------------------------------------
@@ -221,31 +152,6 @@ $ENABLE_EMAIL_TO_STATUSGROUP = TRUE;                                // enable to
 $ENABLE_EMAIL_ATTACHMENTS = TRUE;                               // enable attachment functions for internal and external messages
 $MAIL_ATTACHMENTS_MAX_SIZE = 10;                             //maximum size of attachments in MB
 
-/*advanced system settings
-----------------------------------------------------------------
-this are some settings to activate some special features, special
-behaviour of some features and other advanced options. Change on your
-own risk :) */
-
-$ALLOW_GROUPING_SEMINARS = TRUE;                            //if true, administrators can group seminars - students
-                                            //will only be able to register for one of the grouped seminars
-
-$ALLOW_SELFASSIGN_STUDYCOURSE = TRUE;                           //if true, students are allowed to set or change
-                                            //their studycourse (studiengang)
-
-$SHOW_TERMS_ON_FIRST_LOGIN = TRUE;                         //if true, the user has to accept the terms on his first login
-                                            //(this feature makes only sense, if you use disable $ENABLE_SELF_REGISTRATION).
-
-$USER_VISIBILITY_CHECK = TRUE;             // enable presentation of visibility decision texts for users after first login
-                                            // see lib/include/header.php and lib/user_visible.inc.php for further info
-
-$CONVERT_IDNA_URL = TRUE;                               //if true, urls with german "umlauts" are converted
-
-$USERNAME_REGULAR_EXPRESSION = '/^([a-zA-Z0-9_@.-]{4,})$/'; //regex for allowed characters in usernames
-
-/*timezone
-----------------------------------------------------------------*/
-$DEFAULT_TIMEZONE = 'Europe/Berlin';
 
 /*language settings
 ----------------------------------------------------------------*/
@@ -448,18 +354,6 @@ $STUDIP_AUTH_CONFIG_STANDARDEXTERN = array( "db_host" => "localhost",
 //some additional authification-settings
 //NOTE: you MUST enable Standard authentication-plugin for this settings to take effect!
 
-$ALLOW_CHANGE_USERNAME = TRUE;                          //if true, users are allowed to change their username
-$ALLOW_CHANGE_EMAIL = TRUE;                         //if true, users are allowed to change their email-address
-$ALLOW_CHANGE_NAME = TRUE;                          //if true, users are allowed to change their name
-$ALLOW_CHANGE_TITLE = TRUE;                         //if true, users are allowed to change their titles
-$ENABLE_SELF_REGISTRATION = TRUE;               //should it be possible for an user to register himself
-
-$ENABLE_REQUEST_NEW_PASSWORD_BY_USER = TRUE;            //if true, users are able to request a new password themselves
-$REQUEST_NEW_PASSWORD_SECRET = 'jh896fajsb974b4850aMhlf'; // if the above feature is used, set this to somthing different!!!
-$PHPASS_USE_PORTABLE_HASH = true;
-
-$ENABLE_FREE_ACCESS = TRUE;                         //if true, courses with public access are available
-
 // Login ip range check
 $ENABLE_ADMIN_IP_CHECK = false;
 $ENABLE_ROOT_IP_CHECK = false;
@@ -477,8 +371,3 @@ $LOGIN_IP_RANGES =
 /*path generation
 -----------------------------------------------------------------
 (end of user defined settings)*/
-
-
-//create the html-version of $UNI_NAME clean
-$UNI_NAME = htmlspecialchars($UNI_NAME_CLEAN, ENT_QUOTES, 'cp1252');
-

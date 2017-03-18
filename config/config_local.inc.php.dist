@@ -31,7 +31,7 @@ $DB_STUDIP_SLAVE_DATABASE = "studip-slave";
 #      #    #   #   #    #  ####
 
 
-// ABSOLUTE_PATH_STUDIP should end with a '/'
+//ABSOLUTE_PATH_STUDIP should end with a '/'
 //$ABSOLUTE_PATH_STUDIP = $STUDIP_BASE_PATH . '/public/';
 //$CANONICAL_RELATIVE_PATH_STUDIP
 //$ABSOLUTE_URI_STUDIP
