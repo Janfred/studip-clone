@@ -14,7 +14,7 @@
 * @module       export_linking_functions
 * @package      Export
 */
-require_once $GLOBALS['PATH_EXPORT'] . '/export_config.inc.php';
+require_once 'lib/export/export_config.inc.php';
 
 use Studip\Button, Studip\LinkButton;
 
@@ -34,9 +34,9 @@ use Studip\Button, Studip\LinkButton;
 */
 function export_form($range_id, $ex_type = "", $filename = "", $format = "", $filter = "")
 {
-    global $output_formats, $PATH_EXPORT, $xslt_filename;
+    global $output_formats, $xslt_filename;
     $filename = $xslt_filename;
-    require_once ($PATH_EXPORT . "/export_xslt_vars.inc.php");
+    require_once ("lib/export/export_xslt_vars.inc.php");
     $export_string .= "<form action=\"" . "export.php\" method=\"post\">";
     $export_string .= CSRFProtection::tokenTag();
     $export_string .= "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><tr><td class=\"table_row_even\"> &nbsp; &nbsp; &nbsp; ";
@@ -82,9 +82,9 @@ function export_form($range_id, $ex_type = "", $filename = "", $format = "", $fi
 */
 function export_form_sidebar($range_id, $ex_type = "", $filename = "", $format = "", $filter = "")
 {
-    global $output_formats, $PATH_EXPORT, $xslt_filename;
+    global $output_formats, $xslt_filename;
     $filename = $xslt_filename;
-    require_once ($PATH_EXPORT . "/export_xslt_vars.inc.php");
+    require_once ("lib/export/export_xslt_vars.inc.php");
     $export_string .= "<form class=\"default\" action=\"" .$GLOBALS['ABSOLUTE_URI_STUDIP']. "export.php\" method=\"post\">";
     $export_string .= CSRFProtection::tokenTag();
     $export_string .= "<select name=\"format\">";
@@ -124,7 +124,7 @@ function export_form_sidebar($range_id, $ex_type = "", $filename = "", $format =
 */
 function export_link($range_id, $ex_type = "", $filename = "", $format = "", $choose = "", $filter = "", $content = "", $o_mode = 'processor')
 {
-    global $PATH_EXPORT, $xslt_filename, $i_page;
+    global $xslt_filename, $i_page;
 
     $filename = preg_replace('/[\x7f-\x9f]/', '_', $filename);
     $export_string = '<a href="';
@@ -157,7 +157,7 @@ function export_link($range_id, $ex_type = "", $filename = "", $format = "", $ch
 */
 function export_button($range_id, $ex_type = "", $filename = "", $format = "", $choose = "", $filter = "")
 {
-    global $PATH_EXPORT, $xslt_filename, $i_page;
+    global $xslt_filename, $i_page;
     $filename = $xslt_filename;
     $filename = preg_replace('/[\x7f-\x9f]/', '_', $filename);
     if ($choose != "")

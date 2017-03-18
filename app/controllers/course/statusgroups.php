@@ -17,6 +17,7 @@
 require_once 'app/models/statusgroups.php';
 require_once 'lib/messaging.inc.php'; //Funktionen des Nachrichtensystems
 require_once 'lib/export/export_studipdata_func.inc.php'; // Funktionen für den Export
+require_once 'lib/export/export_linking_func.inc.php';
 
 class Course_StatusgroupsController extends AuthenticatedController
 {
@@ -160,7 +161,6 @@ class Course_StatusgroupsController extends AuthenticatedController
                 $sidebar->addWidget($actions);
             }
             if (Config::get()->EXPORT_ENABLE) {
-                include_once $GLOBALS['PATH_EXPORT'] . '/export_linking_func.inc.php';
 
                 $export = new ExportWidget();
 

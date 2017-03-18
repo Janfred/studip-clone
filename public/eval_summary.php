@@ -125,7 +125,7 @@ function do_graph_template()
  */
 function do_graph($data, $evalquestion_id)
 {
-    global $tmp_path_export, $auth, $PATH_EXPORT;
+    global $tmp_path_export, $auth;
 
     $type = do_graph_template();
 
@@ -173,7 +173,7 @@ function do_graph($data, $evalquestion_id)
         $graph->SetPlotType($type);
         $graph->SetXLabelAngle(count($data) < 10 ? 0 : 90);
         //$graph->SetShading(0); // kein 3D
-    
+
         $graph->SetLineWidth(1);
         $graph->SetDrawXDataLabels(true);
         //Draw it

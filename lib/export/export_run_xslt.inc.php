@@ -41,7 +41,7 @@ use Studip\Button, Studip\LinkButton;
 if (($o_mode != "direct") AND ($o_mode != "passthrough"))
     $perm->check("tutor");
 
-require_once ($GLOBALS['PATH_EXPORT'] . '/export_xslt_vars.inc.php');   // Liste der XSLT-Skripts
+require_once ('lib/export/export_xslt_vars.inc.php');   // Liste der XSLT-Skripts
 require_once('lib/datei.inc.php');
 
 /**
@@ -92,7 +92,7 @@ if (!CheckParamRUN()) {
     $result_file = md5(uniqid(rand())) . "." . $format;
     $result = "" . $TMP_PATH . "/export/" . $result_file;
     $xml_process_file = "" . $TMP_PATH . "/export/" . $xml_file_id;
-    $xslt_process_file = $GLOBALS['STUDIP_BASE_PATH'] . '/' . $PATH_EXPORT . "/" . $xslt_files[$choose]["file"];
+    $xslt_process_file = $GLOBALS['STUDIP_BASE_PATH'] . '/lib/export/' . $xslt_files[$choose]["file"];
 
     $xh = new XSLTProcessor();
     $xml_doc = new DOMDocument();
@@ -183,7 +183,7 @@ if (!CheckParamRUN()) {
         }
 
 
-        include_once ("$PATH_EXPORT/oscar.php");
+        include_once ("lib/export/oscar.php");
     }
 
 }

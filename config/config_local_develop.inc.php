@@ -128,9 +128,7 @@ $RELATIVE_PATH_CALENDAR = "lib/calendar";                           //Stud.IP mo
 $RELATIVE_PATH_ADMIN_MODULES = "lib/admin";                         //Stud.IP module: admin tools
 $RELATIVE_PATH_EXTERN = "lib/extern";                           //Stud.IP module: SRI-System for including Stud.IP data in other websites
 $RELATIVE_PATH_ELEARNING_INTERFACE = "lib/elearning";                   //Stud.IP module: Ilias 3 lerningmodules-connection / general E-Learning-interface
-$RELATIVE_PATH_SOAP = "lib/soap";
 
-$PATH_EXPORT = "lib/export";                                //Stud.IP module: export
 
 //caching
 $CACHING_ENABLE = true;

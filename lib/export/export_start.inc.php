@@ -38,7 +38,7 @@
 
 use Studip\Button, Studip\LinkButton;
 
-require_once ("$PATH_EXPORT/export_xslt_vars.inc.php");   // XSLT-Variablen
+require_once ("lib/export/export_xslt_vars.inc.php");   // XSLT-Variablen
 
 $semester = new SemesterData;
 

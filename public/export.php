@@ -62,12 +62,7 @@ if (($o_mode != "direct") AND ($o_mode != "passthrough"))
     include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 }
 
-//$i_page = "my_courses.php";
-//$EXPORT_ENABLE = TRUE;
-//$PATH_EXPORT = "export";
-// -- here you have to put initialisations for the current page
-
-require_once $GLOBALS['PATH_EXPORT'] . '/export_config.inc.php';
+require_once  'lib/export/export_config.inc.php';
 
 PageLayout::setHelpKeyword("Basis.Export");
 ob_start();
@@ -100,7 +95,7 @@ if (Config::get()->EXPORT_ENABLE)
 
     if ( (empty($range_id) AND empty($xml_file_id) AND empty($o_mode) AND empty($ex_type)) OR ($o_mode == "start"))
     {
-        include($GLOBALS['PATH_EXPORT'] . "/export_start.inc.php");
+        include("lib/export/export_start.inc.php");
         $start_done = true;
     }
 
@@ -110,14 +105,14 @@ if (Config::get()->EXPORT_ENABLE)
     //Exportmodul einbinden
     if (($page != 3) AND ($o_mode == "choose") AND ($export_error_num < 1))
     {
-        include($GLOBALS['PATH_EXPORT']  . "/export_choose_xslt.inc.php");
+        include("lib/export/export_choose_xslt.inc.php");
         if ($export_error_num < 1)
             $xslt_choose_done = true;
     }
 
     if ( ($range_id != "") AND ($xml_file_id == "") AND ($o_mode != "start") AND (($o_mode != "choose") OR ($page == 3)))
     {
-        include($GLOBALS['PATH_EXPORT']  . "/export_xml.inc.php");
+        include("lib/export/export_xml.inc.php");
         if ($export_error_num < 1)
             $xml_output_done = true;
     }
@@ -125,13 +120,13 @@ if (Config::get()->EXPORT_ENABLE)
     if ( ($choose != "") AND ($format != "") AND ($format != "xml") AND (Config::get()->XSLT_ENABLE) AND ($export_error_num==0) AND
         ( ($o_mode == "processor") OR ($o_mode == "passthrough") OR ($page == 3) ) )
     {
-        include($GLOBALS['PATH_EXPORT']  . "/export_run_xslt.inc.php");
+        include("lib/export/export_run_xslt.inc.php");
         if ($export_error_num < 1)
             $xslt_process_done = true;
     }
 
     if (($export_error_num < 1) AND ($xslt_process_done) AND ($format == "fo"))
-        include($GLOBALS['PATH_EXPORT']  . "/export_run_fop.inc.php");
+        include("lib/export/export_run_fop.inc.php");
 
     if (($export_error_num < 1) AND (!$start_done) AND ((!$xml_output_done) OR ($o_mode != "file")) AND (!$xslt_choose_done) AND (!$xslt_process_done))
     {
@@ -140,13 +135,13 @@ if (Config::get()->EXPORT_ENABLE)
 
     }
 
-    include($GLOBALS['PATH_EXPORT']  . "/export_view.inc.php");
+    include("lib/export/export_view.inc.php");
 }
 else
 {
     PageLayout::postError(_("Das Exportmodul ist nicht eingebunden. Damit Daten im XML-Format exportiert werden können, muss das Exportmodul in den Systemeinstellungen freigeschaltet werden. 
     Wenden Sie sich bitte an die Administratoren."), [_("Exportmodul nicht eingebunden")]);
-    
+
 }
 if (!in_array($o_mode, words('direct', 'passthrough'))) {
     $template = $GLOBALS['template_factory']->open('layouts/base.php');

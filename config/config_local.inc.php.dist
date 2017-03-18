@@ -119,9 +119,7 @@ $MEDIA_CACHE_PATH = $STUDIP_BASE_PATH . '/data/media_cache';
 $RELATIVE_PATH_CALENDAR = "lib/calendar";                           //Stud.IP module: calendar
 $RELATIVE_PATH_EXTERN = "lib/extern";                           //Stud.IP module: SRI-System for including Stud.IP data in other websites
 $RELATIVE_PATH_ELEARNING_INTERFACE = "lib/elearning";                   //Stud.IP module: Ilias 3 lerningmodules-connection / general E-Learning-interface
-$RELATIVE_PATH_SOAP = "lib/soap";
 
-$PATH_EXPORT = "lib/export";                                //Stud.IP module: export
 
 //caching
 $CACHING_ENABLE = true;

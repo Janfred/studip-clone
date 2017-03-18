@@ -7,7 +7,8 @@
  * @todo test datafields!
  */
 
-include_once $GLOBALS['PATH_EXPORT'] . '/export_linking_func.inc.php';
+require_once 'lib/export/export_studipdata_func.inc.php'; // Funktionen für den Export
+require_once 'lib/export/export_linking_func.inc.php';
 
 class Institute_MembersController extends AuthenticatedController
 {

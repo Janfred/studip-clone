@@ -20,6 +20,8 @@ require_once 'lib/messaging.inc.php'; //Funktionen des Nachrichtensystems
 
 require_once 'lib/admission.inc.php'; //Funktionen der Teilnehmerbegrenzung
 require_once 'lib/export/export_studipdata_func.inc.php'; // Funktionne für den Export
+require_once 'lib/export/export_linking_func.inc.php';
+
 
 class Course_MembersController extends AuthenticatedController
 {
@@ -114,7 +116,6 @@ class Course_MembersController extends AuthenticatedController
 
     public function index_action()
     {
-        global $perm, $PATH_EXPORT;
 
         $sem                = Seminar::getInstance($this->course_id);
         $this->sort_by      = Request::option('sortby', 'nachname');
@@ -1514,7 +1515,6 @@ class Course_MembersController extends AuthenticatedController
             $sidebar->addWidget($widget);
 
             if (Config::get()->EXPORT_ENABLE) {
-                include_once $GLOBALS['PATH_EXPORT'] . '/export_linking_func.inc.php';
 
                 $widget = new ExportWidget();
 

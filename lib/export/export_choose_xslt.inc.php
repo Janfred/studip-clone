@@ -41,7 +41,7 @@ use Studip\Button, Studip\LinkButton;
 
 $perm->check("tutor");
 
-require_once ($PATH_EXPORT.'/export_xslt_vars.inc.php');   // Liste der XSLT-Skripts
+require_once 'lib/export/export_xslt_vars.inc.php';   // Liste der XSLT-Skripts
 require_once ('lib/dates.inc.php');   // Datumsfunktionen
 
 /**

@@ -43,9 +43,9 @@ if (($o_mode != "direct") AND ($o_mode != "passthrough"))
     $perm->check("tutor");
 
 $export_pagename = _("Datenexport");
-require_once $PATH_EXPORT . '/export_xml_vars.inc.php';   // XML-Variablen
-require_once $PATH_EXPORT . '/export_xml_func.inc.php';   // XML-Funktionen
-require_once $PATH_EXPORT . '/export_studipdata_func.inc.php';   // Studip-Export-Funktionen
+require_once 'lib/export/export_xml_vars.inc.php';   // XML-Variablen
+require_once 'lib/export/export_xml_func.inc.php';   // XML-Funktionen
+require_once 'lib/export/export_studipdata_func.inc.php';   // Studip-Export-Funktionen
 require_once 'lib/dates.inc.php';   // Datumsfunktionen
 
 /**
@@ -120,8 +120,8 @@ if ($o_mode === 'file' || $o_mode === 'choose') {
     if ($object_counter<1) {
         $xml_export_text = _("Es wurden keine Daten gefunden!");
         $export_error = _("Es wurden keine Daten gefunden! Die übergebene ID ist mit keinen Veranstaltungs- / Personendaten verbunden.");
-        $export_pagecontent .= "<br><br><br><center>" 
-                            . LinkButton::create('<< ' .  _('Zurück'), URLHelper::getURL("", array('range_id' => $range_id, 'ex_type' => $ex_type, 'ex_sem' => $ex_sem, 'o_mode' => 'start')))  
+        $export_pagecontent .= "<br><br><br><center>"
+                            . LinkButton::create('<< ' .  _('Zurück'), URLHelper::getURL("", array('range_id' => $range_id, 'ex_type' => $ex_type, 'ex_sem' => $ex_sem, 'o_mode' => 'start')))
                             . "</center>";
         $export_error_num ++;
 
