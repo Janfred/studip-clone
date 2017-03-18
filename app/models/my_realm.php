@@ -599,15 +599,19 @@ class MyRealmModel
         $threshold = Config::get()->NEW_INDICATOR_THRESHOLD ? strtotime("-{".Config::get()->NEW_INDICATOR_THRESHOLD."} days 0:00:00") : 0;
         $statement = DBManager::get()->prepare("
             SELECT COUNT(DISTINCT questionnaires.questionnaire_id) AS count,
-                COUNT(IF((questionnaires.chdate > IFNULL(object_user_visits.visitdate, :threshold) AND questionnaires.user_id !=:user_id AND questionnaires.visible = '1'), questionnaires.questionnaire_id, NULL)) AS new,
-                MAX(IF((questionnaires.chdate > IFNULL(object_user_visits.visitdate, :threshold) AND questionnaires.user_id !=:user_id AND questionnaires.visible = '1'), questionnaires.chdate, 0)) AS last_modified
+                COUNT(IF((questionnaires.chdate > IFNULL(object_user_visits.visitdate, :threshold) AND questionnaires.user_id !=:user_id), questionnaires.questionnaire_id, NULL)) AS new,
+                MAX(IF((questionnaires.chdate > IFNULL(object_user_visits.visitdate, :threshold) AND questionnaires.user_id !=:user_id), questionnaires.chdate, 0)) AS last_modified
             FROM questionnaire_assignments
                 INNER JOIN questionnaires ON (questionnaires.questionnaire_id = questionnaire_assignments.questionnaire_id)
                 LEFT JOIN object_user_visits ON(object_user_visits.object_id = questionnaires.questionnaire_id AND object_user_visits.user_id = :user_id AND object_user_visits.type = 'vote')
             WHERE questionnaire_assignments.range_id = :course_id
-                AND questionnaire_assignments.range_type = 'course'
-                AND questionnaires.visible = '1'
-                AND (questionnaires.stopdate IS NULL OR questionnaires.stopdate > UNIX_TIMESTAMP())
+                AND questionnaire_assignments.range_type IN ('course', 'institute')
+                AND questionnaires.startdate IS NOT NULL AND questionnaires.startdate < UNIX_TIMESTAMP()
+                AND (
+                    ((questionnaires.stopdate IS NULL OR questionnaires.stopdate > UNIX_TIMESTAMP()) AND questionnaires.resultvisibility = 'always')
+                OR 
+               (questionnaires.stopdate IS NOT NULL AND questionnaires.stopdate < UNIX_TIMESTAMP() AND questionnaires.resultvisibility <> 'never')
+               )
             GROUP BY questionnaire_assignments.range_id
         ");
         $statement->execute(array(
@@ -615,6 +619,8 @@ class MyRealmModel
             'user_id' => $user_id,
             'course_id' => $object_id
         ));
+
+
         $result = $statement->fetch(PDO::FETCH_ASSOC);
 
         if (!empty($result)) {
@@ -820,7 +826,7 @@ class MyRealmModel
             $current_sem = $sem_key;
  	        if (!$one_sem['past']) break;
  	    }
-        
+
         if (isset($sem_data[$current_sem + 1])) {
             $max_sem = $current_sem + 1;
         } else {
