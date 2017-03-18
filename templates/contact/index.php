@@ -13,7 +13,14 @@
                     <?= Icon::create('arr_1down', 'clickable')->asImg() ?>
                     <?= _('Alle aufklappen') ?>
             <? endif; ?>
-                    <?= sprintf($size_of_book == 1 ? _('(%d Eintrag)') : _('(%d Einträge)'), $size_of_book) ?>
+                    <?= sprintf(
+                            ngettext(
+                                '(%d Eintrag)',
+                                '(%d Einträge)',
+                                $size_of_book
+                            ),
+                            $size_of_book
+                        ) ?>
                 </a>
         <? endif; ?>
             </td>
