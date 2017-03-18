@@ -573,7 +573,7 @@ if ($evaluation = $statement->fetch(PDO::FETCH_ASSOC)) {
     if (do_template("show_total_stats")) {
         fputs($fo_file,"    <fo:block text-align=\"start\" space-before.optimum=\"10pt\" line-height=\"10pt\" font-size=\"8pt\">\n");
         fputs($fo_file,"      ". xml_escape($number_of_votes." "._("Teilnehmer insgesamt")).".\n");
-        fputs($fo_file,"      ". xml_escape(_("Die Teilnahme war")." ". ($evaluation['anonymous']==0 ? _("nicht") : "") . " "._("anonym")).".\n");
+        fputs($fo_file,"      ". xml_escape(($evaluation['anonymous']==0  ? _('Die Teilnahme war nicht anonym.') : _('Die Teilnahme war anonym.'))."\n"));
         fputs($fo_file,"      " . xml_escape(_("Eigentümer").": ".$db_owner.". "._("Erzeugt am").": ".date("d.m.Y H:i:s"))."\n");
         fputs($fo_file,"    </fo:block>\n");
     }
