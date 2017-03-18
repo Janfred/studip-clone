@@ -29,7 +29,7 @@ PageLayout::setHelpKeyword("Basis.Ressourcen");// META:in resourcesControl.inc.p
 
 if (Config::get()->RESOURCES_ENABLE) {
     //Steuerung der Ressourcenverwaltung einbinden
-    include ("$RELATIVE_PATH_RESOURCES/resourcesControl.inc.php");
+    include "lib/resources/resourcesControl.inc.php";
 } else {
     ob_start();
     PageLayout::postError(_("Die Ressourcenverwaltung ist nicht eingebunden. Bitte aktivieren Sie sie in den Systemeinstellungen, oder wenden Sie sich an die Systemadministratoren."), [_("Ressourcenverwaltung nicht eingebunden")]);

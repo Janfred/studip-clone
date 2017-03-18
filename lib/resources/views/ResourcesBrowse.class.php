@@ -39,7 +39,7 @@
 use Studip\Button,
     Studip\LinkButton;
 
-require_once $RELATIVE_PATH_RESOURCES . '/views/ShowList.class.php';
+require_once 'lib/resources/views/ShowList.class.php';
 
 
 /*****************************************************************************

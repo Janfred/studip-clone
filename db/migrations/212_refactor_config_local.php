@@ -15,6 +15,10 @@ class RefactorConfigLocal extends Migration
                 'description' => "Name der Stud.IP-Installation bzw. Hochschule.",
                 'type' => "string"
             ),
+            "STUDIP_INSTALLATION_ID" => array(
+                'description' => "unique identifier for installation",
+                'type' => "string"
+            ),
             "MEDIA_CACHE_MAX_LENGTH" => array(
                 'description' => "Wie große Dateien sollen maximal gecached werden (in Bytes)?",
                 'type' => "integer"

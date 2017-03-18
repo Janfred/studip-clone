@@ -364,10 +364,7 @@ function getResourceObjectCategory($id)
 
 function getMyRoomRequests($user_id = '', $semester_id = null, $only_not_closed = true, $single_request = null, $sem_type = null, $faculty = null, $tagged = null)
 {
-    global $user, $perm, $RELATIVE_PATH_RESOURCES;
-
-    $db = DBManager::get();
-
+    global $user;
 
     if (!$user_id) {
         $user_id = $user->id;

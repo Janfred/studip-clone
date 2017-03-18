@@ -39,7 +39,7 @@
 use Studip\Button,
     Studip\LinkButton;
 
-require_once $RELATIVE_PATH_RESOURCES . '/views/ShowTreeRow.class.php';
+require_once 'lib/resources/views/ShowTreeRow.class.php';
 
 /*****************************************************************************
 ShowList, stellt Liste mit Hilfe von printThread dar
@@ -79,7 +79,7 @@ class ShowList extends ShowTreeRow{
 
     //private
     function showListObject ($resource_id, $admin_buttons=FALSE) {
-        global $edit_structure_object, $RELATIVE_PATH_RESOURCES, $ActualObjectPerms,
+        global $edit_structure_object,
             $user, $perm, $clipObj, $view_mode, $view;
 
         //Object erstellen
@@ -251,7 +251,7 @@ class ShowList extends ShowTreeRow{
 
     function showRangeList($range_id) {
         $count = 0;
-        require_once $GLOBALS['RELATIVE_PATH_RESOURCES']."/lib/ResourcesOpenObjectGroups.class.php";
+        require_once "lib/resources/lib/ResourcesOpenObjectGroups.class.php";
         foreach(ResourcesOpenObjectGroups::GetInstance($range_id)->getAllResources() as $resource_id){
             $this->showListObject($resource_id);
             ++$count;

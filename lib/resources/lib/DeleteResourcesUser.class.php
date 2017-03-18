@@ -45,7 +45,6 @@ class DeleteResourcesUser
     //Konstruktor
     function __construct($range_id)
     {
-        global $RELATIVE_PATH_RESOURCES;
         $this->range_id = $range_id;
         $this->object_type = get_object_type($this->range_id);
     }

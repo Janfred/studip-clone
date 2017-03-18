@@ -37,7 +37,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/views/ScheduleView.class.php";
+require_once "lib/resources/views/ScheduleView.class.php";
 
 class ScheduleWeek extends ScheduleView
 {

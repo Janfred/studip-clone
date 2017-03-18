@@ -124,8 +124,7 @@ class EditResourceData {
     }
 
     function showScheduleForms($assign_id='') {
-        global $perm, $user,
-            $CANONICAl_RELATIVE_PATH_STUDIP, $RELATIVE_PATH_RESOURCES;
+        global $perm, $user;
 
         $resReq = new RoomRequest();
 

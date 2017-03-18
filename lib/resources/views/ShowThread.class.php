@@ -39,7 +39,7 @@
 use Studip\Button,
     Studip\LinkButton;
 
-require_once $RELATIVE_PATH_RESOURCES . '/views/ShowTreeRow.class.php';
+require_once 'lib/resources/views/ShowTreeRow.class.php';
 
 
 /*****************************************************************************
@@ -54,7 +54,7 @@ class ShowThread extends ShowTreeRow {
 
     function showThreadLevel ($root_id, $level=0, $lines='')
     {
-        global $edit_structure_object, $RELATIVE_PATH_RESOURCES, $ActualObjectPerms;
+        global $edit_structure_object, $ActualObjectPerms;
 
         // Prepare statement that obtains all children of a given resource
         $query = "SELECT resource_id

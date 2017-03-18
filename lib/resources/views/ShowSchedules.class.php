@@ -39,7 +39,7 @@
 use Studip\Button,
     Studip\LinkButton;
 
-require_once $GLOBALS['RELATIVE_PATH_RESOURCES'] . '/views/ScheduleWeek.class.php';
+require_once 'lib/resources/views/ScheduleWeek.class.php';
 
 /*****************************************************************************
 ShowSchedules - schedule view
@@ -251,7 +251,7 @@ class ShowSchedules
 
     public function showScheduleGraphical($print_view = false)
     {
-        global $RELATIVE_PATH_RESOURCES, $view_mode, $ActualObjectPerms;
+        global $view_mode, $ActualObjectPerms;
 
         $categories = $this->getCategories();
 

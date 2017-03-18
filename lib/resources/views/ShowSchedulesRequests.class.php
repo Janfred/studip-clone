@@ -36,9 +36,9 @@
 
 use Studip\Button;
 
-require_once $GLOBALS['RELATIVE_PATH_RESOURCES'] . '/views/ScheduleWeekRequests.class.php';
-require_once $GLOBALS['RELATIVE_PATH_RESOURCES'] . '/views/ShowSchedules.class.php';
-require_once $GLOBALS['RELATIVE_PATH_RESOURCES'] . '/views/ShowToolsRequests.class.php';
+require_once 'lib/resources/views/ScheduleWeekRequests.class.php';
+require_once 'lib/resources/views/ShowSchedules.class.php';
+require_once 'lib/resources/views/ShowToolsRequests.class.php';
 
 /*****************************************************************************
 ShowSchedules - schedule view
@@ -97,7 +97,7 @@ class ShowSchedulesRequests extends ShowSchedules{
 
 
     function showScheduleGraphical() {
-        global $RELATIVE_PATH_RESOURCES, $view_mode, $ActualObjectPerms;
+        global $view_mode;
 
         $categories["na"] = 4;
         $categories["sd"] = 4;

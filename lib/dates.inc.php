@@ -351,10 +351,9 @@ dies muss das aufrufende Script sicherstellen.
 */
 
 function delete_date($termin_id, $topic_delete = TRUE, $folder_move = TRUE, $sem_id=0) {
-    global $RELATIVE_PATH_RESOURCES;
 
     if (Config::get()->RESOURCES_ENABLE) {
-        include_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
+        include_once ("lib/resources/lib/VeranstaltungResourcesAssign.class.php");
     }
 
     if (!$folder_move) {
