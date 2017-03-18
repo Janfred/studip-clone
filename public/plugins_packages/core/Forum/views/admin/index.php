@@ -1,20 +1,14 @@
-<?
-$infobox_content[] = array(
-    'kategorie' => _('Informationen / Bedienungshinweise'),
-    'eintrag'   => array(
-        array(
-            'icon' => Icon::create('info', 'clickable'),
-            'text' => _('Sie befinden sich hier in der Administrationsansicht des Forums. '
-                    . 'Mit den blauen Pfeilen können Sie einen oder mehrere Einträge auswählen, welche dann verschoben werden können. ')
-        ),
-        array(
-            'icon' => Icon::create('info', 'clickable'),
-            'text' => _('Sie sollten nicht mehr als 20 Einträge gleichzeitig auswählen, da das verschieben sonst sehr lange dauern kann.')
-        )
-    )
+<?php
+Helpbar::get()->addPlainText(
+    _('Bedienungshinweise'),
+    _('Sie befinden sich hier in der Administrationsansicht des Forums. '
+    . 'Mit den blauen Pfeilen können Sie einen oder mehrere Einträge auswählen, welche dann verschoben werden können. '),
+    Icon::create('info', 'info_alt')
 );
-
-$infobox = array('picture' => 'sidebar/forum-sidebar.png', 'content' => $infobox_content);
+Helpbar::get()->addPlainText(
+    '',
+    _('Sie sollten nicht mehr als 20 Einträge gleichzeitig auswählen, da das verschieben sonst sehr lange dauern kann.')
+);
 ?>
 <div id="forum">
     <ul style="margin: 0; padding-left: 20px;" class="js">
