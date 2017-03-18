@@ -58,7 +58,7 @@
             <li class="lvgroup-tree-root tree-loaded keep-node">
                 <input type="checkbox" id="root" checked="checked"/>
                 <label for="root">
-                    <?= $GLOBALS['UNI_NAME'] ?>
+                    <?= htmlReady($GLOBALS['UNI_NAME_CLEAN']) ?>
                 </label>
                 <ul>
                 <? foreach ((array) $tree as $node) : ?>

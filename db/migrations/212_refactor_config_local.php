@@ -85,27 +85,33 @@ class RefactorConfigLocal extends Migration
             ),
             "ALLOW_CHANGE_USERNAME" => array(
                 'description' => "if true, users are allowed to change their username",
-                'type' => "boolean"
+                'type' => "boolean",
+                'section' => "permissions"
             ),
             "ALLOW_CHANGE_EMAIL" => array(
                 'description' => "if true, users are allowed to change their username",
-                'type' => "boolean"
+                'type' => "boolean",
+                'section' => "permissions"
             ),
             "ALLOW_CHANGE_NAME" => array(
                 'description' => "if true, users are allowed to change their name",
-                'type' => "boolean"
+                'type' => "boolean",
+                'section' => "permissions"
             ),
             "ALLOW_CHANGE_TITLE" => array(
                 'description' => "if true, users are allowed to change their titles",
-                'type' => "boolean"
+                'type' => "boolean",
+                'section' => "permissions"
             ),
             "ENABLE_SELF_REGISTRATION" => array(
                 'description' => "should it be possible for an user to register himself",
-                'type' => "boolean"
+                'type' => "boolean",
+                'section' => "permissions"
             ),
             "ENABLE_REQUEST_NEW_PASSWORD_BY_USER" => array(
                 'description' => "if true, users are able to request a new password themselves",
-                'type' => "boolean"
+                'type' => "boolean",
+                'section' => "permissions"
             ),
             "PHPASS_USE_PORTABLE_HASH" => array(
                 'description' => "PHPASS_USE_PORTABLE_HASH",
@@ -134,7 +140,7 @@ class RefactorConfigLocal extends Migration
                 'type'        => $data['type'],
                 'value'       => $GLOBALS[$name],
                 'range'       => 'global',
-                'section'     => 'config_local',
+                'section'     => $data['section'] ?: "global",
                 'description' => $data['description']
             );
             $stmt->execute($option);

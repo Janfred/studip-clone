@@ -139,7 +139,6 @@ enable or disable the Stud.IP internal modules, set and basic settings*/
 $FOP_SH_CALL = "/usr/bin/fop";                        //path to fop
 
 $EXTERN_SERVER_NAME = "";                               //define name, if you use special setup
-$EXTERN_ALLOW_ACCESS_WITHOUT_CONFIG = FALSE;                        //free access to external pages (without the need of a configuration), independent of SRI settings above
 
 $ELEARNING_INTERFACE_MODULES = array(
     "ilias4" => array(
@@ -480,7 +479,3 @@ $LOGIN_IP_RANGES =
 /*path generation
 -----------------------------------------------------------------
 (end of user defined settings)*/
-
-
-//create the html-version of $UNI_NAME clean
-$UNI_NAME = htmlspecialchars($UNI_NAME_CLEAN, ENT_QUOTES, 'cp1252');
