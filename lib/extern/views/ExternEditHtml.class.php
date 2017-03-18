@@ -38,7 +38,7 @@
 // +---------------------------------------------------------------------------+
 
 
-require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/views/ExternEditGeneric.class.php");
+require_once "lib/extern/views/ExternEditGeneric.class.php";
 
 class ExternEditHtml extends ExternEditGeneric {
 

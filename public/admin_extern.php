@@ -48,7 +48,7 @@ PageLayout::setHelpKeyword("Basis.EinrichtungenVerwaltenExterneSeiten");
 PageLayout::setTitle(_("Verwaltung externer Seiten"));
 
 if (Config::get()->EXTERN_ENABLE) {
-    include($GLOBALS['RELATIVE_PATH_EXTERN'] . "/admin_extern.inc.php");
+    include "lib/extern/admin_extern.inc.php";
 } else {
     ob_start();
     // Start of Output

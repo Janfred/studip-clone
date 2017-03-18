@@ -16,8 +16,8 @@ class Events extends \RESTAPI\RouteMap
 {
     public function before($router, &$handler, &$parameters)
     {
-        require_once $GLOBALS['RELATIVE_PATH_CALENDAR'] . '/CalendarExportFile.class.php';
-        require_once $GLOBALS['RELATIVE_PATH_CALENDAR'] . '/CalendarWriterICalendar.class.php';
+        require_once 'lib/calendar/CalendarExportFile.class.php';
+        require_once 'lib/calendar/CalendarWriterICalendar.class.php';
     }
 
     /**

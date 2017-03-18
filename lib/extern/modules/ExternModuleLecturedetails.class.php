@@ -38,8 +38,8 @@
 // +---------------------------------------------------------------------------+
 
 
-require_once $GLOBALS['RELATIVE_PATH_EXTERN'] . '/views/extern_html_templates.inc.php';
-require_once $GLOBALS['RELATIVE_PATH_EXTERN'] . '/modules/views/ExternSemBrowse.class.php';
+require_once 'lib/extern/views/extern_html_templates.inc.php';
+require_once 'lib/extern/modules/views/ExternSemBrowse.class.php';
 require_once 'lib/dates.inc.php';
 
 class ExternModuleLecturedetails extends ExternModule {
@@ -123,8 +123,7 @@ class ExternModuleLecturedetails extends ExternModule {
             $language = "de_DE";
         init_i18n($language);
 
-        include($GLOBALS["RELATIVE_PATH_EXTERN"]
-                . "/modules/views/lecturedetails_preview.inc.php");
+        include "lib/extern/modules/views/lecturedetails_preview.inc.php";
 
         if ($this->config->getValue("Main", "wholesite"))
             echo html_footer();

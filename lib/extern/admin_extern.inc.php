@@ -151,7 +151,7 @@ if (Request::option('com') == 'delete_sec') {
 }
 
 if (Request::option('com') == 'info') {
-    include $RELATIVE_PATH_EXTERN . '/views/extern_info_module.inc.php';
+    include 'lib/extern/views/extern_info_module.inc.php';
 
     $template = $GLOBALS['template_factory']->open('layouts/base.php');
     $template->content_for_layout = ob_get_clean();
@@ -163,7 +163,7 @@ if (Request::option('com') == 'info') {
 if (Request::option('com') == 'new' || Request::option('com') == 'edit' || Request::option('com') == 'open' ||
         Request::option('com') == 'close' || Request::option('com') == 'store') {
 
-    require_once($RELATIVE_PATH_EXTERN . "/views/extern_edit_module.inc.php");
+    require_once "lib/extern/views/extern_edit_module.inc.php";
 
 
     $template = $GLOBALS['template_factory']->open('layouts/base.php');

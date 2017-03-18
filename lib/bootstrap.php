@@ -203,13 +203,13 @@ namespace {
     require_once 'lib/resources/lib/list_assign.inc.php';
 
     if (Config::get()->EXTERN_ENABLE) {
-        StudipAutoloader::addAutoloadPath($GLOBALS['STUDIP_BASE_PATH'] . '/' . $GLOBALS['RELATIVE_PATH_EXTERN'] . '/lib');
-        require_once $GLOBALS['STUDIP_BASE_PATH'] . '/' . $GLOBALS['RELATIVE_PATH_EXTERN'] . '/extern_config.inc.php';
-        require_once $GLOBALS['STUDIP_BASE_PATH'] . '/' . $GLOBALS['RELATIVE_PATH_EXTERN'] . '/lib/extern_functions.inc.php';
+        StudipAutoloader::addAutoloadPath($GLOBALS['STUDIP_BASE_PATH'] . '/lib/extern/lib');
+        require_once $GLOBALS['STUDIP_BASE_PATH'] . '/lib/extern/extern_config.inc.php';
+        require_once $GLOBALS['STUDIP_BASE_PATH'] . '/lib/extern/lib/extern_functions.inc.php';
     }
 
     if (Config::get()->CALENDAR_ENABLE) {
-        StudipAutoloader::addAutoloadPath($GLOBALS['STUDIP_BASE_PATH'] . '/' . $GLOBALS['RELATIVE_PATH_CALENDAR'] . '/lib');
+        StudipAutoloader::addAutoloadPath($GLOBALS['STUDIP_BASE_PATH'] . '/lib/calendar/lib');
         require_once 'lib/calendar_functions.inc.php';
     }
 

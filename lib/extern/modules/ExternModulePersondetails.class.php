@@ -37,7 +37,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once $GLOBALS['RELATIVE_PATH_EXTERN'] . '/views/extern_html_templates.inc.php';
+require_once 'lib/extern/views/extern_html_templates.inc.php';
 require_once 'lib/dates.inc.php';
 
 class ExternModulePersondetails extends ExternModule {
@@ -107,8 +107,7 @@ class ExternModulePersondetails extends ExternModule {
             $language = "de_DE";
         init_i18n($language);
         
-        include($GLOBALS["RELATIVE_PATH_EXTERN"]
-                . "/modules/views/persondetails.inc.php");
+        include "lib/extern/modules/views/persondetails.inc.php";
         
         if ($this->config->getValue("Main", "wholesite"))
             echo html_footer();
@@ -122,8 +121,7 @@ class ExternModulePersondetails extends ExternModule {
             $language = "de_DE";
         init_i18n($language);
         
-        include($GLOBALS["RELATIVE_PATH_EXTERN"]
-                . "/modules/views/persondetails_preview.inc.php");
+        include "lib/extern/modules/views/persondetails_preview.inc.php";
         
         if ($this->config->getValue("Main", "wholesite"))
             echo html_footer();

@@ -45,6 +45,5 @@ if (!get_config('EXTERN_ENABLE')) {
     exit;
 }
 
-include($GLOBALS['RELATIVE_PATH_EXTERN'] . "/extern.inc.php");
+include "lib/extern/extern.inc.php";
 
-?>

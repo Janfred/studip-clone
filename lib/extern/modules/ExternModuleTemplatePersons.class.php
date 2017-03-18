@@ -37,7 +37,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once $GLOBALS['RELATIVE_PATH_EXTERN'] . '/views/extern_html_templates.inc.php';
+require_once 'lib/extern/views/extern_html_templates.inc.php';
 require_once 'lib/user_visible.inc.php';
 
 class ExternModuleTemplatePersons extends ExternModule {

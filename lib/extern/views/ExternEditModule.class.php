@@ -40,7 +40,7 @@ use Studip\Button, Studip\LinkButton;
 // +---------------------------------------------------------------------------+
 
 
-require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/views/ExternEditHtml.class.php");
+require_once "lib/extern/views/ExternEditHtml.class.php";
 
 class ExternEditModule extends ExternEditHtml {
 

@@ -37,8 +37,8 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once $GLOBALS['RELATIVE_PATH_EXTERN'] . '/views/extern_html_templates.inc.php';
-require_once $GLOBALS['RELATIVE_PATH_EXTERN'] . '/modules/views/ExternSemBrowse.class.php';
+require_once 'lib/extern/views/extern_html_templates.inc.php';
+require_once 'lib/extern/modules/views/ExternSemBrowse.class.php';
 
 class ExternModuleLectures extends ExternModule {
 
@@ -93,8 +93,7 @@ class ExternModuleLectures extends ExternModule {
             $language = "de_DE";
         init_i18n($language);
         
-        include($GLOBALS["RELATIVE_PATH_EXTERN"]
-                . "/modules/views/lectures_preview.inc.php");
+        include "lib/extern/modules/views/lectures_preview.inc.php";
         
         if ($this->config->getValue("Main", "wholesite"))
             echo html_footer();

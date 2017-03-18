@@ -37,7 +37,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once $GLOBALS['RELATIVE_PATH_EXTERN'] . '/views/ExternEditModule.class.php';
+require_once 'lib/extern/views/ExternEditModule.class.php';
 
 class ExternModule {
 
@@ -59,7 +59,7 @@ class ExternModule {
 
         if ($module_name != '') {
             $module_name = ucfirst($module_name);
-            require_once($GLOBALS['RELATIVE_PATH_EXTERN'] . "/modules/ExternModule$module_name.class.php");
+            require_once "lib/extern/modules/ExternModule$module_name.class.php";
 
             $class_name = "ExternModule" . $module_name;
             $module = new $class_name($range_id, $module_name, $config_id, $set_config, $global_id);
@@ -227,7 +227,7 @@ class ExternModule {
     function toStringEdit ($open_elements = "", $post_vars = "",
             $faulty_values = "", $anker = "") {
 
-        require_once($GLOBALS['RELATIVE_PATH_EXTERN'] . "/views/ExternEditModule.class.php");
+        require_once "lib/extern/views/ExternEditModule.class.php";
         $edit_form = new ExternEditModule($this->config, $post_vars, $faulty_values, $anker);
 
         $out = $edit_form->editHeader();

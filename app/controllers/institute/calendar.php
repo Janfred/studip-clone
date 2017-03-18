@@ -96,7 +96,7 @@ class Institute_CalendarController extends AuthenticatedController
             $et = 23;
         }
 
-        include_once($GLOBALS['RELATIVE_PATH_CALENDAR'] . '/lib/DbCalendarWeek.class.php');
+        include_once 'lib/calendar/lib/DbCalendarWeek.class.php';
         $this->_calendar = $calendar;
         $this->atime = $atime;
         $this->cmd = 'showweek';

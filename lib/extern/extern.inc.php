@@ -48,7 +48,7 @@ $perm = new Seminar_Perm();
 // there is a page_url, switch to the sri-interface
 $page_url = Request::quoted('page_url');
 if ($page_url) {
-    require($GLOBALS['RELATIVE_PATH_EXTERN'] . "/sri.inc.php");
+    require "lib/extern/sri.inc.php";
     exit;
 }
 
