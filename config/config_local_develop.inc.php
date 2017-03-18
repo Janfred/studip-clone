@@ -4,7 +4,7 @@
 you find here the basic system settings. You shouldn't have to touch much of them...
 please note the CONFIG.INC.PHP in the system folder for the indivual settings of your installation!*/
 
-$UNI_NAME_CLEAN = "Stud.IP Entwicklungs- und Anwendungsforum";                          //the clean-name of your master-faculty (e.g. University of Göttingen), without html-entities (used for mail-system)
+$UNI_NAME_CLEAN = "Stud.IP Entwicklungs- und Anwendungsforum";                          //the clean-name of your master-faculty (e.g. University of G?ttingen), without html-entities (used for mail-system)
 $STUDIP_INSTALLATION_ID = 'develop';      //unique identifier for installation
 
 
@@ -249,40 +249,40 @@ $_lit_search_plugins[] = array('name' => "Studip",'display_name' =>'Katalog der 
 /* Gemeinsamer Verbundkatalog - GVK */
 $_lit_search_plugins[] = array('name' => "Gvk",'display_name' =>'Gemeinsamer Verbundkatalog', 'link' => 'http://gso.gbv.de/DB=2.1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
-/* Niedersächsische Staats- und Universitätsbibliothek Göttingen, OPAC */
-$_lit_search_plugins[] = array('name' => "SUBGoeOpac",'display_name' => "Opac der SUB Göttingen" , 'link' => 'http://goopc4.sub.uni-goettingen.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
+/* Nieders?chsische Staats- und Universit?tsbibliothek G?ttingen, OPAC */
+$_lit_search_plugins[] = array('name' => "SUBGoeOpac",'display_name' => "Opac der SUB G?ttingen" , 'link' => 'http://goopc4.sub.uni-goettingen.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
-/* Göttinger Gesamtkatalog (Regionalkatalog Göttingen) */
-$_lit_search_plugins[] = array('name' => 'Rkgoe', 'display_name' =>'Regionalkatalog Göttingen', 'link' => 'http://gso.gbv.de/DB=2.90/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
+/* G?ttinger Gesamtkatalog (Regionalkatalog G?ttingen) */
+$_lit_search_plugins[] = array('name' => 'Rkgoe', 'display_name' =>'Regionalkatalog G?ttingen', 'link' => 'http://gso.gbv.de/DB=2.90/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
-/* Bibliotheken der Wirtschafts- und Sozialwiss. Fakultäten Goettingen" */
+/* Bibliotheken der Wirtschafts- und Sozialwiss. Fakult?ten Goettingen" */
 //$_lit_search_plugins[] = array('name' => 'WisoFak', 'link' => 'http://goopc4.sub.uni-goettingen.de:8080/DB=2/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
-/* Technische Informationsbibliothek / Universitätsbibliothek Hannover, OPAC */
+/* Technische Informationsbibliothek / Universit?tsbibliothek Hannover, OPAC */
 //$_lit_search_plugins[] = array('name' => 'TIBUBOpac', 'link' => 'http://opc4.tib.uni-hannover.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}', 'display_name' => "UB Katalog");
 
 /* Hannover Gesamtkatalog (Regionalkatalog Hannover) */
 //$_lit_search_plugins[] = array('name' => 'Rkhan', 'link' => 'http://gso.gbv.de/DB=2.92/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}', 'display_name' => "Gesamtkatalog Hannover");
 
-/* Bibliotheken der Fachhochschule Hildesheim/Holzminden/Göttingen */
+/* Bibliotheken der Fachhochschule Hildesheim/Holzminden/G?ttingen */
 //$_lit_search_plugins[] = array('name' => 'FHHIOpac', 'link' => 'http://hidbs2.bib.uni-hildesheim.de:8080/DB=2/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
-/* Thüringer Universitäts- und Landesbibliothek Jena */
+/* Th?ringer Universit?ts- und Landesbibliothek Jena */
 //$_lit_search_plugins[] = array('name' => 'ThULB_Jena', 'link' => 'http://jenopc4.thulb.uni-jena.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
 /* Bibliothek der Fachhochschule Jena */
 //$_lit_search_plugins[] = array('name' => 'FH_Jena', 'link' => 'http://jenopc4.thulb.uni-jena.de:8080/DB=2/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
-/* Universitätsbibliothek der Bauhaus-Universität Weimar */
+/* Universit?tsbibliothek der Bauhaus-Universit?t Weimar */
 //$_lit_search_plugins[] = array('name' => 'UB_Weimar', 'link' => 'http://weias.ub.uni-weimar.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
 /* Herzogin Anna Amalia Bibliothek Weimar */
 //$_lit_search_plugins[] = array('name' => 'HAAB_Weimar', 'link' => 'http://weias.ub.uni-weimar.de:8080/DB=2/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
-/* Bibliothek der Hochschule für Musik Franz Liszt Weimar */
+/* Bibliothek der Hochschule f?r Musik Franz Liszt Weimar */
 //$_lit_search_plugins[] = array('name' => 'HSfMFL_Weimar', 'link' => 'http://weias.ub.uni-weimar.de:8080/DB=3/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
-/* Universitätsbibliothek Erfurt */
+/* Universit?tsbibliothek Erfurt */
 //$_lit_search_plugins[] = array('name' => 'UB_Erfurt', 'link' => 'http://opac.uni-erfurt.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
 /* Bibliothek der Fachhochschule Erfurt */
@@ -291,13 +291,13 @@ $_lit_search_plugins[] = array('name' => 'Rkgoe', 'display_name' =>'Regionalkata
 /* Bibliothek der Fachhochschule Nordhausen */
 //$_lit_search_plugins[] = array('name' => 'FH_Nordhausen', 'link' => 'http://opac.uni-erfurt.de:8080/DB=5/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
-/* Universitätsbibliothek Ilmenau */
+/* Universit?tsbibliothek Ilmenau */
 //$_lit_search_plugins[] = array('name' => 'UB_Ilmenau', 'link' => 'http://ilmopc4.bibliothek.tu-ilmenau.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
 /* Bibliothek der Fachhochschule Schmalkalden */
 //$_lit_search_plugins[] = array('name' => 'FH_Schmalkalden', 'link' => 'http://ilmopc4.bibliothek.tu-ilmenau.de:8080/DB=2/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
-/* Universitäts- und Landesbibliothek Sachsen-Anhalt Halle */
+/* Universit?ts- und Landesbibliothek Sachsen-Anhalt Halle */
 //$_lit_search_plugins[] = array('name' => "Ulb", 'link' => 'http://haweb1.bibliothek.uni-halle.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
 /* FB Technik ULB Halle und FH Merseburg  */
@@ -306,10 +306,10 @@ $_lit_search_plugins[] = array('name' => 'Rkgoe', 'display_name' =>'Regionalkata
 /* Deutsche Akademie der Naturforscher Leopoldina */
 //$_lit_search_plugins[] = array('name' => "Leopoldina", 'link' => 'http://haweb1.bibliothek.uni-halle.de:8080/DB=4/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
-/* Universitätsbibliothek Trier */
-//$_lit_search_plugins[] = array('name' => 'UB_Trier', 'display_name' =>'BIB-KAT Universität Trier', 'link' => 'http://bibkat.uni-trier.de/F/?func=find-c&local_base=tri01&ccl_term={accession_number}');
+/* Universit?tsbibliothek Trier */
+//$_lit_search_plugins[] = array('name' => 'UB_Trier', 'display_name' =>'BIB-KAT Universit?t Trier', 'link' => 'http://bibkat.uni-trier.de/F/?func=find-c&local_base=tri01&ccl_term={accession_number}');
 
-/* Südwestdeutscher Bibliotheksverbund SWB Online */
+/* S?dwestdeutscher Bibliotheksverbund SWB Online */
 //$_lit_search_plugins[] = array('name' => "Swb", 'display_name' => "SWB Online Katalog", 'link' => 'http://swb.bsz-bw.de/DB=2.1/SET=1/TTL=2/CLK?IKT=12&TRM={accession_number}');
 
 /* IWF Campusmedien */
