@@ -60,7 +60,7 @@ if (Config::get()->ELEARNING_INTERFACE_ENABLE)
 
         if ($error_count == 0)
         {
-            require_once ($RELATIVE_PATH_ELEARNING_INTERFACE . "/" . $ELEARNING_INTERFACE_MODULES[$cms_select]["CLASS_PREFIX"] . "ConnectedCMS.class.php");
+            require_once ("lib/elearning/" . $ELEARNING_INTERFACE_MODULES[$cms_select]["CLASS_PREFIX"] . "ConnectedCMS.class.php");
             $classname = $ELEARNING_INTERFACE_MODULES[$cms_select]["CLASS_PREFIX"] . "ConnectedCMS";
             $connected_cms[$cms_select] = new $classname($cms_select);
             $connected_cms[$cms_select]->initSubclasses();
@@ -68,7 +68,7 @@ if (Config::get()->ELEARNING_INTERFACE_ENABLE)
     } else {
         unset($cms_select);
     }
-    
+
     if ($messages["error"] != "")
     {
         PageLayout::postError($messages["error"]);
@@ -77,7 +77,7 @@ if (Config::get()->ELEARNING_INTERFACE_ENABLE)
     {
        PageLayout::postInfo($messages["info"]);
     }
-    
+
     if ($cms_select == "")
         echo ELearningUtils::getCMSSelectbox(_("Bitte wählen Sie ein angebundenes System für die Schnittstelle: "), false) . "\n\n<br><br>";
     else
@@ -164,7 +164,7 @@ if (Config::get()->ELEARNING_INTERFACE_ENABLE)
     Helpbar::Get()->addPlainText(_('Information'), _('Hier können Sie angebundene Systeme verwalten.'), Icon::create('info'));
     Helpbar::Get()->addPlainText(_('Aktionen'), _('Nachdem Sie ein angebundenes System ausgewählt haben wird die Verbindung zum System geprüft.'), Icon::create('info'));
     // Anzeige, wenn noch keine Account-Zuordnung besteht
-      
+
         switch($status_info)
         {
             case "active":
@@ -189,7 +189,7 @@ else
     PageLayout::postError(_("Die Schnittstelle für die Integration von Lernmodulen ist nicht aktiviert.
     Damit Lernmodule verwendet werden können, muss die Verbindung zu einem LCM-System in der Konfigurationsdatei von Stud.IP hergestellt werden. 
     Wenden Sie sich bitte an den/die AdministratorIn."), [_("E-Learning-Schnittstelle nicht eingebunden")]);
-    
+
 }
 
 

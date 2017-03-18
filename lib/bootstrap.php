@@ -127,7 +127,7 @@ namespace {
     require_once 'lib/language.inc.php';
     require_once 'lib/visual.inc.php';
     require_once 'lib/deputies_functions.inc.php';
-    
+
     //setup default logger
     Log::get()->setHandler($GLOBALS['TMP_PATH'] . '/studip.log');
     if (Studip\ENV == 'development') {
@@ -197,7 +197,7 @@ namespace {
 
     // Add paths to autoloader that were defined in config_local.inc.php and
     // may be optional
-    
+
     StudipAutoloader::addAutoloadPath($GLOBALS['STUDIP_BASE_PATH'] . '/lib/resources/lib');
     require_once 'lib/resources/resourcesFunc.inc.php';
     require_once 'lib/resources/lib/list_assign.inc.php';
@@ -214,7 +214,7 @@ namespace {
     }
 
     if (Config::get()->ELEARNING_INTERFACE_ENABLE) {
-        StudipAutoloader::addAutoloadPath($GLOBALS['STUDIP_BASE_PATH'] . '/' . $GLOBALS['RELATIVE_PATH_ELEARNING_INTERFACE']);
+        StudipAutoloader::addAutoloadPath($GLOBALS['STUDIP_BASE_PATH'] . '/lib/elearning');
     }
 
     // set dummy navigation until db is ready

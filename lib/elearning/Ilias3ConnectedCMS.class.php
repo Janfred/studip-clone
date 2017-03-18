@@ -43,7 +43,7 @@ class Ilias3ConnectedCMS extends ConnectedCMS
     */
     function __construct($cms)
     {
-        global $ELEARNING_INTERFACE_MODULES, $RELATIVE_PATH_ELEARNING_INTERFACE;
+        global $ELEARNING_INTERFACE_MODULES;
 
         parent::__construct($cms);
 
@@ -51,26 +51,7 @@ class Ilias3ConnectedCMS extends ConnectedCMS
         $classname = $this->CLASS_PREFIX . "Soap";
         $this->soap_client = new $classname($this->cms_type);
         $this->soap_client->setCachingStatus(true);
-/*
-        if (($ELEARNING_INTERFACE_MODULES[$cms]["RELATIVE_PATH_DB_CLASSES"] != false) AND ($cms != ""))
-        {
-            require_once($RELATIVE_PATH_ELEARNING_INTERFACE . "/" . $ELEARNING_INTERFACE_MODULES[$cms]["RELATIVE_PATH_DB_CLASSES"] . "/" . $ELEARNING_INTERFACE_MODULES[$cms]["db_classes"]["content"]["file"] );
-            $classname = $ELEARNING_INTERFACE_MODULES[$cms]["db_classes"]["content"]["classname"];
-            $this->db_class = new $classname();
 
-            require_once($RELATIVE_PATH_ELEARNING_INTERFACE . "/" . $ELEARNING_INTERFACE_MODULES[$cms]["RELATIVE_PATH_DB_CLASSES"] . "/" . $ELEARNING_INTERFACE_MODULES[$cms]["db_classes"]["object"]["file"] );
-            $classname = $ELEARNING_INTERFACE_MODULES[$cms]["db_classes"]["object"]["classname"];
-            $this->db_class_object = new $classname();
-
-            require_once($RELATIVE_PATH_ELEARNING_INTERFACE . "/" . $ELEARNING_INTERFACE_MODULES[$cms]["RELATIVE_PATH_DB_CLASSES"] . "/" . $ELEARNING_INTERFACE_MODULES[$cms]["db_classes"]["tree"]["file"] );
-            $classname = $ELEARNING_INTERFACE_MODULES[$cms]["db_classes"]["tree"]["classname"];
-            $this->db_class_tree = new $classname();
-
-            require_once($RELATIVE_PATH_ELEARNING_INTERFACE . "/" . $ELEARNING_INTERFACE_MODULES[$cms]["RELATIVE_PATH_DB_CLASSES"] . "/" . $ELEARNING_INTERFACE_MODULES[$cms]["db_classes"]["course"]["file"] );
-            $classname = $ELEARNING_INTERFACE_MODULES[$cms]["db_classes"]["course"]["classname"];
-            $this->db_class_course = new $classname();
-        }
-/**/
         $this->main_category_node_id = ELearningUtils::getConfigValue("category_id", $cms);
 
         if ((ELearningUtils::getConfigValue("user_role_template_id", $cms) == "") AND ($GLOBALS["role_template_name"] == ""))

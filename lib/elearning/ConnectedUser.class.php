@@ -57,14 +57,14 @@ class ConnectedUser
     */
     function __construct($cms, $user_id = false)
     {
-        global $auth, $RELATIVE_PATH_ELEARNING_INTERFACE, $ELEARNING_INTERFACE_MODULES;
+        global $auth, $ELEARNING_INTERFACE_MODULES;
 
         $this->studip_id = $user_id ? $user_id : $auth->auth["uid"];
         $this->cms_type = $cms;
 
         if ($ELEARNING_INTERFACE_MODULES[$this->cms_type]["RELATIVE_PATH_DB_CLASSES"] != false)
         {
-            require_once($RELATIVE_PATH_ELEARNING_INTERFACE . "/" . $ELEARNING_INTERFACE_MODULES[$this->cms_type]["RELATIVE_PATH_DB_CLASSES"] . "/" . $ELEARNING_INTERFACE_MODULES[$this->cms_type]["db_classes"]["user"]["file"] );
+            require_once("lib/elearning/" . $ELEARNING_INTERFACE_MODULES[$this->cms_type]["RELATIVE_PATH_DB_CLASSES"] . "/" . $ELEARNING_INTERFACE_MODULES[$this->cms_type]["db_classes"]["user"]["file"] );
             $classname = $ELEARNING_INTERFACE_MODULES[$this->cms_type]["db_classes"]["user"]["classname"];
             $this->db_class = new $classname();
         }

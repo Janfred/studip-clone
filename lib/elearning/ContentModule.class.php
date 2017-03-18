@@ -43,7 +43,7 @@ class ContentModule
     */
     function __construct($module_id = "", $module_type, $cms_type)
     {
-        global $connected_cms, $RELATIVE_PATH_ELEARNING_INTERFACE;
+        global $connected_cms;
 
         $this->is_dummy = false;
         $this->setCMSType($cms_type);
@@ -51,12 +51,7 @@ class ContentModule
         if ($module_id != "")
         {
             $this->setId($module_id);
-/*          if ($connected_cms[$this->cms_type]->RELATIVE_PATH_DB_CLASSES != false)
-            {
-                require_once($RELATIVE_PATH_ELEARNING_INTERFACE . "/" . $connected_cms[$this->cms_type]->RELATIVE_PATH_DB_CLASSES . "/" . $connected_cms[$this->cms_type]->db_classes["content"]["file"] );
-                $classname = $connected_cms[$this->cms_type]->db_classes["content"]["classname"];
-                $this->db_class = new $classname();
-            }*/
+
             $this->readData();
         }
         $this->view = new ContentModuleView($this->cms_type);

@@ -25,11 +25,11 @@ class ELearningUtils
     */
     function loadClass($cms)
     {
-        global $connected_cms, $RELATIVE_PATH_ELEARNING_INTERFACE, $ELEARNING_INTERFACE_MODULES, $object_connections;
+        global $connected_cms, $ELEARNING_INTERFACE_MODULES, $object_connections;
 
         if (! is_object($connected_cms[$cms]))
         {
-            require_once ($RELATIVE_PATH_ELEARNING_INTERFACE . "/" . $ELEARNING_INTERFACE_MODULES[$cms]["CLASS_PREFIX"] . "ConnectedCMS.class.php");
+            require_once ("lib/elearning/" . $ELEARNING_INTERFACE_MODULES[$cms]["CLASS_PREFIX"] . "ConnectedCMS.class.php");
             $classname = $ELEARNING_INTERFACE_MODULES[$cms]["CLASS_PREFIX"] . "ConnectedCMS";
             $connected_cms[$cms] = new $classname($cms);
             $connected_cms[$cms]->initSubclasses();
@@ -241,7 +241,7 @@ class ELearningUtils
     function getNewAccountForm(&$new_account_cms)
     {
         global $connected_cms, $cms_select, $view, $current_module, $messages,
-            $RELATIVE_PATH_ELEARNING_INTERFACE, $ELEARNING_INTERFACE_MODULES;
+             $ELEARNING_INTERFACE_MODULES;
 
         $new_account_step = Request::int('new_account_step');
         $ext_password = Request::get('ext_password');

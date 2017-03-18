@@ -55,7 +55,6 @@ class ConnectedCMS
     */
     function __construct($cms = "")
     {
-        global $RELATIVE_PATH_ELEARNING_INTERFACE;
 
         $this->cms_type = $cms;
         if (Config::get()->getValue("ELEARNING_INTERFACE_" . $this->cms . "_ACTIVE"))
@@ -137,7 +136,7 @@ class ConnectedCMS
     */
     function getConnectionStatus($cms = "")
     {
-        global $RELATIVE_PATH_ELEARNING_INTERFACE, $STUDIP_BASE_PATH;
+        global $STUDIP_BASE_PATH;
         if ($this->cms_type == "")
         {
             $this->init($cms);
@@ -199,7 +198,7 @@ class ConnectedCMS
             }
         }
 
-        $el_path = $STUDIP_BASE_PATH . '/' . $RELATIVE_PATH_ELEARNING_INTERFACE;
+        $el_path = $STUDIP_BASE_PATH . '/lib/elearning';
         // check if needed classes exist
         if (!file_exists($el_path."/" . $this->CLASS_PREFIX . "ConnectedUser.class.php") AND ($this->auth_necessary))
             $msg["class_user"]["error"] .= sprintf(_("Die Datei \"%s\" existiert nicht."), $el_path."/" . $this->CLASS_PREFIX . "ConnectedUser.class.php");

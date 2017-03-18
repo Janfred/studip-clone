@@ -115,10 +115,6 @@ $UNZIP_PATH = "/usr/bin/unzip";
 // media proxy settings
 $MEDIA_CACHE_PATH = $STUDIP_BASE_PATH . '/data/media_cache';
 
-//path to Stud.IP modules (this folders only have to exist, if the corresponcing module is active)
-$RELATIVE_PATH_ELEARNING_INTERFACE = "lib/elearning";                   //Stud.IP module: Ilias 3 lerningmodules-connection / general E-Learning-interface
-
-
 //caching
 $CACHING_ENABLE = true;
 $CACHING_FILECACHE_PATH = $TMP_PATH . '/studip_cache';

@@ -25,22 +25,22 @@ class ConnectedPermissions
     * init class. don't call directly, class is loaded by ConnectedCMS.
     * @access public
     * @param string $cms system-type
-    */ 
+    */
     function __construct($cms)
     {
-        global $connected_cms, $RELATIVE_PATH_ELEARNING_INTERFACE, $ELEARNING_INTERFACE_MODULES;
+        global $connected_cms, $ELEARNING_INTERFACE_MODULES;
 
         $this->cms_type = $cms;
         if ($ELEARNING_INTERFACE_MODULES[$this->cms_type]["RELATIVE_PATH_DB_CLASSES"] != false)
-        {   
-            require_once($RELATIVE_PATH_ELEARNING_INTERFACE . "/" . $ELEARNING_INTERFACE_MODULES[$this->cms_type]["RELATIVE_PATH_DB_CLASSES"] 
+        {
+            require_once('lib/elearning/' . $ELEARNING_INTERFACE_MODULES[$this->cms_type]["RELATIVE_PATH_DB_CLASSES"]
                 . "/" . $ELEARNING_INTERFACE_MODULES[$this->cms_type]["db_classes"]["permissions"]["file"] );
             $classname = $ELEARNING_INTERFACE_MODULES[$this->cms_type]["db_classes"]["permissions"]["classname"];
             $this->db_class = new $classname();
         }
 
     }
-    
+
     /**
     * get module-permissions
     *
