@@ -120,9 +120,6 @@ $EXTERN_LOG_FILE = "";
 // don't edit below this line
 //==============================================================================
 
-if (mb_substr($EXTERN_CONFIG_FILE_PATH, -1) != "/")
-    $EXTERN_CONFIG_FILE_PATH .= "/";
-
 // path generation for SRI-interface (external pages)
 if (preg_match('#^(http://|https://)?(.+?)(/)?$#', $GLOBALS['EXTERN_SERVER_NAME'], $matches)) {
     if ($matches[1]) {

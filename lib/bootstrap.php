@@ -119,6 +119,51 @@ namespace {
 
     require 'lib/phplib/page_open.php';
 
+    $GLOBALS['ABSOLUTE_PATH_STUDIP'] = $STUDIP_BASE_PATH . '/public/';
+
+    // CANONICAL_RELATIVE_PATH_STUDIP should end with a '/'
+    $CANONICAL_RELATIVE_PATH_STUDIP = dirname($_SERVER['PHP_SELF']);
+    if (DIRECTORY_SEPARATOR != '/') {
+        $CANONICAL_RELATIVE_PATH_STUDIP = str_replace(DIRECTORY_SEPARATOR, '/', $CANONICAL_RELATIVE_PATH_STUDIP);
+    }
+
+    if (substr($CANONICAL_RELATIVE_PATH_STUDIP,-1) != "/"){
+        $CANONICAL_RELATIVE_PATH_STUDIP .= "/";
+    }
+
+    // ABSOLUTE_URI_STUDIP: insert the absolute URL to your Stud.IP installation; it should end with a '/'
+    $ABSOLUTE_URI_STUDIP = "";
+
+    // automagically compute ABSOLUTE_URI_STUDIP if $_SERVER['SERVER_NAME'] is set
+    if (isset($_SERVER['SERVER_NAME'])) {
+        // work around possible bug in lighttpd
+        if (mb_strpos($_SERVER['SERVER_NAME'], ':') !== false) {
+            list($_SERVER['SERVER_NAME'], $_SERVER['SERVER_PORT']) =
+                explode(':', $_SERVER['SERVER_NAME']);
+        }
+
+        $ABSOLUTE_URI_STUDIP = $_SERVER['HTTPS'] == 'on' ? 'https' : 'http';
+        $ABSOLUTE_URI_STUDIP .= '://'.$_SERVER['SERVER_NAME'];
+
+        if ($_SERVER['HTTPS'] == 'on' && $_SERVER['SERVER_PORT'] != 443 ||
+            $_SERVER['HTTPS'] != 'on' && $_SERVER['SERVER_PORT'] != 80) {
+            $ABSOLUTE_URI_STUDIP .= ':'.$_SERVER['SERVER_PORT'];
+        }
+
+        $ABSOLUTE_URI_STUDIP .= $CANONICAL_RELATIVE_PATH_STUDIP;
+    }
+
+    // default ASSETS_URL, customize if required
+    $GLOBALS['ASSETS_URL'] = $ABSOLUTE_URI_STUDIP . 'assets/';
+
+    // construct absolute URL for ASSETS_URL
+    if ($GLOBALS['ASSETS_URL'][0] === '/') {
+        $host = preg_replace('%^([a-z]+:/*[^/]*).*%', '$1', $ABSOLUTE_URI_STUDIP);
+        $GLOBALS['ASSETS_URL'] = $host . $GLOBALS['ASSETS_URL'];
+    } else if (!preg_match('/^[a-z]+:/', $GLOBALS['ASSETS_URL'])) {
+        $GLOBALS['ASSETS_URL'] = $ABSOLUTE_URI_STUDIP . $GLOBALS['ASSETS_URL'];
+    }
+
     StudipFileloader::load('config_local.inc.php', $GLOBALS, compact('STUDIP_BASE_PATH'));
 
     require 'config.inc.php';

@@ -32,55 +32,14 @@ $DB_STUDIP_SLAVE_DATABASE = "studip-slave";
 
 
 // ABSOLUTE_PATH_STUDIP should end with a '/'
-$ABSOLUTE_PATH_STUDIP = $STUDIP_BASE_PATH . '/public/';
-
-
-// CANONICAL_RELATIVE_PATH_STUDIP should end with a '/'
-$CANONICAL_RELATIVE_PATH_STUDIP = dirname($_SERVER['PHP_SELF']);
-if (DIRECTORY_SEPARATOR != '/') {
-    $CANONICAL_RELATIVE_PATH_STUDIP = str_replace(DIRECTORY_SEPARATOR, '/', $CANONICAL_RELATIVE_PATH_STUDIP);
-}
-
-if (substr($CANONICAL_RELATIVE_PATH_STUDIP,-1) != "/"){
-    $CANONICAL_RELATIVE_PATH_STUDIP .= "/";
-}
-
-// ABSOLUTE_URI_STUDIP: insert the absolute URL to your Stud.IP installation; it should end with a '/'
-$ABSOLUTE_URI_STUDIP = "";
-
-// automagically compute ABSOLUTE_URI_STUDIP if $_SERVER['SERVER_NAME'] is set
-if (isset($_SERVER['SERVER_NAME'])) {
-    // work around possible bug in lighttpd
-    if (mb_strpos($_SERVER['SERVER_NAME'], ':') !== false) {
-        list($_SERVER['SERVER_NAME'], $_SERVER['SERVER_PORT']) =
-            explode(':', $_SERVER['SERVER_NAME']);
-    }
-
-    $ABSOLUTE_URI_STUDIP = $_SERVER['HTTPS'] == 'on' ? 'https' : 'http';
-    $ABSOLUTE_URI_STUDIP .= '://'.$_SERVER['SERVER_NAME'];
-
-    if ($_SERVER['HTTPS'] == 'on' && $_SERVER['SERVER_PORT'] != 443 ||
-        $_SERVER['HTTPS'] != 'on' && $_SERVER['SERVER_PORT'] != 80) {
-        $ABSOLUTE_URI_STUDIP .= ':'.$_SERVER['SERVER_PORT'];
-    }
-
-    $ABSOLUTE_URI_STUDIP .= $CANONICAL_RELATIVE_PATH_STUDIP;
-}
-
-// default ASSETS_URL, customize if required
-$ASSETS_URL = $ABSOLUTE_URI_STUDIP . 'assets/';
-
-// construct absolute URL for ASSETS_URL
-if ($ASSETS_URL[0] === '/') {
-    $host = preg_replace('%^([a-z]+:/*[^/]*).*%', '$1', $ABSOLUTE_URI_STUDIP);
-    $ASSETS_URL = $host . $ASSETS_URL;
-} else if (!preg_match('/^[a-z]+:/', $ASSETS_URL)) {
-    $ASSETS_URL = $ABSOLUTE_URI_STUDIP . $ASSETS_URL;
-}
+//$ABSOLUTE_PATH_STUDIP = $STUDIP_BASE_PATH . '/public/';
+//$CANONICAL_RELATIVE_PATH_STUDIP
+//$ABSOLUTE_URI_STUDIP
+//$ASSETS_URL
 
 
 // absolute filesystem path to the plugin packages
-$PLUGINS_PATH = $ABSOLUTE_PATH_STUDIP . 'plugins_packages';
+$PLUGINS_PATH = $STUDIP_BASE_PATH . 'public/plugins_packages';
 
 // absolute filesystem path to the plugin assets
 $PLUGIN_ASSETS_PATH = $STUDIP_BASE_PATH . '/data/assets_cache';
@@ -94,12 +53,8 @@ $USER_DOC_PATH = $STUDIP_BASE_PATH . "/data/user_doc";
 // path to Stud.IP archive (wwwrun needs write-perm there)
 $ARCHIV_PATH = $STUDIP_BASE_PATH . "/data/archiv";
 
-//path to store configs (wwwrun needs write-perm there)
-$EXTERN_CONFIG_FILE_PATH =  $STUDIP_BASE_PATH . "/data/extern_config/";
-
-
 // path and url for dynamically generated static content like smilies..
-$DYNAMIC_CONTENT_PATH = $ABSOLUTE_PATH_STUDIP . "pictures";
+$DYNAMIC_CONTENT_PATH = $STUDIP_BASE_PATH . "public/pictures";
 $DYNAMIC_CONTENT_URL  = $ABSOLUTE_URI_STUDIP  . "pictures";
 
 
