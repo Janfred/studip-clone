@@ -60,7 +60,7 @@ function startpage_redirect($page_code) {
 }
 
 global $i_page,
-       $DEFAULT_LANGUAGE, $SessSemName, $SessionSeminar,
+       $DEFAULT_LANGUAGE, $SessionSeminar,
        $sess, $auth, $user, $perm, $_language_path;
 
 //get the name of the current page in $i_page
@@ -117,7 +117,7 @@ $course_id = Request::option('cid', $_SESSION['SessionSeminar']);
 // This also binds the global $_SESSION['SessionSeminar']
 // variable to the URL parameter 'cid' for all generated links.
 if (isset($course_id)) {
-    selectSem($course_id) || selectInst($course_id);
+    Context::set($course_id);
     unset($course_id);
 }
 
@@ -132,8 +132,8 @@ PluginEngine::loadPlugins();
 
 // add navigation item: add modules
 if ((Navigation::hasItem('/course/admin') || $GLOBALS['perm']->have_perm('admin'))
-    && ($perm->have_studip_perm('tutor', $SessSemName[1]) && $SessSemName['class'] == 'sem')
-    && ($SessSemName['class'] != 'sem' || !$GLOBALS['SEM_CLASS'][$GLOBALS['SEM_TYPE'][$SessSemName['art_num']]['class']]['studygroup_mode'])) {
+    && ($perm->have_studip_perm('tutor', Context::getId()) && Context::isCourse())
+    && (!Context::isCourse() || !$GLOBALS['SEM_CLASS'][$GLOBALS['SEM_TYPE'][Context::getArtNum()]['class']]['studygroup_mode'])) {
     $plus_nav = new Navigation(_('Mehr …'), 'dispatch.php/course/plus/index');
     $plus_nav->setDescription(_("Mehr Stud.IP-Funktionen für Ihre Veranstaltung"));
     Navigation::addItem('/course/modules', $plus_nav);

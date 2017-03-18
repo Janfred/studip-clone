@@ -84,7 +84,7 @@ class EvaluationObjectDB extends DatabaseObject {
        }
        $o_type = get_object_type($rangeID, array('sem','user','inst'));
        if (in_array($o_type, array('sem','inst','fak'))) {
-           $name = getHeaderLine ($rangeID);
+           $name = Context::getHeaderLine();
            if ($name != NULL) {
                if ( $html_decode )
                    $rangename = decodeHTML ($name);

@@ -32,7 +32,7 @@ class Course_ElearningController extends AuthenticatedController
             $this->elearning_active = true;
 
         PageLayout::setHelpKeyword('Basis.Ilias');
-        PageLayout::setTitle($_SESSION['SessSemName']["header_line"]. " - " . _("Lernmodule"));
+        PageLayout::setTitle(Context::getHeaderLine(). " - " . _("Lernmodule"));
 
         checkObject(); // do we have an open object?
         checkObjectModule('elearning_interface');
@@ -49,7 +49,7 @@ class Course_ElearningController extends AuthenticatedController
         $this->module_id = Request::get('module_id');
         $this->module_type = Request::get('module_type');
         $this->anker_target = Request::get('anker_target');
-        $this->seminar_id = $_SESSION['SessSemName'][1];
+        $this->seminar_id = Context::getId();
         $this->rechte = $GLOBALS['perm']->have_studip_perm('tutor', $this->seminar_id);
         if (!isset($GLOBALS['ELEARNING_INTERFACE_MODULES'][$this->new_account_cms])) {
             unset($this->new_account_cms);
@@ -135,7 +135,7 @@ class Course_ElearningController extends AuthenticatedController
             }
         }
         if (($this->module_count == 0) AND ($this->new_account_cms == "")) {
-            if ($_SESSION['SessSemName']['class']=='inst') {
+            if (Context::isInstitute()) {
                 PageLayout::postMessage(MessageBox::info(_('Momentan sind dieser Einrichtung keine Lernmodule zugeordnet.')));
             } else {
                 PageLayout::postMessage(MessageBox::info(_('Momentan sind dieser Veranstaltung keine Lernmodule zugeordnet.')));
@@ -248,7 +248,7 @@ class Course_ElearningController extends AuthenticatedController
             }
         }
         if (($this->module_count == 0) AND ($this->new_account_cms == "")) {
-            if ($_SESSION['SessSemName']['class']=='inst') {
+            if (Context::isInstitute()) {
                 PageLayout::postMessage(MessageBox::info(_('Momentan sind dieser Einrichtung keine Lernmodule zugeordnet.')));
             } else {
                 PageLayout::postMessage(MessageBox::info(_('Momentan sind dieser Veranstaltung keine Lernmodule zugeordnet.')));
@@ -328,7 +328,7 @@ class Course_ElearningController extends AuthenticatedController
         }
         $this->sidebar->addWidget($widget);
         $this->new_account = $this->new_account_cms;
-        $this->is_inst = ($_SESSION['SessSemName']['class']=='inst');
+        $this->is_inst = Context::isInstitute();
         if ($this->cms_select) {
             $this->cms_name = $connected_cms[$this->cms_select]->getName();
             $this->cms_logo = $connected_cms[$this->cms_select]->getLogo();

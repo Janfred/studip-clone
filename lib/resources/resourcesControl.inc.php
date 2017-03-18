@@ -259,7 +259,7 @@ if ($view == "lists" || $view == "openobject_main") {
     }
 
     if ($view == "openobject_main") {
-        if (!$list->showRangeList($SessSemName[1])) {
+        if (!$list->showRangeList(Context::getId())) {
             echo "</td></tr>";
             $msg->displayMsg(13);
         }
@@ -527,7 +527,7 @@ if ($view == "view_group_schedule" || $view == "view_group_schedule_daily") {
 }
 
 if ($view == "openobject_group_schedule") {
-    $resources_groups = ResourcesOpenObjectGroups::GetInstance($SessSemName[1]);
+    $resources_groups = ResourcesOpenObjectGroups::GetInstance(Context::getId());
     if(!$resources_groups->isGroup($_SESSION['resources_data']["actual_room_group"])){
         $_SESSION['resources_data']["actual_room_group"] = 0;
     }

@@ -68,7 +68,7 @@ if( $_SESSION['rangeID'] )  unset($_SESSION['rangeID']);
 if (!empty($the_range))
      $rangeID = $the_range;
 
-$rangeID = ($rangeID) ? $rangeID : $SessSemName[1];
+$rangeID = ($rangeID) ? $rangeID : Context::getId();
 
 if (empty ($rangeID) || ($rangeID == get_username ($user->id)))
      $rangeID = $user->id;

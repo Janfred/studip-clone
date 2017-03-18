@@ -47,7 +47,7 @@ class Ilias4ConnectedPermissions extends Ilias3ConnectedPermissions
      */
     function checkUserPermissions($course_id = "")
     {
-        global $connected_cms, $SemUserStatus, $messages;
+        global $connected_cms, $messages;
 
         if ($course_id == "") return false;
         if ($connected_cms[$this->cms_type]->user->getId() == "") return false;
@@ -56,7 +56,7 @@ class Ilias4ConnectedPermissions extends Ilias3ConnectedPermissions
         $local_roles = $connected_cms[$this->cms_type]->soap_client->getLocalRoles($course_id);
         $active_role = "";
         $proper_role = "";
-        $user_crs_role = $connected_cms[$this->cms_type]->crs_roles[$SemUserStatus];
+        $user_crs_role = $connected_cms[$this->cms_type]->crs_roles[$perm->get_studip_perm(Context::getId())];
         if (is_array($local_roles)) {
             foreach ($local_roles as $key => $role_data) {
                 // check only if local role is il_crs_member, -tutor or -admin

@@ -58,7 +58,7 @@ $lib = new EvalTemplateGUI();
 #error_reporting( E_ALL );
 
 /* Set variables ----------------------------------------------------------- */
-$rangeID = ($rangeID) ? $rangeID : $SessSemName[1];
+$rangeID = ($rangeID) ? $rangeID : Context::getId();
 
 if (empty ($rangeID)) {
     $rangeID = $user->id;

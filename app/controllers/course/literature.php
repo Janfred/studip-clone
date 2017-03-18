@@ -44,7 +44,7 @@ class Course_LiteratureController extends AuthenticatedController
     public function index_action($id = null)
     {
         Navigation::activateItem('/course/literature/view');
-        PageLayout::setTitle($_SESSION['SessSemName']["header_line"]. " - " . _("Literatur"));
+        PageLayout::setTitle(Context::getHeaderLine(). " - " . _("Literatur"));
         $this->list = StudipLitList::GetFormattedListsByRange($_SESSION["SessionSeminar"], object_get_visit($_SESSION["SessionSeminar"], "literature"));
         $this->_range_id = $_SESSION["SessionSeminar"];
     }

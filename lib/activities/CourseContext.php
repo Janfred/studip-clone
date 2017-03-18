@@ -77,7 +77,7 @@ class CourseContext extends Context
      */
     public function getContextType()
     {
-        return 'course';
+        return \Context::COURSE;
     }
 
     /**

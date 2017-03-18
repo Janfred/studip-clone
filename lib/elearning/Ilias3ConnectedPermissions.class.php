@@ -88,7 +88,7 @@ class Ilias3ConnectedPermissions extends ConnectedPermissions
     */
     function checkUserPermissions($course_id = "")
     {
-        global $connected_cms, $SemUserStatus, $messages;
+        global $connected_cms, $messages;
 
         if ($course_id == "")
             return false;
@@ -99,7 +99,7 @@ class Ilias3ConnectedPermissions extends ConnectedPermissions
         $local_roles = $connected_cms[$this->cms_type]->soap_client->getLocalRoles($course_id);
         $active_role = "";
         $proper_role = "";
-        $user_crs_role = $connected_cms[$this->cms_type]->crs_roles[$SemUserStatus];
+        $user_crs_role = $connected_cms[$this->cms_type]->crs_roles[$perm->get_studip_perm(Context::getId())];
         if (is_array($local_roles))
             foreach ($local_roles as $key => $role_data)
                 // check only if local role is il_crs_member, -tutor or -admin
@@ -167,18 +167,9 @@ class Ilias3ConnectedPermissions extends ConnectedPermissions
             $this->permissions_changed = true;
 
         }
-//      echo $connected_cms[$this->cms_type]->crs_roles[$SemUserStatus];
-
-//      if ($permissions_changed)
-//          unset($connected_cms[$this->cms_type]->content_module);
-        if (! $this->getContentModulePerms( $course_id ))
-        {
-//          if ($GLOBALS["debug"] == true)
+        if (!$this->getContentModulePerms($course_id)) {
             $messages["info"] .= _("Für den zugeordneten ILIAS-Kurs konnten keine Berechtigungen ermittelt werden.") . "<br>";
         }
-//      if (! $this->isAllowed(OPERATION_READ))
-//          echo "NIX DA";
-
     }
 
     /**

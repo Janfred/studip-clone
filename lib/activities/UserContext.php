@@ -67,7 +67,7 @@ class UserContext extends Context
     */
     public function getContextType()
     {
-        return 'user';
+        return \Context::USER;
     }
 
     /**

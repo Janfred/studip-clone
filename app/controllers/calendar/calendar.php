@@ -116,9 +116,8 @@ class Calendar_CalendarController extends AuthenticatedController
 
         // Remove cid
         if (Request::option('self')) {
-            URLHelper::removeLinkParam('cid');
-            unset($_SESSION['SessSemName']);
-            unset($_SESSION['SessionSeminar']);
+            Context::close();
+
             $this->redirect(URLHelper::getURL('dispatch.php/' . $this->base
                 . $default_view . '/' . $GLOBALS['user']->id, array(), true));
         } else {

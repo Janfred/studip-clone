@@ -76,9 +76,7 @@ class Calendar_ScheduleController extends AuthenticatedController
         if ($inst_mode) {
 
             // try to find the correct institute-id
-            $institute_id = Request::option('institute_id',
-                            $SessSemName[1] ? $SessSemName[1] :
-                            Request::option('cid', false));
+            $institute_id = Request::option('institute_id', Context::getId());
 
 
             if (!$institute_id) {

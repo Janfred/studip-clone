@@ -17,7 +17,7 @@ class WikiController extends AuthenticatedController
         parent::before_filter($action, $args);
 
         $this->keyword  = Request::get('keyword');
-        $this->range_id = $GLOBALS['SessSemName'][1];
+        $this->range_id = Context::getId();
     }
 
     public function store_action($version)

@@ -106,7 +106,7 @@ class EvalCommon {
     if (empty($extra)) {
     $img->addAttr ("alt", $imgALT);
     $img->addAttr ("title", $imgALT);
-    } else 
+    } else
     $img->addString($extra);
 
     return $img;
@@ -117,7 +117,7 @@ class EvalCommon {
    */
   static function createEvalShowJS( $isPreview = NO, $as_object = YES ) {
       $html = "";
-      $html .= 
+      $html .=
       "<script type=\"text/javascript\" language=\"JavaScript\">".
       "  function openEval( evalID ) {" .
       "    evalwin = window.open(STUDIP.URLHelper.getURL('show_evaluation.php?evalID=' + evalID + '&isPreview=".$isPreview."'), " .
@@ -129,7 +129,7 @@ class EvalCommon {
       $div = new HTML ("div");
 #      $div->addAttr( "style", "display:inline;" );
       $div->addHTMLContent( $html );
-      
+
       if ( $as_object )
           return $div;
       else
@@ -141,7 +141,7 @@ class EvalCommon {
    */
   static function createEvalShowLink ($evalID, $content, $isPreview = NO, $as_object = YES) {
       $html = "";
-      
+
       $html .=
       "<a " .
           "href=\"". URLHelper::getLink('show_evaluation.php?evalID=' .$evalID .'&isPreview=' . $isPreview) . "\" " .
@@ -153,7 +153,7 @@ class EvalCommon {
       $div = new HTML ("div");
 #      $div->addAttr( "style", "display:inline;" );
       $div->addHTMLContent( $html );
-      
+
       if ( $as_object )
           return $div;
       else
@@ -189,7 +189,7 @@ class EvalCommon {
     $td->addAttr ("class", $cssClass);
     $td->addHTMLContent ($text);
     $tr->addContent ($td);
-    
+
     $table->addContent ($tr);
 
     return $table;
@@ -209,12 +209,12 @@ class EvalCommon {
     $message = new HTML ("div");
 
     if (!$object->isError ()) {
-      $table =  EvalCommon::createReportMessage 
-    (_("Es ist kein Fehler aufgetreten"), EVAL_PIC_SUCCESS, 
+      $table =  EvalCommon::createReportMessage
+    (_("Es ist kein Fehler aufgetreten"), EVAL_PIC_SUCCESS,
      EVAL_CSS_SUCCESS);
       $message->addContent ($table);
     } else {
-      $table =  EvalCommon::createReportMessage ($errortitle, EVAL_PIC_ERROR, 
+      $table =  EvalCommon::createReportMessage ($errortitle, EVAL_PIC_ERROR,
                          EVAL_CSS_ERROR);
       $ul = new HTML ("ul");
       foreach ($object->getErrors () as $error) {
@@ -254,15 +254,15 @@ class EvalCommon {
    * Returns the rangeID
    */
   static function getRangeID () {
-    $rangeID = Request::option('range_id') ? Request::option('range_id') : 
-      $GLOBALS["SessSemName"][1];
+    $rangeID = Request::option('range_id') ?: Context::getId();
+
     if (empty ($rangeID) || ($rangeID == get_username ($GLOBALS['user']->id)))
       $rangeID = $GLOBALS['user']->id;
-    
+
     return $rangeID;
   }
 
-  
+
   /**
    * Checks and transforms a date into a UNIX (r)(tm) timestamp
    * @access public
@@ -275,7 +275,7 @@ class EvalCommon {
    * @param   integer $second The second (optional)
    * @return  integer If an error occurs -> -1. Otherwise the UNIX-timestamp
    */
-  static function date2timestamp ($day, $month, $year, 
+  static function date2timestamp ($day, $month, $year,
                $hour = 0, $minute = 0, $second = 0) {
       if (!checkdate ((int)$month, (int)$day, (int)$year) ||
       $hour < 0 || $hour > 24 ||
@@ -283,7 +283,7 @@ class EvalCommon {
       $second < 0 || $second > 59) {
       return -1;
       }
-      
+
       // windows cant count that mutch
       if ( $year < 1971 )
         $year = 1971;

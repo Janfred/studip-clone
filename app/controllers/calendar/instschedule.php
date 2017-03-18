@@ -45,9 +45,7 @@ class Calendar_InstscheduleController extends AuthenticatedController
         }
 
         // try to find the correct institute-id
-        $institute_id = Request::option('institute_id',
-            $SessSemName[1] ? $SessSemName[1] :
-            Request::option('cid', false));
+        $institute_id = Request::option('institute_id', Context::getId());
 
         if (!$institute_id) {
             $institute_id = $GLOBALS['user']->cfg->MY_INSTITUTES_DEFAULT;
@@ -73,7 +71,7 @@ class Calendar_InstscheduleController extends AuthenticatedController
 
         Navigation::activateItem('/course/main/schedule');
         PageLayout::setHelpKeyword('Basis.TerminkalenderStundenplan');
-        PageLayout::setTitle($GLOBALS['SessSemName']['header_line'].' - '._('Veranstaltungs-Stundenplan'));
+        PageLayout::setTitle(Context::getHeaderLine().' - '._('Veranstaltungs-Stundenplan'));
 
         $zoom = Request::int('zoom', 0);
         $this->controller = $this;
@@ -97,19 +95,19 @@ class Calendar_InstscheduleController extends AuthenticatedController
             PageLayout::addStylesheet('print.css');
 
             // remove all stylesheets that are not used for printing to have a more reasonable printing preview
-            PageLayout::addHeadElement('script', array(), "$('head link[media=screen]').remove();");            
+            PageLayout::addHeadElement('script', array(), "$('head link[media=screen]').remove();");
         } else {
             PageLayout::addStylesheet('print.css', array('media' => 'print'));
         }
-        
+
         Helpbar::Get()->addPlainText(_('Information'), _('Der Stundenplan zeigt die regelmäßigen Veranstaltungen dieser Einrichtung.'), Icon::create('info'));
-        
+
         $views = new ViewsWidget();
         $views->addLink(_('klein'), URLHelper::getLink('', array('zoom' => 0)))->setActive($zoom == 0);
         $views->addLink(_('mittel'), URLHelper::getLink('', array('zoom' => 2)))->setActive($zoom == 2);
         $views->addLink(_('groß'), URLHelper::getLink('', array('zoom' => 4)))->setActive($zoom == 4);
         $views->addLink(_('extra groß'), URLHelper::getLink('', array('zoom' => 7)))->setActive($zoom == 7);
-        
+
         Sidebar::Get()->addWidget($views);
         $actions = new ActionsWidget();
         $actions->addLink(_('Druckansicht'),
@@ -122,7 +120,7 @@ class Calendar_InstscheduleController extends AuthenticatedController
         $semesterSelector = new SemesterSelectorWidget($this->url_for('calendar/instschedule'), 'semester_id', 'post');
         $semesterSelector->includeAll(false);
         Sidebar::Get()->addWidget($semesterSelector);
-        
+
     }
 
     /**

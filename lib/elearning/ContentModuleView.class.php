@@ -26,11 +26,11 @@ class ContentModuleView
     * init class. don't call directly, class is loaded by ContentModule.
     * @access public
     * @param string $cms system-type
-    */ 
+    */
     function __construct($cms)
     {
         global $connected_cms;
-        
+
         $this->change_date = 0;
         $this->module_new = false;
         $this->cms_type = $cms;
@@ -54,7 +54,7 @@ class ContentModuleView
                 return false;
             }
         }
-            
+
         if ($_SESSION['elearning_open_close'][$content_module->getReferenceString()] == true)
             $this->setViewMode("open");
         $module_title = $content_module->getTitle();
@@ -96,7 +96,7 @@ class ContentModuleView
     */
     function showAdmin($mode = "")
     {
-        global $connected_cms, $view, $search_key, $cms_select, $SessSemName, $current_module, $anker_target;
+        global $connected_cms, $view, $search_key, $cms_select, $current_module, $anker_target;
 
         $content_module = $connected_cms[$this->cms_type]->content_module[$current_module];
 
@@ -105,7 +105,7 @@ class ContentModuleView
                 return false;
             }
         }
-            
+
         if ($_SESSION['elearning_open_close'][$content_module->getReferenceString()] == true)
             $this->setViewMode("open");
 
@@ -178,10 +178,9 @@ class ContentModuleView
     */
     function setChangeDate($module_chdate)
     {
-        global $SessSemName;
         $this->change_date = $module_chdate;
 
-        if (object_get_visit($SessSemName[1], "elearning_interface") < $this->change_date) 
+        if (object_get_visit(Context::getId(), "elearning_interface") < $this->change_date)
             $this->module_new = true;
         else
             $this->module_new = false;

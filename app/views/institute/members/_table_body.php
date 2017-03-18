@@ -11,8 +11,8 @@
             ->addLink(
                 $controller->link_for('messages/write?filter=inst_status', [
                     'who'             => $key,
-                    'default_subject' => $GLOBALS['SessSemName'][0],
-                    'course_id'       => $GLOBALS['SessSemName'][1],
+                    'default_subject' => Context::get()->Name,
+                    'course_id'       => Context::getId(),
                 ]),
                 sprintf(_('Nachricht an alle Mitglieder mit dem Status %s verschicken'), $th_title),
                 Icon::create('mail', 'clickable'),
@@ -22,7 +22,7 @@
             ->addLink(
                 $controller->link_for('messages/write', [
                     'group_id'        => $group->id,
-                    'default_subject' => $GLOBALS['SessSemName'][0],
+                    'default_subject' => Context::get()->Name,
                 ]),
                 sprintf(_('Nachricht an alle Mitglieder der Gruppe %s verschicken'), $th_title),
                 Icon::create('mail', 'clickable'),
@@ -158,7 +158,7 @@
                     $controller->link_for('institute/members/remove_from_group', $group->id, $type, ['username' => $member->username]),
                     _('Person aus Gruppe austragen'),
                     Icon::create('door-leave', 'clickable'),
-                    ['data-confirm' => _('Wollen Sie die Person wirklich aus der Gruppe austragen?')]                    
+                    ['data-confirm' => _('Wollen Sie die Person wirklich aus der Gruppe austragen?')]
                 ) ?>
             </td>
         <? endif; ?>

@@ -39,9 +39,9 @@
 
 
 function object_set_visit_module($type){
-    global $SessSemName;
-    if (object_get_visit($SessSemName[1], $type, false, false) < object_get_visit($SessSemName[1], $SessSemName['class'], false, false)){
-        object_set_visit($SessSemName[1], $type);
+    if (object_get_visit(Context::getId(), $type, false, false)
+            < object_get_visit(Context::getId(), Context::getClass(), false, false)){
+        object_set_visit(Context::getId(), $type);
     }
 }
 
@@ -211,5 +211,3 @@ function object_return_views ($object_id)
     $statement->execute(array($object_id));
     return $statement->fetchColumn() ?: 0;
 }
-
-

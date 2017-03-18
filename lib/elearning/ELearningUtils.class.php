@@ -25,7 +25,7 @@ class ELearningUtils
     */
     function loadClass($cms)
     {
-        global $connected_cms, $RELATIVE_PATH_ELEARNING_INTERFACE, $ELEARNING_INTERFACE_MODULES, $SessSemName, $object_connections;
+        global $connected_cms, $RELATIVE_PATH_ELEARNING_INTERFACE, $ELEARNING_INTERFACE_MODULES, $object_connections;
 
         if (! is_object($connected_cms[$cms]))
         {

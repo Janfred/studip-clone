@@ -54,8 +54,8 @@ include_once 'lib/seminar_open.php';
 
 PageLayout::setHelpKeyword("Basis.Evaluationen");
 $title = _('Verwaltung von Evaluationen');
-if ($GLOBALS['SessSemName'][1]) {
-    $title = getHeaderLine($GLOBALS['SessSemName'][1]) . ' - ' . $title;
+if (Context::get()) {
+    $title = Context::getHeaderLine() . ' - ' . $title;
 }
 PageLayout::setTitle($title);
 
@@ -64,14 +64,14 @@ require_once 'lib/evaluation/evaluation.config.php';
 if ($view === 'eval_inst') {
     Navigation::activateItem('/admin/institute/evaluation');
     require_once 'lib/admin_search.inc.php';
-} else if ($SessSemName[1] && $view == "eval_sem") {
+} else if (Context::getId() && $view == "eval_sem") {
     Navigation::activateItem('/course/admin/evaluation');
 } else {
     Navigation::activateItem('/tools/evaluation');
 }
 
-if (($SessSemName[1]) && ($view == "eval_sem") || ($view == "eval_inst")) {
-    $the_range = $SessSemName[1];
+if ((Context::getId()) && ($view == "eval_sem") || ($view == "eval_inst")) {
+    $the_range = Context::getId();
 } else {
     $the_range = Request::option('rangeID');
 }
@@ -84,7 +84,7 @@ if ($the_range) {
         $isUserrange = 1;
     }
 } elseif ($view) {
-    $the_range = $SessSemName[1];
+    $the_range = Context::getId();
 }
 
 if (empty($the_range)) {

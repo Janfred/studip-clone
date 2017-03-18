@@ -136,18 +136,18 @@ class ForumHelpers {
      *
      * @param int $page_num the page
      */
-    static function setPage($page_num) 
+    static function setPage($page_num)
     {
         self::$page = $page_num;
     }
-    
+
     /**
      * Return an info-text explaining the visit-status of the passed topic_di
      * which has the passed number of new entries.
-     * 
+     *
      * @param string $num_entries  the number of new entries
-     * @param string $topic_id     the id of the topic 
-     * 
+     * @param string $topic_id     the id of the topic
+     *
      * @return string  a human readable, localized text
      */
     static function getVisitText($num_entries, $topic_id)
@@ -166,7 +166,7 @@ class ForumHelpers {
                       . ' Es sind %s alte Beiträge vorhanden.'), $all_entries);
             }
         }
-        
+
         return $text;
     }
 
@@ -176,11 +176,11 @@ class ForumHelpers {
      *  - available
      *  - away
      *  - offline
-     * 
+     *
      * @staticvar type $online_status
-     * 
+     *
      * @param string $user_id
-     * 
+     *
      * @return string
      */
     static function getOnlineStatus($user_id)
@@ -206,17 +206,17 @@ class ForumHelpers {
                 }
             }
         }
-        
+
         return $online_status[$user_id] ?: 'offline';
     }
 
     /**
      * Create a pdf of all postings belonging to the passed seminar located
      * under the passed topic_id. The PDF is dispatched automatically.
-     * 
-     * BEWARE: This function never returns, it dies after the PDF has been 
+     *
+     * BEWARE: This function never returns, it dies after the PDF has been
      * (succesfully or not) dispatched.
-     * 
+     *
      * @param string $seminar_id
      * @param string $parent_id
      */
@@ -247,13 +247,13 @@ class ForumHelpers {
                 $document->addContent("\n\n");
             } else if ($entry['depth'] == 2) {
                 $document->addContent('++**'. _('Thema') .': '. $entry['name_raw'] .'**++' . "\n");
-                $document->addContent('%%' . sprintf(_('erstellt von %s am %s'), $author, 
+                $document->addContent('%%' . sprintf(_('erstellt von %s am %s'), $author,
                     strftime('%A %d. %B %Y, %H:%M', (int)$entry['mkdate'])) . '%%' . "\n");
                 $document->addContent($entry['content_raw']);
                 $document->addContent("\n\n");
             } else if ($entry['depth'] == 3) {
                 $document->addContent('**'.$entry['name_raw'] .'**' . "\n");
-                $document->addContent('%%' . sprintf(_('erstellt von %s am %s'), $author, 
+                $document->addContent('%%' . sprintf(_('erstellt von %s am %s'), $author,
                     strftime('%A %d. %B %Y, %H:%M', (int)$entry['mkdate'])) . '%%' . "\n");
                 $document->addContent($entry['content_raw']);
                 $document->addContent("\n--\n");
@@ -268,33 +268,24 @@ class ForumHelpers {
     /**
      * Returns the id of the currently selected seminar or false, if no seminar
      * is selected
-     * 
+     *
      * @return mixed  seminar_id or false
      */
     static function getSeminarId()
     {
-        if (!Request::option('cid')) {
-            if ($GLOBALS['SessionSeminar']) {
-                URLHelper::bindLinkParam('cid', $GLOBALS['SessionSeminar']);
-                return $GLOBALS['SessionSeminar'];
-            }
-
-            return false;
-        }
-
-        return Request::option('cid');
+        return Context::getId();
     }
-    
+
     /**
      * replace in the passed text every %%% with <% and every ### with %>
      * This is used to work around a limitation of the Button-API in combination
      * with the underscore.js way of inserting template vars.
-     * 
-     * The Button-API correctly replaces < > with tags, but underscore.js is 
+     *
+     * The Button-API correctly replaces < > with tags, but underscore.js is
      * unable to find them in their tag-represenation
-     * 
+     *
      * @param string $text the text to apply the replacements on
-     * 
+     *
      * @return string the modified text
      */
     static function replace($text)

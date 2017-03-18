@@ -27,7 +27,7 @@ class Course_OverviewController extends AuthenticatedController
         $this->course_id = $this->course->id;
 
         PageLayout::setHelpKeyword("Basis.InVeranstaltungKurzinfo");
-        PageLayout::setTitle($GLOBALS['SessSemName']["header_line"]. " - " . _("Kurzinfo"));
+        PageLayout::setTitle(Context::getHeaderLine(). " - " . _("Kurzinfo"));
         Navigation::activateItem('/course/main/info');
         // add skip link
         SkipLinks::addIndex(Navigation::getItem('/course/main/info')->getTitle(), 'main_content', 100);

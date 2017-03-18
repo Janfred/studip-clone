@@ -548,7 +548,7 @@ class Calendar_SingleController extends Calendar_CalendarController
             $title = sprintf(_('Terminkalender von %s'),
                     $calendar->range_object->getFullname());
             } else {
-                $title = getHeaderLine($calendar->getRangeId());
+                $title = Context::getHeaderLine();
             }
             if ($calendar->havePermission(Calendar::PERMISSION_WRITABLE)) {
                 $status = ' (' . _('schreibberechtigt') . ')';

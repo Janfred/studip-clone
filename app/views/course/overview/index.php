@@ -1,8 +1,8 @@
     <?
-    echo "<h1>".htmlReady($GLOBALS['SessSemName']["header_line"]). "</h1>";
-    if ($GLOBALS['SessSemName'][3]) {
+    echo "<h1>". htmlReady(Context::getHeaderLine()) ."</h1>";
+    if (Context::get()->Untertitel) {
         echo "<b>" . _("Untertitel:") . " </b>";
-        echo htmlReady($GLOBALS['SessSemName'][3]);
+        echo htmlReady(Context::get()->Untertitel);
         echo "<br>";
     }
 

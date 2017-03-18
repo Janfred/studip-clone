@@ -78,7 +78,7 @@ class Course_StudygroupController extends AuthenticatedController
         if (Request::isXhr()) {
             PageLayout::setTitle(_('Studiengruppendetails'));
         } else {
-            PageLayout::setTitle(getHeaderLine($id) . ' - ' . _('Studiengruppendetails'));
+            PageLayout::setTitle(Context::getHeaderLine() . ' - ' . _('Studiengruppendetails'));
             PageLayout::setHelpKeyword('Basis.StudiengruppenAbonnieren');
             PageLayout::addSqueezePackage('enrolment');
 
@@ -431,7 +431,7 @@ class Course_StudygroupController extends AuthenticatedController
         // if we are permitted to edit the studygroup get some data...
         if ($perm->have_studip_perm('dozent', $id)) {
 
-            PageLayout::setTitle(getHeaderLine($id) . ' - ' . _('Studiengruppe bearbeiten'));
+            PageLayout::setTitle(Context::getHeaderLine() . ' - ' . _('Studiengruppe bearbeiten'));
             Navigation::activateItem('/course/admin/main');
 
             $sem                     = new Seminar($id);
@@ -711,7 +711,7 @@ class Course_StudygroupController extends AuthenticatedController
     public function members_action()
     {
         $id = $_SESSION['SessionSeminar'];
-        PageLayout::setTitle(getHeaderLine($_SESSION['SessionSeminar']) . ' - ' . _("Teilnehmende"));
+        PageLayout::setTitle(Context::getHeaderLine() . ' - ' . _("Teilnehmende"));
         Navigation::activateItem('/course/members');
         PageLayout::setHelpKeyword('Basis.StudiengruppenBenutzer');
 

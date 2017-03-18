@@ -174,7 +174,7 @@ class MVVPlugin extends StudipPlugin implements SystemPlugin, Loggable {
     public function isVisibleCourse()
     {
         return $GLOBALS['perm']->
-                have_studip_perm('tutor', $GLOBALS['SessSemName'][1]);
+                have_studip_perm('tutor', Context::getId());
     }
 
     public function isVisibleSearch()
@@ -185,7 +185,7 @@ class MVVPlugin extends StudipPlugin implements SystemPlugin, Loggable {
     public function isVisibleAdminCourse()
     {
         return $GLOBALS['perm']->
-                have_studip_perm('tutor', $GLOBALS['SessSemName'][1]);
+                have_studip_perm('tutor', Context::getId());
     }
 
     public function isVisibleSeminareAssi() {

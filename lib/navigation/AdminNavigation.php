@@ -32,17 +32,17 @@ class AdminNavigation extends Navigation
      */
     public function initSubNavigation()
     {
-        global $SessionSeminar, $SessSemName, $archive_kill, $perm;
+        global $SessionSeminar, $archive_kill, $perm;
 
         parent::initSubNavigation();
 
-        if ($SessSemName['class'] == 'inst') {
+        if (Context::isInstitute()) {
             if (isset($_SESSION['links_admin_data']['referred_from']) && $_SESSION['links_admin_data']['referred_from'] == 'inst') {
                 $back_jump = _('zurück zur ausgewählten Einrichtung');
             } else {
                 $back_jump = _('zur ausgewählten Einrichtung');
             }
-        } else if ($SessSemName['class'] == 'sem') {
+        } else if (Context::isCourse()) {
             if (isset($_SESSION['links_admin_data']['referred_from']) && $_SESSION['links_admin_data']['referred_from'] == 'sem' && !$archive_kill && !(isset($_SESSION['links_admin_data']['assi']) && $_SESSION['links_admin_data']['assi'])) {
                 $back_jump = _('zurück zur ausgewählten Veranstaltung');
             } else if (isset($_SESSION['links_admin_data']['referred_from']) && $_SESSION['links_admin_data']['referred_from'] == 'assi' && !$archive_kill) {
@@ -186,11 +186,11 @@ class AdminNavigation extends Navigation
         }
 
         // link to course
-        if ($SessSemName['class'] == 'inst') {
-            $navigation = new Navigation($back_jump, 'dispatch.php/institute/overview?auswahl=' . $SessSemName[1]);
+        if (Context::isInstitute()) {
+            $navigation = new Navigation($back_jump, 'dispatch.php/institute/overview?auswahl=' . Context::getId());
             $this->addSubNavigation('back_jump', $navigation);
-        } else if ($SessSemName['class'] == 'sem' && !$archive_kill && !(isset($_SESSION['links_admin_data']['assi']) && $_SESSION['links_admin_data']['assi'])) {
-            $navigation = new Navigation($back_jump, 'seminar_main.php?auswahl=' . $SessSemName[1]);
+        } else if (Context::isCourse() && !$archive_kill && !(isset($_SESSION['links_admin_data']['assi']) && $_SESSION['links_admin_data']['assi'])) {
+            $navigation = new Navigation($back_jump, 'seminar_main.php?auswahl=' . Context::getId());
             $this->addSubNavigation('back_jump', $navigation);
         }
 

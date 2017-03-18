@@ -51,33 +51,6 @@ require_once 'lib/object.inc.php';
 require_once 'lib/user_visible.inc.php';
 
 /**
- * This function creates the header line for studip-objects
- *
- * you will get a line like this "Veranstaltung: Name..."
- *
- * @param string $id          the id of the Veranstaltung
- * @param string $object_name the name of the object (optional)
- *
- * @return string  the header-line
- *
- */
-function getHeaderLine($id, $object_name = null)
-{
-    if(!$object_name){
-        $object_name = get_object_name($id, get_object_type($id));
-    }
-    $header_line = $object_name['type'];
-    if ($object_name['name']) $header_line.=": ";
-    if (mb_strlen($object_name['name']) > 60){
-            $header_line .= studip_substr($object_name['name'], 0, 60);
-            $header_line .= "... ";
-    } else {
-        $header_line .= $object_name['name'];
-    }
-    return $header_line;
-}
-
-/**
  * returns an array containing name and type of the passed objeact
  * denoted by $range_id
  *
@@ -142,186 +115,7 @@ function get_object_by_range_id($range_id) {
 }
 
 /**
- * This function "selects" a Veranstaltung to work with it
- *
- * The following variables will bet set:
- *   $SessionSeminar                 Veranstaltung id<br>
- *   $SessSemName[0]                 Veranstaltung name<br>
- *   $SessSemName[1]                 Veranstaltung id<br>
- *   $SessSemName[2]                 Veranstaltung ort (room)<br>
- *   $SessSemName[3]                 Veranstaltung Untertitel (subtitle)<br>
- *   $SessSemName[4]                 Veranstaltung start_time (the Semester start_time)<br>
- *   $SessSemName[5]                 Veranstaltung institut_id (the home-intitute)<br>
- *   $SessSemName["art"]             Veranstaltung type in alphanumeric form<br>
- *   $SessSemName["art_num"]         Veranstaltung type in numeric form<br>
- *   $SessSemName["art_generic"]     Veranstaltung generic type in alhanumeric form (self description)<br>
- *   $SessSemName["class"]               Veranstaltung class (sem or inst, in this function always sem)<br>
- *   $SessSemName["header_line"]     the header-line to use on every page of the Veranstaltung<br>
- *
- * @param string $sem_id the id of the Veranstaltung
- *
- * @return boolean  true if successful
- *
- */
-function selectSem ($sem_id)
-{
-    global $perm, $SEM_TYPE, $SEM_TYPE_MISC_NAME, $SessionSeminar, $SessSemName, $SemUserStatus, $rechte, $auth;
-
-    closeObject();
-    $SessionSeminar = $sem_id;
-    $course = Course::findCurrent();
-    if ($course) {
-        $rechte = $perm->have_studip_perm("tutor", $course["Seminar_id"]);
-        if( !($SemUserStatus = $perm->get_studip_perm($course["Seminar_id"])) ){
-            $SemUserStatus = "nobody";
-            if ($course['lesezugriff'] > 0 || !get_config('ENABLE_FREE_ACCESS')) {
-                // redirect to login page if user is not logged in
-                $auth->login_if($auth->auth["uid"] == "nobody");
-                throw new AccessDeniedException();
-            }
-        }
-        $SessionSeminar = $course["Seminar_id"];
-        $SessSemName[0] = $course["Name"];
-        $SessSemName[1] = $course["Seminar_id"];
-        $SessSemName[3] = $course["Untertitel"];
-        $SessSemName[4] = $course["start_time"];
-        $SessSemName[5] = $course["Institut_id"];
-        $SessSemName["art_generic"] = _("Veranstaltung");
-        $SessSemName["class"] = "sem";
-        $SessSemName["art_num"] = $course["status"];
-        if ($SEM_TYPE[$row["status"]]["name"] == $SEM_TYPE_MISC_NAME) {
-            $SessSemName["art"] = _("Veranstaltung");
-        } else {
-            $SessSemName["art"] = $SEM_TYPE[$row["status"]]["name"];
-        }
-        $SessSemName["header_line"] = $course->getFullname();
-
-        $_SESSION['SessionSeminar'] =& $SessionSeminar;
-        $_SESSION['SessSemName'] =& $SessSemName;
-
-        URLHelper::addLinkParam('cid', $SessionSeminar);
-
-                // if the aux data is forced for this seminar forward all user that havent made an input to this site
-        if ($course["aux_lock_rule_forced"] && !$perm->have_studip_perm('tutor', $course["Seminar_id"]) && !in_array($_SERVER['PATH_INFO'], array('/course/members/additional_input', '/course/change_view'))) {
-            $statement = DBManager::get()->prepare("SELECT 1 FROM datafields_entries WHERE range_id = ? AND sec_range_id = ? LIMIT 1");
-            $statement->execute(array($GLOBALS['user']->id, $course["Seminar_id"]));
-            if (!$statement->rowCount()) {
-                header('location: ' . URLHelper::getURL('dispatch.php/course/members/additional_input'));
-                page_close();
-                die;
-            }
-        }
-
-        return true;
-    } else {
-        $SessionSeminar = null;
-        return false;
-    }
-}
-
-/**
- * This function "selects" an Einrichtung to work with it
- *
- * Note: Stud.IP treats Einrichtungen like Veranstaltungen, yu can see this
- * especially if you look at the variable names....
- *
- * The following variables will bet set:
- *   $SessionSeminar                 Einrichtung id<br>
- *   $SessSemName[0]                 Einrichtung name<br>
- *   $SessSemName[1]                 Einrichtung id<br>
- *   $SessSemName["art"]             Einrichtung type in alphanumeric form<br>
- *   $SessSemName["art_num"]         Einrichtung type in numeric form<br>
- *   $SessSemName["art_generic"]     Einrichtung generic type in alhanumeric form (self description)<br>
- *   $SessSemName["class"]               Einrichtung class (sem or inst, in this function always inst)<br>
- *   $SessSemName["header_line"]     the header-line to use on every page of the Einrichtung<br>
- *
- * @param string $inst_id the id of the Veranstaltung
- *
- * @return boolean  true if successful
- *
- */
-function selectInst ($inst_id)
-{
-    global $SessionSeminar, $SessSemName, $INST_TYPE, $SemUserStatus, $rechte, $perm, $auth;
-
-    closeObject();
-
-    if (!get_config('ENABLE_FREE_ACCESS') && !$perm->have_perm('user')) {
-        // redirect to login page if user is not logged in
-        $auth->login_if($auth->auth["uid"] == "nobody");
-        throw new AccessDeniedException();
-    }
-
-    $SessionSeminar = $inst_id;
-    $institute = Institute::findCurrent();
-    if ($institute) {
-        if ( !($SemUserStatus = $perm->get_studip_perm($institute["Institut_id"])) ) {
-            $SemUserStatus = 'nobody';
-        }
-        $rechte = $perm->have_studip_perm("tutor", $institute["Institut_id"]);
-        $SessionSeminar = $institute["Institut_id"];
-        $SessSemName[0] = $institute["Name"];
-        $SessSemName[1] = $institute["Institut_id"];
-        $SessSemName["art_generic"] = _("Einrichtung");
-        $SessSemName["art"] = $INST_TYPE[$row["type"]]["name"];
-        if (!$SessSemName["art"]) {
-            $SessSemName["art"] = $SessSemName["art_generic"];
-        }
-        $SessSemName["class"] = "inst";
-        $SessSemName["is_fak"] = $institute["is_fak"];
-        $SessSemName["art_num"] = $institute["type"];
-        $SessSemName["fak"] = $institute["fakultaets_id"];
-        $SessSemName["header_line"] = $institute->getFullname();
-
-        $_SESSION['SessionSeminar'] =& $SessionSeminar;
-        $_SESSION['SessSemName'] =& $SessSemName;
-
-        URLHelper::addLinkParam('cid', $SessionSeminar);
-        return true;
-    } else {
-        $SessionSeminar = null;
-        return false;
-    }
-}
-
-/**
- * This function "opens" a course to work with it. Does the same
- * as selectSem() but also sets the visit date.
- *
- * @param string $sem_id the id of the course
- *
- * @return boolean  true if successful
- */
-function openSem ($sem_id)
-{
-    if (($result = selectSem($sem_id))) {
-        object_set_visit($sem_id, "sem");
-    }
-
-    return $result;
-}
-
-/**
- * This function "opens" an institute to work with it. Does the same
- * as selectInst() but also sets the visit date.
- *
- * @param string $inst_id the id of the institute
- *
- * @return boolean  true if successful
- */
-function openInst ($inst_id)
-{
-    if (($result = selectInst($inst_id))) {
-        object_set_visit($inst_id, "inst");
-    }
-
-    return $result;
-}
-
-/**
  * This function checks, if there is an open Veranstaltung or Einrichtung
- *
- * @global array $SessSemName
  *
  * @throws CheckObjectException
  *
@@ -329,9 +123,7 @@ function openInst ($inst_id)
  */
 function checkObject()
 {
-    global $SessSemName;
-
-    if ($SessSemName[1] == "") {
+    if (!Context::get()) {
         throw new CheckObjectException(_('Sie haben kein Objekt gewählt.'));
     }
 }
@@ -341,22 +133,18 @@ function checkObject()
  * This function checks, if given old style module "wiki","scm" (not "CoreWiki") etc.
  * is allowed in this stud.ip-object.
  *
- * @global array $SessSemName
- *
  * @param string $module the module to check for
  *
  * @return void
  */
 function checkObjectModule($module)
 {
-    global $SessSemName;
-
-    if ($SessSemName[1]) {
+    if ($context = Context::get()) {
         $modules = new Modules();
-        $local_modules = $modules->getLocalModules($SessSemName[1], $SessSemName['class']);
+        $local_modules = $modules->getLocalModules($context['id'], Context::getClass());
         $checkslot = $module;
-        if ($SessSemName['class'] == 'sem' && $GLOBALS['SEM_CLASS'][$GLOBALS['SEM_TYPE'][$SessSemName['art_num']]['class']]) {
-            $sem_class = $GLOBALS['SEM_CLASS'][$GLOBALS['SEM_TYPE'][$SessSemName['art_num']]['class']];
+        if (Context::isCourse() && $GLOBALS['SEM_CLASS'][$GLOBALS['SEM_TYPE'][Context::getArtNum()]['class']]) {
+            $sem_class = $GLOBALS['SEM_CLASS'][$GLOBALS['SEM_TYPE'][Context::getArtNum()]['class']];
             $new_module_name = "Core".ucfirst($module);
             $mandatory = false;
             foreach (SemClass::getSlots() as $slot) {
@@ -368,6 +156,7 @@ function checkObjectModule($module)
                 }
             }
         }
+
         if (!$local_modules[$checkslot] && !$mandatory) {
             throw new CheckObjectException(sprintf(_('Das Inhaltselement "%s" ist für dieses Objekt leider nicht verfügbar.'), ucfirst($module)));
         }
@@ -377,32 +166,11 @@ function checkObjectModule($module)
 /**
  * This function closes a opened Veranstaltung or Einrichtung
  *
- * @global string  $SessionSeminar
- * @global array   $SessSemName
- * @global string  $SemSecLevelRead
- * @global string  $SemSecLevelWrite
- * @global string  $SemUserStatus
- * @global boolean $rechte
- * @global object  $sess
- *
  * @return void
  */
 function closeObject()
 {
-    global $SessionSeminar, $SessSemName, $SemSecLevelRead, $SemSecLevelWrite, $SemUserStatus, $rechte, $sess;
-
-    $SessionSeminar = null;
-    $SessSemName = array();
-    $SemSecLevelRead = null;
-    $SemSecLevelWrite = null;
-    $SemUserStatus = null;
-    $rechte = false;
-
-    unset($_SESSION['SessionSeminar']);
-    unset($_SESSION['SessSemName']);
-    unset($_SESSION['raumzeitFilter']);
-
-    URLHelper::removeLinkParam('cid');
+    Context::close();
 }
 
 /**
@@ -1706,7 +1474,6 @@ function studip_json_encode($data, $options = 0)
  * specified SEM_TYPE. Alternative titles can be defined in the config.inc.php.
  *
  * @global array $SEM_TYPE
- * @global array $SessSemName
  * @global array $DEFAULT_TITLE_FOR_STATUS
  *
  * @param string $type     status ('dozent', 'tutor', 'autor', 'user' or 'accepted')
@@ -1717,10 +1484,10 @@ function studip_json_encode($data, $options = 0)
  */
 function get_title_for_status($type, $count, $sem_type = NULL)
 {
-    global $SEM_TYPE, $SessSemName, $DEFAULT_TITLE_FOR_STATUS;
+    global $SEM_TYPE, $DEFAULT_TITLE_FOR_STATUS;
 
     if (is_null($sem_type)) {
-        $sem_type = $SessSemName['art_num'];
+        $sem_type = Context::getArtNum();
     }
 
     $atype = 'title_'.$type;

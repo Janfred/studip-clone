@@ -37,7 +37,7 @@ class Institute_BasicdataController extends AuthenticatedController
         Navigation::activateItem('/admin/institute/details');
 
         //get ID from an open Institut
-        $i_view = $i_id ?: Request::option('i_view', $GLOBALS['SessSemName'][1]);
+        $i_view = $i_id ?: Request::option('i_view', Context::getId());
 
         if (!$i_view) {
             require_once 'lib/admin_search.inc.php';
@@ -55,7 +55,7 @@ class Institute_BasicdataController extends AuthenticatedController
         }
 
         //Change header_line if open object
-        $header_line = getHeaderLine($i_view);
+        $header_line = Context::getHeaderLine();
         if ($header_line) {
             PageLayout::setTitle($header_line . ' - ' . PageLayout::getTitle());
         }
@@ -288,7 +288,7 @@ class Institute_BasicdataController extends AuthenticatedController
             $message = sprintf(_('Die Einrichtung "%s" wurde erfolgreich angelegt.'), $institute->name);
             PageLayout::postMessage(MessageBox::success($message));
 
-            openInst($institute->id);
+            object_set_visit($institute_id, "inst");
         } else {
             // Report success
             $message = sprintf(_('Die Änderung der Einrichtung "%s" wurde erfolgreich gespeichert.'), htmlReady($institute->name));

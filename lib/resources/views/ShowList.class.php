@@ -79,7 +79,7 @@ class ShowList extends ShowTreeRow{
 
     //private
     function showListObject ($resource_id, $admin_buttons=FALSE) {
-        global $edit_structure_object, $RELATIVE_PATH_RESOURCES, $ActualObjectPerms, $SessSemName,
+        global $edit_structure_object, $RELATIVE_PATH_RESOURCES, $ActualObjectPerms,
             $user, $perm, $clipObj, $view_mode, $view;
 
         //Object erstellen

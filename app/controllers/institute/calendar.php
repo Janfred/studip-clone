@@ -41,7 +41,7 @@ class Institute_CalendarController extends AuthenticatedController
     {
         $calendar = Calendar::getInstance(Calendar::RANGE_INST,
                 $this->institute_id);
-        PageLayout::setTitle(getHeaderLine($this->institute_id)
+        PageLayout::setTitle(Context::getHeaderLine()
                 . ' - ' . _("Terminkalender - Tagesansicht"));
         $_SESSION['calendar_sess_control_data']['view_prv'] = 'showday';
         Navigation::activateItem("/course/calendar/day");
@@ -76,7 +76,7 @@ class Institute_CalendarController extends AuthenticatedController
     {
         $calendar = Calendar::getInstance(Calendar::RANGE_INST,
                 $this->institute_id);
-        PageLayout::setTitle(getHeaderLine($this->institute_id)
+        PageLayout::setTitle(Context::getHeaderLine()
                 . ' - ' . _("Terminkalender - Wochenansicht"));
         $_SESSION['calendar_sess_control_data']['view_prv'] = 'showweek';
         Navigation::activateItem("/course/calendar/week");

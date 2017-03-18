@@ -88,14 +88,14 @@ if (Request::get('folderzip')) {
 
 if (Request::get('zipnewest') !== NULL) {
     //Abfrage der neuen Dateien
-    $folder_tree = TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessSemName[1]));
+    $folder_tree = TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => Context::getId()));
     $query = "SELECT range_id, dokument_id, url
               FROM dokumente
               WHERE seminar_id = ? AND user_id != ?
                 AND GREATEST(mkdate, IFNULL(chdate, 0)) > ?";
     $statement = DBManager::get()->prepare($query);
     $statement->execute(array(
-        $SessSemName[1],
+        Context::getId(),
         $user->id,
         Request::int('zipnewest'),
     ));
@@ -112,7 +112,7 @@ if (Request::get('zipnewest') !== NULL) {
     if (count($download_ids)>0) {
         $zip_file_id = createSelectedZip($download_ids, true, true);
         if($zip_file_id){
-            $zip_name = prepareFilename($SessSemName[0].'-'._("Neue Dokumente").'.zip');
+            $zip_name = prepareFilename(Context::get()->Name .'-'._("Neue Dokumente").'.zip');
             header('Location: ' . getDownloadLink( $zip_file_id, $zip_name, 4));
             page_close();
             die;
@@ -125,7 +125,7 @@ if (Request::submitted('download_selected')) {
     if (count($download_ids)  > 0) {
         $zip_file_id = createSelectedZip($download_ids, true, true);
         if($zip_file_id){
-            $zip_name = prepareFilename($SessSemName[0].'-'._("Dokumente").'.zip');
+            $zip_name = prepareFilename(Context::get()->Name .'-'._("Dokumente").'.zip');
             header('Location: ' . getDownloadLink( $zip_file_id, $zip_name, 4));
             page_close();
             die;
@@ -136,7 +136,7 @@ if (Request::submitted('download_selected')) {
     // add skip links
     SkipLinks::addIndex(Navigation::getItem('/course/files/all')->getTitle(), 'main_content', 100);
     SkipLinks::addIndex(Navigation::getItem('/course/files/tree')->getTitle(), 'main_content', 100);
-$folder_tree = TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessSemName[1]));
+$folder_tree = TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => Context::getId()));
 
 $question = '';
 $msgs = [];
@@ -166,7 +166,8 @@ if (!$rechte && $open_cmd) {
     $owner = FALSE;
 }
 
-if(!$rechte && in_array($open_cmd, array('n','d','c','sc','m','co')) && $SemUserStatus == "autor"){
+if(!$rechte && in_array($open_cmd, array('n','d','c','sc','m','co'))
+        && $perm->get_studip_perm(Context::getId()) == "autor"){
     $create_folder_perm = $folder_tree->checkCreateFolder($open_id, $user->id);
 } else {
     $create_folder_perm = false;
@@ -194,19 +195,19 @@ if ($rechte || $owner || $create_folder_perm) {
     //wird entsprechende Funktion aufgerufen
     if ($open_cmd == 'a') {
         $permission = 7;
-        if ($open_id == $SessSemName[1]) {
+        if ($open_id == Context::getId()) {
             $titel=_("Allgemeiner Dateiordner");
-            $description= sprintf(_("Ablage für allgemeine Ordner und Dokumente der %s"), $SessSemName["art_generic"]);
+            $description= sprintf(_("Ablage für allgemeine Ordner und Dokumente der %s"), Context::getTypeName());
         } else if ($open_id == md5('new_top_folder')){
             $titel = Request::get('top_folder_name') ? Request::get('top_folder_name') : _("Neuer Ordner");
-            $open_id = md5($SessSemName[1] . 'top_folder');
+            $open_id = md5(Context::getId() . 'top_folder');
         } elseif ($titel = Statusgruppen::find($open_id)->name) {
             $titel = _("Dateiordner der Gruppe:") . ' ' . $titel;
             $description = _("Ablage für Ordner und Dokumente dieser Gruppe");
             $permission = 15;
         } else if ($data = SingleDateDB::restoreSingleDate($open_id)) {
             // If we create a folder which has not yet an issue, we just create one
-            $issue = new Issue(array('seminar_id' => $SessSemName[1]));
+            $issue = new Issue(array('seminar_id' => Context::getId()));
             $issue->setTitle(_("Ohne Titel"));
             $termin = new SingleDate($open_id);
             $termin->addIssueID($issue->getIssueID());
@@ -461,7 +462,7 @@ if ($rechte || $owner || $create_folder_perm) {
 }
 
 //Upload, Check auf Konsistenz mit Seminar-Schreibberechtigung
-if (($SemUserStatus == "autor") || ($rechte)) {
+if (($perm->get_studip_perm(Context::getId()) == "autor") || ($rechte)) {
     //wurde Code fuer Hochladen uebermittelt (=id+"_u_"), wird entsprechende Variable gesetzt
     if ($open_cmd == 'u' && (!Request::submitted("cancel"))) {
         $folder_system_data["upload"]=$open_id;
@@ -554,7 +555,7 @@ if ($rechte && Request::submittedSome('move_to_sem', 'move_to_inst', 'move_to_to
     if (!Request::submitted('move_to_top_folder')){
         $new_sem_id = Request::submitted('move_to_sem') ? Request::getArray('sem_move_id') : Request::getArray('inst_move_id');
     } else {
-        $new_sem_id = array($SessSemName[1]);
+        $new_sem_id = array(Context::getId());
     }
     if ($new_sem_id) {
         foreach($new_sem_id as $sid) {
@@ -768,7 +769,7 @@ if ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
                 array(
                     'range_id'    => Request::get("copyintofolder"),
                     'user_id'     => $user->id,
-                    'seminar_id'  => $SessSemName[1],
+                    'seminar_id'  => Context::getId(),
                     'name'        => $result['name'],
                     'description' => $result['description'],
                     'filename'    => $result['filename'],
@@ -796,7 +797,7 @@ if ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
 // Start of Output
 
 PageLayout::setHelpKeyword("Basis.Dateien");
-PageLayout::setTitle($SessSemName["header_line"]. " - " . _("Dateien"));
+PageLayout::setTitle(Context::getHeaderLine(). " - " . _("Dateien"));
 
 if ($folder_system_data['cmd'] == 'all') {
     Navigation::activateItem('/course/files/all');
@@ -815,7 +816,7 @@ ob_start();
 // Hauptteil
 
  if (!isset($range_id))
-    $range_id = $SessSemName[1] ;
+    $range_id = Context::getId() ;
 
 //JS Routinen einbinden, wenn benoetigt. Wird in der Funktion gecheckt, ob noetig...
 JS_for_upload();
@@ -844,7 +845,7 @@ if ($question) {
             $module_check = new Modules();
             $my_sem = $my_inst = array();
             foreach(search_range('%') as $key => $value){
-                if ($module_check->getStatus('documents', $key, $value['type']) && $key != $SessSemName[1]){
+                if ($module_check->getStatus('documents', $key, $value['type']) && $key != Context::getId()){
                     if ($value['type'] == 'sem'){
                         $my_sem[$key] = $value['name'];
                     } else {
@@ -934,11 +935,11 @@ if ($question) {
 
     if ($folder_system_data["cmd"]=="all") {
         print "<p class=\"info\">";
-        printf (_("Hier sehen Sie alle Dateien, die zu dieser %s eingestellt wurden. Um eine neue Datei hoch zu laden, wählen Sie bitte links die Ordneransicht."), $SessSemName["art_generic"]);
+        printf (_("Hier sehen Sie alle Dateien, die zu dieser %s eingestellt wurden. Um eine neue Datei hoch zu laden, wählen Sie bitte links die Ordneransicht."), Context::getTypeName());
         print "</p>";
     }
 
-    $lastvisit = object_get_visit($SessSemName[1], "documents");
+    $lastvisit = object_get_visit(Context::getId(), "documents");
 
     $query = "SELECT COUNT(*)
               FROM dokumente
@@ -1002,7 +1003,7 @@ div.droppable.hover {
 
         //Weitere Ordner:
         $statement->execute(array(
-            md5($SessSemName[1] . 'top_folder')
+            md5(Context::getId() . 'top_folder')
         ));
         while ($general_folder = $statement->fetch(PDO::FETCH_ASSOC)) {
             if ($folder_tree->isExecutable($general_folder['folder_id'], $user->id) || $rechte) {
@@ -1020,7 +1021,7 @@ div.droppable.hover {
         }
 
         // Themenordner zu Terminen:
-        if($SessSemName['class'] == 'sem') {
+        if(Context::isCourse()) {
             $query = "SELECT DISTINCT folder_id
                       FROM themen AS th
                       LEFT JOIN themen_termine AS tt ON (th.issue_id = tt.issue_id)
@@ -1282,7 +1283,7 @@ $sidebar->setImage('sidebar/files-sidebar.png');
 if ($rechte) {
     $actions = new ActionsWidget();
     $actions->addLink(_('Neuer Ordner'),
-                      URLHelper::getLink('dispatch.php/folder/create/' . $range_id . '/' . $SessSemName['class']),
+                      URLHelper::getLink('dispatch.php/folder/create/' . $range_id . '/' . Context::getClass()),
                       Icon::create('folder-empty+add', 'clickable'),
                       array('data-dialog' => 'size=auto'));
     $sidebar->addWidget($actions);

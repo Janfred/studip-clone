@@ -27,7 +27,7 @@ class Course_ScmController extends StudipController
     private function set_title($title = '')
     {
         $title_parts   = func_get_args();
-        $title_parts[] = $GLOBALS['SessSemName']['header_line'];
+        $title_parts[] = Context::getHeaderLine();
         $page_title    = implode(' - ', $title_parts);
 
         PageLayout::setTitle($page_title);
@@ -59,7 +59,7 @@ class Course_ScmController extends StudipController
 
         $GLOBALS['auth']->login_if(Request::get('again')
                                    && $GLOBALS['auth']->auth['uid'] == 'nobody');
-        $this->priviledged = $GLOBALS['perm']->have_studip_perm('tutor', $GLOBALS['SessSemName'][1]);
+        $this->priviledged = $GLOBALS['perm']->have_studip_perm('tutor', Context::getId());
 
         if (!in_array($action, words('index create edit move delete'))) {
             array_unshift($args, $action);
@@ -70,7 +70,7 @@ class Course_ScmController extends StudipController
             throw new AccessDeniedException();
         }
 
-        if ($GLOBALS['perm']->have_studip_perm('tutor', $GLOBALS['SessSemName'][1])) {
+        if ($GLOBALS['perm']->have_studip_perm('tutor', Context::getId())) {
             $widget = new ActionsWidget();
             $widget->addLink(_('Neuen Eintrag anlegen'),
                              URLHelper::getLink('dispatch.php/course/scm/create'), Icon::create('add', 'clickable'))
@@ -98,7 +98,7 @@ class Course_ScmController extends StudipController
      */
     public function index_action($id = null)
     {
-        $temp       = StudipScmEntry::findByRange_id($GLOBALS['SessSemName'][1], 'ORDER BY position ASC');
+        $temp       = StudipScmEntry::findByRange_id(Context::getId(), 'ORDER BY position ASC');
         $this->scms = SimpleORMapCollection::createFromArray($temp);
         $this->scm  = $id ? $this->scms->find($id) : $this->scms->first();
 
@@ -127,7 +127,7 @@ class Course_ScmController extends StudipController
         $this->scm->user_id = $GLOBALS['user']->id;
         $this->scm->chdate  = time();
 
-        $this->first_entry = StudipScmEntry::countBySql('range_id = ?', array($GLOBALS['SessSemName'][1])) == 0;
+        $this->first_entry = StudipScmEntry::countBySql('range_id = ?', array(Context::getId())) == 0;
 
         $this->set_title(_('Neue Informationsseite anlegen'));
 
@@ -150,10 +150,10 @@ class Course_ScmController extends StudipController
             $scm->tab_name = Request::get('tab_name_template') ?: Request::get('tab_name');
             $scm->content  = Studip\Markup::purifyHtml(Request::get('content'));
             $scm->user_id  = $GLOBALS['user']->id;
-            $scm->range_id = $GLOBALS['SessSemName'][1];
+            $scm->range_id = Context::getId();
 
             if ($scm->isNew()) {
-                $temp = StudipScmEntry::findByRange_id($GLOBALS['SessSemName'][1], 'ORDER BY position ASC');
+                $temp = StudipScmEntry::findByRange_id(Context::getId(), 'ORDER BY position ASC');
                 $scms = SimpleORMapCollection::createFromArray($temp);
                 $max  = max($scms->pluck('position'));
 
@@ -183,7 +183,7 @@ class Course_ScmController extends StudipController
     public function move_action($id)
     {
         $scm = new StudipScmEntry($id);
-        if (!$scm->isNew() && $scm->range_id == $GLOBALS['SessSemName'][1]){
+        if (!$scm->isNew() && $scm->range_id == Context::getId()){
             $query = "UPDATE scm
                       SET position = position + 1
                       WHERE range_id = :range_id AND position < :position";
@@ -210,7 +210,7 @@ class Course_ScmController extends StudipController
         $ticket = Request::option('ticket');
         if ($ticket && check_ticket($ticket)) {
             $scm = new StudipScmEntry($id);
-            if (!$scm->isNew() && $scm->range_id == $GLOBALS['SessSemName'][1]){
+            if (!$scm->isNew() && $scm->range_id == Context::getId()){
                 $scm->delete();
                 PageLayout::postMessage(MessageBox::success(_('Der Eintrag wurde gelöscht.')));
             }

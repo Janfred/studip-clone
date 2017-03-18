@@ -25,15 +25,14 @@ $wiki_extended_link_regex = "\[\[(([\w\.\-\:\(\)_§\/@# ]|&[AOUaou]uml;|&szlig;)+
 * @param int    Version number. If empty, latest version is returned.
 *
 **/
-function getWikiPage($keyword, $version, $db = NULL) {
-    global $SessSemName;
-
+function getWikiPage($keyword, $version, $db = NULL)
+{
     $query = "SELECT *
               FROM wiki
               WHERE keyword = :keyword AND range_id = :range_id";
     $parameters = array(
         'keyword'  => $keyword,
-        'range_id' => $SessSemName[1],
+        'range_id' => Context::getId(),
     );
 
     if (!$version) {
@@ -167,16 +166,15 @@ function getFirstVersion($keyword, $range_id) {
 * @param string     getfirst Should first (=most recent) version e retrieved, too?
 *
 **/
-function getWikiPageVersions($keyword, $limit=10, $getfirst=0) {
-    global $SessSemName;
-
+function getWikiPageVersions($keyword, $limit=10, $getfirst=0)
+{
     $query = "SELECT version, chdate
               FROM wiki
               WHERE keyword = ? AND range_id = ?
               ORDER BY version DESC
               LIMIT " . (int)$limit;
     $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($keyword, $SessSemName[1]));
+    $statement->execute(array($keyword, Context::getId()));
     $versions = $statement->fetchAll(PDO::FETCH_ASSOC);
 
     if (!$getfirst) {
@@ -196,12 +194,11 @@ function getWikiPageVersions($keyword, $limit=10, $getfirst=0) {
 **/
 function keywordExists($str, $sem_id=NULL) {
     static $keywords;
-    global $SessSemName;
 
     if (is_null($keywords)) {
         $query = "SELECT DISTINCT keyword, 1 FROM wiki WHERE range_id = ?";
         $statement = DBManager::get()->prepare($query);
-        $statement->execute(array($sem_id ?: $SessSemName[1]));
+        $statement->execute(array($sem_id ?: Context::getId()));
         $keywords = $statement->fetchGrouped(PDO::FETCH_COLUMN);
     }
     // retranscode html entities to ascii values (as stored in db)
@@ -254,15 +251,14 @@ function isKeyword($str, $page, $format="wiki", $sem_id=NULL, $alt_str=NULL){
 * @param    string  user_id  Internal user id
 *
 **/
-function getLock($keyword, $user_id) {
-    global $SessSemName;
-
+function getLock($keyword, $user_id)
+{
     $query = "SELECT user_id, chdate
               FROM wiki_locks
               WHERE range_id = ? AND keyword = ? AND user_id != ?
               ORDER BY chdate DESC";
     $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($SessSemName[1], $keyword, $user_id));
+    $statement->execute(array(Context::getId(), $keyword, $user_id));
     $locks = $statement->fetchAll(PDO::FETCH_ASSOC);
 
     $lockstring = '';
@@ -306,8 +302,8 @@ function setWikiLock($db, $user_id, $range_id, $keyword) {
 * @param    string  WikiPage keyword
 *
 **/
-function releaseLocks($keyword) {
-    global $SessSemName;
+function releaseLocks($keyword)
+{
 
     // Prepare statement that actually releases (removes) the lock
     $query = "DELETE FROM wiki_locks WHERE range_id = ? AND keyword = ? AND chdate = ?";
@@ -318,7 +314,7 @@ function releaseLocks($keyword) {
               FROM wiki_locks
               WHERE range_id = ? AND keyword = ? AND chdate < UNIX_TIMESTAMP(NOW() - INTERVAL 30 MINUTE)";
     $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($SessSemName[1], $keyword));
+    $statement->execute(array(Context::getId(), $keyword));
 
     while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
         $release_statement->execute(array(
@@ -336,13 +332,12 @@ function releaseLocks($keyword) {
 * @param    string  user_id Internal user id
 *
 **/
-function releasePageLocks($keyword, $user_id) {
-    global $SessSemName;
-
+function releasePageLocks($keyword, $user_id)
+{
     $query = "DELETE FROM wiki_locks
               WHERE range_id = ? AND keyword = ? AND user_id = ?";
     $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($SessSemName[1], $keyword, $user_id));
+    $statement->execute(array(Context::getId(), $keyword, $user_id));
 }
 
 
@@ -370,15 +365,14 @@ function getWikiLinks($str) {
 * @param    string  Wiki keyword
 *
 **/
-function getBacklinks($keyword) {
-    global $SessSemName;
-
+function getBacklinks($keyword)
+{
     // don't show references from Table of contents (='toc')
     $query = "SELECT DISTINCT from_keyword
               FROM wiki_links
               WHERE range_id = ? AND to_keyword = ? AND from_keyword != 'toc'";
     $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($SessSemName[1], $keyword));
+    $statement->execute(array(Context::getId(), $keyword));
     return $statement->fetchAll(PDO::FETCH_COLUMN);
 }
 
@@ -390,8 +384,8 @@ function getBacklinks($keyword) {
 * @param    string  str Page content containing links
 *
 **/
-function refreshBacklinks($keyword, $str) {
-    global $SessSemName;
+function refreshBacklinks($keyword, $str)
+{
     // insert links from page to db
     // logic: all links are added, also links to nonexistant pages
     // (these will change when submitting other pages)
@@ -399,7 +393,7 @@ function refreshBacklinks($keyword, $str) {
     // first delete all links
     $query = "DELETE FROM wiki_links WHERE range_id = ? AND from_keyword = ?";
     $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($SessSemName[1], $keyword));
+    $statement->execute(array(Context::getId(), $keyword));
 
     // then reinsert those (still) existing
     $wikiLinkList = getWikiLinks($str);
@@ -409,7 +403,7 @@ function refreshBacklinks($keyword, $str) {
         $statement = DBManager::get()->prepare($query);
 
         foreach ($wikiLinkList as $key => $value) {
-            $statement->execute(array($SessSemName[1], $keyword, decodeHTML($value)));
+            $statement->execute(array(Context::getId(), $keyword, decodeHTML($value)));
         }
     }
 }
@@ -426,9 +420,9 @@ function getZusatz($wikiData)
     if (!$wikiData || $wikiData["version"] <= 0) {
         return "";
     }
-    
+
     $user = User::find($wikiData['user_id']);
-    
+
     $s =  '<a href="' . URLHelper::getLink('?keyword=' . urlencode($wikiData['keyword']) . '&version=' . $wikiData['version']). '">' . _('Version ') . $wikiData['version'] . '</a>';
     $s .= sprintf(_(', geändert von %s am %s'),
                   $user
@@ -448,14 +442,14 @@ function getZusatz($wikiData)
 *
 **/
 function showDeleteDialog($keyword, $version) {
-    global $perm, $SessSemName;
-    if (!$perm->have_studip_perm("tutor", $SessSemName[1])) {
+    global $perm;
+    if (!$perm->have_studip_perm("tutor", Context::getId())) {
         throw new AccessDeniedException(_('Sie haben keine Berechtigung, Seiten zu löschen.'));
     }
     $islatest=0; // will another version become latest version?
     $willvanish=0; // will the page be deleted entirely?
     if ($version=="latest") {
-        $lv=getLatestVersion($keyword, $SessSemName[1]);
+        $lv=getLatestVersion($keyword, Context::getId());
         $version=$lv["version"];
         if ($version==1) {
             $willvanish=1;
@@ -489,8 +483,8 @@ function showDeleteDialog($keyword, $version) {
 *
 **/
 function showDeleteAllDialog($keyword) {
-    global $perm, $SessSemName;
-    if (!$perm->have_studip_perm("tutor", $SessSemName[1])) {
+    global $perm;
+    if (!$perm->have_studip_perm("tutor", Context::getId())) {
         throw new AccessDeniedException(_('Sie haben keine Berechtigung, Seiten zu löschen.'));
     }
     $msg= sprintf(_("Wollen Sie die Seite %s wirklich vollständig - mit allen Versionen - löschen?"), "<b>".htmlReady($keyword)."</b>") . "<br>\n";
@@ -527,11 +521,11 @@ function showDeleteAllDialog($keyword) {
 *
 **/
 function deleteWikiPage($keyword, $version, $range_id) {
-    global $perm, $SessSemName, $dellatest;
-    if (!$perm->have_studip_perm("tutor", $SessSemName[1])) {
+    global $perm, $dellatest;
+    if (!$perm->have_studip_perm("tutor", Context::getId())) {
         throw new AccessDeniedException(_('Sie haben keine Berechtigung, Seiten zu löschen.'));
     }
-    $lv=getLatestVersion($keyword, $SessSemName[1]);
+    $lv=getLatestVersion($keyword, Context::getId());
     if ($lv["version"] != $version) {
         throw new InvalidArgumentException(_('Die Version, die Sie löschen wollen, ist nicht die aktuellste. Überprüfen Sie, ob inzwischen eine aktuellere Version erstellt wurde.'));
     }
@@ -554,7 +548,7 @@ function deleteWikiPage($keyword, $version, $range_id) {
     $message = MessageBox::info(sprintf(_('Version %s der Seite %s gelöscht.'), htmlReady($version), '<b>'.htmlReady($keyword).'</b>') . $addmsg);
     PageLayout::postMessage($message);
     if ($dellatest) {
-        $lv=getLatestVersion($keyword, $SessSemName[1]);
+        $lv=getLatestVersion($keyword, Context::getId());
         if ($lv) {
             $body="";
         } else {
@@ -573,8 +567,8 @@ function deleteWikiPage($keyword, $version, $range_id) {
 *
 **/
 function deleteAllWikiPage($keyword, $range_id) {
-    global $perm, $SessSemName;
-    if (!$perm->have_studip_perm("tutor", $SessSemName[1])) {
+    global $perm;
+    if (!$perm->have_studip_perm("tutor", Context::getId())) {
         throw new AccessDeniedException(_('Sie haben keine Berechtigung, Seiten zu löschen.'));
     }
 
@@ -596,9 +590,8 @@ function deleteAllWikiPage($keyword, $range_id) {
 * @param  mode  string  Either "all" or "new", affects default sorting and page title.
 * @param  sortby  string  Different sortings of entries.
 **/
-function listPages($mode, $sortby = NULL) {
-    global $SessSemName;
-
+function listPages($mode, $sortby = NULL)
+{
     if ($mode=="all") {
         $selfurl = "?view=listall";
         $sort = "ORDER by lastchange DESC"; // default sort order for "all pages"
@@ -609,7 +602,7 @@ function listPages($mode, $sortby = NULL) {
         Helpbar::get()->ignoreDatabaseContents();
         Helpbar::get()->addPlainText('', $help);
     } else if ($mode=="new") {
-        $lastlogindate = object_get_visit($SessSemName[1], "wiki");
+        $lastlogindate = object_get_visit(Context::getId(), "wiki");
         $selfurl = "?view=listnew";
         $sort = "ORDER by lastchange"; // default sort order for "new pages"
         $nopages = _("Seit Ihrem letzten Login gab es keine Änderungen.");
@@ -660,14 +653,14 @@ function listPages($mode, $sortby = NULL) {
                   WHERE range_id = ?
                   GROUP BY keyword
                   {$sort}";
-        $parameters = array($SessSemName[1]);
+        $parameters = array(Context::getId());
     } else if ($mode=="new") {
         $query = "SELECT keyword, MAX(chdate) AS lastchange, MAX(version) AS lastversion
                   FROM wiki
                   WHERE range_id = ? AND chdate > ?
                   GROUP BY keyword
                   {$sort}";
-        $parameters = array($SessSemName[1], $lastlogindate);
+        $parameters = array(Context::getId(), $lastlogindate);
     }
     $statement = DBManager::get()->prepare($query);
     $statement->execute($parameters);
@@ -704,7 +697,7 @@ function listPages($mode, $sortby = NULL) {
             $keyword    = $page['keyword'];
             $lastchange = $page['lastchange'];
 
-            $meta_statement->execute(array($SessSemName[1], $keyword, $lastchange));
+            $meta_statement->execute(array(Context::getId(), $keyword, $lastchange));
             $temp = $meta_statement->fetch(PDO::FETCH_ASSOC);
             $meta_statement->closeCursor();
 
@@ -758,11 +751,10 @@ function listPages($mode, $sortby = NULL) {
 * @param  keyword  string  last shown page or keyword for local (one page) search
 * @param keyword bool if localsearch is set, only one page (all versions) is searched
 **/
-function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch) {
-    global $SessSemName;
-    $range_id=$SessSemName[1];
-
-    $result=NULL;
+function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch)
+{
+    $range_id = Context::getId();
+    $result   = NULL;
 
     // check for invalid search string
     if (mb_strlen($searchfor)<3) {
@@ -1027,13 +1019,13 @@ function wikiEdit($keyword, $wikiData, $user_id, $backpage=NULL)
 * @param    string  version WikiPage version
 *
 **/
-function printWikiPage($keyword, $version) {
-    global $SessSemName;
+function printWikiPage($keyword, $version)
+{
     $wikiData=getWikiPage($keyword, $version);
     PageLayout::removeStylesheet('style.css');
     PageLayout::addStylesheet('print.css'); // use special stylesheet for printing
     include ('lib/include/html_head.inc.php'); // Output of html head
-    echo "<p><em>" . htmlReady($SessSemName['header_line']) ."</em></p>";
+    echo "<p><em>" . htmlReady(Context::getHeaderLine()) ."</em></p>";
     echo "<h1>" . htmlReady($keyword) ."</h1>";
     echo "<p><em>";
     echo sprintf(_("Version %s, letzte Änderung %s von %s."), $wikiData['version'],
@@ -1047,22 +1039,21 @@ function printWikiPage($keyword, $version) {
     include ('lib/include/html_end.inc.php');
 }
 
-function exportWikiPagePDF($keyword, $version) {
-    global $SessSemName;
+function exportWikiPagePDF($keyword, $version)
+{
     $wikiData=getWikiPage($keyword,$version);
 
     $document = new ExportPDF();
     $document->SetTitle(_('Wiki: ') . $keyword);
-    $document->setHeaderTitle(sprintf(_("Wiki von \"%s\""), $SessSemName[0]));
+    $document->setHeaderTitle(sprintf(_("Wiki von \"%s\""), Context::get()->Name));
     $document->setHeaderSubtitle(sprintf(_("Seite: %s"), $keyword));
     $document->addPage();
     $document->addContent(deleteWikiLinks($wikiData["body"]));
-    $document->dispatch($SessSemName['header_line']." - ".$keyword);
+    $document->dispatch(Context::getHeaderLine() ." - ".$keyword);
 }
 
-function exportAllWikiPagesPDF($mode, $sortby) {
-    global $SessSemName;
-
+function exportAllWikiPagesPDF($mode, $sortby)
+{
     $titlesortlink = "title";
     $versionsortlink = "version";
     $changesortlink = "lastchange";
@@ -1098,23 +1089,23 @@ function exportAllWikiPagesPDF($mode, $sortby) {
               GROUP BY keyword
               {$sort}";
 
-    $parameters = array($SessSemName[1]);
+    $parameters = array(Context::getId());
 
     $statement = DBManager::get()->prepare($query);
     $statement->execute($parameters);
 
     $document = new ExportPDF();
     $document->SetTitle(_('Wiki: ').htmlReady($wikiData["keyword"]));
-    $document->setHeaderTitle(sprintf(_("Wiki von \"%s\""), $SessSemName[0]));
+    $document->setHeaderTitle(sprintf(_("Wiki von \"%s\""), Context::get()->Name));
 
     while ($wikiData = $statement->fetch(PDO::FETCH_ASSOC)) {
-        $pagedata = getLatestVersion($wikiData["keyword"], $SessSemName[1]);
+        $pagedata = getLatestVersion($wikiData["keyword"], Context::getId());
         $document->setHeaderSubtitle(sprintf(_("Seite: %s"), $wikiData["keyword"]));
         $document->addPage();
         $document->addContent(deleteWikiLinks($pagedata["body"]));
     }
 
-    $document->dispatch($SessSemName[header_line]." - ".$wikiData["keyword"]);
+    $document->dispatch(Context::getHeaderLine() ." - ".$wikiData["keyword"]);
 }
 
 function deleteWikiLinks($keyword){
@@ -1264,7 +1255,7 @@ function getShowPageInfobox($keyword, $latest_version)
 
     $toccont = get_toc_content();
     $toccont_empty = !trim(strip_tags($toccont));
-    if ($GLOBALS['perm']->have_studip_perm('autor', $GLOBALS['SessSemName'][1])){
+    if ($GLOBALS['perm']->have_studip_perm('autor', Context::getId())){
         $extra = sprintf('<a href="%s">%s</a>',
                          URLHelper::getLink('?keyword=toc&view=edit'),
                          $toccont_empty
@@ -1423,7 +1414,7 @@ function get_toc_toggler() {
     return $cont;
 }
 function get_toc_content() {
-    global $perm, $SessSemName;
+    global $perm;
     // Table of Contents / Wiki navigation
     $toc=getWikiPage("toc",0);
     if ($toc) {
@@ -1434,7 +1425,7 @@ function get_toc_content() {
         $toccont.="</div>\n";
     }
     /*  additional edit link for QuickLinks. Disabled.
-    if ($GLOBALS['perm']->have_studip_perm('autor', $GLOBALS['SessSemName'][1])){
+    if ($GLOBALS['perm']->have_studip_perm('autor', Context::getId())){
         $toccont.="<div class='wikitoc_editlink'>";
         if ($toc) {
             $toccont.="<a href=\"".URLHelper::getLink("?keyword=toc&view=edit")."\">"._("bearbeiten")."</a>";
@@ -1457,7 +1448,7 @@ function get_toc_content() {
 *
 **/
 function showWikiPage($keyword, $version, $special="", $show_comments="icon", $hilight=NULL) {
-    global $perm, $SessSemName;
+    global $perm;
 
     showPageFrameStart();
 
@@ -1473,7 +1464,7 @@ function showWikiPage($keyword, $version, $special="", $show_comments="icon", $h
     if (!$version) {
         $latest_version=1;
     } else {
-        $wikiLatest= getLatestVersion($keyword, $SessSemName[1]);
+        $wikiLatest= getLatestVersion($keyword, Context::getId());
         if ($version==$wikiLatest["version"]) {
             $latest_version=1;
         } else {
@@ -1484,16 +1475,16 @@ function showWikiPage($keyword, $version, $special="", $show_comments="icon", $h
     // show page logic
     wikiSinglePageHeader($wikiData, $keyword);
 
-    if ($perm->have_studip_perm("autor", $SessSemName[1])) {
+    if ($perm->have_studip_perm("autor", Context::getId())) {
         if (!$latest_version) {
             $edit  = Icon::create('lock-locked', 'info')->asImg();
             $edit .= _("Ältere Version, nicht bearbeitbar!");
         } else {
             $edit="";
-            if ($perm->have_studip_perm("autor", $SessSemName[1])) {
+            if ($perm->have_studip_perm("autor", Context::getId())) {
                 $edit.=LinkButton::create(_('Bearbeiten'), URLHelper::getURL("?keyword=".urlencode($keyword)."&view=edit"));
             }
-            if ($perm->have_studip_perm("tutor", $SessSemName[1])) {
+            if ($perm->have_studip_perm("tutor", Context::getId())) {
                 $edit.=LinkButton::create(_('Löschen'),URLHelper::getURL("?keyword=".urlencode($keyword)."&cmd=delete&version=latest"));
             }
         }
@@ -1568,15 +1559,14 @@ function end_blank_table() {
 * @param    string  Only show versions newer than this timestamp
 *
 **/
-function showDiffs($keyword, $versions_since) {
-    global $SessSemName;
-
+function showDiffs($keyword, $versions_since)
+{
     $query = "SELECT *
               FROM wiki
               WHERE keyword = ? AND range_id = ?
               ORDER BY version DESC";
     $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($keyword, $SessSemName[1]));
+    $statement->execute(array($keyword, Context::getId()));
     $versions = $statement->fetchAll(PDO::FETCH_ASSOC);
 
     if (count($versions) === 0) {
@@ -1649,11 +1639,10 @@ function toDiffLineArray($lines, $who) {
     return $dla;
 }
 
-function showComboDiff($keyword, $db=NULL) {
-    global $SessSemName;
-
-    $version2=getLatestVersion($keyword, $SessSemName[1]);
-    $version1=getFirstVersion($keyword, $SessSemName[1]);
+function showComboDiff($keyword, $db=NULL)
+{
+    $version2=getLatestVersion($keyword, Context::getId());
+    $version1=getFirstVersion($keyword, Context::getId());
     $version2=$version2["version"];
     $version1=$version1["version"];
 

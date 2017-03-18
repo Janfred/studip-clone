@@ -76,7 +76,7 @@ $lib = new EvalShow();
 #error_reporting( E_ALL & ~E_NOTICE );
 
 /* Set variables ----------------------------------------------------------- */
-$rangeID = Request::option('rangeID',$SessSemName[1]);
+$rangeID = Request::option('rangeID',Context::getId());
 if (empty ($rangeID)) {
     $rangeID = $user->id; }
 

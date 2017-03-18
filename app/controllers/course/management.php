@@ -27,16 +27,16 @@ class Course_ManagementController extends AuthenticatedController
         if (!$GLOBALS['perm']->have_studip_perm("tutor", $GLOBALS['SessionSeminar'])) {
             throw new Trails_Exception(400);
         }
-        if ($GLOBALS['SessSemName']['class'] == 'sem') {
-            $sem_class = $GLOBALS['SEM_CLASS'][$GLOBALS['SEM_TYPE'][$GLOBALS['SessSemName']['art_num']]['class']] ?: SemClass::getDefaultSemClass();
+        if (Context::isCourse()) {
+            $sem_class = $GLOBALS['SEM_CLASS'][$GLOBALS['SEM_TYPE'][Context::get()->status]['class']] ?: SemClass::getDefaultSemClass();
         } else {
-            $sem_class = SemClass::getDefaultInstituteClass($GLOBALS['SessSemName']['art_num']);
+            $sem_class = SemClass::getDefaultInstituteClass(Context::get()->type);
         }
         if (!$sem_class->isModuleAllowed("CoreAdmin")) {
             throw new Exception(_('Dies ist eine Studiengruppe und kein Seminar!'));
         }
 
-        PageLayout::setTitle(sprintf(_("%s - Verwaltung"), $GLOBALS['SessSemName']['header_line']));
+        PageLayout::setTitle(sprintf(_("%s - Verwaltung"), Context::getHeaderLine()));
         PageLayout::setHelpKeyword('Basis.InVeranstaltungVerwaltung');
     }
 
@@ -49,7 +49,7 @@ class Course_ManagementController extends AuthenticatedController
     {
         Navigation::activateItem('course/admin/main');
 
-        if ($GLOBALS['SessSemName']['class'] == 'inst') {
+        if (Context::isInstitute()) {
             Helpbar::get()->addPlainText(_('Information'), _('Als Mitarbeiter Ihrer Einrichtung können Sie für diese Inhalte in mehreren Kategorien bereitstellen.Inhalte in Ihrer Einrichtung können von allen Stud.IP-Nutzern abgerufen werden.'));
         } else {
             Helpbar::get()->addPlainText(_('Information'), _('Sie können hier Ihre Veranstaltung in mehreren Kategorien anpassen. Informationen wie Grunddaten oder Termine und Einstellungen, Zugangsbeschränkungen und Funktionen können Sie hier administrieren.'));

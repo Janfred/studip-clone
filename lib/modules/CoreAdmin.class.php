@@ -29,7 +29,7 @@ class CoreAdmin implements StudipModule {
             $main = new Navigation(_('Verwaltung'), 'dispatch.php/course/management');
             $navigation->addSubNavigation('main', $main);
 
-            if ($GLOBALS['SessSemName']['class'] !== "inst") {
+            if (!Context::isInstitute()) {
                 $item = new Navigation(_('Grunddaten'), 'dispatch.php/course/basicdata/view/' . $course_id);
                 $item->setImage(Icon::create('edit', 'clickable'));
                 $item->setDescription(_('Bearbeiten der Grundeinstellungen dieser Veranstaltung.'));
@@ -49,7 +49,7 @@ class CoreAdmin implements StudipModule {
                 $item->setImage(Icon::create('date', 'clickable'));
                 $item->setDescription(_('Regelmäßige Veranstaltungszeiten, Einzeltermine und Ortsangaben ändern.'));
                 $navigation->addSubNavigation('dates', $item);
-                
+
                 if (get_config('RESOURCES_ENABLE') && get_config('RESOURCES_ALLOW_ROOM_REQUESTS')) {
                     $item = new Navigation(_('Raumanfragen'), 'dispatch.php/course/room_requests/index/' . $course_id);
                     $item->setImage(Icon::create('resources', 'clickable'));

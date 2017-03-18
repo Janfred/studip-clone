@@ -63,7 +63,7 @@ class Institute_MembersController extends AuthenticatedController
         }
 
         //Change header_line if open object
-        if ($header_line = getHeaderLine($this->institute->id)) {
+        if ($header_line = Context::getHeaderLine()) {
             PageLayout::setTitle($header_line." - ".PageLayout::getTitle());
         }
 
@@ -154,7 +154,7 @@ class Institute_MembersController extends AuthenticatedController
 
         // Actual display routines
         $this->display_tables = [];
-        
+
         if ($this->type == 'function') {
             $this->display_recursive($this->institute->status_groups, $dview);
 
@@ -313,7 +313,7 @@ class Institute_MembersController extends AuthenticatedController
                 if ($perms === 'root') {
                     PageLayout::postError(_('ROOTs können nicht berufen werden!'));
                 } elseif ($perms == 'admin') {
-                    if ($GLOBALS['perm']->have_perm('root') || (!$GLOBALS['SessSemName']['is_fak'] && $GLOBALS['perm']->have_studip_perm('admin', $GLOBALS['SessSemName']['fak']))) {
+                    if ($GLOBALS['perm']->have_perm('root') || (!Context::get()->is_fak && $GLOBALS['perm']->have_studip_perm('admin', Context::get()->fakultaets_id))) {
                         // Emails schreiben...
                         if ($enable_mail_dozent || $enable_mail_admin) {
                             if ($enable_mail_admin && $enable_mail_dozent) {
@@ -376,7 +376,7 @@ class Institute_MembersController extends AuthenticatedController
                 } else {
                     //ok, aber nur hochstufen auf Maximal-Status (hat sich selbst schonmal gemeldet als Student an dem Inst)
                     $was_new = $member->isNew();
-                    
+
                     $member->inst_perms = $perms;
                     if ($member->store()) {
 
@@ -575,7 +575,8 @@ class Institute_MembersController extends AuthenticatedController
 
         if (Config::get()->EXPORT_ENABLE && $GLOBALS['perm']->have_perm('tutor')) {
             $widget = new ExportWidget();
-            $widget->addElement(new WidgetElement(export_form_sidebar($institute->id, 'person', $GLOBALS['SessSemName'][0])));
+            $widget->addElement(new WidgetElement(export_form_sidebar($this->institute->id,
+                'person', $this->institute->Name)));
             $sidebar->addWidget($widget);
         }
     }

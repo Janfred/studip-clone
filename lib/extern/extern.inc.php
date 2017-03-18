@@ -54,7 +54,7 @@ if ($page_url) {
 
 // set base url for URLHelper class
 URLHelper::setBaseUrl($GLOBALS['ABSOLUTE_URI_STUDIP']);
-$range_id = Request::option('range_id',$SessSemName[1]);
+$range_id = Request::option('range_id',Context::getId());
 $module = Request::quoted('module');
 $config_id = Request::option('config_id');
 $global_id = Request::option('global_id');

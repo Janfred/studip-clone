@@ -48,7 +48,7 @@ if (Request::option('view') == 'extern_global') {
     $range_id = 'studip';
     URLHelper::addLinkParam('view', 'extern_global');
 } else {
-    $range_id = $SessSemName[1] ? $SessSemName[1] : '';
+    $range_id = Context::getId() ? Context::getId() : '';
     URLHelper::addLinkParam('view', 'extern_inst');
 }
 URLHelper::addLinkParam('cid', $range_id);
@@ -71,7 +71,7 @@ if ($range_id != 'studip') {
     Navigation::activateItem('/admin/locations/external');
 }
 $mod=Request::quoted('mod');//Change header_line if open object
-$header_line = getHeaderLine($range_id);
+$header_line = Context::getHeaderLine();
 if ($header_line) {
     PageLayout::setTitle($header_line." - ".PageLayout::getTitle());
     foreach ($GLOBALS['EXTERN_MODULE_TYPES'] as $key => $type) {
@@ -164,7 +164,7 @@ if (Request::option('com') == 'new' || Request::option('com') == 'edit' || Reque
         Request::option('com') == 'close' || Request::option('com') == 'store') {
 
     require_once($RELATIVE_PATH_EXTERN . "/views/extern_edit_module.inc.php");
-    
+
 
     $template = $GLOBALS['template_factory']->open('layouts/base.php');
     $template->content_for_layout = ob_get_clean();
@@ -307,14 +307,14 @@ if (!$have_config) {
     echo "<caption>\n";
     echo _("Angelegte Konfigurationen");
     echo "</caption>\n";
-    
+
     foreach ($module_types_ordered as $order) {
         $module_type = $GLOBALS['EXTERN_MODULE_TYPES'][$order];
         if (isset($configurations[$module_type["module"]])) {
-          
+
             echo "<thead>\n";
             echo "<tr>\n<th colspan=\"2\">";
-            
+
             if (isset($configurations[$module_type["module"]][$config_id])) {
                 echo "<a name=\"anker\"></a>\n";
             }
@@ -322,7 +322,7 @@ if (!$have_config) {
 
             echo "</th></tr>\n</thead>\n";
             echo "<tbody>\n";
-            
+
 
             foreach ($configurations[$module_type["module"]] as $configuration) {
                 echo "<tr><td style=\"width: 65%\">";
@@ -332,7 +332,7 @@ if (!$have_config) {
                         URLHelper::getLink('?com=download_config&config_id='. $configuration['id'] .'&module='. $module_type['module']),
                         _('Konfigurationsdatei herunterladen'),
                         Icon::create('download', 'clickable', ['title' => _('Konfigurationsdatei herunterladen')]));
-                
+
                 $actionMenu->addLink(
                         URLHelper::getLink('?com=upload_config&config_id='. $configuration['id']),
                         _('Konfigurationsdatei hochladen'),
@@ -406,7 +406,7 @@ if (sizeof($configurations)) {
     Helpbar::get()->addPlainText(_('Weitere Informationen'),
             _('Klicken Sie auf diesen Button um weitere Informationen über diese Konfiguration zu erhalten. Hier finden Sie auch die Links, über die Sie die Module in Ihrer Website einbinden können.'),
             Icon::create('infopage'));
-    
+
 }
 
 

@@ -62,7 +62,7 @@ if (PageLayout::isHeaderEnabled()) //Einige Seiten benötigen keinen Header, spri
             Navigation::hasItem('/course') && Navigation::getItem('/course')->isActive()) {
             // indicate to the template that this course is publicly visible
             // need to handle institutes separately (always visible)
-            if ($GLOBALS['SessSemName']['class'] == 'inst') {
+            if (Context::isInstitute()) {
                 $header_template->public_hint = _('öffentliche Einrichtung');
             } else if (Course::findCurrent()->lesezugriff == 0) {
                 $header_template->public_hint = _('öffentliche Veranstaltung');

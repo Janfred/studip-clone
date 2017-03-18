@@ -523,7 +523,7 @@ function export_sem($inst_id, $ex_sem_id = 'all')
 */
 function export_teilis($inst_id, $ex_sem_id = "no")
 {
-    global $range_id, $xml_file, $o_mode, $xml_names_person, $xml_groupnames_person, $xml_names_studiengaenge, $xml_groupnames_studiengaenge, $object_counter, $filter, $SEM_CLASS, $SEM_TYPE, $SessSemName;
+    global $range_id, $xml_file, $o_mode, $xml_names_person, $xml_groupnames_person, $xml_names_studiengaenge, $xml_groupnames_studiengaenge, $object_counter, $filter, $SEM_CLASS, $SEM_TYPE;
 
     if ($filter == 'status') {
         $query = "SELECT statusgruppe_id, name
@@ -538,7 +538,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
     } else {
 
         if (!in_array($filter, words('awaiting claiming'))) {
-            if (!$SEM_CLASS[$SEM_TYPE[$SessSemName['art_num']]['class']]['workgroup_mode']) {
+            if (!$SEM_CLASS[$SEM_TYPE[Context::getArtNum()]['class']]['workgroup_mode']) {
                 $gruppe = array(
                     'dozent'   => _('Lehrende'),
                     'tutor'    => _('Tutor/-innen'),
@@ -885,4 +885,3 @@ function export_datafields($range_id, $childgroup_tag, $childobject_tag, $object
     if ($d_fields) $ret .= xml_close_tag( $childgroup_tag );
     return $ret;
 }
-

@@ -28,7 +28,7 @@ class Ilias4ConnectedCMS extends Ilias3ConnectedCMS
      */
     function __construct($cms)
     {
-        global $messages, $SessSemName;
+        global $messages;
         parent::__construct($cms);
         if (ELearningUtils::getConfigValue("user_category_id", $cms)) {
             $this->user_category_node_id = ELearningUtils::getConfigValue("user_category_id", $cms);
@@ -56,7 +56,7 @@ class Ilias4ConnectedCMS extends Ilias3ConnectedCMS
         $result = $this->soap_client->getTreeChilds($parent_id, $types, $this->user->getId());
         if ($result) {
             $parent_path = $this->soap_client->getRawPath($parent_id) . '_' . $parent_id;
-            foreach($result as $ref_id => $data) { 
+            foreach($result as $ref_id => $data) {
                 // Workaround: getTreeChilds() liefert ALLE Referenzen der beteiligten Objekte, hier sollen aber nur die aus dem Kurs geprüft werden. Deshalb Abgleich der Pfade aller gefundenen Objekt-Referenzen.
                 if (($data["accessInfo"] != "granted") OR ($this->soap_client->getRawPath($ref_id) != $parent_path))
                     unset($result[$ref_id]);
@@ -66,13 +66,13 @@ class Ilias4ConnectedCMS extends Ilias3ConnectedCMS
                 }
             }
         }
-        
+
         if (is_array($result))
             return $result;
-        else 
+        else
             return array();
     }
-        
+
     /**
      * check connected modules and update connections
      *
@@ -83,7 +83,7 @@ class Ilias4ConnectedCMS extends Ilias3ConnectedCMS
      */
     function updateConnections($course_id)
     {
-        global $connected_cms, $messages, $SessSemName, $object_connections;
+        global $connected_cms, $messages, $object_connections;
 
         $db = DBManager::get();
 
@@ -102,18 +102,18 @@ class Ilias4ConnectedCMS extends Ilias3ConnectedCMS
             $deleted = 0;
             $messages["info"] .= "<b>".sprintf(_("Aktualisierung der Zuordnungen zum System \"%s\":"), $this->getName()) . "</b><br>";
             foreach($result as $ref_id => $data) {
-                $check->execute(array($SessSemName[1], $ref_id, $this->cms_type, $data["type"]));
+                $check->execute(array(Context::getId(), $ref_id, $this->cms_type, $data["type"]));
                 if (!$check->fetch()) {
                     $messages["info"] .= sprintf(_("Zuordnung zur Lerneinheit \"%s\" wurde hinzugefügt."), ($data["title"])) . "<br>";
-                    ObjectConnections::setConnection($SessSemName[1], $ref_id, $data["type"], $this->cms_type);
+                    ObjectConnections::setConnection(Context::getId(), $ref_id, $data["type"], $this->cms_type);
                     $added++;
                 }
                 $found[] = $ref_id . '_' . $data["type"];
             }
             $to_delete = $db->prepare("SELECT module_id,module_type FROM object_contentmodules WHERE module_type <> 'crs' AND object_id = ? AND system_type = ? AND CONCAT_WS('_', module_id,module_type) NOT IN (?)");
-            $to_delete->execute(array($SessSemName[1], $this->cms_type, count($found) ? $found : array('')));
+            $to_delete->execute(array(Context::getId(), $this->cms_type, count($found) ? $found : array('')));
             while ($row = $to_delete->fetch(PDO::FETCH_ASSOC)) {
-                ObjectConnections::unsetConnection($SessSemName[1], $row["module_id"], $row["module_type"], $this->cms_type);
+                ObjectConnections::unsetConnection(Context::getId(), $row["module_id"], $row["module_type"], $this->cms_type);
                 $deleted++;
                 $messages["info"] .= sprintf(_("Zuordnung zu \"%s\" wurde entfernt."), $row["module_id"]  . '_' . $row["module_type"]) . "<br>";
             }
@@ -134,7 +134,7 @@ class Ilias4ConnectedCMS extends Ilias3ConnectedCMS
      */
     function createCourse($seminar_id)
     {
-        global $messages, $SessSemName, $DEFAULT_LANGUAGE, $ELEARNING_INTERFACE_MODULES;
+        global $messages, $DEFAULT_LANGUAGE, $ELEARNING_INTERFACE_MODULES;
 
         $crs_id = ObjectConnections::getConnectionModuleId($seminar_id, "crs", $this->cms_type);
         $this->soap_client->setCachingStatus(false);

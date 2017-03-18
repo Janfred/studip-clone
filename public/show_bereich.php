@@ -121,8 +121,8 @@ if (Request::int('send_excel')){
 }
 
 PageLayout::setHelpKeyword("Basis.Informationsseite");
-PageLayout::setTitle(($level == "s" ? $SessSemName["header_line"]." - " : "").$head_text);
-if ($level == "s" && $SessSemName[1] && $SessSemName["class"] == "inst") {
+PageLayout::setTitle(($level == "s" ? Context::getHeaderLine() ." - " : "").$head_text);
+if ($level == "s" && Context::getId() && Context::isInstitute()) {
     Navigation::activateItem('/course/main/courses');
 }
 
@@ -150,7 +150,9 @@ if (get_config('EXPORT_ENABLE') && $perm->have_perm("tutor")) {
     if ($level == "s") {
         $export->addLink(
             _("Diese Daten exportieren"),
-            URLHelper::getLink("export.php", array('range_id' => $SessSemName[1], 'o_mode' => 'choose', 'ex_type' => "veranstaltung", 'xslt_filename' => $SessSemName[0], 'ex_sem' => $show_semester)),
+            URLHelper::getLink("export.php", array('range_id' => Context::getId(),
+                'o_mode' => 'choose', 'ex_type' => "veranstaltung",
+                'xslt_filename' => Context::get()->Name, 'ex_sem' => $show_semester)),
             Icon::create('download', 'info')
         );
         $export->addLink(

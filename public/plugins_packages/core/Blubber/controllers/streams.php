@@ -66,7 +66,7 @@ class StreamsController extends PluginController {
      */
     public function forum_action() {
         object_set_visit($_SESSION['SessionSeminar'], "forum");
-        if ($GLOBALS['SessSemName']['class'] === "sem") {
+        if (Context::isCourse()) {
             $seminar = new Seminar($_SESSION['SessionSeminar']);
             $this->commentable = ($seminar->read_level == 0 || $GLOBALS['perm']->have_studip_perm("autor", $_SESSION['SessionSeminar']));
         } else {
@@ -75,7 +75,7 @@ class StreamsController extends PluginController {
         if (!$this->commentable) {
             throw new AccessDeniedException();
         }
-        PageLayout::setTitle($GLOBALS['SessSemName']["header_line"]." - ".$this->plugin->getDisplayTitle());
+        PageLayout::setTitle(Context::getHeaderLine()." - ".$this->plugin->getDisplayTitle());
         Navigation::getItem("/course/blubberforum")->setImage(Icon::create('blubber', 'info'));
         Navigation::activateItem("/course/blubberforum");
         $coursestream = BlubberStream::getCourseStream($_SESSION['SessionSeminar']);
@@ -125,7 +125,7 @@ class StreamsController extends PluginController {
      */
     public function more_comments_action() {
         $thread = new BlubberPosting(Request::option("thread_id"));
-        if ($thread['context_type'] === "course" && $GLOBALS['SessSemName']['class'] === "sem") {
+        if ($thread['context_type'] === "course" && Context::isCourse()) {
             $seminar = new Seminar($thread['Seminar_id']);
             if ($seminar->read_level > 0 && !$GLOBALS['perm']->have_studip_perm("autor", $thread['Seminar_id'])) {
                 throw new AccessDeniedException();
@@ -224,7 +224,7 @@ class StreamsController extends PluginController {
         }
         $context = Request::option("context");
         $context_type = Request::option("context_type");
-        if ($context_type === "course" && $GLOBALS['SessSemName']['class'] === "sem") {
+        if ($context_type === "course" && Context::isCourse()) {
             $seminar = new Seminar($context);
             if ($seminar->write_level > 0 && !$GLOBALS['perm']->have_studip_perm("autor", $context)) {
                 throw new AccessDeniedException();
@@ -420,7 +420,7 @@ class StreamsController extends PluginController {
         }
         $context = Request::option("context");
         $thread = new BlubberPosting(Request::option("thread"));
-        if ($thread['context_type'] === "course" && $GLOBALS['SessSemName']['class'] === "sem") {
+        if ($thread['context_type'] === "course" && Context::isCourse()) {
             $seminar = new Seminar($context);
             if ($seminar->write_level > 0 && !$GLOBALS['perm']->have_studip_perm("autor", $context)) {
                 throw new AccessDeniedException();
@@ -646,7 +646,7 @@ class StreamsController extends PluginController {
             }
         }
         if ($this->thread['context_type'] === "course") {
-            PageLayout::setTitle($GLOBALS['SessSemName']["header_line"]." - ".$this->plugin->getDisplayTitle());
+            PageLayout::setTitle(Context::getHeaderLine()." - ".$this->plugin->getDisplayTitle());
         } elseif($this->thread['context_type'] === "public") {
             PageLayout::setTitle(get_fullname($this->thread['user_id'])." - Blubber");
         } elseif($this->thread['context_type'] === "private") {

@@ -226,16 +226,16 @@ function parse_link($link, $level=0) {
  * @return string filename(id) of the created zip without path
  */
 function createSelectedZip ($file_ids, $perm_check = TRUE, $size_check = false) {
-    global $TMP_PATH, $ZIP_PATH, $SessSemName;
+    global $TMP_PATH, $ZIP_PATH;
     $zip_file_id = false;
     $max_files = Config::GetInstance()->getValue('ZIP_DOWNLOAD_MAX_FILES');
     $max_size = Config::GetInstance()->getValue('ZIP_DOWNLOAD_MAX_SIZE') * 1024 * 1024;
     if(!$max_files && !$max_size) $size_check = false;
     $db = DBManager::get();
     if ( is_array($file_ids) && !($size_check && count($file_ids) > $max_files)) {
-        $folder_tree = TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessSemName[1]));
+        $folder_tree = TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => Context::getId()));
         if ($perm_check) {
-            $folders_cond = "AND seminar_id = " . $db->quote($SessSemName[1]);
+            $folders_cond = "AND seminar_id = " . $db->quote(Context::getId());
             $allowed_folders = $folder_tree->getReadableFolders($GLOBALS['user']->id);
             if (is_array($allowed_folders) && count($allowed_folders)) {
                 $folders_cond .= " AND range_id IN (" . $db->quote($allowed_folders) . ") ";
@@ -290,7 +290,7 @@ function createSelectedZip ($file_ids, $perm_check = TRUE, $size_check = false) 
  * @return string filename(id) of the created zip without path
  */
 function createFolderZip ($folder_id, $perm_check = TRUE, $size_check = false) {
-    global $TMP_PATH, $ZIP_PATH, $SessSemName;
+    global $TMP_PATH, $ZIP_PATH;
     $zip_file_id = false;
     $max_files = Config::GetInstance()->getValue('ZIP_DOWNLOAD_MAX_FILES');
     $max_size = Config::GetInstance()->getValue('ZIP_DOWNLOAD_MAX_SIZE') * 1024 * 1024;
@@ -304,7 +304,7 @@ function createFolderZip ($folder_id, $perm_check = TRUE, $size_check = false) {
         mkdir($tmp_full_path,0700);
 
         //create folder content
-        $filelist = createTempFolder($folder_id, $tmp_full_path, $SessSemName[1], $perm_check);
+        $filelist = createTempFolder($folder_id, $tmp_full_path, Context::getId(), $perm_check);
 
         $caption = array('filename' => _("Dateiname"), 'filesize' => _("Größe"), 'author_name' => _("Ersteller"), 'chdate' => _("Datum"), 'name' =>  _("Name"), 'description' => _("Beschreibung"), 'path' => _("Pfad"));
         array_to_csv($filelist, $tmp_full_path . '/' . _("dateiliste.csv"), $caption);
@@ -898,16 +898,16 @@ function create_folder ($name, $description, $parent_id, $permission = 7, $semin
 //Ausgabe des Formulars
 function form($refresh = FALSE)
 {
-    global $UPLOAD_TYPES,$range_id,$SessSemName,$user,$folder_system_data;
+    global $UPLOAD_TYPES,$range_id,$user,$folder_system_data;
 
-    $sem_status = $GLOBALS['perm']->get_studip_perm($SessSemName[1]);
+    $sem_status = $GLOBALS['perm']->get_studip_perm(Context::getId());
 
     // add skip link (position in list is one before main content => 99)
     SkipLinks::addIndex(_("Datei hochladen"), 'upload_form', 99);
 
     //erlaubte Dateigroesse aus Regelliste der Config.inc.php auslesen
-    if ($UPLOAD_TYPES[$SessSemName["art_num"]]) {
-        $max_filesize=$UPLOAD_TYPES[$SessSemName["art_num"]]["file_sizes"][$sem_status];
+    if ($UPLOAD_TYPES[Context::getArtNum()]) {
+        $max_filesize=$UPLOAD_TYPES[Context::getArtNum()]["file_sizes"][$sem_status];
     }   else {
         $max_filesize=$UPLOAD_TYPES["default"]["file_sizes"][$sem_status];
     }
@@ -928,11 +928,11 @@ function form($refresh = FALSE)
 
     //erlaubte Upload-Typen aus Regelliste der Config.inc.php auslesen
     if (!$folder_system_data['zipupload']) {
-        if ($UPLOAD_TYPES[$SessSemName["art_num"]]) {
-            if ($UPLOAD_TYPES[$SessSemName["art_num"]]["type"] == "allow") {
+        if ($UPLOAD_TYPES[Context::getArtNum()]) {
+            if ($UPLOAD_TYPES[Context::getArtNum()]["type"] == "allow") {
                 $i=1;
                 $print.= _("Unzulässige Dateitypen:") . "</b><font></td><td class=\"table_row_even\" width=\"80%\"><font size=-1>";
-                foreach ($UPLOAD_TYPES[$SessSemName["art_num"]]["file_types"] as $ft) {
+                foreach ($UPLOAD_TYPES[Context::getArtNum()]["file_types"] as $ft) {
                     if ($i !=1)
                         $print.= ", ";
                     $print.= mb_strtoupper ($ft);
@@ -942,7 +942,7 @@ function form($refresh = FALSE)
             else {
                 $i=1;
                 $print.= _("Zulässige Dateitypen:") . "</b><font></td><td class=\"table_row_even\" width=\"80%\"><font size=-1>";
-                foreach ($UPLOAD_TYPES[$SessSemName["art_num"]]["file_types"] as $ft) {
+                foreach ($UPLOAD_TYPES[Context::getArtNum()]["file_types"] as $ft) {
                     if ($i !=1)
                         $print.= ", ";
                     $print.= mb_strtoupper ($ft);
@@ -1017,7 +1017,7 @@ function form($refresh = FALSE)
     $print.="</td></tr>";
 
     $print.= "\n<input type=\"hidden\" name=\"cmd\" value=\"upload\">";
-    $print.= "\n<input type=\"hidden\" name=\"upload_seminar_id\" value=\"".$SessSemName[1]."\">";
+    $print.= "\n<input type=\"hidden\" name=\"upload_seminar_id\" value=\"".Context::getId()."\">";
     $print.= "\n</table></form><br></center>";
 
     return $print;
@@ -1090,7 +1090,7 @@ function getFileExtension($str) {
  * @return Can the given file be uploaded to Stud.IP?
  */
 function validate_upload($the_file, $real_file_name='') {
-    global $UPLOAD_TYPES, $SessSemName;
+    global $UPLOAD_TYPES;
 
     $the_file_size = $the_file['size'];
     $the_file_name = $the_file['name'];
@@ -1107,8 +1107,8 @@ function validate_upload($the_file, $real_file_name='') {
             $sem_status = $GLOBALS['perm']->get_perm();
         } else {
             if (Request::option('cid')) {
-                $sem_status = $GLOBALS['perm']->get_studip_perm($SessSemName[1]);
-                $active_upload_type = $SessSemName["art_num"];
+                $sem_status = $GLOBALS['perm']->get_studip_perm(Context::getId());
+                $active_upload_type = Context::getArtNum();
             } else {
                 $sem_status = $GLOBALS['perm']->get_perm();
                 $active_upload_type = "personalfiles";
@@ -1260,7 +1260,7 @@ function getUploadMetadata($range_id, $refresh = FALSE) {
 
 
 function JS_for_upload() {
-    $active_upload_type = $GLOBALS['SessSemName']["art_num"];
+    $active_upload_type = Context::getArtNum();
     //displays the templates for upload windows now
     //for upload code see application.js : STUDIP.OldUpload
     ?>
@@ -1400,7 +1400,7 @@ function link_item ($range_id, $create = FALSE, $echo = FALSE, $refresh = FALSE,
 
 function link_form ($range_id, $updating=FALSE)
 {
-    global $SessSemName, $the_link, $protect, $description, $name, $folder_system_data, $user;
+    global $the_link, $protect, $description, $name, $folder_system_data, $user;
     if ($folder_system_data['update_link']) {
         $updating = TRUE;
     }
@@ -1479,7 +1479,7 @@ function link_form ($range_id, $updating=FALSE)
     $print .= '</div>';
 
     $print .="</td></tr>";
-    $print.= "\n<input type=\"hidden\" name=\"upload_seminar_id\" value=\"".$SessSemName[1]."\">";
+    $print.= "\n<input type=\"hidden\" name=\"upload_seminar_id\" value=\"".Context::getId()."\">";
     if ($updating == TRUE) {
         $print.= "\n<input type=\"hidden\" name=\"cmd\" value=\"link_update\">";
         $print.= "\n<input type=\"hidden\" name=\"link_update\" value=\"$range_id\">";
@@ -1631,8 +1631,8 @@ $countfiles = 0;
  *
  */
 function display_file_line ($datei, $folder_id, $open, $change, $move, $upload, $all, $refresh=FALSE, $filelink="", $anchor_id, $position = "middle") {
-    global $_fullname_sql,$SessionSeminar,$SessSemName, $rechte, $anfang,
-        $user, $SemSecLevelWrite, $SemUserStatus, $check_all, $countfiles;
+    global $_fullname_sql,$SessionSeminar, $rechte, $anfang,
+        $user, $check_all, $countfiles;
     //Einbinden einer Klasse, die Informationen über den ganzen Baum enthält
     $folder_tree = TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessionSeminar));
     $javascriptok = true;
@@ -1645,7 +1645,7 @@ function display_file_line ($datei, $folder_id, $open, $change, $move, $upload, 
 
     //Farbe des Pfeils bestimmen:
     $chdate = (($datei["chdate"]) ? $datei["chdate"] : $datei["mkdate"]);
-    if (object_get_visit($SessSemName[1], "documents") < $chdate)
+    if (object_get_visit(Context::getId(), "documents") < $chdate)
         $timecolor = "#FF0000";
     else {
         $timediff = (int) log((time() - doc_newest($folder_id)) / 86400 + 1) * 15;
@@ -1767,7 +1767,7 @@ function display_file_line ($datei, $folder_id, $open, $change, $move, $upload, 
  *
  */
 function display_folder_body($folder_id, $open, $change, $move, $upload, $refresh=FALSE, $filelink="", $anchor_id, $level = 0) {
-    global $_fullname_sql, $SessionSeminar, $SemUserStatus, $SessSemName, $user, $perm, $rechte, $countfolder;
+    global $_fullname_sql, $SessionSeminar, $user, $perm, $rechte, $countfolder;
     $db = DBManager::get();
     //Einbinden einer Klasse, die Informationen über den ganzen Baum enthält
     $folder_tree = TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessionSeminar));
@@ -1935,7 +1935,7 @@ function display_folder_body($folder_id, $open, $change, $move, $upload, $refres
 
                 # verschieben
                 if (
-                    ($rechte && $result['range_id'] != $SessSemName[1])
+                    ($rechte && $result['range_id'] != Context::getId())
                     ||
                     (
                         $level !=0
@@ -2040,8 +2040,8 @@ $droppable_folder = 0;
  *
  */
 function display_folder ($folder_id, $open, $change, $move, $upload, $refresh=FALSE, $filelink="", $anchor_id, $position="middle", $isissuefolder = false) {
-    global $_fullname_sql,$SessionSeminar,$SessSemName, $rechte, $anfang,
-        $user, $SemSecLevelWrite, $SemUserStatus, $check_all, $countfolder, $droppable_folder;
+    global $_fullname_sql,$SessionSeminar, $rechte, $anfang,
+        $user, $check_all, $countfolder, $droppable_folder;
     $option = true;
     $countfolder++;
     $more = true;
@@ -2069,7 +2069,7 @@ function display_folder ($folder_id, $open, $change, $move, $upload, $refresh=FA
 
     //Farbe des Pfeils bestimmen:
     $chdate = (($result["chdate"]) ? $result["chdate"] : $result["mkdate"]);
-    if (object_get_visit($SessSemName[1], "documents") < $chdate)
+    if (object_get_visit(Context::getId(), "documents") < $chdate)
         $neuer_ordner = TRUE;
     else
         $neuer_ordner = FALSE;
@@ -2186,7 +2186,7 @@ function display_folder ($folder_id, $open, $change, $move, $upload, $refresh=FA
     if (($change == $folder_id)
             && (!$isissuefolder)
             && ((count($folder_tree->getParents($folder_id)) > 1)
-             || $result['range_id'] == md5($SessSemName[1] . 'top_folder')
+             || $result['range_id'] == md5(Context::getId() . 'top_folder')
              || $folder_tree->isGroupFolder($result['folder_id'])
              )
             ) { //Aenderungsmodus, Anker + Formular machen, Font tag direkt ausgeben (muss ausserhalb einer td stehen!

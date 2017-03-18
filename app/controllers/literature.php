@@ -84,7 +84,7 @@ class LiteratureController extends AuthenticatedController
 
         if (Request::option('list') || Request::option('view') || Request::option('view_mode') || $this->_range_id != $GLOBALS['user']->id){
             Navigation::activateItem('/course/literature/edit');
-            $this->_range_id = ($_SESSION['SessSemName'][1]) ? $_SESSION['SessSemName'][1] : $this->_range_id;
+            $this->_range_id = Context::getId() ?: $this->_range_id;
         } else {
             Navigation::activateItem('/tools/literature/edit_list');
             closeObject();
@@ -147,7 +147,7 @@ class LiteratureController extends AuthenticatedController
                 'value' => 'ins_' . $this->lists[$i]);
             }
         }
-        
+
         $this->lists = $_the_tree->getKids('root');
         if ($this->lists) {
             $this->list_count['visible'] = 0;
@@ -209,7 +209,7 @@ class LiteratureController extends AuthenticatedController
 
         if ($this->return_range != $GLOBALS['user']->id) {
             Navigation::activateItem('/course/literature/search');
-            $this->return_range = ($_SESSION['SessSemName'][1]) ? $_SESSION['SessSemName'][1] : $this->return_range;
+            $this->return_range = Context::getId() ?: $this->return_range;
         } else {
             Navigation::activateItem('/tools/literature/search');
             closeObject();
@@ -267,7 +267,7 @@ class LiteratureController extends AuthenticatedController
             }
             $_the_clipboard->insertElement($catalog_id);
         }
-        
+
         $this->search = $_the_search;
         $this->clipboard = $_the_clipboard;
         $this->clip_form = $_the_clip_form;
@@ -419,8 +419,8 @@ class LiteratureController extends AuthenticatedController
         if (!$_the_element->isChangeable()) {
             PageLayout::postMessage(MessageBox::info(_('Sie haben diesen Eintrag nicht selbst vorgenommen, und dürfen ihn daher nicht verändern! Wenn Sie mit diesem Eintrag arbeiten wollen, können Sie sich eine persönliche Kopie erstellen.')));
         }
-        
-        
+
+
         $this->catalog_id = $_catalog_id;
         $this->element = $_the_element;
         $this->treeview = $_the_treeview;

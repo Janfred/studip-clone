@@ -138,7 +138,7 @@ if (Request::option('cancel_edit_assign')) {
 
 //send the user to index, if he want to use studip-object based modul but has no object set!
 if (($view=="openobject_main") || ($view=="openobject_details") || ($view=="openobject_assign") || ($view=="openobject_schedule")){
-    if (!$SessSemName[1]) {
+    if (!Context::getId()) {
         $_SESSION['resources_data'] = null;
         $_SESSION['resources_data']["view"] = $view = "search";
         $_SESSION['resources_data']["view_mode"] = $view_mode = FALSE;
