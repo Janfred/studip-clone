@@ -546,7 +546,7 @@ if ($evaluation = $statement->fetch(PDO::FETCH_ASSOC)) {
     fputs($fo_file,"    "._("Erstellt mit Stud.IP")." " . xml_escape($SOFTWARE_VERSION) . " - ". _("Seite")." <fo:page-number/>\n");
     fputs($fo_file,"    </fo:block>\n");
     fputs($fo_file,"    <fo:block text-align=\"center\" font-size=\"8pt\" font-family=\"serif\" line-height=\"14pt\" >\n");
-    fputs($fo_file,"      <fo:basic-link color=\"blue\" external-destination=\"$ABSOLUTE_URI_STUDIP\">". xml_escape($UNI_NAME_CLEAN) . "</fo:basic-link>\n");
+    fputs($fo_file,"      <fo:basic-link color=\"blue\" external-destination=\"$ABSOLUTE_URI_STUDIP\">". xml_escape(Config::get()->UNI_NAME_CLEAN) . "</fo:basic-link>\n");
     fputs($fo_file,"    </fo:block>\n");
     fputs($fo_file,"  </fo:static-content>\n");
     fputs($fo_file,"  <fo:flow flow-name=\"xsl-region-body\">\n");

@@ -77,7 +77,7 @@ class ExternElementMainNews extends ExternElementMain {
             "urlcss" => "",
             "title" => _("News"),
             "nodatatext" => _("Keine aktuellen News"),
-            "copyright" => htmlReady($GLOBALS['UNI_NAME_CLEAN']
+            "copyright" => htmlReady(Config::get()->UNI_NAME_CLEAN
                     . " ({$GLOBALS['UNI_CONTACT']})"),
             "author" => "",
             "showdateauthor" => "0",

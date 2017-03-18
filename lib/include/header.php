@@ -44,7 +44,7 @@
  * Bei Nutzung dieser Funktion unbedingt die Texte unter locale/de/LC_HELP/visibility_decision.php bzw.
  * locale/en/LC_HELP/visibility_decision.php an die lokalen Verhältnisse anpassen!
  */
-if ($GLOBALS['USER_VISIBILITY_CHECK'] && is_object($GLOBALS['user']) && $GLOBALS['user']->id != 'nobody')
+if (Config::get()->USER_VISIBILITY_CHECK && is_object($GLOBALS['user']) && $GLOBALS['user']->id != 'nobody')
 {
    require_once('lib/user_visible.inc.php');
    first_decision($GLOBALS['user']->id);
@@ -58,7 +58,7 @@ if (PageLayout::isHeaderEnabled()) //Einige Seiten benötigen keinen Header, spri
 
     if (is_object($GLOBALS['user']) && $GLOBALS['user']->id != 'nobody') {
         // only mark course if user is logged in and free access enabled
-        if (get_config('ENABLE_FREE_ACCESS') &&
+        if (Config::get()->ENABLE_FREE_ACCESS &&
             Navigation::hasItem('/course') && Navigation::getItem('/course')->isActive()) {
             // indicate to the template that this course is publicly visible
             // need to handle institutes separately (always visible)
@@ -89,7 +89,7 @@ else
 
 echo $header_template->render();
 
-if ($GLOBALS['SHOW_TERMS_ON_FIRST_LOGIN'] && is_object($GLOBALS['user']) && $GLOBALS['user']->id != 'nobody')
+if (Config::get()->SHOW_TERMS_ON_FIRST_LOGIN && is_object($GLOBALS['user']) && $GLOBALS['user']->id != 'nobody')
 {
     require_once('lib/terms.inc.php');
     check_terms($GLOBALS['user']->id, $GLOBALS['_language_path']);

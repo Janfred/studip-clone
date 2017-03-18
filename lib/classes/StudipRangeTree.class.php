@@ -51,7 +51,7 @@ class StudipRangeTree extends TreeAbstract {
     function __construct($args) {
         DbView::addView('range_tree');
 
-        $this->root_name = $GLOBALS['UNI_NAME_CLEAN'];
+        $this->root_name = Config::get()->UNI_NAME_CLEAN;
         $this->studip_objects['inst'] = array('pk' => 'Institut_id', 'table' => 'Institute');
         $this->studip_objects['fak'] = array('pk' => 'Institut_id', 'table' => 'Institute');
         if (isset($args['sem_number']) ){

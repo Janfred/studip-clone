@@ -3,7 +3,7 @@
 
     $mailbody="This is a Stud.IP system confirmation mail.\n"
     ."(Studienbegleitender Internetsupport von Präsenzlehre)\n"
-    ."- $UNI_NAME_CLEAN -\n\n"
+    ."- Config::get()->UNI_NAME_CLEAN -\n\n"
     ."You want to get a new password for your account.\n"
     ."Username: $username\n"
     ."Forename: $vorname\n"

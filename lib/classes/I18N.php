@@ -21,7 +21,7 @@ class I18N
     {
 
         $languages = $GLOBALS['CONTENT_LANGUAGES'];
-        $base_lang = $GLOBALS['DEFAULT_LANGUAGE'];
+        $base_lang = Config::get()->DEFAULT_LANGUAGE;
         if (!($value instanceof I18NString)) {
             $value = new I18NString($value);
         }
@@ -81,7 +81,7 @@ class I18N
     public static function textarea($name, $value, $attributes = array())
     {
         $languages = $GLOBALS['CONTENT_LANGUAGES'];
-        $base_lang = $GLOBALS['DEFAULT_LANGUAGE'];
+        $base_lang = Config::get()->DEFAULT_LANGUAGE;
         $value instanceOf I18NString or $value = new I18NString($value);
 
         $result = "<div class=\"i18n_group textarea-input " . (!self::isEnabled() ? 'single_lang' : '') . "\">";

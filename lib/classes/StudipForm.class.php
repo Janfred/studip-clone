@@ -540,7 +540,7 @@ function getSomeOptions(&$caller, $name){
 }
 
 page_open(array("sess" => "Seminar_Session"));
-$_language = $DEFAULT_LANGUAGE;
+$_language = DEFAULT_LANGUAGE;
 $_language_path = $INSTALLED_LANGUAGES[$_language]["path"];
 
 $form_fields = array('text1'        =>  array('type' => 'text', 'caption' => 'Testtextfeld1', 'info' => 'Hier Schwachsinn eingeben'),

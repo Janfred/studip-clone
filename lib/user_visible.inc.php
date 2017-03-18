@@ -225,7 +225,7 @@ function first_decision($userid) {
     PageLayout::setTabNavigation(NULL);
 
     // avoid recursion when loading the header
-    $GLOBALS['USER_VISIBILITY_CHECK'] = false;
+    Config::get()->USER_VISIBILITY_CHECK = false;
 
     $template = $GLOBALS['template_factory']->open("../locale/$user_language/LC_HELP/visibility_decision.php");
     $template->set_layout('layouts/base.php');

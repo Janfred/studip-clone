@@ -155,8 +155,6 @@ $EXTERN_ALLOW_ACCESS_WITHOUT_CONFIG = FALSE;                        //free acces
 $SOAP_ENABLE = TRUE;
 $SOAP_USE_PHP5 = TRUE;
 
-$WEBSERVICES_ENABLE = TRUE;
-
 $PLUGINS_UPLOAD_ENABLE = TRUE;                  //Upload of Plugins is enabled
 
 $PLUGIN_REPOSITORIES = array(
@@ -225,32 +223,6 @@ $ENABLE_EMAIL_TO_STATUSGROUP = TRUE;                                // enable to
 $ENABLE_EMAIL_ATTACHMENTS = TRUE;                               // enable attachment functions for internal and external messages
 $MAIL_ATTACHMENTS_MAX_SIZE = 10;                             //maximum size of attachments in MB
 
-/*advanced system settings
-----------------------------------------------------------------
-this are some settings to activate some special features, special
-behaviour of some features and other advanced options. Change on your
-own risk :) */
-
-$ALLOW_GROUPING_SEMINARS = TRUE;                            //if true, administrators can group seminars - students
-                                            //will only be able to register for one of the grouped seminars
-
-$ALLOW_SELFASSIGN_STUDYCOURSE = TRUE;                           //if true, students are allowed to set or change
-                                            //their studycourse (studiengang)
-
-$SHOW_TERMS_ON_FIRST_LOGIN = TRUE;                         //if true, the user has to accept the terms on his first login
-                                            //(this feature makes only sense, if you use disable $ENABLE_SELF_REGISTRATION).
-
-$USER_VISIBILITY_CHECK = TRUE;             // enable presentation of visibility decision texts for users after first login
-                                            // see lib/include/header.php and lib/user_visible.inc.php for further info
-
-$CONVERT_IDNA_URL = TRUE;                               //if true, urls with german "umlauts" are converted
-
-$USERNAME_REGULAR_EXPRESSION = '/^([a-zA-Z0-9_@.-]{4,})$/'; //regex for allowed characters in usernames
-
-/*timezone
-----------------------------------------------------------------*/
-$DEFAULT_TIMEZONE = 'Europe/Berlin';
-
 /*language settings
 ----------------------------------------------------------------*/
 
@@ -258,7 +230,6 @@ $INSTALLED_LANGUAGES["de_DE"] = array ("path"=>"de", "picture"=>"lang_de.gif", "
 $INSTALLED_LANGUAGES["en_GB"] = array ("path"=>"en", "picture"=>"lang_en.gif", "name"=>"English");
 $CONTENT_LANGUAGES['de_DE'] = array('picture' => 'lang_de.gif', 'name' => 'Deutsch');
 $CONTENT_LANGUAGES['en_GB'] = array('picture' => 'lang_en.gif', 'name' => 'English');
-$DEFAULT_LANGUAGE = "de_DE";  // which language should we use if we can gather no information from user?
 
 $_language_domain = "studip";  // the name of the language file. Should not be changed except in cases of individual translations or special terms.
 
@@ -451,18 +422,6 @@ $STUDIP_AUTH_CONFIG_STANDARDEXTERN = array( "db_host" => "localhost",
 
 //some additional authification-settings
 //NOTE: you MUST enable Standard authentication-plugin for this settings to take effect!
-
-$ALLOW_CHANGE_USERNAME = TRUE;                          //if true, users are allowed to change their username
-$ALLOW_CHANGE_EMAIL = TRUE;                         //if true, users are allowed to change their email-address
-$ALLOW_CHANGE_NAME = TRUE;                          //if true, users are allowed to change their name
-$ALLOW_CHANGE_TITLE = TRUE;                         //if true, users are allowed to change their titles
-$ENABLE_SELF_REGISTRATION = TRUE;               //should it be possible for an user to register himself
-
-$ENABLE_REQUEST_NEW_PASSWORD_BY_USER = TRUE;            //if true, users are able to request a new password themselves
-$REQUEST_NEW_PASSWORD_SECRET = 'jh896fajsb974b4850aMhlf'; // if the above feature is used, set this to somthing different!!!
-$PHPASS_USE_PORTABLE_HASH = true;
-
-$ENABLE_FREE_ACCESS = TRUE;                         //if true, courses with public access are available
 
 // Login ip range check
 $ENABLE_ADMIN_IP_CHECK = false;

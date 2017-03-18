@@ -51,7 +51,7 @@ class StudipSemTree extends TreeAbstract {
     function __construct($args) {
         DbView::addView('sem_tree');
 
-        $this->root_name = $GLOBALS['UNI_NAME_CLEAN'];
+        $this->root_name = Config::get()->UNI_NAME_CLEAN;
         if (isset($args['visible_only'])){
             $this->visible_only = (int)$args['visible_only'];
         }

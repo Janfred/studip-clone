@@ -248,7 +248,7 @@ function isLinkIntern($url) {
 * @return   string  link in punycode
 */
 function idna_link($link, $mail = false){
-    if (!$GLOBALS['CONVERT_IDNA_URL']) return $link;
+    if (!Config::get()->CONVERT_IDNA_URL) return $link;
     $pu = @parse_url($link);
     if (preg_match('/&\w+;/i',$pu['host'])) { //umlaute?  (html-coded)
         $IDN = new idna_convert();

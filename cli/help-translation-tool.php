@@ -239,7 +239,7 @@ $force    = isset($options['f']) || isset($options['force']);
 $version  = @$options['version'] ?: @$options['v']
           ?: DBManager::get()->query("SELECT MAX(studip_version) FROM help_content LIMIT 1")->fetchColumn()
           ?: $GLOBALS['SOFTWARE_VERSION'];
-$language = @$options['language'] ?: @$options['l'] ?: mb_substr($GLOBALS['DEFAULT_LANGUAGE'], 0, 2);
+$language = @$options['language'] ?: @$options['l'] ?: mb_substr(Config::get()->DEFAULT_LANGUAGE, 0, 2);
 
 // Remove option from arguments
 $remove = array();

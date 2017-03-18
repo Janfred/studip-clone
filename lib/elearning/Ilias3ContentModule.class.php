@@ -134,7 +134,7 @@ class Ilias3ContentModule extends ContentModule
     */
     function setConnection($seminar_id)
     {
-        global $connected_cms, $messages, $DEFAULT_LANGUAGE;
+        global $connected_cms, $messages;
 
         $write_permission = Request::option("write_permission");
         $write_permission_autor = Request::option("write_permission_autor");
@@ -157,7 +157,7 @@ class Ilias3ContentModule extends ContentModule
         if ($crs_id == false)
         {
 
-            $lang_array = explode("_",$DEFAULT_LANGUAGE);
+            $lang_array = explode("_",Config::get()->DEFAULT_LANGUAGE);
             $course_data["language"] = $lang_array[0];
             $course_data["title"] = "Stud.IP-Kurs " . Context::get()->Name;
             $course_data["description"] = "";

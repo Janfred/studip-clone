@@ -54,7 +54,7 @@ class vCard {
         // vCard exportheader
         $vCard['BEGIN'] = 'VCARD';
         $vCard['VERSION'] = '3.0';
-        $vCard['PRODID'] = 'Stud.IP//' . $GLOBALS['UNI_NAME_CLEAN'] . '//DE';
+        $vCard['PRODID'] = 'Stud.IP//' . Config::get()->UNI_NAME_CLEAN . '//DE';
         $vCard['REV'] = date('Y-m-d  H:i:s');
         $vCard['TZ'] = date('O');
 

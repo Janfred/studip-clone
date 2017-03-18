@@ -38,7 +38,7 @@ class Settings_GeneralController extends Settings_SettingsController
      */
     public function index_action()
     {
-        $this->user_language = $_SESSION['_language'] ?: $GLOBALS['DEFAULT_LANGUAGE'];
+        $this->user_language = $_SESSION['_language'] ?: Config::get()->DEFAULT_LANGUAGE;
     }
 
     /**

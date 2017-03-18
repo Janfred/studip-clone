@@ -636,7 +636,7 @@ function in_archiv ($sem_id)
     $statement->execute(array($seminar_id));
     $fakultaet = $statement->fetchColumn();
 
-    setTempLanguage();  // use $DEFAULT_LANGUAGE for archiv-dumps
+    setTempLanguage();  // use DEFAULT_LANGUAGE for archiv-dumps
 
     //Dump holen
     $dump = dump_sem($sem_id, 'nobody');

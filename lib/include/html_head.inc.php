@@ -39,7 +39,7 @@
 <head>
     <meta charset="WINDOWS-1252">
     <title data-original="<?= htmlReady(PageLayout::getTitle()) ?>">
-        <?= htmlReady(PageLayout::getTitle() . ' - ' . $GLOBALS['UNI_NAME_CLEAN']) ?>
+        <?= htmlReady(PageLayout::getTitle() . ' - ' . Config::get()->UNI_NAME_CLEAN) ?>
     </title>
     <?php
         // needs to be included in templates/layouts/base.php as well

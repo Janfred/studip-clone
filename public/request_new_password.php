@@ -46,7 +46,7 @@ $step = Request::int('step');
 // set up user session
 include 'lib/seminar_open.php';
 
-if (!($GLOBALS['ENABLE_REQUEST_NEW_PASSWORD_BY_USER'] && in_array('Standard', $GLOBALS['STUDIP_AUTH_PLUGIN'])) || $auth->auth["uid"] != "nobody") {
+if (!(Config::get()->ENABLE_REQUEST_NEW_PASSWORD_BY_USER && in_array('Standard', $GLOBALS['STUDIP_AUTH_PLUGIN'])) || $auth->auth["uid"] != "nobody") {
     ob_start();
     if ($auth->auth["uid"] != "nobody") {
         $message = _("Sie können kein neues Passwort anfordern, wenn Sie bereits eingeloggt sind.");
@@ -63,7 +63,7 @@ if (!($GLOBALS['ENABLE_REQUEST_NEW_PASSWORD_BY_USER'] && in_array('Standard', $G
 }
 $msg        = [];
 $email      = '';
-$admin_link = sprintf(_("Leider ist ein Fehler aufgetreten. Bitte fordern Sie gegebenenfalls %sper E-Mail%s ein neues Passwort an."), "<a href=\"mailto:{$GLOBALS['UNI_CONTACT']}?subject=" . rawurlencode("Stud.IP Passwort vergessen - {$GLOBALS['UNI_NAME_CLEAN']}") . "&amp;body=" . rawurlencode("Ich habe mein Passwort vergessen. Bitte senden Sie mir ein Neues.\nMein Nutzername: " . htmlReady($uname) . "\n") . "\">", "</a>");
+$admin_link = sprintf(_("Leider ist ein Fehler aufgetreten. Bitte fordern Sie gegebenenfalls %sper E-Mail%s ein neues Passwort an."), "<a href=\"mailto:{$GLOBALS['UNI_CONTACT']}?subject=" . rawurlencode("Stud.IP Passwort vergessen - ".Config::get()->UNI_NAME_CLEAN) . "&amp;body=" . rawurlencode("Ich habe mein Passwort vergessen. Bitte senden Sie mir ein Neues.\nMein Nutzername: " . htmlReady($uname) . "\n") . "\">", "</a>");
 
 
 /*
@@ -89,7 +89,7 @@ if ($email != "") {
             $one_user = current($userlist);
             if ($one_user['auth_plugin'] != 'standard' || in_array($one_user['perms'], words('root admin'))) {
                 $msg['error'][] = sprintf(_("Ihr Passwort kann nur durch einen Adminstrator geändert werden. Bitte fordern Sie gegebenenfalls %sper E-Mail%s ein neues Passwort an."),
-                    "<a href=\"mailto:{$GLOBALS['UNI_CONTACT']}?subject=" . rawurlencode("Stud.IP Passwort vergessen - {$GLOBALS['UNI_NAME_CLEAN']}") . "&amp;body=" . rawurlencode("Ich habe mein Passwort vergessen. Bitte senden Sie mir ein Neues.\nMein Nutzername: " . htmlReady($uname) . "\n") . "\">",
+                    "<a href=\"mailto:{$GLOBALS['UNI_CONTACT']}?subject=" . rawurlencode("Stud.IP Passwort vergessen - ".Config::get()->UNI_NAME_CLEAN) . "&amp;body=" . rawurlencode("Ich habe mein Passwort vergessen. Bitte senden Sie mir ein Neues.\nMein Nutzername: " . htmlReady($uname) . "\n") . "\">",
                     "</a>");
             } else {
                 // Bestätigungslink senden

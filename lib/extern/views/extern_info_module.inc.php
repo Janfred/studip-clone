@@ -75,7 +75,7 @@ if ($info['module_type'] != 0)  :?>
         <p><?= _('Diese Adresse können Sie in einen Link auf Ihrer Website integrieren, um auf die Ausgabe des Moduls zu verweisen.') ?></p>
     <? endif ?>
 
-    <? if ($EXTERN_SRI_ENABLE && sri_is_enabled(Context::getId())) : ?>
+    <? if (Config::get()->EXTERN_SRI_ENABLE && sri_is_enabled(Context::getId())) : ?>
         <p><strong><?= _("Stud.IP-Remote-Include (SRI)  Schnittstelle") ?></strong></p>
         <p><?= _('Der unten aufgeführte Textblock ermöglicht Ihnen den Zugriff auf die Stud.IP-Remote-Include-Schnittstelle (SRI).') ?></p>
         <blockquote>

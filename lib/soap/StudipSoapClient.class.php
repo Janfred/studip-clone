@@ -10,7 +10,6 @@ class StudipSoapClient
 
     function __construct($path)
     {
-        global $RELATIVE_PATH_SOAP, $SOAP_ENABLE;
         require_once("vendor/nusoap/nusoap.php");
 
         $this->soap_client = new soap_client($path, true);

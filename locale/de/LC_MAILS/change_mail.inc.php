@@ -3,7 +3,7 @@
         
         $mailbody="Dies ist eine Informationsmail des Stud.IP-Systems\n"
         ."(Studienbegleitender Internetsupport von Präsenzlehre)\n"
-        ."- " . $GLOBALS['UNI_NAME_CLEAN'] . " -\n\n"
+        ."- " . Config::get()->UNI_NAME_CLEAN . " -\n\n"
         ."Ihr Account wurde um " . $Zeit . " von der Administration verändert"
         .($this->user_data['auth_user_md5.locked']==1 ? " und gesperrt" : "")
         .".\nDie aktuellen Angaben lauten:\n\n"

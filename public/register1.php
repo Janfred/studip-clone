@@ -30,7 +30,7 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-if (!$GLOBALS['ENABLE_SELF_REGISTRATION']){
+if (!Config::get()->ENABLE_SELF_REGISTRATION){
     ob_start();
     PageLayout::postError(_("Registrierung ausgeschaltet"),
             [_("In dieser Installation ist die Möglichkeit zur Registrierung ausgeschaltet."),

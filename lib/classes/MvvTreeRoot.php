@@ -68,7 +68,7 @@ class MvvTreeRoot implements MvvTreeItem
     
     public function getDisplayName()
     {
-        return $GLOBALS['UNI_NAME_CLEAN'];
+        return Config::get()->UNI_NAME_CLEAN;
     }
     
     public function getId()

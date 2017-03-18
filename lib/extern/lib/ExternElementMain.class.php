@@ -71,8 +71,8 @@ class ExternElementMain extends ExternElement {
         $this->config =& $config;
         $this->data_fields =& $data_fields;
         $this->field_names =& $field_names;
-        if ($GLOBALS['EXTERN_SRI_ENABLE'] && (!$GLOBALS['EXTERN_SRI_ENABLE_BY_ROOT'] ||
-                (sri_is_enabled($this->config->range_id) && $GLOBALS['EXTERN_SRI_ENABLE_BY_ROOT']))) {
+        if (Config::get()->EXTERN_SRI_ENABLE && (!Config::get()->EXTERN_SRI_ENABLE_BY_ROOT ||
+                (sri_is_enabled($this->config->range_id) && Config::get()->EXTERN_SRI_ENABLE_BY_ROOT))) {
             $this->attributes[] = 'sriurl';
         }
     }
@@ -115,8 +115,8 @@ class ExternElementMain extends ExternElement {
     function getSRIFormContent (&$edit_form, $include_url = false) {
         $content = '';
         $sri_info = _("Nur bei Benutzung der SRI-Schnittstelle für dieses Modul: Geben Sie hier die vollständige URL der Seite an, in die die Ausgabe des Moduls eingefügt werden soll.");
-        if (!$include_url && $GLOBALS['EXTERN_SRI_ENABLE'] && (!$GLOBALS['EXTERN_SRI_ENABLE_BY_ROOT'] ||
-                (sri_is_enabled($this->config->range_id) && $GLOBALS['EXTERN_SRI_ENABLE_BY_ROOT']))) {
+        if (!$include_url && Config::get()->EXTERN_SRI_ENABLE && (!Config::get()->EXTERN_SRI_ENABLE_BY_ROOT ||
+                (sri_is_enabled($this->config->range_id) && Config::get()->EXTERN_SRI_ENABLE_BY_ROOT))) {
             $headline = $edit_form->editHeadline(_("URL des SRI-Templates"));
             $table = $edit_form->editTextfieldGeneric("sriurl", '', $sri_info, 70, 350);
             $content = $edit_form->editContentTable($headline, $table);
@@ -125,7 +125,7 @@ class ExternElementMain extends ExternElement {
         if ($include_url) {
             $table = '';
             $headline = $edit_form->editHeadline(_("Einbindung des Moduls"));
-            if ($GLOBALS['EXTERN_SRI_ENABLE'] && (!$GLOBALS['EXTERN_SRI_ENABLE_BY_ROOT'] ||(sri_is_enabled($this->config->range_id) && $GLOBALS['EXTERN_SRI_ENABLE_BY_ROOT']))) {
+            if (Config::get()->EXTERN_SRI_ENABLE && (!Config::get()->EXTERN_SRI_ENABLE_BY_ROOT ||(sri_is_enabled($this->config->range_id) && Config::get()->EXTERN_SRI_ENABLE_BY_ROOT))) {
                 $table = $edit_form->editTextfieldGeneric('sriurl', 'SRI-URL', $sri_info, 50, 350);
             }
             $table .= $edit_form->editTextfieldGeneric('includeurl', 'include-URL', _("URL der Seite, in der die Ausgabe des Moduls per Include (z.B. durch eine Script-Sprache) eingebunden wird."), 50, 350);

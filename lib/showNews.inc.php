@@ -195,7 +195,7 @@ function show_rss_news($range_id, $type)
     switch ($type){
         case 'user':
             $studip_url = $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'dispatch.php/profile?again=yes&username=' . get_username($range_id);
-            $title = get_fullname($range_id) . ' (Stud.IP - ' . $GLOBALS['UNI_NAME_CLEAN'] . ')';
+            $title = get_fullname($range_id) . ' (Stud.IP - ' . Config::get()->UNI_NAME_CLEAN . ')';
             $description = _('Persönliche Neuigkeiten') . ' ' . $title;
         break;
         case 'sem':
@@ -204,7 +204,7 @@ function show_rss_news($range_id, $type)
             if ($sem_obj->read_level > 0) {
                 $studip_url .= '&again=yes';
             }
-            $title = $sem_obj->getName() . ' (Stud.IP - ' . $GLOBALS['UNI_NAME_CLEAN'] . ')';
+            $title = $sem_obj->getName() . ' (Stud.IP - ' . Config::get()->UNI_NAME_CLEAN . ')';
             $description = _('Neuigkeiten der Veranstaltung') . ' ' . $title;
 
         break;
@@ -214,12 +214,12 @@ function show_rss_news($range_id, $type)
             if (!Config::get()->ENABLE_FREE_ACCESS) {
                 $studip_url .= "&again=yes";
             }
-            $title = $object_name['name'] . ' (Stud.IP - ' . $GLOBALS['UNI_NAME_CLEAN'] . ')';
+            $title = $object_name['name'] . ' (Stud.IP - ' . Config::get()->UNI_NAME_CLEAN . ')';
             $description = _('Neuigkeiten der Einrichtung') . ' ' . $title;
         break;
         case 'global':
             $studip_url = $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'dispatch.php/start?again=yes';
-            $title = 'Stud.IP - ' . $GLOBALS['UNI_NAME_CLEAN'];
+            $title = 'Stud.IP - ' . Config::get()->UNI_NAME_CLEAN;
             $description = _('Allgemeine Neuigkeiten') . ' ' . $title;
         break;
     }

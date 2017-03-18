@@ -55,11 +55,11 @@ require_once('lib/datei.inc.php');
 */
 function CheckParamRUN()
 {
-global $XSLT_ENABLE, $ex_type, $o_mode, $xml_file_id, $page, $format, $output_formats, $choose, $xslt_files, $export_error, $export_error_num, $export_o_modes, $export_ex_types;
+global $ex_type, $o_mode, $xml_file_id, $format, $choose, $xslt_files, $export_error, $export_error_num, $export_o_modes, $export_ex_types;
 
     if (($xml_file_id == "")
             OR ($xslt_files[$choose]["file"] == "")
-            OR ($XSLT_ENABLE != true))
+            OR (Config::get()->XSLT_ENABLE != true))
     {
         $export_error .= "<b>" . _("Fehlende Parameter!") . "</b><br>";
         $export_error_num++;

@@ -280,7 +280,7 @@ class Calendar_SingleController extends Calendar_CalendarController
             if (Request::submitted('submit_email')) {
                 $email_reg_exp = '/^([-.0-9=?A-Z_a-z{|}~])+@([-.0-9=?A-Z_a-z{|}~])+\.[a-zA-Z]{2,6}$/i';
                 if (preg_match($email_reg_exp, Request::get('email')) !== 0) {
-                    $subject = '[' . get_config('UNI_NAME_CLEAN') . ']' . _('Exportadresse für Ihre Termine');
+                    $subject = '[' .Config::get()->UNI_NAME_CLEAN . ']' . _('Exportadresse für Ihre Termine');
                     $text .= _('Diese Email wurde vom Stud.IP-System verschickt. Sie können auf diese Nachricht nicht antworten.') . "\n\n";
                     $text .= _('Über diese Adresse erreichen Sie den Export für Ihre Termine:') . "\n\n";
                     $text .= $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'dispatch.php/ical/index/'

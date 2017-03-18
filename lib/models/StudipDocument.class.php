@@ -139,7 +139,7 @@ class StudipDocument extends SimpleORMap {
         $access = false;
         if (in_array($object_type, array('inst', 'fak'))) {
             //download from institute and user is always allowed
-            if (get_config('ENABLE_FREE_ACCESS') || $GLOBALS['perm']->have_perm('user', $user_id)) {
+            if (Config::get()->ENABLE_FREE_ACCESS || $GLOBALS['perm']->have_perm('user', $user_id)) {
                 $access = true;
             } else { //check external download module (types 6 and 10)
                 $result = DBManager::get()->query("SELECT * FROM extern_config WHERE range_id = '"

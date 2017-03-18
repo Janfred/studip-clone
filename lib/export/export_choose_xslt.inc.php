@@ -249,7 +249,7 @@ elseif ($page == 2)  // Seite 3 : Download der Dateien
     $export_pagecontent .= "<input type=\"hidden\" name=\"xslt_filename\" value=\"" . htmlReady($xslt_filename) . "\">";
 
     $export_weiter_button = "<center>" . Button::create('<< ' . _('Zurück'), 'back') . "&nbsp;";
-    if ($XSLT_ENABLE)
+    if (Config::get()->XSLT_ENABLE)
     {
         $export_pagecontent .= _("Um die Daten mit dem installierten XSLT-Prozessor in das gewünschte Format zu bringen, klicken Sie bitte auf 'weiter'") . "<br><br>";
         $export_weiter_button .= LinkButton::create(_('Weiter') . ' >>', '#', array('name' => 'next'));
@@ -276,7 +276,7 @@ elseif ($page == 2)  // Seite 3 : Download der Dateien
         "text"  => _("Sie können sich die XML-Daten und das XSLT-Skript herunterladen.")
     );
 
-    if ($XSLT_ENABLE) {
+    if (Config::get()->XSLT_ENABLE) {
         $infobox[1]["eintrag"][] = array (  "icon" => Icon::create('info', 'clickable'),
                                     "text"  => _("Wenn Sie auf 'weiter' klicken, wird mit dem installierten XSLT-Prozessor die Ausgabedatei erzeugt.")
                                 );

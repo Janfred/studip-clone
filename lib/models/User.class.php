@@ -792,7 +792,7 @@ class User extends AuthUserMd5
             return true;
         }
 
-        if (!$GLOBALS['ALLOW_CHANGE_EMAIL']) {
+        if (!Config::get()->ALLOW_CHANGE_EMAIL) {
             return false;
         }
 

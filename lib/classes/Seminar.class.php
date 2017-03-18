@@ -1824,7 +1824,7 @@ class Seminar
      */
     public function isPublic()
     {
-        return get_config('ENABLE_FREE_ACCESS') && $this->read_level == 0;
+        return Config::get()->ENABLE_FREE_ACCESS && $this->read_level == 0;
     }
 
     /**

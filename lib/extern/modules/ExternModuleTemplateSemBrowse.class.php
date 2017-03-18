@@ -1357,7 +1357,7 @@ class ExternModuleTemplateSemBrowse extends ExternModule {
             // Creating the first worksheet
             $worksheet1 =& $workbook->addworksheet(_("Veranstaltungen"));
             $worksheet1->set_row(0, 20);
-            $worksheet1->write_string(0, 0, _("Stud.IP Veranstaltungen") . ' - ' . $GLOBALS['UNI_NAME_CLEAN'] ,$head_format);
+            $worksheet1->write_string(0, 0, _("Stud.IP Veranstaltungen") . ' - ' . Config::get()->UNI_NAME_CLEAN ,$head_format);
             $worksheet1->set_row(1, 20);
             $worksheet1->write_string(1, 0, sprintf(_(" %s Veranstaltungen gefunden %s, Gruppierung: %s"),count($sem_data),
                 (($this->sem_browse_data['do_search']) ? _("(Suchergebnis)") : ''),

@@ -241,8 +241,8 @@ function enable_sri ($i_id, $enable) {
 }
 
 function sri_is_enabled ($i_id) {
-    if ($GLOBALS['EXTERN_SRI_ENABLE']) {
-        if (!$GLOBALS['EXTERN_SRI_ENABLE_BY_ROOT']) {
+    if (Config::get()->EXTERN_SRI_ENABLE) {
+        if (!Config::get()->EXTERN_SRI_ENABLE_BY_ROOT) {
             return 1;
         }
         $query = "SELECT srienabled FROM Institute WHERE Institut_id = ? AND srienabled = 1";

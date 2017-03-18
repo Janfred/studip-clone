@@ -35,7 +35,6 @@
 // +---------------------------------------------------------------------------+
 
 global
-  $CALENDAR_MAX_EVENTS,
   $FLASHPLAYER_DEFAULT_CONFIG_MIN,
   $FLASHPLAYER_DEFAULT_CONFIG_MAX,
   $INST_ADMIN_DATAFIELDS_VIEW,
@@ -251,9 +250,6 @@ $PERS_TERMIN_KAT[13]=array("name"=>_("Urlaub"), "color"=>"#70c3bf");
 $PERS_TERMIN_KAT[14]=array("name"=>_("Reise"), "color"=>"#f7a866");
 $PERS_TERMIN_KAT[15]=array("name"=>_("Vorlesung"), "color"=>"#ca9eaf");
 // more categories can be added here
-
-//number of personal events each user can store in his calendar
-$CALENDAR_MAX_EVENTS = 1000;
 
 //preset for academic titles -  add further titles to the array, if necessary
 $TITLE_FRONT_TEMPLATE = array("","Prof.","Prof. Dr.","Dr.","PD Dr.","Dr. des.","Dr. med.","Dr. rer. nat.","Dr. forest.",

@@ -277,9 +277,6 @@ $TIME_PRESETS = array ( //starthour, startminute, endhour, endminute
 //$TIME_PRESETS = false;
 
 
-//number of personal events each user can store in his calendar
-$CALENDAR_MAX_EVENTS = 1000;
-
 //preset for academic titles -  add further titles to the array, if necessary
 $TITLE_FRONT_TEMPLATE = array("","Prof.","Prof. Dr.","Dr.","PD Dr.","Dr. des.","Dr. med.","Dr. rer. nat.","Dr. forest.",
                             "Dr. sc. agr.","Dipl.-Biol.","Dipl.-Chem.","Dipl.-Ing.","Dipl.-Sozw.","Dipl.-Geogr.",

@@ -25,11 +25,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 require '../lib/bootstrap.php';
 
-$my_auth = ($GLOBALS['ENABLE_SELF_REGISTRATION'] ? "Seminar_Register_Auth" : "Seminar_Default_Auth");
+$my_auth = (Config::get()->ENABLE_SELF_REGISTRATION ? "Seminar_Register_Auth" : "Seminar_Default_Auth");
 
 page_open(array("sess" => "Seminar_Session", "auth" => $my_auth, "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-if (!$GLOBALS['ENABLE_SELF_REGISTRATION']){
+if (!Config::get()->ENABLE_SELF_REGISTRATION){
     ob_start();
     PageLayout::postError(_("Registrierung ausgeschaltet"),
             [_("In dieser Installation ist die Möglichkeit zur Registrierung ausgeschaltet."),

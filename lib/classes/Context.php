@@ -219,7 +219,7 @@ class Context {
 
             // check if current user can access the object
             if (!$perm->get_studip_perm($course["Seminar_id"])) {
-                if ($course['lesezugriff'] > 0 || !get_config('ENABLE_FREE_ACCESS')) {
+                if ($course['lesezugriff'] > 0 || !Config::get()->ENABLE_FREE_ACCESS) {
                     // redirect to login page if user is not logged in
                     $auth->login_if($auth->auth["uid"] == "nobody");
 

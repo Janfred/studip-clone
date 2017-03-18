@@ -34,7 +34,7 @@ class StudipNavigation extends Navigation
 
         // if the user is not logged in, he will see the free courses, otherwise
         // the my courses page will be shown.
-        if (is_object($user) && $user->id != 'nobody' || get_config('ENABLE_FREE_ACCESS')) {
+        if (is_object($user) && $user->id != 'nobody' || Config::get()->ENABLE_FREE_ACCESS) {
             $this->addSubNavigation('browse', new BrowseNavigation());
         }
 

@@ -55,7 +55,7 @@ $AVAILABLE_SERVICES =
                 array_flatten(PluginEngine::sendMessage("WebServicePlugin",
                                                         "getWebServices")));
 
-if (!get_config('WEBSERVICES_ENABLE'))
+if (!Config::get()->WEBSERVICES_ENABLE)
 {
     throw new Exception("Webservices not available");
 }

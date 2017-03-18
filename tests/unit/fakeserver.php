@@ -76,8 +76,8 @@ function fakeServerGlobals($uri) {
     $fragment = isset($urlComponents['fragment']) ? ('#' . $urlComponents['fragment']) : '';
     $_SERVER['REQUEST_URI'] = $path . $query . $fragment;
 
-    if (!isset($GLOBALS['CONVERT_IDNA_URL'])) {
-        $GLOBALS['CONVERT_IDNA_URL'] = false;
+    if (!isset(Config::get()->CONVERT_IDNA_URL)) {
+        Config::get()->CONVERT_IDNA_URL = false;
     }
 }
 

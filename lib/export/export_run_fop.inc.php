@@ -36,8 +36,6 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-$FOP_ENABLE = true;
-
 if (($o_mode != "direct") AND ($o_mode != "passthrough"))
     $perm->check("tutor");
 
@@ -55,7 +53,7 @@ require_once('lib/datei.inc.php');
 */
 function CheckParamRUN_FOP()
 {
-global $XSLT_ENABLE, $ex_type, $o_mode, $xml_file_id, $page, $format, $output_formats, $choose, $xslt_files, $export_error, $export_error_num, $export_o_modes, $export_ex_types, $result_file;
+global $export_error, $export_error_num, $result_file;
 
     if ($result_file == "")
     {
@@ -81,7 +79,7 @@ if (!CheckParamRUN_FOP())
         )
     );
 }
-elseif ($FOP_ENABLE != true)
+elseif (Config::get()->FOP_ENABLE != true)
 {
     $infobox[1]["eintrag"][] = array (  'icon' => Icon::create('admin', 'clickable'),
                                 "text"  => sprintf(_("Die Erweiterung zum Erzeugen von PDF-Dateien ist nicht aktiviert, es konnten daher nur Formatting Objects erzeugt werden."))

@@ -249,7 +249,7 @@ class SiteinfoMarkupEngine {
     }
 
     function uniName() {
-        return htmlReady($GLOBALS['UNI_NAME_CLEAN']);
+        return htmlReady(Config::get()->UNI_NAME_CLEAN);
     }
 
     function uniContact() {

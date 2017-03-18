@@ -39,7 +39,7 @@ class LoginNavigation extends Navigation
             $this->addSubNavigation('login_shib', $navigation);
         }
 
-        if (get_config('ENABLE_SELF_REGISTRATION')) {
+        if (Config::get()->ENABLE_SELF_REGISTRATION) {
             $navigation = new Navigation(_('Registrieren'), 'register1.php');
             $navigation->setDescription(_('um NutzerIn zu werden'));
             $this->addSubNavigation('register', $navigation);

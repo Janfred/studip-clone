@@ -266,7 +266,7 @@ class Request implements ArrayAccess, IteratorAggregate
     {
         $value = self::get($param, $default);
 
-        if (!isset($value) || !preg_match($GLOBALS['USERNAME_REGULAR_EXPRESSION'], $value)) {
+        if (!isset($value) || !preg_match(Config::get()->USERNAME_REGULAR_EXPRESSION, $value)) {
             $value = $default;
         }
 
@@ -375,7 +375,7 @@ class Request implements ArrayAccess, IteratorAggregate
         $array = self::getArray($param);
 
         foreach ($array as $key => $value) {
-            if (!preg_match($GLOBALS['USERNAME_REGULAR_EXPRESSION'], $value)) {
+            if (!preg_match(Config::get()->USERNAME_REGULAR_EXPRESSION, $value)) {
                 unset($array[$key]);
             }
         }

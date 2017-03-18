@@ -29,8 +29,8 @@ class Settings_SettingsController extends AuthenticatedController
     public function before_filter(&$action, &$args)
     {
         // Abwärtskompatibilität, erst ab 1.1 bekannt
-        if (!isset($GLOBALS['ALLOW_CHANGE_NAME'])) {
-            $GLOBALS['ALLOW_CHANGE_NAME'] = TRUE;
+        if (!isset(Config::get()->ALLOW_CHANGE_NAME)) {
+            Config::get()->ALLOW_CHANGE_NAME = TRUE;
         }
 
         parent::before_filter($action, $args);
@@ -178,7 +178,7 @@ class Settings_SettingsController extends AuthenticatedController
             'username' => 'ALLOW_CHANGE_USERNAME',
         );
 
-        if (isset($global_mapping[$attribute]) and !$GLOBALS[$global_mapping[$attribute]]) {
+        if (isset($global_mapping[$attribute]) and !Config::get()->{$global_mapping[$attribute]}) {
             return false;
         }
 

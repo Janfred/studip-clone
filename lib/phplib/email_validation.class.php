@@ -27,7 +27,7 @@ class email_validation_class
 
     function __construct()
     {
-        $this->username_regular_expression = $GLOBALS['USERNAME_REGULAR_EXPRESSION'];
+        $this->username_regular_expression = Config::get()->USERNAME_REGULAR_EXPRESSION;
     }
 
     Function Tokenize($string,$separator="")

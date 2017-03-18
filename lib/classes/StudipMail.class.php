@@ -131,7 +131,7 @@ class StudipMail
     function __construct() {
         $mail_localhost = ($GLOBALS['MAIL_LOCALHOST'] == "") ? $_SERVER["SERVER_NAME"] : $GLOBALS['MAIL_LOCALHOST'];
         $this->setSenderEmail($GLOBALS['MAIL_ENV_FROM'] == "" ? "wwwrun@" . $mail_localhost : $GLOBALS['MAIL_ENV_FROM']);
-        $this->setSenderName($GLOBALS['MAIL_FROM'] == "" ? 'Stud.IP - ' . $GLOBALS['UNI_NAME_CLEAN'] : $GLOBALS['MAIL_FROM']);
+        $this->setSenderName($GLOBALS['MAIL_FROM'] == "" ? 'Stud.IP - ' . Config::get()->UNI_NAME_CLEAN : $GLOBALS['MAIL_FROM']);
         $this->setReplyToEmail($GLOBALS['MAIL_ABUSE'] == "" ? "abuse@" . $mail_localhost : $GLOBALS['MAIL_ABUSE']);
     }
 

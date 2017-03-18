@@ -137,7 +137,7 @@ class ConnectedCMS
     */
     function getConnectionStatus($cms = "")
     {
-        global $RELATIVE_PATH_ELEARNING_INTERFACE, $RELATIVE_PATH_SOAP, $SOAP_ENABLE, $STUDIP_BASE_PATH;
+        global $RELATIVE_PATH_ELEARNING_INTERFACE, $RELATIVE_PATH_SOAP, $STUDIP_BASE_PATH;
         if ($this->cms_type == "")
         {
             $this->init($cms);
@@ -173,13 +173,13 @@ class ConnectedCMS
         // check for SOAP-Interface
         if ($this->ABSOLUTE_PATH_SOAP != "" && in_array($this->CLASS_PREFIX, words('Ilias3 Ilias4')))
         {
-            if (! $SOAP_ENABLE)
+            if (!Config::get()->SOAP_ENABLE)
                 $msg["soap"]["error"] = sprintf(_("Das Stud.IP-Modul für die SOAP-Schnittstelle ist nicht aktiviert. Ändern Sie den entsprechenden Eintrag in der Konfigurationsdatei \"local.inc\"."));
             elseif (! is_array($this->soap_data))
                 $msg["soap"]["error"] = sprintf(_("Die SOAP-Verbindungsdaten sind für dieses System nicht gesetzt. Ergänzen Sie die Einstellungen für dieses Systems um den Eintrag \"soap_data\" in der Konfigurationsdatei \"local.inc\"."));
             else
             {
-                require_once($RELATIVE_PATH_SOAP."/StudipSoapClient" . ($GLOBALS['SOAP_USE_PHP5'] ? "_PHP5" : "") .".class.php");
+                require_once($RELATIVE_PATH_SOAP."/StudipSoapClient" . (Config::get()->SOAP_USE_PHP5 ? "_PHP5" : "") .".class.php");
                 $this->soap_client = new StudipSoapClient($this->ABSOLUTE_PATH_SOAP);
                 $msg["soap"]["info"] = sprintf(_("Das SOAP-Modul ist aktiv."));
             }

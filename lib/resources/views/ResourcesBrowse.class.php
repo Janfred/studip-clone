@@ -100,7 +100,7 @@ class ResourcesBrowse {
             <label>
                 <?= _('Freie Suche') . ":"; ?>
                 <select>
-                    <option value="0" selected><?=htmlReady($GLOBALS['UNI_NAME_CLEAN'])?></option>
+                    <option value="0" selected><?=htmlReady(Config::get()->UNI_NAME_CLEAN)?></option>
                     <?if ($this->open_object){
                         $res = ResourceObject::Factory($this->open_object);
                         ?>
@@ -120,8 +120,6 @@ class ResourcesBrowse {
     //private
     function getHistory($id)
     {
-        global $UNI_URL, $UNI_NAME_CLEAN;
-
         $query = "SELECT name, parent_id, resource_id, owner_id
                   FROM resources_objects
                   WHERE resource_id = ? ORDER BY name";
@@ -144,7 +142,7 @@ class ResourcesBrowse {
         if (count($result_arr) > 0)
             switch (ResourceObject::getOwnerType($result_arr[count($result_arr)-1]["owner_id"])) {
                 case "global":
-                    $top_level_name = $UNI_NAME_CLEAN;
+                    $top_level_name = Config::get()->UNI_NAME_CLEAN;
                 break;
                 case "sem":
                     $top_level_name = _("Veranstaltungsressourcen");

@@ -225,7 +225,7 @@ class StudipLitSearch {
 /*
 $_lit_search_plugins = array("Studip", "Gbv");
 page_open(array("sess" => "Seminar_Session"));
-$_language = $DEFAULT_LANGUAGE;
+$_language = DEFAULT_LANGUAGE;
 $_language_path = $INSTALLED_LANGUAGES[$_language]["path"];
 $test = new StudipLitSearch();
 

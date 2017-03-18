@@ -84,7 +84,7 @@ class ExternElementMainLectures extends ExternElementMain {
             "language" => "",
             "urlcss" => "",
             "title" => _("Lehrveranstaltungen"),
-            "copyright" => htmlReady($GLOBALS['UNI_NAME_CLEAN']
+            "copyright" => htmlReady(Config::get()->UNI_NAME_CLEAN
                     . " ({$GLOBALS['UNI_CONTACT']})"),
             "author" => ""
         );

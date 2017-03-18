@@ -86,7 +86,7 @@ if ($range_id && $module) {
         if ($id = ExternConfig::GetStandardConfiguration($range_id, $type)) {
             $config_id = $id;
         } else {
-            if ($GLOBALS['EXTERN_ALLOW_ACCESS_WITHOUT_CONFIG']) {
+            if (Config::get()->EXTERN_ALLOW_ACCESS_WITHOUT_CONFIG) {
                 // use default configuraion
                 $default = 'DEFAULT';
                 $config_id = '';

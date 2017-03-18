@@ -203,7 +203,7 @@ class Seminar_Session
      */
     function __construct()
     {
-        if ($GLOBALS['CACHING_ENABLE'] && $GLOBALS['CACHE_IS_SESSION_STORAGE']) {
+        if (Config::get()->CACHING_ENABLE && $GLOBALS['CACHE_IS_SESSION_STORAGE']) {
             $this->that_class = 'CT_Cache';
         }
         $this->cookie_path = $this->cookie_path ? : $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'];

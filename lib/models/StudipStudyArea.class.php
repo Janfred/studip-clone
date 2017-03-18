@@ -376,7 +376,7 @@ class StudipStudyArea extends SimpleORMap
     static function getRootArea() {
         $root = new StudipStudyArea();
         $root->setID(self::ROOT);
-        $root->setName($GLOBALS['UNI_NAME_CLEAN']);
+        $root->setName(Config::get()->UNI_NAME_CLEAN);
         return $root;
     }
 

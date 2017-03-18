@@ -28,10 +28,10 @@ class Studip extends \RESTAPI\RouteMap
         }, \SemClass::getClasses());
 
         return array(
-            'ALLOW_CHANGE_USERNAME' => $GLOBALS['ALLOW_CHANGE_USERNAME'],
-            'ALLOW_CHANGE_EMAIL'    => $GLOBALS['ALLOW_CHANGE_EMAIL'],
-            'ALLOW_CHANGE_NAME'     => $GLOBALS['ALLOW_CHANGE_NAME'],
-            'ALLOW_CHANGE_TITLE'    => $GLOBALS['ALLOW_CHANGE_TITLE'],
+            'ALLOW_CHANGE_USERNAME' => Config::get()->ALLOW_CHANGE_USERNAME,
+            'ALLOW_CHANGE_EMAIL'    => Config::get()->ALLOW_CHANGE_EMAIL,
+            'ALLOW_CHANGE_NAME'     => Config::get()->ALLOW_CHANGE_NAME,
+            'ALLOW_CHANGE_TITLE'    => Config::get()->ALLOW_CHANGE_TITLE,
             'INST_TYPE'             => $GLOBALS['INST_TYPE'],
             'SEM_TYPE'              => $sem_types,
             'SEM_CLASS'             => $sem_classes,
@@ -39,7 +39,7 @@ class Studip extends \RESTAPI\RouteMap
             'PERS_TERMIN_KAT'       => $GLOBALS['PERS_TERMIN_KAT'],
             'SUPPORT_EMAIL'         => $GLOBALS['UNI_CONTACT'],
             'TITLES'                => $GLOBALS['DEFAULT_TITLE_FOR_STATUS'],
-            'UNI_NAME_CLEAN'        => $GLOBALS['UNI_NAME_CLEAN'],
+            'UNI_NAME_CLEAN'        => Config::get()->UNI_NAME_CLEAN,
         );
     }
 

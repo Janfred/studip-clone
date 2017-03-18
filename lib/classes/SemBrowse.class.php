@@ -520,7 +520,7 @@ class SemBrowse {
 
         global $_fullname_sql,$SEM_TYPE,$SEM_CLASS,$TMP_PATH;
 
-        if(!$headline) $headline = _("Stud.IP Veranstaltungen") . ' - ' . $GLOBALS['UNI_NAME_CLEAN'];
+        if(!$headline) $headline = _("Stud.IP Veranstaltungen") . ' - ' . Config::get()->UNI_NAME_CLEAN;
         if (is_array($this->sem_browse_data['search_result']) && count($this->sem_browse_data['search_result'])) {
             if (!is_object($this->sem_tree)){
                 $the_tree = TreeAbstract::GetInstance("StudipSemTree", false);

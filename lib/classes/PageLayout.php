@@ -150,7 +150,7 @@ class PageLayout
         return isset(self::$title) ? self::$title :
                 (isset($GLOBALS['_html_head_title']) ? $GLOBALS['_html_head_title'] :
                     (isset($GLOBALS['CURRENT_PAGE']) ? $GLOBALS['CURRENT_PAGE'] :
-                        $GLOBALS['UNI_NAME_CLEAN']));
+                        Config::get()->UNI_NAME_CLEAN));
     }
 
     /**

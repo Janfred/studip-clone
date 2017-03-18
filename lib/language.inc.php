@@ -48,9 +48,9 @@
 *
 */
 function get_accepted_languages() {
-    global $INSTALLED_LANGUAGES, $DEFAULT_LANGUAGE;
+    global $INSTALLED_LANGUAGES;
 
-    $_language = $DEFAULT_LANGUAGE;
+    $_language = Config::get()->DEFAULT_LANGUAGE;
     $accepted_languages = explode(",", getenv("HTTP_ACCEPT_LANGUAGE"));
     if (is_array($accepted_languages) && count($accepted_languages)) {
         foreach ($accepted_languages as $temp_accepted_language) {
@@ -98,13 +98,11 @@ function init_i18n($_language) {
  */
 function getUserLanguage($uid)
 {
-    global $DEFAULT_LANGUAGE;
-
     // try to get preferred language from user, fallback to default
     $query = "SELECT preferred_language FROM user_info WHERE user_id = ?";
     $statement = DBManager::get()->prepare($query);
     $statement->execute(array($uid));
-    $language = $statement->fetchColumn() ?: $DEFAULT_LANGUAGE;
+    $language = $statement->fetchColumn() ?: Config::get()->DEFAULT_LANGUAGE;
 
     return $language;
 }
@@ -139,7 +137,7 @@ function getUserLanguagePath($uid)
 * @param        string  explicit temporary language (set $uid to FALSE to switch to this language)
 */
 function setTempLanguage ($uid = FALSE, $temp_language = "") {
-    global $_language_domain, $DEFAULT_LANGUAGE;
+    global $_language_domain;
 
     if ($uid) {
         $temp_language = getUserLanguage($uid);
@@ -147,7 +145,7 @@ function setTempLanguage ($uid = FALSE, $temp_language = "") {
 
     if ($temp_language == "") {
         // we got no arguments, best we can do is to set system default
-        $temp_language = $DEFAULT_LANGUAGE;
+        $temp_language = Config::get()->DEFAULT_LANGUAGE;
     }
 
     setLocaleEnv($temp_language, $_language_domain);

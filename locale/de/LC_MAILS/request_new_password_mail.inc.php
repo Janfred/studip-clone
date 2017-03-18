@@ -1,9 +1,9 @@
 <?
-    $subject = _("[Stud.IP - " . $GLOBALS['UNI_NAME_CLEAN'] . "] Neues Passwort zusenden (Schritt 3 von 5)");
+    $subject = _("[Stud.IP - " . Config::get()->UNI_NAME_CLEAN . "] Neues Passwort zusenden (Schritt 3 von 5)");
 
     $mailbody="Dies ist eine Bestätigungsmail des Stud.IP-Systems\n"
     ."(Studienbegleitender Internetsupport von Präsenzlehre)\n"
-    ."- {$GLOBALS['UNI_NAME_CLEAN']} -\n\n"
+    ."- ".Config::get()->UNI_NAME_CLEAN." -\n\n"
     ."Sie haben um die Zusendung eines neuen Passwortes gebeten.\n\n"
     ."Benutzername: {$username}\n"
     ."Vorname: {$vorname}\n"

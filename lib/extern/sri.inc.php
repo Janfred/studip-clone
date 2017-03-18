@@ -37,7 +37,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-if (!$EXTERN_SRI_ENABLE) {
+if (!Config::get()->EXTERN_SRI_ENABLE) {
     echo $EXTERN_ERROR_MESSAGE;
     exit;
 }
@@ -115,7 +115,7 @@ elseif (!$config_id) {
     if ($id = ExternConfig::GetStandardConfiguration($range_id, $type)) {
         $config_id = $id;
     } else {
-        if ($EXTERN_ALLOW_ACCESS_WITHOUT_CONFIG) {
+        if (Config::get()->EXTERN_ALLOW_ACCESS_WITHOUT_CONFIG) {
             // use default configuraion
             $default = 'DEFAULT';
             $config_id = '';

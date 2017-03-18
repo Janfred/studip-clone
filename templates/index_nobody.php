@@ -8,7 +8,7 @@
 
 <div class="index_main">
     <nav>
-        <h1><?= htmlReady($GLOBALS['UNI_NAME_CLEAN']) ?></h1>
+        <h1><?= htmlReady(Config::get()->UNI_NAME_CLEAN) ?></h1>
         <? foreach (Navigation::getItem('/login') as $key => $nav) : ?>
             <? if ($nav->isVisible()) : ?>
                 <? list($name, $title) = explode(' - ', $nav->getTitle()) ?>

@@ -104,7 +104,7 @@ if (Config::get()->EXPORT_ENABLE)
         $start_done = true;
     }
 
-    if (($page==2) AND get_config('XSLT_ENABLE') AND get_config('skip_page_3'))
+    if (($page==2) AND Config::get()->XSLT_ENABLE AND get_config('skip_page_3'))
         $page=3;
 
     //Exportmodul einbinden
@@ -122,7 +122,7 @@ if (Config::get()->EXPORT_ENABLE)
             $xml_output_done = true;
     }
 
-    if ( ($choose != "") AND ($format != "") AND ($format != "xml") AND ($XSLT_ENABLE) AND ($export_error_num==0) AND
+    if ( ($choose != "") AND ($format != "") AND ($format != "xml") AND (Config::get()->XSLT_ENABLE) AND ($export_error_num==0) AND
         ( ($o_mode == "processor") OR ($o_mode == "passthrough") OR ($page == 3) ) )
     {
         include($GLOBALS['PATH_EXPORT']  . "/export_run_xslt.inc.php");

@@ -136,9 +136,6 @@ namespace {
         Log::get()->setLogLevel(Log::ERROR);
     }
 
-    // set default time zone
-    date_default_timezone_set($DEFAULT_TIMEZONE ? : @date_default_timezone_get());
-
     // set assets url
     Assets::set_assets_url($GLOBALS['ASSETS_URL']);
 
@@ -177,6 +174,10 @@ namespace {
     } else {
         DBManager::getInstance()->aliasConnection('studip', 'studip-slave');
     }
+
+    // set default time zone
+    date_default_timezone_set(Config::get()->DEFAULT_TIMEZONE ? : @date_default_timezone_get());
+
     //include 'tools/debug/StudipDebugPDO.class.php';
 
     /**

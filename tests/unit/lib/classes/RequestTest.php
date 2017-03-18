@@ -33,7 +33,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
             $_GET  = Request::addslashes($_GET);
             $_POST = Request::addslashes($_POST);
         }
-        $GLOBALS['USERNAME_REGULAR_EXPRESSION'] = '/^([a-zA-Z0-9_@.-]{4,})$/';
+        Config::get()->USERNAME_REGULAR_EXPRESSION = '/^([a-zA-Z0-9_@.-]{4,})$/';
     }
 
     public function testURL ()

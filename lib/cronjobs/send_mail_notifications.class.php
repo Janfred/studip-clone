@@ -112,7 +112,7 @@ class SendMailNotificationsJob extends CronJob
             }
             setTempLanguage('', $user->preferred_language);
             $to = $user->email;
-            $title = "[" . $GLOBALS['UNI_NAME_CLEAN'] . "] " . _("Tägliche Benachrichtigung");
+            $title = "[" . Config::get()->UNI_NAME_CLEAN . "] " . _("Tägliche Benachrichtigung");
             $mailmessage = $notification->getAllNotifications($user->id);
             $ok = false;
             if ($mailmessage) {

@@ -137,7 +137,7 @@ class UserManagement
     public static function getPwdHasher()
     {
         if (self::$pwd_hasher === null) {
-            self::$pwd_hasher = new PasswordHash(8, $GLOBALS['PHPASS_USE_PORTABLE_HASH']);
+            self::$pwd_hasher = new PasswordHash(8, Config::get()->PHPASS_USE_PORTABLE_HASH);
         }
         return self::$pwd_hasher;
     }
@@ -408,7 +408,7 @@ class UserManagement
         }
 
         // include language-specific subject and mailbody
-        $user_language = getUserLanguagePath($this->user_data['auth_user_md5.user_id']); // user has been just created, so we will get $DEFAULT_LANGUAGE
+        $user_language = getUserLanguagePath($this->user_data['auth_user_md5.user_id']); // user has been just created, so we will get DEFAULT_LANGUAGE
         $Zeit=date("H:i:s, d.m.Y",time());
         include("locale/$user_language/LC_MAILS/create_mail.inc.php");
 
