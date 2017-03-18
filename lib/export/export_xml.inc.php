@@ -76,16 +76,9 @@ global $range_id, $ex_type, $xml_file_id, $o_mode, $export_error, $export_error_
 }
 
 
-if (!CheckParamXML())
-{
-    $infobox = array(
-    array ("kategorie"  => _("Information:"),
-        "eintrag" => array  (
-                        array ( "icon" => Icon::create('info', 'clickable'),
-                                "text"  => _("Die Parametern, mit denen diese Seite aufgerufen wurde, sind fehlerhaft.")
-                             )
-                        )
-        )
+if (!CheckParamXML()) {
+    PageLayout::postError(
+        _('Die Parameter, mit denen diese Seite aufgerufen wurde, sind fehlerhaft.')
     );
 }
 
@@ -118,16 +111,13 @@ export_range( $range_id );
 
 
 
-if ($o_mode != "direct")
-{
+if ($o_mode !== "direct") {
     fclose($xml_file);
 }
 
-if (($o_mode == "file") OR ($o_mode == "choose"))
-{
+if ($o_mode === 'file' || $o_mode === 'choose') {
 
-    if ($object_counter<1)
-    {
+    if ($object_counter<1) {
         $xml_export_text = _("Es wurden keine Daten gefunden!");
         $export_error = _("Es wurden keine Daten gefunden! Die übergebene ID ist mit keinen Veranstaltungs- / Personendaten verbunden.");
         $export_pagecontent .= "<br><br><br><center>" 
@@ -135,14 +125,13 @@ if (($o_mode == "file") OR ($o_mode == "choose"))
                             . "</center>";
         $export_error_num ++;
 
-    }
-    else
-    {
+    } else {
         $xml_export_text = _("Die Daten wurden erfolgreich exportiert.");
-        if ($object_counter == 1)
+        if ($object_counter == 1) {
             $export_msg = sprintf(_("%s Objekt wurde verarbeitet.") . " ", $object_counter);
-        else
+        } else {
             $export_msg = sprintf(_("%s Objekte wurden verarbeitet.") . " ", $object_counter);
+        }
 
         $export_pagecontent .= "<form method=\"POST\" action=\"" . URLHelper::getLink() . "\">";
         $export_pagecontent .= CSRFProtection::tokenTag();
@@ -151,7 +140,7 @@ if (($o_mode == "file") OR ($o_mode == "choose"))
         $export_pagecontent .= "<input type=\"hidden\" name=\"o_mode\" value=\"choose\">";
         $export_pagecontent .= "<input type=\"hidden\" name=\"ex_type\" value=\"" . htmlReady($ex_type) . "\">";
         $export_pagecontent .= "<input type=\"hidden\" name=\"ex_sem\" value=\"" . htmlReady($ex_sem) . "\">";
-        foreach(array_keys($ex_sem_class) as $semclassid){
+        foreach (array_keys($ex_sem_class) as $semclassid) {
             $export_pagecontent .= "<input type=\"hidden\" name=\"ex_sem_class[". htmlReady($semclassid) ."]\" value=\"1\">";
         }
         $export_pagecontent .= "<input type=\"hidden\" name=\"range_id\" value=\"" . htmlReady($range_id) . "\">";
@@ -166,22 +155,13 @@ if (($o_mode == "file") OR ($o_mode == "choose"))
         $xml_printcontent = _("In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags können mit einem XSLT-Script verarbeitet werden.") . "<br>";
     }
 
-    $infobox = array    (
-    array ("kategorie"  => _("Information:"),
-        "eintrag" => array  (
-                        array ( "icon" => Icon::create('info', 'clickable'),
-                                "text"  => $xml_export_text
-                             )
-                        )
-        )
-    );
-    if ($object_counter > 0)
-    {
-        $link = '<a href="'. GetDownloadLink($xml_file_id, $xml_filename, 2) .' ">';
-        $infobox[1]["kategorie"] = _("Aktionen:");
-            $infobox[1]["eintrag"][] = array (  'icon' => Icon::create('download', 'clickable'),
-                                        "text"  => sprintf(_("Um die XML-Datei jetzt herunterzuladen klicken Sie %s hier %s."), $link, "</a>")
-                                    );
-    }
+    PageLayout::postInfo($xml_export_text);
 
+    if ($object_counter > 0) {
+        $link = '<a href="'. GetDownloadLink($xml_file_id, $xml_filename, 2) .' ">';
+        PageLayout::postSuccess(sprintf(
+            _('Um die XML-Datei jetzt herunterzuladen klicken Sie %s hier %s.'),
+            $link, '</a>'
+        ));
+    }
 }

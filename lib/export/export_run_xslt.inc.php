@@ -83,22 +83,11 @@ $export_pagename = _("Download der Ausgabedatei");
 $xslt_process = false;
 $xslt_filename = mb_strlen(Request::get('xslt_filename')) ? basename(stripslashes(Request::get('xslt_filename'))) : $xslt_filename_default;
 
-if (!CheckParamRUN())
-{
-    $infobox = array(
-    array ("kategorie"  => _("Information:"),
-        "eintrag" => array  (
-                        array ( "icon" => Icon::create('info', 'clickable'),
-                                "text"  => _("Die Parameter, mit denen diese Seite aufgerufen wurde, sind fehlerhaft.")
-                             )
-                        )
-        )
+if (!CheckParamRUN()) {
+    PageLayout::postError(
+        _('Die Parameter, mit denen diese Seite aufgerufen wurde, sind fehlerhaft.')
     );
-}
-else
-{
-
-
+} else {
     // Process the document
     $result_file = md5(uniqid(rand())) . "." . $format;
     $result = "" . $TMP_PATH . "/export/" . $result_file;

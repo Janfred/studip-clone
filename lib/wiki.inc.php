@@ -1223,7 +1223,6 @@ function showPageFrameStart() {
 **/
 function showPageFrameEnd()
 {
-    $GLOBALS['infobox'] = array();
     echo '</div>';
 }
 

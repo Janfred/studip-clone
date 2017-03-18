@@ -2,15 +2,15 @@
 
 @page-margin: 15px;
 
-@infobox-width: 250px;
-@infobox-padding: 12px;
-@infobox-border-width: 1px;
+@sidebar-width: 250px;
+@sidebar-padding: 12px;
+@sidebar-border-width: 1px;
 
 @content-width: 400px;
 @content-margin: 12px;
 
-@site-width: (@page-margin * 2 + @infobox-width + @infobox-padding * 2 + @infobox-border-width * 2 + @content-width + @content-margin * 2); 
-@page-width: (@infobox-width + @infobox-padding * 2 + @infobox-border-width * 2 + @content-width + @content-margin * 2); 
+@site-width: (@page-margin * 2 + @sidebar-width + @sidebar-padding * 2 + @sidebar-border-width * 2 + @content-width + @content-margin * 2); 
+@page-width: (@sidebar-width + @sidebar-padding * 2 + @sidebar-border-width * 2 + @content-width + @content-margin * 2); 
 
 
 /* --- Layouts -------------------------------------------------------------- */
@@ -58,14 +58,10 @@
 #layout_sidebar {
     background: inherit;
     border-left: 1px dashed @brand-color-darker;
-    max-width: @infobox-width;
-    width: @infobox-width;
-    min-width: @infobox-width;
-    padding: @infobox-padding;
-}
-
-#layout_infobox {
-    width: @infobox-width;
+    max-width: @sidebar-width;
+    width: @sidebar-width;
+    min-width: @sidebar-width;
+    padding: @sidebar-padding;
 }
 
 #layout_wrapper {

@@ -86,13 +86,6 @@ if ($navigation) {
                 <?= implode(PageLayout::getMessages()) ?>
                 <?= $content_for_layout ?>
             </div>
-            <? if ($infobox) : ?>
-            <div id="layout_sidebar">
-                <div id="layout_infobox">
-                    <?= is_array($infobox) ? $this->render_partial('infobox/infobox_generic_content', $infobox) : $infobox ?>
-                </div>
-            </div>
-            <? endif ?>
         </div>
     </div> <? // Closes #layout_page opened in included templates/header.php ?>
 
