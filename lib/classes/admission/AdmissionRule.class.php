@@ -155,6 +155,7 @@ abstract class AdmissionRule
             if (is_dir($GLOBALS['STUDIP_BASE_PATH'] . DIRECTORY_SEPARATOR . $current['path'])) {
                 StudipAutoloader::addAutoloadPath($GLOBALS['STUDIP_BASE_PATH'] . DIRECTORY_SEPARATOR . $current['path']);
                 try {
+                    StudipAutoloader::loadClass($className);
                     $rule = new $className();
                     $rules[$className] = array(
                             'id' => $current['id'],
