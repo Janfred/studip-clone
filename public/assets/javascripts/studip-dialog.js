@@ -473,7 +473,7 @@
                     element = $('<a class="ui-dialog-titlebar-wiki" target="_blank">').attr('href', link).attr('title', tooltip);
 
                 if (options.wikilink === undefined || options.wikilink !== false) {
-                    $(this).siblings('.ui-dialog-titlebar').find('.ui-dialog-titlebar-close').before(element);
+                    $(this).siblings('.ui-dialog-titlebar').addClass('with-wiki-link').find('.ui-dialog-titlebar-close').before(element);
                 }
 
                 instance.open = true;

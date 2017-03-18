@@ -7425,6 +7425,7 @@ form.settings-avatar footer {
 .ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-dialog-buttonset {
   text-align: center;
   float: none;
+  white-space: nowrap;
 }
 .ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button {
   background: white;
@@ -7540,6 +7541,10 @@ form.settings-avatar footer {
 }
 .ui-dialog .ui-dialog-title {
   margin-right: 48px;
+}
+.ui-dialog .with-wiki-link .ui-dialog-title {
+  box-sizing: border-box;
+  padding-right: 24px;
 }
 .studip-dialog-centered .ui-dialog-content {
   -webkit-box-sizing: border-box;
