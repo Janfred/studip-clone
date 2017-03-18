@@ -43,7 +43,7 @@ class Ilias3ConnectedCMS extends ConnectedCMS
     */
     function __construct($cms)
     {
-        global $ELEARNING_INTERFACE_MODULES, $RELATIVE_PATH_ELEARNING_INTERFACE, $RELATIVE_PATH_SOAP;
+        global $ELEARNING_INTERFACE_MODULES, $RELATIVE_PATH_ELEARNING_INTERFACE;
 
         parent::__construct($cms);
 
