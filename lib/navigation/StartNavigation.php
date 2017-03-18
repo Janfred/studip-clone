@@ -41,8 +41,11 @@ class StartNavigation extends Navigation
                     SELECT COUNT(*)
                     FROM questionnaire_assignments
                         INNER JOIN questionnaires ON (questionnaires.questionnaire_id = questionnaire_assignments.questionnaire_id)
+                    LEFT JOIN object_user_visits b ON (b.object_id = questionnaires.questionnaire_id AND b.user_id = :user_id AND b.type = 'vote')
+
                     WHERE questionnaire_assignments.range_id = 'start'
-                        AND questionnaires.chdate > :threshold
+                        AND questionnaires.chdate > IFNULL(b.visitdate, :threshold)
+                        AND questionnaires.user_id <> :user_id
                         AND questionnaires.startdate IS NOT NULL AND questionnaires.startdate < UNIX_TIMESTAMP()
                 AND (
                     ((questionnaires.stopdate IS NULL OR questionnaires.stopdate > UNIX_TIMESTAMP()) AND questionnaires.resultvisibility = 'always')
@@ -50,7 +53,8 @@ class StartNavigation extends Navigation
                (questionnaires.stopdate IS NOT NULL AND questionnaires.stopdate < UNIX_TIMESTAMP() AND questionnaires.resultvisibility <> 'never')
                )
                 ");
-                $statement->execute(array('threshold' => $threshold));
+                $statement->execute(array('threshold' => $threshold,
+                    ':user_id' => $GLOBALS['user']->id));
                 $vote = (int) $statement->fetchColumn();
 
                 $query = "SELECT COUNT(IF(chdate > IFNULL(b.visitdate, :threshold) AND d.author_id != :user_id, a.eval_id, NULL))
