@@ -29,7 +29,6 @@ if (Course::findCurrent()) {
 }
 ?>
 
-<? var_dump(Navigation::getItem('/course/admin')); ?>
 <ul class="boxed-grid">
 <? foreach (Navigation::getItem('/course/admin') as $name => $nav): ?>
     <? if ($nav->isVisible() && $name != 'main'): ?>

@@ -112,16 +112,19 @@ class NotificationCenter
      *
      * @throws NotificationVetoException  on observer veto
      */
-    public static function postNotification($event, $object, $user_data = NULL)
+    public static function postNotification($event, $object, $user_data = null)
     {
-        foreach (array('', $event) as $e) {
-            if (isset(self::$observers[$e])) {
-                foreach (self::$observers[$e] as $list) {
-                    if (!$list['predicate'] || $list['predicate']($object)) {
-                        call_user_func($list['observer'], $event, $object, $user_data);
-                    }
-                }
+        $current_observers = [];
+        foreach (self::$observers as $e => $l) {
+            if ($e === '' || $e === $event || strpos($event, $e) !== false) {
+                $current_observers = array_merge($current_observers, $l);
+            }
+        }
+        foreach ($current_observers as $list) {
+            if (!$list['predicate'] || $list['predicate']($object)) {
+                call_user_func($list['observer'], $event, $object, $user_data);
             }
         }
     }
+
 }

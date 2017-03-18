@@ -250,11 +250,32 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
         } elseif (count($config['pk']) === 1) {
             $config['registered_callbacks']['before_store'][] = 'cbAutoKeyCreation';
         }
+
+        $auto_notification_map['after_create'] = $class . 'DidCreate';
+        $auto_notification_map['after_store'] = $class . 'DidStore';
+        $auto_notification_map['after_delete'] = $class . 'DidDelete';
+        $auto_notification_map['after_update'] = $class . 'DidUpdate';
+        $auto_notification_map['before_create'] = $class . 'WillCreate';
+        $auto_notification_map['before_store'] = $class . 'WillStore';
+        $auto_notification_map['before_delete'] = $class . 'WillDelete';
+        $auto_notification_map['before_update'] = $class . 'WillUpdate';
+
+        foreach ($auto_notification_map as $cb => $notification) {
+            if (isset($config['notification_map'][$cb])) {
+                if (mb_strpos($config['notification_map'][$cb], $notification) !== false) {
+                    $config['notification_map'][$cb] .= ' ' . $notification;
+                }
+            } else {
+                $config['notification_map'][$cb] = $notification;
+            }
+        }
+
         if (is_array($config['notification_map'])) {
             foreach (array_keys($config['notification_map']) as $cb) {
                 $config['registered_callbacks'][$cb][] = 'cbNotificationMapper';
             }
         }
+
         if (I18N::isEnabled()) {
             if (count($config['i18n_fields'])) {
                 $config['registered_callbacks']['before_store'][] = 'cbI18N';
@@ -1759,9 +1780,6 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
         }
         $rel_ret = $this->storeRelations();
         $this->applyCallbacks('after_store');
-        if ($ret) {
-            NotificationCenter::postNotification("SimpleORMapDidStore", $this);
-        }
         if ($ret || $rel_ret) {
             $this->restore();
         }
@@ -1869,9 +1887,6 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
             }
             $this->is_deleted = true;
             $this->applyCallbacks('after_delete');
-            if ($ret) {
-                NotificationCenter::postNotification("SimpleORMapDidDelete", $this);
-            }
         }
         $this->setData(array(), true);
         return $ret;

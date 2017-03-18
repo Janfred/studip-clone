@@ -47,20 +47,6 @@ class PersonalNotifications extends SimpleORMap
         $config['db_table'] = 'personal_notifications';
         $config['additional_fields']['more_unseen'] = true;
 
-        $config['notification_map'] = array(
-            'after_create'  => 'PersonalNotificationsDidCreate',
-            'before_create' => 'PersonalNotificationsWillCreate',
-
-            'after_delete'  => 'PersonalNotificationsDidDelete',
-            'before_delete' => 'PersonalNotificationsWillDelete',
-
-            'after_store'   => 'PersonalNotificationsDidStore',
-            'before_store'  => 'PersonalNotificationsWillStore',
-
-            'after_update'  => 'PersonalNotificationsDidUpdate',
-            'before_update' => 'PersonalNotificationsWillUpdate'
-        );
-
         $config['registered_callbacks']['after_store'][] = 'cbExpireCache';
         $config['registered_callbacks']['before_delete'][] = 'cbExpireCache';
 

@@ -405,12 +405,6 @@ class User extends AuthUserMd5
             }
         }
 
-        $config['notification_map']['after_create'] = 'UserDidCreate';
-        $config['notification_map']['after_store'] = 'UserDidUpdate';
-        $config['notification_map']['after_delete'] = 'UserDidDelete';
-        $config['notification_map']['before_create'] = 'UserWillCreate';
-        $config['notification_map']['before_store'] = 'UserWillUpdate';
-        $config['notification_map']['before_delete'] = 'UserWillDelete';
         parent::configure($config);
     }
 

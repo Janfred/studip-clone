@@ -43,8 +43,6 @@ class LogEvent extends SimpleORMap
             'class_name' => 'User',
             'foreign_key' => 'user_id',
         );
-        $config['notification_map']['after_create'] = 'LogEventDidCreate';
-        $config['notification_map']['before_create'] = 'LogEventWillCreate';
         parent::configure($config);
     }
 

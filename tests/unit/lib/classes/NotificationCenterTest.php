@@ -228,6 +228,28 @@ class NotificationCenterTest extends PHPUnit_Framework_TestCase
         NotificationCenter::removeObserver($wildcard);
     }
 
+    public function testLikeObserver()
+    {
+        // prepare fixtures
+        $user_data = array(42);
+        $subject = new stdClass();
+
+        // register observer
+        $wildcard = $this->getMock("Observer");
+        $wildcard->expects($this->once())->method('update')->with('foobar', $subject, $user_data);
+
+        NotificationCenter::addObserver($wildcard, 'update', 'foo');
+
+
+        // expect notication
+        NotificationCenter::postNotification('foobar', $subject, $user_data);
+
+        NotificationCenter::postNotification('tafkap', $subject, $user_data);
+
+        // remove observer
+        NotificationCenter::removeObserver($wildcard);
+    }
+
     function assertMatchingNotification($matcher, $subject)
     {
         // register observer

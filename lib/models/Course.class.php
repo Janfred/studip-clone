@@ -197,12 +197,8 @@ class Course extends SimpleORMap
 
         $config['additional_fields']['end_time'] = true;
 
-        $config['notification_map']['after_create'] = 'CourseDidCreateOrUpdate CourseDidCreate';
-        $config['notification_map']['after_store'] = 'CourseDidCreateOrUpdate CourseDidUpdate';
-        $config['notification_map']['before_create'] = 'CourseWillCreate';
-        $config['notification_map']['before_store'] = 'CourseWillUpdate';
-        $config['notification_map']['after_delete'] = 'CourseDidDelete';
-        $config['notification_map']['before_delete'] = 'CourseWillDelete';
+        $config['notification_map']['after_create'] = 'CourseDidCreateOrUpdate';
+        $config['notification_map']['after_store'] = 'CourseDidCreateOrUpdate';
 
         $config['i18n_fields']['name'] = true;
         $config['i18n_fields']['untertitel'] = true;

@@ -20,6 +20,7 @@ require_once 'lib/classes/StudipArrayObject.class.php';
 require_once 'lib/classes/MultiDimArrayObject.class.php';
 require_once 'lib/classes/CSVArrayObject.class.php';
 require_once 'lib/classes/JSONArrayObject.class.php';
+require_once 'lib/classes/NotificationCenter.class.php';
 
 
 
@@ -34,6 +35,8 @@ class auth_user_md5 extends SimpleORMap
         $config['additional_fields']['additional']['set'] = function ($record, $field, $data) {return $record->additional_dummy_data = $data;};
         $config['serialized_fields']['csvdata'] = 'CSVArrayObject';
         $config['serialized_fields']['jsondata'] = 'JSONArrayObject';
+        $config['notification_map']['after_store'] = 'auth_user_md5DidCreateOrUpdate';
+
         parent::configure($config);
     }
 
@@ -263,5 +266,24 @@ class SimpleOrMapNodbTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($stored);
         $this->assertEquals(3, $a->id);
         $this->assertEquals('before_store', $callback_was_here);
+    }
+
+    /**
+     * @depends testConstruct
+     */
+    public function testNotification($a)
+    {
+        $callback_was_here = null;
+        $cb = function ($type, $record) use (&$callback_was_here)
+        {
+            $callback_was_here = $type;
+            $record->id = 3;
+            throw new NotificationVetoException('veto');
+        };
+        NotificationCenter::addObserver($cb, '__invoke', 'auth_user_md5WillStore', $a);
+        $stored = $a->store();
+        $this->assertFalse($stored);
+        $this->assertEquals(3, $a->id);
+        $this->assertEquals('auth_user_md5WillStore', $callback_was_here);
     }
 }

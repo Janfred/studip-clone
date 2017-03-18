@@ -416,20 +416,6 @@ class StudipNews extends SimpleORMap {
             'foreign_key' => 'user_id',
         );
 
-        $config['notification_map'] = array(
-            'after_create'  => 'NewsDidCreate',
-            'before_create' => 'NewsWillCreate',
-
-            'after_delete'  => 'NewsDidDelete',
-            'before_delete' => 'NewsWillDelete',
-
-            'after_store'   => 'NewsDidStore',
-            'before_store'  => 'NewsWillStore',
-
-            'after_update'  => 'NewsDidUpdate',
-            'before_update' => 'NewsWillUpdate'
-        );
-
         parent::configure($config);
     }
 
