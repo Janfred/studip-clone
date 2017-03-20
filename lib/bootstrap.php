@@ -164,7 +164,7 @@ namespace {
         $GLOBALS['ASSETS_URL'] = $ABSOLUTE_URI_STUDIP . $GLOBALS['ASSETS_URL'];
     }
 
-    StudipFileloader::load('config_local.inc.php', $GLOBALS, compact('STUDIP_BASE_PATH', 'ABSOLUTE_URI_STUDIP', 'ASSETS_URL'));
+    StudipFileloader::load('config.php', $GLOBALS, compact('STUDIP_BASE_PATH', 'ABSOLUTE_URI_STUDIP', 'ASSETS_URL'));
 
     require 'config.inc.php';
 
