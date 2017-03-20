@@ -39,7 +39,7 @@ $DB_STUDIP_SLAVE_DATABASE = "studip-slave";
 
 
 // absolute filesystem path to the plugin packages
-$PLUGINS_PATH = $STUDIP_BASE_PATH . 'public/plugins_packages';
+$PLUGINS_PATH = $STUDIP_BASE_PATH . '/public/plugins_packages';
 
 // absolute filesystem path to the plugin assets
 $PLUGIN_ASSETS_PATH = $STUDIP_BASE_PATH . '/data/assets_cache';
