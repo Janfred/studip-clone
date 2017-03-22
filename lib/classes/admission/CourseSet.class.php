@@ -347,9 +347,12 @@ class CourseSet
      * @param String $courseSetId
      * @return Array
      */
-    public static function getCoursesByCourseSetId($courseSetId) {
-        $stmt = DBManager::get()->prepare("SELECT seminar_id FROM `seminar_courseset`
-            WHERE courseset_id=?");
+    public static function getCoursesByCourseSetId($courseSetId)
+    {
+        $query = "SELECT `seminar_id`
+                  FROM `seminar_courseset`
+                  WHERE `set_id` = ?";
+        $stmt = DBManager::get()->prepare($query);
         $stmt->execute(array($courseSetId));
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
