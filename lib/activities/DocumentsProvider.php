@@ -97,22 +97,22 @@ class DocumentsProvider implements ActivityProvider
             $mkdate = $document_info['chdate'];
         }
 
-
-        $activity = Activity::create(
-            array(
-                'provider'     => __CLASS__,
-                'context'      => ($type == 'sem') ? 'course' : 'institute',
-                'context_id'   => $course_id,
-                'content'      => $summary,
-                'actor_type'   => 'user',      // who initiated the activity?
-                'actor_id'     => $user_id,    // id of initiator
-                'verb'         => $verb,       // the activity type
-                'object_id'    => $file_id,    // the id of the referenced object
-                'object_type'  => 'documents', // type of activity object
-                'mkdate'       =>  $mkdate
-            )
-        );
-
+        if (isset($verb)) {
+            $activity = Activity::create(
+                array(
+                    'provider'     => __CLASS__,
+                    'context'      => ($type == 'sem') ? 'course' : 'institute',
+                    'context_id'   => $course_id,
+                    'content'      => $summary,
+                    'actor_type'   => 'user',      // who initiated the activity?
+                    'actor_id'     => $user_id,    // id of initiator
+                    'verb'         => $verb,       // the activity type
+                    'object_id'    => $file_id,    // the id of the referenced object
+                    'object_type'  => 'documents', // type of activity object
+                    'mkdate'       =>  $mkdate
+                )
+            );
+        }
     }
 
     /**
