@@ -49,12 +49,12 @@ class StudipLitImportPluginEndNote extends StudipLitImportPluginAbstract {
         if ($suche && $ersetze && $data)
                         $data = preg_replace($suche, $ersetze, $data);
 
-        if (!$domTree = @domxml_open_mem($data)) {
-                        // parent::addError("error","Error 5: while parsing the document");
-                        libxml_disable_entity_loader($this->loadEntities);
-                        $this->addError("error","Error 5: while parsing the document");
-                        return FALSE;
-                }
+        if (!$domTree = DomDocument::loadXML($data)) {
+            // parent::addError("error","Error 5: while parsing the document");
+            libxml_disable_entity_loader($this->loadEntities);
+            $this->addError("error","Error 5: while parsing the document");
+            return FALSE;
+        }
         return $domTree;
     }
     
@@ -62,8 +62,8 @@ class StudipLitImportPluginEndNote extends StudipLitImportPluginAbstract {
         global $auth, $_msg;
             $msg = &$_msg;
             if ($domTree) {
-                    $records = $domTree->get_elements_by_tagname("record");
-                    if (count($records)==0) $records = $domTree->get_elements_by_tagname("RECORD");
+                    $records = $domTree->getElementsByTagname("record");
+                    if (count($records)==0) $records = $domTree->getElementsByTagname("RECORD");
 
             $fields_arr = array();
 
@@ -74,55 +74,55 @@ class StudipLitImportPluginEndNote extends StudipLitImportPluginAbstract {
                             $dates = "";
 
                             $child = $record;
-                            $ref_type = $child->get_elements_by_tagname("ref-type");
-                            if (count($ref_type)==0) $ref_type = $child->get_elements_by_tagname("REF-TYPE");
+                            $ref_type = $child->getElementsByTagName("ref-type");
+                            if (count($ref_type)==0) $ref_type = $child->getElementsByTagName("REF-TYPE");
                             foreach ($ref_type as $r)
-                                    $fields["dc_type"] = $r->get_attribute("name");
+                                    $fields["dc_type"] = $r->getAttribute("name");
 
-                            $titles = $child->get_elements_by_tagname("title");
-                            if (count($titles)==0) $titles = $child->get_elements_by_tagname("TITLE");
+                            $titles = $child->getElementsByTagName("title");
+                            if (count($titles)==0) $titles = $child->getElementsByTagName("TITLE");
                             foreach ($titles as $t)
-                                    $fields["dc_title"] .= $t->get_content().",";
+                                    $fields["dc_title"] .= $t->textContent.",";
 
-                            $authors = $child->get_elements_by_tagname("author");
-                            if (count($authors)==0) $authors = $child->get_elements_by_tagname("AUTHOR");
+                            $authors = $child->getElementsByTagName("author");
+                            if (count($authors)==0) $authors = $child->getElementsByTagName("AUTHOR");
                             foreach ($authors as $a)
-                                    $fields["dc_creator"] .= $a->get_content().",";
+                                    $fields["dc_creator"] .= $a->textContent.",";
 
-                            $keywords = $child->get_elements_by_tagname("keyword");
-                            if (count($keywords)==0) $keywords = $child->get_elements_by_tagname("KEYWORD");
+                            $keywords = $child->getElementsByTagName("keyword");
+                            if (count($keywords)==0) $keywords = $child->getElementsByTagName("KEYWORD");
                             foreach ($keywords as $k)
-                                    $fields["dc_subject"] .= $k->get_content().",";
-                            $notes = $child->get_elements_by_tagname("notes");
-                            if (count($notes)==0) $notes = $child->get_elements_by_tagname("NOTES");
+                                    $fields["dc_subject"] .= $k->textContent.",";
+                            $notes = $child->getElementsByTagName("notes");
+                            if (count($notes)==0) $notes = $child->getElementsByTagName("NOTES");
                             foreach ($notes as $n)
-                                    $fields["dc_subject"] .= $n->get_content().",";
+                                    $fields["dc_subject"] .= $n->textContent.",";
 
-                            $publisher = $child->get_elements_by_tagname("publisher");
-                            if (count($publisher)==0) $publisher = $child->get_elements_by_tagname("PUBLISHER");
+                            $publisher = $child->getElementsByTagName("publisher");
+                            if (count($publisher)==0) $publisher = $child->getElementsByTagName("PUBLISHER");
                             foreach ($publisher as $p)
-                                    $fields["dc_publisher"] .= $p->get_content().",";
+                                    $fields["dc_publisher"] .= $p->textContent.",";
 
-                            $pub_loc = $child->get_elements_by_tagname("pub-location");
-                            if (count($pub_loc)==0) $pub_loc = $child->get_elements_by_tagname("PUB-LOCATION");
+                            $pub_loc = $child->getElementsByTagName("pub-location");
+                            if (count($pub_loc)==0) $pub_loc = $child->getElementsByTagName("PUB-LOCATION");
                             foreach ($pub_loc as $p)
-                                    $fields["dc_publisher"] .= " ".$p->get_content().",";
+                                    $fields["dc_publisher"] .= " ".$p->textContent.",";
 
-                            $isbn = $child->get_elements_by_tagname("isbn");
-                            if (count($isbn)==0) $isbn = $child->get_elements_by_tagname("ISBN");
+                            $isbn = $child->getElementsByTagName("isbn");
+                            if (count($isbn)==0) $isbn = $child->getElementsByTagName("ISBN");
                             foreach ($isbn as $i)
-                                    $fields["dc_identifier"] .= " ISBN: ".$i->get_content().",";
-                            $issn = $child->get_elements_by_tagname("issn");
-                            if (count($issn)==0) $issn = $child->get_elements_by_tagname("ISSN");
+                                    $fields["dc_identifier"] .= " ISBN: ".$i->textContent.",";
+                            $issn = $child->getElementsByTagName("issn");
+                            if (count($issn)==0) $issn = $child->getElementsByTagName("ISSN");
                             foreach ($issn as $i)
-                                    $fields["dc_identifier"] .= " ISSN: ".$i->get_content().",";
+                                    $fields["dc_identifier"] .= " ISSN: ".$i->textContent.",";
 
-                            $years = $child->get_elements_by_tagname("year");
-                            if (count($years)==0) $years = $child->get_elements_by_tagname("YEAR");
+                            $years = $child->getElementsByTagName("year");
+                            if (count($years)==0) $years = $child->getElementsByTagName("YEAR");
                             foreach ($years as $y) {
-                                    // $fields["dc_date"] = mktime(0, 0, 0, 1, 1, date("Y",$y->get_content()));
-                                    $fields["dc_date"] = $y->get_content()."-01-01";
-                                    $dates .= $y->get_content().",";
+                                    // $fields["dc_date"] = mktime(0, 0, 0, 1, 1, date("Y",$y->textContent));
+                                    $fields["dc_date"] = $y->textContent."-01-01";
+                                    $dates .= $y->textContent.",";
                             }
  
                             if ($fields["dc_identifier"]) $fields["dc_identifier"] = utf8_decode(mb_substr($fields["dc_identifier"],0,-1));
@@ -143,4 +143,3 @@ class StudipLitImportPluginEndNote extends StudipLitImportPluginAbstract {
 
     }
 }
-?>

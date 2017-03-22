@@ -44,7 +44,7 @@ class StudipLitImportPluginGenericXML extends StudipLitImportPluginAbstract {
     function parse($data){
         // Disable entity load
         $this->loadEntities = libxml_disable_entity_loader(true);
-        $domTree = @domxml_open_mem($data);
+        $domTree = DomDocument::loadXML($data);
         if (!is_object($domTree)) {
            libxml_disable_entity_loader($this->loadEntities);
             $this->addError("error","Error 5: while parsing the document");
@@ -57,8 +57,8 @@ class StudipLitImportPluginGenericXML extends StudipLitImportPluginAbstract {
         global $auth, $_msg;
         $msg = &$_msg;
         if ($domTree) {
-            $records = $domTree->get_elements_by_tagname("eintrag");
-            if (count($records)==0) $records = $domTree->get_elements_by_tagname("EINTRAG");
+            $records = $domTree->getElementsByTagName("eintrag");
+            if (count($records)==0) $records = $domTree->getElementsByTagName("EINTRAG");
             
             $fields_arr = array();
             
@@ -70,41 +70,41 @@ class StudipLitImportPluginGenericXML extends StudipLitImportPluginAbstract {
                 
                 $child = $record;
                 
-                $titles = $child->get_elements_by_tagname("titel");
-                if (count($titles)==0) $titles = $child->get_elements_by_tagname("TITEL");
+                $titles = $child->getElementsByTagName("titel");
+                if (count($titles)==0) $titles = $child->getElementsByTagName("TITEL");
                 foreach ($titles as $t)
-                    $fields["dc_title"] .= $t->get_content().",";
+                    $fields["dc_title"] .= $t->textContent.",";
                 
-                $authors = $child->get_elements_by_tagname("autor");
-                if (count($authors)==0) $authors = $child->get_elements_by_tagname("AUTOR");
+                $authors = $child->getElementsByTagName("autor");
+                if (count($authors)==0) $authors = $child->getElementsByTagName("AUTOR");
                 foreach ($authors as $a)
-                    $fields["dc_creator"] .= $a->get_content().";";
+                    $fields["dc_creator"] .= $a->textContent.";";
                 
-                $description = $child->get_elements_by_tagname("beschreibung");
-                if (count($description)==0) $description = $child->get_elements_by_tagname("BESCHREIBUNG");
+                $description = $child->getElementsByTagName("beschreibung");
+                if (count($description)==0) $description = $child->getElementsByTagName("BESCHREIBUNG");
                 foreach ($description as $d)
-                    $fields["dc_subject"] .= $d->get_content().",";
+                    $fields["dc_subject"] .= $d->textContent.",";
                 
-                $publisher = $child->get_elements_by_tagname("herausgeber");
-                if (count($publisher)==0) $publisher = $child->get_elements_by_tagname("HERAUSGEBER");
+                $publisher = $child->getElementsByTagName("herausgeber");
+                if (count($publisher)==0) $publisher = $child->getElementsByTagName("HERAUSGEBER");
                 foreach ($publisher as $p)
-                    $fields["dc_publisher"] .= $p->get_content().",";
+                    $fields["dc_publisher"] .= $p->textContent.",";
                 
-                $pub_loc = $child->get_elements_by_tagname("ort");
-                if (count($pub_loc)==0) $pub_loc = $child->get_elements_by_tagname("ORT");
+                $pub_loc = $child->getElementsByTagName("ort");
+                if (count($pub_loc)==0) $pub_loc = $child->getElementsByTagName("ORT");
                 foreach ($pub_loc as $p)
-                    $fields["dc_publisher"] .= " ".$p->get_content().",";
+                    $fields["dc_publisher"] .= " ".$p->textContent.",";
                 
-                $isbn = $child->get_elements_by_tagname("isbn");
-                if (count($isbn)==0) $isbn = $child->get_elements_by_tagname("ISBN");
+                $isbn = $child->getElementsByTagName("isbn");
+                if (count($isbn)==0) $isbn = $child->getElementsByTagName("ISBN");
                 foreach ($isbn as $i)
-                    $fields["dc_identifier"] .= " ISBN: ".$i->get_content().",";
+                    $fields["dc_identifier"] .= " ISBN: ".$i->textContent.",";
                 
-                $years = $child->get_elements_by_tagname("jahr");
-                if (count($years)==0) $years = $child->get_elements_by_tagname("JAHR");
+                $years = $child->getElementsByTagName("jahr");
+                if (count($years)==0) $years = $child->getElementsByTagName("JAHR");
                 foreach ($years as $y) {
-                    $fields["dc_date"] = $y->get_content()."-01-01";
-                    $dates .= $y->get_content().",";
+                    $fields["dc_date"] = $y->textContent."-01-01";
+                    $dates .= $y->textContent.",";
                 }
                 
                 if ($fields["dc_identifier"]) $fields["dc_identifier"] = utf8_decode(mb_substr($fields["dc_identifier"],0,-1));
@@ -125,4 +125,4 @@ class StudipLitImportPluginGenericXML extends StudipLitImportPluginAbstract {
         
     }
 }
-?>
+

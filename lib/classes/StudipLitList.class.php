@@ -285,7 +285,7 @@ class StudipLitList extends TreeAbstract {
             $this->view->params[] = (isset($fields['visibility'])) ? $fields['visibility'] : (int)$this->tree_data[$list_id]['visibility'];
             $this->view->params[] = $list_id;
             $rs = $this->view->get_query("view:LIT_INS_LIST");
-            NotificationCenter::postNotification('LitListDidCreate', array('range_id' => $this->range_id ,'name' => $this->tree_data[$list_id]['name']));
+            NotificationCenter::postNotification('LitListDidCreate', array('range_id' => $this->range_id ,'name' => $fields['name']));
             return $rs->affected_rows();
         } else {
             return false;
