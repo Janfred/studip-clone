@@ -232,11 +232,12 @@ MVV.Search = {
             type: 'POST',
             success:function(d){
                 if (_.isNull(d.name)) {
-                    jQuery('#studiengang_id_1').attr('placeholder',
+                    jQuery('#fach_id_1').attr('placeholder',
                         "Keine Angabe beim Fach".toLocaleString());
                 } else {
-                    jQuery('#studiengang_id_1').attr('value', d.name);
-                    jQuery('#studiengang_id_1').attr('placeholder', d.name);
+                    jQuery('#fach_id_1').attr('value', d.name);
+                    jQuery('#fach_id_1').attr('aria-label', d.name);
+                    jQuery('#fach_id_1').attr('placeholder', d.name);
                 }
                 if (_.isNull(d.name_en)) {
                     jQuery('#name_en').attr('placeholder',

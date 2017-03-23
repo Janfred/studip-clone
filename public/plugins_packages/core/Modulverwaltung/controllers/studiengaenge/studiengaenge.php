@@ -132,11 +132,42 @@ class Studiengaenge_StudiengaengeController extends MVVController
             if ($this->studiengang->isNew()) {
                 $this->reset_search('Studiengang');
             }
-            $this->studiengang->name =
+            
+            
+            //Special handling for names and short names:
+            //These can be copied from a "fach" object, if such an object
+            //has been selected via the quick search element.
+            //In such a case the studiengang_id parameter contains a MD5 sum
+            //instead of text.
+            
+            $fach_id = Request::get('fach_id');
+            $this->fach = null;
+            
+            //check, if fach_id contains a MD5 sum:
+            if(preg_match('/[a-f0-9]{32}/', $fach_id)) {
+                //We have a MD5 sum of a "fach":
+                //Lookup the "fach" object in the database:
+                $this->fach = Fach::find($fach_id);
+            }
+            
+            if($this->fach) {
+                //"fach" object exists: use its value
+                //for the names and short names of the "studiengang"
+                $this->studiengang->name = $this->fach->name;
+                $this->studiengang->name_en = $this->fach->name_en;
+                $this->studiengang->name_kurz = $this->fach->name_kurz;
+                $this->studiengang->name_kurz_en = $this->fach->name_kurz_en;
+            } else {
+                //No "fach" object has been found:
+                //Use the entered names and short names
+                $this->studiengang->name =
                     trim(Request::get('studiengang_id_parameter'));
-            $this->studiengang->name_en = trim(Request::get('name_en'));
-            $this->studiengang->name_kurz = trim(Request::get('name_kurz'));
-            $this->studiengang->name_kurz_en = trim(Request::get('name_kurz_en'));
+                $this->studiengang->name_en = trim(Request::get('name_en'));
+                $this->studiengang->name_kurz = trim(Request::get('name_kurz'));
+                $this->studiengang->name_kurz_en = trim(Request::get('name_kurz_en'));
+            }
+            
+            
             $this->studiengang->abschluss_id = Request::option('abschluss_id');
             $this->studiengang->beschreibung = trim(Request::get('beschreibung'));
             $this->studiengang->beschreibung_en = trim(Request::get('beschreibung_en'));
@@ -180,7 +211,7 @@ class Studiengaenge_StudiengaengeController extends MVVController
         $query = 'SELECT fach_id, name FROM '
                 . 'fach WHERE name LIKE :input ';
         $search = new SQLSearch($query, $quicksearchText, 'fach_id');
-        $this->search = QuickSearch::get('studiengang_id', $search)
+        $this->search = QuickSearch::get('fach_id', $search)
                     ->defaultValue($this->studiengang->name,
                         $this->studiengang->name)
                     ->noSelectbox()
