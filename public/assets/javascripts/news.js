@@ -21,6 +21,11 @@ STUDIP.News = {
 
         jQuery('#' + id + ' form').on('submit', function (event) {
             event.preventDefault();
+            var w = STUDIP.wysiwyg;
+            if (w && !w.disabled) {
+                var textarea = jQuery('textarea.news_body');
+                textarea.val(w.markAsHtml(textarea.val()));
+            }
             var button = jQuery(this).data('clicked').attr('name');
             var form_route = jQuery(this).attr('action');
             var form_data = jQuery(this).serialize() + '&' + button + '=1';
