@@ -167,7 +167,7 @@ class Course_TimesroomsController extends AuthenticatedController
                     continue;
                 }
 
-                if ($sem->beginn > $val->date || $sem->ende < $val->date || isset($val->metadate_id)) {
+                if ($sem->beginn > $val->date || $sem->ende < $val->date || $val->metadate_id != '') {
                     continue;
                 }
 
@@ -299,7 +299,7 @@ class Course_TimesroomsController extends AuthenticatedController
 
         $time_changed = ($date != $termin->date || $end_time != $termin->end_time);
         //time changed for regular date. create normal singledate and cancel the regular date
-        if ($termin->metadate_id && $time_changed) {
+        if ($termin->metadate_id != '' && $time_changed) {
             $termin_values = $termin->toArray();
             $termin_info   = $termin->getFullname();
 
