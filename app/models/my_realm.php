@@ -606,11 +606,11 @@ class MyRealmModel
                 LEFT JOIN object_user_visits ON(object_user_visits.object_id = questionnaires.questionnaire_id AND object_user_visits.user_id = :user_id AND object_user_visits.type = 'vote')
             WHERE questionnaire_assignments.range_id = :course_id
                 AND questionnaire_assignments.range_type IN ('course', 'institute')
-                AND questionnaires.startdate IS NOT NULL AND questionnaires.startdate < UNIX_TIMESTAMP()
+                AND questionnaires.startdate IS NOT NULL
+                AND questionnaires.startdate <= UNIX_TIMESTAMP()
                 AND (
-                    ((questionnaires.stopdate IS NULL OR questionnaires.stopdate > UNIX_TIMESTAMP()) AND questionnaires.resultvisibility = 'always')
-                OR 
-               (questionnaires.stopdate IS NOT NULL AND questionnaires.stopdate < UNIX_TIMESTAMP() AND questionnaires.resultvisibility <> 'never')
+                    questionnaires.stopdate IS NULL
+                    OR questionnaires.stopdate > UNIX_TIMESTAMP()
                )
             GROUP BY questionnaire_assignments.range_id
         ");
