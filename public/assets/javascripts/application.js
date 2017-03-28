@@ -348,3 +348,10 @@ jQuery(document).on('dialog-update', function (event, data) {
         }
     }
 })(window.print);
+
+/* Change open-variable on course-basicdata*/
+(function ($) {
+    $(document).on('click', 'form[name=course-details] fieldset legend', function () {
+        $('#open_variable').attr('value', $(this).parent('fieldset').data('open'));
+    });
+}(jQuery))

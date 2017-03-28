@@ -20,11 +20,11 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
     <?= MessageBox::{$message_types[$msg[0]]}($msg[1]) ?>
 <? endforeach ?>
 
-<form name="details" method="post" action="<?= $controller->url_for('course/basicdata/set', $course_id) ?>" <?= $dialog_attr ?> class="default collapsable">
+<form name="course-details" name="details" method="post" action="<?= $controller->url_for('course/basicdata/set', $course_id) ?>" <?= $dialog_attr ?> class="default collapsable">
     <?= CSRFProtection::tokenTag() ?>
     <input id="open_variable" type="hidden" name="open" value="<?= $flash['open'] ?>">
 
-    <fieldset>
+    <fieldset <?= isset($flash['open']) && $flash['open'] != 'bd_basicsettings' ? 'class="collapsed"' : ''?> data-open="bd_basicsettings">
         <legend><?= _('Grundeinstellungen') ?></legend>
 
 <? if (!$attributes): ?>
@@ -54,7 +54,7 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
         </label>
     </fieldset>
 
-    <fieldset class="collapsed">
+    <fieldset <?= !isset($flash['open']) || $flash['open'] != 'inset' ? 'class="collapsed"' : ''?> data-open="bd_inst">
         <legend><?= _('Einrichtungen') ?></legend>
 
 <? if (!$institutional): ?>
@@ -77,7 +77,7 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
 <? endif; ?>
     </fieldset>
 
-    <fieldset class="collapsed">
+    <fieldset <?= !isset($flash['open']) || $flash['open'] != 'bd_personal' ? 'class="collapsed"' : ''?>>
         <legend><?= _('Personal') ?></legend>
 
         <table class="default">
@@ -289,8 +289,7 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
             </tbody>
         </table>
     </fieldset>
-
-    <fieldset class="collapsed">
+    <fieldset <?= !isset($flash['open']) || $flash['open'] != 'bd_description' ? 'class="collapsed"' : ''?> data-open="bd_description">
         <legend><?= _('Beschreibungen') ?></legend>
 
 <? if (!$descriptions): ?>
