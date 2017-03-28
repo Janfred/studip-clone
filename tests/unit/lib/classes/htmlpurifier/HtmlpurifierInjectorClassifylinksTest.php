@@ -34,6 +34,14 @@ require_once 'lib/classes/htmlpurifier/HTMLPurifier_Injector_ClassifyLinks.php';
  */
 class HTMLPurifier_Injector_ClassifyLinksTest extends PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        $config = new Config([
+            'CONVERT_IDNA_URL' => false,
+        ]);
+        Config::set($config);
+    }
+
     /**
      * @dataProvider dataProvider
      */
@@ -102,5 +110,10 @@ class HTMLPurifier_Injector_ClassifyLinksTest extends PHPUnit_Framework_TestCase
                 $a($url('net', 'index.php'), $in, 'Main Page')
             ),
         );
+    }
+
+    public function tearDown()
+    {
+        Config::set(null);
     }
 }

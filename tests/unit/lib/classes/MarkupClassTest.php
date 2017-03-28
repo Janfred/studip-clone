@@ -34,7 +34,7 @@ require_once 'lib/classes/Markup.class.php';
 
 # Seminar_Session cannot be mocked since it uses static functions.
 # Also, including phplib_local.inc.php, where Seminar_Session is
-# defined, introduces a massive amount of dependencies that are otherwise 
+# defined, introduces a massive amount of dependencies that are otherwise
 # completely unneeded for testing the Markup class.
 # Instead, create a fake class.
 # => But note, this will fail if another test case does the same thing!

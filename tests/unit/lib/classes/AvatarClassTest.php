@@ -30,7 +30,7 @@ class AvatarTestCase extends PHPUnit_Framework_TestCase {
 
     function setUp()
     {
-        $stub = $this->getMock('Seminar_Perm');
+        $stub = $this->createMock('Seminar_Perm');
         // Configure the stub.
         $stub->expects($this->any())
             ->method('have_perm')

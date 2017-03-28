@@ -113,7 +113,7 @@ class SqueezePackagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->conf["compress"] = TRUE;
         $packager = new Packager($this->conf);
-        $compressor = $this->getMock("\Studip\Squeeze\Compressor",
+        $compressor = $this->createMock("\Studip\Squeeze\Compressor",
                                      array(), array(array()));
         $compressor
             ->expects($this->once())

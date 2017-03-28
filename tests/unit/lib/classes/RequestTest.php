@@ -33,7 +33,11 @@ class RequestTest extends PHPUnit_Framework_TestCase
             $_GET  = Request::addslashes($_GET);
             $_POST = Request::addslashes($_POST);
         }
-        Config::get()->USERNAME_REGULAR_EXPRESSION = '/^([a-zA-Z0-9_@.-]{4,})$/';
+
+        $testconfig = new Config([
+            'USERNAME_REGULAR_EXPRESSION' => '/^([a-zA-Z0-9_@.-]{4,})$/',
+        ]);
+        Config::set($testconfig);
     }
 
     public function testURL ()
@@ -182,6 +186,11 @@ class RequestTest extends PHPUnit_Framework_TestCase
     {
         $this->assertFalse(Request::submittedSome('null', 'null'));
         $this->assertTrue(Request::submittedSome('null', 's', 'v'));
+    }
+
+    public function tearDown()
+    {
+        Config::set(null);
     }
 }
 

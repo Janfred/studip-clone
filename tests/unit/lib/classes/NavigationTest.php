@@ -184,7 +184,7 @@ class NavigationNotificationTest extends PHPUnit_Framework_TestCase
         $navigation = new Navigation('test');
         Navigation::addItem('/test', $navigation);
 
-        $observer = $this->getMock("NotificationObserver");
+        $observer = $this->createMock("NotificationObserver");
         $observer->expects($this->once())
             ->method('update')
             ->with($this->equalTo('NavigationDidActivateItem'),
