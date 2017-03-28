@@ -4375,6 +4375,16 @@ input.quicksearchbox {
 .ui-autocomplete {
   z-index: 99999;
 }
+.QuickSearchSelect {
+  width: calc(100% - 32px);
+}
+.QuickSearchSelect + input[type=submit] {
+  float: none;
+  margin-left: 0px;
+  height: 30px;
+  background-color: #7E92B0;
+  background-position: center center;
+}
 #institute_result {
   background: #e7ebf1;
   border-top: 1px solid #28497c;

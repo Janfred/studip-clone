@@ -11,9 +11,12 @@ if ($withButton) : ?>
 <? endif ?>
 <? endif ?>
 <select<? foreach ($withAttributes as $attr_name => $attr_value) {
-              print ' '.$attr_name.'="'.$attr_value.'"';
-          }
-          ?> name="<?= $name ?>">
+        if($attr_name != 'class') {
+            //The class attribute is handled below!
+            print ' '.$attr_name.'="'.$attr_value.'"';
+        }
+    }
+    ?> name="<?= $name ?>" class="QuickSearchSelect <?= array_key_exists('class', $withAttributes) ? htmlReady($withAttributes['class']) : '' ?>">
 <? if (count($searchresults)) : ?>
   <? foreach ($searchresults as $result) : ?>
   <option value="<?= htmlReady($result[0]) ?>"><?= htmlReady($result[1]) ?></option>
