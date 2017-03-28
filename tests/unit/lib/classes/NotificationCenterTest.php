@@ -38,7 +38,7 @@ class NotificationCenterTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->observer = $this->createMock("Observer");
+        $this->observer = $this->getMock("Observer");
         $this->subject = new stdClass();
 
         NotificationCenter::addObserver($this->observer, 'update', NULL);
@@ -95,7 +95,7 @@ class NotificationCenterTest extends PHPUnit_Framework_TestCase
     {
         $this->observer->expects($this->exactly(4))->method('update');
 
-        $observer = $this->createMock("Observer");
+        $observer = $this->getMock("Observer");
         NotificationCenter::removeObserver($observer);
         NotificationCenter::postNotification('foo', $this->subject);
     }
@@ -215,7 +215,7 @@ class NotificationCenterTest extends PHPUnit_Framework_TestCase
         $subject = new stdClass();
 
         // register observer
-        $wildcard = $this->createMock("Observer");
+        $wildcard = $this->getMock("Observer");
         $wildcard->expects($this->once())->method('update')->with('foo', $subject, $user_data);
 
         NotificationCenter::addObserver($wildcard, 'update', NULL);
@@ -235,7 +235,7 @@ class NotificationCenterTest extends PHPUnit_Framework_TestCase
         $subject = new stdClass();
 
         // register observer
-        $wildcard = $this->createMock("Observer");
+        $wildcard = $this->getMock("Observer");
         $wildcard->expects($this->once())->method('update')->with('foobar', $subject, $user_data);
 
         NotificationCenter::addObserver($wildcard, 'update', 'foo');
@@ -253,7 +253,7 @@ class NotificationCenterTest extends PHPUnit_Framework_TestCase
     function assertMatchingNotification($matcher, $subject)
     {
         // register observer
-        $observer = $this->createMock("Observer");
+        $observer = $this->getMock("Observer");
         NotificationCenter::addObserver($observer, 'update',
                                         'SomeNotification', $matcher);
 
