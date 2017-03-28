@@ -809,11 +809,11 @@ class Course_TimesroomsController extends AuthenticatedController
         $duration = $this->course->duration_time;
         if ($duration == -1) { // course with endless lifespan
             $end_semester = Semester::findBySQL('beginn >= :beginn ORDER BY beginn',
-                                                array(':beginn' => $this->course->start_semester->beginn));
+                                                array(':beginn' => $this->course->getStartSemester()));
         } else if ($duration > 0) { // course over more than one semester
-            $end_semester = Semester::findBySQL('beginn >= :beginn AND ende <= :ende ORDER BY beginn',
-                                                array(':beginn' => $this->course->start_semester->beginn,
-                                                      ':ende'   => $this->course->getEndSemester() + $duration));
+            $end_semester = Semester::findBySQL('beginn >= :beginn AND beginn <= :ende ORDER BY beginn',
+                                                array(':beginn' => $this->course->getStartSemester(),
+                                                      ':ende'   => $this->course->getEndSemester()));
         } else { // one semester course
             $end_semester[] = $this->course->start_semester;
         }
