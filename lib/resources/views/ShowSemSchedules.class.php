@@ -201,7 +201,7 @@ class ShowSemSchedules extends ShowSchedules {
                 } else {
                     $add_info = '';
                 }
-                $schedule->addEvent('EB'.$num++.':' . $event->getName(get_config('RESOURCES_SCHEDULE_EXPLAIN_USER_NAME')), $event->getBegin(), $event->getEnd(),
+                $schedule->addEvent(null, 'EB'.$num++.':' . $event->getName(get_config('RESOURCES_SCHEDULE_EXPLAIN_USER_NAME')), $event->getBegin(), $event->getEnd(),
                         URLHelper::getLink('?cancel_edit_assign=1&quick_view='.$view.'&quick_view_mode='.$view_mode.'&edit_assign_object='.$event->getAssignId()), $add_info, $categories[$event->repeat_mode]);
             }
             $num_single_events = $assign_events->numberOfEvents();
@@ -297,7 +297,7 @@ class ShowSemSchedules extends ShowSchedules {
                         reset($assign_events->events);
                         $num = 1;
                         while($event = $assign_events->nextEvent()) {
-                            echo LinkButton::create(_('Eigenschaften'), URLHelper::getURL('?quick_view=' 
+                            echo LinkButton::create(_('Eigenschaften'), URLHelper::getURL('?quick_view='
                                 . $view . '&quick_view_mode=' . $view_mode . '&edit_assign_object=' . $event->getAssignId()));
                             printf ("&nbsp; <font size=-1>"._("%s ist von <b>%s</b> bis <b>%s</b>, belegt von <b>%s</b>")."</font><br>",'EB'.$num++, strftime("%A, %d.%m.%Y %H:%M", $event->getBegin()), strftime("%A, %d.%m.%Y %H:%M", $event->getEnd()), $event->getName());
                         }
