@@ -25,7 +25,7 @@ class JSONArrayObject extends MultiDimArrayObject
         if (is_string($input)) {
             $input = studip_utf8decode((array)json_decode($input, true));
         }
-        parent::__construct((array) $input);
+        parent::__construct($input);
     }
 
     /**
