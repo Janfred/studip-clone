@@ -271,7 +271,7 @@ class StudyAreasWizardStep implements CourseWizardStep
             } else {
                 $data = array(
                     'id' => $c->id,
-                    'name' => $utf ? studip_utf8encode($c->name) : $c->name,
+                    'name' => (string) ($utf ? studip_utf8encode($c->name) : $c->name),
                     'has_children' => $c->hasChildren(),
                     'parent' => $node->id,
                     'assignable' => $c->isAssignable(),
