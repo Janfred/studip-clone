@@ -1,7 +1,7 @@
 <?php
 /**
  * LockRules.class.php
- * 
+ *
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -30,7 +30,7 @@ class LockRules {
     /**
      * get lockrule object for given id
      * from static object pool
-     * 
+     *
      * @param string $lock_id id of lockrule
      * @return LockRule
      */
@@ -45,7 +45,7 @@ class LockRules {
     /**
      * returns a list of lockrules that can be administrated
      * with the given user id
-     * 
+     *
      * @param string $user_id id of user
      * @return array of LockRule objects
      */
@@ -59,7 +59,7 @@ class LockRules {
     /**
      * returns a list of lockrules that can be applied to a course
      * with the given user id
-     * 
+     *
      * @param string $user_id id of user
      * @return array of LockRule objects
      */
@@ -72,10 +72,10 @@ class LockRules {
 
     /**
      * returns the lock rule object for the given id, else null
-     * 
+     *
      * @param string $object_id id of course, institute or user
      * @param bool $renew if true, reloads the rule from database
-     * @return LockRule 
+     * @return LockRule
      */
     public static function getObjectRule($object_id, $renew = false)
     {
@@ -101,7 +101,7 @@ class LockRules {
     /**
      * checks if an attribute of an entity is locked for the current user
      * see self::getLockRuleConfig() for the list of attributes
-     * 
+     *
      * @param string $object_id id of course, institute or user
      * @param string $attribute the name of an lockable attribute
      * @return boolean true if attribute is locked for the current user
@@ -118,7 +118,7 @@ class LockRules {
 
     /**
      * checks if given entity is locked for the current user
-     * 
+     *
      * @param string $object_id id of course, institute or user
      * @return boolean true if given entity is locked fpr the current user
      */
@@ -146,7 +146,7 @@ class LockRules {
     /**
      * returns an array containing all lockable attributes for
      * given entity type
-     * 
+     *
      * @param string $type entity type, one of [sem,inst,user]
      * @return array
      */
@@ -182,6 +182,7 @@ class LockRules {
         $attributes['sem']['leistungsnachweis'] = array('name' => _("Leistungsnachweis"), 'group' => 'misc');
         $attributes['sem']['room_time'] = array('name' => _("Zeiten/Räume"), 'group' => 'room_time');
         $attributes['sem']['cancelled_dates'] = array('name' => _("Termine ausfallen lassen"), 'group' => 'room_time');
+        $attributes['sem']['edit_dates_in_schedule'] = array('name' => _("Erweiterte Termindaten im Ablaufplan ändern"), 'group' => 'room_time');
         $attributes['sem']['admission_endtime'] = array('name' => _("Zeit/Datum der Platzverteilung/Kontingentierung"), 'group' => 'access');
         $attributes['sem']['admission_disable_waitlist'] = array('name' => _("Aktivieren/Deaktivieren der Warteliste"), 'group' => 'access');
         $attributes['sem']['admission_binding'] = array('name' => _("Verbindlichkeit der Anmeldung"), 'group' => 'access');

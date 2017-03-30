@@ -98,6 +98,10 @@ class Course_DatesController extends AuthenticatedController
                 $this->date->range_id,
                 'cancelled_dates'
             );
+            $this->metadata_locked = LockRules::Check(
+                $this->date->range_id,
+                'edit_dates_in_schedule'
+            );
             $this->dates_locked = LockRules::Check(
                 $this->date->range_id,
                 'room_time'

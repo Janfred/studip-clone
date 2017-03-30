@@ -5,7 +5,7 @@
         <legend><?= _('Art des Termins') ?></legend>
 
         <label>
-            <select name="dateType">
+            <select name="dateType" <?=$metadata_locked ? 'disabled' : ''?>>>
             <? foreach ($GLOBALS['TERMIN_TYP'] as $key => $val): ?>
                 <option value="<?= htmlReady($key) ?>" <? if ($date->date_typ == $key) echo 'selected'; ?>>
                     <?= htmlReady($val['name']) ?>
@@ -35,7 +35,7 @@
     </fieldset>
 
 <? if (count($teachers) > 1): ?>
-    <fieldset class="studip-selection" data-attribute-name="assigned_teachers">
+    <fieldset class="studip-selection <?= $metadata_locked ? 'disabled' : ''?>" data-attribute-name="assigned_teachers">
         <legend><?= _('Durchführende Lehrende') ?></legend>
 
         <section class="studip-selection-selected">
@@ -89,7 +89,7 @@
 <? endif; ?>
 
 <? if (count($groups) > 0): ?>
-    <fieldset class="studip-selection" data-attribute-name="assigned_groups">
+    <fieldset class="studip-selection <?= $metadata_locked ? 'disabled' : ''?>" data-attribute-name="assigned_groups">
         <legend><?= _('Beteiligte Gruppen') ?></legend>
 
         <section class="studip-selection-selected">
@@ -134,8 +134,10 @@
 <? endif; ?>
 
     <footer data-dialog-button>
-    <? if (!$dates_locked): ?>
-        <?= Studip\Button::createAccept(_('Speichern')); ?>
+        <? if (!$metadata_locked): ?>
+            <?= Studip\Button::createAccept(_('Speichern')); ?>
+        <? endif; ?>
+        <? if (!$dates_locked): ?>
         <?= Studip\LinkButton::create(
             _('Termin bearbeiten'),
             $controller->url_for('course/timesrooms', ['raumzeitFilter' => 'all'])

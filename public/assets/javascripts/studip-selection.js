@@ -11,7 +11,7 @@
         return list.find('ul:first');
     }
 
-    $(document).on('click', '.studip-selection li:not(.empty-placeholder)', function () {
+    $(document).on('click', '.studip-selection:not(.disabled) li:not(.empty-placeholder)', function () {
         var remove    = $(this).is('.studip-selection-selected li'),
             item_id   = $(this).data().selectionId,
             attr_name = $(this).closest('.studip-selection').data().attributeName || 'selected',
