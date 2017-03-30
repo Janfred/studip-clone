@@ -70,7 +70,7 @@
                               ]),
                               ['data-dialog' => 'size=auto']
                           )
-                          ->conditionAll(!$is_locked)
+                          ->condition(!($is_participants_locked || $is_locked))
                           ->addMultiPersonSearch(
                               MultiPersonSearch::get('add_statusgroup_member' . $group->id)
                                   ->setTitle(_('Personen hinzufügen'))
@@ -87,6 +87,7 @@
                                   ->addQuickfilter(_('Keiner Gruppe zugeordnete Personen'),
                                                 $no_group ? $no_group['members']->pluck('user_id') : array())
                           )
+                          ->conditionAll(!$is_locked)
                           ->addLink(
                               $controller->url_for('course/statusgroups/edit', $group->id),
                               _('Bearbeiten'),

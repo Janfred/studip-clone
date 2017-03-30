@@ -41,7 +41,8 @@ class Course_StatusgroupsController extends AuthenticatedController
         $this->is_autor  = $perm->have_studip_perm('autor', $this->course_id);
 
         // Check lock rules
-        $this->is_locked = LockRules::Check($this->course_id, 'participants');
+        $this->is_locked = LockRules::Check($this->course_id, 'groups');
+        $this->is_participants_locked = LockRules::Check($this->course_id, 'participants');
 
         PageLayout::setTitle(sprintf('%s - %s', Course::findCurrent()->getFullname(), _('Gruppen')));
 
@@ -54,6 +55,13 @@ class Course_StatusgroupsController extends AuthenticatedController
     {
         PageLayout::addSqueezePackage('statusgroups');
         Navigation::activateItem('/course/members/statusgroups');
+
+        if ($this->is_locked && $this->is_tutor) {
+            $lockdata = LockRules::getObjectRule($this->course_id);
+            if ($lockdata['description']) {
+                PageLayout::postMessage(MessageBox::info(formatLinks($lockdata['description'])));
+            }
+        }
 
         // Sorting as given by Request parameters
         $this->sort_by = Request::option('sortby', 'nachname');
