@@ -1290,7 +1290,7 @@ if ($view == "view_schedule" || $view == "openobject_schedule") {
         $_SESSION['resources_data']["schedule_week_offset"] = 0;
         $startTime = explode('.', Request::get('startTime'));
         $_SESSION['resources_data']["schedule_start_time"] = mktime (0,0,0,$startTime[1], $startTime[0], $startTime[2]);
-        if (Request::submitted('start_list') || (Request::submitted('jump') && ($_SESSION['resources_data']["schedule_mode"] == "list"))) {
+        if (Request::submitted('start_list') || Request::submitted('export_list') || (Request::submitted('jump') && ($_SESSION['resources_data']["schedule_mode"] == "list"))) {
             $_SESSION['resources_data']["schedule_mode"] = "list";
             if ($_SESSION['resources_data']["schedule_start_time"] < 1)
                 $_SESSION['resources_data']["schedule_start_time"] = mktime (0, 0, 0, date("n", time()), date("j", time()), date("Y", time()));

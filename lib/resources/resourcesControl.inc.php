@@ -162,6 +162,25 @@ if ((getGlobalPerms($user->id) == 'admin') || ($perm->have_perm('root'))) {
     $resources_nav->addSubNavigation('settings', $navigation);
 }
 
+/*****************************************************************************
+Belegungen exportieren, views: export_list
+/*****************************************************************************/
+if (Request::submitted('export_list')) {
+    require_once ($RELATIVE_PATH_RESOURCES."/views/ShowSchedules.class.php");
+    if ($_SESSION['resources_data']["actual_object"]) {
+        $ViewSchedules=new ShowSchedules($_SESSION['resources_data']["actual_object"]);
+        $ViewSchedules->setStartTime($_SESSION['resources_data']["schedule_start_time"]);
+        $ViewSchedules->setEndTime($_SESSION['resources_data']["schedule_end_time"]);
+        $ViewSchedules->setLengthFactor($_SESSION['resources_data']["schedule_length_factor"]);
+        $ViewSchedules->setLengthUnit($_SESSION['resources_data']["schedule_length_unit"]);
+        $ViewSchedules->setWeekOffset($_SESSION['resources_data']["schedule_week_offset"]);
+        $ViewSchedules->exportScheduleList();
+        $_SESSION['resources_data'] = serialize($_SESSION['resources_data']);
+        page_close();
+        die();
+    }
+}
+
 //load content, text, pictures and stuff
 include ("lib/resources/views/page_intros.inc.php");
 //save messages from

@@ -144,6 +144,7 @@ class ShowSchedules
                         <option <? if ($this->length_unit  == "y") echo "selected" ?> value="y"><?=_("Jahre(e)")?></option>
                     </select>
                     <?= Button::create(_('Als Liste ausgeben'), 'start_list') ?>
+                    <?= Button::create(_('Liste exportieren'), 'export_list') ?>
                 </td>
             </tr>
             <tr>
@@ -154,6 +155,36 @@ class ShowSchedules
             </tr>
         </table>
     <?
+    }
+
+    public function exportScheduleList()
+    {
+        $room = ResourceObject::Factory($this->resource_id);
+        $name = preg_replace('/\W/', '_', $room->getName());
+        $stdout = fopen('php://output', 'w');
+        $assign_events = new AssignEventList($this->start_time, $this->end_time, $this->resource_id, '', '', true);
+
+        header('Content-Type: text/csv; charset=windows-1252');
+        header('Content-Disposition: attachment; filename="' . $name . '.csv"');
+        header('Pragma: public');
+
+        while ($event = $assign_events->nextEvent()) {
+            $date_begin = strftime('%d.%m.%Y %H:%M', $event->getBegin());
+            $date_end   = strftime('%d.%m.%Y %H:%M', $event->getEnd());
+            $sem_nr     = '';
+            $info       = trim($event->getName(get_config('RESOURCES_SCHEDULE_EXPLAIN_USER_NAME')));
+
+            if ($event->getOwnerType() == 'date') {
+                $sem_obj = Seminar::GetInstance(Seminar::GetSemIdByDateId($event->getAssignUserId()));
+                $sem_nr = $sem_obj->getNumber();
+                $date = new SingleDate($event->getAssignUserId());
+                $dozenten = array_intersect_key($sem_obj->getMembers('dozent'), array_flip($date->getRelatedPersons()));
+                $sem_doz_names = array_map(create_function('$a', 'return $a["Nachname"];'), array_slice($dozenten,0,3, true));
+                $info .= ' (' . join(', ' , $sem_doz_names) . ')';
+            }
+
+            fputcsv($stdout, array($date_begin, $date_end, $sem_nr, $info), ';');
+        }
     }
 
     public function showScheduleList($print_view = false)
