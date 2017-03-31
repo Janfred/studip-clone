@@ -35,6 +35,7 @@
 	<xsl:variable name="zusatzangaben" select="exsl:node-set($collect-zusatzangaben)/entry"/>
 
   <xsl:template match="/">
+		<xsl:text>Anrede;</xsl:text>
 		<xsl:text>Titel;</xsl:text>
 		<xsl:text>Vorname;</xsl:text>
 		<xsl:text>Nachname;</xsl:text>
@@ -78,6 +79,10 @@
 	<xsl:template name="showperson">
 		<xsl:for-each select="person">
 			<xsl:text>"</xsl:text>
+
+			<xsl:if test="geschlecht = 1">Herr</xsl:if>
+			<xsl:if test="geschlecht = 2">Frau</xsl:if>
+			<xsl:text>";"</xsl:text>
 
 			<xsl:if test="titel">
 				<xsl:value-of select="str:replace(titel,'&quot;','&quot;&quot;')"/>

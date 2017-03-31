@@ -36,6 +36,7 @@
 
 	<xsl:template match="/">
 		<xsl:text>Position;</xsl:text>
+		<xsl:text>Anrede;</xsl:text>
 		<xsl:text>Titel;</xsl:text>
 		<xsl:text>Vorname;</xsl:text>
 		<xsl:text>Nachname;</xsl:text>
@@ -82,6 +83,10 @@
 			<xsl:if test="position_warteliste">
 				<xsl:value-of select="position_warteliste"/>
 			</xsl:if>
+			<xsl:text>";"</xsl:text>
+
+			<xsl:if test="geschlecht = 1">Herr</xsl:if>
+			<xsl:if test="geschlecht = 2">Frau</xsl:if>
 			<xsl:text>";"</xsl:text>
 
 			<xsl:if test="titel">
