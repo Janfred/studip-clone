@@ -362,7 +362,7 @@ function getResourceObjectCategory($id)
     return $statement->fetchColumn() ?: false;
 }
 
-function getMyRoomRequests($user_id = '', $semester_id = null, $only_not_closed = true, $single_request = null, $sem_type = null, $faculty = null, $tagged = null)
+function getMyRoomRequests($user_id = '', $semester_id = null, $only_not_closed = true, $single_request = null, $sem_type = null, $faculty = null, $tagged = null, $regular = null)
 {
     global $user;
 
@@ -391,6 +391,9 @@ function getMyRoomRequests($user_id = '', $semester_id = null, $only_not_closed 
         }
         if ($tagged) {
             $criteria .= " AND NOT EXISTS (SELECT * FROM resources_requests_user_status WHERE resources_requests_user_status.request_id=rr.request_id AND resources_requests_user_status.user_id=".DBManager::get()->quote($user_id).") ";
+        }
+        if ($regular) {
+            $criteria .= " AND EXISTS (SELECT * FROM termine WHERE range_id=rr.seminar_id AND date > UNIX_TIMESTAMP() AND metadate_id IS NOT NULL AND metadate_id != '') "; 
         }
     }
 

@@ -626,7 +626,7 @@ Roomplanning
 /*****************************************************************************/
 if ($view == "requests_start") {
     require_once "lib/resources/views/ShowToolsRequests.class.php";
-    $toolReq=new ShowToolsRequests($_SESSION['resources_data']["sem_schedule_semester_id"],$_SESSION['resources_data']["resolve_requests_no_time"],$_SESSION['resources_data']["resolve_requests_sem_type"],$_SESSION['resources_data']["resolve_requests_faculty"], $_SESSION['resources_data']["resolve_requests_tagged"]);
+    $toolReq=new ShowToolsRequests($_SESSION['resources_data']["sem_schedule_semester_id"],$_SESSION['resources_data']["resolve_requests_no_time"],$_SESSION['resources_data']["resolve_requests_sem_type"],$_SESSION['resources_data']["resolve_requests_faculty"], $_SESSION['resources_data']["resolve_requests_tagged"], $_SESSION['resources_data']["resolve_requests_regular"]);
     $toolReq->showToolStart();
 }
 
@@ -639,7 +639,7 @@ if ($view == "edit_request") {
 
 if ($view == "list_requests") {
         require_once "lib/resources/views/ShowToolsRequests.class.php";
-        $toolReq=new ShowToolsRequests($_SESSION['resources_data']["sem_schedule_semester_id"],$_SESSION['resources_data']["resolve_requests_no_time"],$_SESSION['resources_data']["resolve_requests_sem_type"],$_SESSION['resources_data']["resolve_requests_faculty"], $_SESSION['resources_data']["resolve_requests_tagged"]);
+        $toolReq=new ShowToolsRequests($_SESSION['resources_data']["sem_schedule_semester_id"],$_SESSION['resources_data']["resolve_requests_no_time"],$_SESSION['resources_data']["resolve_requests_sem_type"],$_SESSION['resources_data']["resolve_requests_faculty"], $_SESSION['resources_data']["resolve_requests_tagged"], $_SESSION['resources_data']["resolve_requests_regular"]);
         $toolReq->showRequestList();
 }
 if ($view == "view_requests_schedule") {

@@ -52,8 +52,9 @@ class ShowToolsRequests
     var $sem_type;
     var $faculty;
     var $tagged;
-    
-    public function __construct($semester_id, $resolve_requests_no_time = null, $sem_type = null, $faculty = null, $tagged = null)
+    var $regular;
+
+    public function __construct($semester_id, $resolve_requests_no_time = null, $sem_type = null, $faculty = null, $tagged = null, $regular = null)
     {
         $this->semester_id = $semester_id ?: SemesterData::GetSemesterIdByDate(time());
         if (!is_null($resolve_requests_no_time)) {
@@ -67,6 +68,9 @@ class ShowToolsRequests
         }
         if (!is_null($tagged)) {
             $this->tagged = $tagged;
+        }
+        if (!is_null($regular)) {
+            $this->regular = $regular;
         }
     }
     
@@ -97,7 +101,7 @@ class ShowToolsRequests
     public function restoreOpenRequests()
     {
         if (is_null($this->requests)) {
-            $this->requests = (array)getMyRoomRequests($GLOBALS['user']->id, $this->semester_id, true, null, $this->sem_type, $this->faculty, $this->tagged);//MOD_BREMEN
+            $this->requests = (array)getMyRoomRequests($GLOBALS['user']->id, $this->semester_id, true, null, $this->sem_type, $this->faculty, $this->tagged, $this->regular);//MOD_BREMEN
             foreach ($this->requests as $val) {
                 $this->requests_stats_open['sum'] += !$val["closed"] && ($val["have_times"] || $this->show_requests_no_time);
                 $this->requests_stats_open['my_res'] += !$val["closed"] && $val["my_res"] && ($val["have_times"] || $this->show_requests_no_time);
@@ -140,6 +144,7 @@ class ShowToolsRequests
         $template->display_sem_type  = $this->sem_type;//MOD_BREMEN
         $template->display_faculty   = $this->faculty;//MOD_BREMEN
         $template->display_tagged    = $this->tagged;//MOD_BREMEN
+        $template->display_regular   = $this->regular;
         $template->rooms             = $this->getMyRequestedRooms();
         echo $template->render();
     }

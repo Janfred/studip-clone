@@ -4,7 +4,7 @@
     <?= CSRFProtection::tokenTag() ?>
     <input type="hidden" name="view" value="edit_request">
 
-<table class="default" style="margin: 0 1%; width: 98%;">
+<table class="default nohover">
     <colgroup>
         <col width="4%">
         <col>
@@ -14,7 +14,7 @@
             <td>&nbsp;</td>
             <td>
 
-                <table border="0" cellpadding="2" cellspacing="2">
+                <table>
                     <tr>
                         <td>
                             <?= SemesterData::GetSemesterSelector(array(
@@ -88,7 +88,15 @@
                                        name="resolve_requests_tagged"
                                        type="checkbox" value="1"
                                        <? if ($display_tagged) echo 'checked'; ?>>
-                                <?= _('Anfragen die von mir als bearbeitet markiert sind ausblenden') ?>
+                                <?= _('Anfragen, die von mir als bearbeitet markiert sind, ausblenden') ?>
+                            </label>
+                            <br>
+                            <label>
+                                <input onchange="document.tools_requests_form.submit()"
+                                       name="resolve_requests_regular"
+                                       type="checkbox" value="1"
+                                       <? if ($display_regular) echo 'checked'; ?>>
+                                <?= _('Nur Veranstaltungen mit regelmäßigen Terminen einbeziehen') ?>
                             </label>
                         </td>
                     </tr>
