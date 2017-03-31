@@ -107,6 +107,7 @@ class ExternModuleTemplateLectures extends ExternModule {
         $markers['TemplateGeneric'][] = array('__GLOBAL__', _("Globale Variablen (gültig im gesamten Template)."));
         $markers['TemplateGeneric'][] = array('###LECTURES-COUNT###', '');
         $markers['TemplateGeneric'][] = array('###LECTURES-SUBSTITUTE-GROUPED-BY###', '');
+        $markers['TemplateGeneric'][] = array('###START_SEMESTER###', _('Name des Startsemesters'));
 
         $markers['TemplateGeneric'][] = array('<!-- BEGIN LECTURES -->', '');
 
@@ -248,6 +249,8 @@ class ExternSemBrowseTemplate extends SemBrowse {
 
         for (;$last_sem > $current_sem; $last_sem--)
             $this->sem_number[] = $last_sem - 1;
+
+        $this->start_sem = $current_sem;
 
         $semclasses = $this->module->config->getValue('Main', 'semclasses');
         foreach ($SEM_TYPE as $key => $type) {
@@ -423,6 +426,7 @@ class ExternSemBrowseTemplate extends SemBrowse {
             $content['__GLOBAL__']['LECTURES-COUNT'] = count($sem_data);
             $group_by_name = $this->module->config->getValue("Main", "aliasesgrouping");
             $content['__GLOBAL__']['LECTURES-SUBSTITUTE-GROUPED-BY'] = $group_by_name[$this->sem_browse_data['group_by']];
+            $content['__GLOBAL__']['START_SEMESTER'] = ExternModule::ExtHtmlReady($this->sem_dates[$this->start_sem]['name']);
 
             $i = 0;
             foreach ((array) $group_by_data as $group_field => $sem_ids) {
