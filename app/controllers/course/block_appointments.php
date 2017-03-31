@@ -52,7 +52,7 @@ class Course_BlockAppointmentsController extends AuthenticatedController
         }
         $this->linkAttributes   = array('fromDialog' => Request::int('fromDialog') ? 1 : 0);
         $this->start_ts         = strtotime('this monday');
-        $this->request          = $this->flash['request'];
+        $this->request          = $this->flash['request'] ?: $_SESSION['block_appointments'];
     }
 
     /**
@@ -134,6 +134,17 @@ class Course_BlockAppointmentsController extends AuthenticatedController
                 }
 
                 if (Request::submitted('save')) {
+                    // store last used values in session as defaults
+                    $_SESSION['block_appointments'] = [
+                        'block_appointments_start_day' =>  date('d.m.Y', $start_day),
+                        'block_appointments_end_day' =>    date('d.m.Y', $end_day),
+                        'block_appointments_start_time' => date('H:i', $start_time),
+                        'block_appointments_end_time' =>   date('H:i', $end_time),
+                        'block_appointments_termin_typ' => $termin_typ,
+                        'block_appointments_room_text' =>  $free_room_text,
+                        'block_appointments_date_count' => $date_count,
+                        'block_appointments_days' =>       $days
+                    ];
                     $dates_created = array_filter(array_map(function ($d) {
                         return $d->store() ? $d->getFullname() : null;
                     }, $dates));
