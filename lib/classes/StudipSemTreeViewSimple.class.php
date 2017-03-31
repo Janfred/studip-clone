@@ -70,8 +70,11 @@ class StudipSemTreeViewSimple {
         echo "\n<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
         echo "\n<tr><td class=\"table_row_odd\" align=\"left\" valign=\"top\" style=\"font-size:10pt;\">"
             . "<div style=\"font-size:10pt;margin-left:10px\"><b>" . _("Studienbereiche"). ":</b><br>". $this->getSemPath();
+        if ($this->tree->getValue($this->start_item_id, 'info')) {
+            echo '<div class="sem_path_info">' . formatReady($this->tree->getValue($this->start_item_id, 'info')) . '</div>';
+        }
         echo "</div></td>";
-        echo "<td nowrap class=\"table_row_odd\" align=\"right\" valign=\"bottom\" style=\"font-size:10pt;\">";
+        echo "<td nowrap class=\"table_row_odd\" align=\"right\" valign=\"top\" style=\"padding-top: 1em;\">";
         if ($this->start_item_id != "root"){
             echo "\n<a href=\"" .URLHelper::getLink($this->getSelf("start_item_id={$this->tree->tree_data[$this->start_item_id]['parent_id']}", false)) . "\">".
             Icon::create('arr_2left', 'clickable')->asImg(['class' => 'text-top', 'title' =>_('eine Ebene zurück')]). "</a>";
@@ -134,11 +137,11 @@ class StudipSemTreeViewSimple {
             }
         } else {
             if ($item_id == "root"){
-                $info = ($this->root_content) ? $this->root_content : _("Keine weitere Info vorhanden");
+                $info = $this->root_content;
             } else {
-                $info = ($this->tree->getValue($item_id, 'info')) ? $this->tree->getValue($item_id, 'info') :  _("Keine weitere Info vorhanden");
+                $info = $this->tree->getValue($item_id, 'info');
             }
-            $ret = tooltipicon(kill_format($info));
+            $ret = $info ? tooltipicon(kill_format($info)) : '';
         }
         return $ret;
     }
@@ -196,7 +199,9 @@ class StudipSemTreeViewSimple {
 
         }
         $ret .= "&nbsp;";
-        $ret .= $this->getInfoIcon($this->start_item_id);
+        if (!$this->tree->getValue($this->start_item_id, 'info')) {
+            $ret .= $this->getInfoIcon($this->start_item_id);
+        }
         return $ret;
     }
 
