@@ -379,6 +379,7 @@ $CASAbstractUserDataMapping_CONFIG = array();
 $STUDIP_AUTH_CONFIG_CAS = array("host" => "cas.studip.de",
                                         "port" => 8443,
                                         "uri"  => "cas",
+                                        "proxy"  => false,
                                         "cacert" => "/path/to/server/cert",
                                         "user_data_mapping_class" => "CASAbstractUserDataMapping",
                                         "user_data_mapping" => // map_args are dependent on your own data mapping class

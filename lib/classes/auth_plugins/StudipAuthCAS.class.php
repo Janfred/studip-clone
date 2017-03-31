@@ -11,6 +11,7 @@
 */
 
 require_once 'vendor/phpCAS/CAS.php';
+require_once 'lib/classes/cas/CAS_PGTStorage_Cache.php';
 
 class StudipAuthCAS extends StudipAuthSSO {
 
@@ -33,7 +34,13 @@ class StudipAuthCAS extends StudipAuthSSO {
         parent::__construct();
 
         if (Request::option('sso')) {
-            $this->cas = new CAS_Client(CAS_VERSION_2_0, false, $this->host, $this->port, $this->uri, false);
+            $this->cas = new CAS_Client(CAS_VERSION_2_0, $this->proxy, $this->host, $this->port, $this->uri, false);
+
+            if ($this->proxy) {
+                URLHelper::setBaseUrl($GLOBALS['ABSOLUTE_URI_STUDIP']);
+                $this->cas->setPGTStorage(new CAS_PGTStorage_Cache($this->cas));
+                $this->cas->setCallbackURL(URLHelper::getURL('dispatch.php/cas/proxy'));
+            }
 
             if (isset($this->cacert)) {
                 $this->cas->setCasServerCACert($this->cacert);
