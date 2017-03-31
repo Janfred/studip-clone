@@ -175,7 +175,10 @@ if ($type == 6) {
     }
     $filesize = $link_data['Content-Length'];
     if (!$filesize) $filesize = false;
-} elseif ($type != 5){
+} elseif ($type != 5) {
+    if (!file_exists($path_file)) {
+        throw new Exception(_('Fehler beim Laden der Inhalte der Datei'));
+    }
     $filesize = @filesize($path_file);
 } else {
     $filesize = mb_strlen($the_data);
