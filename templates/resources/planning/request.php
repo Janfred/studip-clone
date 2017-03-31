@@ -123,6 +123,9 @@
                                     <? if ($resObj->getOwnerId() == 'global')  : ?>
                                         [global]
                                     <? endif ?>
+                                    <? if ($resObj->getSeats() > 1) : ?>
+                                        <?= sprintf(_('- %d Plätze'), $resObj->getSeats()) ?>
+                                    <? endif ?>
                                 <? else : ?>
                                     <?= _('Es wurde kein Raum angefordert.'); ?>
                                 <? endif ?>
@@ -205,6 +208,9 @@
                                             if ($resObj->getOwnerId() == 'global') {
                                                 print ' [global]';
                                             }
+                                            if ($resObj->getSeats() > 1) {
+                                                printf(_('- %d Plätze'), $resObj->getSeats());
+                                            }
                                             ?>
                                         </td>
                                         <?
@@ -273,6 +279,9 @@
                                         print tooltipicon(_('Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:') . "\n" . $resObj->getPlainProperties(true), $resObj->getOwnerId() == 'global');
                                         if ($resObj->getOwnerId() == 'global') {
                                             print ' [global]';
+                                        }
+                                        if ($resObj->getSeats() > 1) {
+                                            printf(_('- %d Plätze'), $resObj->getSeats());
                                         }
                                         ?>
                                     </td>
@@ -353,6 +362,9 @@
                                         print tooltipicon(_('Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:') . "\n" . $resObj->getPlainProperties(true), $resObj->getOwnerId() == 'global');
                                         if ($resObj->getOwnerId() == 'global') {
                                             print ' [global]';
+                                        }
+                                        if ($resObj->getSeats() > 1) {
+                                            printf(_('- %d Plätze'), $resObj->getSeats());
                                         }
                                         ?>
                                     </td>

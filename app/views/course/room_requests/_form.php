@@ -106,17 +106,7 @@ if ($request_resource_id = $request->getResourceId()) :
                             <? if ($prop['system'] == 2) : ?>
                                 <input type="number" id="num_<?= $index ?>"
                                        name="request_property_val[<?= $prop["property_id"] ?>]"
-                                       value="<?= htmlReady($request->getPropertyState($prop["property_id"]))  ?>">
-                                <? if ($admission_turnout) : ?>
-                                    <br>
-                                    <label for="seats_are_admission_turnout">
-                                    <input id="seats_are_admission_turnout" type="checkbox"
-                                               name="seats_are_admission_turnout"
-                                        <?= ($request->getPropertyState($prop["property_id"]) == $admission_turnout && $admission_turnout > 0) ? "checked" : "" ?>>
-
-                                        <?= _('max. Teilnehmeranzahl übernehmen') ?>
-                                    </label>
-                                <? endif ?>
+                                       value="<?= htmlReady($request->getPropertyState($prop["property_id"]) ?: $admission_turnout ?: 10) ?>">
                             <? else : ?>
                                 <input id="num_<?= $index ?>" type="text" size="4" maxlength="4"
                                        name="request_property_val[<?= $prop["property_id"] ?>]"

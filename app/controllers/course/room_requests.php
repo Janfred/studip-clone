@@ -305,9 +305,7 @@ class Course_RoomRequestsController extends AuthenticatedController
                 $request_property_val = Request::getArray('request_property_val');
                 foreach ($request->getAvailableProperties() as $prop) {
                     if ($prop["system"] == 2) { //it's the property for the seat/room-size!
-                        if (Request::get('seats_are_admission_turnout') && $admission_turnout) {
-                            $request->setPropertyState($prop['property_id'], $admission_turnout);
-                        } else if (!Request::submitted('send_room_type')) {
+                        if (!Request::submitted('send_room_type')) {
                             $request->setPropertyState($prop['property_id'], abs($request_property_val[$prop['property_id']]));
                         }
                     } else {
