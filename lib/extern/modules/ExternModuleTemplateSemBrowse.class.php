@@ -122,6 +122,7 @@ class ExternModuleTemplateSemBrowse extends ExternModule {
             array('__GLOBAL__', _("Globale Variablen (gültig im gesamten Template).")),
             array('###CURRENT_SEMESTER###', _("Name des aktuellen Semesters")),
             array('###CURRENT_LEVEL_NAME###', _("Name der aktuelllen Ebene")),
+            array('###CURRENT_LEVEL_ID###', _("ID der aktuellen Ebene")),
             array('###CURRENT_LEVEL_INFO###', _("Infotext zur aktuellen Ebene")),
             array('###TREE_LEVEL_NAME_x###', _("Name der Ebene an Stelle x des Pfades")),
             array('###TREE_LEVEL_ID_x###', _("Interne ID der Ebene an Stelle x des Pfades")),
@@ -197,6 +198,7 @@ class ExternModuleTemplateSemBrowse extends ExternModule {
             array('###SUBLEVEL-HREF_x###', ''),
             array('###SUBLEVEL-HREF_SHOW_COURSES_x###', ''),
             array('###SUBLEVEL_NAME_x###', ''),
+            array('###SUBLEVEL_ID_x###', ''),
             array('###SUBLEVEL_COURSE_COUNT_x###', _("Anzahl der Veranstaltungen in der Ebene x (einschließlich Unterebenen)")),
             array('###SUBLEVEL_NO_x###', ''),
             array('###SUBLEVEL_INFO_x###', _("Weitere Informationen zur Ebene x")),
@@ -207,6 +209,7 @@ class ExternModuleTemplateSemBrowse extends ExternModule {
             array('###SUBLEVEL-HREF_x###', ''),
             array('###SUBLEVEL-HREF_SHOW_COURSES_x###', ''),
             array('###SUBLEVEL_NAME_x###', ''),
+            array('###SUBLEVEL_ID_x###', ''),
             array('###SUBLEVEL_COURSE_COUNT_x###', _("Anzahl der Veranstaltungen in der Ebene x (einschließlich Unterebenen)")),
             array('###SUBLEVEL_NO_x###', ''),
             array('<!-- END LINK_TO_COURSES_x -->', ''),
@@ -651,6 +654,7 @@ class ExternModuleTemplateSemBrowse extends ExternModule {
             }
             // set this as global marker in getContent()
             $this->global_markers['CURRENT_LEVEL_NAME'] = $tree->getValue($this->sem_browse_data['start_item_id'], 'name');
+            $this->global_markers['CURRENT_LEVEL_ID'] = $this->sem_browse_data['start_item_id'];
             /*
             if ($tree->isModuleItem($parents[$i]) && $studienmodulmanagement = PluginEngine::getPlugin('StudienmodulManagement')) {
                 $this->global_markers['CURRENT_LEVEL_NAME'] = $studienmodulmanagement->getModuleDescription($parents[$i], SemesterData::GetSemesterIdByIndex($this->sem_browse_data['sem']));
@@ -670,6 +674,7 @@ class ExternModuleTemplateSemBrowse extends ExternModule {
 
         $content['LEVEL_TREE']['SUBLEVELS_1'] = $this->getAllTreeLevelContent($tree, $this->sem_browse_data['start_item_id'], ($this->config->getValue('Main', 'countshowsublevels') ? $this->config->getValue('Main', 'countshowsublevels') : 0));
 
+        $content['__GLOBAL__'] = $this->global_markers;
         if ($tree->hasKids($this->sem_browse_data['start_item_id']) && ($num_entries = $tree->getNumEntries($this->sem_browse_data['start_item_id'], true))) {
             $content['__GLOBAL__']['COURSE_COUNT_SUBLEVELS'] = $num_entries;
             $content['__GLOBAL__']['COURSES_SUBLEVELS-HREF'] = $this->getLinkToSelf(array('start_item_id' => $this->sem_browse_data['start_item_id'], 'show_result' => '1', 'withkids' => '1', 'do_search' => '0'), true, 'LinkInternTree');
@@ -718,6 +723,7 @@ class ExternModuleTemplateSemBrowse extends ExternModule {
                 //  }
                     $level_content = array(
                             'SUBLEVEL_NAME_' . $level => ExternModule::ExtHtmlReady($tree->tree_data[$kid]['name']),
+                            'SUBLEVEL_ID_' . $level => $kid,
                             'SUBLEVEL_COURSE_COUNT_' . $level => $num_entries,
                             'SUBLEVEL_NO_' . $level => $count + 1,
                             'SUBLEVEL_INFO_' . $level => $info
@@ -746,7 +752,7 @@ class ExternModuleTemplateSemBrowse extends ExternModule {
 
     function getContentResult ($level_id = null) {
         global $_fullname_sql, $SEM_TYPE, $SEM_CLASS;
-        $content = null;
+        $content['__GLOBAL__'] = $this->global_markers;
         if (is_array($this->sem_browse_data['search_result']) && count($this->sem_browse_data['search_result'])) {
             list($group_by_data, $sem_data) = $this->getResult($level_id);
             if (count($sem_data)) {
@@ -760,7 +766,6 @@ class ExternModuleTemplateSemBrowse extends ExternModule {
                 $content['__GLOBAL__']['GROUP_BY_RANGE-HREF'] = $this->getLinkToSelf(array('group_by' => '1'), true);
                 $content['__GLOBAL__']['GROUP_BY_LECTURER-HREF'] = $this->getLinkToSelf(array('group_by' => '2'), true);
                 $content['__GLOBAL__']['GROUP_BY_INSTITUTE-HREF'] = $this->getLinkToSelf(array('group_by' => '4'), true);
-                $content['__GLOBAL__'] = array_merge($content['__GLOBAL__'], $this->global_markers);
                 $j = 0;
                 $semester = SemesterData::GetSemesterArray();
                 foreach ($group_by_data as $group_field => $sem_ids) {
