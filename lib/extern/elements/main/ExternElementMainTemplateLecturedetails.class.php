@@ -46,7 +46,7 @@ class ExternElementMainTemplateLecturedetails extends ExternElementMain {
     function __construct($module_name, &$data_fields, &$field_names, &$config) {
         $this->attributes = array(
                 'name', 'genericdatafields', 'rangepathlevel',
-                'nameformat', 'language'
+                'nameformat', 'dateformat', 'language'
         );
         $this->real_name = _("Grundeinstellungen");
         $this->description = _("In den Grundeinstellungen können Sie allgemeine Daten des Moduls ändern.");
@@ -61,6 +61,7 @@ class ExternElementMainTemplateLecturedetails extends ExternElementMain {
             "name" => "",
             "rangepathlevel" => "1",
             "nameformat" => "",
+            "dateformat" => '%d. %b. %Y',
             "language" => ""
         );
         
@@ -110,6 +111,13 @@ class ExternElementMainTemplateLecturedetails extends ExternElementMain {
                 _("Dr. Peter Meyer"), _("Meyer, Peter, Dr."));
         $table .= $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
         
+        $title = _("Datumsformat:");
+        $info = _("Wählen Sie, wie Datumsangaben formatiert werden sollen.");
+        $values = array("%d. %b. %Y", "%d.%m.%Y", "%d.%m.%y", "%d. %B %Y", "%m/%d/%y");
+        $names = array(_("25. Nov. 2003"), _("25.11.2003"), _("25.11.03"),
+                _("25. November 2003"), _("11/25/03"));
+        $table .= $edit_form->editOptionGeneric("dateformat", $title, $info, $values, $names);
+
         $title = _("Sprache:");
         $info = _("Wählen Sie eine Sprache für die Datumsangaben aus.");
         $values = array("", "de_DE", "en_GB");

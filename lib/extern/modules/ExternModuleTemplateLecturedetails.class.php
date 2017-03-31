@@ -59,6 +59,7 @@ class ExternModuleTemplateLecturedetails extends ExternModule {
                 'ReplaceTextSemType',
                 'LinkInternPersondetails' => 'LinkInternTemplate',
                 'TemplateLectureData' => 'TemplateGeneric',
+                'TemplateNews' => 'TemplateGeneric',
                 'TemplateStudipData' => 'TemplateGeneric'
         );
         $this->field_names = array
@@ -96,6 +97,7 @@ class ExternModuleTemplateLecturedetails extends ExternModule {
         $this->elements['LinkInternPersondetails']->real_name = _("Verlinkung zum Modul MitarbeiterInnendetails");
         $this->elements['LinkInternPersondetails']->link_module_type = array(2, 14);
         $this->elements['TemplateLectureData']->real_name = _("Haupttemplate");
+        $this->elements['TemplateNews']->real_name = _("Template für News");
         $this->elements['TemplateStudipData']->real_name = _("Template für statistische Daten aus Stud.IP");
 
     }
@@ -105,6 +107,7 @@ class ExternModuleTemplateLecturedetails extends ExternModule {
 
         $this->updateGenericDatafields('TemplateLectureData', 'sem');
         $this->elements['TemplateLectureData']->markers = $this->getMarkerDescription('TemplateLectureData');
+        $this->elements['TemplateNews']->markers = $this->getMarkerDescription('TemplateNews');
         $this->elements['TemplateStudipData']->markers = $this->getMarkerDescription('TemplateStudipData');
 
         return parent::toStringEdit($open_elements, $post_vars, $faulty_values, $anker);
@@ -166,6 +169,7 @@ class ExternModuleTemplateLecturedetails extends ExternModule {
 
         $this->insertDatafieldMarkers('sem', $markers, 'TemplateLectureData');
 
+        $markers['TemplateLectureData'][] = array('###NEWS###', _("Inhalt aus dem Template für News"));
         $markers['TemplateLectureData'][] = array('###STUDIP-DATA###', 'Inhalt aus dem Template für statistische Daten aus Stud.IP');
 
         $markers['TemplateLectureData'][] = array('<!-- BEGIN RANGE-PATHES -->', '');
@@ -175,6 +179,28 @@ class ExternModuleTemplateLecturedetails extends ExternModule {
         $markers['TemplateLectureData'][] = array('<!-- END RANGE-PATHES -->', '');
 
         $markers['TemplateLectureData'][] = array('<!-- END LECTUREDETAILS -->');
+
+        $markers['TemplateNews'][] = array('<!-- BEGIN NEWS -->', '');
+        $markers['TemplateNews'][] = array('<!-- BEGIN NO-NEWS -->', '');
+        $markers['TemplateNews'][] = array('###NEWS_NO-NEWS-TEXT###', '');
+        $markers['TemplateNews'][] = array('<!-- END NO-NEWS -->', '');
+        $markers['TemplateNews'][] = array('<!-- BEGIN ALL-NEWS -->', '');
+        $markers['TemplateNews'][] = array('<!-- BEGIN SINGLE-NEWS -->', '');
+        $markers['TemplateNews'][] = array('###NEWS_TOPIC###', '');
+        $markers['TemplateNews'][] = array('###NEWS_BODY###', '');
+        $markers['TemplateNews'][] = array('###NEWS_DATE###', '');
+        $markers['TemplateNews'][] = array('###NEWS_ADMIN-MESSAGE###', '');
+        $markers['TemplateNews'][] = array('###NEWS_NO###', '');
+        $markers['TemplateNews'][] = array('###FULLNAME###', _("Vollständiger Name des Autors."));
+        $markers['TemplateNews'][] = array('###LASTNAME###', _("Nachname des Autors."));
+        $markers['TemplateNews'][] = array('###FIRSTNAME###', _("Vorname des Autors."));
+        $markers['TemplateNews'][] = array('###TITLEFRONT###', _("Titel des Autors (vorangestellt)."));
+        $markers['TemplateNews'][] = array('###TITLEREAR###', _("Titel des Autors (nachgestellt)."));
+        $markers['TemplateNews'][] = array('###PERSONDETAIL-HREF###', '');
+        $markers['TemplateNews'][] = array('###USERNAME###', '');
+        $markers['TemplateNews'][] = array('<!-- END SINGLE-NEWS -->', '');
+        $markers['TemplateNews'][] = array('<!-- END ALL-NEWS -->', '');
+        $markers['TemplateNews'][] = array('<!-- END NEWS -->', '');
 
         $markers['TemplateStudipData'][] = array('<!-- BEGIN STUDIP-DATA -->', '');
         $markers['TemplateStudipData'][] = array('###HOME-INST-NAME###', '');
@@ -328,6 +354,7 @@ class ExternModuleTemplateLecturedetails extends ExternModule {
                 }
             }
 
+            $content['LECTUREDETAILS']['NEWS'] = $this->elements['TemplateNews']->toString(array('content' => $this->getContentNews(), 'subpart' => 'NEWS'));
             $content['LECTUREDETAILS']['STUDIP-DATA'] = $this->getStudipData();
 
             // generic data fields
@@ -349,6 +376,55 @@ class ExternModuleTemplateLecturedetails extends ExternModule {
             $content['__GLOBAL__']['STUDIP-REGISTER-HREF'] = "{$GLOBALS['ABSOLUTE_URI_STUDIP']}dispatch.php/course/details/?again=1&sem_id={$this->seminar_id}";
         }
 
+        return $content;
+    }
+
+    private function getContentNews () {
+        $local_fullname_sql = $GLOBALS['_fullname_sql'];
+        if (!$nameformat = $this->config->getValue('Main', 'nameformat')) {
+            $nameformat = 'no_title';
+        }
+        if ($nameformat == 'last') $local_fullname_sql['last'] = ' Nachname ';
+        $dateform = $this->config->getValue('Main', 'dateformat');
+
+        $news = StudipNews::GetNewsByRange($this->seminar_id, TRUE);
+        if (!count($news)) {
+            $content['NEWS']['NO-NEWS']['NEWS_NO-NEWS-TEXT'] = $this->config->getValue('Main', 'nodatatext');
+        } else {
+            $i = 0;
+            foreach ($news as $news_id => $news_detail) {
+                list($news_content, $admin_msg) = explode("<admin_msg>", $news_detail['body']);
+                if ($admin_msg) {
+                    $content['NEWS']['ALL-NEWS']['SINGLE-NEWS'][$i]['NEWS_ADMIN-MESSAGE'] = preg_replace('# \(.*?\)#', '', $admin_msg);
+                    $content['NEWS']['ALL-NEWS']['SINGLE-NEWS'][$i]['NEWS_BODY'] = ExternModule::ExtFormatReady($news_content);
+                } else {
+                    $content['NEWS']['ALL-NEWS']['SINGLE-NEWS'][$i]['NEWS_BODY'] = ExternModule::ExtFormatReady($news_detail['body']);
+                }
+                $content['NEWS']['ALL-NEWS']['SINGLE-NEWS'][$i]['NEWS_DATE'] = strftime($dateform, $news_detail['date']);
+                $content['NEWS']['ALL-NEWS']['SINGLE-NEWS'][$i]['NEWS_TOPIC'] = ExternModule::ExtHtmlReady($news_detail['topic']);
+                $content['NEWS']['ALL-NEWS']['SINGLE-NEWS'][$i]['NEWS_NO'] = $i + 1;
+
+                $query = "SELECT Nachname, Vorname, title_front, title_rear,
+                                 {$local_fullname_sql[$nameformat]} AS fullname, username,
+                                 aum.user_id
+                          FROM auth_user_md5 AS aum
+                          LEFT JOIN user_info AS ui USING (user_id)
+                          WHERE aum.user_id = ?";
+                $statement = DBManager::get()->prepare($query);
+                $statement->execute(array($news_detail['user_id']));
+                $temp = $statement->fetch(PDO::FETCH_ASSOC);
+                if ($temp) {
+                    $content['NEWS']['ALL-NEWS']['SINGLE-NEWS'][$i]['FULLNAME'] = ExternModule::ExtHtmlReady($temp['fullname']);
+                    $content['NEWS']['ALL-NEWS']['SINGLE-NEWS'][$i]['FIRSTNAME'] = ExternModule::ExtHtmlReady($temp['Vorname']);
+                    $content['NEWS']['ALL-NEWS']['SINGLE-NEWS'][$i]['LASTNAME'] = ExternModule::ExtHtmlReady($temp['Nachname']);
+                    $content['NEWS']['ALL-NEWS']['SINGLE-NEWS'][$i]['TITLEFRONT'] = ExternModule::ExtHtmlReady($temp['title_front']);
+                    $content['NEWS']['ALL-NEWS']['SINGLE-NEWS'][$i]['TITLEREAR'] = ExternModule::ExtHtmlReady($temp['title_rear']);
+                    $content['NEWS']['ALL-NEWS']['SINGLE-NEWS'][$i]['USERNAME'] = $temp['username'];
+                    $content['NEWS']['ALL-NEWS']['SINGLE-NEWS'][$i]['PERSONDETAIL-HREF'] = $this->elements['LinkInternPersondetails']->createUrl(array('link_args' => 'username=' . $temp['username']));
+                }
+                $i++;
+            }
+        }
         return $content;
     }
 
