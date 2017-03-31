@@ -109,6 +109,7 @@ class LogEvent extends SimpleORMap
             '/%singledate\(%affected\)/',
             '/%semester\(%coaffected\)/',
             '/%plugin\(%coaffected\)/',
+            '/%group\(%coaffected\)/',
         ];
 
         $text = preg_replace_callback($replace_callbacks, [$this, 'formatCallback'], $text);
@@ -126,6 +127,7 @@ class LogEvent extends SimpleORMap
             'res'  => 'Resource',
             'inst' => 'Institute',
             'user' => 'Username',
+            'group' => 'Statusgruppe'
         ];
         $ret = '';
         if (preg_match_all('/%([a-z]+)/', $m[0], $found)) {
@@ -275,6 +277,30 @@ class LogEvent extends SimpleORMap
             }
         }
         return $this->$field;
+    }
+
+    /**
+     * Returns the name of the statusgroup for the id found in the given
+     * field or the id if the group is unknown.
+     *
+     * @param string $field The name of the table field.
+     * @return string The name of statusgruppe or the id.
+     */
+    protected function formatStatusgruppe($field)
+    {
+        $group = Statusgruppen::find($this->$field);
+
+        if (!$group) {
+            return $this->$field;
+        }
+        $course = Course::find($group->range_id);
+        return sprintf(
+            '<a href="%s">%s</a>',
+            URLHelper::getLink('dispatch.php/course/statusgroups', array(
+                'contentbox_open' => $group->getId()
+            )),
+            htmlReady($group->name. ($course ? " (VA: ".$course->name.")" : ""))
+        );
     }
 
     protected function formatObject()
