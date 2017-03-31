@@ -64,10 +64,10 @@ if(!Config::GetInstance()->getValue('SEM_TREE_ALLOW_BRANCH_ASSIGN')){
     $_possible_open_items = $_open_items;
 }
 
-// allow add only for items where user has admin permission
+// allow add only for items where user has admin permission and which are not hidden
 if (is_array($_possible_open_items)) {
     foreach ($_possible_open_items as $item_id => $value) {
-        if (!$the_tree->isItemAdmin($item_id)) {
+        if (!$the_tree->isItemAdmin($item_id) || $the_tree->tree->isHiddenItem($item_id)) {
             unset($_possible_open_items[$item_id]);
         }
     }

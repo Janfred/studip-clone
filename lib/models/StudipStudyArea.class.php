@@ -208,6 +208,19 @@ class StudipStudyArea extends SimpleORMap
     }
 
     /**
+     * is this study area hidden, see $SEM_TREE_TYPES in config.inc.php
+     *
+     * @return bool
+     */
+    function isHidden(){
+        if (isset($GLOBALS['SEM_TREE_TYPES'][$this->getType()]['hidden'])) {
+            return (bool) $GLOBALS['SEM_TREE_TYPES'][$this->getType()]['hidden'];
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Get the path along the sem_tree to this study area.
      *
      * @param  string     optional; TODO
@@ -302,9 +315,9 @@ class StudipStudyArea extends SimpleORMap
         $cfg = Config::GetInstance();
         $leaves_too = $cfg->getValue('SEM_TREE_ALLOW_BRANCH_ASSIGN');
         if ($leaves_too) {
-            return !$this->isRoot();
+            return !$this->isRoot() && !$this->isHidden();
         } else {
-            return !$this->isRoot() && !$this->hasChildren();
+            return !$this->isRoot() && !$this->isHidden() && !$this->hasChildren();
         }
     }
 

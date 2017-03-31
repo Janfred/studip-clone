@@ -96,6 +96,7 @@ $DEFAULT_TITLE_FOR_STATUS = array(
 /*
 possible types of sem_tree ("Veranstaltungshierarchie") types
 the "editable" flag could be used to prevent modifications, e.g. imported data
+the "hidden" flag could be used to hide entries that are no longer in use
 the "is_module" flag specifies an entry which represents a "Studienmodul", if the "studienmodulmanagement"
 plugin interface is used
 */

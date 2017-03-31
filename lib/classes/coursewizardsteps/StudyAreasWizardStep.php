@@ -224,13 +224,15 @@ class StudyAreasWizardStep implements CourseWizardStep
         $level = array();
         $children = StudipStudyArea::findByParent($parentId);
         foreach ($children as $c) {
-            $level[] = array(
-                'id' => $c->sem_tree_id,
-                'name' => studip_utf8encode((string) $c->getName()),
-                'has_children' => $c->hasChildren(),
-                'parent' => $parentId,
-                'assignable' => $c->isAssignable()
-            );
+            if (!$c->isHidden()) {
+                $level[] = array(
+                    'id' => $c->sem_tree_id,
+                    'name' => studip_utf8encode((string) $c->getName()),
+                    'has_children' => $c->hasChildren(),
+                    'parent' => $parentId,
+                    'assignable' => $c->isAssignable()
+                );
+            }
         }
         if (Request::isXhr()) {
             return json_encode($level);
@@ -243,6 +245,7 @@ class StudyAreasWizardStep implements CourseWizardStep
     {
         $result = array();
         $search = StudipStudyArea::search($searchterm);
+        $search = array_filter($search, function($a) { return !$a->isHidden(); });
         $root = StudipStudyArea::backwards($search);
         $result = $this->buildPartialSemTree($root, $utf, $id_only);
         if ($id_only) {
