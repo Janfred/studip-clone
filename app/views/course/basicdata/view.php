@@ -33,6 +33,7 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
     <? foreach ($attributes as $attribute): ?>
         <label>
             <?= htmlReady($attribute['title']) ?>
+            <?= $attribute['description'] ? tooltipIcon($attribute['description']) : '' ?>
         <? if ($attribute['must']): ?>
             <em class="required"></em>
         <? endif; ?>

@@ -3,11 +3,12 @@
 $is_locked = $input['locked'] ? 'disabled readonly' : '';
 $is_locked_array = $input['locked'] ? array('disabled' => true, 'readonly' => true) : array();
 $is_required_array = $input['must'] ? array('required' => true) : array();
+$is_pattern_array = $input['pattern'] ? array('pattern' => $input['pattern']) : array();
 if ($input['type'] === "text") : ?>
     <? if ($input['i18n']) : ?>
-        <?= I18N::input($input['name'], $input['value'], $is_locked_array + $is_required_array) ?>
+        <?= I18N::input($input['name'], $input['value'], $is_locked_array + $is_required_array + $is_pattern_array) ?>
     <? else : ?>
-        <input <?=$is_locked ?> type="text" name="<?= $input['name'] ?>" value="<?= htmlReady($input['value']) ?>" <? if ($input['must']) echo 'required'; ?>>
+        <input <?=$is_locked ?> type="text" name="<?= $input['name'] ?>" value="<?= htmlReady($input['value']) ?>" <? if ($input['must']) echo 'required'; ?> <? if ($input['pattern']) : ?>pattern="<?= htmlReady($input['pattern']) ?>"<? endif ?>>
     <? endif ?>
 <? endif;
 

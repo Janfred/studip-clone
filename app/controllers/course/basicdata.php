@@ -70,12 +70,15 @@ class Course_BasicdataController extends AuthenticatedController
             'value' => $data['form'],
             'locked' => LockRules::Check($course_id, 'art')
         );
+        $course_number_format_config = Config::get()->getMetadata('COURSE_NUMBER_FORMAT');
         $this->attributes[] = array(
             'title' => _("Veranstaltungs-Nummer"),
             'name' => "course_seminar_number",
             'type' => 'text',
             'value' => $data['seminar_number'],
-            'locked' => LockRules::Check($course_id, 'VeranstaltungsNummer')
+            'locked' => LockRules::Check($course_id, 'VeranstaltungsNummer'),
+            'description' => $course_number_format_config['comment'],
+            'pattern' => Config::get()->COURSE_NUMBER_FORMAT
         );
         $this->attributes[] = array(
             'title' => _("ECTS-Punkte"),
@@ -382,6 +385,7 @@ class Course_BasicdataController extends AuthenticatedController
     {
         global $perm;
 
+        $course_number_format = get_config('COURSE_NUMBER_FORMAT');
         $sem = Seminar::getInstance($course_id);
         $this->msg = array();
         $old_settings = $sem->getSettings();
@@ -422,6 +426,9 @@ class Course_BasicdataController extends AuthenticatedController
 
                         if ($varname === "name" && !$req_value) {
                             $this->msg[] = array("error", _("Name der Veranstaltung darf nicht leer sein."));
+                        } elseif ($varname === "seminar_number" && $req_value && $course_number_format &&
+                                  !preg_match('/^' . $course_number_format . '$/', $req_value)) {
+                            $this->msg[] = array('error', _('Die Veranstaltungsnummer hat ein ungültiges Format.'));
                         } else if ($field['type'] == 'select' && !in_array($req_value, array_flatten(array_values(array_map('array_keys', $field['choices']))))) {
                             // illegal value - just ignore this
                         } else if ($sem->{$varname} != $req_value) {

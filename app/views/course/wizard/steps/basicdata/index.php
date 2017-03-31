@@ -38,10 +38,14 @@
     <input type="text" name="name" id="wizard-name" size="75" maxlength="254" value="<?= htmlReady($values['name']) ?>"/>
 </section>
 <section>
+    <? $course_number_format_config = Config::get()->getMetadata('COURSE_NUMBER_FORMAT'); ?>
     <label for="wizard-number">
         <?= _('Veranstaltungsnummer') ?>
+        <?= $course_number_format_config['comment'] ? tooltipIcon($course_number_format_config['comment']) : '' ?>
     </label>
-    <input type="text" name="number" id="wizard-number" size="20" maxlength="99" value="<?= htmlReady($values['number']) ?>"/>
+    <? $course_number_format = Config::get()->COURSE_NUMBER_FORMAT; ?>
+    <input type="text" name="number" id="wizard-number" size="20" maxlength="99" value="<?= htmlReady($values['number']) ?>"
+     <? if ($course_number_format) : ?>pattern="<?= htmlReady($course_number_format) ?>" <? endif ?>/>
 </section>
 <section>
     <label for="wizard-description">
