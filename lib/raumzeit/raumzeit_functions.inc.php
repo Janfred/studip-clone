@@ -33,6 +33,9 @@ function getAllSortedSingleDates(&$sem) {
 
     $termine = array_merge($termine, $sem->getSingleDates(true, false, true));
     uasort ($termine, function ($a, $b) {
+        if ($a->getStartTime() === $b->getStartTime()) {
+            return strnatcasecmp($a->getRoom(), $b->getRoom());
+        }
         return $a->getStartTime() - $b->getStartTime();
     });
 

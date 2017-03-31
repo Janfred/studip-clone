@@ -391,6 +391,7 @@ class MetaDate
         foreach (SeminarCycleDate::findBySeminar($this->seminar_id) as $c) {
             $this->cycles[$c->getId()] = new CycleData($c);
         }
+        $this->sortCycleData();
     }
 
     function delete($removeSingleDates = TRUE)
