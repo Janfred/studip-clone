@@ -13,6 +13,7 @@ abstract class DataFieldEntry
         'bool',
         'textline',
         'textarea',
+        'textmarkup',
         'selectbox',
         'selectboxmultiple',
         'date',
