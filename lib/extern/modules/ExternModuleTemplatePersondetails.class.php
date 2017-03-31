@@ -86,7 +86,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
             array_unshift($this->registered_elements, 'SelectInstitutes');
         }
         $this->field_names = array();
-        $this->args = array('username', 'seminar_id');
+        $this->args = array('username', 'seminar_id', 'group_id');
 
         parent::__construct($range_id, $module_name, $config_id, $set_config, $global_id);
 
@@ -116,6 +116,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
             $faulty_values = '', $anker = '') {
 
         $this->updateGenericDatafields('TemplateMain', 'user');
+        $this->updateGenericDatafields('TemplateMain', 'userinstrole');
         $this->elements['TemplateMain']->markers = $this->getMarkerDescription('TemplateMain');
         $this->elements['TemplateLectures']->markers = $this->getMarkerDescription('TemplateLectures');
         $this->elements['TemplateLitList']->markers = $this->getMarkerDescription('TemplateLitList');
@@ -181,6 +182,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
         $markers['TemplateMain'][] = array('<!-- END ALL-INST -->', '');
 
         $this->insertDatafieldMarkers('user', $markers, 'TemplateMain');
+        $this->insertDatafieldMarkers('userinstrole', $markers, 'TemplateMain');
         $this->insertPluginMarkers('HomepagePlugin', $markers, 'TemplateMain');
         $markers['TemplateMain'][] = array('###LECTURES###', _("Inhalt aus dem Template für Veranstaltungen"));
         $markers['TemplateMain'][] = array('###NEWS###', _("Inhalt aus dem Template für News"));
@@ -256,6 +258,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
         $instituts_id = $this->config->range_id;
         $username = $args['username'];
         $sem_id = $args['seminar_id'];
+        $group_id = $args['group_id'];
 
         if (!$nameformat = $this->config->getValue('Main', 'nameformat')) {
             $nameformat = 'full';
@@ -403,6 +406,8 @@ class ExternModuleTemplatePersondetails extends ExternModule {
                     , $GLOBALS['_fullname_sql'][$nameformat], get_ext_vis_query()));
                 $stm->execute(array($username, $instituts_id));
                 $row = $stm->fetch(PDO::FETCH_ASSOC);
+            } else {
+                $instituts_id = $row['Institut_id'];
             }
         } else {
             $stm = DBManager::get()->prepare(sprintf(
@@ -498,7 +503,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
         }
 
         // generic data fields
-        if ($generic_datafields = $this->config->getValue('Main', 'genericdatafields')) {
+        if ($generic_datafields = $this->config->getValue('TemplateMain', 'genericdatafields')) {
             $localEntries = DataFieldEntry::getDataFieldEntries($this->user_id, 'user');
             $k = 1;
             foreach ($generic_datafields as $datafield) {
@@ -510,6 +515,24 @@ class ExternModuleTemplatePersondetails extends ExternModule {
                     } else {
                         $localEntry = $localEntries[$datafield]->getDisplayValue();
                     }
+                    if ($localEntry) {
+                        $content['PERSONDETAILS']["DATAFIELD_$k"] = $localEntry;
+                    }
+                }
+                $k++;
+            }
+
+            $localEntries = DataFieldEntry::getDataFieldEntries(array($this->user_id, $instituts_id), 'userinstrole');
+            if (isset($group_id)) {
+                $roleEntries = DataFieldEntry::getDataFieldEntries(array($this->user_id, $group_id), 'userinstrole');
+                $roleEntries = array_filter($roleEntries, function($val) { return $val->getValue() !== 'default_value'; });
+                $localEntries = $roleEntries + $localEntries;
+            }
+            $k = 1;
+            foreach ($generic_datafields as $datafield) {
+                if (isset($localEntries[$datafield]) &&
+                        is_object($localEntries[$datafield])) {
+                    $localEntry = $localEntries[$datafield]->getDisplayValue();
                     if ($localEntry) {
                         $content['PERSONDETAILS']["DATAFIELD_$k"] = $localEntry;
                     }

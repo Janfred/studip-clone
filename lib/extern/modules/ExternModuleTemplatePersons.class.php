@@ -80,6 +80,7 @@ class ExternModuleTemplatePersons extends ExternModule {
             $faulty_values = '', $anker = '') {
 
         $this->updateGenericDatafields('TemplateGeneric', 'user');
+        $this->updateGenericDatafields('TemplateGeneric', 'userinstrole');
         $this->elements['TemplateGeneric']->markers = $this->getMarkerDescription('TemplateGeneric');
 
         return parent::toStringEdit($open_elements, $post_vars, $faulty_values, $anker);
@@ -116,6 +117,7 @@ class ExternModuleTemplatePersons extends ExternModule {
         $markers['TemplateGeneric'][] = array('###OFFICEHOURS###', '');
         $markers['TemplateGeneric'][] = array('###PERSON-NO###', '');
         $this->insertDatafieldMarkers('user', $markers, 'TemplateGeneric');
+        $this->insertDatafieldMarkers('userinstrole', $markers, 'TemplateGeneric');
         $markers['TemplateGeneric'][] = array('<!-- END PERSON -->', '');
 
         $markers['TemplateGeneric'][] = array('<!-- END GROUP -->', '');
@@ -236,10 +238,11 @@ class ExternModuleTemplatePersons extends ExternModule {
                     $visibilities = get_local_visibility_by_id($row['user_id'], 'homepage', true);
                     $user_perm = $visibilities['perms'];
                     $visibilities = json_decode($visibilities['homepage'], true);
+                    $instituts_id = $this->config->range_id;
 
                     if ($defaultaddress) {
                         $query = 'SELECT ui.raum, ui.sprechzeiten, ui.Telefon, inst_perms,  Email, ';
-                        $query .= 'title_front, title_rear, ';
+                        $query .= 'title_front, title_rear, Institut_id, ';
                         $query .= 'aum.user_id, username, ' . $GLOBALS['_fullname_sql'][$nameformat];
                         $query .= ' AS fullname, aum.Nachname, aum.Vorname FROM auth_user_md5 aum LEFT JOIN ';
                         $query .= 'user_info USING(user_id) LEFT JOIN ';
@@ -262,6 +265,8 @@ class ExternModuleTemplatePersons extends ExternModule {
                             $params = array($this->config->range_id);
                             $statement2->execute($params);
                             $db_out = $statement2->fetch(PDO::FETCH_ASSOC);
+                        } else {
+                            $instituts_id = $db_out['Institut_id'];
                         }
                     }
                     $content['PERSONS']['GROUP'][$i]['PERSON'][$j]['FULLNAME'] = ExternModule::ExtHtmlReady($db_out['fullname']);
@@ -269,7 +274,8 @@ class ExternModuleTemplatePersons extends ExternModule {
                     $content['PERSONS']['GROUP'][$i]['PERSON'][$j]['FIRSTNAME'] = ExternModule::ExtHtmlReady($db_out['Vorname']);
                     $content['PERSONS']['GROUP'][$i]['PERSON'][$j]['TITLEFRONT'] = ExternModule::ExtHtmlReady($db_out['title_front']);
                     $content['PERSONS']['GROUP'][$i]['PERSON'][$j]['TITLEREAR'] = ExternModule::ExtHtmlReady($db_out['title_rear']);
-                    $content['PERSONS']['GROUP'][$i]['PERSON'][$j]['PERSONDETAIL-HREF'] = $this->elements['LinkInternTemplate']->createUrl(array('link_args' => 'username=' . $db_out['username']));
+                    $content['PERSONS']['GROUP'][$i]['PERSON'][$j]['PERSONDETAIL-HREF'] =
+                        $this->elements['LinkInternTemplate']->createUrl(array('link_args' => 'username=' . $db_out['username'] . ($grouping ? '&group_id=' . $group_id : '')));
                     $content['PERSONS']['GROUP'][$i]['PERSON'][$j]['USERNAME'] = $db_out['username'];
 
                     if (Visibility::verify('picture', $row['user_id']) == 5) {
@@ -305,6 +311,24 @@ class ExternModuleTemplatePersons extends ExternModule {
                                 } else {
                                     $localEntry = $localEntries[$datafield]->getDisplayValue();
                                 }
+                                if ($localEntry) {
+                                    $content['PERSONS']['GROUP'][$i]['PERSON'][$j]['DATAFIELD_' . $k] = $localEntry;
+                                }
+                            }
+                            $k++;
+                        }
+
+                        $localEntries = DataFieldEntry::getDataFieldEntries(array($db_out['user_id'], $instituts_id), 'userinstrole');
+                        if ($grouping) {
+                            $roleEntries = DataFieldEntry::getDataFieldEntries(array($db_out['user_id'], $group_id), 'userinstrole');
+                            $roleEntries = array_filter($roleEntries, function($val) { return $val->getValue() !== 'default_value'; });
+                            $localEntries = $roleEntries + $localEntries;
+                        }
+                        $k = 1;
+                        foreach ($generic_datafields as $datafield) {
+                            if (isset($localEntries[$datafield]) && 
+                                    is_object($localEntries[$datafield])) {
+                                $localEntry = $localEntries[$datafield]->getDisplayValue();
                                 if ($localEntry) {
                                     $content['PERSONS']['GROUP'][$i]['PERSON'][$j]['DATAFIELD_' . $k] = $localEntry;
                                 }
