@@ -114,6 +114,7 @@ class ExternModuleTemplatePersons extends ExternModule {
         $markers['TemplateGeneric'][] = array('###EMAIL###', '');
         $markers['TemplateGeneric'][] = array('###EMAIL-LOCAL###', _("Der local-part der E-Mail-Adresse (vor dem @-Zeichen)"));
         $markers['TemplateGeneric'][] = array('###EMAIL-DOMAIN###', _("Der domain-part der E-Mail-Adresse (nach dem @-Zeichen)"));
+        $markers['TemplateGeneric'][] = array('###HOMEPAGE-HREF###', '');
         $markers['TemplateGeneric'][] = array('###OFFICEHOURS###', '');
         $markers['TemplateGeneric'][] = array('###PERSON-NO###', '');
         $this->insertDatafieldMarkers('user', $markers, 'TemplateGeneric');
@@ -170,7 +171,7 @@ class ExternModuleTemplatePersons extends ExternModule {
 
         if(!$grouping) {
             $query = "SELECT DISTINCT ui.raum, ui.sprechzeiten, ui.Telefon, inst_perms, Email, aum.user_id, ";
-            $query .= 'username, aum.Vorname, title_front, title_rear, ';
+            $query .= 'username, aum.Vorname, title_front, title_rear, Home, ';
             $query .= $GLOBALS['_fullname_sql'][$nameformat] . " AS fullname, aum.Nachname ";
             if ($query_order != '') {
                 $query .= "FROM statusgruppe_user LEFT JOIN auth_user_md5 aum USING(user_id) ";
@@ -209,7 +210,7 @@ class ExternModuleTemplatePersons extends ExternModule {
                     $query_order = ' ORDER BY su.position';
                 }
                 $query = 'SELECT ui.raum, ui.sprechzeiten, ui.Telefon, inst_perms, Email, aum.user_id, ';
-                $query .= 'username, aum.Vorname, title_front, title_rear, ';
+                $query .= 'username, aum.Vorname, title_front, title_rear, Home, ';
                 $query .= $GLOBALS['_fullname_sql'][$nameformat] . " AS fullname, aum.Nachname ";
                 $query .= 'FROM statusgruppe_user su LEFT JOIN auth_user_md5 aum USING(user_id) ';
                 $query .= 'LEFT JOIN user_info USING(user_id) LEFT JOIN user_inst ui USING(user_id) ';
@@ -242,7 +243,7 @@ class ExternModuleTemplatePersons extends ExternModule {
 
                     if ($defaultaddress) {
                         $query = 'SELECT ui.raum, ui.sprechzeiten, ui.Telefon, inst_perms,  Email, ';
-                        $query .= 'title_front, title_rear, Institut_id, ';
+                        $query .= 'title_front, title_rear, Home, Institut_id, ';
                         $query .= 'aum.user_id, username, ' . $GLOBALS['_fullname_sql'][$nameformat];
                         $query .= ' AS fullname, aum.Nachname, aum.Vorname FROM auth_user_md5 aum LEFT JOIN ';
                         $query .= 'user_info USING(user_id) LEFT JOIN ';
@@ -255,7 +256,7 @@ class ExternModuleTemplatePersons extends ExternModule {
                         //no default
                         if ($db_out === false) {
                             $query = 'SELECT ui.raum, ui.sprechzeiten, ui.Telefon, inst_perms,  Email, ';
-                            $query .= 'title_front, title_rear, ';
+                            $query .= 'title_front, title_rear, Home, ';
                             $query .= 'aum.user_id, username, ' . $GLOBALS['_fullname_sql'][$nameformat];
                             $query .= ' AS fullname, aum.Nachname, aum.Vorname FROM auth_user_md5 aum LEFT JOIN ';
                             $query .= 'user_info USING(user_id) LEFT JOIN ';
@@ -292,6 +293,9 @@ class ExternModuleTemplatePersons extends ExternModule {
                     $content['PERSONS']['GROUP'][$i]['PERSON'][$j]['EMAIL'] = get_visible_email($row['user_id']);
                     $content['PERSONS']['GROUP'][$i]['PERSON'][$j]['EMAIL-LOCAL'] = array_shift(explode('@', $content['PERSONS']['GROUP'][$i]['PERSON'][$j]['EMAIL']));
                     $content['PERSONS']['GROUP'][$i]['PERSON'][$j]['EMAIL-DOMAIN'] = array_pop(explode('@', $content['PERSONS']['GROUP'][$i]['PERSON'][$j]['EMAIL']));
+                    if ($row['Home'] && Visibility::verify('homepage', $row['user_id'])) {
+                        $content['PERSONS']['GROUP'][$i]['PERSON'][$j]['HOMEPAGE-HREF'] = ExternModule::ExtHtmlReady(trim($row['Home']));
+                    }
                     $content['PERSONS']['GROUP'][$i]['PERSON'][$j]['OFFICEHOURS'] = ExternModule::ExtHtmlReady($db_out['sprechzeiten']);
                     $content['PERSONS']['GROUP'][$i]['PERSON'][$j]['PERSON-NO'] = $j + 1;
 
