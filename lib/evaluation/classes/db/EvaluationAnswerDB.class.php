@@ -145,7 +145,8 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
             DBManager::get()->execute(
                 "INSERT INTO evalanswer_user SET
                     evalanswer_id   = ?,
-                    user_id       = ?",
+                    user_id         = ?,
+                    evaldate        = UNIX_TIMESTAMP()",
                 array($answerObject->getObjectID(), $userID));
     }
     /* ----------------------------------------------------- end: connecting */
