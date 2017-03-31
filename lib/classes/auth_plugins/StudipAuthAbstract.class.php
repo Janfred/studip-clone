@@ -444,9 +444,11 @@ class StudipAuthAbstract {
                     $split = explode(".",$key);
                     $table = $split[0];
                     $field = $split[1];
-                    if($table == 'auth_user_md5' || $table == 'user_info') {
+                    if ($table == 'auth_user_md5' || $table == 'user_info') {
                         $mapped_value = call_user_func(array($this, $value['callback']),$value['map_args']);
-                        $user->setValue($field, $mapped_value);
+                        if (isset($mapped_value)) {
+                            $user->setValue($field, $mapped_value);
+                        }
                     } else {
                         call_user_func(array($this, $value['callback']),array($table,$field,$user,$value['map_args']));
                     }
