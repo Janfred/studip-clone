@@ -118,7 +118,7 @@ $privileges = array(
                 'MVVFreigabe'   => 3
             ),
             'genehmigt' => array(
-                'MVVEntwickler' => 1,
+                'MVVEntwickler' => 3,
                 'MVVRedakteur'  => 1,
                 'MVVTranslator' => 1,
                 'MVVFreigabe'   => 3

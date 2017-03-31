@@ -37,6 +37,12 @@ class Modulteil extends ModuleManagementModelTreeItem
             'on_delete' => 'delete',
             'on_store' => 'store'
         );
+        $config['has_many']['abschnitt_assignments'] = array(
+            'class_name' => 'ModulteilStgteilabschnitt',
+            'order_by' => 'ORDER BY fachsemester,mkdate',
+            'on_delete' => 'delete',
+            'on_store' => 'store'
+        ); 
         $config['has_many']['deskriptoren'] = array(
             'class_name' => 'ModulteilDeskriptor',
             'assoc_foreign_key' => 'modulteil_id',
@@ -197,7 +203,7 @@ class Modulteil extends ModuleManagementModelTreeItem
      * 
      * @return \Modulteil
      */
-    public function copy($deep = false)
+    public function copy($deep = false, $with_assignments = false)
     {
         $copy = clone $this;
         $copy->setNew(true);
@@ -220,6 +226,16 @@ class Modulteil extends ModuleManagementModelTreeItem
                 $lvgruppen[] = $cloned_lvgruppe;
             }
             $copy->lvgruppen_assignments = SimpleORMapCollection::createFromArray($lvgruppen);
+            if ($with_assignments) {
+                $abschnitt_assignments = [];
+                foreach ($this->abschnitt_assignments as $abschnitt_assignment) {
+                    $cloned_abschnitt_assignment = clone $abschnitt_assignment;
+                    $cloned_abschnitt_assignment->setNew(true);
+                    $abschnitt_assignments[] = $cloned_abschnitt_assignment;
+                }
+                $copy->abschnitt_assignments =
+                    SimpleORMapCollection::createFromArray($abschnitt_assignments);
+            }
         }
         
         return $copy;

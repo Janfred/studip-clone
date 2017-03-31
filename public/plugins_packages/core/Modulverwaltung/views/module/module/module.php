@@ -65,9 +65,9 @@
                             Icon::create('edit', 'clickable', ['title' => _('Modulteil bearbeiten')]))
                     ?>
                 <? endif; ?>
-                <? if ($perm->havePermCreate()) : ?>
+                <? if ($perm->haveFieldPerm('copy_module', MvvPerm::PERM_CREATE)) : ?>
                     <? $actionMenu->addLink(
-                            $controller->url_for('/copy/' . $modul->id),
+                            $controller->url_for('/copy_form/' . $modul->id),
                             _('Modul kopieren'),
                             Icon::create('files', 'clickable', ['title' => _('Modulteil kopieren')]))
                     ?>

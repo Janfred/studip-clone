@@ -511,5 +511,29 @@ $privileges = array(
                 'MVVFreigabe'   => 3
             )
         ),
+        // folgende Konfigurationen gelten für bestimmte Funktionen,
+        // die auf das Objekt angewendet werden dürfen (oder eben nicht).
+        
+        // Kopieren von Modulen
+        'copy_module' => [
+            'planung' => [
+                    'MVVEntwickler' => 0,
+                    'MVVRedakteur'  => 0,
+                    'MVVTranslator' => 0,
+                    'MVVFreigabe'   => 0
+            ],
+            'genehmigt' => [
+                    'MVVEntwickler' => 7,
+                    'MVVRedakteur'  => 0,
+                    'MVVTranslator' => 0,
+                    'MVVFreigabe'   => 0
+            ],
+            'ausgelaufen' => [
+                    'MVVEntwickler' => 0,
+                    'MVVRedakteur'  => 0,
+                    'MVVTranslator' => 0,
+                    'MVVFreigabe'   => 0
+            ]
+        ]
     )
 );

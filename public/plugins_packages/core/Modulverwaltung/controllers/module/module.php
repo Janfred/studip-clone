@@ -206,7 +206,9 @@ class Module_ModuleController extends MVVController
             CSRFProtection::verifyUnsafeRequest();
             $stored = false;
             if ($this->def_lang) {
-                $this->modul->quelle = Request::option('quelle');
+                // Quelle aus Formular entfernt, darf aber nicht überschrieben werden
+                // da wichtig, um neueste Version zu ermitteln,
+                //$this->modul->quelle = Request::option('quelle');
                 $this->modul->variante = Request::option('modul_item');
                 $this->modul->flexnow_modul = trim(Request::get('flexnow_modul'));
                 $this->modul->code = trim(Request::get('code'));
@@ -397,6 +399,12 @@ class Module_ModuleController extends MVVController
         }
         $this->redirect($this->url_for('/index'));
     }
+    
+    public function assignments_action($modul_id)
+    {
+        $this->modul = Modul::find($modul_id);
+        PageLayout::setTitle(_('Zuordnungen'));
+    }
 
     public function description_action($modul_id)
     {
@@ -433,43 +441,86 @@ class Module_ModuleController extends MVVController
         }
         $this->render_template('module/module/approve', $this->layout);
     }
-
+    
+    public function copy_form_action($modul_id)
+    {
+        // find the latest version of the given module
+        $modul = Modul::find($modul_id);
+        $this->modul = reset(Modul::findBySql('LEFT JOIN semester_data '
+                . 'ON start = semester_id '
+                . "WHERE modul_id = ? OR quelle = ? AND stat = 'genehmigt' "
+                . 'ORDER BY beginn DESC LIMIT 1',
+                [$modul->id, $modul->quelle]));
+        if (!$this->modul) {
+            PageLayout::postError( _('Unbekanntes Modul.'));
+        } else {
+            $this->perm = MvvPerm::get($this->modul);
+            $this->submit_url = $this->url_for('/copy', $this->modul->id);
+            $this->cancel_url = $this->url_for('/index');
+        }
+        PageLayout::setTitle(_('Modul kopieren'));
+    }
+    
+    
     public function copy_action($modul_id)
     {
         $modul = Modul::find($modul_id);
         if (!$modul) {
-             PageLayout::postError( _('Unbekanntes Modul.'));
+            PageLayout::postError( _('Unbekanntes Modul.'));
         } else {
-            if (Request::submitted('yes')) {
+            $perm = MvvPerm::get($modul);
+            if (Request::submitted('copy')) {
                 CSRFProtection::verifyUnsafeRequest();
-                $copy = $modul->copy();
+                // Assign the copied module to the same versions of studycourses
+                // as the original?
+                $copy_assignments_to_versions = Request::get('copy_assignments');
+                $copy = $modul->copy(true, $copy_assignments_to_versions);
                 // Kopie kennzeichnen (eindeutiger Code und Titel des Moduls in
                 // allen Deskriptoren
-                $copy->code = $modul->code . ' --KOPIE--';
+                $copy->code = $modul->code;
                 $copy->beschlussdatum = null;
-
+                $current = Semester::find($copy->end);
+                $next = Semester::findNext($current->beginn);
+                if (is_array($next) && !empty($next)) {
+                    $next = array_pop($next);
+                }
+                $copy->start = $next->id;
+                // get end semester from selection
+                $end_sem = Semester::find(Request::option('end_sem'));
+                $copy->end = $next->beginn > $end_sem->beginn ? '' : $end_sem->id;
+                
                 // quelle: Klammerung von (Gültigkeit-) Versionen desselben Moduls
                 // Gießen: Modul-ID des ursprünglichen Moduls
                 $copy->quelle = $modul->quelle ?: $modul->id;
-
+                //UOL Version um 1 hochzählen
+                $copy->version = $copy->version + 1;
                 // don't show the new Modul
                 $copy->stat = 'planung';
-
-                // Deskriptoren als KOPIE kennzeichnen
-                foreach ($copy->deskriptoren as $deskriptor) {
-                    $deskriptor->bezeichnung = $deskriptor->bezeichnung . ' --KOPIE--';
-                }
-
+                
+                // Deskriptoren als KOPIE kennzeichnen/
+                /* nicht UOL
+                 foreach ($copy->deskriptoren as $deskriptor) {
+                 $deskriptor->bezeichnung = $deskriptor->bezeichnung;
+                 }
+                 *
+                 */
+                
                 // Deskriptoren der Modulteile als KOPIE kennzeichnen
-                foreach ($copy->modulteile as $modulteil) {
-                    foreach ($modulteil->deskriptoren as $deskriptor) {
-                        $deskriptor->bezeichnung = $deskriptor->bezeichnung . ' --KOPIE--';
-                    }
-                }
+                /* nicht UOL
+                 foreach ($copy->modulteile as $modulteil) {
+                 foreach ($modulteil->deskriptoren as $deskriptor) {
+                 $deskriptor->bezeichnung = $deskriptor->bezeichnung;
+                 }
+                 }
+                 *
+                 */
+                $store = false;
                 try {
-                    $copy->store();
+                    $copy->verifyPermission();
+                    // UOL: Don't validate
+                    $store = $copy->store(false);
                     PageLayout::postSuccess(sprintf(_('Das Modul "%s" und alle zugehörigen Modulteile wurden kopiert!'),
-                        htmlReady($modul->getDisplayName())));
+                            htmlReady($modul->getDisplayName())));
                 } catch (InvalidValuesException $e) {
                     PageLayout::postError(
                             _('Das Modul konnte nicht kopiert werden!')
@@ -478,16 +529,10 @@ class Module_ModuleController extends MVVController
                     PageLayout::postError(_('Beim Kopieren trat ein Fehler auf!'));
                 }
             }
-            if (!Request::isPost()) {
-                $this->flash_dialog(
-                        sprintf(_('Wollen Sie wirklich das Modul "%s" und alle zugehörigen Modulteile kopieren?'),
-                                $modul->getDisplayName()),
-                        '/copy/'. $modul->getId(), '/index');
-            }
         }
         $this->redirect($this->url_for('/index'));
     }
-
+    
     /**
      * Retrieves all fields from descriptor in the original language and
      * returns them as a json object.
@@ -1254,9 +1299,12 @@ class Module_ModuleController extends MVVController
         
         $modul_ids = Modul::findByFilter($this->filter);
         
-        $institute_filter = ['mvv_modul.stat' => $this->filter['mvv_modul.stat'],
+        $institute_filter = [
+            'mvv_modul.stat'             => $this->filter['mvv_modul.stat'],
             'mvv_modul_inst.institut_id' => $own_institutes,
-            'mvv_modul_inst.gruppe' => 'hauptverantwortlich'];
+            'mvv_modul_inst.gruppe'      => 'hauptverantwortlich',
+            'start_sem.beginn'           => $this->filter['start_sem.beginn'],
+            'end_sem.ende'               => $this->filter['end_sem.ende']]; 
 
         $template = $template_factory->open('shared/filter');
 

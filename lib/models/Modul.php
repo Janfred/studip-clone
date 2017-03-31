@@ -77,7 +77,7 @@ class Modul extends ModuleManagementModelTreeItem
             'on_delete' => 'delete',
             'on_store' => 'store'
         );
-        $config['belongs_to']['abschnitte_modul'] = array(
+        $config['has_many']['abschnitte_modul'] = array(
             'class_name' => 'StgteilabschnittModul',
             'assoc_foreign_key' => 'modul_id',
             'order_by' => 'ORDER BY position,mkdate',
@@ -508,7 +508,7 @@ class Modul extends ModuleManagementModelTreeItem
      * @param boolean $deep Copy all assigned modulteile if true
      * @return Modul A copy of this module.
      */
-    public function copy($deep = true)
+    public function copy($deep = true, $with_assignments = false)
     {
         $copy = clone $this;
         $copy->setNew(true);
@@ -561,11 +561,21 @@ class Modul extends ModuleManagementModelTreeItem
             $modulteile = [];
             $position = 1;
             foreach ($this->modulteile as $modulteil) {
-                $modulteil_copy = $modulteil->copy($deep);
+                $modulteil_copy = $modulteil->copy(true, $with_assignments);
                 $modulteil_copy->position = $position++;
                 $modulteile[] = $modulteil_copy;
             }
             $copy->modulteile = SimpleORMapCollection::createFromArray($modulteile);
+            
+            if ($with_assignments) {
+                $abschnitte_modul = [];
+                foreach ($this->abschnitte_modul as $abschnitt_modul) {
+                    $cloned_abschnitt_modul = clone $abschnitt_modul;
+                    $cloned_abschnitt_modul->setNew(true);
+                    $abschnitte_modul[] = $cloned_abschnitt_modul;
+                }
+                $copy->abschnitte_modul = SimpleORMapCollection::createFromArray($abschnitte_modul);
+            } 
         }
         return $copy;
     }
@@ -848,6 +858,7 @@ class Modul extends ModuleManagementModelTreeItem
         if ($this->isDirty()) {
             $messages = array();
             $rejected = false;
+            /*
             if ($this->quelle) {
                 $quelle = Modul::find($this->quelle);
                 if (is_null($quelle)) {
@@ -856,6 +867,7 @@ class Modul extends ModuleManagementModelTreeItem
                     $rejected = true;
                 }
             }
+            */
             if ($this->variante) {
                 $variante = Modul::find($this->variante);
                 if (is_null($variante)) {

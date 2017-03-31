@@ -220,10 +220,13 @@ class StgteilabschnittModul extends ModuleManagementModelTreeItem
      */
     public function getStatus()
     {
+        // workaround to copy module with assignments to Studiengangteil-Version
+        // check first whether it is new
+        if ($this->isNew()) {
+            return $GLOBALS['MVV_STGTEILVERSION']['STATUS']['default'];
+        }
         if ($this->abschnitt) {
             return $this->abschnitt->getStatus();
-        } elseif ($this->isNew()) {
-            return $GLOBALS['MVV_STGTEILVERSION']['STATUS']['default'];
         }
         return parent::getStatus();
     }

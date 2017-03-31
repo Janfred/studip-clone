@@ -60,7 +60,7 @@ $privileges = array(
         'ausgelaufen'
     ),
     'default_table' => array(
-        'MVVEntwickler' => 1,
+        'MVVEntwickler' => 7,
         'MVVRedakteur'  => 1,
         'MVVTranslator' => 1,
         'MVVFreigabe'   => 1
