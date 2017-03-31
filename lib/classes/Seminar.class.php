@@ -1530,6 +1530,7 @@ class Seminar
 
                     if ($metadate_has_termine) {
                         $info[$i]['name'] = $cycle->toString('long').' ('.$semester['name'].')';
+                        $info[$i]['export'] = $cycle->toString('long').' ('.$semester['name'].')';
                         $info[$i]['weekend'] = ($cycle->getDay() == 6 || $cycle->getDay() == 0);
                         $this->applyTimeFilter($semester['beginn'], $semester['ende']);
                         $raum = $this->getDatesTemplate('dates/seminar_predominant_html', array('cycle_id' => $metadate_id));
@@ -1537,6 +1538,7 @@ class Seminar
                             $info[$i]['name'] .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;'.$raum;
                             $room_stat = $this->getStatOfNotBookedRooms($cycle->getMetadateId());
                             $info[$i]['name'] .= sprintf(_(" (%s von %s belegt)"), $room_stat['all'] - $room_stat['open'] , $room_stat['all']);
+                            $info[$i]['export'] .= sprintf(_(" (%s von %s belegt)"), $room_stat['all'] - $room_stat['open'] , $room_stat['all']);
                             $groups[$i]['complete'] = ($room_stat['all'] - $room_stat['open'] >= sizeof($groups[$i]['termin_ids'])) ? true : false;
                         }
                         if (!$single) unset($info[$i]['raum']);
@@ -1570,10 +1572,12 @@ class Seminar
                                 $groups[$i]["termin_ids"][$termin->getSingleDateId()] = TRUE;
                                 if (!$first) $info[$i]['name'] .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;';
                                 $info[$i]['name'] .= $termin->toString();
+                                $info[$i]['export'] .= $termin->toString();
                                 $resObj = ResourceObject::Factory($termin->resource_id);
 
                                 if ($link = $resObj->getFormattedLink($termin->getStartTime())) {
                                     $info[$i]['name'] .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;'.$link;
+                                    $info[$i]['export'] .= ': ' . $resObj->getName();
                                     if (empty($info[$i]['raum'])) {
                                         $info[$i]['raum'] = $termin->resource_id;
                                     } else if ($info[$i]['raum'] != $termin->resource_id) {
@@ -1598,11 +1602,13 @@ class Seminar
                                 }
                                 $groups[$i]["termin_ids"][$termin->getSingleDateId()] = TRUE;
                                 $info[$i]['name'] = $termin->toString();
+                                $info[$i]['export'] = $termin->toString();
                                 $resObj = ResourceObject::Factory($termin->resource_id);
 
                                 if ($link = $resObj->getFormattedLink($termin->getStartTime())) {
                                     $info[$i]['name'] .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;'.$link;
                                     $info[$i]['raum'] = $termin->resource_id;
+                                    $info[$i]['export'] .= ': ' . $resObj->getName();
                                 }
 
                                 $info[$i]['weekend'] = (date('w', $termin->getStartTime()) == 6 || date('w', $termin->getStartTime()) == 0);
@@ -1616,6 +1622,7 @@ class Seminar
             $termin = new SingleDate($singledate);
             $groups[0]['termin_ids'][$termin->getSingleDateID()] = TRUE;
             $info[0]['name']   = $this->getDatesTemplate('dates/date_html', array('date' => $termin));
+            $info[0]['export'] = $termin->toString();
             $info[0]['raum']   = $termin->resource_id;
             $info[0]['weekend'] = (date('w', $termin->getStartTime()) == 6 || date('w', $termin->getStartTime()) == 0);
             $first_event = $termin->getStartTime();

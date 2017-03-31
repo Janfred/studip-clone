@@ -145,6 +145,20 @@ if ($perm->have_perm('admin')) {
         }
 
         $resources_nav->addSubNavigation('room_requests', $navigation);
+
+        //CSV EXPORT
+        if ($view == "list_requests"){
+            // Set default sidebar image
+            $sidebar = Sidebar::get();
+            $sidebar->setImage('sidebar/person-sidebar.png');
+
+            if (Config::get()->EXPORT_ENABLE) {
+                $widget = new ExportWidget();
+                $link = URLHelper::getLink('dispatch.php/resources/export_requestlist');
+                $widget->addLink(_('Anfragenliste als CSV-Dokument exportieren'), $link, Icon::create('file-office'));
+                $sidebar->addWidget($widget);
+            }
+        }
     }
 }
 
