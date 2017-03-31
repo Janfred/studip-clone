@@ -115,6 +115,27 @@ class StudipSemTreeViewAdmin extends TreeView {
         $this->move_item_id = $this->marked_item;
     }
 
+    function execCommandOrderItemsAlphabetically()
+    {
+        $item_id = Request::option('sort_id');
+        $sorted_items_stmt = DBManager::get()->prepare(
+            'SELECT * FROM sem_tree LEFT JOIN Institute ON studip_object_id = Institut_id WHERE parent_id = :parent_id ORDER BY IF(studip_object_id, Institute.name, sem_tree.name)'
+        );
+        $sorted_items_stmt->execute(array(
+            'parent_id' => $item_id,
+        ));
+        $sorted_items = $sorted_items_stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($sorted_items as $priority => $data) {
+            $update_priority_stmt = DBManager::get()->prepare('UPDATE sem_tree SET priority = :priority WHERE sem_tree_id = :sem_tree_id');
+            $update_priority_stmt->execute(array(
+                'priority' => $priority,
+                'sem_tree_id' => $data['sem_tree_id']
+            ));
+        }
+
+        return true;
+    }
+
     function execCommandOrderItem(){
         $direction = Request::quoted('direction');
         $item_id = Request::option('item_id');
@@ -477,33 +498,36 @@ class StudipSemTreeViewAdmin extends TreeView {
         $content .= $this->getItemMessage($item_id);
         $content .= "\n<tr><td style=\"font-size:10pt;\" align=\"center\">";
         if(!$is_not_editable){
-        if ($this->isItemAdmin($item_id) ){
-            $content .= LinkButton::create(_('Neues Objekt'),
-                    URLHelper::getURL($this->getSelf('cmd=NewItem&item_id='.$item_id)),
-                    array('title' => _('Innerhalb dieser Ebene ein neues Element einfügen'))) . '&nbsp;';
-        }
-        if ($this->isParentAdmin($item_id) && $item_id != "root"){
-            $content .= LinkButton::create(_('Bearbeiten'),
-                    URLHelper::getURL($this->getSelf('cmd=EditItem&item_id=' . $item_id)),
-                    array('title' => 'Dieses Element bearbeiten')) . '&nbsp;';
-
-            $content .= LinkButton::create(_('Löschen'),
-                    URLHelper::getURL($this->getSelf('cmd=AssertDeleteItem&item_id=' . $item_id)),
-                    array('title' => _('Dieses Element löschen'))) . '&nbsp;';
-
-            if ($this->move_item_id == $item_id && ($this->mode == "MoveItem" || $this->mode == "CopyItem")){
-                $content .= LinkButton::create(_('Abbrechen'),
-                        URLHelper::getURL($this->getSelf('cmd=Cancel&item_id=' . $item_id)),
-                        array('title' => _('Verschieben / Kopieren abbrechen'))) . '&nbsp;';
-            } else {
-                $content .= LinkButton::create(_('Verschieben'),
-                        URLHelper::getURL($this->getSelf('cmd=MoveItem&item_id='.$item_id)),
-                        array('title' => _('Dieses Element in eine andere Ebene verschieben'))) . '&nbsp;';
-                $content .= LinkButton::create(_('Kopieren'),
-                        URLHelper::getURL($this->getSelf('cmd=CopyItem&item_id='.$item_id)),
-                        array('title' => _('Dieses Element in eine andere Ebene kopieren')));
+            if ($this->isItemAdmin($item_id) ){
+                $content .= LinkButton::create(_('Neues Objekt'),
+                        URLHelper::getURL($this->getSelf('cmd=NewItem&item_id='.$item_id)),
+                        array('title' => _('Innerhalb dieser Ebene ein neues Element einfügen'))) . '&nbsp;';
+                $content .= LinkButton::create(_('Sortieren'),
+                        URLHelper::getURL($this->getSelf('cmd=OrderItemsAlphabetically&sort_id='.$item_id)),
+                        array('title' => _('Sortiert die untergeordneten Elemente alphabetisch'))) . '&nbsp;';
             }
-        }
+            if ($this->isParentAdmin($item_id) && $item_id != "root"){
+                $content .= LinkButton::create(_('Bearbeiten'),
+                        URLHelper::getURL($this->getSelf('cmd=EditItem&item_id=' . $item_id)),
+                        array('title' => 'Dieses Element bearbeiten')) . '&nbsp;';
+
+                $content .= LinkButton::create(_('Löschen'),
+                        URLHelper::getURL($this->getSelf('cmd=AssertDeleteItem&item_id=' . $item_id)),
+                        array('title' => _('Dieses Element löschen'))) . '&nbsp;';
+
+                if ($this->move_item_id == $item_id && ($this->mode == "MoveItem" || $this->mode == "CopyItem")){
+                    $content .= LinkButton::create(_('Abbrechen'),
+                            URLHelper::getURL($this->getSelf('cmd=Cancel&item_id=' . $item_id)),
+                            array('title' => _('Verschieben / Kopieren abbrechen'))) . '&nbsp;';
+                } else {
+                    $content .= LinkButton::create(_('Verschieben'),
+                            URLHelper::getURL($this->getSelf('cmd=MoveItem&item_id='.$item_id)),
+                            array('title' => _('Dieses Element in eine andere Ebene verschieben'))) . '&nbsp;';
+                    $content .= LinkButton::create(_('Kopieren'),
+                            URLHelper::getURL($this->getSelf('cmd=CopyItem&item_id='.$item_id)),
+                            array('title' => _('Dieses Element in eine andere Ebene kopieren')));
+                }
+            }
         }
         if ($item_id == 'root' && $this->isItemAdmin($item_id)){
             $view = DbView::getView('sem_tree');
