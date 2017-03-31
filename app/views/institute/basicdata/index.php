@@ -70,13 +70,13 @@
 
         <label>
             <?= _('Telefonnummer') ?>
-            <input type="text" size="80" <?= LockRules::Check($institute->id, 'telefon') ? 'readonly disabled' : '' ?> id="telefon" name="telefon" maxlength="32"
+            <input type="text" size="80" <?= LockRules::Check($institute->id, 'telefon') ? 'readonly disabled' : '' ?> id="telefon" name="telefon"
                    value="<?= htmlReady(Request::get('telefon', $institute->telefon)) ?>">
         </label>
 
         <label>
             <?= _('Faxnummer') ?>
-            <input type="text" size="80" <?= LockRules::Check($institute->id, 'fax') ? 'readonly disabled' : '' ?> id="fax" name="fax" maxlength="32"
+            <input type="text" size="80" <?= LockRules::Check($institute->id, 'fax') ? 'readonly disabled' : '' ?> id="fax" name="fax"
                    value="<?= htmlReady(Request::get('fax', $institute->fax)) ?>">
         </label>
 
