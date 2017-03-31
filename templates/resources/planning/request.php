@@ -14,7 +14,7 @@
             <tr>
                 <th colspan="2">
                     <a href="<?= URLHelper::getLink($sem_link) ?>">
-                        <?= $semObj->seminar_number ? htmlReady($semObj->seminar_number) . ':' : '' ?><?= htmlReady($semObj->getName()) ?>
+                        <?= $semObj->seminar_number ? htmlReady($semObj->seminar_number) . ': ' : '' ?><?= htmlReady($semObj->getName()) ?>
                     </a>
                 </th>
             </tr>
@@ -25,24 +25,20 @@
                 <td><?= htmlReady($reqObj->getTypeExplained()) ?></td>
             </tr>
             <tr>
-                <td><?= _('Erstellt von') ?></td>
+                <td><?= _('Erstellt am') ?></td>
                 <td>
+                    <?= strftime('%x %H:%M', $reqObj->mkdate) ?>
+                    <?= _('von') ?>
                     <a href="<?= URLHelper::getLink('dispatch.php/profile', ['username' => $reqObj->user->username]) ?>">
                         <?= htmlReady($reqObj->user->getFullName()) ?>
                     </a>
                 </td>
             </tr>
             <tr>
-                <td><?= _('Erstellt am') ?></td>
-                <td><?= strftime('%x %H:%M', $reqObj->mkdate) ?></td>
-            </tr>
-            <tr>
                 <td><?= _('Letzte Änderung') ?></td>
-                <td><?= strftime('%x %H:%M', $reqObj->chdate) ?></td>
-            </tr>
-            <tr>
-                <td><?= _('Letzte Änderung von') ?></td>
                 <td>
+                    <?= strftime('%x %H:%M', $reqObj->chdate) ?>
+                    <?= _('von') ?>
                     <a href="<?= URLHelper::getLink('dispatch.php/profile', ['username' => $modifier->username]) ?>">
                         <?= htmlReady($modifier->getFullName()) ?>
                     </a>
@@ -63,11 +59,10 @@
             </tr>
             <tr>
                 <td><?= _('verantwortliche Einrichtung') ?></td>
-                <td><?= htmlReady($semObj->home_institut->faculty->name) ?></td>
-            </tr>
-            <tr>
-                <td><?= _('verantwortliche Fakultät') ?></td>
-                <td><?= htmlReady($semObj->home_institut->name) ?></td>
+                <td><?= htmlReady($semObj->home_institut->name) ?>
+                <? if ($semObj->institut_id != $semObj->home_institut->fakultaets_id) : ?>
+                    (<?= htmlReady($semObj->home_institut->faculty->name) ?>)</td>
+                <? endif ?>
             </tr>
             <tr>
                 <td><?= _('aktuelle Teilnehmerzahl') ?></td>
