@@ -32,6 +32,12 @@ use Studip\Button, Studip\LinkButton;
         </label>
 
         <label>
+            <?= _('Standardwert') ?>
+
+            <?= str_replace('['.$datafield_id.']', '', $datafield_entry->getHTML('default_value')) ?>
+        </label>
+
+        <label>
         <? if ($item->object_type === 'sem'): ?>
             <?= _('Veranstaltungskategorie') ?>:
 

@@ -95,9 +95,9 @@ class Admin_DatafieldsController extends AuthenticatedController
         PageLayout::setTitle(_('Datenfeld ändern'));
 
         $datafield = new DataField($datafield_id);
+        $datafield_entry = DataFieldEntry::createDataFieldEntry($datafield);
 
         if (Request::submitted('uebernehmen')) {
-            $datafield = new DataField($datafield_id);
             if (Request::get('datafield_name')) {
                 $datafield->name          = Request::get('datafield_name');
                 if ($datafield->object_type === 'moduldeskriptor'
@@ -115,6 +115,8 @@ class Admin_DatafieldsController extends AuthenticatedController
                 $datafield->is_required   = Request::int('is_required') ?: 0;
                 $datafield->description   = Request::get('description', $datafield->description);
                 $datafield->is_userfilter = Request::int('is_userfilter') ?: 0;
+                $datafield_entry->setValueFromSubmit(Request::getInstance()->offsetGet('default_value'));
+                $datafield->default_value = $datafield_entry->getValue();
                 $datafield->store();
 
                 PageLayout::postSuccess(_('Die Änderungen am generischen Datenfeld wurden übernommen.'));
@@ -129,6 +131,7 @@ class Admin_DatafieldsController extends AuthenticatedController
         $this->item         = $datafield;
         $this->datafield_id = $datafield->id;
         $this->type         = $datafield->type;
+        $this->datafield_entry = $datafield_entry;
     }
 
     /**

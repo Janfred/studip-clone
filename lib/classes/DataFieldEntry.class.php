@@ -58,7 +58,7 @@ abstract class DataFieldEntry
      * @param mixed     $value     Value of the entry
      * @return DataFieldEntry instance of appropriate type
      */
-    public static function createDataFieldEntry(DataField $datafield, $rangeID = '', $value = '')
+    public static function createDataFieldEntry(DataField $datafield, $rangeID = '', $value = null)
     {
         $type = $datafield->type;
         if (!in_array($type, self::getSupportedTypes())) {
@@ -210,7 +210,7 @@ abstract class DataFieldEntry
     {
         $this->model   = $datafield;
         $this->rangeID = $rangeID;
-        $this->value   = $value;
+        $this->value   = isset($value) ? $value : $datafield->default_value;
     }
 
     /**
@@ -229,7 +229,7 @@ abstract class DataFieldEntry
         $old_value = $entry->content;
         $entry->content = $this->getValue();
 
-        if ($this->isEmpty()) {
+        if ($entry->content == $this->model->default_value) {
             $result = $entry->delete();
         } else {
             $result = $entry->store();
