@@ -83,12 +83,7 @@
 
         <label for="block_appointments_date_count">
             <?= _('Anzahl') ?>
-            <select name="block_appointments_date_count" id="block_appointments_date_count" class="size-s">
-                <? foreach (range(1, 5) as $day) : ?>
-                    <option
-                        value="<?= $day ?>" <?= $request['block_appointments_date_count'] == $day ? 'selected' : '' ?>><?= $day ?></option>
-                <? endforeach ?>
-            </select>
+            <input type="text" name="block_appointments_date_count" id="block_appointments_date_count" class="size-s" value="<?= $request['block_appointments_date_count'] ?: 1 ?>">
         </label>
 
     </fieldset>
