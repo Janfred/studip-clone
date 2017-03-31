@@ -152,7 +152,7 @@ $this->msg[32] = array (
         "msg"=> _("Die ausgewählten Einträge wurden in die aktuelle Anfrage übernommen."));
 $this->msg[33] = array (
         "mode" => 'success',
-        "msg"=> _("Folgende Räume wurden gebucht und der Veranstaltung zugewiesen: <font size=\"-1\" color=\"black\">%s</font>"));
+        "msg"=> _("Folgende Räume wurden gebucht und der Veranstaltung &raquo;%s&laquo; zugewiesen: <font size=\"-1\" color=\"black\">%s</font>"));
 $this->msg[34] = array (
         "mode" => "error",
         "msg"=> _("Folgende Räume konnten wegen Überschneidungen nicht gebucht werden: <font size=\"-1\" color=\"black\">%s</font>"));
