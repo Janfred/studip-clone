@@ -41,7 +41,14 @@ if ($flash['error']) {
             <?= _('Besitzer des Anmeldesets:') ?>
         </label>
         <div>
-        <?= htmlReady(get_fullname($courseset->getUserId())) ?>
+            <? $user = User::find($courseset->getUserId()) ?>
+            <? if (isset($user)) : ?>
+                <a target="_blank" href="<?= $controller->url_for('profile', array('username' => $user->username)) ?>" >
+                    <?= htmlReady($user->getFullName()) ?> (<?= $user->username ?>)
+                </a>
+            <? else : ?>
+                <?= _('unbekannt') ?>
+            <? endif ?>
         </div>
         <? endif ;?>
         <label for="institutes" class="caption">
