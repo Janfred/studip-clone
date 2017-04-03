@@ -96,7 +96,7 @@
             <? foreach ($stgteil->fachberater as $fachberater) : ?>
             <li id="fachberater_<?= $fachberater->getId() ?>"<?= $perm->haveFieldPerm('fachberater_assignments') ? 'class="sort_items"' : '' ?>>
                 <div class="mvv-item-list-text">
-                    <a href="<?= URLHelper::getLink('about.php', array('username' => $fachberater->username)) ?>"><?= htmlReady($fachberater->getFullname()) ?></a>
+                    <a href="<?= URLHelper::getLink('dispatch.php/profile', array('username' => $fachberater->username)) ?>"><?= htmlReady($fachberater->getFullname()) ?></a>
                 </div>
                 <? if ($perm->haveFieldPerm('fachberater')) : ?>
                 <div class="mvv-item-list-buttons">
