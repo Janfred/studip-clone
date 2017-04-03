@@ -30,9 +30,12 @@ class Course_DetailsController extends AuthenticatedController
             $course_id = $GLOBALS['SessionSeminar'];
         }
 
-        $this->course                = Course::find($course_id);
+        $this->course = Course::find($course_id);
         if (!$this->course) {
-            throw new Trails_Exception(400);
+            throw new Trails_Exception(
+                404,
+                _('Es konnte keine Veranstaltung gefunden werden')
+            );
         }
         $this->send_from_search_page = Request::get('send_from_search_page');
 
