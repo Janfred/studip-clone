@@ -89,12 +89,7 @@ jQuery(function ($) {
                     // and internal links should not have any attributes except
                     // for href, but this cannot be enforced here
                     attributes: ['!href', 'target', 'rel'],
-                    classes: 'link-extern'
-                },
-                audio: {
-                    attributes: ['alt', 'controls', '!src', 'height', 'width'],
-                    // only float:left and float:right should be allowed
-                    styles: ['float', 'height', 'width']
+                    classes: ['link-extern', 'link-intern']
                 },
                 blockquote: {},
                 br: {},
@@ -169,11 +164,6 @@ jQuery(function ($) {
                     styles: ['text-align', 'width', 'height']
                 },
                 tr: {},
-                video: {
-                    attributes: ['alt', 'controls', '!src', 'height', 'width'],
-                    // only float:left and float:right should be allowed
-                    styles: ['float', 'height', 'width']
-                }
             },
             width: textareaWidth,
             skin: 'studip,' + STUDIP.ASSETS_URL + 'stylesheets/ckeditor-skin/',
