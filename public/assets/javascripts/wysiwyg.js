@@ -91,6 +91,11 @@ jQuery(function ($) {
                     attributes: ['!href', 'target', 'rel'],
                     classes: 'link-extern'
                 },
+                audio: {
+                    attributes: ['alt', 'controls', '!src', 'height', 'width'],
+                    // only float:left and float:right should be allowed
+                    styles: ['float', 'height', 'width']
+                },
                 blockquote: {},
                 br: {},
                 caption: {},
@@ -163,7 +168,12 @@ jQuery(function ($) {
                     attributes: ['colspan', 'rowspan', 'scope'],
                     styles: ['text-align', 'width', 'height']
                 },
-                tr: {}
+                tr: {},
+                video: {
+                    attributes: ['alt', 'controls', '!src', 'height', 'width'],
+                    // only float:left and float:right should be allowed
+                    styles: ['float', 'height', 'width']
+                }
             },
             width: textareaWidth,
             skin: 'studip,' + STUDIP.ASSETS_URL + 'stylesheets/ckeditor-skin/',
@@ -207,6 +217,7 @@ jQuery(function ($) {
             removeDialogTabs: 'image:Link;image:advanced;'
                 + 'link:target;link:advanced;'
                 + 'table:advanced',
+            dialog_buttonsOrder: 'ltr',
 
             // convert special chars except latin ones to html entities
             entities: false,
