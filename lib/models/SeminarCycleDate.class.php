@@ -293,7 +293,6 @@ class SeminarCycleDate extends SimpleORMap
                 || $this->end_time != $old_cycle->end_time
                 || $old_cycle->weekday != $this->weekday )
         {
-
             $update_count = $this->updateExistingDates($old_cycle);
         }
 
@@ -301,7 +300,6 @@ class SeminarCycleDate extends SimpleORMap
             || $old_cycle->end_offset != $this->end_offset
             || $old_cycle->cycle != $this->cycle )
         {
-
             $update_count = $this->generateNewDates($old_cycle);
         }
 
@@ -390,7 +388,7 @@ class SeminarCycleDate extends SimpleORMap
                     $end_time_offset = $course->end_semester->vorles_ende;
                 }
             } else {
-                $end_time_offset = $course->start_semester->vorles_beginn + $this->end_offset * 7 * 24 * 60 * 60;
+                $end_time_offset = $course->start_semester->vorles_beginn + ($this->end_offset + 1) * 7 * 24 * 60 * 60;
             }
 
 
@@ -456,7 +454,7 @@ class SeminarCycleDate extends SimpleORMap
                 $sem_end = $course->end_semester->vorles_ende;
             }
         } else {
-            $sem_end = $course->start_semester->vorles_beginn + $this->end_offset * 7 * 24 * 60 * 60;
+            $sem_end = $course->start_semester->vorles_beginn + ($this->end_offset + 1) * 7 * 24 * 60 * 60;
         }
 
         $semester = Semester::findBySQL('beginn <= :ende AND ende >= :start',
@@ -551,7 +549,7 @@ class SeminarCycleDate extends SimpleORMap
                 $end_time_offset = $course->end_semester->vorles_ende;
             }
         } else {
-            $end_time_offset = $course->start_semester->vorles_beginn + $this->end_offset * 7 * 24 * 60 * 60;
+            $end_time_offset = $course->start_semester->vorles_beginn + ($this->end_offset + 1) * 7 * 24 * 60 * 60;
         }
 
         // loop through all possible singledates for this regular time-entry

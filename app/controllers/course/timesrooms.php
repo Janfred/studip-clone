@@ -833,7 +833,7 @@ class Course_TimesroomsController extends AuthenticatedController
                         $this->end_semester_weeks['start'][] = array('value' => $key, 'label' => sprintf(_('Anfang %s'), $sem->name));
                     }
                     if (mb_strpos($week, mb_substr($weeks[count($weeks) - 1], -15)) !== false) {
-                        $this->end_semester_weeks['ende'][] = array('value' => $key + 1, 'label' => sprintf(_('Ende %s'), $sem->name));
+                        $this->end_semester_weeks['ende'][] = array('value' => $key, 'label' => sprintf(_('Ende %s'), $sem->name));
                     }
                     foreach ($weeks as $val) {
                         if (mb_strpos($week, mb_substr($val, -15)) !== false) {
@@ -877,7 +877,7 @@ class Course_TimesroomsController extends AuthenticatedController
         $cycle->sws         = round(Request::float('teacher_sws'), 1);
         $cycle->cycle       = Request::int('cycle');
         $cycle->week_offset = Request::int('startWeek');
-        $cycle->end_offset  = Request::int('endWeek', null);
+        $cycle->end_offset  = Request::int('endWeek');
         $cycle->start_time  = date('H:i:00', $start);
         $cycle->end_time    = date('H:i:00', $end);
 
@@ -928,8 +928,8 @@ class Course_TimesroomsController extends AuthenticatedController
         $cycle->description = Request::get('description');
         $cycle->sws         = Request::get('teacher_sws');
         $cycle->cycle       = Request::get('cycle');
-        $cycle->week_offset = Request::get('startWeek');
-        $cycle->end_offset  = Request::int('endWeek', null);
+        $cycle->week_offset = Request::int('startWeek');
+        $cycle->end_offset  = Request::int('endWeek');
 
         if($cycle->end_offset == -1) {
             $cycle->end_offset = NULL;

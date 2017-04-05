@@ -91,7 +91,7 @@
         <?= _('Endwoche') ?>
         <select name="endWeek">
             <? if (isset($end_semester_weeks['ende'])) : ?>
-                <? $selected = $cycle->end_offset ? : end($end_semester_weeks['ende'])['value'];?>
+                <? $selected = isset($cycle->end_offset) ? $cycle->end_offset : end($end_semester_weeks['ende'])['value'];?>
                 <? foreach ($end_semester_weeks['ende'] as $end_sem_week) : ?>
                     <option value="<?= $end_sem_week['value'] ?>"
                         <?= (Request::get('endWeek', $selected) == $end_sem_week['value']) ? 'selected' : '' ?>>
