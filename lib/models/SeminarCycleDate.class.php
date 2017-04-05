@@ -38,8 +38,6 @@
  */
 class SeminarCycleDate extends SimpleORMap
 {
-    private $visible = null;
-
     /**
      * returns array of instances of SeminarCycleDates of the given seminar_id
      *
@@ -152,12 +150,7 @@ class SeminarCycleDate extends SimpleORMap
      */
     public function getIsVisible()
     {
-        if ($this->visible === null) {
-            $stmt = DBManager::get()->prepare("SELECT termin_id FROM termine WHERE termine.metadate_id = ? LIMIT 1");
-            $stmt->execute(array($this->getId()));
-            $this->visible = ($stmt->rowCount() !== 0);
-        }
-        return $this->visible;
+        return sizeof($this->dates) ? true : false;
     }
 
     /**
