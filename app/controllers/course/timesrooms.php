@@ -195,10 +195,10 @@ class Course_TimesroomsController extends AuthenticatedController
             CSRFProtection::verifyUnsafeRequest();
             $current_semester = Semester::findCurrent();
             $start_semester = Semester::find(Request::get('startSemester'));
-            if (Request::int('endSemester') != -1) {
+            if (Request::get('endSemester') != '-1' && Request::get('endSemester') != '0') {
                 $end_semester = Semester::find(Request::get('endSemester'));
             } else {
-                $end_semester = -1;
+                $end_semester = Request::int('endSemester');
             }
 
             $course = $this->course;
@@ -212,7 +212,7 @@ class Course_TimesroomsController extends AuthenticatedController
             } else {
 
                 $course->setStartSemester($start_semester->beginn);
-                if ($end_semester != -1) {
+                if (is_object($end_semester)) {
                     $course->setEndSemester($end_semester->beginn);
                 } else {
                     $course->setEndSemester($end_semester);

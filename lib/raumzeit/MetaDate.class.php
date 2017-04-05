@@ -603,12 +603,6 @@ class MetaDate
         $day_of_week = date('l', strtotime('Sunday + ' . $this->cycles[$metadate_id]->day . ' days'));
         $stamp = strtotime('this ' . $day_of_week, $sem_begin);
 
-        if ($end_woche) {
-            $end_woche -= 1;
-            if ($end_woche < 0) $end_woche = 0;
-            $sem_end = strtotime(sprintf('+%u weeks %s', $end_woche, strftime('%d.%m.%Y', $stamp)));
-        }
-
         $start_time = mktime(
             (int)$this->cycles[$metadate_id]->start_stunde,     // Hour
             (int)$this->cycles[$metadate_id]->start_minute,     // Minute
@@ -632,7 +626,7 @@ class MetaDate
             $dateExists = false;
 
             // do not create singledates, if they are earlier then the chosen start-week
-            if ($start_woche > $week) $dateExists = true;
+            if ($start_woche > $week || (isset($end_woche) && $week > $end_woche)) $dateExists = true;
 
             // bi-weekly check
             if ($turnus > 0 && ($week - $start_woche) > 0 && (($week - $start_woche) % ($turnus + 1))) {
@@ -655,7 +649,7 @@ class MetaDate
                     }
 
                     // delete singledates if they are earlier than the chosen start-week
-                    if ($start_woche > $week) {
+                    if ($start_woche > $week || (isset($end_woche) && $week > $end_woche)) {
                         $dates_to_delete[$key] = $val;
                         unset($existingSingleDates[$key]);
                     }
@@ -706,15 +700,6 @@ class MetaDate
 
         } while ($end_time < $sem_end);
 
-
-        foreach ($existingSingleDates as $id => $val) {
-            foreach (array_keys($dates) as $date) {
-                if($date != $id){
-                    $dates_to_delete[$id] = $val;
-                    unset($existingSingleDates[$id]);
-                }
-            }
-        }
         return array('dates' => $dates, 'dates_to_delete' => $dates_to_delete);
     }
 
