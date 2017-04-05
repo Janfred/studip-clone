@@ -413,13 +413,19 @@ class MetaDate
 
     /**
      * returns cycledates as arrays
+     *
+     * @param bool $show_invisibles if cycles without dates should
+     *                              be in the array, defaults to false
      * @return array assoc of cycledate data arrays
      */
-    function getCycleData()
+    function getCycleData($show_invisibles = false)
     {
         $ret = array();
+
         foreach ($this->cycles as $val) {
-            $ret[$val->getMetaDateID()] = $val->toArray();
+            if ($val->is_visible || $show_invisibles) {
+                $ret[$val->getMetaDateID()] = $val->toArray();
+            }
         }
         return $ret;
     }

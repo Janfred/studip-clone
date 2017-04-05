@@ -34,9 +34,11 @@
  * @property SimpleORMapCollection dates        has_many CourseDate
  * @property Course                course       belongs_to Course
  * @property RoomRequest           room_request has_one RoomRequest
+ * @property bool                  is_visible   computed column read
  */
 class SeminarCycleDate extends SimpleORMap
 {
+    private $visible = null;
 
     /**
      * returns array of instances of SeminarCycleDates of the given seminar_id
@@ -94,6 +96,7 @@ class SeminarCycleDate extends SimpleORMap
         $config['additional_fields']['start_minute'] = array('get' => 'getTimeFraction', 'set' => 'setTimeFraction');
         $config['additional_fields']['end_hour'] = array('get' => 'getTimeFraction', 'set' => 'setTimeFraction');
         $config['additional_fields']['end_minute'] = array('get' => 'getTimeFraction', 'set' => 'setTimeFraction');
+        $config['additional_fields']['is_visible'] = array('get' => 'getIsVisible');
         parent::configure($config);
     }
 
@@ -140,6 +143,21 @@ class SeminarCycleDate extends SimpleORMap
             $this->end_time = sprintf('%02u:%02u:00', $this->end_hour, $value);
             return $this->end_minute;
         }
+    }
+
+    /**
+     * Check if there is a least one not cancelled date for this cycle data
+     *
+     * @return bool   true, if there is at least one not cancelled date
+     */
+    public function getIsVisible()
+    {
+        if ($this->visible === null) {
+            $stmt = DBManager::get()->prepare("SELECT termin_id FROM termine WHERE termine.metadate_id = ? LIMIT 1");
+            $stmt->execute(array($this->getId()));
+            $this->visible = ($stmt->rowCount() !== 0);
+        }
+        return $this->visible;
     }
 
     /**

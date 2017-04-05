@@ -44,10 +44,13 @@ class CycleData
      *
      * @var array
      */
-    private $alias = array( 'start_stunde' => 'start_hour',
-                            'end_stunde' => 'end_hour',
-                            'day' => 'weekday',
-                            'desc' => 'description');
+    private $alias = array(
+        'start_stunde' => 'start_hour',
+        'end_stunde'   => 'end_hour',
+        'day'          => 'weekday',
+        'desc'         => 'description',
+        'is_visible'   => 'is_visible'
+    );
 
     /**
      * this is mostly filtered, see readSingleDates()
@@ -153,6 +156,16 @@ class CycleData
     function setDay($day)
     {
         $this->cycle_date->weekday = $day;
+    }
+
+    /**
+     * Check if there is a least one not cancelled date for this cycle data
+     *
+     * @return bool   true, if there is at least one not cancelled date
+     */
+    function getIsVisible()
+    {
+        return $this->cycle_date->is_visible;
     }
 
     function __get($field)
