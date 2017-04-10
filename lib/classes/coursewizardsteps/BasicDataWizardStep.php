@@ -58,7 +58,7 @@ class BasicDataWizardStep implements CourseWizardStep
                 $values['institute'] = Config::get()->STUDYGROUP_DEFAULT_INST;
             // Normal course.
             } else {
-                if (!$class['course_creation_forbidden']) {
+                if (!$class['course_creation_forbidden'] && !$class['studygroup_mode']) {
                     $typestruct[$class['name']][] = $type;
                 }
             }
