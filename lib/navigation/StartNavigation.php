@@ -48,15 +48,11 @@ class StartNavigation extends Navigation
                         AND questionnaires.user_id <> :user_id
                         AND questionnaires.startdate IS NOT NULL AND questionnaires.startdate < UNIX_TIMESTAMP()
                 AND (
-                    ((questionnaires.stopdate IS NULL OR questionnaires.stopdate > UNIX_TIMESTAMP()) AND questionnaires.resultvisibility = 'always')
-                OR 
-               (questionnaires.stopdate IS NOT NULL AND questionnaires.stopdate < UNIX_TIMESTAMP() AND questionnaires.resultvisibility <> 'never')
-               )
+                    questionnaires.stopdate IS NULL OR questionnaires.stopdate > UNIX_TIMESTAMP() )
                 ");
                 $statement->execute(array('threshold' => $threshold,
                     ':user_id' => $GLOBALS['user']->id));
                 $vote = (int) $statement->fetchColumn();
-
                 $query = "SELECT COUNT(IF(chdate > IFNULL(b.visitdate, :threshold) AND d.author_id != :user_id, a.eval_id, NULL))
                           FROM eval_range a
                           INNER JOIN eval d ON (a.eval_id = d.eval_id AND d.startdate < UNIX_TIMESTAMP() AND
