@@ -7,7 +7,7 @@
     </h2>
     <ul class="css-tree">
         <li class="sem-tree-assigned-root keep-node" data-id="root"<?=
-                $assigned ? ' class="hidden-no-js hidden-no-js"' : '' ?>>
+                $assigned ? ' class="hidden-no-js hidden-js"' : '' ?>>
             <?= htmlReady($GLOBALS['UNI_NAME_CLEAN']) ?>
             <ul>
             <?php foreach ($assigned as $element) : ?>

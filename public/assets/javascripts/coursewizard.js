@@ -517,7 +517,10 @@ STUDIP.CourseWizard = {
      */
     cleanupAssignTree: function(element)
     {
-        if (element.parent().children('li').length == 1 && !element.parent().parent().hasClass('keep-node')) {
+        var parent = element.parent();
+        var grandparent = parent.parent();
+        if (parent.children('li').length == 1 && !grandparent.hasClass('keep-node') &&
+                grandparent.children('input[type="hidden"][name="studyareas[]"]').length == 0) {
             STUDIP.CourseWizard.cleanupAssignTree(element.parent().parent());
         } else {
             element.remove();
