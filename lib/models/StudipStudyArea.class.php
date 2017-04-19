@@ -425,6 +425,10 @@ class StudipStudyArea extends SimpleORMap
         // create the dummy root
         $root = static::getRootArea();
 
+        $hashmap = array();
+
+        $i = 0;
+
         // let the backwardssearch begin
         while ($nodes && $i < 99) {
 
@@ -433,21 +437,22 @@ class StudipStudyArea extends SimpleORMap
 
             //process nodes on this level
             foreach ($nodes as $node) {
+
                 // if we know the node already place there
                 if ($hashmap[$node->parent_id]) {
+
                     $cached = $hashmap[$node->parent_id];
-                    $cached->required_children[] = $node;
+                    $cached->required_children[$node->id] = $node;
                 } else {
 
                     // if we have a node that is directly under root
                     if ($node->parent_id == $root->id) {
-                        $root->required_children[] = $node;
+                        $root->required_children[$node->id] = $node;
                     } else {
-
                         // else store in hashmap and continue
                         $hashmap[$node->parent_id] = $node->_parent;
-                        $node->_parent->required_children[] = $node;
-                        $newNodes[] = $node->_parent;
+                        $node->_parent->required_children[$node->id] = $node;
+                        $newNodes[$node->id] = $node->_parent;
                     }
                 }
             }
