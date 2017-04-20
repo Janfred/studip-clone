@@ -10,10 +10,11 @@
       * @param bool $major  if true (default) only the major version part is returned
       * @return string
       */
-     private static function getStudipVersion($major)
+     public static function getStudipVersion($major)
      {
          if ($major) {
-             return substr($GLOBALS['SOFTWARE_VERSION'], 0, 3);
+             preg_match('/\d*.\d*/', $GLOBALS['SOFTWARE_VERSION'], $matches);
+             return $matches[0];
          } else {
              return $GLOBALS['SOFTWARE_VERSION'];
          }
