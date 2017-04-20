@@ -1,4 +1,6 @@
-<h1><?= PageLayout::getTitle() ?></h1>
+<h1 class="hide-in-dialog">
+    <?= htmlReady(PageLayout::getTitle()) ?>
+</h1>
 <section class="contentbox">
     <header>
         <h1>
