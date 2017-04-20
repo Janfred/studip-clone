@@ -13,7 +13,7 @@
      public static function getStudipVersion($major)
      {
          if ($major) {
-             preg_match('/\d*.\d*/', $GLOBALS['SOFTWARE_VERSION'], $matches);
+             preg_match('/^\d+\.\d+/', $GLOBALS['SOFTWARE_VERSION'], $matches);
              return $matches[0];
          } else {
              return $GLOBALS['SOFTWARE_VERSION'];
