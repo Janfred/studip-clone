@@ -17,7 +17,7 @@ class Search_CoursesController extends AuthenticatedController
     {
         parent::before_filter($action, $args);
         PageLayout::setHelpKeyword("Basis.VeranstaltungenAbonnieren");
-        PageLayout::setTitle(_("Veranstaltungssuche"));
+        PageLayout::setTitle(_("Suche nach Veranstaltungen"));
         if (Request::option('view')) {
             $_SESSION['sem_portal']['bereich'] = Request::option('view');
         }
