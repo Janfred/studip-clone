@@ -204,6 +204,7 @@ jQuery(function ($) {
             toolbarStartupExpanded: textarea.width() > 420,
 
             // configure dialogs
+            dialog_buttonsOrder: 'ltr',
             removeDialogTabs: 'image:Link;image:advanced;'
                 + 'link:target;link:advanced;'
                 + 'table:advanced',
