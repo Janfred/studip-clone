@@ -96,7 +96,7 @@ class PermissionSearch extends SQLSearch {
                             "OR auth_user_md5.username LIKE :input ) " .
                             "AND auth_user_md5.perms IN (:permission) ".
                             "AND auth_user_md5.user_id NOT IN(:exclude_user) " .
-                        "ORDER BY auth_user_md5.Nachname";
+                        "ORDER BY auth_user_md5.Nachname, auth_user_md5.Vorname, auth_user_md5.username";
             break;
             case "user_not_already_in_sem":
                 $sql =  "SELECT DISTINCT $first_column, ".$GLOBALS['_fullname_sql']['full_rev_username']." AS fullname " .
@@ -108,7 +108,7 @@ class PermissionSearch extends SQLSearch {
                             "OR CONCAT(auth_user_md5.Nachname, \", \", auth_user_md5.Vorname) LIKE :input " .
                             "OR auth_user_md5.username LIKE :input ) " .
                             "AND auth_user_md5.perms IN (:permission) ".
-                        "ORDER BY auth_user_md5.Nachname";
+                        "ORDER BY auth_user_md5.Nachname, auth_user_md5.Vorname, auth_user_md5.username";
             break;
             case "user_in_sem":
                 $sql =  "SELECT DISTINCT $first_column, ".$GLOBALS['_fullname_sql']['full_rev_username']." AS fullname " .
@@ -119,7 +119,7 @@ class PermissionSearch extends SQLSearch {
                             "OR CONCAT(auth_user_md5.Nachname, \" \", auth_user_md5.Vorname) LIKE :input " .
                             "OR CONCAT(auth_user_md5.Nachname, \", \", auth_user_md5.Vorname) LIKE :input " .
                             "OR auth_user_md5.username LIKE :input ) ".
-                        "ORDER BY auth_user_md5.Nachname";
+                        "ORDER BY auth_user_md5.Nachname, auth_user_md5.Vorname, auth_user_md5.username";
             break;
             case "user_inst":
                 $sql =  "SELECT DISTINCT $first_column, ".$GLOBALS['_fullname_sql']['full_rev_username']." AS fullname " .
@@ -132,7 +132,7 @@ class PermissionSearch extends SQLSearch {
                             "AND user_inst.Institut_id IN (:institute) " .
                             "AND user_inst.inst_perms IN (:permission) ".
                             "AND auth_user_md5.user_id NOT IN(:exclude_user) " .
-                        "ORDER BY auth_user_md5.Nachname";
+                        "ORDER BY auth_user_md5.Nachname, auth_user_md5.Vorname, auth_user_md5.username";
            break;
            case "user_inst_not_already_in_sem":
                 $sql =  "SELECT DISTINCT $first_column, ".$GLOBALS['_fullname_sql']['full_rev_username']." AS fullname " .
@@ -144,7 +144,7 @@ class PermissionSearch extends SQLSearch {
                             "OR auth_user_md5.username LIKE :input ) " .
                             "AND user_inst.Institut_id IN (:institute) " .
                             "AND user_inst.inst_perms IN (:permission) ".
-                        "ORDER BY auth_user_md5.Nachname";
+                        "ORDER BY auth_user_md5.Nachname, auth_user_md5.Vorname, auth_user_md5.username";
            break;
            case "user_not_already_in_sem_or_deputy":
                 $sql =  "SELECT DISTINCT $first_column, ".$GLOBALS['_fullname_sql']['full_rev_username']." AS fullname " .
@@ -155,7 +155,7 @@ class PermissionSearch extends SQLSearch {
                             "OR CONCAT(auth_user_md5.Nachname, \", \", auth_user_md5.Vorname) LIKE :input " .
                             "OR auth_user_md5.username LIKE :input ) " .
                             "AND auth_user_md5.perms IN (:permission) ".
-                        "ORDER BY auth_user_md5.Nachname";
+                        "ORDER BY auth_user_md5.Nachname, auth_user_md5.Vorname, auth_user_md5.username";
            break;
            default:
                throw new InvalidArgumentException("search parameter not valid");
