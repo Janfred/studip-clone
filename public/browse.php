@@ -28,7 +28,7 @@ require_once 'lib/user_visible.inc.php';
 
 //Basics
 PageLayout::setHelpKeyword('Basis.SuchenPersonen');
-PageLayout::setTitle(_('Personensuche'));
+PageLayout::setTitle(_('Suche nach Personen'));
 Navigation::activateItem('/search/users');
 
 $template = $GLOBALS['template_factory']->open('browse');
