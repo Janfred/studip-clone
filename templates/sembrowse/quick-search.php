@@ -43,7 +43,6 @@ SkipLinks::addIndex(_('Suchformular'), 'search_sem_qs', 100);
                 'sem',
                 [ 'id' => 'search_sem_sem', 'class' => 'form-control' ],
                 $sem_browse_data['default_sem']) ?>
-            <?= $search_obj->getSemChangeButton([ ]) ?>
         </div>
     </label>
 
