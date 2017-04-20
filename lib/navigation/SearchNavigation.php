@@ -41,12 +41,6 @@ class SearchNavigation extends Navigation
 
         // browse courses
         $navigation = new Navigation(_('Veranstaltungen'), 'dispatch.php/search/courses');
-        $navigation->addSubNavigation('all', new Navigation(_('Alle'), 'dispatch.php/search/courses?reset_all=TRUE', array('view' => 'all')));
-
-        foreach ($GLOBALS['SEM_CLASS'] as $key => $val) {
-            $navigation->addSubNavigation($key, new Navigation($val['name'], 'dispatch.php/search/courses?reset_all=TRUE&cmd=qs', array('view' => $key)));
-        }
-
         $this->addSubNavigation('courses', $navigation);
 
         // search archive
