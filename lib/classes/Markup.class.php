@@ -282,6 +282,7 @@ class Markup
             'author',
             'content',
             'link-extern',
+            'link-intern',
             'wiki-link',
             'math-tex'
         ));
