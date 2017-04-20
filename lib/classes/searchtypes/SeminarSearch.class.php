@@ -17,18 +17,7 @@
 
 class SeminarSearch extends SearchType
 {
-    private $styles = array(
-                    'name' => 'Name',
-                    'number-name' => "TRIM(CONCAT_WS(' ', VeranstaltungsNummer, Name))",
-                    'number-name-lecturer' => "CONCAT_WS(' ', TRIM(CONCAT_WS(' ', VeranstaltungsNummer, Name)), CONCAT('(', GROUP_CONCAT(Nachname ORDER BY position,Nachname SEPARATOR ', '),')'))"
-                    );
-    private $resultstyle;
-
-    function __construct($resultstyle = 'name')
-    {
-        $this->resultstyle = $resultstyle;
-    }
-
+    
     /**
      * title of the search like "search for courses" or just "courses"
      * @return string
@@ -73,18 +62,20 @@ class SeminarSearch extends SearchType
          if (empty($result)) {
              return array();
          }
-         $style = $this->styles[$this->resultstyle] ?: $this->styles['name'];
 
-         $query = "SELECT s.Seminar_id, {$style}, Name
+         $query = "SELECT s.Seminar_id, CONCAT(s.VeranstaltungsNummer, ' ', s.name, ' (', semester_data.name, ')')
                    FROM seminare AS s
+                   INNER JOIN semester_data ON (
+                        s.start_time + s.duration_time BETWEEN semester_data.beginn AND semester_data.ende
+                        OR (s.duration_time = -1 AND s.start_time <= semester_data.ende))
                    LEFT JOIN seminar_user AS su ON (su.Seminar_id = s.Seminar_id AND su.status='dozent')
                    LEFT JOIN auth_user_md5 USING (user_id)
                    WHERE s.Seminar_id IN (?)
                    GROUP BY s.Seminar_id";
          if (Config::get()->IMPORTANT_SEMNUMBER) {
-             $query .= " ORDER BY s.VeranstaltungsNummer, s.Name";
+             $query .= " ORDER BY semester_data.beginn DESC, s.VeranstaltungsNummer, s.Name";
          } else {
-             $query .= " ORDER BY s.Name";
+             $query .= " ORDER BY semester_data.beginn DESC, s.Name";
          }
          $statement = DBManager::get()->prepare($query);
          $statement->execute(array(
