@@ -94,14 +94,14 @@ class MyCoursesSearch extends StandardSearch
     private function getSQL()
     {
         $semnumber = Config::get()->IMPORTANT_SEMNUMBER;
-        $semester = "CONCAT(' (', 
+        $semester_text = "CONCAT(' (', 
             IF(s.`duration_time` = -1, CONCAT_WS(' - ', sem1.`name`, '" . _('unbegrenzt') . "'),
                 IF(s.`duration_time` != 0, CONCAT_WS(' - ', sem1.`name`, sem2.`name`), sem1.`name`)), ')')";
 
         switch ($this->perm_level) {
             // Roots see everything, everywhere.
             case 'root':
-                $query = "SELECT DISTINCT s.`Seminar_id`, CONCAT(s.`VeranstaltungsNummer`, ' ', s.`Name`, ' (', sem.`name`, ')')
+                $query = "SELECT DISTINCT s.`Seminar_id`, CONCAT(s.`VeranstaltungsNummer`, ' ', s.`Name`, " . $semester_text . ")
                     FROM `seminare` s
                         JOIN `semester_data` sem1 ON (s.`start_time` = sem1.`beginn`)
                         LEFT JOIN `semester_data` sem2 ON (s.`start_time` + s.`duration_time` = sem2.`beginn`)
@@ -117,7 +117,7 @@ class MyCoursesSearch extends StandardSearch
                 return $query;
             // Admins see everything at their assigned institutes.
             case 'admin':
-                $query = "SELECT DISTINCT s.`Seminar_id`, CONCAT(s.`VeranstaltungsNummer`, ' ', s.`Name`, ' (', sem.`name`, ')')
+                $query = "SELECT DISTINCT s.`Seminar_id`, CONCAT(s.`VeranstaltungsNummer`, ' ', s.`Name`, " . $semester_text . ")
                     FROM `seminare` s
                         JOIN `semester_data` sem1 ON (s.`start_time` = sem1.`beginn`)
                         LEFT JOIN `semester_data` sem2 ON (s.`start_time` + s.`duration_time` = sem2.`beginn`)
@@ -135,7 +135,7 @@ class MyCoursesSearch extends StandardSearch
                 return $query;
             // Lecturers see their own courses.
             case 'dozent':
-                $query = "SELECT DISTINCT s.`Seminar_id`, CONCAT(s.`VeranstaltungsNummer`, ' ', s.`Name`, ' (', sem.`name`, ')'), sem.`beginn`
+                $query = "SELECT DISTINCT s.`Seminar_id`, CONCAT(s.`VeranstaltungsNummer`, ' ', s.`Name`, " . $semester_text . ")
                     FROM `seminare` s
                         JOIN `seminar_user` su ON (s.`Seminar_id`=su.`Seminar_id`)
                         JOIN `semester_data` sem1 ON (s.`start_time` = sem1.`beginn`)
@@ -148,7 +148,7 @@ class MyCoursesSearch extends StandardSearch
                         AND s.`Seminar_id` NOT IN (:exclude)";
                 if (Config::get()->DEPUTIES_ENABLE) {
                     $query .= " UNION
-                        SELECT DISTINCT s.`Seminar_id`, CONCAT(s.`VeranstaltungsNummer`, ' ', s.`Name`, ' (', sem.`name`, ')'), sem.`beginn`
+                        SELECT DISTINCT s.`Seminar_id`, CONCAT(s.`VeranstaltungsNummer`, ' ', s.`Name`, " . $semester_text . ")
                         FROM `seminare` s
                             JOIN `deputies` d ON (s.`Seminar_id` = d.`range_id`)
                             JOIN `semester_data` sem ON (
