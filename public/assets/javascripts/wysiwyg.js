@@ -89,7 +89,7 @@ jQuery(function ($) {
                     // and internal links should not have any attributes except
                     // for href, but this cannot be enforced here
                     attributes: ['!href', 'target', 'rel'],
-                    classes: ['link-extern', 'link-intern']
+                    classes: 'link-extern'
                 },
                 blockquote: {},
                 br: {},
@@ -163,7 +163,7 @@ jQuery(function ($) {
                     attributes: ['colspan', 'rowspan', 'scope'],
                     styles: ['text-align', 'width', 'height']
                 },
-                tr: {},
+                tr: {}
             },
             width: textareaWidth,
             skin: 'studip,' + STUDIP.ASSETS_URL + 'stylesheets/ckeditor-skin/',
@@ -207,7 +207,6 @@ jQuery(function ($) {
             removeDialogTabs: 'image:Link;image:advanced;'
                 + 'link:target;link:advanced;'
                 + 'table:advanced',
-            dialog_buttonsOrder: 'ltr',
 
             // convert special chars except latin ones to html entities
             entities: false,
