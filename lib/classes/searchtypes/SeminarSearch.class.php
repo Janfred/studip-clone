@@ -17,7 +17,7 @@
 
 class SeminarSearch extends SearchType
 {
-    
+
     /**
      * title of the search like "search for courses" or just "courses"
      * @return string
@@ -63,9 +63,9 @@ class SeminarSearch extends SearchType
              return array();
          }
 
-         $query = "SELECT s.Seminar_id, CONCAT(s.VeranstaltungsNummer, ' ', s.name, CONCAT(' (', 
+         $query = "SELECT s.Seminar_id, CONCAT_WS(' ', s.VeranstaltungsNummer, s.name, CONCAT(' (', 
             IF(s.duration_time = -1, CONCAT_WS(' - ', sem1.name, '" . _('unbegrenzt') . "'),
-                IF(s.duration_time != 0, CONCAT_WS(' - ', sem1.name, sem2.name), sem1.name)), ')'))
+                IF(s.duration_time != 0, CONCAT_WS(' - ', sem1.name, sem2.name), sem1.name)), ')')) AS Name
                    FROM seminare AS s
                    JOIN `semester_data` sem1 ON (s.`start_time` = sem1.`beginn`)
                         LEFT JOIN `semester_data` sem2 ON (s.`start_time` + s.`duration_time` = sem2.`beginn`)
