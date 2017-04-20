@@ -28,7 +28,7 @@ class StudipSemSearchHelper {
     
     public static function GetQuickSearchFields(){
         return array(   'all' =>_("alles"),
-                        'title_lecturer_number' => _("Titel") . ',' . _("Lehrende") . ',' . _("Nummer"), 
+                        'title_lecturer_number' => _("Titel") . ', ' . _("Lehrende") . ', ' . _("Nummer"),
                         'title' => _("Titel"),
                         'sub_title' => _("Untertitel"),
                         'lecturer' => _("Lehrende"),
