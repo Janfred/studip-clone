@@ -38,17 +38,16 @@ class Search_CoursesController extends AuthenticatedController
         }
 
         $views = new ViewsWidget();
-        $views->addLink(
-            _('Alle'),
-                URLHelper::getURL('dispatch.php/search/courses?reset_all=TRUE&cmd=qs',
-                    ['reset_all' => 'TRUE', 'cmd' => 'qs', 'view' => 'all'])
-        )->setActive(!Request::get('view') || Request::get('view') == 'all');
+        $views->addLink(_('Alle'), $this->url_for(
+            'search/courses?reset_all=TRUE&cmd=qs',
+            ['view' => 'all']
+        ))->setActive(Request::get('view', 'all') === 'all');
+
         foreach ($GLOBALS['SEM_CLASS'] as $key => $val) {
-            $views->addLink(
-                $val['name'],
-                    URLHelper::getURL('dispatch.php/search/courses?reset_all=TRUE&cmd=qs',
-                        ['reset_all' => 'TRUE', 'cmd' => 'qs', 'view' => $key])
-            )->setActive(Request::get('view') == $key);
+            $views->addLink($val['name'], $this->url_for(
+                'search/courses?reset_all=TRUE&cmd=qs',
+                ['view' => $key]
+            ))->setActive(Request::int('view') === $key);
         }
         Sidebar::Get()->addWidget($views);
     }
