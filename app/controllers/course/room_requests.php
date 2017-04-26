@@ -100,6 +100,9 @@ class Course_RoomRequestsController extends AuthenticatedController
     public function edit_action()
     {
         Helpbar::get()->addPlainText(_('Information'), _('Hier können Sie Angaben zu gewünschten Raumeigenschaften machen.'));
+        
+        $request_was_closed_before = false;
+        
         if (Request::option('new_room_request_type')) {
             $request = new RoomRequest();
             $request->seminar_id = $this->course_id;
@@ -128,6 +131,8 @@ class Course_RoomRequestsController extends AuthenticatedController
             if($request->user_id != $GLOBALS['user']->id) {
                 $request->last_modified_by = $GLOBALS['user']->id;
             }
+            
+            $request_was_closed_before = $request->getClosed() > 0;
         }
 
         $admission_turnout = Seminar::getInstance($this->course_id)->admission_turnout;
@@ -144,6 +149,12 @@ class Course_RoomRequestsController extends AuthenticatedController
                 PageLayout::postMessage(MessageBox::error(_("Die Anfrage konnte nicht gespeichert werden, da Sie mindestens einen Raum oder mindestens eine Eigenschaft (z.B. Anzahl der Sitzplätze) angeben müssen!")));
             } else {
                 $request->setClosed(0);
+                if ($request_was_closed_before) {
+                    //The one who re-activates a request shall be the one who owns it.
+                    //(Fix for Biest #2794).
+                    $request->user_id = $GLOBALS['user']->id;
+                }
+                
                 $this->request_stored = $request->store();
                 if ($this->request_stored) {
                     PageLayout::postMessage(MessageBox::success(_("Die Raumanfrage und gewünschte Raumeigenschaften wurden gespeichert")));
