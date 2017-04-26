@@ -58,7 +58,6 @@ class ProfileController extends AuthenticatedController
      */
     public function index_action()
     {
-
         // Template Index_Box for render-partials
         $layout = $GLOBALS['template_factory']->open('shared/content_box');
         $this->shared_box = $layout;
@@ -68,7 +67,7 @@ class ProfileController extends AuthenticatedController
             $this->current_user->store();
         }
 
-        if (get_config('NEWS_RSS_EXPORT_ENABLE')) {
+        if (Config::get()->NEWS_RSS_EXPORT_ENABLE) {
             $news_author_id = StudipNews::GetRssIdFromUserId($this->current_user->user_id);
             if ($news_author_id) {
                 PageLayout::addHeadElement('link', array('rel'   => 'alternate',
@@ -79,7 +78,7 @@ class ProfileController extends AuthenticatedController
         }
 
         // GetScroreList
-        if (get_config('SCORE_ENABLE')) {
+        if (Config::get()->SCORE_ENABLE) {
             if ($this->current_user->user_id === $GLOBALS['user']->id || $this->current_user->score) {
                 $this->score         = Score::GetMyScore($this->current_user);
                 $this->score_title   = Score::getTitel($this->score, $this->current_user->geschlecht);
@@ -95,7 +94,7 @@ class ProfileController extends AuthenticatedController
         $this->homepage     = $this->profile->getVisibilityValue('Home','homepage');
 
         // skype informations
-        if (get_config('ENABLE_SKYPE_INFO') && $this->profile->checkVisibility('skype_name')) {
+        if (Config::get()->ENABLE_SKYPE_INFO && $this->profile->checkVisibility('skype_name')) {
             $this->skype_name   = UserConfig::get($this->current_user->user_id)->SKYPE_NAME;
         }
 
@@ -141,7 +140,7 @@ class ProfileController extends AuthenticatedController
 
 
         // calendar
-        if (get_config('CALENDAR_ENABLE')) {
+        if (Config::get()->CALENDAR_ENABLE) {
             if (!in_array($this->current_user->perms, words('admin root'))) {
                 if ($this->profile->checkVisibility('termine')) {
             $response = $this->relay('calendar/contentbox/display/' . $this->current_user->user_id);
@@ -151,7 +150,7 @@ class ProfileController extends AuthenticatedController
         }
 
         // include and show votes and tests
-        if (get_config('VOTE_ENABLE') && $this->profile->checkVisibility('votes')) {
+        if (Config::get()->VOTE_ENABLE && $this->profile->checkVisibility('votes')) {
             $response = $this->relay('evaluation/display/' . $this->current_user->user_id);
             $this->evaluations = $response->body;
 
@@ -198,7 +197,7 @@ class ProfileController extends AuthenticatedController
         $this->hompage_plugin = $render;
 
         // show literature info
-        if (get_config('LITERATURE_ENABLE')) {
+        if (Config::get()->LITERATURE_ENABLE) {
             $lit_list = StudipLitList::GetFormattedListsByRange($this->current_user->user_id);
             if ($this->current_user->user_id == $this->user->user_id) {
                 $this->admin_url    = 'dispatch.php/literature/edit_list.php?_range_id=self';
@@ -233,6 +232,58 @@ class ProfileController extends AuthenticatedController
         if( !empty($categories)) {
             $this->categories = array_filter($categories, function ($item) { return !empty($item['content']); });
         }
+
+        $actions = new ActionsWidget();
+        if ($this->current_user->username != $this->user->username) {
+            if($GLOBALS['perm']->have_perm('root')) {
+                $actions->addLink(
+                    _('Dieses Konto bearbeiten'),
+                    $this->url_for('dispatch.php/admin/user/edit/' . $this->current_user->user_id),
+                    Icon::create('edit', 'clickable', tooltip2( _('Dieses Konto bearbeiten')))
+                );
+            }
+
+            if (!$this->user->isFriendOf($this->current_user)) {
+                $actions->addLink(
+                    _('zu den Kontakten hinzufügen'),
+                    $this->url_for('profile/add_buddy?username=' . $this->current_user->username),
+                    Icon::create('person', 'clickable', tooltip2(_('Zu den Kontakten hinzufügen')))
+                );
+            }
+
+            $actions->addLink(
+                _('Nachricht schreiben'),
+                $this->url_for('messages/write', ['rec_uname' => $this->current_user->username]),
+                Icon::create('mail', 'clickable', tooltip2(_('Nachricht an Nutzer verschicken')))
+            )->asDialog('size="50%"');
+
+            if (class_exists('Blubber')) {
+                $actions->addLink(
+                    _('Anblubbern'),
+                    URLHelper::getLink('plugins.php/blubber/streams/global', ['mention' => $this->current_user->username]),
+                    Icon::create('blubber', 'clickable', tooltip2(_('Blubber diesen Nutzer an')))
+                );
+            }
+
+        }
+        $actions->addLink(
+            _('vCard herunterladen'),
+            $this->url_for('contact/vcard', ['user[]' => $this->current_user->username]),
+            Icon::create('vcard', 'clickable', tooltip2(_('vCard herunterladen')))
+        );
+
+        if ($this->score && $this->score_title)  {
+            $actions->addLink(
+                sprintf('%s : %u - %s', _('Stud.IP-Punkte'), $this->score, $this->score_title),
+                $this->url_for('contact/vcard', ['user[]' => $this->current_user->username]),
+                Icon::create('crown', 'clickable', tooltip2(_("Zur Rangliste")))
+            );
+        }
+
+        $sidebar = Sidebar::Get();
+        $sidebar->setContextAvatar(Avatar::getAvatar($this->current_user->user_id));
+        $sidebar->setTitle(PageLayout::getTitle());
+        $sidebar->addWidget($actions);
     }
 
     /**
@@ -261,15 +312,16 @@ class ProfileController extends AuthenticatedController
         $this->redirect('profile/index?username=' . $username);
     }
 
-
+    /**
+     * Returns user-institutes
+     * @return mixed
+     */
     private function getInstitutInformations()
     {
         $institutes = $this->current_user->institute_memberships->filter(function($member) {
             return $member->inst_perms !== 'user'
                 && $member->visible;
         });
-
-//        var_dump($institutes);die;
 
         $institutes = $institutes->orderBy('priority asc');
         $institutes = $institutes->toArray();

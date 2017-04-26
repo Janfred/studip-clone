@@ -6,10 +6,9 @@ $fields = [
     'fax'          => _('Fax'),
 ];
 ?>
-
-<br>
-<strong><?= _('Wo ich arbeite:') ?></strong><br>
-
+<p>
+    <strong><?= _('Wo ich arbeite:') ?></strong>
+</p>
 <ul>
 <? foreach ($institutes as $institute): ?>
     <li>
