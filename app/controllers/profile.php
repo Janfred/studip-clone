@@ -94,7 +94,7 @@ class ProfileController extends AuthenticatedController
         $this->homepage     = $this->profile->getVisibilityValue('Home', 'homepage');
 
         // skype informations
-        if (Config::get()->ENABLE_SKYPE_INFO && $this->profile->checkVisibility('skype_name')) {
+        if (Config::get()->ENABLE_SKYPE_INFO && Visibility::verify('skype_name', $this->current_user->user_id)) {
             $this->skype_name = UserConfig::get($this->current_user->user_id)->SKYPE_NAME;
         }
 
@@ -108,7 +108,7 @@ class ProfileController extends AuthenticatedController
         // get studying informations of an user
         if ($this->current_user->perms != 'dozent') {
 
-            if (count($this->current_user->institute_memberships) > 0 && $this->profile->checkVisibility('studying')) {
+            if (count($this->current_user->institute_memberships) > 0 && Visibility::verify('studying', $this->current_user->user_id)) {
                 $study_institutes       = $this->current_user->institute_memberships->filter(function ($a) {
                     return $a->inst_perms == 'user';
                 });
@@ -133,7 +133,7 @@ class ProfileController extends AuthenticatedController
 
         $show_admin = ($this->perm->have_perm('autor') && $this->user->user_id == $this->current_user->user_id) ||
             (isDeputyEditAboutActivated() && isDeputy($this->user->user_id, $this->current_user->user_id, true));
-        if ($this->profile->checkVisibility('news') OR $show_admin === true) {
+        if (Visibility::verify('news', $this->current_user->user_id) OR $show_admin === true) {
             $response   = $this->relay('news/display/' . $this->current_user->user_id);
             $this->news = $response->body;
         }
@@ -142,7 +142,7 @@ class ProfileController extends AuthenticatedController
         // calendar
         if (Config::get()->CALENDAR_ENABLE) {
             if (!in_array($this->current_user->perms, words('admin root'))) {
-                if ($this->profile->checkVisibility('termine')) {
+                if (Visibility::verify('termine', $this->current_user->user_id)) {
                     $response    = $this->relay('calendar/contentbox/display/' . $this->current_user->user_id);
                     $this->dates = $response->body;
                 }
@@ -150,7 +150,7 @@ class ProfileController extends AuthenticatedController
         }
 
         // include and show votes and tests
-        if (Config::get()->VOTE_ENABLE && $this->profile->checkVisibility('votes')) {
+        if (Config::get()->VOTE_ENABLE && Visibility::verify('votes', $this->current_user->user_id)) {
             $response          = $this->relay('evaluation/display/' . $this->current_user->user_id);
             $this->evaluations = $response->body;
 
@@ -168,7 +168,7 @@ class ProfileController extends AuthenticatedController
 
         $ausgabe_inhalt = [];
         foreach ($ausgabe_felder as $key => $value) {
-            if ($this->profile->checkVisibility($key)) {
+            if (Visibility::verify($key, $this->current_user->user_id)) {
                 $ausgabe_inhalt[$value] = $this->current_user[$key];
             }
         }
@@ -205,7 +205,7 @@ class ProfileController extends AuthenticatedController
                 $this->admin_title = _('Literaturlisten bearbeiten');
             }
 
-            if ($this->profile->checkVisibility('literature')) {
+            if (Visibility::verify('literature', $this->current_user->user_id)) {
                 $this->show_lit = true;
                 $this->lit_list = $lit_list;
             }
@@ -223,7 +223,7 @@ class ProfileController extends AuthenticatedController
                 $vis_text .= ' ( ' . Visibility::getStateDescription('kat_' . $cat->kategorie_id) . ' )';
             }
 
-            if ($this->profile->checkVisibility('kat_' . $cat->kategorie_id)) {
+            if (Visibility::verify('kat_' . $cat->kategorie_id, $this->current_user->user_id)) {
                 $categories[$cat->kategorie_id]['head']    = $head;
                 $categories[$cat->kategorie_id]['zusatz']  = $vis_text;
                 $categories[$cat->kategorie_id]['content'] = $body;

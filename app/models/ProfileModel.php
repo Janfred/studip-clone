@@ -62,16 +62,6 @@ class ProfileModel
     }
 
     /**
-     * Checks the visibility value
-     *
-     * @return boolean
-     */
-    function checkVisibility($param)
-    {
-        return Visibility::verify($param, $this->current_user->user_id);
-    }
-
-    /**
      * Returns the visibility value
      *
      * @return String

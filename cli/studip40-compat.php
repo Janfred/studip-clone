@@ -121,6 +121,7 @@ $rules = [
     'get_local_visibility_by_username' => false,
     'get_homepage_element_visibility' => false,
     'set_homepage_element_visibility' => false,
+    'checkVisibility' => 'Use #{yellow:Visibility::verify($param, $this->current_user->user_id)} instead',
 
     'InsertPersonStatusgruppe' => 'Use #{Statusgruppen::addUser()} instead',
     'RemovePersonStatusgruppe(' => 'Use #{yellow:Statusgruppen::find($group_id)->removeUser($user_id)} instead',
