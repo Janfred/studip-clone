@@ -44,7 +44,7 @@ class ProfileController extends AuthenticatedController
             PageLayout::setTitle(_('Mein Profil'));
             UserConfig::get($this->user->id)->store('PROFILE_LAST_VISIT', time());
         } else if ($this->current_user['user_id'] && ($this->perm->have_perm('root') || (!$this->current_user['locked'] && get_visibility_by_id($this->current_user['user_id'])))) {
-            PageLayout::setTitle(_('Profil') . ' - ' . $this->current_user->getFullname());
+            PageLayout::setTitle(_('Profil von')  . ' ' . $this->current_user->getFullname());
             object_add_view($this->current_user->user_id);
         } else {
             PageLayout::setTitle(_('Profil'));
@@ -275,18 +275,21 @@ class ProfileController extends AuthenticatedController
             Icon::create('vcard', 'clickable', tooltip2(_('vCard herunterladen')))
         );
 
+        $sidebar = Sidebar::Get();
+        $sidebar->setContextAvatar(Avatar::getAvatar($this->current_user->user_id));
+        $sidebar->addWidget($actions);
+
         if ($this->score && $this->score_title) {
-            $actions->addLink(
-                sprintf('%s : %u - %s', _('Stud.IP-Punkte'), $this->score, $this->score_title),
+            $scores = new ActionsWidget();
+            $scores->setTitle(_('Stud.IP-Punkte'));
+            $scores->addLink(
+                sprintf('%s %s', number_format($this->score, 0, ',','.'),$this->score_title ),
                 $this->url_for('score'),
                 Icon::create('crown', 'clickable', tooltip2(_("Zur Rangliste")))
             );
+            $sidebar->addWidget($scores);
         }
 
-        $sidebar = Sidebar::Get();
-        $sidebar->setContextAvatar(Avatar::getAvatar($this->current_user->user_id));
-        $sidebar->setTitle(PageLayout::getTitle());
-        $sidebar->addWidget($actions);
     }
 
     /**

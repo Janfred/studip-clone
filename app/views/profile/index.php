@@ -1,13 +1,12 @@
-<div class="profile-view">
-    <div class="profile-view-aside">
-
-    </div>
-
-    <div class="profile-view-main">
-        <h1><?= htmlReady($current_user->getFullName()) ?></h1>
-
+<section class="contentbox">
+    <header>
+        <h1>
+            <?= _('Allgemeine Informationen')?>
+        </h1>
+    </header>
+    <section>
         <? if ($motto) : ?>
-            <h3><?= htmlReady($motto) ?></h3>
+            <p><strong><?= htmlReady($motto) ?></strong></p>
         <? endif ?>
         <p>
             <strong>
@@ -80,13 +79,13 @@
         <? if (count($study_institutes) > 0): ?>
             <p><strong><?= _('Wo ich studiere:') ?></strong></p>
             <ul>
-            <? foreach ($study_institutes as $inst_result) : ?>
-                <li>
-                    <a href="<?= $controller->link_for('institute/overview', ['auswahl' => $inst_result->institut_id]) ?>">
-                        <?= htmlReady($inst_result->institute->name) ?>
-                    </a>
-                </li>
-            <? endforeach ?>
+                <? foreach ($study_institutes as $inst_result) : ?>
+                    <li>
+                        <a href="<?= $controller->link_for('institute/overview', ['auswahl' => $inst_result->institut_id]) ?>">
+                            <?= htmlReady($inst_result->institute->name) ?>
+                        </a>
+                    </li>
+                <? endforeach ?>
             </ul>
         <? endif ?>
 
@@ -116,8 +115,8 @@
                 </p>
             <? endforeach ?>
         <? endif ?>
-    </div>
-</div>
+    </section>
+</section>
 
 <?= $news ?>
 
