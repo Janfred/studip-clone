@@ -241,7 +241,7 @@ class ProfileController extends AuthenticatedController
             if ($GLOBALS['perm']->have_perm('root')) {
                 $actions->addLink(
                     _('Dieses Konto bearbeiten'),
-                    $this->url_for('dispatch.php/admin/user/edit/' . $this->current_user->user_id),
+                    $this->url_for('admin/user/edit/' . $this->current_user->user_id),
                     Icon::create('edit', 'clickable', tooltip2(_('Dieses Konto bearbeiten')))
                 );
             }
