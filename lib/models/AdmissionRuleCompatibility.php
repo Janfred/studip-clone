@@ -30,7 +30,7 @@ class AdmissionRuleCompatibility extends SimpleORMap
 
     public static function getCompatibilityMatrix()
     {
-        $types = RuleAdministrationModel::getAdmissionRuleTypes();
+        $types = AdmissionRule::getAvailableAdmissionRules(false);
 
         $matrix = array();
         foreach ($types as $class => $data) {

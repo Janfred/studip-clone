@@ -148,6 +148,8 @@ $rules = [
     'AutoInsert::existSeminars' => false,
     'ZebraTable' => 'No longer neccessary. Use #{table.default} instead.',
     'Table' => 'No longer neccessary. Use #{table.default} instead.',
+
+    'RuleAdministrationModel::getAdmissionRuleTypes' => 'Use #{yellow:AdmissionRule::getAvailableAdmissionRules(false)} instead.',
 ];
 
 

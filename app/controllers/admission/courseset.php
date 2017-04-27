@@ -15,7 +15,6 @@
  */
 
 require_once 'app/models/courseset.php';
-require_once 'app/models/rule_administration.php';
 require_once 'lib/admission.inc.php';
 
 class Admission_CoursesetController extends AuthenticatedController
@@ -62,7 +61,7 @@ class Admission_CoursesetController extends AuthenticatedController
             $courseset = new CourseSet($this->course_set_details);
             return $this->render_text($courseset->toString());
         }
-        $this->ruleTypes = RuleAdministrationModel::getAdmissionRuleTypes();
+        $this->ruleTypes = AdmissionRule::getAvailableAdmissionRules(false);
         $this->coursesets = array();
         foreach (words('current_institut_id current_rule_types set_name_prefix current_semester_id current_rule_types') as $param) {
             $this->$param = $_SESSION[get_class($this)][$param];

@@ -15,8 +15,6 @@
  * @since       3.0
  */
 
-require_once 'app/models/rule_administration.php';
-
 class Admission_RuleAdministrationController extends AuthenticatedController
 {
     protected $utf8decode_xhr = true;
@@ -54,7 +52,7 @@ class Admission_RuleAdministrationController extends AuthenticatedController
     {
         PageLayout::setTitle(_('Verwaltung von Anmelderegeln'));
 
-        $this->ruleTypes = RuleAdministrationModel::getAdmissionRuleTypes();
+        $this->ruleTypes = AdmissionRule::getAvailableAdmissionRules(false);
         // Available rule classes.
         $ruleClasses = array_map(function($s) { return mb_strtolower($s); }, array_keys($this->ruleTypes));
         // Found directories with rule definitions.
@@ -67,7 +65,7 @@ class Admission_RuleAdministrationController extends AuthenticatedController
     {
         PageLayout::setTitle(_('Anmelderegelkompatibilität'));
 
-        $this->ruletypes = RuleAdministrationModel::getAdmissionRuleTypes();
+        $this->ruletypes = AdmissionRule::getAvailableAdmissionRules(false);
         $this->matrix = AdmissionRuleCompatibility::getCompatibilityMatrix();
     }
 
@@ -80,7 +78,7 @@ class Admission_RuleAdministrationController extends AuthenticatedController
     public function check_activation_action($ruleType)
     {
         PageLayout::setTitle(_('Verfügbarkeit der Anmelderegel'));
-        $this->ruleTypes = RuleAdministrationModel::getAdmissionRuleTypes();
+        $this->ruleTypes = AdmissionRule::getAvailableAdmissionRules(false);
         $this->type = $ruleType;
         $stmt = DBManager::get()->prepare("SELECT ai.`institute_id`
             FROM `admissionrule_inst` ai
