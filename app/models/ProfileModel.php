@@ -194,21 +194,4 @@ class ProfileModel
         }
         return $array;
     }
-
-    /**
-     * Get the decorated StudIP-Kings information
-     * @return String
-     */
-    function getKingsInformations()
-    {
-        $is_king = StudipKing::is_king($this->current_user->user_id, TRUE);
-
-        $result = '';
-        foreach ($is_king as $type => $text) {
-            $type = str_replace('_', '-', $type);
-            $result .= Assets::img("crowns/crown-$type.png", array('alt' => $text, 'title' => $text));
-        }
-
-        return $result ?: null;
-    }
 }

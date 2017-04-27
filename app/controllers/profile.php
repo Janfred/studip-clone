@@ -123,7 +123,7 @@ class ProfileController extends AuthenticatedController
         // get kings informations
         if (Config::Get()->SCORE_ENABLE) {
             if ($this->current_user->user_id === $GLOBALS['user']->id || $this->current_user->score) {
-                $kings = $this->profile->getKingsInformations();
+                $kings = $this->current_user->getStudipKingIcon();
 
                 if ($kings != null) {
                     $this->kings = $kings;

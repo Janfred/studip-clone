@@ -144,6 +144,7 @@ $rules = [
     'getExternDefaultForUser' => 'Use #{yellow:InstituteMember::getDefaultInstituteIdForUser($user_id)} instead.',
     'checkExternDefaultForUser' => 'Use #{yellow:InstituteMember::ensureDefaultInstituteIdForUser($user_id)} instead.',
     'getAllChildIDs' => false,
+    'getKingsInformations' => 'Use #{yellow:User} model instead',
 
     'AutoInsert::existSeminars' => false,
     'ZebraTable' => 'No longer neccessary. Use #{table.default} instead.',

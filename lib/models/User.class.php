@@ -600,6 +600,22 @@ class User extends AuthUserMd5
     }
 
     /**
+     * Get the decorated StudIP-Kings information
+     * @return String
+     */
+    public function getStudipKingIcon() {
+        $is_king = StudipKing::is_king($this->user_id, TRUE);
+
+        $result = '';
+        foreach ($is_king as $type => $text) {
+            $type = str_replace('_', '-', $type);
+            $result .= Assets::img('crowns/crown-' . $type . '.png', ['alt' => $text, 'title' => $text]);
+        }
+
+        return $result ?: null;
+    }
+
+    /**
      * Builds an array containing all available elements that are part of a
      * user's homepage together with their visibility. It isn't sufficient to
      * just load the visibility settings from database, because if the user
