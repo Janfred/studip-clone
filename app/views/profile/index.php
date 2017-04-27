@@ -1,98 +1,82 @@
 <section class="contentbox">
     <header>
         <h1>
-            <?= _('Allgemeine Informationen')?>
+            <?= _('Allgemeine Informationen') ?>
         </h1>
     </header>
     <section>
-        <? if ($motto) : ?>
-            <p><strong><?= htmlReady($motto) ?></strong></p>
-        <? endif ?>
-        <p>
-            <strong>
-                <?= _('Profilbesuche:') ?>
-            </strong>
-            <?= object_return_views($current_user->user_id) ?>
-        </p>
-        <? if (!get_visibility_by_id($current_user->user_id)): ?>
-            <p style="color: red;">
-                <? if ($current_user->user_id !== $user->user_id): ?>
-                    <?= _('(Dieser Nutzer ist unsichtbar.)') ?>
-                <? else: ?>
-                    <?= _('(Sie sind unsichtbar. Deshalb können nur Sie diese Seite sehen.)') ?>
-                <? endif; ?>
-            </p>
-        <? endif; ?>
-        <? if ($current_user->auth_plugin === null): ?>
-            <p style="color:red;">
-                <?= _("(vorläufiger Benutzer)") ?>
-            </p>
-        <? endif; ?>
-        <? if ($public_email): ?>
-            <p>
-                <strong><?= _("E-Mail:") ?></strong>
-                <a href="mailto:<?= htmlReady($public_email) ?>">
-                    <?= htmlReady($public_email) ?>
-                </a>
-            </p>
-        <? endif; ?>
+        <dl>
+            <dt><?= _('Profilbesuche:') ?></dt>
+            <dd><?= object_return_views($current_user->user_id) ?></dd>
+            <? if ($public_email): ?>
+                <dt><?= _("E-Mail:") ?></dt>
+                <dd>
+                    <a href="mailto:<?= htmlReady($public_email) ?>">
+                        <?= htmlReady($public_email) ?>
+                    </a>
+                </dd>
+            <? endif; ?>
 
-        <? if ($private_nr) : ?>
-            <p>
-                <strong><?= _("Telefon (privat):") ?></strong>
-                <?= htmlReady($private_nr) ?>
-            </p>
-        <? endif ?>
+            <? if ($private_nr) : ?>
+                <dt><?= _("Telefon (privat):") ?></dt>
+                <dd><?= htmlReady($private_nr) ?></dd>
+            <? endif ?>
 
-        <? if ($private_cell) : ?>
-            <p>
-                <strong><?= _("Mobiltelefon:") ?></strong>
-                <?= htmlReady($private_cell) ?>
-            </p>
-        <? endif ?>
+            <? if ($private_cell) : ?>
+                <dt><?= _("Mobiltelefon:") ?></dt>
+                <dd><?= htmlReady($private_cell) ?></dd>
+            <? endif ?>
 
-        <? if ($skype_name) : ?>
-            <p>
-                <strong><?= _("Skype:") ?></strong>
-                <?= htmlReady($skype_name) ?>
-            </p>
-        <? endif ?>
+            <? if ($skype_name) : ?>
+                <dt><?= _("Skype:") ?></dt>
+                <dd><?= htmlReady($skype_name) ?></dd>
+            <? endif ?>
 
-        <? if ($privadr) : ?>
-            <p>
-                <strong><?= _("Adresse (privat):") ?></strong>
-                <?= htmlReady($privadr) ?>
-            </p>
-        <? endif ?>
+            <? if ($privadr) : ?>
+                <dt><?= _("Adresse (privat):") ?></dt>
+                <dd><?= htmlReady($privadr) ?></dd>
+            <? endif ?>
 
-        <? if ($homepage) : ?>
-            <p>
-                <strong><?= _("Homepage:") ?></strong>
-                <?= formatLinks($homepage) ?>
-            </p>
-        <? endif ?>
+            <? if ($homepage) : ?>
+                <dt><?= _("Homepage:") ?></dt>
+                <dd><?= formatLinks($homepage) ?></dd>
+            <? endif ?>
 
-        <? if ($perm->have_perm('root') && $current_user['locked']) : ?>
-            <p style="color:red; font-weight: bold"><?= _("BENUTZER IST GESPERRT!") ?></p>
-        <? endif ?>
+            <? if (count($study_institutes) > 0): ?>
+                <dt><?= _('Wo ich studiere:') ?></dt>
+                <dd>
+                    <ul>
+                        <? foreach ($study_institutes as $inst_result) : ?>
+                            <li>
+                                <a href="<?= $controller->link_for('institute/overview', ['auswahl' => $inst_result->institut_id]) ?>">
+                                    <?= htmlReady($inst_result->institute->name) ?>
+                                </a>
+                            </li>
+                        <? endforeach ?>
+                    </ul>
+                </dd>
+            <? endif ?>
 
-        <? if (count($study_institutes) > 0): ?>
-            <p><strong><?= _('Wo ich studiere:') ?></strong></p>
-            <ul>
-                <? foreach ($study_institutes as $inst_result) : ?>
-                    <li>
-                        <a href="<?= $controller->link_for('institute/overview', ['auswahl' => $inst_result->institut_id]) ?>">
-                            <?= htmlReady($inst_result->institute->name) ?>
-                        </a>
-                    </li>
+            <? if (count($institutes) > 0) : ?>
+                <?= $this->render_partial("profile/working_place") ?>
+            <? endif ?>
+
+            <? if (!empty($shortDatafields)) : ?>
+                <? foreach ($shortDatafields as $name => $entry) : ?>
+                    <dt><?= htmlReady($name) ?>:</dt>
+                    <dd>
+                        <?= $entry['content'] ?>
+                        <span class="minor"><?= $entry['visible'] ?></span>
+                    </dd>
                 <? endforeach ?>
-            </ul>
-        <? endif ?>
+            <? endif ?>
 
-        <? if (count($institutes) > 0) : ?>
-            <?= $this->render_partial("profile/working_place") ?>
-        <? endif ?>
-
+            <? if (isset($kings)): ?>
+                <p>
+                    <?= $kings ?>
+                </p>
+            <? endif; ?>
+        </dl>
         <? if ($has_denoted_fields): ?>
             <p>
                 <small>
@@ -100,22 +84,8 @@
                 </small>
             </p>
         <? endif ?>
-
-        <? if (isset($kings)): ?>
-            <p>
-                <?= $kings ?>
-            </p>
-        <? endif; ?>
-        <? if (!empty($shortDatafields)) : ?>
-            <? foreach ($shortDatafields as $name => $entry) : ?>
-                <p>
-                    <strong><?= htmlReady($name) ?>:</strong>
-                    <?= $entry['content'] ?>
-                    <span class="minor"><?= $entry['visible'] ?></span>
-                </p>
-            <? endforeach ?>
-        <? endif ?>
     </section>
+
 </section>
 
 <?= $news ?>

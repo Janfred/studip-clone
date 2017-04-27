@@ -44,7 +44,7 @@ class ProfileController extends AuthenticatedController
             PageLayout::setTitle(_('Mein Profil'));
             UserConfig::get($this->user->id)->store('PROFILE_LAST_VISIT', time());
         } else if ($this->current_user['user_id'] && ($this->perm->have_perm('root') || (!$this->current_user['locked'] && get_visibility_by_id($this->current_user['user_id'])))) {
-            PageLayout::setTitle(_('Profil von')  . ' ' . $this->current_user->getFullname());
+            PageLayout::setTitle(_('Profil von') . ' ' . $this->current_user->getFullname());
             object_add_view($this->current_user->user_id);
         } else {
             PageLayout::setTitle(_('Profil'));
@@ -283,13 +283,48 @@ class ProfileController extends AuthenticatedController
             $scores = new ActionsWidget();
             $scores->setTitle(_('Stud.IP-Punkte'));
             $scores->addLink(
-                sprintf('%s %s', number_format($this->score, 0, ',','.'),$this->score_title ),
+                sprintf('%s %s', number_format($this->score, 0, ',', '.'), $this->score_title),
                 $this->url_for('score'),
                 Icon::create('crown', 'clickable', tooltip2(_("Zur Rangliste")))
             );
             $sidebar->addWidget($scores);
         }
 
+        $info_widget = new SidebarWidget();
+        $info_widget->setTitle(_('Informationen'));
+
+        if (!get_visibility_by_id($this->current_user->user_id)) {
+            if ($this->current_user->user_id !== $this->user->user_id) {
+                $string = _('(Dieser Nutzer ist unsichtbar.)');
+            } else {
+                $string = _('(Sie sind unsichtbar. Deshalb können nur Sie diese Seite sehen.)');
+            }
+            $info_widget->addElement(
+                new WidgetElement('<span style="color:red;">' . $string . '</span>')
+            );
+        }
+
+        if ($GLOBALS['perm']->have_perm('root') && $this->current_user['locked']) {
+            $info_widget->addElement(
+                new WidgetElement('<span style="color:red;">' . _('BENUTZER IST GESPERRT!') . '</span>')
+            );
+        }
+        if ($this->current_user->auth_plugin === null) {
+            $info_widget->addElement(
+                new WidgetElement('<span style="color:red;">' . _('vorläufiger Benutzer') . '</span>')
+            );
+        }
+
+        if (count($info_widget->getElements())) {
+            $sidebar->addWidget($info_widget);
+        }
+
+        if ($this->motto) {
+            $motto_widget = new SidebarWidget();
+            $motto_widget->setTitle(_('Motto'));
+            $motto_widget->addElement(new WidgetElement(htmlReady($this->motto)));
+            $sidebar->addWidget($motto_widget);
+        }
     }
 
     /**
