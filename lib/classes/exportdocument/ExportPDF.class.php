@@ -114,7 +114,7 @@ class ExportPDF extends TCPDF implements ExportDocument {
                 $headers = get_headers($url, true);
                 list(, $status) = explode(' ', $headers[0]);
 
-                $url = $header['Location'] ?: $header['location'] ?: $url;
+                $url = $headers['Location'] ?: $headers['location'] ?: $url;
             } while (in_array($status, array(300, 301, 302, 303, 305, 307)));
 
             $status = $status ?: 404;
