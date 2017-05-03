@@ -6,7 +6,7 @@ SkipLinks::addIndex(_('Suchformular'), 'search_sem_qs', 100);
 
 <fieldset>
     <legend class="hidden-small-down">
-        <?= _("Filter") ?>
+        <?= _("Suche nach Veranstaltungen") ?>
     </legend>
 
     <label>
@@ -15,7 +15,7 @@ SkipLinks::addIndex(_('Suchformular'), 'search_sem_qs', 100);
     </label>
 
     <label>
-        <?= _('Schnellsuche') ?>
+        <?= _('Suchen in') ?>
         <?= $search_obj->getSearchField('qs_choose', [ 'id' => 'search_sem_qs_choose' ]) ?>
     </label>
 
