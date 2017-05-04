@@ -17,6 +17,8 @@ class LiteratureProvider implements ActivityProvider
      */
     public function getActivityDetails($activity)
     {
+        $activity->content = \htmlReady($activity->content);
+
         if ($activity->context == "course") {
 
             $url = \URLHelper::getUrl("dispatch.php/course/literature?cid={$activity->context_id}&view=literatur_sem");

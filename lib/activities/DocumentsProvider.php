@@ -18,6 +18,8 @@ class DocumentsProvider implements ActivityProvider
      */
     public function getActivityDetails($activity)
     {
+        $activity->content = \htmlReady($activity->content);
+
         $document = \StudipDocument::find($activity->object_id);
 
         // check, if current observer has access to document

@@ -17,7 +17,7 @@ class ScheduleProvider implements ActivityProvider
      */
     public function getActivityDetails($activity)
     {
-        $activity->content = $activity->content;
+        $activity->content = htmlReady($activity->content);
 
         $url = \URLHelper::getUrl("dispatch.php/course/dates?cid={$activity->context_id}");
         $route = \URLHelper::getURL('api.php/course/' . $activity->context_id . '/events', NULL, true);

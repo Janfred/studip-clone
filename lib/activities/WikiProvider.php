@@ -17,6 +17,8 @@ class WikiProvider implements ActivityProvider
      */
     public function getActivityDetails($activity)
     {
+        $activity->content = \htmlReady($activity->content);
+
         if ($activity->context == "course") {
             $url = \URLHelper::getUrl("wiki.php?cid={$activity->context_id}&keyword={$activity->object_id}");
             $route = \URLHelper::getURL('api.php/course/' . $activity->context_id . '/wiki/' . $activity->object_id, NULL, true);

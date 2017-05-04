@@ -58,7 +58,7 @@ class ParticipantsProvider implements ActivityProvider
      */
     public function getActivityDetails($activity)
     {
-        $activity->content = $activity->content;
+        $activity->content = htmlReady($activity->content);
 
         $url = \URLHelper::getUrl("dispatch.php/course/members/index", array('cid' => $activity->context_id));
 
