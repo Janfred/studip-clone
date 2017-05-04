@@ -41,7 +41,7 @@ require_once ('lib/seminar_open.php'); // initialise Stud.IP-Session
 require_once ('lib/visual.inc.php');
 
 PageLayout::setHelpKeyword("Basis.SuchenEinrichtungen");
-PageLayout::setTitle(_("Einrichtungssuche"));
+PageLayout::setTitle(_("Suche nach Einrichtungen"));
 Navigation::activateItem('/search/institutes');
 
 $template = $GLOBALS['template_factory']->open('institute_browse');
@@ -73,6 +73,14 @@ if (Request::submitted('reset')) {
     }
     $template->search_text = $search_text;
 }
+
+// add sidebar
+$sidebar = Sidebar::get();
+$sidebar->setImage('sidebar/institute-sidebar.png');
+
+// the sidebar needs a dummy widget to be rendered
+$widget = new Widget();
+$sidebar->addWidget($widget);
 
 // render view
 echo $template->render();
