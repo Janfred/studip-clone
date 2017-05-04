@@ -69,7 +69,7 @@
         <section class="activity-content">
             <section class="activity-description">
                 <span class="activity-details">
-                    <%= activity.content %>
+                    <%- activity.content %>
                 </span>
             </section>
             <div class='clear'></div>
