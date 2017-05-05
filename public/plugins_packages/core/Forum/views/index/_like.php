@@ -15,7 +15,7 @@ shuffle($likes);
             $text .= '<span class="tooltip-content">';
             foreach ($likes as $user_id) {
                 if ($user_id != $GLOBALS['user']->id) {
-                    $text .= get_fullname($user_id) .'<br>';
+                    $text .= htmlReady(get_fullname($user_id)) .'<br>';
                 }
             }
             $text .= '</span></span>';
@@ -26,7 +26,7 @@ shuffle($likes);
         $text = '<span class="tooltip">' . sprintf(_('%s gefällt das.'), sizeof($likes));
         $text .= '<span class="tooltip-content">';
         foreach ($likes as $user_id) {
-            $text .= get_fullname($user_id) .'<br>';
+            $text .= htmlReady(get_fullname($user_id)) .'<br>';
         }
         $text .= '</span></span>';
     }
