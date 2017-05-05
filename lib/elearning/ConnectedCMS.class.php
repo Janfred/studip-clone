@@ -178,7 +178,7 @@ class ConnectedCMS
                 $msg["soap"]["error"] = sprintf(_("Die SOAP-Verbindungsdaten sind für dieses System nicht gesetzt. Ergänzen Sie die Einstellungen für dieses Systems um den Eintrag \"soap_data\" in der Konfigurationsdatei \"local.inc\"."));
             else
             {
-                require_once("/lib/soap/StudipSoapClient" . (Config::get()->SOAP_USE_PHP5 ? "_PHP5" : "") .".class.php");
+                require_once("lib/soap/StudipSoapClient" . (Config::get()->SOAP_USE_PHP5 ? "_PHP5" : "") .".class.php");
                 $this->soap_client = new StudipSoapClient($this->ABSOLUTE_PATH_SOAP);
                 $msg["soap"]["info"] = sprintf(_("Das SOAP-Modul ist aktiv."));
             }
