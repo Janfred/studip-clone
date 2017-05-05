@@ -57,8 +57,9 @@ $template->tree_view = $the_tree;
 // reset the search and show StudipRangeTree
 if (Request::submitted('reset')) {
     $the_tree->open_ranges['root'] = true;
-} elseif ($search_text = Request::get('search_text')) {
-    if (mb_strlen($search_text) >= 3){
+} elseif (Request::submitted('search')) {
+    $search_text = Request::get('search_text');
+    if ($search_text && mb_strlen($search_text) > 3){
         $view->params[0] = "%" . Request::quoted('search_text') . "%";
         $view->params[1] = "%" . Request::quoted('search_text') . "%";
         $search_results = $view->get_query("view:TREE_SEARCH_ITEM");
@@ -69,12 +70,6 @@ if (Request::submitted('reset')) {
         }
         $template->tree_item_ids = $tree_item_ids;
         $template->tree = $range_tree_object->tree;
-
-        if(!$tree_item_ids) {
-            PageLayout::postInfo(_('Es konnte keine Einrichtung gefunden werden, die Ihrer Suchanfrage entspricht.'));
-        }
-    } else {
-        PageLayout::postError(_('Der Suchbegriff muss mindestens 3 Zeichen lang sein.'));
     }
     $template->search_text = $search_text;
 }
@@ -83,10 +78,9 @@ if (Request::submitted('reset')) {
 $sidebar = Sidebar::get();
 $sidebar->setImage('sidebar/institute-sidebar.png');
 
-$search = new SearchWidget(URLHelper::getLink());
-$search->setMethod('post');
-$search->addNeedle(_('Einrichtung suchen'), 'search_text', true);
-$sidebar->addWidget($search);
+// the sidebar needs a dummy widget to be rendered
+$widget = new Widget();
+$sidebar->addWidget($widget);
 
 // render view
 echo $template->render();

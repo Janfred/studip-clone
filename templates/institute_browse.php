@@ -1,3 +1,22 @@
+<? use Studip\Button; ?>
+
+<form class="default" action="<?= URLHelper::getLink() ?>">
+    <fieldset>
+        <legend>
+            <?= _('Suche nach Einrichtungen') ?>
+        </legend>
+        <label>
+            <?= _('Name der Einrichtung') . ':' ?>
+            <input type="text" minlength="4" name="search_text" placeholder="<?= _('Einrichtung suchen') ?>"
+                   value="<?= htmlReady($search_text) ?>" autofocus>
+        </label>
+    </fieldset>
+    <footer>
+        <?= Button::create(_('Suchen'), 'search') ?>
+        <?= Button::create(_('Zurücksetzen'), 'reset') ?>
+    </footer>
+</form>
+
 <? if ($tree_item_ids): ?>
     <? foreach ($tree_item_ids as $tree_item_id): ?>
         <table id="institute_result">
@@ -25,6 +44,10 @@
             </tbody>
         </table>
     <? endforeach ?>
+<? endif ?>
+
+<? if ($search_text && !$tree_item_ids): ?>
+    <? PageLayout::postMessage($message = MessageBox::info(_('Es konnte keine Einrichtung gefunden werden, die Ihrer Suchanfrage entspricht.'))); ?>
 <? endif ?>
 
 <? if (!$search_text): ?>
