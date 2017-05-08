@@ -2,9 +2,6 @@
 
 <form class="default" action="<?= URLHelper::getLink() ?>">
     <fieldset>
-        <legend>
-            <?= _('Suche nach Einrichtungen') ?>
-        </legend>
         <label>
             <?= _('Name der Einrichtung') . ':' ?>
             <input type="text" minlength="4" name="search_text" placeholder="<?= _('Einrichtung suchen') ?>"
