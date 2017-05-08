@@ -118,6 +118,7 @@ class AdminNavigation extends Navigation
             }
 
             $navigation->addSubNavigation('sem_classes', new Navigation(_('Veranstaltungskategorien'), 'dispatch.php/admin/sem_classes/overview'));
+            $navigation->addSubNavigation('loginstyle', new Navigation(_('Startbildschirm'), 'dispatch.php/admin/loginstyle'));
         }
         $this->addSubNavigation('locations', $navigation);
 

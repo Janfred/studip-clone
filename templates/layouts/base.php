@@ -75,11 +75,37 @@ if ($navigation) {
             <?= $this->render_partial('change_view', array('changed_status' => $_SESSION['seminar_change_view_'.$GLOBALS['SessionSeminar']])) ?>
         <? endif ?>
 
-        <? if (PageLayout::isHeaderEnabled() && isset($navigation)) : ?>
-            <?= $this->render_partial('tabs', compact("navigation")) ?>
-        <? endif ?>
+        <? if (PageLayout::isHeaderEnabled() /*&& isset($navigation)*/) : ?>
+            <?= $this->render_partial('tabs', compact('navigation')) ?>
+        <? endif; ?>
 
-        <?= Helpbar::get()->render() ?>
+        <?
+        if (is_object($GLOBALS['user']) && $GLOBALS['user']->id != 'nobody') {
+            // only mark course if user is logged in and free access enabled
+            if (Config::get()->ENABLE_FREE_ACCESS
+                && Navigation::hasItem('/course')
+                && Navigation::getItem('/course')->isActive())
+            {
+                // indicate to the template that this course is publicly visible
+                // need to handle institutes separately (always visible)
+                if ($GLOBALS['SessSemName']['class'] == 'inst') {
+                    $header_template->public_hint = _('öffentliche Einrichtung');
+                } else if (Course::findCurrent()->lesezugriff == 0) {
+                    $header_template->public_hint = _('öffentliche Veranstaltung');
+                }
+            }
+        }
+        ?>
+        <div id="page_title_container">
+            <div id="current_page_title">
+                <?= htmlReady(PageLayout::getTitle()) ?>
+                <?= $public_hint ? '(' . htmlReady($public_hint) . ')' : '' ?>
+            </div>
+            <? if (is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm('autor')) : ?>
+            	<?= Helpbar::get()->render() ?>
+            <? endif; ?>
+         </div>
+
         <div id="layout_container">
             <?= Sidebar::get()->render() ?>
             <div id="layout_content">

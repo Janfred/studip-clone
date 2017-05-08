@@ -1,4 +1,3 @@
-<h1><?= _('Studienbereiche') ?></h1>
 <div id="assigned">
     <h2>
         <span class="required">

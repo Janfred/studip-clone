@@ -32,7 +32,7 @@ class Course_AvatarController extends AuthenticatedController
         }
         
         $this->body_id = 'custom_avatar';
-        PageLayout::setTitle(Course::findCurrent()->getFullname() . ' - ' . _('Bild ändern'));
+        PageLayout::setTitle(Course::findCurrent()->getFullname() . ' - ' . _('Veranstaltungsbild ändern'));
         
         $sem                   = Seminar::getInstance($this->course_id);
         $this->studygroup_mode = $sem->getSemClass()->offsetget('studygroup_mode');

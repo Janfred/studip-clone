@@ -183,6 +183,7 @@ class ProfileController extends AuthenticatedController
         $homepageplugins = PluginEngine::getPlugins('HomepagePlugin');
 
         $render = '';
+        $layout = $GLOBALS['template_factory']->open('shared/content_box');
         foreach ($homepageplugins as $homepageplugin) {
             if ($homepageplugin->isActivated($this->current_user->user_id, 'user')) {
                 // get homepageplugin tempaltes
@@ -236,7 +237,38 @@ class ProfileController extends AuthenticatedController
             });
         }
 
+        
+        $sidebar = Sidebar::Get();
+        
+        //The profile avatar, profile visits and profile score
+        //shall be visible in the sidebar. Therefore we must construct
+        //generic WidgetElement objects and their HTML in here.
+        
+        // First the avatar:
+        $avatar_widget = new TemplateWidget(
+                $this->current_user->getFullName(),
+                $this->get_template_factory()->open('profile/widget-avatar.php'),
+                ['avatar' => Avatar::getAvatar($this->current_user->user_id)]
+                );
+        $avatar_widget->setTitle($this->current_user->getFullName());
+        $sidebar->addWidget($avatar_widget);
+        
+        //Then visits and score (below the avatar image):
+        $details_widget = new TemplateWidget(
+                _('Status'),
+                $this->get_template_factory()->open('profile/widget-details.php'), [
+                        'kings'       => $this->kings,
+                        'views'       => object_return_views($this->current_user->user_id),
+                        'score'       => $this->score,
+                        'score_title' => $this->score_title,
+                ]
+                );
+        $details_widget->setTitle(_('Status'));
+        $sidebar->addWidget($details_widget);
+        
         $actions = new ActionsWidget();
+        //If a user visits the profile of another user
+        //we add a few more actions to the sidebar:
         if ($this->current_user->username != $this->user->username) {
             if ($GLOBALS['perm']->have_perm('root')) {
                 $actions->addLink(
@@ -275,20 +307,7 @@ class ProfileController extends AuthenticatedController
             Icon::create('vcard', 'clickable', tooltip2(_('vCard herunterladen')))
         );
 
-        $sidebar = Sidebar::Get();
-        $sidebar->setContextAvatar(Avatar::getAvatar($this->current_user->user_id));
         $sidebar->addWidget($actions);
-
-        if ($this->score && $this->score_title) {
-            $scores = new ActionsWidget();
-            $scores->setTitle(_('Stud.IP-Punkte'));
-            $scores->addLink(
-                sprintf('%s %s', number_format($this->score, 0, ',', '.'), $this->score_title),
-                $this->url_for('score'),
-                Icon::create('crown', 'clickable', tooltip2(_("Zur Rangliste")))
-            );
-            $sidebar->addWidget($scores);
-        }
 
         $info_widget = new SidebarWidget();
         $info_widget->setTitle(_('Informationen'));

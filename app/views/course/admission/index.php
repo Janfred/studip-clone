@@ -1,5 +1,3 @@
-<h1><?= _("Zugangsberechtigungen") ?></h1>
-
 <form class="default" action="<?= $controller->link_for('/change_course_set') ?>" method="post">
     <?= CSRFProtection::tokenTag() ?>
     <fieldset>

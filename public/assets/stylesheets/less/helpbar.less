@@ -3,9 +3,13 @@
 .helpbar-container {
     background: #fff;
     clear: both;
-    height: 3em;
+    height: 28px;
     position: relative;
-    width: 100%;
+    top: 15px;
+    min-width: 32px;
+    /*width: 100%;*/
+
+    float: right;
 
     #helpbar-sticky {
         display: none;
@@ -31,14 +35,13 @@
 }
 .helpbar {
     .box-sizing(border-box);
-    .box-shadow(1px 1px 0 @dark-gray-color-60);
 
     @border-width: 4px;
-    background: @base-color;
+    background: #fff;
 
     position: absolute;
-    right: 12px;
-    top: -1px;
+    right: 0px;
+    top: 0px;
 
     width: @helpbar-width;
     z-index: 1000;
@@ -48,7 +51,7 @@
         border-left: @border-width solid transparent;
         border-right: @border-width solid transparent;
         content: '';
-        display: inline-block;
+        display: none;
         position: absolute;
         top: -1px;
         left: 0;
@@ -56,12 +59,12 @@
     }
 
     .helpbar-title {
-        .background-icon('question-circle', 'info_alt', 24);
+        .background-icon('question-circle', 'clickable', 24);
         background-position: right top;
         background-repeat: no-repeat;
-        margin: 4px 4px -2px;
+        margin: 2px 4px -4px;
         overflow: hidden;
-        padding: 2px 0 10px 6px;
+        padding: 0px 0 12px 0px;
 
         label {
             cursor: pointer;
@@ -110,7 +113,7 @@
 }
 
 .helpbar {
-    @transition: all 0;
+    @transition: all 300;
 
     width: 32px;
     text-indent: -@helpbar-width;
@@ -124,6 +127,7 @@
 
     #helpbar-sticky:checked + & {
         text-indent: 0;
+        background-color: #28497c;
         width: @helpbar-width;
         .helpbar-title {
             .background-icon('decline-circle', 'info_alt', 24);

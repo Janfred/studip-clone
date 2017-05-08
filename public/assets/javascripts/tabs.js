@@ -75,6 +75,9 @@
         };
 
         needsCompression = function (list) {
+            if (list.children().length == 0 || list.children().last().offset().top === list.children().first().offset().top) {
+                return false;
+            }
             return list.length > 0 && list.height() > _.max(_.map(list.children(), function (kid) {
                 return $(kid).outerHeight(true);
             }));

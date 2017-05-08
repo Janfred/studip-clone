@@ -1,3 +1,6 @@
+<div class="responsive-visible">
+    <?= Avatar::getAvatar($current_user->user_id)->getImageTag(Avatar::NORMAL) ?>
+</div>
 <section class="contentbox">
     <header>
         <h1>

@@ -16,7 +16,7 @@ class Sidebar extends WidgetContainer
         parent::__construct();
 
         $this->setTitle();
-        
+
         // Default sidebar image in order to prevent jumps in navigation
         $this->setImage('sidebar/seminar-sidebar.png');
     }
@@ -149,14 +149,18 @@ class Sidebar extends WidgetContainer
 
         NotificationCenter::postNotification('SidebarWillRender', $this);
 
+        $template = $GLOBALS['template_factory']->open('sidebar/sidebar');
+
         if ($this->hasWidgets()) {
-            $template = $GLOBALS['template_factory']->open('sidebar/sidebar');
             $template->widgets = $this->widgets;
-            $template->image   = $this->getImage();
-            $template->title   = $this->getTitle();
-            $template->avatar  = $this->context_avatar;
-            $content = $template->render();
+        } else {
+            $template->widgets = [];
         }
+
+        $template->image  = $this->getImage();
+        $template->title  = $this->getTitle();
+        $template->avatar = $this->context_avatar;
+        $content = $template->render();
 
         NotificationCenter::postNotification('SidebarDidRender', $this);
 

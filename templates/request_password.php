@@ -1,75 +1,73 @@
-<?
+<?php
 # Lifter010: TODO
 use Studip\Button, Studip\LinkButton;
+
+// Get background images (this should be resolved differently since mobile
+// browsers might still download the desktop background)
+try {
+    $bg_desktop = LoginBackground::getRandomPicture('desktop')->getURL();
+} catch (Exception $e) {
+    $bg_desktop = URLHelper::getLink('pictures/loginbackgrounds/1.jpg');
+}
+try {
+    $bg_mobile = LoginBackground::getRandomPicture('mobile')->getURL();
+} catch (Exception $e) {
+    $bg_mobile = URLHelper::getLink('pictures/loginbackgrounds/2.jpg');
+}
 ?>
-<style>
-    #layout_container {
-        background-color: transparent;
-    }   
-</style>
-<div class="index_container">
-<?if (sizeof($messages)):?>
-<? foreach($messages as $type => $_messages) {
-    if(!empty($_messages)) {
-        foreach($_messages as $message) {
-            echo MessageBox::$type($message);
-        }
-    }
-}?>
-<?endif;?>
-<table class="index_box logintable">
-<tr>
-    <td class="table_header_bold">
-        <?= Icon::create('door-enter', 'info_alt')->asImg() ?>
-        <b>&nbsp;<?=sprintf(_("Stud.IP - Neues Passwort anfordern (Schritt %s von 5)"), $step)?></b>
-    </td>
-</tr>
-<tr>
-    <td>
-    <div style="margin-left:40px;margin-top:15px;">
-        <div style="width: 400px; margin-bottom: 1em;">
-            <?if ($step == 2 || $step == 4):?>
-            <br><br><?=$link_startpage?>
-            <?endif;?>
-        <?if ($step == 1):?>
-            <?if (!sizeof($messages)):?>
-            <?=_("Bitte geben Sie Ihre E-Mail-Adresse an, die Sie in Stud.IP benutzen. An diese Adresse wird ihnen eine E-Mail geschickt, die einen Bestätigungslink enthält, mit dem Sie ein neues Passwort anfordern können.<br>Bitte beachten Sie die Hinweise in dieser E-Mail.")?>
-            <br><br>
-            <?endif;?>
-            <?=_("Geben Sie Ihre E-Mail-Adresse ein:")?><br>
+<div>
+    <div class="index_container">
+        <ul id="tabs" role="navigation"></ul>
+        <div id="background-desktop" style="background: url(<?= $bg_desktop ?>) no-repeat top left/cover;"></div>
+        <div id="background-mobile" style="background: url(<?= $bg_mobile ?>) no-repeat top left/cover;"></div>
+        <? if (count($messages)): ?>
+            <? foreach($messages as $type => $_messages) {
+                if (!empty($_messages)) {
+                    foreach ($_messages as $message) {
+                        echo MessageBox::$type($message);
+                    }
+                }
+            }
+            ?>
+        <? endif ?>
+        <div class="index_main">
+            <form class="default" name="newpwd" method="post" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                <header>
+                    <h1>
+                        <?= sprintf(_('Stud.IP - Neues Passwort anfordern (Schritt %s von 5)'), $step) ?>
+                    </h1>
+                </header>
+                <? if ($step == 2 || $step == 4): ?>
+                    <section>
+                        <br><br>
+                        <?= $link_startpage ?>
+                    </section>
+                <? endif ?>
+                <? if ($step == 1): ?>
+                    <? if (!count($messages)): ?>
+                        <section>
+                            <?= _('Bitte geben Sie Ihre E-Mail-Adresse an, die Sie in ' .
+                                  'Stud.IP benutzen. An diese Adresse wird ihnen eine ' .
+                                  'E-Mail geschickt, die einen Bestätigungslink enthält, ' .
+                                  'mit dem Sie ein neues Passwort anfordern können.<br>' .
+                                  'Bitte beachten Sie die Hinweise in dieser E-Mail.') ?>
+                        </section>
+                    <? endif ?>
+                    <section>
+                        <label>
+                            <?= _('E-Mail:') ?>
+                            <input type="email" name="email" autofocus
+                                   value="<?= htmlReady($email) ?>"
+                                   size="20" maxlength="63">
+                        </label>
+                    </section>
+
+                    <?= CSRFProtection::tokenTag() ?>
+                    <input type="hidden" name="step" value="1">
+                    <?= Button::createAccept(_('Abschicken'))?>
+                    <?= LinkButton::createCancel(_('Abbrechen'), 'index.php?cancel_login=1')?>
+                <? endif ?>
+            </form>
         </div>
-        <form name="newpwd" method="post" action="<?=$_SERVER['REQUEST_URI']?>">
-            <?= CSRFProtection::tokenTag() ?>
-            <input type="hidden" name="step" value="1">
-            <table border="0" cellspacing="0" cellpadding="4">
-                <tr valign=top align=left>
-                    <td><?=_("E-Mail:")?> </td>
-                    <td>
-                        <input type="email" name="email" value="<?=htmlReady($email)?>" size="20" maxlength="63">
-                    </td>
-                </tr>
-                <tr>
-                    <td align="center" colspan="2">
-                        <?= Button::createAccept(_('Abschicken'))?>
-                        <?= LinkButton::createCancel(_('Abbrechen'), 'index.php?cancel_login=1')?>
-                        <br>
-                    </td>
-                </tr>
-            </table>
-        </form>
-        <?else:?>
-        </div>
-        <?endif;?>
     </div>
-    </td>
-</tr>
-</table>
 </div>
-<?if ($step == 1):?>
-<script type="text/javascript" language="javascript">
-<!--
-  // Activate the appropriate input form field.
-    document.newpwd.email.focus();
-// -->
-</script>
-<?endif;?>

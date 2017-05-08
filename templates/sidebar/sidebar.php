@@ -3,9 +3,6 @@
 <? if ($image): ?>
         <div class="sidebar-image <? if ($avatar) echo 'sidebar-image-with-context'; ?>">
             <?= Assets::img($image, array('alt' => '')) ?>
-        <? if ($title): ?>
-            <span class="sidebar-title"><?= htmlReady($title) ?></span>
-        <? endif; ?>
         <? if ($avatar) : ?>
             <div class="sidebar-context">
                 <?= $avatar->getImageTag(Avatar::MEDIUM) ?>

@@ -7,25 +7,38 @@
         $wrapper,
         was_below_the_fold = false,
         scroll = function (scrolltop) {
-            var is_below_the_fold = scrolltop > fold;
+            var is_below_the_fold = scrolltop > fold,
+                menu;
             if (is_below_the_fold !== was_below_the_fold) {
-                $('#barBottomContainer').toggleClass('fixed', is_below_the_fold);
+                $('body').toggleClass('fixed', is_below_the_fold);
+
+                menu = $('#barTopMenu').remove();
+                if (is_below_the_fold) {
+                    menu.append(
+                        $('.action-menu-list li', menu).remove().addClass('from-action-menu')
+                    );
+                    menu.appendTo('#barBottomLeft');
+                } else {
+                    $('.action-menu-list', menu).append(
+                        $('.from-action-menu', menu).remove().removeClass('from-action-menu')
+                    );
+                    menu.appendTo('#flex-header');
+
+                    $('#barTopMenu-toggle').prop('checked', false);
+                }
+
                 was_below_the_fold = is_below_the_fold;
             }
         };
 
     STUDIP.HeaderMagic = {
         enable: function () {
-            var header = $('#barBottomContainer');
-            if (header.closest('.sticky-wrapper').length === 0) {
-                header.wrap('<div class="sticky-wrapper" />').parent().height(header.outerHeight(true));
-            }
-            fold = header.offset().top;
+            fold = $('#flex-header').next().offset().top - $('#barBottomContainer').height();
             STUDIP.Scroll.addHandler('header', scroll);
         },
         disable : function () {
             STUDIP.Scroll.removeHandler('header');
-            $('#barBottomContainer').removeClass('fixed');
+            $('body').removeClass('fixed');
         }
     };
 
@@ -34,7 +47,49 @@
         if ($('#barBottomContainer').length > 0) {
             STUDIP.HeaderMagic.enable();
         }
+
+        $("#barTopMenu li").hover(function() {
+            if ($(this).hasClass('active')) {
+                return false;
+            }
+            $("#barTopMenu li.active div.navtitle").hide();
+        },function(){
+            $("#barTopMenu li.active div.navtitle").show();
+        });
+
+        $(window).scroll(function() {
+            moveTopAvatar();
+        });
+
+        $(window).resize(function() {
+            moveTopAvatar();
+        });
+
     });
+
+    $('#barBottomright').ready(function(){
+        $('#barBottomright ul li:not(".action-menu-item"):contains("Logout")').addClass('responsive-visible');
+    })
+
+    $('#notification_container').ready(function(){
+        moveTopAvatar();
+    });
+
+    function moveTopAvatar() {
+        if ($(window).scrollTop() >= $('#flex-header').offset().top
+            && !(window.matchMedia('(max-width: 800px)').matches) ) {
+            $('#notification_container').addClass('fixed');
+            $('#barTopAvatar').addClass('fixed');
+            $('#barTopAvatar .action-menu-icon').addClass('fixed');
+            $('#barTopAvatar .action-menu-content').addClass('fixed');
+        } else {
+            $('#notification_container').removeClass('fixed');
+            $('#barTopAvatar').removeClass('fixed');
+            $('#barTopAvatar .action-menu-icon').removeClass('fixed');
+            $('#barTopAvatar .action-menu-content').removeClass('fixed');
+        }
+    };
+
 }(jQuery, window.document));
 
 (function ($) {

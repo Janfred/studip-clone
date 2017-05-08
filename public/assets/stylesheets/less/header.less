@@ -1,43 +1,30 @@
 /* --- header.css ----------------------------------------------------------- */
+#layout_wrapper {
+    padding-top: @bar-bottom-container-height;
+}
 #barBottomContainer {
-    background-color: @brand-color-lighter;
+    background-color: @base-color;
     border: 1px @brand-color-darker;
     color: @contrast-content-white;
     border-bottom-style: solid;
-    box-shadow: 0px 0px 15px rgba(0,0,0,0.3);
-    height: 24px;
-    margin-bottom: 5px;
+    height: @bar-bottom-container-height;
+
     width: 100%;
-    display: flex;
-    &.fixed {
-        .translate(0, 0) !important; // We need !important due to the horizontal scroll handler
-        position: fixed;
-        top: 0px;
-        z-index: 10000;
-    }
-    > div {
-        display: flex;
-        align-items: center;
-        flex: 0 1 auto;
-    }
+    position: relative;
+
+    .flex();
+    .flex-direction-row();
+    .flex-wrap(nowrap);
+    .flex-justify-content(space-between);
+
+    .translate(0, 0) !important; // We need !important due to the horizontal scroll handler
+    position: fixed;
+    top: 0px;
+    z-index: 10000;
 
     #barBottomLeft {
         padding: 0 15px;
-        // Adds an arrow at the end
-        #arrow > .right(12px, @brand-color-lighter, 0);
         z-index: 2;
-    }
-
-    #barBottomArrow {
-        #gradient > .horizontal(@brand-color-light, @brand-color-lighter);
-        width: 30px;
-    }
-
-    #barBottommiddle {
-        z-index: 1;
-        flex: 1;
-        white-space: nowrap;
-        overflow: hidden;
     }
 }
 
@@ -48,6 +35,7 @@
         text-decoration: none;
         &:hover { color: @contrast-content-hovergray; }
     }
+
     > ul {
         display: flex;
         align-items: center;
@@ -56,41 +44,169 @@
         height: 100%;
         padding: 0;
         > li {
-            margin: 0 2px;
+            margin: 2px;
         }
     }
 }
 
+#barTopAvatar {
+    display: inline;
+    /*position: absolute;*/
+    bottom: -45px;
+    right: -40px;
+    padding-bottom: 20px !important;
+
+    &.fixed {
+        position: relative;
+        bottom: 1px;
+        right: 2px;
+    }
+
+}
+
+#barTopAvatar, #header_avatar_menu {
+
+    #header_avatar, .action-menu-icon {
+        border: 1px solid @base-color;
+        background: @dark-gray-color-5;
+        height: 42px;
+        width: 42px;
+        z-index: 1;
+        position: relative;
+        top: 35px;
+        left: 44px;
+
+        img {
+            height: 100%;
+            width: 100%;
+        }
+
+        &.fixed {
+            .border-radius(1px);
+            border: thin solid @base-color-20;
+            height: 19px;
+            width: 19px;
+            top: 21px;
+            left: 41px;
+        }
+
+    }
+
+    .action-menu-title{
+        margin: 0em 0 0.3em;
+    }
+
+    .action-menu-content {
+        z-index: 1002;
+        position: absolute;
+        top: 89px;
+        right: -42px;
+        padding: 4px 28px 4px 8px;
+        background: #fff;
+        box-shadow: 1px 1px 1px @dark-gray-color-60;
+        text-align: left;
+        white-space: nowrap;
+
+        &.fixed {
+            top: 20px;
+            right: -42px;
+        }
+
+        a {
+            color: @base-color;
+        }
+
+        div {
+            color: #000;
+        }
+    }
+/*
+    .action-menu-content:before, .action-menu-content:after {
+        bottom: 100%;
+        right: 13px;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+    }
+
+    .action-menu-content:before {
+        border-color: rgba(194, 225, 245, 0);
+        border-bottom-color: #8b8f95;
+        border-width: 9px;
+        margin-left: -8px;
+    }
+    .action-menu-content:after {
+        border-color: rgba(194, 225, 245, 0);
+        border-bottom-color: #e7ecf2;
+        border-width: 8px;
+        margin-left: -8px;
+    }
+*/
+}
+
+.header_avatar_container, #header_avatar_menu .action-menu-icon {
+  z-index: 1003;
+}
+
 #notification_marker {
-    .border-radius(2px);
-    .transition(all 1s);
-    width: 18px;
-    height: 16px;
+    //.transition(all 1s);
+    width: 25px;
+    padding-left: 10px;
+    padding-right: 65px;
+    height: 25px;
     font-size: 0.8em;
-    border: thin solid @contrast-content-white;
-    color: @contrast-content-white;
+    color: @base-color;
     text-align: center;
-    line-height: 17px;
+    line-height: 25px;
     vertical-align: text-bottom;
-    background-color: @brand-color-lighter;
-    
+    background-color: transparent;
+
     &.alert {
-        border: thin solid white;
+        border: thin solid @white;
         background-color: @public-course-bgcolor;
-        color: white;
+        color: @white;
     }
 }
 
 #notification_container {
+    @arrow-height: 10px;
+
+    .border-radius(2px);
+    //.transition(all 1s);
+    width: 100px;
+    height: 25px;
+    border: thin solid @dark-gray-color-20;
+    color: @base-color;
+    vertical-align: text-bottom;
+    background-color: @white;
     position: relative;
-    .avatar {
-        float: left;
-        margin-right: 10px;
-        margin-left: 0px;
-        background-position: center center;
-        background-size: 100%;
-        width: 40px;
-        height: 40px;
+
+    // Insert invisible padding on top of the arrow in order to try to
+    // close the "mouse trap gap" created by the arrow
+    &::before {
+        content: "";
+        display: block;
+        position: absolute;
+        bottom: -@arrow-height;
+        left: 0;
+        right: 0;
+        height: @arrow-height;
+    }
+
+    &.fixed {
+        width: 60px;
+        height: 19px;
+
+        #notification_marker {
+            width: 29px;
+            padding-left: 5px;
+            padding-right: 5px;
+            height: 19px;
+            line-height: 19px;
+        }
     }
     .list, li&:hover .list { display: none; }
     &.hoverable:hover {
@@ -98,10 +214,10 @@
     }
     #notification_list {
         z-index: 1001;
-        margin-top: 8px;
+        margin-top: 10px;
         ul {
             width: 100%;
-            padding: 2px;
+            padding: 0;
         }
         .more {
             font-size: 0.8em;
@@ -110,47 +226,31 @@
     }
     .list {
         // Creates an arrow pointing from the list to the triggering element
-        #arrow > .top(10px, #eee);
+        #arrow > .top-border(10px, @white, 1px, @light-gray-color-80);
 
         @width: 400px;
-        @arrow-height: 10px;
 
-        background-color: #eeeeee;
-        border: thin solid #666;
+        background-color: @white;
+        border-left: thin solid @light-gray-color-60;
+        border-top: thin solid @light-gray-color-60;
         border-collapse: collapse;
-        .border-radius(3px);
-        color: #333333;
+        color: @black;
         display: none;
         font-size: 1em;
         position: absolute;
         width: @width;
         max-width: @width;
-        padding: 4px;
-        .box-shadow(0 0 8px rgba(0, 0, 0, 0.5));
-
+        .box-shadow(1px 1px 1px @light-gray-color-80);
 
         // Without this, buttons or message boxes would appear on top of the list
         z-index: 2;
-
-        // Insert invisible padding on top of the arrow in order to try to
-        // close the "mouse trap gap" created by the arrow
-        &:after {
-            content: "";
-            display: block;
-            position: absolute;
-            top: -@arrow-height;
-            left: 0;
-            right: 0;
-            height: @arrow-height;
-        }
-
-        &:before {
-            left: 379px;
+        &::before, &::after {
+            left: (@width - 20px);
         }
 
         // Positions: below or left'ish or right'ish to the triggering element
         &.below {
-            left: ((-@width) + 30px);
+            left: ((-@width) + 40px);
         }
         &.left {
             right: 0px;
@@ -166,26 +266,42 @@
 
         // List item
         .item {
-            @padding: 4px;
+            @padding: 5px;
             .clearfix();
-            border-top: thin solid #333;
+            border-top: thin solid @light-gray-color-60;
             line-height: 20px;
             display: block;
             height: auto;
-            .transition(~"background-color 0.5s, opacity 0.8s");
-            padding-top: @padding;
-            padding-bottom: @padding;
+            padding: @padding;
             white-space: normal;
 
-            &:hover { background-color: #ffffff; }
+            &:hover { background-color: fadeout(@light-gray-color, 80%);}
 
             // First child: no top-border and but rounded corners
             &:first-child {
                 border-top: 0;
-                .border-top-radius(5px);
             }
             // Last child: rounded corners
             &:last-child { .border-bottom-radius(5px); }
+
+
+            .content {
+                .flex();
+                .flex-direction-row();
+                .flex-wrap(nowrap);
+
+                .avatar {
+                    @avatar-size: 40px;
+                    margin-right: 10px;
+                    margin-left: 0px;
+                    background-position: center center;
+                    background-size: 100%;
+                    background-repeat: no-repeat;
+                    width: @avatar-size;
+                    height: @avatar-size;
+                    min-width: @avatar-size;
+                }
+            }
         }
 
         a {
@@ -209,29 +325,26 @@
     }
 }
 #barTopFont {
-    color: #cccccc;
-    font-size: 16pt;
-    font-weight: 300;
-    left: 15px;
-    position: absolute;
-    top: 10px;
+    display: none;
 }
 
 .studip-logo {
     .hide-text();
     background-repeat: no-repeat;
-    .retina-background-image('logos/studip-logo.png', 'logos/studip-logo@2x.png', 168px, 57px);
-    background-image: none, url("@{image-path}/logos/studip-logo.svg");
-    background-size: 168px 57px;
+
+    .retina-background-image('logos/studip4-logo.png', 'logos/studip4-logo@2x.png', 130px, 92px);
+    background-image: none, url("@{image-path}/logos/studip4-logo.svg");
+
+    background-size: 130px 92px;
     display: block;
-    width: 168px;
-    height: 57px;
+    width: 130px;
+    height: 92px;
 }
 
 #barTopStudip {
     position: absolute;
-    bottom: 16px;
-    right: 15px;
+    bottom: -10px;
+    right: 50px;
 }
 
 #barTopLogo {
@@ -241,11 +354,12 @@
 }
 
 #header {
-    height: 100px;
+    height: @header-height;
+    background-color: @dark-gray-color-5;
 }
 
+
 #flex-header {
-    #gradient > .vertical(@brand-color-darker, @brand-color-light);
     position: relative;
 }
 
@@ -256,15 +370,12 @@
 
     #barBottommiddle, #barBottomright, #barBottomLeft {
         background-color: @public-course-bgcolor;
+
+        .helpbar {
+            background-color: @public-course-bgcolor;
+        }
     }
-    #barBottomLeft {
-        // Adds an arrow at the end
-        #arrow > .right(12px, @public-course-bgcolor, 0);
-    }
-    #barBottomArrow {
-        // Adds the fading background to the left
-        #gradient > .horizontal(darken(@public-course-bgcolor, 10%), @public-course-bgcolor);
-    }
+
     #barBottomright:before {
         #gradient > .horizontal(fadeout(@public-course-bgcolor, 100%), @public-course-bgcolor);
         background-color: fadeout(@public-course-bgcolor, 100%);

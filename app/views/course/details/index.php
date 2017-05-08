@@ -14,15 +14,6 @@
         border-bottom: 0;
     }
 </style>
-
-<? if (!Request::isXhr()) : ?>
-    <h1>
-        <?= htmlReady($course->name) ?>
-        <? if ($course->untertitel) : ?>
-            <span><?= htmlReady($course->untertitel) ?></span>
-        <? endif ?>
-    </h1>
-<? endif ?>
     <article class="studip" id="tablefix">
         <header>
             <h1><?= _('Allgemeine Informationen') ?></h1>
@@ -32,6 +23,12 @@
                 <col width="40%">
             </colgroup>
             <tbody>
+            <? if ($course->veranstaltungsnummer) : ?>
+                <tr>
+                    <td><strong><?= _('Untertitel') ?></strong></td>
+                    <td><?= htmlReady($course->untertitel) ?></td>
+                </tr>
+            <? endif ?>            
             <? if ($course->veranstaltungsnummer) : ?>
                 <tr>
                     <td><strong><?= _('Veranstaltungsnummer') ?></strong></td>
@@ -298,9 +295,6 @@
 
     <? if ($studyAreaTree) : ?>
         <article class="studip">
-            <header>
-                <h1><?= _('Studienbereiche') ?></h1>
-            </header>
             <section>
                 <ul class="collapsable css-tree">
                     <?= $this->render_partial('study_area/tree.php', array('node' => $studyAreaTree, 'open' => true, 'dont_open' => Config::get()->COURSE_SEM_TREE_CLOSED_LEVELS)) ?>
@@ -311,9 +305,6 @@
 
     <? if ($study_areas && count($study_areas) > 0) : ?>
         <article class="studip">
-            <header>
-                <h1><?= _('Studienbereiche') ?></h1>
-            </header>
             <section>
                 <ul class="list-unstyled">
                     <? foreach ($study_areas as $area) : ?>
