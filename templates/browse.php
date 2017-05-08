@@ -8,9 +8,6 @@ use Studip\Button, Studip\LinkButton;
     <?= CSRFProtection::tokenTag() ?>
     <!-- form zur wahl der institute -->
     <fieldset>
-        <legend>
-            <?= _('Suche nach Personen') ?>
-        </legend>
 
         <!-- form zur freien Suche -->
         <label>
