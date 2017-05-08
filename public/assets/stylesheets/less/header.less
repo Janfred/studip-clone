@@ -277,6 +277,15 @@
 
             &:hover { background-color: fadeout(@light-gray-color, 80%);}
 
+            &:first-child:hover {
+                #arrow > .top(10px, fadeout(@light-gray-color, 80%));
+                margin-top: 0;
+                &::before {
+                    left: (@width - 20px);
+                    z-index: 2;
+                }
+            }
+
             // First child: no top-border and but rounded corners
             &:first-child {
                 border-top: 0;
