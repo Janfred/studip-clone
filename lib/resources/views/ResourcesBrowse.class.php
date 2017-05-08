@@ -89,9 +89,6 @@ class ResourcesBrowse {
     function searchForm() {
         ?>
         <fieldset>
-            <legend>
-                <?= _('Suche nach Ressourcen'); ?>
-            </legend>
             <label>
                 <?= _('Bezeichnung') . ":"; ?>
                 <input name="search_exp" type="text" placeholder="<?= _('Ressource suchen') ?>" autofocus
