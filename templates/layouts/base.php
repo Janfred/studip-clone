@@ -89,9 +89,9 @@ if ($navigation) {
                 // indicate to the template that this course is publicly visible
                 // need to handle institutes separately (always visible)
                 if ($GLOBALS['SessSemName']['class'] == 'inst') {
-                    $header_template->public_hint = _('Öffentliche Einrichtung');
+                    $header_template->public_hint = _('öffentliche Einrichtung');
                 } else if (Course::findCurrent()->lesezugriff == 0) {
-                    $header_template->public_hint = _('Öffentliche Veranstaltung');
+                    $header_template->public_hint = _('öffentliche Veranstaltung');
                 }
             }
         }
