@@ -1,7 +1,6 @@
 <form class="default" method="post" action="<?= URLHelper::getLink(); ?>">
     <input type="hidden" name="myCoursesOnly" value="<?= Request::get('myCoursesOnly') ?>">
     <fieldset>
-        <legend><?= _('Suche im Veranstaltungsarchiv'); ?></legend>
         <label>
             <?= _('Name der Veranstaltung') . ':'; ?>
             <input type="text" minlength="4" name="criteria" placeholder="<?= _('Veranstaltung suchen') ?>"
