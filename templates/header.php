@@ -7,7 +7,7 @@
     <div id="barBottomLeft">
         <input type="checkbox" id="barTopMenu-toggle">
         <label for="barTopMenu-toggle">
-            <?= _('MenÃ¼') ?>
+            <?= _('Menü') ?>
         </label>
         <? // The main menu will be placed here when scrolled, see navigation.less ?>
     </div>
@@ -153,7 +153,7 @@
 <div id="flex-header">
     <div id="header">
         <!--<div id='barTopLogo'>
-            <?= Assets::img('logos/logoneu.jpg', array('alt' => 'Logo Uni GÃ¶ttingen')) ?>
+            <?= Assets::img('logos/logoneu.jpg', array('alt' => 'Logo Uni Göttingen')) ?>
         </div>
          -->
         <div id="barTopFont">
