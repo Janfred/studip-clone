@@ -48,15 +48,6 @@
             STUDIP.HeaderMagic.enable();
         }
 
-        $("#barTopMenu li").hover(function() {
-            if ($(this).hasClass('active')) {
-                return false;
-            }
-            $("#barTopMenu li.active div.navtitle").hide();
-        },function(){
-            $("#barTopMenu li.active div.navtitle").show();
-        });
-
         $(window).scroll(function() {
             moveTopAvatar();
         });

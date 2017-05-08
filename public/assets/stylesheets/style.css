@@ -2527,6 +2527,19 @@ body:not(.fixed) #barTopMenu li:hover {
   border-bottom: 3px solid #d8dadc;
   padding-bottom: 2px;
 }
+body:not(.fixed) #barTopMenu .navtitle {
+  -webkit-transition: opacity 300ms;
+  -moz-transition: opacity 300ms;
+  -o-transition: opacity 300ms;
+  transition: opacity 300ms;
+}
+body:not(.fixed) #barTopMenu:hover li:not(:hover) .navtitle {
+  opacity: 0;
+  -webkit-transition: opacity 0;
+  -moz-transition: opacity 0;
+  -o-transition: opacity 0;
+  transition: opacity 0;
+}
 body:not(.fixed) #barTopMenu a:hover,
 body:not(.fixed) #barTopMenu li.active a {
   color: #28497c;

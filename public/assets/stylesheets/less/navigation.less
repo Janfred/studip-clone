@@ -124,6 +124,18 @@ body:not(.fixed) #barTopMenu {
         padding-bottom: 2px;
     }
 
+    // Hide all navigation item title on hover and display only the currently
+    // hovered one
+    .navtitle {
+        .transition(opacity 300ms); // Smooth change when entering
+    }
+    &:hover {
+        li:not(:hover) .navtitle {
+            opacity: 0;
+            .transition(opacity 0); // Quick change when leaving
+        }
+    }
+
     a:hover, li.active a {
         color: @base-color;
 
