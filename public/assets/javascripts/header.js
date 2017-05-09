@@ -47,6 +47,10 @@
         if ($('#barBottomContainer').length > 0) {
             STUDIP.HeaderMagic.enable();
         }
+
+        $(window).on('scroll resize', function() {
+            moveTopAvatar();
+        });
     });
 
     $('#barBottomright').ready(function(){
