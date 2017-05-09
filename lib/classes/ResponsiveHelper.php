@@ -26,7 +26,7 @@ class ResponsiveHelper
             }
 
             $image = $nav->getImage();
-            $image_src = $image ? $image->asImagePath() : false;
+            $image_src = $image ? $image->copyWithRole('info_alt')->asImagePath() : false;
             $item = array(
                 'icon'   => $image_src ? self::getAssetsURL($image_src) : false,
                 'title'  => $nav->getTitle(),

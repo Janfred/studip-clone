@@ -9497,6 +9497,7 @@ label[for="responsive-toggle"]::before {
 }
 #responsive-toggle:checked + #responsive-navigation {
   left: 0;
+  height: 100vh;
 }
 #responsive-navigation {
   background-color: #365a90;
