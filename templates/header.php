@@ -10,7 +10,7 @@ $header_nav = ['visible' => $nav_items, 'hidden' => []];
 if (isset($_COOKIE['navigation-length'])) {
     $header_nav['hidden'] = array_splice(
         $header_nav['visible'],
-        $_COOKIE['navigation_-ength']
+        $_COOKIE['navigation-length']
     );
 }
 ?>
@@ -173,7 +173,7 @@ if (isset($_COOKIE['navigation-length'])) {
             <?= htmlReady(Config::get()->UNI_NAME_CLEAN) ?>
         </div>
         <? SkipLinks::addIndex(_('Hauptnavigation'), 'barTopMenu', 1); ?>
-        <ul id="barTopMenu" role="navigation">
+        <ul id="barTopMenu" role="navigation" <? if (count($header_nav['hidden']) > 0) echo 'class="overflown"'; ?>>
         <? foreach ($header_nav['visible'] as $path => $nav): ?>
             <?= $this->render_partial(
                 'header-navigation-item.php',

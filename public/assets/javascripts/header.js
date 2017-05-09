@@ -47,15 +47,6 @@
         if ($('#barBottomContainer').length > 0) {
             STUDIP.HeaderMagic.enable();
         }
-
-        $(window).scroll(function() {
-            moveTopAvatar();
-        });
-
-        $(window).resize(function() {
-            moveTopAvatar();
-        });
-
     });
 
     $('#barBottomright').ready(function(){

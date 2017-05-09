@@ -4,15 +4,17 @@
     'use strict';
 
     function setCookie(name, value, expiry_days) {
-        var content = name + '=' + value,
+        var chunks = [name + '=' + value],
             date;
         if (expiry_days !== undefined) {
             date = new Date();
             date.setTime(date.getTime() + expiry_days * 24 * 60 * 60 * 1000);
 
-            content += ';expires=' + date.toUTCString();
+            chunks.push('expires=' + date.toUTCString());
         }
-        document.cookie = content;
+        chunks.push('path=' + STUDIP.URLHelper.getURL('a', true).slice(0, -1));
+
+        document.cookie = chunks.join(';');
     }
 
     // Enable shrinking of navigation
@@ -72,10 +74,7 @@
 
     // Shrink on domready
     $(document).ready(function () {
-        // Delay shrinking until browser is no longer busy
-        window.setTimeout(function () {
-            STUDIP.NavigationShrinker();
-        }, 0);
+        STUDIP.NavigationShrinker();
     });
 
 }(jQuery, STUDIP, _));
