@@ -1,14 +1,17 @@
 /* --- main navigation ----------------------------------------------------- */
 body:not(.fixed) #barTopMenu {
+    position: absolute;
     left: 5px;
+    top: 20px;
+    // TODO: This is bad but currently neccessary
+    right: 391px; // This is default #barBottomContainer.width()
+
     margin: 0;
     padding: 0;
-    position: absolute;
-    top: 20px;
     z-index: 1000;
 
-    li {
-        float: left;
+    > li {
+        display: inline-block;
         list-style-type: none;
         width: 64px;
         height: 55px;
@@ -16,7 +19,7 @@ body:not(.fixed) #barTopMenu {
         z-index: 2;
     }
     a {
-        color: transparent;
+        color: @base-color;
         display: block;
         padding: 0 0px;
         text-align: center;
@@ -26,31 +29,17 @@ body:not(.fixed) #barTopMenu {
         span {
             background: no-repeat 0 0;
             display: inline-block;
-            .size(32px, 32px);
+            .square(32px);
 
             // Icon state: new
-            &.new { background-position: -64px 0; }
-        }
-
-        div.navtitle {
-            text-align: center;
-            position: relative;
-            left: +100%;
-
-            &:before {
-                content: '';
-                display: inline-block;
-                margin-right: -200%;
+            &.new {
+                background-position: -64px 0;
             }
         }
 
         img.original {
-            margin-left: 0px;
-            margin-right: 0px;
-            margin-top: 5px;
-            margin-bottom: 5px;
-            width: 28px;
-            height: 28px;
+            margin: 5px 0px;
+            .square(28px);
         }
         canvas.punch {
             display: none;
@@ -71,7 +60,7 @@ body:not(.fixed) #barTopMenu {
                 }
             }
 
-            &:before, &:after {
+            &::before, &::after {
                 position: absolute;
                 left: 50%;
                 margin-left: 5px;
@@ -79,20 +68,19 @@ body:not(.fixed) #barTopMenu {
             }
 
             // Just draw the badge
-            &:before {
+            &::before {
                 background-color: @red;
                 border-radius: 8px;
                 content: ' ';
                 display: inline-block;
-                width: 16px;
-                height: 16px;
+                .square(16px);
             }
 
             // Write the text on top of the badge so it will never
             // expand the badge into regions we don't want.
             // Text may overflow into the icon. There's no good way
             // to prevent that...
-            &:after {
+            &::after {
                 content: attr(data-badge);
                 color: white;
                 width: 16px;
@@ -107,21 +95,23 @@ body:not(.fixed) #barTopMenu {
         }
     }
 
-    a, li a {
-        canvas, img {
-            /*filter: url('filter.svg#brightness');
-            filter: brightness(150%);
-            filter: grayscale(80%);
-            -webkit-filter: brightness(150%) grayscale(80%);*/
+    > li > a,
+    > li > label {
+        .navtitle {
+            position: absolute;
+            white-space: nowrap;
 
-            -webkit-filter:hue-rotate(350deg) saturate(8.7%) brightness(177.3%) !important;
-            filter: hue-rotate(350deg) saturate(8.7%) brightness(177.3%) !important;
+            text-indent: 50%;
+            .translate(-50%, 0);
+
+            opacity: 0;
         }
     }
 
-    li:hover {
-        border-bottom: 3px solid @dark-gray-color-20;
-        padding-bottom: 2px;
+    img,
+    canvas {
+        -webkit-filter:hue-rotate(350deg) saturate(8.7%) brightness(177.3%) !important;
+        filter: hue-rotate(350deg) saturate(8.7%) brightness(177.3%) !important;
     }
 
     // Hide all navigation item title on hover and display only the currently
@@ -130,22 +120,31 @@ body:not(.fixed) #barTopMenu {
         .transition(opacity 300ms); // Smooth change when entering
     }
     &:hover {
-        li:not(:hover) .navtitle {
+        > li.active .navtitle {
             opacity: 0;
+        }
+        > li:hover .navtitle {
+            opacity: 1;
             .transition(opacity 0); // Quick change when leaving
         }
     }
 
-    a:hover, li.active a {
-        color: @base-color;
+    // Recolor on hover and for active items
+    li:hover,
+    li.active {
+        .navtitle {
+            opacity: 1;
+        }
+        > a {
+            canvas,
+            img {
+                -webkit-filter:hue-rotate(0deg) saturate(100%) brightness(100%) !important;
+                filter: hue-rotate(0deg) saturate(100%) brightness(100%) !important;
 
-        canvas, img {
-            -webkit-filter:hue-rotate(0deg) saturate(100%) brightness(100%) !important;
-            filter: hue-rotate(0deg) saturate(100%) brightness(100%) !important;
-
-            filter: url('filter.svg#brightness');
-            filter: brightness(100%);
-            -webkit-filter: brightness(100%);
+                filter: url('filter.svg#brightness');
+                filter: brightness(100%);
+                -webkit-filter: brightness(100%);
+            }
         }
 
         // Icon state: hover
@@ -154,97 +153,80 @@ body:not(.fixed) #barTopMenu {
         span.new { background-position: -96px 0; }
     }
 
+    > .overflow {
+        position: relative;
 
-    .action-menu-icon {
-        vertical-align: middle;
-        margin-top: 8px;
-        margin-left: 8px;
-        -webkit-filter:hue-rotate(350deg) saturate(8.7%) brightness(177.3%);
-        filter: hue-rotate(350deg) saturate(8.7%) brightness(177.3%);
-        z-index: 1003;
-    }
-
-
-
-    .action-menu-content {
-
-        .action-menu-title {
-            margin-left: 35px;
-            margin-bottom: 10px;
+        // Hide overflow and touch toggle
+        > input[type="checkbox"] {
+            display: none;
         }
 
-        .action-menu-list {
+        // Rotate icon
+        > label img {
+            transition: transform 300ms;
+            transform: rotate(90deg);
+        }
+
+        // Display menu on activation
+        &:hover label,
+        input[type="checkbox"]:checked {
+             ~ ul {
+                max-height: 1000px;
+            }
+             img,
+             ~ label img {
+                 transform: rotate(180deg);
+             }
+        }
+
+        > ul {
+            display: block;
+
+            position: absolute;
+            right: 0;
+            top: 100%;
+            z-index: 10;
+
+            list-style: none;
+            margin: 5px 0 0;
+            padding: 0;
+
+            background-color: @dark-gray-color-5;
+
+            min-width: 150px;
+            max-width: 250px;
+            max-height: 0;
+            overflow: hidden;
+
             li {
-                height: auto;
-                width: auto;
-                padding: 3px;
+                display: block;
+                a {
+                    .flex();
+                    .flex-direction-row();
+                    .flex-wrap(nowrap);
+                    .flex-align-items(center);
 
-                &:hover {
-                    border: none;
+                    padding: 0.5em 1em;
                 }
-            }
-
-            a {
-                color: #000;
-                height: auto;
-
-                &:hover {
-                    color: @base-color;
+                img, canvas {
+                    .flex-item(1, 0, 24px);
+                    .square(24px);
+                    margin: 2px 0.7em 0 0;
+                }
+                .navtitle {
+                    .flex-item(1, 0, 100%);
+                    text-align: left;
+                    white-space: nowrap;
+                }
+                br {
+                    display: none;
                 }
             }
         }
-
-        .action-menu-table {
-            a {
-                color: @dark-gray-color-75;
-                font-size: 12px;
-                text-align: center;
-                width: 64px;
-                height: 50px;
-            }
-
-            img {
-                width: 28px;
-                height: 28px;
-            }
-        }
-
-        z-index: 1002;
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        right: auto;
-        padding: 4px 28px 4px 8px;
-        background: #fff;
-        box-shadow: 1px 1px 1px @dark-gray-color-60;
-        text-align: left;
-        white-space: nowrap;
     }
-/*
-    .action-menu-content:before, .action-menu-content:after {
-        bottom: 100%;
-        left: 17px;
-        border: solid transparent;
-        content: " ";
-        height: 0;
-        width: 0;
-        position: absolute;
-        pointer-events: none;
+    &:not(.overflown) > .overflow {
+        display: none;
     }
-
-    .action-menu-content:before {
-        border-color: rgba(194, 225, 245, 0);
-        border-bottom-color: #8b8f95;
-        border-width: 9px;
-        margin-left: -8px;
-    }
-    .action-menu-content:after {
-        border-color: rgba(194, 225, 245, 0);
-        border-bottom-color: #e7ecf2;
-        border-width: 8px;
-        margin-left: -8px;
-    }*/
-
 }
 
 // Toggle mechanism for touch/hover
@@ -326,6 +308,25 @@ body.fixed {
 
             &:hover {
                 background-color: @base-color-80;
+            }
+
+            &.overflow {
+                padding: 0;
+
+                &:hover {
+                    background-color: inherit;
+                }
+
+                input[type="checkbox"],
+                label {
+                    display: none;
+                }
+
+                ul {
+                    list-style: none;
+                    margin: 0;
+                    padding: 0;
+                }
             }
         }
     }

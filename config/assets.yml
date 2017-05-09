@@ -21,6 +21,7 @@ javascripts:
   header: &header
     - javascripts/vendor/notificon.js
     - javascripts/header.js
+    - javascripts/header-navigation.js
     - javascripts/personal_notifications.js
 
   toolbar: &toolbar
@@ -119,7 +120,7 @@ javascripts:
     - javascripts/studip-selection-helper.js
     - javascripts/studip-cache.js
     - javascripts/application.js
-    
+
     - javascripts/course_archive.js
 
   raumzeit:

@@ -54,6 +54,13 @@ body:not(.fixed) #barTopMenu {
     .action-menu-icon {
         transform: rotate(-90deg);
     }
+
+    .overflow li:hover {
+        .border-beneath('light', 2px, 2px);
+        &::after {
+            .translate(0, -4px);
+        }
+    }
 }
 
 #tabs, #tabs2 {
@@ -63,10 +70,10 @@ body:not(.fixed) #barTopMenu {
             padding-top: 3px;
         }
         &.current {
-            .border-beneath('dark', 1px);
+            .border-beneath('dark', 2px, 2px);
         }
         &:not(.current) {
-            .border-beneath('light', 1px);
+            .border-beneath('light', 2px, 2px);
             &:not(:hover)::after {
                 .border-shrink();
             }

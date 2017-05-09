@@ -1,5 +1,18 @@
-<?
+<?php
 # Lifter010: TODO
+
+$nav_items = Navigation::getItem('/')->getIterator()->getArrayCopy();
+$nav_items = array_filter($nav_items, function ($item) {
+    return $item->isVisible(true);
+});
+
+$header_nav = ['visible' => $nav_items, 'hidden' => []];
+if (isset($_COOKIE['navigation-length'])) {
+    $header_nav['hidden'] = array_splice(
+        $header_nav['visible'],
+        $_COOKIE['navigation_-ength']
+    );
+}
 ?>
 
 <!-- Leiste unten -->
@@ -161,71 +174,37 @@
         </div>
         <? SkipLinks::addIndex(_('Hauptnavigation'), 'barTopMenu', 1); ?>
         <ul id="barTopMenu" role="navigation">
-            <? $accesskey = 0 ?>
+        <? foreach ($header_nav['visible'] as $path => $nav): ?>
+            <?= $this->render_partial(
+                'header-navigation-item.php',
+                compact('path', 'nav', 'accesskey_enabled')
+            ) ?>
+        <? endforeach; ?>
+            <li class="overflow">
+                <input type="checkbox" id="header-sink">
+                <label for="header-sink">
+                    <a class="canvasready" href="#">
+                        <?= Icon::create('mobile-sidebar', 'navigation')->asImg(28, [
+                            'class'  => 'headericon original',
+                            'title'  => '',
+                            'alt'    => '',
+                        ]) ?>
+                        <br>
+                        <div class="navtitle">
+                            <?= _('Weitere') ?>&hellip;
+                        </div>
+                    </a>
+                </label>
 
-            <? $content_group = ContentGroupMenu::get();
-                $content_group->setColumns(1);
-                $content_group->setLabel(_('Weitere Bereiche'));
-            ?>
-
-            <? $mainnav = array('start', 'course', 'browse', 'messaging', 'community', 'calendar', 'search', 'tools', 'admin', 'resources'); ?>
-            <? $skipnav = array('profile'); ?>
-
-            <? foreach (Navigation::getItem('/') as $path => $nav) : ?>
-                <? if ($nav->isVisible(true) && !in_array($path, $skipnav)) : ?>
-                    <?
-                    $accesskey_attr = '';
-                    $image = $nav->getImage();
-                    $link_attributes = $nav->getLinkAttributes();
-
-                    // Add access key to link attributes
-                    if ($accesskey_enabled) {
-                        $accesskey = ++$accesskey % 10;
-                        $link_attributes['accesskey'] = $accesskey;
-                        $link_attributes['title']    .= "  [ALT] + $accesskey";
-                    }
-
-                    // Add badge number to link attributes
-                    if ($nav->getBadgeNumber()) {
-                        $link_attributes['data-badge'] = (int)$nav->getBadgeNumber();
-                    }
-
-                    // Convert link attributes array to proper attribute string
-                    $attr_str = '';
-                    foreach ($link_attributes as $key => $value) {
-                        $attr_str .= sprintf(' %s="%s"', htmlReady($key), htmlReady($value));
-                    }
-
-                    ?>
-
-                    <? if (in_array($path, $mainnav)): ?>
-
-                    <li id="nav_<?= $path ?>"<? if ($nav->isActive()) : ?> class="active"<? endif ?>>
-                        <a href="<?= URLHelper::getLink($nav->getURL(), $link_params) ?>" <?= $attr_str ?>>
-                            <?= $image->asImg(['class' => 'headericon original']) ?>
-                            <br>
-                            <div class="navtitle"><?= htmlReady($nav->getTitle()) ?></div>
-                        </a>
-                    </li>
-
-                    <? else: ?>
-                        <?php
-                            $content_group->addLink(
-                                URLHelper::getLink($nav->getURL(), $link_params),
-                                $nav->getTitle(),
-                                $image,
-                                $link_attributes
-                            );
-                        ?>
-                    <? endif; ?>
-                <? endif ?>
-            <? endforeach ?>
-
-        <? if ($content_group->countLinks()): ?>
-            <li id="nav_extra">
-                <?= $content_group->render() ?>
+                <ul>
+                <? foreach ($header_nav['hidden'] as $path => $nav) : ?>
+                    <?= $this->render_partial(
+                        'header-navigation-item.php',
+                        compact('path', 'nav', 'accesskey_enabled')
+                    ) ?>
+                <? endforeach; ?>
+                </ul>
             </li>
-        <? endif; ?>
         </ul>
     </div>
 

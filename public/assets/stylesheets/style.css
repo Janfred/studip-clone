@@ -2418,39 +2418,16 @@ li#notification_container:hover .list {
 }
 /* --- main navigation ----------------------------------------------------- */
 body:not(.fixed) #barTopMenu {
+  position: absolute;
   left: 5px;
+  top: 20px;
+  right: 391px;
   margin: 0;
   padding: 0;
-  position: absolute;
-  top: 20px;
   z-index: 1000;
-  /*
-    .action-menu-content:before, .action-menu-content:after {
-        bottom: 100%;
-        left: 17px;
-        border: solid transparent;
-        content: " ";
-        height: 0;
-        width: 0;
-        position: absolute;
-        pointer-events: none;
-    }
-
-    .action-menu-content:before {
-        border-color: rgba(194, 225, 245, 0);
-        border-bottom-color: #8b8f95;
-        border-width: 9px;
-        margin-left: -8px;
-    }
-    .action-menu-content:after {
-        border-color: rgba(194, 225, 245, 0);
-        border-bottom-color: #e7ecf2;
-        border-width: 8px;
-        margin-left: -8px;
-    }*/
 }
-body:not(.fixed) #barTopMenu li {
-  float: left;
+body:not(.fixed) #barTopMenu > li {
+  display: inline-block;
   list-style-type: none;
   width: 64px;
   height: 55px;
@@ -2458,7 +2435,7 @@ body:not(.fixed) #barTopMenu li {
   z-index: 2;
 }
 body:not(.fixed) #barTopMenu a {
-  color: transparent;
+  color: #28497c;
   display: block;
   padding: 0 0px;
   text-align: center;
@@ -2473,21 +2450,8 @@ body:not(.fixed) #barTopMenu a span {
 body:not(.fixed) #barTopMenu a span.new {
   background-position: -64px 0;
 }
-body:not(.fixed) #barTopMenu a div.navtitle {
-  text-align: center;
-  position: relative;
-  left: 100%;
-}
-body:not(.fixed) #barTopMenu a div.navtitle:before {
-  content: '';
-  display: inline-block;
-  margin-right: -200%;
-}
 body:not(.fixed) #barTopMenu a img.original {
-  margin-left: 0px;
-  margin-right: 0px;
-  margin-top: 5px;
-  margin-bottom: 5px;
+  margin: 5px 0px;
   width: 28px;
   height: 28px;
 }
@@ -2507,14 +2471,14 @@ body:not(.fixed) #barTopMenu a[data-badge]:not([data-badge="0"]).canvasready img
 body:not(.fixed) #barTopMenu a[data-badge]:not([data-badge="0"]).canvasready canvas.punch {
   display: inline-block;
 }
-body:not(.fixed) #barTopMenu a[data-badge]:not([data-badge="0"]):before,
-body:not(.fixed) #barTopMenu a[data-badge]:not([data-badge="0"]):after {
+body:not(.fixed) #barTopMenu a[data-badge]:not([data-badge="0"])::before,
+body:not(.fixed) #barTopMenu a[data-badge]:not([data-badge="0"])::after {
   position: absolute;
   left: 50%;
   margin-left: 5px;
   top: 0;
 }
-body:not(.fixed) #barTopMenu a[data-badge]:not([data-badge="0"]):before {
+body:not(.fixed) #barTopMenu a[data-badge]:not([data-badge="0"])::before {
   background-color: #d60000;
   border-radius: 8px;
   content: ' ';
@@ -2522,7 +2486,7 @@ body:not(.fixed) #barTopMenu a[data-badge]:not([data-badge="0"]):before {
   width: 16px;
   height: 16px;
 }
-body:not(.fixed) #barTopMenu a[data-badge]:not([data-badge="0"]):after {
+body:not(.fixed) #barTopMenu a[data-badge]:not([data-badge="0"])::after {
   content: attr(data-badge);
   color: white;
   width: 16px;
@@ -2533,20 +2497,22 @@ body:not(.fixed) #barTopMenu a[data-badge]:not([data-badge="0"]):after {
   vertical-align: top;
   white-space: nowrap;
 }
-body:not(.fixed) #barTopMenu a canvas,
-body:not(.fixed) #barTopMenu li a canvas,
-body:not(.fixed) #barTopMenu a img,
-body:not(.fixed) #barTopMenu li a img {
-  /*filter: url('filter.svg#brightness');
-            filter: brightness(150%);
-            filter: grayscale(80%);
-            -webkit-filter: brightness(150%) grayscale(80%);*/
+body:not(.fixed) #barTopMenu > li > a .navtitle,
+body:not(.fixed) #barTopMenu > li > label .navtitle {
+  position: absolute;
+  white-space: nowrap;
+  text-indent: 50%;
+  -webkit-transform: translate(-50%, 0);
+  -moz-transform: translate(-50%, 0);
+  -ms-transform: translate(-50%, 0);
+  -o-transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
+  opacity: 0;
+}
+body:not(.fixed) #barTopMenu img,
+body:not(.fixed) #barTopMenu canvas {
   -webkit-filter: hue-rotate(350deg) saturate(8.7%) brightness(177.3%) !important;
   filter: hue-rotate(350deg) saturate(8.7%) brightness(177.3%) !important;
-}
-body:not(.fixed) #barTopMenu li:hover {
-  border-bottom: 3px solid #d8dadc;
-  padding-bottom: 2px;
 }
 body:not(.fixed) #barTopMenu .navtitle {
   -webkit-transition: opacity 300ms;
@@ -2554,84 +2520,123 @@ body:not(.fixed) #barTopMenu .navtitle {
   -o-transition: opacity 300ms;
   transition: opacity 300ms;
 }
-body:not(.fixed) #barTopMenu:hover li:not(:hover) .navtitle {
+body:not(.fixed) #barTopMenu:hover > li.active .navtitle {
   opacity: 0;
+}
+body:not(.fixed) #barTopMenu:hover > li:hover .navtitle {
+  opacity: 1;
   -webkit-transition: opacity 0;
   -moz-transition: opacity 0;
   -o-transition: opacity 0;
   transition: opacity 0;
 }
-body:not(.fixed) #barTopMenu a:hover,
-body:not(.fixed) #barTopMenu li.active a {
-  color: #28497c;
+body:not(.fixed) #barTopMenu li:hover .navtitle,
+body:not(.fixed) #barTopMenu li.active .navtitle {
+  opacity: 1;
 }
-body:not(.fixed) #barTopMenu a:hover canvas,
-body:not(.fixed) #barTopMenu li.active a canvas,
-body:not(.fixed) #barTopMenu a:hover img,
-body:not(.fixed) #barTopMenu li.active a img {
+body:not(.fixed) #barTopMenu li:hover > a canvas,
+body:not(.fixed) #barTopMenu li.active > a canvas,
+body:not(.fixed) #barTopMenu li:hover > a img,
+body:not(.fixed) #barTopMenu li.active > a img {
   -webkit-filter: hue-rotate(0deg) saturate(100%) brightness(100%) !important;
   filter: hue-rotate(0deg) saturate(100%) brightness(100%) !important;
   filter: url('filter.svg#brightness');
   filter: brightness(100%);
   -webkit-filter: brightness(100%);
 }
-body:not(.fixed) #barTopMenu a:hover span,
-body:not(.fixed) #barTopMenu li.active a span {
+body:not(.fixed) #barTopMenu li:hover span,
+body:not(.fixed) #barTopMenu li.active span {
   background-position: -32px 0;
 }
-body:not(.fixed) #barTopMenu a:hover span.new,
-body:not(.fixed) #barTopMenu li.active a span.new {
+body:not(.fixed) #barTopMenu li:hover span.new,
+body:not(.fixed) #barTopMenu li.active span.new {
   background-position: -96px 0;
 }
-body:not(.fixed) #barTopMenu .action-menu-icon {
-  vertical-align: middle;
-  margin-top: 8px;
-  margin-left: 8px;
-  -webkit-filter: hue-rotate(350deg) saturate(8.7%) brightness(177.3%);
-  filter: hue-rotate(350deg) saturate(8.7%) brightness(177.3%);
-  z-index: 1003;
+body:not(.fixed) #barTopMenu > .overflow {
+  position: relative;
 }
-body:not(.fixed) #barTopMenu .action-menu-content {
-  z-index: 1002;
+body:not(.fixed) #barTopMenu > .overflow > input[type="checkbox"] {
+  display: none;
+}
+body:not(.fixed) #barTopMenu > .overflow > label img {
+  transition: transform 300ms;
+  transform: rotate(90deg);
+}
+body:not(.fixed) #barTopMenu > .overflow:hover label ~ ul,
+body:not(.fixed) #barTopMenu > .overflow input[type="checkbox"]:checked ~ ul {
+  max-height: 1000px;
+}
+body:not(.fixed) #barTopMenu > .overflow:hover label img,
+body:not(.fixed) #barTopMenu > .overflow input[type="checkbox"]:checked img,
+body:not(.fixed) #barTopMenu > .overflow:hover label ~ label img,
+body:not(.fixed) #barTopMenu > .overflow input[type="checkbox"]:checked ~ label img {
+  transform: rotate(180deg);
+}
+body:not(.fixed) #barTopMenu > .overflow > ul {
+  display: block;
   position: absolute;
-  top: 0px;
-  left: 0px;
-  right: auto;
-  padding: 4px 28px 4px 8px;
-  background: #fff;
-  box-shadow: 1px 1px 1px #8b8f95;
+  right: 0;
+  top: 100%;
+  z-index: 10;
+  list-style: none;
+  margin: 5px 0 0;
+  padding: 0;
+  background-color: #f5f6f6;
+  min-width: 150px;
+  max-width: 250px;
+  max-height: 0;
+  overflow: hidden;
+}
+body:not(.fixed) #barTopMenu > .overflow > ul li {
+  display: block;
+}
+body:not(.fixed) #barTopMenu > .overflow > ul li a {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-box-flex;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  -moz-box-direction: normal;
+  -moz-box-orient: horizontal;
+  -webkit-box-orient: horizontal;
+  flex-direction: row;
+  -webkit-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  -moz-box-align: center;
+  align-items: center;
+  padding: 0.5em 1em;
+}
+body:not(.fixed) #barTopMenu > .overflow > ul li img,
+body:not(.fixed) #barTopMenu > .overflow > ul li canvas {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 0 24px;
+  -ms-flex: 1 0 24px;
+  -moz-box-flex: 1;
+  flex: 1 0 24px;
+  width: 24px;
+  height: 24px;
+  margin: 2px 0.7em 0 0;
+}
+body:not(.fixed) #barTopMenu > .overflow > ul li .navtitle {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 0 100%;
+  -ms-flex: 1 0 100%;
+  -moz-box-flex: 1;
+  flex: 1 0 100%;
   text-align: left;
   white-space: nowrap;
 }
-body:not(.fixed) #barTopMenu .action-menu-content .action-menu-title {
-  margin-left: 35px;
-  margin-bottom: 10px;
+body:not(.fixed) #barTopMenu > .overflow > ul li br {
+  display: none;
 }
-body:not(.fixed) #barTopMenu .action-menu-content .action-menu-list li {
-  height: auto;
-  width: auto;
-  padding: 3px;
-}
-body:not(.fixed) #barTopMenu .action-menu-content .action-menu-list li:hover {
-  border: none;
-}
-body:not(.fixed) #barTopMenu .action-menu-content .action-menu-list a {
-  color: #000;
-  height: auto;
-}
-body:not(.fixed) #barTopMenu .action-menu-content .action-menu-list a:hover {
-  color: #28497c;
-}
-body:not(.fixed) #barTopMenu .action-menu-content .action-menu-table a {
-  color: #6d737b;
-  font-size: 12px;
-  text-align: center;
-  width: 64px;
-  height: 50px;
-}
-body:not(.fixed) #barTopMenu .action-menu-content .action-menu-table img {
-  width: 28px;
-  height: 28px;
+body:not(.fixed) #barTopMenu:not(.overflown) > .overflow {
+  display: none;
 }
 #barTopMenu-toggle {
   display: none;
@@ -2713,6 +2718,21 @@ body.fixed #barTopMenu li > a {
 }
 body.fixed #barTopMenu li:hover {
   background-color: #536d96;
+}
+body.fixed #barTopMenu li.overflow {
+  padding: 0;
+}
+body.fixed #barTopMenu li.overflow:hover {
+  background-color: inherit;
+}
+body.fixed #barTopMenu li.overflow input[type="checkbox"],
+body.fixed #barTopMenu li.overflow label {
+  display: none;
+}
+body.fixed #barTopMenu li.overflow ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 body.fixed #barBottomLeft:hover #barTopMenu,
 body.fixed #barTopMenu-toggle:checked ~ #barTopMenu {
@@ -9870,6 +9890,44 @@ body:not(.fixed) #barTopMenu #nav_extra::after {
 body:not(.fixed) #barTopMenu .action-menu-icon {
   transform: rotate(-90deg);
 }
+body:not(.fixed) #barTopMenu .overflow li:hover {
+  border-bottom: 0;
+  padding-bottom: 0;
+  position: relative;
+}
+body:not(.fixed) #barTopMenu .overflow li:hover::after {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  opacity: 1;
+  content: '';
+  display: block;
+  background-color: #b1b4b9;
+  height: 2px;
+  margin-top: 2px;
+  transition: left 300ms, right 300ms, opacity 300ms;
+}
+body:not(.fixed) #barTopMenu .overflow li:hover::after {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  opacity: 1;
+  content: '';
+  display: block;
+  background-color: 'light';
+  height: 2px;
+  margin-top: 2px;
+  transition: left 300ms, right 300ms, opacity 300ms;
+}
+body:not(.fixed) #barTopMenu .overflow li:hover::after {
+  -webkit-transform: translate(0, -4px);
+  -moz-transform: translate(0, -4px);
+  -ms-transform: translate(0, -4px);
+  -o-transform: translate(0, -4px);
+  transform: translate(0, -4px);
+}
 #tabs > li,
 #tabs2 > li,
 #tabs > li.current,
@@ -9895,8 +9953,8 @@ body:not(.fixed) #barTopMenu .action-menu-icon {
   content: '';
   display: block;
   background-color: #646a72;
-  height: 1px;
-  margin-top: 3px;
+  height: 2px;
+  margin-top: 2px;
   transition: left 300ms, right 300ms, opacity 300ms;
 }
 #tabs > li.current::after,
@@ -9909,8 +9967,8 @@ body:not(.fixed) #barTopMenu .action-menu-icon {
   content: '';
   display: block;
   background-color: 'dark';
-  height: 3px;
-  margin-top: 1px;
+  height: 2px;
+  margin-top: 2px;
   transition: left 300ms, right 300ms, opacity 300ms;
 }
 #tabs > li:not(.current),
@@ -9929,8 +9987,8 @@ body:not(.fixed) #barTopMenu .action-menu-icon {
   content: '';
   display: block;
   background-color: #b1b4b9;
-  height: 1px;
-  margin-top: 3px;
+  height: 2px;
+  margin-top: 2px;
   transition: left 300ms, right 300ms, opacity 300ms;
 }
 #tabs > li:not(.current)::after,
@@ -9943,8 +10001,8 @@ body:not(.fixed) #barTopMenu .action-menu-icon {
   content: '';
   display: block;
   background-color: 'light';
-  height: 3px;
-  margin-top: 1px;
+  height: 2px;
+  margin-top: 2px;
   transition: left 300ms, right 300ms, opacity 300ms;
 }
 #tabs > li:not(.current):not(:hover)::after,
