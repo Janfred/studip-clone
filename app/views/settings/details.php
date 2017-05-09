@@ -49,38 +49,21 @@
         <label>
             <?= _('Hobbys:') ?>
             <?= I18N::textarea('hobby', $user->hobby, !$controller->shallChange('user_info.hobby')? ['disabled' => true, 'readonly' => true] : []) ?>
-            <!--<textarea name="hobby" id="hobbies"
-                      class="add_toolbar wysiwyg"
-                    <? if (!$controller->shallChange('user_info.hobby')) echo 'disabled'; ?>
-            ><?= htmlReady($user->hobby) ?></textarea>-->
         </label>
         <a name="lebenslauf"></a>
         <label>
             <?= _('Lebenslauf:') ?>
             <?= I18N::textarea('lebenslauf', $user->lebenslauf, !$controller->shallChange('user_info.lebenslauf')? ['disabled' => true, 'readonly' => true] : []) ?>
-            <!--<textarea id="lebenslauf" name="lebenslauf"
-                      class="add_toolbar wysiwyg"
-                    <? if (!$controller->shallChange('user_info.lebenslauf')) echo 'disabled'; ?>
-            ><?= htmlReady($user->lebenslauf) ?></textarea>-->
         </label>
         <? if ($is_dozent): ?>
             <a name="schwerpunkte"></a>
             <label>
                 <?= _('Schwerpunkte:') ?>
                 <?= I18N::textarea('schwerp', $user->schwerp, !$controller->shallChange('user_info.schwerp')? ['disabled' => true, 'readonly' => true] : []) ?>
-                <!--<textarea id="schwerp" name="schwerp"
-                          class="add_toolbar wysiwyg"
-                        <? if (!$controller->shallChange('user_info.schwerp')) echo 'disabled'; ?>
-                ><?= htmlReady($user->schwerp) ?></textarea>
-            </label>-->
             <a name="publikationen"></a>
             <label>
                 <?= _('Publikationen:') ?>
                 <?= I18N::textarea('publi', $user->publi, !$controller->shallChange('user_info.publi')? ['disabled' => true, 'readonly' => true] : []) ?>
-                <!--<textarea id="publi" name="publi" style="width:100%;height:100px;"
-                          class="add_toolbar wysiwyg"
-                        <? if (!$controller->shallChange('user_info.publi')) echo 'disabled'; ?>
-                ><?= htmlReady($user->publi) ?></textarea>-->
             </label>
         <? endif; ?>
     </fieldset>
