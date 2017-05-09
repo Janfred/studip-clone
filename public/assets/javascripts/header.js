@@ -33,7 +33,7 @@
 
     STUDIP.HeaderMagic = {
         enable: function () {
-            fold = $('#flex-header').next().offset().top - $('#barBottomContainer').height();
+            fold = $('#flex-header').height();
             STUDIP.Scroll.addHandler('header', scroll);
         },
         disable : function () {
