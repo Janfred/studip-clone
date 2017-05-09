@@ -2501,7 +2501,7 @@ body:not(.fixed) #barTopMenu > li > a .navtitle,
 body:not(.fixed) #barTopMenu > li > label .navtitle {
   position: absolute;
   white-space: nowrap;
-  text-indent: 50%;
+  left: 50%;
   -webkit-transform: translate(-50%, 0);
   -moz-transform: translate(-50%, 0);
   -ms-transform: translate(-50%, 0);
