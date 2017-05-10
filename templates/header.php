@@ -48,11 +48,13 @@ if (isset($_COOKIE['navigation-length'])) {
                         _('Profil'),
                         Icon::create('person', 'clickable')
                     );
-                    $action_menu->addLink(
-                        URLHelper::getURL('dispatch.php/document/files'),
-                        _('Meine Dateien'),
-                        Icon::create('folder-empty', 'clickable')
-                    );
+                    if (Config::get()->PERSONALDOCUMENT_ENABLE) {
+                        $action_menu->addLink(
+                            URLHelper::getURL('dispatch.php/document/files'),
+                            _('Meine Dateien'),
+                            Icon::create('folder-empty', 'clickable')
+                        );
+                    }
                     $action_menu->addLink(
                         URLHelper::getURL('dispatch.php/settings/general'),
                         _('Einstellungen'),
