@@ -122,6 +122,13 @@ STUDIP.QuickSearch = {
                             return false;
                         }
                     }
+                },
+                open: function () {
+                    // Ensure autocomplete list is above any surrounding dialog
+                    var dialog = jQuery(this).closest('.ui-dialog');
+                    if (dialog.length > 0) {
+                        jQuery('.ui-autocomplete.ui-front').zIndex(dialog.zIndex() + 1);
+                    }
                 }
             });
 
