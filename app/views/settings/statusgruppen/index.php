@@ -69,7 +69,7 @@
             ?>
             <? foreach ($institute['flattened'] as $role_id => $role): ?>
                 <article
-                        class="<?= ContentBoxHelper::classes($role_id) ?> <? if (Request::get('type') == 'role' && Request::get('open') == $role_id) : ?>open<? endif ?>">
+                        class="indented <?= ContentBoxHelper::classes($role_id) ?> <? if (Request::get('type') == 'role' && Request::get('open') == $role_id) : ?>open<? endif ?>">
                     <header>
                         <h1>
                             <? if (count($institute['datafields'][$role_id]) > 0): ?>

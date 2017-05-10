@@ -208,5 +208,12 @@ section.contentbox {
                 .icon('before', "arr_1right", 'new');
             }
         }
+
+        &.indented {
+            margin-left: calc(10px + 1em);
+            > header {
+                background-color: mix(@content-color, #fff, 10%);
+            }
+        }
     }
 }

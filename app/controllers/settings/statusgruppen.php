@@ -255,8 +255,7 @@ class Settings_StatusgruppenController extends Settings_SettingsController
     {
         if (in_array($GLOBALS['perm']->get_profile_perm($this->user->user_id), words('user admin'))) {
 
-            $query
-                       = "SELECT Institut_id
+            $query = "SELECT Institut_id
                       FROM user_inst
                       WHERE user_id = ? AND inst_perms != 'user'
                       ORDER BY priority ASC";
@@ -278,8 +277,7 @@ class Settings_StatusgruppenController extends Settings_SettingsController
             }
 
             if ($changed) {
-                $query
-                           = "UPDATE user_inst
+                $query = "UPDATE user_inst
                           SET priority = ?
                           WHERE user_id = ? AND Institut_id = ?";
                 $statement = DBManager::get()->prepare($query);

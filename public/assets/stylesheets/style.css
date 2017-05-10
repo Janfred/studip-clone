@@ -3555,6 +3555,12 @@ section.contentbox > article.new header h1 a::before {
   vertical-align: text-top;
   width: 16px;
 }
+section.contentbox > article.indented {
+  margin-left: calc(10px + 1em);
+}
+section.contentbox > article.indented > header {
+  background-color: #f3f5f8;
+}
 #header .badge {
   position: relative;
 }

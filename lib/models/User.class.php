@@ -331,6 +331,7 @@ class User extends AuthUserMd5
         );
         $config['has_many']['institute_memberships'] = array(
             'class_name' => 'InstituteMember',
+            'order_by' => 'ORDER BY priority ASC',
             'on_delete' => 'delete',
             'on_store' => 'store',
         );
