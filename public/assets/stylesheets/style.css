@@ -4510,9 +4510,6 @@ div.messagebox_warning {
   vertical-align: middle;
   margin: auto;
 }
-#index .messagebox {
-  margin: 5px 0;
-}
 #reloader.more {
   display: none;
 }
@@ -6417,24 +6414,18 @@ h3.eval {
   color: #000000;
   font-weight: bold;
 }
-#index div.index_container,
-#request_new_password div.index_container,
-#web_migrate div.index_container {
+div.index_container {
   margin: 0 0;
   position: absolute;
   top: 111px;
   bottom: 0px;
   width: 100%;
-  height: calc(100% - 136px);
+  height: calc(100% - 81px);
 }
-#index div.index_container ul#tabs,
-#request_new_password div.index_container ul#tabs,
-#web_migrate div.index_container ul#tabs {
+div.index_container ul#tabs {
   display: none;
 }
-#index div.index_container #background-desktop,
-#request_new_password div.index_container #background-desktop,
-#web_migrate div.index_container #background-desktop {
+div.index_container #background-desktop {
   position: absolute;
   top: 0;
   left: 0;
@@ -6442,9 +6433,7 @@ h3.eval {
   bottom: 0;
   z-index: -1;
 }
-#index div.index_container #background-mobile,
-#request_new_password div.index_container #background-mobile,
-#web_migrate div.index_container #background-mobile {
+div.index_container #background-mobile {
   display: none;
   position: absolute;
   top: 0;
@@ -6453,114 +6442,74 @@ h3.eval {
   height: 150px;
   z-index: -1;
 }
-#index div.index_container div.messagebox,
-#request_new_password div.index_container div.messagebox,
-#web_migrate div.index_container div.messagebox {
+div.index_container div.messagebox {
   margin-left: 50px;
   margin-top: 25px;
   width: 428px;
 }
-#index div.index_container div.index_main,
-#request_new_password div.index_container div.index_main,
-#web_migrate div.index_container div.index_main {
+div.index_container div.index_main {
   background-color: rgba(255, 255, 255, 0.8);
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
   margin-left: 50px;
   margin-top: 50px;
   width: 500px;
 }
-#index div.index_container div.index_main > div,
-#request_new_password div.index_container div.index_main > div,
-#web_migrate div.index_container div.index_main > div {
+div.index_container div.index_main > div {
   padding: 20px;
 }
-#index div.index_container div.index_main form,
-#request_new_password div.index_container div.index_main form,
-#web_migrate div.index_container div.index_main form {
+div.index_container div.index_main form {
   padding: 20px;
   padding-bottom: 0;
 }
-#index div.index_container div.index_main footer,
-#request_new_password div.index_container div.index_main footer,
-#web_migrate div.index_container div.index_main footer {
+div.index_container div.index_main footer {
   overflow: auto;
   padding: 20px;
 }
-#index div.index_container div.index_main footer div#languages,
-#request_new_password div.index_container div.index_main footer div#languages,
-#web_migrate div.index_container div.index_main footer div#languages {
+div.index_container div.index_main footer div#languages {
   border-top: 1px solid #6d737b;
   font-size: 0.9em;
   padding: 10px;
 }
-#index div.index_container div.index_main footer div#languages a,
-#request_new_password div.index_container div.index_main footer div#languages a,
-#web_migrate div.index_container div.index_main footer div#languages a {
+div.index_container div.index_main footer div#languages a {
   padding-right: 10px;
 }
-#index div.index_container div.index_main footer div.login_info,
-#request_new_password div.index_container div.index_main footer div.login_info,
-#web_migrate div.index_container div.index_main footer div.login_info {
+div.index_container div.index_main footer div.login_info {
   border-top: 1px solid #6d737b;
   font-size: 0.8em;
 }
-#index div.index_container div.index_main footer div.login_info div,
-#request_new_password div.index_container div.index_main footer div.login_info div,
-#web_migrate div.index_container div.index_main footer div.login_info div {
+div.index_container div.index_main footer div.login_info div {
   text-align: right;
   float: left;
   padding: 5px;
 }
-#index div.index_container div.index_main footer div.login_info div:last-child,
-#request_new_password div.index_container div.index_main footer div.login_info div:last-child,
-#web_migrate div.index_container div.index_main footer div.login_info div:last-child {
+div.index_container div.index_main footer div.login_info div:last-child {
   float: right;
 }
-#index div.index_container div.index_main footer > a,
-#request_new_password div.index_container div.index_main footer > a,
-#web_migrate div.index_container div.index_main footer > a {
+div.index_container div.index_main footer > a {
   margin-left: 12px;
 }
-#index div.index_container div.index_main nav,
-#request_new_password div.index_container div.index_main nav,
-#web_migrate div.index_container div.index_main nav {
+div.index_container div.index_main nav {
   padding: 10px;
   margin-left: 20px;
   margin-top: 20px;
   display: inline-block;
   width: 450px;
 }
-#index div.index_container div.index_main nav h1,
-#request_new_password div.index_container div.index_main nav h1,
-#web_migrate div.index_container div.index_main nav h1 {
+div.index_container div.index_main nav h1 {
   border-bottom: 0px;
 }
-#index div.index_container div.index_main nav div.login_link,
-#request_new_password div.index_container div.index_main nav div.login_link,
-#web_migrate div.index_container div.index_main nav div.login_link {
+div.index_container div.index_main nav div.login_link {
   display: inline-block;
   width: 180px;
   vertical-align: top;
   padding-right: 25px;
 }
-#index div.index_container div.index_main nav div.login_link a,
-#request_new_password div.index_container div.index_main nav div.login_link a,
-#web_migrate div.index_container div.index_main nav div.login_link a {
+div.index_container div.index_main nav div.login_link a {
   font-size: 1.5em;
 }
-#index div.index_container div.index_main nav div.login_link a p,
-#request_new_password div.index_container div.index_main nav div.login_link a p,
-#web_migrate div.index_container div.index_main nav div.login_link a p {
+div.index_container div.index_main nav div.login_link a p {
   font-size: 0.5em;
   color: #6d737b;
-}
-#index #layout_footer,
-#request_new_password #layout_footer,
-#web_migrate #layout_footer {
-  height: 25px;
-  position: relative;
-  top: -55px;
-  padding: 0;
 }
 /* --- news --------------------------------------------------- */
 #news_dialog_content {

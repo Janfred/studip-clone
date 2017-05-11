@@ -39,7 +39,9 @@ class LoginBackground extends SimpleORMap
     {
         return URLHelper::getURL(
             self::getRelativePath() . '/' . $this->id
-            . '.' . pathinfo($this->filename, PATHINFO_EXTENSION)
+            . '.' . pathinfo($this->filename, PATHINFO_EXTENSION),
+            null,
+            true
         );
     }
 
