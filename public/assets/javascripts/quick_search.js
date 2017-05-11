@@ -130,6 +130,12 @@ STUDIP.QuickSearch = {
                         jQuery('.ui-autocomplete.ui-front').zIndex(dialog.zIndex() + 1);
                     }
                 }
+            }).on('click', function () {
+                // Reensure autocomplete list is above any surrounding dialog
+                var dialog = jQuery(this).closest('.ui-dialog');
+                if (dialog.length > 0) {
+                    jQuery('.ui-autocomplete.ui-front').zIndex(dialog.zIndex() + 1);
+                }
             });
 
             if (jQuery("#" + name + "_frame").length) {
