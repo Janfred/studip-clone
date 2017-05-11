@@ -23,12 +23,12 @@
                 <col width="40%">
             </colgroup>
             <tbody>
-            <? if ($course->veranstaltungsnummer) : ?>
+            <? if ($course->untertitel) : ?>
                 <tr>
                     <td><strong><?= _('Untertitel') ?></strong></td>
                     <td><?= htmlReady($course->untertitel) ?></td>
                 </tr>
-            <? endif ?>            
+            <? endif ?>
             <? if ($course->veranstaltungsnummer) : ?>
                 <tr>
                     <td><strong><?= _('Veranstaltungsnummer') ?></strong></td>
