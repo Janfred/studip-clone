@@ -109,29 +109,18 @@ namespace {
     ));
     StudipAutoloader::addAutoloadPath($GLOBALS['STUDIP_BASE_PATH'] . '/vendor/mishal-iless/lib/ILess', 'ILess');
 
-    // sample the request time and number of db queries every tenth time
-    register_shutdown_function(function ($timer) {
-        $timer('core.request_time', 0.1);
 
-        $query_count = DBManager::get()->query_count;
-        Metrics::gauge('core.database.queries', $query_count, 0.1);
-    }, Metrics::startTimer());
+    $ABSOLUTE_PATH_STUDIP = $STUDIP_BASE_PATH . '/public/';
 
-    require 'lib/phplib/page_open.php';
-
-    $GLOBALS['ABSOLUTE_PATH_STUDIP'] = $STUDIP_BASE_PATH . '/public/';
-
-    // CANONICAL_RELATIVE_PATH_STUDIP should end with a '/'
     $CANONICAL_RELATIVE_PATH_STUDIP = dirname($_SERVER['PHP_SELF']);
     if (DIRECTORY_SEPARATOR != '/') {
         $CANONICAL_RELATIVE_PATH_STUDIP = str_replace(DIRECTORY_SEPARATOR, '/', $CANONICAL_RELATIVE_PATH_STUDIP);
     }
-
+    // CANONICAL_RELATIVE_PATH_STUDIP should end with a '/'
     if (substr($CANONICAL_RELATIVE_PATH_STUDIP,-1) != "/"){
         $CANONICAL_RELATIVE_PATH_STUDIP .= "/";
     }
 
-    // ABSOLUTE_URI_STUDIP: insert the absolute URL to your Stud.IP installation; it should end with a '/'
     $ABSOLUTE_URI_STUDIP = "";
 
     // automagically compute ABSOLUTE_URI_STUDIP if $_SERVER['SERVER_NAME'] is set
@@ -156,18 +145,19 @@ namespace {
     // default ASSETS_URL, customize if required
     $GLOBALS['ASSETS_URL'] = $ABSOLUTE_URI_STUDIP . 'assets/';
 
+    StudipFileloader::load('config_defaults.inc.php config_local.inc.php', $GLOBALS, compact('STUDIP_BASE_PATH', 'ABSOLUTE_URI_STUDIP', 'ASSETS_URL', 'CANONICAL_RELATIVE_PATH_STUDIP'), true);
+
     // construct absolute URL for ASSETS_URL
     if ($GLOBALS['ASSETS_URL'][0] === '/') {
-        $host = preg_replace('%^([a-z]+:/*[^/]*).*%', '$1', $ABSOLUTE_URI_STUDIP);
+        $host = preg_replace('%^([a-z]+:/*[^/]*).*%', '$1', $GLOBALS['ABSOLUTE_URI_STUDIP']);
         $GLOBALS['ASSETS_URL'] = $host . $GLOBALS['ASSETS_URL'];
     } else if (!preg_match('/^[a-z]+:/', $GLOBALS['ASSETS_URL'])) {
-        $GLOBALS['ASSETS_URL'] = $ABSOLUTE_URI_STUDIP . $GLOBALS['ASSETS_URL'];
+        $GLOBALS['ASSETS_URL'] = $GLOBALS['ABSOLUTE_URI_STUDIP'] . $GLOBALS['ASSETS_URL'];
     }
-
-    StudipFileloader::load('config.php', $GLOBALS, compact('STUDIP_BASE_PATH', 'ABSOLUTE_URI_STUDIP', 'ASSETS_URL'));
 
     require 'config.inc.php';
 
+    require 'lib/phplib/page_open.php';
     require_once 'lib/functions.php';
     require_once 'lib/language.inc.php';
     require_once 'lib/visual.inc.php';
@@ -189,20 +179,20 @@ namespace {
     $GLOBALS['template_factory'] =
         new Flexi_TemplateFactory($STUDIP_BASE_PATH . '/templates');
 
-    // set default exception handler
-    // command line or http request?
-    if (isset($_SERVER['REQUEST_METHOD'])) {
-        set_exception_handler('studip_default_exception_handler');
-    }
 
     // set default pdo connection
-    DBManager::getInstance()
-        ->setConnection('studip',
-            'mysql:host=' . $GLOBALS['DB_STUDIP_HOST'] .
-            ';dbname=' . $GLOBALS['DB_STUDIP_DATABASE'],
-            $GLOBALS['DB_STUDIP_USER'],
-            $GLOBALS['DB_STUDIP_PASSWORD']);
-
+    try {
+        DBManager::getInstance()
+            ->setConnection('studip',
+                'mysql:host=' . $GLOBALS['DB_STUDIP_HOST'] .
+                ';dbname=' . $GLOBALS['DB_STUDIP_DATABASE'],
+                $GLOBALS['DB_STUDIP_USER'],
+                $GLOBALS['DB_STUDIP_PASSWORD']);
+    } catch (PDOException $exception) {
+        header('HTTP/1.1 500 Internal Server Error');
+        die(sprintf('database connection %s failed', 'mysql:host=' . $GLOBALS['DB_STUDIP_HOST'] .
+        ';dbname=' . $GLOBALS['DB_STUDIP_DATABASE']));
+    }
     // set slave connection
     if (isset($GLOBALS['DB_STUDIP_SLAVE_HOST'])) {
         try {
@@ -220,8 +210,22 @@ namespace {
         DBManager::getInstance()->aliasConnection('studip', 'studip-slave');
     }
 
+    // set default exception handler
+    // command line or http request?
+    if (isset($_SERVER['REQUEST_METHOD'])) {
+        set_exception_handler('studip_default_exception_handler');
+    }
+
     // set default time zone
     date_default_timezone_set(Config::get()->DEFAULT_TIMEZONE ? : @date_default_timezone_get());
+
+    // sample the request time and number of db queries every tenth time
+    register_shutdown_function(function ($timer) {
+        $timer('core.request_time', 0.1);
+
+        $query_count = DBManager::get()->query_count;
+        Metrics::gauge('core.database.queries', $query_count, 0.1);
+    }, Metrics::startTimer());
 
     //include 'tools/debug/StudipDebugPDO.class.php';
 
@@ -306,8 +310,8 @@ namespace {
         include 'vendor/email_message/smtp.php';
         $mail_transporter->localhost = ($GLOBALS['MAIL_LOCALHOST'] == "") ? $_SERVER["SERVER_NAME"] : $GLOBALS['MAIL_LOCALHOST'];
         $mail_transporter->smtp_host = ($GLOBALS['MAIL_HOST_NAME'] == "") ? $_SERVER["SERVER_NAME"] : $GLOBALS['MAIL_HOST_NAME'];
-        if (is_array($MAIL_SMTP_OPTIONS)) {
-            foreach ($MAIL_SMTP_OPTIONS as $key => $value) {
+        if (is_array($GLOBALS['MAIL_SMTP_OPTIONS'])) {
+            foreach ($GLOBALS['MAIL_SMTP_OPTIONS'] as $key => $value) {
                 $mail_transporter->{"smtp_$key"} = $value;
             }
             if ($mail_transporter->smtp_user !== '') {
