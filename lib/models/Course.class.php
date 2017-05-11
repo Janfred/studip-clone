@@ -68,27 +68,16 @@
 class Course extends SimpleORMap
 {
 
-    private static $current_course;
-
     /**
      * Returns the currently active course or false if none is active.
      *
-     * @return mixed Course object of currently active course, false otherwise
+     * @return Course object of currently active course, null otherwise
      * @since 3.0
      */
     public static function findCurrent()
     {
-        if (empty($GLOBALS['SessionSeminar'])) {
-            return null;
-        }
-        if (isset(self::$current_course) && $GLOBALS['SessionSeminar'] === self::$current_course->id) {
-            return self::$current_course;
-        }
-        $found = Course::find($GLOBALS['SessionSeminar']);
-        if ($found) {
-            self::$current_course = $found;
-            Seminar::setInstance(new Seminar(self::$current_course));
-            return self::$current_course;
+        if (Context::isCourse()) {
+            return Context::get();
         }
     }
 

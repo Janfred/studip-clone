@@ -44,7 +44,7 @@ class Context {
      */
     private static function loadContext($id)
     {
-        $possible_sorms = "Course Institute User";
+        $possible_sorms = "Course Institute";
         foreach(words($possible_sorms) as $sorm) {
             if ($context = $sorm::find($id)) {
                 self::$context = $context;
@@ -56,7 +56,7 @@ class Context {
     /**
      * Return sorm-object of currently active Stud.IP object
      *
-     * @return Object sorm-object of current context
+     * @return Course|Institute sorm-object of current context
      */
     public static function get()
     {
@@ -203,7 +203,7 @@ class Context {
         self::loadContext($id);
 
         if (!self::getType()) {
-            throw new CheckObjectException(_('Sie haben kein Objekt gewählt.'));
+            return;
         }
 
         if (self::isCourse() || self::isInstitute()) {
@@ -216,6 +216,8 @@ class Context {
 
         if (self::isCourse()) {
             $course = self::get();
+
+            Seminar::setInstance(new Seminar($course));
 
             // check if current user can access the object
             if (!$perm->get_studip_perm($course["Seminar_id"])) {
@@ -266,5 +268,8 @@ class Context {
         self::$type           = null;
 
         URLHelper::removeLinkParam('cid');
+        unset($GLOBALS['SessionSeminar']);
+        unset($_SESSION['SessionSeminar']);
+        unset($rechte);
     }
 }

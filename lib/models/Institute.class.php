@@ -42,25 +42,16 @@
 class Institute extends SimpleORMap
 {
 
-    private static $current_institute;
-
     /**
     * Returns the currently active course or false if none is active.
     *
-    * @return mixed Course object of currently active course, false otherwise
+    * @return Institute object of currently active institute
     * @since 3.0
     */
     public static function findCurrent()
     {
-        if (empty($GLOBALS['SessionSeminar'])) {
-            return null;
-        }
-        if (isset(self::$current_institute) && $GLOBALS['SessionSeminar'] === self::$current_institute->id) {
-            return self::$current_institute;
-        }
-        $found = Institute::find($GLOBALS['SessionSeminar']);
-        if ($found) {
-            return self::$current_institute = $found;
+        if (Context::isInstitute()) {
+            return Context::get();
         }
     }
 
