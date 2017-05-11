@@ -9,8 +9,6 @@
     </header>
     <section>
         <dl>
-            <dt><?= _('Profilbesuche:') ?></dt>
-            <dd><?= object_return_views($current_user->user_id) ?></dd>
             <? if ($public_email): ?>
                 <dt><?= _("E-Mail:") ?></dt>
                 <dd>
