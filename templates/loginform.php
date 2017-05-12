@@ -59,7 +59,7 @@ try {
                     <input type="hidden" name="resolution"  value="">
                     <input type="hidden" name="device_pixel_ratio" value="1">
                     <?= Button::createAccept(_('Anmelden'), _('Login')); ?>
-                    <?= LinkButton::create(_('Abbrechen'), URLHelper::getURL('index.php?cancel_login=1')) ?>
+                    <?= LinkButton::create(_('Abbrechen'), URLHelper::getURL('index.php', ['cancel_login' => 1], true)) ?>
             </form>
 
             <div>

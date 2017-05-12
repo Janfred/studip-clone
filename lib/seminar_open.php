@@ -109,7 +109,7 @@ include 'config.inc.php';
 // in the current request. For compatibility reasons there is a fallback to
 // the last selected one from the session
 
-$course_id = Request::option('cid', $_SESSION['SessionSeminar']);
+$course_id = Request::int('cancel_login') ? null: Request::option('cid', $_SESSION['SessionSeminar']);
 
 // Select the current course or institute if we got one from 'cid' or session.
 // This also binds the global $_SESSION['SessionSeminar']
