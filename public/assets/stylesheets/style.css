@@ -2390,6 +2390,7 @@ li#notification_container:hover .list {
 }
 #flex-header {
   position: relative;
+  z-index: 3;
 }
 /* --- public course marker ------------------------------------------------ */
 #barBottomContainer.public_course {
