@@ -326,7 +326,6 @@ class AdminCourseFilter
         if ($count_courses && $count_courses <= $this->max_show_courses) {
             $settings = $this->settings;
             $this->settings['query']['select'] = array();
-            $this->settings['query']['orderby'] = "seminare.name";
             $ret = $this->getCourses(false);
             $this->settings = $settings;
             return $ret;
