@@ -2150,9 +2150,18 @@ form.default label.packed button {
   display: block;
   position: absolute;
   bottom: -10px;
-  left: 0;
+  left: -400px;
   right: 0;
   height: 10px;
+}
+#notification_container:hover::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 100%;
+  width: 25px;
 }
 #notification_container.fixed {
   width: 60px;
@@ -2247,22 +2256,12 @@ li#notification_container:hover .list {
   left: 4px;
 }
 #notification_container .list .item {
-  *zoom: 1;
   border-top: thin solid #a8abb0;
   line-height: 20px;
   display: block;
   height: auto;
   padding: 5px;
   white-space: normal;
-}
-#notification_container .list .item:before,
-#notification_container .list .item:after {
-  display: table;
-  content: "";
-  line-height: 0;
-}
-#notification_container .list .item:after {
-  clear: both;
 }
 #notification_container .list .item:hover {
   background-color: rgba(109, 115, 123, 0.2);

@@ -174,6 +174,8 @@
 #notification_container {
     @arrow-height: 10px;
 
+    @list-width: 400px;
+
     .border-radius(2px);
     //.transition(all 1s);
     width: 100px;
@@ -185,15 +187,25 @@
     position: relative;
 
     // Insert invisible padding on top of the arrow in order to try to
-    // close the "mouse trap gap" created by the arrow
+    // close the "mouse trap gap" created by the arrow as well as an invisible
+    // 25px border to the left
     &::before {
         content: "";
         display: block;
         position: absolute;
         bottom: -@arrow-height;
-        left: 0;
+        left: (-@list-width);
         right: 0;
         height: @arrow-height;
+    }
+    &:hover::after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 100%;
+        width: 25px;
     }
 
     &.fixed {
@@ -228,8 +240,6 @@
         // Creates an arrow pointing from the list to the triggering element
         #arrow > .top-border(10px, @white, 1px, @light-gray-color-80);
 
-        @width: 400px;
-
         background-color: @white;
         border-left: thin solid @light-gray-color-60;
         border-top: thin solid @light-gray-color-60;
@@ -238,19 +248,19 @@
         display: none;
         font-size: 1em;
         position: absolute;
-        width: @width;
-        max-width: @width;
+        width: @list-width;
+        max-width: @list-width;
         .box-shadow(1px 1px 1px @light-gray-color-80);
 
         // Without this, buttons or message boxes would appear on top of the list
         z-index: 2;
         &::before, &::after {
-            left: (@width - 20px);
+            left: (@list-width - 20px);
         }
 
         // Positions: below or left'ish or right'ish to the triggering element
         &.below {
-            left: ((-@width) + 40px);
+            left: (-@list-width + 40px);
         }
         &.left {
             right: 0px;
@@ -267,7 +277,6 @@
         // List item
         .item {
             @padding: 5px;
-            .clearfix();
             border-top: thin solid @light-gray-color-60;
             line-height: 20px;
             display: block;
@@ -281,7 +290,7 @@
                 #arrow > .top(10px, fadeout(@light-gray-color, 80%));
                 margin-top: 0;
                 &::before {
-                    left: (@width - 20px);
+                    left: (@list-width - 20px);
                     z-index: 2;
                 }
             }
