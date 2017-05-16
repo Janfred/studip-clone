@@ -2145,7 +2145,7 @@ form.default label.packed button {
   background-color: #fff;
   position: relative;
 }
-#notification_container::before {
+#notification_container:hover::before {
   content: "";
   display: block;
   position: absolute;
