@@ -28,7 +28,9 @@
             <? endif ?>
         </th>
     </tr>
-    <?= $this->render_partial("my_courses/_course", compact('course_collection')) ?>
+    <? if ($_my_sem_open[$id]) : ?>
+        <?= $this->render_partial("my_courses/_course", compact('course_collection')) ?>
+    <? endif ?>
     </tbody>
     <? $index++ ?>
 <? endforeach ?>
