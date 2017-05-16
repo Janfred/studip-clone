@@ -196,8 +196,5 @@ $translations = array(
 
 // translations have to be UTF8 for #json_encode
 $translations = $plugin->utf8EncodeArray($translations);
-
 ?>
-String.toLocaleString({
-  "<?= strtr($language, "_", "-") ?>": <?= json_encode($translations) ?>
-});
+<?= json_encode($translations) ?>
