@@ -60,7 +60,7 @@
         <label>
             <?= _("Ergebnisse an Teilnehmer") ?>
             <select name="questionnaire[resultvisibility]">
-                <option value="always"<?= $questionnaire['resultvisibility'] === "always" ? " selected" : "" ?>><?= _("Wenn sie geantwortet haben.") ?></option>
+                <option value="always"<?= $questionnaire['resultvisibility'] === "always" ? " selected" : "" ?>><?= _("Immer.") ?></option>
                 <option value="afterending"<?= $questionnaire['resultvisibility'] === "afterending" ? " selected" : "" ?>><?= _("Nach Ende der Befragung.") ?></option>
                 <option value="never"<?= $questionnaire['resultvisibility'] === "never" ? " selected" : "" ?>><?= _("Niemals.") ?></option>
             </select>
