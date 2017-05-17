@@ -88,14 +88,11 @@ div.messagebox_details {
     bottom: 0;
     z-index: 9999;
 
-    text-align: center;
-    &:before { // see http://css-tricks.com/centering-in-the-unknown/
-        content: "";
-        display: inline-block;
-        height: 100%;
-        vertical-align: middle;
-        zoom: 1; // IE :(
-    }
+    .flex();
+    .flex-align-items(center);
+    .flex-justify-content(center);
+
+    padding: 10vh 20vw;
 
     .messagebox {
         display: inline-block;

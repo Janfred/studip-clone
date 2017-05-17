@@ -4460,14 +4460,19 @@ div.messagebox_warning {
   right: 0;
   bottom: 0;
   z-index: 9999;
-  text-align: center;
-}
-.modaloverlay:before {
-  content: "";
-  display: inline-block;
-  height: 100%;
-  vertical-align: middle;
-  zoom: 1;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-box-flex;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: flex;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  -moz-box-align: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  padding: 10vh 20vw;
 }
 .modaloverlay .messagebox {
   display: inline-block;
