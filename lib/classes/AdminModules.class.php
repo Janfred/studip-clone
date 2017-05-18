@@ -199,15 +199,21 @@ class AdminModules extends ModulesNotification {
     }
 
     public function getModuleElearning_interfaceExistingItems($range_id) {
-        $object_connections = new ObjectConnections($range_id);
-        return is_array($object_connections->getConnections()) ? count($object_connections->getConnections()) : 0;
+        if (Config::get()->ELEARNING_INTERFACE_ENABLE) {
+            $object_connections = new ObjectConnections($range_id);
+            return is_array($object_connections->getConnections()) ? count($object_connections->getConnections()) : 0;
+        } else {
+            return 0;
+        }
     }
 
     public function moduleElearning_interfaceDeactivate($range_id) {
-        global $connected_cms;
-        foreach(ObjectConnections::GetConnectedSystems($range_id) as $system){
-            ELearningUtils::loadClass($system);
-            $connected_cms[$system]->deleteConnectedModules($range_id);
+        if (Config::get()->ELEARNING_INTERFACE_ENABLE) {
+            global $connected_cms;
+            foreach(ObjectConnections::GetConnectedSystems($range_id) as $system){
+                ELearningUtils::loadClass($system);
+                $connected_cms[$system]->deleteConnectedModules($range_id);
+            }
         }
     }
 
