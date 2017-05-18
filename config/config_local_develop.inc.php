@@ -112,3 +112,5 @@ $STUDIP_AUTH_CONFIG_SHIB = array(
         'auth_user_md5.Email' => array('callback' => 'getUserData', 'map_args' => 'mail')
     )
 );
+$PHPASS_USE_PORTABLE_HASH = true;
+
