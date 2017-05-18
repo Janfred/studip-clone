@@ -101,6 +101,11 @@ function holiday ($tmstamp, $mod = "") {
         case 365: $name = _("Silvester"); $col = 1; break;
     }
 
+    // special handling of Reformation Day in 2017
+    if ($doy == 304 && $year == 2017) {
+        $col = 3;
+    }
+
     // Die Sonntagsfeiertage
     if (date("w", $tmstamp) == 0) {
         if ($doy > 127 && $doy < 135) {
