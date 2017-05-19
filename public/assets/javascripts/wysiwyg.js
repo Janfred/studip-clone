@@ -91,6 +91,11 @@ jQuery(function ($) {
                     attributes: ['!href', 'target', 'rel'],
                     classes: ['link-extern', 'link-intern']
                 },
+                audio: {
+                    attributes: ['controls', '!src', 'height', 'width'],
+                    // only float:left and float:right should be allowed
+                    styles: ['float', 'height', 'width']
+                },
                 blockquote: {},
                 br: {},
                 caption: {},
@@ -163,7 +168,12 @@ jQuery(function ($) {
                     attributes: ['colspan', 'rowspan', 'scope'],
                     styles: ['text-align', 'width', 'height']
                 },
-                tr: {}
+                tr: {},
+                video: {
+                    attributes: ['controls', '!src', 'height', 'width'],
+                    // only float:left and float:right should be allowed
+                    styles: ['float', 'height', 'width']
+                }
             },
             width: textareaWidth,
             skin: 'studip,' + STUDIP.ASSETS_URL + 'stylesheets/ckeditor-skin/',
