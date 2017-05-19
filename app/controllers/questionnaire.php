@@ -573,8 +573,8 @@ class QuestionnaireController extends AuthenticatedController
             object_set_visit($questionnaire['questionnaire_id'], 'vote');
         }
         if (in_array($this->range_type, ["course", "institute"])
-                && !$GLOBALS['perm']->have_studip_perm("tutor", $_SESSION['SessionSeminar'])
-                && !$stopped_visible) {
+                && !$GLOBALS['perm']->have_studip_perm("tutor", $this->range_id)
+                && !($stopped_visible || count($this->questionnaire_data))) {
             $this->render_nothing();
         }
     }
