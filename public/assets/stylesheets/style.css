@@ -8201,7 +8201,7 @@ select:not([multiple]) {
 }
 select:not([multiple]) {
   padding-right: 20px !important;
-  background-image: url("../images/icons/blue/arr_1down.svg");
+  background-image: url("../images/icons/blue/arr_1up.svg");
   -webkit-background-size: 10px 10px;
   -moz-background-size: 10px 10px;
   -o-background-size: 10px 10px;
@@ -8210,7 +8210,7 @@ select:not([multiple]) {
   background-repeat: no-repeat;
 }
 select:not([multiple]):focus {
-  background-image: url("../images/icons/blue/arr_1up.svg");
+  background-image: url("../images/icons/blue/arr_1down.svg");
   -webkit-background-size: 10px 10px;
   -moz-background-size: 10px 10px;
   -o-background-size: 10px 10px;
@@ -8225,9 +8225,6 @@ select[multiple] {
 }
 select:focus {
   border: 1px solid #28497c;
-}
-select.has-no-value:not(:focus) {
-  color: #8b8f95;
 }
 .select2-container {
   box-sizing: border-box;
@@ -8793,7 +8790,7 @@ select.has-no-value:not(:focus) {
 }
 .select2-container--default .select2-selection--multiple {
   padding-right: 15px;
-  background-image: url("../images/icons/blue/arr_1down.svg");
+  background-image: url("../images/icons/blue/arr_1up.svg");
   -webkit-background-size: 10px 10px;
   -moz-background-size: 10px 10px;
   -o-background-size: 10px 10px;
@@ -8845,14 +8842,14 @@ select.has-no-value:not(:focus) {
   order: 2;
 }
 .select2-container--default.select2-container--open .select2-selection--multiple {
-  background-image: url("../images/icons/blue/arr_1up.svg");
+  background-image: url("../images/icons/blue/arr_1down.svg");
   -webkit-background-size: 10px 10px;
   -moz-background-size: 10px 10px;
   -o-background-size: 10px 10px;
   background-size: 10px 10px;
 }
 .select2-container--default .select2-selection__arrow {
-  background-image: url("../images/icons/blue/arr_1down.svg");
+  background-image: url("../images/icons/blue/arr_1up.svg");
   -webkit-background-size: 10px 10px;
   -moz-background-size: 10px 10px;
   -o-background-size: 10px 10px;
@@ -8868,7 +8865,7 @@ select.has-no-value:not(:focus) {
   border: 1px solid #28497c;
 }
 .select2-container--default.select2-container--open .select2-selection__arrow {
-  background-image: url("../images/icons/blue/arr_1up.svg");
+  background-image: url("../images/icons/blue/arr_1down.svg");
   -webkit-background-size: 10px 10px;
   -moz-background-size: 10px 10px;
   -o-background-size: 10px 10px;

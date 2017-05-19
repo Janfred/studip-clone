@@ -34,12 +34,12 @@ select {
         // to ensure the icon is always clearly visible
         padding-right: 20px !important;
 
-        .background-icon('arr_1down', 'clickable', @select-arrow-size);
+        .background-icon('arr_1up', 'clickable', @select-arrow-size);
         background-position: right 4px center;
         background-repeat: no-repeat;
 
         &:focus {
-            .background-icon('arr_1up', 'clickable', @select-arrow-size);
+            .background-icon('arr_1down', 'clickable', @select-arrow-size);
         }
 
         &:not([size]) {
@@ -53,10 +53,6 @@ select {
 
     &:focus {
         border: @select-border-focus;
-    }
-
-    &.has-no-value:not(:focus) {
-        color: @dark-gray-color-60;
     }
 }
 
@@ -133,7 +129,7 @@ select {
 
     .select2-selection--multiple {
         padding-right: unit((@select-arrow-size + 5), px);
-        .background-icon('arr_1down', 'clickable', @select-arrow-size);
+        .background-icon('arr_1up', 'clickable', @select-arrow-size);
         background-position: right 4px top unit((@select-height-default / 2 - 4), px);
         background-repeat: no-repeat;
 
@@ -163,11 +159,11 @@ select {
         }
     }
     &.select2-container--open .select2-selection--multiple {
-        .background-icon('arr_1up', 'clickable', @select-arrow-size);
+        .background-icon('arr_1down', 'clickable', @select-arrow-size);
     }
 
     .select2-selection__arrow {
-        .background-icon('arr_1down', 'clickable', @select-arrow-size);
+        .background-icon('arr_1up', 'clickable', @select-arrow-size);
         background-position: right 4px center;
         background-repeat: no-repeat;
 
@@ -182,7 +178,7 @@ select {
             border: @select-border-focus;
         }
         .select2-selection__arrow {
-            .background-icon('arr_1up', 'clickable', @select-arrow-size);
+            .background-icon('arr_1down', 'clickable', @select-arrow-size);
         }
     }
 
