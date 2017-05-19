@@ -8201,20 +8201,13 @@ select:not([multiple]) {
 }
 select:not([multiple]) {
   padding-right: 20px !important;
-  background-image: url("../images/icons/blue/arr_1up.svg");
+  background-image: url("../images/icons/blue/arr_1down.svg");
   -webkit-background-size: 10px 10px;
   -moz-background-size: 10px 10px;
   -o-background-size: 10px 10px;
   background-size: 10px 10px;
   background-position: right 4px center;
   background-repeat: no-repeat;
-}
-select:not([multiple]):focus {
-  background-image: url("../images/icons/blue/arr_1down.svg");
-  -webkit-background-size: 10px 10px;
-  -moz-background-size: 10px 10px;
-  -o-background-size: 10px 10px;
-  background-size: 10px 10px;
 }
 select:not([multiple]):not([size]) {
   height: 30px;
@@ -8790,7 +8783,7 @@ select:focus {
 }
 .select2-container--default .select2-selection--multiple {
   padding-right: 15px;
-  background-image: url("../images/icons/blue/arr_1up.svg");
+  background-image: url("../images/icons/blue/arr_1down.svg");
   -webkit-background-size: 10px 10px;
   -moz-background-size: 10px 10px;
   -o-background-size: 10px 10px;
@@ -8841,15 +8834,8 @@ select:focus {
 .select2-container--default .select2-selection--multiple .select2-selection__choice .select2-selection__choice__remove {
   order: 2;
 }
-.select2-container--default.select2-container--open .select2-selection--multiple {
-  background-image: url("../images/icons/blue/arr_1down.svg");
-  -webkit-background-size: 10px 10px;
-  -moz-background-size: 10px 10px;
-  -o-background-size: 10px 10px;
-  background-size: 10px 10px;
-}
 .select2-container--default .select2-selection__arrow {
-  background-image: url("../images/icons/blue/arr_1up.svg");
+  background-image: url("../images/icons/blue/arr_1down.svg");
   -webkit-background-size: 10px 10px;
   -moz-background-size: 10px 10px;
   -o-background-size: 10px 10px;
@@ -8863,13 +8849,6 @@ select:focus {
 .select2-container--default.select2-container--open .select2-selection--single,
 .select2-container--default.select2-container--open .select2-selection--multiple {
   border: 1px solid #28497c;
-}
-.select2-container--default.select2-container--open .select2-selection__arrow {
-  background-image: url("../images/icons/blue/arr_1down.svg");
-  -webkit-background-size: 10px 10px;
-  -moz-background-size: 10px 10px;
-  -o-background-size: 10px 10px;
-  background-size: 10px 10px;
 }
 .nested-select .select2-results > ul > li.nested-item-header {
   font-weight: bold;
