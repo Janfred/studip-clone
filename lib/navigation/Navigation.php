@@ -359,7 +359,7 @@ class Navigation implements IteratorAggregate
      * @param Icon   $image            an instance of class Icon depicting this item
      * @param array  $link_attributes  additional link attributes
      */
-    public function setImage(\Icon $image, $linkAttributes = [])
+    public function setImage(\Icon $image = null, $linkAttributes = [])
     {
         $this->image = $image;
         $this->setLinkAttributes($linkAttributes);
@@ -374,7 +374,7 @@ class Navigation implements IteratorAggregate
      * @param Icon   $image            an instance of class Icon depicting this item
      * @param array  $link_attributes  additional link attributes
      */
-    public function setActiveImage(\Icon $image, $linkAttributes = [])
+    public function setActiveImage(\Icon $image = null, $linkAttributes = [])
     {
         $this->active_image = $image;
         $this->setLinkAttributes($linkAttributes);
