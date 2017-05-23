@@ -65,7 +65,7 @@ STUDIP.Questionnaire = {
     updateWidgetQuestionnaire: function (html) {
         //update the results of a questionnaire
         var questionnaire_id = jQuery(html).data("questionnaire_id");
-        jQuery(".questionnaire_widget .widget_questionnaire_" + questionnaire_id).replaceWith(html);
+        jQuery(".questionnaire_widget .questionnaire_" + questionnaire_id).replaceWith(html);
         jQuery(document).trigger("dialog-open");
     },
     beforeAnswer: function () {

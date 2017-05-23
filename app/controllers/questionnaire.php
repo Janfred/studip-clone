@@ -372,12 +372,7 @@ class QuestionnaireController extends AuthenticatedController
         if (!$this->questionnaire->isEditable()) {
             throw new AccessDeniedException("Der Fragebogen ist nicht bearbeitbar.");
         }
-        $this->questionnaire['visible'] = 1;
-        $this->questionnaire['startdate'] = time();
-        if ($this->questionnaire['stopdate'] && $this->questionnaire['stopdate'] < time()) {
-            $this->questionnaire['stopdate'] = null;
-        }
-        $this->questionnaire->store();
+        $this->questionnaire->start();
 
         PageLayout::postMessage(MessageBox::success(_("Die Befragung wurde gestartet.")));
         if (Request::get("redirect")) {
