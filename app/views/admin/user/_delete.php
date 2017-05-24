@@ -19,7 +19,7 @@ use Studip\Button;
     </label>
     <label>
         <input id="mail" name="mail" value="1" checked type="checkbox">
-        <?= _('Emailbenachrichtigung verschicken?') ?>
+        <?= _('E-Mail-Benachrichtigung verschicken?') ?>
     </label>
     <footer data-dialog-button>
         <?= Button::createAccept(_('JA!'), 'delete', ['title' => _('Benutzer löschen')]) ?>
