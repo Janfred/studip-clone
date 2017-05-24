@@ -16,19 +16,19 @@ class RefactorConfigLocal extends Migration
                 'type' => "string"
             ),
             "STUDIP_INSTALLATION_ID" => array(
-                'description' => "unique identifier for installation",
+                'description' => "Unique identifier for installation",
                 'type' => "string"
             ),
             "MEDIA_CACHE_MAX_LENGTH" => array(
-                'description' => "Wie große Dateien sollen maximal gecached werden (in Bytes)?",
+                'description' => "Maximale Größe von Dateien, die im Media-Cache gecached werden (in Bytes)?",
                 'type' => "integer"
             ),
             "MEDIA_CACHE_LIFETIME" => array(
-                'description' => "Wieviele Sekunden soll cecached werden?",
+                'description' => "Wieviele Sekunden soll gecached werden?",
                 'type' => "integer"
             ),
             "MEDIA_CACHE_MAX_FILES" => array(
-                'description' => "Wieviele Dateien sollen maximal cecached werden?",
+                'description' => "Wieviele Dateien sollen maximal gecached werden?",
                 'type' => "integer"
             ),
             "XSLT_ENABLE" => array(
@@ -40,15 +40,15 @@ class RefactorConfigLocal extends Migration
                 'type' => "boolean"
             ),
             "EXTERN_SRI_ENABLE" => array(
-                'description' => "allow the usage of SRI-interface (Stud.IP Remote Include)",
+                'description' => "Allow the usage of SRI-interface (Stud.IP Remote Include)",
                 'type' => "boolean"
             ),
             "EXTERN_SRI_ENABLE_BY_ROOT" => array(
-                'description' => "only root allows the usage of SRI-interface for specific institutes",
+                'description' => "Only root allows the usage of SRI-interface for specific institutes",
                 'type' => "boolean"
             ),
             "EXTERN_ALLOW_ACCESS_WITHOUT_CONFIG" => array(
-                'description' => "free access to external pages (without the need of a configuration), independent of SRI settings above",
+                'description' => "Free access to external pages (without the need of a configuration), independent of SRI settings above",
                 'type' => "boolean"
             ),
             "SOAP_ENABLE" => array(
@@ -60,23 +60,23 @@ class RefactorConfigLocal extends Migration
                 'type' => "boolean"
             ),
             "ALLOW_SELFASSIGN_STUDYCOURSE" => array(
-                'description' => "if true, students are allowed to set or change their studycourse (studiengang)",
+                'description' => "If true, students are allowed to set or change their studycourse (studiengang)",
                 'type' => "boolean"
             ),
             "SHOW_TERMS_ON_FIRST_LOGIN" => array(
-                'description' => "if true, the user has to accept the terms on his first login (this feature makes only sense, if you use disable ENABLE_SELF_REGISTRATION).",
+                'description' => "If true, the user has to accept the terms on his first login (this feature makes only sense, if you use disable ENABLE_SELF_REGISTRATION).",
                 'type' => "boolean"
             ),
             "CONVERT_IDNA_URL" => array(
-                'description' => "if true, urls with german \"umlauts\" are converted",
+                'description' => "If true, urls with german \"umlauts\" are converted",
                 'type' => "boolean"
             ),
             "USER_VISIBILITY_CHECK" => array(
-                'description' => "enable presentation of visibility decision texts for users after first login. see lib/include/header.php and lib/user_visible.inc.php for further info",
+                'description' => "Enable presentation of visibility decision texts for users after first login. see lib/include/header.php and lib/user_visible.inc.php for further info",
                 'type' => "boolean"
             ),
             "USERNAME_REGULAR_EXPRESSION" => array(
-                'description' => "regex for allowed characters in usernames",
+                'description' => "Regex for allowed characters in usernames",
                 'type' => "string"
             ),
             "DEFAULT_TIMEZONE" => array(
@@ -88,32 +88,32 @@ class RefactorConfigLocal extends Migration
                 'type' => "string"
             ),
             "ALLOW_CHANGE_USERNAME" => array(
-                'description' => "if true, users are allowed to change their username",
+                'description' => "If true, users are allowed to change their username",
                 'type' => "boolean",
                 'section' => "permissions"
             ),
             "ALLOW_CHANGE_EMAIL" => array(
-                'description' => "if true, users are allowed to change their username",
+                'description' => "If true, users are allowed to change their username",
                 'type' => "boolean",
                 'section' => "permissions"
             ),
             "ALLOW_CHANGE_NAME" => array(
-                'description' => "if true, users are allowed to change their name",
+                'description' => "If true, users are allowed to change their name",
                 'type' => "boolean",
                 'section' => "permissions"
             ),
             "ALLOW_CHANGE_TITLE" => array(
-                'description' => "if true, users are allowed to change their titles",
+                'description' => "If true, users are allowed to change their titles",
                 'type' => "boolean",
                 'section' => "permissions"
             ),
             "ENABLE_SELF_REGISTRATION" => array(
-                'description' => "should it be possible for an user to register himself",
+                'description' => "Should it be possible for an user to register himself",
                 'type' => "boolean",
                 'section' => "permissions"
             ),
             "ENABLE_REQUEST_NEW_PASSWORD_BY_USER" => array(
-                'description' => "if true, users are able to request a new password themselves",
+                'description' => "If true, users are able to request a new password themselves",
                 'type' => "boolean",
                 'section' => "permissions"
             ),
@@ -126,7 +126,7 @@ class RefactorConfigLocal extends Migration
                 'type' => "boolean"
             ),
             "ENABLE_FREE_ACCESS" => array(
-                'description' => "if true, courses with public access are available",
+                'description' => "If true, courses with public access are available",
                 'type' => "boolean"
             ),
         );
