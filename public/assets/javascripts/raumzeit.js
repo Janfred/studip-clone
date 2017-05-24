@@ -29,7 +29,7 @@
         $('input[type=radio][name=room][value=freetext]').prop('checked', true);
     });
 
-    $(document).on('click', 'a.bookable_rooms_action', function (event) {
+    $(document).on('click', '.bookable_rooms_action', function (event) {
         var select = $(this).prev('select')[0],
             me = $(this);
         if (select !== null && select !== undefined) {
@@ -78,11 +78,11 @@
     });
 
     $(document).on('change', 'input[name="singledate[]"]', function () {
-        STUDIP.Raumzeit.disableBookableRooms($('a.bookable_rooms_action'));
+        STUDIP.Raumzeit.disableBookableRooms($('.bookable_rooms_action'));
     });
 
-    $(document).ready(function () {
-        $('a.bookable_rooms_action').show();
+    $(document).on('ready dialog-update', function () {
+        $('.bookable_rooms_action').show();
     });
 
     STUDIP.Dialog.handlers.header['X-Raumzeit-Update-Times'] = function (json) {
