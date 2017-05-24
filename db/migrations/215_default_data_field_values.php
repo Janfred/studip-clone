@@ -13,7 +13,7 @@ class DefaultDataFieldValues extends Migration
     /**
      * perform this migration
      */
-    function up()
+    public function up()
     {
         DBManager::get()->exec("ALTER TABLE datafields ADD default_value TEXT NULL AFTER is_required");
         DBManager::get()->exec("DELETE FROM datafields_entries WHERE content IS NULL OR content = ''");
@@ -23,7 +23,7 @@ class DefaultDataFieldValues extends Migration
     /**
      * revert this migration
      */
-    function down()
+    public function down()
     {
         DBManager::get()->exec("ALTER TABLE datafields DROP default_value");
         SimpleORMap::expireTableScheme();

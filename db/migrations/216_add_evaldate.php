@@ -2,12 +2,12 @@
 
 class AddEvaldate extends Migration
 {
-    function description()
+    public function description()
     {
         return 'add column "evaldate" to "evalanswer_user" table';
     }
 
-    function up()
+    public function up()
     {
         $db = DBManager::get();
 
@@ -15,7 +15,7 @@ class AddEvaldate extends Migration
         SimpleORMap::expireTableScheme();
     }
 
-    function down()
+    public function down()
     {
         $db = DBManager::get();
 
