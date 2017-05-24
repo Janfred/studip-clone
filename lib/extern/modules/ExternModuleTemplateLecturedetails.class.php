@@ -379,12 +379,15 @@ class ExternModuleTemplateLecturedetails extends ExternModule {
         return $content;
     }
 
-    private function getContentNews () {
+    private function getContentNews ()
+    {
         $local_fullname_sql = $GLOBALS['_fullname_sql'];
         if (!$nameformat = $this->config->getValue('Main', 'nameformat')) {
             $nameformat = 'no_title';
         }
-        if ($nameformat == 'last') $local_fullname_sql['last'] = ' Nachname ';
+        if ($nameformat == 'last') {
+            $local_fullname_sql['last'] = ' Nachname ';
+        }
         $dateform = $this->config->getValue('Main', 'dateformat');
 
         $news = StudipNews::GetNewsByRange($this->seminar_id, TRUE);
