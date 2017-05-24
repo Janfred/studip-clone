@@ -148,7 +148,7 @@ class Questionnaire extends SimpleORMap
 
     public function start()
     {
-        if (!$this->isStarted() || $this->isStopped()) {
+        if (!$this->isRunning()) {
             $this['startdate'] = time();
             $this['visible'] = 1;
             if ($this->isStopped()) {
@@ -175,7 +175,7 @@ class Questionnaire extends SimpleORMap
 
     public function isStarted()
     {
-        return $this['visible'] && $this['startdate'] && ($this['startdate'] <= time());
+        return $this['startdate'] && ($this['startdate'] <= time());
     }
 
     public function isStopped()
