@@ -551,10 +551,10 @@ class QuestionnaireController extends AuthenticatedController
         $stopped_visible = 0;
         foreach ($this->questionnaire_data as $i => $questionnaire) {
             $one = Questionnaire::buildExisting($questionnaire);
-            if (!$questionnaire['visible'] && $questionnaire->isRunning()) {
+            if (!$questionnaire['visible'] && $one->isRunning()) {
                 $one->start();
             }
-            if ($questionnaire['visible'] && $questionnaire->isStopped()) {
+            if ($questionnaire['visible'] && $one->isStopped()) {
                 $one->stop();
             }
             if ($one->isStopped() && $one->resultsVisible()) {
