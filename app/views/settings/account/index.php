@@ -100,7 +100,7 @@ $genders = [
             </select>
         </label>
         <label class="col-3">
-            <?= _('Titel nachgestl. eingeben') ?>
+            <?= _('Titel nachgest. eingeben') ?>
             <input type="text" name="title_rear" id="title_rear"
                    data-target="#title_rear_chooser"
                    value="<?= htmlReady($user['title_rear']) ?>"
