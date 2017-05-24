@@ -43,7 +43,7 @@
     <label>
         <?= _('Beschreibung') ?>
         <input type="text" name="description"
-               value="<?= Request::get('description', $cycle->description) ?>">
+               value="<?= htmlReady(Request::get('description', $cycle->description)) ?>">
     </label>
 
     <label>
