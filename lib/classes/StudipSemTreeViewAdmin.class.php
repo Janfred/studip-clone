@@ -115,7 +115,7 @@ class StudipSemTreeViewAdmin extends TreeView {
         $this->move_item_id = $this->marked_item;
     }
 
-    function execCommandOrderItemsAlphabetically()
+    public function execCommandOrderItemsAlphabetically()
     {
         $item_id = Request::option('sort_id');
         $sorted_items_stmt = DBManager::get()->prepare(
@@ -132,6 +132,7 @@ class StudipSemTreeViewAdmin extends TreeView {
                 'sem_tree_id' => $data['sem_tree_id']
             ));
         }
+        $this->msg[$item_id] = 'info§' . _('Die Einträge im Bereich wurden alphabetisch sortiert.');
 
         return true;
     }
