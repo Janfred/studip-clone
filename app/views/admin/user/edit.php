@@ -46,7 +46,7 @@ use Studip\Button, Studip\LinkButton;
             <tr>
                 <td>
                     <label for="permission">
-                        <?= _('globaler Status:') ?>
+                        <?= _('Globaler Status:') ?>
                     </label>
                 </td>
                 <td colspan="2">
