@@ -385,7 +385,7 @@ class Course_BasicdataController extends AuthenticatedController
     {
         global $perm;
 
-        $course_number_format = get_config('COURSE_NUMBER_FORMAT');
+        $course_number_format = Config::get()->COURSE_NUMBER_FORMAT;
         $sem = Seminar::getInstance($course_id);
         $this->msg = array();
         $old_settings = $sem->getSettings();
