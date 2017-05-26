@@ -1068,7 +1068,7 @@ class Admin_CoursesController extends AuthenticatedController
             'waiting'       => _('Personen auf Warteliste'),
             'preliminary'   => _('Vorläufige Anmeldungen'),
             'contents'      => _('Inhalt'),
-            'last_activity' => _('letzte Aktivität'),
+            'last_activity' => _('Letzte Aktivität'),
         );
     }
 
