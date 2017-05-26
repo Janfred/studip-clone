@@ -16,7 +16,7 @@ if (isset($_COOKIE['navigation-length'])) {
 ?>
 
 <!-- Leiste unten -->
-<div id="barBottomContainer" <?= $public_hint ? 'class="public_course"' : '' ?>>
+<div id="barBottomContainer">
     <div id="barBottomLeft">
         <input type="checkbox" id="barTopMenu-toggle">
         <label for="barTopMenu-toggle">

@@ -382,21 +382,3 @@
     z-index: 3;
 }
 
-/* --- public course marker ------------------------------------------------ */
-#barBottomContainer.public_course {
-
-    background-color: @public-course-bgcolor;
-
-    #barBottommiddle, #barBottomright, #barBottomLeft {
-        background-color: @public-course-bgcolor;
-
-        .helpbar {
-            background-color: @public-course-bgcolor;
-        }
-    }
-
-    #barBottomright:before {
-        #gradient > .horizontal(fadeout(@public-course-bgcolor, 100%), @public-course-bgcolor);
-        background-color: fadeout(@public-course-bgcolor, 100%);
-    }
-}
