@@ -44,7 +44,7 @@ if ($flash['error']) {
             <? $user = User::find($courseset->getUserId()) ?>
             <? if (isset($user)) : ?>
                 <a target="_blank" href="<?= $controller->url_for('profile', array('username' => $user->username)) ?>" >
-                    <?= htmlReady($user->getFullName()) ?> (<?= $user->username ?>)
+                    <?= htmlReady($user->getFullName()) ?> (<?= htmlReady($user->username) ?>)
                 </a>
             <? else : ?>
                 <?= _('unbekannt') ?>
