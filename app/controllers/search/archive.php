@@ -165,12 +165,16 @@ class Search_ArchiveController extends AuthenticatedController
             $this->foundCourses = ArchivedCourse::findBySQL($sql, $sqlArray);
             
             if($this->foundCourses) {
-                
-                if(count($this->foundCourses) == 1){
-                    PageLayout::postInfo(_('Es wurde eine Veranstaltung gefunden!'));
-                } else {
-                    PageLayout::postInfo(sprintf(_('Es wurden %s Veranstaltungen gefunden!'), $this->amountOfCourses));
-                }
+                PageLayout::postInfo(
+                    sprintf(
+                        ngettext(
+                            'Es wurde eine Veranstaltung gefunden!',
+                            'Es wurden %s Veranstaltungen gefunden!',
+                            $this->amountOfCourses
+                        ),
+                        $this->amountOfCourses
+                    )
+                );
             } else {
                 PageLayout::postInfo(_('Es wurde keine Veranstaltung gefunden!'));
             }
