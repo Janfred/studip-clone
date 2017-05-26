@@ -116,7 +116,7 @@ class Settings_DetailsController extends Settings_SettingsController
             $value = Request::get($key);
             if (in_array($key, array('hobby', 'lebenslauf', 'schwerp', 'publi'))) {
                 // purify HTML input for these fields if wysiwyg is used
-                $value = Studip\Markup::purifyHtml($value);
+                $value = Studip\Markup::purifyHtml(Request::i18n($key));
             }
             if ($this->user->$column != $value && $this->shallChange('user_info.' . $column, $column, $value)) {
                 $this->user->$column = $value;

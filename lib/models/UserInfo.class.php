@@ -51,6 +51,10 @@ class UserInfo extends SimpleORMap
     protected static function configure($config = array())
     {
         $config['db_table'] = 'user_info';
+        $config['i18n_fields']['hobby'] = true;
+        $config['i18n_fields']['lebenslauf'] = true;
+        $config['i18n_fields']['schwerp'] = true;
+        $config['i18n_fields']['publi'] = true;
         parent::configure($config);
     }
 }
