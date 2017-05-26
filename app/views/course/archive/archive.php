@@ -1,10 +1,11 @@
 <? if ($archivedCourses) : ?>
-
-<? if (count($archivedCourses) == 1) : ?>
-<?= MessageBox::info(_('Veranstaltung erfolgreich archiviert!')) ?>
-<? else : ?>
-<?= MessageBox::info(_('Veranstaltungen erfolgreich archiviert!')) ?>
-<? endif ?>
+<?= MessageBox::info(
+        ngettext(
+            'Veranstaltung erfolgreich archiviert!',
+            'Veranstaltungen erfolgreich archiviert!',
+            count($archivedCourses)
+        )
+    ) ?>
 <script>
     STUDIP.Archive.removeArchivedCourses([
         <? for($i = 0; $i < count($archivedCourses); $i++ ) : ?>
