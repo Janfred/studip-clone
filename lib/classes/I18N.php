@@ -112,7 +112,7 @@ class I18N
                 unset($attr['required']);
             }
 
-            if ($wysiwyg) {
+            if ($wysiwyg && self::isEnabled()) {
                 $result .= '<div class="i18n" style="' . htmlReady($attr['style']) .
                            '" data-lang_desc="' . htmlReady($attr['data-lang_desc']) . '">';
             }
@@ -125,7 +125,7 @@ class I18N
                 }
             }
             $result .= '>' . htmlReady($text) . "</textarea>\n";
-            if ($wysiwyg) {
+            if ($wysiwyg && self::isEnabled()) {
                 $result .= '</div>';
             }
         }
