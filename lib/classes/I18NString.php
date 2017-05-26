@@ -115,16 +115,16 @@ class I18NString
     /**
      * Trim all language strings
      *
-     * @param string $symbols All symbols to trim. Default only spaces
+     * @param string $symbols All symbols to trim.
      * @return I18NString
      */
-    public function trim($symbols = " ")
+    public function trim($symbols = " \t\n\r\0\x0B")
     {
         foreach ($this->lang as &$lang) {
             $lang = trim($lang, $symbols);
-            $this->base = trim($this->base);
+            $this->base = trim($this->base, $symbols);
         }
-        return ($this);
+        return $this;
     }
 
     /**

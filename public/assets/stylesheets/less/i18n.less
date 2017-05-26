@@ -47,6 +47,7 @@ select.i18n {
         height: 30px;
         overflow: hidden;
         max-width: @max-width;
+        z-index: 2;     // stay above ckeditor toolbar
     }
     > select:-moz-focusring {
         color: transparent;
@@ -69,7 +70,7 @@ select.i18n {
             border-bottom: 1px solid @light-gray-color-40;
         }
 
-        > textarea {
+        > textarea, .cktoolbar .cke_inner {
             padding-left: (@max-width + 6px) !important;
         }
 

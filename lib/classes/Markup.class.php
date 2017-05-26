@@ -192,6 +192,17 @@ class Markup
      */
     public static function purifyHtml($html)
     {
+        if ($html instanceof \I18NString) {
+            $base = self::purifyHtml($html->original());
+            $lang = $html->toArray();
+
+            foreach ($lang as &$value) {
+                $value = self::purifyHtml($value);
+            }
+
+            return new \I18NString($base, $lang);
+        }
+
         if (self::isHtml($html)) {
             $html = self::markAsHtml(self::purify($html));
         }

@@ -9309,6 +9309,7 @@ select.i18n option {
   height: 30px;
   overflow: hidden;
   max-width: 28px;
+  z-index: 2;
 }
 .i18n_group:not(.single_lang) > select:-moz-focusring {
   color: transparent;
@@ -9327,7 +9328,8 @@ select.i18n option {
 .i18n_group:not(.single_lang).textarea-input > select:last-child {
   border-bottom: 1px solid #c5c7ca;
 }
-.i18n_group:not(.single_lang).textarea-input > textarea {
+.i18n_group:not(.single_lang).textarea-input > textarea,
+.i18n_group:not(.single_lang).textarea-input .cktoolbar .cke_inner {
   padding-left: 34px !important;
 }
 #responsive-container {
