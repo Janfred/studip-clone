@@ -182,18 +182,20 @@ class Admin_UserController extends AuthenticatedController
     /**
      * Bulk action (delete users or send message to all)
      */
-    public function bulk_action($user_id = '')
+    public function bulk_action($user_id = null)
     {
-        if (Request::get('method') == 'delete') {
+        $action = Request::option('method');
+
+        if ($action === 'delete') {
             PageLayout::setTitle(_('Folgende Nutzer löschen'));
-            if ($user_id != '') {
+            if ($user_id) {
                 $this->users = [User::find($user_id)];
             } else {
                 $this->users = User::findMany(Request::getArray('user_ids'));
             }
             $this->render_template('admin/user/_delete.php');
             return;
-        } else {
+        } elseif ($action === 'send_message') {
             $users = User::findMany(Request::getArray('user_ids'));
 
             if ($users) {

@@ -143,12 +143,14 @@ use Studip\Button, Studip\LinkButton;
                             );
                         }
                         $actionMenu->addButton(
-                                'delete_user',
-                                _('Benutzer löschen'),
-                                Icon::create('trash', 'clickable',
-                                        ['title'      => _('Benutzer löschen'),
-                                         'formaction' => $controller->url_for('admin/user/bulk/' . $user->user_id, ['method' => 'delete']),
-                                         'style'      => 'margin: 0px']))
+                            'delete_user',
+                            _('Benutzer löschen'),
+                            Icon::create('trash', 'clickable', [
+                                'title'      => _('Benutzer löschen'),
+                                 'formaction' => $controller->url_for('admin/user/bulk/' . $user->user_id, ['method' => 'delete']),
+                                 'style'      => 'margin: 0px'
+                             ])
+                        );
                         ?>
                         <?= $actionMenu->render() ?>
                     </td>
