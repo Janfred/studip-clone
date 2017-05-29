@@ -48,7 +48,7 @@ class Settings_SettingsController extends AuthenticatedController
             $username = $user->username;
             URLHelper::addLinkParam('username', $username);
         }
-        $this->user       = User::findByUsername($username);
+        $this->user = User::findByUsername($username);
 
         if (!$GLOBALS['perm']->get_profile_perm($this->user->user_id)) {
             PageLayout::postError(_('Zugriff verweigert.'), array(

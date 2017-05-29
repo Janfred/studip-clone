@@ -27,15 +27,15 @@ class Settings_PrivacyController extends Settings_SettingsController
     public function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
-        
+
         PageLayout::setHelpKeyword('Basis.MyStudIPPrivacy');
         PageLayout::setTitle(_('Privatsphäre'));
-        
+
         Navigation::activateItem('/profile/settings/privacy');
-        
+
         SkipLinks::addIndex(_('Privatsphäre'), 'layout_content', 100);
     }
-    
+
     /**
      * Displays the privacy settings of a user.
      */
@@ -46,22 +46,22 @@ class Settings_PrivacyController extends Settings_SettingsController
         $this->online_visibility = get_local_visibility_by_id($this->user->user_id, 'online');
         $this->search_visibility = get_local_visibility_by_id($this->user->user_id, 'search');
         $this->email_visibility  = get_local_visibility_by_id($this->user->user_id, 'email');
-        
+
         // Get default visibility for homepage elements.
         $this->default_homepage_visibility = Visibility::get_default_homepage_visibility($this->user->user_id);
-        
+
         $this->NOT_HIDEABLE_FIELDS = $GLOBALS['NOT_HIDEABLE_FIELDS'];
         $this->user_perm           = $GLOBALS['perm']->get_perm($this->user->user_id);
         $this->user_domains        = UserDomain::getUserDomains();
-        
+
         // Calculate colWidth and colCount for different visibilities
         $this->colCount          = Visibility::getColCount();
         $this->colWidth          = 67 / $this->colCount;
         $this->visibilities      = Visibility::getVisibilities();
         $this->homepage_elements = Visibility::getHTMLArgs($this->user->user_id);
-        
+
     }
-    
+
     /**
      * Stores the privacy settings concerning the appearance of a user inside
      * the system.
@@ -69,9 +69,9 @@ class Settings_PrivacyController extends Settings_SettingsController
     public function global_action()
     {
         $this->check_ticket();
-        
+
         $visibility = Request::option('global_visibility');
-        
+
         // Globally visible or unknown -> set local visibilities accordingly.
         if ($visibility != 'no') {
             $online             = Request::int('online') ?: 0;
@@ -84,30 +84,32 @@ class Settings_PrivacyController extends Settings_SettingsController
             $email   = Config::get()->DOZENT_ALLOW_HIDE_EMAIL ? 0 : 1;
             $success = $this->changeCompleteHomepageVisibility(VISIBILITY_ME);
         }
-        
+
         $this->config->store('FOAF_SHOW_IDENTITY', $foaf_show_identity);
-        
+
         $this->user->visible = $visibility;
         $this->user->store();
-        
-        $query
-                   = "INSERT INTO user_visibility
+
+        $query = "INSERT INTO user_visibility
                     (user_id, online, search, email, mkdate)
                   VALUES (?, ?, ?, ?, UNIX_TIMESTAMP())
                   ON DUPLICATE KEY
                     UPDATE online = VALUES(online),
-                           search = VALUES(search), email = VALUES(email)";
+                           search = VALUES(search),
+                           email = VALUES(email)";
         $statement = DBManager::get()->prepare($query);
         $statement->execute([
             $this->user->user_id,
-            $online, $search, $email,
+            $online,
+            $search,
+            $email,
         ]);
         NotificationCenter::postNotification('UserVisibilityDidCreate', $GLOBALS['user']->id);
-        
+
         PageLayout::postSuccess(_('Ihre Sichtbarkeitseinstellungen wurden gespeichert.'));
         $this->redirect('settings/privacy');
     }
-    
+
     private function changeCompleteHomepageVisibility($new_visibility)
     {
         $result    = [];
@@ -117,12 +119,16 @@ class Settings_PrivacyController extends Settings_SettingsController
         $data = $this->user->getHomepageElements();
         // Iterate through data and set new visibility.
         foreach ($data as $key => $entry) {
-            $new_data[$key] = ['name' => $entry['name'], 'visibility' => $new_visibility];
+            $new_data[$key] = [
+                'name'       => $entry['name'],
+                'visibility' => $new_visibility,
+            ];
             if ($entry['extern']) {
                 $new_data[$key]['extern'] = true;
             }
             $new_data[$key]['category'] = $entry['category'];
-            $db_result[$key]            = $new_visibility;
+
+            $db_result[$key] = $new_visibility;
         }
         $success = $this->change_homepage_visibility($db_result);
         if ($success) {
@@ -130,7 +136,7 @@ class Settings_PrivacyController extends Settings_SettingsController
         }
         return $result;
     }
-    
+
     /**
      * Saves user specified visibility settings for homepage elements.
      *
@@ -140,8 +146,7 @@ class Settings_PrivacyController extends Settings_SettingsController
      */
     private function change_homepage_visibility($data)
     {
-        $query
-                   = "INSERT INTO user_visibility
+        $query = "INSERT INTO user_visibility
                     (user_id, homepage, mkdate)
                   VALUES (?, ?, UNIX_TIMESTAMP())
                   ON DUPLICATE KEY
@@ -153,7 +158,7 @@ class Settings_PrivacyController extends Settings_SettingsController
         ]);
         return $statement->rowCount();
     }
-    
+
     /**
      * Sets a default visibility for elements that are added to a user's
      * homepage but whose visibility hasn't been configured explicitly yet.
@@ -163,8 +168,7 @@ class Settings_PrivacyController extends Settings_SettingsController
      */
     private function set_default_homepage_visibility($visibility)
     {
-        $query
-                   = "INSERT INTO user_visibility
+        $query = "INSERT INTO user_visibility
                     (user_id, default_homepage_visibility, mkdate)
                   VALUES (?, ?, UNIX_TIMESTAMP())
                   ON DUPLICATE KEY
@@ -176,7 +180,7 @@ class Settings_PrivacyController extends Settings_SettingsController
         ]);
         return $statement->rowCount();
     }
-    
+
     /**
      * Stores the privacy settings concerning the homepage / profile of a
      * user.
@@ -184,7 +188,7 @@ class Settings_PrivacyController extends Settings_SettingsController
     public function homepage_action()
     {
         $this->check_ticket();
-        
+
         // If no bulk action is performed set all visibilitysettings seperately
         if (!$this->bulk()) {
             $data = Request::getArray('visibility_update');
@@ -196,7 +200,7 @@ class Settings_PrivacyController extends Settings_SettingsController
         }
         $this->redirect('settings/privacy');
     }
-    
+
     /**
      * Performs bulk actions on the privacy settings of a user. This can be
      * either the setting of new default values or the changing of all privacy
@@ -207,9 +211,9 @@ class Settings_PrivacyController extends Settings_SettingsController
     public function bulk()
     {
         if ($default_visibility = Request::int('default')) {
-            $this->set_default_homepage_visibility(Request::int('default'));
+            $this->set_default_homepage_visibility($default_visibility);
         }
-        
+
         if ($visibility = Request::int('all')) {
             if (Visibility::setAllSettingsForUser($visibility, $this->user->user_id)) {
                 PageLayout::postSuccess(_('Die Sichtbarkeit der Profilelemente wurde gespeichert.'));

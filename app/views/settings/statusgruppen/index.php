@@ -53,23 +53,22 @@
                 </header>
                 <section>
                     <article>
-                        <?= $this->render_partial('settings/statusgruppen/modify_institute',
-                                ['followers' => count($institute['flattened']) > 0,
-                                 'inst_id'   => $inst_id,
-                                 'institute' => $institute]) ?>
+                        <?= $this->render_partial('settings/statusgruppen/modify_institute', [
+                            'followers' => count($institute['flattened']) > 0,
+                            'inst_id'   => $inst_id,
+                            'institute' => $institute,
+                        ]) ?>
                     </article>
                 </section>
             </article>
 
-            <? $inst_count += 1; ?>
-
             <?
-            $role_count = 1;
-            $max_roles  = count($institute['flattened']);
+                $inst_count += 1;
+                $role_count = 1;
+                $max_roles  = count($institute['flattened']);
             ?>
             <? foreach ($institute['flattened'] as $role_id => $role): ?>
-                <article
-                        class="indented <?= ContentBoxHelper::classes($role_id) ?> <? if (Request::get('type') == 'role' && Request::get('open') == $role_id) : ?>open<? endif ?>">
+                <article class="indented <?= ContentBoxHelper::classes($role_id) ?> <? if (Request::get('type') === 'role' && Request::get('open') == $role_id) : ?>open<? endif ?>">
                     <header>
                         <h1>
                             <? if (count($institute['datafields'][$role_id]) > 0): ?>
@@ -79,8 +78,7 @@
                                     <?= htmlReady($role['name_long']) ?>
                                 </a>
                             <? else: ?>
-                                <a class="link"
-                                   href="<?= ContentBoxHelper::href($role_id) ?>">
+                                <a class="link" href="<?= ContentBoxHelper::href($role_id) ?>">
                                     <?= htmlReady($role['name_long']) ?>
                                 </a>
                             <? endif; ?>
@@ -98,12 +96,13 @@
                         </nav>
                     </header>
                     <section>
-                        <?= $this->render_partial('settings/statusgruppen/modify',
-                                ['followers'  => $role_count < $max_roles,
-                                 'inst_id'    => $inst_id,
-                                 'role_id'    => $role_id,
-                                 'datafields' => $institute['datafields'][$role_id],
-                                 'role'       => $role['role']]) ?>
+                        <?= $this->render_partial('settings/statusgruppen/modify', [
+                            'followers'  => $role_count < $max_roles,
+                            'inst_id'    => $inst_id,
+                            'role_id'    => $role_id,
+                            'datafields' => $institute['datafields'][$role_id],
+                            'role'       => $role['role'],
+                        ]) ?>
                     </section>
                 </article>
 
@@ -113,7 +112,7 @@
     </section>
 
     <? if ($GLOBALS['perm']->have_perm('admin') && !$locked): ?>
-        <?= $this->render_partial('settings/statusgruppen/assign', compact(words('subview_id admin_insts sub_admin_insts'))) ?>
+        <?= $this->render_partial('settings/statusgruppen/assign', compact('subview_id', 'admin_insts', 'sub_admin_insts')) ?>
     <? endif; ?>
 
 <? endif; ?>

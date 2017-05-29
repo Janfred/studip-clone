@@ -69,10 +69,13 @@ class Settings_CategoriesController extends Settings_SettingsController
 
         $sidebar = Sidebar::get();
         $sidebar->setImage('sidebar/category-sidebar.png');
-        
+
         $actions = new ActionsWidget();
-        $actions->addLink(_('Neue Kategorie anlegen'),
-                          $this->url_for('settings/categories/create'), Icon::create('add', 'clickable'));
+        $actions->addLink(
+            _('Neue Kategorie anlegen'),
+            $this->url_for('settings/categories/create'),
+            Icon::create('add', 'clickable')
+        );
         $sidebar->addWidget($actions);
     }
 
@@ -81,7 +84,7 @@ class Settings_CategoriesController extends Settings_SettingsController
      */
     public function create_action()
     {
-        Kategorie::increatePrioritiesByUserId($this->user->user_id);
+        Kategorie::increasePrioritiesByUserId($this->user->user_id);
 
         $category = new Kategorie;
         $category->range_id = $this->user->user_id;

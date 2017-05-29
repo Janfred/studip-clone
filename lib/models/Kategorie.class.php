@@ -24,7 +24,11 @@
 
 class Kategorie extends SimpleORMap
 {
-
+    /**
+     * Configures the model.
+     *
+     * @param array $config Configuration array
+     */
     protected static function configure($config = array())
     {
         $config['db_table'] = 'kategorien';
@@ -32,7 +36,10 @@ class Kategorie extends SimpleORMap
     }
 
     /**
+     * Finds all categories of a specific user
      *
+     * @param string $user_id Id of the user
+     * @return array of category objects
      */
     public static function findByUserId($user_id)
     {
@@ -40,9 +47,12 @@ class Kategorie extends SimpleORMap
     }
 
     /**
+     * Increases all category priorities of a user
      *
+     * @param string $user_id Id of the user
+     * @return number of changed records
      */
-    public static function increatePrioritiesByUserId($user_id)
+    public static function increasePrioritiesByUserId($user_id)
     {
         $query = "UPDATE kategorien SET priority = priority + 1 WHERE range_id = ?";
         $statement = DBManager::get()->prepare($query);
