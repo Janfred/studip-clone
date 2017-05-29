@@ -295,7 +295,7 @@ class User extends AuthUserMd5
                   LEFT JOIN userdomains uds USING (userdomain_id)
                   LEFT JOIN user_studiengang us ON (us.user_id = au.user_id)
                   LEFT JOIN user_inst uis ON uis.user_id = au.user_id
-                  WHERE 1";
+                  WHERE 1 ";
         if ($attributes['username']) {
             $query .= "AND au.username like :username ";
             $params[':username'] = self::searchParam($attributes['username']);
