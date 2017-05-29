@@ -326,10 +326,8 @@ class Admin_UserController extends AuthenticatedController
      */
     public function edit_action($user_id = null)
     {
-        global $auth;
-
         //check submitted user_id
-        if (is_null($user_id)) {
+        if ($user_id === null) {
             if (Request::option('user')) {
                 $user_id = Request::option('user');
             } else {
@@ -547,9 +545,9 @@ class Admin_UserController extends AuthenticatedController
         }
 
 
-        $this->prelim = $this->user->auth_plugin == 'preliminary';
+        $this->prelim = $this->user->auth_plugin === 'preliminary';
         if ($this->prelim) {
-            $this->available_auth_plugins['preliminary'] = _("vorläufig");
+            $this->available_auth_plugins['preliminary'] = _('vorläufig');
         }
         foreach ($GLOBALS['STUDIP_AUTH_PLUGIN'] as $ap) {
             $this->available_auth_plugins[mb_strtolower($ap)] = $ap;
@@ -557,10 +555,10 @@ class Admin_UserController extends AuthenticatedController
 
         if (count($this->user->institute_memberships)) {
             $this->student_institutes = $this->user->institute_memberships->filter(function ($a) {
-                return $a->inst_perms == 'user';
+                return $a->inst_perms === 'user';
             });
-            $this->institutes         = $this->user->institute_memberships->filter(function ($a) {
-                return $a->inst_perms != 'user';
+            $this->institutes = $this->user->institute_memberships->filter(function ($a) {
+                return $a->inst_perms !== 'user';
             });
         }
 
@@ -916,18 +914,20 @@ class Admin_UserController extends AuthenticatedController
     public function lock_action($user_id)
     {
         CSRFProtection::verifyUnsafeRequest();
-        $user               = User::find($user_id);
+        $user = User::find($user_id);
+
         $user->locked       = 1;
         $user->lock_comment = Request::get('lock_comment');
-        $user->locked_by = $GLOBALS['user']->id;
+        $user->locked_by    = $GLOBALS['user']->id;
 
-
-        if($user->store()) {
-            PageLayout::postSuccess(sprintf(_('%s wurde gesperrt.'), htmlReady($user->getFullname())));
+        if ($user->store()) {
+            PageLayout::postSuccess(sprintf(
+                _('%s wurde gesperrt.'),
+                htmlReady($user->getFullname())
+            ));
         }
 
-
-        if(Request::int('from_index')) {
+        if (Request::int('from_index')) {
             $this->redirect('admin/user');
         } else {
             $this->redirect('admin/user/edit/' . $user_id);
@@ -941,18 +941,25 @@ class Admin_UserController extends AuthenticatedController
      */
     public function unlock_action($user_id)
     {
-        $user               = User::find($user_id);
+        $user = User::find($user_id);
+
         $user->locked       = 0;
         $user->lock_comment = null;
         $user->locked_by    = null;
 
         if ($user->store()) {
-            PageLayout::postSuccess(sprintf(_('%s wurde entsperrt.'), htmlReady($user->getFullname())));
+            PageLayout::postSuccess(sprintf(
+                _('%s wurde entsperrt.'),
+                htmlReady($user->getFullname())
+            ));
         } else {
-            PageLayout::postError(sprintf(_('%s konnte nicht entsperrt werden.'), htmlReady($user->getFullname())));
+            PageLayout::postError(sprintf(
+                _('%s konnte nicht entsperrt werden.'),
+                htmlReady($user->getFullname())
+            ));
         }
 
-        if(Request::int('from_index')) {
+        if (Request::int('from_index')) {
             $this->redirect('admin/user');
         } else {
             $this->redirect('admin/user/edit/' . $user_id);
@@ -997,10 +1004,10 @@ class Admin_UserController extends AuthenticatedController
         $inst_membership = InstituteMember::findOneBySQL('user_id = ? AND institut_id = ?', [$user_id, $institute_id]);
 
         $values = [];
-        foreach (words('inst_perms visible raum sprechzeiten Telefon Fax') as $param) {
+        foreach (['inst_perms', 'visible', 'raum', 'sprechzeiten', 'Telefon', 'Fax'] as $param) {
             $values[$param] = Request::get(mb_strtolower($param), '');
         }
-        foreach (words('externdefault visible') as $param) {
+        foreach (['externdefault', 'visible'] as $param) {
             $values[$param] = Request::int($param, 0);
         }
 
@@ -1008,7 +1015,7 @@ class Admin_UserController extends AuthenticatedController
         $datafields = Request::getArray('datafields');
         foreach ($datafields as $id => $data) {
             $datafield = DataField::find($id);
-            $entry     = DataFieldEntry::createDataFieldEntry($datafield, [$user_id, $institute_id]);
+            $entry = DataFieldEntry::createDataFieldEntry($datafield, [$user_id, $institute_id]);
             $entry->setValueFromSubmit($data);
             if ($entry->isValid()) {
                 $entry->store();
@@ -1069,8 +1076,7 @@ class Admin_UserController extends AuthenticatedController
             $groups     = GetAllStatusgruppen($institut_id);
             $group_list = GetRoleNames($groups, 0, '', true);
             if (is_array($group_list) && count($group_list) > 0) {
-                $query
-                           = "DELETE FROM statusgruppe_user
+                $query = "DELETE FROM statusgruppe_user
                           WHERE statusgruppe_id IN (?) AND user_id = ?";
                 $statement = DBManager::get()->prepare($query);
                 $statement->execute([array_keys($group_list), $user_id]);
@@ -1207,12 +1213,10 @@ class Admin_UserController extends AuthenticatedController
             }
         }
 
-        if (Request::get('view') == 'seminar_wait') {
+        if (Request::get('view') === 'seminar_wait') {
             // waiting list
             $seminar_wait = AdmissionApplication::findByUser($user_id);
-        }
-
-        if (Request::get('view') == 'priorities') {
+        } elseif (Request::get('view') === 'priorities') {
             // priorities
             $priorities = DBManager::get()->fetchAll('SELECT * FROM `priorities` WHERE `user_id` = ?', [$user_id]);
         }
@@ -1224,7 +1228,6 @@ class Admin_UserController extends AuthenticatedController
             $this->sections['institutes'] = $institutes;
         }
         if (!empty($courses)) {
-
             $this->sections['courses'] = $courses;
         }
         if (!empty($courses)) {

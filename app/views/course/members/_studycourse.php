@@ -15,7 +15,7 @@ if ($count = count($studycourses)) {
                 htmlReady($item->semester)
             );
         }));
-        echo tooltipHtmlIcon('<strong>' . _('Weitere Studiengänge') . '</strong><br>' .$course_res);
+        echo tooltipHtmlIcon('<strong>' . _('Weitere Studiengänge') . '</strong><br>' . $course_res);
     }
-    
-};?>
+}
+?>

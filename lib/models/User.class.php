@@ -71,6 +71,92 @@
 class User extends AuthUserMd5
 {
     /**
+     *
+     */
+    protected static function configure($config = array())
+    {
+        $config['has_many']['course_memberships'] = [
+            'class_name' => 'CourseMember',
+            'on_delete'  => 'delete',
+            'on_store'   => 'store',
+        ];
+        $config['has_many']['institute_memberships'] = [
+            'class_name' => 'InstituteMember',
+            'order_by'   => 'ORDER BY priority ASC',
+            'on_delete'  => 'delete',
+            'on_store'   => 'store',
+        ];
+        $config['has_many']['admission_applications'] = [
+            'class_name' => 'AdmissionApplication',
+            'on_delete'  => 'delete',
+            'on_store'   => 'store',
+        ];
+        $config['has_many']['archived_course_memberships'] = [
+            'class_name' => 'ArchivedCourseMember',
+            'on_delete'  => 'delete',
+            'on_store'   => 'store',
+        ];
+        $config['has_many']['datafields'] = [
+            'class_name'  => 'DatafieldEntryModel',
+            'foreign_key' => function ($user) {
+                return array($user);
+            },
+            'assoc_foreign_key' => function ($model, $params) {
+                $model->setValue('range_id', $params[0]->id);
+            },
+            'assoc_func' => 'findByModel',
+            'on_delete'  => 'delete',
+            'on_store'   => 'store',
+        ];
+        $config['has_many']['studycourses'] = [
+            'class_name' => 'UserStudyCourse',
+            'assoc_func' => 'findByUser',
+            'on_delete'  => 'delete',
+            'on_store'   => 'store',
+        ];
+        $config['has_and_belongs_to_many']['contacts'] = [
+            'class_name'     => 'User',
+            'thru_table'     => 'contact',
+            'thru_key'       => 'owner_id',
+            'thru_assoc_key' => 'user_id',
+            'order_by'       => 'ORDER BY Nachname, Vorname',
+            'on_delete'      => 'delete',
+            'on_store'       => 'store',
+        ];
+        $config['has_many']['contactgroups'] = [
+            'class_name'        => 'Statusgruppen',
+            'assoc_foreign_key' => 'range_id',
+            'on_delete'         => 'delete',
+            'on_store'          => 'store',
+        ];
+        $config['has_one']['info'] = [
+            'class_name' => 'UserInfo',
+            'on_delete'  => 'delete',
+            'on_store'   => 'store',
+        ];
+        $config['has_one']['online'] = [
+            'class_name' => 'UserOnline',
+            'on_delete'  => 'delete',
+            'on_store'   => 'store',
+        ];
+
+        $info = new UserInfo();
+        $info_meta = $info->getTableMetadata();
+        foreach ($info_meta ['fields'] as $field => $meta) {
+            if ($field !== $info_meta['pk'][0]) {
+                $config['additional_fields'][$field] = [
+                    'get'            => '_getAdditionalValueFromRelation',
+                    'set'            => '_setAdditionalValueFromRelation',
+                    'relation'       => 'info',
+                    'relation_field' => $field,
+                ];
+            }
+        }
+
+        parent::configure($config);
+    }
+
+    /**
      * Returns the currently authenticated user.
      *
      * @return User User
@@ -108,7 +194,10 @@ class User extends AuthUserMd5
      */
     public static function findFull($id)
     {
-        $sql = "SELECT * FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE auth_user_md5.user_id = ?";
+        $sql = "SELECT *
+                FROM auth_user_md5
+                LEFT JOIN user_info USING (user_id)
+                WHERE user_id = ?";
         $data = DbManager::get()->fetchOne($sql, array($id));
         if ($data) {
             return self::buildExisting($data);
@@ -135,15 +224,14 @@ class User extends AuthUserMd5
      */
     public static function findByDatafield($datafield_id, $value)
     {
-        $search = DBManager::get()->prepare(
-            "SELECT range_id " .
-            "FROM datafields_entries " .
-            "WHERE datafield_id = :datafield_id " .
-                "AND content = :value " .
-        "");
-        $search->execute(compact("datafield_id", "value"));
+        $query = "SELECT range_id
+                  FROM datafields_entries
+                  WHERE datafield_id = :datafield_id
+                    AND content = :value";
+        $search = DBManager::get()->prepare($query);
+        $search->execute(compact('datafield_id', 'value'));
         $users = array();
-        foreach ($search->fetchAll(PDO::FETCH_COLUMN, 0) as $user_id) {
+        foreach ($search->fetchAll(PDO::FETCH_COLUMN) as $user_id) {
             $users[] = new User($user_id);
         }
         return $users;
@@ -153,22 +241,21 @@ class User extends AuthUserMd5
     {
         $record = new User();
         $db = DBManager::get();
-        $sql = "
-            SELECT `" .  $record->db_table . "`.*
-            FROM `" .  $record->db_table . "`
-                INNER JOIN termin_related_persons USING (user_id)
-            WHERE termin_related_persons.range_id = ?
-            ORDER BY Nachname, Vorname ASC
-        ";
-        $st = $db->prepare($sql);
-        $st->execute(array($termin_id));
-        $ret = array();
-        $c = 0;
-        while($row = $st->fetch(PDO::FETCH_ASSOC)) {
-            $ret[$c] = new User();
-            $ret[$c]->setData($row, true);
-            $ret[$c]->setNew(false);
-            ++$c;
+        $sql = "SELECT `{$record->db_table}`.*
+                FROM `{$record->db_table}`
+                INNER JOIN `termin_related_persons` USING (user_id)
+                WHERE `termin_related_persons`.`range_id` = ?
+                ORDER BY Nachname, Vorname ASC";
+        $statement = $db->prepare($sql);
+        $statement->execute([$termin_id]);
+
+        $ret = [];
+        while($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+            $item = new User();
+            $item->setData($row, true);
+            $item->setNew(false);
+
+            $ret[] = $item;
         }
         return $ret;
     }
@@ -199,16 +286,16 @@ class User extends AuthUserMd5
     {
         $params = [];
 
-        $query = "SELECT au.*,ui.* "
-                 ."FROM auth_user_md5 au "
-                 ."LEFT JOIN datafields_entries de ON de.range_id=au.user_id "
-                 ."LEFT JOIN user_online uo ON au.user_id = uo.user_id "
-                 ."LEFT JOIN user_info ui ON (au.user_id = ui.user_id) "
-                 ."LEFT JOIN user_userdomains uud ON (au.user_id = uud.user_id) "
-                 ."LEFT JOIN userdomains uds USING (userdomain_id) "
-                 ."LEFT JOIN user_studiengang us ON us.user_id = au.user_id "
-                 ."LEFT JOIN user_inst uis ON uis.user_id = au.user_id "
-                 ."WHERE 1 ";
+        $query = "SELECT au.*,ui.*
+                  FROM auth_user_md5 au
+                  LEFT JOIN datafields_entries de ON (de.range_id = au.user_id)
+                  LEFT JOIN user_online uo ON (au.user_id = uo.user_id)
+                  LEFT JOIN user_info ui ON (au.user_id = ui.user_id)
+                  LEFT JOIN user_userdomains uud ON (au.user_id = uud.user_id)
+                  LEFT JOIN userdomains uds USING (userdomain_id)
+                  LEFT JOIN user_studiengang us ON (us.user_id = au.user_id)
+                  LEFT JOIN user_inst uis ON uis.user_id = au.user_id
+                  WHERE 1";
         if ($attributes['username']) {
             $query .= "AND au.username like :username ";
             $params[':username'] = self::searchParam($attributes['username']);
@@ -320,99 +407,9 @@ class User extends AuthUserMd5
 
 
     /**
-     *
-     */
-    protected static function configure($config = array())
-    {
-        $config['has_many']['course_memberships'] = array(
-            'class_name' => 'CourseMember',
-            'on_delete' => 'delete',
-            'on_store' => 'store',
-        );
-        $config['has_many']['institute_memberships'] = array(
-            'class_name' => 'InstituteMember',
-            'order_by' => 'ORDER BY priority ASC',
-            'on_delete' => 'delete',
-            'on_store' => 'store',
-        );
-        $config['has_many']['admission_applications'] = array(
-            'class_name' => 'AdmissionApplication',
-            'on_delete' => 'delete',
-            'on_store' => 'store',
-        );
-        $config['has_many']['archived_course_memberships'] = array(
-            'class_name' => 'ArchivedCourseMember',
-            'on_delete' => 'delete',
-            'on_store' => 'store',
-        );
-        $config['has_many']['datafields'] = array(
-            'class_name' => 'DatafieldEntryModel',
-            'assoc_foreign_key' =>
-                function($model, $params) {
-                    $model->setValue('range_id', $params[0]->id);
-                },
-            'assoc_func' => 'findByModel',
-            'on_delete' => 'delete',
-            'on_store' => 'store',
-            'foreign_key' =>
-                function($user) {
-                    return array($user);
-                }
-        );
-        $config['has_many']['studycourses'] = array(
-            'class_name' => 'UserStudyCourse',
-            'assoc_func' => 'findByUser',
-            'on_delete' => 'delete',
-            'on_store' => 'store',
-        );
-        $config['has_and_belongs_to_many']['contacts'] = array(
-            'class_name' => 'User',
-            'thru_table' => 'contact',
-            'thru_key' => 'owner_id',
-            'thru_assoc_key' => 'user_id',
-            'order_by' => 'ORDER BY Nachname, Vorname',
-            'on_delete' => 'delete',
-            'on_store' => 'store'
-        );
-        $config['has_many']['contactgroups'] = array(
-            'class_name' => 'Statusgruppen',
-            'assoc_foreign_key' => 'range_id',
-            'on_delete' => 'delete',
-            'on_store' => 'store'
-        );
-        $config['has_one']['info'] = array(
-            'class_name' => 'UserInfo',
-            'assoc_func' => 'find',
-            'on_delete' => 'delete',
-            'on_store' => 'store'
-        );
-        $config['has_one']['online'] = array(
-            'class_name' => 'UserOnline',
-            'assoc_func' => 'find',
-            'on_delete' => 'delete',
-            'on_store' => 'store'
-        );
-
-        $info = new UserInfo();
-        $info_meta = $info->getTableMetadata();
-        foreach ( $info_meta ['fields'] as $field => $meta ) {
-            if ($field !== $info_meta ['pk'] [0]) {
-                $config ['additional_fields'] [$field] = array (
-                        'get' => '_getAdditionalValueFromRelation',
-                        'set' => '_setAdditionalValueFromRelation',
-                        'relation' => 'info',
-                        'relation_field' => $field
-                );
-            }
-        }
-
-        parent::configure($config);
-    }
-
-    /**
      * @see SimpleORMap::store()
      */
-    function store()
+    public function store()
     {
         if ($this->isDirty() && !$this->info->isFieldDirty('chdate')) {
             $this->info->setValue('chdate', time());
@@ -423,7 +420,7 @@ class User extends AuthUserMd5
     /**
      * @see SimpleORMap::triggerChdate()
      */
-    function triggerChdate()
+    public function triggerChdate()
     {
        return $this->info->triggerChdate();
     }
@@ -435,7 +432,7 @@ class User extends AuthUserMd5
      * @param string one of full,full_rev,no_title,no_title_rev,no_title_short,no_title_motto,full_rev_username
      * @return string guess what - the fullname
      */
-    function getFullName($format = "full")
+    public function getFullName($format = 'full')
     {
         static $concat,$left,$if,$quote;
 
@@ -463,7 +460,7 @@ class User extends AuthUserMd5
         return eval('return ' . $eval . ';');
     }
 
-    function toArrayRecursive($only_these_fields = null)
+    public function toArrayRecursive($only_these_fields = null)
     {
         $ret = parent::toArrayRecursive($only_these_fields);
         unset($ret['info']);
@@ -591,11 +588,11 @@ class User extends AuthUserMd5
             return ['admin'];
         }
         $allowed_status = [];
-        $possible_status = words('autor tutor dozent');
+        $possible_status = ['autor', 'tutor', 'dozent'];
 
         $pos = array_search($this->perms, $possible_status);
-        if($pos) {
-            $allowed_status = array_slice($possible_status, 0, $pos+1);
+        if ($pos) {
+            $allowed_status = array_slice($possible_status, 0, $pos + 1);
         }
         return $allowed_status;
     }
@@ -604,7 +601,8 @@ class User extends AuthUserMd5
      * Get the decorated StudIP-Kings information
      * @return String
      */
-    public function getStudipKingIcon() {
+    public function getStudipKingIcon()
+    {
         $is_king = StudipKing::is_king($this->user_id, TRUE);
 
         $result = '';
@@ -1203,7 +1201,6 @@ class User extends AuthUserMd5
         return $messages;
     }
 
-
     /**
      * Delete double entries of the old and new user. This is a part of the old
      * numit-plugin.
@@ -1231,7 +1228,7 @@ class User extends AuthUserMd5
 
         if (!empty($items)) {
             $query = "DELETE FROM `{$table}`
-                  WHERE user_id = :user_id AND `{$field}` IN (:items)";
+                      WHERE user_id = :user_id AND `{$field}` IN (:items)";
 
             $statement = DBManager::get()->prepare($query);
             $statement->bindValue(':user_id', $new_id);

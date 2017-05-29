@@ -35,10 +35,10 @@ class Button extends Interactable
     /**
      * @return  returns a HTML representation of this button.
      */
-    function __toString()
+    public function __toString()
     {
         // add "button" to attribute @class
-        @$this->attributes["class"] .= " button";
+        @$this->attributes['class'] .= ' button';
 
         $attributes = array();
         ksort($this->attributes);
@@ -46,8 +46,10 @@ class Button extends Interactable
             $attributes[] = sprintf(' %s="%s"', $k, htmlReady($v));
         }
 
-        return sprintf('<button type="submit"%s>%s</button>',
-                       join('', $attributes),
-                       htmlReady($this->label));
+        return sprintf(
+            '<button type="submit"%s>%s</button>',
+            join('', $attributes),
+            htmlReady($this->label)
+        );
     }
 }

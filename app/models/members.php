@@ -64,7 +64,7 @@ class MembersModel
 
                     StudipLog::log('SEM_CHANGED_RIGHTS', $this->course_id, $user_id, $next_status,
                             $this->getLogLevel($direction, $next_status));
-                    NotificationCenter::postNotification('CourseMemberStatusDidUpdate', $this->course_id, $user_id); 
+                    NotificationCenter::postNotification('CourseMemberStatusDidUpdate', $this->course_id, $user_id);
 
                     if (is_null($next_pos)) {
                         $next_pos = 0;
@@ -134,7 +134,7 @@ class MembersModel
                                 '____%system%____', FALSE, FALSE, '1', FALSE, sprintf('%s %s', _('Systemnachricht:'),
                                         _("nicht zugelassen in Veranstaltung")), TRUE);
                 StudipLog::log('SEM_USER_DEL', $this->course_id, $user_id, 'Wurde aus der Veranstaltung entfernt');
-                NotificationCenter::postNotification('UserDidLeaveCourse', $this->course_id, $user_id); 
+                NotificationCenter::postNotification('UserDidLeaveCourse', $this->course_id, $user_id);
 
                 $msgs[] = $user->getFullName();
             }
@@ -199,7 +199,7 @@ class MembersModel
         // insert
         $copy_course = ($accepted || $consider_contingent) ? TRUE : FALSE;
         $admission_user = insert_seminar_user($this->course_id, $user_id, $status, $copy_course, $consider_contingent, true);
-        
+
         if ($admission_user) {
             setTempLanguage($user_id);
             if ($cmd == 'add_user') {

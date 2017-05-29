@@ -20,39 +20,39 @@ use Studip\Button, Studip\LinkButton;
                               . 'wollen, oder ob Sie unsichtbar sein möchten und dann nur '
                               . 'eingeschränkte Kommunikationsfunktionen nutzen können.')) ?>
             <div>
-                <? if ($global_visibility != 'always' && $global_visibility != 'never' &&
-                       ($user_perm != 'dozent' || !get_config('DOZENT_ALWAYS_VISIBLE'))
-                ):
-                    // only show selection if visibility can be changed
-                    ?>
-                    <select name="global_visibility" aria-describedby="global_vis_description" id="global_vis">
-                        <?php
-                        if (count($user_domains)) {
-                            printf("<option %s value=\"global\">" . _("sichtbar für alle Nutzer") . "</option>", $global_visibility == 'global' ? 'selected="selected"' : '');
-                            $visible_text = _('sichtbar für eigene Nutzerdomäne');
-                        } else {
-                            $visible_text = _('sichtbar');
-                        }
-                        printf("<option %s value=\"yes\">" . $visible_text . "</option>", ($global_visibility == 'yes' || ($global_visibility == 'unknown' && Config::get()->USER_VISIBILITY_UNKNOWN)) ? 'selected' : '');
-                        printf("<option %s value=\"no\">" . _("unsichtbar") . "</option>", ($global_visibility == 'no' || ($global_visibility == 'unknown' && !Config::get()->USER_VISIBILITY_UNKNOWN)) ? 'selected' : '');
-                        ?>
-                    </select>
+            <? if (!in_array($global_visibility, ['always', 'never'])
+                   && ($user_perm !== 'dozent' || !Config::get()->DOZENT_ALWAYS_VISIBLE)
+            ):
+                // only show selection if visibility can be changed
+                ?>
+                <select name="global_visibility" aria-describedby="global_vis_description" id="global_vis">
+                <?php
+                    if (count($user_domains)) {
+                        printf("<option %s value=\"global\">" . _('sichtbar für alle Nutzer') . "</option>", $global_visibility === 'global' ? 'selected="selected"' : '');
+                        $visible_text = _('sichtbar für eigene Nutzerdomäne');
+                    } else {
+                        $visible_text = _('sichtbar');
+                    }
+                    printf("<option %s value=\"yes\">" . $visible_text . "</option>", ($global_visibility == 'yes' || ($global_visibility === 'unknown' && Config::get()->USER_VISIBILITY_UNKNOWN)) ? 'selected' : '');
+                    printf("<option %s value=\"no\">" . _("unsichtbar") . "</option>", ($global_visibility == 'no' || ($global_visibility === 'unknown' && !Config::get()->USER_VISIBILITY_UNKNOWN)) ? 'selected' : '');
+                ?>
+                </select>
+            <? else: ?>
+                <? if ($global_visibility === 'never'): ?>
+                    <em><?= _('Ihre Kennung wurde von einem Administrator unsichtbar geschaltet.') ?></em>
+                <? elseif ($user_perm == 'dozent' && Config::get()->DOZENT_ALWAYS_VISIBLE): ?>
+                    <em><?= _('Sie haben Dozentenrechte und sind daher immer global sichtbar.') ?></em>
                 <? else: ?>
-                    <? if ($global_visibility == 'never'): ?>
-                        <i><?= _('Ihre Kennung wurde von einem Administrator unsichtbar geschaltet.') ?></i>
-                    <? elseif ($user_perm == 'dozent' && Config::get()->DOZENT_ALWAYS_VISIBLE): ?>
-                        <i><?= _('Sie haben Dozentenrechte und sind daher immer global sichtbar.') ?></i>
-                    <? else: ?>
-                        <i><?= _('Sie sind immer global sichtbar.') ?></i>
-                    <? endif; ?>
-                    <input type="hidden" name="global_visibility" value="<?= $global_visibility ?>">
+                    <em><?= _('Sie sind immer global sichtbar.') ?></em>
                 <? endif; ?>
+                <input type="hidden" name="global_visibility" value="<?= $global_visibility ?>">
+            <? endif; ?>
             </div>
         </label>
 
-        <? if (($global_visibility == 'yes' || $global_visibility == 'global' ||
-                ($global_visibility == 'unknown' && Config::get()->USER_VISIBILITY_UNKNOWN) ||
-                ($user_perm == 'dozent' && Config::get()->DOZENT_ALWAYS_VISIBLE)) &&
+        <? if ((in_array($global_visibility, ['yes', 'global']) ||
+                ($global_visibility === 'unknown' && Config::get()->USER_VISIBILITY_UNKNOWN) ||
+                ($user_perm === 'dozent' && Config::get()->DOZENT_ALWAYS_VISIBLE)) &&
                (!$NOT_HIDEABLE_FIELDS[$user_perm]['online'] ||
                 !$NOT_HIDEABLE_FIELDS[$user_perm]['search'] ||
                 !$NOT_HIDEABLE_FIELDS[$user_perm]['email'])
@@ -63,31 +63,31 @@ use Studip\Button, Studip\LinkButton;
                         _('Stellen Sie hier ein, in welchen Bereichen des Systems Sie erscheinen wollen.')
                         . (!$NOT_HIDEABLE_FIELDS[$user_perm]['email']
                                 ? _('Wenn Sie hier Ihre E-Mail-Adresse verstecken, wird stattdessen die E-Mail-Adresse Ihrer (Standard-)Einrichtung angezeigt.')
-                                : "")
+                                : '')
                 ) ?>
 
-                <? if (!$NOT_HIDEABLE_FIELDS[$user_perm]['online']): ?>
-                    <label>
-                        <input type="checkbox" name="online" value="1"
-                                <? if ($online_visibility) echo 'checked'; ?>>
-                        <?= _('sichtbar in "Wer ist online"') ?>
-                    </label>
-                <? endif; ?>
-                <? if (!$NOT_HIDEABLE_FIELDS[$user_perm]['search']): ?>
-                    <label>
-                        <input type="checkbox" name="search" value="1"
-                                <? if ($search_visibility) echo 'checked'; ?>>
-                        <?= _('auffindbar über die Personensuche') ?>
-                    </label>
-                <? endif;
-                  ?>
-                <? if (!$NOT_HIDEABLE_FIELDS[$user_perm]['email']): ?>
-                    <label>
-                        <input type="checkbox" name="email" value="1"
-                                <? if ($email_visibility) echo 'checked'; ?>>
-                        <?= _('eigene E-Mail Adresse sichtbar') ?>
-                    </label>
-                <? endif; ?>
+            <? if (!$NOT_HIDEABLE_FIELDS[$user_perm]['online']): ?>
+                <label>
+                    <input type="checkbox" name="online" value="1"
+                            <? if ($online_visibility) echo 'checked'; ?>>
+                    <?= _('sichtbar in "Wer ist online"') ?>
+                </label>
+            <? endif; ?>
+            <? if (!$NOT_HIDEABLE_FIELDS[$user_perm]['search']): ?>
+                <label>
+                    <input type="checkbox" name="search" value="1"
+                            <? if ($search_visibility) echo 'checked'; ?>>
+                    <?= _('auffindbar über die Personensuche') ?>
+                </label>
+            <? endif;
+              ?>
+            <? if (!$NOT_HIDEABLE_FIELDS[$user_perm]['email']): ?>
+                <label>
+                    <input type="checkbox" name="email" value="1"
+                            <? if ($email_visibility) echo 'checked'; ?>>
+                    <?= _('eigene E-Mail Adresse sichtbar') ?>
+                </label>
+            <? endif; ?>
             </div>
         <? endif; ?>
     </fieldset>
