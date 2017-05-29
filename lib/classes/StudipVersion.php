@@ -10,14 +10,14 @@
       * @param bool $major  if true (default) only the major version part is returned
       * @return string
       */
-     public static function getStudipVersion($major)
+     public static function getStudipVersion($major = true)
      {
          if ($major) {
              preg_match('/^\d+\.\d+/', $GLOBALS['SOFTWARE_VERSION'], $matches);
              return $matches[0];
-         } else {
-             return $GLOBALS['SOFTWARE_VERSION'];
          }
+
+        return $GLOBALS['SOFTWARE_VERSION'];
      }
 
      /**
@@ -29,7 +29,7 @@
       */
      public static function newerThan($version, $major = true)
      {
-         return (version_compare(self::getStudipVersion($major), $version, '>'));
+         return version_compare(self::getStudipVersion($major), $version, '>');
      }
 
      /**
@@ -41,7 +41,7 @@
       */
      public static function olderThan($version, $major = true)
      {
-         return (version_compare(self::getStudipVersion($major), $version, '<'));
+         return version_compare(self::getStudipVersion($major), $version, '<');
      }
 
      /**
@@ -53,7 +53,7 @@
       */
      public static function matches($version, $major = true)
      {
-         return (version_compare(self::getStudipVersion($major), $version, '='));
+         return version_compare(self::getStudipVersion($major), $version, '=');
      }
 
      /**
@@ -68,6 +68,6 @@
      public static function range($from_version, $to_version, $major = true)
      {
          return version_compare(self::getStudipVersion($major), $from_version, '>=')
-                 && version_compare(self::getStudipVersion($major), $to_version, '<=');
+             && version_compare(self::getStudipVersion($major), $to_version, '<=');
      }
  }
