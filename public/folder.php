@@ -44,6 +44,8 @@ object_set_visit_module('documents');
 // -- here you have to put initialisations for the current page
 require_once 'lib/datei.inc.php';
 
+$rechte = $perm->have_studip_perm('tutor', $SessionSeminar);
+
 $open = Request::option('open');
 $close = Request::option('close');
 $check_all = Request::option('check_all');

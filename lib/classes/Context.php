@@ -195,7 +195,7 @@ class Context
      */
     public static function set($id)
     {
-        global $perm, $auth, $rechte;
+        global $perm, $auth;
 
         self::close();
         self::loadContext($id);
@@ -207,7 +207,6 @@ class Context
         if (self::isCourse() || self::isInstitute()) {
             $GLOBALS['SessionSeminar']  =  $id;
             $_SESSION['SessionSeminar'] =& $GLOBALS['SessionSeminar'];
-            $rechte                     = $perm->have_studip_perm("tutor", self::getId());
         }
 
         URLHelper::addLinkParam('cid', $GLOBALS['SessionSeminar']);
