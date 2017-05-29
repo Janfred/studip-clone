@@ -35,7 +35,7 @@ foreach ($available_modules as $category => $pluginlist) {
     ?>
     <tr class="<?= $visibility; ?>">
         <th colspan=3>
-            <?= htmlReady($category) ?>            
+            <?= htmlReady($category) ?>
         </th>
     </tr>
 
@@ -55,7 +55,7 @@ foreach ($available_modules as $category => $pluginlist) {
             $pluginname = isset($info['displayname']) ? $info['displayname'] : $plugin->getPluginname();
             $URL = $plugin->getPluginURL();
 
-            $warning = $plugin->deactivationWarning($_SESSION['SessionSeminar']);
+            $warning = $plugin->deactivationWarning(Context::getId());
 
         } elseif ($val['type'] == 'modul') {
 
@@ -74,8 +74,8 @@ foreach ($available_modules as $category => $pluginlist) {
             $cb_disabled = $pre_check ? 'disabled' : '';
             $cb_checked = $modules->isBit($_SESSION['admin_modules_data']["changed_bin"], $modul["id"]) ? "checked" : "";
 
-            
-            
+
+
             $URL = $GLOBALS['ASSETS_URL'].'images';
 
             if ($sem_class) {
@@ -163,12 +163,12 @@ foreach ($available_modules as $category => $pluginlist) {
                             <? if (isset($info['descriptionshort'])) : ?>
                                 <? foreach (explode('\n', $info['descriptionshort']) as $descriptionshort) { ?>
                                     <?= htmlReady($descriptionshort) ?>
-                                <? } ?>   
+                                <? } ?>
                             <? endif ?>
                             <? if (!isset($info['descriptionshort'])) : ?>
                                 <? if (isset($info['summary'])) : ?>
                                     <?= htmlReady($info['summary']) ?>
-                                <? elseif (isset($info['description'])) : ?>  
+                                <? elseif (isset($info['description'])) : ?>
                                     <?= htmlReady($info['description']) ?>
                                 <? else: ?>
                                     <?= _("Keine Beschreibung vorhanden.") ?>
@@ -181,7 +181,7 @@ foreach ($available_modules as $category => $pluginlist) {
                     <!-- inhaltlöschenbutton -->
                     <? if ($val['type'] == 'plugin' && method_exists($plugin, 'deleteContent')) echo LinkButton::create(_('Inhalte löschen'), URLHelper::getURL("?deleteContent=true&name=" . $key), array('style' => 'float:right; z-index: 1;')); ?>
                     <? if ($val['type'] == 'modul' && $studip_module instanceOf StudipModule && method_exists($studip_module, 'deleteContent')) echo LinkButton::create(_('Inhalte löschen'), URLHelper::getURL("?deleteContent=true&name=" . $key), array('style' => 'float:right; z-index: 1;')); ?>
-                          
+
                 </div>
 
                 <? if ($_SESSION['plus']['View'] == 'openall' || !isset($_SESSION['plus'])) { ?>
@@ -189,17 +189,17 @@ foreach ($available_modules as $category => $pluginlist) {
                     <div class="plus_expert hidden-tiny-down">
 
                         <div class="screenshot_holder">
-                            <? if (isset($info['screenshot']) || isset($info['screenshots'])) : 
-                                if(isset($info['screenshots'])){   
+                            <? if (isset($info['screenshot']) || isset($info['screenshots'])) :
+                                if(isset($info['screenshots'])){
                                     $title = $info['screenshots']['pictures'][0]['title'];
-                                    $source = $info['screenshots']['path'].'/'.$info['screenshots']['pictures'][0]['source'];                                   
+                                    $source = $info['screenshots']['path'].'/'.$info['screenshots']['pictures'][0]['source'];
                                 } else {
                                     $fileext = end(explode(".", $info['screenshot']));
                                     $title = str_replace("_"," ",basename($info['screenshot'], ".".$fileext));
                                     $source = $info['screenshot'];
                                 }
                                 ?>
-                                
+
                                 <a href="<?= $URL . "/" . $source ?>"
                                    data-lightbox="<?= $pluginname ?>" data-title="<?= $title ?>">
                                     <img class="big_thumb" src="<?= $URL . "/" . $source ?>"
@@ -218,8 +218,8 @@ foreach ($available_modules as $category => $pluginlist) {
                                             $counter = count($info['additionalscreenshots']);
                                             $cstart = 0;
                                         } ?>
-                                        
-                                        <? for ($i = $cstart; $i < $counter; $i++) { 
+
+                                        <? for ($i = $cstart; $i < $counter; $i++) {
 
                                             if (isset($info['screenshots'])){
                                                 $title = $info['screenshots']['pictures'][$i]['title'];
@@ -229,7 +229,7 @@ foreach ($available_modules as $category => $pluginlist) {
                                                 $title = str_replace("_"," ",basename($info['additionalscreenshots'][$i], ".".$fileext));
                                                 $source = $info['additionalscreenshots'][$i];
                                             }
-                                                                                    
+
                                              ?>
 
                                             <a href="<?= $URL . "/" . $source ?>"
@@ -254,7 +254,7 @@ foreach ($available_modules as $category => $pluginlist) {
                             <!-- inhaltlöschenbutton -->
                             <?// if ($val['type'] == 'plugin' && method_exists($plugin, 'deleteContent')) echo LinkButton::create(_('Inhalte löschen'), URLHelper::getURL("?deleteContent=true&name=" . $key), array('style' => 'float:right; z-index: 1;')); ?>
                             <?// if ($val['type'] == 'modul' && $studip_module instanceOf StudipModule && method_exists($studip_module, 'deleteContent')) echo LinkButton::create(_('Inhalte löschen'), URLHelper::getURL("?deleteContent=true&name=" . $key), array('style' => 'float:right; z-index: 1;')); ?>
-                            
+
                             <!-- tags -->
                             <? if (isset($info['keywords'])) : ?>
                                 <ul class="keywords">
@@ -270,7 +270,7 @@ foreach ($available_modules as $category => $pluginlist) {
                                 <p class="longdesc">
                                     <?= htmlReady($descriptionlong) ?>
                                 </p>
-                            <? } ?>   
+                            <? } ?>
                             <? endif ?>
 
                             <? if (!isset($info['descriptionlong']) && isset($info['summary'])) : ?>

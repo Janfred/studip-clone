@@ -133,7 +133,7 @@ class WikiFormat extends StudipFormat
         $page = decodeHTML($matches[1]);
         $display_page = $matches[2] ? $markup->format($matches[2]) : htmlReady($page);
 
-        if (keywordExists($page, $_SESSION['SessionSeminar'])) {
+        if (keywordExists($page, Context::getId())) {
             return sprintf('<a href="%s">%s</a>',
                 URLHelper::getLink("wiki.php", array('keyword' => $page)),
                 $display_page

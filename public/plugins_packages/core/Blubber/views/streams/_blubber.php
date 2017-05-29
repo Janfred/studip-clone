@@ -1,5 +1,5 @@
 <?
-$last_visit = object_get_visit($_SESSION['SessionSeminar'], "forum");
+$last_visit = object_get_visit(Context::getId(), "forum");
 BlubberPosting::$course_hashes = ($thread['context_type'] === "course" ? $thread['Seminar_id'] : false);
 $related_users = $thread['context_type'] === "private" ? $thread->getRelatedUsers() : array();
 $author = $thread->getUser();

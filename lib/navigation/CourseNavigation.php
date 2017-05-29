@@ -97,7 +97,7 @@ class CourseNavigation extends Navigation
                 $navigation->setActiveImage(Icon::create('persons', 'info'));
                 $navigation->addSubNavigation('view', new Navigation(_('MitarbeiterInnen'), 'dispatch.php/institute/members'));
 
-                if ($GLOBALS['perm']->have_studip_perm('tutor', $_SESSION['SessionSeminar']) && $GLOBALS['perm']->have_perm('admin')) {
+                if ($GLOBALS['perm']->have_studip_perm('tutor', Context::getId()) && $GLOBALS['perm']->have_perm('admin')) {
                     $navigation->addSubNavigation('edit_groups', new Navigation(_('Funktionen / Gruppen verwalten'), 'dispatch.php/admin/statusgroups'));
                 }
 
@@ -194,7 +194,7 @@ class CourseNavigation extends Navigation
         }
 
         //plugins
-        $standard_plugins = PluginManager::getInstance()->getPlugins("StandardPlugin", $_SESSION['SessionSeminar']);
+        $standard_plugins = PluginManager::getInstance()->getPlugins("StandardPlugin", Context::getId());
         foreach ($standard_plugins as $plugin) {
             if (!$sem_class->isSlotModule(get_class($plugin))) {
                 foreach ($sem_class->getNavigationForSlot(get_class($plugin)) as $nav_name => $navigation) {

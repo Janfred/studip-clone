@@ -3,7 +3,7 @@
         <?= Icon::create('topic', 'clickable')->asImg(['class' => 'text-bottom']) ?>
         <?= htmlReady($topic['title']) ?>
     </a>
-    <? if ($GLOBALS['perm']->have_studip_perm("tutor", $_SESSION['SessionSeminar'])) : ?>
+    <? if ($GLOBALS['perm']->have_studip_perm("tutor", Context::getId())) : ?>
     <a href="#" onClick="STUDIP.Dates.removeTopicFromIcon.call(this); return false;">
         <?= Icon::create('trash', 'clickable')->asImg(['class' => "text-bottom"]) ?>
     </a>

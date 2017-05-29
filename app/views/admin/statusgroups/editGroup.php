@@ -49,7 +49,7 @@
     <label>
         <?= _('Einordnen unter') ?>
         <select name="range_id" class="nested-select">
-            <option value="<?= htmlReady($_SESSION['SessionSeminar']) ?>">
+            <option value="<?= htmlReady(Context::getId()) ?>">
                 - <?= _('Hauptebene') ?> -
             </option>
             <?= $this->render_partial("admin/statusgroups/_edit_subgroupselect.php", array('groups' => $groups, 'selected' => $group, 'level' => 0)) ?>

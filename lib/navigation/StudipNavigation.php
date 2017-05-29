@@ -40,7 +40,7 @@ class StudipNavigation extends Navigation
 
         // if a course is selected, the navigation for it will be loaded, but
         // it will not be shown in the main toolbar
-        if ($_SESSION['SessionSeminar']) {
+        if (Context::getId()) {
             $this->addSubNavigation('course', new CourseNavigation());
         }
 

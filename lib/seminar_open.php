@@ -106,14 +106,13 @@ $_language_path = init_i18n($_SESSION['_language']);
 include 'config.inc.php';
 
 // Try to select the course or institute given by the parameter 'cid'
-// in the current request. For compatibility reasons there is a fallback to
-// the last selected one from the session
+// in the current request.
 
-$course_id = Request::int('cancel_login') ? null: Request::option('cid', $_SESSION['SessionSeminar']);
+$course_id = Request::int('cancel_login') ? null: Request::option('cid');
 
 // Select the current course or institute if we got one from 'cid' or session.
-// This also binds the global $_SESSION['SessionSeminar']
-// variable to the URL parameter 'cid' for all generated links.
+// This also binds Context::getId()
+// to the URL parameter 'cid' for all generated links.
 if (isset($course_id)) {
     Context::set($course_id);
     unset($course_id);

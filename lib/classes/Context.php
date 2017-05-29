@@ -206,7 +206,6 @@ class Context
 
         if (self::isCourse() || self::isInstitute()) {
             $GLOBALS['SessionSeminar']  =  $id;
-            $_SESSION['SessionSeminar'] =& $GLOBALS['SessionSeminar'];
         }
 
         URLHelper::addLinkParam('cid', $GLOBALS['SessionSeminar']);
@@ -266,6 +265,5 @@ class Context
 
         URLHelper::removeLinkParam('cid');
         unset($GLOBALS['SessionSeminar']);
-        unset($_SESSION['SessionSeminar']);
     }
 }

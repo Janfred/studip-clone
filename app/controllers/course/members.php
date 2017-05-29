@@ -1266,7 +1266,7 @@ class Course_MembersController extends AuthenticatedController
         }
         Navigation::activateItem('/course/members/additional');
         // fetch course and aux data
-        $course = new Course($_SESSION['SessionSeminar']);
+        $course = Course::findCurrent();
         if (Request::submitted('save')) {
             foreach ($course->members->findBy('status', 'autor') as $member) {
                 $course->aux->updateMember($member, Request::getArray($member->user_id));
@@ -1291,7 +1291,7 @@ class Course_MembersController extends AuthenticatedController
         Navigation::activateItem('/course/members/additional');
 
         // Fetch datafields for the user
-        $course = new Course($_SESSION['SessionSeminar']);
+        $course = Course::findCurrent();
         $member = $course->members->findOneBy('user_id', $GLOBALS['user']->id);
         $this->datafields = $member ? $course->aux->getMemberData($member) : array();
         // We need aux data in the view

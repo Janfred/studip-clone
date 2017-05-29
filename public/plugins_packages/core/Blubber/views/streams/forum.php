@@ -13,7 +13,7 @@
 <input type="hidden" id="base_url" value="plugins.php/blubber/streams/">
 <input type="hidden" id="user_id" value="<?= htmlReady($GLOBALS['user']->id) ?>">
 <input type="hidden" id="stream" value="course">
-<input type="hidden" id="context_id" value="<?= $_SESSION['SessionSeminar'] ?>">
+<input type="hidden" id="context_id" value="<?= Context::getId() ?>">
 <input type="hidden" id="stream_time" value="<?= time() ?>">
 <input type="hidden" id="search" value="<?= htmlReady($search) ?>">
 <input type="hidden" id="browser_start_time" value="">
@@ -25,7 +25,7 @@
     <div class="row writer">
         <div id="context_selector" style="display: none;">
             <input type="hidden" id="context_type" value="course" checked="checked">
-            <input type="hidden" id="context" value="<?= $_SESSION['SessionSeminar'] ?>">
+            <input type="hidden" id="context" value="<?= Context::getId() ?>">
         </div>
         <textarea id="new_posting" placeholder="<?= _("Schreib was, frag was.") ?>"><?= $search ? htmlReady($search) : "" ?></textarea>
         <label title="<?= _("Datei hochladen") ?>" class="uploader">

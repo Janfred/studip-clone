@@ -65,10 +65,10 @@ class StreamsController extends PluginController {
      * @throws AccessDeniedException if user has no access to course
      */
     public function forum_action() {
-        object_set_visit($_SESSION['SessionSeminar'], "forum");
+        object_set_visit(Context::getId(), "forum");
         if (Context::isCourse()) {
-            $seminar = new Seminar($_SESSION['SessionSeminar']);
-            $this->commentable = ($seminar->read_level == 0 || $GLOBALS['perm']->have_studip_perm("autor", $_SESSION['SessionSeminar']));
+            $seminar = new Seminar(Context::get());
+            $this->commentable = ($seminar->read_level == 0 || $GLOBALS['perm']->have_studip_perm("autor", Context::getId()));
         } else {
             $this->commentable = true;
         }
@@ -78,7 +78,7 @@ class StreamsController extends PluginController {
         PageLayout::setTitle(Context::getHeaderLine()." - ".$this->plugin->getDisplayTitle());
         Navigation::getItem("/course/blubberforum")->setImage(Icon::create('blubber', 'info'));
         Navigation::activateItem("/course/blubberforum");
-        $coursestream = BlubberStream::getCourseStream($_SESSION['SessionSeminar']);
+        $coursestream = BlubberStream::getCourseStream(Context::getId());
         $this->tags = $coursestream->fetchTags();
         if (Request::get("hash")) {
             $this->search = "#".Request::get("hash");
@@ -86,7 +86,7 @@ class StreamsController extends PluginController {
         }
         $this->threads = $coursestream->fetchThreads(0, $this->max_threads + 1);
         $this->more_threads = count($this->threads) > $this->max_threads;
-        $this->course_id = $_SESSION['SessionSeminar'];
+        $this->course_id = Context::getId();
         if ($this->more_threads) {
             $this->threads = array_slice($this->threads, 0, $this->max_threads);
         }
@@ -107,7 +107,7 @@ class StreamsController extends PluginController {
         $this->tags = $profilestream->fetchTags();
         $this->threads = $profilestream->fetchThreads(0, $this->max_threads + 1);
         $this->more_threads = count($this->threads) > $this->max_threads;
-        $this->course_id = $_SESSION['SessionSeminar'];
+        $this->course_id = Context::getId();
         if ($this->more_threads) {
             $this->threads = array_slice($this->threads, 0, $this->max_threads);
         }
@@ -203,7 +203,7 @@ class StreamsController extends PluginController {
         foreach ($threads as $posting) {
             $template = $factory->open("streams/_blubber.php");
             $template->set_attribute('thread', $posting);
-            $template->set_attribute('course_id', $_SESSION['SessionSeminar']);
+            $template->set_attribute('course_id', Context::getId());
             $template->set_attribute('controller', $this);
             $output['threads'][] = array(
                 'content' => $template->render(),
@@ -668,7 +668,7 @@ class StreamsController extends PluginController {
             }
         }
 
-        $this->course_id     = $_SESSION['SessionSeminar'];
+        $this->course_id     = Context::getId();
         $this->single_thread = true;
         BlubberPosting::$course_hashes = ($this->thread['user_id'] !== $this->thread['Seminar_id'] ? $this->thread['Seminar_id'] : false);
     }

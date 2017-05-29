@@ -9,10 +9,6 @@
  *  the License, or (at your option) any later version.
  */
 
-if (isset($GLOBALS['SEM_CLASS'])) {
-    $GLOBALS['SEM_CLASS_OLD_VAR'] = $GLOBALS['SEM_CLASS'];
-}
-
 /**
  * Class to define and manage attributes of seminar classes (or seminar categories).
  * Usually all sem-classes are stored in a global variable $SEM_CLASS which is
@@ -324,7 +320,7 @@ class SemClass implements ArrayAccess
     {
         $module = $this->getModule($slot);
         if ($module) {
-            return (array) $module->getTabNavigation($course_id ? $course_id : $_SESSION['SessionSeminar']);
+            return (array) $module->getTabNavigation($course_id ? $course_id : Context::getId());
         } else {
             return array();
         }

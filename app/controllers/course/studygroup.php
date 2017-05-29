@@ -708,9 +708,10 @@ class Course_StudygroupController extends AuthenticatedController
      * @return void
      *
      */
-    public function members_action()
+    public function members_action($id)
     {
-        $id = $_SESSION['SessionSeminar'];
+        $sem = Context::get();
+        $id = $sem->id;
         PageLayout::setTitle(Context::getHeaderLine() . ' - ' . _("Teilnehmende"));
         Navigation::activateItem('/course/members');
         PageLayout::setHelpKeyword('Basis.StudiengruppenBenutzer');
@@ -718,7 +719,7 @@ class Course_StudygroupController extends AuthenticatedController
         Request::set('choose_member_parameter', $this->flash['choose_member_parameter']);
 
         object_set_visit_module('participants');
-        $sem = Course::find($id);
+
 
         $this->last_visitdate   = object_get_visit($id, 'participants');
         $this->anzahl           = StudygroupModel::countMembers($id);
@@ -729,7 +730,7 @@ class Course_StudygroupController extends AuthenticatedController
         $this->tutors           = $sem->getMembersWithStatus('tutor');
         $this->autors           = $sem->getMembersWithStatus('autor');
         $this->accepted         = $sem->admission_applicants->findBy('status', 'accepted');
-        $this->sem_class        = Course::findCurrent()->getSemClass();
+        $this->sem_class        = $sem->getSemClass();
         $this->invitedMembers   = StudygroupModel::getInvitations($id);
         $this->rechte           = $GLOBALS['perm']->have_studip_perm('tutor', $id);
 

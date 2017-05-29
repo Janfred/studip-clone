@@ -42,7 +42,7 @@
                 <?= $this->render_partial('course/dates/_topic_li', compact('topic', 'date')) ?>
             <? endforeach; ?>
             </ul>
-        <? if ($GLOBALS['perm']->have_studip_perm('tutor', $_SESSION['SessionSeminar'])): ?>
+        <? if ($GLOBALS['perm']->have_studip_perm('tutor', Context::getId())): ?>
             <a href="<?= $controller->url_for('course/dates/new_topic?termin_id=' . $date->id) ?>" style="align-self: flex-end;" title="<?= _('Thema hinzufügen') ?>" data-dialog>
                 <?= Icon::create('add', 'clickable')->asImg(12) ?>
             </a>

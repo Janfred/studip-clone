@@ -74,8 +74,8 @@ if ($navigation) {
     <? include 'lib/include/header.php' ?>
 
     <div id="layout_page">
-        <? if (PageLayout::isHeaderEnabled() && is_object($GLOBALS['user']) && $GLOBALS['user']->id != 'nobody' && Navigation::hasItem('/course') && Navigation::getItem('/course')->isActive() && $_SESSION['seminar_change_view_'.$GLOBALS['SessionSeminar']]) : ?>
-            <?= $this->render_partial('change_view', array('changed_status' => $_SESSION['seminar_change_view_'.$GLOBALS['SessionSeminar']])) ?>
+        <? if (PageLayout::isHeaderEnabled() && is_object($GLOBALS['user']) && $GLOBALS['user']->id != 'nobody' && Navigation::hasItem('/course') && Navigation::getItem('/course')->isActive() && $_SESSION['seminar_change_view_'.Context::getId()]) : ?>
+            <?= $this->render_partial('change_view', array('changed_status' => $_SESSION['seminar_change_view_'.Context::getId()])) ?>
         <? endif ?>
 
         <? if (PageLayout::isHeaderEnabled() /*&& isset($navigation)*/) : ?>

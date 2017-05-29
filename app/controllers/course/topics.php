@@ -17,9 +17,9 @@ class Course_TopicsController extends AuthenticatedController
 
     public function index_action()
     {
-        if (Request::isPost() && Request::get("edit") && $GLOBALS['perm']->have_studip_perm("tutor", $_SESSION['SessionSeminar'])) {
+        if (Request::isPost() && Request::get("edit") && $GLOBALS['perm']->have_studip_perm("tutor", Context::getId())) {
             $topic = new CourseTopic(Request::option("issue_id"));
-            if ($topic['seminar_id'] && ($topic['seminar_id'] !== $_SESSION['SessionSeminar'])) {
+            if ($topic['seminar_id'] && ($topic['seminar_id'] !== Context::getId())) {
                 throw new AccessDeniedException();
             }
             if (Request::submitted("delete_topic")) {
@@ -29,7 +29,7 @@ class Course_TopicsController extends AuthenticatedController
                 $topic['title'] = Request::get("title");
                 $topic['description'] = Studip\Markup::purifyHtml(Request::get("description"));
                 if ($topic->isNew()) {
-                    $topic['seminar_id'] = $_SESSION['SessionSeminar'];
+                    $topic['seminar_id'] = Context::getId();
                 }
                 $topic->store();
 
@@ -65,7 +65,7 @@ class Course_TopicsController extends AuthenticatedController
             }
         }
         if (Request::isPost() && Request::option("move_down")) {
-            $topics = CourseTopic::findBySeminar_id($_SESSION['SessionSeminar']);
+            $topics = CourseTopic::findBySeminar_id(Context::getId());
             $mainkey = null;
             foreach ($topics as $key => $topic) {
                 if ($topic->getId() === Request::option("move_down")) {
@@ -82,7 +82,7 @@ class Course_TopicsController extends AuthenticatedController
             }
         }
         if (Request::isPost() && Request::option("move_up")) {
-            $topics = CourseTopic::findBySeminar_id($_SESSION['SessionSeminar']);
+            $topics = CourseTopic::findBySeminar_id(Context::getId());
             foreach ($topics as $key => $topic) {
                 if (($topic->getId() === Request::option("move_up")) && $key > 0) {
                     $topic['priority'] = $key;
@@ -96,17 +96,17 @@ class Course_TopicsController extends AuthenticatedController
         }
 
         Navigation::activateItem('/course/schedule/topics');
-        $this->topics = CourseTopic::findBySeminar_id($_SESSION['SessionSeminar']);
-        $this->cancelled_dates_locked = LockRules::Check($_SESSION['SessionSeminar'], 'cancelled_dates');
+        $this->topics = CourseTopic::findBySeminar_id(Context::getId());
+        $this->cancelled_dates_locked = LockRules::Check(Context::getId(), 'cancelled_dates');
     }
 
     public function edit_action($topic_id = null)
     {
-        if (!$GLOBALS['perm']->have_studip_perm("tutor", $_SESSION['SessionSeminar'])) {
+        if (!$GLOBALS['perm']->have_studip_perm("tutor", Context::getId())) {
             throw new AccessDeniedException();
         }
         $this->topic = new CourseTopic($topic_id);
-        $this->dates = CourseDate::findBySeminar_id($_SESSION['SessionSeminar']);
+        $this->dates = CourseDate::findBySeminar_id(Context::getId());
 
         if (Request::isXhr()) {
             $this->set_layout(null);
@@ -117,7 +117,7 @@ class Course_TopicsController extends AuthenticatedController
 
     public function allow_public_action()
     {
-        if (!$GLOBALS['perm']->have_studip_perm("tutor", $_SESSION['SessionSeminar'])) {
+        if (!$GLOBALS['perm']->have_studip_perm("tutor", Context::getId())) {
             throw new AccessDeniedException();
         }
         $this->course = Course::findCurrent();
@@ -128,18 +128,18 @@ class Course_TopicsController extends AuthenticatedController
 
     public function copy_action()
     {
-        if (!$GLOBALS['perm']->have_studip_perm("tutor", $_SESSION['SessionSeminar'])) {
+        if (!$GLOBALS['perm']->have_studip_perm("tutor", Context::getId())) {
             throw new AccessDeniedException();
         }
         if (Request::submitted("copy")) {
             $prio = 1;
-            foreach (Course::find($_SESSION['SessionSeminar'])->topics as $topic) {
+            foreach (Course::find(Context::getId())->topics as $topic) {
                 $prio = max($prio, $topic['priority']);
             }
             foreach (Request::getArray("topic") as $topic_id => $value) {
                 $topic = new CourseTopic($topic_id);
                 $topic = clone $topic;
-                $topic['seminar_id'] = $_SESSION['SessionSeminar'];
+                $topic['seminar_id'] = Context::getId();
                 $topic['priority'] = $prio;
                 $prio++;
                 $topic->setId($topic->getNewId());

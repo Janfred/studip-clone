@@ -39,7 +39,7 @@ class BrowseNavigation extends Navigation
         }
 
         parent::__construct($coursetext, $courselink);
-        if (!$_SESSION['SessionSeminar']) {
+        if (!Context::getId()) {
             $this->setImage(Icon::create('seminar', 'navigation', ["title" => $courseinfo]));
         }
     }

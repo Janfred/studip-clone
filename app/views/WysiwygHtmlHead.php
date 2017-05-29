@@ -15,7 +15,7 @@ if (Settings::getInstance()->isGloballyDisabled()) {
         STUDIP.wysiwyg = {
             disabled: <?= Settings::getInstance()->isDisabled() ? 'true' : 'false' ?>,
             settings: <?= Settings::getInstance()->asJson() ?>,
-            seminarId: '<?= $_SESSION['SessionSeminar'] ?>',
+            seminarId: '<?= Context::getId() ?>',
             htmlMarker: '<?= addslashes(Markup::HTML_MARKER) ?>',
             htmlMarkerRegExp: '<?= addslashes(Markup::HTML_MARKER_REGEXP) ?>',
             isHtml: function isHtml(text) {

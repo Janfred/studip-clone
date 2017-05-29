@@ -97,7 +97,7 @@ abstract class StudIPPlugin {
             if ($type == 'user') {
                 $context = get_userid(Request::username('username', $user->username));
             } else {
-                $context = $_SESSION['SessionSeminar'];
+                $context = Context::getId();
             }
         }
 

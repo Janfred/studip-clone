@@ -66,7 +66,7 @@
                         </tbody>
                     </table>
                     <div style="text-align: center;">
-                        <? if ($GLOBALS['perm']->have_studip_perm("tutor", $_SESSION['SessionSeminar'])) : ?>
+                        <? if ($GLOBALS['perm']->have_studip_perm("tutor", Context::getId())) : ?>
                             <?= \Studip\LinkButton::createEdit(_('Bearbeiten'),
                                                                URLHelper::getURL("dispatch.php/course/topics/edit/".$topic->getId()),
                                                                array('data-dialog' => '')) ?>
@@ -108,7 +108,7 @@ $actions = new ActionsWidget();
 $actions->addLink(_("Alle Themen aufklappen"),
                   null, Icon::create('arr_1down', 'clickable'),
                   array('onClick' => "jQuery('table.withdetails > tbody > tr:not(.details):not(.open) > :first-child a').click(); return false;"));
-if ($GLOBALS['perm']->have_studip_perm("tutor", $_SESSION['SessionSeminar'])) {
+if ($GLOBALS['perm']->have_studip_perm("tutor", Context::getId())) {
     $actions->addLink(
         _("Neues Thema erstellen"),
         URLHelper::getURL("dispatch.php/course/topics/edit"),

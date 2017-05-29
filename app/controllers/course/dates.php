@@ -190,7 +190,7 @@ class Course_DatesController extends AuthenticatedController
     public function save_details_action($date_id)
     {
         CSRFProtection::verifyUnsafeRequest();
-        if (!$GLOBALS['perm']->have_studip_perm("tutor", $_SESSION['SessionSeminar'])) {
+        if (!$GLOBALS['perm']->have_studip_perm("tutor", Context::getId())) {
             throw new AccessDeniedException();
         }
         $termin = CourseDate::find($date_id);
@@ -309,8 +309,8 @@ class Course_DatesController extends AuthenticatedController
 
     public function export_action()
     {
-        $course = new Course($_SESSION['SessionSeminar']);
-        $sem = new Seminar($_SESSION['SessionSeminar']);
+        $course = Context::get();
+        $sem = new Seminar($course);
         $themen =& $sem->getIssues();
 
         $termine = getAllSortedSingleDates($sem);
@@ -368,7 +368,7 @@ class Course_DatesController extends AuthenticatedController
 
     private function hasAccess()
     {
-        return $GLOBALS['perm']->have_studip_perm('tutor', $_SESSION['SessionSeminar']);
+        return $GLOBALS['perm']->have_studip_perm('tutor', Context::getId());
     }
 
     private function checkAccess()

@@ -25,8 +25,7 @@ class ProfileController extends AuthenticatedController
         parent::before_filter($action, $args);
 
         // Remove cid
-        URLHelper::removeLinkParam('cid');
-        unset($_SESSION['SessionSeminar']);
+        Context::close();
 
         Navigation::activateItem('/profile/index');
         URLHelper::addLinkParam('username', Request::username('username'));

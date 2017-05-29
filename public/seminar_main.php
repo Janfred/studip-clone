@@ -38,7 +38,7 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
-$course_id = $_SESSION['SessionSeminar'];
+$course_id = Context::getId();
 
 //set visitdate for course, when coming from my_courses
 if (Request::get('auswahl')) {

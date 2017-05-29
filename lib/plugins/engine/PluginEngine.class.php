@@ -8,7 +8,7 @@
  * @subpackage engine
  */
 
-class PluginEngine 
+class PluginEngine
 {
     /**
      * This function maps an incoming request to a tuple
@@ -45,7 +45,7 @@ class PluginEngine
         self::getPlugins('HomepagePlugin');
 
         // load course plugins
-        if (isset($_SESSION['SessionSeminar'])) {
+        if (Context::getId()) {
             self::getPlugins('StandardPlugin');
         }
 

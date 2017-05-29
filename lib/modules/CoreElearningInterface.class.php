@@ -38,7 +38,7 @@ class CoreElearningInterface implements StudipModule {
                 $navigation->addSubNavigation('show', $elearning_nav);
             }
 
-            if ($GLOBALS['perm']->have_studip_perm('tutor', $_SESSION['SessionSeminar'])) {
+            if ($GLOBALS['perm']->have_studip_perm('tutor', Context::getId())) {
                 $navigation->addSubNavigation('edit', new Navigation(_('Lernmodule hinzufügen / entfernen'), 'dispatch.php/course/elearning/edit?seminar_id=' . $course_id));
             }
 
