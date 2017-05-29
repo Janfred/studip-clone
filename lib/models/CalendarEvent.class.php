@@ -265,25 +265,39 @@ class CalendarEvent extends SimpleORMap implements Event
                 } else {
                     $ts = mktime(12, 0, 0, date('n', $start),
                             date('j', $start) + (7 - (strftime('%u', $start) - 1))
-                            - ((strftime('%u', $start) <= mb_substr($r_rule['wdays'], -1)) ? 7 : 0),
+                            - ((strftime('%u', $start) <= substr($r_rule['wdays'], -1)) ? 7 : 0),
                             date('Y', $start));
 
                     if ($r_rule['count']) {
-                        $set_start_wday = false;
-                        $wdays = array(0);
-                        for ($i = 0; $i < mb_strlen($r_rule['wdays']); $i++) {
-                            $wdays[] = $r_rule['wdays']{$i};
-                            if (!$set_start_wday && intval($r_rule['wdays']{$i}) >= intval(strftime('%u', $start))) {
-                                $start_wday = $r_rule['wdays']{$i};
-                                $set_start_wday = true;
+                        $dt_ts = DateTime::createFromFormat('U', $ts);
+
+                        // max. length of selected week days must not exceed
+                        // number of recurrences
+                        $r_rule['wdays'] = substr($r_rule['wdays'], 0, $r_rule['count']);
+                        
+                        $start_wday = date('N', $start);
+                        $count_first_week = 0;
+                        for ($i = 0; $i < strlen($r_rule['wdays']); $i++) {
+                            if ($r_rule['wdays']{$i} >= $start_wday) {
+                                $count_first_week++;
                             }
                         }
-                        if (intval(strftime('%u', $start)) > intval(mb_substr($r_rule['wdays'], -1))) {
-                            $start_wday = $r_rule['wdays']{0};
-                        }
-                        $expire_ts = $ts + ((($r_rule['count'] % (count($wdays) - 1)) >= 1) ? (($start_wday - 1) * 86400) : 0)
-                                + floor($r_rule['count'] / (count($wdays) - 1)) * 604800 * $r_rule['linterval'];
+                        
+                        $count_first_week += (date('N', $start) < $r_rule['wdays']{0}) ? 1 : 0;
+                        
+                        $count_complete = $r_rule['count'] - $count_first_week;
+                        $weeks_max = floor($count_complete / strlen($r_rule['wdays']));
 
+                        $dt_expire = $dt_ts->add(new DateInterval('P' . ($weeks_max + 1) . 'W'));
+                        $count_last_week = $count_complete % strlen($r_rule['wdays']);
+                        if ($count_last_week) {
+                            $last_wday = $r_rule['wdays']{$count_last_week - 1};
+                            $dt_expire = $dt_expire->add(new DateInterval('P' . ($last_wday - 1) . 'D'));
+                        } else {
+                            $dt_expire = $dt_expire->sub(new DateInterval('P1D'));
+                        }
+                        
+                        $expire_ts = $dt_expire->format('U');
                         $r_rule['expire'] = mktime(23, 59, 59, date('n', $expire_ts),
                                 date('j', $expire_ts), date('Y', $expire_ts));
                     }
