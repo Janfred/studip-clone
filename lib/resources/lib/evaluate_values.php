@@ -1777,7 +1777,11 @@ if (Request::submitted('save_state')) {
                 //create msg's
                 if ($good_msg) {
                     $GLOBALS['messageForUsers'] = $good_msg;
-                    $course_link = '<a href="'.URLHelper::getLink('dispatch.php/course/timesrooms', array('cid' => $semObj->getId())).'">'.$semObj->getName().'</a>';
+                    $course_link = sprintf(
+                        '<a href="%s">%s</a>',
+                        URLHelper::getLink('dispatch.php/course/timesrooms', ['cid' => $semObj->getId()]),
+                        htmlReady($semObj->getName())
+                    );
                     $msg->addMsg(33, array($course_link, $good_msg));
                 }
                 if ($bad_msg)
