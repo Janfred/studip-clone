@@ -16,7 +16,7 @@
 require_once __DIR__ . '/studip_cli_env.inc.php';
 require_once 'app/models/calendar/Calendar.php';
 
-$events = EventData::findBySQL("event_id = 'eefcf7b9b7b0f8c9e34ef9a521fee248' AND rtype = 'WEEKLY' AND IFNULL(count, 0) > 0");
+$events = EventData::findBySQL("rtype = 'WEEKLY' AND IFNULL(count, 0) > 0");
 $cal_event = new CalendarEvent();
 $i = 0;
 foreach ($events as $event) {
