@@ -14,7 +14,8 @@ class Course_OverviewController extends AuthenticatedController
 {
     protected $allow_nobody = true;
 
-    function before_filter(&$action, &$args) {
+    public function before_filter(&$action, &$args)
+    {
         global $SEM_TYPE, $SEM_CLASS;
 
         parent::before_filter($action, $args);
@@ -26,62 +27,113 @@ class Course_OverviewController extends AuthenticatedController
         }
         $this->course_id = $this->course->id;
 
-        PageLayout::setHelpKeyword("Basis.InVeranstaltungKurzinfo");
-        PageLayout::setTitle(Context::getHeaderLine(). " - " . _("Kurzinfo"));
+        PageLayout::setHelpKeyword('Basis.InVeranstaltungKurzinfo');
+        PageLayout::setTitle(Context::getHeaderLine() . ' - ' . _('Kurzinfo'));
         Navigation::activateItem('/course/main/info');
         // add skip link
         SkipLinks::addIndex(Navigation::getItem('/course/main/info')->getTitle(), 'main_content', 100);
 
 
-        $this->sem = Seminar::getInstance($this->course_id);
-        $sem_class = $this->sem->getSemClass();
-        $this->studygroup_mode = $sem_class["studygroup_mode"];
-
+        $this->sem             = Seminar::getInstance($this->course_id);
+        $sem_class             = $this->sem->getSemClass();
+        $this->studygroup_mode = $sem_class['studygroup_mode'];
     }
 
     /**
      * This method is called to show the form to upload a new avatar for a
      * course.
-     *
      * @return void
      */
-    function index_action()
+    public function index_action()
     {
-        // nothing to do
-        if ($this->studygroup_mode) {
-            $this->avatar = StudygroupAvatar::getAvatar($this->course_id);
-        } else {
-            $this->avatar = CourseAvatar::getAvatar($this->course_id);
-        }
-
-        if (get_config('NEWS_RSS_EXPORT_ENABLE') && $this->course_id){
+        if (Config::get()->NEWS_RSS_EXPORT_ENABLE && $this->course_id) {
             $rss_id = StudipNews::GetRssIdFromRangeId($this->course_id);
             if ($rss_id) {
-                PageLayout::addHeadElement('link', array('rel'   => 'alternate',
-                                                         'type'  => 'application/rss+xml',
-                                                         'title' => 'RSS',
-                                                         'href'  => 'rss.php?id='.$rss_id));
+                PageLayout::addHeadElement('link', ['rel'   => 'alternate',
+                                                    'type'  => 'application/rss+xml',
+                                                    'title' => 'RSS',
+                                                    'href'  => 'rss.php?id=' . $rss_id]);
             }
         }
 
         // Fetch news
-        $response = $this->relay('news/display/' . $this->course_id);
+        $response   = $this->relay('news/display/' . $this->course_id);
         $this->news = $response->body;
 
         // Fetch  votes
-        if (get_config('VOTE_ENABLE')) {
-            $response = $this->relay('evaluation/display/' . $this->course_id);
-            $this->evaluations = $response->body;
-
-            $response = $this->relay('questionnaire/widget/' . $this->course_id);
+        if (Config::get()->VOTE_ENABLE) {
+            $response             = $this->relay('evaluation/display/' . $this->course_id);
+            $this->evaluations    = $response->body;
+            $response             = $this->relay('questionnaire/widget/' . $this->course_id);
             $this->questionnaires = $response->body;
         }
 
-        // Fetch dates
+
         if (!$this->studygroup_mode) {
-            $response = $this->relay("calendar/contentbox/display/{$this->course_id}/1210000");
-            $this->dates = $response->body;
+            $this->avatar = CourseAvatar::getAvatar($this->course_id);
+            // Fetch dates
+            $response          = $this->relay("calendar/contentbox/display/{$this->course_id}/1210000");
+            $this->dates       = $response->body;
+            $this->next_date   = $this->sem->getNextDate();
+            $this->first_date  = $this->sem->getFirstDate();
+            $show_link         = ($GLOBALS["perm"]->have_studip_perm('autor', $this->course_id) && $this->modules['schedule']);
+            $this->times_rooms = $this->sem->getDatesTemplate('dates/seminar_html', ['link_to_dates' => $show_link, 'show_room' => true]);
+
+            // Fettch teachers
+            $dozenten      = $this->sem->getMembers('dozent');
+            $num_dozenten  = count($dozenten);
+            $show_dozenten = [];
+            foreach ($dozenten as $dozent) {
+                $show_dozenten[] = '<a href="' . URLHelper::getLink('dispatch.php/profile', ['username' => $dozent['username']]) . '">'
+                    . htmlready($num_dozenten > 10 ? get_fullname($dozent['user_id'], 'no_title_short') : $dozent['fullname'])
+                    . '</a>';
+            }
+            $this->show_dozenten = $show_dozenten;
+
+            // Check lock rules
+            if (!$GLOBALS["perm"]->have_studip_perm('dozent', $this->course_id)) {
+                $rule = AuxLockRules::getLockRuleBySemId($this->course_id);
+                if (isset($rule)) {
+                    $show = false;
+                    foreach ((array)$rule['attributes'] as $val) {
+                        if ($val == 1) {
+                            // Es gibt also Zusatzangaben. Nun noch überprüfen ob der Nutzer diese Angaben schon gemacht hat...
+                            $query     = "SELECT 1
+                                      FROM datafields
+                                      LEFT JOIN datafields_entries USING (datafield_id)
+                                      WHERE object_type = 'usersemdata' AND sec_range_id = ? AND range_id = ?";
+                            $statement = DBManager::get()->prepare($query);
+                            $statement->execute([$this->course_id, $GLOBALS['user']->id]);
+                            if (!$statement->fetchColumn()) {
+                                $show = true;
+                            }
+                            break;
+                        }
+                    }
+
+                    if ($show) {
+                        PageLayout::postInfo(
+                            _("Sie haben noch nicht die für diese Veranstaltung benötigten Zusatzinformationen eingetragen."),
+                            [
+                                sprintf(
+                                    _('Um das nachzuholen, gehen Sie unter "Teilnehmende" auf "Zusatzangaben" oder %1$s direkt zu den Zusatzangaben. %2$s'),
+                                    '<a href="' . URLHelper::getLink('dispatch.php/course/members/additional_input') . '">',
+                                    '</a>'
+                                )
+                            ]
+                        );
+                    }
+                }
+            }
+        } else {
+            $this->all_mods = $this->sem->getMembers('dozent') + $this->sem->getMembers('tutor');
+            $this->avatar   = StudygroupAvatar::getAvatar($this->course_id);
         }
+
+        $this->plugins = PluginEngine::getPlugins('StandardPlugin', $this->course_id);
+
+        $sidebar = Sidebar::get();
+        $sidebar->setImage('sidebar/seminar-sidebar.png');
     }
 
 }
