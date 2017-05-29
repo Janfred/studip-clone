@@ -9,7 +9,7 @@ use Studip\Button, Studip\LinkButton;
     <?= MessageBox::info($flash['info']) ?>
 <? endif ?>
 
-<form action="<?= $controller->url_for('admin/specification/store' . (($rule) ? '/' . $rule['lock_id'] : '')) ?>"
+<form action="<?= $controller->url_for('admin/specification/store' . ($rule ? '/' . $rule['lock_id'] : '')) ?>"
       method="post" class="default">
     <?= CSRFProtection::tokenTag() ?>
     <fieldset>
@@ -39,8 +39,11 @@ use Studip\Button, Studip\LinkButton;
                 <?= _('Zusatzinformationen') ?>
             </legend>
             <? foreach ($entries_semdata as $id => $entry) : ?>
-                <?= $this->render_partial('admin/specification/_field',
-                        array_merge(compact('rule'), ['id' => $entry->datafield_id, 'name' => $entry->name], ['required' => true])) ?>
+                <?= $this->render_partial('admin/specification/_field', array_merge(
+                    compact('rule'),
+                    ['id' => $entry->datafield_id, 'name' => $entry->name],
+                    ['required' => true]
+                )) ?>
             <? endforeach ?>
         </fieldset>
     <? endif ?>
@@ -71,7 +74,7 @@ use Studip\Button, Studip\LinkButton;
         <? if ($rule) : ?>
             <?= Button::createAccept(_('Übernehmen'), 'uebernehmen', ['title' => _('Änderungen übernehmen')]) ?>
         <? else : ?>
-            <?= Button::create(_('Erstellen'), 'erstellen', ['title' => _('Neue Regel erstellen')]) ?>
+            <?= Button::createAccept(_('Erstellen'), 'erstellen', ['title' => _('Neue Regel erstellen')]) ?>
         <? endif ?>
         <?= LinkButton::createCancel(_('Abbrechen'), $controller->url_for('admin/specification'), ['title' => _('Zurück zur Übersicht')]) ?>
     </footer>

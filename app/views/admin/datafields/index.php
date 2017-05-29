@@ -150,19 +150,17 @@
             <td><?= count($val) ?></td>
             <td class="actions">
                 <? $actionMenu = ActionMenu::get() ?>
-                <?
-                $actionMenu->addLink(
-                        $controller->url_for('admin/datafields/edit/' . $val->id),
-                        _('Datenfeld ändern'),
-                        Icon::create('edit', 'clickable', ['title' => _('Datenfeld ändern')]),
-                        ['data-dialog' => 'size=auto']
-                );
-                $actionMenu->addLink(
-                        $controller->url_for('admin/datafields/delete/' . $val->id),
-                        _('Datenfeld löschen'),
-                        Icon::create('trash', 'clickable', ['title' => _('Datenfeld löschen')])
-                );
-                ?>
+                <? $actionMenu->addLink(
+                    $controller->url_for('admin/datafields/edit/' . $val->id),
+                    _('Datenfeld ändern'),
+                    Icon::create('edit', 'clickable', ['title' => _('Datenfeld ändern')]),
+                    ['data-dialog' => 'size=auto']
+                ) ?>
+                <? $actionMenu->addLink(
+                    $controller->url_for('admin/datafields/delete/' . $val->id),
+                    _('Datenfeld löschen'),
+                    Icon::create('trash', 'clickable', ['title' => _('Datenfeld löschen')])
+                ) ?>
                 <?= $actionMenu->render() ?>
             </td>
         </tr>

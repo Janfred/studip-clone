@@ -1,104 +1,110 @@
-<tr id="questionnaire_<?= $questionnaire->getId() ?>">
+<tr id="questionnaire_<?= $questionnaire->id ?>">
     <td>
-        <a href="<?= URLHelper::getLink("dispatch.php/questionnaire/evaluate/".$questionnaire->getId()) ?>" data-dialog>
+        <a href="<?= $controller->link_for('questionnaire/evaluate/' . $questionnaire->id) ?>" data-dialog>
             <?= htmlReady($questionnaire['title']) ?>
         </a>
         <span>
-            <?
+        <?
             $icons = [];
             foreach ($questionnaire->questions as $question) {
                 $class = get_class($question);
                 $icons[$class] = $class::getIcon();
             }
             foreach ($icons as $class => $icon) {
-                echo $icon->asImg(20, ['class' => "text-bottom", 'title' => $class::getName()]);
+                echo $icon->asImg(20, ['class' => 'text-bottom', 'title' => $class::getName()]);
             }
-            ?>
+        ?>
         </span>
     </td>
     <td>
-        <?= $questionnaire['startdate'] ? date("d.m.Y H:i", $questionnaire['startdate']) : _("händisch") ?>
+    <? if ($questionnaire['startdate']): ?>
+        <?= date('d.m.Y H:i', $questionnaire['startdate']) ?>
+    <? else: ?>
+        <?= _('händisch') ?>
+    <? endif; ?>
     </td>
     <td>
-        <?= $questionnaire['stopdate'] ? date("d.m.Y H:i", $questionnaire['stopdate']) : _("händisch") ?>
+    <? if ($questionnaire['stopdate']): ?>
+        <?= date('d.m.Y H:i', $questionnaire['stopdate']) ?>
+    <? else: ?>
+        <?= _('händisch') ?>
+    <? endif; ?>
     </td>
     <td class="context">
-        <? if (count($questionnaire->assignments)) : ?>
-            <ul class="clean">
-                <? foreach ($questionnaire->assignments as $assignment) : ?>
-                    <li>
-                        <? if ($assignment['range_id'] === "start") : ?>
-                            <?= _("Stud.IP Startseite")?>
-                        <? endif ?>
-                        <? if ($assignment['range_id'] === "public") : ?>
-                            <?= _("Öffentlich per Link")?>
-                        <? endif ?>
-                        <? if ($assignment['range_type'] === "user") : ?>
-                            <?= _("Profilseite")?>
-                        <? endif ?>
-                        <? if ($assignment['range_type'] === "course") : ?>
-                            <?= htmlReady(Course::find($assignment['range_id'])->name) ?>
-                        <? endif ?>
-                        <? if ($assignment['range_type'] === "institute") : ?>
-                            <?= htmlReady(Institute::find($assignment['range_id'])->name) ?>
-                        <? endif ?>
-                    </li>
-                <? endforeach ?>
-            </ul>
-        <? else : ?>
-            <?= _("Nirgendwo") ?>
-        <? endif ?>
+    <? if (count($questionnaire->assignments) > 0) : ?>
+        <ul class="clean">
+        <? foreach ($questionnaire->assignments as $assignment) : ?>
+            <li>
+            <? if ($assignment['range_id'] === 'start') : ?>
+                <?= _('Stud.IP Startseite')?>
+            <? elseif ($assignment['range_id'] === 'public') : ?>
+                <?= _('Öffentlich per Link')?>
+            <? endif ?>
+
+            <? if ($assignment['range_type'] === 'user') : ?>
+                <?= _('Profilseite')?>
+            <? elseif ($assignment['range_type'] === 'course') : ?>
+                <?= htmlReady(Course::find($assignment['range_id'])->name) ?>
+            <? elseif ($assignment['range_type'] === 'institute') : ?>
+                <?= htmlReady(Institute::find($assignment['range_id'])->name) ?>
+            <? endif ?>
+            </li>
+        <? endforeach ?>
+        </ul>
+    <? else : ?>
+        <?= _('Nirgendwo') ?>
+    <? endif ?>
     </td>
     <td>
         <? $countedAnswers = $questionnaire->countAnswers() ?>
         <?= htmlReady($countedAnswers) ?>
     </td>
     <td class="actions">
-        <? if ($questionnaire->isRunning() && $countedAnswers) : ?>
-            <?= Icon::create("edit", "inactive")->asimg("20px", array('title' => _("Der Fragebogen wurde gestartet und kann nicht mehr bearbeitet werden."))) ?>
-        <? else : ?>
-            <a href="<?= URLHelper::getLink("dispatch.php/questionnaire/edit/".$questionnaire->getId()) ?>" data-dialog title="<?= _("Fragebogen bearbeiten") ?>">
-                <?= Icon::create("edit", "clickable")->asimg("20px", array()) ?>
-            </a>
-        <? endif ?>
-        <a href="<?= URLHelper::getLink("dispatch.php/questionnaire/context/".$questionnaire->getId()) ?>" data-dialog title="<?= _("Zuweisungen bearbeiten") ?>">
-            <?= Icon::create("group2", "clickable")->asimg("20px", array()) ?>
+    <? if ($questionnaire->isRunning() && $countedAnswers) : ?>
+        <?= Icon::create('edit', 'inactive')->asImg(20, ['title' => _('Der Fragebogen wurde gestartet und kann nicht mehr bearbeitet werden.')]) ?>
+    <? else : ?>
+        <a href="<?= $controller->link_for('questionnaire/edit/' . $questionnaire->id) ?>" data-dialog title="<?= _('Fragebogen bearbeiten') ?>">
+            <?= Icon::create('edit', 'clickable')->asImg(20) ?>
+        </a>
+    <? endif ?>
+        <a href="<?= $controller->link_for('questionnaire/context/' . $questionnaire->id) ?>" data-dialog title="<?= _('Zuweisungen bearbeiten') ?>">
+            <?= Icon::create('group2', 'clickable')->asImg(20) ?>
         </a>
 
         <?
         $menu = ActionMenu::get();
         if ($questionnaire->isRunning()) {
             $menu->addLink(
-                URLHelper::getLink("dispatch.php/questionnaire/stop/".$questionnaire->getId(), in_array($range_type, ['course', 'institute']) ? ['redirect' => "questionnaire/courseoverview"] : []),
-                _("Fragebogen beenden"),
-                Icon::create("pause", "clickable")
+                $controller->link_for('questionnaire/stop/' . $questionnaire->id, in_array($range_type, ['course', 'institute']) ? ['redirect' => 'questionnaire/courseoverview'] : []),
+                _('Fragebogen beenden'),
+                Icon::create('pause', 'clickable')
             );
         } else {
             $menu->addLink(
-                URLHelper::getLink("dispatch.php/questionnaire/start/".$questionnaire->getId(), in_array($range_type, ['course', 'institute']) ? ['redirect' => "questionnaire/courseoverview"] : []),
-                _("Fragebogen starten"),
-                Icon::create("play", "clickable")
+                $controller->link_for('questionnaire/start/'  .$questionnaire->id, in_array($range_type, ['course', 'institute']) ? ['redirect' => 'questionnaire/courseoverview'] : []),
+                _('Fragebogen starten'),
+                Icon::create('play', 'clickable')
             );
         }
         $menu->addLink(
-            URLHelper::getLink("dispatch.php/questionnaire/evaluate/".$questionnaire->getId()),
-            _("Auswertung"),
-            Icon::create("stat", "clickable"),
-            array('data-dialog' => 1)
+            $controller->link_for('questionnaire/evaluate/'  .$questionnaire->id),
+            _('Auswertung'),
+            Icon::create('stat', 'clickable'),
+            ['data-dialog' => '']
         );
         $menu->addLink(
-            URLHelper::getLink("dispatch.php/questionnaire/export/".$questionnaire->getId()),
-            _("Export als CSV"),
-            Icon::create("file-excel", "clickable"),
-            array('data-dialog' => 1)
+            $controller->link_for('questionnaire/export/'  .$questionnaire->id),
+            _('Export als CSV'),
+            Icon::create('file-excel', 'clickable'),
+            ['data-dialog' => '']
         );
         $menu->addLink(
-            URLHelper::getLink("dispatch.php/questionnaire/delete/".$questionnaire->getId()),
-            _("Fragebogen löschen"),
-            Icon::create("trash", "clickable"),
-            array('onClick' => "return window.confirm('". _("Wirklich löschen?") . "');")
+            $controller->link_for('questionnaire/delete/'  .$questionnaire->id),
+            _('Fragebogen löschen'),
+            Icon::create('trash', 'clickable'),
+            ['data-confirm' => _('Wirklich löschen?')]
         );
-        echo $menu;
+        echo $menu->render();
         ?>
     </td>
 </tr>

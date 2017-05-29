@@ -100,9 +100,9 @@ class Course_RoomRequestsController extends AuthenticatedController
     public function edit_action()
     {
         Helpbar::get()->addPlainText(_('Information'), _('Hier können Sie Angaben zu gewünschten Raumeigenschaften machen.'));
-        
+
         $request_was_closed_before = false;
-        
+
         if (Request::option('new_room_request_type')) {
             $request = new RoomRequest();
             $request->seminar_id = $this->course_id;
@@ -131,7 +131,7 @@ class Course_RoomRequestsController extends AuthenticatedController
             if($request->user_id != $GLOBALS['user']->id) {
                 $request->last_modified_by = $GLOBALS['user']->id;
             }
-            
+
             $request_was_closed_before = $request->getClosed() > 0;
         }
 
@@ -154,7 +154,7 @@ class Course_RoomRequestsController extends AuthenticatedController
                     //(Fix for Biest #2794).
                     $request->user_id = $GLOBALS['user']->id;
                 }
-                
+
                 $this->request_stored = $request->store();
                 if ($this->request_stored) {
                     PageLayout::postMessage(MessageBox::success(_("Die Raumanfrage und gewünschte Raumeigenschaften wurden gespeichert")));
@@ -211,7 +211,7 @@ class Course_RoomRequestsController extends AuthenticatedController
                 $widget->addElement(new WidgetElement(_('Dies ist eine neue Raumanfrage.')));
             } else {
                 $info_txt = '';
-                if($request->user) {
+                if ($request->user) {
                     $info_txt .= '<p>' . sprintf(_('Erstellt von: %s'), htmlReady($request->user->getFullname())) . '</p>';
                 }
                 $info_txt .= '<p>' . sprintf(_('Erstellt am: %s'), htmlReady(strftime('%x %H:%M', $request->mkdate))) . '</p>';

@@ -1,4 +1,5 @@
 <? use Studip\Button, Studip\LinkButton; ?>
+
 <div id="edit_tour_step" class="edit_tour_step">
     <? if (Request::isXhr()) : ?>
         <? foreach (PageLayout::getMessages() as $msg) : ?>
@@ -29,10 +30,10 @@
             <label>
                 <span class="required"><?= _('Art:') ?></span>
                 <select name="step_interactive">
-                    <option value="0" <?= $step->interactive == 0 ? ' selected="selected"' : '' ?>>
+                    <option value="0" <? if (!$step->interactive) echo 'selected'; ?>>
                         <?= _('Geführt') ?>
                     </option>
-                    <option value="1" <?= $step->interactive == 1 ? ' selected="selected"' : '' ?>>
+                    <option value="1" <? if ($step->interactive) echo ' selected'; ?>>
                         <?= _('Interaktiv') ?>
                     </option>
                 </select>
@@ -57,90 +58,139 @@
 
             <? endif ?>
         </fieldset>
-        <? if ($step->css_selector) : ?>
-            <fieldset>
-                <legend><?= _('Orientierung:') ?></legend>
-                <div class="tour_step_orientation"
-                     style="<?= $step->css_selector ? 'display: block' : 'display: none' ?>">
-                    <table>
-                        <tr>
-                            <td></td>
-                            <td><input type="radio" name="step_orientation"
-                                       value="TL" <?= ($step->orientation == 'TL') ? 'checked' : '' ?>><?= _('oben (links)') ?>
-                            </td>
-                            <td><input type="radio" name="step_orientation"
-                                       value="T" <?= ($step->orientation == 'T') ? 'checked' : '' ?>><?= _('oben') ?>
-                            </td>
-                            <td><input type="radio" name="step_orientation"
-                                       value="TR" <?= ($step->orientation == 'TR') ? 'checked' : '' ?>><?= _('oben (rechts)') ?>
-                            </td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td><input type="radio" name="step_orientation"
-                                       value="LT" <?= ($step->orientation == 'LT') ? 'checked' : '' ?>><?= _('links (oben)') ?>
-                            </td>
-                            <td colspan="3"></td>
-                            <td><input type="radio" name="step_orientation"
-                                       value="RT" <?= ($step->orientation == 'RT') ? 'checked' : '' ?>><?= _('rechts (oben)') ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><input type="radio" name="step_orientation"
-                                       value="L" <?= ($step->orientation == 'L') ? 'checked' : '' ?>><?= _('links') ?>
-                            </td>
-                            <td colspan="3" style="text-align: center"><?= _('Selektiertes Element') ?></td>
-                            <td><input type="radio" name="step_orientation"
-                                       value="R" <?= ($step->orientation == 'R') ? 'checked' : '' ?>><?= _('rechts') ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><input type="radio" name="step_orientation"
-                                       value="RB" <?= ($step->orientation == 'RB') ? 'checked' : '' ?>><?= _('links (unten)') ?>
-                            </td>
-                            <td colspan="3"></td>
-                            <td><input type="radio" name="step_orientation"
-                                       value="LB" <?= ($step->orientation == 'LB') ? 'checked' : '' ?>><?= _('rechts (unten)') ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td><input type="radio" name="step_orientation"
-                                       value="BL" <?= ($step->orientation == 'BL') ? 'checked' : '' ?>><?= _('unten (links)') ?>
-                            </td>
-                            <td><input type="radio" name="step_orientation"
-                                       value="B" <?= ($step->orientation == 'B') ? 'checked' : '' ?>><?= _('unten') ?>
-                            </td>
-                            <td><input type="radio" name="step_orientation"
-                                       value="BR" <?= ($step->orientation == 'BR') ? 'checked' : '' ?>><?= _('unten (rechts)') ?>
-                            </td>
-                            <td></td>
-                        </tr>
-                    </table>
-                </div>
-            </fieldset>
-        <? endif ?>
+    <? if ($step->css_selector) : ?>
+        <fieldset>
+            <legend><?= _('Orientierung:') ?></legend>
+            <div class="tour_step_orientation">
+                <table>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <label>
+                                <input type="radio" name="step_orientation"
+                                       value="TL" <? if ($step->orientation === 'TL') echo 'checked'; ?>>
+                                <?= _('oben (links)') ?>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input type="radio" name="step_orientation"
+                                       value="T" <? if ($step->orientation === 'T') echo 'checked'; ?>>
+                                <?= _('oben') ?>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input type="radio" name="step_orientation"
+                                       value="TR" <? if ($step->orientation === 'TR') echo 'checked'; ?>>
+                                <?= _('oben (rechts)') ?>
+                            </label>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>
+                                <input type="radio" name="step_orientation"
+                                       value="LT" <? if ($step->orientation === 'LT') echo 'checked'; ?>>
+                                <?= _('links (oben)') ?>
+                            </label>
+                        </td>
+                        <td colspan="3"></td>
+                        <td>
+                            <label>
+                                <input type="radio" name="step_orientation"
+                                       value="RT" <? if ($step->orientation === 'RT') echo 'checked'; ?>>
+                                <?= _('rechts (oben)') ?>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>
+                                <input type="radio" name="step_orientation"
+                                       value="L" <? if ($step->orientation === 'L') echo 'checked'; ?>>
+                                <?= _('links') ?>
+                            </label>
+                        </td>
+                        <td colspan="3" style="text-align: center"><?= _('Selektiertes Element') ?></td>
+                        <td>
+                            <label>
+                                <input type="radio" name="step_orientation"
+                                       value="R" <? if ($step->orientation === 'R') echo 'checked'; ?>>
+                                <?= _('rechts') ?>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>
+                                <input type="radio" name="step_orientation"
+                                       value="RB" <? if ($step->orientation === 'RB') echo 'checked'; ?>>
+                                <?= _('links (unten)') ?>
+                            </label>
+                        </td>
+                        <td colspan="3"></td>
+                        <td>
+                            <label>
+                                <input type="radio" name="step_orientation"
+                                       value="LB" <? if ($step->orientation === 'LB') echo 'checked'; ?>>
+                                <?= _('rechts (unten)') ?>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <label>
+                                <input type="radio" name="step_orientation"
+                                       value="BL" <? if ($step->orientation === 'BL') echo 'checked'; ?>>
+                                <?= _('unten (links)') ?>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input type="radio" name="step_orientation"
+                                       value="B" <? if ($step->orientation === 'B') echo 'checked'; ?>>
+                                <?= _('unten') ?>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input type="radio" name="step_orientation"
+                                       value="BR" <? if ($step->orientation === 'BR') echo 'checked'; ?>>
+                                <?= _('unten (rechts)') ?>
+                            </label>
+                        </td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        </fieldset>
+    <? endif ?>
+
         <footer data-dialog-button>
-            <?= CSRFProtection::tokenTag() ?>
-            <? if ($via_ajax): ?>
-                <?= Button::create(_('Speichern'), 'confirm', ['data-dialog' => '1', 'data-dialog-button' => '1']) ?>
-            <? else: ?>
-                <?= Button::createAccept(_('Speichern'), 'submit') ?>
-                <?= LinkButton::createCancel(_('Abbrechen'), $controller->url_for('tour/admin_overview'), []) ?>
-            <? endif; ?>
+        <? if ($via_ajax): ?>
+            <?= Button::createAccept(_('Speichern'), 'confirm', ['data-dialog' => '']) ?>
+        <? else: ?>
+            <?= Button::createAccept(_('Speichern'), 'submit') ?>
+        <? endif; ?>
+            <?= LinkButton::createCancel(_('Abbrechen'), $controller->url_for('tour/admin_overview'), []) ?>
         </footer>
     </form>
 </div>
+
 <script>
-    jQuery(document).on('change', 'input[name=step_css]', function (event) {
-        if (jQuery('input[name=step_css]').val())
-            jQuery('.tour_step_orientation').show();
-        else
-            jQuery('.tour_step_orientation').hide();
+jQuery(function ($) {
+    $('input[name=step_css]').change(function () {
+        if ($('input[name=step_css]').val()) {
+            $('.tour_step_orientation').show();
+        } else {
+            $('.tour_step_orientation').hide();
+        }
     });
     if (STUDIP.Tour.started) {
-        jQuery('#tour_controls').hide();
-        jQuery('#tour_tip').hide();
-        jQuery('#selector_overlay').hide();
+        $('#tour_controls, #tour_tip, #selector_overlay').hide();
     }
+});
 </script>

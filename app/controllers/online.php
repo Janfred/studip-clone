@@ -21,7 +21,7 @@ class OnlineController extends AuthenticatedController
      * @param String $action Which action shall be invoked
      * @param Array $args Arguments passed to the action method
      */
-    function before_filter(&$action, &$args)
+    public function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
 
@@ -49,7 +49,6 @@ class OnlineController extends AuthenticatedController
      **/
     public function index_action()
     {
-
         $this->contact_count = Contact::countBySQL('owner_id=?', array(User::findCurrent()->id)); // Total number of contacts
 
         $this->users           = $this->getOnlineUsers($this->settings['show_groups']);
@@ -69,13 +68,17 @@ class OnlineController extends AuthenticatedController
         if ($this->contact_count > 0) {
             $actions = new OptionsWidget();
 
-            $actions->addCheckbox(_('Nur Kontakte in der Übersicht der aktiven Benutzer anzeigen'),
-                                  $this->settings['show_only_buddys'],
-                                  $this->url_for('online/config/show_buddies/' . get_ticket()));
+            $actions->addCheckbox(
+                _('Nur Kontakte in der Übersicht der aktiven Benutzer anzeigen'),
+                $this->settings['show_only_buddys'],
+                $this->url_for('online/config/show_buddies/' . get_ticket())
+            );
 
-            $actions->addCheckbox(_('Kontaktgruppen bei der Darstellung berücksichtigen'),
-                                  $this->settings['show_groups'],
-                                  $this->url_for('online/config/show_groups/' . get_ticket()));
+            $actions->addCheckbox(
+                _('Kontaktgruppen bei der Darstellung berücksichtigen'),
+                $this->settings['show_groups'],
+                $this->url_for('online/config/show_groups/' . get_ticket())
+            );
 
             $sidebar->addWidget($actions);
         }
@@ -95,16 +98,17 @@ class OnlineController extends AuthenticatedController
         $username = Request::username('username');
 
         if ($action === 'add' && $username !== null) {
-            if (Contact::import(array(
+            if (Contact::import([
                 'owner_id' => User::findCurrent()->id,
-                'user_id' => User::findByUsername($username)->id)
-                    )->store()) {
-                PageLayout::postMessage(MessageBox::success(_('Der Benutzer wurde zu Ihren Kontakten hinzugefügt.')));
+                'user_id' => User::findByUsername($username)->id,
+            ])->store())
+            {
+                PageLayout::postSuccess(_('Der Benutzer wurde zu Ihren Kontakten hinzugefügt.'));
             }
         } elseif ($action === 'remove' && $username !== null) {
-            $contact = Contact::find(array(User::findCurrent()->id, User::findByUsername($username)->id));
+            $contact = Contact::find([User::findCurrent()->id, User::findByUsername($username)->id]);
             if ($contact && $contact->delete()) {
-                PageLayout::postMessage(MessageBox::success(_('Der Benutzer gehört nicht mehr zu Ihren Kontakten.')));
+                PageLayout::postSuccess(_('Der Benutzer gehört nicht mehr zu Ihren Kontakten.'));
             }
         }
         $this->redirect('online');

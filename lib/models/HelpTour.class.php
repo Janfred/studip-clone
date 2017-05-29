@@ -44,7 +44,35 @@ require_once 'lib/object.inc.php';
  * @property SimpleORMapCollection audiences has_many HelpTourAudience
  * @property HelpTourSettings settings has_one HelpTourSettings
  */
-class HelpTour extends SimpleORMap {
+class HelpTour extends SimpleORMap
+{
+    /**
+     *
+     */
+    protected static function configure($config = array())
+    {
+        $config['db_table'] = 'help_tours';
+        $config['has_one']['settings'] = [
+            'class_name'        => 'HelpTourSettings',
+            'assoc_foreign_key' => 'tour_id',
+            'on_delete'         => 'delete',
+            'on_store'          => 'store',
+        ];
+        $config['has_many']['steps'] = [
+            'class_name'        => 'HelpTourStep',
+            'assoc_foreign_key' => 'tour_id',
+            'on_delete'         => 'delete',
+            'on_store'          => 'store',
+        ];
+        $config['has_many']['audiences'] = [
+            'class_name'        => 'HelpTourAudience',
+            'assoc_foreign_key' => 'tour_id',
+            'on_delete'         => 'delete',
+            'on_store'          => 'store',
+        ];
+
+        parent::configure($config);
+    }
 
     /**
      * get visible tours for helpbar
@@ -57,14 +85,14 @@ class HelpTour extends SimpleORMap {
         $route = get_route();
         $tours = HelpTour::getToursByRoute($route);
         foreach($tours as $index => $tour) {
-            if ($tour->isVisible() AND ($tour->settings->access != 'link')) {
+            if ($tour->isVisible() && ($tour->settings->access !== 'link')) {
                 $visible_tours[$index] = $tour;
-                if ((($tour->settings->access == 'autostart') OR ($tour->settings->access == 'autostart_once')) AND ! $GLOBALS['user']->cfg->TOUR_AUTOSTART_DISABLE) {
+                if (in_array($tour->settings->access, ['autostart', 'autostart_once']) && !$GLOBALS['user']->cfg->TOUR_AUTOSTART_DISABLE) {
                     $user_visit = new HelpTourUser(array($tour->tour_id, $GLOBALS['user']->user_id));
-                    if (($tour->settings->access == 'autostart_once') AND $user_visit->isNew()) {
+                    if ($tour->settings->access === 'autostart_once' && $user_visit->isNew()) {
                         $active_tour_id = $tour->tour_id;
                         $active_tour_step_nr = 1;
-                    } elseif (($tour->settings->access == 'autostart') AND ! $user_visit->completed) {
+                    } elseif ($tour->settings->access === 'autostart' && !$user_visit->completed) {
                         $active_tour_id = $tour->tour_id;
                         $active_tour_step_nr = 1;
                     }
@@ -72,21 +100,28 @@ class HelpTour extends SimpleORMap {
             }
         }
         //if there is an active tour, initialize it
-        if ($_SESSION['active_tour']['tour_id'] AND
-                (($_SESSION['active_tour']['last_route'] == $route) OR
-                ($_SESSION['active_tour']['next_route'] == $route))) {
+        if ($_SESSION['active_tour']['tour_id']
+            && ($_SESSION['active_tour']['last_route'] === $route
+                || $_SESSION['active_tour']['next_route'] === $route))
+        {
             $active_tour = new HelpTour($_SESSION['active_tour']['tour_id']);
             $step_nr = $_SESSION['active_tour']['step_nr'];
-            if (! ($_SESSION['active_tour']['last_route'] == $route) AND ($_SESSION['active_tour']['next_route'] == $route))
-                while ($_SESSION['active_tour']['last_route'] == $active_tour->steps[$step_nr-1]->route)
-                    $step_nr++;
-            if ($route == $active_tour->steps[$step_nr-1]->route) {
+            if ($_SESSION['active_tour']['last_route'] !== $route && $_SESSION['active_tour']['next_route'] === $route) {
+                while ($_SESSION['active_tour']['last_route'] === $active_tour->steps[$step_nr - 1]->route) {
+                    $step_nr += 1;
+                }
+            }
+            if ($route === $active_tour->steps[$step_nr - 1]->route) {
                 $_SESSION['active_tour']['step_nr'] = $step_nr;
                 $active_tour_id = $_SESSION['active_tour']['tour_id'];
                 $active_tour_step_nr = $step_nr;
             }
         }
-        return array('tours' => $visible_tours, 'active_tour_id' => $active_tour_id, 'active_tour_step_nr' => $active_tour_step_nr);
+        return [
+            'tours'               => $visible_tours,
+            'active_tour_id'      => $active_tour_id,
+            'active_tour_step_nr' => $active_tour_step_nr,
+        ];
     }
 
     /**
@@ -107,7 +142,7 @@ class HelpTour extends SimpleORMap {
                   WHERE route = ? AND step = 1
                   ORDER BY name ASC";
         $statement = DBManager::get()->prepare($query);
-        $statement->execute(array($route));
+        $statement->execute([$route]);
         $ret = $statement->fetchGrouped(PDO::FETCH_ASSOC);
 
         return HelpTour::GetTourObjects($ret);
@@ -122,15 +157,15 @@ class HelpTour extends SimpleORMap {
      */
     public static function GetToursByFilter($term = '')
     {
-        $params = array();
+        $params = [];
         $condition = '';
         if (mb_strlen(trim($term)) >= 3) {
-            $condition =  "WHERE name LIKE CONCAT('%', ?, '%')";
+            $condition = "WHERE name LIKE CONCAT('%', ?, '%')";
             $params[] = $term;
         }
         $query = "SELECT tour_id AS idx, help_tours.*
                   FROM help_tours
-                  $condition
+                  {$condition}
                   ORDER BY name ASC";
         $statement = DBManager::get()->prepare($query);
         $statement->execute($params);
@@ -146,7 +181,7 @@ class HelpTour extends SimpleORMap {
      */
     public static function GetConflicts()
     {
-        $conflicts = array();
+        $conflicts = [];
         $query = "SELECT tour_id AS idx, help_tours.*
                   FROM help_tours
                   WHERE installation_id = ?
@@ -157,12 +192,21 @@ class HelpTour extends SimpleORMap {
         foreach ($ret as $index => $data) {
             $query = "SELECT tour_id AS idx, help_tours.*
                       FROM help_tours
-                      WHERE global_tour_id = ? AND language = ? AND studip_version >= ? AND installation_id <> ?
-                      ORDER BY studip_version DESC LIMIT 1";
+                      WHERE global_tour_id = ?
+                        AND language = ?
+                        AND studip_version >= ?
+                        AND installation_id <> ?
+                      ORDER BY studip_version DESC
+                      LIMIT 1";
             $statement = DBManager::get()->prepare($query);
-            $statement->execute(array($data['global_tour_id'], $data['language'], $data['studip_version'], $GLOBALS['STUDIP_INSTALLATION_ID']));
+            $statement->execute([
+                $data['global_tour_id'],
+                $data['language'],
+                $data['studip_version'],
+                $GLOBALS['STUDIP_INSTALLATION_ID'],
+            ]);
             $ret2 = $statement->fetchGrouped(PDO::FETCH_ASSOC);
-            if (count($ret2)) {
+            if (count($ret2) > 0) {
                 $conflicts[] = HelpTour::GetTourObjects(array_merge(array($index => $data), $ret2));
             }
         }
@@ -177,7 +221,7 @@ class HelpTour extends SimpleORMap {
      */
     public static function GetTourObjects($tour_result)
     {
-        $objects = array();
+        $objects = [];
         if (is_array($tour_result)){
             foreach($tour_result as $id => $result){
                 $objects[$id] = new HelpTour();
@@ -189,47 +233,26 @@ class HelpTour extends SimpleORMap {
     }
 
     /**
-     *
-     */
-    protected static function configure($config = array())
-    {
-        $config['db_table'] = 'help_tours';
-        $config['has_one']['settings'] = array(
-            'class_name' => 'HelpTourSettings',
-            'assoc_foreign_key' => 'tour_id',
-            'on_delete' => 'delete',
-            'on_store' => 'store',
-        );
-        $config['has_many']['steps'] = array(
-            'class_name' => 'HelpTourStep',
-            'assoc_foreign_key' => 'tour_id',
-            'on_delete' => 'delete',
-            'on_store' => 'store',
-        );
-        $config['has_many']['audiences'] = array(
-            'class_name' => 'HelpTourAudience',
-            'assoc_foreign_key' => 'tour_id',
-            'on_delete' => 'delete',
-            'on_store' => 'store',
-        );
-
-        parent::configure($config);
-    }
-
-    /**
      * checks if tour is visible for current user
      */
-    function isVisible() {
-        if (!$this->settings->active)
+    public function isVisible()
+    {
+        if (!$this->settings->active) {
             return false;
+        }
+
         $language = mb_substr($GLOBALS['user']->preferred_language, 0, 2);
-        if (!$language)
+        if (!$language) {
             $language = 'de';
-        if ($language != $this->language)
+        }
+        if ($language !== $this->language) {
             return false;
+        }
+
         $current_role = User::findCurrent() ? User::findCurrent()->perms : 'nobody';
-        if ((mb_strpos($this->roles, $current_role) === false))
+        if (mb_strpos($this->roles, $current_role) === false) {
             return false;
+        }
         foreach ($this->audiences as $audience) {
             switch ($audience->type) {
                 case 'inst':
@@ -253,22 +276,27 @@ class HelpTour extends SimpleORMap {
                     $field_name = 'userdomain_id';
                 break;
             }
-            if ($audience->range_id AND $table_name) {
-                $query = 'SELECT * FROM '.$table_name.' WHERE user_id = ? AND '.$field_name.' = ?';
-                $items = array($GLOBALS['user']->user_id, $audience->range_id);
+            if ($audience->range_id && $table_name) {
+                $query = "SELECT *
+                          FROM {$table_name}
+                          WHERE user_id = ?
+                            AND {$field_name} = ?";
+                $items = [$GLOBALS['user']->user_id, $audience->range_id];
                 $statement = DBManager::get()->prepare($query);
                 $statement->execute($items);
                 $ret = $statement->fetchOne(PDO::FETCH_ASSOC);
-                if (!count($ret))
+                if (!count($ret)) {
                     return false;
+                }
             } elseif ($table_name) {
-                $query = 'SELECT * FROM '.$table_name.' WHERE user_id = ?';
-                $items = array($GLOBALS['user']->user_id);
+                $query = "SELECT * FROM {$table_name} WHERE user_id = ?";
+                $items = [$GLOBALS['user']->user_id];
                 $statement = DBManager::get()->prepare($query);
                 $statement->execute($items);
                 $ret = $statement->fetchOne(PDO::FETCH_ASSOC);
-                if (count($ret))
+                if (count($ret)) {
                     return false;
+                }
             }
         }
         return true;
@@ -277,48 +305,53 @@ class HelpTour extends SimpleORMap {
     /**
      * adds step to the tour and rearranges existing steps
      */
-    function addStep($data, $position = 0) {
+    public function addStep($data, $position = 0)
+    {
         $step = new HelpTourStep();
         $step->setData($data, true);
-        if ($position)
+        if ($position) {
             $step->step = $position;
-        else
+        } else {
             $step->step = count($this->steps) + 1;
+        }
         $step->tour_id = $this->tour_id;
         if ($step->validate()) {
-            if ($position AND ($position <= count($this->steps))) {
-                $query = "UPDATE help_tour_steps 
-                          SET step = step+1 
-                          WHERE tour_id = ? AND step >= ? 
+            if ($position && $position <= count($this->steps)) {
+                $query = "UPDATE help_tour_steps
+                          SET step = step + 1
+                          WHERE tour_id = ? AND step >= ?
                           ORDER BY step DESC";
                 $statement = DBManager::get()->prepare($query);
-                $statement->execute(array($this->tour_id, $position));
+                $statement->execute([$this->tour_id, $position]);
             }
             $step->store();
             $this->restore();
             return true;
         }
+
         return false;
     }
 
     /**
      * deletes step and rearranges existing steps
      */
-    function deleteStep($position = 0) {
-        if (!$position OR (count($this->steps) < 2)) {
-            PageLayout::postMessage(MessageBox::error(_('Löschen nicht möglich. Die Tour muss mindestens einen Schritt enthalten.')));
+    public function deleteStep($position = 0)
+    {
+        if (!$position || count($this->steps) < 2) {
+            PageLayout::postError(_('Löschen nicht möglich. Die Tour muss mindestens einen Schritt enthalten.'));
             return false;
         }
-        $query = "DELETE FROM help_tour_steps 
+        $query = "DELETE FROM help_tour_steps
                   WHERE tour_id = ? AND step = ?";
         $statement = DBManager::get()->prepare($query);
-        $statement->execute(array($this->tour_id, $position));
-        $query = "UPDATE help_tour_steps 
-                  SET step = step-1 
-                  WHERE tour_id = ? AND step > ? 
+        $statement->execute([$this->tour_id, $position]);
+
+        $query = "UPDATE help_tour_steps
+                  SET step = step - 1
+                  WHERE tour_id = ? AND step > ?
                   ORDER BY step ASC";
         $statement = DBManager::get()->prepare($query);
-        $statement->execute(array($this->tour_id, $position));
+        $statement->execute([$this->tour_id, $position]);
         $this->restore();
         return true;
     }
@@ -328,24 +361,25 @@ class HelpTour extends SimpleORMap {
      *
      * @return boolean true or false
      */
-    function validate() {
-        if (!$this->name OR !$this->description) {
-            PageLayout::postMessage(MessageBox::error(_('Die Tour muss einen Namen und eine Beschreibung haben.')));
+    public function validate()
+    {
+        if (!$this->name || !$this->description) {
+            PageLayout::postError(_('Die Tour muss einen Namen und eine Beschreibung haben.'));
             return false;
         }
         if (!$this->type) {
-            PageLayout::postMessage(MessageBox::error(_('Ungültige oder fehlende Angabe zur Art der Tour.')));
+            PageLayout::postError(_('Ungültige oder fehlende Angabe zur Art der Tour.'));
             return false;
         }
         if (!$this->roles) {
-            PageLayout::postMessage(MessageBox::error(_('Angabe des Nutzendenstatus fehlt.')));
+            PageLayout::postError(_('Angabe des Nutzendenstatus fehlt.'));
             return false;
         }
         if (!$this->version) {
             $this->version = 1;
         }
-        if (! $this->isNew() AND ! count($this->steps)) {
-            PageLayout::postMessage(MessageBox::error(_('Die Tour muss mindestens einen Schritt enthalten.')));
+        if (!$this->isNew() && count($this->steps) === 0) {
+            PageLayout::postError(_('Die Tour muss mindestens einen Schritt enthalten.'));
             return false;
         }
         return true;

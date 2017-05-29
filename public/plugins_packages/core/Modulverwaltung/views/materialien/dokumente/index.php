@@ -40,41 +40,45 @@
                             <?= $dokument->count_zuordnungen ?>
                         </td>
                         <td style="white-space: nowrap;" class="dont-hide actions">
-                            <? $actionMenu = ActionMenu::get() ?>
+                        <? $actionMenu = ActionMenu::get() ?>
+                        <? $actionMenu->addLink(
+                            $controller->url_for('shared/log_event/show', $dokument->id),
+                            _('Log-Einträge dieses Dokumentes'),
+                            Icon::create('log', 'clickable', ['title' => _('Log-Einträge dieses Dokumentes')]),
+                            ['data-dialog' => 'size=auto']
+                        ) ?>
+                        <? if ($perm->havePermWrite()) : ?>
                             <? $actionMenu->addLink(
-                                    $controller->url_for('shared/log_event/show', $dokument->id),
-                                    _('Log-Einträge dieses Dokumentes'),
-                                    Icon::create('log', 'clickable', ['title' => _('Log-Einträge dieses Dokumentes')]),
-                                    ['data-dialog' => 'size=auto'])
-                            ?>
-                            <? if ($perm->havePermWrite()) : ?>
-                                <? $actionMenu->addLink(
-                                        $controller->url_for('/dokument/' . $dokument->id),
-                                        _('Dokument bearbeiten'),
-                                        Icon::create('edit', 'clickable', ['title' => _('Dokument bearbeiten')]))
-                                ?>
-                            <? endif; ?>
-                            <? if ($perm->havePermCreate()) : ?>
-                                <?
-                                if ($relations = $dokument->getCountRelations()) {
-                                    $msg = sprintf(_('Wollen Sie das Dokument "%s" wirklich löschen?')
-                                                   . ' '
-                                                   . ngettext('Dieses Dokument wird von einem Objekt referenziert.',
-                                                    'Dieses Dokument wird von %s Objekten referenziert.', $relations),
-                                            $dokument->name, $relations);
-                                } else {
-                                    $msg = sprintf(_('Wollen Sie das Dokument "%s" wirklich löschen?'), $dokument->name);
-                                } ?>
-                                <? $actionMenu->addButton(
-                                        'delete_file',
-                                        _('Dokument löschen'),
-                                        Icon::create('trash', 'clickable',
-                                                ['title'        => _('Dokument löschen'),
-                                                 'formaction'   => $controller->url_for('/delete/' . $dokument->id),
-                                                 'data-confirm' => $msg]))
-                                ?>
-                            <? endif; ?>
-                            <?= $actionMenu->render() ?>
+                                $controller->url_for('/dokument/' . $dokument->id),
+                                _('Dokument bearbeiten'),
+                                Icon::create('edit', 'clickable', ['title' => _('Dokument bearbeiten')])
+                            ) ?>
+                        <? endif; ?>
+                        <? if ($perm->havePermCreate()) : ?>
+                            <? if ($relations = $dokument->getCountRelations()) {
+                                $msg = sprintf(
+                                    _('Wollen Sie das Dokument "%s" wirklich löschen?')
+                                    . ' '
+                                    . ngettext(
+                                        'Dieses Dokument wird von einem Objekt referenziert.',
+                                        'Dieses Dokument wird von %s Objekten referenziert.',
+                                        $relations
+                                    ),
+                                    $dokument->name,
+                                    $relations
+                                );
+                            } else {
+                                $msg = sprintf(_('Wollen Sie das Dokument "%s" wirklich löschen?'), $dokument->name);
+                            } ?>
+                            <? $actionMenu->addButton(
+                                'delete_file',
+                                _('Dokument löschen'),
+                                Icon::create('trash', 'clickable', ['title' => _('Dokument löschen')]),
+                                ['formaction'   => $controller->url_for('/delete/' . $dokument->id),
+                                 'data-confirm' => $msg]
+                            ) ?>
+                        <? endif; ?>
+                        <?= $actionMenu->render() ?>
                         </td>
                     </tr>
                     <? if ($dokument_id == $dokument->getId()) : ?>

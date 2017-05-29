@@ -65,7 +65,6 @@ class Admin_PluginController extends AuthenticatedController
         if (!check_ticket(Request::option('studip_ticket'))) {
             throw new InvalidArgumentException(_('Das Ticket für diese Aktion ist ungültig.'));
         }
-
     }
 
     /**
@@ -361,10 +360,10 @@ class Admin_PluginController extends AuthenticatedController
      */
     public function manifest_action($plugin_id)
     {
-
         $plugin_manager = PluginManager::getInstance();
         $plugin = $plugin_manager->getPluginInfoById($plugin_id);
         PageLayout::setTitle(sprintf(_('Details von %s'), $plugin['name']));
+
         // retrieve manifest
         $pluginpath = Config::get()->PLUGINS_PATH . '/' . $plugin['path'];
         $manifest = $plugin_manager->getPluginManifest($pluginpath);

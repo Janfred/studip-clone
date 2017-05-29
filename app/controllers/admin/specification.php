@@ -23,28 +23,27 @@ class Admin_SpecificationController extends AuthenticatedController
     public function before_filter(&$action, &$args)
     {
         global $perm;
-        
+
         parent::before_filter($action, $args);
-        
+
         # user must have special permission
-        if (!$perm->have_perm(Config::get()->AUX_RULE_ADMIN_PERM ? Config::get()->AUX_RULE_ADMIN_PERM : 'admin')) {
+        if (!$perm->have_perm(Config::get()->AUX_RULE_ADMIN_PERM ?: 'admin')) {
             throw new AccessDeniedException(_('Keine Berechtigung.'));
         }
-        
+
         //setting title and navigation
         Navigation::activateItem('/admin/config/specification');
         PageLayout::setTitle(_('Verwaltung von Zusatzangaben'));
     }
-    
+
     /**
      * Maintenance view for the specification parameters
-     *
      */
     public function index_action()
     {
         $this->allrules = AuxLockRules::getAllLockRules();
     }
-    
+
     /**
      * Edit or create a rule
      *
@@ -58,15 +57,19 @@ class Admin_SpecificationController extends AuthenticatedController
         $this->semFields       = AuxLockRules::getSemFields();
         $this->entries_user    = DataField::getDataFields($user_field);
         $this->entries_semdata = DataField::getDataFields($semdata_field);
-        $this->rule            = (is_null($id)) ? false : AuxLockRules::getLockRuleByID($id);
-        
+        $this->rule            = is_null($id) ? false : AuxLockRules::getLockRuleByID($id);
+
         if ($GLOBALS['perm']->have_perm('root') && count($this->entries_semdata) == 0) {
-            PageLayout::postWarning(sprintf(_('Sie müssen zuerst im Bereich %sDatenfelder%s in der Kategorie '
-                                              . '<i>Datenfelder für Personenzusatzangaben in Veranstaltungen</i> einen neuen Eintrag erstellen.'),
-                '<a href="' . URLHelper::getLink('dispatch.php/admin/datafields') . '">', '</a>'));
+            PageLayout::postWarning(sprintf(
+                _('Sie müssen zuerst im Bereich %sDatenfelder%s in der Kategorie '
+                . '<em>Datenfelder für Personenzusatzangaben in Veranstaltungen</em> '
+                . 'einen neuen Eintrag erstellen.'),
+                '<a href="' . URLHelper::getLink('dispatch.php/admin/datafields') . '">',
+                '</a>'
+            ));
         }
     }
-    
+
     /**
      * Store or edit Rule
      * @param string $id
@@ -74,30 +77,34 @@ class Admin_SpecificationController extends AuthenticatedController
     public function store_action($id = '')
     {
         CSRFProtection::verifyRequest();
+
         $errors = [];
         if (!Request::get('rulename')) {
-            array_push($errors, _('Bitte geben Sie der Regel mindestens einen Namen!'));
+            $errors[] = _('Bitte geben Sie der Regel mindestens einen Namen!');
         }
         if (!AuxLockRules::checkLockRule(Request::getArray('fields'))) {
-            array_push($errors, _('Bitte wählen Sie mindestens ein Feld aus der Kategorie "Zusatzinformationen" aus!'));
+            $errors[] = _('Bitte wählen Sie mindestens ein Feld aus der Kategorie "Zusatzinformationen" aus!');
         }
-        
+
         if (empty($errors)) {
-            //new
-            if ($id == '') {
+            if (!$id) {
+                //new
                 AuxLockRules::createLockRule(Request::get('rulename'), Request::get('description'), Request::getArray('fields'), Request::getArray('order'));
-                //edit
             } else {
+                //edit
                 AuxLockRules::updateLockRule($id, Request::get('rulename'), Request::get('description'), Request::getArray('fields'), Request::getArray('order'));
             }
-            PageLayout::postSuccess(sprintf(_('Die Regel "%s" wurde erfolgreich gespeichert!'), htmlReady(Request::get('rulename'))));
+            PageLayout::postSuccess(sprintf(
+                _('Die Regel "%s" wurde erfolgreich gespeichert!'),
+                htmlReady(Request::get('rulename'))
+            ));
         } else {
             PageLayout::postError(_('Ihre Eingaben sind ungültig.'), $errors);
         }
-        
+
         $this->redirect('admin/specification');
     }
-    
+
     /**
      * Delete a rule, using a modal dialog
      *
@@ -111,7 +118,7 @@ class Admin_SpecificationController extends AuthenticatedController
         } else {
             PageLayout::postError(_('Es können nur nicht verwendete Regeln gelöscht werden!'));
         }
-        
+
         $this->redirect('admin/specification');
     }
 }

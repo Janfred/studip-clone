@@ -15,18 +15,18 @@ $room_request_filter = function ($date) {
     <? if(!$locked) : ?>
         <? $actionMenu = ActionMenu::get()?>
         <? $actionMenu->addLink(
-                $controller->link_for('course/timesrooms/createSingleDate/' . $course->id, $linkAttributes),
-                _('Einzeltermin hinzufügen'),
-                Icon::create('date+add', 'clickable', ['title' => _('Einzeltermin hinzufügen')]),
-                ['data-dialog' => 'size=600'])
-        ?>
+            $controller->link_for('course/timesrooms/createSingleDate/' . $course->id, $linkAttributes),
+            _('Einzeltermin hinzufügen'),
+            Icon::create('date+add', 'clickable', ['title' => _('Einzeltermin hinzufügen')]),
+            ['data-dialog' => 'size=600']
+        ) ?>
 
         <? $actionMenu->addLink(
-                $controller->url_for('course/block_appointments/index/' . $course->id, $linkAttributes),
-                _('Blocktermin hinzufügen'),
-                Icon::create('timetable+add', 'clickable', ['title' => _('Blocktermin hinzufügen')]),
-                ['data-dialog' => 'size=600'])
-        ?>
+            $controller->url_for('course/block_appointments/index/' . $course->id, $linkAttributes),
+            _('Blocktermin hinzufügen'),
+            Icon::create('timetable+add', 'clickable', ['title' => _('Blocktermin hinzufügen')]),
+            ['data-dialog' => 'size=600']
+        ) ?>
         <?= $actionMenu->render() ?>
     <? endif ?>
     </header>
@@ -77,10 +77,10 @@ $room_request_filter = function ($date) {
 
                     <tbody>
                     <? foreach ($termine as $termin): ?>
-                        <?= $this->render_partial('course/timesrooms/_cycleRow.php', array(
-                                'termin'    => $termin,
-                                'class_ids' => 'ids-irregular',
-                        )) ?>
+                        <?= $this->render_partial('course/timesrooms/_cycleRow.php', [
+                            'termin'    => $termin,
+                            'class_ids' => 'ids-irregular',
+                        ]) ?>
                     <? endforeach; ?>
                     </tbody>
                 </table>
@@ -110,10 +110,10 @@ $room_request_filter = function ($date) {
                         <select name="method" class="datesBulkActions actionForAllIrregular">
                             <?= $this->render_partial('course/timesrooms/_stack_actions.php') ?>
                         </select>
-                        <?= Studip\Button::create(_('Ausführen'), 'run', array(
-                                'class' => 'actionForAllIrregular',
-                                'data-dialog' => 'size=big',
-                        )) ?>
+                        <?= Studip\Button::create( _('Ausführen'), 'run', [
+                            'class' => 'actionForAllIrregular',
+                            'data-dialog' => 'size=big',
+                        ]) ?>
                     </td>
                 </tr>
             </tfoot>

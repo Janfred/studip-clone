@@ -29,45 +29,45 @@
                         <? endif; ?>
                     </td>
                     <td class="dont-hide actions" style="white-space: nowrap;">
-                        <? $actionMenu = ActionMenu::get() ?>
-                        <? if (MvvPerm::havePermCreate('Lvgruppe') && $perm->haveFieldPermLvgruppen(MvvPerm::PERM_CREATE)) : ?>
-                            <? $actionMenu->addLink(
-                                    $controller->url_for('/new_lvgruppe/' . $modulteil->id),
-                                    _('Neue LV-Gruppe anlegen'),
-                                    Icon::create('file+add', 'clickable', ['title' => _('Neue LV-Gruppe anlegen')]),
-                                    ['data-dialog' => 'size=auto',
-                                     'title'       => _('Neue LV-Gruppe anlegen')])
-                            ?>
-                        <? endif; ?>
-                        <? if ($perm->havePermWrite()) : ?>
-                            <? $actionMenu->addLink(
-                                    $controller->url_for('/modulteil/' . $modulteil->id),
-                                    _('Modulteil bearbeiten'),
-                                    Icon::create('edit', 'clickable', ['title' => _('Modulteil bearbeiten')]))
-                            ?>
-                        <? endif; ?>
-                        <? if ($perm->havePermCreate()) : ?>
-                            <? $actionMenu->addLink(
-                                    $controller->url_for('/copy_modulteil/' . $modulteil->id),
-                                    _('Modulteil kopieren'),
-                                    Icon::create('files', 'clickable', ['title' => _('Modulteil kopieren')]))
-                            ?>
-                        <? endif; ?>
-                        <? if ($perm->havePermCreate()) : ?>
-                                <? $actionMenu->addLink(
-                                        $controller->url_for('/delete_modulteil/' . $modulteil->id),
-                                        _('Modulteil löschen'),
-                                        Icon::create('trash', 'clickable', ['title' => _('Modulteil löschen')]))
-                                ?>
-                        <? endif; ?>
-                        <?= $actionMenu->render() ?>
+                    <? $actionMenu = ActionMenu::get() ?>
+                    <? if (MvvPerm::havePermCreate('Lvgruppe') && $perm->haveFieldPermLvgruppen(MvvPerm::PERM_CREATE)) : ?>
+                        <? $actionMenu->addLink(
+                            $controller->url_for('/new_lvgruppe/' . $modulteil->id),
+                            _('Neue LV-Gruppe anlegen'),
+                            Icon::create('file+add', 'clickable', ['title' => _('Neue LV-Gruppe anlegen')]),
+                            ['data-dialog' => 'size=auto',
+                             'title'       => _('Neue LV-Gruppe anlegen')]
+                        ) ?>
+                    <? endif; ?>
+                    <? if ($perm->havePermWrite()) : ?>
+                        <? $actionMenu->addLink(
+                            $controller->url_for('/modulteil/' . $modulteil->id),
+                            _('Modulteil bearbeiten'),
+                            Icon::create('edit', 'clickable', ['title' => _('Modulteil bearbeiten')])
+                        ) ?>
+                    <? endif; ?>
+                    <? if ($perm->havePermCreate()) : ?>
+                        <? $actionMenu->addLink(
+                            $controller->url_for('/copy_modulteil/' . $modulteil->id),
+                            _('Modulteil kopieren'),
+                            Icon::create('files', 'clickable', ['title' => _('Modulteil kopieren')])
+                        ) ?>
+                    <? endif; ?>
+                    <? if ($perm->havePermCreate()) : ?>
+                        <? $actionMenu->addLink(
+                            $controller->url_for('/delete_modulteil/' . $modulteil->id),
+                            _('Modulteil löschen'),
+                            Icon::create('trash', 'clickable', ['title' => _('Modulteil löschen')])
+                        ) ?>
+                    <? endif; ?>
+                    <?= $actionMenu->render() ?>
                     </td>
                 </tr>
-                <? if (count($modulteil->lvgruppen) && $modulteil_id == $modulteil->id) : ?>
-                    <tr class="loaded-details nohover">
-                        <?= $this->render_partial('module/module/modulteil_lvg', compact('modulteil')) ?>
-                    </tr>
-                <? endif; ?>
+            <? if (count($modulteil->lvgruppen) && $modulteil_id == $modulteil->id) : ?>
+                <tr class="loaded-details nohover">
+                    <?= $this->render_partial('module/module/modulteil_lvg', compact('modulteil')) ?>
+                </tr>
+            <? endif; ?>
             </tbody>
         <? endforeach; ?>
     </table>

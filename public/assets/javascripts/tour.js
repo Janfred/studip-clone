@@ -9,7 +9,7 @@
  * @description Studip Tour
  *
  * Parts of this script are a modified version of:
- * 
+ *
  * jQuery aSimpleTour
  * @author alvaro.veliz@gmail.com
  * @servedby perkins (http://p.erkins.com)
@@ -38,7 +38,7 @@ STUDIP.Tour = {
                 'dataType': 'json',
                 'success': function (json) {
                     jQuery(document).trigger('tourstart.studip');
-                    
+
                     STUDIP.Tour.pending_ajax_request = false;
                     STUDIP.Tour.options = json;
                     if (STUDIP.Tour.options.redirect) {
@@ -121,11 +121,11 @@ STUDIP.Tour = {
         }
         jQuery('#tour_controls').show();
     },
-    
+
     next : function () {
         STUDIP.Tour.direction = 'f';
         STUDIP.Tour.step++;
- 
+
         if (STUDIP.Tour.step >= STUDIP.Tour.steps) {
             if (STUDIP.Tour.options.proceed_link) {
                 window.location.href = STUDIP.URLHelper.getURL(STUDIP.Tour.options.proceed_link);
@@ -170,7 +170,7 @@ STUDIP.Tour = {
             }
             tip_id = 'tour_tip_interactive';
         }
-        jQuery('#tour_title').html(STUDIP.Tour.options.tour_title + 
+        jQuery('#tour_title').html(STUDIP.Tour.options.tour_title +
             ' (' + (parseInt(STUDIP.Tour.options.route_step_nr, 10) + STUDIP.Tour.step) +
             '/' + STUDIP.Tour.options.step_count + ')');
         if (stepData.controlsPosition) {
@@ -192,7 +192,7 @@ STUDIP.Tour = {
         var position = STUDIP.Tour.getControlPosition(pos);
         jQuery('#tour_controls').css(position);
     },
-    
+
     setTooltipPosition : function (pos, element, tip_id) {
         jQuery('.tourArrow').remove();
         if (element && ! jQuery(element).length) {
@@ -324,7 +324,7 @@ STUDIP.Tour = {
         STUDIP.Tour.step = -1;
         STUDIP.Tour.started = false;
     },
-    
+
     setSelectorOverlay : function () {
         if (jQuery(STUDIP.Tour.options.data[STUDIP.Tour.step].element).length) {
             jQuery('#tour_selector_overlay').css({
@@ -338,7 +338,7 @@ STUDIP.Tour = {
             jQuery('#tour_selector_overlay').hide();
         }
     },
-    
+
     getSelector : function (target) {
         var element = jQuery(target).prop("tagName");
         if (jQuery(target).attr('id')) {
@@ -430,7 +430,7 @@ STUDIP.Tour = {
             });
         }
     },
-    
+
     saveStepPosition : function (tour_id, step_nr, element, mode) {
         mode = typeof mode !== 'undefined' ? mode : 'save_position';
         STUDIP.Tour.options.data[STUDIP.Tour.step].element = element;
@@ -450,7 +450,7 @@ STUDIP.Tour = {
             });
         }
     },
-    
+
     startEditor : function () {
         jQuery('#tour_editor').show();
         if (STUDIP.Tour.options.step_count > 1) {

@@ -6,7 +6,7 @@ $order  = Request::getArray('order');
 <label class="col-2">
 <? if ($required) : ?>
 <span class="required">
-    <? endif ?>
+<? endif ?>
     <?= htmlReady($name) ?>
 <? if ($required) : ?>
     </span>

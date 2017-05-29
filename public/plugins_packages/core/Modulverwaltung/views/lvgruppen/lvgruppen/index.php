@@ -30,32 +30,32 @@
                 <td style="text-align: center;" class="dont-hide"><?= $lvgruppe->count_archiv ?> </td>
                 <td style="text-align: center;" class="dont-hide"><?= $lvgruppe->count_modulteile ?> </td>
                 <td class="dont-hide actions" style="white-space: nowrap;">
-                    <? $actionMenu = ActionMenu::get() ?>
-                    <? if (MvvPerm::get($lvgruppe)->havePermWrite()) : ?>
-                        <? $actionMenu->addLink(
-                                $controller->url_for('/lvgruppe/' . $lvgruppe->id),
-                                _('Lehrveranstaltungsgruppe bearbeiten'),
-                                Icon::create('edit', 'clickable', ['title' => _('Lehrveranstaltungsgruppe bearbeiten')]),
-                                ['data-dialog' => 'size=auto'])
-                        ?>
+                <? $actionMenu = ActionMenu::get() ?>
+                <? if (MvvPerm::get($lvgruppe)->havePermWrite()) : ?>
+                    <? $actionMenu->addLink(
+                        $controller->url_for('/lvgruppe/' . $lvgruppe->id),
+                        _('Lehrveranstaltungsgruppe bearbeiten'),
+                        Icon::create('edit', 'clickable', ['title' => _('Lehrveranstaltungsgruppe bearbeiten')]),
+                        ['data-dialog' => 'size=auto']
+                    ) ?>
 
+                    <? $actionMenu->addLink(
+                        $controller->url_for('shared/log_event/show/Lvgruppe/' . $lvgruppe->id),
+                        _('Log-Einträge dieser Lehrveranstaltungsgruppe'),
+                        Icon::create('log', 'clickable', ['title' => _('Log-Einträge dieser Lehrveranstaltungsgruppe')]),
+                        ['data-dialog' => 'size=auto']
+                    ) ?>
+                <? endif; ?>
+                <? if (MvvPerm::get($lvgruppe)->havePermCreate()) : ?>
+                    <? if ($lvgruppe->count_semester == 0 && $lvgruppe->count_modulteile == 0): ?>
                         <? $actionMenu->addLink(
-                                $controller->url_for('shared/log_event/show/Lvgruppe/' . $lvgruppe->id),
-                                _('Log-Einträge dieser Lehrveranstaltungsgruppe'),
-                                Icon::create('log', 'clickable', ['title' => _('Log-Einträge dieser Lehrveranstaltungsgruppe')]),
-                                ['data-dialog' => 'size=auto'])
-                        ?>
+                            $controller->url_for('/delete', $lvgruppe->id),
+                            _('Lehrveranstaltungsgruppe löschen'),
+                            Icon::create('trash', 'clickable', ['title' => _('Lehrveranstaltungsgruppe löschen')])
+                        ) ?>
                     <? endif; ?>
-                    <? if (MvvPerm::get($lvgruppe)->havePermCreate()) : ?>
-                        <? if ($lvgruppe->count_semester == 0 && $lvgruppe->count_modulteile == 0): ?>
-                            <? $actionMenu->addLink(
-                                    $controller->url_for('/delete', $lvgruppe->id),
-                                    _('Lehrveranstaltungsgruppe löschen'),
-                                    Icon::create('trash', 'clickable', ['title' => _('Lehrveranstaltungsgruppe löschen')]))
-                            ?>
-                        <? endif; ?>
-                    <? endif; ?>
-                    <?= $actionMenu->render() ?>
+                <? endif; ?>
+                <?= $actionMenu->render() ?>
                 </td>
             </tr>
             <? if ($lvgruppe_id == $lvgruppe->id) : ?>
