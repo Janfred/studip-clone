@@ -23,9 +23,6 @@ require_once 'lib/object.inc.php';
 /**
  * StudipNews.class.php
  *
- *
- *
- *
  * @author   André Noack <noack@data-quest>, Suchi & Berg GmbH <info@data-quest.de>
  * @author   Arne Schröder <schroeder@data-quest>
  * @access   public
@@ -46,7 +43,30 @@ require_once 'lib/object.inc.php';
  * @property SimpleORMapCollection comments has_many StudipComment
  * @property User owner belongs_to User
  */
-class StudipNews extends SimpleORMap {
+class StudipNews extends SimpleORMap
+{
+    protected static function configure($config = array())
+    {
+        $config['db_table'] = 'news';
+        $config['has_many']['news_ranges'] = [
+            'class_name'        => 'NewsRange',
+            'assoc_foreign_key' => 'news_id',
+            'on_delete'         => 'delete',
+            'on_store'          => 'store',
+        ];
+        $config['has_many']['comments'] = [
+            'class_name'        => 'StudipComment',
+            'assoc_foreign_key' => 'object_id',
+            'on_delete'         => 'delete',
+            'on_store'          => 'store',
+        ];
+        $config['belongs_to']['owner'] = [
+            'class_name'  => 'User',
+            'foreign_key' => 'user_id',
+        ];
+
+        parent::configure($config);
+    }
 
     public static function GetNewsByRange($range_id, $only_visible = false, $as_objects = false)
     {
@@ -83,7 +103,6 @@ class StudipNews extends SimpleORMap {
 
     public static function GetNewsByAuthor($user_id, $as_objects = false)
     {
-        $ret = array();
         $query = "SELECT news_id AS idx, news.*
                   FROM news
                   WHERE user_id = ?
@@ -92,21 +111,23 @@ class StudipNews extends SimpleORMap {
         $statement->execute(array($user_id));
         $ret = $statement->fetchGrouped(PDO::FETCH_ASSOC);
 
-        return ($as_objects ? StudipNews::GetNewsObjects($ret) : $ret);
+        return $as_objects ? StudipNews::GetNewsObjects($ret) : $ret;
     }
 
-    public static function GetNewsByRSSId($rss_id, $as_objects = false){
+    public static function GetNewsByRSSId($rss_id, $as_objects = false)
+    {
         if ($user_id = StudipNews::GetUserIDFromRssID($rss_id)){
             return StudipNews::GetNewsByRange($user_id, true, $as_objects);
-        } else {
-            return array();
         }
+
+        return [];
     }
 
-    public static function GetNewsObjects($news_result){
-        $objects = array();
+    public static function GetNewsObjects($news_result)
+    {
+        $objects = [];
         if (is_array($news_result)){
-            foreach($news_result as $id => $result){
+            foreach ($news_result as $id => $result){
                 $objects[$id] = new StudipNews();
                 $objects[$id]->setData($result, true);
                 $objects[$id]->setNew(false);
@@ -228,16 +249,19 @@ class StudipNews extends SimpleORMap {
         return $objects;
     }
 
-    public static function GetUserIdFromRssID($rss_id){
+    public static function GetUserIdFromRssID($rss_id)
+    {
         $ret = StudipNews::GetRangeIdFromRssID($rss_id);
         return $ret['range_id'];
     }
 
-    public static function GetRssIdFromUserId($user_id){
+    public static function GetRssIdFromUserId($user_id)
+    {
         return StudipNews::GetRssIdFromRangeId($user_id);
     }
 
-    public static function GetRangeFromRssID($rss_id){
+    public static function GetRangeFromRssID($rss_id)
+    {
         if ($rss_id){
             $query = "SELECT range_id ,range_type
                       FROM news_rss_range
@@ -246,12 +270,15 @@ class StudipNews extends SimpleORMap {
             $statement->execute(array($rss_id));
             $ret = $statement->fetch(PDO::FETCH_ASSOC);
 
-            if (count($ret)) return $ret;
+            if (count($ret)) {
+                return $ret;
+            }
         }
         return false;
     }
 
-    public static function GetRangeIdFromRssID($rss_id){
+    public static function GetRangeIdFromRssID($rss_id)
+    {
         $ret = StudipNews::GetRangeFromRssID($rss_id);
         return $ret['range_id'];
     }
@@ -268,18 +295,20 @@ class StudipNews extends SimpleORMap {
     {
         if (!$type){
             $type = get_object_type($range_id);
-            if ($type == 'fak') $type = 'inst';
+            if ($type === 'fak') {
+                $type = 'inst';
+            }
         }
-        $rss_id = md5('StudipRss'.$range_id);
+        $rss_id = md5('StudipRss' . $range_id);
 
         $query = "REPLACE INTO news_rss_range (range_id,rss_id,range_type)
                   VALUES (?, ?, ?)";
         $statement = DBManager::get()->prepare($query);
-        $statement->execute(array(
+        $statement->execute([
             $range_id,
             $rss_id,
             $type
-        ));
+        ]);
         return $statement->rowCount();
     }
 
@@ -291,30 +320,48 @@ class StudipNews extends SimpleORMap {
         return $statement->rowCount();
     }
 
-    public static function GetAdminMsg($user_id, $date){
-        return sprintf(_("Zuletzt aktualisiert von %s (%s) am %s"),get_fullname($user_id) ,get_username($user_id) ,date("d.m.y",$date));
+    public static function GetAdminMsg($user_id, $date)
+    {
+        return sprintf(
+            _('Zuletzt aktualisiert von %s (%s) am %s'),
+            get_fullname($user_id),
+            get_username($user_id),
+            date('d.m.y', $date)
+        );
     }
 
-    public static function DoGarbageCollect(){
+    public static function DoGarbageCollect()
+    {
         $db = DBManager::get();
-        if (!Config::GetInstance()->getValue('NEWS_DISABLE_GARBAGE_COLLECT')){
-            $result = $db->query(
-                                "SELECT news.news_id FROM news where (date+expire)<UNIX_TIMESTAMP()
-                                UNION DISTINCT
-                                SELECT news_range.news_id FROM news_range LEFT JOIN news USING (news_id) WHERE ISNULL(news.news_id)
-                                UNION DISTINCT
-                                SELECT news.news_id FROM news LEFT JOIN news_range USING (news_id) WHERE range_id IS NULL"
-                                )->fetchAll(PDO::FETCH_COLUMN, 0);
+        if (!Config::get()->NEWS_DISABLE_GARBAGE_COLLECT) {
+            $query = "SELECT news.news_id
+                      FROM news
+                      WHERE date + expire < UNIX_TIMESTAMP()
+
+                      UNION DISTINCT
+
+                      SELECT news_range.news_id
+                      FROM news_range
+                      LEFT JOIN news USING (news_id)
+                      WHERE news.news_id IS NULL
+
+                      UNION DISTINCT
+
+                      SELECT news.news_id
+                      FROM news
+                      LEFT JOIN news_range USING (news_id)
+                      WHERE range_id IS NULL";
+            $result = $db->query($query)->fetchAll(PDO::FETCH_COLUMN);
 
             if (count($result) > 0) {
                 $query = "DELETE FROM news WHERE news_id IN (?)";
                 $statement = DBManager::get()->prepare($query);
-                $statement->execute(array($result));
+                $statement->execute([$result]);
                 $killed = $statement->rowCount();
 
                 $query = "DELETE FROM news_range WHERE news_id IN (?)";
                 $statement = DBManager::get()->prepare($query);
-                $statement->execute(array($result));
+                $statement->execute([$result]);
 
                 object_kill_visits(null, $result);
                 object_kill_views($result);
@@ -327,12 +374,15 @@ class StudipNews extends SimpleORMap {
     /**
      * DEPRECATED
      */
-    public static function TouchNews($news_id, $touch_stamp = null){
+    public static function TouchNews($news_id, $touch_stamp = null)
+    {
         $ret = false;
-        if(!$touch_stamp) $touch_stamp = time();
+        if (!$touch_stamp) {
+            $touch_stamp = time();
+        }
         $news = new StudipNews($news_id);
         if (!$news->isNew()) {
-            $news->setValue('date', mktime(0,0,0,strftime("%m",$touch_stamp),strftime("%d",$touch_stamp),strftime("%y",$touch_stamp)));
+            $news->date = strtotime('today 0:00:00', $touch_stamp);
             if (!$news->store()) {
                 $news->triggerChdate();
             }
@@ -340,54 +390,66 @@ class StudipNews extends SimpleORMap {
         return $ret;
     }
 
-    public static function DeleteNewsRanges($range_id){
-        $ret = DBManager::get()->exec("DELETE FROM news_range WHERE range_id='$range_id'");
+    public static function DeleteNewsRanges($range_id)
+    {
+        $query = "DELETE FROM news_range WHERE range_id = :id";
+        $statement = DBManager::get()->prepare($query);
+        $statement->bindValue(':id', $range_id);
+        $result = $statement->execute();
+
         StudipNews::DoGarbageCollect();
-        return $ret;
+
+        return $result;
     }
 
-    public static function DeleteNewsByAuthor($user_id){
-        foreach (StudipNews::GetNewsByAuthor($user_id, true) as $news){
+    public static function DeleteNewsByAuthor($user_id)
+    {
+        foreach (StudipNews::GetNewsByAuthor($user_id, true) as $news) {
             $deleted += $news->delete();
         }
         return $deleted;
     }
 
-    public static function haveRangePermission($operation, $range_id, $user_id = '') {
+    public static function haveRangePermission($operation, $range_id, $user_id = '')
+    {
         static $news_range_perm_cache;
-        if (isset($news_range_perm_cache[$user_id.$range_id.$operation]))
+        if (isset($news_range_perm_cache[$user_id.$range_id.$operation])) {
             return $news_range_perm_cache[$user_id.$range_id.$operation];
-        if (!$user_id)
-            $user_id = $GLOBALS['auth']->auth['uid'];
-        if ($GLOBALS['perm']->have_perm('root', $user_id))
+        }
+        if (!$user_id) {
+            $user_id = $GLOBALS['user']->id;
+        }
+        if ($GLOBALS['perm']->have_perm('root', $user_id)) {
             return $news_range_perm_cache[$user_id.$range_id.$operation] = true;
-        $type = get_object_type($range_id, array('global', 'sem', 'inst', 'fak', 'user'));
+        }
+
+        $type = get_object_type($range_id, ['global', 'sem', 'inst', 'fak', 'user']);
         switch($type) {
             case 'global':
-                if ($operation == 'view')
+                if ($operation === 'view')
                     return $news_range_perm_cache[$user_id.$range_id.$operation] = true;
                 break;
             case 'fak':
             case 'inst':
             case 'sem':
-                if ($operation == 'view'
-                    && ($type != 'sem'
+                if ($operation === 'view'
+                    && ($type !== 'sem'
                         || $GLOBALS['perm']->have_studip_perm('user', $range_id)
                         || (Config::get()->ENABLE_FREE_ACCESS && Seminar::getInstance($range_id)->read_level == 0)
                         )) {
                         return $news_range_perm_cache[$user_id.$range_id.$operation] = true;
                     }
-                if (($operation == 'edit') OR ($operation == 'copy')) {
+                if ($operation === 'edit' || $operation === 'copy') {
                     if ($GLOBALS['perm']->have_studip_perm('tutor', $range_id))
                         return $news_range_perm_cache[$user_id.$range_id.$operation] = true;
                 }
                 break;
             case 'user':
-                if ($operation == 'view') {
-                    if (($range_id == $user_id) OR get_visibility_by_id($range_id))
+                if ($operation === 'view') {
+                    if ($range_id === $user_id || get_visibility_by_id($range_id)) {
                         return $news_range_perm_cache[$user_id.$range_id.$operation] = true;
-                }
-                elseif (($operation == 'edit') OR ($operation == 'copy')) {
+                    }
+                } elseif ($operation === 'edit' || $operation == 'copy') {
                     if ($GLOBALS['perm']->have_profile_perm('user', $range_id))
                         return $news_range_perm_cache[$user_id.$range_id.$operation] = true;
                 }
@@ -396,44 +458,25 @@ class StudipNews extends SimpleORMap {
         return $news_range_perm_cache[$user_id.$range_id.$operation] = false;
     }
 
-    protected static function configure($config = array())
+    public function restoreRanges()
     {
-        $config['db_table'] = 'news';
-        $config['has_many']['news_ranges'] = array(
-            'class_name' => 'NewsRange',
-            'assoc_foreign_key' => 'news_id',
-            'on_delete' => 'delete',
-            'on_store' => 'store',
-        );
-        $config['has_many']['comments'] = array(
-            'class_name' => 'StudipComment',
-            'assoc_foreign_key' => 'object_id',
-            'on_delete' => 'delete',
-            'on_store' => 'store',
-        );
-        $config['belongs_to']['owner'] = array(
-            'class_name' => 'User',
-            'foreign_key' => 'user_id',
-        );
-
-        parent::configure($config);
-    }
-
-    function restoreRanges() {
         $this->resetRelation('news_ranges');
         return count($this->news_ranges);
     }
 
-    function getRanges() {
+    public function getRanges()
+    {
         $ranges = $this->news_ranges->pluck('range_id');
         return $ranges;
     }
 
-    function issetRange($range_id) {
+    public function issetRange($range_id)
+    {
         return array_search($range_id, $this->getRanges()) !== false;
     }
 
-    function addRange($range_id) {
+    public function addRange($range_id)
+    {
         if (!$this->issetRange($range_id)) {
             $range = new NewsRange(array($this->getId(), $range_id));
             if ($range->isNew()) {
@@ -442,25 +485,27 @@ class StudipNews extends SimpleORMap {
             }
             $this->news_ranges[] = $range;
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
-    function deleteRange($range_id) {
+    public function deleteRange($range_id)
+    {
         if ($this->issetRange($range_id)) {
             return $this->news_ranges->unsetBy('range_id', $range_id);
-        } else {
-            return false;
         }
+
+        return false;
     }
 
-    function storeRanges()
+    public function storeRanges()
     {
         $this->storeRelations();
     }
 
-    function delete() {
+    public function delete()
+    {
         object_kill_visits(null, $this->getId());
         object_kill_views($this->getId());
         return parent::delete();
@@ -476,40 +521,52 @@ class StudipNews extends SimpleORMap {
      *                                global $user's ID
      * @return boolean true or false
      */
-    function havePermission($operation, $check_range_id = '', $user_id = null) {
-        if (!$user_id)
-            $user_id = $GLOBALS['auth']->auth['uid'];
-        if (!in_array($operation, array('delete', 'unassign', 'edit', 'copy', 'view')))
+    public function havePermission($operation, $check_range_id = '', $user_id = null)
+    {
+        if (!$user_id) {
+            $user_id = $GLOBALS['user']->id;
+        }
+        if (!in_array($operation, ['delete', 'unassign', 'edit', 'copy', 'view'])) {
             return false;
+        }
+
         // in order to unassign, there must be more than one range assigned; $check_range_id must be specified.
-        if (($operation == 'unassign') AND (count($this->getRanges()) < 2))
+        if ($operation === 'unassign' && count($this->getRanges()) < 2) {
             return false;
+        }
         // root, owner, and owner's deputy have full permission
         if ($GLOBALS['perm']->have_perm('root', $user_id)
-              OR (($user_id == $this->user_id) AND $GLOBALS['perm']->have_perm('autor'))
-              OR (isDeputyEditAboutActivated() AND isDeputy($user_id, $this->user_id, true)))
+            || ($user_id === $this->user_id && $GLOBALS['perm']->have_perm('autor'))
+            || (isDeputyEditAboutActivated() && isDeputy($user_id, $this->user_id, true)))
+        {
             return true;
+        }
+
         // check news' ranges for edit, copy or view permission
-        if (($operation == 'unassign') OR ($operation == 'delete'))
+        if ($operation === 'unassign' || $operation === 'delete') {
             $range_operation = 'edit';
-        else
+        } else {
             $range_operation = $operation;
+        }
         foreach ($this->getRanges() as $range_id) {
             if (StudipNews::haveRangePermission($range_operation, $range_id, $user_id)) {
-                // in order to view, edit, copy, or unassign, access to one of the ranges is sufficient
-                if (($operation == 'view') OR ($operation == 'edit') OR ($operation == 'copy')) {
+                if ($operation === 'view' || $operation === 'edit' || $operation === 'copy') {
+                    // in order to view, edit, copy, or unassign, access to one of the ranges is sufficient
                     return true;
-                // in order to unassign, access to the specified range is needed
-                } elseif (($operation == 'unassign') AND ($range_id == $check_range_id)) {
+                } elseif ($operation === 'unassign' && $range_id === $check_range_id) {
+                    // in order to unassign, access to the specified range is needed
                     return true;
                 }
                 // in order to delete, access to all ranges is necessary
-                $permission_ranges++;
-            } elseif ($operation == 'delete')
+                $permission_ranges += 1;
+            } elseif ($operation === 'delete') {
                 return false;
+            }
         }
-        if (($operation == 'delete') AND (count($this->getRanges()) == $permission_ranges))
+        if ($operation === 'delete' && count($this->getRanges()) == $permission_ranges) {
             return true;
+        }
+
         return false;
     }
 
@@ -518,35 +575,37 @@ class StudipNews extends SimpleORMap {
      *
      * @return boolean true or false
      */
-    function validate() {
-        if (!$this->user_id AND $this->isNew()) {
-            $this->user_id = $GLOBALS['auth']->auth['uid'];
+    public function validate()
+    {
+        if (!$this->user_id && $this->isNew()) {
+            $this->user_id = $GLOBALS['user']->id;
             $this->author = get_fullname(false, 'full', false);
         }
         if (!$this->user_id OR !$this->author) {
-            PageLayout::postMessage(MessageBox::error(_('Fehler: Personenangabe unvollständig.')));
+            PageLayout::postError(_('Fehler: Personenangabe unvollständig.'));
             return false;
         }
         if (!$this->topic) {
-            PageLayout::postMessage(MessageBox::error(_('Bitte geben Sie einen Titel für die Ankündigung ein.')));
+            PageLayout::postError(_('Bitte geben Sie einen Titel für die Ankündigung ein.'));
             return false;
         }
         if (!$this->body) {
-            PageLayout::postMessage(MessageBox::error(_('Bitte geben Sie einen Inhalt für die Ankündigung ein.')));
+            PageLayout::postError(_('Bitte geben Sie einen Inhalt für die Ankündigung ein.'));
             return false;
         }
         if (!count($this->getRanges())) {
-            PageLayout::postMessage(MessageBox::error(_('Die Ankündigung muss mindestens einem Bereich zugeordnet sein.')));
+            PageLayout::postError(_('Die Ankündigung muss mindestens einem Bereich zugeordnet sein.'));
             return false;
         }
         if ((int)$this->date < 1) {
-            PageLayout::postMessage(MessageBox::error(_('Ungültiges Einstelldatum.')));
+            PageLayout::postError(_('Ungültiges Einstelldatum.'));
             return false;
         }
         if ((int)$this->expire < 1) {
-            PageLayout::postMessage(MessageBox::error(_('Ungültiges Ablaufdatum.')));
+            PageLayout::postError(_('Ungültiges Ablaufdatum.'));
             return false;
         }
+
         return true;
     }
 }
