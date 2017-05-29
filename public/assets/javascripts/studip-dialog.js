@@ -163,7 +163,8 @@
             }
         },
         shouldOpen: function () {
-            return $(window).innerWidth() >= 800 && $(window).innerHeight() >= 400;
+            return !$('html').is('.responsive-display')
+                && $(window).innerHeight() >= 400;
         },
         handlers: {
             header: {}

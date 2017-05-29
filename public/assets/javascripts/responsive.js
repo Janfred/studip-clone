@@ -6,7 +6,7 @@
         return;
     }
 
-    var media_query = window.matchMedia('(max-width: 800px)');
+    var media_query = window.matchMedia('(max-width: 768px)');
 
     // Builds a dom element from a navigation object
     function buildMenu(navigation, path, id) {
@@ -96,24 +96,32 @@
         }).trigger('change');
     }
 
+    function setResponsiveDisplay(state) {
+        if (state === undefined) {
+            state = true;
+        }
+
+        $('html').toggleClass('responsive-display', state);
+        STUDIP.Sidebar.setSticky(!state);
+
+        if (state) {
+            STUDIP.HeaderMagic.disable();
+        } else {
+            STUDIP.HeaderMagic.enable();
+        }
+    }
+
     // Build responsife menu on domready or resize
     $(document).ready(function () {
         if (media_query.matches) {
             responsify();
-            STUDIP.HeaderMagic.disable();
-            STUDIP.Sidebar.setSticky(false);
+            setResponsiveDisplay();
         } else {
             media_query.addListener(responsify);
         }
 
         media_query.addListener(function () {
-            if (media_query.matches) {
-                STUDIP.HeaderMagic.disable();
-                STUDIP.Sidebar.setSticky(false);
-            } else {
-                STUDIP.HeaderMagic.enable();
-                STUDIP.Sidebar.setSticky(true);
-            }
+            setResponsiveDisplay(media_query.matches);
         });
     });
 }(jQuery));

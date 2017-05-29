@@ -62,18 +62,13 @@
     });
 
     function moveTopAvatar() {
-        if ($(window).scrollTop() >= $('#flex-header').offset().top
-            && !(window.matchMedia('(max-width: 800px)').matches) ) {
-            $('#notification_container').addClass('fixed');
-            $('#barTopAvatar').addClass('fixed');
-            $('#barTopAvatar .action-menu-icon').addClass('fixed');
-            $('#barTopAvatar .action-menu-content').addClass('fixed');
-        } else {
-            $('#notification_container').removeClass('fixed');
-            $('#barTopAvatar').removeClass('fixed');
-            $('#barTopAvatar .action-menu-icon').removeClass('fixed');
-            $('#barTopAvatar .action-menu-content').removeClass('fixed');
-        }
+        var should_move = $(window).scrollTop() >= $('#flex-header').offset().top
+                          && !$('html').is('.responsive-display');
+
+        $('#notification_container').toggleClass('fixed', should_move);
+        $('#barTopAvatar').toggleClass('fixed', should_move);
+        $('#barTopAvatar .action-menu-icon').toggleClass('fixed', should_move);
+        $('#barTopAvatar .action-menu-content').toggleClass('fixed', should_move);
     };
 
 }(jQuery));

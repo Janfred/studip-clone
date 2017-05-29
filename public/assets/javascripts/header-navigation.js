@@ -33,7 +33,7 @@
         main.removeClass('overflown');
         $('li', sink).remove().insertBefore(sink);
 
-        if ($('html').is('.responsified')) {
+        if ($('html').is('.responsive-display')) {
             return;
         }
 
