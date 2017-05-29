@@ -22,7 +22,8 @@
  * @category    Stud.IP
  */
 
-class Context {
+class Context
+{
     /**
      * Constants to check for type of context
      */
@@ -33,9 +34,8 @@ class Context {
     /**
      * storage for the current context
      */
-    private static
-        $context        = null,
-        $type           = null;
+    private static $context = null;
+    private static $type    = null;
 
     /**
      * Load context for passed id.
@@ -44,11 +44,11 @@ class Context {
      */
     private static function loadContext($id)
     {
-        $possible_sorms = "Course Institute";
-        foreach(words($possible_sorms) as $sorm) {
+        $possible_sorms = ['Course', 'Institute'];
+        foreach($possible_sorms as $sorm) {
             if ($context = $sorm::find($id)) {
                 self::$context = $context;
-                self::$type = strtolower($sorm);
+                self::$type    = strtolower($sorm);
             }
         }
     }
@@ -168,11 +168,9 @@ class Context {
         switch (self::getType()) {
             case self::COURSE:
                 return _('Veranstaltung');
-                break;
 
             case self::INSTITUTE:
                 return _('Einrichtung');
-                break;
         }
     }
 
@@ -220,26 +218,26 @@ class Context {
             Seminar::setInstance(new Seminar($course));
 
             // check if current user can access the object
-            if (!$perm->get_studip_perm($course["Seminar_id"])) {
+            if (!$perm->get_studip_perm($course['Seminar_id'])) {
                 if ($course['lesezugriff'] > 0 || !Config::get()->ENABLE_FREE_ACCESS) {
                     // redirect to login page if user is not logged in
-                    $auth->login_if($auth->auth["uid"] == "nobody");
+                    $auth->login_if($auth->auth['uid'] === 'nobody');
 
-                    if (!$perm->get_studip_perm($course["Seminar_id"])) {
+                    if (!$perm->get_studip_perm($course['Seminar_id'])) {
                         throw new AccessDeniedException();
                     }
                 }
             }
 
             // if the aux data is forced for this seminar forward all user that havent made an input to this site
-            if ($course["aux_lock_rule_forced"] && !$perm->have_studip_perm('tutor', $course["Seminar_id"])
-                    && !in_array($_SERVER['PATH_INFO'], array('/course/members/additional_input', '/course/change_view'))) {
+            if ($course['aux_lock_rule_forced'] && !$perm->have_studip_perm('tutor', $course['Seminar_id'])
+                    && !in_array($_SERVER['PATH_INFO'], ['/course/members/additional_input', '/course/change_view'])) {
 
                 $statement = DBManager::get()->prepare("SELECT 1 FROM datafields_entries WHERE range_id = ? AND sec_range_id = ? LIMIT 1");
-                $statement->execute(array($GLOBALS['user']->id, $course["Seminar_id"]));
+                $statement->execute([$GLOBALS['user']->id, $course['Seminar_id']]);
 
                 if (!$statement->rowCount()) {
-                    header('location: ' . URLHelper::getURL('dispatch.php/course/members/additional_input'));
+                    header('Location: ' . URLHelper::getURL('dispatch.php/course/members/additional_input'));
                     page_close();
                     die;
                 }
@@ -248,13 +246,13 @@ class Context {
             // check if current user can access the object
             if (!get_config('ENABLE_FREE_ACCESS') && !$perm->have_perm('user')) {
                 // redirect to login page if user is not logged in
-                $auth->login_if($auth->auth["uid"] == "nobody");
+                $auth->login_if($auth->auth['uid'] === 'nobody');
 
                 if (!$perm->have_perm('user')) {
                     throw new AccessDeniedException();
                 }
             }
-        } else if (self::getType() == self::USER) {
+        } else if (self::getType() === self::USER) {
 
         }
     }
@@ -262,14 +260,13 @@ class Context {
     /**
      * "Close" the current context
      */
-    function close()
+    public static function close()
     {
-        self::$context        = null;
-        self::$type           = null;
+        self::$context = null;
+        self::$type    = null;
 
         URLHelper::removeLinkParam('cid');
         unset($GLOBALS['SessionSeminar']);
         unset($_SESSION['SessionSeminar']);
-        unset($rechte);
     }
 }
