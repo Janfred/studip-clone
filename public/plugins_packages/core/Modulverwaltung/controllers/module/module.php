@@ -30,11 +30,6 @@ class Module_ModuleController extends MVVController
         Navigation::activateItem($this->me . '/module/module');
         $this->filter = $this->sessGet('filter', array());
         $this->action = $action;
-        if (Request::isXhr()) {
-            $this->response->add_header('Content-Type',
-                    'text/html; charset=WINDOWS-1252');
-            $this->set_layout(null);
-        }
     }
 
     public function index_action()
@@ -49,7 +44,7 @@ class Module_ModuleController extends MVVController
         // set default semester filter
         if (!isset($this->filter['start_sem.beginn'])
                 || !isset($this->filter['end_sem.ende'])) {
-            $sem_time_switch = Config::get()->getValue('SEMESTER_TIME_SWITCH');
+            $sem_time_switch = Config::get()->SEMESTER_TIME_SWITCH;
             // switch semester according to time switch
             // (n weeks before next semester)
             $current_sem = Semester::findByTimestamp(time()
@@ -399,7 +394,7 @@ class Module_ModuleController extends MVVController
         }
         $this->redirect($this->url_for('/index'));
     }
-    
+
     public function assignments_action($modul_id)
     {
         $this->modul = Modul::find($modul_id);
@@ -441,7 +436,7 @@ class Module_ModuleController extends MVVController
         }
         $this->render_template('module/module/approve', $this->layout);
     }
-    
+
     public function copy_form_action($modul_id)
     {
         // find the latest version of the given module
@@ -460,8 +455,8 @@ class Module_ModuleController extends MVVController
         }
         PageLayout::setTitle(_('Modul kopieren'));
     }
-    
-    
+
+
     public function copy_action($modul_id)
     {
         $modul = Modul::find($modul_id);
@@ -488,7 +483,7 @@ class Module_ModuleController extends MVVController
                 // get end semester from selection
                 $end_sem = Semester::find(Request::option('end_sem'));
                 $copy->end = $next->beginn > $end_sem->beginn ? '' : $end_sem->id;
-                
+
                 // quelle: Klammerung von (Gültigkeit-) Versionen desselben Moduls
                 // Gießen: Modul-ID des ursprünglichen Moduls
                 $copy->quelle = $modul->quelle ?: $modul->id;
@@ -496,7 +491,7 @@ class Module_ModuleController extends MVVController
                 $copy->version = $copy->version + 1;
                 // don't show the new Modul
                 $copy->stat = 'planung';
-                
+
                 // Deskriptoren als KOPIE kennzeichnen/
                 /* nicht UOL
                  foreach ($copy->deskriptoren as $deskriptor) {
@@ -504,7 +499,7 @@ class Module_ModuleController extends MVVController
                  }
                  *
                  */
-                
+
                 // Deskriptoren der Modulteile als KOPIE kennzeichnen
                 /* nicht UOL
                  foreach ($copy->modulteile as $modulteil) {
@@ -519,12 +514,15 @@ class Module_ModuleController extends MVVController
                     $copy->verifyPermission();
                     // UOL: Don't validate
                     $store = $copy->store(false);
-                    PageLayout::postSuccess(sprintf(_('Das Modul "%s" und alle zugehörigen Modulteile wurden kopiert!'),
-                            htmlReady($modul->getDisplayName())));
+                    PageLayout::postSuccess(sprintf(
+                        _('Das Modul "%s" und alle zugehörigen Modulteile wurden kopiert!'),
+                        htmlReady($modul->getDisplayName())
+                    ));
                 } catch (InvalidValuesException $e) {
                     PageLayout::postError(
-                            _('Das Modul konnte nicht kopiert werden!')
-                            . ' ' . htmlReady($e->getMessage()));
+                        _('Das Modul konnte nicht kopiert werden!')
+                        . ' ' . htmlReady($e->getMessage())
+                    );
                 } catch (Exception $e) {
                     PageLayout::postError(_('Beim Kopieren trat ein Fehler auf!'));
                 }
@@ -532,7 +530,7 @@ class Module_ModuleController extends MVVController
         }
         $this->redirect($this->url_for('/index'));
     }
-    
+
     /**
      * Retrieves all fields from descriptor in the original language and
      * returns them as a json object.
@@ -540,7 +538,7 @@ class Module_ModuleController extends MVVController
     public function show_original_action()
     {
         if (Request::isXhr()) {
-            if (Request::option('type') == 'modulteil') {
+            if (Request::option('type') === 'modulteil') {
                 $parent = Modulteil::find(Request::option('id'));
                 $formatted_fields = words('voraussetzung kommentar
                     kommentar_kapazitaet kommentar_wl_praesenz
@@ -1296,15 +1294,15 @@ class Module_ModuleController extends MVVController
         // eine Rolle hat
         $own_institutes = MvvPerm::getOwnInstitutes();
         $modul_ids = null;
-        
+
         $modul_ids = Modul::findByFilter($this->filter);
-        
+
         $institute_filter = [
             'mvv_modul.stat'             => $this->filter['mvv_modul.stat'],
             'mvv_modul_inst.institut_id' => $own_institutes,
             'mvv_modul_inst.gruppe'      => 'hauptverantwortlich',
             'start_sem.beginn'           => $this->filter['start_sem.beginn'],
-            'end_sem.ende'               => $this->filter['end_sem.ende']]; 
+            'end_sem.ende'               => $this->filter['end_sem.ende']];
 
         $template = $template_factory->open('shared/filter');
 
@@ -1327,7 +1325,7 @@ class Module_ModuleController extends MVVController
         $semesters = $semesters->orderBy('beginn desc');
         $selected_semester = $semesters->findOneBy('beginn',
                 $this->filter['start_sem.beginn']);
-        
+
 
         $template->set_attribute('semester', $semesters);
         $template->set_attribute('selected_semester', $selected_semester->id);
