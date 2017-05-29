@@ -32,11 +32,10 @@ class CAS_PGTStorage_Cache extends CAS_PGTStorage_AbstractStorage
      * parameters of the storage.(used for debugging purposes).
      *
      * @return an informational string.
-     * @public
      */
     public function getStorageInfo()
     {
-        return 'cache_class_file=' . get_config('cache_class_file');
+        return 'cache_class_file=' . Config::get()->cache_class_file;
     }
 
     /**
