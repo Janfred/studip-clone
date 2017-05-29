@@ -58,7 +58,7 @@ $rules = [
     'ContainerTable'   => false,
     'DbCrossTableView' => false,
     'DbPermissions'    => false,
-    
+
     'pclzip' => 'Use #{yellow:Studip\\ZipArchive} instead',
     'get_global_visibility_by_id' => 'Use #{yellow:User::visible} attribute instead',
 
@@ -147,10 +147,14 @@ $rules = [
     'getKingsInformations' => 'Use #{yellow:User} model instead',
 
     'AutoInsert::existSeminars' => false,
-    'ZebraTable' => 'No longer neccessary. Use #{table.default} instead.',
-    'Table' => 'No longer neccessary. Use #{table.default} instead.',
+    'new ZebraTable' => 'No longer neccessary. Use #{table.default} instead.',
+    'new Table' => 'No longer neccessary. Use #{table.default} instead.',
 
     'RuleAdministrationModel::getAdmissionRuleTypes' => 'Use #{yellow:AdmissionRule::getAvailableAdmissionRules(false)} instead.',
+    'SessSemName' => 'Use class #{yellow:Context} instead',
+    '_SESSION["SessionSeminar"]' => 'Use class #{yellow:Context} instead',
+    '_SESSION[\'SessionSeminar\']' => 'Use class #{yellow:Context} instead',
+
 ];
 
 
