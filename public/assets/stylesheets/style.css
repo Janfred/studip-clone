@@ -7537,6 +7537,9 @@ div.available-widgets .studip-widget {
     max-width: 100%;
   }
 }
+.profile-sidebar-details {
+  margin-left: 0.5em;
+}
 .profile-view {
   display: -ms-flexbox;
   display: -webkit-box;

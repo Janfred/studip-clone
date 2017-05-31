@@ -242,29 +242,22 @@ class ProfileController extends AuthenticatedController
 
         //The profile avatar, profile visits and profile score
         //shall be visible in the sidebar. Therefore we must construct
-        //generic WidgetElement objects and their HTML in here.
+        //a generic WidgetElement object and its HTML in here.
 
-        // First the avatar:
         $avatar_widget = new TemplateWidget(
-                $this->current_user->getFullName(),
-                $this->get_template_factory()->open('profile/widget-avatar.php'),
-                ['avatar' => Avatar::getAvatar($this->current_user->user_id)]
-                );
+            $this->current_user->getFullName(),
+            $this->get_template_factory()->open('profile/widget-avatar.php'),
+            [
+                'avatar' => Avatar::getAvatar($this->current_user->user_id),
+                'kings' => $this->kings,
+                'views' => object_return_views($this->current_user->user_id),
+                'score' => $this->score,
+                'score_title' => $this->score_title
+            ]
+        );
+        
         $avatar_widget->setTitle($this->current_user->getFullName());
         $sidebar->addWidget($avatar_widget);
-
-        //Then visits and score (below the avatar image):
-        $details_widget = new TemplateWidget(
-                _('Status'),
-                $this->get_template_factory()->open('profile/widget-details.php'), [
-                        'kings'       => $this->kings,
-                        'views'       => object_return_views($this->current_user->user_id),
-                        'score'       => $this->score,
-                        'score_title' => $this->score_title,
-                ]
-                );
-        $details_widget->setTitle(_('Status'));
-        $sidebar->addWidget($details_widget);
 
         $actions = new ActionsWidget();
         //If a user visits the profile of another user
