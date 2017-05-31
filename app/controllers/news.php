@@ -602,27 +602,27 @@ class NewsController extends StudipController
             $widget = new ViewsWidget();
             $widget->addLink(
                 _('Alle Ankündigungen'),
-                $controller->url_for('news/admin_news/all')
+                $this->url_for('news/admin_news/all')
             )->setActive(!$this->area_type);
             if ($GLOBALS['perm']->have_perm('root')) {
                 $widget->addLink(
                     _('System'),
-                    $controller->url_for('news/admin_news/global')
+                    $this->url_for('news/admin_news/global')
                 )->setActive($this->area_type === 'global');
             }
             if ($GLOBALS['perm']->have_perm('dozent')) {
                 $widget->addLink(
                     _('Einrichtungen'),
-                    $controller->url_for('news/admin_news/inst')
+                    $this->url_for('news/admin_news/inst')
                 )->setActive($this->area_type === 'inst');
             }
             $widget->addLink(
                 _('Veranstaltungen'),
-                $controller->url_for('news/admin_news/sem')
+                $this->url_for('news/admin_news/sem')
             )->setActive($this->area_type === 'sem');
             $widget->addLink(
                 _('Profil'),
-                $controller->url_for('news/admin_news/user')
+                $this->url_for('news/admin_news/user')
             )->setActive($this->area_type === 'user');
             $this->sidebar->addWidget($widget);
         }
@@ -630,7 +630,7 @@ class NewsController extends StudipController
         $widget = new ActionsWidget();
         $widget->addLink(
             _('Ankündigung erstellen'),
-            $controller->url_for('news/edit_news/new'),
+            $this->url_for('news/edit_news/new'),
             Icon::create('news+add', 'clickable'),
             ['rel' => 'get_dialog', 'target' => '_blank']
         );
