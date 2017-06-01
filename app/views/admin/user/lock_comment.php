@@ -5,6 +5,6 @@
         <input required class="user_form" name="lock_comment" type="text">
     </label>
     <footer data-dialog-button>
-        <?= Studip\Button::createAccept(_('Benuter sperren'))?>
+        <?= Studip\Button::createAccept(_('Benutzer sperren'))?>
     </footer>
 </form>
