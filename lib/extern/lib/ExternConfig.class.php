@@ -643,8 +643,9 @@ class ExternConfig {
     }
     
     function GetStandardConfiguration ($range_id, $type) {
+        // pick the first one if none is explicitly marked
         $query = "SELECT config_id FROM extern_config WHERE range_id = ? AND ";
-        $query .= "config_type = ? AND is_standard = 1";
+        $query .= "config_type = ? ORDER BY is_standard DESC, name";
         $params = array($range_id, $type);
         $state = DBManager::get()->prepare($query);
         $state->execute($params);

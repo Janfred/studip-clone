@@ -159,8 +159,9 @@ class ExternElementLinkIntern extends ExternElement {
             $module_name = $config_meta_data['module_name'];
         } else {
             foreach ((array) $this->link_module_type as $type) {
-                if (is_array($GLOBALS['EXTERN_MODULE_TYPES'][$type])) {
-                    $module_name = $GLOBALS['EXTERN_MODULE_TYPES'][$type]['module'];
+                $module_name = $GLOBALS['EXTERN_MODULE_TYPES'][$type]['module'];
+                $configs = ExternConfig::GetAllConfigurations($this->config->range_id, $type);
+                if (sizeof($configs)) {
                     break;
                 }
             }
