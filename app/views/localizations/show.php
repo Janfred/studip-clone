@@ -20,7 +20,6 @@ $translations = array(
     'Blenden Sie die restlichen Termine aus' => _('Blenden Sie die restlichen Termine aus'),
     'Blenden Sie die restlichen Termine ein' => _('Blenden Sie die restlichen Termine ein'),
     'Schliessen' => _('Schliessen'),
-    'Ihre Eingaben wurden bislang noch nicht gespeichert.' => _('Ihre Eingaben wurden bislang noch nicht gespeichert.'),
 
     // public/assets/javascripts/big-image-handler.js
     'Dieses Bild wird verkleinert dargestellt. Klicken Sie für eine größere Darstellung.' => _('Dieses Bild wird verkleinert dargestellt. Klicken Sie für eine größere Darstellung.'),
@@ -39,14 +38,6 @@ $translations = array(
     'Objekt zuklappen' => _('Objekt zuklappen'),
 
     // public/assets/javascripts/forms.js
-    'Bitte ändern Sie ihre Eingabe' => _('Bitte ändern Sie ihre Eingabe'),
-    'Bitte wählen Sie einen Wert aus.' => _('Bitte wählen Sie einen Wert aus.'),
-    'Bitte geben Sie gültige E-Mail-Adresse ein' => _('Bitte geben Sie gültige E-Mail-Adresse ein'),
-    'Bitte geben Sie eine Zahl ein' => _('Bitte geben Sie eine Zahl ein'),
-    'Bitte geben Sie eine gültige Web-Adresse ein' => _('Bitte geben Sie eine gültige Web-Adresse ein'),
-    'Der eingegebene Wert darf nicht größer als $1 sein' => _('Der eingegebene Wert darf nicht größer als $1 sein'),
-    'Der eingegebene Wert darf nicht kleiner als $1 sein' => _('Der eingegebene Wert darf nicht kleiner als $1 sein'),
-    'Dies ist ein erforderliches Feld' => _('Dies ist ein erforderliches Feld'),
     'Zeichen verbleibend: ' => _('Zeichen verbleibend: '),
     'Bitte %u Zeichen weniger eingeben' => _('Bitte %u Zeichen weniger eingeben'),
     'Bitte %u Zeichen mehr eingeben' => _('Bitte %u Zeichen mehr eingeben'),
@@ -82,7 +73,6 @@ $translations = array(
     'Alle Räume anzeigen' => _('Alle Räume anzeigen'),
     'Wollen Sie die gewünschten Termine wirklich löschen?' => _('Wollen Sie die gewünschten Termine wirklich löschen?'),
     'Sind Sie sicher, dass Sie die regelmäßige Zeit ändern möchten?' => _('Sind Sie sicher, dass Sie die regelmäßige Zeit ändern möchten?'),
-    'Nur buchbare Räume anzeigen' => _('Nur buchbare Räume anzeigen'),
 
     // public/assets/javascripts/register.js
     'Der Benutzername ist zu kurz, er sollte mindestens 4 Zeichen lang sein.' => _('Der Benutzername ist zu kurz, er sollte mindestens 4 Zeichen lang sein.'),
@@ -99,9 +89,6 @@ $translations = array(
     'Termindetails bearbeiten' => _('Termindetails bearbeiten'),
     'Detaillierte Veranstaltungsliste' => _('Detaillierte Veranstaltungsliste'),
 
-    // public/assets/javascripts/settings.js
-    'Die beiden Werte "$1" und "$2" stimmen nicht überein. ' => _('Die beiden Werte "$1" und "$2" stimmen nicht überein. '),
-
     // public/assets/javascripts/smiley-picker.js
     'Smileys' => _('Smileys'),
     'Zur Gesamtübersicht' => _('Zur Gesamtübersicht'),
@@ -114,9 +101,13 @@ $translations = array(
 
     // public/assets/javascripts/studip-helper-attributes.js
     'Wollen Sie die Aktion wirklich ausführen?' => _('Wollen Sie die Aktion wirklich ausführen?'),
+    'Die beiden Werte "$1" und "$2" stimmen nicht überein. ' => _('Die beiden Werte "$1" und "$2" stimmen nicht überein. '),
 
     // public/assets/javascripts/studip-jquery.multi-select.tweaks.js
     'Die Person ist bereits eingetragen.' => _('Die Person ist bereits eingetragen.'),
+
+    // public/assets/javascripts/studip-secure-forms.js
+    'Ihre Eingaben wurden bislang noch nicht gespeichert.' => _('Ihre Eingaben wurden bislang noch nicht gespeichert.'),
 
     // public/assets/javascripts/studip-ui.js
     'schließen' => _('schließen'),
@@ -196,5 +187,6 @@ $translations = array(
 
 // translations have to be UTF8 for #json_encode
 $translations = $plugin->utf8EncodeArray($translations);
+
 ?>
 <?= json_encode($translations) ?>
