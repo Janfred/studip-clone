@@ -19,14 +19,19 @@ class I18N
      */
     public static function input($name, $value, $attributes = array())
     {
-
         $languages = $GLOBALS['CONTENT_LANGUAGES'];
         $base_lang = Config::get()->DEFAULT_LANGUAGE;
+        $enabled = self::isEnabled();
+        $result = '';
+
         if (!($value instanceof I18NString)) {
             $value = new I18NString($value);
         }
 
-        $result = "<div class=\"i18n_group normal-input " . (!self::isEnabled() ? 'single_lang' : '') . "\">";
+        if ($enabled) {
+            $result .= '<div class="i18n_group">';
+        }
+
         foreach ($languages as $locale => $lang) {
             if ($locale === $base_lang) {
                 $attr = array(
@@ -41,12 +46,8 @@ class I18N
                     'id' => NULL
                 );
             }
-            $attr += array(
-                'class' => $attributes['class'] . ' i18n',
-                'style' => sprintf('%s background-image: url(%s);', $attributes['style'],
-                                   Assets::image_path('languages/' . $lang['picture'])),
-                'data-lang_desc' => $lang['name']
-            );
+
+            $result .= sprintf('<div class="i18n" data-lang="%s" data-icon="url(%s)">', $lang['name'], Assets::image_path('languages/' . $lang['picture']));
 
             $attr = array_merge($attr, $attributes);
             if (isset($attr['required']) && empty($attr['value']) && $locale !== $base_lang) {
@@ -61,9 +62,12 @@ class I18N
                     $result .= sprintf(' %s="%s"', $key, htmlReady($val));
                 }
             }
-            $result .= ">\n";
+            $result .= "></div>\n";
         }
-        $result .= "</div>";
+
+        if ($enabled) {
+            $result .= "</div>";
+        }
 
         return $result;
     }
@@ -82,10 +86,17 @@ class I18N
     {
         $languages = $GLOBALS['CONTENT_LANGUAGES'];
         $base_lang = Config::get()->DEFAULT_LANGUAGE;
-        $wysiwyg = in_array('wysiwyg', words($attributes['class']));
-        $value instanceOf I18NString or $value = new I18NString($value);
+        $enabled = self::isEnabled();
+        $result = '';
 
-        $result = "<div class=\"i18n_group textarea-input " . (!self::isEnabled() ? 'single_lang' : '') . "\">";
+        if (!($value instanceof I18NString)) {
+            $value = new I18NString($value);
+        }
+
+        if ($enabled) {
+            $result .= '<div class="i18n_group">';
+        }
+
         foreach ($languages as $locale => $lang) {
             if ($locale === $base_lang) {
                 $attr = array(
@@ -100,22 +111,14 @@ class I18N
                 );
                 $text = $value->translation($locale);
             }
-            $attr += array(
-                'class' => $attributes['class'] . ' i18n',
-                'style' => sprintf('%s background-image: url(%s);', $attributes['style'],
-                    Assets::image_path('languages/' . $lang['picture'])),
-                'data-lang_desc' => $lang['name']
-            );
+
+            $result .= sprintf('<div class="i18n" data-lang="%s" data-icon="url(%s)">', $lang['name'], Assets::image_path('languages/' . $lang['picture']));
 
             $attr = array_merge($attr, $attributes);
             if (isset($attr['required']) && empty($text) && $locale !== $base_lang) {
                 unset($attr['required']);
             }
 
-            if ($wysiwyg && self::isEnabled()) {
-                $result .= '<div class="i18n" style="' . htmlReady($attr['style']) .
-                           '" data-lang_desc="' . htmlReady($attr['data-lang_desc']) . '">';
-            }
             $result .= '<textarea';
             foreach ($attr as $key => $val) {
                 if ($val === true) {
@@ -124,12 +127,13 @@ class I18N
                     $result .= sprintf(' %s="%s"', $key, htmlReady($val));
                 }
             }
-            $result .= '>' . htmlReady($text) . "</textarea>\n";
-            if ($wysiwyg && self::isEnabled()) {
-                $result .= '</div>';
-            }
+            $result .= '>' . htmlReady($text) . "</textarea></div>\n";
         }
-        $result .= "</div>";
+
+        if ($enabled) {
+            $result .= "</div>";
+        }
+
         return $result;
     }
 

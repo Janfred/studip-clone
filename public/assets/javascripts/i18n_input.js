@@ -14,9 +14,9 @@
 
     STUDIP.i18n = {
         init: function (root) {
-            $('div.i18n_group:not(.single_lang)', root).each(function () {
+            $('.i18n_group', root).each(function () {
                 var languages = $(this).find('> .i18n'),
-                    select    = $('<select tabindex="-1">').addClass('i18n').css('background-image', $(languages).first().css('background-image'));
+                    select    = $('<select tabindex="-1">').addClass('i18n').css('background-image', $(languages).first().data('icon'));
                 select.change(function () {
                     var opt   = $(this).find('option:selected'),
                         index = opt.index();
@@ -25,17 +25,17 @@
                     $(this).css('background-image', opt.css('background-image'));
                 });
                 languages.each(function (id, lang) {
-                    select.append($('<option>', {text: $(lang).data().lang_desc}).css('background-image', $(lang).css('background-image')));
+                    select.append($('<option>', {text: $(lang).data('lang')}).css('background-image', $(lang).data('icon')));
                 });
                 $(this).append(select);
-                languages.css('background-image', '').not(':eq(0)').hide();
+                languages.not(':eq(0)').hide();
 
                 $('.i18n[required]').on('invalid', function () {
                     if ($(this).siblings('.i18n[required]:visible').is(':invalid')) {
                         return;
                     }
                     $(this).show().siblings('.i18n[required]').hide();
-                    $(this).siblings('select').val($(this).data().lang_desc).change();
+                    $(this).siblings('select').val($(this).data('lang')).change();
                 });
             });
         }
