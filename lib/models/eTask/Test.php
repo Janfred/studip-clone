@@ -1,20 +1,30 @@
 <?php
+
 namespace eTask;
 
 /**
- * eTask conforming test definition
- * integer id database column
- * string title database column
- * string description database column
- * string user_id database column
- * string created database column
- * string changed database column
- * string options database column
+ * eTask conforming test definition.
+ *
+ * @property int id database column
+ * @property string title database column
+ * @property string description database column
+ * @property string user_id database column
+ * @property string created database column
+ * @property string changed database column
+ * @property string options database column
+ * @property SimpleORMapCollection tasks additional field etask\Task
+ * @property SimpleORMapCollection testtasks has_many etask\TestTask
+ * @property User owner belongs_to User
+ * @property SimpleORMapCollection assignments has_many etask\Assignment
+ * @property JSONArrayobject options serialized database column
  */
 class Test extends \SimpleORMap
 {
     use ConfigureTrait;
 
+    /**
+     * @see SimpleORMap::configure
+     */
     protected static function configure($config = [])
     {
         $config['db_table'] = 'etask_tests';
@@ -47,6 +57,11 @@ class Test extends \SimpleORMap
         parent::configure($config);
     }
 
+    /**
+     * Retrieve the tasks associated to this test.
+     *
+     * @return SimpleORMapCollection the associated tasks
+     */
     public function getTasks()
     {
         $klass = $this->relationTypes['Task'];
@@ -65,13 +80,26 @@ class Test extends \SimpleORMap
         );
     }
 
+    /**
+     * Count all the tasks related to this test.
+     *
+     * @return int the number of related tasks
+     */
     public function countTasks()
     {
         $klass = $this->relationTypes['TestTask'];
 
-        return $klass::countBySql('test_id = ?', [ $this->id ]);
+        return $klass::countBySql('test_id = ?', [$this->id]);
     }
 
+    /**
+     * Convenience method to associate a task to this test.
+     * Creates a TestTask object and returns it.
+     *
+     * @param eTask\Task task the task to associate
+     *
+     * @return eTask\TestTask the created TestTask object
+     */
     public function addTask($task)
     {
         $klass = $this->relationTypes['TestTask'];
@@ -86,6 +114,7 @@ class Test extends \SimpleORMap
         );
 
         $this->resetRelation('testtasks');
+
         return $testTask;
     }
 }

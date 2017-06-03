@@ -1,8 +1,9 @@
 <?php
+
 namespace eTask;
 
 /**
- * eTask conforming assignment definition
+ * eTask conforming assignment definition.
  *
  * @property int id database column
  * @property int test_id database column
@@ -13,11 +14,19 @@ namespace eTask;
  * @property string end database column
  * @property int active database column
  * @property string options database column
+ * @property eTask\Test test belongs_to etask\Test
+ * @property SimpleORMapCollection attempts has_many etask\Attempt
+ * @property SimpleORMapCollection ranges has_many etask\AssignmentRange
+ * @property SimpleORMapCollection responses has_many etask\Response
+ * @property JSONArrayobject options serialized database column
  */
 class Assignment extends \SimpleORMap
 {
     use ConfigureTrait;
 
+    /**
+     * @see SimpleORMap::configure
+     */
     protected static function configure($config = [])
     {
         $config['db_table'] = 'etask_assignments';

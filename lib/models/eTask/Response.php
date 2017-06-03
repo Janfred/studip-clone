@@ -1,26 +1,36 @@
 <?php
+
 namespace eTask;
 
 /**
- * eTask conforming assignment definition
+ * eTask conforming assignment definition.
  *
- *  integer id database column
- *  integer assignment_id database column
- *  integer task_id database column
- *  string user_id database column
- *  string response database column
- *  integer state database column
- *  float points database column
- *  string feedback database column
- *  string grader_id database column
- *  string created database column
- *  string changed database column
- *  string options database column
+ *  @property int id database column
+ *  @property int assignment_id database column
+ *  @property int task_id database column
+ *  @property string user_id database column
+ *  @property string response database column
+ *  @property int state database column
+ *  @property float points database column
+ *  @property string feedback database column
+ *  @property string grader_id database column
+ *  @property string created database column
+ *  @property string changed database column
+ *  @property string options database column
+ *  @property eTask\Assignment assignment belongs_to etask\Assignment
+ *  @property eTask\Task task belongs_to etask\Task
+ *  @property User user belongs_to User
+ *  @property User grader belongs_to User
+ *  @property JSONArrayobject response serialized database column
+ *  @property JSONArrayobject options serialized database column
  */
 class Response extends \SimpleORMap
 {
     use ConfigureTrait;
 
+    /**
+     * @see SimpleORMap::configure
+     */
     protected static function configure($config = [])
     {
         $config['db_table'] = 'etask_responses';

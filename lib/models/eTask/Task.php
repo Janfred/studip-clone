@@ -1,44 +1,33 @@
 <?php
+
 namespace eTask;
 
 /**
- * eTask conforming task definition
+ * eTask conforming task definition.
  *
- * integer id database column
- * string type database column
- * string title database column
- * string description database column
- * string task database column
- * string user_id database column
- * string created database column
- * string changed database column
- * string options database column
+ * @property int id database column
+ * @property string type database column
+ * @property string title database column
+ * @property string description database column
+ * @property string task database column
+ * @property string user_id database column
+ * @property string created database column
+ * @property string changed database column
+ * @property string options database column
+ * @property User owner belongs_to User
+ * @property SimpleORMapCollection tests additional field etask\Test
+ * @property SimpleORMapCollection test_tasks has_many etask\TestTask
+ * @property SimpleORMapCollection responses has_many etask\Response
+ * @property JSONArrayobject task serialized database column
+ * @property JSONArrayobject options serialized database column
  */
 class Task extends \SimpleORMap
 {
     use ConfigureTrait;
 
     /**
-     * {@inheritdoc}
+     * @see SimpleORMap::configure
      */
-    public function __construct($id = null)
-    {
-        parent::__construct($id);
-        $this->registerCallback('before_store', 'cbUpdateChanged');
-    }
-
-    /**
-     * Updates the field `changed` on change
-     * @return true
-     */
-    protected function cbUpdateChanged()
-    {
-        if ($this->isDirty()) {
-            $this->changed = date('c');
-        }
-        return true;
-    }
-
     protected static function configure($config = [])
     {
         $config['db_table'] = 'etask_tasks';
@@ -72,6 +61,34 @@ class Task extends \SimpleORMap
         parent::configure($config);
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct($id = null)
+    {
+        parent::__construct($id);
+        $this->registerCallback('before_store', 'cbUpdateChanged');
+    }
+
+    /**
+     * Updates the field `changed` on change.
+     *
+     * @return true
+     */
+    protected function cbUpdateChanged()
+    {
+        if ($this->isDirty()) {
+            $this->changed = date('c');
+        }
+
+        return true;
+    }
+
+    /**
+     * Retrieve the tests associated to this task.
+     *
+     * @return SimpleORMapCollection the associated tests
+     */
     public function getTests()
     {
         $klass = $this->relationTypes['Test'];
