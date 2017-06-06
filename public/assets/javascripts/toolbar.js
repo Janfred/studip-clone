@@ -1,12 +1,29 @@
-/*jslint browser: true, white: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, newcap: true, immed: true, indent: 4, onevar: false */
-/*global window, $, jQuery, _ */
+/*jslint browser: true */
+/*global jQuery, STUDIP */
 
 /* ------------------------------------------------------------------------
  * jQuery plugin "addToolbar"
  * ------------------------------------------------------------------------ */
-(function ($) {
-    STUDIP.Toolbar = {
+(function ($, STUDIP) {
+    'use strict';
 
+    function getElementWidth(element) {
+        var proxy = null;
+
+        // Special case: Handle i18n hidden textareas
+        // - Hidden textareas have no dimensions thus we need to proxy the
+        //   width from the first visible element in the i18n group
+        if ($(element).is(':hidden') && $(element).closest('.i18n_group').length > 0) {
+            proxy = $(element).closest('.i18n_group').find('div.i18n:visible').children().first();
+            if (proxy.length > 0) {
+                element = proxy;
+            }
+        }
+
+        return $(element).outerWidth(true) || $(element).css('width');
+    }
+
+    STUDIP.Toolbar = {
         // For better readability, the button set is externally defined in the file
         // toolbar-buttonset.js
         buttonSet: {},
@@ -14,11 +31,8 @@
         // Initializes (adds) a toolbar the passed textarea element
         initialize: function (element, button_set) {
             var $element = $(element),
-                width = $element.css('width') || $element.width(),
                 wrap,
-                toolbar,
-                temp,
-                height;
+                toolbar;
 
             // Bail out if the element is not a tetarea or a toolbar has already
             // been applied
@@ -34,64 +48,59 @@
                 button_set.right.wysiwyg = {
                     label: 'WYSIWYG',
                     evaluate: function () {
-                        var activate = confirm(
-                            'Soll der WYSIWYG Editor aktiviert werden?'
-                            + '\n'
-                            + '\nDie Seite muss danach neu geladen werden,'
-                            + '\num den WYSIWYG Editor zu laden.'
-                        );
-                        if (!activate) {
-                            return;
-                        }
+                        var question = [
+                                "Soll der WYSIWYG Editor aktiviert werden?".toLocaleString(),
+                                "",
+                                "Die Seite muss danach neu geladen werden, um den WYSIWYG Editor zu laden.".toLocaleString()
+                            ].join("\n");
+                        STUDIP.Dialog.confirm(question, function () {
+                            var url = STUDIP.URLHelper.resolveURL('dispatch.php/wysiwyg/settings/users/current');
 
-                        // activate the WYSIWYG editor
-                        var settingsUrl = STUDIP.URLHelper.resolveURL(
-                            'dispatch.php/wysiwyg/settings/users/current'
-                        );
+                            $.ajax({
+                                url: url,
+                                type: 'PUT',
+                                contentType: 'application/json',
+                                data: JSON.stringify({ disabled: false })
+                            }).fail(function (xhr) {
+                                window.alert([
+                                    "Das Aktivieren des WYSIWYG Editors ist fehlgeschlagen.".toLocaleString(),
+                                    "",
+                                    "URL".toLocaleString() + ": " + url,
+                                    "Status".toLocaleString() + ": " + xhr.status + " " + xhr.statusText,
+                                    "Antwort".toLcoaleString() + ": " + xhr.responseText
+                                ].join("\n"));
+                            });
 
-                        $.ajax({
-                            url: settingsUrl,
-                            type: 'PUT',
-                            contentType: 'application/json',
-                            data: JSON.stringify({ disabled: false })
-                        })
-                        .fail(function (xhr) {
-                            alert(
-                                'Das Aktivieren des WYSIWYG Editors ist fehlgeschlagen.'
-                                + '\n'
-                                + '\nURL: ' + settingsUrl
-                                + '\nStatus: ' + xhr.status
-                                + ' ' + xhr.statusText
-                                + '\nAntwort: ' + xhr.responseText
-                            );
                         });
-                    } // evaluate
-                } // wysiwyg
+                    }
+                };
             }
 
             // Add flag so one element will never have more than one toolbar
             $element.data('toolbar-added', true);
 
             // Create toolbar element
-            toolbar = $('<div class="buttons" />');
+            toolbar = $('<div class="buttons">');
 
             // Assemble toolbar
-            _.each(['left', 'right'], function (position) {
-                var buttons = $('<span/>').addClass(position);
-                _.each(button_set[position], function (format, name) {
-                    var button = $('<span />').addClass(name),
+            ['left', 'right'].forEach(function (position) {
+                var buttons = $('<span>').addClass(position);
+                $.each(button_set[position], function (name, format) {
+                    var button = $('<span>').addClass(name),
                         label  = format.label || name;
 
                     if (format.icon) {
-                        label = $('<img/>').attr('alt', format.label || name)
-                                           .attr('src', STUDIP.ASSETS_URL + "images/icons/blue/" + format.icon + '.svg');
+                        label = $('<img>', {
+                            alt: format.label || name,
+                            src: STUDIP.ASSETS_URL + "images/icons/blue/" + format.icon + '.svg'
+                        });
                     }
 
                     button.html(label).button().click(function () {
                         var selection   = $element.getSelection(),
                             result      = format.evaluate(selection, $element, this) || selection,
-                            replacement = _.isObject(result) ? result.replacement : (_.isUndefined(result) ? selection : result),
-                            offset      = _.isObject(result) ? result.offset : (result || '').length;
+                            replacement = $.isPlainObject(result) ? result.replacement : (result === undefined ? selection : result),
+                            offset      = $.isPlainObject(result) ? result.offset : (result || '').length;
                         $element.replaceSelection(replacement, offset).change();
                         return false;
                     });
@@ -102,8 +111,8 @@
             });
 
             // Attach toolbar to the specified element
-            wrap = $('<div class="editor_toolbar"/>').css({
-                width: width,
+            wrap = $('<div class="editor_toolbar">').css({
+                width: getElementWidth($element),
                 display: $element.css('display')
             });
             $element.css('width', '100%').wrap(wrap).before(toolbar);
@@ -123,4 +132,4 @@
         }
     });
 
-}(jQuery));
+}(jQuery, STUDIP));
