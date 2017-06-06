@@ -86,7 +86,7 @@ class Settings_DetailsController extends Settings_SettingsController
             'schwerp'    => 'schwerp',
             'publi'      => 'publi',
         );
-        
+
         // Visibilitymapping Remove in Stud.IP 3.0 with a migration
         $vis_mapping = array(
             'telefon'    => 'private_phone',
@@ -99,7 +99,7 @@ class Settings_DetailsController extends Settings_SettingsController
             'schwerp'    => 'schwerp',
             'publi'      => 'publi',
         );
-        
+
         $settingsname = array(
             'telefon'    => _('Private Telefonnummer'),
             'cell'       => _('Private Handynummer'),
@@ -140,14 +140,14 @@ class Settings_DetailsController extends Settings_SettingsController
                         $datafields_changed = true;
                     }
                 } else {
-                    $errors[] = sprintf(_('Fehlerhafter Eintrag im Feld <em>%s</em>: %s (Eintrag wurde nicht gespeichert)'), 
+                    $errors[] = sprintf(_('Fehlerhafter Eintrag im Feld <em>%s</em>: %s (Eintrag wurde nicht gespeichert)'),
                                         $entry->getName(), $entry->getDisplayValue());
                 }
             }
         }
 
         if (count($errors) > 0) {
-            PageLayout::portError(_('Bitte überprüfen Sie Ihre Eingaben.'), $errors);
+            PageLayout::postError(_('Bitte überprüfen Sie Ihre Eingaben.'), $errors);
         } else if ($this->user->store() || $changed || $datafields_changed) {
             PageLayout::postSuccess(_('Daten im Lebenslauf u.a. wurden geändert.'));
 

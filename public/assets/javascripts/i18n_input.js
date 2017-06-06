@@ -15,7 +15,7 @@
     STUDIP.i18n = {
         init: function (root) {
             $('.i18n_group', root).each(function () {
-                var languages = $(this).find('> .i18n'),
+                var languages = $(this).children('.i18n'),
                     select    = $('<select tabindex="-1">').addClass('i18n').css('background-image', $(languages).first().data('icon'));
                 select.change(function () {
                     var opt   = $(this).find('option:selected'),
@@ -30,12 +30,12 @@
                 $(this).append(select);
                 languages.not(':eq(0)').hide();
 
-                $('.i18n[required]').on('invalid', function () {
-                    if ($(this).siblings('.i18n[required]:visible').is(':invalid')) {
-                        return;
+                $('div.i18n textarea[required]', this).on('invalid', function () {
+                    var element = $(this).closest('.i18n');
+                    if (element.parent().find('.i18n:has(textarea:visible:invalid)').length === 0) {
+                        element.siblings('div').hide();
+                        element.siblings('select').val($(element).data('lang')).change();
                     }
-                    $(this).show().siblings('.i18n[required]').hide();
-                    $(this).siblings('select').val($(this).data('lang')).change();
                 });
             });
         }
