@@ -2793,6 +2793,9 @@ ul.widget-list > li {
 div#sidebar-navigation div.sidebar-widget-header {
   display: none;
 }
+div#sidebar-navigation div.sidebar-widget-content {
+  border-top: 0px;
+}
 .widget-links {
   margin: 5px;
 }
