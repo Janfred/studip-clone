@@ -568,37 +568,34 @@
 
     // Specialized confirmation dialog
     STUDIP.Dialog.confirm = function (question, yes_callback, no_callback) {
-        STUDIP.Dialog.show($('<div/>').text(question || '').html(), {
-            id: 'confirmation-dialog',
-            title: 'Bitte bestätigen Sie die Aktion'.toLocaleString(),
-            size: 'fit',
-            wikilink: false,
-            dialogClass: 'studip-confirmation',
-            buttons: {
-                accept: {
-                    text: 'Ja'.toLocaleString(),
-                    click: function () {
-                        STUDIP.Dialog.close({id: 'confirmation-dialog'});
-
-                        if ($.isFunction(yes_callback)) {
-                            yes_callback();
-                        }
+        return $.Deferred(function (defer) {
+            STUDIP.Dialog.show(question, {
+                id: 'confirmation-dialog',
+                title: 'Bitte bestätigen Sie die Aktion'.toLocaleString(),
+                size: 'fit',
+                wikilink: false,
+                dialogClass: 'studip-confirmation',
+                buttons: {
+                    accept: {
+                        text: 'Ja'.toLocaleString(),
+                        click: defer.resolve,
+                        'class': 'accept'
                     },
-                    'class': 'accept'
-                },
-                cancel: {
-                    text: 'Nein'.toLocaleString(),
-                    click: function () {
-                        STUDIP.Dialog.close({id: 'confirmation-dialog'});
-
-                        if ($.isFunction(no_callback)) {
-                            no_callback();
-                        }
-                    },
-                    'class': 'cancel'
+                    cancel: {
+                        text: 'Nein'.toLocaleString(),
+                        click: defer.reject,
+                        'class': 'cancel'
+                    }
                 }
-            }
-        });
+            });
+            $(document).one('dialog-close', function () {
+                if (defer.state() === 'pending') {
+                    defer.reject();
+                }
+            });
+        }).then(yes_callback, no_callback).always(function () {
+            STUDIP.Dialog.close({id: 'confirmation-dialog'});
+        }).promise();
     };
 
     // Actual dialog handler
