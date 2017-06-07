@@ -56,10 +56,22 @@
     right: -40px;
     padding-bottom: 20px !important;
 
+    #avatar-arrow {
+        position: relative;
+        top: 7px;
+        left: -2px;
+        float: right;
+        z-index: 1;
+    }
+
     &.fixed {
         position: relative;
         bottom: 1px;
         right: 2px;
+
+        #avatar-arrow {
+            display: none;
+        }
     }
 
 }
@@ -154,8 +166,10 @@
 #notification_marker {
     //.transition(all 1s);
     width: 25px;
+    margin-left: 0px;
     padding-left: 10px;
-    padding-right: 65px;
+    margin-right: 57px;
+    padding-right: 8px;
     height: 25px;
     font-size: 0.8em;
     color: @base-color;
@@ -178,12 +192,12 @@
 
     .border-radius(2px);
     //.transition(all 1s);
-    width: 100px;
+    width: 105px;
     height: 25px;
     border: thin solid @dark-gray-color-20;
     color: @base-color;
     vertical-align: text-bottom;
-    background-color: @white;
+    background-color: @dark-gray-color-10;
     position: relative;
 
     // Insert invisible padding on top of the arrow in order to try to

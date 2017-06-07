@@ -68,6 +68,7 @@ if (isset($_COOKIE['navigation-length'])) {
                 ?>
                 <?= $action_menu->render(); ?>
                </div>
+               <?= Icon::create('arr_1down', 'clickable', array('id' => 'avatar-arrow')); ?>
 
             <? if (is_object($GLOBALS['perm']) && PersonalNotifications::isActivated() && $GLOBALS['perm']->have_perm('autor')) : ?>
                 <? $notifications = PersonalNotifications::getMyNotifications() ?>

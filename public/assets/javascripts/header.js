@@ -71,6 +71,11 @@
         $('#barTopAvatar .action-menu-content').toggleClass('fixed', should_move);
     };
 
+    $(document).on('click', '#avatar-arrow', function (event) {
+        event.stopPropagation();
+        $('#header_avatar_menu .action-menu-icon').trigger('click');
+    });
+
 }(jQuery));
 
 (function ($) {
