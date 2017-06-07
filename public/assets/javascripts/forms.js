@@ -7,7 +7,7 @@
 
 (function ($, STUDIP) {
     'use strict';
-    
+
     $.extend($.expr[':'], {
         invalid : function (elem, index, match) {
             var invalids = document.querySelectorAll(':invalid'),
@@ -110,7 +110,7 @@
             $(this).trigger('change');
         });
     }
-    
+
     $(document).ready(createLengthHint).on('dialog-update', createLengthHint);
 
     // Automatic form submission handler when a select has changed it's value.
@@ -211,6 +211,7 @@
             allowClear: placeholder !== undefined,
             minimumResultsForSearch: $(element).closest('.sidebar').length > 0 ? 15 : 10,
             placeholder: placeholder,
+            dropdownParent: $(element).closest('.ui-dialog,body'),
             templateResult: function (data, container) {
                 if (data.element) {
                     var option_classes = $(data.element).attr('class'),
@@ -308,4 +309,3 @@
     });
 
 }(jQuery, STUDIP));
-
