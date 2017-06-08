@@ -359,7 +359,9 @@ class Course_TimesroomsController extends AuthenticatedController
             $singledate->store();
             $this->course->createMessage(sprintf(_("Der Termin %s wurde geändert, etwaige Raumbuchung wurden entfernt und stattdessen der angegebene Freitext eingetragen!"), '<b>' . $singledate->toString() . '</b>'));
         } elseif (Request::option('room') == 'noroom') {
+            $singledate->setFreeRoomText('');
             $singledate->killAssign();
+            $singledate->store();
             $this->course->createMessage(sprintf(_("Der Termin %s wurde geändert, etwaige freie Ortsangaben und Raumbuchungen wurden entfernt."), '<b>' . $singledate->toString() . '</b>'));
         }
 
@@ -770,6 +772,8 @@ class Course_TimesroomsController extends AuthenticatedController
                     $this->course->createMessage(sprintf(_("Der Termin %s wurde geändert, etwaige Raumbuchung wurden entfernt und stattdessen der angegebene Freitext eingetragen!"),
                                                          '<strong>' . $date->toString() . '</strong>'));
                 } elseif (Request::option('action') == 'noroom') {
+                    $date->setFreeRoomText('');
+                    $date->store();
                     $date->killAssign();
                     $this->course->createMessage(sprintf(_("Der Termin %s wurde geändert, etwaige freie Ortsangaben und Raumbuchungen wurden entfernt."),
                                                          '<strong>' . $date->toString() . '</strong>'));

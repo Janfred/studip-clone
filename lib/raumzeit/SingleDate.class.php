@@ -75,6 +75,10 @@ class SingleDate
             $single_date_data = $data->toArray();
             $single_date_data['ex_termin'] = $data instanceOf CourseDate ? 0 : 1;
             $single_date_data['resource_id'] = $data->room_assignment->resource_id ?: '';
+            if ($data instanceOf CourseDate) {
+                $single_date_data['related_persons'] = $data->dozenten->pluck('user_id');
+                $single_date_data['related_groups'] = $data->statusgruppen->pluck('statusgruppe_id');
+            }
             $this->fillValuesFromArray($single_date_data);
         } else {
             if (is_array($data)) {
