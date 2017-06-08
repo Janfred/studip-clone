@@ -69,14 +69,6 @@ class Course_DetailsController extends AuthenticatedController
         $this->title             = $this->course->getFullname();
         $this->course_domains    = UserDomain::getUserDomainsForSeminar($this->course->id);
         $this->sem = new Seminar($this->course);
-        if ($studienmodulmanagement = PluginEngine::getPlugin('StudienmodulManagement')) {
-            foreach ($this->course->study_areas->filter(function ($m) {
-                return $m->isModule();
-            }) as $module) {
-                $this->studymodules[] = array('nav'   => $studienmodulmanagement->getModuleInfoNavigation($module->id, $this->course->start_semester->id),
-                                              'title' => $studienmodulmanagement->getModuleTitle($module->id, $this->course->start_semester->id));
-            }
-        }
 
         // Retrive display of sem_tree
         if (Config::get()->COURSE_SEM_TREE_DISPLAY) {

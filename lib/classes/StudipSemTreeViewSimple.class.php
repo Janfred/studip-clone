@@ -35,12 +35,10 @@
 * @author   André Noack <noack@data-quest.de>
 * @package
 */
-class StudipSemTreeViewSimple {
-
-
+class StudipSemTreeViewSimple
+{
     var $tree;
     var $show_entries;
-    var $studienmodulmanagement;
 
     /**
     * constructor
@@ -63,7 +61,6 @@ class StudipSemTreeViewSimple {
         if (!$this->tree->tree_data[$this->start_item_id]){
             $this->start_item_id = "root";
         }
-        $this->studienmodulmanagement = PluginEngine::getPlugin('StudienmodulManagement');
     }
 
     function showSemTree(){
@@ -126,23 +123,14 @@ class StudipSemTreeViewSimple {
         return $num_all_entries;
     }
 
-    function getInfoIcon($item_id){
-        if(is_object($this->studienmodulmanagement) && $this->tree->isModuleItem($item_id)){
-            $nav = $this->studienmodulmanagement->getModuleInfoNavigation($item_id, SemesterData::GetSemesterIdByIndex($this->tree->sem_number[0]));
-            if ($nav->isVisible(true)) {
-                $ret = '<a class="module-info" href="' . URLHelper::getLink($nav->getURL()) . '">';
-                $ret .= $nav->getImage()->asImg($nav->getLinkAttributes());
-                $ret .= '<span>' .htmlready($nav->getTitle()) . '</span>';
-                $ret .= '</a>';
-            }
+    function getInfoIcon($item_id)
+    {
+        if ($item_id === 'root') {
+            $info = $this->root_content;
         } else {
-            if ($item_id == "root"){
-                $info = $this->root_content;
-            } else {
-                $info = $this->tree->getValue($item_id, 'info');
-            }
-            $ret = $info ? tooltipicon(kill_format($info)) : '';
+            $info = $this->tree->getValue($item_id, 'info');
         }
+        $ret = $info ? tooltipicon(kill_format($info)) : '';
         return $ret;
     }
 

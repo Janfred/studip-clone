@@ -97,8 +97,6 @@ $DEFAULT_TITLE_FOR_STATUS = array(
 /*
 possible types of sem_tree ("Veranstaltungshierarchie") types
 the "editable" flag could be used to prevent modifications, e.g. imported data
-the "is_module" flag specifies an entry which represents a "Studienmodul", if the "studienmodulmanagement"
-plugin interface is used
 */
 $SEM_TREE_TYPES[0] = array("name" => "", "editable" => true); //default type, must be present
 //$SEM_TREE_TYPES[1] = array("name" => _("Studienmodul") , "editable" => true, "is_module" => true);
@@ -383,4 +381,3 @@ $NOT_HIDEABLE_FIELDS = array(
 );
 //Add ids of datafields to use for import on teilnehmer.php
 $TEILNEHMER_IMPORT_DATAFIELDS = array();
-

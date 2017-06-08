@@ -354,45 +354,6 @@ class StudipStudyArea extends SimpleORMap
     }
 
     /**
-     * returns the modul description if this study area is a module
-     * and if there is a compatible plugin available
-     *
-     * @param string $semester_id
-     * @return string
-     */
-    public function getModuleDescription($semester_id = '')
-    {
-        if ($this->isModule() && $plugin = PluginEngine::getPlugin('StudienmodulManagement')) {
-            return $plugin->getModuleDescription($this->getID(), $semester_id);
-        } else {
-            return '';
-        }
-    }
-
-    /**
-     * returns a HTML snippet for the info icon if this study area is a module
-     * and if there is a compatible plugin available
-     *
-     * @param string $semester_id
-     * @return string
-     */
-    public function getModuleInfoHTML($semester_id = '')
-    {
-        $ret = '';
-        if ($this->isModule() && $plugin = PluginEngine::getPlugin('StudienmodulManagement')) {
-            $nav = $plugin->getModuleInfoNavigation($this->getID(), $semester_id);
-            if ($nav->isVisible(true)) {
-                $ret = '<a class="module-info" href="' . URLHelper::getLink($nav->getURL()) . '">';
-                $ret .= $nav->getImage()->asImg($nav->getLinkAttributes);
-                $ret .= '<span>' .htmlready($nav->getTitle()) . '</span>';
-                $ret .= '</a>';
-            }
-        }
-        return $ret;
-    }
-
-
-    /**
      * Get an associative array of all study areas of a course. The array
      * contains StudipStudyArea instances
      *

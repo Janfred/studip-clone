@@ -626,18 +626,12 @@ class ExternModuleTemplateSemBrowse extends ExternModule {
         $j = 0;
         if ($parents = $tree->getParents($this->sem_browse_data['start_item_id'])) {
             for ($i = count($parents) - 2; $i >= 0; --$i) {
-                /*
-                if ($tree->isModuleItem($parents[$i]) && $studienmodulmanagement = PluginEngine::getPlugin('StudienmodulManagement')) {
-                    $info = $studienmodulmanagement->getModuleDescription($parents[$i], SemesterData::GetSemesterIdByIndex($this->sem_browse_data['sem']));
+                if (trim($tree->tree_data[$parents[$i]]['info'])) {
+                    $info = kill_format(trim($tree->tree_data[$parents[$i]]['info']));
                 } else {
-                */
-                    if (trim($tree->tree_data[$parents[$i]]['info'])) {
-                        $info = kill_format(trim($tree->tree_data[$parents[$i]]['info']));
-                    } else {
-                        $info = '';
-                        $content['LEVEL_TREE']['LEVEL_PATH']['LEVEL_PATH_ITEM'][$j]['LEVEL_NO_INFO'] = true;
-                    }
-            //  }
+                    $info = '';
+                    $content['LEVEL_TREE']['LEVEL_PATH']['LEVEL_PATH_ITEM'][$j]['LEVEL_NO_INFO'] = true;
+                }
                 $content['LEVEL_TREE']['LEVEL_PATH']['LEVEL_PATH_ITEM'][$j] = array(
                         'LEVEL-HREF' => $this->getLinkToSelf(array('start_item_id' => $parents[$i], 'do_search' => '0', 'show_result' => (($parents[$i] == $this->getRootStartItemId()) ? '1' : '0')), true, 'LinkInternTree'),
                         'LEVEL_NAME' => ExternModule::ExtHtmlReady($tree->tree_data[$parents[$i]]['name']),
@@ -655,15 +649,9 @@ class ExternModuleTemplateSemBrowse extends ExternModule {
             // set this as global marker in getContent()
             $this->global_markers['CURRENT_LEVEL_NAME'] = $tree->getValue($this->sem_browse_data['start_item_id'], 'name');
             $this->global_markers['CURRENT_LEVEL_ID'] = $this->sem_browse_data['start_item_id'];
-            /*
-            if ($tree->isModuleItem($parents[$i]) && $studienmodulmanagement = PluginEngine::getPlugin('StudienmodulManagement')) {
-                $this->global_markers['CURRENT_LEVEL_NAME'] = $studienmodulmanagement->getModuleDescription($parents[$i], SemesterData::GetSemesterIdByIndex($this->sem_browse_data['sem']));
-            } else {
-            */
-                if (trim($tree->tree_data[$this->sem_browse_data['start_item_id']]['info'])) {
-                    $this->global_markers['CURRENT_LEVEL_INFO'] = ExternModule::ExtFormatReady($tree->tree_data[$this->sem_browse_data['start_item_id']]['info']);
-                }
-        //  }
+            if (trim($tree->tree_data[$this->sem_browse_data['start_item_id']]['info'])) {
+                $this->global_markers['CURRENT_LEVEL_INFO'] = ExternModule::ExtFormatReady($tree->tree_data[$this->sem_browse_data['start_item_id']]['info']);
+            }
         }
 
         $content['LEVEL_TREE']['LEVEL_PATH']['LEVEL_PATH_ITEM'][$j] = array(
@@ -709,18 +697,12 @@ class ExternModuleTemplateSemBrowse extends ExternModule {
             foreach ($kids as $kid) {
                 $num_entries = $tree->getNumEntries($kid, true);
                 if (!($this->config->getValue('Main', 'disableemptylevels') && $num_entries == 0)) {
-                    /*
-                    if ($tree->isModuleItem($kid) && $studienmodulmanagement = PluginEngine::getPlugin('StudienmodulManagement')) {
-                        $info = 'An dieser Stelle nicht verwendet';
+                    if (trim($tree->tree_data[$kid]['info'])) {
+                        $info = kill_format(trim($tree->tree_data[$kid]['info']));
                     } else {
-                    */
-                        if (trim($tree->tree_data[$kid]['info'])) {
-                            $info = kill_format(trim($tree->tree_data[$kid]['info']));
-                        } else {
-                            $info = '';
-                            $content['SUBLEVEL_' . $level][$count]['SUBLEVEL_NO_INFO_' . $level] = true;
-                        }
-                //  }
+                        $info = '';
+                        $content['SUBLEVEL_' . $level][$count]['SUBLEVEL_NO_INFO_' . $level] = true;
+                    }
                     $level_content = array(
                             'SUBLEVEL_NAME_' . $level => ExternModule::ExtHtmlReady($tree->tree_data[$kid]['name']),
                             'SUBLEVEL_ID_' . $level => $kid,
@@ -780,13 +762,7 @@ class ExternModuleTemplateSemBrowse extends ExternModule {
                             if ($this->sem_tree->tree_data[$group_field]) {
                                 $range_path_level = $this->config->getValue('Main', 'rangepathlevel');
                                 $content['RESULT']['GROUP'][$j]['GROUP_NAME'] = ExternModule::ExtHtmlReady($this->sem_tree->getShortPath($group_field, NULL, '>', $range_path_level ? $range_path_level - 1 : 0));
-                                /*
-                                if ($this->sem_tree->isModuleItem($group_field) && $studienmodulmanagement = PluginEngine::getPlugin('StudienmodulManagement')) {
-                                    $content['RESULT']['GROUP'][$j]['GROUP_INFO'] = $studienmodulmanagement->getModuleDescription($group_field, SemesterData::GetSemesterIdByIndex($this->sem_browse_data['sem']));
-                                } else {
-                                */
-                                    $content['RESULT']['GROUP'][$j]['NO_GROUP_INFO'] = true;
-                            //  }
+                                $content['RESULT']['GROUP'][$j]['NO_GROUP_INFO'] = true;
                             } else {
                                 $content['RESULT']['GROUP'][$j]['NO_GROUP_NAME'] = true;
                             }

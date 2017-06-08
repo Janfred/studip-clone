@@ -39,10 +39,9 @@ use Studip\Button, Studip\LinkButton;
 * @author   André Noack <noack@data-quest.de>
 * @package
 */
-class StudipSemTreeViewAdmin extends TreeView {
-
+class StudipSemTreeViewAdmin extends TreeView
+{
     var $admin_ranges = array();
-    var $studienmodulmanagement = null;
 
     /**
     * constructor
@@ -53,7 +52,6 @@ class StudipSemTreeViewAdmin extends TreeView {
         $this->start_item_id = ($start_item_id) ? $start_item_id : "root";
         $this->root_content = $GLOBALS['UNI_INFO'];
         parent::__construct("StudipSemTree"); //calling the baseclass constructor
-        $this->studienmodulmanagement = PluginEngine::getPlugin('StudienmodulManagement');
         URLHelper::bindLinkParam("_marked_item", $this->marked_item);
         $this->marked_sem =& $_SESSION['_marked_sem'];
         $this->parseCommand();
@@ -554,13 +552,6 @@ class StudipSemTreeViewAdmin extends TreeView {
         if ($this->tree->tree_data[$item_id]['info']){
             $content .= "\n<tr><td style=\"font-size:10pt;\" class=\"table_row_even\" align=\"left\" colspan=\"3\">";
             $content .= formatReady($this->tree->tree_data[$item_id]['info']) . "</td></tr>";
-        }
-        if(is_object($this->studienmodulmanagement) && $this->tree->isModuleItem($item_id)){
-            $content .= "\n<tr><td class=\"blank\" align=\"left\" colspan=\"3\">";
-            $content .=  _("Modulbeschreibung:") . '</td></tr>';
-            $content .= "\n<tr><td class=\"blank\" align=\"left\" colspan=\"3\">";
-            $content .= htmlReady($this->studienmodulmanagement->getModuleDescription($item_id));
-            $content .= "</td></tr>";
         }
         $content .= "<tr><td style=\"font-size:10pt;\"colspan=\"3\">&nbsp;</td></tr>";
         if ($this->tree->getNumEntries($item_id) - $this->tree->tree_data[$item_id]['lonely_sem']){
