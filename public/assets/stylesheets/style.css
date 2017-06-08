@@ -2885,10 +2885,10 @@ div#sidebar-navigation div.sidebar-widget-content {
 .widget-links.sidebar-navigation > li,
 .widget-links.sidebar-views > li {
   padding-left: 5px;
-  line-height: 2em;
 }
 .widget-links.sidebar-navigation > li.active,
 .widget-links.sidebar-views > li.active {
+  line-height: 2em;
   display: block;
 }
 .widget-links.sidebar-navigation > li.active:before,
