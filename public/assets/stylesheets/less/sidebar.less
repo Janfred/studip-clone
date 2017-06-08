@@ -83,14 +83,11 @@ div#sidebar-navigation {
     }
     span[disabled] {
         text-decoration: line-through;
-    }
-    &.sidebar-navigation > li {
-        line-height: 2em;
-    }
+    }    
     &.sidebar-navigation > li.active {
         background-color: @content-color-20;
         margin-left: -4px;
-        #arrow > .right-border(14px, @content-color-20, 1px, @content-color-20, -5px);
+        #arrow > .right-border(14px, @content-color-20, 1px, @content-color-40, -5px);
         a {
             color: @base-color;
             padding-left: 4px;            
@@ -98,11 +95,18 @@ div#sidebar-navigation {
     }
     &.sidebar-views > li.active {
         background: @activity-color-40;
+        margin-left: -5px;
         .box-shadow(inset 0 0 0 1px @activity-color);
-        #arrow > .right-border(floor((0.5 * @line-height-computed)), @activity-color-40, 1px, @activity-color, -5px);
+        #arrow > .right-border(14px, @activity-color-40, 1px, @activity-color, -5px);
+        a {
+            color: @base-color;
+            padding-left: 4px;            
+        }
     }
-    &.sidebar-navigation > li {
+    &.sidebar-navigation > li,
+    &.sidebar-views > li {
         padding-left: 5px;
+        line-height: 2em;
         &.active {
             &:before, &:after {
                 margin-left: -1px;
@@ -115,23 +119,6 @@ div#sidebar-navigation {
             }
             &:after {
                 border-left-width: floor((14px * 2 / 3 - 1));
-            }
-        }
-    }
-    &.sidebar-views > li {
-        padding-left: 5px;
-        &.active {
-            &:before, &:after {
-                margin-left: -1px;
-            }
-            display: block;
-
-            // Obtuse angle looks kinda ugly with borders
-            &:before {
-                border-left-width: floor((0.5 * @line-height-computed * 2 / 3));
-            }
-            &:after {
-                border-left-width: floor((0.5 * @line-height-computed * 2 / 3 - 1));
             }
         }
     }
