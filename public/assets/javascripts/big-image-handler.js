@@ -24,7 +24,8 @@
 (function ($, STUDIP) {
     'use strict';
 
-    var pixelRatio = window.devicePixelRatio || 1;
+    var pixelRatio = window.devicePixelRatio || 1,
+        dataAttribute = 'big-image-handled';
 
     // Determines whether the image should not be handled due to one of the
     // following reasons:
@@ -39,7 +40,8 @@
         var $img  = $(img),
             $link = $img.closest('a'),
             src   = $img.attr('src');
-        return $img.closest('[contenteditable]').length > 0
+        return $img.data(dataAttribute)
+            || $img.closest('[contenteditable]').length > 0
             || ($link.length > 0 && $link.attr('href') !== src)
             || src.match(/\.svg$/);
     }
@@ -89,6 +91,7 @@
                 var img = new Image();
                 img.onload = oversizedHandler(this);
                 img.src = this.src;
+                $(this).data(dataAttribute, true);
             }
         }).on('click.big-image-handler', 'img.oversized-image', function (event) {
             var src     = $(this).attr('src'),
@@ -132,4 +135,3 @@
     STUDIP.BigImageHandler.enable();
 
 }(jQuery, STUDIP));
-
