@@ -25,28 +25,28 @@
                    placeholder="<?= _('Beispiel-Applikation') ?>"
                    value="<?= htmlReady($consumer->title) ?>">
         </label>
-        
+
         <label for="contact">
             <?= _('Kontaktperson') ?>
             <input required type="text" id="contact" name="contact"
                    placeholder="John Doe"
                    value="<?= htmlReady($consumer->contact) ?>">
         </label>
-        
+
         <label for="email">
             <?= _('Kontaktadresse') ?>
             <input required type="text" id="email" name="email"
                    placeholder="support@appsite.tld"
                    value="<?= htmlReady($consumer->email) ?>">
         </label>
-        
+
         <label for="callback">
             <?= _('Callback URL') ?>
             <input required type="text" id="callback" name="callback"
                    placeholder="http://appsite.tld/auth"
                    value="<?= htmlReady($consumer->callback) ?>">
         </label>
-        
+
         <? if ($consumer->id): ?>
 
             <label for="consumer_key">
@@ -54,7 +54,7 @@
                 <input readonly type="text" id="consumer_key"
                        value="<?= htmlReady($consumer->auth_key) ?>">
             </label>
-            
+
             <label for="consumer_secret">
                 <?= _('Consumer Secret') ?>
                 <input readonly type="text" id="consumer_secret"
@@ -81,12 +81,12 @@
             <input type="checkbox" class="switch" id="commercial" name="commercial" value="1"
                     <?= $consumer->commercial ? 'checked' : '' ?>>
         </label>
-        
+
         <label for="description">
             <?= _('Beschreibung') ?>
             <textarea id="description" name="description"><?= htmlReady($consumer->description) ?></textarea>
         </label>
-        
+
         <label for="url">
             <?= _('URL') ?>
             <input type="text" id="url" name="url"
@@ -114,7 +114,7 @@
     </fieldset>
 
     <footer data-dialog-button>
-        <?= Button::createAccept(_('speichern'), 'store') ?>
-        <?= LinkButton::createCancel(_('abbrechen'), $controller->url_for('admin/api')) ?>
+        <?= Button::createAccept(_('Speichern'), 'store') ?>
+        <?= LinkButton::createCancel(_('Abbrechen'), $controller->url_for('admin/api')) ?>
     </footer>
 </form>

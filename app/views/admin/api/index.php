@@ -1,4 +1,5 @@
 <? if (!empty($consumers)): ?>
+<form action="#" method="post">
 <table class="default">
     <caption><?= _('Registrierte Konsumenten') ?></caption>
     <thead>
@@ -48,15 +49,18 @@
                 <a href="<?= $controller->url_for('admin/api/permissions', $consumer->id) ?>" title="<?= _('Zugriffsberechtigungen verwalten') ?>">
                     <?= Icon::create('admin', 'clickable')->asImg() ?>
                 </a>
-                <a href="<?= $controller->url_for('admin/api/delete', $consumer->id) ?>"
-                   title="<?= htmlReady(sprintf(_('Applikation "%s" entfernen'), $consumer->title)) ?>">
-                    <?= Icon::create('trash', 'clickable')->asImg() ?>
-                </a>
+                <?= Icon::create('trash')->asInput([
+                    'formaction'   => $controller->url_for('admin/api/delete/', $consumer->id),
+                    'title'        => sprintf(_('Applikation "%s" entfernen'), $consumer->title),
+                    'data-confirm' => '',
+                ]) ?>
             </td>
         </tr>
 <? endforeach; ?>
     </tbody>
 </table>
+</form>
+
 <? else: ?>
 <p>
     <?= MessageBox::info(_('Es wurde noch keine Applikation registriert.'),

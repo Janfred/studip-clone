@@ -151,8 +151,14 @@ class Admin_ApiController extends AuthenticatedController
      **/
     public function delete_action($id)
     {
-        $this->store->delete($id);
-        PageLayout::postMessage(MessageBox::success(_('Die Applikation wurde erfolgreich gelöscht.')));
+        if (!Request::isPost()) {
+            throw new MethodNotAllowedException();
+        }
+        if ($consumer = RESTAPI\Consumer\Base::find($id)) {
+            $consumer->delete();
+
+            PageLayout::postSuccess(_('Die Applikation wurde erfolgreich gelöscht.'));
+        }
         $this->redirect('admin/api');
     }
 
