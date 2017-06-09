@@ -1,6 +1,6 @@
 <?php
 if (!function_exists('__nav_attr')) {
-    if (true || $accesskey_enabled) {
+    if ($accesskey_enabled) {
         function __nav_attr($nav) {
             static $count = 1;
             $image_attributes = $nav->getImage()->getAttributes();
