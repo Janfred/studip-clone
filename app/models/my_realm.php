@@ -1439,6 +1439,38 @@ class MyRealmModel
                 unset($_tmp_courses[$sem_key][$sem_tree_id]);
             }
         }
+        
+        //After the $_tmp_courses array has been built we must sort the
+        //third layer (course collection) by group (color),
+        //by number (at your option) and by name:
+        foreach ($_tmp_courses as $sem_key => $sem_tree) {
+            foreach ($sem_tree as $sem_tree_name => $collection) {
+                //We must sort all courses by their group and their name:
+                uasort($collection, function ($a, $b) {
+                    if (Config::get()->IMPORTANT_SEMNUMBER) {
+                        if ($a['gruppe'] == $b['gruppe']) {
+                            if ($a['number'] == $b['number']) {
+                                if ($a['temp_name'] == $b['temp_name']) {
+                                    return 0;
+                                }
+                                return ($a['temp_name'] < $b['temp_name']) ? -1 : 1;
+                            }
+                            return ($a['number'] < $b['number']) ? -1 : 1;
+                        }
+                        return ($a['gruppe'] < $b['gruppe']) ? -1 : 1;
+                    } else {
+                        if ($a['gruppe'] == $b['gruppe']) {
+                            if ($a['temp_name'] == $b['temp_name']) {
+                                return 0;
+                            }
+                            return ($a['temp_name'] < $b['temp_name']) ? -1 : 1;
+                        }
+                        return ($a['gruppe'] < $b['gruppe']) ? -1 : 1;
+                    }
+                });
+                $_tmp_courses[$sem_key][$sem_tree_name] = $collection;
+            }
+        }
 
         $sem_courses = $_tmp_courses;
     }
