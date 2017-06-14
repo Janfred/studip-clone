@@ -610,7 +610,7 @@ use Studip\Button, Studip\LinkButton;
             <tr>
                 <td colspan="3" style="text-align:center">
                     <?= Button::createAccept(_('Speichern'), 'edit') ?>
-                    <?= LinkButton::createCancel(_('Abbrechen'), $controller->url_for('admin/user/?reset'), ['name' => 'abort']) ?>
+                    <?= LinkButton::createCancel(_('Abbrechen'), $controller->url_for('admin/user'), ['name' => 'abort']) ?>
                 </td>
             </tr>
         </tfoot>

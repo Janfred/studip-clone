@@ -32,7 +32,7 @@
                             <? foreach ($_memberships as $membership): ?>
                                 <tr>
                                     <td>
-                                        <a href="<?= URLHelper::getLink('seminar_main.php', ['auswahl' => $course->id]) ?>">
+                                        <a href="<?= URLHelper::getLink('seminar_main.php', ['auswahl' => $membership->course->id]) ?>">
                                             <?= htmlReady($membership->course->veranstaltungsnummer) ?>
                                         </a>
                                     </td>
