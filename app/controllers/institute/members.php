@@ -109,7 +109,8 @@ class Institute_MembersController extends AuthenticatedController
 
         // Show lock rule information
         $lockrule = LockRules::getObjectRule($this->institute->id);
-        if ($this->admin_view && $lockrule->description && LockRules::Check($this->institute->id, 'participants')) {
+        if ($this->admin_view && $lockrule->description
+                && LockRules::Check($this->institute->id, 'participants')) {
             PageLayout::postInfo(formatLinks($lockrule->description));
         }
 
@@ -166,7 +167,8 @@ class Institute_MembersController extends AuthenticatedController
                     return $group->members->pluck('user_id');
                 })));
                 $institut_members = $this->institute->members->filter(function ($member) use ($assigned) {
-                    if (!$GLOBALS['perm']->have_perm('admin') && !($member->visible && $member->user->visible !== 'never')) {
+                    if (!$GLOBALS['perm']->have_perm('admin')
+                            && !($member->visible && $member->user->visible !== 'never')) {
                         return false;
                     }
                     if ($member->inst_perms === 'user') {
@@ -314,7 +316,8 @@ class Institute_MembersController extends AuthenticatedController
                 if ($perms === 'root') {
                     PageLayout::postError(_('ROOTs können nicht berufen werden!'));
                 } elseif ($perms == 'admin') {
-                    if ($GLOBALS['perm']->have_perm('root') || (!Context::get()->is_fak && $GLOBALS['perm']->have_studip_perm('admin', Context::get()->fakultaets_id))) {
+                    if ($GLOBALS['perm']->have_perm('root')
+                            || (!Context::get()->is_fak && $GLOBALS['perm']->have_studip_perm('admin', Context::get()->fakultaets_id))) {
                         // Emails schreiben...
                         if ($enable_mail_dozent || $enable_mail_admin) {
                             if ($enable_mail_admin && $enable_mail_dozent) {
@@ -605,7 +608,9 @@ class Institute_MembersController extends AuthenticatedController
             ->setTitle(_('Personen in die Einrichtung eintragen'))
             ->setExecuteURL($this->link_for('institute/members/add', $this->type, ['admin_view' => 1]))
             ->setSearchObject($search_obj)
-            ->setAdditionalHTML('<p><strong>' . _('Nur bei Zuordnung eines Admins:') .' </strong> <label><input name="additional[]" value="admins" type="checkbox">' . _('Benachrichtigung der Admins') . '</label>
-                             <label><input name="additional[]" value="dozenten" type="checkbox">' . _('Benachrichtigung der Dozenten') . '</label></p>');
+            ->setAdditionalHTML('<p><strong>' . _('Nur bei Zuordnung eines Admins:') .' </strong> 
+                            <label><input name="additional[]" value="admins" type="checkbox">' . _('Benachrichtigung der Admins') . '</label>
+                            <label><input name="additional[]" value="dozenten" type="checkbox">' . _('Benachrichtigung der Dozenten') . '</label>
+                            </p>');
     }
 }

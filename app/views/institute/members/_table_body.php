@@ -119,7 +119,11 @@
     <? endif; ?>
     </tr>
 <? if ($structure['statusgruppe']): ?>
-    <? foreach ($groups->filter(function ($group) use ($member) { return $group->isMember($member->user_id); }) as $group):
+    <?
+    $my_groups = $groups->filter(function ($group) use ($member) {
+        return $group->isMember($member->user_id);
+    });
+    foreach ($my_groups as $group):
         $group_member = $group->members->findOneBy('user_id', $member->user_id);
     ?>
         <tr>
