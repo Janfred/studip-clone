@@ -34,6 +34,7 @@ class Course_StudygroupController extends AuthenticatedController
         }
 
         Sidebar::get()->setImage('sidebar/studygroup-sidebar.png');
+        $this->set_layout('course/studygroup/layout');
 
         $this->view = $this->getView($args[0]);
     }
