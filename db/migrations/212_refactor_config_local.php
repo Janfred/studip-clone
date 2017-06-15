@@ -33,47 +33,58 @@ class RefactorConfigLocal extends Migration
             ),
             "XSLT_ENABLE" => array(
                 'description' => "Soll Export mit XSLT angeschaltet sein?",
-                'type' => "boolean"
+                'type' => "boolean",
+                'default' => 1
             ),
             "FOP_ENABLE" => array(
                 'description' => "Soll Export mit FOP erlaubt sein?",
-                'type' => "boolean"
+                'type' => "boolean",
+                'default' => 1
             ),
             "EXTERN_SRI_ENABLE" => array(
                 'description' => "Allow the usage of SRI-interface (Stud.IP Remote Include)",
-                'type' => "boolean"
+                'type' => "boolean",
+                'default' => 1
             ),
             "EXTERN_SRI_ENABLE_BY_ROOT" => array(
                 'description' => "Only root allows the usage of SRI-interface for specific institutes",
-                'type' => "boolean"
+                'type' => "boolean",
+                'default' => 0
             ),
             "EXTERN_ALLOW_ACCESS_WITHOUT_CONFIG" => array(
                 'description' => "Free access to external pages (without the need of a configuration), independent of SRI settings above",
-                'type' => "boolean"
+                'type' => "boolean",
+                'default' => 0
             ),
             "SOAP_ENABLE" => array(
                 'description' => "Schaltet die SOAP-Schnittstelle an.",
-                'type' => "boolean"
+                'type' => "boolean",
+                'default' => 0
             ),
             "SOAP_USE_PHP5" => array(
                 'description' => "Sollen PHP-Bibliotheken für SOAP verwendet werden?",
-                'type' => "boolean"
+                'type' => "boolean",
+                'default' => 0
             ),
             "ALLOW_SELFASSIGN_STUDYCOURSE" => array(
                 'description' => "If true, students are allowed to set or change their studycourse (studiengang)",
-                'type' => "boolean"
+                'type' => "boolean",
+                'default' => 1
             ),
             "SHOW_TERMS_ON_FIRST_LOGIN" => array(
                 'description' => "If true, the user has to accept the terms on his first login (this feature makes only sense, if you use disable ENABLE_SELF_REGISTRATION).",
-                'type' => "boolean"
+                'type' => "boolean",
+                'default' => 0
             ),
             "CONVERT_IDNA_URL" => array(
                 'description' => "If true, urls with german \"umlauts\" are converted",
-                'type' => "boolean"
+                'type' => "boolean",
+                'default' => 1
             ),
             "USER_VISIBILITY_CHECK" => array(
                 'description' => "Enable presentation of visibility decision texts for users after first login. see lib/include/header.php and lib/user_visible.inc.php for further info",
-                'type' => "boolean"
+                'type' => "boolean",
+                'default' => 0
             ),
             "USERNAME_REGULAR_EXPRESSION" => array(
                 'description' => "Regex for allowed characters in usernames",
@@ -90,44 +101,53 @@ class RefactorConfigLocal extends Migration
             "ALLOW_CHANGE_USERNAME" => array(
                 'description' => "If true, users are allowed to change their username",
                 'type' => "boolean",
-                'section' => "permissions"
+                'section' => "permissions",
+                'default' => 1
             ),
             "ALLOW_CHANGE_EMAIL" => array(
                 'description' => "If true, users are allowed to change their username",
                 'type' => "boolean",
-                'section' => "permissions"
+                'section' => "permissions",
+                'default' => 1
             ),
             "ALLOW_CHANGE_NAME" => array(
                 'description' => "If true, users are allowed to change their name",
                 'type' => "boolean",
-                'section' => "permissions"
+                'section' => "permissions",
+                'default' => 1
             ),
             "ALLOW_CHANGE_TITLE" => array(
                 'description' => "If true, users are allowed to change their titles",
                 'type' => "boolean",
-                'section' => "permissions"
+                'section' => "permissions",
+                'default' => 1
             ),
             "ENABLE_SELF_REGISTRATION" => array(
                 'description' => "Should it be possible for an user to register himself",
                 'type' => "boolean",
-                'section' => "permissions"
+                'section' => "permissions",
+                'default' => 1
             ),
             "ENABLE_REQUEST_NEW_PASSWORD_BY_USER" => array(
                 'description' => "If true, users are able to request a new password themselves",
                 'type' => "boolean",
-                'section' => "permissions"
+                'section' => "permissions",
+                'default' => 1
             ),
             "PHPASS_USE_PORTABLE_HASH" => array(
                 'description' => "PHPASS_USE_PORTABLE_HASH",
-                'type' => "boolean"
+                'type' => "boolean",
+                'default' => 0
             ),
             "WEBSERVICES_ENABLE" => array(
                 'description' => "Schaltet die Webservice-Schnittstelle an.",
-                'type' => "boolean"
+                'type' => "boolean",
+                'default' => 0
             ),
             "ENABLE_FREE_ACCESS" => array(
                 'description' => "If true, courses with public access are available",
-                'type' => "boolean"
+                'type' => "boolean",
+                'default' => 1
             ),
         );
 
@@ -135,7 +155,7 @@ class RefactorConfigLocal extends Migration
             INSERT IGNORE INTO config
                 (config_id, field, value, is_default, type, `range`, section, mkdate, chdate, description)
             VALUES
-                (MD5(:name), :name, :value, 1, :type, :range, :section, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), :description)
+                (MD5(:name), :name, :value, :is_default, :type, :range, :section, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), :description)
         ");
 
         foreach ($global_boolean_parameter as $name => $data) {
@@ -143,6 +163,7 @@ class RefactorConfigLocal extends Migration
                 'name'        => $name,
                 'type'        => $data['type'],
                 'value'       => $GLOBALS[$name],
+                'is_default'  => $data['default'] ?: "",
                 'range'       => 'global',
                 'section'     => $data['section'] ?: "global",
                 'description' => $data['description']
