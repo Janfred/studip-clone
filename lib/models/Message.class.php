@@ -160,7 +160,7 @@ class Message extends SimpleORMap
                              function ($data) {
                                  $user_id = $data['user_id'];
                                  unset($data['user_id']);
-                                 $user = User::build($data);
+                                 $user = User::buildExisting($data);
                                  $ret = $user->toArray('username vorname nachname');
                                  $ret['fullname'] = $user->getFullname();
                                  $ret['user_id'] = $user_id;
