@@ -40,7 +40,6 @@
                         <?= $stgteilbezeichnung->count_studiengaenge ?>
                     </td>
                     <td class="dont-hide actions">
-                        <? $actionMenu = ActionMenu::get() ?>
                         <? if ($perm->havePermWrite()) : ?>
                             <a data-dialog="size=auto" href="<?= $controller->url_for('/stgteilbezeichnung/' . $stgteilbezeichnung->id) ?>">
                                 <?= Icon::create('edit', 'clickable', ['title' => _('Studiengangteil-Bezeichnung bearbeiten')])->asImg(); ?>
