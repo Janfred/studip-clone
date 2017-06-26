@@ -23,83 +23,31 @@ if (isset($_COOKIE['navigation-length'])) {
             <?= _('Menü') ?>
         </label>
         <? // The main menu will be placed here when scrolled, see navigation.less ?>
+        <div id="barTopFont">
+            <?= htmlReady(Config::get()->UNI_NAME_CLEAN) ?>
+        </div>
     </div>
     <!-- Dynamische Links ohne Icons -->
     <div id="barBottomright">
         <ul>
-        <? if (is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm('autor')): ?>
-
-            <? $active = false;
-                if (Navigation::hasItem('/profile')) {
-                    $active = Navigation::getItem('/profile')->isActive();
-                }
-            ?>
-
-            <!-- User-Avatar -->
-            <li class="header_avatar_container <?= $active ? 'active' : '' ?>" id="barTopAvatar">
-
-                <div id="header_avatar_menu">
-                <?php
-                    $action_menu = ContentGroupMenu::get();
-                    $action_menu->setLabel(User::findCurrent()->getFullName());
-                    $action_menu->setIcon(Avatar::getAvatar(User::findCurrent()->id)->getImageTag(Avatar::MEDIUM));
-                    $action_menu->addLink(
-                        URLHelper::getURL('dispatch.php/profile', array(), true),
-                        _('Profil'),
-                        Icon::create('person', 'clickable')
-                    );
-                    if (Config::get()->PERSONALDOCUMENT_ENABLE) {
-                        $action_menu->addLink(
-                            URLHelper::getURL('dispatch.php/document/files'),
-                            _('Meine Dateien'),
-                            Icon::create('folder-empty', 'clickable')
-                        );
-                    }
-                    $action_menu->addLink(
-                        URLHelper::getURL('dispatch.php/settings/general'),
-                        _('Einstellungen'),
-                        Icon::create('settings2', 'clickable')
-                    );
-                    $action_menu->addLink(
-                        URLHelper::getURL('logout.php'),
-                        _('Logout'),
-                        Icon::create('door-leave', 'clickable')
-                    );
-                ?>
-                <?= $action_menu->render(); ?>
-               </div>
-               <?= Icon::create('arr_1down', 'clickable', array('id' => 'avatar-arrow')); ?>
-
-            <? if (is_object($GLOBALS['perm']) && PersonalNotifications::isActivated() && $GLOBALS['perm']->have_perm('autor')) : ?>
-                <? $notifications = PersonalNotifications::getMyNotifications() ?>
-                <? $lastvisit = (int)UserConfig::get($GLOBALS['user']->id)->getValue('NOTIFICATIONS_SEEN_LAST_DATE') ?>
-                <div id="notification_container"<?= count($notifications) > 0 ? ' class="hoverable"' : '' ?>>
-                    <? foreach ($notifications as $notification) {
-                        if ($notification['mkdate'] > $lastvisit) {
-                            $alert = true;
-                        }
-                    } ?>
-                    <div id="notification_marker"<?= $alert ? ' class="alert"' : "" ?> title="<?= _("Benachrichtigungen") ?>" data-lastvisit="<?= $lastvisit ?>">
-                        <?= count($notifications) ?>
-                    </div>
-                    <div class="list below" id="notification_list">
-                        <ul>
-                        <? foreach ($notifications as $notification) : ?>
-                            <?= $notification->getLiElement() ?>
-                        <? endforeach ?>
-                        </ul>
-                    </div>
-                <? if (PersonalNotifications::isAudioActivated()): ?>
-                    <audio id="audio_notification" preload="none">
-                        <source src="<?= Assets::url('sounds/blubb.ogg') ?>" type="audio/ogg">
-                        <source src="<?= Assets::url('sounds/blubb.mp3') ?>" type="audio/mpeg">
-                    </audio>
+        
+        <? if (Navigation::hasItem('/links')): ?>
+            <? foreach (Navigation::getItem('/links') as $nav): ?>
+                <? if ($nav->isVisible()) : ?>
+                    <li <? if ($nav->isActive()) echo 'class="active"'; ?>>
+                        <a
+                            <? if (is_internal_url($url = $nav->getURL())) : ?>
+                                href="<?= URLHelper::getLink($url) ?>"
+                            <? else: ?>
+                                href="<?= htmlReady($url) ?>" target="_blank"
+                            <? endif; ?>
+                            <? if ($nav->getDescription()): ?>
+                                title="<?= htmlReady($nav->getDescription()) ?>"
+                            <? endif; ?>
+                            ><?= htmlReady($nav->getTitle()) ?></a>
+                    </li>
                 <? endif; ?>
-                </div>
-            <? else: ?>
-                <div id="notification_container"></div>
-            <? endif; ?>
-            </li>
+            <? endforeach; ?>
         <? endif; ?>
 
         <? if (isset($search_semester_nr)) : ?>
@@ -140,24 +88,88 @@ if (isset($_COOKIE['navigation-length'])) {
                 </li>
             <? endif; ?>
         <? endif; ?>
+        
+        <? if (is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm('autor')): ?>
 
-        <? if (Navigation::hasItem('/links')): ?>
-            <? foreach (Navigation::getItem('/links') as $nav): ?>
-                <? if ($nav->isVisible()) : ?>
-                    <li <? if ($nav->isActive()) echo 'class="active"'; ?>>
-                        <a
-                            <? if (is_internal_url($url = $nav->getURL())) : ?>
-                                href="<?= URLHelper::getLink($url) ?>"
-                            <? else: ?>
-                                href="<?= htmlReady($url) ?>" target="_blank"
-                            <? endif; ?>
-                            <? if ($nav->getDescription()): ?>
-                                title="<?= htmlReady($nav->getDescription()) ?>"
-                            <? endif; ?>
-                            ><?= htmlReady($nav->getTitle()) ?></a>
-                    </li>
+            <? $active = false;
+                if (Navigation::hasItem('/profile')) {
+                    $active = Navigation::getItem('/profile')->isActive();
+                }
+            ?>
+
+            <!-- User-Avatar -->
+            <li class="header_avatar_container <?= $active ? 'active' : '' ?>" id="barTopAvatar">
+
+            <? if (is_object($GLOBALS['perm']) && PersonalNotifications::isActivated() && $GLOBALS['perm']->have_perm('autor')) : ?>
+                <? $notifications = PersonalNotifications::getMyNotifications() ?>
+                <? $lastvisit = (int)UserConfig::get($GLOBALS['user']->id)->getValue('NOTIFICATIONS_SEEN_LAST_DATE') ?>
+                <div id="notification_container"<?= count($notifications) > 0 ? ' class="hoverable"' : '' ?>>
+                    <? foreach ($notifications as $notification) {
+                        if ($notification['mkdate'] > $lastvisit) {
+                            $alert = true;
+                        }
+                    } ?>
+                    <div id="notification_marker"<?= $alert ? ' class="alert"' : "" ?> title="<?= _("Benachrichtigungen") ?>" data-lastvisit="<?= $lastvisit ?>">
+                        <?= count($notifications) ?>
+                    </div>
+                    <div class="list below" id="notification_list">
+                        <ul>
+                        <? foreach ($notifications as $notification) : ?>
+                            <?= $notification->getLiElement() ?>
+                        <? endforeach ?>
+                        </ul>
+                    </div>
+                <? if (PersonalNotifications::isAudioActivated()): ?>
+                    <audio id="audio_notification" preload="none">
+                        <source src="<?= Assets::url('sounds/blubb.ogg') ?>" type="audio/ogg">
+                        <source src="<?= Assets::url('sounds/blubb.mp3') ?>" type="audio/mpeg">
+                    </audio>
                 <? endif; ?>
-            <? endforeach; ?>
+                </div>
+            <? else: ?>
+                <div id="notification_container"></div>
+            <? endif; ?>
+
+
+                <div id="header_avatar_menu">
+                <?php
+                    $action_menu = ContentGroupMenu::get();
+                    $action_menu->setLabel(User::findCurrent()->getFullName());
+                    $action_menu->setIcon(Avatar::getAvatar(User::findCurrent()->id)->getImageTag(Avatar::MEDIUM));
+                    $action_menu->addLink(
+                        URLHelper::getURL('dispatch.php/profile', array(), true),
+                        _('Profil'),
+                        Icon::create('person', 'clickable')
+                    );
+                    /*if (Config::get()->PERSONALDOCUMENT_ENABLE) {
+                        $action_menu->addLink(
+                            URLHelper::getURL('dispatch.php/document/files'),
+                            _('Meine Dateien'),
+                            Icon::create('folder-empty', 'clickable')
+                        );
+                    }*/
+                    $action_menu->addLink(
+                        URLHelper::getURL('dispatch.php/settings/account'),
+                        _('Nutzerdaten'),
+                        Icon::create('key', 'clickable')
+                    );
+                    $action_menu->addLink(
+                        URLHelper::getURL('dispatch.php/settings/general'),
+                        _('Einstellungen'),
+                        Icon::create('admin', 'clickable')
+                    );
+                    $action_menu->addLink(
+                        URLHelper::getURL('logout.php'),
+                        _('Logout'),
+                        Icon::create('door-leave', 'clickable')
+                    );
+                ?>
+                <?= $action_menu->render(); ?>
+               </div>
+               <?= Icon::create('arr_1down', 'info_alt', array('id' => 'avatar-arrow')); ?>
+
+            
+            </li>
         <? endif; ?>
 
         </ul>
@@ -172,9 +184,7 @@ if (isset($_COOKIE['navigation-length'])) {
             <?= Assets::img('logos/logoneu.jpg', array('alt' => 'Logo Uni Göttingen')) ?>
         </div>
          -->
-        <div id="barTopFont">
-            <?= htmlReady(Config::get()->UNI_NAME_CLEAN) ?>
-        </div>
+        
         <? SkipLinks::addIndex(_('Hauptnavigation'), 'barTopMenu', 1); ?>
         <ul id="barTopMenu" role="navigation" <? if (count($header_nav['hidden']) > 0) echo 'class="overflown"'; ?>>
         <? foreach ($header_nav['visible'] as $path => $nav): ?>

@@ -62,6 +62,11 @@
             <?= $this->render_partial('profile/working_place') ?>
         <? endif ?>
 
+        <? if ($current_user->user_id === $GLOBALS['user']->id) : ?>
+            <dt><?= _('Status:') ?></dt>
+            <dd><?= htmlReady(ucfirst($current_user['perms'])) ?></dd>
+        <? endif ?>
+
         <? if (!empty($shortDatafields)) : ?>
             <? foreach ($shortDatafields as $name => $entry) : ?>
                 <dt><?= htmlReady($name) ?>:</dt>

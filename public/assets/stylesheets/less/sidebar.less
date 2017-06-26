@@ -85,11 +85,12 @@ div#sidebar-navigation {
         text-decoration: line-through;
     }    
     &.sidebar-navigation > li.active {
-        background-color: @content-color-20;
+        background-color: @base-color;
         margin-left: -4px;
-        #arrow > .right-border(14px, @content-color-20, 1px, @content-color-40, -5px);
+        //#arrow > .right-border(14px, @content-color-20, 1px, @content-color-40, -5px);
+        #arrow > .right-border(14px, @base-color, 1px, @base-color, -5px);
         a {
-            color: @base-color;
+            color: @white;
             padding-left: 4px;            
         }
     }
