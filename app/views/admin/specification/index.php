@@ -27,23 +27,13 @@
                         <?= htmlReady($rule['description']) ?>
                     </td>
                     <td class="actions">
-                        <? $actionMenu = ActionMenu::get() ?>
-                        <? $actionMenu->addLink(
-                            $controller->url_for('admin/specification/edit/' . $rule['lock_id']),
-                            _('Regel bearbeiten'),
-                            Icon::create('edit', 'clickable')
-                        ) ?>
-                        <? $actionMenu->addButton(
-                            'delete_rule',
-                            _('Regel löschen'),
-                            Icon::create('trash', 'clickable', [
-                                'title'        => _('Regel löschen'),
-                                'formaction'   => $controller->url_for('admin/specification/delete/' . $rule['lock_id']),
-                                'data-confirm' => sprintf(_('Wollen Sie die Regel "%s" wirklich löschen?'), $rule['name']),
-                                'style'        => 'margin: 0px',
-                            ])
-                        ) ?>
-                        <?= $actionMenu->render() ?>
+                        <a href="<?=$controller->url_for('admin/specification/edit/'.$rule['lock_id']) ?>">
+                            <?= Icon::create('edit', 'clickable', ['title' => _('Regel bearbeiten')])->asImg() ?>
+                        </a>
+                        <?=Icon::create('trash', 'clickable', tooltip2(_('Regel löschen')))->asInput([
+                            'formaction'   => $controller->url_for('admin/specification/delete/' . $rule['lock_id']),
+                            'data-confirm' => sprintf(_('Wollen Sie die Regel "%s" wirklich löschen?'), $rule['name'])
+                        ])?>
                     </td>
                 </tr>
             <? endforeach ?>
