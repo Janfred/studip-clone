@@ -1759,6 +1759,7 @@ form.default label.packed button {
   flex: 1;
   margin-left: 8px;
   margin-top: 2px;
+  line-height: 28px;
 }
 #layout_wrapper {
   display: -ms-flexbox;
@@ -1987,18 +1988,28 @@ form.default label.packed button {
   padding: 0 15px;
   z-index: 2;
 }
-#barBottomright a,
-#layout_footer a {
+#layout_footer a,
+#barBottomright a {
   color: #ffffff;
   margin: 0 6px;
   text-decoration: none;
 }
-#barBottomright a:hover,
-#layout_footer a:hover {
+#layout_footer a:hover,
+#barBottomright a:hover {
   color: #ececed;
 }
-#barBottomright > ul,
 #layout_footer > ul {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style-type: none;
+  height: 30px;
+  padding: 0px;
+}
+#layout_footer > ul > li {
+  margin: 2px;
+}
+#barBottomright > ul {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -2006,18 +2017,15 @@ form.default label.packed button {
   height: 40px;
   padding: 0px;
 }
-#barBottomright > ul > li,
-#layout_footer > ul > li {
+#barBottomright > ul > li {
   margin: 2px;
   padding: 0px 10px;
 }
-#barBottomright #quicksearch_item input[type="text"],
-#layout_footer #quicksearch_item input[type="text"] {
+#barBottomright #quicksearch_item input[type="text"] {
   height: 26px;
   width: 273px;
 }
-#barBottomright #quicksearch_item .quicksearchbutton,
-#layout_footer #quicksearch_item .quicksearchbutton {
+#barBottomright #quicksearch_item .quicksearchbutton {
   margin: 7px 8px;
 }
 #barTopAvatar {
