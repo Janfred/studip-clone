@@ -41,6 +41,11 @@
     <title data-original="<?= htmlReady(PageLayout::getTitle()) ?>">
         <?= htmlReady(PageLayout::getTitle() . ' - ' . Config::get()->UNI_NAME_CLEAN) ?>
     </title>
+    <script>String.locale = "<?= htmlReady(strtr($_SESSION['_language'], '_', '-')) ?>";</script>
+ <? if ($_SESSION['_language'] !== $GLOBALS['DEFAULT_LANGUAGE']): ?> 
+     <link rel="localization" hreflang="<?= htmlReady(strtr($_SESSION['_language'], '_', '-')) ?>" href="<?= URLHelper::getScriptLink('dispatch.php/localizations/' . $_SESSION['_language']) ?>" type="application/vnd.oftn.l10n+json">
+ <? endif; ?>
+
     <script>
         CKEDITOR_BASEPATH = "<?= Assets::url('javascripts/ckeditor/') ?>";
     </script>
@@ -55,7 +60,6 @@
         STUDIP.wysiwyg_enabled = <?= Config::get()->WYSIWYG ? 'true' : 'false' ?>;
         STUDIP.editor_enabled = <?= Studip\Markup::editorEnabled() ? 'true' : 'false' ?> && CKEDITOR.env.isCompatible;
         STUDIP.URLHelper.parameters = <?= json_encode(studip_utf8encode(URLHelper::getLinkParams())) ?>;
-        String.locale = "<?= htmlReady(strtr($_SESSION['_language'], '_', '-')) ?>";
     </script>
 </head>
 
