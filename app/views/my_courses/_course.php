@@ -128,7 +128,7 @@
                 <?= Icon::create('door-leave+decline', 'inactive', ['title' => _("Die Teilnahme ist bindend. Bitte wenden Sie sich an die Lehrenden.")])->asImg(20) ?>
             </a>
         <? else: ?>
-            <a href="<?= $controller->for('my_courses/decline/' . $course['seminar_id'], ['cmd' => 'suppose_to_kill']) ?>">
+            <a href="<?= $controller->url_for('my_courses/decline/' . $course['seminar_id'], ['cmd' => 'suppose_to_kill']) ?>">
                 <?= Icon::create('door-leave', 'inactive', ['title' => _('aus der Veranstaltung abmelden')])->asImg(20) ?>
             </a>
         <? endif ?>
