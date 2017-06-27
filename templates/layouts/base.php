@@ -36,7 +36,7 @@ if ($navigation) {
 <head>
     <meta charset="WINDOWS-1252">
     <title data-original="<?= htmlReady(PageLayout::getTitle()) ?>">
-      <?= htmlReady(PageLayout::getTitle() . ' - ' . Config::get()->UNI_NAME_CLEAN) ?>
+        <?= htmlReady(PageLayout::getTitle() . ' - ' . Config::get()->UNI_NAME_CLEAN) ?>
     </title>
     <script>
         CKEDITOR_BASEPATH = "<?= Assets::url('javascripts/ckeditor/') ?>";
@@ -52,7 +52,7 @@ if ($navigation) {
     <script>
         STUDIP.ABSOLUTE_URI_STUDIP = "<?= $GLOBALS['ABSOLUTE_URI_STUDIP'] ?>";
         STUDIP.ASSETS_URL = "<?= $GLOBALS['ASSETS_URL'] ?>";
-        STUDIP.STUDIP_SHORT_NAME = "<?= Config::get()->STUDIP_SHORT_NAME ?>";
+        STUDIP.STUDIP_SHORT_NAME = "<?= htmlReady(Config::get()->STUDIP_SHORT_NAME) ?>";
         STUDIP.jsupdate_enable = <?= is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm('autor') && PersonalNotifications::isActivated() ? 'true' : 'false' ?>;
         STUDIP.wysiwyg_enabled = <?= Config::get()->WYSIWYG ? 'true' : 'false' ?>;
         STUDIP.editor_enabled = <?= Studip\Markup::editorEnabled() ? 'true' : 'false' ?> && CKEDITOR.env.isCompatible;

@@ -41,21 +41,21 @@
     <title data-original="<?= htmlReady(PageLayout::getTitle()) ?>">
         <?= htmlReady(PageLayout::getTitle() . ' - ' . Config::get()->UNI_NAME_CLEAN) ?>
     </title>
-    <script>String.locale = "<?= htmlReady(strtr($_SESSION['_language'], '_', '-')) ?>";</script>
- <? if ($_SESSION['_language'] !== $GLOBALS['DEFAULT_LANGUAGE']): ?> 
-     <link rel="localization" hreflang="<?= htmlReady(strtr($_SESSION['_language'], '_', '-')) ?>" href="<?= URLHelper::getScriptLink('dispatch.php/localizations/' . $_SESSION['_language']) ?>" type="application/vnd.oftn.l10n+json">
- <? endif; ?>
-
     <script>
         CKEDITOR_BASEPATH = "<?= Assets::url('javascripts/ckeditor/') ?>";
+        String.locale = "<?= htmlReady(strtr($_SESSION['_language'], '_', '-')) ?>";
     </script>
-    <?= PageLayout::getHeadElements() ?>
+    <? if ($_SESSION['_language'] !== $GLOBALS['DEFAULT_LANGUAGE']): ?> 
+        <link rel="localization" hreflang="<?= htmlReady(strtr($_SESSION['_language'], '_', '-')) ?>"
+              href="<?= URLHelper::getScriptLink('dispatch.php/localizations/' . $_SESSION['_language']) ?>" type="application/vnd.oftn.l10n+json">
+    <? endif ?>
 
-    <script src="<?= URLHelper::getScriptLink('dispatch.php/localizations/' . $_SESSION['_language']) ?>"></script>
+    <?= PageLayout::getHeadElements() ?>
 
     <script>
         STUDIP.ABSOLUTE_URI_STUDIP = "<?= $GLOBALS['ABSOLUTE_URI_STUDIP'] ?>";
         STUDIP.ASSETS_URL = "<?= $GLOBALS['ASSETS_URL'] ?>";
+        STUDIP.STUDIP_SHORT_NAME = "<?= htmlReady(Config::get()->STUDIP_SHORT_NAME) ?>";
         STUDIP.jsupdate_enable = <?= is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm('autor') && PersonalNotifications::isActivated() ? 'true' : 'false' ?>;
         STUDIP.wysiwyg_enabled = <?= Config::get()->WYSIWYG ? 'true' : 'false' ?>;
         STUDIP.editor_enabled = <?= Studip\Markup::editorEnabled() ? 'true' : 'false' ?> && CKEDITOR.env.isCompatible;
@@ -67,4 +67,3 @@
 <div id="layout_wrapper">
     <? SkipLinks::insertContainer() ?>
     <?= PageLayout::getBodyElements() ?>
-    <? PageLayout::clearMessages() ?>
