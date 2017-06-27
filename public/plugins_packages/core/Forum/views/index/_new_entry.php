@@ -27,7 +27,7 @@
             <div class="postbody">
                 <textarea class="add_toolbar wysiwyg" data-textarea="new_entry" name="content" required tabindex="3"
                     placeholder="<?= _('Schreiben Sie hier Ihren Beitrag. Hilfe zu Formatierungen'
-                        . ' finden Sie rechts neben diesem Textfeld.') ?>"><?= htmlReady($this->flash['new_entry_content']) ?></textarea>
+                        . ' finden Sie rechts neben diesem Textfeld.') ?>"><?= wysiwygReady($this->flash['new_entry_content']) ?></textarea>
             </div>
 
             <div class="buttons">

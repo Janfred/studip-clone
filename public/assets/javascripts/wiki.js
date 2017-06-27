@@ -21,7 +21,7 @@
         id,
         wysiwyg_editor = false;
 
-    if (STUDIP.wysiwyg && !STUDIP.wysiwyg.disabled && !!CKEDITOR) {
+    if (STUDIP.editor_enabled) {
         id = $('textarea[name="body"]', form).attr('id');
         wysiwyg_editor = CKEDITOR.instances[id];
         wysiwyg_editor.updateElement();
@@ -117,7 +117,7 @@
         // Disable "save and edit" button if text was not changed
         $('#wiki button[name="submit-and-edit"]').prop('disabled', this.value === this.defaultValue);
     }).ready(function () {
-        if (!STUDIP.wysiwyg || STUDIP.wysiwyg.disabled) {
+        if (!STUDIP.editor_enabled) {
             // Trigger above disable mechanism only when not using wysiwyg
             $('#wiki textarea[name=body]').change();
         } else {

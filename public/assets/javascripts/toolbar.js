@@ -44,7 +44,7 @@
 
             // if WYSIWYG is globally enabled then add a button so
             // the user can activate it
-            if (STUDIP.wysiwyg) {
+            if (STUDIP.wysiwyg_enabled) {
                 button_set.right.wysiwyg = {
                     label: 'WYSIWYG',
                     evaluate: function () {
@@ -123,7 +123,7 @@
     $.fn.extend({
         // Adds the toolbar to an element
         addToolbar: function (button_set) {
-            if (STUDIP.wysiwyg && !STUDIP.wysiwyg.disabled) {
+            if (STUDIP.editor_enabled) {
                 return this;
             }
             return this.each(function () {

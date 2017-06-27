@@ -2,4 +2,4 @@
           id="<?= $name ?>_<?= $model->id ?>"
           class="add_toolbar wysiwyg"
           <? if ($model->is_required) echo 'required'; ?>
-><?= htmlReady($value) ?></textarea>
+><?= wysiwygReady($value) ?></textarea>

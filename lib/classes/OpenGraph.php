@@ -19,7 +19,7 @@ class OpenGraph
         $collection = new OpenGraphURLCollection;
 
         if (Config::get()->OPENGRAPH_ENABLE) {
-            $regexp = StudipFormat::getStudipMarkups()['links']['start'];
+            $regexp = StudipCoreFormat::getStudipMarkup('links')['start'];
             $matched = preg_match_all('/' . $regexp . '/ms', $string, $matches, PREG_SET_ORDER);
             foreach ($matches as $match) {
                 $url = $match[2];

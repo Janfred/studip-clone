@@ -306,10 +306,9 @@ STUDIP.Forum = {
         // usually the wysiwyg editor does this automatically,
         // but since there is no submit event the editor does not
         // get notified
-        var w = STUDIP.wysiwyg;
-        if (w && !w.disabled) {
+        if (STUDIP.editor_enabled) {
             // wysiwyg is active, ensure HTML markers are set
-            textarea.val(w.markAsHtml(textarea.val()));
+            textarea.val(STUDIP.wysiwyg.markAsHtml(textarea.val()));
         }
 
         // remember current textarea value
@@ -417,11 +416,7 @@ STUDIP.Forum = {
             'span[data-edit-topic=' + topic_id +'] textarea[name=content]'
         ).val();
 
-        var content = '[quote=' + name + ']\n' + originalContent + '\n[/quote]\n';
-        var w = STUDIP.wysiwyg;
-        if (w && w.isHtml(originalContent)) {
-            content = w.markAsHtml(content);
-        }
+        var content = STUDIP.Forum.quote(originalContent, name);
 
         jQuery('#new_entry_box textarea').val(content);
         jQuery('#new_entry_box').insertAfter('form[data-topicid=' + topic_id + ']');
@@ -429,6 +424,40 @@ STUDIP.Forum = {
 
         jQuery('input[type=hidden][name=parent]').val(topic_id);
         STUDIP.Forum.newEntry();
+    },
+
+    quote: function(text, name) {
+        // If quoting is changed update these functions:
+        // - StudipFormat::markupQuote
+        //   lib/classes/StudipFormat.php
+        // - quotes_encode lib/visual.inc.php
+        // - STUDIP.Forum.citeEntry > quote
+        //   public/plugins_packages/core/Forum/javascript/forum.js
+        // - studipQuotePlugin > insertStudipQuote
+        //   public/assets/javascripts/ckeditor/plugins/studip-quote/plugin.js
+
+        if (STUDIP.editor_enabled) {
+            // quote with HTML markup
+            var author = '';
+            if (name) {
+                var writtenBy = '%s hat geschrieben:'.toLocaleString();
+                author = '<div class="author">'
+                    + writtenBy.replace('%s', name)
+                    + '</div>';
+            }
+            return '<blockquote>' + author + text + '</blockquote><p>&nbsp;</p>';
+        }
+
+        if (STUDIP.wysiwyg.isHtml(text)) {
+            // remove HTML before quoting
+            text = jQuery(text).text();
+        }
+
+        // quote with Stud.IP markup
+        if (name) {
+            return '[quote=' + name + ']\n' + text + '\n[/quote]\n';
+        }
+        return '[quote]\n' + text + '\n[/quote]\n';
     },
 
     forwardEntry: function(topic_id) {
@@ -490,6 +519,9 @@ STUDIP.Forum = {
     preview: function (text_element_id, preview_id) {
         var posting = {};
         posting.posting = jQuery('textarea[data-textarea=' + text_element_id + ']').val();
+        if (STUDIP.editor_enabled) {
+            posting.posting = STUDIP.wysiwyg.markAsHtml(posting.posting);
+        }
 
         jQuery.ajax(STUDIP.URLHelper.getURL('plugins.php/coreforum/index/preview?cid=' + STUDIP.Forum.seminar_id), {
             type: 'POST',

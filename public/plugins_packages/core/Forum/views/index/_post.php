@@ -83,7 +83,7 @@
         <!-- Postinginhalt -->
         <div class="content">
             <span data-edit-topic="<?= $post['topic_id'] ?>" <?= $edit_posting == $post['topic_id'] ? '' : 'style="display: none;"' ?>>
-                <textarea data-textarea="<?= $post['topic_id'] ?>" data-reset="<?= htmlReady($post['content_raw']) ?>" name="content" class="add_toolbar wysiwyg"><?= htmlReady($post['content_raw']) ?></textarea>
+                <textarea data-textarea="<?= $post['topic_id'] ?>" data-reset="<?= wysiwygReady($post['content_raw']) ?>" name="content" class="add_toolbar wysiwyg"><?= wysiwygReady($post['content_raw']) ?></textarea>
             </span>
             
             <span data-show-topic="<?= $post['topic_id'] ?>" data-topic-content="<?= $post['topic_id'] ?>" <?= $edit_posting != $post['topic_id'] ? '' : 'style="display: none;"' ?>>

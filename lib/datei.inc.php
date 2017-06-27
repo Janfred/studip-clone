@@ -1836,7 +1836,7 @@ function display_folder_body($folder_id, $open, $change, $move, $upload, $refres
             . ' style="width:98%" class="add_toolbar wysiwyg"'
             . ' aria-label="Beschreibung des Ordners eingeben"'
             . ' rows="3">'
-            . htmlReady($result["description"])
+            . wysiwygReady($result["description"])
             . '</textarea>';
 
         if($rechte){

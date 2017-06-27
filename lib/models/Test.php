@@ -28,6 +28,7 @@ class Test extends QuestionnaireQuestion implements QuestionType
     {
         $questions = Request::getArray('questions');
         $requestData = $questions[$this->getId()];
+        $question_data['question'] = Studip\Markup::purifyHtml($question_data['question']);
 
         // create a new eTask if this is a new question
         if (!$this->etask) {

@@ -149,7 +149,7 @@ class Settings_CategoriesController extends Settings_SettingsController
             }
             $category = Kategorie::find($id);
             $category->name    = $data['name'];
-            $category->content = $data['content'];
+            $category->content = Studip\Markup::purifyHtml($data['content']);
             if ($category->store()) {
                 PageLayout::postSuccess(_('Kategorien geändert!'));
                 Visibility::renamePrivacySetting('kat_' . $category->id, $category->name);

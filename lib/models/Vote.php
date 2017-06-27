@@ -40,7 +40,7 @@ class Vote extends QuestionnaireQuestion implements QuestionType
         }
 
         // update description
-        $this->etask->description = $data['description'];
+        $this->etask->description = Studip\Markup::purifyHtml($data['description']);
 
         // update task's type (single|multiple)
         $task = [

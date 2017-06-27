@@ -2310,7 +2310,7 @@ function createTitleInput($mode = ROOT_BLOCK){
             $title_label = _("Titel der Evaluation");
             $title       = htmlReady ($this->tree->eval->getTitle());
             $text_label  = _("Zusätzlicher Text");
-            $text        = formatReady ($this->tree->eval->getText());
+            $text        = wysiwygReady ($this->tree->eval->getText());
             break;
 
         case ARRANGMENT_BLOCK:
@@ -2318,7 +2318,7 @@ function createTitleInput($mode = ROOT_BLOCK){
             $group       =  &$this->tree->getGroupObject($this->itemID);
             $title       = htmlReady ($group->getTitle());
             $text_label  = _("Zusätzlicher Text");
-            $text        = formatReady ($group->getText());
+            $text        = wysiwygReady ($group->getText());
             break;
 
         case QUESTION_BLOCK:
@@ -2327,7 +2327,7 @@ function createTitleInput($mode = ROOT_BLOCK){
             $group       =  &$this->tree->getGroupObject($this->itemID);
             $title       = htmlReady ($group->getTitle());
             $text_label  = _("Zusätzlicher Text");
-            $text        = formatReady ($group->getText());
+            $text        = wysiwygReady ($group->getText());
             break;
     }
     $text_info = _("Die Angabe des zusätzlichen Textes ist optional.");

@@ -216,7 +216,7 @@ STUDIP.Messages = {
                 jQuery.ajax({
                     url: STUDIP.ABSOLUTE_URI_STUDIP + "dispatch.php/messages/preview",
                     data: {
-                        text: written_text
+                        text: STUDIP.editor_enabled ? STUDIP.wysiwyg.markAsHtml(written_text) : written_text
                     },
                     type: "POST",
                     success: function (html) {

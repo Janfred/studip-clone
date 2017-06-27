@@ -1,6 +1,6 @@
 <?php
 /*
- * studip_format_test.php - unit tests for the StudipFormat class
+ * studip_format_test.php - unit tests for the StudipCoreFormat class
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -14,7 +14,7 @@
 
 require_once dirname(__FILE__) . '/../../bootstrap.php';
 require_once 'lib/classes/TextFormat.php';
-require_once 'lib/classes/StudipFormat.php';
+require_once 'lib/classes/StudipCoreFormat.php';
 
 function markupBold($markup, $matches, $contents)
 {
@@ -24,24 +24,24 @@ function markupBold($markup, $matches, $contents)
 class StudipFormatTest extends PHPUnit_Framework_TestCase
 {
     function setUp() {
-        $this->old_rules = StudipFormat::getStudipMarkups();
+        $this->old_rules = StudipCoreFormat::getStudipMarkups();
     }
 
     function tearDown()
     {
-        foreach(StudipFormat::getStudipMarkups() as $key => $value) {
-            StudipFormat::removeStudipMarkup($key);
+        foreach(StudipCoreFormat::getStudipMarkups() as $key => $value) {
+            StudipCoreFormat::removeStudipMarkup($key);
         }
 
         foreach($this->old_rules as $key => $value) {
-            StudipFormat::addStudipMarkup($key, @$value['start'], @$value['end'], @$value['callback']);
+            StudipCoreFormat::addStudipMarkup($key, @$value['start'], @$value['end'], @$value['callback']);
         }
     }
 
     public function testAddStudipMarkup()
     {
-        StudipFormat::addStudipMarkup('bb-bold', '\[b\]', '\[\/b\]', 'markupBold', 'links');
-        $markup = new StudipFormat();
+        StudipCoreFormat::addStudipMarkup('bb-bold', '\[b\]', '\[\/b\]', 'markupBold', 'links');
+        $markup = new StudipCoreFormat();
 
         $input = '[b]some %%code%%[/b]';
         $expected = '<b>some <em>code</em></b>';
@@ -50,8 +50,8 @@ class StudipFormatTest extends PHPUnit_Framework_TestCase
 
     public function testRemoveStudipMarkup()
     {
-        StudipFormat::removeStudipMarkup('bold');
-        $markup = new StudipFormat();
+        StudipCoreFormat::removeStudipMarkup('bold');
+        $markup = new StudipCoreFormat();
 
         $input = '**some %%code%%**';
         $expected = '**some <em>code</em>**';
@@ -60,7 +60,7 @@ class StudipFormatTest extends PHPUnit_Framework_TestCase
 
     public function testTextSizing()
     {
-        $markup = new StudipFormat();
+        $markup = new StudipCoreFormat();
 
         $input = '++++abc++++ **++123++**';
         $expected = '<big><big>abc</big></big> <strong><big>123</big></strong>';
@@ -69,7 +69,7 @@ class StudipFormatTest extends PHPUnit_Framework_TestCase
 
     public function testHtmlEnclosedMarkup()
     {
-        $markup = new StudipFormat();
+        $markup = new StudipCoreFormat();
         $index = 0;
         forEach (array(
             '<p>' . PHP_EOL
@@ -98,7 +98,7 @@ class StudipFormatTest extends PHPUnit_Framework_TestCase
 
     public function testTable()
     {
-        $markup = new StudipFormat();
+        $markup = new StudipCoreFormat();
         $index = 0;
         forEach (array(
             '|a|table' . PHP_EOL

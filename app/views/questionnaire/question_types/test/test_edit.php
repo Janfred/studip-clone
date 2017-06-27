@@ -3,8 +3,8 @@
 <label>
     <?= _('Frage') ?>
     <textarea name="questions[<?= $vote->getId() ?>][description]"
-              class="size-l"
-              required><?= isset($etask->description) ? htmlReady($etask->description) : '' ?></textarea>
+              class="size-l wysiwyg"
+              required><?= isset($etask->description) ? wysiwygReady($etask->description) : '' ?></textarea>
 </label>
 
 <? $emptyAnswerTemplate = $this->render_partial('questionnaire/question_types/test/_answer', [ 'vote' => $vote, 'answer' => [] ]) ?>

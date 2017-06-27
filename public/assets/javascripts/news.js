@@ -21,10 +21,10 @@ STUDIP.News = {
 
         jQuery('#' + id + ' form').on('submit', function (event) {
             event.preventDefault();
-            var w = STUDIP.wysiwyg;
-            if (w && !w.disabled) {
+            if (STUDIP.editor_enabled) {
                 var textarea = jQuery('textarea.news_body');
-                textarea.val(w.markAsHtml(textarea.val()));
+                // wysiwyg is active, ensure HTML markers are set
+                textarea.val(STUDIP.wysiwyg.markAsHtml(textarea.val()));
             }
             var button = jQuery(this).data('clicked').attr('name');
             var form_route = jQuery(this).attr('action');

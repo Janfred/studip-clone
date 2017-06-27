@@ -86,6 +86,7 @@ class I18N
     {
         $languages = $GLOBALS['CONTENT_LANGUAGES'];
         $base_lang = Config::get()->DEFAULT_LANGUAGE;
+        $wysiwyg = in_array('wysiwyg', words($attributes['class']));
         $enabled = self::isEnabled();
         $result = '';
 
@@ -127,7 +128,7 @@ class I18N
                     $result .= sprintf(' %s="%s"', $key, htmlReady($val));
                 }
             }
-            $result .= '>' . htmlReady($text) . "</textarea></div>\n";
+            $result .= '>' . ($wysiwyg ? wysiwygReady($text) : htmlReady($text)) . "</textarea></div>\n";
         }
 
         if ($enabled) {

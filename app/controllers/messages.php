@@ -265,11 +265,7 @@ class MessagesController extends AuthenticatedController {
             }
             if (!Request::get('forward')) {
                 if (Request::option("quote") === $old_message->getId()) {
-                    if (Studip\Markup::isHtml($old_message['message'])) {
-                        $this->default_message['message'] = "<div>[quote]\n".$old_message['message']."\n[/quote]</div>";
-                    } else {
-                        $this->default_message['message'] = "[quote]\n".$old_message['message']."\n[/quote]";
-                    }
+                    $this->default_message['message'] = quotes_encode($old_message['message']);
                 }
                 $this->default_message['subject'] = mb_substr($old_message['subject'], 0, 4) === "RE: " ? $old_message['subject'] : "RE: ".$old_message['subject'];
                 $user = new MessageUser();
@@ -305,8 +301,10 @@ class MessagesController extends AuthenticatedController {
                     }
                 }
                 $message .= "\n\n";
-                if (Studip\Markup::isHtml($old_message['message'])) {
-                    $message = '<div>' . htmlReady($message,false,true) . '</div>' . $old_message['message'];
+                if (Studip\Markup::editorEnabled()) {
+                    $message = Studip\Markup::markupToHtml($message, false) . Studip\Markup::markupToHtml($old_message['message']);
+                } else if (Studip\Markup::isHtml($old_message['message'])) {
+                    $message .= Studip\Markup::removeHtml($old_message['message']);
                 } else {
                     $message .= $old_message['message'];
                 }
@@ -340,17 +338,8 @@ class MessagesController extends AuthenticatedController {
         $settings = UserConfig::get($GLOBALS['user']->id)->MESSAGING_SETTINGS;
         $this->mailforwarding = Request::get('emailrequest') ? true : $settings['request_mail_forward'];
         if (trim($settings['sms_sig'])) {
-            if (Studip\Markup::isHtml($this->default_message['message']) || Studip\Markup::isHtml($settings['sms_sig'])) {
-                if (!Studip\Markup::isHtml($this->default_message['message'])) {
-                    $this->default_message['message'] = '<div>' . nl2br($this->default_message['message']) . '</div>';
-                }
-                $this->default_message['message'] .= '<br><br>--<br>';
-                if (Studip\Markup::isHtml($settings['sms_sig'])) {
-                    $this->default_message['message'] .= $settings['sms_sig'];
-                } else {
-                    $this->default_message['message'] .= formatReady($settings['sms_sig']);
-                }
-
+            if (Studip\Markup::editorEnabled()) {
+                $this->default_message['message'] .= Studip\Markup::markAsHtml('<br><hr>' . Studip\Markup::markupToHtml($settings['sms_sig']));
             } else {
                 $this->default_message['message'] .= "\n\n--\n" . $settings['sms_sig'];
             }

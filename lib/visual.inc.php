@@ -20,6 +20,20 @@ function htmlReady($what, $trim=TRUE, $br=FALSE, $double_encode=true) {
     return Markup::htmlReady($what, $trim, $br, $double_encode);
 }
 
+/**
+ * Prepare text for wysiwyg (if enabled), otherwise convert special
+ * characters using htmlReady.
+ *
+ * @param  string  $text  The text.
+ * @param  boolean $trim  Trim text before applying markup rules, if TRUE.
+ * @param  boolean $br    Replace newlines by <br>, if TRUE and wysiwyg editor disabled.
+ * @param  boolean $double_encode  Encode existing HTML entities, if TRUE and wysiwyg editor disabled.
+ * @return string         The converted string.
+ */
+function wysiwygReady($what, $trim=TRUE, $br=FALSE, $double_encode=true) {
+    return Markup::wysiwygReady($what, $trim, $br, $double_encode);
+}
+
 function jsReady ($what, $target) {
     switch ($target) {
 
@@ -44,20 +58,49 @@ function jsReady ($what, $target) {
 }
 
 /**
- * Funktion um Quotings zu encoden
+ * Quote a piece of text, optionally include the author's name.
  *
- * @param string $description der Text der gequotet werden soll, wird zurueckgegeben
- * @param string $author Name des urspruenglichen Autors
- * @return string
+ * Applies Stud.IP-Markup if WYSIWYG/HTML is disabled and HTML
+ * if it is enabled.
+ *
+ * @param string $text Text that is to be quoted.
+ * @param string $author Name of the text's author (optional).
+ *
+ * @return string The quoted text.
  */
-function quotes_encode($description,$author)
+function quotes_encode($text, $author = '')
 {
-    if (preg_match("/%%\[editiert von/",$description)) { // wurde schon mal editiert
-        $postmp = mb_strpos($description,"%%[editiert von");
-        $description = substr_replace($description," ",$postmp);
+    // If quoting is changed update these functions:
+    // - StudipFormat::markupQuote
+    //   lib/classes/StudipFormat.php
+    // - quotes_encode lib/visual.inc.php
+    // - STUDIP.Forum.citeEntry > quote
+    //   public/plugins_packages/core/Forum/javascript/forum.js
+    // - studipQuotePlugin > insertStudipQuote
+    //   public/assets/javascripts/ckeditor/plugins/studip-quote/plugin.js
+
+    if (Markup::editorEnabled()) {
+        // quote with HTML markup
+        $text = Markup::markupToHtml($text);
+
+        if ($author) {
+            $title = sprintf(_('%s hat geschrieben:'), htmlReady($author));
+            $text = '<div class="author">' . $title . '</div>' . $text;
+        }
+        $text = sprintf('<blockquote>%s</blockquote><p>&nbsp;</p>', $text);
+        return Markup::markAsHtml($text);
     }
-    $description = "[quote=".$author."]\n".$description."\n[/quote]";
-    return $description;
+
+    if (Markup::isHtml($text)) {
+        // remove HTML before quoting
+        $text = Markup::removeHtml($text);
+    }
+
+    // quote with Stud.IP markup
+    if ($author) {
+        return "[quote=" . $author . "]\n" . $text . "\n[/quote]\n";
+    }
+    return "[quote]\n" . $text . "\n[/quote]\n";
 }
 
 /**
@@ -87,7 +130,7 @@ function formatReady($text, $trim=TRUE, $extern=FALSE, $wiki=FALSE, $show_commen
  *                        HTML-links.
  */
 function formatLinks($text, $nl2br=TRUE){
-    $link_markup_rule = StudipFormat::getStudipMarkup('links');
+    $link_markup_rule = StudipCoreFormat::getStudipMarkup('links');
     $markup = new TextFormat();
     $markup->addMarkup(
         'links',
@@ -159,8 +202,16 @@ function preg_call_format_signature($username, $timestamp) {
 */
 function kill_format ($text) {
     if (Markup::isHtml($text)) {
-        $text = Markup::removeHTML($text);
+        $is_fallback = Markup::isHtmlFallback($text);
+        $text = Markup::removeHtml($text);
+
+        if (!$is_fallback) {
+            // pure HTML - no Stud.IP markup to remove
+            return $text;
+        }
     }
+
+    // remove Stud.IP markup
     $text = preg_replace("'\n?\r\n?'", "\n", $text);
     // wir wandeln [code] einfach in [pre][nop] um und sind ein Problem los ... :-)
     $text = preg_replace_callback ( "|(\[/?code\])|isU", create_function('$a', 'return ($a[0] == "[code]")? "[pre][nop]":"[/nop][/pre]";'), $text);

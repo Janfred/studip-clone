@@ -90,11 +90,11 @@ class ForumEntry {
         $raw_content = ForumEntry::killEdit($description);
 
         $comment = ForumEntry::getEditComment($description, $anonymous);
-        if ($comment) {
-            $raw_content .= "\n" . '%%' . $comment . '%%';
-        }
-
         $content = formatReady($raw_content);
+
+        if ($comment) {
+            $content .= '<br><em>' . htmlReady($comment) . '</em>';
+        }
 
         return $content;
     }

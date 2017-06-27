@@ -82,11 +82,9 @@
 
         // Specialized handler to trigger recalculation when wysiwyg
         // instances are created.
-        if (STUDIP.wysiwyg) {
-            $(document).on('load.wysiwyg', 'textarea', function () {
-                $(document.body).trigger('sticky_kit:recalc');
-            });
-        }
+        $(document).on('load.wysiwyg', 'textarea', function () {
+            $(document.body).trigger('sticky_kit:recalc');
+        });
     }
 
     // Engage
