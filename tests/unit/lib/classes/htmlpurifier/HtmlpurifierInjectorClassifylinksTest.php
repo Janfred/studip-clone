@@ -21,7 +21,7 @@
 require_once dirname(__FILE__) . '/../../../bootstrap.php';
 require_once 'tests/unit/fakeserver.php';
 
-require_once 'vendor/HTMLPurifier/HTMLPurifier.auto.php';
+require_once 'vendor/HTMLPurifier/HTMLPurifier.standalone.php';
 
 # needed by visual.inc.php, which is required by link classifier
 require_once 'lib/classes/DbView.class.php';

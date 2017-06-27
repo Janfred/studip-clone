@@ -20,7 +20,7 @@
  */
 namespace Studip;
 
-require_once 'vendor/HTMLPurifier/HTMLPurifier.auto.php';
+require_once 'vendor/HTMLPurifier/HTMLPurifier.standalone.php';
 require_once 'htmlpurifier/HTMLPurifier_Injector_ClassifyLinks.php';
 require_once 'htmlpurifier/HTMLPurifier_Injector_ClassifyTables.php';
 require_once 'htmlpurifier/HTMLPurifier_Injector_Unlinkify.php';
