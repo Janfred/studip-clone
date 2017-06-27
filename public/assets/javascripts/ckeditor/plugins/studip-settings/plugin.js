@@ -13,7 +13,7 @@ CKEDITOR.plugins.add('studip-settings', {
         editor.ui.addButton('settings', {
             label: editor.lang['studip-settings'].buttonLabel,
             command: 'settings',
-            toolbar: 'others'
+            toolbar: 'settings'
         });
     }
 });

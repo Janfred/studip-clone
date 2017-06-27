@@ -230,13 +230,9 @@ jQuery(function ($) {
             // configure toolbar
             toolbarGroups: [
                 {name: 'basicstyles', groups: ['undo', 'basicstyles', 'cleanup']},
-                {name: 'paragraph',   groups: ['list', 'indent', 'blocks', 'align']},
+                {name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'quote']},
                 '/',
-                {name: 'styles'},
-                {name: 'colors'},
-                {name: 'tools'},
-                {name: 'links'},
-                {name: 'insert'},
+                {name: 'styles', groups: ['styles', 'colors', 'tools', 'links', 'insert']},
                 {name: 'others', groups: ['mode', 'settings']}
             ],
             removeButtons: 'Font,FontSize,Anchor',
