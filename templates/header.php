@@ -30,7 +30,7 @@ if (isset($_COOKIE['navigation-length'])) {
     <!-- Dynamische Links ohne Icons -->
     <div id="barBottomright">
         <ul>
-        
+
         <? if (Navigation::hasItem('/links')): ?>
             <? foreach (Navigation::getItem('/links') as $nav): ?>
                 <? if ($nav->isVisible()) : ?>
@@ -88,7 +88,7 @@ if (isset($_COOKIE['navigation-length'])) {
                 </li>
             <? endif; ?>
         <? endif; ?>
-        
+
         <? if (is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm('autor')): ?>
 
             <? $active = false;
@@ -168,7 +168,7 @@ if (isset($_COOKIE['navigation-length'])) {
                </div>
                <?= Icon::create('arr_1down', 'info_alt', array('id' => 'avatar-arrow')); ?>
 
-            
+
             </li>
         <? endif; ?>
 
@@ -179,47 +179,45 @@ if (isset($_COOKIE['navigation-length'])) {
 
 <!-- Start Header -->
 <div id="flex-header">
-    <div id="header">
-        <!--<div id='barTopLogo'>
-            <?= Assets::img('logos/logoneu.jpg', array('alt' => 'Logo Uni Göttingen')) ?>
-        </div>
-         -->
-        
-        <? SkipLinks::addIndex(_('Hauptnavigation'), 'barTopMenu', 1); ?>
-        <ul id="barTopMenu" role="navigation" <? if (count($header_nav['hidden']) > 0) echo 'class="overflown"'; ?>>
-        <? foreach ($header_nav['visible'] as $path => $nav): ?>
-            <?= $this->render_partial(
-                'header-navigation-item.php',
-                compact('path', 'nav', 'accesskey_enabled')
-            ) ?>
-        <? endforeach; ?>
-            <li class="overflow">
-                <input type="checkbox" id="header-sink">
-                <label for="header-sink">
-                    <a class="canvasready" href="#">
-                        <?= Icon::create('mobile-sidebar', 'navigation')->asImg(28, [
-                            'class'  => 'headericon original',
-                            'title'  => '',
-                            'alt'    => '',
-                        ]) ?>
-                        <br>
-                        <div class="navtitle">
-                            <?= _('Weitere') ?>&hellip;
-                        </div>
-                    </a>
-                </label>
-
-                <ul>
-                <? foreach ($header_nav['hidden'] as $path => $nav) : ?>
-                    <?= $this->render_partial(
-                        'header-navigation-item.php',
-                        compact('path', 'nav', 'accesskey_enabled')
-                    ) ?>
-                <? endforeach; ?>
-                </ul>
-            </li>
-        </ul>
+    <!--<div id='barTopLogo'>
+        <?= Assets::img('logos/logoneu.jpg', array('alt' => 'Logo Uni Göttingen')) ?>
     </div>
+     -->
+
+    <? SkipLinks::addIndex(_('Hauptnavigation'), 'barTopMenu', 1); ?>
+    <ul id="barTopMenu" role="navigation" <? if (count($header_nav['hidden']) > 0) echo 'class="overflown"'; ?>>
+    <? foreach ($header_nav['visible'] as $path => $nav): ?>
+        <?= $this->render_partial(
+            'header-navigation-item.php',
+            compact('path', 'nav', 'accesskey_enabled')
+        ) ?>
+    <? endforeach; ?>
+        <li class="overflow">
+            <input type="checkbox" id="header-sink">
+            <label for="header-sink">
+                <a class="canvasready" href="#">
+                    <?= Icon::create('mobile-sidebar', 'navigation')->asImg(28, [
+                        'class'  => 'headericon original',
+                        'title'  => '',
+                        'alt'    => '',
+                    ]) ?>
+                    <br>
+                    <div class="navtitle">
+                        <?= _('Weitere') ?>&hellip;
+                    </div>
+                </a>
+            </label>
+
+            <ul>
+            <? foreach ($header_nav['hidden'] as $path => $nav) : ?>
+                <?= $this->render_partial(
+                    'header-navigation-item.php',
+                    compact('path', 'nav', 'accesskey_enabled')
+                ) ?>
+            <? endforeach; ?>
+            </ul>
+        </li>
+    </ul>
 
     <!-- Stud.IP Logo -->
     <a class="studip-logo" id="barTopStudip" href="http://www.studip.de/" title="Stud.IP Homepage" target="_blank">

@@ -9,8 +9,8 @@
 @content-width: 400px;
 @content-margin: 12px;
 
-@site-width: (@page-margin * 2 + @sidebar-width + @sidebar-padding * 2 + @sidebar-border-width * 2 + @content-width + @content-margin * 2); 
-@page-width: (@sidebar-width + @sidebar-padding * 2 + @sidebar-border-width * 2 + @content-width + @content-margin * 2); 
+@site-width: (@page-margin * 2 + @sidebar-width + @sidebar-padding * 2 + @sidebar-border-width * 2 + @content-width + @content-margin * 2);
+@page-width: (@sidebar-width + @sidebar-padding * 2 + @sidebar-border-width * 2 + @content-width + @content-margin * 2);
 
 
 /* --- Layouts -------------------------------------------------------------- */
@@ -135,12 +135,12 @@
 
         .flex-item(0,1);
 
-        #header {                   // column 1 of flex-header
+        #barTopMenu {                   // column 1 of flex-header
             .flex-item(1, 1);
         }
 
         #barTopStudip {             // column 2 of flex-header
-            .flex-item(0,1);
+            .flex-item(0, 1);
         }
     }
 

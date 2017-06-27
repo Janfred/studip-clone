@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true*/
-/*global STUDIP, jQuery, _ */
-(function ($, STUDIP, _) {
+/*global STUDIP, jQuery */
+(function ($, STUDIP) {
     'use strict';
 
     function setCookie(name, value, expiry_days) {
@@ -21,10 +21,8 @@
     var shrinker  = function () {
         var main = $('#barTopMenu'),
             sink = $('li.overflow', main),
-            y,
-            element,
-            elements = $([]), // Yes, we really need an empty object;
-            counter = 1;
+            x = 0,
+            index = false;
         if (main.length === 0 || sink.length === 0) {
             return;
         }
@@ -37,25 +35,27 @@
             return;
         }
 
-        // Check whether the elements need to be rearranged
-        y = $('a:first', main).position().top;
-        if (sink.prev().position().top > y) {
-
-            element = sink.prev();
-            while (element.length > 0 && (element.position().top > y || counter-- > 0)) {
-                elements = elements.add(element);
-                element = element.prev();
+        $('li:not(.overflow)', main).each(function (idx) {
+            var this_x = $(this).position().left;
+            if (this_x > x) {
+                x = this_x;
+            } else {
+                index = idx;
+                return false;
             }
+        });
 
-            $('ul', sink).prepend(elements.remove());
+        if (index !== false) {
+            $('li:not(.overflow)', main).slice(index - 2).remove().prependTo($('ul', sink));
+
+            main.addClass('overflown');
         }
-        main.toggleClass('overflown', sink.find('li').length > 0);
 
         setCookie('navigation-length', main.children(':not(.overflow)').length, 30);
     };
 
     // Throttle shrinker
-    STUDIP.NavigationShrinker = _.throttle(shrinker, 100);
+    STUDIP.NavigationShrinker = shrinker;
 
     // Hide sink on touch elsewhere
     $(document).on('touchstart', function (event) {
@@ -77,4 +77,4 @@
         STUDIP.NavigationShrinker();
     });
 
-}(jQuery, STUDIP, _));
+}(jQuery, STUDIP));

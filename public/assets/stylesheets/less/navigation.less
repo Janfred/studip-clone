@@ -1,12 +1,8 @@
 /* --- main navigation ----------------------------------------------------- */
 body:not(.fixed) #barTopMenu {
-    position: absolute;
-    left: 5px;
-    top: 20px;
-    // TODO: This is bad but currently neccessary
-    right: 391px; // This is default #barBottomContainer.width()
+    .flex-align-self(flex-end);
 
-    margin: 0;
+    margin: 0 0 4px 5px;
     padding: 0;
     z-index: 1000;
 

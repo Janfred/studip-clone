@@ -22,7 +22,7 @@
                     $('.action-menu-list', menu).append(
                         $('.from-action-menu', menu).remove().removeClass('from-action-menu')
                     );
-                    menu.appendTo('#flex-header');
+                    menu.prependTo('#flex-header');
 
                     $('#barTopMenu-toggle').prop('checked', false);
                 }
