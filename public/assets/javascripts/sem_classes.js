@@ -96,7 +96,8 @@ STUDIP.admin_sem_class = {
                 'create_description': jQuery("#create_description").val(),
                 'admission_prelim_default': jQuery("#admission_prelim_default").val(),
                 'admission_type_default': jQuery("#admission_type_default").val(),
-                'show_raumzeit': jQuery("#show_raumzeit").is(":checked") ? 1 : 0
+                'show_raumzeit': jQuery("#show_raumzeit").is(":checked") ? 1 : 0,
+                'is_group': jQuery("#is_group").is(":checked") ? 1 : 0
             },
             'type': "POST",
             'dataType': "json",

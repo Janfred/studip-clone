@@ -2,40 +2,50 @@
 
 /*
  *  Copyright (c) 2012  Rasmus Fuhse <fuhse@data-quest.de>
- * 
+ *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License as
  *  published by the Free Software Foundation; either version 2 of
  *  the License, or (at your option) any later version.
  */
 
-class CoreParticipants implements StudipModule {
-    
-    function getIconNavigation($course_id, $last_visit, $user_id) {
-        $navigation = new Navigation(_('Teilnehmende'), "seminar_main.php?auswahl=".$course_id."&redirect_to=dispatch.php/course/members");
+class CoreParticipants implements StudipModule
+{
+    public function getIconNavigation($course_id, $last_visit, $user_id)
+    {
+        $navigation = new Navigation(_('Teilnehmende'), 'seminar_main.php?auswahl=' . $course_id . '&redirect_to=dispatch.php/course/members');
         $navigation->setImage(Icon::create('persons', 'inactive'));
         return $navigation;
     }
-    
-    function getTabNavigation($course_id) {
+
+    public function getTabNavigation($course_id)
+    {
         #$navigation = new AutoNavigation(_('Teilnehmende'));
         $navigation = new Navigation(_('Teilnehmende'));
         $navigation->setImage(Icon::create('persons', 'info_alt'));
         $navigation->setActiveImage(Icon::create('persons', 'info'));
-        $navigation->addSubNavigation('view', new Navigation(_('Teilnehmende'), 'dispatch.php/course/members'));
-        if (Course::find($course_id)->aux_lock_rule) {
+
+        $course  = Course::find($course_id);
+
+        // Only courses without children have a regular member list and statusgroups.
+        if (!$course->getSemClass()->isGroup()) {
+            $navigation->addSubNavigation('view', new Navigation(_('Teilnehmende'), 'dispatch.php/course/members'));
+            $navigation->addSubNavigation('statusgroups', new Navigation(_('Gruppen'), 'dispatch.php/course/statusgroups'));
+        } else {
+            $navigation->addSubNavigation('children', new Navigation(_('Teilnehmende in Unterveranstaltungen'), 'dispatch.php/course/grouping/members'));
+        }
+
+        if ($course->aux_lock_rule) {
             $navigation->addSubNavigation('additional', new Navigation(_('Zusatzangaben'), 'dispatch.php/course/members/additional'));
         }
 
-        $navigation->addSubNavigation('statusgroups', new Navigation(_('Gruppen'), 'dispatch.php/course/statusgroups'));
-
-        return array('members' => $navigation);
+        return ['members' => $navigation];
     }
 
-    /** 
+    /**
      * @see StudipModule::getMetadata()
-     */ 
-    function getMetadata()
+     */
+    public function getMetadata()
     {
         return array(
             'summary' => _('Liste aller Teilnehmenden einschließlich Nachrichtenfunktionen'),
@@ -63,13 +73,13 @@ class CoreParticipants implements StudipModule {
                                    'bzw. einzelne Teilnehmende separat anzuschreiben.'),
             'category' => _('Lehr- und Lernorganisation'),
             'icon' => Icon::create('persons', 'info'),
-            'screenshots' => array(
+            'screenshots' => [
                 'path' => 'plus/screenshots/TeilnehmerInnen',
-                'pictures' => array(
-                    0 => array('source' => 'Liste_aller_Teilnehmenden_einer_Veranstaltung.jpg', 'title' => _('Liste aller Teilnehmenden einer Veranstaltung')),
-                    1 => array( 'source' => 'Rundmail_an_alle_TeilnehmerInnen_einer_Veranstaltung.jpg', 'title' => _('Rundmail an alle Teilnehmdenden einer Veranstaltung'))
-                )
-            )
+                'pictures' => [
+                    ['source' => 'Liste_aller_Teilnehmenden_einer_Veranstaltung.jpg', 'title' => _('Liste aller Teilnehmenden einer Veranstaltung')],
+                    ['source' => 'Rundmail_an_alle_TeilnehmerInnen_einer_Veranstaltung.jpg', 'title' => _('Rundmail an alle Teilnehmdenden einer Veranstaltung')],
+                ]
+            ],
         );
     }
 }

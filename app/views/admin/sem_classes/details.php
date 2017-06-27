@@ -194,6 +194,10 @@
             <td><label for="create_description"><?= _("Kurzer Beschreibungstext zum Anlagen einer Veranstaltung") ?></label></td>
             <td><textarea id="create_description" maxlength="200" style="width: 100%"><?= htmlReady($sem_class['create_description']) ?></textarea></td>
         </tr>
+        <tr class="sub">
+            <td><label for="is_group"><?= _("Kann Unterveranstaltungen haben") ?></label></td>
+            <td><input type="checkbox" id="is_group" value="1"<?= $sem_class['is_group'] ? " checked" : "" ?>></td>
+        </tr>
         <tr>
             <td>
                 <?= _("Inhaltselemente") ?>

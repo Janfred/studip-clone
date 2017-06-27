@@ -204,6 +204,25 @@ class SemType implements ArrayAccess
     }
 
     /**
+     * Gets all SemTypes that are allowed as group parents.
+     * @return array
+     */
+    public static function getGroupingSemTypes()
+    {
+        return SimpleCollection::createFromArray(array_flatten(SemClass::getGroupClasses()->getSemTypes()))->pluck('id');
+    }
+
+    /**
+     * Gets all SemTypes that are allowed as group parents.
+     * @return array
+     */
+    public static function getNonGroupingSemTypes()
+    {
+        $non_grouping = SimpleCollection::createFromArray(SemClass::getClasses())->findBy('is_group', false)->findBy('studygroup_mode', false);
+        return SimpleCollection::createFromArray(array_flatten($non_grouping->getSemTypes()))->pluck('id');
+    }
+
+    /**
      * Static method only to keep the translationstrings of the values. It is
      * never used within the system.
      */

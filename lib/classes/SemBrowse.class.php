@@ -358,12 +358,20 @@ class SemBrowse {
             }
             $the_tree = $this->sem_tree->tree;
 
-            SkipLinks::addIndex(_("Suchergebnis"), 'sem_search_result', 90);
+            SkipLinks::addIndex(_('Suchergebnis'), 'sem_search_result', 90);
 
             list($group_by_data, $sem_data) = $this->get_result();
+
+            $visibles = $sem_data;
+            if (!$GLOBALS['perm']->have_perm('root')) {
+                $visibles = array_filter($visibles, function ($c) {
+                    return key($c['visible']) == 1;
+                });
+            }
+
             echo "\n<table class='default' id=\"sem_search_result\" border=\"0\" align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
             echo "<caption>"
-                . sprintf(_(" %s Veranstaltungen gefunden %s, Gruppierung: %s"),count($sem_data),
+                . sprintf(_(" %s Veranstaltungen gefunden %s, Gruppierung: %s"),count($visibles),
                 (($this->sem_browse_data['sset']) ? _("(Suchergebnis)") : ""),
                 $this->group_by_fields[$this->sem_browse_data['group_by']]['name'])
                 . "</caption>";
@@ -395,105 +403,19 @@ class SemBrowse {
                     break;
 
                 }
-                echo "</th></tr><tr>";
+                echo "</th></tr>";
                 ob_end_flush();
                 ob_start();
                 if (is_array($sem_ids['Seminar_id'])){
                     if ($this->sem_browse_data["default_sem"] != 'all') {
                         $current_semester_id = SemesterData::GetSemesterIdByIndex($this->sem_browse_data["default_sem"]);
                     }
+
+                    // Get sem classes that can be used for grouping.
+                    $grouping = SemType::getGroupingSemTypes();
+
                     while(list($seminar_id,) = each($sem_ids['Seminar_id'])){
-                        // create instance of seminar-object
-                        $seminar_obj = new Seminar($seminar_id);
-                        // is this sem a studygroup?
-                        $studygroup_mode = SeminarCategories::GetByTypeId($seminar_obj->getStatus())->studygroup_mode;
-
-                        $sem_name = $SEM_TYPE[key($sem_data[$seminar_id]["status"])]["name"] . ": "  . key($sem_data[$seminar_id]["Name"]);
-                        $seminar_number = key($sem_data[$seminar_id]['VeranstaltungsNummer']);
-
-                        if ($studygroup_mode) {
-                            $sem_name .= ' ('. _("Studiengruppe");
-                            if ($seminar_obj->admission_prelim) $sem_name .= ', '. _("Zutritt auf Anfrage");
-                            $sem_name .= ')';
-                            echo '<td width="1%" class="hidden-tiny-down">';
-                            echo StudygroupAvatar::getAvatar($seminar_id)->getImageTag(Avatar::SMALL, array('title' => htmlReady($seminar_obj->getName())));
-                            echo '</td>';
-                        } else {
-                            $sem_number_start = key($sem_data[$seminar_id]["sem_number"]);
-                            $sem_number_end = key($sem_data[$seminar_id]["sem_number_end"]);
-                            if ($sem_number_start != $sem_number_end){
-                                $sem_name .= " (" . $this->search_obj->sem_dates[$sem_number_start]['name'] . " - ";
-                                $sem_name .= (($sem_number_end == -1) ? _("unbegrenzt") : $this->search_obj->sem_dates[$sem_number_end]['name']) . ")";
-                            } elseif ($this->sem_browse_data["group_by"]) {
-                                $sem_name .= " (" . $this->search_obj->sem_dates[$sem_number_start]['name'] . ")";
-                            }
-                            echo '<td width="1%" class="hidden-tiny-down">';
-                            echo CourseAvatar::getAvatar($seminar_id)->getImageTag(Avatar::SMALL, array('title' => htmlReady($seminar_obj->getName())));
-                            echo '</td>';
-
-                        }
-                        $send_from_search = URLHelper::getUrl(basename($_SERVER['PHP_SELF']), array('keep_result_set' => 1, 'cid' => null));
-                        $send_from_search_link = UrlHelper::getLink($this->target_url, array($this->target_id => $seminar_id,
-                                                                                             'cid' => null,
-                                                                                             'send_from_search' => 1,
-                                                                                             'send_from_search_page' => $send_from_search));
-                        echo '<td width="66%" colspan="2">';
-                        echo '<a href="' . $send_from_search_link . '">';
-                        if (Config::get()->IMPORTANT_SEMNUMBER && $seminar_number) {
-                            echo htmlReady($seminar_number) ." ";
-                        }
-                        echo htmlReady($sem_name) . '</a><br>';
-                        //create Turnus field
-                        if ($studygroup_mode) {
-                            echo "<div style=\"font-size:smaller\">" . htmlReady(mb_substr($seminar_obj->description,0,100)) . "</div>";
-                        } else {
-                            $temp_turnus_string = $seminar_obj->getDatesExport(array('short' => true, 'shrink' => true, 'semester_id' => $current_semester_id));
-                            //Shorten, if string too long (add link for details.php)
-                            if (mb_strlen($temp_turnus_string) > 70) {
-                                $temp_turnus_string = htmlReady(mb_substr($temp_turnus_string, 0, mb_strpos(mb_substr($temp_turnus_string, 70, mb_strlen($temp_turnus_string)), ",") + 71));
-                                $temp_turnus_string .= " ... <a href=\"$send_from_search_link\">("._("mehr").")</a>";
-                            } else {
-                                $temp_turnus_string = htmlReady($temp_turnus_string);
-                            }
-                            if (!Config::get()->IMPORTANT_SEMNUMBER) {
-                                echo "<div style=\"margin-left:5px;font-size:smaller\">" . htmlReady($seminar_number) . "</div>";
-                            }
-                            echo "<div style=\"margin-left:5px;font-size:smaller\">" . $temp_turnus_string . "</div>";
-                        }
-                        echo '</td>';
-                        echo "<td align=\"right\">(";
-                        $doz_name = array();
-                        $c = 0;
-                        reset($sem_data[$seminar_id]['fullname']);
-                        foreach($sem_data[$seminar_id]['username'] as $anzahl1){
-                            if($c == 0){
-                                list($d_name, $anzahl2) = each($sem_data[$seminar_id]['fullname']);
-                                $c = $anzahl2/$anzahl1;
-                                $doz_name = array_merge($doz_name, array_fill(0, $c, $d_name));
-                            }
-                            --$c;
-                        }
-                        $doz_uname = array_keys($sem_data[$seminar_id]['username']);
-                        $doz_position = array_keys($sem_data[$seminar_id]['position']);
-                        if (count($doz_name)){
-                            if(count($doz_position) != count($doz_uname)) $doz_position = range(1, count($doz_uname));
-                            array_multisort($doz_position, $doz_name, $doz_uname);
-                            $i = 0;
-                            foreach ($doz_name as $index => $value){
-                                if ($value) {  // hide dozenten with empty username
-                                    if ($i == 4){
-                                        echo "... <a href=\"$send_from_search_link\">("._("mehr").")</a>";
-                                        break;
-                                    }
-                                    echo "<a href=\"" . UrlHelper::getLink('dispatch.php/profile', array('username' => $doz_uname[$index])) ."\">" . htmlReady($value) . "</a>";
-                                    if($i != count($doz_name)-1){
-                                        echo ", ";
-                                    }
-                                }
-                                ++$i;
-                            }
-                            echo ")</td></tr>";
-                        }
+                        echo $this->printCourseRow($seminar_id, $sem_data);
                     }
                 }
             }
@@ -703,12 +625,13 @@ class SemBrowse {
 
         $query = ("SELECT seminare.Seminar_id,VeranstaltungsNummer, seminare.status, IF(seminare.visible=0,CONCAT(seminare.Name, ' ". _("(versteckt)") ."'), seminare.Name) AS Name,
                 $add_fields" . $_fullname_sql['full'] ." AS fullname, auth_user_md5.username,
-                " . $dbv->sem_number_sql . " AS sem_number, " . $dbv->sem_number_end_sql . " AS sem_number_end, seminar_user.position AS position FROM seminare
+                " . $dbv->sem_number_sql . " AS sem_number, " . $dbv->sem_number_end_sql . " AS sem_number_end,
+                seminar_user.position AS position, seminare.parent_course, seminare.visible FROM seminare
                 LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent')
                 LEFT JOIN auth_user_md5 USING (user_id)
                 LEFT JOIN user_info USING (user_id)
                 $add_query
-                WHERE seminare.Seminar_id IN('" . join("','", array_keys($this->sem_browse_data['search_result'])) . "')");
+                WHERE seminare.Seminar_id IN('" . join("','", array_keys($this->sem_browse_data['search_result'])) . "') OR seminare.parent_course IN ('" . join("','", array_keys($this->sem_browse_data['search_result'])) . "')");
         $db = new DB_Seminar($query);
         $snap = new DbSnapshot($db);
         $group_field = $this->group_by_fields[$this->sem_browse_data['group_by']]['group_field'];
@@ -730,6 +653,7 @@ class SemBrowse {
 
                 $current_semester_index = SemesterData::GetInstance()->GetSemesterIndexById(Semester::findCurrent()->semester_id);
                 foreach (array_keys($detail['Seminar_id']) as $seminar_id) {
+
                     $start_sem = key($sem_data[$seminar_id]["sem_number"]);
                     if ($sem_number_end == -1) {
                         if ($this->sem_number === false) {
@@ -808,5 +732,163 @@ class SemBrowse {
 
         return array($group_by_data, $sem_data);
     }
-}
 
+    /**
+     * Creates HTML code for a single course row. This has been extracted
+     * into a separate function as that makes handling and outputting
+     * course children easier.
+     * @param string $seminar_id a single course id to output
+     * @param mixed $sem_data collected data for all found courses
+     * @param bool $child call in "child mode" -> force output because here children are listed
+     * @return string A HTML table row.
+     */
+    private function printCourseRow($seminar_id, &$sem_data, $child = false) {
+        global $_fullname_sql,$SEM_TYPE,$SEM_CLASS;
+
+        $row = '';
+
+        /*
+         * As we include child courses now, we need an extra check for visibility.
+         * Child courses are not shown extra, but summarized under their parent if
+         * the parent is part of the search result.
+         */
+        if (($GLOBALS['perm']->have_perm('root') || key($sem_data[$seminar_id]['visible']) == 1) && (!$sem_data[key($sem_data[$seminar_id]['parent_course'])] || $child)) {
+            // create instance of seminar-object
+            $seminar_obj = new Seminar($seminar_id);
+            // is this sem a studygroup?
+            $studygroup_mode = SeminarCategories::GetByTypeId($seminar_obj->getStatus())->studygroup_mode;
+
+            $sem_name = $SEM_TYPE[key($sem_data[$seminar_id]["status"])]["name"] . ": " . key($sem_data[$seminar_id]["Name"]);
+            $seminar_number = key($sem_data[$seminar_id]['VeranstaltungsNummer']);
+
+            $visibleChildren = [];
+
+            $row .= '<tr';
+            // Set necessary classes if we are displaying subcourses.
+            if ($child) {
+                $row .= ' class="hidden-js subcourses subcourses-' . key($sem_data[$seminar_id]['parent_course']) . '"' ;
+            }
+            $row .= '>';
+
+            if ($studygroup_mode) {
+                $sem_name .= ' (' . _("Studiengruppe");
+                if ($seminar_obj->admission_prelim) $sem_name .= ', ' . _("Zutritt auf Anfrage");
+                $sem_name .= ')';
+                $row .= '<td width="1%" class="hidden-tiny-down">';
+                $row .= StudygroupAvatar::getAvatar($seminar_id)->getImageTag(Avatar::SMALL, array('title' => htmlReady($seminar_obj->getName())));
+                $row .= '</td>';
+            } else {
+                $sem_number_start = key($sem_data[$seminar_id]["sem_number"]);
+                $sem_number_end = key($sem_data[$seminar_id]["sem_number_end"]);
+                if ($sem_number_start != $sem_number_end) {
+                    $sem_name .= " (" . $this->search_obj->sem_dates[$sem_number_start]['name'] . " - ";
+                    $sem_name .= (($sem_number_end == -1) ? _("unbegrenzt") : $this->search_obj->sem_dates[$sem_number_end]['name']) . ")";
+                } elseif ($this->sem_browse_data["group_by"]) {
+                    $sem_name .= " (" . $this->search_obj->sem_dates[$sem_number_start]['name'] . ")";
+                }
+                $row .= '<td width="1%" class="hidden-tiny-down">';
+                $row .= CourseAvatar::getAvatar($seminar_id)->getImageTag(Avatar::SMALL, array('title' => htmlReady($seminar_obj->getName())));
+                $row .= '</td>';
+
+            }
+            $send_from_search = URLHelper::getUrl(basename($_SERVER['PHP_SELF']), array('keep_result_set' => 1, 'cid' => null));
+            $send_from_search_link = UrlHelper::getLink($this->target_url, array($this->target_id => $seminar_id,
+                'cid' => null,
+                'send_from_search' => 1,
+                'send_from_search_page' => $send_from_search));
+            $row .= '<td width="66%" colspan="2">';
+
+            // Show the "more" icon only if there are visible children.
+            if (count($seminar_obj->children) > 0) {
+
+                // If you are not root, perhaps not all available subcourses are visible.
+                $visibleChildren = $GLOBALS['perm']->have_perm('root') ?
+                    $seminar_obj->children :
+                    $seminar_obj->children->filter(function($c) { return $c->visible == 1; });
+                if (count($visibleChildren) > 0) {
+                    $row .= Icon::create('add', 'clickable',[
+                            'id' => 'show-subcourses-' . $seminar_id,
+                            'title' => sprintf(_('%u Unterveranstaltungen anzeigen'), count($visibleChildren)),
+                            'onclick' => "jQuery('tr.subcourses-" . $seminar_id . "').removeClass('hidden-js');jQuery(this).closest('tr').addClass('has-subcourses');jQuery(this).hide();jQuery('#hide-subcourses-" . $seminar_id . "').show();"
+                        ])->asImg(12) . ' ';
+                    $row .= Icon::create('remove', 'clickable',[
+                            'id' => 'hide-subcourses-' . $seminar_id,
+                            'style' => 'display:none',
+                            'title' => sprintf(_('%u Unterveranstaltungen ausblenden'), count($visibleChildren)),
+                            'onclick' => "jQuery('tr.subcourses-" . $seminar_id . "').addClass('hidden-js'); jQuery(this).closest('tr').removeClass('has-subcourses');jQuery(this).hide();jQuery('#show-subcourses-" . $seminar_id . "').show();"
+                        ])->asImg(12) . ' ';
+                }
+            }
+
+            $row .= '<a href="' . $send_from_search_link . '">';
+            if (Config::get()->IMPORTANT_SEMNUMBER && $seminar_number) {
+                $row .= htmlReady($seminar_number) . " ";
+            }
+            $row .= htmlReady($sem_name) . '</a><br>';
+            //create Turnus field
+            if ($studygroup_mode) {
+                $row .= "<div style=\"font-size:smaller\">" . htmlReady(mb_substr($seminar_obj->description, 0, 100)) . "</div>";
+            } else {
+                $temp_turnus_string = $seminar_obj->getDatesExport(array('short' => true, 'shrink' => true, 'semester_id' => $current_semester_id));
+                //Shorten, if string too long (add link for details.php)
+                if (mb_strlen($temp_turnus_string) > 70) {
+                    $temp_turnus_string = htmlReady(mb_substr($temp_turnus_string, 0, mb_strpos(mb_substr($temp_turnus_string, 70, mb_strlen($temp_turnus_string)), ",") + 71));
+                    $temp_turnus_string .= " ... <a href=\"$send_from_search_link\">(" . _("mehr") . ")</a>";
+                } else {
+                    $temp_turnus_string = htmlReady($temp_turnus_string);
+                }
+                if (!Config::get()->IMPORTANT_SEMNUMBER) {
+                    $row .= '<div style="margin-left:5px;font-size:smaller">' . htmlReady($seminar_number) . '</div>';
+                }
+                $row .= '<div style="margin-left:5px;font-size:smaller">' . $temp_turnus_string . '</div>';
+                if (count($seminar_obj->children) > 0 && count($visibleChildren) > 0) {
+                    $row .= '<div style="margin-left:5px;font-size:smaller">';
+                    $row .= sprintf(_('%u Unterveranstaltungen'), count($visibleChildren));
+                    $row .= '</div>';
+                }
+            }
+            $row .= '</td>';
+            $row .= "<td align=\"right\">(";
+            $doz_name = array();
+            $c = 0;
+            reset($sem_data[$seminar_id]['fullname']);
+            foreach ($sem_data[$seminar_id]['username'] as $anzahl1) {
+                if ($c == 0) {
+                    list($d_name, $anzahl2) = each($sem_data[$seminar_id]['fullname']);
+                    $c = $anzahl2 / $anzahl1;
+                    $doz_name = array_merge($doz_name, array_fill(0, $c, $d_name));
+                }
+                --$c;
+            }
+            $doz_uname = array_keys($sem_data[$seminar_id]['username']);
+            $doz_position = array_keys($sem_data[$seminar_id]['position']);
+            if (count($doz_name)) {
+                if (count($doz_position) != count($doz_uname)) $doz_position = range(1, count($doz_uname));
+                array_multisort($doz_position, $doz_name, $doz_uname);
+                $i = 0;
+                foreach ($doz_name as $index => $value) {
+                    if ($value) {  // hide dozenten with empty username
+                        if ($i == 4) {
+                            $row .= "... <a href=\"$send_from_search_link\">(" . _("mehr") . ")</a>";
+                            break;
+                        }
+                        $row .= "<a href=\"" . UrlHelper::getLink('dispatch.php/profile', array('username' => $doz_uname[$index])) . "\">" . htmlReady($value) . "</a>";
+                        if ($i != count($doz_name) - 1) {
+                            $row .= ", ";
+                        }
+                    }
+                    ++$i;
+                }
+                $row .= ")</td></tr>";
+            }
+
+            // Process children.
+            foreach ($seminar_obj->children as $child) {
+                $row .= $this->printCourseRow($child->id, $sem_data, true);
+            }
+
+        }
+
+        return $row;
+    }
+}

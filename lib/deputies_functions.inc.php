@@ -33,7 +33,7 @@
 
 /**
  * Fetches all deputies of the given course or person.
- * 
+ *
  * @param string $range_id ID of a course or person
  * @param string $name_format defines which format the full name of a deputy should have
  * @return array An array containing all deputies.
@@ -45,9 +45,9 @@ function getDeputies($range_id, $name_format='full_rev') {
     } else {
         $name_query = $_fullname_sql['full_rev'];
     }
-    $name_query .= " AS fullname "; 
+    $name_query .= " AS fullname ";
     $data = DBManager::get()->query(
-        "SELECT a.user_id, a.username, a.Vorname, a.Nachname, d.edit_about, ". 
+        "SELECT a.user_id, a.username, a.Vorname, a.Nachname, d.edit_about, ".
         "a.perms, ".$name_query.
         "FROM deputies d ".
         "LEFT JOIN auth_user_md5 a ON (d.user_id=a.user_id) ".
@@ -63,7 +63,7 @@ function getDeputies($range_id, $name_format='full_rev') {
 
 /**
  * Fetches all persons of which the given person is default deputy.
- * 
+ *
  * @param string $user_id the user to check
  * @param string $name_format what format should full name entries have?
  * @return array An array of the given person's bosses.
@@ -75,7 +75,7 @@ function getDeputyBosses($user_id, $name_format='full_rev') {
     } else {
         $name_query = $_fullname_sql['full_rev'];
     }
-    $name_query .= " AS fullname "; 
+    $name_query .= " AS fullname ";
     $data = DBManager::get()->query(
        "SELECT a.user_id, a.username, a.Vorname, a.Nachname, d.edit_about, ".
         $name_query.
@@ -88,89 +88,116 @@ function getDeputyBosses($user_id, $name_format='full_rev') {
 
 /**
  * Adds a person as deputy of a course or another person.
- * 
+ *
  * @param string $user_id person to add as deputy
  * @param string $range_id ID of a course or a person
  * @return int Number of affected rows in the database (hopefully 1).
  */
 function addDeputy($user_id, $range_id) {
-    return DBManager::get()->exec(
-       "INSERT INTO deputies SET range_id='$range_id', user_id='$user_id'");
+    if (Deputy::exists([$range_id, $user_id])) {
+        return true;
+    }
+
+    $d = new Deputy();
+    $d->user_id  = $user_id;
+    $d->range_id = $range_id;
+
+    // Check if the given range_id is a course and has a parent.
+    if ($course = Course::find($range_id)) {
+        if ($course->parent_course && !Deputy::exists([$course->parent_course, $user_id])) {
+            $p = new Deputy();
+            $p->user_id  = $user_id;
+            $p->range_id = $course->parent_course;
+            $p->store();
+        }
+    }
+
+    return $d->store();
 }
 
 /**
  * Removes a person as deputy in the given context (course or person).
- * 
- * @param mixed $user_id which person(s) to remove, can be a single ID or 
+ *
+ * @param mixed $user_id which person(s) to remove, can be a single ID or
  * an array of IDs
  * @param string $range_id where to remove as deputy (course or person ID)
  * @return int Number of affected rows in the database ("1" if successful).
  */
 function deleteDeputy($user_id, $range_id) {
+    $success = true;
     if (is_array($user_id)) {
-        return DBManager::get()->exec(
-               "DELETE FROM deputies ".
-               "WHERE range_id='$range_id' AND user_id IN ('".
-               implode("', '", $user_id)."')"
-            );
-    } else {
-        return DBManager::get()->exec(
-                "DELETE FROM deputies ".
-                "WHERE range_id='$range_id' AND user_id='$user_id'"
-           );
+        foreach ($user_id as $u) {
+            $success = $success && deleteDeputy($u, $range_id);
+        }
+        return $success;
     }
+
+    $d = Deputy::find([$range_id, $user_id]);
+    if ($d) {
+        return $d->delete();
+    }
+
+    return true;
 }
 
 /**
  * Remove all deputies of the given course or person at once.
- * 
+ *
  * @param string $range_id course or person ID
  * @return int Number of affected database rows (>0 if successful).
  */
 function deleteAllDeputies($range_id) {
-    return DBManager::get()->exec(
-           "DELETE FROM deputies WHERE range_id='".$range_id."'"
-       );
+    $success = 0;
+    foreach (Deputy::findByRange_id($range_id) as $d) {
+        $success += (int)$d->delete();
+    }
+    return $success;
 }
 
 /**
- * Checks whether the given person is a deputy in the given context 
+ * Checks whether the given person is a deputy in the given context
  * (course or person).
- * 
+ *
  * @param string $user_id person ID to check
  * @param string $range_id course or person ID
- * @param boolean $check_edit_about check if the given person may edit 
+ * @param boolean $check_edit_about check if the given person may edit
  * the other person's profile
  * @return boolean Is the given person deputy in the given context?
  */
 function isDeputy($user_id, $range_id, $check_edit_about=false) {
-    $query = "SELECT COUNT(user_id) AS deputy FROM deputies ".
-        "WHERE range_id='$range_id' AND user_id='$user_id'";
-    if ($check_edit_about)
-        $query .= " AND edit_about=1";
-    $data = DBManager::get()->query($query);
-    $current = $data->fetch();
-    return $current['deputy'];
+    $d = Deputy::find([$range_id, $user_id]);
+    if (!$d) {
+        return false;
+    }
+
+    return $check_edit_about
+         ? $d->edit_about == 1
+         : true;
 }
 
 /**
  * Set whether the given person my edit the bosses profile page.
- * 
+ *
  * @param string $user_id person ID to grant or remove rights
  * @param string $range_id which person's profile are we talking about?
  * @param int $rights editing allowed? 0 or 1
  * @return Number of affected database rows ("1" if successful).
  */
 function setDeputyHomepageRights($user_id, $range_id, $rights) {
-    return DBManager::get()->exec("UPDATE deputies SET edit_about=$rights ".
-       "WHERE user_id='$user_id' AND range_id='$range_id'");
+    $d = Deputy::find([$range_id, $user_id]);
+    if (!$d) {
+        return false;
+    }
+
+    $d->edit_about = $rights;
+    return $d->store();
 }
 
 /**
- * Shows which permission level a person must have in order to be available 
+ * Shows which permission level a person must have in order to be available
  * as deputy.
- * 
- * @param boolean $min_perm_only whether to give only the minimum permission 
+ *
+ * @param boolean $min_perm_only whether to give only the minimum permission
  * or a set of all valid permissions available for being deputy
  * @return mixed The minimum permission needed for being deputy or a set of
  * all permissions between minimum and "admin"
@@ -181,9 +208,9 @@ function getValidDeputyPerms($min_perm_only = false) {
 }
 
 /**
- * Checks whether the given user has the necessary permission in order to be 
+ * Checks whether the given user has the necessary permission in order to be
  * deputy.
- * 
+ *
  * @param string $user_id user ID to check
  * @return boolean My the given user be given as deputy?
  */
@@ -201,18 +228,18 @@ function haveDeputyPerm($user_id='') {
 }
 
 /**
- * Database query for retrieving all courses where the current user is deputy 
+ * Database query for retrieving all courses where the current user is deputy
  * in.
- * 
+ *
  * @param string $type are we in the "My courses" list (='my_courses') or
- * in grouping or notification view ('gruppe', 'notification') or outside 
+ * in grouping or notification view ('gruppe', 'notification') or outside
  * Stud.IP in the notification cronjob (='notification_cli')?
  * @param string $sem_number_sql SQL for specifying the semester for a course
- * @param string $sem_number_end_sql SQL for specifying the last semester 
+ * @param string $sem_number_end_sql SQL for specifying the last semester
  * a course is in
  * @param string $add_fields optionally necessary fields from database
  * @param string $add_query additional joins
- * @return string The SQL query for getting all courses where the current 
+ * @return string The SQL query for getting all courses where the current
  * user is deputy in
  */
 function getMyDeputySeminarsQuery($type, $sem_number_sql, $sem_number_end_sql, $add_fields, $add_query, $studygroups = false) {
@@ -292,24 +319,24 @@ function getMyDeputySeminarsQuery($type, $sem_number_sql, $sem_number_end_sql, $
 
 /**
  * Checks if persons may be assigned as default deputy of other persons.
- * 
+ *
  * @return activation status of the default deputy functionality.
  */
 function isDefaultDeputyActivated() {
-    return get_config('DEPUTIES_ENABLE') && 
+    return get_config('DEPUTIES_ENABLE') &&
         get_config('DEPUTIES_DEFAULTENTRY_ENABLE');
 }
 
 /**
- * Checks if default deputies may get the rights to edit their bosses profile 
+ * Checks if default deputies may get the rights to edit their bosses profile
  * page.
- * 
- * @return activation status of the deputy boss profile page editing 
+ *
+ * @return activation status of the deputy boss profile page editing
  *         functionality.
  */
 function isDeputyEditAboutActivated() {
-    return get_config('DEPUTIES_ENABLE') && 
-        get_config('DEPUTIES_DEFAULTENTRY_ENABLE') && 
+    return get_config('DEPUTIES_ENABLE') &&
+        get_config('DEPUTIES_DEFAULTENTRY_ENABLE') &&
         get_config('DEPUTIES_EDIT_ABOUT_ENABLE');
 }
 ?>

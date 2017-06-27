@@ -126,6 +126,25 @@ class Course_DetailsController extends AuthenticatedController
             }
         }
 
+        $order = Config::get()->IMPORTANT_SEMNUMBER ? 'veranstaltungsnummer, name' : 'name';
+
+        // Find child courses or parent course if applicable.
+        if ($this->course->getSemClass()->isGroup()) {
+            $this->children = SimpleCollection::createFromArray(
+                Course::findByParent_Course($this->course->id, "ORDER BY $order")
+            )->filter(function ($c) {
+                return $c->isVisibleForUser();
+            });
+        // Find other courses belonging to the same parent.
+        } else if ($this->course->parent_course) {
+            $this->siblings = SimpleCollection::createFromArray(
+                Course::findbyParent_Course($this->course->parent_course, "ORDER BY $order")
+            )->findBy('id', $this->course->id, '!=')
+             ->filter(function ($c) {
+                 return $c->isVisibleForUser();
+             });
+        }
+
         if (Request::isXhr()) {
             $this->set_layout(null);
             $this->response->add_header('Content-Type', 'text/html;charset=Windows-1252');

@@ -48,11 +48,15 @@
  * @property string lock_rule database column
  * @property string admission_waitlist_max database column
  * @property string admission_disable_waitlist_move database column
+ * @property string is_complete database column
+ * @property string public_topics database column
+ * @property string parent_course database column
  * @property string end_time computed column read/write
  * @property SimpleORMapCollection topics has_many CourseTopic
  * @property SimpleORMapCollection dates has_many CourseDate
  * @property SimpleORMapCollection ex_dates has_many CourseExDate
  * @property SimpleORMapCollection members has_many CourseMember
+ * @property SimpleORMapCollection deputies has_many Deputy
  * @property SimpleORMapCollection statusgruppen has_many Statusgruppen
  * @property SimpleORMapCollection admission_applicants has_many AdmissionApplication
  * @property SimpleORMapCollection datafields has_many DatafieldEntryModel
@@ -63,6 +67,8 @@
  * @property AuxLockRule aux belongs_to AuxLockRule
  * @property SimpleORMapCollection study_areas has_and_belongs_to_many StudipStudyArea
  * @property SimpleORMapCollection institutes has_and_belongs_to_many Institute
+ * @property Course parent belongs_to Course
+ * @property SimpleORMapCollection children has_many Course
  */
 
 class Course extends SimpleORMap
@@ -79,106 +85,121 @@ class Course extends SimpleORMap
         if (Context::isCourse()) {
             return Context::get();
         }
+
+        return null;
     }
 
     protected static function configure($config = array())
     {
         $config['db_table'] = 'seminare';
-        $config['has_many']['topics'] = array(
+        $config['has_many']['topics'] = [
             'class_name' => 'CourseTopic',
-            'on_delete' => 'delete',
-            'on_store' => 'store',
-        );
-        $config['has_many']['dates'] = array(
-            'class_name' => 'CourseDate',
+            'on_delete'  => 'delete',
+            'on_store'   => 'store',
+        ];
+        $config['has_many']['dates'] = [
+            'class_name'        => 'CourseDate',
             'assoc_foreign_key' => 'range_id',
-            'on_delete' => 'delete',
-            'on_store' => 'store',
-            'order_by' => 'ORDER BY date'
-        );
-        $config['has_many']['ex_dates'] = array(
-            'class_name' => 'CourseExDate',
+            'on_delete'         => 'delete',
+            'on_store'          => 'store',
+            'order_by'          => 'ORDER BY date'
+        ];
+        $config['has_many']['ex_dates'] = [
+            'class_name'        => 'CourseExDate',
             'assoc_foreign_key' => 'range_id',
-            'on_delete' => 'delete',
-            'on_store' => 'store',
-        );
-        $config['has_many']['members'] = array(
+            'on_delete'         => 'delete',
+            'on_store'          => 'store',
+        ];
+        $config['has_many']['members'] = [
             'class_name' => 'CourseMember',
             'assoc_func' => 'findByCourse',
-            'on_delete' => 'delete',
-            'on_store' => 'store',
-        );
-        $config['has_many']['statusgruppen'] = array(
+            'on_delete'  => 'delete',
+            'on_store'   => 'store',
+        ];
+        $config['has_many']['deputies'] = [
+            'class_name' => 'Deputy',
+            'assoc_func' => 'findByRange_id',
+            'on_delete'  => 'delete',
+            'on_store'   => 'store',
+        ];
+        $config['has_many']['statusgruppen'] = [
             'class_name' => 'Statusgruppen',
-            'on_delete' => 'delete',
-            'on_store' => 'store',
-        );
-        $config['has_many']['admission_applicants'] = array(
+            'on_delete'  => 'delete',
+            'on_store'   => 'store',
+        ];
+        $config['has_many']['admission_applicants'] = [
             'class_name' => 'AdmissionApplication',
             'assoc_func' => 'findByCourse',
-            'on_delete' => 'delete',
-            'on_store' => 'store',
-        );
+            'on_delete'  => 'delete',
+            'on_store'   => 'store',
+        ];
         $config['has_many']['datafields'] = array(
             'class_name' => 'DatafieldEntryModel',
-            'assoc_foreign_key' =>
-                function($model,$params) {
-                    $model->setValue('range_id', $params[0]->id);
-                },
             'assoc_func' => 'findByModel',
+            'assoc_foreign_key' => function ($model, $params) {
+                $model->setValue('range_id', $params[0]->id);
+            },
+            'foreign_key' => function ($course) {
+                return [$course];
+            },
             'on_delete' => 'delete',
-            'on_store' => 'store',
-            'foreign_key' =>
-                function($course) {
-                    return array($course);
-                }
+            'on_store'  => 'store',
         );
-        $config['has_many']['cycles'] = array(
+        $config['has_many']['cycles'] = [
             'class_name' => 'SeminarCycleDate',
             'assoc_func' => 'findBySeminar',
-            'on_delete' => 'delete',
-            'on_store' => 'store',
-        );
+            'on_delete'  => 'delete',
+            'on_store'   => 'store',
+        ];
 
-        $config['belongs_to']['start_semester'] = array(
-            'class_name' => 'Semester',
-            'foreign_key' => 'start_time',
-            'assoc_func' => 'findByTimestamp',
+        $config['belongs_to']['start_semester'] = [
+            'class_name'        => 'Semester',
+            'foreign_key'       => 'start_time',
+            'assoc_func'        => 'findByTimestamp',
             'assoc_foreign_key' => 'beginn',
-        );
-        $config['belongs_to']['end_semester'] = array(
-            'class_name' => 'Semester',
-            'foreign_key' => 'end_time',
-            'assoc_func' => 'findByTimestamp',
+        ];
+        $config['belongs_to']['end_semester'] = [
+            'class_name'        => 'Semester',
+            'foreign_key'       => 'end_time',
+            'assoc_func'        => 'findByTimestamp',
             'assoc_foreign_key' => 'beginn',
-        );
-        $config['belongs_to']['home_institut'] = array(
-            'class_name' => 'Institute',
+        ];
+        $config['belongs_to']['home_institut'] = [
+            'class_name'  => 'Institute',
             'foreign_key' => 'institut_id',
-            'assoc_func' => 'find',
-        );
-        $config['belongs_to']['aux'] = array(
-            'class_name' => 'AuxLockRule',
+            'assoc_func'  => 'find',
+        ];
+        $config['belongs_to']['aux'] = [
+            'class_name'  => 'AuxLockRule',
             'foreign_key' => 'aux_lock_rule',
-        );
-        $config['has_and_belongs_to_many']['study_areas'] = array(
+        ];
+        $config['has_and_belongs_to_many']['study_areas'] = [
             'class_name' => 'StudipStudyArea',
             'thru_table' => 'seminar_sem_tree',
-            'on_delete' => 'delete',
-            'on_store' => 'store',
-        );
-        $config['has_and_belongs_to_many']['institutes'] = array(
+            'on_delete'  => 'delete',
+            'on_store'   => 'store',
+        ];
+        $config['has_and_belongs_to_many']['institutes'] = [
             'class_name' => 'Institute',
             'thru_table' => 'seminar_inst',
-            'on_delete' => 'delete',
-            'on_store' => 'store',
-        );
+            'on_delete'  => 'delete',
+            'on_store'   => 'store',
+        ];
 
-        $config['has_many']['room_requests'] = array(
+        $config['has_many']['room_requests'] = [
             'class_name'        => 'RoomRequest',
             'assoc_foreign_key' => 'seminar_id',
             'on_delete'         => 'delete',
-        );
+        ];
+        $config['belongs_to']['parent'] = [
+            'class_name'  => 'Course',
+            'foreign_key' => 'parent_course'
+        ];
+        $config['has_many']['children'] = [
+            'class_name'        => 'Course',
+            'assoc_foreign_key' => 'parent_course',
+            'order_by'          => 'GROUP BY seminar_id ORDER BY VeranstaltungsNummer, Name'
+        ];
 
         $config['default_values']['lesezugriff'] = 1;
         $config['default_values']['schreibzugriff'] = 1;
@@ -201,47 +222,48 @@ class Course extends SimpleORMap
         parent::configure($config);
     }
 
-    function getEnd_Time()
+    public function getEnd_Time()
     {
         return $this->duration_time == -1 ? -1 : $this->start_time + $this->duration_time;
     }
 
-    function setEnd_Time($value)
+    public function setEnd_Time($value)
     {
         if ($value == -1) {
             $this->duration_time = -1;
-        } else if (($this->start_time > 0)  && ($value > $this->start_time)) {
+        } elseif ($this->start_time > 0 && $value > $this->start_time) {
             $this->duration_time = $value - $this->start_time;
         } else {
             $this->duration_time = 0;
         }
     }
 
-    function getFreeSeats()
+    public function getFreeSeats()
     {
         $free_seats = $this->admission_turnout - $this->getNumParticipants();
-        return $free_seats > 0 ? $free_seats : 0;
+        return max($free_seats, 0);;
     }
 
-    function isWaitlistAvailable()
+    public function isWaitlistAvailable()
     {
         if ($this->admission_disable_waitlist) {
             return false;
-        } else if ($this->admission_waitlist_max) {
-            return ($this->admission_waitlist_max - $this->getNumWaiting()) > 0 ? true : false;
-        } else {
-            return true;
         }
+
+        if ($this->admission_waitlist_max) {
+            return $this->admission_waitlist_max - $this->getNumWaiting() > 0;
+        }
+
+        return true;
     }
 
     /**
      * Retrieves all members of a status
      *
      * @param String|Array $status  the status to filter with
-     *
      * @return Array an array of all those members.
      */
-    function getMembersWithStatus($status)
+    public function getMembersWithStatus($status)
     {
         return CourseMember::findByCourseAndStatus($this->id, $status);
     }
@@ -253,33 +275,33 @@ class Course extends SimpleORMap
      *
      * @return int the number of all those members.
      */
-    function countMembersWithStatus($status)
+    public function countMembersWithStatus($status)
     {
         return CourseMember::countByCourseAndStatus($this->id, $status);
     }
 
-    function getNumParticipants()
+    public function getNumParticipants()
     {
         return $this->countMembersWithStatus('user autor') + $this->getNumPrelimParticipants();
     }
 
-    /* wtf ?
-    function getMemberWithUser($user_id) {
-        return CourseMember::findBySQL('seminar_id = ? AND user_id = ? ORDER BY position', array($this->id, $user_id));
-    }
-    */
-
-    function getNumPrelimParticipants()
+    public function getNumPrelimParticipants()
     {
-        return AdmissionApplication::countBySql("seminar_id = ? AND status = 'accepted'", array($this->id));
+        return AdmissionApplication::countBySql(
+            "seminar_id = ? AND status = 'accepted'",
+            [$this->id]
+        );
     }
 
-    function getNumWaiting()
+    public function getNumWaiting()
     {
-        return AdmissionApplication::countBySql("seminar_id = ? AND status = 'awaiting'", array($this->id));
+        return AdmissionApplication::countBySql(
+            "seminar_id = ? AND status = 'awaiting'",
+            [$this->id]
+        );
     }
 
-    function getParticipantStatus($user_id)
+    public function getParticipantStatus($user_id)
     {
         $p_status = $this->members->findBy('user_id', $user_id)->val('status');
         if (!$p_status) {
@@ -293,14 +315,15 @@ class Course extends SimpleORMap
     *
     * @return SemType The semTypeObject for the course
     */
-    public function getSemType() {
+    public function getSemType()
+    {
         $semTypes = SemType::getTypes();
         if (isset($semTypes[$this->status])) {
             return $semTypes[$this->status];
-        } else {
-            Log::ERROR(sprintf('SemType not found id:%s status:%s', $this->id, $this->status));
-            return new SemType(array('name' => 'Fehlerhafter Veranstaltungstyp'));
         }
+
+        Log::ERROR(sprintf('SemType not found id:%s status:%s', $this->id, $this->status));
+        return new SemType(['name' => 'Fehlerhafter Veranstaltungstyp']);
     }
 
     /**
@@ -308,7 +331,8 @@ class Course extends SimpleORMap
      *
      * @return SemClass The SemClassObject for the course
      */
-     public function getSemClass() {
+     public function getSemClass()
+     {
          return $this->getSemType()->getClass();
      }
 
@@ -320,7 +344,8 @@ class Course extends SimpleORMap
      * @param string formatting template name
      * @return string Fullname
      */
-    public function getFullname($format = 'default') {
+    public function getFullname($format = 'default')
+    {
         $template['type-name'] = '%2$s: %1$s';
         $template['number-type-name'] = '%3$s %2$s: %1$s';
         $template['number-name'] = '%3$s %1$s';
@@ -345,10 +370,8 @@ class Course extends SimpleORMap
         $dates = $this->ex_dates->findBy('content', '', '<>');
         $dates->merge($this->dates);
         $dates->uasort(function($a, $b) {
-            if ($a->date === $b->date) {
-                return strnatcasecmp($a->getRoomName(), $b->getRoomName());
-            }
-            return $a->date < $b->date ? -1 : 1;
+            return $a->date - $b->date
+                ?: strnatcasecmp($a->getRoomName(), $b->getRoomName());
         });
         return $dates;
     }
@@ -370,34 +393,49 @@ class Course extends SimpleORMap
             $this->study_areas = SimpleCollection::createFromArray(StudipStudyArea::findMany($ids));
 
             if ($this->store()) {
-                NotificationCenter::postNotification("CourseDidChangeStudyArea", $this);
+                NotificationCenter::postNotification('CourseDidChangeStudyArea', $this);
                 $success = true;
 
                 foreach ($added as $one) {
-                    StudipLog::log("SEM_ADD_STUDYAREA", $this->id, $one);
+                    StudipLog::log('SEM_ADD_STUDYAREA', $this->id, $one);
 
                     $area = $this->study_areas->find($one);
                     if ($area->isModule()) {
-                        NotificationCenter::postNotification('CourseAddedToModule', $area,
-                            array('module_id' => $one, 'course_id' => $this->id));
+                        NotificationCenter::postNotification(
+                            'CourseAddedToModule',
+                            $area,
+                            ['module_id' => $one, 'course_id' => $this->id]
+                        );
                     }
                 }
 
                 foreach ($removed as $one) {
-                    StudipLog::log("SEM_DELETE_STUDYAREA", $this->id, $one);
+                    StudipLog::log('SEM_DELETE_STUDYAREA', $this->id, $one);
 
                     $area = StudipStudyArea::find($one);
                     if ($area->isModule()) {
-                        NotificationCenter::postNotification('CourseRemovedFromModule', $area,
-                            array('module_id' => $one, 'course_id' => $this->id));
+                        NotificationCenter::postNotification(
+                            'CourseRemovedFromModule',
+                            $area,
+                            ['module_id' => $one, 'course_id' => $this->id]
+                        );
                     }
                 }
-
             }
-
         }
 
         return $success;
     }
 
+    /**
+     * Is the current course visible for the current user?
+     * @param string $user_id
+     * @return bool Visible?
+     */
+    public function isVisibleForUser($user_id = null)
+    {
+        return $this->visible
+            || $GLOBALS['perm']->have_perm(Config::get()->SEM_VISIBILITY_PERM, $user_id)
+            || $GLOBALS['perm']->have_studip_perm('user', $this->id, $user_id);
+    }
 }

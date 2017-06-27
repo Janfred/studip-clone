@@ -90,7 +90,6 @@ function insert_seminar_user($seminar_id, $user_id, $status, $copy_studycourse =
         $log_message = 'Wurde in die Veranstaltung eingetragen, admission_status: '. $admission_status . ' Kontingent: ' . $contingent;
     }
     StudipLog::log('SEM_USER_ADD', $seminar_id, $user_id, $status, $log_message);
-
     // actually insert the user into the seminar
     $stmt = DBManager::get()->prepare('INSERT IGNORE INTO seminar_user
         (Seminar_id, user_id, status, comment, gruppe, mkdate)
@@ -117,6 +116,11 @@ function insert_seminar_user($seminar_id, $user_id, $status, $copy_studycourse =
 
     // reload the seminar, the contingents have changed
     $sem->restore();
+
+    // Check if a parent course exists and insert user there.
+    if ($sem->parent_course) {
+        insert_seminar_user($sem->parent_course, $user_id, $status, $copy_studycourse, $contingent, $log_message);
+    }
 
     return true;
 }

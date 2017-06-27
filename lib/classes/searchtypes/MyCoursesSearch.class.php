@@ -101,14 +101,15 @@ class MyCoursesSearch extends StandardSearch
         switch ($this->perm_level) {
             // Roots see everything, everywhere.
             case 'root':
-                $query = "SELECT DISTINCT s.`Seminar_id`, CONCAT(s.`VeranstaltungsNummer`, ' ', s.`Name`, " . $semester_text . ")
+                $query = "SELECT DISTINCT s.`Seminar_id`, CONCAT(s.`VeranstaltungsNummer`, ' ', s.`Name`, " . $semester_text . ") 
                     FROM `seminare` s
                         JOIN `semester_data` sem1 ON (s.`start_time` = sem1.`beginn`)
                         LEFT JOIN `semester_data` sem2 ON (s.`start_time` + s.`duration_time` = sem2.`beginn`)
                     WHERE (s.`VeranstaltungsNummer` LIKE :input
                             OR s.`Name` LIKE :input)
                         AND s.`status` NOT IN (:semtypes)
-                        AND s.`Seminar_id` NOT IN (:exclude)";
+                        AND s.`Seminar_id` NOT IN (:exclude)
+                        AND sem1.`semester_id` IN (:semesters)";
                 if ($semnumber) {
                     $query .= " ORDER BY IFNULL(sem2.`beginn`, sem1.`beginn`) DESC, s.`VeranstaltungsNummer`, s.`Name`";
                 } else {
@@ -126,7 +127,8 @@ class MyCoursesSearch extends StandardSearch
                             OR s.`Name` LIKE :input)
                         AND s.`status` NOT IN (:semtypes)
                         AND si.`institut_id` IN (:institutes)
-                        AND s.`Seminar_id` NOT IN (:exclude)";
+                        AND s.`Seminar_id` NOT IN (:exclude)
+                        AND sem1.`semester_id` IN (:semesters)";
                 if ($semnumber) {
                     $query .= " ORDER BY IFNULL(sem2.`beginn`, sem1.`beginn`) DESC, s.`VeranstaltungsNummer`, s.`Name`";
                 } else {
@@ -135,7 +137,8 @@ class MyCoursesSearch extends StandardSearch
                 return $query;
             // Lecturers see their own courses.
             case 'dozent':
-                $query = "SELECT DISTINCT s.`Seminar_id`, CONCAT(s.`VeranstaltungsNummer`, ' ', s.`Name`, " . $semester_text . ")
+                $query = "SELECT DISTINCT s.`Seminar_id`, CONCAT(s.`VeranstaltungsNummer`, ' ', s.`Name`, " . $semester_text . "),
+                        sem1.`beginn` AS b1, sem2.`beginn` AS b2, s.`VeranstaltungsNummer` AS num, s.`Name`
                     FROM `seminare` s
                         JOIN `seminar_user` su ON (s.`Seminar_id`=su.`Seminar_id`)
                         JOIN `semester_data` sem1 ON (s.`start_time` = sem1.`beginn`)
@@ -145,24 +148,26 @@ class MyCoursesSearch extends StandardSearch
                         AND su.`user_id` = :userid
                         AND su.`status` = 'dozent'
                         AND s.`status` NOT IN (:semtypes)
-                        AND s.`Seminar_id` NOT IN (:exclude)";
+                        AND s.`Seminar_id` NOT IN (:exclude)
+                        AND sem1.`semester_id` IN (:semesters)";
                 if (Config::get()->DEPUTIES_ENABLE) {
                     $query .= " UNION
-                        SELECT DISTINCT s.`Seminar_id`, CONCAT(s.`VeranstaltungsNummer`, ' ', s.`Name`, " . $semester_text . ")
+                        SELECT DISTINCT s.`Seminar_id`, CONCAT(s.`VeranstaltungsNummer`, ' ', s.`Name`, " . $semester_text . "),
+                            sem1.`beginn` AS b1, sem2.`beginn` AS b2, s.`VeranstaltungsNummer` AS num, s.`Name`
                         FROM `seminare` s
                             JOIN `deputies` d ON (s.`Seminar_id` = d.`range_id`)
-                            JOIN `semester_data` sem ON (
-                                s.`start_time` + s.`duration_time` BETWEEN sem.`beginn` AND sem.`ende`
-                                OR (s.`duration_time` = -1 AND s.`start_time` <= sem.`ende`))
+                            JOIN `semester_data` sem1 ON (s.`start_time` = sem1.`beginn`)
+                            LEFT JOIN `semester_data` sem2 ON (s.`start_time` + s.`duration_time` = sem2.`beginn`)
                         WHERE (s.`VeranstaltungsNummer` LIKE :input
                                 OR s.`Name` LIKE :input)
                             AND d.`user_id` = :userid
-                            AND s.`Seminar_id` NOT IN (:exclude)";
+                            AND s.`Seminar_id` NOT IN (:exclude)
+                            AND sem1.`semester_id` IN (:semesters)";
                 }
                 if ($semnumber) {
-                    $query .= " ORDER BY IFNULL(sem2.`beginn`, sem1.`beginn`) DESC, s.`VeranstaltungsNummer`, s.`Name`";
+                    $query .= " ORDER BY IFNULL(b2, b1) DESC, num, `Name`";
                 } else {
-                    $query .= " ORDER BY IFNULL(sem2.`beginn`, sem1.`beginn`) DESC, s.`Name`";
+                    $query .= " ORDER BY IFNULL(b2, b1) DESC, `Name`";
                 }
                 return $query;
         }

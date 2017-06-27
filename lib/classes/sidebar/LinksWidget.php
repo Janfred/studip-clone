@@ -14,7 +14,7 @@ class LinksWidget extends ListWidget
     public function __construct()
     {
         parent::__construct();
-        
+
         $this->addCSSClass('widget-links');
     }
 
@@ -35,5 +35,10 @@ class LinksWidget extends ListWidget
         $element = new LinkElement($label, $url, $icon, $attributes);
         $this->addElement($element, $index);
         return $element;
+    }
+
+    public function addLinkFromHTML($html, Icon $icon = null)
+    {
+        $this->addElement(LinkElement::fromHTML($html, $icon));
     }
 }

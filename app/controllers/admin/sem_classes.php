@@ -130,6 +130,7 @@ class Admin_SemClassesController extends AuthenticatedController
         $sem_class->set('admission_prelim_default', Request::int("admission_prelim_default"));
         $sem_class->set('admission_type_default', Request::int("admission_type_default"));
         $sem_class->set('show_raumzeit', Request::int("show_raumzeit"));
+        $sem_class->set('is_group', Request::int("is_group"));
         $sem_class->store();
         if (!count($sem_class->getSemTypes())) {
             $notice = "<br>"._("Beachten Sie, dass es noch keine Veranstaltungstypen gibt!");

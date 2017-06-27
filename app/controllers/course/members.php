@@ -275,7 +275,7 @@ class Course_MembersController extends AuthenticatedController
         if (!Request::submitted('save') || is_null($course_member)) {
             throw new Trails_Exception(400);
         }
-        $course_member->comment = preg_replace("/\r\n?/", "\n", Request::get('comment'));
+        $course_member->comment = Request::get('comment');
 
         if ($course_member->store() !== false) {
             PageLayout::postSuccess(_('Bemerkung wurde erfolgreich gespeichert.'));
@@ -726,15 +726,6 @@ class Course_MembersController extends AuthenticatedController
             PageLayout::postMessage(MessageBox::info(sprintf(_('%s Personen waren bereits in der Veranstaltung eingetragen!'), $csv_count_present)));
         }
 
-        if (count($csv_not_found) > 0) {
-            PageLayout::postError(sprintf(_('%s Personen konnten <b>nicht</b> zugeordnet werden!'), htmlReady(join(',', $csv_not_found))));
-        }
-
-        if ($csv_count_contingent_full) {
-            PageLayout::postError(sprintf(_('%s Personen konnten <b>nicht</b> zugeordnet werden, da das ausgewählte Kontingent keine freien Plätze hat.'),
-                $csv_count_contingent_full));
-        }
-
         // redirect to manual assignment
         if ($csv_mult_founds) {
             PageLayout::postMessage(MessageBox::info(sprintf(_('%s Personen konnten <b>nicht eindeutig</b>
@@ -742,6 +733,14 @@ class Course_MembersController extends AuthenticatedController
             $this->flash['csv_mult_founds'] = $csv_mult_founds;
             $this->redirect('course/members/csv_manual_assignment');
             return;
+        }
+        if (count($csv_not_found) > 0) {
+            PageLayout::postError(sprintf(_('%s konnten <b>nicht</b> zugeordnet werden!'), htmlReady(join(',', $csv_not_found))));
+        }
+
+        if ($csv_count_contingent_full) {
+            PageLayout::postError(sprintf(_('%s Personen konnten <b>nicht</b> zugeordnet werden, da das ausgewählte Kontingent keine freien Plätze hat.'),
+                $csv_count_contingent_full));
         }
 
         $this->redirect('course/members/index');
@@ -755,9 +754,6 @@ class Course_MembersController extends AuthenticatedController
     public function csv_manual_assignment_action()
     {
         global $perm;
-
-        Navigation::activateItem('/course/members/view');
-
         // Security. If user not autor, then redirect to index
         if (!$perm->have_studip_perm('tutor', $this->course_id)) {
             throw new AccessDeniedException('Sie sind nicht berechtigt auf diesen Bereich von Stud.IP zuzugreifen.');
@@ -1519,22 +1515,67 @@ class Course_MembersController extends AuthenticatedController
                 $widget = new ExportWidget();
 
                 // create csv-export link
-                $csvExport = export_link($this->course_id, "person", sprintf('%s %s', htmlReady($this->status_groups['autor']), htmlReady($this->course_title)), 'csv', 'csv-teiln', '', _('Teilnehmendenliste als csv-Dokument exportieren'), 'passthrough');
-                $widget->addLink(_('Teilnehmendenliste als CSV-Dokument exportieren'),
-                                 $this->parseHref($csvExport), Icon::create('file-office', 'clickable'));
+                $csvExport = export_link(
+                    $this->course_id,
+                    'person',
+                    htmlReady(sprintf('%s %s', $this->status_groups['autor'], $this->course_title)),
+                    'csv',
+                    'csv-teiln',
+                    '',
+                    _('Teilnehmendenliste als csv-Dokument exportieren'),
+                    'passthrough'
+                );
+                $widget->addLinkFromHTML(
+                    $csvExport,
+                    Icon::create('file-office', 'clickable')
+                );
+
                 // create csv-export link
-                $rtfExport = export_link($this->course_id, "person", sprintf('%s %s', htmlReady($this->status_groups['autor']), htmlReady($this->course_title)), 'rtf', 'rtf-teiln', '', _('Teilnehmendenliste als rtf-Dokument exportieren'), 'passthrough');
-                $widget->addLink(_('Teilnehmendenliste als rtf-Dokument exportieren'),
-                                 $this->parseHref($rtfExport), Icon::create('file-text', 'clickable'));
+                $rtfExport = export_link(
+                    $this->course_id,
+                    'person',
+                    htmlReady(sprintf('%s %s', $this->status_groups['autor'], $this->course_title)),
+                    'rtf',
+                    'rtf-teiln',
+                    '',
+                    _('Teilnehmendenliste als rtf-Dokument exportieren'),
+                    'passthrough'
+                );
+                $widget->addLinkFromHTML(
+                    $rtfExport,
+                    Icon::create('file-text', 'clickable')
+                );
 
                 if (count($this->awaiting) > 0) {
-                    $awaiting_rtf = export_link($this->course_id, "person", sprintf(_('Warteliste %s'), htmlReady($this->course_title)), "rtf", "rtf-warteliste", $this->waiting_type, _("Warteliste als Textdokument (.rtf) exportieren"), 'passthrough');
-                    $widget->addLink(_('Warteliste als rtf-Dokument exportieren'),
-                                     $this->parseHref($awaiting_rtf), Icon::create('file-office+export', 'clickable'));
+                    $awaiting_rtf = export_link(
+                        $this->course_id,
+                        'person',
+                        htmlReady(sprintf(_('Warteliste %s'), $this->course_title)),
+                        'rtf',
+                        'rtf-warteliste',
+                        $this->waiting_type,
+                        _('Warteliste als rtf-Dokument exportieren'),
+                        'passthrough'
+                    );
+                    $widget->addLinkFromHTML(
+                        $awaiting_rtf,
+                        Icon::create('file-office+export', 'clickable')
+                    );
 
-                    $awaiting_csv = export_link($this->course_id, "person", sprintf(_('Warteliste %s'), htmlReady($this->course_title)), "csv", "csv-warteliste", $this->waiting_type, _("Warteliste als Tabellendokument (.csv) exportieren"), 'passthrough');
-                    $widget->addLink(_('Warteliste als csv-Dokument exportieren'),
-                                     $this->parseHref($awaiting_csv), Icon::create('file-text+export', 'clickable'));
+                    $awaiting_csv = export_link(
+                        $this->course_id,
+                        'person',
+                        htmlReady(sprintf(_('Warteliste %s'), $this->course_title)),
+                        'csv',
+                        'csv-warteliste',
+                        $this->waiting_type,
+                        _('Warteliste als csv-Dokument exportieren'),
+                        'passthrough'
+                    );
+                    $widget->addLinkFromHTML(
+                        $awaiting_csv,
+                        Icon::create('file-text+export', 'clickable')
+                    );
                 }
 
                 $sidebar->addWidget($widget);
@@ -1561,12 +1602,6 @@ class Course_MembersController extends AuthenticatedController
                               array('title' => $text));
             $sidebar->addWidget($actions);
         }
-    }
-
-    private function parseHref($string)
-    {
-        $temp = preg_match('/href="(.*?)"/', $string, $match); // Yes, you're absolutely right - this IS horrible!
-        return $match[1];
     }
 
     public function export_members_csv_action()

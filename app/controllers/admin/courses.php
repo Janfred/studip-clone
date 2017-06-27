@@ -365,6 +365,8 @@ class Admin_CoursesController extends AuthenticatedController
         PageLayout::addSqueezePackage('raumzeit');
         // Add admission functions.
         PageLayout::addSqueezePackage('admission');
+        // Add subcourses listing.
+        PageLayout::addSqueezePackage('subcourses');
     }
 
     /**
@@ -920,6 +922,31 @@ class Admin_CoursesController extends AuthenticatedController
         }
     }
 
+    public function get_subcourses_action($course_id)
+    {
+        // get courses only if institutes available
+        $this->actions = $this->getActions();
+
+        // Get the view filter
+        $this->view_filter = $this->getFilterConfig();
+
+        $this->selected_action = $GLOBALS['user']->cfg->MY_COURSES_ACTION_AREA;
+        if (is_null($this->selected_action) || (!is_numeric($this->selected_action) && !class_exists($this->selected_action))) {
+            $this->selected_action = 1;
+        }
+
+        $this->courses = $this->getCourses(array(
+            'sortby'      => $this->sortby,
+            'sortFlag'    => $this->sortFlag,
+            'view_filter' => $this->view_filter,
+            'datafields' => $this->getDatafieldFilters(),
+            'parent_course' => $course_id
+        ));
+
+        $this->parent = $course_id;
+
+    }
+
     /**
      * Return a specifically action or all available actions
      * @param null $selected
@@ -1076,6 +1103,7 @@ class Admin_CoursesController extends AuthenticatedController
      * Returns all courses matching set criteria.
      *
      * @param Array $params Additional parameters
+     * @param String $parent_id Fetch only subcourses of this parent
      * @return Array of courses
      */
     private function getCourses($params = array())
@@ -1137,6 +1165,15 @@ class Admin_CoursesController extends AuthenticatedController
         }
 
         $filter->where("sem_classes.studygroup_mode = '0'");
+
+        // Get only children of given course
+        if ($params['parent_course']) {
+            $filter->where("parent_course = :parent",
+                array(
+                    'parent' => $params['parent_course']
+                )
+            );
+        }
 
         if (is_object($this->semester)) {
             $filter->filterBySemester($this->semester->getId());
