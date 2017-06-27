@@ -50,6 +50,7 @@ class HTMLPurifier_Injector_ClassifyLinksTest extends PHPUnit_Framework_TestCase
         # create purifier
         $config = \HTMLPurifier_Config::createDefault();
         $config->set('AutoFormat.Custom', array('ClassifyLinks'));
+        $config->set('Cache.DefinitionImpl', null);
         $purifier = new \HTMLPurifier($config);
 
         # run test

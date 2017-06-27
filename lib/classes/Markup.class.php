@@ -463,9 +463,8 @@ class Markup
     }
 
     private static function createDefaultPurifier() {
-        global $TMP_PATH;
         $config = \HTMLPurifier_Config::createDefault();
-        $config->set('Cache.SerializerPath', realpath($TMP_PATH));
+        $config->set('Cache.SerializerPath', $GLOBALS['TMP_PATH']);
         return $config;
     }
 }
