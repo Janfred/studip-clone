@@ -450,13 +450,12 @@ class Markup
     {
         if (self::isHtml($html)) {
             $config = self::createDefaultPurifier();
-            $config->set('Core.Encoding', 'WINDOWS-1252');
             $config->set('HTML.Allowed', 'a[href],img[alt|src],br');
             $config->set('AutoFormat.Custom', array('Unlinkify'));
 
             $purifier = new \HTMLPurifier($config);
-
-            return \decodeHTML(trim(str_replace('<br />', PHP_EOL, $purifier->purify($html))));
+            $html = studip_utf8decode($purifier->purify(studip_utf8encode($html)));
+            $html = \decodeHTML(trim(str_replace('<br />', PHP_EOL, $html)));
         }
 
         return $html;
