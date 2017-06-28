@@ -86,7 +86,7 @@ jQuery(function ($) {
         }
 
         // create new toolbar container
-        var textareaWidth = (textarea.width() / textarea.parent().width() * 100) + '%';
+        var textareaWidth = textarea.outerWidth() / textarea.parent().width() * 100 + '%';
 
         // fetch ckeditor configuration
         var options = textarea.attr('data-editor'),

@@ -34,6 +34,11 @@
                 wrap,
                 toolbar;
 
+            // don't initialize toolbar for wysiwyg textareas
+            if (STUDIP.editor_enabled && $element.hasClass('wysiwyg')) {
+                return;
+            }
+
             // Bail out if the element is not a tetarea or a toolbar has already
             // been applied
             if (!$element.is('textarea') || $element.data('toolbar-added')) {
@@ -123,9 +128,6 @@
     $.fn.extend({
         // Adds the toolbar to an element
         addToolbar: function (button_set) {
-            if (STUDIP.editor_enabled) {
-                return this;
-            }
             return this.each(function () {
                 STUDIP.Toolbar.initialize(this, button_set);
             });

@@ -30,12 +30,9 @@
                 $(this).append(select);
                 languages.not(':eq(0)').hide();
 
-                $('div.i18n textarea[required]', this).on('invalid', function () {
+                $('div.i18n input[required], div.i18n textarea[required]', this).on('invalid', function () {
                     var element = $(this).closest('.i18n');
-                    if (element.parent().find('.i18n:has(textarea:visible:invalid)').length === 0) {
-                        element.siblings('div').hide();
-                        element.siblings('select').val($(element).data('lang')).change();
-                    }
+                    element.siblings('select').val($(element).data('lang')).change();
                 });
             });
         }
