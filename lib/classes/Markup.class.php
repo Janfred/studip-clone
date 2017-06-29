@@ -242,7 +242,6 @@ class Markup
     private static function createPurifier()
     {
         $config = self::createDefaultPurifier();
-        $config->set('AutoFormat.Linkify', true);
         $config->set('Core.RemoveInvalidImg', true);
 
         // restrict allowed HTML tags and attributes
@@ -332,8 +331,7 @@ class Markup
         ));
         $config->set('AutoFormat.Custom', array(
             'ClassifyLinks',
-            'ClassifyTables',
-            'LinkifyEmail'
+            'ClassifyTables'
         ));
         $config->set('AutoFormat.RemoveSpansWithoutAttributes', true);
         $config->set('CSS.AllowedFonts', array(
