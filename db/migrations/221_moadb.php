@@ -151,15 +151,7 @@ class Moadb extends Migration
             $this->migrateFolder($folder, $folder['seminar_id'], 'institute', 'StandardFolder');
         }
         unset($institute_folders);
-        //Blubber folders
-        foreach ($db->query("SELECT f.*, a.user_id AS seminar_id, CONCAT_WS(' ', vorname,nachname) as name
-                            FROM `folder` f
-                            INNER JOIN `auth_user_md5` a ON a.user_id = f.range_id") as $folder) {
-            $folder['range_id'] = '';
-            $folder['description'] = '';
-            $folder['name'] = '';
-            $this->migrateFolder($folder, $folder['seminar_id'], 'user', 'StandardFolder');
-        }
+
         $seminar_folders = array();
         foreach ($db->query("SELECT s.seminar_id as new_range_id,s.name FROM `folder` f INNER JOIN `seminare` s ON s.Seminar_id = f.range_id OR MD5(CONCAT(s.Seminar_id, 'top_folder')) = f.range_id group by s.Seminar_id") as $folder) {
             $folder['folder_id'] = md5(uniqid('folders', true));
@@ -196,28 +188,81 @@ class Moadb extends Migration
         }
 
         //personal documents
+        $insert_personal_folder = $db->prepare("INSERT IGNORE INTO `folders` (`id`, `user_id`, `parent_id`, `range_id`, `range_type`, `folder_type`, `name`, `data_content`, `description`, `mkdate`, `chdate`) VALUES (?, ?, ?, ?, 'user', ?, ?, ?, ?, ?, ?)");
         foreach ($db->fetchFirst("SELECT distinct parent_id FROM `_file_refs` inner join auth_user_md5 where parent_id=user_id") as $user_id) {
-            $top_folder_id = $db->fetchColumn("SELECT id FROM folders WHERE range_type = 'user' AND range_id=?", [$user_id]);
+            $top_folder_id = $db->fetchColumn("SELECT id FROM folders WHERE range_type = 'user' AND parent_id='' AND range_id=?", [$user_id]);
             if (!$top_folder_id) {
-                $folder = [
-                    'folder_id' => md5(uniqid($user_id)),
-                    'range_id' => '',
-                    'range_type' => 'user',
-                    'parent_id' => '',
-                    'user_id' => $user_id,
-                    'description' => '',
-                    'name' => '',
-                    'mkdate' => time(),
-                    'chdate' => time()
-                ];
-                $this->migratePersonalFolder($folder, $user_id);
-                $top_folder_id = $folder['folder_id'];
+                $top_folder_id = md5(uniqid($user_id));
+                $insert_personal_folder->execute([
+                    $top_folder_id,
+                    $user_id,
+                    '',
+                    $user_id,
+                    'RootFolder',
+                    '',
+                    '',
+                    '',
+                    time(),
+                    time()
+                ]);
             }
-            $this->migratePersonalFiles($db->fetchAll("SELECT file_id,id,storage_id,mime_type,user_id,filename,description,mkdate,chdate,downloads,size FROM `_files` inner join _file_refs using(file_id) WHERE parent_id = ? and storage_id<>''", array($user_id)), $top_folder_id);
-            $subfolders = $db->fetchAll("SELECT file_id as folder_id,user_id,'{$top_folder_id}' as range_id,name,description,mkdate,chdate FROM _file_refs INNER JOIN _files USING(file_id) WHERE storage_id='' AND parent_id = ?", array($user_id));
+            $personal_folder_id = md5($top_folder_id . 'personal_top_folder_id');
+            $insert_personal_folder->execute([
+                $personal_folder_id,
+                $user_id,
+                $top_folder_id,
+                $user_id,
+                'PublicFolder',
+                'öffentliche Dateien',
+                Config::get()->PERSONALDOCUMENT_OPEN_ACCESS ? '{"viewable":1}' : '',
+                '',
+                time(),
+                time()
+            ]);
+            $this->migratePersonalFiles($db->fetchAll("SELECT file_id,id,storage_id,mime_type,user_id,filename,description,mkdate,chdate,downloads,size FROM `_files` inner join _file_refs using(file_id) WHERE parent_id = ? and storage_id<>''", array($user_id)), $personal_folder_id);
+            $subfolders = $db->fetchAll("SELECT file_id as folder_id,user_id,'{$personal_folder_id}' as range_id,name,description,mkdate,chdate FROM _file_refs INNER JOIN _files USING(file_id) WHERE storage_id='' AND parent_id = ?", array($user_id));
             foreach ($subfolders as $one) {
                 $this->migratePersonalFolder($one, $user_id);
             }
+        }
+        //Blubber folders
+        foreach ($db->query("SELECT f.*, a.user_id AS seminar_id, CONCAT_WS(' ', vorname,nachname) as name
+                            FROM `folder` f
+                            INNER JOIN `auth_user_md5` a ON a.user_id = f.range_id") as $folder) {
+            $user_id = $folder['seminar_id'];
+            $top_folder_id = $db->fetchColumn("SELECT id FROM folders WHERE range_type = 'user' AND parent_id='' AND range_id=?", [$user_id]);
+            if (!$top_folder_id) {
+                $top_folder_id = md5(uniqid($user_id));
+                $insert_personal_folder->execute([
+                    $top_folder_id,
+                    $user_id,
+                    '',
+                    $user_id,
+                    'RootFolder',
+                    '',
+                    '',
+                    '',
+                    time(),
+                    time()
+                ]);
+            }
+            $personal_folder_id = md5($top_folder_id . 'personal_top_folder_id');
+            $insert_personal_folder->execute([
+                $personal_folder_id,
+                $user_id,
+                $top_folder_id,
+                $user_id,
+                'PublicFolder',
+                'öffentliche Dateien',
+                Config::get()->PERSONALDOCUMENT_OPEN_ACCESS ? '{"viewable":1}' : '',
+                '',
+                time(),
+                time()
+            ]);
+
+            $folder['range_id'] = $personal_folder_id;
+            $folder['description'] = '';
+            $this->migrateFolder($folder, $user_id, 'user', 'PublicFolder');
         }
 
 
@@ -360,9 +405,19 @@ class Moadb extends Migration
     public function migratePersonalFolder($folder, $range_id)
     {
         $db = DBManager::get();
-        $insert_folder = $db->prepare("INSERT INTO `folders` (`id`, `user_id`, `parent_id`, `range_id`, `range_type`, `folder_type`, `name`, `data_content`, `description`, `mkdate`, `chdate`) VALUES (?, ?, ?, ?, 'user', 'StandardFolder', ?, '', ?, ?, ?)");
+        $insert_folder = $db->prepare("INSERT INTO `folders` (`id`, `user_id`, `parent_id`, `range_id`, `range_type`, `folder_type`, `name`, `data_content`, `description`, `mkdate`, `chdate`) VALUES (?, ?, ?, ?, 'user', 'PublicFolder', ?, ?, ?, ?, ?)");
 
-        $insert_folder->execute(array($folder['folder_id'], $folder['user_id'], $folder['range_id'], $range_id, $folder['name'], (string)$folder['description'], $folder['mkdate'], $folder['chdate']));
+        $insert_folder->execute([
+            $folder['folder_id'],
+            $folder['user_id'],
+            $folder['range_id'],
+            $range_id,
+            $folder['name'],
+            Config::get()->PERSONALDOCUMENT_OPEN_ACCESS ? '{"viewable":1}' : '',
+            (string)$folder['description'],
+            $folder['mkdate'],
+            $folder['chdate']
+        ]);
         $subfolders = $db->fetchAll("SELECT file_id as folder_id,user_id,parent_id as range_id,name,description,mkdate,chdate FROM _file_refs INNER JOIN _files USING(file_id) WHERE storage_id='' AND parent_id = ?", array($folder['folder_id']));
         foreach ($subfolders as $one) {
             $this->migratePersonalFolder($one, $range_id);

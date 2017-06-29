@@ -115,7 +115,11 @@ class PublicFolder extends StandardFolder
      */
     public function getDescriptionTemplate()
     {
-        return _('Öffentlich sichtbar für alle.');
+        return $this->viewable ?
+            _('Dateien aus diesem Ordner werden auf Ihrer Profilseite zum Donwload angeboten.')
+            :
+         _('Dateien aus diesem Ordner sind für alle Stud.IP Nutzer zugreifbar.');
+
     }
 
     /**
