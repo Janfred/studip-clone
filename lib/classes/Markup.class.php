@@ -241,6 +241,7 @@ class Markup
     private static function createPurifier()
     {
         $config = self::createDefaultPurifier();
+        $config->set('AutoFormat.Linkify', true);
         $config->set('Core.RemoveInvalidImg', true);
 
         // restrict allowed HTML tags and attributes
