@@ -213,7 +213,7 @@
         <? $df = $entry->getTypedDatafield(); ?>
         <tr>
             <td><strong><?= htmlReady($df->getName()) ?></strong></td>
-            <td><?= htmlReady($df->getDisplayValue()); ?></td>
+            <td><?= $df->getDisplayValue(); ?></td>
         </tr>
         <? endforeach; ?>
     </tbody>
