@@ -36,7 +36,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-$if (($o_mode != "direct") AND ($o_mode != "passthrough"))
+if (($o_mode != "direct") AND ($o_mode != "passthrough"))
     $perm->check("tutor");
 
 
