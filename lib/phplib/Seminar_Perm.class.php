@@ -37,6 +37,18 @@ class Seminar_Perm
     private $fak_admins = array();
 
     /**
+     * @return Seminar_Perm
+     */
+    public static function get()
+    {
+        if (is_object($GLOBALS['perm'])) {
+            return $GLOBALS['perm'];
+        } else {
+            return new Seminar_Perm();
+        }
+    }
+
+    /**
      * @param $must_have
      * @throws AccessDeniedException
      */

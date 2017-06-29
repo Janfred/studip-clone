@@ -95,7 +95,7 @@ if ($o_mode != "direct")
         chmod ($TMP_PATH . "/export", 0777);
     }
     $xml_file_id = md5(uniqid(rand())) . ".xml";
-    $xml_file = fopen($TMP_PATH."/export/" . $xml_file_id, "w");
+    $xml_file = fopen($TMP_PATH."/" . $xml_file_id, "w");
 }
 
 if ($o_mode == 'direct'){
@@ -147,10 +147,10 @@ if ($o_mode === 'file' || $o_mode === 'choose') {
         $export_pagecontent .= "<input type=\"hidden\" name=\"xslt_filename\" value=\"" . htmlReady($xslt_filename) . "\">";
 
         $export_weiter_button = "<br><br><center>" . Button::create('<< ' . _('Zurück'), 'back') . "</center></form>";
-        $xml_printimage = '<a href="'. GetDownloadLink($xml_file_id, $xml_filename, 2) .  '">';
+        $xml_printimage = '<a href="'. FileManager::getDownloadLinkForTemporaryFile($xml_file_id, $xml_filename) .  '">';
         $xml_printimage.= Icon::create($export_icon['xml'], 'clickable');
         $xml_printimage.= '</a>';
-        $xml_printlink = '<a href="'. GetDownloadLink($xml_file_id, $xml_filename, 2). '" class="tree">' . htmlReady($xml_filename) . '</a>';
+        $xml_printlink = '<a href="'. FileManager::getDownloadLinkForTemporaryFile($xml_file_id, $xml_filename). '" class="tree">' . htmlReady($xml_filename) . '</a>';
         $xml_printdesc = _("XML-Daten");
         $xml_printcontent = _("In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags können mit einem XSLT-Script verarbeitet werden.") . "<br>";
     }
@@ -158,7 +158,7 @@ if ($o_mode === 'file' || $o_mode === 'choose') {
     PageLayout::postInfo($xml_export_text);
 
     if ($object_counter > 0) {
-        $link = '<a href="'. GetDownloadLink($xml_file_id, $xml_filename, 2) .' ">';
+        $link = '<a href="'. FileManager::getDownloadLinkForTemporaryFile($xml_file_id, $xml_filename) .' ">';
         PageLayout::postSuccess(sprintf(
             _('Um die XML-Datei jetzt herunterzuladen klicken Sie %s hier %s.'),
             $link, '</a>'

@@ -36,8 +36,6 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once 'lib/datei.inc.php';
-require_once 'lib/dates.inc.php';
 
 class AdminModules extends ModulesNotification {
 
@@ -85,37 +83,6 @@ class AdminModules extends ModulesNotification {
         $this->registered_modules["elearning_interface"]["msg_activate"] = _("Die Schnittstelle für die Integration von Content-Modulen kann jederzeit aktiviert werden.");
         $this->registered_modules["elearning_interface"]["msg_deactivate"] = _("Die Schnittstelle für die Integration von Content-Modulen kann jederzeit deaktiviert werden.");
 
-        $this->registered_modules["documents_folder_permissions"]['name'] = _("Dateiordnerberechtigungen");
-        $this->registered_modules["documents_folder_permissions"]["msg_activate"] = _("Die Dateiordnerberechtigungen können jederzeit aktiviert werden.");
-        $this->registered_modules["documents_folder_permissions"]["msg_warning"] = _("Wollen Sie wirklich die Dateiordnerberechtigungen deaktivieren und damit eventuell versteckte Inhalte zugänglich machen?");
-        $this->registered_modules["documents_folder_permissions"]["msg_deactivate"] = _("Die Dateiordnerberechtigungen können jederzeit deaktiviert werden.");
-        $this->registered_modules["documents_folder_permissions"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren der Dateiordnerberechtigungen werden <b>%s</b> geschützte Ordner zugänglich!");
-        $this->registered_modules["documents_folder_permissions"]['preconditions'] = array('documents');
-        $this->registered_modules["documents_folder_permissions"]['metadata'] = array(
-                'summary' => _("Dateiordnerberechtigungen"),
-                'descriptionshort' => _("Vergabe von Rechten für Dateiordner an teilnehmende Studierende"),
-                'category' => _("Lehr- und Lernorganisation"),
-                'keywords' => _('Das Recht "Lesen" (r): Dateien können geöffnet und heruntergeladen werden;
-                                Das Recht "Schreiben" (w): Studierende können Dateien hochladen;
-                                Das Recht "Sichtbarkeit" (x): Ordner wird angezeigt;
-                                Das Recht "Ordner erstellen" (f): Studierende können Unterordner anlegen'),
-                'icon' => Icon::create('files', 'info'),
-                'screenshots' => array(
-                    'path' => 'plus/screenshots/Dateiordnerberechtigung',
-                    'pictures' => array(
-                        0 => array(
-                            'source' => 'Ordner_zum_Hausaufgabenordner_umwandeln.jpg',
-                            'title'  => _('Ordner zum Hausaufgabenordner umwandeln'),
-                        )
-                    )
-                ),
-                'description' => _('Mit den Einstellungen zur Dateiordnerberechtigung können Lehrende die Zugriffsrechte '.
-                                    'für Ordner im Dateibereich verändern. Wird z. B. das Leserecht entfernt, entsteht ein '.
-                                    'Hausaufgabenordner, in den Studierende Dateien zwar hochladen, aber nicht sehen können, '.
-                                    'welche Dateien sich noch im Ordner befinden. Es gibt vier Einstellungsmöglichkeiten, '.
-                                    'die miteinander kombiniert werden können (Lesen, Schreiben, Sehen, Ordner anlegen). '.
-                                    'Beim Einschalten bestimmter Funktionen wird die Dateiordnerberechtigung automatisch eingeschaltet.')
-            );
         if (get_config('CALENDAR_GROUP_ENABLE')) {
             $this->registered_modules["calendar"]["name"] = _("Kalender");
             $this->registered_modules["calendar"]["msg_activate"] = _("Der Kalender kann jederzeit aktiviert werden.");
@@ -138,26 +105,10 @@ class AdminModules extends ModulesNotification {
     }
 
     public function getDocumentsExistingItems($range_id) { //getModuleDocumentsExistingItems
-        $query = "SELECT COUNT(dokument_id) FROM dokumente WHERE seminar_id = ?";
-        $statement = DBManager::get()->prepare($query);
-        $statement->execute(array($range_id));
-        $items = $statement->fetchColumn();
-
-        $folder_tree = TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $range_id));
-
-        $items += $folder_tree->getNumKidsKids('root') - $folder_tree->getNumKids('root');
-        return $items;
+        return 0;
     }
 
     public function moduleDocumentsActivate($range_id) {
-        if ($this->getDocumentsExistingItems($range_id)) {
-            return;
-        }
-        create_folder(_('Allgemeiner Dateiordner'),
-                      _('Ablage für allgemeine Ordner und Dokumente der Veranstaltung'),
-                      $range_id,
-                      7,
-                      $range_id);
     }
 
     public function getModuleWikiExistingItems($range_id) {
@@ -215,36 +166,6 @@ class AdminModules extends ModulesNotification {
                 $connected_cms[$system]->deleteConnectedModules($range_id);
             }
         }
-    }
-
-    public function moduledocuments_folder_permissionsDeactivate($range_id){
-        $folder_tree = TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $range_id));
-        foreach($folder_tree->getKidsKids('root') as $folder_id){
-            $folder_tree->setDefaultPermission($folder_id);
-        }
-    }
-
-    public function moduledocuments_folder_permissionsActivate($range_id){
-    }
-
-    public function getModuledocuments_folder_permissionsExistingItems($range_id) {
-        $folder_tree = TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $range_id));
-        return count($folder_tree->getUnreadableFolders('xxx', true));
-    }
-
-    public function moduledocuments_folder_permissionsPreconditions($range_id, $args){
-        if (is_array($args)){
-            $must_activate = array();
-            foreach($args as $m){
-                if (!$this->getStatus($m, $range_id)){
-                    $must_activate[] = $this->registered_modules[$m]['name'];
-                }
-            }
-            if (count($must_activate)){
-                return sprintf(_("Die Dateiordnerberechtigungen erfordern die Aktivierung von: <b>%s</b>"), join(', ',$must_activate));
-            }
-        }
-        return null;
     }
 
     public function getModuleCalendarExistingItems($range_id)

@@ -515,113 +515,107 @@ class StreamsController extends PluginController {
                 || ($context_type === "course" && !$GLOBALS['perm']->have_studip_perm("autor", $context))) {
             throw new AccessDeniedException();
         }
-        //check folders
-        $db = DBManager::get();
-        $folder_id = md5("Blubber_".$context."_".$GLOBALS['user']->id);
-        $parent_folder_id = md5("Blubber_".$context);
-        if ($context_type !== "course") {
-            $folder_id = $parent_folder_id;
-        }
-        $folder = $db->query(
-            "SELECT * " .
-            "FROM folder " .
-            "WHERE folder_id = ".$db->quote($folder_id)." " .
-        "")->fetch(PDO::FETCH_COLUMN, 0);
-        if (!$folder) {
-            $folder = $db->query(
-                "SELECT * " .
-                "FROM folder " .
-                "WHERE folder_id = ".$db->quote($parent_folder_id)." " .
-            "")->fetch(PDO::FETCH_COLUMN, 0);
-            if (!$folder) {
-                $db->exec(
-                    "INSERT IGNORE INTO folder " .
-                    "SET folder_id = ".$db->quote($parent_folder_id).", " .
-                        "range_id = ".$db->quote($context).", " .
-                        "seminar_id = ".$db->quote($context).", " .
-                        "user_id = ".$db->quote($GLOBALS['user']->id).", " .
-                        "name = ".$db->quote("BlubberDateien").", " .
-                        "permission = '7', " .
-                        "mkdate = ".$db->quote(time()).", " .
-                        "chdate = ".$db->quote(time())." " .
-                "");
-            }
-            if ($context_type === "course") {
-                $db->exec(
-                    "INSERT IGNORE INTO folder " .
-                    "SET folder_id = ".$db->quote($folder_id).", " .
-                        "range_id = ".$db->quote($parent_folder_id).", " .
-                        "seminar_id = ".$db->quote($context).", " .
-                        "user_id = ".$db->quote($GLOBALS['user']->id).", " .
-                        "name = ".$db->quote(get_fullname()).", " .
-                        "permission = '7', " .
-                        "mkdate = ".$db->quote(time()).", " .
-                        "chdate = ".$db->quote(time())." " .
-                "");
-            }
-        }
-
+        
         $output = array();
 
         foreach ($_FILES as $file) {
-            $GLOBALS['msg'] = '';
-            validate_upload($file);
-            if ($GLOBALS['msg']) {
-                $output['errors'][] = $file['name'] . ': ' . decodeHTML(trim(mb_substr($GLOBALS['msg'],6), '§'));
-                continue;
-            }
+        
+            $newfile = null; //is filled below
+            $file_ref = null; //is also filled below
+            
+            
             if ($file['size']) {
-                $document['name'] = $document['filename'] = studip_utf8decode(mb_strtolower($file['name']));
                 $document['user_id'] = $GLOBALS['user']->id;
-                $document['author_name'] = get_fullname();
-                $document['seminar_id'] = $context;
-                $document['range_id'] = $context_type === "course" ? $folder_id : $parent_folder_id;
                 $document['filesize'] = $file['size'];
 
-                if ($context === $GLOBALS['user']->id && Config::get()->PERSONALDOCUMENT_ENABLE) {
-                    try {
-                        $root_dir = RootDirectory::find($GLOBALS['user']->id);
-                        $blubber_directory = $root_dir->listDirectories()->findOneBy('name', 'Blubber');
-                        if (!$blubber_directory) {
-                            $blubber_directory = $root_dir->mkdir('Blubber', _('Ihre Dateien aus Blubberstreams'));
+                try {
+                    $root_dir = Folder::findTopFolder($GLOBALS['user']->id);
+                    $root_dir = $root_dir->getTypedFolder();
+                    $blubber_directory = Folder::findOneBySql(
+                        "parent_id = :parent_id
+                        AND
+                        folder_type = 'PublicFolder'
+                        AND
+                        data_content = '[\"Blubber\"]'",
+                        [
+                            'parent_id' => $root_dir->getId()
+                        ]
+                    );
+                    
+                    
+                    if ($blubber_directory) {
+                        $blubber_directory = $blubber_directory->getTypedFolder();
+                    } else {
+                        //blubber directory not found: create it
+                        $blubber_directory = FileManager::createSubFolder(
+                            $root_dir,
+                            $GLOBALS['user']->getAuthenticatedUser(),
+                            'PublicFolder',
+                            'Blubber',
+                            _('Ihre Dateien aus Blubberstreams')
+                        );
+                        
+                        if(!$blubber_directory instanceof FolderType) {
+                            throw new Exception('Cannot create Blubber folder!');
                         }
-                        $newfile = $blubber_directory->file->createFile($document['name']);
-                        $newfile->name = $document['name'];
-                        $newfile->store();
-
-                        $handle = $newfile->file;
-                        $handle->restricted = 0;
-                        $handle->mime_type = $file['type'];
-                        $handle->setContentFromFile($file['tmp_name']);
-                        $handle->update();
-
-                        $url = $newfile->getDownloadLink(true, true);
-
-                        $success = true;
-                    } catch (Exception $e) {
-                        $output['error'][] = $e->getMessage();
-                        $success = false;
+                        
+                        $blubber_directory->data_content = ['Blubber'];
+                        $blubber_directory->store();
                     }
-                } else {
-                    $newfile = StudipDocument::createWithFile($file['tmp_name'], $document);
-                    $success = (bool)$newfile;
-
-                    if ($success) {
-                        $url = GetDownloadLink($newfile->getId(), $newfile['filename']);
+                    
+                    if($blubber_directory) {
+                        //ok, blubber directory exists: we can handle the uploaded file
+                        
+                        $error_string = $blubber_directory->validateUpload(
+                            $file,
+                            $GLOBALS['user']->id
+                        );
+                        
+                        if($error_string) {
+                            throw new Exception($error_string);
+                        }
+                        
+                        
+                        $file['tmp_path'] = $file['tmp_name'];
+                        
+                        $file_ref = $blubber_directory->createFile($file);
+                        
+                        if($file_ref) {
+                            //we can't use the FileRef's getDownloadURL() here,
+                            //because the getDownloadURL method does not provide
+                            //the full URL!
+                            $url = mb_substr($GLOBALS['ABSOLUTE_URI_STUDIP'], 0, -1) . URLHelper::getUrl(
+                                '/sendfile.php',
+                                [
+                                    'type' => '0',
+                                    'file_id' => $file_ref->id,
+                                    'file_name' => $file_ref->name
+                                ],
+                                true
+                            );
+                            $success = true;
+                        } else {
+                            throw new Exception('File cannot be created!');
+                        }
+                        
                     }
+                } catch (Exception $e) {
+                    $output['error'][] = $e->getMessage();
+                    $success = false;
                 }
-
+                
+                
                 if ($success) {
                     $type = null;
-                    mb_strpos($file['type'], 'image') === false || $type = "img";
-                    mb_strpos($file['type'], 'video') === false || $type = "video";
-                    if (mb_strpos($file['type'], 'audio') !== false || mb_strpos($document['filename'], '.ogg') !== false) {
+                    mb_strpos($file['mime_type'], 'image') === false || $type = "img";
+                    mb_strpos($file['mime_type'], 'video') === false || $type = "video";
+                    if (mb_strpos($file['mime_type'], 'audio') !== false || mb_strpos($file_ref['name'], '.ogg') !== false) {
                          $type = "audio";
                     }
                     if ($type) {
                         $output['inserts'][] = "[".$type."]".$url;
                     } else {
-                        $output['inserts'][] = "[".$document['filename']."]".$url;
+                        $output['inserts'][] = "[".$file_ref['name']."]".$url;
                     }
                 }
             }

@@ -35,16 +35,13 @@ class GarbageCollectorJob extends CronJob
 
     public function setUp()
     {
-        require_once 'lib/datei.inc.php';
+        
     }
 
     public function execute($last_result, $parameters = array())
     {
         $db = DBManager::get();
-        $dd_func = function($d) {
-            delete_document($d);
-        };
-
+        
         //abgelaufenen News löschen
         $deleted_news = StudipNews::DoGarbageCollect();
         //messages aufräumen
@@ -53,10 +50,29 @@ class GarbageCollectorJob extends CronJob
         if (count($to_delete)) {
             $db->exec("DELETE FROM message_user WHERE message_id IN(" . $db->quote($to_delete) . ")");
             $db->exec("DELETE FROM message WHERE message_id IN(" . $db->quote($to_delete) . ")");
-            $to_delete_attach = $db->query("SELECT dokument_id FROM dokumente WHERE range_id IN(" . $db->quote($to_delete) . ")")->fetchAll(PDO::FETCH_COLUMN,0);
-            array_walk($to_delete_attach, $dd_func);
         }
-        //Attachments von nicht versendeten Messages aufräumen
+        
+        //delete old attachments of non-sent and deleted messages:
+        //A folder is old and not attached to a message when it has the
+        //range type 'message', belongs to the folder type 'MessageFolder', 
+        //is older than 2 hours and has a range-ID that doesn't exist
+        //in the "message" table.
+        $unsent_attachment_folders = Folder::deleteBySql(
+            "folder_type = 'MessageFolder'
+            AND
+            range_type = 'message'
+            AND
+            chdate < UNIX_TIMESTAMP(DATE_ADD(NOW(),INTERVAL -2 HOUR))
+            AND
+            range_id NOT IN (
+                SELECT message_id FROM message
+            )",
+            [
+                'user_id' => $GLOBALS['user']->id
+            ]
+        );
+        
+        
         $to_delete_attach = $db->query("SELECT dokument_id FROM dokumente WHERE range_id = 'provisional' AND chdate < UNIX_TIMESTAMP(DATE_ADD(NOW(),INTERVAL -2 HOUR))")->fetchAll(PDO::FETCH_COLUMN,0);
         array_walk($to_delete_attach, $dd_func);
         if ($parameters['verbose']) {

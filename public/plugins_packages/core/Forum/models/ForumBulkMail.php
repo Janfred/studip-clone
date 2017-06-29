@@ -110,8 +110,24 @@ class ForumBulkMail extends Messaging {
 
                 if($GLOBALS["ENABLE_EMAIL_ATTACHMENTS"]){
                     $message = Message::find($data['message_id']);
-                    foreach($message->attachments as $attachment){
-                        $mail->addStudipAttachment($attachment->id);
+                    
+                    $current_user = User::findCurrent();
+                    
+                    $message_folder = MessageFolder::findMessageTopFolder(
+                        $message->id,
+                        $current_user->id
+                    );
+                    
+                    $message_folder = $message_folder->getTypedFolder();
+                    
+                    $attachments = FileManager::getFolderFilesRecursive(
+                        $message_folder,
+                        $current_user->id
+                    );
+                    
+                    
+                    foreach($attachments as $attachment) {
+                        $mail->addStudipAttachment($attachment);
                     }
                 }
                 $mail->send();

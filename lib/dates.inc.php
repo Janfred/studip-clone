@@ -23,7 +23,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-require_once 'lib/datei.inc.php';  // benötigt zum Löschen von Dokumenten
 require_once 'lib/calendar_functions.inc.php';
 require_once 'lib/raumzeit/raumzeit_functions.inc.php'; // Helper-Funktionen
 
@@ -356,31 +355,9 @@ function delete_date($termin_id, $topic_delete = TRUE, $folder_move = TRUE, $sem
         include_once ("lib/resources/lib/VeranstaltungResourcesAssign.class.php");
     }
 
-    if (!$folder_move) {
-        ## Dateiordner muessen weg!
-        recursiv_folder_delete ($termin_id);
-    } else {
-        ## Dateiordner werden verschoben, wenn Ordner nicht leer, ansonsten auch weg
-        if (!doc_count($termin_id))
-            recursiv_folder_delete($termin_id);
-        else {
-            $query = "SELECT folder_id FROM folder WHERE range_id = ?";
-            $statement = DBManager::get()->prepare($query);
-            $statement->execute(array($termin_id));
-            $folder_id = $statement->fetchColumn();
-
-            move_item($folder_id, $sem_id, $sem_id);
-
-            $query = "UPDATE folder SET name = ?, description = ? WHERE folder_id = ?";
-            $statement = DBManager::get()->prepare($query);
-            $statement->execute(array(
-                _('Dateiordner zu gelöschtem Termin'),
-                _('Dieser Ordner enthält Dokumente und Termine eines gelöschten Termins'),
-                $folder_id,
-            ));
-        }
-    }
-
+    //Deleting folders was removed since folders can't be assigned to
+    //single dates, only to topics.
+    
     ## Und den Termin selbst loeschen
     $query = "DELETE FROM termine WHERE termin_id = ?";
     $statement = DBManager::get()->prepare($query);

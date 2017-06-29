@@ -44,16 +44,15 @@
                             <?= Icon::create('forum', 'inactive')->asImg(20, ["style" => 'visibility: hidden;']) ?>
                         <? endif; ?>
 
-                        <? if(($row['archiv_file_id']) and archiv_check_perm($row['seminar_id'])) :
-                                $filename = _('Dateisammlung') . '-' . mb_substr($row['name'], 0, 200) . '.zip';
-                            ?>
-                            <a href="<?= URLHelper::getLink(GetDownloadLink($row['archiv_file_id'], $filename, 1)) ?>">
+                        
+                        <? $course = ArchivedCourse::find($row['seminar_id']); ?>
+
+                        <? if(($row['archiv_file_id']) and archiv_check_perm($row['seminar_id'])): ?>
+                            <a href="<?= FileManager::getDownloadLinkForArchivedCourse($course, false) ?>">
                                 <?= Icon::create('file-archive', 'clickable', ['title' => _('Dateisammlung der Veranstaltung herunterladen')])->asImg(20) ?>
                             </a>
-                        <? elseif(($row['archiv_protected_file_id']) and archiv_check_perm($row['seminar_id'] == 'admin')) :
-                                $filename = _('Dateisammlung') . '-' . mb_substr($row['name'], 0, 200) . '.zip';
-                            ?>
-                            <a href="<?= URLHelper::getLink(GetDownloadLink($row['archiv_protected_file_id'], $filename, 1)) ?>">
+                        <? elseif(($row['archiv_protected_file_id']) and archiv_check_perm($row['seminar_id'] == 'admin')): ?>
+                            <a href="<?= FileManager::getDownloadLinkForArchivedCourse($course, true) ?>">
                                 <?= Icon::create('file-archive', 'clickable', ['title' => _('Dateisammlung der Veranstaltung herunterladen')])->asImg(20) ?>
                             </a>
                         <? else: ?>

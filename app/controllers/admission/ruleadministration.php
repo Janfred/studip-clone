@@ -202,12 +202,16 @@ class Admission_RuleAdministrationController extends AuthenticatedController
      */
     public function download_action($ruleName)
     {
-        $dirname = $GLOBALS['ABSOLUTE_PATH_STUDIP'].'admissionrules/'.
-            mb_strtolower($ruleName);
+        $dirname = $GLOBALS['STUDIP_BASE_PATH'] . '/lib/admissionrules/'.
+            mb_strtolower($ruleName) . '/';
+        
         $filename = $ruleName.'.zip';
         $filepath = get_config('TMP_PATH').'/'.$filename;
 
-        create_zip_from_directory($dirname, $filepath);
+        FileArchiveManager::createArchiveFromPhysicalFolder(
+            $dirname,
+            $filepath
+        );
 
         header('Content-Type: application/zip');
         header('Content-Disposition: attachment; filename="'.$filename.'"');

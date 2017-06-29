@@ -21,7 +21,6 @@
 require '../lib/bootstrap.php';
 
 require_once 'vendor/phplot/phplot.php';
-require_once 'lib/datei.inc.php';
 require_once 'lib/evaluation/evaluation.config.php';
 require_once EVAL_FILE_EVAL;
 require_once EVAL_FILE_OBJECTDB;
@@ -56,7 +55,7 @@ $has_template   = 0;
 $eval_templates = array();
 $question_type  = "";
 
-$tmp_path_export = $GLOBALS['TMP_PATH']. '/export/';
+$tmp_path_export = $GLOBALS['TMP_PATH'];
 export_tmp_gc();
 
 if (isset($cmd)) {
@@ -318,7 +317,9 @@ function answers($parent_id, $anz_nutzer, $question_type)
     $txt .= "    </td>\n";
     $txt .= "    <td width=\"30%\" valign=\"TOP\" align=\"RIGHT\">\n";
     if (do_template("show_graphics")) {
-        $txt .= '<IMG SRC="' . GetDownloadLink('evalsum'.$parent_id.$auth->auth['uid'].'.'.Config::get()->EVAL_AUSWERTUNG_GRAPH_FORMAT, 'evalsum'.$parent_id.$auth->auth['uid'].'.'.Config::get()->EVAL_AUSWERTUNG_GRAPH_FORMAT, 2) .'">'."\n";
+        $txt .= '<IMG SRC="' . FileManager::getDownloadLinkForTemporaryFile(
+            'evalsum'.$parent_id.$auth->auth['uid'].'.'.Config::get()->EVAL_AUSWERTUNG_GRAPH_FORMAT,
+            'evalsum'.$parent_id.$auth->auth['uid'].'.'.Config::get()->EVAL_AUSWERTUNG_GRAPH_FORMAT) .'">'."\n";
     } else $txt .= "&nbsp;\n";
     $txt .= "    </td>\n";
     $txt .= "  </tr>\n";

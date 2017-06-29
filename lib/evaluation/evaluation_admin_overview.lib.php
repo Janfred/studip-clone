@@ -28,7 +28,6 @@ use Studip\Button,
 
 # Include all required files ================================================ #
 require_once 'lib/evaluation/evaluation.config.php';
-require_once 'lib/datei.inc.php';
 require_once HTML;
 require_once EVAL_LIB_COMMON;
 require_once EVAL_LIB_SHOW;
@@ -901,14 +900,6 @@ class EvalOverview {
                 $exportManager = new EvaluationExportManagerCSV($evalID);
                 $exportManager->export();
                 /* -------------------------------------- end: export evaluation */
-
-
-                /* Create link ------------------------------------------------- */
-                $link = new HTML("a");
-                $link->addAttr('href', GetDownloadLink($exportManager->getTempFilename(), $exportManager->getFilename(), 2));
-                $link->addHTMLContent(GetFileIcon('csv')->asImg());
-                $link->addContent(_("auf diese Verknüpfung"));
-                /* -------------------------------------------- end: create link */
 
 
                 /* Create report ----------------------------------------------- */

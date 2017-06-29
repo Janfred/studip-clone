@@ -49,7 +49,7 @@
                 <tr>
                     <td><strong><?= _("Themen-Dateiordner") ?></strong></td>
                     <td>
-                        <? $folder = $topic->folder ?>
+                        <? $folder = $topic->folders->first() ?>
                         <? if ($folder) : ?>
                             <?= Icon::create('accept', 'accept')->asImg(['class' => "text-bottom"]) ?>
                             <?= _("Dateiordner vorhanden ") ?>

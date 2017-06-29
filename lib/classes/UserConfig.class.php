@@ -193,6 +193,7 @@ class UserConfig extends Config
     function store($field, $value)
     {
         $entry = UserConfigEntry::findByFieldAndUser($field, $this->user_id);
+        $this->data[$field] = $value;
         if($entry === null) {
             $entry = new UserConfigEntry();
             $entry->user_id = $this->user_id;

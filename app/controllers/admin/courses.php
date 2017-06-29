@@ -641,7 +641,11 @@ class Admin_CoursesController extends AuthenticatedController
 
         $tmpname = md5(uniqid('Veranstaltungsexport'));
         if (array_to_csv($data, $GLOBALS['TMP_PATH'] . '/' . $tmpname, $captions)) {
-            $this->redirect(GetDownloadLink($tmpname, 'Veranstaltungen_Export.csv', 4, 'force'));
+            $this->redirect(FileManager::getDownloadURLForTemporaryFile(
+                $tmpname,
+                'Veranstaltungen_Export.csv'
+                )
+            );
             return;
         }
     }

@@ -735,33 +735,53 @@ function display_exception($exception, $as_html = false, $deep = false) {
  * @param String $mime_type Mime type to get the icon for
  * @return String Icon path for the mime type
  */
+//DEPRECATED: replaced by FileManager::getIconNameForMimeType
+//TODO: test: lib/extern/modules/ExternModuleDownload.class.php
+//TODO: test: lib/extern/modules/ExternModuleTemplateDownload.class.php
+/*
 function get_icon_for_mimetype($mime_type)
 {
-    if (mb_strpos($mime_type, 'image/') === 0) {
-        return 'file-pic';
-    }
-    if (mb_strpos($mime_type, 'audio/') === 0) {
-        return 'file-audio';
-    }
-    if (mb_strpos($mime_type, 'video/') === 0) {
-        return 'file-video';
-    }
-    if ($mime_type === 'application/pdf') {
-        return 'file-pdf';
-    }
-    if ($mime_type === 'application/vnd.ms-powerpoint') {
-        return 'file-presentation';
+
+    $icons_application = [
+        'file-pdf' => ['pdf'],
+        'file-ppt' => ['powerpoint','presentation'],
+        'file-excel' => ['excel', 'spreadsheet', 'csv'],
+        'file-word' => ['word', 'wordprocessingml', 'opendocument.text', 'rtf'],
+        'file-archive' => ['zip', 'rar', 'arj', '7z' ]
+        ];
+    list($type, $subtype) = explode('/', $mime_type);
+    switch ($type) {
+        case 'image':
+            $ret = 'file-pic';
+        break;
+        case 'audio':
+            $ret = 'file-audio';
+            break;
+        case 'video':
+            $ret = 'file-video';
+            break;
+        case 'text':
+            $ret = 'file-text';
+            if (preg_match('/csv|comma-separated-values/i', $subtype)) {
+                $ret = 'file-excel';
+            }
+            break;
+        case 'application':
+            $ret = 'file-generic';
+            foreach($icons_application as $icon => $marker) {
+                if (preg_match('/' . join('|', array_map('preg_quote', $marker)) . '/i', $subtype)) {
+                    $ret = $icon;
+                    break;
+                }
+            }
+            break;
+        default:
+            $ret = 'file-generic';
     }
 
-    $parts = explode('/', $mime_type);
-    if (reset($parts) === 'application' && in_array(end($parts), words('vnd.ms-excel msexcel x-msexcel x-ms-excel x-excel x-dos_ms_excel xls x-xls'))) {
-        return 'file-xls';
-    }
-    if (reset($parts) === 'application' && in_array(end($parts), words('7z arj rar zip'))) {
-        return 'file-archive';
-    }
-    return 'file';
+    return $ret;
 }
+*/
 
 
 if (!function_exists('preg_replace_callback_array')) {

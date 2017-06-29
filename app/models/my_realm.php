@@ -29,26 +29,167 @@ require_once 'lib/object.inc.php';
 class MyRealmModel
 {
     /**
-     * Check for changes in folders for a course
-     * @param      $my_obj
-     * @param      $user_id
-     * @param null $modules
+     * Checks for changes in folders for a course.
+     * @param mixed $my_obj
+     * @param string $user_id
+     * @param string $object_id
      */
     public static function checkDocuments(&$my_obj, $user_id, $object_id)
     {
         if ($my_obj["modules"]["documents"]) {
-            if (!$GLOBALS['perm']->have_perm('admin')) {
-                if ($my_obj['modules']['documents_folder_permissions'] || ($my_obj['obj_type'] == 'sem' && StudipDocumentTree::ExistsGroupFolders($object_id))) {
-                    $must_have_perm = $my_obj['obj_type'] == 'sem' ? 'tutor' : 'autor';
-                    if ($GLOBALS['perm']->permissions[$my_obj['user_status']] < $GLOBALS['perm']->permissions[$must_have_perm]) {
-                        $folder_tree = TreeAbstract::GetInstance('StudipDocumentTree',
-                            array('range_id'    => $object_id,
-                                  'entity_type' => $my_obj['obj_type']));
+            //the document module is available in the object
 
-                        $unreadable_folders = (array)$folder_tree->getUnReadableFolders($user_id);
-                    }
+            $db = DBManager::get();
+            $result = $db->query(
+                "SELECT visitdate FROM object_user_visits
+                WHERE user_id = " . $db->quote($user_id) . "
+                AND object_id = " . $db->quote($object_id) . "
+                AND type = 'sem'
+                LIMIT 1"
+            );
+
+            $last_visit_date = 0;
+
+            if($result) {
+                $last_visit_date = $result->fetchColumn(0);
+            }
+
+
+            $top_folder = Folder::findTopFolder($object_id);
+            if(!$top_folder) {
+                return null;
+            }
+
+            $top_folder = $top_folder->getTypedFolder();
+            if(!$top_folder) {
+                //we can't do anything useful if no top folder can be found.
+                return null;
+            }
+
+            //count all files in standard folders for the object.
+            $files_count = FileRef::countBySql(
+                "INNER JOIN folders ON folders.id = file_refs.folder_id
+                WHERE 
+                folders.folder_type = 'StandardFolder'
+                AND folders.range_id = :range_id",
+                [
+                    'range_id' => $object_id
+                ]
+            );
+
+            //Count all new files in standard folders for the object.
+            //Permission checks for standard folders are omitted
+            //to allow a wider use of this method.
+            $new_files_count = FileRef::countBySql(
+                "INNER JOIN folders ON folders.id = file_refs.folder_id
+                WHERE 
+                (file_refs.mkdate > :last_visit_date
+                OR file_refs.chdate > :last_visit_date)
+                AND folders.folder_type = 'StandardFolder'
+                AND folders.range_id = :range_id
+                AND file_refs.user_id <> :user_id",
+                [
+                    'last_visit_date' => $last_visit_date,
+                    'range_id' => $object_id,
+                    'user_id' => $user_id
+                ]
+            );
+
+
+            //For nonstandard folders we must loop through all files
+            //if those folders are visible for the selected user.
+            //First we get all nonstandard folders of a course
+            //and then add those files to a list if the folder is readable
+            //for the current user.
+            $nonstandard_folders = Folder::findBySql(
+                "folder_type <> 'StandardFolder'
+                AND range_id = :range_id",
+                [
+                    'range_id' => $object_id
+                ]
+            );
+
+
+            $filter_closure = function($file_ref) use ($last_visit_date) {
+                if(!($file_ref instanceof FileRef)) {
+                    //we only want FileRef objects!
+                    return false;
+                }
+
+                if($file_ref->mkdate > $last_visit_date) {
+                    return true;
+                }
+                //if this is executed the file is not new:
+                return false;
+            };
+
+
+
+            foreach($nonstandard_folders as $folder) {
+                $folder = $folder->getTypedFolder();
+
+                //A folder must be readable and visible for a user
+                //so that the new files it contains are shown to the user.
+                if($folder->isReadable($user_id) && $folder->isVisible($user_id)) {
+                    //first get the amount of all files:
+                    $files = $folder->getFiles();
+                    $files_count += count($files);
+
+                    //then filter them to get only the new files:
+                    $new_files = array_filter($files, $filter_closure);
+
+                    $new_files_count += count($new_files);
                 }
             }
+
+            $navigation = new Navigation('files');
+            if ($new_files_count > 0) {
+                $navigation->setURL(
+                    URLHelper::getURL(
+                        'dispatch.php/course/files/flat',
+                        [
+                            'select' => 'new'
+                        ]
+                    )
+                );
+
+                $navigation->setImage(
+                    Icon::create(
+                        'files+new',
+                        'attention',
+                        [
+                            'title' => sprintf(
+                                _('%s Datei(en), %s neue'),
+                                $files_count,
+                                $new_files_count
+                            )
+                        ]
+                    )
+                );
+
+                $navigation->setBadgeNumber($new_files_count);
+            } else {
+                $navigation->setURL(
+                    URLHelper::getURL(
+                        'dispatch.php/course/files/index'
+                    )
+                );
+                $navigation->setImage(
+                    Icon::create(
+                        'files',
+                        'inactive',
+                        [
+                            'title' => sprintf(
+                                _('%s Datei(en)'),
+                                $files_count
+                            )
+                        ]
+                    )
+                );
+            }
+            return $navigation;
+
+
             $result = self::getDocumentsVisitDate($object_id, $user_id, $unreadable_folders);
 
             if (!is_null($result['last_modified'])) {
@@ -57,7 +198,7 @@ class MyRealmModel
                 }
                 $nav = new Navigation('files');
                 if ($result['neue']) {
-                    $nav->setURL(sprintf('folder.php?cmd=all'));
+                    $nav->setURL(URLHelper::getURL('dispatch.php/course/files/flat', ['select' => 'new']));
                     $nav->setImage(
                         Icon::create(
                             'files+new',
@@ -77,7 +218,7 @@ class MyRealmModel
                     );
                     $nav->setBadgeNumber($result['neue']);
                 } else {
-                    $nav->setURL('folder.php?cmd=tree');
+                    $nav->setURL(URLHelper::getURL('dispatch.php/course/files/index'));
                     $nav->setImage(
                         Icon::create(
                             'files',
@@ -98,6 +239,7 @@ class MyRealmModel
                 return $nav;
             }
         }
+
         return null;
     }
 
@@ -1425,7 +1567,7 @@ class MyRealmModel
                     'StudipSemTree',
                     ['build_index' => true]
                 );
-                return (int)($the_tree->tree_data[$a]['index'] 
+                return (int)($the_tree->tree_data[$a]['index']
                     - $the_tree->tree_data[$b]['index']);
             });
             //At this point the $_tmp_courses array is sorted by the ordering
@@ -1437,7 +1579,7 @@ class MyRealmModel
                 unset($_tmp_courses[$sem_key][$sem_tree_id]);
             }
         }
-        
+
         //After the $_tmp_courses array has been built we must sort the
         //third layer (course collection) by group (color),
         //by number (at your option) and by name:

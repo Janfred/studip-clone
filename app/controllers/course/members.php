@@ -1272,7 +1272,12 @@ class Course_MembersController extends AuthenticatedController
             $aux = $course->aux->getCourseData($course, true);
             $tmp_name = uniqid();
             array_to_csv($aux['rows'], $GLOBALS['TMP_PATH'] . '/' . $tmp_name, $aux['head']);
-            $this->redirect(GetDownloadLink($tmp_name, _('Zusatzangaben') . '.csv', 4, 'force'));
+            $this->redirect(
+                FileManager::getDownloadURLForTemporaryFile(
+                    $tmpname,
+                    _('Zusatzangaben') . '.csv'
+                )
+            );
         } else {
             $this->aux = $course->aux->getCourseData($course);
         }

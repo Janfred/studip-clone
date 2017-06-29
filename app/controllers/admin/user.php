@@ -156,7 +156,12 @@ class Admin_UserController extends AuthenticatedController
                             strftime('%x', $u['changed_timestamp'])];
                 };
                 if (array_to_csv(array_map($mapper, $this->users), $GLOBALS['TMP_PATH'] . '/' . $tmpname, $captions)) {
-                    $this->redirect(GetDownloadLink($tmpname, 'nutzer-export.csv', 4));
+                    $this->redirect(
+                        FileManager::getDownloadURLForTemporaryFile(
+                            $tmpname,
+                            'nutzer-export.csv'
+                        )
+                    );
                 }
             }
         }
@@ -1174,7 +1179,11 @@ class Admin_UserController extends AuthenticatedController
         foreach ($memberships as $membership) {
             if (!Request::get('view') || Request::get('view') === 'files') {
                 // count files for course
-                $count = StudipDocument::countBySql('user_id = ? AND seminar_id =?', [$user_id, $membership->seminar_id]);
+                
+                $top_folder = Folder::findTopFolder($membership->seminar_id);
+                $top_folder = $top_folder->getTypedFolder();
+                $count = FileManager::countFilesInFolder($top_folder, true, $user_id);
+                
 
                 if ($count) {
                     if (!isset($course_files[$membership->seminar_id])) {
@@ -1202,8 +1211,12 @@ class Admin_UserController extends AuthenticatedController
             $institutes = Institute::getMyInstitutes($user_id);
             if (!empty($institutes)) {
                 foreach ($institutes as $index => $institute) {
-                    $count = StudipDocument::countBySql('user_id = ? AND seminar_id =?', [$user_id, $institute['Institut_id']]);
-
+                    $top_folder = Folder::findTopFolder($institute['Institut_id']);
+                    
+                    $top_folder = $top_folder->getTypedFolder();
+                    
+                    $count = FileManager::countFilesInFolder($top_folder, true, $user_id);
+                    
                     if ($count) {
                         $institutes[$index]['files'] = $count;
                     } else {
@@ -1251,8 +1264,19 @@ class Admin_UserController extends AuthenticatedController
     public function list_files_action($user_id, $range_id)
     {
         $this->user  = User::find($user_id);
-        $this->files = StudipDocument::findBySQL('user_id = ? AND seminar_id = ? ORDER BY name', [$user_id, $range_id]);
-
+        $folder = Folder::findTopFolder($range_id);
+        if($folder) {
+            $folder = $folder->getTypedFolder();
+        }
+        
+        if($folder) {
+            //Folder exists: We can collect all subfolders in the folder.
+            $this->folders = FileManager::getFolderFilesRecursive($folder, $this->user->id)['folders'];
+        } else {
+            //Folder does not exist: We can't collect any subfolders.
+            $this->folders = [];
+        }
+        
         $this->range = Course::find($range_id);
         if (is_null($this->range)) {
             $this->range = Institute::find($range_id);
@@ -1348,19 +1372,31 @@ class Admin_UserController extends AuthenticatedController
             'query' => "SELECT COUNT(*) FROM resources_objects WHERE owner_id = ? GROUP BY owner_id",
         ];
         $queries[] = [
-            'desc'    => _("Anzahl der Dateien (hochgeladen / verlinkt)"),
-            'query'   => "SELECT CONCAT_WS(' / ', COUNT(*) - COUNT(NULLIF(url,'')), COUNT(NULLIF(url,'')))
-                  FROM dokumente
-                  WHERE user_id = ?
-                  GROUP BY user_id",
+            'desc'    => _("Anzahl der Dateien in Veranstaltungen und Einrichtungen"),
+            'query'   => "SELECT COUNT(file_refs.id)
+                  FROM (file_refs INNER JOIN files ON file_refs.file_id = files.id)
+                  INNER JOIN folders ON file_refs.folder_id = folders.id
+                  WHERE (file_refs.user_id = ?)
+                  AND (files.storage <> 'url')
+                  AND (
+                    (folders.range_type = 'course') 
+                    OR (folders.range_type = 'institute')
+                  )
+                  GROUP BY file_refs.user_id",
             'details' => "files",
         ];
         $queries[] = [
-            'desc'    => _("Gesamtgröße der hochgeladenen Dateien (MB)"),
-            'query'   => "SELECT FORMAT(SUM(filesize)/1024/1024,2)
-                  FROM dokumente
-                  WHERE user_id = ? AND (url IS NULL OR url = '')
-                  GROUP BY user_id",
+            'desc'    => _("Gesamtgröße der hochgeladenen Dateien in Veranstaltungen und Einrichtungen (in Megabytes)"),
+            'query'   => "SELECT FORMAT(SUM(files.size)/1000000,2)
+                  FROM (file_refs INNER JOIN files ON file_refs.file_id = files.id)
+                  INNER JOIN folders ON file_refs.folder_id = folders.id
+                  WHERE (file_refs.user_id = ?)
+                  AND (files.storage <> 'url')
+                  AND (
+                    (folders.range_type = 'course') 
+                    OR (folders.range_type = 'institute')
+                  )
+                  GROUP BY file_refs.user_id",
             'details' => "files",
         ];
 
@@ -1392,28 +1428,43 @@ class Admin_UserController extends AuthenticatedController
      */
     public function download_user_files_action($user_id, $course_id = '')
     {
-        $query      = "SELECT dokument_id FROM dokumente WHERE user_id = ?";
-        $parameters = [$user_id];
-
-        if ($course_id !== '') {
-            $query .= " AND seminar_id = ?";
-            $parameters[] = $course_id;
+        global $TMP_PATH;
+        
+        
+        $top_folder = Folder::findTopFolder($course_id);
+        $top_folder = $top_folder->getTypedFolder();
+        
+        $element_lists = FileManager::getFolderFilesRecursive($top_folder, $user_id);
+        
+        //We want only those FileRefs which belong to the user identified by $user_id:
+        $file_refs = [];
+        
+        foreach($element_lists['files'] as $file_ref) {
+            if($file_ref->user_id == $user_id) {
+                $file_refs[] = $file_ref;
+            }
         }
-        $statement = DBManager::get()->prepare($query);
-        $statement->execute($parameters);
-
-        $download_ids = $statement->fetchAll(PDO::FETCH_COLUMN);
-        $zip_file_id  = createSelectedZip($download_ids, false);
-
-        $user     = User::find($user_id);
-        $filename = prepareFilename($user->username . '-' . _("Dokumente") . '.zip');
-        header('Content-Type: application/zip');
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
-        header('Location: ' . getDownloadLink($zip_file_id, $filename, 4));
-        header('Pragma: public');
-
-        $this->render_nothing();
-
+        
+        $user = User::find($user_id);
+        
+        $archive_file_name = $user->username . '_files_' . date('Ymd-Hi') . '.zip';
+        
+        $archive_path = $TMP_PATH . '/' . $archive_file_name;
+        
+        $result = FileArchiveManager::createArchiveFromFileRefs(
+            $file_refs,
+            User::findCurrent(),
+            $archive_path,
+            false
+        );
+        
+        
+        $archive_download_link = FileManager::getDownloadURLForTemporaryFile(
+            $archive_path,
+            $archive_file_name
+        );
+        
+        $this->redirect($archive_download_link);
     }
 
     /**
@@ -1499,7 +1550,7 @@ class Admin_UserController extends AuthenticatedController
         }
 
         if ($this->action == 'activities') {
-            $user_actions->addLink(_('Alle Dateien als ZIP herunterladen'),
+            $user_actions->addLink(_('Alle Dateien des Nutzers aus Veranstaltungen und Einrichtungen als ZIP herunterladen'),
                 $this->url_for('admin/user/download_user_files/' . $this->user->user_id),
                 Icon::create('folder-full', 'clickable'));
         }

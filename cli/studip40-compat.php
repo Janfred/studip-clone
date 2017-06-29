@@ -150,6 +150,29 @@ $rules = [
     'new ZebraTable' => 'No longer neccessary. Use #{table.default} instead.',
     'new Table' => 'No longer neccessary. Use #{table.default} instead.',
 
+    //old datei.inc.php and visual.inc.php functions:
+    'createSelectedZip' => 'Removed. Use #{yellow:FileArchiveManager::createArchiveFromFileRefs} instead.',
+    'create_zip_from_directory' => 'Removed(?). Use #{yellow:FileArchiveManager::createArchiveFromPhysicalFolder} instead.',
+    'getFileExtension' => 'Removed. Use PHP\'s built-in #{yellow:pathinfo($filename, PATHINFO_EXTENSION)} instead.',
+    'get_icon_for_mimetype' => 'Removed. Use #{yellow:FileManager::getIconNameForMimeType} instead.',
+    'get_upload_file_path' => 'Removed. Use #{yellow:File->getPath()} instead.',
+    'GetDownloadLink' => 'Removed. Use one of the following alternatives instead: #{yellow:FileRef->getDownloadURL()}, #{yellow:FileManager::getDownloadLinkForArchivedCourse}, #{yellow:FileManager::getDownloadLinkForTemporaryFile} or #{yellow:FileManager::getDownloadURLForTemporaryFile}',
+    'prepareFilename' => 'Removed. Use #{yellow:FileManager::cleanFileName} instead.',
+    'GetFileIcon' => 'Removed. Use #{yellow:FileManager::getIconNameForMimeType} instead.',
+    'parse_link' => 'Removed. Use #{yellow:FileManager::fetchURLMetadata} instead.',
+    'extract_zip' => 'Removed. Use #{yellow:Studip\ZipArchive::extractToPath} or #yellow:Studip\ZipArchive::test} instead.',
+    'datei.inc.php' => 'Removed. Use methods in functions.inc.php, FileManager, FileArchiveManager, FileRef, File or FolderType instead.',
+
+    //StudipDocument and related classes:
+    'StudipDocument(' => 'Removed(?). Use class #{yellow:FileRef} instead.',
+    'StudipDocumentTree(' => 'Removed(?). Use class #{yellow:Folder} or #{yellow:FolderType} instead.',
+    'WysiwygDocument' => 'Deprecated/To be removed. Use class #{yellow:FileRef} in conjunction with a #{yellow:FolderType} implementation instead.',
+
+    'ZIP_USE_INTERNAL' => 'Removed. Please avoid querying the value of this configuration variable!',
+    'ZIP_PATH' => 'Removed. Please avoid querying the value of this configuration variable!',
+    'ZIP_OPTIONS' => 'Removed. Please avoid querying the value of this configuration variable!',
+    'UNZIP_PATH' => 'Removed. Please avoid querying the value of this configuration variable!',
+
     'RuleAdministrationModel::getAdmissionRuleTypes' => 'Use #{yellow:AdmissionRule::getAvailableAdmissionRules(false)} instead.',
     'SessSemName' => 'Use class #{yellow:Context} instead',
     '_SESSION["SessionSeminar"]' => 'Use class #{yellow:Context} instead',

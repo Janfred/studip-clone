@@ -100,7 +100,12 @@ class Admission_RestrictedCoursesController extends AuthenticatedController
 
             $tmpname = md5(uniqid('tmp'));
             if (array_to_csv($data, $GLOBALS['TMP_PATH'].'/'.$tmpname, $captions)) {
-                $this->redirect(GetDownloadLink($tmpname, 'teilnahmebeschraenkteVeranstaltungen.csv', 4, 'force'));
+                $this->redirect(
+                    FileManager::getDownloadURLForTemporaryFile(
+                        $tmpname,
+                        'teilnahmebeschraenkteVeranstaltungen.csv'
+                    )
+                );
                 return;
             }
         }

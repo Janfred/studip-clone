@@ -427,7 +427,12 @@ class Admission_CoursesetController extends AuthenticatedController
             }
             $tmpname = md5(uniqid('tmp'));
             if (array_to_csv($data, $GLOBALS['TMP_PATH'].'/'.$tmpname, $captions)) {
-                $this->redirect(GetDownloadLink($tmpname, 'Veranstaltungen_' . $courseset->getName() . '.csv', 4, 'force'));
+                $this->redirect(
+                    FileManager::getDownloadURLForTemporaryFile(
+                        $tmpname,
+                        'Veranstaltungen_' . $courseset->getName() . '.csv'
+                    )
+                );
                 return;
             }
         }
@@ -450,7 +455,12 @@ class Admission_CoursesetController extends AuthenticatedController
                 if (count($liste)) {
                     $tmpname = md5(uniqid('tmp'));
                     if (array_to_csv($liste, $GLOBALS['TMP_PATH'].'/'.$tmpname, $captions)) {
-                        $this->redirect(GetDownloadLink($tmpname, 'Gesamtteilnehmerliste_' . $courseset->getName() . '.csv', 4, 'force'));
+                        $this->redirect(
+                            FileManager::getDownloadURLForTemporaryFile(
+                                $tmpname,
+                                'Gesamtteilnehmerliste_' . $courseset->getName() . '.csv'
+                            )
+                        );
                         return;
                     }
                 }
@@ -475,7 +485,12 @@ class Admission_CoursesetController extends AuthenticatedController
             if (count($liste)) {
                     $tmpname = md5(uniqid('tmp'));
                     if (array_to_csv($liste, $GLOBALS['TMP_PATH'].'/'.$tmpname, $captions)) {
-                        $this->redirect(GetDownloadLink($tmpname, 'Mehrfachanmeldungen_' . $courseset->getName() . '.csv', 4, 'force'));
+                        $this->redirect(
+                            FileManager::getDownloadURLForTemporaryFile(
+                                $tmpname,
+                                'Mehrfachanmeldungen_' . $courseset->getName() . '.csv'
+                            )
+                        );
                         return;
                     }
                 }
@@ -569,7 +584,12 @@ class Admission_CoursesetController extends AuthenticatedController
             $tmpname = md5(uniqid('tmp'));
             $captions[] = _("Email");
             if (array_to_csv($data, $GLOBALS['TMP_PATH'].'/'.$tmpname, $captions)) {
-                $this->redirect(GetDownloadLink($tmpname, 'Anmeldungen_' . $courseset->getName() . '.csv', 4, 'force'));
+                $this->redirect(
+                    FileManager::getDownloadURLForTemporaryFile(
+                        $tmpname,
+                        'Anmeldungen_' . $courseset->getName() . '.csv'
+                    )
+                );
                 return;
             }
         }

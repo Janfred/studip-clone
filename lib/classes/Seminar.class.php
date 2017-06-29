@@ -1927,9 +1927,13 @@ class Seminar
 
 
         // Alle Dokumente zu diesem Seminar loeschen.
-        if (($db_ar = delete_all_documents($s_id)) > 0) {
-            $this->createMessage(sprintf(_("%s Dokumente und Ordner archiviert."), $db_ar));
+        $folder = Folder::findTopFolder($s_id);
+        if($folder) {
+            if($folder->delete()) {
+                $this->createMessage(_("Dokumente und Ordner archiviert."));
+            }
         }
+        
 
         // Freie Seite zu diesem Seminar löschen
         $query = "DELETE FROM scm WHERE range_id = ?";

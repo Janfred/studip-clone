@@ -1932,3 +1932,189 @@ function count_table_rows($table) {
     $stat = DbManager::get()->fetchOne("SHOW TABLE STATUS LIKE ?", array($table));
     return (int)$stat['Rows'];
 }
+
+
+/**
+ * converts a given array to a csv format
+ *
+ * @param array $data the data to convert, each row should be an array
+ * @param string $filename full path to a file to write to, if omitted the csv content is returned
+ * @param array $caption assoc array with captions, is written to the first line, $data is filtered by keys
+ * @param string $delimiter sets the field delimiter (one character only)
+ * @param string $enclosure sets the field enclosure (one character only)
+ * @param string $eol sets the end of line format
+ * @return mixed if $filename is given the number of written bytes, else the csv content as string
+ */
+function array_to_csv($data, $filename = null, $caption = null, $delimiter = ';' , $enclosure = '"', $eol = "\r\n" )
+{
+    $fp = fopen('php://temp', 'r+');
+    $fp2 = fopen('php://temp', 'r+');
+    if (is_array($caption)) {
+        fputcsv($fp, array_values($caption), $delimiter, $enclosure);
+        rewind($fp);
+        $csv = stream_get_contents($fp);
+        if ($eol != PHP_EOL) {
+            $csv = trim($csv);
+            $csv .= $eol;
+        }
+        fwrite($fp2, $csv);
+        ftruncate($fp, 0);
+        rewind($fp);
+    }
+    foreach ($data as $row) {
+        if (is_array($caption)) {
+            $fields = array();
+            foreach(array_keys($caption) as $fieldname) {
+                $fields[] = $row[$fieldname];
+            }
+        } else {
+            $fields = $row;
+        }
+        fputcsv($fp, $fields, $delimiter, $enclosure);
+        rewind($fp);
+        $csv = stream_get_contents($fp);
+        if ($eol != PHP_EOL) {
+            $csv = trim($csv);
+            $csv .= $eol;
+        }
+        fwrite($fp2, $csv);
+        ftruncate($fp, 0);
+        rewind($fp);
+    }
+    fclose($fp);
+    rewind($fp2);
+    if ($filename === null) {
+        return stream_get_contents($fp2);
+    } else {
+        return file_put_contents($filename, $fp2);
+    }
+}
+
+
+/**
+* Delete a file, or a folder and its contents
+*
+* @author      Aidan Lister <aidan@php.net>
+* @version     1.0
+* @param       string   $dirname    The directory to delete
+* @return      bool     Returns true on success, false on failure
+*/
+function rmdirr($dirname){
+    // Simple delete for a file
+    if (is_file($dirname)) {
+        return @unlink($dirname);
+    } else if (!is_dir($dirname)) {
+        return false;
+    }
+
+    // Loop through the folder
+    $dir = dir($dirname);
+    while (false !== ($entry = $dir->read())) {
+        // Skip pointers
+        if ($entry == '.' || $entry == '..') {
+            continue;
+        }
+
+        // Deep delete directories
+        if (is_dir("$dirname/$entry") && !is_link("$dirname/$entry")) {
+            rmdirr("$dirname/$entry");
+        } else {
+            @unlink("$dirname/$entry");
+        }
+    }
+    // Clean up
+    $dir->close();
+    return @rmdir($dirname);
+}
+
+
+/**
+ * Determines an appropriate MIME type for a file based on the
+ * extension of the file name.
+ *
+ * @param string $filename      file name to check
+ */
+function get_mime_type($filename)
+{
+    static $mime_types = array(
+        // archive types
+        'gz'   => 'application/x-gzip',
+        'tgz'  => 'application/x-gzip',
+        'bz2'  => 'application/x-bzip2',
+        'zip'  => 'application/zip',
+        // document types
+        'txt'  => 'text/plain',
+        'css'  => 'text/css',
+        'csv'  => 'text/csv',
+        'rtf'  => 'application/rtf',
+        'pdf'  => 'application/pdf',
+        'doc'  => 'application/msword',
+        'xls'  => 'application/ms-excel',
+        'ppt'  => 'application/ms-powerpoint',
+        'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'swf'  => 'application/x-shockwave-flash',
+        'odp'  => 'application/vnd.oasis.opendocument.presentation',
+        'ods'  => 'application/vnd.oasis.opendocument.spreadsheet',
+        'odt'  => 'application/vnd.oasis.opendocument.text',
+        // image types
+        'gif'  => 'image/gif',
+        'jpeg' => 'image/jpeg',
+        'jpg'  => 'image/jpeg',
+        'jpe'  => 'image/jpeg',
+        'png'  => 'image/png',
+        'bmp'  => 'image/x-ms-bmp',
+        // audio types
+        'mp3'  => 'audio/mp3',
+        'oga'  => 'audio/ogg',
+        'wav'  => 'audio/wave',
+        'ra'   => 'application/x-pn-realaudio',
+        'ram'  => 'application/x-pn-realaudio',
+        // video types
+        'mpeg' => 'video/mpeg',
+        'mpg'  => 'video/mpeg',
+        'mpe'  => 'video/mpeg',
+        'qt'   => 'video/quicktime',
+        'mov'  => 'video/quicktime',
+        'avi'  => 'video/x-msvideo',
+        'flv'  => 'video/x-flv',
+        'ogg'  => 'application/ogg',
+        'ogv'  => 'video/ogg',
+        'mp4'  => 'video/mp4',
+        'webm' => 'video/webm',
+    );
+
+    $extension = mb_strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+    if (isset($mime_types[$extension])) {
+        return $mime_types[$extension];
+    } else {
+        return 'application/octet-stream';
+    }
+}
+
+
+function readfile_chunked($filename, $start = null, $end = null) {
+    if (isset($start) && $start < $end) {
+        $chunksize = 1024 * 1024; // how many bytes per chunk
+        $bytes = 0;
+        $handle = fopen($filename, 'rb');
+        if ($handle === false) {
+            return false;
+        }
+        fseek($handle, $start);
+        while (!feof($handle) && ($p = ftell($handle)) <= $end) {
+            if ($p + $chunksize > $end) {
+                $chunksize = $end - $p + 1;
+            }
+            $buffer = fread($handle, $chunksize);
+            $bytes += mb_strlen($buffer);
+            echo $buffer;
+        }
+        fclose($handle);
+        return $bytes; // return num. bytes delivered like readfile() does.
+    } else {
+        return readfile($filename);
+    }
+}

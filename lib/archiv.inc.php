@@ -24,7 +24,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 require_once 'lib/dates.inc.php';
-require_once 'lib/datei.inc.php';
 require_once 'lib/wiki.inc.php'; // getAllWikiPages for dump
 require_once 'lib/user_visible.inc.php';
 
@@ -556,7 +555,7 @@ function dumpDateTableRows($data)
 //Funktion zum archivieren eines Seminars, sollte in der Regel vor dem Loeschen ausgfuehrt werden.
 function in_archiv ($sem_id)
 {
-    global $SEM_CLASS,$SEM_TYPE, $ARCHIV_PATH, $TMP_PATH, $ZIP_PATH, $ZIP_OPTIONS, $_fullname_sql;
+    global $SEM_CLASS,$SEM_TYPE, $ARCHIV_PATH, $TMP_PATH, $_fullname_sql;
 
     NotificationCenter::postNotification('CourseWillArchive', $sem_id);
 
@@ -652,7 +651,7 @@ function in_archiv ($sem_id)
     restoreLanguage();
 
     //OK, naechster Schritt: Kopieren der Personendaten aus seminar_user in archiv_user
-    $query = "INSERT INTO archiv_user (seminar_id, user_id, status)
+    $query = "INSERT IGNORE INTO archiv_user (seminar_id, user_id, status)
               SELECT Seminar_id, user_id, status FROM seminar_user WHERE Seminar_id = ?";
     $statement = DBManager::get()->prepare($query);
     $statement->execute(array($seminar_id));
@@ -668,63 +667,94 @@ function in_archiv ($sem_id)
         }
     }
 
-    $Modules = new Modules;
-    $Modules = $Modules->getLocalModules($sem_id);
-    $folder_tree = TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $sem_id,'entity_type' => 'sem'));
-
-    if ($Modules['documents_folder_permissions'] || StudipDocumentTree::ExistsGroupFolders($sem_id)) {
-        $unreadable_folders = $folder_tree->getUnReadableFolders('nobody');
+    
+    //Archive files:
+    
+    
+    //Get the top folder of the course:
+    $top_folder = Folder::findTopFolder($sem_id);
+    if($top_folder) {
+        $top_folder = $top_folder->getTypedFolder();
     }
-
-    $query = "SELECT COUNT(dokument_id) FROM dokumente WHERE seminar_id = ? AND url = ''";
-    $statement = DBManager::get()->prepare($query);
-    $statement->execute(array($seminar_id));
-    $count = $statement->fetchColumn();
-    if ($count) {
-        $hash_secret = "frauen";
-        $archiv_file_id = md5(uniqid($hash_secret,1));
-
-        //temporaeres Verzeichnis anlegen
-        $tmp_full_path = "$TMP_PATH/$archiv_file_id";
-        mkdir($tmp_full_path, 0700);
-
-        if($folder_tree->getNumKids('root')) {
-            $list = $folder_tree->getKids('root');
+    
+    //Collect all subfolders and files which are directly below the top folder:
+    
+    $readable_items = []; //files and folders which are readable for all course participants
+    $protected_archive_items = []; //all files and folders of the course
+    
+    foreach($top_folder->getSubfolders() as $subfolder) {
+        $protected_archive_items[] = $subfolder;
+        if($subfolder instanceof StandardFolder) {
+            //StandardFolder instances inside a course are always readable
+            //for everyone. For other folder types we can't be sure
+            //about that so that these folder types aren't included
+            //in the standard file archive.
+            $readable_items[] = $subfolder;
         }
-        if (is_array($list) && count($list) > 0) {
-            $query = "SELECT folder_id, name
-                      FROM folder WHERE range_id IN (?)
-                      ORDER BY name";
-            $statement = DBManager::get()->prepare($query);
-            $statement->execute(array($list));
-
-            $folder = 0;
-            while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-                $folder += 1;
-                $temp_folder = $tmp_full_path . "/[$folder]_" . prepareFilename($row['name'], FALSE);
-                mkdir($temp_folder, 0700);
-                createTempFolder($row['folder_id'], $temp_folder, $seminar_id, 'nobody');
+    }
+    
+    foreach($top_folder->getFiles() as $file_ref) {
+        $protected_archive_items[] = $file_ref;
+        if($file_ref->terms_of_use) {
+            if($file_ref->terms_of_use->download_condition == 0) {
+                //only Files which are downloadable by everyone in the course
+                //can be added to the standard file archive.
+                $readable_items[] = $file_ref;
             }
-
-            //zip all the stuff
-            $archiv_full_path = "$ARCHIV_PATH/$archiv_file_id";
-            create_zip_from_directory($tmp_full_path, $tmp_full_path);
-            @rename($tmp_full_path . '.zip', $archiv_full_path);
         }
-        rmdirr($tmp_full_path);
-
-        if (is_array($unreadable_folders)) {
-            $query = "SELECT dokument_id FROM dokumente WHERE seminar_id = ? AND url = '' AND range_id IN (?)";
-            $statement = DBManager::get()->prepare($query);
-            $statement->execute(array($seminar_id, $unreadable_folders));
-            $archiv_protected_file_id = createSelectedZip($statement->fetchAll(PDO::FETCH_COLUMN), false, false);
-            @rename("$TMP_PATH/$archiv_protected_file_id", "$ARCHIV_PATH/$archiv_protected_file_id");
-        }
-    } else {
-        $archiv_file_id = '';
     }
-
-    //Reinschreiben von diversem Klumpatsch in die Datenbank
+    
+    
+    //Create the standard file archive if there are files and folders which
+    //are readable (or downloadable) for everyone in the course:
+    
+    $archive_file_id = '';
+    
+    if (!empty($readable_items)) {
+        //list of readable items isn't empty
+        
+        //create name for the archive ZIP file:
+        $archive_file_id = md5('archive_' . $sem_id);
+        
+        $archive_path = $ARCHIV_PATH . '/' . $archive_file_id;
+        
+        FileArchiveManager::createArchive(
+            $readable_items,
+            'nobody',
+            $archive_path,
+            false, //don't do individual permission checks
+            true, //keep hierarchy
+            true //skip check for user permissions
+        );
+        
+        if(!file_exists($archive_path)) {
+            //empty archive or error during archive creation:
+            $archive_file_id = ''; //no archive
+        }
+        
+    }
+    
+    
+    //Create the protected file archive which contains all files of the course.
+    
+    $archive_protected_files_zip_id = md5('protected_archive_' . $sem_id);
+    
+    $archive_protected_files_path = $ARCHIV_PATH . '/' . $archive_protected_files_zip_id;
+    
+    FileArchiveManager::createArchive(
+        $protected_archive_items,
+        null,
+        $archive_protected_files_path,
+        false //no permission checks
+    );
+    
+    if(!file_exists($archive_protected_files_path)) {
+        //empty archive or error during archive creation:
+        $archive_protected_files_zip_id = ''; //no protected files archive
+    }
+    
+    
+    //We're done with archiving: Store a new archived course in the database:
     $query = "INSERT INTO archiv
                 (seminar_id, name, untertitel, beschreibung, start_time,
                  semester, heimat_inst_id, institute, dozenten, fakultaet,
@@ -745,8 +775,8 @@ function in_archiv ($sem_id)
         $dozenten ?: '',
         $fakultaet ?: '',
         $dump ?: '',
-        $archiv_file_id ?: '',
-        $archiv_protected_file_id ?: '',
+        $archive_file_id ?: '',
+        $archive_protected_files_zip_id ?: '',
         $forumdump ?: '',
         $wikidump ?: '',
         $studienbereiche ?: '',

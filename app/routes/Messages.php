@@ -89,7 +89,46 @@ class Messages extends \RESTAPI\RouteMap
         return $message_json;
     }
 
-
+    
+    /**
+     * Get the root file folder of a message.
+     * The root file folder contains all files
+     * that were appended to the message.
+     * 
+     * @get /message/:message_id/file_folder
+     */
+    public function getTopFolder($message_id)
+    {
+        //first we check if the user exists:
+        $message = \Message::find($message_id);
+        
+        $user = \User::findCurrent();
+        
+        if(!$user) {
+            $this->halt(404, 'User not found!');
+        }
+        
+        if(!$message->permissionToRead($user->id)) {
+            $this->halt(403, 'You are not allowed to read this message or its appended files!');
+        }
+        
+        //we can get the top folder:
+        $top_folder = \Folder::findTopFolder($message->id, 'message');
+        
+        $top_folder = $top_folder->getTypedFolder();
+        if(!$top_folder) {
+            $this->halt(500, 'Folder type not found!');
+        }
+        
+        
+        if(!$top_folder->isReadable($user->id)) {
+            $this->halt(403, 'You are not allowed to read the top folder of this message!');
+        }
+        
+        return $top_folder->getEditTemplate();
+    }
+    
+    
     /**
      * Schreibt eine neue Nachricht.
      *

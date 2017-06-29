@@ -123,6 +123,7 @@ class CourseNavigation extends Navigation
             }
         }
 
+
         // schedule
         if (($modules['schedule'] || $sem_class->isSlotMandatory("schedule"))
                 && $sem_class->isModuleAllowed($sem_class->getSlotModule("schedule"))) {

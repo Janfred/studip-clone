@@ -21,7 +21,6 @@
  */
 
 require_once 'lib/user_visible.inc.php';
-require_once 'lib/datei.inc.php';
 
 
 
@@ -185,11 +184,11 @@ class messaging
             $reply_to = $sender->Email;
         }
         $attachments = array();
-        if ($GLOBALS['ENABLE_EMAIL_ATTACHMENTS']) {
-            $attachments = $msg->attachments->toArray();
-            $size_of_attachments = array_sum($msg->attachments->pluck('filesize')) ?: 0;
+        if ($GLOBALS['ENABLE_EMAIL_ATTACHMENTS'] && $msg->attachment_folder) {
+            $attachments = $msg->attachment_folder->file_refs;
+            $size_of_attachments = array_sum($attachments->pluck('size')) ?: 0;
             //assume base64 takes 33% more space
-            $attachments_as_links = $size_of_attachments * 1.33 > $GLOBALS['MAIL_ATTACHMENTS_MAX_SIZE'] * 1024 * 1024;
+            $attachments_as_links = $size_of_attachments * 1.33 > $GLOBALS['MAIL_ATTACHMENTS_MAX_SIZE'] * 1048576; //1MiB = 1024 KiB = 1048576 Bytes
         }
         $template = $GLOBALS['template_factory']->open('mail/text');
         $template->set_attribute('message', kill_format($message));
@@ -231,7 +230,7 @@ class messaging
 
         if (count($attachments) && !$attachments_as_links) {
             foreach ($attachments as $attachment) {
-                $mail->addStudipAttachment($attachment['dokument_id']);
+                $mail->addStudipAttachment($attachment);
             }
         }
         if (!get_config("MAILQUEUE_ENABLE")) {
@@ -288,17 +287,6 @@ class messaging
             $message .= _('Diese Nachricht wurde automatisch vom Stud.IP-System generiert. Sie können darauf nicht antworten.');
 
             restoreLanguage();
-        }
-
-
-        // Setzen der Message-ID als Range_ID für angehängte Dateien
-        if (isset($this->provisonal_attachment_id) && $GLOBALS['ENABLE_EMAIL_ATTACHMENTS']) {
-            $attachments = StudipDocument::findBySQL("range_id = 'provisional' AND description = ?", [$this->provisonal_attachment_id]);
-            foreach ($attachments as $attachment) {
-                $attachment->range_id = $tmp_message_id;
-                $attachment->description = '';
-                $attachment->store();
-            }
         }
 
         // insert message

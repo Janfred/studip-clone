@@ -302,7 +302,10 @@ class Admin_PluginController extends AuthenticatedController
         $filename = $plugin['class'] . '-' . $manifest['version'] . '.zip';
         $filepath = get_config('TMP_PATH') . '/' . $filename;
 
-        create_zip_from_directory($pluginpath, $filepath);
+        FileArchiveManager::createArchiveFromPhysicalFolder(
+            $pluginpath,
+            $filepath
+        );
 
         header('Content-Type: application/zip');
         header('Content-Disposition: attachment; filename="' . $filename . '"');

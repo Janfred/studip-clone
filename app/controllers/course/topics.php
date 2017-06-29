@@ -47,7 +47,7 @@ class Course_TopicsController extends AuthenticatedController
                 }
                 $topic->store();
 
-                if (Request::get("folder") && !$topic->folder) {
+                if (Request::get("folder")) {
                     $topic->connectWithDocumentFolder();
                 }
 

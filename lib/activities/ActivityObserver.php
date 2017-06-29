@@ -25,9 +25,9 @@ class ActivityObserver
         \NotificationCenter::addObserver('\Studip\Activity\ParticipantsProvider', 'postActivity','UserDidLeaveCourse');
 
         //Notifications for DocumentsProvider
-        \NotificationCenter::addObserver('\Studip\Activity\DocumentsProvider', 'postActivity','DocumentDidCreate');
-        \NotificationCenter::addObserver('\Studip\Activity\DocumentsProvider', 'postActivity','DocumentDidUpdate');
-        \NotificationCenter::addObserver('\Studip\Activity\DocumentsProvider', 'postActivity','DocumentDidDelete');
+        \NotificationCenter::addObserver('\Studip\Activity\DocumentsProvider', 'postActivity','FileRefDidCreate');
+        \NotificationCenter::addObserver('\Studip\Activity\DocumentsProvider', 'postActivity','FileRefDidUpdate');
+        \NotificationCenter::addObserver('\Studip\Activity\DocumentsProvider', 'postActivity','FileRefDidDelete');
 
         //Notifications for NewsProvider
         \NotificationCenter::addObserver('\Studip\Activity\NewsProvider', 'postActivity','NewsDidStore');

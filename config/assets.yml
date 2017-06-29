@@ -51,6 +51,10 @@ javascripts:
     - javascripts/jquery/jquery.tablesorter-2.22.5.js
     - javascripts/jquery/jquery.tablesorter.pager-2.22.5.js
 
+  tablesorterfork: &tablesorterfork
+    - javascripts/jquery/jquery.tablesorter-fork-2.27.8.js
+    - javascripts/jquery/jquery.tablesorter-fork-2.27.8.widgets.js
+
   base:
     - *jquery
     - *modernizr
@@ -76,6 +80,8 @@ javascripts:
     - javascripts/updater.js
     - javascripts/study_area_selection.js
     - javascripts/file_system.js
+    - javascripts/files.js
+    - javascripts/folders.js
     - javascripts/arbeitsgruppen.js
     - javascripts/news.js
     - javascripts/markup.js

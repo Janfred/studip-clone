@@ -66,19 +66,19 @@
 <div class="message_body">
     <?= formatReady($message["message"]) ?>
 </div>
-<? if (count($message->attachments)) : ?>
-<h3><?= Icon::create('staple', 'inactive')->asImg(20, ["class" => "text-bottom"]) ?><?= _("Anhang") ?></h3>
-<ul class="message_attachments">
-    <? foreach ($message->attachments as $attachment) : ?>
-    <li>
-        <? $mime_type = get_mime_type($attachment['filename']) ?>
-        <h4><a href="<?= GetDownloadLink($attachment->getId(), $attachment['filename'], 7, 'force') ?>"><?= GetFileIcon(mb_substr($attachment['filename'], mb_strrpos($attachment["filename"], ".") + 1))->asImg() ?><?= htmlReady($attachment['name']) ?></a></h4>
-        <? if (mb_substr($mime_type, 0, 5) === "image") : ?>
-        <div><img src="<?= GetDownloadLink($attachment->getId(), $attachment['filename'], 7, 'normal') ?>" style="max-width: 400px;"></div>
-        <? endif ?>
-    </li>
-    <? endforeach ?>
-</ul>
+<? if($attachment_folder): ?>
+<h3><?= Icon::create('staple', 'inactive')->asImg(20, ["class" => "text-bottom"]) ?><?= _('Anhänge') ?></h3>
+    <table class="default sortable-table" data-sortlist="[[2, 0]]">
+        <?= $this->render_partial('files/_files_thead') ?>
+        <? foreach($attachment_folder->getFiles() as $file_ref): ?>
+            <?= $this->render_partial('files/_fileref_tr',
+                [
+                    'file_ref' => $file_ref,
+                    'current_folder' => $attachment_folder,
+                    'last_visitdate' => time()
+                ]) ?>
+        <? endforeach ?>
+    </table>
 <? endif ?>
 
 <div align="center" data-dialog-button>

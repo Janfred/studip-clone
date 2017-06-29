@@ -115,6 +115,10 @@
     <? endforeach ?>
 <? endif ?>
 
+<? if (isset($public_files)) : ?>
+    <?= $this->render_partial('profile/public_files') ?>
+<? endif ?>
+
 <? if ($current_user['perms'] === 'dozent' && !empty($seminare)) : ?>
     <?= $this->render_partial('profile/seminare') ?>
 <? endif ?>

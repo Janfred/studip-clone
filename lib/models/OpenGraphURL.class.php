@@ -111,7 +111,7 @@ class OpenGraphURL extends SimpleORMap
      * Only $url['is_opengraph'] === '0' indicates that the site is no
      * opengraph node at all.
      *
-     * @todo The combination of parse_link() and the following request
+     * @todo The combination of FileManager::fetchURLMetadata() and the following request
      *       leads to two requests for the open graph data. This should
      *       be fixed due to performance reasons.
      */
@@ -121,7 +121,7 @@ class OpenGraphURL extends SimpleORMap
             return;
         }
 
-        $response = parse_link($this['url']);
+        $response = FileManager::fetchURLMetadata($this['url']);
         if ($response['response_code'] == 200 && mb_strpos($response['Content-Type'],'html') !== false) {
             if (preg_match('/(?<=charset=)[^;]*/i', $response['Content-Type'], $match)) {
                 $currentEncoding = $match[0];

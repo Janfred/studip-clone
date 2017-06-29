@@ -6,6 +6,9 @@
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
+ *
+ * @author Stud.IP developers
+ * @author Moritz Strohm <strohm@data-quest.de> (only code related to the new file area)
  */
 
 require_once 'lib/statusgruppe.inc.php';
@@ -125,6 +128,13 @@ class MessagesController extends AuthenticatedController {
             throw new AccessDeniedException();
         }
 
+        //load the message's top folder (if any):
+        $attachment_folder = Folder::findOneByRange_id($this->message->id);
+        if ($attachment_folder) {
+            $this->attachment_folder = $attachment_folder->getTypedFolder();
+        }
+
+
         PageLayout::setTitle(_('Betreff') . ': ' . $this->message['subject']);
 
         if ($this->message['autor_id'] === $GLOBALS['user']->id) {
@@ -156,14 +166,26 @@ class MessagesController extends AuthenticatedController {
     {
         PageLayout::setTitle(_("Neue Nachricht schreiben"));
 
-        //collect possible default adressees
+        //the message-ID for the new message:
+        $this->message_id = Request::option("message_id") ?: md5(uniqid("neWMesSagE"));
+
+
         $this->to = array();
         $this->default_message = new Message();
+        $this->default_message->setId($this->default_message->getNewId());
+
+        //flag to determine if the message is forwarded or not:
+        $forward_message = false;
+
+
+        //check if a receiver is given:
         if (Request::username("rec_uname")) {
             $user = new MessageUser();
             $user->setData(array('user_id' => get_userid(Request::username("rec_uname")), 'snd_rec' => "rec"));
             $this->default_message->receivers[] = $user;
         }
+
+        //check if a list of receivers is given:
         if (Request::getArray("rec_uname")) {
             foreach (Request::usernameArray("rec_uname") as $username) {
                 $user = new MessageUser();
@@ -171,6 +193,8 @@ class MessagesController extends AuthenticatedController {
                 $this->default_message->receivers[] = $user;
             }
         }
+
+        //check if the message shall be sent to all members of a status group:
         if (Request::option("group_id")) {
             $this->default_message->receivers = array();
             $group = Statusgruppen::find(Request::option("group_id"));
@@ -184,11 +208,13 @@ class MessagesController extends AuthenticatedController {
             }
         }
 
+        //check if the message shall be sent to all members of an institute:
         if(Request::get('inst_id') && $GLOBALS['perm']->have_perm('admin')) {
             $query = "SELECT user_id FROM user_inst WHERE Institut_id = ? AND inst_perms != 'user'";
             $this->default_message->receivers = DBManager::get()->fetchAll($query, array(Request::option('inst_id')), 'MessageUser::build');
         }
 
+        //check if the message shall be sent to all (or some) members of a course:
         if (Request::get("filter") && Request::option("course_id")) {
             $course = new Course(Request::option('course_id'));
             if ($GLOBALS['perm']->have_studip_perm("tutor", Request::option('course_id')) || $course->getSemClass()['studygroup_mode']) {
@@ -257,6 +283,8 @@ class MessagesController extends AuthenticatedController {
             $this->default_message->receivers = DBManager::get()->fetchAll("SELECT user_id,'rec' as snd_rec FROM auth_user_md5 WHERE username IN(?) ORDER BY Nachname,Vorname", array($_SESSION['sms_data']['p_rec']), 'MessageUser::build');
             unset($_SESSION['sms_data']);
         }
+
+        //check if the message is a reply or if it shall be forwarded:
         if (Request::option("answer_to")) {
             $this->default_message->receivers = array();
             $old_message = new Message(Request::option("answer_to"));
@@ -264,6 +292,7 @@ class MessagesController extends AuthenticatedController {
                 throw new AccessDeniedException("Message is not for you.");
             }
             if (!Request::get('forward')) {
+                //message is a reply message
                 if (Request::option("quote") === $old_message->getId()) {
                     $this->default_message['message'] = quotes_encode($old_message['message']);
                 }
@@ -273,6 +302,9 @@ class MessagesController extends AuthenticatedController {
                 $this->default_message->receivers[] = $user;
                 $this->answer_to = $old_message->id;
             } else {
+                //message shall be forwarded
+                $forward_message = true;
+
                 $messagesubject = 'FWD: ' . $old_message['subject'];
                 $message = _("-_-_ Weitergeleitete Nachricht _-_-");
                 $message .= "\n" . _("Betreff") . ": " . $old_message['subject'];
@@ -308,21 +340,37 @@ class MessagesController extends AuthenticatedController {
                 } else {
                     $message .= $old_message['message'];
                 }
-                if (count($old_message->attachments)) {
-                    Request::set('message_id', $old_message->getNewId());
-                    foreach($old_message->attachments as $attachment) {
-                        $attachment->range_id = 'provisional';
-                        $attachment->seminar_id = $GLOBALS['user']->id;
-                        $attachment->autor_host = $_SERVER['REMOTE_ADDR'];
-                        $attachment->user_id = $GLOBALS['user']->id;
-                        $attachment->description = Request::option('message_id');
-                        $new_attachment = $attachment->toArray(array('range_id', 'user_id', 'seminar_id', 'name', 'description', 'filename', 'filesize'));
-                        $new_attachment = StudipDocument::createWithFile(get_upload_file_path($attachment->getId()), $new_attachment);
-                        $this->default_attachments[] = array('icon' => GetFileIcon(getFileExtension($new_attachment['filename']))->asImg(['class' => "text-bottom"]),
-                                                             'name' => $new_attachment['filename'],
-                                                             'document_id' => $new_attachment->id,
-                                                             'size' => relsize($new_attachment['filesize'],false));
+                if ($old_message->getNumAttachments()) {
+                    //there is at least one attachment: we must copy it
+                    $old_attachment_folder = MessageFolder::findTopFolder($old_message->id);
 
+                    if ($old_attachment_folder) {
+                        $new_attachment_folder = MessageFolder::createTopFolder($this->default_message->id);
+                        if ($new_attachment_folder) {
+                            foreach ($old_attachment_folder->getFiles() as $old_attachment) {
+                                $new_attachment = new FileRef();
+                                $new_attachment->file_id = $old_attachment->file_id;
+                                $new_attachment->folder_id = $new_attachment_folder->getId();
+                                $new_attachment->name = $old_attachment->file->name;
+                                $new_attachment->description = $old_attachment->description;
+                                $new_attachment->content_terms_of_use_id = $old_attachment->content_terms_of_use_id;
+                                $new_attachment->user_id = $GLOBALS['user']->id;
+
+                                if ($new_attachment->store()) {
+                                    $this->default_attachments[] = [
+                                        'icon'        => Icon::create(
+                                            FileManager::getIconNameForMimeType(
+                                                $new_attachment->file->mime_type
+                                            ),
+                                            'clickable'
+                                        )->asImg(['class' => "text-bottom"]),
+                                        'name'        => $new_attachment->name,
+                                        'document_id' => $new_attachment->id,
+                                        'size'        => relsize($new_attachment->file->size, false)
+                                    ];
+                                }
+                            }
+                        }
                     }
                 }
                 $this->default_message['subject'] = $messagesubject;
@@ -344,6 +392,85 @@ class MessagesController extends AuthenticatedController {
                 $this->default_message['message'] .= "\n\n--\n" . $settings['sms_sig'];
             }
         }
+
+
+        //Files that were uploaded earlier and were left unattached
+        //are only attached to new messages which are not forwarded.
+        //This is because forwarded messages will only have those attachments
+        //that were present in the original message.
+        if (!$forward_message) {
+
+            //Check if there are files that were uploaded earlier and not attached
+            //to a message. These files can be attached to the new message.
+
+            //unattached folders are all folders that are from type 'MessageFolder',
+            //belong to the range type 'message', are owned by the current user
+            //and whose range-ID does not belong to a message.
+            //Background: Attachment folders of messages that haven't been sent
+            //have a "provisional" range-ID. When the message is sent this
+            //"provisional" range-ID is replaced by the message-ID.
+            $unattached_folders = Folder::findBySql(
+                "folder_type = 'MessageFolder'
+                AND
+                range_type = 'message'
+                AND
+                user_id = :user_id
+                AND
+                range_id NOT IN (
+                    SELECT message_id FROM message
+                    WHERE autor_id = :user_id
+                )",
+                [
+                    'user_id' => $GLOBALS['user']->id
+                ]
+            );
+
+            $unattached_files = [];
+
+            //loop through all unattached folders, retrieve all file_refs,
+            //add them to the default_attachments array and store them in a
+            //new folder that gets the "provisional" range-ID of this message.
+            //After that, delete the old folders.
+            foreach ($unattached_folders as $unattached_folder) {
+                foreach ($unattached_folder->file_refs as $file_ref) {
+                    $unattached_files[] = $file_ref;
+                    $this->default_attachments[] = [
+                        'icon'        => Icon::create(
+                            FileManager::getIconNameForMimeType(
+                                $file_ref->file->mime_type
+                            ),
+                            'clickable'
+                        )->asImg(['class' => "text-bottom"]),
+                        'name'        => $file_ref->name,
+                        'document_id' => $file_ref->id,
+                        'size'        => relsize($file_ref->file->size, false)
+                    ];
+                }
+
+            }
+
+            //we must display a note for the user to avoid sending a message
+            //with the wrong attachements attached to it.
+            if (count($unattached_files)) {
+                PageLayout::postInfo(_('Es wurden Dateianhänge gefunden, welche zwar hochgeladen, aber noch nicht versandt wurden. Diese wurden an diese Nachricht angehängt!'));
+                //create an attachment folder for the new message:
+                $new_attachment_folder = MessageFolder::createTopFolder($this->default_message->id);
+
+                //"bend" the folder-ID of each unattached file to the new attachment folder's ID:
+                foreach ($unattached_files as $file) {
+                    $file->folder_id = $new_attachment_folder->getId();
+                    $file->store();
+                }
+            }
+
+            //now we can delete the old unattached folders since we transferred
+            //the attachments to a new folder:
+            foreach ($unattached_folders as $unattached_folder) {
+                $unattached_folder->delete();
+            }
+        }
+
+
         NotificationCenter::postNotification("DefaultMessageForComposerCreated", $this->default_message);
 
 
@@ -362,14 +489,13 @@ class MessagesController extends AuthenticatedController {
                     $rec_uname[] = get_username($user_id);
                 }
             }
-            $messaging->provisonal_attachment_id = Request::option("message_id");
             $messaging->send_as_email =  Request::int("message_mail");
             $messaging->insert_message(
                 Studip\Markup::purifyHtml(Request::get("message_body")),
                 $rec_uname,
                 $GLOBALS['user']->id,
                 '',
-                '',
+                Request::option("message_id"),
                 '',
                 null,
                 Request::get("message_subject"),
@@ -573,7 +699,8 @@ class MessagesController extends AuthenticatedController {
         return $messages;
     }
 
-    public function upload_attachment_action() {
+    public function upload_attachment_action()
+    {
         if ($GLOBALS['user']->id === "nobody") {
             throw new AccessDeniedException();
         }
@@ -585,32 +712,46 @@ class MessagesController extends AuthenticatedController {
             'name' => $file['name'],
             'size' => $file['size']
         );
-        $output['message_id'] = Request::option("message_id");
-        if (!validate_upload($file)) {
-            list($type, $error) = explode("§", $GLOBALS['msg']);
-            throw new Exception($error);
+
+        $message_id = Request::option('message_id');
+        $output['message_id'] = $message_id;
+
+        $message_top_folder = MessageFolder::findTopFolder($message_id) ?: MessageFolder::createTopFolder($message_id);
+
+        $error = $message_top_folder->validateUpload($file, $GLOBALS['user']->id);
+        if ($error != null) {
+            throw new RuntimeException($error);
         }
 
-        $document = new StudipDocument();
-        $document->setValue('range_id' , 'provisional');
-        $document->setValue('seminar_id' , $GLOBALS['user']->id);
-        $document->setValue('name' , $output['name']);
-        $document->setValue('filename' , $document->getValue('name'));
-        $document->setValue('filesize' , (int) $output['size']);
-        $document->setValue('autor_host' , $_SERVER['REMOTE_ADDR']);
-        $document->setValue('user_id' , $GLOBALS['user']->id);
-        $document->setValue('description', Request::option('message_id'));
-        $success = $document->store();
-        if (!$success) {
-            throw new Exception("Unable to handle uploaded file.");
-        }
-        $file_moved = move_uploaded_file($file['tmp_name'], get_upload_file_path($document->getId()));
-        if(!$file_moved) {
-            throw new Exception("No permission to move file to destination.");
+        $user = User::findCurrent();
+
+        $file_object = new File();
+        $file_object->user_id = $user->id;
+        $file_object->mime_type = get_mime_type($output['name']);
+        $file_object->name = $output['name'];
+        $file_object->size = (int)$output['size'];
+        $file_object->storage = 'disk';
+        $file_object->author_name = $user->getFullName();
+
+        $file_ref = $message_top_folder->createFile($file);
+
+        if (!$file_ref instanceof FileRef) {
+            $error_message = _('Die hochgeladene Datei kann nicht verarbeitet werden!');
+
+            if ($file_ref instanceof MessageBox) {
+                $error_message .= ' ' . $file_ref->message;
+            }
+            throw new RuntimeException($error_message);
         }
 
-        $output['document_id'] = $document->getId();
-        $output['icon'] = GetFileIcon(getFileExtension($output['name']))->asImg(['class' => "text-bottom"]);
+        $output['document_id'] = $file_ref->id;
+
+        $output['icon'] = Icon::create(
+            FileManager::getIconNameForMimeType(
+                $file_ref->file->mime_type
+            ),
+            'clickable'
+        )->asImg(['class' => "text-bottom"]);
 
         $this->render_json($output);
     }
@@ -618,10 +759,9 @@ class MessagesController extends AuthenticatedController {
     public function delete_attachment_action()
     {
         CSRFProtection::verifyUnsafeRequest();
-        $doc = StudipDocument::find(Request::option('document_id'));
-        if ($doc && $doc->range_id == 'provisional' && $doc->description == Request::option('message_id')) {
-            @unlink(get_upload_file_path($doc->id));
-            $doc->delete();
+        $attachment = FileRef::find(Request::option('document_id'));
+        if ($attachment) {
+            $attachment->delete();
         }
         $this->render_nothing();
     }

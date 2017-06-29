@@ -57,7 +57,7 @@ namespace {
 
     StudipAutoloader::addAutoloadPath($GLOBALS['STUDIP_BASE_PATH'] . '/lib/calendar');
     StudipAutoloader::addAutoloadPath($GLOBALS['STUDIP_BASE_PATH'] . '/lib/exceptions');
-    StudipAutoloader::addAutoloadPath($GLOBALS['STUDIP_BASE_PATH'] . '/lib/files');
+    StudipAutoloader::addAutoloadPath($GLOBALS['STUDIP_BASE_PATH'] . '/lib/filesystem');
     StudipAutoloader::addAutoloadPath($GLOBALS['STUDIP_BASE_PATH'] . '/lib/modules');
     StudipAutoloader::addAutoloadPath($GLOBALS['STUDIP_BASE_PATH'] . '/lib/navigation');
     StudipAutoloader::addAutoloadPath($GLOBALS['STUDIP_BASE_PATH'] . '/lib/phplib');

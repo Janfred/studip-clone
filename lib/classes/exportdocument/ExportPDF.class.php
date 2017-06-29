@@ -151,36 +151,51 @@ class ExportPDF extends TCPDF implements ExportDocument {
     }
 
     /**
-     * Saves the content as a file in the filesystem and returns a Stud.IP-document object.
+     * Saves the content as a file in the filesystem and returns a FileRef object.
+     * 
      * @param string $filename name of the future file without the extension.
      * @param mixed $folder_id md5-id of a given folder in database or null for nothing
-     * @return StudipDocument of the exported file or false if creation of StudipDocument failed.
+     * @return FileRef of the exported file or false if creation of the FileRef or its associated File object failed.
      */
     public function save($filename, $folder_id = null)
     {
         global $user;
-        $db = DBManager::get();
-        $doc = new StudipDocument();
-        $doc['folder_id'] = $folder_id;
-        if ($folder_id) {
-            $query = "SELECT range_id FROM folder WHERE folder_id = ?";
-            $statement = DBManager::get()->prepare($query);
-            $statement->execute(array($folder_id));
-            $doc['range_id'] = $statement->fetchColumn();
+        
+        //get folder:
+        $folder = Folder::find($folder_id);
+        if(!$folder) {
+            return false;
         }
-        $doc['user_id'] = $user->id;
-        $doc['name'] = $filename;
-        $doc['filename'] = $filename.".pdf";
-        $doc['description'] = "";
-        $doc['author_host'] = getenv('REMOTE_ADDR');
-        $doc['author_name'] = get_fullname($user->id);
-        if ($doc->store()) {
-            $path = get_upload_file_path($doc->getId());
-            $this->Output($path, 'F');
-            $doc['filesize'] = filesize($path);
-            $doc->store();
-            return $doc;
+        $folder = $folder->getTypedFolder();
+        
+        //Create a File:
+        $file = new File();
+        $file->user_id = $user->id;
+        $file->mime_type = 'application/pdf';
+        $file->name = FileMananger::cleanFileName($filename);
+        $file->storage = 'disk';
+        if(!$file->store()) {
+            return false;
         }
+        
+        //...and a FileRef:
+        $file_ref = new FileRef();
+        $file_ref->file_id = $file->id;
+        $file_ref->folder_id = $folder->getId();
+        $file_ref->user_id = $user->id;
+        $file_ref->name = $file->name;
+        if(!$file_ref->store()) {
+            return false;
+        }
+        
+        //Now we can create the PDF file and store it in the file's path:
+        $path = $file->getPath();
+        $this->Output($path, 'F');
+        $file->size = filesize($path);
+        if($file->store()) {
+            return $file_ref;
+        }
+        
         return false;
     }
 
@@ -296,15 +311,20 @@ class ExportPDF extends TCPDF implements ExportDocument {
                 }
             } else if (mb_stripos($url, 'dispatch.php/document/download') !== false) {
                 if (preg_match('#([a-f0-9]{32})#', $url, $matches)) {
-                    $convurl = DirectoryEntry::find($matches[1])->file->getStorageObject()->getPath();
+                    $file_ref = FileRef::find($matches[1]);
+                    $folder = $file_ref->folder->getTypedFolder();
+                    if($folder->isFileDownloadable($file_ref->id, $GLOBALS['user']->id)) {
+                        $convurl = $file_ref->file->getPath();
+                    }
                 }
             } else if (mb_stripos($url, 'download') !== false
                     || mb_stripos($url, 'sendfile.php') !== false) {
                 //// get file id
                 if (preg_match('#([a-f0-9]{32})#', $url, $matches)) {
-                    $document = new StudipDocument($matches[1]);
-                    if ($document->checkAccess($GLOBALS['user']->id)) {
-                        $convurl = get_upload_file_path($matches[1]);
+                    $file_ref = FileRef::find($matches[1]);
+                    $folder = $file_ref->folder->getTypedFolder();
+                    if($folder->isFileDownloadable($file_ref->id, $GLOBALS['user']->id)) {
+                        $convurl = $file_ref->file->getPath();
                     } else {
                         $convurl = Assets::image_path('messagebox/exception.png');
                     }

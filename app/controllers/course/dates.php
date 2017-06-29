@@ -356,7 +356,7 @@ class Course_DatesController extends AuthenticatedController
         $content = $template->render();
 
         $content = mb_encode_numericentity($content, array(0x80, 0xffff, 0, 0xffff), 'cp1252');
-        $filename = prepareFilename($course['name'] . '-' . _("Ablaufplan")) . '.doc';
+        $filename = FileManager::cleanFileName($course['name'] . '-' . _("Ablaufplan") . '.doc');
 
         $this->set_content_type(get_mime_type($filename));
         $this->response->add_header('Content-Disposition', 'attachment;filename="' . $filename . '"');

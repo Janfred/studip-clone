@@ -439,10 +439,17 @@ class Institute_BasicdataController extends AuthenticatedController
                 }
             }
 
-            // Delete assigned documents
-            $db_ar = delete_all_documents($i_id);
-            if ($db_ar > 0) {
-                $details[] = sprintf(_('%u Dokumente gelöscht.'), $db_ar);
+            //Delete all documents of the institute:
+            $top_folder = Folder::getTopFolder($i_id);
+            $file_result = false;
+            if(!$top_folder->is_new()) {
+                //The top folder already existed and wasn't created in this instance:
+                //We can safely delete it (and its content):
+                $file_result = $top_folder->delete();
+            }
+            
+            if ($file_result) {
+                $details[] = _('Alle Dokumente gelöscht.');
             }
 
             //kill the object_user_vists for this institut

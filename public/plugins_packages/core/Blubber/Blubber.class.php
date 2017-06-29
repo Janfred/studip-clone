@@ -8,7 +8,6 @@
  *  the License, or (at your option) any later version.
  */
 
-require_once 'lib/datei.inc.php';
 require_once __DIR__ . '/models/BlubberPosting.class.php';
 require_once __DIR__ . '/models/BlubberExternalContact.class.php';
 require_once __DIR__ . '/models/BlubberStream.class.php';

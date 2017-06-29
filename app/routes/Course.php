@@ -96,7 +96,35 @@ class Course extends \RESTAPI\RouteMap
                                 compact('course_id'), array('status' => $status_filter));
     }
 
-
+    
+    /**
+     * Get the root file folder of a course.
+     * 
+     * @get /course/:course_id/top_folder
+     */
+    public function getTopFolder($course_id)
+    {
+        //first we check if the course exists:
+        $course = $this->requireCourse($course_id);
+        
+        //then we can get the top folder:
+        $top_folder = \Folder::findTopFolder($course->id, 'course');
+        
+        $top_folder = $top_folder->getTypedFolder();
+        if(!$top_folder) {
+            $this->halt(500, 'Folder type not found!');
+        }
+        
+        
+        if(!$top_folder->isReadable(\User::findCurrent()->id)) {
+            $this->halt(403, 'You are not allowed to read the top folder of this course!');
+        }
+        
+        return $top_folder->getEditTemplate();
+    }
+    
+    
+    
     /**************************************************/
     /* PRIVATE HELPER METHODS                         */
     /**************************************************/

@@ -78,16 +78,12 @@
                 </a>
                 <? endif ?>
                 
-                <? if ($course->archiv_file_id and archiv_check_perm($course->id)) : 
-                    $filename = _('Dateisammlung') . '-' . mb_substr($course->name, 0, 200) . '.zip';
-                ?>
-                <a href="<?= URLHelper::getLink(GetDownloadLink($course->archiv_file_id, $filename, 1)) ?>">
+                <? if ($course->archiv_protected_file_id and in_array(archiv_check_perm($course->id), ['tutor', 'dozent', 'admin'])): ?>
+                <a href="<?= FileManager::getDownloadLinkForArchivedCourse($course, true) ?>">
                     <?= Icon::create('file-archive', 'clickable')->asImg('16px') ?>
                 </a>
-                <? elseif ($course->archiv_protected_file_id and in_array(archiv_check_perm($course->id), ['tutor', 'dozent', 'admin'])) :
-                    $filename = _('Dateisammlung') . '-' . mb_substr($course->name, 0, 200) . '.zip';
-                ?>
-                <a href="<?= URLHelper::getLink(GetDownloadLink($course->archiv_protected_file_id, $filename, 1)) ?>">
+                <? elseif ($course->archiv_file_id and archiv_check_perm($course->id)): ?>
+                <a href="<?= FileManager::getDownloadLinkForArchivedCourse($course, false) ?>">
                     <?= Icon::create('file-archive', 'clickable')->asImg('16px') ?>
                 </a>
                 <? endif ?>

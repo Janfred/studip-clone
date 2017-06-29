@@ -174,6 +174,23 @@ class ProfileController extends AuthenticatedController
         }
         $this->ausgabe_inhalt = array_filter($ausgabe_inhalt);
 
+        //public folders
+        $folders = Folder::findBySQL("range_type='user' AND range_id = ? AND folder_type = 'PublicFolder'", [$this->current_user->user_id]);
+        $public_files = [];
+        $public_folders =[];
+        foreach ($folders as $folder) {
+            $one_public_folder = $folder->getTypedFolder();
+            if ($one_public_folder->viewable) {
+                $all_files = FileManager::getFolderFilesRecursive($one_public_folder, $GLOBALS['user']->id);
+                $public_files = array_merge($public_files, $all_files['files']);
+                $public_folders = array_merge($public_folders, $all_files['folders']);
+            }
+        }
+        if (count($public_files)) {
+            $this->public_files = $public_files;
+            $this->public_folders = $public_folders;
+        }
+
         // Anzeige der Seminare, falls User = dozent
         if ($this->current_user['perms'] == 'dozent') {
             $this->seminare = array_filter($this->profile->getDozentSeminars());
@@ -255,7 +272,7 @@ class ProfileController extends AuthenticatedController
                 'score_title' => $this->score_title
             ]
         );
-        
+
         $avatar_widget->setTitle($this->current_user->getFullName());
         $sidebar->addWidget($avatar_widget);
 

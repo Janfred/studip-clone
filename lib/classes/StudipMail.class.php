@@ -278,13 +278,16 @@ class StudipMail
     }
 
     /**
-     * @param $dokument_id
+     * @param FileRef $file_ref The FileRef object of a file that shall be added to a mail
      * @return StudipMail provides fluent interface
      */
-    function addStudipAttachment($dokument_id){
-        $doc = new StudipDocument($dokument_id);
-        if(!$doc->isNew()){
-            $this->addFileAttachment(get_upload_file_path($doc->getId()), $doc->getValue('filename'));
+    function addStudipAttachment(FileRef $file_ref)
+    {
+        if (!$file_ref->isNew()) {
+            $this->addFileAttachment(
+                $file_ref->file->getPath(),
+                $file_ref->name
+            );
         }
         return $this;
     }
