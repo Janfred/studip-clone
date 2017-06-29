@@ -57,7 +57,7 @@ if ($navigation) {
         STUDIP.wysiwyg_enabled = <?= Config::get()->WYSIWYG ? 'true' : 'false' ?>;
         STUDIP.editor_enabled = <?= Studip\Markup::editorEnabled() ? 'true' : 'false' ?> && CKEDITOR.env.isCompatible;
         STUDIP.URLHelper.parameters = <?= json_encode(studip_utf8encode(URLHelper::getLinkParams())) ?>;
-        STUDIP.CSRF_TOKEN = {name: '<?=CSRFProtection::TOKEN?>', value: '<?=CSRFProtection::token()?>'};
+        STUDIP.CSRF_TOKEN = {name: '<?=CSRFProtection::TOKEN?>', value: '<? try {echo CSRFProtection::token();} catch (SessionRequiredException $e){}?>'};
     </script>
 </head>
 
