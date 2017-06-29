@@ -405,7 +405,7 @@ class Moadb extends Migration
             ));
             $insert_file->execute(array($one['storage_id'], $one['user_id'], $one['mime_type'], $filename, $one['size'], 'disk', '', $one['mkdate'], $one['chdate']));
             $new_path = $GLOBALS['UPLOAD_PATH'] . '/' . substr($one['storage_id'], 0, 2) . '/' . $one['storage_id'];
-            $old_path = $GLOBALS['USER_DOC_PATH'] . '/' . substr($one['storage_id'], 0, 2) . '/' . $one['storage_id'];
+            $old_path = $GLOBALS['USER_DOC_PATH'] . '/' . $one['user_id'] . '/' . $one['storage_id'];
             @rename($old_path, $new_path);
         }
     }
@@ -413,7 +413,7 @@ class Moadb extends Migration
     public function down()
     {
         /*
-         * I’M SORRY DAVE, I’M AFRAID I CAN’T DO THAT
+         * I'M SORRY DAVE, I'M AFRAID I CAN'T DO THAT
          */
     }
 }
