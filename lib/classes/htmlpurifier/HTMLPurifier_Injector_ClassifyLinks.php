@@ -1,5 +1,4 @@
 <?php
-require_once 'vendor/HTMLPurifier/HTMLPurifier.standalone.php';
 
 /**
  * Classify links as internal or external and set the class attribute 

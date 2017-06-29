@@ -23,6 +23,7 @@ namespace Studip;
 require_once 'vendor/HTMLPurifier/HTMLPurifier.standalone.php';
 require_once 'htmlpurifier/HTMLPurifier_Injector_ClassifyLinks.php';
 require_once 'htmlpurifier/HTMLPurifier_Injector_ClassifyTables.php';
+require_once 'htmlpurifier/HTMLPurifier_Injector_LinkifyEmail.php';
 require_once 'htmlpurifier/HTMLPurifier_Injector_Unlinkify.php';
 
 class Markup
@@ -331,7 +332,8 @@ class Markup
         ));
         $config->set('AutoFormat.Custom', array(
             'ClassifyLinks',
-            'ClassifyTables'
+            'ClassifyTables',
+            'LinkifyEmail'
         ));
         $config->set('AutoFormat.RemoveSpansWithoutAttributes', true);
         $config->set('CSS.AllowedFonts', array(

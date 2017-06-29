@@ -1,5 +1,4 @@
 <?php
-require_once 'vendor/HTMLPurifier/HTMLPurifier.standalone.php';
 
 /**
  * Ensure that tables always have their class attribute set to 'content'.
