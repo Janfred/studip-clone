@@ -1,7 +1,7 @@
 <?php
 /**
  * wysiwyg.php - Provide web services for the WYSIWYG editor.
- * 
+ *
  **
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -85,83 +85,70 @@ class WysiwygController extends \AuthenticatedController
     {
         try {
             WysiwygRequest::verifyWritePermission(self::UPLOAD_PERMISSION);
-            
+
             $user = User::findCurrent();
-            
-            //get the top folder of the user's personal file area and its FolderType:
-            $top_folder = Folder::findTopFolder($user->id);
-            
-            if(!$top_folder) {
-                $this->render_json(_('Hauptordner der Veranstaltung/Einrichtung nicht gefunden!'));
-                return;
-            }
-            
-            $top_folder = $top_folder->getTypedFolder();
-            if(!$top_folder) {
-                $this->render_json(_('Ordnertyp des Hauptordners konnte nicht ermittelt werden!'));
-                return;
-            }
-            
+
             //try to find an already existing WYSIWYG folder inside the
             //user's personal file area:
             $wysiwyg_folder = Folder::findOneBySql(
-                "user_id = :user_id
-                AND parent_id = :parent_id
+                "range_id = :user_id
                 AND folder_type = 'PublicFolder'
                 AND name = :wysiwyg_name ",
                 [
                     'user_id' => $user->id,
-                    'parent_id' => $top_folder->id,
                     'wysiwyg_name' => self::FOLDER_NAME
                 ]
             );
-            
-            if(!$wysiwyg_folder) {
-                //folder does not exist: create it
-                $wysiwyg_folder = FileManager::createSubFolder(
-                    $top_folder,
-                    $user,
-                    'PublicFolder',
-                    self::FOLDER_NAME,
-                    self::FOLDER_DESCRIPTION
-                );
-                
-                if(!$wysiwyg_folder instanceof PublicFolder) {
+
+            if (!$wysiwyg_folder) {
+                //get the top folder of the user's personal file area and its FolderType:
+                $top_folder = Folder::findTopFolder($user->id)->getTypedFolder();
+
+                $wysiwyg_folder = new PublicFolder(Folder::build([
+                    'user_id' => $user->id,
+                    'name' => self::FOLDER_NAME,
+                    'description' => self::FOLDER_DESCRIPTION
+                ]));
+
+                if (!$top_folder->createSubfolder($wysiwyg_folder)) {
                     $this->render_json(_('WYSIWYG-Ordner für hochgeladene Dateien konnte nicht erstellt werden!'));
                     return;
                 }
+            } else {
+                $wysiwyg_folder = $wysiwyg_folder->getTypedFolder();
             }
-            
+
             //Ok, we have our folder where we can store the uploaded files in:
             $response = [];
-            foreach($_FILES['files'] as $key => $file_attr) {
-                if(!empty($_FILES['files']['errors'][$key]) ||
-                    !empty($_FILES['files']['tmp_name'][$key])) {
-                    //Some error occured: go to next file
-                    continue;
+
+            if (!$wysiwyg_folder->isWritable($user->id)) {
+                throw new AccessDeniedException();
+            }
+            if (Request::isPost() && is_array($_FILES['files'])) {
+                $validatedFiles = FileManager::handleFileUpload(
+                    $_FILES['files'],
+                    $wysiwyg_folder,
+                    $GLOBALS['user']->id
+                );
+
+                if (count($validatedFiles['error']) > 0) {
+                    // error during upload: display error message:
+                    $this->render_json(_('Beim Hochladen ist ein Fehler aufgetreten ') . "\n" .
+                        join("\n", $validatedFiles['error'])
+                    );
+                    return;
                 }
-                
-                try {
-                    //if the following is executed everything went fine:
-                    $file_ref = $wysiwyg_folder->createFile([
-                        'name' => $_FILES['files']['name'][$key],
-                        'type' => $_FILES['files']['type'][$key],
-                        'tmp_name' => $_FILES['files']['tmp_name'][$key],
-                        'error' => $_FILES['files']['error'][$key],
-                        'size' => $_FILES['files']['size'][$key]
-                    ]);
-                    
-                    $response[] = [
-                        'name' => $file_ref->name,
-                        'type' => $file_ref->file->mime_type,
-                        'url' => $file_ref->getDownloadURL()
-                    ];
-                } catch(Exception $e) {
-                    $response[] = [
-                        'name' => $_FILES['files']['name'][$key],
-                        'type' => $_FILES['files']['type'][$key],
-                        'error' => $e->getMessage()
-                    ];
+
+                //all files were uploaded successfully:
+                $storedFiles = [];
+                foreach ($validatedFiles['files'] as $file) {
+                    if ($fileref = $wysiwyg_folder->createFile($file)) {
+                        $response['files'][] = [
+                            'name' => $fileref->name,
+                            'type' => $fileref->file->mime_type,
+                            'url'  => $fileref->getDownloadURL()
+                        ];
+                    }
                 }
             }
         } catch (AccessDeniedException $e) {
@@ -173,14 +160,14 @@ class WysiwygController extends \AuthenticatedController
     /**
      * Store or retrieve settings.
      *
-     * Settings are further subdivided into groups. For example: global, 
+     * Settings are further subdivided into groups. For example: global,
      * seminar- and user-specific settings (see below).
      *
      * HTTP GET
      * returns a JSON object with current settings.
      *
      * HTTP PUT
-     * expects a JSON object with settings to store and returns 
+     * expects a JSON object with settings to store and returns
      * updated settings as a JSON object. Some settings are read-only,
      * others can only be set if the user has the necessary access level.
      *
@@ -250,13 +237,13 @@ class WysiwygController extends \AuthenticatedController
      * The difference of seminar's settings for a user and user's settings
      * for a seminar:
      *
-     *   A seminar's teacher may want to set the upload directory for each user 
-     *   to a separate one, which should not be overwritable by a user, in 
-     *   order to make sure that users cannot see other users uploads (there 
+     *   A seminar's teacher may want to set the upload directory for each user
+     *   to a separate one, which should not be overwritable by a user, in
+     *   order to make sure that users cannot see other users uploads (there
      *   are other ways to do this, but it's just an example).
      *
-     *   A user might want to have a specific upload directory in order to 
-     *   collaborate better with other users in the same seminar (e.g. when 
+     *   A user might want to have a specific upload directory in order to
+     *   collaborate better with other users in the same seminar (e.g. when
      *   students form a study group).
      *
      *   For example the ELMO module needs such settings.
@@ -284,7 +271,7 @@ class WysiwygController extends \AuthenticatedController
      *   }
      * }
      *
-     * When accessing a sub-resource that resource's branch of the JSON scheme 
+     * When accessing a sub-resource that resource's branch of the JSON scheme
      * will be returned.
      */
     public function settings_action()
@@ -314,7 +301,7 @@ class WysiwygController extends \AuthenticatedController
 
     /**
      * Set WYSIWYG settings for a specific group.
-     * 
+     *
      * Dummy implementation: Currently only accepts setting the
      * disabled flag for wysiwyg/settings/users/current.
      *
@@ -362,8 +349,8 @@ class WysiwygController extends \AuthenticatedController
     /**
      * Return WYSIWYG settings for a specific group.
      *
-     * @param $group string The requested settings group: 'user', 'seminar', 
-     * 'global' or 'all'. If the group is set to 'all' then all levels will be 
+     * @param $group string The requested settings group: 'user', 'seminar',
+     * 'global' or 'all'. If the group is set to 'all' then all levels will be
      * returned. If the group is unknown an error will be thrown.
      *
      * @return object Settings for the requested group.
@@ -480,7 +467,7 @@ class WysiwygController extends \AuthenticatedController
      * returned unchanged.
      *
      * @param mixed $data Data to convert.
-     * 
+     *
      * @return mixed Converted data.
      */
     private function objectToArray($data)
