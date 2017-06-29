@@ -1579,13 +1579,15 @@ class MyRealmModel
         }
 
         foreach ($my_obj as $courses) {
-            if ($group_field !== 'sem_number') {
-                // tlx: If array is 2-dimensional, merge it into a 1-dimensional
-                $courses = call_user_func_array('array_merge', $courses);
-            }
+            if(!empty($courses)) {
+                if ($group_field !== 'sem_number') {
+                    // tlx: If array is 2-dimensional, merge it into a 1-dimensional
+                    $courses = call_user_func_array('array_merge', $courses);
+                }
 
-            foreach ($courses as $course) {
-                $nav_elements = max($nav_elements, count(self::array_rtrim($course['navigation'])));
+                foreach ($courses as $course) {
+                    $nav_elements = max($nav_elements, count(self::array_rtrim($course['navigation'])));
+                }
             }
         }
 
