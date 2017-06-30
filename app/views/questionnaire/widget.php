@@ -11,7 +11,7 @@
                     <?= Icon::create("add", "clickable")->asimg("16px", array('class' => "text-bottom")) ?>
                 </a>
                 <a href="<?= URLHelper::getLink("dispatch.php/questionnaire/" . ($range_type == 'course' || $range_type == 'institute' ? 'course' : ''). "overview") ?>" title="<?= _('Fragebögen verwalten') ?>">
-                    <?= Icon::create("admin", "clickable")->asimg("16px", array('class' => "text-bottom")) ?>
+                    <?= Icon::create("edit", "clickable")->asimg("16px", array('class' => "text-bottom")) ?>
                 </a>
             <? endif ?>
         </nav>

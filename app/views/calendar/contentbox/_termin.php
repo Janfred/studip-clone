@@ -12,7 +12,7 @@
             </span>
             <? if($admin && $isProfile && $termin['type'] === 'CalendarEvent'): ?>
             <a href="<?= URLHelper::getLink('dispatch.php/calendar/single/edit/' . $termin['range_id'] . '/' . $termin['event_id'], array('source_page' => 'dispatch.php/profile')) ?>">
-                <?= Icon::create('admin', 'clickable')->asImg(['class' => 'text-bottom']) ?>
+                <?= Icon::create('edit', 'clickable')->asImg(['class' => 'text-bottom']) ?>
             </a>
             <? endif; ?>
         </nav>

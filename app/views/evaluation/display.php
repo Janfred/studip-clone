@@ -8,7 +8,7 @@
         <nav>
         <? if ($admin): ?>
             <a href="<?= URLHelper::getLink('admin_evaluation.php', array('rangeID' => $range_id)) ?>">
-                <?= Icon::create('admin', 'clickable')->asImg(); ?>
+                <?= Icon::create('edit', 'clickable')->asImg(); ?>
             </a>
         <? endif; ?>
         </nav>
