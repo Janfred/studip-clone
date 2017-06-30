@@ -64,7 +64,7 @@ class Admin_UserController extends AuthenticatedController
         if (Request::submitted('reset')) {
             unset($_SESSION['admin']['user']);
         } elseif (Request::submitted('search')) {
-            $request = $_SESSION['admin']['user'] = Request::getInstance();
+            $request = $_SESSION['admin']['user'] = iterator_to_array(Request::getInstance());
         }
 
         //Suchparameter und Ergebnisse vorhanden
@@ -1179,11 +1179,11 @@ class Admin_UserController extends AuthenticatedController
         foreach ($memberships as $membership) {
             if (!Request::get('view') || Request::get('view') === 'files') {
                 // count files for course
-                
+
                 $top_folder = Folder::findTopFolder($membership->seminar_id);
                 $top_folder = $top_folder->getTypedFolder();
                 $count = FileManager::countFilesInFolder($top_folder, true, $user_id);
-                
+
 
                 if ($count) {
                     if (!isset($course_files[$membership->seminar_id])) {
@@ -1212,11 +1212,11 @@ class Admin_UserController extends AuthenticatedController
             if (!empty($institutes)) {
                 foreach ($institutes as $index => $institute) {
                     $top_folder = Folder::findTopFolder($institute['Institut_id']);
-                    
+
                     $top_folder = $top_folder->getTypedFolder();
-                    
+
                     $count = FileManager::countFilesInFolder($top_folder, true, $user_id);
-                    
+
                     if ($count) {
                         $institutes[$index]['files'] = $count;
                     } else {
@@ -1268,7 +1268,7 @@ class Admin_UserController extends AuthenticatedController
         if($folder) {
             $folder = $folder->getTypedFolder();
         }
-        
+
         if($folder) {
             //Folder exists: We can collect all subfolders in the folder.
             $this->folders = FileManager::getFolderFilesRecursive($folder, $this->user->id)['folders'];
@@ -1276,7 +1276,7 @@ class Admin_UserController extends AuthenticatedController
             //Folder does not exist: We can't collect any subfolders.
             $this->folders = [];
         }
-        
+
         $this->range = Course::find($range_id);
         if (is_null($this->range)) {
             $this->range = Institute::find($range_id);
@@ -1429,41 +1429,41 @@ class Admin_UserController extends AuthenticatedController
     public function download_user_files_action($user_id, $course_id = '')
     {
         global $TMP_PATH;
-        
-        
+
+
         $top_folder = Folder::findTopFolder($course_id);
         $top_folder = $top_folder->getTypedFolder();
-        
+
         $element_lists = FileManager::getFolderFilesRecursive($top_folder, $user_id);
-        
+
         //We want only those FileRefs which belong to the user identified by $user_id:
         $file_refs = [];
-        
+
         foreach($element_lists['files'] as $file_ref) {
             if($file_ref->user_id == $user_id) {
                 $file_refs[] = $file_ref;
             }
         }
-        
+
         $user = User::find($user_id);
-        
+
         $archive_file_name = $user->username . '_files_' . date('Ymd-Hi') . '.zip';
-        
+
         $archive_path = $TMP_PATH . '/' . $archive_file_name;
-        
+
         $result = FileArchiveManager::createArchiveFromFileRefs(
             $file_refs,
             User::findCurrent(),
             $archive_path,
             false
         );
-        
-        
+
+
         $archive_download_link = FileManager::getDownloadURLForTemporaryFile(
             $archive_path,
             $archive_file_name
         );
-        
+
         $this->redirect($archive_download_link);
     }
 

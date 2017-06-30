@@ -1,6 +1,7 @@
 <?
 # Lifter010: TODO
 use Studip\Button, Studip\LinkButton;
+
 ?>
 
 
@@ -48,7 +49,7 @@ use Studip\Button, Studip\LinkButton;
             <section class="hgroup size-m">
                 <select name="inaktiv" class="size-s">
                 <? foreach(array('<=' => '>=', '=' => '=', '>' => '<', 'nie' =>_('nie')) as $i => $one): ?>
-                    <option value="<?= htmlready($i) ?>" <?= ($user['inaktiv'] === $i) ? 'selected' : '' ?>>
+                    <option value="<?= htmlready($i) ?>" <?= ($request['inaktiv'][0] === $i) ? 'selected' : '' ?>>
                         <?= htmlReady($one) ?>
                     </option>
                 <? endforeach; ?>
@@ -56,7 +57,7 @@ use Studip\Button, Studip\LinkButton;
 
                 <label>
                     <input name="inaktiv_tage" type="number" id="inactive"
-                           value="<?= htmlReady($request['inaktiv_tage']) ?>">
+                           value="<?= htmlReady($request['inaktiv'][1]) ?>">
                     <?= _('Tage') ?>
                 </label>
             </section>
