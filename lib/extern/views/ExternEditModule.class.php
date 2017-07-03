@@ -150,14 +150,10 @@ class ExternEditModule extends ExternEditHtml {
                 // visible
                 if ($visible[$order[$i]]) {
                 $out .= "\n";
-                $out .= Icon::create('checkbox-checked', 'clickable', ['title' => _('Datenfeld ausblenden')])->asInput(["type" => "image", "class" => "middle", "name" => $this->element_name."_hide[{
-$order[$i]}
-]"]);
+                $out .= Icon::create('checkbox-checked', 'clickable', ['title' => _('Datenfeld ausblenden')])->asInput(["type" => "image", "class" => "middle", "name" => $this->element_name."_hide[".$order[$i]."]"]);
                 } else {
                     $out .= "\n";
-                    $out .= Icon::create('checkbox-unchecked', 'clickable', ['title' => _('Datenfeld einblenden')])->asInput(["type" => "image", "class" => "middle", "name" => $this->element_name."_show[{
-$order[$i]}
-]"]);
+                    $out .= Icon::create('checkbox-unchecked', 'clickable', ['title' => _('Datenfeld einblenden')])->asInput(["type" => "image", "class" => "middle", "name" => $this->element_name."_show[".$order[$i]."]"]);
                     $out .= "</td>\n";
                 }
            }
