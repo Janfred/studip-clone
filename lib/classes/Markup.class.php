@@ -193,16 +193,14 @@ class Markup
     /**
      * Call HTMLPurifier to create safe HTML.
      *
-     * @param   string $dirty_html  Unsafe or 'uncleaned' HTML code.
+     * @param   string  $dirty_html  Unsafe or 'uncleaned' HTML code.
+     * @param   boolean $autoformat  Apply the AutoFormat rules
      * @return  string              Clean and safe HTML code.
      */
-    public static function purify($dirty_html)
+    private static function purify($dirty_html, $autoformat = true)
     {
-        // remember created purifier so it doesn't have to be created again
-        static $purifier = NULL;
-        if ($purifier === NULL) {
-            $purifier = self::createPurifier();
-        }
+        $purifier = self::createPurifier($autoformat);
+
         return studip_utf8decode(trim(
             $purifier->purify(studip_utf8encode($dirty_html))));
     }
@@ -237,11 +235,14 @@ class Markup
 
     /**
      * Create HTML purifier instance with Stud.IP-specific configuration.
+     *
+     * @param  boolean $autoformat  Apply the AutoFormat rules
      * @return HTMLPurifier A new instance of the HTML purifier.
      */
-    private static function createPurifier()
+    private static function createPurifier($autoformat)
     {
-        $config = self::createDefaultPurifier();
+        $config = \HTMLPurifier_Config::createDefault();
+        $config->set('Cache.SerializerPath', $GLOBALS['TMP_PATH']);
         $config->set('Core.RemoveInvalidImg', true);
 
         // restrict allowed HTML tags and attributes
@@ -329,11 +330,6 @@ class Markup
             'usercode',
             'wiki-link'
         ));
-        $config->set('AutoFormat.Custom', array(
-            'ClassifyLinks',
-            'ClassifyTables'
-        ));
-        $config->set('AutoFormat.RemoveSpansWithoutAttributes', true);
         $config->set('CSS.AllowedFonts', array(
             'serif',
             'sans-serif',
@@ -349,6 +345,16 @@ class Markup
             'background-color', // needed by span, td
             'float'
         ));
+
+        if ($autoformat) {
+            $config->set('AutoFormat.Linkify', true);
+            $config->set('AutoFormat.Custom', array(
+                'ClassifyLinks',
+                'ClassifyTables',
+                'LinkifyEmail'
+            ));
+            $config->set('AutoFormat.RemoveSpansWithoutAttributes', true);
+        }
 
         // avoid <img src="evil_CSRF_stuff">
         $def = $config->getHTMLDefinition(true);
@@ -428,7 +434,7 @@ class Markup
     {
         if (self::isHtml($text)) {
             $is_fallback = self::isHtmlFallback($text);
-            $text = self::purify($text);
+            $text = self::purify($text, false);
 
             if ($is_fallback) {
                 $text = self::markupText(new \StudipCoreFormat(), $text);
@@ -450,7 +456,8 @@ class Markup
     public static function removeHtml($html)
     {
         if (self::isHtml($html)) {
-            $config = self::createDefaultPurifier();
+            $config = \HTMLPurifier_Config::createDefault();
+            $config->set('Cache.SerializerPath', $GLOBALS['TMP_PATH']);
             $config->set('HTML.Allowed', 'a[href],img[alt|src],br');
             $config->set('AutoFormat.Custom', array('Unlinkify'));
 
@@ -460,12 +467,6 @@ class Markup
         }
 
         return $html;
-    }
-
-    private static function createDefaultPurifier() {
-        $config = \HTMLPurifier_Config::createDefault();
-        $config->set('Cache.SerializerPath', $GLOBALS['TMP_PATH']);
-        return $config;
     }
 }
 
