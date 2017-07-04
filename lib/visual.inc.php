@@ -138,10 +138,7 @@ function formatLinks($text, $nl2br=TRUE){
         $link_markup_rule['end'],
         $link_markup_rule['callback']
     );
-    if ($nl2br) { // fix newlines
-        $text = nl2br($text, FALSE);
-    }
-    return Markup::purify($markup->format(trim($text)));
+    return $markup->format(htmlReady($text, true, $nl2br));
 }
 
 /**
