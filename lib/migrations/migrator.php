@@ -236,14 +236,14 @@ class Migrator {
                $this->direction,
                $this->target_version);
 
-
     foreach ($migrations as $version => $migration) {
 
       $class = get_class($migration);
       $this->log("\n\nNext migration: %s (%d)\n\n", $class, $version);
-
+      $time_start = microtime(true);
       $migration->migrate($this->direction);
-      $this->schema_version->set($this->is_down() ? $version - 1 : $version);
+        $this->log("\n\nmigration: %s took %s s\n\n", $class, round(microtime(true) - $time_start,3));
+        $this->schema_version->set($this->is_down() ? $version - 1 : $version);
     }
   }
 
