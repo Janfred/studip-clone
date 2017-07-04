@@ -221,40 +221,33 @@ class Statusgruppen extends SimpleORMap
      */
     public function hasFolder()
     {
-        $query = "SELECT folder_id FROM folder WHERE range_id = ?";
+        $query = "SELECT id FROM folders WHERE folder_type = 'CourseGroupFolder' AND range_id = ? AND data_content LIKE ? LIMIT 1";
         $statement = DBManager::get()->prepare($query);
-        $statement->execute(array($this->id));
-        return (bool) $statement->fetchColumn();
+        $statement->execute(array($this->range_id, '%"group":"' . $this->id. '"%'));
+        return $statement->fetchColumn();
     }
 
     /**
      * Gets the folder assigned to this statusgroup.
      *
-     * @return DocumentFolder|null
+     * @return CourseGroupFolder|null
      */
     public function getFolder()
     {
-        return DocumentFolder::findOneByRange_id($this->id);
+        $folder_id = $this->hasFolder();
+        return $folder_id ? FileManager::getTypedFolder($folder_id) : null;
     }
 
     /**
      * Delete or create a folder
-     *
+     * TODO: update(false) löscht? muss anders
      * @param boolean $set <b>true</b> Create a folder
      * <b>false</b> Delete the folder
      */
     public function updateFolder($set)
     {
-        if ($this->hasFolder() && !$set) {
-            delete_folder($this->hasFolder(), true);
-        }
         if (!$this->hasFolder() && $set) {
-            create_folder(
-                _('Dateiordner der Gruppe:') . ' ' . $this->name,
-                _('Ablage für Ordner und Dokumente dieser Gruppe'),
-                $this->id,
-                15
-            );
+
         }
     }
 

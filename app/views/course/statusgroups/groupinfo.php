@@ -44,10 +44,8 @@
     <?php if ($folder = $group->getFolder()) : ?>
         <p>
             <?= formatReady(sprintf(_('Zu dieser Gruppe gehört ein [Dateiordner]%s .'),
-                URLHelper::getURL('folder.php#anker', array(
+                URLHelper::getURL('dispatch.php/course/files/index/' . $folder->id, array(
                     'cid' => $course_id,
-                    'data[cmd]' => 'tree',
-                    'open' => $folder->id
                 )))) ?>
         </p>
     <?php endif ?>
