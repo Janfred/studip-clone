@@ -171,6 +171,6 @@ class ZipArchive extends \ZipArchive
      */
     private static function convertArchiveFilename($filename)
     {
-        return iconv('UTF-8', 'ISO-8859-1', $filename);
+        return iconv('IBM437', 'ISO-8859-1', $filename);
     }
 }
