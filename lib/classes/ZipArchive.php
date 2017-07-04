@@ -72,7 +72,7 @@ class ZipArchive extends \ZipArchive
         if ($result !== true) {
             return false;
         }
-
+        $ok = true;
         for ($i = 0; $i < $archive->numFiles; $i += 1) {
             $zip_filename = $archive->getNameIndex($i, self::FL_UNCHANGED);
             $filename = self::convertArchiveFilename($zip_filename);
@@ -80,21 +80,31 @@ class ZipArchive extends \ZipArchive
             if (strpos($filename, '../') !== false) {
                 continue;
             }
-
             if (substr($zip_filename, -1) === '/') {
-                mkdir($path . substr($zip_filename, 0, -1));
+                $dirname = trim($filename, '/');
             } else {
-                $source = $archive->getStream($zip_filename);
-                $target = fopen($path . $filename, 'wb+');
-                stream_copy_to_stream($source, $target);
-                fclose($source);
-                fclose($target);
+                $dirname = trim(dirname($filename), '/');
             }
+            if ($dirname && $dirname !== '.') {
+                if (!is_dir($path . $dirname)) {
+                    if (mkdir($path . $dirname, 0777, true) === false) {
+                        $ok = false;
+                    }
+                }
+            }
+            if (substr($zip_filename, -1) === '/') {
+                continue;
+            }
+            $source = $archive->getStream($zip_filename);
+            $target = @fopen($path . $filename, 'wb+');
+            if (@stream_copy_to_stream($source, $target) === false) {
+                $ok = false;
+            }
+            @fclose($source);
+            @fclose($target);
         }
-
         $archive->close();
-
-        return true;
+        return $ok;
     }
 
     /**
