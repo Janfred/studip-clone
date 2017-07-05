@@ -124,7 +124,7 @@ class Moadb extends Migration
         $db->exec("SET autocommit=0");
         //top folder courses
         $institute_folders = array();
-        foreach ($db->query("SELECT i.institut_id as new_range_id,i.name FROM `folder` f INNER JOIN `Institute` i ON i.institut_id = f.range_id UNION DISTINCT SELECT i.institut_id as new_range_id,i.name FROM `folder` f INNER JOIN `Institute` i ON MD5(CONCAT(i.institut_id, 'top_folder')) = f.range_id") as $folder) {
+        foreach ($db->query("SELECT DISTINCT i.institut_id as new_range_id,i.name FROM `folder` f INNER JOIN `Institute` i ON i.institut_id = f.seminar_id") as $folder) {
             $folder['folder_id'] = md5(uniqid('folders', true));
             $folder['range_id'] = '';
             $folder['user_id'] = $GLOBALS['user']->id;
@@ -147,8 +147,9 @@ class Moadb extends Migration
         unset($institute_folders);
         $db->exec("COMMIT");
 
+
         $seminar_folders = array();
-        foreach ($db->query("SELECT s.seminar_id as new_range_id,s.name FROM `folder` f INNER JOIN `seminare` s ON s.Seminar_id = f.range_id UNION DISTINCT SELECT s.seminar_id as new_range_id,s.name FROM `folder` f INNER JOIN `seminare` s ON MD5(CONCAT(s.Seminar_id, 'top_folder')) = f.range_id") as $folder) {
+        foreach ($db->query("SELECT DISTINCT s.seminar_id as new_range_id,s.name FROM  `seminare` s INNER JOIN `folder` f ON s.Seminar_id = f.seminar_id") as $folder) {
             $folder['folder_id'] = md5(uniqid('folders', true));
             $folder['range_id'] = '';
             $folder['user_id'] = $GLOBALS['user']->id;
@@ -169,7 +170,6 @@ class Moadb extends Migration
         //other top folders
         foreach ($db->query("SELECT f.*, s.Seminar_id as seminar_id FROM `folder` f INNER JOIN `seminare` s ON MD5(CONCAT(s.Seminar_id, 'top_folder')) = f.range_id") as $folder) {
             $folder['range_id'] = $seminar_folders[$folder['seminar_id']];
-            if (!$folder['range_id'] ) throw new Exception($folder['seminar_id']);
             $this->migrateFolder($folder, $folder['seminar_id'], 'course', 'StandardFolder');
         }
         $db->exec("COMMIT");
