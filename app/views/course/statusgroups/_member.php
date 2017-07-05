@@ -26,27 +26,8 @@
         <?= strftime('%x %X', $m->mkdate) ?>
     </td>
     <td>
-    <?php
-    if ($count = count($m->user->studycourses)) {
-        $studycourse = $m->user->studycourses->first();
-        printf(
-            '%s (%s)',
-            htmlReady(trim($studycourse->studycourse->name . ' ' . $studycourse->degree->name)),
-            htmlReady($studycourse->semester)
-        );;
-        if ($count > 1) {
-            echo '[...]';
-            $course_res = implode("\n", $m->user->studycourses->limit(1, PHP_INT_MAX)->map(function ($item) {
-                return sprintf(
-                    '- %s (%s)<br>',
-                    htmlReady(trim($item->studycourse->name . ' ' . $item->degree->name)),
-                    htmlReady($item->semester)
-                );
-            }));
-            echo tooltipHtmlIcon('<strong>' . _('Weitere Studiengänge') . '</strong><br>' .$course_res);
-        }
-    }
-    ?>
+    <?= $this->render_partial('course/members/_studycourse.php',
+                array('studycourses' => new SimpleCollection(UserStudyCourse::findByUser($m->user_id)))) ?>
     </td>
 <? endif ?>
     <td class="memberactions">
