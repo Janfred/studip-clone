@@ -1217,6 +1217,28 @@ class FileManager
     }
 
     /**
+     * Creates a list of unreadable subfolders of a folder.
+     *
+     * @param FolderType $top_folder
+     * @param string $user_id
+     * @return FolderType[] assoc array ID => FolderType
+     */
+    public static function getUnreadableFolders(FolderType $top_folder, $user_id)
+    {
+        $folders = [];
+        $array_walker = function ($top_folder) use (&$array_walker, &$folders,$user_id) {
+            if (!($top_folder->isVisible($user_id) && $top_folder->isReadable($user_id))) {
+                $folders[$top_folder->getId()] = $top_folder;
+                array_walk($top_folder->getSubFolders(), $array_walker);
+            }
+        };
+
+        $top_folders = [$top_folder];
+        array_walk($top_folders, $array_walker);
+        return $folders;
+    }
+
+    /**
      * Returns a FolderType instance for a given folder-ID.
      * This method can also get FolderType instances which are defined
      * in a file system plugin.

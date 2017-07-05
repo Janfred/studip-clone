@@ -325,17 +325,13 @@ function get_my_obj_values (&$my_obj, $user_id)
     $unreadable_folders = array();
     if (!$GLOBALS['perm']->have_perm('admin')){
         foreach (array_keys($my_obj) as $obj_id){
-            if($my_obj[$obj_id]['modules']['documents_folder_permissions']
-            || ($my_obj[$obj_id]['obj_type'] == 'sem' && StudipDocumentTree::ExistsGroupFolders($obj_id))){
-                $must_have_perm = $my_obj[$obj_id]['obj_type'] == 'sem' ? 'tutor' : 'autor';
-                if ($GLOBALS['perm']->permissions[$my_obj[$obj_id]['status']] < $GLOBALS['perm']->permissions[$must_have_perm]){
-                    $folder_tree = TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $obj_id,'entity_type' => $my_obj[$obj_id]['obj_type']));
-                    $unreadable_folders = array_merge((array)$unreadable_folders, (array)$folder_tree->getUnReadableFolders($user_id));
-                }
+            $must_have_perm = $my_obj[$obj_id]['obj_type'] == 'sem' ? 'tutor' : 'autor';
+            if ($GLOBALS['perm']->permissions[$my_obj[$obj_id]['status']] < $GLOBALS['perm']->permissions[$must_have_perm]) {
+                $unreadable_folders = array_merge((array)$unreadable_folders, FileManager::getUnreadableFolders(Folder::findTopFolder($obj_id)->getTypedFolder(), $user_id));
             }
         }
     }
-    $db2->query(get_obj_clause('dokumente a','Seminar_id','dokument_id',"(chdate > IFNULL(b.visitdate, $threshold) AND a.user_id !='$user_id')", 'documents', false, (count($unreadable_folders) ? "AND a.range_id NOT IN('".join("','", $unreadable_folders)."')" : ""), false, $user_id));
+    $db2->query(get_obj_clause('folders a {ON_CLAUSE} INNER JOIN file_refs fr ON (fr.folder_id=a.id)','range_id','fr.id',"(fr.chdate > IFNULL(b.visitdate, $threshold) AND fr.user_id !='$user_id')", 'documents', false, (count($unreadable_folders) ? "AND f.id NOT IN('".join("','", array_keys($unreadable_folders))."')" : ""), false, $user_id, 'fr.chdate'));
     while($db2->next_record()) {
         $object_id = $db2->f('object_id');
         if ($my_obj[$object_id]["modules"]["documents"]) {
@@ -348,11 +344,11 @@ function get_my_obj_values (&$my_obj, $user_id)
             $nav = new Navigation('files');
 
             if ($db2->f('neue')) {
-                $nav->setURL('folder.php?cmd=all');
+                $nav->setURL('dispatch.php/course/files/flat');
                 $nav->setImage(Icon::create('files+new', 'attention', ["title" => sprintf(_('%s Dokumente, %s neue'),$db2->f('count'),$db2->f('neue'))]));
                 $nav->setBadgeNumber($db2->f('neue'));
             } else if ($db2->f('count')) {
-                $nav->setURL('folder.php?cmd=tree');
+                $nav->setURL('dispatch.php/course/files/index');
                 $nav->setImage(Icon::create('files', 'inactive', ["title" => sprintf(_('%s Dokumente'),$db2->f('count'))]));
             }
 
