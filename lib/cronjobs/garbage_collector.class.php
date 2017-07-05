@@ -35,13 +35,13 @@ class GarbageCollectorJob extends CronJob
 
     public function setUp()
     {
-        
+
     }
 
     public function execute($last_result, $parameters = array())
     {
         $db = DBManager::get();
-        
+
         //abgelaufenen News löschen
         $deleted_news = StudipNews::DoGarbageCollect();
         //messages aufräumen
@@ -51,10 +51,10 @@ class GarbageCollectorJob extends CronJob
             $db->exec("DELETE FROM message_user WHERE message_id IN(" . $db->quote($to_delete) . ")");
             $db->exec("DELETE FROM message WHERE message_id IN(" . $db->quote($to_delete) . ")");
         }
-        
+
         //delete old attachments of non-sent and deleted messages:
         //A folder is old and not attached to a message when it has the
-        //range type 'message', belongs to the folder type 'MessageFolder', 
+        //range type 'message', belongs to the folder type 'MessageFolder',
         //is older than 2 hours and has a range-ID that doesn't exist
         //in the "message" table.
         $unsent_attachment_folders = Folder::deleteBySql(
@@ -71,14 +71,12 @@ class GarbageCollectorJob extends CronJob
                 'user_id' => $GLOBALS['user']->id
             ]
         );
-        
-        
-        $to_delete_attach = $db->query("SELECT dokument_id FROM dokumente WHERE range_id = 'provisional' AND chdate < UNIX_TIMESTAMP(DATE_ADD(NOW(),INTERVAL -2 HOUR))")->fetchAll(PDO::FETCH_COLUMN,0);
-        array_walk($to_delete_attach, $dd_func);
+
+
         if ($parameters['verbose']) {
             printf(_("Gelöschte Ankündigungen: %u") . "\n", (int)$deleted_news);
             printf(_("Gelöschte Nachrichten: %u") . "\n", count($to_delete));
-            printf(_("Gelöschte Dateianhänge: %u") . "\n", count($to_delete_attach));
+            printf(_("Gelöschte Dateianhänge: %u") . "\n", count($unsent_attachment_folders));
         }
 
         PersonalNotifications::doGarbageCollect();
