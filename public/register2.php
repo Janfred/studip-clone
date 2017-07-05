@@ -51,38 +51,19 @@ if ($auth->auth["uid"] == "nobody") {
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
-// -- here you have to put initialisations for the current page
-
-PageLayout::setHelpKeyword("Basis.AnmeldungRegistrierung");
-PageLayout::setTitle(_("Registrierung erfolgreich"));
-// Start of Output
-include ('lib/include/html_head.inc.php'); // Output of html head
-include ('lib/include/header.php');   // Output of Stud.IP head
-
-?>
-<div id="layout_page">
-
-<table width ="100%" border="0" cellspacing="0" cellpadding="5">
-<tr>
-    <td class="table_header_bold"><b>&nbsp;<?=_("Herzlich Willkommen")?></b>
-    </td>
-</tr>
-
-<tr>
-    <td class="blank">&nbsp;
-        <blockquote>
-        <?=_("Ihre Registrierung wurde erfolgreich vorgenommen.")?><br><br>
-        <?=_("Das System wird Ihnen zur Bestätigung eine E-Mail zusenden.")?><br>
-        <?=_("Bitte rufen Sie die E-Mail ab und folgen Sie den Anweisungen, um Schreibrechte im System zu bekommen.")?><br>
-        <br>
-        <? printf(_("%sHier%s geht es wieder zur Startseite."), "<a href=\"index.php\">", "</a>");?>
-        <br><br>
-        </blockquote>
-    </td>
-</tr>   
-</table>
-
-</div>
-<?php 
-include ('lib/include/html_end.inc.php');
 page_close();
+
+ob_start();
+PageLayout::setHelpKeyword('Basis.AnmeldungRegistrierung');
+PageLayout::setTitle(_('Registrierung erfolgreich'));
+$template                     = $GLOBALS['template_factory']->open('register/success.php');
+$template->content_for_layout = ob_get_clean();
+$template->infobox            = $infobox ? ['content' => $infobox] : null;
+$content                      = $template->render();
+
+$template                     = $GLOBALS['template_factory']->open('layouts/base.php');
+$template->content_for_layout = $content;
+echo $template->render();
+$auth->logout();
+page_close();
+die;

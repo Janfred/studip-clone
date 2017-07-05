@@ -25,7 +25,7 @@ class Seminar_Register_Auth extends Seminar_Auth
     /**
      *
      */
-    function auth_registerform()
+    public function auth_registerform()
     {
         $this->check_environment();
         // load the default set of plugins
@@ -34,7 +34,7 @@ class Seminar_Register_Auth extends Seminar_Auth
         if (!$_COOKIE[get_class($GLOBALS['sess'])]) {
             $register_template = $GLOBALS['template_factory']->open('nocookies');
         } else {
-            $register_template = $GLOBALS['template_factory']->open('registerform');
+            $register_template = $GLOBALS['template_factory']->open('register/form');
             $register_template->set_attribute('validator', new email_validation_class());
             $register_template->set_attribute('error_msg', $this->error_msg);
             $register_template->set_attribute('username', Request::get('username'));
@@ -62,7 +62,7 @@ class Seminar_Register_Auth extends Seminar_Auth
     /**
      * @return bool|string
      */
-    function auth_doregister()
+    public function auth_doregister()
     {
         $this->check_environment();
 
@@ -166,7 +166,7 @@ class Seminar_Register_Auth extends Seminar_Auth
         }
     }
 
-    static function get_validation_hash($user_id)
+    public static function get_validation_hash($user_id)
     {
         return md5("$user_id:" . self::$magic);
     }
