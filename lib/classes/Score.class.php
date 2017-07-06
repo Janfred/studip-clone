@@ -190,7 +190,7 @@ class Score
         $tables = array();
         $tables[] = array('table' => "user_info");
         $tables[] = array('table' => "comments");
-        $tables[] = array('table' => "dokumente");
+        $tables[] = array('table' => "file_refs");
         $tables[] = array('table' => "forum_entries");
         $tables[] = array('table' => "news");
         $tables[] = array('table' => "seminar_user");

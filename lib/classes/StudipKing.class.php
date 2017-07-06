@@ -67,7 +67,7 @@ class StudipKing {
 
             # read cache (unserializing a cache miss - FALSE - does not matter)
             $kings = unserialize($cache->read(self::CACHE_KEY));
-            
+
             # cache miss, retrieve from database
             if ($kings === FALSE) {
                 $kings = self::get_kings_uncached();
@@ -127,13 +127,13 @@ class StudipKing {
                 }
             }
         }
-        
+
         return $kings;
     }
 
     private static function files_kings()
     {
-        return self::select_kings("SELECT user_id AS id, COUNT(*) AS num FROM dokumente GROUP BY user_id");
+        return self::select_kings("SELECT user_id AS id, COUNT(*) AS num FROM file_refs GROUP BY user_id");
     }
 
     private static function votes_kings()
