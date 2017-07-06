@@ -1,6 +1,6 @@
 <section class="contentbox">
     <header>
-        <h1><?= _('Stimmen Sie den Nutzungsbedinungen zu?') ?></h1>
+        <h1><?= _('Was ist Stud.IP?') ?></h1>
     </header>
     <section>
         <?= _('Stud.IP ist ein Open Source Projekt und steht unter der Gnu General Public License (GPL). Das System befindet sich in der ständigen Weiterentwicklung.') ?>
@@ -11,17 +11,14 @@
         <br><br>
         <?= _('Um den vollen Funktionsumfang von Stud.IP nutzen zu können, müssen Sie sich am System anmelden.') ?><br>
         <?= _('Das hat viele Vorzüge:') ?><br>
-        <blockquote>
-            <ul>
-                <li><?= _('Zugriff auf Ihre Daten von jedem internetfähigen Rechner weltweit,') ?>
-                <li><?= _('Anzeige neuer Mitteilungen oder Dateien seit Ihrem letzten Besuch,') ?>
-                <li><?= _('Eine eigenes Profil im System,') ?>
-                <li><?= _('die Möglichkeit anderen Personen Nachrichten zu schicken oder mit ihnen zu chatten,') ?>
-                <li><?= _('und vieles mehr.') ?></li>
-        </blockquote>
-        <br>
-        </ul>
 
+        <ul>
+            <li><?= _('Zugriff auf Ihre Daten von jedem internetfähigen Rechner weltweit,') ?>
+            <li><?= _('Anzeige neuer Mitteilungen oder Dateien seit Ihrem letzten Besuch,') ?>
+            <li><?= _('Eine eigenes Profil im System,') ?>
+            <li><?= _('die Möglichkeit anderen Personen Nachrichten zu schicken oder mit ihnen zu chatten,') ?>
+            <li><?= _('und vieles mehr.') ?></li>
+        </ul>
         <?= _('Mit der Anmeldung werden die nachfolgenden Nutzungsbedingungen akzeptiert:') ?>
     </section>
 </section>
