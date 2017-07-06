@@ -44,7 +44,7 @@ require_once 'lib/dates.inc.php';
 
 class ExternModuleLecturedetails extends ExternModule {
 
-   
+
     // private
     var $seminar_id;
 
@@ -137,7 +137,7 @@ class ExternModuleLecturedetails extends ExternModule {
         $statement = DBManager::get()->prepare($query);
         $statement->execute($parameters);
         $row = $statement->fetch(PDO::FETCH_ASSOC);
-        
+
         $visible = $this->config->getValue("Main", "visible");
         $j = -1;
         if ($row !== false) {
@@ -564,14 +564,19 @@ class ExternModuleLecturedetails extends ExternModule {
             foreach (PluginEngine::getPlugins('ForumModule') as $plugin) {
                 $postings += $plugin->getNumberOfPostingsForSeminar($this->seminar_id);
             }
-            
+
             if ($postings) {
                 $studip_info .= $this->elements["StudipInfo"]->toString(array("content" =>
                             $this->config->getValue("StudipInfo", "countpostings") . "&nbsp;"));
                 $studip_info .= $postings . "<br>\n";
             }
 
-            $query = "SELECT count(*) as count_documents FROM dokumente WHERE seminar_id = ?";
+            $query = "SELECT COUNT(*) AS count_documents
+                  FROM folders
+                  INNER JOIN file_refs ON folder_id = folders.id
+                  WHERE range_id = ? AND range_type = 'course'
+            AND folder_type IN ('RootFolder', 'StandardFolder')
+                  GROUP BY range_id";
             $parameters = array($this->seminar_id);
             $statement = DBManager::get()->prepare($query);
             $statement->execute($parameters);

@@ -224,7 +224,7 @@ class ExternModuleTemplateLecturedetails extends ExternModule {
     function getContent ($args = NULL, $raw = FALSE) {
         $this->seminar_id = $args["seminar_id"];
         $seminar = new Seminar($this->seminar_id);
-        
+
         $query = "SELECT * FROM seminare WHERE Seminar_id = ?";
         $parameters = array($this->seminar_id);
         $statement = DBManager::get()->prepare($query);
@@ -272,7 +272,7 @@ class ExternModuleTemplateLecturedetails extends ExternModule {
             }
 
             $lecturers = array_keys($seminar->getMembers('dozent'));
-            
+
             $l = 0;
             foreach ($lecturers as $lecturer) {
                 $query = "SELECT {$GLOBALS['_fullname_sql'][$name_sql]} AS name, username, Vorname, Nachname, title_rear, title_front FROM auth_user_md5 aum LEFT JOIN user_info ui USING(user_id) WHERE aum.user_id = ?";
@@ -293,7 +293,7 @@ class ExternModuleTemplateLecturedetails extends ExternModule {
             }
 
             $tutors = array_keys($seminar->getMembers('tutor'));
-            
+
             $l = 0;
             foreach ($tutors as $tutor) {
                 $query = "SELECT {$GLOBALS['_fullname_sql'][$name_sql]} AS name, username, Vorname, Nachname, title_rear, title_front FROM auth_user_md5 aum LEFT JOIN user_info ui USING(user_id) WHERE aum.user_id = ?";
@@ -484,7 +484,12 @@ class ExternModuleTemplateLecturedetails extends ExternModule {
         }
         $content['STUDIP-DATA']['COUNT-POSTINGS'] = $count;
 
-        $query = "SELECT count(*) as count_documents FROM dokumente WHERE seminar_id = ?";
+        $query = "SELECT COUNT(*) AS count_documents
+                  FROM folders
+                  INNER JOIN file_refs ON folder_id = folders.id
+                  WHERE range_id = ? AND range_type = 'course'
+            AND folder_type IN ('RootFolder', 'StandardFolder')
+                  GROUP BY range_id";
         $parameters = array($this->seminar_id);
         $statement = DBManager::get()->prepare($query);
         $statement->execute($parameters);
