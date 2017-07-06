@@ -176,14 +176,26 @@ class User extends AuthUserMd5
      */
     public static function buildExisting($data)
     {
+        return self::build($data, true);
+    }
+
+    /**
+     * build new object with given data
+     *
+     * @param $data array assoc array of record
+     * @return User
+     */
+    public static function build($data, $is_new = false)
+    {
         $user = new User();
         $user->info = new UserInfo();
         $user->setData($data);
-        $user->setNew(false);
+        $user->setNew($is_new);
         foreach (array_keys($user->db_fields) as $field) {
             $user->content_db[$field] = $user->content[$field];
         }
-        $user->info = UserInfo::buildExisting($data);
+        $user->info = UserInfo::build($data);
+        $user->info->setNew($is_new);
         return $user;
     }
 
@@ -1043,11 +1055,15 @@ class User extends AuthUserMd5
 
         // Dateieintragungen und Ordner
         // TODO (mlunzena) should post a notification
-        $query = "UPDATE IGNORE dokumente SET user_id = ? WHERE user_id = ?";
+        $query = "UPDATE IGNORE file_refs SET user_id = ? WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
 
-        $query = "UPDATE IGNORE folder SET user_id = ? WHERE user_id = ?";
+        $query = "UPDATE IGNORE files SET user_id = ? WHERE user_id = ?";
+        $statement = DBManager::get()->prepare($query);
+        $statement->execute(array($new_id, $old_id));
+
+        $query = "UPDATE IGNORE folders SET user_id = ? WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
 
