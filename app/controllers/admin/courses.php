@@ -631,6 +631,10 @@ class Admin_CoursesController extends AuthenticatedController
                 $row['last_activity'] = $course['lastActivity'];
             }
 
+            if (in_array('semester', $filter_config)) {
+                $row['semester'] = $sem->start_semester->name;
+            }
+
             $data[$course_id] = $row;
         }
 
