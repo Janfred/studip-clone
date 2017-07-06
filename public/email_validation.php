@@ -37,10 +37,11 @@ $perm->check('user');
 include 'lib/seminar_open.php'; // initialise Stud.IP-Session
 
 $hash = Seminar_Register_Auth::get_validation_hash($user->id);
+
 // hier wird noch mal berechnet, welches secret in der Bestaetigungsmail uebergeben wurde
 $secret = Request::option('secret');
 PageLayout::setHelpKeyword('Basis.AnmeldungMail');
-PageLayout::setTitle(_('Aktivierung'));
+PageLayout::setTitle(_('Bestätigung der E-Mail-Adresse'));
 
 //user bereits vorhanden
 if ($perm->have_perm('autor')) {
