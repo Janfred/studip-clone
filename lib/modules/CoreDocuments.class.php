@@ -14,7 +14,8 @@ class CoreDocuments implements StudipModule
 
     function getIconNavigation($course_id, $last_visit, $user_id)
     {
-        $navigation = new Navigation(_('Dateibereich'), "seminar_main.php?auswahl=$course_id&redirect_to=folder.php");
+        $range_type = get_object_type($course_id, ['sem', 'inst']) == 'sem' ? 'course' : 'institute';
+        $navigation = new Navigation(_('Dateibereich'), "seminar_main.php?auswahl=$course_id&redirect_to=dispatch.php/' . $range_type . '/files'");
         $navigation->setImage(Icon::create('files', 'inactive'));
         return $navigation;
     }

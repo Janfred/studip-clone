@@ -172,7 +172,7 @@ class ExternModuleTemplateDownload extends ExternModule {
         }
         if ($query_order) {
             ksort($query_order, SORT_NUMERIC);
-            $query_order = ' ORDER BY ' . implode(',', $query_order) . ' DESC';
+            $query_order = implode(',', $query_order) . ' DESC';
         }
 
         if (!$nameformat = $this->config->getValue('Main', 'nameformat')) {
@@ -183,133 +183,73 @@ class ExternModuleTemplateDownload extends ExternModule {
         $generic_datafields = $this->config->getValue('TemplateGeneric', 'genericdatafields');
 
         $downloadable_file_refs = [];
-        
+
         $top_folder = Folder::findTopFolder($seminar_id);
         $top_folder = $top_folder->getTypedFolder();
-        
-        $subfolders = FileManager::getFolderFilesRecursive($top_folder, 'nobody')['folders'];
-        
-        foreach($top_folder->getFiles() as $file_ref) {
-            if($top_folder->isFileDownloadable($file_ref->id, 'nobody')) {
-                $downloadable_file_refs[] = $file_ref;
+
+        $files = $folders = [];
+        extract(FileManager::getFolderFilesRecursive($top_folder, 'nobody'));
+
+        foreach ($files as $f) {
+            if ($folders[$f->folder_id]->isFileDownloadable($f, 'nobody')) {
+                $file_data = $f->toArray();
+                $file_data['fullname'] = $f->owner->getFullname($nameformat);
+                $file_data['username'] = $f->owner->username;
+                $file_data['vorname'] = $f->owner->vorname;
+                $file_data['nachname'] = $f->owner->nachname;
+                $file_data['title_front'] = $f->owner->title_front;
+                $file_data['title_rear'] = $f->owner->title_rear;
+
+                $file_data['filename'] = $f->name;
+                $file_data['filesize'] = $f->size;
+                $downloadable_file_refs[] = $file_data;
             }
         }
-        
-        foreach($subfolders as $subfolder) {
-            foreach($subfolder->getFiles() as $file_ref) {
-                if($subfolder->isFileDownloadable($file_ref->id, 'nobody')) {
-                    $downloadable_file_refs[] = $file_ref;
-                }
-            }
-        }
-        
-        
-        
-        /*
-        $folder_tree = TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $seminar_id));
 
-        $allowed_folders = $folder_tree->getReadableFolders('nobody');
-        $mrks =  str_repeat('?,', count($allowed_folders) - 1) . '?';
-        $query = "SELECT dokument_id, name, description, filename, d.mkdate, d.chdate, filesize, ";
-        $query .= $GLOBALS['_fullname_sql'][$nameformat];
-        $query .= "AS fullname, Vorname, Nachname, title_front, title_rear, username, aum.user_id, author_name FROM dokumente d LEFT JOIN user_info USING (user_id) ";
-        $query .= "LEFT JOIN auth_user_md5 aum USING (user_id) WHERE ";
-        $query .= "seminar_id = ? AND range_id IN ($mrks)$query_order";
 
-        $parameters = $allowed_folders;
-        $parameters[] = $seminar_id;          
-        $statement = DBManager::get()->prepare($query);
-        $statement->execute($parameters);
-        $row = $statement->fetch(PDO::FETCH_ASSOC);
-        */
-        
-        
         if (empty($downloadable_file_refs)) {
             $content['NO-FILES']['NO-FILES-TEXT'] = $this->config->getValue('Main', 'nodatatext');
         } else {
             $i = 0;
-            foreach($downloadable_file_refs as $downloadable_file_ref) {
-                
+            $downloadable_file_refs = new SimpleCollection($downloadable_file_refs);
+            $downloadable_file_refs->orderBy($query_order);
+            foreach ($downloadable_file_refs as $downloadable_file_ref) {
+
                 $content['FILES']['FILE'][$i]['FILE_ICON-HREF'] = Icon::create(
-                    FileManager::getIconNameForMimeType($downloadable_file_ref->file->mime_type),
+                    FileManager::getIconNameForMimeType($downloadable_file_ref->mime_type),
                     'clickable'
                     )->asImagePath(16);
-                
-                /*
-                preg_match("/^.+\.([a-z1-9_-]+)$/i", $row['filename'], $file_suffix);
 
-                $icon = '';
-                switch ($file_suffix[1]) {
-                    case 'txt' :
-                        if (!$content['FILES']['FILE'][$i]['FILE_ICON-HREF'] = $this->config->getValue('Main', 'icontxt'))
-                            $content['FILES']['FILE'][$i]['FILE_ICON-HREF'] = Icon::create('file-text', 'clickable')->asImagePath(16);
-                        break;
-                    case 'xls' :
-                        if (!$content['FILES']['FILE'][$i]['FILE_ICON-HREF'] = $this->config->getValue('Main', 'iconxls'))
-                            $content['FILES']['FILE'][$i]['FILE_ICON-HREF'] = Icon::create('file-xls', 'clickable')->asImagePath(16);
-                        break;
-                    case 'ppt' :
-                        if (!$content['FILES']['FILE'][$i]['FILE_ICON-HREF'] = $this->config->getValue('Main', 'iconppt'))
-                            $content['FILES']['FILE'][$i]['FILE_ICON-HREF'] = Icon::create('file-presentation', 'clickable')->asImagePath(16);
-                        break;
-                    case 'rtf' :
-                        if (!$content['FILES']['FILE'][$i]['FILE_ICON-HREF'] = $this->config->getValue('Main', 'iconrtf'))
-                            $content['FILES']['FILE'][$i]['FILE_ICON-HREF'] = Icon::create('file-text', 'clickable')->asImagePath(16);
-                        break;
-                    case 'zip' :
-                    case 'tgz' :
-                    case 'gz' :
-                        if (!$content['FILES']['FILE'][$i]['FILE_ICON-HREF'] = $this->config->getValue('Main', 'iconzip'))
-                            $content['FILES']['FILE'][$i]['FILE_ICON-HREF'] = Icon::create('file-archive', 'clickable')->asImagePath(16);
-                        break;
-                    case 'jpg' :
-                    case 'png' :
-                    case 'gif' :
-                    case 'jpeg' :
-                    case 'tif' :
-                        if (!$content['FILES']['FILE'][$i]['FILE_ICON-HREF'] = $this->config->getValue('Main', 'iconpic'))
-                            $content['FILES']['FILE'][$i]['FILE_ICON-HREF'] = Icon::create('file-pic', 'clickable')->asImagePath(16);
-                        break;
-                    case 'pdf' :
-                        if (!$content['FILES']['FILE'][$i]['FILE_ICON-HREF'] = $this->config->getValue('Main', 'iconpdf'))
-                            $content['FILES']['FILE'][$i]['FILE_ICON-HREF'] = Icon::create('file-pdf', 'clickable')->asImagePath(16);
-                        break;
-                    default :
-                        if (!$content['FILES']['FILE'][$i]['FILE_ICON-HREF'] = $this->config->getValue('Main', 'icondefault'))
-                            $content['FILES']['FILE'][$i]['FILE_ICON-HREF'] = Icon::create('file-generic', 'clickable')->asImagePath(16);
-                }
-                */
-                
+
                 $content['FILES']['FILE'][$i]['FILE_NO'] = $i + 1;
 
-                $download_link = $downloadable_file_ref->getDownloadURL();
-                //$download_link = GetDownloadLink($row['dokument_id'], $row['filename']);
+                $download_link = $downloadable_file_ref->download_url;
 
                 $content['FILES']['FILE'][$i]['FILE_HREF'] = $download_link;
                 $content['FILES']['FILE'][$i]['FILE_NAME'] = ExternModule::ExtHtmlReady($downloadable_file_ref->name);
-                $content['FILES']['FILE'][$i]['FILE_FILE-NAME'] = ExternModule::ExtHtmlReady($downloadable_file_ref->filename);
+                $content['FILES']['FILE'][$i]['FILE_FILE-NAME'] = ExternModule::ExtHtmlReady($downloadable_file_ref->name);
                 $content['FILES']['FILE'][$i]['FILE_DESCRIPTION'] = ExternModule::ExtHtmlReady(mila_extern($downloadable_file_ref->description,
                                                      $this->config->getValue("Main", "lengthdesc")));
                 $content['FILES']['FILE'][$i]['FILE_UPLOAD-DATE'] = strftime($this->config->getValue("Main", "dateformat"), $downloadable_file_ref->mkdate);
-                $content['FILES']['FILE'][$i]['FILE_SIZE'] = $downloadable_file_ref->file->size > 1048576 ? round($downloadable_file_ref->file->size / 1048576, 1) . " MB" : round($downloadable_file_ref->file->size / 1024, 1) . " kB";
+                $content['FILES']['FILE'][$i]['FILE_SIZE'] = $downloadable_file_ref->filesize > 1048576 ? round($downloadable_file_ref->filesize / 1048576, 1) . " MB" : round($downloadable_file_ref->filesize / 1024, 1) . " kB";
 
-                $content['FILES']['FILE'][$i]['USERNAME'] = $downloadable_file_ref->user->username;
-                $content['FILES']['FILE'][$i]['FULLNAME'] = ExternModule::ExtHtmlReady($downloadable_file_ref->owner->getFullName());
-                $content['FILES']['FILE'][$i]['FIRSTNAME'] = ExternModule::ExtHtmlReady($downloadable_file_ref->owner->vorname);
-                $content['FILES']['FILE'][$i]['LASTNAME'] = ExternModule::ExtHtmlReady($downloadable_file_ref->owner->nachname);
-                $content['FILES']['FILE'][$i]['TITLEFRONT'] = ExternModule::ExtHtmlReady($downloadable_file_ref->owner->title_front);
-                $content['FILES']['FILE'][$i]['TITLEREAR'] = ExternModule::ExtHtmlReady($downloadable_file_ref->owner->title_rear);
-                $content['FILES']['FILE'][$i]['PERSONDETAIL-HREF'] = $this->elements['LinkInternTemplate']->createUrl('Persondetails', array('link_args' => 'username=' . $downloadable_file_ref->owner->username));
+                $content['FILES']['FILE'][$i]['USERNAME'] = $downloadable_file_ref->username;
+                $content['FILES']['FILE'][$i]['FULLNAME'] = ExternModule::ExtHtmlReady($downloadable_file_ref->fullname);
+                $content['FILES']['FILE'][$i]['FIRSTNAME'] = ExternModule::ExtHtmlReady($downloadable_file_ref->vorname);
+                $content['FILES']['FILE'][$i]['LASTNAME'] = ExternModule::ExtHtmlReady($downloadable_file_ref->nachname);
+                $content['FILES']['FILE'][$i]['TITLEFRONT'] = ExternModule::ExtHtmlReady($downloadable_file_ref->title_front);
+                $content['FILES']['FILE'][$i]['TITLEREAR'] = ExternModule::ExtHtmlReady($downloadable_file_ref->title_rear);
+                $content['FILES']['FILE'][$i]['PERSONDETAIL-HREF'] = $this->elements['LinkInternTemplate']->createUrl(['Persondetails', array('link_args' => 'username=' . $downloadable_file_ref->username)]);
 
                 // if user is member of a group then link name to details page
                 $link_persondetail = '';
                 if (GetRoleNames(GetAllStatusgruppen($this->config->range_id, $downloadable_file_ref->user_id))) {
-                    $content['FILES']['FILE'][$i]['PERSONDETAIL-LINK']['LINK_PERSONDETAIL-HREF'] = $this->elements['LinkInternTemplate']->createUrl('Persondetails', array('link_args' => 'username=' . $downloadable_file_ref->owner->username));
-                    $content['FILES']['FILE'][$i]['PERSONDETAIL-LINK']['LINK_FULLNAME'] = ExternModule::ExtHtmlReady($downloadable_file_ref->owner->getFullName());
-                    $content['FILES']['FILE'][$i]['PERSONDETAIL-LINK']['LINK_FIRSTNAME'] = ExternModule::ExtHtmlReady($downloadable_file_ref->owner->vorname);
-                    $content['FILES']['FILE'][$i]['PERSONDETAIL-LINK']['LINK_LASTNAME'] = ExternModule::ExtHtmlReady($downloadable_file_ref->owner->nachname);
-                    $content['FILES']['FILE'][$i]['PERSONDETAIL-LINK']['LINK_TITLEFRONT'] = ExternModule::ExtHtmlReady($downloadable_file_ref->owner->title_front);
-                    $content['FILES']['FILE'][$i]['PERSONDETAIL-LINK']['LINK_TITLEREAR'] = ExternModule::ExtHtmlReady($downloadable_file_ref->owner->title_rear);
+                    $content['FILES']['FILE'][$i]['PERSONDETAIL-LINK']['LINK_PERSONDETAIL-HREF'] = $this->elements['LinkInternTemplate']->createUrl(['Persondetails', array('link_args' => 'username=' . $downloadable_file_ref->username)]);
+                    $content['FILES']['FILE'][$i]['PERSONDETAIL-LINK']['LINK_FULLNAME'] = ExternModule::ExtHtmlReady($downloadable_file_ref->fullname);
+                    $content['FILES']['FILE'][$i]['PERSONDETAIL-LINK']['LINK_FIRSTNAME'] = ExternModule::ExtHtmlReady($downloadable_file_ref->vorname);
+                    $content['FILES']['FILE'][$i]['PERSONDETAIL-LINK']['LINK_LASTNAME'] = ExternModule::ExtHtmlReady($downloadable_file_ref->nachname);
+                    $content['FILES']['FILE'][$i]['PERSONDETAIL-LINK']['LINK_TITLEFRONT'] = ExternModule::ExtHtmlReady($downloadable_file_ref->title_front);
+                    $content['FILES']['FILE'][$i]['PERSONDETAIL-LINK']['LINK_TITLEREAR'] = ExternModule::ExtHtmlReady($downloadable_file_ref->title_rear);
                 }
 
                 // generic data fields

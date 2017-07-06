@@ -100,7 +100,7 @@ class ExternModuleDownload extends ExternModule {
     }
 
     function toString ($args = NULL) {
-        
+
         $error_message = "";
 
         // check for valid range_id
@@ -118,7 +118,7 @@ class ExternModuleDownload extends ExternModule {
             $statement = DBManager::get()->prepare($query);
             $statement->execute($parameters);
             $row = $statement->fetch(PDO::FETCH_ASSOC);
-            
+
             if ($row === false && $row['Lesezugriff'] == 0)
                 $error_message = $GLOBALS["EXTERN_ERROR_MESSAGE"];
         } else {
@@ -134,56 +134,36 @@ class ExternModuleDownload extends ExternModule {
         }
         if ($query_order) {
             ksort($query_order, SORT_NUMERIC);
-            $query_order = " ORDER BY " . implode(",", $query_order) . " DESC";
+            $query_order = implode(",", $query_order) . " DESC";
         }
 
         if (!$nameformat = $this->config->getValue("Main", "nameformat")) {
             $nameformat = "no_title_short";
         }
-        
+
         $downloadable_file_refs = [];
-        
+
         $top_folder = Folder::findTopFolder($seminar_id);
         $top_folder = $top_folder->getTypedFolder();
-        
-        $subfolders = FileManager::getFolderFilesRecursive($top_folder, 'nobody')['folders'];
-        
-        foreach($top_folder->getFiles() as $file_ref) {
-            if($file_ref->terms_of_use->download_condition == '0') {
-                $downloadable_file_refs[] = $file_ref;
-            }
-        }
-        
-        foreach($subfolders as $subfolder) {
-            if($subfolder instanceof StandardFolder) {
-                foreach($subfolder->getFiles() as $file_ref) {
-                    if($file_ref->terms_of_use->download_condition == '0') {
-                        $downloadable_file_refs[] = $file_ref;
-                    }
-                }
-            }
-        }
-        
-        /*
-        $folder_tree = TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $seminar_id));
-        $allowed_folders = $folder_tree->getReadableFolders('nobody');
-        $query = "SELECT dokument_id, description, filename, d.mkdate, d.chdate, filesize, ";
-        $query .= $GLOBALS["_fullname_sql"][$nameformat];
-        $query .= "AS fullname, username, aum.user_id, author_name FROM dokumente d LEFT JOIN user_info USING (user_id) ";
-        $query .= "LEFT JOIN auth_user_md5 aum USING (user_id) WHERE ";
-        $query .= "seminar_id = ? AND range_id IN ('";
-        $query .= implode("','", $allowed_folders) . "')$query_order";
 
-        $parameters = array($seminar_id);
-        $statement = DBManager::get()->prepare($query);
-        $statement->execute($parameters);
-        $row = $statement->fetch(PDO::FETCH_ASSOC);
-        */
+        $files = $folders = [];
+        extract(FileManager::getFolderFilesRecursive($top_folder, 'nobody'));
+
+        foreach ($files as $f) {
+            if ($folders[$f->folder_id]->isFileDownloadable($f, 'nobody')) {
+                $file_data = $f->toArray();
+                $file_data['fullname'] = $f->owner->getFullname($nameformat);
+                $file_data['username'] = $f->owner->username;
+                $file_data['filename'] = $f->name;
+                $file_data['filesize'] = $f->size;
+                $downloadable_file_refs[] = $file_data;
+            }
+        }
 
         if (empty($downloadable_file_refs)) {
             $error_message = $this->config->getValue("Main", "nodatatext");
         }
-        
+
         $out = $this->elements["TableHeadrow"]->toString();
 
         if ($error_message) {
@@ -193,39 +173,41 @@ class ExternModuleDownload extends ExternModule {
             $this->config->setValue('Main', 'width', array('100%'));
             $out = $this->elements['TableRow']->toString(array('content' => array('' => $error_message)));
         } else {
+
             $table_row_data["data_fields"] = $this->data_fields;
-            
-            foreach($downloadable_file_refs as $downloadable_file_ref) {
-                $icon = Icon::create(FileManager::getIconNameForMimeType($downloadable_file_ref->file->mime_type), 'clickable');
-                
-                $download_link = $downloadable_file_ref->getDownloadURL();
-                
+            $downloadable_file_refs = new SimpleCollection($downloadable_file_refs);
+            $downloadable_file_refs->orderBy($query_order);
+            foreach ($downloadable_file_refs as $downloadable_file_ref) {
+                $icon = Icon::create(FileManager::getIconNameForMimeType($downloadable_file_ref->mime_type), 'clickable');
+
+                $download_link = $downloadable_file_ref->download_url;
+
                 // Aufbereiten der Daten
                 $table_row_data["content"] = array(
                     "icon"        => sprintf("<a href=\"%s\">%s</a>",
                                              $download_link,
                                              $icon->asImg()),
-                                                                             
+
                     "filename"    => $this->elements["Link"]->toString(array("content" =>
                                                         htmlReady($downloadable_file_ref->name), "link" => $download_link)),
-                                                         
+
                     "description" => htmlReady(mila_extern($downloadable_file_ref->description,
                                                      $this->config->getValue("Main", "lengthdesc"))),
-                    
+
                     "mkdate"      => strftime($this->config->getValue("Main", "dateformat"), $downloadable_file_ref->mkdate),
-                    
-                    "filesize"    => $downloadable_file_ref->file->size > 1048576 ? round($downloadable_file_ref->file->size / 1048576, 1) . " MB"
-                        : round($downloadable_file_ref->file->size / 1024, 1) . " kB",
-                                                            
+
+                    "filesize"    => $downloadable_file_ref->size > 1048576 ? round($downloadable_file_ref->size / 1048576, 1) . " MB"
+                        : round($downloadable_file_ref->size / 1024, 1) . " kB",
+
                 );
                 // if user is member of a group then link name to details page
-                if (GetRoleNames(GetAllStatusgruppen($this->config->range_id, $row['user_id']))) {
-                    $table_row_data['content']['fullname'] = 
+                if (GetRoleNames(GetAllStatusgruppen($this->config->range_id, $downloadable_file_ref['user_id']))) {
+                    $table_row_data['content']['fullname'] =
                             $this->elements['LinkIntern']->toString(array('content' =>
-                            htmlReady($downloadable_file_ref->owner->getFullName), 'module' => 'Persondetails',
-                            'link_args' => 'username=' . $downloadable_file_ref->owner->username));
+                            htmlReady($downloadable_file_ref->fullname), 'module' => 'Persondetails',
+                            'link_args' => 'username=' . $downloadable_file_ref->username));
                 } else {
-                    $table_row_data['content']['fullname'] = htmlReady($downloadable_file_ref->owner->username);
+                    $table_row_data['content']['fullname'] = htmlReady($downloadable_file_ref->fullname);
                 }
                 $out .= $this->elements["TableRow"]->toString($table_row_data);
             }

@@ -16,6 +16,8 @@
 
 class Institute_FilesController extends AuthenticatedController
 {
+    protected $allow_nobody = true;
+
     public function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
@@ -30,6 +32,7 @@ class Institute_FilesController extends AuthenticatedController
         PageLayout::setTitle($this->institute->getFullname() . " - " . _("Dateien"));
 
         $this->last_visitdate = object_get_visit($this->institute->id, 'documents');
+        Navigation::activateItem('/course/files');
     }
 
     private function buildSidebar()
@@ -67,6 +70,24 @@ class Institute_FilesController extends AuthenticatedController
         }
 
         $sidebar->addWidget($actions);
+
+        $views = new ViewsWidget();
+        $views->addLink(
+            _('Ordneransicht'),
+            $this->url_for('institute/files/index'),
+            null,
+            [],
+            'index'
+        )->setActive(true);
+        $views->addLink(
+            _('Alle Dateien'),
+            $this->url_for('institute/files/flat'),
+            null,
+            [],
+            'flat'
+        );
+
+        $sidebar->addWidget($views);
     }
 
     /**
@@ -74,8 +95,6 @@ class Institute_FilesController extends AuthenticatedController
      **/
     public function index_action($topFolderId = '')
     {
-        Navigation::activateItem('/course/files_new/tree');
-
         $this->marked_element_ids = [];
 
         if (!$topFolderId) {
@@ -104,8 +123,6 @@ class Institute_FilesController extends AuthenticatedController
      **/
     public function flat_action()
     {
-        Navigation::activateItem('/course/files_new/flat');
-
         $this->marked_element_ids = [];
 
         $folder = Folder::findTopFolder($this->institute->id);
