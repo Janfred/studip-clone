@@ -398,9 +398,9 @@ class Admin_UserController extends AuthenticatedController
             }
 
             //changing studiendaten
-            if (in_array($editPerms[0], ['autor', 'tutor', 'dozent']) && Request::option('new_studiengang') != 'none' && Request::option('new_abschluss') != 'none') {
+            if (in_array($editPerms[0], ['autor', 'tutor', 'dozent']) && Request::option('new_studiengang', 'none') != 'none' && Request::option('new_abschluss', 'none') != 'none') {
                 //change studycourses
-                if (Request::option('new_studiengang') == 'none' || Request::option('new_abschluss') == 'none') {
+                if (Request::option('new_studiengang', 'none') == 'none' || Request::option('new_abschluss', 'none') == 'none') {
                     $details[] = _('<b>Der Studiengang wurde nicht hinzugefügt.</b> Bitte geben Sie Fach und Abschluss ein.');
                 } else {
                     $user_stc = UserStudyCourse::find([
@@ -478,7 +478,7 @@ class Admin_UserController extends AuthenticatedController
                 NotificationCenter::postNotification('UserInstitutionDidUpdate', Request::option('new_inst'), $user_id);
                 InstituteMember::ensureDefaultInstituteForUser($user_id);
                 $details[] = _('Die Einrichtung wurde hinzugefügt.');
-            } elseif (Request::option('new_inst') != 'none' && Request::option('new_student_inst') == Request::option('new_inst') && $editPerms[0] != 'root') {
+            } elseif (Request::option('new_inst') != '' && Request::option('new_student_inst') == Request::option('new_inst') && $editPerms[0] != 'root') {
                 $details[] = _('<b>Die Einrichtung wurde nicht hinzugefügt.</b> Sie können keine Person gleichzeitig als Studierende/-r und als Mitarbeiter/-in einer Einrichtung hinzufügen.');
             }
 
