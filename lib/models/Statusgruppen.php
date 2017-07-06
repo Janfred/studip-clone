@@ -195,6 +195,11 @@ class Statusgruppen extends SimpleORMap
         return $this->name;
     }
 
+    public function getName()
+    {
+        return $this->name;
+    }
+
     /**
      * Puts out an array of all gendered userroles for a user in a certain
      * context

@@ -84,7 +84,7 @@ function GetAllStatusgruppen($parent, $check_user = null, $exclude = false)
 
         if (!$check_user || !$exclude || $user_in_child || $user_there) {
             $childs[$group['statusgruppe_id']] = array(
-                'role'          => Statusgruppe::getFromArray($group),
+                'role'          => Statusgruppen::build($group),
                 'visible'       => $visible,
                 'user_there'    => $user_there,
                 'user_in_child' => $user_in_child,
@@ -98,7 +98,7 @@ function GetAllStatusgruppen($parent, $check_user = null, $exclude = false)
 
 
 /**
- * 
+ *
  */
 function GetRoleNames($roles, $level = 0, $pred = '', $all = false) {
     $out = array();

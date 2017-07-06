@@ -106,16 +106,18 @@ class PublicCoursesController extends AuthenticatedController
         $seminar_ids = array_keys($seminars);
 
         // Documents
-        $query = "SELECT seminar_id, COUNT(*) AS count
-                  FROM dokumente
-                  WHERE seminar_id IN (?)
-                  GROUP BY seminar_id";
+        $query = "SELECT range_id, COUNT(*) AS count
+                  FROM folders
+                  INNER JOIN file_refs ON folder_id = folders.id
+                  WHERE range_id IN (?) AND range_type = 'course'
+                  AND folder_type IN ('RootFolder', 'StandardFolder')
+                  GROUP BY range_id";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($seminar_ids));
         while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-            $nav = new Navigation('files', 'folder.php?cmd=tree');
+            $nav = new Navigation('files', 'dispatch.php/course/files/index');
             $nav->setImage(Icon::create('files', 'inactive', ["title" => sprintf(_('%s Dokumente'),$row['count'])]));
-            $seminars[$row['seminar_id']]['navigations']['files'] = $nav;
+            $seminars[$row['range_id']]['navigations']['files'] = $nav;
         }
 
         // News
