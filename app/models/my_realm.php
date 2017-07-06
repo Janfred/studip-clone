@@ -188,56 +188,6 @@ class MyRealmModel
                 );
             }
             return $navigation;
-
-
-            $result = self::getDocumentsVisitDate($object_id, $user_id, $unreadable_folders);
-
-            if (!is_null($result['last_modified'])) {
-                if ($my_obj['last_modified'] < $result['last_modified']) {
-                    $my_obj['last_modified'] = $result['last_modified'];
-                }
-                $nav = new Navigation('files');
-                if ($result['neue']) {
-                    $nav->setURL(URLHelper::getURL('dispatch.php/course/files/flat', ['select' => 'new']));
-                    $nav->setImage(
-                        Icon::create(
-                            'files+new',
-                            'attention',
-                            [
-                                'title' => sprintf(
-                                    ngettext(
-                                        '%1$d Dokument, %2$d neues',
-                                        '%1$d Dokumente, %2$d neue',
-                                        $result['count']
-                                    ),
-                                    $result['count'],
-                                    $result['neue']
-                                )
-                            ]
-                        )
-                    );
-                    $nav->setBadgeNumber($result['neue']);
-                } else {
-                    $nav->setURL(URLHelper::getURL('dispatch.php/course/files/index'));
-                    $nav->setImage(
-                        Icon::create(
-                            'files',
-                            'inactive',
-                            [
-                                'title' => sprintf(
-                                    ngettext(
-                                        '%d Dokument',
-                                        '%d Dokumente',
-                                        $result['count']
-                                    ),
-                                    $result['count']
-                                )
-                            ]
-                        )
-                    );
-                }
-                return $nav;
-            }
         }
 
         return null;
@@ -1255,28 +1205,6 @@ class MyRealmModel
         return null;
     }
 
-
-    public static function getDocumentsVisitDate($object_id, $user_id, $unreadable_folders = array())
-    {
-        $sql = "SELECT
-              MAX(IF ((d.chdate > IFNULL(ouv.visitdate, :threshold) AND d.user_id !=:user_id), d.chdate, 0)) AS last_modified,
-              COUNT(d.dokument_id) as count,
-              COUNT(IF((d.chdate > IFNULL(ouv.visitdate, :threshold) AND d.user_id !=:user_id), d.dokument_id, NULL)) AS neue
-            FROM
-              dokumente d
-            LEFT JOIN object_user_visits ouv
-              ON(ouv . object_id = d . Seminar_id AND ouv . user_id = :user_id AND ouv . type = 'documents')
-            WHERE d . Seminar_id = :course_id";
-        $sql .= (count($unreadable_folders) ? " AND d . range_id NOT IN('" . join("', '", $unreadable_folders) . "')" : "");
-        $sql .= " GROUP BY d.Seminar_id";
-
-        $statement = DBManager::get()->prepare($sql);
-        $statement->bindValue(':user_id', $user_id);
-        $statement->bindValue(':course_id', $object_id);
-        $statement->bindValue(':threshold', ($threshold = Config::get()->NEW_INDICATOR_THRESHOLD) ? strtotime("-{$threshold} days 0:00:00") : 0);
-        $statement->execute();
-        return $statement->fetch(PDO::FETCH_ASSOC);
-    }
 
     /**
      * Get the whole icon-navigation for a given course

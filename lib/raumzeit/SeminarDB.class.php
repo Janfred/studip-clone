@@ -33,15 +33,15 @@
  * @version     19. Oktober 2005
  * @access      protected
  * @package     raumzeit
+ * @deprecated
  */
 
 class SeminarDB
 {
     function getIssues($seminar_id)
     {
-        $query = "SELECT themen.*, folder.range_id, folder.folder_id
+        $query = "SELECT *
                   FROM themen
-                  LEFT JOIN folder ON (range_id = issue_id)
                   WHERE themen.seminar_id = ?
                   ORDER BY priority";
         $statement = DBManager::get()->prepare($query);
@@ -78,7 +78,7 @@ class SeminarDB
             if ($data['related_groups']) {
                 $data['related_groups'] = explode(',', $data['related_groups']);
             }
-            
+
             $ret[] = $data;
         }
 
@@ -253,7 +253,7 @@ class SeminarDB
 
         return true;
     }
-    
+
     function getDeletedSingleDates($seminar_id, $start = 0, $end = 0)
     {
         $ret = array();

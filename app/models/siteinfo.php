@@ -383,13 +383,14 @@ class SiteinfoMarkupEngine {
                 break;
             case "mostdocuments":
                 $template->heading = _("die meisten Materialien (Dokumente)");
-                $sql = "SELECT a.seminar_id,
+                $sql = "SELECT b.seminar_id,
                                b.name AS display,
-                               count(a.seminar_id) AS count
+                               count(b.seminar_id) AS count
                         FROM seminare b
-                        INNER JOIN dokumente a USING(seminar_id)
+                        INNER JOIN folders ON (range_id = seminar_id)
+                        INNER JOIN file_refs ON (folders.id = folder_id)
                         WHERE b.visible=1
-                        GROUP BY a.seminar_id
+                        GROUP BY b.seminar_id
                         ORDER BY count DESC
                         LIMIT 10";
                 $template->type = "seminar";
@@ -481,10 +482,10 @@ class SiteinfoMarkupEngine {
         $indicator['user_autor'] = array("query" => "SELECT COUNT(*) FROM auth_user_md5 WHERE perms='autor'",
                                          "title" => _("registrierte Autoren"),
                                          "detail" => "");
-        $indicator['document'] = array("query" => "SELECT COUNT(*) FROM dokumente WHERE url = ''",
+        $indicator['document'] = array("query" => "SELECT COUNT(*) FROM files WHERE storage='disk'",
                                        "title" => _("Dokumente"),
                                        "detail" => "");
-        $indicator['link'] = array("query" => "SELECT COUNT(*) FROM dokumente WHERE url != ''",
+        $indicator['link'] = array("query" => "SELECT COUNT(*) FROM files WHERE storage='url'",
                                    "title" => _("verlinkte Dateien"),
                                    "detail" => "");
         $indicator['litlist'] = array("count" => array('count_table_rows','lit_list'),

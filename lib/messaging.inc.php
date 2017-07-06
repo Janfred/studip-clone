@@ -73,13 +73,13 @@ class messaging
         if (!$statement->fetchColumn()) {
             $this->remove_message($message_id);
 
-            // StEP 155: Mail Attachments
-            $query = "SELECT dokument_id FROM dokumente WHERE range_id = ?";
-            $statement = DBManager::get()->prepare($query);
-            $statement->execute(array($message_id));
-            $document_ids = $statement->fetchAll(PDO::FETCH_COLUMN);
-
-            array_map('delete_document', $document_ids);
+            $folder = Folder::findOneBySQL(
+                "range_id = ? AND parent_id='' AND folder_type='MessageFolder'",
+                [$message_id]
+            );
+            if ($folder) {
+                $folder->delete();
+            }
         }
         return true;
     }

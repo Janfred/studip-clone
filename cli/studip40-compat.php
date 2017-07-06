@@ -162,7 +162,7 @@ $rules = [
     'parse_link' => 'Removed. Use #{yellow:FileManager::fetchURLMetadata} instead.',
     'unzip_file' => 'Removed. Use #{yellow:Studip\ZipArchive::extractToPath} or #yellow:Studip\ZipArchive::test} instead.',
     'datei.inc.php' => 'Removed. Use methods in functions.inc.php, FileManager, FileArchiveManager, FileRef, File or FolderType instead.',
-
+    'TrackAccess' => 'Removed(?). Use {yellow:FileRef::incrementDownloadCounter}',
     //StudipDocument and related classes:
     'StudipDocument(' => 'Removed(?). Use class #{yellow:FileRef} instead.',
     'DocumentFolder(' => 'Removed(?). Use class #{yellow:Folder} instead.',
@@ -179,6 +179,7 @@ $rules = [
     '_SESSION["SessionSeminar"]' => 'Use class #{yellow:Context} instead',
     '_SESSION[\'SessionSeminar\']' => 'Use class #{yellow:Context} instead',
 
+    'Statusgruppe(' => 'Removed(?). Use class #{yellow:Statusgruppen} instead.',
 ];
 
 

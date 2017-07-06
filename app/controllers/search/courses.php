@@ -136,11 +136,12 @@ class Search_CoursesController extends AuthenticatedController
                 //$toplist = $this->getToplist(_('Teilnehmeranzahl'), $query, 'count', $parameters);
                 break;
             case 2:
-                $query = "SELECT dokumente.seminar_id, seminare.name, COUNT(dokumente.seminar_id) AS count
+                $query = "SELECT seminare.seminar_id, seminare.name, COUNT(file_refs.id) AS count
                       FROM seminare
-                      INNER JOIN dokumente USING (seminar_id)
+                      INNER JOIN folders ON (range_id = seminar_id)
+                      INNER JOIN file_refs ON (folders.id = folder_id)
                       {$sql_where_query_seminare}
-                      GROUP BY dokumente.seminar_id
+                      GROUP BY seminare.seminar_id
                       ORDER BY count DESC
                       LIMIT 5";
                 $statement = DBManager::get()->prepare($query);

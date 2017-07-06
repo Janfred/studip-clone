@@ -214,7 +214,7 @@ function get_object_type($id, $check_only = array())
         'date'       => "SELECT 1 FROM termine WHERE termin_id = ?",
         'user'       => "SELECT 1 FROM auth_user_md5 WHERE user_id = ?",
         'group'      => "SELECT 1 FROM statusgruppen WHERE statusgruppe_id = ?",
-        'dokument'   => "SELECT 1 FROM dokumente WHERE dokument_id = ?",
+        'dokument'   => "SELECT 1 FROM file_refs WHERE id = ?",
         'range_tree' => "SELECT 1 FROM range_tree WHERE item_id = ?",
     );
 
@@ -495,28 +495,6 @@ function get_userid($username = "")
     return $cache[$username];
 }
 
-
-/**
- * This function tracks user acces to several Data (only dokuments by now, to be extended)
- *
- * @param string $id          the id of the object to track
- * @param string $object_type the object type (optional)
- *
- * @return void
- */
-function TrackAccess ($id, $object_type = null)
-{
-    if (!$object_type){
-        $object_type = get_object_type($id, array('dokument'));
-    }
-    switch ($object_type) {         // what kind ob object shall we track
-        case "dokument":                // the object is a dokument, so downloads will be increased
-            $query = "UPDATE dokumente SET downloads = downloads + 1 WHERE dokument_id = ?";
-            $statement = DBManager::get()->prepare($query);
-            $statement->execute(array($id));
-            break;
-    }
-}
 
 /**
  * Return an array containing the nodes of the sem-tree-path

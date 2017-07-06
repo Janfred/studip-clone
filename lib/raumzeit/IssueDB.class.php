@@ -33,15 +33,15 @@
  * @version     19. Oktober 2005
  * @access      protected
  * @package     raumzeit
+ * @deprecated
  */
 
 class IssueDB {
 
     function restoreIssue($issue_id)
     {
-        $query = "SELECT themen.*, folder.range_id, folder.folder_id
+        $query = "SELECT *
                   FROM themen
-                  LEFT JOIN folder ON (range_id = issue_id)
                   WHERE issue_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($issue_id));
@@ -51,36 +51,8 @@ class IssueDB {
     function storeIssue(&$issue)
     {
         global $user;
-        if ($issue->file) {
-            $query = "SELECT 1 FROM folder WHERE range_id = ?";
-            $statement = DBManager::get()->prepare($query);
-            $statement->execute(array($issue->issue_id));
-            $check = $statement->fetchColumn();
 
-            if ($check) {
-                $query = "UPDATE folder SET name = ? WHERE range_id = ?";
-                $statement = DBManager::get()->prepare($query);
-                $statement->execute(array(
-                    $issue->toString(),
-                    $issue->issue_id
-                ));
-            } else {
-                $query = "INSERT INTO folder (folder_id, range_id, user_id, name, description, mkdate, chdate, seminar_id)
-                          VALUES (?, ?, ?, ?, ?, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), ?)";
-                $statement = DBManager::get()->prepare($query);
-                $statement->execute(array(
-                    md5(uniqid('folder', true)),
-                    $issue->issue_id,
-                    $user->id,
-                    $issue->toString(),
-                    _('Themenbezogener Dateiordner'),
-                    $issue->seminar_id
-                ));
-            }
-        } else {
-            //$db->query("DELETE FROM folder WHERE range_id = '{$issue->issue_id}'");
-        }
-        
+
         if ($issue->new) {
             $query = "INSERT INTO themen
                         (issue_id, seminar_id, author_id, title, description, mkdate, chdate, priority)
@@ -134,19 +106,6 @@ class IssueDB {
 
     function deleteIssue($issue_id, $seminar_id, $title = '', $description = '')
     {
-        if ($title) {
-            $query = "UPDATE folder
-                      SET name = ?, description= ?, range_id = ?
-                      WHERE range_id = ?";
-            $statement = DBManager::get()->prepare($query);
-            $statement->execute(array(
-                $title,
-                $description,
-                md5($seminar_id . 'top_folder'),
-                $issue_id
-            ));
-        }
-
         $query = "DELETE FROM themen WHERE issue_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($issue_id));
@@ -180,7 +139,7 @@ class IssueDB {
         }
         return $ret;
     }
-    
+
     static function deleteAllIssues($course_id)
     {
         $query = "SELECT issue_id FROM themen WHERE seminar_id = ?";
