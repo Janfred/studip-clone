@@ -35,15 +35,14 @@
 // +---------------------------------------------------------------------------+
 
 /**
-* Returns all statusgruppen for the given range.
-*
-* If there is no statusgruppe for the given range, it returns FALSE.
-*
-* @access   public
-* @param    string  $range_id
-* @param    string  $user_id
-* @return   array   (structure statusgruppe_id => name)
-*/
+ * Returns all statusgruppen for the given range.
+ *
+ * If there is no statusgruppe for the given range, it returns FALSE.
+ * @deprecated
+ * @param    string  $range_id
+ * @param    string  $user_id
+ * @return   array   (structure statusgruppe_id => name)
+ */
 function GetAllStatusgruppen($parent, $check_user = null, $exclude = false)
 {
     $query = "SELECT * FROM statusgruppen WHERE range_id = ? ORDER BY position";
@@ -98,7 +97,12 @@ function GetAllStatusgruppen($parent, $check_user = null, $exclude = false)
 
 
 /**
- *
+ * @deprecated
+ * @param $roles
+ * @param int $level
+ * @param string $pred
+ * @param bool $all
+ * @return array|null
  */
 function GetRoleNames($roles, $level = 0, $pred = '', $all = false) {
     $out = array();
@@ -125,6 +129,16 @@ function GetRoleNames($roles, $level = 0, $pred = '', $all = false) {
     return (sizeof($out) > 0 ? $out : null);
 }
 
+/**
+ * @deprecated
+ * @param $roles
+ * @param $user_id
+ * @param $default_entries
+ * @param null $filter
+ * @param int $level
+ * @param string $pred
+ * @return array
+ */
 function get_role_data_recursive($roles, $user_id, &$default_entries, $filter = null, $level = 0, $pred = '') {
     global $auth, $user, $has_denoted_fields;
 
@@ -136,17 +150,7 @@ function get_role_data_recursive($roles, $user_id, &$default_entries, $filter = 
 
         $the_user = User::find($user_id);
 
-        switch ($the_user->geschlecht) {
-            case 2:
-                $role['name'] = $role['role']->getName_w() ?: $role['role']->getName();
-                break;
-            case 1:
-                $role['name'] = $role['role']->getName_m() ?: $role['role']->getName();
-                break;
-            default:
-                $role['name'] = $role['role']->getName();
-                break;
-        }
+        $role['name'] = $role['role']->getGenderedName($the_user);
 
         $out_zw = '';
 
@@ -222,4 +226,59 @@ function get_role_data_recursive($roles, $user_id, &$default_entries, $filter = 
     }
 
     return array('standard' => $out, 'table' => $out_table);
+}
+
+/**
+ * @deprecated
+ * @param $roles
+ * @param int $level
+ * @param bool $parent_name
+ * @return array
+ */
+function getFlattenedRoles($roles, $level = 0, $parent_name = false) {
+    if (!is_array($roles)) return array();
+
+    $ret = array();
+
+    foreach ($roles as $id => $role) {
+        if (!isset($role['name'])) $role['name'] = $role['role']->getName();
+        $spaces = '';
+        for ($i = 0; $i < $level; $i++) $spaces .= '&nbsp;&nbsp;';
+
+        // generate an indented version of the role-name
+        $role['name'] = $spaces . $role['name'];
+
+        // generate a name with all parent-roles in the name
+        if ($parent_name) {
+            $role['name_long'] = $parent_name . ' > ' . $role['role']->getName();
+        } else {
+            $role['name_long'] = $role['role']->getName();
+        }
+
+        $ret[$id] = $role;
+
+        if ($role['child']) {
+            $ret = array_merge($ret, getFlattenedRoles($role['child'], $level + 1, $role['name_long']));
+        }
+
+    }
+
+    return $ret;
+}
+
+/**
+ * @deprecated
+ * @param $roles
+ * @param bool $omit_role
+ * @param int $level
+ */
+function displayOptionsForRoles($roles, $omit_role = false, $level = 0) {
+    if (is_array($roles)) foreach ($roles as $role_id => $role) {
+        if ($omit_role != $role_id) {
+            echo '<option value="'. $role_id .'">';
+            for ($i = 1; $i <= $level; $i++) echo '&nbsp; &nbsp;';
+            echo substr($role['role']->getName(), 0, 70).'</option>';
+        }
+        if ($role['child']) displayOptionsForRoles($role['child'], $omit_role, $level+1);
+    }
 }

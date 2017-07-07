@@ -5,9 +5,9 @@
 # Lifter010: TODO
 /**
 * extern_functions.inc.php
-* 
-* 
-* 
+*
+*
+*
 *
 * @author       Peter Thienel <pthienel@web.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @access       public
@@ -51,8 +51,8 @@ require_once 'lib/statusgruppe.inc.php';
 */
 function get_all_statusgruppen ($range_id) {
     $ret = array();
-    $roles = Statusgruppe::getFlattenedRoles(getAllStatusgruppen($range_id));
-    
+    $roles = getFlattenedRoles(getAllStatusgruppen($range_id));
+
     foreach ($roles as $id => $role) {
         $ret[$id] = $role['name_long'];
     }
@@ -63,12 +63,12 @@ function get_all_statusgruppen ($range_id) {
 * Returns an array containing the ids as key and the name as value
 * for every given name of statusgruppe.
 *
-* If there is no known statusgruppe in the given range and name, 
+* If there is no known statusgruppe in the given range and name,
 * it returns FALSE.
 *
 * @access   public
 * @param    string  $range_id
-* @param    string  $ids comma separated list of statusgruppe_id for 
+* @param    string  $ids comma separated list of statusgruppe_id for
 * statusgruppe valid for the given range (syntax: 'id1','id2',...)
 *
 * @return   array       (structure statusgruppe_id => name)
@@ -91,14 +91,14 @@ function print_footer () {
 }
 
 function mila_extern ($string, $length) {
-    if ($length > 0 && mb_strlen($string) > $length) 
+    if ($length > 0 && mb_strlen($string) > $length)
         $string = mb_substr($string, 0, $length) . "... ";
-    
+
     return $string;
 }
 
 function get_start_item_id ($object_id) {
-   
+
     $query = "SELECT item_id FROM range_tree WHERE studip_object_id=?";
     $parameters = array($object_id);
     $statement = DBManager::get()->prepare($query);
@@ -114,24 +114,24 @@ function get_generic_datafields ($object_type) {
 //  $datafields_obj = new DataFields();
     $fieldStructs = DataField::getDataFields($object_type);
 //  $generic_datafields = $datafields_obj->getFields($object_type);
-    
+
     if (sizeof($fieldStructs)) {
         foreach ($fieldStructs as $struct) {
             $datafields["ids"][] = $struct->getID();
             $datafields["names"][] = $struct->getName();
             $datafields["ids_names"][$struct->getID()] = $struct->getName();
-        }       
-        
+        }
+
         return $datafields;
     }
-    
+
     return FALSE;
 }
 
 function array_condense ($array) {
     foreach ($array as $value)
         $array_ret[] = $value;
-    
+
     return $array_ret;
 }
 
@@ -141,12 +141,12 @@ function update_generic_datafields (&$config, &$data_fields, &$field_names, $obj
         $config_datafields = $config->getValue("Main", "genericdatafields");
         if (!is_array($config_datafields))
             $config_datafields = array();
-        
+
         $visible = (array) $config->getValue("Main", "visible");
         $order = (array) $config->getValue("Main", "order");
         $aliases = (array) $config->getValue("Main", "aliases");
         $store = FALSE;
-        
+
         // data fields deleted
         if ($diff_generic_datafields = array_diff($config_datafields,
                 $generic_datafields["ids"])) {
@@ -163,7 +163,7 @@ function update_generic_datafields (&$config, &$data_fields, &$field_names, $obj
             $visible = array_condense($visible);
             $order = array_condense(array_flip($swapped_order));
             $aliases = array_condense($aliases);
-            
+
             $config_generic_datafields = array_diff($config_datafields,
                     $diff_generic_datafields);
             for ($i = 0; $i < sizeof($order); $i++) {
@@ -174,7 +174,7 @@ function update_generic_datafields (&$config, &$data_fields, &$field_names, $obj
             }
             $store = TRUE;
         }
-        
+
         if (!$config_generic_datafields)
             $config_generic_datafields = $config_datafields;
         // data fields added
@@ -252,7 +252,7 @@ function sri_is_enabled ($i_id) {
         if ($row) {
             return 1;
         }
-        
+
     }
     return 0;
 }
@@ -266,7 +266,7 @@ function sri_is_enabled ($i_id) {
  */
 function download_config($range_id, $config_id, $module) {
     $extern = new ExternConfigDb($range_id, '',$config_id);
-    
+
     // check, if we have an external configuration with the given ids
     $stmt = DBManager::get()->prepare("SELECT COUNT(*) as c FROM extern_config 
         WHERE config_id = ? AND range_id = ?");
@@ -279,7 +279,7 @@ function download_config($range_id, $config_id, $module) {
         header("Content-Disposition: attachment; filename=$config_id.cfg");
         $extern->parse();
         $extern->config['config_type'] = $module;
-        
+
         // utf8-encode all values
         $config = $extern->config;
         array_walk_recursive($config, 'utf8Encode');
@@ -374,7 +374,7 @@ function utf8Encode(&$value, &$key) {
 
 /**
  * for use with functions like array_walk. utf8_decode's the passed parameters
- * 
+ *
  * @param  mixed  $value  the array-value
  * @param  mixed  $key    the array-key
  */

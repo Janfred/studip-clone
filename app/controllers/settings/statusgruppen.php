@@ -115,7 +115,7 @@ class Settings_StatusgruppenController extends Settings_SettingsController
                 $roles = GetAllStatusgruppen($institute_membership->institut_id, $this->user->user_id, true);
                 $institutes[$institute_membership->institut_id]['roles'] = $roles ?: [];
 
-                $institutes[$institute_membership->institut_id]['flattened'] = array_filter(Statusgruppe::getFlattenedRoles($roles), function ($role) {
+                $institutes[$institute_membership->institut_id]['flattened'] = array_filter(getFlattenedRoles($roles), function ($role) {
                     return $role['user_there'];
                 });
 

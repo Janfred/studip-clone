@@ -177,15 +177,15 @@ class Statusgruppen extends SimpleORMap
     /**
      * Returns the gendered name of a statusgroup
      *
-     * @param string $user_id The user_id
+     * @param string|User $user_id The user_id
      * @return string The gendered name
      */
-    public function getGenderedName($user_id)
+    public function getGenderedName($user_or_id)
     {
         // We have to have at least 1 name gendered
         if ($this->name_m || $this->name_w) {
-            $userinfo = new UserInfo($user_id);
-            switch ($userinfo->geschlecht) {
+            $user = User::toObject($user_or_id);
+            switch ($user->geschlecht) {
                 case UserInfo::GENDER_FEMALE:
                     return $this->name_w ?: $this->name;
                 case UserInfo::GENDER_MALE:
@@ -197,7 +197,7 @@ class Statusgruppen extends SimpleORMap
 
     public function getName()
     {
-        return $this->name;
+        return $this->content['name'];
     }
 
     /**
