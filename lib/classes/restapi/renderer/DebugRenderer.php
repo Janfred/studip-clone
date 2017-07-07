@@ -35,7 +35,7 @@ class DebugRenderer extends DefaultRenderer
     public function render($response)
     {
         if (!isset($response['Content-Type'])) {
-            $response['Content-Type'] = $this->contentType() . ';charset=windows-1252';
+            $response['Content-Type'] = $this->contentType() . ';charset=utf-8';
         }
 
         $debug = function ($label, $data) {

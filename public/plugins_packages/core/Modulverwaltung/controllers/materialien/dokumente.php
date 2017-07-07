@@ -6,7 +6,7 @@
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * @author      Peter Thienel <thienel@data-quest.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
@@ -140,7 +140,7 @@ class Materialien_DokumenteController extends MVVController
                         ]
                 ];
                 $this->response->add_header('X-Dialog-Close', 1);
-                $this->response->add_header('X-Dialog-Execute', json_encode(studip_utf8encode($ret)));
+                $this->response->add_header('X-Dialog-Execute', json_encode($ret));
                 $this->render_nothing();
                 return;
             }

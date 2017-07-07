@@ -1082,7 +1082,7 @@ class Course_StudygroupController extends AuthenticatedController
     {
         $sem = Course::find($id);
         if (mb_strlen($sem->getFullname()) > 32) {//cut subject if to long
-            $subject = sprintf(_("[Studiengruppe: %s...]"), studip_substr($sem->getFullname(), 0, 30));
+            $subject = sprintf(_("[Studiengruppe: %s...]"), mb_substr($sem->getFullname(), 0, 30));
         } else {
             $subject = sprintf(_("[Studiengruppe: %s]"), $sem->getFullname());
         }

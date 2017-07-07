@@ -33,9 +33,4 @@ require_once 'StudipLitImportPluginStudipLitList.class.php';
  **/
 class StudipLitImportPluginCitavi extends StudipLitImportPluginStudipLitList
 {
-
-    function parse($data)
-    {
-        return studip_utf8decode($data);
-    }
 }

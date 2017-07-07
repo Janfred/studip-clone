@@ -20,7 +20,7 @@ $expand_id = $area->hasChildren() ? $id : implode('_', (array) $area->getTrailPa
      href="<?= URLHelper::getLink(isset($url) ? $url : '',
                    array('lvgruppe_selection[selected]' => htmlReady($expand_id),
                        'lvgruppe_selection[type]' => get_class($area))) ?>">
-    <?= Request::isAjax() ? studip_utf8encode($name) : $name ?>
+    <?= $name ?>
   </a>
     <? if (isset($pathes) && count($pathes)) : ?>
         <ul>
@@ -32,7 +32,7 @@ $expand_id = $area->hasChildren() ? $id : implode('_', (array) $area->getTrailPa
         </ul>
     <? endif; ?>
 <? else : ?>
-  <?= Request::isAjax() ? studip_utf8encode($name) : $name ?>
+  <?= $name ?>
   <? if (isset($pathes) && count($pathes)) : ?>
         <ul>
         <? foreach ($pathes as $path) : ?>

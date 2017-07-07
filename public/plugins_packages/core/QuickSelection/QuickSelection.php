@@ -63,7 +63,7 @@ class QuickSelection extends StudIPPlugin implements PortalPlugin
         header('X-Dialog-Close: 1');
         header('X-Dialog-Execute: STUDIP.QuickSelection.update');
 
-        echo studip_utf8encode($template->render());
+        echo $template->render();
     }
 
     public function configuration_action()
@@ -75,6 +75,6 @@ class QuickSelection extends StudIPPlugin implements PortalPlugin
         $template->plugin = $this;
 
         header('X-Title: ' . _('Schnellzugriff konfigurieren'));
-        echo studip_utf8encode($template->render());
+        echo $template->render();
     }
 }

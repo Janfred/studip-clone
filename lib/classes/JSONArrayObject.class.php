@@ -23,7 +23,7 @@ class JSONArrayObject extends MultiDimArrayObject
     function __construct($input)
     {
         if (is_string($input)) {
-            $input = studip_utf8decode((array)json_decode($input, true));
+            $input = (array)json_decode($input, true);
         }
         parent::__construct($input);
     }
@@ -35,6 +35,6 @@ class JSONArrayObject extends MultiDimArrayObject
      */
     function __toString()
     {
-        return json_encode(studip_utf8encode($this->getArrayCopy()));
+        return json_encode($this->getArrayCopy());
     }
 }

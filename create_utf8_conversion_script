@@ -1,0 +1,43 @@
+#!/bin/bash
+
+rm convert_files.sh
+
+cd app
+echo cd app >> ../convert_files.sh
+find . -name '*.php' -exec printf "iconv -f windows-1252 -t utf-8 {} > {}.new \n mv {}.new {}\n" >> ../convert_files.sh \;
+echo cd .. >> ../convert_files.sh
+
+cd ../cli
+echo cd cli >> ../convert_files.sh
+find . -name '*.php' -exec printf "iconv -f windows-1252 -t utf-8 {} > {}.new \n mv {}.new {}\n" >> ../convert_files.sh \;
+echo cd .. >> ../convert_files.sh
+
+cd ../db
+echo cd db >> ../convert_files.sh
+find . -name '*.php' -exec printf "iconv -f windows-1252 -t utf-8 {} > {}.new \n mv {}.new {}\n" >> ../convert_files.sh \;
+echo cd .. >> ../convert_files.sh
+
+cd ../lib
+echo cd lib >> ../convert_files.sh
+find . -name '*.php' -exec printf "iconv -f windows-1252 -t utf-8 {} > {}.new \n mv {}.new {}\n" >> ../convert_files.sh \;
+echo cd .. >> ../convert_files.sh
+
+cd ../public
+echo cd public >> ../convert_files.sh
+find . -name '*.php' -exec printf "iconv -f windows-1252 -t utf-8 {} > {}.new \n mv {}.new {}\n" >> ../convert_files.sh \;
+echo cd .. >> ../convert_files.sh
+
+cd ../templates
+echo cd templates >> ../convert_files.sh
+find . -name '*.php' -exec printf "iconv -f windows-1252 -t utf-8 {} > {}.new \n mv {}.new {}\n" >> ../convert_files.sh \;
+echo cd .. >> ../convert_files.sh
+
+cd ../tests
+echo cd tests >> ../convert_files.sh
+find . -name '*.php' -exec printf "iconv -f windows-1252 -t utf-8 {} > {}.new \n mv {}.new {}\n" >> ../convert_files.sh \;
+echo cd .. >> ../convert_files.sh
+
+cd ..
+
+echo "iconv -f windows-1252 -t utf-8 ./config/config.inc.php > ./config/config.inc.php.new" >> convert_files.sh
+echo "mv ./config/config.inc.php.new ./config/config.inc.php" >> convert_files.sh

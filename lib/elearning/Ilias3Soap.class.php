@@ -196,25 +196,9 @@ class Ilias3Soap extends StudipSoapClient
     */
     function ParseXML($data)
     {
-        $xml_parser = new Ilias3ObjectXMLParser( studip_utf8encode($data) );
+        $xml_parser = new Ilias3ObjectXMLParser($data);
         $xml_parser->startParsing();
-        return $this->utf8_decode_array_values($xml_parser->getObjectData());
-    }
-
-    function utf8_decode_array_values($ar){
-        if (is_array($ar)){
-            $decoded = array();
-            foreach($ar as $key => $value){
-                if (!is_array($value)){
-                    $decoded[$key] = studip_utf8decode($value);
-                } else {
-                    $decoded[$key] = $this->utf8_decode_array_values($value);
-                }
-            }
-            return $decoded;
-        } else {
-            return null;
-        }
+        return $xml_parser->getObjectData();
     }
 
     /**
@@ -284,7 +268,7 @@ class Ilias3Soap extends StudipSoapClient
         $param = array(
             'sid' => $this->getSID(),
             'types' => $types,
-            'key' => studip_utf8encode($key),
+            'key' => $key,
             'combination' => $combination
             );
          if ($user_id != "")
@@ -372,9 +356,9 @@ class Ilias3Soap extends StudipSoapClient
     function getObjectByTitle($key, $type = "")
     {
         $param = array(
-            'sid' => $this->getSID(),
-            'title'         => studip_utf8encode($key)
-            );
+            'sid'   => $this->getSID(),
+            'title' => $key
+        );
         $result = $this->call('getObjectsByTitle', $param);
         if ($result != false)
         {
@@ -405,9 +389,9 @@ class Ilias3Soap extends StudipSoapClient
     function getReferenceByTitle($key, $type = "")
     {
         $param = array(
-            'sid' => $this->getSID(),
-            'title'         => studip_utf8encode($key)
-            );
+            'sid'   => $this->getSID(),
+            'title' => $key
+        );
         $result = $this->call('getObjectsByTitle', $param);
         if ($result != false)
         {
@@ -441,8 +425,8 @@ class Ilias3Soap extends StudipSoapClient
     function addObject($object_data, $ref_id)
     {
     $type = $object_data["type"];
-    $title = htmlReady(studip_utf8encode($object_data["title"]));
-    $description = htmlReady(studip_utf8encode($object_data["description"]));
+    $title = htmlReady($object_data["title"]);
+    $description = htmlReady($object_data["description"]);
 
     $xml = "<!DOCTYPE Objects SYSTEM \"http://www.ilias.uni-koeln.de/download/dtd/ilias_object_0_1.dtd\">
 <Objects>
@@ -657,8 +641,8 @@ class Ilias3Soap extends StudipSoapClient
     function addRole($role_data, $ref_id)
     {
     $type = "role";
-    $title = htmlReady(studip_utf8encode($role_data["title"]));
-    $description = htmlReady(studip_utf8encode($role_data["description"]));
+    $title = htmlReady($role_data["title"]);
+    $description = htmlReady($role_data["description"]);
 
     $xml = "<!DOCTYPE Objects SYSTEM \"http://www.ilias.uni-koeln.de/download/dtd/ilias_object_0_1.dtd\">
 <Objects>
@@ -697,8 +681,8 @@ class Ilias3Soap extends StudipSoapClient
     function addRoleFromTemplate($role_data, $ref_id, $role_id)
     {
     $type = "role";
-    $title = htmlReady(studip_utf8encode($role_data["title"]));
-    $description = htmlReady(studip_utf8encode($role_data["description"]));
+    $title = htmlReady($role_data["title"]);
+    $description = htmlReady($role_data["description"]);
 
     $xml = "<!DOCTYPE Objects SYSTEM \"http://www.ilias.uni-koeln.de/download/dtd/ilias_object_0_1.dtd\">
 <Objects>
@@ -818,9 +802,9 @@ class Ilias3Soap extends StudipSoapClient
     function lookupUser($username)
     {
         $param = array(
-            'sid' => $this->getSID(),
-            'user_name'         => studip_utf8encode($username),
-            );
+            'sid'       => $this->getSID(),
+            'user_name' => $username,
+        );
         return $this->call('lookupUser', $param); // returns user_id
     }
 
@@ -853,9 +837,6 @@ class Ilias3Soap extends StudipSoapClient
     */
     function addUser($user_data, $role_id)
     {
-        foreach($user_data as $key => $value)
-            $user_data[$key] = studip_utf8encode($user_data[$key]);
-
         $param = array(
             'sid' => $this->getSID(),
             'user_data' => $user_data,
@@ -874,13 +855,10 @@ class Ilias3Soap extends StudipSoapClient
     */
     function updateUser($user_data)
     {
-        foreach($user_data as $key => $value)
-            $user_data[$key] = studip_utf8encode($user_data[$key]);
-
         $param = array(
             'sid' => $this->getSID(),
             'user_data' => $user_data
-            );
+        );
         return $this->call('updateUser', $param); // returns boolean
     }
 
@@ -896,10 +874,10 @@ class Ilias3Soap extends StudipSoapClient
     function updatePassword($user_id, $password)
     {
         $param = array(
-            'sid' => $this->getSID(),
-            'user_id'         => $user_id,
-            'new_password'         => studip_utf8encode($password)
-            );
+            'sid'          => $this->getSID(),
+            'user_id'      => $user_id,
+            'new_password' => $password
+        );
         return $this->call('updatePassword', $param); // returns boolean
     }
 
@@ -979,8 +957,9 @@ class Ilias3Soap extends StudipSoapClient
     */
     function addCourse($course_data, $ref_id)
     {
-        foreach($course_data as $key => $value)
-            $course_data[$key] = htmlReady(studip_utf8encode($course_data[$key]));
+        foreach($course_data as $key => $value) {
+            $course_data[$key] = htmlReady($course_data[$key]);
+        }
 
         $xml = $this->getCourseXML($course_data);
         $param = array(
@@ -1066,9 +1045,10 @@ class Ilias3Soap extends StudipSoapClient
     function checkReferenceById($id)
     {
         $param = array(
-        'sid' => $this->getSID(),
-        'reference_id'         => studip_utf8encode($id)
+            'sid'          => $this->getSID(),
+            'reference_id' => $id
         );
+
         $result = $this->call('getObjectByReference', $param);
         if ($result != false)
         {

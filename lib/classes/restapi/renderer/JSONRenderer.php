@@ -68,7 +68,7 @@ class JSONRenderer extends DefaultRenderer
         if (is_array($data) || $data instanceof \Traversable) {
             $new_data = array();
             foreach ($data as $key => $value) {
-                $key = studip_utf8encode((string) $key);
+                $key = (string) $key;
                 $new_data[$key] = self::utf8encodeRecursive($value);
             }
             return $new_data;
@@ -76,7 +76,7 @@ class JSONRenderer extends DefaultRenderer
 
         // string-artiges wird an die nicht-rekursive Variante übergeben
         else if (is_string($data) || is_callable(array($data, '__toString'))) {
-            return studip_utf8encode((string) $data);
+            return (string) $data;
         }
 
         // skalare Werte und `null` wird so durchgeschleift

@@ -49,7 +49,7 @@
     .mvv-diff-added .mvv-modul-details th {
         border: solid 1px green;
     }
-    
+
 </style>
 <h2>
     <? printf(_('Vergleich von %s mit %s'), '<span style="font-style: italic">'
@@ -60,9 +60,9 @@
 <?
 $old = $this->render_partial('shared/modul/_modul', array('modul' => $old_module));
 $new = $this->render_partial('shared/modul/_modul', array('modul' => $new_module));
-$diff = new HtmlDiff(studip_utf8encode($old), studip_utf8encode($new));
+$diff = new HtmlDiff($old, $new);
 $diff->build();
-echo studip_utf8decode($diff->getDifference());
+echo $diff->getDifference();
 ?>
 </div>
 <? if ($type_old == 1) : ?>
@@ -71,21 +71,21 @@ echo studip_utf8decode($diff->getDifference());
         <?
         $old = $this->render_partial('shared/modul/_modullvs', array('modul' => $old_module));
         $new = $this->render_partial('shared/modul/_modullvs', array('modul' => $new_module));
-        $diff = new HtmlDiff(studip_utf8encode($old), studip_utf8encode($new));
+        $diff = new HtmlDiff($old, $new);
         $diff->build();
-        echo studip_utf8decode($diff->getDifference());
-        
+        echo $diff->getDifference();
+
         $old = $this->render_partial('shared/modul/_pruefungen', array('modul' => $old_module));
         $new = $this->render_partial('shared/modul/_pruefungen', array('modul' => $new_module));
-        $diff = new HtmlDiff(studip_utf8encode($old), studip_utf8encode($new));
+        $diff = new HtmlDiff($old, $new);
         $diff->build();
-        echo studip_utf8decode($diff->getDifference());
-        
+        echo $diff->getDifference();
+
         $old = $this->render_partial('shared/modul/_regularien', array('modul' => $old_module));
         $new = $this->render_partial('shared/modul/_regularien', array('modul' => $new_module));
-        $diff = new HtmlDiff(studip_utf8encode($old), studip_utf8encode($new));
+        $diff = new HtmlDiff($old, $new);
         $diff->build();
-        echo studip_utf8decode($diff->getDifference());
+        echo $diff->getDifference();
         ?>
     </div>
     <? else : ?>
@@ -113,9 +113,9 @@ echo studip_utf8decode($diff->getDifference());
         <?
         $old = $this->render_partial('shared/modul/_modullv', array('modul' => $old_module));
         $new = $this->render_partial('shared/modul/_modullv', array('modul' => $new_module));
-        $diff = new HtmlDiff(studip_utf8encode($old), studip_utf8encode($new));
+        $diff = new HtmlDiff($old, $new);
         $diff->build();
-        echo studip_utf8decode($diff->getDifference());
+        echo $diff->getDifference();
         ?>
     </div>
     <? else : ?>
@@ -123,7 +123,7 @@ echo studip_utf8decode($diff->getDifference());
         <?= $this->render_partial('shared/modul/_modullv', array('modul' => $old_module)) ?>
     </div>
     <? endif; ?>
-    
+
     <div class="mvv-diff mvv-diff-added">
     <? if ($type_new == 1) : ?>
         <?= $this->render_partial('shared/modul/_modullvs', array('modul' => $old_module)) ?>
@@ -143,9 +143,9 @@ echo studip_utf8decode($diff->getDifference());
         <?
         $old = $this->render_partial('shared/modul/_modul_ohne_lv', array('modul' => $old_module));
         $new = $this->render_partial('shared/modul/_modul_ohne_lv', array('modul' => $new_module));
-        $diff = new HtmlDiff(studip_utf8encode($old), studip_utf8encode($new));
+        $diff = new HtmlDiff($old, $new);
         $diff->build();
-        echo studip_utf8decode($diff->getDifference());
+        echo $diff->getDifference();
         ?>
     </div>
     <? else : ?>

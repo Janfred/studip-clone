@@ -5,10 +5,10 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // StudipAuthLdapReadAndBind.class.php
-// Stud.IP authentication against LDAP Server using read-only account and 
+// Stud.IP authentication against LDAP Server using read-only account and
 // user bind
-// 
-// Copyright (c) 2006 André Noack <noack@data-quest.de> 
+//
+// Copyright (c) 2006 André Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -28,38 +28,34 @@
 /**
 * Stud.IP authentication against LDAP Server
 *
-* Stud.IP authentication against LDAP Server using read-only account and 
+* Stud.IP authentication against LDAP Server using read-only account and
 * following user bind
 *
 * @access   public
 * @author   André Noack <noack@data-quest.de>
-* @package  
+* @package
 */
 class StudipAuthLdapReadAndBind extends StudipAuthLdap {
-    
+
     var $anonymous_bind = false;
-    
+
     var $reader_dn;
     var $reader_password;
-    
+
     /**
     * Constructor
     *
-    * 
+    *
     * @access public
-    * 
+    *
     */
     function __construct() {
         //calling the baseclass constructor
         parent::__construct();
     }
-    
-                
+
+
     function getUserDn($username){
-        if ($this->send_utf8_credentials) {
-            $username = studip_utf8encode($username);
-            $reader_password = studip_utf8encode($this->reader_password);
-        }
         $user_dn = "";
         if (!($r = @ldap_bind($this->conn, $this->reader_dn, $this->reader_password))){
             $this->error_msg = sprintf(_("Anmeldung von %s fehlgeschlagen."),$this->reader_dn) . $this->getLdapError();
@@ -83,7 +79,7 @@ class StudipAuthLdapReadAndBind extends StudipAuthLdap {
         }
         return $user_dn;
     }
-    
+
     function isUsedUsername($username){
         if (!$this->doLdapConnect()) {
             return false;

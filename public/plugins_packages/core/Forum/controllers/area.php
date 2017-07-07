@@ -16,14 +16,9 @@ class AreaController extends ForumController
         ForumPerm::check('add_area', $this->getId());
 
         $new_id = md5(uniqid(rand()));
-        
-        if (Request::isXhr()) {
-            $name    = studip_utf8decode(Request::get('name', _('Kein Titel')));
-            $content = studip_utf8decode(Request::get('content'));
-        } else {
-            $name    = Request::get('name', _('Kein Titel'));
-            $content = Request::get('content');
-        }
+
+        $name    = Request::get('name', _('Kein Titel'));
+        $content = Request::get('content');
 
         ForumEntry::insert(array(
             'topic_id'    => $new_id,
@@ -51,8 +46,8 @@ class AreaController extends ForumController
         ForumPerm::check('edit_area', $this->getId(), $area_id);
 
         if (Request::isAjax()) {
-            ForumEntry::update($area_id, studip_utf8decode(Request::get('name')), studip_utf8decode(Request::get('content')));
-            $this->render_json(array('content' => ForumEntry::killFormat(ForumEntry::killEdit(studip_utf8decode(Request::get('content'))))));
+            ForumEntry::update($area_id, Request::get('name'), Request::get('content'));
+            $this->render_json(array('content' => ForumEntry::killFormat(ForumEntry::killEdit(Request::get('content')))));
         } else {
             ForumEntry::update($area_id, Request::get('name'), Request::get('content'));
             $this->flash['messages'] = array('success' => _('Die Änderungen am Bereich wurden gespeichert.'));

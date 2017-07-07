@@ -49,8 +49,8 @@ rsort($ordered_results);
        ? 'jQuery(document).add(".questionnaire_results").one("dialog-open", function () {'
        : 'jQuery(function () {' ?>
         var data = {
-            labels: <?= json_encode(studip_utf8encode($ordered_answer_options)) ?>,
-            series: [<?= json_encode(studip_utf8encode($ordered_results)) ?>]
+            labels: <?= json_encode($ordered_answer_options) ?>,
+            series: [<?= json_encode($ordered_results) ?>]
         };
         <? if ($etask->task['type'] === 'multiple') : ?>
             new Chartist.Bar(

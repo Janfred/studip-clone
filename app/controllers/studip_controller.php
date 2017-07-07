@@ -15,7 +15,7 @@ abstract class StudipController extends Trails_Controller
 {
     protected $with_session = false; //do we need to have a session for this controller
     protected $allow_nobody = true; //should 'nobody' allowed for this controller or redirected to login?
-    protected $encoding = "windows-1252";
+    protected $encoding = "utf-8";
     protected $utf8decode_xhr = false; //uf8decode request parameters from XHR ?
 
     function before_filter(&$action, &$args)
@@ -76,7 +76,7 @@ abstract class StudipController extends Trails_Controller
         if (Request::isXhr() && $this->utf8decode_xhr) {
             $request = Request::getInstance();
             foreach ($request as $key => $value) {
-                $request[$key] = studip_utf8decode($value);
+                $request[$key] = $value;
             }
         }
     }
@@ -140,7 +140,7 @@ abstract class StudipController extends Trails_Controller
         parent::after_filter($action, $args);
 
         if (Request::isXhr() && !isset($this->response->headers['X-Title']) && PageLayout::hasTitle()) {
-            $this->response->add_header('X-Title', PageLayout::getTitle());
+            $this->response->add_header('X-Title', rawurlencode(PageLayout::getTitle()));
         }
 
         if ($this->with_session) {
@@ -281,7 +281,7 @@ abstract class StudipController extends Trails_Controller
     function render_json($data)
     {
         $this->set_content_type('application/json;charset=utf-8');
-        return $this->render_text(json_encode(studip_utf8encode($data)));
+        return $this->render_text(json_encode($data));
     }
 
     /**

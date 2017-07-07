@@ -1,22 +1,22 @@
 <?='<?xml'?> version="1.0"?>
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
     <channel>
-        <title><?= htmlReady(studip_utf8encode($title)) ?></title>
-        <link><?= htmlReady(studip_utf8encode($studip_url)) ?></link>
+        <title><?= htmlReady($title) ?></title>
+        <link><?= htmlReady($studip_url) ?></link>
         <image>
             <url><?= Assets::image_path('logos/logoklein.png') ?></url>
-            <title><?= htmlReady(studip_utf8encode($title)) ?></title>
-            <link><?= htmlReady(studip_utf8encode($studip_url)) ?></link>
+            <title><?= htmlReady($title) ?></title>
+            <link><?= htmlReady($studip_url) ?></link>
         </image>
-        <description><?= htmlReady(studip_utf8encode($description)) ?></description>
+        <description><?= htmlReady($description) ?></description>
         <lastBuildDate><?= date('r',$last_changed) ?></lastBuildDate>
-        <generator><?= htmlReady(studip_utf8encode('Stud.IP - ' . $GLOBALS['SOFTWARE_VERSION'])) ?></generator>
+        <generator><?= htmlReady('Stud.IP - ' . $GLOBALS['SOFTWARE_VERSION']) ?></generator>
 <? foreach ($items as $id => $item): ?>
         <item>
-            <title><?= htmlReady(studip_utf8encode($item['topic'])) ?></title>
-            <link><?= htmlReady(studip_utf8encode(sprintf($item_url_fmt, $studip_url, $id))) ?></link>
-            <description><![CDATA[<?= studip_utf8encode(formatready($item['body'], 1, 1)) ?>]]></description>
-            <dc:contributor><![CDATA[<?= studip_utf8encode($item['author']) ?>]]></dc:contributor>
+            <title><?= htmlReady($item['topic']) ?></title>
+            <link><?= htmlReady(sprintf($item_url_fmt, $studip_url, $id)) ?></link>
+            <description><![CDATA[<?= formatready($item['body'], 1, 1) ?>]]></description>
+            <dc:contributor><![CDATA[<?= $item['author'] ?>]]></dc:contributor>
             <dc:date><?= gmstrftime('%Y-%m-%dT%H:%MZ', $item['date']) ?></dc:date>
             <pubDate><?= date('r', $item['date']) ?></pubDate>
         </item>

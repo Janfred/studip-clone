@@ -202,8 +202,8 @@ class NewsController extends StudipController
             if (Request::isXhr()) {
                 $this->area_options_selected = studip_json_decode(Request::get('news_selected_areas'));
                 $this->area_options_selectable = studip_json_decode(Request::get('news_selectable_areas'));
-                $topic = studip_utf8decode(Request::get('news_topic'));
-                $body = transformBeforeSave(Studip\Markup::purifyHtml(studip_utf8decode(Request::get('news_body'))));
+                $topic = Request::get('news_topic');
+                $body = transformBeforeSave(Studip\Markup::purifyHtml(Request::get('news_body')));
             } else {
                 $this->area_options_selected = studip_json_decode(Request::get('news_selected_areas'));
                 $this->area_options_selectable = studip_json_decode(Request::get('news_selectable_areas'));
@@ -311,7 +311,7 @@ class NewsController extends StudipController
         // perform search
         if (Request::submitted('area_search') || Request::submitted('area_search_preset')) {
             $this->anker = 'news_areas';
-            $this->search_term = studip_utf8decode(Request::get('area_search_term'));
+            $this->search_term = Request::get('area_search_term');
             if (Request::submitted('area_search')) {
                 $this->area_options_selectable = $this->search_area($this->search_term);
             } else {

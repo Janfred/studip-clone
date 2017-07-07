@@ -414,7 +414,7 @@ class Smiley
             // and all entrys
             while ($txt = $statement->fetchColumn()) {
                 // extract all smileys
-                if (preg_match_all('/' . SmileyFormat::REGEXP . '/', $txt, $matches)) {
+                if (preg_match_all('/' . SmileyFormat::REGEXP . '/u', $txt, $matches)) {
                     for ($k = 0; $k < count($matches[2]); $k++) {
                         $name = $matches[2][$k];
                         if (!isset($usage[$name])) {
@@ -425,7 +425,7 @@ class Smiley
                 }
                 // and now the short-notation
                 foreach (self::getShort() as $code => $name) {
-                    $regexp = '/(\>|^|\s)' . preg_quote($code) . '(?=$|\<|\s)/';
+                    $regexp = '/(\>|^|\s)' . preg_quote($code) . '(?=$|\<|\s)/u';
                     if ($count = preg_match_all($regexp, $txt, $matches)) {
                         if (!isset($usage[$name])) {
                             $usage[$name] = array('count' => 0, 'short_count' => 0, 'favorites' => 0);
@@ -538,10 +538,10 @@ class Smiley
                 $update = true;
                 $counts['update'] += 1;
             }
-            
+
             //$smiley->width || $smiley->width = 20;
             //$smiley->height || $smiley->height = 20;
-            
+
             if ($update) {
                 $smiley->store();
             }

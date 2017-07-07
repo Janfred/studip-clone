@@ -37,7 +37,7 @@
 <!DOCTYPE html>
 <html class="no-js">
 <head>
-    <meta charset="WINDOWS-1252">
+    <meta charset="utf-8">
     <title data-original="<?= htmlReady(PageLayout::getTitle()) ?>">
         <?= htmlReady(PageLayout::getTitle() . ' - ' . Config::get()->UNI_NAME_CLEAN) ?>
     </title>
@@ -59,7 +59,7 @@
         STUDIP.jsupdate_enable = <?= is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm('autor') && PersonalNotifications::isActivated() ? 'true' : 'false' ?>;
         STUDIP.wysiwyg_enabled = <?= Config::get()->WYSIWYG ? 'true' : 'false' ?>;
         STUDIP.editor_enabled = <?= Studip\Markup::editorEnabled() ? 'true' : 'false' ?> && CKEDITOR.env.isCompatible;
-        STUDIP.URLHelper.parameters = <?= json_encode(studip_utf8encode(URLHelper::getLinkParams())) ?>;
+        STUDIP.URLHelper.parameters = <?= json_encode(URLHelper::getLinkParams()) ?>;
     </script>
 </head>
 

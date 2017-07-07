@@ -93,7 +93,7 @@ class Admin_ConfigurationController extends AuthenticatedController
                 $comment = Request::get('comment');
 
                 Config::get()->store($field, compact(words('value section comment')));
-                
+
                 PageLayout::postSuccess(sprintf(_('Der Konfigurationseintrag "%s" wurde erfolgreich übernommen!'), $field));
 
                 $this->relocate('admin/configuration/configuration/' . $section);
@@ -145,7 +145,7 @@ class Admin_ConfigurationController extends AuthenticatedController
             $value = Request::get('value');
             if ($this->validateInput($field, $value)) {
                 UserConfig::get($user_id)->store($field, $value);
-                
+
                 PageLayout::postSuccess(sprintf(_('Der Konfigurationseintrag: %s wurde erfolgreich geändert!'), $field));
 
                 $this->redirect('admin/configuration/user_configuration?user_id=' . $user_id);
@@ -171,7 +171,7 @@ class Admin_ConfigurationController extends AuthenticatedController
 
         // Step 1: Prepare input
         if ($config['type'] === 'array') {
-            $value = studip_utf8decode(json_decode(studip_utf8encode($value), true));
+            $value = json_decode($value, true);
         }
 
         // Step 2: Validate

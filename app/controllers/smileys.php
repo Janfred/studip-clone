@@ -21,7 +21,7 @@ class SmileysController extends AuthenticatedController
 {
     const GRID_WIDTH  = 5;
     const GRID_HEIGHT = 2;
-    
+
     /**
      * Common tasks for all actions.
      */
@@ -93,7 +93,7 @@ class SmileysController extends AuthenticatedController
             $this->response->add_header('Content-Type', 'application/json');
             $this->render_text(json_encode(array(
                 'state'   => $state,
-                'message' => studip_utf8encode($msg_box),
+                'message' => $msg_box,
             )));
         } else {
             PageLayout::postMessage($msg_box);

@@ -84,8 +84,8 @@ class WysiwygDocument
                 );
             } catch (\AccessDeniedException $e) { // document creation failed
                 $results['files'][] = Array(
-                    'name' => \studip_utf8decode($file['name']),
-                    'type' => \studip_utf8decode($file['type']),
+                    'name' => $file['name'],
+                    'type' => $file['type'],
                     'error' => $e->getMessage()
                 );
             }
@@ -120,7 +120,7 @@ class WysiwygDocument
      *   'error'    => error2,
      *   ...],
      *  ...]
-     * 
+     *
      * @return array  Each entry is an associative array for a single file.
      */
     public static function getUploadedFiles(){
@@ -140,7 +140,7 @@ class WysiwygDocument
      */
     public static function fromUpload($file, $folder_id) {
         self::verifyUpload($file);  // throw exception if file is forbidden
-    
+
         $newfile = \StudipDocument::createWithFile(
             $file['tmp_name'],
             self::studipData($file, $folder_id));
@@ -149,7 +149,7 @@ class WysiwygDocument
             throw new \AccessDeniedException(
                 _('Stud.IP-Dokument konnte nicht erstellt werden.'));
         }
-        return new WysiwygDocument($newfile, \studip_utf8decode($file['type']));
+        return new WysiwygDocument($newfile, $file['type']);
     }
 
     /**
@@ -163,7 +163,7 @@ class WysiwygDocument
         if (! \validate_upload($file)) { // upload is forbidden
             // remove error pattern from message
             $message = \preg_replace('/error§(.+)§/', '$1', $GLOBALS['msg']);
-    
+
             // clear global messages and throw exception
             $GLOBALS['msg'] = '';
             throw new \AccessDeniedException(\decodeHTML($message));
@@ -178,7 +178,7 @@ class WysiwygDocument
      * @return array   Stud.IP document metadata
      */
     static function studipData($file, $folder_id) {
-        $filename = \studip_utf8decode($file['name']);
+        $filename = $file['name'];
         return array(
             'name' => $filename,
             'filename' => $filename,
@@ -221,7 +221,7 @@ class WysiwygDocument
     }
 
 
-    
+
     //// utilities ////////////////////////////////////////////////////////////
 
     /**

@@ -120,7 +120,7 @@ function table_footer () {
 function html_header (&$config) {
     $out = "<!DOCTYPE html>\n";
     $out .= "<html>\n<head>\n";
-    $out .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=ISO-8859-1\">\n";
+    $out .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n";
     if ($copyright = $config->getValue('Main', 'copyright'))
         $out .= "<meta name=\"copyright\" content=\"$copyright\">\n";
     if ($author = $config->getValue('Main', 'author'))

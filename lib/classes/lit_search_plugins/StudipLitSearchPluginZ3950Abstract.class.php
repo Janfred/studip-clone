@@ -277,7 +277,7 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
             $xmlrecord = new SimpleXMLElement($record);
             foreach($xmlrecord->controlfield as $field){
                 $code = (string)$field['tag'];
-                $data = studip_utf8decode((string)$field);
+                $data = (string)$field;
                 if (isset($plugin_mapping[$code])){
                     $mapping = (is_array($plugin_mapping[$code][0])) ? $plugin_mapping[$code] : array($plugin_mapping[$code]);
                     for ($j = 0; $j < count($mapping); ++$j){
@@ -292,7 +292,7 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
                 foreach($field->subfield as $subfield){
                     $subcode = (string)$subfield['code'];
                     if($subcode && !isset($data[$subcode])){
-                        $data[$subcode] =  studip_utf8decode((string)$subfield);
+                        $data[$subcode] = (string)$subfield;
                     }
                 }
                 if (isset($plugin_mapping[$code])){

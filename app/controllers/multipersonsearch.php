@@ -25,7 +25,7 @@ class MultipersonsearchController extends AuthenticatedController {
     {
         $searchterm = Request::get("s");
         $searchterm = str_replace(",", " ", $searchterm);
-        $searchterm = preg_replace('/\s+/', ' ', $searchterm);
+        $searchterm = preg_replace('/\s+/u', ' ', $searchterm);
 
         $result = array();
         // execute searchobject if searchterm is at least 3 chars long

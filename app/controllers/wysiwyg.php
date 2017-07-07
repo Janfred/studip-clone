@@ -295,7 +295,7 @@ class WysiwygController extends \AuthenticatedController
         } catch (WysiwygHttpException $e) {
             $this->set_status($e->getCode());
             $this->set_content_type('text/plain; charset=utf-8');
-            $this->render_text(studip_utf8encode($e->getMessage()));
+            $this->render_text($e->getMessage());
         }
     }
 

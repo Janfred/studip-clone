@@ -97,7 +97,7 @@ class UserConfig extends Config
                         $value = (bool)$row['value'];
                         break;
                     case 'array':
-                        $value = studip_utf8decode((array)json_decode($row['value'], true));
+                        $value = (array)json_decode($row['value'], true);
                         break;
                     default:
                         $value = $row['value'];
@@ -215,7 +215,7 @@ class UserConfig extends Config
                 $value = (int)$value;
             break;
             case 'array' :
-                $value = json_encode(studip_utf8encode($value));
+                $value = json_encode($value);
             break;
             default:
                 $value = (string)$value;

@@ -126,7 +126,7 @@ class OpenGraphURL extends SimpleORMap
             if (preg_match('/(?<=charset=)[^;]*/i', $response['Content-Type'], $match)) {
                 $currentEncoding = $match[0];
             } else {
-                $currentEncoding = 'ISO-8859-1';
+                $currentEncoding = 'UTF-8';
             }
 
             $context = stream_context_create(array(
@@ -161,7 +161,7 @@ class OpenGraphURL extends SimpleORMap
                     $key = mb_strtolower(mb_substr($tag->getAttribute('name'), 3));
                 }
                 if ($key) {
-                    $content = studip_utf8decode($tag->getAttribute('content'));
+                    $content = $tag->getAttribute('content');
                     $data[] = array('og:'.$key => $content);
                     $ogTags[$key] = $content;
                     $isOpenGraph = true;
@@ -175,7 +175,7 @@ class OpenGraphURL extends SimpleORMap
             if (!$this['title'] && $isOpenGraph) {
                 $titles = $doc->getElementsByTagName('title');
                 if ($titles->length > 0) {
-                    $this['title'] = studip_utf8decode($titles->item(0)->textContent);
+                    $this['title'] = $titles->item(0)->textContent;
                 }
             }
             if (!$this['description'] && $isOpenGraph) {
@@ -183,7 +183,7 @@ class OpenGraphURL extends SimpleORMap
                     if (mb_stripos($tag->getAttribute('name'), "description") !== false
                         || mb_stripos($tag->getAttribute('property'), "description") !== false)
                     {
-                        $this['description'] = studip_utf8decode($tag->getAttribute('content'));
+                        $this['description'] = $tag->getAttribute('content');
                     }
                 }
             }

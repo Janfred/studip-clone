@@ -143,8 +143,8 @@ class MessagesController extends AuthenticatedController {
             Navigation::activateItem('/messaging/messages/inbox');
         }
         if (Request::isXhr()) {
-            $this->response->add_header('X-Tags', json_encode(studip_utf8encode($this->message->getTags())));
-            $this->response->add_header('X-All-Tags', json_encode(studip_utf8encode(Message::getUserTags())));
+            $this->response->add_header('X-Tags', json_encode($this->message->getTags()));
+            $this->response->add_header('X-All-Tags', json_encode(Message::getUserTags()));
         } else {
             // Try to redirect to overview of recevied/sent messages if
             // controller is not called via ajax to ensure message is loaded
@@ -707,7 +707,7 @@ class MessagesController extends AuthenticatedController {
         if (!$GLOBALS['ENABLE_EMAIL_ATTACHMENTS']) {
             throw new AccessDeniedException(_('Mailanhänge sind nicht erlaubt.'));
         }
-        $file = studip_utf8decode($_FILES['file']);
+        $file = $_FILES['file'];
         $output = array(
             'name' => $file['name'],
             'size' => $file['size']

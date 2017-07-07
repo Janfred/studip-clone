@@ -7,7 +7,7 @@
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * @author      Peter Thienel <thienel@data-quest.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
@@ -22,11 +22,11 @@ class Fach extends ModuleManagementModelTreeItem
     private $count_sem;
     private $count_stgteile;
     private $count_module;
-    
+
     protected static function configure($config = array())
     {
         $config['db_table'] = 'fach';
-        
+
         $config['has_many']['abschluesse'] = array(
             'class_name' => 'Abschluss',
             'assoc_func' => 'findByFach'
@@ -56,11 +56,11 @@ class Fach extends ModuleManagementModelTreeItem
             'on_store' => 'store',
             'on_delete' => 'delete'
         );
-        
+
         $config['additional_fields']['count_abschluesse']['get'] =
             function($fach) { return $fach->count_abschluesse; };
         $config['additional_fields']['count_abschluesse']['set'] = false;
-        $config['additional_fields']['count_user']['get'] = 
+        $config['additional_fields']['count_user']['get'] =
             function($fach) { return $fach->count_user; };
         $config['additional_fields']['count_user']['set'] = false;
         $config['additional_fields']['count_sem']['get'] =
@@ -70,11 +70,11 @@ class Fach extends ModuleManagementModelTreeItem
             function($fach) { return $fach->count_stgteile; };
         $config['additional_fields']['count_stgteile']['set'] = false;
         $config['additional_fields']['count_module']['get'] =
-            function($fach) { return $fach->count_module; };        
-        
+            function($fach) { return $fach->count_module; };
+
         parent::configure($config);
     }
-    
+
     /**
      *
      * @param string $id primary key of table
@@ -84,12 +84,12 @@ class Fach extends ModuleManagementModelTreeItem
         parent::__construct($id);
         $this->object_real_name = _('Fach');
     }
-    
+
     /**
      * Returns all or a specified (by row count and offset) number of
      * Abschluesse sorted and filtered by given parameters and enriched with
      * some additional fields. This function is mainly used in the list view.
-     * 
+     *
      * @param string $sortby Field name to order by.
      * @param string $order ASC or DESC direction of order.
      * @param array $filter Key-value pairs of filed names and values
@@ -114,10 +114,10 @@ class Fach extends ModuleManagementModelTreeItem
                 . 'GROUP BY fach_id '
                 . 'ORDER BY ' . $sortby, array(), $row_count, $offset);
     }
-    
+
     /**
      * Returns the number of Fächer optional filtered by $filter.
-     * 
+     *
      * @param array $filter Key-value pairs of filed names and values
      * to filter the result set.
      * @return int The number of Fächer
@@ -133,11 +133,11 @@ class Fach extends ModuleManagementModelTreeItem
         $db->execute();
         return $db->fetchColumn(0);
     }
-    
+
     /**
      * Returns all Faecher which are assigned to Studiengangteile. Sorted and
      * filtered by optional parameters.
-     * 
+     *
      * @param string $sortby Column names to sort by.
      * @param strind $order Direction of sorting ASC|DESC.
      * @param int $row_count Number of rows to return.
@@ -159,10 +159,10 @@ class Fach extends ModuleManagementModelTreeItem
                 . 'GROUP BY fach_id '
                 . 'ORDER BY ' . $sortby, array(), $row_count, $offset);
     }
-    
+
     /**
      * Retrieves the Fach assigned to the given Studiengangteil.
-     * 
+     *
      * @param string $stgteil_id The id of the Studiengangteil.
      * @return object Fach assigned to the given Studiengangteil contained in a
      * collection.
@@ -175,10 +175,10 @@ class Fach extends ModuleManagementModelTreeItem
                 . 'WHERE ms.stgteil_id = ? '
                 . 'ORDER BY name', array($stgteil_id));
     }
-    
+
     /**
      * Retrieves all Faecher assigned to the given Studiengang.
-     * 
+     *
      * @param string $studiengang_id The id of the Studiengang.
      * @return object Collection of Faecher assigned to the given Studiengang.
      */
@@ -192,10 +192,10 @@ class Fach extends ModuleManagementModelTreeItem
                 . 'WHERE mss.studiengang_id = ? '
                 . 'ORDER BY name', array($studiengang_id));
     }
-    
+
     /**
      * Retrieves all Faecher implicitly assigned to the given Abschluss.
-     * 
+     *
      * @param string $abschluss_id The id of the Abschluss.
      * @return object Collection of Faecher assigned to the given Abschluss.
      */
@@ -209,12 +209,12 @@ class Fach extends ModuleManagementModelTreeItem
                 . 'WHERE ms.abschluss_id = ? '
                 . 'ORDER BY name', array($abschluss_id));
     }
-    
+
     /**
      * Retrieves all Faecher the giveb Fachbereich is assigned to. If the 2nd
      * parameter is true, only Faecher assigned to Studiengangteile will be
      * returned.
-     * 
+     *
      * @param string $abschluss_id The id of the Abschluss.
      * @return object Collection of Faecher assigned to the given Abschluss.
      */
@@ -230,11 +230,11 @@ class Fach extends ModuleManagementModelTreeItem
                 . 'WHERE mfi.institut_id = ? '
                 . 'ORDER BY name', array($fachbereich_id));
     }
-    
+
     /**
      * Retrieves all Faecher implicitly assigned by public Studiengangteile to
      * the given modules.
-     * 
+     *
      * @param array $modul_ids Ids of modules.
      * @return object Collection of Faecher.
      */
@@ -256,12 +256,12 @@ class Fach extends ModuleManagementModelTreeItem
                     ModuleManagementModel::getPublicStatus('Studiengang'),
                     ModuleManagementModel::getPublicStatus('StgteilVersion')));
     }
-    
+
     /**
      * Retrieves all Faecher by given search term. The term is compared to
      * name of the Fach and the column "zusatz" of the Studiengangteil the
      * Fach ist assigned to.
-     * 
+     *
      * @param string $term The search term.
      * @return object Collection of Faecher.
      */
@@ -276,11 +276,11 @@ class Fach extends ModuleManagementModelTreeItem
                 . " OR mf.name LIKE " . $quoted_term
                 . ' GROUP BY stgteil_id ORDER BY `name`');
     }
-    
+
     /**
      * Returns all Faecher which are assigned to the given Studiengangteile.
      * Sorted and filtered by optional parameters.
-     * 
+     *
      * @param array Array of Studiengangteil ids.
      * @param string $sortby Column names to sort by.
      * @param strind $order Direction of sorting ASC|DESC.
@@ -305,10 +305,10 @@ class Fach extends ModuleManagementModelTreeItem
                 . 'ORDER BY ' . $sortby, array((array) $stgteil_ids),
                 $row_count, $offset);
     }
-    
+
     /**
      * Returns an associative array of all Fachbereiche assigned to Faecher.
-     * 
+     *
      * @param string $order Direction of sorting ASC|DESC.
      * @return array An associative array of Faecher.
      */
@@ -327,11 +327,11 @@ class Fach extends ModuleManagementModelTreeItem
         }
         return $fachbereiche;
     }
-    
+
     /**
      * Returns an associative array of institutes (name and id) assigned to
      * studiengaenge. Can be filtered by ids of studiengaenge.
-     * 
+     *
      * @param array $studiengang_ids Limits the result to these studiengaenge.
      * @return array Associative array (id and name) of institutes.
      */
@@ -356,11 +356,11 @@ class Fach extends ModuleManagementModelTreeItem
                 . 'GROUP BY Institute.Institut_id '
                 . 'ORDER BY is_fak DESC, fak_name ASC, name ASC');
     }
-    
+
     /**
      * Finds all Fachbereiche assigned to Faecher. The result can be filtered
      * by a Abschluss-Kategorie or an Abschluss.
-     * 
+     *
      * @param string $kategorie_id The id of the Abschluss-Kategorie.
      * @param string $abschluss_id The id of the Abschluss.
      * @return array Found Fachbereiche as array. Empty array if none was found.
@@ -411,12 +411,12 @@ class Fach extends ModuleManagementModelTreeItem
         }
         return $fachbereiche;
     }
-    
-    
+
+
     /**
      * Returns names ans ids of all Fachbereiche (institutes) with number of
      * related Faecher. Sorted and filtered by optional parameters.
-     * 
+     *
      * @param string $sortby Column names to sort by.
      * @param strind $order Direction of sorting ASC|DESC.
      * @param array $filter Array of filter parameters (name of column as key,
@@ -443,11 +443,11 @@ class Fach extends ModuleManagementModelTreeItem
         }
         return $fachbereiche;
     }
-    
+
     /**
      * Returns an array with all faecher which are used by given Fachbereich
      * and the given Studiengangteil.
-     * 
+     *
      * @param string $fachbereich_id The id of a Fachbereich (institute)
      * @param string $stgteil_id The id oa a Studiengangteil.
      * @return array Associative array of Faecher with id as key.
@@ -466,11 +466,11 @@ class Fach extends ModuleManagementModelTreeItem
         $stmt = DBManager::get()->prepare($query);
         $stmt->execute(array($fachbereich_id, $stgteil_id));
         foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $fach) {
-            $faecher[$fach['fach_id']] = array_map('studip_utf8encode', $fach);
+            $faecher[$fach['fach_id']] = $fach;
         }
         return $faecher;
     }
-    
+
     /**
      * @see ModuleManagementModel::getClassDisplayName
      */
@@ -478,11 +478,11 @@ class Fach extends ModuleManagementModelTreeItem
     {
         return _('Fach');
     }
-    
+
     /**
      * Assignes fachbereiche to this fach.
      * Returns true only if all given fachbereich ids are valid.
-     * 
+     *
      * @param string[]|object[] Array of $fachbereich_ids or
      * fachbereich objects.
      * @return boolean True if fachbereiche was successfully assigned.
@@ -515,27 +515,27 @@ class Fach extends ModuleManagementModelTreeItem
                     SimpleORMapCollection::createFromArray($all_fachbereiche);
         return true;
     }
-    
+
     /**
      * Returns all Fachbereiche assigned to this Fach.
-     * 
+     *
      * @return array All assigned Fachbereiche.
      */
     public function getFachbereiche()
     {
         return $this->departments;
     }
-    
+
     /**
      * Returns all Abschluesse this Fach is implicitly assigned to.
-     * 
+     *
      * @return A collection of Faecher.
      */
     public function getAbschluesse()
     {
         return Abschluss::findByFach($this->getId());
     }
-    
+
     /**
      * @see MvvTreeItem::getTrailParentId()
      */
@@ -551,7 +551,7 @@ class Fach extends ModuleManagementModelTreeItem
     {
         return Fachbereich::get($this->getTrailParentId());
     }
-    
+
     /**
      * @see MvvTreeItem::getChildren()
      */
@@ -560,7 +560,7 @@ class Fach extends ModuleManagementModelTreeItem
         $_SESSION['MVV/StudiengangTeil/trail_parent_id'] =  $this->getId();
         return StudiengangTeil::findByFach($this->getId());
     }
-    
+
     /**
      * @see MvvTreeItem::hasChildren()
      */
@@ -568,7 +568,7 @@ class Fach extends ModuleManagementModelTreeItem
     {
         return count($this->getChildren()) > 0;
     }
-    
+
     /**
      * @see MvvTreeItem::getParents()
      */
@@ -576,12 +576,12 @@ class Fach extends ModuleManagementModelTreeItem
     {
         return array();
     }
-    
+
     /**
      * Returns ids of all modules which are related to this Fach. The relation
      * is done by assigning a Fach to a Studiengangteil and the modules to a
      * version of that Studiengangteil.
-     * 
+     *
      * @param boolean $only_public If true only modules with a public state
      * will be returned.
      * @return array
@@ -615,7 +615,7 @@ class Fach extends ModuleManagementModelTreeItem
         $stmt->execute($params);
         return $stmt->fetchAll(PDO::FETCH_COLUMN);
     }
-    
+
     public function validate()
     {
         $ret = parent::validate();
@@ -648,10 +648,10 @@ class Fach extends ModuleManagementModelTreeItem
         }
         return $ret;
     }
-    
+
     /**
      * Returns all responsible institutes.
-     * 
+     *
      * @return array An array of Fachbereich objects.
      */
     public function getResponsibleInstitutes()
@@ -662,10 +662,10 @@ class Fach extends ModuleManagementModelTreeItem
         }
         return $institutes;
     }
-    
+
     /**
      * The number of users this Fach was selected by.
-     * 
+     *
      * @return int The number of users.
      */
     public function countUser()
@@ -675,11 +675,11 @@ class Fach extends ModuleManagementModelTreeItem
         $stmt->execute(array($this->id));
         return $stmt->fetchColumn();
     }
-    
+
     /**
      * The number of users this Fach was selected by. Filtered by given
      * degree (Abschluss).
-     * 
+     *
      * @return int The number of users.
      */
     public function countUserByDegree($degree_id)
@@ -690,5 +690,5 @@ class Fach extends ModuleManagementModelTreeItem
         $stmt->execute(array($this->id, $degree_id));
         return $stmt->fetchColumn();
     }
-    
+
 }

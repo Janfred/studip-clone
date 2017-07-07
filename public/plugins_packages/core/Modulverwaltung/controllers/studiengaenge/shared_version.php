@@ -230,7 +230,7 @@ class SharedVersionController extends MVVController
 
                 $this->render_nothing();
             } else {
-                $content = studip_utf8encode($template->render());
+                $content = $template->render();
                 $this->response->add_header('Content-type', 'application/msword');
                 $this->response->add_header('Content-Disposition', 'attachment; filename="' . $version->getDisplayName() . '.doc"');
                 $this->render_text($content);

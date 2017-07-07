@@ -22,7 +22,7 @@ class ZipArchive extends \ZipArchive
      */
     public static function create($filename)
     {
-        if (strtolower(substr($filename, -3)) !== 'zip') {
+        if (mb_strtolower(mb_substr($filename, -3)) !== 'zip') {
             $filename = $filename . '.zip';
         }
 
@@ -77,10 +77,10 @@ class ZipArchive extends \ZipArchive
             $zip_filename = $archive->getNameIndex($i, self::FL_UNCHANGED);
             $filename = self::convertArchiveFilename($zip_filename);
 
-            if (strpos($filename, '../') !== false) {
+            if (mb_strpos($filename, '../') !== false) {
                 continue;
             }
-            if (substr($zip_filename, -1) === '/') {
+            if (mb_substr($zip_filename, -1) === '/') {
                 $dirname = trim($filename, '/');
             } else {
                 $dirname = trim(dirname($filename), '/');
@@ -92,7 +92,7 @@ class ZipArchive extends \ZipArchive
                     }
                 }
             }
-            if (substr($zip_filename, -1) === '/') {
+            if (mb_substr($zip_filename, -1) === '/') {
                 continue;
             }
             $source = $archive->getStream($zip_filename);

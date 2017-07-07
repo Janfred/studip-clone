@@ -67,6 +67,10 @@ class Activity extends \SimpleORMap
      */
     public function setVerb($verb)
     {
+        if (is_null($verb)) {
+            return;
+        }
+
         if (in_array($verb, self::$allowed_verbs) === false) {
             throw new \InvalidArgumentException("That verb is not allowed.");
         }

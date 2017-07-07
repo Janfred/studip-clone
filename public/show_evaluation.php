@@ -62,12 +62,7 @@ require_once EVAL_LIB_SHOW;
 # ====================================================== end: including files #
 
 header('Content-Type:text/html;charset=windows-1252');
-if (Request::isXHR()) {
-    $request = Request::getInstance();
-    foreach ($request as $key => $value) {
-        $request[$key] = studip_utf8decode($value);
-    }
-}
+
 /* Create objects ---------------------------------------------------------- */
 $db  = new EvaluationDB();
 $lib = new EvalShow();

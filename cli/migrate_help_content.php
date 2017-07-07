@@ -2,13 +2,13 @@
 <?php
 /**
 * migrate_help_content.php
-* 
+*
 * @author       Arne Schröder <schroeder@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @access       public
 */
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
-// 
+//
 // Copyright (C) 2014 Arne Schröder <schroeder@data-quest.de>,
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
@@ -48,7 +48,7 @@ if (count($ret)) {
 
 $filename = $help_path .'/'. $argv[2] . '/helpcontent.json';
 if (is_file($filename)){
-    $json = studip_utf8decode(json_decode(file_get_contents($filename), true));
+    $json = json_decode(file_get_contents($filename), true);
 } else {
     trigger_error("File not found: ".$filename, E_USER_ERROR);
 }
@@ -66,7 +66,7 @@ foreach ($json as $row) {
             $row['icon'] = '';
             foreach ($row['text'] as $index => $text) {
         $count[$argv[2].$row['route']]++;
-        $query = "INSERT INTO help_content (content_id, language, label, icon, content, route, studip_version, position, custom, visible, author_id, installation_id, mkdate) 
+        $query = "INSERT INTO help_content (content_id, language, label, icon, content, route, studip_version, position, custom, visible, author_id, installation_id, mkdate)
                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, 1, '', ?, UNIX_TIMESTAMP())";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array(md5(uniqid(rand(), true)), $argv[2], ($index == 0 ? $row['label'] : ''), ($index == 0 ? $row['icon'] : ''), $text, $row['route'], $argv[1], $count[$argv[2].$row['route']], $GLOBALS['STUDIP_INSTALLATION_ID']));
@@ -75,8 +75,8 @@ foreach ($json as $row) {
 if (count($count)) {
     if (!Config::get()->getValue('HELP_CONTENT_CURRENT_VERSION'))
         Config::get()->create('HELP_CONTENT_CURRENT_VERSION', array(
-            'value' => $argv[1], 
-            'is_default' => 0, 
+            'value' => $argv[1],
+            'is_default' => 0,
             'type' => 'string',
             'range' => 'global',
             'section' => 'global',

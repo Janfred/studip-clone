@@ -291,7 +291,7 @@ class Course_DatesController extends AuthenticatedController
         }
         $this->topic->store();
 
-        $this->set_content_type('text/html;charset=windows-1252');
+        $this->set_content_type('text/html;charset=utf-8');
         $this->render_template('course/dates/_topic_li.php');
     }
 
@@ -355,7 +355,7 @@ class Course_DatesController extends AuthenticatedController
         $template->lecturer_count = $course->countMembersWithStatus('dozent');
         $content = $template->render();
 
-        $content = mb_encode_numericentity($content, array(0x80, 0xffff, 0, 0xffff), 'cp1252');
+        $content = mb_encode_numericentity($content, array(0x80, 0xffff, 0, 0xffff), 'utf-8');
         $filename = FileManager::cleanFileName($course['name'] . '-' . _("Ablaufplan") . '.doc');
 
         $this->set_content_type(get_mime_type($filename));

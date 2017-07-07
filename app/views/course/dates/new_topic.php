@@ -13,7 +13,7 @@
                 <script>
                     jQuery(function () {
                         jQuery("#dates_add_topic .topic_title").autocomplete({
-                            'source': <?= json_encode(studip_utf8encode($course->topics->pluck('title'))) ?>,
+                            'source': <?= json_encode($course->topics->pluck('title')) ?>,
                             'select': function () {
                                 jQuery("form#dates_add_topic").submit();
                             }

@@ -175,7 +175,7 @@ class DBManager
         $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         if ($connection->getAttribute(PDO::ATTR_DRIVER_NAME) == 'mysql') {
             $connection->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
-            $connection->exec('SET CHARACTER SET latin1');
+            // $connection->exec('SET CHARACTER SET latin1');
         }
     }
 

@@ -625,7 +625,7 @@ class StudygroupModel
         }
 
         if (mb_strlen($sem->getName()) > 32) //cut subject if to long
-            $subject = sprintf(_("[Studiengruppe: %s...]"), studip_substr($sem->getName(), 0, 30));
+            $subject = sprintf(_("[Studiengruppe: %s...]"), mb_substr($sem->getName(), 0, 30));
         else
             $subject = sprintf(_("[Studiengruppe: %s]"), $sem->getName());
 

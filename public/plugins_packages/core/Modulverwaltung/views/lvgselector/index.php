@@ -12,15 +12,11 @@
     <ul class="css-tree">
         <li class="lvgroup-tree-assigned-root keep-node" data-id="root">
             <ul id="lvgroup-tree-assigned-selected">
-            
+
               <? foreach ($selection->getAreas() as $area) : ?>
-              	<? if (Request::isXhr()): ?>
-                	<?= studip_utf8decode($this->render_partial('coursewizard/lvgroups/lvgroup_entry', compact('area'))) ?>
-                <? else: ?>
-                	<?= $this->render_partial('coursewizard/lvgroups/lvgroup_entry', compact('area')) ?>
-                <?endif; ?>
+            	<?= $this->render_partial('coursewizard/lvgroups/lvgroup_entry', compact('area')) ?>
               <? endforeach ?>
-            
+
             </ul>
         </li>
     </ul>
@@ -46,11 +42,11 @@
                 <?= Icon::create('refresh', 'clickable')->asInput(["name" => 'reset_search', "onclick" => "return MVV.CourseWizard.resetSearch()", "class" => $search_result?'':' hidden-no-js']) ?>
             </span>
         </div>
-        
+
         <div id="lvgsearchresults" style="display: none;">
         	<h2><?= _('Suchergebnisse') ?></h2>
         	<ul class="collapsable css-tree">
-        
+
         	</ul>
         </div>
         <h2><?= _('Alle Lehrveranstaltungsgruppen') ?></h2>

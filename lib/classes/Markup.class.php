@@ -201,8 +201,7 @@ class Markup
     {
         $purifier = self::createPurifier($autoformat);
 
-        return studip_utf8decode(trim(
-            $purifier->purify(studip_utf8encode($dirty_html))));
+        return $purifier->purify($dirty_html);
     }
 
     /**
@@ -391,8 +390,8 @@ class Markup
     public static function htmlReady(
         $text, $trim = true, $br = false, $double_encode = true
     ) {
-        $text = htmlspecialchars($text, ENT_QUOTES, 'cp1252', $double_encode);
-        $text = preg_replace('/&amp;#([1-9]{1,1}[0-9]{2,});/', '&#$1;', $text);
+        $text = htmlspecialchars($text, ENT_QUOTES, 'utf-8', $double_encode);
+        $text = preg_replace('/&amp;#([1-9]{1,1}[0-9]{2,});/u', '&#$1;', $text);
         if ($trim) {
             $text = trim($text);
         }
@@ -462,7 +461,7 @@ class Markup
             $config->set('AutoFormat.Custom', array('Unlinkify'));
 
             $purifier = new \HTMLPurifier($config);
-            $html = studip_utf8decode($purifier->purify(studip_utf8encode($html)));
+            $html = $purifier->purify($html);
             $html = \decodeHTML(trim(str_replace('<br />', PHP_EOL, $html)));
         }
 

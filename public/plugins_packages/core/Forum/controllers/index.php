@@ -31,7 +31,7 @@ class IndexController extends ForumController
     /**
      * the main action for the forum. May be called with a topic_id to be displayed
      * and optionally the page to display
-     * 
+     *
      * @param type $topic_id the topic to display, defaults to the main
      *                       view of the current seminar
      * @param type $page the page to be displayed (for thread-view)
@@ -53,7 +53,7 @@ class IndexController extends ForumController
 
         $this->topic_id   = $topic_id ? $topic_id : $this->getId();
         $this->constraint = ForumEntry::getConstraints($this->topic_id);
-        
+
         // check if there has been submitted an invalid id and use seminar_id in case
         if (!$this->constraint) {
             $this->topic_id   = $this->getId();
@@ -80,7 +80,7 @@ class IndexController extends ForumController
 
         // check if the topic_id matches the currently selected seminar
         ForumPerm::checkTopicId($this->getId(), $this->topic_id);
-        
+
 
         /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
          * B E R E I C H E / T H R E A D S / P O S T I N G S   L A D E N *
@@ -127,14 +127,14 @@ class IndexController extends ForumController
                     foreach ($list_item as $key2 => $contents) {
                         if (empty($contents)) {
                             // remove the orphaned entry from the list and from the database
-                            unset($new_list[$key1][$key2]); 
+                            unset($new_list[$key1][$key2]);
                             ForumCat::removeArea($key2);
                         }
                     }
                 }
 
                 $this->list = $new_list;
-                
+
             } else if ($this->constraint['depth'] == 1) {   // THREADS
                 if (!empty($list['list'])) {
                     $this->list = array($list['list']);
@@ -145,7 +145,7 @@ class IndexController extends ForumController
 
         // set the visit-date and get the stored last_visitdate
         $this->visitdate = ForumVisit::getLastVisit($this->getId());
-        
+
         $this->seminar_id = $this->getId();
 
         // highlight text if passed some words to highlight
@@ -162,7 +162,7 @@ class IndexController extends ForumController
 
     /**
      * show newest entries
-     * 
+     *
      * @param int $page show entries on submitted page
      */
     function newest_action($page = null)
@@ -170,7 +170,7 @@ class IndexController extends ForumController
         $nav = Navigation::getItem('course/forum2');
         $nav->setImage(Icon::create('forum', 'info'));
         Navigation::activateItem('course/forum2/newest');
-        
+
         // set page to which we shall jump
         if ($page) {
             ForumHelpers::setPage($page);
@@ -197,10 +197,10 @@ class IndexController extends ForumController
 
         $this->render_action('index');
     }
-    
+
     /**
      * show all latest entries as flat list
-     * 
+     *
      * @param int $page show entries on submitted page
      */
     function latest_action($page = null)
@@ -208,7 +208,7 @@ class IndexController extends ForumController
         $nav = Navigation::getItem('course/forum2');
         $nav->setImage(Icon::create('forum', 'info'));
         Navigation::activateItem('course/forum2/latest');
-        
+
         // set page to which we shall jump
         if ($page) {
             ForumHelpers::setPage($page);
@@ -238,7 +238,7 @@ class IndexController extends ForumController
 
     /**
      * show the current users favorized entries
-     * 
+     *
      * @param int $page show entries on submitted page
      */
     function favorites_action($page = null)
@@ -276,13 +276,13 @@ class IndexController extends ForumController
 
     /**
      * show search results
-     * 
+     *
      * @param int $page show entries on submitted page
      */
     function search_action($page = null)
     {
         ForumPerm::check('search', $this->getId());
-        
+
         $nav = Navigation::getItem('course/forum2');
         $nav->setImage(Icon::create('forum', 'info'));
         Navigation::activateItem('course/forum2/index');
@@ -300,7 +300,7 @@ class IndexController extends ForumController
         foreach (array('search_title', 'search_content', 'search_author') as $option) {
             $this->options[$option] = Request::option($option);
         }
-        
+
         $this->searchfor = Request::get('searchfor');
         if (mb_strlen($this->searchfor) < 3) {
             $this->flash['messages'] = array('error' => _('Ihr Suchbegriff muss mindestens 3 Zeichen lang sein und darf nur Buchstaben und Zahlen enthalten!'));
@@ -337,7 +337,7 @@ class IndexController extends ForumController
     function preview_action() {
         if (Request::isXhr()) {
             $this->set_content_type('text/html; charset=UTF-8');
-            $this->render_text(studip_utf8encode(formatReady(transformBeforeSave(studip_utf8decode(Request::get('posting'))))));
+            $this->render_text(formatReady(transformBeforeSave(Request::get('posting'))));
         } else {
             $this->render_text(
                 ForumEntry::getContentAsHtml(
@@ -348,9 +348,9 @@ class IndexController extends ForumController
     }
 
     /**
-     * Add a new entry. Has a simple spambot protection and checks 
+     * Add a new entry. Has a simple spambot protection and checks
      * the parent_id to add the entry to, throwing an exception if missing.
-     * 
+     *
      * @throws Exception
      */
     function add_entry_action()
@@ -364,11 +364,11 @@ class IndexController extends ForumController
         if (!$parent_id = Request::option('parent')) {
             throw new Exception('missing seminar_id/topic_id while adding a new entry!');
         }
-        
+
         ForumPerm::check('add_entry', $this->getId(), $parent_id);
-        
+
         $constraints = ForumEntry::getConstraints($parent_id);
-        
+
         // if we are answering/citing a posting, we want to add it to the thread
         // (which is the parent of passed posting id)
         if ($constraints['depth'] == 3) {
@@ -382,7 +382,7 @@ class IndexController extends ForumController
         } else {
             $fullname = get_fullname($GLOBALS['user']->id);
         }
-        
+
         ForumEntry::insert(array(
             'topic_id'    => $new_id,
             'seminar_id'  => $this->getId(),
@@ -401,7 +401,7 @@ class IndexController extends ForumController
 
     /**
      * Delete the submitted entry.
-     * 
+     *
      * @param string $topic_id the entry to delete
      */
     function delete_entry_action($topic_id)
@@ -409,7 +409,7 @@ class IndexController extends ForumController
         // get the page of the posting to be able to jump there again
         $page = ForumEntry::getPostingPage($topic_id);
         URLHelper::addLinkParam('page', $page);
-        
+
         if (ForumPerm::hasEditPerms($topic_id) || ForumPerm::check('remove_entry', $this->getId(), $topic_id)) {
             $path = ForumEntry::getPathToPosting($topic_id);
             $topic  = array_pop($path);
@@ -421,7 +421,7 @@ class IndexController extends ForumController
                     ForumEntry::delete($topic_id);
                     $this->flash['messages'] = array('success' => sprintf(_('Der Eintrag %s wurde gelöscht!'), $topic['name']));
                 } else {
-                    $this->flash['messages'] = array('info_html' => 
+                    $this->flash['messages'] = array('info_html' =>
                         sprintf(_('Sind sie sicher dass Sie den Eintrag %s löschen möchten?'), $topic['name'])
                         . '<br>'. \Studip\LinkButton::createAccept(_('Ja'), PluginEngine::getUrl('coreforum/index/delete_entry/'. $topic_id .'?approve_delete=1'))
                         . \Studip\LinkButton::createCancel(_('Nein'), PluginEngine::getUrl('coreforum/index/index/'. ForumEntry::getParentTopicId($topic_id) .'/'. $page))
@@ -442,19 +442,14 @@ class IndexController extends ForumController
 
     /**
      * Update the submitted entry.
-     * 
+     *
      * @param string $topic_id id of the entry to update
      * @throws AccessDeniedException
      */
     function update_entry_action($topic_id)
     {
-        if (Request::isXhr()) {
-            $name    = studip_utf8decode(Request::get('name', _('Kein Titel')));
-            $content = Studip\Markup::purifyHtml(studip_utf8decode(Request::get('content', _('Keine Beschreibung'))));
-        } else {
-            $name    = Request::get('name', _('Kein Titel'));
-            $content = Studip\Markup::purifyHtml(Request::get('content', _('Keine Beschreibung')));
-        }
+        $name    = Request::get('name', _('Kein Titel'));
+        $content = Studip\Markup::purifyHtml(Request::get('content', _('Keine Beschreibung')));
 
         ForumPerm::check('add_entry', $this->getId(), $topic_id);
 
@@ -466,8 +461,8 @@ class IndexController extends ForumController
 
         if (Request::isXhr()) {
             $this->render_text(json_encode(array(
-                'name'    => studip_utf8encode(htmlReady($name)),
-                'content' => studip_utf8encode(formatReady($content))
+                'name'    => htmlReady($name),
+                'content' => formatReady($content)
             )));
         } else {
             $this->redirect(PluginEngine::getLink('coreforum/index/index/' . $topic_id .'#'. $topic_id));
@@ -476,7 +471,7 @@ class IndexController extends ForumController
 
     /**
      * Move the submitted thread to the submitted parent
-     * 
+     *
      * @param string $thread_id    the thread to move
      * @param string $destination  the threads new parent
      */
@@ -493,15 +488,15 @@ class IndexController extends ForumController
 
     /**
      * Mark the submitted entry as favorite
-     * 
+     *
      * @param string $topic_id the entry to mark
      */
     function set_favorite_action($topic_id)
     {
         ForumPerm::check('fav_entry', $this->getId(), $topic_id);
-        
+
         ForumFavorite::set($topic_id);
-        
+
         if (Request::isXhr()) {
             $this->topic_id = $topic_id;
             $this->favorite = true;
@@ -510,17 +505,17 @@ class IndexController extends ForumController
             $this->redirect(PluginEngine::getLink('coreforum/index/index/' . $topic_id .'#'. $topic_id));
         }
     }
-    
+
     /**
      * Remove the submtted entry as favorite
-     * 
+     *
      * @param string $topic_id the entry to unmark
      */
     function unset_favorite_action($topic_id) {
         ForumPerm::check('fav_entry', $this->getId(), $topic_id);
-        
+
         ForumFavorite::remove($topic_id);
-        
+
         if (Request::isXhr()) {
             $this->topic_id = $topic_id;
             $this->favorite = false;
@@ -531,9 +526,9 @@ class IndexController extends ForumController
     }
 
     /**
-     * Jump to page in the entries of the submitted parent-entry 
+     * Jump to page in the entries of the submitted parent-entry
      * denoted by the submitted context (section)
-     * 
+     *
      * @param string $topic_id  the parent-topic to goto
      * @param string $section   the type of view (one of index/search)
      * @param int $page         the page to jump to
@@ -554,7 +549,7 @@ class IndexController extends ForumController
                     }
                 }
 
-                $this->redirect(PluginEngine::getURL('coreforum/index/'. $section .'/'. (int)$page 
+                $this->redirect(PluginEngine::getURL('coreforum/index/'. $section .'/'. (int)$page
                     .'/?searchfor='. Request::get('searchfor') .'&'. implode('&', $optionlist)));
                 break;
 
@@ -565,14 +560,14 @@ class IndexController extends ForumController
     }
 
     /**
-     * Like the submitted topic 
-     * 
+     * Like the submitted topic
+     *
      * @param string $topic_id the topic to like
      */
     function like_action($topic_id)
     {
         ForumPerm::check('like_entry', $this->getId(), $topic_id);
-        
+
         ForumLike::like($topic_id);
 
         if (Request::isXhr()) {
@@ -584,8 +579,8 @@ class IndexController extends ForumController
     }
 
     /**
-     * Remove like for the submitted topic 
-     * 
+     * Remove like for the submitted topic
+     *
      * @param string $topic_id the topic to unlike
      */
     function dislike_action($topic_id)
@@ -593,7 +588,7 @@ class IndexController extends ForumController
         ForumPerm::check('like_entry', $this->getId(), $topic_id);
 
         ForumLike::dislike($topic_id);
-        
+
         if (Request::isXhr()) {
             $this->topic_id   = $topic_id;
             $this->render_template('index/_like');
@@ -601,10 +596,10 @@ class IndexController extends ForumController
             $this->redirect(PluginEngine::getLink('coreforum/index/index/' . $topic_id .'#'. $topic_id));
         }
     }
-    
+
     /**
      * This action is used to close a thread.
-     * 
+     *
      * @param string $topic_id the topic which will be closed
      * @param string $redirect the topic which will be shown after closing the thread
      * @param int    $page the page number of the topic $redirect
@@ -612,9 +607,9 @@ class IndexController extends ForumController
     function close_thread_action($topic_id, $redirect, $page = 0)
     {
         ForumPerm::check('close_thread', $this->getId(), $topic_id);
-        
+
         ForumEntry::close($topic_id);
-        
+
         $success_text = _('Das Thema wurde erfolgreich geschlossen.');
 
         if (Request::isXhr()) {
@@ -624,10 +619,10 @@ class IndexController extends ForumController
             $this->redirect(PluginEngine::getLink('coreforum/index/index/' . $redirect . '/' . $page));
         }
     }
-    
+
     /**
      * This action is used to open a thread.
-     * 
+     *
      * @param string $topic_id the topic which will be opened
      * @param string $redirect the topic which will be shown after opening the thread
      * @param int    $page the page number of the topic $redirect
@@ -635,9 +630,9 @@ class IndexController extends ForumController
     function open_thread_action($topic_id, $redirect, $page = 0)
     {
         ForumPerm::check('close_thread', $this->getId(), $topic_id);
-        
+
         ForumEntry::open($topic_id);
-        
+
         $success_text = _('Das Thema wurde erfolgreich geöffnet.');
 
         if (Request::isXhr()) {
@@ -647,10 +642,10 @@ class IndexController extends ForumController
             $this->redirect(PluginEngine::getLink('coreforum/index/index/' . $redirect . '/' . $page));
         }
     }
-    
+
     /**
      * This action is used to mark a thread as sticky.
-     * 
+     *
      * @param string $topic_id the topic which will be marked as sticky.
      * @param string $redirect the topic which will be shown afterwards
      * @param int    $page the page number of the topic $redirect
@@ -658,9 +653,9 @@ class IndexController extends ForumController
     function make_sticky_action($topic_id, $redirect, $page = 0)
     {
         ForumPerm::check('make_sticky', $this->getId(), $topic_id);
-        
+
         ForumEntry::sticky($topic_id);
-        
+
         $success_text = _('Das Thema wurde erfolgreich in der Themenliste hervorgehoben.');
 
         if (Request::isXhr()) {
@@ -670,10 +665,10 @@ class IndexController extends ForumController
             $this->redirect(PluginEngine::getLink('coreforum/index/index/' . $redirect . '/' . $page));
         }
     }
-    
+
     /**
      * This action is used to remove the sticky attribute from a topic.
-     * 
+     *
      * @param string $topic_id the topic which will be marked as unsticky.
      * @param string $redirect the topic which will be shown afterwards
      * @param int    $page the page number of the topic $redirect
@@ -681,9 +676,9 @@ class IndexController extends ForumController
     function make_unsticky_action($topic_id, $redirect, $page = 0)
     {
         ForumPerm::check('make_sticky', $this->getId(), $topic_id);
-        
+
         ForumEntry::unsticky($topic_id);
-        
+
         $success_text = _('Die Hervorhebung des Themas in der Themenliste wurde entfernt.');
 
         if (Request::isXhr()) {
@@ -700,7 +695,7 @@ class IndexController extends ForumController
 
     /**
      * Show new-entry-form with submitted entry as cite
-     * 
+     *
      * @param string $topic_id the entry to cite from
      */
     function cite_action($topic_id)
@@ -728,7 +723,7 @@ class IndexController extends ForumController
 
     /**
      * Show new-entry-form for submitted topic
-     * 
+     *
      * @param string $topic_id hte id of the entry to add to
      */
     function new_entry_action($topic_id)
@@ -753,9 +748,9 @@ class IndexController extends ForumController
         ForumPerm::check('add_category', $this->getId());
 
         $category_id = ForumCat::add($this->getId(), Request::get('category'));
-        
+
         ForumPerm::checkCategoryId($this->getId(), $category_id);
-                    
+
         $this->redirect(PluginEngine::getLink('coreforum/index#cat_'. $category_id));
     }
 
@@ -766,7 +761,7 @@ class IndexController extends ForumController
     {
         ForumPerm::checkCategoryId($this->getId(), $category_id);
         ForumPerm::check('remove_category', $this->getId());
-        
+
         $this->flash['messages'] = array('success' => _('Die Kategorie wurde gelöscht!'));
         ForumCat::remove($category_id, $this->getId());
 
@@ -780,15 +775,15 @@ class IndexController extends ForumController
 
     /**
      * Change the name of the submitted category
-     * 
+     *
      * @param string $category_id the category to edit
      */
     function edit_category_action($category_id) {
         ForumPerm::checkCategoryId($this->getId(), $category_id);
         ForumPerm::check('edit_category', $this->getId());
-        
+
         if (Request::isXhr()) {
-            ForumCat::setName($category_id, studip_utf8decode(Request::get('name')));
+            ForumCat::setName($category_id, Request::get('name'));
             $this->render_nothing();
         } else {
             ForumCat::setName($category_id, Request::get('name'));
@@ -814,16 +809,16 @@ class IndexController extends ForumController
 
         $this->render_nothing();
     }
-    
+
     /*
      * Subscribe to the submitted topic and receive mails on new postings
-     * 
+     *
      * @param string $topic_id
      */
     function abo_action($topic_id)
     {
         ForumPerm::check('abo', $this->getId(), $topic_id);
-            
+
         ForumAbo::add($topic_id);
         $this->constraint = ForumEntry::getConstraints($topic_id);
 
@@ -842,7 +837,7 @@ class IndexController extends ForumController
 
     /**
      * Unsubscribe from the passed topic
-     * 
+     *
      * @param string $topic_id
      */
     function remove_abo_action($topic_id)
@@ -850,7 +845,7 @@ class IndexController extends ForumController
         ForumPerm::check('abo', $this->getId(), $topic_id);
 
         ForumAbo::delete($topic_id);
-        
+
         if (Request::isXhr()) {
             $this->constraint = ForumEntry::getConstraints($topic_id);
             $this->render_template('index/_abo_link');
@@ -862,13 +857,13 @@ class IndexController extends ForumController
 
     /**
      * Generate a pdf-export for the whole forum or the passed subtree
-     * 
+     *
      * @param string $parent_id
      */
     function pdfexport_action($parent_id = null)
     {
         ForumPerm::check('pdfexport', $this->getId(), $parent_id);
-        
+
         ForumHelpers::createPDF($this->getId(), $parent_id);
     }
 }

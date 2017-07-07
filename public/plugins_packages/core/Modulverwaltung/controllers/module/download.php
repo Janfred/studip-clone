@@ -6,7 +6,7 @@
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
+ *
  * @author      Peter Thienel <thienel@data-quest.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
@@ -17,7 +17,7 @@ require_once dirname(__FILE__) . '/../MVV.class.php';
 
 class Module_DownloadController extends MVVController
 {
-    
+
     public function details_action($modul_id, $language = null)
     {
         $modul = Modul::find($modul_id);
@@ -27,36 +27,36 @@ class Module_DownloadController extends MVVController
         $this->get_details($modul_id, $language);
         $this->download = true;
         $as_pdf = Request::int('pdf');
-        
+
         $factory = $this->get_template_factory();
-        
+
         if ($as_pdf) {
-            
+
             $doc = new ExportPDF();
-            
+
             $template = $factory->open('module/download/pdf');
             $this->set_attributes($template, $modul);
-            
+
             $doc->addPage();
             $doc->SetFont('helvetica', '', 8);
             $doc->writeHTML($template->render(), false, false, true);
-            
+
             $doc->Output($modul->getDisplayName() . '.pdf', 'D');
-            
+
             $this->render_nothing();
         } else {
             $factory = $this->get_template_factory();
             $template = $factory->open('module/download/doc');
             $this->set_attributes($template, $modul);
-            
-            $content = studip_utf8encode($template->render());
+
+            $content = $template->render();
             $this->response->add_header('Content-type', 'application/msword');
             $this->response->add_header('Content-Disposition', 'attachment; filename="' . $modul->getDisplayName() . '.doc"');
             $this->render_text($content);
         }
         return;
     }
-    
+
     private function get_details($id, $language = null)
     {
         $modul = Modul::find($id);
@@ -171,7 +171,7 @@ class Module_DownloadController extends MVVController
         $this->detail_list_url = $this->url_for('modul/detail_list/', $modul->id);
         $this->download_detail_url = $this->url_for('modul/download_detail/', $modul->id);
     }
-    
+
     private function set_attributes($template, $modul)
     {
         $template->set_attributes(
@@ -195,6 +195,5 @@ class Module_DownloadController extends MVVController
                     'download_detail_url' => $this->download_detail_url
                 ));
     }
-    
-}
 
+}

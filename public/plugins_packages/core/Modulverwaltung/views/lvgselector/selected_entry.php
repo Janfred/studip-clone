@@ -11,7 +11,7 @@ $_id = htmlReady(implode('_', (array) $area->getId()));
         src="<?= Icon::create('trash', 'clickable')->asImagePath(); ?>">
 <? endif; ?>
     <span class="lvgruppe_selection_expand">
-    <?= Request::isAjax() ? studip_utf8encode(htmlReady($area->getDisplayName())) : htmlReady($area->getDisplayName()) ?>
+    <?= htmlReady($area->getDisplayName()) ?>
         <input title="<?= _('Alle Zuordnungen anzeigen') ?>"
             data-id="<?= $_id ?>" data-course_id="<?= htmlReady($course_id) ?>"
             style="vertical-align: text-top;"
@@ -26,4 +26,3 @@ $_id = htmlReady(implode('_', (array) $area->getId()));
     </ul>
     <input type="hidden" name="lvgruppe_selection[areas][]" class="lvgruppe_selection_area" value="<?= $_id ?>">
 </li>
-

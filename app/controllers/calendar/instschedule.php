@@ -135,7 +135,7 @@ class Calendar_InstscheduleController extends AuthenticatedController
      */
     function groupedentry_action($start, $end, $seminars, $day)
     {
-        $this->response->add_header('Content-Type', 'text/html; charset=windows-1252');
+        $this->response->add_header('Content-Type', 'text/html; charset=utf-8');
 
         // strucutre of an id: seminar_id-cycle_id
         // we do not need the cycle id here, so we trash it.

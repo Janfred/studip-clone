@@ -76,7 +76,15 @@ class StudipAuthStandard extends StudipAuthAbstract
         $old_style_check = (mb_strlen($pass) == 32 && md5($password) == $pass);
         $migrated_check = $hasher->CheckPassword(md5($password), $pass);
         $check = $hasher->CheckPassword($password, $pass);
-        if (!($check || $migrated_check || $old_style_check)) {
+        $old_encoding_check = $hasher->CheckPassword(legacy_studip_utf8decode($password), $pass);
+
+        if (($migrated_check || $old_style_check || $old_encoding_check) && !$check) {
+            // time to convert the password
+            $user->password = $hasher->HashPassword($password);
+            $user->store();
+        }
+
+        if (!($check || $migrated_check || $old_style_check || $old_encoding_check)) {
             $this->error_msg= _("Das Passwort ist falsch!");
             return false;
         } else {

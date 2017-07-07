@@ -231,7 +231,7 @@ class Config implements ArrayAccess, Countable, IteratorAggregate
                         $value = (bool)$row['value'];
                         break;
                     case 'array':
-                        $value = studip_utf8decode((array)json_decode($row['value'], true));
+                        $value = (array)json_decode($row['value'], true);
                         break;
                     default:
                         $value = (string)$row['value'];
@@ -268,7 +268,7 @@ class Config implements ArrayAccess, Countable, IteratorAggregate
                 $values['value'] = (int)$values['value'];
             break;
             case 'array' :
-                 $values['value'] = json_encode(studip_utf8encode($values['value']));
+                 $values['value'] = json_encode($values['value']);
             break;
             default:
                 $values['value'] = (string)$values['value'];

@@ -58,14 +58,14 @@
 <?
 $old = $this->render_partial('shared/version/_version', array('version' => $old_version, 'url' => $this->plugin->getPluginURL()."/public/"));
 $new = $this->render_partial('shared/version/_version', array('version' => $new_version, 'url' => $this->plugin->getPluginURL()."/public/"));
-$diff = new HtmlDiff(studip_utf8encode($old), studip_utf8encode($new));
+$diff = new HtmlDiff($old, $new);
 $diff->build();
-echo studip_utf8decode($diff->getDifference());
+echo $diff->getDifference();
 
 $old = $this->render_partial('shared/version/_versionmodule', array('version' => $old_version, 'plugin' => $this->plugin));
 $new = $this->render_partial('shared/version/_versionmodule', array('version' => $new_version, 'plugin' => $this->plugin));
-$diff = new HtmlDiff(studip_utf8encode($old), studip_utf8encode($new));
+$diff = new HtmlDiff($old, $new);
 $diff->build();
-echo studip_utf8decode($diff->getDifference());
+echo $diff->getDifference();
 ?>
 </div>

@@ -44,14 +44,7 @@ class StudipSoapClient
             if (is_array($result)){
                 foreach($result as $index => $one){
                     if (is_object($one)) $result[$index] = (array)$one;
-                    if (is_array($result[$index])){
-                        //hmmm
-                    } else {
-                        $result[$index] = studip_utf8decode($result[$index]);
-                    }
                 }
-            } else {
-                $result = studip_utf8decode($result);
             }
             $this->soap_client->fault = false;
         }

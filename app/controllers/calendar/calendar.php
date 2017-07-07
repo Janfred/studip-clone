@@ -477,10 +477,10 @@ class Calendar_CalendarController extends AuthenticatedController
         }
 
         if (Request::isXhr()) {
-            $event->setTitle(studip_utf8decode(Request::get('summary', '')));
-            $event->event->description = studip_utf8decode(Request::get('description', ''));
-            $event->setUserDefinedCategories(studip_utf8decode(Request::get('categories', '')));
-            $event->event->location = studip_utf8decode(Request::get('location', ''));
+            $event->setTitle(Request::get('summary', ''));
+            $event->event->description = Request::get('description', '');
+            $event->setUserDefinedCategories(Request::get('categories', ''));
+            $event->event->location = Request::get('location', '');
         } else {
             $event->setTitle(Request::get('summary'));
             $event->event->description = Request::get('description', '');
@@ -511,7 +511,7 @@ class Calendar_CalendarController extends AuthenticatedController
             $rrule['count'] = Request::int('exp_count', 10);
         } else if ($expire == 'date') {
             if (Request::isXhr()) {
-                $exp_date = studip_utf8decode(Request::get('exp_date'));
+                $exp_date = Request::get('exp_date');
             } else {
                 $exp_date = Request::get('exp_date');
             }

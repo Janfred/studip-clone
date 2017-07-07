@@ -253,7 +253,7 @@ class StreamsController extends PluginController {
             }
         }
 
-        $thread['description'] = studip_utf8decode(Request::get("content"));
+        $thread['description'] = Request::get("content");
         $thread->store();
 
         $content = $this->transformMentions($thread['description'], $thread);
@@ -345,7 +345,7 @@ class StreamsController extends PluginController {
         $old_content = $posting['description'];
         $messaging = new messaging();
 
-        $new_content = studip_utf8decode(Request::get('content'));
+        $new_content = Request::get('content');
         $new_content = $this->transformMentions($new_content, $posting);
 
         if ($new_content && $old_content !== $new_content) {
@@ -449,10 +449,10 @@ class StreamsController extends PluginController {
                 }
             }
             $posting['author_host'] = $_SERVER['REMOTE_ADDR'];
-            $posting['description'] = studip_utf8decode(Request::get("content"));
+            $posting['description'] = Request::get("content");
             $posting->store();
 
-            $content = studip_utf8decode(Request::get("content"));
+            $content = Request::get("content");
             $content = $this->transformMentions($content, $posting);
             $posting['description'] = $content;
             $posting->store();

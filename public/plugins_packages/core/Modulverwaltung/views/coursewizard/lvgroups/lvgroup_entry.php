@@ -8,11 +8,11 @@ $_id = htmlReady(implode('_', (array) $area->getId()));
        "data-id" => $_id, "data-course_id" => htmlReady($course_id)]) ?>
 <? endif; ?>
     <span class="lvgruppe_selection_expand">
-    <?= Request::isAjax() ? studip_utf8encode(htmlReady($area->getDisplayName())) : htmlReady($area->getDisplayName()) ?>
-	<?= Icon::create('info', 'clickable')->asInput(["name" => 'lvgruppe_selection[details]['.$_id.']', 
+    <?= htmlReady($area->getDisplayName()) ?>
+	<?= Icon::create('info', 'clickable')->asInput(["name" => 'lvgruppe_selection[details]['.$_id.']',
                 "onclick" => "return MVV.CourseWizard.showDetails('".$_id."')", "class" => '',
                 "data-id" => $_id, "data-course_id" => htmlReady($course_id)]) ?>
-    
+
     </span>
     <? if(isset($selection_details) && key_exists($_id, $selection_details)): ?>
     <ul id="lvgruppe_selection_detail_<?= $_id ?>"><?= $selection_details[$_id] ?></ul>
@@ -21,4 +21,3 @@ $_id = htmlReady(implode('_', (array) $area->getId()));
     <? endif; ?>
     <input type="hidden" name="lvgruppe_selection[areas][]" class="lvgruppe_selection_area" value="<?= $_id ?>">
 </li>
-

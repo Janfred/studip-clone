@@ -127,7 +127,7 @@ class ExternElementMainNewsticker extends ExternElementMain {
         $info = _("Wählen Sie diese Option, wenn das Modul nur die JavaScript-Funktion ausgeben soll. Die Funktionsname ist newsticker(). Sie kann z.B. innerhalb von <textarea> eingesetzt werden. Beispiel:");
         $info .= "\n<!DOCTYPE html>\n";
         $info .= "<html>\n\t<head>\n\t\t";
-        $info .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=ISO-8859-1\">\n";
+        $info .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n";
         $info .= "\t\t<title>Newsticker</title>\n\t</head>\n";
         $info .= "\t\t<script src=\"Link to SRI-Interface for newsticker. Look at info-page (i).\" type=\"text/javascript\">\n";
         $info .= "\t<body>\n\t\t<form name=\"tickform\">\n\t\t\t";

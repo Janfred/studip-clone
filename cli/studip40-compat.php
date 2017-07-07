@@ -34,7 +34,6 @@ $rules = [
     'SimpleORMap::haveData' => 'Use #{yellow:SimpleORMap::isDirty()} or #{yellow:SimpleORMap::isNew()} instead',
     'Seminar::getMetaDateType' => 'Don\'t use this!',
     'UserConfig::setUserId' => 'Don\'t use this. #{yellow:Set the user via the constructor}.',
-    'string_to_unicode' => 'Use #{yellow:studip_utf8encode()} if neccessary.',
 
     'StudIPTemplateEngine' => 'Time to refactor your plugin.',
     'AbstractStudIPAdministrationPlugin' => 'Time to refactor your plugin.',

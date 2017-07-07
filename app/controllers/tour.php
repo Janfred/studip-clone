@@ -123,7 +123,7 @@ class TourController extends AuthenticatedController
         $template->set_layout(null);
         $data['tour_html'] = $template->render();
         $this->set_content_type('application/json; charset=UTF-8');
-        return $this->render_text(json_encode(studip_utf8encode($data)));
+        return $this->render_text(json_encode($data));
     }
 
     /**
@@ -181,6 +181,7 @@ class TourController extends AuthenticatedController
         PageLayout::setHelpKeyword('Basis.TourAdmin');
         // set navigation
         Navigation::activateItem('/admin/config/tour');
+
 
         if (Request::get('tour_filter') === 'set') {
             $this->tour_searchterm = Request::option('tour_filter_term');

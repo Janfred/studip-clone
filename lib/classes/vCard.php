@@ -20,7 +20,7 @@ class vCard {
 
     /**
      * Transforms a user or an array of users into a vCard export string
-     * 
+     *
      * @param User $users Userobject
      * @return String vCard export string
      */
@@ -40,12 +40,12 @@ class vCard {
 
     /**
      * Export of a single user
-     * 
+     *
      * @param User $user Userobject
      * @return String vCard export string
      */
     private static function exportUser(User $user) {
-        
+
         // If user is not visible export nothing
         if (!get_visibility_by_id($user->id)) {
             return "";
@@ -60,30 +60,30 @@ class vCard {
 
         // User specific data
         //Fullname
-        $vCard['FN'] = studip_utf8encode($user->getFullname());
+        $vCard['FN'] = $user->getFullname();
 
         //Name
-        $vCard['N'][] = studip_utf8encode($user->Nachname);
-        $vCard['N'][] = studip_utf8encode($user->Vorname);
-        $vCard['N'][] = studip_utf8encode($user->info->title_rear);
-        $vCard['N'][] = studip_utf8encode($user->info->title_front);
+        $vCard['N'][] = $user->Nachname;
+        $vCard['N'][] = $user->Vorname;
+        $vCard['N'][] = $user->info->title_rear;
+        $vCard['N'][] = $user->info->title_front;
 
         // Adress
         if (Visibility::verify('privadr', $user->id)) {
-            $vCard['ADR;TYPE=HOME'] = studip_utf8encode($user->info->privadr);
+            $vCard['ADR;TYPE=HOME'] = $user->info->privadr;
         }
 
         // Tel
         if (Visibility::verify('private_phone', $user->id)) {
-            $vCard['TEL;TYPE=HOME'] = studip_utf8encode($user->info->privatnr);
+            $vCard['TEL;TYPE=HOME'] = $user->info->privatnr;
         }
         if (Visibility::verify('private_cell', $user->id)) {
-            $vCard['TEL;TYPE=CELL'] = studip_utf8encode($user->info->privatcell);
+            $vCard['TEL;TYPE=CELL'] = $user->info->privatcell;
         }
 
         // Email
         if (get_local_visibility_by_id($user->id, 'email')) {
-            $vCard['EMAIL'] = studip_utf8encode($user->email);
+            $vCard['EMAIL'] = $user->email;
         }
 
         // Photo
@@ -92,7 +92,7 @@ class vCard {
             // Fetch avatar
             $avatar = Avatar::getAvatar($user->id);
 
-            // Only export if 
+            // Only export if
             if ($avatar->is_customized()) {
                 $vCard['PHOTO;JPEG;ENCODING=BASE64'] = base64_encode(file_get_contents($avatar->getFilename(Avatar::NORMAL)));
             }

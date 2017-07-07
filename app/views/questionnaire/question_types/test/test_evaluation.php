@@ -42,8 +42,8 @@ $labels = array_map(function ($answer) { return strip_tags(formatReady($answer['
        ? 'jQuery(document).one("dialog-open", function () {'
        : 'jQuery(function () {' ?>
         var data = {
-            labels: <?= json_encode(studip_utf8encode($labels)) ?>,
-            series: [<?= json_encode(studip_utf8encode($results)) ?>]
+            labels: <?= json_encode($labels) ?>,
+            series: [<?= json_encode($results) ?>]
         };
         <? if ($etask->task['type'] === 'multiple') : ?>
             new Chartist.Bar(

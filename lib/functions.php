@@ -297,7 +297,8 @@ function my_substr($what, $start, $end)
     $what_length = mb_strlen($what);
     // adding 5 because: mb_strlen("[...]") == 5
     if ($what_length > $length + 5) {
-        $what=studip_substr($what, $start, round(($length / 3) * 2))."[...]".studip_substr($what, $what_length - round($length / 3), $what_length);
+        $what = mb_substr($what, $start, round(($length / 3) * 2))
+              . "[...]" . mb_substr($what, $what_length - round($length / 3), $what_length);
     }
     return $what;
 }
@@ -1319,33 +1320,33 @@ function words($string)
 }
 
 /**
- * Encodes a string or array from Stud.IP encoding (WINDOWS-1252/ISO-8859-1 with numeric HTML-ENTITIES) to UTF-8
+ * Does not encode anything anymore and just returns the data it received.
  *
- * @param mixed $data a string or an array with strings to encode in WINDOWS-1252/HTML-ENTITIES
+ * @deprecated
  *
- * @return string  the string in UTF-8
+ * @param mixed $data
+ *
+ * @return mixed unaltered input $data 
  */
 function studip_utf8encode($data)
 {
-    if (is_array($data)) {
-        $new_data = array();
-        foreach ($data as $key => $value) {
-            $key = studip_utf8encode($key);
-            $new_data[$key] = studip_utf8encode($value);
-        }
-        return $new_data;
-    }
-
-    if (!preg_match('/[\200-\377]/', $data) && !preg_match("'&#[0-9]+;'", $data)) {
-        return $data;
-    } else {
-        return mb_decode_numericentity(
-            mb_convert_encoding($data,'UTF-8', 'WINDOWS-1252'),
-            array(0x100, 0xffff, 0, 0xffff),
-            'UTF-8'
-        );
-    }
+    return $data;
 }
+
+/**
+ * Does not decode anything anymore and just returns the data it received.
+ *
+ * @deprecated
+ *
+ * @param mixed $data
+ *
+ * @return mixed unaltered input $data 
+ */
+function studip_utf8decode($data)
+{
+    return $data;
+}
+
 
 /**
  * Encodes a string or array from UTF-8 to Stud.IP encoding (WINDOWS-1252/ISO-8859-1 with numeric HTML-ENTITIES)
@@ -1354,13 +1355,13 @@ function studip_utf8encode($data)
  *
  * @return string  the string in WINDOWS-1252/HTML-ENTITIES
  */
-function studip_utf8decode($data)
+function legacy_studip_utf8decode($data)
 {
     if (is_array($data)) {
         $new_data = array();
         foreach ($data as $key => $value) {
-            $key = studip_utf8decode($key);
-            $new_data[$key] = studip_utf8decode($value);
+            $key = legacy_studip_utf8decode($key);
+            $new_data[$key] = legacy_studip_utf8decode($value);
         }
         return $new_data;
     }
@@ -1426,7 +1427,6 @@ function studip_utf8decode($data)
 function studip_json_decode($json, $assoc = true, $depth = 512, $options = 0)
 {
     $data = json_decode($json, $assoc, $depth, $options);
-    $data = studip_utf8decode($data);
 
     return $data;
 }
@@ -1441,7 +1441,6 @@ function studip_json_decode($json, $assoc = true, $depth = 512, $options = 0)
  */
 function studip_json_encode($data, $options = 0)
 {
-    $data = studip_utf8encode($data);
     $json = json_encode($data, $options);
 
     return $json;
@@ -1479,44 +1478,6 @@ function get_title_for_status($type, $count, $sem_type = NULL)
     }
 
     return ngettext($title[0], $title[1], $count);
-}
-
-/**
- * Stud.IP encoding aware version of good ol' mb_substr(), treats numeric HTML-ENTITIES as one character
- * use only if really necessary
- *
- * @param string  $string string to shorten
- * @param integer $offset position to start with
- * @param integer $length maximum length
- *
- * @return string  the part of the string
- */
-function studip_substr($string, $offset, $length = false)
-{
-    if(!preg_match("'&#[0-9]+;'", $string)){
-        return mb_substr($string, $offset, $length);
-    }
-    $utf8string = studip_utf8encode($string);
-    if ($length === false) {
-        return studip_utf8decode(mb_substr($utf8string, $offset, mb_strlen($utf8string, 'UTF-8'), 'UTF-8'));
-    } else {
-        return studip_utf8decode(mb_substr($utf8string, $offset, $length, 'UTF-8'));
-    }
-}
-
-/**
- * Stud.IP encoding aware version of good ol' mb_strlen(), treats numeric HTML-ENTITIES as one character
- * use only if really necessary
- *
- * @param string $string the string to measure
- *
- * @return integer  the number of characters in string
- *
- * @deprecated
- */
-function studip_strlen($string)
-{
-    return mb_strlen($string);
 }
 
 /**

@@ -49,7 +49,7 @@ class Ilias4Soap extends Ilias3Soap
     function addUser($user_data, $role_id)
     {
         foreach($user_data as $key => $value) {
-            $user_data[$key] = htmlReady(studip_utf8encode($user_data[$key]));
+            $user_data[$key] = htmlReady($user_data[$key]);
         }
 
         $usr_xml = "<Users>
@@ -87,7 +87,7 @@ class Ilias4Soap extends Ilias3Soap
         );
         $result = $this->call('importUsers', $param);
 
-        $s = simplexml_load_string(studip_utf8encode($result));
+        $s = simplexml_load_string($result);
 
         if ((string)$s->rows->row->column[3] == "successful")
         return (string)$s->rows->row->column[0];
@@ -107,8 +107,8 @@ class Ilias4Soap extends Ilias3Soap
     function copyObject($source_id, $target_id)
     {
         $type = $object_data["type"];
-        $title = studip_utf8encode($object_data["title"]);
-        $description = studip_utf8encode($object_data["description"]);
+        $title = $object_data["title"];
+        $description = $object_data["description"];
 
         $xml = "<Settings source_id=\"$source_id\" target_id=\"$target_id\" default_action=\"COPY\"/>";
 
@@ -137,10 +137,10 @@ class Ilias4Soap extends Ilias3Soap
         $result = $this->call('getPathForRefId', $param);
 
         if ($result) {
-            $s = simplexml_load_string(studip_utf8encode($result));
+            $s = simplexml_load_string($result);
 
             foreach ($s->rows->row as $row) {
-                $path[] = studip_utf8decode((string)$row->column[2]);
+                $path[] = (string)$row->column[2];
             }
         }
 
@@ -169,7 +169,7 @@ class Ilias4Soap extends Ilias3Soap
         $result = $this->call('getPathForRefId', $param);
 
         if ($result) {
-            $s = simplexml_load_string(studip_utf8encode($result));
+            $s = simplexml_load_string($result);
 
             foreach ($s->rows->row as $row) {
                 $path[] = (string)$row->column[0];

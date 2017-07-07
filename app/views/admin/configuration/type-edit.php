@@ -14,11 +14,10 @@
         </label>
     <? elseif ($type === 'array') : ?>
         <label>
-        <?php $v = version_compare(PHP_VERSION, '5.4.0', '>=') ? studip_utf8decode(json_encode(studip_utf8encode($value), JSON_UNESCAPED_UNICODE)) : json_encode(studip_utf8encode($value)) ?>
+        <?php $v = version_compare(PHP_VERSION, '5.4.0', '>=') ? json_encode($value, JSON_UNESCAPED_UNICODE) : json_encode($value) ?>
         <textarea cols="80" rows="5" name="value" id="item-value"><?= htmlReady($v, true, true) ?></textarea>
     <? else: ?>
         <textarea cols="80" rows="3" name="value" id="item-value"><?= htmlReady($value) ?></textarea>
     <? endif; ?>
     </label>
 <? endif ?>
-    

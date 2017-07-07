@@ -511,7 +511,7 @@ class Admin_CoursesController extends AuthenticatedController
                 }
 
                 //the array is filled: now convert it to JSON:
-                $activeArray = json_encode(studip_utf8encode($activeArray));
+                $activeArray = json_encode($activeArray);
 
                 //store the configuration value:
                 $userConfig = UserConfig::get(User::findCurrent()->id);

@@ -30,10 +30,10 @@ class LVGroupsWizardStep implements CourseWizardStep
     {
         $mvv_plugin = PluginEngine::getPlugin("MVVPlugin");
         $mvv_basepath = $mvv_plugin->getPluginPath();
-        
+
         $first_step = reset($values);
         $_SESSION['wizarstep_course_starttime'] = $first_step['start_time'];
-                
+
         // We only need our own stored values here.
         $values = $values[__CLASS__];
 
@@ -141,7 +141,7 @@ class LVGroupsWizardStep implements CourseWizardStep
 
             $level[] = array(
                 'id' => $c->getId().'-'.$mvvid[0],
-                'name' => studip_utf8encode($c->getDisplayname()),
+                'name' => $c->getDisplayname(),
                 'has_children' => $c->hasChildren(),
                 'parent' => $c->getTrailParentId(),
                 'assignable' => $c->isAssignable(),
@@ -352,7 +352,7 @@ class LVGroupsWizardStep implements CourseWizardStep
         $coursetype = reset($values)['coursetype'];
         $class = $GLOBALS['SEM_TYPE'][$coursetype]['class'];
         $lvgruppen_not_allowed = !$GLOBALS['SEM_CLASS'][$class]['module'];
-                
+
         if (!$locked && !$lvgruppen_not_allowed) {
             return true;
         } else {
@@ -367,6 +367,7 @@ class LVGroupsWizardStep implements CourseWizardStep
 
         // Has user access to this function? Access state is configured in global config.
         $access_right = get_config('MVV_ACCESS_ASSIGN_LVGRUPPEN');
+
         // the id of the home institute
         // get the institute from the first step (normally "BasicDataWizardStep")
         $inst_id = reset($values)['institute'];

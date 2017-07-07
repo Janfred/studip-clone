@@ -54,7 +54,6 @@ function po_unescape($string) {
         '\\n' => "\n",
     );
     $string = str_replace(array_keys($replaces), array_values($replaces), $string);
-    $string = studip_utf8decode($string);
     return $string;
 }
 
@@ -65,7 +64,6 @@ function po_unescape($string) {
  * @return String Processed string
  */
 function po_stringify($string) {
-    $string = studip_utf8encode($string);
     $string = str_replace("\r", '', $string);
     $chunks = explode("\n", $string);
 
@@ -97,7 +95,7 @@ function po_stringify($string) {
  * @param Array  $message  Complete message item from parsed .po file
  * @param String $route    Associated route (if any)
  * @param int    $index    Type index for the entity
- * @param int    $position Position/version of the entity 
+ * @param int    $position Position/version of the entity
  * @return String Id of the entity
  */
 function get_id($version, $language, $message, $route, $index, $position) {
@@ -139,7 +137,7 @@ function get_id($version, $language, $message, $route, $index, $position) {
             $ids[$hash] = $id;
         } elseif ($index < 7) {
             // Help tour
-            
+
             // Is there any previous generated content?
             // We have to use the hash generated above as the new id since
             // there is no other way to exactly identify an already created
@@ -207,7 +205,7 @@ function get_id($version, $language, $message, $route, $index, $position) {
             $ids[$hash] = $id;
         } elseif ($index == 7) {
             // Help tooltip
-            
+
             // Nothing needs to be done, just copy the tooltip id
             // (This is the only table that has the id and version/language
             // info as primary key)
@@ -383,12 +381,12 @@ if ($_SERVER['argv'][1] === 'export') {
         fputs($fp, 'msgstr ""' . "\n");
         fputs($fp, "\n");
     }
-    
+
     // Close output file
     fclose($fp);
 } elseif ($_SERVER['argv'][1] === 'import') {
     // Import
-    
+
     // Error message: Invalid parameters
     if ($_SERVER['argc'] < 4) {
         print 'Usage: ' . $_SERVER['argv'][0] . ' import [--language] <file> <version>';

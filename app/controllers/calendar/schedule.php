@@ -262,7 +262,7 @@ class Calendar_ScheduleController extends AuthenticatedController
     function entry_action($id = false, $cycle_id = false)
     {
         if (Request::isXhr()) {
-            $this->response->add_header('Content-Type', 'text/html; charset=windows-1252');
+            $this->response->add_header('Content-Type', 'text/html; charset=utf-8');
             $this->layout = null;
 
             $this->entry = array(
@@ -299,7 +299,7 @@ class Calendar_ScheduleController extends AuthenticatedController
      */
     function entryajax_action($id, $cycle_id = false)
     {
-        $this->response->add_header('Content-Type', 'text/html; charset=windows-1252');
+        $this->response->add_header('Content-Type', 'text/html; charset=utf-8');
         if ($cycle_id) {
             $this->show_entry = array_pop(CalendarScheduleModel::getSeminarEntry($id, $GLOBALS['user']->id, $cycle_id));
             $this->show_entry['id'] = $id;
@@ -324,7 +324,7 @@ class Calendar_ScheduleController extends AuthenticatedController
      */
     function groupedentry_action($start, $end, $seminars, $day)
     {
-        $this->response->add_header('Content-Type', 'text/html; charset=windows-1252');
+        $this->response->add_header('Content-Type', 'text/html; charset=utf-8');
 
         // strucutre of an id: seminar_id-cycle_id
         // we do not need the cycle id here, so we trash it.
@@ -471,7 +471,7 @@ class Calendar_ScheduleController extends AuthenticatedController
     function settings_action()
     {
         if (Request::isXhr()) {
-            $this->response->add_header('Content-Type', 'text/html; charset=windows-1252');
+            $this->response->add_header('Content-Type', 'text/html; charset=utf-8');
             $this->layout = null;
         } else {
             $this->redirect('calendar/schedule/index?show_settings=true');

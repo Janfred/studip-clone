@@ -195,7 +195,7 @@ abstract class RouteMap
         }
 
         if ($mediaType = $this->getRequestMediaType()) {
-            $this->data = studip_utf8decode($this->parseRequestBody($mediaType));
+            $this->data = $this->parseRequestBody($mediaType);
         }
     }
 
@@ -525,7 +525,7 @@ abstract class RouteMap
     public function contentType($mime_type, $params = array())
     {
         if (!isset($params['charset'])) {
-            $params['charset'] = 'windows-1252';
+            $params['charset'] = 'utf-8';
         }
 
         if (mb_strpos($mime_type, 'charset') !== FALSE) {

@@ -907,18 +907,10 @@ class Module_ModuleController extends MVVController
             if (Request::submitted('store')) {
                 CSRFProtection::verifyUnsafeRequest();
                 $stored = false;
-                if (Request::isXhr()) {
-                    $this->lvgruppe->name = trim(studip_utf8decode(
-                            Request::get('name')));
-                    $this->lvgruppe->alttext = trim(studip_utf8decode(
-                            Request::get('alttext')));
-                    $this->lvgruppe->alttext_en = trim(studip_utf8decode(
-                            Request::get('alttext_en')));
-                } else {
-                    $this->lvgruppe->name = trim(Request::get('name'));
-                    $this->lvgruppe->alttext = trim(Request::get('alttext'));
-                    $this->lvgruppe->alttext_en = trim(Request::get('alttext_en'));
-                }
+                $this->lvgruppe->name = trim(Request::get('name'));
+                $this->lvgruppe->alttext = trim(Request::get('alttext'));
+                $this->lvgruppe->alttext_en = trim(Request::get('alttext_en'));
+
                 try {
                     $stored = $this->lvgruppe->store();
 

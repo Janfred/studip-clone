@@ -58,7 +58,6 @@ class JsupdaterController extends AuthenticatedController
     {
         $data = UpdateInformation::getInformation();
         $data = array_merge($data, $this->coreInformation());
-        $data = studip_utf8encode($data);
 
         $this->set_content_type('application/json;charset=utf-8');
         $this->render_text(json_encode($data));
@@ -144,24 +143,6 @@ class JsupdaterController extends AuthenticatedController
                         'html' => $template->render()
                     );
                 }
-            }
-        }
-        return $data;
-    }
-
-    /**
-     * Converts all strings within an array (except for indexes)
-     * from windows 1252 to utf8. PHP-objects are ignored.
-     * @param array $data: any array with strings in windows-1252 encoded
-     * @return array: almost the same array but strings are now utf8-encoded
-     */
-    protected function recursive_studip_utf8encode(array $data)
-    {
-        foreach ($data as $key => $component) {
-            if (is_array($component)) {
-                $data[$key] = $this->recursive_studip_utf8encode($component);
-            } elseif(is_string($component)) {
-                $data[$key] = studip_utf8encode($component);
             }
         }
         return $data;

@@ -156,7 +156,7 @@ class UserDataToConfig extends Migration
                         $old_values = array_intersect_key((array)$vars[$key], $defaults);
                         $new_values = array_merge($defaults, $old_values);
                         $check->execute(array($option['name'], $user_id));
-                        $stmt->execute(array(md5($option['name'].$user_id), $user_id, $option['name'], json_encode(studip_utf8encode($new_values))));
+                        $stmt->execute(array(md5($option['name'].$user_id), $user_id, $option['name'], json_encode($new_values)));
                     }
                 }
                 foreach(array('homepage_cache_own','CurrentLogin','LastLogin','_my_sem_group_field','_my_admin_inst_id') as $key) {

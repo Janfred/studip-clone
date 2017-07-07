@@ -132,24 +132,24 @@ class Studiengaenge_StudiengaengeController extends MVVController
             if ($this->studiengang->isNew()) {
                 $this->reset_search('Studiengang');
             }
-            
-            
+
+
             //Special handling for names and short names:
             //These can be copied from a "fach" object, if such an object
             //has been selected via the quick search element.
             //In such a case the studiengang_id parameter contains a MD5 sum
             //instead of text.
-            
+
             $fach_id = Request::get('fach_id');
             $this->fach = null;
-            
+
             //check, if fach_id contains a MD5 sum:
             if(preg_match('/[a-f0-9]{32}/', $fach_id)) {
                 //We have a MD5 sum of a "fach":
                 //Lookup the "fach" object in the database:
                 $this->fach = Fach::find($fach_id);
             }
-            
+
             if($this->fach) {
                 //"fach" object exists: use its value
                 //for the names and short names of the "studiengang"
@@ -166,8 +166,8 @@ class Studiengaenge_StudiengaengeController extends MVVController
                 $this->studiengang->name_kurz = trim(Request::get('name_kurz'));
                 $this->studiengang->name_kurz_en = trim(Request::get('name_kurz_en'));
             }
-            
-            
+
+
             $this->studiengang->abschluss_id = Request::option('abschluss_id');
             $this->studiengang->beschreibung = trim(Request::get('beschreibung'));
             $this->studiengang->beschreibung_en = trim(Request::get('beschreibung_en'));
@@ -719,7 +719,7 @@ class Studiengaenge_StudiengaengeController extends MVVController
             $this->filter['mvv_fach_inst.institut_id']
                     = Request::option('fachbereich_filter');
         }
-        
+
         // store filter
         $this->sessSet('filter', $this->filter);
         $this->reset_page();
@@ -783,11 +783,11 @@ class Studiengaenge_StudiengaengeController extends MVVController
     {
         $template_factory = $this->get_template_factory();
         $studiengang_ids = Studiengang::findByFilter($this->filter);
-        
+
         if ($this->search_result['Studiengang']) {
             $studiengang_ids = array_intersect($studiengang_ids, $this->search_result['Studiengang']);
         }
-        
+
         // Semesters
         $semesters = new SimpleCollection(Semester::getAll());
         $semesters = $semesters->orderBy('beginn desc');
@@ -859,7 +859,7 @@ class Studiengaenge_StudiengaengeController extends MVVController
                 . 'OR mvv_studiengang.name_kurz LIKE :input) ';
             $query .= ModuleManagementModel::getFilterSql($this->filter, false);
         }
-        
+
         $search_term =
                 $this->search_term ? $this->search_term : _('Studiengang suchen');
 
@@ -932,7 +932,7 @@ class Studiengaenge_StudiengaengeController extends MVVController
 
                 $this->render_nothing();
             } else {
-                $content = studip_utf8encode($template->render());
+                $content = $template->render();
                 $this->response->add_header('Content-type', 'application/msword');
                 $this->response->add_header('Content-Disposition', 'attachment; filename="' . FileHelper::sanitizeFilename($studiengang->getDisplayName()). '.doc"');
                 $this->render_text($content);

@@ -199,7 +199,8 @@ namespace {
             DBManager::getInstance()
                 ->setConnection('studip-slave',
                     'mysql:host=' . $GLOBALS['DB_STUDIP_SLAVE_HOST'] .
-                    ';dbname=' . $GLOBALS['DB_STUDIP_SLAVE_DATABASE'],
+                    ';dbname=' . $GLOBALS['DB_STUDIP_SLAVE_DATABASE'] .
+                    ';charset=utf8mb4',
                     $GLOBALS['DB_STUDIP_SLAVE_USER'],
                     $GLOBALS['DB_STUDIP_SLAVE_PASSWORD']);
         } catch (PDOException $exception) {
@@ -246,7 +247,6 @@ namespace {
 
     // Add paths to autoloader that were defined in config_local.inc.php and
     // may be optional
-
     StudipAutoloader::addAutoloadPath($GLOBALS['STUDIP_BASE_PATH'] . '/lib/resources/lib');
     require_once 'lib/resources/resourcesFunc.inc.php';
     require_once 'lib/resources/lib/list_assign.inc.php';
@@ -319,7 +319,7 @@ namespace {
             }
         }
     }
-    $mail_transporter->default_charset = 'WINDOWS-1252';
+    $mail_transporter->default_charset = 'UTF-8';
     $mail_transporter->SetBulkMail((int)$GLOBALS['MAIL_BULK_DELIVERY']);
     StudipMail::setDefaultTransporter($mail_transporter);
     unset($mail_transporter);
