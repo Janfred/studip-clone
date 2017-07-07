@@ -13,23 +13,28 @@ class RefactorConfigLocal extends Migration
         $global_boolean_parameter = array(
             "UNI_NAME_CLEAN" => array(
                 'description' => "Name der Stud.IP-Installation bzw. Hochschule.",
-                'type' => "string"
+                'type' => "string",
+                'default' => "Stud.IP"
             ),
             "STUDIP_INSTALLATION_ID" => array(
                 'description' => "Unique identifier for installation",
-                'type' => "string"
+                'type' => "string",
+                'default' => "demo-installation"
             ),
             "MEDIA_CACHE_MAX_LENGTH" => array(
                 'description' => "Maximale Größe von Dateien, die im Media-Cache gecached werden (in Bytes)?",
-                'type' => "integer"
+                'type' => "integer",
+                'default' => 1000000
             ),
             "MEDIA_CACHE_LIFETIME" => array(
                 'description' => "Wieviele Sekunden soll gecached werden?",
-                'type' => "integer"
+                'type' => "integer",
+                'default' => 86400
             ),
             "MEDIA_CACHE_MAX_FILES" => array(
                 'description' => "Wieviele Dateien sollen maximal gecached werden?",
-                'type' => "integer"
+                'type' => "integer",
+                'default' => 3000
             ),
             "XSLT_ENABLE" => array(
                 'description' => "Soll Export mit XSLT angeschaltet sein?",
@@ -88,15 +93,18 @@ class RefactorConfigLocal extends Migration
             ),
             "USERNAME_REGULAR_EXPRESSION" => array(
                 'description' => "Regex for allowed characters in usernames",
-                'type' => "string"
+                'type' => "string",
+                'default' => '/^([a-zA-Z0-9_@.-]{4,})$/'
             ),
             "DEFAULT_TIMEZONE" => array(
                 'description' => "What timezone should be used (default: Europe/Berlin)?",
-                'type' => "string"
+                'type' => "string",
+                'default' => 'Europe/Berlin'
             ),
             "DEFAULT_LANGUAGE" => array(
                 'description' => "Which language should we use if we can gather no information from user?",
-                'type' => "string"
+                'type' => "string",
+                'default' => 'de_DE'
             ),
             "ALLOW_CHANGE_USERNAME" => array(
                 'description' => "If true, users are allowed to change their username",
@@ -151,24 +159,33 @@ class RefactorConfigLocal extends Migration
             ),
         );
 
-        $stmt = DBManager::get()->prepare("
+        $stmt_value = DBManager::get()->prepare("
             INSERT IGNORE INTO config
                 (config_id, field, value, is_default, type, `range`, section, mkdate, chdate, description)
             VALUES
-                (MD5(:name), :name, :value, :is_default, :type, :range, :section, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), :description)
+                (:config_id, :name, :value, '0', :type, :range, :section, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), :description)
+        ");
+        $stmt_default = DBManager::get()->prepare("
+            INSERT IGNORE INTO config
+                (config_id, field, value, is_default, type, `range`, section, mkdate, chdate, description)
+            VALUES
+                (:config_id, :name, :value, '1', :type, :range, :section, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), :description)
         ");
 
         foreach ($global_boolean_parameter as $name => $data) {
             $option = array(
+                'config_id'   => md5($name),
                 'name'        => $name,
                 'type'        => $data['type'],
                 'value'       => $GLOBALS[$name],
-                'is_default'  => $data['default'] ?: "",
                 'range'       => 'global',
                 'section'     => $data['section'] ?: "global",
                 'description' => $data['description']
             );
-            $stmt->execute($option);
+            $stmt_value->execute($option);
+            $option['config_id'] = md5($name."___DEFAULT");
+            $option['value']     = $data['default'] ?: "";
+            $stmt_default->execute($option);
         }
     }
 
