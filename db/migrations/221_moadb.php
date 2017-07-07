@@ -140,7 +140,7 @@ class Moadb extends Migration
             $this->migrateFolder($folder, $folder['seminar_id'], 'institute', 'StandardFolder');
         }
         //other top folders
-        foreach ($db->query("SELECT f.*, i.institut_id as seminar_id FROM `folder` f INNER JOIN `Institute` i ON MD5(CONCAT(i.institut_id, 'top_folder')) = f.range_id") as $folder) {
+        foreach ($db->query("SELECT f.*, i.institut_id as seminar_id FROM `folder` f INNER JOIN `Institute` i ON BINARY MD5(CONCAT(i.institut_id, _latin1'top_folder')) = f.range_id") as $folder) {
             $folder['range_id'] = $institute_folders[$folder['seminar_id']];
             $this->migrateFolder($folder, $folder['seminar_id'], 'institute', 'StandardFolder');
         }
@@ -168,7 +168,7 @@ class Moadb extends Migration
         $db->exec("COMMIT");
 
         //other top folders
-        foreach ($db->query("SELECT f.*, s.Seminar_id as seminar_id FROM `folder` f INNER JOIN `seminare` s ON MD5(CONCAT(s.Seminar_id, 'top_folder')) = f.range_id") as $folder) {
+        foreach ($db->query("SELECT f.*, s.Seminar_id as seminar_id FROM `folder` f INNER JOIN `seminare` s ON BINARY MD5(CONCAT(s.Seminar_id, 'top_folder')) = f.range_id") as $folder) {
             $folder['range_id'] = $seminar_folders[$folder['seminar_id']];
             $this->migrateFolder($folder, $folder['seminar_id'], 'course', 'StandardFolder');
         }
@@ -287,7 +287,7 @@ class Moadb extends Migration
                   ADD KEY `parent_id` (`parent_id`)");
 
         //delete configuration variables designed for the old file area:
-        /*
+
         $db->exec(
             "DELETE FROM `config`
             WHERE
@@ -299,7 +299,7 @@ class Moadb extends Migration
             'DOCUMENTS_EMBEDD_FLASH_MOVIES')"
         );
         $db->exec("DROP TABLE `doc_filetype`, `doc_filetype_forbidden`, `doc_usergroup_config`, `dokumente`, `files_backend_studip`, `files_backend_url`, `files_share`, `folder`, `_files`, `_file_refs`, `document_licenses`");
-        */
+
         SimpleORMap::expireTableScheme();
     }
 
