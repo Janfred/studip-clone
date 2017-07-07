@@ -185,7 +185,8 @@ namespace {
         DBManager::getInstance()
             ->setConnection('studip',
                 'mysql:host=' . $GLOBALS['DB_STUDIP_HOST'] .
-                ';dbname=' . $GLOBALS['DB_STUDIP_DATABASE'],
+                ';dbname=' . $GLOBALS['DB_STUDIP_DATABASE'] .
+                ';charset=utf8mb4',
                 $GLOBALS['DB_STUDIP_USER'],
                 $GLOBALS['DB_STUDIP_PASSWORD']);
     } catch (PDOException $exception) {
