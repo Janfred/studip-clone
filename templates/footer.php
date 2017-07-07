@@ -35,7 +35,9 @@
     </ul>
 <? endif; ?>
 </div>
+<? /*
 <script>
 STUDIP.Navigation = <?= json_encode(ResponsiveHelper::getNavigationArray()) ?>;
 </script>
+*/ ?>
 <!-- Ende Footer -->
