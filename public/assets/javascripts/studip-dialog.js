@@ -496,7 +496,7 @@
             // Create 'close' button
             if (!dialog_options.buttons.hasOwnProperty('cancel')) {
                 dialog_options.buttons.cancel = {
-                    text: 'Schließen'.toLocaleString()
+                    text: 'SchlieÃŸen'.toLocaleString()
                 };
             }
             dialog_options.buttons.cancel.click = function () {
@@ -571,7 +571,7 @@
         return $.Deferred(function (defer) {
             STUDIP.Dialog.show(question, {
                 id: 'confirmation-dialog',
-                title: 'Bitte bestätigen Sie die Aktion'.toLocaleString(),
+                title: 'Bitte bestï¿½tigen Sie die Aktion'.toLocaleString(),
                 size: 'fit',
                 wikilink: false,
                 dialogClass: 'studip-confirmation',
