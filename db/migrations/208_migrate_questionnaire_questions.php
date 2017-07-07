@@ -45,44 +45,40 @@ class MigrateQuestionnaireQuestions extends Migration
 
     private function addEtaskIDToQuestionsTable()
     {
-        $this->db->exec(<<<'SQL'
-ALTER TABLE  `questionnaire_questions`
-ADD  `etask_task_id` INT NOT NULL
-AFTER  `questionnaire_id`
-SQL
-        );
+        $this->db->exec("
+            ALTER TABLE  `questionnaire_questions`
+            ADD  `etask_task_id` INT NOT NULL
+            AFTER  `questionnaire_id`
+        ");
         SimpleORMap::expireTableScheme();
     }
 
     private function addQuestionTypeAndDataFromQuestionsTable()
     {
-        $this->db->exec(<<<'SQL'
-ALTER TABLE  `questionnaire_questions`
-ADD  `questiondata` text NOT NULL AFTER  `questionnaire_id`,
-ADD  `questiontype` varchar(64) NOT NULL AFTER  `questionnaire_id`
-SQL
-        );
+        $this->db->exec("
+            ALTER TABLE  `questionnaire_questions`
+            ADD  `questiondata` text NOT NULL AFTER  `questionnaire_id`,
+            ADD  `questiontype` varchar(64) NOT NULL AFTER  `questionnaire_id`
+        ");
         SimpleORMap::expireTableScheme();
     }
 
     private function connectTaskToQuestion($taskID, $questionID)
     {
-        $stmt = $this->db->prepare(<<<'SQL'
-UPDATE questionnaire_questions
-SET  etask_task_id =  ?
-WHERE  question_id = ?
-SQL
-        );
+        $stmt = $this->db->prepare("
+            UPDATE questionnaire_questions
+            SET  etask_task_id =  ?
+            WHERE  question_id = ?
+        ");
 
         $stmt->execute([ $taskID, $questionID ]);
     }
 
     private function fetchTask($id)
     {
-        $stmt = $this->db->prepare(<<<'SQL'
-SELECT * FROM  `etask_tasks` WHERE id = ?
-SQL
-        );
+        $stmt = $this->db->prepare("
+            SELECT * FROM  `etask_tasks` WHERE id = ?
+        ");
         $stmt->execute([$id]);
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -93,21 +89,18 @@ SQL
         $stmt = $this->db->prepare('SELECT * FROM  `questionnaire_questions`');
         $stmt->execute();
 
-        while ($record = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            yield $record;
-        }
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     private function findOwner($questionID)
     {
-        $stmt = $this->db->prepare(<<<'SQL'
-SELECT user_id
-FROM  `questionnaire_questions`
-INNER JOIN questionnaires
-USING ( questionnaire_id )
-WHERE question_id = ? LIMIT 1
-SQL
-        );
+        $stmt = $this->db->prepare("
+            SELECT user_id
+            FROM  `questionnaire_questions`
+            INNER JOIN questionnaires
+            USING ( questionnaire_id )
+            WHERE question_id = ? LIMIT 1
+        ");
 
         $stmt->execute([ $questionID ]);
 
@@ -116,24 +109,21 @@ SQL
 
     private function fetchMCAnswers()
     {
-        $stmt = $this->db->prepare(<<<'SQL'
-SELECT answer_id, answerdata
-FROM  `questionnaire_answers`
-WHERE answerdata LIKE  '%{"answers":%'
-SQL
-        );
+        $stmt = $this->db->prepare("
+            SELECT answer_id, answerdata
+            FROM  `questionnaire_answers`
+            WHERE answerdata LIKE  '%{\"answers\":%'
+        ");
         $stmt->execute([]);
-        while ($record = $stmt->fetch(PDO::FETCH_NUM)) {
-            yield $record;
-        }
+
+        return $stmt->fetch(PDO::FETCH_NUM);
     }
 
     private function migrateMCAnswers()
     {
-        $updateStmt = $this->db->prepare(<<<'SQL'
-UPDATE  questionnaire_answers SET answerdata = ? WHERE answer_id = ?
-SQL
-        );
+        $updateStmt = $this->db->prepare("
+            UPDATE questionnaire_answers SET answerdata = ? WHERE answer_id = ?
+        ");
 
         $decr = function ($item) {
             return  intval($item) - 1;
@@ -209,8 +199,8 @@ SQL
                 'description' => $description,
                 'task' => $task,
                 'user_id' => $userID,
-                'created' => date('c', $questionAry['mkdate']),
-                'changed' => date('c', $questionAry['chdate']),
+                'mkdate' => $questionAry['mkdate'],
+                'chdate' => $questionAry['chdate'],
                 'options' => $options
             ]
         );
@@ -255,8 +245,8 @@ SQL
                 'description' => $description,
                 'task' => $task,
                 'user_id' => $userID,
-                'created' => date('c', $questionAry['mkdate']),
-                'changed' => date('c', $questionAry['chdate']),
+                'mkdate' => $questionAry['mkdate'],
+                'chdate' => $questionAry['chdate'],
                 'options' => $options
             ]
         );
@@ -264,22 +254,20 @@ SQL
 
     private function removeEtaskIDToQuestionsTable()
     {
-        $this->db->exec(<<<'SQL'
-ALTER TABLE `questionnaire_questions`
-DROP `etask_task_id`
-SQL
-        );
+        $this->db->exec("
+            ALTER TABLE `questionnaire_questions`
+            DROP `etask_task_id`
+        ");
         SimpleORMap::expireTableScheme();
     }
 
     private function removeQuestionTypeAndDataFromQuestionsTable()
     {
-        $this->db->exec(<<<'SQL'
-ALTER TABLE `questionnaire_questions`
-  DROP `questiontype`,
-  DROP `questiondata`
-SQL
-        );
+        $this->db->exec("
+            ALTER TABLE `questionnaire_questions`
+            DROP `questiontype`,
+            DROP `questiondata`
+        ");
         SimpleORMap::expireTableScheme();
     }
 
@@ -296,13 +284,12 @@ SQL
             return;
         }
 
-        $stmt = $this->db->prepare(<<<'SQL'
-UPDATE questionnaire_questions
-SET  questiontype =  ?,
-     questiondata =  ?
-WHERE question_id = ?
-SQL
-        );
+        $stmt = $this->db->prepare("
+            UPDATE questionnaire_questions
+            SET  questiontype = ?,
+                 questiondata = ?
+            WHERE question_id = ?
+        ");
 
         $stmt->execute([$questiontype, $questiondata, $questionAry['question_id']]);
     }

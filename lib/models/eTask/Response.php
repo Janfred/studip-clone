@@ -14,8 +14,8 @@ namespace eTask;
  *  @property float points database column
  *  @property string feedback database column
  *  @property string grader_id database column
- *  @property string created database column
- *  @property string changed database column
+ *  @property string mkdate database column
+ *  @property string chdate database column
  *  @property string options database column
  *  @property eTask\Assignment assignment belongs_to etask\Assignment
  *  @property eTask\Task task belongs_to etask\Task

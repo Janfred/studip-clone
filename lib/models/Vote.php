@@ -34,7 +34,6 @@ class Vote extends QuestionnaireQuestion implements QuestionType
                 [
                     'type' => 'multiple-choice',
                     'user_id' => $GLOBALS['user']->id,
-                    'created' => date('c', time())
                 ]
             );
         }

@@ -9,8 +9,8 @@ namespace eTask;
  * @property string title database column
  * @property string description database column
  * @property string user_id database column
- * @property string created database column
- * @property string changed database column
+ * @property string mkdate database column
+ * @property string chdate database column
  * @property string options database column
  * @property SimpleORMapCollection tasks additional field etask\Task
  * @property SimpleORMapCollection testtasks has_many etask\TestTask

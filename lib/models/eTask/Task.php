@@ -11,8 +11,8 @@ namespace eTask;
  * @property string description database column
  * @property string task database column
  * @property string user_id database column
- * @property string created database column
- * @property string changed database column
+ * @property string mkdate database column
+ * @property string chdate database column
  * @property string options database column
  * @property User owner belongs_to User
  * @property SimpleORMapCollection tests additional field etask\Test
@@ -62,29 +62,6 @@ class Task extends \SimpleORMap
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function __construct($id = null)
-    {
-        parent::__construct($id);
-        $this->registerCallback('before_store', 'cbUpdateChanged');
-    }
-
-    /**
-     * Updates the field `changed` on change.
-     *
-     * @return true
-     */
-    protected function cbUpdateChanged()
-    {
-        if ($this->isDirty()) {
-            $this->changed = date('c');
-        }
-
-        return true;
-    }
-
-    /**
      * Retrieve the tests associated to this task.
      *
      * @return SimpleORMapCollection the associated tests
@@ -101,7 +78,7 @@ class Task extends \SimpleORMap
                     'thru_key' => 'task_id',
                     'thru_assoc_key' => 'test_id',
                     'assoc_foreign_key' => 'id',
-                    'order_by' => 'ORDER BY etask_tests.changed ASC'
+                    'order_by' => 'ORDER BY etask_tests.chdate ASC'
                 ]
             )
         );
