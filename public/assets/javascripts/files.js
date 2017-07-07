@@ -8,12 +8,12 @@
         openAddFilesWindow: function (folder_id) {
             if ($('.files_source_selector').length > 0) {
                 STUDIP.Dialog.show($('.files_source_selector').html(), {
-                    title: 'Datei hinzuf¸gen'.toLocaleString(),
+                    title: 'Datei hinzuf√ºgen'.toLocaleString(),
                     size: 'auto'
                 });
             } else {
                 STUDIP.Dialog.fromURL(STUDIP.URLHelper.getURL('dispatch.php/file/add_files_window/' + folder_id), {
-                    title: 'Datei hinzuf¸gen'.toLocaleString(),
+                    title: 'Datei hinzuf√ºgen'.toLocaleString(),
                     size: 'auto'
                 });
             }
@@ -51,7 +51,7 @@
                         files += 1;
                     } else {
                         $('.file_upload_window .errorbox').show();
-                        $('.file_upload_window .errorbox .errormessage').text('Datei ist zu groﬂ oder hat eine nicht erlaubte Endung.'.toLocaleString());
+                        $('.file_upload_window .errorbox .errormessage').text('Datei ist zu gro√ü oder hat eine nicht erlaubte Endung.'.toLocaleString());
                     }
                 }
             });
@@ -97,7 +97,7 @@
                     if (json.redirect) {
                         STUDIP.Dialog.fromURL(json.redirect, {
                             title: json.window_title
-                                || (json.new_html.length > 1 ? 'Lizenz ausw‰hlen: %s Dateien'.toLocaleString().replace('%s', json.new_html.length) : 'Lizenz ausw‰hlen'.toLocaleString())
+                                || (json.new_html.length > 1 ? 'Lizenz ausw√§hlen: %s Dateien'.toLocaleString().replace('%s', json.new_html.length) : 'Lizenz ausw√§hlen'.toLocaleString())
                         });
                     } else if (json.message) {
                         $('.file_uploader .uploadbar').hide().parent().append(json.message);

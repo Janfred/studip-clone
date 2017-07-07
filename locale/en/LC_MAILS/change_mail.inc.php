@@ -2,7 +2,7 @@
         $subject="Stud.IP system account modification";
         
         $mailbody="This is a Stud.IP system information mail\n"
-        ."(Studienbegleitender Internetsupport von Präsenzlehre)\n"
+        ."(Studienbegleitender Internetsupport von PrÃ¤senzlehre)\n"
         ."- " . Config::get()->UNI_NAME_CLEAN . " -\n\n"
         ."Your account was modified ".($this->user_data['auth_user_md5.locked']==1 ? "and locked" : "")." by an administrator at $Zeit\n"
         ."The current information is:\n\n"

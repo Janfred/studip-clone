@@ -27,9 +27,9 @@ STUDIP.MultiSelect = {
 jQuery(function () {
     jQuery.extend(jQuery.ui.multiselect, {
         locale: {
-            addAll: "Alle hinzufügen".toLocaleString(),
+            addAll: "Alle hinzufÃ¼gen".toLocaleString(),
             removeAll: "Alle entfernen".toLocaleString(),
-            itemsCount: "ausgewählt".toLocaleString()
+            itemsCount: "ausgewÃ¤hlt".toLocaleString()
         }
     });
 });

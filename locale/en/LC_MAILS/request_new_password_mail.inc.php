@@ -2,7 +2,7 @@
     $subject = _("[Stud.IP - " . $GLOBALS['UNI_NAME_CLEAN'] . "] Send new password (STEP 3/5)");
 
     $mailbody="This is a Stud.IP system confirmation mail.\n"
-    ."(Studienbegleitender Internetsupport von Präsenzlehre)\n"
+    ."(Studienbegleitender Internetsupport von PrÃ¤senzlehre)\n"
     ."- Config::get()->UNI_NAME_CLEAN -\n\n"
     ."You want to get a new password for your account.\n"
     ."Username: $username\n"

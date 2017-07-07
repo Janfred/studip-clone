@@ -1,10 +1,10 @@
 <?
-        $subject="Account-Änderung Stud.IP-System";
+        $subject="Account-Ã„nderung Stud.IP-System";
         
         $mailbody="Dies ist eine Informationsmail des Stud.IP-Systems\n"
-        ."(Studienbegleitender Internetsupport von Präsenzlehre)\n"
+        ."(Studienbegleitender Internetsupport von PrÃ¤senzlehre)\n"
         ."- " . Config::get()->UNI_NAME_CLEAN . " -\n\n"
-        ."Ihr Account wurde um " . $Zeit . " von der Administration verändert"
+        ."Ihr Account wurde um " . $Zeit . " von der Administration verÃ¤ndert"
         .($this->user_data['auth_user_md5.locked']==1 ? " und gesperrt" : "")
         .".\nDie aktuellen Angaben lauten:\n\n"
         ."Benutzername: " . $this->user_data['auth_user_md5.username'] . "\n"
@@ -12,11 +12,11 @@
         ."Vorname: " . $this->user_data['auth_user_md5.Vorname'] . "\n"
         ."Nachname: " . $this->user_data['auth_user_md5.Nachname'] . "\n"
         ."E-Mail-Adresse: " . $this->user_data['auth_user_md5.Email'] . "\n\n"
-        ."Ihr Passwort hat sich nicht verändert.\n\n"
-        ."Diese E-Mail wurde Ihnen zugesandt, um Sie über die Änderungen zu informieren.\n\n"
-        ."Wenn Sie Einwände gegen die Änderungen haben, wenden Sie sich bitte an\n"
+        ."Ihr Passwort hat sich nicht verÃ¤ndert.\n\n"
+        ."Diese E-Mail wurde Ihnen zugesandt, um Sie Ã¼ber die Ã„nderungen zu informieren.\n\n"
+        ."Wenn Sie EinwÃ¤nde gegen die Ã„nderungen haben, wenden Sie sich bitte an\n"
         . $this->abuse_email . "\n"
-        ."Sie können einfach auf diese E-Mail antworten.\n\n"
+        ."Sie kÃ¶nnen einfach auf diese E-Mail antworten.\n\n"
         ."Hier kommen Sie direkt ins System:\n"
         . $GLOBALS['ABSOLUTE_URI_STUDIP'] . "\n\n";
 

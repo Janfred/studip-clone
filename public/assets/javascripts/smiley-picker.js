@@ -75,7 +75,7 @@
                     hide: 'fade',
                     buttons: [
                         {
-                            text: 'Zur Gesamtübersicht'.toLocaleString(),
+                            text: 'Zur GesamtÃ¼bersicht'.toLocaleString(),
                             click: function () {
                                 var url = STUDIP.URLHelper.getURL('dispatch.php/smileys');
                                 picker_element.dialog('close');

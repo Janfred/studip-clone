@@ -58,7 +58,7 @@
                                 var not_bookable_rooms = _.map(result, function (v) {
                                     return $(select).children('option[value=' + v + ']').text().trim();
                                 });
-                                select.title = 'Nicht buchbare Räume:'.toLocaleString() + ' ' + not_bookable_rooms.join(', ');
+                                select.title = 'Nicht buchbare RÃ¤ume:'.toLocaleString() + ' ' + not_bookable_rooms.join(', ');
                             } else {
                                 select.title = '';
                             }
@@ -68,7 +68,7 @@
                         } else {
                             select.title = '';
                         }
-                        me.attr('title', 'Alle Räume anzeigen'.toLocaleString());
+                        me.attr('title', 'Alle RÃ¤ume anzeigen'.toLocaleString());
                         me.data('state', 'enabled');
                     }
                 });
@@ -93,7 +93,7 @@
     $(document).on('change', '.datesBulkActions', function () {
         var $button = $(this).next('button');
         if ($(this).val() === 'delete') {
-            $button.attr('data-confirm', 'Wollen Sie die gewünschten Termine wirklich löschen?'.toLocaleString());
+            $button.attr('data-confirm', 'Wollen Sie die gewÃ¼nschten Termine wirklich lÃ¶schen?'.toLocaleString());
         } else {
             if ($button.attr('data-confirm')) {
                 $button.removeAttr('data-confirm');
@@ -109,9 +109,9 @@
                 && (start.value !== start.defaultValue || end.value !== end.defaultValue);
         // check if new time exceeds the current one and add security question if necessary
         if (changed && (start.value < start.defaultValue || end.value > end.defaultValue)) {
-            $(this).attr('data-confirm', 'Wenn Sie die regelmäßige Zeit ändern, '
-                + 'verlieren Sie die Raumbuchungen für alle in der Zukunft liegenden Termine! '
-                + 'Sind Sie sicher, dass Sie die regelmäßige Zeit ändern möchten?'.toLocaleString());
+            $(this).attr('data-confirm', 'Wenn Sie die regelmÃ¤ÃŸige Zeit Ã¤ndern, '
+                + 'verlieren Sie die Raumbuchungen fÃ¼r alle in der Zukunft liegenden Termine! '
+                + 'Sind Sie sicher, dass Sie die regelmÃ¤ÃŸige Zeit Ã¤ndern mÃ¶chten?'.toLocaleString());
         } else {
             // remove security question - not necessary (any more)
             $(this).attr('data-confirm', null);

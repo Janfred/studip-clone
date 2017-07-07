@@ -6,7 +6,7 @@ STUDIP.Folders = {
         STUDIP.Dialog.fromURL(
             STUDIP.ABSOLUTE_URI_STUDIP + 'dispatch.php/folder/new?rangeId=' + range_id + '&parent_folder_id=' + folder_id + '&js=1',
             {
-                title: 'Datei hinzufügen'.toLocaleString()
+                title: 'Datei hinzufÃ¼gen'.toLocaleString()
             }
         );
     },

@@ -159,7 +159,7 @@ STUDIP.Admission = {
         var parent = $('#user_' + userId).parent();
         $('#user_' + userId).remove();
         if (parent.children('li').size() === 0) {
-            var nousers = 'Sie haben noch niemanden hinzugefügt.'.toLocaleString();
+            var nousers = 'Sie haben noch niemanden hinzugefÃ¼gt.'.toLocaleString();
             $(parent).parent().append('<span id="nousers">' +
                 '<i>' + nousers + '</i></span>');
         }

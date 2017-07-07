@@ -167,13 +167,13 @@
             },
             maximumSelected: function(e) {
                 var t = [
-                    'Sie kˆnnen nur %u Eintrag ausw‰hlen'.toLocaleString(),
-                    'Sie kˆnnen nur %u Eintr‰ge ausw‰hlen'.toLocaleString()
+                    'Sie k√∂nnen nur %u Eintrag ausw√§hlen'.toLocaleString(),
+                    'Sie k√∂nnen nur %u Eintr√§ge ausw√§hlen'.toLocaleString()
                 ];
                 return t[e.maximum === 1 ? 0 : 1].replace('%u', e.maximum);
             },
             noResults: function() {
-                return 'Keine ‹bereinstimmungen gefunden'.toLocaleString();
+                return 'Keine √úbereinstimmungen gefunden'.toLocaleString();
             },
             searching: function() {
                 return 'Suche...'.toLocaleString();

@@ -1,14 +1,14 @@
 <h1><font color="red">DIES IST NUR EIN BEISPIELTEXT. NICHT OHNE LOKALE ANPASSUNGEN VERWENDEN!</font></h1>
 <table width="100%" border="0" cellspacing="10" cellpadding="10">
 <tr>
-<td colspan=2><h1>Änderungen zur Sichtbarkeit in Stud.IP</h1>
-<p>Ab sofort sind Ihre Daten für andere NutzerInnen nur
-  noch mit Ihrem Einverständnis zugänglich. Sie haben <em>jetzt</em>
-  die Möglichkeit, sich zu entscheiden, weiterhin sichtbar zu sein und Stud.IP
-  wie gewohnt zu nutzen, oder unsichtbar zu sein, dafür aber nicht mehr alle
-  Funktionen verwenden zu können.</p>
-<p>Sie können diese Einstellung jederzeit unter &quot;Persönliche Einstellungen&quot;
-  ändern.</p>
+<td colspan=2><h1>Ã„nderungen zur Sichtbarkeit in Stud.IP</h1>
+<p>Ab sofort sind Ihre Daten fÃ¼r andere NutzerInnen nur
+  noch mit Ihrem EinverstÃ¤ndnis zugÃ¤nglich. Sie haben <em>jetzt</em>
+  die MÃ¶glichkeit, sich zu entscheiden, weiterhin sichtbar zu sein und Stud.IP
+  wie gewohnt zu nutzen, oder unsichtbar zu sein, dafÃ¼r aber nicht mehr alle
+  Funktionen verwenden zu kÃ¶nnen.</p>
+<p>Sie kÃ¶nnen diese Einstellung jederzeit unter &quot;PersÃ¶nliche Einstellungen&quot;
+  Ã¤ndern.</p>
   </td>
 </tr>
   <tr>
@@ -19,33 +19,33 @@
     </tr>
     <tr>
     <td width="50%" valign="top"><ul>
-        <li> können Sie alle Kommunikationsmöglichkeiten wie gewohnt
+        <li> kÃ¶nnen Sie alle KommunikationsmÃ¶glichkeiten wie gewohnt
           nutzen, </li>
-        <li>können Sie in Ihrem Profil trotzdem weitestgehend
-          entscheiden, was andere über Sie erfahren können,</li>
-        <li>können Sie von anderen gefunden und kontaktiert werden,</li>
+        <li>kÃ¶nnen Sie in Ihrem Profil trotzdem weitestgehend
+          entscheiden, was andere Ã¼ber Sie erfahren kÃ¶nnen,</li>
+        <li>kÃ¶nnen Sie von anderen gefunden und kontaktiert werden,</li>
         <li>leisten Sie einen Beitrag dazu, Stud.IP weiterhin zu einer aktiven
           und kommunikativen Plattform zu machen.</li>
       </ul></td>
     <td width="50%" valing="top">
     <ul>
-        <li>können Sie nicht mehr über die Personensuche gefunden werden,</li>
-        <li>können Sie nicht mehr in der "Wer-ist-online"-Liste erscheinen,</li>
-        <li>können Sie nicht mehr Ihr Profil nutzen,</li>
-        <li>können Sie nicht mehr Ihre E-Mail-Adresse, Ihr Gästebuch, Ihre Stud.IP-Punkte etc. anderen zugänglich machen,</li>
-        <li>können Sie nicht mehr im Adressbuch anderer NutzerInnen stehen. </li>
+        <li>kÃ¶nnen Sie nicht mehr Ã¼ber die Personensuche gefunden werden,</li>
+        <li>kÃ¶nnen Sie nicht mehr in der "Wer-ist-online"-Liste erscheinen,</li>
+        <li>kÃ¶nnen Sie nicht mehr Ihr Profil nutzen,</li>
+        <li>kÃ¶nnen Sie nicht mehr Ihre E-Mail-Adresse, Ihr GÃ¤stebuch, Ihre Stud.IP-Punkte etc. anderen zugÃ¤nglich machen,</li>
+        <li>kÃ¶nnen Sie nicht mehr im Adressbuch anderer NutzerInnen stehen. </li>
       </ul></td>
   </tr>
   <tr>
   <td colspan="2">
-  Achtung! Grundsätzlich und unabhängig davon, ob Sie sichtbar oder unsichtbar sind, gilt:
+  Achtung! GrundsÃ¤tzlich und unabhÃ¤ngig davon, ob Sie sichtbar oder unsichtbar sind, gilt:
   </td></tr>
   <tr>
   <td colspan=2>
   <ul>
-  <li>Sie können Stud.IP aktiv nutzen und sich an Veranstaltungen, Foren etc. beteiligen
-  <li>Teilnehmendenliste von Veranstaltungen sind nur dann für die Teilnehmenden zugänglich, wenn alle einverstanden sind
-  <li>Sobald Sie im System aktiv werden - d.h. Forumsbeiträge verfassen, sich an nicht-anonymen Umfragen beteiligen, Mails verschicken etc. - wird Ihr Name dabei angegeben und es lässt sich nicht vermeiden, dass andere Nutzerinnen und Nutzer indirekt erkennen können, ob Sie sichtbar oder unsichtbar sind.
+  <li>Sie kÃ¶nnen Stud.IP aktiv nutzen und sich an Veranstaltungen, Foren etc. beteiligen
+  <li>Teilnehmendenliste von Veranstaltungen sind nur dann fÃ¼r die Teilnehmenden zugÃ¤nglich, wenn alle einverstanden sind
+  <li>Sobald Sie im System aktiv werden - d.h. ForumsbeitrÃ¤ge verfassen, sich an nicht-anonymen Umfragen beteiligen, Mails verschicken etc. - wird Ihr Name dabei angegeben und es lÃ¤sst sich nicht vermeiden, dass andere Nutzerinnen und Nutzer indirekt erkennen kÃ¶nnen, ob Sie sichtbar oder unsichtbar sind.
   </ul>
     </td></tr>
 <tr>
@@ -53,9 +53,9 @@
 <table style="background:#ddffdd; border:1px solid black;" cellpadding=4>
 <tr>
 <td width="50%" valign="top">
-<p><b>Ich möchte sichtbar sein und alle Möglichkeiten von Stud.IP nutzen können.</b></p>
-<p>Ich akzeptiere damit, dass die in den <a href="<?= URLHelper::getLink('datenschutz.php') ?>" class="link-intern" target="_blank">Erläuterungen zum Datenschutz</a> aufgeführten Informationen
-anderen zugänglich sind.</p>
+<p><b>Ich mÃ¶chte sichtbar sein und alle MÃ¶glichkeiten von Stud.IP nutzen kÃ¶nnen.</b></p>
+<p>Ich akzeptiere damit, dass die in den <a href="<?= URLHelper::getLink('datenschutz.php') ?>" class="link-intern" target="_blank">ErlÃ¤uterungen zum Datenschutz</a> aufgefÃ¼hrten Informationen
+anderen zugÃ¤nglich sind.</p>
 <p>&nbsp;</p>
 </td>
 </tr>
@@ -68,10 +68,10 @@ anderen zugänglich sind.</p>
 <table style="background:#ffdddd; border:1px solid black;" cellpadding=4>
 <tr>
 <td width="50%" valign="top">
-<p><b>Ich möchte unsichtbar sein und nehme Einschränkungen in der Nutzung in Kauf.</b>
-<p>Ich nehme damit zur Kenntnis, dass meine persönlichen Daten wie in den <a href="<?= URLHelper::getLink('datenschutz.php') ?>" class="link-intern" target="_blank">Erläuterungen zum Datenschutz</a>
-beschrieben und begründet dennoch Administrator/-innen und, in Teilen, den
-Lehrenden meiner Veranstaltungen zugänglich sind.
+<p><b>Ich mÃ¶chte unsichtbar sein und nehme EinschrÃ¤nkungen in der Nutzung in Kauf.</b>
+<p>Ich nehme damit zur Kenntnis, dass meine persÃ¶nlichen Daten wie in den <a href="<?= URLHelper::getLink('datenschutz.php') ?>" class="link-intern" target="_blank">ErlÃ¤uterungen zum Datenschutz</a>
+beschrieben und begrÃ¼ndet dennoch Administrator/-innen und, in Teilen, den
+Lehrenden meiner Veranstaltungen zugÃ¤nglich sind.
 </tr>
 <tr>
     <td width=50% align=center valign=top><a href="<?=URLHelper::getLink('?vis_state=no&vis_cmd=apply')?>"><?= Assets::img('aus.png') ?><br>unsichtbar werden</a></td>
@@ -79,7 +79,7 @@ Lehrenden meiner Veranstaltungen zugänglich sind.
 </table>
 </td></tr>
 <tr><td colspan="2">
-<p>Sie können diese Entscheidung jederzeit unter "Persönliche Einstellungen" wieder ändern.
+<p>Sie kÃ¶nnen diese Entscheidung jederzeit unter "PersÃ¶nliche Einstellungen" wieder Ã¤ndern.
 
 
 </td></tr>

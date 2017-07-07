@@ -5,7 +5,7 @@
  * Stud.IP Tour
  * ------------------------------------------------------------------------
  *
- * @author Arne Schröder, schroeder@data-quest.de
+ * @author Arne SchrÃ¶der, schroeder@data-quest.de
  * @description Studip Tour
  *
  * Parts of this script are a modified version of:

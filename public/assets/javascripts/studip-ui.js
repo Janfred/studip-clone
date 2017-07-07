@@ -35,14 +35,14 @@
     // localization method through String.toLocaleString())
     var defaults = {},
         locale = {
-            closeText: 'schlieﬂen'.toLocaleString(),
-            prevText: 'Zur¸ck'.toLocaleString(),
+            closeText: 'schlie√üen'.toLocaleString(),
+            prevText: 'Zur√ºck'.toLocaleString(),
             nextText: 'Vor;'.toLocaleString(),
             currentText: 'heute'.toLocaleString(),
             monthNames: [
                 'Januar'.toLocaleString(),
                 'Februar'.toLocaleString(),
-                'M‰rz'.toLocaleString(),
+                'M√§rz'.toLocaleString(),
                 'April'.toLocaleString(),
                 'Mai'.toLocaleString(),
                 'Juni'.toLocaleString(),
@@ -56,7 +56,7 @@
             monthNamesShort: [
                 'Jan'.toLocaleString(),
                 'Feb'.toLocaleString(),
-                'M‰r'.toLocaleString(),
+                'M√§r'.toLocaleString(),
                 'Apr'.toLocaleString(),
                 'Mai'.toLocaleString(),
                 'Jun'.toLocaleString(),

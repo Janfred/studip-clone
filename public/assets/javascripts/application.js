@@ -183,7 +183,7 @@ jQuery.extend(jQuery.ui.dialog.prototype.options, {
 /* Written by Marvin */
 (function ($) {
     $.timepicker.regional.de = {
-        timeOnlyTitle: 'Zeit w‰hlen',
+        timeOnlyTitle: 'Zeit w√§hlen',
         timeText: 'Zeit',
         hourText: 'Stunde',
         minuteText: 'Minute',

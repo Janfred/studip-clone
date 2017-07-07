@@ -25,7 +25,7 @@ STUDIP.register = {
         }
         
         if (STUDIP.register.re_username.test(jQuery('input[name=username]').val()) === false) {
-            STUDIP.register.addError('username', "Der Benutzername enth‰lt unzul‰ssige Zeichen, er darf keine Sonderzeichen oder Leerzeichen enthalten.".toLocaleString());
+            STUDIP.register.addError('username', "Der Benutzername enth√§lt unzul√§ssige Zeichen, er darf keine Sonderzeichen oder Leerzeichen enthalten.".toLocaleString());
             document.login.username.focus();
             return false;
         }
@@ -50,7 +50,7 @@ STUDIP.register = {
 
         var checked = true;
         if (jQuery('input[name=password]').val() !== jQuery('input[name=password2]').val()) {
-            STUDIP.register.addError('password2', "Das Passwort stimmt nicht mit dem Best‰tigungspasswort ¸berein!".toLocaleString());
+            STUDIP.register.addError('password2', "Das Passwort stimmt nicht mit dem Best√§tigungspasswort √ºberein!".toLocaleString());
             document.login.password2.focus();
             checked = false;
         }
@@ -62,7 +62,7 @@ STUDIP.register = {
 
         var checked = true;
         if (STUDIP.register.re_name.test(jQuery('input[name=Vorname]').val()) === false) {
-            STUDIP.register.addError('Vorname', "Bitte geben Sie Ihren tats‰chlichen Vornamen an.".toLocaleString());
+            STUDIP.register.addError('Vorname', "Bitte geben Sie Ihren tats√§chlichen Vornamen an.".toLocaleString());
             document.login.Vorname.focus();
             checked = false;
         }
@@ -74,7 +74,7 @@ STUDIP.register = {
         
         var checked = true;
         if (STUDIP.register.re_name.test(jQuery('input[name=Nachname]').val()) === false) {
-            STUDIP.register.addError('Nachname', "Bitte geben Sie Ihren tats‰chlichen Nachnamen an.".toLocaleString());
+            STUDIP.register.addError('Nachname', "Bitte geben Sie Ihren tats√§chlichen Nachnamen an.".toLocaleString());
             document.login.Nachname.focus();
             checked = false;
         }

@@ -61,7 +61,7 @@
             var width  = this.width,
                 height = this.height,
                 title  = $(this).prop('title')
-                      || 'Dieses Bild wird verkleinert dargestellt. Klicken Sie für eine größere Darstellung.'.toLocaleString(),
+                      || 'Dieses Bild wird verkleinert dargestellt. Klicken Sie fÃ¼r eine grÃ¶ÃŸere Darstellung.'.toLocaleString(),
                 highdpi_check = width / display_width === pixelRatio
                              && height / display_height === pixelRatio;
             if (!highdpi_check && (width > display_width || height > display_height)) {

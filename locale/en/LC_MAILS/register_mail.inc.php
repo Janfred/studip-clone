@@ -2,7 +2,7 @@
         $subject="Stud.IP system confirmation mail";
         
         $mailbody="This is a Stud.IP system confirmation mail.\n"
-        ."(Studienbegleitender Internetsupport von Präsenzlehre)\n"
+        ."(Studienbegleitender Internetsupport von PrÃ¤senzlehre)\n"
         ."- Config::get()->UNI_NAME_CLEAN -\n\n"
         ."You registered with the following information at $Zeit:\n\n"
         ."Username: $username\n"

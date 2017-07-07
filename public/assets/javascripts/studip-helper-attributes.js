@@ -116,7 +116,7 @@
                 question = element.data().confirm
                         || element.attr('title')
                         || element.find('[title]:first').attr('title')
-                        || 'Wollen Sie die Aktion wirklich ausführen?'.toLocaleString();
+                        || 'Wollen Sie die Aktion wirklich ausfÃ¼hren?'.toLocaleString();
 
             STUDIP.Dialog.confirm(question, function () {
                 var content = element.data().confirm;
@@ -147,7 +147,7 @@
                 label = label || $('label[for="' + $(element).attr('id') + '"]').text();
                 return $.trim(label.split(':')[0]);
             }),
-            error_message = 'Die beiden Werte "$1" und "$2" stimmen nicht überein. '.toLocaleString(),
+            error_message = 'Die beiden Werte "$1" und "$2" stimmen nicht Ã¼berein. '.toLocaleString(),
             matches = error_message.match(/\$\d/g);
 
         $.each(matches, function (i) {

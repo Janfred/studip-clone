@@ -2,7 +2,7 @@
         $subject="Registration in the Stud.IP system";
         
         $mailbody="This is a Stud.IP system information mail\n"
-        ."(Studienbegleitender Internetsupport von Präsenzlehre)\n"
+        ."(Studienbegleitender Internetsupport von PrÃ¤senzlehre)\n"
         ."- " . Config::get()->UNI_NAME_CLEAN . " -\n\n"
         ."The following information was entered into the system\n"
         ."by an administrator at " . $Zeit . ":\n\n"

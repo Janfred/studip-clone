@@ -1,13 +1,13 @@
 <?
-        $subject="E-Mail-Änderung Stud.IP";
+        $subject="E-Mail-Ã„nderung Stud.IP";
 
         $mailbody="Dies ist eine Informationsmail des Systems Stud.IP\n"
-        ."(Studienbegleitender Internetsupport von Präsenzlehre)\n"
+        ."(Studienbegleitender Internetsupport von PrÃ¤senzlehre)\n"
         ."- ". Config::get()->UNI_NAME_CLEAN ." -\n\n"
-        ."Um die Änderung Ihrer E-Mail Adresse abzuschließen,\n"
+        ."Um die Ã„nderung Ihrer E-Mail Adresse abzuschlieÃŸen,\n"
         ."folgen Sie bitte dem nachfolgendem Link:\n"
         . $activatation_url . "\n\n"
-        ."Der Aktivierungsschlüssel lautet:\n"
+        ."Der AktivierungsschlÃ¼ssel lautet:\n"
         . $key . "\n\n"
 
 ?>
