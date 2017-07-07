@@ -9,7 +9,7 @@ STUDIP.Forum = {
     current_area_id: null,
     current_category_id: null,
     seminar_id: null,
-    warning_text: 'Wenn Sie die Seite verlassen, gehen ihre Änderungen verloren!'.toLocaleString(),
+    warning_text: 'Wenn Sie die Seite verlassen, gehen ihre Ã„nderungen verloren!'.toLocaleString(),
     clipboard: {},
 
     getTemplate: _.memoize(function(name) {
@@ -106,7 +106,7 @@ STUDIP.Forum = {
     },
 
     deleteCategory: function (category_id) {
-        STUDIP.Forum.showDialog('Sind sie sicher, dass Sie diese Kategorie entfernen möchten? '.toLocaleString()
+        STUDIP.Forum.showDialog('Sind sie sicher, dass Sie diese Kategorie entfernen mÃ¶chten? '.toLocaleString()
             + 'Alle Bereiche werden dann nach "Allgemein" verschoben!'.toLocaleString(),
             'javascript:STUDIP.Forum.approveDelete()',
             'table[data-category-id=' + category_id +'] td.areaentry');
@@ -179,8 +179,8 @@ STUDIP.Forum = {
     },
 
     deleteArea: function (element, area_id) {
-        STUDIP.Forum.showDialog('Sind sie sicher, dass Sie diesen Bereich löschen möchten? '.toLocaleString()
-            + 'Es werden auch alle Beiträge in diesem Bereich gelöscht!'.toLocaleString(),
+        STUDIP.Forum.showDialog('Sind sie sicher, dass Sie diesen Bereich lÃ¶schen mÃ¶chten? '.toLocaleString()
+            + 'Es werden auch alle BeitrÃ¤ge in diesem Bereich gelÃ¶scht!'.toLocaleString(),
             'javascript:STUDIP.Forum.approveDelete()',
             'tr[data-area-id=' + area_id +'] td.areaentry');
 
@@ -465,7 +465,7 @@ STUDIP.Forum = {
         var content = jQuery('span[data-edit-topic=' + topic_id +'] textarea[name=content]').val().trim();
         var is_html = STUDIP.wysiwyg.isHtml(content);
         var nl      = is_html ? '<br>' : "\n";
-        var text    = 'Die Senderin/der Sender dieser Nachricht möchte Sie auf den folgenden Beitrag aufmerksam machen. '.toLocaleString()
+        var text    = 'Die Senderin/der Sender dieser Nachricht mÃ¶chte Sie auf den folgenden Beitrag aufmerksam machen. '.toLocaleString()
                     + nl + nl
                     + 'Link zum Beitrag: '.toLocaleString()
                     + nl
@@ -683,7 +683,7 @@ STUDIP.Forum = {
     },
 
     openThreadFromOverview: function(topic_id, parent_topic_id, page) {
-        var buttonText = "Thema schließen".toLocaleString();
+        var buttonText = "Thema schlieÃŸen".toLocaleString();
         jQuery('#closeButton-' + topic_id + ' img').attr('src', STUDIP.ASSETS_URL + 'images/icons/blue/lock-locked.svg');
         jQuery('#closeButton-' + topic_id + ' img').attr('title', buttonText);
         jQuery('#closeButton-' + topic_id).attr('onclick', 'STUDIP.Forum.closeThreadFromOverview("' + topic_id + '", "' + parent_topic_id + '", ' + page + '); return false;');
@@ -693,7 +693,7 @@ STUDIP.Forum = {
     },
 
     openThreadFromThread: function(topic_id, page) {
-        var buttonText = "Thema schließen".toLocaleString();
+        var buttonText = "Thema schlieÃŸen".toLocaleString();
         jQuery('.closeButtons').text(buttonText);
         jQuery('.closeButtons').attr('onclick', 'STUDIP.Forum.closeThreadFromThread("' + topic_id + '", ' + page + '); return false;');
         jQuery('.closeButtons').closest("li").css('background-image', "url(" + STUDIP.ASSETS_URL + 'images/icons/blue/lock-locked.svg' + ")");
@@ -717,7 +717,7 @@ STUDIP.Forum = {
     },
 
     closeThreadFromOverview: function(topic_id, parent_topic_id, page) {
-        var buttonText = "Thema öffnen".toLocaleString();
+        var buttonText = "Thema Ã¶ffnen".toLocaleString();
         jQuery('#closeButton-' + topic_id + ' img').attr('src', STUDIP.ASSETS_URL + 'images/icons/blue/lock-unlocked.svg');
         jQuery('#closeButton-' + topic_id + ' img').attr('title', buttonText);
         jQuery('#closeButton-' + topic_id).attr('onclick', 'STUDIP.Forum.openThreadFromOverview("' + topic_id + '", ' + page + '); return false;');
@@ -728,7 +728,7 @@ STUDIP.Forum = {
     },
 
     closeThreadFromThread: function(topic_id, page) {
-        var buttonText = "Thema öffnen".toLocaleString();
+        var buttonText = "Thema Ã¶ffnen".toLocaleString();
         jQuery('.closeButtons').text(buttonText);
         jQuery('.closeButtons').attr('onclick', 'STUDIP.Forum.openThreadFromThread("' + topic_id + '", '+ page +'); return false;');
         jQuery('.closeButtons').closest("li").css('background-image', "url(" + STUDIP.ASSETS_URL + 'images/icons/blue/lock-unlocked.svg' + ")");

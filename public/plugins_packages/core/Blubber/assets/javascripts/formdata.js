@@ -1,7 +1,7 @@
 /**
 * Emulate FormData for some browsers
 * MIT License
-* (c) 2010 François de Metz
+* (c) 2010 FranÃ§ois de Metz
 */
 (function(w) {
     if (w.FormData)

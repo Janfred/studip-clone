@@ -108,7 +108,7 @@ $( document ).ready(function() {
 				var url = STUDIP.URLHelper.getURL("plugins.php/mvvplugin/shared/log_event/get_log_autor");
 				$.post( url, senddata, function( data ) {
 				    if (data) {
-				    	var info = 'Änderung durch ' + data.user + ' am ' + data.time;
+				    	var info = 'Ã„nderung durch ' + data.user + ' am ' + data.time;
     					ins.attr("title",info);
     					ins.after('<ins class="difflog"> [' + info + '] </ins>');
 				    }
@@ -132,7 +132,7 @@ $( document ).ready(function() {
 			var url = STUDIP.URLHelper.getURL("plugins.php/mvvplugin/shared/log_event/get_log_autor");
 			$.post( url, { "mvv_field": "mvv_"+mvv_type, "mvv_id": mvv_id, "log_action": "new" }, function( data ) {
 			    if (data) {
-			    	var info = 'Hinzugefügt von ' + data.user + ' am ' + data.time;
+			    	var info = 'HinzugefÃ¼gt von ' + data.user + ' am ' + data.time;
 			    	curtable.attr("title",info);
 					curtable.append('<tr><td><ins class="difflog"> [' + info + '] </ins><td></tr>');
 			    }

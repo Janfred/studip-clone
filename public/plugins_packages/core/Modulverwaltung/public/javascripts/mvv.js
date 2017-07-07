@@ -105,7 +105,7 @@ MVV.Search = {
             item_id = jQuery('#'+qs_name+'_realvalue').val();
         jQuery('<img src="' + STUDIP.ASSETS_URL
             + 'images/icons/yellow/arr_2down.svg">')
-            .attr('alt', "hinzufügen".toLocaleString())
+            .attr('alt', "hinzufÃ¼gen".toLocaleString())
             .appendTo(add_button);
         if (item_id == '') {
             qs_item.siblings('.mvv-add-button').find('.mvv-add-item')
@@ -159,7 +159,7 @@ MVV.Search = {
         var reset_button = jQuery('<input type="image" />');
             reset_button.attr({
                 src: STUDIP.ASSETS_URL+'images/icons/blue/refresh.svg',
-                title: "Suche zurücksetzen".toLocaleString()
+                title: "Suche zurÃ¼cksetzen".toLocaleString()
             }).addClass('mvv-search-reset');
         if (!_.isUndefined(do_submit)) {
             qs_select.change(function() {
@@ -540,7 +540,7 @@ MVV.Content = {
                 }
                 item.html(MVV.Content.deskriptor_data[field_id]['value']);
             } else {
-                item.html("Datenfeld in Original-Sprache nicht verfügbar."
+                item.html("Datenfeld in Original-Sprache nicht verfÃ¼gbar."
                         .toLocaleString());
                 item.css({
                     "color": "red",

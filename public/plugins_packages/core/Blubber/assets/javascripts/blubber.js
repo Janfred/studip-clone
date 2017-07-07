@@ -200,7 +200,7 @@ STUDIP.Blubber = {
                         jQuery(content).insertBefore(li).hide().fadeIn();
                         var comment_top = jQuery("#posting_" + posting_id).offset().top;
                         var height = jQuery("#posting_" + posting_id).height() +
-                            + 15; //2 * padding + 1 für Border
+                            + 15; //2 * padding + 1 fÃ¼r Border
                         if (comment_top < top) {
                             jQuery(document).scrollTop(top + height);
                         }
