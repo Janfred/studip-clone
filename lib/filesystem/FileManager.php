@@ -793,19 +793,6 @@ class FileManager
             );
         }
 
-        // check if destination_folder is a standard folder
-        if (get_class($destination_folder) !== 'StandardFolder'
-            && get_class($sub_folder_type) !== get_class($destination_folder))
-        {
-            //we can't create a special folder in another special folder!
-            $errors[] = sprintf(
-                _('Ein Ordner vom Typ %s kann nicht in einem Ordner vom Typ %s erzeugt werden!'),
-                get_class($sub_folder_type),
-                get_class($destination_folder)
-            );
-        }
-
-
         if (!$destination_folder->isSubfolderAllowed($user->id)) {
             $errors[] = _('Sie sind nicht dazu berechtigt, einen Unterordner zu erstellen!');
         }

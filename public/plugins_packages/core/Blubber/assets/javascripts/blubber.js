@@ -387,7 +387,7 @@ STUDIP.Blubber = {
                             jQuery(textarea).val(jQuery(textarea).val() + " " + text);
                         });
                     }
-                    if (typeof json.errors === "object") {
+                    if (typeof json.errors !== "undefined") {
                         alert(json.errors.join("\n"));
                     } else if (typeof json.inserts !== "object") {
                         alert("Fehler beim Dateiupload.");

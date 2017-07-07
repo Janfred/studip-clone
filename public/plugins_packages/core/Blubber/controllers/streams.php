@@ -554,16 +554,16 @@ class StreamsController extends PluginController {
                             'Blubber',
                             _('Ihre Dateien aus Blubberstreams')
                         );
-                        
-                        if(!$blubber_directory instanceof FolderType) {
-                            throw new Exception('Cannot create Blubber folder!');
+
+                        if (!$blubber_directory instanceof FolderType) {
+                            throw new Exception($blubber_directory[0]);
                         }
                         
                         $blubber_directory->data_content = ['Blubber'];
                         $blubber_directory->store();
                     }
                     
-                    if($blubber_directory) {
+                    if ($blubber_directory) {
                         //ok, blubber directory exists: we can handle the uploaded file
                         
                         $error_string = $blubber_directory->validateUpload(
@@ -571,7 +571,7 @@ class StreamsController extends PluginController {
                             $GLOBALS['user']->id
                         );
                         
-                        if($error_string) {
+                        if ($error_string) {
                             throw new Exception($error_string);
                         }
                         
@@ -600,16 +600,17 @@ class StreamsController extends PluginController {
                         
                     }
                 } catch (Exception $e) {
-                    $output['error'][] = $e->getMessage();
+                    $output['errors'][] = $e->getMessage();
                     $success = false;
                 }
-                
+
                 
                 if ($success) {
                     $type = null;
-                    mb_strpos($file['mime_type'], 'image') === false || $type = "img";
-                    mb_strpos($file['mime_type'], 'video') === false || $type = "video";
-                    if (mb_strpos($file['mime_type'], 'audio') !== false || mb_strpos($file_ref['name'], '.ogg') !== false) {
+
+                    mb_strpos($file['type'], 'image') === false || $type = "img";
+                    mb_strpos($file['type'], 'video') === false || $type = "video";
+                    if (mb_strpos($file['type'], 'audio') !== false || mb_strpos($file_ref['name'], '.ogg') !== false) {
                          $type = "audio";
                     }
                     if ($type) {
