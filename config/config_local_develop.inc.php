@@ -4,8 +4,6 @@
 please fill in your database connection settings.
 */
 
-ini_set('default_charset', 'utf-8');
-ini_set('mbstring.internal_encoding', 'utf-8');
 
 // default Stud.IP database (DB_Seminar)
 $DB_STUDIP_HOST = "localhost";
@@ -84,11 +82,11 @@ $_lit_search_plugins[] = array('name' => "Studip",'display_name' =>'Katalog der 
 /* Gemeinsamer Verbundkatalog - GVK */
 $_lit_search_plugins[] = array('name' => "Gvk",'display_name' =>'Gemeinsamer Verbundkatalog', 'link' => 'http://gso.gbv.de/DB=2.1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
-/* Niedersächsische Staats- und Universitätsbibliothek Göttingen, OPAC */
-$_lit_search_plugins[] = array('name' => "SUBGoeOpac",'display_name' => "Opac der SUB Göttingen" , 'link' => 'http://goopc4.sub.uni-goettingen.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
+/* NiedersÃ¤chsische Staats- und UniversitÃ¤tsbibliothek GÃ¶ttingen, OPAC */
+$_lit_search_plugins[] = array('name' => "SUBGoeOpac",'display_name' => "Opac der SUB GÃ¶ttingen" , 'link' => 'http://goopc4.sub.uni-goettingen.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
-/* Göttinger Gesamtkatalog (Regionalkatalog Göttingen) */
-$_lit_search_plugins[] = array('name' => 'Rkgoe', 'display_name' =>'Regionalkatalog Göttingen', 'link' => 'http://gso.gbv.de/DB=2.90/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
+/* GÃ¶ttinger Gesamtkatalog (Regionalkatalog GÃ¶ttingen) */
+$_lit_search_plugins[] = array('name' => 'Rkgoe', 'display_name' =>'Regionalkatalog GÃ¶ttingen', 'link' => 'http://gso.gbv.de/DB=2.90/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
 
 
