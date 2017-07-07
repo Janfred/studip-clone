@@ -21,18 +21,15 @@ class RefactorConfigLocal extends Migration
             ),
             "MEDIA_CACHE_MAX_LENGTH" => array(
                 'description' => "Maximale Größe von Dateien, die im Media-Cache gecached werden (in Bytes)?",
-                'type' => "integer",
-                'default' => 1000000
+                'type' => "integer"
             ),
             "MEDIA_CACHE_LIFETIME" => array(
                 'description' => "Wieviele Sekunden soll gecached werden?",
-                'type' => "integer",
-                'default' => 86400
+                'type' => "integer"
             ),
             "MEDIA_CACHE_MAX_FILES" => array(
                 'description' => "Wieviele Dateien sollen maximal gecached werden?",
-                'type' => "integer",
-                'default' => 3000
+                'type' => "integer"
             ),
             "XSLT_ENABLE" => array(
                 'description' => "Soll Export mit XSLT angeschaltet sein?",
@@ -91,18 +88,15 @@ class RefactorConfigLocal extends Migration
             ),
             "USERNAME_REGULAR_EXPRESSION" => array(
                 'description' => "Regex for allowed characters in usernames",
-                'type' => 'string',
-                'default' => '/^([a-zA-Z0-9_@.-]{4,})$/'
+                'type' => "string"
             ),
             "DEFAULT_TIMEZONE" => array(
                 'description' => "What timezone should be used (default: Europe/Berlin)?",
-                'type' => 'string',
-                'default' => 'Europe/Berlin'
+                'type' => "string"
             ),
             "DEFAULT_LANGUAGE" => array(
                 'description' => "Which language should we use if we can gather no information from user?",
-                'type' => "string",
-                'default' => 'de_DE'
+                'type' => "string"
             ),
             "ALLOW_CHANGE_USERNAME" => array(
                 'description' => "If true, users are allowed to change their username",
