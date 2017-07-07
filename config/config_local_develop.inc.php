@@ -4,6 +4,9 @@
 please fill in your database connection settings.
 */
 
+ini_set('default_charset', 'utf-8');
+ini_set('mbstring.internal_encoding', 'utf-8');
+
 // default Stud.IP database (DB_Seminar)
 $DB_STUDIP_HOST = "localhost";
 $DB_STUDIP_USER = "";
