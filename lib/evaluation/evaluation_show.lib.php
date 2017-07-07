@@ -71,7 +71,7 @@ class EvalShow
       $td2->cont( $br );
       if( $votedNow ) {
           $message = new HTML('div');
-          $message->_content = array((string) MessageBox::success(_("Vielen Dank für Ihre Teilnahme.")));
+          $message->_content = array((string) MessageBox::success(_("Vielen Dank fÃ¼r Ihre Teilnahme.")));
           $td2->cont($message);
       } elseif( $votedEarlier ) {
           $message = new HTML('div');
@@ -92,7 +92,7 @@ class EvalShow
     
       if(!$voted && $GLOBALS["mandatories"] != 0) {
           $message = new HTML('div');
-          $message->_content = [(string)sprintf(_("Mit %s gekennzeichnete Fragen müssen beantwortet werden."),
+          $message->_content = [(string)sprintf(_("Mit %s gekennzeichnete Fragen mÃ¼ssen beantwortet werden."),
               "<b><span class=\"eval_error\">**</span></b>")];
           $table2->cont($message);
       }
@@ -147,14 +147,14 @@ class EvalShow
       $html .= "<hr noshade=\"noshade\" size=\"1\">\n";
 
 #      $html .= $votedEarlier ? _("Sie haben an dieser Evaluation bereits teilgenommen.") : "";
-#      $html .= $votedNow ? _("Vielen Dank für Ihre Teilnahme.") : "";
+#      $html .= $votedNow ? _("Vielen Dank fÃ¼r Ihre Teilnahme.") : "";
 #      $html .= $voted ? "<hr noshade=\"noshade\" size=\"1\">\n" : "";
 
       /* multiple choice? ----------------------------------------------------- */
 #      if ($eval->isMultipleChoice()) {
 #     $html .= ($voted || $eval->isStopped())
-#         ? _("Sie konnten mehrere Antworten auswählen.")
-#         : _("Sie können mehrere Antworten auswählen.");
+#         ? _("Sie konnten mehrere Antworten auswÃ¤hlen.")
+#         : _("Sie kÃ¶nnen mehrere Antworten auswÃ¤hlen.");
 #     $html .= " \n";
 #      }
       /* ---------------------------------------------------------------------- */
@@ -229,7 +229,7 @@ class EvalShow
                     date ("H:i", $stopdate));
           }
           else {
-          $html .= sprintf (_("Sie können teilnehmen bis zum <b>%s</b> um <b>%s</b> Uhr."),
+          $html .= sprintf (_("Sie kÃ¶nnen teilnehmen bis zum <b>%s</b> um <b>%s</b> Uhr."),
                     date ("d.m.Y", $stopdate),
                     date ("H:i", $stopdate));
           }
@@ -258,7 +258,7 @@ class EvalShow
           ? _("Die Teilnahme ist anonym.")
 #         : _("Die Teilnahme ist <b>nicht</b> anonym.");
           : ("<span style=\"color:red;\">" .
-         _("Dies ist eine personalisierte Evaluation. Ihre Angaben werden verknüpft mit Ihrem Namen gespeichert.") .
+         _("Dies ist eine personalisierte Evaluation. Ihre Angaben werden verknÃ¼pft mit Ihrem Namen gespeichert.") .
          "</span>");
 
       return $html;
@@ -295,7 +295,7 @@ class EvalShow
       /* close button */
       if (!Request::isXHR()) {
          $button = new HTM( "p" );
-         $button->cont( _("Sie können dieses Fenster jetzt schließen.") );
+         $button->cont( _("Sie kÃ¶nnen dieses Fenster jetzt schlieÃŸen.") );
          $td->cont( $button );
       }
 
@@ -379,9 +379,9 @@ class EvalShow
    }
 
    function createDeleteButton ($eval) {
-         $button = LinkButton::create(_('Löschen'),
+         $button = LinkButton::create(_('LÃ¶schen'),
                  URLHelper::getURL(EVAL_FILE_ADMIN."?evalAction=delete_request&evalID=".$eval->getObjectID ()),
-                 array('title' => _('Evaluation löschen.')));
+                 array('title' => _('Evaluation lÃ¶schen.')));
          return $button;
    }
 

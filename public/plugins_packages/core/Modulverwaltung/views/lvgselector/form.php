@@ -19,7 +19,7 @@
     <? endif ?>
 
     <div id="lvgruppe_selection_at_least_one" style="display:none;">
-      <?= _("Sie können diesen Studienbereich nicht löschen, da eine Veranstaltung immer mindestens einem Studienbereich zugeordnet sein muss.") ?>
+      <?= _("Sie kÃ¶nnen diesen Studienbereich nicht lÃ¶schen, da eine Veranstaltung immer mindestens einem Studienbereich zugeordnet sein muss.") ?>
     </div>
 
     <?= $this->render_partial('lvgselector/selected_entries') ?>
@@ -28,7 +28,7 @@
 
 
   <div id="lvgruppe_selection_selectables">
-    <h3><?= _("Bitte wählen:") ?></h3>
+    <h3><?= _("Bitte wÃ¤hlen:") ?></h3>
     <?= $this->render_partial('lvgselector/tree', compact('trail', 'subtree')) ?>
 
     <h3><?=_("Suche:")?></h3>

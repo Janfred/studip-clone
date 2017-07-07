@@ -36,15 +36,15 @@ class CoreDocuments implements StudipModule
     {
         return array(
             'summary'          => _('Austausch von Dateien'),
-            'description'      => _('Im Dateibereich können Dateien sowohl von ' .
+            'description'      => _('Im Dateibereich kÃ¶nnen Dateien sowohl von ' .
                 'Lehrenden als auch von Studierenden hoch- bzw. ' .
-                'heruntergeladen werden. Es können Ordner angelegt und ' .
+                'heruntergeladen werden. Es kÃ¶nnen Ordner angelegt und ' .
                 'individuell benannt werden (nur Lehrende). Die Dateien ' .
-                'können somit strukturiert zur Verfügung gestellt werden. ' .
+                'kÃ¶nnen somit strukturiert zur VerfÃ¼gung gestellt werden. ' .
                 'Multimediadateien wie Grafiken, Audio- und Videodateien ' .
-                'können sofort angezeigt bzw. abgespielt werden. Über das ' .
-                'PlugIn "Dateiordnerberechtigung" können Im Dateibereich ' .
-                'bestimmte Rechte für Studierende, wie z.B. das Leserecht, ' .
+                'kÃ¶nnen sofort angezeigt bzw. abgespielt werden. Ãœber das ' .
+                'PlugIn "Dateiordnerberechtigung" kÃ¶nnen Im Dateibereich ' .
+                'bestimmte Rechte fÃ¼r Studierende, wie z.B. das Leserecht, ' .
                 'festgelegt werden.'),
             'displayname'      => _('Dateien'),
             'category'         => _('Lehr- und Lernorganisation'),
@@ -53,21 +53,21 @@ class CoreDocuments implements StudipModule
                             Verschieben einer Datei/eines Ordners per drag and drop innerhalb einer Veranstaltung;
                             Verschieben einer Datei/eines Ordners in eine andere Veranstaltung;
                             Kopieren einer Datei/eines Ordners in eine andere oder mehrere Veranstaltungen;
-                            Verlinkung auf abgelegte Dateien möglich;
+                            Verlinkung auf abgelegte Dateien mÃ¶glich;
                             Erstellung Hausaufgabenordner durch Aktivierung der Funktion "Dateiordnerberechtigung"'),
             'descriptionshort' => _('Austausch von Dateien'),
-            'descriptionlong'  => _('Dateien können sowohl von Lehrenden als auch von Studierenden hoch- bzw. ' .
-                'heruntergeladen werden. Ordner können angelegt und individuell benannt werden ' .
-                '(Standard: nur Lehrende), so dass Dateien strukuriert zur Verfügung gestellt ' .
-                'werden können. Multimediadateien wie Grafiken, Audio- und Videodateien werden ' .
-                'sofort angezeigt bzw. abspielbar dargestellt. Über das PlugIn "Dateiordnerberechtigungen" ' .
-                'können Im Dateibereich bestimmte Rechte (r, w, x, f) für Studierende, wie z.B. das ' .
+            'descriptionlong'  => _('Dateien kÃ¶nnen sowohl von Lehrenden als auch von Studierenden hoch- bzw. ' .
+                'heruntergeladen werden. Ordner kÃ¶nnen angelegt und individuell benannt werden ' .
+                '(Standard: nur Lehrende), so dass Dateien strukuriert zur VerfÃ¼gung gestellt ' .
+                'werden kÃ¶nnen. Multimediadateien wie Grafiken, Audio- und Videodateien werden ' .
+                'sofort angezeigt bzw. abspielbar dargestellt. Ãœber das PlugIn "Dateiordnerberechtigungen" ' .
+                'kÃ¶nnen Im Dateibereich bestimmte Rechte (r, w, x, f) fÃ¼r Studierende, wie z.B. das ' .
                 'Leserecht (r), festgelegt werden.'),
             'icon'             => Icon::create('files', 'info'),
             'screenshots'      => array(
                 'path'     => 'plus/screenshots/Dateibereich_-_Dateiordnerberechtigung',
                 'pictures' => array(
-                    0 => array('source' => 'Ordneransicht_mit_geoeffnetem_Ordner.jpg', 'title' => _('Ordneransicht mit geöffnetem Ordner')),
+                    0 => array('source' => 'Ordneransicht_mit_geoeffnetem_Ordner.jpg', 'title' => _('Ordneransicht mit geÃ¶ffnetem Ordner')),
                     1 => array('source' => 'Ordneransicht_mit_Dateiinformationen.jpg', 'title' => _('Ordneransicht mit Dateiinformationen')),
                     2 => array('source' => 'Neuen_Ordner_erstellen.jpg', 'title' => _('Neuen Ordner erstellen')),
                     3 => array('source' => 'Ordner_zum_Hausaufgabenordner_umwandeln.jpg', 'title' => _('Ordner zum Hausaufgabenordner umwandeln')),

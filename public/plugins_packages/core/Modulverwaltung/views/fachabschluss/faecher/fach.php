@@ -64,7 +64,7 @@
         <? endif;?>
         <ul id="institut_target" class="mvv-assigned-items mvv-institute sortable">
             <? if ($perm->haveFieldPermDepartments(MvvPerm::PERM_WRITE)) : ?>
-                <li class="mvv-item-list-placeholder"<?= (count($fach->departments) ? ' style="display: none;"' : '') ?>><?= _('Bitte mindestens eine verantwortliche Einrichtung hinzufügen.') ?></li>
+                <li class="mvv-item-list-placeholder"<?= (count($fach->departments) ? ' style="display: none;"' : '') ?>><?= _('Bitte mindestens eine verantwortliche Einrichtung hinzufÃ¼gen.') ?></li>
             <? elseif (!count($fach->getFachbereiche())) : ?>
                 <li class="mvv-item-list-placeholder"><?= _('Es wurde noch keine verantwortliche Einrichtung angegeben.') ?></li>
             <? endif; ?>
@@ -88,14 +88,14 @@
         </ul>
     </fieldset>
     <fieldset>
-        <legend><?= _('Zusätzliche Angaben') ?></legend>
+        <legend><?= _('ZusÃ¤tzliche Angaben') ?></legend>
         <label><?= _('Schlagworte') ?>
         <? if ($perm->haveFieldPerm('schlagworte')) : ?>
             <textarea cols="60" rows="5" name="schlagworte" id="schlagworte" class="add_toolbar ui-resizable"><?= htmlReady($fach->schlagworte) ?></textarea>
         <? else : ?>
             <textarea readonly cols="60" rows="5" name="schlagworte" id="schlagworte" class="ui-resizable"><?= htmlReady($fach->schlagworte) ?></textarea>
         <? endif; ?>
-            <?= _('Hier können zusätzlich Schlagworte angegeben werden, die in der Suche berücksichtigt werden.') ?>
+            <?= _('Hier kÃ¶nnen zusÃ¤tzlich Schlagworte angegeben werden, die in der Suche berÃ¼cksichtigt werden.') ?>
         </label>
     </fieldset>
     <footer data-dialog-button>
@@ -105,9 +105,9 @@
         <? endif; ?>
     <? else : ?>
         <? if ($perm->havePermWrite()) : ?>
-            <?= Button::createAccept(_('übernehmen'), 'store', array('title' => _('Änderungen übernehmen'))) ?>
+            <?= Button::createAccept(_('Ã¼bernehmen'), 'store', array('title' => _('Ã„nderungen Ã¼bernehmen'))) ?>
         <? endif; ?>
     <? endif; ?>
-        <?= LinkButton::createCancel(_('abbrechen'), $controller->url_for('/index'), array('title' => _('zurück zur Übersicht'))) ?>
+        <?= LinkButton::createCancel(_('abbrechen'), $controller->url_for('/index'), array('title' => _('zurÃ¼ck zur Ãœbersicht'))) ?>
     </footer>
 </form>

@@ -2,7 +2,7 @@
 <div id="tour_controls" style="display: none">
     <div id="tour_title"></div>
     <div id="tour_interactive_text" style="display:none; width:360px">
-        <?= _('Die Tour wird fortgesetzt, wenn Sie die beschriebene Aktion ausgeführt haben.') ?>
+        <?= _('Die Tour wird fortgesetzt, wenn Sie die beschriebene Aktion ausgefÃ¼hrt haben.') ?>
     </div>
     <div id="tour_buttons">
         <table cellpadding="0" cellspacing="0">
@@ -11,17 +11,17 @@
                     <div id="tour_editor" style="display: none">
                         <?= LinkButton::create(_('Neuer Schritt'), '', ['id' => 'tour_new_step', 'data-dialog' => 'size=auto;reload-on-close']) ?>
                         <?= LinkButton::create(_('Schritt bearbeiten'), '', ['id' => 'tour_edit', 'data-dialog' => 'size=auto;reload-on-close']) ?>
-                        <?= Button::create(_('Schritt löschen'), 'tour_delete_step', ['id' => 'tour_delete_step']) ?>
+                        <?= Button::create(_('Schritt lÃ¶schen'), 'tour_delete_step', ['id' => 'tour_delete_step']) ?>
                         <?= LinkButton::create(_('Seitenwechsel'), '', ['id' => 'tour_new_page', 'data-dialog' => 'size=auto']) ?>
                         <br>
                         <?= Button::create(_('Klick setzen (weiter)'), 'tour_select_action_next', ['id' => 'tour_select_action_next']) ?>
-                        <?= Button::create(_('Klick setzen (zurück)'), 'tour_select_action_prev', ['id' => 'tour_select_action_prev']) ?>
-                        <?= Button::create(_('Position wählen'), 'tour_select_css', ['id' => 'tour_select_css']) ?>
+                        <?= Button::create(_('Klick setzen (zurÃ¼ck)'), 'tour_select_action_prev', ['id' => 'tour_select_action_prev']) ?>
+                        <?= Button::create(_('Position wÃ¤hlen'), 'tour_select_css', ['id' => 'tour_select_css']) ?>
                         <?= Button::create(_('Keine Position'), 'tour_no_css', ['id' => 'tour_no_css']) ?>
                     </div>
                 </td>
                 <td width="120" style="text-align: center">
-                    <?= Button::create(_('Zurück'), 'tour_prev', ['id' => 'tour_prev', 'style' => 'display:none']) ?>
+                    <?= Button::create(_('ZurÃ¼ck'), 'tour_prev', ['id' => 'tour_prev', 'style' => 'display:none']) ?>
                     <?= Button::create(_('Tour neu beginnen'), 'tour_reset', ['id' => 'tour_reset', 'style' => 'display:none']) ?>
                 </td>
                 <td width="120" style="text-align: center">

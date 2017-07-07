@@ -7,7 +7,7 @@
     </section>
     <section>
         <label class="caption">
-            <?= _('Sollen die gewählten Personen in die Zielveranstaltung verschoben oder kopiert werden?') ?>
+            <?= _('Sollen die gewÃ¤hlten Personen in die Zielveranstaltung verschoben oder kopiert werden?') ?>
             <select name="move">
                 <option value="1"><?= _('Verschieben') ?></option>
                 <option value="0"><?= _('Kopieren') ?></option>

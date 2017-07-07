@@ -376,7 +376,7 @@ $privileges = array(
                 'MVVFreigabe'   => 3
             ),
         ),
-        // verknüpfte Objekte
+        // verknÃ¼pfte Objekte
         'responsible_institute' => array(
             'planung' => array(
                 'MVVEntwickler' => 7,
@@ -511,8 +511,8 @@ $privileges = array(
                 'MVVFreigabe'   => 3
             )
         ),
-        // folgende Konfigurationen gelten für bestimmte Funktionen,
-        // die auf das Objekt angewendet werden dürfen (oder eben nicht).
+        // folgende Konfigurationen gelten fÃ¼r bestimmte Funktionen,
+        // die auf das Objekt angewendet werden dÃ¼rfen (oder eben nicht).
         
         // Kopieren von Modulen
         'copy_module' => [

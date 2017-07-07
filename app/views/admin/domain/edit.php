@@ -8,7 +8,7 @@ use Studip\Button, Studip\LinkButton;
 <?= CSRFProtection::tokenTag() ?>
 <table class="default" style="margin-bottom: 1em;">    
     <caption>
-        <?= _('Liste der Nutzerdomänen') ?>
+        <?= _('Liste der NutzerdomÃ¤nen') ?>
     </caption>
 
     <?= $this->render_partial('admin/domain/domains') ?>
@@ -30,7 +30,7 @@ use Studip\Button, Studip\LinkButton;
     <tfoot>
     <tr>
         <td colspan="4" align="center">
-            <?= Button::createAccept(_('Übernehmen'),'uebernehmen', array('title' => _('Änderungen speichern')))?>
+            <?= Button::createAccept(_('Ãœbernehmen'),'uebernehmen', array('title' => _('Ã„nderungen speichern')))?>
             <?= LinkButton::createCancel(_('Abbrechen'), $controller->url_for('admin/domain'), array('title' => _('abrrechen')))?>
         </td>
     </tr>

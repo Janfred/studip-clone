@@ -22,7 +22,7 @@ class Step00249MyCoursesConfig extends Migration
             (config_id, field, value, is_default, `type`, `range`, section, mkdate, chdate, description, comment)
             VALUES
             (md5('MY_COURSES_ENABLE_ALL_SEMESTERS'), 'MY_COURSES_ENABLE_ALL_SEMESTERS', 0, 0, 'boolean', 'global', 'MeineVeranstaltungen',
-             UNIX_TIMESTAMP(),  UNIX_TIMESTAMP(), 'Ermöglicht die Anzeige von allen Semestern unter meine Veranstaltungen.', '')
+             UNIX_TIMESTAMP(),  UNIX_TIMESTAMP(), 'ErmÃ¶glicht die Anzeige von allen Semestern unter meine Veranstaltungen.', '')
             ");
 
         DBManager::get()->exec("UPDATE config SET value = 'sem_number' WHERE field = 'MY_COURSES_FORCE_GROUPING'");

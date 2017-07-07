@@ -16,7 +16,7 @@ $default_entries = DataFieldEntry::getDataFieldEntries([$user->user_id, $inst_id
         <thead>
             <tr>
                 <th colspan="4">
-                    <?= _('Daten für diese Funktion') ?>
+                    <?= _('Daten fÃ¼r diese Funktion') ?>
                 </th>
                 <th>
                     <?= _('Standarddaten') ?>
@@ -36,7 +36,7 @@ $default_entries = DataFieldEntry::getDataFieldEntries([$user->user_id, $inst_id
                         </td>
                         <td style="text-align: right">
                             <a href="<?= $controller->url_for('settings/statusgruppen/default', $inst_id, $role_id, $id, true) ?>">
-                                <?= Icon::create('checkbox-unchecked', 'clickable', ['title' => _('Diese Daten von den Standarddaten übernehmen')])->asImg(16, ["class" => 'text-top']) ?>
+                                <?= Icon::create('checkbox-unchecked', 'clickable', ['title' => _('Diese Daten von den Standarddaten Ã¼bernehmen')])->asImg(16, ["class" => 'text-top']) ?>
                             </a>
                         </td>
                     <? elseif ($entry->getValue() == 'default_value'): ?>
@@ -45,7 +45,7 @@ $default_entries = DataFieldEntry::getDataFieldEntries([$user->user_id, $inst_id
                         </td>
                         <td style="text-align:right">
                             <? if ($entry->isEditable() && !$locked): ?>
-                                <a href="<?= $controller->url_for('settings/statusgruppen/default', $inst_id, $role_id, $id, false) ?>">                            <?= Icon::create('checkbox-checked', 'clickable', ['title' => _('Diese Daten NICHT von den Standarddaten übernehmen')])->asImg(16, ["class" => 'text-top']) ?>
+                                <a href="<?= $controller->url_for('settings/statusgruppen/default', $inst_id, $role_id, $id, false) ?>">                            <?= Icon::create('checkbox-checked', 'clickable', ['title' => _('Diese Daten NICHT von den Standarddaten Ã¼bernehmen')])->asImg(16, ["class" => 'text-top']) ?>
                                 </a>
                             <? endif; ?>
                         </td>
@@ -61,7 +61,7 @@ $default_entries = DataFieldEntry::getDataFieldEntries([$user->user_id, $inst_id
             <? if (!$locked): ?>
                 <tr>
                     <td colspan="4" style="text-align:right">
-                        <?= _('Standarddaten übernehmen:') ?>
+                        <?= _('Standarddaten Ã¼bernehmen:') ?>
                         <a href="<?= $controller->url_for('settings/statusgruppen/defaults', $role_id, false) ?>">
                             <?= _('keine') ?>
                         </a>
@@ -77,7 +77,7 @@ $default_entries = DataFieldEntry::getDataFieldEntries([$user->user_id, $inst_id
             <tfoot>
                 <tr>
                     <td colspan="5" style="text-align: center">
-                        <?= Button::createAccept(_('Änderungen speichern'), 'store') ?>
+                        <?= Button::createAccept(_('Ã„nderungen speichern'), 'store') ?>
                     </td>
                 </tr>
             </tfoot>

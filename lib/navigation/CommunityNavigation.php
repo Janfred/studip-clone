@@ -33,9 +33,9 @@ class CommunityNavigation extends Navigation
         if ($user_count) {
 
             if ($user_count == 1) {
-                $onlinetip = _('Außer Ihnen ist eine Person online');
+                $onlinetip = _('AuÃŸer Ihnen ist eine Person online');
             } else {
-                $onlinetip = sprintf(_('Es sind außer Ihnen %d Personen online'), $user_count);
+                $onlinetip = sprintf(_('Es sind auÃŸer Ihnen %d Personen online'), $user_count);
             }
         }
 

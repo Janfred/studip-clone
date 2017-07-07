@@ -130,7 +130,7 @@ if( $votedNow ) {
         )
     ) {
 
-    $eval->throwError( 1, _("Sie haben keine Antworten gew‰hlt.") );
+    $eval->throwError( 1, _("Sie haben keine Antworten gew√§hlt.") );
     $votedNow = NO;
 
     }

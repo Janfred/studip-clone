@@ -34,7 +34,7 @@ class Settings_StatusgruppenController extends Settings_SettingsController
 
         require_once 'lib/statusgruppe.inc.php';
 
-        PageLayout::setHelpKeyword('Basis.HomepageUniversitäreDaten');
+        PageLayout::setHelpKeyword('Basis.HomepageUniversitÃ¤reDaten');
         PageLayout::setTitle(_('Einrichtungsdaten bearbeiten'));
         Navigation::activateItem('/profile/edit/statusgruppen');
         SkipLinks::addIndex(_('Einrichtungsdaten bearbeiten'), 'layout_content', 100);
@@ -218,7 +218,7 @@ class Settings_StatusgruppenController extends Settings_SettingsController
                 InstituteMember::ensureDefaultInstituteForUser($this->user->user_id);
 
                 $_SESSION['edit_about_data']['open'] = $role_id;
-                PageLayout::postSuccess(_('Die Person wurde in die ausgewählte Gruppe eingetragen!'));
+                PageLayout::postSuccess(_('Die Person wurde in die ausgewÃ¤hlte Gruppe eingetragen!'));
             } else {
                 PageLayout::postError(_('Fehler beim Eintragen in die Gruppe!'));
             }
@@ -239,7 +239,7 @@ class Settings_StatusgruppenController extends Settings_SettingsController
             $this->check_ticket();
 
             Statusgruppen::find($id)->removeUser($this->user->id);
-            PageLayout::postSuccess(_('Die Person wurde aus der ausgewählten Gruppe gelöscht!'));
+            PageLayout::postSuccess(_('Die Person wurde aus der ausgewÃ¤hlten Gruppe gelÃ¶scht!'));
         }
 
         $this->redirect('settings/statusgruppen');
@@ -289,7 +289,7 @@ class Settings_StatusgruppenController extends Settings_SettingsController
                         $id,
                     ]);
                 }
-                PageLayout::postSuccess(_('Reihenfolge wurde geändert'));
+                PageLayout::postSuccess(_('Reihenfolge wurde geÃ¤ndert'));
             }
         }
         $this->redirect('settings/statusgruppen#' . $id);
@@ -326,7 +326,7 @@ class Settings_StatusgruppenController extends Settings_SettingsController
                     StudipLog::log('INST_USER_STATUS', $id, $this->user->user_id, $perms . ' -> ' . $status);
                     NotificationCenter::postNotification('UserInstitutionPermDidUpdate', $id, $this->user->user_id);
 
-                    $success[] = _('Der Status wurde geändert!');
+                    $success[] = _('Der Status wurde geÃ¤ndert!');
                 }
             }
 
@@ -345,10 +345,10 @@ class Settings_StatusgruppenController extends Settings_SettingsController
                 ]);
                 if ($statement->rowCount() > 0) {
                     $changed   = true;
-                    $success[] = sprintf(_('Ihre Daten an der Einrichtung %s wurden geändert.'), htmlReady(Request::get('name')));
+                    $success[] = sprintf(_('Ihre Daten an der Einrichtung %s wurden geÃ¤ndert.'), htmlReady(Request::get('name')));
 
                     setTempLanguage($this->user->user_id);
-                    $this->postPrivateMessage(_("Ihre Daten an der Einrichtung %s wurden geändert.\n"), Request::get('name'));
+                    $this->postPrivateMessage(_("Ihre Daten an der Einrichtung %s wurden geÃ¤ndert.\n"), Request::get('name'));
                     restoreLanguage();
                 }
             }
@@ -380,7 +380,7 @@ class Settings_StatusgruppenController extends Settings_SettingsController
                     if ($entry->isValid()) {
                         if ($entry->store() && !$changed && $type === 'institute') {
                             $changed   = true;
-                            $success[] = sprintf(_('Ihre Daten an der Einrichtung %s wurden geändert'), htmlReady(Institute::find($id)->name)
+                            $success[] = sprintf(_('Ihre Daten an der Einrichtung %s wurden geÃ¤ndert'), htmlReady(Institute::find($id)->name)
                             );
                         }
                     } else {
@@ -393,7 +393,7 @@ class Settings_StatusgruppenController extends Settings_SettingsController
         }
 
         if (count($success) > 0) {
-            PageLayout::postSuccess(_('Änderung erfolgreich'), $success);
+            PageLayout::postSuccess(_('Ã„nderung erfolgreich'), $success);
 
             if (count($errors) > 0) {
                 PageLayout::postWarning(_('Bei der Verarbeitung sind allerdings folgende Fehler aufgetreten'), $errors);
@@ -401,7 +401,7 @@ class Settings_StatusgruppenController extends Settings_SettingsController
         } elseif (count($errors) === 1) {
             PageLayout::postError($errors);
         } elseif (count($errors) > 0) {
-            PageLayout::postError(_('Fehler bei der Speicherung Ihrer Daten. Bitte überprüfen Sie Ihre Angaben.'), $errors);
+            PageLayout::postError(_('Fehler bei der Speicherung Ihrer Daten. Bitte Ã¼berprÃ¼fen Sie Ihre Angaben.'), $errors);
         }
 
 

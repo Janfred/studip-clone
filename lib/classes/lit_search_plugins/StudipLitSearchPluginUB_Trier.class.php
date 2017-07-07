@@ -2,13 +2,13 @@
 # Lifter002: TODO
 # Lifter007: TODO
 # Lifter003: TODO
-// Universität Trier  -  Jörg Röpke  -  <roepke@uni-trier.de>
+// UniversitÃ¤t Trier  -  JÃ¶rg RÃ¶pke  -  <roepke@uni-trier.de>
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // StudipLitSearchPluginUB_Trier.class.php
 //
 //
-// Copyright (c) 2005 Jörg Röpke  -  <roepke@uni-trier.de>
+// Copyright (c) 2005 JÃ¶rg RÃ¶pke  -  <roepke@uni-trier.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ class StudipLitSearchPluginUB_Trier extends StudipLitSearchPluginZ3950Abstract_A
 
     function __construct() {
         parent::__construct();
-        $this->description = "Universitätsbibliothek Trier";
+        $this->description = "UniversitÃ¤tsbibliothek Trier";
         //$this->z_host = "tcp:ub-a18t.uni-trier.de:9991/TRI01";
         $this->z_host = "tcp:ub-a18.uni-trier.de:9991/TRI01";
         $this->z_options = array('user' => 'z39studip', 'password' => 'ubtstudip');
@@ -38,10 +38,10 @@ class StudipLitSearchPluginUB_Trier extends StudipLitSearchPluginZ3950Abstract_A
         $this->convert_umlaute = true;
         $this->z_sort = '1=30 > 1=1 < 1=4 <';
         $this->z_profile = array('1016' => _("Basisindex [ALL]"),
-                                    '4' => _("Titelstichwörter [TIT]"),
+                                    '4' => _("TitelstichwÃ¶rter [TIT]"),
                                  '1004' => _("Person, Author [PER]"),
-                                    '3' => _("Körperschaft [KOR]"),
-                                   '46' => _("Schlagwörter [SLW]"),
+                                    '3' => _("KÃ¶rperschaft [KOR]"),
+                                   '46' => _("SchlagwÃ¶rter [SLW]"),
                                     '7' => _("ISBN [ISB]"));
     }
 }

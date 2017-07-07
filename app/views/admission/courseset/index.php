@@ -39,10 +39,10 @@ if ($coursesets) {
                 <a href="<?= $controller->link_for('admission/courseset/delete/'.
                     $courseset->getId()) ?>"
                     onclick="return STUDIP.Dialogs.showConfirmDialog('<?=
-                        sprintf(_('Soll das Anmeldeset %s wirklich gelöscht werden?'), htmlReady($courseset->getName())) ?>', '<?=
+                        sprintf(_('Soll das Anmeldeset %s wirklich gelÃ¶scht werden?'), htmlReady($courseset->getName())) ?>', '<?=
                         URLHelper::getURL('dispatch.php/admission/courseset/delete/'.
                         $courseset->getId(), array('really' => 1)) ?>')">
-                    <?= Icon::create('trash', 'clickable', ['title' => _('Anmeldeset löschen')])->asImg(16, ["alt" => _('Anmeldeset löschen')]); ?>
+                    <?= Icon::create('trash', 'clickable', ['title' => _('Anmeldeset lÃ¶schen')])->asImg(16, ["alt" => _('Anmeldeset lÃ¶schen')]); ?>
                 </a>
              <? endif ?>
         </div>
@@ -60,7 +60,7 @@ if ($coursesets) {
 <?php
 } else {
 ?>
-<?= MessageBox::info(sprintf(_('Es wurden keine Anmeldesets gefunden. Sie können ein '.
+<?= MessageBox::info(sprintf(_('Es wurden keine Anmeldesets gefunden. Sie kÃ¶nnen ein '.
     'neues %sAnmeldeset anlegen%s.'), '<a href="'.
     $controller->url_for('admission/courseset/configure').'">',
     '</a>')); ?>

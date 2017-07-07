@@ -1,15 +1,15 @@
 <section class="contentbox timesrooms">
     <header>
         <h1>
-            <?= _('Regelmäßige Termine') ?>
+            <?= _('RegelmÃ¤ÃŸige Termine') ?>
         </h1>
     <? if(!$locked) : ?>
         <nav>
             <a class="link-add"
                href="<?= $controller->link_for('course/timesrooms/createCycle', $linkAttributes) ?>"
                data-dialog="size=600"
-               title="<?= _('Regelmäßigen Termin hinzufügen') ?>">
-                <?= _('Regelmäßigen Termin hinzufügen') ?>
+               title="<?= _('RegelmÃ¤ÃŸigen Termin hinzufÃ¼gen') ?>">
+                <?= _('RegelmÃ¤ÃŸigen Termin hinzufÃ¼gen') ?>
             </a>
         </nav>
     <? endif ?>
@@ -62,10 +62,10 @@
                     ) ?>
                     <? $actionMenu->addButton(
                         'delete_cycle',
-                        _('Diesen Zeitraum löschen'),
-                        Icon::create('trash', 'clickable', ['title' => _('Diesen Zeitraum löschen')]),
+                        _('Diesen Zeitraum lÃ¶schen'),
+                        Icon::create('trash', 'clickable', ['title' => _('Diesen Zeitraum lÃ¶schen')]),
                         ['formaction'   => $controller->url_for('course/timesrooms/deleteCycle/' . $metadate_id, $linkAttributes),
-                         'data-confirm' => _('Soll dieser Zeitraum wirklich gelöscht werden?'),
+                         'data-confirm' => _('Soll dieser Zeitraum wirklich gelÃ¶scht werden?'),
                          'style'        => 'margin: 0px',]
                     ) ?>
                     <?= $actionMenu->render() ?>
@@ -112,14 +112,14 @@
                                             <input type="checkbox"
                                                     data-proxyfor=".date-proxy_<?= $metadate_id ?>"
                                                     data-activates=".actionForAllRegular_<?= $metadate_id ?>">
-                                            <?= _('Alle auswählen') ?>
+                                            <?= _('Alle auswÃ¤hlen') ?>
                                         </label>
                                     </td>
                                     <td colspan="3" class="actions">
                                         <select name="method" class="datesBulkActions actionForAllRegular_<?= $metadate_id ?>">
                                             <?= $this->render_partial('course/timesrooms/_stack_actions.php') ?>
                                         </select>
-                                        <?= Studip\Button::create(_('Ausführen'), 'run', array(
+                                        <?= Studip\Button::create(_('AusfÃ¼hren'), 'run', array(
                                                 'class' => 'actionForAllRegular_' . $metadate_id,
                                                 'data-dialog' => 'size=big'
                                         )) ?>
@@ -137,7 +137,7 @@
 <? else: ?>
     <section>
         <p class="text-center">
-            <strong><?= _('Keine regelmäßigen Termine vorhanden') ?></strong>
+            <strong><?= _('Keine regelmÃ¤ÃŸigen Termine vorhanden') ?></strong>
         </p>
     </section>
 <? endif; ?>

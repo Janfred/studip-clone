@@ -13,10 +13,10 @@
     <fieldset>
         <legend><?= _('Fach') ?></legend>
         <? if (is_array($faecher)) : ?>
-        <label>><?= sprintf(_('Mögliche Fächer im gewählten Fachbereich %s:'),
+        <label>><?= sprintf(_('MÃ¶gliche FÃ¤cher im gewÃ¤hlten Fachbereich %s:'),
                     '<strong>' . htmlReady($fachbereich->name) . '</strong>') ?>
             <select name="fach_item">
-                <option value=""><?= _('-- bitte wählen --') ?></option>
+                <option value=""><?= _('-- bitte wÃ¤hlen --') ?></option>
                 <? foreach ($faecher as $fach) : ?>
                 <option value="<?= $fach->id ?>"><?= htmlReady($fach->name) ?></option>
                 <? endforeach; ?>
@@ -50,7 +50,7 @@
         <? endif; ?>
     </fieldset>
     <fieldset>
-        <legend><?= _('Ausprägung') ?></legend>
+        <legend><?= _('AusprÃ¤gung') ?></legend>
         <label><?= _('Kredit-Punkte') ?>
         <input <?= $perm->disable('kp') ?> type="text" name="kp" id="stgteil_kp" size="10" maxlength="50" value="<?= htmlReady($stgteil->kp) ?>">
         </label>
@@ -108,7 +108,7 @@
             <? endforeach; ?>
         </ul>
         <div style="width: 100%; max-width: 48em;">
-        <?= _('Die Reihenfolge der Studienfachberater kann durch Anklicken und Ziehen geändert werden.') ?>
+        <?= _('Die Reihenfolge der Studienfachberater kann durch Anklicken und Ziehen geÃ¤ndert werden.') ?>
         </div>
     </fieldset>
     <footer data-dialog-button>
@@ -118,9 +118,9 @@
         <? endif; ?>
     <? else : ?>
         <? if ($perm->havePermWrite()) : ?>
-            <?= Button::createAccept(_('übernehmen'), 'store', array('title' => _('Änderungen übernehmen'))) ?>
+            <?= Button::createAccept(_('Ã¼bernehmen'), 'store', array('title' => _('Ã„nderungen Ã¼bernehmen'))) ?>
         <? endif; ?>
     <? endif; ?>
-        <?= LinkButton::createCancel(_('abbrechen'), $cancel_url, array('title' => _('zurück zur Übersicht'))) ?>
+        <?= LinkButton::createCancel(_('abbrechen'), $cancel_url, array('title' => _('zurÃ¼ck zur Ãœbersicht'))) ?>
     </footer>
 </form>

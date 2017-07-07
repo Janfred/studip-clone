@@ -17,7 +17,7 @@ class CourseScmHelptext extends Migration
         $db->exec("
             INSERT INTO help_content (global_content_id, content_id, language, content, route, studip_version)
             VALUES
-            ('142482b4b06a376b2eb4c91d38559a15', '142482b4b06a376b2eb4c91d38559a15', 'de', 'Freie Gestaltung von Reiternamen und Inhalten durch Lehrende. Es gibt Raum für eigene Informationen, der Name des Reiters ist frei definierbar. Es können beliebig viele Einträge (\"neue Einträge\") hinzugefügt werden.', 'dispatch.php/course/scm', '4.0')
+            ('142482b4b06a376b2eb4c91d38559a15', '142482b4b06a376b2eb4c91d38559a15', 'de', 'Freie Gestaltung von Reiternamen und Inhalten durch Lehrende. Es gibt Raum fÃ¼r eigene Informationen, der Name des Reiters ist frei definierbar. Es kÃ¶nnen beliebig viele EintrÃ¤ge (\"neue EintrÃ¤ge\") hinzugefÃ¼gt werden.', 'dispatch.php/course/scm', '4.0')
             ;"
         );
         

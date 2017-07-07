@@ -7,7 +7,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      André Noack <noack@data-quest.de>
+ * @author      AndrÃ© Noack <noack@data-quest.de>
  * @author      Moritz Strohm <strohm@data-quest.de>
  * @copyright   2016 Stud.IP Core-Group
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
@@ -245,7 +245,7 @@ class FileManager
     {
         $errors = [];
         if ($uploaded_file['error'] === UPLOAD_ERR_INI_SIZE) {
-            $errors[] = _('Die maximale Dateigröße wurde überschritten.');
+            $errors[] = _('Die maximale DateigrÃ¶ÃŸe wurde Ã¼berschritten.');
         } elseif ($uploaded_file['error'] > 0) {
             $errors[] = sprintf(
                 _('Ein Systemfehler ist beim Upload aufgetreten. Fehlercode: %s.'),
@@ -279,7 +279,7 @@ class FileManager
 
         //check if user has write permissions for the folder:
         if (!$folder->isWritable($user_id)) {
-            $error[] = _('Keine Schreibrechte für Zielordner!');
+            $error[] = _('Keine Schreibrechte fÃ¼r Zielordner!');
             return compact('error');
         }
 
@@ -418,7 +418,7 @@ class FileManager
 
         $connect_success = $data_file->connectWithDataFile($uploaded_file_data['tmp_name']);
         if (!$connect_success) {
-            $errors[] = _('Aktualisierte Datei konnte nicht ins Stud.IP Dateisystem übernommen werden!');
+            $errors[] = _('Aktualisierte Datei konnte nicht ins Stud.IP Dateisystem Ã¼bernommen werden!');
             return $errors;
         }
 
@@ -497,7 +497,7 @@ class FileManager
 
         if (!$folder_type->isFileEditable($file_ref, $user->id)) {
             return [sprintf(
-                _('Ungenügende Berechtigungen zum Bearbeiten der Datei %s!'),
+                _('UngenÃ¼gende Berechtigungen zum Bearbeiten der Datei %s!'),
                 $file_ref->name
             )];
         }
@@ -545,7 +545,7 @@ class FileManager
 
         //error while saving the changes!
         return [sprintf(
-            _('Fehler beim Speichern der Änderungen bei Datei %s'),
+            _('Fehler beim Speichern der Ã„nderungen bei Datei %s'),
             $file_ref->name
         )];
     }
@@ -585,7 +585,7 @@ class FileManager
             //or to write to the destination folder!
             return [
                 sprintf(
-                    _('Ungenügende Berechtigungen zum Kopieren der Datei %s in Ordner %s!'),
+                    _('UngenÃ¼gende Berechtigungen zum Kopieren der Datei %s in Ordner %s!'),
                     $source->name,
                     $destination_folder->name
                 )
@@ -682,7 +682,7 @@ class FileManager
             !$destination_folder->isWritable($user->id)
         ) {
             return [sprintf(
-                _('Ungenügende Berechtigungen zum Verschieben der Datei %s in Ordner %s!'),
+                _('UngenÃ¼gende Berechtigungen zum Verschieben der Datei %s in Ordner %s!'),
                 $source->name,
                 $destination_folder->name
             )];
@@ -719,7 +719,7 @@ class FileManager
 
         if (!$folder_type->isFileWritable($file_ref->id, $user->id)) {
             return [sprintf(
-                _('Ungenügende Berechtigungen zum Löschen der Datei %s in Ordner %s!'),
+                _('UngenÃ¼gende Berechtigungen zum LÃ¶schen der Datei %s in Ordner %s!'),
                 $file_ref->name
             )];
         }
@@ -728,7 +728,7 @@ class FileManager
             return $file_ref;
         }
 
-        return [_('Dateireferenz konnte nicht gelöscht werden.')];
+        return [_('Dateireferenz konnte nicht gelÃ¶scht werden.')];
     }
 
     // FOLDER METHODS
@@ -1015,7 +1015,7 @@ class FileManager
     {
         if (!$folder->isWritable($user->id)) {
             return [sprintf(
-                    _('Unzureichende Berechtigungen zum Löschen von Ordner %s!'),
+                    _('Unzureichende Berechtigungen zum LÃ¶schen von Ordner %s!'),
                     $folder->name
                 )
             ];
@@ -1028,7 +1028,7 @@ class FileManager
 
         //error occured!
         return [sprintf(
-            _('Fehler beim Löschvorgang von Ordner %s!'),
+            _('Fehler beim LÃ¶schvorgang von Ordner %s!'),
             $folder->name
         )];
     }
@@ -1424,7 +1424,7 @@ class FileManager
             $header['filename'] = basename($url_parts['path']);
         }
 
-        // Weg über einen Locationheader:
+        // Weg Ã¼ber einen Locationheader:
         $location_header = $header['Location'] ?: $header['location'];
         if (in_array($header['response_code'], [300, 301, 302, 303, 305, 307]) && $location_header) {
             if (mb_strpos($location_header, 'http') !== 0) {

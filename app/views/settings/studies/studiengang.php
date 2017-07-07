@@ -1,6 +1,6 @@
 <? use Studip\Button; ?>
 
-<h3 style="text-align: center;"><?= _('Ich studiere folgende Fächer und Abschlüsse:') ?></h3>
+<h3 style="text-align: center;"><?= _('Ich studiere folgende FÃ¤cher und AbschlÃ¼sse:') ?></h3>
 
 <? if ($allow_change['sg']): ?>
 <form action="<?= $controller->url_for('settings/studies/store_sg') ?>" method="post">
@@ -59,7 +59,7 @@
                             <? if (count($versionen)) : ?>
                                 <select name="change_version[<?= $usc->fach_id ?>][<?= $ucs->abschluss_id ?>]"
                                         aria-labelledby="version_label">
-                                    <option value=""><?= _('-- Bitte Version auswählen --') ?></option>
+                                    <option value=""><?= _('-- Bitte Version auswÃ¤hlen --') ?></option>
                                     <? foreach ($versionen as $version) : ?>
                                         <option<?= $version->getId() == $ucs->version_id ? ' selected' : '' ?>
                                                 value="<?= htmlReady($version->getId()) ?>">
@@ -68,7 +68,7 @@
                                     <? endforeach; ?>
                                 </select>
                             <? else : ?>
-                                <?= tooltipIcon(_('Keine Version in der gewählten Fach-Abschluss-Kombination verfügbar.'), true) ?>
+                                <?= tooltipIcon(_('Keine Version in der gewÃ¤hlten Fach-Abschluss-Kombination verfÃ¼gbar.'), true) ?>
                             <? endif; ?>
                         </td>
                     <? else : ?>
@@ -108,13 +108,13 @@
                 <td colspan="<?= $modulemanagement_enabled ? '5' : '4' ?>">
                     <? if ($allow_change['sg']): ?>
                         <p>
-                            <?= _('Wählen Sie die Fächer, Abschlüsse und Fachsemester in der folgenden Liste aus:') ?>
+                            <?= _('WÃ¤hlen Sie die FÃ¤cher, AbschlÃ¼sse und Fachsemester in der folgenden Liste aus:') ?>
                         </p>
                         <p>
                             <a name="studiengaenge"></a>
                             <select name="new_studiengang" id="new_studiengang"
-                                    aria-label="<?= _('-- Bitte Fach auswählen --') ?>">
-                                <option selected value="none"><?= _('-- Bitte Fach auswählen --') ?></option>
+                                    aria-label="<?= _('-- Bitte Fach auswÃ¤hlen --') ?>">
+                                <option selected value="none"><?= _('-- Bitte Fach auswÃ¤hlen --') ?></option>
                                 <? foreach ($faecher as $fach) : ?>
                                     <?= sprintf('<option value="%s">%s</option>', $fach->id, htmlReady(my_substr($fach->name, 0, 50))); ?>
                                 <? endforeach ?>
@@ -122,15 +122,15 @@
 
                             <a name="abschluss"></a>
                             <select name="new_abschluss" id="new_abschluss"
-                                    aria-label="<?= _('-- Bitte Abschluss auswählen --') ?>">
-                                <option selected value="none"><?= _('-- Bitte Abschluss auswählen --') ?></option>
+                                    aria-label="<?= _('-- Bitte Abschluss auswÃ¤hlen --') ?>">
+                                <option selected value="none"><?= _('-- Bitte Abschluss auswÃ¤hlen --') ?></option>
                                 <? foreach ($abschluesse as $abschluss) : ?>
                                     <?= sprintf('<option value="%s">%s</option>' . "\n", $abschluss->id, htmlReady(my_substr($abschluss->name, 0, 50))); ?>
                                 <? endforeach ?>
                             </select>
 
                             <a name="semester"></a>
-                            <select name="fachsem" aria-label="<?= _("Bitte Fachsemester wählen") ?>">
+                            <select name="fachsem" aria-label="<?= _("Bitte Fachsemester wÃ¤hlen") ?>">
                                 <? for ($i = 1; $i <= 50; $i += 1): ?>
                                     <option><?= $i ?></option>
                                 <? endfor; ?>
@@ -138,16 +138,16 @@
                         </p>
 
                         <p>
-                            <?= _('Wenn Sie einen Studiengang wieder austragen möchten, '
+                            <?= _('Wenn Sie einen Studiengang wieder austragen mÃ¶chten, '
                                   . 'markieren Sie die entsprechenden Felder in der oberen Tabelle.') ?>
-                            <?= _('Mit einem Klick auf <b>Übernehmen</b> werden die gewählten Änderungen durchgeführt.') ?>
+                            <?= _('Mit einem Klick auf <b>Ãœbernehmen</b> werden die gewÃ¤hlten Ã„nderungen durchgefÃ¼hrt.') ?>
                             <br>
                             <br>
-                            <?= Button::create(_('Übernehmen'), 'store_sg', ['title' => _('Änderungen übernehmen')]) ?>
+                            <?= Button::create(_('Ãœbernehmen'), 'store_sg', ['title' => _('Ã„nderungen Ã¼bernehmen')]) ?>
                         </p>
                     <? else: ?>
                         <?= _('Die Informationen zu Ihrem Studiengang werden vom System verwaltet, '
-                              . 'und können daher von Ihnen nicht geändert werden.') ?>
+                              . 'und kÃ¶nnen daher von Ihnen nicht geÃ¤ndert werden.') ?>
                     <? endif; ?>
                 </td>
             </tr>

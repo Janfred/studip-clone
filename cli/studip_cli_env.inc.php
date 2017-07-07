@@ -7,14 +7,14 @@
 * sets up a faked Stud.IP environment with usable $auth, $user and $perm objects
 * for a faked 'root' user, sets custom error handler wich writes to STDERR
 *
-* @author       André Noack <noack@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
+* @author       AndrÃ© Noack <noack@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @access       public
 */
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // studip_cli_env.inc.php
 //
-// Copyright (C) 2006 André Noack <noack@data-quest.de>,
+// Copyright (C) 2006 AndrÃ© Noack <noack@data-quest.de>,
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -39,7 +39,7 @@ function CliErrorHandler($errno, $errstr, $errfile, $errline) {
     return true;
 }
 
-function parse_msg_to_clean_text($long_msg,$separator="§") {
+function parse_msg_to_clean_text($long_msg,$separator="Â§") {
     $msg = explode ($separator,$long_msg);
     $ret = array();
     for ($i=0; $i < count($msg); $i=$i+2) {

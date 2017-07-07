@@ -26,7 +26,7 @@ class ArchiveController extends AuthenticatedController
         $navigation->addSubNavigation(
             'overview',
             new Navigation(
-                _('Übersicht'),
+                _('Ãœbersicht'),
                 $this->url_for('archive/overview/' . $args[0])
                 )
         );

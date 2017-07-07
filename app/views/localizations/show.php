@@ -3,18 +3,18 @@
 $translations = array(
     // app/views/admin/autoinsert/manual.php
     'Fehler' => _('Fehler'),
-    'Fehler bei der Übertragung' => _('Fehler bei der Übertragung'),
+    'Fehler bei der Ãœbertragung' => _('Fehler bei der Ãœbertragung'),
     'Gefundene Nutzer' => _('Gefundene Nutzer'),
     'Wollen Sie diesen Filter wirklich entfernen?' => _('Wollen Sie diesen Filter wirklich entfernen?'),
 
     // app/views/messages/overview.php
-    'Wirklich %s Nachrichten löschen?' => _('Wirklich %s Nachrichten löschen?'),
+    'Wirklich %s Nachrichten lÃ¶schen?' => _('Wirklich %s Nachrichten lÃ¶schen?'),
 
     // public/assets/javascripts/admission.js
     'Wird geladen' => _('Wird geladen'),
     'Anmelderegel konfigurieren' => _('Anmelderegel konfigurieren'),
     'Sie haben noch keine Anmelderegeln festgelegt.' => _('Sie haben noch keine Anmelderegeln festgelegt.'),
-    'Sie haben noch niemanden hinzugefügt.' => _('Sie haben noch niemanden hinzugefügt.'),
+    'Sie haben noch niemanden hinzugefÃ¼gt.' => _('Sie haben noch niemanden hinzugefÃ¼gt.'),
 
     // public/assets/javascripts/application.js
     'Blenden Sie die restlichen Termine aus' => _('Blenden Sie die restlichen Termine aus'),
@@ -22,7 +22,7 @@ $translations = array(
     'Schliessen' => _('Schliessen'),
 
     // public/assets/javascripts/big-image-handler.js
-    'Dieses Bild wird verkleinert dargestellt. Klicken Sie für eine größere Darstellung.' => _('Dieses Bild wird verkleinert dargestellt. Klicken Sie für eine größere Darstellung.'),
+    'Dieses Bild wird verkleinert dargestellt. Klicken Sie fÃ¼r eine grÃ¶ÃŸere Darstellung.' => _('Dieses Bild wird verkleinert dargestellt. Klicken Sie fÃ¼r eine grÃ¶ÃŸere Darstellung.'),
 
     // public/assets/javascripts/calendar.js
     'Montag' => _('Montag'),
@@ -42,24 +42,24 @@ $translations = array(
     'Bitte %u Zeichen weniger eingeben' => _('Bitte %u Zeichen weniger eingeben'),
     'Bitte %u Zeichen mehr eingeben' => _('Bitte %u Zeichen mehr eingeben'),
     'Lade mehr Ergebnisse...' => _('Lade mehr Ergebnisse...'),
-    'Sie können nur %u Eintrag auswählen' => _('Sie können nur %u Eintrag auswählen'),
-    'Sie können nur %u Einträge auswählen' => _('Sie können nur %u Einträge auswählen'),
-    'Keine Übereinstimmungen gefunden' => _('Keine Übereinstimmungen gefunden'),
+    'Sie kÃ¶nnen nur %u Eintrag auswÃ¤hlen' => _('Sie kÃ¶nnen nur %u Eintrag auswÃ¤hlen'),
+    'Sie kÃ¶nnen nur %u EintrÃ¤ge auswÃ¤hlen' => _('Sie kÃ¶nnen nur %u EintrÃ¤ge auswÃ¤hlen'),
+    'Keine Ãœbereinstimmungen gefunden' => _('Keine Ãœbereinstimmungen gefunden'),
     'Suche...' => _('Suche...'),
 
     // public/assets/javascripts/messages.js
     'Sie haben nicht angegeben, wer die Nachricht empfangen soll!' => _('Sie haben nicht angegeben, wer die Nachricht empfangen soll!'),
 
     // public/assets/javascripts/multi_person_search.js
-    'Sie haben <%= count %> Personen ausgewählt' => _('Sie haben <%= count %> Personen ausgewählt'),
+    'Sie haben <%= count %> Personen ausgewÃ¤hlt' => _('Sie haben <%= count %> Personen ausgewÃ¤hlt'),
     'Suchergebnisse' => _('Suchergebnisse'),
-    'Alle hinzufügen' => _('Alle hinzufügen'),
+    'Alle hinzufÃ¼gen' => _('Alle hinzufÃ¼gen'),
     'Alle entfernen' => _('Alle entfernen'),
-    ' Dieser Filter enthält keine (neuen) Personen.' => _(' Dieser Filter enthält keine (neuen) Personen.'),
-    'Es wurden keine neuen Ergebnisse für "<%= needle %>" gefunden.' => _('Es wurden keine neuen Ergebnisse für "<%= needle %>" gefunden.'),
+    ' Dieser Filter enthÃ¤lt keine (neuen) Personen.' => _(' Dieser Filter enthÃ¤lt keine (neuen) Personen.'),
+    'Es wurden keine neuen Ergebnisse fÃ¼r "<%= needle %>" gefunden.' => _('Es wurden keine neuen Ergebnisse fÃ¼r "<%= needle %>" gefunden.'),
 
     // public/assets/javascripts/multi_select.js
-    'ausgewählt' => _('ausgewählt'),
+    'ausgewÃ¤hlt' => _('ausgewÃ¤hlt'),
 
     // public/assets/javascripts/news.js
     'Dialog wird geladen...' => _('Dialog wird geladen...'),
@@ -69,18 +69,18 @@ $translations = array(
     'Kein Ergebnis gefunden.' => _('Kein Ergebnis gefunden.'),
 
     // public/assets/javascripts/raumzeit.js
-    'Nicht buchbare Räume:' => _('Nicht buchbare Räume:'),
-    'Alle Räume anzeigen' => _('Alle Räume anzeigen'),
-    'Wollen Sie die gewünschten Termine wirklich löschen?' => _('Wollen Sie die gewünschten Termine wirklich löschen?'),
-    'Sind Sie sicher, dass Sie die regelmäßige Zeit ändern möchten?' => _('Sind Sie sicher, dass Sie die regelmäßige Zeit ändern möchten?'),
+    'Nicht buchbare RÃ¤ume:' => _('Nicht buchbare RÃ¤ume:'),
+    'Alle RÃ¤ume anzeigen' => _('Alle RÃ¤ume anzeigen'),
+    'Wollen Sie die gewÃ¼nschten Termine wirklich lÃ¶schen?' => _('Wollen Sie die gewÃ¼nschten Termine wirklich lÃ¶schen?'),
+    'Sind Sie sicher, dass Sie die regelmÃ¤ÃŸige Zeit Ã¤ndern mÃ¶chten?' => _('Sind Sie sicher, dass Sie die regelmÃ¤ÃŸige Zeit Ã¤ndern mÃ¶chten?'),
 
     // public/assets/javascripts/register.js
     'Der Benutzername ist zu kurz, er sollte mindestens 4 Zeichen lang sein.' => _('Der Benutzername ist zu kurz, er sollte mindestens 4 Zeichen lang sein.'),
-    'Der Benutzername enthält unzulässige Zeichen, er darf keine Sonderzeichen oder Leerzeichen enthalten.' => _('Der Benutzername enthält unzulässige Zeichen, er darf keine Sonderzeichen oder Leerzeichen enthalten.'),
+    'Der Benutzername enthÃ¤lt unzulÃ¤ssige Zeichen, er darf keine Sonderzeichen oder Leerzeichen enthalten.' => _('Der Benutzername enthÃ¤lt unzulÃ¤ssige Zeichen, er darf keine Sonderzeichen oder Leerzeichen enthalten.'),
     'Das Passwort ist zu kurz, es sollte mindestens 4 Zeichen lang sein.' => _('Das Passwort ist zu kurz, es sollte mindestens 4 Zeichen lang sein.'),
-    'Das Passwort stimmt nicht mit dem Bestätigungspasswort überein!' => _('Das Passwort stimmt nicht mit dem Bestätigungspasswort überein!'),
-    'Bitte geben Sie Ihren tatsächlichen Vornamen an.' => _('Bitte geben Sie Ihren tatsächlichen Vornamen an.'),
-    'Bitte geben Sie Ihren tatsächlichen Nachnamen an.' => _('Bitte geben Sie Ihren tatsächlichen Nachnamen an.'),
+    'Das Passwort stimmt nicht mit dem BestÃ¤tigungspasswort Ã¼berein!' => _('Das Passwort stimmt nicht mit dem BestÃ¤tigungspasswort Ã¼berein!'),
+    'Bitte geben Sie Ihren tatsÃ¤chlichen Vornamen an.' => _('Bitte geben Sie Ihren tatsÃ¤chlichen Vornamen an.'),
+    'Bitte geben Sie Ihren tatsÃ¤chlichen Nachnamen an.' => _('Bitte geben Sie Ihren tatsÃ¤chlichen Nachnamen an.'),
     'Die E-Mail-Adresse ist nicht korrekt!' => _('Die E-Mail-Adresse ist nicht korrekt!'),
 
     // public/assets/javascripts/schedule.js
@@ -91,17 +91,17 @@ $translations = array(
 
     // public/assets/javascripts/smiley-picker.js
     'Smileys' => _('Smileys'),
-    'Zur Gesamtübersicht' => _('Zur Gesamtübersicht'),
+    'Zur GesamtÃ¼bersicht' => _('Zur GesamtÃ¼bersicht'),
 
     // public/assets/javascripts/studip-dialog.js
-    'Schließen' => _('Schließen'),
-    'Bitte bestätigen Sie die Aktion' => _('Bitte bestätigen Sie die Aktion'),
+    'SchlieÃŸen' => _('SchlieÃŸen'),
+    'Bitte bestÃ¤tigen Sie die Aktion' => _('Bitte bestÃ¤tigen Sie die Aktion'),
     'Ja' => _('Ja'),
     'Nein' => _('Nein'),
 
     // public/assets/javascripts/studip-helper-attributes.js
-    'Wollen Sie die Aktion wirklich ausführen?' => _('Wollen Sie die Aktion wirklich ausführen?'),
-    'Die beiden Werte "$1" und "$2" stimmen nicht überein. ' => _('Die beiden Werte "$1" und "$2" stimmen nicht überein. '),
+    'Wollen Sie die Aktion wirklich ausfÃ¼hren?' => _('Wollen Sie die Aktion wirklich ausfÃ¼hren?'),
+    'Die beiden Werte "$1" und "$2" stimmen nicht Ã¼berein. ' => _('Die beiden Werte "$1" und "$2" stimmen nicht Ã¼berein. '),
 
     // public/assets/javascripts/studip-jquery.multi-select.tweaks.js
     'Die Person ist bereits eingetragen.' => _('Die Person ist bereits eingetragen.'),
@@ -110,13 +110,13 @@ $translations = array(
     'Ihre Eingaben wurden bislang noch nicht gespeichert.' => _('Ihre Eingaben wurden bislang noch nicht gespeichert.'),
 
     // public/assets/javascripts/studip-ui.js
-    'schließen' => _('schließen'),
-    'Zurück' => _('Zurück'),
+    'schlieÃŸen' => _('schlieÃŸen'),
+    'ZurÃ¼ck' => _('ZurÃ¼ck'),
     'Vor;' => _('Vor;'),
     'heute' => _('heute'),
     'Januar' => _('Januar'),
     'Februar' => _('Februar'),
-    'März' => _('März'),
+    'MÃ¤rz' => _('MÃ¤rz'),
     'April' => _('April'),
     'Mai' => _('Mai'),
     'Juni' => _('Juni'),
@@ -128,7 +128,7 @@ $translations = array(
     'Dezember' => _('Dezember'),
     'Jan' => _('Jan'),
     'Feb' => _('Feb'),
-    'Mär' => _('Mär'),
+    'MÃ¤r' => _('MÃ¤r'),
     'Apr' => _('Apr'),
     'Jun' => _('Jun'),
     'Jul' => _('Jul'),
@@ -164,23 +164,23 @@ $translations = array(
     'Sichtbarkeit' => _('Sichtbarkeit'),
 
     // public/plugins_packages/core/Forum/javascript/forum.js
-    'Wenn Sie die Seite verlassen, gehen ihre Änderungen verloren!' => _('Wenn Sie die Seite verlassen, gehen ihre Änderungen verloren!'),
-    'Sind sie sicher, dass Sie diese Kategorie entfernen möchten? ' => _('Sind sie sicher, dass Sie diese Kategorie entfernen möchten? '),
+    'Wenn Sie die Seite verlassen, gehen ihre Ã„nderungen verloren!' => _('Wenn Sie die Seite verlassen, gehen ihre Ã„nderungen verloren!'),
+    'Sind sie sicher, dass Sie diese Kategorie entfernen mÃ¶chten? ' => _('Sind sie sicher, dass Sie diese Kategorie entfernen mÃ¶chten? '),
     'Alle Bereiche werden dann nach "Allgemein" verschoben!' => _('Alle Bereiche werden dann nach "Allgemein" verschoben!'),
-    'Sind sie sicher, dass Sie diesen Bereich löschen möchten? ' => _('Sind sie sicher, dass Sie diesen Bereich löschen möchten? '),
-    'Es werden auch alle Beiträge in diesem Bereich gelöscht!' => _('Es werden auch alle Beiträge in diesem Bereich gelöscht!'),
+    'Sind sie sicher, dass Sie diesen Bereich lÃ¶schen mÃ¶chten? ' => _('Sind sie sicher, dass Sie diesen Bereich lÃ¶schen mÃ¶chten? '),
+    'Es werden auch alle BeitrÃ¤ge in diesem Bereich gelÃ¶scht!' => _('Es werden auch alle BeitrÃ¤ge in diesem Bereich gelÃ¶scht!'),
     'Anonym' => _('Anonym'),
-    'Die Senderin/der Sender dieser Nachricht möchte Sie auf den folgenden Beitrag aufmerksam machen. ' => _('Die Senderin/der Sender dieser Nachricht möchte Sie auf den folgenden Beitrag aufmerksam machen. '),
+    'Die Senderin/der Sender dieser Nachricht mÃ¶chte Sie auf den folgenden Beitrag aufmerksam machen. ' => _('Die Senderin/der Sender dieser Nachricht mÃ¶chte Sie auf den folgenden Beitrag aufmerksam machen. '),
     'Link zum Beitrag: ' => _('Link zum Beitrag: '),
     'Beitrag verschieben' => _('Beitrag verschieben'),
-    'Thema schließen' => _('Thema schließen'),
-    'Thema öffnen' => _('Thema öffnen'),
+    'Thema schlieÃŸen' => _('Thema schlieÃŸen'),
+    'Thema Ã¶ffnen' => _('Thema Ã¶ffnen'),
     'Hervorhebung aufheben' => _('Hervorhebung aufheben'),
     'Thema hervorheben' => _('Thema hervorheben'),
 
     // public/plugins_packages/core/Modulverwaltung/public/javascripts/mvv.js
-    'hinzufügen' => _('hinzufügen'),
-    'Suche zurücksetzen' => _('Suche zurücksetzen'),
+    'hinzufÃ¼gen' => _('hinzufÃ¼gen'),
+    'Suche zurÃ¼cksetzen' => _('Suche zurÃ¼cksetzen'),
     'Keine Angabe beim Fach' => _('Keine Angabe beim Fach'),
 
     // public/plugins_packages/core/Forum/javascript/forum.js

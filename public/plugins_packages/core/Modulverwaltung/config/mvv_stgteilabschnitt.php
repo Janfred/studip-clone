@@ -252,7 +252,7 @@ $privileges = array(
                 'MVVFreigabe'   => 3
             )
         ),
-        // verknüpfte Objekte
+        // verknÃ¼pfte Objekte
         'modul_zuordnungen' => array(
             'default' => array(
                 'MVVEntwickler' => 1,

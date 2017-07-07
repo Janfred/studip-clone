@@ -20,7 +20,7 @@ class Admin_ApiController extends AuthenticatedController
 
         $this->types = array(
             'website' => _('Website'),
-            'desktop' => _('Herkömmliches Desktopprogramm'),
+            'desktop' => _('HerkÃ¶mmliches Desktopprogramm'),
             'mobile'  => _('Mobile App')
         );
 
@@ -77,7 +77,7 @@ class Admin_ApiController extends AuthenticatedController
         if (Request::isXhr()) {
             $this->render_text(implode('<br>', $details));
         } else {
-            PageLayout::postMessage(MessageBox::info(_('Die Schlüssel in den Details dieser Meldung sollten vertraulich behandelt werden!'), $details, true));
+            PageLayout::postMessage(MessageBox::info(_('Die SchlÃ¼ssel in den Details dieser Meldung sollten vertraulich behandelt werden!'), $details, true));
             $this->redirect('admin/api/#' . $id);
         }
     }
@@ -117,7 +117,7 @@ class Admin_ApiController extends AuthenticatedController
                 $message = MessageBox::success(_('Die Applikation wurde erfolgreich gespeichert.'));
             } else {
                 $details  = $this->render_keys($consumer->id);
-                $message = MessageBox::success(_('Die Applikation wurde erfolgreich erstellt, die Schlüssel finden Sie in den Details dieser Meldung.'), $details, true);
+                $message = MessageBox::success(_('Die Applikation wurde erfolgreich erstellt, die SchlÃ¼ssel finden Sie in den Details dieser Meldung.'), $details, true);
             }
             PageLayout::postMessage($message);
             $this->redirect('admin/api/index#' . $consumer->id);
@@ -157,7 +157,7 @@ class Admin_ApiController extends AuthenticatedController
         if ($consumer = RESTAPI\Consumer\Base::find($id)) {
             $consumer->delete();
 
-            PageLayout::postSuccess(_('Die Applikation wurde erfolgreich gelöscht.'));
+            PageLayout::postSuccess(_('Die Applikation wurde erfolgreich gelÃ¶scht.'));
         }
         $this->redirect('admin/api');
     }

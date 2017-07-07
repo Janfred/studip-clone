@@ -47,13 +47,13 @@ class CoreLiterature implements StudipModule {
     {
         return array(
             'summary' => _('Erstellung von Literaturlisten unter Verwendung von Katalogen'),
-            'description' => _('Lehrende haben die Möglichkeit, '.
+            'description' => _('Lehrende haben die MÃ¶glichkeit, '.
                 'veranstaltungsspezifische Literaturlisten entweder zu '.
                 'erstellen oder bestehende Listen aus anderen '.
                 'Literaturverwaltungsprogrammen (z. B. Citavi und Endnote) '.
-                'hochzuladen. Diese Listen können in Lehrveranstaltungen '.
+                'hochzuladen. Diese Listen kÃ¶nnen in Lehrveranstaltungen '.
                 'kopiert und sichtbar geschaltet werden. Je nach Anbindung '.
-                'kann im tatsächlichen Buchbestand der Hochschule '.
+                'kann im tatsÃ¤chlichen Buchbestand der Hochschule '.
                 'recherchiert werden.'),
             'displayname' => _('Literatur'),
             'category' => _('Lehr- und Lernorganisation'),
@@ -61,17 +61,17 @@ class CoreLiterature implements StudipModule {
                             Anbindung an Literaturverwaltungsprogramme (z. B. OPAC);
                             Einfache Suche nach Literatur'),
             'descriptionshort' => _('Erstellung von Literaturlisten unter Verwendung von Katalogen'),
-            'descriptionlong' => _('Lehrende haben die Möglichkeit, veranstaltungsspezifische Literaturlisten '.
+            'descriptionlong' => _('Lehrende haben die MÃ¶glichkeit, veranstaltungsspezifische Literaturlisten '.
                                     'entweder zu erstellen oder bestehende Listen aus anderen Literaturverwaltungsprogrammen '.
-                                    '(z. B. Citavi und Endnote) hochzuladen. Diese Listen können in Lehrveranstaltungen '.
-                                    'kopiert und sichtbar geschaltet werden. Je nach Anbindung kann im tatsächlichen '.
+                                    '(z. B. Citavi und Endnote) hochzuladen. Diese Listen kÃ¶nnen in Lehrveranstaltungen '.
+                                    'kopiert und sichtbar geschaltet werden. Je nach Anbindung kann im tatsÃ¤chlichen '.
                                     'Buchbestand der Hochschule recherchiert werden.'),
             'icon' => Icon::create('literature', 'info'),
             'screenshots' => array(
                 'path' => 'plus/screenshots/Literatur',
                 'pictures' => array(
                     0 => array('source' => 'Literatur_suchen.jpg', 'title' => _('Literatur suchen')),
-                    1 => array('source' => 'Literatur_in_Literaturliste_einfuegen.jpg', 'title' => _('Literatur in Literaturliste einfügen')),
+                    1 => array('source' => 'Literatur_in_Literaturliste_einfuegen.jpg', 'title' => _('Literatur in Literaturliste einfÃ¼gen')),
                     2 => array( 'source' => 'Literaturliste_in_der_Veranstaltung_anzeigen.jpg', 'title' => _('Literaturliste in der Veranstaltung anzeigen'))
                 )
             )                        

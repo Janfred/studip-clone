@@ -3,7 +3,7 @@
  * MultiDimArrayObject
  *
  *
- * @author      André Noack <noack@data-quest.de>
+ * @author      AndrÃ© Noack <noack@data-quest.de>
  *
  */
 class MultiDimArrayObject extends StudipArrayObject

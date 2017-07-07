@@ -3,13 +3,13 @@
 # Lifter007: TODO
 # Lifter003: TODO
 # Lifter010: TODO
-// Universität Trier  -  Jörg Röpke  -  <roepke@uni-trier.de>
+// UniversitÃ¤t Trier  -  JÃ¶rg RÃ¶pke  -  <roepke@uni-trier.de>
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // StudipLitSearchPluginZ3950Abstract_Aleph.class.php
 //
 //
-// Copyright (c) 2005 Jörg Röpke  -  <roepke@uni-trier.de>
+// Copyright (c) 2005 JÃ¶rg RÃ¶pke  -  <roepke@uni-trier.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@ class StudipLitSearchPluginZ3950Abstract_Aleph extends StudipLitSearchPluginZ395
         parent::__construct();
         $mapping =
                                    array('001' => array('field' => 'accession_number', 'callback' => 'idMap', 'cb_args' => FALSE),
-                                         // übergeordneter Band
+                                         // Ã¼bergeordneter Band
                                          '760' => array('field' => 'dc_title', 'callback' => 'search_superbook', 'cb_args' => '$o'),
                                          // Titel
                                          '245' => array (array('field' => 'dc_title', 'callback' => 'simpleMap', 'cb_args' => '$a - $b'),
@@ -66,7 +66,7 @@ class StudipLitSearchPluginZ3950Abstract_Aleph extends StudipLitSearchPluginZ395
 
 
 
-    // suche übergeortnetem Band
+    // suche Ã¼bergeortnetem Band
     function search_superbook($cat_element, $data, $field, $args)
     {
         $result = $data['o'];
@@ -89,7 +89,7 @@ class StudipLitSearchPluginZ3950Abstract_Aleph extends StudipLitSearchPluginZ395
     }
 
 
-    // ID Mapping für Hyperlink zum Bibliothekskatalog
+    // ID Mapping fÃ¼r Hyperlink zum Bibliothekskatalog
     function idMap($cat_element, $data, $field, $args)
     {
         // NEU
@@ -108,10 +108,10 @@ class StudipLitSearchPluginZ3950Abstract_Aleph extends StudipLitSearchPluginZ395
         $result = str_replace(array('<','>'),'',$result);
         $result = trim($result);
 
-        // Untergeordneter Band -> Supertitel hinzufügen
+        // Untergeordneter Band -> Supertitel hinzufÃ¼gen
         if($cat_element->super_book['dc_title'] != "")
             $cat_element->setValue($field, $cat_element->super_book['dc_title']." - ".$result);
-        // Haupt- bzw. Übergeordneter Band
+        // Haupt- bzw. Ãœbergeordneter Band
         else
             $cat_element->setValue($field, $result);
         return;

@@ -1,6 +1,6 @@
 <?php
 /**
- * @author Till Glˆggler <tgloeggl@uos.de>
+ * @author Till Gl√∂ggler <tgloeggl@uos.de>
  */
  class StudipVersion
  {

@@ -131,7 +131,7 @@ class EvaluationExportManagerCSV extends EvaluationExportManager {
     */
    function exportHeader () {
       if (empty ($this->filehandle))
-         return $this->throwError (1, _("ExportManager::Konnte tempor‰re Datei nicht ˆffnen."));
+         return $this->throwError (1, _("ExportManager::Konnte tempor√§re Datei nicht √∂ffnen."));
 
       fputs ($this->filehandle, EVALEXPORT_DELIMITER . _("Nummer") . EVALEXPORT_DELIMITER.EVALEXPORT_SEPERATOR);
       fputs ($this->filehandle, EVALEXPORT_DELIMITER . _("Datum") . EVALEXPORT_DELIMITER.EVALEXPORT_SEPERATOR);
@@ -212,7 +212,7 @@ class EvaluationExportManagerCSV extends EvaluationExportManager {
 
          /* Questiontype: undefined ----------------------------------------- */
          } else {
-            return $this->throwError (2, _("ExportManager::Ung¸ltiger Typ."));
+            return $this->throwError (2, _("ExportManager::Ung√ºltiger Typ."));
          }
          /* -------------------------------------------------- end: undefined */
       }
@@ -316,7 +316,7 @@ class EvaluationExportManagerCSV extends EvaluationExportManager {
 
             /* Questiontype: undefined -------------------------------------- */
             else {
-               return $this->throwError (1, _("ExportManager::Ung¸ltiger Fragetyp."));
+               return $this->throwError (1, _("ExportManager::Ung√ºltiger Fragetyp."));
             }
             /* ----------------------------------------------- end: undefined */
          }

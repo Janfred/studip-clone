@@ -5,7 +5,7 @@
 # Lifter010: TODO
 /*
 user_visible.inc.php - Functions for determining a users visibility
-Copyright (C) 2004 Till Glöggler <virtuos@snowysoft.de>
+Copyright (C) 2004 Till GlÃ¶ggler <virtuos@snowysoft.de>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -181,7 +181,7 @@ function vis_chooser($vis, $new = false, $id = false) {
     $txt = array();
     $txt[] = sprintf('<select name="visible"%s>', $id ? 'id="' . htmlReady($id) . '"' : '');
     if (!$new) {
-        $txt[] = '<option value="'.$vis.'">'._("keine Änderung").'</option>';
+        $txt[] = '<option value="'.$vis.'">'._("keine Ã„nderung").'</option>';
     }
     $txt[] = '<option value="always">'._("immer").'</option>';
     /* $txt[] = '<option value="yes">'._("ja").'</option>'; */
@@ -221,7 +221,7 @@ function first_decision($userid) {
         return;
     }
 
-    PageLayout::setTitle(_('Bitte wählen Sie Ihren Sichtbarkeitsstatus aus!'));
+    PageLayout::setTitle(_('Bitte wÃ¤hlen Sie Ihren Sichtbarkeitsstatus aus!'));
     PageLayout::setTabNavigation(NULL);
 
     // avoid recursion when loading the header

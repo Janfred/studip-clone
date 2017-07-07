@@ -6,7 +6,7 @@
 // This file is part of Stud.IP
 // SingleDateDB.class.php
 //
-// Datenbank-Abfragen für SingleDate.class.php
+// Datenbank-Abfragen fÃ¼r SingleDate.class.php
 //
 // +--------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@
  * SingleDateDB.class.php
  *
  *
- * @author      Till Glöggler <tgloeggl@uos.de>
+ * @author      Till GlÃ¶ggler <tgloeggl@uos.de>
  * @version     19. Oktober 2005
  * @access      protected
  * @package     raumzeit

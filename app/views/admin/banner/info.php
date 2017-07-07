@@ -64,7 +64,7 @@
             </td>
         </tr>
         <tr>
-            <td><?= _('Priorität:') ?></td>
+            <td><?= _('PrioritÃ¤t:') ?></td>
             <td>
                 <select disabled>
                 <? foreach ($priorities as $key => $label): ?>

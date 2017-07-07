@@ -207,7 +207,7 @@ function dump_sem($sem_id, $print_view = false)
     $statement->execute(array($sem_id));
     $faculties = $statement->fetchAll(PDO::FETCH_COLUMN);
     if (count($faculties) > 0) {
-        $dumpRow(_('Fakult‰t(en):'), implode('<br>', array_map('htmlReady', $faculties)));
+        $dumpRow(_('Fakult√§t(en):'), implode('<br>', array_map('htmlReady', $faculties)));
     }
 
     //Studienbereiche
@@ -253,7 +253,7 @@ function dump_sem($sem_id, $print_view = false)
     foreach ($forum_modules as $plugin) {
         $count += $plugin->getNumberOfPostingsForSeminar($sem_id);
     }
-    $dumpRow(_('Forenbeitr‰ge:'), $count);
+    $dumpRow(_('Forenbeitr√§ge:'), $count);
 
     if ($Modules['documents']) {
         //do not show hidden documents
@@ -402,7 +402,7 @@ function dump_sem($sem_id, $print_view = false)
                 $dump .= '<h2 class="table_header_bold">&nbsp;' . get_title_for_status($key, count($users), $sem_type) . '</h2>';
                 $dump .= '</td></tr>' . "\n";
                 $dump .= '<th width="30%">' . _('Name') . '</th>';
-                $dump .= '<th width="10%">' . _('Forenbeitr‰ge') . '</th>';
+                $dump .= '<th width="10%">' . _('Forenbeitr√§ge') . '</th>';
                 $dump .= '<th width="10%">' . _('Dokumente') . '</th></tr>' . "\n";
 
                 foreach ($users as $user) {
@@ -470,7 +470,7 @@ function dumpExtraDatesSchedule($sem_id)
     $statement->execute(array($sem_id));
     $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-    return dumpScheduleTable($data, _('zus‰tzliche Termine'));
+    return dumpScheduleTable($data, _('zus√§tzliche Termine'));
 }
 
 /**

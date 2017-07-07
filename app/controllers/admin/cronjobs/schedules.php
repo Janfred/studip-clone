@@ -178,7 +178,7 @@ class Admin_Cronjobs_SchedulesController extends AuthenticatedController
             }
             $schedule->store();
 
-            PageLayout::postMessage(MessageBox::success(_('Die Änderungen wurden gespeichert.')));
+            PageLayout::postMessage(MessageBox::success(_('Die Ã„nderungen wurden gespeichert.')));
             $this->redirect('admin/cronjobs/schedules/index/' . $page);
             return;
         }
@@ -192,7 +192,7 @@ class Admin_Cronjobs_SchedulesController extends AuthenticatedController
         $sidebar->setTitle(_('Cronjobs'));
 
         $actions = new ActionsWidget();
-        $actions->addLink(_('Zurück zur Übersicht'),$this->url_for('admin/cronjobs/schedules/index/' . $page), Icon::create('link-intern', 'clickable'));
+        $actions->addLink(_('ZurÃ¼ck zur Ãœbersicht'),$this->url_for('admin/cronjobs/schedules/index/' . $page), Icon::create('link-intern', 'clickable'));
 
         $sidebar->addWidget($actions);
 
@@ -263,7 +263,7 @@ class Admin_Cronjobs_SchedulesController extends AuthenticatedController
     {
         CronjobSchedule::find($id)->delete();
 
-        PageLayout::postMessage(MessageBox::success(_('Der Cronjob wurde gelöscht.')));
+        PageLayout::postMessage(MessageBox::success(_('Der Cronjob wurde gelÃ¶scht.')));
         $this->redirect('admin/cronjobs/schedules/index/' . $page);
     }
 
@@ -316,7 +316,7 @@ class Admin_Cronjobs_SchedulesController extends AuthenticatedController
             }
 
             $n = count($schedules);
-            $message = sprintf(ngettext('%u Cronjob wurde gelöscht.', '%u Cronjobs wurden gelöscht.', $n), $n);
+            $message = sprintf(ngettext('%u Cronjob wurde gelÃ¶scht.', '%u Cronjobs wurden gelÃ¶scht.', $n), $n);
             PageLayout::postMessage(MessageBox::success($message));
         }
 

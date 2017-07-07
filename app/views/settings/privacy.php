@@ -9,16 +9,16 @@ use Studip\Button, Studip\LinkButton;
 
     <fieldset>
         <legend>
-            <?= _('Privatsphäre') ?>:
+            <?= _('PrivatsphÃ¤re') ?>:
             <?= _('Globale Einstellungen') ?>
         </legend>
 
         <label>
             <?= _('Globale Sichtbarkeit') ?>
-            <?= tooltipIcon(_('Sie können wählen, ob Sie für andere NutzerInnen sichtbar sein '
-                              . 'und alle Kommunikationsfunktionen von Stud.IP nutzen können '
-                              . 'wollen, oder ob Sie unsichtbar sein möchten und dann nur '
-                              . 'eingeschränkte Kommunikationsfunktionen nutzen können.')) ?>
+            <?= tooltipIcon(_('Sie kÃ¶nnen wÃ¤hlen, ob Sie fÃ¼r andere NutzerInnen sichtbar sein '
+                              . 'und alle Kommunikationsfunktionen von Stud.IP nutzen kÃ¶nnen '
+                              . 'wollen, oder ob Sie unsichtbar sein mÃ¶chten und dann nur '
+                              . 'eingeschrÃ¤nkte Kommunikationsfunktionen nutzen kÃ¶nnen.')) ?>
             <div>
             <? if (!in_array($global_visibility, ['always', 'never'])
                    && ($user_perm !== 'dozent' || !Config::get()->DOZENT_ALWAYS_VISIBLE)
@@ -28,8 +28,8 @@ use Studip\Button, Studip\LinkButton;
                 <select name="global_visibility" aria-describedby="global_vis_description" id="global_vis">
                 <?php
                     if (count($user_domains)) {
-                        printf("<option %s value=\"global\">" . _('sichtbar für alle Nutzer') . "</option>", $global_visibility === 'global' ? 'selected="selected"' : '');
-                        $visible_text = _('sichtbar für eigene Nutzerdomäne');
+                        printf("<option %s value=\"global\">" . _('sichtbar fÃ¼r alle Nutzer') . "</option>", $global_visibility === 'global' ? 'selected="selected"' : '');
+                        $visible_text = _('sichtbar fÃ¼r eigene NutzerdomÃ¤ne');
                     } else {
                         $visible_text = _('sichtbar');
                     }
@@ -77,10 +77,10 @@ use Studip\Button, Studip\LinkButton;
                 <label>
                     <input type="checkbox" name="search" value="1"
                             <? if ($search_visibility) echo 'checked'; ?>>
-                    <?= _('auffindbar über die Personensuche') ?>
+                    <?= _('auffindbar Ã¼ber die Personensuche') ?>
                 </label>
             <? endif;
-              ?>
+            Â  ?>
             <? if (!$NOT_HIDEABLE_FIELDS[$user_perm]['email']): ?>
                 <label>
                     <input type="checkbox" name="email" value="1"
@@ -92,7 +92,7 @@ use Studip\Button, Studip\LinkButton;
         <? endif; ?>
     </fieldset>
     <footer>
-        <?= Button::create(_('Übernehmen'), 'store', ['title' => _('Änderungen speichern')]) ?>
+        <?= Button::create(_('Ãœbernehmen'), 'store', ['title' => _('Ã„nderungen speichern')]) ?>
     </footer>
 </form>
 
@@ -104,7 +104,7 @@ use Studip\Button, Studip\LinkButton;
 
     <fieldset>
         <legend>
-            <?= _('Privatsphäre') ?>:
+            <?= _('PrivatsphÃ¤re') ?>:
             <?= _('Eigenes Profil') ?>
         </legend>
 
@@ -112,7 +112,7 @@ use Studip\Button, Studip\LinkButton;
             <thead>
                 <tr>
                     <th><?= _('Profil-Element'); ?></th>
-                    <th class="hidden-tiny-down" style='text-align: center;' colspan="<?= $colCount++ ?>"><?= _('sichtbar für'); ?></th>
+                    <th class="hidden-tiny-down" style='text-align: center;' colspan="<?= $colCount++ ?>"><?= _('sichtbar fÃ¼r'); ?></th>
                 </tr>
 
                 <tr class="hidden-tiny-down">
@@ -134,7 +134,7 @@ use Studip\Button, Studip\LinkButton;
                         <tr>
                             <td class="visibility-homepage-element" style="padding-left: <?= $element['padding'] ?>">
                                 <span class="visibility-homepage-element-name"><?= htmlReady($element['name']) ?></span>
-                                <span class="hidden-small-up"><?= _('sichtbar für') ?></span>
+                                <span class="hidden-small-up"><?= _('sichtbar fÃ¼r') ?></span>
                             </td>
                             <? if ($element['is_category']): ?>
                                 <td colspan="<?= $colCount ?>"></td>
@@ -159,7 +159,7 @@ use Studip\Button, Studip\LinkButton;
         <label>
             <?= _('Neue Elemente') ?>
             <select name="default">
-                <option value="">-- <?= _('bitte wählen'); ?> --</option>
+                <option value="">-- <?= _('bitte wÃ¤hlen'); ?> --</option>
                 <? foreach ($visibilities as $visibility => $label): ?>
                     <option value="<?= $visibility ?>" <? if ($default_homepage_visibility == $visibility) echo 'selected'; ?>>
                         <?= htmlReady($label) ?>
@@ -171,7 +171,7 @@ use Studip\Button, Studip\LinkButton;
         <label>
             <?= _('Jetzt alle Sichtbarkeiten auf') ?>
             <select name="all">
-                <option value="">-- <?= _('bitte wählen'); ?> --</option>
+                <option value="">-- <?= _('bitte wÃ¤hlen'); ?> --</option>
                 <? foreach ($visibilities as $visibility => $label): ?>
                     <option value="<?= $visibility ?>">
                         <?= htmlReady($label) ?>
@@ -182,6 +182,6 @@ use Studip\Button, Studip\LinkButton;
     </fieldset>
 
     <footer>
-        <?= Button::create(_('Übernehmen'), 'store', ['title' => _('Änderungen speichern')]) ?>
+        <?= Button::create(_('Ãœbernehmen'), 'store', ['title' => _('Ã„nderungen speichern')]) ?>
     </footer>
 </form>

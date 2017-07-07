@@ -126,7 +126,7 @@ class CourseGroupFolder extends StandardFolder
     public function setDataFromEditTemplate($request)
     {
         if ($request['group'] == null){
-            return MessageBox::error(_('Es wurde keine gültige Gruppe ausgewählt.'));
+            return MessageBox::error(_('Es wurde keine gÃ¼ltige Gruppe ausgewÃ¤hlt.'));
         }
 
         $this->folderdata['data_content']['group'] = $request['group'];

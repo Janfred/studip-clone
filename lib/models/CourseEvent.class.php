@@ -191,7 +191,7 @@ class CourseEvent extends CourseDate implements Event
     }
 
     /**
-     * TODO Wird das noch benötigt?
+     * TODO Wird das noch benÃ¶tigt?
      */
     public function getType()
     {

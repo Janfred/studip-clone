@@ -69,13 +69,13 @@ class OnlineController extends AuthenticatedController
             $actions = new OptionsWidget();
 
             $actions->addCheckbox(
-                _('Nur Kontakte in der Übersicht der aktiven Benutzer anzeigen'),
+                _('Nur Kontakte in der Ãœbersicht der aktiven Benutzer anzeigen'),
                 $this->settings['show_only_buddys'],
                 $this->url_for('online/config/show_buddies/' . get_ticket())
             );
 
             $actions->addCheckbox(
-                _('Kontaktgruppen bei der Darstellung berücksichtigen'),
+                _('Kontaktgruppen bei der Darstellung berÃ¼cksichtigen'),
                 $this->settings['show_groups'],
                 $this->url_for('online/config/show_groups/' . get_ticket())
             );
@@ -103,12 +103,12 @@ class OnlineController extends AuthenticatedController
                 'user_id' => User::findByUsername($username)->id,
             ])->store())
             {
-                PageLayout::postSuccess(_('Der Benutzer wurde zu Ihren Kontakten hinzugefügt.'));
+                PageLayout::postSuccess(_('Der Benutzer wurde zu Ihren Kontakten hinzugefÃ¼gt.'));
             }
         } elseif ($action === 'remove' && $username !== null) {
             $contact = Contact::find([User::findCurrent()->id, User::findByUsername($username)->id]);
             if ($contact && $contact->delete()) {
-                PageLayout::postSuccess(_('Der Benutzer gehört nicht mehr zu Ihren Kontakten.'));
+                PageLayout::postSuccess(_('Der Benutzer gehÃ¶rt nicht mehr zu Ihren Kontakten.'));
             }
         }
         $this->redirect('online');

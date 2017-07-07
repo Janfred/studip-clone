@@ -54,7 +54,7 @@ $sem_browse_obj = new SemBrowse(array('group_by' => 0));
 $sem_browse_obj->sem_browse_data['default_sem'] = "all";
 $sem_browse_obj->sem_number = false;
 $sem_browse_obj->target_url = "dispatch.php/course/details/";  //teilt der nachfolgenden Include mit, wo sie die Leute hinschicken soll
-$sem_browse_obj->target_id = "sem_id";        //teilt der nachfolgenden Include mit, wie die id die übergeben wird, bezeichnet werden soll
+$sem_browse_obj->target_id = "sem_id";        //teilt der nachfolgenden Include mit, wie die id die Ã¼bergeben wird, bezeichnet werden soll
 $sem_browse_obj->sem_browse_data['level'] = $level;
 if ($show_semester) {
     $sem_number = SemesterData::GetSemesterIndexById($show_semester);
@@ -71,7 +71,7 @@ case "sbb":
 
     $the_tree = $sem_browse_obj->sem_tree->tree;
     $bereich_typ = _("Studienbereich");
-    $head_text = _("Übersicht aller Veranstaltungen eines Studienbereichs");
+    $head_text = _("Ãœbersicht aller Veranstaltungen eines Studienbereichs");
     $intro_text = sprintf(_("Alle Veranstaltungen, die dem Studienbereich: <br><b>%s</b><br> zugeordnet wurden."),
         htmlReady($the_tree->getShortPath($id)));
     $excel_text = strip_tags(DecodeHtml($intro_text));
@@ -79,7 +79,7 @@ case "sbb":
 case "s":
     $db = DbManager::get();
     $bereich_typ=_("Einrichtung");
-    $head_text = _("Übersicht aller Veranstaltungen einer Einrichtung");
+    $head_text = _("Ãœbersicht aller Veranstaltungen einer Einrichtung");
     $intro_text = sprintf(_("Alle Veranstaltungen der Einrichtung: <b>%s</b>"), htmlReady(Institute::find($id)->name));
     $excel_text = strip_tags(DecodeHtml($intro_text));
 
@@ -114,7 +114,7 @@ case "s":
 if (Request::int('send_excel')){
     $tmpfile = basename($sem_browse_obj->create_result_xls($excel_text));
     if($tmpfile){
-        header('Location: ' . getDownloadLink( $tmpfile, _("Veranstaltungsübersicht.xls"), 4));
+        header('Location: ' . getDownloadLink( $tmpfile, _("VeranstaltungsÃ¼bersicht.xls"), 4));
         page_close();
         die;
     }

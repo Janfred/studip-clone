@@ -13,13 +13,13 @@
         <? if (ForumPerm::has('edit_category', $seminar_id) || ForumPerm::has('remove_category', $seminar_id)) : ?>
         <span class="actions" id="tutorCategoryIcons">
             <? if ($category_id == $seminar_id) : ?>
-            <?= tooltipIcon(_('Diese vordefinierte Kategorie kann nicht bearbeitet oder gelöscht werden.'
-                    . ' Für Autor/innen taucht sie allerdings nur auf, wenn sie Bereiche enthält.')) ?>
+            <?= tooltipIcon(_('Diese vordefinierte Kategorie kann nicht bearbeitet oder gelÃ¶scht werden.'
+                    . ' FÃ¼r Autor/innen taucht sie allerdings nur auf, wenn sie Bereiche enthÃ¤lt.')) ?>
             <? else : ?>
                 <? if (ForumPerm::has('edit_category', $seminar_id)) : ?>
                 <a href="<?= PluginEngine::getLink('coreforum/index/?edit_category=' . $category_id) ?>"
                     onClick="javascript:STUDIP.Forum.editCategoryName('<?= $category_id ?>'); return false;">
-                    <?= Icon::create('edit', 'clickable', ['title' => 'Name der Kategorie ändern'])->asImg() ?>
+                    <?= Icon::create('edit', 'clickable', ['title' => 'Name der Kategorie Ã¤ndern'])->asImg() ?>
                 </a>
                 <? endif ?>
 
@@ -53,7 +53,7 @@
     <thead>
         <tr>
             <th colspan="2"> <?= _('Name des Bereichs') ?></th>
-            <th data-type="answers"><?= _("Beiträge") ?></th>
+            <th data-type="answers"><?= _("BeitrÃ¤ge") ?></th>
             <th colspan="2" data-type="last_posting"><?= _("letzte Antwort") ?></th>
         </tr>
     </thead>
@@ -82,8 +82,8 @@
     <? if (Request::get('add_area') != $category_id) : ?>
     <tr class="add_area">
         <td colspan="5" onClick="STUDIP.Forum.addArea('<?= $category_id ?>'); return false;" class="add_area">
-            <a href="<?= PluginEngine::getLink('coreforum/index/index/?add_area=' . $category_id)?>#cat_<?= $category_id ?>"  title="<?= _('Neuen Bereich zu dieser Kategorie hinzufügen.') ?>">
-                <span><?= _('Bereich hinzufügen') ?></span>
+            <a href="<?= PluginEngine::getLink('coreforum/index/index/?add_area=' . $category_id)?>#cat_<?= $category_id ?>"  title="<?= _('Neuen Bereich zu dieser Kategorie hinzufÃ¼gen.') ?>">
+                <span><?= _('Bereich hinzufÃ¼gen') ?></span>
                 <?= Icon::create('add', 'clickable')->asImg(16, ["id" => 'tutorAddArea']) ?>
             </a>
         </td>

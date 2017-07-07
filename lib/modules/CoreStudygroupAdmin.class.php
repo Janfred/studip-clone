@@ -29,8 +29,8 @@ class CoreStudygroupAdmin implements StudipModule {
 
             if (!$GLOBALS['perm']->have_perm('admin')) {
                 if (get_config('VOTE_ENABLE')) {
-                    $item = new Navigation(_('Fragebögen'), 'dispatch.php/questionnaire/courseoverview');
-                    $item->setDescription(_('Erstellen und bearbeiten von Fragebögen.'));
+                    $item = new Navigation(_('FragebÃ¶gen'), 'dispatch.php/questionnaire/courseoverview');
+                    $item->setDescription(_('Erstellen und bearbeiten von FragebÃ¶gen.'));
                     $navigation->addSubNavigation('questionnaires', $item);
 
                     $item = new Navigation(_('Evaluationen'), 'admin_evaluation.php?view=eval_sem');

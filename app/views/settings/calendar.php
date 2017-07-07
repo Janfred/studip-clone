@@ -154,6 +154,6 @@ $cal_step_weeks = array(
             <input type="hidden" name="atime" value="<?= Request::option('atime') ?>">
         <? endif ?>
         <input type="hidden" name="view" value="calendar">
-        <?= Button::createAccept(_('Übernehmen'), array('title' => _('Änderungen übernehmen'))) ?>
+        <?= Button::createAccept(_('Ãœbernehmen'), array('title' => _('Ã„nderungen Ã¼bernehmen'))) ?>
     </footer>
 </form>

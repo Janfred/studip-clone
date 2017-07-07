@@ -34,7 +34,7 @@ class UserDomain
     public function __construct ($id, $name = NULL)
     {
         if (preg_match('/[^\\w.-]/', $id)) {
-            throw new Exception(_('Ungültige ID für Nutzerdomäne').': '.$id);
+            throw new Exception(_('UngÃ¼ltige ID fÃ¼r NutzerdomÃ¤ne').': '.$id);
         }
 
         $this->id = $id;

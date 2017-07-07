@@ -1,8 +1,8 @@
 <?= $this->controller->renderMessages() ?>
 <table class="default collapsable">
     <caption>
-        <?= _('Fächer mit verwendeten Abschlüssen') ?>
-        <span class="actions"><? printf(ngettext('%s Fach', '%s Fächer', $count), $count) ?></span>
+        <?= _('FÃ¤cher mit verwendeten AbschlÃ¼ssen') ?>
+        <span class="actions"><? printf(ngettext('%s Fach', '%s FÃ¤cher', $count), $count) ?></span>
     </caption>
     <colgroup>
         <col>
@@ -11,7 +11,7 @@
     <thead>
         <tr class="sortable">
             <?= $controller->renderSortLink('/index', _('Fach'), 'name') ?>
-            <?= $controller->renderSortLink('/index', _('Abschlüsse'), 'count_abschluesse') ?>
+            <?= $controller->renderSortLink('/index', _('AbschlÃ¼sse'), 'count_abschluesse') ?>
             <th> </th>
         </tr>
     </thead>
@@ -34,7 +34,7 @@
         <? endif; ?>
         <? if (MvvPerm::havePermCreate($fach)) : ?>
             <? if ($fach->count_user == 0 && $fach->count_sem == 0): ?> <a href="<?= $controller->url_for('/delete', $fach->id) ?>">
-                <?= Icon::create('trash', 'clickable', array('title' => _('Fach löschen')))->asImg(); ?>
+                <?= Icon::create('trash', 'clickable', array('title' => _('Fach lÃ¶schen')))->asImg(); ?>
             </a>
             <? endif;?>
         <? endif; ?>

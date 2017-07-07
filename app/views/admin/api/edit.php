@@ -66,7 +66,7 @@
             <div class="centered">
                 <?= strftime(_('Erstellt am %d.%m.%Y %H:%M:%S'), $consumer->mkdate) ?><br>
                 <? if ($consumer->mkdate != $consumer->chdate): ?>
-                    <?= strftime(_('Zuletzt geändert am %d.%m.%Y %H:%M:%S'), $consumer->chdate) ?>
+                    <?= strftime(_('Zuletzt geÃ¤ndert am %d.%m.%Y %H:%M:%S'), $consumer->chdate) ?>
                 <? endif; ?>
             </div>
         <? endif; ?>

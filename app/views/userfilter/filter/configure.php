@@ -6,9 +6,9 @@ use Studip\Button, Studip\LinkButton;
 </div>
 <br/>
 <a href="#" onclick="return STUDIP.UserFilter.addConditionField('conditionfields', '<?= $controller->url_for('userfilter/field/configure') ?>')">
-    <?= Icon::create('add', 'clickable')->asImg(16, ["alt" => _('Auswahlfeld hinzufügen')]) ?>
+    <?= Icon::create('add', 'clickable')->asImg(16, ["alt" => _('Auswahlfeld hinzufÃ¼gen')]) ?>
     <?php
-        $text = _('Auswahlfeld hinzufügen');
+        $text = _('Auswahlfeld hinzufÃ¼gen');
         echo $text;
     ?>
 </a>

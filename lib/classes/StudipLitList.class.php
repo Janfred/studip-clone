@@ -9,7 +9,7 @@
 // StudipLitList.class.php
 //
 //
-// Copyright (c) 2003 André Noack <noack@data-quest.de>
+// Copyright (c) 2003 AndrÃ© Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -32,7 +32,7 @@
 * This class provides
 *
 * @access   public
-* @author   André Noack <noack@data-quest.de>
+* @author   AndrÃ© Noack <noack@data-quest.de>
 * @package
 */
 class StudipLitList extends TreeAbstract {
@@ -392,7 +392,7 @@ class StudipLitList extends TreeAbstract {
                 if ( ($tree->tree_data[$lists[$i]]['user_id'] != $GLOBALS['auth']->auth['uid'])
                 && ($last_modified_since !== false)
                 && ($tree->tree_data[$lists[$i]]['chdate'] > $last_modified_since) ){
-                    $ret .= '<div align="left" style="color:red" title="' . htmlReady(sprintf(_("Letzte Änderung am %s von %s"),
+                    $ret .= '<div align="left" style="color:red" title="' . htmlReady(sprintf(_("Letzte Ã„nderung am %s von %s"),
                     date('d M Y H:i',$tree->tree_data[$lists[$i]]['chdate']),
                     $tree->tree_data[$lists[$i]]['fullname'])) . '">';
                     $ret .=  "<b><u>" . htmlReady($tree->tree_data[$lists[$i]]['name']) . "</u></b>\n<br>\n";
@@ -415,7 +415,7 @@ class StudipLitList extends TreeAbstract {
                         if ( ($tree->tree_data[$rs->f('list_element_id')]['user_id'] != $GLOBALS['auth']->auth['uid'])
                         && ($last_modified_since !== false)
                         && ($tree->tree_data[$rs->f('list_element_id')]['chdate'] > $last_modified_since) ){
-                            $ret .= '<li style="color:red" title="' . htmlReady(sprintf(_("Letzte Änderung am %s von %s"),
+                            $ret .= '<li style="color:red" title="' . htmlReady(sprintf(_("Letzte Ã„nderung am %s von %s"),
                             date('d M Y H:i',$tree->tree_data[$rs->f('list_element_id')]['chdate']),
                             $tree->tree_data[$rs->f('list_element_id')]['fullname'])) . '">';
                             $ret .=  formatReady($tree->getFormattedEntry($rs->f('list_element_id'), $rs->Record), false, true) . "\n<br>\n";

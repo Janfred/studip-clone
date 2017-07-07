@@ -1,5 +1,5 @@
 <? if (isset($flash['delete'])): ?>
-    <?= createQuestion(_('Wollen Sie das Banner wirklich löschen?'),
+    <?= createQuestion(_('Wollen Sie das Banner wirklich lÃ¶schen?'),
                        array('delete' => 1),
                        array('back' => 1),
                        $controller->url_for('admin/banner/delete', $flash['delete']['banner_id'])) ?>
@@ -57,10 +57,10 @@
                     <?= Icon::create('edit', 'clickable', ['title' => _('Banner bearbeiten')])->asImg() ?>
                 </a>
                 <a href="<?= $controller->url_for('admin/banner/reset', $banner['ad_id']) ?>">
-                    <?= Icon::create('refresh', 'clickable', ['title' => _('Klicks/Views zurücksetzen')])->asImg() ?>
+                    <?= Icon::create('refresh', 'clickable', ['title' => _('Klicks/Views zurÃ¼cksetzen')])->asImg() ?>
                 </a>
                 <a href="<?= $controller->url_for('admin/banner/delete', $banner['ad_id']) ?>">
-                    <?= Icon::create('trash', 'clickable', ['title' => _('Banner löschen')])->asImg() ?>
+                    <?= Icon::create('trash', 'clickable', ['title' => _('Banner lÃ¶schen')])->asImg() ?>
                 </a>
             </td>
         </tr>

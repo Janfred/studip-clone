@@ -22,13 +22,13 @@
         </div>
         <div style="text-align:right;">
             <a data-dialog href="<?= $controller->url_for('search/module/description/' . $modul->getId()) ?>">
-            <?= _('Vollständige Modulbeschreibung') ?>
+            <?= _('VollstÃ¤ndige Modulbeschreibung') ?>
             </a>
         </div>
         <? else : ?>
         <div style="text-align:right;">
             <a href="<?= $controller->url_for('search/module/overview/' . $modul->getId()) ?>">
-            <?= _('Modulübersicht') ?>
+            <?= _('ModulÃ¼bersicht') ?>
             </a>
         </div>
         <? endif; ?>

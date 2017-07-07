@@ -378,7 +378,7 @@ abstract class RouteMap
                         $tmpheaders[] = array('index' => mb_strtolower(trim($matches[1])), 'value' => trim($matches[2]));
                     }
                 } else {
-                    //noch zur letzten Zeile hinzuz‰hlen
+                    //noch zur letzten Zeile hinzuz√§hlen
                     end($tmpheaders);
                     $lastkey = key($tmpheaders);
                     $tmpheaders[$lastkey]['value'] .= " ".mb_substr($headline, 1);

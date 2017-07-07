@@ -49,7 +49,7 @@
             </tr>
             <tr>
                 <td>
-                    <label for="priority"><?= _('Priorität') ?></label>
+                    <label for="priority"><?= _('PrioritÃ¤t') ?></label>
                 </td>
                 <td>
                     <select name="priority" id="priority">

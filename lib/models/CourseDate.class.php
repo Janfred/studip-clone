@@ -239,7 +239,7 @@ class CourseDate extends SimpleORMap
                          : '%R';
 
         if (($this->end_time - $this->date) / 60 / 60 > 23) {
-            return strftime('%a., %x (' . _('ganztägig') . ')' , $this->date);
+            return strftime('%a., %x (' . _('ganztÃ¤gig') . ')' , $this->date);
         }
 
         return strftime('%a., %x, %R', $this->date) . ' - '

@@ -5,7 +5,7 @@
         <h1>
             <?= Icon::create('news', 'info')->asImg() ?>
 
-            <?= _('Ankündigungen') ?>
+            <?= _('AnkÃ¼ndigungen') ?>
         </h1>
         <nav>
         <? if ($perm): ?>
@@ -50,21 +50,21 @@
     <? endforeach; ?>
     <? if (!$news): ?>
     <section>
-        <?= _('Es sind keine aktuellen Ankündigungen vorhanden. Um neue Ankündigungen zu erstellen, klicken Sie rechts auf das Plus-Zeichen.') ?>
+        <?= _('Es sind keine aktuellen AnkÃ¼ndigungen vorhanden. Um neue AnkÃ¼ndigungen zu erstellen, klicken Sie rechts auf das Plus-Zeichen.') ?>
     </section>
         <? if ($perm && $count_all_news) : ?>
             <footer>
-            <a href="<?=URLHelper::getLink('?nshow_all=1')?>"><?=sprintf(_("Abgelaufene und unveröffentlichte Ankündigungen anzeigen (%s)"), $count_all_news)?></a>
+            <a href="<?=URLHelper::getLink('?nshow_all=1')?>"><?=sprintf(_("Abgelaufene und unverÃ¶ffentlichte AnkÃ¼ndigungen anzeigen (%s)"), $count_all_news)?></a>
             </footer>
         <? endif; ?>
     <? elseif ($perm) : ?>
         <? if ($count_all_news > count($news)) : ?>
             <footer>
-                <a href="<?=URLHelper::getLink('?nshow_all=1')?>"><?=sprintf(_("Abgelaufene und unveröffentlichte Ankündigungen anzeigen (%s)"), $count_all_news-count($news))?></a>
+                <a href="<?=URLHelper::getLink('?nshow_all=1')?>"><?=sprintf(_("Abgelaufene und unverÃ¶ffentlichte AnkÃ¼ndigungen anzeigen (%s)"), $count_all_news-count($news))?></a>
             </footer>
             <? elseif ($show_all_news) : ?>
             <footer>
-                <a href="<?=URLHelper::getLink('?nshow_all=0')?>"><?=_("Abgelaufene und unveröffentlichte Ankündigungen ausblenden")?></a>
+                <a href="<?=URLHelper::getLink('?nshow_all=0')?>"><?=_("Abgelaufene und unverÃ¶ffentlichte AnkÃ¼ndigungen ausblenden")?></a>
             </footer>
             <? endif ?>
     <? endif; ?>

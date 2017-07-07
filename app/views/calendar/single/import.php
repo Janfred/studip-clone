@@ -22,7 +22,7 @@ SkipLinks::addIndex(_('Termine importieren'), 'main_content', 100);
             <tr>
                 <td>
                     <label for="event-type">
-                        <?= _('Öffentliche Termine als "privat" importieren') ?>:
+                        <?= _('Ã–ffentliche Termine als "privat" importieren') ?>:
                     </label>
                 </td>
                 <td colspan="2">
@@ -32,7 +32,7 @@ SkipLinks::addIndex(_('Termine importieren'), 'main_content', 100);
             <tr>
                 <td colspan="3">
                     <label>
-                        <?= _('Klicken Sie auf "Durchsuchen", um eine Datei auszuwählen') ?>
+                        <?= _('Klicken Sie auf "Durchsuchen", um eine Datei auszuwÃ¤hlen') ?>
                         <input type="file" name="importfile">
                     </label>
                 </td>

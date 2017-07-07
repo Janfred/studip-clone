@@ -5,7 +5,7 @@ use Studip\Button, Studip\LinkButton;
 <div class="modaloverlay">
     <div class="messagebox">
         <div class="content">
-            <?= formatReady(_("Möchten Sie folgende Inhaltselemente wirklich deaktivieren?")
+            <?= formatReady(_("MÃ¶chten Sie folgende Inhaltselemente wirklich deaktivieren?")
                     . "\n" . $deactivate_modules_names) ?>
         </div>
         <div class="buttons">

@@ -1,6 +1,6 @@
 <?= $controller->renderMessages() ?>
 <table class="default collapsable" style="width: 100%;">
-    <caption><?= _('Studiengänge gruppiert nach Abschlüssen') ?></caption>
+    <caption><?= _('StudiengÃ¤nge gruppiert nach AbschlÃ¼ssen') ?></caption>
     <colgroup>
         <col>
         <col style="width: 10%;">
@@ -8,7 +8,7 @@
     <thead>
         <tr class="sortable">
             <?= $controller->renderSortLink('/index', _('Abschluss'), 'name') ?>
-            <?= $controller->renderSortLink('/index', _('Studiengänge'), 'count_studiengaenge', array('style' => 'text-align: center;')) ?>
+            <?= $controller->renderSortLink('/index', _('StudiengÃ¤nge'), 'count_studiengaenge', array('style' => 'text-align: center;')) ?>
         </tr>
     </thead>
     <? foreach ($abschluesse as $abschluss) : ?>

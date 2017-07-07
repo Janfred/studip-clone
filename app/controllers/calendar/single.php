@@ -160,7 +160,7 @@ class Calendar_SingleController extends Calendar_CalendarController
         $this->range_id = $range_id ?: $this->range_id;
         $this->calendar = new SingleCalendar($this->range_id);
         if ($this->calendar->deleteEvent($event_id, true)) {
-            PageLayout::postMessage(MessageBox::success(_('Der Termin wurde gelöscht.')));
+            PageLayout::postMessage(MessageBox::success(_('Der Termin wurde gelÃ¶scht.')));
         }
         $this->redirect($this->url_for('calendar/single/' . $this->last_view));
     }
@@ -176,7 +176,7 @@ class Calendar_SingleController extends Calendar_CalendarController
             $event->setExceptions($exceptions);
             if ($event->store() !== false) {
                 PageLayout::postMessage(MessageBox::success(
-                    strftime(_('Termin am %x aus Serie gelöscht.'), $atime)));
+                    strftime(_('Termin am %x aus Serie gelÃ¶scht.'), $atime)));
             }
         }
         $this->redirect($this->url_for('calendar/single/' . $this->last_view));
@@ -265,7 +265,7 @@ class Calendar_SingleController extends Calendar_CalendarController
                 CSRFProtection::verifySecurityToken();
                 IcalExport::deleteKey($GLOBALS['user']->id);
                 PageLayout::postMessage(MessageBox::success(
-                        _('Die Adresse, unter der Ihre Termine abrufbar sind, wurde gelöscht')));
+                        _('Die Adresse, unter der Ihre Termine abrufbar sind, wurde gelÃ¶scht')));
             }
 
             if (Request::submitted('new_id')) {
@@ -280,15 +280,15 @@ class Calendar_SingleController extends Calendar_CalendarController
             if (Request::submitted('submit_email')) {
                 $email_reg_exp = '/^([-.0-9=?A-Z_a-z{|}~])+@([-.0-9=?A-Z_a-z{|}~])+\.[a-zA-Z]{2,6}$/i';
                 if (preg_match($email_reg_exp, Request::get('email')) !== 0) {
-                    $subject = '[' .Config::get()->UNI_NAME_CLEAN . ']' . _('Exportadresse für Ihre Termine');
-                    $text .= _('Diese Email wurde vom Stud.IP-System verschickt. Sie können auf diese Nachricht nicht antworten.') . "\n\n";
-                    $text .= _('Über diese Adresse erreichen Sie den Export für Ihre Termine:') . "\n\n";
+                    $subject = '[' .Config::get()->UNI_NAME_CLEAN . ']' . _('Exportadresse fÃ¼r Ihre Termine');
+                    $text .= _('Diese Email wurde vom Stud.IP-System verschickt. Sie kÃ¶nnen auf diese Nachricht nicht antworten.') . "\n\n";
+                    $text .= _('Ãœber diese Adresse erreichen Sie den Export fÃ¼r Ihre Termine:') . "\n\n";
                     $text .= $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'dispatch.php/ical/index/'
                             . IcalExport::getKeyByUser($GLOBALS['user']->id);
                     StudipMail::sendMessage(Request::get('email'), $subject, $text);
                     PageLayout::postMessage(MessageBox::success(_('Die Adresse wurde verschickt!')));
                 } else {
-                    PageLayout::postMessage(MessageBox::error(_('Bitte geben Sie eine gültige Email-Adresse an.')));
+                    PageLayout::postMessage(MessageBox::error(_('Bitte geben Sie eine gÃ¼ltige Email-Adresse an.')));
                 }
                 $this->short_id = IcalExport::getKeyByUser($GLOBALS['user']->id);
             }
@@ -346,8 +346,8 @@ class Calendar_SingleController extends Calendar_CalendarController
         }, $this->users);
 
         $this->mps = MultiPersonSearch::get('calendar-manage_access')
-                ->setTitle(_('Personhinzufügen'))
-                ->setLinkText(_('Person hinzufügen'))
+                ->setTitle(_('PersonhinzufÃ¼gen'))
+                ->setLinkText(_('Person hinzufÃ¼gen'))
                 ->setDefaultSelectedUser($all_calendar_users->pluck('user_id'))
                 ->setJSFunctionOnSubmit('STUDIP.CalendarDialog.closeMps')
                 ->setExecuteURL($this->url_for('calendar/single/add_users/'
@@ -386,8 +386,8 @@ class Calendar_SingleController extends Calendar_CalendarController
         }
         if ($added) {
             PageLayout::postMessage(MessageBox::success(sprintf(
-                    ngettext('Eine Person wurde mit der Berechtigung zum Lesen des Kalenders hinzugefügt.',
-                            '%s Personen wurden mit der Berechtigung zum Lesen des Kalenders hinzugefügt.',
+                    ngettext('Eine Person wurde mit der Berechtigung zum Lesen des Kalenders hinzugefÃ¼gt.',
+                            '%s Personen wurden mit der Berechtigung zum Lesen des Kalenders hinzugefÃ¼gt.',
                             $added), $added)));
         }
 
@@ -465,12 +465,12 @@ class Calendar_SingleController extends Calendar_CalendarController
                         '%s Personen wurden auf schreibberechtigt gesetzt.', $write), $write);
             }
             PageLayout::postMessage(MessageBox::success(sprintf(
-                    ngettext('Die Berechtigungen von einer Person wurde geändert.',
-                            'Die Berechtigungen von %s Personen wurden geändert.',
+                    ngettext('Die Berechtigungen von einer Person wurde geÃ¤ndert.',
+                            'Die Berechtigungen von %s Personen wurden geÃ¤ndert.',
                     $sum), $sum), $details));
         // no message if the group was changed
         } else if (!Request::submitted('calendar_group_submit')) {
-            PageLayout::postMessage(MessageBox::success(_('Es wurden keine Berechtigungen geändert.')));
+            PageLayout::postMessage(MessageBox::success(_('Es wurden keine Berechtigungen geÃ¤ndert.')));
         }
         $this->redirect($this->url_for('calendar/single/manage_access/'
                 . $this->calendar->getRangeId(),
@@ -542,7 +542,7 @@ class Calendar_SingleController extends Calendar_CalendarController
         $title = '';
         $status = '';
         if ($calendar->getRangeId() == $GLOBALS['user']->id) {
-            $title = _('Mein persönlicher Terminkalender');
+            $title = _('Mein persÃ¶nlicher Terminkalender');
         } else {
             if ($calendar->getRange() == Calendar::RANGE_USER) {
             $title = sprintf(_('Terminkalender von %s'),

@@ -2,8 +2,8 @@
 namespace RESTAPI\Routes;
 
 /**
- * @author      Till Glˆggler <tgloeggl@uos.de>
- * @author      AndrÈ Klaﬂen <klassen@elan-ev.de>
+ * @author      Till Gl√∂ggler <tgloeggl@uos.de>
+ * @author      Andr√© Kla√üen <klassen@elan-ev.de>
  * @license     GPL 2 or later
  *
  * @condition user_id ^[a-f0-9]{32}$
@@ -26,7 +26,7 @@ class Activity extends \RESTAPI\RouteMap
             $this->error(401);
         }
 
-        // failsafe einbauen - falls es keine ‰lteren Aktivit‰ten mehr im System gibt, Abbruch!
+        // failsafe einbauen - falls es keine √§lteren Aktivit√§ten mehr im System gibt, Abbruch!
 
         if ($oldest_activity = \Studip\Activity\Activity::getOldestActivity()) {
             $max_age = array_pop($oldest_activity)->mkdate;

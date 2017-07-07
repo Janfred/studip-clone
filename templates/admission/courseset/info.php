@@ -11,7 +11,7 @@
     <?php } ?>
 </ul>
 <?php } ?>
-<i><?= _("Folgende Regeln gelten für die Anmeldung:") ?></i>
+<i><?= _("Folgende Regeln gelten fÃ¼r die Anmeldung:") ?></i>
 <ul>
 <?php foreach ($courseset->getAdmissionRules() as $rule) { ?>
     <li>

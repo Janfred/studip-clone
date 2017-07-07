@@ -8,7 +8,7 @@
 // StudipSemTreeSearch.class.php
 // Class to build search formular and execute search
 //
-// Copyright (c) 2003 André Noack <noack@data-quest.de>
+// Copyright (c) 2003 AndrÃ© Noack <noack@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@
 *
 *
 * @access   public
-* @author   André Noack <noack@data-quest.de>
+* @author   AndrÃ© Noack <noack@data-quest.de>
 * @package  DBTools
 **/
 class StudipSemTreeSearch {
@@ -159,7 +159,7 @@ class StudipSemTreeSearch {
             foreach ($paths as $p) {
                 $ret .= "\n<div style=\"margin-top:5px;font-weight:bold;color:red;\">" . $p ."</div>";
             }
-            $ret .= "\n<div style=\"font-weight:bold;color:red;\">" . str_repeat("¯",$cols) . "</div>";
+            $ret .= "\n<div style=\"font-weight:bold;color:red;\">" . str_repeat("Â¯",$cols) . "</div>";
             for ($i = 0; $i < count($sem_tree_id); ++$i){
                 $id = $this->form_name . '_' . $field_name . '_' . $sem_tree_id[$i];
                 $ret .= "\n<div>";

@@ -47,7 +47,7 @@
         </label>
     </fieldset>
     <footer data-dialog-button>
-        <?= Studip\Button::createAccept(_('Übernehmen')) ?>
+        <?= Studip\Button::createAccept(_('Ãœbernehmen')) ?>
         <?= Studip\LinkButton::createCancel(_('Abbrechen'),
                 $controller->url_for('admin/configuration/configuration/' . $config['section'])) ?>
     </footer>

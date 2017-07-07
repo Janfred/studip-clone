@@ -31,7 +31,7 @@ use Studip\Button, Studip\LinkButton;
             </tr>
             <tr>
                 <td>
-                    <?= _('Neuer zusammengeführter Benutzer:') ?>
+                    <?= _('Neuer zusammengefÃ¼hrter Benutzer:') ?>
                 </td>
                 <td>
                     <?= QuickSearch::get('new_id', new StandardSearch('user_id'))->render() ?>
@@ -40,14 +40,14 @@ use Studip\Button, Studip\LinkButton;
             <tr>
                 <td>
                     <label for="convert_ident">
-                        <?= _('Identitätsrelevante Daten migrieren:') ?>
+                        <?= _('IdentitÃ¤tsrelevante Daten migrieren:') ?>
                     </label>
                 </td>
                 <td>
                     <input type="checkbox" name="convert_ident" id="convert_ident" checked>
                     <i>
-                        <?= _('(Es werden zusätzlich folgende Daten migriert: '
-                             .'Veranstaltungen, Studiengänge, persönliche '
+                        <?= _('(Es werden zusÃ¤tzlich folgende Daten migriert: '
+                             .'Veranstaltungen, StudiengÃ¤nge, persÃ¶nliche '
                              .'Profildaten inkl. Nutzerbild, Institute, '
                              .'generische Datenfelder und Buddies.)') ?>
                     </i>
@@ -56,7 +56,7 @@ use Studip\Button, Studip\LinkButton;
             <tr>
                 <td>
                     <label for="delete_old">
-                        <?= _('Den alten Benutzer löschen:') ?>
+                        <?= _('Den alten Benutzer lÃ¶schen:') ?>
                     </label>
                 </td>
                 <td>

@@ -1,5 +1,5 @@
 <?php use Studip\Button, Studip\LinkButton; ?>
-<!--h2><?= _('Lernmodule hinzuf¸gen / entfernen') ?></h2-->
+<!--h2><?= _('Lernmodule hinzuf√ºgen / entfernen') ?></h2-->
 <? if ($elearning_active) : ?>
     <? if (!count($content_modules)) : ?>
         <? if (count($course_output['courses'])) : ?>
@@ -55,7 +55,7 @@
         <? else : ?>
             <br>
             <div class="messagebox messagebox_info" style="background-image: none; padding-left: 15px">
-                <?=sprintf(_('Sie kˆnnen im System %s nicht suchen, da Sie bisher keinen Benutzer-Account angelegt haben.'),
+                <?=sprintf(_('Sie k√∂nnen im System %s nicht suchen, da Sie bisher keinen Benutzer-Account angelegt haben.'),
                            $cms_name)?><br>
                 <a href="<?=URLHelper::getLink('dispatch.php/elearning/my_accounts')?>">
                 <?=_('Jetzt einen Account erstellen.')?><br>
@@ -68,10 +68,10 @@
             <?=ELearningUtils::getHeader(_("Leeren Kurs anlegen"))?>
             <div align="center">
             <br>
-            <?=_('Hier kˆnnen Sie einen leeren Ilias-Kurs f¸r diese Veranstaltung anlegen. Die Teilnehmenden '
-                .'der Veranstaltung kˆnnen dann den Kurs betreten, auch wenn noch keine Lernmodule zugeordnet sind. '
+            <?=_('Hier k√∂nnen Sie einen leeren Ilias-Kurs f√ºr diese Veranstaltung anlegen. Die Teilnehmenden '
+                .'der Veranstaltung k√∂nnen dann den Kurs betreten, auch wenn noch keine Lernmodule zugeordnet sind. '
                 .'Solange der Kurs leer ist, erscheint auf der Seite "Meine Veranstaltungen und Einrichtungen" kein '
-                .'Lernmodulsymbol f¸r diese Veranstaltung. <b>Dieser Schritt kann nicht r¸ckg‰ngig gemacht werden.</b>')?>
+                .'Lernmodulsymbol f√ºr diese Veranstaltung. <b>Dieser Schritt kann nicht r√ºckg√§ngig gemacht werden.</b>')?>
             <br>
             <br>
             <input type="HIDDEN" name="anker_target" value="search">
@@ -86,17 +86,17 @@
         <? if (count($existing_courses)) : ?>
             <form method="POST" action="<?=URLHelper::getLink() . "#anker"?>>
             <?=CSRFProtection::tokenTag()?>
-            <?=ELearningUtils::getHeader(_("Verkn¸pfung mit einem bestehenden Kurs"))?>
+            <?=ELearningUtils::getHeader(_("Verkn√ºpfung mit einem bestehenden Kurs"))?>
             <div align="center">
             <br>
-            <?_('Wenn Sie die Veranstaltung mit einem bestehenden Ilias-Kurs verbinden wollen, w‰hlen Sie hier '
-               .'die Stud.IP-Veranstaltung, mit der der bestehende Kurs verkn¸pft ist. Beide Stud.IP-Veranstaltungen '
-               .'sind dann mit dem selben Ilias-Kurs verkn¸pft. <b>Dieser Schritt kann nicht r¸ckg‰ngig gemacht werden.</b>')?>
+            <?_('Wenn Sie die Veranstaltung mit einem bestehenden Ilias-Kurs verbinden wollen, w√§hlen Sie hier '
+               .'die Stud.IP-Veranstaltung, mit der der bestehende Kurs verkn√ºpft ist. Beide Stud.IP-Veranstaltungen '
+               .'sind dann mit dem selben Ilias-Kurs verkn√ºpft. <b>Dieser Schritt kann nicht r√ºckg√§ngig gemacht werden.</b>')?>
             <br>
             <br>
             <select name="connect_course_sem_id" size="1">
                 <option value="">
-                    <?=_("Bitte ausw‰hlen")?>
+                    <?=_("Bitte ausw√§hlen")?>
                 </option>
                 <? foreach ($existing_courses as $key => $name) : ?>
                 <option value="<?=$key?>">
@@ -107,7 +107,7 @@
             <input type="HIDDEN" name="anker_target" value="search">
             <input type="HIDDEN" name="view" value="<?=$view?>">
             <input type="HIDDEN" name="cms_select" value="<?=$cms_select?>">
-            <?=Button::create(_('Ausw‰hlen'), 'connect_course')?>
+            <?=Button::create(_('Ausw√§hlen'), 'connect_course')?>
             <br>
             </div>
             </form>
@@ -118,11 +118,11 @@
             <?=ELearningUtils::getHeader(_("Links zu anderen ILIAS-Objekten"))?>
             <div align="center">
             <br>
-            <?=_('Sie kˆnnen beliebige weitere Objekte hinzuf¸gen, indem Sie im verkn¸pften Kurs in ILIAS einen '
+            <?=_('Sie k√∂nnen beliebige weitere Objekte hinzuf√ºgen, indem Sie im verkn√ºpften Kurs in ILIAS einen '
                 .'internen Link zu den entsprechenden Objekten anlegen. '
-                .'Wechseln Sie dazu in den Kurs, w‰hlen Sie unter "Neues Objekt hinzuf¸gen" die Option Weblink und legen '
-                .'einen Link innerhalb von ILIAS an. Kehren Sie anschlieﬂend auf diese Seite zur¸ck und klicken Sie in der Infobox '
-                .'auf "Aktualisieren". F¸r die auf diese Weise verlinkten Objekte m¸ssen Sie selbst sicherstellen, dass die Teilnehmenden '
+                .'Wechseln Sie dazu in den Kurs, w√§hlen Sie unter "Neues Objekt hinzuf√ºgen" die Option Weblink und legen '
+                .'einen Link innerhalb von ILIAS an. Kehren Sie anschlie√üend auf diese Seite zur√ºck und klicken Sie in der Infobox '
+                .'auf "Aktualisieren". F√ºr die auf diese Weise verlinkten Objekte m√ºssen Sie selbst sicherstellen, dass die Teilnehmenden '
                 .'des Kurses Zugriff darauf haben.')?>
             <br>
             <br>
@@ -134,5 +134,5 @@
             <a name='anker'></a>
         <? endif ?>
     <? endif ?>
-    <?=ELearningUtils::getCMSSelectbox(_("Um Lernmodule hinzuzuf¸gen, w‰hlen Sie ein angebundenes System aus:"))?>
+    <?=ELearningUtils::getCMSSelectbox(_("Um Lernmodule hinzuzuf√ºgen, w√§hlen Sie ein angebundenes System aus:"))?>
 <? endif?>

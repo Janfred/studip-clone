@@ -2,7 +2,7 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 //
-// Copyright (C) 2014 Arne Schröder <schroeder@data-quest>,
+// Copyright (C) 2014 Arne SchrÃ¶der <schroeder@data-quest>,
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@
  *
  *
  *
- * @author   Arne Schröder <schroeder@data-quest>
+ * @author   Arne SchrÃ¶der <schroeder@data-quest>
  * @access   public
  *
  * @property string content_id database column

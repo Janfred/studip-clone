@@ -3,7 +3,7 @@
  * semester.php - controller class for the semester administration
  *
  * @author    Jan-Hendrik Willms <tleilax+studip@gmail.com>
- * @author    Hermann Schröder <hermann.schroeder@uni-oldenburg.de>
+ * @author    Hermann SchrÃ¶der <hermann.schroeder@uni-oldenburg.de>
  * @author    Michael Riehemann <michael.riehemann@uni-oldenburg.de>
  * @license   GPL2 or any later version
  * @category  Stud.IP
@@ -87,7 +87,7 @@ class Admin_SemesterController extends AuthenticatedController
 
             // If valid, try to store the semester
             if (empty($errors) && $this->semester->isDirty() && !$this->semester->store()) {
-                $errors[] = _('Fehler bei der Speicherung Ihrer Daten. Bitte überprüfen Sie Ihre Angaben.');
+                $errors[] = _('Fehler bei der Speicherung Ihrer Daten. Bitte Ã¼berprÃ¼fen Sie Ihre Angaben.');
             }
 
             // Output potential errors or show success message and relocate
@@ -95,7 +95,7 @@ class Admin_SemesterController extends AuthenticatedController
                 $error = reset($errors);
                 PageLayout::postMessage(MessageBox::error($error));
             } elseif (!empty($errors)) {
-                $message = _('Ihre eingegebenen Daten sind ungültig.');
+                $message = _('Ihre eingegebenen Daten sind ungÃ¼ltig.');
                 PageLayout::postMessage(MessageBox::error($message, $errors));
             } else {
                 $message = _('Das Semester wurde erfolgreich gespeichert.');
@@ -126,9 +126,9 @@ class Admin_SemesterController extends AuthenticatedController
             $semesters = Semester::findMany($ids);
             foreach ($semesters as $semester) {
                 if ($semester->absolute_seminars_count > 0) {
-                    $errors[] = sprintf(_('Das Semester "%s" hat noch Veranstaltungen und kann daher nicht gelöscht werden.'), $semester->name);
+                    $errors[] = sprintf(_('Das Semester "%s" hat noch Veranstaltungen und kann daher nicht gelÃ¶scht werden.'), $semester->name);
                 } elseif (!$semester->delete()) {
-                    $errors[] = sprintf(_('Fehler beim Löschen des Semesters "%s".'), $semester->name);
+                    $errors[] = sprintf(_('Fehler beim LÃ¶schen des Semesters "%s".'), $semester->name);
                 } else {
                     $deleted += 1;
                 }
@@ -137,11 +137,11 @@ class Admin_SemesterController extends AuthenticatedController
             if (count($errors) === 1) {
                 PageLayout::postMessage(MessageBox::error($errors[0]));
             } elseif (!empty($errors)) {
-                $message = _('Beim Löschen der Semester sind folgende Fehler aufgetreten.');
+                $message = _('Beim LÃ¶schen der Semester sind folgende Fehler aufgetreten.');
                 PageLayout::postMessage(MessageBox::error($message, $errors));
             }
             if ($deleted > 0) {
-                $message = sprintf(_('%u Semester wurde(n) erfolgreich gelöscht.'), $deleted);
+                $message = sprintf(_('%u Semester wurde(n) erfolgreich gelÃ¶scht.'), $deleted);
                 PageLayout::postMessage(MessageBox::success($message));
             }
         }
@@ -165,19 +165,19 @@ class Admin_SemesterController extends AuthenticatedController
         // Validation, step 1: Check required values
         $errors = array();
         if (!$this->semester->name) {
-            $errors['name'] = _('Sie müssen den Namen des Semesters angeben.');
+            $errors['name'] = _('Sie mÃ¼ssen den Namen des Semesters angeben.');
         }
         if (!$this->semester->beginn) {
-            $errors['beginn'] = _('Sie müssen den Beginn des Semesters angeben.');
+            $errors['beginn'] = _('Sie mÃ¼ssen den Beginn des Semesters angeben.');
         }
         if (!$this->semester->ende) {
-            $errors['ende'] = _('Sie müssen das Ende des Semesters angeben.');
+            $errors['ende'] = _('Sie mÃ¼ssen das Ende des Semesters angeben.');
         }
         if (!$this->semester->vorles_beginn) {
-            $errors['vorles_beginn'] = _('Sie müssen den Beginn der Vorlesungzeit angeben.');
+            $errors['vorles_beginn'] = _('Sie mÃ¼ssen den Beginn der Vorlesungzeit angeben.');
         }
         if (!$this->semester->vorles_ende) {
-            $errors['vorles_ende'] = _('Sie müssen das Ende der Vorlesungzeit angeben.');
+            $errors['vorles_ende'] = _('Sie mÃ¼ssen das Ende der Vorlesungzeit angeben.');
         }
 
         // Validation, step 2: Check properness of values
@@ -199,7 +199,7 @@ class Admin_SemesterController extends AuthenticatedController
             $collisions = $all_semester->findBy('beginn', array($this->semester->beginn, $this->semester->ende), '>=<=');
             $collisions->merge($all_semester->findBy('ende', array($this->semester->beginn, $this->semester->ende), '>=<='));
             if ($collisions->count()) {
-                $errors[] = sprintf(_('Der angegebene Zeitraum des Semester überschneidet sich mit einem anderen Semester (%s)'), join(', ', $collisions->pluck('name')));
+                $errors[] = sprintf(_('Der angegebene Zeitraum des Semester Ã¼berschneidet sich mit einem anderen Semester (%s)'), join(', ', $collisions->pluck('name')));
             }
         }
 
@@ -236,13 +236,13 @@ class Admin_SemesterController extends AuthenticatedController
         $sidebar->setImage('sidebar/admin-sidebar.png');
 
         $views = new ViewsWidget();
-        $views->addLink(_('Alle Einträge'),
+        $views->addLink(_('Alle EintrÃ¤ge'),
                         $this->url_for('admin/semester', array('filter' => null)))
               ->setActive(!$this->filter);
-        $views->addLink(_('Aktuelle/zukünftige Einträge'),
+        $views->addLink(_('Aktuelle/zukÃ¼nftige EintrÃ¤ge'),
                         $this->url_for('admin/semester', array('filter' => 'current')))
               ->setActive($this->filter === 'current');
-        $views->addLink(_('Vergangene Einträge'),
+        $views->addLink(_('Vergangene EintrÃ¤ge'),
                         $this->url_for('admin/semester', array('filter' => 'past')))
               ->setActive($this->filter === 'past');
         $sidebar->addWidget($views);

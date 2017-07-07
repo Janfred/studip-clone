@@ -1,4 +1,4 @@
-<label><?= _('Für alle Veranstaltungen') ?>
+<label><?= _('FÃ¼r alle Veranstaltungen') ?>
     <select name="lock_sem_all" style="max-width: 200px">
         <? for ($i = 0; $i < count($all_lock_rules); $i++) : ?>
             <option value="<?= $all_lock_rules[$i]["lock_id"] ?>"

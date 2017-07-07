@@ -12,7 +12,7 @@
 <input type="HIDDEN" name="view" value="<?=htmlReady($view)?>">
 <input type="HIDDEN" name="search_key" value="<?=htmlReady($search_key)?>">
 <select name="cms_select" style="vertical-align:middle">
-<option value=""><?=_("Bitte auswählen")?></option>
+<option value=""><?=_("Bitte auswÃ¤hlen")?></option>
 <? foreach($options as $key => $name) : ?>
     <option value="<?=$key?>" <?=($cms_select == $key) ? ' selected' : ''?>>
         <?=htmlReady($name)?>
@@ -20,7 +20,7 @@
 <? endforeach ?>
 </select>
 &nbsp;
-<?=Button::create(_('Auswählen'))?>
+<?=Button::create(_('AuswÃ¤hlen'))?>
 <br>
 <br>
 </font>

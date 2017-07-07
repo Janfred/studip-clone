@@ -1,17 +1,17 @@
 <table class="mvv-modul-details default nohover">
     <thead>
         <tr>
-            <th><?= _('Prüfung') ?></th>
-            <th><?= _('Prüfungsvorleistung') ?></th>
-            <th><?= _('Prüfungsform') ?></th>
+            <th><?= _('PrÃ¼fung') ?></th>
+            <th><?= _('PrÃ¼fungsvorleistung') ?></th>
+            <th><?= _('PrÃ¼fungsform') ?></th>
         </tr>
     </thead>
     <tbody>
         <? foreach ($modul->modulteile as $modulTeil): ?>
             <?
             $modulTeilDeskriptor = $modulTeil->getDeskriptor();
-            // Für die Kenntlichmachung der Modulteile in Listen die Nummer des
-            // Modulteils und den ausgewählten Namen verwenden.
+            // FÃ¼r die Kenntlichmachung der Modulteile in Listen die Nummer des
+            // Modulteils und den ausgewÃ¤hlten Namen verwenden.
             // Ist keine Nummer vorhanden, dann Durchnummerieren und Standard-
             // Bezeichnung verwenden.
             if (trim($modulTeil->nummer)) {
@@ -40,7 +40,7 @@
         </tr>
         <tr>
             <td style="vertical-align: top; font-weight: bold;">
-                <?= _('Wiederholungsprüfung') ?>
+                <?= _('WiederholungsprÃ¼fung') ?>
             </td>
             <td colspan="3">
                 <?= formatReady($modulDeskriptor->pruef_wiederholung) ?>

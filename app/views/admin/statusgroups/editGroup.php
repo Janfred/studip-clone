@@ -12,14 +12,14 @@
                placeholder="<?= _('Mitarbeiterin') ?>">
     </label>
     <label>
-        <?= _('Männliche Bezeichnung') ?>
+        <?= _('MÃ¤nnliche Bezeichnung') ?>
         <input type="text" name="name_m" size="50"
                value="<?= htmlReady($group->name_m) ?>"
                placeholder="<?= _('Mitarbeiter') ?>">
     </label>
 <? if ($type['needs_size']): ?>
     <label>
-        <?= _('Größe') ?>
+        <?= _('GrÃ¶ÃŸe') ?>
         <input name="size" type="text" size="10"
                value="<?= htmlReady($group->size) ?>"
                placeholder="<?= _('Unbegrenzt') ?>">

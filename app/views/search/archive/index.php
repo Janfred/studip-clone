@@ -47,7 +47,7 @@
     </fieldset>
     <footer>
         <?= \Studip\Button::create(_('Suchen'), '') ?>
-        <?= Studip\LinkButton::create(_('Zurücksetzen'), URLHelper::getURL('dispatch.php/search/archive')) ?>
+        <?= Studip\LinkButton::create(_('ZurÃ¼cksetzen'), URLHelper::getURL('dispatch.php/search/archive')) ?>
     </footer>
 </form>
 <? if ($foundCourses) : ?>
@@ -107,7 +107,7 @@
             <td colspan="5" class="detailscontainer">
                 <ul class="default nohover">
                     <li>
-                        <strong><?= _('Fakultät') . ':' ?></strong>
+                        <strong><?= _('FakultÃ¤t') . ':' ?></strong>
                         <?= htmlReady($course->fakultaet) ?>
                     </li>
                     <li>

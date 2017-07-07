@@ -105,7 +105,7 @@ class ExternModuleTemplateNews extends ExternModule {
         $markers['TemplateGeneric'][] = array('###NEWS_ADMIN-MESSAGE###', '');
         $markers['TemplateGeneric'][] = array('<!-- END NEWS_ADMIN-MESSAGE -->', '');
         $markers['TemplateGeneric'][] = array('###NEWS_NO###', '');
-        $markers['TemplateGeneric'][] = array('###FULLNAME###', _("Vollst‰ndiger Name des Autors."));
+        $markers['TemplateGeneric'][] = array('###FULLNAME###', _("Vollst√§ndiger Name des Autors."));
         $markers['TemplateGeneric'][] = array('###LASTNAME###', _("Nachname des Autors."));
         $markers['TemplateGeneric'][] = array('###FIRSTNAME###', _("Vorname des Autors."));
         $markers['TemplateGeneric'][] = array('###TITLEFRONT###', _("Titel des Autors (vorangestellt)."));
@@ -124,7 +124,7 @@ class ExternModuleTemplateNews extends ExternModule {
         $markers['TemplateGeneric'][] = array('###ARCHIV-NEWS_ADMIN-MESSAGE###', '');
         $markers['TemplateGeneric'][] = array('<!-- END ARCHIV-NEWS-ADMIN-MESSAGE -->', '');
         $markers['TemplateGeneric'][] = array('###ARCHIV_NEWS_NO###', '');
-        $markers['TemplateGeneric'][] = array('###ARCHIV_FULLNAME###', _("Vollst‰ndiger Name des Autors."));
+        $markers['TemplateGeneric'][] = array('###ARCHIV_FULLNAME###', _("Vollst√§ndiger Name des Autors."));
         $markers['TemplateGeneric'][] = array('###ARCHIV_LASTNAME###', _("Nachname des Autors."));
         $markers['TemplateGeneric'][] = array('###ARCHIV_FIRSTNAME###', _("Vorname des Autors."));
         $markers['TemplateGeneric'][] = array('###ARCHIV_TITLEFRONT###', _("Titel des Autors (vorangestellt)."));
@@ -143,7 +143,7 @@ class ExternModuleTemplateNews extends ExternModule {
         $content = array();
         $error_message = "";
 
-        // stimmt die ¸bergebene range_id?
+        // stimmt die √ºbergebene range_id?
         $query = "SELECT 1 FROM Institute WHERE Institut_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($this->config->range_id));

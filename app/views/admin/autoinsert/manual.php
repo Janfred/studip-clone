@@ -81,7 +81,7 @@ use Studip\Button, Studip\LinkButton;
                       <? endif ?>
                     <? endforeach; ?>
                     </select>
-                    <?= Icon::create('add', 'clickable', ['title' => _('Filter hinzufügen')])->asInput(["type" => "image", "class" => "middle", "name" => "add_filter"]) ?>
+                    <?= Icon::create('add', 'clickable', ['title' => _('Filter hinzufÃ¼gen')])->asInput(["type" => "image", "class" => "middle", "name" => "add_filter"]) ?>
                 </td>
             </tr>
         <? endif ?>
@@ -91,7 +91,7 @@ use Studip\Button, Studip\LinkButton;
     <? if (!empty($filtertype)): ?>
         <tbody class="default filter_selection" style="vertical-align: top;">
             <tr>
-                <th colspan="3"><?= _('Ausgewählte Filterkriterien') ?></th>
+                <th colspan="3"><?= _('AusgewÃ¤hlte Filterkriterien') ?></th>
             </tr>
         <? $index = 0; foreach ($filtertype as $type): ?>
           <? if ($index%2 == 0): ?>
@@ -150,7 +150,7 @@ jQuery(function ($) {
                     result  = "Fehler".toLocaleString() + ": ";
                     result += json.error
                        ? json.error.toLocaleString()
-                       : "Fehler bei der Übertragung".toLocaleString();
+                       : "Fehler bei der Ãœbertragung".toLocaleString();
                 } else {
                     result  = "Gefundene Nutzer".toLocaleString() + ": ";
                     result += "<strong>" + json.users + "</strong>";
@@ -171,6 +171,6 @@ jQuery(function ($) {
 $sidebar = Sidebar::Get();
 $sidebar->setTitle('Manuelles Eintragen');
 $links = new ActionsWidget();
-$links->addLink(_('Übersicht'), $controller->url_for('admin/autoinsert'), Icon::create('edit', 'clickable'));
+$links->addLink(_('Ãœbersicht'), $controller->url_for('admin/autoinsert'), Icon::create('edit', 'clickable'));
 $sidebar->addWidget($links);
 

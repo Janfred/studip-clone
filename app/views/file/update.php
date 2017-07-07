@@ -6,14 +6,14 @@
         <legend><?= _('Neue Dateiversion') ?></legend>
         <label class="file-upload">
             <?= sprintf(
-                _('Bitte die neue Version der Datei %s auswählen.'),
+                _('Bitte die neue Version der Datei %s auswÃ¤hlen.'),
                 htmlReady($file_ref->name)
             ) ?>
             <input type="file" name="file">
         </label>
         <label>
             <input type="checkbox" name="update_filename" value="1">
-            <?= _('Dateinamen aus neuer Dateiversion übernehmen.') ?>
+            <?= _('Dateinamen aus neuer Dateiversion Ã¼bernehmen.') ?>
         </label>
     <? $count = count($file_ref->file->refs) ?>
     <? if ($count > 1) : ?>

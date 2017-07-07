@@ -11,7 +11,7 @@ class RemoveGuestbookMigration extends Migration
     function up()
     {
         $db = DBManager::get();
-        $guestbook_text = _("Gästebuch");
+        $guestbook_text = _("GÃ¤stebuch");
         $db->exec("
             INSERT IGNORE INTO blubber (topic_id, parent_id, root_id, context_type, name, description, mkdate, chdate, Seminar_id, user_id, external_contact)
                 SELECT MD5(CONCAT('guestbook_', user_info.user_id)), '0', MD5(CONCAT('guestbook_', user_info.user_id)), 'public', ".$db->quote($guestbook_text).", ".$db->quote($guestbook_text).", user_info.mkdate, user_info.mkdate, user_info.user_id, user_info.user_id, '0'

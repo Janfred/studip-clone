@@ -2,7 +2,7 @@
 <?php
 /**
  * @author Witali Mik <mik@data-quest.de>
- * Script um Collation Konflikte automatisiert zu lösen
+ * Script um Collation Konflikte automatisiert zu lÃ¶sen
  */
 
 require_once dirname(__FILE__) . '/studip_cli_env.inc.php';

@@ -10,7 +10,7 @@ use Studip\Button, Studip\LinkButton;
 
 <form action="<?= $controller->url_for('course/studygroup/update/'.$sem_id) ?>" method=post>
 <?= CSRFProtection::tokenTag() ?>
-<input type='submit' class="invisible" name="<?=_("Änderungen übernehmen")?>" aria-hidden="true">
+<input type='submit' class="invisible" name="<?=_("Ã„nderungen Ã¼bernehmen")?>" aria-hidden="true">
 <table class="blank" width="75%" cellspacing="5" cellpadding="0" border="0">
 
 <tr>
@@ -88,7 +88,7 @@ use Studip\Button, Studip\LinkButton;
   <td style='text-align:right;'><?= _('Zugang:') ?></td>
   <td>
       <select name="groupaccess">
-          <option <?= ($sem->admission_prelim == 0) ? 'selected="selected"':'' ?> value="all"><?= _('Offen für alle') ?></option>
+          <option <?= ($sem->admission_prelim == 0) ? 'selected="selected"':'' ?> value="all"><?= _('Offen fÃ¼r alle') ?></option>
           <option <?= ($sem->admission_prelim == 1) ? 'selected="selected"':'' ?> value="invite"><?= _('Auf Anfrage') ?></option>
           <? if(Config::get()->STUDYGROUPS_INVISIBLE_ALLOWED || $sem->visible == 0): ?>
             <option <?= ($sem->visible == 0) ? 'selected="selected"':'' ?> value="invisible" <?= Config::get()->STUDYGROUPS_INVISIBLE_ALLOWED ? '' : 'disabled="true"' ?>><?= _('Unsichtbar') ?></option>
@@ -105,7 +105,7 @@ use Studip\Button, Studip\LinkButton;
 <tr>
   <td></td>
   <td>
-      <?= Button::createAccept(_('Übernehmen'), array('title' => _("Änderungen übernehmen"))); ?>
+      <?= Button::createAccept(_('Ãœbernehmen'), array('title' => _("Ã„nderungen Ã¼bernehmen"))); ?>
       <?= LinkButton::createCancel(_('Abbrechen'), URLHelper::getURL('seminar_main.php')); ?>
   </td>
 </tr>

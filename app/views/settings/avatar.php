@@ -9,17 +9,17 @@
             <?= Avatar::getAvatar($user->user_id)->getImageTag(Avatar::NORMAL) ?>
 
             <label class="file-upload">
-                <?= _('W‰hlen Sie ein Bild von Ihrer Festplatte aus.') ?>
+                <?= _('W√§hlen Sie ein Bild von Ihrer Festplatte aus.') ?>
                 <input name="imgfile" type="file" accept="image/gif,image/png,image/jpeg">
 
                 <p class="form-text">
                     <?= sprintf(
-                        _('Die Bilddatei darf max. %s groﬂ sein, es sind nur Dateien mit den Endungen .jpg, .png oder .gif erlaubt!'),
+                        _('Die Bilddatei darf max. %s gro√ü sein, es sind nur Dateien mit den Endungen .jpg, .png oder .gif erlaubt!'),
                         relsize(Avatar::MAX_FILE_SIZE)
                     ) ?>
                 </p>
 
-                <a onclick="javascript:void 0" class=button>Ausw‰hlen</a>
+                <a onclick="javascript:void 0" class=button>Ausw√§hlen</a>
             </label>
         </div>
 
@@ -28,7 +28,7 @@
     <footer>
         <?= Studip\Button::createAccept(_('Absenden'), 'upload') ?>
         <? if ($customized): ?>
-            <?= Studip\Button::create(_('Aktuelles Bild lˆschen'), 'reset') ?>
+            <?= Studip\Button::create(_('Aktuelles Bild l√∂schen'), 'reset') ?>
         <? endif; ?>
     </footer>
 </form>

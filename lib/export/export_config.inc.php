@@ -29,7 +29,7 @@ $output_formats = array(
     "xml"       =>      "Extensible Markup Language (XML)"
 );
 
-// Icons für die Ausgabeformate
+// Icons fÃ¼r die Ausgabeformate
 $export_icon["xml"]  = "file-generic";
 $export_icon["xslt"] = "file-office";
 $export_icon["xsl"]  = "file-office";

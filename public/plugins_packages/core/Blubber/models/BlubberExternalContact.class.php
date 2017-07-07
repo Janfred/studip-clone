@@ -97,11 +97,11 @@ class BlubberExternalContact extends SimpleORMap implements BlubberContact
             . $posting['root_id']
             . ($posting['context_type'] === "course" ? '?cid='.$posting['Seminar_id'] : "");
         $message = sprintf(
-            _("%s hat Sie in einem Blubber erw‰hnt. Zum Beantworten klicken auf Sie auf folgenen Link:\n\n%s\n"),
+            _("%s hat Sie in einem Blubber erw√§hnt. Zum Beantworten klicken auf Sie auf folgenen Link:\n\n%s\n"),
             get_fullname(), 
             $url
         );
-        StudipMail::sendMessage($this['mail_identifier'], _("Sie wurden erw‰hnt."), $message);
+        StudipMail::sendMessage($this['mail_identifier'], _("Sie wurden erw√§hnt."), $message);
     }
 
     /**

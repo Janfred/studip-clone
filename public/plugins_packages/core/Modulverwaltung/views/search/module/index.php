@@ -7,7 +7,7 @@
         <input type="hidden" name="do_search" value="1">
         <?= Button::create('Suche') ?>
         <? if ($search_done) : ?>
-            <?= LinkButton::create('Zurücksetzen', $controller->url_for('search/module/reset'), array('title' => _('Suche zurücksetzen'))); ?>
+            <?= LinkButton::create('ZurÃ¼cksetzen', $controller->url_for('search/module/reset'), array('title' => _('Suche zurÃ¼cksetzen'))); ?>
         <? endif; ?>
     </form>
 </div>
@@ -15,7 +15,7 @@
 <table class="default collapsable">
     <caption>
         <? if (count($module)) : ?>
-        <?= sprintf(_('Gefundene Module für <i>%s</i>'), htmlReady($sterm)) ?>
+        <?= sprintf(_('Gefundene Module fÃ¼r <i>%s</i>'), htmlReady($sterm)) ?>
         <span class="actions">
             <? if (count($drill_down_type)) : ?>
                 <? printf(_('%s von %s Modulen insgesamt)'), $drill_down_count, $result_count); ?>
@@ -36,7 +36,7 @@
     <thead>
         <tr>
             <th><?= _('Modultitel') ?></th>
-            <th><?= _('Gültigkeit') ?></th>
+            <th><?= _('GÃ¼ltigkeit') ?></th>
             <th><?= _('Einrichtung') ?></th>
         </tr>
     </thead>

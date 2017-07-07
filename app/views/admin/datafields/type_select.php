@@ -24,7 +24,7 @@ use Studip\Button, Studip\LinkButton;
     </fieldset>
 
     <footer data-dialog-button>
-        <?= Button::create(_('Auswählen'), 'auswaehlen', array('title' => _('Datenfeld auswählen')))?>
+        <?= Button::create(_('AuswÃ¤hlen'), 'auswaehlen', array('title' => _('Datenfeld auswÃ¤hlen')))?>
         <?= LinkButton::createCancel(_('Abbrechen'), $controller->url_for('admin/datafields', compact('class_filter'))) ?>
     </footer>
 </form>

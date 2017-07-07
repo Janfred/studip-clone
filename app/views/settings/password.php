@@ -5,7 +5,7 @@
     <input type="hidden" name="studipticket" value="<?= get_ticket() ?>">
     <fieldset>
         <legend>
-            <?= _('Passwort ändern') ?>
+            <?= _('Passwort Ã¤ndern') ?>
         </legend>
         <label>
             <span class="required"><?= _('Aktuelles Passwort') ?></span>
@@ -18,11 +18,11 @@
                    data-message="<?= _('Das Passwort ist zu kurz - es sollte mindestens 4 Zeichen lang sein.') ?>">
         </label>
         <label>
-            <span class="required"><?= _('Passwort bestätigen') ?></span>
+            <span class="required"><?= _('Passwort bestÃ¤tigen') ?></span>
             <input required type="password" pattern=".{4,}"
                    id="new_password_confirm" name="new_password_confirm"
                    data-must-equal="#new_password">
         </label>
     </fieldset>
-    <footer><?= Button::create(_('Übernehmen'), 'store', ['title' => _('Änderungen übernehmen')]) ?></footer>
+    <footer><?= Button::create(_('Ãœbernehmen'), 'store', ['title' => _('Ã„nderungen Ã¼bernehmen')]) ?></footer>
 </form>

@@ -4,7 +4,7 @@ class Step117StudienModule extends Migration
     private $sql_up = 
 "
 -- 
--- Tabellenstruktur für Tabelle `his_abschl`
+-- Tabellenstruktur fÃ¼r Tabelle `his_abschl`
 -- 
 
 CREATE TABLE `his_abschl` (
@@ -30,7 +30,7 @@ CREATE TABLE `his_abschl` (
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `his_abstgv`
+-- Tabellenstruktur fÃ¼r Tabelle `his_abstgv`
 -- 
 
 CREATE TABLE `his_abstgv` (
@@ -53,7 +53,7 @@ CREATE TABLE `his_abstgv` (
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `his_pvers`
+-- Tabellenstruktur fÃ¼r Tabelle `his_pvers`
 -- 
 
 CREATE TABLE `his_pvers` (
@@ -70,7 +70,7 @@ CREATE TABLE `his_pvers` (
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `his_stg`
+-- Tabellenstruktur fÃ¼r Tabelle `his_stg`
 -- 
 
 CREATE TABLE `his_stg` (
@@ -85,12 +85,12 @@ CREATE TABLE `his_stg` (
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `stm_abstract`
+-- Tabellenstruktur fÃ¼r Tabelle `stm_abstract`
 -- 
 
 CREATE TABLE `stm_abstract` (
   `stm_abstr_id` varchar(32) NOT NULL default '',
-  `id_number` varchar(10) default NULL COMMENT 'alphanummerische Identifikationsnummer für das Modul',
+  `id_number` varchar(10) default NULL COMMENT 'alphanummerische Identifikationsnummer fÃ¼r das Modul',
   `duration` varchar(155) default NULL,
   `credits` tinyint(3) unsigned default NULL COMMENT 'Anzahl der Leistungspunkte/Kreditpunkte',
   `workload` smallint(6) unsigned default NULL COMMENT 'Studentischer Arbeitsaufwand in Stunden',
@@ -104,7 +104,7 @@ CREATE TABLE `stm_abstract` (
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `stm_abstract_assign`
+-- Tabellenstruktur fÃ¼r Tabelle `stm_abstract_assign`
 -- 
 
 CREATE TABLE `stm_abstract_assign` (
@@ -112,9 +112,9 @@ CREATE TABLE `stm_abstract_assign` (
   `stm_type_id` varchar(32) NOT NULL default '' COMMENT 'ID eines Modultyps',
   `abschl` char(3) NOT NULL default '' COMMENT 'ID eines Studienabschlusses',
   `stg` char(3) NOT NULL default '' COMMENT 'ID eines Studienprogramms/-fachs',
-  `pversion` varchar(8) NOT NULL default '' COMMENT 'Version der Prüfungsordnung',
-  `earliest` tinyint(4) default NULL COMMENT 'frührester Zeitpunkt (Semester)',
-  `latest` tinyint(4) default NULL COMMENT 'spätester Zpkt.',
+  `pversion` varchar(8) NOT NULL default '' COMMENT 'Version der PrÃ¼fungsordnung',
+  `earliest` tinyint(4) default NULL COMMENT 'frÃ¼hrester Zeitpunkt (Semester)',
+  `latest` tinyint(4) default NULL COMMENT 'spÃ¤tester Zpkt.',
   `recommed` tinyint(4) default NULL COMMENT 'empfohlener Zpkt.',
   PRIMARY KEY  (`stm_abstr_id`,`abschl`,`stg`,`pversion`),
   KEY `studycourse` (`abschl`,`stg`)
@@ -123,15 +123,15 @@ CREATE TABLE `stm_abstract_assign` (
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `stm_abstract_elements`
+-- Tabellenstruktur fÃ¼r Tabelle `stm_abstract_elements`
 -- 
 
 CREATE TABLE `stm_abstract_elements` (
   `element_id` varchar(32) NOT NULL default '' COMMENT 'ID eines abstrakten Modulbestandzeiles',
   `stm_abstr_id` varchar(32) NOT NULL default '' COMMENT 'ID eines abstrakten Studienmodules',
   `element_type_id` varchar(32) NOT NULL default '' COMMENT 'um welche Art von Element handelt es sich',
-  `custom_name` varchar(50) default NULL COMMENT 'selbstgewählter Name',
-  `sws` tinyint(4) NOT NULL default '0' COMMENT 'Semesterwochenstunden für den Bestandteil',
+  `custom_name` varchar(50) default NULL COMMENT 'selbstgewÃ¤hlter Name',
+  `sws` tinyint(4) NOT NULL default '0' COMMENT 'Semesterwochenstunden fÃ¼r den Bestandteil',
   `workload` int(4) NOT NULL default '0',
   `semester` tinyint(1) default NULL COMMENT 'Sommer od. Winter (Sommer = 1; Winter = 2)',
   `elementgroup` tinyint(4) NOT NULL default '0' COMMENT 'Kombinationsvariante',
@@ -143,7 +143,7 @@ CREATE TABLE `stm_abstract_elements` (
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `stm_abstract_text`
+-- Tabellenstruktur fÃ¼r Tabelle `stm_abstract_text`
 -- 
 
 CREATE TABLE `stm_abstract_text` (
@@ -160,7 +160,7 @@ CREATE TABLE `stm_abstract_text` (
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `stm_abstract_types`
+-- Tabellenstruktur fÃ¼r Tabelle `stm_abstract_types`
 -- 
 
 CREATE TABLE `stm_abstract_types` (
@@ -174,7 +174,7 @@ CREATE TABLE `stm_abstract_types` (
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `stm_element_types`
+-- Tabellenstruktur fÃ¼r Tabelle `stm_element_types`
 -- 
 
 CREATE TABLE `stm_element_types` (
@@ -183,12 +183,12 @@ CREATE TABLE `stm_element_types` (
   `abbrev` varchar(5) default NULL COMMENT 'Kurzname',
   `name` varchar(50) NOT NULL default '' COMMENT 'Name',
   PRIMARY KEY  (`element_type_id`,`lang_id`)
-) ENGINE=MyISAM COMMENT='Typen von möglichen Bestandteilen eines abstrakten Moduls';
+) ENGINE=MyISAM COMMENT='Typen von mÃ¶glichen Bestandteilen eines abstrakten Moduls';
 
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `stm_instances`
+-- Tabellenstruktur fÃ¼r Tabelle `stm_instances`
 -- 
 
 CREATE TABLE `stm_instances` (
@@ -206,7 +206,7 @@ CREATE TABLE `stm_instances` (
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `stm_instances_elements`
+-- Tabellenstruktur fÃ¼r Tabelle `stm_instances_elements`
 -- 
 
 CREATE TABLE `stm_instances_elements` (
@@ -219,7 +219,7 @@ CREATE TABLE `stm_instances_elements` (
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `stm_instances_text`
+-- Tabellenstruktur fÃ¼r Tabelle `stm_instances_text`
 -- 
 
 CREATE TABLE `stm_instances_text` (

@@ -49,7 +49,7 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
         </label>
 
         <label>
-            <?= _('Letzte Änderung') ?>
+            <?= _('Letzte Ã„nderung') ?>
             <br>
             <?= htmlReady($chstring) ?>
         </label>
@@ -88,7 +88,7 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
             <? if ($perm_dozent && !$dozent_is_locked): ?>
                 <span class="actions">
                     <?= MultiPersonSearch::get('add_member_dozent' . $course_id)
-                            ->setTitle(_('Mehrere Lehrende hinzufügen'))
+                            ->setTitle(_('Mehrere Lehrende hinzufÃ¼gen'))
                             ->setSearchObject($dozentUserSearch)
                             ->setDefaultSelectedUser(array_keys($dozenten))
                             ->setDataDialogStatus(Request::isXhr())
@@ -127,7 +127,7 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
                     </td>
                     <td>
                     <? if ($perm_dozent && !$dozent_is_locked): ?>
-                        <input value="<?= htmlReady($dozent['label']) ?>" type="text" name="label[<?= htmlReady($dozent['user_id']) ?>]" title="<?= _('Die Funktion, die die Person in der Veranstaltung erfüllt.') ?>">
+                        <input value="<?= htmlReady($dozent['label']) ?>" type="text" name="label[<?= htmlReady($dozent['user_id']) ?>]" title="<?= _('Die Funktion, die die Person in der Veranstaltung erfÃ¼llt.') ?>">
                     <? else : ?>
                         <?= htmlReady($dozent['label']) ?>
                     <? endif ?>
@@ -163,7 +163,7 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
             <? if ($perm_dozent && !$dozent_is_locked) : ?>
                 <span class="actions">
                     <?= MultiPersonSearch::get('add_member_deputy' . $course_id)
-                            ->setTitle(_('Mehrere Vertretungen hinzufügen'))
+                            ->setTitle(_('Mehrere Vertretungen hinzufÃ¼gen'))
                             ->setSearchObject($deputySearch)
                             ->setDefaultSelectedUser(array_keys($deputies))
                             ->setDataDialogStatus(Request::isXhr())
@@ -222,7 +222,7 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
             <? if ($perm_dozent && !$tutor_is_locked): ?>
                 <span class="actions">
                 <?= MultiPersonSearch::get('add_member_tutor' . $course_id)
-                        ->setTitle(_('Mehrere TutorInnen hinzufügen'))
+                        ->setTitle(_('Mehrere TutorInnen hinzufÃ¼gen'))
                         ->setSearchObject($tutorUserSearch)
                         ->setDefaultSelectedUser(array_merge(array_keys($dozenten), array_keys($tutoren)))
                         ->setDataDialogStatus(Request::isXhr())
@@ -262,7 +262,7 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
                     </td>
                     <td>
                     <? if ($perm_dozent && !$tutor_is_locked): ?>
-                        <input value="<?= htmlReady($tutor['label']) ?>" type="text" name="label[<?= htmlReady($tutor['user_id']) ?>]" title="<?= _('Die Funktion, die die Person in der Veranstaltung erfüllt.') ?>">
+                        <input value="<?= htmlReady($tutor['label']) ?>" type="text" name="label[<?= htmlReady($tutor['user_id']) ?>]" title="<?= _('Die Funktion, die die Person in der Veranstaltung erfÃ¼llt.') ?>">
                     <? else: ?>
                         <?= htmlReady($tutor['label']) ?>
                     <? endif; ?>
@@ -309,7 +309,7 @@ $message_types = array('msg' => "success", 'error' => "error", 'info' => "info")
     </fieldset>
 
     <footer data-dialog-button>
-        <?= Button::create(_('Übernehmen')) ?>
+        <?= Button::create(_('Ãœbernehmen')) ?>
     </footer>
 </form>
 

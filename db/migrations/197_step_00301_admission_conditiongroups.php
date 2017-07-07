@@ -2,7 +2,7 @@
 /**
  * Migration for StEP00301
  *
- * @author  Arne Schröder <schroeder@data-quest.de>
+ * @author  Arne SchrÃ¶der <schroeder@data-quest.de>
  * @license GPL2 or any later version
  * @since   Stud.IP 3.5
  *

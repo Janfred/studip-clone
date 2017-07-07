@@ -2,7 +2,7 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 //
-// Copyright (C) 2005 André Noack <noack@data-quest>,
+// Copyright (C) 2005 AndrÃ© Noack <noack@data-quest>,
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -23,8 +23,8 @@ require_once 'lib/object.inc.php';
 /**
  * StudipNews.class.php
  *
- * @author   André Noack <noack@data-quest>, Suchi & Berg GmbH <info@data-quest.de>
- * @author   Arne Schröder <schroeder@data-quest>
+ * @author   AndrÃ© Noack <noack@data-quest>, Suchi & Berg GmbH <info@data-quest.de>
+ * @author   Arne SchrÃ¶der <schroeder@data-quest>
  * @access   public
  *
  * @property string news_id database column
@@ -231,13 +231,13 @@ class StudipNews extends SimpleORMap
                         $result['startsem'] != $result['endsem'] ? ' - ' . $result['endsem'] : '');
                 } elseif ($area == 'user') {
                     if ($GLOBALS['user']->id == $result['userid']) {
-                        $objects[$area][$id]['title'] = _('Ankündigungen auf Ihrer Profilseite');
+                        $objects[$area][$id]['title'] = _('AnkÃ¼ndigungen auf Ihrer Profilseite');
                     }
                     else {
-                        $objects[$area][$id]['title'] = sprintf(_('Ankündigungen auf der Profilseite von %s'), get_fullname($result['userid']));
+                        $objects[$area][$id]['title'] = sprintf(_('AnkÃ¼ndigungen auf der Profilseite von %s'), get_fullname($result['userid']));
                     }
                 } elseif ($area == 'global') {
-                    $objects[$area][$id]['title'] = _('Ankündigungen auf der Stud.IP Startseite');
+                    $objects[$area][$id]['title'] = _('AnkÃ¼ndigungen auf der Stud.IP Startseite');
                 }
                 if ($as_objects) {
                     $objects[$area][$id]['object'] = new StudipNews();
@@ -582,27 +582,27 @@ class StudipNews extends SimpleORMap
             $this->author = get_fullname(false, 'full', false);
         }
         if (!$this->user_id OR !$this->author) {
-            PageLayout::postError(_('Fehler: Personenangabe unvollständig.'));
+            PageLayout::postError(_('Fehler: Personenangabe unvollstÃ¤ndig.'));
             return false;
         }
         if (!$this->topic) {
-            PageLayout::postError(_('Bitte geben Sie einen Titel für die Ankündigung ein.'));
+            PageLayout::postError(_('Bitte geben Sie einen Titel fÃ¼r die AnkÃ¼ndigung ein.'));
             return false;
         }
         if (!$this->body) {
-            PageLayout::postError(_('Bitte geben Sie einen Inhalt für die Ankündigung ein.'));
+            PageLayout::postError(_('Bitte geben Sie einen Inhalt fÃ¼r die AnkÃ¼ndigung ein.'));
             return false;
         }
         if (!count($this->getRanges())) {
-            PageLayout::postError(_('Die Ankündigung muss mindestens einem Bereich zugeordnet sein.'));
+            PageLayout::postError(_('Die AnkÃ¼ndigung muss mindestens einem Bereich zugeordnet sein.'));
             return false;
         }
         if ((int)$this->date < 1) {
-            PageLayout::postError(_('Ungültiges Einstelldatum.'));
+            PageLayout::postError(_('UngÃ¼ltiges Einstelldatum.'));
             return false;
         }
         if ((int)$this->expire < 1) {
-            PageLayout::postError(_('Ungültiges Ablaufdatum.'));
+            PageLayout::postError(_('UngÃ¼ltiges Ablaufdatum.'));
             return false;
         }
 

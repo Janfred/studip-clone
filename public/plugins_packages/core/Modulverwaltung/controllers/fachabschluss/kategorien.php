@@ -39,12 +39,12 @@ class Fachabschluss_KategorienController extends MVVController
     {
         $helpbar = Helpbar::get();
         $widget = new HelpbarWidget();
-        $widget->addElement(new WidgetElement(_('Sie können die Reihenfolge der Abschluss-Kategorien durch Ziehen der Zeilen ändern.').'</br>'));
-        $widget->addElement(new WidgetElement(_('Eine Abschluss-Katgorie kann aufgeklappt werden, um die Abschlüsse anzuzeigen, die der Abschluss-Kategorie bereits zugeordnet wurden.')));
-        $widget->addElement(new WidgetElement(_('Die Reihenfolge der zugeordneten Abschlüsse kann ebenfalls geändert werden.')));
+        $widget->addElement(new WidgetElement(_('Sie kÃ¶nnen die Reihenfolge der Abschluss-Kategorien durch Ziehen der Zeilen Ã¤ndern.').'</br>'));
+        $widget->addElement(new WidgetElement(_('Eine Abschluss-Katgorie kann aufgeklappt werden, um die AbschlÃ¼sse anzuzeigen, die der Abschluss-Kategorie bereits zugeordnet wurden.')));
+        $widget->addElement(new WidgetElement(_('Die Reihenfolge der zugeordneten AbschlÃ¼sse kann ebenfalls geÃ¤ndert werden.')));
         $helpbar->addWidget($widget);
 
-        // Nur Abschluss-Kategorien mit Abschlüssen, die Studiengängen zugeordnet
+        // Nur Abschluss-Kategorien mit AbschlÃ¼ssen, die StudiengÃ¤ngen zugeordnet
         // sind an deren Verantwortliche Einrichtung dem User eine Rolle
         // zugewiesen wurde
         $filter = array('ms.institut_id' => MvvPerm::getOwnInstitutes());
@@ -70,7 +70,7 @@ class Fachabschluss_KategorienController extends MVVController
             $success_message = ('Die Abschluss-Kategorie "%s" wurde angelegt.');
         } else {
             PageLayout::setTitle(_('Abschluss-Kategorie bearbeiten'));
-            $success_message = _('Die Abschluss-Kategorie "%s" wurde geändert.');
+            $success_message = _('Die Abschluss-Kategorie "%s" wurde geÃ¤ndert.');
         }
         $this->sessSet('dokument_target', array($this->abschluss_kategorie->getId(),
                 'AbschlussKategorie'));
@@ -105,7 +105,7 @@ class Fachabschluss_KategorienController extends MVVController
                     PageLayout::postSuccess(sprintf($success_message,
                             htmlReady($this->abschluss_kategorie->name)));
                 } else {
-                    PageLayout::postInfo(_('Es wurden keine Änderungen vorgenommen.'));
+                    PageLayout::postInfo(_('Es wurden keine Ã„nderungen vorgenommen.'));
                 }
                 */
                 $this->redirect($this->url_for('/index'));
@@ -122,7 +122,7 @@ class Fachabschluss_KategorienController extends MVVController
         if (!$this->abschluss_kategorie->isNew()) {
             $sidebar = Sidebar::get();
             $action_widget = $sidebar->getWidget('actions');
-            $action_widget->addLink(_('Log-Einträge dieser Kategorie'),
+            $action_widget->addLink(_('Log-EintrÃ¤ge dieser Kategorie'),
                     $this->url_for('shared/log_event/show/AbschlussKategorie', $this->abschluss_kategorie->getId()),
                     Icon::create('log', 'clickable'))->asDialog();
         }
@@ -143,16 +143,16 @@ class Fachabschluss_KategorienController extends MVVController
                     throw new Trails_Exception(403);
                 }
                 if (!count($abschluss_kategorie->abschluesse)) {
-                    PageLayout::postSuccess(sprintf(_('Abschluss-Kategorie "%s" gelöscht!'),
+                    PageLayout::postSuccess(sprintf(_('Abschluss-Kategorie "%s" gelÃ¶scht!'),
                             htmlReady($abschluss_kategorie->name)));
                     $abschluss_kategorie->delete();
                 } else {
-                    PageLayout::postError( sprintf(_('Löschen nicht möglich! Die Abschluss-Kategorie "%s" ist noch Abschlüssen zugeordnet!'),
+                    PageLayout::postError( sprintf(_('LÃ¶schen nicht mÃ¶glich! Die Abschluss-Kategorie "%s" ist noch AbschlÃ¼ssen zugeordnet!'),
                             htmlReady($abschluss_kategorie->name)));
                 }
             }
             if (!Request::isPost()) {
-                $this->flash_set('dialog', sprintf(_('Wollen Sie wirklich die Abschluss-Kategorie "%s" löschen?'),
+                $this->flash_set('dialog', sprintf(_('Wollen Sie wirklich die Abschluss-Kategorie "%s" lÃ¶schen?'),
                                 $abschluss_kategorie->name),
                         '/delete/' . $abschluss_kategorie->getId(),
                         '/index');

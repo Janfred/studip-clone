@@ -8,7 +8,7 @@
 <? if ($modul) : ?>
 <? $end_sem = Semester::find($modul->end);?>
 <? if (!$end_sem) : ?>
-    <?= MessageBox::warning(_('Das Modul kann nicht kopiert werden, da die aktuellste Version unbegrenzt gültig ist. Setzen Sie erst ein Endsemester für die aktuellste Version.')) ?>
+    <?= MessageBox::warning(_('Das Modul kann nicht kopiert werden, da die aktuellste Version unbegrenzt gÃ¼ltig ist. Setzen Sie erst ein Endsemester fÃ¼r die aktuellste Version.')) ?>
     <? if ($perm->havePermRead()) : ?>
     <section>
         <p>
@@ -26,14 +26,14 @@
 <? if ($end_sem) : ?>
     <section>
         <h3>
-            <?= htmlReady(sprintf(_('Wollen Sie wirklich das Modul "%s" und alle zugehörigen Modulteile kopieren?'), $modul->getDisplayName())) ?>
+            <?= htmlReady(sprintf(_('Wollen Sie wirklich das Modul "%s" und alle zugehÃ¶rigen Modulteile kopieren?'), $modul->getDisplayName())) ?>
         </h3>
     </section>
 <? endif; ?>
     <section>
         <dl>
             <dt>
-                <?= _('Das Modul ist in seiner aktuellsten Version gültig von:') ?>
+                <?= _('Das Modul ist in seiner aktuellsten Version gÃ¼ltig von:') ?>
             </dt>
             <dd>
                 <?= htmlReady(Semester::find($modul->start)->name) ?>
@@ -56,7 +56,7 @@
                 <?= htmlReady(Semester::findNext($end_sem->ende)->name) ?>
             </dd>
             <dt>
-                <label for="end_sem"><?= _('Gültig bis:') ?></label>
+                <label for="end_sem"><?= _('GÃ¼ltig bis:') ?></label>
             </dt>
             <dd>
                 <select name="end_sem" id="end_sem">
@@ -76,9 +76,9 @@
         <p>
             <label class="undecorated">
                 <input type="checkbox" name="copy_assignments" value="1" checked>
-                <?= _('Zuordnungen zu Studiengängen mit übernehmen') ?>
+                <?= _('Zuordnungen zu StudiengÃ¤ngen mit Ã¼bernehmen') ?>
             </label>
-            <a title="<?= _('Verwendet in Studiengängen') ?>" href="<?= $controller->url_for('/assignments', $modul->id) ?>" onclick="STUDIP.Dialog.fromURL(this.href, {title: this.title, resizable: true, id: 'stgteil_assignments'}); return false;">
+            <a title="<?= _('Verwendet in StudiengÃ¤ngen') ?>" href="<?= $controller->url_for('/assignments', $modul->id) ?>" onclick="STUDIP.Dialog.fromURL(this.href, {title: this.title, resizable: true, id: 'stgteil_assignments'}); return false;">
                 <?= Icon::create('info-circle', 'clickable', ['title' => _('Zuordnungen anzeigen')]) ?>
             </a>
         </p>
@@ -88,7 +88,7 @@
     <? if ($perm->havePermWrite() && $end_sem) : ?>
         <?= Button::createAccept(_('Kopieren'), 'copy', ['title' => _('Modul kopieren')]) ?>
     <? endif; ?>
-        <?= LinkButton::createCancel(_('Abbrechen'), $cancel_url, ['title' => _('Zurück zur Übersicht')]) ?>
+        <?= LinkButton::createCancel(_('Abbrechen'), $cancel_url, ['title' => _('ZurÃ¼ck zur Ãœbersicht')]) ?>
     </footer>
 </form>
 <? endif; ?>

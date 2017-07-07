@@ -27,10 +27,10 @@
             <? endif; ?>
             </a>
         <? if (!$course['visible']) : ?>
-            <? $infotext = _('Versteckte Veranstaltungen können über die Suchfunktionen nicht gefunden werden.'); ?>
+            <? $infotext = _('Versteckte Veranstaltungen kÃ¶nnen Ã¼ber die Suchfunktionen nicht gefunden werden.'); ?>
             <? $infotext .= ' '; ?>
             <? if (Config::get()->ALLOW_DOZENT_VISIBILITY) : ?>
-                <? $infotext .= _('Um die Veranstaltung sichtbar zu machen, wählen Sie den Punkt "Sichtbarkeit" im Administrationsbereich der Veranstaltung.'); ?>
+                <? $infotext .= _('Um die Veranstaltung sichtbar zu machen, wÃ¤hlen Sie den Punkt "Sichtbarkeit" im Administrationsbereich der Veranstaltung.'); ?>
             <? else : ?>
                 <? $infotext .= _('Um die Veranstaltung sichtbar zu machen, wenden Sie sich an Admins.'); ?>
             <? endif ?>

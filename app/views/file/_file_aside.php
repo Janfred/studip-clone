@@ -7,7 +7,7 @@
         <caption><?= htmlReady($file_ref->name) ?></caption>
         <tbody>
             <tr>
-                <td><?= _('Größe') ?></td>
+                <td><?= _('GrÃ¶ÃŸe') ?></td>
                 <td><?= relSize($file_ref->size, false) ?></td>
             </tr>
             <tr>
@@ -15,7 +15,7 @@
                 <td><?= date('d.m.Y H:i', $file_ref->mkdate) ?></td>
             </tr>
             <tr>
-                <td><?= _('Geändert') ?></td>
+                <td><?= _('GeÃ¤ndert') ?></td>
                 <td><?= date('d.m.Y H:i', $file_ref->chdate) ?></td>
             </tr>
             <tr>

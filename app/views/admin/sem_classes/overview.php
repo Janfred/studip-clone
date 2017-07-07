@@ -16,7 +16,7 @@
             <th><?= _("Veranstaltungskategorie") ?></th>
             <th><?= _("Anzahl Veranstaltungstypen") ?></th>
             <th><?= _("Anzahl Veranstaltungen") ?></th>
-            <th><?= _("Zuletzt geändert") ?></th>
+            <th><?= _("Zuletzt geÃ¤ndert") ?></th>
             <th></th>
         </tr>
     </thead>

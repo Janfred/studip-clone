@@ -17,7 +17,7 @@ class Step00202EnhancedSeminarCycle extends Migration
             'type'        => 'boolean',
             'value'       => 0,
             'section'     => 'permissions',
-            'description' => 'Soll es erlaubt sein, dass regelmäßige Zeiten einer Veranstaltung frei sortiert werden können?'
+            'description' => 'Soll es erlaubt sein, dass regelmÃ¤ÃŸige Zeiten einer Veranstaltung frei sortiert werden kÃ¶nnen?'
             );
 
         $stmt = $db->prepare("

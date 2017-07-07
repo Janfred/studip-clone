@@ -13,10 +13,10 @@
                     <th>
                         <input type="checkbox"
                                data-proxyfor="[name^=requests_marked_to_kill]:checkbox"
-                               title="<?= _('Alle auswählen') ?>">
+                               title="<?= _('Alle auswÃ¤hlen') ?>">
                     </th>
                 <? endif ?>
-                <th><?= _('Zähler') ?></th>
+                <th><?= _('ZÃ¤hler') ?></th>
                 <th><?= _('V.-Nummer') ?></th>
                 <th><?= _('Titel') ?></th>
                 <th><?= _('Dozenten') ?></th>
@@ -85,7 +85,7 @@
             <tfoot>
                 <tr>
                     <td colspan="8">
-                        <?= Studip\Button::create(_('Ausgewählte löschen'), 'do_delete_requests', ['title' => _('Ausgewählte Anfragen löschen')]) ?>
+                        <?= Studip\Button::create(_('AusgewÃ¤hlte lÃ¶schen'), 'do_delete_requests', ['title' => _('AusgewÃ¤hlte Anfragen lÃ¶schen')]) ?>
                     </td>
                 </tr>
             </tfoot>

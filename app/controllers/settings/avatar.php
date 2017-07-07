@@ -29,13 +29,13 @@ class Settings_AvatarController extends Settings_SettingsController
         parent::before_filter($action, $args);
 
         PageLayout::setHelpKeyword('Basis.HomepageBild');
-        PageLayout::setTitle(_('Hochladen eines persönlichen Bildes'));
+        PageLayout::setTitle(_('Hochladen eines persÃ¶nlichen Bildes'));
         Navigation::activateItem('/profile/avatar');
-        SkipLinks::addIndex(_('Hochladen eines persönlichen Bildes'), 'edit_avatar');
+        SkipLinks::addIndex(_('Hochladen eines persÃ¶nlichen Bildes'), 'edit_avatar');
 
         $this->customized = Avatar::getAvatar($this->user->user_id)->is_customized();
         if ($this->customized) {
-            SkipLinks::addIndex(_('Eigenes Bild löschen'), 'delete_picture');
+            SkipLinks::addIndex(_('Eigenes Bild lÃ¶schen'), 'delete_picture');
         }
     }
 
@@ -58,7 +58,7 @@ class Settings_AvatarController extends Settings_SettingsController
         if (Request::submitted('reset')) {
             Avatar::getAvatar($this->user->user_id)->reset();
             Visibility::removePrivacySetting('picture', $this->user->user_id);
-            PageLayout::postSuccess(_('Bild gelöscht.'));
+            PageLayout::postSuccess(_('Bild gelÃ¶scht.'));
         } elseif (Request::submitted('upload')) {
             try {
                 Avatar::getAvatar($this->user->user_id)->createFromUpload('imgfile');
@@ -67,7 +67,7 @@ class Settings_AvatarController extends Settings_SettingsController
 
                 $message = _('Die Bilddatei wurde erfolgreich hochgeladen. '
                             .'Eventuell sehen Sie das neue Bild erst, nachdem Sie diese Seite '
-                            .'neu geladen haben (in den meisten Browsern F5 drücken).');
+                            .'neu geladen haben (in den meisten Browsern F5 drÃ¼cken).');
                 PageLayout::postSuccess($message);
 
                 setTempLanguage($this->user->user_id);

@@ -14,7 +14,7 @@
     <? if (isset($attachments) && count($attachments)) : ?>
     <hr>
     <span class="minor">
-      <?=_("Dateianhänge:")?>
+      <?=_("DateianhÃ¤nge:")?>
         <ul>
         <? foreach($attachments as $attachment) : ?>
        	  <li>

@@ -1,7 +1,7 @@
 <? SkipLinks::addIndex(_("Wartelisten"), 'my_waitlists') ?>
 <table class="default collapsable" id="my_waitlists">
     <caption>
-        <?= _("Anmelde- und Wartelisteneinträge") ?>
+        <?= _("Anmelde- und WartelisteneintrÃ¤ge") ?>
     </caption>
     <colgroup class="hidden-small-down">
         <col width="1px">
@@ -32,7 +32,7 @@
 
         // wir sind in einer Anmeldeliste und brauchen Prozentangaben
         if ($wait["status"] == "claiming") {
-            // Grün der Farbe nimmt mit Wahrscheinlichkeit ab
+            // GrÃ¼n der Farbe nimmt mit Wahrscheinlichkeit ab
             $chance_color = dechex(55 + $wait['admission_chance'] * 2);
         } // wir sind in einer Warteliste
         else {

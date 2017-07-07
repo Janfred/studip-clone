@@ -62,11 +62,11 @@
                     <? if ($perm->havePermCreate()) : ?>
                         <? $actionMenu->addButton(
                                 'delete',
-                                _('Version löschen'),
+                                _('Version lÃ¶schen'),
                                 Icon::create('trash', 'clickable',
-                                        ['title'        => _('Version löschen'),
+                                        ['title'        => _('Version lÃ¶schen'),
                                          'formaction'   => $controller->url_for('/delete_version/' . $version->id),
-                                         'data-confirm' => sprintf(_('Wollen Sie wirklich die Version "%s" des Studiengangteils löschen?'),
+                                         'data-confirm' => sprintf(_('Wollen Sie wirklich die Version "%s" des Studiengangteils lÃ¶schen?'),
                                                  htmlReady($version->getDisplayName()))]))
                         ?>
                     <? endif; ?>

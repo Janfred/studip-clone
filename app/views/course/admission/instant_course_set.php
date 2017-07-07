@@ -7,7 +7,7 @@
 <input type="hidden" name="rule_id" value="<?=htmlReady($rule_id)?>">
 <?= $rule_template ?>
     <br>
-<label class="caption"><?= _("Name für diese Anmelderegel")?></label>
+<label class="caption"><?= _("Name fÃ¼r diese Anmelderegel")?></label>
 <input type="text" name="instant_course_set_name" size="70" value="<?= htmlReady($course_set_name) ?>">
 <div data-dialog-button>
     <?= Studip\Button::create(_("Speichern"), 'save', array('data-dialog' => ''))?>

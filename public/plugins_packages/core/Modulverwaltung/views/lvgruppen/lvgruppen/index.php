@@ -41,8 +41,8 @@
 
                     <? $actionMenu->addLink(
                         $controller->url_for('shared/log_event/show/Lvgruppe/' . $lvgruppe->id),
-                        _('Log-Einträge dieser Lehrveranstaltungsgruppe'),
-                        Icon::create('log', 'clickable', ['title' => _('Log-Einträge dieser Lehrveranstaltungsgruppe')]),
+                        _('Log-EintrÃ¤ge dieser Lehrveranstaltungsgruppe'),
+                        Icon::create('log', 'clickable', ['title' => _('Log-EintrÃ¤ge dieser Lehrveranstaltungsgruppe')]),
                         ['data-dialog' => 'size=auto']
                     ) ?>
                 <? endif; ?>
@@ -50,8 +50,8 @@
                     <? if ($lvgruppe->count_semester == 0 && $lvgruppe->count_modulteile == 0): ?>
                         <? $actionMenu->addLink(
                             $controller->url_for('/delete', $lvgruppe->id),
-                            _('Lehrveranstaltungsgruppe löschen'),
-                            Icon::create('trash', 'clickable', ['title' => _('Lehrveranstaltungsgruppe löschen')])
+                            _('Lehrveranstaltungsgruppe lÃ¶schen'),
+                            Icon::create('trash', 'clickable', ['title' => _('Lehrveranstaltungsgruppe lÃ¶schen')])
                         ) ?>
                     <? endif; ?>
                 <? endif; ?>

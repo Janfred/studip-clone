@@ -3,7 +3,7 @@
 
 /*
  * Copyright (C) 2009 - Marcus Lunzenauer <mlunzena@uos.de>
- * André Noack <noack@data-quest.de>
+ * AndrÃ© Noack <noack@data-quest.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -31,7 +31,7 @@ class Institute_AvatarController extends AuthenticatedController
         }
 
         $this->body_id = 'custom_avatar';
-        PageLayout::setTitle(Context::getHeaderLine() . ' - ' . _('Bild ändern'));
+        PageLayout::setTitle(Context::getHeaderLine() . ' - ' . _('Bild Ã¤ndern'));
 
         Navigation::activateItem('/admin/institute/details');
     }
@@ -71,7 +71,7 @@ class Institute_AvatarController extends AuthenticatedController
     {
         InstituteAvatar::getAvatar($this->institute_id)->reset();
 
-        PageLayout::postMessage(MessageBox::success(_('Das Infobild wurde gelöscht.')));
+        PageLayout::postMessage(MessageBox::success(_('Das Infobild wurde gelÃ¶scht.')));
         $this->redirect(URLHelper::getUrl('dispatch.php/institute/basicdata/index/' . $this->institute_id));
     }
 }

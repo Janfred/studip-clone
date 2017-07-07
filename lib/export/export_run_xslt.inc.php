@@ -69,7 +69,7 @@ global $ex_type, $o_mode, $xml_file_id, $format, $choose, $xslt_files, $export_e
             OR (!in_array($o_mode,  $export_o_modes))
             OR (!$xslt_files[$choose][$format]))
     {
-        $export_error .= "<b>" . _("Unzulässiger Seitenaufruf!") . "</b><br>";
+        $export_error .= "<b>" . _("UnzulÃ¤ssiger Seitenaufruf!") . "</b><br>";
         $export_error_num++;
         return false;
     }
@@ -145,9 +145,9 @@ if (!CheckParamRUN()) {
         $export_weiter_button .= "<input type=\"hidden\" name=\"xml_file_id\" value=\"" . htmlReady($xml_file_id) . "\">";
         $export_weiter_button .= "<input type=\"hidden\" name=\"xslt_filename\" value=\"" . htmlReady($xslt_filename) . "\">";
         if (Request::option('jump'))
-            $export_weiter_button .= '<center>' . LinkButton::create('<< ' . _('Zurück'), URLHelper::getURL('seminar_main.php', array('auswahl' => $range_id, 'redirect_to' => $jump))) . "<br>";
+            $export_weiter_button .= '<center>' . LinkButton::create('<< ' . _('ZurÃ¼ck'), URLHelper::getURL('seminar_main.php', array('auswahl' => $range_id, 'redirect_to' => $jump))) . "<br>";
         else
-            $export_weiter_button .= "<center>" . Button::create('<< ' . _('Zurück'), 'back') . "<br>";
+            $export_weiter_button .= "<center>" . Button::create('<< ' . _('ZurÃ¼ck'), 'back') . "<br>";
         $export_weiter_button .= "</center></form>";
 
         if ($xslt_process) {
@@ -163,14 +163,14 @@ if (!CheckParamRUN()) {
         $xml_printimage.= '</a>';
         $xml_printlink = ' <a href="'. FileManager::getDownloadLinkForTemporaryFile($xml_file_id, $xml_filename) . '" class="tree">' . htmlReady($xml_filename) . '</a>';
         $xml_printdesc = _("XML-Daten");
-        $xml_printcontent = _("In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags können mit einem XSLT-Script verarbeitet werden.") . '<br>';
+        $xml_printcontent = _("In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags kÃ¶nnen mit einem XSLT-Script verarbeitet werden.") . '<br>';
 
         $xslt_printimage = ' <a href="'. FileManager::getDownloadLinkForTemporaryFile($xslt_files[$choose]['file'], $xslt_files[$choose]['name'].'.xsl') . '">';
         $xslt_printimage.= Icon::create($export_icon['xslt'], 'clickable')->asImg(['class' => 'text-top']);
         $xslt_printimage.= '</a>';
         $xslt_printlink = ' <a href="' . FileManager::getDownloadLinkForTemporaryFile($xslt_files[$choose]['file'], $xslt_files[$choose]['name'].'.xsl') .  '" class="tree"> ' . $xslt_files[$choose]['name'] . '.xsl</a>';
         $xslt_printdesc = _("XSLT-Datei");
-        $xslt_printcontent = _("Dies ist das XSLT-Script zur Konvertierung der Daten. Klicken Sie auf den Dateinamen, um die Datei zu öffnen.") . '<br>';
+        $xslt_printcontent = _("Dies ist das XSLT-Script zur Konvertierung der Daten. Klicken Sie auf den Dateinamen, um die Datei zu Ã¶ffnen.") . '<br>';
 
         if ($xslt_process) {
             $result_printimage = '<a href="'. FileManager::getDownloadLinkForTemporaryFile($result_file, $xslt_filename .'.'. $format) . '">';

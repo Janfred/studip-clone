@@ -1,8 +1,8 @@
 <? if ($selected_status || $selected_kategorie || $selected_abschluss || $selected_fachbereich || $selected_zuordnung || $selected_institut || $selected_semester != $default_semester) : ?>
 <div style="width: 100%; text-align: right;">
     <a href="<?= $action_reset ?>">
-        <?= Icon::create('refresh', 'clickable', array('title' => _('Filter zurücksetzen')))->asImg(); ?>
-        <?= _('Zurücksetzen') ?>
+        <?= Icon::create('refresh', 'clickable', array('title' => _('Filter zurÃ¼cksetzen')))->asImg(); ?>
+        <?= _('ZurÃ¼cksetzen') ?>
     </a>
 </div>
 <? endif; ?>
@@ -22,7 +22,7 @@
     <label>
         <?= _('Zugeordnet zu Objekten:') ?>
         <select name="zuordnung_filter" class="sidebar-selectlist submit-upon-select">
-            <option value=""><?= _('-- Objekt wählen --') ?></option>
+            <option value=""><?= _('-- Objekt wÃ¤hlen --') ?></option>
             <? foreach ($zuordnungen as $object_type => $zuordnung) : ?>
             <option value="<?= $object_type ?>"
                 <?= ($object_type == $selected_zuordnung ? ' selected' : '') ?>><?= htmlReady($object_type::getClassDisplayName()) ?></option>
@@ -34,7 +34,7 @@
     <label>
         <?= _('Status:') ?><br>
         <select name="status_filter" class="sidebar-selectlist submit-upon-select">
-            <option value=""><?= _('-- Status wählen --') ?></option>
+            <option value=""><?= _('-- Status wÃ¤hlen --') ?></option>
             <? foreach ($status_array as $key => $stat) : ?>
             <? if ($status[$key]['count_objects']) : ?>
             <option value="<?= $key ?>"
@@ -51,7 +51,7 @@
     <label>
         <?= _('Kategorie:') ?><br>
         <select name="kategorie_filter" class="sidebar-selectlist submit-upon-select">
-            <option value=""><?= _('-- Kategorie wählen --') ?></option>
+            <option value=""><?= _('-- Kategorie wÃ¤hlen --') ?></option>
             <? foreach ($kategorien as $kategorie) : ?>
             <option value="<?= $kategorie->getId() ?>"
                 <?= ($kategorie->getId() == $selected_kategorie || (!isset($abschluesse) || $abschluesse[$selected_abschluss]->kategorie_id == $kategorie->getId()) ? ' selected' : '') ?>><?= htmlReady($kategorie->name) . ' (' . $kategorie->count_objects . ')'  ?></option>
@@ -63,7 +63,7 @@
     <label>
         <?= _('Abschluss:') ?><br>
         <select name="abschluss_filter" class="sidebar-selectlist" onChange="document.getElementById('index_filter').submit();">
-            <option value=""><?= _('-- Abschluss wählen --') ?></option>
+            <option value=""><?= _('-- Abschluss wÃ¤hlen --') ?></option>
             <? foreach ($abschluesse as $abschluss) : ?>
             <option value="<?= $abschluss->getId() ?>"<?= ($abschluss->getId() == $selected_abschluss ? ' selected' : '') ?>><?= htmlReady($abschluss->name) . ' (' . $abschluss->count_objects . ')' ?></option>
             <? endforeach; ?>
@@ -76,7 +76,7 @@
         <label>
             <?= _('Verantw. Einrichtung:') ?><br>
             <select name="institut_filter" class="sidebar-selectlist nested-select submit-upon-select">
-                <option value=""><?= _('-- Einrichtung wählen --') ?></option>
+                <option value=""><?= _('-- Einrichtung wÃ¤hlen --') ?></option>
                 <? $fak = '' ?>
                 <? foreach ($institute as $institut) : ?>
                     <?
@@ -121,7 +121,7 @@
         <label>
             <?= $fachbereich_caption ?: _('Fachbereiche:') ?><br>
             <select name="fachbereich_filter" class="sidebar-selectlist submit-upon-select">
-                <option value=""><?= _('-- Fachbereich wählen --') ?></option>
+                <option value=""><?= _('-- Fachbereich wÃ¤hlen --') ?></option>
                 <? foreach ($fachbereiche as $fachbereich) : ?>
                     <? if (count($perm_institutes) == 0
                             || in_array($fachbereich->getId(), $perm_institutes)) : ?>

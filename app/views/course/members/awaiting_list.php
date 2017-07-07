@@ -35,7 +35,7 @@
             <tr class="sortable">
             <? if (!$is_locked) : ?>
                 <th>
-                    <input aria-label="<?= _('NutzerInnen auswählen') ?>"
+                    <input aria-label="<?= _('NutzerInnen auswÃ¤hlen') ?>"
                            type="checkbox" name="all" value="1" data-proxyfor=":checkbox[name^=awaiting]">
                 </th>
             <? endif ?>
@@ -60,7 +60,7 @@
                     <? if ($waiting_type === 'awaiting'): ?>
                         <?= _('Position') ?>
                     <? else: ?>
-                        <?= _('Priorität') ?>
+                        <?= _('PrioritÃ¤t') ?>
                     <? endif; ?>
                     </a>
                 </th>
@@ -75,7 +75,7 @@
             <tr>
             <? if (!$is_locked) : ?>
                 <td>
-                    <input aria-label="<?= _('Alle NutzerInnen auswählen') ?>" type="checkbox"
+                    <input aria-label="<?= _('Alle NutzerInnen auswÃ¤hlen') ?>" type="checkbox"
                            name="awaiting[<?= $waiting['user_id'] ?>]" value="1">
                         </td>
             <? endif ?>
@@ -128,8 +128,8 @@
         <tfoot>
             <tr>
                 <td colspan="6">
-                    <select name="action_awaiting" id="action_awaiting" aria-label="<?= _('Aktion ausführen') ?>">
-                        <option value="">- <?= _('Aktion wählen') ?></option>
+                    <select name="action_awaiting" id="action_awaiting" aria-label="<?= _('Aktion ausfÃ¼hren') ?>">
+                        <option value="">- <?= _('Aktion wÃ¤hlen') ?></option>
                         <option value="upgrade_autor">
                             <?= sprintf(_('Zu %s hochstufen'), htmlReady($status_groups['autor'])) ?>
                         </option>
@@ -141,7 +141,7 @@
 <!--                    <option value="copy_to_sem"><?= _('In Seminar verschieben/kopieren') ?></option>-->
                     </select>
                     <input type="hidden" value="<?= $waiting_type ?>" name="waiting_type"/>
-                    <?= Button::create(_('Ausführen'), 'submit_awaiting') ?>
+                    <?= Button::create(_('AusfÃ¼hren'), 'submit_awaiting') ?>
                 </td>
             </tr>
         </tfoot>

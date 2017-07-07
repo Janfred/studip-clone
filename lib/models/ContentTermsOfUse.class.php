@@ -105,7 +105,7 @@ class ContentTermsOfUse extends SimpleORMap
         return [
             0 => _('Ohne Bedingung'),
             1 => _('Nur innerhalb geschlossene Gruppen erlaubt'),
-            2 => _('Nur für EigentümerIn erlaubt'),
+            2 => _('Nur fÃ¼r EigentÃ¼merIn erlaubt'),
         ];
     }
 
@@ -154,7 +154,7 @@ class ContentTermsOfUse extends SimpleORMap
             );
         }
         if (!$this->name) {
-            $errors[] = _('Es wurde kein Name für den Eintrag gesetzt!');
+            $errors[] = _('Es wurde kein Name fÃ¼r den Eintrag gesetzt!');
         }
         return $errors;
     }

@@ -9,7 +9,7 @@
 // StudipSemTreeViewSimple.class.php
 // Class to print out the seminar tree
 //
-// Copyright (c) 2003 André Noack <noack@data-quest.de>
+// Copyright (c) 2003 AndrÃ© Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -32,7 +32,7 @@
 * This class prints out a html representation a part of the tree
 *
 * @access   public
-* @author   André Noack <noack@data-quest.de>
+* @author   AndrÃ© Noack <noack@data-quest.de>
 * @package
 */
 class StudipSemTreeViewSimple
@@ -74,7 +74,7 @@ class StudipSemTreeViewSimple
         echo "<td nowrap class=\"table_row_odd\" align=\"right\" valign=\"top\" style=\"padding-top: 1em;\">";
         if ($this->start_item_id != "root"){
             echo "\n<a href=\"" .URLHelper::getLink($this->getSelf("start_item_id={$this->tree->tree_data[$this->start_item_id]['parent_id']}", false)) . "\">".
-            Icon::create('arr_2left', 'clickable')->asImg(['class' => 'text-top', 'title' =>_('eine Ebene zurück')]). "</a>";
+            Icon::create('arr_2left', 'clickable')->asImg(['class' => 'text-top', 'title' =>_('eine Ebene zurÃ¼ck')]). "</a>";
         } else {
             echo "&nbsp;";
         }
@@ -105,7 +105,7 @@ class StudipSemTreeViewSimple
             $num_entries = $this->tree->getNumEntries($kids[$i],true);
                 $num_all_entries += $num_entries;
             }
-            echo "<li><a " . ($num_entries ? tooltip(sprintf(_("%s Einträge in allen Unterebenen vorhanden"), $num_entries), false) : '') . " href=\"" .URLHelper::getLink($this->getSelf("start_item_id={$kids[$i]}", false)) . "\">";
+            echo "<li><a " . ($num_entries ? tooltip(sprintf(_("%s EintrÃ¤ge in allen Unterebenen vorhanden"), $num_entries), false) : '') . " href=\"" .URLHelper::getLink($this->getSelf("start_item_id={$kids[$i]}", false)) . "\">";
             echo htmlReady($this->tree->getValue($kids[$i], 'name'));
             if ($num_entries) echo " ($num_entries)";
             echo "</a></li>";
@@ -139,14 +139,14 @@ class StudipSemTreeViewSimple
         if ($item_id != "root"){
             if ($this->tree->hasKids($item_id) && $num_all_entries){
                 if ($this->show_entries != "sublevels"){
-                    if ($num_all_entries <= 100) echo "<a " . tooltip(_("alle Einträge in allen Unterebenen anzeigen"), false) ." href=\"" . URLHelper::getLink($this->getSelf("cmd=show_sem_range&item_id={$this->start_item_id}_withkids")) ."\">";
+                    if ($num_all_entries <= 100) echo "<a " . tooltip(_("alle EintrÃ¤ge in allen Unterebenen anzeigen"), false) ." href=\"" . URLHelper::getLink($this->getSelf("cmd=show_sem_range&item_id={$this->start_item_id}_withkids")) ."\">";
                     echo Icon::create('arr_1right', 'clickable')->asImg();
                     echo '&nbsp;';
                 } else {
                     echo Icon::create('arr_1down', 'clickable')->asImg();
                     echo '&nbsp;';
                 }
-                printf(_("<b>%s</b> Einträge in allen Unterebenen vorhanden"), $num_all_entries);
+                printf(_("<b>%s</b> EintrÃ¤ge in allen Unterebenen vorhanden"), $num_all_entries);
                 if ($this->show_entries != "sublevels"){
                     echo "</a>";
                 }
@@ -154,19 +154,19 @@ class StudipSemTreeViewSimple
             }
             if ($num_entries = $this->tree->getNumEntries($item_id)){
                 if ($this->show_entries != "level"){
-                    echo "<a " . tooltip(_("alle Einträge auf dieser Ebene anzeigen"), false) ." href=\"" . URLHelper::getLink($this->getSelf("cmd=show_sem_range&item_id=$item_id")) ."\">";
+                    echo "<a " . tooltip(_("alle EintrÃ¤ge auf dieser Ebene anzeigen"), false) ." href=\"" . URLHelper::getLink($this->getSelf("cmd=show_sem_range&item_id=$item_id")) ."\">";
                     echo Icon::create('arr_1right', 'clickable')->asImg();
                     echo '&nbsp;';
                 } else {
                     echo Icon::create('arr_1down', 'clickable')->asImg();
                     echo '&nbsp;';
                 }
-                printf(_("<b>%s</b> Einträge auf dieser Ebene.&nbsp;"),$num_entries);
+                printf(_("<b>%s</b> EintrÃ¤ge auf dieser Ebene.&nbsp;"),$num_entries);
                 if ($this->show_entries != "level"){
                     echo "</a>";
                 }
             } else {
-                    echo _("Keine Einträge auf dieser Ebene vorhanden!");
+                    echo _("Keine EintrÃ¤ge auf dieser Ebene vorhanden!");
             }
         }
         echo "\n</div>";

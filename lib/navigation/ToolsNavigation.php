@@ -44,12 +44,12 @@ class ToolsNavigation extends Navigation
         $username = $auth->auth['uname'];
 
         // news
-        $navigation = new Navigation(_('Ankündigungen'), 'dispatch.php/news/admin_news');
+        $navigation = new Navigation(_('AnkÃ¼ndigungen'), 'dispatch.php/news/admin_news');
         $this->addSubNavigation('news', $navigation);
 
         // votes and tests, evaluations
         if (get_config('VOTE_ENABLE')) {
-            $navigation = new Navigation(_('Fragebögen'), URLHelper::getURL("dispatch.php/questionnaire/overview"));
+            $navigation = new Navigation(_('FragebÃ¶gen'), URLHelper::getURL("dispatch.php/questionnaire/overview"));
             $this->addSubNavigation('questionnaire', $navigation);
 
             $navigation = new Navigation(_('Evaluationen'), 'admin_evaluation.php', array('rangeID' => $username));
@@ -59,9 +59,9 @@ class ToolsNavigation extends Navigation
         // literature
         if (get_config('LITERATURE_ENABLE')) {
             if ($perm->have_perm('admin')) {
-                $navigation = new Navigation(_('Literaturübersicht'), 'admin_literatur_overview.php');
+                $navigation = new Navigation(_('LiteraturÃ¼bersicht'), 'admin_literatur_overview.php');
                 $this->addSubNavigation('literature', $navigation);
-                $navigation->addSubNavigation('overview', new Navigation(_('Literaturübersicht'), 'admin_literatur_overview.php'));
+                $navigation->addSubNavigation('overview', new Navigation(_('LiteraturÃ¼bersicht'), 'admin_literatur_overview.php'));
                 $navigation->addSubNavigation('edit_list', new Navigation(_('Literatur bearbeiten'), 'dispatch.php/literature/edit_list?_range_id=self'));
                 $navigation->addSubNavigation('search', new Navigation(_('Literatur suchen'), 'dispatch.php/literature/search?return_range=self'));
             } elseif (get_config('LITERATURE_ENABLE')) {
@@ -89,7 +89,7 @@ class ToolsNavigation extends Navigation
             $this->addSubNavigation('coursesets', $navigation);
             $navigation->addSubNavigation('sets', new Navigation(_('Anmeldesets verwalten'), 'dispatch.php/admission/courseset/index'));
             $navigation->addSubNavigation('userlists', new Navigation(_('Personenlisten'), 'dispatch.php/admission/userlist/index'));
-            $navigation->addSubNavigation('restricted_courses', new Navigation(_('teilnahmebeschränkte Veranstaltungen'), 'dispatch.php/admission/restricted_courses'));
+            $navigation->addSubNavigation('restricted_courses', new Navigation(_('teilnahmebeschrÃ¤nkte Veranstaltungen'), 'dispatch.php/admission/restricted_courses'));
         }
 
     }

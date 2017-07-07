@@ -7,7 +7,7 @@ use Studip\Button, Studip\LinkButton;
 
     <fieldset>
         <legend>
-            <?= sprintf(_('Einen neuen Datentyp für die Kategorie "%s" erstellen'), $type_name) ?>
+            <?= sprintf(_('Einen neuen Datentyp fÃ¼r die Kategorie "%s" erstellen'), $type_name) ?>
         </legend>
 
         <label>
@@ -78,7 +78,7 @@ use Studip\Button, Studip\LinkButton;
         </label>
 
         <label>
-            <?= _('benötigter Status') ?>
+            <?= _('benÃ¶tigter Status') ?>
 
             <select name="edit_perms">
             <? foreach (array_keys($controller->user_status) as $perm): ?>
@@ -100,8 +100,8 @@ use Studip\Button, Studip\LinkButton;
     <? if ($object_typ === 'user') :?>
         <label>
             <?= _('Systemfeld') ?>
-            <?= tooltipIcon(_('Nur für die Person selbst sichtbar, wenn der '
-                            . 'benötigte Status zum Bearbeiten oder die '
+            <?= tooltipIcon(_('Nur fÃ¼r die Person selbst sichtbar, wenn der '
+                            . 'benÃ¶tigte Status zum Bearbeiten oder die '
                             . 'Sichtbarkeit ausreichend ist')) ?>
 
             <input type="hidden" name="system" value="0">
@@ -135,7 +135,7 @@ use Studip\Button, Studip\LinkButton;
     <? endif; ?>
     <? if ($object_typ === 'user'): ?>
         <label>
-            <?= _('Mögliche Bedingung für Anmelderegel') ?>
+            <?= _('MÃ¶gliche Bedingung fÃ¼r Anmelderegel') ?>
 
             <input type="checkbox" name="is_userfilter" value="1"
                    <? if ($this->flash['request']['is_userfilter']) echo 'checked'; ?>>
@@ -145,6 +145,6 @@ use Studip\Button, Studip\LinkButton;
 
     <footer data-dialog-button>
         <?= Button::createAccept(_('Anlegen'), 'anlegen', array('title' => _('Neues Datenfeld anlegen'))) ?>
-        <?= LinkButton::createCancel(_('Abbrechen'), $controller->url_for('admin/datafields'), array('title' => _('Zurück zur Übersicht'))) ?>
+        <?= LinkButton::createCancel(_('Abbrechen'), $controller->url_for('admin/datafields'), array('title' => _('ZurÃ¼ck zur Ãœbersicht'))) ?>
     </footer>
 </form>

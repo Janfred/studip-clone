@@ -8,7 +8,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      André Noack <noack@data-quest.de>
+ * @author      AndrÃ© Noack <noack@data-quest.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
  */
@@ -36,7 +36,7 @@ class DatafieldCondition extends UserFilterField
     {
         $this->validCompareOperators = array(
             '>=' => _('mindestens'),
-            '<=' => _('höchstens'),
+            '<=' => _('hÃ¶chstens'),
             '=' => _('ist'),
             '!=' => _('ist nicht')
         );

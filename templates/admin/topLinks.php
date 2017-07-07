@@ -19,7 +19,7 @@
     <div style="float: left;">
         <a href="<?= URLHelper::getLink("?#admin_top_links", array('cid' => $adminList[$last_one]['Seminar_id'])) ?>" title="<?= htmlReady($adminList[$last_one]['Name']) ?>">
             <?= Icon::create('arr_1left', 'clickable')->asImg(['class' => "text-bottom"]) ?>
-            <?= _("zurück") ?>
+            <?= _("zurÃ¼ck") ?>
         </a>
     </div>
     <? endif ?>

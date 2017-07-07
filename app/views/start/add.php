@@ -1,4 +1,4 @@
-<h2 class="hide-in-dialog"><?= _('Neues Widgets zur Startseite hinzufügen') ?></h2>
+<h2 class="hide-in-dialog"><?= _('Neues Widgets zur Startseite hinzufÃ¼gen') ?></h2>
 <form action="<?= $controller->url_for('start/add') ?>" method="post">
     <input type="hidden" name="studip_ticket" value="<?= get_ticket() ?>">
     <input type="hidden" name="position" value="0">
@@ -19,7 +19,7 @@
     </ul>
     
     <div data-dialog-button>
-        <?= Studip\Button::createAccept(_('Hinzufügen')) ?>
+        <?= Studip\Button::createAccept(_('HinzufÃ¼gen')) ?>
         <?= Studip\LinkButton::createCancel(_('Abbrechen'), $controller->url_for('start')) ?>
     </div>
 </form>

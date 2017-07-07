@@ -50,7 +50,7 @@ class ExternElementMainNewsticker extends ExternElementMain {
                 'name', 'rows', 'length', 'pause', 'frequency',
                 'starttext', 'endtext', 'nodatatext', 'automaticstart', 'jsonly', 'style');
         $this->real_name = _("Grundeinstellungen");
-        $this->description = _("In den Grundeinstellungen können Sie allgemeine Daten des Moduls ändern.");
+        $this->description = _("In den Grundeinstellungen kÃ¶nnen Sie allgemeine Daten des Moduls Ã¤ndern.");
         parent::__construct($module_name, $data_fields, $field_names, $config);
     }
 
@@ -104,11 +104,11 @@ class ExternElementMainNewsticker extends ExternElementMain {
         $table = $edit_form->editTextfieldGeneric("frequency", $title, $info, 2, 2);
 
         $title = _("Pause zwischen News:");
-        $info = _("Geben Sie an, wie lange der Ticker warten soll (in Millisekunden), bis er die nächste News ausgibt.");
+        $info = _("Geben Sie an, wie lange der Ticker warten soll (in Millisekunden), bis er die nÃ¤chste News ausgibt.");
         $table .= $edit_form->editTextfieldGeneric("pause", $title, $info, 4, 4);
 
         $title = _("Text am Anfang der Ausgabe:");
-        $info = _("Dieser Text wird ausgegeben, während die News in den Ticker geladen werden, also am Anfang des ersten Durchlaufs.");
+        $info = _("Dieser Text wird ausgegeben, wÃ¤hrend die News in den Ticker geladen werden, also am Anfang des ersten Durchlaufs.");
         $table .= $edit_form->editTextfieldGeneric("starttext", $title, $info, 50, 200);
 
         $title = _("Text am Ende der Ausgabe:");
@@ -116,15 +116,15 @@ class ExternElementMainNewsticker extends ExternElementMain {
         $table .= $edit_form->editTextfieldGeneric("endtext", $title, $info, 50, 200);
 
         $title = _("Keine News:");
-        $info = _("Dieser Text wird ausgegeben, wenn keine News verfügbar sind.");
+        $info = _("Dieser Text wird ausgegeben, wenn keine News verfÃ¼gbar sind.");
         $table .= $edit_form->editTextfieldGeneric("nodatatext", $title, $info, 50, 200);
 
         $title = _("Ticker sofort starten?");
-        $info = _("Wählen Sie diese Option, wenn das Modul den Ticker automatisch starten soll. Bei längeren Ladezeiten der Seite, in der Sie den Ticker integriert haben, kann es sinnvoll sein, den Ticker erst zu starten, wenn die Seite komplett geladen ist. Deaktivieren Sie dafür diese Option, und tragen Sie im <body>-Tag der Seite das Attribut onLoad=\"newsticker\" ein.");
+        $info = _("WÃ¤hlen Sie diese Option, wenn das Modul den Ticker automatisch starten soll. Bei lÃ¤ngeren Ladezeiten der Seite, in der Sie den Ticker integriert haben, kann es sinnvoll sein, den Ticker erst zu starten, wenn die Seite komplett geladen ist. Deaktivieren Sie dafÃ¼r diese Option, und tragen Sie im <body>-Tag der Seite das Attribut onLoad=\"newsticker\" ein.");
         $table .= $edit_form->editCheckboxGeneric("automaticstart", $title, $info, "1", "");
 
         $title = _("Nur JavaScript-Funktion ausgeben?");
-        $info = _("Wählen Sie diese Option, wenn das Modul nur die JavaScript-Funktion ausgeben soll. Die Funktionsname ist newsticker(). Sie kann z.B. innerhalb von <textarea> eingesetzt werden. Beispiel:");
+        $info = _("WÃ¤hlen Sie diese Option, wenn das Modul nur die JavaScript-Funktion ausgeben soll. Die Funktionsname ist newsticker(). Sie kann z.B. innerhalb von <textarea> eingesetzt werden. Beispiel:");
         $info .= "\n<!DOCTYPE html>\n";
         $info .= "<html>\n\t<head>\n\t\t";
         $info .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n";

@@ -36,7 +36,7 @@ class Tic6188ViewResourceOccupation extends Migration
             ':field' => 'RESOURCES_ALLOW_VIEW_RESOURCE_OCCUPATION',
             ':value' => '1',
             ':type'  => 'boolean',
-            ':description' => 'Dürfen alle Nutzer Ressourcenbelegungen einsehen?',
+            ':description' => 'DÃ¼rfen alle Nutzer Ressourcenbelegungen einsehen?',
         ));
     }
 

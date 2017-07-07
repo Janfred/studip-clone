@@ -3,7 +3,7 @@
 <table class="default nohover">
     <thead>
         <tr>
-            <th><?= _('Fächer') ?></th>
+            <th><?= _('FÃ¤cher') ?></th>
         <? foreach ($teilNamen as $teilName): ?>
             <th style="text-align: center;"><?= htmlReady($teilName) ?></th>
         <? endforeach; ?>

@@ -28,7 +28,7 @@ class SendMailQueueJob extends CronJob
      */
     public static function getDescription()
     {
-        return _('Sendet alle Einträge in der Mailqueue bis zu 24 Stunden, nachdem sie hinzugefügt wurden.');
+        return _('Sendet alle EintrÃ¤ge in der Mailqueue bis zu 24 Stunden, nachdem sie hinzugefÃ¼gt wurden.');
     }
 
     /**

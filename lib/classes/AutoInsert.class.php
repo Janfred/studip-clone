@@ -5,7 +5,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      Nico Müller <nico.mueller@uni-oldenburg.de>
+ * @author      Nico MÃ¼ller <nico.mueller@uni-oldenburg.de>
  * @author      Michael Riehemann <michael.riehemann@uni-oldenburg.de>
  * @author      Jan Hendrik Willms <jan.hendrik.willms@uni-oldenburg.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
@@ -82,7 +82,7 @@ class AutoInsert
     }
     
     /**
-     * Trägt den Benutzer in den Eingestellten veranstaltungen automatisch ein.
+     * TrÃ¤gt den Benutzer in den Eingestellten veranstaltungen automatisch ein.
      * @param type $user_id
      * @param type $status Wenn Status nicht angegeben wird, wird der Status des Users aus user_id genommen
      * @return array 'added' Namen der Seminare in die der User eingetragen wurde

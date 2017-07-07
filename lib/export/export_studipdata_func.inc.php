@@ -276,7 +276,7 @@ function export_inst($inst_id, $ex_sem_id = "all")
     default:
         echo "</td></tr>";
         echo '<tr><td>';
-        echo MessageBox::error(_('Der gew‰hlte Exportmodus wird nicht unterst¸tzt.'));
+        echo MessageBox::error(_('Der gew√§hlte Exportmodus wird nicht unterst√ºtzt.'));
         echo '</td></tr>';
         echo "</table></td></tr></table>";
         die();
@@ -544,7 +544,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
                     'tutor'    => _('Tutor/-innen'),
                     'autor'    => _('Studierende'),
                     'user'     => _('Leser/-innen'),
-                    'accepted' => _('Vorl‰ufig akzeptierte Personen')
+                    'accepted' => _('Vorl√§ufig akzeptierte Personen')
                 );
             } else {
                 $gruppe = array(
@@ -552,7 +552,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
                     'tutor'    => _('Mitglieder'),
                     'autor'    => _('Autor/-innen'),
                     'user'     => _('Leser/-innen'),
-                    'accepted' => _('Vorl‰ufig akzeptierte Personen')
+                    'accepted' => _('Vorl√§ufig akzeptierte Personen')
                 );
             }
         } else {

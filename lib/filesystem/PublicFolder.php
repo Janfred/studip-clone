@@ -7,7 +7,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author    André Noack <noack@data-quest.de>
+ * @author    AndrÃ© Noack <noack@data-quest.de>
  * @copyright 2017 Stud.IP Core-Group
  * @license   http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category  Stud.IP
@@ -21,7 +21,7 @@ class PublicFolder extends StandardFolder
      */
     static public function getTypeName()
     {
-        return _('Ein Ordner für öffentlich zugängliche Daten');
+        return _('Ein Ordner fÃ¼r Ã¶ffentlich zugÃ¤ngliche Daten');
     }
 
     /**
@@ -118,7 +118,7 @@ class PublicFolder extends StandardFolder
         return $this->viewable ?
             _('Dateien aus diesem Ordner werden auf Ihrer Profilseite zum Donwload angeboten.')
             :
-         _('Dateien aus diesem Ordner sind für alle Stud.IP Nutzer zugreifbar.');
+         _('Dateien aus diesem Ordner sind fÃ¼r alle Stud.IP Nutzer zugreifbar.');
 
     }
 

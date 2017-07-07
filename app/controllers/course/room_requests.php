@@ -8,7 +8,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      AndrÈ Noack <noack@data-quest.de>
+ * @author      Andr√© Noack <noack@data-quest.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
  * @package     admin
@@ -99,7 +99,7 @@ class Course_RoomRequestsController extends AuthenticatedController
      */
     public function edit_action()
     {
-        Helpbar::get()->addPlainText(_('Information'), _('Hier kˆnnen Sie Angaben zu gew¸nschten Raumeigenschaften machen.'));
+        Helpbar::get()->addPlainText(_('Information'), _('Hier k√∂nnen Sie Angaben zu gew√ºnschten Raumeigenschaften machen.'));
 
         $request_was_closed_before = false;
 
@@ -146,7 +146,7 @@ class Course_RoomRequestsController extends AuthenticatedController
 
         if (Request::submitted('save') || Request::submitted('save_close')) {
             if (!($request->getSettedPropertiesCount() || $request->getResourceId())) {
-                PageLayout::postMessage(MessageBox::error(_("Die Anfrage konnte nicht gespeichert werden, da Sie mindestens einen Raum oder mindestens eine Eigenschaft (z.B. Anzahl der Sitzpl‰tze) angeben m¸ssen!")));
+                PageLayout::postMessage(MessageBox::error(_("Die Anfrage konnte nicht gespeichert werden, da Sie mindestens einen Raum oder mindestens eine Eigenschaft (z.B. Anzahl der Sitzpl√§tze) angeben m√ºssen!")));
             } else {
                 $request->setClosed(0);
                 if ($request_was_closed_before) {
@@ -157,7 +157,7 @@ class Course_RoomRequestsController extends AuthenticatedController
 
                 $this->request_stored = $request->store();
                 if ($this->request_stored) {
-                    PageLayout::postMessage(MessageBox::success(_("Die Raumanfrage und gew¸nschte Raumeigenschaften wurden gespeichert")));
+                    PageLayout::postMessage(MessageBox::success(_("Die Raumanfrage und gew√ºnschte Raumeigenschaften wurden gespeichert")));
                 }
                 if (Request::submitted('save_close')) {
                     if (!Request::isXhr()) {
@@ -176,7 +176,7 @@ class Course_RoomRequestsController extends AuthenticatedController
         }
 
         if (!$request->isNew() && $request->isDirty()) {
-            PageLayout::postMessage(MessageBox::info(_("Die ƒnderungen an der Raumanfrage wurden noch nicht gespeichert!")));
+            PageLayout::postMessage(MessageBox::info(_("Die √Ñnderungen an der Raumanfrage wurden noch nicht gespeichert!")));
         }
         $room_categories = array_values(array_filter(getResourcesCategories(), function ($a) { return $a["is_room"] == 1;}));
         if (!$request->getCategoryId() && count($room_categories) == 1) {
@@ -195,7 +195,7 @@ class Course_RoomRequestsController extends AuthenticatedController
         $actions->addLink(_('Bearbeitung abbrechen'), $this->link_for('index/' . $this->course_id), Icon::create('decline', 'clickable'));
 
         if (!$request->isNew() && (getGlobalPerms($GLOBALS['user']->id) == 'admin' || ($GLOBALS['perm']->have_perm('admin') && count(getMyRoomRequests(null, null, true, $request->getId()))))) {
-            $actions->addLink(_('Raumanfrage auflˆsen'),
+            $actions->addLink(_('Raumanfrage aufl√∂sen'),
                 URLHelper::getLink('resources.php', array('view'           => 'edit_request',
                                                           'single_request' => $request->getId()
                 )),
@@ -215,7 +215,7 @@ class Course_RoomRequestsController extends AuthenticatedController
                     $info_txt .= '<p>' . sprintf(_('Erstellt von: %s'), htmlReady($request->user->getFullname())) . '</p>';
                 }
                 $info_txt .= '<p>' . sprintf(_('Erstellt am: %s'), htmlReady(strftime('%x %H:%M', $request->mkdate))) . '</p>';
-                $info_txt .= '<p>' . sprintf(_('Letzte ƒnderung: %s'), htmlReady(strftime('%x %H:%M', $request->chdate))) . '</p>';
+                $info_txt .= '<p>' . sprintf(_('Letzte √Ñnderung: %s'), htmlReady(strftime('%x %H:%M', $request->chdate))) . '</p>';
                 $widget->addElement(new WidgetElement($info_txt));
             }
             Sidebar::Get()->addWidget($widget);
@@ -234,12 +234,12 @@ class Course_RoomRequestsController extends AuthenticatedController
         }
         if (!RoomRequest::existsByCourse($this->course_id)) {
             $options[] = array('value' => 'course',
-                               'name'  => _('alle regelm‰ﬂigen und unregelm‰ﬂigen Termine der Veranstaltung')
+                               'name'  => _('alle regelm√§√üigen und unregelm√§√üigen Termine der Veranstaltung')
             );
         }
         foreach (SeminarCycleDate::findBySeminar($this->course_id) as $cycle) {
             if (!RoomRequest::existsByCycle($cycle->getId())) {
-                $name = _("alle Termine einer regelm‰ﬂigen Zeit");
+                $name = _("alle Termine einer regelm√§√üigen Zeit");
                 $name .= ' (' . $cycle->toString('full') . ')';
                 $options[] = array('value' => 'cycle_' . $cycle->getId(), 'name' => $name);
             }
@@ -254,7 +254,7 @@ class Course_RoomRequestsController extends AuthenticatedController
         }
         $this->options = $options;
 
-        Helpbar::get()->addPlainText(_('Information'), _('Hier kˆnnen Sie festlegen, welche Art von Raumanfrage Sie erstellen mˆchten.'));
+        Helpbar::get()->addPlainText(_('Information'), _('Hier k√∂nnen Sie festlegen, welche Art von Raumanfrage Sie erstellen m√∂chten.'));
     }
 
     /**
@@ -270,13 +270,13 @@ class Course_RoomRequestsController extends AuthenticatedController
             $factory = new Flexi_TemplateFactory($this->dispatcher->trails_root . '/views/');
             $template = $factory->open('course/room_requests/_del.php');
             $template->action = $this->link_for('delete/' . $this->course_id, array('request_id' => $request->getid()));
-            $template->question = sprintf(_('Mˆchten Sie die Raumanfrage "%s" lˆschen?'), $request->getTypeExplained());
+            $template->question = sprintf(_('M√∂chten Sie die Raumanfrage "%s" l√∂schen?'), $request->getTypeExplained());
             $this->flash['message'] = $template->render();
         } else {
             CSRFProtection::verifyUnsafeRequest();
             if (Request::submitted('kill')) {
                 if ($request->delete()) {
-                    $this->flash['message'] = MessageBox::success("Die Raumanfrage wurde gelˆscht.");
+                    $this->flash['message'] = MessageBox::success("Die Raumanfrage wurde gel√∂scht.");
                 }
             }
         }

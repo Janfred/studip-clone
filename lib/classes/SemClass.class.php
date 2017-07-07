@@ -675,15 +675,15 @@ class SemClass implements ArrayAccess
 
         _("Hier finden Sie alle in Stud.IP registrierten Lehrveranstaltungen");
         _("Verwenden Sie diese Kategorie, um normale Lehrveranstaltungen anzulegen");
-        _("Hier finden Sie virtuelle Veranstaltungen zum Thema Forschung an der Universität");
-        _("In dieser Kategorie können Sie virtuelle Veranstaltungen für Forschungsprojekte anlegen.");
-        _("Hier finden Sie virtuelle Veranstaltungen zu verschiedenen Gremien an der Universität");
-        _("Um virtuelle Veranstaltungen für Uni-Gremien anzulegen, verwenden Sie diese Kategorie");
+        _("Hier finden Sie virtuelle Veranstaltungen zum Thema Forschung an der UniversitÃ¤t");
+        _("In dieser Kategorie kÃ¶nnen Sie virtuelle Veranstaltungen fÃ¼r Forschungsprojekte anlegen.");
+        _("Hier finden Sie virtuelle Veranstaltungen zu verschiedenen Gremien an der UniversitÃ¤t");
+        _("Um virtuelle Veranstaltungen fÃ¼r Uni-Gremien anzulegen, verwenden Sie diese Kategorie");
         _("Hier finden Sie virtuelle Veranstaltungen zu unterschiedlichen Themen");
-        _("Wenn Sie Veranstaltungen als Diskussiongruppen zu unterschiedlichen Themen anlegen möchten, verwenden Sie diese Kategorie.");
+        _("Wenn Sie Veranstaltungen als Diskussiongruppen zu unterschiedlichen Themen anlegen mÃ¶chten, verwenden Sie diese Kategorie.");
         _("Hier finden Sie verschiedene Arbeitsgruppen an der %s");
         _("Verwenden Sie diese Kategorie, um unterschiedliche Arbeitsgruppen anzulegen.");
-        _("Veranstaltungen dieser Kategorie dienen als Gruppierungselement, um die Zusammengehörigkeit von Veranstaltungen anderer Kategorien abzubilden.");
+        _("Veranstaltungen dieser Kategorie dienen als Gruppierungselement, um die ZusammengehÃ¶rigkeit von Veranstaltungen anderer Kategorien abzubilden.");
     }
 
 }

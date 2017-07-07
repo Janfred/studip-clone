@@ -38,9 +38,9 @@
             . " ORDER BY fullname ASC",
             _("Nutzer suchen"), "user_id");
         $mps = MultiPersonSearch::get("add_adressees")
-           ->setLinkText(_('Mehrere Adressaten hinzufügen'))
+           ->setLinkText(_('Mehrere Adressaten hinzufÃ¼gen'))
             //->setDefaultSelectedUser($defaultSelectedUser)
-            ->setTitle(_('Mehrere Adressaten hinzufügen'))
+            ->setTitle(_('Mehrere Adressaten hinzufÃ¼gen'))
             ->setExecuteURL(URLHelper::getURL("dispatch.php/messages/write"))
             ->setJSFunctionOnSubmit("STUDIP.Messages.add_adressees")
             ->setSearchObject($search_obj);
@@ -76,7 +76,7 @@
                 <a href="" onClick="STUDIP.Messages.toggleSetting('attachments'); return false;">
                     <?= Icon::create('staple', 'clickable')->asImg(40) ?>
                     <br>
-                    <strong><?= _("Anhänge") ?></strong>
+                    <strong><?= _("AnhÃ¤nge") ?></strong>
                 </a>
             </li>
         <? endif; ?>
@@ -106,7 +106,7 @@
 
 <? if ($GLOBALS['ENABLE_EMAIL_ATTACHMENTS']): ?>
     <div id="attachments" style="<?= $default_attachments ? '' : 'display: none;'?>">
-        <h4><?= _("Anhänge") ?></h4>
+        <h4><?= _("AnhÃ¤nge") ?></h4>
         <div>
             <ul class="files">
                 <li style="display: none;" class="file">

@@ -21,7 +21,7 @@ class SemesterSelectorWidget extends SelectWidget
      */
     public function __construct($url, $name = 'semester_id', $method = 'get')
     {
-        parent::__construct(_('Semester ausw‰hlen'), $url, $name, $method);
+        parent::__construct(_('Semester ausw√§hlen'), $url, $name, $method);
     }
 
     /**

@@ -3,12 +3,12 @@
 /**
  * tic4491_help_content.php
  *
- * Die Migration erzeugt die Tabelle für Texte in der Helpbar.
+ * Die Migration erzeugt die Tabelle fÃ¼r Texte in der Helpbar.
  *  
  * @category    Stud.IP
  * @version     3.1
  *
- * @author      Arne Schröder <schroeder@data-quest.de>
+ * @author      Arne SchrÃ¶der <schroeder@data-quest.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2 or later
  */
 

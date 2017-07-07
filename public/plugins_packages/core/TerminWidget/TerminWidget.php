@@ -2,7 +2,7 @@
 /*
  * TerminWidget.php - A portal plugin for dates
  *
- * Copyright (C) 2014 - AndrÈ Klaﬂen <klassen@elan-ev.de>
+ * Copyright (C) 2014 - Andr√© Kla√üen <klassen@elan-ev.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as

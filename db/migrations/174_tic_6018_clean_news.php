@@ -15,7 +15,7 @@ class Tic6018CleanNews extends Migration
             'type'        => 'integer',
             'range'       => 'global',
             'section'     => 'view',
-            'description' => 'Legt fest, wie sich News f¸r Anwender pr‰sentieren. (2 zeigt sowohl Autor als auch Zugriffszahlen an. 1 zeigt nur den Autor an. 0 blendet beides f¸r Benutzer aus.',
+            'description' => 'Legt fest, wie sich News f√ºr Anwender pr√§sentieren. (2 zeigt sowohl Autor als auch Zugriffszahlen an. 1 zeigt nur den Autor an. 0 blendet beides f√ºr Benutzer aus.',
         ));
     }
 

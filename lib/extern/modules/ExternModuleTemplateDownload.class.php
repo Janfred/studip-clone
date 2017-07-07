@@ -64,7 +64,7 @@ class ExternModuleTemplateDownload extends ExternModule {
                 _("Dateiname"),
                 _("Beschreibung"),
                 _("Datum"),
-                _("Größe"),
+                _("GrÃ¶ÃŸe"),
                 _("Upload durch")
         );
 
@@ -96,7 +96,7 @@ class ExternModuleTemplateDownload extends ExternModule {
     }
 
     function getMarkerDescription ($element_name) {
-        $markers['TemplateGeneric'][] = array('__GLOBAL__', _("Globale Variablen (gültig im gesamten Template)."));
+        $markers['TemplateGeneric'][] = array('__GLOBAL__', _("Globale Variablen (gÃ¼ltig im gesamten Template)."));
         $markers['TemplateGeneric'][] = array('###FILES-COUNT###', '');
         $markers['TemplateGeneric'][] = array('<!-- BEGIN DOWNLOAD -->', '');
         $markers['TemplateGeneric'][] = array('<!-- BEGIN NO-FILES -->', '');

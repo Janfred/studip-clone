@@ -11,14 +11,14 @@
             <input type="radio" name="action" value="room" checked="checked">
             <label style="display: inline;">
                 <select name="room" style="display: inline-block; width: 50%;" onFocus="jQuery('input[type=radio][name=action][value=room]').prop('checked', 'checked')">
-                    <option value="0">-- <?= _('Raum auswählen') ?> --</option>
+                    <option value="0">-- <?= _('Raum auswÃ¤hlen') ?> --</option>
                     <? while ($res = $resList->next()) : ?>
                         <option value="<?= $res['resource_id'] ?>">
-                            <?= my_substr(htmlReady($res["name"]), 0, 30) ?> <?= $seats[$res['resource_id']] ? '(' . $seats[$res['resource_id']] . ' ' . _('Sitzplätze') . ')' : '' ?>
+                            <?= my_substr(htmlReady($res["name"]), 0, 30) ?> <?= $seats[$res['resource_id']] ? '(' . $seats[$res['resource_id']] . ' ' . _('SitzplÃ¤tze') . ')' : '' ?>
                         </option>
                     <? endwhile; ?>
                 </select>
-                <?= Icon::create('room-clear', 'inactive', ['title' => _("Nur buchbare Räume anzeigen")])->asImg(16, ["class" => 'bookable_rooms_action', "data-name" => 'bulk_action']) ?>
+                <?= Icon::create('room-clear', 'inactive', ['title' => _("Nur buchbare RÃ¤ume anzeigen")])->asImg(16, ["class" => 'bookable_rooms_action', "data-name" => 'bulk_action']) ?>
             </label>
             </section>
 
@@ -43,7 +43,7 @@
 
         <label>
             <input type="radio" name="action" value="nochange" checked="checked">
-            <?= _('Keine Änderungen an den Raumangaben vornehmen') ?>
+            <?= _('Keine Ã„nderungen an den Raumangaben vornehmen') ?>
         </label>
     </fieldset>
 
@@ -52,7 +52,7 @@
         <label>
             <?= _('Art') ?>
             <select name="course_type" id="course_type" class="size-s">
-                <option><?=_('Bitte wählen')?></option>
+                <option><?=_('Bitte wÃ¤hlen')?></option>
                 <? foreach ($GLOBALS['TERMIN_TYP'] as $id => $value) : ?>
                     <option value="<?= $id ?>"><?= htmlReady($value['name']) ?></option>
                 <? endforeach ?>
@@ -61,11 +61,11 @@
     </fieldset>
 
     <fieldset class="collapsed">
-        <legend><?= _('Durchführende Lehrende') ?></legend>
+        <legend><?= _('DurchfÃ¼hrende Lehrende') ?></legend>
         <label>
             <select name="related_persons_action" id="related_persons_action">
-                <option value="">-- <?= _('Aktion auswählen') ?> --</option>
-                <option value="add">...<?= _('hinzufügen') ?></option>
+                <option value="">-- <?= _('Aktion auswÃ¤hlen') ?> --</option>
+                <option value="add">...<?= _('hinzufÃ¼gen') ?></option>
                 <option value="delete">...<?= _('entfernen') ?></option>
             </select>
         </label>
@@ -82,8 +82,8 @@
             <legend><?= _('Beteiligte Gruppen') ?></legend>
             <label>
                 <select name="related_groups_action" id="related_groups_action">
-                    <option value="">-- <?= _('Aktion auswählen') ?> --</option>
-                    <option value="add">...<?= _('hinzufügen') ?></option>
+                    <option value="">-- <?= _('Aktion auswÃ¤hlen') ?> --</option>
+                    <option value="add">...<?= _('hinzufÃ¼gen') ?></option>
                     <option value="delete">...<?= _('entfernen') ?></option>
                 </select>
             </label>
@@ -98,9 +98,9 @@
 
 
     <footer data-dialog-button>
-        <?= Studip\Button::createAccept(_('Änderungen speichern'), 'save') ?>
+        <?= Studip\Button::createAccept(_('Ã„nderungen speichern'), 'save') ?>
         <? if (Request::int('fromDialog')) : ?>
-            <?= Studip\LinkButton::create(_('Zurück zur Übersicht'), $controller->url_for('course/timesrooms/index'), array('data-dialog' => 'size=big')) ?>
+            <?= Studip\LinkButton::create(_('ZurÃ¼ck zur Ãœbersicht'), $controller->url_for('course/timesrooms/index'), array('data-dialog' => 'size=big')) ?>
         <? endif ?>
     </footer>
 </form>

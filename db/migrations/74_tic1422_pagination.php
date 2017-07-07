@@ -27,7 +27,7 @@ class Tic1422Pagination extends Migration
 
         $stmt->execute(array(
             'name' => 'ENTRIES_PER_PAGE',
-            'description' => 'Anzahl von Einträgen pro Seite',
+            'description' => 'Anzahl von EintrÃ¤gen pro Seite',
             'section' => 'global',
             'range' => 'global',
             'type' => 'integer',

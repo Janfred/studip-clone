@@ -118,12 +118,12 @@ class Module_ModuleController extends MVVController
 
             $helpbar = Helpbar::get();
             $widget = new HelpbarWidget();
-            $widget->addElement(new WidgetElement(sprintf(_('Sie legen ein neues Modul an. Das Modul muss zunächst in der Ausgabesprache <em>%s</em> angelegt werden.'),
+            $widget->addElement(new WidgetElement(sprintf(_('Sie legen ein neues Modul an. Das Modul muss zunÃ¤chst in der Ausgabesprache <em>%s</em> angelegt werden.'),
                         $GLOBALS['MVV_MODUL_DESKRIPTOR']['SPRACHE']['values'][$sprache]['name'])));
             $helpbar->addWidget($widget);
         } else {
             PageLayout::setTitle(_('Modul bearbeiten'));
-            $success_message = _('Das Modul "%s" wurde geändert.');
+            $success_message = _('Das Modul "%s" wurde geÃ¤ndert.');
             $sprache = Request::option('display_language',
                     $this->modul->getDefaultLanguage());
             $this->deskriptor = $this->modul->getDeskriptor($sprache, true);
@@ -158,7 +158,7 @@ class Module_ModuleController extends MVVController
                 Icon::create('accept', 'clickable'), ['data-dialog' => 'size=auto;buttons=false']);
             }
 
-            $action_widget->addLink( _('Log-Einträge dieses Moduls'),
+            $action_widget->addLink( _('Log-EintrÃ¤ge dieses Moduls'),
                 $this->url_for('shared/log_event/show/Modul/' . $this->modul->id,
                         ['object2_type' => 'ModulDeskriptor', 'object2_id' => $this->deskriptor->id]),
                 Icon::create('log', 'clickable'))->asDialog();
@@ -201,7 +201,7 @@ class Module_ModuleController extends MVVController
             CSRFProtection::verifyUnsafeRequest();
             $stored = false;
             if ($this->def_lang) {
-                // Quelle aus Formular entfernt, darf aber nicht überschrieben werden
+                // Quelle aus Formular entfernt, darf aber nicht Ã¼berschrieben werden
                 // da wichtig, um neueste Version zu ermitteln,
                 //$this->modul->quelle = Request::option('quelle');
                 $this->modul->variante = Request::option('modul_item');
@@ -295,7 +295,7 @@ class Module_ModuleController extends MVVController
                     }
                     else {
 
-                        PageLayout::postInfo(_('Es wurden keine Änderungen vorgenommen.'));
+                        PageLayout::postInfo(_('Es wurden keine Ã„nderungen vorgenommen.'));
                     }*/
                     $this->redirect($this->url_for('/index'));
                     return;
@@ -383,11 +383,11 @@ class Module_ModuleController extends MVVController
         }
         $def_lang = $deskriptor->modul->getDefaultLanguage();
         if ($deskriptor->sprache == $def_lang) {
-            throw new Trails_Exception(403, _('Ein Deskriptor in der Original-Sprache kann nicht gelöscht werden.'));
+            throw new Trails_Exception(403, _('Ein Deskriptor in der Original-Sprache kann nicht gelÃ¶scht werden.'));
         }
         if (Request::submitted('delete')) {
             CSRFProtection::verifyUnsafeRequest();
-            PageLayout::postSuccess(sprintf(_('Der Deskriptor "%s" des Moduls "%s" wurde gelöscht!'),
+            PageLayout::postSuccess(sprintf(_('Der Deskriptor "%s" des Moduls "%s" wurde gelÃ¶scht!'),
                     htmlReady($deskriptor->getDisplayName()),
                     htmlReady($deskriptor->modul->getDisplayName())));
             $deskriptor->delete();
@@ -484,10 +484,10 @@ class Module_ModuleController extends MVVController
                 $end_sem = Semester::find(Request::option('end_sem'));
                 $copy->end = $next->beginn > $end_sem->beginn ? '' : $end_sem->id;
 
-                // quelle: Klammerung von (Gültigkeit-) Versionen desselben Moduls
-                // Gießen: Modul-ID des ursprünglichen Moduls
+                // quelle: Klammerung von (GÃ¼ltigkeit-) Versionen desselben Moduls
+                // GieÃŸen: Modul-ID des ursprÃ¼nglichen Moduls
                 $copy->quelle = $modul->quelle ?: $modul->id;
-                //UOL Version um 1 hochzählen
+                //UOL Version um 1 hochzÃ¤hlen
                 $copy->version = $copy->version + 1;
                 // don't show the new Modul
                 $copy->stat = 'planung';
@@ -515,7 +515,7 @@ class Module_ModuleController extends MVVController
                     // UOL: Don't validate
                     $store = $copy->store(false);
                     PageLayout::postSuccess(sprintf(
-                        _('Das Modul "%s" und alle zugehörigen Modulteile wurden kopiert!'),
+                        _('Das Modul "%s" und alle zugehÃ¶rigen Modulteile wurden kopiert!'),
                         htmlReady($modul->getDisplayName())
                     ));
                 } catch (InvalidValuesException $e) {
@@ -627,12 +627,12 @@ class Module_ModuleController extends MVVController
             PageLayout::setTitle(_('Neuen Modulteil anlegen'));
             $success_message = ('Der Modulteil "%s" wurde angelegt.');
             $language = $this->modulteil->getDefaultLanguage();
-            PageLayout::postInfo(sprintf(_('Sie legen einen neuen Modulteil für das Modul <em>%s</em> an. Der Modulteil muss zunächst in der Ausgabesprache <em>%s</em> angelegt werden.'),
+            PageLayout::postInfo(sprintf(_('Sie legen einen neuen Modulteil fÃ¼r das Modul <em>%s</em> an. Der Modulteil muss zunÃ¤chst in der Ausgabesprache <em>%s</em> angelegt werden.'),
                 htmlReady($this->modul->getDisplayName()),
                 htmlReady($GLOBALS['MVV_MODUL_DESKRIPTOR']['SPRACHE']['values'][$this->modulteil->getDefaultLanguage()]['name'])));
         } else {
             PageLayout::setTitle(_('Modulteil bearbeiten'));
-            $success_message = _('Der Modulteil "%s" wurde geändert.');
+            $success_message = _('Der Modulteil "%s" wurde geÃ¤ndert.');
             $language = Request::option('display_language',
                     $this->modulteil->getDefaultLanguage());
 
@@ -728,7 +728,7 @@ class Module_ModuleController extends MVVController
                     PageLayout::postSuccess(sprintf($success_message,
                             htmlReady($this->modulteil->getDisplayName())));
                 } else {
-                    PageLayout::postInfo(_('Es wurden keine Änderungen vorgenommen.'));
+                    PageLayout::postInfo(_('Es wurden keine Ã„nderungen vorgenommen.'));
                 }
                 $this->redirect($this->url_for('/details', $this->modulteil->modul_id));
                 return;
@@ -743,7 +743,7 @@ class Module_ModuleController extends MVVController
         $this->cancel_url = $this->url_for('/details', $this->modulteil->modul_id);
 
         $action_widget = Sidebar::get()->getWidget('actions');
-        $action_widget->addLink(_('Log-Einträge dieses Modulteils'),
+        $action_widget->addLink(_('Log-EintrÃ¤ge dieses Modulteils'),
                 $this->url_for('shared/log_event/show/Modulteil/' . $this->modulteil->id,
                 ['object2_type' => 'ModulteilDeskriptor', 'object2_id' => $this->deskriptor->id]),
                 Icon::create('log', 'clickable'))->asDialog();
@@ -765,11 +765,11 @@ class Module_ModuleController extends MVVController
         }
         $def_lang = $deskriptor->modulteil->getDefaultLanguage();
         if ($deskriptor->sprache == $def_lang) {
-            throw new Trails_Exception(403, _('Ein Deskriptor in der Original-Sprache kann nicht gelöscht werden.'));
+            throw new Trails_Exception(403, _('Ein Deskriptor in der Original-Sprache kann nicht gelÃ¶scht werden.'));
         }
         if (Request::submitted('delete')) {
             CSRFProtection::verifyUnsafeRequest();
-            PageLayout::postSuccess(sprintf(_('Der Deskriptor "%s" des Modulteils "%s" wurde gelöscht!'),
+            PageLayout::postSuccess(sprintf(_('Der Deskriptor "%s" des Modulteils "%s" wurde gelÃ¶scht!'),
                     htmlReady($deskriptor->getDisplayName()),
                     htmlReady($deskriptor->modulteil->getDisplayName())));
             $deskriptor->delete();
@@ -787,7 +787,7 @@ class Module_ModuleController extends MVVController
         }
         $copy_modulteil = $modulteil->copy();
         $copy_modulteil->store();
-        PageLayout::postInfo(sprintf(_('Der Modulteil "%s" wurde kopiert. Klicken Sie auf "übernehmen", um Änderungen an der Kopie zu speichern.'),
+        PageLayout::postInfo(sprintf(_('Der Modulteil "%s" wurde kopiert. Klicken Sie auf "Ã¼bernehmen", um Ã„nderungen an der Kopie zu speichern.'),
                 htmlReady($copy_modulteil->getDisplayName())));
         $this->redirect($this->url_for('/modulteil', $copy_modulteil->id));
     }
@@ -853,7 +853,7 @@ class Module_ModuleController extends MVVController
                             htmlReady($this->modulteil->getDisplayName())));
                 } else {
                     PageLayout::postInfo(sprintf(
-                            _('Die bestehende Zuordnung der Lehrveranstaltungsgruppe "%s" zum Modulteil "%s" wurde nicht geändert.'),
+                            _('Die bestehende Zuordnung der Lehrveranstaltungsgruppe "%s" zum Modulteil "%s" wurde nicht geÃ¤ndert.'),
                             htmlReady($this->lvgruppe->getDisplayName()),
                             htmlReady($this->modulteil->getDisplayName())));
                 }
@@ -925,10 +925,10 @@ class Module_ModuleController extends MVVController
                 }
                 if ($stored !== false && $stored_modulteil !== false) {
                     if ($stored) {
-                        PageLayout::postSuccess(sprintf(_('LV-Gruppe "%s" geändert.'),
+                        PageLayout::postSuccess(sprintf(_('LV-Gruppe "%s" geÃ¤ndert.'),
                                 htmlReady($this->lvgruppe->getDisplayName())));
                     } else {
-                        PageLayout::postInfo(_('Es wurden keine Änderungen vorgenommen.'));
+                        PageLayout::postInfo(_('Es wurden keine Ã„nderungen vorgenommen.'));
                     }
                     $this->redirect($this->url_for('/details',
                             $this->modulteil->modul_id, $this->modulteil->id));
@@ -947,13 +947,13 @@ class Module_ModuleController extends MVVController
         } else {
             if (Request::submitted('yes')) {
                 CSRFProtection::verifySecurityToken();
-                PageLayout::postSuccess(sprintf(_('Modul "%s" gelöscht!'),
+                PageLayout::postSuccess(sprintf(_('Modul "%s" gelÃ¶scht!'),
                         htmlReady($modul->getDisplayName())));
                 $modul->delete();
             }
             if (!Request::isPost()) {
                 $this->flash_dialog(
-                        sprintf(_('Wollen Sie wirklich das Modul "%s" löschen?'),
+                        sprintf(_('Wollen Sie wirklich das Modul "%s" lÃ¶schen?'),
                                 $modul->getDisplayName()),
                         array('module', 'module', 'delete',
                                 $modul->getId()),
@@ -972,13 +972,13 @@ class Module_ModuleController extends MVVController
         } else {
             if (Request::submitted('yes')) {
                 CSRFProtection::verifyUnsafeRequest();
-                PageLayout::postSuccess(sprintf(_('Modulteil "%s" gelöscht!'),
+                PageLayout::postSuccess(sprintf(_('Modulteil "%s" gelÃ¶scht!'),
                         htmlReady($modulteil->getDisplayName())));
                 $modulteil->delete();
             }
             if (!Request::isPost()) {
                 $this->flash_dialog(
-                        sprintf(_('Wollen Sie wirklich den Modulteil "%s" löschen?'),
+                        sprintf(_('Wollen Sie wirklich den Modulteil "%s" lÃ¶schen?'),
                                 $modulteil->getDisplayName()),
                         array('/delete_modulteil',
                                 $modulteil->getId()),
@@ -1270,8 +1270,8 @@ class Module_ModuleController extends MVVController
         }
         $helpbar = Helpbar::get();
         $widget = new HelpbarWidget();
-        $widget->addElement(new WidgetElement(_('Auf diesen Seiten können Sie die Module verwalten. Ein Modul kann ein oder mehrere Modulteil(e) haben.').'</br>'));
-        $widget->addElement(new WidgetElement(_('Module können nur gelöscht werden, wenn Sie noch keinem Studiengang zugeordnet sind.')));
+        $widget->addElement(new WidgetElement(_('Auf diesen Seiten kÃ¶nnen Sie die Module verwalten. Ein Modul kann ein oder mehrere Modulteil(e) haben.').'</br>'));
+        $widget->addElement(new WidgetElement(_('Module kÃ¶nnen nur gelÃ¶scht werden, wenn Sie noch keinem Studiengang zugeordnet sind.')));
         $helpbar->addWidget($widget);
         $this->sidebar_rendered = true;
     }

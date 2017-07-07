@@ -8,6 +8,6 @@
     <dt><?= _('Smiley-Vorkommen') ?></dt>
     <dd><?= $sum ?></dd>
 
-    <dt><?= _('Letzte Änderung') ?></dt>
+    <dt><?= _('Letzte Ã„nderung') ?></dt>
     <dd><?= (!is_null($last_change) ? date('d.m.Y H:i:s', $last_change) : '')?></dd>
 </dl>

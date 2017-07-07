@@ -8,7 +8,7 @@
 // StudipLitSearchPluginAbstract.class.php
 //
 //
-// Copyright (c) 2003 André Noack <noack@data-quest.de>
+// Copyright (c) 2003 AndrÃ© Noack <noack@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@ require_once 'StudipLitSearchPluginAbstract.class.php';
 *
 *
 * @access   public
-* @author   André Noack <noack@data-quest.de>
+* @author   AndrÃ© Noack <noack@data-quest.de>
 * @package
 **/
 class StudipLitSearchPluginStudip extends StudipLitSearchPluginAbstract{
@@ -43,7 +43,7 @@ class StudipLitSearchPluginStudip extends StudipLitSearchPluginAbstract{
         $this->dbv = DbView::getView('literatur');
         $rs = $this->dbv->get_query("view:LIT_GET_CATALOG_COUNT");
         $rs->next_record();
-        $this->description = sprintf(_("Stud.IP Literaturkatalog. Inhalt des Kataloges: %s Einträge."), $rs->f(0));
+        $this->description = sprintf(_("Stud.IP Literaturkatalog. Inhalt des Kataloges: %s EintrÃ¤ge."), $rs->f(0));
     }
 
     function doSearch($search_values){

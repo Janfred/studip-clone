@@ -1,7 +1,7 @@
 <?
 use Studip\Button, Studip\LinkButton;
 
-// Datenfelder für Rollen in Einrichtungen ausgeben
+// Datenfelder fÃ¼r Rollen in Einrichtungen ausgeben
 // Default-Daten der Einrichtung
 $entries = (array)DataFieldEntry::getDataFieldEntries([$user->user_id, $inst_id], 'userinstrole')
 ?>
@@ -78,10 +78,10 @@ $entries = (array)DataFieldEntry::getDataFieldEntries([$user->user_id, $inst_id]
         <?= _('Einrichtung nicht auf der Profilseite:'); ?>
         <dfn>
             <?= _('Die Angaben zu dieser Einrichtung werden nicht '
-                  . 'auf Ihrer Profilseite und in Adressbüchern ausgegeben.') ?>
+                  . 'auf Ihrer Profilseite und in AdressbÃ¼chern ausgegeben.') ?>
         </dfn>
     </label>
     <footer>
-        <?= Button::createAccept(_('Änderungen speichern'), 'speichern') ?>
+        <?= Button::createAccept(_('Ã„nderungen speichern'), 'speichern') ?>
     </footer>
 </form>

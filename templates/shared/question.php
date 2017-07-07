@@ -5,7 +5,7 @@
 <div class="modaloverlay">
     <div class="create-question-dialog ui-widget-content ui-dialog studip-confirmation">
         <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
-            <span><?= _('Bitte bestätigen Sie die Aktion') ?></span>
+            <span><?= _('Bitte bestÃ¤tigen Sie die Aktion') ?></span>
             <a href="<?= $disapprovalLink ?>" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close">
                 <span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span>
                 <span class="ui-button-text"><?= _('Schliessen') ?></span>

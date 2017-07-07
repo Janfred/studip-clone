@@ -4,12 +4,12 @@
 <?= CSRFProtection::tokenTag() ?>
 <table class="default">
     <caption>
-        <?=sprintf(_('%s hinzufügen'), htmlReady(get_title_for_status('autor', 1)))?>
+        <?=sprintf(_('%s hinzufÃ¼gen'), htmlReady(get_title_for_status('autor', 1)))?>
     </caption>
     <thead>
     <tr>
         <th colspan="2">
-            <?=_('Teilnehmerliste übernehmen')?>
+            <?=_('Teilnehmerliste Ã¼bernehmen')?>
         </th>
     </tr>
     </thead>
@@ -18,8 +18,8 @@
             <td>
                 <?=_('Eingabeformat')?>:
 
-                <?= tooltipHtmlIcon(sprintf(_('In das Textfeld <strong>Teilnehmerliste übernehmen</strong> können Sie eine Liste mit Namen von %s eingeben,
-                    die in die Veranstaltung aufgenommen werden sollen. Wählen Sie in der Auswahlbox das gewünschte Format, in dem Sie die Namen eingeben möchten.<br />
+                <?= tooltipHtmlIcon(sprintf(_('In das Textfeld <strong>Teilnehmerliste Ã¼bernehmen</strong> kÃ¶nnen Sie eine Liste mit Namen von %s eingeben,
+                    die in die Veranstaltung aufgenommen werden sollen. WÃ¤hlen Sie in der Auswahlbox das gewÃ¼nschte Format, in dem Sie die Namen eingeben mÃ¶chten.<br />
                     <strong>Eingabeformat</strong><br/>
                     <strong>Nachname, Vorname &crarr;</strong><br />Geben Sie dazu in jede Zeile den Nachnamen und (optional) den Vornamen getrennt durch ein Komma oder ein Tabulatorzeichen ein.<br />
                     <strong>Nutzername &crarr;</strong><br />Geben Sie dazu in jede Zeile den Stud.IP Nutzernamen ein.'), htmlReady($status_groups['autor'])));?>

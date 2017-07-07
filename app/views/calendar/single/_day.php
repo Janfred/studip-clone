@@ -18,7 +18,7 @@ $max_columns = $em['max_cols'] ?: 1;
 <nav class="calendar-nav">
     <span style="white-space: nowrap;">
         <a href="<?= $controller->url_for('calendar/single/day', array('atime' => strtotime('-1 day', $atime))) ?>">
-            <?= Icon::create('arr_1left', 'clickable', ['title' => _('Einen Tag zurück')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
+            <?= Icon::create('arr_1left', 'clickable', ['title' => _('Einen Tag zurÃ¼ck')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
             <span class="hidden-tiny-down">
                 <?= strftime(_('%x'), strtotime('-1 day', $calendar->getStart())) ?>
             </span>
@@ -59,7 +59,7 @@ $max_columns = $em['max_cols'] ?: 1;
         <tr>
             <td align="center"<?= $settings['step_day'] < 3600 ? ' colspan="2"' : '' ?>>
                 <a href="<?= $controller->url_for('calendar/single/day', array('atime' => ($atime - (date('G', $atime) * 3600 - $start + 3600)))) ?>">
-                    <?= Icon::create('arr_1up', 'clickable', ['title' => _('Früher')])->asImg() ?>
+                    <?= Icon::create('arr_1up', 'clickable', ['title' => _('FrÃ¼her')])->asImg() ?>
                 </a>
             </td>
             <td colspan="<?= $max_columns + 1 ?>">
@@ -75,7 +75,7 @@ $max_columns = $em['max_cols'] ?: 1;
         <tr>
             <td align="center"<?= $settings['step_day'] < 3600 ? ' colspan="2"' : '' ?>>
                 <a href="<?= $controller->url_for('calendar/single/day', array('atime' => ($atime + $end - date('G', $atime) * 3600 + 3600))) ?>">
-                    <?= Icon::create('arr_1down', 'clickable', ['title' => _('Später')])->asImg() ?>
+                    <?= Icon::create('arr_1down', 'clickable', ['title' => _('SpÃ¤ter')])->asImg() ?>
                 </a>
             </td>
             <td colspan="<?= $max_columns + 1 ?>">

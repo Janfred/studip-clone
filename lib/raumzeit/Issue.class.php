@@ -7,7 +7,7 @@
 // This file is part of Stud.IP
 // Issue.class.php
 //
-// Repräsentiert ein einzelnes Thema einer Veranstaltung
+// ReprÃ¤sentiert ein einzelnes Thema einer Veranstaltung
 //
 // +--------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@
  * Issue.class.php
  *
  *
- * @author      Till Glöggler <tgloeggl@uos.de>
+ * @author      Till GlÃ¶ggler <tgloeggl@uos.de>
  * @version     19. Oktober 2005
  * @access      protected
  * @package     raumzeit
@@ -179,9 +179,9 @@ class Issue {
         }
 
         if (sizeof($titles) > 0) {
-            $title = implode(', ', $titles).', '.$this->getTitle() . ' ' ._("(Thema gelöscht)");
+            $title = implode(', ', $titles).', '.$this->getTitle() . ' ' ._("(Thema gelÃ¶scht)");
         } else {
-            $title = $this->getTitle() . ' ' ._("(Thema gelöscht)");
+            $title = $this->getTitle() . ' ' ._("(Thema gelÃ¶scht)");
         }
         $description = _("Dateiordner bezieht sich auf ein nicht mehr vorhandenes Thema.");
 
@@ -235,9 +235,9 @@ class Issue {
     function setFile($file) {
         if ($file != $this->file) {
             if ($file) {
-                $this->messages[] = sprintf(_("Dateiordner für das Thema \"%s\" angelegt."),$this->toString());
+                $this->messages[] = sprintf(_("Dateiordner fÃ¼r das Thema \"%s\" angelegt."),$this->toString());
             } else {
-                //$this->messages[] = sprintf(_("Dateiordner für das Thema \"%s\" gelöscht!"),$this->toString());
+                //$this->messages[] = sprintf(_("Dateiordner fÃ¼r das Thema \"%s\" gelÃ¶scht!"),$this->toString());
             }
         }
         $this->file = $file;
@@ -257,7 +257,7 @@ class Issue {
                     // only link if there is none yet
                     if (!$plugin->getLinkToThread($this->issue_id)) {
                         $plugin->setThreadForIssue($this->issue_id, $this->title, $this->description);
-                        $this->messages[] = sprintf(_("Ordner im Forum für das Thema \"%s\" angelegt."), $this->toString());
+                        $this->messages[] = sprintf(_("Ordner im Forum fÃ¼r das Thema \"%s\" angelegt."), $this->toString());
                     }
                 }
             }

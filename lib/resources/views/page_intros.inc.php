@@ -48,7 +48,7 @@ switch ($view) {
     break;
 
     case 'resources':
-        PageLayout::setTitle(_('Übersicht der Ressourcen'));
+        PageLayout::setTitle(_('Ãœbersicht der Ressourcen'));
         Navigation::activateItem('/resources/view/hierarchy');
     break;
     case 'search':
@@ -69,7 +69,7 @@ switch ($view) {
                 URLHelper::getLink('?view=search&quick_view_mode=' . $view_mode . '&check_assigns=TRUE'),
                 URLHelper::getLink('?view=search&quick_view_mode=' . $view_mode . '&check_assigns=FALSE'));
         }
-        $widget->addCheckbox(_('Nur Räume anzeigen'),
+        $widget->addCheckbox(_('Nur RÃ¤ume anzeigen'),
                              $_SESSION['resources_data']['search_only_rooms'],
                              URLHelper::getLink('?view=search&quick_view_mode=' . $view_mode . '&search_only_rooms=1'),
                              URLHelper::getLink('?view=search&quick_view_mode=' . $view_mode . '&search_only_rooms=0'));
@@ -105,7 +105,7 @@ switch ($view) {
         Navigation::activateItem('/resources/objects/edit_assign');
 
         if ($view_mode === 'no_nav') {
-            $navigation = new Navigation(_('Zurück zum Belegungsplan'), '?quick_view=view_schedule&quick_view_mode=' . $view_mode);
+            $navigation = new Navigation(_('ZurÃ¼ck zum Belegungsplan'), '?quick_view=view_schedule&quick_view_mode=' . $view_mode);
             Navigation::getItem('/resources/objects')->addSubNavigation('search', $navigation);
         } else {
             $page_intro = '<h2>' . sprintf(_('Raum: %s'), $currentObject->getName()) . '</h2>';
@@ -161,11 +161,11 @@ switch ($view) {
 
         if ($view_mode !== 'no_nav') {
             if (Context::isCourse()) {
-                $navigation = new Navigation(_('Zurück zur Veranstaltung'), 'seminar_main.php');
+                $navigation = new Navigation(_('ZurÃ¼ck zur Veranstaltung'), 'seminar_main.php');
                 Navigation::getItem('/resources/objects')->addSubNavigation('back', $navigation);
             }
             if (Context::isInstitute()) {
-                $navigation = new Navigation(_('Zurück zur Einrichtung'), 'dispatch.php/institute/overview');
+                $navigation = new Navigation(_('ZurÃ¼ck zur Einrichtung'), 'dispatch.php/institute/overview');
                 Navigation::getItem('/resources/objects')->addSubNavigation('back', $navigation);
             }
         }
@@ -211,11 +211,11 @@ switch ($view) {
 
         if ($view_mode !== 'no_nav') {
             if (Context::isCourse()) {
-                $navigation = new Navigation(_('Zurück zur Veranstaltung'), 'seminar_main.php');
+                $navigation = new Navigation(_('ZurÃ¼ck zur Veranstaltung'), 'seminar_main.php');
                 Navigation::getItem('/resources/objects')->addSubNavigation('back', $navigation);
             }
             if (Context::isInstitute()) {
-                $navigation = new Navigation(_('Zurück zur Einrichtung'), 'dispatch.php/institute/overview');
+                $navigation = new Navigation(_('ZurÃ¼ck zur Einrichtung'), 'dispatch.php/institute/overview');
                 Navigation::getItem('/resources/objects')->addSubNavigation('back', $navigation);
             }
         }
@@ -272,7 +272,7 @@ switch ($view) {
 
     //Reiter Raumplanung
     case 'requests_start':
-        PageLayout::setTitle(_('Übersicht des Raumplanungs-Status'));
+        PageLayout::setTitle(_('Ãœbersicht des Raumplanungs-Status'));
         Navigation::activateItem('/resources/room_requests/start');
     break;
     case 'edit_request':
@@ -311,7 +311,7 @@ switch ($view) {
             'member_type' => Context::isCourse() ? _('Teilnehmende') : _('Mitarbeiter/-in'),
         ));
 
-        PageLayout::setTitle(Context::getHeaderLine()." - "._("Ressourcenübersicht"));
+        PageLayout::setTitle(Context::getHeaderLine()." - "._("RessourcenÃ¼bersicht"));
         Navigation::activateItem('/course/resources/overview');
     break;
     case 'openobject_details':
@@ -372,7 +372,7 @@ switch ($view) {
         $sidebar->addWidget($widget);
     break;
     case 'view_requests_schedule':
-        PageLayout::setTitle(_('Anfragenübersicht eines Raums:') . ' ' . ResourceObject::Factory($_SESSION['resources_data']['resolve_requests_one_res'])->getName());
+        PageLayout::setTitle(_('AnfragenÃ¼bersicht eines Raums:') . ' ' . ResourceObject::Factory($_SESSION['resources_data']['resolve_requests_one_res'])->getName());
         Navigation::activateItem('/resources/room_requests/schedule');
 
         $widget = new ViewsWidget();
@@ -384,7 +384,7 @@ switch ($view) {
     break;
     //default
     default:
-        PageLayout::setTitle(_('Übersicht der Ressourcen'));
+        PageLayout::setTitle(_('Ãœbersicht der Ressourcen'));
         Navigation::activateItem('/resources/view/hierarchy');
     break;
 }

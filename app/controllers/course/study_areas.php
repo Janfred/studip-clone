@@ -150,7 +150,7 @@ class Course_StudyAreasController extends AuthenticatedController
             $studyareas = Request::getArray('studyareas');
 
             if (empty($studyareas)) {
-                PageLayout::postMessage(MessageBox::error(_('Sie müssen mindestens einen Studienbereich auswählen')));
+                PageLayout::postMessage(MessageBox::error(_('Sie mÃ¼ssen mindestens einen Studienbereich auswÃ¤hlen')));
                 $this->redirect($url);
                 return;
             }
@@ -168,7 +168,7 @@ class Course_StudyAreasController extends AuthenticatedController
         }
 
         if (!$msg) {
-            PageLayout::postMessage(MessageBox::success(_('Die Studienbereichszuordnung wurde übernommen.')));
+            PageLayout::postMessage(MessageBox::success(_('Die Studienbereichszuordnung wurde Ã¼bernommen.')));
         } else {
             PageLayout::postMessage(MessageBox::error($msg));
         }
@@ -186,7 +186,7 @@ class Course_StudyAreasController extends AuthenticatedController
         }
 
         if (empty($assigned)) {
-            return _('Sie müssen mindestens einen Studienbereich auswählen');
+            return _('Sie mÃ¼ssen mindestens einen Studienbereich auswÃ¤hlen');
         }
 
         if (!$this->course->setStudyAreas($assigned)) {

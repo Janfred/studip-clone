@@ -499,7 +499,7 @@ class Step00302Modulverwaltung extends Migration
             (config_id, field, value, is_default, `type`, `range`, section, mkdate, chdate, description, comment)
             VALUES
             (MD5('MVV_ACCESS_ASSIGN_LVGRUPPEN'), 'MVV_ACCESS_ASSIGN_LVGRUPPEN', 'admin', 1, 'string', 'global', 'modules',
-             UNIX_TIMESTAMP(),  UNIX_TIMESTAMP(), 'Ab welchem Rechtestatus können Veranstaltungen Modulen (LV-Gruppen) zugeordnet werden. Bei Angabe von fakadmin darf nur dieser Zuordnungen vornehmen.', '')
+             UNIX_TIMESTAMP(),  UNIX_TIMESTAMP(), 'Ab welchem Rechtestatus kÃ¶nnen Veranstaltungen Modulen (LV-Gruppen) zugeordnet werden. Bei Angabe von fakadmin darf nur dieser Zuordnungen vornehmen.', '')
         ");
 
         /**
@@ -559,114 +559,114 @@ class Step00302Modulverwaltung extends Migration
          * Logging
          */
         StudipLog::registerActionPlugin('MVV_MODUL_NEW', 'MVV: Modul erstellen', '%user erstellt neues Modul %modul(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_MODUL_UPDATE', 'MVV: Modul ändern', '%user ändert Modul %modul(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_MODUL_DEL', 'MV: Modul löschen', '%user löscht Modul %modul(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_MODUL_UPDATE', 'MVV: Modul Ã¤ndern', '%user Ã¤ndert Modul %modul(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_MODUL_DEL', 'MV: Modul lÃ¶schen', '%user lÃ¶scht Modul %modul(%affected).', 'MVVPlugin');
 
         StudipLog::registerActionPlugin('MVV_STUDIENGANG_NEW', 'MVV: Studiengang erstellen', '%user erstellt neuen Studiengang %stg(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_STUDIENGANG_UPDATE', 'MVV: Studiengang ändern', '%user ändert Studiengang %stg(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_STUDIENGANG_DEL', 'MVV: Studiengang löschen', '%user löscht Studiengang %stg(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_STUDIENGANG_UPDATE', 'MVV: Studiengang Ã¤ndern', '%user Ã¤ndert Studiengang %stg(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_STUDIENGANG_DEL', 'MVV: Studiengang lÃ¶schen', '%user lÃ¶scht Studiengang %stg(%affected).', 'MVVPlugin');
 
         StudipLog::registerActionPlugin('MVV_STGTEIL_NEW', 'MVV: Studiengangteil erstellen', '%user erstellt neuen Studiengangteil %stgteil(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_STGTEIL_UPDATE', 'MVV: Studiengangteil ändern', '%user ändert Studiengangteil %stgteil(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_STGTEIL_DEL', 'MVV: Studiengangteil löschen', '%user löscht Studiengangteil %stgteil(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_STGTEIL_UPDATE', 'MVV: Studiengangteil Ã¤ndern', '%user Ã¤ndert Studiengangteil %stgteil(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_STGTEIL_DEL', 'MVV: Studiengangteil lÃ¶schen', '%user lÃ¶scht Studiengangteil %stgteil(%affected).', 'MVVPlugin');
 
         StudipLog::registerActionPlugin('MVV_STGTEILVERSION_NEW', 'MVV: Studiengangteilversion erstellen', '%user erstellt neue Studiengangteilversion %version(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_STGTEILVERSION_UPDATE', 'MVV: Studiengangteilversion ändern', '%user ändert Studiengangteilversion %version(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_STGTEILVERSION_DEL', 'MVV: Studiengangteilversion löschen', '%user löscht Studiengangteilversion %version(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_STGTEILVERSION_UPDATE', 'MVV: Studiengangteilversion Ã¤ndern', '%user Ã¤ndert Studiengangteilversion %version(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_STGTEILVERSION_DEL', 'MVV: Studiengangteilversion lÃ¶schen', '%user lÃ¶scht Studiengangteilversion %version(%affected).', 'MVVPlugin');
 
         StudipLog::registerActionPlugin('MVV_STGTEILBEZ_NEW', 'MVV: Studiengangteil-Bezeichnung erstellen', '%user erstellt neue Studiengangteil-Bezeichnung %stgteilbez(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_STGTEILBEZ_UPDATE', 'MVV: Studiengangteil-Bezeichnung ändern', '%user ändert Studiengangteil-Bezeichnung %stgteilbez(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_STGTEILBEZ_DEL', 'MVV: Studiengangteil-Bezeichnung löschen', '%user löscht Studiengangteil-Bezeichnung %stgteilbez(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_STGTEILBEZ_UPDATE', 'MVV: Studiengangteil-Bezeichnung Ã¤ndern', '%user Ã¤ndert Studiengangteil-Bezeichnung %stgteilbez(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_STGTEILBEZ_DEL', 'MVV: Studiengangteil-Bezeichnung lÃ¶schen', '%user lÃ¶scht Studiengangteil-Bezeichnung %stgteilbez(%affected).', 'MVVPlugin');
 
         StudipLog::registerActionPlugin('MVV_LVGRUPPE_NEW', 'MVV: LV-Gruppe erstellen', '%user erstellt neue LV-Gruppe %lvgruppe(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_LVGRUPPE_UPDATE', 'MVV: LV-Gruppe ändern', '%user ändert LV-Gruppe %lvgruppe(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_LVGRUPPE_DEL', 'MVV: LV-Gruppe löschen', '%user löscht LV-Gruppe %lvgruppe(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_LVGRUPPE_UPDATE', 'MVV: LV-Gruppe Ã¤ndern', '%user Ã¤ndert LV-Gruppe %lvgruppe(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_LVGRUPPE_DEL', 'MVV: LV-Gruppe lÃ¶schen', '%user lÃ¶scht LV-Gruppe %lvgruppe(%affected).', 'MVVPlugin');
 
         StudipLog::registerActionPlugin('MVV_FACH_NEW', 'MVV: Fach erstellen', '%user erstellt neues Fach %fach(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_FACH_UPDATE', 'MVV: Fach ändern', '%user ändert Fach %fach(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_FACH_DEL', 'MVV: Fach löschen', '%user löscht Fach %fach(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_FACH_UPDATE', 'MVV: Fach Ã¤ndern', '%user Ã¤ndert Fach %fach(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_FACH_DEL', 'MVV: Fach lÃ¶schen', '%user lÃ¶scht Fach %fach(%affected).', 'MVVPlugin');
 
         StudipLog::registerActionPlugin('MVV_ABSCHLUSS_NEW', 'MVV: Abschluss erstellen', '%user erstellt neuen Abschluss %abschluss(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_ABSCHLUSS_UPDATE', 'MVV: Abschluss ändern', '%user ändert Abschluss %abschluss(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_ABSCHLUSS_DEL', 'MVV: Abschluss löschen', '%user löscht Abschluss %abschluss(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_ABSCHLUSS_UPDATE', 'MVV: Abschluss Ã¤ndern', '%user Ã¤ndert Abschluss %abschluss(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_ABSCHLUSS_DEL', 'MVV: Abschluss lÃ¶schen', '%user lÃ¶scht Abschluss %abschluss(%affected).', 'MVVPlugin');
 
         StudipLog::registerActionPlugin('MVV_KATEGORIE_NEW', 'MVV: Abschluss-Kategorie erstellen', '%user erstellt neue Abschluss-Kategorie %abskategorie(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_KATEGORIE_UPDATE', 'MVV: Abschluss-Kategorie ändern', '%user ändert Abschluss-Kategorie %abskategorie(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_KATEGORIE_DEL', 'MVV: Abschluss-Kategorie löschen', '%user löscht Abschluss-Kategorie %abskategorie(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_KATEGORIE_UPDATE', 'MVV: Abschluss-Kategorie Ã¤ndern', '%user Ã¤ndert Abschluss-Kategorie %abskategorie(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_KATEGORIE_DEL', 'MVV: Abschluss-Kategorie lÃ¶schen', '%user lÃ¶scht Abschluss-Kategorie %abskategorie(%affected).', 'MVVPlugin');
 
         StudipLog::registerActionPlugin('MVV_DOKUMENT_NEW', 'MVV: Dokument erstellen', '%user erstellt neues Dokument %dokument(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_DOKUMENT_UPDATE', 'MVV: Dokument ändern', '%user ändert Dokument %dokument(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_DOKUMENT_DEL', 'MVV: Dokument löschen', '%user löscht Dokument %dokument(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_DOKUMENT_UPDATE', 'MVV: Dokument Ã¤ndern', '%user Ã¤ndert Dokument %dokument(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_DOKUMENT_DEL', 'MVV: Dokument lÃ¶schen', '%user lÃ¶scht Dokument %dokument(%affected).', 'MVVPlugin');
 
         StudipLog::registerActionPlugin('MVV_STGTEILABS_NEW', 'MVV: Studiengangteilabschnitt erstellen', '%user erstellt neuen Studiengangteilabschnitt %stgteilabs(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_STGTEILABS_UPDATE', 'MVV: Studiengangteilabschnitt ändern', '%user ändert Studiengangteilabschnitt %stgteilabs(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_STGTEILABS_DEL', 'MVV: Studiengangteilabschnitt löschen', '%user löscht Studiengangteilabschnitt %stgteilabs(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_STGTEILABS_UPDATE', 'MVV: Studiengangteilabschnitt Ã¤ndern', '%user Ã¤ndert Studiengangteilabschnitt %stgteilabs(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_STGTEILABS_DEL', 'MVV: Studiengangteilabschnitt lÃ¶schen', '%user lÃ¶scht Studiengangteilabschnitt %stgteilabs(%affected).', 'MVVPlugin');
 
         StudipLog::registerActionPlugin('MVV_MODULTEIL_NEW', 'MVV: Modulteil erstellen', '%user erstellt neuen Modulteil %modulteil(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_MODULTEIL_UPDATE', 'MVV: Modulteil ändern', '%user ändert Modulteil %modulteil(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_MODULTEIL_DEL', 'MVV: Modulteil löschen', '%user löscht Modulteil %modulteil(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_MODULTEIL_UPDATE', 'MVV: Modulteil Ã¤ndern', '%user Ã¤ndert Modulteil %modulteil(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_MODULTEIL_DEL', 'MVV: Modulteil lÃ¶schen', '%user lÃ¶scht Modulteil %modulteil(%affected).', 'MVVPlugin');
 
         StudipLog::registerActionPlugin('MVV_MODULTEIL_DESK_NEW', 'MVV: Modulteil Deskriptor erstellen', '%user erstellt neuen Modulteil Deskriptor %modulteildesk(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_MODULTEIL_DESK_UPDATE', 'MVV: Modulteil Deskriptor ändern', '%user ändert Modulteil Deskriptor %modulteildesk(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_MODULTEIL_DESK_DEL', 'MVV: Modulteil Deskriptor löschen', '%user löscht Modulteil Deskriptor %modulteildesk(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_MODULTEIL_DESK_UPDATE', 'MVV: Modulteil Deskriptor Ã¤ndern', '%user Ã¤ndert Modulteil Deskriptor %modulteildesk(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_MODULTEIL_DESK_DEL', 'MVV: Modulteil Deskriptor lÃ¶schen', '%user lÃ¶scht Modulteil Deskriptor %modulteildesk(%affected).', 'MVVPlugin');
 
         StudipLog::registerActionPlugin('MVV_MODUL_DESK_NEW', 'MVV: Modul Deskriptor erstellen', '%user erstellt neuen Modul Deskriptor %moduldesk(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_MODUL_DESK_UPDATE', 'MVV: Modul Deskriptor ändern', '%user ändert Modul Deskriptor %moduldesk(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_MODUL_DESK_DEL', 'MVV: Modul Deskriptor löschen', '%user löscht Modul Deskriptor %moduldesk(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_MODUL_DESK_UPDATE', 'MVV: Modul Deskriptor Ã¤ndern', '%user Ã¤ndert Modul Deskriptor %moduldesk(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_MODUL_DESK_DEL', 'MVV: Modul Deskriptor lÃ¶schen', '%user lÃ¶scht Modul Deskriptor %moduldesk(%affected).', 'MVVPlugin');
 
         //Zuweisungstabellen
         StudipLog::registerActionPlugin('MVV_MODULINST_NEW', 'MVV: Modul-Einrichtung Beziehung erstellen', '%user weist dem Modul %modul(%affected) die Einrichtungen %inst(%coaffected) zu.', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_MODULINST_DEL', 'MVV: Modul-Einrichtung Beziehung löschen', '%user löscht die Zuweisung der Einrichtungen %inst(%coaffected) zum Modul %modul(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_MODULINST_UPDATE', 'MVV: Modul-Einrichtung Beziehung ändern', '%user ändert die Zuweisung der Einrichtungen %inst(%coaffected) zum Modul %modul(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_MODULINST_DEL', 'MVV: Modul-Einrichtung Beziehung lÃ¶schen', '%user lÃ¶scht die Zuweisung der Einrichtungen %inst(%coaffected) zum Modul %modul(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_MODULINST_UPDATE', 'MVV: Modul-Einrichtung Beziehung Ã¤ndern', '%user Ã¤ndert die Zuweisung der Einrichtungen %inst(%coaffected) zum Modul %modul(%affected).', 'MVVPlugin');
 
         StudipLog::registerActionPlugin('MVV_ABS_ZUORD_NEW', 'MVV: Abschluss-Kategorien Zuweisung erstellen', '%user weist den Abschluss %abschluss(%affected) der Kategorie %abskategorie(%coaffected) zu.', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_ABS_ZUORD_DEL', 'MVV: Abschluss-Kategorien Zuweisung  löschen', '%user löscht die Zuweisung des Abschlusses %abschluss(%affected) zur Kategorie %abskategorie(%coaffected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_ABS_ZUORD_UPDATE', 'MVV: Abschluss-Kategorien Zuweisung  ändern', '%user ändert die Zuweisung des Abschlusses %abschluss(%affected) zur Kategorie %abskategorie(%coaffected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_ABS_ZUORD_DEL', 'MVV: Abschluss-Kategorien Zuweisung  lÃ¶schen', '%user lÃ¶scht die Zuweisung des Abschlusses %abschluss(%affected) zur Kategorie %abskategorie(%coaffected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_ABS_ZUORD_UPDATE', 'MVV: Abschluss-Kategorien Zuweisung  Ã¤ndern', '%user Ã¤ndert die Zuweisung des Abschlusses %abschluss(%affected) zur Kategorie %abskategorie(%coaffected).', 'MVVPlugin');
 
         StudipLog::registerActionPlugin('MVV_DOK_ZUORD_NEW', 'MVV: Dokumentzuordnung erstellen', '%user weist das Dokument %dokument(%affected) %object_type(%coaffected) zu.', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_DOK_ZUORD_DEL', 'MVV: Dokumentzuordnung löschen', '%user löscht die Zuweisung des Dokumentes %dokument(%affected) zu %object_type(%coaffected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_DOK_ZUORD_UPDATE', 'MVV: Dokumentzuordnung ändern', '%user ändert die Zuweisung des Dokumentes %dokument(%affected) zu %object_type(%coaffected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_DOK_ZUORD_DEL', 'MVV: Dokumentzuordnung lÃ¶schen', '%user lÃ¶scht die Zuweisung des Dokumentes %dokument(%affected) zu %object_type(%coaffected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_DOK_ZUORD_UPDATE', 'MVV: Dokumentzuordnung Ã¤ndern', '%user Ã¤ndert die Zuweisung des Dokumentes %dokument(%affected) zu %object_type(%coaffected).', 'MVVPlugin');
 
         StudipLog::registerActionPlugin('MVV_FACHINST_NEW', 'MVV: Fach-Einrichtung Zuweisung erstellen', '%user weist das Fach %fach(%affected) der Einrichtung %inst(%coaffected) zu.', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_FACHINST_DEL', 'MVV: Fach-Einrichtung Zuweisung löschen', '%user löscht die Zuweisung des Faches %fach(%affected) zur Einrichtung %inst(%coaffected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_FACHINST_UPDATE', 'MVV: Fach-Einrichtung Zuweisung ändern', '%user ändert die Zuweisung des Faches %fach(%affected) zur Einrichtung %inst(%coaffected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_FACHINST_DEL', 'MVV: Fach-Einrichtung Zuweisung lÃ¶schen', '%user lÃ¶scht die Zuweisung des Faches %fach(%affected) zur Einrichtung %inst(%coaffected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_FACHINST_UPDATE', 'MVV: Fach-Einrichtung Zuweisung Ã¤ndern', '%user Ã¤ndert die Zuweisung des Faches %fach(%affected) zur Einrichtung %inst(%coaffected).', 'MVVPlugin');
 
         StudipLog::registerActionPlugin('MVV_LVMODULTEIL_NEW', 'MVV: LV-Gruppe zu Modulteil Zuweisung erstellen', '%user weist der LV-Gruppe %lv(%affected) den Modulteil %modulteil(%coaffected) zu.', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_LVMODULTEIL_DEL', 'MVV: LV-Gruppe zu Modulteil Zuweisung löschen', '%user löscht die Zuweisung der LV-Gruppe %lv(%affected) zum Modulteil %modulteil(%coaffected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_LVMODULTEIL_UPDATE', 'MVV: LV-Gruppe zu Modulteil Zuweisung ändern', '%user ändert die Zuweisung der LV-Gruppe %lv(%affected) zum Modulteil %modulteil(%coaffected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_LVMODULTEIL_DEL', 'MVV: LV-Gruppe zu Modulteil Zuweisung lÃ¶schen', '%user lÃ¶scht die Zuweisung der LV-Gruppe %lv(%affected) zum Modulteil %modulteil(%coaffected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_LVMODULTEIL_UPDATE', 'MVV: LV-Gruppe zu Modulteil Zuweisung Ã¤ndern', '%user Ã¤ndert die Zuweisung der LV-Gruppe %lv(%affected) zum Modulteil %modulteil(%coaffected).', 'MVVPlugin');
 
         StudipLog::registerActionPlugin('MVV_LVSEMINAR_NEW', 'MVV: LV-Gruppe zu Veranstaltung Zuweisung erstellen', '%user weist der LV-Gruppe %lvgruppe(%affected) der Veranstaltung %sem(%coaffected) zu.', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_LVSEMINAR_DEL', 'MVV: LV-Gruppe zu Veranstaltung Zuweisung löschen', '%user löscht die Zuweisung der LV-Gruppe %lvgruppe(%affected) zur Veranstaltung %sem(%coaffected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_LVSEMINAR_UPDATE', 'MVV: LV-Gruppe zu Veranstaltung Zuweisung ändern', '%user ändert die Zuweisung der LV-Gruppe %lvgruppe(%affected) zur Veranstaltung %sem(%coaffected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_LVSEMINAR_DEL', 'MVV: LV-Gruppe zu Veranstaltung Zuweisung lÃ¶schen', '%user lÃ¶scht die Zuweisung der LV-Gruppe %lvgruppe(%affected) zur Veranstaltung %sem(%coaffected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_LVSEMINAR_UPDATE', 'MVV: LV-Gruppe zu Veranstaltung Zuweisung Ã¤ndern', '%user Ã¤ndert die Zuweisung der LV-Gruppe %lvgruppe(%affected) zur Veranstaltung %sem(%coaffected).', 'MVVPlugin');
 
         StudipLog::registerActionPlugin('MVV_STGTEILABS_MODUL_NEW', 'MVV: Stgteilabschnitt-Modul Zuweisung erstellen', '%user weist dem Studiengangteilabschnitt %stgteilabs(%affected) dem Modul %Modul(%coaffected) zu.', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_STGTEILABS_MODUL_DEL', 'MVV: Stgteilabschnitt-Modul Zuweisung löschen', '%user löscht die Zuweisung des Studiengangteilabschnitts %stgteilabs(%affected) zum Modul %modul(%coaffected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_STGTEILABS_MODUL_UPDATE', 'MVV: Stgteilabschnitt-Modul Zuweisung ändern', '%user ändert die Zuweisung des Studiengangteilabschnitts %stgteilabs(%affected) zum Modul %modul(%coaffected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_STGTEILABS_MODUL_DEL', 'MVV: Stgteilabschnitt-Modul Zuweisung lÃ¶schen', '%user lÃ¶scht die Zuweisung des Studiengangteilabschnitts %stgteilabs(%affected) zum Modul %modul(%coaffected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_STGTEILABS_MODUL_UPDATE', 'MVV: Stgteilabschnitt-Modul Zuweisung Ã¤ndern', '%user Ã¤ndert die Zuweisung des Studiengangteilabschnitts %stgteilabs(%affected) zum Modul %modul(%coaffected).', 'MVVPlugin');
 
         StudipLog::registerActionPlugin('MVV_MODULTEIL_LANG_NEW', 'MVV: Sprache zu Modulteil Zuweisung erstellen', '%user weist dem Modulteil %modulteil(%affected) die Unterrichtssprache %language(%coaffected) zu.', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_MODULTEIL_LANG_DEL', 'MVV: Sprache zu Modulteil Zuweisung löschen', '%user löscht die Zuweisung der Unterrichtssprache %language(%coaffected) zum Modulteil %modulteil(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_MODULTEIL_LANG_UPDATE', 'MVV: Sprache zu Modulteil Zuweisung ändern', '%user ändert die Zuweisung der Unterrichtssprache %language(%coaffected) zum Modulteil %modulteil(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_MODULTEIL_LANG_DEL', 'MVV: Sprache zu Modulteil Zuweisung lÃ¶schen', '%user lÃ¶scht die Zuweisung der Unterrichtssprache %language(%coaffected) zum Modulteil %modulteil(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_MODULTEIL_LANG_UPDATE', 'MVV: Sprache zu Modulteil Zuweisung Ã¤ndern', '%user Ã¤ndert die Zuweisung der Unterrichtssprache %language(%coaffected) zum Modulteil %modulteil(%affected).', 'MVVPlugin');
 
         StudipLog::registerActionPlugin('MVV_MODUL_LANG_NEW', 'MVV: Sprache zu Modul Zuweisung erstellen', '%user weist dem Modul %modul(%affected) die Unterrichtssprache %language(%coaffected) zu.', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_MODUL_LANG_DEL', 'MVV: Sprache zu Modul Zuweisung löschen', '%user löscht die Zuweisung der Unterrichtssprache %language(%coaffected) zum Modul %modul(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_MODUL_LANG_UPDATE', 'MVV: Sprache zu Modul Zuweisung ändern', '%user ändert die Zuweisung der Unterrichtssprache %language(%coaffected) zum Modul %modul(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_MODUL_LANG_DEL', 'MVV: Sprache zu Modul Zuweisung lÃ¶schen', '%user lÃ¶scht die Zuweisung der Unterrichtssprache %language(%coaffected) zum Modul %modul(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_MODUL_LANG_UPDATE', 'MVV: Sprache zu Modul Zuweisung Ã¤ndern', '%user Ã¤ndert die Zuweisung der Unterrichtssprache %language(%coaffected) zum Modul %modul(%affected).', 'MVVPlugin');
 
         StudipLog::registerActionPlugin('MVV_FACHBERATER_NEW', 'MVV: Person zu Fach Zuweisung erstellen', '%user weist dem Studiengangteil %stgteil(%affected) %user(%coaffected) zu.', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_FACHBERATER_DEL', 'MVV: Person zu Fach Zuweisung löschen', '%user löscht die Zuweisung von %user(%coaffected) zum Studiengangteil %stgteil(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_FACHBERATER_UPDATE', 'MVV: Person zu Fach Zuweisung ändern', '%user ändert die Zuweisung von %user(%coaffected) zum Studiengangteil %stgteil(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_FACHBERATER_DEL', 'MVV: Person zu Fach Zuweisung lÃ¶schen', '%user lÃ¶scht die Zuweisung von %user(%coaffected) zum Studiengangteil %stgteil(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_FACHBERATER_UPDATE', 'MVV: Person zu Fach Zuweisung Ã¤ndern', '%user Ã¤ndert die Zuweisung von %user(%coaffected) zum Studiengangteil %stgteil(%affected).', 'MVVPlugin');
 
         //3er Index
         StudipLog::registerActionPlugin('MVV_MODUL_USER_NEW', 'MVV: Person zu Modul Zuweisung erstellen', '%user weist dem Modul %modul(%affected) %user(%coaffected) als %gruppe zu.', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_MODUL_USER_DEL', 'MVV: Person zu Modul Zuweisung löschen', '%user löscht die Zuweisung von %user(%coaffected) als %gruppe zum Modul %modul(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_MODUL_USER_UPDATE', 'MVV: Person zu Modul Zuweisung ändern', '%user ändert die Zuweisung von %user(%coaffected) als %gruppe zum Modul %modul(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_MODUL_USER_DEL', 'MVV: Person zu Modul Zuweisung lÃ¶schen', '%user lÃ¶scht die Zuweisung von %user(%coaffected) als %gruppe zum Modul %modul(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_MODUL_USER_UPDATE', 'MVV: Person zu Modul Zuweisung Ã¤ndern', '%user Ã¤ndert die Zuweisung von %user(%coaffected) als %gruppe zum Modul %modul(%affected).', 'MVVPlugin');
 
         StudipLog::registerActionPlugin('MVV_MODULTEIL_STGTEILABS_NEW', 'MVV: Studiengangteilabschnitt zu Modulteil Zuweisung erstellen', '%user weist den Modulteil %modulteil(%affected) dem Studiengangteilabschnitt %stgteilabs(%coaffected) im %fachsem. Fachsemester zu.', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_MODULTEIL_STGTEILABS_DEL', 'MVV: Studiengangteilabschnitt zu Modulteil Zuweisung löschen', '%user löscht die Zuweisung des Modulteils %modulteil(%affected) im %fachsem. des Studiengangteilabschnitt %stgteilabs(%coaffected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_MODULTEIL_STGTEILABS_UPDATE', 'MVV: Studiengangteilabschnitt zu Modulteil Zuweisung ändern', '%user ändert die Zuweisung des Modulteils %modulteil(%affected) im %fachsem. des Studiengangteilabschnitt %stgteilabs(%coaffected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_MODULTEIL_STGTEILABS_DEL', 'MVV: Studiengangteilabschnitt zu Modulteil Zuweisung lÃ¶schen', '%user lÃ¶scht die Zuweisung des Modulteils %modulteil(%affected) im %fachsem. des Studiengangteilabschnitt %stgteilabs(%coaffected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_MODULTEIL_STGTEILABS_UPDATE', 'MVV: Studiengangteilabschnitt zu Modulteil Zuweisung Ã¤ndern', '%user Ã¤ndert die Zuweisung des Modulteils %modulteil(%affected) im %fachsem. des Studiengangteilabschnitt %stgteilabs(%coaffected).', 'MVVPlugin');
 
         StudipLog::registerActionPlugin('MVV_STG_STGTEIL_NEW', 'MVV: Studiengang zu Studiengangteil Zuweisung erstellen', '%user weist den Studiengang %stg(%affected) dem Studiengangteil %stgteil(%coaffected) zu.', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_STG_STGTEIL_DEL', 'MVV: Studiengang zu Studiengangteil Zuweisung löschen', '%user löscht die Zuweisung des Studienganges %stg(%affected) zum Studiengangteil %stgteil(%coaffected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_STG_STGTEIL_UPDATE', 'MVV: Studiengang zu Studiengangteil Zuweisung ändern', '%user ändert die Zuweisung des Studienganges %stg(%affected) zum Studiengangteil %stgteil(%coaffected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_STG_STGTEIL_DEL', 'MVV: Studiengang zu Studiengangteil Zuweisung lÃ¶schen', '%user lÃ¶scht die Zuweisung des Studienganges %stg(%affected) zum Studiengangteil %stgteil(%coaffected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_STG_STGTEIL_UPDATE', 'MVV: Studiengang zu Studiengangteil Zuweisung Ã¤ndern', '%user Ã¤ndert die Zuweisung des Studienganges %stg(%affected) zum Studiengangteil %stgteil(%coaffected).', 'MVVPlugin');
 
         // migrate table studiengaenge to fach
         $db->exec("RENAME TABLE `studiengaenge` TO `fach`");
@@ -690,7 +690,7 @@ class Step00302Modulverwaltung extends Migration
                 . "ADD `editor_id` VARCHAR(32) NOT NULL AFTER `author_id`");
 
         // erweitert Tabelle user_studiengang um die optionale Angabe einer
-        // Version des Studiengangs (genauer: Studiengangteils), Fremdschlüssel
+        // Version des Studiengangs (genauer: Studiengangteils), FremdschlÃ¼ssel
         // aus Tabelle mvv_stgteilversion
         $db->exec("ALTER TABLE `user_studiengang` CHANGE `studiengang_id` `fach_id` "
                 . "VARCHAR(32) NOT NULL DEFAULT ''");

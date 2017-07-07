@@ -17,7 +17,7 @@
         <? else : ?>
             <tr class="noquestionnaires">
                 <td colspan="7" style="text-align: center">
-                    <?= _('Sie haben noch keine Fragebögen erstellt.') ?>
+                    <?= _('Sie haben noch keine FragebÃ¶gen erstellt.') ?>
                 </td>
             </tr>
         <? endif ?>

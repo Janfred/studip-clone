@@ -29,7 +29,7 @@ include 'lib/seminar_open.php';
 // this page must be accessible during visibility decision
 $USER_VISIBILITY_CHECK = false;
 
-PageLayout::setTitle(_('Erläuterungen zum Datenschutz'));
+PageLayout::setTitle(_('ErlÃ¤uterungen zum Datenschutz'));
 
 $template = $template_factory->open('privacy');
 $template->set_layout('layouts/base.php');

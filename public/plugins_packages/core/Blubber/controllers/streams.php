@@ -34,7 +34,7 @@ class StreamsController extends PluginController {
             $stream = new BlubberStream(Request::option("delete_stream"));
             if ($stream['user_id'] === $GLOBALS['user']->id) {
                 $stream->delete();
-                PageLayout::postMessage(MessageBox::success(_("Stream wurde erfolgreich gelöscht.")));
+                PageLayout::postMessage(MessageBox::success(_("Stream wurde erfolgreich gelÃ¶scht.")));
                 Navigation::removeItem("/community/blubber/".Request::option("delete_stream"));
             }
         }
@@ -115,7 +115,7 @@ class StreamsController extends PluginController {
             $this->isBuddy = is_a($this->user, "BlubberExternalContact") ? $this->user->isFollowed() : User::findCurrent()->isFriendOf($this->user);
         }
         if (count($this->threads) === 0 && Request::get("user_id") !== $GLOBALS['user']->id) {
-            PageLayout::postMessage(MessageBox::info(_("Dieser Nutzer hat noch nicht öffentlich bzw. auf sein Profil geblubbert.")));
+            PageLayout::postMessage(MessageBox::info(_("Dieser Nutzer hat noch nicht Ã¶ffentlich bzw. auf sein Profil geblubbert.")));
         }
     }
 
@@ -371,7 +371,7 @@ class StreamsController extends PluginController {
                     get_username($posting['user_id']),
                     $GLOBALS['user']->id,
                     null, null, null, null,
-                    _("Änderungen an Ihrem Posting.")
+                    _("Ã„nderungen an Ihrem Posting.")
                 );
             }
         } elseif(!$new_content) {
@@ -379,13 +379,13 @@ class StreamsController extends PluginController {
                 setTempLanguage($posting['user_id']);
                 $messaging->insert_message(
                     sprintf(
-                        _("%s hat als Moderator gerade Ihren Beitrag im Blubberforum GELÖSCHT.\n\nDer alte Beitrag lautete:\n\n%s\n"),
+                        _("%s hat als Moderator gerade Ihren Beitrag im Blubberforum GELÃ–SCHT.\n\nDer alte Beitrag lautete:\n\n%s\n"),
                         get_fullname(), $old_content
                     ),
                     get_username($posting['user_id']),
                     $GLOBALS['user']->id,
                     null, null, null, null,
-                    _("Ihr Posting wurde gelöscht.")
+                    _("Ihr Posting wurde gelÃ¶scht.")
                 );
                 restoreLanguage();
             }
@@ -704,7 +704,7 @@ class StreamsController extends PluginController {
         }
         $this->render_json(array(
             'success' => 1,
-            'message' => (string) MessageBox::success(_("Kontakt hinzugefügt"))
+            'message' => (string) MessageBox::success(_("Kontakt hinzugefÃ¼gt"))
         ));
     }
 
@@ -826,7 +826,7 @@ class StreamsController extends PluginController {
             throw new AccessDeniedException("Not allowed to edit stream");
         }
         $this->stream->delete();
-        PageLayout::postMessage(MessageBox::success(_("Blubberstream gelöscht.")));
+        PageLayout::postMessage(MessageBox::success(_("Blubberstream gelÃ¶scht.")));
         $path = "streams/global";
         foreach (BlubberStream::findMine() as $stream) {
             if ($stream['defaultstream']) {

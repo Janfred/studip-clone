@@ -160,8 +160,8 @@ class Shared_ModulController extends MVVController
         foreach ($modul->modulteile as $modulTeil) {
 
             $deskriptor = $modulTeil->getDeskriptor($display_language);
-            // Für die Kenntlichmachung der Modulteile in Listen die Nummer des
-            // Modulteils und den ausgewählten Namen verwenden.
+            // FÃ¼r die Kenntlichmachung der Modulteile in Listen die Nummer des
+            // Modulteils und den ausgewÃ¤hlten Namen verwenden.
             // Ist keine Nummer vorhanden, dann Durchnummerieren und Standard-
             // Bezeichnung verwenden.
             if (trim($modulTeil->nummer)) {

@@ -39,7 +39,7 @@ class CoreElearningInterface implements StudipModule {
             }
 
             if ($GLOBALS['perm']->have_studip_perm('tutor', Context::getId())) {
-                $navigation->addSubNavigation('edit', new Navigation(_('Lernmodule hinzuf¸gen / entfernen'), 'dispatch.php/course/elearning/edit?seminar_id=' . $course_id));
+                $navigation->addSubNavigation('edit', new Navigation(_('Lernmodule hinzuf√ºgen / entfernen'), 'dispatch.php/course/elearning/edit?seminar_id=' . $course_id));
             }
 
             return array('elearning' => $navigation);
@@ -55,11 +55,11 @@ class CoreElearningInterface implements StudipModule {
     {
         return array(
             'summary' => _('Zugang zu extern erstellten Lernmodulen'),
-            'description' => _('‹ber diese Schnittstelle ist es mˆglich, '.
+            'description' => _('√úber diese Schnittstelle ist es m√∂glich, '.
                 'Selbstlerneinheiten, die in externen Programmen erstellt '.
-                'werden, in Stud.IP zur Verf¸gung zu stellen. Ein h‰ufig '.
+                'werden, in Stud.IP zur Verf√ºgung zu stellen. Ein h√§ufig '.
                 'angebundenes System ist ILIAS. Besteht eine Anbindung zu '.
-                'einem ILIAS-System, haben Lehrende die Mˆglichkeit, in '.
+                'einem ILIAS-System, haben Lehrende die M√∂glichkeit, in '.
                 'ILIAS Selbstlerneinheiten zu erstellen und in Stud.IP '.
                 'bereit zu stellen.'),
             'displayname' => _('Lernmodulschnittstelle'),
@@ -69,10 +69,10 @@ class CoreElearningInterface implements StudipModule {
                             Aufgaben- und Test-Erstellung'),
             'icon' => Icon::create('learnmodule', 'info'),
             'descriptionshort' => _('Zugang zu extern erstellten Lernmodulen'),
-            'descriptionlong' => _('‹ber diese Schnittstelle ist es mˆglich, Selbstlerneinheiten, '.
-                                    'die in externen Programmen erstellt werden, in Stud.IP zur Verf¸gung '.
-                                    'zu stellen. Ein h‰ufig angebundenes System ist ILIAS. Besteht eine '.
-                                    'Anbindung zu einem ILIAS-System, haben Lehrende die Mˆglichkeit, in '.
+            'descriptionlong' => _('√úber diese Schnittstelle ist es m√∂glich, Selbstlerneinheiten, '.
+                                    'die in externen Programmen erstellt werden, in Stud.IP zur Verf√ºgung '.
+                                    'zu stellen. Ein h√§ufig angebundenes System ist ILIAS. Besteht eine '.
+                                    'Anbindung zu einem ILIAS-System, haben Lehrende die M√∂glichkeit, in '.
                                     'ILIAS Selbstlerneinheiten zu erstellen und in Stud.IP bereit zu stellen.')
         );
     }

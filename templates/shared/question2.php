@@ -5,7 +5,7 @@
 <div class="modaloverlay">
     <div class="create-question-dialog ui-widget-content ui-dialog studip-confirmation">
         <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
-            <span><?= _('Bitte bestätigen Sie die Aktion') ?></span>
+            <span><?= _('Bitte bestÃ¤tigen Sie die Aktion') ?></span>
             <form action="<?= $approvalLink ?>" method="post">
                 <?= CSRFProtection::tokenTag() ?> 
                 <?= $this->render_partial('shared/question2-parameters.php', array(

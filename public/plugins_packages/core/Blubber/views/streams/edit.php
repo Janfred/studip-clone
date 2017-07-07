@@ -23,7 +23,7 @@
             </td>
             <td>
                 <select id="stream_sort" name="sort">
-                    <option value="activity"<?= $stream['sort'] === "activity" ? " selected" : "" ?>><?= _("Nach neuster Aktivität") ?></option>
+                    <option value="activity"<?= $stream['sort'] === "activity" ? " selected" : "" ?>><?= _("Nach neuster AktivitÃ¤t") ?></option>
                     <option value="age"<?= $stream['sort'] === "age" ? " selected" : "" ?>><?= _("Nach Alter") ?></option>
                 </select>
             </td>
@@ -70,7 +70,7 @@
                     <br>
                     <?= _("Veranstaltungen") ?>
                 </div>
-                <? $label = _("Wählen Sie die Veranstaltungen aus, deren Blubber im Stream auftauchen sollen.") ?>
+                <? $label = _("WÃ¤hlen Sie die Veranstaltungen aus, deren Blubber im Stream auftauchen sollen.") ?>
                 <select multiple name="pool_courses[]" style="max-width: 220px;" size="8" 
                         aria-label="<?= $label ?>" title="<?= $label ?>"
                         class="selector"
@@ -92,7 +92,7 @@
                     <br>
                     <?= _("Kontaktgruppen") ?>
                 </div>
-                <? $label = _("Wählen Sie die Kontaktgruppen aus, deren Blubber im Stream erscheinen sollen.") ?>
+                <? $label = _("WÃ¤hlen Sie die Kontaktgruppen aus, deren Blubber im Stream erscheinen sollen.") ?>
                 <select multiple name="pool_groups[]" style="max-width: 220px;" 
                         aria-label="<?= $label ?>" title="<?= $label ?>" size="8"
                         class="selector"
@@ -114,7 +114,7 @@
                     <br>
                     <?= _("Hashtags") ?>
                 </div>
-                <? $label = _("Bennen Sie beliebig viele mit Leerzeichen getrennte #Hashtags. Alle für Sie potentiell sichtbaren Blubber (öffentlich, privat oder aus Veranstaltungen) mit dem Hashtag tauchen dann im Stream auf.") ?>
+                <? $label = _("Bennen Sie beliebig viele mit Leerzeichen getrennte #Hashtags. Alle fÃ¼r Sie potentiell sichtbaren Blubber (Ã¶ffentlich, privat oder aus Veranstaltungen) mit dem Hashtag tauchen dann im Stream auf.") ?>
                 <div>
                 <textarea name="pool_hashtags" rows="6" style="width: 98%; max-width: 220px;" 
                           aria-label="<?= $label ?>" title="<?= $label ?>" 
@@ -151,7 +151,7 @@
                         aria-label="<?= $label ?>" title="<?= $label ?>"
                         class="selector"
                         >
-                    <option value="public"<?= in_array("public", (array) $stream['filter_type']) ? " selected" : "" ?>><?= _("Öffentlich") ?></option>
+                    <option value="public"<?= in_array("public", (array) $stream['filter_type']) ? " selected" : "" ?>><?= _("Ã–ffentlich") ?></option>
                     <option value="private"<?= in_array("private", (array) $stream['filter_type']) ? " selected" : "" ?>><?= _("Privat") ?></option>
                     <option value="course"<?= in_array("course", (array) $stream['filter_type']) ? " selected" : "" ?>><?= _("Veranstaltungsblubber") ?></option>
                 </select>
@@ -167,7 +167,7 @@
                     <br>
                     <?= _("Veranstaltungen") ?>
                 </div>
-                <? $label = _("Wählen Sie Veranstaltungen aus, die nicht im Stream berücksichtigt werden sollen.") ?>
+                <? $label = _("WÃ¤hlen Sie Veranstaltungen aus, die nicht im Stream berÃ¼cksichtigt werden sollen.") ?>
                 <select multiple name="filter_courses[]" style="max-width: 220px;" size="8" 
                         aria-label="<?= $label ?>" title="<?= $label ?>"
                         class="selector"
@@ -189,7 +189,7 @@
                     <br>
                     <?= _("Kontaktgruppen") ?>
                 </div>
-                <? $label = _("Wählen Sie die Kontaktgruppen aus, deren Blubber im Stream nicht erscheinen sollen.") ?>
+                <? $label = _("WÃ¤hlen Sie die Kontaktgruppen aus, deren Blubber im Stream nicht erscheinen sollen.") ?>
                 <select multiple name="filter_groups[]" style="max-width: 220px;" 
                         aria-label="<?= $label ?>" title="<?= $label ?>" size="8"
                         class="selector"
@@ -231,7 +231,7 @@
                     <br>
                     <?= _("Ohne Hashtags") ?>
                 </div>
-                <? $label = _("Folgende Hashtags dürfen nicht in den Blubberpostings des Streams vorkommen.") ?>
+                <? $label = _("Folgende Hashtags dÃ¼rfen nicht in den Blubberpostings des Streams vorkommen.") ?>
                 <div>
                 <textarea name="filter_nohashtags" rows="6" style="width: 98%; max-width: 220px;" 
                           aria-label="<?= $label ?>" title="<?= $label ?>" 
@@ -263,6 +263,6 @@ if ($streamAvatar->is_customized()) {
 
 $actions = new ActionsWidget();
 if (!$stream->isNew()) {
-    $actions->addLink(_("Diesen Stream löschen"), PluginEngine::getURL($plugin, array(), 'streams/delete/'.$stream->getId()), Icon::create("trash", "clickable"), array('onclick' => "return window.confirm('"._("Wirklich löschen?")."');"));
+    $actions->addLink(_("Diesen Stream lÃ¶schen"), PluginEngine::getURL($plugin, array(), 'streams/delete/'.$stream->getId()), Icon::create("trash", "clickable"), array('onclick' => "return window.confirm('"._("Wirklich lÃ¶schen?")."');"));
 }
 $sidebar->addWidget($actions);

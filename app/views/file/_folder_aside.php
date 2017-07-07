@@ -9,7 +9,7 @@
                 <td><?= date('d.m.Y H:i', $folder->mkdate) ?></td>
             </tr>
             <tr>
-                <td><?= _('Geändert') ?></td>
+                <td><?= _('GeÃ¤ndert') ?></td>
                 <td><?= date('d.m.Y H:i', $folder->chdate) ?></td>
             </tr>
             <tr>

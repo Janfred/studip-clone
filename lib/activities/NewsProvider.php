@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @author      Till Glˆggler <tgloeggl@uos.de>
- * @author      AndrÈ Klaﬂen <klassen@elan-ev.de>
+ * @author      Till Gl√∂ggler <tgloeggl@uos.de>
+ * @author      Andr√© Kla√üen <klassen@elan-ev.de>
  * @license     GPL 2 or later
  */
 
@@ -15,26 +15,26 @@ class NewsProvider implements ActivityProvider
         switch ($activity->context) {
             case 'course':
                 return array(
-                    \URLHelper::getUrl('dispatch.php/course/overview/?cid=' . $activity->context_id . '&contentbox_type=news&contentbox_open=' . $activity->object_id) => _('Ank¸ndigungen in der Veranstaltung')
+                    \URLHelper::getUrl('dispatch.php/course/overview/?cid=' . $activity->context_id . '&contentbox_type=news&contentbox_open=' . $activity->object_id) => _('Ank√ºndigungen in der Veranstaltung')
                 );
             break;
 
             case 'institute':
                 return array(
-                    \URLHelper::getUrl('dispatch.php/institute/overview?auswahl=' . $activity->context_id) => _('Ank¸ndigungen in der Einrichtung')
+                    \URLHelper::getUrl('dispatch.php/institute/overview?auswahl=' . $activity->context_id) => _('Ank√ºndigungen in der Einrichtung')
                 );
             break;
 
             case 'system':
                 return array(
-                    \URLHelper::getUrl('dispatch.php/start?contentbox_type=news&contentbox_open='. $news->getId() .'#'. $news->getId()) => _('Ank¸ndigungen auf der Startseite')
+                    \URLHelper::getUrl('dispatch.php/start?contentbox_type=news&contentbox_open='. $news->getId() .'#'. $news->getId()) => _('Ank√ºndigungen auf der Startseite')
                 );
             break;
 
             case 'user':
                 return array(
                     \URLHelper::getUrl('dispatch.php/profile/?username='. get_username($activity->context_id)
-                        . '&contentbox_type=news&contentbox_open='. $news->getId() .'#'. $news->getId()) => _('Ank¸ndigungen auf der Profilseite')
+                        . '&contentbox_type=news&contentbox_open='. $news->getId() .'#'. $news->getId()) => _('Ank√ºndigungen auf der Profilseite')
                 );
             break;
         }
@@ -123,7 +123,7 @@ class NewsProvider implements ActivityProvider
      */
     public static function getLexicalField()
     {
-        return _('eine Ank¸ndigung');
+        return _('eine Ank√ºndigung');
     }
 
 }

@@ -5,11 +5,11 @@
             <td colspan="8" style="text-align: center; vertical-align: middle;">
                 <div style="text-align: left; display: inline-block; width: 33%; white-space: nowrap;">
                     <a style="padding-right: 2em;" href="<?= $controller->url_for('calendar/group/month', array('atime' => mktime(12, 0, 0, date('n', $calendars[0][15]->getStart()), 15, date('Y', $calendars[0][15]->getStart()) - 1))) ?>">
-                        <?= Icon::create('arr_2left', 'clickable', ['title' => _('Ein Jahr zurück')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
+                        <?= Icon::create('arr_2left', 'clickable', ['title' => _('Ein Jahr zurÃ¼ck')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
                         <?= strftime('%B %Y', strtotime('-1 year', $calendars[0][15]->getStart())) ?>
                     </a>
                     <a href="<?= $controller->url_for('calendar/group/month', array('atime' => $calendars[0][0]->getStart() - 1)) ?>">
-                        <?= Icon::create('arr_1left', 'clickable', ['title' => _('Einen Monat zurück')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
+                        <?= Icon::create('arr_1left', 'clickable', ['title' => _('Einen Monat zurÃ¼ck')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
                         <?= strftime('%B %Y', strtotime('-1 month', $calendars[0][15]->getStart())) ?>
                     </a>
                 </div>

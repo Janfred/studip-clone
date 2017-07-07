@@ -1,5 +1,5 @@
 <div>
-    <?=_("Um endgültig in die Veranstaltung aufgenommen zu werden, müssen Sie noch weitere Voraussetzungen erfüllen.")?>
+    <?=_("Um endgÃ¼ltig in die Veranstaltung aufgenommen zu werden, mÃ¼ssen Sie noch weitere Voraussetzungen erfÃ¼llen.")?>
 </div>
 <div>
     <?=_("Lesen Sie bitte folgenden Hinweistext:")?>

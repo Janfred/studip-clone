@@ -50,7 +50,7 @@ class MessagesController extends AuthenticatedController {
             foreach (Request::getArray("bulk") as $message_id) {
                 $this->delete_message($message_id);
             }
-            PageLayout::postMessage(MessageBox::success(sprintf(_("%u Nachrichten wurden gelöscht"), count(Request::getArray("bulk")))));
+            PageLayout::postMessage(MessageBox::success(sprintf(_("%u Nachrichten wurden gelÃ¶scht"), count(Request::getArray("bulk")))));
         }
 
         $this->messages = $this->get_messages(
@@ -74,7 +74,7 @@ class MessagesController extends AuthenticatedController {
             foreach (Request::getArray("bulk") as $message_id) {
                 $this->delete_message($message_id);
             }
-            PageLayout::postMessage(MessageBox::success(sprintf(_("%u Nachrichten wurden gelöscht"), count(Request::getArray("bulk")))));
+            PageLayout::postMessage(MessageBox::success(sprintf(_("%u Nachrichten wurden gelÃ¶scht"), count(Request::getArray("bulk")))));
         }
 
         $this->messages = $this->get_messages(
@@ -452,7 +452,7 @@ class MessagesController extends AuthenticatedController {
             //we must display a note for the user to avoid sending a message
             //with the wrong attachements attached to it.
             if (count($unattached_files)) {
-                PageLayout::postInfo(_('Es wurden Dateianhänge gefunden, welche zwar hochgeladen, aber noch nicht versandt wurden. Diese wurden an diese Nachricht angehängt!'));
+                PageLayout::postInfo(_('Es wurden DateianhÃ¤nge gefunden, welche zwar hochgeladen, aber noch nicht versandt wurden. Diese wurden an diese Nachricht angehÃ¤ngt!'));
                 //create an attachment folder for the new message:
                 $new_attachment_folder = MessageFolder::createTopFolder($this->default_message->id);
 
@@ -580,9 +580,9 @@ class MessagesController extends AuthenticatedController {
         if (Request::isPost() && $ticket && check_ticket($ticket)) {
             $success = $this->delete_message($message_id);
             if ($success) {
-                PageLayout::postMessage(MessageBox::success(_('Nachricht gelöscht!')));
+                PageLayout::postMessage(MessageBox::success(_('Nachricht gelÃ¶scht!')));
             } else {
-                PageLayout::postMessage(MessageBox::error(_('Nachricht konnte nicht gelöscht werden.')));
+                PageLayout::postMessage(MessageBox::error(_('Nachricht konnte nicht gelÃ¶scht werden.')));
             }
         }
 
@@ -705,7 +705,7 @@ class MessagesController extends AuthenticatedController {
             throw new AccessDeniedException();
         }
         if (!$GLOBALS['ENABLE_EMAIL_ATTACHMENTS']) {
-            throw new AccessDeniedException(_('Mailanhänge sind nicht erlaubt.'));
+            throw new AccessDeniedException(_('MailanhÃ¤nge sind nicht erlaubt.'));
         }
         $file = $_FILES['file'];
         $output = array(
@@ -777,7 +777,7 @@ class MessagesController extends AuthenticatedController {
     {
         CSRFProtection::verifyUnsafeRequest();
         DbManager::get()->execute("DELETE FROM message_tags WHERE user_id=? AND tag LIKE ?", array($GLOBALS['user']->id, Request::get('tag')));
-        PageLayout::postMessage(MessageBox::success(_('Schlagwort gelöscht!')));
+        PageLayout::postMessage(MessageBox::success(_('Schlagwort gelÃ¶scht!')));
         $this->redirect($this->url_for('messages/overview'));
     }
 }

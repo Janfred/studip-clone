@@ -6,12 +6,12 @@
 <? endif ?>
 
 <? if (count($domains) == 0) : ?>
-    <?= MessageBox::info(_('Es sind keine Nutzerdomänen vorhanden.')) ?>
+    <?= MessageBox::info(_('Es sind keine NutzerdomÃ¤nen vorhanden.')) ?>
 <? else : ?>
 
 <table class="default">
     <caption>
-        <?= _('Liste der Nutzerdomänen') ?>
+        <?= _('Liste der NutzerdomÃ¤nen') ?>
     </caption>
     <?= $this->render_partial('admin/domain/domains') ?>
 </table>

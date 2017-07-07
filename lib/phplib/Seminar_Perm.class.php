@@ -9,7 +9,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      André Noack <noack@data-quest.de>
+ * @author      AndrÃ© Noack <noack@data-quest.de>
  * @copyright   2000 Stud.IP Core-Group
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  */
@@ -56,8 +56,8 @@ class Seminar_Perm
     {
         if (!$this->have_perm($must_have)) {
             if ($GLOBALS['user']->id == 'nobody') {
-                $message = _('Sie sind nicht im System angemeldet und können daher nicht auf diesen Teil des Systems zugreifen. '
-                           . 'Um den vollen Funktionsumfang des Systems benutzen zu können, müssen Sie sich mit Ihrem Nutzernamen und Passwort anmelden.');
+                $message = _('Sie sind nicht im System angemeldet und kÃ¶nnen daher nicht auf diesen Teil des Systems zugreifen. '
+                           . 'Um den vollen Funktionsumfang des Systems benutzen zu kÃ¶nnen, mÃ¼ssen Sie sich mit Ihrem Nutzernamen und Passwort anmelden.');
                 throw new AccessDeniedException($message);
             } else {
                 throw new AccessDeniedException();

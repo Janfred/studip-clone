@@ -97,15 +97,15 @@ class ExternElementLitList extends ExternElement {
         $element_headline = $this->getEditFormHeadline($edit_form);
         
         $edit_form_headlines = array(
-                'div_change' => _("Bereich mit Änderungsdatum und Name (HTML-Tag &lt;div&gt;)"),
+                'div_change' => _("Bereich mit Ã„nderungsdatum und Name (HTML-Tag &lt;div&gt;)"),
                 'span_name' => _("Formatierung des Namens (HTML-Tag &lt;span&gt;)"));
         $content_table = $edit_form->getEditFormContent($this->attributes, $edit_form_headlines);
         $content_table .= $edit_form->editBlankContent();
         
         $headline = $edit_form->editHeadline(_("Weitere Optionen"));
 
-        $title = _("Änderungsdatum anzeigen:");
-        $info = _("Ausgabe des Änderungsdatums und des Namens der Person, die die Änderungen vorgenommen hat");
+        $title = _("Ã„nderungsdatum anzeigen:");
+        $info = _("Ausgabe des Ã„nderungsdatums und des Namens der Person, die die Ã„nderungen vorgenommen hat");
         $content = $edit_form->editCheckboxGeneric('showlastchange', $title, $info, 1, '');
         
         $title = _("Alternative Formatierung:");

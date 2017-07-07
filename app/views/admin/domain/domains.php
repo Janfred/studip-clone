@@ -40,7 +40,7 @@
       </a>
       <? if (count($domain->getUsers()) == 0): ?>
         <a href="<?= $controller->url_for('admin/domain/delete?id='.$domain->getID()) ?>">
-          <?= Icon::create('trash', 'clickable', ['title' => _('löschen')])->asImg() ?>
+          <?= Icon::create('trash', 'clickable', ['title' => _('lÃ¶schen')])->asImg() ?>
         </a>
       <? endif ?>
     </td>

@@ -28,7 +28,7 @@ class Admin_AdditionalController extends AuthenticatedController
         // Check permissions to be on this site
         if (!$GLOBALS['perm']->have_studip_perm("tutor", $this->course->id)) {
             throw new AccessDeniedException(_("Sie haben keine Berechtigung diese " .
-                    "Veranstaltung zu ver‰ndern."));
+                    "Veranstaltung zu ver√§ndern."));
         }
     }
 

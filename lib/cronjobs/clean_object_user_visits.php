@@ -18,7 +18,7 @@ class CleanObjectUserVisits extends CronJob
      */
     public static function getName()
     {
-        return _('Entfernt alte Eintr‰ge aus der Tabelle "object_user_visits"');
+        return _('Entfernt alte Eintr√§ge aus der Tabelle "object_user_visits"');
     }
 
     /**
@@ -28,7 +28,7 @@ class CleanObjectUserVisits extends CronJob
      */
     public static function getDescription()
     {
-        return _('Um die Tabelle "object_user_visits" schmal zu halten, werden alte Eintr‰ge nach einem definierten Zeitraum entfernt.');
+        return _('Um die Tabelle "object_user_visits" schmal zu halten, werden alte Eintr√§ge nach einem definierten Zeitraum entfernt.');
     }
 
     /**

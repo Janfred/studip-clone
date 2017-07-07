@@ -8,7 +8,7 @@
 // StudipLitSearchPluginGvk.class.php
 //
 //
-// Copyright (c) 2003 André Noack <noack@data-quest.de>
+// Copyright (c) 2003 AndrÃ© Noack <noack@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@ require_once 'StudipLitSearchPluginZ3950Abstract.class.php';
 *
 *
 * @access   public
-* @author   André Noack <noack@data-quest.de>
+* @author   AndrÃ© Noack <noack@data-quest.de>
 * @package
 **/
 class StudipLitSearchPluginGvk extends StudipLitSearchPluginZ3950Abstract{
@@ -42,33 +42,33 @@ class StudipLitSearchPluginGvk extends StudipLitSearchPluginZ3950Abstract{
     {
         parent::__construct();
         $this->description = "Gemeinsamer Verbundkatalog - GVK
-Der GVK erfasst die Bibliotheksbestände der Bundesländer: Bremen, Hamburg, Niedersachsen, Sachsen-Anhalt, Schleswig-Holstein, Thüringen, Mecklenburg-Vorpommern und der Stiftung Preußischer Kulturbesitz (Berlin).
-Zusätzlich sind die Zeitschriftennachweise aller subito-Lieferbibliotheken aus Deutschland und Österreich sowie weiterer deutscher Universitätsbibliotheken enthalten.";
+Der GVK erfasst die BibliotheksbestÃ¤nde der BundeslÃ¤nder: Bremen, Hamburg, Niedersachsen, Sachsen-Anhalt, Schleswig-Holstein, ThÃ¼ringen, Mecklenburg-Vorpommern und der Stiftung PreuÃŸischer Kulturbesitz (Berlin).
+ZusÃ¤tzlich sind die Zeitschriftennachweise aller subito-Lieferbibliotheken aus Deutschland und Ã–sterreich sowie weiterer deutscher UniversitÃ¤tsbibliotheken enthalten.";
         $this->z_host = "sru.gbv.de/gvk";
         $this->z_record_encoding = 'utf-8';
         $this->z_syntax = 'USMARC';
         $this->convert_umlaute = true;
         $this->z_accession_bib = "12";
         $this->z_accession_re = '/[0-9]{8}[0-9X]{1}/';
-        $this->z_profile = array('1016' => _("Alle Wörter [ALL]"),
-                     '4' => _("Titelstichwörter [TIT]"),
-                     '21' => _("Schlagwörter [SLW]"),
+        $this->z_profile = array('1016' => _("Alle WÃ¶rter [ALL]"),
+                     '4' => _("TitelstichwÃ¶rter [TIT]"),
+                     '21' => _("SchlagwÃ¶rter [SLW]"),
                      '5' => _("Serie, Zeitschrift (Phrase) [GTI]"),
                      '1004 ' => _("Person, Autor [PER]"),
                      '7' => _("ISBN [ISB]"),
                      '8' => _("ISSN [ISN]"),
                      '1007' => _("alle Nummern (ISBN, ISSN, ...) [NUM]"),
-                     '2' => _("Körperschaftsname (Phrase) [KOS]"),
-                     '1005' => _("Körperschaft (Stichwort) [KOR]"),
+                     '2' => _("KÃ¶rperschaftsname (Phrase) [KOS]"),
+                     '1005' => _("KÃ¶rperschaft (Stichwort) [KOR]"),
                      '3' => _("Kongress (Phrase) [KNS]"),
                      '1006' => _("Kongress (Stichwort) [KON]"),
                      '1018' => _("Ort,Verlag (Stichwort) [PUB]"),
                      '20' => _("Basisklassifikation [BKL]"),
                      '12' => _("PICA Prod.-Nr. [PPN]"),
                     ); /*  '5' => _("Serie, Zeitschrift (Stichwort) [SER]"),
-                           herausgenommen, da #5 standardmäßig auf Phrase gemappt ist und eine Stichwortsuche nicht möglich ist.
-                           Eine Stichwortsuche müsste über das Structure-Attribut (#4=2) kenntlich gemacht werden. Dies wird aber
-                           von Stud.IP nicht unterstützt.
+                           herausgenommen, da #5 standardmÃ¤ÃŸig auf Phrase gemappt ist und eine Stichwortsuche nicht mÃ¶glich ist.
+                           Eine Stichwortsuche mÃ¼sste Ã¼ber das Structure-Attribut (#4=2) kenntlich gemacht werden. Dies wird aber
+                           von Stud.IP nicht unterstÃ¼tzt.
                        */
     }
 }

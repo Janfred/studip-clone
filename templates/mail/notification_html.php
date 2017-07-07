@@ -9,9 +9,9 @@
   <div style="background-color: white; margin: auto; max-width: 700px; padding: 4px;">
     <?= Assets::img("locale/$lang/LC_PICTURES/mail_header_notification.png") ?>
     <p>
-      <?= _("Sie erhalten hiermit in regelmäßigen Abständen Informationen über Neuigkeiten und Änderungen in belegten Veranstaltungen.") ?>
+      <?= _("Sie erhalten hiermit in regelmÃ¤ÃŸigen AbstÃ¤nden Informationen Ã¼ber Neuigkeiten und Ã„nderungen in belegten Veranstaltungen.") ?>
       <br><br>
-      <?= _("Über welche Inhalte und in welchem Format Sie informiert werden wollen, können Sie hier einstellen:") ?>
+      <?= _("Ãœber welche Inhalte und in welchem Format Sie informiert werden wollen, kÃ¶nnen Sie hier einstellen:") ?>
       <br>
       <a href="<?= URLHelper::getLink('dispatch.php/settings/notification') ?>">
         <?= URLHelper::getLink('dispatch.php/settings/notification') ?>
@@ -43,7 +43,7 @@
     </table>
     <hr>
     <span class="minor">
-      <?= _("Diese Nachricht wurde automatisch vom Stud.IP-System generiert. Sie können darauf nicht antworten.") ?>
+      <?= _("Diese Nachricht wurde automatisch vom Stud.IP-System generiert. Sie kÃ¶nnen darauf nicht antworten.") ?>
     </span>
   </div>
 </body>

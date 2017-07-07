@@ -33,7 +33,7 @@ class EventLog
             'institute' => _('Einrichtung'),
             'user'      => _('Nutzer/-in'),
             'resource'  => _('Ressource'),
-            'other'     => _('Sonstige (von Aktion abh‰ngig)')
+            'other'     => _('Sonstige (von Aktion abh√§ngig)')
         );
     }
 

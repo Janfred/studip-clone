@@ -21,7 +21,7 @@ class Api_AuthorizationsController extends AuthenticatedController
 
         $this->types = array(
             'website' => _('Website'),
-            'program' => _('Herkömmliches Desktopprogramm'),
+            'program' => _('HerkÃ¶mmliches Desktopprogramm'),
             'app'     => _('Mobile App')
         );
     }
@@ -34,7 +34,7 @@ class Api_AuthorizationsController extends AuthenticatedController
         $this->consumers = RESTAPI\UserPermissions::get($GLOBALS['user']->id)->getConsumers();
         $this->types = array(
             'website' => _('Website'),
-            'program' => _('Herkömmliches Desktopprogramm'),
+            'program' => _('HerkÃ¶mmliches Desktopprogramm'),
             'app'     => _('Mobile App')
         );
 

@@ -1,20 +1,20 @@
 <blockquote>
     <p>
-        <?= _('Die folgenden Veranstaltungen können Sie betreten, ohne '
+        <?= _('Die folgenden Veranstaltungen kÃ¶nnen Sie betreten, ohne '
             .'sich im System registriert zu haben.') ?>
     </p>
     <p>
-        <?= sprintf(_('In den %s blau markierten Veranstaltungen dürfen '
+        <?= sprintf(_('In den %s blau markierten Veranstaltungen dÃ¼rfen '
                      .'Sie nur lesen und Dokumente herunterladen.'),
                     '<span class="gruppe6">&nbsp;&nbsp;</span>') ?>
         <br>
         <?= sprintf(_('In den %s orange markierten Veranstaltungen '
-                     .'können Sie sich zusätzlich mit eigenen Beiträgen '
+                     .'kÃ¶nnen Sie sich zusÃ¤tzlich mit eigenen BeitrÃ¤gen '
                      .'im Forum beteiligen.'),
                     '<span class="gruppe2">&nbsp;&nbsp;</span>') ?>
     </p>
     <p>
-        <?= _('In der rechten Spalte können Sie sehen, was in den '
+        <?= _('In der rechten Spalte kÃ¶nnen Sie sehen, was in den '
               .'einzelnen Veranstaltungen an Inhalten vorhanden ist.') ?>
     </p>
 </blockquote>

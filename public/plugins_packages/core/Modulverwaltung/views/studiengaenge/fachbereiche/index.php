@@ -1,6 +1,6 @@
 <?= $controller->renderMessages() ?>
 <table class="default collapsable" style="width: 100%;">
-    <caption><?= _('Studiengänge gruppiert nach Fachbereichen') ?></caption>
+    <caption><?= _('StudiengÃ¤nge gruppiert nach Fachbereichen') ?></caption>
     <colgroup>
         <col>
         <col style="width: 10%;">
@@ -8,7 +8,7 @@
     <thead>
         <tr class="sortable">
             <?= $controller->renderSortLink('/index', _('Fachbereich'), 'name') ?>
-            <?= $controller->renderSortLink('/index', _('Studiengänge'), 'count_objects', array('style' => 'text-align: center;')) ?>
+            <?= $controller->renderSortLink('/index', _('StudiengÃ¤nge'), 'count_objects', array('style' => 'text-align: center;')) ?>
         </tr>
     </thead>
     <? foreach ($fachbereiche as $fachbereich) : ?>

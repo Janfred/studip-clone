@@ -3,7 +3,7 @@
     <nav class="calendar-nav" style="vertical-align: middle">
         <span style="white-space: nowrap;">
             <a href="<?= $controller->url_for('calendar/single/year', array('atime' => strtotime('-1 year', $atime))) ?>">
-                <?= Icon::create('arr_2left', 'clickable', ['title' => _('Ein Jahr zurück')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
+                <?= Icon::create('arr_2left', 'clickable', ['title' => _('Ein Jahr zurÃ¼ck')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
                 <?= strftime('%Y', strtotime('-1 year', $atime)) ?>
             </a>
         </span>

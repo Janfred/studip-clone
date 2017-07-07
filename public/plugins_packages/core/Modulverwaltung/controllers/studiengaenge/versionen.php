@@ -277,7 +277,7 @@ class Studiengaenge_VersionenController extends SharedVersionController
         $sidebar->setImage(Assets::image_path('sidebar/learnmodule-sidebar.png'));
 
         $widget  = new ActionsWidget();
-        $widget->addLink( _('Auswahl zurücksetzen'),
+        $widget->addLink( _('Auswahl zurÃ¼cksetzen'),
                 $this->url_for('/reset'),
                 Icon::create('refresh', 'clickable'));
         if ($this->chooser_filter['stgteil']) {
@@ -293,7 +293,7 @@ class Studiengaenge_VersionenController extends SharedVersionController
 
         $helpbar = Helpbar::get();
         $widget = new HelpbarWidget();
-        $widget->addElement(new WidgetElement(_('Auf dieser Seite können Sie die Versionen der Studiengangteile verwalten.')));
+        $widget->addElement(new WidgetElement(_('Auf dieser Seite kÃ¶nnen Sie die Versionen der Studiengangteile verwalten.')));
         $helpbar->addWidget($widget);
     }
 

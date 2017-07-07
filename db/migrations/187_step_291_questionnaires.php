@@ -118,7 +118,7 @@ class Step291Questionnaires extends Migration
                     for ($i = 0; $i < $count; $i++) {
                         $answer = new QuestionnaireAnswer();
                         $answer['user_id'] = null;
-                        $answer['chdate'] = 1; //damit man nicht aus dem chdate auf die user_id schließen kann
+                        $answer['chdate'] = 1; //damit man nicht aus dem chdate auf die user_id schlieÃŸen kann
                         $answer['mkdate'] = 1; //mkdate genauso
                         $answer['question_id'] = $question['id'];
                         $answerdata = array();
@@ -183,7 +183,7 @@ class Step291Questionnaires extends Migration
             }
 
 
-            //Und noch einhängen das ganze:
+            //Und noch einhÃ¤ngen das ganze:
             $binding = new QuestionnaireAssignment();
             $binding['questionnaire_id'] = $questionnaire->getId();
             $binding['range_id'] = $vote['range_id'] !== "studip" ? $vote['range_id'] : "start";
@@ -236,7 +236,7 @@ class Step291Questionnaires extends Migration
             'question' => $vote['question'],
         );
 
-        //Antwortmöglichkeiten vorsehen:
+        //AntwortmÃ¶glichkeiten vorsehen:
         $optionsStatement = $database->prepare("
                 SELECT *
                 FROM voteanswers

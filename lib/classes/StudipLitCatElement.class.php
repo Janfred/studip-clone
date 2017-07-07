@@ -8,7 +8,7 @@
 // StudipLitCatElement.class.php
 // Class to build search formular and execute search
 //
-// Copyright (c) 2003 André Noack <noack@data-quest.de>
+// Copyright (c) 2003 AndrÃ© Noack <noack@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@
 *
 *
 * @access   public
-* @author   André Noack <noack@data-quest.de>
+* @author   AndrÃ© Noack <noack@data-quest.de>
 * @package
 **/
 class StudipLitCatElement {
@@ -61,12 +61,12 @@ class StudipLitCatElement {
                                                 'type'  => 'text',
                                                 'mandatory' => true),
                         'dc_creator'=>  array(  'caption'   => _("Verfasser oder Urheber"),
-                                                'info'  => _("Die Person(en) oder Organisation(en), die den intellektuellen Inhalt verantworten. Z.B. Autoren bei Textdokumenten; Künstler, Photographen bzw. auch andere Bezeichnungen wie Komponist und Maler bei graphischen Dokumenten."),
+                                                'info'  => _("Die Person(en) oder Organisation(en), die den intellektuellen Inhalt verantworten. Z.B. Autoren bei Textdokumenten; KÃ¼nstler, Photographen bzw. auch andere Bezeichnungen wie Komponist und Maler bei graphischen Dokumenten."),
                                                 'len'   => 255,
                                                 'type'  => 'text',
                                                 'mandatory' => true),
-                        'dc_subject'=>  array(  'caption'   => _("Thema und Stichwörter"),
-                                                'info'  => _("Thema, Schlagwort, Stichwort. Das Thema der Ressource bzw. Stichwörter oder Phrasen, die das Thema oder den Inhalt beschreiben"),
+                        'dc_subject'=>  array(  'caption'   => _("Thema und StichwÃ¶rter"),
+                                                'info'  => _("Thema, Schlagwort, Stichwort. Das Thema der Ressource bzw. StichwÃ¶rter oder Phrasen, die das Thema oder den Inhalt beschreiben"),
                                                 'len'   => 255,
                                                 'type'  => 'text'),
                         'dc_description'=>array('caption'   => _("Inhaltliche Beschreibung"),
@@ -74,25 +74,25 @@ class StudipLitCatElement {
                                                 'len'   => 65535,
                                                 'type'  => 'text'),
                         'dc_publisher'=>array(  'caption'=> _("Verleger, Herausgeber"),
-                                                'info'  => _("Die Einrichtung, die verantwortet, daß diese Ressource in dieser Form zur Verfügung steht, wie z.B. ein Verleger, ein Herausgeber, eine Universität oder eine korporatives Unternehmen."),
+                                                'info'  => _("Die Einrichtung, die verantwortet, daÃŸ diese Ressource in dieser Form zur VerfÃ¼gung steht, wie z.B. ein Verleger, ein Herausgeber, eine UniversitÃ¤t oder eine korporatives Unternehmen."),
                                                 'len'   => 255,
                                                 'type'  => 'text'),
-                        'dc_contributor'=>array('caption'=> _("Weitere beteiligten Personen und Körperschaften"),
-                                                'info'  => _("Sonstige an der Erstellung und Veröffentlichung der Ressource beteiligte Personen oder Organisationen"),
+                        'dc_contributor'=>array('caption'=> _("Weitere beteiligten Personen und KÃ¶rperschaften"),
+                                                'info'  => _("Sonstige an der Erstellung und VerÃ¶ffentlichung der Ressource beteiligte Personen oder Organisationen"),
                                                 'len'   => 255,
                                                 'type'  => 'text'),
                        'dc_date' => array( 'caption'=> _("Datum"),
-                                                'info'  => _("Das Datum, an dem die Ressource in der gegenwärtigen Form zugänglich gemacht wurde."),
+                                                'info'  => _("Das Datum, an dem die Ressource in der gegenwÃ¤rtigen Form zugÃ¤nglich gemacht wurde."),
                                                 'len'   => 11,
                                                 'type'  => 'datepicker',
                                                 'mandatory' => true),
                         'dc_type'   =>  array(  'caption'=> _("Ressourcenart"),
-                                                'info'  => _("Die Art der Ressource, z.B. Homepage, Roman, Gedicht, Arbeitsbericht, technischer Bericht, Essay, Wörterbuch\n(Die Vorgaben entsprechen den EndNote Referenz Typen)"),
+                                                'info'  => _("Die Art der Ressource, z.B. Homepage, Roman, Gedicht, Arbeitsbericht, technischer Bericht, Essay, WÃ¶rterbuch\n(Die Vorgaben entsprechen den EndNote Referenz Typen)"),
                                                 'len'   => 255,
                                                 'type'  => 'text',
                                                 'select_list' => array('','Book','Manuscript','Magazine Article','Conference Proceedings','Report','Computer Program','Audiovisual Material','Artwork','Patent','Bill','Case','Journal Article','Book Section','Edited Book','Newspaper Article','Thesis','Personal Communication','Electronic Source','Film or Broadcast','Map','Hearing','Statute')),
                         'dc_format' =>  array(  'caption'=> _("Format"),
-                                                'info'  => _("Hier wird das datentechnische Format der Ressource eingetragen, z.B. Text/HTML, ASCII, Postscript-Datei, ausführbare Anwendung, JPEG-Bilddatei etc. Grundsätzlich können Formate auch physische Medieneinheiten wie Bücher, Zeitschriften oder andere nichtelektronische Medien mit einschließen."),
+                                                'info'  => _("Hier wird das datentechnische Format der Ressource eingetragen, z.B. Text/HTML, ASCII, Postscript-Datei, ausfÃ¼hrbare Anwendung, JPEG-Bilddatei etc. GrundsÃ¤tzlich kÃ¶nnen Formate auch physische Medieneinheiten wie BÃ¼cher, Zeitschriften oder andere nichtelektronische Medien mit einschlieÃŸen."),
                                                 'len'   => 255,
                                                 'type'  => 'text',
                                                 'select_list' => array('','text/html','application/pdf')),
@@ -101,7 +101,7 @@ class StudipLitCatElement {
                                                 'len'   => 255,
                                                 'type'  => 'text'),
                         'dc_source' =>  array(  'caption'=> _("Quelle"),
-                                                'info'  => _("Bei nichtoriginären Beiträgen die Quelle bzw. das Original"),
+                                                'info'  => _("Bei nichtoriginÃ¤ren BeitrÃ¤gen die Quelle bzw. das Original"),
                                                 'len'   => 255,
                                                 'type'  => 'text'),
                         'dc_language'=> array(  'caption'=> _("Sprache"),
@@ -110,11 +110,11 @@ class StudipLitCatElement {
                                                 'type'  => 'text',
                                                 'select_list'=> array('','ger','eng','fre','ita','spa')),
                         'dc_relation'=> array(  'caption'=> _("Beziehung zu anderen Ressourcen"),
-                                                'info'  => _("Die Angabe in diesem Feld ermöglicht es, Verbindungen unter verschiedenen Ressourcen darzustellen, die einen formalen Bezug zu anderen Ressourcen haben, aber als eigenständige Ressourcen existieren."),
+                                                'info'  => _("Die Angabe in diesem Feld ermÃ¶glicht es, Verbindungen unter verschiedenen Ressourcen darzustellen, die einen formalen Bezug zu anderen Ressourcen haben, aber als eigenstÃ¤ndige Ressourcen existieren."),
                                                 'len'   => 255,
                                                 'type'  => 'text'),
-                        'dc_coverage'=> array(  'caption'=> _("Räumliche und zeitliche Maßangaben"),
-                                                'info'  => _("Hier werden Angaben zur räumlichen Bestimmung (z.B. geographische Koordinaten) und zeitlichen Gültigkeit eingetragen, die die Ressource charakterisieren."),
+                        'dc_coverage'=> array(  'caption'=> _("RÃ¤umliche und zeitliche MaÃŸangaben"),
+                                                'info'  => _("Hier werden Angaben zur rÃ¤umlichen Bestimmung (z.B. geographische Koordinaten) und zeitlichen GÃ¼ltigkeit eingetragen, die die Ressource charakterisieren."),
                                                 'len'   => 255,
                                                 'type'  => 'text'),
                         'dc_rights' =>  array(  'caption'=> _("Rechtliche Bedingungen"),
@@ -122,11 +122,11 @@ class StudipLitCatElement {
                                                 'len'   => 255,
                                                 'type'  => 'text'),
                         'accession_number'=>array('caption' => _("Zugriffsnummer"),
-                                                'info'  => _("Die Zugriffsnummer eines Bibliothekssystems, über die diese Quelle identifiziert werden kann. z.B. PICA Prod Nummer oder die Signatur einer Bibliothek."),
+                                                'info'  => _("Die Zugriffsnummer eines Bibliothekssystems, Ã¼ber die diese Quelle identifiziert werden kann. z.B. PICA Prod Nummer oder die Signatur einer Bibliothek."),
                                                 'len'   => 100,
                                                 'type'  => 'text'),
                         'lit_plugin'=>  array(  'caption'   => _("Verweis auf externes Bibliothekssystem"),
-                                                'info'  => _("Der Name des externen Bibliothekssystems, in das über einen Weblink verzweigt werden kann."),
+                                                'info'  => _("Der Name des externen Bibliothekssystems, in das Ã¼ber einen Weblink verzweigt werden kann."),
                                                 'len'   => 100,
                                                 'type'  => 'select',
                                                 'options'=> StudipLitSearch::GetAvailablePluginsOptions()),
@@ -183,7 +183,7 @@ class StudipLitCatElement {
         $form_name = $this->form_name;
         if($this->isNewEntry()){
             $this->fields['default_lit_list'] = array('caption' => _("Eintrag in diese Literaturliste"),
-                                                'info'  => _("Wählen Sie hier eine persönliche Literaturliste aus, in die der neue Eintrag aufgenommen werden soll."),
+                                                'info'  => _("WÃ¤hlen Sie hier eine persÃ¶nliche Literaturliste aus, in die der neue Eintrag aufgenommen werden soll."),
                                                 'len'   => 255,
                                                 'type'  => 'select',
                                                 'options'=> array_merge(array('---'), (array)StudipLitList::GetListsByRange($GLOBALS['user']->id, 'form_options')));
@@ -210,9 +210,9 @@ class StudipLitCatElement {
             }
         }
         $form_fields['catalog_id'] = array('type' => 'hidden', 'default_value' => $this->fields['catalog_id']['value']);
-        $form_buttons = array('send' => array('type' => 'accept', 'caption' => _('speichern'), 'info' => _("Änderungen speichern")),
-                            'reset' => array('caption' => _('zurücksetzen'), 'info' => _("Änderungen zurücksetzen")),
-                            'delete' => array('caption' => _('löschen'), 'info' => _("Eintrag löschen"))
+        $form_buttons = array('send' => array('type' => 'accept', 'caption' => _('speichern'), 'info' => _("Ã„nderungen speichern")),
+                            'reset' => array('caption' => _('zurÃ¼cksetzen'), 'info' => _("Ã„nderungen zurÃ¼cksetzen")),
+                            'delete' => array('caption' => _('lÃ¶schen'), 'info' => _("Eintrag lÃ¶schen"))
                     );
         if (!is_object($this->form_obj)){
             $this->form_obj = new StudipForm($form_fields, $form_buttons, $form_name);
@@ -267,14 +267,14 @@ class StudipLitCatElement {
                 $field_values[] = addslashes(trim($detail['value']));
             }
             $sql = "INSERT INTO lit_catalog(" . join(",", $field_names) . ") VALUES ('" . join("','", $field_values) . "')";
-            PageLayout::postSuccess(_("Ein neuer Datensatz wurde eingefügt."));
+            PageLayout::postSuccess(_("Ein neuer Datensatz wurde eingefÃ¼gt."));
         } else {
             $this->fields['chdate']['value'] = time();
             foreach($this->fields as $name => $detail){
                 $field_upd[] = $name . "='" . addslashes(trim($detail['value'])) . "'";
             }
             $sql = "UPDATE lit_catalog SET " . join(",", $field_upd) . " WHERE catalog_id='" . $this->fields['catalog_id']['value'] . "'";
-            PageLayout::postSuccess(_("Die geänderten Daten wurden gespeichert."));
+            PageLayout::postSuccess(_("Die geÃ¤nderten Daten wurden gespeichert."));
         }
         $rs = $this->dbv->get_query($sql);
         if ($this->init_form){
@@ -297,12 +297,12 @@ class StudipLitCatElement {
         $this->dbv->params[0] = $this->getValue("catalog_id");
         $rs = $this->dbv->get_query("view:LIT_DEL_ELEMENT");
         if ($rs->affected_rows()){
-            PageLayout::postSuccess(_("Der Datensatz wurde gelöscht."));
+            PageLayout::postSuccess(_("Der Datensatz wurde gelÃ¶scht."));
             $this->initFields();
             $this->getElementData("new_entry");
             return true;
         } else {
-            PageLayout::postError(_("Der Datensatz konnte nicht gelöscht werden"));
+            PageLayout::postError(_("Der Datensatz konnte nicht gelÃ¶scht werden"));
             return false;
         }
     }
@@ -335,7 +335,7 @@ class StudipLitCatElement {
             }
         }
         if (is_array($missing_fields)){
-            PageLayout::postError(sprintf(_("Bitte füllen Sie folgende Felder aus: %s"), "\"" . join("\", \"",$missing_fields)));
+            PageLayout::postError(sprintf(_("Bitte fÃ¼llen Sie folgende Felder aus: %s"), "\"" . join("\", \"",$missing_fields)));
         }
         return is_array($missing_fields) ? false : true;
     }

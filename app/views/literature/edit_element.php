@@ -6,17 +6,17 @@
 
     <? if (!$element->isNewEntry()) : ?>
         <p>
-            <?= sprintf(_('Anzahl an Referenzen für diesen Eintrag: %s'), (int)$element->reference_count) ?><br>
+            <?= sprintf(_('Anzahl an Referenzen fÃ¼r diesen Eintrag: %s'), (int)$element->reference_count) ?><br>
             <b><?= ($element->getValue('user_id') == 'studip') ? _('Systemeintrag:') : _('Eingetragen von:') ?></b><br>
             <?= ($element->getValue('user_id') == 'studip') ? _('Dies ist ein vom System generierter Eintrag.') : get_fullname($element->getValue("user_id"), 'full', true) ?>
             <br>
-            <b><?= _('Letzte Änderung') ?>:</b><br>
+            <b><?= _('Letzte Ã„nderung') ?>:</b><br>
             <?= strftime('%d.%m.%Y', $element->getValue('chdate')) ?>
         </p>
     <? endif ?>
     <p>
         <small>
-            <?= sprintf(_('Alle mit einem Sternchen %s markierten Felder müssen ausgefüllt werden.'),
+            <?= sprintf(_('Alle mit einem Sternchen %s markierten Felder mÃ¼ssen ausgefÃ¼llt werden.'),
                 '<span style="font-size:1.5em;color:red;font-weigth:bold;">*</span>') ?>
         </small>
     </p>
@@ -57,8 +57,8 @@
         <? endif ?>
         <? if ($catalog_id != "new_entry") : ?>
             <?= Assets::img('blank.gif', array('size' => '15@28')) ?>
-            <?= Studip\LinkButton::create(_('Verfügbarkeit'), URLHelper::getURL('dispatch.php/literature/edit_element?cmd=check_entry&_catalog_id=' . $catalog_id),
-                array('title' => _('Verfügbarkeit überprüfen'), 'data-dialog' => '')) ?>
+            <?= Studip\LinkButton::create(_('VerfÃ¼gbarkeit'), URLHelper::getURL('dispatch.php/literature/edit_element?cmd=check_entry&_catalog_id=' . $catalog_id),
+                array('title' => _('VerfÃ¼gbarkeit Ã¼berprÃ¼fen'), 'data-dialog' => '')) ?>
         <? endif ?>
         <? if ($catalog_id != "new_entry" && !$clipboard->isInClipboard($catalog_id)) : ?>
             <?= Assets::img('blank.gif', array('size' => '15@28')) ?>

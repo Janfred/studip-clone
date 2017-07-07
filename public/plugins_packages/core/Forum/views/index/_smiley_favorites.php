@@ -19,7 +19,7 @@ $sm = new SmileyFavorites($GLOBALS['user']->id);
             <?= _('Sie haben noch keine Smiley-Favoriten.') ?><br>
             <br>
             <a href="<?= URLHelper::getLink('dispatch.php/smileys') ?>" data-dialog>
-                <?= _('Fügen Sie welche hinzu!') ?>
+                <?= _('FÃ¼gen Sie welche hinzu!') ?>
             </a>
         </span>
     <? endif ?>

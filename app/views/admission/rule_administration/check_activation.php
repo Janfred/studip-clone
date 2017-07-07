@@ -15,7 +15,7 @@ use Studip\Button, Studip\LinkButton;
     <div id="activation">
         <fieldset>
             <legend>
-                <?= _('Regel ist verfügbar') ?>
+                <?= _('Regel ist verfÃ¼gbar') ?>
             </legend>
             <label>
                 <input type="radio" name="activated" value="studip"
@@ -25,7 +25,7 @@ use Studip\Button, Studip\LinkButton;
             <label>
                 <input type="radio" name="activated" value="inst"
                        onclick="STUDIP.Admission.checkRuleActivation('rule_activation_form')"<?= $atInst ? ' checked="checked"' : '' ?>>
-                <?= _('an ausgewählten Einrichtungen') ?>
+                <?= _('an ausgewÃ¤hlten Einrichtungen') ?>
             </label>
 
         </fieldset>

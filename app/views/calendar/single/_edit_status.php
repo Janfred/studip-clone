@@ -39,7 +39,7 @@
     <div style="text-align: center;" data-dialog-button>
         <?= Button::create(_('Speichern'), 'store', array('title' => _('Termin speichern'))) ?>
         <? if ($event->havePermission(Event::PERMISSION_DELETABLE)) : ?>
-        <?= LinkButton::create(_('Löschen'), $controller->url_for('calendar/single/delete/' . implode('/', $event->getId()))) ?>
+        <?= LinkButton::create(_('LÃ¶schen'), $controller->url_for('calendar/single/delete/' . implode('/', $event->getId()))) ?>
         <? endif; ?>
         <? if (!Request::isXhr()) : ?>
         <?= LinkButton::create(_('Abbrechen'), $controller->url_for('calendar/single/' . $last_view, array($event->getStart()))) ?>

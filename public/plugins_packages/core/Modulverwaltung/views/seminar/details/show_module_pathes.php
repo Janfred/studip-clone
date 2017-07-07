@@ -20,5 +20,5 @@ if (count($mvv_pathes)) {
     <br>
 </font>
 <? } else { ?>
-<?= _('Keine Modulzuordnungen verfügbar') ?>
+<?= _('Keine Modulzuordnungen verfÃ¼gbar') ?>
 <? } ?>

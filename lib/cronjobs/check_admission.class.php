@@ -2,7 +2,7 @@
 /**
 * check_admission.class.php
 *
-* @author André Noack <noack@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
+* @author AndrÃ© Noack <noack@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @access public
 * @since  2.4
 */
@@ -12,12 +12,12 @@ class CheckAdmissionJob extends CronJob
 
      public static function getName()
      {
-        return _('Losverfahren überprüfen');
+        return _('Losverfahren Ã¼berprÃ¼fen');
      }
 
       public static function getDescription()
       {
-          return _('Überprüft, ob Losverfahren anstehen und führt diese aus');
+          return _('ÃœberprÃ¼ft, ob Losverfahren anstehen und fÃ¼hrt diese aus');
       }
 
       public static function getParameters()
@@ -27,7 +27,7 @@ class CheckAdmissionJob extends CronJob
                           'type'        => 'boolean',
                           'default'     => false,
                           'status'      => 'optional',
-                          'description' => _('Sollen Ausgaben erzeugt werden (sind später im Log des Cronjobs sichtbar)'),
+                          'description' => _('Sollen Ausgaben erzeugt werden (sind spÃ¤ter im Log des Cronjobs sichtbar)'),
                   ),
                   'send_messages' => array(
                           'type'        => 'boolean',
@@ -74,7 +74,7 @@ class CheckAdmissionJob extends CronJob
                           echo ++$i . ' ' . $courseset->getId() . ' : ' . $courseset->getName() . chr(10);
                           $applicants = AdmissionPriority::getPriorities($set_id);
                           $courses = SimpleCollection::createFromArray(Course::findMany($courseset->getCourses()))->toGroupedArray('seminar_id', words('name veranstaltungsnummer'));
-                          $captions = array(_("Nachname"), _("Vorname"), _("Nutzername"),_('Nutzer-ID'), _('Veranstaltung-ID'), _("Veranstaltung"), _("Nummer"), _("Priorität"));
+                          $captions = array(_("Nachname"), _("Vorname"), _("Nutzername"),_('Nutzer-ID'), _('Veranstaltung-ID'), _("Veranstaltung"), _("Nummer"), _("PrioritÃ¤t"));
                           $data = array();
                           $users = User::findEachMany(function($user) use ($courses,$applicants,&$data) {
                                   $app_courses = $applicants[$user->id];

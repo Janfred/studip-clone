@@ -6,7 +6,7 @@
         <section>
             <p>
                 <?= sprintf(
-                    _('Diese Veranstaltung gehört zur Hauptveranstaltung %s%s%s.'),
+                    _('Diese Veranstaltung gehÃ¶rt zur Hauptveranstaltung %s%s%s.'),
                     sprintf(
                         '<a href="%s" title="%s">',
                         $controller->link_for('course/grouping/children', ['cid' => $parent->id]),

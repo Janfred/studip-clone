@@ -18,7 +18,7 @@
                 <a href="<?= $controller->url_for('search/module/drilldown', array('type' => get_class($object), 'id' => $object->getId())) ?>">
                 <?= htmlReady($object->getDisplayName()) . ' (' . /*$object->count_module .*/ ')' ?>
  <? /*                <? if ($object->getId() == $drill_down_id) : ?>
-                    <?= Icon::create('accept', 'clickable', array('title' => _('Bereich ausgewählt')))->asImg(); ?>
+                    <?= Icon::create('accept', 'clickable', array('title' => _('Bereich ausgewÃ¤hlt')))->asImg(); ?>
                 <? endif; ?>
                 </a>
             </li>
@@ -47,7 +47,7 @@
                 <a href="<?= $controller->url_for('search/module/drilldown', array('type' => get_class($object), 'id' => $object->getId())) ?>">
                 <?= htmlReady($object->getDisplayName()) . ' (' . $object->count_module . ')' ?>
                 <? if ($object->getId() == $drill_down_id) : ?>
-                    <?= Icon::create('accept', 'clickable', array('title' => _('Bereich ausgewählt')))->asImg(); ?>
+                    <?= Icon::create('accept', 'clickable', array('title' => _('Bereich ausgewÃ¤hlt')))->asImg(); ?>
                 <? endif; ?>
                 </a>
             </li>

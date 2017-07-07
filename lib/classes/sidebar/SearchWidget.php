@@ -152,7 +152,7 @@ class SearchWidget extends SidebarWidget
             $reset_link = sprintf('<a href="%s">%s %s</a>',
                                   URLHelper::getLink($this->url, array_merge($query_params, array('reset-search' => 1))),
                                   Icon::create('search+decline', 'clickable')->asImg(["class" => 'text-top']),
-                                  _('Zurücksetzen'));
+                                  _('ZurÃ¼cksetzen'));
             $this->template_variables['reset_search'] = $reset_link;
         }
 

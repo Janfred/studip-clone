@@ -93,8 +93,8 @@ class ExternModuleLecturedetails extends ExternModule {
 
         // setup module properties
         $this->elements["SemName"]->real_name = _("Name der Veranstaltung");
-        $this->elements["Headline"]->real_name = _("Überschriften");
-        $this->elements["Content"]->real_name = _("Absätze");
+        $this->elements["Headline"]->real_name = _("Ãœberschriften");
+        $this->elements["Content"]->real_name = _("AbsÃ¤tze");
         $this->elements["LinkInternSimple"]->link_module_type = 2;
         $this->elements["LinkInternSimple"]->real_name = _("Link zum Modul Mitarbeiterdetails");
     }
@@ -299,7 +299,7 @@ class ExternModuleLecturedetails extends ExternModule {
         $data_sem["requirements"] = str_repeat(_("Voraussetzungen") . " ", 6);
         $data_sem["lernorga"] = str_repeat(_("Lernorganisation") . " ", 6);
         $data_sem["leistung"] = str_repeat(_("Leistungsnachweis") . " ", 6);
-        $data_sem["range_path"] = _("Fakultät &gt; Studiengang &gt; Bereich");
+        $data_sem["range_path"] = _("FakultÃ¤t &gt; Studiengang &gt; Bereich");
         $data_sem["misc"] = str_repeat(_("Sonstiges") . " ", 6);
         $data_sem["ects"] = "4";
 

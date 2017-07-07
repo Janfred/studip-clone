@@ -1,6 +1,6 @@
 <? if ($verify_action === 'delete' && $verify_id): ?>
     <?= $controller->verifyDialog(
-            _('Wollen Sie die Zuordnung zu der Funktion wirklich löschen?'),
+            _('Wollen Sie die Zuordnung zu der Funktion wirklich lÃ¶schen?'),
             ['settings/statusgruppen/delete', $verify_id, true],
             ['settings/statusgruppen#' . $verify_id]
     ) ?>
@@ -86,7 +86,7 @@
                         <nav>
                             <? if ($GLOBALS['perm']->have_studip_perm('admin', $inst_id) && !$locked) : ?>
                                 <a href="<?= $controller->url_for('settings/statusgruppen/verify/delete/' . $role_id) ?>#<?= $role_id ?>">
-                                    <?= Icon::create('trash', 'clickable', ['title' => _('Löschen')])->asImg() ?>
+                                    <?= Icon::create('trash', 'clickable', ['title' => _('LÃ¶schen')])->asImg() ?>
                                 </a>
 
                                 <a href="<?= URLHelper::getURL('dispatch.php/admin/statusgroups', ['cid' => $inst_id]) ?>#group-<?= $role_id ?>">

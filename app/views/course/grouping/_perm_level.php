@@ -123,7 +123,7 @@
                         </option>
                     </select>
                     <?= Studip\Button::createAccept(
-                        _('Ausführen'),
+                        _('AusfÃ¼hren'),
                         'single_action',
                         ['value' => $current->id . '-' . $level]
                     ) ?>

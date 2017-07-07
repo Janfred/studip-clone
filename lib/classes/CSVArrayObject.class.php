@@ -17,7 +17,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      André Noack <noack@data-quest.de>
+ * @author      AndrÃ© Noack <noack@data-quest.de>
  * @link http://www.php.net/manual/en/class.arrayobject.php
  */
 class CSVArrayObject extends StudipArrayObject

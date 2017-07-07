@@ -77,7 +77,7 @@ $types = array(
     <?= CSRFProtection::tokenTag() ?>
 
 <div style="text-align: center; margin-top: 1em;">
-    <?= Button::createAccept(_('Übernehmen'), '_send_property_type') ?>
+    <?= Button::createAccept(_('Ãœbernehmen'), '_send_property_type') ?>
 </div>
 
 <table class="default zebra" style="margin: 0 1%; width: 98%;">
@@ -167,9 +167,9 @@ $types = array(
             <td valign="bottom" align="center">
                 <?= _('diese Eigenschaft') ?><br>
             <? if (($property['depTyp']==0) && !$type['system']): ?>
-                <?= LinkButton::create(_('Löschen'), URLHelper::getURL('?delete_property=' . $property['property_id'])) ?>
+                <?= LinkButton::create(_('LÃ¶schen'), URLHelper::getURL('?delete_property=' . $property['property_id'])) ?>
             <? else: ?>
-                <?= Button::create(_('Löschen'), array('disabled' => 'disabled')) ?>
+                <?= Button::create(_('LÃ¶schen'), array('disabled' => 'disabled')) ?>
             <? endif; ?>
             </td>
         </tr>
@@ -178,7 +178,7 @@ $types = array(
     <tfoot>
         <tr class="table_footer">
             <td colspan="6" style="text-align: center;">
-                <?= Button::createAccept(_('Übernehmen'), '_send_property_type') ?>
+                <?= Button::createAccept(_('Ãœbernehmen'), '_send_property_type') ?>
             </td>
         </tr>
     </tfoot>

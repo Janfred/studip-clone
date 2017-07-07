@@ -8,7 +8,7 @@
 // SemTree.class.php
 // Class to handle structure of the "seminar tree"
 //
-// Copyright (c) 2003 André Noack <noack@data-quest.de>
+// Copyright (c) 2003 AndrÃ© Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@
 * This class provides an interface to the structure of the seminar tree
 *
 * @access   public
-* @author   André Noack <noack@data-quest.de>
+* @author   AndrÃ© Noack <noack@data-quest.de>
 * @package
 */
 class StudipSemTree extends TreeAbstract

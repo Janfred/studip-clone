@@ -13,7 +13,7 @@
         <tbody>
             <tr class="table_row_odd">
                 <td>
-                    <label for="replace"><?= _('existierende Datei überschreiben') ?></label>
+                    <label for="replace"><?= _('existierende Datei Ã¼berschreiben') ?></label>
                 </td>
                 <td>
                     <input type="checkbox" id="replace" name="replace" value="1">
@@ -21,7 +21,7 @@
             </tr>
             <tr class="table_row_even">
                 <td>
-                    <label for="file"><?= _('Bilddatei auswählen') ?></label>
+                    <label for="file"><?= _('Bilddatei auswÃ¤hlen') ?></label>
                 </td>
                 <td>
                     <input type="file" id="file" name="smiley_file" required>

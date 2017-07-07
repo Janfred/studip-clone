@@ -5,12 +5,12 @@ class AdditionalSemtreeLogActions extends Migration {
     private $logactions = array(
         array(
             'name'=>'STUDYAREA_ADD',
-            'description'=>'Studienbereich hinzufügen',
+            'description'=>'Studienbereich hinzufÃ¼gen',
             'info_template'=>'%user legt Studienbereich %studyarea(%affected) an.',
             'active'=>0),
         array(
             'name'=>'STUDYAREA_DELETE',
-            'description'=>'Studienbereich löschen',
+            'description'=>'Studienbereich lÃ¶schen',
             'info_template'=>'%user entfernt Studienbereich %studyarea(%affected).',
             'active'=>0)
             );

@@ -73,10 +73,10 @@ class StgteilabschnittModul extends ModuleManagementModelTreeItem
         $name .= trim($this->bezeichnung) ?: trim($this->modul->getDeskriptor()->bezeichnung);
         if ($end_sem || $start_sem) {
             if ($end_sem) {
-                $name .= sprintf(_(', gültig %s bis %s'),
+                $name .= sprintf(_(', gÃ¼ltig %s bis %s'),
                         $start_sem->name, $end_sem->name);
             } else {
-                $name .= sprintf(_(', gültig ab %s'), $start_sem->name);
+                $name .= sprintf(_(', gÃ¼ltig ab %s'), $start_sem->name);
             }
         }
 

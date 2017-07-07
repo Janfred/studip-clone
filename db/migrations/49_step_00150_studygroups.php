@@ -26,9 +26,9 @@ class Step00150Studygroups extends Migration
             '0', '1', 'boolean', 'global', '', '0', UNIX_TIMESTAMP( ) , UNIX_TIMESTAMP( ) ,
             'Studiengruppen', '', '')");
         
-        $terms = "Mir ist bekannt, dass ich die Gruppe nicht zu rechtswidrigen Zwecken nutzen darf. Dazu zählen u.a. Urheberrechtsverletzungen, Beleidigungen und andere Persönlichkeitsdelikte.
+        $terms = "Mir ist bekannt, dass ich die Gruppe nicht zu rechtswidrigen Zwecken nutzen darf. Dazu zÃ¤hlen u.a. Urheberrechtsverletzungen, Beleidigungen und andere PersÃ¶nlichkeitsdelikte.
 
-Ich erkläre mich damit einverstanden, dass Admins die Inhalte der Gruppe zu Kontrollzwecken einsehen dürfen.";
+Ich erklÃ¤re mich damit einverstanden, dass Admins die Inhalte der Gruppe zu Kontrollzwecken einsehen dÃ¼rfen.";
 
         DBManager::get()->query("INSERT IGNORE INTO `config` (
             `config_id`, `parent_id`, `field`, `value`, `is_default`, `type`,

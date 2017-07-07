@@ -60,7 +60,7 @@ class Wiki extends \RESTAPI\RouteMap
     }
 
     /**
-     * Wikiseite ändern/hinzufügen
+     * Wikiseite Ã¤ndern/hinzufÃ¼gen
      *
      * @put /course/:course_id/wiki/:keyword
      */

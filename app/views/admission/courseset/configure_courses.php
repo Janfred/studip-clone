@@ -5,7 +5,7 @@
                 <th><?= _("Name")?></th>
                 <th><?= _("Dozenten")?></th>
                 <th><?= _("versteckt")?></th>
-                <th><?= _("vorläufige Anmeldung")?></th>
+                <th><?= _("vorlÃ¤ufige Anmeldung")?></th>
                 <th><?= _("verbindliche Anmeldung")?></th>
                 <th><?= _("max. Teilnehmer")?></th>
                 <th><?= _("Teilnehmer aktuell")?></th>

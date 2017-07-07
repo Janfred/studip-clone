@@ -37,8 +37,8 @@
                 </tbody>
                 <tfoot>
                 <tr>
-                    <td><?=LinkButton::create(_('Übernehmen'), $controller->url_for('help_content/resolve_conflict/'.$conflict[$keys[0]]->getId().'/accept')) ?></td>
-                    <td><?=LinkButton::create(_('Übernehmen'), $controller->url_for('help_content/resolve_conflict/'.$conflict[$keys[0]]->getId().'/delete')) ?></td>
+                    <td><?=LinkButton::create(_('Ãœbernehmen'), $controller->url_for('help_content/resolve_conflict/'.$conflict[$keys[0]]->getId().'/accept')) ?></td>
+                    <td><?=LinkButton::create(_('Ãœbernehmen'), $controller->url_for('help_content/resolve_conflict/'.$conflict[$keys[0]]->getId().'/delete')) ?></td>
                 </tr></tfoot>
             </table>
             <? endforeach ?>
@@ -52,6 +52,6 @@
 <?
 $sidebar = Sidebar::get();
 $widget = new ViewsWidget();
-$widget->addLink(_('Übersicht'), URLHelper::getURL('dispatch.php/help_content/admin_overview'));
+$widget->addLink(_('Ãœbersicht'), URLHelper::getURL('dispatch.php/help_content/admin_overview'));
 $widget->addLink(_('Konflikte'), URLHelper::getURL('dispatch.php/help_content/admin_conflicts'))->setActive(true);
 $sidebar->addWidget($widget);

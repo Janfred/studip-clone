@@ -12,7 +12,7 @@ if ($folder_id) {
 
 ?>
 <div class="files_source_selector" data-folder_id="<?= htmlReady($folder_id) ?>" <? if ($hidden) echo ' style="display: none;"'; ?>>
-    <?= _('Quelle auswählen') ?>
+    <?= _('Quelle auswÃ¤hlen') ?>
     <div class="file_select_possibilities">
         <a href="#" onclick="jQuery('.file_selector input[type=file]').first().click(); return false;">
             <?= Icon::create('computer', Icon::ROLE_CLICKABLE)->asImg(50) ?>

@@ -3,7 +3,7 @@
  * configuration.php - controller class for the configuration
  *
  * @author  Jan-Hendrik Willms <tleilax+stuip@gmail.com>
- * @author  Nico Müller <nico.mueller@uni-oldenburg.de>
+ * @author  Nico MÃ¼ller <nico.mueller@uni-oldenburg.de>
  * @author  Michael Riehemann <michael.riehemann@uni-oldenburg.de>
  * @license GPL2 or any later version
  * @package admin
@@ -94,7 +94,7 @@ class Admin_ConfigurationController extends AuthenticatedController
 
                 Config::get()->store($field, compact(words('value section comment')));
 
-                PageLayout::postSuccess(sprintf(_('Der Konfigurationseintrag "%s" wurde erfolgreich übernommen!'), $field));
+                PageLayout::postSuccess(sprintf(_('Der Konfigurationseintrag "%s" wurde erfolgreich Ã¼bernommen!'), $field));
 
                 $this->relocate('admin/configuration/configuration/' . $section);
             }
@@ -117,12 +117,12 @@ class Admin_ConfigurationController extends AuthenticatedController
         $user_id = Request::option('user_id');
         if ($user_id) {
             $this->configs   = ConfigurationModel::searchUserConfiguration($user_id);
-            $this->title     = sprintf(_('Vorhandene Konfigurationsparameter für "%s"'),
+            $this->title     = sprintf(_('Vorhandene Konfigurationsparameter fÃ¼r "%s"'),
                                        User::find($user_id)->getFullname());
             $this->linkchunk = 'admin/configuration/edit_user_config/' . $user_id . '?id=';
         } else {
             $this->configs   = ConfigurationModel::searchUserConfiguration(null, true);
-            $this->title     = _('Globale Konfigurationsparameter für alle Personen');
+            $this->title     = _('Globale Konfigurationsparameter fÃ¼r alle Personen');
             $this->linkchunk = 'admin/configuration/edit_configuration/?id=';
         }
         $this->has_sections = false;
@@ -146,7 +146,7 @@ class Admin_ConfigurationController extends AuthenticatedController
             if ($this->validateInput($field, $value)) {
                 UserConfig::get($user_id)->store($field, $value);
 
-                PageLayout::postSuccess(sprintf(_('Der Konfigurationseintrag: %s wurde erfolgreich geändert!'), $field));
+                PageLayout::postSuccess(sprintf(_('Der Konfigurationseintrag: %s wurde erfolgreich geÃ¤ndert!'), $field));
 
                 $this->redirect('admin/configuration/user_configuration?user_id=' . $user_id);
             }
@@ -176,7 +176,7 @@ class Admin_ConfigurationController extends AuthenticatedController
 
         // Step 2: Validate
         if (mb_strlen($value) === 0) {
-            $error = _('Es wurde kein gültiger Wert eingetragen!');
+            $error = _('Es wurde kein gÃ¼ltiger Wert eingetragen!');
         } elseif ($config['type'] === 'integer' && !is_numeric($value)) {
             $error = _('Bitte geben Sie bei Parametern vom Typ "integer" nur Zahlen ein!');
         } elseif ($config['type'] === 'array' && !is_array($value)) {

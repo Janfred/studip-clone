@@ -5,7 +5,7 @@
 
 <? if (isset($attachments) && count($attachments)) : ?>
 
-    <?= _("Dateianhänge:") ?>
+    <?= _("DateianhÃ¤nge:") ?>
 
     <? foreach ($attachments as $attachment) : ?>
         <?= $attachment->name . ' (' . relsize($attachment->file->size, false) . ')' ?>

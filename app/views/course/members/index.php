@@ -17,7 +17,7 @@
 <? if ($is_tutor && $semAdmissionEnabled) : ?>
     <p style="float: right">
         <? //TODO?>
-        <strong><?= _('Teilnahmebeschränkte Veranstaltung') ?></strong> -
+        <strong><?= _('TeilnahmebeschrÃ¤nkte Veranstaltung') ?></strong> -
         <?= _('max. Teilnehmeranzahl') ?> <?= $course->admission_turnout ?>,
         <?= _('davon belegt') ?>: <?= (count($autoren) + count($users) + count($accepted)) ?>
     </p>

@@ -20,14 +20,14 @@
                 <input type='checkbox' name='forced' value='1' <?= $course->aux_lock_rule_forced ? "checked" : "" ?>>
             </label>
             <? if($count): ?>
-           <?= $count." "._('Datensätze vorhanden') ?>
-                        <label><?= _('Löschen?') ?>
+           <?= $count." "._('DatensÃ¤tze vorhanden') ?>
+                        <label><?= _('LÃ¶schen?') ?>
                 <input type='checkbox' name='delete' value='1'>
             </label>
             <? endif; ?>
         </fieldset>
         <footer>
-            <?= Studip\Button::create(_('Übernehmen'), 'save') ?>
+            <?= Studip\Button::create(_('Ãœbernehmen'), 'save') ?>
         </footer>
     </form>
 <? else: ?>

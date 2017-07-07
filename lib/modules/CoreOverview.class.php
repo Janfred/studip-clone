@@ -25,7 +25,7 @@ class CoreOverview implements StudipModule {
             $sem_class = SemClass::getDefaultInstituteClass($institute->type);
         }
 
-        $navigation = new Navigation(_('Übersicht'));
+        $navigation = new Navigation(_('Ãœbersicht'));
         $navigation->setImage(Icon::create('seminar', 'info_alt'));
         $navigation->setActiveImage(Icon::create('seminar', 'info'));
         if ($object_type !== 'sem') {

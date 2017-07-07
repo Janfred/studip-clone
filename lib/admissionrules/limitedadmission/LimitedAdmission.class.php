@@ -91,7 +91,7 @@ class LimitedAdmission extends AdmissionRule
     public static function getDescription() {
         return _("Diese Art von Anmelderegel legt eine Maximalzahl von ".
             "Veranstaltungen fest, an denen Nutzer im aktuellen ".
-            "Anmeldeset teilnehmen können.");
+            "Anmeldeset teilnehmen kÃ¶nnen.");
     }
 
     /**

@@ -8,12 +8,12 @@
 <table border="0" cellspacing=0 cellpadding=6 width = "100%">
 <tr><td>
     <font size="-1">
-    <?=sprintf(_("Typ für neues Lernmodul: %s"), ELearningUtils::getTypeSelectbox($cms))?>
+    <?=sprintf(_("Typ fÃ¼r neues Lernmodul: %s"), ELearningUtils::getTypeSelectbox($cms))?>
     </font>
 </td>
 <td align="right" valign="middle">
     <? if (count($types) > 1) : ?>
-        <?=Button::create(_('Auswählen'), 'choose')?>
+        <?=Button::create(_('AuswÃ¤hlen'), 'choose')?>
     <? endif ?>
     <?=$link?>
 </td></tr></table>

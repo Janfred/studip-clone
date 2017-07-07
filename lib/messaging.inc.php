@@ -284,7 +284,7 @@ class messaging
             $snd_user_id = '____%system%____';
             setTempLanguage();
             $message .= $this->sig_string;
-            $message .= _('Diese Nachricht wurde automatisch vom Stud.IP-System generiert. Sie können darauf nicht antworten.');
+            $message .= _('Diese Nachricht wurde automatisch vom Stud.IP-System generiert. Sie kÃ¶nnen darauf nicht antworten.');
 
             restoreLanguage();
         }

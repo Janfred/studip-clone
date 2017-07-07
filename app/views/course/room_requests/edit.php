@@ -11,8 +11,8 @@
     <?= $this->render_partial('course/room_requests/_form.php'); ?>
 
     <div data-dialog-button>
-        <?= Button::createAccept(_('Speichern und zurück zur Übersicht'), 'save_close', array('title' => _('Speichern und zurück zur Übersicht'))) ?>
-        <?= Button::create(_('Übernehmen'), 'save', array('title' => _('Änderungen speichern'))) ?>
+        <?= Button::createAccept(_('Speichern und zurÃ¼ck zur Ãœbersicht'), 'save_close', array('title' => _('Speichern und zurÃ¼ck zur Ãœbersicht'))) ?>
+        <?= Button::create(_('Ãœbernehmen'), 'save', array('title' => _('Ã„nderungen speichern'))) ?>
         <?= LinkButton::createCancel(_('Abbrechen'), $controller->link_for('index/' . $course_id), array('title' => _('Abbrechen'))) ?>
     </div>
 </form>

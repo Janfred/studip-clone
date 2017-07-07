@@ -11,9 +11,9 @@ use Studip\Button, Studip\LinkButton;
 // Make sure to change routines below if this changes
 //
 global $wiki_keyword_regex, $wiki_link_regex, $wiki_extended_link_regex;
-$wiki_keyword_regex = "(^|\s|\A|\>)(([A-ZÄÖÜ]|&[AOU]uml;)([a-z0-9äöüß]|&[aou]uml;|&szlig;)+([A-ZÄÖÜ]|&[AOU]uml;)([a-zA-Z0-9äöüÄÖÜß]|&[aouAOU]uml;|&szlig;)+)";
-$wiki_link_regex = "\[\[(([\w\.\-\:\(\)_§\/@# ]|&[AOUaou]uml;|&szlig;)+)\]\]";
-$wiki_extended_link_regex = "\[\[(([\w\.\-\:\(\)_§\/@# ]|&[AOUaou]uml;|&szlig;)+)\|([^\]]+)\]\]";
+$wiki_keyword_regex = "(^|\s|\A|\>)(([A-ZÃ„Ã–Ãœ]|&[AOU]uml;)([a-z0-9Ã¤Ã¶Ã¼ÃŸ]|&[aou]uml;|&szlig;)+([A-ZÃ„Ã–Ãœ]|&[AOU]uml;)([a-zA-Z0-9Ã¤Ã¶Ã¼Ã„Ã–ÃœÃŸ]|&[aouAOU]uml;|&szlig;)+)";
+$wiki_link_regex = "\[\[(([\w\.\-\:\(\)_Â§\/@# ]|&[AOUaou]uml;|&szlig;)+)\]\]";
+$wiki_extended_link_regex = "\[\[(([\w\.\-\:\(\)_Â§\/@# ]|&[AOUaou]uml;|&szlig;)+)\|([^\]]+)\]\]";
 
 /**
 * Retrieve a WikiPage version from current seminar's WikiWikiWeb.
@@ -83,9 +83,9 @@ function submitWikiPage($keyword, $version, $body, $user_id, $range_id) {
 
     StudipTransformFormat::addStudipMarkup('wiki-comments', '(\[comment\])', null, function(){return sprintf('[comment=%s]', get_fullname());});
 
-    //TODO: Die $message Texte klingen fürchterlich. Halbsätze, Denglisch usw...
+    //TODO: Die $message Texte klingen fÃ¼rchterlich. HalbsÃ¤tze, Denglisch usw...
     if ($latestVersion && ($latestVersion['body'] == $body)) {
-        $message = MessageBox::info(_('Keine Änderung vorgenommen.'));
+        $message = MessageBox::info(_('Keine Ã„nderung vorgenommen.'));
         PageLayout::postMessage($message);
     } else if ($latestVersion && ($version !== null) && ($lastchange < 30*60) && ($user_id == $latestVersion['user_id'])) {
         // if same author changes again within 30 minutes, no new verison is created
@@ -424,7 +424,7 @@ function getZusatz($wikiData)
     $user = User::find($wikiData['user_id']);
 
     $s =  '<a href="' . URLHelper::getLink('?keyword=' . urlencode($wikiData['keyword']) . '&version=' . $wikiData['version']). '">' . _('Version ') . $wikiData['version'] . '</a>';
-    $s .= sprintf(_(', geändert von %s am %s'),
+    $s .= sprintf(_(', geÃ¤ndert von %s am %s'),
                   $user
                       ? '<a href="' . URLHelper::getLink('dispatch.php/profile?username=' . $user->username) .'">' . htmlReady($user->getFullName()) . '</a>'
                       : _('unbekannt'),
@@ -444,7 +444,7 @@ function getZusatz($wikiData)
 function showDeleteDialog($keyword, $version) {
     global $perm;
     if (!$perm->have_studip_perm("tutor", Context::getId())) {
-        throw new AccessDeniedException(_('Sie haben keine Berechtigung, Seiten zu löschen.'));
+        throw new AccessDeniedException(_('Sie haben keine Berechtigung, Seiten zu lÃ¶schen.'));
     }
     $islatest=0; // will another version become latest version?
     $willvanish=0; // will the page be deleted entirely?
@@ -458,20 +458,20 @@ function showDeleteDialog($keyword, $version) {
     }
 
     if (!$islatest) {
-        throw new InvalidArgumentException(_('Die Version, die Sie löschen wollen, ist nicht die Aktuellste. Überprüfen Sie, ob inzwischen eine aktuellere Version erstellt wurde.'));
+        throw new InvalidArgumentException(_('Die Version, die Sie lÃ¶schen wollen, ist nicht die Aktuellste. ÃœberprÃ¼fen Sie, ob inzwischen eine aktuellere Version erstellt wurde.'));
     }
-    $msg= sprintf(_("Wollen Sie die untenstehende Version %s der Seite %s wirklich löschen?"), "<b>".htmlReady($version)."</b>", "<b>".htmlReady($keyword)."</b>") . "<br>\n";
+    $msg= sprintf(_("Wollen Sie die untenstehende Version %s der Seite %s wirklich lÃ¶schen?"), "<b>".htmlReady($version)."</b>", "<b>".htmlReady($keyword)."</b>") . "<br>\n";
     if (!$willvanish) {
-        $msg .= _("Diese Version ist derzeit aktuell. Nach dem Löschen wird die nächstältere Version aktuell.") . "<br>";
+        $msg .= _("Diese Version ist derzeit aktuell. Nach dem LÃ¶schen wird die nÃ¤chstÃ¤ltere Version aktuell.") . "<br>";
     } else {
-        $msg .= _("Diese Version ist die derzeit einzige. Nach dem Löschen ist die Seite komplett gelöscht.") . "<br>";
+        $msg .= _("Diese Version ist die derzeit einzige. Nach dem LÃ¶schen ist die Seite komplett gelÃ¶scht.") . "<br>";
     }
     //TODO: modaler dialog benutzen
     $msg.=LinkButton::create(_('Ja!'), URLHelper::getURL("?cmd=really_delete&keyword=".urlencode($keyword)."&version=$version&dellatest=$islatest"));
     $lnk = "?keyword=".urlencode($keyword); // what to do when delete is aborted
     if (!$islatest) $lnk .= "&version=$version";
     $msg .= LinkButton::create(_("NEIN!"), URLHelper::getLink($lnk));
-    $msg.='<p>'. sprintf(_("Um alle Versionen einer Seite auf einmal zu löschen, klicken Sie %shier%s."),'<a href="'.URLHelper::getLink('?cmd=delete_all&keyword='.urlencode($keyword)).'">','</a>');
+    $msg.='<p>'. sprintf(_("Um alle Versionen einer Seite auf einmal zu lÃ¶schen, klicken Sie %shier%s."),'<a href="'.URLHelper::getLink('?cmd=delete_all&keyword='.urlencode($keyword)).'">','</a>');
     PageLayout::postMessage(MessageBox::info($msg));
     return $version;
 }
@@ -485,11 +485,11 @@ function showDeleteDialog($keyword, $version) {
 function showDeleteAllDialog($keyword) {
     global $perm;
     if (!$perm->have_studip_perm("tutor", Context::getId())) {
-        throw new AccessDeniedException(_('Sie haben keine Berechtigung, Seiten zu löschen.'));
+        throw new AccessDeniedException(_('Sie haben keine Berechtigung, Seiten zu lÃ¶schen.'));
     }
-    $msg= sprintf(_("Wollen Sie die Seite %s wirklich vollständig - mit allen Versionen - löschen?"), "<b>".htmlReady($keyword)."</b>") . "<br>\n";
+    $msg= sprintf(_("Wollen Sie die Seite %s wirklich vollstÃ¤ndig - mit allen Versionen - lÃ¶schen?"), "<b>".htmlReady($keyword)."</b>") . "<br>\n";
     if ($keyword=="WikiWikiWeb") {
-        $msg .= "<p>" . _("Sie sind im Begriff die Startseite zu löschen, die dann durch einen leeren Text ersetzt wird. Damit wären auch alle anderen Seiten nicht mehr direkt erreichbar.") . "</p>";
+        $msg .= "<p>" . _("Sie sind im Begriff die Startseite zu lÃ¶schen, die dann durch einen leeren Text ersetzt wird. Damit wÃ¤ren auch alle anderen Seiten nicht mehr direkt erreichbar.") . "</p>";
     } else {
         $numbacklinks=count(getBacklinks($keyword));
         if ($numbacklinks == 0) {
@@ -523,11 +523,11 @@ function showDeleteAllDialog($keyword) {
 function deleteWikiPage($keyword, $version, $range_id) {
     global $perm, $dellatest;
     if (!$perm->have_studip_perm("tutor", Context::getId())) {
-        throw new AccessDeniedException(_('Sie haben keine Berechtigung, Seiten zu löschen.'));
+        throw new AccessDeniedException(_('Sie haben keine Berechtigung, Seiten zu lÃ¶schen.'));
     }
     $lv=getLatestVersion($keyword, Context::getId());
     if ($lv["version"] != $version) {
-        throw new InvalidArgumentException(_('Die Version, die Sie löschen wollen, ist nicht die aktuellste. Überprüfen Sie, ob inzwischen eine aktuellere Version erstellt wurde.'));
+        throw new InvalidArgumentException(_('Die Version, die Sie lÃ¶schen wollen, ist nicht die aktuellste. ÃœberprÃ¼fen Sie, ob inzwischen eine aktuellere Version erstellt wurde.'));
     }
 
     NotificationCenter::postNotification('WikiPageWillDelete', array($range_id, $keyword));
@@ -539,13 +539,13 @@ function deleteWikiPage($keyword, $version, $range_id) {
     NotificationCenter::postNotification('WikiPageDidDelete', array($range_id, $keyword));
 
     if (!keywordExists($keyword)) { // all versions have gone
-        $addmsg = '<br>' . sprintf(_("Damit ist die Seite %s mit allen Versionen gelöscht."),'<b>'.htmlReady($keyword).'</b>');
+        $addmsg = '<br>' . sprintf(_("Damit ist die Seite %s mit allen Versionen gelÃ¶scht."),'<b>'.htmlReady($keyword).'</b>');
         $newkeyword = "WikiWikiWeb";
     } else {
         $newkeyword = $keyword;
         $addmsg = "";
     }
-    $message = MessageBox::info(sprintf(_('Version %s der Seite %s gelöscht.'), htmlReady($version), '<b>'.htmlReady($keyword).'</b>') . $addmsg);
+    $message = MessageBox::info(sprintf(_('Version %s der Seite %s gelÃ¶scht.'), htmlReady($version), '<b>'.htmlReady($keyword).'</b>') . $addmsg);
     PageLayout::postMessage($message);
     if ($dellatest) {
         $lv=getLatestVersion($keyword, Context::getId());
@@ -569,14 +569,14 @@ function deleteWikiPage($keyword, $version, $range_id) {
 function deleteAllWikiPage($keyword, $range_id) {
     global $perm;
     if (!$perm->have_studip_perm("tutor", Context::getId())) {
-        throw new AccessDeniedException(_('Sie haben keine Berechtigung, Seiten zu löschen.'));
+        throw new AccessDeniedException(_('Sie haben keine Berechtigung, Seiten zu lÃ¶schen.'));
     }
 
     $query = "DELETE FROM wiki WHERE keyword = ? AND range_id = ?";
     $statement = DBManager::get()->prepare($query);
     $statement->execute(array($keyword, $range_id));
 
-    $message = MessageBox::info(sprintf(_('Die Seite %s wurde mit allen Versionen gelöscht.'), '<b>'.htmlReady($keyword).'</b>'));
+    $message = MessageBox::info(sprintf(_('Die Seite %s wurde mit allen Versionen gelÃ¶scht.'), '<b>'.htmlReady($keyword).'</b>'));
     PageLayout::postMessage($message);
     refreshBacklinks($keyword, "");
     return "WikiWikiWeb";
@@ -598,17 +598,17 @@ function listPages($mode, $sortby = NULL)
         $nopages = _("In dieser Veranstaltung wurden noch keine WikiSeiten angelegt.");
 
         // help texts
-        $help = _('Zeigt eine tabellarische Übersicht aller Wiki-Seiten an.');
+        $help = _('Zeigt eine tabellarische Ãœbersicht aller Wiki-Seiten an.');
         Helpbar::get()->ignoreDatabaseContents();
         Helpbar::get()->addPlainText('', $help);
     } else if ($mode=="new") {
         $lastlogindate = object_get_visit(Context::getId(), "wiki");
         $selfurl = "?view=listnew";
         $sort = "ORDER by lastchange"; // default sort order for "new pages"
-        $nopages = _("Seit Ihrem letzten Login gab es keine Änderungen.");
+        $nopages = _("Seit Ihrem letzten Login gab es keine Ã„nderungen.");
 
         // help texts
-        $help = _('Zeigt eine tabellarische Übersicht neu erstellter bzw. bearbeiteter Wiki-Seiten an.');
+        $help = _('Zeigt eine tabellarische Ãœbersicht neu erstellter bzw. bearbeiteter Wiki-Seiten an.');
         Helpbar::get()->ignoreDatabaseContents();
         Helpbar::get()->addPlainText('', $help);
     } else {
@@ -680,8 +680,8 @@ function listPages($mode, $sortby = NULL)
         $s = "<td class=\"content_title\" width=\"%d%%\" align=\"%s\">%s</td>";
         printf($s, 3, "left", "&nbsp;");
         printf($s, 39,"left",  "<font size=-1><b><a href=\"".URLHelper::getLink("$selfurl&sortby=$titlesortlink")."\">"._("Titel")."</a></b></font>");
-        printf($s, 10,"center",  "<font size=-1><b><a href=\"".URLHelper::getLink("$selfurl&sortby=$versionsortlink")."\">"._("Änderungen")."</a></b></font>");
-        printf($s, 15,"left",  "<font size=-1><b><a href=\"".URLHelper::getLink("$selfurl&sortby=$changesortlink")."\">"._("Letzte Änderung")."</a></b></font>");
+        printf($s, 10,"center",  "<font size=-1><b><a href=\"".URLHelper::getLink("$selfurl&sortby=$versionsortlink")."\">"._("Ã„nderungen")."</a></b></font>");
+        printf($s, 15,"left",  "<font size=-1><b><a href=\"".URLHelper::getLink("$selfurl&sortby=$changesortlink")."\">"._("Letzte Ã„nderung")."</a></b></font>");
         printf($s, 25,"left",  "<font size=-1><b>"._("von")."</b></font>");
         echo "</tr>";
 
@@ -714,7 +714,7 @@ function listPages($mode, $sortby = NULL)
             print($tdheadcenter.$version . $tdtail);
             print($tdheadleft.date("d.m.Y, H:i", $lastchange));
             if ($mode=="new" && $version > 1) {
-                print("&nbsp;(<a href=\"".URLHelper::getLink("?view=diff&keyword=".urlencode($keyword)."&versionssince=$lastlogindate")."\">"._("Änderungen")."</a>)");
+                print("&nbsp;(<a href=\"".URLHelper::getLink("?view=diff&keyword=".urlencode($keyword)."&versionssince=$lastlogindate")."\">"._("Ã„nderungen")."</a>)");
             }
             print($tdtail);
             print($tdheadleft.get_fullname($user_id,'full',TRUE).$tdtail."</tr>");
@@ -814,7 +814,7 @@ function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch)
 ?>
 <table class="default">
     <caption>
-        <?= sprintf(_('Treffer für Suche nach %s'), '&raquo;' . htmlReady($searchfor) . '&laquo;') ?>
+        <?= sprintf(_('Treffer fÃ¼r Suche nach %s'), '&raquo;' . htmlReady($searchfor) . '&laquo;') ?>
     <? if ($localsearch): ?>
         <?= sprintf(_('in allen Versionen der Seite %s'), '&raquo;' . htmlReady($keyword) . '&laquo;') ?>
     <? elseif ($searchcurrentversions): ?>
@@ -850,9 +850,9 @@ function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch)
             } else if ($last_keyword_count>0) {
                 print($tdheadleft."&nbsp;".$tdtail);
                 if ($last_keyword_count==1) {
-                    $hitstring=_("Weitere Treffer in %s älteren Version. Klicken Sie %shier%s, um diese Treffer anzuzeigen.");
+                    $hitstring=_("Weitere Treffer in %s Ã¤lteren Version. Klicken Sie %shier%s, um diese Treffer anzuzeigen.");
                 } else {
-                    $hitstring=_("Weitere Treffer in %s älteren Versionen. Klicken Sie %shier%s, um diese Treffer anzuzeigen.");
+                    $hitstring=_("Weitere Treffer in %s Ã¤lteren Versionen. Klicken Sie %shier%s, um diese Treffer anzuzeigen.");
                 }
                 print($tdheadleft."<em>".sprintf($hitstring,$last_keyword_count,"<b><a href=\"".URLHelper::getLink("?view=search&searchfor=$searchfor&keyword=".urlencode($last_keyword)."&localsearch=1")."\">","</a></b>")."</em>".$tdtail);
                 print($tdheadleft."&nbsp;".$tdtail);
@@ -918,9 +918,9 @@ function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch)
         print("<tr>");
         print($tdheadleft."&nbsp;".$tdtail);
         if ($last_keyword_count==1) {
-            $hitstring=_("Weitere Treffer in %s älteren Version. Klicken Sie %shier%s, um diese Treffer anzuzeigen.");
+            $hitstring=_("Weitere Treffer in %s Ã¤lteren Version. Klicken Sie %shier%s, um diese Treffer anzuzeigen.");
         } else {
-            $hitstring=_("Weitere Treffer in %s älteren Versionen. Klicken Sie %shier%s, um diese Treffer anzuzeigen.");
+            $hitstring=_("Weitere Treffer in %s Ã¤lteren Versionen. Klicken Sie %shier%s, um diese Treffer anzuzeigen.");
         }
         print($tdheadleft."<em>".sprintf($hitstring,$last_keyword_count,"<b><a href=\"".URLHelper::getLink("?view=search&searchfor=$searchfor&keyword=".urlencode($last_keyword)."&localsearch=1")."\">","</a></b>")."</em>".$tdtail);
         print($tdheadleft."&nbsp;".$tdtail);
@@ -979,11 +979,11 @@ function wikiEdit($keyword, $wikiData, $user_id, $backpage=NULL)
     $locks=getLock($keyword, $user_id);
     $cont="";
     if ($locks && $lock["user_id"]!=$user_id) {
-        $message = MessageBox::info(sprintf(_("Die Seite wird eventuell von %s bearbeitet."), htmlReady($locks)), array(_("Wenn Sie die Seite trotzdem ändern, kann ein Versionskonflikt entstehen."), _("Es werden dann beide Versionen eingetragen und müssen von Hand zusammengeführt werden."),  _("Klicken Sie auf Abbrechen, um zurückzukehren.")));
+        $message = MessageBox::info(sprintf(_("Die Seite wird eventuell von %s bearbeitet."), htmlReady($locks)), array(_("Wenn Sie die Seite trotzdem Ã¤ndern, kann ein Versionskonflikt entstehen."), _("Es werden dann beide Versionen eingetragen und mÃ¼ssen von Hand zusammengefÃ¼hrt werden."),  _("Klicken Sie auf Abbrechen, um zurÃ¼ckzukehren.")));
         PageLayout::postMessage($message);
     }
     if ($keyword=='toc') {
-        $message = MessageBox::info(_("Sie bearbeiten die QuickLinks."), array(_("Verwenden Sie Aufzählungszeichen (-, --, ---), um Verweise auf Seiten hinzuzufügen.")));
+        $message = MessageBox::info(_("Sie bearbeiten die QuickLinks."), array(_("Verwenden Sie AufzÃ¤hlungszeichen (-, --, ---), um Verweise auf Seiten hinzuzufÃ¼gen.")));
         PageLayout::postMessage($message);
         if (!$body) {
             $body=_("- WikiWikiWeb\n- BeispielSeite\n-- UnterSeite1\n-- UnterSeite2");
@@ -1005,10 +1005,10 @@ function wikiEdit($keyword, $wikiData, $user_id, $backpage=NULL)
     // help texts
     Helpbar::get()->ignoreDatabaseContents();
 
-    $help = _('Der Editor dient zum Einfügen und Ändern von beliebigem Text.');
+    $help = _('Der Editor dient zum EinfÃ¼gen und Ã„ndern von beliebigem Text.');
     Helpbar::get()->addPlainText('', $help);
 
-    $tip = _('Links entstehen automatisch aus Wörtern, die von zwei paar eckigen Klammern umgeben sind (Beispiel: [nop][[[/nop]%%Schlüsselwort%%[nop]]][/nop]');
+    $tip = _('Links entstehen automatisch aus WÃ¶rtern, die von zwei paar eckigen Klammern umgeben sind (Beispiel: [nop][[[/nop]%%SchlÃ¼sselwort%%[nop]]][/nop]');
     Helpbar::get()->addPlainText(_('Tip'), $tip, Icon::create('info-circle'));
 }
 
@@ -1028,7 +1028,7 @@ function printWikiPage($keyword, $version)
     echo "<p><em>" . htmlReady(Context::getHeaderLine()) ."</em></p>";
     echo "<h1>" . htmlReady($keyword) ."</h1>";
     echo "<p><em>";
-    echo sprintf(_("Version %s, letzte Änderung %s von %s."), $wikiData['version'],
+    echo sprintf(_("Version %s, letzte Ã„nderung %s von %s."), $wikiData['version'],
     date("d.m.Y, H:i", $wikiData['chdate']), get_fullname($wikiData['user_id'], 'full', 1));
     echo "</em></p>";
     echo "<hr>";
@@ -1120,7 +1120,7 @@ function deleteWikiLinks($keyword){
 **/
 function exportWiki() {
     showPageFrameStart();
-    $message = MessageBox::info(_('Alle Wiki-Seiten werden als große HTML-Datei zusammengefügt und in einem neuen Fenster angezeigt. Von dort aus können Sie die Datei abspeichern.'));
+    $message = MessageBox::info(_('Alle Wiki-Seiten werden als groÃŸe HTML-Datei zusammengefÃ¼gt und in einem neuen Fenster angezeigt. Von dort aus kÃ¶nnen Sie die Datei abspeichern.'));
     PageLayout::postMessage($message);
 
     print '<div style="text-align: center;">';
@@ -1180,7 +1180,7 @@ function getAllWikiPages($range_id, $header, $fullhtml=TRUE) {
                 }
                 $out[]="<hr><a name=\"$pagename\"></a><h1>$pagename</h1>";
                 $out[]="<font size=-1><p><em>";
-                $out[] = sprintf(_("Version %s, letzte Änderung %s von %s."), $pagedata['version'], date("d.m.Y, H:i", $pagedata['chdate']), get_fullname($pagedata['user_id'], 'full', 1));
+                $out[] = sprintf(_("Version %s, letzte Ã„nderung %s von %s."), $pagedata['version'], date("d.m.Y, H:i", $pagedata['chdate']), get_fullname($pagedata['user_id'], 'full', 1));
                 $out[] = "</em></p></font>";
                 // output is html without comments
                 $out[]=wikiReady($pagedata['body'],TRUE,FALSE,"none");
@@ -1240,7 +1240,7 @@ function getShowPageInfobox($keyword, $latest_version)
     $versions = getWikiPageVersions($keyword);
 
     if (!$latest_version) {
-        $message = sprintf(_('Sie betrachten eine alte Version, die nicht mehr geändert werden kann. Verwenden Sie dazu die %saktuelle Version%s.'),
+        $message = sprintf(_('Sie betrachten eine alte Version, die nicht mehr geÃ¤ndert werden kann. Verwenden Sie dazu die %saktuelle Version%s.'),
                            '<a href="' . URLHelper::getLink('?keyword='.urlencode($keyword)) . '">',
                            '</a>');
         PageLayout::postMessage(MessageBox::info($message));
@@ -1285,7 +1285,7 @@ function getShowPageInfobox($keyword, $latest_version)
                      Icon::create('wiki', 'clickable'))
            ->setActive(true);
     if (count($versions) >= 1) {
-        $widget->addLink(_('Textänderungen anzeigen'),
+        $widget->addLink(_('TextÃ¤nderungen anzeigen'),
                          URLHelper::getLink('?keyword=' . urlencode($keyword) . '&view=diff'));
         $widget->addLink(_('Text mit Autor/-innenzuordnung anzeigen'),
                          URLHelper::getLink('?keyword=' . urlencode($keyword) . '&view=combodiff'));
@@ -1362,7 +1362,7 @@ function getDiffPageInfobox($keyword) {
     $widget->addLink(_('Standard'),
                      URLHelper::getLink('?keyword=' . urlencode($keyword) . '&view=show'));
     if (count($versions) >= 1) {
-        $widget->addLink(_('Textänderungen anzeigen'),
+        $widget->addLink(_('TextÃ¤nderungen anzeigen'),
                          URLHelper::getLink('?keyword=' . urlencode($keyword) . '&view=diff'))
                ->setActive(Request::option('view') === 'diff');
         $widget->addLink(_('Text mit Autor/-innenzuordnung anzeigen'),
@@ -1477,14 +1477,14 @@ function showWikiPage($keyword, $version, $special="", $show_comments="icon", $h
     if ($perm->have_studip_perm("autor", Context::getId())) {
         if (!$latest_version) {
             $edit  = Icon::create('lock-locked', 'info')->asImg();
-            $edit .= _("Ältere Version, nicht bearbeitbar!");
+            $edit .= _("Ã„ltere Version, nicht bearbeitbar!");
         } else {
             $edit="";
             if ($perm->have_studip_perm("autor", Context::getId())) {
                 $edit.=LinkButton::create(_('Bearbeiten'), URLHelper::getURL("?keyword=".urlencode($keyword)."&view=edit"));
             }
             if ($perm->have_studip_perm("tutor", Context::getId())) {
-                $edit.=LinkButton::create(_('Löschen'),URLHelper::getURL("?keyword=".urlencode($keyword)."&cmd=delete&version=latest"));
+                $edit.=LinkButton::create(_('LÃ¶schen'),URLHelper::getURL("?keyword=".urlencode($keyword)."&cmd=delete&version=latest"));
             }
         }
         $edit .= "<br>&nbsp;";
@@ -1587,7 +1587,7 @@ function showDiffs($keyword, $versions_since)
         $current        = $version['body'];
         $currentversion = $version['version'];
 
-        $diffarray = '<b><font size=-1>'. _("Änderungen zu") . " </font> $zusatz</b><p>";
+        $diffarray = '<b><font size=-1>'. _("Ã„nderungen zu") . " </font> $zusatz</b><p>";
         $diffarray .= "<table cellpadding=0 cellspacing=0 border=0 width=\"100%\">\n";
         $diffarray .= do_diff($current, $last);
         $diffarray .= "</table>\n";
@@ -1607,7 +1607,7 @@ function showDiffs($keyword, $versions_since)
     showPageFrameEnd();
 
     // help texts
-    $help = _('Die Ansicht zeigt den Verlauf der Textänderungen einer Wiki-Seite.');
+    $help = _('Die Ansicht zeigt den Verlauf der TextÃ¤nderungen einer Wiki-Seite.');
     Helpbar::get()->ignoreDatabaseContents();
     Helpbar::get()->addPlainText('', $help);
 }
@@ -1702,7 +1702,7 @@ function showComboDiff($keyword, $db=NULL)
                 $col=create_color($idx);
                 echo "<tr bgcolor=$col>";
                 echo "<td width=30 align=center valign=top>";
-                echo Icon::create('info-circle', 'inactive', ['title' => _("Änderung von").' ' . get_fullname($last_author)])->asImg();
+                echo Icon::create('info-circle', 'inactive', ['title' => _("Ã„nderung von").' ' . get_fullname($last_author)])->asImg();
                 echo "</td>";
                 echo "<td><font size=-1>";
                 echo wikiReady($collect);
@@ -1723,8 +1723,8 @@ function showComboDiff($keyword, $db=NULL)
 
     // help texts
     $help = array(
-        _('Die Ansicht zeigt den Verlauf der Textänderungen einer Wiki-Seite '.
-          'mit einer Übersicht, welche Autor/-innen welche Textänderungen ' .
+        _('Die Ansicht zeigt den Verlauf der TextÃ¤nderungen einer Wiki-Seite '.
+          'mit einer Ãœbersicht, welche Autor/-innen welche TextÃ¤nderungen ' .
           'vorgenommen haben.'));
     Helpbar::get()->ignoreDatabaseContents();
     Helpbar::get()->addPlainText('', $help);

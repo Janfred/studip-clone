@@ -11,5 +11,5 @@ if (Studip\ENV == 'development') {
 ?>
     <?= MessageBox::exception($title, $details) ?>
     <p>
-      <?= _('Zurück zur') ?> <a href="<?= URLHelper::getLink('index.php') ?>"><?= _('Startseite') ?></a>
+      <?= _('ZurÃ¼ck zur') ?> <a href="<?= URLHelper::getLink('index.php') ?>"><?= _('Startseite') ?></a>
     </p>

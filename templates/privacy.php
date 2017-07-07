@@ -4,9 +4,9 @@
 <div class="white" style="padding: 2ex;">
   <table width="100%">
     <tr><td>
-      <h2><?= _('Stud.IP - Erläuterungen zum Datenschutz im Überblick') ?></h2>
+      <h2><?= _('Stud.IP - ErlÃ¤uterungen zum Datenschutz im Ãœberblick') ?></h2>
 
-      <p><?= _('Die wichtigsten Informationen auf einen Blick: Wer kann was über mich sehen bzw. herausfinden?') ?></p>
+      <p><?= _('Die wichtigsten Informationen auf einen Blick: Wer kann was Ã¼ber mich sehen bzw. herausfinden?') ?></p>
 
       <table border="1" cellpadding="2" cellspacing="1">
 
@@ -63,7 +63,7 @@
         </tr>
 
         <tr>
-          <td style="background-color: #aaaaaa"><?= _('Studiengänge') ?></td>
+          <td style="background-color: #aaaaaa"><?= _('StudiengÃ¤nge') ?></td>
           <td style="background-color: green">&nbsp;</td>
           <td style="background-color: red">&nbsp;</td>
           <td style="background-color: red">&nbsp;</td>
@@ -154,7 +154,7 @@
         </tr>
 
         <tr>
-          <td style="background-color: #aaaaaa"><?= _('Mein Name an meinen<br>Beiträgen, Dateien, ...') ?></td>
+          <td style="background-color: #aaaaaa"><?= _('Mein Name an meinen<br>BeitrÃ¤gen, Dateien, ...') ?></td>
           <td style="background-color: green">&nbsp;</td>
           <td style="background-color: green">&nbsp;</td>
           <td style="background-color: green">&nbsp;</td>
@@ -180,7 +180,7 @@
         </tr>
 
         <tr>
-          <td style="background-color: #aaaaaa"><?= _('Welche Dateien, Beiträge,<br>Ankündigungen,... habe ich gelesen?') ?></td>
+          <td style="background-color: #aaaaaa"><?= _('Welche Dateien, BeitrÃ¤ge,<br>AnkÃ¼ndigungen,... habe ich gelesen?') ?></td>
           <td style="background-color: red">&nbsp;</td>
           <td style="background-color: red">&nbsp;</td>
           <td style="background-color: red">&nbsp;</td>
@@ -199,15 +199,15 @@
       <table border="1" cellpadding="1" cellspacing="2">
         <tr>
           <td width="50" style="background-color: green">&nbsp;</td>
-          <td><?= _('immer möglich') ?></td>
+          <td><?= _('immer mÃ¶glich') ?></td>
         </tr>
         <tr>
           <td width="50" style="background-color: yellow">&nbsp;</td>
-          <td><?= _('mit meiner Zustimmung möglich') ?></td>
+          <td><?= _('mit meiner Zustimmung mÃ¶glich') ?></td>
         </tr>
         <tr>
           <td width="50" style="background-color: red">&nbsp;</td>
-          <td><?= _('nicht möglich') ?></td>
+          <td><?= _('nicht mÃ¶glich') ?></td>
         </tr>
       </table>
 

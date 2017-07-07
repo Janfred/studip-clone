@@ -49,10 +49,10 @@ class WikiController extends AuthenticatedController
             $this->render_json(false);
         } elseif ($latest_version && $version != $latest_version['version']) {
             $error  = _('Die von Ihnen bearbeitete Seite ist nicht mehr aktuell.') . ' ';
-            $error .= _('Falls Sie dennoch speichern, überschreiben Sie die getätigte Änderung und es wird unter Umständen zu Datenverlusten kommen.');
+            $error .= _('Falls Sie dennoch speichern, Ã¼berschreiben Sie die getÃ¤tigte Ã„nderung und es wird unter UmstÃ¤nden zu Datenverlusten kommen.');
             $this->response->add_header('X-Studip-Error', $error);
 
-            $this->response->add_header('X-Studip-Confirm', _('Möchten Sie Ihre Version dennoch speichern?'));
+            $this->response->add_header('X-Studip-Confirm', _('MÃ¶chten Sie Ihre Version dennoch speichern?'));
 
             $this->render_json(null);
         } else {

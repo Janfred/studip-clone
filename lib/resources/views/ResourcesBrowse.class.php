@@ -109,7 +109,7 @@ class ResourcesBrowse {
 
         <footer>
             <?= Button::create(_('Suchen'), 'start_search') ?>
-            <?= LinkButton::create(_('Zurücksetzen'), URLHelper::getURL('?view=search&quick_view_mode=' . $GLOBALS['view_mode'] . '&reset=TRUE')) ?>
+            <?= LinkButton::create(_('ZurÃ¼cksetzen'), URLHelper::getURL('?view=search&quick_view_mode=' . $GLOBALS['view_mode'] . '&reset=TRUE')) ?>
         </footer>
         <?
     }
@@ -148,10 +148,10 @@ class ResourcesBrowse {
                     $top_level_name = _("Einrichtungsressourcen");
                 break;
                 case "fak":
-                    $top_level_name = _("Fakultätsressourcen");
+                    $top_level_name = _("FakultÃ¤tsressourcen");
                 break;
                 case "user":
-                    $top_level_name = _("persönliche Ressourcen");
+                    $top_level_name = _("persÃ¶nliche Ressourcen");
                 break;
             }
 
@@ -204,7 +204,7 @@ class ResourcesBrowse {
                             <script>
                                 jQuery('#searchDate').datepicker();
                             </script>
-                            &nbsp;&nbsp;&nbsp;&nbsp;    <input type="checkbox" name="search_repeating" value="1" <?=($this->searchArray["search_repeating"]==1) ? "checked=checked" : ""?>> <?= _('für restliches Semester prüfen') ?>
+                            &nbsp;&nbsp;&nbsp;&nbsp;    <input type="checkbox" name="search_repeating" value="1" <?=($this->searchArray["search_repeating"]==1) ? "checked=checked" : ""?>> <?= _('fÃ¼r restliches Semester prÃ¼fen') ?>
                             <br>
                         </td>
                     </tr>
@@ -427,7 +427,7 @@ class ResourcesBrowse {
             <? if ($way_back >= 0): ?>
                 <a href="<?= URLHelper::getLink('?view=search&quick_view_mode='. $GLOBALS['view_mode']
                             . '&' . (!$way_back ? "reset=TRUE" : "open_level=$way_back")) ?>">
-                    <?= Icon::create('arr_2left', 'clickable', ['title' => _('eine Ebene zurück')])->asImg(16, ["class" => 'text-top']) ?>
+                    <?= Icon::create('arr_2left', 'clickable', ['title' => _('eine Ebene zurÃ¼ck')])->asImg(16, ["class" => 'text-top']) ?>
                 </a>
             <? endif; ?>
             </td>
@@ -474,7 +474,7 @@ class ResourcesBrowse {
             <td <? echo ($this->mode == "browse") ? " colspan=\"2\"" : "" ?>>
                 <?$result_count=$this->list->showListObjects($this->open_object);
         if (!$result_count) {
-            echo MessageBox::info(_("Es existieren keine Einträge auf dieser Ebene.")); ?>
+            echo MessageBox::info(_("Es existieren keine EintrÃ¤ge auf dieser Ebene.")); ?>
             </td>
         </tr>
             <?
@@ -488,7 +488,7 @@ class ResourcesBrowse {
             <td <? echo ($this->mode == "browse") ? " colspan=\"2\"" : "" ?>>
                 <?$result_count=$this->list->showSearchList($this->searchArray, $check_assigns);
         if (!$result_count) {
-            echo MessageBox::info(_("Es wurden keine Einträge zu Ihren Suchkriterien gefunden.")); ?>
+            echo MessageBox::info(_("Es wurden keine EintrÃ¤ge zu Ihren Suchkriterien gefunden.")); ?>
             </td>
         </tr>
             <?

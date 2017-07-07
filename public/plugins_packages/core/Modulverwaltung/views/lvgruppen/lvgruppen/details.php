@@ -37,7 +37,7 @@
                 <td colspan="2"><strong><?= _('Zugeordnete Lehrveranstaltungen:') ?></strong><br>
                 <? if (count($courses) == 0) : ?>
                     <span class="mvv-no-entry">
-                    <?= _('Dieser Lehrveranstaltungsgruppe wurde für das ausgewählte Semester keine Lehrveranstaltung zugeordnet.') ?>
+                    <?= _('Dieser Lehrveranstaltungsgruppe wurde fÃ¼r das ausgewÃ¤hlte Semester keine Lehrveranstaltung zugeordnet.') ?>
                     </span>
                 <? else : ?>
                     <ul style="list-style-type:none;">
@@ -64,7 +64,7 @@
                     <div onClick="jQuery(this).prev().find('.mvv-sem-hidden').slideToggle(); return false;">
                         <a href="<?= $controller->url_for('/details/' . $lvgruppe->id, array('all_sem' => 1)) ?>">
                             <?= Icon::create('arr_1right', 'clickable')->asImg(); ?>
-                            <?= _('Frühere Semester.') ?>
+                            <?= _('FrÃ¼here Semester.') ?>
                         </a>
                     </div>
                     <? endif; ?>
@@ -98,7 +98,7 @@
             </tr>
             <? if ($lvgruppe->mkdate != $lvgruppe->chdate) : ?>
             <tr>
-                <td><strong><?= _('Letzte Änderung am:') ?></strong></td>
+                <td><strong><?= _('Letzte Ã„nderung am:') ?></strong></td>
                 <td>
                     <?= strftime('%x, %X', $lvgruppe->chdate) . ', ' ?>
                     <?= get_fullname($lvgruppe->editor_id) ?>

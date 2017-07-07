@@ -41,7 +41,7 @@ class Admin_Cronjobs_LogsController extends AuthenticatedController
         parent::before_filter($action, $args);
 
         Navigation::activateItem('/admin/config/cronjobs');
-        PageLayout::setTitle(_('Cronjob-Verwaltung') . ' - ' . _('Log-Einträge'));
+        PageLayout::setTitle(_('Cronjob-Verwaltung') . ' - ' . _('Log-EintrÃ¤ge'));
 
         if (empty($_SESSION['cronlog-filter'])) {
             $_SESSION['cronlog-filter'] = array(
@@ -150,7 +150,7 @@ class Admin_Cronjobs_LogsController extends AuthenticatedController
     {
         $this->log = CronjobLog::find($id);
 
-        $title = sprintf(_('Logeintrag für Cronjob "%s" anzeigen'),
+        $title = sprintf(_('Logeintrag fÃ¼r Cronjob "%s" anzeigen'),
                          $this->log->schedule->title);
 
         PageLayout::setTitle($title);
@@ -165,7 +165,7 @@ class Admin_Cronjobs_LogsController extends AuthenticatedController
     {
         CronjobLog::find($id)->delete();
 
-        $message = sprintf(_('Der Logeintrag wurde gelöscht.'), $deleted);
+        $message = sprintf(_('Der Logeintrag wurde gelÃ¶scht.'), $deleted);
         PageLayout::postMessage(MessageBox::success($message));
 
         $this->redirect('admin/cronjobs/logs/index/' . $page);
@@ -189,7 +189,7 @@ class Admin_Cronjobs_LogsController extends AuthenticatedController
             }
 
             $n = count($logs);
-            $message = sprintf(ngettext('%u Logeintrag wurde gelöscht.', '%u Logeinträge wurden gelöscht.', $n), $n);
+            $message = sprintf(ngettext('%u Logeintrag wurde gelÃ¶scht.', '%u LogeintrÃ¤ge wurden gelÃ¶scht.', $n), $n);
             PageLayout::postMessage(MessageBox::success($message));
         }
 

@@ -2,7 +2,7 @@
 /**
  * configuration.php - model class for the configuration
  *
- * @author      Nico Müller <nico.mueller@uni-oldenburg.de>
+ * @author      Nico MÃ¼ller <nico.mueller@uni-oldenburg.de>
  * @author      Michael Riehemann <michael.riehemann@uni-oldenburg.de>
  * @license     GPL2 or any later version
  * @category    Stud.IP

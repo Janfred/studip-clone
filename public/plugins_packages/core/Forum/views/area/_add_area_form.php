@@ -6,7 +6,7 @@
             <input type="text" name="name" size="50" maxlength="255" style="width: 99%;" placeholder="<?= _('Name des neuen Bereiches') ?>" required><br>
             <textarea name="content" style="height: 3em; width: 99%;" placeholder="<?= _('Optionale Beschreibung des neuen Bereiches') ?>"></textarea>
 
-            <?= Studip\Button::create(_('Bereich hinzufügen')) ?>
+            <?= Studip\Button::create(_('Bereich hinzufÃ¼gen')) ?>
             <?= Studip\LinkButton::createCancel(_('Abbrechen'), PluginEngine::getLink('coreforum/index/index#cat_'. $category_id)) ?>
         </form>
     </td>

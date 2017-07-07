@@ -3,7 +3,7 @@
 use Studip\Button, Studip\LinkButton;
 ?>
 
-<h3><?= _('Rollenverwaltung für Plugins') ?></h3>
+<h3><?= _('Rollenverwaltung fÃ¼r Plugins') ?></h3>
 
 <form action="<?= $controller->url_for('admin/role/assign_plugin_role') ?>" style="margin-bottom: 1em;" method="POST">
     <?= CSRFProtection::tokenTag() ?>
@@ -15,7 +15,7 @@ use Studip\Button, Studip\LinkButton;
         <? endforeach ?>
     </select>
 
-    <?= Button::create(_('Auswählen'), 'select', array('title' => _('Plugin auswählen'))) ?>
+    <?= Button::create(_('AuswÃ¤hlen'), 'select', array('title' => _('Plugin auswÃ¤hlen'))) ?>
 </form>
 
 <? if ($pluginid): ?>
@@ -24,9 +24,9 @@ use Studip\Button, Studip\LinkButton;
         <input type="hidden" name="studip_ticket" value="<?= get_ticket() ?>">
         <table class="default nohover">
             <tr>
-                <th style="text-align: center;"><?= _('Gegenwärtig zugewiesene Rollen') ?></th>
+                <th style="text-align: center;"><?= _('GegenwÃ¤rtig zugewiesene Rollen') ?></th>
                 <th></th>
-                <th><?= _('Verfügbare Rollen') ?></th>
+                <th><?= _('VerfÃ¼gbare Rollen') ?></th>
             </tr>
             <tr class="table_row_even">
                 <td style="text-align: right;">

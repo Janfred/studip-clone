@@ -11,7 +11,7 @@ class AddSwitchToPreselectSemester extends Migration {
                 "('06d703c3de37cdae942c66e18f7dcd02', '', 'ASSI_SEMESTER_PRESELECT', " .
                 "'TRUE', 0, 'boolean', 'global', '', 0, ".time().",". time().
                 ", 'Wenn ausgeschaltet wird im admin_seminare_assi beim" .
-                "Erstellen einer Veranstaltung als Semester bitte ausw‰hlen " .
+                "Erstellen einer Veranstaltung als Semester bitte ausw√§hlen " .
                 "angezeigt und nicht das voreingestellte Semester.', '', '')");
     }
 

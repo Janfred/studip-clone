@@ -11,11 +11,11 @@
         <legend><?= _("Freigaben bearbeiten") ?></legend>
         <label>
             <input type="checkbox" name="user" value="1"<?= $profile ? " checked" : "" ?>>
-            <?= _("Auf der persönlichen Profilseite") ?>
+            <?= _("Auf der persÃ¶nlichen Profilseite") ?>
         </label>
         <label>
             <input type="checkbox" name="public" value="1"<?= $public ? " checked" : "" ?>>
-            <?= _("Als öffentlicher Link für unangemeldete Nutzer") ?>
+            <?= _("Als Ã¶ffentlicher Link fÃ¼r unangemeldete Nutzer") ?>
         </label>
         <? if ($GLOBALS['perm']->have_perm("root")) : ?>
             <label>

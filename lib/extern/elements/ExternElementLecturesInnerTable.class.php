@@ -56,7 +56,7 @@ class ExternElementLecturesInnerTable extends ExternElement {
         
         $this->name = "LecturesInnerTable";
         $this->real_name = _("Veranstaltungsname/Zeiten(Termine)/Lehrende");
-        $this->description = _("Formatierung von Veranstaltungsname/Zeiten(Termine)/Lehrenden in der Veranstaltungsübersicht.");
+        $this->description = _("Formatierung von Veranstaltungsname/Zeiten(Termine)/Lehrenden in der VeranstaltungsÃ¼bersicht.");
         
         $this->headlines = array(_("Angaben zum HTML-Tag &lt;tr&gt;"), _("Angaben zum HTML-Tag &lt;td&gt;"),
             _("Ausrichtung Veranstaltungsname"), _("Ausrichtung Zeiten(Termine)/Lehrenden"),
@@ -101,15 +101,15 @@ class ExternElementLecturesInnerTable extends ExternElement {
         $table .= $edit_form->editTextfieldGeneric("td2width", $title, $info, 2, 2);
         
         $title = _("Horizontale Ausrichtung Zeiten:");
-        $info = _("Wählen Sie aus der Auswahlliste die Art der horizontalen Ausrichtung.");
+        $info = _("WÃ¤hlen Sie aus der Auswahlliste die Art der horizontalen Ausrichtung.");
         $values = array("left", "right", "center");
-        $names = array(_("linksbündig"), _("rechtsbündig"), _("zentriert"));
+        $names = array(_("linksbÃ¼ndig"), _("rechtsbÃ¼ndig"), _("zentriert"));
         $table .= $edit_form->editOptionGeneric("td2_align", $title, $info, $values, $names);
         
         $title = _("Horizontale Ausrichtung Lehrende:");
-        $info = _("Wählen Sie aus der Auswahlliste die Art der horizontalen Ausrichtung.");
+        $info = _("WÃ¤hlen Sie aus der Auswahlliste die Art der horizontalen Ausrichtung.");
         $values = array("left", "right", "center");
-        $names = array(_("linksbündig"), _("rechtsbündig"), _("zentriert"));
+        $names = array(_("linksbÃ¼ndig"), _("rechtsbÃ¼ndig"), _("zentriert"));
         $table .= $edit_form->editOptionGeneric("td3_align", $title, $info, $values, $names);
         
         $table .= $edit_form->editValign("td2_valign");

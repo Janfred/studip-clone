@@ -95,9 +95,9 @@ if (!$controllerpath) {
                     ]) ?>
                 <? endif; ?>
                 <? if ($topFolder->isWritable($GLOBALS['user']->id)): ?>
-    	            <?= Studip\Button::create(_('Löschen'), 'delete', [
+    	            <?= Studip\Button::create(_('LÃ¶schen'), 'delete', [
                         'disabled'     => '',
-                        'data-confirm' => _('Soll die Auswahl wirklich gelöscht werden?')
+                        'data-confirm' => _('Soll die Auswahl wirklich gelÃ¶scht werden?')
                     ]) ?>
                 <? endif; ?>
                 </span>
@@ -110,7 +110,7 @@ if (!$controllerpath) {
                 ) ?>
             <? endif ?>
             <? if ($topFolder->isWritable($GLOBALS['user']->id)): ?>
-                <?= Studip\LinkButton::create(_('Datei hinzufügen'), '#', [
+                <?= Studip\LinkButton::create(_('Datei hinzufÃ¼gen'), '#', [
                     'onclick' => 'STUDIP.Files.openAddFilesWindow(); return false;'
                 ]) ?>
             <? endif ?>

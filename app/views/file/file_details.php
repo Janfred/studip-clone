@@ -32,7 +32,7 @@
 <? endif; ?>
 <? if ($next_file_ref_id): ?>
     <?= Studip\LinkButton::create(
-        _('Nächste Datei >>'),
+        _('NÃ¤chste Datei >>'),
         $controller->url_for('file/details/' . $next_file_ref_id),
         ['data-dialog' => '']
     ) ?>

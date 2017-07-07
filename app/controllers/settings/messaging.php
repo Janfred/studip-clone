@@ -106,13 +106,13 @@ class Settings_MessagingController extends Settings_SettingsController
 
                 $this->config->delete('MESSAGING_SETTINGS');
 
-                PageLayout::postSuccess(_('Ihre Einstellungen wurden erfolgreich zurückgesetzt.'));
+                PageLayout::postSuccess(_('Ihre Einstellungen wurden erfolgreich zurÃ¼ckgesetzt.'));
             } else if ($action === 'forward_receiver') {
                 $this->user->smsforward_rec  = '';
                 $this->user->smsforward_copy = 0;
                 $this->user->store();
 
-                PageLayout::postSuccess(_('Empfänger und Weiterleitung wurden erfolgreich gelöscht'));
+                PageLayout::postSuccess(_('EmpfÃ¤nger und Weiterleitung wurden erfolgreich gelÃ¶scht'));
             }
         }
         $this->redirect('settings/messaging');

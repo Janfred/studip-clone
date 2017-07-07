@@ -1,12 +1,12 @@
 <div><?= htmlReady($type )?>:</div>
 <label>
     <input disabled type="checkbox" <? if ($folder->isReadable()) echo 'checked'; ?>>
-    <strong>r</strong> - <?= _('Lesen (Dateien können heruntergeladen werden)') ?>
+    <strong>r</strong> - <?= _('Lesen (Dateien kÃ¶nnen heruntergeladen werden)') ?>
 </label>
 <br>
 <label>
     <input disabled type="checkbox" <? if ($folder->isWritable()) echo 'checked'; ?>>
-    <strong>w</strong> - <?= _('Schreiben (Dateien können hochgeladen werden)') ?>
+    <strong>w</strong> - <?= _('Schreiben (Dateien kÃ¶nnen hochgeladen werden)') ?>
 </label>
 <br>
 <label>

@@ -73,7 +73,7 @@ class ExternEditModule extends ExternEditHtml {
         $out .= "<tr>\n";
         $out .= "<td><font size=\"2\"><b>" . _("Datenfeld") . "</b></font></td>\n";
         if (!in_array('aliases', $hide))
-            $out .= "<td><font size=\"2\"><b>" . _("Überschrift") . "</b></font></td>\n";
+            $out .= "<td><font size=\"2\"><b>" . _("Ãœberschrift") . "</b></font></td>\n";
         if (!in_array("width", $hide))
             $out .= "<td><font size=\"2\"><b>" . _("Breite") . "</b></font></td>\n";
         if (!in_array("sort", $hide))
@@ -165,7 +165,7 @@ class ExternEditModule extends ExternEditHtml {
         if (!in_array("widthpp", $hide) && !in_array('width', $hide)) {
             $colspan = 4 - sizeof($hide);
             $title = _("Breite in:");
-            $info = _("Wählen Sie hier, ob die Breiten der Tabellenspalten als Prozentwerte oder Pixel interpretiert werden sollen.");
+            $info = _("WÃ¤hlen Sie hier, ob die Breiten der Tabellenspalten als Prozentwerte oder Pixel interpretiert werden sollen.");
             $width_values = array("%", "");
             $width_names = array(_("Prozent"), _("Pixel"));
             $out .= "<tr>\n";
@@ -240,8 +240,8 @@ class ExternEditModule extends ExternEditHtml {
         if (!$groups_db)
             return FALSE;
 
-        $title = _("Gruppen auswählen:");
-        $info = _("Wählen Sie die Statusgruppen aus, die ausgegeben werden sollen.");
+        $title = _("Gruppen auswÃ¤hlen:");
+        $info = _("WÃ¤hlen Sie die Statusgruppen aus, die ausgegeben werden sollen.");
         $groups_config = $this->getValue("groups");
 
         // this value is always necessary, even there is an error in the users inputs, so
@@ -338,7 +338,7 @@ class ExternEditModule extends ExternEditHtml {
         $out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">\n";
         $out .= "<tr>\n";
         $out .= "<td><font size=\"2\"><b>" . _("Datenfeld") . "</b></font></td>\n";
-        $out .= "<td><font size=\"2\"><b>" . _("Überschrift") . "</b></font></td>\n";
+        $out .= "<td><font size=\"2\"><b>" . _("Ãœberschrift") . "</b></font></td>\n";
         $out .= "<td align=\"center\"><font size=\"2\"><b>" . _("Reihenfolge") . "</b></font></td>\n";
         $out .= "<td align=\"center\"><font size=\"2\"><b>" . _("Sichtbarkeit") . "</b></font></td>\n";
         $out .= "</tr>\n";
@@ -417,8 +417,8 @@ class ExternEditModule extends ExternEditHtml {
     }
 
     function editSelectSubjectAreas ($selector) {
-        $info = _("Wählen Sie die Studienbereiche aus, deren Veranstaltungen angezeigt werden sollen.");
-        $info2 = _("Sie können beliebig viele Studienbereiche auswählen.");
+        $info = _("WÃ¤hlen Sie die Studienbereiche aus, deren Veranstaltungen angezeigt werden sollen.");
+        $info2 = _("Sie kÃ¶nnen beliebig viele Studienbereiche auswÃ¤hlen.");
         $form_name = $this->element_name . "_" . 'subjectareasselected';
 
         if ($this->faulty_values[$form_name][0]) {
@@ -554,7 +554,7 @@ class ExternEditModule extends ExternEditHtml {
             $stm_inst->execute(array($row_fak['Institut_id']));
             $out .= sprintf('<div style="margin-top: 5px; font-weight: bold; color: red;">%s</div>', htmlReady(my_substr($row_fak['Name'], 0, 70)));
             $out .= '<div style="font-weight: bold; color: red;">';
-            $out .= str_repeat("¯", 70);
+            $out .= str_repeat("Â¯", 70);
             $out .= '</div>';
             while ($row_inst = $stm_inst->fetch(PDO::FETCH_ASSOC)) {
                 $is_selected = in_array($row_inst['Institut_id'], $selected);

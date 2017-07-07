@@ -70,7 +70,7 @@ global $range_id, $ex_type, $xml_file_id, $o_mode, $export_error, $export_error_
 
     if ((($range_id != "") OR ($xml_file_id != "")) AND (in_array($o_mode, $export_o_modes) AND (in_array($ex_type, $export_ex_types))))
         return true;
-    $export_error .= "<b>" . _("Unzulässiger Seitenaufruf!") . "</b><br>";
+    $export_error .= "<b>" . _("UnzulÃ¤ssiger Seitenaufruf!") . "</b><br>";
     $export_error_num++;
     return false;
 }
@@ -119,9 +119,9 @@ if ($o_mode === 'file' || $o_mode === 'choose') {
 
     if ($object_counter<1) {
         $xml_export_text = _("Es wurden keine Daten gefunden!");
-        $export_error = _("Es wurden keine Daten gefunden! Die übergebene ID ist mit keinen Veranstaltungs- / Personendaten verbunden.");
+        $export_error = _("Es wurden keine Daten gefunden! Die Ã¼bergebene ID ist mit keinen Veranstaltungs- / Personendaten verbunden.");
         $export_pagecontent .= "<br><br><br><center>"
-                            . LinkButton::create('<< ' .  _('Zurück'), URLHelper::getURL("", array('range_id' => $range_id, 'ex_type' => $ex_type, 'ex_sem' => $ex_sem, 'o_mode' => 'start')))
+                            . LinkButton::create('<< ' .  _('ZurÃ¼ck'), URLHelper::getURL("", array('range_id' => $range_id, 'ex_type' => $ex_type, 'ex_sem' => $ex_sem, 'o_mode' => 'start')))
                             . "</center>";
         $export_error_num ++;
 
@@ -146,13 +146,13 @@ if ($o_mode === 'file' || $o_mode === 'choose') {
         $export_pagecontent .= "<input type=\"hidden\" name=\"range_id\" value=\"" . htmlReady($range_id) . "\">";
         $export_pagecontent .= "<input type=\"hidden\" name=\"xslt_filename\" value=\"" . htmlReady($xslt_filename) . "\">";
 
-        $export_weiter_button = "<br><br><center>" . Button::create('<< ' . _('Zurück'), 'back') . "</center></form>";
+        $export_weiter_button = "<br><br><center>" . Button::create('<< ' . _('ZurÃ¼ck'), 'back') . "</center></form>";
         $xml_printimage = '<a href="'. FileManager::getDownloadLinkForTemporaryFile($xml_file_id, $xml_filename) .  '">';
         $xml_printimage.= Icon::create($export_icon['xml'], 'clickable');
         $xml_printimage.= '</a>';
         $xml_printlink = '<a href="'. FileManager::getDownloadLinkForTemporaryFile($xml_file_id, $xml_filename). '" class="tree">' . htmlReady($xml_filename) . '</a>';
         $xml_printdesc = _("XML-Daten");
-        $xml_printcontent = _("In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags können mit einem XSLT-Script verarbeitet werden.") . "<br>";
+        $xml_printcontent = _("In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags kÃ¶nnen mit einem XSLT-Script verarbeitet werden.") . "<br>";
     }
 
     PageLayout::postInfo($xml_export_text);

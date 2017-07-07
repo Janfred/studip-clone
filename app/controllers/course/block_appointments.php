@@ -8,7 +8,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      André Noack <noack@data-quest.de>
+ * @author      AndrÃ© Noack <noack@data-quest.de>
  * @author      David Siegfried <david.siegfried@uni-vechta.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
@@ -68,13 +68,13 @@ class Course_BlockAppointmentsController extends AuthenticatedController
         $end_day = strtotime(Request::get('block_appointments_end_day'));
 
         if (!($start_day && $end_day && $start_day <= $end_day)) {
-            $errors[] = _('Bitte geben Sie korrekte Werte für Start- und Enddatum an!');
+            $errors[] = _('Bitte geben Sie korrekte Werte fÃ¼r Start- und Enddatum an!');
         } else {
             $start_time = strtotime(Request::get('block_appointments_start_time'), $start_day);
             $end_time = strtotime(Request::get('block_appointments_end_time'), $end_day);
 
             if (!($start_time && $end_time && (strtotime(Request::get('block_appointments_start_time')) < strtotime(Request::get('block_appointments_end_time'))))) {
-                $errors[] = _('Bitte geben Sie korrekte Werte für Start- und Endzeit an!');
+                $errors[] = _('Bitte geben Sie korrekte Werte fÃ¼r Start- und Endzeit an!');
             }
         }
 
@@ -85,7 +85,7 @@ class Course_BlockAppointmentsController extends AuthenticatedController
         $days = Request::getArray('block_appointments_days');
 
         if (!is_array($days)) {
-            $errors[] = _('Bitte wählen Sie mindestens einen Tag aus!');
+            $errors[] = _('Bitte wÃ¤hlen Sie mindestens einen Tag aus!');
         }
 
         if (count($errors)) {
@@ -158,7 +158,7 @@ class Course_BlockAppointmentsController extends AuthenticatedController
 
                 }
             } else {
-                PageLayout::postMessage(MessageBox::error(_('Keiner der ausgewählten Tage liegt in dem angegebenen Zeitraum!')));
+                PageLayout::postMessage(MessageBox::error(_('Keiner der ausgewÃ¤hlten Tage liegt in dem angegebenen Zeitraum!')));
                 $this->redirect('course/block_appointments/index');
                 return;
             }

@@ -67,9 +67,9 @@ class PasswordAdmission extends AdmissionRule
      * subclass) does.
      */
     public static function getDescription() {
-        return _("Mit dieser Anmelderegel können Sie ein Passwort für Zugang ".
+        return _("Mit dieser Anmelderegel kÃ¶nnen Sie ein Passwort fÃ¼r Zugang ".
             "zu den zugeordneten Veranstaltungen vergeben. Die Anmeldung ist ".
-            "dann nur für Personen möglich, die dieses Passwort kennen.");
+            "dann nur fÃ¼r Personen mÃ¶glich, die dieses Passwort kennen.");
     }
 
     /**
@@ -231,7 +231,7 @@ class PasswordAdmission extends AdmissionRule
             $errors[] = _('Das Passwort darf nicht leer sein.');
         }
         if ($data['password1'] != $data['password2']) {
-            $errors[] = _('Das Passwort stimmt nicht mit der Wiederholung überein.');
+            $errors[] = _('Das Passwort stimmt nicht mit der Wiederholung Ã¼berein.');
         }
         return $errors;
     }

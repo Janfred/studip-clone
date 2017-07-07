@@ -124,7 +124,7 @@ if ($GLOBALS['perm']->have_studip_perm("tutor", Context::getId())) {
         array('data-dialog' => "buttons")
     );
     $actions->addLink(
-        _("Themen öffentlich einsehbar"),
+        _("Themen Ã¶ffentlich einsehbar"),
         URLHelper::getURL("dispatch.php/course/topics/allow_public"),
         Icon::create(Course::findCurrent()->public_topics ? 'checkbox-checked' : 'checkbox-unchecked', 'clickable')
     );

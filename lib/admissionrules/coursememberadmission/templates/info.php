@@ -11,7 +11,7 @@ $course = Course::find($rule->mandatory_course_id);
 if ($course) {
 echo sprintf(!$rule->modus ?
     _('Die Anmeldung ist nur Teilnehmern der Veranstaltung: <b>%s</b> %s erlaubt.') :
-    _('Die Anmeldung ist für Teilnehmer der Veranstaltung: <b>%s</b> %s verboten.'),
+    _('Die Anmeldung ist fÃ¼r Teilnehmer der Veranstaltung: <b>%s</b> %s verboten.'),
     $course->getFullname('number-name-semester'), '<a href="'.URLHelper::getScriptLink('dispatch.php/course/details/index/' . $course->id).'"  data-dialog>'.
         Icon::create('info-circle', 'inactive', ['title' =>_('Veranstaltungsdetails aufrufen')])->asImg().'</a>');
 }

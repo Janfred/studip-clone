@@ -85,12 +85,12 @@ use Studip\Button, Studip\LinkButton;
         </label>
 
         <label class="col-3">
-            <?= _('Nutzerdomäne') ?>
+            <?= _('NutzerdomÃ¤ne') ?>
 
             <select name="userdomains">
                 <option value=""><?= _('Alle') ?></option>
                 <option value="null-domain" <?= ($request['userdomains'] === 'null-domain') ? 'selected' : '' ?>>
-                    <?= _('Ohne Domäne') ?>
+                    <?= _('Ohne DomÃ¤ne') ?>
                 </option>
             <? foreach ($userdomains as $one): ?>
                 <option value="<?= htmlReady($one->getId()) ?>" <?= ($request['userdomains'] === $one->getId()) ? 'selected' : ''?>>
@@ -125,7 +125,7 @@ use Studip\Button, Studip\LinkButton;
 
             <select name="auth_plugins">
                <option value=""><?= _('Alle') ?></option>
-           <? foreach (array_merge(['preliminary' => _('vorläufig')], $available_auth_plugins) as $key => $val): ?>
+           <? foreach (array_merge(['preliminary' => _('vorlÃ¤ufig')], $available_auth_plugins) as $key => $val): ?>
                 <option value="<?= $key ?>" <?= $request['auth_plugins'] === $key ? 'selected' : '' ?>>
                     <?= htmlReady($val) ?>
                 </option>
@@ -173,7 +173,7 @@ use Studip\Button, Studip\LinkButton;
 
     <footer>
         <?= Button::create(_('Suchen'), 'search')?>
-        <?= Button::create(_('Zurücksetzen'), 'reset')?>
+        <?= Button::create(_('ZurÃ¼cksetzen'), 'reset')?>
     </footer>
 </form>
 

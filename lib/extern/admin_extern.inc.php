@@ -99,7 +99,7 @@ if (Request::option('com') == "do_upload_config") {
     } else if (!store_config($range_id, $config_id, $jsonconfig)) {
         PageLayout::postError(_('Die Konfigurationsdatei konnte nicht hochgeladen werden!'));
     } else {
-        PageLayout::postSuccess(_('Die Datei wurde erfolgreich übertragen!'));
+        PageLayout::postSuccess(_('Die Datei wurde erfolgreich Ã¼bertragen!'));
     }
 }
 
@@ -123,11 +123,11 @@ if (Request::option('com') == 'copyconfig') {
 if (Request::option('com') == 'delete') {
     $config = ExternConfig::GetInstance($range_id, '', $config_id);
     if ($config->deleteConfiguration()) {
-        echo MessageBox::success(sprintf(_("Konfiguration <strong>\"%s\"</strong> für Modul <strong>\"%s\"</strong> gelöscht!"),
+        echo MessageBox::success(sprintf(_("Konfiguration <strong>\"%s\"</strong> fÃ¼r Modul <strong>\"%s\"</strong> gelÃ¶scht!"),
                 htmlReady($config->getConfigName()),
                 htmlReady($GLOBALS['EXTERN_MODULE_TYPES'][$config->getTypeName()]['name'])));
     } else {
-        echo MessageBox::erro(_("Konfiguration konnte nicht gelöscht werden"));
+        echo MessageBox::erro(_("Konfiguration konnte nicht gelÃ¶scht werden"));
     }
 }
 
@@ -136,7 +136,7 @@ if (Request::option('com') == 'delete') {
 if (Request::option('com') == 'delete_sec') {
     $config = ExternConfig::GetConfigurationMetaData($range_id, $config_id);
 
-    $message = sprintf(_("Wollen Sie die Konfiguration <b>&quot;%s&quot;</b> des Moduls <b>%s</b> wirklich löschen?"), $config["name"], $GLOBALS["EXTERN_MODULE_TYPES"][$config["type"]]["name"]);
+    $message = sprintf(_("Wollen Sie die Konfiguration <b>&quot;%s&quot;</b> des Moduls <b>%s</b> wirklich lÃ¶schen?"), $config["name"], $GLOBALS["EXTERN_MODULE_TYPES"][$config["type"]]["name"]);
     $message .= '<br><br>';
     $message .= LinkButton::createAccept("JA", URLHelper::getURL('?com=delete&config_id='.$config_id));
     $message .= LinkButton::createCancel("NEIN", URLHelper::getURL('?list=TRUE&view=extern_inst'));
@@ -240,7 +240,7 @@ if ($choose_module_form != '') {
         echo CSRFProtection::tokenTag();
         echo "<blockquote>";
         $choose_module_form = "<select name=\"mod\">\n$choose_module_form</select>\n";
-        printf(_("Neue Konfiguration für Modul %s anlegen.") . " ", $choose_module_form);
+        printf(_("Neue Konfiguration fÃ¼r Modul %s anlegen.") . " ", $choose_module_form);
         echo Button::create(_("Neu anlegen"));
         echo "</blockquote>\n";
         echo "</form>\n";
@@ -283,7 +283,7 @@ if ($choose_module_form != '') {
             echo "<blockquote>";
             printf(_("Konfiguration %s aus Einrichtung kopieren."), $choose_module_select . '</select>');
             echo Button::create(_("Kopieren"));
-            echo LinkButton::create("<< " . _("Zurück"), URLHelper::getURL('?list=TRUE&view=extern_inst'));
+            echo LinkButton::create("<< " . _("ZurÃ¼ck"), URLHelper::getURL('?list=TRUE&view=extern_inst'));
             echo "</blockquote>\n";
             echo "<input type=\"hidden\" name=\"copyinstid\" value=\"" . htmlReady(Request::quoted('copychooseinst')) . "\">\n";
             echo "</form>\n";
@@ -293,7 +293,7 @@ if ($choose_module_form != '') {
 }
 else {
     echo "<blockquote>";
-    echo _("Sie haben bereits für alle Module die maximale Anzahl von Konfigurationen angelegt. Um eine neue Konfiguration anzulegen, müssen Sie erst eine bestehende im gewünschten Modul löschen.");
+    echo _("Sie haben bereits fÃ¼r alle Module die maximale Anzahl von Konfigurationen angelegt. Um eine neue Konfiguration anzulegen, mÃ¼ssen Sie erst eine bestehende im gewÃ¼nschten Modul lÃ¶schen.");
     echo "</blockquote>\n";
 }
 
@@ -358,8 +358,8 @@ if (!$have_config) {
 
                 $actionMenu->addLink(
                         URLHelper::getLink('?com=delete_sec&config_id=' . $configuration['id']) . '#anker',
-                        _('Konfiguration löschen'),
-                        Icon::create('trash', 'clickable', ['title' => _('Konfiguration löschen')]));
+                        _('Konfiguration lÃ¶schen'),
+                        Icon::create('trash', 'clickable', ['title' => _('Konfiguration lÃ¶schen')]));
                 $actionMenu->addLink(
                         URLHelper::getURL('?com=edit&mod=' . $module_type['module'] . '&config_id=' . $configuration['id']),
                         _('Konfiguration bearbeiten'),
@@ -386,10 +386,10 @@ if (!$have_config) {
 }
 echo "</table>\n";
 
-$info_max_configs = sprintf(_("Sie können pro Modul maximal %s Konfigurationen anlegen."),
+$info_max_configs = sprintf(_("Sie kÃ¶nnen pro Modul maximal %s Konfigurationen anlegen."),
         $EXTERN_MAX_CONFIGURATIONS);
 
-Helpbar::get()->addPlainText(_('Information'), sprintf(_("Sie können pro Modul maximal %s Konfigurationen anlegen."),
+Helpbar::get()->addPlainText(_('Information'), sprintf(_("Sie kÃ¶nnen pro Modul maximal %s Konfigurationen anlegen."),
         $EXTERN_MAX_CONFIGURATIONS));
 
 if (sizeof($configurations)) {
@@ -398,13 +398,13 @@ if (sizeof($configurations)) {
             _('Dieses Symbol kennzeichnet die Standard-Konfiguration, die zur Formatierung herangezogen wird, wenn Sie beim Aufruf dieses Moduls keine Konfiguration angeben.'),
             Icon::create('checkbox-checked'));
     Helpbar::get()->addPlainText(_('Keine Standard-Konfiguration'),
-            _('Wenn Sie keine Konfiguration als Standard ausgewählt haben, wird die Stud.IP-Konfiguration verwendet.'),
+            _('Wenn Sie keine Konfiguration als Standard ausgewÃ¤hlt haben, wird die Stud.IP-Konfiguration verwendet.'),
             Icon::create('info'));
     Helpbar::get()->addPlainText(_('Standard-Konfiguration zuweisen'),
-            _('Klicken Sie auf diesen Button, um eine Konfiguration zur Standard-Konfiguration zu erklären.'),
+            _('Klicken Sie auf diesen Button, um eine Konfiguration zur Standard-Konfiguration zu erklÃ¤ren.'),
             Icon::create('checkbox-unchecked'));
     Helpbar::get()->addPlainText(_('Weitere Informationen'),
-            _('Klicken Sie auf diesen Button um weitere Informationen über diese Konfiguration zu erhalten. Hier finden Sie auch die Links, über die Sie die Module in Ihrer Website einbinden können.'),
+            _('Klicken Sie auf diesen Button um weitere Informationen Ã¼ber diese Konfiguration zu erhalten. Hier finden Sie auch die Links, Ã¼ber die Sie die Module in Ihrer Website einbinden kÃ¶nnen.'),
             Icon::create('infopage'));
 
 }

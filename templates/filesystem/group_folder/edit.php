@@ -2,7 +2,7 @@
 $groups = Statusgruppen::findBySeminar_id(Request::get('cid'));
 ?>
 <label>
-    <?= _('Wählen sie eine zugehörige Gruppe aus') ?>
+    <?= _('WÃ¤hlen sie eine zugehÃ¶rige Gruppe aus') ?>
     <select name="group">
     <? if (count($groups) === 0): ?>
         <option value="">

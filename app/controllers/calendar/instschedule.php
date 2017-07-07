@@ -9,7 +9,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      Till Glöggler <tgloeggl@uos.de>
+ * @author      Till GlÃ¶ggler <tgloeggl@uos.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
  */
@@ -53,7 +53,7 @@ class Calendar_InstscheduleController extends AuthenticatedController
 
         if (!$institute_id || (in_array(get_object_type($institute_id), words('inst fak')) === false)) {
             throw new Exception(sprintf(_('Kann Einrichtungskalendar nicht anzeigen!'
-                . 'Es wurde eine ungültige Instituts-Id übergeben (%s)!', $institute_id)));
+                . 'Es wurde eine ungÃ¼ltige Instituts-Id Ã¼bergeben (%s)!', $institute_id)));
         }
 
         // load semester-data and current semester
@@ -100,13 +100,13 @@ class Calendar_InstscheduleController extends AuthenticatedController
             PageLayout::addStylesheet('print.css', array('media' => 'print'));
         }
 
-        Helpbar::Get()->addPlainText(_('Information'), _('Der Stundenplan zeigt die regelmäßigen Veranstaltungen dieser Einrichtung.'), Icon::create('info'));
+        Helpbar::Get()->addPlainText(_('Information'), _('Der Stundenplan zeigt die regelmÃ¤ÃŸigen Veranstaltungen dieser Einrichtung.'), Icon::create('info'));
 
         $views = new ViewsWidget();
         $views->addLink(_('klein'), URLHelper::getLink('', array('zoom' => 0)))->setActive($zoom == 0);
         $views->addLink(_('mittel'), URLHelper::getLink('', array('zoom' => 2)))->setActive($zoom == 2);
-        $views->addLink(_('groß'), URLHelper::getLink('', array('zoom' => 4)))->setActive($zoom == 4);
-        $views->addLink(_('extra groß'), URLHelper::getLink('', array('zoom' => 7)))->setActive($zoom == 7);
+        $views->addLink(_('groÃŸ'), URLHelper::getLink('', array('zoom' => 4)))->setActive($zoom == 4);
+        $views->addLink(_('extra groÃŸ'), URLHelper::getLink('', array('zoom' => 7)))->setActive($zoom == 7);
 
         Sidebar::Get()->addWidget($views);
         $actions = new ActionsWidget();

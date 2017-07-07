@@ -38,17 +38,17 @@ class AdminNavigation extends Navigation
 
         if (Context::isInstitute()) {
             if (isset($_SESSION['links_admin_data']['referred_from']) && $_SESSION['links_admin_data']['referred_from'] == 'inst') {
-                $back_jump = _('zurück zur ausgewählten Einrichtung');
+                $back_jump = _('zurÃ¼ck zur ausgewÃ¤hlten Einrichtung');
             } else {
-                $back_jump = _('zur ausgewählten Einrichtung');
+                $back_jump = _('zur ausgewÃ¤hlten Einrichtung');
             }
         } else if (Context::isCourse()) {
             if (isset($_SESSION['links_admin_data']['referred_from']) && $_SESSION['links_admin_data']['referred_from'] == 'sem' && !$archive_kill && !(isset($_SESSION['links_admin_data']['assi']) && $_SESSION['links_admin_data']['assi'])) {
-                $back_jump = _('zurück zur ausgewählten Veranstaltung');
+                $back_jump = _('zurÃ¼ck zur ausgewÃ¤hlten Veranstaltung');
             } else if (isset($_SESSION['links_admin_data']['referred_from']) && $_SESSION['links_admin_data']['referred_from'] == 'assi' && !$archive_kill) {
                 $back_jump = _('zur neu angelegten Veranstaltung');
             } else if (!(isset($_SESSION['links_admin_data']['assi']) && $_SESSION['links_admin_data']['assi'])) {
-                $back_jump = _('zur ausgewählten Veranstaltung');
+                $back_jump = _('zur ausgewÃ¤hlten Veranstaltung');
             }
         }
 
@@ -61,7 +61,7 @@ class AdminNavigation extends Navigation
             $navigation->addSubNavigation('index', new Navigation(_('Benutzer'), 'dispatch.php/admin/user'));
 
             if ($perm->have_perm('root')) {
-                $navigation->addSubNavigation('user_domains', new Navigation(_('Nutzerdomänen'), 'dispatch.php/admin/domain'));
+                $navigation->addSubNavigation('user_domains', new Navigation(_('NutzerdomÃ¤nen'), 'dispatch.php/admin/domain'));
             }
             $this->addSubNavigation('user', $navigation);
         }
@@ -75,7 +75,7 @@ class AdminNavigation extends Navigation
         $navigation->addSubNavigation('groups', new Navigation(_('Funktionen / Gruppen'), 'dispatch.php/admin/statusgroups?type=inst'));
 
         if (Config::get()->VOTE_ENABLE) {
-            $navigation->addSubNavigation('questionnaires', new Navigation(_('Fragebögen'), 'dispatch.php/questionnaire/courseoverview'));
+            $navigation->addSubNavigation('questionnaires', new Navigation(_('FragebÃ¶gen'), 'dispatch.php/questionnaire/courseoverview'));
             $navigation->addSubNavigation('evaluation', new Navigation(_('Evaluationen'), 'admin_evaluation.php?view=eval_inst'));
         }
 

@@ -32,8 +32,8 @@ class Tic1207Config extends Migration
         $db->exec("UPDATE config SET section = 'archiv' WHERE field LIKE 'AUTO\_ARCHIV%'");
 
         //adding descriptions
-        $db->exec("UPDATE config SET description = 'Schaltet ein oder aus, ob die Studiengruppen global verfügbar sind.' WHERE field = 'STUDYGROUPS_ENABLE'");
-        $db->exec("UPDATE config SET description = 'Die Standardeinrichtung für Studiengruppen kann hier gesetzt werden.' WHERE field = 'STUDYGROUP_DEFAULT_INST'");
+        $db->exec("UPDATE config SET description = 'Schaltet ein oder aus, ob die Studiengruppen global verfÃ¼gbar sind.' WHERE field = 'STUDYGROUPS_ENABLE'");
+        $db->exec("UPDATE config SET description = 'Die Standardeinrichtung fÃ¼r Studiengruppen kann hier gesetzt werden.' WHERE field = 'STUDYGROUP_DEFAULT_INST'");
         $db->exec("UPDATE config SET description = 'Hier werden die globalen Einstellungen aller Studiengruppen hinterlegt.' WHERE field = 'STUDYGROUP_SETTINGS'");
         $db->exec("UPDATE config SET description = 'Hier werden die Nutzungsbedinungen der Studiengruppen hinterlegt.' WHERE field = 'STUDYGROUP_TERMS'");
 

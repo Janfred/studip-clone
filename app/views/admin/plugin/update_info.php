@@ -3,7 +3,7 @@
 use Studip\Button, Studip\LinkButton;
 
 ?>
-<?= sprintf(ngettext('Es ist ein Update für ein Plugin verfügbar', 'Es sind Updates für %d Plugins verfügbar', $num_updates), $num_updates) ?>
+<?= sprintf(ngettext('Es ist ein Update fÃ¼r ein Plugin verfÃ¼gbar', 'Es sind Updates fÃ¼r %d Plugins verfÃ¼gbar', $num_updates), $num_updates) ?>
 
 <form action="<?= $controller->url_for('admin/plugin/install_updates') ?>" method="post">
     <?= CSRFProtection::tokenTag() ?>

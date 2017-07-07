@@ -76,8 +76,8 @@
             <? if ($perm->havePermCreate()) : ?>
                 <? $actionMenu->addLink(
                     $controller->url_for('/delete/' . $modul->id),
-                    _('Modul löschen'),
-                    Icon::create('trash', 'clickable', ['title' => _('Modulteil löschen')])
+                    _('Modul lÃ¶schen'),
+                    Icon::create('trash', 'clickable', ['title' => _('Modulteil lÃ¶schen')])
                 ) ?>
             <? endif; ?>
             <?= $actionMenu->render() ?>

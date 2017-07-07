@@ -7,7 +7,7 @@
 // StudipAuthLdap.class.php
 // Stud.IP authentication against LDAP Server
 //
-// Copyright (c) 2003 André Noack <noack@data-quest.de>
+// Copyright (c) 2003 AndrÃ© Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -30,7 +30,7 @@
 * Stud.IP authentication against LDAP Server
 *
 * @access   public
-* @author   André Noack <noack@data-quest.de>
+* @author   AndrÃ© Noack <noack@data-quest.de>
 * @package
 */
 class StudipAuthLdap extends StudipAuthAbstract {
@@ -76,7 +76,7 @@ class StudipAuthLdap extends StudipAuthAbstract {
     function doLdapConnect()
     {
         if (!($this->conn = ldap_connect($this->host))) {
-            $this->error_msg = _("Keine Verbindung zum LDAP Server möglich.");
+            $this->error_msg = _("Keine Verbindung zum LDAP Server mÃ¶glich.");
             return false;
         }
         if (!($r = ldap_set_option($this->conn, LDAP_OPT_PROTOCOL_VERSION, 3))){
@@ -200,7 +200,7 @@ class StudipAuthLdap extends StudipAuthAbstract {
     function isUsedUsername($username)
     {
         if (!$this->anonymous_bind){
-            $this->error = _("Kann den Benutzernamen nicht überprüfen, anonymous_bind ist ausgeschaltet!");
+            $this->error = _("Kann den Benutzernamen nicht Ã¼berprÃ¼fen, anonymous_bind ist ausgeschaltet!");
             return false;
         }
         if (!$this->doLdapConnect()){

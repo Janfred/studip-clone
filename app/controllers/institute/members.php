@@ -1,13 +1,13 @@
 <?php
 /**
- * @author Arne Schrˆder <schroeder@data-quest.de>
+ * @author Arne Schr√∂der <schroeder@data-quest.de>
  * @author Jan-Hendrik Willms <tleilax+studip@gmail.com>
  * @license GPL2 or any later version
  *
  * @todo test datafields!
  */
 
-require_once 'lib/export/export_studipdata_func.inc.php'; // Funktionen f¸r den Export
+require_once 'lib/export/export_studipdata_func.inc.php'; // Funktionen f√ºr den Export
 require_once 'lib/export/export_linking_func.inc.php';
 
 class Institute_MembersController extends AuthenticatedController
@@ -34,7 +34,7 @@ class Institute_MembersController extends AuthenticatedController
             require_once 'lib/admin_search.inc.php';
 
             // TODO: We don't seem to need this since admin_search will stop the script
-            PageLayout::postInfo(_('Sie m¸ssen zun‰chst eine Einrichtung ausw‰hlen'));
+            PageLayout::postInfo(_('Sie m√ºssen zun√§chst eine Einrichtung ausw√§hlen'));
             $this->redirect('institute/basicdata/index?list=TRUE');
             return;
         }
@@ -306,7 +306,7 @@ class Institute_MembersController extends AuthenticatedController
                 // der Admin hat Tomaten auf den Augen, der Mitarbeiter sitzt schon im Institut
                 PageLayout::postError(
                     _('Die Person ist bereits in der Einrichtung eingetragen.') . ' ' .
-                    _('Um Rechte etc. zu ‰ndern folgen Sie dem Link zu den Nutzerdaten der Person!')
+                    _('Um Rechte etc. zu √§ndern folgen Sie dem Link zu den Nutzerdaten der Person!')
                 );
             } else {
                 // mal nach dem globalen Status sehen
@@ -314,7 +314,7 @@ class Institute_MembersController extends AuthenticatedController
                 $perms    = $member->user->perms;
 
                 if ($perms === 'root') {
-                    PageLayout::postError(_('ROOTs kˆnnen nicht berufen werden!'));
+                    PageLayout::postError(_('ROOTs k√∂nnen nicht berufen werden!'));
                 } elseif ($perms == 'admin') {
                     if ($GLOBALS['perm']->have_perm('root')
                             || (!Context::get()->is_fak && $GLOBALS['perm']->have_studip_perm('admin', Context::get()->fakultaets_id))) {
@@ -394,7 +394,7 @@ class Institute_MembersController extends AuthenticatedController
 
                         PageLayout::postInfo(
                             sprintf(_('%s wurde als "%s" in die Einrichtung aufgenommen.'), htmlReady($Fullname), $perms) . ' ' .
-                            _('Um Rechte etc. zu ‰ndern folgen Sie dem Link zu den Nutzerdaten der Person!')
+                            _('Um Rechte etc. zu √§ndern folgen Sie dem Link zu den Nutzerdaten der Person!')
                         );
                     } else {
                         PageLayout::postError(sprintf(_('%s konnte nicht in die Einrichtung aufgenommen werden!'), htmlReady($Fullname)));
@@ -442,13 +442,13 @@ class Institute_MembersController extends AuthenticatedController
         }
 
         if ($user->id === $GLOBALS['user']->id) {
-            throw new Exception(_('Sie kˆnnen sich nicht selbst aus der Einrichtung austragen.'));
+            throw new Exception(_('Sie k√∂nnen sich nicht selbst aus der Einrichtung austragen.'));
         }
 
         $member = InstituteMember::find([$user->id, $this->institute->id]);
         if ($member && $member->delete()) {
             PageLayout::postInfo(sprintf(
-                _('%s wurde von der Liste des Personals gelˆscht.'),
+                _('%s wurde von der Liste des Personals gel√∂scht.'),
                 htmlReady($user->getFullName())
             ));
 
@@ -528,7 +528,7 @@ class Institute_MembersController extends AuthenticatedController
                 $actions->addElement(LinkElement::fromHTML($search->render(), $icon));
             }
 
-            // Mitglieder z‰hlen und E-Mail-Adressen zusammenstellen
+            // Mitglieder z√§hlen und E-Mail-Adressen zusammenstellen
             $valid_mail_members = $this->institute->members->filter(function ($member) {
                 return $member->inst_perms !== 'user'
                     && (bool)$member->email;

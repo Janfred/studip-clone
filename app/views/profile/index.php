@@ -86,7 +86,7 @@
     <? if ($has_denoted_fields): ?>
         <p>
             <small>
-                * <?= _('Diese Felder sind nur für Sie und Administratoren sichtbar') ?>
+                * <?= _('Diese Felder sind nur fÃ¼r Sie und Administratoren sichtbar') ?>
             </small>
         </p>
     <? endif ?>

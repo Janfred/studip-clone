@@ -7,9 +7,9 @@
         <div class="buttons">
             <form action="<?=$action ?>" method="post">
             <?= CSRFProtection::tokenTag() ?>
-                <?= Button::createAccept(_('JA!'), 'kill', array('title' => _('Raumanfrage löschen')))?>
+                <?= Button::createAccept(_('JA!'), 'kill', array('title' => _('Raumanfrage lÃ¶schen')))?>
                 <span style="margin-left: 1em;">
-                    <?= Button::createCancel(_('NEIN!'), 'cancel', array('title' => _('Raumanfrage löschen')))?>
+                    <?= Button::createCancel(_('NEIN!'), 'cancel', array('title' => _('Raumanfrage lÃ¶schen')))?>
                 </span>
             </form>
         </div>

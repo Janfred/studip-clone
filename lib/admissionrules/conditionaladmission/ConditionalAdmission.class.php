@@ -62,7 +62,7 @@ class ConditionalAdmission extends AdmissionRule
     public function __construct($ruleId='', $courseSetId = '')
     {
         parent::__construct($ruleId, $courseSetId);
-        $this->default_message = _("Sie erfüllen nicht die Bedingung: %s");
+        $this->default_message = _("Sie erfÃ¼llen nicht die Bedingung: %s");
         if ($ruleId) {
             $this->load();
         } else {
@@ -117,7 +117,7 @@ class ConditionalAdmission extends AdmissionRule
     }
 
     /**
-     * Gets all users that are matched by thís rule.
+     * Gets all users that are matched by thÃ­s rule.
      *
      * @return Array An array containing IDs of users who are matched by
      *      this rule.
@@ -182,10 +182,10 @@ class ConditionalAdmission extends AdmissionRule
      */
     public static function getDescription()
     {
-        return _('Über eine Menge von Bedingungen kann festgelegt werden, '.
+        return _('Ãœber eine Menge von Bedingungen kann festgelegt werden, '.
             'wer zur Anmeldung zu den Veranstaltungen des Anmeldesets '.
-            'zugelassen ist. Es muss nur eine der Bedingungen erfüllt sein, '.
-            'innerhalb einer Bedingung müssen aber alle Datenfelder '.
+            'zugelassen ist. Es muss nur eine der Bedingungen erfÃ¼llt sein, '.
+            'innerhalb einer Bedingung mÃ¼ssen aber alle Datenfelder '.
             'zutreffen.');
     }
 
@@ -514,11 +514,11 @@ class ConditionalAdmission extends AdmissionRule
             $quota_total += $part;
         }
         if ($grouped && $ungrouped) {
-            $errors[] = sprintf(_('Es müssen entweder alle Bedingungen Teil einer Gruppe sein, oder keine. %s Bedingungen sind keiner Gruppe zugeordnet.'), $ungrouped);
+            $errors[] = sprintf(_('Es mÃ¼ssen entweder alle Bedingungen Teil einer Gruppe sein, oder keine. %s Bedingungen sind keiner Gruppe zugeordnet.'), $ungrouped);
         } elseif ($grouped && $quota_total !== 100) {
             $errors[] = _('Die Gesamtsumme der Kontingente muss 100 Prozent betragen.');
         } elseif ($grouped && $no_quota) {
-            $errors[] = sprintf(_('Für %s Gruppen muss noch ein Kontingent festgelegt werden.'), $no_quota);
+            $errors[] = sprintf(_('FÃ¼r %s Gruppen muss noch ein Kontingent festgelegt werden.'), $no_quota);
         }
         return $errors;
     }

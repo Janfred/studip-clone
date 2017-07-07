@@ -248,7 +248,7 @@ class MessageFolder implements FolderType
 
         if ($upload_type['file_sizes'][$status] < $uploaded_file['size']) {
             return sprintf(
-                _('Die maximale Größe für einen Upload (%s) wurde überschritten.'),
+                _('Die maximale GrÃ¶ÃŸe fÃ¼r einen Upload (%s) wurde Ã¼berschritten.'),
                 relsize($upload_type['file_sizes'][$status])
             );
         }
@@ -258,12 +258,12 @@ class MessageFolder implements FolderType
 
         if (!in_array($extension, $types) && $upload_type['type'] === 'deny') {
             return sprintf(
-                _('Sie dürfen nur die Dateitypen %s hochladen!'),
+                _('Sie dÃ¼rfen nur die Dateitypen %s hochladen!'),
                 join(',', $upload_type['file_types'])
             );
         }
         if (in_array($extension, $types) && $upload_type['type'] === 'allow') {
-            return sprintf(_('Sie dürfen den Dateityp %s nicht hochladen!'), $extension);
+            return sprintf(_('Sie dÃ¼rfen den Dateityp %s nicht hochladen!'), $extension);
         }
     }
 

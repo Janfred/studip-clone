@@ -106,7 +106,7 @@ class ExternModuleTemplatePersons extends ExternModule {
         $markers['TemplateGeneric'][] = array('###TITLEREAR###', '');
         $markers['TemplateGeneric'][] = array('###PERSONDETAIL-HREF###', '');
         $markers['TemplateGeneric'][] = array('###USERNAME###', '');
-        $markers['TemplateGeneric'][] = array('###IMAGE-URL-NORMAL###', _('Nutzerbild (groﬂ)'));
+        $markers['TemplateGeneric'][] = array('###IMAGE-URL-NORMAL###', _('Nutzerbild (gro√ü)'));
         $markers['TemplateGeneric'][] = array('###IMAGE-URL-MEDIUM###', _('Nutzerbild (mittel)'));
         $markers['TemplateGeneric'][] = array('###IMAGE-URL-SMALL###', _('Nutzerbild (klein)'));
         $markers['TemplateGeneric'][] = array('###PHONE###', '');

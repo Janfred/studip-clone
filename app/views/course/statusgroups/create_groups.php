@@ -5,7 +5,7 @@
         </legend>
         <label>
             <input type="radio" name="mode" value="numbering" checked onclick="$('.numbering-data').show();$('.course-data').hide();">
-            <?= _('Erzeuge beliebig viele Gruppen mit Namenspräfix') ?>
+            <?= _('Erzeuge beliebig viele Gruppen mit NamensprÃ¤fix') ?>
         </label>
         <label>
             <input type="radio" name="mode" value="coursedata" onclick="$('.numbering-data').hide();$('.course-data').show();">
@@ -30,7 +30,7 @@
         </section>
         <section class="numbering-data">
             <label class="required">
-                <?= _('Namenspräfix') ?>
+                <?= _('NamensprÃ¤fix') ?>
             </label>
             <input type="text" name="prefix" maxlength="200" value="<?= _('Gruppe') ?>">
         </section>
@@ -46,7 +46,7 @@
             <section class="course-data">
                 <label>
                     <input type="radio" name="createmode" value="dates">
-                    <?= _('Lege eine Gruppe pro regelmäßiger Zeit/Einzeltermin an') ?>
+                    <?= _('Lege eine Gruppe pro regelmÃ¤ÃŸiger Zeit/Einzeltermin an') ?>
                 </label>
             </section>
         <?php endif ?>
@@ -59,11 +59,11 @@
     </fieldset>
     <fieldset>
         <legend>
-            <?= _('Voreinstellungen für alle anzulegenden Gruppen') ?>
+            <?= _('Voreinstellungen fÃ¼r alle anzulegenden Gruppen') ?>
         </legend>
         <section>
             <label>
-                <?= _('Gruppengröße') ?>
+                <?= _('GruppengrÃ¶ÃŸe') ?>
             </label>
             <input type="number" name="size" value="0" min="0">
         </section>

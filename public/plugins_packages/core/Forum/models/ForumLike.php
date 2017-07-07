@@ -7,7 +7,7 @@
  * published by the Free Software Foundation; either version 3 of
  * the License, or (at your option) any later version.
  *
- * @author      Till Glˆggler <tgloeggl@uos.de>
+ * @author      Till Gl√∂ggler <tgloeggl@uos.de>
  * @license     http://www.gnu.org/licenses/gpl-3.0.html GPL version 3
  * @category    Stud.IP
  */
@@ -31,7 +31,7 @@ class ForumLike {
         
         // notify owner of posting about the like
         setTempLanguage($data['user_id']);
-        $notification = get_fullname($GLOBALS['user']->id) . _(' gef‰llt einer deiner Forenbeitr‰ge!');
+        $notification = get_fullname($GLOBALS['user']->id) . _(' gef√§llt einer deiner Forenbeitr√§ge!');
         restoreLanguage();
         
         PersonalNotifications::add(

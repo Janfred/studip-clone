@@ -62,7 +62,7 @@
     $eval_id     = Request::option('eval_id');
     $template_id = Request::option('template_id');
 
-    // Überprüfen, ob die Evaluation existiert oder der Benutzer genügend Rechte hat
+    // ÃœberprÃ¼fen, ob die Evaluation existiert oder der Benutzer genÃ¼gend Rechte hat
     $eval = new Evaluation($eval_id);
     $eval->check();
     if (EvaluationObjectDB::getEvalUserRangesWithNoPermission($eval) == YES || count($eval->errorArray) > 0) {

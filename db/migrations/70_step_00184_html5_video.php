@@ -8,7 +8,7 @@ class Step00184Html5Video extends Migration
     private $options_new = array(
         array(
             'name' => 'LOAD_EXTERNAL_MEDIA',
-            'description' => 'Sollen externe Medien über [img/flash/audio/video] eingebunden werden? deny=nicht erlaubt, allow=erlaubt, proxy=proxy benutzen.',
+            'description' => 'Sollen externe Medien Ã¼ber [img/flash/audio/video] eingebunden werden? deny=nicht erlaubt, allow=erlaubt, proxy=proxy benutzen.',
             'section' => '',
             'type' => 'string',
             'value' => 'deny'
@@ -21,7 +21,7 @@ class Step00184Html5Video extends Migration
     private $options_old = array(
         array(
             'name' => 'EXTERNAL_IMAGE_EMBEDDING',
-            'description' => 'Sollen externe Bilder über [img] eingebunden werden? deny=nicht erlaubt, allow=erlaubt, proxy=image proxy benutzen',
+            'description' => 'Sollen externe Bilder Ã¼ber [img] eingebunden werden? deny=nicht erlaubt, allow=erlaubt, proxy=image proxy benutzen',
             'section' => '',
             'type' => 'string',
             'value' => 'deny'

@@ -6,14 +6,14 @@
 /*
  * help_content.php - Stud.IP-Help Content controller
  *
- * Copyright (C) 2014 - Arne Schröder <schroeder@data-quest.de>
+ * Copyright (C) 2014 - Arne SchrÃ¶der <schroeder@data-quest.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      Arne Schröder <schroeder@data-quest.de>
+ * @author      Arne SchrÃ¶der <schroeder@data-quest.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
  * @package     help
@@ -199,12 +199,12 @@ class HelpContentController extends AuthenticatedController
         }
 
         CSRFProtection::verifySecurityToken();
-        PageLayout::setTitle(_('Hilfe-Text löschen'));
+        PageLayout::setTitle(_('Hilfe-Text lÃ¶schen'));
 
         $this->help_content = HelpContent::GetContentByID($id);
         if (is_object($this->help_content)) {
             if (Request::submitted('delete_help_content')) {
-                PageLayout::postMessage(MessageBox::success(sprintf(_('Der Hilfe-Text zur Route "%s" wurde gelöscht.'), $this->help_content->route)));
+                PageLayout::postMessage(MessageBox::success(sprintf(_('Der Hilfe-Text zur Route "%s" wurde gelÃ¶scht.'), $this->help_content->route)));
                 $this->help_content->delete();
                 header('X-Dialog-Close: 1');
                 return $this->render_nothing();

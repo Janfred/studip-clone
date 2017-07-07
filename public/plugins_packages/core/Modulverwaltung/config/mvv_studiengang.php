@@ -318,7 +318,7 @@ $privileges = array(
                 'MVVFreigabe'   => 3
             )
         ),
-        // verknüpfte Objekte
+        // verknÃ¼pfte Objekte
         'studiengangteile' => array(
             'planung' => array(
                 'MVVEntwickler' => 7,

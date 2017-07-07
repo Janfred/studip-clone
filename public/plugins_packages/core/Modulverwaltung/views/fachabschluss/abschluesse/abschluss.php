@@ -33,11 +33,11 @@
         </label>
     </fieldset>
     <fieldset>
-        <legend><?= _('Abschluss-Kategorie wählen') ?></legend>
+        <legend><?= _('Abschluss-Kategorie wÃ¤hlen') ?></legend>
         <? if ($perm->haveFieldPerm('category_assignment')) : ?>
         <label><?= _('Abschluss-Kategorie') ?></label>
             <select id="abschluss_kategorie" name="kategorie_id" size="1">
-                <option value=""><?= _('-- bitte wählen --') ?></option>
+                <option value=""><?= _('-- bitte wÃ¤hlen --') ?></option>
                 <? foreach ($abschluss_kategorien as $kategorie) : ?>
                 <option <?= ($kategorie->getId() == $abschluss->kategorie_id ? 'selected ' : '') ?>value="<?= $kategorie->getId() ?>"><?= htmlReady($kategorie->name) ?></option>
                 <? endforeach; ?>
@@ -74,9 +74,9 @@
         <? endif; ?>
     <? else : ?>
         <? if ($perm->havePermWrite()) : ?>
-        <?= Button::createAccept(_('übernehmen'), 'store', array('title' => _('Änderungen übernehmen'))) ?>
+        <?= Button::createAccept(_('Ã¼bernehmen'), 'store', array('title' => _('Ã„nderungen Ã¼bernehmen'))) ?>
         <? endif; ?>
     <? endif; ?>
-        <?= LinkButton::createCancel(_('abbrechen'), $controller->url_for('/index'), array('title' => _('zurück zur Übersicht'))) ?>
+        <?= LinkButton::createCancel(_('abbrechen'), $controller->url_for('/index'), array('title' => _('zurÃ¼ck zur Ãœbersicht'))) ?>
     </footer>
 </form>

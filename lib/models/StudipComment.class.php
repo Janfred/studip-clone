@@ -28,7 +28,7 @@
  *
  *
  *
- * @author   André Noack <noack@data-quest>, Suchi & Berg GmbH <info@data-quest.de>
+ * @author   AndrÃ© Noack <noack@data-quest>, Suchi & Berg GmbH <info@data-quest.de>
  * @access   public
  *
  * @property string comment_id database column

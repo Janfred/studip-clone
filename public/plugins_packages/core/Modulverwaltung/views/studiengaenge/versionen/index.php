@@ -3,7 +3,7 @@
 <div class="mvv-version-content">
     <table class="default collapsable">
         <caption>
-            <?= _('Versionen des gewählten Studiengangteils') ?>
+            <?= _('Versionen des gewÃ¤hlten Studiengangteils') ?>
             <? if ($stgteil && MvvPerm::haveFieldPermVersionen($stgteil, MvvPerm::PERM_CREATE)) : ?>
             <span class="actions">
                 <a href="<?= $controller->url_for('/version', $stgteil->id); ?>">
@@ -46,7 +46,7 @@
     </table>
     <? if ($stgteil && !$count) : ?>
     <div>
-    <?= sprintf(_('Für den Studiengangteil <strong>%s</strong> wurden noch keine Versionen angelegt. '), $stgteil->getDisplayName()) ?>
+    <?= sprintf(_('FÃ¼r den Studiengangteil <strong>%s</strong> wurden noch keine Versionen angelegt. '), $stgteil->getDisplayName()) ?>
     </div>
     <a href="<?= $controller->url_for('studiengaenge/versionen/version') ?>">
     <?= Studip\LinkButton::create(_('Eine neue Version anlegen.'), $controller->url_for('/version', $stgteil->id), array('title' => _('Eine neue Version anlegen'))) ?>

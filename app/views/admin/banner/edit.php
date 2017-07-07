@@ -12,7 +12,7 @@
                 <? else: ?>
                     <?= _('noch kein Bild hochgeladen') ?>
                 <? endif; ?><br>
-                    <label for="imgfile"><?= _('Bilddatei auswählen:') ?></label><br>
+                    <label for="imgfile"><?= _('Bilddatei auswÃ¤hlen:') ?></label><br>
                     <input id="imgfile" name="imgfile" type="file" accept="image/*"><br>
                     <input type="hidden" name="banner_path" value="<?= $banner['banner_path'] ?>"><br>
                 </td>
@@ -84,7 +84,7 @@
             </tr>
             <tr>
                 <td>
-                    <label for="priority"><?= _('Priorität:')?></label>
+                    <label for="priority"><?= _('PrioritÃ¤t:')?></label>
                 </td>
                 <td>
                     <select id="priority" name="priority">

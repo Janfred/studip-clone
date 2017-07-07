@@ -7,7 +7,7 @@
 // This file is part of Stud.IP
 // MetaDate.class.php
 //
-// Repräsentiert die Zeit- und Turnusdaten einer Veranstaltung
+// ReprÃ¤sentiert die Zeit- und Turnusdaten einer Veranstaltung
 //
 // +--------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@
  * MetaDate.class.php
  *
  *
- * @author      Till Glöggler <tgloeggl@uos.de>
+ * @author      Till GlÃ¶ggler <tgloeggl@uos.de>
  * @version     28. Juni 2007
  * @access      protected
  * @package     raumzeit
@@ -396,7 +396,7 @@ class MetaDate
 
     function delete($removeSingleDates = TRUE)
     {
-        //TODO: Löschen eines MetaDate-Eintrages (CycleData);
+        //TODO: LÃ¶schen eines MetaDate-Eintrages (CycleData);
     }
 
     /**
@@ -502,7 +502,7 @@ class MetaDate
                 $d->store();
             }
         }
-        //das sollte nicht nötig sein, muss aber erst genauer untersucht werden
+        //das sollte nicht nÃ¶tig sein, muss aber erst genauer untersucht werden
         $this->store();
         $this->restore();
     }

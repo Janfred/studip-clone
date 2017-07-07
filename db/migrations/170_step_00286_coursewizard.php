@@ -34,16 +34,16 @@ class Step00286CourseWizard extends Migration
         if (!Config::get()->STUDYGROUP_ACCEPTANCE_TEXT) {
             Config::get()->create('STUDYGROUP_ACCEPTANCE_TEXT', array(
                 'value' => _('Die Moderatorinnen und ' .
-                    'Moderatoren der Studiengruppe können Ihren ' .
-                    'Aufnahmewunsch bestätigen oder ablehnen. Erst nach ' .
-                    'Bestätigung erhalten Sie vollen Zugriff auf die ' .
+                    'Moderatoren der Studiengruppe kÃ¶nnen Ihren ' .
+                    'Aufnahmewunsch bestÃ¤tigen oder ablehnen. Erst nach ' .
+                    'BestÃ¤tigung erhalten Sie vollen Zugriff auf die ' .
                     'Gruppe.'),
                 'is_default' => 1,
                 'type' => 'string',
                 'range' => 'global',
                 'section' => 'studygroups',
                 'description' => _('Text, der angezeigt wird, wenn man sich ' .
-                    'in eine zugriffsbeschränkte Studiengruppe eintragen möchte')
+                    'in eine zugriffsbeschrÃ¤nkte Studiengruppe eintragen mÃ¶chte')
             ));
         }
     }

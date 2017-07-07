@@ -10,7 +10,7 @@ class Step00129EmailRestriction extends Migration
     {
         $this->announce("add new value EMAIL_DOMAIN_RESTRICTION to table config");
 
-        DBManager::get()->exec("INSERT INTO `config` VALUES ('cb92d5bb08f346567dbd394d0d553454', '', 'EMAIL_DOMAIN_RESTRICTION', '', 1, 'string', 'global', '', 0, 1157107088, 1157107088, 'Beschränkt die gültigkeit von Email-Adressen bei freier Registrierung auf die angegebenen Domains. Komma-separierte Liste von Domains ohne vorangestelltes @.', '', '')");
+        DBManager::get()->exec("INSERT INTO `config` VALUES ('cb92d5bb08f346567dbd394d0d553454', '', 'EMAIL_DOMAIN_RESTRICTION', '', 1, 'string', 'global', '', 0, 1157107088, 1157107088, 'BeschrÃ¤nkt die gÃ¼ltigkeit von Email-Adressen bei freier Registrierung auf die angegebenen Domains. Komma-separierte Liste von Domains ohne vorangestelltes @.', '', '')");
 
         $this->announce("done.");
 

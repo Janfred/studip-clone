@@ -20,7 +20,7 @@ if (isset($_COOKIE['navigation-length'])) {
     <div id="barBottomLeft">
         <input type="checkbox" id="barTopMenu-toggle">
         <label for="barTopMenu-toggle">
-            <?= _('Menü') ?>
+            <?= _('MenÃ¼') ?>
         </label>
         <? // The main menu will be placed here when scrolled, see navigation.less ?>
         <div id="barTopFont">
@@ -180,7 +180,7 @@ if (isset($_COOKIE['navigation-length'])) {
 <!-- Start Header -->
 <div id="flex-header">
     <!--<div id='barTopLogo'>
-        <?= Assets::img('logos/logoneu.jpg', array('alt' => 'Logo Uni Göttingen')) ?>
+        <?= Assets::img('logos/logoneu.jpg', array('alt' => 'Logo Uni GÃ¶ttingen')) ?>
     </div>
      -->
 

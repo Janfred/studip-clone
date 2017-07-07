@@ -162,7 +162,7 @@ class WysiwygDocument
         $GLOBALS['msg'] = ''; // validate_upload will store messages here
         if (! \validate_upload($file)) { // upload is forbidden
             // remove error pattern from message
-            $message = \preg_replace('/error§(.+)§/', '$1', $GLOBALS['msg']);
+            $message = \preg_replace('/errorÂ§(.+)Â§/', '$1', $GLOBALS['msg']);
 
             // clear global messages and throw exception
             $GLOBALS['msg'] = '';

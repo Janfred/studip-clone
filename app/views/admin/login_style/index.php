@@ -1,7 +1,7 @@
 <?php if (count($pictures) > 0) : ?>
     <table class="default">
         <caption>
-            <?= _('Hintergrundbilder für den Startbildschirm') ?>
+            <?= _('Hintergrundbilder fÃ¼r den Startbildschirm') ?>
         </caption>
         <colgroup>
             <col>
@@ -13,7 +13,7 @@
             <tr>
                 <th><?= _('Info') ?></th>
                 <th><?= _('Vorschau') ?></th>
-                <th><?= _('Aktiviert für') ?></th>
+                <th><?= _('Aktiviert fÃ¼r') ?></th>
                 <th><?= _('Aktionen') ?></th>
             </tr>
         </thead>
@@ -32,22 +32,22 @@
                     <a href="<?= $controller->url_for('admin/loginstyle/activation', $pic->id, 'desktop', (int) !$pic->desktop) ?>">
                         <?= Icon::create('computer', $pic->desktop ? 'clickable' : 'inactive', [
                             'title' => $pic->desktop
-                                     ? _('Bild nicht mehr für die Desktopansicht verwenden')
-                                     : _('Bild für die Desktopansicht verwenden')
+                                     ? _('Bild nicht mehr fÃ¼r die Desktopansicht verwenden')
+                                     : _('Bild fÃ¼r die Desktopansicht verwenden')
                         ])->asImg(32) ?>
                     </a>
                     <a href="<?= $controller->url_for('admin/loginstyle/activation', $pic->id, 'mobile', (int) !$pic->mobile) ?>">
                         <?= Icon::create('cellphone', $pic->mobile ? 'clickable' : 'inactive', [
                             'title' => $pic->mobile
-                                     ? _('Bild nicht mehr für die Mobilansicht verwenden')
-                                     : _('Bild für die Mobilansicht verwenden')
+                                     ? _('Bild nicht mehr fÃ¼r die Mobilansicht verwenden')
+                                     : _('Bild fÃ¼r die Mobilansicht verwenden')
                         ])->asImg(32) ?>
                     </a>
                 </td>
                 <td>
                 <?php if (!$pic->in_release): ?>
                     <a href="<?= $controller->url_for('admin/loginstyle/delete', $pic->id) ?>">
-                        <?= Icon::create('trash', 'clickable', ['title' => _('Bild löschen')]) ?>
+                        <?= Icon::create('trash', 'clickable', ['title' => _('Bild lÃ¶schen')]) ?>
                     </a>
                 <?php endif; ?>
                 </td>
@@ -55,5 +55,5 @@
         <?php endforeach ?>
     </table>
 <?php else : ?>
-    <?= PageLayout::postInfo(_('In Ihrem System sind leider keine Bilder für den Startbildschirm hinterlegt.')) ?>
+    <?= PageLayout::postInfo(_('In Ihrem System sind leider keine Bilder fÃ¼r den Startbildschirm hinterlegt.')) ?>
 <?php endif ?>

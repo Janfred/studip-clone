@@ -20,7 +20,7 @@ class LimitMailqueue extends Migration
             ':field' => 'MAILQUEUE_SEND_LIMIT',
             ':value' => "0",
             ':type'  => 'integer',
-            ':description' => 'Wieviele Mails soll die Mailqueue maximal auf einmal an den Mailserver schicken. 0 f¸r unendlich viele.',
+            ':description' => 'Wieviele Mails soll die Mailqueue maximal auf einmal an den Mailserver schicken. 0 f√ºr unendlich viele.',
         ));
     }
 

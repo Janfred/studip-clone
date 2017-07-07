@@ -79,7 +79,7 @@ class Studiengaenge_StudiengangteileController extends SharedVersionController
             $success_message = ('Der Studiengangteil "%s" wurde angelegt.');
         } else {
             PageLayout::setTitle(_('Studiengangteil bearbeiten'));
-            $success_message = _('Der Studiengangteil "%s" wurde geändert.');
+            $success_message = _('Der Studiengangteil "%s" wurde geÃ¤ndert.');
             if ($this->stgteil->fach) {
                 $this->fach_id = $this->stgteil->fach->getId();
             }
@@ -106,7 +106,7 @@ class Studiengaenge_StudiengangteileController extends SharedVersionController
                     PageLayout::postSuccess(sprintf($success_message,
                             htmlReady($this->stgteil->getDisplayName())));
                 } else {
-                    PageLayout::postInfo(_('Es wurden keine Änderungen vorgenommen.'));
+                    PageLayout::postInfo(_('Es wurden keine Ã„nderungen vorgenommen.'));
                 }
                 $this->redirect($this->url_for('/index'));
                 return;
@@ -139,7 +139,7 @@ class Studiengaenge_StudiengangteileController extends SharedVersionController
         if (!$this->stgteil->isNew()) {
             $sidebar = Sidebar::get();
             $action_widget = $sidebar->getWidget('actions');
-            $action_widget->addLink( _('Log-Einträge dieses Studiengangteils'),
+            $action_widget->addLink( _('Log-EintrÃ¤ge dieses Studiengangteils'),
                     $this->url_for('shared/log_event/show/StudiengangTeil', $this->stgteil->getId()),
                     Icon::create('log', 'clickable'))->asDialog();
         }
@@ -172,9 +172,9 @@ class Studiengaenge_StudiengangteileController extends SharedVersionController
         $stg_stgteile   = StudiengangStgteil::findBySql('stgteil_id = ' . DBManager::get()->quote($stgteil->getId()));
         
         if (count($stg_stgteile)) {
-            PageLayout::postInfo(_('Der Studiengangteil kann nicht gelöscht werden, da er Studiengängen zugeordnet ist.'));
+            PageLayout::postInfo(_('Der Studiengangteil kann nicht gelÃ¶scht werden, da er StudiengÃ¤ngen zugeordnet ist.'));
         } else {
-            PageLayout::postSuccess(sprintf(_('Studiengangteil "%s" gelöscht!'),
+            PageLayout::postSuccess(sprintf(_('Studiengangteil "%s" gelÃ¶scht!'),
                 htmlReady($stgteil->getDisplayName())));
             $stgteil->delete();
             $this->sessDelete();
@@ -247,7 +247,7 @@ class Studiengaenge_StudiengangteileController extends SharedVersionController
                 PluginEngine::getLink($this->plugin, array(),
                         'studiengaenge/studiengangteile', true))
                 ->setActive(get_called_class() == 'Studiengaenge_StudiengangteileController');
-        $widget->addLink(_('Gruppiert nach Fächern'),
+        $widget->addLink(_('Gruppiert nach FÃ¤chern'),
                 PluginEngine::getLink($this->plugin, array(),
                         'studiengaenge/faecher/index', true))
                 ->setActive(get_called_class() == 'Studiengaenge_FaecherController');
@@ -271,8 +271,8 @@ class Studiengaenge_StudiengangteileController extends SharedVersionController
 
         $helpbar = Helpbar::get();
         $widget = new HelpbarWidget();
-        $widget->addElement(new WidgetElement(_('Auf diesen Seiten können Sie die Studiengangteile verwalten. Ein Fach kann einen oder mehrere Studiengangteil(e) haben, die Studiengängen zugeordnet werden.') . '</br>'));
-        $widget->addElement(new WidgetElement(_("Studiengangteile können nur gelöscht werden, wenn Sie keinem Studiengang zugeordnet sind.")));
+        $widget->addElement(new WidgetElement(_('Auf diesen Seiten kÃ¶nnen Sie die Studiengangteile verwalten. Ein Fach kann einen oder mehrere Studiengangteil(e) haben, die StudiengÃ¤ngen zugeordnet werden.') . '</br>'));
+        $widget->addElement(new WidgetElement(_("Studiengangteile kÃ¶nnen nur gelÃ¶scht werden, wenn Sie keinem Studiengang zugeordnet sind.")));
         $helpbar->addWidget($widget);
 
         $this->sidebar_rendered = true;

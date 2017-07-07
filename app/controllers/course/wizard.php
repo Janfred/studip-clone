@@ -166,7 +166,7 @@ class Course_WizardController extends AuthenticatedController
                         if (in_array($this->course->status, studygroup_sem_types() ?: array())) {
                             $message = MessageBox::success(
                                 sprintf(_('Die Studien-/Arbeitsgruppe "%s" wurde angelegt. ' .
-                                    'Sie können sie direkt hier weiter verwalten.'),
+                                    'Sie kÃ¶nnen sie direkt hier weiter verwalten.'),
                                     htmlReady($this->course->name)));
                             $target = $this->url_for('course/studygroup/edit/' . $this->course->id . '?cid=' . $this->course->id);
                             // "Normal" course.
@@ -177,7 +177,7 @@ class Course_WizardController extends AuthenticatedController
                                 $target = $this->url_for('admin/courses');
                             } else {
                                 $message = MessageBox::success(
-                                    sprintf(_('Die Veranstaltung "%s" wurde angelegt. Sie können sie direkt hier weiter verwalten.'),
+                                    sprintf(_('Die Veranstaltung "%s" wurde angelegt. Sie kÃ¶nnen sie direkt hier weiter verwalten.'),
                                         htmlReady($this->course->getFullname())));
                                 $target = $this->url_for('course/management?cid=' . $this->course->id);
                             }
@@ -269,7 +269,7 @@ class Course_WizardController extends AuthenticatedController
     public function copy_action($id) {
         if (!$GLOBALS['perm']->have_studip_perm('dozent', $id)
             || LockRules::Check($id, 'seminar_copy')) {
-            throw new AccessDeniedException(_("Sie dürfen diese Veranstaltung nicht kopieren"));
+            throw new AccessDeniedException(_("Sie dÃ¼rfen diese Veranstaltung nicht kopieren"));
         }
         $course = Course::find($id);
         $values = array();

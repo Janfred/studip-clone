@@ -42,13 +42,13 @@ if (Config::get()->ELEARNING_INTERFACE_ENABLE) {
         $connected_cms[$cms_select]->terminate();
         ob_end_clean();
         if (!$sess_id){
-            $message =  _("Login nicht möglich");
+            $message =  _("Login nicht mÃ¶glich");
             $details = [];
-            $details[]  = sprintf(_("Automatischer Login für das System <b>%s</b> (Nutzername:%s) fehlgeschlagen."),
+            $details[]  = sprintf(_("Automatischer Login fÃ¼r das System <b>%s</b> (Nutzername:%s) fehlgeschlagen."),
                 htmlReady($connected_cms[$cms_select]->getName()),
                 $connected_cms[$cms_select]->user->getUsername());
-            $details[] = _("Dieser Fehler kann dadurch hervorgerufen werden, dass Sie Ihr Passwort geändert haben. In diesem Fall versuchen Sie bitte Ihren Account erneut zu verknüpfen.");
-            $details[] = sprintf(_("%sZurück%s zu Meine Lernmodule"), '<a href="'.URLHelper::getLink("dispatch.php/elearning/my_accounts").'"><b>', '</b></a>');
+            $details[] = _("Dieser Fehler kann dadurch hervorgerufen werden, dass Sie Ihr Passwort geÃ¤ndert haben. In diesem Fall versuchen Sie bitte Ihren Account erneut zu verknÃ¼pfen.");
+            $details[] = sprintf(_("%sZurÃ¼ck%s zu Meine Lernmodule"), '<a href="'.URLHelper::getLink("dispatch.php/elearning/my_accounts").'"><b>', '</b></a>');
 
             PageLayout::postError($message, $details);
             $template = $GLOBALS['template_factory']->open('layouts/base.php');

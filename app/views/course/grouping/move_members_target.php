@@ -1,6 +1,6 @@
 <form class="default" action="<?= $controller->url_for('course/grouping/move_members', $source_id) ?>" method="post">
     <header>
-        <h1><?= _('Wohin sollen die gewählten Personen verschoben werden?') ?></h1>
+        <h1><?= _('Wohin sollen die gewÃ¤hlten Personen verschoben werden?') ?></h1>
     </header>
 
     <section>

@@ -29,10 +29,10 @@
             <?= _("Die Teilnahme ist nicht anonym.") ?>
         <? endif ?>
         <? if ($questionnaire['editanswers']) : ?>
-            <?= _("Sie können Ihre Antworten nachträglich ändern.") ?>
+            <?= _("Sie kÃ¶nnen Ihre Antworten nachtrÃ¤glich Ã¤ndern.") ?>
         <? endif ?>
         <? if ($questionnaire['stopdate']) : ?>
-            <?= sprintf(_("Sie können den Fragebogen beantworten bis zum %s um %s Uhr."), date("d.m.Y", $questionnaire['stopdate']), date("H:i", $questionnaire['stopdate'])) ?>
+            <?= sprintf(_("Sie kÃ¶nnen den Fragebogen beantworten bis zum %s um %s Uhr."), date("d.m.Y", $questionnaire['stopdate']), date("H:i", $questionnaire['stopdate'])) ?>
         <? endif ?>
     </div>
 

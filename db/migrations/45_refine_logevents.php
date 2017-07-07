@@ -17,7 +17,7 @@ class RefineLogevents extends Migration
         
         // (2) Update the format string
         DBManager::get()->query("UPDATE log_actions 
-            SET info_template = '%user ändert die Zugangsberechtigungen der Veranstaltung %sem(%affected).'
+            SET info_template = '%user Ã¤ndert die Zugangsberechtigungen der Veranstaltung %sem(%affected).'
             WHERE action_id = '$action_id'");
 
         // (3) Get all corresponding logevents and update the info text
@@ -36,17 +36,17 @@ class RefineLogevents extends Migration
             $verbindlich = $info["admission_binding"]; 
             $enable_quota=$info["admission_enable_quota"]; 
 
-            $inf_txt=": \nAnmeldeverfahren auf ".get_admission_description('admission_type', $anmeldeverfahren)." geändert.". 
-                            " Startzeit auf ".date("d.m.Y H:i",$startzeit)." geändert.". 
-                            " Endzeit auf ".date("d.m.Y H:i",$endzeit)." geändert.\n". 
-                            "Lesezugriff auf ".get_admission_description('read_level', $lesezugriff)." geändert.". 
-                            " Schreibzugriff auf ".get_admission_description('write_level', $schreibzugriff)." geändert.". 
-                            " Vorläufigen Zugang auf ".get_admission_description('admission_prelim',$admission_prelim)." geändert.\n". 
-                            "Passwort auf ".$passwort." geändert.". 
-                            "Warteliste auf ".$disable_waiting_list." geändert.". 
-                            " Teilnehmerzahl auf ".$maxteilnehmerzahl." geändert.". 
-                            " Verbindlich auf ".$verbindlich." geändert.". 
-                            " Enable_Quotas ".$enable_quota." geändert."; 
+            $inf_txt=": \nAnmeldeverfahren auf ".get_admission_description('admission_type', $anmeldeverfahren)." geÃ¤ndert.". 
+                            " Startzeit auf ".date("d.m.Y H:i",$startzeit)." geÃ¤ndert.". 
+                            " Endzeit auf ".date("d.m.Y H:i",$endzeit)." geÃ¤ndert.\n". 
+                            "Lesezugriff auf ".get_admission_description('read_level', $lesezugriff)." geÃ¤ndert.". 
+                            " Schreibzugriff auf ".get_admission_description('write_level', $schreibzugriff)." geÃ¤ndert.". 
+                            " VorlÃ¤ufigen Zugang auf ".get_admission_description('admission_prelim',$admission_prelim)." geÃ¤ndert.\n". 
+                            "Passwort auf ".$passwort." geÃ¤ndert.". 
+                            "Warteliste auf ".$disable_waiting_list." geÃ¤ndert.". 
+                            " Teilnehmerzahl auf ".$maxteilnehmerzahl." geÃ¤ndert.". 
+                            " Verbindlich auf ".$verbindlich." geÃ¤ndert.". 
+                            " Enable_Quotas ".$enable_quota." geÃ¤ndert."; 
             
             DBManager::get()->query("UPDATE log_events SET info = '$inf_txt' WHERE event_id = '{$data['event_id']}'");
           }  

@@ -2,7 +2,7 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 //
-// Copyright (C) 2014 Arne Schröder <schroeder@data-quest>,
+// Copyright (C) 2014 Arne SchrÃ¶der <schroeder@data-quest>,
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@ require_once 'lib/object.inc.php';
  *
  *
  *
- * @author   Arne Schröder <schroeder@data-quest>
+ * @author   Arne SchrÃ¶der <schroeder@data-quest>
  * @access   public
  *
  * @property string tour_id database column
@@ -338,7 +338,7 @@ class HelpTour extends SimpleORMap
     public function deleteStep($position = 0)
     {
         if (!$position || count($this->steps) < 2) {
-            PageLayout::postError(_('Löschen nicht möglich. Die Tour muss mindestens einen Schritt enthalten.'));
+            PageLayout::postError(_('LÃ¶schen nicht mÃ¶glich. Die Tour muss mindestens einen Schritt enthalten.'));
             return false;
         }
         $query = "DELETE FROM help_tour_steps
@@ -368,7 +368,7 @@ class HelpTour extends SimpleORMap
             return false;
         }
         if (!$this->type) {
-            PageLayout::postError(_('Ungültige oder fehlende Angabe zur Art der Tour.'));
+            PageLayout::postError(_('UngÃ¼ltige oder fehlende Angabe zur Art der Tour.'));
             return false;
         }
         if (!$this->roles) {

@@ -22,9 +22,9 @@ use Studip\Button,
             <? if (!empty($_SESSION['assign_object_has_holidays'][$resAssign->id])) : ?>
         		<?  $holidays = "<br>" . htmlReady(implode(', ', $_SESSION['assign_object_has_holidays'][$resAssign->id])) . "<br>";    	        
         	        if (count($_SESSION['assign_object_has_holidays'][$resAssign->id]) > 1) {
-        	            $msg = sprintf(_("Die Belegung überschneidet sich mit folgenden Feiertagen: %s Wollen Sie die Belegung dennoch speichern?"), $holidays);
+        	            $msg = sprintf(_("Die Belegung Ã¼berschneidet sich mit folgenden Feiertagen: %s Wollen Sie die Belegung dennoch speichern?"), $holidays);
         	        } else {
-        	            $msg = sprintf(_("Die Belegung überschneidet sich mit folgendem Feiertag: %s Wollen Sie die Belegung dennoch speichern?"), $holidays);
+        	            $msg = sprintf(_("Die Belegung Ã¼berschneidet sich mit folgendem Feiertag: %s Wollen Sie die Belegung dennoch speichern?"), $holidays);
         	        }
                 ?>                
                 <?= MessageBox::error($msg . "<br>". Button::createAccept(_('JA!'), 'ignore_holidays') . ' ' . Button::createCancel(_('NEIN!'), 'no_ignore_holidays')) ?>
@@ -35,26 +35,26 @@ use Studip\Button,
             <? endif; ?>
 
             <? if (!$lockedAssign) : ?>
-                <?= Button::createAccept(_('Übernehmen'), 'submit') ?>
+                <?= Button::createAccept(_('Ãœbernehmen'), 'submit') ?>
                 <?= LinkButton::CreateCancel(_('Abbrechen'), URLHelper::getURL('?cancel_edit_assign=1&quick_view_mode='. $view_mode)) ?>
             <? endif; ?>
 
             <? if ($killButton) : ?>
-                <?= Button::create(_('Löschen'), 'kill_assign') ?>
+                <?= Button::create(_('LÃ¶schen'), 'kill_assign') ?>
             <? endif; ?>
 
             <? if ($lockedAssign) : ?>
                 <br>
                 <?= Icon::create('info-circle', 'inactive')->asImg() ?>
                 <? if ($owner_type == "sem") : ?>
-                    <?= sprintf ( _("Diese Belegung ist ein regelmäßiger Termin der Veranstaltung %s, die in diesem Raum stattfindet."),
+                    <?= sprintf ( _("Diese Belegung ist ein regelmÃ¤ÃŸiger Termin der Veranstaltung %s, die in diesem Raum stattfindet."),
                         ($perm->have_studip_perm("user", $seminarID)) ?
                             "<a href=\"seminar_main.php?auswahl=". $seminarID ."\" onClick=\"return check_opener(this)\">". htmlReady($seminarName) ."</a>" :
                             "<a href=\"dispatch.php/course/details/?&sem_id=". $seminarID ."\" onClick=\"return check_opener(this)\">". htmlReady($seminarName) ."</a>");
                     ?>
                     <? if ($perm->have_studip_perm("tutor", $seminarID)) : ?>
                         <br>
-                        <?= sprintf(_("Um die Belegung zu verändern, ändern Sie diese auf der Seite %sZeiten / Räume%s der Veranstaltung"),
+                        <?= sprintf(_("Um die Belegung zu verÃ¤ndern, Ã¤ndern Sie diese auf der Seite %sZeiten / RÃ¤ume%s der Veranstaltung"),
                                     Icon::create('schedule', 'info')->asImg() . "&nbsp;" .
                                     "<a href=" . URLHelper::getURL("dispatch.php/course/timesrooms", array('cid' => $seminarID)) . "onClick=\"return check_opener(this)\">",
                                     "</a>");
@@ -68,7 +68,7 @@ use Studip\Button,
                         ?>
                     <? if ($perm->have_studip_perm("tutor", $seminarID)) : ?>
                         <br>
-                        <?= sprintf(_("Um die Belegung zu verändern, ändern Sie bitte den Termin auf der Seite %sZeiten / Räume%s der Veranstaltung"),
+                        <?= sprintf(_("Um die Belegung zu verÃ¤ndern, Ã¤ndern Sie bitte den Termin auf der Seite %sZeiten / RÃ¤ume%s der Veranstaltung"),
                                    Icon::create('schedule', 'info')->asImg() . "&nbsp;" .
                                    "<a href=" . URLHelper::getURL("dispatch.php/course/timesrooms", array('cid' => $seminarID)) ." onClick=\"return check_opener(this)\">",
                                    "</a>");
@@ -95,12 +95,12 @@ use Studip\Button,
             <? if ($lockedAssign) :
                 if ($resAssign->getRepeatMode()=="w") :
                     if ($resAssign->getRepeatInterval() == 2)
-                        echo "<b>"._("zweiwöchentlich")."</b>";
+                        echo "<b>"._("zweiwÃ¶chentlich")."</b>";
                     else
-                        echo "<b>"._("wöchentlich")."</b>";
+                        echo "<b>"._("wÃ¶chentlich")."</b>";
                 else :
                     if (($owner_type == "date") && (isMetadateCorrespondingDate($resAssign->getAssignUserId())))
-                        echo "<b>"._("Einzeltermin zu regelmäßigen Veranstaltungszeiten")."</b>";
+                        echo "<b>"._("Einzeltermin zu regelmÃ¤ÃŸigen Veranstaltungszeiten")."</b>";
                     else
                         echo "<b>"._("keine Wiederholung (Einzeltermin)")."</b>";
                 endif;
@@ -108,11 +108,11 @@ use Studip\Button,
             <? else : ?>
                 <? $repeat_buttons = array(
                     'na' => array('name' => _('Keine'), 'action' => 'change_schedule_repeat_none'),
-                    'd'  => array('name' => _('Täglich'), 'action' => 'change_schedule_repeat_day'),
-                    'w'  => array('name' => ucfirst(_('wöchentlich')), 'action' => 'change_schedule_repeat_week'),
-                    'sd' => array('name' => _('Mehrtägig'), 'action' => 'change_schedule_repeat_severaldays'),
+                    'd'  => array('name' => _('TÃ¤glich'), 'action' => 'change_schedule_repeat_day'),
+                    'w'  => array('name' => ucfirst(_('wÃ¶chentlich')), 'action' => 'change_schedule_repeat_week'),
+                    'sd' => array('name' => _('MehrtÃ¤gig'), 'action' => 'change_schedule_repeat_severaldays'),
                     'm'  => array('name' => _('Monatlich'), 'action' => 'change_schedule_repeat_month'),
-                    'y'  => array('name' => _('Jährlich'),  'action' => 'change_schedule_repeat_year')
+                    'y'  => array('name' => _('JÃ¤hrlich'),  'action' => 'change_schedule_repeat_year')
                 ) ?>
             
                 <? foreach ($repeat_buttons as $repeat_mode => $button) : ?>
@@ -142,7 +142,7 @@ use Studip\Button,
             </td>
             <td width="40%" valign="top">
             <? if ($resAssign->getRepeatMode() != "na") : ?>
-                <?if ($resAssign->getRepeatMode() != "sd") print _("Wiederholung bis spätestens:"); else print _("Letzter Termin:"); ?><br>
+                <?if ($resAssign->getRepeatMode() != "sd") print _("Wiederholung bis spÃ¤testens:"); else print _("Letzter Termin:"); ?><br>
             <?
             if ($lockedAssign) :
                 echo "<b>".date("d.m.Y",$resAssign->getRepeatEnd())."</b>";
@@ -161,7 +161,7 @@ use Studip\Button,
 
         <tr>
             <td valign="top">
-                <?=_("eingetragen für die Belegung:")?><br>
+                <?=_("eingetragen fÃ¼r die Belegung:")?><br>
                 <?
                 $user_name=$resAssign->getUsername(FALSE);
                 if ($user_name)
@@ -178,7 +178,7 @@ use Studip\Button,
                     <? showSearchForm("search_user", $search_string_search_user, FALSE, TRUE, FALSE, FALSE, FALSE, "up") ?> <br>
                     <?=_("freie Eingabe zur Belegung:")?><br>
                     <input name="change_schedule_user_free_name" value="<?= htmlReady($resAssign->getUserFreeName()); ?>" size=40 maxlength="255">
-                    <br><?=_("<b>Beachten Sie:</b> Wenn Sie einen NutzerIn oder eine Einrichtung eintragen, kann diese NutzerIn oder berechtigte Personen die Belegung selbstständig aufheben. Sie können die Belegung aber auch frei eingeben.")?>
+                    <br><?=_("<b>Beachten Sie:</b> Wenn Sie einen NutzerIn oder eine Einrichtung eintragen, kann diese NutzerIn oder berechtigte Personen die Belegung selbststÃ¤ndig aufheben. Sie kÃ¶nnen die Belegung aber auch frei eingeben.")?>
                     <input type ="hidden" name="change_schedule_assign_user_id" value="<? echo $resAssign->getAssignUserId(); ?>">
                     <input type ="hidden" name="change_schedule_repeat_mode" value="<? echo $resAssign->getRepeatMode(); ?>">
                 <? endif; ?>
@@ -195,7 +195,7 @@ use Studip\Button,
                         $str[2]= _("jeden zweiten Tag");
                         $str[3]= _("jeden dritten Tag");
                         $str[4]= _("jeden vierten Tag");
-                        $str[5]= _("jeden fünften Tag");
+                        $str[5]= _("jeden fÃ¼nften Tag");
                         $str[6]= _("jeden sechsten Tag");
                         $max=6;
                     break;
@@ -211,7 +211,7 @@ use Studip\Button,
                         $str[2]= _("jeden zweiten Monat");
                         $str[3]= _("jeden dritten Monat");
                         $str[4]= _("jeden vierten Monat");
-                        $str[5]= _("jeden fünften Monat");
+                        $str[5]= _("jeden fÃ¼nften Monat");
                         $str[6]= _("jeden sechsten Monat");
                         $str[7]= _("jeden siebten Monat");
                         $str[8]= _("jeden achten Monat");
@@ -225,7 +225,7 @@ use Studip\Button,
                         $str[2]= _("jedes zweite Jahr");
                         $str[3]= _("jedes dritte Jahr");
                         $str[4]= _("jedes vierte Jahr");
-                        $str[5]= _("jedes fünfte Jahr");
+                        $str[5]= _("jedes fÃ¼nfte Jahr");
                         $max=5;
                     break;
                 endswitch;
@@ -274,10 +274,10 @@ use Studip\Button,
         <? if ($ObjectPerms->havePerm('admin') || !$lockedAssign) : ?>
         <tr>
             <td colspan="3" align="center"><br>&nbsp;
-                <?= Button::createAccept(_('Übernehmen'), 'submit') ?>
+                <?= Button::createAccept(_('Ãœbernehmen'), 'submit') ?>
                 <?= LinkButton::CreateCancel(_('Abbrechen'), URLHelper::getURL('?cancel_edit_assign=1&quick_view_mode='. $view_mode)) ?>            
                 <? if ($killButton) : ?>
-                    <?= Button::create(_('Löschen'), 'kill_assign') ?>
+                    <?= Button::create(_('LÃ¶schen'), 'kill_assign') ?>
                 <? endif; ?>
                 <br>
             </td>
@@ -303,7 +303,7 @@ use Studip\Button,
             if ($owner_type == "sem" || $owner_type == "date") {
                 ?>
                 <b><?=_("Belegung in anderen Raum verschieben:")?></b><br>
-                <?=_("Sie können diese Belegung in einen anderen Raum verschieben. <br>Alle anderen Angaben bleiben unverändert.");?>
+                <?=_("Sie kÃ¶nnen diese Belegung in einen anderen Raum verschieben. <br>Alle anderen Angaben bleiben unverÃ¤ndert.");?>
                 <br>&nbsp;
                 <?
             } else {
@@ -326,7 +326,7 @@ use Studip\Button,
                     </td>
                     <td>
                     <label for="change_schedule_move_or_copy2" style="font-weight:bold;">
-                    <?=_("Belegung in andere Räume kopieren")?>
+                    <?=_("Belegung in andere RÃ¤ume kopieren")?>
                     </label>
                     </td>
                     </td>
@@ -350,7 +350,7 @@ use Studip\Button,
                     }
                     print "</select> ";
                     echo Button::create(_('Verschieben'), 'send_change_resource', 
-                        array('title' => _("Die Belegung in den ausgewählten Raum verschieben")));
+                        array('title' => _("Die Belegung in den ausgewÃ¤hlten Raum verschieben")));
                     echo Button::create(_('Neue Suche'), 'reset_room_search');                
                 } else {
                     ?>
@@ -361,7 +361,7 @@ use Studip\Button,
                     </select>
                     </font>
                     <?= Button::create(_('Kopieren'), 'send_change_resource', 
-                        array('title' => _("Die Belegung in die ausgewählten Raum kopieren"))); ?>
+                        array('title' => _("Die Belegung in die ausgewÃ¤hlten Raum kopieren"))); ?>
                     <?= Button::create(_('Neue Suche'), 'reset_room_search'); ?>
                     <?
                 }
@@ -384,8 +384,8 @@ use Studip\Button,
             <?
             if (!in_array($resAssign->getRepeatMode(), array('na','sd'))) :
                 ?>
-                <b><?=_("Regelmäßige Belegung in Einzeltermine umwandeln:")?></b><br><br>
-                <?=_("Nutzen Sie diese Funktion, um eine Terminserie in Einzeltermine umzuwandeln. Diese Einzeltermine können dann getrennt bearbeitet werden.");?>
+                <b><?=_("RegelmÃ¤ÃŸige Belegung in Einzeltermine umwandeln:")?></b><br><br>
+                <?=_("Nutzen Sie diese Funktion, um eine Terminserie in Einzeltermine umzuwandeln. Diese Einzeltermine kÃ¶nnen dann getrennt bearbeitet werden.");?>
                 <br><br>
                 <?= Button::create(_('Umwandeln'), 'change_meta_to_single_assigns') ?>
             <?

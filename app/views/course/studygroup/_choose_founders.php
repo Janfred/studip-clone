@@ -3,7 +3,7 @@
 ?>
 <tr>
     <? if(empty($flash['founders']) && empty($founders)) :?>
-        <td style='text-align:right; vertical-align:top;'><?= _("GruppengründerIn hinzufügen:") ?></td>
+        <td style='text-align:right; vertical-align:top;'><?= _("GruppengrÃ¼nderIn hinzufÃ¼gen:") ?></td>
         <td nowrap>
             <div style="width: 49%; float: left;">
             <? if (is_array($results_choose_founders)) : ?>
@@ -12,7 +12,7 @@
                     <option value="<?= $user_id ?>"><?= htmlReady(my_substr($data['fullname']." (".$data['username'],0,35)) ?>) - <?= $data['perms'] ?></option>
                     <? endforeach; ?>
                 </select>
-                <?= Icon::create('accept', 'clickable', ['title' => _('NutzerIn hinzufügen')])->asInput(["type" => "image", "class" => "middle", "name" => "add_founder"]) ?>
+                <?= Icon::create('accept', 'clickable', ['title' => _('NutzerIn hinzufÃ¼gen')])->asInput(["type" => "image", "class" => "middle", "name" => "add_founder"]) ?>
                 <?= Icon::create('refresh', 'clickable', ['title' => _('neue Suche starten')])->asInput(["type" => "image", "class" => "middle", "name" => "new_search"]) ?>
                 <? if (sizeof($results_choose_founders) == 500) : ?>
                 <br><span style="color:red"><?= sprintf(_("Es werden nur die ersten %s Treffer angezeigt!"), 500) ?></span>
@@ -25,7 +25,7 @@
             </div>
         </td>
     <? else: ?>
-        <td style='text-align:right; vertical-align:top;'><?= _("Gruppengründer:") ?></td>
+        <td style='text-align:right; vertical-align:top;'><?= _("GruppengrÃ¼nder:") ?></td>
         <td nowrap>
             <div style="width: 49%; float: left;">
             <? if (is_array($founders) && sizeof($founders) > 0) :

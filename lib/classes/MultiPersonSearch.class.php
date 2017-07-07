@@ -525,9 +525,9 @@ class MultiPersonSearch {
      * sets default values of the internal variables.
      */
     private function setDefaultValues() {
-        $this->title = _('Personen hinzuf¸gen');
-        $this->description = _('Bitte w‰hlen Sie aus, wen Sie hinzuf¸gen mˆchten.');
-        $this->linkIconPath = Icon::create("community+add", "clickable", ['title' => _('Personen hinzuf¸gen')]);
+        $this->title = _('Personen hinzuf√ºgen');
+        $this->description = _('Bitte w√§hlen Sie aus, wen Sie hinzuf√ºgen m√∂chten.');
+        $this->linkIconPath = Icon::create("community+add", "clickable", ['title' => _('Personen hinzuf√ºgen')]);
     }
     
     /**

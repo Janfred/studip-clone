@@ -11,16 +11,16 @@
                 <td class="actions">
                 <? if (MvvPerm::haveFieldPermStudiengangteil($studiengang, MVVPerm::PERM_CREATE)) : ?>
                     <? if ($stg_bez) : ?>
-                    <? $msg = sprintf(_('Wollen Sie die Zuordnung des Studiengangteils "%s" als "%s" zum Studiengang "%s" wirklich löschen?'), $stgteil->getDisplayName(), $stg_bez->getDisplayName(), $studiengang->getDisplayName()) ?>
+                    <? $msg = sprintf(_('Wollen Sie die Zuordnung des Studiengangteils "%s" als "%s" zum Studiengang "%s" wirklich lÃ¶schen?'), $stgteil->getDisplayName(), $stg_bez->getDisplayName(), $studiengang->getDisplayName()) ?>
                     <form action="<?= $controller->url_for('/delete_stgteilmf', $studiengang->id, $stgteil->id, $stg_bez->id) ?>" method="post">
                         <?= CSRFProtection::tokenTag(); ?>
-                        <?= Icon::create('trash', 'clickable', ['title' => _('Zuordnung des Studiengangteils löschen')])->asInput(['data-confirm' => htmlReady($msg)]); ?>
+                        <?= Icon::create('trash', 'clickable', ['title' => _('Zuordnung des Studiengangteils lÃ¶schen')])->asInput(['data-confirm' => htmlReady($msg)]); ?>
                     </form>
                     <? else : ?>
-                    <? $msg = sprintf(_('Wollen Sie die Zuordnung des Studiengangteils "%s" zum Studiengang "%s" wirklich löschen?'), $stgteil->getDisplayName(), $studiengang->getDisplayName()) ?>
+                    <? $msg = sprintf(_('Wollen Sie die Zuordnung des Studiengangteils "%s" zum Studiengang "%s" wirklich lÃ¶schen?'), $stgteil->getDisplayName(), $studiengang->getDisplayName()) ?>
                     <form action="<?= $controller->url_for('/delete_stgteil', $studiengang->id, $stgteil->id) ?>" method="post">
                         <?= CSRFProtection::tokenTag(); ?>
-                        <?= Icon::create('trash', 'clickable', ['title' => _('Zuordnung des Studiengangteils löschen')])->asInput(['data-confirm' => htmlReady($msg)]); ?>
+                        <?= Icon::create('trash', 'clickable', ['title' => _('Zuordnung des Studiengangteils lÃ¶schen')])->asInput(['data-confirm' => htmlReady($msg)]); ?>
                     </form>
                     <? endif; ?>
                 <? endif; ?>
@@ -34,7 +34,7 @@
                 <td colspan="2">
                     <form style="width: 100%;" action="<?= $controller->url_for('/add_stgteil', $studiengang->id) ?>" method="post">
                         <?= CSRFProtection::tokenTag() ?>
-                        <?= _('Studiengangteil hinzufügen') ?></div>
+                        <?= _('Studiengangteil hinzufÃ¼gen') ?></div>
                         <?= $search->render() ?>
                         <?= Icon::create('search', 'clickable', ['title' => _('Studiengangteil suchen'), 'name' => 'search_stgteil', 'data-qs_name' => $search->getId(), 'data-qs_id' => $qs_search_id, 'data-qs_submit' => '1',  'class' => 'mvv-qs-button'])->asInput(); ?>
                         <?= Icon::create('accept', 'clickable', ['title' => _('Studiengangteil zuordnen')])->asInput(['class' => 'mvv-submit', 'name' => 'add_stgteil']); ?>

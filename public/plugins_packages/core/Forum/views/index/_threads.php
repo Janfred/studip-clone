@@ -21,7 +21,7 @@
     <thead>
         <tr>
             <th colspan="2"><?= _('Thema') ?></th>
-            <th data-type="answers"><?= _("Beiträge") ?></th>
+            <th data-type="answers"><?= _("BeitrÃ¤ge") ?></th>
             <th data-type="last_posting"><?= _("letzte Antwort") ?></th>
         </tr>
     </thead>
@@ -49,7 +49,7 @@
             <? endif ?>
 
             <br>
-            <?= Icon::create('lock-locked', 'info', ['title' => _('Dieses Thema ist geschlossen, es können keine neuen Beiträge erstellt werden.')])->asImg(16, ["id" => 'img-locked-'.$entry['topic_id'], "style" => $entry['closed']?'':'display: none']) ?>
+            <?= Icon::create('lock-locked', 'info', ['title' => _('Dieses Thema ist geschlossen, es kÃ¶nnen keine neuen BeitrÃ¤ge erstellt werden.')])->asImg(16, ["id" => 'img-locked-'.$entry['topic_id'], "style" => $entry['closed']?'':'display: none']) ?>
             
             <?= Icon::create('staple', 'info', ['title' => _('Dieses Thema wurde hervorgehoben.')])->asImg(16, ["id" => 'img-sticky-'.$entry['topic_id'], "style" => $entry['sticky']?'':'display: none']) ?>
             </a>
@@ -86,10 +86,10 @@
                     
                     <? if (ForumPerm::has('remove_entry', $seminar_id)) : ?>
                     <a href="<?= PluginEngine::getURL('coreforum/index/delete_entry/' . $entry['topic_id']) ?>"
-                        onClick="STUDIP.Forum.showDialog('<?= _('Möchten Sie dieses Thema wirklich löschen?') ?>',
+                        onClick="STUDIP.Forum.showDialog('<?= _('MÃ¶chten Sie dieses Thema wirklich lÃ¶schen?') ?>',
                        '<?= PluginEngine::getURL('coreforum/index/delete_entry/' . $entry['topic_id'] .'?approve_delete=1&page='. ForumHelpers::getPage()) ?>',
                        'tr[data-area-id=<?= $entry['topic_id'] ?>] td.areaentry'); return false;">
-                        <?= Icon::create('trash', 'clickable', ['title' => _('Dieses Thema löschen')])->asImg(16, ["class" => 'move-thread']) ?>
+                        <?= Icon::create('trash', 'clickable', ['title' => _('Dieses Thema lÃ¶schen')])->asImg(16, ["class" => 'move-thread']) ?>
                     </a>
                     <? endif ?>
                     
@@ -99,14 +99,14 @@
                                 . $constraint['topic_id'] .'/'. ForumHelpers::getPage()) ?>" 
                                 onclick="STUDIP.Forum.closeThreadFromOverview('<?= $entry['topic_id'] ?>', '<?= $constraint['topic_id'] ?>', <?= ForumHelpers::getPage() ?>); return false;"
                                 id="closeButton-<?= $entry['topic_id']; ?>">
-                                <?= Icon::create('lock-locked', 'clickable', ['title' => _('Thema schließen')])->asImg(16) ?>
+                                <?= Icon::create('lock-locked', 'clickable', ['title' => _('Thema schlieÃŸen')])->asImg(16) ?>
                             </a>
                         <? else : ?>
                             <a href="<?= PluginEngine::getURL('coreforum/index/open_thread/' . $entry['topic_id'] . '/' 
                                 . $constraint['topic_id'] . '/' . ForumHelpers::getPage()) ?>"
                                 onclick="STUDIP.Forum.openThreadFromOverview('<?= $entry['topic_id'] ?>', '<?= $constraint['topic_id'] ?>', <?= ForumHelpers::getPage() ?>); return false;"
                                 id="closeButton-<?= $entry['topic_id']; ?>">
-                                <?= Icon::create('lock-unlocked', 'clickable', ['title' => _('Thema öffnen')])->asImg(16) ?>
+                                <?= Icon::create('lock-unlocked', 'clickable', ['title' => _('Thema Ã¶ffnen')])->asImg(16) ?>
                             </a>
                         <? endif ?>
                     <? endif ?>

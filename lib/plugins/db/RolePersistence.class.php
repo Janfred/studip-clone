@@ -21,7 +21,7 @@
 define("UNKNOWN_ROLE_ID",-1);
 
 /**
- * Funktionen für das Rollenmanagement
+ * Funktionen fÃ¼r das Rollenmanagement
  * TODO: (mriehe) this is a static class, change the public function in static public functions
  *
  */

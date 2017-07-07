@@ -491,11 +491,11 @@ class AttrTransform_Image_Source extends \HTMLPurifier_AttrTransform
             $attr['src'] = MediaProxy\getMediaUrl($attr['src']);
         } catch (MediaProxy\InvalidInternalLinkException $e) {
             // invalid internal link ==> remove <img src> attribute
-            $GLOBALS['msg'][] = _('Ungültige interne Medienverknüpfung entfernt: ')
+            $GLOBALS['msg'][] = _('UngÃ¼ltige interne MedienverknÃ¼pfung entfernt: ')
                 . \htmlentities($e->getUrl());
             $attr['src'] = NULL; // remove <img src> attribute
         } catch (MediaProxy\ExternalMediaDeniedException $e) {
-            $GLOBALS['msg'][] = _('Verbotene externe Medienverknüpfung entfernt: ')
+            $GLOBALS['msg'][] = _('Verbotene externe MedienverknÃ¼pfung entfernt: ')
                 . \htmlentities($e->getUrl());
             $attr['src'] = NULL; // remove <img src> attribute
         }

@@ -1,6 +1,6 @@
 <?php
 /*
- * studip_user.php - Basisklasse für Stud.IP User
+ * studip_user.php - Basisklasse fÃ¼r Stud.IP User
  *
  * Copyright (C) 2006 - Marcus Lunzenauer <mlunzena@uos.de>
  *

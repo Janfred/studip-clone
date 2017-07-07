@@ -3,14 +3,14 @@
 <?
 $genders = [
         _('unbekannt'),
-        _('männlich'),
+        _('mÃ¤nnlich'),
         _('weiblich'),
 ];
 ?>
 
 <? if ($user->auth_plugin !== 'standard'): ?>
     <?= MessageBox::info(sprintf(_('Ihre Authentifizierung (%s) benutzt nicht die Stud.IP Datenbank, '
-                                   . 'daher können Sie einige Felder nicht verändern!'),
+                                   . 'daher kÃ¶nnen Sie einige Felder nicht verÃ¤ndern!'),
             $user->auth_plugin)) ?>
 <? endif; ?>
 
@@ -32,11 +32,11 @@ $genders = [
                     <?= _('Nutzername:') ?>
                </span>
             <? if ($restricted) : ?>
-                <?= tooltipIcon('Dieses Feld dürfen Sie nicht ändern, Adminzugriff ist hier nicht erlaubt!') ?>
+                <?= tooltipIcon('Dieses Feld dÃ¼rfen Sie nicht Ã¤ndern, Adminzugriff ist hier nicht erlaubt!') ?>
             <? endif ?>
             <input required type="text" name="new_username" id="new_username"
                    pattern="<?= htmlReady(trim($validator->username_regular_expression, '/i^$()')) ?>"
-                   data-message="<?= _('Der Benutzername ist unzulässig. Er muss mindestens 4 Zeichen lang sein und darf keine Sonderzeichen oder Leerzeichen enthalten.') ?>"
+                   data-message="<?= _('Der Benutzername ist unzulÃ¤ssig. Er muss mindestens 4 Zeichen lang sein und darf keine Sonderzeichen oder Leerzeichen enthalten.') ?>"
                    value="<?= $user['username'] ?>"
                    autocorrect="off" autocapitalize="off"
                     <? if ($restricted || !$controller->shallChange('auth_user_md5.username')) echo 'disabled'; ?>>
@@ -46,7 +46,7 @@ $genders = [
                 <?= _('Vorname:') ?>
             </span>
             <? if ($restricted) : ?>
-                <?= tooltipIcon('Dieses Feld dürfen Sie nicht ändern, Adminzugriff ist hier nicht erlaubt!') ?>
+                <?= tooltipIcon('Dieses Feld dÃ¼rfen Sie nicht Ã¤ndern, Adminzugriff ist hier nicht erlaubt!') ?>
             <? endif ?>
             <input required type="text" name="vorname"
                    pattern="<?= htmlReady(trim($validator->name_regular_expression, '/i^$()')) ?>"
@@ -58,18 +58,18 @@ $genders = [
                 <?= _('Nachname:') ?>
             </span>
             <? if ($restricted) : ?>
-                <?= tooltipIcon('Dieses Feld dürfen Sie nicht ändern, Adminzugriff ist hier nicht erlaubt!') ?>
+                <?= tooltipIcon('Dieses Feld dÃ¼rfen Sie nicht Ã¤ndern, Adminzugriff ist hier nicht erlaubt!') ?>
             <? endif ?>
             <input required type="text" name="nachname"
                    pattern="<?= htmlReady(trim($validator->name_regular_expression, '/i^$()')) ?>"
-                   data-message="<?= _('Bitte geben Sie Ihren tatsächlichen Nachnamen an.') ?>"
+                   data-message="<?= _('Bitte geben Sie Ihren tatsÃ¤chlichen Nachnamen an.') ?>"
                    value="<?= htmlReady($user['Nachname']) ?>"
                     <? if ($restricted || !$controller->shallChange('auth_user_md5.Nachname', 'name')) echo 'disabled'; ?>>
         </label>
         <label class="col-3">
             <?= _('Titel:') ?>
             <select id="title_front_chooser" name="title_front_chooser"
-                    aria-label="<?= _('Titel auswählen') ?>"
+                    aria-label="<?= _('Titel auswÃ¤hlen') ?>"
                     data-target="#title_front"
                     <? if (!$controller->shallChange('user_info.title_front', 'title')) echo 'disabled'; ?>>
                 <? foreach ($GLOBALS['TITLE_FRONT_TEMPLATE'] as $title): ?>
@@ -89,7 +89,7 @@ $genders = [
         <label class="col-3">
             <?= _('Titel nachgest.:') ?>
             <select name="title_rear_chooser" id="title_rear_chooser"
-                    aria-label="<?= _('Titel nachgestellt auswählen') ?>"
+                    aria-label="<?= _('Titel nachgestellt auswÃ¤hlen') ?>"
                     data-target="#title_rear"
                     <? if (!$controller->shallChange('user_info.title_rear', 'title')) echo 'disabled'; ?>>
                 <? foreach ($GLOBALS['TITLE_REAR_TEMPLATE'] as $title): ?>
@@ -111,7 +111,7 @@ $genders = [
         <legend>
             <?= _('E-Mail') ?>
             <? if ($restricted) : ?>
-                <?= tooltipIcon('Dieses Feld dürfen Sie nicht ändern, Adminzugriff ist hier nicht erlaubt!') ?>
+                <?= tooltipIcon('Dieses Feld dÃ¼rfen Sie nicht Ã¤ndern, Adminzugriff ist hier nicht erlaubt!') ?>
             <? endif ?>
         </legend>
         <label class="col-3">
@@ -132,8 +132,8 @@ $genders = [
             <label class="divider email-change-confirm">
                     
                         <span id="email-change-confirm">
-                            <?= _('Falls Sie Ihre E-Mail-Adresse ändern, muss diese Änderung durch die Eingabe '
-                                  . 'Ihres Passworts bestätigt werden:') ?>
+                            <?= _('Falls Sie Ihre E-Mail-Adresse Ã¤ndern, muss diese Ã„nderung durch die Eingabe '
+                                  . 'Ihres Passworts bestÃ¤tigt werden:') ?>
                         </span>
                 <input type="text" name="disable_autofill" style="display: none;">
                 <input type="password" name="password" aria-labelledby="email-change-confirm">
@@ -157,6 +157,6 @@ $genders = [
     </fieldset>
 
     <footer>
-        <?= Button::create(_('Übernehmen'), 'store', ['title' => _('Änderungen übernehmen')]) ?>
+        <?= Button::create(_('Ãœbernehmen'), 'store', ['title' => _('Ã„nderungen Ã¼bernehmen')]) ?>
     </footer>
 </form>

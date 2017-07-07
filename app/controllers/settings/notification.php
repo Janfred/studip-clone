@@ -42,9 +42,9 @@ class Settings_NotificationController extends Settings_SettingsController
         }
 
         PageLayout::setHelpKeyword('Basis.MyStudIPBenachrichtigung');
-        PageLayout::setTitle(_('Benachrichtigung über neue Inhalte anpassen'));
+        PageLayout::setTitle(_('Benachrichtigung Ã¼ber neue Inhalte anpassen'));
         Navigation::activateItem('/profile/settings/notification');
-        SkipLinks::addIndex(_('Benachrichtigung über neue Inhalte anpassen'), 'layout_content', 100);
+        SkipLinks::addIndex(_('Benachrichtigung Ã¼ber neue Inhalte anpassen'), 'layout_content', 100);
 
         Sidebar::get()->setImage('sidebar/seminar-sidebar.png');
     }
@@ -85,7 +85,7 @@ class Settings_NotificationController extends Settings_SettingsController
         $seminars = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         if (!count($seminars)) {
-            $message = sprintf(_('Sie haben zur Zeit keine Veranstaltungen belegt. Bitte nutzen Sie %s<b>Veranstaltung suchen / hinzufügen</b>%s um sch für Veranstaltungen anzumdelden.'),
+            $message = sprintf(_('Sie haben zur Zeit keine Veranstaltungen belegt. Bitte nutzen Sie %s<b>Veranstaltung suchen / hinzufÃ¼gen</b>%s um sch fÃ¼r Veranstaltungen anzumdelden.'),
                 '<a href="' . URLHelper::getLink('dispatch.php/search/courses') . '">', '</a>');
             PageLayout::postMessage(MessageBox::info($message));
             $this->render_nothing();

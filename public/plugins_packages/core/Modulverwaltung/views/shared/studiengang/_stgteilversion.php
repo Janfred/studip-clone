@@ -2,7 +2,7 @@
 <table class="default  mvv-modul-details" id="<?= $version->id ?>" data-mvv-id="<?= $version->id; ?>" data-mvv-type="stgteilversion">
     <tbody>
         <tr>
-            <td><strong><?= _('Gültigkeit') ?></strong></td>
+            <td><strong><?= _('GÃ¼ltigkeit') ?></strong></td>
             <td nowrap data-mvv-field="mvv_stgteilversion.start_sem mvv_stgteilversion.beschlussdatum">
                 <?= _('von Semester:') ?>
                 <? $sem = Semester::find($version->start_sem) ?>
@@ -17,7 +17,7 @@
                     <? $sem = Semester::find($version->end_sem) ?>
                     <?= htmlReady($sem->name) ?>
                 <? else : ?>
-                    <?= _('unbegrenzt gültig') ?>
+                    <?= _('unbegrenzt gÃ¼ltig') ?>
                 <? endif; ?>  
                 <br>
                 <?= _('Fassung:') ?> 

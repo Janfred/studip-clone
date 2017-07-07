@@ -99,7 +99,7 @@ use Studip\Button, Studip\LinkButton;
                 <? endforeach; ?>
                 </select>
             <? else : ?>
-                <?= MessageBox::info(_('Sie können die Einordnung in die Orga-Struktur nicht ändern.')) ?>
+                <?= MessageBox::info(_('Sie kÃ¶nnen die Einordnung in die Orga-Struktur nicht Ã¤ndern.')) ?>
             <? endif; ?>
             </td>
         </tr>
@@ -149,7 +149,7 @@ use Studip\Button, Studip\LinkButton;
         <tr>
             <td>&nbsp;</td>
             <td colspan="2" style="color: red">
-                <?= _('Das Objekt wurde noch keinem Typ zugewiesen. Um Eigenschaften bearbeiten zu können, müssen Sie vorher einen Typ festlegen!') ?>
+                <?= _('Das Objekt wurde noch keinem Typ zugewiesen. Um Eigenschaften bearbeiten zu kÃ¶nnen, mÃ¼ssen Sie vorher einen Typ festlegen!') ?>
             </td>
         </tr>
 <? endif; ?>
@@ -160,7 +160,7 @@ use Studip\Button, Studip\LinkButton;
                 <b><?= _('gleichzeitige Belegung') ?></b><br>
                 <br>
                 <label for="change_multiple_assign">
-                    <?= _('Die Ressource darf mehrfach zur gleichen Zeit belegt werden - <br>Überschneidungschecks finden <u>nicht</u> statt!') ?>
+                    <?= _('Die Ressource darf mehrfach zur gleichen Zeit belegt werden - <br>Ãœberschneidungschecks finden <u>nicht</u> statt!') ?>
                 </label>
             </td>
             <td>
@@ -172,10 +172,10 @@ use Studip\Button, Studip\LinkButton;
         <tr>
             <td>&nbsp;</td>
             <td>
-                <b><?= _('wünschbar') ?></b><br>
+                <b><?= _('wÃ¼nschbar') ?></b><br>
                 <br>
                 <label for="change_requestable">
-                    <?= _('legt fest ob ein Raum wünschbar ist') ?>
+                    <?= _('legt fest ob ein Raum wÃ¼nschbar ist') ?>
                 </label>
             </td>
             <td>
@@ -190,7 +190,7 @@ use Studip\Button, Studip\LinkButton;
             <td>&nbsp;</td>
             <td colspan="2" align="center">
                 <br>
-                <?= Button::create(_('Übernehmen'))?>
+                <?= Button::create(_('Ãœbernehmen'))?>
                 <? if ($resObject->isUnchanged()) : ?>
                     <?= LinkButton::createCancel(_('Abbrechen'), URLHelper::getLink('?cancel_edit='. $resObject->id))?>
                 <? endif; ?>

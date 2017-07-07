@@ -56,7 +56,7 @@ class Admin_CourseWizardStepsController extends AuthenticatedController
             $title = _('Schritt bearbeiten');
             $this->step = CourseWizardStepRegistry::find($id);
         } else {
-            $title = _('Schritt hinzufügen');
+            $title = _('Schritt hinzufÃ¼gen');
             $this->step = new CourseWizardStepRegistry();
             $this->step->name = '';
             $this->step->classname = '';
@@ -134,9 +134,9 @@ class Admin_CourseWizardStepsController extends AuthenticatedController
         if ($step) {
             $name = $step->name;
             if (CourseWizardStepRegistry::unregisterStep($id)) {
-                PageLayout::postSuccess(sprintf(_('Der Schritt "%s" wurde gelöscht.'), $name));
+                PageLayout::postSuccess(sprintf(_('Der Schritt "%s" wurde gelÃ¶scht.'), $name));
             } else {
-                PageLayout::postError(sprintf(_('Der Schritt %s konnte nicht gelöscht werden.'), $name));
+                PageLayout::postError(sprintf(_('Der Schritt %s konnte nicht gelÃ¶scht werden.'), $name));
             }
         }
         $this->redirect($this->url_for('admin/coursewizardsteps'));

@@ -3,7 +3,7 @@
 
 /*
  * Copyright (C) 2009 - Marcus Lunzenauer (mlunzena@uos)
- * André Noack <noack@data-quest.de>
+ * AndrÃ© Noack <noack@data-quest.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -17,7 +17,7 @@
  * @package    studip
  * @subpackage lib
  *
- * @author    André Noack <noack@data-quest.de>
+ * @author    AndrÃ© Noack <noack@data-quest.de>
  * @copyright (c) Authors
  * @since     1.10
  */

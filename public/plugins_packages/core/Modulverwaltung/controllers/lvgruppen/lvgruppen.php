@@ -99,7 +99,7 @@ class Lvgruppen_LvgruppenController extends MVVController
         
         $helpbar = Helpbar::get();
         $widget = new HelpbarWidget();
-        $widget->addElement(new WidgetElement(_('Auf diesen Seiten können Sie Lehrveranstaltungsgruppen verwalten.').'</br>'));
+        $widget->addElement(new WidgetElement(_('Auf diesen Seiten kÃ¶nnen Sie Lehrveranstaltungsgruppen verwalten.').'</br>'));
         $widget->addElement(new WidgetElement(_('Eine Lehrveranstaltungsgruppe kann aufgeklappt werden, um die Lehrveranstaltungen anzuzeigen, die dieser Gruppe bereits zugeordnet wurden.')));
         $helpbar->addWidget($widget);
 
@@ -170,7 +170,7 @@ class Lvgruppen_LvgruppenController extends MVVController
             $this->headline = _('Neue Lehrveranstaltungsgruppe anlegen.');
         } else {
             PageLayout::setTitle(_('Lehrveranstaltungsgruppe bearbeiten'));
-            $success_message = _('Die Lehveranstaltungsgruppe "%s" wurde geändert.');
+            $success_message = _('Die Lehveranstaltungsgruppe "%s" wurde geÃ¤ndert.');
             $this->headline = sprintf(_('Lehrveranstaltungsgruppe "%s" bearbeiten.'),
                 $this->lvgruppe->getDisplayName());
         }
@@ -196,7 +196,7 @@ class Lvgruppen_LvgruppenController extends MVVController
                     PageLayout::postSuccess(sprintf($success_message,
                             htmlReady($this->lvgruppe->getDisplayName())));
                 } else {
-                    PageLayout::postInfo(_('Es wurden keine Änderungen vorgenommen.'));
+                    PageLayout::postInfo(_('Es wurden keine Ã„nderungen vorgenommen.'));
                 }
                 $this->redirect($this->url_for('/index'));
                 return;
@@ -207,7 +207,7 @@ class Lvgruppen_LvgruppenController extends MVVController
         if (!$this->lvgruppe->isNew()) {
             $sidebar = Sidebar::get();
             $widget  = new ActionsWidget();
-            $widget->addLink( _('Log-Einträge dieser LV-Gruppe'),
+            $widget->addLink( _('Log-EintrÃ¤ge dieser LV-Gruppe'),
                     $this->url_for('shared/log_event/show', $this->lvgruppe->getId()),
                     Icon::create('log', 'clickable'), array('data-dialog' => 'size=auto'));
             $sidebar->addWidget($widget);
@@ -224,23 +224,23 @@ class Lvgruppen_LvgruppenController extends MVVController
         if (Request::submitted('yes')) {
             CSRFProtection::verifyUnsafeRequest();
             if ($lvgruppe->isNew()) {
-                PageLayout::postError( _('Die Lehrveranstaltungsgruppe kann nicht gelöscht werden (unbekannte Lehrveranstaltungsgruppe).'));
+                PageLayout::postError( _('Die Lehrveranstaltungsgruppe kann nicht gelÃ¶scht werden (unbekannte Lehrveranstaltungsgruppe).'));
             } elseif (count($lvgruppe->courses)
                     || count($lvgruppe->modulteile)
                     || count($lvgruppe->archived_courses)) {
-                PageLayout::postError( _('Die Lehrveranstaltungsgruppe kann nicht gelöscht werden, da sie mit Veranstaltungen oder Modulteilen verknüpft ist.'));
+                PageLayout::postError( _('Die Lehrveranstaltungsgruppe kann nicht gelÃ¶scht werden, da sie mit Veranstaltungen oder Modulteilen verknÃ¼pft ist.'));
             } else {
                 if ($perm->havePerm(MvvPerm::PERM_CREATE)) {
                     $name = $lvgruppe->getDisplayName();
                     $lvgruppe->delete();
-                    PageLayout::postSuccess(sprintf(_('Die Lehrveranstaltungsgruppe "%s" wurde gelöscht.'), htmlReady($name)));
+                    PageLayout::postSuccess(sprintf(_('Die Lehrveranstaltungsgruppe "%s" wurde gelÃ¶scht.'), htmlReady($name)));
                 } else {
                     throw new Trails_Exception(403, _('Keine Berechtigung'));
                 }
             }
         }
         if (!Request::isPost()) {
-            $this->flash_set('dialog', sprintf(_('Wollen Sie wirklich die Lehrveranstaltungsgruppe "%s" löschen?'),
+            $this->flash_set('dialog', sprintf(_('Wollen Sie wirklich die Lehrveranstaltungsgruppe "%s" lÃ¶schen?'),
                             $lvgruppe->getDisplayName()),
                     '/delete/'
                     . $lvgruppe->getId(),
@@ -370,7 +370,7 @@ class Lvgruppen_LvgruppenController extends MVVController
             $widget->class = 'institute-list';
             
             $widget->addElement(
-                new SelectElement("",_('-- Einrichtung wählen --')), 'select-none');
+                new SelectElement("",_('-- Einrichtung wÃ¤hlen --')), 'select-none');
             
             
             

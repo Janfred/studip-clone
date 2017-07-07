@@ -48,7 +48,7 @@
             <td data-mvv-field="mvv_modul.code"><?= htmlReady($modul->code) ?></td>
         </tr>
         <tr>
-            <td><strong><?= _('Semester der erstmaligen Durchführung') ?></strong></td>
+            <td><strong><?= _('Semester der erstmaligen DurchfÃ¼hrung') ?></strong></td>
             <td data-mvv-field="mvv_modul.start"><?= htmlReady($startSemester['name']) ?></td>
         </tr>
         <? if ($instituteName) : ?>
@@ -58,7 +58,7 @@
         </tr>
         <? endif; ?>
         <tr>
-            <td><strong><?= _('Verwendet in Studiengängen / Semestern') ?></strong></td>
+            <td><strong><?= _('Verwendet in StudiengÃ¤ngen / Semestern') ?></strong></td>
             <td>
                 <? $trails = $modul->getTrails(array('StgteilAbschnitt', 'StgteilVersion', 'Studiengang')); ?>
                 <? if (count($trails)) : ?>
@@ -151,11 +151,11 @@
             <td data-mvv-field="mvv_modul_deskriptor.turnus"><?= htmlReady($modulDeskriptor->turnus) ?></td>
         </tr>
         <tr>
-            <td><strong><?= _('Aufnahmekapazität Modul') ?></strong></td>
+            <td><strong><?= _('AufnahmekapazitÃ¤t Modul') ?></strong></td>
             <td data-mvv-field="mvv_modul.kapazitaet"><?= htmlReady(trim($modul->kapazitaet)) ?: _('unbegrenzt') ?> <?= MVVController::trim($modulDeskriptor->kommentar_kapazitaet) ? sprintf("(%s)", formatReady($modulDeskriptor->kommentar_kapazitaet)) : '' ?></td>
         </tr>
         <tr>
-            <td><strong><?= _('Prüfungsebene') ?></strong></td>
+            <td><strong><?= _('PrÃ¼fungsebene') ?></strong></td>
             <td data-mvv-field="mvv_modul.pruef_ebene"><?= htmlReady($pruefungsEbene) ?></td>
         </tr>
         <tr>
@@ -169,8 +169,8 @@
                     <? $nummer_modulteil = 1; ?>
                     <? $note = array(); ?>
                     <? foreach ($modul->modulteile as $modulteil): ?>
-                        <? // Für die Kenntlichmachung der Modulteile in Listen die Nummer des
-                        // Modulteils und den ausgewählten Namen verwenden.
+                        <? // FÃ¼r die Kenntlichmachung der Modulteile in Listen die Nummer des
+                        // Modulteils und den ausgewÃ¤hlten Namen verwenden.
                         // Ist keine Nummer vorhanden, dann Durchnummerieren und Standard-
                         // Bezeichnung verwenden.
                         if (trim($modulteil->nummer)) {
@@ -200,7 +200,7 @@
             </td>
         </tr>
         <tr>
-            <td><strong><?= _('Faktor der Modulnote für die Endnote des Studiengangs') ?></strong></td>
+            <td><strong><?= _('Faktor der Modulnote fÃ¼r die Endnote des Studiengangs') ?></strong></td>
             <td data-mvv-field="mvv_modul.faktor_note"><?= htmlReady($modul->faktor_note) ?></td>
         </tr>
         <? if (trim($modulDeskriptor->kommentar)) : ?>

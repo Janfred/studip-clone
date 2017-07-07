@@ -14,7 +14,7 @@
     <? if (count($entries) === 0): ?>
         <tr>
             <td colspan="6">
-                <?= MessageBox::info(_('Es sind keine Nutzungsbedingungen für Inhalte definiert!')) ?>
+                <?= MessageBox::info(_('Es sind keine Nutzungsbedingungen fÃ¼r Inhalte definiert!')) ?>
                 <?= Studip\LinkButton::create(
                     _('Neue Nutzungsbedingungen definieren'),
                     $controller->url_for('admin/content_terms_of_use/add'),

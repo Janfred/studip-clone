@@ -1,5 +1,5 @@
 <?= sprintf(_('Bei der Platzverteilung zu Veranstaltungen haben die betreffenden '.
-    'Personen gegenüber Anderen eine %s-fache Chance darauf, einen Platz zu '.
+    'Personen gegenÃ¼ber Anderen eine %s-fache Chance darauf, einen Platz zu '.
     'erhalten.'), '<b>'.$userlist->getFactor().'</b>'); ?>
 <br/>
 <?= _('Personen auf dieser Liste:') ?>

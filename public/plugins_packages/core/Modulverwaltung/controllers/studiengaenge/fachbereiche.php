@@ -28,13 +28,13 @@ class Studiengaenge_FachbereicheController
     }
     
     /**
-     * Liste der Studieng‰nge gruppiert nach Fachbereiche (Fachbereich ist
+     * Liste der Studieng√§nge gruppiert nach Fachbereiche (Fachbereich ist
      * die  verantwortliche Einrichtung des zugeordneten Faches, nicht die des
      * Studiengangs!)
      */
     public function index_action()
     {
-        PageLayout::setTitle(_('Studieng‰nge gruppiert nach Fachbereichen'));
+        PageLayout::setTitle(_('Studieng√§nge gruppiert nach Fachbereichen'));
         
         // Nur Fachbereiche an denen der User eine Rolle hat
         $perm_institutes = MvvPerm::getOwnInstitutes();

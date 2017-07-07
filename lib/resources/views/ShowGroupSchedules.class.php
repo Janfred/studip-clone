@@ -9,7 +9,7 @@
 * view schedule/assigns for a ressource-object
 *
 *
-* @author       AndrÈ Noack <noack@data-quest.de>, Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
+* @author       Andr√© Noack <noack@data-quest.de>, Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @access       public
 * @package      resources
 */
@@ -80,7 +80,7 @@ class ShowGroupSchedules extends ShowSemSchedules {
                     <td rowspan="2">&nbsp;</td>
                     <td valign="top">
                         <?= SemesterData::GetSemesterSelector(array('name' => 'sem_schedule_choose', 'class' => 'submit-upon-select'), $this->semester['semester_id'],'semester_id',false)?>
-                        <?= Button::create(_('Ausw‰hlen'), 'jump') ?><br>
+                        <?= Button::create(_('Ausw√§hlen'), 'jump') ?><br>
                         <label>
                         <input type="radio" onChange="document.schedule_form.submit()" style="vertical-align:bottom" <?=($this->timespan == 'course_time' ? 'checked' : '')?> name="sem_time_choose" value="course_time">
                         <?=_("Vorlesungszeit")?>
@@ -91,7 +91,7 @@ class ShowGroupSchedules extends ShowSemSchedules {
                         </label>
                     </td>
                     <td valign="top">
-                        <?=_("Eine Raumgruppe ausw‰hlen")?>:<br>
+                        <?=_("Eine Raumgruppe ausw√§hlen")?>:<br>
                         <select name="group_schedule_choose_group" class="submit-upon-select">
                         <?
                         $room_group = RoomGroups::GetInstance();
@@ -103,7 +103,7 @@ class ShowGroupSchedules extends ShowSemSchedules {
                         }
                         ?>
                         </select>
-                        <?= Button::create(_('Ausw‰hlen')) ?>
+                        <?= Button::create(_('Ausw√§hlen')) ?>
                     </td>
                     <td>&nbsp;</td>
                 </tr>
@@ -165,40 +165,40 @@ class ShowGroupSchedules extends ShowSemSchedules {
                     foreach($events as $id => $event){
                         $repeat_mode = $event['repeat_mode'];
                         $add_info = ($event['sem_doz_names'] ? '('.$event['sem_doz_names'].') ' : '');
-                        $add_info .= ($repeat_mode == 'w' && $event['repeat_interval'] == 1 ? '('._("wˆchentlich").')' : '');
-                        $add_info .= ($repeat_mode == 'w' && $event['repeat_interval'] > 1 ? '('.$event['repeat_interval'].'-'._("wˆchentlich").')' : '');
+                        $add_info .= ($repeat_mode == 'w' && $event['repeat_interval'] == 1 ? '('._("w√∂chentlich").')' : '');
+                        $add_info .= ($repeat_mode == 'w' && $event['repeat_interval'] > 1 ? '('.$event['repeat_interval'].'-'._("w√∂chentlich").')' : '');
                         $name = $event['name'];
                         $schedule->addEvent($room_to_show_id, $name, $event['begin'], $event['end'],
                                     URLHelper::getLink('?show_object='.$room_id.'&cancel_edit_assign=1&quick_view='.$view.'&quick_view_mode='.$view_mode.'&edit_assign_object='.$event['assign_id']), $add_info, $categories[$repeat_mode]);
                         ++$num_rep_events;
                     }
                 }
-                // nur zuk¸nftige Einzelbelegungen
+                // nur zuk√ºnftige Einzelbelegungen
                 if ( ($end_time > time()) && ($_SESSION['resources_data']["show_repeat_mode"] == 'single' || $_SESSION['resources_data']["show_repeat_mode"] == 'all')){
                     $a_start_time = ($start_time > time() ? $start_time : time());
                     $a_end_time = $end_time;
                     $assign_events = new AssignEventList ($a_start_time, $a_end_time, $room_id, '', '', TRUE, 'semschedulesingle', $this->dow);
                     while ($event = $assign_events->nextEvent()) {
-                        //mehrt‰gige nur am passenden Tag anzeigen
+                        //mehrt√§gige nur am passenden Tag anzeigen
                         if ($event->repeat_mode == 'sd' && date('N', $event->begin) != $this->dow) continue;
                         if(in_array($event->repeat_mode, array('w','d','m','y'))){
                             if(strftime('%u', $event->getBegin()) != $this->dow) continue;
                             $assign = AssignObject::Factory($event->getAssignId());
                             switch($event->repeat_mode){
                                 case 'd':
-                                $add_info = '('.sprintf(_("t‰glich, %s bis %s"), strftime('%x',$assign->getBegin()), strftime('%x',$assign->getRepeatEnd())).')';
+                                $add_info = '('.sprintf(_("t√§glich, %s bis %s"), strftime('%x',$assign->getBegin()), strftime('%x',$assign->getRepeatEnd())).')';
                                 break;
                                 case 'w':
-                                if($assign->getRepeatInterval() == 1) $add_info = '('._("wˆchentlich").')';
-                                else  $add_info = '('.$assign->getRepeatInterval().'-'._("wˆchentlich").')';
+                                if($assign->getRepeatInterval() == 1) $add_info = '('._("w√∂chentlich").')';
+                                else  $add_info = '('.$assign->getRepeatInterval().'-'._("w√∂chentlich").')';
                                 break;
                                 case 'm':
                                 if($assign->getRepeatInterval() == 1) $add_info = '('._("monatlich").')';
                                 else  $add_info = '('.$assign->getRepeatInterval().'-'._("monatlich").')';
                                 break;
                                 case 'y':
-                                if($assign->getRepeatInterval() == 1) $add_info = '('._("j‰hrlich").')';
-                                else  $add_info = '('.$assign->getRepeatInterval().'-'._("j‰hrlich").')';
+                                if($assign->getRepeatInterval() == 1) $add_info = '('._("j√§hrlich").')';
+                                else  $add_info = '('.$assign->getRepeatInterval().'-'._("j√§hrlich").')';
                                 break;
                             }
                         } else {
@@ -241,7 +241,7 @@ class ShowGroupSchedules extends ShowSemSchedules {
                     </th>
                     <th align="center">
                         <a href="<?= URLHelper::getLink('?quick_view='.$this->used_view.'&quick_view_mode='.$view_mode.'&next_day=1') ?>">
-                            <?= Icon::create('arr_2right', 'clickable')->asImg(['class' => "middle", 'alt' => _("N‰chsten Tag anzeigen"), 'title' => _("N‰chsten Tag anzeigen")]) ?>
+                            <?= Icon::create('arr_2right', 'clickable')->asImg(['class' => "middle", 'alt' => _("N√§chsten Tag anzeigen"), 'title' => _("N√§chsten Tag anzeigen")]) ?>
                         </a>
                     </th>
                 </tr>
@@ -253,7 +253,7 @@ class ShowGroupSchedules extends ShowSemSchedules {
                         <a href="<?= URLHelper::getLink('', array('quick_view' => $this->used_view,
                                                                   'quick_view_mode' => $view_mode,
                                                                   'time_range' => $_SESSION['resources_data']['schedule_time_range'] ? 'FALSE' : -1)) ?>">
-                               <?= Icon::create('arr_2up', 'clickable', ['title' => _('Fr¸here Belegungen anzeigen')])->asImg(['class' => 'middle']) ?>
+                               <?= Icon::create('arr_2up', 'clickable', ['title' => _('Fr√ºhere Belegungen anzeigen')])->asImg(['class' => 'middle']) ?>
                         </a>
                     <? endif; ?>
                     </td>
@@ -261,7 +261,7 @@ class ShowGroupSchedules extends ShowSemSchedules {
                         <?
 
                         if ($_SESSION['resources_data']["show_repeat_mode"] == 'repeated' || $_SESSION['resources_data']["show_repeat_mode"] == 'all'){
-                            echo "&nbsp;<font size=-1>"._("Anzahl der regelm‰ﬂigen Belegungen in diesem Zeitraum:")." ".$num_rep_events."</font><br>";
+                            echo "&nbsp;<font size=-1>"._("Anzahl der regelm√§√üigen Belegungen in diesem Zeitraum:")." ".$num_rep_events."</font><br>";
                         }
                         if ($_SESSION['resources_data']["show_repeat_mode"] == 'single' || $_SESSION['resources_data']["show_repeat_mode"] == 'all'){
                             echo "&nbsp;<font size=-1>"._("Anzahl der Einzelbelegungen in diesem Zeitraum:")." ".$num_single_events."</font><br>";
@@ -291,7 +291,7 @@ class ShowGroupSchedules extends ShowSemSchedules {
                         <a href="<?= URLHelper::getLink('', array('quick_view' => $this->used_view,
                                                                   'quick_view_mode' => $view_mode,
                                                                   'time_range' => $_SESSION['resources_data']['schedule_time_range'] ? 'FALSE' : 1)) ?>">
-                               <?= Icon::create('arr_2down', 'clickable', ['title' => _('Fr¸here Belegungen anzeigen')])->asImg(['class' => 'middle']) ?>
+                               <?= Icon::create('arr_2down', 'clickable', ['title' => _('Fr√ºhere Belegungen anzeigen')])->asImg(['class' => 'middle']) ?>
                         </a>
                     <? endif; ?>
                     </td>

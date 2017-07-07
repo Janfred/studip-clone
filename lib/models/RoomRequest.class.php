@@ -8,8 +8,8 @@
  * the License, or (at your option) any later version.
  *
  * @author      Cornelis Kater <ckater@gwdg.de>
- * @author      Till Glöggler <tgloeggl@uos.de>
- * @author      André Noack <noack@data-quest.de>
+ * @author      Till GlÃ¶ggler <tgloeggl@uos.de>
+ * @author      AndrÃ© Noack <noack@data-quest.de>
  * @author      Suchi & Berg GmbH <info@data-quest.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
@@ -564,7 +564,7 @@ class RoomRequest extends SimpleORMap
     {
         if ($this->isNew()) {
             if (!($this->getSettedPropertiesCount() || $this->getResourceId())) {
-                $requestData[] = _('Die Raumanfrage ist unvollständig, und kann so nicht dauerhaft gespeichert werden!');
+                $requestData[] = _('Die Raumanfrage ist unvollstÃ¤ndig, und kann so nicht dauerhaft gespeichert werden!');
             } else {
                 $requestData[] = _('Die Raumanfrage ist neu.');
             }
@@ -572,15 +572,15 @@ class RoomRequest extends SimpleORMap
         } else {
             $requestData[] = _('Erstellt von') . ': ' . get_fullname($this->user_id);
             $requestData[] = _('Erstellt am') . ': ' . strftime('%x %H:%M', $this->mkdate);
-            $requestData[] = _('Letzte Änderung') . ': ' . strftime('%x %H:%M', $this->chdate);
-            $requestData[] = _('Letzte Änderung von') . ': ' . get_fullname($this->last_modified_by ?: $this->user_id);
+            $requestData[] = _('Letzte Ã„nderung') . ': ' . strftime('%x %H:%M', $this->chdate);
+            $requestData[] = _('Letzte Ã„nderung von') . ': ' . get_fullname($this->last_modified_by ?: $this->user_id);
         }
         if ($this->resource_id) {
             $resObject = ResourceObject::Factory($this->resource_id);
             $requestData[] = _('Raum') . ': ' . $resObject->getName();
             $requestData[] = _('verantwortlich') . ': ' . $resObject->getOwnerName();
         } else {
-            $requestData[] = _('Es wurde kein spezifischer Raum gewünscht');
+            $requestData[] = _('Es wurde kein spezifischer Raum gewÃ¼nscht');
         }
         $requestData[] = '';
 
@@ -626,12 +626,12 @@ class RoomRequest extends SimpleORMap
                 $ret .= chr(10) . '(' . $termin->toString() . ')';
             }
         } elseif ($this->metadate_id) {
-            $ret = _("alle Termine einer regelmäßigen Zeit");
+            $ret = _("alle Termine einer regelmÃ¤ÃŸigen Zeit");
             if ($cycle = SeminarCycleDate::find($this->metadate_id)) {
                 $ret .= chr(10) . ' (' . $cycle->toString('full') . ')';
             }
         } elseif ($this->seminar_id) {
-            $ret =  _("alle regelmäßigen und unregelmäßigen Termine der Veranstaltung");
+            $ret =  _("alle regelmÃ¤ÃŸigen und unregelmÃ¤ÃŸigen Termine der Veranstaltung");
             if (get_object_type($this->seminar_id, array('sem'))) {
                 $course = new Seminar($this->seminar_id);
                 $ret .= chr(10) . ' (' . $course->getDatesExport(array('short' => true, 'shrink' => true)) . ')';

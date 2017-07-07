@@ -17,7 +17,7 @@
         </label>
         <label>
             <input type="checkbox" name="cancel_dates_snd_message" value="1">
-            <?= _('Benachrichtigung über ausfallende Termine an alle Teilnehmer verschicken') ?>
+            <?= _('Benachrichtigung Ã¼ber ausfallende Termine an alle Teilnehmer verschicken') ?>
         </label>
     </fieldset>
     <? if ($issue_id) : ?>

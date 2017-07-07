@@ -8,7 +8,7 @@
 // liteartur.view.class.php
 // Database views used with "Literatruverwaltung"
 // 
-// Copyright (c) 2003 André Noack <noack@data-quest.de> 
+// Copyright (c) 2003 AndrÃ© Noack <noack@data-quest.de> 
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -34,7 +34,7 @@ $_views["LIT_CHECK_ELEMENT"] = array("query" => "SELECT catalog_id FROM lit_cata
 $_views["LIT_LIST_GET_ELEMENTS"] = array("query" => "SELECT list_element_id, b.* FROM lit_list_content LEFT JOIN lit_catalog b USING (catalog_id) WHERE list_id=? ORDER BY priority");
 $_views["LIT_GET_REFERENCE_COUNT"] = array("query" => "SELECT count(*) AS anzahl FROM lit_list_content WHERE catalog_id=?");
 $_views["LIT_GET_CATALOG_COUNT"] = array("query" => "SELECT count(*) AS anzahl FROM lit_catalog");
-$_views["LIT_SEARCH_CATALOG"] = array("query" => "SELECT catalog_id FROM lit_catalog WHERE § ORDER BY dc_date DESC");
+$_views["LIT_SEARCH_CATALOG"] = array("query" => "SELECT catalog_id FROM lit_catalog WHERE Â§ ORDER BY dc_date DESC");
 $_views["LIT_DEL_ELEMENT"] = array("query" => "DELETE FROM lit_catalog WHERE catalog_id=?");
 $_views["LIT_GET_CLIP_ELEMENTS"] = array("query" => "SELECT catalog_id, " . $_views['element_name_short_sql'] . " as short_name 
                                                     FROM  lit_catalog WHERE catalog_id IN(&) ORDER BY short_name");
@@ -55,7 +55,7 @@ $_views["LIT_GET_LIST_CONTENT"] = array("query" => "SELECT a.*," . $_views['elem
                                                     WHERE list_id IN(&) ORDER BY list_id,priority");
 $_views["LIT_UPD_LIST_CONTENT"] = array("query" => "UPDATE lit_list_content SET list_id=?, catalog_id=?, user_id=?,note=?,priority=?, chdate=UNIX_TIMESTAMP() WHERE list_element_id=?");
 $_views["LIT_INS_LIST_CONTENT"] = array("query" => "INSERT INTO lit_list_content (list_id,catalog_id,user_id,note,priority,chdate,mkdate,list_element_id) VALUES (?,?,?,?,?,UNIX_TIMESTAMP(),UNIX_TIMESTAMP(),?)");
-$_views["LIT_UPD_LIST"] = array("query" => "UPDATE lit_list SET range_id=?, name=?, user_id=?,format=?,priority=?,visibility=§, chdate=UNIX_TIMESTAMP() WHERE list_id=?");
+$_views["LIT_UPD_LIST"] = array("query" => "UPDATE lit_list SET range_id=?, name=?, user_id=?,format=?,priority=?,visibility=Â§, chdate=UNIX_TIMESTAMP() WHERE list_id=?");
 $_views["LIT_INS_LIST"] = array("query" => "INSERT INTO lit_list (range_id,name,user_id,format,priority,visibility,chdate,mkdate,list_id) VALUES (?,?,?,?,?,?,UNIX_TIMESTAMP(),UNIX_TIMESTAMP(),?)");
 $_views["LIT_DEL_LIST"] = array("query" => "DELETE FROM lit_list WHERE list_id IN(&)");
 $_views["LIT_DEL_LIST_CONTENT_ALL"] = array("query" => "DELETE FROM lit_list_content WHERE list_id IN(&)");

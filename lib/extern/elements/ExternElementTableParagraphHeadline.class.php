@@ -53,8 +53,8 @@ class ExternElementTableParagraphHeadline extends ExternElement {
             $this->config = $config;
         
         $this->name = "TableParagraphHeadline";
-        $this->real_name = _("Absatz¸berschrift");
-        $this->description = _("Angaben zur Formatierung einer Absatz¸berschrift.");
+        $this->real_name = _("Absatz√ºberschrift");
+        $this->description = _("Angaben zur Formatierung einer Absatz√ºberschrift.");
     }
     
     function toString ($args = null) {

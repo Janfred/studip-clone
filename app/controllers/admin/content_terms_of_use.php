@@ -46,7 +46,7 @@ class Admin_ContentTermsOfUseController extends AuthenticatedController
         //build sidebar
         $actions = new ActionsWidget(_('Aktionen'));
         $actions->addLink(
-            _('Eintrag hinzufügen'),
+            _('Eintrag hinzufÃ¼gen'),
             $this->url_for('admin/content_terms_of_use/add'),
             Icon::create('add', 'clickable')
         )->asDialog();
@@ -65,12 +65,12 @@ class Admin_ContentTermsOfUseController extends AuthenticatedController
         $this->entry = new ContentTermsOfUse($id);
 
         PageLayout::setTitle(
-            $this->entry->isNew() ? _('Eintrag hinzufügen') : _('Eintrag bearbeiten')
+            $this->entry->isNew() ? _('Eintrag hinzufÃ¼gen') : _('Eintrag bearbeiten')
         );
 
         if ($id !== null && $this->entry->isNew()) {
             PageLayout::postError(sprintf(
-                _('Eintrag für Nutzungsbedingungen mit ID %s wurde nicht in der Datenbank gefunden!'),
+                _('Eintrag fÃ¼r Nutzungsbedingungen mit ID %s wurde nicht in der Datenbank gefunden!'),
                 $id
             ));
             $this->redirect('admin/content_terms_of_use/index');
@@ -101,7 +101,7 @@ class Admin_ContentTermsOfUseController extends AuthenticatedController
                 PageLayout::postError(reset($errors));
             } else {
                 PageLayout::postError(
-                    _('Fehler beim Speichern des Eintrags für Nutzungsbedingungen'),
+                    _('Fehler beim Speichern des Eintrags fÃ¼r Nutzungsbedingungen'),
                     $errors
                 );
             }
@@ -111,7 +111,7 @@ class Admin_ContentTermsOfUseController extends AuthenticatedController
             return;
         }
 
-        PageLayout::postSuccess(_('Eintrag für Nutzungsbedingungen wurde gespeichert!'));
+        PageLayout::postSuccess(_('Eintrag fÃ¼r Nutzungsbedingungen wurde gespeichert!'));
         $this->redirect('admin/content_terms_of_use/index');
     }
 
@@ -120,7 +120,7 @@ class Admin_ContentTermsOfUseController extends AuthenticatedController
      */
     public function delete_action()
     {
-        PageLayout::setTitle(_('Eintrag löschen'));
+        PageLayout::setTitle(_('Eintrag lÃ¶schen'));
 
         $this->entry_id = Request::get('entry_id');
 
@@ -129,7 +129,7 @@ class Admin_ContentTermsOfUseController extends AuthenticatedController
         if (!$entry) {
             //entry not found: return to index page
             PageLayout::postError(sprintf(
-                _('Eintrag für Nutzungsbedingungen mit ID %s wurde nicht in der Datenbank gefunden!'),
+                _('Eintrag fÃ¼r Nutzungsbedingungen mit ID %s wurde nicht in der Datenbank gefunden!'),
                 $this->entry_id
             ));
             $this->redirect('admin/content_terms_of_use/index');
@@ -152,7 +152,7 @@ class Admin_ContentTermsOfUseController extends AuthenticatedController
                     //Files depend on the old entry, but no new entry
                     //was selected. That's an error!
                     PageLayout::postError(sprintf(
-                        _('Fehler beim Löschen von Eintrag mit ID %s: Es wurde für betroffene Dateien kein neuer Nutzungsbedingungen-Eintrag ausgewählt!'),
+                        _('Fehler beim LÃ¶schen von Eintrag mit ID %s: Es wurde fÃ¼r betroffene Dateien kein neuer Nutzungsbedingungen-Eintrag ausgewÃ¤hlt!'),
                         $this->entry_id
                     ));
                     $this->redirect('admin/content_terms_of_use/index');
@@ -172,7 +172,7 @@ class Admin_ContentTermsOfUseController extends AuthenticatedController
 
                 if (!$result) {
                     PageLayout::postError(sprintf(
-                        _('Fehler beim Zuordnen von Dateien zu Eintrag mit  ID %s! Eintrag mit ID %s wurde nicht gelöscht!'),
+                        _('Fehler beim Zuordnen von Dateien zu Eintrag mit  ID %s! Eintrag mit ID %s wurde nicht gelÃ¶scht!'),
                         $this->other_entry_id,
                         $this->entry_id
                     ));
@@ -186,26 +186,26 @@ class Admin_ContentTermsOfUseController extends AuthenticatedController
             if ($entry->delete()) {
                 if ($this->dependent_files_count > 0) {
                     PageLayout::postSuccess(sprintf(
-                        _('Eintrag mit ID "%s" wurde gelöscht. Alle Dateien, welche diesen Eintrag verwendeten, nutzen nun den Eintrag mit ID "%s"!'),
+                        _('Eintrag mit ID "%s" wurde gelÃ¶scht. Alle Dateien, welche diesen Eintrag verwendeten, nutzen nun den Eintrag mit ID "%s"!'),
                         $this->entry_id,
                         $this->other_entry_id
                     ));
                 } else {
                     PageLayout::postSuccess(sprintf(
-                        _('Eintrag mit ID "%s" wurde gelöscht!'),
+                        _('Eintrag mit ID "%s" wurde gelÃ¶scht!'),
                         $this->entry_id
                     ));
                 }
             } else {
                 if ($this->dependent_files_count > 0) {
                     PageLayout::postError(sprintf(
-                        _('Fehler beim Löschen von Eintrag mit ID "%s"! Alle Dateien, welche diesen Eintrag verwendeten, nutzen nun den Eintrag mit ID "%s"!'),
+                        _('Fehler beim LÃ¶schen von Eintrag mit ID "%s"! Alle Dateien, welche diesen Eintrag verwendeten, nutzen nun den Eintrag mit ID "%s"!'),
                         $this->entry_id,
                         $this->other_entry_id
                     ));
                 } else {
                     PageLayout::postError(sprintf(
-                        _('Fehler beim Löschen von Eintrag mit ID "%s"!'),
+                        _('Fehler beim LÃ¶schen von Eintrag mit ID "%s"!'),
                         $this->entry_id
                     ));
                 }

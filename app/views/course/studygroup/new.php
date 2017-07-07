@@ -18,7 +18,7 @@ use Studip\Button, Studip\LinkButton;
 
 <tr>
   <td style='text-align:right; vertical-align:top;'><label for="groupdescription"><?= _("Beschreibung:") ?></label></td>
-  <td><textarea name='groupdescription' id='groupdescription' rows=5 cols=50 placeholder="<?= _("Hier aussagekräftige Beschreibung eingeben.") ?>"><?= htmlReady($this->flash['request']['groupdescription']) ?></textarea></td>
+  <td><textarea name='groupdescription' id='groupdescription' rows=5 cols=50 placeholder="<?= _("Hier aussagekrÃ¤ftige Beschreibung eingeben.") ?>"><?= htmlReady($this->flash['request']['groupdescription']) ?></textarea></td>
 </tr>
 
 <? if ($GLOBALS['perm']->have_perm('admin')) : ?>
@@ -80,7 +80,7 @@ use Studip\Button, Studip\LinkButton;
   <td style='text-align:right;'><label for="groupaccess"><?= _("Zugang:") ?></label></td>
   <td>
       <select name="groupaccess" id="groupaccess">
-         <option <?= ($groupaccess == 'all') ? 'selected="selected"':'' ?> value="all"><?= _("Offen für alle") ?></option>
+         <option <?= ($groupaccess == 'all') ? 'selected="selected"':'' ?> value="all"><?= _("Offen fÃ¼r alle") ?></option>
          <option <?= ($groupaccess == 'invite') ? 'selected="selected"':'' ?> value="invite"><?= _("Auf Anfrage") ?></option>
          <? if (Config::get()->STUDYGROUPS_INVISIBLE_ALLOWED): ?>
              <option <?= ($groupaccess == 'invisible') ? 'selected="selected"':'' ?> value="invisible"><?= _('Unsichtbar') ?></option>
@@ -99,7 +99,7 @@ use Studip\Button, Studip\LinkButton;
   <td>
     <? if ($GLOBALS['perm']->have_perm('admin')) : ?>
     <p>
-      <b><?= _("Ich habe die eingetragenen GründerInnen darüber informiert, dass in Ihrem Namen eine Studiengruppe angelegt wird und versichere, dass Sie mit folgenden Nutzungsbedingungen einverstandenen sind:") ?></b>
+      <b><?= _("Ich habe die eingetragenen GrÃ¼nderInnen darÃ¼ber informiert, dass in Ihrem Namen eine Studiengruppe angelegt wird und versichere, dass Sie mit folgenden Nutzungsbedingungen einverstandenen sind:") ?></b>
     </p>
     <? endif; ?>
     <p>

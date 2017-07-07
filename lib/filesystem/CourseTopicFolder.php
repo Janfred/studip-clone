@@ -7,7 +7,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author    André Noack <noack@data-quest.de>
+ * @author    AndrÃ© Noack <noack@data-quest.de>
  * @copyright 2016 Stud.IP Core-Group
  * @license   http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category  Stud.IP
@@ -54,7 +54,7 @@ class CourseTopicFolder extends StandardFolder implements FolderType
     public function setDataFromEditTemplate($request)
     {
         if ($request['topic_id'] == null) {
-            return MessageBox::error(_('Es wurde kein Thema ausgewählt.'));
+            return MessageBox::error(_('Es wurde kein Thema ausgewÃ¤hlt.'));
         }
 
         $this->folderdata['data_content']['topic_id'] = $request['topic_id'];

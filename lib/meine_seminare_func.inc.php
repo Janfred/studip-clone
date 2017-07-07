@@ -95,8 +95,8 @@ function sort_groups($group_field, &$groups)
 
         case 'dozent_id':
         uksort($groups, create_function('$a,$b',
-                'return strnatcasecmp(str_replace(array("ä","ö","ü"), array("ae","oe","ue"), mb_strtolower(get_fullname($a, "no_title_short"))),
-                                    str_replace(array("ä","ö","ü"), array("ae","oe","ue"), mb_strtolower(get_fullname($b, "no_title_short"))));'));
+                'return strnatcasecmp(str_replace(array("Ã¤","Ã¶","Ã¼"), array("ae","oe","ue"), mb_strtolower(get_fullname($a, "no_title_short"))),
+                                    str_replace(array("Ã¤","Ã¶","Ã¼"), array("ae","oe","ue"), mb_strtolower(get_fullname($b, "no_title_short"))));'));
         break;
 
         default:
@@ -243,7 +243,7 @@ function fill_groups(&$groups, $group_key, $group_entry)
     if (is_null($group_key)){
         $group_key = 'not_grouped';
     }
-    $group_entry['name'] = str_replace(array("ä","ö","ü"), array("ae","oe","ue"), mb_strtolower($group_entry['name']));
+    $group_entry['name'] = str_replace(array("Ã¤","Ã¶","Ã¼"), array("ae","oe","ue"), mb_strtolower($group_entry['name']));
     if (!is_array($groups[$group_key]) || (is_array($groups[$group_key]) && !in_array($group_entry, $groups[$group_key]))){
         $groups[$group_key][$group_entry['seminar_id']] = $group_entry;
         return true;
@@ -356,7 +356,7 @@ function get_my_obj_values (&$my_obj, $user_id)
         }
     }
 
-    //Ankündigungen
+    //AnkÃ¼ndigungen
     $db2->query(get_obj_clause('news_range a {ON_CLAUSE} LEFT JOIN news nw ON(a.news_id=nw.news_id AND UNIX_TIMESTAMP() BETWEEN date AND (date+expire))','range_id','nw.news_id',"(chdate > IFNULL(b.visitdate, $threshold) AND nw.user_id !='$user_id')",'news',false,false,'a.news_id', $user_id));
     while($db2->next_record()) {
         $object_id = $db2->f('object_id');
@@ -370,10 +370,10 @@ function get_my_obj_values (&$my_obj, $user_id)
 
         if ($db2->f('neue')) {
             $nav->setURL('?new_news=true');
-            $nav->setImage(Icon::create('news+new', 'attention', ["title" => sprintf(_('%s Ankündigungen, %s neue'),$db2->f('count'),$db2->f('neue'))]));
+            $nav->setImage(Icon::create('news+new', 'attention', ["title" => sprintf(_('%s AnkÃ¼ndigungen, %s neue'),$db2->f('count'),$db2->f('neue'))]));
             $nav->setBadgeNumber($db2->f('neue'));
         } else if ($db2->f('count')) {
-            $nav->setImage(Icon::create('news', 'inactive', ["title" => sprintf(_('%s Ankündigungen'),$db2->f('count'))]));
+            $nav->setImage(Icon::create('news', 'inactive', ["title" => sprintf(_('%s AnkÃ¼ndigungen'),$db2->f('count'))]));
         }
 
         $my_obj[$object_id]['news'] = $nav;
@@ -400,9 +400,9 @@ function get_my_obj_values (&$my_obj, $user_id)
                     $nav->setBadgeNumber($db2->f('neue'));
 
                     if ($db2->f('count') == 1) {
-                        $title = $db2->f('tab_name')._(' (geändert)');
+                        $title = $db2->f('tab_name')._(' (geÃ¤ndert)');
                     } else {
-                        $title = sprintf(_('%s Einträge, %s neue'), $db2->f('count') ,$db2->f('neue'));
+                        $title = sprintf(_('%s EintrÃ¤ge, %s neue'), $db2->f('count') ,$db2->f('neue'));
                     }
                 } else {
                     $image = Icon::create('infopage', 'inactive');
@@ -410,7 +410,7 @@ function get_my_obj_values (&$my_obj, $user_id)
                     if ($db2->f('count') == 1) {
                         $title = $db2->f('tab_name');
                     } else {
-                        $title = sprintf(_('%s Einträge'), $db2->f('count'));
+                        $title = sprintf(_('%s EintrÃ¤ge'), $db2->f('count'));
                     }
                 }
 
@@ -473,7 +473,7 @@ function get_my_obj_values (&$my_obj, $user_id)
 
                 if ($db2->f('neue')) {
                     $nav->setURL('wiki.php?view=listnew');
-                    $nav->setImage(Icon::create('wiki+new', 'attention', ["title" => sprintf(_('%s WikiSeiten, %s Änderungen'),$db2->f('count_d'),$db2->f('neue'))]));
+                    $nav->setImage(Icon::create('wiki+new', 'attention', ["title" => sprintf(_('%s WikiSeiten, %s Ã„nderungen'),$db2->f('count_d'),$db2->f('neue'))]));
                     $nav->setBadgeNumber($db2->f('neue'));
                 } else if ($db2->f('count')) {
                     $nav->setURL('wiki.php');
@@ -570,10 +570,10 @@ function get_my_obj_values (&$my_obj, $user_id)
             $nav = new Navigation('vote', '#vote');
 
             if ($my_obj[$object_id]['neuevotes']) {
-                $nav->setImage(Icon::create('vote+new', 'attention', ["title" => sprintf(_('%s Fragebögen, %s neue'),$my_obj[$object_id]['votes'],$my_obj[$object_id]['neuevotes'])]));
+                $nav->setImage(Icon::create('vote+new', 'attention', ["title" => sprintf(_('%s FragebÃ¶gen, %s neue'),$my_obj[$object_id]['votes'],$my_obj[$object_id]['neuevotes'])]));
                 $nav->setBadgeNumber($my_obj[$object_id]['neuevotes']);
             } else if ($my_obj[$object_id]['votes']) {
-                $nav->setImage(Icon::create('vote', 'inactive', ["title" => sprintf(_('%s Fragebögen'),$my_obj[$object_id]['votes'])]));
+                $nav->setImage(Icon::create('vote', 'inactive', ["title" => sprintf(_('%s FragebÃ¶gen'),$my_obj[$object_id]['votes'])]));
             }
 
             $my_obj[$object_id]['vote'] = $nav;
@@ -608,7 +608,7 @@ function get_my_obj_values (&$my_obj, $user_id)
 
     // TeilnehmerInnen
     if ($GLOBALS['perm']->have_perm('tutor')) {
-        //vorläufige Teilnahme
+        //vorlÃ¤ufige Teilnahme
         $db2->query(get_obj_clause('admission_seminar_user a','seminar_id','a.user_id',
             "(mkdate > IFNULL(b.visitdate, $threshold) AND a.user_id !='$user_id')",
             'participants', false, " AND a.status='accepted' ", false, $user_id, 'mkdate'));

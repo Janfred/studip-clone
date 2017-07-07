@@ -1,14 +1,14 @@
 <?php
 # Lifter010: TODO
 /**
- * webservice_access.php - access rules für webservices admin controller
+ * webservice_access.php - access rules fÃ¼r webservices admin controller
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      André Noack <noack@data-quest.de>
+ * @author      AndrÃ© Noack <noack@data-quest.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
  * @package     admin
@@ -31,7 +31,7 @@ class Admin_WebserviceAccessController extends AuthenticatedController
             throw new AccessDeniedException(_("Die Webservices sind in diesem System nicht aktiviert."));
         }
 
-        PageLayout::setTitle(_('Verwaltung der Zugriffsregeln für Webservices'));
+        PageLayout::setTitle(_('Verwaltung der Zugriffsregeln fÃ¼r Webservices'));
         Navigation::activateItem('/admin/config/webservice_access');
 
         $this->get_all_rules();
@@ -67,7 +67,7 @@ class Admin_WebserviceAccessController extends AuthenticatedController
     {
         $rule = $this->ws_rules[$id];
         if ($rule && !$rule->isNew() && $rule->delete()) {
-            PageLayout::postMessage(MessageBox::success(_("Die Regel wurde gelöscht.")));
+            PageLayout::postMessage(MessageBox::success(_("Die Regel wurde gelÃ¶scht.")));
         }
         $this->redirect($this->url_for('admin/webservice_access'));
     }
@@ -98,15 +98,15 @@ class Admin_WebserviceAccessController extends AuthenticatedController
                 }
                 list($ip_address, $mask) = explode('/', $ip);
                 if (!ip2long($ip_address) || ($mask && ($mask < 8 || $mask > 30))) {
-                    $msg['error'][] = sprintf(_("Der IP Bereich %s ist ungültig."), htmlready($ip));
+                    $msg['error'][] = sprintf(_("Der IP Bereich %s ist ungÃ¼ltig."), htmlready($ip));
                     unset($rule->ip_range[$key]);
                 }
             }
             if (!$rule->method) {
-                $msg['info'][] = _("Eine Regel ohne angegebene Methode gilt für alle Methoden!");
+                $msg['info'][] = _("Eine Regel ohne angegebene Methode gilt fÃ¼r alle Methoden!");
             }
             if (!count($rule->ip_range)) {
-                $msg['info'][] = _("Eine Regel ohne IP Bereich gilt für alle IP Adressen!");
+                $msg['info'][] = _("Eine Regel ohne IP Bereich gilt fÃ¼r alle IP Adressen!");
             }
             if ($msg['error']) {
                 PageLayout::postMessage(MessageBox::error(_("Die Regel wurde nicht gespeichert."), $msg['error']));

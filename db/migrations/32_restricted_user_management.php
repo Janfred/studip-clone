@@ -11,7 +11,7 @@ class RestrictedUserManagement extends Migration
         $db = DBManager::get();
 
         $name = 'RESTRICTED_USER_MANAGEMENT';
-        $description = 'Schränkt Zugriff auf die globale Nutzerverwaltung auf root ein';
+        $description = 'SchrÃ¤nkt Zugriff auf die globale Nutzerverwaltung auf root ein';
         $time = time();
 
         $db->exec("

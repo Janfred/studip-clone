@@ -202,13 +202,13 @@ class ShowToolsRequests
             }
             $desc = '';
             if ($overlap_events_count >= round($events_count * Config::get()->RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE / 100)) {
-                if ($overlap_events_count == 1) if ($lock_desc) $desc .= sprintf(_("Es besteht eine Belegungssperre zur gewünschten Belegungszeit.") . "\n" . $lock_desc); else
-                    $desc .= sprintf(_("Es existieren Überschneidungen zur gewünschten Belegungszeit.") . "\n"); else
-                    $desc .= sprintf(_("Es existieren Überschneidungen oder Belegungssperren zu mehr als %s%% aller gewünschten Belegungszeiten.") . "\n" . $lock_desc, Config::get()->RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE);
+                if ($overlap_events_count == 1) if ($lock_desc) $desc .= sprintf(_("Es besteht eine Belegungssperre zur gewÃ¼nschten Belegungszeit.") . "\n" . $lock_desc); else
+                    $desc .= sprintf(_("Es existieren Ãœberschneidungen zur gewÃ¼nschten Belegungszeit.") . "\n"); else
+                    $desc .= sprintf(_("Es existieren Ãœberschneidungen oder Belegungssperren zu mehr als %s%% aller gewÃ¼nschten Belegungszeiten.") . "\n" . $lock_desc, Config::get()->RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE);
                 $html   = Icon::create('radiobutton-checked', 'attention', ['title' => $desc] + $style)->asImg();
                 $status = 2;
             } else {
-                $desc .= sprintf(_("Einige der gewünschten Belegungszeiten überschneiden sich mit eingetragenen Belegungen bzw. Sperrzeiten:\n"));
+                $desc .= sprintf(_("Einige der gewÃ¼nschten Belegungszeiten Ã¼berschneiden sich mit eingetragenen Belegungen bzw. Sperrzeiten:\n"));
                 foreach ($group_dates as $key => $val) {
                     if ($overlaps[$key]) foreach ($overlaps[$key] as $key2 => $val2) if ($val2["lock"]) $desc .= sprintf(_("%s, %s Uhr bis %s, %s Uhr (Sperrzeit)") . "\n", date("d.m.Y", $val2["begin"]), date("H:i", $val2["begin"]), date("d.m.Y", $val2["end"]), date("H:i", $val2["end"])); else
                         $desc .= sprintf(_("%s von %s bis %s Uhr") . "\n", date("d.m.Y", $val2["begin"]), date("H:i", $val2["begin"]), date("H:i", $val2["end"]));
@@ -217,7 +217,7 @@ class ShowToolsRequests
                 $status = 1;
             }
         } else {
-            $html   = Icon::create('radiobutton-checked', 'accept', ['title' => _('Es existieren keine Überschneidungen')] + $style)->asImg();
+            $html   = Icon::create('radiobutton-checked', 'accept', ['title' => _('Es existieren keine Ãœberschneidungen')] + $style)->asImg();
             $status = 0;
         }
         return ["html" => $html, "status" => $status];
@@ -238,13 +238,13 @@ class ShowToolsRequests
             }
             $desc = '';
             if ($overlap_events_count >= round($events_count * Config::get()->RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE / 100)) {
-                if ($overlap_events_count == 1) if ($overlaps[0]["lock"]) $desc .= sprintf(_("Es besteht eine Belegungssperre zur gewünschten Belegungszeit.") . "\n" . $lock_desc); else
-                    $desc .= sprintf(_("Es existieren Überschneidungen zur gewünschten Belegungszeit.") . "\n"); else
-                    $desc .= sprintf(_("Es existieren Überschneidungen oder Belegungssperren zu mehr als %s%% aller gewünschten Belegungszeiten.") . "\n" . $lock_desc, Config::get()->RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE);
+                if ($overlap_events_count == 1) if ($overlaps[0]["lock"]) $desc .= sprintf(_("Es besteht eine Belegungssperre zur gewÃ¼nschten Belegungszeit.") . "\n" . $lock_desc); else
+                    $desc .= sprintf(_("Es existieren Ãœberschneidungen zur gewÃ¼nschten Belegungszeit.") . "\n"); else
+                    $desc .= sprintf(_("Es existieren Ãœberschneidungen oder Belegungssperren zu mehr als %s%% aller gewÃ¼nschten Belegungszeiten.") . "\n" . $lock_desc, Config::get()->RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE);
                 $html   = Icon::create('decline', 'attention', ['title' => $desc])->asImg();
                 $status = 2;
             } else {
-                $desc .= sprintf(_("Einige der gewünschten Belegungszeiten überschneiden sich mit eingetragenen Belegungen bzw. Sperrzeiten:\n"));
+                $desc .= sprintf(_("Einige der gewÃ¼nschten Belegungszeiten Ã¼berschneiden sich mit eingetragenen Belegungen bzw. Sperrzeiten:\n"));
                 foreach ($overlaps as $val) {
                     if ($val["lock"]) $desc .= sprintf(_("%s, %s Uhr bis %s, %s Uhr (Sperrzeit)") . "\n", date("d.m.Y", $val["begin"]), date("H:i", $val["begin"]), date("d.m.Y", $val["end"]), date("H:i", $val["end"])); else
                         $desc .= sprintf(_("%s von %s bis %s Uhr") . "\n", date("d.m.Y", $val["begin"]), date("H:i", $val["begin"]), date("H:i", $val["end"]));
@@ -253,7 +253,7 @@ class ShowToolsRequests
                 $status = 1;
             }
         } else {
-            $html   = Icon::create('accept', 'accept', ['title' => _('Es existieren keine Überschneidungen')])->asImg();
+            $html   = Icon::create('accept', 'accept', ['title' => _('Es existieren keine Ãœberschneidungen')])->asImg();
             $status = 0;
         }
         return ["html" => $html, "status" => $status];

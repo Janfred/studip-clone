@@ -19,7 +19,7 @@ require_once 'app/models/members.php';
 require_once 'lib/messaging.inc.php'; //Funktionen des Nachrichtensystems
 
 require_once 'lib/admission.inc.php'; //Funktionen der Teilnehmerbegrenzung
-require_once 'lib/export/export_studipdata_func.inc.php'; // Funktionne für den Export
+require_once 'lib/export/export_studipdata_func.inc.php'; // Funktionne fÃ¼r den Export
 require_once 'lib/export/export_linking_func.inc.php';
 
 
@@ -138,7 +138,7 @@ class Course_MembersController extends AuthenticatedController
 
         // Check autor-perms
         if (!$this->is_tutor) {
-            SkipLinks::addIndex(_("Sichtbarkeit ändern"), 'change_visibility');
+            SkipLinks::addIndex(_("Sichtbarkeit Ã¤ndern"), 'change_visibility');
             // filter invisible user
             $this->invisibles = count($filtered_members['autor']->findBy('visible', 'no')) + count($filtered_members['user']->findBy('visible', 'no'));
             $current_user_id = $this->user_id;
@@ -169,9 +169,9 @@ class Course_MembersController extends AuthenticatedController
             if ($sem->getCourseSet()->hasAlgorithmRun()) {
                 $this->waitingTitle = _("Warteliste");
                 if (!$sem->admission_disable_waitlist_move) {
-                    $this->waitingTitle .= ' (' . _("automatisches Nachrücken ist eingeschaltet") . ')';
+                    $this->waitingTitle .= ' (' . _("automatisches NachrÃ¼cken ist eingeschaltet") . ')';
                 } else {
-                    $this->waitingTitle .= ' (' . _("automatisches Nachrücken ist ausgeschaltet") . ')';
+                    $this->waitingTitle .= ' (' . _("automatisches NachrÃ¼cken ist ausgeschaltet") . ')';
                 }
                 $this->semAdmissionEnabled = 2;
                 $this->waiting_type = 'awaiting';
@@ -244,7 +244,7 @@ class Course_MembersController extends AuthenticatedController
         }
         $this->comment = $course_member->comment;
         $this->user = User::find($user_id);
-        PageLayout::setTitle(sprintf(_('Bemerkung für %s'), $this->user->getFullName()));
+        PageLayout::setTitle(sprintf(_('Bemerkung fÃ¼r %s'), $this->user->getFullName()));
 
         // Output as dialog (Ajax-Request) or as Stud.IP page?
         $this->xhr = Request::isXhr();
@@ -308,9 +308,9 @@ class Course_MembersController extends AuthenticatedController
         }
 
         if ($countAdded == 1) {
-            $text = _("Es wurde eine neue Person hinzugefügt.");
+            $text = _("Es wurde eine neue Person hinzugefÃ¼gt.");
         } else {
-            $text = sprintf(_("Es wurden %s neue Personen hinzugefügt."), $countAdded);
+            $text = sprintf(_("Es wurden %s neue Personen hinzugefÃ¼gt."), $countAdded);
         }
         PageLayout::postSuccess($text);
         $this->redirect('course/members/index');
@@ -339,9 +339,9 @@ class Course_MembersController extends AuthenticatedController
         if($countAdded > 0) {
             $status = get_title_for_status('dozent', $countAdded, $sem->status);
             if ($countAdded == 1) {
-                PageLayout::postSuccess(sprintf(_('Ein %s wurde hinzugefügt.'), $status));
+                PageLayout::postSuccess(sprintf(_('Ein %s wurde hinzugefÃ¼gt.'), $status));
             } else {
-                PageLayout::postSuccess(sprintf(_("Es wurden %s %s Personen hinzugefügt."), $countAdded, $status));
+                PageLayout::postSuccess(sprintf(_("Es wurden %s %s Personen hinzugefÃ¼gt."), $countAdded, $status));
             }
         }
 
@@ -372,8 +372,8 @@ class Course_MembersController extends AuthenticatedController
         }
 
         if ($countAdded) {
-            PageLayout::postSuccess(sprintf(ngettext('Es wurde %u neue Person auf der Warteliste hinzugefügt.',
-                'Es wurden %u neue Personen auf der Warteliste hinzugefügt.', $countAdded), $countAdded));
+            PageLayout::postSuccess(sprintf(ngettext('Es wurde %u neue Person auf der Warteliste hinzugefÃ¼gt.',
+                'Es wurden %u neue Personen auf der Warteliste hinzugefÃ¼gt.', $countAdded), $countAdded));
         }
         if ($countFailed) {
             PageLayout::postError(sprintf(ngettext('%u Person konnte nicht auf die Warteliste eingetragen werden.',
@@ -437,7 +437,7 @@ class Course_MembersController extends AuthenticatedController
             }
         }
         if($countAdded) {
-            PageLayout::postMessage(MessageBox::success(sprintf(_('%s wurde hinzugefügt.'), get_title_for_status('tutor', $countAdded, $sem->status))));
+            PageLayout::postMessage(MessageBox::success(sprintf(_('%s wurde hinzugefÃ¼gt.'), get_title_for_status('tutor', $countAdded, $sem->status))));
         }
         $this->redirect('course/members/index');
     }
@@ -501,7 +501,7 @@ class Course_MembersController extends AuthenticatedController
                     }
                 }
 
-                PageLayout::setTitle( _('Zielveranstaltung auswählen'));
+                PageLayout::setTitle( _('Zielveranstaltung auswÃ¤hlen'));
             } else {
                 if (Request::isXhr()) {
                     $this->response->add_header('X-Dialog-Close', '1');
@@ -554,7 +554,7 @@ class Course_MembersController extends AuthenticatedController
                 PageLayout::postError($text);
             }
         } else {
-            PageLayout::postError(_('Bitte wählen Sie eine Zielveranstaltung.'));
+            PageLayout::postError(_('Bitte wÃ¤hlen Sie eine Zielveranstaltung.'));
         }
         $this->redirect('course/members/index');
     }
@@ -739,7 +739,7 @@ class Course_MembersController extends AuthenticatedController
         }
 
         if ($csv_count_contingent_full) {
-            PageLayout::postError(sprintf(_('%s Personen konnten <b>nicht</b> zugeordnet werden, da das ausgewählte Kontingent keine freien Plätze hat.'),
+            PageLayout::postError(sprintf(_('%s Personen konnten <b>nicht</b> zugeordnet werden, da das ausgewÃ¤hlte Kontingent keine freien PlÃ¤tze hat.'),
                 $csv_count_contingent_full));
         }
 
@@ -791,9 +791,9 @@ class Course_MembersController extends AuthenticatedController
         }
 
         if ($result > 0) {
-            PageLayout::postSuccess(_('Ihre Sichtbarkeit wurde erfolgreich geändert.'));
+            PageLayout::postSuccess(_('Ihre Sichtbarkeit wurde erfolgreich geÃ¤ndert.'));
         } else {
-            PageLayout::postError(_('Leider ist beim Ändern der Sichtbarkeit ein Fehler aufgetreten. Die Einstellung konnte nicht vorgenommen werden.'));
+            PageLayout::postError(_('Leider ist beim Ã„ndern der Sichtbarkeit ein Fehler aufgetreten. Die Einstellung konnte nicht vorgenommen werden.'));
         }
         $this->redirect('course/members/index');
     }
@@ -1037,18 +1037,18 @@ class Course_MembersController extends AuthenticatedController
                         $message = sprintf(_('%s wurde aus der Anmelde bzw. Warteliste mit dem Status
                             <b>%s</b> in die Veranstaltung eingetragen.'), htmlReady(join(', ', $msgs)), $this->decoratedStatusGroups[$target_status]);
                     } else {
-                        $message = sprintf(_('%s wurde mit dem Status <b>%s</b> endgültig akzeptiert
+                        $message = sprintf(_('%s wurde mit dem Status <b>%s</b> endgÃ¼ltig akzeptiert
                             und damit in die Veranstaltung aufgenommen.'), htmlReady(join(', ', $msgs)), $this->decoratedStatusGroups[$target_status]);
                     }
                 }
 
                 PageLayout::postSuccess($message);
             } else {
-                $message = _("Es stehen keine weiteren Plätze mehr im Teilnehmerkontingent zur Verfügung.");
+                $message = _("Es stehen keine weiteren PlÃ¤tze mehr im Teilnehmerkontingent zur VerfÃ¼gung.");
                 PageLayout::postError($message);
             }
         } else {
-            PageLayout::postError(_('Sie haben niemanden zum Hochstufen ausgewählt.'));
+            PageLayout::postError(_('Sie haben niemanden zum Hochstufen ausgewÃ¤hlt.'));
         }
 
         $this->redirect('course/members/index');
@@ -1091,7 +1091,7 @@ class Course_MembersController extends AuthenticatedController
                         }
                     }
                 } else {
-                    PageLayout::postWarning(sprintf(_('Sie haben keine %s zum Austragen ausgewählt'), $this->status_groups[$status]));
+                    PageLayout::postWarning(sprintf(_('Sie haben keine %s zum Austragen ausgewÃ¤hlt'), $this->status_groups[$status]));
                 }
             } else {
                 if ($cmd == "singleuser") {
@@ -1150,18 +1150,18 @@ class Course_MembersController extends AuthenticatedController
             $msgs = $this->members->setMemberStatus($users, $status, $next_status, 'upgrade');
 
             if ($msgs['success']) {
-                PageLayout::postSuccess(sprintf(_('Das Hochstufen auf den Status  %s von %s wurde erfolgreich durchgeführt'),
+                PageLayout::postSuccess(sprintf(_('Das Hochstufen auf den Status  %s von %s wurde erfolgreich durchgefÃ¼hrt'),
                     htmlReady($this->decoratedStatusGroups[$next_status]),
                     htmlReady(join(', ', $msgs['success']))));
             }
 
             if ($msgs['no_tutor']) {
-                PageLayout::postError(sprintf(_('Das Hochstufen auf den Status  %s von %s konnte wegen fehlender Rechte nicht durchgeführt werden.'),
+                PageLayout::postError(sprintf(_('Das Hochstufen auf den Status  %s von %s konnte wegen fehlender Rechte nicht durchgefÃ¼hrt werden.'),
                     htmlReady($this->decoratedStatusGroups[$next_status]),
                     htmlReady(join(', ', $msgs['no_tutor']))));
             }
         } else {
-            PageLayout::postError(sprintf(_('Sie haben keine %s zum Hochstufen ausgewählt'), htmlReady($this->status_groups[$status])));
+            PageLayout::postError(sprintf(_('Sie haben keine %s zum Hochstufen ausgewÃ¤hlt'), htmlReady($this->status_groups[$status])));
         }
 
         $this->redirect('course/members/index');
@@ -1206,7 +1206,7 @@ class Course_MembersController extends AuthenticatedController
                     $this->decoratedStatusGroups[$next_status]));
             }
         } else {
-            PageLayout::postError(sprintf(_('Sie haben keine %s zum Herunterstufen ausgewählt'), htmlReady($this->status_groups[$status])));
+            PageLayout::postError(sprintf(_('Sie haben keine %s zum Herunterstufen ausgewÃ¤hlt'), htmlReady($this->status_groups[$status])));
         }
 
         $this->redirect('course/members/index');
@@ -1242,7 +1242,7 @@ class Course_MembersController extends AuthenticatedController
                     count($msg['error']) <= 5 ? $msg['error'] : []);
             }
         } else {
-            PageLayout::postError(_('Sie haben keine Personen zum Verschieben auf die Warteliste ausgewählt'));
+            PageLayout::postError(_('Sie haben keine Personen zum Verschieben auf die Warteliste ausgewÃ¤hlt'));
         }
 
         $this->redirect('course/members/index');
@@ -1588,12 +1588,12 @@ class Course_MembersController extends AuthenticatedController
         } else if ($this->is_autor || $this->is_user) {
             // Visibility preferences
             if (!$this->my_visibility['iam_visible']) {
-                $text = _('Sie sind für andere Teilnehmenden auf der Teilnehmendenliste nicht sichtbar.');
+                $text = _('Sie sind fÃ¼r andere Teilnehmenden auf der Teilnehmendenliste nicht sichtbar.');
                 $icon = Icon::create('visibility-visible', 'clickable');
                 $modus = 'make_visible';
                 $link_text = _('Klicken Sie hier, um sichtbar zu werden.');
             } else {
-                $text = _('Sie sind für andere Teilnehmenden auf der Teilnehmendenliste sichtbar.');
+                $text = _('Sie sind fÃ¼r andere Teilnehmenden auf der Teilnehmendenliste sichtbar.');
                 $icon = Icon::create('visibility-invisible', 'clickable');
                 $modus = 'make_invisible';
                 $link_text = _('Klicken Sie hier, um unsichtbar zu werden.');
@@ -1621,7 +1621,7 @@ class Course_MembersController extends AuthenticatedController
         $autoren = $filtered_members['autor']->toArray('user_id username vorname nachname visible mkdate');
 
 
-        $header = array(_('Titel'), _('Vorname'), _('Nachname'), _('Titel2'), _('Nutzernamen'), _('Privatadr'), _('Privatnr'), _('E-Mail'), _('Anmeldedatum'), _('Studiengänge'));
+        $header = array(_('Titel'), _('Vorname'), _('Nachname'), _('Titel2'), _('Nutzernamen'), _('Privatadr'), _('Privatnr'), _('E-Mail'), _('Anmeldedatum'), _('StudiengÃ¤nge'));
         $data = array($header);
         foreach (array($dozenten, $tutoren, $autoren) as $usergroup) {
             foreach ($usergroup as $dozent) {

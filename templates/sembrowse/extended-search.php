@@ -90,7 +90,7 @@ SkipLinks::addLink(
             ]) ?>
         </td>
         <td align="right">
-            <label for="search_sem_combination"><?= _('Verknüpfung') ?>:</label>
+            <label for="search_sem_combination"><?= _('VerknÃ¼pfung') ?>:</label>
         </td>
         <td>
             <?= $search_obj->getSearchField('combination', ['id' => 'search_sem_combination']) ?>
@@ -114,9 +114,9 @@ SkipLinks::addLink(
         <td align="center" colspan="4">
             <?= $search_obj->getSearchButton() ?>
             <?= Studip\LinkButton::createCancel(
-                _('Zurücksetzen'),
+                _('ZurÃ¼cksetzen'),
                 URLHelper::getURL('?cmd=xts&level=f&reset_all=1'),
-                ['title' => _('Zurücksetzen')]
+                ['title' => _('ZurÃ¼cksetzen')]
             ) ?>
         </td>
     </tr>

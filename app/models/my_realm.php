@@ -306,8 +306,8 @@ class MyRealmModel
                         [
                             'title' => sprintf(
                                 ngettext(
-                                    '%1$d Ankündigung, %2$d neue',
-                                    '%1$d Ankündigungen, %2$d neue',
+                                    '%1$d AnkÃ¼ndigung, %2$d neue',
+                                    '%1$d AnkÃ¼ndigungen, %2$d neue',
                                     $result['count']
                                 ),
                                 $result['count'],
@@ -325,8 +325,8 @@ class MyRealmModel
                         [
                             'title' => sprintf(
                                 ngettext(
-                                    '%d Ankündigung',
-                                    '%d Ankündigungen',
+                                    '%d AnkÃ¼ndigung',
+                                    '%d AnkÃ¼ndigungen',
                                     $result['count']
                                 ),
                                 $result['count']
@@ -383,10 +383,10 @@ class MyRealmModel
                         $image = Icon::create('infopage+new', 'new');
                         $nav->setBadgeNumber($result['neue']);
                         if ($result['count'] == 1) {
-                            $title = $result['tab_name'] . _(' (geändert)');
+                            $title = $result['tab_name'] . _(' (geÃ¤ndert)');
                         } else {
                             $title = sprintf(
-                                _('%1$d Einträge insgesamt, %2$d neue'),
+                                _('%1$d EintrÃ¤ge insgesamt, %2$d neue'),
                                 $result['count'],
                                 $result['neue']
                             );
@@ -394,12 +394,12 @@ class MyRealmModel
                     } else {
                         $image = Icon::create('infopage', 'inactive');
                         if ($result['count'] == 1) {
-                            $title = $result['tab_name'] . _(' (geändert)');
+                            $title = $result['tab_name'] . _(' (geÃ¤ndert)');
                         } else {
                             $title = sprintf(
                                 ngettext(
                                     '%d Eintrag',
-                                    '%d Einträge',
+                                    '%d EintrÃ¤ge',
                                     $result['count']
                                 ),
                                 $result['count']
@@ -568,8 +568,8 @@ class MyRealmModel
                             [
                                 'title' => sprintf(
                                     ngettext(
-                                        '%1$d Wiki-Seite, %2$d Änderung(en)',
-                                        '%1$d Wiki-Seiten, %2$d Änderung(en)',
+                                        '%1$d Wiki-Seite, %2$d Ã„nderung(en)',
+                                        '%1$d Wiki-Seiten, %2$d Ã„nderung(en)',
                                         $result['count_d']
                                     ),
                                     $result['count_d'],
@@ -760,7 +760,7 @@ class MyRealmModel
                     'title' => sprintf(
                         ngettext(
                             '%1$u Fragebogen, %2$u neuer',
-                            '%1$u Fragebögen, %2$u neue',
+                            '%1$u FragebÃ¶gen, %2$u neue',
                             $count
                         ),
                         $count,
@@ -773,7 +773,7 @@ class MyRealmModel
                     'title' => sprintf(
                         ngettext(
                             '%u Fragebogen',
-                            '%u Fragebögen',
+                            '%u FragebÃ¶gen',
                             $count
                         ),
                         $count

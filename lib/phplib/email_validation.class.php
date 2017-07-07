@@ -10,7 +10,7 @@ class email_validation_class
 {
     var $username_regular_expression=null;
     var $password_regular_expression="/^([[:print:]]{4,72})\$/";
-    var $name_regular_expression='/^[-_ a-zA-ZÀ-ÿ\']+$/';
+    var $name_regular_expression='/^[-_ a-zA-ZÃ€-Ã¿\']+$/';
     var $telefon_regular_expression="/^([0-9 \(\)\\/+_-]*)\$/";
     var $email_regular_expression='/^([-+.0-9=?A-Z_a-z{|}~])+@([-.0-9=?A-Z_a-z{|}~])+\.[a-zA-Z]{2,6}$/i';
     var $email_regular_expression_restricted_part = "/^([a-zA-Z0-9_]|\\-|\\.)+/";

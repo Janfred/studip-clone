@@ -19,7 +19,7 @@
             <?= $received ? _("Eingang") : _("Gesendet") ?>
             <? if (Request::get("tag")) : ?>
                 <?= ", "._("Schlagwort: ").htmlReady(ucfirst(Request::get("tag"))) ?>
-                <button onClick="if (window.confirm('<?= _("Schlagwort wirklich löschen?") ?>') { jQuery('#delete_tags_form').submit(); }" style="background: none; border: none; cursor: pointer;" title="<?= _("Schlagwort von allen Nachrichten entfernen.") ?>">
+                <button onClick="if (window.confirm('<?= _("Schlagwort wirklich lÃ¶schen?") ?>') { jQuery('#delete_tags_form').submit(); }" style="background: none; border: none; cursor: pointer;" title="<?= _("Schlagwort von allen Nachrichten entfernen.") ?>">
                     <?= Icon::create('trash', 'clickable')->asImg(20) ?>
                 </button>
             <? endif ?>
@@ -41,7 +41,7 @@
                 <th></th>
                 <th></th>
                 <th><?= _("Betreff") ?></th>
-                <th  class="hidden-small-down"><?= $received ? _("Gesendet") : _("Empfänger") ?></th>
+                <th  class="hidden-small-down"><?= $received ? _("Gesendet") : _("EmpfÃ¤nger") ?></th>
                 <th><?= _("Zeit") ?></th>
                 <th class="hidden-small-down"><?= _("Schlagworte") ?></th>
             </tr>
@@ -54,7 +54,7 @@
                 <tr>
                     <td colspan="8">
                         <? if (Request::int("offset") > 0) : ?>
-                        <a title="<?= _("zurück") ?>" href="<?= URLHelper::getLink("?", array('offset' => Request::int("offset") - $messageBufferCount > 0 ? Request::int("offset") - $messageBufferCount : null)) ?>"><?= Icon::create('arr_1left', 'clickable')->asImg(["class" => "text-bottom"]) ?></a>
+                        <a title="<?= _("zurÃ¼ck") ?>" href="<?= URLHelper::getLink("?", array('offset' => Request::int("offset") - $messageBufferCount > 0 ? Request::int("offset") - $messageBufferCount : null)) ?>"><?= Icon::create('arr_1left', 'clickable')->asImg(["class" => "text-bottom"]) ?></a>
                         <? endif ?>
                         <? if ($more) : ?>
                         <div style="float:right">
@@ -73,7 +73,7 @@
                 <tr>
                     <td colspan="7">
                         <? if (Request::int("offset") > 0) : ?>
-                            <a title="<?= _("zurück") ?>" href="<?= URLHelper::getLink("?", array('offset' => Request::int("offset") - $messageBufferCount > 0 ? Request::int("offset") - $messageBufferCount : null)) ?>"><?= Icon::create('arr_1left', 'clickable')->asImg(["class" => "text-bottom"]) ?></a>
+                            <a title="<?= _("zurÃ¼ck") ?>" href="<?= URLHelper::getLink("?", array('offset' => Request::int("offset") - $messageBufferCount > 0 ? Request::int("offset") - $messageBufferCount : null)) ?>"><?= Icon::create('arr_1left', 'clickable')->asImg(["class" => "text-bottom"]) ?></a>
                         <? endif ?>
                         <? if ($more) : ?>
                             <div style="float:right">
@@ -129,10 +129,10 @@ if (Navigation::getItem('/messaging/messages/inbox')->isActive() && $messages) {
     );
 }
 $actions->addLink(
-    _('Ausgewählte Nachrichten löschen'),
+    _('AusgewÃ¤hlte Nachrichten lÃ¶schen'),
     "#", Icon::create('trash', 'clickable'),
     array(
-        'onclick' => "if (window.confirm('Wirklich %s Nachrichten löschen?'.toLocaleString().replace('%s', jQuery('#bulk tbody :checked').length))) { jQuery('#bulk').submit(); } return false;"
+        'onclick' => "if (window.confirm('Wirklich %s Nachrichten lÃ¶schen?'.toLocaleString().replace('%s', jQuery('#bulk tbody :checked').length))) { jQuery('#bulk').submit(); } return false;"
     )
 );
 $sidebar->addWidget($actions);

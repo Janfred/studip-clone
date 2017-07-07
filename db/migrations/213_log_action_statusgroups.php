@@ -7,8 +7,8 @@ class LogActionStatusgroups extends Migration
             INSERT IGNORE INTO log_actions
             SET action_id = MD5('STATUSGROUP_ADD_USER'),
                 name = 'STATUSGROUP_ADD_USER',
-                description = 'Nutzer wird zu einer Statusgruppe hinzugefügt',
-                info_template = '%user fügt %user(%affected) zur %group(%coaffected) hinzu.',
+                description = 'Nutzer wird zu einer Statusgruppe hinzugefÃ¼gt',
+                info_template = '%user fÃ¼gt %user(%affected) zur %group(%coaffected) hinzu.',
                 active = '1',
                 expires = '0'
         ");
@@ -16,7 +16,7 @@ class LogActionStatusgroups extends Migration
             INSERT IGNORE INTO log_actions
             SET action_id = MD5('STATUSGROUP_REMOVE_USER'),
                 name = 'STATUSGROUP_REMOVE_USER',
-                description = 'Nutzer wird aus einer Statusgruppe gelöscht',
+                description = 'Nutzer wird aus einer Statusgruppe gelÃ¶scht',
                 info_template = '%user entfernt %user(%affected) aus %group(%coaffected).',
                 active = '1',
                 expires = '0'

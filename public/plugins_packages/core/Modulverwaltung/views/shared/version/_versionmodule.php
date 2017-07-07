@@ -78,7 +78,7 @@ foreach ($abschnitte as $abschnitt) {
                             <? $abschnitt_modul = new StgteilabschnittModul(array($abschnitt_id, $modul_id)) ?>
                             <?= htmlReady($abschnitt_modul->getDisplayName()) ?>
                         </a>
-                        <a data-dialog title="<?= htmlReady($modul['name']) . ' (' . _('Vollständige Modulbeschreibung') . ')' ?>" href="<?= PluginEngine::getURL($plugin, array(), 'shared/modul/description/' . $modul_id) ?>">
+                        <a data-dialog title="<?= htmlReady($modul['name']) . ' (' . _('VollstÃ¤ndige Modulbeschreibung') . ')' ?>" href="<?= PluginEngine::getURL($plugin, array(), 'shared/modul/description/' . $modul_id) ?>">
                             <?= Icon::create('info-circle', 'clickable', array())->asImg(); ?>
                         </a>
                     </td>

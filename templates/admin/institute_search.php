@@ -3,12 +3,12 @@
 
 <? if ($GLOBALS['perm']->have_perm('admin')): ?>
     <legend>
-        <?= _('Bitte wählen Sie die Einrichtung aus, die Sie bearbeiten wollen:') ?>
+        <?= _('Bitte wÃ¤hlen Sie die Einrichtung aus, die Sie bearbeiten wollen:') ?>
     </legend>
 <? endif; ?>
     <select name="cid" required class="nested-select">
         <option value="" class="is-placeholder">
-            <?= _('-- Bitte Einrichtung auswählen --') ?>
+            <?= _('-- Bitte Einrichtung auswÃ¤hlen --') ?>
         </option>
     <? foreach ($institutes as $institute): ?>
         <option value="<?= htmlReady($institute['Institut_id']) ?>"
@@ -18,5 +18,5 @@
     <? endforeach; ?>
     </select>
     
-    <?= Studip\Button::create(_('Einrichtung auswählen')) ?>
+    <?= Studip\Button::create(_('Einrichtung auswÃ¤hlen')) ?>
 </form>

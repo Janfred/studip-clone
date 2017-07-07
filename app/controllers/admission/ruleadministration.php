@@ -39,7 +39,7 @@ class Admission_RuleAdministrationController extends AuthenticatedController
         $views->addLink(_('Installierte Anmelderegeln'),
             $this->url_for('admission/ruleadministration'))
             ->setActive($action === 'index');
-        $views->addLink(_('Regelkompatibilität'),
+        $views->addLink(_('RegelkompatibilitÃ¤t'),
             $this->url_for('admission/ruleadministration/compatibility'))
             ->setActive($action === 'compatibility');
         $sidebar->addWidget($views);
@@ -63,7 +63,7 @@ class Admission_RuleAdministrationController extends AuthenticatedController
 
     public function compatibility_action()
     {
-        PageLayout::setTitle(_('Anmelderegelkompatibilität'));
+        PageLayout::setTitle(_('AnmelderegelkompatibilitÃ¤t'));
 
         $this->ruletypes = AdmissionRule::getAvailableAdmissionRules(false);
         $this->matrix = AdmissionRuleCompatibility::getCompatibilityMatrix();
@@ -77,7 +77,7 @@ class Admission_RuleAdministrationController extends AuthenticatedController
      */
     public function check_activation_action($ruleType)
     {
-        PageLayout::setTitle(_('Verfügbarkeit der Anmelderegel'));
+        PageLayout::setTitle(_('VerfÃ¼gbarkeit der Anmelderegel'));
         $this->ruleTypes = AdmissionRule::getAvailableAdmissionRules(false);
         $this->type = $ruleType;
         $stmt = DBManager::get()->prepare("SELECT ai.`institute_id`
@@ -184,7 +184,7 @@ class Admission_RuleAdministrationController extends AuthenticatedController
             try {
                 $ruleAdmin = new RuleAdministrationModel();
                 $ruleAdmin->uninstall($ruleType);
-                PageLayout::postSuccess(_('Die Anmelderegel wurde erfolgreich gelöscht.'));
+                PageLayout::postSuccess(_('Die Anmelderegel wurde erfolgreich gelÃ¶scht.'));
             } catch (AdmissionRuleInstallationException $e) {
                 PageLayout::postError($e->getMessage());
             }
@@ -293,14 +293,14 @@ class Admission_RuleAdministrationController extends AuthenticatedController
         }
 
         if ($success > 0 && count($fail) == 0) {
-            PageLayout::postSuccess(_('Die Einstellungen zur Regelkompatibilität wurden gespeichert.'));
+            PageLayout::postSuccess(_('Die Einstellungen zur RegelkompatibilitÃ¤t wurden gespeichert.'));
         } else if ($success > 0 && count($fail) > 0) {
             PageLayout::postWarning(_('Die Einstellungen zur '.
-                'Regelkompatibilität konnten nicht vollständig gespeichert '.
-                'werden. Es sind Probleme bei folgenden Einträgen aufgetreten:'),
+                'RegelkompatibilitÃ¤t konnten nicht vollstÃ¤ndig gespeichert '.
+                'werden. Es sind Probleme bei folgenden EintrÃ¤gen aufgetreten:'),
                 $fail);
         } else if (count($fail) > 0) {
-            PageLayout::postError(_('Die Einstellungen zur Regelkompatibilität konnten nicht gespeichert werden.'));
+            PageLayout::postError(_('Die Einstellungen zur RegelkompatibilitÃ¤t konnten nicht gespeichert werden.'));
         }
 
         $this->relocate('admission/ruleadministration/compatibility');
@@ -315,7 +315,7 @@ class Admission_RuleAdministrationController extends AuthenticatedController
     private function check_ticket()
     {
         if (!check_ticket(Request::option('ticket'))) {
-            throw new InvalidArgumentException(_('Das Ticket für diese Aktion ist ungültig.'));
+            throw new InvalidArgumentException(_('Das Ticket fÃ¼r diese Aktion ist ungÃ¼ltig.'));
         }
 
     }

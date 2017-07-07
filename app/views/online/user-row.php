@@ -42,7 +42,7 @@
         <? else: ?>
             <? $actionMenu->addLink(
                 $controller->url_for('online/buddy/add?username=' . $user['username']),
-                _('Zu den Kontakten hinzufügen'),
+                _('Zu den Kontakten hinzufÃ¼gen'),
                 Icon::create('person+add', 'clickable')
             ) ?>
         <? endif; ?>

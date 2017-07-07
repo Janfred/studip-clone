@@ -21,20 +21,20 @@
                     <?= Icon::create('lock-locked', 'inactive')->asImg() ?>
                 <? endif; ?>
             <? endif; ?>
-            <a data-dialog="size=auto" title="<?= _('Gruppe ändern') ?>" href="<?= $controller->url_for("admin/statusgroups/editGroup/{$group->id}") ?>">
-                <?= Icon::create('edit', 'clickable', ['title' => _('Gruppe ändern')])->asImg() ?>
+            <a data-dialog="size=auto" title="<?= _('Gruppe Ã¤ndern') ?>" href="<?= $controller->url_for("admin/statusgroups/editGroup/{$group->id}") ?>">
+                <?= Icon::create('edit', 'clickable', ['title' => _('Gruppe Ã¤ndern')])->asImg() ?>
             </a>
             <?= MultiPersonSearch::get("add_statusgroup" . $group->id)
                     ->setLinkText()
                     ->setDefaultSelectedUser($group->members->pluck('user_id'))
-                    ->setTitle(_('Personen hinzufügen'))
+                    ->setTitle(_('Personen hinzufÃ¼gen'))
                     ->setExecuteURL($controller->url_for("admin/statusgroups/memberAdd/{$group->id}"))
                     ->setSearchObject($searchType)
                     ->addQuickfilter(_("aktuelle Einrichtung"), $membersOfInstitute)
                     ->addQuickfilter(_('Nicht zugeordnet'), $not_assigned)
                     ->render() ?>
-            <a data-dialog="size=auto" title="<?= _('Gruppe löschen') ?>" href="<?= $controller->url_for("admin/statusgroups/deleteGroup/{$group->id}") ?>">
-                <?= Icon::create('trash', 'clickable', ['title' => _('Gruppe löschen')])->asImg() ?>
+            <a data-dialog="size=auto" title="<?= _('Gruppe lÃ¶schen') ?>" href="<?= $controller->url_for("admin/statusgroups/deleteGroup/{$group->id}") ?>">
+                <?= Icon::create('trash', 'clickable', ['title' => _('Gruppe lÃ¶schen')])->asImg() ?>
             </a>
             <a data-dialog="size=auto" title="<?= _('Gruppe alphabetisch sortieren') ?>" href="<?= $controller->url_for("admin/statusgroups/sortAlphabetic/{$group->id}") ?>">
                 <?= Icon::create('arr_2down', 'clickable', ['title' => _('Gruppe alphabetisch sortieren')])->asImg() ?>

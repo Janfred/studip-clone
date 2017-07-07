@@ -2,7 +2,7 @@
     <header>
         <h1>
             <a href="<?= ContentBoxHelper::href('priorities') ?>">
-                <?= _('Übersicht Anmeldelisten von Veranstaltungen mit automatischer Platzvergabe') ?>
+                <?= _('Ãœbersicht Anmeldelisten von Veranstaltungen mit automatischer Platzvergabe') ?>
             </a>
         </h1>
     </header>
@@ -18,7 +18,7 @@
                     <tr>
                         <th><?= _('Veranstaltungsnummer') ?></th>
                         <th><?= _('Veranstaltung') ?></th>
-                        <th style="text-align: center"><?= _('Priorität') ?></th>
+                        <th style="text-align: center"><?= _('PrioritÃ¤t') ?></th>
                     </tr>
                 </thead>
                 <tbody>

@@ -7,7 +7,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      André Noack
+ * @author      AndrÃ© Noack
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
  */
@@ -28,11 +28,11 @@ class SimpleCollectionTest extends PHPUnit_Framework_TestCase
 
     public function testConstruct()
     {
-        $data[] = array('id' => 1, 'vorname' => 'Ândré', 'nachname' => 'Noack', 'perm' => 'dozent');
+        $data[] = array('id' => 1, 'vorname' => 'Ã‚ndrÃ©', 'nachname' => 'Noack', 'perm' => 'dozent');
         $data[] = array('id' => 2, 'vorname' => 'Stefan', 'nachname' => 'Suchi', 'perm' => 'dozent');
-        $data[] = array('id' => 10, 'vorname' => 'Élmar', 'nachname' => 'Ludwig', 'perm' => 'admin');
+        $data[] = array('id' => 10, 'vorname' => 'Ã‰lmar', 'nachname' => 'Ludwig', 'perm' => 'admin');
         $data[] = array('id' => 11, 'vorname' => 'Jan-Hendrik', 'nachname' => 'Wilms', 'perm' => 'tutor');
-        $data[] = array('id' => 15, 'vorname' => 'Nico', 'nachname' => 'Müller', 'perm' => 'root');
+        $data[] = array('id' => 15, 'vorname' => 'Nico', 'nachname' => 'MÃ¼ller', 'perm' => 'root');
 
         $a = new SimpleCollection();
         $this->assertInstanceOf('SimpleCollection', $a);
@@ -54,7 +54,7 @@ class SimpleCollectionTest extends PHPUnit_Framework_TestCase
      */
     public function testArrayAccess($a)
     {
-        $newval = array('id' => 17, 'vorname' => 'Till', 'nachname' => 'Glöggler', 'perm' => 'root');
+        $newval = array('id' => 17, 'vorname' => 'Till', 'nachname' => 'GlÃ¶ggler', 'perm' => 'root');
         $a[] = $newval;
         $last = count($a) - 1;
         $this->assertEquals(17, $a[$last]->id);
@@ -123,7 +123,7 @@ class SimpleCollectionTest extends PHPUnit_Framework_TestCase
         $test = $a->findBy('nachname', 'll', '*=');
         $this->assertInstanceOf('SimpleCollection', $test);
         $this->assertCount(1, $test);
-        $test = $a->findBy('nachname', 'Müll', '^=');
+        $test = $a->findBy('nachname', 'MÃ¼ll', '^=');
         $this->assertInstanceOf('SimpleCollection', $test);
         $this->assertCount(1, $test);
         $test = $a->findBy('nachname', 'lms', '$=');
@@ -171,7 +171,7 @@ class SimpleCollectionTest extends PHPUnit_Framework_TestCase
         $expected[2] = array('nachname' => 'Suchi');
         $expected[10] = array('nachname' => 'Ludwig');
         $expected[11] = array('nachname' => 'Wilms');
-        $expected[15] = array('nachname' => 'Müller');
+        $expected[15] = array('nachname' => 'MÃ¼ller');
         $this->assertEquals($expected, $a->toGroupedArray('id', array('nachname')));
         $expected = array();
         $expected['dozent'] = 2;
@@ -206,7 +206,7 @@ class SimpleCollectionTest extends PHPUnit_Framework_TestCase
         $expected = array( 'Wilms',
                             'Suchi',
                             'Noack',
-                            'Müller',
+                            'MÃ¼ller',
                             'Ludwig'
         );
         $this->assertEquals($expected, array_values($a->orderBy('nachname desc')->pluck('nachname')));
@@ -215,13 +215,13 @@ class SimpleCollectionTest extends PHPUnit_Framework_TestCase
                         'Jan-Hendrik',
                         'Nico',
                         'Stefan',
-                        'Ândré',
-                        'Élmar'
+                        'Ã‚ndrÃ©',
+                        'Ã‰lmar'
         );
         $this->assertEquals($expected, array_values($a->orderBy('vorname asc', SORT_STRING)->pluck('vorname')));
         $expected = array (
-                         'Ândré',
-                         'Élmar',
+                         'Ã‚ndrÃ©',
+                         'Ã‰lmar',
                          'Jan-Hendrik',
                          'Nico',
                          'Stefan'

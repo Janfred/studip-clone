@@ -9,7 +9,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      André Noack <noack@data-quest.de>
+ * @author      AndrÃ© Noack <noack@data-quest.de>
  * @copyright   2000 Stud.IP Core-Group
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  */
@@ -91,7 +91,7 @@ class Seminar_Register_Auth extends Seminar_Auth
         }
 
         if (!$validator->ValidateUsername($username)) {
-            $this->error_msg = $this->error_msg . _("Der gewählte Benutzername ist zu kurz!") . "<br>";
+            $this->error_msg = $this->error_msg . _("Der gewÃ¤hlte Benutzername ist zu kurz!") . "<br>";
             return false;
         } // username syntaktisch falsch oder zu kurz
         // auf doppelte Vergabe wird weiter unten getestet.
@@ -118,12 +118,12 @@ class Seminar_Register_Auth extends Seminar_Auth
         $Zeit = date("H:i:s, d.m.Y", time());
 
         if (!$validator->ValidateEmailHost($Email)) { // Mailserver nicht erreichbar, ablehnen
-            $this->error_msg = $this->error_msg . _("Der Mailserver ist nicht erreichbar, bitte überprüfen Sie, ob Sie E-Mails mit der angegebenen Adresse verschicken und empfangen können!") . "<br>";
+            $this->error_msg = $this->error_msg . _("Der Mailserver ist nicht erreichbar, bitte Ã¼berprÃ¼fen Sie, ob Sie E-Mails mit der angegebenen Adresse verschicken und empfangen kÃ¶nnen!") . "<br>";
             return false;
         } else { // Server ereichbar
             if (!$validator->ValidateEmailBox($Email)) { // aber user unbekannt. Mail an abuse!
                 StudipMail::sendAbuseMessage("Register", "Emailbox unbekannt\n\nUser: $username\nEmail: $Email\n\nIP: $REMOTE_ADDR\nZeit: $Zeit\n");
-                $this->error_msg = $this->error_msg . _("Die angegebene E-Mail-Adresse ist nicht erreichbar, bitte überprüfen Sie Ihre Angaben!") . "<br>";
+                $this->error_msg = $this->error_msg . _("Die angegebene E-Mail-Adresse ist nicht erreichbar, bitte Ã¼berprÃ¼fen Sie Ihre Angaben!") . "<br>";
                 return false;
             } else {
                 ; // Alles paletti, jetzt kommen die Checks gegen die Datenbank...
@@ -134,12 +134,12 @@ class Seminar_Register_Auth extends Seminar_Auth
 
         if ($check_uname['found']) {
             //   error_log("username schon vorhanden", 0);
-            $this->error_msg = $this->error_msg . _("Der gewählte Benutzername ist bereits vorhanden!") . "<br>";
+            $this->error_msg = $this->error_msg . _("Der gewÃ¤hlte Benutzername ist bereits vorhanden!") . "<br>";
             return false; // username schon vorhanden
         }
 
         if (count(User::findBySQL("Email LIKE " . DbManager::get()->quote($Email)))) {
-            $this->error_msg = $this->error_msg . _("Die angegebene E-Mail-Adresse wird bereits von einem anderen Benutzer verwendet. Sie müssen eine andere E-Mail-Adresse angeben!") . "<br>";
+            $this->error_msg = $this->error_msg . _("Die angegebene E-Mail-Adresse wird bereits von einem anderen Benutzer verwendet. Sie mÃ¼ssen eine andere E-Mail-Adresse angeben!") . "<br>";
             return false; // Email schon vorhanden
         }
 

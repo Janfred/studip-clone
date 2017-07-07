@@ -9,7 +9,7 @@
 *
 * This class contains methods to handle connected content module data.
 *
-* @author   Arne Schröder <schroeder@data-quest.de>
+* @author   Arne SchrÃ¶der <schroeder@data-quest.de>
 * @access   public
 * @modulegroup  elearning_interface_modules
 * @module       ContentModule
@@ -349,15 +349,15 @@ class ContentModule
         {
             case "no permission":
                 $this->setTitle(_("--- Keine Lese-Berechtigung! ---"));
-                $this->setDescription(sprintf(_("Sie haben im System \"%s\" keine Lese-Berechtigung für das Lernmodul, das dieser Veranstaltung / Einrichtung an dieser Stelle zugeordnet ist."), $this->getCMSName()));
+                $this->setDescription(sprintf(_("Sie haben im System \"%s\" keine Lese-Berechtigung fÃ¼r das Lernmodul, das dieser Veranstaltung / Einrichtung an dieser Stelle zugeordnet ist."), $this->getCMSName()));
                 break;
             case "not found":
                 $this->setTitle(_("--- Dieses Content-Modul existiert nicht mehr im angebundenen System! ---"));
-                $this->setDescription(sprintf(_("Das Lernmodul, das dieser Veranstaltung / Einrichtung an dieser Stelle zugeordnet war, existiert nicht mehr. Dieser Fehler tritt auf, wenn das angebundene LCMS \"%s\" nicht erreichbar ist oder wenn das Lernmodul innerhalb des angebundenen Systems gelöscht wurde."), $this->getCMSName()));
+                $this->setDescription(sprintf(_("Das Lernmodul, das dieser Veranstaltung / Einrichtung an dieser Stelle zugeordnet war, existiert nicht mehr. Dieser Fehler tritt auf, wenn das angebundene LCMS \"%s\" nicht erreichbar ist oder wenn das Lernmodul innerhalb des angebundenen Systems gelÃ¶scht wurde."), $this->getCMSName()));
                 break;
             case "deleted":
-                $this->setTitle(_("--- Dieses Content-Modul wurde im angebundenen System gelöscht! ---"));
-                $this->setDescription(sprintf(_("Das Lernmodul, das dieser Veranstaltung / Einrichtung an dieser Stelle zugeordnet war, wurde gelöscht."), $this->getCMSName()));
+                $this->setTitle(_("--- Dieses Content-Modul wurde im angebundenen System gelÃ¶scht! ---"));
+                $this->setDescription(sprintf(_("Das Lernmodul, das dieser Veranstaltung / Einrichtung an dieser Stelle zugeordnet war, wurde gelÃ¶scht."), $this->getCMSName()));
                 break;
             default:
                 $this->setTitle(_("--- Es ist ein unbekannter Fehler aufgetreten! ---"));

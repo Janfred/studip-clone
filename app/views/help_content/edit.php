@@ -14,7 +14,7 @@
                 <?= _('Seite:') ?>
                 <input type="text" size="60" maxlength="255" name="help_content_route"
                        value=""
-                       placeholder="<?= _('Bitte geben Sie eine Route für den Hilfe-Text an') ?>">
+                       placeholder="<?= _('Bitte geben Sie eine Route fÃ¼r den Hilfe-Text an') ?>">
             </label>
         <? endif ?>
         <? if ($GLOBALS['perm']->have_perm('root')) : ?>

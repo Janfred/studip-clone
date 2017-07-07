@@ -104,7 +104,7 @@ class ExternModuleTemplateLectures extends ExternModule {
     }
 
     function getMarkerDescription ($element_name) {
-        $markers['TemplateGeneric'][] = array('__GLOBAL__', _("Globale Variablen (gültig im gesamten Template)."));
+        $markers['TemplateGeneric'][] = array('__GLOBAL__', _("Globale Variablen (gÃ¼ltig im gesamten Template)."));
         $markers['TemplateGeneric'][] = array('###LECTURES-COUNT###', '');
         $markers['TemplateGeneric'][] = array('###LECTURES-SUBSTITUTE-GROUPED-BY###', '');
         $markers['TemplateGeneric'][] = array('###START_SEMESTER###', _('Name des Startsemesters'));
@@ -378,9 +378,9 @@ class ExternSemBrowseTemplate extends SemBrowse {
             foreach ($group_by_data as $group_field => $sem_ids){
                 foreach ($sem_ids['Seminar_id'] as $seminar_id => $foo){
                     $name = mb_strtolower(key($sem_data[$seminar_id]["Name"]));
-                    $name = str_replace("ä","ae",$name);
-                    $name = str_replace("ö","oe",$name);
-                    $name = str_replace("ü","ue",$name);
+                    $name = str_replace("Ã¤","ae",$name);
+                    $name = str_replace("Ã¶","oe",$name);
+                    $name = str_replace("Ã¼","ue",$name);
                     $group_by_data[$group_field]['Seminar_id'][$seminar_id] = $name;
                 }
                 uasort($group_by_data[$group_field]['Seminar_id'], 'strnatcmp');

@@ -67,15 +67,15 @@ class ExternModuleGlobal extends ExternModule {
     *
     */
     function setup () {
-        $this->elements["PageBodyGlobal"]->real_name = _("Seitenkörper");
+        $this->elements["PageBodyGlobal"]->real_name = _("SeitenkÃ¶rper");
         $this->elements["MainTableHeaderGlobal"]->real_name = _("Tabellenkopf Gesamttabelle");
         $this->elements["InnerTableHeaderGlobal"]->real_name = _("Tabellenkopf innere Tabelle");
         $this->elements["MainTableHeadrowGlobal"]->real_name = _("Kopfzeile");
         $this->elements["TableGrouprowGlobal"]->real_name = _("Gruppenzeile");
         $this->elements["TableRowGlobal"]->real_name = _("Datenzeile");
         $this->elements["TableHeadrowTextGlobal"]->real_name = _("Text in Tabellenkopf");
-        $this->elements["Headline1TextGlobal"]->real_name = _("Überschriften erster Ordnung");
-        $this->elements["Headline2TextGlobal"]->real_name = _("Überschriften zweiter Ordnung");
+        $this->elements["Headline1TextGlobal"]->real_name = _("Ãœberschriften erster Ordnung");
+        $this->elements["Headline2TextGlobal"]->real_name = _("Ãœberschriften zweiter Ordnung");
         $this->elements["TextGlobal"]->real_name = _("Schrift");
         $this->elements["LinksGlobal"]->real_name = _("Links");
         

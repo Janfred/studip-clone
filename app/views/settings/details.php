@@ -70,7 +70,7 @@
 
     <? if (count($user_entries) > 0): ?>
         <fieldset>
-            <legend> <?= _('Zusätzliche Datenfelder') ?></legend>
+            <legend> <?= _('ZusÃ¤tzliche Datenfelder') ?></legend>
             <? foreach ($user_entries as $id => $entry): ?>
 
                 <? if (isset($invalid_entries[$id])): ?>
@@ -86,12 +86,12 @@
                         <div>
                             <?= formatReady($entry->getDisplayValue(false)) ?>
 
-                            <small> <?= _('(Das Feld ist für die Bearbeitung gesperrt und kann '
-                                       . 'nur durch einen Administrator verändert werden.)') ?></small>
+                            <small> <?= _('(Das Feld ist fÃ¼r die Bearbeitung gesperrt und kann '
+                                       . 'nur durch einen Administrator verÃ¤ndert werden.)') ?></small>
                         </div>
                     <? endif; ?>
                     <? if (!$entry->isVisible($user->perms)): ?>
-                        <?= tooltipIcon(_('Systemfeld (für die Person selbst nicht sichtbar)'), true) ?>
+                        <?= tooltipIcon(_('Systemfeld (fÃ¼r die Person selbst nicht sichtbar)'), true) ?>
                     <? endif; ?>
                 </label>
 
@@ -100,6 +100,6 @@
         </fieldset>
     <? endif; ?>
     <footer>
-        <?= Button::create(_('Übernehmen'), 'store', ['title' => _('Änderungen übernehmen')]) ?>
+        <?= Button::create(_('Ãœbernehmen'), 'store', ['title' => _('Ã„nderungen Ã¼bernehmen')]) ?>
     </footer>
 </form>

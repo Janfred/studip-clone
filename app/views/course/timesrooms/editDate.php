@@ -38,7 +38,7 @@
                        id="room" <?= $date->room_assignment->resource_id ? 'checked' : '' ?>>
 
                 <select name="room_sd" style="display: inline-block; width: 50%;" class="single_room">
-                    <option value=""><?= _('Wählen Sie einen Raum aus') ?></option>
+                    <option value=""><?= _('WÃ¤hlen Sie einen Raum aus') ?></option>
                     <? foreach ($resList->resources as $room_id => $room) : ?>
                         <option value="<?= $room_id ?>"
                             <?= $date->room_assignment->resource_id == $room_id ? 'selected' : '' ?>>
@@ -66,7 +66,7 @@
 
 <? if (count($teachers) > 1): ?>
     <fieldset class="collapsed studip-selection" data-attribute-name="assigned_teachers">
-        <legend><?= _('Durchführende Lehrende') ?></legend>
+        <legend><?= _('DurchfÃ¼hrende Lehrende') ?></legend>
 
         <section class="studip-selection-selected">
             <h2><?= _('Zugewiesene Lehrende') ?></h2>
@@ -109,7 +109,7 @@
         <? endforeach; ?>
                 <li class="empty-placeholder">
                     <?= sprintf(
-                            _('Ihre Auswahl entspricht dem Zustand "%s" und wird beim Speichern zurückgesetzt'),
+                            _('Ihre Auswahl entspricht dem Zustand "%s" und wird beim Speichern zurÃ¼ckgesetzt'),
                             _('Kein spezieller Lehrender zugewiesen')
                     ) ?>
                 </li>
@@ -166,7 +166,7 @@
     <footer data-dialog-button>
         <?= Studip\Button::createAccept(_('Speichern'), 'save_dates') ?>
         <? if (Request::int('fromDialog')) : ?>
-            <?= Studip\LinkButton::create(_('Zurück zur Übersicht'),
+            <?= Studip\LinkButton::create(_('ZurÃ¼ck zur Ãœbersicht'),
                                           $controller->url_for('course/timesrooms',
                                                                array('fromDialog' => 1, 'contentbox_open' => $date->metadate_id)),
                                           array('data-dialog' => 'size=big')) ?>

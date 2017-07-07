@@ -1,8 +1,8 @@
 <form class="default" action="<?= $controller->url_for('course/statusgroups/batch_delete_groups') ?>" method="post">
     <header>
         <h1>
-            <?= ngettext('Soll die folgende Gruppe wirklich gelöscht werden?',
-                'Sollen die folgenden Gruppen wirklich gelöscht werden?', count($groups)) ?>
+            <?= ngettext('Soll die folgende Gruppe wirklich gelÃ¶scht werden?',
+                'Sollen die folgenden Gruppen wirklich gelÃ¶scht werden?', count($groups)) ?>
         </h1>
         <ul>
             <?php foreach ($groups as $g) : ?>
@@ -15,7 +15,7 @@
     </header>
     <?= CSRFProtection::tokenTag() ?>
     <footer data-dialog-button>
-        <?= Studip\Button::createAccept(_('Löschen'), 'submit') ?>
+        <?= Studip\Button::createAccept(_('LÃ¶schen'), 'submit') ?>
         <?= Studip\LinkButton::createCancel(_('Abbrechen'),
             $controller->url_for('course/statusgroups')) ?>
     </footer>

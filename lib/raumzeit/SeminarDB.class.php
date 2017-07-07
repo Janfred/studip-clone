@@ -7,7 +7,7 @@
 // This file is part of Stud.IP
 // SeminarDB.class.php
 //
-// Datenbank-Abfragen für Seminar.class.php
+// Datenbank-Abfragen fÃ¼r Seminar.class.php
 //
 // +--------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@
  * SeminarDB.class.php
  *
  *
- * @author      Till Glöggler <tgloeggl@uos.de>
+ * @author      Till GlÃ¶ggler <tgloeggl@uos.de>
  * @version     19. Oktober 2005
  * @access      protected
  * @package     raumzeit
@@ -238,7 +238,7 @@ class SeminarDB
     }
 
     /**
-     * vergisst die Einträge in resources_requests_properties
+     * vergisst die EintrÃ¤ge in resources_requests_properties
      * @deprecated
      * @param unknown_type $id
      * @return boolean

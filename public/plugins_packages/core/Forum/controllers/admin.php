@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2011 - Till Glˆggler     <tgloeggl@uos.de>
+ * Copyright (C) 2011 - Till Gl√∂ggler     <tgloeggl@uos.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as

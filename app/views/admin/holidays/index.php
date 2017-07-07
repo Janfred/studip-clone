@@ -26,7 +26,7 @@
         <tr>
             <td colspan="4" style="text-align: center;">
             <? if ($filter): ?>
-                <?= _('In der gewählten Ansicht gibt es keine Einträge.') ?>
+                <?= _('In der gewÃ¤hlten Ansicht gibt es keine EintrÃ¤ge.') ?>
             <? else: ?>
                 <?= _('Es wurden noch keine Ferien angelegt.') ?><br>
                 <?= Studip\LinkButton::create(_('Neue Ferien anlegen'),
@@ -53,9 +53,9 @@
                 <a data-dialog="size=auto" href="<?= $controller->url_for('admin/holidays/edit/' . $holiday->id) ?>">
                     <?= Icon::create('edit', 'clickable', ['title' => _('Ferienangaben bearbeiten')])->asImg() ?>
                 </a>
-                <?= Icon::create('trash', 'clickable', ['title' => _('Ferien löschen')])->asInput([
+                <?= Icon::create('trash', 'clickable', ['title' => _('Ferien lÃ¶schen')])->asInput([
                     'formaction'   => $controller->url_for('admin/holidays/delete/' . $holiday->id),
-                    'data-confirm' => _('Sollen die Ferien wirklich gelöscht werden?'),
+                    'data-confirm' => _('Sollen die Ferien wirklich gelÃ¶scht werden?'),
                     'class' => 'text-bottom',
                 ]) ?>
             </td>
@@ -66,9 +66,9 @@
     <tfoot>
         <tr>
             <td colspan="4">
-                <?= _('Markierte Einträge') ?>
-                <?= Studip\Button::create(_('Löschen'), 'delete', [
-                    'data-confirm' => _('Sollen die Ferien wirklich gelöscht werden?'),
+                <?= _('Markierte EintrÃ¤ge') ?>
+                <?= Studip\Button::create(_('LÃ¶schen'), 'delete', [
+                    'data-confirm' => _('Sollen die Ferien wirklich gelÃ¶scht werden?'),
                 ]) ?>
             </td>
         </tr>

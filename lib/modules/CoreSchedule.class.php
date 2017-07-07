@@ -18,7 +18,7 @@ class CoreSchedule implements StudipModule {
     }
     
     function getTabNavigation($course_id) {
-        // cmd und open_close_id mit durchziehen, damit geöffnete Termine geöffnet bleiben
+        // cmd und open_close_id mit durchziehen, damit geÃ¶ffnete Termine geÃ¶ffnet bleiben
         $req = Request::getInstance();
         $openItem = '';
         if (isset($req['cmd']) && isset($req['open_close_id'])) {
@@ -42,24 +42,24 @@ class CoreSchedule implements StudipModule {
     {
         return array(
             'summary' => _('Anzeige aller Termine der Veranstaltung'),
-            'description' => _('Der Ablaufplan listet alle Präsenz-, '.
+            'description' => _('Der Ablaufplan listet alle PrÃ¤senz-, '.
                 'E-Learning-, Klausur-, Exkursions- und sonstige '.
                 'Veranstaltungstermine auf. Zur besseren Orientierung und zur '.
-                'inhaltlichen Einstimmung der Studierenden können Lehrende den '.
-                'Terminen Themen hinzufügen, die z. B. eine Kurzbeschreibung '.
+                'inhaltlichen Einstimmung der Studierenden kÃ¶nnen Lehrende den '.
+                'Terminen Themen hinzufÃ¼gen, die z. B. eine Kurzbeschreibung '.
                 'der Inhalte darstellen.'),
             'displayname' => _('Ablaufplan'),
             'category' => _('Lehr- und Lernorganisation'),
-            'keywords' => _('Inhaltliche und räumliche Orientierung für Studierende;
+            'keywords' => _('Inhaltliche und rÃ¤umliche Orientierung fÃ¼r Studierende;
                             Beschreibung der Inhalte einzelner Termine;
                             Raumangabe;
                             Themenzuordnung zu Terminen;
                             Terminzuordnung zu Themen'),
             'descriptionshort' => _('Anzeige aller Termine der Veranstaltung, ggf. mit Themenansicht'),
-            'descriptionlong' => _('Der Ablaufplan listet alle Präsenz-, E-Learning-, Klausur-, Exkursions- ' .
+            'descriptionlong' => _('Der Ablaufplan listet alle PrÃ¤senz-, E-Learning-, Klausur-, Exkursions- ' .
                                     'und sonstige Veranstaltungstermine auf. Zur besseren Orientierung und zur ' .
-                                    'inhaltlichen Einstimmung der Studierenden können Lehrende den Terminen ' .
-                                    'Themen hinzufügen, die z. B. eine Kurzbeschreibung der Inhalte darstellen.'),          
+                                    'inhaltlichen Einstimmung der Studierenden kÃ¶nnen Lehrende den Terminen ' .
+                                    'Themen hinzufÃ¼gen, die z. B. eine Kurzbeschreibung der Inhalte darstellen.'),          
             'icon' => Icon::create('schedule', 'info'),
             'screenshots' => array(
                 'path' => 'plus/screenshots/Ablaufplan',

@@ -11,18 +11,18 @@ class Step00158Privacy extends Migration
             'name'        => 'DOZENT_ALWAYS_VISIBLE',
             'type'        => 'boolean',
             'value'       => 1,
-            'description' => 'Legt fest, ob Personen mit Dozentenrechten immer global sichtbar sind und das auch nicht selbst ändern können.'
+            'description' => 'Legt fest, ob Personen mit Dozentenrechten immer global sichtbar sind und das auch nicht selbst Ã¤ndern kÃ¶nnen.'
         // What is the default visibility for unconfigured homepage elements?
         ), array(
             'name'        => 'HOMEPAGE_VISIBILITY_DEFAULT',
             'type'        => 'string',
             'value'       => 'VISIBILITY_STUDIP',
-            'description' => 'Standardsichtbarkeit für Homepageelemente, falls der Benutzer nichts anderes eingestellt hat. Gültige Werte sind: VISIBILITY_ME, VISIBILITY_BUDDIES, VISIBILITY_DOMAIN, VISIBILITY_STUDIP, VISIBILITY_EXTERN'
+            'description' => 'Standardsichtbarkeit fÃ¼r Homepageelemente, falls der Benutzer nichts anderes eingestellt hat. GÃ¼ltige Werte sind: VISIBILITY_ME, VISIBILITY_BUDDIES, VISIBILITY_DOMAIN, VISIBILITY_STUDIP, VISIBILITY_EXTERN'
         ), array(
             'name'        => 'FORUM_ANONYMOUS_POSTINGS',
             'type'        => 'boolean',
             'value'       => 0,
-            'description' => 'Legt fest, ob Forenbeiträge anonym verfasst werden dürfen (Root sieht aber immer den Urheber).'
+            'description' => 'Legt fest, ob ForenbeitrÃ¤ge anonym verfasst werden dÃ¼rfen (Root sieht aber immer den Urheber).'
         )
     );
 

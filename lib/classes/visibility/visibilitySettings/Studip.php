@@ -24,7 +24,7 @@ class Visibility_Studip extends VisibilityAbstract {
     protected $display_name = "Stud.IP-intern";
     
     // Description for the state
-    protected $description = "für alle Stud.IP-Nutzer sichtbar";
+    protected $description = "fÃ¼r alle Stud.IP-Nutzer sichtbar";
 
     // When do two users have this state
     public function verify($user_id, $other_id)

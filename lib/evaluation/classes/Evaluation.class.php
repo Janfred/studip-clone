@@ -169,7 +169,7 @@ class Evaluation extends EvaluationObject {
      return $this->throwError 
        (1, _("Das Startdatum ist nach dem Stoppdatum."));
        if ($startdate <= 0)
-     return $this->throwError (1, _("Das Startdatum ist leider ung¸ltig."));
+     return $this->throwError (1, _("Das Startdatum ist leider ung√ºltig."));
      }
      $this->startdate = $startdate;
    }
@@ -192,7 +192,7 @@ class Evaluation extends EvaluationObject {
    function setStopdate ($stopdate) {
      if (!empty ($stopdate)) {
        if ($stopdate <= 0)
-         return $this->throwError (1, _("Das Stoppdatum ist leider ung¸ltig."));
+         return $this->throwError (1, _("Das Stoppdatum ist leider ung√ºltig."));
        if ($stopdate < $this->startdate) 
          return $this->throwError (1, _("Das Stoppdatum ist vor dem Startdatum."));
        if (!empty ($this->timespan)) 
@@ -422,7 +422,7 @@ class Evaluation extends EvaluationObject {
     * @access public
     */
    function resetAnswers () {
-      // F¸r diesen Mist habe ich jetzt ca. 3 Stunden gebraucht :(
+      // F√ºr diesen Mist habe ich jetzt ca. 3 Stunden gebraucht :(
       $answers = $this->getSpecialChildobjects ($this, INSTANCEOF_EVALANSWER);     
       
       $number = count ($answers);
@@ -466,10 +466,10 @@ class Evaluation extends EvaluationObject {
        $this->throwError (1, _("Der Titel darf nicht leer sein."));
      
      if ($this->isTemplate () && $this->hasVoted ())
-        $this->throwError (2, _("Ung¸ltiges Objekt: Bei einer Vorlage wurde abgestimmt."));
+        $this->throwError (2, _("Ung√ºltiges Objekt: Bei einer Vorlage wurde abgestimmt."));
      
      if (!$this->isTemplate () && $this->isShared ())
-        $this->throwError (3, _("Ung¸ltiges Objekt: Eine aktive Evaluation wurde freigegeben."));
+        $this->throwError (3, _("Ung√ºltiges Objekt: Eine aktive Evaluation wurde freigegeben."));
 
    }
 # ==================================================== end: private functions #

@@ -8,7 +8,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      Nico Müller <nico.mueller@uni-oldenburg.de>
+ * @author      Nico MÃ¼ller <nico.mueller@uni-oldenburg.de>
  * @author      Michael Riehemann <michael.riehemann@uni-oldenburg.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
@@ -61,8 +61,8 @@ class Admin_SpecificationController extends AuthenticatedController
 
         if ($GLOBALS['perm']->have_perm('root') && count($this->entries_semdata) == 0) {
             PageLayout::postWarning(sprintf(
-                _('Sie müssen zuerst im Bereich %sDatenfelder%s in der Kategorie '
-                . '<em>Datenfelder für Personenzusatzangaben in Veranstaltungen</em> '
+                _('Sie mÃ¼ssen zuerst im Bereich %sDatenfelder%s in der Kategorie '
+                . '<em>Datenfelder fÃ¼r Personenzusatzangaben in Veranstaltungen</em> '
                 . 'einen neuen Eintrag erstellen.'),
                 '<a href="' . URLHelper::getLink('dispatch.php/admin/datafields') . '">',
                 '</a>'
@@ -83,7 +83,7 @@ class Admin_SpecificationController extends AuthenticatedController
             $errors[] = _('Bitte geben Sie der Regel mindestens einen Namen!');
         }
         if (!AuxLockRules::checkLockRule(Request::getArray('fields'))) {
-            $errors[] = _('Bitte wählen Sie mindestens ein Feld aus der Kategorie "Zusatzinformationen" aus!');
+            $errors[] = _('Bitte wÃ¤hlen Sie mindestens ein Feld aus der Kategorie "Zusatzinformationen" aus!');
         }
 
         if (empty($errors)) {
@@ -99,7 +99,7 @@ class Admin_SpecificationController extends AuthenticatedController
                 htmlReady(Request::get('rulename'))
             ));
         } else {
-            PageLayout::postError(_('Ihre Eingaben sind ungültig.'), $errors);
+            PageLayout::postError(_('Ihre Eingaben sind ungÃ¼ltig.'), $errors);
         }
 
         $this->redirect('admin/specification');
@@ -114,9 +114,9 @@ class Admin_SpecificationController extends AuthenticatedController
     {
         CSRFProtection::verifyUnsafeRequest();
         if (AuxLockRules::deleteLockRule($rule_id)) {
-            PageLayout::postSuccess(_('Die Regel wurde erfolgreich gelöscht!'));
+            PageLayout::postSuccess(_('Die Regel wurde erfolgreich gelÃ¶scht!'));
         } else {
-            PageLayout::postError(_('Es können nur nicht verwendete Regeln gelöscht werden!'));
+            PageLayout::postError(_('Es kÃ¶nnen nur nicht verwendete Regeln gelÃ¶scht werden!'));
         }
 
         $this->redirect('admin/specification');

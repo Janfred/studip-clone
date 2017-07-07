@@ -141,12 +141,12 @@ class CourseExDate extends SimpleORMap
                          : '%R';
 
         if (($this->end_time - $this->date) / 60 / 60 > 23) {
-            return strftime('%a., %x' . ' (' . _('ganzt‰gig') . ')' , $this->date) . " (" . _("f‰llt aus") . ")";
+            return strftime('%a., %x' . ' (' . _('ganzt√§gig') . ')' , $this->date) . " (" . _("f√§llt aus") . ")";
         }
 
         return strftime('%a., %x, %R', $this->date) . ' - '
              . strftime($latter_template, $this->end_time)
-             . ' (' . _('f‰llt aus') . ')';
+             . ' (' . _('f√§llt aus') . ')';
     }
 
     /**

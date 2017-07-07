@@ -88,7 +88,7 @@ class Admission_UserListController extends AuthenticatedController
             }
         });
         $uids = array_map(function($u) { return $u->id; }, $this->users);
-        $this->userSearch = new PermissionSearch('user', 'Person hinzufügen', 'user_id',
+        $this->userSearch = new PermissionSearch('user', 'Person hinzufÃ¼gen', 'user_id',
             array(
                 'permission' => array('user', 'autor', 'tutor', 'dozent'),
                 'exclude_user' => $uids
@@ -171,8 +171,8 @@ class Admission_UserListController extends AuthenticatedController
         $this->flash['users'] = $users;
 
         PageLayout::postInfo(
-            sprintf(ngettext('Eine Person wurde der Liste hinzugefügt.',
-                '%u Personen wurden der Liste hinzugefügt, die Liste ist aber noch nicht gespeichert.',
+            sprintf(ngettext('Eine Person wurde der Liste hinzugefÃ¼gt.',
+                '%u Personen wurden der Liste hinzugefÃ¼gt, die Liste ist aber noch nicht gespeichert.',
                 $newsize - $oldsize), $newsize - $oldsize));
 
         $this->redirect($this->url_for('admission/userlist/configure', $userlistId));

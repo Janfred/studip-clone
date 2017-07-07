@@ -246,8 +246,8 @@ class TextFormatTest extends PHPUnit_Framework_TestCase
 
     public function testHeading()
     {
-        $input = '!!%%Überschrift%%';
-        $expected = '<h3 class="content"><i>Überschrift</i></h3>';
+        $input = '!!%%Ãœberschrift%%';
+        $expected = '<h3 class="content"><i>Ãœberschrift</i></h3>';
         $this->assertEquals($expected, $this->markup->format($input));
     }
 
@@ -320,9 +320,9 @@ class TextFormatTest extends PHPUnit_Framework_TestCase
 
     public function testList()
     {
-        $input = "- Einführung\n- Hauptteil\n-= Argument 1\n-= Argument 2\n- Schluss\n";
+        $input = "- EinfÃ¼hrung\n- Hauptteil\n-= Argument 1\n-= Argument 2\n- Schluss\n";
         $expected = '<ul>'
-                   .'<li>Einführung</li>'
+                   .'<li>EinfÃ¼hrung</li>'
                    .'<li>Hauptteil<ol>'
                    .'<li>Argument 1</li>'
                    .'<li>Argument 2</li>'

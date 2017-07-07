@@ -9,7 +9,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      Till Glöggler <tgloeggl@uos.de>
+ * @author      Till GlÃ¶ggler <tgloeggl@uos.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
  */
@@ -556,7 +556,7 @@ class CalendarScheduleModel
             }
 
             if (sizeof($days) == 1) {
-                $ret[$day]->setTitle($day_names[$day] .' ('. _('zurück zur Wochenansicht') .')')
+                $ret[$day]->setTitle($day_names[$day] .' ('. _('zurÃ¼ck zur Wochenansicht') .')')
                     ->setURL('dispatch.php/calendar/'. $controller .'/index');
             } else {
                 $ret[$day]->setTitle($day_names[$day])

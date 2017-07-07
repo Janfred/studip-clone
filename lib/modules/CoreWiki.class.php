@@ -43,34 +43,34 @@ class CoreWiki implements StudipModule {
     { 
         return array(
             'summary' => _('Gemeinsames asynchrones Erstellen und Bearbeiten von Texten'),
-            'description' => _('Im Wiki-Web oder kurz "Wiki" können '.
+            'description' => _('Im Wiki-Web oder kurz "Wiki" kÃ¶nnen '.
                 'verschiedene Autor/-innen gemeinsam Texte, Konzepte und andere '.
                 'schriftliche Arbeiten erstellen und gestalten, dies '.
-                'allerdings nicht gleichzeitig. Texte können individuell '.
-                'bearbeitet und die Änderungen gespeichert werden. Das '.
+                'allerdings nicht gleichzeitig. Texte kÃ¶nnen individuell '.
+                'bearbeitet und die Ã„nderungen gespeichert werden. Das '.
                 'Besondere im Wiki ist, dass Studierende und Lehrende '.
-                'annähernd die gleichen Rechte (schreiben, lesen, ändern, '.
-                'löschen) haben, was sich nicht einschränken lässt. Das '.
-                'System erstellt eine Versionshistorie, mit der Änderungen '.
-                'nachvollziehbar werden. Einzelne Versionen können zudem '.
-                'auch gelöscht werden (nur Lehrende). Ein Export als '.
+                'annÃ¤hernd die gleichen Rechte (schreiben, lesen, Ã¤ndern, '.
+                'lÃ¶schen) haben, was sich nicht einschrÃ¤nken lÃ¤sst. Das '.
+                'System erstellt eine Versionshistorie, mit der Ã„nderungen '.
+                'nachvollziehbar werden. Einzelne Versionen kÃ¶nnen zudem '.
+                'auch gelÃ¶scht werden (nur Lehrende). Ein Export als '.
                 'pdf-Datei ist integriert.'),
             
             'displayname' => _('Wiki-Web'),
             'keywords' => _('Individuelle Bearbeitung von Texten;
                             Versionshistorie;
                             Druckansicht und PDF-Export;
-                            Löschfunktion für die aktuellste Seiten-Version;
-                            Keine gleichzeitige Bearbeitung desselben Textes möglich, nur nacheinander'),
+                            LÃ¶schfunktion fÃ¼r die aktuellste Seiten-Version;
+                            Keine gleichzeitige Bearbeitung desselben Textes mÃ¶glich, nur nacheinander'),
             'descriptionshort' => _('Gemeinsames asynchrones Erstellen und Bearbeiten von Texten'),
-            'descriptionlong' => _('Im Wiki-Web oder kurz "Wiki" können verschiedene Autor/-innen gemeinsam Texte, '.
+            'descriptionlong' => _('Im Wiki-Web oder kurz "Wiki" kÃ¶nnen verschiedene Autor/-innen gemeinsam Texte, '.
                                     'Konzepte und andere schriftliche Arbeiten erstellen und gestalten. Dies '.
-                                    'allerdings nicht gleichzeitig. Texte können individuell bearbeitet und '.
+                                    'allerdings nicht gleichzeitig. Texte kÃ¶nnen individuell bearbeitet und '.
                                     'gespeichert werden. Das Besondere im Wiki ist, dass Studierende und Lehrende '.
-                                    'annähernd die gleichen Rechte (schreiben, lesen, ändern, löschen) haben, was '.
+                                    'annÃ¤hernd die gleichen Rechte (schreiben, lesen, Ã¤ndern, lÃ¶schen) haben, was '.
                                     'gegenseitiges Vertrauen voraussetzt. Das System erstellt eine Versionshistorie, '.
-                                    'mit der Änderungen nachvollziehbar werden. Einzelne Versionen können zudem auch '.
-                                    'gelöscht werden (nur Lehrende). Eine Druckansicht und eine Exportmöglichkeit als '.
+                                    'mit der Ã„nderungen nachvollziehbar werden. Einzelne Versionen kÃ¶nnen zudem auch '.
+                                    'gelÃ¶scht werden (nur Lehrende). Eine Druckansicht und eine ExportmÃ¶glichkeit als '.
                                     'PDF-Datei ist integriert.'),
             'category' => _('Kommunikation und Zusammenarbeit'),
             'icon' => Icon::create('wiki', 'info'),

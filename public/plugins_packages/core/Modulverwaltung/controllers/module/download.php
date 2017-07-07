@@ -22,7 +22,7 @@ class Module_DownloadController extends MVVController
     {
         $modul = Modul::find($modul_id);
         if (!$modul) {
-            throw new Exception(_('Ungültiges Modul'));
+            throw new Exception(_('UngÃ¼ltiges Modul'));
         }
         $this->get_details($modul_id, $language);
         $this->download = true;
@@ -61,7 +61,7 @@ class Module_DownloadController extends MVVController
     {
         $modul = Modul::find($id);
         if (!$modul) {
-            throw new Exception(_('Ungültiges Modul'));
+            throw new Exception(_('UngÃ¼ltiges Modul'));
         }
 
         $type = 1;

@@ -69,7 +69,7 @@
         <? if ($sem->isAdmissionEnabled() && $course->getNumWaiting()) : ?>
             <tr>
                 <td>
-                    <strong><?= _('Wartelisteneinträge') ?></strong>
+                    <strong><?= _('WartelisteneintrÃ¤ge') ?></strong>
                 </td>
                 <td><?= $course->getNumWaiting() ?></td>
             </tr>
@@ -109,7 +109,7 @@
         <tr>
             <td><strong><?= _('Hauptveranstaltung') ?></strong></td>
             <td>
-                <?= _('Diese Veranstaltung gehört zu einer Hauptveranstaltung') ?>:
+                <?= _('Diese Veranstaltung gehÃ¶rt zu einer Hauptveranstaltung') ?>:
                 <br><br>
                 <a href="<?= $controller->link_for('course/details/', ['sem_id' => $course->parent->id]) ?>"
                    title="<?= htmlReady($course->parent->getFullname()) ?>">
@@ -118,7 +118,7 @@
             <? if ($siblings) : ?>
                 <br><br>
                 <section>
-                    <?= _('Ebenfalls zu dieser Hauptveranstaltung gehören:') ?>
+                    <?= _('Ebenfalls zu dieser Hauptveranstaltung gehÃ¶ren:') ?>
                     <ul>
                     <? foreach ($siblings as $sibling): ?>
                         <li>
@@ -161,7 +161,7 @@
         <? $next_date = $sem->getNextDate() ?>
         <? if ($next_date) : ?>
             <tr>
-                <td><strong><?= _('Nächster Termin') ?></strong></td>
+                <td><strong><?= _('NÃ¤chster Termin') ?></strong></td>
                 <td><?= $next_date ?></td>
             </tr>
         <? else : ?>
@@ -405,7 +405,7 @@ if ($mvv_pathes) : ?>
         </header>
         <section>
             <div>
-                <?= sprintf(_('Diese Veranstaltung gehört zum Anmeldeset "%s".'), htmlReady($courseset->getName())) ?>
+                <?= sprintf(_('Diese Veranstaltung gehÃ¶rt zum Anmeldeset "%s".'), htmlReady($courseset->getName())) ?>
             </div>
             <div id="courseset_<?= $courseset->getId() ?>">
                 <?= $courseset->toString(true) ?>
@@ -426,15 +426,15 @@ if ($mvv_pathes) : ?>
                     <p><?= formatReady($course->admission_prelim_txt) ?></p>
                 <? else : ?>
                         <p><?=
-                            _("Nutzer/-innen, die sich für diese Veranstaltung eintragen möchten,
-                    erhalten nähere Hinweise und können sich dann noch gegen eine Teilnahme entscheiden.")?>
+                            _("Nutzer/-innen, die sich fÃ¼r diese Veranstaltung eintragen mÃ¶chten,
+                    erhalten nÃ¤here Hinweise und kÃ¶nnen sich dann noch gegen eine Teilnahme entscheiden.")?>
                         </p>
                 <? endif ?>
             </section>
         <? endif ?>
         <? if ($course->admission_binding == 1) : ?>
             <section>
-                <p><?= _("Die Anmeldung ist verbindlich, Teilnehmende können sich nicht selbst austragen.") ?></p>
+                <p><?= _("Die Anmeldung ist verbindlich, Teilnehmende kÃ¶nnen sich nicht selbst austragen.") ?></p>
             </section>
         <? endif ?>
     </article>
@@ -443,7 +443,7 @@ if ($mvv_pathes) : ?>
 <? if (!empty($course_domains)): ?>
     <article class="studip">
         <header>
-            <h1><?= _("Zugelassenene Nutzerdomänen:") ?></h1>
+            <h1><?= _("Zugelassenene NutzerdomÃ¤nen:") ?></h1>
         </header>
         <ul>
             <? foreach ($course_domains as $domain): ?>
@@ -456,6 +456,6 @@ if ($mvv_pathes) : ?>
 
 <? if (Request::get('from')) : ?>
     <footer data-dialog-button>
-        <?= \Studip\LinkButton::createCancel(_('Zurück'), URLHelper::getURL(Request::get('from')))?>
+        <?= \Studip\LinkButton::createCancel(_('ZurÃ¼ck'), URLHelper::getURL(Request::get('from')))?>
     </footer>
 <? endif ?>

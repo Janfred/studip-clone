@@ -73,7 +73,7 @@ class CourseCancelledEvent extends CourseEvent
     {
         $title = parent::getTitle();
         if ($this->havePermission(Event::PERMISSION_READABLE)) {
-            $title .= ' ' . _('(f‰llt aus)');
+            $title .= ' ' . _('(f√§llt aus)');
         }
         return $title;
     }

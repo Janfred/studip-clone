@@ -9,7 +9,7 @@
 * Send files to the browser an does permchecks
 *
 * @author       Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>,
-*               André Noack <andre.noack@gmx.net>
+*               AndrÃ© Noack <andre.noack@gmx.net>
 * @access       public
 * @package      studip_core
 * @modulegroup  library
@@ -20,7 +20,7 @@
 // This file is part of Stud.IP
 // sendfile.php - Datei an Browser senden
 // Copyright (C) 2000 - 2002 Cornelis Kater <ckater@gwdg.de>
-// Ralf Stockmann <rstockm@gwdg.de>, André Noack André Noack <andre.noack@gmx.net>
+// Ralf Stockmann <rstockm@gwdg.de>, AndrÃ© Noack AndrÃ© Noack <andre.noack@gmx.net>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -92,7 +92,7 @@ if ($type == 4) {
 if ($no_access) {
     // redirect to login page if user is not logged in
     $auth->login_if($auth->auth['uid'] == 'nobody');
-    throw new AccessDeniedException(_("Sie haben keine Zugriffsberechtigung für diesen Download!"));
+    throw new AccessDeniedException(_("Sie haben keine Zugriffsberechtigung fÃ¼r diesen Download!"));
 }
 
 //replace bad charakters to avoid problems when saving the file

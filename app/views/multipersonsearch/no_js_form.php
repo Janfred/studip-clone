@@ -31,7 +31,7 @@
             <div style="display: inline-block; float: left; width: 44%; height: 100%">
                 <label><?=_('Suchergebnis')?><br>
                 <select id="search_persons_selectable" name="search_persons_selectable[]" style="minWidth: 200px; width: 100%; height: 116px" style="height: 16px" multiple
-                        aria-label="<?= _('Gefundene Personen, die der Gruppe hinzugefügt werden können') ?>">
+                        aria-label="<?= _('Gefundene Personen, die der Gruppe hinzugefÃ¼gt werden kÃ¶nnen') ?>">
                         <? if (count($selectableUsers) == 0) : ?>
                             <option disabled><?= _("Keine neuen Suchergebnisse gefunden"); ?></option>
                         <? else : ?>
@@ -46,13 +46,13 @@
                 <br>
                 <br>
                 <br>
-                <?= Icon::create('arr_2right', 'clickable', ['title' => _('In den Suchergebnissen markierte Bereiche der Gruppe hinzufügen')])
+                <?= Icon::create('arr_2right', 'clickable', ['title' => _('In den Suchergebnissen markierte Bereiche der Gruppe hinzufÃ¼gen')])
                         ->asInput(array(
                             'id' => 'search_persons_add',
                             'name' => 'search_persons_add',
                             'class' => 'stay_on_dialog')) ?>
                 <br><br>
-                <?= Icon::create('arr_2left', 'clickable', ['title' => _('Bei den bereits ausgewählten Personen die markierten Personen entfernen')])
+                <?= Icon::create('arr_2left', 'clickable', ['title' => _('Bei den bereits ausgewÃ¤hlten Personen die markierten Personen entfernen')])
                         ->asInput(array(
                             'id' => 'search_persons_remove',
                             'name' => 'search_persons_remove',
@@ -63,11 +63,11 @@
                 <div>
                     <? $selectedCount = count($selectedUsers);
                     if ($selectedCount == 0) : ?>
-                        <?=_('Niemand wurde ausgewählt.')?>
+                        <?=_('Niemand wurde ausgewÃ¤hlt.')?>
                     <? elseif ($selectedCount == 1) : ?>
-                        <?=_('Eine Person wurde ausgewählt')?>
+                        <?=_('Eine Person wurde ausgewÃ¤hlt')?>
                     <? else : ?>
-                        <?=sprintf(_('%s Personen wurden ausgewählt.'), $selectedCount)?>
+                        <?=sprintf(_('%s Personen wurden ausgewÃ¤hlt.'), $selectedCount)?>
                     <? endif ?>
                 </div>
                 <select id="search_persons_selected" name="search_persons_selected[]" style="minWidth: 200px; width: 100%; height: 116px" size="7" multiple

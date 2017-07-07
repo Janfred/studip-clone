@@ -23,7 +23,7 @@ if ($_SERVER['HTTPS'] == 'on' && $_SERVER['SERVER_PORT'] != 443 ||
 <form action="<?= $controller->url_for('admin/plugin/edit_automaticupdate/'.$plugin['id']) ?>" method="post" class="default" data-dialog>
     <?= CSRFProtection::tokenTag() ?>
     <input type="hidden" name="studip_ticket" value="<?= get_ticket() ?>">
-    <?= MessageBox::info(_("Sie können gitlab, github.com oder dem neuen Stud.IP-Plugin-Marktplatz mitteilen, dass Ihr Stud.IP per Webhook über Änderungen im Code des Plugins benachrichtigt werden soll.")) ?>
+    <?= MessageBox::info(_("Sie kÃ¶nnen gitlab, github.com oder dem neuen Stud.IP-Plugin-Marktplatz mitteilen, dass Ihr Stud.IP per Webhook Ã¼ber Ã„nderungen im Code des Plugins benachrichtigt werden soll.")) ?>
     <fieldset>
         <legend><?= _("Einstellungen von Stud.IP") ?></legend>
         <label>
@@ -31,14 +31,14 @@ if ($_SERVER['HTTPS'] == 'on' && $_SERVER['SERVER_PORT'] != 443 ||
             <input type="url" name="automatic_update_url" value="<?= htmlReady($plugin['automatic_update_url']) ?>">
         </label>
         <label>
-            <?= _("Automatisches Update absichern über Sicherheitstoken (optional)") ?>
+            <?= _("Automatisches Update absichern Ã¼ber Sicherheitstoken (optional)") ?>
             <input type="checkbox" name="use_security_token" value="1"<?= $plugin['automatic_update_secret'] || !$plugin['automatic_update_url'] ? " checked" : "" ?>>
         </label>
     </fieldset>
 
     <? if ($plugin['automatic_update_url']) : ?>
     <fieldset>
-        <legend><?= _("Daten für das bereitstellende System") ?></legend>
+        <legend><?= _("Daten fÃ¼r das bereitstellende System") ?></legend>
         <p class="info">
             <?= _("Tragen Sie bei gitlab, github.com oder dem Pluginmarktplatz untenstehende URL ein, die der Webhook aufrufen soll.") ?>
             <? if ($plugin['automatic_update_secret']) : ?>
@@ -51,7 +51,7 @@ if ($_SERVER['HTTPS'] == 'on' && $_SERVER['SERVER_PORT'] != 443 ||
         </label>
         <? if ($plugin['automatic_update_secret']) : ?>
         <label>
-            <?= _("Sicherheitstoken für das andere System (schreibgeschützt)") ?>
+            <?= _("Sicherheitstoken fÃ¼r das andere System (schreibgeschÃ¼tzt)") ?>
             <input type="text" readonly value="<?= htmlReady($plugin['automatic_update_secret']) ?>">
         </label>
         <? endif ?>

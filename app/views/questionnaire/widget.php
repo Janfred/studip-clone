@@ -3,14 +3,14 @@
     <header>
         <h1>
             <?= Icon::create("evaluation", "info")->asimg("16px", array('class' => "text-bottom")) ?>
-            <?= _('Fragebögen') ?>
+            <?= _('FragebÃ¶gen') ?>
         </h1>
         <nav>
             <? if ($allowed_to_add) : ?>
-                <a href="<?= URLHelper::getLink("dispatch.php/questionnaire/edit", array('range_id' => $range_id, 'range_type' => $range_type)) ?>" data-dialog title="<?= _('Fragebogen hinzufügen') ?>">
+                <a href="<?= URLHelper::getLink("dispatch.php/questionnaire/edit", array('range_id' => $range_id, 'range_type' => $range_type)) ?>" data-dialog title="<?= _('Fragebogen hinzufÃ¼gen') ?>">
                     <?= Icon::create("add", "clickable")->asimg("16px", array('class' => "text-bottom")) ?>
                 </a>
-                <a href="<?= URLHelper::getLink("dispatch.php/questionnaire/" . ($range_type == 'course' || $range_type == 'institute' ? 'course' : ''). "overview") ?>" title="<?= _('Fragebögen verwalten') ?>">
+                <a href="<?= URLHelper::getLink("dispatch.php/questionnaire/" . ($range_type == 'course' || $range_type == 'institute' ? 'course' : ''). "overview") ?>" title="<?= _('FragebÃ¶gen verwalten') ?>">
                     <?= Icon::create("edit", "clickable")->asimg("16px", array('class' => "text-bottom")) ?>
                 </a>
             <? endif ?>
@@ -19,9 +19,9 @@
 
     <? if (!count($questionnaire_data)): ?>
         <section class="noquestionnaires">
-            <?= _('Es sind keine Fragebögen vorhanden.') ?>
+            <?= _('Es sind keine FragebÃ¶gen vorhanden.') ?>
             <? if ($allowed_to_add) : ?>
-                <?= _("Um neue Fragebögen zu erstellen, klicken Sie rechts auf das Plus.") ?>
+                <?= _("Um neue FragebÃ¶gen zu erstellen, klicken Sie rechts auf das Plus.") ?>
             <? endif ?>
         </section>
     <? else: ?>
@@ -31,9 +31,9 @@
     <? endif; ?>
         <footer>
             <? if (Request::get('questionnaire_showall')): ?>
-                <a href="<?= URLHelper::getLink('#questionnaire_area', array('questionnaire_showall' => 0)) ?>"><?= _('Abgelaufene Fragebögen ausblenden') ?></a>
+                <a href="<?= URLHelper::getLink('#questionnaire_area', array('questionnaire_showall' => 0)) ?>"><?= _('Abgelaufene FragebÃ¶gen ausblenden') ?></a>
             <? else: ?>
-                <a href="<?= URLHelper::getLink('#questionnaire_area', array('questionnaire_showall' => 1)) ?>"><?= _('Abgelaufene Fragebögen einblenden') ?></a>
+                <a href="<?= URLHelper::getLink('#questionnaire_area', array('questionnaire_showall' => 1)) ?>"><?= _('Abgelaufene FragebÃ¶gen einblenden') ?></a>
             <? endif; ?>
         </footer>
 </article>

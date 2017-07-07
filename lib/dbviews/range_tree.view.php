@@ -8,7 +8,7 @@
 // range_tree.view.class.php
 // Database views used with "range_tree"
 //
-// Copyright (c) 2002 Andr้ Noack <noack@data-quest.de>
+// Copyright (c) 2002 Andrรฉ Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -40,12 +40,12 @@ $_views["TREE_GET_DATA"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
 $_views["TREE_GET_SEM_ENTRIES"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
                             "query"=>"SELECT item_id,count(d.Seminar_id) AS entries FROM range_tree a
                                     INNER JOIN seminar_inst c ON (a.studip_object_id = c.institut_id)
-                                     INNER JOIN seminare d ON(c.seminar_id=d.Seminar_id  ง) ง GROUP BY a.item_id");
+                                     INNER JOIN seminare d ON(c.seminar_id=d.Seminar_id  ยง) ยง GROUP BY a.item_id");
 
 $_views["TREE_OBJECT_NAME"] = array("pk"=>"","temp_table_type"=>"HEAP",
-                            "query"=>"SELECT Name FROM ง WHERE ง LIKE ? ");
+                            "query"=>"SELECT Name FROM ยง WHERE ยง LIKE ? ");
 $_views["TREE_OBJECT_DETAIL"] = array("pk"=>"","temp_table_type"=>"HEAP",
-                            "query"=>"SELECT * FROM ง WHERE ง LIKE ? ");
+                            "query"=>"SELECT * FROM ยง WHERE ยง LIKE ? ");
 $_views["TREE_OBJECT_CAT"] = array("pk"=>"kategorie_id","temp_table_type"=>"MyISAM",
                             "query"=>"SELECT * FROM kategorien WHERE range_id LIKE ? ORDER BY priority");
 $_views["TREE_INST_STATUS"] = array("pk"=>"","temp_table_type"=>"HEAP",
@@ -55,14 +55,14 @@ $_views["TREE_FAK_STATUS"] = array("pk"=>"","temp_table_type"=>"HEAP",
 $_views["TREE_ITEMS_OBJECT"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
                             "query"=>"SELECT item_id FROM range_tree WHERE studip_object_id LIKE ?");
 
-$_views["TREE_UPD_PRIO"] = array("query" => "UPDATE range_tree SET priority=ง WHERE item_id=?");
-$_views["TREE_INS_ITEM"] = array("query" => "INSERT INTO range_tree (item_id,parent_id,name,priority,studip_object,studip_object_id) VALUES (?,?,?,ง,?,?)");
+$_views["TREE_UPD_PRIO"] = array("query" => "UPDATE range_tree SET priority=ยง WHERE item_id=?");
+$_views["TREE_INS_ITEM"] = array("query" => "INSERT INTO range_tree (item_id,parent_id,name,priority,studip_object,studip_object_id) VALUES (?,?,?,ยง,?,?)");
 $_views["TREE_UPD_ITEM"] = array("query" => "UPDATE range_tree SET name=?, studip_object=?, studip_object_id=? WHERE item_id=?");
-$_views["TREE_MOVE_ITEM"] = array("query" => "UPDATE range_tree SET parent_id=?, priority=ง WHERE item_id=?");
+$_views["TREE_MOVE_ITEM"] = array("query" => "UPDATE range_tree SET parent_id=?, priority=ยง WHERE item_id=?");
 $_views["TREE_DEL_ITEM"] = array("query" => "DELETE FROM range_tree WHERE item_id IN (&)");
 
-$_views["TREE_SEARCH_INST"] = array("query" => "SELECT Name,Institut_id FROM Institute WHERE fakultaets_id!=Institut_id AND Name LIKE '%ง%'");
-$_views["TREE_SEARCH_FAK"] = array("query" => "SELECT Name,Institut_id AS Fakultaets_id FROM Institute WHERE fakultaets_id=Institut_id AND Name LIKE '%ง%'");
+$_views["TREE_SEARCH_INST"] = array("query" => "SELECT Name,Institut_id FROM Institute WHERE fakultaets_id!=Institut_id AND Name LIKE '%ยง%'");
+$_views["TREE_SEARCH_FAK"] = array("query" => "SELECT Name,Institut_id AS Fakultaets_id FROM Institute WHERE fakultaets_id=Institut_id AND Name LIKE '%ยง%'");
 $_views["TREE_SEARCH_ITEM"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
                             "query"=>"SELECT a.item_id FROM range_tree a LEFT JOIN Institute b ON (a.studip_object_id = b.Institut_id) WHERE a.name LIKE ? OR b.Name LIKE ? ");
 $_views["TREE_SEARCH_USER"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
@@ -73,9 +73,9 @@ $_views["TREE_SEARCH_SEM"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
                             WHERE NOT ISNULL(rt.item_id) AND a.Name LIKE ?");
 
 
-$_views["CAT_UPD_PRIO"] = array("query" => "UPDATE kategorien SET priority=ง,chdate=UNIX_TIMESTAMP() WHERE kategorie_id=?");
+$_views["CAT_UPD_PRIO"] = array("query" => "UPDATE kategorien SET priority=ยง,chdate=UNIX_TIMESTAMP() WHERE kategorie_id=?");
 $_views["CAT_UPD_CONTENT"] = array("query" => "UPDATE kategorien SET name=?, content=?, chdate=UNIX_TIMESTAMP() WHERE kategorie_id=?");
-$_views["CAT_INS_ALL"] = array("query" => "INSERT INTO kategorien (kategorie_id,range_id,name,content,priority,mkdate,chdate)VALUES (?,?,?,?,ง,UNIX_TIMESTAMP(),UNIX_TIMESTAMP())");
+$_views["CAT_INS_ALL"] = array("query" => "INSERT INTO kategorien (kategorie_id,range_id,name,content,priority,mkdate,chdate)VALUES (?,?,?,?,ยง,UNIX_TIMESTAMP(),UNIX_TIMESTAMP())");
 $_views["CAT_DEL"] = array("query" => "DELETE FROM kategorien WHERE kategorie_id IN (&)");
 $_views["CAT_DEL_RANGE"] = array("query" => "DELETE FROM kategorien WHERE range_id IN (&)");
 

@@ -4,7 +4,7 @@
             <th><?= _('Regularien') ?></th>
             <th><?= _('Teilnahme&shy;voraussetzungen') ?></th>
             <th><?= _('Angebots&shy;rhythmus') ?></th>
-        <? /*    <th><?= _('Aufnahme&shy;kapazität') ?></th> */ ?>
+        <? /*    <th><?= _('Aufnahme&shy;kapazitÃ¤t') ?></th> */ ?>
             <th><?= _('Anwesenheits&shy;pflicht') ?></th>
             <th><?= _('Gewicht an Modulnote in %') ?></th>
         </tr>
@@ -13,8 +13,8 @@
         <? foreach ($modul->modulteile as $modulTeil): ?>
             <?
             $modulTeilDeskriptor = $modulTeil->getDeskriptor();
-            // Für die Kenntlichmachung der Modulteile in Listen die Nummer des
-            // Modulteils und den ausgewählten Namen verwenden.
+            // FÃ¼r die Kenntlichmachung der Modulteile in Listen die Nummer des
+            // Modulteils und den ausgewÃ¤hlten Namen verwenden.
             // Ist keine Nummer vorhanden, dann Durchnummerieren und Standard-
             // Bezeichnung verwenden.
             if (trim($modulTeil->nummer)) {

@@ -8,7 +8,7 @@
 // StudipLitSearchPluginRkgoe.class.php
 //
 //
-// Copyright (c) 2003 AndrÈ Noack <noack@data-quest.de>
+// Copyright (c) 2003 Andr√© Noack <noack@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@ require_once 'StudipLitSearchPluginGvk.class.php';
 *
 *
 * @access   public
-* @author   AndrÈ Noack <noack@data-quest.de>
+* @author   Andr√© Noack <noack@data-quest.de>
 * @package
 **/
 class StudipLitSearchPluginTIBUBOpac extends StudipLitSearchPluginGvk
@@ -42,18 +42,18 @@ class StudipLitSearchPluginTIBUBOpac extends StudipLitSearchPluginGvk
     function __construct()
     {
         parent::__construct();
-        $this->description = "Technische Informationsbibliothek / Universit‰tsbibliothek Hannover";
+        $this->description = "Technische Informationsbibliothek / Universit√§tsbibliothek Hannover";
         $this->z_host = "sru.gbv.de/opac-de-89";
-        $this->z_profile = array('1016' => _("alle Wˆrter [ALL]"),
+        $this->z_profile = array('1016' => _("alle W√∂rter [ALL]"),
                      '1004' => _("Person, Autor [PER]"),
-                     '4' => _("Titelstichwˆrter [TIT]"),
-                     '5' => _("Stichwˆrter Serie/Zeitschrift [SER]"),
-                     '1005' => _("Stichwˆrter Kˆrperschaft [KOR]"),
-                     '46' => _("Schlagwˆrter [SWW]"),
+                     '4' => _("Titelstichw√∂rter [TIT]"),
+                     '5' => _("Stichw√∂rter Serie/Zeitschrift [SER]"),
+                     '1005' => _("Stichw√∂rter K√∂rperschaft [KOR]"),
+                     '46' => _("Schlagw√∂rter [SWW]"),
                      '54' => _("Signatur [SGN]"),
                      '1007' => _("alle Nummern (ISBN, ISSN ...) [NUM]")
-        ); /* '4' => _("Titelanf‰nge [TAF]"),
-           herausgenommen, da keine Unterscheidung anhand von Wort oder Phrase durchgef¸hrt wird.
+        ); /* '4' => _("Titelanf√§nge [TAF]"),
+           herausgenommen, da keine Unterscheidung anhand von Wort oder Phrase durchgef√ºhrt wird.
            */
     }
 }

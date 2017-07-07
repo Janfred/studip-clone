@@ -62,7 +62,7 @@ if ($view == "edit_request") {
     }
 
     $_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["reload"] = TRUE;
-    //hmm, zu früh an dieser Stelle. Notwendig?
+    //hmm, zu frÃ¼h an dieser Stelle. Notwendig?
     //page_close(NULL);
 }
 
@@ -75,12 +75,12 @@ Navigation aufbauen
 $resources_nav = Navigation::getItem('/resources');
 
 // Reiter "Uebersicht"
-$navigation = new Navigation(_('Übersicht'));
+$navigation = new Navigation(_('Ãœbersicht'));
 $navigation->addSubNavigation('hierarchy', new Navigation(_('Struktur'), 'resources.php#a', array('view' => 'resources')));
 
 if (get_config('RESOURCES_ENABLE_GROUPING')) {
-    $navigation->addSubNavigation('group_schedule_daily', new Navigation(_('Gruppen-Belegungspläne'), 'resources.php', array('view' => 'view_group_schedule_daily')));
-    $navigation->addSubNavigation('group_schedule', new Navigation(_('Gruppen-Belegungspläne (Semester)'), 'resources.php', array('view' => 'view_group_schedule')));
+    $navigation->addSubNavigation('group_schedule_daily', new Navigation(_('Gruppen-BelegungsplÃ¤ne'), 'resources.php', array('view' => 'view_group_schedule_daily')));
+    $navigation->addSubNavigation('group_schedule', new Navigation(_('Gruppen-BelegungsplÃ¤ne (Semester)'), 'resources.php', array('view' => 'view_group_schedule')));
 }
 
 if (get_config('RESOURCES_ALLOW_CREATE_TOP_LEVEL') || getGlobalPerms($user->id) == 'admin') {
@@ -129,7 +129,7 @@ if ($perm->have_perm('admin')) {
     $resList = new ResourcesUserRoomsList($user_id, TRUE, FALSE);
     if ($resList->roomsExist() && get_config('RESOURCES_ALLOW_ROOM_REQUESTS')) {
         $navigation = new Navigation(_('Raumplanung'));
-        $navigation->addSubNavigation('start', new Navigation(_('Übersicht'), 'resources.php?cancel_edit_request_x=1', array('view' => 'requests_start')));
+        $navigation->addSubNavigation('start', new Navigation(_('Ãœbersicht'), 'resources.php?cancel_edit_request_x=1', array('view' => 'requests_start')));
 
         $edit_nav = new Navigation(_('Anfragen bearbeiten'), 'resources.php', array('view' => 'edit_request'));
         $list_nav = new Navigation(_('Anfragenliste'), 'resources.php', array('view' => 'list_requests'));

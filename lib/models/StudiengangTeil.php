@@ -347,7 +347,7 @@ class StudiengangTeil extends ModuleManagementModelTreeItem
     }
 
     /**
-     * Returns an array of all Fachbereiche assigned through Fächer to
+     * Returns an array of all Fachbereiche assigned through FÃ¤cher to
      * Studiengangteile.
      *
      * @param string $sortby Field names to order by.
@@ -455,7 +455,7 @@ class StudiengangTeil extends ModuleManagementModelTreeItem
             /*
             if (!mb_strlen($this->kp)) {
                 $ret['kp'] = true;
-                $messages[] = _('Es müssen Kredit-Punkte angegeben werden.');
+                $messages[] = _('Es mÃ¼ssen Kredit-Punkte angegeben werden.');
                 $rejected = true;
             }
              *

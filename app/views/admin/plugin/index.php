@@ -28,9 +28,9 @@ use Studip\Button, Studip\LinkButton;
 
 <? if (count($plugins) == 0): ?>
     <?= MessageBox::info(_('Es sind noch keine Plugins in diesem Stud.IP vorhanden.'), [
-        _('Sie können Plugins aus dem Marktplatz installieren oder manuell hochladen.'),
+        _('Sie kÃ¶nnen Plugins aus dem Marktplatz installieren oder manuell hochladen.'),
         sprintf(
-            _('Benutzen Sie dafür die Funktion "%sweitere Plugins installieren%s" in der Info-Box.'),
+            _('Benutzen Sie dafÃ¼r die Funktion "%sweitere Plugins installieren%s" in der Info-Box.'),
             '<a href="' . $controller->url_for('admin/plugin/search') . '">',
             '</a>'
         )
@@ -83,7 +83,7 @@ use Studip\Button, Studip\LinkButton;
                             <?= htmlReady($migrations[$pluginid]['schema_version']) ?>
                             <? if ($migrations[$pluginid]['schema_version'] < $migrations[$pluginid]['migration_top_version']): ?>
                                 <a href="<?= $controller->url_for('admin/plugin/migrate/' . $pluginid) ?>"
-                                   title="<?= sprintf(_('Update auf Version %d verfügbar'), $migrations[$pluginid]['migration_top_version']) ?>">
+                                   title="<?= sprintf(_('Update auf Version %d verfÃ¼gbar'), $migrations[$pluginid]['migration_top_version']) ?>">
                                     <?= Icon::create('plugin+new', 'clickable') ?>
                                 </a>
                             <? endif; ?>
@@ -173,7 +173,7 @@ if (Config::get()->PLUGINS_UPLOAD_ENABLE) {
 $widget = new OptionsWidget();
 $widget->setTitle(_('Darstellungseinstellungen'));
 $widget->addSelect(
-    _('Darstellung einschränken'),
+    _('Darstellung einschrÃ¤nken'),
     $controller->url_for('admin/plugin'),
     'plugin_filter',
     array_merge(
@@ -200,7 +200,7 @@ $widget->addRadioButton(
 if ($plugin_filter || ($core_filter ?: 'yes') !== 'yes') {
     $widget->addElement(new WidgetElement('<hr>'));
     $widget->addElement(new LinkElement(
-        _('Zurücksetzen'),
+        _('ZurÃ¼cksetzen'),
         $controller->url_for('admin/plugin?reset_filter=1'),
         Icon::create('refresh', 'clickable'),
         ['class' => 'options-radio']

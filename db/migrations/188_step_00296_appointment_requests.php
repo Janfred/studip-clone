@@ -9,7 +9,7 @@ class Step00296AppointmentRequests extends Migration
     private $options_new = array(
         array(
             'name' => 'CALENDAR_GRANT_ALL_INSERT',
-            'description' => 'Ermöglicht das Eintragen von Terminen in alle Nutzerkalender, ohne Beachtung des Rechtesystems.',
+            'description' => 'ErmÃ¶glicht das Eintragen von Terminen in alle Nutzerkalender, ohne Beachtung des Rechtesystems.',
             'section' => 'modules',
             'type' => 'boolean',
             'value' => '0'

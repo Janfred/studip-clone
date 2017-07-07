@@ -8,7 +8,7 @@ use Studip\Button, Studip\LinkButton;
     <fieldset>
         <legend><?= _("Literaturlisten importieren:") ?></legend>
         <label>
-            <?= _("Bitte wählen Sie eine Literaturverwaltung aus:"); ?>
+            <?= _("Bitte wÃ¤hlen Sie eine Literaturverwaltung aus:"); ?>
             <select name="plugin_name" size="1" onChange="this.form.cmd='';" class="submit-upon-select">
                 <? foreach ($GLOBALS['LIT_IMPORT_PLUGINS'] as $p) : ?>
                     <option value="<?= $p["name"] ?>" <?= ($p["name"]==$plugin_name ? "selected" : "") ?>>
@@ -23,7 +23,7 @@ use Studip\Button, Studip\LinkButton;
             <?= mb_strlen($plugin["description"]) > 0 ? Icon::create('info-circle', 'inactive')->asImg() : '' ?>
             <?= formatReady($plugin["description"]) ?><br>
             <br>
-            <?= _("1. Wählen Sie mit <b>Durchsuchen</b> eine Datei von Ihrer Festplatte aus.") ?><br>
+            <?= _("1. WÃ¤hlen Sie mit <b>Durchsuchen</b> eine Datei von Ihrer Festplatte aus.") ?><br>
             <input name="xmlfile" type="file" style="width:250px" accept="text/xml" maxlength="8000000"><br>
             <br>
             <?= _("2. Klicken Sie auf <b>Absenden</b>, um die Datei hochzuladen.") ?><br>

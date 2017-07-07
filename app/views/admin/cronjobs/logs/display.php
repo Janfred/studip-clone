@@ -5,16 +5,16 @@
     <dt><?= _('Aufgabe') ?></dt>
     <dd><?= htmlReady($log->schedule->task->name) ?></dd>
 
-    <dt><?= _('Geplante Ausführung') ?></dt>
+    <dt><?= _('Geplante AusfÃ¼hrung') ?></dt>
     <dd><?= date('d.m.Y H:i:s', $log->scheduled) ?></dd>
 
-    <dt><?= _('Tatsächliche Ausführung') ?></dt>
+    <dt><?= _('TatsÃ¤chliche AusfÃ¼hrung') ?></dt>
     <dd><?= date('d.m.Y H:i:s', $log->executed) ?></dd>
 
-    <dt><?= _('Ausführungsdauer') ?></dt>
+    <dt><?= _('AusfÃ¼hrungsdauer') ?></dt>
     <dd>
     <? if ($log->duration == -1): ?>
-        <?= _('Cronjob läuft noch oder wurde durch einen Fehler abgebrochen') ?>
+        <?= _('Cronjob lÃ¤uft noch oder wurde durch einen Fehler abgebrochen') ?>
     <? else: ?>
         <?= number_format($log->duration, 6, ',', '.') ?> <?= _('Sekunden') ?>
     <? endif; ?>

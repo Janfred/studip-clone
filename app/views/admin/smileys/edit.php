@@ -28,7 +28,7 @@
             </tr>
             <tr class="table_row_even">
                 <td>
-                    <label for="short"><?= _('Kürzel')?></label>
+                    <label for="short"><?= _('KÃ¼rzel')?></label>
                 </td>
                 <td>
                     <input type="text" name="short" id="short" 
@@ -40,7 +40,7 @@
                 <td><?= date('d.m.Y H:i:s', $smiley->mkdate) ?></td>
             </tr>
             <tr class="table_row_even">
-                <td><?= _('Geändert') ?></td>
+                <td><?= _('GeÃ¤ndert') ?></td>
                 <td><?= date('d.m.Y H:i:s', $smiley->chdate) ?></td>
             </tr>
         </tbody>

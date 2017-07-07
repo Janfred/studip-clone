@@ -24,7 +24,7 @@
         <th class="dont-hide hidden-small-down"></th>
         <th class="dont-hide hidden-small-down" colspan="2">
             <? if ($last_modified) : ?>
-                <?= tooltipIcon(_('Letzte Änderung') . ': ' . strftime('%x, %H:%M', $last_modified), true) ?>
+                <?= tooltipIcon(_('Letzte Ã„nderung') . ': ' . strftime('%x, %H:%M', $last_modified), true) ?>
             <? endif ?>
         </th>
     </tr>

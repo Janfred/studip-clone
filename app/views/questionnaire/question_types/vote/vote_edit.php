@@ -31,10 +31,10 @@
            name="questions[<?= $vote->getId() ?>][options][randomize]"
            value="1"
            <?= isset($etask->options['randomize']) && $etask->options['randomize'] ? 'checked' : '' ?>>
-    <?= _('Antworten den Teilnehmenden zufällig präsentieren.') ?>
+    <?= _('Antworten den Teilnehmenden zufÃ¤llig prÃ¤sentieren.') ?>
 </label>
 
-<div style="display: none" class="delete_question"><?= _('Diese Antwortmöglichkeit wirklich löschen?') ?></div>
+<div style="display: none" class="delete_question"><?= _('Diese AntwortmÃ¶glichkeit wirklich lÃ¶schen?') ?></div>
 
 <script>
     jQuery(function () {

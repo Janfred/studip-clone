@@ -97,16 +97,16 @@ class ExternElementContact extends ExternElement {
         $field_names = array(_("Raum"), _("Telefon"), _("Fax"), _("Email"), _("Homepage"), _("Sprechzeiten"));
         $table = $edit_form->editMainSettings($field_names, "", array("width", "sort", "widthpp"));
         
-        $title = _("Überschrift:");
-        $info = _("Überschrift der Kontakt-Daten");
+        $title = _("Ãœberschrift:");
+        $info = _("Ãœberschrift der Kontakt-Daten");
         $table .= $edit_form->editTextfieldGeneric("headline", $title, $info, 35, 100);
         
         $title = _("Standard-Adresse:");
-        $info = _("Wenn Sie diese Option wählen, wird die Standard-Adresse ausgegeben, die jede(r) Mitarbeiter(in) bei seinen universitären Daten auswählen kann. Wählen Sie diese Option nicht, wenn immer die Adresse der Einrichtung ausgegeben werden soll.");
+        $info = _("Wenn Sie diese Option wÃ¤hlen, wird die Standard-Adresse ausgegeben, die jede(r) Mitarbeiter(in) bei seinen universitÃ¤ren Daten auswÃ¤hlen kann. WÃ¤hlen Sie diese Option nicht, wenn immer die Adresse der Einrichtung ausgegeben werden soll.");
         $table .= $edit_form->editCheckboxGeneric('defaultadr', $title, $info, '1', '0');
         
         $title = _("Personenname ausblenden:");
-        $info = _("Unterdrückt die Anzeige des Namens im Adressfeld.");
+        $info = _("UnterdrÃ¼ckt die Anzeige des Namens im Adressfeld.");
         $table .= $edit_form->editCheckboxGeneric('hidepersname', $title, $info, '1', '0');
         
         $title = _("Funktionen anzeigen:");
@@ -124,7 +124,7 @@ class ExternElementContact extends ExternElement {
         $table .= $edit_form->editCheckboxGeneric('separatelinks', $title, $info, '1', '0');
         
         $title = _("Adresszusatz:");
-        $info = _("Zusatz zur Adresse der Einrichtung, z.B. Universitätsname.");
+        $info = _("Zusatz zur Adresse der Einrichtung, z.B. UniversitÃ¤tsname.");
         $table .= $edit_form->editTextfieldGeneric("adradd", $title, $info, 35, 100);
         
         $content_table .= $edit_form->editContentTable($headline, $table);
@@ -140,7 +140,7 @@ class ExternElementContact extends ExternElement {
         $attributes = array("fonttitle_face", "fonttitle_size", "fonttitle_color", "fonttitle_class",
                 "fonttitle_style", "fontcontent_face", "fontcontent_size", "fontcontent_color",
                 "fontcontent_class", "fontcontent_style");
-        $headlines = array("fonttitle" => _("Schriftformatierung der Überschrift"),
+        $headlines = array("fonttitle" => _("Schriftformatierung der Ãœberschrift"),
                 "fontcontent" => _("Schriftformatierung des Inhalts"));
         $content_table .= $edit_form->getEditFormContent($attributes, $headlines);
         $content_table .= $edit_form->editBlankContent();

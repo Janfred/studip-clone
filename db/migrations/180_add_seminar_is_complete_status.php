@@ -19,7 +19,7 @@ class AddSeminarIsCompleteStatus extends Migration
                                         `description`)
                   VALUES (MD5(CONCAT('CONFIG_', :field)), :field, 0, 'boolean',
                           'global', 'global', UNIX_TIMESTAMP(), UNIX_TIMESTAMP(),
-                          'Definiert, ob auf der Admin-Veranstaltunggseite der Komplett-Status für Veranstaltungen aufgeführt sein soll')";
+                          'Definiert, ob auf der Admin-Veranstaltunggseite der Komplett-Status fÃ¼r Veranstaltungen aufgefÃ¼hrt sein soll')";
         $statement = DBManager::get()->prepare($query);
         $statement->bindValue(':field', 'ADMIN_COURSES_SHOW_COMPLETE');
         $statement->execute();

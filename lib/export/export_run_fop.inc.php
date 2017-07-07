@@ -116,7 +116,7 @@ if (!CheckParamRUN_FOP()) {
     $xml_printimage .= '</a>';
     $xml_printlink = ' <a href="' . FileManager::getDownloadLinkForTemporaryFile($xml_file_id, $xml_filename) . '" class="tree"> ' . $xml_filename . '</a>';
     $xml_printdesc = _("XML-Daten");
-    $xml_printcontent = _("In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags können mit einem XSLT-Script verarbeitet werden.") . "<br>";
+    $xml_printcontent = _("In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags kÃ¶nnen mit einem XSLT-Script verarbeitet werden.") . "<br>";
 
     $xslt_printimage = '<a href="' . FileManager::getDownloadLinkForTemporaryFile($result_file, $xslt_filename . '.' . $format) . '">';
     $xslt_printimage .= Icon::create($export_icon[$format], 'clickable')->asImg(['class' => 'text-top']);

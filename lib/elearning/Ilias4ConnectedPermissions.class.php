@@ -11,7 +11,7 @@ DEFINE (OPERATION_COPY, "copy");
  *
  * This class contains methods to handle permissions on connected objects.
  *
- * @author    Arne Schröder <schroeder@data-quest.de>
+ * @author    Arne SchrÃ¶der <schroeder@data-quest.de>
  * @access    public
  * @modulegroup    elearning_interface_modules
  * @module        Ilias4ConnectedPermission
@@ -119,7 +119,7 @@ class Ilias4ConnectedPermissions extends Ilias3ConnectedPermissions
         }
 
         if (! $this->getContentModulePerms( $course_id )) {
-            $messages["info"] .= _("Für den zugeordneten ILIAS-Kurs konnten keine Berechtigungen ermittelt werden.") . "<br>";
+            $messages["info"] .= _("FÃ¼r den zugeordneten ILIAS-Kurs konnten keine Berechtigungen ermittelt werden.") . "<br>";
         }
 
         return true;

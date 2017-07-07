@@ -84,7 +84,7 @@
         <div class="button-group">
             <?= \Studip\Button::create(_("speichern")) ?>
             <? if (!$topic->isNew()) : ?>
-            <?= \Studip\Button::create(_("löschen"), "delete_topic", array('onClick' => "return window.confirm('"._("Wirklich löschen?")."');")) ?>
+            <?= \Studip\Button::create(_("lÃ¶schen"), "delete_topic", array('onClick' => "return window.confirm('"._("Wirklich lÃ¶schen?")."');")) ?>
             <? endif ?>
         </div>
     </div>

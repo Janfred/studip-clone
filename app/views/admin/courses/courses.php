@@ -138,7 +138,7 @@
             <th <?= ($sortby == 'prelim') ? sprintf('class="sort%s"', mb_strtolower($sortFlag)) : '' ?>>
                 <a href="<?=
                 URLHelper::getLink('', array('sortby'   => 'prelim',
-                                             'sortFlag' => mb_strtolower($sortFlag))) ?>"><?= _('Vorläufig') ?></a>
+                                             'sortFlag' => mb_strtolower($sortFlag))) ?>"><?= _('VorlÃ¤ufig') ?></a>
             </th>
         <? endif ?>
         <? if (in_array('contents', $view_filter)) : ?>
@@ -148,7 +148,7 @@
         <? endif ?>
         <? if (in_array('last_activity', $view_filter)) : ?>
             <th style="width: <?= $nav_elements * 27 ?>px">
-                <?= _('letzte Aktivität') ?>
+                <?= _('letzte AktivitÃ¤t') ?>
             </th>
         <? endif ?>
         <th style="text-align: center" class="actions">

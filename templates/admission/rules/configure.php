@@ -1,11 +1,11 @@
 <label for="message" class="caption">
     <?= _('Nachricht bei fehlgeschlagener Anmeldung') ?>:
-    <?= (mb_strpos($rule->getMessage(),'%s') ? tooltipicon(_("Die Zeichen %s sind ein Platzhalter für änderbare Bedingungen")) : '')?>
+    <?= (mb_strpos($rule->getMessage(),'%s') ? tooltipicon(_("Die Zeichen %s sind ein Platzhalter fÃ¼r Ã¤nderbare Bedingungen")) : '')?>
 </label>
 <textarea name="message" rows="4" cols="50"><?= htmlReady($rule->getMessage()) ?></textarea>
 <br/>
 <label for="start_date" class="caption">
-    <?= _('Gültigkeitszeitraum der Regel') ?>:
+    <?= _('GÃ¼ltigkeitszeitraum der Regel') ?>:
 </label>
 <div class="form_group">
     <?= _('von') ?>

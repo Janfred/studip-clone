@@ -18,7 +18,7 @@
                     &nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="allow_requests"
                            <? if (Config::get()->RESOURCES_ALLOW_ROOM_REQUESTS) echo 'checked'; ?>>
-                    <?= _('NutzerInnen können im Rahmen der Veranstaltungsverwaltung Raumeigenschaften und konkrete Räume wünschen.') ?>
+                    <?= _('NutzerInnen kÃ¶nnen im Rahmen der Veranstaltungsverwaltung Raumeigenschaften und konkrete RÃ¤ume wÃ¼nschen.') ?>
                 </label>
                 <br>
             </td>
@@ -26,13 +26,13 @@
         <tr>
             <td>&nbsp;</td>
             <td>
-                <b><?= _('Nur wünschbare <i>Räume</i>')?></b><br>
+                <b><?= _('Nur wÃ¼nschbare <i>RÃ¤ume</i>')?></b><br>
                 <br>
                 <label>
                     &nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="allow_requestable_requests"
                            <? if (Config::get()->RESOURCES_ALLOW_REQUESTABLE_ROOM_REQUESTS) echo 'checked'; ?>>
-                    <?= _('NutzerInnen können im Rahmen der Veranstaltungsverwaltung nur wünschbare Räume wünschen.') ?>
+                    <?= _('NutzerInnen kÃ¶nnen im Rahmen der Veranstaltungsverwaltung nur wÃ¼nschbare RÃ¤ume wÃ¼nschen.') ?>
                 </label>
                 <br>
             </td>
@@ -40,13 +40,13 @@
         <tr>
             <td>&nbsp;</td>
             <td>
-                <b><?= _('Nur konkrete <i>Räume</i> wünschbar')?></b><br>
+                <b><?= _('Nur konkrete <i>RÃ¤ume</i> wÃ¼nschbar')?></b><br>
                 <br>
                 <label>
                     &nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="direct_requests_only"
                            <? if (Config::get()->RESOURCES_DIRECT_ROOM_REQUESTS_ONLY) echo 'checked'; ?>>
-                    <?= _('NutzerInnen können im Rahmen der Veranstaltungsverwaltung nur konkrete Räume wünschen.') ?>
+                    <?= _('NutzerInnen kÃ¶nnen im Rahmen der Veranstaltungsverwaltung nur konkrete RÃ¤ume wÃ¼nschen.') ?>
                 </label>
                 <br>
             </td>
@@ -54,9 +54,9 @@
         <tr>
             <td>&nbsp;</td>
             <td>
-                <b><?= _('Sperrzeiten für die Bearbeitung von <i>Raum</i>belegungen') ?></b><br>
+                <b><?= _('Sperrzeiten fÃ¼r die Bearbeitung von <i>Raum</i>belegungen') ?></b><br>
                 <br>
-                <?= _('Die <b>Bearbeitung</b> von Belegungen soll für alle lokalen Ressourcen-Administratoren zu folgenden Bearbeitungszeiten geblockt werden:') ?><br>
+                <?= _('Die <b>Bearbeitung</b> von Belegungen soll fÃ¼r alle lokalen Ressourcen-Administratoren zu folgenden Bearbeitungszeiten geblockt werden:') ?><br>
                 <br>
                 <label>
                     &nbsp;&nbsp;&nbsp;
@@ -74,9 +74,9 @@
         <tr>
             <td>&nbsp;</td>
             <td>
-                <b><?=_('Sperrzeiten für <i>Raum</i>belegungen') ?></b><br>
+                <b><?=_('Sperrzeiten fÃ¼r <i>Raum</i>belegungen') ?></b><br>
                 <br>
-                <?= _('Die <b>Belegung</b> soll für alle lokalen Ressourcen-Administratoren zu folgenden Belegungszeitenzeiten geblockt werden:') ?><br>
+                <?= _('Die <b>Belegung</b> soll fÃ¼r alle lokalen Ressourcen-Administratoren zu folgenden Belegungszeitenzeiten geblockt werden:') ?><br>
                 <br>
                 <label>
                     &nbsp;&nbsp;&nbsp;
@@ -98,7 +98,7 @@
                 <br>
                 <label>
                     &nbsp;&nbsp;&nbsp;
-                    <?= _('Anzahl der Belegungen, ab der Räume dennoch mit Einzelterminen passend belegt werden können:') ?>
+                    <?= _('Anzahl der Belegungen, ab der RÃ¤ume dennoch mit Einzelterminen passend belegt werden kÃ¶nnen:') ?>
                     <input type="text" size="5" maxlength="10"
                            name="allow_single_assign_percentage"
                            value="<?= Config::get()->RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE ?>">%
@@ -118,13 +118,13 @@
         <tr>
             <td>&nbsp;</td>
             <td>
-                <b><?= _('Einordnung von <i>Räumen</i> in Orga-Struktur') ?></b><br>
+                <b><?= _('Einordnung von <i>RÃ¤umen</i> in Orga-Struktur') ?></b><br>
                 <br>
                 <label>
                     &nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="enable_orga_classify"
                            <? if (Config::get()->RESOURCES_ENABLE_ORGA_CLASSIFY) echo 'checked'; ?>>
-                    <?= _('<i>Räume</i> können Fakultäten und Einrichtungen unabhängig von Besitzerrechten zugeordnet werden.')?><br>
+                    <?= _('<i>RÃ¤ume</i> kÃ¶nnen FakultÃ¤ten und Einrichtungen unabhÃ¤ngig von Besitzerrechten zugeordnet werden.')?><br>
                 </label>
                 <br>
             </td>
@@ -132,10 +132,10 @@
         <tr>
             <td>&nbsp;</td>
             <td>
-                <b><?= _('Anlegen von <i>Räumen</i>') ?></b><br>
+                <b><?= _('Anlegen von <i>RÃ¤umen</i>') ?></b><br>
                 <br>
                 <label>
-                    <?= _('Das Anlegen von <i>Räumen</i> kann nur durch folgende Personenkreise vorgenommen werden:') ?><br>
+                    <?= _('Das Anlegen von <i>RÃ¤umen</i> kann nur durch folgende Personenkreise vorgenommen werden:') ?><br>
                     <br>
                     &nbsp;&nbsp;&nbsp;
                     <select name="allow_create_resources">
@@ -157,17 +157,17 @@
         <tr>
             <td>&nbsp;</td>
             <td>
-                <b><?= _('Vererbte Berechtigungen von Veranstaltungen und Einrichtungen für Ressourcen')?></b><br>
+                <b><?= _('Vererbte Berechtigungen von Veranstaltungen und Einrichtungen fÃ¼r Ressourcen')?></b><br>
                 <br>
                 <?= _('Mitglieder von Veranstaltungen oder Einrichtungen erhalten '
                      .'folgende Rechte in Ressourcen, die diesen Veranstaltungen '
-                     .'oder Einrichtungen gehören:') ?><br>
+                     .'oder Einrichtungen gehÃ¶ren:') ?><br>
                 <br>
                 <label>
                     &nbsp;&nbsp;&nbsp;
                     <input type="radio" name="inheritance_rooms" value="1"
                            <? if (Config::get()->RESOURCES_INHERITANCE_PERMS_ROOMS == 1) echo 'checked'; ?>>
-                    <?= _('die lokalen Rechte der Einrichtung oder Veranstaltung werden übertragen') ?>
+                    <?= _('die lokalen Rechte der Einrichtung oder Veranstaltung werden Ã¼bertragen') ?>
                     <br>
                 </label>
                 <label>
@@ -190,17 +190,17 @@
         <tr>
             <td>&nbsp;</td>
             <td>
-                <b><?= _('Vererbte Berechtigungen von Veranstaltungen und Einrichtungen für <i>Räume</i>') ?></b><br>
+                <b><?= _('Vererbte Berechtigungen von Veranstaltungen und Einrichtungen fÃ¼r <i>RÃ¤ume</i>') ?></b><br>
                 <br>
                 <?= _('Mitglieder von Veranstaltungen oder Einrichtungen erhalten '
-                     .'folgende Rechte in <i>Räumen</i>, die diesen Veranstaltungen '
-                     .'oder Einrichtungen gehören:') ?><br>
+                     .'folgende Rechte in <i>RÃ¤umen</i>, die diesen Veranstaltungen '
+                     .'oder Einrichtungen gehÃ¶ren:') ?><br>
                 <br>
                 <label>
                     &nbsp;&nbsp;&nbsp;
                     <input type="radio" name="inheritance" value="1"
                            <? if (Config::get()->RESOURCES_INHERITANCE_PERMS == 1) echo 'checked'; ?>>
-                    <?= _('die lokalen Rechte der Einrichtung oder Veranstaltung werden übertragen') ?><br>
+                    <?= _('die lokalen Rechte der Einrichtung oder Veranstaltung werden Ã¼bertragen') ?><br>
                 </label>
                 <label>
                     &nbsp;&nbsp;&nbsp;
@@ -221,7 +221,7 @@
     <tfoot>
         <tr>
             <td class="table_footer" colspan="2" style="text-align:center">
-                <?= Button::create(_('Übernehmen'), '_send_settings') ?>
+                <?= Button::create(_('Ãœbernehmen'), '_send_settings') ?>
             </td>
         </tr>
     </tfoot>

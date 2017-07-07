@@ -48,13 +48,13 @@ class CoreParticipants implements StudipModule
     public function getMetadata()
     {
         return array(
-            'summary' => _('Liste aller Teilnehmenden einschließlich Nachrichtenfunktionen'),
+            'summary' => _('Liste aller Teilnehmenden einschlieÃŸlich Nachrichtenfunktionen'),
             'description' => _('Die Teilnehmenden werden gruppiert nach ihrer '.
-                'jeweiligen Funktion in einer Tabelle gelistet. Für Lehrende '.
+                'jeweiligen Funktion in einer Tabelle gelistet. FÃ¼r Lehrende '.
                 'werden sowohl das Anmeldedatum als auch der Studiengang mit '.
                 'Semesterangabe dargestellt. Die Liste kann in verschiedene '.
-                'Formate exportiert werden. Außerdem gibt es die '.
-                'Möglichkeiten, eine Rundmail an alle zu schreiben (nur '.
+                'Formate exportiert werden. AuÃŸerdem gibt es die '.
+                'MÃ¶glichkeiten, eine Rundmail an alle zu schreiben (nur '.
                 'Lehrende) bzw. einzelne Teilnehmende separat anzuschreiben.'),
             'displayname' => _('Teilnehmende'),
             'keywords' => _('Rundmail an einzelne, mehrere oder alle Teilnehmenden;
@@ -64,12 +64,12 @@ class CoreParticipants implements StudipModule
                             Export der Teilnehmendenliste;
                             Einrichten von Gruppen;
                             Anzeige Studiengang und Fachsemester'),
-            'descriptionshort' => _('Liste aller Teilnehmenden einschließlich Nachrichtenfunktionen'),
+            'descriptionshort' => _('Liste aller Teilnehmenden einschlieÃŸlich Nachrichtenfunktionen'),
             'descriptionlong' => _('Die Teilnehmenden werden gruppiert nach ihrer jeweiligen Rolle in '.
-                                   'einer Tabelle gelistet. Für Lehrende werden sowohl das Anmeldedatum '.
+                                   'einer Tabelle gelistet. FÃ¼r Lehrende werden sowohl das Anmeldedatum '.
                                    'als auch der Studiengang mit Semesterangabe der Studierenden dargestellt. '.
-                                   'Die Liste kann in verschiedene Formate exportiert werden. Außerdem gibt '.
-                                   'es die Möglichkeiten für Lehrende, allen eine Rundmail zukommen zu lassen '.
+                                   'Die Liste kann in verschiedene Formate exportiert werden. AuÃŸerdem gibt '.
+                                   'es die MÃ¶glichkeiten fÃ¼r Lehrende, allen eine Rundmail zukommen zu lassen '.
                                    'bzw. einzelne Teilnehmende separat anzuschreiben.'),
             'category' => _('Lehr- und Lernorganisation'),
             'icon' => Icon::create('persons', 'info'),

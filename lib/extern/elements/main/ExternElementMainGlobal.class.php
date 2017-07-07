@@ -52,7 +52,7 @@ class ExternElementMainGlobal extends ExternElementMain {
                 'defaultadr'
         );
         $this->real_name = _("Grundeinstellungen");
-        $this->description = _("In den Grundeinstellungen kˆnnen Sie allgemeine Daten des Moduls ‰ndern.");
+        $this->description = _("In den Grundeinstellungen k√∂nnen Sie allgemeine Daten des Moduls √§ndern.");
         parent::__construct($module_name, $data_fields, $field_names, $config);
     }
     
@@ -107,10 +107,10 @@ class ExternElementMainGlobal extends ExternElementMain {
         $headline = $edit_form->editHeadline(_("Anzuzeigende Lehrveranstaltungen"));
         
         $title = _("Startsemester:");
-        $info = _("Geben Sie das erste anzuzeigende Semester an. Die Angaben \"vorheriges\", \"aktuelles\" und \"n‰chstes\" beziehen sich immer auf das laufende Semester und werden automatisch angepasst.");
+        $info = _("Geben Sie das erste anzuzeigende Semester an. Die Angaben \"vorheriges\", \"aktuelles\" und \"n√§chstes\" beziehen sich immer auf das laufende Semester und werden automatisch angepasst.");
         $current_sem = get_sem_num_sem_browse();
         if ($current_sem === FALSE) {
-            $names = array(_("keine Auswahl"), _("aktuelles"), _("n‰chstes"));
+            $names = array(_("keine Auswahl"), _("aktuelles"), _("n√§chstes"));
             $values = array("", "current", "next");
         }
         else if ($current_sem === TRUE) {
@@ -118,7 +118,7 @@ class ExternElementMainGlobal extends ExternElementMain {
             $values = array("", "previous", "current");
         }
         else {
-            $names = array(_("keine Auswahl"), _("vorheriges"), _("aktuelles"), "n‰chstes");
+            $names = array(_("keine Auswahl"), _("vorheriges"), _("aktuelles"), "n√§chstes");
             $values = array("", "previous", "current", "next");
         }
         foreach ($semester_data as $sem_num => $sem) {
@@ -139,7 +139,7 @@ class ExternElementMainGlobal extends ExternElementMain {
         $table .= $edit_form->editOptionGeneric("semrange", $title, $info, $values, $names);
         
         $title = _("Umschalten des aktuellen Semesters:");
-        $info = _("Geben Sie an, wieviele Wochen vor Semesterende automatisch auf das n‰chste Semester umgeschaltet werden soll.");
+        $info = _("Geben Sie an, wieviele Wochen vor Semesterende automatisch auf das n√§chste Semester umgeschaltet werden soll.");
         $names = array(_("keine Auswahl"), _("am Semesterende"), _("1 Woche vor Semesterende"));
         for ($i = 2; $i < 13; $i++)
             $names[] = sprintf(_("%s Wochen vor Semesterende"), $i);
@@ -152,24 +152,24 @@ class ExternElementMainGlobal extends ExternElementMain {
         $headline = $edit_form->editHeadline(_("Weitere Angaben"));
         
         $title = _("Namensformat:");
-        $info = _("W‰hlen Sie, wie Personennamen formatiert werden sollen.");
+        $info = _("W√§hlen Sie, wie Personennamen formatiert werden sollen.");
         $values = array("", "no_title_short", "no_title", "no_title_rev", "full", "full_rev");
         $names = array(_("keine Auswahl"), _("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
                 _("Dr. Peter Meyer"), _("Meyer, Peter, Dr."));
         $table = $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
         
         $title = _("Sprache:");
-        $info = _("W‰hlen Sie eine Sprache f¸r die Datumsangaben aus.");
+        $info = _("W√§hlen Sie eine Sprache f√ºr die Datumsangaben aus.");
         $values = array("", "de_DE", "en_GB");
         $names = array(_("keine Auswahl"), _("Deutsch"), _("Englisch"));
         $table .= $edit_form->editOptionGeneric("language", $title, $info, $values, $names);
         
         $title = _("Standard-Adresse:");
-        $info = _("Wenn Sie diese Option w‰hlen, wird die Standard-Adresse ausgegeben, die jede(r) Mitarbeiter(in) bei seinen universit‰ren Daten ausw‰hlen kann. W‰hlen Sie diese Option nicht, wenn immer die Adresse der Einrichtung ausgegeben werden soll.");
+        $info = _("Wenn Sie diese Option w√§hlen, wird die Standard-Adresse ausgegeben, die jede(r) Mitarbeiter(in) bei seinen universit√§ren Daten ausw√§hlen kann. W√§hlen Sie diese Option nicht, wenn immer die Adresse der Einrichtung ausgegeben werden soll.");
         $table .= $edit_form->editCheckboxGeneric('defaultadr', $title, $info, '1', '0');
         
         $title = _("HTML-Header/Footer:");
-        $info = _("Anw‰hlen, wenn die Seite als komplette HTML-Seite ausgegeben werden soll, z.B. bei direkter Verlinkung oder in einem Frameset.");
+        $info = _("Anw√§hlen, wenn die Seite als komplette HTML-Seite ausgegeben werden soll, z.B. bei direkter Verlinkung oder in einem Frameset.");
         $values = "1";
         $names = "";
         $table .= $edit_form->editCheckboxGeneric("wholesite", $title, $info, $values, $names);
@@ -179,11 +179,11 @@ class ExternElementMainGlobal extends ExternElementMain {
         $table .= $edit_form->editTextfieldGeneric("urlcss", $title, $info, 50, 200);
         
         $title = _("Copyright:");
-        $info = _("Geben Sie hier einen Copyright-Vermerk an. Dieser wird im Meta-Tag \"copyright\" ausgegeben, wenn Sie die Option \"HTML-Header/Footer\" angew‰hlt haben.");
+        $info = _("Geben Sie hier einen Copyright-Vermerk an. Dieser wird im Meta-Tag \"copyright\" ausgegeben, wenn Sie die Option \"HTML-Header/Footer\" angew√§hlt haben.");
         $table .= $edit_form->editTextfieldGeneric("copyright", $title, $info, 50, 200);
         
         $title = _("Autor:");
-        $info = _("Geben Sie hier den Namen des Seitenautors an. Dieser wird im Meta-Tag \"author\" ausgegeben, wenn Sie die Option \"HTML-Header/Footer\" angew‰hlt haben.");
+        $info = _("Geben Sie hier den Namen des Seitenautors an. Dieser wird im Meta-Tag \"author\" ausgegeben, wenn Sie die Option \"HTML-Header/Footer\" angew√§hlt haben.");
         $table .= $edit_form->editTextfieldGeneric("author", $title, $info, 50, 200);
         
         $content_table .= $edit_form->editContentTable($headline, $table);

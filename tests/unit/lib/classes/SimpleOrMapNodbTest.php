@@ -7,7 +7,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      André Noack
+ * @author      AndrÃ© Noack
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
  */
@@ -162,7 +162,7 @@ class SimpleOrMapNodbTest extends PHPUnit_Framework_TestCase
      */
     public function testsetData($a)
     {
-        $a->vorname = 'André';
+        $a->vorname = 'AndrÃ©';
         $data['email'] = 'fuhse@data-quest.de';
         $data['vorname'] = 'Rasmus';
         $data['nachname'] = 'Fuhse';

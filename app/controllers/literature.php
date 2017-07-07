@@ -1,14 +1,14 @@
 <?php
 /**
- * Literaturübersicht von Stud.IP
+ * LiteraturÃ¼bersicht von Stud.IP
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author   Arne Schröder <schroeder@data-quest.de>
- * @author   André Noack <noack@data-quest.de>
+ * @author   Arne SchrÃ¶der <schroeder@data-quest.de>
+ * @author   AndrÃ© Noack <noack@data-quest.de>
  * @author   Jan Kulmann <jankul@tzi.de>
  * @author   Rasmus Fuhse <fuhse@data-quest.de>
  * @license  http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
@@ -108,7 +108,7 @@ class LiteratureController extends AuthenticatedController
         //checking rights
         if (($_the_tree->range_type == "sem" && !$GLOBALS['perm']->have_studip_perm("tutor", $this->_range_id)) ||
             (($_the_tree->range_type == "inst" || $_the_tree->range_type == "fak") && !$GLOBALS['perm']->have_studip_perm("autor", $this->_range_id))){
-                throw new AccessDeniedException(_('Keine Berechtigung für diese Literaturliste.'));
+                throw new AccessDeniedException(_('Keine Berechtigung fÃ¼r diese Literaturliste.'));
         }
 
         $_the_treeview->parseCommand();
@@ -130,11 +130,11 @@ class LiteratureController extends AuthenticatedController
                     if ($inserted){
                         $_the_tree->init();
                         $_the_treeview->open_ranges[$clip_cmd[1]] = true;
-                        PageLayout::postMessage(MessageBox::success(sprintf(_("%s Einträge aus Ihrer Merkliste wurden in <b>%s</b> eingetragen."),
+                        PageLayout::postMessage(MessageBox::success(sprintf(_("%s EintrÃ¤ge aus Ihrer Merkliste wurden in <b>%s</b> eingetragen."),
                         $inserted, htmlReady($_the_tree->tree_data[$clip_cmd[1]]['name']))));
                     }
                 } else {
-                    PageLayout::postMessage(MessageBox::info(_("Sie haben keinen Eintrag in Ihrer Merkliste ausgewählt!")));
+                    PageLayout::postMessage(MessageBox::info(_("Sie haben keinen Eintrag in Ihrer Merkliste ausgewÃ¤hlt!")));
                 }
             }
             $_the_clipboard->doClipCmd();
@@ -318,7 +318,7 @@ class LiteratureController extends AuthenticatedController
         if (Request::option('cmd') == 'clone_entry'){
             $_the_element = StudipLitCatElement::GetClonedElement($_catalog_id);
             if ($_the_element->isNewEntry()){
-                PageLayout::postWarning(_("Der Eintrag wurde kopiert, Sie können die Daten jetzt ändern."), [_("Der kopierte Eintrag wurde noch nicht gespeichert.")]);
+                PageLayout::postWarning(_("Der Eintrag wurde kopiert, Sie kÃ¶nnen die Daten jetzt Ã¤ndern."), [_("Der kopierte Eintrag wurde noch nicht gespeichert.")]);
                 //$old_cat_id = $_catalog_id;
                 $_catalog_id = $_the_element->getValue('catalog_id');
             } else {
@@ -347,10 +347,10 @@ class LiteratureController extends AuthenticatedController
 
         if ($_the_form->IsClicked("delete") && $_catalog_id != "new_entry" && $_the_element->isChangeable()){
             if ($_the_element->reference_count){
-                PageLayout::postInfo(sprintf(_("Sie können diesen Eintrag nicht löschen, da er noch in %s Literaturlisten referenziert wird."),$_the_element->reference_count));
+                PageLayout::postInfo(sprintf(_("Sie kÃ¶nnen diesen Eintrag nicht lÃ¶schen, da er noch in %s Literaturlisten referenziert wird."),$_the_element->reference_count));
             } else {
-                PageLayout::postInfo(_("Wollen Sie diesen Eintrag wirklich löschen?"),
-                    [LinkButton::createAccept(_('Ja'), URLHelper::getURL('?cmd=delete_element&_catalog_id=' . $_catalog_id), array('title' =>  _('löschen')))
+                PageLayout::postInfo(_("Wollen Sie diesen Eintrag wirklich lÃ¶schen?"),
+                    [LinkButton::createAccept(_('Ja'), URLHelper::getURL('?cmd=delete_element&_catalog_id=' . $_catalog_id), array('title' =>  _('lÃ¶schen')))
                             .LinkButton::createCancel(_('Abbrechen'), URLHelper::getURL('?_catalog_id=' . $_catalog_id), array('title' =>  _('abbrechen')))]);
             }
         }
@@ -368,7 +368,7 @@ class LiteratureController extends AuthenticatedController
         if (Request::option('cmd') == "check_entry"){
             $lit_plugin_value = $_the_element->getValue('lit_plugin');
             $check_result = StudipLitSearch::CheckZ3950($_the_element->getValue('accession_number'));
-            $content = "<div style=\"font-size:70%\"<b>" ._("Verfügbarkeit in externen Katalogen:") . "</b><br>";
+            $content = "<div style=\"font-size:70%\"<b>" ._("VerfÃ¼gbarkeit in externen Katalogen:") . "</b><br>";
             if (is_array($check_result)) {
                 foreach ($check_result as $plugin_name => $ret){
                     $content .= "<b>&nbsp;" . htmlReady(StudipLitSearch::GetPluginDisplayName($plugin_name))."&nbsp;</b>";
@@ -417,7 +417,7 @@ class LiteratureController extends AuthenticatedController
         $_catalog_id = $_the_element->getValue("catalog_id");
 
         if (!$_the_element->isChangeable()) {
-            PageLayout::postMessage(MessageBox::info(_('Sie haben diesen Eintrag nicht selbst vorgenommen, und dürfen ihn daher nicht verändern! Wenn Sie mit diesem Eintrag arbeiten wollen, können Sie sich eine persönliche Kopie erstellen.')));
+            PageLayout::postMessage(MessageBox::info(_('Sie haben diesen Eintrag nicht selbst vorgenommen, und dÃ¼rfen ihn daher nicht verÃ¤ndern! Wenn Sie mit diesem Eintrag arbeiten wollen, kÃ¶nnen Sie sich eine persÃ¶nliche Kopie erstellen.')));
         }
 
 

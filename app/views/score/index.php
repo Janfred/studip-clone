@@ -50,7 +50,7 @@
 
             // News
             if ($news = $person['newscount']) {
-                $tmp = sprintf(ngettext('Eine persönliche Ankündigung', '%s persönliche Ankündigungen', $news), $news);
+                $tmp = sprintf(ngettext('Eine persÃ¶nliche AnkÃ¼ndigung', '%s persÃ¶nliche AnkÃ¼ndigungen', $news), $news);
                 $content .= sprintf(
                     '<a href="%s">%s</a> ',
                     URLHelper::getLink('dispatch.php/profile?username=' . $person['username']),
@@ -104,7 +104,7 @@
             <td class="hidden-small-down"  style="text-align: right">
             <? if($person['user_id'] == $GLOBALS['user']->id): ?>
                 <a href="<?= $controller->url_for('score/unpublish') ?>">
-                    <?= Icon::create('trash', 'clickable', ['title' => _('Ihren Wert von der Liste löschen')])->asImg(16, ["class" => 'text-top']) ?>
+                    <?= Icon::create('trash', 'clickable', ['title' => _('Ihren Wert von der Liste lÃ¶schen')])->asImg(16, ["class" => 'text-top']) ?>
                 </a>
             <? endif; ?>
             </td>

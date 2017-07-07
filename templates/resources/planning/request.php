@@ -35,7 +35,7 @@
                 </td>
             </tr>
             <tr>
-                <td><?= _('Letzte ƒnderung') ?></td>
+                <td><?= _('Letzte √Ñnderung') ?></td>
                 <td>
                     <?= strftime('%x %H:%M', $reqObj->chdate) ?>
                     <?= _('von') ?>
@@ -85,7 +85,7 @@
                         }
 
                         if ($reqObj->getType() != 'date') {
-                            echo _("regelm‰ﬂige Buchung ab") . ": " . strftime("%x", $dates['first_event']);
+                            echo _("regelm√§√üige Buchung ab") . ": " . strftime("%x", $dates['first_event']);
                         }
                     } else {
                         print _("nicht angegeben");
@@ -114,12 +114,12 @@
                                 <? if ($request_resource_id = $reqObj->getResourceId()) : ?>
                                     <? $resObj = ResourceObject::Factory($request_resource_id); ?>
                                     <?= $resObj->getFormattedLink($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["first_event"]); ?>
-                                    <?= tooltipicon(_('Der ausgew‰hlte Raum bietet folgende der w¸nschbaren Eigenschaften:') . "\n" . $resObj->getPlainProperties(true), $resObj->getOwnerId() == 'global'); ?>
+                                    <?= tooltipicon(_('Der ausgew√§hlte Raum bietet folgende der w√ºnschbaren Eigenschaften:') . "\n" . $resObj->getPlainProperties(true), $resObj->getOwnerId() == 'global'); ?>
                                     <? if ($resObj->getOwnerId() == 'global')  : ?>
                                         [global]
                                     <? endif ?>
                                     <? if ($resObj->getSeats() > 1) : ?>
-                                        <?= sprintf(_('- %d Pl‰tze'), $resObj->getSeats()) ?>
+                                        <?= sprintf(_('- %d Pl√§tze'), $resObj->getSeats()) ?>
                                     <? endif ?>
                                 <? else : ?>
                                     <?= _('Es wurde kein Raum angefordert.'); ?>
@@ -171,7 +171,7 @@
                             ?>
                             <tr>
                                 <td style="border-top:1px solid; width: 100%" colspan="<?= $cols + 2 ?>">
-                                    <strong><?= _('Raumgruppe ber¸cksichtigen') ?>:</strong>
+                                    <strong><?= _('Raumgruppe ber√ºcksichtigen') ?>:</strong>
                                 </td>
                             </tr>
                             <tr>
@@ -187,7 +187,7 @@
                                     </select>
                                 </td>
                                 <td colspan="<?= $cols + 2 ?>">
-                                    <?= Button::create(_('Ausw‰hlen'), 'request_tool_group') ?>
+                                    <?= Button::create(_('Ausw√§hlen'), 'request_tool_group') ?>
                                 </td>
                             </tr>
                             <?
@@ -199,12 +199,12 @@
                                             <?
                                             $resObj = ResourceObject::Factory($key);
                                             print $resObj->getFormattedLink($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["first_event"]);
-                                            print tooltipicon(_('Der ausgew‰hlte Raum bietet folgende der w¸nschbaren Eigenschaften:') . "\n" . $resObj->getPlainProperties(true), $resObj->getOwnerId() == 'global');
+                                            print tooltipicon(_('Der ausgew√§hlte Raum bietet folgende der w√ºnschbaren Eigenschaften:') . "\n" . $resObj->getPlainProperties(true), $resObj->getOwnerId() == 'global');
                                             if ($resObj->getOwnerId() == 'global') {
                                                 print ' [global]';
                                             }
                                             if ($resObj->getSeats() > 1) {
-                                                printf(_('- %d Pl‰tze'), $resObj->getSeats());
+                                                printf(_('- %d Pl√§tze'), $resObj->getSeats());
                                             }
                                             ?>
                                         </td>
@@ -249,7 +249,7 @@
                         ?>
                         <tr>
                             <td style="border-top:1px solid; width: 100%" colspan="<?= $cols + 2 ?>">
-                                <strong><?= _('weitere passende R‰ume') ?>:</strong>
+                                <strong><?= _('weitere passende R√§ume') ?>:</strong>
                             </td>
                         </tr>
                         <?
@@ -271,12 +271,12 @@
                                         <?
                                         $resObj = ResourceObject::Factory($key);
                                         print $resObj->getFormattedLink($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["first_event"]);
-                                        print tooltipicon(_('Der ausgew‰hlte Raum bietet folgende der w¸nschbaren Eigenschaften:') . "\n" . $resObj->getPlainProperties(true), $resObj->getOwnerId() == 'global');
+                                        print tooltipicon(_('Der ausgew√§hlte Raum bietet folgende der w√ºnschbaren Eigenschaften:') . "\n" . $resObj->getPlainProperties(true), $resObj->getOwnerId() == 'global');
                                         if ($resObj->getOwnerId() == 'global') {
                                             print ' [global]';
                                         }
                                         if ($resObj->getSeats() > 1) {
-                                            printf(_('- %d Pl‰tze'), $resObj->getSeats());
+                                            printf(_('- %d Pl√§tze'), $resObj->getSeats());
                                         }
                                         ?>
                                     </td>
@@ -319,7 +319,7 @@
                             ?>
                             <tr>
                                 <td colspan="<?= $cols + 2 ?>" style="text-align: center">
-                                    <?= _("zeige R‰ume") ?>
+                                    <?= _("zeige R√§ume") ?>
                                     <a href="<?= URLHelper::getLink('?dec_limit_low=1') ?>">-</a>
                                     <input type="text" name="search_rooms_limit_low" size="2"
                                            value="<?= ($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["search_limit_low"] + 1) ?>">
@@ -331,7 +331,7 @@
                                            value="<?= $_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["search_limit_high"] ?>">
                                     <a href="<?= URLHelper::getLink('?inc_limit_high=1') ?>">+</a>
 
-                                    <?= Icon::create('arr_2up', 'sort', ['title' => 'ausgew‰hlten Bereich anzeigen'])->asInput(['name' => 'matching_rooms_limit_submit',]) ?>
+                                    <?= Icon::create('arr_2up', 'sort', ['title' => 'ausgew√§hlten Bereich anzeigen'])->asInput(['name' => 'matching_rooms_limit_submit',]) ?>
                                 </td>
                             </tr>
                             <?
@@ -343,7 +343,7 @@
                             ?>
                             <tr>
                                 <td style="border-top:1px solid; width: 100%" colspan="<?= $cols + 2 ?>">
-                                    <strong><?= _('R‰ume aus der Merkliste') ?>:</strong>
+                                    <strong><?= _('R√§ume aus der Merkliste') ?>:</strong>
                                 </td>
                             </tr>
                             <?
@@ -354,12 +354,12 @@
                                         <?
                                         $resObj = ResourceObject::Factory($key);
                                         print $resObj->getFormattedLink($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["first_event"]);
-                                        print tooltipicon(_('Der ausgew‰hlte Raum bietet folgende der w¸nschbaren Eigenschaften:') . "\n" . $resObj->getPlainProperties(true), $resObj->getOwnerId() == 'global');
+                                        print tooltipicon(_('Der ausgew√§hlte Raum bietet folgende der w√ºnschbaren Eigenschaften:') . "\n" . $resObj->getPlainProperties(true), $resObj->getOwnerId() == 'global');
                                         if ($resObj->getOwnerId() == 'global') {
                                             print ' [global]';
                                         }
                                         if ($resObj->getSeats() > 1) {
-                                            printf(_('- %d Pl‰tze'), $resObj->getSeats());
+                                            printf(_('- %d Pl√§tze'), $resObj->getSeats());
                                         }
                                         ?>
                                     </td>
@@ -405,7 +405,7 @@
             </tr>
             <tr>
                 <td valign="top">
-                    <p><strong><?= _('gew¸nschte Raumeigenschaften') ?>:</strong></p>
+                    <p><strong><?= _('gew√ºnschte Raumeigenschaften') ?>:</strong></p>
                     <? $properties = $reqObj->getProperties(); ?>
                     <? if (sizeof($properties))  : ?>
                         <table cellpadding="0" cellspacing="0">
@@ -435,7 +435,7 @@
                             <? endforeach; ?>
                         </table>
                     <? else : ?>
-                        <?= _('Es wurden keine Raumeigenschaften gew¸nscht.'); ?>
+                        <?= _('Es wurden keine Raumeigenschaften gew√ºnscht.'); ?>
                     <? endif ?>
                 </td>
             </tr>
@@ -498,12 +498,12 @@
 
 
                     if ($inc_possible) {
-                        echo Button::create('<< ' . _('Zur¸ck'), 'dec_request');
+                        echo Button::create('<< ' . _('Zur√ºck'), 'dec_request');
                     }
 
 
                     echo Button::createCancel(_('Abbrechen'), 'cancel_edit_request');
-                    echo Button::create(_('Lˆschen'), 'delete_request');
+                    echo Button::create(_('L√∂schen'), 'delete_request');
 
                     if ((($reqObj->getResourceId()) || (sizeof($matching_rooms)) || (sizeof($clipped_rooms)) || (sizeof($grouped_rooms))) && ((is_array($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["groups"])) || ($_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["assign_objects"]))) {
                         echo Button::createAccept(_('Speichern'), 'save_state');
@@ -523,7 +523,7 @@
                     ?>
 
                     <?
-                    if (sizeof($_SESSION['resources_data']["requests_open"]) > 1) printf("<br>" . _("<b>%s</b> von <b>%s</b> Anfragen in der Bearbeitung wurden noch nicht aufgelˆst."), sizeof($_SESSION['resources_data']["requests_open"]), sizeof($_SESSION['resources_data']["requests_working_on"]));
+                    if (sizeof($_SESSION['resources_data']["requests_open"]) > 1) printf("<br>" . _("<b>%s</b> von <b>%s</b> Anfragen in der Bearbeitung wurden noch nicht aufgel√∂st."), sizeof($_SESSION['resources_data']["requests_open"]), sizeof($_SESSION['resources_data']["requests_working_on"]));
                     printf("<br>" . _("Aktueller Request: ") . "<b>%s</b>", $_SESSION['resources_data']["requests_working_pos"] + 1);
                     ?>
                 </td>

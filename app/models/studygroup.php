@@ -8,7 +8,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author     AndrÈ Klaﬂen <andre.klassen@elan-ev.de>
+ * @author     Andr√© Kla√üen <andre.klassen@elan-ev.de>
  * @copyright  2009 ELAN e.V.
  * @license    http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category   Stud.IP
@@ -635,7 +635,7 @@ class StudygroupModel
                 get_fullname($user_id), $sem->getName(), URLHelper::getlink($GLOBALS['ABSOLUTE_URI_STUDIP'] . "dispatch.php/course/studygroup/members/" . $sem->id, array('cid' => $sem->id)));
         } else {
             $subject .= " " . _("Neuer Mitgliedsantrag");
-            $message = sprintf(_("%s mˆchte der Studiengruppe %s beitreten. Klicken Sie auf den untenstehenden Link, um direkt zur Studiengruppe zu gelangen.\n\n [Direkt zur Studiengruppe]%s"),
+            $message = sprintf(_("%s m√∂chte der Studiengruppe %s beitreten. Klicken Sie auf den untenstehenden Link, um direkt zur Studiengruppe zu gelangen.\n\n [Direkt zur Studiengruppe]%s"),
                 get_fullname($user_id), $sem->getName(), URLHelper::getlink($GLOBALS['ABSOLUTE_URI_STUDIP'] . "dispatch.php/course/studygroup/members/" . $sem->id, array('cid' => $sem->id)));
         }
 

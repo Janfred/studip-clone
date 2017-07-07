@@ -30,7 +30,7 @@
                 <?= Studip\Button::create(_('Kopieren'), 'copy', ['data-dialog' => '']) ?>
 
             <? if ($topFolder->isWritable($GLOBALS['user']->id)): ?>
-                <?= Studip\Button::create(_('Löschen'), 'delete', ['data-confirm' => _('Soll die Auswahl wirklich gelöscht werden?')]) ?>
+                <?= Studip\Button::create(_('LÃ¶schen'), 'delete', ['data-confirm' => _('Soll die Auswahl wirklich gelÃ¶scht werden?')]) ?>
             <? endif ?>
            </td>
         </tr>

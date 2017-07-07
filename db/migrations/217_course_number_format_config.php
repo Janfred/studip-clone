@@ -10,7 +10,7 @@ class CourseNumberFormatConfig extends Migration
     private $options = array(
         array(
             'name'        => 'COURSE_NUMBER_FORMAT',
-            'description' => 'Erlaubt das Eintragen eines regulären Ausdrucks zur Validierung einer Veranstaltungsnummer. Im Kommentarfeld kann ein entsprechender Hilfetext hinterlegt werden.',
+            'description' => 'Erlaubt das Eintragen eines regulÃ¤ren Ausdrucks zur Validierung einer Veranstaltungsnummer. Im Kommentarfeld kann ein entsprechender Hilfetext hinterlegt werden.',
             'section'     => 'global',
             'type'        => 'string',
             'value'       => ''

@@ -29,7 +29,7 @@
                     <strong><?= _('Sie haben sich noch keinen Einrichtungen zugeordnet.') ?></strong><br>
                     <br>
                     <?= _('Wenn Sie auf Ihrem Profil Ihre Einrichtungen '
-                          . 'auflisten wollen, können Sie diese Einrichtungen hier eintragen.') ?>
+                          . 'auflisten wollen, kÃ¶nnen Sie diese Einrichtungen hier eintragen.') ?>
                 </td>
             </tr>
         <? endif; ?>
@@ -54,7 +54,7 @@
                 <td colspan="2">
                 <? if ($allow_change['in']): ?>
                     <label for="select_new_inst">
-                        <?= _('Um sich einer Einrichtung zuzuordnen, wählen '
+                        <?= _('Um sich einer Einrichtung zuzuordnen, wÃ¤hlen '
                               . 'Sie die entsprechende Einrichtung aus der folgenden Liste aus:') ?>
                     </label>
                     <br>
@@ -63,7 +63,7 @@
                     <a name="einrichtungen"></a>
                     <select name="new_inst" id="new_inst" class="nested-select">
                         <option value="" class="is-placeholder">
-                            <?= _('-- Bitte Einrichtung auswählen --') ?>
+                            <?= _('-- Bitte Einrichtung auswÃ¤hlen --') ?>
                         </option>
                         <? foreach ($available_institutes as $i) : ?>
                             <? if (InstituteMember::countBySql('user_id = ? AND institut_id = ?', [$user->user_id, $i['Institut_id']]) == 0
@@ -83,16 +83,16 @@
                     <br>
                     <br>
 
-                    <?= _('Wenn Sie aus Einrichtungen wieder ausgetragen werden möchten, '
+                    <?= _('Wenn Sie aus Einrichtungen wieder ausgetragen werden mÃ¶chten, '
                           . 'markieren Sie die entsprechenden Felder in der linken Tabelle.') ?><br>
-                    <?= _('Mit einem Klick auf <b>Übernehmen</b> werden die gewählten Änderungen durchgeführt.') ?>
+                    <?= _('Mit einem Klick auf <b>Ãœbernehmen</b> werden die gewÃ¤hlten Ã„nderungen durchgefÃ¼hrt.') ?>
                     <br>
                     <br>
 
-                    <?= Button::create(_('Übernehmen'), 'store_in', ['title' => _('Änderungen übernehmen')]) ?>
+                    <?= Button::create(_('Ãœbernehmen'), 'store_in', ['title' => _('Ã„nderungen Ã¼bernehmen')]) ?>
                 <? else: ?>
                     <?= _('Die Informationen zu Ihrer Einrichtung werden vom System verwaltet, '
-                          . 'und können daher von Ihnen nicht geändert werden.') ?>
+                          . 'und kÃ¶nnen daher von Ihnen nicht geÃ¤ndert werden.') ?>
                 <? endif; ?>
                 </td>
             </tr>

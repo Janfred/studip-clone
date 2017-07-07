@@ -33,7 +33,7 @@
     <label>
         <?= _('Art') ?>
         <select name="course_type" id="course_type" class="size-s">
-            <option><?=_('Bitte wählen')?></option>
+            <option><?=_('Bitte wÃ¤hlen')?></option>
             <? foreach ($GLOBALS['TERMIN_TYP'] as $id => $value) : ?>
                 <option value="<?= $id ?>" <? if(Request::get('course_type') && Request::get('course_type') == $id) :?>selected="selected"<? endif?>><?= htmlReady($value['name']) ?></option>
             <? endforeach; ?>
@@ -50,13 +50,13 @@
         <?= _('Turnus') ?>
         <select name="cycle">
             <option value="0" <?= (Request::int('cycle', $cycle->cycle) === 0) ? 'selected' : '' ?>>
-                <?= _('Wöchentlich') ?>
+                <?= _('WÃ¶chentlich') ?>
             </option>
             <option value="1" <?= (Request::int('cycle', $cycle->cycle) === 1) ? 'selected' : '' ?>>
-                <?= _('Zweiwöchentlich') ?>
+                <?= _('ZweiwÃ¶chentlich') ?>
             </option>
             <option value="2" <?= (Request::int('cycle', $cycle->cycle) === 2) ? 'selected' : '' ?>>
-                <?= _('Dreiwöchentlich') ?>
+                <?= _('DreiwÃ¶chentlich') ?>
             </option>
         </select>
     </label>
@@ -129,7 +129,7 @@
     <footer data-dialog-button>
         <?= Studip\Button::createAccept(_('Speichern'), 'save') ?>
         <? if (Request::int('fromDialog')): ?>
-            <?= Studip\LinkButton::create(_('Zurück zur Übersicht'), $controller->url_for('course/timesrooms/index'), array('data-dialog' => 'size=big')) ?>
+            <?= Studip\LinkButton::create(_('ZurÃ¼ck zur Ãœbersicht'), $controller->url_for('course/timesrooms/index'), array('data-dialog' => 'size=big')) ?>
         <? endif; ?>
     </footer>
 </form>

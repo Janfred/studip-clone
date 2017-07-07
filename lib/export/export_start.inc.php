@@ -44,13 +44,13 @@ $semester = new SemesterData;
 
 $export_pagename = _("Datenexport - Startseite");
 
-$export_info = _("Bitte w‰hlen Sie Datenart und Einrichtung.") . "<br>";
+$export_info = _("Bitte w√§hlen Sie Datenart und Einrichtung.") . "<br>";
 
 $export_pagecontent .= "<form method=\"POST\" action=\"" . URLHelper::getURL() . "\">";
 
 $export_pagecontent .= CSRFProtection::tokenTag();
 
-$export_pagecontent .="<br><b>". _("Bitte w‰hlen Sie eine Einrichtung: ") .  "</b><br><select name=\"range_id\" class=\"nested-select\">";
+$export_pagecontent .="<br><b>". _("Bitte w√§hlen Sie eine Einrichtung: ") .  "</b><br><select name=\"range_id\" class=\"nested-select\">";
 
 // Prepare institutes statement for faculty
 $query = "SELECT Institut_id, Name
@@ -108,7 +108,7 @@ $export_pagecontent .= " value=\"person\">" . _("MitarbeiterInnendaten") .  "</o
 
 $export_pagecontent .= "</select><br><br><br><br>";
 
-$export_pagecontent .="<b>". _("Aus welchem Semester sollen die Daten exportiert werden (f¸r Veranstaltungsexport): ") .  "</b><br>";
+$export_pagecontent .="<b>". _("Aus welchem Semester sollen die Daten exportiert werden (f√ºr Veranstaltungsexport): ") .  "</b><br>";
 if (!isset($ex_sem)) {
     $ex_sem = (Semester::findCurrent() ? Semester::findCurrent()->getId() : null);
 }

@@ -2,7 +2,7 @@
 /** @namespace RESTAPI
  *
  * Im Namensraum RESTAPI sind alle Klassen und Funktionen versammelt,
- * die für die RESTful Web Services von Stud.IP benötigt werden.
+ * die fÃ¼r die RESTful Web Services von Stud.IP benÃ¶tigt werden.
  */
 namespace RESTAPI;
 use DocBlock, BadMethodCallException;
@@ -12,14 +12,14 @@ use DocBlock, BadMethodCallException;
  * Mappings von sogenannten Routen (Tupel aus HTTP-Methode und Pfad)
  * auf Code.
  *
- * Dazu werden zunächst Routen mittels der Funktion
+ * Dazu werden zunÃ¤chst Routen mittels der Funktion
  * Router::registerRoutes registriert.
  *
  * Wenn dann ein HTTP-Request eingeht, kann mithilfe von
- * Router::dispatch und HTTP-Methode bzw. Pfad der zugehörige Code
- * gefunden und ausgeführt werden. Der Router bildet aus dem
- * Rückgabewert des Codes ein Response-Objekt, das er als Ergebnis
- * zurück meldet.
+ * Router::dispatch und HTTP-Methode bzw. Pfad der zugehÃ¶rige Code
+ * gefunden und ausgefÃ¼hrt werden. Der Router bildet aus dem
+ * RÃ¼ckgabewert des Codes ein Response-Objekt, das er als Ergebnis
+ * zurÃ¼ck meldet.
  *
  * @code
  * $router = Router::getInstance();

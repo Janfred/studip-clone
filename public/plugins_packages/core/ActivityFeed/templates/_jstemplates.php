@@ -20,7 +20,7 @@
                 }) %>
         <% });
     } else { %>
-        <?= MessageBox::info(_('Keine (weiteren) Aktivitäten gefunden.')) ?>
+        <?= MessageBox::info(_('Keine (weiteren) AktivitÃ¤ten gefunden.')) ?>
     <% } %>
 </script>
 

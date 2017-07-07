@@ -5,7 +5,7 @@
 <? if ($mandatory_course) : ?>
     <input type="hidden" name="mandatory_course_id_old" value="<?=$mandatory_course->id?>">
     <label class="caption">
-        <?= _('Mitgliedschaft in folgender Veranstaltung überprüfen') ?>:
+        <?= _('Mitgliedschaft in folgender Veranstaltung Ã¼berprÃ¼fen') ?>:
     </label>
     <p>
         <?=htmlReady($mandatory_course->getFullName('number-name-semester'));?>

@@ -27,15 +27,15 @@ class Studiengaenge_AbschluesseController
     }
     
     /**
-     * Liste der Studiengänge gruppiert nach Fachbereiche (Fachbereich ist
+     * Liste der StudiengÃ¤nge gruppiert nach Fachbereiche (Fachbereich ist
      * die  verantwortliche Einrichtung des zugeordneten Faches, nicht die des
      * Studiengangs!)
      */
     public function index_action()
     {
-        PageLayout::setTitle(_('Studiengänge gruppiert nach Abschlüssen'));
+        PageLayout::setTitle(_('StudiengÃ¤nge gruppiert nach AbschlÃ¼ssen'));
         
-        // Nur Abschlüsse von Fachbereichen an denen der User eine Rolle hat
+        // Nur AbschlÃ¼sse von Fachbereichen an denen der User eine Rolle hat
         $perm_institutes = MvvPerm::getOwnInstitutes();
         
         $this->initPageParams('abschluesse');

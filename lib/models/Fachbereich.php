@@ -247,7 +247,7 @@ class Fachbereich extends ModuleManagementModelTreeItem
     }
 
     /**
-     * Gießener Spezialität: Kurzbezeichnungen für Fakultäten.
+     * GieÃŸener SpezialitÃ¤t: Kurzbezeichnungen fÃ¼r FakultÃ¤ten.
      * Returns the short name of the faculty. If short name is not set returns
      * the display name.
      *
@@ -255,7 +255,7 @@ class Fachbereich extends ModuleManagementModelTreeItem
      */
     public function getShortName()
     {
-        // Gießen
+        // GieÃŸen
         //return $this->jlug_fak ? $this->jlug_fak : $this->getDisplayName();
 
         return $this->getDisplayName();

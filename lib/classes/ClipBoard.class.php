@@ -8,7 +8,7 @@
 // ClipBoard.class.php
 // a generic clipboard-class to use in Stud.IP
 //
-// Copyright (c) 2004 André Noack <noack@data-quest.de>, Cornelis Kater <kater@data-quest.de>,
+// Copyright (c) 2004 AndrÃ© Noack <noack@data-quest.de>, Cornelis Kater <kater@data-quest.de>,
 // data-quest GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@
 * a generic clipboard class to use in Stud.IP
 *
 * @access   public
-* @author   André Noack <noack@data-quest.de>, Cornelis Kater <kater@data-quest.de>,
+* @author   AndrÃ© Noack <noack@data-quest.de>, Cornelis Kater <kater@data-quest.de>,
 * @package  core
 **/
 class ClipBoard {
@@ -86,9 +86,9 @@ class ClipBoard {
             }
         }
         if ($inserted == 1){
-            $this->msg .= "msg§" . _("Es wurde ein Verweis in Ihre Merkliste aufgenommen.") . "§";
+            $this->msg .= "msgÂ§" . _("Es wurde ein Verweis in Ihre Merkliste aufgenommen.") . "Â§";
         } else if ($inserted){
-            $this->msg .= "msg§" . sprintf(_("Es wurden %s Verweise in Ihre Merkliste aufgenommen."), $inserted) . "§";
+            $this->msg .= "msgÂ§" . sprintf(_("Es wurden %s Verweise in Ihre Merkliste aufgenommen."), $inserted) . "Â§";
         }
         $this->setDefaultValue();
         return $inserted;
@@ -106,9 +106,9 @@ class ClipBoard {
             }
         }
         if ($deleted == 1){
-            $this->msg .= "msg§" . _("Es wurde ein Verweis aus Ihrer Merkliste entfernt.") . "§";
+            $this->msg .= "msgÂ§" . _("Es wurde ein Verweis aus Ihrer Merkliste entfernt.") . "Â§";
         } else if ($deleted){
-            $this->msg .= "msg§" . sprintf(_("Es wurden %s Verweis aus Ihrer Merkliste entfernt."), $deleted) . "§";
+            $this->msg .= "msgÂ§" . sprintf(_("Es wurden %s Verweis aus Ihrer Merkliste entfernt."), $deleted) . "Â§";
         }
         $this->setDefaultValue();
         return $deleted;
@@ -167,8 +167,8 @@ class ClipBoard {
     public function setFormObject(){
         $form_name = $this->form_name;
         $form_fields['clip_content'] = array('type' => 'select', 'multiple' => true, 'options_callback' => array($this, "getClipOptions"));
-        $form_fields['clip_cmd'] = array('type' => 'select', 'options' => array(array('name' => _("Aus Merkliste löschen"), 'value' => 'del')));
-        $form_buttons['clip_ok'] = array('type' => 'accept', 'caption' => _('OK'), 'info' => _("Gewählte Aktion starten"));
+        $form_fields['clip_cmd'] = array('type' => 'select', 'options' => array(array('name' => _("Aus Merkliste lÃ¶schen"), 'value' => 'del')));
+        $form_buttons['clip_ok'] = array('type' => 'accept', 'caption' => _('OK'), 'info' => _("GewÃ¤hlte Aktion starten"));
         if (!is_object($this->form_obj)){
             $this->form_obj = new StudipForm($form_fields, $form_buttons, $form_name, false);
         } else {
@@ -186,7 +186,7 @@ class ClipBoard {
             }
         } else {
             $options[] = array('name' => ("Ihre Merkliste ist leer!"), 'value' => 0);
-            $options[] = array('name' => str_repeat("¯",floor($cols * .8)) , 'value' => 0);
+            $options[] = array('name' => str_repeat("Â¯",floor($cols * .8)) , 'value' => 0);
         }
         return $options;
     }

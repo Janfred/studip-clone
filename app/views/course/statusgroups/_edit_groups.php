@@ -1,7 +1,7 @@
 <form class="default" action="<?= $controller->url_for('course/statusgroups/batch_save_groups') ?>" method="post">
     <section>
         <label for="size">
-            <?= _('Gruppengröße') ?>
+            <?= _('GruppengrÃ¶ÃŸe') ?>
             <input type="number" name="size" value="<?= intval($size) ?>" min="0">
             <?= $different_sizes ? '(' . _('verschiedene Werte') . ')' : '' ?>
         </label>

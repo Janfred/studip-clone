@@ -5,8 +5,8 @@ $open_requests = $course->room_requests->filter(function (RoomRequest $request) 
 ?>
 <? if (count($open_requests) > 0): ?>
     <?= MessageBox::info(sprintf(ngettext(
-            'Für diese Veranstaltung liegt eine offene Raumanfrage vor.',
-            'Für diese Veranstaltung liegen %u offene Raumanfragen vor',
+            'FÃ¼r diese Veranstaltung liegt eine offene Raumanfrage vor.',
+            'FÃ¼r diese Veranstaltung liegen %u offene Raumanfragen vor',
             count($open_requests)
         ), count($open_requests)) . '<br>'
         . Studip\LinkButton::create(_('Raumanfragen anzeigen'),

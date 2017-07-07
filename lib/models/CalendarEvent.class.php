@@ -460,7 +460,7 @@ class CalendarEvent extends SimpleORMap implements Event
                             $rrule['linterval']);
                 } else {
                     $type = 'daily';
-                    $text = _('Der Termin wird täglich wiederholt');
+                    $text = _('Der Termin wird tÃ¤glich wiederholt');
                 }
                 break;
             case 'WEEKLY':
@@ -513,7 +513,7 @@ class CalendarEvent extends SimpleORMap implements Event
                 }
                 break;
             case 'YEARLY':
-                $month_names = array(_('Januar'), _('Februar'), _('März'), _('April'), _('Mai'),
+                $month_names = array(_('Januar'), _('Februar'), _('MÃ¤rz'), _('April'), _('Mai'),
                     _('Juni'), _('Juli'), _('August'), _('September'), _('Oktober'),
                     _('November'), _('Dezember'));
                 if ($rrule['day']) {
@@ -575,7 +575,7 @@ class CalendarEvent extends SimpleORMap implements Event
                 $this->permission_user_id)) {
             switch ($this->event->class) {
                 case 'PUBLIC':
-                    return _('Öffentlich');
+                    return _('Ã–ffentlich');
                 case 'CONFIDENTIAL':
                     return _('Vertraulich');
                 default:
@@ -930,7 +930,7 @@ class CalendarEvent extends SimpleORMap implements Event
             case Calendar::PERMISSION_ADMIN :
                 $options = array(
                     // SEMBBS nur private und vertrauliche Termine
-                    'PUBLIC' => _('Öffentlich'),
+                    'PUBLIC' => _('Ã–ffentlich'),
                     'PRIVATE' => _('Privat'),
                     'CONFIDENTIAL' => _('Vertraulich')
                 );
@@ -1172,7 +1172,7 @@ class CalendarEvent extends SimpleORMap implements Event
             } else
             
             // SEMBBS
-            // Admins dürfen alle Termine löschen
+            // Admins dÃ¼rfen alle Termine lÃ¶schen
             /*
             if ($GLOBALS['perm']->have_perm('admin')) {
                 $permissions[$user_id][$this->event_id] = Event::PERMISSION_DELETABLE;

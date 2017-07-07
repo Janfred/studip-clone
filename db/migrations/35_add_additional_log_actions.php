@@ -5,13 +5,13 @@ class AddAdditionalLogActions extends Migration {
     private $logactions = array(
         array(
             'name'=>'CHANGE_BASIC_DATA',
-            'description'=>'Basisdaten geändert',
-            'info_template'=>'%user hat in Veranstaltung %sem(%affected) die Daten %info geändert.',
+            'description'=>'Basisdaten geÃ¤ndert',
+            'info_template'=>'%user hat in Veranstaltung %sem(%affected) die Daten %info geÃ¤ndert.',
             'active'=>0),
         array(
             'name'=>'CHANGE_INSTITUTE_DATA',
-            'description'=>'Institutdaten geändert',
-            'info_template'=>'%user hat in Veranstaltung %sem(%affected) die Daten %info geändert.',
+            'description'=>'Institutdaten geÃ¤ndert',
+            'info_template'=>'%user hat in Veranstaltung %sem(%affected) die Daten %info geÃ¤ndert.',
             'active'=>0),
         array(
             'name'=>'PLUGIN_ENABLE',
@@ -25,13 +25,13 @@ class AddAdditionalLogActions extends Migration {
             'active'=>1),
         array(
             'name'=>'SEM_CHANGED_ACCESS',
-            'description'=>'Zugangsberechtigungen geändert',
-            'info_template'=>'%user ändert die Zugangsberechtigungen für %sem(%affected) auf %access(%info).',
+            'description'=>'Zugangsberechtigungen geÃ¤ndert',
+            'info_template'=>'%user Ã¤ndert die Zugangsberechtigungen fÃ¼r %sem(%affected) auf %access(%info).',
             'active'=>0),
         array(
             'name'=>'SEM_USER_ADD',
             'description'=>'In Veranstaltung eingetragen',
-            'info_template'=>'%user hat %user(%coaffected) für %sem(%affected) mit dem status %info eingetragen. (%dbg_info)',
+            'info_template'=>'%user hat %user(%coaffected) fÃ¼r %sem(%affected) mit dem status %info eingetragen. (%dbg_info)',
             'active'=>0),
         array(
             'name'=>'SEM_USER_DEL',
@@ -40,23 +40,23 @@ class AddAdditionalLogActions extends Migration {
             'active'=>0),
         array(
             'name'=>'SEM_CHANGED_RIGHTS',
-            'description'=>'Veranstaltungsrechte geändert',
+            'description'=>'Veranstaltungsrechte geÃ¤ndert',
             'info_template'=>'%user hat %user(%coaffected) in %sem(%affected) als %info eingetragen. (%dbg_info)',
             'active'=>0),
         array(
             'name'=>'SEM_ADD_STUDYAREA',
-            'description'=>'Studienbereich zu Veranst. hinzufügen',
-            'info_template'=>'%user fügt Studienbereich \"%studyarea(%coaffected)\" zu %sem(%affected) hinzu.',
+            'description'=>'Studienbereich zu Veranst. hinzufÃ¼gen',
+            'info_template'=>'%user fÃ¼gt Studienbereich \"%studyarea(%coaffected)\" zu %sem(%affected) hinzu.',
             'active'=>0),
         array(
             'name'=>'SEM_DELETE_STUDYAREA',
-            'description'=>'Studienbereich aus Veranst. löschen',
+            'description'=>'Studienbereich aus Veranst. lÃ¶schen',
             'info_template'=>'%user entfernt Studienbereich \"%studyarea(%coaffected)\" aus %sem(%affected).',
             'active'=>0),
         array(
             'name'=>'RES_ASSIGN_SEM',
             'description'=>'Buchen einer Ressource (VA)',
-            'info_template'=>'%user bucht %res(%affected) für %sem(%coaffected) (%info).',
+            'info_template'=>'%user bucht %res(%affected) fÃ¼r %sem(%coaffected) (%info).',
             'active'=>0),
         array(
             'name'=>'RES_ASSIGN_SINGLE',
@@ -66,37 +66,37 @@ class AddAdditionalLogActions extends Migration {
         array(
             'name'=>'RES_REQUEST_NEW',
             'description'=>'Neue Raumanfrage',
-            'info_template'=>'%user stellt neue Raumanfrage für %sem(%affected), gewünschter Raum: %res(%coaffected), %info',
+            'info_template'=>'%user stellt neue Raumanfrage fÃ¼r %sem(%affected), gewÃ¼nschter Raum: %res(%coaffected), %info',
             'active'=>0),
         array(
             'name'=>'RES_REQUEST_UPDATE',
-            'description'=>'Geänderte Raumanfrage',
-            'info_template'=>'%user ändert Raumanfrage für %sem(%affected), gewünschter Raum: %res(%coaffected), %info',
+            'description'=>'GeÃ¤nderte Raumanfrage',
+            'info_template'=>'%user Ã¤ndert Raumanfrage fÃ¼r %sem(%affected), gewÃ¼nschter Raum: %res(%coaffected), %info',
             'active'=>0),
         array(
             'name'=>'RES_REQUEST_DEL',
-            'description'=>'Raumanfrage löschen',
-            'info_template'=>'%user löscht Raumanfrage für %sem(%affected).',
+            'description'=>'Raumanfrage lÃ¶schen',
+            'info_template'=>'%user lÃ¶scht Raumanfrage fÃ¼r %sem(%affected).',
             'active'=>0),
         array(
             'name'=>'RES_ASSIGN_DEL_SEM',
-            'description'=>'VA-Buchung löschen',
-            'info_template'=>'%user löscht Ressourcenbelegung für %res(%affected) in Veranstaltung %sem(%coaffected), %info.',
+            'description'=>'VA-Buchung lÃ¶schen',
+            'info_template'=>'%user lÃ¶scht Ressourcenbelegung fÃ¼r %res(%affected) in Veranstaltung %sem(%coaffected), %info.',
             'active'=>0),
         array(
             'name'=>'RES_ASSIGN_DEL_SINGLE',
-            'description'=>'Direktbuchung löschen',
-            'info_template'=>'%user löscht Direktbuchung für %res(%affected) (%info).',
+            'description'=>'Direktbuchung lÃ¶schen',
+            'info_template'=>'%user lÃ¶scht Direktbuchung fÃ¼r %res(%affected) (%info).',
             'active'=>0),
         array(
             'name'=>'RES_REQUEST_DENY',
             'description'=>'Abgelehnte Raumanfrage',
-            'info_template'=>'%user lehnt Raumanfrage für %sem(%coaffected), Raum %sem(%affected) ab.',
+            'info_template'=>'%user lehnt Raumanfrage fÃ¼r %sem(%coaffected), Raum %sem(%affected) ab.',
             'active'=>0),
         array(
             'name'=>'RES_REQUEST_RESOLVE',
-            'description'=>'Aufgelöste Raumanfrage',
-            'info_template'=>'%user löst Raumanfrage für %sem(%affected), Raum %res(%coaffected) auf.',
+            'description'=>'AufgelÃ¶ste Raumanfrage',
+            'info_template'=>'%user lÃ¶st Raumanfrage fÃ¼r %sem(%affected), Raum %res(%coaffected) auf.',
             'active'=>0)
         );
 

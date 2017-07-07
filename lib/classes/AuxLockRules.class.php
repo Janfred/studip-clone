@@ -6,7 +6,7 @@
 /**
 * ZusatzLockRules.class.php - Sichtbarkeits-Administration fuer Zusatzangaben bei Teilnehmerlisten
 *
-* Copyright (C) 2006 Till Glöggler <tgloeggl@inspace.de>
+* Copyright (C) 2006 Till GlÃ¶ggler <tgloeggl@inspace.de>
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License

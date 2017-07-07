@@ -8,7 +8,7 @@
 // TreeAbstract.class.php
 // Abstract Base Class to handle in-memory tree structures
 //
-// Copyright (c) 2002 André Noack <noack@data-quest.de>
+// Copyright (c) 2002 AndrÃ© Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -32,7 +32,7 @@
 * This class provides an interface to basic handling of structure of tree structures
 *
 * @access   public
-* @author   André Noack <noack@data-quest.de>
+* @author   AndrÃ© Noack <noack@data-quest.de>
 * @package
 */
 class TreeAbstract {

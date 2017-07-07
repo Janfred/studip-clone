@@ -149,7 +149,7 @@ class ExternConfig {
         if ($this->insertConfiguration()) {
             $this->store();
         } else {
-            echo MessageBox::error(_("Sie haben die maximale Anzahl an Konfigurationen für dieses Modul erreicht! Kopieren fehlgeschlagen!"));
+            echo MessageBox::error(_("Sie haben die maximale Anzahl an Konfigurationen fÃ¼r dieses Modul erreicht! Kopieren fehlgeschlagen!"));
             ExternModule::printError();
         }
     }
@@ -688,7 +688,7 @@ class ExternConfig {
             return true;
         }
         
-        throw new Exception(_("Sie verfügen nicht über ausreichend Rechte für diese Aktion."));
+        throw new Exception(_("Sie verfÃ¼gen nicht Ã¼ber ausreichend Rechte fÃ¼r diese Aktion."));
     }
     
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Literaturübersicht von Stud.IP
+ * LiteraturÃ¼bersicht von Stud.IP
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -28,7 +28,7 @@ class Course_LiteratureController extends AuthenticatedController
         parent::before_filter($action, $args);
 
         if (!Config::Get()->LITERATURE_ENABLE ) {
-            throw new AccessDeniedException(_('Die Literaturübersicht ist nicht aktiviert.'));
+            throw new AccessDeniedException(_('Die LiteraturÃ¼bersicht ist nicht aktiviert.'));
         }
 
         PageLayout::setHelpKeyword('Basis.Literatur');

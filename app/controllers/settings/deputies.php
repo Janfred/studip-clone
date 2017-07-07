@@ -49,7 +49,7 @@ class Settings_DeputiesController extends Settings_SettingsController
             if (isDeputy($deputy_id, $this->user->user_id)) {
                 PageLayout::postError(_('%s ist bereits als Vertretung eingetragen.'), get_fullname($deputy_id, 'full'));
             } else if ($deputy_id == $this->user->user_id) {
-                PageLayout::postError(_('Sie können sich nicht als Ihre eigene Vertretung eintragen!'));
+                PageLayout::postError(_('Sie kÃ¶nnen sich nicht als Ihre eigene Vertretung eintragen!'));
             } else if (addDeputy($deputy_id, $this->user->user_id)) {
                 PageLayout::postSuccess(_('%s wurde als Vertretung eingetragen.'), get_fullname($deputy_id, 'full'));
             } else {
@@ -106,7 +106,7 @@ class Settings_DeputiesController extends Settings_SettingsController
             if (isDeputy($_user_id, $this->user->user_id)) {
                 $msg['error'][] = sprintf(_('%s ist bereits als Vertretung eingetragen.'), get_fullname($_user_id, 'full'));
             } else if ($_user_id == $this->user->user_id) {
-                $msg['error'][] = _('Sie können sich nicht als Ihre eigene Vertretung eintragen!');
+                $msg['error'][] = _('Sie kÃ¶nnen sich nicht als Ihre eigene Vertretung eintragen!');
             } else if (!addDeputy($_user_id, $this->user->user_id)) {
                 $msg['error'][] = _('Fehler beim Eintragen der Vertretung!');
             } else {
@@ -115,10 +115,10 @@ class Settings_DeputiesController extends Settings_SettingsController
         }
         // only show an error messagebox once.
         if (!empty($msg['error'])) {
-            PageLayout::postError(_('Die gewünschte Operation konnte nicht ausgeführt werden.'), $msg['error']);
+            PageLayout::postError(_('Die gewÃ¼nschte Operation konnte nicht ausgefÃ¼hrt werden.'), $msg['error']);
         }
         if (!empty($msg['success'])) {
-            PageLayout::postSuccess(_('Die gewünschten Personen wurden als Ihre Vertretung eingetragen!'), $msg['success']);
+            PageLayout::postSuccess(_('Die gewÃ¼nschten Personen wurden als Ihre Vertretung eingetragen!'), $msg['success']);
         }
 
         $this->redirect('settings/deputies/index');

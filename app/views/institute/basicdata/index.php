@@ -11,11 +11,11 @@
         </label>
 
         <label>
-            <?= _('Fakultät') ?>
+            <?= _('FakultÃ¤t') ?>
 
         <? if (count($institute->sub_institutes) > 0): ?>
             <small>
-                <?= _('Diese Einrichtung hat den Status einer Fakultät.') ?><br>
+                <?= _('Diese Einrichtung hat den Status einer FakultÃ¤t.') ?><br>
                 <?= sprintf(_('Es wurden bereits %u andere Einrichtungen zugeordnet.'), count($institute->sub_institutes)) ?>
             </small>
             <input type="hidden" name="Fakultaet" id="Fakultaet" value="<?= $institute->id ?>">
@@ -23,7 +23,7 @@
             <select <?= !$may_edit_faculty ? 'readonly disabled' : '' ?> name="Fakultaet" id="Fakultaet">
             <? if ($GLOBALS['perm']->have_perm('root')): ?>
                 <option value="<?= $institute->id ?>" <?= ($institute->fakultaets_id == Request::option('Fakultaet', $institute->id)) ? 'selected' : '' ?>>
-                    <?= _('Diese Einrichtung hat den Status einer Fakultät.') ?>
+                    <?= _('Diese Einrichtung hat den Status einer FakultÃ¤t.') ?>
                 </option>
             <? endif; ?>
             <? if ($may_edit_faculty): ?>
@@ -57,7 +57,7 @@
         </label>
 
         <label>
-            <?= _('Straße') ?>
+            <?= _('StraÃŸe') ?>
             <input type="text" size="80" <?= LockRules::Check($institute->id, 'strasse') ? 'readonly disabled' : '' ?> id="strasse" name="strasse"
                    value="<?= htmlReady(Request::get('strasse', $institute->strasse)) ?>">
         </label>
@@ -131,8 +131,8 @@
     <footer>
     <? if ($i_view != 'new' && !$institute->isNew()): ?>
         <input type="hidden" name="i_id" value="<?= $institute->id ?>">
-        <?= Studip\Button::createAccept(_('Übernehmen'), 'i_edit') ?>
-        <?= Studip\LinkButton::create(_('Löschen'),
+        <?= Studip\Button::createAccept(_('Ãœbernehmen'), 'i_edit') ?>
+        <?= Studip\LinkButton::create(_('LÃ¶schen'),
                                       $controller->url_for('institute/basicdata/index/' . $i_view, array('i_trykill' => 1)),
                                       !$may_delete ? array('disabled' => '') : array()) ?>
         <? if (!$may_delete && mb_strlen($reason_txt) > 0): ?>
@@ -151,9 +151,9 @@ $sidebar->setImage('sidebar/institute-sidebar.png');
 
 if (!$institute->isNew()) {
     $widget = new ActionsWidget();
-    $widget->addLink(_('Infobild ändern'), URLHelper::getLink('dispatch.php/institute/avatar/update/' . $institute->id), Icon::create('edit', 'clickable'));
+    $widget->addLink(_('Infobild Ã¤ndern'), URLHelper::getLink('dispatch.php/institute/avatar/update/' . $institute->id), Icon::create('edit', 'clickable'));
     if (InstituteAvatar::getAvatar($institute->id)->is_customized()) {
-        $widget->addLink(_('Infobild löschen'), URLHelper::getLink('dispatch.php/institute/avatar/delete/' . $institute->id), Icon::create('trash', 'clickable'));
+        $widget->addLink(_('Infobild lÃ¶schen'), URLHelper::getLink('dispatch.php/institute/avatar/delete/' . $institute->id), Icon::create('trash', 'clickable'));
     }
     $sidebar->addWidget($widget);
 }

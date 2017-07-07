@@ -1,6 +1,6 @@
 <table class="default">
     <caption>
-        <?= sprintf(_('Veranstaltungen mit regelmäßigen Zeiten am %s, %s Uhr'), htmlReady($day), htmlReady($start) .' - '. htmlReady($end)) ?>
+        <?= sprintf(_('Veranstaltungen mit regelmÃ¤ÃŸigen Zeiten am %s, %s Uhr'), htmlReady($day), htmlReady($start) .' - '. htmlReady($end)) ?>
     </caption>
     <colgroup>
         <col width="15%">

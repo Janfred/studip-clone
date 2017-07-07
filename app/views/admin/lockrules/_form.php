@@ -12,9 +12,9 @@ use Studip\Button, Studip\LinkButton;
         </colgroup>
         <caption>
             <? if ($lock_rule->name) : ?>
-                <?= sprintf(_('Sperrebene "%s" ändern'), htmlready($lock_rule["name"])) ?>
+                <?= sprintf(_('Sperrebene "%s" Ã¤ndern'), htmlready($lock_rule["name"])) ?>
             <? else : ?>
-                <?= _('Neue Sperrebene eingeben für den Bereich:') ?> <?= $rule_type_names[$lock_rule_type]; ?>
+                <?= _('Neue Sperrebene eingeben fÃ¼r den Bereich:') ?> <?= $rule_type_names[$lock_rule_type]; ?>
             <? endif ?>
         </caption>
         <tr>
@@ -40,7 +40,7 @@ use Studip\Button, Studip\LinkButton;
             <td>
                 <?= _('Nutzerstatus') ?>
                 <div
-                    style="font-size:80%"><?= _('(die Einstellungen dieser Sperrebene gelten für Nutzer bis zu dieser Berechtigung)') ?></div>
+                    style="font-size:80%"><?= _('(die Einstellungen dieser Sperrebene gelten fÃ¼r Nutzer bis zu dieser Berechtigung)') ?></div>
             </td>
             <td>
                 <select name="lockdata_permission">
@@ -91,7 +91,7 @@ use Studip\Button, Studip\LinkButton;
                 <tfoot>
                 <tr>
                     <td colspan="3" style="text-align:center">
-                        <?= Button::create(_('Übernehmen'), 'ok', array('title' => _('Einstellungen übernehmen'))) ?>
+                        <?= Button::create(_('Ãœbernehmen'), 'ok', array('title' => _('Einstellungen Ã¼bernehmen'))) ?>
                     </td>
                 </tr>
                 </tfoot>

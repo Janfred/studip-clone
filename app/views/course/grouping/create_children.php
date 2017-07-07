@@ -12,7 +12,7 @@
     </section>
     <section>
         <span class="required">
-            <?= _('Nummerierung/Kennzeichnung anhängen an') ?>
+            <?= _('Nummerierung/Kennzeichnung anhÃ¤ngen an') ?>
         </span>
         <label>
             <input type="radio" name="batchcreate[add_number_to]" value="name" required>

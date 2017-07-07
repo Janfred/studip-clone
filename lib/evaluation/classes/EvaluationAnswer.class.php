@@ -266,7 +266,7 @@ class EvaluationAnswer extends EvaluationObject {
   function check () {
     parent::check ();
 #    if (!empty ($this->users) && !empty ($this->counter))
-#$this->throwError (1, _("Z‰hler hat einen ung¸ltigen Wert"));
+#$this->throwError (1, _("Z√§hler hat einen ung√ºltigen Wert"));
   }
   
   /**

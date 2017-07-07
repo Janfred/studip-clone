@@ -10,7 +10,7 @@
     </fieldset>
     <footer>
         <?= Button::create(_('Suchen'), 'search') ?>
-        <?= Button::create(_('Zurücksetzen'), 'reset') ?>
+        <?= Button::create(_('ZurÃ¼cksetzen'), 'reset') ?>
     </footer>
 </form>
 

@@ -1,7 +1,7 @@
 <tbody class="collapsed">
     <tr class="header-row">
         <th colspan="3" class="toggle-indicator">
-            <a class="toggler"><?= _('Teilnehmer hinzufügen') ?>
+            <a class="toggler"><?= _('Teilnehmer hinzufÃ¼gen') ?>
                 <?
                 if ($event->attendees->count()) {
                     $count_attendees = $event->attendees->filter(

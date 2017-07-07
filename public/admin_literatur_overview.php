@@ -158,7 +158,7 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
             <table cellpadding="0" cellspacing="0" border="0" width="99%" align="center">
                 <tr>
                     <td class="table_row_even">
-                        <font size=-1><br><b><?=_("Bitte w‰hlen Sie die Einrichtung und das Semester aus, f¸r die Sie die Literaturliste anschauen wollen:")?></b><br>&nbsp; </font>
+                        <font size=-1><br><b><?=_("Bitte w√§hlen Sie die Einrichtung und das Semester aus, f√ºr die Sie die Literaturliste anschauen wollen:")?></b><br>&nbsp; </font>
                     </td>
                 </tr>
                 <tr>
@@ -220,7 +220,7 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
                     $statement->execute($parameters);
                     $institutes = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-                    printf ("<option value=\"\" class=\"is-placeholder\">%s</option>\n", _("-- Bitte Einrichtung ausw‰hlen --"));
+                    printf ("<option value=\"\" class=\"is-placeholder\">%s</option>\n", _("-- Bitte Einrichtung ausw√§hlen --"));
                     foreach ($institutes as $institute) {
                         printf("<option value=\"%s\" class=\"%s\" %s>%s </option>\n",
                                $institute['Institut_id'],
@@ -255,7 +255,7 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
                     ?>
                 </select>
                 </font>&nbsp;
-                <?= Button::create(_('Ausw‰hlen')) ?>
+                <?= Button::create(_('Ausw√§hlen')) ?>
                 </td>
             </tr>
             <tr>
@@ -277,9 +277,9 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
                     }
                     ?>
                 </select>
-                    <?= Button::create(_('Verf¸gbarkeit'), array('title' => _("Alle markierten Eintr‰ge im ausgew‰hlten Katalog suchen"), 'style' => "vertical-align:middle")) ?>
+                    <?= Button::create(_('Verf√ºgbarkeit'), array('title' => _("Alle markierten Eintr√§ge im ausgew√§hlten Katalog suchen"), 'style' => "vertical-align:middle")) ?>
                     &nbsp;&nbsp;&nbsp;
-                    <?= LinkButton::create(_('Ausw‰hlen'), URLHelper::getURL('?cmd=markall'), array('title' => _("Alle Eintr‰ge markieren"))) ?>
+                    <?= LinkButton::create(_('Ausw√§hlen'), URLHelper::getURL('?cmd=markall'), array('title' => _("Alle Eintr√§ge markieren"))) ?>
                     <br>&nbsp;
                 </td>
             </tr>
@@ -345,11 +345,11 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
         if (is_array($_SESSION['_open']) && count($_SESSION['_open'])){
             echo "\n<a href=\"".URLHelper::getLink('?cmd=close_all')."\" class=\"tree\">";
             echo Icon::create('arr_1down', 'clickable')->asImg(['class' => 'text-top']);
-            echo " " . _("Alle Eintr‰ge zuklappen") . "</a>";
+            echo " " . _("Alle Eintr√§ge zuklappen") . "</a>";
         } else {
             echo "\n<a href=\"".URLHelper::getLink('?cmd=open_all')."\" class=\"tree\">";
             echo Icon::create('arr_1right', 'clickable')->asImg(['class' => 'text-top']);
-            echo " " . _("Alle Eintr‰ge aufklappen") . "</a>";
+            echo " " . _("Alle Eintr√§ge aufklappen") . "</a>";
         }
         echo "</tr></table>";
         foreach ($_SESSION['_lit_data'] as $cid => $data){
@@ -370,7 +370,7 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
                         $tt = _("gefunden");
                     } else if (count($check['error'])){
                         $ampel_pic = Icon::create('exclaim', 'info');
-                        $tt = _("keine automatische Suche mˆglich");
+                        $tt = _("keine automatische Suche m√∂glich");
                     } else {
                         $ampel_pic = Icon::create('decline', 'attention');
                         $tt =_("nicht gefunden");
@@ -420,7 +420,7 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
                     $content = "";
                     $estimated_p = 0;
                     $participants = 0;
-                    $edit .= LinkButton::create(_('Verf¸gbarkeit'), URLHelper::getURL('?_catalog_id=' . $element->getValue('catalog_id') . '#anker'), array('title' => _("Verf¸gbarkeit ¸berpr¸fen")));
+                    $edit .= LinkButton::create(_('Verf√ºgbarkeit'), URLHelper::getURL('?_catalog_id=' . $element->getValue('catalog_id') . '#anker'), array('title' => _("Verf√ºgbarkeit √ºberpr√ºfen")));
                     $edit .= "&nbsp;";
                     $edit .= LinkButton::create(_('Details'), 'dispatch.php/literature/edit_element.php?_catalog_id=' . $element->getValue('catalog_id'), array('title' => _("Detailansicht dieses Eintrages ansehen.")));
                     $edit .= "&nbsp;";
@@ -460,7 +460,7 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
                         $_SESSION['_lit_data'][$cid]['check_accession'] = StudipLitSearch::CheckZ3950($element->getValue('accession_number'));
                     }
                     if (is_array($_SESSION['_lit_data'][$cid]['check_accession'])){
-                        $content .= "<div style=\"margin-top: 10px;border: 1px solid black;padding: 5px; width:96%;\"<b>" ._("Verf¸gbarkeit in externen Katalogen:") . "</b><br>";
+                        $content .= "<div style=\"margin-top: 10px;border: 1px solid black;padding: 5px; width:96%;\"<b>" ._("Verf√ºgbarkeit in externen Katalogen:") . "</b><br>";
                         foreach ( $_SESSION['_lit_data'][$cid]['check_accession'] as $plugin_name => $ret){
                             $content .= "<b>&nbsp;{$plugin_name}&nbsp;</b>";
                             if ($ret['found']){
@@ -497,7 +497,7 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
     </table>
     </form>
 <?
-PageLayout::setTitle(_("‹bersicht verwendeter Literatur"));
+PageLayout::setTitle(_("√úbersicht verwendeter Literatur"));
 Navigation::activateItem('/tools/literature/overview');
 $sidebar = Sidebar::Get();
 $links = new ActionsWidget();

@@ -42,8 +42,8 @@
                     <? if (!$studiengang->count_faecher) : ?>
                         <? $actionMenu->addLink(
                                 $controller->url_for('/delete/' . $studiengang->id),
-                                _('Studiengang löschen'),
-                                Icon::create('trash', 'clickable', ['title' => _('Studiengang löschen')]))
+                                _('Studiengang lÃ¶schen'),
+                                Icon::create('trash', 'clickable', ['title' => _('Studiengang lÃ¶schen')]))
                         ?>
                     <? endif; ?>
                 <? endif; ?>

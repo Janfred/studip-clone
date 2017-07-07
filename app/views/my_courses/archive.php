@@ -38,7 +38,7 @@
                     <td align="center">
                         <? if ($row['forumdump'] and archiv_check_perm($row['seminar_id'])) : ?>
                             <a href="<?= URLHelper::getLink('dispatch.php/archive/forum/' . $row['seminar_id']) ?>" data-dialog>
-                                <?= Icon::create('forum', 'clickable', ['title' => _('Beiträge des Forums der Veranstaltung')])->asImg(20) ?>
+                                <?= Icon::create('forum', 'clickable', ['title' => _('BeitrÃ¤ge des Forums der Veranstaltung')])->asImg(20) ?>
                             </a>
                         <? else: ?>
                             <?= Icon::create('forum', 'inactive')->asImg(20, ["style" => 'visibility: hidden;']) ?>
@@ -61,7 +61,7 @@
 
                         <? if ($row['wikidump'] and archiv_check_perm($row['seminar_id'])) : ?>
                             <a href="<?= URLHelper::getLink('dispatch.php/archive/wiki/' . $row['seminar_id']) ?>" data-dialog>
-                                <?= Icon::create('wiki', 'clickable', ['title' => _('Beiträge des Wikis der Veranstaltung')])->asImg(20) ?>
+                                <?= Icon::create('wiki', 'clickable', ['title' => _('BeitrÃ¤ge des Wikis der Veranstaltung')])->asImg(20) ?>
                             </a>
                         <? else: ?>
                             <?= Icon::create('wiki', 'inactive')->asImg(20, ["style" => 'visibility: hidden;']) ?>

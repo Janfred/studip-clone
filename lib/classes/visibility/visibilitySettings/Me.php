@@ -25,7 +25,7 @@ class Visibility_Me extends VisibilityAbstract {
     protected $display_name = "nur mich selbst";
     
     // Description for the state
-    protected $description = "nur für mich sichtbar";
+    protected $description = "nur fÃ¼r mich sichtbar";
 
     // When do two users have this state
     function verify($user_id, $other_id)

@@ -64,7 +64,7 @@ class ExternElementMain extends ExternElement {
     */
     function __construct ($module_name, &$data_fields, &$field_names, &$config) { 
         $this->real_name = _("Grundeinstellungen");
-        $this->description = _("In den Grundeinstellungen können Sie allgemeine Daten des Elements ändern.");
+        $this->description = _("In den Grundeinstellungen kÃ¶nnen Sie allgemeine Daten des Elements Ã¤ndern.");
         $this->name = 'Main';
         $this->edit_function = 'editMainSettings';
         $this->config =& $config;
@@ -113,7 +113,7 @@ class ExternElementMain extends ExternElement {
     
     function getSRIFormContent (&$edit_form, $include_url = false) {
         $content = '';
-        $sri_info = _("Nur bei Benutzung der SRI-Schnittstelle für dieses Modul: Geben Sie hier die vollständige URL der Seite an, in die die Ausgabe des Moduls eingefügt werden soll.");
+        $sri_info = _("Nur bei Benutzung der SRI-Schnittstelle fÃ¼r dieses Modul: Geben Sie hier die vollstÃ¤ndige URL der Seite an, in die die Ausgabe des Moduls eingefÃ¼gt werden soll.");
         if (!$include_url && Config::get()->EXTERN_SRI_ENABLE && (!Config::get()->EXTERN_SRI_ENABLE_BY_ROOT ||
                 (sri_is_enabled($this->config->range_id) && Config::get()->EXTERN_SRI_ENABLE_BY_ROOT))) {
             $headline = $edit_form->editHeadline(_("URL des SRI-Templates"));

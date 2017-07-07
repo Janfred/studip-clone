@@ -67,7 +67,7 @@ jQuery(function ($) {
 
 <div data-dialog-button>
     <?= Studip\LinkButton::create(
-        _('Zurück'),
+        _('ZurÃ¼ck'),
         $controller->url_for('file/choose_destination/' . $options['fileref_id'], $options),
         ['data-dialog' => 'size=auto']
     ) ?>

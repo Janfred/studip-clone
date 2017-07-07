@@ -147,12 +147,12 @@ class Settings_DetailsController extends Settings_SettingsController
         }
 
         if (count($errors) > 0) {
-            PageLayout::postError(_('Bitte überprüfen Sie Ihre Eingaben.'), $errors);
+            PageLayout::postError(_('Bitte Ã¼berprÃ¼fen Sie Ihre Eingaben.'), $errors);
         } else if ($this->user->store() || $changed || $datafields_changed) {
-            PageLayout::postSuccess(_('Daten im Lebenslauf u.a. wurden geändert.'));
+            PageLayout::postSuccess(_('Daten im Lebenslauf u.a. wurden geÃ¤ndert.'));
 
             setTempLanguage($this->user->user_id);
-            $this->postPrivateMessage(_('Daten im Lebenslauf u.a. wurden geändert.'));
+            $this->postPrivateMessage(_('Daten im Lebenslauf u.a. wurden geÃ¤ndert.'));
             restoreLanguage();
         }
         $this->redirect('settings/details');

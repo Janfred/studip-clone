@@ -16,7 +16,7 @@ class QuestionnaireController extends AuthenticatedController
             Navigation::activateItem("/tools/questionnaire");
         }
         Sidebar::Get()->setImage(Assets::image_path("sidebar/evaluation-sidebar.png"));
-        PageLayout::setTitle(_("Fragebögen"));
+        PageLayout::setTitle(_("FragebÃ¶gen"));
         class_exists("Test"); //trigger autoloading
     }
 
@@ -82,7 +82,7 @@ class QuestionnaireController extends AuthenticatedController
             throw new AccessDeniedException("Fragebogen ist nicht bearbeitbar.");
         }
         if ($this->questionnaire->isRunning() && $this->questionnaire->countAnswers() > 0) {
-            $this->render_text(MessageBox::error(_("Fragebogen ist gestartet worden und kann jetzt nicht mehr bearbeitet werden. Stoppen oder löschen Sie den Fragebogen stattdessen.")));
+            $this->render_text(MessageBox::error(_("Fragebogen ist gestartet worden und kann jetzt nicht mehr bearbeitet werden. Stoppen oder lÃ¶schen Sie den Fragebogen stattdessen.")));
             return;
         }
         if (Request::isPost()) {
@@ -129,10 +129,10 @@ class QuestionnaireController extends AuthenticatedController
 
                 if ($is_new && Request::get("range_id") && Request::get("range_type")) {
                     if (Request::get("range_id") === "start" && !$GLOBALS['perm']->have_perm("root")) {
-                        throw new Exception("Der Fragebogen darf nicht von Ihnen auf die Startseite eingehängt werden, sondern nur von einem Admin.");
+                        throw new Exception("Der Fragebogen darf nicht von Ihnen auf die Startseite eingehÃ¤ngt werden, sondern nur von einem Admin.");
                     }
                     if (Request::get("range_type") === "course" && !$GLOBALS['perm']->have_studip_perm("tutor", Request::get("range_id"))) {
-                        throw new Exception("Der Fragebogen darf nicht in die ausgewählte Veranstaltung eingebunden werden.");
+                        throw new Exception("Der Fragebogen darf nicht in die ausgewÃ¤hlte Veranstaltung eingebunden werden.");
                     }
                     $assignment = new QuestionnaireAssignment();
                     $assignment['questionnaire_id'] = $this->questionnaire->getId();
@@ -215,7 +215,7 @@ class QuestionnaireController extends AuthenticatedController
             throw new AccessDeniedException("Der Fragebogen ist nicht bearbeitbar.");
         }
         $this->questionnaire->delete();
-        PageLayout::postMessage(MessageBox::success(_("Der Fragebogen wurde gelöscht.")));
+        PageLayout::postMessage(MessageBox::success(_("Der Fragebogen wurde gelÃ¶scht.")));
         if (Request::get("redirect")) {
             $this->redirect(Request::get("redirect"));
         } else {
@@ -312,16 +312,16 @@ class QuestionnaireController extends AuthenticatedController
                 $this->response->add_header("X-Dialog-Execute", "STUDIP.Questionnaire.updateWidgetQuestionnaire");
                 $this->render_template("questionnaire/evaluate");
             } elseif (Request::get("range_type") === "user") {
-                PageLayout::postMessage(MessageBox::success(_("Danke für die Teilnahme!")));
+                PageLayout::postMessage(MessageBox::success(_("Danke fÃ¼r die Teilnahme!")));
                 $this->redirect("profile?username=".get_username(Request::option("range_id")));
             } elseif (Request::get("range_type") === "course") {
-                PageLayout::postMessage(MessageBox::success(_("Danke für die Teilnahme!")));
+                PageLayout::postMessage(MessageBox::success(_("Danke fÃ¼r die Teilnahme!")));
                 $this->redirect("course/overview?cid=".Request::option("range_id"));
             } elseif (Request::get("range_id") === "start") {
-                PageLayout::postMessage(MessageBox::success(_("Danke für die Teilnahme!")));
+                PageLayout::postMessage(MessageBox::success(_("Danke fÃ¼r die Teilnahme!")));
                 $this->redirect("start");
             } else {
-                PageLayout::postMessage(MessageBox::success(_("Danke für die Teilnahme!")));
+                PageLayout::postMessage(MessageBox::success(_("Danke fÃ¼r die Teilnahme!")));
                 if ($GLOBALS['perm']->have_perm("autor")) {
                     $this->redirect("questionnaire/overview");
                 } else {
@@ -344,8 +344,8 @@ class QuestionnaireController extends AuthenticatedController
         PageLayout::setTitle(sprintf(_("Fragebogen: %s"), $this->questionnaire->title));
 
         if (Request::isAjax() && !$_SERVER['HTTP_X_DIALOG']) {
-            //Wenn das hier direkt auf der Übersichts-/Profil-/Startseite angezeigt
-            //wird, brauchen wir kein 'Danke für die Teilnahme'.
+            //Wenn das hier direkt auf der Ãœbersichts-/Profil-/Startseite angezeigt
+            //wird, brauchen wir kein 'Danke fÃ¼r die Teilnahme'.
             PageLayout::clearMessages();
         }
     }
@@ -521,7 +521,7 @@ class QuestionnaireController extends AuthenticatedController
             );
             $this->response->add_header("X-Dialog-Execute", json_encode($output));
         }
-        PageLayout::setTitle(sprintf(_("Bereiche für Fragebogen: %s"), $this->questionnaire->title));
+        PageLayout::setTitle(sprintf(_("Bereiche fÃ¼r Fragebogen: %s"), $this->questionnaire->title));
     }
 
     public function widget_action($range_id, $range_type = "course")

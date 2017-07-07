@@ -37,7 +37,7 @@
         <input type="checkbox" name="externdefault" value="1" <? if ($institute->externdefault) echo 'checked'; ?>>
     </label>
     <label>
-        <?= _('Auf der Profilseite und in Adressbüchern sichtbar') ?>
+        <?= _('Auf der Profilseite und in AdressbÃ¼chern sichtbar') ?>
         <input type="checkbox" name="visible" value="1" <? if ($institute->visible) echo 'checked'; ?>>
     </label>
 
@@ -54,7 +54,7 @@
     <? endforeach ?>
 <? endif ?>
     <footer data-dialog-button>
-        <?= Button::createAccept(_('Übernehmen'), 'uebernehmen', ['title' => _('Änderungen übernehmen')]) ?>
+        <?= Button::createAccept(_('Ãœbernehmen'), 'uebernehmen', ['title' => _('Ã„nderungen Ã¼bernehmen')]) ?>
         <?= LinkButton::createCancel(_('Abbrechen'), $controller->url_for('admin/user/edit/' . $user->user_id)) ?>
     </footer>
 </form>

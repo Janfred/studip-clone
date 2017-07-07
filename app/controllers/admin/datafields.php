@@ -8,7 +8,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      Nico Müller <nico.mueller@uni-oldenburg.de>
+ * @author      Nico MÃ¼ller <nico.mueller@uni-oldenburg.de>
  * @author      Michael Riehemann <michael.riehemann@uni-oldenburg.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
@@ -92,7 +92,7 @@ class Admin_DatafieldsController extends AuthenticatedController
      */
     public function edit_action($datafield_id)
     {
-        PageLayout::setTitle(_('Datenfeld ändern'));
+        PageLayout::setTitle(_('Datenfeld Ã¤ndern'));
 
         $datafield = new DataField($datafield_id);
         $datafield_entry = DataFieldEntry::createDataFieldEntry($datafield);
@@ -119,7 +119,7 @@ class Admin_DatafieldsController extends AuthenticatedController
                 $datafield->default_value = $datafield_entry->getValue();
                 $datafield->store();
 
-                PageLayout::postSuccess(_('Die Änderungen am generischen Datenfeld wurden übernommen.'));
+                PageLayout::postSuccess(_('Die Ã„nderungen am generischen Datenfeld wurden Ã¼bernommen.'));
                 $this->redirect('admin/datafields/index/' . $datafield->object_type . '#item_'.$datafield_id);
             } else {
                 PageLayout::postError(_('Es wurde keine Bezeichnung eingetragen!'));
@@ -201,7 +201,7 @@ class Admin_DatafieldsController extends AuthenticatedController
         if (Request::int('delete') == 1) {
             $datafield->delete();
 
-            PageLayout::postSuccess(_('Das Datenfeld wurde erfolgreich gelöscht!'));
+            PageLayout::postSuccess(_('Das Datenfeld wurde erfolgreich gelÃ¶scht!'));
         } elseif (!Request::get('back')) {
             $this->datafield_id = $datafield_id;
             $this->flash['delete'] = compact('datafield_id', 'name');
@@ -226,7 +226,7 @@ class Admin_DatafieldsController extends AuthenticatedController
         if (Request::isPost() && Request::submitted('store')) {
             $datafield->store();
 
-            PageLayout::postSuccess(_('Die Parameter wurden übernommen.'));
+            PageLayout::postSuccess(_('Die Parameter wurden Ã¼bernommen.'));
 
             $this->redirect('admin/datafields/index/' . $datafield_id->object_type . '#item_' . $datafield_id);
         }

@@ -2,7 +2,7 @@
 /**
 * garbage_collector.class.php
 *
-* @author André Noack <noack@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
+* @author AndrÃ© Noack <noack@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @access public
 * @since  2.4
 */
@@ -18,7 +18,7 @@ class GarbageCollectorJob extends CronJob
 
     public static function getDescription()
     {
-        return _('Entfernt endgültig gelöschte Nachrichten, nicht zugehörige Dateianhänge, abgelaufene Ankündigungen, alte Aktivitäten, veraltete Plugin-Assets sowie veraltete OAuth-Servernonces');
+        return _('Entfernt endgÃ¼ltig gelÃ¶schte Nachrichten, nicht zugehÃ¶rige DateianhÃ¤nge, abgelaufene AnkÃ¼ndigungen, alte AktivitÃ¤ten, veraltete Plugin-Assets sowie veraltete OAuth-Servernonces');
     }
 
     public static function getParameters()
@@ -28,7 +28,7 @@ class GarbageCollectorJob extends CronJob
                 'type'        => 'boolean',
                 'default'     => false,
                 'status'      => 'optional',
-                'description' => _('Sollen Ausgaben erzeugt werden (sind später im Log des Cronjobs sichtbar)'),
+                'description' => _('Sollen Ausgaben erzeugt werden (sind spÃ¤ter im Log des Cronjobs sichtbar)'),
             ),
         );
     }
@@ -42,9 +42,9 @@ class GarbageCollectorJob extends CronJob
     {
         $db = DBManager::get();
 
-        //abgelaufenen News löschen
+        //abgelaufenen News lÃ¶schen
         $deleted_news = StudipNews::DoGarbageCollect();
-        //messages aufräumen
+        //messages aufrÃ¤umen
         $to_delete = $db->query("SELECT message_id, count( message_id ) AS gesamt, count(IF (deleted =0, NULL , 1) ) AS geloescht
                 FROM message_user GROUP BY message_id HAVING gesamt = geloescht")->fetchAll(PDO::FETCH_COLUMN,0);
         if (count($to_delete)) {
@@ -74,9 +74,9 @@ class GarbageCollectorJob extends CronJob
 
 
         if ($parameters['verbose']) {
-            printf(_("Gelöschte Ankündigungen: %u") . "\n", (int)$deleted_news);
-            printf(_("Gelöschte Nachrichten: %u") . "\n", count($to_delete));
-            printf(_("Gelöschte Dateianhänge: %u") . "\n", count($unsent_attachment_folders));
+            printf(_("GelÃ¶schte AnkÃ¼ndigungen: %u") . "\n", (int)$deleted_news);
+            printf(_("GelÃ¶schte Nachrichten: %u") . "\n", count($to_delete));
+            printf(_("GelÃ¶schte DateianhÃ¤nge: %u") . "\n", count($unsent_attachment_folders));
         }
 
         PersonalNotifications::doGarbageCollect();
@@ -92,7 +92,7 @@ class GarbageCollectorJob extends CronJob
         $removed = DBManager::get()->exec($query);
 
         if ($removed > 0 && $parameters['verbose']) {
-            printf(_('Gelöschte Server-Nonces: %u') . "\n", (int)$removed);
+            printf(_('GelÃ¶schte Server-Nonces: %u') . "\n", (int)$removed);
         }
     }
 }

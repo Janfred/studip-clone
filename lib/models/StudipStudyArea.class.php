@@ -12,7 +12,7 @@
  * @package     studip
  *
  * @author    mlunzena
- * @author    André Noack <noack@data-quest.de>
+ * @author    AndrÃ© Noack <noack@data-quest.de>
  * @copyright (c) Authors
  *
  * @property string sem_tree_id database column

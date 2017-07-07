@@ -1,6 +1,6 @@
 <h1>
     <?= sprintf(
-        _('Soll der Eintrag mit der ID "%s" wirklich gelöscht werden?'),
+        _('Soll der Eintrag mit der ID "%s" wirklich gelÃ¶scht werden?'),
         $entry_id
     ) ?>
 </h1>
@@ -10,7 +10,7 @@
 <? if ($dependent_files_count): ?>
     <p>
         <?= sprintf(
-            _('Bevor ein Eintrag gelöscht werden kann, müssen Dateien, welche auf ihn verweisen, einem anderen Eintrag zugewiesen werden! Es müssen %u Dateien bearbeitet werden!'),
+            _('Bevor ein Eintrag gelÃ¶scht werden kann, mÃ¼ssen Dateien, welche auf ihn verweisen, einem anderen Eintrag zugewiesen werden! Es mÃ¼ssen %u Dateien bearbeitet werden!'),
             $dependent_files_count
         ) ?>
     </p>
@@ -29,7 +29,7 @@
 <? endif; ?>
 
     <div data-dialog-button>
-        <?= Studip\Button::createAccept(_('Löschen'), 'confirm') ?>
+        <?= Studip\Button::createAccept(_('LÃ¶schen'), 'confirm') ?>
         <?= Studip\LinkButton::createCancel(_('Abbrechen'),
             URLHelper::getUrl('dispatch.php/admin/content_terms_of_use/index')
             ) ?>

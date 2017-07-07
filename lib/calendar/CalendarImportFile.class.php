@@ -39,7 +39,7 @@ class CalendarImportFile extends CalendarImport
     {
         $data = '';
         if (!$file = @fopen($this->file['tmp_name'], 'rb')) {
-            throw new CalendarExportException(_("Die Import-Datei konnte nicht geöffnet werden!"));
+            throw new CalendarExportException(_("Die Import-Datei konnte nicht geÃ¶ffnet werden!"));
             return false;
         }
         if ($file) {
@@ -119,7 +119,7 @@ class CalendarImportFile extends CalendarImport
     public function deleteFile()
     {
         if (!unlink($this->file['tmp_name'])) {
-            throw new CalendarExportException(_("Die Datei konnte nicht gelöscht werden!"));
+            throw new CalendarExportException(_("Die Datei konnte nicht gelÃ¶scht werden!"));
             return false;
         }
         return true;

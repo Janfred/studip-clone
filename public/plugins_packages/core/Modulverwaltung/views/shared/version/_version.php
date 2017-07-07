@@ -3,7 +3,7 @@
     <tbody>
     <? if (!empty($version->start_sem)) : ?>
         <tr>
-            <td colspan="2"><strong><?= _('Gültigkeit') ?></strong>
+            <td colspan="2"><strong><?= _('GÃ¼ltigkeit') ?></strong>
                 <div style="padding: 10px; float: left;" data-mvv-field="mvv_stgteilversion.start_sem">
                     <?= _('von Semester:') ?>
                     <? $sem = Semester::find($version->start_sem) ?>
@@ -15,7 +15,7 @@
                         <? $sem = Semester::find($version->end_sem) ?>
                         <?= htmlReady($sem->name) ?>
                     <? else : ?>
-                        <?= _('unbegrenzt gültig') ?>
+                        <?= _('unbegrenzt gÃ¼ltig') ?>
                     <? endif; ?>
                 </div>
                 <div style="padding: 10px; display:inline-block;" data-mvv-field="mvv_stgteilversion.beschlussdatum">

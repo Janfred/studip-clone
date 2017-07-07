@@ -96,7 +96,7 @@ class Materialien_DokumenteController extends MVVController
             $success_message = _("Das Dokument <em>%s</em> wurde angelegt.");
         } else {
             PageLayout::setTitle(_('Dokument bearbeiten'));
-            $success_message = _('Das Dokument "%s" wurde geändert.');
+            $success_message = _('Das Dokument "%s" wurde geÃ¤ndert.');
         }
         $success = false;
         //save changes
@@ -122,7 +122,7 @@ class Materialien_DokumenteController extends MVVController
                     if ($stored) {
                         PageLayout::postSuccess(sprintf($success_message, htmlReady($this->dokument->name)));
                     } else {
-                        PageLayout::postInfo(_('Es wurden keine Änderungen vorgenommen.'));
+                        PageLayout::postInfo(_('Es wurden keine Ã„nderungen vorgenommen.'));
                     }
                     $this->redirect($this->url_for('/index'));
                 }
@@ -150,7 +150,7 @@ class Materialien_DokumenteController extends MVVController
         if (!$this->dokument->isNew()) {
             $sidebar = Sidebar::get();
             $action_widget = $sidebar->getWidget('actions');
-            $action_widget->addLink(_('Log-Einträge dieses Dokumentes'),
+            $action_widget->addLink(_('Log-EintrÃ¤ge dieses Dokumentes'),
                     $this->url_for('shared/log_event/show/Dokument', $this->dokument->id),
                     Icon::create('log', 'clickable'))->asDialog();
         }
@@ -164,12 +164,12 @@ class Materialien_DokumenteController extends MVVController
         CSRFProtection::verifyUnsafeRequest();
         $dokument = Dokument::get($dokument_id);
         if ($dokument->isNew()) {
-            PageLayout::postError( _('Das Dokument kann nicht gelöscht werden (unbekanntes Dokument).'));
+            PageLayout::postError( _('Das Dokument kann nicht gelÃ¶scht werden (unbekanntes Dokument).'));
         } else {
             CSRFProtection::verifyUnsafeRequest();
             $name = $dokument->name;
             $dokument->delete();
-            PageLayout::postSuccess(sprintf(_('Das Dokument "%s" wurde gelöscht.'), htmlReady($name)));
+            PageLayout::postSuccess(sprintf(_('Das Dokument "%s" wurde gelÃ¶scht.'), htmlReady($name)));
         }
         $this->redirect($this->url_for('/index'));
     }
@@ -263,7 +263,7 @@ class Materialien_DokumenteController extends MVVController
         }
         $helpbar = Helpbar::get();
         $widget = new HelpbarWidget();
-        $widget->addElement(new WidgetElement(_('Auf dieser Seite können Sie Dokumente verwalten, die mit Studiengängen, Studiengangteilen usw. verknüpft sind.')));
+        $widget->addElement(new WidgetElement(_('Auf dieser Seite kÃ¶nnen Sie Dokumente verwalten, die mit StudiengÃ¤ngen, Studiengangteilen usw. verknÃ¼pft sind.')));
         $helpbar->addWidget($widget);
 
         $this->sidebar_rendered = true;

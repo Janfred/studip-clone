@@ -3,7 +3,7 @@
 use Studip\Button, Studip\LinkButton;
 ?>
 
-<h3><?= _('Rollenverwaltung für Benutzer') ?></h3>
+<h3><?= _('Rollenverwaltung fÃ¼r Benutzer') ?></h3>
 
 <form action="<?= $controller->url_for('admin/role/assign_role') ?>" style="margin-bottom: 1em;" method="POST">
     <?= CSRFProtection::tokenTag() ?>
@@ -20,8 +20,8 @@ use Studip\Button, Studip\LinkButton;
             </option>
         <? endforeach ?>
         </select>
-        <?= Button::create(_('Auswählen'), 'select', array('title' => _('Benutzer auswählen')))?>
-        <?= LinkButton::create(_('Zurücksetzen'), $controller->url_for('admin/role/assign_role'), array('title' => _('Suche zurücksetzen')))?>
+        <?= Button::create(_('AuswÃ¤hlen'), 'select', array('title' => _('Benutzer auswÃ¤hlen')))?>
+        <?= LinkButton::create(_('ZurÃ¼cksetzen'), $controller->url_for('admin/role/assign_role'), array('title' => _('Suche zurÃ¼cksetzen')))?>
     <? endif ?>
 </form>
 
@@ -32,10 +32,10 @@ use Studip\Button, Studip\LinkButton;
         <table class="default nohover">
             <tr>
                 <th style="text-align: center;">
-                    <? printf(_('Rollen für %s'), htmlReady($currentuser->vorname . ' ' . $currentuser->nachname)) ?>
+                    <? printf(_('Rollen fÃ¼r %s'), htmlReady($currentuser->vorname . ' ' . $currentuser->nachname)) ?>
                 </th>
                 <th></th>
-                <th><?= _('Verfügbare Rollen') ?></th>
+                <th><?= _('VerfÃ¼gbare Rollen') ?></th>
             </tr>
             <tr class="table_row_even">
                 <td style="text-align: right;">

@@ -8,15 +8,15 @@
         </a>
     <? elseif ($section == 'newest'): ?>
         <a href="<?= PluginEngine::getURL('coreforum/index/newest') ?>">
-            <?= _('Neue Beiträge') ?>
+            <?= _('Neue BeitrÃ¤ge') ?>
         </a>
     <? elseif ($section == 'latest') : ?>
         <a href="<?= PluginEngine::getURL('coreforum/index/latest') ?>">
-            <?= _('Letzte Beiträge') ?>
+            <?= _('Letzte BeitrÃ¤ge') ?>
         </a>
     <? elseif ($section == 'favorites') : ?>
         <a href="<?= PluginEngine::getURL('coreforum/index/favorites') ?>">
-            <?= _('Gemerkte Beiträge') ?>
+            <?= _('Gemerkte BeitrÃ¤ge') ?>
         </a>        
     <? else: ?>
 

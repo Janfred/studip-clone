@@ -6,7 +6,7 @@ use Studip\Button, Studip\LinkButton;
 ?>
 <table class="default">
     <caption>
-        <?= sprintf(_('Veranstaltungen mit regelmäßigen Zeiten am %s, %s Uhr'), htmlReady($day), htmlReady($timespan)) ?>
+        <?= sprintf(_('Veranstaltungen mit regelmÃ¤ÃŸigen Zeiten am %s, %s Uhr'), htmlReady($day), htmlReady($timespan)) ?>
     </caption>
     <thead>
         <tr>

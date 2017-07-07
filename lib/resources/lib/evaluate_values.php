@@ -201,7 +201,7 @@ if (($view == "search") || ($view == "edit_request")) {
     $clipObj =  ClipBoard::GetInstance("search");
     $clipFormObj =& $clipObj->getFormObject();
     if ($view == "edit_request") {
-        array_unshift ($clipFormObj->form_fields['clip_cmd']['options'], array('name' => _("In aktueller Anfrage mit berücksichtigen"), 'value' => 'add'));
+        array_unshift ($clipFormObj->form_fields['clip_cmd']['options'], array('name' => _("In aktueller Anfrage mit berÃ¼cksichtigen"), 'value' => 'add'));
         $clipFormObj->form_buttons['clip_reload'] = array('type' => 'aktualisieren', 'info' => _("neu laden"));
 
 
@@ -1874,7 +1874,7 @@ if (Request::int('decline_request')) {
 if (Request::submitted('delete_request') || Request::quoted('approveDelete')) {
         if(!Request::quoted('approveDelete')){
             $approval=array('approveDelete' => TRUE);
-            echo createQuestion(_("Wollen Sie diese Raumanfrage wirklich löschen?"), $approval);
+            echo createQuestion(_("Wollen Sie diese Raumanfrage wirklich lÃ¶schen?"), $approval);
         }
 
     if(Request::quoted('approveDelete')){
@@ -2234,9 +2234,9 @@ if ($_sendMessage) {
 
         // create appropriate message
         if ($semObj->seminar_number)
-            $message = sprintf (_("Ihre Raumanfrage zur Veranstaltung %s (%s) wurde bearbeitet.")." \n"._("Für folgende Belegungszeiten wurde der jeweils angegebene Raum gebucht:")."\n\n", $semObj->getName(), $semObj->seminar_number);
+            $message = sprintf (_("Ihre Raumanfrage zur Veranstaltung %s (%s) wurde bearbeitet.")." \n"._("FÃ¼r folgende Belegungszeiten wurde der jeweils angegebene Raum gebucht:")."\n\n", $semObj->getName(), $semObj->seminar_number);
         else
-            $message = sprintf (_("Ihre Raumanfrage zur Veranstaltung %s wurde bearbeitet.")." \n"._("Für folgende Belegungszeiten wurde der jeweils angegebene Raum gebucht:")."\n\n", $semObj->getName());
+            $message = sprintf (_("Ihre Raumanfrage zur Veranstaltung %s wurde bearbeitet.")." \n"._("FÃ¼r folgende Belegungszeiten wurde der jeweils angegebene Raum gebucht:")."\n\n", $semObj->getName());
 
         //send the message into stud.ip message system
         // only if there are assigned dates

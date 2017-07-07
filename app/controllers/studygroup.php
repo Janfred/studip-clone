@@ -8,7 +8,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      AndrÈ Klaﬂen <aklassen@uos.de>
+ * @author      Andr√© Kla√üen <aklassen@uos.de>
  * @copyright   2009-2010 Stud.IP Core-Group
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
@@ -73,7 +73,7 @@ class StudygroupController extends AuthenticatedController
                     $this->flash['info'] = _("Der Suchbegriff ist zu kurz.");
                     unset($this->flash['searchterm']);
                 } elseif (isset($this->flash['searchterm'])) {
-                    $this->flash['info'] = _("Es wurden keine Studiengruppen f¸r den Suchbegriff gefunden");
+                    $this->flash['info'] = _("Es wurden keine Studiengruppen f√ºr den Suchbegriff gefunden");
                 }
             }
             $this->anzahl = StudygroupModel::countGroups();

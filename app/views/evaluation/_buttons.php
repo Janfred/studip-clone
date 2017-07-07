@@ -10,7 +10,7 @@
         : Studip\LinkButton::create(_('Sortieren'), ContentBoxHelper::href($vote->id, array('preview[]' => $vote->id, 'sort' => 1)))
     ?>
     <? if ($vote->changeable && $vote->state == 'active' && !$nobody): ?>
-        <?= Studip\LinkButton::create(_('Antwort ändern'), ContentBoxHelper::href($vote->id, array('change' => 1))) ?>
+        <?= Studip\LinkButton::create(_('Antwort Ã¤ndern'), ContentBoxHelper::href($vote->id, array('change' => 1))) ?>
     <? endif; ?>
     <? if (!$vote->anonymous && ($admin || $vote->namesvisibility)): ?>
         <? if (Request::get('revealNames') === $vote->id) : ?>

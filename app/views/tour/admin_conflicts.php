@@ -51,8 +51,8 @@
             <tfoot>
                 <tr>
                     <td></td>
-                    <td><?= LinkButton::create(_('Übernehmen'), $controller->url_for('tour/resolve_conflict/' . $conflict[$keys[0]]->getId() . '/accept')) ?></td>
-                    <td><?= LinkButton::create(_('Löschen'), $controller->url_for('tour/resolve_conflict/' . $conflict[$keys[0]]->getId() . '/delete')) ?></td>
+                    <td><?= LinkButton::create(_('Ãœbernehmen'), $controller->url_for('tour/resolve_conflict/' . $conflict[$keys[0]]->getId() . '/accept')) ?></td>
+                    <td><?= LinkButton::create(_('LÃ¶schen'), $controller->url_for('tour/resolve_conflict/' . $conflict[$keys[0]]->getId() . '/delete')) ?></td>
                 </tr>
             </tfoot>
         </table>

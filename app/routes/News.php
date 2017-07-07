@@ -75,7 +75,7 @@ class News extends \RESTAPI\RouteMap
     }
 
     /**
-     * News löschen
+     * News lÃ¶schen
      *
      * @delete /news/:news_id
      */
@@ -246,7 +246,7 @@ class News extends \RESTAPI\RouteMap
     }
 
     /**
-     * News-Comment löschen
+     * News-Comment lÃ¶schen
      *
      * @delete /comment/:comment_id
      */

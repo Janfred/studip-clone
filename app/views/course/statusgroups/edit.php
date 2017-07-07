@@ -11,7 +11,7 @@
         </section>
         <section>
             <label for="size">
-                <?= _('Gruppengröße') ?>
+                <?= _('GruppengrÃ¶ÃŸe') ?>
             </label>
             <input type="number" name="size" value="<?= intval($group->size) ?>" min="0">
         </section>
@@ -51,7 +51,7 @@
         <?php elseif ($group->hasFolder()) : ?>
             <section>
                 <input type="checkbox" checked disabled>
-                <?= _('Zu dieser Gruppe gehört ein Dateiordner.')  ?>
+                <?= _('Zu dieser Gruppe gehÃ¶rt ein Dateiordner.')  ?>
             </section>
         <?php endif ?>
     </fieldset>
@@ -64,7 +64,7 @@
                 <?php if ($cycles) : ?>
                     <section class="contentbox">
                         <header>
-                            <h1><?= _('Regelmäßige Zeiten') ?></h1>
+                            <h1><?= _('RegelmÃ¤ÃŸige Zeiten') ?></h1>
                         </header>
                         <?php foreach ($cycles as $c) : ?>
                             <article class="<?= ContentBoxHelper::classes($c->id) ?>" id="<?= $c->id ?>">

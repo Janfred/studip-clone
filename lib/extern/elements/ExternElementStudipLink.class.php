@@ -63,7 +63,7 @@ class ExternElementStudipLink extends ExternElement {
     function getDefaultConfig () {
 
         $config = array(
-            "linktext" => _("Daten ändern"),
+            "linktext" => _("Daten Ã¤ndern"),
             "imageurl" => "",
             "image" => "1",
             "align" => "left"
@@ -94,11 +94,11 @@ class ExternElementStudipLink extends ExternElement {
         $content = $edit_form->editAlign("align");
 
         $title = _("Linktext:");
-        $info = _("Geben Sie den Text für den Link ein.");
+        $info = _("Geben Sie den Text fÃ¼r den Link ein.");
         $content .= $edit_form->editTextfieldGeneric("linktext", $title, $info, 40, 150);
 
         $title = _("Bild anzeigen:");
-        $info = _("Anwählen, wenn ein Bild als Link angezeigt werden soll.");
+        $info = _("AnwÃ¤hlen, wenn ein Bild als Link angezeigt werden soll.");
         $value = "1";
         $content .= $edit_form->editCheckboxGeneric("image", $title, $info, $value, "");
 

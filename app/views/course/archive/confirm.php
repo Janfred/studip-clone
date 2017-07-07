@@ -1,8 +1,8 @@
 <? if ($courses) : ?>
     <?= MessageBox::warning(
             ngettext(
-                'Sie sind im Begriff, die folgende Veranstaltung zu archivieren. Dieser Schritt kann nicht rückgängig gemacht werden!',
-                'Sie sind im Begriff, die folgenden Veranstaltungen zu archivieren. Dieser Schritt kann nicht rückgängig gemacht werden!',
+                'Sie sind im Begriff, die folgende Veranstaltung zu archivieren. Dieser Schritt kann nicht rÃ¼ckgÃ¤ngig gemacht werden!',
+                'Sie sind im Begriff, die folgenden Veranstaltungen zu archivieren. Dieser Schritt kann nicht rÃ¼ckgÃ¤ngig gemacht werden!',
                 count($courses)
             )
         ) ?>
@@ -10,7 +10,7 @@
     <thead>
         <tr>
             <th><?= _('Name der Veranstaltung') ?></th>
-            <th><?= _('Letzte Aktivität') ?></th>
+            <th><?= _('Letzte AktivitÃ¤t') ?></th>
         </tr>
     </thead>
     <tbody>
@@ -31,7 +31,7 @@
                     <dl class="default nohover">
                         <dt><?= _('Untertitel') . ':' ?></dt>
                         <dd>
-                            <?= $course->untertitel ? htmlReady($course->untertitel) : ' ' ?>
+                            <?= $course->untertitel ? htmlReady($course->untertitel) : 'Â ' ?>
                         </dd>
                         <dt><?= _('Lehrende') ?></dt>
                         <dd>
@@ -46,11 +46,11 @@
                             </ul>
                         </dd>
                         <dt><?= _('Veranstaltungsort') . ':' ?></dt>
-                        <dd><?= $course->ort ? htmlReady($course->ort) : ' ' ?></dd>
+                        <dd><?= $course->ort ? htmlReady($course->ort) : 'Â ' ?></dd>
                         <dt><?= _('Semester') . ':'; ?></dt>
-                        <dd><?= $course->start_semester->name ? htmlReady($course->start_semester->name) : ' ' ?></dd>
+                        <dd><?= $course->start_semester->name ? htmlReady($course->start_semester->name) : 'Â ' ?></dd>
                         <dt><?= _('Veranstaltungsnummer') . ':' ?></dt>
-                        <dd><?= $course->veranstaltungsnummer ? htmlReady($course->veranstaltungsnummer) : ' ' ?></dd>
+                        <dd><?= $course->veranstaltungsnummer ? htmlReady($course->veranstaltungsnummer) : 'Â ' ?></dd>
                     </dl>
                 </div>
             </td>
@@ -73,5 +73,5 @@
     </tfoot>
 </table>
 <? else : ?>
-<?= MessageBox::error(_('Es wurde keine Veranstaltung ausgewählt!')) ?>
+<?= MessageBox::error(_('Es wurde keine Veranstaltung ausgewÃ¤hlt!')) ?>
 <? endif ?>

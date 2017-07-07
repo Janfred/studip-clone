@@ -1,10 +1,10 @@
 <? foreach(PageLayout::getMessages() as $pm) : ?>
     <?= $pm ?>
 <? endforeach; ?>
-<h4><?= sprintf(_("Einrichtungszuordnung für %s in der Rolle %s"), htmlReady($user->getFullname()), htmlready($role->getRoleName()))?></h4>
+<h4><?= sprintf(_("Einrichtungszuordnung fÃ¼r %s in der Rolle %s"), htmlReady($user->getFullname()), htmlready($role->getRoleName()))?></h4>
 <form action="<?= $controller->link_for('/assign_role_institutes/' . $role->getRoleid() . '/' . $user->id) ?>" method="post">
 <?= $qsearch->render() ?>
-<?= Studip\Button::create(_('Einrichtung hinzufügen'), "add_institute", array("rel" => "lightbox")) ?>
+<?= Studip\Button::create(_('Einrichtung hinzufÃ¼gen'), "add_institute", array("rel" => "lightbox")) ?>
 </form>
 
 <h4><?= _("Vorhandene Zuordnungen") ?></h4>
@@ -19,4 +19,4 @@
 <? endforeach ?>
 </ul>
 
-<?= Studip\LinkButton::createCancel(_('Schließen'), $controller->url_for('/assign_role/' . $user->id), ['data-dialog-button' => '']) ?>
+<?= Studip\LinkButton::createCancel(_('SchlieÃŸen'), $controller->url_for('/assign_role/' . $user->id), ['data-dialog-button' => '']) ?>

@@ -55,9 +55,9 @@ SkipLinks::addIndex(_('Suchformular'), 'search_sem_qs', 100);
             true
         ) ?>
         <?= Studip\LinkButton::create(
-            _('Zurücksetzen'),
+            _('ZurÃ¼cksetzen'),
             URLHelper::getURL('?reset_all=1'),
-            ['title' => _('Zurücksetzen')]
+            ['title' => _('ZurÃ¼cksetzen')]
         ) ?>
     </span>
 </footer>

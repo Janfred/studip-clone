@@ -37,12 +37,12 @@
 // +---------------------------------------------------------------------------+
 
 /* ---
- * Mögliche Datenschutz-/Sichtbarkeitsentscheidung: Beim ersten Login wird ein
- * informierender Text mit Entscheidungsmöglichkeit: "Ich will sichtbar sein" oder
+ * MÃ¶gliche Datenschutz-/Sichtbarkeitsentscheidung: Beim ersten Login wird ein
+ * informierender Text mit EntscheidungsmÃ¶glichkeit: "Ich will sichtbar sein" oder
  * "Ich will unsichtbar sein" angezeigt.
  *
  * Bei Nutzung dieser Funktion unbedingt die Texte unter locale/de/LC_HELP/visibility_decision.php bzw.
- * locale/en/LC_HELP/visibility_decision.php an die lokalen Verhältnisse anpassen!
+ * locale/en/LC_HELP/visibility_decision.php an die lokalen VerhÃ¤ltnisse anpassen!
  */
 if (Config::get()->USER_VISIBILITY_CHECK && is_object($GLOBALS['user']) && $GLOBALS['user']->id != 'nobody')
 {
@@ -50,7 +50,7 @@ if (Config::get()->USER_VISIBILITY_CHECK && is_object($GLOBALS['user']) && $GLOB
    first_decision($GLOBALS['user']->id);
 }
 
-if (PageLayout::isHeaderEnabled()) //Einige Seiten benötigen keinen Header, sprich Navigation (Evaluation usw.)
+if (PageLayout::isHeaderEnabled()) //Einige Seiten benÃ¶tigen keinen Header, sprich Navigation (Evaluation usw.)
 {
     $header_template = $GLOBALS['template_factory']->open('header');
     $header_template->current_page = PageLayout::getTitle();
@@ -63,9 +63,9 @@ if (PageLayout::isHeaderEnabled()) //Einige Seiten benötigen keinen Header, spri
             // indicate to the template that this course is publicly visible
             // need to handle institutes separately (always visible)
             if (Context::isInstitute()) {
-                $header_template->public_hint = _('öffentliche Einrichtung');
+                $header_template->public_hint = _('Ã¶ffentliche Einrichtung');
             } else if (Course::findCurrent()->lesezugriff == 0) {
-                $header_template->public_hint = _('öffentliche Veranstaltung');
+                $header_template->public_hint = _('Ã¶ffentliche Veranstaltung');
             }
         }
         if ($GLOBALS['user']->cfg->getValue('ACCESSKEY_ENABLE')){

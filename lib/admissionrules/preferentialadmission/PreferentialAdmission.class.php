@@ -180,7 +180,7 @@ class PreferentialAdmission extends AdmissionRule
     }
 
     /**
-     * Gets all users that are matched by thís rule.
+     * Gets all users that are matched by thÃ­s rule.
      *
      * @return Array An array containing IDs of users who are matched by
      *      this rule.
@@ -215,7 +215,7 @@ class PreferentialAdmission extends AdmissionRule
      */
     public static function getDescription()
     {
-        return _('Sie können hier festlegen, dass bestimmte Studiengänge, '.
+        return _('Sie kÃ¶nnen hier festlegen, dass bestimmte StudiengÃ¤nge, '.
             'Fachsemester etc. bei der Platzverteilung zu Veranstaltungen '.
             'bevorzugt behandelt werden sollen.');
     }

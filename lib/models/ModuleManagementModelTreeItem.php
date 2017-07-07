@@ -140,7 +140,7 @@ abstract class ModuleManagementModelTreeItem extends ModuleManagementModel imple
      * @param type $delimiter
      * @return type
      */
-    public static function getPathes($trails, $delimiter = ' · ')
+    public static function getPathes($trails, $delimiter = ' Â· ')
     {
         $pathes =  array();
         foreach ($trails as $trail) {

@@ -96,7 +96,7 @@ class ExternModulePersondetails extends ExternModule {
         // setup module properties
         $this->elements["LinkIntern"]->link_module_type = 4;
         $this->elements["LinkIntern"]->real_name = _("Link zum Modul Veranstaltungsdetails");
-        $this->elements["TableHeader"]->real_name = _("Umschlieﬂende Tabelle");
+        $this->elements["TableHeader"]->real_name = _("Umschlie√üende Tabelle");
     }
     
     function printout ($args) {

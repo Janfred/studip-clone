@@ -144,7 +144,7 @@ class Studiengang extends ModuleManagementModelTreeItem
     }
 
     /**
-     * Retrieves all Studiengänge ba given Abschluss-Kategorie.
+     * Retrieves all StudiengÃ¤nge ba given Abschluss-Kategorie.
      *
      * @param string $kategorie_id The id of an Abschluss-Kategorie.
      * @return SimpleORMapCollection A collection of Studiengaenge.
@@ -736,12 +736,12 @@ class Studiengang extends ModuleManagementModelTreeItem
             if (!$this->isNew() && $this->isFieldDirty('typ') && count($this->studiengangteile)) {
                 $this->revertValue('typ');
                 $ret['typ'] = true;
-                $messages[] = _('Der Typ des Studiengangs kann nicht mehr verändert werden, da bereits ein Studiengangteil zugeordnet wurde.');
+                $messages[] = _('Der Typ des Studiengangs kann nicht mehr verÃ¤ndert werden, da bereits ein Studiengangteil zugeordnet wurde.');
                 $rejected = true;
             } else {
                 if (!in_array($this->typ, words('einfach mehrfach'))) {
                     $ret['typ'] = true;
-                    $messages[] = _('Bitte den Typ des Studiengangs wählen.');
+                    $messages[] = _('Bitte den Typ des Studiengangs wÃ¤hlen.');
                     $rejected = true;
                 }
             }
@@ -749,7 +749,7 @@ class Studiengang extends ModuleManagementModelTreeItem
                 $start_sem = Semester::find($this->start);
                 if (!$start_sem) {
                     $ret['start'] = true;
-                    $messages[] = _('Ungültiges Semester.');
+                    $messages[] = _('UngÃ¼ltiges Semester.');
                     $rejected = true;
                 } else if ($this->end) {
                     $end_sem = Semester::find($this->end);
@@ -761,7 +761,7 @@ class Studiengang extends ModuleManagementModelTreeItem
                         }
                     } else {
                         $ret['end'] = true;
-                        $messages[] = _('Ungültiges Endsemester.');
+                        $messages[] = _('UngÃ¼ltiges Endsemester.');
                         $rejected = true;
                     }
                 }

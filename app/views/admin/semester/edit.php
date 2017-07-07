@@ -21,7 +21,7 @@
         </tr>
         <tr>
             <td>
-                <label for="token"><?= _('Kürzel') ?></label>
+                <label for="token"><?= _('KÃ¼rzel') ?></label>
             </td>
             <td>
                 <input type="text" name="token" id="token"
@@ -45,7 +45,7 @@
             <td>
                 <label for="beginn"><?= _('Beginn') ?></label>
             <? if ($semester->absolute_seminars_count > 0): ?>
-                <?= tooltipIcon(_('Das Startdatum kann nur bei Semestern geändert werden, in denen keine Veranstaltungen liegen!'), true) ?>
+                <?= tooltipIcon(_('Das Startdatum kann nur bei Semestern geÃ¤ndert werden, in denen keine Veranstaltungen liegen!'), true) ?>
             <? endif; ?>
             </td>
             <td>

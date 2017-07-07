@@ -15,7 +15,7 @@ class Tic5961AddConfigDefaultSem extends Migration
             'type'        => 'string',
             'range'       => 'global',
             'section'     => 'MeineVeranstaltungen',
-            'description' => 'Standardeinstellung für den Semester-Filter, falls noch keine Auswahl getätigt wurde. (all, future, current, last)',
+            'description' => 'Standardeinstellung fÃ¼r den Semester-Filter, falls noch keine Auswahl getÃ¤tigt wurde. (all, future, current, last)',
         ));
     }
 

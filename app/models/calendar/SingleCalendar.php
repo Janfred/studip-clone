@@ -177,7 +177,7 @@ class SingleCalendar
                 $attendee_calendar = new SingleCalendar($attendee_id);
                 
                 // SEMBBS
-                // Gruppentermine können ab Calendar::PERMISSION_READABLE angelegt werden
+                // Gruppentermine kÃ¶nnen ab Calendar::PERMISSION_READABLE angelegt werden
                 // if ($attendee_calendar->havePermission(Calendar::PERMISSION_READABLE)) {
                     
                 if ($attendee_calendar->havePermission(Calendar::PERMISSION_WRITABLE)
@@ -501,8 +501,8 @@ class SingleCalendar
             $subject = strftime(_('Neuer Termin am %c'), $event->getStart());
             $msg_text .= "\n\n**";
         } else {
-            $msg_text = sprintf(_("%s hat einen Termin in Ihrem Kalender geändert."), get_fullname());
-            $subject = strftime(_('Termin am %c geändert'), $event->getStart());
+            $msg_text = sprintf(_("%s hat einen Termin in Ihrem Kalender geÃ¤ndert."), get_fullname());
+            $subject = strftime(_('Termin am %c geÃ¤ndert'), $event->getStart());
             $msg_text .= "\n\n**";
         }
         $msg_text .= _('Zeit:') . '** ' . strftime(' %c - ', $event->getStart())
@@ -515,7 +515,7 @@ class SingleCalendar
             $msg_text .= '**' . _("Kategorie:") . "** $event_data\n";
         }
         if ($event_data = $event->toStringPriority()) {
-            $msg_text .= '**' . _("Priorität:") . "** $event_data\n";
+            $msg_text .= '**' . _("PrioritÃ¤t:") . "** $event_data\n";
         }
         if ($event_data = $event->toStringAccessibility()) {
             $msg_text .= '**' . _("Zugriff:") . "** $event_data\n";
@@ -616,8 +616,8 @@ class SingleCalendar
         $message = new messaging();
         $event_data = '';
 
-        $subject = strftime(_('Termin am %c gelöscht'), $event->getStart());
-        $msg_text = sprintf(_("%s hat folgenden Termin in Ihrem Kalender gelöscht:"), get_fullname());
+        $subject = strftime(_('Termin am %c gelÃ¶scht'), $event->getStart());
+        $msg_text = sprintf(_("%s hat folgenden Termin in Ihrem Kalender gelÃ¶scht:"), get_fullname());
         $msg_text .= "\n\n";
 
         $msg_text .= '**' . _('Zeit:') . '**' . strftime(' %c - ', $event->getStart())
@@ -630,7 +630,7 @@ class SingleCalendar
             $msg_text .= '**' . _("Kategorie:") . "** $event_data\n";
         }
         if ($event_data = $event->toStringPriority()) {
-            $msg_text .= '**' . _("Priorität:") . "** $event_data\n";
+            $msg_text .= '**' . _("PrioritÃ¤t:") . "** $event_data\n";
         }
         if ($event_data = $event->toStringAccessibility()) {
             $msg_text .= '**' . _("Zugriff:") . "** $event_data\n";

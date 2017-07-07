@@ -50,9 +50,9 @@ class Course_ManagementController extends AuthenticatedController
         Navigation::activateItem('course/admin/main');
 
         if (Context::isInstitute()) {
-            Helpbar::get()->addPlainText(_('Information'), _('Als Mitarbeiter Ihrer Einrichtung können Sie für diese Inhalte in mehreren Kategorien bereitstellen.Inhalte in Ihrer Einrichtung können von allen Stud.IP-Nutzern abgerufen werden.'));
+            Helpbar::get()->addPlainText(_('Information'), _('Als Mitarbeiter Ihrer Einrichtung kÃ¶nnen Sie fÃ¼r diese Inhalte in mehreren Kategorien bereitstellen.Inhalte in Ihrer Einrichtung kÃ¶nnen von allen Stud.IP-Nutzern abgerufen werden.'));
         } else {
-            Helpbar::get()->addPlainText(_('Information'), _('Sie können hier Ihre Veranstaltung in mehreren Kategorien anpassen. Informationen wie Grunddaten oder Termine und Einstellungen, Zugangsbeschränkungen und Funktionen können Sie hier administrieren.'));
+            Helpbar::get()->addPlainText(_('Information'), _('Sie kÃ¶nnen hier Ihre Veranstaltung in mehreren Kategorien anpassen. Informationen wie Grunddaten oder Termine und Einstellungen, ZugangsbeschrÃ¤nkungen und Funktionen kÃ¶nnen Sie hier administrieren.'));
         }
     }
 
@@ -90,7 +90,7 @@ class Course_ManagementController extends AuthenticatedController
     public function lock_action()
     {
         Navigation::activateItem('course/admin/main');
-        PageLayout::setTitle(_('Sperrebene ändern'));
+        PageLayout::setTitle(_('Sperrebene Ã¤ndern'));
         $course = Course::findCurrent();
 
         if (!$course) {
@@ -122,9 +122,9 @@ class Course_ManagementController extends AuthenticatedController
             if ($course->store()) {
                 if (!is_null($rule_id)) {
                     $lock_rule = LockRule::find($rule_id);
-                    $msg       = sprintf(_('Die Sperrebene %s wurde erfolgreich übernommen!'), $lock_rule->name);
+                    $msg       = sprintf(_('Die Sperrebene %s wurde erfolgreich Ã¼bernommen!'), $lock_rule->name);
                 } else {
-                    $msg = _('Die Sperrebene wurde erfolgreich zurückgesetzt!');
+                    $msg = _('Die Sperrebene wurde erfolgreich zurÃ¼ckgesetzt!');
                 }
                 PageLayout::postMessage(MessageBox::success($msg));
             }

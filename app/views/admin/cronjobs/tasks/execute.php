@@ -1,4 +1,4 @@
-<h2><?= sprintf(_('Cronjob-Aufgabe "%s" ausführen'), htmlReady($task->name)) ?></h2>
+<h2><?= sprintf(_('Cronjob-Aufgabe "%s" ausfÃ¼hren'), htmlReady($task->name)) ?></h2>
 <? if (isset($result)): ?>
 <pre><code><?= htmlReady($result ?: _('- Keine Ausgabe -')) ?></code></pre>
 <? else: ?>
@@ -8,7 +8,7 @@
     <?= $this->render_partial('admin/cronjobs/schedules/parameters') ?>
 <? endif; ?>
     <div data-dialog-button>
-        <?= Studip\Button::createAccept(_('Ausführen'), 'submit') ?>
+        <?= Studip\Button::createAccept(_('AusfÃ¼hren'), 'submit') ?>
     </div>
 </form>
 <? endif; ?>

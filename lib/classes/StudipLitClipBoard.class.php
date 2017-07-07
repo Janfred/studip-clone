@@ -8,7 +8,7 @@
 // StudipLitClipBoard.class.php
 // Class to
 //
-// Copyright (c) 2003 AndrÈ Noack <noack@data-quest.de>
+// Copyright (c) 2003 Andr√© Noack <noack@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@
 /**
  *
  * @access   public
- * @author   AndrÈ Noack <noack@data-quest.de>
+ * @author   Andr√© Noack <noack@data-quest.de>
  * @package
  **/
 class StudipLitClipBoard {
@@ -83,9 +83,9 @@ class StudipLitClipBoard {
             }
         }
         if ($deleted == 1){
-            PageLayout::postMessage(MessageBox::success(_('Es wurde ein Literaturverweis aus Ihrer Merkliste gelˆscht')));
+            PageLayout::postMessage(MessageBox::success(_('Es wurde ein Literaturverweis aus Ihrer Merkliste gel√∂scht')));
         } else if ($deleted){
-            PageLayout::postMessage(sprintf(_('Es wurden %s Literaturverweise aus Ihrer Merkliste gelˆscht.'), $deleted));
+            PageLayout::postMessage(sprintf(_('Es wurden %s Literaturverweise aus Ihrer Merkliste gel√∂scht.'), $deleted));
         }
         $this->setDefaultValue();
         return $deleted;
@@ -133,8 +133,8 @@ class StudipLitClipBoard {
     function setFormObject(){
         $form_name = $this->form_name;
         $form_fields['clip_content'] = array('type' => 'select', 'multiple' => true, 'options_callback' => array($this, "getClipOptions"));
-        $form_fields['clip_cmd'] = array('type' => 'select', 'options' => array(array('name' => _("Aus Merkliste lˆschen"), 'value' => 'del')));
-        $form_buttons['clip_ok'] = array('type' => 'accept', 'caption' => _('OK'), 'info' => _("Gew‰hlte Aktion starten"));
+        $form_fields['clip_cmd'] = array('type' => 'select', 'options' => array(array('name' => _("Aus Merkliste l√∂schen"), 'value' => 'del')));
+        $form_buttons['clip_ok'] = array('type' => 'accept', 'caption' => _('OK'), 'info' => _("Gew√§hlte Aktion starten"));
         if (!is_object($this->form_obj)){
             $this->form_obj = new StudipForm($form_fields, $form_buttons, $form_name, false);
         } else {
@@ -152,7 +152,7 @@ class StudipLitClipBoard {
             }
         } else {
             $options[] = array('name' => ("Ihre Merkliste ist leer!"), 'value' => 0);
-            $options[] = array('name' => str_repeat("Ø",floor($cols * .8)) , 'value' => 0);
+            $options[] = array('name' => str_repeat("¬Ø",floor($cols * .8)) , 'value' => 0);
         }
         return $options;
     }
@@ -166,7 +166,7 @@ class StudipLitClipBoard {
                     $this->deleteElement($selected);
                     $this->form_obj->doFormReset();
                 } else {
-                    PageLayout::postMessage(MessageBox::info(_('Sie haben keinen Eintrag in Ihrer Merkliste ausgew‰hlt!')));
+                    PageLayout::postMessage(MessageBox::info(_('Sie haben keinen Eintrag in Ihrer Merkliste ausgew√§hlt!')));
                 }
                 break;
         }

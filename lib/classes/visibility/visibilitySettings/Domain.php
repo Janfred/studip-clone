@@ -23,7 +23,7 @@ class Visibility_Domain extends VisibilityAbstract {
     protected $display_name = "Domain";
 
     // Description for the state
-    protected $description = "nur für meine Nutzerdomäne sichtbar";
+    protected $description = "nur fÃ¼r meine NutzerdomÃ¤ne sichtbar";
 
     // When do two users have this state
     function verify($user_id, $other_id)

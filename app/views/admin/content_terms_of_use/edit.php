@@ -32,7 +32,7 @@
     </fieldset>
 
     <fieldset>
-        <legend><?= _('Zusätzliche Angaben') ?></legend>
+        <legend><?= _('ZusÃ¤tzliche Angaben') ?></legend>
 
         <label>
             <?= _('Position') ?>

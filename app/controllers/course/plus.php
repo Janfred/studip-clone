@@ -99,11 +99,11 @@ class Course_PlusController extends AuthenticatedController
             if (method_exists($class, 'deleteContent')) {
                 $class->deleteContent();
             } else {
-                PageLayout::postMessage(MessageBox::info(_("Das Plugin/Modul enthält keine Funktion zum Löschen der Inhalte.")));
+                PageLayout::postMessage(MessageBox::info(_("Das Plugin/Modul enthÃ¤lt keine Funktion zum LÃ¶schen der Inhalte.")));
             }
         } else {
-            PageLayout::postMessage(MessageBox::info(sprintf(_("Sie beabsichtigen die Inhalte von %s zu löschen."), $displayname)
-                . "<br>" . _("Wollen Sie die Inhalte wirklich löschen?") . "<br>"
+            PageLayout::postMessage(MessageBox::info(sprintf(_("Sie beabsichtigen die Inhalte von %s zu lÃ¶schen."), $displayname)
+                . "<br>" . _("Wollen Sie die Inhalte wirklich lÃ¶schen?") . "<br>"
                 . LinkButton::createAccept(_('Ja'), URLHelper::getURL("?deleteContent=true&check=true&name=" . $name))
                 . LinkButton::createCancel(_('Nein'))));
         }

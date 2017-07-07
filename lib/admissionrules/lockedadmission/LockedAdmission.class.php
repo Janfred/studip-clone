@@ -55,7 +55,7 @@ class LockedAdmission extends AdmissionRule
      */
     public static function getDescription() {
         return _("Diese Art von Anmelderegel sperrt die Anmeldung ".
-            "zu allen zugehörigen Veranstaltungen, sodass sich niemand ".
+            "zu allen zugehÃ¶rigen Veranstaltungen, sodass sich niemand ".
             "eintragen kann.");
     }
 

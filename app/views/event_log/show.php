@@ -25,7 +25,7 @@ use Studip\Button, Studip\LinkButton;
       <? endforeach ?>
     </select>
 
-    <?= _('für') ?>
+    <?= _('fÃ¼r') ?>
 
     <? if (isset($objects)): ?>
       <? foreach ($types as $name => $title): ?>
@@ -108,13 +108,13 @@ use Studip\Button, Studip\LinkButton;
         <input type="hidden" name="start" value="<?= $start ?>">
 
         <? if ($start > 0): ?>
-          <?= Button::create('<< '. _("Zurück"), 'back') ?>
+          <?= Button::create('<< '. _("ZurÃ¼ck"), 'back') ?>
         <? endif ?>
         <? if ($start + count($log_events) < $num_entries): ?>
           <?= Button::create(_('Weiter') . " >>", 'forward') ?>
         <? endif ?>
     <? else: ?>
-      <?= _('keine Einträge gefunden') ?>
+      <?= _('keine EintrÃ¤ge gefunden') ?>
     <? endif ?>
     </p>
   <? endif ?>

@@ -42,7 +42,7 @@ if (isset($flash['question']) && isset($flash['candidate'])) {
 <? if ($rechte): ?>
     <? if (count($accepted) > 0): ?>
         <table class="default sortable-table">
-            <caption><?= _('Offene Mitgliedsanträge') ?></caption>
+            <caption><?= _('Offene MitgliedsantrÃ¤ge') ?></caption>
             <colgroup>
                 <col width="40">
                 <col>
@@ -116,8 +116,8 @@ if (isset($flash['question']) && isset($flash['candidate'])) {
                             </a>
                         </td>
                         <td class="actions">
-                            <a href="<?= $controller->url_for('course/studygroup/edit_members/' . $sem_id . '/cancelInvitation?user=' . $p['username']) ?>" data-confirm="<?= _('Wollen Sie die Einladung wirklich löschen?') ?>">
-                                <?= Icon::create('trash', 'clickable', ['title' => _('Einladung löschen')])->asImg() ?>
+                            <a href="<?= $controller->url_for('course/studygroup/edit_members/' . $sem_id . '/cancelInvitation?user=' . $p['username']) ?>" data-confirm="<?= _('Wollen Sie die Einladung wirklich lÃ¶schen?') ?>">
+                                <?= Icon::create('trash', 'clickable', ['title' => _('Einladung lÃ¶schen')])->asImg() ?>
                             </a>
                         </td>
                     </tr>

@@ -18,7 +18,7 @@ class Tic4044InvisibleStudygroups extends Migration {
             'type' => 'boolean',
             'range' => 'global',
             'section' => 'studygroups',
-            'description' => _('Ermˆglicht unsichtbare Studiengruppen')
+            'description' => _('Erm√∂glicht unsichtbare Studiengruppen')
             ));
     }
 

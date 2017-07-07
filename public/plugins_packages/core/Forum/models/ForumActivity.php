@@ -7,7 +7,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      Till Glöggler <tgloeggl@uos.de>
+ * @author      Till GlÃ¶ggler <tgloeggl@uos.de>
  * @license     https://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  */
 
@@ -72,17 +72,17 @@ class ForumActivity
      */
     public static function deleteEntry($event, $topic_id, $post)
     {
-        $summary = _('%s hat im Forum der Veranstaltung "%s" einen Beitrag gelöscht.');
+        $summary = _('%s hat im Forum der Veranstaltung "%s" einen Beitrag gelÃ¶scht.');
 
         if ($post['user_id'] == $GLOBALS['user']->id) {
             $content = sprintf(
-                _('%s hat seinen Beitrag vom %s gelöscht.'),
+                _('%s hat seinen Beitrag vom %s gelÃ¶scht.'),
                 get_fullname($GLOBALS['user']->id),
                 date('d.m.y, H:i', $post['mkdate'])
             );
         } else {
             $content = sprintf(
-                _('%s hat den Beitrag von %s vom %s gelöscht.'),
+                _('%s hat den Beitrag von %s vom %s gelÃ¶scht.'),
                 get_fullname($post['user_id']),
                 get_fullname($GLOBALS['user']->id),
                 date('d.m.y, H:i', $post['mkdate'])

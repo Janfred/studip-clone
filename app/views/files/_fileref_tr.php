@@ -28,7 +28,7 @@
         <?= htmlReady($file_ref->name) ?>
     <? endif ?>
     <? if ($file_ref->terms_of_use && $file_ref->terms_of_use->download_condition > 0): ?>
-        <?= Icon::create('lock-locked', Icon::ROLE_INFO)->asImg(['class' => 'text-top', 'title' => _('Das Herunterladen dieser Datei ist nur eingeschränkt möglich.')]) ?>
+        <?= Icon::create('lock-locked', Icon::ROLE_INFO)->asImg(['class' => 'text-top', 'title' => _('Das Herunterladen dieser Datei ist nur eingeschrÃ¤nkt mÃ¶glich.')]) ?>
     <? endif; ?>
     </td>
     <td title="<?= number_format($file_ref->size, 0, ',', '.') . ' Byte' ?>" data-sort-value="<?= $file_ref->size ?>" class="responsive-hidden">
@@ -62,13 +62,13 @@
         if (Navigation::hasItem('/course/files_new/flat') && Navigation::getItem('/course/files_new/flat')->isActive()) {
             $actionMenu->addLink(
                 $controller->url_for('course/files/index/' . $file_ref->folder_id),
-                _('Ordner öffnen'),
+                _('Ordner Ã¶ffnen'),
                 Icon::create('folder-empty', Icon::ROLE_CLICKABLE, ['size' => 20])
             );
         } elseif (Navigation::hasItem('/profile/files/flat') && Navigation::getItem('/profile/files/flat')->isActive()) {
              $actionMenu->addLink(
                  $controller->url_for('files/index/' . $file_ref->folder_id),
-                 _('Ordner öffnen'),
+                 _('Ordner Ã¶ffnen'),
                  Icon::create('folder-empty', Icon::ROLE_CLICKABLE, ['size' => 20])
             );
         }
@@ -105,9 +105,9 @@
         if ($current_folder->isFileWritable($file_ref->id, $GLOBALS['user']->id)) {
             $actionMenu->addLink(
                 $controller->url_for('file/delete/' . $file_ref->id),
-                _('Datei löschen'),
+                _('Datei lÃ¶schen'),
                 Icon::create('trash', Icon::ROLE_CLICKABLE, ['size' => 20]),
-                ['onclick' => "return STUDIP.Dialog.confirmAsPost('" . sprintf(_('Soll die Datei "%s" wirklich gelöscht werden?'), htmlReady($file_ref->name)) . "', this.href);"]
+                ['onclick' => "return STUDIP.Dialog.confirmAsPost('" . sprintf(_('Soll die Datei "%s" wirklich gelÃ¶scht werden?'), htmlReady($file_ref->name)) . "', this.href);"]
             );
         }
     ?>

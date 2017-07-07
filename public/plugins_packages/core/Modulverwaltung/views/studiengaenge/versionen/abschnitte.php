@@ -26,8 +26,8 @@
                             <? if (!$abschnitt->count_module) : ?>
                                 <? $actionMenu->addLink(
                                         $controller->url_for('/delete_abschnitt/'. $abschnitt->id),
-                                        _('Studiengangteil-Abschnitt löschen'),
-                                        Icon::create('trash', 'clickable', ['title' => _('Studiengangteil-Abschnitt löschen')]))
+                                        _('Studiengangteil-Abschnitt lÃ¶schen'),
+                                        Icon::create('trash', 'clickable', ['title' => _('Studiengangteil-Abschnitt lÃ¶schen')]))
                                 ?>
                             <? endif; ?>
                         <? endif; ?>
@@ -50,7 +50,7 @@
                     <td colspan="3">
                         <form class="mvv-qsform" action="<?= $controller->url_for('/add_modul', $version->id) ?>"
                               method="post">
-                            <?= _('Modul hinzufügen') ?>
+                            <?= _('Modul hinzufÃ¼gen') ?>
                             <?= CSRFProtection::tokenTag() ?>
                             <?= $search_modul_version->render(); ?>
                             <?= Icon::create('search', 'clickable', ['title' => _('Modul suchen'), 'name' => 'search_stgteil', 'data-qs_name' => $search_modul_version->getId(), 'data-qs_id' => $qs_search_modul_version_id, 'data-qs_submit' => 'no', 'class' => 'mvv-qs-button'])->asInput(); ?>
@@ -63,7 +63,7 @@
                                 </select>
                             </label>
                             <input name="add_modul" class="text-top mvv-submit" type="image"
-                                   title="<?= _('Studiengangteil-Abschnitt hinzufügen') ?>"
+                                   title="<?= _('Studiengangteil-Abschnitt hinzufÃ¼gen') ?>"
                                    src="<?= Icon::create('accept', 'clickable')->asImagePath(); ?>">
                         </form>
                     </td>

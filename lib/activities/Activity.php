@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @author      Till Glˆggler <tgloeggl@uos.de>
- * @author      AndrÈ Klaﬂen <klassen@elan-ev.de>
+ * @author      Till Gl√∂ggler <tgloeggl@uos.de>
+ * @author      Andr√© Kla√üen <klassen@elan-ev.de>
  * @license     GPL 2 or later
  */
 
@@ -134,7 +134,7 @@ class Activity extends \SimpleORMap
             'attended'    => _('nahm teil an %s'),
             'completed'   => _('beendete %s'),
             'created'     => _('erstellte %s'),
-            'deleted'     => _('lˆschte %s'),
+            'deleted'     => _('l√∂schte %s'),
             'edited'      => _('bearbeitete %s'),
             'experienced' => _('erlebte %s'),
             'failed'      => _('verfehlte %s'),
@@ -143,7 +143,7 @@ class Activity extends \SimpleORMap
             'passed'      => _('bestand %s'),
             'shared'      => _('teilte %s'),
             'sent'        => _('sendete %s'),
-            'voided'      => _('lˆschte %s')
+            'voided'      => _('l√∂schte %s')
         );
 
         return ($translation[$this->verb]);

@@ -25,7 +25,7 @@ use Studip\Button, Studip\LinkButton;
                 <? if ($edit_about_enabled): ?>
                     <th><?= _('darf mein Profil bearbeiten'); ?></th>
                 <? endif; ?>
-                <th><?= _('löschen'); ?></th>
+                <th><?= _('lÃ¶schen'); ?></th>
             </tr>
             </thead>
             <tbody>
@@ -59,7 +59,7 @@ use Studip\Button, Studip\LinkButton;
             <tfoot>
             <tr>
                 <td colspan="<?= 2 + (int)$edit_about_enabled ?>">
-                    <?= Button::create(_('Übernehmen'), 'store', array('title' => _('Änderungen speichern'))) ?>
+                    <?= Button::create(_('Ãœbernehmen'), 'store', array('title' => _('Ã„nderungen speichern'))) ?>
                 </td>
             </tr>
             </tfoot>

@@ -97,13 +97,13 @@ class CalendarExportFile extends CalendarExport
                 throw new CalendarExportException(_('Das Export-Verzeichnis konnte nicht angelegt werden!'));
             } else {
                 if (!chmod($this->path, 0777)) {
-                    throw new CalendarExportException(_('Die Zugriffsrechte auf das Export-Verzeichnis konnten nicht geändert werden!'));
+                    throw new CalendarExportException(_('Die Zugriffsrechte auf das Export-Verzeichnis konnten nicht geÃ¤ndert werden!'));
                 }
             }
         }
         if (file_exists($this->path . $this->tmp_file_name)) {
             if (!unlink($this->path . $this->tmp_file_name)) {
-                throw new CalendarExportException(_('Eine bestehende Export-Datei konnte nicht gelöscht werden!'));
+                throw new CalendarExportException(_('Eine bestehende Export-Datei konnte nicht gelÃ¶scht werden!'));
             }
         }
         $this->export = fopen($this->path . $this->tmp_file_name, "wb");

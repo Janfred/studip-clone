@@ -16,7 +16,7 @@
  * @author      Cornelis Kater <ckater@gwdg.de>
  * @author      Suchi & Berg GmbH <info@data-quest.de>
  * @author      Ralf Stockmann <rstockm@gwdg.de>
- * @author      André Noack <andre.noack@gmx.net>
+ * @author      AndrÃ© Noack <andre.noack@gmx.net>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
  * @access      public
@@ -30,7 +30,7 @@
 // functions.php
 // Stud.IP Kernfunktionen
 // Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>,
-// Ralf Stockmann <rstockm@gwdg.de>, André Noack André Noack <andre.noack@gmx.net>
+// Ralf Stockmann <rstockm@gwdg.de>, AndrÃ© Noack AndrÃ© Noack <andre.noack@gmx.net>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -124,7 +124,7 @@ function get_object_by_range_id($range_id) {
 function checkObject()
 {
     if (!Context::get()) {
-        throw new CheckObjectException(_('Sie haben kein Objekt gewählt.'));
+        throw new CheckObjectException(_('Sie haben kein Objekt gewÃ¤hlt.'));
     }
 }
 
@@ -158,7 +158,7 @@ function checkObjectModule($module)
         }
 
         if (!$local_modules[$checkslot] && !$mandatory) {
-            throw new CheckObjectException(sprintf(_('Das Inhaltselement "%s" ist für dieses Objekt leider nicht verfügbar.'), ucfirst($module)));
+            throw new CheckObjectException(sprintf(_('Das Inhaltselement "%s" ist fÃ¼r dieses Objekt leider nicht verfÃ¼gbar.'), ucfirst($module)));
         }
     }
 }

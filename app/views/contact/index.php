@@ -12,8 +12,8 @@
                     </a>
                     <?= Icon::create('trash', 'clickable')->asInput(16,
                             ['formaction'   => $controller->url_for('contact/deleteGroup/' . $filter),
-                             'title'        => _('Gruppe löschen'),
-                             'data-confirm' => sprintf(_('Gruppe %s wirklich löschen?'), htmlReady($title))]) ?>
+                             'title'        => _('Gruppe lÃ¶schen'),
+                             'data-confirm' => sprintf(_('Gruppe %s wirklich lÃ¶schen?'), htmlReady($title))]) ?>
                 <? endif; ?>
             </span>
         </caption>

@@ -2,7 +2,7 @@
 <? $perm = MvvPerm::get($abschnitt) ?>
 <h3>
     <? if ($abschnitt->isNew()) : ?>
-    <?= sprintf(_('Einen neuen Studiengangteil-Abschnitt für die Version "%s" anlegen.'),
+    <?= sprintf(_('Einen neuen Studiengangteil-Abschnitt fÃ¼r die Version "%s" anlegen.'),
             htmlReady($version->getDisplayName())) ?>
     <? else : ?>
     <?= sprintf(_('Studiengangteil-Abschnitt "%s" der Version "%s" bearbeiten.'),
@@ -41,7 +41,7 @@
         </label>
     </fieldset>
     <fieldset>
-        <legend><?= _('Zwischenüberschrift') ?></legend>
+        <legend><?= _('ZwischenÃ¼berschrift') ?></legend>
         <label style="padding: 10px; display:block;">
             <img src="<?= Assets::image_path('languages/lang_de.gif') ?>" alt="<?= _('Deutsch') ?>">
             <input <?= $perm->disable('ueberschrift') ?> type="text" name="ueberschrift" id="ueberschrift" size="60" maxlength="254" value="<?= htmlReady($abschnitt->ueberschrift) ?>">
@@ -56,8 +56,8 @@
         <? if ($abschnitt->isNew()) : ?>
         <?= Button::createAccept(_('anlegen'), 'store', array('title' => _('Abschnitt anlegen'))) ?>
         <? else : ?>
-        <?= Button::createAccept(_('übernehmen'), 'store', array('title' => _('Änderungen übernehmen'))) ?>
+        <?= Button::createAccept(_('Ã¼bernehmen'), 'store', array('title' => _('Ã„nderungen Ã¼bernehmen'))) ?>
         <? endif; ?>
-        <?= LinkButton::createCancel(_('abbrechen'), $cancel_url, array('title' => _('zurück zur Übersicht'))) ?>
+        <?= LinkButton::createCancel(_('abbrechen'), $cancel_url, array('title' => _('zurÃ¼ck zur Ãœbersicht'))) ?>
     </footer>
 </form>

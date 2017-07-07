@@ -21,7 +21,7 @@
                                     'name' => 'tools_requests_sem_choose',
                                     'class' => 'submit-upon-select'
                                 ), $this->semester_id, 'semester_id',false) ?>
-                            <?= Button::create(_('Semester auswählen'), 'tools_requests_sem_choose_button') ?>
+                            <?= Button::create(_('Semester auswÃ¤hlen'), 'tools_requests_sem_choose_button') ?>
                             <br>
                             <select name="tools_requests_sem_type_choose" class="submit-upon-select">
                             <option value=""><?= _("alle Veranstaltungen")?></option>
@@ -52,12 +52,12 @@
                         <td style="padding-left:10px">
                             <b><?= _('Status:') ?></b><br>
                         <? if ($open_requests): ?>
-                            <?= sprintf(_('Es liegen insgesamt <b>%s</b> nicht aufgelöste Anfragen vor '
+                            <?= sprintf(_('Es liegen insgesamt <b>%s</b> nicht aufgelÃ¶ste Anfragen vor '
                                         . '- <br>davon <b>%s</b> von Veranstaltungen und <b>%s</b> auf '
                                         . 'Ressourcen, auf die Sie Zugriff haben.'),
                                         $open_requests, (int)$open_sem_requests, (int)$open_res_requests) ?>
                         <? else: ?>
-                            <?= _('Es liegen im Augenblick keine unaufgelösten Anfragen vor.') ?>
+                            <?= _('Es liegen im Augenblick keine unaufgelÃ¶sten Anfragen vor.') ?>
                         <? endif; ?>
                     <? if ($no_time): ?>
                             <br>
@@ -96,7 +96,7 @@
                                        name="resolve_requests_regular"
                                        type="checkbox" value="1"
                                        <? if ($display_regular) echo 'checked'; ?>>
-                                <?= _('Nur Veranstaltungen mit regelmäßigen Terminen einbeziehen') ?>
+                                <?= _('Nur Veranstaltungen mit regelmÃ¤ÃŸigen Terminen einbeziehen') ?>
                             </label>
                         </td>
                     </tr>
@@ -108,8 +108,8 @@
         <tr>
             <td>&nbsp;</td>
             <td>
-                <b><?= _('Optionen beim Auflösen') ?></b><br>
-                <?= _('Sie können die vorliegenden Anfragen mit folgenden Optionen auflösen:') ?><br>
+                <b><?= _('Optionen beim AuflÃ¶sen') ?></b><br>
+                <?= _('Sie kÃ¶nnen die vorliegenden Anfragen mit folgenden Optionen auflÃ¶sen:') ?><br>
                 <br>
 
                 <table border="0" cellpadding="2" cellspacing="0">
@@ -132,7 +132,7 @@
 
                             <label>
                                 <input type="radio" name="resolve_requests_mode" value="res">
-                                <?= _('nur Anfragen auf meine Räume') ?>
+                                <?= _('nur Anfragen auf meine RÃ¤ume') ?>
                             </label>
                             <br>
 
@@ -163,13 +163,13 @@
 
                             <label>
                                 <input type="radio" name="resolve_requests_order" value="complex" checked>
-                                <?= _('komplexere zuerst (Raumgröße und  gewünschte Eigenschaften)') ?>
+                                <?= _('komplexere zuerst (RaumgrÃ¶ÃŸe und  gewÃ¼nschte Eigenschaften)') ?>
                             </label>
                             <br>
 
                             <label>
                                 <input type="radio" name="resolve_requests_order" value="oldest">
-                                <?= _('ältere zuerst') ?>
+                                <?= _('Ã¤ltere zuerst') ?>
                             </label>
                             <br>
 

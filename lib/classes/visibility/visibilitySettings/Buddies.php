@@ -24,7 +24,7 @@ class Visibility_Buddies extends VisibilityAbstract
     protected $display_name = 'Kontakte';
 
     // Description for the state
-    protected $description = "nur für meine Kontakte sichtbar";
+    protected $description = "nur fÃ¼r meine Kontakte sichtbar";
 
     // When do two users have this state
     function verify($user_id, $other_id)

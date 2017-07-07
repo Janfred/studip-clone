@@ -44,7 +44,7 @@ class Studiengaenge_StudiengaengeController extends MVVController
 
     public function index_action()
     {
-        PageLayout::setTitle(_('Verwaltung der Studiengänge'));
+        PageLayout::setTitle(_('Verwaltung der StudiengÃ¤nge'));
 
         $this->initPageParams();
         $this->initSearchParams();
@@ -65,7 +65,7 @@ class Studiengaenge_StudiengaengeController extends MVVController
             }
         }
 
-        // Nur Studiengänge von verantwortlichen Einrichtungen an denen der User
+        // Nur StudiengÃ¤nge von verantwortlichen Einrichtungen an denen der User
         // eine Rolle hat
         $this->filter = array_merge(
                 array(
@@ -82,9 +82,9 @@ class Studiengaenge_StudiengaengeController extends MVVController
 
         if (count($this->studiengaenge) == 0) {
             if (sizeof($this->filter) || $this->search_term) {
-                $this->msg = _('Es wurden keine Studiengänge gefunden.');
+                $this->msg = _('Es wurden keine StudiengÃ¤nge gefunden.');
             } else {
-                $this->msg =_('Es wurden noch keine Studiengänge angelegt.');
+                $this->msg =_('Es wurden noch keine StudiengÃ¤nge angelegt.');
             }
         }
 
@@ -98,8 +98,8 @@ class Studiengaenge_StudiengaengeController extends MVVController
 
         $helpbar = Helpbar::get();
         $widget = new HelpbarWidget();
-        $widget->addElement(new WidgetElement(_('Auf diesen Seiten können Sie die Studiengänge verwalten.').'</br>'));
-        $widget->addElement(new WidgetElement(_('Studiengänge bestehen aus einem Abschluss und einem oder mehreren Studiengangteilen.')));
+        $widget->addElement(new WidgetElement(_('Auf diesen Seiten kÃ¶nnen Sie die StudiengÃ¤nge verwalten.').'</br>'));
+        $widget->addElement(new WidgetElement(_('StudiengÃ¤nge bestehen aus einem Abschluss und einem oder mehreren Studiengangteilen.')));
         $helpbar->addWidget($widget);
 
         unset($this->parent_id);
@@ -120,7 +120,7 @@ class Studiengaenge_StudiengaengeController extends MVVController
             $reset_sort = true;
         } else {
             PageLayout::setTitle(_('Studiengang bearbeiten'));
-            $success_message = _('Der Studiengang "%s" wurde geändert.');
+            $success_message = _('Der Studiengang "%s" wurde geÃ¤ndert.');
             $quicksearchText = $this->studiengang->name;
             $reset_sort = false;
         }
@@ -200,7 +200,7 @@ class Studiengaenge_StudiengaengeController extends MVVController
                     PageLayout::postSuccess(sprintf($success_message,
                             htmlReady($this->studiengang->name)));
                 } else {
-                    PageLayout::postInfo(_('Es wurden keine Änderungen vorgenommen.'));
+                    PageLayout::postInfo(_('Es wurden keine Ã„nderungen vorgenommen.'));
                 }
                 $this->redirect($this->url_for('/details', $this->studiengang->id));
                 return;
@@ -239,7 +239,7 @@ class Studiengaenge_StudiengaengeController extends MVVController
 
         $helpbar = Helpbar::get();
         $widget = new HelpbarWidget();
-        $widget->addElement(new WidgetElement(_('Die Reihenfolge der Studiengangteile können Sie durch ziehen ändern.')));
+        $widget->addElement(new WidgetElement(_('Die Reihenfolge der Studiengangteile kÃ¶nnen Sie durch ziehen Ã¤ndern.')));
         $helpbar->addWidget($widget);
 
         $this->setSidebar();
@@ -260,7 +260,7 @@ class Studiengaenge_StudiengaengeController extends MVVController
                         Icon::create('accept', 'clickable'), array('data-dialog' => 'size=auto;buttons=false'));
             }
 
-            $action_widget->addLink( _('Log-Einträge dieses Studienganges'),
+            $action_widget->addLink( _('Log-EintrÃ¤ge dieses Studienganges'),
                     $this->url_for('shared/log_event/show/Studiengang', $this->studiengang->getId()),
                     Icon::create('log', 'clickable'))->asDialog();
         }
@@ -283,12 +283,12 @@ class Studiengaenge_StudiengaengeController extends MVVController
             if (Request::isPost()) {
                 if (Request::submitted('yes')) {
                     CSRFProtection::verifyRequest();
-                    PageLayout::postSuccess(sprintf(_('Studiengang "%s" gelöscht!'),
+                    PageLayout::postSuccess(sprintf(_('Studiengang "%s" gelÃ¶scht!'),
                             htmlReady($studiengang->name)));
                     $studiengang->delete();
                 }
             } else {
-                $this->flash_set('dialog', sprintf(_('Wollen Sie wirklich den Studiengang "%s" löschen?'),
+                $this->flash_set('dialog', sprintf(_('Wollen Sie wirklich den Studiengang "%s" lÃ¶schen?'),
                                 $studiengang->name),
                         array('/delete', $studiengang->id), '/index');
             }
@@ -297,15 +297,15 @@ class Studiengaenge_StudiengaengeController extends MVVController
     }
 
     /**
-     * List of Studiengänge grouped by Abschlusskategorien
+     * List of StudiengÃ¤nge grouped by Abschlusskategorien
      */
     public function kategorien_action()
     {
-        PageLayout::setTitle(_('Studiengänge gruppiert nach Abschluss-Kategorien'));
+        PageLayout::setTitle(_('StudiengÃ¤nge gruppiert nach Abschluss-Kategorien'));
 
         $this->initPageParams('kategorien');
 
-        // Nur Kategorien anzeigen, denen Studiengänge zugeordnet sind an deren
+        // Nur Kategorien anzeigen, denen StudiengÃ¤nge zugeordnet sind an deren
         // verantwortlichen Einrichtungen der User eine Rolle hat...
         $perm_institutes = MvvPerm::getOwnInstitutes();
         $filter = array();
@@ -416,13 +416,13 @@ class Studiengaenge_StudiengaengeController extends MVVController
                     if ($stg_stgteil->store()) {
                         if ($this->studiengang->typ == 'mehrfach') {
                             $this->flash_set('success',
-                                sprintf(_('Der Studiengangteil "%s" wurde dem Studiengang "%s" als "%s" hinzugefügt.'),
+                                sprintf(_('Der Studiengangteil "%s" wurde dem Studiengang "%s" als "%s" hinzugefÃ¼gt.'),
                                         $stgteil->getDisplayName(),
                                         $this->studiengang->name,
                                         $this->stgteil_bez->name));
                         } else {
                             $this->flash_set('success',
-                                sprintf(_('Der Studiengangteil "%s" wurde dem Studiengang "%s" hinzugefügt.'),
+                                sprintf(_('Der Studiengangteil "%s" wurde dem Studiengang "%s" hinzugefÃ¼gt.'),
                                         $stgteil->getDisplayName(),
                                         $this->studiengang->name));
                         }
@@ -454,7 +454,7 @@ class Studiengaenge_StudiengaengeController extends MVVController
                                     . '_' . $stgteil_bez->id));
                 }
                 if (!$stgteil_bez) {
-                    PageLayout::postError(_('Bitte Studiengangteil-Bezeichnung auswählen!'));
+                    PageLayout::postError(_('Bitte Studiengangteil-Bezeichnung auswÃ¤hlen!'));
                     $this->redirect($this->url_for('/details', $studiengang->id, $stgteil->id));
                     return;
                 }
@@ -472,13 +472,13 @@ class Studiengaenge_StudiengaengeController extends MVVController
                     if ($stg_stgteil->store()) {
                         if ($studiengang->typ == 'mehrfach') {
                             PageLayout::postSuccess(
-                                sprintf(_('Der Studiengangteil "%s" wurde dem Studiengang "%s" als "%s" hinzugefügt.'),
+                                sprintf(_('Der Studiengangteil "%s" wurde dem Studiengang "%s" als "%s" hinzugefÃ¼gt.'),
                                         htmlReady($stgteil->getDisplayName()),
                                         htmlReady($studiengang->name),
                                         htmlReady($stgteil_bez->name)));
                         } else {
                             PageLayout::postSuccess(
-                                sprintf(_('Der Studiengangteil "%s" wurde dem Studiengang "%s" hinzugefügt.'),
+                                sprintf(_('Der Studiengangteil "%s" wurde dem Studiengang "%s" hinzugefÃ¼gt.'),
                                         htmlReady($stgteil->getDisplayName()),
                                         htmlReady($studiengang->name)));
                         }
@@ -524,12 +524,12 @@ class Studiengaenge_StudiengaengeController extends MVVController
                     $stgbez_name = $this->stg_stgteil->stgbez_name;
                     if ($this->stg_stgteil->delete()) {
                         PageLayout::postSuccess(
-                            sprintf(_('Die Zuordnung des Studiengangteils "%s" als "%s" zum Studiengang "%s" wurde gelöscht.'),
+                            sprintf(_('Die Zuordnung des Studiengangteils "%s" als "%s" zum Studiengang "%s" wurde gelÃ¶scht.'),
                                     htmlReady($stgteil_name),
                                     htmlReady($stgbez_name),
                                     htmlReady($studiengang->name)));
                     } else {
-                        PageLayout::postError( _('Der Studiengangteil konnte nicht gelöscht werden.'));
+                        PageLayout::postError( _('Der Studiengangteil konnte nicht gelÃ¶scht werden.'));
                     }
                 }
             }
@@ -568,18 +568,18 @@ class Studiengaenge_StudiengaengeController extends MVVController
                     if ($stg_stgteil->delete()) {
                         if ($stgbez_id) {
                             PageLayout::postSuccess(
-                                sprintf(_('Die Zuordnung des Studiengangteils "%s" als "%s" zum Studiengang "%s" wurde gelöscht.'),
+                                sprintf(_('Die Zuordnung des Studiengangteils "%s" als "%s" zum Studiengang "%s" wurde gelÃ¶scht.'),
                                         htmlReady($stgteil_name),
                                         htmlReady($stgbez_name),
                                         htmlReady($studiengang->name)));
                         } else {
                             PageLayout::postSuccess(
-                                sprintf(_('Die Zuordnung des Studiengangteils "%s" zum Studiengang "%s" wurde gelöscht.'),
+                                sprintf(_('Die Zuordnung des Studiengangteils "%s" zum Studiengang "%s" wurde gelÃ¶scht.'),
                                         htmlReady($stgteil_name),
                                         htmlReady($studiengang->name)));
                         }
                     } else {
-                        PageLayout::postError( _('Der Studiengangteil konnte nicht gelöscht werden.'));
+                        PageLayout::postError( _('Der Studiengangteil konnte nicht gelÃ¶scht werden.'));
                     }
                 }
             }
@@ -743,7 +743,7 @@ class Studiengaenge_StudiengaengeController extends MVVController
         $sidebar->setImage('sidebar/learnmodule-sidebar.png');
 
         $widget  = new ViewsWidget();
-        $widget->addLink(_('Liste der Studiengänge'),
+        $widget->addLink(_('Liste der StudiengÃ¤nge'),
             URLHelper::getLink('plugins.php/mvvplugin/studiengaenge/studiengaenge',
                     null, true))->setActive(get_called_class()
                             == 'Studiengaenge_StudiengaengeController');
@@ -751,7 +751,7 @@ class Studiengaenge_StudiengaengeController extends MVVController
             URLHelper::getLink('plugins.php/mvvplugin/studiengaenge/fachbereiche',
                     null, true))->setActive(get_called_class()
                             == 'Studiengaenge_FachbereicheController');
-        $widget->addLink(_('Gruppierung nach Abschlüssen'),
+        $widget->addLink(_('Gruppierung nach AbschlÃ¼ssen'),
             URLHelper::getLink('plugins.php/mvvplugin/studiengaenge/abschluesse',
                     null, true))->setActive(get_called_class()
                             == 'Studiengaenge_AbschluesseController');

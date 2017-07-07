@@ -11,7 +11,7 @@
     <thead>
         <tr>
             <th>
-                <?= _('Darstellung einschränken') ?>
+                <?= _('Darstellung einschrÃ¤nken') ?>
             </th>
             <th colspan="2">
             <? if ($total_filtered != $total): ?>
@@ -30,7 +30,7 @@
                         <?= _('Nur einmalige Cronjobs anzeigen') ?>
                     </option>
                     <option value="periodic" <? if ($filter['type'] === 'periodic') echo 'selected'; ?>>
-                        <?= _('Nur regelmässige Cronjobs anzeigen') ?>
+                        <?= _('Nur regelmÃ¤ssige Cronjobs anzeigen') ?>
                     </option>
                 </select>
             </td>
@@ -67,9 +67,9 @@
                 </noscript>
 
             <? if (!empty($filter)): ?>
-                <?= LinkButton::createCancel(_('Zurücksetzen'),
+                <?= LinkButton::createCancel(_('ZurÃ¼cksetzen'),
                                              $controller->url_for('admin/cronjobs/schedules/filter'),
-                                             array('title' => _('Filter zurücksetzen'))) ?>
+                                             array('title' => _('Filter zurÃ¼cksetzen'))) ?>
             <? endif; ?>
             </td>
         </tr>
@@ -103,7 +103,7 @@
             <th><?= _('Cronjob') ?></th>
             <th><?= _('Aktiv') ?></th>
             <th><?= _('Typ') ?></th>
-            <th colspan="5"><?= _('Ausführung') ?></th>
+            <th colspan="5"><?= _('AusfÃ¼hrung') ?></th>
             <th><?= _('Optionen') ?></th>
         </tr>
     </thead>
@@ -121,7 +121,7 @@
             <td><?= htmlReady($schedules[$i]->title ?: $schedules[$i]->task->name) ?></td>
             <td style="text-align: center;">
             <? if (!$schedules[$i]->task->active): ?>
-                <?= Icon::create('checkbox-unchecked', 'inactive', ['title' => _('Cronjob kann nicht aktiviert werden, da die zugehörige '.'Aufgabe deaktiviert ist.')])->asImg(16) ?>
+                <?= Icon::create('checkbox-unchecked', 'inactive', ['title' => _('Cronjob kann nicht aktiviert werden, da die zugehÃ¶rige '.'Aufgabe deaktiviert ist.')])->asImg(16) ?>
             <? elseif ($schedules[$i]->active): ?>
                 <a href="<?= $controller->url_for('admin/cronjobs/schedules/deactivate', $schedules[$i]->schedule_id, $page) ?>" data-behaviour="ajax-toggle">
                     <?= Icon::create('checkbox-checked', 'clickable', ['title' => _('Cronjob deaktivieren')])->asImg() ?>
@@ -132,7 +132,7 @@
                 </a>
             <? endif; ?>
             </td>
-            <td><?= ($schedules[$i]->type === 'once') ? _('Einmalig') : _('Regelmässig') ?></td>
+            <td><?= ($schedules[$i]->type === 'once') ? _('Einmalig') : _('RegelmÃ¤ssig') ?></td>
         <? if ($schedules[$i]->type === 'once'): ?>
             <td colspan="5">
                 <?= date('d.m.Y H:i', $schedules[$i]->next_execution) ?>
@@ -151,7 +151,7 @@
                     <?= Icon::create('log', 'clickable', ['title' => _('Log anzeigen')])->asImg() ?>
                 </a>
                 <a href="<?= $controller->url_for('admin/cronjobs/schedules/cancel', $schedules[$i]->schedule_id, $page) ?>">
-                    <?= Icon::create('trash', 'clickable', ['title' => _('Cronjob löschen')])->asImg() ?>
+                    <?= Icon::create('trash', 'clickable', ['title' => _('Cronjob lÃ¶schen')])->asImg() ?>
                 </a>
             </td>
         </tr>
@@ -162,12 +162,12 @@
         <tr>
             <td colspan="2">
                 <select name="action" data-activates=".cronjobs button[name=bulk]">
-                    <option value="">- <?= _('Aktion auswählen') ?></option>
+                    <option value="">- <?= _('Aktion auswÃ¤hlen') ?></option>
                     <option value="activate"><?= _('Aktivieren') ?></option>
                     <option value="deactivate"><?= _('Deaktivieren') ?></option>
-                    <option value="cancel"><?= _('Löschen') ?></option>
+                    <option value="cancel"><?= _('LÃ¶schen') ?></option>
                 </select>
-                <?= Button::createAccept(_('Ausführen'), 'bulk') ?>
+                <?= Button::createAccept(_('AusfÃ¼hren'), 'bulk') ?>
             </td>
             <td colspan="8" style="text-align: right; vertical-align: middle;">
                 <?

@@ -7,14 +7,14 @@
 <? endif; ?>
 
     <table class="default" id="assigned_userdomains">
-        <caption><?= _('Ich bin folgenden Nutzerdomänen zugeordnet:') ?></caption>
+        <caption><?= _('Ich bin folgenden NutzerdomÃ¤nen zugeordnet:') ?></caption>
         <colgroup>
             <col>
             <col width="100px">
         </colgroup>
         <thead>
             <tr>
-                <th><?= _('Nutzerdomäne') ?></th>
+                <th><?= _('NutzerdomÃ¤ne') ?></th>
                 <th>
                 <? if ($allow_change): ?>
                     <?= _('austragen') ?>
@@ -26,7 +26,7 @@
         <? if (count($user_domains) === 0): ?>
             <tr>
                 <td colspan="2" style="text-align: center">
-                    <?= _('Sie sind noch keiner Nutzerdomäne zugeordnet.') ?>
+                    <?= _('Sie sind noch keiner NutzerdomÃ¤ne zugeordnet.') ?>
                 </td>
             </tr>
         <? endif; ?>
@@ -47,13 +47,13 @@
             <tr>
                 <td colspan="2" id="select_userdomains">
                 <? if ($allow_change): ?>
-                    <strong><?= _('Wählen Sie eine Nutzerdomäne aus der folgenden Liste aus:') ?></strong><br>
+                    <strong><?= _('WÃ¤hlen Sie eine NutzerdomÃ¤ne aus der folgenden Liste aus:') ?></strong><br>
                     <br>
 
                     <a name="userdomains"></a>
                     <? if (!empty($domains)) : ?>
                         <select name="new_userdomain" id="new_userdomain">
-                            <option selected value="none"><?= _('-- Bitte Nutzerdomäne auswählen --') ?></option>
+                            <option selected value="none"><?= _('-- Bitte NutzerdomÃ¤ne auswÃ¤hlen --') ?></option>
                             <? foreach ($domains as $domain) : ?>
                                 <option value="<?= $domain->getID() ?>"><?= htmlReady(my_substr($domain->getName(), 0, 50)) ?></option>
                             <? endforeach ?>
@@ -61,15 +61,15 @@
                     <? endif ?>
                     <br>
 
-                    <?= _('Wenn Sie Nutzerdomänen wieder entfernen möchten, markieren '
+                    <?= _('Wenn Sie NutzerdomÃ¤nen wieder entfernen mÃ¶chten, markieren '
                           . 'Sie die entsprechenden Felder in der linken Tabelle.') ?><br>
-                    <?= _('Mit einem Klick auf <b>Übernehmen</b> werden die gewählten Änderungen durchgeführt.') ?>
+                    <?= _('Mit einem Klick auf <b>Ãœbernehmen</b> werden die gewÃ¤hlten Ã„nderungen durchgefÃ¼hrt.') ?>
                     <br>
                     <br>
 
-                    <?= Button::create(_('Übernehmen'), 'store', ['title' => _('Änderungen übernehmen')]) ?>
+                    <?= Button::create(_('Ãœbernehmen'), 'store', ['title' => _('Ã„nderungen Ã¼bernehmen')]) ?>
                 <? else: ?>
-                    <?= _('Die Informationen zu Ihren Nutzerdomänen werden vom System verwaltet und können daher von Ihnen nicht geändert werden.') ?>
+                    <?= _('Die Informationen zu Ihren NutzerdomÃ¤nen werden vom System verwaltet und kÃ¶nnen daher von Ihnen nicht geÃ¤ndert werden.') ?>
                 <? endif; ?>
                 </td>
             </tr>

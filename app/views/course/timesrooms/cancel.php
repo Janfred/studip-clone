@@ -3,7 +3,7 @@
     <?= CSRFProtection::tokenTag() ?>
     <?= $this->render_partial('course/timesrooms/_cancel_form.php', compact('termin')) ?>
     <footer data-dialog-button>
-        <?= Studip\Button::createAccept(_('Übernehmen'), 'editDeletedSingleDate') ?>
+        <?= Studip\Button::createAccept(_('Ãœbernehmen'), 'editDeletedSingleDate') ?>
         <?= Studip\LinkButton::createCancel(_('Abbrechen'), '?#' . $termin_id) ?>
     </footer>
 </form>

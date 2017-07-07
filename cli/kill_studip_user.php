@@ -8,14 +8,14 @@
 *
 *
 *
-* @author       André Noack <noack@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
+* @author       AndrÃ© Noack <noack@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @access       public
 */
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // kill_studip_user.php
 //
-// Copyright (C) 2006 André Noack <noack@data-quest.de>,
+// Copyright (C) 2006 AndrÃ© Noack <noack@data-quest.de>,
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -79,7 +79,7 @@ foreach($kill_user as $uname => $udetail){
         fwrite(STDOUT, "user: $uname is '{$udetail['perms']}', NOT deleted". chr(10));
     } else {
         $umanager = new UserManagement($udetail['user_id']);
-        //wenn keine Email gewünscht, Adresse aus den Daten löschen
+        //wenn keine Email gewÃ¼nscht, Adresse aus den Daten lÃ¶schen
         if (!SEND_MAIL_ON_DELETE) $umanager->user_data['auth_user_md5.Email'] = '';
         if ($umanager->deleteUser()){
             fwrite(STDOUT, "user: $uname successfully deleted:". chr(10)

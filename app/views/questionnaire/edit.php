@@ -24,7 +24,7 @@
                 <a href="" onClick="STUDIP.Questionnaire.addQuestion('<?= htmlReady($class) ?>'); return false;">
                     <?= $class::getIcon(true, true)->asimg("20px", array('class' => "text-bottom")) ?>
                     <?= htmlReady($class::getName()) ?>
-                    <?= _("hinzufügen") ?>
+                    <?= _("hinzufÃ¼gen") ?>
                 </a>
             <? endif;
         endforeach ?>
@@ -33,12 +33,12 @@
     <fieldset class="questionnaire_metadata">
 
         <label>
-            <?= _("Startzeitpunkt (leer lassen für manuellen Start)") ?>
+            <?= _("Startzeitpunkt (leer lassen fÃ¼r manuellen Start)") ?>
             <input type="text" name="questionnaire[startdate]" value="<?= $questionnaire['startdate'] ? date("d.m.Y H:i", $questionnaire['startdate']) : ($questionnaire->isNew() ? _("sofort") : "") ?>" data-datetime-picker>
         </label>
 
         <label>
-            <?= _("Endzeitpunkt (leer lassen für manuelles Ende)") ?>
+            <?= _("Endzeitpunkt (leer lassen fÃ¼r manuelles Ende)") ?>
             <input type="text" name="questionnaire[stopdate]" value="<?= $questionnaire['stopdate'] ? date("d.m.Y H:i", $questionnaire['stopdate']) : "" ?>" data-datetime-picker>
         </label>
 
@@ -54,7 +54,7 @@
 
         <label id="questionnaire_editanswers" <?= $questionnaire['anonymous'] ? 'style="display: none"' : '' ?>>
             <input type="checkbox" name="questionnaire[editanswers]" value="1"<?= $questionnaire['editanswers'] || $questionnaire->isNew() ? " checked" : "" ?>>
-            <?= _("Teilnehmer dürfen ihre Antworten revidieren") ?>
+            <?= _("Teilnehmer dÃ¼rfen ihre Antworten revidieren") ?>
         </label>
 
         <label>

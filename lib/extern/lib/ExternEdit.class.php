@@ -169,7 +169,7 @@ class ExternEdit {
 
     function editSubmit ($module_name, $config_id, $element_name = "", $hidden = NULL) {
         $out = "<tr><td align=\"center\" colspan=\"2\" nowrap=\"nowrap\">&nbsp;";
-        $out .= Button::createAccept(_("Übernehmen"), "submit"); 
+        $out .= Button::createAccept(_("Ãœbernehmen"), "submit"); 
         $out .= "&nbsp; &nbsp; &nbsp;";
         $out .= LinkButton::createCancel(_("Abbrechen"), URLHelper::getURL('?list=TRUE'));
         $out .= "<input type=\"hidden\" name=\"config_id\" value=\"$config_id\">";

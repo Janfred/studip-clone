@@ -43,7 +43,7 @@
                         </label> :
                         <input style="text-align: right;" type="text" name="start_minute" value="<?= date('i', $event->getStart()) ?>" size="2" maxlength="2"<?= $event->isDayEvent() ? ' disabled' : '' ?>>
                     </span>
-                    <label class="hidden-tiny-down" style="white-space: nowrap;"><?= _('Ganztägig') ?>
+                    <label class="hidden-tiny-down" style="white-space: nowrap;"><?= _('GanztÃ¤gig') ?>
                         <input type="checkbox" name="isdayevent" value="1" <?= $event->isDayEvent() ? 'checked' : '' ?> onChange="jQuery(this).closest('tbody').find('input[size=\'2\']').prop('disabled', function (i,val) { return !val; });
                         ">
                     </label>
@@ -70,7 +70,7 @@
             <tr class="hidden-small-up">
                 <td>
                     <label for="isdayevent2">
-                        <?= _('Ganztägig') ?>
+                        <?= _('GanztÃ¤gig') ?>
                     </label>
                 </td>
                 <td colspan="2">
@@ -116,7 +116,7 @@
                     <? endforeach; ?>
                     </select>
                     <input type="text" size="40" name="categories" value="<?= htmlReady($event->getUserDefinedCategories()) ?>">
-                    <?= tooltipicon(_('Sie können beliebige Kategorien in das Freitextfeld eingeben. Trennen Sie einzelne Kategorien bitte durch ein Komma.')) ?>
+                    <?= tooltipicon(_('Sie kÃ¶nnen beliebige Kategorien in das Freitextfeld eingeben. Trennen Sie einzelne Kategorien bitte durch ein Komma.')) ?>
                 </td>
             </tr>
             <tr>
@@ -142,19 +142,19 @@
                         <? endforeach; ?>
                     </select>
                     <? if ($calendar->getPermissionByUser($GLOBALS['user']->id) == Calendar::PERMISSION_OWN) : ?>
-                    <? $info = _('Private und vertrauliche Termine sind nur für Sie sichtbar.') ?>
+                    <? $info = _('Private und vertrauliche Termine sind nur fÃ¼r Sie sichtbar.') ?>
                     
                     <? /* SEMBBS nur private und vertrauliche Termine
-                    <? $info = _('Private und vertrauliche Termine sind nur für Sie sichtbar. Öffentliche Termine werden auf ihrer internen Homepage auch anderen Nutzern bekanntgegeben.') ?>
+                    <? $info = _('Private und vertrauliche Termine sind nur fÃ¼r Sie sichtbar. Ã–ffentliche Termine werden auf ihrer internen Homepage auch anderen Nutzern bekanntgegeben.') ?>
                      * 
                      */ ?>
                     
                     <? elseif ($calendar->getRange() == Calendar::RANGE_SEM) : ?>
-                    <? $info = _('In Veranstaltungskalendern können nur private Termine angelegt werden.') ?>
+                    <? $info = _('In Veranstaltungskalendern kÃ¶nnen nur private Termine angelegt werden.') ?>
                     <? elseif ($calendar->getRange() == Calendar::RANGE_INST) : ?>
-                    <? $info = _('In Einrichtungskalendern können nur private Termine angelegt werden.') ?>
+                    <? $info = _('In Einrichtungskalendern kÃ¶nnen nur private Termine angelegt werden.') ?>
                     <? else : ?>
-                    <? $info = _('Im Kalender eines anderen Nutzers können Sie nur private oder vertrauliche Termine einstellen. Vertrauliche Termine sind nur für Sie und den Kalenderbesitzer sichtbar. Alle anderen sehen den Termin nur als Besetztzeit.') ?>
+                    <? $info = _('Im Kalender eines anderen Nutzers kÃ¶nnen Sie nur private oder vertrauliche Termine einstellen. Vertrauliche Termine sind nur fÃ¼r Sie und den Kalenderbesitzer sichtbar. Alle anderen sehen den Termin nur als Besetztzeit.') ?>
                     <? endif; ?>
                     <?= tooltipicon($info) ?>
                 </td>
@@ -162,7 +162,7 @@
             <tr>
                 <td>
                     <label for="priority">
-                        <?= _('Priorität') ?>:
+                        <?= _('PrioritÃ¤t') ?>:
                     </label>
                 </td>
                 <td colspan="2">
@@ -229,7 +229,7 @@
                         <li>
                             <input type="radio" class="rec-select" id="rec-daily" name="recurrence" value="daily"<?= $event->getRecurrence('rtype') == 'DAILY' ? ' checked' : '' ?>>
                             <label class="rec-label" for="rec-daily">
-                                <?= _('Täglich') ?>
+                                <?= _('TÃ¤glich') ?>
                             </label>
                             <div class="rec-content" id="rec-content-daily">
                                 <div>
@@ -257,7 +257,7 @@
                                 '7' => _('Sonntag')) ?>
                             <input type="radio" class="rec-select" id="rec-weekly" name="recurrence" value="weekly"<?= $event->getRecurrence('rtype') == 'WEEKLY' ? ' checked' : '' ?>>
                             <label class="rec-label" for="rec-weekly">
-                                <?= _('Wöchentlich') ?>
+                                <?= _('WÃ¶chentlich') ?>
                             </label>
                             <div class="rec-content" id="rec-content-weekly">
                                 <div>
@@ -329,7 +329,7 @@
                             <? $months = array(
                                 '1' => _('Januar'),
                                 '2' => _('Februar'),
-                                '3' => _('März'),
+                                '3' => _('MÃ¤rz'),
                                 '4' => _('April'),
                                 '5' => _('Mai'),
                                 '6' => _('Juni'),
@@ -350,7 +350,7 @@
                             endforeach; ?>
                             <input type="radio" class="rec-select" id="rec-yearly" name="recurrence" value="yearly"<?= $event->getRecurrence('rtype') == 'YEARLY' ? ' checked' : '' ?>>
                             <label class="rec-label" for="rec-yearly">
-                                <?= _('Jährlich') ?>
+                                <?= _('JÃ¤hrlich') ?>
                             </label>
                             <div class="rec-content" id="rec-content-yearly">
                                 <div>
@@ -420,7 +420,7 @@
                         <li>
                             <label>
                                 <input type="checkbox" name="del_exc_dates[]" value="<?= strftime('%d.%m.%Y', $exception) ?>" style="display: none;">
-                                <span><?= strftime('%x', $exception) ?><?= Icon::create('trash', 'clickable', ['title' => _('Ausnahme löschen')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?></span>
+                                <span><?= strftime('%x', $exception) ?><?= Icon::create('trash', 'clickable', ['title' => _('Ausnahme lÃ¶schen')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?></span>
                             </label>
                             <input type="hidden" name="exc_dates[]" value="<?= strftime('%d.%m.%Y', $exception) ?>">
                         </li>
@@ -430,7 +430,7 @@
                            type="text" size="12" name="exc_date" id="exc-date" value=""
                            placeholder="<?= _("Datum eingeben") ?>">
                     <span style="vertical-align: top;" onclick="STUDIP.CalendarDialog.addException(); return false;">
-                        <?= Icon::create('add', 'clickable', ['title' => _('Ausnahme hinzufügen')])->asInput(['class' => 'text-bottom']) ?>
+                        <?= Icon::create('add', 'clickable', ['title' => _('Ausnahme hinzufÃ¼gen')])->asInput(['class' => 'text-bottom']) ?>
                     </span>
                 </td>
             </tr>
@@ -444,9 +444,9 @@
 
         <? if (!$event->isNew()) : ?>
         <? if ($event->getRecurrence('rtype') != 'SINGLE') : ?>
-        <?= LinkButton::create(_('Aus Serie löschen'), $controller->url_for('calendar/single/delete_recurrence/' . implode('/', $event->getId()) . '/' . $atime)) ?>
+        <?= LinkButton::create(_('Aus Serie lÃ¶schen'), $controller->url_for('calendar/single/delete_recurrence/' . implode('/', $event->getId()) . '/' . $atime)) ?>
         <? endif; ?>
-        <?= LinkButton::create(_('Löschen'), $controller->url_for('calendar/single/delete/' . implode('/', $event->getId()))) ?>
+        <?= LinkButton::create(_('LÃ¶schen'), $controller->url_for('calendar/single/delete/' . implode('/', $event->getId()))) ?>
         <? endif; ?>
         <? if (!Request::isXhr()) : ?>
         <?= LinkButton::create(_('Abbrechen'), $controller->url_for('calendar/single/' . $last_view, array($event->getStart()))) ?>

@@ -76,7 +76,7 @@ class Api_OauthController extends StudipController
                 } else {
                     // No oauth_callback, show the user the result of the authorization
                     // ** your code here **
-                    PageLayout::postMessage(MessageBox::success(_('Sie haben der Applikation Zugriff auf Ihre Daten gewährt.')));
+                    PageLayout::postMessage(MessageBox::success(_('Sie haben der Applikation Zugriff auf Ihre Daten gewÃ¤hrt.')));
                     $this->redirect('api/authorizations#' . $consumer->auth_key);
                 }
                 return;

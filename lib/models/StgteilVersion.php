@@ -266,7 +266,7 @@ class StgteilVersion extends ModuleManagementModelTreeItem
             if (!$start_sem) {
                 $name = $fassung_nr . trim($fassung_typ);
             } else {
-                $name = $fassung_nr . $fassung_typ . sprintf(_('gültig ab %s'),
+                $name = $fassung_nr . $fassung_typ . sprintf(_('gÃ¼ltig ab %s'),
                         $start_sem->name);
             }
         } else {
@@ -298,14 +298,14 @@ class StgteilVersion extends ModuleManagementModelTreeItem
         if ($end_sem || $start_sem) {
             if ($end_sem) {
                 if ($start_sem->name == $end_sem->name) {
-                    $ret .= sprintf(_('gültig im %s'),
+                    $ret .= sprintf(_('gÃ¼ltig im %s'),
                             $start_sem->name);
                 } else {
-                    $ret .= sprintf(_('gültig %s bis %s'),
+                    $ret .= sprintf(_('gÃ¼ltig %s bis %s'),
                             $start_sem->name, $end_sem->name);
                 }
             } else {
-                $ret .= sprintf(_('gültig ab %s'), $start_sem->name);
+                $ret .= sprintf(_('gÃ¼ltig ab %s'), $start_sem->name);
             }
         }
         return $ret;
@@ -404,7 +404,7 @@ class StgteilVersion extends ModuleManagementModelTreeItem
                 $start_sem = Semester::find($this->start_sem);
                 if (!$start_sem) {
                     $ret['start_sem'] = true;
-                    $messages[] = _('Ungültiges Semester.');
+                    $messages[] = _('UngÃ¼ltiges Semester.');
                     $rejected = true;
                 } else if ($this->end_sem) {
                     $end_sem = Semester::find($this->end_sem);
@@ -416,7 +416,7 @@ class StgteilVersion extends ModuleManagementModelTreeItem
                         }
                     } else {
                         $ret['end_sem'] = true;
-                        $messages[] = _('Ungültiges Endsemester.');
+                        $messages[] = _('UngÃ¼ltiges Endsemester.');
                         $rejected = true;
                     }
                 }
@@ -428,7 +428,7 @@ class StgteilVersion extends ModuleManagementModelTreeItem
             if ($this->stgteil_id) {
                 if (!StudiengangTeil::find($this->stgteil_id)) {
                     $ret['stgteil'] = true;
-                    $messages[] = _('Der angegebene Studiengangteil ist ungültig.');
+                    $messages[] = _('Der angegebene Studiengangteil ist ungÃ¼ltig.');
                     $rejected = true;
                 }
             } else {
@@ -439,7 +439,7 @@ class StgteilVersion extends ModuleManagementModelTreeItem
             if ($this->fassung_nr) {
                 if (!is_int($this->fassung_nr)) {
                     $ret['fassung_nr'] = true;
-                    $messages[] = _('Für Fassung bitte eine Zahl angeben.');
+                    $messages[] = _('FÃ¼r Fassung bitte eine Zahl angeben.');
                     $rejected = true;
                 }
                 if (!$GLOBALS['MVV_STGTEILVERSION']['FASSUNG_TYP'][$this->fassung_typ]) {

@@ -5,7 +5,7 @@ use Studip\Button, Studip\LinkButton;
 
 <? if ($delete_role): ?>
     <?= $GLOBALS['template_factory']->render('shared/question',
-        array('question' => sprintf(_('Wollen Sie wirklich die Rolle "%s" löschen?'), $roles[$delete_role]->getRolename()),
+        array('question' => sprintf(_('Wollen Sie wirklich die Rolle "%s" lÃ¶schen?'), $roles[$delete_role]->getRolename()),
               'approvalLink' => $controller->url_for('admin/role/remove_role', $delete_role).'?studip_ticket='.get_ticket(),
               'disapprovalLink' => $controller->url_for('admin/role'))) ?>
 <? endif ?>
@@ -41,7 +41,7 @@ use Studip\Button, Studip\LinkButton;
             <td class="actions">
                 <? if (!$role->getSystemtype()): ?>
                     <a href="<?= $controller->url_for('admin/role/ask_remove_role', $role_id) ?>">
-                        <?= Icon::create('trash', 'clickable', ['title' => _('Rolle löschen')])->asImg() ?>
+                        <?= Icon::create('trash', 'clickable', ['title' => _('Rolle lÃ¶schen')])->asImg() ?>
                     </a>
                 <? endif ?>
             </td>

@@ -471,7 +471,7 @@ class AssignObject
                 $str[2] = _('jeden zweiten Tag');
                 $str[3] = _('jeden dritten Tag');
                 $str[4] = _('jeden vierten Tag');
-                $str[5] = _('jeden fünften Tag');
+                $str[5] = _('jeden fÃ¼nften Tag');
                 $str[6] = _('jeden sechsten Tag');
             break;
             case 'w':
@@ -484,7 +484,7 @@ class AssignObject
                 $str[2] = _('jeden zweiten Monat');
                 $str[3] = _('jeden dritten Monat');
                 $str[4] = _('jeden vierten Monat');
-                $str[5] = _('jeden fünften Monat');
+                $str[5] = _('jeden fÃ¼nften Monat');
                 $str[6] = _('jeden sechsten Monat');
                 $str[7] = _('jeden siebten Monat');
                 $str[8] = _('jeden achten Monat');
@@ -497,7 +497,7 @@ class AssignObject
                 $str[2] = _('jedes zweite Jahr');
                 $str[3] = _('jedes dritte Jahr');
                 $str[4] = _('jedes vierte Jahr');
-                $str[5] = _('jedes fünfte Jahr');
+                $str[5] = _('jedes fÃ¼nfte Jahr');
             break;
         }
         return $str[$this->getRepeatInterval()];

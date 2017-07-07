@@ -156,7 +156,7 @@ class ShowList extends ShowTreeRow{
                 if ($admin_buttons && ($simple_perms == "admin")) {
                     $edit .= LinkButton::create(_('Neues Objekt'), URLHelper::getURL('?create_object=' . $resObject->id));
                     if ($resObject->isDeletable()) {
-                        $edit .= LinkButton::create(_('Löschen'), URLHelper::getURL('?kill_object=' . $resObject->id));
+                        $edit .= LinkButton::create(_('LÃ¶schen'), URLHelper::getURL('?kill_object=' . $resObject->id));
                     }
                 }
 

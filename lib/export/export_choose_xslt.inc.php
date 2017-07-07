@@ -64,7 +64,7 @@ global $ex_type, $xml_file_id, $page, $o_mode, $format, $choose, $xslt_files, $e
                 $mod_counter++;
         if (($mod_counter == 0) AND ($format != "xml"))
         {
-            $export_error .= _("Für dieses Format sind keine Ausgabemodule installiert.<br>Bitte wählen Sie ein anderes Ausgabeformat.") . "<br>";
+            $export_error .= _("FÃ¼r dieses Format sind keine Ausgabemodule installiert.<br>Bitte wÃ¤hlen Sie ein anderes Ausgabeformat.") . "<br>";
             $page = 0;
         }
 
@@ -78,7 +78,7 @@ global $ex_type, $xml_file_id, $page, $o_mode, $format, $choose, $xslt_files, $e
     if ( /*($xml_file_id != "") AND */( in_array($ex_type, $export_ex_types) ) AND ( in_array($o_mode, $export_o_modes) ) )
         return true;
 
-    $export_error .= "<b>" . _("Unzulässiger Seitenaufruf!") . "</b><br>";
+    $export_error .= "<b>" . _("UnzulÃ¤ssiger Seitenaufruf!") . "</b><br>";
     $export_error_num++;
     return false;
 }
@@ -90,7 +90,7 @@ if (!CheckParamXSLT())
 {
     $export_pagename .= _("Es ist ein Fehler aufgetreten ");
     $export_pagecontent .= MessageBox::error(
-        _('Die Parameter, mit denen diese Seite aufgerufen wurde, sind fehlerhaft oder unvollständig.')
+        _('Die Parameter, mit denen diese Seite aufgerufen wurde, sind fehlerhaft oder unvollstÃ¤ndig.')
     );
 }
 
@@ -112,7 +112,7 @@ elseif (!isset($page) or ($page == 0)) // Seite 1 : Auswahl des Dateiformats
     unset($xml_printdesc);
     unset($xml_printcontent);
 
-    $export_info = _("Bitte wählen Sie, in welchem Format die Daten ausgegeben werden sollen!") . "<br>";
+    $export_info = _("Bitte wÃ¤hlen Sie, in welchem Format die Daten ausgegeben werden sollen!") . "<br>";
 
     $export_pagecontent .= "<form method=\"POST\" action=\"" . URLHelper::getLink() . "\">";
     $export_pagecontent .= CSRFProtection::tokenTag();
@@ -140,7 +140,7 @@ elseif (!isset($page) or ($page == 0)) // Seite 1 : Auswahl des Dateiformats
     $export_pagecontent .= "<input type=\"hidden\" name=\"choose\" value=\"" . htmlReady($choose) . "\">";
     $export_pagecontent .= "<input type=\"hidden\" name=\"xml_file_id\" value=\"" . htmlReady($xml_file_id) . "\">";
 
-    $export_weiter_button = '<br><center><div class="button-group">' . Button::create('<< ' . _('Zurück'), 'back' ) . "&nbsp;";
+    $export_weiter_button = '<br><center><div class="button-group">' . Button::create('<< ' . _('ZurÃ¼ck'), 'back' ) . "&nbsp;";
     $export_weiter_button .= Button::create(_('Weiter') . ' >>', 'next' ) . "</div>";
 
     $export_weiter_button .= "</center></form>";
@@ -154,7 +154,7 @@ elseif ($page == 1) // Seite 2 : Auswahl des XSLT-Scripts
         unset($choose);
     $export_pagename .= _("Auswahl des Ausgabemoduls");
 
-    $export_info = _("Wählen Sie bitte eine der folgenden XSLT-Dateien und klicken Sie auf 'weiter'");
+    $export_info = _("WÃ¤hlen Sie bitte eine der folgenden XSLT-Dateien und klicken Sie auf 'weiter'");
 
     $export_pagecontent .= "<form method=\"POST\" action=\"" . URLHelper::getLink() . "\">";
     $export_pagecontent .= CSRFProtection::tokenTag();
@@ -199,7 +199,7 @@ elseif ($page == 1) // Seite 2 : Auswahl des XSLT-Scripts
     $export_pagecontent .= "<input type=\"hidden\" name=\"xml_file_id\" value=\"" . htmlReady($xml_file_id) . "\">";
     $export_pagecontent .= "<input type=\"hidden\" name=\"xslt_filename\" value=\"" . htmlReady($xslt_filename) . "\">";
 
-    $export_weiter_button = '<br><center><div class="button-group">' . Button::create('<< ' . _('Zurück'), 'back' ) . "&nbsp;";
+    $export_weiter_button = '<br><center><div class="button-group">' . Button::create('<< ' . _('ZurÃ¼ck'), 'back' ) . "&nbsp;";
 
     $export_weiter_button .= Button::create(_('Weiter') . ' >>', 'next');
     $export_weiter_button .=  "</div></center></form>";
@@ -210,7 +210,7 @@ elseif ($page == 2)  // Seite 3 : Download der Dateien
 {
     $export_pagename .= _("Download der Dateien");
 
-    $export_info = _("Die benötigten Dateien liegen nun zum Download bereit.");
+    $export_info = _("Die benÃ¶tigten Dateien liegen nun zum Download bereit.");
     $export_pagecontent .= "<form method=\"POST\" action=\"" . URLHelper::getLink() . "\">";
     $export_pagecontent .= CSRFProtection::tokenTag();
 
@@ -219,14 +219,14 @@ elseif ($page == 2)  // Seite 3 : Download der Dateien
     $xml_printimage.= '</a>';
     $xml_printlink = '<a href="' . FileManager::getDownloadLinkForTemporaryFile($xml_file_id, $xml_filename) . '">' . htmlReady($xml_filename) . '</a>';
     $xml_printdesc = _("XML-Daten");
-    $xml_printcontent = _("In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags können mit einem XSLT-Script verarbeitet werden.") . "<br>";
+    $xml_printcontent = _("In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags kÃ¶nnen mit einem XSLT-Script verarbeitet werden.") . "<br>";
 
     $xslt_printimage = '<a href="' . FileManager::getDownloadLinkForTemporaryFile( $xslt_files[$choose]['file'], $xslt_files[$choose]['name'] . '.xsl'). '">';
     $xslt_printimage.= Icon::create($export_icon['xslt'], 'clickable')->asImg(['class' => 'text-top']);
     $xslt_printimage.= '</a>';
     $xslt_printlink = '<a href="'.FileManager::getDownloadLinkForTemporaryFile( $xslt_files[$choose]['file'], $xslt_files[$choose]['name'] . '.xsl').'">' . $xslt_files[$choose]['name'] . '.xsl</a>';
     $xslt_printdesc = _("XSLT-Datei");
-    $xslt_printcontent = _("Dies ist das XSLT-Script zur Konvertierung der Daten. Klicken Sie auf den Dateinamen, um die Datei zu öffnen.") . "<br>";
+    $xslt_printcontent = _("Dies ist das XSLT-Script zur Konvertierung der Daten. Klicken Sie auf den Dateinamen, um die Datei zu Ã¶ffnen.") . "<br>";
 
     $export_pagecontent .= "";
     $export_pagecontent .= "<input type=\"hidden\" name=\"page\" value=\"3\">";
@@ -242,10 +242,10 @@ elseif ($page == 2)  // Seite 3 : Download der Dateien
     $export_pagecontent .= "<input type=\"hidden\" name=\"xml_file_id\" value=\"" . htmlReady($xml_file_id) . "\">";
     $export_pagecontent .= "<input type=\"hidden\" name=\"xslt_filename\" value=\"" . htmlReady($xslt_filename) . "\">";
 
-    $export_weiter_button = "<center>" . Button::create('<< ' . _('Zurück'), 'back') . "&nbsp;";
+    $export_weiter_button = "<center>" . Button::create('<< ' . _('ZurÃ¼ck'), 'back') . "&nbsp;";
     if (Config::get()->XSLT_ENABLE)
     {
-        $export_pagecontent .= _("Um die Daten mit dem installierten XSLT-Prozessor in das gewünschte Format zu bringen, klicken Sie bitte auf 'weiter'") . "<br><br>";
+        $export_pagecontent .= _("Um die Daten mit dem installierten XSLT-Prozessor in das gewÃ¼nschte Format zu bringen, klicken Sie bitte auf 'weiter'") . "<br><br>";
         $export_weiter_button .= LinkButton::create(_('Weiter') . ' >>', '#', array('name' => 'next'));
     } else {
         $export_pagecontent .= "<br><br><br>";

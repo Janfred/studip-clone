@@ -11,7 +11,7 @@ use Studip\Button, Studip\LinkButton;
 *
 * This class contains the main methods of the elearning-interface to connect to ILIAS 3. Extends ConnectedCMS.
 *
-* @author   Arne Schröder <schroeder@data-quest.de>
+* @author   Arne SchrÃ¶der <schroeder@data-quest.de>
 * @access   public
 * @modulegroup  elearning_interface_modules
 * @module       Ilias3ConnectedCMS
@@ -156,10 +156,10 @@ class Ilias3ConnectedCMS extends ConnectedCMS
         echo "</td></tr><tr><td  width=30% align=\"left\"><font size=\"-1\">";
 
 
-        echo "<b>" . _("Rollen-Template für die persönliche Kategorie: ") . "</b>";
+        echo "<b>" . _("Rollen-Template fÃ¼r die persÃ¶nliche Kategorie: ") . "</b>";
         echo "</td><td>";
         echo "<input type=\"text\" size=\"20\" border=0 value=\"" . ELearningUtils::getConfigValue("user_role_template_name", $this->cms_type) . "\" name=\"role_template_name\">&nbsp;";
-        echo Icon::create('info-circle', 'inactive', ['title' => _('Geben Sie den Namen des Rollen-Templates ein, das für die persönliche Kategorie von Lehrenden verwendet werden soll (z.B. \"Author\").')])->asImg();
+        echo Icon::create('info-circle', 'inactive', ['title' => _('Geben Sie den Namen des Rollen-Templates ein, das fÃ¼r die persÃ¶nliche Kategorie von Lehrenden verwendet werden soll (z.B. \"Author\").')])->asImg();
         echo "</td></tr><tr><td></td><td><font size=\"-1\">";
         echo " (ID " . $this->user_role_template_id;
         echo ")";
@@ -167,13 +167,13 @@ class Ilias3ConnectedCMS extends ConnectedCMS
         echo "<br>\n";
         echo "</td></tr><tr><td  width=30% align=\"left\"><font size=\"-1\">";
 
-        echo "<b>" . _("Passwörter: ") . "</b>";
+        echo "<b>" . _("PasswÃ¶rter: ") . "</b>";
         echo "</td><td><font size=\"-1\">";
         echo "<input type=\"checkbox\" border=0 value=\"md5\" name=\"encrypt_passwords\"";
         if ($encrypt_passwords == "md5")
             echo " checked";
-        echo ">&nbsp;" . _("ILIAS-Passwörter verschlüsselt speichern.");
-        echo Icon::create('info-circle', 'inactive', ['title' => _('Wählen Sie diese Option, wenn die ILIAS-Passwörter der zugeordneten Accounts verschlüsselt in der Stud.IP-Datenbank abgelegt werden sollen.')])->asImg();
+        echo ">&nbsp;" . _("ILIAS-PasswÃ¶rter verschlÃ¼sselt speichern.");
+        echo Icon::create('info-circle', 'inactive', ['title' => _('WÃ¤hlen Sie diese Option, wenn die ILIAS-PasswÃ¶rter der zugeordneten Accounts verschlÃ¼sselt in der Stud.IP-Datenbank abgelegt werden sollen.')])->asImg();
         echo "</td></tr><tr><td></td><td><font size=\"-1\">";
         echo "<br>\n";
         echo "<br>\n";
@@ -184,8 +184,8 @@ class Ilias3ConnectedCMS extends ConnectedCMS
         echo "<input type=\"checkbox\" border=0 value=\"studip\" name=\"style_setting\"";
         if ($style_setting == "studip")
             echo " checked";
-        echo ">&nbsp;" . _("Stud.IP-Style für neue Nutzer-Accounts voreinstellen.");
-        echo Icon::create('info-circle', 'inactive', ['title' => _('Wählen Sie diese Option, wenn für alle von Stud.IP angelegten ILIAS-Accounts das Stud.IP-Layout als System-Style eingetragen werden soll. ILIAS-seitig angelegte Accounts erhalten weiterhin den Standard-Style.')])->asImg();
+        echo ">&nbsp;" . _("Stud.IP-Style fÃ¼r neue Nutzer-Accounts voreinstellen.");
+        echo Icon::create('info-circle', 'inactive', ['title' => _('WÃ¤hlen Sie diese Option, wenn fÃ¼r alle von Stud.IP angelegten ILIAS-Accounts das Stud.IP-Layout als System-Style eingetragen werden soll. ILIAS-seitig angelegte Accounts erhalten weiterhin den Standard-Style.')])->asImg();
         echo "</td></tr><tr><td></td><td><font size=\"-1\">";
         echo "<br>\n";
         echo "<br>\n";
@@ -195,7 +195,7 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 
         echo "</td></tr>";
         echo "</table>";
-        echo "<center>" . Button::create(_('übernehmen'), 'submit') . "</center><br>";
+        echo "<center>" . Button::create(_('Ã¼bernehmen'), 'submit') . "</center><br>";
         echo "<br>\n";
 
         parent::getPreferences();

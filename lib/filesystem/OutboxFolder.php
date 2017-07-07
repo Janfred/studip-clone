@@ -25,7 +25,7 @@ class OutboxFolder extends InboxOutboxFolder
      */
     public static function getTypeName()
     {
-        return _('Alle Anh‰nge gesendeter Nachrichten');
+        return _('Alle Anh√§nge gesendeter Nachrichten');
     }
 
     /**

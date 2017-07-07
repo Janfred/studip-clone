@@ -1,7 +1,7 @@
     <tr>
         <td width="20">
         <? if ($comments_admin): ?>
-            <input type="CHECKBOX" name="mark_comments[]" value="<?=$comment['comment_id']?>" <?=tooltip(_("Diesen Kommentar zum Löschen vormerken"),false)?>>
+            <input type="CHECKBOX" name="mark_comments[]" value="<?=$comment['comment_id']?>" <?=tooltip(_("Diesen Kommentar zum LÃ¶schen vormerken"),false)?>>
         <? endif ?>
         </td>
         <td>

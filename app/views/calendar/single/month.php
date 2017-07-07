@@ -3,11 +3,11 @@
 <nav class="calendar-nav" style="vertical-align: middle">
     <span style="white-space: nowrap;">
         <a class="hidden-medium-down" style="padding-right: 2em;" href="<?= $controller->url_for('calendar/single/month', array('atime' => strtotime('-1 year', $atime))) ?>">
-            <?= Icon::create('arr_2left', 'clickable', ['title' => _('Ein Jahr zurück')])->asImg(['style' => 'vertical-align: text-top;']) ?>
+            <?= Icon::create('arr_2left', 'clickable', ['title' => _('Ein Jahr zurÃ¼ck')])->asImg(['style' => 'vertical-align: text-top;']) ?>
             <?= strftime('%B %Y', strtotime('-1 year', $atime)) ?>
         </a>
         <a class="hidden-tiny-down" href="<?= $controller->url_for('calendar/single/month', array('atime' => strtotime('-1 month', $atime))) ?>">
-            <?= Icon::create('arr_1left', 'clickable', ['title' => _('Einen Monat zurück')])->asImg(['style' => 'vertical-align: text-top;']) ?>
+            <?= Icon::create('arr_1left', 'clickable', ['title' => _('Einen Monat zurÃ¼ck')])->asImg(['style' => 'vertical-align: text-top;']) ?>
             <?= strftime('%B %Y', strtotime('-1 month', $atime)) ?>
         </a>
     </span>

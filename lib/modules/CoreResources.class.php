@@ -24,8 +24,8 @@ class CoreResources implements StudipModule {
             $navigation->setImage(Icon::create('resources', 'info_alt'));
             $navigation->setActiveImage(Icon::create('resources', 'info'));
 
-            $navigation->addSubNavigation('overview', new Navigation(_('Übersicht'), 'resources.php?view=openobject_main'));
-            $navigation->addSubNavigation('group_schedule', new Navigation(_('Übersicht Belegung'), 'resources.php?view=openobject_group_schedule'));
+            $navigation->addSubNavigation('overview', new Navigation(_('Ãœbersicht'), 'resources.php?view=openobject_main'));
+            $navigation->addSubNavigation('group_schedule', new Navigation(_('Ãœbersicht Belegung'), 'resources.php?view=openobject_group_schedule'));
             $navigation->addSubNavigation('view_details', new Navigation(_('Details'), 'resources.php?view=openobject_details'));
             $navigation->addSubNavigation('view_schedule', new Navigation(_('Belegung'), 'resources.php?view=openobject_schedule'));
             $navigation->addSubNavigation('edit_assign', new Navigation(_('Belegungen bearbeiten'), 'resources.php?view=openobject_assign'));

@@ -8,14 +8,14 @@
 * use this script to get a sample config_room_groups.inc.php based on existing
 * rooms and resources structure, writes to STDOUT
 *
-* @author       André Noack <noack@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
+* @author       AndrÃ© Noack <noack@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @access       public
 */
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // show_room_groups.php
 // 
-// Copyright (C) 2006 André Noack <noack@data-quest.de>,
+// Copyright (C) 2006 AndrÃ© Noack <noack@data-quest.de>,
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or

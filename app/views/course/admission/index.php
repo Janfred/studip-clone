@@ -7,7 +7,7 @@
         </section>
         <? if ($current_courseset) : ?>
             <div>
-                <?= sprintf(_('Diese Veranstaltung gehört zum Anmeldeset "%s".'), htmlReady($current_courseset->getName())) ?>
+                <?= sprintf(_('Diese Veranstaltung gehÃ¶rt zum Anmeldeset "%s".'), htmlReady($current_courseset->getName())) ?>
                 <div id="courseset_<?= $current_courseset->getId() ?>">
                     <?= $current_courseset->toString(true) ?>
                 </div>
@@ -39,9 +39,9 @@
                     <? endif ?>
                     <br>
                     <? if (isset($activated_admission_rules['ParticipantRestrictedAdmission'])) : ?>
-                        <?= Studip\LinkButton::create(_("Teilnahmebeschränkte Anmeldung"), $controller->url_for('/instant_course_set', ['type' => 'ParticipantRestrictedAdmission']), ['data-dialog' => '']) ?>
+                        <?= Studip\LinkButton::create(_("TeilnahmebeschrÃ¤nkte Anmeldung"), $controller->url_for('/instant_course_set', ['type' => 'ParticipantRestrictedAdmission']), ['data-dialog' => '']) ?>
                         <? if (isset($activated_admission_rules['TimedAdmission'])) : ?>
-                            <?= Studip\LinkButton::create(_("Zeitgesteuerte und Teilnahmebeschränkte Anmeldung"), $controller->url_for('/instant_course_set', ['type' => 'ParticipantRestrictedAdmission_TimedAdmission']), ['data-dialog' => '']) ?>
+                            <?= Studip\LinkButton::create(_("Zeitgesteuerte und TeilnahmebeschrÃ¤nkte Anmeldung"), $controller->url_for('/instant_course_set', ['type' => 'ParticipantRestrictedAdmission_TimedAdmission']), ['data-dialog' => '']) ?>
                         <? endif ?>
                     <? endif ?>
                 <? endif ?>
@@ -53,9 +53,9 @@
                             <td>
                                 <label class="caption toggler">
                                 <span style="cursor:pointer"
-                                      title="<?= _("Klicken um Zuordnungsmöglichkeiten zu öffnen") ?>">
+                                      title="<?= _("Klicken um ZuordnungsmÃ¶glichkeiten zu Ã¶ffnen") ?>">
                                     <?= _("Zuordnung zu einem bestehenden Anmeldeset"); ?>
-                                    <?= tooltipIcon(_("Wenn die Veranstaltung die Anmelderegeln eines Anmeldesets übernehmen soll, klicken Sie hier und wählen das entsprechende Anmeldeset aus.")); ?>
+                                    <?= tooltipIcon(_("Wenn die Veranstaltung die Anmelderegeln eines Anmeldesets Ã¼bernehmen soll, klicken Sie hier und wÃ¤hlen das entsprechende Anmeldeset aus.")); ?>
                                 </span>
                                 </label>
                             </td>
@@ -76,7 +76,7 @@
                                         </optgroup>
                                     <? endif ?>
                                     <? if ($other_sets->count()) : ?>
-                                        <optgroup label="<?= _("Verfügbare Anmeldesets meiner Einrichtungen") ?>">
+                                        <optgroup label="<?= _("VerfÃ¼gbare Anmeldesets meiner Einrichtungen") ?>">
                                             <? foreach ($available_coursesets->findBy('my_own', false) as $cs) : ?>
                                                 <option
                                                         value="<?= $cs['id'] ?>"><?= htmlReady(my_substr($cs['name'], 0, 100)) ?></option>
@@ -105,17 +105,17 @@
     <form class="default" action="<?= $controller->link_for('/change_admission_turnout') ?>" method="post">
         <?= CSRFProtection::tokenTag() ?>
         <fieldset>
-            <legend><?= _('Beschränkte Teilnehmeranzahl') ?></legend>
+            <legend><?= _('BeschrÃ¤nkte Teilnehmeranzahl') ?></legend>
             <div>
-                <?= _('Bitte geben Sie hier an, wieviele Personen maximal für die Veranstaltung vorgesehen sind, 
-                und ob eine Warteliste erstellt werden soll, falls die Zahl der Anmeldungen die maximale Personenzahl überschreitet.'); ?>
+                <?= _('Bitte geben Sie hier an, wieviele Personen maximal fÃ¼r die Veranstaltung vorgesehen sind, 
+                und ob eine Warteliste erstellt werden soll, falls die Zahl der Anmeldungen die maximale Personenzahl Ã¼berschreitet.'); ?>
             </div>
 
             <label for="admission_turnout">
                 <?= _('max. Anzahl:') ?>
                 <input type="number" name="admission_turnout" id="admission_turnout"
                        value="<?= $course->admission_turnout ?>">
-                <small><?= sprintf(_("(%s freie Plätze)"), $course->getFreeSeats()) ?></small>
+                <small><?= sprintf(_("(%s freie PlÃ¤tze)"), $course->getFreeSeats()) ?></small>
             </label>
             <br>
             <fieldset>
@@ -136,7 +136,7 @@
                             id="admission_disable_waitlist_move"
                             name="admission_disable_waitlist_move"
                             value="1" <?= ($course->admission_disable_waitlist_move == 0 ? "checked" : ""); ?>>
-                    <?= _('automatisches Nachrücken aus der Warteliste aktivieren') ?></label>
+                    <?= _('automatisches NachrÃ¼cken aus der Warteliste aktivieren') ?></label>
                 <label for="admission_waitlist_max">
                     <?= _('max. Anzahl an Wartenden (optional)') ?>
                     <input <?= $is_locked['admission_waitlist_max'] ?>
@@ -149,7 +149,7 @@
             </fieldset>
         </fieldset>
         <footer>
-            <?= Studip\Button::create(_('Teilnehmeranzahl ändern'), 'change_admission_turnout', ['data-dialog' => '']) ?>
+            <?= Studip\Button::create(_('Teilnehmeranzahl Ã¤ndern'), 'change_admission_turnout', ['data-dialog' => '']) ?>
         </footer>
     </form>
     <br>
@@ -160,7 +160,7 @@
     <fieldset>
         <legend><?= _('Anmeldemodus') ?></legend>
         <div>
-            <?= _('Bitte wählen Sie hier einen Anmeldemodus aus:'); ?>
+            <?= _('Bitte wÃ¤hlen Sie hier einen Anmeldemodus aus:'); ?>
         </div>
         <label for="admission_prelim_0">
             <input <?= $is_locked['admission_prelim'] ?>
@@ -173,9 +173,9 @@
                     type="radio" id="admission_prelim_1"
                     name="admission_prelim"
                     value="1" <?= ($course->admission_prelim == 1 ? "checked" : ""); ?>>
-            <?= _('Vorläufiger Eintrag') ?></label>
+            <?= _('VorlÃ¤ufiger Eintrag') ?></label>
         <? if ($course->admission_prelim == 1) : ?>
-            <label for="admission_prelim_txt"><?= _("Hinweistext bei vorläufigen Eintragungen:"); ?></label>
+            <label for="admission_prelim_txt"><?= _("Hinweistext bei vorlÃ¤ufigen Eintragungen:"); ?></label>
             <textarea <?= $is_locked['admission_prelim_txt'] ?> id="admission_prelim_txt" name="admission_prelim_txt"
                                                                 rows="4"><?
                 echo htmlReady($course->admission_prelim_txt);
@@ -185,11 +185,11 @@
             <input <?= $is_locked['admission_binding'] ?> id="admission_binding"
                                                           type="checkbox" <?= ($course->admission_binding == 1 ? "checked" : ""); ?>
                                                           name="admission_binding" value="1">
-            <?= _("Anmeldung ist <u>verbindlich</u>. (Teilnehmenden können sich nicht selbst wieder abmelden.)") ?>
+            <?= _("Anmeldung ist <u>verbindlich</u>. (Teilnehmenden kÃ¶nnen sich nicht selbst wieder abmelden.)") ?>
         </label>
     </fieldset>
     <footer>
-        <?= Studip\Button::create(_("Anmeldemodus ändern"), 'change_admission_prelim', ['data-dialog' => '']) ?>
+        <?= Studip\Button::create(_("Anmeldemodus Ã¤ndern"), 'change_admission_prelim', ['data-dialog' => '']) ?>
     </footer>
 </form>
 <br>
@@ -208,7 +208,7 @@
                         id="lesezugriff"
                         type="checkbox" <?= ($course->lesezugriff == 0 ? "checked" : ""); ?>
                         name="read_level" value="1">
-                <?= _('Lesezugriff für nicht angemeldete Personen erlauben') ?>
+                <?= _('Lesezugriff fÃ¼r nicht angemeldete Personen erlauben') ?>
             </label>
 
 
@@ -217,11 +217,11 @@
                         id="schreibzugriff"
                         type="checkbox" <?= ($course->schreibzugriff == 0 ? "checked" : ""); ?>
                         name="write_level" value="1">
-                <?= _('Schreibzugriff für nicht angemeldete Personen erlauben') ?>
+                <?= _('Schreibzugriff fÃ¼r nicht angemeldete Personen erlauben') ?>
             </label>
         </fieldset>
         <footer>
-            <?= Studip\Button::create(_('Freien Zugriff ändern'), 'change_free_access', ['data-dialog' => '']) ?>
+            <?= Studip\Button::create(_('Freien Zugriff Ã¤ndern'), 'change_free_access', ['data-dialog' => '']) ?>
         </footer>
     </form>
     <br>
@@ -231,9 +231,9 @@
     <form class="default" action="<?= $controller->link_for('/change_domains') ?>" method="post">
         <?= CSRFProtection::tokenTag() ?>
         <fieldset>
-            <legend><?= _('Zugelassenene Nutzerdomänen') ?></legend>
+            <legend><?= _('Zugelassenene NutzerdomÃ¤nen') ?></legend>
             <div>
-                <?= _('Bitte geben Sie hier an, welche Nutzerdomänen zugelassen sind.'); ?>
+                <?= _('Bitte geben Sie hier an, welche NutzerdomÃ¤nen zugelassen sind.'); ?>
             </div>
             <? foreach ($all_domains as $domain) : ?>
                 <label for="user_domain_<?= $domain->getId() ?>">
@@ -245,7 +245,7 @@
             <? endforeach ?>
         </fieldset>
         <footer>
-            <?= Studip\Button::create(_("Nutzerdomänen ändern"), 'change_domains', ['data-dialog' => '']) ?>
+            <?= Studip\Button::create(_("NutzerdomÃ¤nen Ã¤ndern"), 'change_domains', ['data-dialog' => '']) ?>
         </footer>
     </form>
 <? endif ?>

@@ -156,7 +156,7 @@ abstract class Interactable
      */
     static function createAccept($label = NULL, $trait = NULL, $attributes = array())
     {
-        $args = func_num_args() ? func_get_args() : array(_('Übernehmen'));
+        $args = func_num_args() ? func_get_args() : array(_('Ãœbernehmen'));
         return self::__callStatic(__FUNCTION__, $args);
     }
 

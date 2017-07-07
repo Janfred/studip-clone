@@ -24,9 +24,9 @@ class Step00138Studienbereichszuordnung extends Migration
                   "VALUES ('34f348c06bbd5d9fc7bb36a8d829e12e', '', ".
                   "'SEM_TREE_ALLOW_BRANCH_ASSIGN', '1', 1, 'boolean', 'global', ".
                   "'', 0, 1222947575, 1222947575, ".
-                  "'Diese Option beeinflusst die Möglichkeit, Veranstaltungen ".
-                  "entweder nur an die Blätter oder überall in der ".
-                  "Veranstaltungshierarchie einhängen zu dürfen.', '', '')");
+                  "'Diese Option beeinflusst die MÃ¶glichkeit, Veranstaltungen ".
+                  "entweder nur an die BlÃ¤tter oder Ã¼berall in der ".
+                  "Veranstaltungshierarchie einhÃ¤ngen zu dÃ¼rfen.', '', '')");
 
         $this->announce("done.");
     }

@@ -3,7 +3,7 @@
  use Studip\Button,
      Studip\LinkButton ?>
 
-<h1><?= sprintf(_('%s hinzufügen'), htmlReady($decoratedStatusGroups['dozent'])) ?></h1>
+<h1><?= sprintf(_('%s hinzufÃ¼gen'), htmlReady($decoratedStatusGroups['dozent'])) ?></h1>
 
 <form action="<?= $controller->url_for('course/members/set') ?>" method="post">
 <?= CSRFProtection::tokenTag() ?>

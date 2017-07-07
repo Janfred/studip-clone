@@ -66,7 +66,7 @@ if ($sem_class->getSlotModule("overview")) {
     $Modules = new Modules();
     $course_modules = $Modules->getLocalModules($course_id);
     if (!$course_modules['overview'] && !$sem_class->isSlotMandatory("overview")) {
-        //Keine Übersichtsseite. Anstatt eines Fehler wird der Nutzer zum ersten
+        //Keine Ãœbersichtsseite. Anstatt eines Fehler wird der Nutzer zum ersten
         //Reiter der Veranstaltung weiter geleitet.
         if (Navigation::hasItem("/course")) {
             foreach (Navigation::getItem("/course")->getSubNavigation() as $navigation) {

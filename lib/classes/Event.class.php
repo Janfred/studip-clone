@@ -32,7 +32,7 @@ interface Event
     public function getRecurrence($index = null);
     
     /**
-     * TODO Wird das noch benötigt?
+     * TODO Wird das noch benÃ¶tigt?
      */
     public function getType();
     

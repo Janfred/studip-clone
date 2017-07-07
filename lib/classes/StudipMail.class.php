@@ -6,14 +6,14 @@
  * class for constructing and sending emails in Stud.IP
  *
  *
- * @author  André Noack <noack@data-quest>, Suchi & Berg GmbH <info@data-quest.de>
+ * @author  AndrÃ© Noack <noack@data-quest>, Suchi & Berg GmbH <info@data-quest.de>
  * @version 1
  */
 
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 //
-// Copyright (C) 2009 André Noack <noack@data-quest>,
+// Copyright (C) 2009 AndrÃ© Noack <noack@data-quest>,
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -392,7 +392,7 @@ class StudipMail
             $text_part = '';
             $text_message = $this->getBodyText();
             if(!$text_message){
-                $text_message = _("Diese Nachricht ist im HTML-Format verfasst. Sie benötigen eine E-Mail-Anwendung, die das HTML-Format anzeigen kann.");
+                $text_message = _("Diese Nachricht ist im HTML-Format verfasst. Sie benÃ¶tigen eine E-Mail-Anwendung, die das HTML-Format anzeigen kann.");
             }
             $transporter->CreateQuotedPrintableTextPart($transporter->WrapText($text_message), "", $text_part);
             $transporter->AddAlternativeMultipart($part = array($text_part, $html_part));

@@ -1,5 +1,5 @@
 <p>
-    <strong><?= _("Öffentlich") ?></strong> - <?= _("jeder darf diesen Blubber sehen.") ?>
+    <strong><?= _("Ã–ffentlich") ?></strong> - <?= _("jeder darf diesen Blubber sehen.") ?>
 </p>
 <hr>
 <? $i_shared = false ?>
@@ -32,7 +32,7 @@
     </p>
 <? else : ?>
     <div style="text-align: center">
-        <?= \Studip\LinkButton::create(_("Weitersagen rückgängig machen"), '#', array('onClick' => "STUDIP.Blubber.unshareBlubber('".$thread->getId()."'); return false;")) ?>
+        <?= \Studip\LinkButton::create(_("Weitersagen rÃ¼ckgÃ¤ngig machen"), '#', array('onClick' => "STUDIP.Blubber.unshareBlubber('".$thread->getId()."'); return false;")) ?>
     </div>
 <? endif ?>
 <br><br>

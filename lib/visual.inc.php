@@ -456,7 +456,7 @@ function printhead($breite, $left, $link, $open, $new, $icon, $titel, $zusatz,
         }
     }
 
-    //TODO: überarbeiten -> valides html und/oder template draus machen...
+    //TODO: Ã¼berarbeiten -> valides html und/oder template draus machen...
     $class = "printhead";
     $class2 = "printhead2";
     $class3 = "printhead3";
@@ -523,9 +523,9 @@ function printcontent ($breite, $write = FALSE, $inhalt, $edit, $printout = TRUE
     if ($edit) {
         $print .= "<br><br><div align=\"center\">$edit</div>";
         if ($addon!="") {
-            if (mb_substr($addon,0,5)=="open:") { // es wird der öffnen-Pfeil mit Link ausgegeben
+            if (mb_substr($addon,0,5)=="open:") { // es wird der Ã¶ffnen-Pfeil mit Link ausgegeben
                 $print .= "</td><td valign=\"middle\" class=\"table_row_even\" nowrap><a href=\"".mb_substr($addon,5)."\">";
-                $print .= Icon::create('arr_1left', 'clickable', ['title' => _('Bewertungsbereich öffnen')])->asImg();
+                $print .= Icon::create('arr_1left', 'clickable', ['title' => _('Bewertungsbereich Ã¶ffnen')])->asImg();
                 $print .= "</a>&nbsp;";
             } else {              // es wird erweiterter Inhalt ausgegeben
                 $print .= "</td><td class=\"content_body_panel\" nowrap>";

@@ -34,7 +34,7 @@ if ($messages["error"] != "") {
         </tr>
         <tr>
             <td width="30%" style="text-align: left; font-weight: bold;">
-            <?=_("Kategorie für Userdaten:")?>
+            <?=_("Kategorie fÃ¼r Userdaten:")?>
             </td>
             <td><?=$user_category_node_id_title?></td>
         </tr>
@@ -44,10 +44,10 @@ if ($messages["error"] != "") {
         </tr>
         <tr>
             <td width="30%" style="text-align: left; font-weight: bold;">
-            <?=_("Rollen-Template für die persönliche Kategorie:")?>
+            <?=_("Rollen-Template fÃ¼r die persÃ¶nliche Kategorie:")?>
             </td>
             <td><input size="20" value="<?=$user_role_template_name ?>" name="role_template_name" type="text">
-            &nbsp; <?=Icon::create('info-circle', 'inactive', ['title' => _("Geben Sie den Namen des Rollen-Templates ein, das für die persönliche Kategorie von Lehrenden verwendet werden soll (z.B. \"Author\").")])->asImg(16)?>
+            &nbsp; <?=Icon::create('info-circle', 'inactive', ['title' => _("Geben Sie den Namen des Rollen-Templates ein, das fÃ¼r die persÃ¶nliche Kategorie von Lehrenden verwendet werden soll (z.B. \"Author\").")])->asImg(16)?>
             </td>
         </tr>
         <tr>
@@ -56,11 +56,11 @@ if ($messages["error"] != "") {
         </tr>
         <tr>
             <td width="30%" style="text-align: left; font-weight: bold;">
-            <?=_("Passwörter:")?>
+            <?=_("PasswÃ¶rter:")?>
             </td>
             <td><input value="md5" name="encrypt_passwords" type="checkbox" <?=($encrypt_passwords ? 'checked' : '') ?>>
-            &nbsp; <?=_("ILIAS-Passwörter verschlüsselt speichern.")?>
-            <?=Icon::create('info-circle', 'inactive', ['title' => _("Wählen Sie diese Option, wenn die ILIAS-Passwörter der zugeordneten Accounts verschlüsselt in der Stud.IP-Datenbank abgelegt werden sollen.")])->asImg(16)?>
+            &nbsp; <?=_("ILIAS-PasswÃ¶rter verschlÃ¼sselt speichern.")?>
+            <?=Icon::create('info-circle', 'inactive', ['title' => _("WÃ¤hlen Sie diese Option, wenn die ILIAS-PasswÃ¶rter der zugeordneten Accounts verschlÃ¼sselt in der Stud.IP-Datenbank abgelegt werden sollen.")])->asImg(16)?>
             </td>
         </tr>
         <tr>
@@ -75,8 +75,8 @@ if ($messages["error"] != "") {
                 echo '<select name="ldap_enable">';
                 echo $ldap_options;
                 echo '</select><br>';
-                echo _("Authentifizierungsplugin (nur LDAP) beim Anlegen von externen Accounts übernehmen.");
-                echo Icon::create('info-circle', 'inactive', ['title' => _("Wählen Sie hier ein Authentifizierungsplugin, damit neu angelegte ILIAS-Accounts den Authentifizierungsmodus LDAP erhalten, wenn dieser Modus auch für den vorhandenen Stud.IP-Account gilt. Andernfalls erhalten alle ILIAS-Accounts den default-Modus")])->asImg(16);
+                echo _("Authentifizierungsplugin (nur LDAP) beim Anlegen von externen Accounts Ã¼bernehmen.");
+                echo Icon::create('info-circle', 'inactive', ['title' => _("WÃ¤hlen Sie hier ein Authentifizierungsplugin, damit neu angelegte ILIAS-Accounts den Authentifizierungsmodus LDAP erhalten, wenn dieser Modus auch fÃ¼r den vorhandenen Stud.IP-Account gilt. Andernfalls erhalten alle ILIAS-Accounts den default-Modus")])->asImg(16);
             } else {
                 echo _("(Um diese Einstellung zu nutzen muss zumindest ein LDAP Authentifizierungsplugin aktiviert sein.)");
                 echo '<input type="hidden" name="ldap_enable" value="">';
@@ -88,6 +88,6 @@ if ($messages["error"] != "") {
         </tr>
     </tbody>
 </table>
-<div style="text-align: center"><?= Button::create(_('Übernehmen'), 'submit', array('title' =>_("Einstellungen übernehmen")))?>
+<div style="text-align: center"><?= Button::create(_('Ãœbernehmen'), 'submit', array('title' =>_("Einstellungen Ã¼bernehmen")))?>
 </div>
 <div style="margin-top: 2em;"><?=$module_types?></div>

@@ -9,7 +9,7 @@
             $rule->getId() ?>')">
             <?= Icon::create('edit', 'clickable')->asImg(); ?></a>
         <a href="#" onclick="return STUDIP.Dialogs.showConfirmDialog('<?= 
-                    _('Soll die Anmelderegel wirklich gelöscht werden?') ?>', 
+                    _('Soll die Anmelderegel wirklich gelÃ¶scht werden?') ?>', 
                     'javascript:STUDIP.Admission.removeRule(\'rule_<?= $rule->getId() ?>\', \'rules\')')">
             <?= Icon::create('trash', 'clickable')->asImg(); ?></a>
     </span>

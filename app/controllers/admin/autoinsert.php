@@ -9,7 +9,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      Nico Müller <nico.mueller@uni-oldenburg.de>
+ * @author      Nico MÃ¼ller <nico.mueller@uni-oldenburg.de>
  * @author      Michael Riehemann <michael.riehemann@uni-oldenburg.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
@@ -114,7 +114,7 @@ class Admin_AutoinsertController extends AuthenticatedController
         if ($domain === 'keine')
             $domain = '';
         AutoInsert::updateSeminar($seminar_id, $domain, $status, $remove);
-        $this->flash['success'] = _("Die Statusgruppenanpassung wurde erfolgreich übernommen!");
+        $this->flash['success'] = _("Die Statusgruppenanpassung wurde erfolgreich Ã¼bernommen!");
         $this->redirect('admin/autoinsert');
     }
 
@@ -127,7 +127,7 @@ class Admin_AutoinsertController extends AuthenticatedController
     {
         if (Request::int('delete') == 1) {
             if (AutoInsert::deleteSeminar($seminar_id)) {
-                $this->flash['success'] = _("Die Zuordnung der Veranstaltung wurde gelöscht!");
+                $this->flash['success'] = _("Die Zuordnung der Veranstaltung wurde gelÃ¶scht!");
             }
         } elseif (!Request::get('back')) {
             $this->flash['delete'] = $seminar_id;
@@ -146,9 +146,9 @@ class Admin_AutoinsertController extends AuthenticatedController
         if (Request::submitted('submit')) {
             $filters = array_filter(Request::getArray('filter'));
             if (!Request::get('sem_id') || Request::get('sem_id') == 'false') {
-                $this->flash['error'] = _('Ungültiger Aufruf');
+                $this->flash['error'] = _('UngÃ¼ltiger Aufruf');
             } elseif (!count($filters)) {
-                $this->flash['error'] = _('Keine Filterkriterien gewählt');
+                $this->flash['error'] = _('Keine Filterkriterien gewÃ¤hlt');
             } else {
                 $seminar = Seminar::GetInstance(Request::option('sem_id'));
                 $group = select_group($seminar->getSemesterStartTime());
@@ -169,7 +169,7 @@ class Admin_AutoinsertController extends AuthenticatedController
 
                 //messagebox
                 $text = sprintf(
-                        _('Es wurden %u von %u möglichen Personen in die Veranstaltung %s eingetragen.'), $real_users, count($user_ids), sprintf('<a href="%s">%s</a>', URLHelper::getLink('dispatch.php/course/details/', array('cid' => $seminar->getId())), htmlReady($seminar->getName()))
+                        _('Es wurden %u von %u mÃ¶glichen Personen in die Veranstaltung %s eingetragen.'), $real_users, count($user_ids), sprintf('<a href="%s">%s</a>', URLHelper::getLink('dispatch.php/course/details/', array('cid' => $seminar->getId())), htmlReady($seminar->getName()))
                 );
                 if ($real_users > 0) {
                     $this->flash['success'] = $text;
@@ -216,7 +216,7 @@ class Admin_AutoinsertController extends AuthenticatedController
             'fachsemester' => _('Studienfachsemester'),
             'institut'     => _('Einrichtung'),
             'status'       => _('Statusgruppe'),
-            'domain'       => _('Domäne')
+            'domain'       => _('DomÃ¤ne')
         );
     }
 
@@ -230,7 +230,7 @@ class Admin_AutoinsertController extends AuthenticatedController
         $filters = array_filter(Request::getArray('filter'));
 
         if (empty($filters)) {
-            $data = array('error' => utf8_encode(_('Keine Filterkriterien gewählt')));
+            $data = array('error' => utf8_encode(_('Keine Filterkriterien gewÃ¤hlt')));
         } else {
             $userlookup = new UserLookup();
             foreach ($filters as $type => $values) {

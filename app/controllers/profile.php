@@ -290,9 +290,9 @@ class ProfileController extends AuthenticatedController
 
             if (!$this->user->isFriendOf($this->current_user)) {
                 $actions->addLink(
-                    _('zu den Kontakten hinzuf¸gen'),
+                    _('zu den Kontakten hinzuf√ºgen'),
                     $this->url_for('profile/add_buddy?username=' . $this->current_user->username),
-                    Icon::create('person', 'clickable', tooltip2(_('Zu den Kontakten hinzuf¸gen')))
+                    Icon::create('person', 'clickable', tooltip2(_('Zu den Kontakten hinzuf√ºgen')))
                 );
             }
 
@@ -326,7 +326,7 @@ class ProfileController extends AuthenticatedController
             if ($this->current_user->user_id !== $this->user->user_id) {
                 $string = _('(Dieser Nutzer ist unsichtbar.)');
             } else {
-                $string = _('(Sie sind unsichtbar. Deshalb kˆnnen nur Sie diese Seite sehen.)');
+                $string = _('(Sie sind unsichtbar. Deshalb k√∂nnen nur Sie diese Seite sehen.)');
             }
             $info_widget->addElement(
                 new WidgetElement('<span style="color:red;">' . $string . '</span>')
@@ -340,7 +340,7 @@ class ProfileController extends AuthenticatedController
         }
         if ($this->current_user->auth_plugin === null) {
             $info_widget->addElement(
-                new WidgetElement('<span style="color:red;">' . _('vorl‰ufiger Benutzer') . '</span>')
+                new WidgetElement('<span style="color:red;">' . _('vorl√§ufiger Benutzer') . '</span>')
             );
         }
 
@@ -378,7 +378,7 @@ class ProfileController extends AuthenticatedController
         $current->contacts[] = $user;
         $current->store();
 
-        PageLayout::postSuccess(_('Der Nutzer wurde zu Ihren Kontakten hinzugef¸gt.'));
+        PageLayout::postSuccess(_('Der Nutzer wurde zu Ihren Kontakten hinzugef√ºgt.'));
         $this->redirect('profile/index?username=' . $username);
     }
 

@@ -10,7 +10,7 @@ class UserDataToConfig extends Migration
         'calendar_user_control_data' => array('name'=>'CALENDAR_SETTINGS',
                                                'range'=>'user',
                                                'type'=>'array',
-                                               'description'=>'persönliche Einstellungen des Kalenders',
+                                               'description'=>'persÃ¶nliche Einstellungen des Kalenders',
                                                'value'=> json_encode(
                                                    array(
                                                     "view"             => "showweek",
@@ -28,7 +28,7 @@ class UserDataToConfig extends Migration
         'my_messaging_settings' => array('name'=>'MESSAGING_SETTINGS',
                                                'range'=>'user',
                                                'type'=>'array',
-                                               'description'=>'persönliche Einstellungen Nachrichtenbereich',
+                                               'description'=>'persÃ¶nliche Einstellungen Nachrichtenbereich',
                                                'value'=> json_encode(
                                                    array(
                                                     "show_only_buddys"             => FALSE,
@@ -49,7 +49,7 @@ class UserDataToConfig extends Migration
         'forum' => array('name'=>'FORUM_SETTINGS',
                                                'range'=>'user',
                                                'type'=>'array',
-                                               'description'=>'persönliche Einstellungen Forum',
+                                               'description'=>'persÃ¶nliche Einstellungen Forum',
                                                'value'=> json_encode(
                                                    array(
                                                     'neuauf'      => false,
@@ -65,7 +65,7 @@ class UserDataToConfig extends Migration
         'my_schedule_settings' => array('name'=>'SCHEDULE_SETTINGS',
                                                'range'=>'user',
                                                'type'=>'array',
-                                               'description'=>'persönliche Einstellungen Stundenplan',
+                                               'description'=>'persÃ¶nliche Einstellungen Stundenplan',
                                                'value'=> json_encode(
                                                    array(
                                                     "glb_start_time"=> 8,
@@ -93,22 +93,22 @@ class UserDataToConfig extends Migration
         'my_studip_settings' => array('name' =>'PERSONAL_STARTPAGE',
                                        'range' => 'user',
                                        'type' => 'integer',
-                                       'description' => 'Persönliche Startseite',
+                                       'description' => 'PersÃ¶nliche Startseite',
                                        'value'=> 0),
         '_my_sem_group_field' => array('name' =>'MY_COURSES_GROUPING',
                                        'range' => 'user',
                                        'type' => 'string',
-                                       'description' => 'Gruppierung der Veranstaltungsübersicht',
+                                       'description' => 'Gruppierung der VeranstaltungsÃ¼bersicht',
                                        'value'=> ''),
         '_my_sem_open' => array('name' =>'MY_COURSES_OPEN_GROUPS',
                                        'range' => 'user',
                                        'type' => 'array',
-                                       'description' => 'geöffnete Gruppen der Veranstaltungsübersicht',
+                                       'description' => 'geÃ¶ffnete Gruppen der VeranstaltungsÃ¼bersicht',
                                        'value'=> '[]'),
         '_my_admin_inst_id' => array('name' =>'MY_INSTITUTES_DEFAULT',
                                        'range' => 'user',
                                        'type' => 'string',
-                                       'description' => 'Standard Einrichtung in der Veranstaltungsübersicht für Admins',
+                                       'description' => 'Standard Einrichtung in der VeranstaltungsÃ¼bersicht fÃ¼r Admins',
                                        'value'=> ''),
                );
     }

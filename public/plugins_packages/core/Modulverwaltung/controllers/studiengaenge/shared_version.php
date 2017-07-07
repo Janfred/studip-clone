@@ -45,7 +45,7 @@ class SharedVersionController extends MVVController
             $success_message = ('Die Version "%s" des Studiengangteils wurde angelegt.');
         } else {
             PageLayout::setTitle(_('Version des Studiengangteils bearbeiten'));
-            $success_message = _('Die Version "%s" des Studiengangteils wurde geändert.');
+            $success_message = _('Die Version "%s" des Studiengangteils wurde geÃ¤ndert.');
         }
         $this->semester = Semester::getAll();
         $this->dokumente = $this->version->document_assignments;
@@ -85,7 +85,7 @@ class SharedVersionController extends MVVController
                     PageLayout::postSuccess(sprintf($success_message,
                             htmlReady($this->version->getDisplayName())));
                 } else {
-                    PageLayout::postInfo(_('Es wurden keine Änderungen vorgenommen.'));
+                    PageLayout::postInfo(_('Es wurden keine Ã„nderungen vorgenommen.'));
                 }
                 $this->redirect($this->url_for('/abschnitte', $this->version->id));
                 return;
@@ -113,7 +113,7 @@ class SharedVersionController extends MVVController
                         $this->url_for('/approve', $this->stgteil->getId(), $this->version->getId()),
                         Icon::create('accept', 'clickable'), array('data-dialog' => 'size=auto;buttons=false'));
             }
-            $action_widget->addLink( _('Log-Einträge dieser Studiengangteilversion'),
+            $action_widget->addLink( _('Log-EintrÃ¤ge dieser Studiengangteilversion'),
                     $this->url_for('shared/log_event/show/StgteilVersion', $this->version->getId()),
                     Icon::create('log', 'clickable'))->asDialog();
         }
@@ -246,7 +246,7 @@ class SharedVersionController extends MVVController
         }
         if (Request::isPost()) {
             CSRFProtection::verifyUnsafeRequest();
-            PageLayout::postSuccess(sprintf(_('Version "%s" des Studiengangteils gelöscht!'),
+            PageLayout::postSuccess(sprintf(_('Version "%s" des Studiengangteils gelÃ¶scht!'),
                     htmlReady($version->getDisplayName())));
             $version->delete();
         }
@@ -268,7 +268,7 @@ class SharedVersionController extends MVVController
         } else {
             $this->version = $this->abschnitt->version;
             PageLayout::setTitle(_('Studiengangteil-Abschnitt bearbeiten'));
-            $success_message = _('Der Studiengangteil-Abschnitt "%s" wurde geändert.');
+            $success_message = _('Der Studiengangteil-Abschnitt "%s" wurde geÃ¤ndert.');
         }
         if (!$this->version) {
             PageLayout::postError(_('Unbekannte Version.'));
@@ -307,7 +307,7 @@ class SharedVersionController extends MVVController
                     PageLayout::postSuccess(sprintf($success_message,
                             htmlReady($this->abschnitt->name)));
                 } else {
-                    PageLayout::postInfo(_('Es wurden keine Änderungen vorgenommen.'));
+                    PageLayout::postInfo(_('Es wurden keine Ã„nderungen vorgenommen.'));
                 }
                 $this->redirect($this->url_for('/details',
                         $this->abschnitt->id));
@@ -373,7 +373,7 @@ class SharedVersionController extends MVVController
             $version_id = $abschnitt->version_id;
             if (!Request::isPost()) {
                 $this->flash_set('dialog',
-                    sprintf(_('Wollen Sie den Studiengangteil-Abschnitt "%s" wirklich löschen?'),
+                    sprintf(_('Wollen Sie den Studiengangteil-Abschnitt "%s" wirklich lÃ¶schen?'),
                         $abschnitt->getDisplayName()),
                         array('/delete_abschnitt', $abschnitt->id, $version_id),
                         array('/details_abschnitt', $abschnitt->id));
@@ -383,11 +383,11 @@ class SharedVersionController extends MVVController
                 $abschnitt_name = $abschnitt->getDisplayName();
                 if ($abschnitt->delete()) {
                     PageLayout::postSuccess(
-                        sprintf(_('Der Studiengangteil-Abschnitt "%s" wurde glöscht.'),
+                        sprintf(_('Der Studiengangteil-Abschnitt "%s" wurde glÃ¶scht.'),
                                 htmlReady($abschnitt_name)));
                 } else {
                     PageLayout::postError( sprintf(
-                            _('Der Studiengangteil-Abschnitt "%s" konnte nicht gelöscht werden.'),
+                            _('Der Studiengangteil-Abschnitt "%s" konnte nicht gelÃ¶scht werden.'),
                             htmlReady($abschnitt_name)));
                 }
             }
@@ -421,7 +421,7 @@ class SharedVersionController extends MVVController
                         try {
                             $abschnitt->store();
                             PageLayout::postSuccess(
-                                sprintf(_('Das Modul "%s" wurde dem Abschnitt "%s" hinzugefügt.'),
+                                sprintf(_('Das Modul "%s" wurde dem Abschnitt "%s" hinzugefÃ¼gt.'),
                                         htmlReady($modul->getDisplayName()),
                                         htmlReady($abschnitt->name)));
                         } catch (InvalidValuesException $e) {
@@ -469,7 +469,7 @@ class SharedVersionController extends MVVController
                     return;
                 } else {
                     PageLayout::setTitle(_('Modulzuordnung bearbeiten'));
-                    $success_message = _('Die Modulzuordnung "%s" wurde geändert.');
+                    $success_message = _('Die Modulzuordnung "%s" wurde geÃ¤ndert.');
                 }
                 $success = false;
                 if (Request::submitted('store')) {
@@ -495,7 +495,7 @@ class SharedVersionController extends MVVController
                                         htmlReady($this->zuordnung->getDisplayName())));
                             } else {
                                 PageLayout::postInfo(
-                                        _('Es wurden keine Änderungen vorgenommen.'));
+                                        _('Es wurden keine Ã„nderungen vorgenommen.'));
                             }
                             $this->redirect($this->url_for('/details_abschnitt',
                                     $this->abschnitt->getId()));
@@ -527,7 +527,7 @@ class SharedVersionController extends MVVController
             } else {
                 if (!Request::isPost()) {
                     $this->flash_set('dialog',
-                        sprintf(_('Wollen Sie die Zuordnung des Moduls "%s" zum Studiengangteil-Abschnitt "%s" wirklich löschen?'),
+                        sprintf(_('Wollen Sie die Zuordnung des Moduls "%s" zum Studiengangteil-Abschnitt "%s" wirklich lÃ¶schen?'),
                             $modul->getDisplayName(),
                             $abschnitt->getDisplayName()),
                         array('/delete_modul', $abschnitt->id,
@@ -542,7 +542,7 @@ class SharedVersionController extends MVVController
                         try {
                             $stored = $abschnitt->store();
                             PageLayout::postSuccess(
-                                sprintf(_('Die Zuordnung des Moduls "%s" zum Studiengangteil-Abschnitt "%s" wurde gelöscht.'),
+                                sprintf(_('Die Zuordnung des Moduls "%s" zum Studiengangteil-Abschnitt "%s" wurde gelÃ¶scht.'),
                                         htmlReady($modul_name), htmlReady($abschnitt_name)));
                         } catch (InvalidValuesException $e) {
                             PageLayout::postError(htmlReady($e->getMessage()));
@@ -550,7 +550,7 @@ class SharedVersionController extends MVVController
                             PageLayout::postError( _('Beim Speichern trat ein Fehler auf!'));
                         }
                     } else {
-                        PageLayout::postError( _('Die Zuordnung des Moduls konnte nicht gelöscht werden.'));
+                        PageLayout::postError( _('Die Zuordnung des Moduls konnte nicht gelÃ¶scht werden.'));
                     }
                 }
             }
@@ -618,12 +618,12 @@ class SharedVersionController extends MVVController
                     }
                     if ($is_modified) {
                         PageLayout::postSuccess(
-                                sprintf(_('Die Zuordnung der Fachsemester zum Modulteil "%s" im Abschnitt "%s" wurde geändert.'),
+                                sprintf(_('Die Zuordnung der Fachsemester zum Modulteil "%s" im Abschnitt "%s" wurde geÃ¤ndert.'),
                                 htmlReady($this->modulteil->getDisplayName()),
                                 htmlReady($this->abschnitt_modul->abschnitt->getDisplayName())));
                     } else {
                         PageLayout::postInfo(
-                                _('Es wurden keine Änderungen an der Zuordnung der Fachsemester vorgenommen.'));
+                                _('Es wurden keine Ã„nderungen an der Zuordnung der Fachsemester vorgenommen.'));
                     }
                     /*$this->relocate('/modulteile',
                             $this->abschnitt_modul->abschnitt_id,

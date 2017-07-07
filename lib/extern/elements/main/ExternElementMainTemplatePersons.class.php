@@ -50,7 +50,7 @@ class ExternElementMainTemplatePersons extends ExternElementMain {
                 'nameformat', 'defaultadr', 'genericdatafields'
         );
         $this->real_name = _("Grundeinstellungen");
-        $this->description = _("In den Grundeinstellungen können Sie allgemeine Daten des Moduls ändern.");
+        $this->description = _("In den Grundeinstellungen kÃ¶nnen Sie allgemeine Daten des Moduls Ã¤ndern.");
         parent::__construct($module_name, $data_fields, $field_names, $config);
         $this->edit_function = 'editSort';
     }
@@ -130,14 +130,14 @@ class ExternElementMainTemplatePersons extends ExternElementMain {
         $headline = $edit_form->editHeadline(_("Weitere Angaben"));
         
         $title = _("Namensformat:");
-        $info = _("Wählen Sie, wie Personennamen formatiert werden sollen.");
+        $info = _("WÃ¤hlen Sie, wie Personennamen formatiert werden sollen.");
         $values = array("", "no_title_short", "no_title", "no_title_rev", "full", "full_rev");
         $names = array(_("keine Auswahl"), _("Meyer, P."), _("Peter Meyer"), _("Meyer, Peter"),
                 _("Dr. Peter Meyer"), _("Meyer, Peter, Dr."));
         $table = $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
         
         $title = _("Standard-Adresse:");
-        $info = _("Wenn Sie diese Option wählen, wird die Standard-Adresse ausgegeben, die jede(r) Mitarbeiter(in) bei seinen universitären Daten auswählen kann. Wählen Sie diese Option nicht, wenn immer die Adresse der Einrichtung ausgegeben werden soll.");
+        $info = _("Wenn Sie diese Option wÃ¤hlen, wird die Standard-Adresse ausgegeben, die jede(r) Mitarbeiter(in) bei seinen universitÃ¤ren Daten auswÃ¤hlen kann. WÃ¤hlen Sie diese Option nicht, wenn immer die Adresse der Einrichtung ausgegeben werden soll.");
         $table .= $edit_form->editCheckboxGeneric('defaultadr', $title, $info, '1', '0');
         
         $content_table .= $edit_form->editContentTable($headline, $table);

@@ -9,7 +9,7 @@
 // admin_sem_tree.php
 //
 //
-// Copyright (c) 2003 André Noack <noack@data-quest.de>
+// Copyright (c) 2003 AndrÃ© Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -75,9 +75,9 @@ if (is_array($_possible_open_items)) {
 
 if ($search_obj->search_done){
     if ($search_obj->search_result->numRows > 50){
-        PageLayout::postError(_("Es wurden mehr als 50 Veranstaltungen gefunden! Bitte schränken Sie Ihre Suche weiter ein."));
+        PageLayout::postError(_("Es wurden mehr als 50 Veranstaltungen gefunden! Bitte schrÃ¤nken Sie Ihre Suche weiter ein."));
     } elseif ($search_obj->search_result->numRows > 0){
-        PageLayout::postSuccess(sprintf(_("Es wurden %s Veranstaltungen gefunden, und in Ihre Merkliste eingefügt"),$search_obj->search_result->numRows));
+        PageLayout::postSuccess(sprintf(_("Es wurden %s Veranstaltungen gefunden, und in Ihre Merkliste eingefÃ¼gt"),$search_obj->search_result->numRows));
         if (is_array($_SESSION['_marked_sem']) && count($_SESSION['_marked_sem'])){
             $_SESSION['_marked_sem'] = array_merge((array)$_SESSION['_marked_sem'], (array)$search_obj->search_result->getDistinctRows("seminar_id"));
         } else {
@@ -128,15 +128,15 @@ if (Request::option('cmd') == "MarkList"){
 }
 if ($the_tree->mode == "MoveItem" || $the_tree->mode == "CopyItem"){
     if ($_msg){
-        $_msg .= "§";
+        $_msg .= "Â§";
     }
     if ($the_tree->mode == "MoveItem"){
-        $text = _("Der Verschiebemodus ist aktiviert. Bitte wählen Sie ein Einfügesymbol %s aus, um das Element <b>%s</b> an diese Stelle zu verschieben.%s");
+        $text = _("Der Verschiebemodus ist aktiviert. Bitte wÃ¤hlen Sie ein EinfÃ¼gesymbol %s aus, um das Element <b>%s</b> an diese Stelle zu verschieben.%s");
     } else {
-        $text = _("Der Kopiermodus ist aktiviert. Bitte wählen Sie ein Einfügesymbol %s aus, um das Element <b>%s</b> an diese Stelle zu kopieren.%s");
+        $text = _("Der Kopiermodus ist aktiviert. Bitte wÃ¤hlen Sie ein EinfÃ¼gesymbol %s aus, um das Element <b>%s</b> an diese Stelle zu kopieren.%s");
     }
     PageLayout::postInfo(sprintf($text ,
-            Icon::create('arr_2right', 'sort', ['title' => _('Einfügesymbol')])->asImg(),
+            Icon::create('arr_2right', 'sort', ['title' => _('EinfÃ¼gesymbol')])->asImg(),
             htmlReady($the_tree->tree->tree_data[$the_tree->move_item_id]['name']),
             "<div align=\"right\">"
             .LinkButton::createCancel(_('Abbrechen'), $the_tree->getSelf("cmd=Cancel&item_id=$the_tree->move_item_id"), array('title' => _("Verschieben / Kopieren abbrechen")))
@@ -234,17 +234,17 @@ if ($the_tree->mode == "MoveItem" || $the_tree->mode == "CopyItem"){
     </select><br>&nbsp;<br><select name="mark_list_aktion" style="font-size:8pt;width:100%;">
     <?
     if (is_array($_possible_open_items) && count($_possible_open_items) && !(count($_possible_open_items) == 1 && $_possible_open_items['root'])){
-        echo "\n<option  value=\"insert_all\">" . _("Markierte in alle geöffneten Bereiche eintragen") . "</option>";
+        echo "\n<option  value=\"insert_all\">" . _("Markierte in alle geÃ¶ffneten Bereiche eintragen") . "</option>";
         foreach ($_possible_open_items as $item_id => $value){
             echo "\n<option value=\"insert_{$item_id}\">"
                 . sprintf(_("Markierte in \"%s\" eintragen"),htmlReady(my_substr($the_tree->tree->tree_data[$item_id]['name'],0,floor($cols * .8)))) . "</option>";
         }
     }
     ?>
-    <option value="del"><?=_("Markierte aus der Merkliste löschen")?></option>
+    <option value="del"><?=_("Markierte aus der Merkliste lÃ¶schen")?></option>
     </select>
     <div align="right">
-    <?= Button::create(_('OK'), array('title' => _("Gewählte Aktion starten"))); ?>
+    <?= Button::create(_('OK'), array('title' => _("GewÃ¤hlte Aktion starten"))); ?>
     </div>
     </form>
 </td></tr>

@@ -14,13 +14,13 @@ class Step00198Deputies extends Migration
             'name'        => 'DEPUTIES_DEFAULTENTRY_ENABLE',
             'type'        => 'boolean',
             'value'       => 0,
-            'description' => 'Dürfen Lehrende Standardvertretungen festlegen? Diese werden automatisch bei Hinzufügen der Lehrenden als Vertretung in Veranstaltungen eingetragen.'
+            'description' => 'DÃ¼rfen Lehrende Standardvertretungen festlegen? Diese werden automatisch bei HinzufÃ¼gen der Lehrenden als Vertretung in Veranstaltungen eingetragen.'
         ),
         array(
             'name'        => 'DEPUTIES_EDIT_ABOUT_ENABLE',
             'type'        => 'boolean',
             'value'       => 1,
-            'description' => 'Dürfen Lehrende ihren Standardvertretungen erlauben, ihr Profil zu bearbeiten?'
+            'description' => 'DÃ¼rfen Lehrende ihren Standardvertretungen erlauben, ihr Profil zu bearbeiten?'
         )
     );
 

@@ -3,14 +3,14 @@
 
 <? if ($dialog) : ?>
     <?= MessageBox::info(
-        _('Sie haben alle benötigten Daten angegeben und können nun die Veranstaltung anlegen.')
+        _('Sie haben alle benÃ¶tigten Daten angegeben und kÃ¶nnen nun die Veranstaltung anlegen.')
     ) ?>
 <? else : ?>
     <?= MessageBox::info(
-        _('Sie haben alle benötigten Daten angegeben und können nun die Veranstaltung anlegen.')
+        _('Sie haben alle benÃ¶tigten Daten angegeben und kÃ¶nnen nun die Veranstaltung anlegen.')
         . ' ' .
-        _('Der nächste Schritt führt Sie  gleich in den Verwaltungsbereich '
-        . 'der neu angelegten Veranstaltung, wo Sie weitere Daten hinzufügen können.')
+        _('Der nÃ¤chste Schritt fÃ¼hrt Sie  gleich in den Verwaltungsbereich '
+        . 'der neu angelegten Veranstaltung, wo Sie weitere Daten hinzufÃ¼gen kÃ¶nnen.')
     ) ?>
 <? endif ?>
 
@@ -43,7 +43,7 @@
             <input type="hidden" name="batchcreate[<?= $key ?>]" value="<?= $value ?>">
         <? endforeach ?>
     <? endif ?>
-        <?= Studip\Button::create(_('Zurück'), 'back',
+        <?= Studip\Button::create(_('ZurÃ¼ck'), 'back',
             $dialog ? array('data-dialog' => 'size=50%') : array()) ?>
         <?= Studip\Button::createAccept(_('Veranstaltung anlegen'), 'create') ?>
     </footer>

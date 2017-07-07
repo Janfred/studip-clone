@@ -58,7 +58,7 @@ use Studip\Button, Studip\LinkButton;
 
     <footer>
         <?= Button::create(_('Suchen'), 'send')?>
-        <?= Button::create(_('Zurücksetzen'), 'reset')?>
+        <?= Button::create(_('ZurÃ¼cksetzen'), 'reset')?>
     </footer>
 </form>
 

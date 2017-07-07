@@ -116,11 +116,11 @@ class Fach extends ModuleManagementModelTreeItem
     }
 
     /**
-     * Returns the number of Fächer optional filtered by $filter.
+     * Returns the number of FÃ¤cher optional filtered by $filter.
      *
      * @param array $filter Key-value pairs of filed names and values
      * to filter the result set.
-     * @return int The number of Fächer
+     * @return int The number of FÃ¤cher
      */
     public static function getCount($filter = null)
     {

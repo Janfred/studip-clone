@@ -1,6 +1,6 @@
 <form action="<?= URLHelper::getLink($url, array(), true) ?>" method="<?= $method?>">
     <?= ($method == 'post' ? CSRFProtection::tokenTag() : '') ?>
-    <select class="sidebar-selectlist submit-upon-select text-top" size="<?= (int) $size ?: 8 ?>" style="max-width: 200px;cursor:pointer" aria-label="<?= _("Wählen Sie ein Objekt aus. Sie gelangen dann zur neuen Seite.") ?>">
+    <select class="sidebar-selectlist submit-upon-select text-top" size="<?= (int) $size ?: 8 ?>" style="max-width: 200px;cursor:pointer" aria-label="<?= _("WÃ¤hlen Sie ein Objekt aus. Sie gelangen dann zur neuen Seite.") ?>">
     <? foreach ($elements as $element): ?>
         <option <?= $value == $element->getid() ? 'selected' : ''?> value="<?= htmlReady($element->getid()) ?>"><?= htmlReady(my_substr($element->getLabel(), 0, 30)) ?></option>
     <? endforeach; ?>

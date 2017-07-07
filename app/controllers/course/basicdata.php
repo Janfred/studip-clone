@@ -168,7 +168,7 @@ class Course_BasicdataController extends AuthenticatedController
                 _("Achtung:") .
                 "&nbsp;</b>" .
                 _("Diese Ortsangabe wird nur angezeigt, wenn keine " .
-                  "Angaben aus Zeiten oder Sitzungsterminen gemacht werden können.") .
+                  "Angaben aus Zeiten oder Sitzungsterminen gemacht werden kÃ¶nnen.") .
                 "</span>",
             'i18n' => true,
             'name' => "course_location",
@@ -183,7 +183,7 @@ class Course_BasicdataController extends AuthenticatedController
                 if ($datenfeld->isVisible()) {
                     $locked = !$datenfeld->isEditable()
                               || LockRules::Check($course_id, $datenfeld->getID());
-                    $desc = $locked ? _('Diese Felder werden zentral durch die zuständigen Administratoren erfasst.') : $datenfeld->getDescription();
+                    $desc = $locked ? _('Diese Felder werden zentral durch die zustÃ¤ndigen Administratoren erfasst.') : $datenfeld->getDescription();
                     $this->descriptions[] = array(
                         'title' => $datenfeld->getName(),
                         'must' =>  $datenfeld->isRequired(),
@@ -238,8 +238,8 @@ class Course_BasicdataController extends AuthenticatedController
 
     /**
      * Zeigt die Grunddaten an. Man beachte, dass eventuell zuvor eine andere
-     * Action wie Set ausgeführt wurde, von der hierher weitergeleitet worden ist.
-     * Wichtige Daten dazu wurden dann über $this->flash übertragen.
+     * Action wie Set ausgefÃ¼hrt wurde, von der hierher weitergeleitet worden ist.
+     * Wichtige Daten dazu wurden dann Ã¼ber $this->flash Ã¼bertragen.
      *
      * @param md5 $course_id
      */
@@ -263,7 +263,7 @@ class Course_BasicdataController extends AuthenticatedController
         //Berechtigungscheck:
         if (!$perm->have_studip_perm("tutor",$this->course_id)) {
             throw new AccessDeniedException(_("Sie haben keine Berechtigung diese " .
-                    "Veranstaltung zu verändern."));
+                    "Veranstaltung zu verÃ¤ndern."));
         }
 
         //Kopf initialisieren:
@@ -343,12 +343,12 @@ class Course_BasicdataController extends AuthenticatedController
         if ($lockdata['description'] && LockRules::CheckLockRulePermission($this->course_id, $lockdata['permission'])){
             $this->flash['msg'] = array_merge((array)$this->flash['msg'], array(array("info", formatLinks($lockdata['description']))));
         }
-        $this->flash->discard(); //schmeißt ab jetzt unnötige Variablen aus der Session.
+        $this->flash->discard(); //schmeiÃŸt ab jetzt unnÃ¶tige Variablen aus der Session.
         $sidebar = Sidebar::get();
         $sidebar->setImage("sidebar/admin-sidebar.png");
 
         $widget = new ActionsWidget();
-        $widget->addLink(_('Bild ändern'),
+        $widget->addLink(_('Bild Ã¤ndern'),
                          $this->url_for('course/avatar/update', $course_id),
                          Icon::create('edit', 'clickable'));
         if ($this->deputies_enabled) {
@@ -378,7 +378,7 @@ class Course_BasicdataController extends AuthenticatedController
     }
 
     /**
-     * Ändert alle Grunddaten der Veranstaltung (bis auf Personal) und leitet
+     * Ã„ndert alle Grunddaten der Veranstaltung (bis auf Personal) und leitet
      * danach weiter auf View.
      */
     public function set_action($course_id)
@@ -428,7 +428,7 @@ class Course_BasicdataController extends AuthenticatedController
                             $this->msg[] = array("error", _("Name der Veranstaltung darf nicht leer sein."));
                         } elseif ($varname === "seminar_number" && $req_value && $course_number_format &&
                                   !preg_match('/^' . $course_number_format . '$/', $req_value)) {
-                            $this->msg[] = array('error', _('Die Veranstaltungsnummer hat ein ungültiges Format.'));
+                            $this->msg[] = array('error', _('Die Veranstaltungsnummer hat ein ungÃ¼ltiges Format.'));
                         } else if ($field['type'] == 'select' && !in_array($req_value, array_flatten(array_values(array_map('array_keys', $field['choices']))))) {
                             // illegal value - just ignore this
                         } else if ($sem->{$varname} != $req_value) {
@@ -467,14 +467,14 @@ class Course_BasicdataController extends AuthenticatedController
             // end of logging
 
             if ($changemade) {
-                $this->msg[] = array("msg", _("Die Grunddaten der Veranstaltung wurden verändert."));
+                $this->msg[] = array("msg", _("Die Grunddaten der Veranstaltung wurden verÃ¤ndert."));
             }
 
         } else {
-            $this->msg[] = array("error", _("Sie haben keine Berechtigung diese Veranstaltung zu verändern."));
+            $this->msg[] = array("error", _("Sie haben keine Berechtigung diese Veranstaltung zu verÃ¤ndern."));
         }
 
-        //Labels/Funktionen für Dozenten und Tutoren
+        //Labels/Funktionen fÃ¼r Dozenten und Tutoren
         if ($perm->have_studip_perm("dozent", $sem->getId())) {
             foreach (Request::getArray("label") as $user_id => $label) {
                 $sem->setLabel($user_id, $label);
@@ -512,7 +512,7 @@ class Course_BasicdataController extends AuthenticatedController
         }
         // only show an error messagebox once.
         if ($fail === true) {
-            PageLayout::postMessage(MessageBox::error(_('Die gewünschte Operation konnte nicht ausgeführt werden.')));
+            PageLayout::postMessage(MessageBox::error(_('Die gewÃ¼nschte Operation konnte nicht ausgefÃ¼hrt werden.')));
         }
         $this->flash['open'] = "bd_personal";
         $redirect = Request::get('from') ? : 'course/basicdata/view/' . $course_id;
@@ -520,7 +520,7 @@ class Course_BasicdataController extends AuthenticatedController
     }
 
     private function addTutor($tutor, $course_id) {
-        //Tutoren hinzufügen:
+        //Tutoren hinzufÃ¼gen:
         if ($GLOBALS['perm']->have_studip_perm("tutor", $course_id)) {
             $sem = Seminar::GetInstance($course_id);
             if ($sem->addMember($tutor, "tutor")) {
@@ -529,18 +529,18 @@ class Course_BasicdataController extends AuthenticatedController
                     $this->addTutor($tutor, $sem->parent_course);
                 }
 
-                return MessageBox::success(sprintf(_("%s wurde hinzugefügt."),get_title_for_status('tutor', 1, $sem->status)));
+                return MessageBox::success(sprintf(_("%s wurde hinzugefÃ¼gt."),get_title_for_status('tutor', 1, $sem->status)));
             }
         }
         return false;
     }
 
     private function addDeputy($deputy, $course_id) {
-        //Vertretung hinzufügen:
+        //Vertretung hinzufÃ¼gen:
         if ($GLOBALS['perm']->have_studip_perm("dozent", $course_id)) {
             $sem = Seminar::GetInstance($course_id);
             if (addDeputy($deputy, $sem->getId())) {
-                return MessageBox::success(sprintf(_("%s wurde hinzugefügt."), get_title_for_status('deputy', 1, $sem->status)));
+                return MessageBox::success(sprintf(_("%s wurde hinzugefÃ¼gt."), get_title_for_status('deputy', 1, $sem->status)));
             }
         }
         return false;
@@ -578,15 +578,15 @@ class Course_BasicdataController extends AuthenticatedController
                     }
                 }
 
-                return MessageBox::success(sprintf(_('%s wurde hinzugefügt.'), get_title_for_status('dozent', 1)));
+                return MessageBox::success(sprintf(_('%s wurde hinzugefÃ¼gt.'), get_title_for_status('dozent', 1)));
             }
         }
         return false;
     }
 
     /**
-     * Löscht einen Dozenten (bis auf den letzten Dozenten)
-     * Leitet danach weiter auf View und öffnet den Reiter Personal.
+     * LÃ¶scht einen Dozenten (bis auf den letzten Dozenten)
+     * Leitet danach weiter auf View und Ã¶ffnet den Reiter Personal.
      *
      * @param md5 $dozent
      */
@@ -613,10 +613,10 @@ class Course_BasicdataController extends AuthenticatedController
                     }
                 }
             } else {
-                $this->msg[] = array("error", _("Sie dürfen sich nicht selbst aus der Veranstaltung austragen."));
+                $this->msg[] = array("error", _("Sie dÃ¼rfen sich nicht selbst aus der Veranstaltung austragen."));
             }
         } else {
-            $this->msg[] = array("error", _("Sie haben keine Berechtigung diese Veranstaltung zu verändern."));
+            $this->msg[] = array("error", _("Sie haben keine Berechtigung diese Veranstaltung zu verÃ¤ndern."));
         }
         $this->flash['msg'] = $this->msg;
         $this->flash['open'] = "bd_personal";
@@ -624,8 +624,8 @@ class Course_BasicdataController extends AuthenticatedController
     }
 
     /**
-     * Löscht einen Stellvertreter.
-     * Leitet danach weiter auf View und öffnet den Reiter Personal.
+     * LÃ¶scht einen Stellvertreter.
+     * Leitet danach weiter auf View und Ã¶ffnet den Reiter Personal.
      *
      * @param md5 $deputy
      */
@@ -652,10 +652,10 @@ class Course_BasicdataController extends AuthenticatedController
                        get_title_for_status('deputy', 1, $sem->status)));
                 }
             } else {
-                $this->msg[] = array("error", _("Sie dürfen sich nicht selbst aus der Veranstaltung austragen."));
+                $this->msg[] = array("error", _("Sie dÃ¼rfen sich nicht selbst aus der Veranstaltung austragen."));
             }
         } else {
-            $this->msg[] = array("error", _("Sie haben keine Berechtigung diese Veranstaltung zu verändern."));
+            $this->msg[] = array("error", _("Sie haben keine Berechtigung diese Veranstaltung zu verÃ¤ndern."));
         }
         $this->flash['msg'] = $this->msg;
         $this->flash['open'] = "bd_personal";
@@ -663,8 +663,8 @@ class Course_BasicdataController extends AuthenticatedController
     }
 
     /**
-     * Löscht einen Tutor
-     * Leitet danach weiter auf View und öffnet den Reiter Personal.
+     * LÃ¶scht einen Tutor
+     * Leitet danach weiter auf View und Ã¶ffnet den Reiter Personal.
      *
      * @param md5 $tutor
      */
@@ -689,7 +689,7 @@ class Course_BasicdataController extends AuthenticatedController
                 }
             }
         } else {
-            $this->msg[] = array("error", _("Sie haben keine Berechtigung diese Veranstaltung zu verändern."));
+            $this->msg[] = array("error", _("Sie haben keine Berechtigung diese Veranstaltung zu verÃ¤ndern."));
         }
         $this->flash['msg'] = $this->msg;
         $this->flash['open'] = "bd_personal";
@@ -698,7 +698,7 @@ class Course_BasicdataController extends AuthenticatedController
 
     /**
      * Falls eine Person in der >>Reihenfolge<< hochgestuft werden soll.
-     * Leitet danach weiter auf View und öffnet den Reiter Personal.
+     * Leitet danach weiter auf View und Ã¶ffnet den Reiter Personal.
      *
      * @param md5 $user_id
      * @param string $status
@@ -724,7 +724,7 @@ class Course_BasicdataController extends AuthenticatedController
             }
             $sem->setMemberPriority($members, $status);
         } else {
-            $this->msg[] = array("error", _("Sie haben keine Berechtigung diese Veranstaltung zu verändern."));
+            $this->msg[] = array("error", _("Sie haben keine Berechtigung diese Veranstaltung zu verÃ¤ndern."));
         }
         $this->flash['msg'] = $this->msg;
         $this->flash['open'] = "bd_personal";
@@ -733,7 +733,7 @@ class Course_BasicdataController extends AuthenticatedController
 
     /**
      * Falls eine Person in der >>Reihenfolge<< runtergestuft werden soll.
-     * Leitet danach weiter auf View und öffnet den Reiter Personal.
+     * Leitet danach weiter auf View und Ã¶ffnet den Reiter Personal.
      *
      * @param md5 $user_id
      * @param string $status
@@ -759,7 +759,7 @@ class Course_BasicdataController extends AuthenticatedController
             }
             $sem->setMemberPriority($members, $status);
         } else {
-            $this->msg[] = array("error", _("Sie haben keine Berechtigung diese Veranstaltung zu verändern."));
+            $this->msg[] = array("error", _("Sie haben keine Berechtigung diese Veranstaltung zu verÃ¤ndern."));
         }
         $this->flash['msg'] = $this->msg;
         $this->flash['open'] = "bd_personal";

@@ -55,7 +55,7 @@ $inputs = array(
 
                     <?= Icon::create('accept', 'clickable', ['title' => _('Diesen Eintrag speichern')])->asInput(array('name'=>'lock_sent','class'=>'text-top',)) ?>
                     <a href="<?= URLHelper::getLink('?kill_lock=' . $lock['lock_id']) ?>">
-                        <?= Icon::create('trash', 'clickable')->asImg(['class' => 'text-top', 'title' => _('Diesen Eintrag löschen')]) ?>
+                        <?= Icon::create('trash', 'clickable')->asImg(['class' => 'text-top', 'title' => _('Diesen Eintrag lÃ¶schen')]) ?>
                     </a>
                 </td>
             <? else: ?>
@@ -66,7 +66,7 @@ $inputs = array(
                         <?= Icon::create('edit', 'clickable', ['title' => _('Diesen Eintrag bearbeiten')])->asImg(['class' => 'text-top']) ?>
                     </a>
                     <a href="<?= URLHelper::getLink('?kill_lock=' . $lock['lock_id']) ?>">
-                        <?= Icon::create('trash', 'clickable', ['title' => _('Diesen Eintrag löschen')])->asImg(['class' => 'text-top']) ?>
+                        <?= Icon::create('trash', 'clickable', ['title' => _('Diesen Eintrag lÃ¶schen')])->asImg(['class' => 'text-top']) ?>
                     </a>
                 </td>
             <? endif; ?>

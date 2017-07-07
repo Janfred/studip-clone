@@ -32,7 +32,7 @@ class Course_AvatarController extends AuthenticatedController
         }
         
         $this->body_id = 'custom_avatar';
-        PageLayout::setTitle(Course::findCurrent()->getFullname() . ' - ' . _('Veranstaltungsbild ändern'));
+        PageLayout::setTitle(Course::findCurrent()->getFullname() . ' - ' . _('Veranstaltungsbild Ã¤ndern'));
         
         $sem                   = Seminar::getInstance($this->course_id);
         $this->studygroup_mode = $sem->getSemClass()->offsetget('studygroup_mode');
@@ -48,9 +48,9 @@ class Course_AvatarController extends AuthenticatedController
         
         if ($this->avatar->is_customized()) {
             $actions = new ActionsWidget();
-            $actions->addLink(_('Bild löschen'),
+            $actions->addLink(_('Bild lÃ¶schen'),
                 $this->link_for('course/avatar/delete', $this->course_id), Icon::create('trash', 'clickable'),
-                ['data-confirm' => _('Wirklich löschen?')])->asDialog(false);
+                ['data-confirm' => _('Wirklich lÃ¶schen?')])->asDialog(false);
             $sidebar->addWidget($actions);
         }
         
@@ -95,7 +95,7 @@ class Course_AvatarController extends AuthenticatedController
         if (!$error) {
             PageLayout::postMessage(MessageBox::success(
                 _('Die Bilddatei wurde erfolgreich hochgeladen.'),
-                [_('Eventuell sehen Sie das neue Bild erst, nachdem Sie diese Seite neu geladen haben (in den meisten Browsern F5 drücken).')]
+                [_('Eventuell sehen Sie das neue Bild erst, nachdem Sie diese Seite neu geladen haben (in den meisten Browsern F5 drÃ¼cken).')]
             ));
         }
         $this->render_action("update");
@@ -109,7 +109,7 @@ class Course_AvatarController extends AuthenticatedController
     public function delete_action()
     {
         CourseAvatar::getAvatar($this->course_id)->reset();
-        PageLayout::postMessage(MessageBox::success(_('Veranstaltungsbild gelöscht.')));
+        PageLayout::postMessage(MessageBox::success(_('Veranstaltungsbild gelÃ¶scht.')));
         if ($this->studygroup_mode) {
             $this->redirect(URLHelper::getUrl('dispatch.php/course/studygroup/edit/' . $this->course_id));
         } else {

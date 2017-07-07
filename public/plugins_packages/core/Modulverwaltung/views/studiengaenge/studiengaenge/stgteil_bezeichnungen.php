@@ -30,21 +30,21 @@
                 <td colspan="3">
                     <form style="width: 100%;" action="<?= $controller->url_for('/add_stgteil', $studiengang->id) ?>" method="post">
                         <?= CSRFProtection::tokenTag() ?>
-                        <div style="float: left; padding-right: 10px;"><?= _('Studiengangteil hinzufügen') ?></div>
+                        <div style="float: left; padding-right: 10px;"><?= _('Studiengangteil hinzufÃ¼gen') ?></div>
                         <div style="float: left; padding-right: 10px;">
                         <?= $search_stgteil->render() ?>
                         <?= Icon::create('search', 'clickable', ['title' => _('Studiengangteil zuordnen'), 'name' => 'search_stgteil', 'data-qs_name' => $search_stgteil->getId(), 'data-qs_id' => $qs_search_stgteil_id, 'data-qs_submit' => 'no',  'class' => 'mvv-qs-button'])->asInput(); ?>
                         </div>
                             <label><?= _('als') ?>
                                 <select name="stgteil_bez_id" size="1">
-                                    <option value=""><?= _('-- bitte wählen --') ?></option>
+                                    <option value=""><?= _('-- bitte wÃ¤hlen --') ?></option>
                                 <? foreach (StgteilBezeichnung::getAllEnriched() as $stgteil_bez) : ?>
                                     <option value="<?= $stgteil_bez->getId() ?>"><?= htmlReady($stgteil_bez->name) ?></option>
                                 <? endforeach; ?>
                                 </select>
                             </label>
                             <input type="hidden" name="level" value="stg">
-                            <input name="add_stgteil" class="text-top mvv-submit" type="image" title="<?= _('Studiengangteil hinzufügen') ?>" src="<?= Icon::create('accept', 'clickable')->asImagePath(); ?>">
+                            <input name="add_stgteil" class="text-top mvv-submit" type="image" title="<?= _('Studiengangteil hinzufÃ¼gen') ?>" src="<?= Icon::create('accept', 'clickable')->asImagePath(); ?>">
                     </form>
                 </td>
             </tr>

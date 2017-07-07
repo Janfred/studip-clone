@@ -71,11 +71,11 @@ class StartNavigation extends Navigation
         $homeinfo = _('Zur Startseite');
         if ($news) {
             $homeinfo .= ' - ';
-            $homeinfo .= sprintf(ngettext('%u neue Ankündigung', '%u neue Ankündigungen', $news), $news);
+            $homeinfo .= sprintf(ngettext('%u neue AnkÃ¼ndigung', '%u neue AnkÃ¼ndigungen', $news), $news);
         }
         if ($vote) {
             $homeinfo .= ' - ';
-            $homeinfo .= sprintf(ngettext('%u neuer Fragebogen', '%u neue Fragebögen', $vote), $vote);
+            $homeinfo .= sprintf(ngettext('%u neuer Fragebogen', '%u neue FragebÃ¶gen', $vote), $vote);
         }
         $this->setBadgeNumber($vote + $news);
 
@@ -109,14 +109,14 @@ class StartNavigation extends Navigation
 
         // my courses
         if ($perm->have_perm('root')) {
-            $navigation = new Navigation(_('Veranstaltungsübersicht'), 'dispatch.php/search/courses');
+            $navigation = new Navigation(_('VeranstaltungsÃ¼bersicht'), 'dispatch.php/search/courses');
         } else if ($perm->have_perm('admin')) {
             $navigation = new Navigation(_('Veranstaltungen an meinen Einrichtungen'), 'dispatch.php/my_courses');
         } else {
             $navigation = new Navigation(_('Meine Veranstaltungen'), 'dispatch.php/my_courses');
 
             if (!$perm->have_perm('dozent')) {
-                $navigation->addSubNavigation('browse', new Navigation(_('Veranstaltung hinzufügen'), 'dispatch.php/search/courses'));
+                $navigation->addSubNavigation('browse', new Navigation(_('Veranstaltung hinzufÃ¼gen'), 'dispatch.php/search/courses'));
 
                 if ($perm->have_perm('autor') && get_config('STUDYGROUPS_ENABLE')) {
                     $navigation->addSubNavigation('new_studygroup', new Navigation(_('Studiengruppe anlegen'), 'dispatch.php/course/wizard?studygroup=1'));
@@ -246,7 +246,7 @@ class StartNavigation extends Navigation
 
         // tools
         $navigation = new Navigation(_('Tools'));
-        $navigation->addSubNavigation('news', new Navigation(_('Ankündigungen'), 'dispatch.php/news/admin_news'));
+        $navigation->addSubNavigation('news', new Navigation(_('AnkÃ¼ndigungen'), 'dispatch.php/news/admin_news'));
 
         if (get_config('VOTE_ENABLE')) {
             $navigation->addSubNavigation('vote', new Navigation(_('Umfragen und Tests'), 'dispatch.php/questionnaire/overview'));

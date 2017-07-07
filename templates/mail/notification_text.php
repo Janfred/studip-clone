@@ -1,12 +1,12 @@
 <?
 # Lifter010: TODO
 ?>
-<?= _("Diese E-Mail wurde automatisch vom Stud.IP-System verschickt. Sie können auf diese Nachricht nicht antworten.") ?>
+<?= _("Diese E-Mail wurde automatisch vom Stud.IP-System verschickt. Sie kÃ¶nnen auf diese Nachricht nicht antworten.") ?>
 
-<?= _("Sie erhalten hiermit in regelmäßigen Abständen Informationen über Neuigkeiten und Änderungen in Ihren belegten Veranstaltungen.") ?>
+<?= _("Sie erhalten hiermit in regelmÃ¤ÃŸigen AbstÃ¤nden Informationen Ã¼ber Neuigkeiten und Ã„nderungen in Ihren belegten Veranstaltungen.") ?>
 
 
-<?= _("Über welche Inhalte Sie informiert werden wollen, können Sie hier einstellen:") ?>
+<?= _("Ãœber welche Inhalte Sie informiert werden wollen, kÃ¶nnen Sie hier einstellen:") ?>
 
 <?= URLHelper::getURL('dispatch.php/settings/notification') ?>
 
@@ -27,4 +27,4 @@
 <? endforeach ?>
 
 -- 
-<?= _("Diese Nachricht wurde automatisch vom Stud.IP-System generiert. Sie können darauf nicht antworten.") ?>
+<?= _("Diese Nachricht wurde automatisch vom Stud.IP-System generiert. Sie kÃ¶nnen darauf nicht antworten.") ?>

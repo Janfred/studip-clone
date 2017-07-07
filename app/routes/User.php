@@ -2,7 +2,7 @@
 namespace RESTAPI\Routes;
 
 /**
- * @author  AndrÈ Klaﬂen <andre.klassen@elan-ev.de>
+ * @author  Andr√© Kla√üen <andre.klassen@elan-ev.de>
  * @author  <mlunzena@uos.de>
  * @license GPL 2 or later
  * @condition user_id ^[0-9a-f]{32}$

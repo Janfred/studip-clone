@@ -9,9 +9,9 @@
         <nav>
             <span>
                 <? if ($scm->user): ?>
-                    <?= sprintf(_('Zuletzt geändert von %s am %s'), ObjectdisplayHelper::link($scm->user), strftime('%x, %X', $scm->chdate)) ?>
+                    <?= sprintf(_('Zuletzt geÃ¤ndert von %s am %s'), ObjectdisplayHelper::link($scm->user), strftime('%x, %X', $scm->chdate)) ?>
                 <? else: ?>
-                    <?= sprintf(_('Zuletzt geändert am %s'), strftime('%x, %X', $scm->chdate)) ?>
+                    <?= sprintf(_('Zuletzt geÃ¤ndert am %s'), strftime('%x, %X', $scm->chdate)) ?>
                 <? endif; ?>
             </span>
             <? if ($priviledged): ?>
@@ -24,7 +24,7 @@
                             <?= Icon::create('arr_2up', 'clickable')->asImg() ?>
                         </a>
                     <? endif; ?>
-                    <a href="<?= $controller->url_for('course/scm/' . $scm->id . '?verify=delete') ?>" title="<?= _('Diese Seite löschen') ?>">
+                    <a href="<?= $controller->url_for('course/scm/' . $scm->id . '?verify=delete') ?>" title="<?= _('Diese Seite lÃ¶schen') ?>">
                         <?= Icon::create('trash', 'clickable')->asImg() ?>
                     </a>
                 <? endif; ?>

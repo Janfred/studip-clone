@@ -11,11 +11,11 @@
     <thead>
         <tr>
             <th>
-                <?= _('Darstellung einschränken') ?>
+                <?= _('Darstellung einschrÃ¤nken') ?>
             </th>
             <th colspan="2">
             <? if ($total_filtered != $total): ?>
-                <?= sprintf(_('Passend: %u von %u Logeinträgen'), $total_filtered, $total) ?>
+                <?= sprintf(_('Passend: %u von %u LogeintrÃ¤gen'), $total_filtered, $total) ?>
             <? endif; ?>
             </th>
         </tr>
@@ -25,19 +25,19 @@
             <td>
                 <label for="status"><?= _('Status') ?></label>
                 <select name="filter[status]" id="status" class="submit-upon-select">
-                    <option value=""><?= _('Alle Logeinträge anzeigen') ?></option>
+                    <option value=""><?= _('Alle LogeintrÃ¤ge anzeigen') ?></option>
                     <option value="passed" <? if ($filter['status'] === 'passed') echo 'selected'; ?>>
-                        <?= _('Nur fehlerfreie Logeinträge anzeigen') ?>
+                        <?= _('Nur fehlerfreie LogeintrÃ¤ge anzeigen') ?>
                     </option>
                     <option value="failed" <? if ($filter['status'] === 'failed') echo 'selected'; ?>>
-                        <?= _('Nur fehlerhafte Logeinträge anzeigen') ?>
+                        <?= _('Nur fehlerhafte LogeintrÃ¤ge anzeigen') ?>
                     </option>
                 </select>
             </td>
             <td>
                 <label for="schedule_id"><?= _('Cronjob') ?></label>
                 <select name="filter[schedule_id]" id="schedule_id" class="submit-upon-select">
-                    <option value=""><?= _('Alle Logeinträge anzeigen') ?></option>
+                    <option value=""><?= _('Alle LogeintrÃ¤ge anzeigen') ?></option>
                 <? foreach ($schedules as $schedule): ?>
                     <option value="<?= $schedule->schedule_id ?>" <? if ($filter['schedule_id'] === $schedule->schedule_id) echo 'selected'; ?>>
                         <?= htmlReady($schedule->title) ?>
@@ -66,9 +66,9 @@
                 </noscript>
 
             <? if (!empty($filter)): ?>
-                <?= LinkButton::createCancel(_('Zurücksetzen'),
+                <?= LinkButton::createCancel(_('ZurÃ¼cksetzen'),
                                              $controller->url_for('admin/cronjobs/logs/filter'),
-                                             array('title' => _('Filter zurücksetzen'))) ?>
+                                             array('title' => _('Filter zurÃ¼cksetzen'))) ?>
             <? endif; ?>
             </td>
         </tr>
@@ -96,7 +96,7 @@
                        data-proxyfor=":checkbox[name='ids[]']"
                        data-activates=".cronjobs select[name=action]">
             </th>
-            <th><?= _('Ausgeführt') ?></th>
+            <th><?= _('AusgefÃ¼hrt') ?></th>
             <th><?= _('Geplant') ?></th>
             <th><?= _('Cronjob') ?></th>
             <th><?= _('Ok?') ?></th>
@@ -119,7 +119,7 @@
             <td><?= htmlReady($logs[$i]->schedule->title ?: $logs[$i]->schedule->task->name) ?></td>
             <td>
             <? if ($logs[$i]->duration == -1): ?>
-                <?= Icon::create('question', 'inactive', ['title' => _('Läuft noch')])->asImg() ?>
+                <?= Icon::create('question', 'inactive', ['title' => _('LÃ¤uft noch')])->asImg() ?>
             <? elseif ($logs[$i]->exception === null): ?>
                 <?= Icon::create('accept', 'status-green', ['title' => _('Ja')])->asImg() ?>
             <? else: ?>
@@ -131,7 +131,7 @@
                     <?= Icon::create('admin', 'clickable', ['title' => _('Logeintrag anzeigen')])->asImg() ?>
                 </a>
                 <a href="<?= $controller->url_for('admin/cronjobs/logs/delete', $logs[$i]->log_id, $page) ?>">
-                    <?= Icon::create('trash', 'clickable', ['title' => _('Logeintrag löschen')])->asImg() ?>
+                    <?= Icon::create('trash', 'clickable', ['title' => _('Logeintrag lÃ¶schen')])->asImg() ?>
                 </a>
             </td>
         </tr>
@@ -142,10 +142,10 @@
         <tr>
             <td colspan="3">
                 <select name="action" data-activates="button[name=bulk]">
-                    <option value="">- <?= _('Aktion auswählen') ?></option>
-                    <option value="delete"><?= _('Löschen') ?></option>
+                    <option value="">- <?= _('Aktion auswÃ¤hlen') ?></option>
+                    <option value="delete"><?= _('LÃ¶schen') ?></option>
                 </select>
-                <?= Button::createAccept(_('Ausführen'), 'bulk') ?>
+                <?= Button::createAccept(_('AusfÃ¼hren'), 'bulk') ?>
             </td>
             <td colspan="3" style="text-align: right; vertical-align: middle;">
             <?

@@ -33,7 +33,7 @@
     } ?>
     <a href="<?= URLHelper::getLink($overview_url) ?>">
         <?= Icon::create('arr_1left', 'clickable')->asImg(['class' => 'text-top']) ?>
-        <?= _('Zurück zur Übersicht') ?>
+        <?= _('ZurÃ¼ck zur Ãœbersicht') ?>
     </a>
 </p>
 <? endif ?>

@@ -12,7 +12,7 @@
         </footer>
     </section>
 
-    <h2><?= _("Ausgewählter Katalog:") ?></h2>
+    <h2><?= _("AusgewÃ¤hlter Katalog:") ?></h2>
     <p><?= $search->search_plugin->description ?></p>
 
     <section>
@@ -118,7 +118,7 @@
                         <? endif ?>
 
                         <? if ($subject = $element->getValue('dc_subject')) : ?>
-                            <dt><?= _('Schlagwörter:') ?></dt>
+                            <dt><?= _('SchlagwÃ¶rter:') ?></dt>
                             <dd><?= htmlReady($subject, true, true) ?></dd>
                         <? endif ?>
 

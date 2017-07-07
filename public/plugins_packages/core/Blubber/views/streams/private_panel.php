@@ -1,5 +1,5 @@
 <p>
-    <strong><?= _("Privat") ?></strong> - <?= _("nur die folgenden Personen dürfen den Blubber sehen:") ?>
+    <strong><?= _("Privat") ?></strong> - <?= _("nur die folgenden Personen dÃ¼rfen den Blubber sehen:") ?>
 </p>
 <? $i_shared = false ?>
 <ul class="blubber_contacts">

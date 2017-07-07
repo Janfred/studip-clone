@@ -8,7 +8,7 @@
 *
 * This class contains the main methods of the elearning-interface to connect content-management-systems.
 *
-* @author   Arne Schröder <schroeder@data-quest.de>
+* @author   Arne SchrÃ¶der <schroeder@data-quest.de>
 * @access   public
 * @modulegroup  elearning_interface_modules
 * @module       ConnectedCMS
@@ -147,7 +147,7 @@ class ConnectedCMS
         $file = fopen($this->ABSOLUTE_PATH_ELEARNINGMODULES."", "r");
         if ($file == false)
         {
-            $msg["path"]["error"] = sprintf(_("Die Verbindung zum System \"%s\" konnte nicht hergestellt werden. Der Pfad \"$this->ABSOLUTE_PATH_ELEARNINGMODULES\" ist ungültig."), $this->name);
+            $msg["path"]["error"] = sprintf(_("Die Verbindung zum System \"%s\" konnte nicht hergestellt werden. Der Pfad \"$this->ABSOLUTE_PATH_ELEARNINGMODULES\" ist ungÃ¼ltig."), $this->name);
         }
         else
         {
@@ -167,15 +167,15 @@ class ConnectedCMS
             }
         }
         if (!$this->auth_necessary)
-            $msg["auth"]["info"] = sprintf(_("Eine Authentifizierung ist für dieses System nicht vorgesehen."));
+            $msg["auth"]["info"] = sprintf(_("Eine Authentifizierung ist fÃ¼r dieses System nicht vorgesehen."));
 
         // check for SOAP-Interface
         if ($this->ABSOLUTE_PATH_SOAP != "" && in_array($this->CLASS_PREFIX, words('Ilias3 Ilias4')))
         {
             if (!Config::get()->SOAP_ENABLE)
-                $msg["soap"]["error"] = sprintf(_("Das Stud.IP-Modul für die SOAP-Schnittstelle ist nicht aktiviert. Ändern Sie den entsprechenden Eintrag in der Konfigurationsdatei \"local.inc\"."));
+                $msg["soap"]["error"] = sprintf(_("Das Stud.IP-Modul fÃ¼r die SOAP-Schnittstelle ist nicht aktiviert. Ã„ndern Sie den entsprechenden Eintrag in der Konfigurationsdatei \"local.inc\"."));
             elseif (! is_array($this->soap_data))
-                $msg["soap"]["error"] = sprintf(_("Die SOAP-Verbindungsdaten sind für dieses System nicht gesetzt. Ergänzen Sie die Einstellungen für dieses Systems um den Eintrag \"soap_data\" in der Konfigurationsdatei \"local.inc\"."));
+                $msg["soap"]["error"] = sprintf(_("Die SOAP-Verbindungsdaten sind fÃ¼r dieses System nicht gesetzt. ErgÃ¤nzen Sie die Einstellungen fÃ¼r dieses Systems um den Eintrag \"soap_data\" in der Konfigurationsdatei \"local.inc\"."));
             else
             {
                 require_once("lib/soap/StudipSoapClient" . (Config::get()->SOAP_USE_PHP5 ? "_PHP5" : "") .".class.php");
@@ -189,7 +189,7 @@ class ConnectedCMS
         {
             if (!mysql_pconnect ($this->DB_ELEARNINGMODULES_HOST, $this->DB_ELEARNINGMODULES_USER, $this->DB_ELEARNINGMODULES_PASSWORD))
             {
-                $msg["db"]["error"] = sprintf(_("Die Verbindung zur \"%s\"-Datenbank \"%s\" konnte nicht hergestellt werden. Überprüfen Sie die Zugangsdaten."), $this->name, $this->DB_ELEARNINGMODULES_DATABASE);
+                $msg["db"]["error"] = sprintf(_("Die Verbindung zur \"%s\"-Datenbank \"%s\" konnte nicht hergestellt werden. ÃœberprÃ¼fen Sie die Zugangsdaten."), $this->name, $this->DB_ELEARNINGMODULES_DATABASE);
             }
             else
             {

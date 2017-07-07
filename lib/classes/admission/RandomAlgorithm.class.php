@@ -8,7 +8,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      AndrÈ Noack <noack@data-quest.de>
+ * @author      Andr√© Noack <noack@data-quest.de>
  * @author      Thomas Hackl <thomas.hackl@uni-passau.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
@@ -152,7 +152,7 @@ class RandomAlgorithm extends AdmissionAlgorithm
         //unlucky users get a bonus for the next round
         $bonus_users = array();
 
-        //users / courses f¸r later waitlist distribution
+        //users / courses f√ºr later waitlist distribution
         $waiting_users = array();
 
         //number of already distributed seats for users
@@ -292,10 +292,10 @@ class RandomAlgorithm extends AdmissionAlgorithm
         foreach ($user_list as $chosen_one) {
             setTempLanguage($chosen_one);
             $message_title = sprintf(_('Teilnahme an der Veranstaltung %s'), $course->name);
-            $message_body = sprintf(_('Sie haben leider bei der Platzverteilung der Veranstaltung **%s** __keinen__ Platz erhalten. F¸r diese Veranstaltung wurde keine Warteliste vorgesehen.'),
+            $message_body = sprintf(_('Sie haben leider bei der Platzverteilung der Veranstaltung **%s** __keinen__ Platz erhalten. F√ºr diese Veranstaltung wurde keine Warteliste vorgesehen.'),
                                        $course->name);
             if ($prio) {
-                $message_body .= "\n" . sprintf(_("Sie hatten f¸r diese Veranstaltung die Priorit‰t %s gew‰hlt."), $prio[$chosen_one]);
+                $message_body .= "\n" . sprintf(_("Sie hatten f√ºr diese Veranstaltung die Priorit√§t %s gew√§hlt."), $prio[$chosen_one]);
             }
             messaging::sendSystemMessage($chosen_one, $message_title, $message_body);
             restoreLanguage();
@@ -331,11 +331,11 @@ class RandomAlgorithm extends AdmissionAlgorithm
             if ($new_admission_member->store()) {
                 setTempLanguage($chosen_one);
                 $message_title = sprintf(_('Teilnahme an der Veranstaltung %s'), $course->name);
-                $message_body = sprintf(_('Sie haben leider bei der Platzverteilung der Veranstaltung **%s** __keinen__ Platz erhalten. Sie wurden jedoch auf Position %s auf die Warteliste gesetzt. Das System wird Sie automatisch eintragen und benachrichtigen, sobald ein Platz f¸r Sie frei wird.'),
+                $message_body = sprintf(_('Sie haben leider bei der Platzverteilung der Veranstaltung **%s** __keinen__ Platz erhalten. Sie wurden jedoch auf Position %s auf die Warteliste gesetzt. Das System wird Sie automatisch eintragen und benachrichtigen, sobald ein Platz f√ºr Sie frei wird.'),
                                            $course->name,
                                            $maxpos);
                 if ($prio) {
-                    $message_body .= "\n" . sprintf(_("Sie hatten f¸r diese Veranstaltung die Priorit‰t %s gew‰hlt."), $prio[$chosen_one]);
+                    $message_body .= "\n" . sprintf(_("Sie hatten f√ºr diese Veranstaltung die Priorit√§t %s gew√§hlt."), $prio[$chosen_one]);
                 }
                 messaging::sendSystemMessage($chosen_one, $message_title, $message_body);
                 restoreLanguage();
@@ -359,17 +359,17 @@ class RandomAlgorithm extends AdmissionAlgorithm
             $message_title = sprintf(_('Teilnahme an der Veranstaltung %s'), $seminar->getName());
             if ($seminar->admission_prelim) {
                 if ($seminar->addPreliminaryMember($chosen_one)) {
-                    $message_body = sprintf (_('Sie haben bei der Platzvergabe der Veranstaltung **%s** einen vorl‰ufigen Platz erhalten. Die endg¸ltige Zulassung zu der Veranstaltung ist noch von weiteren Bedingungen abh‰ngig, die Sie bitte der Veranstaltungsbeschreibung entnehmen.'),
+                    $message_body = sprintf (_('Sie haben bei der Platzvergabe der Veranstaltung **%s** einen vorl√§ufigen Platz erhalten. Die endg√ºltige Zulassung zu der Veranstaltung ist noch von weiteren Bedingungen abh√§ngig, die Sie bitte der Veranstaltungsbeschreibung entnehmen.'),
                             $seminar->getName());
                 }
             } else {
                 if ($seminar->addMember($chosen_one, 'autor')) {
-                    $message_body = sprintf (_("Sie haben bei der Platzvergabe der Veranstaltung **%s** einen Platz erhalten. Ab sofort finden Sie die Veranstaltung in der ‹bersicht Ihrer Veranstaltungen. Damit sind Sie auch f¸r die Pr‰senzveranstaltung zugelassen."),
+                    $message_body = sprintf (_("Sie haben bei der Platzvergabe der Veranstaltung **%s** einen Platz erhalten. Ab sofort finden Sie die Veranstaltung in der √úbersicht Ihrer Veranstaltungen. Damit sind Sie auch f√ºr die Pr√§senzveranstaltung zugelassen."),
                             $seminar->getName());
                 }
             }
             if ($prio) {
-                $message_body .= "\n" . sprintf(_("Sie hatten f¸r diese Veranstaltung die Priorit‰t %s gew‰hlt."), $prio[$chosen_one]);
+                $message_body .= "\n" . sprintf(_("Sie hatten f√ºr diese Veranstaltung die Priorit√§t %s gew√§hlt."), $prio[$chosen_one]);
             }
             messaging::sendSystemMessage($chosen_one, $message_title, $message_body);
             restoreLanguage();

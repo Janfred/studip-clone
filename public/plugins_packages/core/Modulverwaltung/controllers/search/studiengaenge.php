@@ -162,7 +162,7 @@ class Search_StudiengaengeController extends MVVController
             $this->verlauf_action($id);
             $this->render_template('search/studiengaenge/verlauf', $this->layout);
         } else {
-            // Einfach-Studiengang mit Ausprägungen
+            // Einfach-Studiengang mit AusprÃ¤gungen
             // (unterschiedliche Studiengangteile direkt am Studiengang, ohne
             // Studiengangteil-Bezeichnungen)
             $this->data = array();
@@ -191,7 +191,7 @@ class Search_StudiengaengeController extends MVVController
                 return ($public ? true : false);
             });
         if (!$studiengangTeil || count($versionen) === 0) {
-            PageLayout::postInfo(_('Kein Verlaufsplan im gewählten Bereich verfügbar.'));
+            PageLayout::postInfo(_('Kein Verlaufsplan im gewÃ¤hlten Bereich verfÃ¼gbar.'));
         } else {
             $version_id = Request::option('version');
             if ($versionen->findOneBy('id', $version_id)) {

@@ -50,7 +50,7 @@ class LinkButtonTestCase extends PHPUnit_Framework_TestCase
 
     function testCreateAccept()
     {
-        $this->assertEquals('<a class="accept button" href="?" name="accept" tabindex="0">Übernehmen</a>',
+        $this->assertEquals('<a class="accept button" href="?" name="accept" tabindex="0">Ãœbernehmen</a>',
                             '' . LinkButton::createAccept());
     }
 

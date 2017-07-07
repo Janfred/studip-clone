@@ -29,7 +29,7 @@
     </fieldset>
     <fieldset>
         <legend>
-            <?= _('Unterveranstaltung hinzufügen') ?>
+            <?= _('Unterveranstaltung hinzufÃ¼gen') ?>
         </legend>
         <section>
             <?= $search->render() ?>

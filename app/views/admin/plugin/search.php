@@ -9,7 +9,7 @@ use Studip\Button, Studip\LinkButton;
     <input name="search" type="text" size="20" value="<?= htmlReady($search) ?>">
     <?= Button::create(_('Suchen'), 'suchen', ['title' => _('Suche starten')])?>
     &nbsp;
-    <?= LinkButton::create(_('Zurücksetzen'), $controller->url_for('admin/plugin/search'), array('title' => _('Suche zurücksetzen')))?>
+    <?= LinkButton::create(_('ZurÃ¼cksetzen'), $controller->url_for('admin/plugin/search'), array('title' => _('Suche zurÃ¼cksetzen')))?>
 </form>
 
 
@@ -128,6 +128,6 @@ use Studip\Button, Studip\LinkButton;
         <input name="upload_file" type="file" size="40">
         <input type="hidden" name="studip_ticket" value="<?= get_ticket() ?>">
 
-        <?= Button::create(_('Hinzufügen'), 'hinzufuegen', ['title' => _('neues Plugin installieren')])?>
+        <?= Button::create(_('HinzufÃ¼gen'), 'hinzufuegen', ['title' => _('neues Plugin installieren')])?>
     </form>
 <? endif ?>

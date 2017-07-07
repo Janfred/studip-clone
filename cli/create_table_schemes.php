@@ -8,14 +8,14 @@
 * 
 * 
 *
-* @author       André Noack <noack@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
+* @author       AndrÃ© Noack <noack@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @access       public
 */
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // create_table_schemes.php
 // 
-// Copyright (C) 2006 André Noack <noack@data-quest.de>,
+// Copyright (C) 2006 AndrÃ© Noack <noack@data-quest.de>,
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or

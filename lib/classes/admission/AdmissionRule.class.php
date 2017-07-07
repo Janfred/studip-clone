@@ -128,7 +128,7 @@ abstract class AdmissionRule
     }
 
     /**
-     * Gets all users that are matched by thís rule.
+     * Gets all users that are matched by thÃ­s rule.
      *
      * @return Array An array containing IDs of users who are matched by
      *      this rule.
@@ -205,9 +205,9 @@ abstract class AdmissionRule
      */
     public static function getDescription()
     {
-        return _("Legt eine Regel fest, die erfüllt sein muss, um sich ".
+        return _("Legt eine Regel fest, die erfÃ¼llt sein muss, um sich ".
             "erfolgreich zu einer Menge von Veranstaltungen anmelden zu ".
-            "können.");
+            "kÃ¶nnen.");
     }
 
     public function getInput()

@@ -132,7 +132,7 @@ $privileges = array(
                 'MVVFreigabe'   => 3
             )
         ),
-        // verknüpfte Objekte
+        // verknÃ¼pfte Objekte
         'fachberater_assignments' => array(
             'default' => array(
                 'MVVEntwickler' => 7,

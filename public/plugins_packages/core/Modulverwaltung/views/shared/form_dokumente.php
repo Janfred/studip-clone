@@ -17,7 +17,7 @@
     <? endif; ?>
     <ul id="dokumente_target" class="mvv-assigned-items mvv-with-properties mvv-dokumente sortable">
         <? if ($perm_dokumente) : ?>
-        <li class="mvv-item-list-placeholder"<?= (empty($dokumente) ? '' : ' style="display: none;"') ?>><?= _('Fügen Sie Dokumente und Materialien hinzu.') ?></li>
+        <li class="mvv-item-list-placeholder"<?= (empty($dokumente) ? '' : ' style="display: none;"') ?>><?= _('FÃ¼gen Sie Dokumente und Materialien hinzu.') ?></li>
         <? elseif (empty($dokumente)) : ?>
         <li class="mvv-item-list-placeholder"><?= _('Es wurden keine Dokumente zugeordnet.') ?></li>
         <? endif; ?>
@@ -55,7 +55,7 @@
                     <img src="<?= Assets::image_path('languages/lang_en.gif') ?>" alt="<?= _('englisch') ?>" style="vertical-align: top;">
                     <textarea <?//= $perm->disable('kommentar_en') ?>cols="60" rows="5" id="dokument_kommentar_en_<?= $dokument->dokument_id ?>" name="dokumente_properties[<?= $dokument->dokument_id ?>][kommentar_en]" class="add_toolbar resizable ui-resizable mvv-ref-properties"><?= htmlReady($dokument->kommentar_en) ?></textarea>
                 </label>
-                <?= _('Die Änderungen werden erst gespeichert, wenn das Hauptformular gespeichert wurde!') ?>
+                <?= _('Die Ã„nderungen werden erst gespeichert, wenn das Hauptformular gespeichert wurde!') ?>
             </fieldset>
             
             
@@ -73,11 +73,11 @@
     </ul>
     <? if ($perm_dokumente) : ?>
     <div id="dokumente_edit-form-new">
-        <?= _('Neues Dokument anlegen und hinzufügen') ?>
+        <?= _('Neues Dokument anlegen und hinzufÃ¼gen') ?>
         <a data-dialog href="<?= URLHelper::getLink($controller->url_for('materialien/dokumente/dokument/')) ?>"><?= Icon::create('add', 'clickable', array('title' => _('Neues Dokument anlegen')))->asImg(); ?></a>
     </div>
     <div style="padding-top: 15px; width: 100%; max-width: 48em;">
-    <?= _('Die Reihenfolge der zugeordneten Dokumente kann durch Anklicken und Ziehen geändert werden. Für die Zuordnung eines Dokumentes kann ein zusätzlicher Text angegeben werden.') ?>
+    <?= _('Die Reihenfolge der zugeordneten Dokumente kann durch Anklicken und Ziehen geÃ¤ndert werden. FÃ¼r die Zuordnung eines Dokumentes kann ein zusÃ¤tzlicher Text angegeben werden.') ?>
     </div>
     <? endif; ?>
 </fieldset>

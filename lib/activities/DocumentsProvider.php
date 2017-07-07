@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @author      AndrÈ Klaﬂen <klassen@elan-ev.de>
- * @author      Till Glˆggler <tgloeggl@uos.de>
+ * @author      Andr√© Kla√üen <klassen@elan-ev.de>
+ * @author      Till Gl√∂ggler <tgloeggl@uos.de>
  * @license     GPL 2 or later
  */
 
@@ -95,9 +95,9 @@ class DocumentsProvider implements ActivityProvider
         } elseif (in_array($event, ['FileRefDidDelete'])) {
             $verb = 'voided';
             if ($type == 'course') {
-                $summary = _('Die Datei %s wurde von %s in der Veranstaltung "%s" gelˆscht.');
+                $summary = _('Die Datei %s wurde von %s in der Veranstaltung "%s" gel√∂scht.');
             } else {
-                $summary = _('Die Datei %s wurde von %s in der Einrichtung "%s" gelˆscht.');
+                $summary = _('Die Datei %s wurde von %s in der Einrichtung "%s" gel√∂scht.');
             }
             $summary = sprintf($summary,$file_name, get_fullname($user_id), $course->name);
             $mkdate = $file_ref->chdate;

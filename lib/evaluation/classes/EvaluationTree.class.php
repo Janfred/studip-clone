@@ -83,7 +83,7 @@ class EvaluationTree extends TreeAbstract {
       
       $this->load_mode = ($args['load_mode'] ? $args['load_mode'] : EVAL_LOAD_NO_CHILDREN);
       if (empty($this->evalID)){
-      print _("Fehler in EvaluationTree: Es wurde keine evalID übergeben");
+      print _("Fehler in EvaluationTree: Es wurde keine evalID Ã¼bergeben");
       exit ();
       }
 

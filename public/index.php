@@ -92,7 +92,7 @@ echo $index_nobody_template->render();
 
 $layout = $GLOBALS['template_factory']->open('shared/index_box');
 
-// Prüfen, ob PortalPlugins vorhanden sind.
+// PrÃ¼fen, ob PortalPlugins vorhanden sind.
 $portalplugins = PluginEngine::getPlugins('PortalPlugin');
 
 foreach ($portalplugins as $portalplugin) {

@@ -123,7 +123,7 @@ if ( $templates_search ) {
       $foundTd->addContent (new HTMLempty ("br"));
 
       $b = new HTML ("b");
-      $b->addContent(_("Gefundene öffentliche Evaluationsvorlagen:"));
+      $b->addContent(_("Gefundene Ã¶ffentliche Evaluationsvorlagen:"));
       $foundTd->addContent ($b);
       $foundTr->addContent ($foundTd);
       $foundTable->addContent ($foundTr);
@@ -133,7 +133,7 @@ if ( $templates_search ) {
                          _("Titel"),
 #                        " ",
                          _("Autor"),
-                         _("Letzte Änderung"),
+                         _("Letzte Ã„nderung"),
                          _("Anonym"),
                          "",
                          _("Ansehen"),
@@ -177,7 +177,7 @@ if (!empty ($evalIDArray)) {
                   " ",
                   " ",
                   _("Bearbeiten"),
-                  _("Löschen")), YES, "user_template" ));
+                  _("LÃ¶schen")), YES, "user_template" ));
    foreach ($evalIDArray as $number => $evalID) {
       $eval = new Evaluation ($evalID);
       $open = ($openID == $evalID);
@@ -297,7 +297,7 @@ if (!empty ($evalIDArray)) {
                      _("Status"),
                      "",
                      _("Bearbeiten"),
-                     _("Löschen"),
+                     _("LÃ¶schen"),
              "")));
    foreach ($evalIDArray as $number => $evalID) {
       $eval = new Evaluation ($evalID);
@@ -333,7 +333,7 @@ if (!empty ($evalIDArray)) {
                   _("Status"),
                   "",
                   _("Exportieren"),
-                  _("Löschen"),
+                  _("LÃ¶schen"),
           _("Auswertung"))));
    foreach ($evalIDArray as $number => $evalID) {
       $eval = new Evaluation ($evalID);
@@ -368,7 +368,7 @@ if (!empty ($evalIDArray)) {
                   _("Status"),
                   "",
                   _("Exportieren"),
-                  _("Löschen"),
+                  _("LÃ¶schen"),
           _("Auswertung"))));
    foreach ($evalIDArray as $number => $evalID) {
       $eval = new Evaluation ($evalID);

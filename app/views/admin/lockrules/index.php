@@ -6,7 +6,7 @@
     <?= CSRFProtection::tokenTag() ?>
     <table class="default">
         <caption>
-            <?= _('Sperrebenen für den Bereich:') ?> <?= $rule_type_names[$lock_rule_type]; ?>
+            <?= _('Sperrebenen fÃ¼r den Bereich:') ?> <?= $rule_type_names[$lock_rule_type]; ?>
         </caption>
         <colgroup>
             <col width="30%">
@@ -41,12 +41,12 @@
 
                         <?
                         if ($rule->getUsage()) :?>
-                            <? $msg = sprintf(_('Sie beabsichtigen die Ebene %s zu löschen. Diese Ebene wird von %s Objekten benutzt. Soll sie trotzdem gelöscht werden?'),
+                            <? $msg = sprintf(_('Sie beabsichtigen die Ebene %s zu lÃ¶schen. Diese Ebene wird von %s Objekten benutzt. Soll sie trotzdem gelÃ¶scht werden?'),
                                 $rule->name, $rule->getUsage()) ?>
                         <? else : ?>
-                            <? $msg = sprintf(_('Möchten Sie die Ebene %s löschen?'), $rule->name) ?>
+                            <? $msg = sprintf(_('MÃ¶chten Sie die Ebene %s lÃ¶schen?'), $rule->name) ?>
                         <? endif ?>
-                        <?= Icon::create('trash', 'clickable', ['title' => _('Diese Regel löschen')])->asInput(array('data-confirm'=>$msg,'formaction'=>$controller->url_for('admin/lockrules/delete/'.$rule->lock_id))) ?>
+                        <?= Icon::create('trash', 'clickable', ['title' => _('Diese Regel lÃ¶schen')])->asInput(array('data-confirm'=>$msg,'formaction'=>$controller->url_for('admin/lockrules/delete/'.$rule->lock_id))) ?>
                     </td>
                 </tr>
             <? endforeach; ?>

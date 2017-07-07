@@ -1,6 +1,6 @@
 <section class="oauth authorize">
     <p>
-        <?= sprintf(_('Die Applikation <strong>%s</strong> möchte auf Ihre Daten zugreifen.'), 
+        <?= sprintf(_('Die Applikation <strong>%s</strong> mÃ¶chte auf Ihre Daten zugreifen.'), 
                     htmlReady($consumer->title)) ?>
     </p>
 

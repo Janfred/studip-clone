@@ -2,7 +2,7 @@
     <header>
         <h1>
             <a href="<?= ContentBoxHelper::href('institutes') ?>">
-                <?= _('Dateiübersicht Einrichtungen') ?>
+                <?= _('DateiÃ¼bersicht Einrichtungen') ?>
             </a>
         </h1>
     </header>

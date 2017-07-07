@@ -38,8 +38,8 @@
         <? if ($stgteilbezeichnung->isNew()) : ?>
         <?= Button::createAccept(_('anlegen'), 'store', array('title' => _('Studiengangteil-Bezeichnung anlegen'))) ?>
         <? else : ?>
-        <?= Button::createAccept(_('übernehmen'), 'store', array('title' => _('Änderungen übernehmen'))) ?>
+        <?= Button::createAccept(_('Ã¼bernehmen'), 'store', array('title' => _('Ã„nderungen Ã¼bernehmen'))) ?>
         <? endif; ?>
-        <?= LinkButton::createCancel(_('abbrechen'), $controller->url_for('studiengaenge/stgteilbezeichnungen/index'), array('title' => _('zurück zur Übersicht'))) ?>
+        <?= LinkButton::createCancel(_('abbrechen'), $controller->url_for('studiengaenge/stgteilbezeichnungen/index'), array('title' => _('zurÃ¼ck zur Ãœbersicht'))) ?>
     </footer>
 </form>

@@ -63,7 +63,7 @@
                 <? if ($is_tutor) : ?>
                     <? $actionMenu->addLink(
                         $controller->url_for('course/members/add_comment/' . $dozent['user_id']),
-                        _('Bemerkung hinzufügen'),
+                        _('Bemerkung hinzufÃ¼gen'),
                         Icon::create('comment', 'clickable'),
                         ['data-dialog' => 'size=auto']
                     ) ?>

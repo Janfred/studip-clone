@@ -12,8 +12,8 @@ use Studip\Button, Studip\LinkButton;
 <br>
 
 <a href="<?= URLHelper::getURL('dispatch.php/userfilter/filter/configure/condadmission_conditions') ?>" onclick="return STUDIP.UserFilter.configureCondition('condition', this.href)">
-    <?= Icon::create('add', 'clickable', tooltip2(_('Bedingung hinzufügen')))->asImg() ?>
-    <?= _('Bedingung hinzufügen') ?>
+    <?= Icon::create('add', 'clickable', tooltip2(_('Bedingung hinzufÃ¼gen')))->asImg() ?>
+    <?= _('Bedingung hinzufÃ¼gen') ?>
 </a>
 
 <br>

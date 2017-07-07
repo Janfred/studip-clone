@@ -2,7 +2,7 @@
     <header>
         <h1>
             <a href="<?= ContentBoxHelper::href('seminar_wait') ?>">
-                <?= _('Übersicht Wartelisten von Veranstaltungen') ?>
+                <?= _('Ãœbersicht Wartelisten von Veranstaltungen') ?>
             </a>
         </h1>
     </header>

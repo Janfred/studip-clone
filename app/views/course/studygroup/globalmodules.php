@@ -11,13 +11,13 @@ use Studip\Button, Studip\LinkButton;
 
 <?= $this->render_partial("course/studygroup/_feedback") ?>
 <? if (!$configured): ?>
-    <?= MessageBox::error(_('Keine Veranstaltungsart für Studiengruppen gefunden'),
-        array(sprintf(_('Die Standardkonfiguration für Studiengruppen in der Datei <b>%s</b> fehlt oder ist unvollständig.'),
+    <?= MessageBox::error(_('Keine Veranstaltungsart fÃ¼r Studiengruppen gefunden'),
+        array(sprintf(_('Die Standardkonfiguration fÃ¼r Studiengruppen in der Datei <b>%s</b> fehlt oder ist unvollstÃ¤ndig.'),
                 'config.inc.php'))) ?>
 <? endif ?>
 <? if (!Config::getInstance()->getValue('STUDYGROUPS_ENABLE')):?>
     <?= MessageBox::info( _("Die Studiengruppen sind derzeit <b>nicht</b> aktiviert.")
-            . '<br>'. _("Zum Aktivieren füllen Sie bitte das Formular aus und klicken Sie auf \"Speichern\".")); ?>
+            . '<br>'. _("Zum Aktivieren fÃ¼llen Sie bitte das Formular aus und klicken Sie auf \"Speichern\".")); ?>
 <? else: ?>
     <? if ($can_deactivate) : ?>
         <?= MessageBox::info( _("Die Studiengruppen sind aktiviert.")) ?>
@@ -26,7 +26,7 @@ use Studip\Button, Studip\LinkButton;
         <?= Button::create(_("Deaktivieren"), 'deaktivieren') ?>
         </form>
     <? else: ?>
-        <?= MessageBox::info(_("Sie können die Studiengruppen nicht deaktivieren, solange noch welche in Stud.IP vorhanden sind!")) ?>
+        <?= MessageBox::info(_("Sie kÃ¶nnen die Studiengruppen nicht deaktivieren, solange noch welche in Stud.IP vorhanden sind!")) ?>
     <? endif; ?>
     <br>
 <?php endif;?>
@@ -45,7 +45,7 @@ use Studip\Button, Studip\LinkButton;
             <select name="institute" class="nested-select">
             <? if (!Config::getInstance()->getValue('STUDYGROUPS_ENABLE')):?>
                 <option value="" class="is-placeholder">
-                    <?= _('-- Bitte auswählen --') ?>
+                    <?= _('-- Bitte auswÃ¤hlen --') ?>
                 </option>
             <? endif ?>
             <? foreach ($institutes as $fak_id => $faculty) : ?>
@@ -74,8 +74,8 @@ use Studip\Button, Studip\LinkButton;
     </tr>
     <tr>
         <td colspan="2">
-        <?= _("Geben Sie hier Nutzungsbedingungen für die Studiengruppen ein. ".
-                "Diese müssen akzeptiert werden, bevor eine Studiengruppe angelegt werden kann.") ?>
+        <?= _("Geben Sie hier Nutzungsbedingungen fÃ¼r die Studiengruppen ein. ".
+                "Diese mÃ¼ssen akzeptiert werden, bevor eine Studiengruppe angelegt werden kann.") ?>
         </td>
     </tr>
     <tr>

@@ -14,9 +14,9 @@ class Messages extends \RESTAPI\RouteMap
 {
     /**
      * Liefert die vorhandenen Nachrichtenordner des autorisierten
-     * Nutzers zurück. Der Parameter bestimmt je nach Wert, auf
+     * Nutzers zurÃ¼ck. Der Parameter bestimmt je nach Wert, auf
      * welchen Bereich zugegriffen werden soll.
-     * Die Rückgabe beinhaltet pro Ordner den Namen, die Anzahl
+     * Die RÃ¼ckgabe beinhaltet pro Ordner den Namen, die Anzahl
      * aller Nachrichten sowie die Anzahl der ungelesenen Nachrichten.
      *
      * @get /user/:user_id/:box
@@ -39,7 +39,7 @@ class Messages extends \RESTAPI\RouteMap
 
     /**
      * Liefert die vorhandenen Nachrichten eines Ordners des
-     * autorisierten Nutzers zurück.
+     * autorisierten Nutzers zurÃ¼ck.
      *
      * @get /user/:user_id/:box/:folder_id
      */
@@ -77,7 +77,7 @@ class Messages extends \RESTAPI\RouteMap
     }
 
     /**
-     * Liefert die Daten der angegebenen Nachricht zurück.
+     * Liefert die Daten der angegebenen Nachricht zurÃ¼ck.
      *
      * @get /message/:message_id
      */
@@ -166,7 +166,7 @@ class Messages extends \RESTAPI\RouteMap
 
     /**
      * Eine Nachricht als (un)gelesen markieren oder in einen anderen
-     * Ordner verschieben (Ordner werden dabei als Array und vollständig
+     * Ordner verschieben (Ordner werden dabei als Array und vollstÃ¤ndig
      * angegeben, [/user/:user_id/:box/:folder]).
      *
      * @put /message/:message_id
@@ -194,7 +194,7 @@ class Messages extends \RESTAPI\RouteMap
 
 
     /**
-     * Löscht eine Nachricht.
+     * LÃ¶scht eine Nachricht.
      *
      * @delete /message/:message_id
      */

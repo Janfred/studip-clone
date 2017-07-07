@@ -25,7 +25,7 @@
                         <?= Icon::create('play', 'clickable')->asImg() ?>
                     </a>
                 <? endif; ?>
-                <a title="<?= _("Evaluation löschen") ?>" href="<?= URLHelper::getLink('admin_evaluation.php', array('evalID' => $evaluation->id, 'evalAction' => 'delete_request')) ?>">
+                <a title="<?= _("Evaluation lÃ¶schen") ?>" href="<?= URLHelper::getLink('admin_evaluation.php', array('evalID' => $evaluation->id, 'evalAction' => 'delete_request')) ?>">
                     <?= Icon::create('trash', 'clickable')->asImg() ?>
                 </a>
                 <a title="<?= _("Evaluation exportieren") ?>" href="<?= URLHelper::getLink('admin_evaluation.php', array('evalID' => $evaluation->id, 'evalAction' => 'export_request')) ?>">

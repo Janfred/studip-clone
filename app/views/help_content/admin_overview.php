@@ -47,7 +47,7 @@
                     <td>
                     <a href="<?=URLHelper::getURL('dispatch.php/help_content/edit/'.$help_content_id)?>" <?=tooltip(_('Hilfe-Text bearbeiten'))?> data-dialog="size=auto;reload-on-close">
                     <?= Icon::create('edit', 'clickable')->asImg() ?></a>
-                    <a href="<?=URLHelper::getURL('dispatch.php/help_content/delete/'.$help_content_id)?>" <?=tooltip(_('Hilfe-Text löschen'))?> data-dialog="size=auto;reload-on-close">
+                    <a href="<?=URLHelper::getURL('dispatch.php/help_content/delete/'.$help_content_id)?>" <?=tooltip(_('Hilfe-Text lÃ¶schen'))?> data-dialog="size=auto;reload-on-close">
                     <?= Icon::create('trash', 'clickable')->asImg() ?></a>
                     </td>
                     </tr>
@@ -68,7 +68,7 @@
 <?
 $sidebar = Sidebar::get();
 $widget = new ViewsWidget();
-$widget->addLink(_('Übersicht'), URLHelper::getURL('dispatch.php/help_content/admin_overview'))->setActive(true);
+$widget->addLink(_('Ãœbersicht'), URLHelper::getURL('dispatch.php/help_content/admin_overview'))->setActive(true);
 $widget->addLink(_('Konflikte'), URLHelper::getURL('dispatch.php/help_content/admin_conflicts'));
 $sidebar->addWidget($widget);
 $widget = new ActionsWidget();

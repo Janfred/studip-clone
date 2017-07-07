@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @author      Till Glˆggler <tgloeggl@uos.de>
- * @author      AndrÈ Klaﬂen <klassen@elan-ev.de>
+ * @author      Till Gl√∂ggler <tgloeggl@uos.de>
+ * @author      Andr√© Kla√üen <klassen@elan-ev.de>
  * @license     GPL 2 or later
  */
 
@@ -81,9 +81,9 @@ class WikiProvider implements ActivityProvider
         } elseif ($event == 'WikiPageDidDelete') {
             $verb = 'voided';
             if ($type == 'sem') {
-                $summary = _('Die Wiki-Seite %s wurde von %s in der Veranstaltung "%s" gelˆscht.');
+                $summary = _('Die Wiki-Seite %s wurde von %s in der Veranstaltung "%s" gel√∂scht.');
             } else {
-                $summary = _('Die Wiki-Seite %s wurde von %s in der Einrichtung "%s" gelˆscht.');
+                $summary = _('Die Wiki-Seite %s wurde von %s in der Einrichtung "%s" gel√∂scht.');
             }
         }
 

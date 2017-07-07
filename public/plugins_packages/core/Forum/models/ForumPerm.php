@@ -9,7 +9,7 @@
  * published by the Free Software Foundation; either version 3 of
  * the License, or (at your option) any later version.
  *
- * @author      Till Glöggler <tgloeggl@uos.de>
+ * @author      Till GlÃ¶ggler <tgloeggl@uos.de>
  * @license     http://www.gnu.org/licenses/gpl-3.0.html GPL version 3
  * @category    Stud.IP
  */
@@ -87,7 +87,7 @@ class ForumPerm {
             return true;
         }
 
-        // eCULT Notlösung
+        // eCULT NotlÃ¶sung
         if ($status == 'tutor' && $seminar_id == '30e0b89dcc9173d5fccf9f22b13b87bd') {
             $status = 'autor';
         }
@@ -130,7 +130,7 @@ class ForumPerm {
     {
         if (!self::has($perm, $seminar_id)) {
             throw new AccessDeniedException(sprintf(
-                _("Sie haben keine Berechtigung für diese Aktion! Benötigte Berechtigung: %s"),
+                _("Sie haben keine Berechtigung fÃ¼r diese Aktion! BenÃ¶tigte Berechtigung: %s"),
                 $perm)
             );
         }

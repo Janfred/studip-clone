@@ -9,7 +9,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      André Noack <noack@data-quest.de>
+ * @author      AndrÃ© Noack <noack@data-quest.de>
  * @copyright   2000 Stud.IP Core-Group
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  */
@@ -270,7 +270,7 @@ class Seminar_Auth
         }
         if ($cfg->getValue('MAINTENANCE_MODE_ENABLE') && $user->perms != 'root') {
             $this->unauth();
-            throw new AccessDeniedException(_("Das System befindet sich im Wartungsmodus. Zur Zeit ist kein Zugriff möglich."));
+            throw new AccessDeniedException(_("Das System befindet sich im Wartungsmodus. Zur Zeit ist kein Zugriff mÃ¶glich."));
         }
         return @$this->auth['uid'] ? : false;
     }

@@ -8,7 +8,7 @@
 // StudipForm.class.php
 // Class to build HTML formular and handle persistence using PhpLib
 //
-// Copyright (c) 2003 André Noack <noack@data-quest.de>
+// Copyright (c) 2003 AndrÃ© Noack <noack@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@ use Studip\Button, Studip\LinkButton;
 *
 *
 * @access   public
-* @author   André Noack <noack@data-quest.de>
+* @author   AndrÃ© Noack <noack@data-quest.de>
 * @package
 **/
 class StudipForm {
@@ -102,9 +102,9 @@ class StudipForm {
             foreach ($this->form_fields as $name => $value){
                 if (!$value['disabled']){
                     if ($value['type'] == 'combo'){
-                        if ($this->form_values[$name] != $new_form_values[$value['text']]){ //textfeld wurde verändert
+                        if ($this->form_values[$name] != $new_form_values[$value['text']]){ //textfeld wurde verÃ¤ndert
                             $new_form_values[$name] = $new_form_values[$value['text']];
-                        } else if ($this->form_values[$name] != $new_form_values[$value['select']] && !$new_form_values[$value['text']]){ //textfeld nicht geändert, select geändert
+                        } else if ($this->form_values[$name] != $new_form_values[$value['select']] && !$new_form_values[$value['text']]){ //textfeld nicht geÃ¤ndert, select geÃ¤ndert
                             $new_form_values[$name] = $new_form_values[$value['select']];
                         } else {
                             $new_form_values[$name] = $this->form_values[$name];

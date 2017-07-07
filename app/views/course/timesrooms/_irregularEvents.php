@@ -10,21 +10,21 @@ $room_request_filter = function ($date) {
 <section class="contentbox timesrooms">
     <header>
         <h1>
-            <?= _('Unregelmäßige Termine / Blocktermine') ?>
+            <?= _('UnregelmÃ¤ÃŸige Termine / Blocktermine') ?>
         </h1>
     <? if(!$locked) : ?>
         <? $actionMenu = ActionMenu::get()?>
         <? $actionMenu->addLink(
             $controller->link_for('course/timesrooms/createSingleDate/' . $course->id, $linkAttributes),
-            _('Einzeltermin hinzufügen'),
-            Icon::create('date+add', 'clickable', ['title' => _('Einzeltermin hinzufügen')]),
+            _('Einzeltermin hinzufÃ¼gen'),
+            Icon::create('date+add', 'clickable', ['title' => _('Einzeltermin hinzufÃ¼gen')]),
             ['data-dialog' => 'size=600']
         ) ?>
 
         <? $actionMenu->addLink(
             $controller->url_for('course/block_appointments/index/' . $course->id, $linkAttributes),
-            _('Blocktermin hinzufügen'),
-            Icon::create('timetable+add', 'clickable', ['title' => _('Blocktermin hinzufügen')]),
+            _('Blocktermin hinzufÃ¼gen'),
+            Icon::create('timetable+add', 'clickable', ['title' => _('Blocktermin hinzufÃ¼gen')]),
             ['data-dialog' => 'size=600']
         ) ?>
         <?= $actionMenu->render() ?>
@@ -103,14 +103,14 @@ $room_request_filter = function ($date) {
                         <label class="horizontal">
                             <input type="checkbox" data-proxyfor=".date-proxy"
                                    data-activates=".actionForAllIrregular">
-                            <?= _('Alle auswählen') ?>
+                            <?= _('Alle auswÃ¤hlen') ?>
                         </label>
                     </td>
                     <td colspan="3" class="actions">
                         <select name="method" class="datesBulkActions actionForAllIrregular">
                             <?= $this->render_partial('course/timesrooms/_stack_actions.php') ?>
                         </select>
-                        <?= Studip\Button::create( _('Ausführen'), 'run', [
+                        <?= Studip\Button::create( _('AusfÃ¼hren'), 'run', [
                             'class' => 'actionForAllIrregular',
                             'data-dialog' => 'size=big',
                         ]) ?>
@@ -124,7 +124,7 @@ $room_request_filter = function ($date) {
     <section>
         <p class="text-center">
             <strong>
-                <?= _('Keine unregelmäßigen Termine vorhanden') ?>
+                <?= _('Keine unregelmÃ¤ÃŸigen Termine vorhanden') ?>
             </strong>
         </p>
     </section>

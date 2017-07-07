@@ -15,7 +15,7 @@ class NewsWidget extends StudIPPlugin implements PortalPlugin
 {
     public function getPluginName()
     {
-        return _('Ankündigungen');
+        return _('AnkÃ¼ndigungen');
     }
 
     function getPortalTemplate()
@@ -42,7 +42,7 @@ class NewsWidget extends StudIPPlugin implements PortalPlugin
 
         if ($GLOBALS['perm']->have_perm('root')) {
             $navigation = new Navigation('', 'dispatch.php/news/edit_news/new/studip');
-            $navigation->setImage(Icon::create('add', 'clickable', ["title" => _('Ankündigungen bearbeiten')]), ["rel" => 'get_dialog']);
+            $navigation->setImage(Icon::create('add', 'clickable', ["title" => _('AnkÃ¼ndigungen bearbeiten')]), ["rel" => 'get_dialog']);
             $icons[] = $navigation;
             if (get_config('NEWS_RSS_EXPORT_ENABLE')) {
                 $navigation = new Navigation('', 'dispatch.php/news/rss_config/studip');
@@ -72,7 +72,7 @@ class NewsWidget extends StudIPPlugin implements PortalPlugin
         if (Request::isXhr()) {
             echo json_encode(true);
         } else {
-            PageLayout::postMessage(MessageBox::success(_('Alle Ankündigungen wurden als gelesen markiert.')));
+            PageLayout::postMessage(MessageBox::success(_('Alle AnkÃ¼ndigungen wurden als gelesen markiert.')));
             header('Location: '. URLHelper::getLink('dispatch.php/start'));
         }
     }

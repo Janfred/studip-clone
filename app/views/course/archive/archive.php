@@ -39,5 +39,5 @@
     and we have to provide a link back to the course management page.
 */
 ?>
-    <a href="<?= $controller->url_for('admin/courses') ?>" ><?= _("Zurück zur Veranstaltungsverwaltung") ?></a>
+    <a href="<?= $controller->url_for('admin/courses') ?>" ><?= _("ZurÃ¼ck zur Veranstaltungsverwaltung") ?></a>
 <? endif ?>

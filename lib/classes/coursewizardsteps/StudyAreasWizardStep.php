@@ -46,7 +46,7 @@ class StudyAreasWizardStep implements CourseWizardStep
 
         if (count($tree) == 0) {
             PageLayout::postError(formatReady(_('Das Anlegen einer ' .
-                'Veranstaltung ist nicht möglich, da keine Studienbereiche ' .
+                'Veranstaltung ist nicht mÃ¶glich, da keine Studienbereiche ' .
                 'existieren. Bitte wenden Sie sich an [die ' .
                 'Stud.IP-Administration]' .
                 URLHelper::getLink('dispatch.php/siteinfo/show') . ' .')));

@@ -1,6 +1,6 @@
 <? use Studip\Button, Studip\LinkButton?>
 
-<h1><?=sprintf(_('%s hinzufügen'), htmlReady($decoratedStatusGroups['autor']))?></h1>
+<h1><?=sprintf(_('%s hinzufÃ¼gen'), htmlReady($decoratedStatusGroups['autor']))?></h1>
 <form action="<?=$controller->url_for('course/members/set_autor')?>" method="post">
 <?= CSRFProtection::tokenTag() ?>
     <table class="default collapsable">
@@ -8,7 +8,7 @@
             <tr class="table_header header-row">
                 <th class="toggle-indicator" colspan="4">
                     <a class="toggler">
-                        <?=sprintf(_('%s in die Veranstaltung hinzufügen'), htmlReady($decoratedStatusGroups['autor']))?>
+                        <?=sprintf(_('%s in die Veranstaltung hinzufÃ¼gen'), htmlReady($decoratedStatusGroups['autor']))?>
                     </a>
                 </th>
             </tr>
@@ -41,7 +41,7 @@
         <tr class="table_header header-row">
             <th class="toggle-indicator" colspan="3">
                 <a class="toggler">
-                    <?=_('Teilnehmerliste übernehmen')?>
+                    <?=_('Teilnehmerliste Ã¼bernehmen')?>
                 </a>
             </th>
         </tr>
@@ -49,8 +49,8 @@
             <td>
                 <?=_('Eingabeformat')?>:
 
-                <?= tooltipHtmlIcon(sprintf(_('In das Textfeld <strong>Teilnehmerliste übernehmen</strong> können Sie eine Liste mit Namen von %s eingeben,
-                    die in die Veranstaltung aufgenommen werden sollen. Wählen Sie in der Auswahlbox das gewünschte Format, in dem Sie die Namen eingeben möchten.<br />
+                <?= tooltipHtmlIcon(sprintf(_('In das Textfeld <strong>Teilnehmerliste Ã¼bernehmen</strong> kÃ¶nnen Sie eine Liste mit Namen von %s eingeben,
+                    die in die Veranstaltung aufgenommen werden sollen. WÃ¤hlen Sie in der Auswahlbox das gewÃ¼nschte Format, in dem Sie die Namen eingeben mÃ¶chten.<br />
                     <strong>Eingabeformat</strong><br/>
                     <strong>Nachname, Vorname &crarr;</strong><br />Geben Sie dazu in jede Zeile den Nachnamen und (optional) den Vornamen getrennt durch ein Komma oder ein Tabulatorzeichen ein.<br />
                     <strong>Nutzername &crarr;</strong><br />Geben Sie dazu in jede Zeile den Stud.IP Nutzernamen ein.'), htmlReady($status_groups['autor'])));?>

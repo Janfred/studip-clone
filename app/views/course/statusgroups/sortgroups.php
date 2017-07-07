@@ -1,4 +1,4 @@
-<div class="ordering" title="<?= _('Gruppenreihenfolge ändern') ?>">
+<div class="ordering" title="<?= _('Gruppenreihenfolge Ã¤ndern') ?>">
     <div class="nestable" data-max-depth="1">
         <? if ($groups): ?>
             <ol class="dd-list">

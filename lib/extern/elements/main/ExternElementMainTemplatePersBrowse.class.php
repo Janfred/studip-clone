@@ -51,7 +51,7 @@ class ExternElementMainTemplatePersBrowse extends ExternElementMain {
                 'instperms'
         );
         $this->real_name = _("Grundeinstellungen");
-        $this->description = _("In den Grundeinstellungen können Sie allgemeine Daten des Moduls ändern.");
+        $this->description = _("In den Grundeinstellungen kÃ¶nnen Sie allgemeine Daten des Moduls Ã¤ndern.");
         parent::__construct($module_name, $data_fields, $field_names, $config);
         $this->edit_function = 'editSort';
     }
@@ -126,7 +126,7 @@ class ExternElementMainTemplatePersBrowse extends ExternElementMain {
         $headline = $edit_form->editHeadline(_("Weitere Angaben"));
         
         $title = _("Namensformat:");
-        $info = _("Wählen Sie, wie Personennamen formatiert werden sollen.");
+        $info = _("WÃ¤hlen Sie, wie Personennamen formatiert werden sollen.");
         $values = array("", "no_title_short", "no_title", "no_title_rev", "full", "full_rev");
         $names = array(_("keine Auswahl"), _("Meyer, P."), _("Peter Meyer"), _("Meyer, Peter"),
                 _("Dr. Peter Meyer"), _("Meyer, Peter, Dr."));

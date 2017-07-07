@@ -1,11 +1,11 @@
 <?php if (!$has_enabled) : ?>
-    <?= MessageBox::info(_('Es gibt keine aktiven Schritte für den Anlegeassistenten!')) ?>
+    <?= MessageBox::info(_('Es gibt keine aktiven Schritte fÃ¼r den Anlegeassistenten!')) ?>
 <?php endif ?>
 <form method="post">
     <?= CSRFProtection::tokenTag() ?>
     <table class="default">
         <caption>
-            <?= _('Vorhandene Schritte im Anlegeassistenten für Veranstaltungen') ?>
+            <?= _('Vorhandene Schritte im Anlegeassistenten fÃ¼r Veranstaltungen') ?>
             <span class="actions">
             <a href="<?= $controller->url_for('admin/coursewizardsteps/edit') ?>" data-dialog="size=auto">
                 <?= Icon::create('add', 'clickable')->asImg() ?></a>
@@ -43,11 +43,11 @@
 
                             <? $actionMenu->addButton(
                                     'delete_step',
-                                    _('Schritt lsöchen'),
+                                    _('Schritt lsÃ¶chen'),
                                     Icon::create('trash', 'clickable',
-                                            ['title'        => _('Studiengangteil löschen'),
+                                            ['title'        => _('Studiengangteil lÃ¶schen'),
                                              'formaction'   => $controller->url_for('admin/coursewizardsteps/delete/' . $step->id),
-                                             'data-confirm' => sprintf(_('Soll der Eintrag "%s" wirklich gelöscht werden?'), htmlReady($step->name)),
+                                             'data-confirm' => sprintf(_('Soll der Eintrag "%s" wirklich gelÃ¶scht werden?'), htmlReady($step->name)),
                                              'style'        => 'margin: 0px']))
                             ?>
                             <?= $actionMenu->render() ?>
@@ -57,7 +57,7 @@
             <?php else : ?>
                 <tr>
                     <td colspan="5" style="text-align: center">
-                        <?= _('Es sind keine Schritte für den Veranstaltungsanlegeassistenten registriert!') ?>
+                        <?= _('Es sind keine Schritte fÃ¼r den Veranstaltungsanlegeassistenten registriert!') ?>
                     </td>
                 </tr>
             <?php endif ?>

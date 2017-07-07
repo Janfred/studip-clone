@@ -85,13 +85,13 @@ use Studip\Button;
                         <td>
                             <? if ($perm == 'admin'): ?>
                                 <?= _('Admin') ?>
-                                <?= tooltipIcon(_('Nutzer ist Admin und kann sämtliche Belegungen und Eigenschaften ändern und Rechte vergeben.')) ?>
+                                <?= tooltipIcon(_('Nutzer ist Admin und kann sÃ¤mtliche Belegungen und Eigenschaften Ã¤ndern und Rechte vergeben.')) ?>
                             <? elseif ($perm == 'tutor'): ?>
                                 <?= _('Tutor') ?>
-                                <?= tooltipIcon(_('Nutzer ist Tutor und kann sämtliche Belegungen ändern.')) ?>
+                                <?= tooltipIcon(_('Nutzer ist Tutor und kann sÃ¤mtliche Belegungen Ã¤ndern.')) ?>
                             <? elseif ($perm == 'autor'): ?>
                                 <?= _('Autor') ?>
-                                <?= tooltipIcon(_('Nutzer ist Autor und kann nur eigene Belegungen ändern.')) ?>
+                                <?= tooltipIcon(_('Nutzer ist Autor und kann nur eigene Belegungen Ã¤ndern.')) ?>
                             <? endif; ?>
                         </td>
                         <td class="action">
@@ -141,10 +141,10 @@ use Studip\Button;
                             <!-- Trash  -->
                             <? if ($owner_perms || ($admin_perms && $perm == 'autor')) : ?>
                                 <a href="<?= URLHelper::getLink('?change_object_perms=' . $resObject->getId() . '&delete_user_perms=' . $user_id) ?>">
-                                    <?= Icon::create('trash', 'clickable', ['title' => _('Berechtigung löschen')])->asImg() ?>
+                                    <?= Icon::create('trash', 'clickable', ['title' => _('Berechtigung lÃ¶schen')])->asImg() ?>
                                 </a>
                             <? else : ?>
-                                <?= Icon::create('trash+decline', 'inactive', ['title' => _('Sie dürfen diese Berechtigung leider nicht löschen')])->asImg(16) ?>
+                                <?= Icon::create('trash+decline', 'inactive', ['title' => _('Sie dÃ¼rfen diese Berechtigung leider nicht lÃ¶schen')])->asImg(16) ?>
                             <? endif; ?>
                         </td>
                     </tr>
@@ -177,7 +177,7 @@ use Studip\Button;
             <tr>
                 <td></td>
                 <td colspan="4" style="text-align: center">
-                    <?= Button::create(_('Übernehmen'), array('title' => _('Zuweisen'))) ?>
+                    <?= Button::create(_('Ãœbernehmen'), array('title' => _('Zuweisen'))) ?>
                 </td>
             </tr>
             </tfoot>

@@ -201,7 +201,7 @@ class StudipLog
                 AND action_id IN (?) ",
                 array($needle, $log_action_ids_archived_seminar));
         foreach ($log_events_archived_seminar as $log_event) {
-            $title = sprintf('%s (%s)', my_substr($log_event->info, 0, 40), _('gelöscht'));
+            $title = sprintf('%s (%s)', my_substr($log_event->info, 0, 40), _('gelÃ¶scht'));
             $result[] = array($log_event->affected_range_id, $title);
         }
 
@@ -234,7 +234,7 @@ class StudipLog
                 "action_id = ? AND info LIKE CONCAT('%', ?, '%')",
                 array($log_action_delete_institute->getId(), $needle));
         foreach ($log_events_delete_institute as $log_event) {
-            $title = sprintf('%s (%s)', $log_event->info, _('gelöscht'));
+            $title = sprintf('%s (%s)', $log_event->info, _('gelÃ¶scht'));
             $result[] = array($log_event->affected_range_id, $title);
         }
 
@@ -281,7 +281,7 @@ class StudipLog
                     "action_id = ? AND info LIKE CONCAT('%', ?, '%')",
                     array($log_action_deleted_user->getId(), $needle));
             foreach ($log_events_deleted_user as $log_event) {
-                $name = sprintf('%s (%s)', $log_event->info, _('gelöscht'));
+                $name = sprintf('%s (%s)', $log_event->info, _('gelÃ¶scht'));
                 $result[] = array($log_event->affected_range_id, $name);
             }
         }

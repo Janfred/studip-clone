@@ -1,7 +1,7 @@
 <?= $this->controller->jsUrl() ?>
 <?= $this->controller->renderMessages() ?>
 <table id="abschluss_kategorien" class="default sortable collapsable">
-    <caption><?= _('Abschluss-Kategorien mit verwendeten Abschlüssen') ?></caption>
+    <caption><?= _('Abschluss-Kategorien mit verwendeten AbschlÃ¼ssen') ?></caption>
     <colgroup>
         <col>
         <col style="width: 20%;">
@@ -13,7 +13,7 @@
                 <?=  _('Name') ?>
             </th>
             <th style="text-align: center;">
-                <?= _('Abschlüsse') ?>
+                <?= _('AbschlÃ¼sse') ?>
             </th>
             <th style="text-align: center;">
                 <?= _('Materialien') ?>
@@ -48,10 +48,10 @@
             <? if ($perm->havePermCreate()) : ?>
                 <? if (count($abschluesse) < 1) : ?>
                 <a href="<?= $controller->url_for('/delete',  $kategorie->id) ?>">
-                    <?= Icon::create('trash', 'clickable', array('title' => _('Abschluss-Kategorie löschen')))->asImg(); ?>
+                    <?= Icon::create('trash', 'clickable', array('title' => _('Abschluss-Kategorie lÃ¶schen')))->asImg(); ?>
                 </a>
                 <? else : ?>
-                    <?= Icon::create('trash', 'inactive', array('title' => _('Löschen nicht möglich')))->asImg(); ?>
+                    <?= Icon::create('trash', 'inactive', array('title' => _('LÃ¶schen nicht mÃ¶glich')))->asImg(); ?>
                 <? endif; ?>
             <? endif; ?>
             </td>

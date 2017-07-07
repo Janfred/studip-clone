@@ -56,7 +56,7 @@ if (Request::get('copymode')) {
 
 <div data-dialog-button>
     <?= Studip\LinkButton::create(
-        _('Zurück'),
+        _('ZurÃ¼ck'),
         $controller->url_for('/choose_destination/' . $options['fileref_id'], $options),
         ['data-dialog' => 'size=auto']
     ) ?>

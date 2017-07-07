@@ -83,9 +83,9 @@ $owner = User::find($folder->user_id) ?: new User();
             );
             $actionMenu->addLink(
                 $controller->url_for('file/delete_folder/' . $folder->getId()),
-                _('Ordner löschen'),
+                _('Ordner lÃ¶schen'),
                 Icon::create('trash', 'clickable', ['size' => 20]),
-                ['onclick' => "return STUDIP.Dialog.confirmAsPost('" . sprintf(_('Soll der Ordner "%s" wirklich gelöscht werden?'), htmlReady($folder->name)) . "', this.href);"]
+                ['onclick' => "return STUDIP.Dialog.confirmAsPost('" . sprintf(_('Soll der Ordner "%s" wirklich gelÃ¶scht werden?'), htmlReady($folder->name)) . "', this.href);"]
             );
         }
     ?>

@@ -2,8 +2,8 @@
 # Lifter010: TODO
 ?>
 <div style="width:90%;background-color:#DEE2E8;padding:10px;">
-    <h3><?= _('Verfügbares Markup')?></h3>
-    <p><?= sprintf(_('Zusätzlich zu den üblichen %sSchnellformatierungen%s und dem Wiki-Markup ist folgendes Markup verfügbar:'), '<a href="http://hilfe.studip.de/index.php/Basis/VerschiedenesFormat">', '</a>')?></p>
+    <h3><?= _('VerfÃ¼gbares Markup')?></h3>
+    <p><?= sprintf(_('ZusÃ¤tzlich zu den Ã¼blichen %sSchnellformatierungen%s und dem Wiki-Markup ist folgendes Markup verfÃ¼gbar:'), '<a href="http://hilfe.studip.de/index.php/Basis/VerschiedenesFormat">', '</a>')?></p>
     <dl>
         <dt>[lang=<em>language</em>]<em>...</em>[/lang]</dt>
         <dd><?= sprintf(_('Nur wenn %s der Nutzersprache entspricht, wird der Text (%s) zwischen den Tags angezeigt'),
@@ -14,9 +14,9 @@
         <dt>(:version:)</dt>
         <dd><?= _('Die Angabe der verwendeten Stud.IP-Version.')?></dd>
         <dt>(:uniname:)</dt>
-        <dd><?= _('Der Name des Standortes gemäß der Konfiguration.')?></dd>
+        <dd><?= _('Der Name des Standortes gemÃ¤ÃŸ der Konfiguration.')?></dd>
         <dt>(:unicontact:)</dt>
-        <dd><?= _('Der administrative Kontakt gemäß der Konfiguration.')?></dd>
+        <dd><?= _('Der administrative Kontakt gemÃ¤ÃŸ der Konfiguration.')?></dd>
         <dt>(:userinfo <em>user</em>:)</dt>
         <dd><?= sprintf(_('Ausgabe von Vor- und Nachnamen verlinkt mit dem Profil und der E-Mail-Adresse des mit %s angegebenen Nutzers.'),'<em>user</em>')?></dd>
         <dt>(:userlink <em>user</em>:)</dt>
@@ -28,7 +28,7 @@
         <dt>(:coregroup:)</dt>
         <dd><?= _('Ausgabe des Inhaltes von http://www.studip.de/crew.php.')?></dd>
         <dt>(:toplist <em>subject</em>:)</dt>
-        <dd><?= sprintf(_('Ausgabe von Ranglisten für die mit %s angegebenen Kriterien, die die Ausprägungen:'),
+        <dd><?= sprintf(_('Ausgabe von Ranglisten fÃ¼r die mit %s angegebenen Kriterien, die die AusprÃ¤gungen:'),
                         '<em>subject</em>')?>
             <ul>
                 <li>mostparticipants</li>
@@ -37,10 +37,10 @@
                 <li>mostpostings</li>
                 <li>mostvisitedhomepages</li>
             </ul>
-            haben können.
+            haben kÃ¶nnen.
         </dd>
         <dt>(:indicator <em>subject</em>:)</dt>
-        <dd><?= sprintf(_('Ausgabe von mit %s spezifizierten Kennzahlen aus den folgenden Möglichkeiten:'),
+        <dd><?= sprintf(_('Ausgabe von mit %s spezifizierten Kennzahlen aus den folgenden MÃ¶glichkeiten:'),
                         '<em>subject</em>')?>
             <ul>
                 <li>seminar_all</li>

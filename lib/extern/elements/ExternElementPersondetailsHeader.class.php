@@ -94,8 +94,8 @@ class ExternElementPersondetailsHeader extends ExternElement {
         
         $headline = $edit_form->editHeadline(_("Allgemeine Angaben zum Element Seitenkopf/Bild"));
         
-        $title = _("Überschrift (Name) ausblenden:");
-        $info = _("Unterdrückt die Anzeige des Namens als Überschrift.");
+        $title = _("Ãœberschrift (Name) ausblenden:");
+        $info = _("UnterdrÃ¼ckt die Anzeige des Namens als Ãœberschrift.");
         $table .= $edit_form->editCheckboxGeneric("hidename", $title, $info, '1', '');
         
         $content_table = $edit_form->editContentTable($headline, $table);
@@ -122,8 +122,8 @@ class ExternElementPersondetailsHeader extends ExternElement {
         
         $title = _("Ausrichtung:");
         $info = _("Ausrichtung des Bildes.");
-        $names = array(_("zentriert"), _("linksbündig"), _("rechtsbündig"),
-                _("obenbündig"), _("untenbündig"));
+        $names = array(_("zentriert"), _("linksbÃ¼ndig"), _("rechtsbÃ¼ndig"),
+                _("obenbÃ¼ndig"), _("untenbÃ¼ndig"));
         $values = array("center", "left", "right", "top", "bottom");
         $table = $edit_form->editOptionGeneric("img_align", $title, $info, $values, $names);
         
@@ -135,7 +135,7 @@ class ExternElementPersondetailsHeader extends ExternElement {
         $info = _("Breite des Bildes.");
         $table .= $edit_form->editTextfieldGeneric("img_width", $title, $info, 3, 3);
         
-        $title = _("Höhe:");
+        $title = _("HÃ¶he:");
         $info = _("Breite des Bildes.");
         $table .= $edit_form->editTextfieldGeneric("img_height", $title, $info, 3, 3);
         

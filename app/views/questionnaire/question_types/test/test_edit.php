@@ -26,7 +26,7 @@
 </ol>
 
 <div style="padding-left: 13px; margin-bottom: 20px;">
-    <?= tooltipIcon(_('Wählen Sie über die Auswahlboxen aus, welche Antwortmöglichkeit korrekt ist.')) ?>
+    <?= tooltipIcon(_('WÃ¤hlen Sie Ã¼ber die Auswahlboxen aus, welche AntwortmÃ¶glichkeit korrekt ist.')) ?>
 </div>
 
 <label>
@@ -42,10 +42,10 @@
            name="questions[<?= $vote->getId() ?>][options][randomize]"
            value="1"
            <?= isset($etask->options['randomize']) && $etask->options['randomize'] ? 'checked' : '' ?>>
-    <?= _('Antworten den Teilnehmenden zufällig präsentieren.') ?>
+    <?= _('Antworten den Teilnehmenden zufÃ¤llig prÃ¤sentieren.') ?>
 </label>
 
-<div style="display: none" class="delete_question"><?= _('Diese Antwortmöglichkeit wirklich löschen?') ?></div>
+<div style="display: none" class="delete_question"><?= _('Diese AntwortmÃ¶glichkeit wirklich lÃ¶schen?') ?></div>
 
 <script>
  jQuery(function () {

@@ -1,4 +1,4 @@
-<label><?= _('Für alle Veranstaltungen') ?>
+<label><?= _('FÃ¼r alle Veranstaltungen') ?>
     <select name="lock_sem_all" style="max-width: 200px">
         <? foreach ($aux_lock_rules as $id => $rule) : ?>
             <option value="<?= $id ?>"

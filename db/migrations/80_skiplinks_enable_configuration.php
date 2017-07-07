@@ -22,7 +22,7 @@ class SkiplinksEnableConfiguration extends Migration
             'value'       => '',
             'range'       => 'user',
             'section'     => 'privacy',
-            'description' => 'Wählen Sie diese Option, um Skiplinks beim ersten Drücken der Tab-Taste anzuzeigen (Systemdefault).'
+            'description' => 'WÃ¤hlen Sie diese Option, um Skiplinks beim ersten DrÃ¼cken der Tab-Taste anzuzeigen (Systemdefault).'
             );
 
         $stmt = DBManager::get()->prepare("

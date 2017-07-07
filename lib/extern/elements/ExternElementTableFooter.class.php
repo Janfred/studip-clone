@@ -52,8 +52,8 @@ class ExternElementTableFooter extends ExternElement {
             $this->config = $config;
             
         $this->name = "TableFooter";
-        $this->real_name = _("Tabellenfuﬂ");
-        $this->description = _("Der Tabellenfuﬂ enth‰lt keine administrierbaren Attribute.");
+        $this->real_name = _("Tabellenfu√ü");
+        $this->description = _("Der Tabellenfu√ü enth√§lt keine administrierbaren Attribute.");
     }
 
 }

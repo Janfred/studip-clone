@@ -9,7 +9,7 @@
  * the License, or (at your option) any later version.
  *
  * @author   Nadine Werner <nadine.werner@uni-osnabrueck.de>
- * @author   AndrÈ Klaﬂen <klassen@elan-ev.de>
+ * @author   Andr√© Kla√üen <klassen@elan-ev.de>
  * @license  http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category Stud.IP
  * @package  index

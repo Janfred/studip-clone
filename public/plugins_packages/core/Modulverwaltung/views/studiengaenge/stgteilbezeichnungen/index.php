@@ -17,7 +17,7 @@
             <tr>
                 <th><?= _('Name') ?></th>
                 <th><?= _('Kurzname') ?></th>
-                <th style="text-align: center;"><?= _('Studiengänge') ?></th>
+                <th style="text-align: center;"><?= _('StudiengÃ¤nge') ?></th>
                 <th></th>
             </tr>
         </thead>
@@ -46,10 +46,10 @@
                             </a>
                         <? endif; ?>
                         <? if ($perm->havePermCreate() && $stgteilbezeichnung->count_stgteile < 1) : ?>
-                            <?= Icon::create('trash', 'clickable', ['title' => _('Studiengangteil-Bezeichnung löschen')])
+                            <?= Icon::create('trash', 'clickable', ['title' => _('Studiengangteil-Bezeichnung lÃ¶schen')])
                                 ->asInput([
                                     'formaction'   => $controller->url_for('/delete/' . $stgteilbezeichnung->id),
-                                    'data-confirm' => sprintf(_('Wollen Sie wirklich die Studiengangteil-Bezeichnung "%s" löschen?'), htmlReady($stgteilbezeichnung->name)),]) ?>
+                                    'data-confirm' => sprintf(_('Wollen Sie wirklich die Studiengangteil-Bezeichnung "%s" lÃ¶schen?'), htmlReady($stgteilbezeichnung->name)),]) ?>
                         <? endif; ?>
                     </td>
                 </tr>

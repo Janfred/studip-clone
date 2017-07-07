@@ -56,7 +56,7 @@ class Studiengaenge_StgteilbezeichnungenController extends MVVController
         if (!$this->stgteilbezeichnung->isNew()) {
             $sidebar = Sidebar::get();
             $action_widget = $sidebar->getWidget('actions');
-            $action_widget->addLink( _('Log-Einträge dieser Studiengangteil-Bezeichnung'),
+            $action_widget->addLink( _('Log-EintrÃ¤ge dieser Studiengangteil-Bezeichnung'),
                     $this->url_for('shared/log_event/show/' . $this->stgteilbezeichnung->id),
                     Icon::create('log', 'clickable'), array('data-dialog' => ''));
         }
@@ -73,7 +73,7 @@ class Studiengaenge_StgteilbezeichnungenController extends MVVController
         if ($stgteilbezeichnung->isNew()) {
             $success_message = ('Die Studiengangteil-Bezeichnung "%s" wurde angelegt.');
         } else {
-            $success_message = _('Die Studiengangteil-Bezeichnung "%s" wurde geändert.');
+            $success_message = _('Die Studiengangteil-Bezeichnung "%s" wurde geÃ¤ndert.');
         }
         $stored = false;
         $stgteilbezeichnung->name = trim(Request::get('name'));
@@ -93,7 +93,7 @@ class Studiengaenge_StgteilbezeichnungenController extends MVVController
             if ($stored) {
                 PageLayout::postSuccess(sprintf($success_message, htmlReady($stgteilbezeichnung->name)));
             } else {
-                PageLayout::postInfo(_('Es wurden keine Änderungen vorgenommen.'));
+                PageLayout::postInfo(_('Es wurden keine Ã„nderungen vorgenommen.'));
             }
         }
         $this->relocate('studiengaenge/stgteilbezeichnungen');
@@ -107,14 +107,14 @@ class Studiengaenge_StgteilbezeichnungenController extends MVVController
         CSRFProtection::verifyUnsafeRequest();
         $stgteilbezeichnung = StgteilBezeichnung::get($stgteilbezeichnung_id);
         if ($stgteilbezeichnung->count_studiengaenge) {
-            PageLayout::postError( sprintf(_('Löschen nicht möglich! Die Studiengangteil-Bezeichnung "%s" wird bereits verwendet!'),
+            PageLayout::postError( sprintf(_('LÃ¶schen nicht mÃ¶glich! Die Studiengangteil-Bezeichnung "%s" wird bereits verwendet!'),
                 htmlReady($stgteilbezeichnung->name)));
         } else {
             $perm = MvvPerm::get($stgteilbezeichnung);
             if (!$perm->havePerm(MvvPerm::PERM_CREATE)) {
                 throw new Trails_Exception(403, _('Keine Berechtigung'));
             }
-            PageLayout::postSuccess(sprintf(_('Studiengangteil-Bezeichnung "%s" gelöscht!'),
+            PageLayout::postSuccess(sprintf(_('Studiengangteil-Bezeichnung "%s" gelÃ¶scht!'),
                     htmlReady($stgteilbezeichnung->name)));
             $stgteilbezeichnung->delete();
         }
@@ -178,7 +178,7 @@ class Studiengaenge_StgteilbezeichnungenController extends MVVController
         }
         $helpbar = Helpbar::get();
         $widget = new HelpbarWidget();
-        $widget->addElement(new WidgetElement(_("Sie können die Reihenfolge der Studiengangteil-Bezeichnungen durch Ziehen der Zeilen ändern.").'</br>'));
+        $widget->addElement(new WidgetElement(_("Sie kÃ¶nnen die Reihenfolge der Studiengangteil-Bezeichnungen durch Ziehen der Zeilen Ã¤ndern.").'</br>'));
         $widget->addElement(new WidgetElement(_("Eine Studiengangteil-Bezeichnung kann aufgeklappt werden, um Details anzuzeigen.")));
         $helpbar->addWidget($widget);
 

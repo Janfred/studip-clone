@@ -128,7 +128,7 @@ class Admin_Cronjobs_TasksController extends AuthenticatedController
         $deleted = $task->schedules->count();
         $task->delete();
 
-        $message = sprintf(_('Die Aufgabe und %u Cronjob(s) wurden gelöscht.'), $deleted);
+        $message = sprintf(_('Die Aufgabe und %u Cronjob(s) wurden gelÃ¶scht.'), $deleted);
         PageLayout::postMessage(MessageBox::success($message));
 
         $this->redirect('admin/cronjobs/tasks/index/' . $page);
@@ -172,7 +172,7 @@ class Admin_Cronjobs_TasksController extends AuthenticatedController
             }
 
             $n = count($tasks);
-            $message = sprintf(ngettext('%u Aufgabe wurde gelöscht.', '%u Aufgaben wurden gelöscht.', $n), $n);
+            $message = sprintf(ngettext('%u Aufgabe wurde gelÃ¶scht.', '%u Aufgaben wurden gelÃ¶scht.', $n), $n);
             PageLayout::postMessage(MessageBox::success($message));
         }
 
@@ -188,7 +188,7 @@ class Admin_Cronjobs_TasksController extends AuthenticatedController
     {
         $this->task = new CronjobTask($task_id);
 
-        PageLayout::setTitle(_('Cronjob-Aufgabe ausführen'));
+        PageLayout::setTitle(_('Cronjob-Aufgabe ausfÃ¼hren'));
 
         if (Request::isPost()) {
             $parameters = Request::getArray('parameters');

@@ -53,7 +53,7 @@ class PmWikiConnectedLink extends ConnectedLink
 
         global $connected_cms, $view, $search_key, $cms_select, $current_module;
 
-        // hier muss die Authentifizierung mit übergeben werden...
+        // hier muss die Authentifizierung mit Ã¼bergeben werden...
         //
         if (Context::isCourse()) {
             $context = 'seminar';
@@ -119,7 +119,7 @@ class PmWikiConnectedLink extends ConnectedLink
 
             <?php else :?>
 
-                &nbsp;<?= Button::create(_('Hinzufügen'), 'add') ?>
+                &nbsp;<?= Button::create(_('HinzufÃ¼gen'), 'add') ?>
 
             <?php endif ; ?>
 

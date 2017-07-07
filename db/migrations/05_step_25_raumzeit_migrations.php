@@ -9,7 +9,7 @@ class Step25RaumzeitMigrations extends Migration
     function up ()
     {
         // StEP202 causes this migration to fail, see #1551
-        throw new Exception(_('Die Ausgangsversion der Datenbank ist zu alt. Die Migration kann nicht durchgeführt werden.'));
+        throw new Exception(_('Die Ausgangsversion der Datenbank ist zu alt. Die Migration kann nicht durchgefÃ¼hrt werden.'));
 
         // open log file
         $logfile_handle = fopen( $GLOBALS["TMP_PATH"] ."/Stud.IP_date_conversion.log", "ab");
@@ -95,39 +95,39 @@ class Step25RaumzeitMigrations extends Migration
         ");
 
                 DBManager::get()->exec("
-                    INSERT INTO `log_actions` VALUES (MD5('SEM_DELETE_SINGLEDATE'), 'SEM_DELETE_SINGLEDATE', 'Einzeltermin löschen', '%user löscht Einzeltermin %singledate(%affected) in %sem(%coaffected).', 1, NULL);
+                    INSERT INTO `log_actions` VALUES (MD5('SEM_DELETE_SINGLEDATE'), 'SEM_DELETE_SINGLEDATE', 'Einzeltermin lÃ¶schen', '%user lÃ¶scht Einzeltermin %singledate(%affected) in %sem(%coaffected).', 1, NULL);
         ");
 
                 DBManager::get()->exec("
-                    INSERT INTO `log_actions` VALUES (MD5('SEM_SET_STARTSEMESTER'), 'SEM_SET_STARTSEMESTER', 'Startsemester ändern', '%user hat in %sem(%affected) das Startsemester auf %semester(%coaffected) geändert.', 1, NULL);
+                    INSERT INTO `log_actions` VALUES (MD5('SEM_SET_STARTSEMESTER'), 'SEM_SET_STARTSEMESTER', 'Startsemester Ã¤ndern', '%user hat in %sem(%affected) das Startsemester auf %semester(%coaffected) geÃ¤ndert.', 1, NULL);
         ");
 
                 DBManager::get()->exec("
-                    INSERT INTO `log_actions` VALUES (MD5('SEM_SET_ENDSEMESTER'), 'SEM_SET_ENDSEMESTER', 'Semesterlaufzeit ändern', '%user hat in %sem(%affected) die Laufzeit auf %semester(%coaffected) geändert', 1, NULL);
+                    INSERT INTO `log_actions` VALUES (MD5('SEM_SET_ENDSEMESTER'), 'SEM_SET_ENDSEMESTER', 'Semesterlaufzeit Ã¤ndern', '%user hat in %sem(%affected) die Laufzeit auf %semester(%coaffected) geÃ¤ndert', 1, NULL);
         ");
 
                 DBManager::get()->exec("
-                    INSERT INTO `log_actions` VALUES (MD5('SEM_ADD_CYCLE'), 'SEM_ADD_CYCLE', 'Regelmäßige Zeit hinzugefügt', '%user hat in %sem(%affected) die regelmäßige Zeit <em>%coaffected</em> hinzugefügt.', 1, NULL);
+                    INSERT INTO `log_actions` VALUES (MD5('SEM_ADD_CYCLE'), 'SEM_ADD_CYCLE', 'RegelmÃ¤ÃŸige Zeit hinzugefÃ¼gt', '%user hat in %sem(%affected) die regelmÃ¤ÃŸige Zeit <em>%coaffected</em> hinzugefÃ¼gt.', 1, NULL);
         ");
 
                 DBManager::get()->exec("
-                    INSERT INTO `log_actions` VALUES (MD5('SEM_DELETE_CYCLE'), 'SEM_DELETE_CYCLE', 'Regelmäßige Zeit gelöscht', '%user hat in %sem(%affected) die regelmäßige Zeit <em>%coaffected</em> gelöscht.', 1, NULL);
+                    INSERT INTO `log_actions` VALUES (MD5('SEM_DELETE_CYCLE'), 'SEM_DELETE_CYCLE', 'RegelmÃ¤ÃŸige Zeit gelÃ¶scht', '%user hat in %sem(%affected) die regelmÃ¤ÃŸige Zeit <em>%coaffected</em> gelÃ¶scht.', 1, NULL);
         ");
 
                 DBManager::get()->exec("
-                    INSERT INTO `log_actions` VALUES (MD5('SEM_ADD_SINGLEDATE'), 'SEM_ADD_SINGLEDATE', 'Einzeltermin hinzufügen', '%user hat in %sem(%affected) den Einzeltermin <em>%coaffected</em> hinzugefügt', 1, NULL);
+                    INSERT INTO `log_actions` VALUES (MD5('SEM_ADD_SINGLEDATE'), 'SEM_ADD_SINGLEDATE', 'Einzeltermin hinzufÃ¼gen', '%user hat in %sem(%affected) den Einzeltermin <em>%coaffected</em> hinzugefÃ¼gt', 1, NULL);
         ");
 
                 DBManager::get()->exec("
-                    INSERT INTO `log_actions` VALUES (MD5('SEM_DELETE_REQUEST'), 'SEM_DELETE_REQUEST', 'Raumanfrage gelöscht', '%user hat in %sem(%affected) die Raumanfrage für die gesamte Veranstaltung gelöscht.', 1, NULL);
+                    INSERT INTO `log_actions` VALUES (MD5('SEM_DELETE_REQUEST'), 'SEM_DELETE_REQUEST', 'Raumanfrage gelÃ¶scht', '%user hat in %sem(%affected) die Raumanfrage fÃ¼r die gesamte Veranstaltung gelÃ¶scht.', 1, NULL);
         ");
 
                 DBManager::get()->exec("
-                    INSERT INTO `log_actions` VALUES (MD5('SEM_DELETE_SINGLEDATE_REQUEST'), 'SEM_DELETE_SINGLEDATE_REQUEST', 'Einzeltermin, Raumanfrage gelöscht', '%user hat in %sem(%affected) die Raumanfrage für den Termin <em>%coaffected</em> gelöscht.', 1, NULL);
+                    INSERT INTO `log_actions` VALUES (MD5('SEM_DELETE_SINGLEDATE_REQUEST'), 'SEM_DELETE_SINGLEDATE_REQUEST', 'Einzeltermin, Raumanfrage gelÃ¶scht', '%user hat in %sem(%affected) die Raumanfrage fÃ¼r den Termin <em>%coaffected</em> gelÃ¶scht.', 1, NULL);
         ");
 
                 DBManager::get()->exec("
-                    INSERT INTO `log_actions` VALUES (MD5('SINGLEDATE_CHANGE_TIME'), 'SINGLEDATE_CHANGE_TIME', 'Einzeltermin bearbeiten', '%user hat in %sem(%affected) den Einzeltermin %coaffected geändert.', 1, NULL);
+                    INSERT INTO `log_actions` VALUES (MD5('SINGLEDATE_CHANGE_TIME'), 'SINGLEDATE_CHANGE_TIME', 'Einzeltermin bearbeiten', '%user hat in %sem(%affected) den Einzeltermin %coaffected geÃ¤ndert.', 1, NULL);
         ");
 
         // move "RESOURCES_ENABLE" from config_local.inc.php to config table:

@@ -134,7 +134,7 @@ class Abschluss extends ModuleManagementModelTreeItem
     }
     
     /**
-     * Returns the number of Abschlüsse optional filtered by $filter.
+     * Returns the number of AbschlÃ¼sse optional filtered by $filter.
      * 
      * @param array $filter Key-value pairs of filed names and values
      * to filter the result set.
@@ -391,7 +391,7 @@ class Abschluss extends ModuleManagementModelTreeItem
             
             if (!$this->category_assignment) {
                 $ret['category_assignment'] = true;
-                $messages[] = _('Es muss eine Abschluss-Kategorie ausgewählt werden.');
+                $messages[] = _('Es muss eine Abschluss-Kategorie ausgewÃ¤hlt werden.');
                 $rejected = true;
             } else {
                 if (!AbschlussKategorie::find($this->category_assignment->kategorie_id)) {

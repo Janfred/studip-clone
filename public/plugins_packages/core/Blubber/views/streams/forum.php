@@ -52,7 +52,7 @@
             </tr>
             <tr>
                 <? $_SESSION['blubber_anonymous_security'] or $_SESSION['blubber_anonymous_security'] = mb_substr(md5(uniqid()), 0, 5) ?>
-                <td><?= _("Sicherheitsfrage! Schreibe folgendes rückwärts: ").strrev($_SESSION['blubber_anonymous_security']) ?></td>
+                <td><?= _("Sicherheitsfrage! Schreibe folgendes rÃ¼ckwÃ¤rts: ").strrev($_SESSION['blubber_anonymous_security']) ?></td>
                 <td><input type="text" id="anonymous_security" value="<?= $_SESSION['anonymous_email'] ? htmlReady($_SESSION['blubber_anonymous_security']) : "" ?>"></td>
             </tr>
             <tr>

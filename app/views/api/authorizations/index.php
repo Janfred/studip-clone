@@ -1,7 +1,7 @@
 <? use Studip\Button, Studip\LinkButton; ?>
 
 <? if (empty($consumers)): ?>
-<?= MessageBox::info(_('Sie haben noch keinen Apps Zugriff auf Ihren Account gewährt.')) ?>
+<?= MessageBox::info(_('Sie haben noch keinen Apps Zugriff auf Ihren Account gewÃ¤hrt.')) ?>
 <? else: ?>
 <table class="oauth-apps default">
     <caption><?= _('Applikationen') ?></caption>

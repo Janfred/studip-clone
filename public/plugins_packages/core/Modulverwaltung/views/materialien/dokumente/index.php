@@ -17,7 +17,7 @@
                 <tr>
                     <?= $controller->renderSortLink('materialien/dokumente/', _('Name'), 'name') ?>
                     <?= $controller->renderSortLink('materialien/dokumente/', _('Linktext'), 'linktext') ?>
-                    <?= $controller->renderSortLInk('materialien/dokumente/', _('Geändert am'), 'chdate', ['style' => 'white-space: nowrap;']) ?>
+                    <?= $controller->renderSortLInk('materialien/dokumente/', _('GeÃ¤ndert am'), 'chdate', ['style' => 'white-space: nowrap;']) ?>
                     <?= $controller->renderSortLink('materialien/dokumente/', _('Referenzierungen'), 'count_zuordnungen', ['style' => 'text-align: center;']) ?>
                     <th></th>
                 </tr>
@@ -43,8 +43,8 @@
                         <? $actionMenu = ActionMenu::get() ?>
                         <? $actionMenu->addLink(
                             $controller->url_for('shared/log_event/show', $dokument->id),
-                            _('Log-Einträge dieses Dokumentes'),
-                            Icon::create('log', 'clickable', ['title' => _('Log-Einträge dieses Dokumentes')]),
+                            _('Log-EintrÃ¤ge dieses Dokumentes'),
+                            Icon::create('log', 'clickable', ['title' => _('Log-EintrÃ¤ge dieses Dokumentes')]),
                             ['data-dialog' => 'size=auto']
                         ) ?>
                         <? if ($perm->havePermWrite()) : ?>
@@ -57,7 +57,7 @@
                         <? if ($perm->havePermCreate()) : ?>
                             <? if ($relations = $dokument->getCountRelations()) {
                                 $msg = sprintf(
-                                    _('Wollen Sie das Dokument "%s" wirklich löschen?')
+                                    _('Wollen Sie das Dokument "%s" wirklich lÃ¶schen?')
                                     . ' '
                                     . ngettext(
                                         'Dieses Dokument wird von einem Objekt referenziert.',
@@ -68,12 +68,12 @@
                                     $relations
                                 );
                             } else {
-                                $msg = sprintf(_('Wollen Sie das Dokument "%s" wirklich löschen?'), $dokument->name);
+                                $msg = sprintf(_('Wollen Sie das Dokument "%s" wirklich lÃ¶schen?'), $dokument->name);
                             } ?>
                             <? $actionMenu->addButton(
                                 'delete_file',
-                                _('Dokument löschen'),
-                                Icon::create('trash', 'clickable', ['title' => _('Dokument löschen')]),
+                                _('Dokument lÃ¶schen'),
+                                Icon::create('trash', 'clickable', ['title' => _('Dokument lÃ¶schen')]),
                                 ['formaction'   => $controller->url_for('/delete/' . $dokument->id),
                                  'data-confirm' => $msg]
                             ) ?>

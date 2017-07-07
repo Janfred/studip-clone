@@ -2,7 +2,7 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 //
-// Copyright (C) 2014 Arne Schröder <schroeder@data-quest>,
+// Copyright (C) 2014 Arne SchrÃ¶der <schroeder@data-quest>,
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      Arne Schröder <schroeder@data-quest>
+ * @author      Arne SchrÃ¶der <schroeder@data-quest>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
  * 
@@ -60,7 +60,7 @@ class HelpTourStep extends SimpleORMap
     /**
      * checks, if tour step data is complete
      * 
-     * @todo Das Model sollte nix über PageLayout wissen, das sollte anders raus transportiert werden
+     * @todo Das Model sollte nix Ã¼ber PageLayout wissen, das sollte anders raus transportiert werden
      * @return boolean true or false
      */
     function validate() {
@@ -73,7 +73,7 @@ class HelpTourStep extends SimpleORMap
             return false;
         }
         if (!$this->route) {
-            PageLayout::postMessage(MessageBox::error(_('Ungültige oder fehlende Angabe zur Seite, für die der Schritt angezeigt werden soll.')));
+            PageLayout::postMessage(MessageBox::error(_('UngÃ¼ltige oder fehlende Angabe zur Seite, fÃ¼r die der Schritt angezeigt werden soll.')));
             return false;
         }
         return true;

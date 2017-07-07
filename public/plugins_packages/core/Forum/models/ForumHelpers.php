@@ -7,7 +7,7 @@
  * published by the Free Software Foundation; either version 3 of
  * the License, or (at your option) any later version.
  *
- * @author      Till Glˆggler <tgloeggl@uos.de>
+ * @author      Till Gl√∂ggler <tgloeggl@uos.de>
  * @license     http://www.gnu.org/licenses/gpl-3.0.html GPL version 3
  * @category    Stud.IP
  */
@@ -153,17 +153,17 @@ class ForumHelpers {
     static function getVisitText($num_entries, $topic_id)
     {
         if ($num_entries > 0) {
-            $text = sprintf(_('Seit Ihrem letzten Besuch gibt es %s neue Beitr‰ge'), $num_entries);
+            $text = sprintf(_('Seit Ihrem letzten Besuch gibt es %s neue Beitr√§ge'), $num_entries);
         } else {
             $all_entries = max(ForumEntry::countEntries($topic_id) - 1, 0);
             if ($all_entries == 0) {
-                $text = sprintf(_('Es gibt bisher keine Beitr‰ge.'));
+                $text = sprintf(_('Es gibt bisher keine Beitr√§ge.'));
             } else if ($all_entries == 1) {
                 $text = sprintf(_('Seit Ihrem letzten Besuch gab es nichts Neues.'
                       . ' Es ist ein alter Beitrag vorhanden.'));
             } else {
                 $text = sprintf(_('Seit Ihrem letzten Besuch gab es nichts Neues.'
-                      . ' Es sind %s alte Beitr‰ge vorhanden.'), $all_entries);
+                      . ' Es sind %s alte Beitr√§ge vorhanden.'), $all_entries);
             }
         }
 

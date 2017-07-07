@@ -171,7 +171,7 @@ class Color {
     /**
      * Make the passed color brighter
      *
-     * @author Till Glöggler <tgloeggl@uos.de>
+     * @author Till GlÃ¶ggler <tgloeggl@uos.de>
      *
      * @param  string  $color  any type of css-valid color
      * @param  int  $factor  percentage of brightning, 100 for white and 0 for no changes to color

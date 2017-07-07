@@ -7,7 +7,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      AndrÈ Noack <noack@data-quest.de>
+ * @author      Andr√© Noack <noack@data-quest.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
  * @package     admin
@@ -102,17 +102,17 @@ class Resources_HelpersController extends AuthenticatedController
         }
             $this->resource = new ResourceObject($resource_id);
             $title = sprintf(_("Nutzer von %s benachrichtigen"),htmlReady($this->resource->getName()));
-            $form_fields['start_day'] = array('type' => 'text', 'size' => '10', 'required' => true, 'caption' => _("Belegungen ber¸cksichtigen von"));
+            $form_fields['start_day'] = array('type' => 'text', 'size' => '10', 'required' => true, 'caption' => _("Belegungen ber√ºcksichtigen von"));
             $form_fields['start_day']['attributes'] = array('onMouseOver' => 'jQuery(this).datepicker();this.blur();', 'onChange' => '$(this).closest("form").submit();');
             $form_fields['start_day']['default_value'] = strftime('%x');
-            $form_fields['end_day'] = array('type' => 'text', 'size' => '10', 'required' => true, 'caption' => _("Belegungen ber¸cksichtigen bis"));
+            $form_fields['end_day'] = array('type' => 'text', 'size' => '10', 'required' => true, 'caption' => _("Belegungen ber√ºcksichtigen bis"));
             $form_fields['end_day']['attributes'] = array('onMouseOver' => 'jQuery(this).datepicker();this.blur();', 'onChange' => '$(this).closest("form").submit();');
             $form_fields['end_day']['default_value'] = strftime('%x', strtotime('+6 months'));
             $form_fields['subject'] = array('type' => 'text', 'size' => '200','attributes' => array('style' => 'width:100%'), 'required' => true, 'caption' => _("Betreff"));
             $form_fields['subject']['default_value'] = $this->resource->getName();
             $form_fields['message'] = array('caption' => _("Nachricht"), 'type' => 'textarea', 'required' => true, 'attributes' => array('rows' => 4, 'style' => 'width:100%'));
 
-            $form_buttons['save_close'] = array('caption' => _('OK'), 'info' => _("Benachrichtigung verschicken und Dialog schlieﬂen"));
+            $form_buttons['save_close'] = array('caption' => _('OK'), 'info' => _("Benachrichtigung verschicken und Dialog schlie√üen"));
 
             $form = new StudipForm($form_fields, $form_buttons, 'resource_message', false);
 
@@ -166,7 +166,7 @@ class Resources_HelpersController extends AuthenticatedController
     public function export_requestlist_action()
     {
         $data[] = array(_('V.-Nummer'), _('Titel'), _('Dozenten'), _('Anfrager'), _('Startsemester'), _('Datum der Erstellung'),
-            _('Datum der letzten ƒnderung'), _('angeforderte Belegungszeiten'), _('gew¸nschte Raumeigenschaften'), _('angeforderter Raum'),
+            _('Datum der letzten √Ñnderung'), _('angeforderte Belegungszeiten'), _('gew√ºnschte Raumeigenschaften'), _('angeforderter Raum'),
             _('Teilnehmeranzahl'), _('Kommentar des Anfragenden'));
 
         $resources_data = unserialize($_SESSION['resources_data']);
@@ -210,7 +210,7 @@ class Resources_HelpersController extends AuthenticatedController
                         }
                     }
                     if ($reqObj->getType() != 'date') {
-                        $timeslot[] = _("regelm‰ﬂige Buchung ab: ") . strftime('%x', $dates['first_event']);
+                        $timeslot[] = _("regelm√§√üige Buchung ab: ") . strftime('%x', $dates['first_event']);
                     }
                 }
                 $time = join(', ', $timeslot);

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2011 - Till Glöggler     <tgloeggl@uos.de>
+ * Copyright (C) 2011 - Till GlÃ¶ggler     <tgloeggl@uos.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -313,7 +313,7 @@ class IndexController extends ForumController
             $this->highlight         = $list['highlight'];
 
             if (empty($this->postings)) {
-                $this->flash['messages'] = array('info' => _('Es wurden keine Beiträge gefunden, die zu Ihren Suchkriterien passen!'));
+                $this->flash['messages'] = array('info' => _('Es wurden keine BeitrÃ¤ge gefunden, die zu Ihren Suchkriterien passen!'));
             }
         }
 
@@ -355,8 +355,8 @@ class IndexController extends ForumController
      */
     function add_entry_action()
     {
-        // Schutz vor Spambots - diese füllen meistens alle Felder aus, auch "versteckte".
-        // Ist dieses Feld gefüllt, war das vermutlich kein Mensch
+        // Schutz vor Spambots - diese fÃ¼llen meistens alle Felder aus, auch "versteckte".
+        // Ist dieses Feld gefÃ¼llt, war das vermutlich kein Mensch
         if (Request::get('nixda')) {
             throw new Exception('Access denied!');
         }
@@ -419,16 +419,16 @@ class IndexController extends ForumController
                 // only delete directly if passed by ajax, otherwise ask for confirmation
                 if (Request::isXhr() || Request::get('approve_delete')) {
                     ForumEntry::delete($topic_id);
-                    $this->flash['messages'] = array('success' => sprintf(_('Der Eintrag %s wurde gelöscht!'), $topic['name']));
+                    $this->flash['messages'] = array('success' => sprintf(_('Der Eintrag %s wurde gelÃ¶scht!'), $topic['name']));
                 } else {
                     $this->flash['messages'] = array('info_html' =>
-                        sprintf(_('Sind sie sicher dass Sie den Eintrag %s löschen möchten?'), $topic['name'])
+                        sprintf(_('Sind sie sicher dass Sie den Eintrag %s lÃ¶schen mÃ¶chten?'), $topic['name'])
                         . '<br>'. \Studip\LinkButton::createAccept(_('Ja'), PluginEngine::getUrl('coreforum/index/delete_entry/'. $topic_id .'?approve_delete=1'))
                         . \Studip\LinkButton::createCancel(_('Nein'), PluginEngine::getUrl('coreforum/index/index/'. ForumEntry::getParentTopicId($topic_id) .'/'. $page))
                     );
                 }
             } else {
-                $this->flash['messages'] = array('success' => _('Sie können nicht die gesamte Veranstaltung löschen!'));
+                $this->flash['messages'] = array('success' => _('Sie kÃ¶nnen nicht die gesamte Veranstaltung lÃ¶schen!'));
             }
         }
 
@@ -633,7 +633,7 @@ class IndexController extends ForumController
 
         ForumEntry::open($topic_id);
 
-        $success_text = _('Das Thema wurde erfolgreich geöffnet.');
+        $success_text = _('Das Thema wurde erfolgreich geÃ¶ffnet.');
 
         if (Request::isXhr()) {
             $this->render_text(MessageBox::success($success_text));
@@ -704,7 +704,7 @@ class IndexController extends ForumController
 
         if (ForumEntry::isClosed($topic_id) && !ForumPerm::has('edit_closed')) {
             throw new AccessDeniedException(
-                _('Sie dürfen keinen Beitrag in einem geschlossenen Thema erstellen!')
+                _('Sie dÃ¼rfen keinen Beitrag in einem geschlossenen Thema erstellen!')
             );
         }
 
@@ -732,7 +732,7 @@ class IndexController extends ForumController
 
         if (ForumEntry::isClosed($topic_id) && !ForumPerm::has('edit_closed')) {
             throw new AccessDeniedException(
-                _('Sie dürfen keinen Beitrag in einem geschlossenen Thema erstellen!')
+                _('Sie dÃ¼rfen keinen Beitrag in einem geschlossenen Thema erstellen!')
             );
         }
 
@@ -762,7 +762,7 @@ class IndexController extends ForumController
         ForumPerm::checkCategoryId($this->getId(), $category_id);
         ForumPerm::check('remove_category', $this->getId());
 
-        $this->flash['messages'] = array('success' => _('Die Kategorie wurde gelöscht!'));
+        $this->flash['messages'] = array('success' => _('Die Kategorie wurde gelÃ¶scht!'));
         ForumCat::remove($category_id, $this->getId());
 
         if (Request::isXhr()) {
@@ -787,7 +787,7 @@ class IndexController extends ForumController
             $this->render_nothing();
         } else {
             ForumCat::setName($category_id, Request::get('name'));
-            $this->flash['messages'] = array('success' => _('Der Name der Kategorie wurde geändert.'));
+            $this->flash['messages'] = array('success' => _('Der Name der Kategorie wurde geÃ¤ndert.'));
             $this->redirect(PluginEngine::getLink('coreforum/index/index#cat_' . $category_id));
         }
 
@@ -830,7 +830,7 @@ class IndexController extends ForumController
                 case 1:  $msg = _('Sie haben diesen Bereich abonniert.');break;
                 default: $msg = _('Sie haben dieses Thema abonniert');break;
             }
-            $this->flash['messages'] = array('success' => $msg .' '. _('Sie werden nun über jeden neuen Beitrag informiert.'));
+            $this->flash['messages'] = array('success' => $msg .' '. _('Sie werden nun Ã¼ber jeden neuen Beitrag informiert.'));
             $this->redirect(PluginEngine::getLink('coreforum/index/index/' . $topic_id));
         }
     }

@@ -1,6 +1,6 @@
 <section class="contentbox">
     <header>
-        <h1><?= _('Dateiübersicht') ?></h1>
+        <h1><?= _('DateiÃ¼bersicht') ?></h1>
     </header>
 <? foreach ($folders as $folder) : ?>
     <? foreach($folder->getFiles() as $file): ?>
@@ -26,7 +26,7 @@
                             <?= htmlReady($file->description ?: _('Keine Beschreibung vorhanden'), true, true) ?>
                         </p>
                         <p>
-                            <strong><?= _('Dateigröße') ?>:</strong>
+                            <strong><?= _('DateigrÃ¶ÃŸe') ?>:</strong>
                             <?= relsize($file->file->size) ?>
                         </p>
                         <p>
@@ -37,7 +37,7 @@
 
                 <? if ($file->terms_of_use->download_condition > 0): ?>
                     <article>
-                        <?= MessageBox::warning(_('Das Herunterladen dieser Datei ist aufgrund von Nutzungsbedingungen nur eingeschränkt möglich!')) ?>
+                        <?= MessageBox::warning(_('Das Herunterladen dieser Datei ist aufgrund von Nutzungsbedingungen nur eingeschrÃ¤nkt mÃ¶glich!')) ?>
                     </article>
                 <? endif ?>
                 </section>
@@ -50,7 +50,7 @@
 <? if (Request::int('from_index')) : ?>
     <footer data-dialog-button>
         <?= Studip\LinkButton::create(
-            _('Zurück zur Übersicht'),
+            _('ZurÃ¼ck zur Ãœbersicht'),
             $controller->url_for('admin/user/activities/' . $user->user_id, $params),
             ['data-dialog' => 'size=50%']
         ) ?>

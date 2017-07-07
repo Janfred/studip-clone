@@ -8,7 +8,7 @@
                    value="<?= htmlReady(Request::get('url')) ?>">
         </label>
         <label>
-            <?= _('Gewünschter Dateiname') ?>
+            <?= _('GewÃ¼nschter Dateiname') ?>
             <input type="text" name="name" placeholder="<?= _('Beispielname.pdf') ?>"
                    value="<?= htmlReady(Request::get('name')) ?>">
         </label>
@@ -24,13 +24,13 @@
         <label>
             <input type="radio" name="access_type" value="proxy"
                     <? if (Request::option('access_type') === 'proxy') echo 'checked'; ?>>
-            <?= _('Link über Proxy')?>
+            <?= _('Link Ã¼ber Proxy')?>
         </label>
     </fieldset>
     <div data-dialog-button>
         <?= Studip\Button::createAccept(_('Speichern'), 'store') ?>
         <?= Studip\LinkButton::createCancel(
-            _('Zurück'),
+            _('ZurÃ¼ck'),
             $controller->url_for('/add_files_window/' . Request::option('to_folder_id'), $options),
             ['data-dialog' => '']
         ) ?>

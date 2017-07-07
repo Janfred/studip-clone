@@ -52,7 +52,7 @@ class ExternElementMainTemplateNews extends ExternElementMain {
                 'copyright', 'author', 'showdateauthor', 'notauthorlink'
         );
         $this->real_name = _("Grundeinstellungen");
-        $this->description = _("In den Grundeinstellungen können Sie allgemeine Daten des Moduls ändern.");
+        $this->description = _("In den Grundeinstellungen kÃ¶nnen Sie allgemeine Daten des Moduls Ã¤ndern.");
         parent::__construct($module_name, $data_fields, $field_names, $config);
         $this->edit_function = 'editSort';
     }
@@ -98,27 +98,27 @@ class ExternElementMainTemplateNews extends ExternElementMain {
         $headline = $edit_form->editHeadline(_("Weitere Angaben"));
         
         $title = _("Namensformat:");
-        $info = _("Wählen Sie, wie Personennamen formatiert werden sollen.");
+        $info = _("WÃ¤hlen Sie, wie Personennamen formatiert werden sollen.");
         $values = array("", "no_title_short", "no_title", "no_title_rev", "full", "full_rev", "last");
         $names = array(_("keine Auswahl"), _("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
                 _("Dr. Peter Meyer"), _("Meyer, Peter, Dr."), _("Meyer"));
         $table = $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
         
         $title = _("Datumsformat:");
-        $info = _("Wählen Sie, wie Datumsangaben formatiert werden sollen.");
+        $info = _("WÃ¤hlen Sie, wie Datumsangaben formatiert werden sollen.");
         $values = array("%d. %b. %Y", "%d.%m.%Y", "%d.%m.%y", "%d. %B %Y", "%m/%d/%y");
         $names = array(_("25. Nov. 2003"), "25.11.2003", "25.11.03",
                 _("25. November 2003"), "11/25/03");
         $table .= $edit_form->editOptionGeneric("dateformat", $title, $info, $values, $names);
         
         $title = _("Sprache:");
-        $info = _("Wählen Sie eine Sprache für die Datumsangaben aus.");
+        $info = _("WÃ¤hlen Sie eine Sprache fÃ¼r die Datumsangaben aus.");
         $values = array("", "de_DE", "en_GB");
         $names = array(_("keine Auswahl"), _("Deutsch"), _("Englisch"));
         $table .= $edit_form->editOptionGeneric("language", $title, $info, $values, $names);
         
         $title = _("Keine News:");
-        $info = _("Dieser Text wird an Stelle der Tabelle ausgegeben, wenn keine News verfügbar sind.");
+        $info = _("Dieser Text wird an Stelle der Tabelle ausgegeben, wenn keine News verfÃ¼gbar sind.");
         $table .= $edit_form->editTextareaGeneric("nodatatext", $title, $info, 3, 50);
         
         $content_table .= $edit_form->editContentTable($headline, $table);

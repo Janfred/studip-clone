@@ -13,7 +13,7 @@ class ConfigFilesystemMulticopyEnable extends Migration {
             'type'        => 'boolean',
             'value'       => 1,
             'section'     => '',
-            'description' => 'Soll es erlaubt sein, das Dozenten Ordner oder Dateien in mehrere Veranstaltungen bzw. Institute verschieben oder kopieren dürfen?'
+            'description' => 'Soll es erlaubt sein, das Dozenten Ordner oder Dateien in mehrere Veranstaltungen bzw. Institute verschieben oder kopieren dÃ¼rfen?'
             );
 
         $stmt = DBManager::get()->prepare("

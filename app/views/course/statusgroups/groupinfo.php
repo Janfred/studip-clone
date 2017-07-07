@@ -4,38 +4,38 @@
 <section>
     <p>
         <?= $group->size > 0 ?
-            formatReady(sprintf(_('Diese Gruppe ist auf **%u** Mitglieder beschränkt.'), $group->size)) :
-            formatReady(_('Die Größe dieser Gruppe ist **nicht beschränkt**.')) ?>
+            formatReady(sprintf(_('Diese Gruppe ist auf **%u** Mitglieder beschrÃ¤nkt.'), $group->size)) :
+            formatReady(_('Die GrÃ¶ÃŸe dieser Gruppe ist **nicht beschrÃ¤nkt**.')) ?>
     </p>
 
     <?php if ($group->selfassign) : ?>
         <?php if ($group->selfassign == 1) : ?>
             <p>
-                <?= _('Die Teilnehmenden dieser Veranstaltung können sich ' .
+                <?= _('Die Teilnehmenden dieser Veranstaltung kÃ¶nnen sich ' .
                     'selbst in beliebig viele der Gruppen eintragen, bei denen ' .
                     'kein Exklusiveintrag aktiviert ist.') ?>
             </p>
         <?php elseif ($group->selfassign == 2) : ?>
             <p>
-                <?= _('Die Teilnehmenden dieser Veranstaltung können sich ' .
+                <?= _('Die Teilnehmenden dieser Veranstaltung kÃ¶nnen sich ' .
                 'in genau einer der Gruppen eintragen, bei denen der ' .
                 'Exklusiveintrag aktiviert ist.') ?>
             </p>
         <?php endif ?>
         <?php if ($group->selfassign_start && $group->selfassign_end) : ?>
             <p>
-                <?= formatReady(sprintf(_('Der Eintrag ist möglich **von %s bis %s**.'),
+                <?= formatReady(sprintf(_('Der Eintrag ist mÃ¶glich **von %s bis %s**.'),
                     date('d.m.Y H:i', $group->selfassign_start),
                     date('d.m.Y H:i', $group->selfassign_end))) ?>
             </p>
         <?php elseif ($group->selfassign_start && !$group->selfassign_end) : ?>
             <p>
-                <?= formatReady(sprintf(_('Der Eintrag ist möglich **ab %s**.'),
+                <?= formatReady(sprintf(_('Der Eintrag ist mÃ¶glich **ab %s**.'),
                     date('d.m.Y H:i', $group->selfassign_start))) ?>
             </p>
         <?php elseif (!$group->selfassign_start && $group->selfassign_end) : ?>
             <p>
-                <?= formatReady(sprintf(_('Der Eintrag ist möglich **bis %s**.'),
+                <?= formatReady(sprintf(_('Der Eintrag ist mÃ¶glich **bis %s**.'),
                     date('d.m.Y H:i', $group->selfassign_end))) ?>
             </p>
         <?php endif ?>
@@ -43,7 +43,7 @@
 
     <?php if ($folder = $group->getFolder()) : ?>
         <p>
-            <?= formatReady(sprintf(_('Zu dieser Gruppe gehört ein [Dateiordner]%s .'),
+            <?= formatReady(sprintf(_('Zu dieser Gruppe gehÃ¶rt ein [Dateiordner]%s .'),
                 URLHelper::getURL('dispatch.php/course/files/index/' . $folder->id, array(
                     'cid' => $course_id,
                 )))) ?>
@@ -87,6 +87,6 @@
 </section>
 
 <footer data-dialog-button>
-    <?= Studip\LinkButton::createCancel(_('Schließen'),
+    <?= Studip\LinkButton::createCancel(_('SchlieÃŸen'),
         $controller->url_for('course/statusgroups')) ?>
 </footer>

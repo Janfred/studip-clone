@@ -18,7 +18,7 @@ $sidebar->setImage('sidebar/forum-sidebar.png');
 if (ForumPerm::has('search', $seminar_id)) {
     $search = new SearchWidget(PluginEngine::getLink('coreforum/index/search?backend=search'));
     $search->setId('tutorSearchInfobox');
-    $search->addNeedle(_('Beiträge durchsuchen'), 'searchfor', true);
+    $search->addNeedle(_('BeitrÃ¤ge durchsuchen'), 'searchfor', true);
     $search->addFilter(_('Titel'), 'search_title');
     $search->addFilter(_('Inhalt'), 'search_content');
     $search->addFilter(_('Autor/-in'), 'search_author');
@@ -50,7 +50,7 @@ if ($section == 'index') {
             $close_url = PluginEngine::getLink('coreforum/index/close_thread/' 
                             . $constraint['topic_id'] .'/'. $constraint['topic_id'] .'/'. ForumHelpers::getPage());
             $close = new LinkElement(
-                _('Thema schließen'), 
+                _('Thema schlieÃŸen'), 
                 $close_url, 
                 Icon::create('lock-locked', 'clickable'),
                 array(
@@ -64,7 +64,7 @@ if ($section == 'index') {
             $open_url = PluginEngine::getLink('coreforum/index/open_thread/' 
                             . $constraint['topic_id'] .'/'. $constraint['topic_id'] .'/'. ForumHelpers::getPage());
             $open = new LinkElement(
-                _('Thema öffnen'),
+                _('Thema Ã¶ffnen'),
                 $open_url,
                 Icon::create('lock-unlocked', 'clickable'),
                 array(
@@ -118,7 +118,7 @@ $sidebar->addWidget($actions);
 
 if ($section === 'index' && ForumPerm::has('pdfexport', $seminar_id)) {
     $export = new ExportWidget();
-    $export->addLink(_('Beiträge als PDF exportieren'),
+    $export->addLink(_('BeitrÃ¤ge als PDF exportieren'),
                      $controller->url_for('index/pdfexport/' . $constraint['topic_id']),
                      Icon::create('file-pdf', 'clickable'));
     $sidebar->addWidget($export);
@@ -128,7 +128,7 @@ if ($section === 'index' && ForumPerm::has('pdfexport', $seminar_id)) {
 <!-- Breadcrumb navigation -->
 <?= $this->render_partial('index/_breadcrumb') ?>
 
-<!-- Seitenwähler (bei Bedarf) am oberen Rand anzeigen -->
+<!-- SeitenwÃ¤hler (bei Bedarf) am oberen Rand anzeigen -->
 <div style="float: right; padding-right: 10px;" data-type="page_chooser">
     <? if ($constraint['depth'] > 0 || !isset($constraint)) : ?>
     <?= $pagechooser = $GLOBALS['template_factory']->render('shared/pagechooser', array(
@@ -149,7 +149,7 @@ if ($section === 'index' && ForumPerm::has('pdfexport', $seminar_id)) {
 </div>
 
 <? if ($no_entries) : ?>
-    <?= MessageBox::info(_('In dieser Ansicht befinden sich zur Zeit keine Beiträge.')) ?>
+    <?= MessageBox::info(_('In dieser Ansicht befinden sich zur Zeit keine BeitrÃ¤ge.')) ?>
 <? endif ?>
 
 <!-- Bereiche / Themen darstellen -->
@@ -160,11 +160,11 @@ if ($section === 'index' && ForumPerm::has('pdfexport', $seminar_id)) {
 <? endif ?>
 
 <? if (!empty($postings)) : ?>
-    <!-- Beiträge für das ausgewählte Thema darstellen -->
+    <!-- BeitrÃ¤ge fÃ¼r das ausgewÃ¤hlte Thema darstellen -->
     <?= $this->render_partial('index/_postings') ?>
 <? endif ?>
 
-<!-- Seitenwähler (bei Bedarf) am unteren Rand anzeigen -->
+<!-- SeitenwÃ¤hler (bei Bedarf) am unteren Rand anzeigen -->
 <? if ($pagechooser) : ?>
 <div style="float: right; padding-right: 10px;" data-type="page_chooser">
     <?= $pagechooser ?>
@@ -182,7 +182,7 @@ if ($section === 'index' && ForumPerm::has('pdfexport', $seminar_id)) {
             <? endif ?>
 
             <? if (ForumPerm::has('pdfexport', $seminar_id) && $section == 'index') : ?>
-                <?= Studip\LinkButton::create(_('Beiträge als PDF exportieren'), PluginEngine::getLink('coreforum/index/pdfexport'), array('target' => '_blank')) ?>
+                <?= Studip\LinkButton::create(_('BeitrÃ¤ge als PDF exportieren'), PluginEngine::getLink('coreforum/index/pdfexport'), array('target' => '_blank')) ?>
             <? endif ?>
         </div>
     </div>
@@ -212,13 +212,13 @@ if ($section === 'index' && ForumPerm::has('pdfexport', $seminar_id)) {
                 
                 <? if (ForumPerm::has('close_thread', $seminar_id) && $constraint['depth'] > 1) : ?>
                     <? if ($constraint['closed'] == 0): ?>
-                    <?= Studip\LinkButton::create(_('Thema schließen'), 
+                    <?= Studip\LinkButton::create(_('Thema schlieÃŸen'), 
                             PluginEngine::getLink('coreforum/index/close_thread/' . $topic_id .'/'. $topic_id .'/'. ForumHelpers::getPage()), array(
                                 'onClick' => 'STUDIP.Forum.closeThreadFromThread("'. $topic_id .'"); return false;',
                                 'class' => 'closeButtons')
                         ) ?>
                     <? else: ?>
-                    <?= Studip\LinkButton::create(_('Thema öffnen'), 
+                    <?= Studip\LinkButton::create(_('Thema Ã¶ffnen'), 
                         PluginEngine::getLink('coreforum/index/open_thread/' . $topic_id .'/'. $topic_id .'/'. ForumHelpers::getPage()), array(
                             'onClick' => 'STUDIP.Forum.openThreadFromThread("'. $topic_id .'"); return false;',
                             'class' => 'closeButtons')
@@ -233,7 +233,7 @@ if ($section === 'index' && ForumPerm::has('pdfexport', $seminar_id)) {
                 <? endif ?>
                 
                 <? if (ForumPerm::has('pdfexport', $seminar_id)) : ?>
-                <?= Studip\LinkButton::create(_('Beiträge als PDF exportieren'), PluginEngine::getLink('coreforum/index/pdfexport/' . $topic_id), array('target' => '_blank')) ?>
+                <?= Studip\LinkButton::create(_('BeitrÃ¤ge als PDF exportieren'), PluginEngine::getLink('coreforum/index/pdfexport/' . $topic_id), array('target' => '_blank')) ?>
                 <? endif ?>
             </div>
         </div>
@@ -248,7 +248,7 @@ if ($section === 'index' && ForumPerm::has('pdfexport', $seminar_id)) {
     <? endif ?>
 </div>
 
-<!-- Mail-Notifikationen verschicken (soweit am Ende der Seite wie möglich!) -->
+<!-- Mail-Notifikationen verschicken (soweit am Ende der Seite wie mÃ¶glich!) -->
 <? if ($flash['notify']) :
     ForumAbo::notify($flash['notify']);
 endif ?>

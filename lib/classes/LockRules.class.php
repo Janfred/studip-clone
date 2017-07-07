@@ -9,7 +9,7 @@
  * the License, or (at your option) any later version.
  *
  * @author      Mark Sievers <msievers@uos.de>
- * @author      André Noack <noack@data-quest.de>
+ * @author      AndrÃ© Noack <noack@data-quest.de>
  * @copyright   2011 Stud.IP Core-Group
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
@@ -155,7 +155,7 @@ class LockRules {
         $groups['basic'] = _("Grunddaten");
         $groups['personnel'] = _("Personen und Einordnung");
         $groups['misc'] = _("weitere Daten");
-        $groups['room_time'] = _("Zeiten/Räume");
+        $groups['room_time'] = _("Zeiten/RÃ¤ume");
         $groups['access'] = _("Zugangsberechtigungen");
         $groups['actions'] = _("spezielle Aktionen");
 
@@ -173,44 +173,44 @@ class LockRules {
         $attributes['sem']['tutor'] = array('name' => _("Tutor/-innen"), 'group' => 'personnel');
         $attributes['sem']['institut_id'] = array('name' => _("Heimateinrichtung"), 'group' => 'personnel');
         $attributes['sem']['sem_tree'] = array('name' => _("Studienbereiche"), 'group' => 'personnel');
-        $attributes['sem']['participants'] = array('name' => _("Personen hinzufügen/löschen"), 'group' => 'personnel');
-        $attributes['sem']['groups'] = array('name' => _("Gruppen hinzufügen/löschen"), 'group' => 'personnel');
+        $attributes['sem']['participants'] = array('name' => _("Personen hinzufÃ¼gen/lÃ¶schen"), 'group' => 'personnel');
+        $attributes['sem']['groups'] = array('name' => _("Gruppen hinzufÃ¼gen/lÃ¶schen"), 'group' => 'personnel');
         $attributes['sem']['sonstiges'] = array('name' => _("Sonstiges"), 'group' => 'misc');
         $attributes['sem']['teilnehmer'] = array('name' => _("Beschreibung des Teilnehmerkreises"), 'group' => 'misc');
         $attributes['sem']['voraussetzungen'] = array('name' => _("Teilnahmevoraussetzungen"), 'group' => 'misc');
         $attributes['sem']['lernorga'] = array('name' => _("Lernorganisation"), 'group' => 'misc');
         $attributes['sem']['leistungsnachweis'] = array('name' => _("Leistungsnachweis"), 'group' => 'misc');
-        $attributes['sem']['room_time'] = array('name' => _("Zeiten/Räume"), 'group' => 'room_time');
+        $attributes['sem']['room_time'] = array('name' => _("Zeiten/RÃ¤ume"), 'group' => 'room_time');
         $attributes['sem']['cancelled_dates'] = array('name' => _("Termine ausfallen lassen"), 'group' => 'room_time');
-        $attributes['sem']['edit_dates_in_schedule'] = array('name' => _("Erweiterte Termindaten im Ablaufplan ändern"), 'group' => 'room_time');
+        $attributes['sem']['edit_dates_in_schedule'] = array('name' => _("Erweiterte Termindaten im Ablaufplan Ã¤ndern"), 'group' => 'room_time');
         $attributes['sem']['admission_endtime'] = array('name' => _("Zeit/Datum der Platzverteilung/Kontingentierung"), 'group' => 'access');
         $attributes['sem']['admission_disable_waitlist'] = array('name' => _("Aktivieren/Deaktivieren der Warteliste"), 'group' => 'access');
         $attributes['sem']['admission_binding'] = array('name' => _("Verbindlichkeit der Anmeldung"), 'group' => 'access');
         $attributes['sem']['admission_type'] = array('name' => _("Typ des Anmeldeverfahrens"), 'group' => 'access');
-        $attributes['sem']['admission_prelim'] = array('name' => _("zugelassenene Studiengänge"), 'group' => 'access');
-        $attributes['sem']['admission_prelim_txt'] = array('name' => _("Vorläufigkeit der Anmeldungen"), 'group' => 'access');
+        $attributes['sem']['admission_prelim'] = array('name' => _("zugelassenene StudiengÃ¤nge"), 'group' => 'access');
+        $attributes['sem']['admission_prelim_txt'] = array('name' => _("VorlÃ¤ufigkeit der Anmeldungen"), 'group' => 'access');
         $attributes['sem']['admission_disable_waitlist'] = array('name' => _("Hinweistext bei Anmeldungen"), 'group' => 'access');
-        $attributes['sem']['admission_starttime'] = array('name' => _("Startzeitpunkt der Anmeldemöglichkeit"), 'group' => 'access');
-        $attributes['sem']['admission_endtime_sem'] = array('name' => _("Endzeitpunkt der Anmeldemöglichkeit"), 'group' => 'access');
+        $attributes['sem']['admission_starttime'] = array('name' => _("Startzeitpunkt der AnmeldemÃ¶glichkeit"), 'group' => 'access');
+        $attributes['sem']['admission_endtime_sem'] = array('name' => _("Endzeitpunkt der AnmeldemÃ¶glichkeit"), 'group' => 'access');
         $attributes['sem']['lesezugriff'] = array('name' => _("Lesezugriff"), 'group' => 'access');
         $attributes['sem']['schreibzugriff'] = array('name' => _("Schreibzugriff"), 'group' => 'access');
         $attributes['sem']['passwort'] = array('name' => _("Passwort"), 'group' => 'access');
-        $attributes['sem']['user_domain'] = array('name' => _("Nutzerdomänen zuordnen"), 'group' => 'access');
+        $attributes['sem']['user_domain'] = array('name' => _("NutzerdomÃ¤nen zuordnen"), 'group' => 'access');
         $attributes['sem']['seminar_copy'] = array('name' => _("Veranstaltung kopieren"), 'group' => 'actions');
         $attributes['sem']['seminar_archive'] = array('name' => _("Veranstaltung archivieren"), 'group' => 'actions');
         $attributes['sem']['seminar_visibility'] = array('name' => _("Veranstaltung sichtbar/unsichtbar schalten"), 'group' => 'actions');
 
         $attributes['inst']['name'] = array('name' => _("Name"), 'group' => 'basic');
-        $attributes['inst']['fakultaets_id'] = array('name' => _("Fakultät"), 'group' => 'basic');
+        $attributes['inst']['fakultaets_id'] = array('name' => _("FakultÃ¤t"), 'group' => 'basic');
         $attributes['inst']['type'] = array('name' => _("Bezeichnung"), 'group' => 'basic');
-        $attributes['inst']['strasse'] = array('name' => _("Straße"), 'group' => 'basic');
+        $attributes['inst']['strasse'] = array('name' => _("StraÃŸe"), 'group' => 'basic');
         $attributes['inst']['plz'] = array('name' => _("Ort"), 'group' => 'basic');
         $attributes['inst']['telefon'] = array('name' => _("Telefonnummer"), 'group' => 'basic');
         $attributes['inst']['fax'] = array('name' => _("Faxnummer"), 'group' => 'basic');
         $attributes['inst']['email'] = array('name' => _("E-Mail-Adresse"), 'group' => 'basic');
         $attributes['inst']['url'] = array('name' => _("Homepage"), 'group' => 'basic');
-        $attributes['inst']['participants'] = array('name' => _("Mitarbeiter hinzufügen/löschen"), 'group' => 'personnel');
-        $attributes['inst']['groups'] = array('name' => _("Gruppen hinzufügen/löschen"), 'group' => 'personnel');
+        $attributes['inst']['participants'] = array('name' => _("Mitarbeiter hinzufÃ¼gen/lÃ¶schen"), 'group' => 'personnel');
+        $attributes['inst']['groups'] = array('name' => _("Gruppen hinzufÃ¼gen/lÃ¶schen"), 'group' => 'personnel');
 
         $attributes['user']['name'] = array('name' => _("Vor- und Nachname"), 'group' => 'basic');
         $attributes['user']['username'] = array('name' => _("Nutzername"), 'group' => 'basic');

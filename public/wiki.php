@@ -107,14 +107,14 @@ if ($view=="listall") {
     //
     // show one large diff-file containing all changes
     //
-    SkipLinks::addIndex(_("Seite mit Änderungen"), 'main_content', 100);
+    SkipLinks::addIndex(_("Seite mit Ã„nderungen"), 'main_content', 100);
     showDiffs($keyword, Request::option('versionssince'));
 
 } else if ($view=="combodiff") {
     //
     // show one large diff-file containing all changes
     //
-    SkipLinks::addIndex(_("Seite mit Änderungen"), 'main_content', 100);
+    SkipLinks::addIndex(_("Seite mit Ã„nderungen"), 'main_content', 100);
     showComboDiff($keyword);
 
 } else if ($view=="export") {
@@ -137,7 +137,7 @@ if ($view=="listall") {
 
     // prevent malformed urls: keword must be set
     if (!$keyword) {
-        throw new InvalidArgumentException(_('Es wurde keine zu editierende Seite übergeben!'));
+        throw new InvalidArgumentException(_('Es wurde keine zu editierende Seite Ã¼bergeben!'));
     }
     SkipLinks::addIndex(_("Seite bearbeiten"), 'main_content', 100);
 

@@ -10,7 +10,7 @@
     <dt><?= _('Aktiv') ?></dt>
     <dd><?= $schedule->active ? _('Ja') : _('Nein') ?></dd>
 
-    <dt><?= _('Priorität') ?></dt>
+    <dt><?= _('PrioritÃ¤t') ?></dt>
     <dd><?= CronjobSchedule::describePriority($schedule->priority) ?></dd>
 
 <? if (count($schedule->parameters) > 0): ?>
@@ -33,7 +33,7 @@
         <?= sprintf(_('Einmalig am %s um %s'), date('d.m.Y', $schedule->next_execution), date('H:i', $schedule->next_execution)) ?>
     </dd>
     
-    <dt><?= _('Ausgeführt') ?>?</dt>
+    <dt><?= _('AusgefÃ¼hrt') ?>?</dt>
     <dd>
     <? if ($schedule->execution_count > 0): ?>
         <?= _('Ja') ?>, <?= sprintf(_('am %s um %s'), date('d.m.Y', $schedule->last_execution), date('H:i:s', $schedule->last_execution)) ?>
@@ -43,20 +43,20 @@
     </dd>
 <? else: ?>
     <dd>
-        <?= _('Regelmässig') ?>
+        <?= _('RegelmÃ¤ssig') ?>
         <?= $this->render_partial('admin/cronjobs/schedules/periodic-schedule', $schedule->toArray()) ?>
     </dd>
 
-    <dt><?= _('Ausführungen') ?></dt>
+    <dt><?= _('AusfÃ¼hrungen') ?></dt>
     <dd><?= number_format($schedule->execution_count, 0, ',', '.') ?></dd>
 
     <? if ($schedule->active): ?>
-        <dt><?= _('Nächste Ausführung') ?></dt>
+        <dt><?= _('NÃ¤chste AusfÃ¼hrung') ?></dt>
         <dd><?= date('d.m.Y H:i:s', $schedule->next_execution) ?></dd>
     <? endif; ?>
 
     <? if ($schedule->execution_count > 0): ?>
-        <dt><?= _('Letzte Ausführung') ?></dt>
+        <dt><?= _('Letzte AusfÃ¼hrung') ?></dt>
         <dd><?= $schedule->last_execution ? date('d.m.Y H:i:s', $schedule->last_execution) : _('nie') ?></dd>
 
         <dt><?= _('Letztes Ergebnis') ?></dt>

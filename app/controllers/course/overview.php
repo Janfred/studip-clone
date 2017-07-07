@@ -23,7 +23,7 @@ class Course_OverviewController extends AuthenticatedController
         checkObject();
         $this->course = Course::findCurrent();
         if (!$this->course) {
-            throw new CheckObjectException(_('Sie haben kein Objekt gewählt.'));
+            throw new CheckObjectException(_('Sie haben kein Objekt gewÃ¤hlt.'));
         }
         $this->course_id = $this->course->id;
 
@@ -97,7 +97,7 @@ class Course_OverviewController extends AuthenticatedController
                     $show = false;
                     foreach ((array)$rule['attributes'] as $val) {
                         if ($val == 1) {
-                            // Es gibt also Zusatzangaben. Nun noch überprüfen ob der Nutzer diese Angaben schon gemacht hat...
+                            // Es gibt also Zusatzangaben. Nun noch Ã¼berprÃ¼fen ob der Nutzer diese Angaben schon gemacht hat...
                             $query     = "SELECT 1
                                       FROM datafields
                                       LEFT JOIN datafields_entries USING (datafield_id)
@@ -113,7 +113,7 @@ class Course_OverviewController extends AuthenticatedController
 
                     if ($show) {
                         PageLayout::postInfo(
-                            _("Sie haben noch nicht die für diese Veranstaltung benötigten Zusatzinformationen eingetragen."),
+                            _("Sie haben noch nicht die fÃ¼r diese Veranstaltung benÃ¶tigten Zusatzinformationen eingetragen."),
                             [
                                 sprintf(
                                     _('Um das nachzuholen, gehen Sie unter "Teilnehmende" auf "Zusatzangaben" oder %1$s direkt zu den Zusatzangaben. %2$s'),

@@ -31,7 +31,7 @@ class MyStudygroupsController extends AuthenticatedController
                           URLHelper::getLink('dispatch.php/course/wizard', ['studygroup' => 1]),
                           Icon::create('add', 'clickable'));
         if (count($this->studygroups) > 0) {
-            $actions->addLink(_('Farbgruppierung ändern'),
+            $actions->addLink(_('Farbgruppierung Ã¤ndern'),
                               URLHelper::getLink('dispatch.php/my_courses/groups/all/true'),
                               Icon::create('group4', 'clickable'))
                     ->asDialog();

@@ -4,7 +4,7 @@
     $send_as_email = array(
         1 => _('nie'),
         2 => _('immer'),
-        3 => _('wenn vom Absender gewünscht'),
+        3 => _('wenn vom Absender gewÃ¼nscht'),
     );
     $mail_formats = array(
         0 => _('Text'),
@@ -14,9 +14,9 @@
 
 <? if ($verify_action === 'reset'): ?>
 <?= $controller->verifyDialog(
-        _('Durch das Zurücksetzen werden die persönliche Messaging-Einstellungen '
-         .'auf die Startwerte zurückgesetzt und die persönlichen Nachrichten-Ordner '
-         .'gelöscht. ' . "\n\n" . 'Nachrichten werden nicht entfernt.'),
+        _('Durch das ZurÃ¼cksetzen werden die persÃ¶nliche Messaging-Einstellungen '
+         .'auf die Startwerte zurÃ¼ckgesetzt und die persÃ¶nlichen Nachrichten-Ordner '
+         .'gelÃ¶scht. ' . "\n\n" . 'Nachrichten werden nicht entfernt.'),
         array('settings/messaging/reset/reset', true),
         array('settings/messaging')
     ) ?>
@@ -83,7 +83,7 @@
 
         <div>
             <? if ($user->smsforward_rec):  // empfaenger ausgewaehlt ?>
-                <?= _('Empfänger') ?>
+                <?= _('EmpfÃ¤nger') ?>
                 <a href="<?= URLHelper::getLink('dispatch.php/profile?username=' . get_username($user->smsforward_rec)) ?>">
                     <?= Avatar::getAvatar($user->smsforward_rec)->getImageTag(Avatar::SMALL) ?>
                     <?= get_fullname($user->smsforward_rec, 'full', true) ?>
@@ -95,7 +95,7 @@
                 <label>
                     <input type="checkbox" value="1" name="smsforward_copy"
                         <? if ($user->smsforward_copy) echo 'checked'; ?>>
-                    <?= _('Kopie im persönlichen Posteingang speichern.') ?>
+                    <?= _('Kopie im persÃ¶nlichen Posteingang speichern.') ?>
                 </label>
             <? else: ?>
                 <label>
@@ -124,7 +124,7 @@
 
 
     <footer>
-        <?= Button::createAccept(_('Übernehmen'), 'store', array('title' => _('Änderungen übernehmen'))) ?>
-        <?= LinkButton::create(_('Zurücksetzen'), $controller->url_for('settings/messaging/verify/reset'), array('title' => _('Einstellungen zurücksetzen'))) ?>
+        <?= Button::createAccept(_('Ãœbernehmen'), 'store', array('title' => _('Ã„nderungen Ã¼bernehmen'))) ?>
+        <?= LinkButton::create(_('ZurÃ¼cksetzen'), $controller->url_for('settings/messaging/verify/reset'), array('title' => _('Einstellungen zurÃ¼cksetzen'))) ?>
     </footer>
 </form>

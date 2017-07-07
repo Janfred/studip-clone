@@ -46,14 +46,14 @@
                 <? if (ForumPerm::has('edit_area', $seminar_id)) : ?>
                 <a href="<?= PluginEngine::getLink('coreforum/index/?edit_area=' . $entry['topic_id']) ?>"
                     onClick="STUDIP.Forum.editArea('<?= $entry['topic_id'] ?>');return false;">
-                    <?= Icon::create('edit', 'clickable', ['title' => 'Name/Beschreibung des Bereichs ändern'])->asImg(16, ["class" => 'edit-area']) ?>
+                    <?= Icon::create('edit', 'clickable', ['title' => 'Name/Beschreibung des Bereichs Ã¤ndern'])->asImg(16, ["class" => 'edit-area']) ?>
                 </a>
                 <? endif ?>
 
                 <? if (ForumPerm::has('remove_area', $seminar_id)) : ?>
                 <a href="<?= PluginEngine::getLink('coreforum/index/delete_entry/' . $entry['topic_id']) ?>"
                    onClick="STUDIP.Forum.deleteArea(this, '<?= $entry['topic_id'] ?>'); return false;">
-                    <?= Icon::create('trash', 'clickable', ['title' => 'Bereich mitsamt allen Einträgen löschen!'])->asImg(16, ["class" => 'delete-area']) ?>
+                    <?= Icon::create('trash', 'clickable', ['title' => 'Bereich mitsamt allen EintrÃ¤gen lÃ¶schen!'])->asImg(16, ["class" => 'delete-area']) ?>
                 </a>
                 <? endif ?>
             </span>

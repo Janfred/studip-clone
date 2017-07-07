@@ -4,7 +4,7 @@ class StepRaumZeitEndOffset extends Migration
 {
     function description()
     {
-        return _('Fügt eine neue Spalte hinzu, die Semesterwochhe für das Ende zu speicher!');
+        return _('FÃ¼gt eine neue Spalte hinzu, die Semesterwochhe fÃ¼r das Ende zu speicher!');
     }
 
     function up()

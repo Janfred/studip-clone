@@ -7,7 +7,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      André Noack <noack@data-quest.de>
+ * @author      AndrÃ© Noack <noack@data-quest.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
  * @package     admin
@@ -56,7 +56,7 @@ class Course_EnrolmentController extends AuthenticatedController
             }
             return false;
         }
-        //Grundsätzlich verboten
+        //GrundsÃ¤tzlich verboten
         if (!$enrolment_info['enrolment_allowed']) {
             throw new AccessDeniedException($enrolment_info['description']);
         }
@@ -90,7 +90,7 @@ class Course_EnrolmentController extends AuthenticatedController
                 if ($courseset->isSeatDistributionEnabled()) {
                     if ($courseset->hasAlgorithmRun()) {
                         if ($courseset->getSeatDistributionTime()) {
-                            $msg = _("Die Plätze in dieser Veranstaltung wurden automatisch verteilt.");
+                            $msg = _("Die PlÃ¤tze in dieser Veranstaltung wurden automatisch verteilt.");
                         }
                         if (StudipLock::get('enrolment' . $this->course_id)) {
                             $course = Course::find($this->course_id);
@@ -100,24 +100,24 @@ class Course_EnrolmentController extends AuthenticatedController
                                 if ($course->isWaitlistAvailable()) {
                                     $seminar = new Seminar($course);
                                     if ($maxpos = $seminar->addToWaitlist($user_id, 'last')) {
-                                        $msg = _("Diese Veranstaltung ist teilnahmebeschränkt.");
-                                        $msg_details[] = sprintf(_("Alle Plätze sind belegt, Sie wurden daher auf Platz %s der Warteliste gesetzt."), $maxpos);
+                                        $msg = _("Diese Veranstaltung ist teilnahmebeschrÃ¤nkt.");
+                                        $msg_details[] = sprintf(_("Alle PlÃ¤tze sind belegt, Sie wurden daher auf Platz %s der Warteliste gesetzt."), $maxpos);
                                     }
                                 } else {
                                     if ($course->admission_disable_waitlist) {
-                                        $this->admission_error = MessageBox::error(_("Die Anmeldung war nicht erfolgreich. Alle Plätze sind belegt und es steht keine Warteliste zur Verfügung."));
+                                        $this->admission_error = MessageBox::error(_("Die Anmeldung war nicht erfolgreich. Alle PlÃ¤tze sind belegt und es steht keine Warteliste zur VerfÃ¼gung."));
                                     } else {
-                                        $this->admission_error = MessageBox::error(_("Die Anmeldung war nicht erfolgreich. Alle Plätze sind belegt und es stehen keine Wartelistenplätze zur Verfügung, da die Warteliste voll ist."));
+                                        $this->admission_error = MessageBox::error(_("Die Anmeldung war nicht erfolgreich. Alle PlÃ¤tze sind belegt und es stehen keine WartelistenplÃ¤tze zur VerfÃ¼gung, da die Warteliste voll ist."));
                                     }
                                 }
                             }
                         } else {
-                            $this->admission_error = MessageBox::error(_("Die Anmeldung war wegen technischer Probleme nicht erfolgreich. Bitte versuchen Sie es später noch einmal."));
+                            $this->admission_error = MessageBox::error(_("Die Anmeldung war wegen technischer Probleme nicht erfolgreich. Bitte versuchen Sie es spÃ¤ter noch einmal."));
                         }
                     } else {
-                        $msg = _("Die Plätze in dieser Veranstaltung werden automatisch verteilt.");
+                        $msg = _("Die PlÃ¤tze in dieser Veranstaltung werden automatisch verteilt.");
                         if ($limit = $courseset->getAdmissionRule('LimitedAdmission')) {
-                            $msg_details[] = sprintf(_("Diese Veranstaltung gehört zu einem Anmeldeset mit %s Veranstaltungen. Sie können maximal %s davon belegen. Bei der Verteilung werden die von Ihnen gewünschten Prioritäten berücksichtigt."), count($courseset->getCourses()), $limit->getMaxNumber());
+                            $msg_details[] = sprintf(_("Diese Veranstaltung gehÃ¶rt zu einem Anmeldeset mit %s Veranstaltungen. Sie kÃ¶nnen maximal %s davon belegen. Bei der Verteilung werden die von Ihnen gewÃ¼nschten PrioritÃ¤ten berÃ¼cksichtigt."), count($courseset->getCourses()), $limit->getMaxNumber());
                             $this->user_max_limit = $limit->getMaxNumberForUser($user_id);
                             if (get_config('IMPORTANT_SEMNUMBER')) {
                                 $order = "ORDER BY VeranstaltungsNummer, Name";
@@ -136,7 +136,7 @@ class Course_EnrolmentController extends AuthenticatedController
                         $msg_details[] = _("Zeitpunkt der automatischen Verteilung: ") . strftime("%x %X", $courseset->getSeatDistributionTime());
                         $this->num_claiming = count(AdmissionPriority::getPrioritiesByCourse($courseset->getId(), $this->course_id));
                         if ($this->already_claimed) {
-                            $msg_details[] = _("Sie sind bereits für die Verteilung angemeldet.");
+                            $msg_details[] = _("Sie sind bereits fÃ¼r die Verteilung angemeldet.");
                         }
                     }
                     if ($msg) {
@@ -173,11 +173,11 @@ class Course_EnrolmentController extends AuthenticatedController
                                 $success = sprintf(_("Sie wurden in die Veranstaltung %s als %s eingetragen."), htmlReady($course->getName()), get_title_for_status($status, 1, $course->status));
                                 PageLayout::postMessage(MessageBox::success($success));
                             } else {
-                                $success = sprintf(_("Sie wurden auf die Anmeldeliste der Studiengruppe %s eingetragen. Die Moderatoren der Studiengruppe können Sie jetzt freischalten."), htmlReady($course->getName()));
+                                $success = sprintf(_("Sie wurden auf die Anmeldeliste der Studiengruppe %s eingetragen. Die Moderatoren der Studiengruppe kÃ¶nnen Sie jetzt freischalten."), htmlReady($course->getName()));
                                 PageLayout::postMessage(MessageBox::success($success));
                             }
                         } else {
-                            $success = sprintf(_("Sie wurden in die Veranstaltung %s vorläufig eingetragen."), htmlReady($course->getName()));
+                            $success = sprintf(_("Sie wurden in die Veranstaltung %s vorlÃ¤ufig eingetragen."), htmlReady($course->getName()));
                             PageLayout::postMessage(MessageBox::success($success));
                         }
                     }
@@ -220,7 +220,7 @@ class Course_EnrolmentController extends AuthenticatedController
                     return $a > 0 ? $a : ++$max_prio;
                 }, $admission_prio);
                 if (count(array_unique($admission_prio)) != count(Request::getArray('admission_prio'))) {
-                    PageLayout::postMessage(MessageBox::info(_("Sie dürfen jede Priorität nur einmal auswählen. Überprüfen Sie bitte Ihre Auswahl!")));
+                    PageLayout::postMessage(MessageBox::info(_("Sie dÃ¼rfen jede PrioritÃ¤t nur einmal auswÃ¤hlen. ÃœberprÃ¼fen Sie bitte Ihre Auswahl!")));
                 }
                 $old_prio_count = AdmissionPriority::unsetAllPrioritiesForUser($courseset->getId(), $user_id);
                 if ($order_up = key(Request::getArray('admission_prio_order_up'))) {
@@ -250,7 +250,7 @@ class Course_EnrolmentController extends AuthenticatedController
                     if (count(AdmissionPriority::getPrioritiesByUser($courseset->getId(), $user_id))) {
                         PageLayout::postMessage(MessageBox::success(_("Ihre Priorisierung wurde gespeichert.")));
                     } else {
-                        PageLayout::postMessage(MessageBox::success(_("Ihre Anmeldung zur Platzvergabe wurde zurückgezogen.")));
+                        PageLayout::postMessage(MessageBox::success(_("Ihre Anmeldung zur Platzvergabe wurde zurÃ¼ckgezogen.")));
                     }
                 }
             } else {
@@ -260,7 +260,7 @@ class Course_EnrolmentController extends AuthenticatedController
                     }
                 } else {
                     if (AdmissionPriority::unsetPriority($courseset->getId(), $user_id, $this->course_id)) {
-                        PageLayout::postMessage(MessageBox::success(_("Ihre Anmeldung zur Platzvergabe wurde zurückgezogen.")));
+                        PageLayout::postMessage(MessageBox::success(_("Ihre Anmeldung zur Platzvergabe wurde zurÃ¼ckgezogen.")));
                     }
                 }
             }

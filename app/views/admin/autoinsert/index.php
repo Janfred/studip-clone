@@ -10,7 +10,7 @@ use Studip\Button, Studip\LinkButton;
 <? elseif (isset($flash['success'])): ?>
     <?= MessageBox::success($flash['success'], $flash['success_detail']) ?>
 <? elseif (isset($flash['delete'])): ?>
-    <?= createQuestion(_('Wollen Sie die Zuordnung der Veranstaltung zum automatischen Eintragen wirklich löschen?'),  array('delete' => 1), array('back' => 1), $controller->url_for('admin/autoinsert/delete') .'/'. $flash['delete']) ?>
+    <?= createQuestion(_('Wollen Sie die Zuordnung der Veranstaltung zum automatischen Eintragen wirklich lÃ¶schen?'),  array('delete' => 1), array('back' => 1), $controller->url_for('admin/autoinsert/delete') .'/'. $flash['delete']) ?>
 <? endif; ?>
 
 <h2>

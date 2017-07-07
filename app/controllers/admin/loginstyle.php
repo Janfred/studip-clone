@@ -25,7 +25,7 @@ class Admin_LoginStyleController extends AuthenticatedController
         $GLOBALS['perm']->check('root');
 
         //setting title and navigation
-        PageLayout::setTitle(_('Hintergrundbilder für den Startbildschirm'));
+        PageLayout::setTitle(_('Hintergrundbilder fÃ¼r den Startbildschirm'));
         Navigation::activateItem('/admin/locations/loginstyle');
 
         // Setup sidebar
@@ -100,11 +100,11 @@ class Admin_LoginStyleController extends AuthenticatedController
     {
         $pic = Loginbackground::find($id);
         if ($pic->in_release) {
-            PageLayout::postError(_('Dieses Bild wird vom System mitgeliefert und kann daher nicht gelöscht werden.'));
+            PageLayout::postError(_('Dieses Bild wird vom System mitgeliefert und kann daher nicht gelÃ¶scht werden.'));
         } elseif ($pic->delete()) {
-            PageLayout::postSuccess(_('Das Bild wurde gelöscht.'));
+            PageLayout::postSuccess(_('Das Bild wurde gelÃ¶scht.'));
         } else {
-            PageLayout::postError(_('Das Bild konnte nicht gelöscht werden.'));
+            PageLayout::postError(_('Das Bild konnte nicht gelÃ¶scht werden.'));
         }
 
         $this->relocate('admin/loginstyle');
@@ -139,7 +139,7 @@ class Admin_LoginStyleController extends AuthenticatedController
 
         $links = new ActionsWidget();
         $links->addLink(
-            _('Bild hinzufügen'),
+            _('Bild hinzufÃ¼gen'),
             $this->url_for('admin/loginstyle/newpic'),
             Icon::create('add', 'clickable')
         )->asDialog('size=auto');

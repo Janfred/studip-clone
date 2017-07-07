@@ -25,7 +25,7 @@ class LvgselectorController extends MVVController
 
         $this->course = Course::findCurrent();
         if (!$this->course) {
-            throw new Trails_Exception(404, _('Es wurde keine Veranstaltung ausgewählt!'));
+            throw new Trails_Exception(404, _('Es wurde keine Veranstaltung ausgewÃ¤hlt!'));
         }
         $this->course_id = $this->course->id;
         if (!$GLOBALS['perm']->have_studip_perm('tutor', $this->course_id)) {
@@ -66,7 +66,7 @@ class LvgselectorController extends MVVController
         $this->lvgruppen_not_allowed = !$this->course->getSemClass()->offsetGet('module');
 
         if ($this->lvgruppen_not_allowed) {
-            return $this->render_text(MessageBox::info(_('Für diesen Veranstaltungstyp ist die Zuordnung zu Lehrveranstaltungsgruppen nicht vorgesehen.')));
+            return $this->render_text(MessageBox::info(_('FÃ¼r diesen Veranstaltungstyp ist die Zuordnung zu Lehrveranstaltungsgruppen nicht vorgesehen.')));
         }
         $this->open_lvg_nodes = array();
         if (Request::submitted("open_nodes")) {
@@ -297,7 +297,7 @@ class LvgselectorController extends MVVController
     {
         $helpbar = Helpbar::get();
         $widget = new HelpbarWidget();
-        $widget->addElement(new WidgetElement(_("Auf dieser Seite kann die Veranstaltung ausgewählten Lehrveranstaltungsgruppen zugeordnet werden.")));
+        $widget->addElement(new WidgetElement(_("Auf dieser Seite kann die Veranstaltung ausgewÃ¤hlten Lehrveranstaltungsgruppen zugeordnet werden.")));
         $helpbar->addWidget($widget);
 
         if ($GLOBALS['perm']->have_perm("admin")) {

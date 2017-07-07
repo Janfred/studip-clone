@@ -10,7 +10,7 @@
     <? foreach ($courses as $course) : ?>
         <input type="hidden" name="courses[]" value="<?= $course ?>" required>
     <? endforeach ?>
-        <?= Studip\Button::createAccept(_('Personen hinzufügen'), 'add') ?>
+        <?= Studip\Button::createAccept(_('Personen hinzufÃ¼gen'), 'add') ?>
         <?= Studip\LinkButton::createCancel(_('Abbrechen'), 'cancel', ['data-dialog' => 'close']) ?>
     </footer>
 </form>

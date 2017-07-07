@@ -16,7 +16,7 @@
 
 require_once 'app/models/statusgroups.php';
 require_once 'lib/messaging.inc.php'; //Funktionen des Nachrichtensystems
-require_once 'lib/export/export_studipdata_func.inc.php'; // Funktionen für den Export
+require_once 'lib/export/export_studipdata_func.inc.php'; // Funktionen fÃ¼r den Export
 require_once 'lib/export/export_linking_func.inc.php';
 
 class Course_StatusgroupsController extends AuthenticatedController
@@ -162,7 +162,7 @@ class Course_StatusgroupsController extends AuthenticatedController
                 $actions->addLink(_('Mehrere Gruppen anlegen'),
                     $this->url_for('course/statusgroups/create_groups'),
                     Icon::create('group2+add', 'clickable'))->asDialog('size=auto');
-                $actions->addLink(_('Gruppenreihenfolge ändern'),
+                $actions->addLink(_('Gruppenreihenfolge Ã¤ndern'),
                     $this->url_for('course/statusgroups/sortgroups'),
                     Icon::create('arr_2down', 'clickable'))->asDialog('size=auto');
 
@@ -269,26 +269,26 @@ class Course_StatusgroupsController extends AuthenticatedController
 
         if ($success > 0 && $fail == 0) {
             PageLayout::postSuccess(sprintf(ngettext(
-                '%u Person wurde zu %s hinzugefügt.',
-                '%u Personen wurden zu %s hinzugefügt.',
+                '%u Person wurde zu %s hinzugefÃ¼gt.',
+                '%u Personen wurden zu %s hinzugefÃ¼gt.',
                 $success), $success, htmlReady($g->name)
             ));
         } else if ($success > 0 && $fail > 0) {
             $successMsg = sprintf(ngettext(
-                '%u Person wurde zu %s hinzugefügt.',
-                '%u Personen wurden zu %s hinzugefügt.',
+                '%u Person wurde zu %s hinzugefÃ¼gt.',
+                '%u Personen wurden zu %s hinzugefÃ¼gt.',
                 $success), $success, htmlReady($g->name)
             );
             $failMsg = sprintf(ngettext(
-                '%u Person konnte nicht zu %s hinzugefügt werden.',
-                '%u Personen konnten nicht zu %s hinzugefügt werden.',
+                '%u Person konnte nicht zu %s hinzugefÃ¼gt werden.',
+                '%u Personen konnten nicht zu %s hinzugefÃ¼gt werden.',
                 $fail), $fail, htmlReady($g->name)
             );
             PageLayout::postWarning($successMsg . ' ' . $failMsg);
         } else if ($success == 0 && $fail > 0) {
             PageLayout::postError(sprintf(ngettext(
-                '%u Person konnte nicht zu %s hinzugefügt werden.',
-                '%u Personen konnten nicht zu %s hinzugefügt werden.',
+                '%u Person konnte nicht zu %s hinzugefÃ¼gt werden.',
+                '%u Personen konnten nicht zu %s hinzugefÃ¼gt werden.',
                 $success), $success, htmlReady($g->name)
             ));
         }
@@ -385,7 +385,7 @@ class Course_StatusgroupsController extends AuthenticatedController
             $groupname = $group->name;
             $group->delete();
             PageLayout::postSuccess(sprintf(
-                _('Die Gruppe "%s" wurde gelöscht.'),
+                _('Die Gruppe "%s" wurde gelÃ¶scht.'),
                 htmlReady($groupname)));
             $this->relocate('course/statusgroups');
         } else {
@@ -799,14 +799,14 @@ class Course_StatusgroupsController extends AuthenticatedController
 
                             break;
                         case 'delete':
-                            PageLayout::setTitle(_('Gruppe(n) löschen?'));
+                            PageLayout::setTitle(_('Gruppe(n) lÃ¶schen?'));
                             $this->askdelete = true;
                             break;
                         default:
                             $this->relocate('course/statusgroups');
                     }
                 } else {
-                    PageLayout::postError(_('Sie haben keine Gruppe ausgewählt.'));
+                    PageLayout::postError(_('Sie haben keine Gruppe ausgewÃ¤hlt.'));
                 }
             // Actions for selected group members.
             } else if (Request::submitted('batch_members')) {
@@ -860,7 +860,7 @@ class Course_StatusgroupsController extends AuthenticatedController
             foreach ($groups as $g) {
                 $g->delete();
             }
-            PageLayout::postSuccess(_('Die ausgewählten Gruppen wurden gelöscht.'));
+            PageLayout::postSuccess(_('Die ausgewÃ¤hlten Gruppen wurden gelÃ¶scht.'));
             $this->relocate('course/statusgroups');
         } else {
             throw new Trails_Exception(403);
@@ -886,7 +886,7 @@ class Course_StatusgroupsController extends AuthenticatedController
                     strtotime(Request::get('selfassign_end', 0)),
                     false);
             }
-            PageLayout::postSuccess(_('Die Einstellungen der ausgewählten Gruppen wurden gespeichert.'));
+            PageLayout::postSuccess(_('Die Einstellungen der ausgewÃ¤hlten Gruppen wurden gespeichert.'));
             $this->relocate('course/statusgroups');
         } else {
             throw new Trails_Exception(403);

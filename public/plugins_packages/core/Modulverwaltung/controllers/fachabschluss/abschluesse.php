@@ -41,7 +41,7 @@ class Fachabschluss_AbschluesseController extends MVVController
     public function index_action()
     {
         // set title
-        PageLayout::setTitle(_('Verwaltung der Abschlüsse'));
+        PageLayout::setTitle(_('Verwaltung der AbschlÃ¼sse'));
 
         $this->initPageParams();
 
@@ -52,7 +52,7 @@ class Fachabschluss_AbschluesseController extends MVVController
                 self::$items_per_page,
                 self::$items_per_page * ($this->page - 1), $filter);
         if (sizeof($this->abschluesse) == 0) {
-            PageLayout::postInfo(_('Es wurden noch keine Abschlüsse angelegt.'));
+            PageLayout::postInfo(_('Es wurden noch keine AbschlÃ¼sse angelegt.'));
         }
         $this->count = Abschluss::getCount($filter);
 
@@ -60,8 +60,8 @@ class Fachabschluss_AbschluesseController extends MVVController
 
         $helpbar = Helpbar::get();
         $widget = new HelpbarWidget();
-        $widget->addElement(new WidgetElement(_('Auf diesen Seiten können Sie Fächer und Abschlüsse verwalten.').'</br>'));
-        $widget->addElement(new WidgetElement(_('Ein Abschluss kann aufgeklappt werden, um die Fächer anzuzeigen, die diesem Abschluss bereits zugeordnet wurden.')));
+        $widget->addElement(new WidgetElement(_('Auf diesen Seiten kÃ¶nnen Sie FÃ¤cher und AbschlÃ¼sse verwalten.').'</br>'));
+        $widget->addElement(new WidgetElement(_('Ein Abschluss kann aufgeklappt werden, um die FÃ¤cher anzuzeigen, die diesem Abschluss bereits zugeordnet wurden.')));
         $helpbar->addWidget($widget);
     }
 
@@ -85,7 +85,7 @@ class Fachabschluss_AbschluesseController extends MVVController
     {
         $this->abschluss_kategorien = AbschlussKategorie::getAll();
         if (count($this->abschluss_kategorien) == 0) {
-            PageLayout::postError( _('Es wurden noch keine Abschluss-Kategorien angelegt. Bevor Sie fortfahren, legen Sie bitte hier zunächst eine Abschluss-Kategorie an!'));
+            PageLayout::postError( _('Es wurden noch keine Abschluss-Kategorien angelegt. Bevor Sie fortfahren, legen Sie bitte hier zunÃ¤chst eine Abschluss-Kategorie an!'));
             $this->redirect('fachabschluss/kategorien/kategorie');
         }
         $this->abschluss = new Abschluss($abschluss_id);
@@ -94,7 +94,7 @@ class Fachabschluss_AbschluesseController extends MVVController
             $success_message = _('Der Abschluss "%s" wurde angelegt.');
         } else {
             PageLayout::setTitle(_('Abschluss bearbeiten'));
-            $success_message = _('Der Abschluss "%s" wurde geändert.');
+            $success_message = _('Der Abschluss "%s" wurde geÃ¤ndert.');
         }
         if (Request::submitted('store')) {
             CSRFProtection::verifyUnsafeRequest();
@@ -118,7 +118,7 @@ class Fachabschluss_AbschluesseController extends MVVController
                     PageLayout::postSuccess(sprintf($success_message,
                             htmlReady($this->abschluss->name)));
                 } else {
-                    PageLayout::postInfo(_('Es wurden keine Änderungen vorgenommen.'));
+                    PageLayout::postInfo(_('Es wurden keine Ã„nderungen vorgenommen.'));
                 }
                 $this->redirect($this->url_for('/index'));
                 return;
@@ -129,7 +129,7 @@ class Fachabschluss_AbschluesseController extends MVVController
         if (!$this->abschluss->isNew()) {
             $sidebar = Sidebar::get();
             $action_widget = $sidebar->getWidget('actions');
-            $action_widget->addLink( _('Log-Einträge dieses Abschlusses'),
+            $action_widget->addLink( _('Log-EintrÃ¤ge dieses Abschlusses'),
                     $this->url_for('shared/log_event/show/Abschluss', $this->abschluss->getId()),
                     Icon::create('log', 'clickable'))->asDialog();
         }
@@ -143,16 +143,16 @@ class Fachabschluss_AbschluesseController extends MVVController
         $abschluss = Abschluss::get($abschluss_id);
         if (Request::submitted('yes')) {
             if ($abschluss->isNew()) {
-                PageLayout::postError( _('Der Abschluss kann nicht gelöscht werden (unbekannter Abschluss).'));
+                PageLayout::postError( _('Der Abschluss kann nicht gelÃ¶scht werden (unbekannter Abschluss).'));
             } else {
                 CSRFProtection::verifyUnsafeRequest();
                 $name = $abschluss->name;
                 $abschluss->delete();
-                PageLayout::postSuccess(sprintf(_('Der Abschluss "%s" wurde gelöscht.'), htmlReady($name)));
+                PageLayout::postSuccess(sprintf(_('Der Abschluss "%s" wurde gelÃ¶scht.'), htmlReady($name)));
             }
         }
         if (!Request::isPost()) {
-            $this->flash_set('dialog', sprintf(_('Wollen Sie wirklich den Abschluss "%s" löschen?'),
+            $this->flash_set('dialog', sprintf(_('Wollen Sie wirklich den Abschluss "%s" lÃ¶schen?'),
                             $abschluss->name),
                     '/delete/' . $abschluss->id, '/index');
         }

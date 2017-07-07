@@ -2,16 +2,16 @@
 
 /** @file
  *
- * Diese Datei stellt den Ausgangspunkt für alle Zugriffe auf die
+ * Diese Datei stellt den Ausgangspunkt fÃ¼r alle Zugriffe auf die
  * RESTful Web Services von Stud.IP dar.
- * Grob betrachtet läuft das Routings so ab:
+ * Grob betrachtet lÃ¤uft das Routings so ab:
  *
  * Ein HTTP-Request geht ein. Falls dort eine inkompatible Version der
  * REST-API verlangt wird, bricht das Skript ab. Die Authentifizierung
- * wird durchgeführt. Bei Erfolg wird die PATH_INFO und die HTTP
+ * wird durchgefÃ¼hrt. Bei Erfolg wird die PATH_INFO und die HTTP
  * Methode im Router verwendet, um die passende Funktion zu
  * finden. Der Router liefert in jedem Fall ein Response-Objekt
- * zurück, dass dann anschließende ausgegeben wird, d.h. die Header
+ * zurÃ¼ck, dass dann anschlieÃŸende ausgegeben wird, d.h. die Header
  * werden gesendet und dann das Ergebnis ausgegeben oder gestreamt.
  */
 

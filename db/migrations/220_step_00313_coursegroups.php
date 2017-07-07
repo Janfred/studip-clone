@@ -9,7 +9,7 @@ class StEP00313Coursegroups extends Migration
             "ALTER TABLE `seminare` ADD `parent_course` VARCHAR(32) NULL DEFAULT NULL AFTER `public_topics`");
         DBManager::get()->exec(
             "ALTER TABLE `seminare` ADD INDEX(`parent_course`)");
-        StudipLog::registerAction('SEM_ADD_TO_GROUP', 'Veranstaltung zu Gruppe hinzufügen',
+        StudipLog::registerAction('SEM_ADD_TO_GROUP', 'Veranstaltung zu Gruppe hinzufÃ¼gen',
             '%user ordnet Veranstaltung %sem(%affected) der Gruppe %sem(%coaffected) zu.', null);
         StudipLog::registerAction('SEM_DEL_FROM_GROUP', 'Veranstaltung aus Gruppe entfernen',
             '%user entfernt Veranstaltung %sem(%affected) aus der Gruppe %sem(%coaffected).', null);

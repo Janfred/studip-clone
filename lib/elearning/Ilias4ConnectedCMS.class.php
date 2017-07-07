@@ -9,7 +9,7 @@
  *
  * This class contains the main methods of the elearning-interface to connect to ILIAS 4. Extends Ilias3ConnectedCMS.
  *
- * @author   Arne Schröder <schroeder@data-quest.de>
+ * @author   Arne SchrÃ¶der <schroeder@data-quest.de>
  * @access   public
  * @modulegroup  elearning_interface_modules
  * @module       Ilias4ConnectedCMS
@@ -57,7 +57,7 @@ class Ilias4ConnectedCMS extends Ilias3ConnectedCMS
         if ($result) {
             $parent_path = $this->soap_client->getRawPath($parent_id) . '_' . $parent_id;
             foreach($result as $ref_id => $data) {
-                // Workaround: getTreeChilds() liefert ALLE Referenzen der beteiligten Objekte, hier sollen aber nur die aus dem Kurs geprüft werden. Deshalb Abgleich der Pfade aller gefundenen Objekt-Referenzen.
+                // Workaround: getTreeChilds() liefert ALLE Referenzen der beteiligten Objekte, hier sollen aber nur die aus dem Kurs geprÃ¼ft werden. Deshalb Abgleich der Pfade aller gefundenen Objekt-Referenzen.
                 if (($data["accessInfo"] != "granted") OR ($this->soap_client->getRawPath($ref_id) != $parent_path))
                     unset($result[$ref_id]);
                 elseif ($data['type'] == 'fold') {
@@ -104,7 +104,7 @@ class Ilias4ConnectedCMS extends Ilias3ConnectedCMS
             foreach($result as $ref_id => $data) {
                 $check->execute(array(Context::getId(), $ref_id, $this->cms_type, $data["type"]));
                 if (!$check->fetch()) {
-                    $messages["info"] .= sprintf(_("Zuordnung zur Lerneinheit \"%s\" wurde hinzugefügt."), ($data["title"])) . "<br>";
+                    $messages["info"] .= sprintf(_("Zuordnung zur Lerneinheit \"%s\" wurde hinzugefÃ¼gt."), ($data["title"])) . "<br>";
                     ObjectConnections::setConnection(Context::getId(), $ref_id, $data["type"], $this->cms_type);
                     $added++;
                 }
@@ -147,7 +147,7 @@ class Ilias4ConnectedCMS extends Ilias3ConnectedCMS
                 $ref_id = ObjectConnections::getConnectionModuleId($home_institute->getId(), "cat", $this->cms_type);
             }
             if ($ref_id < 1) {
-                // Kategorie für Heimateinrichtung anlegen
+                // Kategorie fÃ¼r Heimateinrichtung anlegen
                 $object_data["title"] = sprintf("%s", $home_institute->name);
                 $object_data["description"] = sprintf(_("Hier befinden sich die Veranstaltungsdaten zur Stud.IP-Einrichtung \"%s\"."), $home_institute->name);
                 $object_data["type"] = "cat";
@@ -204,7 +204,7 @@ class Ilias4ConnectedCMS extends Ilias3ConnectedCMS
 
         if (($this->main_category_node_id != false) AND (ELearningUtils::getConfigValue("user_category_id", $this->cms_type) == "")) {
             $object_data["title"] = sprintf(_("User-Daten"));
-            $object_data["description"] = _("Hier befinden sich die persönlichen Ordner der Stud.IP-User.");
+            $object_data["description"] = _("Hier befinden sich die persÃ¶nlichen Ordner der Stud.IP-User.");
             $object_data["type"] = "cat";
             $object_data["owner"] = $this->user->getId();
             $user_cat = $connected_cms[$this->cms_type]->soap_client->addObject($object_data, $connected_cms[$this->cms_type]->main_category_node_id);
@@ -212,7 +212,7 @@ class Ilias4ConnectedCMS extends Ilias3ConnectedCMS
                 $this->user_category_node_id = $user_cat;
                 ELearningUtils::setConfigValue("user_category_id", $user_cat, $this->cms_type);
             } else {
-                $messages["error"] .= _("Die Kategorie für User-Daten konnte nicht angelegt werden.") . "<br>\n";
+                $messages["error"] .= _("Die Kategorie fÃ¼r User-Daten konnte nicht angelegt werden.") . "<br>\n";
             }
         }
 

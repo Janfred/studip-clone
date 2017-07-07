@@ -124,9 +124,9 @@ class Calendar_GroupController extends Calendar_CalendarController
             
       //      $default_selected_user = array($this->calendar->getRangeId());
             $this->mps = MultiPersonSearch::get('add_adressees')
-                ->setLinkText(_('Mehrere Teilnehmer hinzufügen'))
+                ->setLinkText(_('Mehrere Teilnehmer hinzufÃ¼gen'))
        //         ->setDefaultSelectedUser($default_selected_user)
-                ->setTitle(_('Mehrere Teilnehmer hinzufügen'))
+                ->setTitle(_('Mehrere Teilnehmer hinzufÃ¼gen'))
                 ->setExecuteURL($this->url_for($this->base . 'edit'))
                 ->setJSFunctionOnSubmit('STUDIP.Messages.add_adressees')
                 ->setSearchObject($search_obj);
@@ -159,7 +159,7 @@ class Calendar_GroupController extends Calendar_CalendarController
                     header('X-Dialog-Close: 1');
                     exit;
                 } else {
-                    PageLayout::postMessage(MessageBox::success(_('Der Termin wurde nicht geändert.')));
+                    PageLayout::postMessage(MessageBox::success(_('Der Termin wurde nicht geÃ¤ndert.')));
                     $this->relocate('calendar/group/' . $this->last_view, array('atime' => $this->atime));
                 }
             } else {

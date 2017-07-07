@@ -30,9 +30,9 @@
                         <a href="<?=$controller->url_for('admin/specification/edit/'.$rule['lock_id']) ?>">
                             <?= Icon::create('edit', 'clickable', ['title' => _('Regel bearbeiten')])->asImg() ?>
                         </a>
-                        <?=Icon::create('trash', 'clickable', tooltip2(_('Regel löschen')))->asInput([
+                        <?=Icon::create('trash', 'clickable', tooltip2(_('Regel lÃ¶schen')))->asInput([
                             'formaction'   => $controller->url_for('admin/specification/delete/' . $rule['lock_id']),
-                            'data-confirm' => sprintf(_('Wollen Sie die Regel "%s" wirklich löschen?'), $rule['name'])
+                            'data-confirm' => sprintf(_('Wollen Sie die Regel "%s" wirklich lÃ¶schen?'), $rule['name'])
                         ])?>
                     </td>
                 </tr>

@@ -27,7 +27,7 @@ class AddOptionResourcesHidePastSingleDates extends Migration
             `message_template`
             )
             VALUES (
-            MD5( 'RESOURCES_HIDE_PAST_SINGLE_DATES' ) , '', 'RESOURCES_HIDE_PAST_SINGLE_DATES', '1', '1', 'boolean', 'global', '', '0', UNIX_TIMESTAMP( ) , UNIX_TIMESTAMP( ) , 'Schaltet in der Ressourcenverwaltung ein,ob bereits vergangene Terminen bei der Buchung und Planung brücksichtigt werden sollen', '', ''
+            MD5( 'RESOURCES_HIDE_PAST_SINGLE_DATES' ) , '', 'RESOURCES_HIDE_PAST_SINGLE_DATES', '1', '1', 'boolean', 'global', '', '0', UNIX_TIMESTAMP( ) , UNIX_TIMESTAMP( ) , 'Schaltet in der Ressourcenverwaltung ein,ob bereits vergangene Terminen bei der Buchung und Planung brÃ¼cksichtigt werden sollen', '', ''
             )
             ");
          $db->exec("INSERT IGNORE INTO `config` (
@@ -47,7 +47,7 @@ class AddOptionResourcesHidePastSingleDates extends Migration
             `message_template`
             )
             VALUES (
-            MD5( 'RESOURCES_ALLOW_ROOM_REQUESTS_ALL_ROOMS' ) , '', 'RESOURCES_ALLOW_ROOM_REQUESTS_ALL_ROOMS', '1', '1', 'boolean', 'global', '', '0', UNIX_TIMESTAMP( ) , UNIX_TIMESTAMP( ) , 'Schaltet in der Ressourcenverwaltung ein,ob alle Räume gewünscht werden können, oder nur eigene und ''Global'' gesetzte', '', ''
+            MD5( 'RESOURCES_ALLOW_ROOM_REQUESTS_ALL_ROOMS' ) , '', 'RESOURCES_ALLOW_ROOM_REQUESTS_ALL_ROOMS', '1', '1', 'boolean', 'global', '', '0', UNIX_TIMESTAMP( ) , UNIX_TIMESTAMP( ) , 'Schaltet in der Ressourcenverwaltung ein,ob alle RÃ¤ume gewÃ¼nscht werden kÃ¶nnen, oder nur eigene und ''Global'' gesetzte', '', ''
             )
             ");
     }

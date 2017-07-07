@@ -199,7 +199,7 @@ class MVVController extends StudipController
         $search = self::getSearch($qs_id);
         if ($search) {
             $results[] = array('id' => '',
-                    'name' => _('-- bitte wählen --'));
+                    'name' => _('-- bitte wÃ¤hlen --'));
             foreach ($search->getResults($qs_term)
                     as $result) {
                 $results[] = [
@@ -241,7 +241,7 @@ class MVVController extends StudipController
                     $this->search_result = array($found_object->getId());
                     $this->search_term = $found_object->getDisplayName();
                     if (!$this->search_id) {
-                        PageLayout::postInfo(sprintf(_('"%s" ausgewählt.'),
+                        PageLayout::postInfo(sprintf(_('"%s" ausgewÃ¤hlt.'),
                                 htmlReady($found_object->getDisplayName())));
                     }
                     $this->search_id = $search_id;
@@ -256,13 +256,13 @@ class MVVController extends StudipController
                     if ($this->current_action == 'search') {
                         if (count($this->search_result)) {
                             PageLayout::postInfo(
-                                    sprintf(_('%s Treffer für die Suche nach "%s".'),
+                                    sprintf(_('%s Treffer fÃ¼r die Suche nach "%s".'),
                                             count($this->search_result),
                                             htmlReady($search_term)));
                             $this->search_term = $search_term;
                         } else {
                             PageLayout::postInfo(
-                                    sprintf(_('Keine Treffer für die Suche nach "%s".'),
+                                    sprintf(_('Keine Treffer fÃ¼r die Suche nach "%s".'),
                                             htmlReady($search_term)));
                         }
                         unset($this->search_id);

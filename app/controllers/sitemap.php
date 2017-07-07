@@ -41,7 +41,7 @@ class SitemapController extends AuthenticatedController
 
         $info = new SidebarWidget();
         $info->setTitle(_('Hinweise'));
-        $info->addElement(new WidgetElement(_('Auf dieser Seite finden Sie eine Übersicht über alle verfügbaren Seiten.')));
+        $info->addElement(new WidgetElement(_('Auf dieser Seite finden Sie eine Ãœbersicht Ã¼ber alle verfÃ¼gbaren Seiten.')));
         $sidebar->addWidget($info);
     }
 }

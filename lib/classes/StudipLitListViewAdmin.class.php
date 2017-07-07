@@ -9,7 +9,7 @@
 // StudipLitListAdmin.class.php
 //
 //
-// Copyright (c) 2003 André Noack <noack@data-quest.de>
+// Copyright (c) 2003 AndrÃ© Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -35,7 +35,7 @@ require_once 'lib/classes/lit_search_plugins/StudipLitSearchPluginZ3950Abstract.
  *
  *
  * @access   public
- * @author   André Noack <noack@data-quest.de>
+ * @author   AndrÃ© Noack <noack@data-quest.de>
  * @package
  */
 class StudipLitListViewAdmin extends TreeView
@@ -57,15 +57,15 @@ class StudipLitListViewAdmin extends TreeView
      */
     function __construct($range_id){
         $this->use_aging = true;
-        $this->format_info = _("Felder müssen in geschweiften Klammern (z.B. {dc_title}) angegeben werden.\n")
+        $this->format_info = _("Felder mÃ¼ssen in geschweiften Klammern (z.B. {dc_title}) angegeben werden.\n")
                              . _("Felder und Text, der zwischen senkrechten Strichen steht, wird nur angezeigt, wenn das angegebene Feld nicht leer ist. (z.B. |Anmerkung: {note}|)\n")
-                             . _("Folgende Felder können angezeigt werden:\n")
+                             . _("Folgende Felder kÃ¶nnen angezeigt werden:\n")
                              . _("Titel - dc_title\n")
                              . _("Verfasser oder Urheber - dc_creator\n")
-                             . _("Thema und Stichwörter - dc_subject\n")
+                             . _("Thema und StichwÃ¶rter - dc_subject\n")
                              . _("Inhaltliche Beschreibung - dc_description\n")
                              . _("Verleger, Herausgeber - dc_publisher\n")
-                             . _("Weitere beteiligten Personen und Körperschaften - dc_contributor\n")
+                             . _("Weitere beteiligten Personen und KÃ¶rperschaften - dc_contributor\n")
                              . _("Datum - dc_date\n")
                              . _("Ressourcenart - dc_type\n")
                              . _("Format - dc_format\n")
@@ -73,7 +73,7 @@ class StudipLitListViewAdmin extends TreeView
                              . _("Quelle - dc_source\n")
                              . _("Sprache - dc_language\n")
                              . _("Beziehung zu anderen Ressourcen - dc_relation\n")
-                             . _("Räumliche und zeitliche Maßangaben - dc_coverage\n")
+                             . _("RÃ¤umliche und zeitliche MaÃŸangaben - dc_coverage\n")
                              . _("Rechtliche Bedingungen - dc_rights\n")
                              . _("Zugriffsnummer - accession_number\n")
                              . _("Jahr - year\n")
@@ -134,17 +134,17 @@ class StudipLitListViewAdmin extends TreeView
             if (Request::get('edit_note')){
                 $affected_rows = $this->tree->updateElement(array('list_element_id' => $item_id, 'note' => Request::quoted('edit_note'), 'user_id' => $user_id));
                 if ($affected_rows){
-                    PageLayout::postSuccess(_("Anmerkung wurde geändert."));
+                    PageLayout::postSuccess(_("Anmerkung wurde geÃ¤ndert."));
                 } else {
-                    PageLayout::postInfo(_("Keine Veränderungen vorgenommen."));
+                    PageLayout::postInfo(_("Keine VerÃ¤nderungen vorgenommen."));
                 }
             } else if ( Request::get('edit_format') ) {
                 
                 $affected_rows = $this->tree->updateList(array('list_id' => $item_id,'format' => Request::quoted('edit_format'),'name' => Request::quoted('edit_name'),'visibility' => Request::quoted('edit_visibility'), 'user_id' => $user_id));
                 if ($affected_rows){
-                    PageLayout::postSuccess(_("Listeneigenschaften wurden geändert."));
+                    PageLayout::postSuccess(_("Listeneigenschaften wurden geÃ¤ndert."));
                 } else {
-                    PageLayout::postInfo(_("Keine Veränderungen vorgenommen."));
+                    PageLayout::postInfo(_("Keine VerÃ¤nderungen vorgenommen."));
                 }
             }
         } else {
@@ -154,7 +154,7 @@ class StudipLitListViewAdmin extends TreeView
                 $this->mode = "";
                 $this->anchor = $item_id;
                 $this->open_items[$item_id] = true;
-                PageLayout::postSuccess(_("Diese Liste wurde neu eingefügt."));
+                PageLayout::postSuccess(_("Diese Liste wurde neu eingefÃ¼gt."));
             }
         }
         $this->mode = "";
@@ -196,9 +196,9 @@ class StudipLitListViewAdmin extends TreeView
         $user_id = $GLOBALS['auth']->auth['uid'];
         $visibility = ($this->tree->tree_data[$item_id]['visibility']) ? 0 : 1;
         if ($this->tree->updateList(array('list_id' => $item_id, 'visibility' => $visibility, 'user_id' => $user_id))){
-            PageLayout::postSuccess(_("Die Sichtbarkeit der Liste wurde geändert."));
+            PageLayout::postSuccess(_("Die Sichtbarkeit der Liste wurde geÃ¤ndert."));
         } else {
-            PageLayout::postError(_("Die Sichtbarkeit konnte nicht geändert werden."));
+            PageLayout::postError(_("Die Sichtbarkeit konnte nicht geÃ¤ndert werden."));
         }
         $this->anchor = $item_id;
         return true;
@@ -258,9 +258,9 @@ class StudipLitListViewAdmin extends TreeView
         $this->mode = "AssertDeleteItem";
         
         $template = $GLOBALS['template_factory']->open('shared/question');
-        $question = _("Sie beabsichtigen, diese Liste inklusive aller Einträge zu löschen. ")
-                    . sprintf(_("Es werden insgesamt %s Einträge gelöscht!"), count($this->tree->getKidsKids($item_id)))
-                    . "\n" . _("Wollen Sie diese Liste wirklich löschen?");
+        $question = _("Sie beabsichtigen, diese Liste inklusive aller EintrÃ¤ge zu lÃ¶schen. ")
+                    . sprintf(_("Es werden insgesamt %s EintrÃ¤ge gelÃ¶scht!"), count($this->tree->getKidsKids($item_id)))
+                    . "\n" . _("Wollen Sie diese Liste wirklich lÃ¶schen?");
         
         $template->set_attribute('approvalLink', URLHelper::getUrl($this->getSelf("cmd=DeleteItem&item_id=$item_id")));
         $template->set_attribute('disapprovalLink', URLHelper::getUrl($this->getSelf("cmd=Cancel&item_id=$item_id")));
@@ -279,16 +279,16 @@ class StudipLitListViewAdmin extends TreeView
         if (!$this->tree->isElement($item_id) && $this->mode == "AssertDeleteItem"){
             $deleted = $this->tree->deleteList($item_id);
             if ($deleted){
-                PageLayout::postSuccess(sprintf(_("Die Liste <b>%s</b> und alle Einträge (insgesamt %s) wurden gelöscht. "),htmlReady($item_name),$deleted-1));
+                PageLayout::postSuccess(sprintf(_("Die Liste <b>%s</b> und alle EintrÃ¤ge (insgesamt %s) wurden gelÃ¶scht. "),htmlReady($item_name),$deleted-1));
             } else {
-                PageLayout::postError(_("Fehler, die Liste konnte nicht gelöscht werden!"));
+                PageLayout::postError(_("Fehler, die Liste konnte nicht gelÃ¶scht werden!"));
             }
         } else {
             $deleted = $this->tree->deleteElement($item_id);
             if ($deleted){
-                PageLayout::postSuccess(sprintf(_("Der Eintrag <b>%s</b> wurde gelöscht. "),htmlReady($item_name)));
+                PageLayout::postSuccess(sprintf(_("Der Eintrag <b>%s</b> wurde gelÃ¶scht. "),htmlReady($item_name)));
             } else {
-                PageLayout::postError(_("Fehler, der Eintrag konnte nicht gelöscht werden!"));
+                PageLayout::postError(_("Fehler, der Eintrag konnte nicht gelÃ¶scht werden!"));
             }
         }
         $this->mode = "";
@@ -394,7 +394,7 @@ class StudipLitListViewAdmin extends TreeView
         $content .= "\n<tr><td class=\"table_row_even\" align=\"left\">";
         $content .= "\n<form name=\"userlist_form\" action=\"" . URLHelper::getLink($this->getSelf("cmd=CopyUserList")) . "\" method=\"POST\">";
         $content .= CSRFProtection::tokenTag();
-        $content .= "<b>" . _("Persönliche Literaturlisten:")
+        $content .= "<b>" . _("PersÃ¶nliche Literaturlisten:")
                     . "</b><br><br>\n<select name=\"user_list\" style=\"vertical-align:middle;width:70%;\">";
         if (is_array($user_lists)) {
             foreach ($user_lists as $list_id => $list_name) {
@@ -402,7 +402,7 @@ class StudipLitListViewAdmin extends TreeView
             }
         }
         $content .= "\n</select>&nbsp;&nbsp;" .
-                    Button::create(_('Kopie erstellen'), array('title' => _('Eine Kopie der ausgewähkten Liste erstellen'))) .
+                    Button::create(_('Kopie erstellen'), array('title' => _('Eine Kopie der ausgewÃ¤hkten Liste erstellen'))) .
                     "</form></td></tr>";
         
         return $content;
@@ -470,7 +470,7 @@ class StudipLitListViewAdmin extends TreeView
     function getBottomRowForTableBox($item_id){
         $content = '';
         $content .= "\n<tr><td class=\"table_row_odd\" align=\"right\" style=\"border-bottom: 1px solid black;border-left: 1px solid black;border-right: 1px solid black;\">";
-        $content .= _("Letzte Änderung") . ':';
+        $content .= _("Letzte Ã„nderung") . ':';
         $content .= strftime(" %d.%m.%Y ", $this->tree->tree_data[$item_id]['chdate']);
         $content .= "(<a href=\"dispatch.php/profile?username=";
         $content .= $this->tree->tree_data[$item_id]['username'];
@@ -560,9 +560,9 @@ class StudipLitListViewAdmin extends TreeView
     }
     
     function getDeleteButton($item_id, $cmd){
-        $content = LinkButton::create(_('Löschen'),
+        $content = LinkButton::create(_('LÃ¶schen'),
             URLHelper::getURL($this->getSelf('cmd='.$cmd.'&item_id='.$item_id)),
-            array('title' => _('Dieses Element löschen')));
+            array('title' => _('Dieses Element lÃ¶schen')));
         $content .= '&nbsp;';
         
         return $content;
@@ -624,7 +624,7 @@ class StudipLitListViewAdmin extends TreeView
                 $head .= "<a href=\"";
                 $head .= ($this->open_ranges[$item_id]) ? URLHelper::getLink($this->getSelf("close_range={$item_id}")) : URLHelper::getLink($this->getSelf("open_range={$item_id}"));
                 $head .= "\"> ";
-                $head .= Icon::create('folder-full', 'clickable', ['title' => $this->open_ranges[$item_id]?_('Alle Unterelemente schließen'):_('Alle Unterelemente öffnen')])->asImg(16);
+                $head .= Icon::create('folder-full', 'clickable', ['title' => $this->open_ranges[$item_id]?_('Alle Unterelemente schlieÃŸen'):_('Alle Unterelemente Ã¶ffnen')])->asImg(16);
                 $head .= "</a>";
             } else {
                 $head .= Icon::create('folder-full', 'clickable', ['title' => _('Dieses Element hat keine Unterelemente')])->asImg();
@@ -635,7 +635,7 @@ class StudipLitListViewAdmin extends TreeView
                     ? 'visibility-visible'
                     : 'visibility-invisible',
                     'clickable',
-                    ['title' => _('Sichtbarkeit ändern')])
+                    ['title' => _('Sichtbarkeit Ã¤ndern')])
                              ->asImg();
                 $head . "</a>";
             }
@@ -691,7 +691,7 @@ class StudipLitListViewAdmin extends TreeView
     function getItemMessage($item_id,$colspan = 1){
         $content = "";
         if ($this->msg[$item_id]){
-            $msg = explode("§",$this->msg[$item_id]);
+            $msg = explode("Â§",$this->msg[$item_id]);
             $pics = array(
                 'error' => Icon::create('decline', 'attention'),
                 'info'  => Icon::create('info', 'info'),

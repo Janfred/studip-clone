@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2011 - Till Glˆggler     <tgloeggl@uos.de>
+ * Copyright (C) 2011 - Till Gl√∂ggler     <tgloeggl@uos.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -50,7 +50,7 @@ class AreaController extends ForumController
             $this->render_json(array('content' => ForumEntry::killFormat(ForumEntry::killEdit(Request::get('content')))));
         } else {
             ForumEntry::update($area_id, Request::get('name'), Request::get('content'));
-            $this->flash['messages'] = array('success' => _('Die ƒnderungen am Bereich wurden gespeichert.'));
+            $this->flash['messages'] = array('success' => _('Die √Ñnderungen am Bereich wurden gespeichert.'));
             $this->redirect(PluginEngine::getLink('coreforum/index/index'));
         }
 

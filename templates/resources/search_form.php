@@ -1,7 +1,7 @@
 <? if ($search_string): ?>
 
     <input type="hidden" name="search_string_<?= $name ?>" value="<?= htmlReady($search_string) ?>">
-    <?= Icon::create('arr_2down', 'clickable', ['title' => _('diesen Eintrag übernehmen')])->asInput(array('name'=>'send_'.$name,'value'=>_('übernehmen'),)) ?>
+    <?= Icon::create('arr_2down', 'clickable', ['title' => _('diesen Eintrag Ã¼bernehmen')])->asInput(array('name'=>'send_'.$name,'value'=>_('Ã¼bernehmen'),)) ?>
 
     <select align="absmiddle" name="submit_<?= $name ?>">
     <? if ($allow_all): ?>
@@ -19,7 +19,7 @@
     <? endforeach; ?>
     </select>
 
-    <?= Icon::create('refresh', 'clickable', ['title' => _('Suche zurücksetzen')])->asInput(array('align'=>'absmiddle','name'=>'reset_'.$name,'value'=>_('neue Suche'),)) ?>
+    <?= Icon::create('refresh', 'clickable', ['title' => _('Suche zurÃ¼cksetzen')])->asInput(array('align'=>'absmiddle','name'=>'reset_'.$name,'value'=>_('neue Suche'),)) ?>
 
 <? else: ?>
 

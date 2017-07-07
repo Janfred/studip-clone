@@ -1,10 +1,10 @@
 <noscript>
-    <?= MessageBox::info(_('Leider ist es aus technischen Gründen nicht möglich ein vernünftiges Interface '
+    <?= MessageBox::info(_('Leider ist es aus technischen GrÃ¼nden nicht mÃ¶glich ein vernÃ¼nftiges Interface '
                          . 'ohne Javascript zu liefern. Nutzen sie bitte die Gruppierung unter den '
                          . 'Einstellungen der Gruppen oder aktivieren sie Javascript.')) ?>
 </noscript>
 
-<div class="ordering" title="<?= _('Gruppenreihenfolge ändern') ?>">
+<div class="ordering" title="<?= _('Gruppenreihenfolge Ã¤ndern') ?>">
     <div class="nestable">
         <?= $this->render_partial('admin/statusgroups/_group-nestable.php', compact('groups')) ?>
     </div>

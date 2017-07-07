@@ -101,13 +101,13 @@ if ($GLOBALS['MVV_MODUL']['SPRACHE']['default'] != $deskriptor->sprache) {
         <? endif; ?>
     </fieldset>
     <fieldset id="mvv-field-modul-gueltigkeit">
-        <legend><?= _('Gültigkeit') ?></legend>
+        <legend><?= _('GÃ¼ltigkeit') ?></legend>
         <? if ($def_lang) : ?>
             <label id="mvv-field-modul-modul_start">
                 <?= _('von Semester:') ?>
                 <? if ($perm->haveFieldPerm('start')) : ?> 
                 <select name="start" size="1">
-                    <option value=""><?= _('-- Semester wählen --') ?></option>
+                    <option value=""><?= _('-- Semester wÃ¤hlen --') ?></option>
                 <? foreach ($semester as $sem) : ?>
                     <option value="<?= $sem->semester_id ?>"<?= ($sem->semester_id == $modul->start ? ' selected' : '') ?>>
                         <?= htmlReady($sem->name) ?>
@@ -124,7 +124,7 @@ if ($GLOBALS['MVV_MODUL']['SPRACHE']['default'] != $deskriptor->sprache) {
                 <?= _('bis Semester:') ?>
                 <? if ($perm->haveFieldPerm('end')) : ?> 
                 <select name="end" size="1">
-                    <option value=""><?= _('unbegrenzt gültig') ?></option>
+                    <option value=""><?= _('unbegrenzt gÃ¼ltig') ?></option>
                 <? foreach ($semester as $sem) : ?>
                     <option value="<?= $sem->semester_id ?>"<?= ($sem->semester_id == $modul->end ? ' selected' : '') ?>>
                         <?= htmlReady($sem->name) ?>
@@ -136,7 +136,7 @@ if ($GLOBALS['MVV_MODUL']['SPRACHE']['default'] != $deskriptor->sprache) {
                         <? $sem = Semester::find($modul->end) ?>
                         <?= htmlReady($sem->name) ?>
                     <? else : ?>
-                        <?= _('unbegrenzt gültig') ?>
+                        <?= _('unbegrenzt gÃ¼ltig') ?>
                     <? endif; ?>                    
                     <input type="hidden" name="end" value="<?= $modul->end ?>">
                 <? endif; ?>
@@ -184,7 +184,7 @@ if ($GLOBALS['MVV_MODUL']['SPRACHE']['default'] != $deskriptor->sprache) {
                 $end_sem = Semester::find($modul->end);
                 printf(_('von Semester: %s bis Semester: %s'),
                         $start_sem ? htmlReady($start_sem->name) : _('unbekanntes Semester'),
-                        $end_sem ? htmlReady($end_sem->name) : _('unbegrenzt gültig'));
+                        $end_sem ? htmlReady($end_sem->name) : _('unbegrenzt gÃ¼ltig'));
                 ?>
             </div>
             <div id="mvv-field-modul-beschlussdatum">
@@ -278,7 +278,7 @@ if ($GLOBALS['MVV_MODUL']['SPRACHE']['default'] != $deskriptor->sprache) {
                 </li>
                 <? endforeach; ?>
             </ul>
-            <?= _('Die Reihenfolge der beteiligten Einrichtungen kann durch Anklicken und Ziehen geändert werden.') ?>
+            <?= _('Die Reihenfolge der beteiligten Einrichtungen kann durch Anklicken und Ziehen geÃ¤ndert werden.') ?>
         <? else : ?>
             <ul id="institute_target" class="mvv-assigned-items mvv-institute">
             <? if (sizeof($modul->assigned_institutes)) : ?>
@@ -345,7 +345,7 @@ if ($GLOBALS['MVV_MODUL']['SPRACHE']['default'] != $deskriptor->sprache) {
                     </li>
                     <? endforeach; ?>
                 </ul>
-                <?= _('Die Reihenfolge der Personen kann innerhalb der Funktion durch Anklicken und Ziehen geändert werden.') ?>
+                <?= _('Die Reihenfolge der Personen kann innerhalb der Funktion durch Anklicken und Ziehen geÃ¤ndert werden.') ?>
             <? else : ?>
                 <ul id="users_target" class="mvv-assigned-items mvv-assign-group">
                 <? if (!count($modul->assigned_users)) : ?>
@@ -407,7 +407,7 @@ if ($GLOBALS['MVV_MODUL']['SPRACHE']['default'] != $deskriptor->sprache) {
                 <? endforeach; ?>
             </ul>
             <?= $this->render_partial('shared/language_chooser', array('chooser_id' => 'language', 'chooser_languages' => $GLOBALS['MVV_MODUL']['SPRACHE']['values'])); ?>
-            <?= _('Die Reihenfolge der Sprachen kann durch Anklicken und Ziehen geändert werden.') ?>
+            <?= _('Die Reihenfolge der Sprachen kann durch Anklicken und Ziehen geÃ¤ndert werden.') ?>
         <? else : ?>
             <ul id="languages_target" class="mvv-assigned-items mvv-languages">
             <? if (count($modul->languages)) : ?>
@@ -481,7 +481,7 @@ if ($GLOBALS['MVV_MODUL']['SPRACHE']['default'] != $deskriptor->sprache) {
         </label>
     </fieldset>
     <fieldset>
-        <legend><?= _('Kapazität/Teilnahmezahl') ?></legend>
+        <legend><?= _('KapazitÃ¤t/Teilnahmezahl') ?></legend>
         <section  id="mvv-field-modul-kapazitaet" class="hgroup size-m">
         <? if ($perm->haveFieldPerm('kapazitaet') && $def_lang): ?>
             <label><?= _('Teilnahmezahl') ?>
@@ -533,7 +533,7 @@ if ($GLOBALS['MVV_MODUL']['SPRACHE']['default'] != $deskriptor->sprache) {
         </label>
     </fieldset>
     <fieldset id="mvv-field-modul-wl_pruef">
-        <legend><?= _('Workload Prüfung') ?></legend>
+        <legend><?= _('Workload PrÃ¼fung') ?></legend>
         <label><?= _('Stunden') ?>
         <? if ($def_lang) : ?>
             <input <?= $perm->disable('wl_pruef') ?> type="text" name="wl_pruef" id="wl_pruef" value="<?= htmlReady($modul->wl_pruef) ?>" maxlength="4">
@@ -560,7 +560,7 @@ if ($GLOBALS['MVV_MODUL']['SPRACHE']['default'] != $deskriptor->sprache) {
         </label>
     </fieldset>
     <fieldset id="mvv-field-modul-pruef_ebene">
-        <legend><?= _('Prüfungsebene') ?></legend>
+        <legend><?= _('PrÃ¼fungsebene') ?></legend>
         <? if ($def_lang && $perm->haveFieldPerm('pruef_ebene', MvvPerm::PERM_WRITE)) : ?>
             <? foreach ($GLOBALS['MVV_MODUL']['PRUEF_EBENE']['values'] as $key => $ebene) : ?>
             <label>
@@ -574,22 +574,22 @@ if ($GLOBALS['MVV_MODUL']['SPRACHE']['default'] != $deskriptor->sprache) {
         <? endif; ?>
     </fieldset>
     <fieldset>
-        <legend><?= _('Prüfung') ?></legend>
-        <label id="mvv-field-modul-pruef_vorleistung"><?= _('Prüfungsvorleistung') ?>
+        <legend><?= _('PrÃ¼fung') ?></legend>
+        <label id="mvv-field-modul-pruef_vorleistung"><?= _('PrÃ¼fungsvorleistung') ?>
         <? if ($perm_d->haveFieldPerm('pruef_vorleistung', MvvPerm::PERM_WRITE)) : ?>
             <textarea cols="60" rows="5" name="pruef_vorleistung" id="pruef_vorleistung" class="add_toolbar ui-resizable"><?= htmlReady($deskriptor->pruef_vorleistung) ?></textarea>
         <? else : ?>
             <textarea readonly cols="60" rows="5" name="pruef_vorleistung" id="pruef_vorleistung" class="ui-resizable"><?= htmlReady($deskriptor->pruef_vorleistung) ?></textarea>
         <? endif; ?>
         </label>
-        <label id="mvv-field-modul-pruef_leistung"><?= _('Leistung/Prüfungsform') ?>
+        <label id="mvv-field-modul-pruef_leistung"><?= _('Leistung/PrÃ¼fungsform') ?>
         <? if ($perm_d->haveFieldPerm('pruef_leistung', MvvPerm::PERM_WRITE)) : ?>
             <textarea cols="60" rows="5" name="pruef_leistung" id="pruef_leistung" class="add_toolbar ui-resizable"><?= htmlReady($deskriptor->pruef_leistung) ?></textarea>
         <? else : ?>
             <textarea readonly cols="60" rows="5" name="pruef_leistung" id="pruef_leistung" class="ui-resizable"><?= htmlReady($deskriptor->pruef_leistung) ?></textarea>
         <? endif; ?>
         </label>
-        <label id="mvv-field-modul-pruef_wiederholung"><?= _('Wiederholungsprüfung') ?>
+        <label id="mvv-field-modul-pruef_wiederholung"><?= _('WiederholungsprÃ¼fung') ?>
         <? if ($perm_d->haveFieldPerm('pruef_wiederholung', MvvPerm::PERM_WRITE)) : ?>
             <textarea cols="60" rows="5" name="pruef_wiederholung" id="pruef_wiederholung" class="add_toolbar ui-resizable"><?= htmlReady($deskriptor->pruef_wiederholung) ?></textarea>
         <? else : ?>
@@ -599,7 +599,7 @@ if ($GLOBALS['MVV_MODUL']['SPRACHE']['default'] != $deskriptor->sprache) {
     </fieldset>
     <fieldset>
         <legend><?= _('Weitere Angaben') ?></legend>
-        <label id="mvv-field-modul-faktor_note"><?= _('Faktor der Modulnote für die Endnote des Studiengangs') ?>
+        <label id="mvv-field-modul-faktor_note"><?= _('Faktor der Modulnote fÃ¼r die Endnote des Studiengangs') ?>
         <? if ($def_lang) : ?>
             <input <?= $perm->disable('faktor_note') ?> type="text" name="faktor_note" id="faktor_note" value="<?= htmlReady($modul->faktor_note) ?>" maxlength="4">
         <? else : ?>
@@ -670,14 +670,14 @@ if ($GLOBALS['MVV_MODUL']['SPRACHE']['default'] != $deskriptor->sprache) {
         <? endif; ?>
     <? else : ?>
         <? if ($perm_d->havePermWrite()) : ?>
-            <?= Button::createAccept(_('übernehmen'), 'store', array('title' => _('Änderungen übernehmen'))) ?>
+            <?= Button::createAccept(_('Ã¼bernehmen'), 'store', array('title' => _('Ã„nderungen Ã¼bernehmen'))) ?>
         <? endif; ?>
         <? if (!$def_lang) : ?>
-            <?= Button::create(_('Löschen'), 'delete', ['title' => _('Deskriptor löschen'), 'data-confirm' => _('Soll dieser Deskriptor gelöscht werden?'),
+            <?= Button::create(_('LÃ¶schen'), 'delete', ['title' => _('Deskriptor lÃ¶schen'), 'data-confirm' => _('Soll dieser Deskriptor gelÃ¶scht werden?'),
                 'formaction' => $controller->url_for('/delete_modul_deskriptor', $deskriptor->id)]); ?>
         <? endif; ?>
     <? endif; ?>
-        <?= LinkButton::createCancel(_('abbrechen'), $cancel_url, array('title' => _('zurück zur Übersicht'))) ?>
+        <?= LinkButton::createCancel(_('abbrechen'), $cancel_url, array('title' => _('zurÃ¼ck zur Ãœbersicht'))) ?>
     </footer>
 </form>
 <? if (!$def_lang) : ?>

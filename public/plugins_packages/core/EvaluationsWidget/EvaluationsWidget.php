@@ -15,7 +15,7 @@ class EvaluationsWidget extends StudIPPlugin implements PortalPlugin
 {
     public function getPluginName()
     {
-        return _('Fragebögen');
+        return _('FragebÃ¶gen');
     }
 
     public function getPortalTemplate()

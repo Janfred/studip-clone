@@ -14,7 +14,7 @@
             <tr>
                 <th colspan="2" nowrap align="center">
                     <a href="<?= URLHelper::getLink('dispatch.php/my_courses/groups') ?>">
-                        <?= Icon::create('group', 'clickable', ['title' => _('Gruppe ändern'), 'class' => 'middle'])->asImg(20) ?>
+                        <?= Icon::create('group', 'clickable', ['title' => _('Gruppe Ã¤ndern'), 'class' => 'middle'])->asImg(20) ?>
                     </a>
                 </th>
                 <th><?= _('Name') ?></th>
@@ -25,5 +25,5 @@
         <?= $this->render_partial('my_studygroups/_course', compact('courses')) ?>
     </table>
 <? else : ?>
-    <?= MessageBox::info(_('Sie haben bisher noch keine Studiengruppe gegründet oder sich in eine eingetragen.')) ?>
+    <?= MessageBox::info(_('Sie haben bisher noch keine Studiengruppe gegrÃ¼ndet oder sich in eine eingetragen.')) ?>
 <? endif ?>

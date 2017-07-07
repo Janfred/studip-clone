@@ -53,7 +53,7 @@ class ExternElementLink extends ExternElement {
         
         $this->name = "Link";
         $this->real_name = _("Links");
-        $this->description = _("Eigenschaften der Schrift f¸r Links.");
+        $this->description = _("Eigenschaften der Schrift f√ºr Links.");
     }
     
     function toString ($args = null) {

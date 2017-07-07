@@ -32,7 +32,7 @@
 <? if ($folder->isVisible($GLOBALS['user']->id)) : ?>
 
     <?= \Studip\LinkButton::create(
-        _('Ordner öffnen'),
+        _('Ordner Ã¶ffnen'),
         $controller->url_for('file/open_folder/' . $folder->getId())
     ) ?>
 </div>

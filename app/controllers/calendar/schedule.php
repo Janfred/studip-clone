@@ -10,7 +10,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      Till Glöggler <tgloeggl@uos.de>
+ * @author      Till GlÃ¶ggler <tgloeggl@uos.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
  */
@@ -233,7 +233,7 @@ class Calendar_ScheduleController extends AuthenticatedController
 
         if ($error) {
             $this->flash['messages'] = array('error' =>
-                array(_("Eintrag konnte nicht gespeichert werden, da die Start- und/oder Endzeit ungültigt ist!"))
+                array(_("Eintrag konnte nicht gespeichert werden, da die Start- und/oder Endzeit ungÃ¼ltigt ist!"))
              );
         } else {
             $data['title']   = Request::get('entry_title');

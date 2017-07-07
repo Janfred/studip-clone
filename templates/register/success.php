@@ -5,7 +5,7 @@
     <section>
         <blockquote>
             <?=_('Ihre Registrierung wurde erfolgreich vorgenommen.')?><br><br>
-            <?=_('Das System wird Ihnen zur Bestätigung eine E-Mail zusenden.')?><br>
+            <?=_('Das System wird Ihnen zur BestÃ¤tigung eine E-Mail zusenden.')?><br>
             <?=_('Bitte rufen Sie die E-Mail ab und folgen Sie den Anweisungen, um Schreibrechte im System zu bekommen.')?><br>
         </blockquote>
         <p>

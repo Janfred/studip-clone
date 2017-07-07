@@ -21,6 +21,6 @@ class InvalidSecurityTokenException extends AccessDeniedException
      */
     public function __construct($message = '', $code = 0, Exception $previous = null)
     {
-        parent::__construct(_('Ungültiges oder fehlendes Sicherheits-Token.'));
+        parent::__construct(_('UngÃ¼ltiges oder fehlendes Sicherheits-Token.'));
     }
 }

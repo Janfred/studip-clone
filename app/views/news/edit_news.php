@@ -38,7 +38,7 @@
         <table class="default nohover news_category_header">
             <thead><tr>
                 <th width="26">
-                    <?= Icon::create($news_isvisible['news_basic'] ? 'arr_1down' : 'arr_1right', 'clickable', ['title' => _('Formular für Grunddaten der Ankündigung einblenden oder ausblenden')])
+                    <?= Icon::create($news_isvisible['news_basic'] ? 'arr_1down' : 'arr_1right', 'clickable', ['title' => _('Formular fÃ¼r Grunddaten der AnkÃ¼ndigung einblenden oder ausblenden')])
                             ->asInput(['name' => 'toggle_news_basic']) ?>
                 </th>
                 <th><?=_("Grunddaten")?></th>
@@ -50,7 +50,7 @@
                 <tr>
                     <td colspan="2">
                         <label><?= _("Titel") ?><br>
-                        <input type="text" name="news_topic" class="news_topic news_prevent_submit" aria-label="<?= _('Titel der Ankündigung') ?>"
+                        <input type="text" name="news_topic" class="news_topic news_prevent_submit" aria-label="<?= _('Titel der AnkÃ¼ndigung') ?>"
                                value="<?= htmlReady($news['topic']) ?>"></label>
                     </td>
                 </tr>
@@ -59,14 +59,14 @@
                         <label><?= _("Inhalt") ?><br>
                         <? list ($body, $admin_msg) = explode("<admin_msg>", $news['body']); ?>
                         <textarea class="news_body add_toolbar wysiwyg" name="news_body" rows="6"
-                            wrap="virtual" placeholder="<?= _('Geben Sie hier den Ankündigungstext ein') ?>"
-                            aria-label="<?= _('Inhalt der Ankündigung') ?>"><?= wysiwygReady($body) ?></textarea></label>
+                            wrap="virtual" placeholder="<?= _('Geben Sie hier den AnkÃ¼ndigungstext ein') ?>"
+                            aria-label="<?= _('Inhalt der AnkÃ¼ndigung') ?>"><?= wysiwygReady($body) ?></textarea></label>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <label>
-                            <?= _('Veröffentlichungsdatum') ?><br>
+                            <?= _('VerÃ¶ffentlichungsdatum') ?><br>
                             <input type="text" class="news_date news_prevent_submit"
                                    name="news_startdate" id="news_startdate"
                                    data-date-picker='{"<=":"#news_enddate"}'
@@ -111,14 +111,14 @@
         <thead>
             <tr>
                 <th width="26">
-                    <?= Icon::create($news_isvisible['news_comments'] ? 'arr_1down' : 'arr_1right', 'clickable', ['title' => _('Formular für Kommentarverwaltung der Ankündigung einblenden oder ausblenden')])
+                    <?= Icon::create($news_isvisible['news_comments'] ? 'arr_1down' : 'arr_1right', 'clickable', ['title' => _('Formular fÃ¼r Kommentarverwaltung der AnkÃ¼ndigung einblenden oder ausblenden')])
                             ->asInput(['name' => 'toggle_news_comments']) ?>
                 </th>
                 <th>
                 <? if ($news['allow_comments']) : ?>
-                    <?=_("Kommentare zu dieser Ankündigung")?>
+                    <?=_("Kommentare zu dieser AnkÃ¼ndigung")?>
                 <? else : ?>
-                    <?=_("Kommentare zu dieser Ankündigung")?>
+                    <?=_("Kommentare zu dieser AnkÃ¼ndigung")?>
                 <? endif ?>
                 </th>
             </tr>
@@ -133,14 +133,14 @@
                     <? endforeach; ?>
                     <? if ($comments_admin): ?>
                         <tfoot><tr><td colspan="3" align="right">
-                        <?=Button::create(_('Markierte Kommentare löschen'), 'delete_marked_comments', array('title' => _('Markierte Kommentare löschen'))) ?>
+                        <?=Button::create(_('Markierte Kommentare lÃ¶schen'), 'delete_marked_comments', array('title' => _('Markierte Kommentare lÃ¶schen'))) ?>
                         </td></tr></tfoot>
                     <? endif ?>
                 <? else : ?>
                     <tr>
                         <td width="26"></td>
                         <td colspan="2">
-                            <?= _('Zu dieser Ankündigung sind keine Kommentare vorhanden.') ?>
+                            <?= _('Zu dieser AnkÃ¼ndigung sind keine Kommentare vorhanden.') ?>
                         </td>
                     </tr>
                 <? endif ?>
@@ -158,7 +158,7 @@
         <thead>
             <tr>
                 <th width="26">
-                    <?= Icon::create($news_isvisible['news_areas'] ? 'arr_1down' : 'arr_1right', 'clickable', ['title' => _('Formular für Bereichszuordnungen der Ankündigung einblenden oder ausblenden')])
+                    <?= Icon::create($news_isvisible['news_areas'] ? 'arr_1down' : 'arr_1right', 'clickable', ['title' => _('Formular fÃ¼r Bereichszuordnungen der AnkÃ¼ndigung einblenden oder ausblenden')])
                             ->asInput(['name' => 'toggle_news_areas']) ?>
                 </th>
                 <th colspan="2"><?=_('In weiteren Bereichen anzeigen')?></th>
@@ -196,7 +196,7 @@
                         <div class="news_area_selectable">
                             <label><?=_('Suchergebnis')?><br>
                             <select name="area_options_selectable[]" class="news_area_options" size="7" multiple
-                                    aria-label="<?= _('Gefundene Bereiche, die der Ankündigung hinzugefügt werden können') ?>"
+                                    aria-label="<?= _('Gefundene Bereiche, die der AnkÃ¼ndigung hinzugefÃ¼gt werden kÃ¶nnen') ?>"
                                     ondblclick="jQuery('input[name=news_add_areas]').click()">
                             <? foreach ($area_structure as $area_key => $area_data) : ?>
                                 <? if (count($area_options_selectable[$area_key])) : ?>
@@ -218,9 +218,9 @@
                             <br>
                             <br>
                             <br>
-                            <?= Icon::create('arr_2right', 'clickable', ['title' => _('In den Suchergebnissen markierte Bereiche der Ankündigung hinzufügen')])->asInput(array('name'=>'news_add_areas',)) ?>
+                            <?= Icon::create('arr_2right', 'clickable', ['title' => _('In den Suchergebnissen markierte Bereiche der AnkÃ¼ndigung hinzufÃ¼gen')])->asInput(array('name'=>'news_add_areas',)) ?>
                             <br><br>
-                            <?= Icon::create('arr_2left', 'clickable', ['title' => _('Bei den bereits ausgewählten Bereichen die markierten Bereiche entfernen')])->asInput(array('name'=>'news_remove_areas',)) ?>
+                            <?= Icon::create('arr_2left', 'clickable', ['title' => _('Bei den bereits ausgewÃ¤hlten Bereichen die markierten Bereiche entfernen')])->asInput(array('name'=>'news_remove_areas',)) ?>
                         </div>
                         <div class="news_area_selected">
                             <? foreach ($area_structure as $area_key => $area_data) :
@@ -229,15 +229,15 @@
                             <label>
                             <div id="news_area_text">
                                 <? if ($area_count == 0) : ?>
-                                    <?=_('Keine Bereiche ausgewählt')?>
+                                    <?=_('Keine Bereiche ausgewÃ¤hlt')?>
                                 <? elseif ($area_count == 1) : ?>
-                                    <?=_('1 Bereich ausgewählt')?>
+                                    <?=_('1 Bereich ausgewÃ¤hlt')?>
                                 <? else : ?>
-                                    <?=sprintf(_('%s Bereiche ausgewählt'), $area_count)?>
+                                    <?=sprintf(_('%s Bereiche ausgewÃ¤hlt'), $area_count)?>
                                 <? endif ?>
                             </div>
                             <select name="area_options_selected[]" class="news_area_options" size="7" multiple
-                                    aria-label="<?= _('Bereiche, in denen die Ankündigung angezeigt wird') ?>"
+                                    aria-label="<?= _('Bereiche, in denen die AnkÃ¼ndigung angezeigt wird') ?>"
                                     ondblclick="jQuery('input[name=news_remove_areas]').click()">
                             <? foreach ($area_structure as $area_key => $area_data) : ?>
                                 <? if (count($area_options_selected[$area_key])) : ?>
@@ -265,12 +265,12 @@
 </div>
 <div class="news_dialog_buttons">
 <?  if ($news["mkdate"]) : ?>
-    <?= Button::createAccept(_('Änderungen speichern'), 'save_news') ?>
+    <?= Button::createAccept(_('Ã„nderungen speichern'), 'save_news') ?>
 <? else : ?>
-    <?= Button::createAccept(_('Ankündigung erstellen'), 'save_news') ?>
+    <?= Button::createAccept(_('AnkÃ¼ndigung erstellen'), 'save_news') ?>
 <? endif ?>
 <? if (Request::isXhr()) : ?>
-    <?= LinkButton::createCancel(_('Schließen'), URLHelper::getURL(''), array('rel' => 'close_dialog')) ?>
+    <?= LinkButton::createCancel(_('SchlieÃŸen'), URLHelper::getURL(''), array('rel' => 'close_dialog')) ?>
 <? endif ?>
 </div>
 </form>

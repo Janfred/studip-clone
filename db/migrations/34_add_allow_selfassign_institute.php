@@ -11,7 +11,7 @@ class AddAllowSelfassignInstitute extends Migration
         $db = DBManager::get();
 
         $name = 'ALLOW_SELFASSIGN_INSTITUTE';
-        $description = 'Wenn eingeschaltet, dürfen Studenten sich selbst Einrichtungen an denen sie studieren zuordnen.';
+        $description = 'Wenn eingeschaltet, dÃ¼rfen Studenten sich selbst Einrichtungen an denen sie studieren zuordnen.';
         $time = time();
 
         $db->exec("

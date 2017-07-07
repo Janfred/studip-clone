@@ -13,7 +13,7 @@ SkipLinks::addIndex(_('Wochenansicht'), 'main_content', 100);
         <td colspan="<?= $colspan_2 ?>" style="vertical-align: middle; text-align: center;">
             <div style="text-align: left; width: 25%; display: inline-block; white-space: nowrap;">
                 <a href="<?= $controller->url_for('calendar/group/week', array('atime' => mktime(12, 0, 0, date('n', $atime), date('j', $atime) - 7, date('Y', $atime)))) ?>">
-                    <?= Icon::create('arr_1left', 'clickable', ['title' => _('Eine Woche zurück')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
+                    <?= Icon::create('arr_1left', 'clickable', ['title' => _('Eine Woche zurÃ¼ck')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
                     <?= sprintf(_('%u. Woche'), strftime('%V'), strtotime('-1 week', $atime)) ?>
                 </a>
             </div>

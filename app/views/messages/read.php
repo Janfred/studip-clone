@@ -54,7 +54,7 @@
                 <? endforeach ?>
                     <span>
                         <input type="text" name="add_tag" style="width: 50px; opacity: 0.8;">
-                        <?= Icon::create('add', 'clickable', ['title' => _("Schlagwort hinzufügen")])->asInput(["class" => 'text-bottom']) ?>
+                        <?= Icon::create('add', 'clickable', ['title' => _("Schlagwort hinzufÃ¼gen")])->asInput(["class" => 'text-bottom']) ?>
                     </span>
                 </form>
             </td>
@@ -67,7 +67,7 @@
     <?= formatReady($message["message"]) ?>
 </div>
 <? if($attachment_folder): ?>
-<h3><?= Icon::create('staple', 'inactive')->asImg(20, ["class" => "text-bottom"]) ?><?= _('Anhänge') ?></h3>
+<h3><?= Icon::create('staple', 'inactive')->asImg(20, ["class" => "text-bottom"]) ?><?= _('AnhÃ¤nge') ?></h3>
     <table class="default sortable-table" data-sortlist="[[2, 0]]">
         <?= $this->render_partial('files/_files_thead') ?>
         <? foreach($attachment_folder->getFiles() as $file_ref): ?>
@@ -92,8 +92,8 @@
     <a href="<?= URLHelper::getLink("dispatch.php/messages/print/".$message->getId()) ?>" class="print_action"><?= \Studip\Button::create(_("Drucken"))?></a>
     <form action="<?= $controller->url_for('messages/delete/' . $message->id) ?>" method="post" style="display: inline;">
         <input type="hidden" name="studip-ticket" value="<?= get_ticket() ?>">
-        <?= \Studip\Button::create(_("Löschen"), 'delete', array(
-                'onClick' => 'return window.confirm("' . _('Nachricht wirklich löschen?') . '");',
+        <?= \Studip\Button::create(_("LÃ¶schen"), 'delete', array(
+                'onClick' => 'return window.confirm("' . _('Nachricht wirklich lÃ¶schen?') . '");',
         ))?>
     </form>
 </div>

@@ -16,7 +16,7 @@ SkipLinks::addIndex(_('Tagesansicht'), 'main_content', 100);
             <td style="text-align: center; width: 10%; height: 40px;">
                 <div style="text-align: left; width: 20%; display: inline-block; white-space: nowrap;">
                     <a href="<?= $controller->url_for('calendar/group/day', array('atime' => $atime - 86400)) ?>">
-                        <?= Icon::create('arr_1left', 'clickable', ['title' => _('Einen Tag zurück')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
+                        <?= Icon::create('arr_1left', 'clickable', ['title' => _('Einen Tag zurÃ¼ck')])->asImg(16, ['style' => 'vertical-align: text-top;']) ?>
                         <?= strftime(_('%x'), strtotime('-1 day', $calendars[0]->getStart())) ?>
                     </a>
                 </div>

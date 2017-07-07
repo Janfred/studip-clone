@@ -8,7 +8,7 @@
  * the License, or (at your option) any later version.
  *
  * @author   Jan-Hendrik Willms <tleilax+studip@gmail.com>
- * @author   André Noack <anoack@mcis.de>
+ * @author   AndrÃ© Noack <anoack@mcis.de>
  * @author   Cornelis Kater <ckater@gwdg.de>
  * @author   Stefan Suchi <suchi@gmx.de>
  * @author   Tobias Thelen <tthelen@uni-osnabrueck.de>
@@ -110,7 +110,7 @@ class Course_ScmController extends StudipController
             $this->verification = $GLOBALS['template_factory']->open('shared/question')->render(array(
                 'approvalLink'    => $this->url_for('course/scm/delete/' . $this->scm->id . '?ticket=' . get_ticket()),
                 'disapprovalLink' => $this->url_for('course/scm/' . $this->scm->id),
-                'question'        => _('Wollen Sie diese Seite wirklich löschen?'),
+                'question'        => _('Wollen Sie diese Seite wirklich lÃ¶schen?'),
             ));
         }
 
@@ -161,7 +161,7 @@ class Course_ScmController extends StudipController
             }
 
             if ($scm->store() !== false) {
-                $message = MessageBox::success(_('Die Änderungen wurden übernommen.'));
+                $message = MessageBox::success(_('Die Ã„nderungen wurden Ã¼bernommen.'));
                 PageLayout::postMessage($message);
             }
 
@@ -212,13 +212,13 @@ class Course_ScmController extends StudipController
             $scm = new StudipScmEntry($id);
             if (!$scm->isNew() && $scm->range_id == Context::getId()){
                 $scm->delete();
-                PageLayout::postMessage(MessageBox::success(_('Der Eintrag wurde gelöscht.')));
+                PageLayout::postMessage(MessageBox::success(_('Der Eintrag wurde gelÃ¶scht.')));
             }
             $this->redirect('course/scm');
             return;
         }
 
-        PageLayout::postMessage(MessageBox::error(_('Es ist ein Fehler aufgetreten. Bitte versuchen Sie erneut, diese Seite zu löschen.')));
+        PageLayout::postMessage(MessageBox::error(_('Es ist ein Fehler aufgetreten. Bitte versuchen Sie erneut, diese Seite zu lÃ¶schen.')));
         $this->redirect('course/scm/' . $id);
     }
 

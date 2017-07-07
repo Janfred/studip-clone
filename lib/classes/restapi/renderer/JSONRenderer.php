@@ -74,7 +74,7 @@ class JSONRenderer extends DefaultRenderer
             return $new_data;
         }
 
-        // string-artiges wird an die nicht-rekursive Variante übergeben
+        // string-artiges wird an die nicht-rekursive Variante Ã¼bergeben
         else if (is_string($data) || is_callable(array($data, '__toString'))) {
             return (string) $data;
         }
@@ -84,7 +84,7 @@ class JSONRenderer extends DefaultRenderer
             return $data;
         }
 
-        // alles andere ist ungültig
+        // alles andere ist ungÃ¼ltig
         throw new \InvalidArgumentException();
     }
 }

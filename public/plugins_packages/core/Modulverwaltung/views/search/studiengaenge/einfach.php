@@ -1,6 +1,6 @@
 <?= $this->render_partial('search/breadcrumb') ?>
 <h2><?= htmlReady($studiengangName) ?></h2>
-<h3><?= _('Ausprägungen') ?></h3>
+<h3><?= _('AusprÃ¤gungen') ?></h3>
 <ul class="mvv-result-list">
 <? foreach ($data as $fach_id => $fach) : ?>
     <? $cycle_class = $i++ % 2 ? 'even' : 'odd'; ?>

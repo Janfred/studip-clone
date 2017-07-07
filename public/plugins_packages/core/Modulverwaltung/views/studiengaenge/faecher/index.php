@@ -3,8 +3,8 @@
     <?= CSRFProtection::tokenTag() ?>
     <table class="default collapsable">
         <caption>
-            <?= _('Studiengangteile nach Fächern gruppiert') ?>
-            <span class="actions"><? printf(_('%s Fächer'), $count) ?></span>
+            <?= _('Studiengangteile nach FÃ¤chern gruppiert') ?>
+            <span class="actions"><? printf(_('%s FÃ¤cher'), $count) ?></span>
         </caption>
         <colgroup>
             <col>
@@ -33,7 +33,7 @@
                     <td class="dont-hide actions">
                         <? if (MvvPerm::havePermCreate('StudiengangTeil')) : ?>
                             <a href="<?= $controller->url_for('/stgteil_fach', $fach->id) ?>">
-                                <?= Icon::create('file+add', 'clickable', ['title' => _('Neuen Studiengangteil für gewähltes Fach anlegen')])->asImg(); ?>
+                                <?= Icon::create('file+add', 'clickable', ['title' => _('Neuen Studiengangteil fÃ¼r gewÃ¤hltes Fach anlegen')])->asImg(); ?>
                             </a>
                         <? endif; ?>
                     </td>

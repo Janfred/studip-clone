@@ -7,7 +7,7 @@ use Studip\Button, Studip\LinkButton;
 
 <form action="<?= $controller->url_for('admin/role/show_role') ?>" method="get" class="default inline">
     <label>
-        <?= _('Rolle wählen') ?>
+        <?= _('Rolle wÃ¤hlen') ?>
 
         <select name="role">
         <? foreach ($roles as $one_role): ?>
@@ -21,7 +21,7 @@ use Studip\Button, Studip\LinkButton;
         </select>
     </label>
 
-    <?= Button::create(_('Auswählen'), 'selectrole', array('title' => _('Rolle auswählen')))?>
+    <?= Button::create(_('AuswÃ¤hlen'), 'selectrole', array('title' => _('Rolle auswÃ¤hlen')))?>
 </form>
 
 <? if (isset($role)): ?>
@@ -102,8 +102,8 @@ use Studip\Button, Studip\LinkButton;
         <tfoot>
             <tr>
                 <td colspan="6">
-                    <?= _('Alle markierten Einträge') ?>
-                    <?= Studip\Button::create(_('Löschen'), 'delete', array(
+                    <?= _('Alle markierten EintrÃ¤ge') ?>
+                    <?= Studip\Button::create(_('LÃ¶schen'), 'delete', array(
                             'data-confirm' => _('Sollen den markierten Personen wirklich die Rolle entzogen werden?'),
                     )) ?>
                 </td>
@@ -124,7 +124,7 @@ use Studip\Button, Studip\LinkButton;
             <div class="actions">
                 <a href="<?= $controller->url_for('admin/role/add_plugin/' . $roleid) ?>" data-dialog="size=auto">
                     <?= Icon::create('plugin+add', 'clickable') ?>
-                    <?= _('Plugins hinzufügen') ?>
+                    <?= _('Plugins hinzufÃ¼gen') ?>
                 </a>
             </div>
         </caption>
@@ -183,8 +183,8 @@ use Studip\Button, Studip\LinkButton;
         <tfoot>
             <tr>
                 <td colspan="6">
-                    <?= _('Alle markierten Einträge') ?>
-                    <?= Studip\Button::create(_('Löschen'), 'delete', array(
+                    <?= _('Alle markierten EintrÃ¤ge') ?>
+                    <?= Studip\Button::create(_('LÃ¶schen'), 'delete', array(
                             'data-confirm' => _('Sollen den markierten Plugins wirklich die Rolle entzogen werden?'),
                     )) ?>
                 </td>

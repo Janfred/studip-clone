@@ -191,7 +191,7 @@ class EditResourceData {
         }
 
         if ($resAssign->isNew() && $lockedAssign){
-            echo MessageBox::info(_("Sie haben nicht die Berechtigung, für diese Resource eine Belegung zu erstellen."));
+            echo MessageBox::info(_("Sie haben nicht die Berechtigung, fÃ¼r diese Resource eine Belegung zu erstellen."));
             return;
         }
 

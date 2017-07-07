@@ -6,14 +6,14 @@
 /*
  * tour.php - Stud.IP-Tour controller
  *
- * Copyright (C) 2013 - Arne Schröder <schroeder@data-quest.de>
+ * Copyright (C) 2013 - Arne SchrÃ¶der <schroeder@data-quest.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      Arne Schröder <schroeder@data-quest.de>
+ * @author      Arne SchrÃ¶der <schroeder@data-quest.de>
  * @author      David Siegfried <david.siegfried@uni-vechta.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
@@ -227,7 +227,7 @@ class TourController extends AuthenticatedController
         $sidebar = Sidebar::get();
 
         $widget = new ViewsWidget();
-        $widget->addLink(_('Übersicht'), $this->url_for('tour/admin_overview'))->setActive(true);
+        $widget->addLink(_('Ãœbersicht'), $this->url_for('tour/admin_overview'))->setActive(true);
         $widget->addLink(_('Konflikte'), $this->url_for('tour/admin_conflicts'));
         $sidebar->addWidget($widget);
 
@@ -262,7 +262,7 @@ class TourController extends AuthenticatedController
         } else {
             $this->response->add_header('X-Action', 'question');
             return createQuestion2(
-                sprintf(_('Wollen Sie die Tour "%s" wirklich löschen?'), $this->tour->name),
+                sprintf(_('Wollen Sie die Tour "%s" wirklich lÃ¶schen?'), $this->tour->name),
                 ['confirm_delete_tour' => 1, 'tour_id' => $tour_id],
                 [],
                 ''
@@ -293,7 +293,7 @@ class TourController extends AuthenticatedController
         } else {
             $this->response->add_header('X-Action', 'question');
             return createQuestion2(sprintf(
-                _('Wollen Sie Schritt %s wirklich löschen?'), $step_nr),
+                _('Wollen Sie Schritt %s wirklich lÃ¶schen?'), $step_nr),
                 ['confirm_delete_tour_step' => 1, 'tour_id' => $tour_id, 'step_nr' => $step_nr],
                 [],
                 ''

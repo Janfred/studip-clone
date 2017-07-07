@@ -26,7 +26,7 @@
             <input<?= $perm->disable('name_en') ?> type="text" name="name_en" id="name_en" value="<?= htmlReady($studiengang->name_en) ?>" size="60" maxlength="255">
         </label>
         <div style="width: 100%; max-width: 48em;">
-        <?= _('Es kann ein beliebiger Name eingegeben werden. Soll der Name mit dem eines Fachs übereinstimmen, geben Sie den Namen des Fachs ein, und wählen Sie das Fach aus der Liste. Es werden dann automatisch die weiteren Bezeichnungen aus den Daten des Fachs übernommen.') ?>
+        <?= _('Es kann ein beliebiger Name eingegeben werden. Soll der Name mit dem eines Fachs Ã¼bereinstimmen, geben Sie den Namen des Fachs ein, und wÃ¤hlen Sie das Fach aus der Liste. Es werden dann automatisch die weiteren Bezeichnungen aus den Daten des Fachs Ã¼bernommen.') ?>
         </div>
     </fieldset>
     <fieldset>
@@ -41,12 +41,12 @@
         </label>
     </fieldset>
     <fieldset>
-        <legend><?= _('Gültigkeit') ?></legend>
+        <legend><?= _('GÃ¼ltigkeit') ?></legend>
         <label>
             <?= _('von Semester:') ?>
             <? if ($perm->haveFieldPerm('start')) : ?> 
             <select name="start" size="1">
-                <option value=""><?= _('-- Semester wählen --') ?></option>
+                <option value=""><?= _('-- Semester wÃ¤hlen --') ?></option>
             <? foreach ($semester as $sem) : ?>
                 <option value="<?= $sem->semester_id ?>"<?= ($sem->semester_id == $studiengang->start ? ' selected' : '') ?>>
                     <?= htmlReady($sem->name) ?>
@@ -63,7 +63,7 @@
             <?= _('bis Semester:') ?>
             <? if ($perm->haveFieldPerm('end')) : ?> 
             <select name="end" size="1">
-                <option value=""><?= _('unbegrenzt gültig') ?></option>
+                <option value=""><?= _('unbegrenzt gÃ¼ltig') ?></option>
             <? foreach ($semester as $sem) : ?>
                 <option value="<?= $sem->semester_id ?>"<?= ($sem->semester_id == $studiengang->end ? ' selected' : '') ?>>
                     <?= htmlReady($sem->name) ?>
@@ -75,7 +75,7 @@
                     <? $sem = Semester::find($studiengang->end) ?>
                     <?= htmlReady($sem->name) ?>
                 <? else : ?>
-                    <?= _('unbegrenzt gültig') ?>
+                    <?= _('unbegrenzt gÃ¼ltig') ?>
                 <? endif; ?>                    
                 <input type="hidden" name="end" value="<?= $studiengang->end ?>">
             <? endif; ?>
@@ -139,14 +139,14 @@
             <? endif; ?>
             <? if ($perm->haveFieldPerm('typ', MvvPerm::PERM_WRITE)) : ?>
             <label><input class="mvv_toggle_hide" type="radio" name="stg_typ"<?=
-            ($studiengang->typ == 'mehrfach' ? ' checked' : '') ?> value="mehrfach"> <?= _('Mehrfach-Studiengang (Diesem Studiengang können mehrere Studiengangteile in Abschnitten zugewiesen werden)') ?></label>
+            ($studiengang->typ == 'mehrfach' ? ' checked' : '') ?> value="mehrfach"> <?= _('Mehrfach-Studiengang (Diesem Studiengang kÃ¶nnen mehrere Studiengangteile in Abschnitten zugewiesen werden)') ?></label>
             <? endif; ?>
     </fieldset>
     <fieldset>
         <legend><?= _('Abschluss') ?></legend>
         <? if ($perm->haveFieldPerm('abschluss_id')) : ?>
         <select id="abschluss_id" name="abschluss_id" size="1">
-            <option value=""><?= _('-- bitte wählen --') ?></option>
+            <option value=""><?= _('-- bitte wÃ¤hlen --') ?></option>
             <? foreach ($abschluesse as $abschluss) : ?>
             <option <?= ($abschluss['abschluss_id'] == $studiengang->abschluss_id ? 'selected ' : '') ?>value="<?= $abschluss['abschluss_id'] ?>"><?= htmlReady($abschluss['name']) ?></option>
             <? endforeach; ?>
@@ -215,7 +215,7 @@
     <fieldset>
         <legend><?= _('Schlagworte') ?></legend>
         <textarea <?= $perm->disable('schlagworte') ?> cols="60" rows="5" name="schlagworte" id="schlagworte" class="ui-resizable"><?= htmlReady($studiengang->schlagworte) ?></textarea>
-        <div><?= _('Hier können zusätzlich Schlagworte angegeben werden, die in der Suche berücksichtigt werden.') ?></div>
+        <div><?= _('Hier kÃ¶nnen zusÃ¤tzlich Schlagworte angegeben werden, die in der Suche berÃ¼cksichtigt werden.') ?></div>
     </fieldset>
     <footer>
     <? if ($studiengang->isNew()) : ?>
@@ -224,9 +224,9 @@
         <? endif; ?>
     <? else : ?>
         <? if ($perm->havePermWrite()) : ?>
-            <?= Button::createAccept(_('übernehmen'), 'store', array('title' => _('Änderungen übernehmen'))) ?>
+            <?= Button::createAccept(_('Ã¼bernehmen'), 'store', array('title' => _('Ã„nderungen Ã¼bernehmen'))) ?>
         <? endif; ?>
     <? endif; ?>
-        <?= LinkButton::createCancel(_('abbrechen'), $cancel_url, array('title' => _('zurück zur Übersicht'))) ?>
+        <?= LinkButton::createCancel(_('abbrechen'), $cancel_url, array('title' => _('zurÃ¼ck zur Ãœbersicht'))) ?>
     </footer>
 </form>

@@ -13,10 +13,10 @@
                     'course_id'        => $course_id,
                     'default_subject'  => $subject,
                 ]) ?>" data-dialog>
-                    <?= Icon::create('inbox', 'clickable', ['title' => sprintf(_('Nachricht mit Mailweiterleitung an alle %s versenden'),'vorläufig akzeptierten Nutzer/-innen')]) ?>
+                    <?= Icon::create('inbox', 'clickable', ['title' => sprintf(_('Nachricht mit Mailweiterleitung an alle %s versenden'),'vorlÃ¤ufig akzeptierten Nutzer/-innen')]) ?>
                 </a>
             </span>
-            <?= _('Vorläufig akzeptierte Teilnehmende') ?>
+            <?= _('VorlÃ¤ufig akzeptierte Teilnehmende') ?>
         </caption>
         <colgroup>
         <? if (!$is_locked): ?>
@@ -32,7 +32,7 @@
             <tr class="sortable">
             <? if (!$is_locked): ?>
                 <th>
-                    <input aria-label="<?= sprintf(_('Alle %s auswählen'), 'vorläufig akzeptierten NutzerInnen') ?>"
+                    <input aria-label="<?= sprintf(_('Alle %s auswÃ¤hlen'), 'vorlÃ¤ufig akzeptierten NutzerInnen') ?>"
                                type="checkbox" name="all" value="1" data-proxyfor=":checkbox[name^=accepted]">
                 </th>
             <? endif ?>
@@ -67,7 +67,7 @@
             <tr>
             <? if (!$is_locked) : ?>
                 <td>
-                    <input aria-label="<?= sprintf(_('%s auswählen'), _('Vorläufig akzeptierte/n NutzerIn')) ?>"
+                    <input aria-label="<?= sprintf(_('%s auswÃ¤hlen'), _('VorlÃ¤ufig akzeptierte/n NutzerIn')) ?>"
                            type="checkbox" name="accepted[<?= $accept['user_id'] ?>]" value="1">
                 </td>
             <? endif ?>
@@ -102,7 +102,7 @@
                     <? $actionMenu = ActionMenu::get() ?>
                     <? $actionMenu->addLink(
                         $controller->url_for('course/members/add_comment/' . $accept['user_id']),
-                        _('Bemerkung hinzufügen'),
+                        _('Bemerkung hinzufÃ¼gen'),
                         Icon::create('comment', 'clickable'),
                         ['data-dialog' => 'size=auto']
                     ) ?>
@@ -137,14 +137,14 @@
         <tfoot>
             <tr>
                 <td class="printhead" colspan="6">
-                    <select name="action_accepted" id="action_accepted" aria-label="<?= _('Aktion ausführen') ?>">
-                        <option value="">- <?= _('Aktion wählen') ?></option>
+                    <select name="action_accepted" id="action_accepted" aria-label="<?= _('Aktion ausfÃ¼hren') ?>">
+                        <option value="">- <?= _('Aktion wÃ¤hlen') ?></option>
                         <option value="upgrade"><?= _('Akzeptieren') ?></option>
                         <option value="remove"><?= _('Austragen') ?></option>
                         <option value="message"><?=_('Nachricht senden')?></option>
                         <!--<option value="copy_to_course"><?= _('In Seminar verschieben/kopieren') ?></option>-->
                     </select>
-                    <?= Button::create(_('Ausführen'), 'submit_accepted') ?>
+                    <?= Button::create(_('AusfÃ¼hren'), 'submit_accepted') ?>
                 </td>
             </tr>
         </tfoot>

@@ -177,7 +177,7 @@ class Course_DetailsController extends AuthenticatedController
                 } else {
                     $abo_msg = _("Zugang zur Veranstaltung");
                     if ($this->sem->admission_binding) {
-                        PageLayout::postMessage(MessageBox::info(_('Die Anmeldung ist verbindlich, Teilnehmende können sich nicht selbst austragen.')));
+                        PageLayout::postMessage(MessageBox::info(_('Die Anmeldung ist verbindlich, Teilnehmende kÃ¶nnen sich nicht selbst austragen.')));
                     }
                 }
                 $links->addLink($abo_msg,
@@ -201,7 +201,7 @@ class Course_DetailsController extends AuthenticatedController
             }
 
             if ($this->send_from_search_page) {
-                $links->addLink(_("Zurück zur letzten Auswahl"), URLHelper::getLink($this->send_from_search_page), Icon::create('link-intern', 'clickable'));
+                $links->addLink(_("ZurÃ¼ck zur letzten Auswahl"), URLHelper::getLink($this->send_from_search_page), Icon::create('link-intern', 'clickable'));
             }
 
             if ($links->hasElements()) {

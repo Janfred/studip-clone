@@ -8,7 +8,7 @@
 // StudipLitSearch.class.php
 // Class to build search formular and execute search
 //
-// Copyright (c) 2003 André Noack <noack@data-quest.de>
+// Copyright (c) 2003 AndrÃ© Noack <noack@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -31,7 +31,7 @@
 *
 *
 * @access   public
-* @author   André Noack <noack@data-quest.de>
+* @author   AndrÃ© Noack <noack@data-quest.de>
 * @package
 **/
 class StudipLitSearch {
@@ -50,16 +50,16 @@ class StudipLitSearch {
         URLHelper::bindLinkParam("_start_result",$this->start_result);
 
         $this->form_template = array('search_term'  =>  array('type' => 'text', 'caption' => _("Suchbegriff"), 'info' => _("Bitte geben Sie hier einen beliebigen Suchbegriff ein.")),
-                                    'search_field'  =>  array('type' => 'select', 'caption' => _("Suchfeld"), 'info' => _("Mögliche Suchfelder"),
+                                    'search_field'  =>  array('type' => 'select', 'caption' => _("Suchfeld"), 'info' => _("MÃ¶gliche Suchfelder"),
                                                             'options_callback' => array($this,"getSearchFields")),
-                                    'search_truncate'=> array('type' => 'select', 'caption' => _("Trunkieren"), 'info' => _("Wenn Sie eine der Trunkierungsoptionen wählen, werden alle Treffer angezeigt, die mit dem Suchbegriff beginnen (Rechts trunkieren) bzw. enden (Links trunkieren)."),
+                                    'search_truncate'=> array('type' => 'select', 'caption' => _("Trunkieren"), 'info' => _("Wenn Sie eine der Trunkierungsoptionen wÃ¤hlen, werden alle Treffer angezeigt, die mit dem Suchbegriff beginnen (Rechts trunkieren) bzw. enden (Links trunkieren)."),
                                                             'options' => array(array('name' => _("Nein"), "value" => 'none'),
                                                                                 array('name' => _("Rechts trunkieren"), "value" => 'right'),
                                                                                 /*array('name' => _("Links trunkieren"), "value" => 'left')*/)),
                                     'search_operator'=> array('type' => 'radio', 'options' => array(array('name' =>_("UND"),'value' => 'AND'),
                                                                                                     array('name' =>_("ODER"),'value' => 'OR'),
                                                                                                     array('name' =>_("NICHT"),'value' => 'NOT')),
-                                                            'caption' => _("Verknüpfung") ,'info'=>_("Wählen Sie eine Verknüpfungsart"), 'separator' => "&nbsp;", 'default_value' => "AND")
+                                                            'caption' => _("VerknÃ¼pfung") ,'info'=>_("WÃ¤hlen Sie eine VerknÃ¼pfungsart"), 'separator' => "&nbsp;", 'default_value' => "AND")
                                     );
         $search_plugins = $this->getAvailablePlugins();
         $preferred_plugin = $this->getPreferredPlugin();
@@ -80,9 +80,9 @@ class StudipLitSearch {
                                     'search_term_count' => array('type' => 'hidden', 'default_value' => 1)
                                     );
         $outer_form_buttons = array('search' => array('caption' => _('Suchen'), 'info' => _("Suche starten")),
-                                    'reset' => array('caption' => _('Zurücksetzen'), 'info' => _("Suche zurücksetzen")),
-                                    'change' => array('caption' => _('Auswählen'), 'info' => _("Anderen Katalog auswählen")),
-                                    'search_add' => array('caption' => _('Hinzufügen'), 'info' => _("Suchfeld hinzufügen")),
+                                    'reset' => array('caption' => _('ZurÃ¼cksetzen'), 'info' => _("Suche zurÃ¼cksetzen")),
+                                    'change' => array('caption' => _('AuswÃ¤hlen'), 'info' => _("Anderen Katalog auswÃ¤hlen")),
+                                    'search_add' => array('caption' => _('HinzufÃ¼gen'), 'info' => _("Suchfeld hinzufÃ¼gen")),
                                     'search_sub' => array('caption' => _('Entfernen'), 'info' => _("Suchfeld entfernen")));
 
         $this->outer_form = new StudipForm($outer_form_fields,$outer_form_buttons,"lit_search");

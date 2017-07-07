@@ -4,7 +4,7 @@
  *
  * This class contains methods to connect to the ILIAS-5-Soap-Server.
  *
- * @author    Arne Schröder <schroeder@data-quest.de>
+ * @author    Arne SchrÃ¶der <schroeder@data-quest.de>
  * @access    public
  * @modulegroup    elearning_interface_modules
  * @module        Ilias5Soap

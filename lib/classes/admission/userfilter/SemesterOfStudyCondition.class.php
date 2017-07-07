@@ -44,7 +44,7 @@ class SemesterOfStudyCondition extends UserFilterField
         );
         $this->validCompareOperators = array(
             '>=' => _('mindestens'),
-            '<=' => _('höchstens'),
+            '<=' => _('hÃ¶chstens'),
             '=' => _('ist'),
             '!=' => _('ist nicht')
         );

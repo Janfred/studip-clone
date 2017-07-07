@@ -38,7 +38,7 @@ class UserService extends AccessControlledService {
     * @param string $long_msg Stud.IP messages, concatenated with $separator
     * @param string $separator
     */
-   static function parse_msg_to_clean_text($long_msg,$separator="ง") {
+   static function parse_msg_to_clean_text($long_msg,$separator="ยง") {
        $msg = explode ($separator,$long_msg);
        $ret = array();
        for ($i=0; $i < count($msg); $i=$i+2) {

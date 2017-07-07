@@ -245,7 +245,7 @@ class Statusgruppen extends SimpleORMap
 
     /**
      * Delete or create a folder
-     * TODO: update(false) löscht? muss anders
+     * TODO: update(false) lÃ¶scht? muss anders
      * @param boolean $set <b>true</b> Create a folder
      * <b>false</b> Delete the folder
      */

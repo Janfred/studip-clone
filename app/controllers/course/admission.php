@@ -7,7 +7,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      André Noack <noack@data-quest.de>
+ * @author      AndrÃ© Noack <noack@data-quest.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
  * @package     admin
@@ -101,10 +101,10 @@ class Course_AdmissionController extends AuthenticatedController
             $available_coursesets->orderBy('name');
             $this->available_coursesets = $available_coursesets;
 
-            PageLayout::postMessage(MessageBox::info(_("Für diese Veranstaltung sind keine Anmelderegeln festgelegt. Die Veranstaltung ist damit für alle Nutzer zugänglich.")));
+            PageLayout::postMessage(MessageBox::info(_("FÃ¼r diese Veranstaltung sind keine Anmelderegeln festgelegt. Die Veranstaltung ist damit fÃ¼r alle Nutzer zugÃ¤nglich.")));
         } else {
             if ($this->current_courseset->isSeatDistributionEnabled() && !$this->course->admission_turnout) {
-                PageLayout::postMessage(MessageBox::info(_("Diese Veranstaltung ist teilnahmebeschränkt, aber die maximale Teilnehmeranzahl ist nicht gesetzt.")));
+                PageLayout::postMessage(MessageBox::info(_("Diese Veranstaltung ist teilnahmebeschrÃ¤nkt, aber die maximale Teilnehmeranzahl ist nicht gesetzt.")));
             }
         }
         $lockdata = LockRules::getObjectRule($this->course_id);
@@ -119,7 +119,7 @@ class Course_AdmissionController extends AuthenticatedController
     function change_admission_prelim_action()
     {
         CSRFProtection::verifyUnsafeRequest();
-        PageLayout::setTitle(_('Anmeldemodus ändern'));
+        PageLayout::setTitle(_('Anmeldemodus Ã¤ndern'));
 
         if (Request::submitted('change_admission_prelim')) {
             $request = Request::extract('admission_prelim int, admission_binding submitted, admission_prelim_txt');
@@ -128,10 +128,10 @@ class Course_AdmissionController extends AuthenticatedController
             $this->course->setData($request);
             if ($this->course->isFieldDirty('admission_prelim')) {
                 if ($this->course->admission_prelim == 1 && $this->course->getNumParticipants()) {
-                    $question = _("Sie beabsichtigen den Anmeldemodus auf vorläufiger Eintrag zu ändern. Sollen die bereits in der Veranstaltung eingetragenen Teilnehmer in vorläufige Teilnehmer umgewandelt werden?");
+                    $question = _("Sie beabsichtigen den Anmeldemodus auf vorlÃ¤ufiger Eintrag zu Ã¤ndern. Sollen die bereits in der Veranstaltung eingetragenen Teilnehmer in vorlÃ¤ufige Teilnehmer umgewandelt werden?");
                 }
                 if ($this->course->admission_prelim == 0 && $this->course->getNumPrelimParticipants()) {
-                    $question = _("Sie beabsichtigen den Anmeldemodus auf direkten Eintrag zu ändern. Sollen die vorläufigen Teilnehmer in die Veranstaltung übernommen werden (ansonsten werden die vorläufigen Teilnehmer aus der Veranstaltung entfernt) ?");
+                    $question = _("Sie beabsichtigen den Anmeldemodus auf direkten Eintrag zu Ã¤ndern. Sollen die vorlÃ¤ufigen Teilnehmer in die Veranstaltung Ã¼bernommen werden (ansonsten werden die vorlÃ¤ufigen Teilnehmer aus der Veranstaltung entfernt) ?");
                 }
             }
             if (Request::submittedSome('change_admission_prelim_no', 'change_admission_prelim_yes') || !$question) {
@@ -142,13 +142,13 @@ class Course_AdmissionController extends AuthenticatedController
                         $seminar->addPreliminaryMember($user_id);
                         $num_moved += ($seminar->deleteMember($user_id) !== false);
                         setTempLanguage($user_id);
-                        $message_body = sprintf(_('Sie wurden in der Veranstaltung **%s** in den Status **vorläufig akzeptiert** befördert, da das Anmeldeverfahren geändert wurde.'), $this->course->name);
-                        $message_title = sprintf(_("Statusänderung %s"), $this->course->name);
+                        $message_body = sprintf(_('Sie wurden in der Veranstaltung **%s** in den Status **vorlÃ¤ufig akzeptiert** befÃ¶rdert, da das Anmeldeverfahren geÃ¤ndert wurde.'), $this->course->name);
+                        $message_title = sprintf(_("StatusÃ¤nderung %s"), $this->course->name);
                         messaging::sendSystemMessage($user_id, $message_title, $message_body);
                         restoreLanguage();
                     }
                     if ($num_moved) {
-                        PageLayout::postMessage(MessageBox::success(sprintf(_("%s Teilnehmer wurden auf vorläufigen Eintrag gesetzt."), $num_moved)));
+                        PageLayout::postMessage(MessageBox::success(sprintf(_("%s Teilnehmer wurden auf vorlÃ¤ufigen Eintrag gesetzt."), $num_moved)));
                     }
                 }
                 if ($this->course->admission_prelim == 0 && $this->course->getNumPrelimParticipants()) {
@@ -158,33 +158,33 @@ class Course_AdmissionController extends AuthenticatedController
                         foreach ($this->course->admission_applicants->findBy('status', 'accepted')->pluck('user_id') as $user_id) {
                             $num_moved += ($seminar->addMember($user_id, 'autor') !== false);
                             setTempLanguage($user_id);
-                            $message_body = sprintf(_('Sie wurden in der Veranstaltung **%s** in den Status **Autor** versetzt, da das Anmeldeverfahren geändert wurde.'), $this->course->name);
-                            $message_title = sprintf(_("Statusänderung %s"), $this->course->name);
+                            $message_body = sprintf(_('Sie wurden in der Veranstaltung **%s** in den Status **Autor** versetzt, da das Anmeldeverfahren geÃ¤ndert wurde.'), $this->course->name);
+                            $message_title = sprintf(_("StatusÃ¤nderung %s"), $this->course->name);
                             messaging::sendSystemMessage($user_id, $message_title, $message_body);
                             restoreLanguage();
                         }
                         if ($num_moved) {
-                            PageLayout::postMessage(MessageBox::success(sprintf(_("%s Teilnehmer wurden in die Veranstaltung übernommen."), $num_moved)));
+                            PageLayout::postMessage(MessageBox::success(sprintf(_("%s Teilnehmer wurden in die Veranstaltung Ã¼bernommen."), $num_moved)));
                         }
                     }
                     if (Request::submitted('change_admission_prelim_no')) {
                         $num_moved = 0;
                         foreach ($this->course->admission_applicants->findBy('status', 'accepted') as $applicant) {
                             setTempLanguage($applicant->user_id);
-                            $message_body = sprintf(_('Sie wurden aus der Veranstaltung **%s** entfernt, da das Anmeldeverfahren geändert wurde.'), $this->course->name);
-                            $message_title = sprintf(_("Statusänderung %s"), $this->course->name);
+                            $message_body = sprintf(_('Sie wurden aus der Veranstaltung **%s** entfernt, da das Anmeldeverfahren geÃ¤ndert wurde.'), $this->course->name);
+                            $message_title = sprintf(_("StatusÃ¤nderung %s"), $this->course->name);
                             messaging::sendSystemMessage($applicant->user_id, $message_title, $message_body);
                             restoreLanguage();
                             $num_moved += $applicant->delete();
                         }
                         if ($num_moved) {
-                            PageLayout::postMessage(MessageBox::success(sprintf(_("%s vorläufige Teilnehmer wurden entfernt."), $num_moved)));
+                            PageLayout::postMessage(MessageBox::success(sprintf(_("%s vorlÃ¤ufige Teilnehmer wurden entfernt."), $num_moved)));
                             $this->course->resetRelation('admission_applicants');
                         }
                     }
                 }
                 if ($this->course->store()) {
-                    PageLayout::postMessage(MessageBox::success(_("Der Anmeldemodus wurde geändert.")));
+                    PageLayout::postMessage(MessageBox::success(_("Der Anmeldemodus wurde geÃ¤ndert.")));
                 }
                 unset($question);
             }
@@ -226,7 +226,7 @@ class Course_AdmissionController extends AuthenticatedController
                 }
             }
             if ($this->course->store()) {
-                PageLayout::postMessage(MessageBox::success(_("Freier Zugriff wurde geändert.")));
+                PageLayout::postMessage(MessageBox::success(_("Freier Zugriff wurde geÃ¤ndert.")));
             }
         }
         $this->redirect($this->url_for('/index'));
@@ -235,7 +235,7 @@ class Course_AdmissionController extends AuthenticatedController
     function change_admission_turnout_action()
     {
         CSRFProtection::verifyUnsafeRequest();
-        PageLayout::setTitle(_('Teilnehmeranzahl ändern'));
+        PageLayout::setTitle(_('Teilnehmeranzahl Ã¤ndern'));
 
         if (Request::submitted('change_admission_turnout')) {
             $request = Request::extract('admission_turnout int, admission_disable_waitlist submitted, admission_disable_waitlist_move submitted, admission_waitlist_max int');
@@ -247,7 +247,7 @@ class Course_AdmissionController extends AuthenticatedController
             if (isset($request['admission_disable_waitlist'])) {
                 $this->course->admission_disable_waitlist = $request['admission_disable_waitlist'] ? 0 : 1;
                 if ($this->course->admission_disable_waitlist && $this->course->getNumWaiting()) {
-                    $question = sprintf(_("Sie beabsichtigen die Warteliste zu deaktivieren. Die bestehende Warteliste mit %s Einträgen wird gelöscht. Sind sie sicher?"), $this->course->getNumWaiting());
+                    $question = sprintf(_("Sie beabsichtigen die Warteliste zu deaktivieren. Die bestehende Warteliste mit %s EintrÃ¤gen wird gelÃ¶scht. Sind sie sicher?"), $this->course->getNumWaiting());
                 }
             }
             if (isset($request['admission_disable_waitlist_move'])) {
@@ -256,7 +256,7 @@ class Course_AdmissionController extends AuthenticatedController
             if (isset($request['admission_waitlist_max'])) {
                 $this->course->admission_waitlist_max = abs($request['admission_waitlist_max']);
                 if ($this->course->admission_waitlist_max > 0 && !$this->admission_disable_waitlist && $this->course->getNumWaiting() > $this->course->admission_waitlist_max) {
-                    $question = sprintf(_("Sie beabsichtigen die Anzahl der Wartenden zu begrenzen. Die letzten %s Einträge der Warteliste werden gelöscht. Sind sie sicher?"), $this->course->getNumWaiting()-$this->course->admission_waitlist_max);
+                    $question = sprintf(_("Sie beabsichtigen die Anzahl der Wartenden zu begrenzen. Die letzten %s EintrÃ¤ge der Warteliste werden gelÃ¶scht. Sind sie sicher?"), $this->course->getNumWaiting()-$this->course->admission_waitlist_max);
                 }
             }
             if (Request::submitted('change_admission_turnout_yes') || !$question) {
@@ -272,7 +272,7 @@ class Course_AdmissionController extends AuthenticatedController
                     foreach ($removed_applicants as $applicant) {
                         setTempLanguage($applicant->user_id);
                         $message_body = sprintf(_('Die Warteliste der Veranstaltung **%s** wurde deaktiviert, Sie sind damit __nicht__ zugelassen worden.'),  $this->course->name);
-                        $message_title = sprintf(_("Statusänderung %s"), $this->course->name);
+                        $message_title = sprintf(_("StatusÃ¤nderung %s"), $this->course->name);
                         messaging::sendSystemMessage($applicant->user_id, $message_title, $message_body);
                         restoreLanguage();
                         $num_moved += $applicant->delete();
@@ -284,7 +284,7 @@ class Course_AdmissionController extends AuthenticatedController
                 }
 
                 if ($this->course->store()) {
-                    PageLayout::postMessage(MessageBox::success(_("Die Teilnehmeranzahl wurde geändert.")));
+                    PageLayout::postMessage(MessageBox::success(_("Die Teilnehmeranzahl wurde geÃ¤ndert.")));
                 }
                 unset($question);
             }
@@ -312,7 +312,7 @@ class Course_AdmissionController extends AuthenticatedController
                     $domain = new UserDomain($d);
                     $domain->addSeminar($this->course_id);
                 }
-                PageLayout::postMessage(MessageBox::success(_("Die zugelassenen Nutzerdomänen wurden geändert.")));
+                PageLayout::postMessage(MessageBox::success(_("Die zugelassenen NutzerdomÃ¤nen wurden geÃ¤ndert.")));
             }
         }
         $this->redirect($this->url_for('/index'));
@@ -327,7 +327,7 @@ class Course_AdmissionController extends AuthenticatedController
                 CourseSet::addCourseToSet($cs->getId(), $this->course_id);
                 $cs->load();
                 if (in_array($this->course_id, $cs->getCourses())) {
-                    PageLayout::postMessage(MessageBox::success(sprintf(_("Die Zuordnung zum Anmeldeset %s wurde durchgeführt."), htmlReady($cs->getName()))));
+                    PageLayout::postMessage(MessageBox::success(sprintf(_("Die Zuordnung zum Anmeldeset %s wurde durchgefÃ¼hrt."), htmlReady($cs->getName()))));
                 }
             }
         }
@@ -335,13 +335,13 @@ class Course_AdmissionController extends AuthenticatedController
             PageLayout::setTitle(_('Anmelderegeln aufheben'));
 
             if ($this->course->getNumWaiting() && !Request::submitted('change_course_set_unassign_yes')) {
-                $question = sprintf(_("In dieser Veranstaltung existiert eine Warteliste. Die bestehende Warteliste mit %s Einträgen wird gelöscht. Sind sie sicher?"), $this->course->getNumWaiting());
+                $question = sprintf(_("In dieser Veranstaltung existiert eine Warteliste. Die bestehende Warteliste mit %s EintrÃ¤gen wird gelÃ¶scht. Sind sie sicher?"), $this->course->getNumWaiting());
             }
             $cs = CourseSet::getSetForCourse($this->course_id);
             if ($cs) {
                 $priorities = AdmissionPriority::getPrioritiesByCourse($cs->getId(), $this->course_id);
                 if (count($priorities) && !Request::submitted('change_course_set_unassign_yes')) {
-                    $question = sprintf(_("In dieser Veranstaltung existiert eine Anmeldeliste (Platzverteilung am %s). Die bestehende Anmeldeliste mit %s Einträgen wird gelöscht. Sind sie sicher?"), strftime('%x %R', $cs->getSeatDistributionTime()), count($priorities));
+                    $question = sprintf(_("In dieser Veranstaltung existiert eine Anmeldeliste (Platzverteilung am %s). Die bestehende Anmeldeliste mit %s EintrÃ¤gen wird gelÃ¶scht. Sind sie sicher?"), strftime('%x %R', $cs->getSeatDistributionTime()), count($priorities));
                 }
             }
             if (!$question && $cs) {
@@ -360,7 +360,7 @@ class Course_AdmissionController extends AuthenticatedController
                     foreach ($this->course->admission_applicants->findBy('status', 'awaiting') as $applicant) {
                         setTempLanguage($applicant->user_id);
                         $message_body = sprintf(_('Die Warteliste der Veranstaltung **%s** wurde deaktiviert, Sie sind damit __nicht__ zugelassen worden.'),  $this->course->name);
-                        $message_title = sprintf(_("Statusänderung %s"), $this->course->name);
+                        $message_title = sprintf(_("StatusÃ¤nderung %s"), $this->course->name);
                         messaging::sendSystemMessage($applicant->user_id, $message_title, $message_body);
                         restoreLanguage();
                         $num_moved += $applicant->delete();
@@ -422,7 +422,7 @@ class Course_AdmissionController extends AuthenticatedController
                         $errors = array_merge($errors, $another_rule->validate(Request::getInstance()));
                     }
                     if (!mb_strlen(trim(Request::get('instant_course_set_name')))) {
-                        $errors[] = _("Bitte geben Sie einen Namen für die Anmelderegel ein!");
+                        $errors[] = _("Bitte geben Sie einen Namen fÃ¼r die Anmelderegel ein!");
                     } else {
                         $course_set->setName(trim(Request::get('instant_course_set_name')));
                     }

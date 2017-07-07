@@ -13,7 +13,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      Till Glöggler <tgloeggl@uos.de>
+ * @author      Till GlÃ¶ggler <tgloeggl@uos.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
  */
@@ -407,7 +407,7 @@ class SingleDate
         } elseif ((($end_hours - $start_hours) / 60 / 60) > 23) {
             return sprintf('%s , %s (%s)',strftime('%a', $this->date),
                 strftime('%d.%m.%Y', $this->date),
-                _('ganztägig'));
+                _('ganztÃ¤gig'));
         } else {
             return sprintf('%s , %s - %s',strftime('%a', $this->date),
                 strftime('%d.%m.%Y %H:%M', $this->date),
@@ -457,7 +457,7 @@ class SingleDate
         if (is_array($overlaps) && (sizeof($overlaps) > 0)) {
             $resObj = ResourceObject::Factory($roomID);
             $raum = $resObj->getFormattedLink($this->date);
-            $msg = sprintf(_("Für den Termin %s konnte der Raum %s nicht gebucht werden, da es Überschneidungen mit folgenden Terminen gibt:"), $this->toString(), $raum) . '<br>';
+            $msg = sprintf(_("FÃ¼r den Termin %s konnte der Raum %s nicht gebucht werden, da es Ãœberschneidungen mit folgenden Terminen gibt:"), $this->toString(), $raum) . '<br>';
             foreach ($overlaps as $tmp_assign_id => $val) {
                 if ($val["lock"])
                     $msg .= sprintf(_("%s, %s Uhr bis %s, %s Uhr (Sperrzeit)") . "\n", date("d.m.Y", $val["begin"]), date("H:i", $val["begin"]), date("d.m.Y", $val["end"]), date("H:i", $val["end"]));
@@ -472,7 +472,7 @@ class SingleDate
         if ($createAssign->create()) {
             $resObj = ResourceObject::Factory($roomID);
             $raum = $resObj->getFormattedLink($this->date);
-            $msg = sprintf(_("Für den Termin %s wurde der Raum %s gebucht."), $this->toString(), $raum);
+            $msg = sprintf(_("FÃ¼r den Termin %s wurde der Raum %s gebucht."), $this->toString(), $raum);
             $this->messages['success'][] = $msg;
             $this->resource_id = $roomID;
 
@@ -504,7 +504,7 @@ class SingleDate
             if (is_array($overlaps) && (sizeof($overlaps) > 0)) {
                 $resObj = ResourceObject::Factory($roomID);
                 $raum = $resObj->getFormattedLink($this->date);
-                $msg = sprintf(_("Für den Termin %s konnte der Raum %s nicht gebucht werden, da es Überschneidungen mit folgenden Terminen gibt:"), $this->toString(), $raum) . '<br>';
+                $msg = sprintf(_("FÃ¼r den Termin %s konnte der Raum %s nicht gebucht werden, da es Ãœberschneidungen mit folgenden Terminen gibt:"), $this->toString(), $raum) . '<br>';
                 foreach ($overlaps as $tmp_assign_id => $val) {
                     if ($val["lock"])
                         $msg .= sprintf(_("%s, %s Uhr bis %s, %s Uhr (Sperrzeit)") . "\n", date("d.m.Y", $val["begin"]), date("H:i", $val["begin"]), date("d.m.Y", $val["end"]), date("H:i", $val["end"]));
@@ -520,7 +520,7 @@ class SingleDate
             $changeAssign->store();
             $resObj = ResourceObject::Factory($roomID);
             $raum = $resObj->getFormattedLink($this->date);
-            $msg = sprintf(_("Für den Termin %s wurde der Raum %s gebucht."), $this->toString(), $raum);
+            $msg = sprintf(_("FÃ¼r den Termin %s wurde der Raum %s gebucht."), $this->toString(), $raum);
             $this->messages['success'][] = $msg;
 
             return true;
@@ -732,7 +732,7 @@ class SingleDate
      * @param  array  optional variables which are passed to the template
      * @return  string  the html-representation of the date
      *
-     * @author Till Glöggler <tgloeggl@uos.de>
+     * @author Till GlÃ¶ggler <tgloeggl@uos.de>
      */
     function getDatesHTML($params = array())
     {
@@ -748,7 +748,7 @@ class SingleDate
      * @param  array  optional variables which are passed to the template
      * @return  string  the representation of the date without html
      *
-     * @author Till Glöggler <tgloeggl@uos.de>
+     * @author Till GlÃ¶ggler <tgloeggl@uos.de>
      */
     function getDatesExport($params = array())
     {
@@ -765,7 +765,7 @@ class SingleDate
      * @param  array  optional variables which are passed to the template
      * @return  string  the xml-representation of the date
      *
-     * @author Till Glöggler <tgloeggl@uos.de>
+     * @author Till GlÃ¶ggler <tgloeggl@uos.de>
      */
     function getDatesXML($params = array())
     {
@@ -781,7 +781,7 @@ class SingleDate
      * @param  mixed  this can be a template-object or a string pointing to a template in path_to_studip/templates
      * @return  string  the template output of the date
      *
-     * @author Till Glöggler <tgloeggl@uos.de>
+     * @author Till GlÃ¶ggler <tgloeggl@uos.de>
      */
     function getDatesTemplate($template)
     {
@@ -897,6 +897,6 @@ class SingleDate
     public function clearRelatedGroups()
     {
         $this->related_groups = array();
-        $this->messages['success'][] = _('Die beteiligten Gruppen wurden zurückgesetzt!');
+        $this->messages['success'][] = _('Die beteiligten Gruppen wurden zurÃ¼ckgesetzt!');
     }
 }

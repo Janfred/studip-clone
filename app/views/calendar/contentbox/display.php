@@ -29,7 +29,7 @@
     <? if($isProfile): ?>
         <?= _('Es sind keine aktuellen Termine vorhanden. Um neue Termine zu erstellen, klicken Sie rechts auf das Plus.') ?>
     <? else: ?>
-        <?= _('Es sind keine aktuellen Termine vorhanden. Um neue Termine zu erstellen, klicken Sie rechts auf die Zahnräder.') ?>
+        <?= _('Es sind keine aktuellen Termine vorhanden. Um neue Termine zu erstellen, klicken Sie rechts auf die ZahnrÃ¤der.') ?>
     <? endif; ?>
     </section>
   <? endif; ?>

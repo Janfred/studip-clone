@@ -251,7 +251,7 @@ class Step00240CourseSets extends Migration
             $cs_r_insert->execute(array($set_id, $rule_id, 'PasswordAdmission'));
             $s_cs_insert->execute(array($set_id, $course['seminar_id']));
         }
-        //ein globales set für alle gesperrten
+        //ein globales set fÃ¼r alle gesperrten
         $locked_set_id = md5(uniqid('coursesets',1));
         $name = 'Anmeldung gesperrt (global)';
         $info = '';
@@ -285,8 +285,8 @@ class Step00240CourseSets extends Migration
 
                 /*
                  * Check, ob Anmeldeverfahren in der Vergangenheit schon
-                 * abgeschlossen wurde. Hier extra ausführlich, damit es
-                 * verständlich bleibt.
+                 * abgeschlossen wurde. Hier extra ausfÃ¼hrlich, damit es
+                 * verstÃ¤ndlich bleibt.
                  */
                 // Veranstaltungen, die (auch implizit) im aktuellen oder kommenden Semestern liegen.
                 if (($course['start_time'] + $course['duration_time'] >= $semester->beginn || $course['duration_time'] == -1) &&
@@ -295,7 +295,7 @@ class Step00240CourseSets extends Migration
                      $course['admission_endtime_sem'] > $now || $course['admission_endtime_sem'] == -1)) {
                     // Erzeuge ein Anmeldeset mit den vorhandenen Einstellungen der Veranstaltung.
                     $cs = $this->buildCourseset($course, true);
-                    $cs->setName('Beschränkte Teilnehmeranzahl: Gruppe ' . $group_name)
+                    $cs->setName('BeschrÃ¤nkte Teilnehmeranzahl: Gruppe ' . $group_name)
                        ->setInfoText('Erzeugt durch Migration 128 ' . strftime('%X %x'))
                        ->addInstitute($course['institut_id'])->setPrivate(true)->setUserId($user_id)->store();
                     $set_id = $cs->getId();
@@ -315,7 +315,7 @@ class Step00240CourseSets extends Migration
             }
             // Veranstaltung mit Losverfahren
             if ($group_type == 1) {
-                // Losliste übernehmen
+                // Losliste Ã¼bernehmen
                 $db->execute("INSERT INTO priorities (user_id, set_id, seminar_id, priority, mkdate, chdate)
                  SELECT user_id, ?, seminar_id, 1, mkdate, UNIX_TIMESTAMP()
                  FROM admission_seminar_user WHERE status = 'claiming' AND seminar_id = ?", array($set_id, $course['seminar_id']));
@@ -336,8 +336,8 @@ class Step00240CourseSets extends Migration
         foreach ($admission as $course) {
             /*
              * Check, ob Anmeldeverfahren in der Vergangenheit schon
-             * abgeschlossen wurde. Hier extra ausführlich, damit es
-             * verständlich bleibt.
+             * abgeschlossen wurde. Hier extra ausfÃ¼hrlich, damit es
+             * verstÃ¤ndlich bleibt.
              */
             // Veranstaltungen, die (auch implizit) im aktuellen oder kommenden Semestern liegen.
             if (($course['start_time'] + $course['duration_time'] >= $semester->beginn || $course['duration_time'] == -1) &&
@@ -346,13 +346,13 @@ class Step00240CourseSets extends Migration
                  $course['admission_endtime_sem'] > $now || $course['admission_endtime_sem'] == -1)) {
                 // Erzeuge ein Anmeldeset mit den vorhandenen Einstellungen der Veranstaltung.
                 $cs = $this->buildCourseset($course, false);
-                $cs->setName('Beschränkte Teilnehmeranzahl: '.$course['name'])
+                $cs->setName('BeschrÃ¤nkte Teilnehmeranzahl: '.$course['name'])
                    ->setInfoText('Erzeugt durch Migration 128 ' . strftime('%X %x'))
                    ->setPrivate(true)->setUserId($user_id)->store();
                 $set_id = $cs->getId();
                 // Veranstaltung mit Losverfahren
                 if ($course['admission_type'] == 1) {
-                    // Losliste übernehmen
+                    // Losliste Ã¼bernehmen
                     $db->execute("INSERT INTO priorities (user_id, set_id, seminar_id, priority, mkdate, chdate)
                      SELECT user_id, ?, seminar_id, 1, mkdate, UNIX_TIMESTAMP()
                      FROM admission_seminar_user WHERE status = 'claiming' AND seminar_id = ?", array($set_id, $course['seminar_id']));
@@ -371,7 +371,7 @@ class Step00240CourseSets extends Migration
         $db->exec("UPDATE seminare SET Lesezugriff=1,Schreibzugriff=1 WHERE Lesezugriff=3");
         $db->exec("UPDATE seminare SET Lesezugriff=1,Schreibzugriff=1 WHERE Lesezugriff=2");
 
-        // Übernehme Veranstaltungen ohne Anmeldeverfahren, aber mit Anmeldezeitraum in der Zukunft.
+        // Ãœbernehme Veranstaltungen ohne Anmeldeverfahren, aber mit Anmeldezeitraum in der Zukunft.
         $now = time();
         $admission = $db->fetchAll("SELECT `seminar_id`,`seminare`.`name`,`institut_id`,`admission_starttime`,`admission_endtime_sem`
             FROM `seminare` WHERE `admission_type`=0 AND (`admission_starttime`>:now OR `admission_endtime_sem`>:now)", array('now' => $now));
@@ -390,7 +390,7 @@ class Step00240CourseSets extends Migration
                ->addCourse($course['seminar_id'])->addAdmissionRule($rule)->setPrivate(true)->setUserId($user_id)->store();
         }
 
-        //Warte und Anmeldelisten löschen
+        //Warte und Anmeldelisten lÃ¶schen
         $db->exec("DELETE FROM admission_seminar_user WHERE status = 'claiming'");
         $db->execute("DELETE FROM admission_seminar_user WHERE status = 'awaiting' AND seminar_id NOT IN(?)", array($preserve_waitlists));
 
@@ -428,7 +428,7 @@ class Step00240CourseSets extends Migration
             (MD5('ALLOW_DOZENT_COURSESET_ADMIN'), '',
             'ALLOW_DOZENT_COURSESET_ADMIN', '0', '1', 'boolean', 'global',
             'coursesets', '0', UNIX_TIMESTAMP(), UNIX_TIMESTAMP(),
-            'Sollen Lehrende einrichtungsweite Anmeldesets anlegen und bearbeiten dürfen?',
+            'Sollen Lehrende einrichtungsweite Anmeldesets anlegen und bearbeiten dÃ¼rfen?',
             '', '')");
         // Insert global configuration: who may edit course sets?
         $db->exec("INSERT IGNORE INTO `config`
@@ -461,16 +461,16 @@ class Step00240CourseSets extends Migration
 
         $cs = new CourseSet();
         $rule = new ParticipantRestrictedAdmission();
-        // Loszeitpunkt übernehmen.
+        // Loszeitpunkt Ã¼bernehmen.
         $rule->setDistributionTime($course['admission_type'] == 1 ? $course['admission_endtime'] : 0);
         $cs->addAdmissionRule($rule);
-        // Beschränkung 1 aus n, falls erforderlich
+        // BeschrÃ¤nkung 1 aus n, falls erforderlich
         if ($grouped) {
             $rule = new LimitedAdmission();
             $rule->setMaxNumber(1);
             $cs->addAdmissionRule($rule);
         }
-        // Falls Anmeldezeitraum eingestellt, diesen übernehmen.
+        // Falls Anmeldezeitraum eingestellt, diesen Ã¼bernehmen.
         if ($course['admission_starttime'] != -1 || $course['admission_endtime_sem'] != -1) {
             $rule = new TimedAdmission();
             if ($course['admission_starttime'] != -1) {
@@ -481,7 +481,7 @@ class Step00240CourseSets extends Migration
             }
             $cs->addAdmissionRule($rule);
         }
-        // Studiengänge eintragen
+        // StudiengÃ¤nge eintragen
         $stmt = $db->prepare('SELECT studiengang_id FROM admission_seminar_studiengang WHERE seminar_id = ?');
         $stmt->execute(array($course['seminar_id']));
         $subjects = $stmt->fetchAll(PDO::FETCH_COLUMN);

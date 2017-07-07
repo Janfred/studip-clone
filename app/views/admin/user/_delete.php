@@ -11,17 +11,17 @@ use Studip\Button;
         <input type="hidden" name="user_ids[]" value="<?= $user['user_id'] ?>">
     <? endforeach ?>
 <? endif ?>
-    <?= MessageBox::warning(_('Wollen Sie die folgenden Nutzer wirklich löschen?'), $details) ?>
+    <?= MessageBox::warning(_('Wollen Sie die folgenden Nutzer wirklich lÃ¶schen?'), $details) ?>
     <label>
         <input id="documents" name="documents" value="1" checked type="checkbox">
-        <?= _('Dokumente löschen?') ?>
+        <?= _('Dokumente lÃ¶schen?') ?>
     </label>
     <label>
         <input id="mail" name="mail" value="1" checked type="checkbox">
         <?= _('E-Mail-Benachrichtigung verschicken?') ?>
     </label>
     <footer data-dialog-button>
-        <?= Button::createAccept(_('JA!'), 'delete', ['title' => _('Benutzer löschen')]) ?>
+        <?= Button::createAccept(_('JA!'), 'delete', ['title' => _('Benutzer lÃ¶schen')]) ?>
         <?= Button::createCancel(_('NEIN!'), 'back', ['title' => _('Abbrechen   ')]) ?>
     </footer>
 </form>

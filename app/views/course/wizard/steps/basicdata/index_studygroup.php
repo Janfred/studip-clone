@@ -36,7 +36,7 @@
         <span class="required"><?= _('Zugang') ?></span>
 
         <select name="access" id="wizard-access">
-            <option value="all"><?= _('offen für alle') ?></option>
+            <option value="all"><?= _('offen fÃ¼r alle') ?></option>
             <option value="invite"><?= _('auf Anfrage') ?></option>
             <?php if (Config::get()->STUDYGROUPS_INVISIBLE_ALLOWED) : ?>
                 <option value="invisible"><?= _('unsichtbar') ?></option>

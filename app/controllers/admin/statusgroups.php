@@ -69,7 +69,7 @@ class Admin_StatusgroupsController extends AuthenticatedController
                              $this->url_for('admin/statusgroups/editGroup'),
                              Icon::create('group3+add', 'clickable'))
                    ->asDialog('size=auto');
-            $widget->addLink(_('Gruppenreihenfolge ändern'),
+            $widget->addLink(_('Gruppenreihenfolge Ã¤ndern'),
                              $this->url_for('admin/statusgroups/sortGroups'),
                              Icon::create('arr_2down', 'clickable'))
                    ->asDialog();
@@ -181,8 +181,8 @@ class Admin_StatusgroupsController extends AuthenticatedController
         }
 
         if ($countAdded > 0) {
-            $message = sprintf(ngettext('Es wurde eine Person hinzugefügt.',
-                                        'Es wurden %u Personen hinzugefügt.',
+            $message = sprintf(ngettext('Es wurde eine Person hinzugefÃ¼gt.',
+                                        'Es wurden %u Personen hinzugefÃ¼gt.',
                                         $countAdded),
                                $countAdded);
             PageLayout::postMessage(MessageBox::success($message));

@@ -2,7 +2,7 @@
 # Lifter010: TODO
 ?>
 <? if (isset($flash['delete'])): ?>
-    <?= createQuestion(sprintf(_('Wollen Sie das Datenfeld "%s" wirklich löschen? Bedenken Sie bitte, dass noch Einträge dazu existieren können'), $flash['delete']['name']),
+    <?= createQuestion(sprintf(_('Wollen Sie das Datenfeld "%s" wirklich lÃ¶schen? Bedenken Sie bitte, dass noch EintrÃ¤ge dazu existieren kÃ¶nnen'), $flash['delete']['name']),
                        array('delete' => 1),
                        array('back' => 1),
                        $controller->url_for('admin/datafields/delete'.'/' . $flash['delete']['datafield_id'])); ?>
@@ -34,23 +34,23 @@
                 <?= tooltipIcon(_('Veranstaltungskategorie, Einrichtungstyp, Sprache bzw. Nutzerstatus')) ?>
             </th>
             <th colspan="2" style="text-align: center">
-                <?= _('benötigter Status') ?>
+                <?= _('benÃ¶tigter Status') ?>
             </th>
             <th colspan="2" rowspan="2"></th>
             <th rowspan="2"><?= _('Position') ?></th>
             <th rowspan="2">
-                <abbr title="<?= _('Einträge') ?>">#</abbr>
+                <abbr title="<?= _('EintrÃ¤ge') ?>">#</abbr>
             </th>
             <th rowspan="2" class="actions"></th>
         </tr>
         <tr>
             <th style="white-space: nowrap">
-                <?= _('Änderbar') ?>
-                <?= tooltipIcon(_('Gibt den Status an, ab dem das Datenfeld änderbar ist')) ?>
+                <?= _('Ã„nderbar') ?>
+                <?= tooltipIcon(_('Gibt den Status an, ab dem das Datenfeld Ã¤nderbar ist')) ?>
             </th>
             <th style="white-space: nowrap">
-                <?= _('Öffentlich') ?>
-                <?= tooltipIcon(_('Gibt den Status an, ab dem das Datenfeld für andere sichtbar ist')) ?>
+                <?= _('Ã–ffentlich') ?>
+                <?= tooltipIcon(_('Gibt den Status an, ab dem das Datenfeld fÃ¼r andere sichtbar ist')) ?>
             </th>
         </tr>
     </thead>
@@ -63,10 +63,10 @@
             <th class="toggle-indicator" colspan="10">
         <? endif; ?>
             <? if (empty($datafields_list[$key])): ?>
-                <?= sprintf(_('Datenfelder für %s'), $allclasses[$key]) ?>
+                <?= sprintf(_('Datenfelder fÃ¼r %s'), $allclasses[$key]) ?>
             <? else: ?>
                 <a name="<?= $key ?>" class="toggler" href="<?= $controller->url_for('admin/datafields/index/' . $key) ?>">
-                    <?= sprintf(_('Datenfelder für %s'), $allclasses[$key]) ?>
+                    <?= sprintf(_('Datenfelder fÃ¼r %s'), $allclasses[$key]) ?>
                 </a>
             <? endif; ?>
             </th>
@@ -77,8 +77,8 @@
         <? elseif ($key === 'user'): ?>
             <th style="white-space: nowrap;">
                 <?= _('System') ?>
-                <?= tooltipIcon(_('Für die Person nur sichtbar, wenn der Status zum Bearbeiten '
-                                . ' oder für die Sichtbarkeit ausreichend ist')) ?>
+                <?= tooltipIcon(_('FÃ¼r die Person nur sichtbar, wenn der Status zum Bearbeiten '
+                                . ' oder fÃ¼r die Sichtbarkeit ausreichend ist')) ?>
             </th>
             <th><?= _('Anmelderegel') ?></th>
             <th colspan="3"></th>
@@ -93,7 +93,7 @@
             <td>
             <? if (in_array($val->type, words('selectbox selectboxmultiple radio combo'))): ?>
                 <a data-dialog="size=auto" href="<?= $controller->url_for('admin/datafields/config/'. $val->id) ?>">
-                    <?= Icon::create('edit', 'clickable')->asImg(['class'=> 'text-top', 'title' => 'Einträge bearbeiten']) ?>
+                    <?= Icon::create('edit', 'clickable')->asImg(['class'=> 'text-top', 'title' => 'EintrÃ¤ge bearbeiten']) ?>
                 </a>
             <? endif; ?>
                  <span><?= htmlReady($val->type) ?></span>
@@ -150,10 +150,10 @@
             <td><?= count($val) ?></td>
             <td class="actions">
                 <a href="<?=$controller->url_for('admin/datafields/edit/' . $val->id)?>" data-dialog>
-                    <?= Icon::create('edit', 'clickable', ['title' => 'Datenfeld ändern'])->asImg() ?>
+                    <?= Icon::create('edit', 'clickable', ['title' => 'Datenfeld Ã¤ndern'])->asImg() ?>
                 </a>
                 <a href="<?=$controller->url_for('admin/datafields/delete/' . $val->id)?>">
-                    <?= Icon::create('trash', 'clickable', ['title' => 'Datenfeld löschen'])->asImg() ?>
+                    <?= Icon::create('trash', 'clickable', ['title' => 'Datenfeld lÃ¶schen'])->asImg() ?>
                 </a>
             </td>
         </tr>

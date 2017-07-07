@@ -11,7 +11,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      Till Glöggler <tgloeggl@uos.de> & Rasmus Fuhse <fuhse@data-quest.de>
+ * @author      Till GlÃ¶ggler <tgloeggl@uos.de> & Rasmus Fuhse <fuhse@data-quest.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
  */

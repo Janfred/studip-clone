@@ -102,7 +102,7 @@ class SiteinfoController extends StudipController
             if ($this->currentdetail) {
                 $actions->addLink(_('Seite bearbeiten'),
                                   $this->url_for('siteinfo/edit/' . $this->currentrubric . '/' . $this->currentdetail), Icon::create('edit', 'clickable'));
-                $actions->addLink(_('Seite löschen'),
+                $actions->addLink(_('Seite lÃ¶schen'),
                                   $this->url_for('siteinfo/delete/' . $this->currentrubric . '/' . $this->currentdetail), Icon::create('trash', 'clickable'));
             }
 
@@ -118,7 +118,7 @@ class SiteinfoController extends StudipController
         if ($this->currentrubric) {
             $actions->addLink(_('Rubrik bearbeiten'),
                               $this->url_for('siteinfo/edit/' . $this->currentrubric), Icon::create('edit', 'clickable'));
-            $actions->addLink(_('Rubrik löschen'),
+            $actions->addLink(_('Rubrik lÃ¶schen'),
                               $this->url_for('siteinfo/delete/' . $this->currentrubric), Icon::create('trash', 'clickable'));
         }
 

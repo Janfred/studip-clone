@@ -6,7 +6,7 @@
  * @copyright  (c) 1998,1999 NetUSE GmbH Boris Erdmann, Kristian Koehntopp,
  *             2000 Maxim Derkachev <kot@books.ru>,
  *             2000 Teodor Cimpoesu <teo@digiro.net>
- * @author     André Noack <noack@data-quest.de> Maxim Derkachev <kot@books.ru>,
+ * @author     AndrÃ© Noack <noack@data-quest.de> Maxim Derkachev <kot@books.ru>,
  *               Teodor Cimpoesu <teo@digiro.net>,Ulf Wendel <uw@netuse.de>
  */
 class Seminar_Session

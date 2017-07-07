@@ -10,7 +10,7 @@
 * This class prints out a html representation of the tree for the "extern modules"
 *
 * @access   public
-* @author   André Noack <noack@data-quest.de>
+* @author   AndrÃ© Noack <noack@data-quest.de>
 * @package  
 */
 class ExternRangeLectureTree {

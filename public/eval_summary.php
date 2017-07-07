@@ -43,7 +43,7 @@ $cmd = Request::option('cmd');
 $evalgroup_id = Request::option('evalgroup_id');
 $group_type = Request::option('group_type');
 
-// Überprüfen, ob die Evaluation existiert oder der Benutzer genügend Rechte hat
+// ÃœberprÃ¼fen, ob die Evaluation existiert oder der Benutzer genÃ¼gend Rechte hat
 $eval = new Evaluation($eval_id);
 $eval->check();
 if (EvaluationObjectDB::getEvalUserRangesWithNoPermission($eval) == YES || count($eval->errorArray) > 0) {
@@ -579,7 +579,7 @@ if ($evaluation = $statement->fetch(PDO::FETCH_ASSOC)) {
     echo "    <td colspan=\"2\" class=\"blank\"><font size=\"-1\">\n";
     echo "      &nbsp;&nbsp;".$number_of_votes." "._("Teilnehmer insgesamt").".&nbsp;";
     echo "      ". ($evaluation['anonymous'] == 0 ? _('Die Teilnahme war nicht anonym.') : _('Die Teilnahme war anonym.')) . ' ';
-    echo "      "._("Eigentümer").": ".$db_owner.". ".("Erzeugt am").": ".date('d.m.Y H:i:s');
+    echo "      "._("EigentÃ¼mer").": ".$db_owner.". ".("Erzeugt am").": ".date('d.m.Y H:i:s');
     echo "    </font></td>\n";
     echo "  </tr>\n";
   }

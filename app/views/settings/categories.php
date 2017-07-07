@@ -1,7 +1,7 @@
 <? use Studip\Button, Studip\LinkButton; ?>
 <? if ($verify && $verify['action'] === 'delete'): ?>
 <?= $controller->verifyDialog(
-        sprintf(_('Möchten Sie wirklich die Kategorie "%s" löschen?'), Kategorie::find($verify['id'])->name),
+        sprintf(_('MÃ¶chten Sie wirklich die Kategorie "%s" lÃ¶schen?'), Kategorie::find($verify['id'])->name),
         array('settings/categories/delete', $verify['id'], true),
         array('settings/categories')
     ) ?>
@@ -53,7 +53,7 @@
                 <? endif; ?>
 
                     <a href="<?= $controller->url_for('settings/categories/delete', $category->id) ?>">
-                        <?= Icon::create('trash', 'clickable')->asImg(['class' => 'text-top', 'title' => _('Kategorie löschen')]) ?>
+                        <?= Icon::create('trash', 'clickable')->asImg(['class' => 'text-top', 'title' => _('Kategorie lÃ¶schen')]) ?>
                     </a>
                 </th>
             </tr>
@@ -75,8 +75,8 @@
         <tbody>
             <tr>
                 <td colspan="4">
-                    <?= sprintf(ngettext('Es existiert zusätzlich eine Kategorie, die Sie nicht einsehen und bearbeiten können.',
-                                         'Es existiereren zusätzlich %s Kategorien, die Sie nicht einsehen und bearbeiten können.',
+                    <?= sprintf(ngettext('Es existiert zusÃ¤tzlich eine Kategorie, die Sie nicht einsehen und bearbeiten kÃ¶nnen.',
+                                         'Es existiereren zusÃ¤tzlich %s Kategorien, die Sie nicht einsehen und bearbeiten kÃ¶nnen.',
                                          $hidden_count), $hidden_count) ?>
                 </td>
             </tr>
@@ -85,7 +85,7 @@
         <tfoot>
             <tr>
                 <td colspan="4">
-                    <?= Button::create(_('Übernehmen'), 'store') ?>
+                    <?= Button::create(_('Ãœbernehmen'), 'store') ?>
                 </td>
         </tfoot>
     </table>

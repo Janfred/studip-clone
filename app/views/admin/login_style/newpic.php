@@ -1,6 +1,6 @@
 <form class="default" action="<?= $controller->url_for('admin/loginstyle/add') ?>" method="post" enctype="multipart/form-data">
     <header>
-        <h1><?= _('Bild(er) hinzufügen') ?></h1>
+        <h1><?= _('Bild(er) hinzufÃ¼gen') ?></h1>
     </header>
     <section>
         <label>

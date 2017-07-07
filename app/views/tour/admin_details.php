@@ -26,7 +26,7 @@
             <input type="text" size="60" maxlength="255" name="tour_name"
                    value="<?= $tour ? htmlReady($tour->name) : '' ?>"
                    required="required" aria-required="true"
-                   placeholder="<?= _('Bitte geben Sie einen Namen für die Tour an') ?>">
+                   placeholder="<?= _('Bitte geben Sie einen Namen fÃ¼r die Tour an') ?>">
         </label>
 
         <label>
@@ -72,7 +72,7 @@
             <input type="text" size="60" maxlength="255" name="tour_startpage"
                    value="<?= $tour_startpage ? htmlReady($tour_startpage) : '' ?>"
                    required="required" aria-required="true"
-                   placeholder="<?= _('Bitte geben Sie eine Startseite für die Tour an') ?>"/>
+                   placeholder="<?= _('Bitte geben Sie eine Startseite fÃ¼r die Tour an') ?>"/>
         </label>
 
     <? endif ?>
@@ -95,7 +95,7 @@
     <option value="inst"<?= ($audience->type == 'inst') ? ' selected' : '' ?>><?= _('Mitglied der Einrichtung') ?></option>
     <option value="studiengang"<?= ($audience->type == 'studiengang') ? ' selected' : '' ?>><?= _('Eingeschrieben in Studiengang') ?></option>
     <option value="abschluss"<?= ($audience->type == 'abschluss') ? ' selected' : '' ?>><?= _('Angestrebter Abschluss') ?></option>
-    <option value="userdomain"<?= ($audience->type == 'userdomain') ? ' selected' : '' ?>><?= _('Zugeordnet zur Nutzerdomäne') ?></option>
+    <option value="userdomain"<?= ($audience->type == 'userdomain') ? ' selected' : '' ?>><?= _('Zugeordnet zur NutzerdomÃ¤ne') ?></option>
     </select>
     <input type="text" size="60" maxlength="255" name="tour_audience_range_id"
         value="<?= $audience ? htmlReady($audience->range_id) : '' ?>"
@@ -126,7 +126,7 @@
             <thead>
                 <tr>
                     <th><?= _('Nr.') ?></th>
-                    <th><?= _('Überschrift') ?></th>
+                    <th><?= _('Ãœberschrift') ?></th>
                     <th><?= _('Inhalt') ?></th>
                     <th><?= _('Seite') ?></th>
                     <th><?= _('Aktion') ?></th>
@@ -150,13 +150,13 @@
                         ) ?>
                         <? $actionMenu->addLink(
                             $controller->url_for('tour/admin_details/' . $tour->tour_id, ['delete_tour_step' => $step->step]),
-                            _('Schritt löschen'),
-                            Icon::create('edit', 'clickable', ['title' => _('Schritt löschen')])
+                            _('Schritt lÃ¶schen'),
+                            Icon::create('edit', 'clickable', ['title' => _('Schritt lÃ¶schen')])
                         ) ?>
                         <? $actionMenu->addLink(
                             $controller->url_for('tour/edit_step/' . $tour->tour_id . '/' . ($step->step + 1) . '/new'),
-                            _('Neuen Schritt hinzufügen'),
-                            Icon::create('add', 'clickable', ['title' => _('Neuen Schritt hinzufügen')]),
+                            _('Neuen Schritt hinzufÃ¼gen'),
+                            Icon::create('add', 'clickable', ['title' => _('Neuen Schritt hinzufÃ¼gen')]),
                             ['data-dialog' => 'size=auto;reload-on-close']
                         ) ?>
                             <?= $actionMenu->render() ?>
@@ -181,7 +181,7 @@ if (count($tour->steps)) {
 
     $widget = new ActionsWidget();
     $widget->addLink(
-        _('Schritt hinzufügen'),
+        _('Schritt hinzufÃ¼gen'),
         $controller->link_for('tour/edit_step/' . $tour->tour_id . '/' . (count($tour->steps) + 1) . '/new'),
         Icon::create('add', 'clickable'),
         ['data-dialog' => 'size=auto;reload-on-close']

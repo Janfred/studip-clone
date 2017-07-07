@@ -4,7 +4,7 @@
  *
  * This class contains methods to handle connected ILIAS 5 user-accounts.
  *
- * @author    Arne Schröder <schroeder@data-quest.de>
+ * @author    Arne SchrÃ¶der <schroeder@data-quest.de>
  * @access    public
  * @modulegroup    elearning_interface_modules
  * @module        Ilias5ConnectedUser

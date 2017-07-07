@@ -2,7 +2,7 @@
 /**
  * purge_cache.class.php - Purges the file cache.
  * 
- * @author AndrÈ Noack <noack@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
+ * @author Andr√© Noack <noack@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
  * @author Jan-Hendrik Willms <tleilax+studip@gmail.com>
  * @access public
  * @since  2.4
@@ -60,7 +60,7 @@ class PurgeCacheJob extends CronJob
                 'type'        => 'boolean',
                 'default'     => false,
                 'status'      => 'optional',
-                'description' => _('Sollen Ausgaben erzeugt werden (sind sp‰ter im Log des Cronjobs sichtbar)'),
+                'description' => _('Sollen Ausgaben erzeugt werden (sind sp√§ter im Log des Cronjobs sichtbar)'),
             ),
         );
     }

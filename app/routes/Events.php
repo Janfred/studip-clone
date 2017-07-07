@@ -4,7 +4,7 @@ use Calendar, DbCalendarEventList, SingleCalendar, SingleDate, Seminar, Issue,
     CalendarExportFile, CalendarWriterICalendar, SemesterData;
 
 /**
- * @author  AndrÈ Klaﬂen <andre.klassen@elan-ev.de>
+ * @author  Andr√© Kla√üen <andre.klassen@elan-ev.de>
  * @author  <mlunzena@uos.de>
  * @license GPL 2 or later
  *
@@ -137,7 +137,7 @@ class Events extends \RESTAPI\RouteMap
 
     private static function getRoomForSingleDate($val) {
 
-        /* css-Klasse ausw‰hlen, sowie Template-Feld f¸r den Raum mit Text f¸llen */
+        /* css-Klasse ausw√§hlen, sowie Template-Feld f√ºr den Raum mit Text f√ºllen */
         if (\Config::get()->RESOURCES_ENABLE) {
 
             if ($val->getResourceID()) {
@@ -158,7 +158,7 @@ class Events extends \RESTAPI\RouteMap
                     if ($name = $val->isHoliday()) {
                         $room = '('.$name.')';
                     } else {
-                        $room = '('._('f‰llt aus').')';
+                        $room = '('._('f√§llt aus').')';
                     }
                 }
 

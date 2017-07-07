@@ -59,7 +59,7 @@ class ExternElementLinkInternSimple extends ExternElement {
         
         $this->name = "LinkIntern";
         $this->real_name = _("Links");
-        $this->description = _("Eigenschaften der Schrift für Links.");
+        $this->description = _("Eigenschaften der Schrift fÃ¼r Links.");
         $this->headlines = array(_("Schriftformatierung"), _("Linkformatierung"),
                 _("Verlinkung zum Modul"));
     }
@@ -90,7 +90,7 @@ class ExternElementLinkInternSimple extends ExternElement {
         $headline = $edit_form->editHeadline($this->headlines[2]);
         
         $title = _("Konfiguration:");
-        $info = _("Der Link ruft das Modul mit der gewählten Konfiguration auf. Wählen Sie \"Standard\", um die von Ihnen gesetzte Standardkonfiguration zu benutzen. Ist für das aufgerufene Modul noch keine Konfiguration erstellt worden, wird die Stud.IP-Default-Konfiguration verwendet.");
+        $info = _("Der Link ruft das Modul mit der gewÃ¤hlten Konfiguration auf. WÃ¤hlen Sie \"Standard\", um die von Ihnen gesetzte Standardkonfiguration zu benutzen. Ist fÃ¼r das aufgerufene Modul noch keine Konfiguration erstellt worden, wird die Stud.IP-Default-Konfiguration verwendet.");
         $configs = ExternConfig::GetAllConfigurations($this->config->range_id, $this->link_module_type);
         if (sizeof($configs)) {
             $module_name = $EXTERN_MODULE_TYPES[$this->link_module_type]["module"];
@@ -108,11 +108,11 @@ class ExternElementLinkInternSimple extends ExternElement {
         $table = $edit_form->editOptionGeneric("config", $title, $info, $values, $names);
         
         $title = _("SRI-Link:");
-        $info = _("Wenn Sie die SRI-Schnittstelle benutzen, müssen Sie hier die vollständige URL (mit http://) der Seite angeben, in der das Modul, das durch den Link aufgerufen wird, eingebunden ist. Lassen Sie dieses Feld unbedingt leer, falls Sie die SRI-Schnittstelle nicht nutzen.");
+        $info = _("Wenn Sie die SRI-Schnittstelle benutzen, mÃ¼ssen Sie hier die vollstÃ¤ndige URL (mit http://) der Seite angeben, in der das Modul, das durch den Link aufgerufen wird, eingebunden ist. Lassen Sie dieses Feld unbedingt leer, falls Sie die SRI-Schnittstelle nicht nutzen.");
         $table .= $edit_form->editTextfieldGeneric("srilink", $title, $info, 50, 250);
         
         $title = _("Extern-Link:");
-        $info = _("Wenn Sie die SRI-Schnittstelle nicht benutzen, können Sie hier die vollständige URL (mit http://) der Seite angeben, in der das Modul, das durch den Link aufgerufen wird, eingebunden wird. Lassen Sie dieses Feld unbedingt leer, falls Sie die SRI-Schnittstelle nutzen.");
+        $info = _("Wenn Sie die SRI-Schnittstelle nicht benutzen, kÃ¶nnen Sie hier die vollstÃ¤ndige URL (mit http://) der Seite angeben, in der das Modul, das durch den Link aufgerufen wird, eingebunden wird. Lassen Sie dieses Feld unbedingt leer, falls Sie die SRI-Schnittstelle nutzen.");
         $table .= $edit_form->editTextfieldGeneric("externlink", $title, $info, 50, 250);
         
         $content_table .= $edit_form->editContentTable($headline, $table);

@@ -16,7 +16,7 @@ class ArchiveHelpTexts extends Migration
         
         $db->exec("
         INSERT INTO help_content (global_content_id, content_id, language, content, route, studip_version)
-        VALUES('55499281ce1a4757f17aaf73faa072ea', '55499281ce1a4757f17aaf73faa072ea', 'de', 'Auf dieser Seite können sie sich vor dem Archivieren vergewissern, das die richtige(n) Veranstaltunge(n) zum Archivieren ausgewählt wurden.', 'dispatch.php/course/archive/confirm', '4.0');
+        VALUES('55499281ce1a4757f17aaf73faa072ea', '55499281ce1a4757f17aaf73faa072ea', 'de', 'Auf dieser Seite kÃ¶nnen sie sich vor dem Archivieren vergewissern, das die richtige(n) Veranstaltunge(n) zum Archivieren ausgewÃ¤hlt wurden.', 'dispatch.php/course/archive/confirm', '4.0');
         ");
         $db->exec("
         INSERT INTO help_content (global_content_id, content_id, language, content, route, studip_version)

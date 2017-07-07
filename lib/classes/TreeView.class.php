@@ -8,7 +8,7 @@
 // TreeView.class.php
 // Class to print out html represantation of a tree object based on TreeAbstract.class.php
 //
-// Copyright (c) 2002 André Noack <noack@data-quest.de>
+// Copyright (c) 2002 AndrÃ© Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@
 * Class to print out html represantation of a tree object based on TreeAbstract.class.php
 *
 * @access   public
-* @author   André Noack <noack@data-quest.de>
+* @author   AndrÃ© Noack <noack@data-quest.de>
 * @package
 */
 class TreeView {
@@ -116,7 +116,7 @@ class TreeView {
         $this->tree_class_name = $tree_class_name;
         $this->tree            = TreeAbstract::GetInstance($tree_class_name, $args);
         // TODO Die Logik hinter forumgrau2 und forumgraurunt2 muss
-        // komplett erneuert werden; dann können auch Instanzen der
+        // komplett erneuert werden; dann kÃ¶nnen auch Instanzen der
         // Klasse "Icon" verwendet werden.
         $this->pic_open        = $this->use_aging
                                ? 'forumgraurunt2.png'
@@ -342,7 +342,7 @@ class TreeView {
             $head .= "<a href=\"";
             $head .= ($this->open_ranges[$item_id]) ? URLHelper::getLink($this->getSelf("close_range={$item_id}")) : URLHelper::getLink($this->getSelf("open_range={$item_id}"));
             $head .= "\">";
-            $head .= Icon::create('folder-full', 'clickable', ['title' => $this->open_ranges[$item_id]?_('Alle Unterelemente schließen'):_('Alle Unterelemente öffnen')])->asImg(16, ['class' => 'text-top']);
+            $head .= Icon::create('folder-full', 'clickable', ['title' => $this->open_ranges[$item_id]?_('Alle Unterelemente schlieÃŸen'):_('Alle Unterelemente Ã¶ffnen')])->asImg(16, ['class' => 'text-top']);
             $head .= "</a>";
         } else {
             $head .= Icon::create('folder-empty', 'clickable', ['title' => _('Dieses Element hat keine Unterelemente')])->asImg();
@@ -360,8 +360,8 @@ class TreeView {
             $head = "<td class=\"printhead\" nowrap align=\"left\" valign=\"bottom\">";
         }
         $head .= "<a href=\"";
-        $head .= ($this->open_items[$item_id])? URLHelper::getLink($this->getSelf("close_item={$item_id}")) . "\"" . tooltip(_("Dieses Element schließen"),true) . ">"
-                                            : URLHelper::getLink($this->getSelf("open_item={$item_id}")) . "\"" . tooltip(_("Dieses Element öffnen"),true) . ">";
+        $head .= ($this->open_items[$item_id])? URLHelper::getLink($this->getSelf("close_item={$item_id}")) . "\"" . tooltip(_("Dieses Element schlieÃŸen"),true) . ">"
+                                            : URLHelper::getLink($this->getSelf("open_item={$item_id}")) . "\"" . tooltip(_("Dieses Element Ã¶ffnen"),true) . ">";
         $head .= Assets::img($this->open_items[$item_id] ? $this->pic_open : $this->pic_close);
         #$head .= (!$this->open_items[$item_id]) ? "<img  src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" width=\"5\" border=\"0\">" : "";
         $head .= "</a>";
@@ -379,8 +379,8 @@ class TreeView {
     function getItemHead($item_id){
         $head = "";
         $head .= "&nbsp;<a class=\"tree\" href=\"";
-        $head .= ($this->open_items[$item_id])? URLHelper::getLink($this->getSelf("close_item={$item_id}")) . "\"" . tooltip(_("Dieses Element schließen"),true) . "><b>"
-                                            : URLHelper::getLink($this->getSelf("open_item={$item_id}")) . "\"" . tooltip(_("Dieses Element öffnen"),true) . ">";
+        $head .= ($this->open_items[$item_id])? URLHelper::getLink($this->getSelf("close_item={$item_id}")) . "\"" . tooltip(_("Dieses Element schlieÃŸen"),true) . "><b>"
+                                            : URLHelper::getLink($this->getSelf("open_item={$item_id}")) . "\"" . tooltip(_("Dieses Element Ã¶ffnen"),true) . ">";
         $head .= htmlReady(my_substr($this->tree->tree_data[$item_id]['name'],0,$this->max_cols));
         $head .= ($this->open_items[$item_id]) ? "</b></a>" : "</a>";
         return $head;
@@ -401,7 +401,7 @@ class TreeView {
             $content .= "\n</table>";
             return $content;
         }
-        $content .= "\n<tr><td class=\"blank\" align=\"left\">Inhalt für Element <b>{$this->tree->tree_data[$item_id]['name']} ($item_id)</b><br>".formatReady($this->tree->tree_data[$item_id]['description'])."</td></tr>";
+        $content .= "\n<tr><td class=\"blank\" align=\"left\">Inhalt fÃ¼r Element <b>{$this->tree->tree_data[$item_id]['name']} ($item_id)</b><br>".formatReady($this->tree->tree_data[$item_id]['description'])."</td></tr>";
         $content .= "</table>";
         return $content;
     }

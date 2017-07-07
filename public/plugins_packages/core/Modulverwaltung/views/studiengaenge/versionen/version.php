@@ -3,7 +3,7 @@
 <? $perm = MvvPerm::get($version) ?>
 <h3>
     <? if ($version->isNew()) : ?>
-    <?= sprintf(_('Neue Version für Studiengangteil: %s'), htmlReady($stgteil->getDisplayName())) ?>
+    <?= sprintf(_('Neue Version fÃ¼r Studiengangteil: %s'), htmlReady($stgteil->getDisplayName())) ?>
     <? else : ?>
     <?= sprintf(_('Version: %s'), htmlReady($version->getDisplayName())) ?>
     <? endif; ?>
@@ -12,12 +12,12 @@
 <form class="default" action="<?= $controller->url_for('/version', $stgteil->id, $version->id) ?>" method="post">
     <?= CSRFProtection::tokenTag() ?>
     <fieldset>
-        <legend><?= _('Gültigkeit') ?></legend>
+        <legend><?= _('GÃ¼ltigkeit') ?></legend>
         <label>
             <?= _('von Semester:') ?>
             <? if ($perm->haveFieldPerm('start_sem')) : ?> 
             <select name="start_sem" size="1">
-                <option value=""><?= _('-- Semester wählen --') ?></option>
+                <option value=""><?= _('-- Semester wÃ¤hlen --') ?></option>
             <? foreach ($semester as $sem) : ?>
                 <option value="<?= $sem->semester_id ?>"<?= ($sem->semester_id == $version->start_sem ? ' selected' : '') ?>>
                     <?= htmlReady($sem->name) ?>
@@ -34,7 +34,7 @@
             <?= _('bis Semester:') ?>
             <? if ($perm->haveFieldPerm('end_sem')) : ?> 
             <select name="end_sem" size="1">
-                <option value=""><?= _('unbegrenzt gültig') ?></option>
+                <option value=""><?= _('unbegrenzt gÃ¼ltig') ?></option>
             <? foreach ($semester as $sem) : ?>
                 <option value="<?= $sem->semester_id ?>"<?= ($sem->semester_id == $version->end_sem ? ' selected' : '') ?>>
                     <?= htmlReady($sem->name) ?>
@@ -46,7 +46,7 @@
                     <? $sem = Semester::find($version->end_sem) ?>
                     <?= htmlReady($sem->name) ?>
                 <? else : ?>
-                    <?= _('unbegrenzt gültig') ?>
+                    <?= _('unbegrenzt gÃ¼ltig') ?>
                 <? endif; ?>
                 <input type="hidden" name="end_sem" value="<?= $version->end_sem ?>">
             <? endif; ?>
@@ -142,9 +142,9 @@
             <? endif; ?>
         <? else : ?>
             <? if ($perm->havePermWrite()) : ?>
-            <?= Button::createAccept(_('übernehmen'), 'store', array('title' => _('Änderungen übernehmen'))) ?>
+            <?= Button::createAccept(_('Ã¼bernehmen'), 'store', array('title' => _('Ã„nderungen Ã¼bernehmen'))) ?>
             <? endif; ?>
         <? endif; ?>
-        <?= LinkButton::createCancel(_('abbrechen'), $cancel_url, array('title' => _('zurück zur Übersicht'))) ?>
+        <?= LinkButton::createCancel(_('abbrechen'), $cancel_url, array('title' => _('zurÃ¼ck zur Ãœbersicht'))) ?>
     </footer>
 </form>

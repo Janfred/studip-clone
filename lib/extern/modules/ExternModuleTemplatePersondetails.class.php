@@ -97,18 +97,18 @@ class ExternModuleTemplatePersondetails extends ExternModule {
         // setup module properties
         $this->elements['LinkInternLecturedetails']->real_name = _("Link zum Modul Veranstaltungsdetails");
         $this->elements['LinkInternLecturedetails']->link_module_type = array(4, 13);
-        $this->elements['PersondetailsLectures']->real_name = _("Einstellungen für Lehrveranstaltungen");
-        $this->elements['LitList']->real_name = _("Einstellungen für Literaturlisten");
+        $this->elements['PersondetailsLectures']->real_name = _("Einstellungen fÃ¼r Lehrveranstaltungen");
+        $this->elements['LitList']->real_name = _("Einstellungen fÃ¼r Literaturlisten");
         $this->elements['TemplateMain']->real_name = _("Haupttemplate");
-        $this->elements['TemplateLectures']->real_name = _("Template für Lehrveranstaltungen");
-        $this->elements['TemplateNews']->real_name = _("Template für News");
+        $this->elements['TemplateLectures']->real_name = _("Template fÃ¼r Lehrveranstaltungen");
+        $this->elements['TemplateNews']->real_name = _("Template fÃ¼r News");
         if (get_config('CALENDAR_ENABLE')) {
-            $this->elements['TemplateAppointments']->real_name = _("Template für Termine");
+            $this->elements['TemplateAppointments']->real_name = _("Template fÃ¼r Termine");
         }
-        $this->elements['TemplateLitList']->real_name = _("Template für Literaturlisten");
-        $this->elements['TemplateOwnCategories']->real_name = _("Template für eigene Kategorien");
+        $this->elements['TemplateLitList']->real_name = _("Template fÃ¼r Literaturlisten");
+        $this->elements['TemplateOwnCategories']->real_name = _("Template fÃ¼r eigene Kategorien");
         if (in_array(get_object_type($this->config->range_id), array('global'))) {
-            $this->elements['SelectInstitutes']->real_name = _("Einschränkung auf Institute/Einrichtungen");
+            $this->elements['SelectInstitutes']->real_name = _("EinschrÃ¤nkung auf Institute/Einrichtungen");
         }
     }
 
@@ -131,7 +131,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
     }
 
     public function getMarkerDescription ($element_name) {
-        $markers['TemplateMain'][] = array('__GLOBAL__', _("Globale Variablen (gültig im gesamten Template)."));
+        $markers['TemplateMain'][] = array('__GLOBAL__', _("Globale Variablen (gÃ¼ltig im gesamten Template)."));
         $markers['TemplateMain'][] = array('###STUDIP-EDIT-HREF###', '');
 
         $markers['TemplateMain'][] = array('<!-- BEGIN PERSONDETAILS -->', '');
@@ -184,11 +184,11 @@ class ExternModuleTemplatePersondetails extends ExternModule {
         $this->insertDatafieldMarkers('user', $markers, 'TemplateMain');
         $this->insertDatafieldMarkers('userinstrole', $markers, 'TemplateMain');
         $this->insertPluginMarkers('HomepagePlugin', $markers, 'TemplateMain');
-        $markers['TemplateMain'][] = array('###LECTURES###', _("Inhalt aus dem Template für Veranstaltungen"));
-        $markers['TemplateMain'][] = array('###NEWS###', _("Inhalt aus dem Template für News"));
-        $markers['TemplateMain'][] = array('###LITERATURE###', _("Inhalt aus dem Template für Literaturlisten"));
-        $markers['TemplateMain'][] = array('###APPOINTMENTS###', _("Inhalt aus dem Template für Termine"));
-        $markers['TemplateMain'][] = array('###OWNCATEGORIES###', _("Inhalt aus dem Template für eigene Kategorien"));
+        $markers['TemplateMain'][] = array('###LECTURES###', _("Inhalt aus dem Template fÃ¼r Veranstaltungen"));
+        $markers['TemplateMain'][] = array('###NEWS###', _("Inhalt aus dem Template fÃ¼r News"));
+        $markers['TemplateMain'][] = array('###LITERATURE###', _("Inhalt aus dem Template fÃ¼r Literaturlisten"));
+        $markers['TemplateMain'][] = array('###APPOINTMENTS###', _("Inhalt aus dem Template fÃ¼r Termine"));
+        $markers['TemplateMain'][] = array('###OWNCATEGORIES###', _("Inhalt aus dem Template fÃ¼r eigene Kategorien"));
         $markers['TemplateMain'][] = array('<!-- END PERSONDETAILS -->', '');
 
         $markers['TemplateLectures'][] = array('<!-- BEGIN LECTURES -->', '');
@@ -227,7 +227,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
             $markers['TemplateAppointments'][] = array('<!-- END NO-APPOINTMENTS -->', '');
             $markers['TemplateAppointments'][] = array('<!-- BEGIN ALL-APPOINTMENTS -->', '');
             $markers['TemplateAppointments'][] = array('<!-- BEGIN SINGLE-APPOINTMENT -->', '');
-            $markers['TemplateAppointments'][] = array('###DATE###', _("Start und Endzeit oder ganztägig"));
+            $markers['TemplateAppointments'][] = array('###DATE###', _("Start und Endzeit oder ganztÃ¤gig"));
             $markers['TemplateAppointments'][] = array('###BEGIN###', '');
             $markers['TemplateAppointments'][] = array('###END###', '');
             $markers['TemplateAppointments'][] = array('###TITLE###', '');
@@ -631,7 +631,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
                 $i = 0;
                 foreach ($events as $event) {
                     if ($event->isDayEvent()) {
-                        $content['APPOINTMENTS']['ALL-APPOINTMENTS']['SINGLE-APPOINTMENT'][$i]['DATE'] = ExternModule::ExtHtmlReady(strftime($this->config->getValue('Main', 'dateformat'), $event->getStart()) . ' (' . _("ganztügig") . ')');
+                        $content['APPOINTMENTS']['ALL-APPOINTMENTS']['SINGLE-APPOINTMENT'][$i]['DATE'] = ExternModule::ExtHtmlReady(strftime($this->config->getValue('Main', 'dateformat'), $event->getStart()) . ' (' . _("ganztÃ¼gig") . ')');
                     } else {
                         $content['APPOINTMENTS']['ALL-APPOINTMENTS']['SINGLE-APPOINTMENT'][$i]['DATE'] = ExternModule::ExtHtmlReady(strftime($this->config->getValue('Main', 'dateformat') . " %X", $event->getStart()));
                         if (date("dmY", $event->getStart()) == date("dmY", $event->getEnd())) {

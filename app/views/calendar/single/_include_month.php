@@ -10,10 +10,10 @@
                             &nbsp;
                         <? else : ?>
                             <a href="<?= $controller->url_for($href, array('imt' => mktime(12, 0, 0, date('n', $imt), 1, date('Y', $imt) - 1))) ?>">
-                               <?= Icon::create('arr_2left', 'clickable', ['title' => _('Ein Jahr zurück')])->asImg() ?>
+                               <?= Icon::create('arr_2left', 'clickable', ['title' => _('Ein Jahr zurÃ¼ck')])->asImg() ?>
                             </a>
                             <a href="<?= $controller->url_for($href, array('imt' => mktime(12, 0, 0, date('n', $imt) - 1, 1, date('Y', $imt)))) ?>">
-                                <?= Icon::create('arr_1left', 'clickable', ['title' => _('Einen Monat zurück')])->asImg() ?>
+                                <?= Icon::create('arr_1left', 'clickable', ['title' => _('Einen Monat zurÃ¼ck')])->asImg() ?>
                             </a>
                         <? endif; ?>
                         </div>

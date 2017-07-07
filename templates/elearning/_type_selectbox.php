@@ -1,7 +1,7 @@
 <?php use Studip\Button, Studip\LinkButton; ?>
 <? if (count($options) > 1) : ?>
     <select name="module_type_<?=htmlReady($cms)?>" style="vertical-align:middle">
-    <option value=""><?=_("Bitte auswählen")?></option>
+    <option value=""><?=_("Bitte auswÃ¤hlen")?></option>
     <? foreach($options as $key => $name) : ?>
         <option value="<?=$key?>" <?=($selected == $key) ? ' selected' : ''?>>
             <?=htmlReady($name)?>

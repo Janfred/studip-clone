@@ -8,7 +8,7 @@
 <table class="default">
     <thead>
         <tr>
-            <th class="topic" colspan="2"><?=sprintf(_('Folgende %s konnten <b>nicht eindeutig</b> zugewiesen werden. Bitte wählen Sie aus der jeweiligen Trefferliste:'), htmlReady($status_groups['autor']))?></th>
+            <th class="topic" colspan="2"><?=sprintf(_('Folgende %s konnten <b>nicht eindeutig</b> zugewiesen werden. Bitte wÃ¤hlen Sie aus der jeweiligen Trefferliste:'), htmlReady($status_groups['autor']))?></th>
         </tr>
     </thead>
     <tbody>
@@ -17,7 +17,7 @@
             <td style="width: 40%"><?=htmlReady(mila($name, 50));?></td>
             <td>
                 <select name="selected_users[]">
-                    <option value="---">--<?=_('bitte auswählen')?> --</option>
+                    <option value="---">--<?=_('bitte auswÃ¤hlen')?> --</option>
                     <? foreach ($csv_mult_found as $csv_found) : ?>
                         <? if ($csv_found['is_present']) : ?>
                             <? continue ?>

@@ -2,7 +2,7 @@
 /**
 * some database tweaking
 *
-* @author  André Noack <noack@data-quest.de>
+* @author  AndrÃ© Noack <noack@data-quest.de>
 * @license GPL2 or any later version
 */
 

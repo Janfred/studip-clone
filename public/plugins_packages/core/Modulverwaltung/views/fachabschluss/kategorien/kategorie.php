@@ -62,9 +62,9 @@
         <? endif; ?>
     <? else : ?>
         <? if ($perm->havePermWrite()) : ?>
-        <?= Button::createAccept(_('übernehmen'), 'store', array('title' => _('Änderungen übernehmen'))) ?>
+        <?= Button::createAccept(_('Ã¼bernehmen'), 'store', array('title' => _('Ã„nderungen Ã¼bernehmen'))) ?>
         <? endif; ?>
     <? endif; ?>
-        <?= LinkButton::createCancel(_('abbrechen'), $controller->url_for('fachabschluss/kategorien'), array('title' => _('zurück zur Übersicht'))) ?>
+        <?= LinkButton::createCancel(_('abbrechen'), $controller->url_for('fachabschluss/kategorien'), array('title' => _('zurÃ¼ck zur Ãœbersicht'))) ?>
     </footer>
 </form>

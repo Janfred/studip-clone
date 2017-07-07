@@ -87,7 +87,7 @@ class ProfileNavigation extends Navigation
                 || ($perm->have_perm('root') && Config::get()->ALLOW_ADMIN_USERACCESS))
                 && !StudipAuthAbstract::CheckField('auth_user_md5.password', $current_user->auth_plugin)
                 && !LockRules::check($current_user->user_id, 'password')) {
-                $navigation->addSubNavigation('password', new Navigation(_('Passwort ändern'), 'dispatch.php/settings/password'));
+                $navigation->addSubNavigation('password', new Navigation(_('Passwort Ã¤ndern'), 'dispatch.php/settings/password'));
             }
             $navigation->addSubNavigation('details', new Navigation(_('Weitere Daten'), 'dispatch.php/settings/details'));
 
@@ -97,7 +97,7 @@ class ProfileNavigation extends Navigation
 
             if ($current_user->perms != 'root') {
                 if (count(UserDomain::getUserDomains())) {
-                    $navigation->addSubNavigation('userdomains', new Navigation(_('Nutzerdomänen'), 'dispatch.php/settings/userdomains'));
+                    $navigation->addSubNavigation('userdomains', new Navigation(_('NutzerdomÃ¤nen'), 'dispatch.php/settings/userdomains'));
                 }
 
                 if ($perm->is_staff_member($current_user->user_id)) {
@@ -111,7 +111,7 @@ class ProfileNavigation extends Navigation
                 $navigation = new Navigation(_('Einstellungen'));
 
                 $navigation->addSubNavigation('general', new Navigation(_('Allgemeines'), 'dispatch.php/settings/general'));
-                $navigation->addSubNavigation('privacy', new Navigation(_('Privatsphäre'), 'dispatch.php/settings/privacy'));
+                $navigation->addSubNavigation('privacy', new Navigation(_('PrivatsphÃ¤re'), 'dispatch.php/settings/privacy'));
                 $navigation->addSubNavigation('messaging', new Navigation(_('Nachrichten'), 'dispatch.php/settings/messaging'));
 
                 if (get_config('CALENDAR_ENABLE')) {

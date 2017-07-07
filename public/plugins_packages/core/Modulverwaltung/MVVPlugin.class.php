@@ -46,10 +46,10 @@ class MVVPlugin extends StudipPlugin implements SystemPlugin, Loggable {
         $navigation->setImage(Icon::create('learnmodule', 'navigation',
                 ['title' => $this->getDisplayTitle()]));
 
-        $stg_navigation = new AutoNavigation(_('Studiengänge'));
+        $stg_navigation = new AutoNavigation(_('StudiengÃ¤nge'));
 
         $stg_navigation->addSubNavigation('studiengaenge',
-                new AutoNavigation(_('Studiengänge'),
+                new AutoNavigation(_('StudiengÃ¤nge'),
                 PluginEngine::getURL($this->me, array(),
                         'studiengaenge/studiengaenge', true), array()));
         $stg_navigation->addSubNavigation('studiengangteile',
@@ -77,14 +77,14 @@ class MVVPlugin extends StudipPlugin implements SystemPlugin, Loggable {
                 PluginEngine::getURL($this->me, array(), 'lvgruppen/lvgruppen', true), array()));
         $navigation->addSubNavigation('lvgruppen', $lvg_navigation);
 
-        $fa_navigation = new AutoNavigation(_('Fächer/Abschlüsse'));
+        $fa_navigation = new AutoNavigation(_('FÃ¤cher/AbschlÃ¼sse'));
         $fa_navigation->addSubNavigation(
-                'faecher', new AutoNavigation(_('Fächer'),
+                'faecher', new AutoNavigation(_('FÃ¤cher'),
                 PluginEngine::getUrl(
                         $this->me, array(), 'fachabschluss/faecher', true),
                         array()));
         $fa_navigation->addSubNavigation(
-                'abschluesse', new AutoNavigation(_('Abschlüsse'),
+                'abschluesse', new AutoNavigation(_('AbschlÃ¼sse'),
                 PluginEngine::getUrl(
                         $this->me, array(), 'fachabschluss/abschluesse', true),
                         array()));
@@ -134,7 +134,7 @@ class MVVPlugin extends StudipPlugin implements SystemPlugin, Loggable {
                     PluginEngine::getUrl($this->me . '/search/angebot'),
                         array()));
             $search_navigation->addSubNavigation('studiengaenge',
-                    new AutoNavigation(_('Studiengänge'),
+                    new AutoNavigation(_('StudiengÃ¤nge'),
                     PluginEngine::getUrl($this->me . '/search/studiengaenge'),
                         array()));
             Navigation::insertItem('/search/module', $search_navigation,

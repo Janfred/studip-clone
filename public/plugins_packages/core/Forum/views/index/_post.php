@@ -11,7 +11,7 @@
     'remove_entry' => ForumPerm::has('remove_entry', $constraint['seminar_id']),
 ) ?>
 
-<!-- Anker, um zu diesem Posting springen zu kˆnnen -->
+<!-- Anker, um zu diesem Posting springen zu k√∂nnen -->
 <a name="<?= $post['topic_id'] ?>"></a>
 
 <form method="post" data-topicid="<?= $post['topic_id'] ?>" action="<?= PluginEngine::getLink('coreforum/index/update_entry/' . $post['topic_id']) ?>">
@@ -57,7 +57,7 @@
                 <? $parent_topic = ForumEntry::getConstraints(ForumEntry::getParentTopicId($post['topic_id'])) ?>
 
                 <? if($constraint['closed']) : ?>
-                <?= Icon::create('lock-locked', 'info', ['title' => _('Dieses Thema wurde geschlossen. Sie kˆnnen daher nicht auf diesen Beitrag antworten.')])->asImg(16) ?>
+                <?= Icon::create('lock-locked', 'info', ['title' => _('Dieses Thema wurde geschlossen. Sie k√∂nnen daher nicht auf diesen Beitrag antworten.')])->asImg(16) ?>
                 <? endif ?>
 
                 <span data-edit-topic="<?= $post['topic_id'] ?>">
@@ -97,8 +97,8 @@
             <div class="button-group">
 
         <span data-edit-topic="<?= $post['topic_id'] ?>" <?= ($edit_posting == $post['topic_id']) ? '' : 'style="display: none;"' ?>>
-            <!-- Buttons f¸r den Bearbeitungsmodus -->
-            <?= Studip\Button::createAccept(_('ƒnderungen speichern'), '',
+            <!-- Buttons f√ºr den Bearbeitungsmodus -->
+            <?= Studip\Button::createAccept(_('√Ñnderungen speichern'), '',
                 array('onClick' => "STUDIP.Forum.saveEntry('". $post['topic_id'] ."'); return false;")) ?>
 
             <?= Studip\LinkButton::createCancel(_('Abbrechen'), PluginEngine::getLink('coreforum/index/index/'. $post['topic_id'] .'#'. $post['topic_id']),
@@ -108,7 +108,7 @@
         </span>
                 
         <span data-show-topic="<?= $post['topic_id'] ?>" <?= $edit_posting != $post['topic_id'] ? '' : 'style="display: none;"' ?>>
-            <!-- Aktions-Buttons f¸r diesen Beitrag -->
+            <!-- Aktions-Buttons f√ºr diesen Beitrag -->
 
 
             <? if (ForumPerm::has('add_entry', $constraint['seminar_id'])) : ?>
@@ -134,12 +134,12 @@
                 <? $confirmLink = PluginEngine::getURL('coreforum/index/delete_entry/' . $post['topic_id'])  ?>
                 <? $confirmLinkApproved = PluginEngine::getURL('coreforum/index/delete_entry/' . $post['topic_id'] . '?approve_delete=1')  ?>
                 <? if ($constraint['depth'] == $post['depth']) : /* this is not only a posting, but a thread */ ?>
-                    <? $confirmText = _('Wenn Sie diesen Beitrag lˆschen wird ebenfalls das gesamte Thema gelˆscht. Sind Sie sicher, dass Sie das tun mˆchten?')  ?>
-                    <?= Studip\LinkButton::create(_('Thema lˆschen'), $confirmLink,
+                    <? $confirmText = _('Wenn Sie diesen Beitrag l√∂schen wird ebenfalls das gesamte Thema gel√∂scht. Sind Sie sicher, dass Sie das tun m√∂chten?')  ?>
+                    <?= Studip\LinkButton::create(_('Thema l√∂schen'), $confirmLink,
                         array('onClick' => "STUDIP.Forum.showDialog('$confirmText', '$confirmLinkApproved'); return false;")) ?>
                 <? else : ?>
-                    <? $confirmText = _('Mˆchten Sie diesen Beitrag wirklich lˆschen?') ?>
-                    <?= Studip\LinkButton::create(_('Beitrag lˆschen'), $confirmLink,
+                    <? $confirmText = _('M√∂chten Sie diesen Beitrag wirklich l√∂schen?') ?>
+                    <?= Studip\LinkButton::create(_('Beitrag l√∂schen'), $confirmLink,
                         array('onClick' => "STUDIP.Forum.showDialog('$confirmText', '$confirmLinkApproved'); return false;")) ?>
                 <? endif ?>
             </span>
@@ -211,9 +211,9 @@
             </dd>
             <? if ($post['user_id']) : ?>
             <dd>
-                Beitr‰ge:
+                Beitr√§ge:
                 <?= ForumEntry::countUserEntries($post['user_id']) ?><br>
-                <?= _('Erhaltene "Gef‰llt mir!":') ?>
+                <?= _('Erhaltene "Gef√§llt mir!":') ?>
                 <?= ForumLike::receivedForUser($post['user_id']) ?>
             </dd>
             <? endif ?>

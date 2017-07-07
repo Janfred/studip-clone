@@ -18,7 +18,7 @@ class AccessDeniedException extends Exception
     {
         if (func_num_args() === 0) {
             $message = _('Sie haben nicht die Berechtigung, diese Aktion '
-                       . 'auszuführen bzw. diesen Teil des Systems zu betreten.');
+                       . 'auszufÃ¼hren bzw. diesen Teil des Systems zu betreten.');
         }
 
         parent::__construct($message, $code, $previous);

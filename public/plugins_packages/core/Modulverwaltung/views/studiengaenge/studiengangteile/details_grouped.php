@@ -32,11 +32,11 @@
                         <? if (MvvPerm::havePermCreate($stgteil)) : ?>
                             <? $actionMenu->addButton(
                                     'delete_part',
-                                    _('Studiengangteil löschen'),
+                                    _('Studiengangteil lÃ¶schen'),
                                     Icon::create('trash', 'clickable',
-                                            ['title'        => _('Studiengangteil löschen'),
+                                            ['title'        => _('Studiengangteil lÃ¶schen'),
                                              'formaction'   => $controller->url_for('/delete', $stgteil->getId()),
-                                             'data-confirm' => sprintf(_('Wollen Sie wirklich den Studiengangteil "%s" löschen?'), htmlReady($stgteil->getDisplayName()))]))
+                                             'data-confirm' => sprintf(_('Wollen Sie wirklich den Studiengangteil "%s" lÃ¶schen?'), htmlReady($stgteil->getDisplayName()))]))
                             ?>
                         <? endif; ?>
                         <?= $actionMenu->render() ?>

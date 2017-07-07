@@ -56,15 +56,15 @@ echo $flash['message'];
                     <? if (getGlobalPerms($GLOBALS['user']->id) === 'admin' || ($GLOBALS['perm']->have_perm('admin') && count(getMyRoomRequests(null, null, true, $rr->getId())))) : ?>
                         <? $actionMenu->addLink(
                             URLHelper::getLink('resources.php', ['view' => 'edit_request', 'single_request' => $rr->getId()]),
-                            _('Diese Anfrage selbst auflösen'),
-                            Icon::create('admin', 'clickable', ['title' => _('Diese Anfrage selbst auflösen')])
+                            _('Diese Anfrage selbst auflÃ¶sen'),
+                            Icon::create('admin', 'clickable', ['title' => _('Diese Anfrage selbst auflÃ¶sen')])
                         ) ?>
                     <? endif ?>
 
                     <? $actionMenu->addLink(
                         $controller->link_for('delete/' . $course_id, ['request_id' => $rr->getId()]),
-                        _('Diese Anfrage zurückziehen'),
-                        Icon::create('trash', 'clickable', ['title' => _('Diese Anfrage zurückziehen')])
+                        _('Diese Anfrage zurÃ¼ckziehen'),
+                        Icon::create('trash', 'clickable', ['title' => _('Diese Anfrage zurÃ¼ckziehen')])
                     ); ?>
                     <?= $actionMenu->render() ?>
                 </td>

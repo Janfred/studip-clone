@@ -3,15 +3,15 @@
         <?= _('Semesterfilter') ?>:
         <select name="sem_select" class="submit-upon-select">
             <option <?= ($sem == 'current' ? 'selected' : '')?> value="current"><?= _('Aktuelles Semester') ?></option>
-            <option <?= ($sem == 'future' ? 'selected' : '')?> value="future"><?= _('Aktuelles und nächstes Semester') ?></option>
+            <option <?= ($sem == 'future' ? 'selected' : '')?> value="future"><?= _('Aktuelles und nÃ¤chstes Semester') ?></option>
             <option <?= ($sem == 'last' ? 'selected' : '')?> value="last"><?= _('Aktuelles und letztes Semester') ?></option>
-            <option <?= ($sem == 'lastandnext' ? 'selected' : '')?> value="lastandnext"><?= _('Letztes, aktuelles, nächstes Semester') ?></option>
+            <option <?= ($sem == 'lastandnext' ? 'selected' : '')?> value="lastandnext"><?= _('Letztes, aktuelles, nÃ¤chstes Semester') ?></option>
             <? if (Config::get()->MY_COURSES_ENABLE_ALL_SEMESTERS) : ?>
                 <option <?= ($sem == 'all' ? 'selected' : '')?> value="all"><?= _('Alle Semester') ?></option>
             <? endif ?>
 
             <? if (!empty($semesters)) : ?>
-                <optgroup label="<?=_('Semester auswählen')?>">
+                <optgroup label="<?=_('Semester auswÃ¤hlen')?>">
                 <? foreach ($semesters as $semester) :?>
                     <option value="<?=$semester->id?>" <?= ($sem == $semester->id ? 'selected' : '')?>>
                         <?= htmlReady($semester->name)?>
@@ -22,6 +22,6 @@
         </select>
     </label>
     <noscript>
-        <?= \Studip\Button::createAccept(_('Auswählen'))?>
+        <?= \Studip\Button::createAccept(_('AuswÃ¤hlen'))?>
     </noscript>
 </form>

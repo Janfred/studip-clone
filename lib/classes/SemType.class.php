@@ -229,7 +229,7 @@ class SemType implements ArrayAccess
     static private function localization() {
         _("Vorlesung");
         _("Seminar");
-        _("Übung");
+        _("Ãœbung");
         _("Praktikum");
         _("Colloquium");
         _("Kolloquium");

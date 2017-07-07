@@ -137,9 +137,9 @@ switch ($top_folder->range_type) {
 
 <? if (!$check): ?>
     <? if ($top_folder->range_type == 'course') : ?>
-        <?= MessageBox::error(_('Der Dateibereich ist für diese Veranstaltung nicht aktiviert.')) ?>
+        <?= MessageBox::error(_('Der Dateibereich ist fÃ¼r diese Veranstaltung nicht aktiviert.')) ?>
     <? elseif($top_folder->range_type == 'institute'): ?>
-        <?= MessageBox::error(_('Der Dateibereich ist für diese Einrichtung nicht aktiviert.')) ?>
+        <?= MessageBox::error(_('Der Dateibereich ist fÃ¼r diese Einrichtung nicht aktiviert.')) ?>
     <? endif; ?>
 <? elseif ($top_folder->isWritable($GLOBALS['user']->id) && $top_folder->getId() !== $options['fileref_id']): ?>
     <div data-dialog-button>
@@ -158,19 +158,19 @@ switch ($top_folder->range_type) {
 <div data-dialog-button>
 <? if (Request::get('direct_parent')): ?>
     <?= Studip\LinkButton::create(
-        _('Zurück'),
+        _('ZurÃ¼ck'),
         $controller->url_for('/choose_destination/' . $options['fileref_id'], $options),
         ['data-dialog' => 'size=auto']
     ) ?>
 <? elseif ($top_folder->range_type === 'course') : ?>
     <?= Studip\LinkButton::create(
-        _('Zurück'),
+        _('ZurÃ¼ck'),
         $controller->url_for('/choose_folder_from_course/', $options),
         ['data-dialog' => '']
     ) ?>
 <? elseif($top_folder->range_type === 'institute'): ?>
     <?= Studip\LinkButton::create(
-        _('Zurück'),
+        _('ZurÃ¼ck'),
         $controller->url_for('/choose_folder_from_institute/', $options),
         ['data-dialog' => '']
     ) ?>

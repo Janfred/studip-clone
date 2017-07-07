@@ -6,7 +6,7 @@
 //
 //
 //
-// Copyright (c) 2007 André Noack <noack@data-quest.de>
+// Copyright (c) 2007 AndrÃ© Noack <noack@data-quest.de>
 // +--------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@
  * @package     studip
  * @subpackage  cache
  *
- * @author    André Noack <noack@data-quest.de>
+ * @author    AndrÃ© Noack <noack@data-quest.de>
  * @version   2
  */
 class StudipFileCache implements StudipCache {

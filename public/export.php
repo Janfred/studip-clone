@@ -139,7 +139,7 @@ if (Config::get()->EXPORT_ENABLE)
 }
 else
 {
-    PageLayout::postError(_("Das Exportmodul ist nicht eingebunden. Damit Daten im XML-Format exportiert werden können, muss das Exportmodul in den Systemeinstellungen freigeschaltet werden. 
+    PageLayout::postError(_("Das Exportmodul ist nicht eingebunden. Damit Daten im XML-Format exportiert werden kÃ¶nnen, muss das Exportmodul in den Systemeinstellungen freigeschaltet werden. 
     Wenden Sie sich bitte an die Administratoren."), [_("Exportmodul nicht eingebunden")]);
 
 }

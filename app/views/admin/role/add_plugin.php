@@ -7,7 +7,7 @@ use Studip\LinkButton;
     <?= CSRFProtection::tokenTag() ?>
 
     <label>
-        <?= _('Plugin(s) auswählen') ?>
+        <?= _('Plugin(s) auswÃ¤hlen') ?>
 
         <select name="plugin_ids[]" multiple>
         <? foreach ($plugins as $plugin): ?>
@@ -19,7 +19,7 @@ use Studip\LinkButton;
     </label>
 
     <footer data-dialog-button>
-        <?= Button::createAccept(_('Hinzufügen')) ?>
+        <?= Button::createAccept(_('HinzufÃ¼gen')) ?>
         <?= LinkButton::createCancel(_('Abbrechen'),
                                      $controller->url_for('admin/role/show_role/' . $role_id)) ?>
     </footer>

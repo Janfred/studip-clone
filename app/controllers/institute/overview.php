@@ -2,7 +2,7 @@
 # Lifter010: TODO
 
 /*
- * Copyright (C) 2014 - Arne Schröder <schroeder@data-quest.de>
+ * Copyright (C) 2014 - Arne SchrÃ¶der <schroeder@data-quest.de>
  *
  * formerly institut_main.php - Die Eingangsseite fuer ein Institut
  *
@@ -27,7 +27,7 @@ class Institute_OverviewController extends AuthenticatedController
         checkObject();
         $this->institute = Institute::findCurrent();
         if (!$this->institute) {
-            throw new CheckObjectException(_('Sie haben kein Objekt gewählt.'));
+            throw new CheckObjectException(_('Sie haben kein Objekt gewÃ¤hlt.'));
         }
         $this->institute_id = $this->institute->id;
 

@@ -35,7 +35,7 @@ class Step00246Blubber extends Migration
                 KEY `user_id` (`user_id`,`Seminar_id`)
             ) ENGINE=MyISAM;
         ");
-        //Spezialevents, bisher nur für Löschen von Beiträgen verwendet
+        //Spezialevents, bisher nur fÃ¼r LÃ¶schen von BeitrÃ¤gen verwendet
         $db->exec("
             CREATE TABLE IF NOT EXISTS `blubber_events_queue` (
                 `event_type` varchar(32) NOT NULL,
@@ -69,7 +69,7 @@ class Step00246Blubber extends Migration
                 KEY `external_contact_id` (`external_contact_id`)
             ) ENGINE=MyISAM
         ");
-        //Rechte für private Blubber
+        //Rechte fÃ¼r private Blubber
         $db->exec("
             CREATE TABLE IF NOT EXISTS `blubber_mentions` (
                 `topic_id` varchar(32) NOT NULL,

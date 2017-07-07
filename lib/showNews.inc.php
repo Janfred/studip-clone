@@ -17,7 +17,7 @@
  * @author      Stefan Suchi <suchi@gmx.de>
  * @author      Michael Riehemann <michael.riehemann@uni-oldenburg.de>
  * @author      Jan-Hendrik Willms <tleilax+studip@gmail.com>
- * @author      Arne Schröder <schroeder@data-quest.de>
+ * @author      Arne SchrÃ¶der <schroeder@data-quest.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
  * @package     news
@@ -54,19 +54,19 @@ function delete_comments($delete_comments_array = '')
                     $delete_counter++;
                 }
                 else
-                    PageLayout::postMessage(MessageBox::error(_('Keine Berechtigung zum Löschen des Kommentars.')));
+                    PageLayout::postMessage(MessageBox::error(_('Keine Berechtigung zum LÃ¶schen des Kommentars.')));
             }
         }
         if ($delete_counter > 1)
-            PageLayout::postMessage(MessageBox::success(sprintf(_('%s Kommentare wurden gelöscht.'), $delete_counter)));
+            PageLayout::postMessage(MessageBox::success(sprintf(_('%s Kommentare wurden gelÃ¶scht.'), $delete_counter)));
         elseif ($delete_counter == 1)
-            PageLayout::postMessage(MessageBox::success(_('Kommentar wurde gelöscht.')));
+            PageLayout::postMessage(MessageBox::success(_('Kommentar wurde gelÃ¶scht.')));
     }
     else {
         if (count($delete_comments_array) > 1)
-            $text = sprintf(_('Wollen Sie die %s Komentare jetzt löschen?'), count($delete_comments_array));
+            $text = sprintf(_('Wollen Sie die %s Komentare jetzt lÃ¶schen?'), count($delete_comments_array));
         elseif (count($delete_comments_array) == 1)
-            $text = _('Wollen Sie den Kommentar jetzt löschen?');
+            $text = _('Wollen Sie den Kommentar jetzt lÃ¶schen?');
     }
     return $text;
 }
@@ -95,25 +95,25 @@ function delete_news($delete_news_array)
             if ($confirmed) {
                 $msg_object = new messaging();
                 if ($delete_news->havePermission('delete')) {
-                    PageLayout::postMessage(MessageBox::success(sprintf(_('Ankündigung "%s" wurde gelöscht.'), htmlReady($delete_news->getValue('topic')))));
+                    PageLayout::postMessage(MessageBox::success(sprintf(_('AnkÃ¼ndigung "%s" wurde gelÃ¶scht.'), htmlReady($delete_news->getValue('topic')))));
                     if ($delete_news->getValue('user_id') != $GLOBALS['auth']->auth['uid']) {
                         setTempLanguage($delete_news->getValue('user_id'));
-                        $msg = sprintf(_('Ihre Ankündigung "%s" wurde von der Administration gelöscht!.'), $delete_news->getValue('topic'), get_fullname() . ' ('.get_username().')'). "\n";
-                        $msg_object->insert_message($msg, get_username($delete_news->getValue('user_id')) , "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("Ankündigung geändert"));
+                        $msg = sprintf(_('Ihre AnkÃ¼ndigung "%s" wurde von der Administration gelÃ¶scht!.'), $delete_news->getValue('topic'), get_fullname() . ' ('.get_username().')'). "\n";
+                        $msg_object->insert_message($msg, get_username($delete_news->getValue('user_id')) , "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("AnkÃ¼ndigung geÃ¤ndert"));
                         restoreLanguage();
                     }
                     $delete_news->delete();
                 }
                 else
-                    PageLayout::postMessage(MessageBox::error(sprintf(_('Keine Berechtigung zum Löschen der Ankündigung "%s".'), htmlReady($delete_news->getValue('topic')))));
+                    PageLayout::postMessage(MessageBox::error(sprintf(_('Keine Berechtigung zum LÃ¶schen der AnkÃ¼ndigung "%s".'), htmlReady($delete_news->getValue('topic')))));
             }
         }
     }
     if (! $confirmed) {
         if (count($delete_news_titles) == 1)
-            $text = sprintf(_('- Die Ankündigung "%s" wird unwiderruflich gelöscht.'), $delete_news_titles[0])."\n";
+            $text = sprintf(_('- Die AnkÃ¼ndigung "%s" wird unwiderruflich gelÃ¶scht.'), $delete_news_titles[0])."\n";
         elseif (count($delete_news_titles) > 1)
-            $text = sprintf(_('- Die %s Ankündigungen "%s" werden unwiderruflich gelöscht.'), count($delete_news_titles), implode('", "', $delete_news_titles))."\n";
+            $text = sprintf(_('- Die %s AnkÃ¼ndigungen "%s" werden unwiderruflich gelÃ¶scht.'), count($delete_news_titles), implode('", "', $delete_news_titles))."\n";
     }
     return $text;
 }
@@ -155,32 +155,32 @@ function remove_news($remove_array)
                         $remove_news->deleteRange($range_id);
                     } else {
                         unset($ranges[$key]);
-                        PageLayout::postMessage(MessageBox::error(sprintf(_('Keine Berechtigung zum Entfernen der Ankündigung "%s" aus diesem Bereich.'), htmlReady($remove_news->getValue('topic')))));
+                        PageLayout::postMessage(MessageBox::error(sprintf(_('Keine Berechtigung zum Entfernen der AnkÃ¼ndigung "%s" aus diesem Bereich.'), htmlReady($remove_news->getValue('topic')))));
                     }
                     if (count($ranges)) {
                         if (count($ranges) == 1)
-                            PageLayout::postMessage(MessageBox::success(sprintf(_('Ankündigung "%s" wurde aus dem Bereich entfernt.'), htmlReady($remove_news->getValue('topic')))));
+                            PageLayout::postMessage(MessageBox::success(sprintf(_('AnkÃ¼ndigung "%s" wurde aus dem Bereich entfernt.'), htmlReady($remove_news->getValue('topic')))));
                         else
-                            PageLayout::postMessage(MessageBox::success(sprintf(_('Ankündigung "%s" wurde aus %s Bereichen entfernt.'), htmlReady($remove_news->getValue('topic')), count($ranges))));
+                            PageLayout::postMessage(MessageBox::success(sprintf(_('AnkÃ¼ndigung "%s" wurde aus %s Bereichen entfernt.'), htmlReady($remove_news->getValue('topic')), count($ranges))));
                         $remove_news->store();
                     }
                 }
             } elseif (! $confirmed) {
                 if (count($ranges) == 1)
-                    $text = sprintf(_('- Die Ankündigung "%s" wird aus dem aktiven Bereich entfernt. '
-                                      .'Sie wird dadurch nicht endgültig gelöscht. Es wird nur die Zuordnung entfernt.'), $remove_news_title)."\n";
+                    $text = sprintf(_('- Die AnkÃ¼ndigung "%s" wird aus dem aktiven Bereich entfernt. '
+                                      .'Sie wird dadurch nicht endgÃ¼ltig gelÃ¶scht. Es wird nur die Zuordnung entfernt.'), $remove_news_title)."\n";
                 elseif (count($ranges) > 1)
-                    $text = sprintf(_('- Die Ankündigung "%s" wird aus den %s gewählten Bereichen entfernt. '
-                                      .'Sie wird dadurch nicht endgültig gelöscht. Es werden nur die Zuordnungen entfernt.'), $remove_news_title, count($ranges))."\n";
+                    $text = sprintf(_('- Die AnkÃ¼ndigung "%s" wird aus den %s gewÃ¤hlten Bereichen entfernt. '
+                                      .'Sie wird dadurch nicht endgÃ¼ltig gelÃ¶scht. Es werden nur die Zuordnungen entfernt.'), $remove_news_title, count($ranges))."\n";
             }
             if ($text)
                $question_text[] = $text;
         }
     }
     if (count($question_text) > 1)
-        return _('Wollen Sie die folgenden Aktionen jetzt ausführen?') . "\n" . implode($question_text);
+        return _('Wollen Sie die folgenden Aktionen jetzt ausfÃ¼hren?') . "\n" . implode($question_text);
     elseif (count($question_text) == 1)
-        return _('Wollen Sie diese Aktion jetzt ausführen?') . "\n" . implode($question_text);
+        return _('Wollen Sie diese Aktion jetzt ausfÃ¼hren?') . "\n" . implode($question_text);
 }
 
 /**
@@ -196,7 +196,7 @@ function show_rss_news($range_id, $type)
         case 'user':
             $studip_url = $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'dispatch.php/profile?again=yes&username=' . get_username($range_id);
             $title = get_fullname($range_id) . ' (Stud.IP - ' . Config::get()->UNI_NAME_CLEAN . ')';
-            $description = _('Persönliche Neuigkeiten') . ' ' . $title;
+            $description = _('PersÃ¶nliche Neuigkeiten') . ' ' . $title;
         break;
         case 'sem':
             $studip_url = $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'dispatch.php/course/overview?cid=' . $range_id;

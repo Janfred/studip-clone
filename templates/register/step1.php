@@ -3,20 +3,20 @@
         <h1><?= _('Was ist Stud.IP?') ?></h1>
     </header>
     <section>
-        <?= _('Stud.IP ist ein Open Source Projekt und steht unter der Gnu General Public License (GPL). Das System befindet sich in der ständigen Weiterentwicklung.') ?>
+        <?= _('Stud.IP ist ein Open Source Projekt und steht unter der Gnu General Public License (GPL). Das System befindet sich in der stÃ¤ndigen Weiterentwicklung.') ?>
 
-        <? printf(_('Für Vorschläge und Kritik findet sich immer ein Ohr. Wenden Sie sich hierzu entweder an die %sStud.IP Crew%s oder direkt an die %sEntwickler%s.'),
+        <? printf(_('FÃ¼r VorschlÃ¤ge und Kritik findet sich immer ein Ohr. Wenden Sie sich hierzu entweder an die %sStud.IP Crew%s oder direkt an die %sEntwickler%s.'),
             "<a href=\"mailto:studip-users@lists.sourceforge.net\">", "</a>",
             "<a href=\"dispatch.php/siteinfo/show\">", "</a>") ?>
         <br><br>
-        <?= _('Um den vollen Funktionsumfang von Stud.IP nutzen zu können, müssen Sie sich am System anmelden.') ?><br>
-        <?= _('Das hat viele Vorzüge:') ?><br>
+        <?= _('Um den vollen Funktionsumfang von Stud.IP nutzen zu kÃ¶nnen, mÃ¼ssen Sie sich am System anmelden.') ?><br>
+        <?= _('Das hat viele VorzÃ¼ge:') ?><br>
 
         <ul>
-            <li><?= _('Zugriff auf Ihre Daten von jedem internetfähigen Rechner weltweit,') ?>
+            <li><?= _('Zugriff auf Ihre Daten von jedem internetfÃ¤higen Rechner weltweit,') ?>
             <li><?= _('Anzeige neuer Mitteilungen oder Dateien seit Ihrem letzten Besuch,') ?>
             <li><?= _('Eine eigenes Profil im System,') ?>
-            <li><?= _('die Möglichkeit anderen Personen Nachrichten zu schicken oder mit ihnen zu chatten,') ?>
+            <li><?= _('die MÃ¶glichkeit anderen Personen Nachrichten zu schicken oder mit ihnen zu chatten,') ?>
             <li><?= _('und vieles mehr.') ?></li>
         </ul>
         <?= _('Mit der Anmeldung werden die nachfolgenden Nutzungsbedingungen akzeptiert:') ?>

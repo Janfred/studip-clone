@@ -12,7 +12,7 @@ if ($rule->getStartTime() && $rule->getEndTime()) {
 }
 ?>
 <? if (count($rule->getUngroupedConditions()) == 1): ?>
-    <?= _('Folgende Bedingung muss zur Anmeldung erfüllt sein:') ?>
+    <?= _('Folgende Bedingung muss zur Anmeldung erfÃ¼llt sein:') ?>
     <br>
     <div id="conditions">
         <?php
@@ -25,7 +25,7 @@ if ($rule->getStartTime() && $rule->getEndTime()) {
     </div>
 <? elseif (count($rule->getUngroupedConditions()) > 1): ?>
     <?= _('Mindestens eine der folgenden Bedingungen muss zur Anmeldung '.
-        'erfüllt sein:') ?>
+        'erfÃ¼llt sein:') ?>
     <br>
     <ul id="conditions">
     <? foreach ($rule->getUngroupedConditions() as $condition): ?>
@@ -36,7 +36,7 @@ if ($rule->getStartTime() && $rule->getEndTime()) {
     </ul>
 <? elseif (count($rule->getConditionGroups())): ?>
     <?= _('Mindestens eine der folgenden Bedingungen muss zur Anmeldung '.
-        'erfüllt sein:') ?>
+        'erfÃ¼llt sein:') ?>
     <br>
     <ul id="conditions">
     <? foreach ($rule->getConditiongroups() as $conditiongroup_id => $conditions): ?>

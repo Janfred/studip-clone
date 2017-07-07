@@ -21,14 +21,14 @@
 
         </div>
     <? else : ?>
-        <?= MessageBox::info(_("In dieser Veranstaltung können keine weiteren Raumanfragen gestellt werden.")) ?>
+        <?= MessageBox::info(_("In dieser Veranstaltung kÃ¶nnen keine weiteren Raumanfragen gestellt werden.")) ?>
     <? endif ?>
     <div data-dialog-button>
         <? if (count($options)) : ?>
             <?= Studip\Button::create(_('Erstellen')) ?>
             <?= Studip\LinkButton::createCancel(_('Abbrechen'), $controller->link_for('index/' . $course_id)) ?>
         <? else : ?>
-            <?= Studip\LinkButton::create(_('Zurück zur Übersicht'), $controller->link_for('index/' . $course_id), array('data-dialog' => 'size=big')) ?>
+            <?= Studip\LinkButton::create(_('ZurÃ¼ck zur Ãœbersicht'), $controller->link_for('index/' . $course_id), array('data-dialog' => 'size=big')) ?>
         <? endif ?>
     </div>
 </form>

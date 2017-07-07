@@ -28,11 +28,11 @@ class Settings_UserdomainsController extends Settings_SettingsController
     {
         parent::before_filter($action, $args);
         
-        PageLayout::setHelpKeyword('Basis.HomepageNutzerdom‰nen');
-        PageLayout::setTitle(_('Nutzerdom‰nen bearbeiten'));
+        PageLayout::setHelpKeyword('Basis.HomepageNutzerdom√§nen');
+        PageLayout::setTitle(_('Nutzerdom√§nen bearbeiten'));
         Navigation::activateItem('/profile/edit/userdomains');
-        SkipLinks::addIndex(_('Zugeordnete Nutzerdom‰nen'), 'assigned_userdomains');
-        SkipLinks::addIndex(_('Nutzerdom‰ne ausw‰hlen'), 'select_userdomains');
+        SkipLinks::addIndex(_('Zugeordnete Nutzerdom√§nen'), 'assigned_userdomains');
+        SkipLinks::addIndex(_('Nutzerdom√§ne ausw√§hlen'), 'select_userdomains');
         
         Sidebar::get()->setImage('sidebar/admin-sidebar.png');
     }
@@ -77,10 +77,10 @@ class Settings_UserdomainsController extends Settings_SettingsController
         }
         
         if ($any_change) {
-            PageLayout::postSuccess(_('Die Zuordnung zu Nutzerdom‰nen wurde ge‰ndert.'));
+            PageLayout::postSuccess(_('Die Zuordnung zu Nutzerdom√§nen wurde ge√§ndert.'));
             
             setTempLanguage($this->user->user_id);
-            $this->postPrivateMessage(_("Die Zuordnung zu Nutzerdom‰nen wurde ge‰ndert!\n"));
+            $this->postPrivateMessage(_("Die Zuordnung zu Nutzerdom√§nen wurde ge√§ndert!\n"));
             restoreLanguage();
         }
         

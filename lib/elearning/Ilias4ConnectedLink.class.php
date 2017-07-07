@@ -11,7 +11,7 @@ use Studip\Button, Studip\LinkButton;
  *
  * This class contains methods to generate links to ILIAS 4.
  *
- * @author    Arne Schröder <schroeder@data-quest.de>
+ * @author    Arne SchrÃ¶der <schroeder@data-quest.de>
  * @access    public
  * @modulegroup    elearning_interface_modules
  * @module        Ilias4ConnectedLink
@@ -91,28 +91,28 @@ class Ilias4ConnectedLink extends Ilias3ConnectedLink
             if ($connected_cms[$this->cms_type]->content_module[$current_module]->isAllowed(OPERATION_COPY) AND (! in_array($connected_cms[$this->cms_type]->content_module[$current_module]->module_type, array("lm", "htlm", "sahs", "cat", "crs", "dbk")))) {
                 $output .= "<input type=\"CHECKBOX\" name=\"copy_object\" value=\"1\">";
                 $output .= _("Als Kopie anlegen") . "&nbsp;";
-                $output .= Icon::create('info-circle', 'inactive', ['title' => _('Wenn Sie diese Option wählen, wird eine identische Kopie als eigenständige Instanz des Lernmoduls erstellt. Anderenfalls wird ein Link zum Lernmodul gesetzt.')])->asImg();
+                $output .= Icon::create('info-circle', 'inactive', ['title' => _('Wenn Sie diese Option wÃ¤hlen, wird eine identische Kopie als eigenstÃ¤ndige Instanz des Lernmoduls erstellt. Anderenfalls wird ein Link zum Lernmodul gesetzt.')])->asImg();
                 $output .= "<br>";
             }
             $output .= "<input type=\"RADIO\" name=\"write_permission\" value=\"none\" checked>";
             $output .= _("Keine Schreibrechte") . "&nbsp;";
-            $output .= Icon::create('info-circle', 'inactive', ['title' => _('Nur der/die BesitzerIn des Lernmoduls hat Schreibzugriff für Inhalte und Struktur des Lernmoduls. Tutor/-innen und Lehrende können die Verknüpfung zur Veranstaltung wieder löschen.')])->asImg();
+            $output .= Icon::create('info-circle', 'inactive', ['title' => _('Nur der/die BesitzerIn des Lernmoduls hat Schreibzugriff fÃ¼r Inhalte und Struktur des Lernmoduls. Tutor/-innen und Lehrende kÃ¶nnen die VerknÃ¼pfung zur Veranstaltung wieder lÃ¶schen.')])->asImg();
             $output .= "<br>";
             $output .= "<input type=\"RADIO\" name=\"write_permission\" value=\"dozent\">";
-            $output .= _("Mit Schreibrechten für alle Lehrenden dieser Veranstaltung") . "&nbsp;";
-            $output .= Icon::create('info-circle', 'inactive', ['title' => _('Lehrende haben Schreibzugriff für Inhalte und Struktur des Lernmoduls. Tutor/-innen und Lehrende können die Verknüpfung zur Veranstaltung wieder löschen.')])->asImg();
+            $output .= _("Mit Schreibrechten fÃ¼r alle Lehrenden dieser Veranstaltung") . "&nbsp;";
+            $output .= Icon::create('info-circle', 'inactive', ['title' => _('Lehrende haben Schreibzugriff fÃ¼r Inhalte und Struktur des Lernmoduls. Tutor/-innen und Lehrende kÃ¶nnen die VerknÃ¼pfung zur Veranstaltung wieder lÃ¶schen.')])->asImg();
             $output .= "<br>";
             $output .= "<input type=\"RADIO\" name=\"write_permission\" value=\"tutor\">";
-            $output .= _("Mit Schreibrechten für alle Lehrenden und Tutor/-innen dieser Veranstaltung") . "&nbsp;";
-            $output .= Icon::create('info-circle', 'inactive', ['title' => _('Lehrende und Tutor/-innen haben Schreibzugriff für Inhalte und Struktur des Lernmoduls. Tutor/-innen und Lehrende können die Verknüpfung zur Veranstaltung wieder löschen.')])->asImg();
+            $output .= _("Mit Schreibrechten fÃ¼r alle Lehrenden und Tutor/-innen dieser Veranstaltung") . "&nbsp;";
+            $output .= Icon::create('info-circle', 'inactive', ['title' => _('Lehrende und Tutor/-innen haben Schreibzugriff fÃ¼r Inhalte und Struktur des Lernmoduls. Tutor/-innen und Lehrende kÃ¶nnen die VerknÃ¼pfung zur Veranstaltung wieder lÃ¶schen.')])->asImg();
             $output .= "<br>";
             $output .= "<input type=\"RADIO\" name=\"write_permission\" value=\"autor\">";
-            $output .= _("Mit Schreibrechten für alle Personen dieser Veranstaltung") . "&nbsp;";
-            $output .= Icon::create('info-circle', 'inactive', ['title' => _('Lehrende, Tutor/-innen und Teilnehmer/-innen haben Schreibzugriff für Inhalte und Struktur des Lernmoduls. Tutor/-innen und Lehrende können die Verknüpfung zur Veranstaltung wieder löschen.')])->asImg();
+            $output .= _("Mit Schreibrechten fÃ¼r alle Personen dieser Veranstaltung") . "&nbsp;";
+            $output .= Icon::create('info-circle', 'inactive', ['title' => _('Lehrende, Tutor/-innen und Teilnehmer/-innen haben Schreibzugriff fÃ¼r Inhalte und Struktur des Lernmoduls. Tutor/-innen und Lehrende kÃ¶nnen die VerknÃ¼pfung zur Veranstaltung wieder lÃ¶schen.')])->asImg();
             $output .= "</div>";
-            $output .= "</div><br>" . Button::create(_('Hinzufügen'), 'add') . "<br>";
+            $output .= "</div><br>" . Button::create(_('HinzufÃ¼gen'), 'add') . "<br>";
         } else {
-            $output .= "&nbsp;" . Button::create(_('Hinzufügen'), 'add');
+            $output .= "&nbsp;" . Button::create(_('HinzufÃ¼gen'), 'add');
         }
         $output .= "</form>";
 

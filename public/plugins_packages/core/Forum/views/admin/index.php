@@ -2,12 +2,12 @@
 Helpbar::get()->addPlainText(
     _('Bedienungshinweise'),
     _('Sie befinden sich hier in der Administrationsansicht des Forums. '
-    . 'Mit den blauen Pfeilen können Sie einen oder mehrere Einträge auswählen, welche dann verschoben werden können. '),
+    . 'Mit den blauen Pfeilen kÃ¶nnen Sie einen oder mehrere EintrÃ¤ge auswÃ¤hlen, welche dann verschoben werden kÃ¶nnen. '),
     Icon::create('info', 'info_alt')
 );
 Helpbar::get()->addPlainText(
     '',
-    _('Sie sollten nicht mehr als 20 Einträge gleichzeitig auswählen, da das verschieben sonst sehr lange dauern kann.')
+    _('Sie sollten nicht mehr als 20 EintrÃ¤ge gleichzeitig auswÃ¤hlen, da das verschieben sonst sehr lange dauern kann.')
 );
 ?>
 <div id="forum">

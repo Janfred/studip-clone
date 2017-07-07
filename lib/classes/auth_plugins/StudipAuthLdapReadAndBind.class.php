@@ -8,7 +8,7 @@
 // Stud.IP authentication against LDAP Server using read-only account and
 // user bind
 //
-// Copyright (c) 2006 André Noack <noack@data-quest.de>
+// Copyright (c) 2006 AndrÃ© Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -32,7 +32,7 @@
 * following user bind
 *
 * @access   public
-* @author   André Noack <noack@data-quest.de>
+* @author   AndrÃ© Noack <noack@data-quest.de>
 * @package
 */
 class StudipAuthLdapReadAndBind extends StudipAuthLdap {

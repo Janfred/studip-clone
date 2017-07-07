@@ -130,7 +130,7 @@ class ProfileModulesController extends AuthenticatedController
 
 
         /*$widget = new OptionsWidget();
-        $widget->setTitle(_('Komplexität'));
+        $widget->setTitle(_('KomplexitÃ¤t'));
         $widget->addCheckbox(_('Standard'), $_SESSION['profile_plus']['Komplex'][1],
             URLHelper::getLink('?', array('Komplex1' => 1)), URLHelper::getLink('?', array('Komplex1' => 0)));
         $widget->addCheckbox(_('Erweitert'), $_SESSION['profile_plus']['Komplex'][2],
@@ -215,7 +215,7 @@ class ProfileModulesController extends AuthenticatedController
         }
 
         if ($success === false) {
-            $message = MessageBox::error(_('Ihre Änderungen konnten nicht gespeichert werden.'));
+            $message = MessageBox::error(_('Ihre Ã„nderungen konnten nicht gespeichert werden.'));
         }
         if ($message) {
             PageLayout::postMessage($message);
@@ -237,7 +237,7 @@ class ProfileModulesController extends AuthenticatedController
             $manager->setPluginActivated($plugin->getPluginId(), $this->user_id, $state, 'user');
         }
 
-        PageLayout::postMessage(MessageBox::success(_('Ihre Änderungen wurden gespeichert.')));
+        PageLayout::postMessage(MessageBox::success(_('Ihre Ã„nderungen wurden gespeichert.')));
         $this->redirect($this->url_for('profilemodules/index', array('username' => $this->username)));
     }
 
@@ -318,11 +318,11 @@ class ProfileModulesController extends AuthenticatedController
             if (method_exists($class, 'deleteContent')) {
                 $class->deleteContent();
             } else {
-                PageLayout::postMessage(MessageBox::info(_("Das Plugin/Modul enthält keine Funktion zum Löschen der Inhalte.")));
+                PageLayout::postMessage(MessageBox::info(_("Das Plugin/Modul enthÃ¤lt keine Funktion zum LÃ¶schen der Inhalte.")));
             }
         } else {
-            PageLayout::postMessage(MessageBox::info(sprintf(_("Sie beabsichtigen die Inhalte von %s zu löschen."), $displayname)
-                . "<br>" . _("Wollen Sie die Inhalte wirklich löschen?") . "<br>"
+            PageLayout::postMessage(MessageBox::info(sprintf(_("Sie beabsichtigen die Inhalte von %s zu lÃ¶schen."), $displayname)
+                . "<br>" . _("Wollen Sie die Inhalte wirklich lÃ¶schen?") . "<br>"
                 . LinkButton::createAccept(_('Ja'), URLHelper::getURL("?deleteContent=true&check=true&name=" . $name))
                 . LinkButton::createCancel(_('Nein'))));
         }

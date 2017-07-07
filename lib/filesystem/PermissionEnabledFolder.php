@@ -7,7 +7,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author    AndrÈ Noack <noack@data-quest.de>
+ * @author    Andr√© Noack <noack@data-quest.de>
  * @copyright 2016 Stud.IP Core-Group
  * @license   http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category  Stud.IP
@@ -25,7 +25,7 @@ class PermissionEnabledFolder extends StandardFolder
 
     public static function getTypeName()
     {
-        return _('Ordner mit Zugangsbeschr‰nkung');
+        return _('Ordner mit Zugangsbeschr√§nkung');
     }
 
     public function __construct($folderdata = null)

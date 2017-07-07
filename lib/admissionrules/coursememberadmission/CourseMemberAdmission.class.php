@@ -10,7 +10,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      André Noack <noack@data-quest.de>
+ * @author      AndrÃ© Noack <noack@data-quest.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
  */
@@ -37,7 +37,7 @@ class CourseMemberAdmission extends AdmissionRule
     {
         parent::__construct($ruleId, $courseSetId);
         $this->default_message = _('Sie sind nicht als Teilnehmer der Veranstaltung: %s eingetragen.');
-        $this->default_message1 = _('Sie dürfen nicht als Teilnehmer der Veranstaltung: %s eingetragen sein.');
+        $this->default_message1 = _('Sie dÃ¼rfen nicht als Teilnehmer der Veranstaltung: %s eingetragen sein.');
         if ($ruleId) {
             $this->load();
         } else {
@@ -61,7 +61,7 @@ class CourseMemberAdmission extends AdmissionRule
      * subclass) does.
      */
     public static function getDescription() {
-        return _("Anmelderegeln dieses Typs legen eine Veranstaltung fest, in der die Nutzer bereits eingetragen sein müssen, oder in der sie nicht eingetragen sein dürfen, um sich zu Veranstaltungen des Anmeldesets anmelden zu können.");
+        return _("Anmelderegeln dieses Typs legen eine Veranstaltung fest, in der die Nutzer bereits eingetragen sein mÃ¼ssen, oder in der sie nicht eingetragen sein dÃ¼rfen, um sich zu Veranstaltungen des Anmeldesets anmelden zu kÃ¶nnen.");
     }
 
     /**
@@ -179,7 +179,7 @@ class CourseMemberAdmission extends AdmissionRule
     {
         $errors = parent::validate($data);
         if (!($data['mandatory_course_id'] || $data['mandatory_course_id_old'])) {
-            $errors[] = _('Bitte wählen Sie eine Veranstaltung aus.');
+            $errors[] = _('Bitte wÃ¤hlen Sie eine Veranstaltung aus.');
         }
         return $errors;
     }

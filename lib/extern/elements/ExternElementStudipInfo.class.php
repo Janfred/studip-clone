@@ -93,8 +93,8 @@ class ExternElementStudipInfo extends ExternElement {
         $info = _("Geben Sie jeweils einen Text ein, der an der entsprechenden Stelle ausgegeben werden soll.");
         $attributes = array("headline", "homeinst", "involvedinst", "countuser",
                 "countpostings", "countdocuments");
-        $titles = array(_("Überschrift:"), _("Heimatinstitut:"), _("beteiligte Institute:"),
-                _("Teilnehmer:"), _("Forenbeiträge:"), _("Dokumente:"));
+        $titles = array(_("Ãœberschrift:"), _("Heimatinstitut:"), _("beteiligte Institute:"),
+                _("Teilnehmer:"), _("ForenbeitrÃ¤ge:"), _("Dokumente:"));
         for ($i = 0; $i < sizeof($attributes); $i++)
             $table .= $edit_form->editTextfieldGeneric($attributes[$i], $titles[$i], $info, 40, 150);
         
@@ -102,7 +102,7 @@ class ExternElementStudipInfo extends ExternElement {
         $content_table .= $edit_form->editBlankContent();
         
         $attributes = array("font_face", "font_size", "font_color", "font_class", "font_style");
-        $headlines = array("font" => _("Schriftformatierung für Textersetzungen"));
+        $headlines = array("font" => _("Schriftformatierung fÃ¼r Textersetzungen"));
         $content_table .= $edit_form->getEditFormContent($attributes, $headlines);
         $content_table .= $edit_form->editBlankContent();
         

@@ -45,9 +45,9 @@ class Course_DatesController extends AuthenticatedController
             }
             $success = $date->addTopic($topic);
             if ($success) {
-                PageLayout::postSuccess(_('Thema wurde hinzugefügt.'));
+                PageLayout::postSuccess(_('Thema wurde hinzugefÃ¼gt.'));
             } else {
-                PageLayout::postInfo(_('Thema war schon mit dem Termin verknüpft.'));
+                PageLayout::postInfo(_('Thema war schon mit dem Termin verknÃ¼pft.'));
             }
         }
         Navigation::activateItem('/course/schedule/dates');
@@ -147,7 +147,7 @@ class Course_DatesController extends AuthenticatedController
                 $start_time = strtotime((Request::get('start_stunde') ?: '0') . ':' . (Request::get('start_minute') ?: '0'), $start_date);
                 $end_time = strtotime((Request::get('end_stunde') ?: '0') . ':' . (Request::get('end_minute') ?: '0'), $start_date);
                 if (!($start_time && $end_time && $start_time < $end_time)) {
-                    $errors[] = _('Bitte geben Sie korrekte Werte für Start- und Endzeit an!');
+                    $errors[] = _('Bitte geben Sie korrekte Werte fÃ¼r Start- und Endzeit an!');
                 }
             }
             $termin = CourseDate::find(Request::option('singleDateID'));
@@ -162,7 +162,7 @@ class Course_DatesController extends AuthenticatedController
             $termin->date_typ = Request::int('dateType');
             if (!count($errors)) {
                 if ($termin->store()) {
-                    PageLayout::postSuccess(_('Der Termin wurde geändert.'));
+                    PageLayout::postSuccess(_('Der Termin wurde geÃ¤ndert.'));
                 }
                 return $this->relocate('course/dates');
             } else {
@@ -212,7 +212,7 @@ class Course_DatesController extends AuthenticatedController
             $termin->statusgruppen = Statusgruppen::findMany($assigned_groups);
 
             if ($termin->store()) {
-                PageLayout::postSuccess(_('Der Termin wurde geändert.'));
+                PageLayout::postSuccess(_('Der Termin wurde geÃ¤ndert.'));
             }
         }
         $this->relocate('course/dates');
@@ -222,7 +222,7 @@ class Course_DatesController extends AuthenticatedController
     {
         Navigation::activateItem('/course/schedule/dates');
         if (Request::isAjax()) {
-            PageLayout::setTitle(_("Thema hinzufügen"));
+            PageLayout::setTitle(_("Thema hinzufÃ¼gen"));
         }
 
         $this->date   = new CourseDate(Request::option('termin_id'));
@@ -338,7 +338,7 @@ class Course_DatesController extends AuthenticatedController
                 } elseif ($singledate->getComment()) {
                     $dates[] = array(
                         'date'  => $singledate->toString(),
-                        'title' => _('fällt aus') . ' (' . _('Kommentar:') . ' ' . $singledate->getComment() . ')',
+                        'title' => _('fÃ¤llt aus') . ' (' . _('Kommentar:') . ' ' . $singledate->getComment() . ')',
                         'description' => '',
                         'start' => $singledate->getStartTime(),
                         'related_persons' => array(),

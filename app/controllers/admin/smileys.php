@@ -81,13 +81,13 @@ class Admin_SmileysController extends AuthenticatedController
             $short = Request::get('short', $smiley->short);
             if (!$message and $smiley->short != $short) { // rename short
                 if (Smiley::getByShort($short)->id) {
-                    $error = sprintf(_('Es gibt bereits einen Smileys mit dem Kürzel "%s".'), $short);
+                    $error = sprintf(_('Es gibt bereits einen Smileys mit dem KÃ¼rzel "%s".'), $short);
                     PageLayout::postMessage(MessageBox::error($error));
                     $success = false;
                 } else {
                     $smiley->short = $short;
                     $smiley->store();
-                    PageLayout::postMessage(MessageBox::success(_('Kürzel erfolgreich geändert.')));
+                    PageLayout::postMessage(MessageBox::success(_('KÃ¼rzel erfolgreich geÃ¤ndert.')));
                 }
             }
 
@@ -115,13 +115,13 @@ class Admin_SmileysController extends AuthenticatedController
             $ids = Request::intArray('smiley_id');
             Smiley::remove($ids);
 
-            $message = sprintf( _('%d Smiley(s) erfolgreich gelöscht.'), count($ids));
+            $message = sprintf( _('%d Smiley(s) erfolgreich gelÃ¶scht.'), count($ids));
         } else {
             $smiley = Smiley::getById($id);
             $name = $smiley->name;
             $smiley->delete();
 
-            $message = sprintf( _('Smiley "%s" erfolgreich gelöscht.'), $name);
+            $message = sprintf( _('Smiley "%s" erfolgreich gelÃ¶scht.'), $name);
         }
         PageLayout::postMessage(MessageBox::success($message));
 
@@ -137,7 +137,7 @@ class Admin_SmileysController extends AuthenticatedController
     {
         $updated = Smiley::updateUsage();
 
-        $message  = sprintf(_('%d Zählerstände aktualisiert'), $updated);
+        $message  = sprintf(_('%d ZÃ¤hlerstÃ¤nde aktualisiert'), $updated);
         $msg = $updated > 0
             ? MessageBox::success($message)
             : MessageBox::info($message);
@@ -155,14 +155,14 @@ class Admin_SmileysController extends AuthenticatedController
     {
         $result = Smiley::refresh();
 
-        $message = sprintf(_('%u Operationen wurden durchgeführt.'), array_sum($result));
+        $message = sprintf(_('%u Operationen wurden durchgefÃ¼hrt.'), array_sum($result));
         $details = array(
             sprintf(_('%d Smileys aktualisiert'), $result['update']),
-            sprintf(_('%d Smileys eingefügt'), $result['insert']),
-            sprintf(_('%d Smileys gelöscht'), $result['delete'])
+            sprintf(_('%d Smileys eingefÃ¼gt'), $result['insert']),
+            sprintf(_('%d Smileys gelÃ¶scht'), $result['delete'])
         );
         if (isset($result['favorites'])) {
-            $details[] = sprintf(_('%d Favoriten geändert'), $result['favorites']);
+            $details[] = sprintf(_('%d Favoriten geÃ¤ndert'), $result['favorites']);
         }
         $msg = array_sum($result) > 0
             ? MessageBox::success($message, $details, true)
@@ -189,7 +189,7 @@ class Admin_SmileysController extends AuthenticatedController
         // File submitted?
         $upload = $_FILES['smiley_file'];
         if (empty($upload) or empty($upload['name'])) {
-            $error = _('Sie haben keine Datei zum Hochladen ausgewählt!');
+            $error = _('Sie haben keine Datei zum Hochladen ausgewÃ¤hlt!');
             PageLayout::postMessage(MessageBox::error($error));
             return;
         }
@@ -266,9 +266,9 @@ class Admin_SmileysController extends AuthenticatedController
 
         $actions = new ActionsWidget();
         $actions->addLink(_('Neues Smiley hochladen'), $this->url_for('admin/smileys/upload', $view), Icon::create('add', 'clickable'))->asDialog('size=auto');
-        $actions->addLink(_('Smileys zählen'), $this->url_for('admin/smileys/count', $view), Icon::create('code', 'clickable'));
+        $actions->addLink(_('Smileys zÃ¤hlen'), $this->url_for('admin/smileys/count', $view), Icon::create('code', 'clickable'));
         $actions->addLink(_('Tabelle aktualisieren'), $this->url_for('admin/smileys/refresh', $view), Icon::create('refresh', 'clickable'));
-        $actions->addLink(_('Smiley-Übersicht öffnen'), URLHelper::getLink('dispatch.php/smileys'), Icon::create('smiley', 'clickable'))->asDialog();
+        $actions->addLink(_('Smiley-Ãœbersicht Ã¶ffnen'), URLHelper::getLink('dispatch.php/smileys'), Icon::create('smiley', 'clickable'))->asDialog();
         $sidebar->addWidget($actions);
 
         $widget = new SelectWidget(_('Filter'), $this->url_for('admin/smileys/index'), 'view');
@@ -285,7 +285,7 @@ class Admin_SmileysController extends AuthenticatedController
             'top20' => _('Top 20'),
             'used'  => _('Benutzte'),
             'none'  => _('Nicht benutzte'),
-            'short' => _('Nur mit Kürzel')
+            'short' => _('Nur mit KÃ¼rzel')
         );
         $group = new SelectGroupElement(_('Gruppiert'));
         foreach ($groups as $key => $label) {

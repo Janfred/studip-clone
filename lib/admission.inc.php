@@ -174,7 +174,7 @@ function renumber_admission ($seminar_id, $send_message = TRUE)
                     $seminar->name,
                     $seminar->getFormattedTurnus(),
                     $position);
-                $subject = sprintf(_('Ihre Position auf der Warteliste der Veranstaltung %s wurde verändert'), $seminar->name);
+                $subject = sprintf(_('Ihre Position auf der Warteliste der Veranstaltung %s wurde verÃ¤ndert'), $seminar->name);
                 restoreLanguage();
 
                 $messaging->insert_message($message, $username, '____%system%____', FALSE, FALSE, '1', FALSE, $subject);
@@ -279,9 +279,9 @@ function normal_update_admission($seminar_id, $send_message = TRUE)
                     if (($sem_preliminary || $affected > 0) && $send_message) {
                         setTempLanguage($row['user_id']);
                         if (!$sem_preliminary) {
-                            $message = sprintf (_('Sie sind in die Veranstaltung **%s (%s)** eingetragen worden, da für Sie ein Platz frei geworden ist. Ab sofort finden Sie die Veranstaltung in der Übersicht Ihrer Veranstaltungen. Damit sind Sie auch für die Präsenzveranstaltung zugelassen.'), $seminar->getName(), $seminar->getFormattedTurnus(true));
+                            $message = sprintf (_('Sie sind in die Veranstaltung **%s (%s)** eingetragen worden, da fÃ¼r Sie ein Platz frei geworden ist. Ab sofort finden Sie die Veranstaltung in der Ãœbersicht Ihrer Veranstaltungen. Damit sind Sie auch fÃ¼r die PrÃ¤senzveranstaltung zugelassen.'), $seminar->getName(), $seminar->getFormattedTurnus(true));
                         } else {
-                            $message = sprintf (_('Sie haben den Status vorläufig akzeptiert in der Veranstaltung **%s (%s)** erhalten, da für Sie ein Platz freigeworden ist.'), $seminar->getName(), $seminar->getFormattedTurnus(true));
+                            $message = sprintf (_('Sie haben den Status vorlÃ¤ufig akzeptiert in der Veranstaltung **%s (%s)** erhalten, da fÃ¼r Sie ein Platz freigeworden ist.'), $seminar->getName(), $seminar->getFormattedTurnus(true));
                         }
                         $subject = sprintf(_("Teilnahme an der Veranstaltung %s"),$seminar->getName());
                         restoreLanguage();

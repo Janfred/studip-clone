@@ -45,7 +45,7 @@ $is_exTermin = $termin instanceof CourseExDate;
     <? endif; ?>
 
     <? if ($is_exTermin && ($comment = $termin->content)) : ?>
-        <span class="is_ex_termin" style="font-style: italic"><?= _('(fällt aus)') ?></span>
+        <span class="is_ex_termin" style="font-style: italic"><?= _('(fÃ¤llt aus)') ?></span>
         <?= tooltipIcon($termin->content, false) ?>
     <? elseif ($name = SemesterHoliday::isHoliday($termin->date, false) && $is_exTermin): ?>
         <?= $room_holiday ?>
@@ -61,7 +61,7 @@ $is_exTermin = $termin instanceof CourseExDate;
 
     <? $room_request = RoomRequest::find(RoomRequest::existsByDate($termin->id, true)) ?>
     <? if (isset($room_request)) : ?>
-        <? $msg_info = _('Für diesen Termin existiert eine Raumanfrage: ') . $room_request->getInfo() ?>
+        <? $msg_info = _('FÃ¼r diesen Termin existiert eine Raumanfrage: ') . $room_request->getInfo() ?>
         <?= tooltipIcon($msg_info) ?>
     <? endif ?>
     </td>
@@ -75,7 +75,7 @@ $is_exTermin = $termin instanceof CourseExDate;
                 $linkAttributes
             ),
             _('Kommentare bearbeiten'),
-            Icon::create('edit', 'clickable', ['title' => _('Kommentar für diesen Termin bearbeiten')]),
+            Icon::create('edit', 'clickable', ['title' => _('Kommentar fÃ¼r diesen Termin bearbeiten')]),
             ['data-dialog' => 'size=50%']
         ) ?>
 
@@ -84,14 +84,14 @@ $is_exTermin = $termin instanceof CourseExDate;
         <? if (!empty($course_topic)) : ?>
             <? if (Config::get()->RESOURCES_ENABLE_EXPERT_SCHEDULE_VIEW) : ?>
                 <? $warning[] = _('Diesem Termin ist im Ablaufplan ein Thema zugeordnet.
-                    Titel und Beschreibung des Themas bleiben erhalten und können in der Expertenansicht des Ablaufplans einem anderen Termin wieder zugeordnet werden.'); ?>
+                    Titel und Beschreibung des Themas bleiben erhalten und kÃ¶nnen in der Expertenansicht des Ablaufplans einem anderen Termin wieder zugeordnet werden.'); ?>
             <? else : ?>
                 <? $warning[] = _('Diesem Termin ist ein Thema zugeordnet.'); ?>
             <? endif ?>
         <? endif ?>
 
         <? if (Config::get()->RESOURCES_ENABLE && $termin->getRoom()) : ?>
-            <? $warning[] = _('Dieser Termin hat eine Raumbuchung, welche mit dem Termin gelöscht wird.'); ?>
+            <? $warning[] = _('Dieser Termin hat eine Raumbuchung, welche mit dem Termin gelÃ¶scht wird.'); ?>
         <? endif ?>
 
         <? $params = [
@@ -124,7 +124,7 @@ $is_exTermin = $termin instanceof CourseExDate;
             'class'        => 'middle',
             'name'         => 'delete_single_date',
             'style'        => 'margin: 0px',
-            'data-confirm' => _('Wollen Sie diesen Termin wirklich löschen / ausfallen lassen?') . (!empty($warning) ? implode("\n", $warning) : ''),
+            'data-confirm' => _('Wollen Sie diesen Termin wirklich lÃ¶schen / ausfallen lassen?') . (!empty($warning) ? implode("\n", $warning) : ''),
             'formaction'   => $controller->url_for(
                 'course/timesrooms/deleteSingle/' . $termin->termin_id,
                 ['cycle_id' => $termin->metadate_id] + $linkAttributes
@@ -136,7 +136,7 @@ $is_exTermin = $termin instanceof CourseExDate;
 
         <? $actionMenu->addButton(
             'delete_part',
-            _('Termin löschen'), Icon::create('trash', 'clickable', $params)
+            _('Termin lÃ¶schen'), Icon::create('trash', 'clickable', $params)
         ) ?>
     <? endif; ?>
         <?= $actionMenu->render() ?>

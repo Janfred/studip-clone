@@ -4,7 +4,7 @@
 # Lifter010: TODO
 
 /*
- * Copyright (C) 2007 - André Klaßen (aklassen@uos.de)
+ * Copyright (C) 2007 - AndrÃ© KlaÃŸen (aklassen@uos.de)
  * Copyright (C) 2008 - Marcus Lunzenauer (mlunzena@uos)
  *
  * This program is free software; you can redistribute it and/or
@@ -20,7 +20,7 @@
  * @package        studip
  * @subpackage lib
  *
- * @author        André Klaßen (aklassen@uos)
+ * @author        AndrÃ© KlaÃŸen (aklassen@uos)
  * @author        Marcus Lunzenauer (mlunzena@uos)
  * @copyright (c) Authors
  * @since         1.7
@@ -263,16 +263,16 @@ class Avatar {
 
         try {
 
-            // Bilddatei ist zu groß
+            // Bilddatei ist zu groÃŸ
             if ($_FILES[$userfile]['size'] > self::MAX_FILE_SIZE) {
-                throw new Exception(sprintf(_("Die hochgeladene Bilddatei ist %s KB groß. Die maximale Dateigröße beträgt %s KB!"),
+                throw new Exception(sprintf(_("Die hochgeladene Bilddatei ist %s KB groÃŸ. Die maximale DateigrÃ¶ÃŸe betrÃ¤gt %s KB!"),
                                                                         round($_FILES[$userfile]['size'] / 1024),
                                                                         self::MAX_FILE_SIZE / 1024));
             }
 
-            // keine Datei ausgewählt!
+            // keine Datei ausgewÃ¤hlt!
             if (!$_FILES[$userfile]['name']) {
-                throw new Exception(_("Sie haben keine Datei zum Hochladen ausgewählt!"));
+                throw new Exception(_("Sie haben keine Datei zum Hochladen ausgewÃ¤hlt!"));
             }
 
             // get extension
@@ -395,7 +395,7 @@ class Avatar {
             IMAGETYPE_JPEG => "imagecreatefromjpeg",
             IMAGETYPE_PNG    => "imagecreatefrompng");
         if (!isset($lookup[$type])) {
-            throw new Exception(_("Der Typ des Bilds wird nicht unterstützt."));
+            throw new Exception(_("Der Typ des Bilds wird nicht unterstÃ¼tzt."));
         }
         $image = $lookup[$type]($filename);
 

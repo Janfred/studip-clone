@@ -148,7 +148,7 @@ $privileges = array(
                 'MVVFreigabe'   => 3
             )
         ),
-        // verknüpfte Objekte
+        // verknÃ¼pfte Objekte
         'abschluss_assignments' => array(
             'default' => array(
                 'MVVEntwickler' => 1,

@@ -8,7 +8,7 @@
 // StudipLitSearchPluginZ3950Abstract.class.php
 //
 //
-// Copyright (c) 2003 André Noack <noack@data-quest.de>
+// Copyright (c) 2003 AndrÃ© Noack <noack@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@ require_once 'StudipLitSearchPluginAbstract.class.php';
 *
 *
 * @access   public
-* @author   André Noack <noack@data-quest.de>
+* @author   AndrÃ© Noack <noack@data-quest.de>
 * @package
 **/
 class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
@@ -175,7 +175,7 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 
     function doCheckAccession($accession_number){
         if (!$this->z_accession_bib){
-            $this->addError("error", sprintf(_("Attribut für Zugriffsnummer fehlt! (%s)"), mb_strtolower(get_class($this))));
+            $this->addError("error", sprintf(_("Attribut fÃ¼r Zugriffsnummer fehlt! (%s)"), mb_strtolower(get_class($this))));
             return false;
         }
         if (!$accession_number){
@@ -183,7 +183,7 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
             return false;
         }
         if (!$this->checkAccessionNumber($accession_number)){
-            $this->addError("error", sprintf(_("Zugriffsnummer hat falsches Format für diesen Katalog!")));
+            $this->addError("error", sprintf(_("Zugriffsnummer hat falsches Format fÃ¼r diesen Katalog!")));
             return false;
         }
         if(!$this->z_id){
@@ -399,25 +399,25 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
     }
 
     function ConvertUmlaute($text){
-        $text = str_replace("ä","ae",$text);
-        $text = str_replace("Ä","Ae",$text);
-        $text = str_replace("ö","oe",$text);
-        $text = str_replace("Ö","Oe",$text);
-        $text = str_replace("ü","ue",$text);
-        $text = str_replace("Ü","Ue",$text);
-        $text = str_replace("ß","ss",$text);
+        $text = str_replace("Ã¤","ae",$text);
+        $text = str_replace("Ã„","Ae",$text);
+        $text = str_replace("Ã¶","oe",$text);
+        $text = str_replace("Ã–","Oe",$text);
+        $text = str_replace("Ã¼","ue",$text);
+        $text = str_replace("Ãœ","Ue",$text);
+        $text = str_replace("ÃŸ","ss",$text);
 
-        $text = str_replace("É","E",$text);
-        $text = str_replace("È","E",$text);
-        $text = str_replace("Ê","E",$text);
-        $text = str_replace("á","ae",$text);
-        $text = str_replace("à","ae",$text);
-        $text = str_replace("é","e",$text);
-        $text = str_replace("è","e",$text);
-        $text = str_replace("î","i",$text);
-        $text = str_replace("í","i",$text);
-        $text = str_replace("ì","i",$text);
-        $text = str_replace("ç","c",$text);
+        $text = str_replace("Ã‰","E",$text);
+        $text = str_replace("Ãˆ","E",$text);
+        $text = str_replace("ÃŠ","E",$text);
+        $text = str_replace("Ã¡","ae",$text);
+        $text = str_replace("Ã ","ae",$text);
+        $text = str_replace("Ã©","e",$text);
+        $text = str_replace("Ã¨","e",$text);
+        $text = str_replace("Ã®","i",$text);
+        $text = str_replace("Ã­","i",$text);
+        $text = str_replace("Ã¬","i",$text);
+        $text = str_replace("Ã§","c",$text);
 
         return $text;
     }

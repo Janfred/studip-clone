@@ -8,7 +8,7 @@
 // StudipSemSearchForm.class.php
 // Class to build search formular and execute search
 //
-// Copyright (c) 2003 André Noack <noack@data-quest.de>
+// Copyright (c) 2003 AndrÃ© Noack <noack@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@
 *
 *
 * @access   public
-* @author   André Noack <noack@data-quest.de>
+* @author   AndrÃ© Noack <noack@data-quest.de>
 * @package  DBTools
 **/
 class StudipSemSearch {
@@ -88,9 +88,9 @@ class StudipSemSearch {
                                                     )
                                 );
         $search_buttons = array('do_search' => array('caption' => _("Suchen"), 'info' => _("Suche starten")),
-                                'sem_change' => array('caption' => _('Auswählen'), 'info' => _("anderes Semester auswählen")),
+                                'sem_change' => array('caption' => _('AuswÃ¤hlen'), 'info' => _("anderes Semester auswÃ¤hlen")),
                                 'new_search' => array('caption' => _('Neue Suche'), 'info' =>_("Neue Suche starten")));
-        //workaround: Qicksearch ändert den Namen des Eingabefeldes
+        //workaround: Qicksearch Ã¤ndert den Namen des Eingabefeldes
         if (Request::get("search_sem_quick_search_parameter")) {
             Request::set('search_sem_quick_search', Request::get("search_sem_quick_search_parameter"));
         }

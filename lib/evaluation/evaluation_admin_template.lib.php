@@ -115,7 +115,7 @@ class EvalTemplateGUI {
     $input->attr( "name", "template_editpol_scale_button" );
     $input->attr( "border", "0" );
     $input->attr( "style", "vertical-align:middle;" );
-    $input->stri( tooltip( _("Ausgewählte Vorlage bearbeiten." ), TRUE ) );
+    $input->stri( tooltip( _("AusgewÃ¤hlte Vorlage bearbeiten." ), TRUE ) );
     $input->attr ("src", EVAL_PIC_EDIT);
 
     $td->addContent($input);
@@ -176,7 +176,7 @@ class EvalTemplateGUI {
     $input->attr( "name", "template_editlikert_scale_button" );
     $input->attr( "border", "0" );
     $input->attr( "style", "vertical-align:middle;" );
-    $input->stri( tooltip( _("Ausgewählte Vorlage bearbeiten." ), TRUE ) );
+    $input->stri( tooltip( _("AusgewÃ¤hlte Vorlage bearbeiten." ), TRUE ) );
     $input->attr ("src", EVAL_PIC_EDIT);
 
     $td->addContent($input);
@@ -238,7 +238,7 @@ class EvalTemplateGUI {
     $input->attr( "name", "template_editnormal_scale_button" );
     $input->attr( "border", "0" );
     $input->attr( "style", "vertical-align:middle;" );
-    $input->stri( tooltip( _("Ausgewählte Vorlage bearbeiten." ), TRUE ) );
+    $input->stri( tooltip( _("AusgewÃ¤hlte Vorlage bearbeiten." ), TRUE ) );
     $input->attr ("src", EVAL_PIC_EDIT);
 
     $td->addContent($input);
@@ -298,7 +298,7 @@ class EvalTemplateGUI {
         $input->attr( "name", "template_editfree_scale_button" );
         $input->attr( "border", "0" );
         $input->attr( "style", "vertical-align:middle;" );
-        $input->stri( tooltip( _("Ausgewählte Vorlage bearbeiten." ), TRUE ) );
+        $input->stri( tooltip( _("AusgewÃ¤hlte Vorlage bearbeiten." ), TRUE ) );
         $input->attr ("src", EVAL_PIC_EDIT);
         $td->addContent($input);
         $tr->addContent($td);
@@ -429,7 +429,7 @@ class EvalTemplateGUI {
        $img = new HTMpty( "img" );
        $img->attr( "src", Icon::create('info-circle', 'inactive')->asImagePath(16));
        $img->attr( "class", "middle" );
-       $img->stri( tooltip( _("Geben Sie hier einen Namen für Ihre Vorlage ein. Wenn Sie eine systemweite Vorlage bearbeiten, und speichern, wird eine neue Vorlage für Sie persönlich angelegt."),
+       $img->stri( tooltip( _("Geben Sie hier einen Namen fÃ¼r Ihre Vorlage ein. Wenn Sie eine systemweite Vorlage bearbeiten, und speichern, wird eine neue Vorlage fÃ¼r Sie persÃ¶nlich angelegt."),
                 FALSE, TRUE ) );
        $form->cont( $img );
        $form->cont( $this->BR );
@@ -740,17 +740,17 @@ class EvalTemplateGUI {
        $input->attr( "value", "QuestionAnswersCreated");
        $form->cont( $input );
 
-       $input = Button::create(_('Übernehmen'),
+       $input = Button::create(_('Ãœbernehmen'),
                 'template_save2_button');
     }
     else{
-        $input = Button::create(_('Übernehmen'),
+        $input = Button::create(_('Ãœbernehmen'),
                 'template_save_button');
     }
 
     if( !mb_strstr($this->command, "create") ) {
        $showDelete = YES;
-       $input2 = Button::createAccept(_('Löschen'),
+       $input2 = Button::createAccept(_('LÃ¶schen'),
                 'template_delete_button');
     }
 
@@ -855,7 +855,7 @@ class EvalTemplateGUI {
      $img = new HTMpty( "img" );
      $img->attr( "src", Icon::create('info-circle', 'inactive')->asImagePath(16));
      $img->attr( "class", "middle" );
-     $img->stri( tooltip( _("Geben Sie hier einen Namen für Ihre Vorlage ein. Ändern Sie den Namen, um eine neue Vorlage anzulegen." ),
+     $img->stri( tooltip( _("Geben Sie hier einen Namen fÃ¼r Ihre Vorlage ein. Ã„ndern Sie den Namen, um eine neue Vorlage anzulegen." ),
            FALSE, TRUE ) );
      $form->cont( $img );
      $form->cont( $this->BR );
@@ -881,7 +881,7 @@ class EvalTemplateGUI {
     $form->cont( $this->BR );
 
     /* uebernehmen / loeschen Button ---------------------------- */
-    $input = Button::create(_('Übernehmen'),
+    $input = Button::create(_('Ãœbernehmen'),
                 'template_savefree_button');
     $odb = new EvaluationObjectDB();
     //if($odb->getGlobalPerm()=="root"){
@@ -894,7 +894,7 @@ class EvalTemplateGUI {
     //   $loesch=1;
     if( !mb_strstr($this->command, "create") ) {
         $showDelete = YES;
-        $input2 = Button::createAccept(_('Löschen'),
+        $input2 = Button::createAccept(_('LÃ¶schen'),
                 'template_delete_button');
     }
 
@@ -976,7 +976,7 @@ class EvalTemplateGUI {
                'isPreview' => YES]), Icon::create('question-circle', 'clickable'),
           ['target' => $evalID,
           'onClick' => "openEval('".$evalID."'); return false;"]);
-      $actions->addLink(_('Zurück zur Evaluations-Verwaltung'), URLHelper::getLink('admin_evaluation.php',
+      $actions->addLink(_('ZurÃ¼ck zur Evaluations-Verwaltung'), URLHelper::getLink('admin_evaluation.php',
           ['page' => 'overview',
            'check_abort_creation_button' => '1',
           'evalID' => $evalID,

@@ -1,13 +1,13 @@
 <?php
 /**
- * Elearning Interface f¸r Veranstaltungen/ Einrichtungen
+ * Elearning Interface f√ºr Veranstaltungen/ Einrichtungen
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author   Arne Schrˆder <schroeder@data-quest.de>
+ * @author   Arne Schr√∂der <schroeder@data-quest.de>
  * @license  http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category Stud.IP
  * @since    3.1
@@ -110,7 +110,7 @@ class Course_ElearningController extends AuthenticatedController
 
                     $connected_cms[$connection["cms"]]->newContentModule($connection["id"], $connection["type"], true);
                     $connected_modules[$key]['title'] = $connected_cms[$connection["cms"]]->content_module[$connection["id"]]->getTitle();
-                    $title_tmp[$key] = str_replace(array('‰','ˆ','¸','ﬂ'),array('ae','oe','ue','ss'),mb_strtolower($connected_modules[$key]['title']));
+                    $title_tmp[$key] = str_replace(array('√§','√∂','√º','√ü'),array('ae','oe','ue','ss'),mb_strtolower($connected_modules[$key]['title']));
                     $type_tmp[$key] = array_search($connection['type'], array_keys($GLOBALS['ELEARNING_INTERFACE_MODULES'][$connection["cms"]]['types']));
                     $class_tmp[$key] = $GLOBALS['ELEARNING_INTERFACE_MODULES'][$connection["cms"]]["CLASS_PREFIX"];
                 }
@@ -160,7 +160,7 @@ class Course_ElearningController extends AuthenticatedController
     {
         global $connected_cms, $current_module;
         if (! $this->rechte)
-            throw new AccessDeniedException(_('Keine Berechtigung zum Bearbeiten der Lernmodul-Verkn¸pfungen.'));
+            throw new AccessDeniedException(_('Keine Berechtigung zum Bearbeiten der Lernmodul-Verkn√ºpfungen.'));
         Navigation::activateItem('/course/elearning/edit');
         $GLOBALS['view'] = 'edit';
         // ggf. neuen Ilias4-Kurs anlegen
@@ -225,7 +225,7 @@ class Course_ElearningController extends AuthenticatedController
 
                     $connected_cms[$connection["cms"]]->newContentModule($connection["id"], $connection["type"], true);
                     $connected_modules[$key]['title'] = $connected_cms[$connection["cms"]]->content_module[$connection["id"]]->getTitle();
-                    $title_tmp[$key] = str_replace(array('‰','ˆ','¸','ﬂ'),array('ae','oe','ue','ss'),mb_strtolower($connected_modules[$key]['title']));
+                    $title_tmp[$key] = str_replace(array('√§','√∂','√º','√ü'),array('ae','oe','ue','ss'),mb_strtolower($connected_modules[$key]['title']));
                     $type_tmp[$key] = array_search($connection['type'], array_keys($GLOBALS['ELEARNING_INTERFACE_MODULES'][$connection["cms"]]['types']));
                     $class_tmp[$key] = $GLOBALS['ELEARNING_INTERFACE_MODULES'][$connection["cms"]]["CLASS_PREFIX"];
                 }
@@ -310,7 +310,7 @@ class Course_ElearningController extends AuthenticatedController
                     }
                 }
 
-                // ILIAS 4: ggf. Hinweis auf Mˆglichkeit, weitere Modulformen als Link einzubinden
+                // ILIAS 4: ggf. Hinweis auf M√∂glichkeit, weitere Modulformen als Link einzubinden
                 elseif (method_exists($connected_cms[$this->cms_select], "updateConnections") AND count($connected_cms[$this->cms_select]->types['webr'])) {
                     $this->show_ilias_link_info = true;
                     $crs_data = ObjectConnections::getConnectionModuleId($this->seminar_id, "crs", $this->cms_select);

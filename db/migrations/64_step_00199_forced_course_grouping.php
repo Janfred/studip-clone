@@ -7,7 +7,7 @@ class Step00199ForcedCourseGrouping extends Migration
             'name'        => 'MY_COURSES_FORCE_GROUPING',
             'type'        => 'string',
             'value'       => 'sem_number',
-            'description' => 'Legt fest, ob die persönliche Veranstaltungsübersicht systemweit zwangsgruppiert werden soll, wenn keine eigene Gruppierung eingestellt ist. Werte: not_grouped, sem_number, sem_tree_id, sem_status, gruppe, dozent_id.'
+            'description' => 'Legt fest, ob die persÃ¶nliche VeranstaltungsÃ¼bersicht systemweit zwangsgruppiert werden soll, wenn keine eigene Gruppierung eingestellt ist. Werte: not_grouped, sem_number, sem_tree_id, sem_status, gruppe, dozent_id.'
         )
     );
 

@@ -29,7 +29,7 @@
                 <? endif; ?>
                 <? if (MvvPerm::havePermCreate($assignment)) : ?>
                     <a href="<?= $controller->url_for('/delete_modul', $abschnitt->id, $assignment->modul->id) ?>">
-                        <?= Icon::create('trash', 'clickable', array('title' => _('Zuordnung löschen')))->asImg(); ?>
+                        <?= Icon::create('trash', 'clickable', array('title' => _('Zuordnung lÃ¶schen')))->asImg(); ?>
                     </a>
                 <? endif; ?>
                 </td>
@@ -46,12 +46,12 @@
             <tr>
                 <td colspan="2">
                     <form action="<?= $controller->url_for('/add_modul', $version->id) ?>" method="post">
-                        <?= _('Modul hinzufügen') ?>
+                        <?= _('Modul hinzufÃ¼gen') ?>
                         <?= CSRFProtection::tokenTag() ?>
                         <?= $search_modul_abschnitt->render(); ?>
                         <?= Icon::create('search', 'clickable', ['title' => _('Modul suchen'), 'name' => 'search_stgteil', 'data-qs_name' => $search_modul_abschnitt->getId(), 'data-qs_id' => $qs_search_modul_abschnitt_id, 'data-qs_submit' => 'no',  'class' => 'mvv-qs-button'])->asInput(); ?>
                         <input type="hidden" name="abschnitt_id" value="<?= $abschnitt->id ?>">
-                        <input name="add_modul" class="text-top mvv-submit" type="image" title="<?= _('Modul hinzufügen') ?>" src="<?= Icon::create('accept', 'clickable')->asImagePath(); ?>">
+                        <input name="add_modul" class="text-top mvv-submit" type="image" title="<?= _('Modul hinzufÃ¼gen') ?>" src="<?= Icon::create('accept', 'clickable')->asImagePath(); ?>">
                     </form>
                 </td>
             </tr>

@@ -10,7 +10,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author    André Noack <noack@data-quest.de>
+ * @author    AndrÃ© Noack <noack@data-quest.de>
  * @copyright 2016 Stud.IP Core-Group
  * @license   http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category  Stud.IP
@@ -220,7 +220,7 @@ class StandardFolder implements FolderType
         $upload_type = $GLOBALS['UPLOAD_TYPES'][$active_upload_type];
         if ($upload_type['file_sizes'][$status] < $uploadedfile['size']) {
             return sprintf(
-                _('Die maximale Größe für einen Upload (%s) wurde überschritten.'),
+                _('Die maximale GrÃ¶ÃŸe fÃ¼r einen Upload (%s) wurde Ã¼berschritten.'),
                 relsize($upload_type['file_sizes'][$status])
             );
         }
@@ -230,13 +230,13 @@ class StandardFolder implements FolderType
 
         if (!in_array($ext, $types) && $upload_type['type'] === 'deny') {
             return sprintf(
-                _('Sie dürfen nur die Dateitypen %s hochladen!'),
+                _('Sie dÃ¼rfen nur die Dateitypen %s hochladen!'),
                 join(',', $upload_type['file_types'])
             );
         }
 
         if (in_array($ext, $types) && $upload_type['type'] === 'allow') {
-            return sprintf(_('Sie dürfen den Dateityp %s nicht hochladen!'), $ext);
+            return sprintf(_('Sie dÃ¼rfen den Dateityp %s nicht hochladen!'), $ext);
         }
     }
 

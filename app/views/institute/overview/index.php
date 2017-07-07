@@ -1,7 +1,7 @@
 <h2><?= htmlReady($institute->getFullname())?></h2>
 <ul style="list-style-type:none;padding:0px;">
     <? if ($institute->strasse) : ?>
-        <li><b><?=_("Straße:")?></b> <?=htmlReady($institute->strasse)?></li>
+        <li><b><?=_("StraÃŸe:")?></b> <?=htmlReady($institute->strasse)?></li>
     <? endif ?>
 
     <? if ($institute->Plz) : ?>
@@ -25,7 +25,7 @@
     <? endif ?>
 
     <? if ($institute->fakultaets_id) : ?>
-        <li><b><?=_("Fakultät:")?></b> <?=htmlReady($institute->faculty->name)?></li>
+        <li><b><?=_("FakultÃ¤t:")?></b> <?=htmlReady($institute->faculty->name)?></li>
     <? endif ?>
 
     <? foreach ($institute->datafields->map(function ($d) {return $d->getTypedDatafield();}) as $entry) : ?>

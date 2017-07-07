@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @author      AndrÈ Klaﬂen <klassen@elan-ev.de>
- * @author      Till Glˆggler <gloeggler@elan-ev.de>
+ * @author      Andr√© Kla√üen <klassen@elan-ev.de>
+ * @author      Till Gl√∂ggler <gloeggler@elan-ev.de>
  * @license     GPL 2 or later
  */
 

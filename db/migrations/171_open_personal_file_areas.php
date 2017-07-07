@@ -29,7 +29,7 @@ class OpenPersonalFileAreas extends Migration
             ':field' => 'PERSONALDOCUMENT_OPEN_ACCESS',
             ':value' => (int) false,
             ':type' => 'boolean',
-            ':description' => 'Schaltet die persˆnlichen Dateibereiche zur Einsicht f¸r alle Nutzer frei',
+            ':description' => 'Schaltet die pers√∂nlichen Dateibereiche zur Einsicht f√ºr alle Nutzer frei',
         ));
 
         $statement->execute(array(
@@ -37,7 +37,7 @@ class OpenPersonalFileAreas extends Migration
             ':field' => 'PERSONALDOCUMENT_OPEN_ACCESS_ROOT_PRIVILEDGED',
             ':value' => (int) true,
             ':type' => 'boolean',
-            ':description' => 'Erlaubt Root-Accounts das Ver‰ndern von persˆnlichen Dateibereiche im Namen fremder Nutzer',
+            ':description' => 'Erlaubt Root-Accounts das Ver√§ndern von pers√∂nlichen Dateibereiche im Namen fremder Nutzer',
         ));
     }
 

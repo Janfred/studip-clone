@@ -17,7 +17,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      André Noack <noack@data-quest.de>
+ * @author      AndrÃ© Noack <noack@data-quest.de>
  * @copyright   2011 Stud.IP Core-Group
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
@@ -727,7 +727,7 @@ class User extends AuthUserMd5
         }
         if ($news && !$GLOBALS['NOT_HIDEABLE_FIELDS'][$this->perms]['news']) {
             $homepage_elements['news'] = [
-                'name'       => _('Ankündigungen'),
+                'name'       => _('AnkÃ¼ndigungen'),
                 'visibility' => $homepage_visibility['news'] ?: get_default_homepage_visibility($this->id),
                 'extern'     => true,
                 'category'   => 'Allgemeine Daten',
@@ -743,7 +743,7 @@ class User extends AuthUserMd5
         }
         if (Config::get()->VOTE_ENABLE && ($activeVotes || $stoppedVotes || $activeEvals) && !$GLOBALS['NOT_HIDEABLE_FIELDS'][$this->perms]['votes']) {
             $homepage_elements['votes'] = [
-                'name'       => _('Fragebögen'),
+                'name'       => _('FragebÃ¶gen'),
                 'visibility' => $homepage_visibility['votes'] ?: get_default_homepage_visibility($this->id),
                 'category'   => 'Allgemeine Daten',
             ];
@@ -808,7 +808,7 @@ class User extends AuthUserMd5
                         'name'       => $field->getName(),
                         'visibility' => $homepage_visibility[$key] ?: get_default_homepage_visibility($this->id),
                         'extern'     => true,
-                        'category'   => 'Zusätzliche Datenfelder',
+                        'category'   => 'ZusÃ¤tzliche Datenfelder',
                     ];
                 }
             }
@@ -879,7 +879,7 @@ class User extends AuthUserMd5
                         $email_restriction_msg_part .= '@' . trim($email_restriction_parts[$email_restriction_count]) . ',<br>';
                     }
                 }
-                PageLayout::postError(sprintf(_('Die E-Mail-Adresse fehlt, ist falsch geschrieben oder gehört nicht zu folgenden Domains:%s'),
+                PageLayout::postError(sprintf(_('Die E-Mail-Adresse fehlt, ist falsch geschrieben oder gehÃ¶rt nicht zu folgenden Domains:%s'),
                     '<br>' . $email_restriction_msg_part));
             } else {
                 PageLayout::postError(_('Die E-Mail-Adresse fehlt oder ist falsch geschrieben!'));
@@ -888,12 +888,12 @@ class User extends AuthUserMd5
         }
 
         if (!$validator->ValidateEmailHost($email)) {     // Mailserver nicht erreichbar, ablehnen
-            PageLayout::postError(_('Der Mailserver ist nicht erreichbar. Bitte überprüfen Sie, ob Sie E-Mails mit der angegebenen Adresse verschicken können!'));
+            PageLayout::postError(_('Der Mailserver ist nicht erreichbar. Bitte Ã¼berprÃ¼fen Sie, ob Sie E-Mails mit der angegebenen Adresse verschicken kÃ¶nnen!'));
             return false;
         } else {       // Server ereichbar
             if (!$validator->ValidateEmailBox($email)) {    // aber user unbekannt. Mail an abuse!
                 StudipMail::sendAbuseMessage("edit_about", "Emailbox unbekannt\n\nUser: " . $this->username . "\nEmail: ".$email ."\n\nIP: " . $REMOTE_ADDR ." \nZeit: " . $Zeit . "\n");
-                PageLayout::postError(_('Die angegebene E-Mail-Adresse ist nicht erreichbar. Bitte überprüfen Sie Ihre Angaben!'));
+                PageLayout::postError(_('Die angegebene E-Mail-Adresse ist nicht erreichbar. Bitte Ã¼berprÃ¼fen Sie Ihre Angaben!'));
                 return false;
             }
         }
@@ -905,7 +905,7 @@ class User extends AuthUserMd5
         }
 
         if (StudipAuthAbstract::CheckField('auth_user_md5.validation_key', $this->auth_plugin)) {
-            PageLayout::postSuccess(_('Ihre E-Mail-Adresse wurde geändert!'));
+            PageLayout::postSuccess(_('Ihre E-Mail-Adresse wurde geÃ¤ndert!'));
         } else {
             // auth_plugin does not map validation_key (what if...?)
 
@@ -938,7 +938,7 @@ class User extends AuthUserMd5
 
             $this->store();
 
-            PageLayout::postInfo(sprintf(_('An Ihre neue E-Mail-Adresse <b>%s</b> wurde ein Aktivierungslink geschickt, dem Sie folgen müssen bevor Sie sich das nächste mal einloggen können.'), $email));
+            PageLayout::postInfo(sprintf(_('An Ihre neue E-Mail-Adresse <b>%s</b> wurde ein Aktivierungslink geschickt, dem Sie folgen mÃ¼ssen bevor Sie sich das nÃ¤chste mal einloggen kÃ¶nnen.'), $email));
             StudipLog::log('USER_NEWPWD', $this->user_id);
         }
         return true;
@@ -961,7 +961,7 @@ class User extends AuthUserMd5
 
         $messages = array();
 
-        //Identitätsrelevante Daten migrieren
+        //IdentitÃ¤tsrelevante Daten migrieren
         if ($identity) {
             // Veranstaltungseintragungen
             self::removeDoubles('seminar_user', 'Seminar_id', $new_id, $old_id);
@@ -974,7 +974,7 @@ class User extends AuthUserMd5
             $statement = DBManager::get()->prepare($query);
             $statement->execute(array($new_id, $old_id));
 
-            // Persönliche Infos
+            // PersÃ¶nliche Infos
             $query = "DELETE FROM user_info WHERE user_id = ?";
             $statement = DBManager::get()->prepare($query);
             $statement->execute(array($new_id));
@@ -983,7 +983,7 @@ class User extends AuthUserMd5
             $statement = DBManager::get()->prepare($query);
             $statement->execute(array($new_id, $old_id));
 
-            // Studiengänge
+            // StudiengÃ¤nge
             self::removeDoubles('user_studiengang', 'fach_id', $new_id, $old_id);
             $query = "UPDATE IGNORE user_studiengang SET user_id = ? WHERE user_id = ?";
             $statement = DBManager::get()->prepare($query);
@@ -1000,8 +1000,8 @@ class User extends AuthUserMd5
             $statement = DBManager::get()->prepare($query);
             $statement->execute(array($new_id, $old_id));
 
-            // Generische Datenfelder zusammenführen (bestehende Einträge des
-            // "neuen" Nutzers werden dabei nicht überschrieben)
+            // Generische Datenfelder zusammenfÃ¼hren (bestehende EintrÃ¤ge des
+            // "neuen" Nutzers werden dabei nicht Ã¼berschrieben)
             $old_user = User::find($old_id);
 
             $query = "INSERT INTO datafields_entries
@@ -1043,10 +1043,10 @@ class User extends AuthUserMd5
                 $old_avatar->reset();
             }
 
-            $messages[] = _('Identitätsrelevante Daten wurden migriert.');
+            $messages[] = _('IdentitÃ¤tsrelevante Daten wurden migriert.');
         }
 
-        // Restliche Daten übertragen
+        // Restliche Daten Ã¼bertragen
 
         // ForumsModule migrieren
         foreach (PluginEngine::getPlugins('ForumModule') as $plugin) {
@@ -1146,7 +1146,7 @@ class User extends AuthUserMd5
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
 
-        // Statusgruppeneinträge
+        // StatusgruppeneintrÃ¤ge
         self::removeDoubles('statusgruppe_user', 'statusgruppe_id', $new_id, $old_id);
         $query = "UPDATE IGNORE statusgruppe_user SET user_id = ? WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
@@ -1189,7 +1189,7 @@ class User extends AuthUserMd5
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
 
-        //Adressbucheinträge
+        //AdressbucheintrÃ¤ge
         $query = "UPDATE IGNORE contact SET owner_id = ? WHERE owner_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));

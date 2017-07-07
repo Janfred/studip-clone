@@ -16,7 +16,7 @@ class Step00247Forum extends Migration
         if ($forumpp_version !== false && $forumpp_version != 6) {  // version 6 is the DB-Version of the latest ForumPP-Plugin
             throw new Exception(_('Sie verwenden das ForumPP-Plugin in einer alten Version. '
                 . 'Bitte aktualisieren Sie es zuerst auf die neueste Version, sonst kann '
-                . 'Die Stud.IP-Migration nicht ausgeführt werden'));
+                . 'Die Stud.IP-Migration nicht ausgefÃ¼hrt werden'));
 
         } else if ($forumpp_version == 6) { // prepare the tables for the rest of the migration
             // rename the forum-tables

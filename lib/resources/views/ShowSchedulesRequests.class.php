@@ -85,7 +85,7 @@ class ShowSchedulesRequests extends ShowSchedules{
                         <input type="text" name="schedule_begin_month" size=2 maxlength=2 value="<?= date('m', $start_time ?: time()) ?>">.
                         <input type="text" name="schedule_begin_year" size=4 maxlength=4 value="<?= date('Y', $start_time ?: time()) ?>">
                         <br>
-                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;<?= Button::create(_('Auswählen'), 'jump') ?>
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;<?= Button::create(_('AuswÃ¤hlen'), 'jump') ?>
                     </td>
                 </tr>
             </tbody>
@@ -196,9 +196,9 @@ class ShowSchedulesRequests extends ShowSchedules{
                     $seminar = Seminar::GetInstance($reqObj->getSeminarId());
                     $date = SingleDateDB::restoreSingleDate($ao->getAssignUserId());
                     if($date['metadate_id']){
-                        $add_info .= ',' . _("regelmäßig");
+                        $add_info .= ',' . _("regelmÃ¤ÃŸig");
                         if ($seminar->getTurnus() == 1) {
-                            $add_info .= "," . _("zweiwöchentlich");
+                            $add_info .= "," . _("zweiwÃ¶chentlich");
                         }
                     }
                     $add_info .= ')';
@@ -251,7 +251,7 @@ class ShowSchedulesRequests extends ShowSchedules{
                 </td>
                 <td align="center">
                     <a href="<?= URLHelper::getLink('?quick_view='.$this->used_view.'&quick_view_mode='.$view_mode.'&next_week=TRUE')?>">
-                        <?= Icon::create('arr_2right', 'clickable', ['title' => _("Nächste Woche anzeigen")])->asImg(16, ["alt" => _("Nächste Woche anzeigen"), "border" => 0]) ?>
+                        <?= Icon::create('arr_2right', 'clickable', ['title' => _("NÃ¤chste Woche anzeigen")])->asImg(16, ["alt" => _("NÃ¤chste Woche anzeigen"), "border" => 0]) ?>
                     </a>
                 </td>
             </tr>
@@ -261,14 +261,14 @@ class ShowSchedulesRequests extends ShowSchedules{
                     <a href="<?= URLHelper::getLink('', array('quick_view' => $this->used_view,
                                                               'quick_view_mode' => $view_mode,
                                                               'time_range' => $_SESSION['resources_data']['schedule_time_range'] ? 'FALSE' : -1)) ?>">
-                        <?= Icon::create('arr_2up', 'clickable', ['title' => _('Frühere Belegungen anzeigen')])->asImg(['class' => 'middle']) ?>
+                        <?= Icon::create('arr_2up', 'clickable', ['title' => _('FrÃ¼here Belegungen anzeigen')])->asImg(['class' => 'middle']) ?>
                     </a>
                 <? endif; ?>
                 </td>
                 <td colspan="2">
                     <?
                     echo "&nbsp;"._("Anzahl der Belegungen in diesem Zeitraum:")." ". $assign_events->numberOfEvents()."<br>";
-                    echo "&nbsp;"._("Anzahl der gwünschten Belegungen in diesem Zeitraum:")." ". (int)$requested_events;
+                    echo "&nbsp;"._("Anzahl der gwÃ¼nschten Belegungen in diesem Zeitraum:")." ". (int)$requested_events;
                     ?>
                 </td>
                 <td nowrap>
@@ -294,7 +294,7 @@ class ShowSchedulesRequests extends ShowSchedules{
                     <a href="<?= URLHelper::getLink('', array('quick_view' => $this->used_view,
                                                               'quick_view_mode' => $view_mode,
                                                               'time_range' => $_SESSION['resources_data']['schedule_time_range'] ? 'FALSE' : 1)) ?>">
-                        <?= Icon::create('arr_2down', 'clickable', ['title' => _('Spätere Belegungen anzeigen')])->asImg() ?>
+                        <?= Icon::create('arr_2down', 'clickable', ['title' => _('SpÃ¤tere Belegungen anzeigen')])->asImg() ?>
                     </a>
                 <? endif; ?>
                 </td>

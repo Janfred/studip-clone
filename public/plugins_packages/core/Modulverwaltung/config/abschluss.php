@@ -2,7 +2,7 @@
 
 /**
  * abschluss.php
- * Configures the permissions for Abschlüsse (table abschluss)
+ * Configures the permissions for AbschlÃ¼sse (table abschluss)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as

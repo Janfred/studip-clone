@@ -75,7 +75,7 @@ use Studip\Button, Studip\LinkButton;
                                     $domains[] = $a->getName();
                                 }
                             });
-                            $tooltxt .= "\n" . _('Domänen:') . ' ' . implode(', ', $domains);
+                            $tooltxt .= "\n" . _('DomÃ¤nen:') . ' ' . implode(', ', $domains);
                         }
                         if ($user->locked == '1') {
                             $tooltxt .= "\n" . _("Nutzer ist gesperrt!");
@@ -111,7 +111,7 @@ use Studip\Button, Studip\LinkButton;
                     <td>
                         <?= ($user->mkdate) ? date("d.m.Y", $user->mkdate) : _('unbekannt') ?>
                     </td>
-                    <td><?= htmlReady($user['auth_plugin'] === null ? _('vorläufig') : $user->auth_plugin) ?></td>
+                    <td><?= htmlReady($user['auth_plugin'] === null ? _('vorlÃ¤ufig') : $user->auth_plugin) ?></td>
                     <td class="actions" nowrap>
                         <?
                         $actionMenu = ActionMenu::get();
@@ -123,8 +123,8 @@ use Studip\Button, Studip\LinkButton;
                         if ($GLOBALS['perm']->have_perm('root')) {
                             $actionMenu->addLink(
                                 $controller->url_for('admin/user/activities/' . $user->user_id, ['from_index' => 1]),
-                                _('Datei- und Aktivitätsübersicht'),
-                                Icon::create('vcard', 'clickable', ['title' => _('Datei- und Aktivitätsübersicht')]),
+                                _('Datei- und AktivitÃ¤tsÃ¼bersicht'),
+                                Icon::create('vcard', 'clickable', ['title' => _('Datei- und AktivitÃ¤tsÃ¼bersicht')]),
                                 ['data-dialog' => 'size=50%']
                             );
                         }
@@ -144,9 +144,9 @@ use Studip\Button, Studip\LinkButton;
                         }
                         $actionMenu->addButton(
                             'delete_user',
-                            _('Benutzer löschen'),
+                            _('Benutzer lÃ¶schen'),
                             Icon::create('trash', 'clickable', [
-                                'title'      => _('Benutzer löschen'),
+                                'title'      => _('Benutzer lÃ¶schen'),
                                  'formaction' => $controller->url_for('admin/user/bulk/' . $user->user_id, ['method' => 'delete']),
                                  'style'      => 'margin: 0px'
                              ])
@@ -161,15 +161,15 @@ use Studip\Button, Studip\LinkButton;
         <tfoot>
             <tr>
                 <td colspan="11" align="right">
-                    <input class="middle" type="checkbox" name="check_all" title="<?= _('Alle Benutzer auswählen') ?>"
+                    <input class="middle" type="checkbox" name="check_all" title="<?= _('Alle Benutzer auswÃ¤hlen') ?>"
                            data-proxyfor=".check_all" data-activates=".bulkAction">
                     <select name="method" class="bulkAction" required>
-                        <option value=""><?= _('Bitte wählen') ?></option>
+                        <option value=""><?= _('Bitte wÃ¤hlen') ?></option>
                         <option value="send_message"><?= _('Nachricht senden') ?></option>
-                        <option value="delete"><?= _('Löschen') ?></option>
+                        <option value="delete"><?= _('LÃ¶schen') ?></option>
                     </select>
-                    <?= Button::create(_('Ausführen'),
-                            ['title' => _('Ausgewählte Aktion ausführen'),
+                    <?= Button::create(_('AusfÃ¼hren'),
+                            ['title' => _('AusgewÃ¤hlte Aktion ausfÃ¼hren'),
                              'class' => 'bulkAction']) ?>
                 </td>
             </tr>

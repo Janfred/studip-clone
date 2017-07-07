@@ -1,6 +1,6 @@
 <div id="enrollment">
     <? if ($max_limit > 1) : ?>
-        <label for="admission_user_limit"><?= _("Ich möchte folgende Anzahl an Veranstaltungen belegen:") ?></label>
+        <label for="admission_user_limit"><?= _("Ich mÃ¶chte folgende Anzahl an Veranstaltungen belegen:") ?></label>
         <select name="admission_user_limit">
             <? foreach (range(1, $max_limit) as $max) : ?>
                 <option <?= $user_max_limit == $max ? 'selected' : '' ?>>
@@ -15,21 +15,21 @@
             <td colspan="3">
                     <span class="hidden-no-js">
                         <?= _('Ziehen Sie die in Frage kommenden Veranstaltungen auf die rechte Seite
-und ordnen Sie sie dort in der Reihenfolge der von Ihnen gewünschten
-Priorität an. Sie können mehr Veranstaltungen nach rechts ziehen als Sie
-tatsächlich belegen wollen') ?>
+und ordnen Sie sie dort in der Reihenfolge der von Ihnen gewÃ¼nschten
+PrioritÃ¤t an. Sie kÃ¶nnen mehr Veranstaltungen nach rechts ziehen als Sie
+tatsÃ¤chlich belegen wollen') ?>
                     </span>
                     <span class="hidden-js">
                         <?= _('Sortieren Sie die in Frage kommenden Veranstaltungen auf die rechte Seite
-und ordnen Sie sie dort in der Reihenfolge der von Ihnen gewünschten
-Priorität an. Sie können mehr Veranstaltungen nach rechts zuweisen als Sie
-tatsächlich belegen wollen') ?>
+und ordnen Sie sie dort in der Reihenfolge der von Ihnen gewÃ¼nschten
+PrioritÃ¤t an. Sie kÃ¶nnen mehr Veranstaltungen nach rechts zuweisen als Sie
+tatsÃ¤chlich belegen wollen') ?>
                     </span>
             </td>
         </tr>
         <tr>
             <td valign="top">
-                <h3> <?= _("Verfügbare Veranstaltungen") ?></h3>
+                <h3> <?= _("VerfÃ¼gbare Veranstaltungen") ?></h3>
                 <input type="text" class="hidden-no-js" name="filter" placeholder="<?= _('Filter') ?>">
 
                 <ul id="avaliable-courses">
@@ -68,12 +68,12 @@ tatsächlich belegen wollen') ?>
 
             </td>
             <td valign="top">
-                <h3><?= _("Ausgewählte Veranstaltungen") ?></h3>
+                <h3><?= _("AusgewÃ¤hlte Veranstaltungen") ?></h3>
                 <input type="text" class="hidden-no-js" name="filter" placeholder="<?= _('Filter') ?>">
                 <ul id="selected-courses">
                     <?php $hasUserPrios = count($user_prio) > 0 ?>
 
-                    <li class="empty" <?= $hasUserPrios ? 'style="display:none"' : '' ?>><?= _('Gewünschte Veranstaltungen hierhin ziehen') ?></li>
+                    <li class="empty" <?= $hasUserPrios ? 'style="display:none"' : '' ?>><?= _('GewÃ¼nschte Veranstaltungen hierhin ziehen') ?></li>
                     <?php
                     asort($user_prio);
 

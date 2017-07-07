@@ -27,7 +27,7 @@ class Tic2007ScheduleEnable extends Migration
 
         $stmt->execute(array(
             'name' => 'SCHEDULE_ENABLE',
-            'description' => 'Schaltet ein oder aus, ob der Stundenplan global verfügbar ist.',
+            'description' => 'Schaltet ein oder aus, ob der Stundenplan global verfÃ¼gbar ist.',
             'section' => 'modules',
             'range' => 'global',
             'type' => 'boolean',

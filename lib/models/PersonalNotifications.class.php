@@ -9,7 +9,7 @@
  * by the following one-liner:
  *
  * PersonalNotifications::add(
- *      $user_A_user_id, //id of user A or array of ´multiple user_ids
+ *      $user_A_user_id, //id of user A or array of Â´multiple user_ids
  *      $url_of_wiki_page, //when user A clicks this URL he/she should jump directly to the changed wiki-page
  *      "User B changed wiki-page xyz", //a small text that describes the notification
  *      "wiki_page_1234", //an (optional) html-id of the content of the wiki page. If the user is looking at the content already, the notification will disappear automatically

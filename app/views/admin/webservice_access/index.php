@@ -43,7 +43,7 @@
             </select>
         </td>
         <td>
-        <?= Icon::create('accept', 'accept', ['title' => _('Änderungen speichern')])->asInput(["type" => "image", "class" => "middle", "name" => "ok"]) ?>
+        <?= Icon::create('accept', 'accept', ['title' => _('Ã„nderungen speichern')])->asInput(["type" => "image", "class" => "middle", "name" => "ok"]) ?>
         <?= Icon::create('decline', 'attention', ['title' => _('Abbrechen')])->asInput(['type' => "image", 'class' => "middle", 'name' => "cancel"]) ?>
         </td>
     <? else : ?>
@@ -64,7 +64,7 @@
             <?= Icon::create('edit', 'clickable', ['title' => _('bearbeiten')])->asImg() ?>
           </a>
           <a href="<?= $controller->url_for('admin/webservice_access/delete/'.$rule->id) ?>">
-              <?= Icon::create('trash', 'clickable', ['title' => _('löschen')])->asImg() ?>
+              <?= Icon::create('trash', 'clickable', ['title' => _('lÃ¶schen')])->asImg() ?>
           </a>
         </td>
     <? endif;?>

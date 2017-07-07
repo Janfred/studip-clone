@@ -26,7 +26,7 @@ class CreateTagsForMessaging extends Migration
         while ($result = $old_config->fetch(PDO::FETCH_ASSOC)) {
             $config = json_decode($result['value'], true);
 
-            //Erstelle alle Tags und verknüpfe sie mit den Nachrichten:
+            //Erstelle alle Tags und verknÃ¼pfe sie mit den Nachrichten:
             $statement = DBManager::get()->prepare("
                 INSERT IGNORE INTO message_tags (message_id, user_id, tag)
                     SELECT message_user.message_id, message_user.user_id, :tag

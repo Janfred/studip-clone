@@ -2,7 +2,7 @@
 
 /**
  * fach.php
- * Configures the permissions for Fächer (table fach)
+ * Configures the permissions for FÃ¤cher (table fach)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -150,7 +150,7 @@ $privileges = array(
                 'MVVFreigabe'   => 3
             )
         ),
-        // verknüpfte Objekte
+        // verknÃ¼pfte Objekte
         'departments' => array(
             'default' => array(
                 'MVVEntwickler' => 1,

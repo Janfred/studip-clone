@@ -28,7 +28,7 @@ class Settings_SettingsController extends AuthenticatedController
      */
     public function before_filter(&$action, &$args)
     {
-        // Abwärtskompatibilität, erst ab 1.1 bekannt
+        // AbwÃ¤rtskompatibilitÃ¤t, erst ab 1.1 bekannt
         if (!isset(Config::get()->ALLOW_CHANGE_NAME)) {
             Config::get()->ALLOW_CHANGE_NAME = TRUE;
         }
@@ -54,10 +54,10 @@ class Settings_SettingsController extends AuthenticatedController
             PageLayout::postError(_('Zugriff verweigert.'), array(
                 _("Wahrscheinlich ist Ihre Session abgelaufen. Bitte "
                  ."nutzen Sie in diesem Fall den untenstehenden Link, "
-                 ."um zurück zur Anmeldung zu gelangen.\n\n"
+                 ."um zurÃ¼ck zur Anmeldung zu gelangen.\n\n"
                  ."Eine andere Ursache kann der Versuch des Zugriffs "
-                 ."auf Userdaten, die Sie nicht bearbeiten dürfen, sein. "
-                 ."Nutzen Sie den untenstehenden Link, um zurück auf "
+                 ."auf Userdaten, die Sie nicht bearbeiten dÃ¼rfen, sein. "
+                 ."Nutzen Sie den untenstehenden Link, um zurÃ¼ck auf "
                  ."die Startseite zu gelangen."),
                 sprintf(_('%s Hier%s geht es wieder zur Anmeldung beziehungsweise Startseite.'),
                         '<a href="index.php">', '</a>')
@@ -240,10 +240,10 @@ class Settings_SettingsController extends AuthenticatedController
         if ($this->restricted && count($this->private_messages) > 0) {
             setTempLanguage($this->user->user_id);
 
-            $message = _("Ihre persönliche Seite wurde von Admin verändert.\n "
-                        ."Folgende Veränderungen wurden vorgenommen:\n \n")
+            $message = _("Ihre persÃ¶nliche Seite wurde von Admin verÃ¤ndert.\n "
+                        ."Folgende VerÃ¤nderungen wurden vorgenommen:\n \n")
                         . '- ' . implode("\n- ", $this->private_messages);
-            $subject = _('Systemnachricht: Profil verändert');
+            $subject = _('Systemnachricht: Profil verÃ¤ndert');
 
             restoreLanguage();
 

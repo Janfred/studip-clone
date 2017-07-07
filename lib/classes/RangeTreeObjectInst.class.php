@@ -8,7 +8,7 @@
 // RangeTreeObjectInst.class.php
 // Class to handle items in the "range tree"
 //
-// Copyright (c) 2002 André Noack <noack@data-quest.de>
+// Copyright (c) 2002 AndrÃ© Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -30,7 +30,7 @@
 * This class is used for items which are "Einrichtungen"
 *
 * @access   public
-* @author   André Noack <noack@data-quest.de>
+* @author   AndrÃ© Noack <noack@data-quest.de>
 * @package
 */
 class RangeTreeObjectInst extends RangeTreeObject {
@@ -45,7 +45,7 @@ class RangeTreeObjectInst extends RangeTreeObject {
     function __construct($item_id) {
         parent::__construct($item_id); //calling the baseclass constructor
         $this->initItemDetail();
-        $this->item_data_mapping = array('Strasse' => _("Straße"), 'Plz' => _("Ort"), 'telefon' => _("Tel."), 'fax' => _("Fax"),
+        $this->item_data_mapping = array('Strasse' => _("StraÃŸe"), 'Plz' => _("Ort"), 'telefon' => _("Tel."), 'fax' => _("Fax"),
                                         'url' => _("Homepage"), 'email' => _("Kontakt"));
         $this->item_data['type_num'] = $this->item_data['type'];
         $this->item_data['type'] = ($this->item_data['type']) ? $GLOBALS['INST_TYPE'][$this->item_data['type']]['name'] : $GLOBALS['INST_TYPE'][1]['name'];

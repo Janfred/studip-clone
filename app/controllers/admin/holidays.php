@@ -3,7 +3,7 @@
  * holidays.php - controller class for the holidays administration
  *
  * @author    Jan-Hendrik Willms <tleilax+studip@gmail.com>
- * @author    Hermann Schröder <hermann.schroeder@uni-oldenburg.de>
+ * @author    Hermann SchrÃ¶der <hermann.schroeder@uni-oldenburg.de>
  * @author    Michael Riehemann <michael.riehemann@uni-oldenburg.de>
  * @license   GPL2 or any later version
  * @category  Stud.IP
@@ -92,7 +92,7 @@ class Admin_HolidaysController extends AuthenticatedController
                 $errors[] = _('Das Ferienende liegt vor dem Beginn.');
             }
             if (!empty($errors)) {
-                PageLayout::postMessage(MessageBox::error(_('Ihre eingegebenen Daten sind ungültig.'), $errors));
+                PageLayout::postMessage(MessageBox::error(_('Ihre eingegebenen Daten sind ungÃ¼ltig.'), $errors));
             } elseif ($this->holiday->isDirty() && !$this->holiday->store()) {
                 PageLayout::postMessage(MessageBox::error(_('Die Ferien konnten nicht gespeichert werden.')));
             } else {
@@ -119,7 +119,7 @@ class Admin_HolidaysController extends AuthenticatedController
                 $holiday->delete();
             }
 
-            PageLayout::postMessage(MessageBox::success(_('Die Ferien wurden erfolgreich gelöscht')));
+            PageLayout::postMessage(MessageBox::success(_('Die Ferien wurden erfolgreich gelÃ¶scht')));
         }
 
         $this->redirect('admin/holidays');
@@ -155,13 +155,13 @@ class Admin_HolidaysController extends AuthenticatedController
         $sidebar->setImage('sidebar/admin-sidebar.png');
 
         $views = new ViewsWidget();
-        $views->addLink(_('Alle Einträge'),
+        $views->addLink(_('Alle EintrÃ¤ge'),
                         $this->url_for('admin/holidays', array('filter' => null)))
               ->setActive(!$this->filter);
-        $views->addLink(_('Aktuelle/zukünftige Einträge'),
+        $views->addLink(_('Aktuelle/zukÃ¼nftige EintrÃ¤ge'),
                         $this->url_for('admin/holidays', array('filter' => 'current')))
               ->setActive($this->filter === 'current');
-        $views->addLink(_('Vergangene Einträge'),
+        $views->addLink(_('Vergangene EintrÃ¤ge'),
                         $this->url_for('admin/holidays', array('filter' => 'past')))
               ->setActive($this->filter === 'past');
         $sidebar->addWidget($views);

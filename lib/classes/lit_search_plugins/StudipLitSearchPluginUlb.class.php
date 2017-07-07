@@ -8,7 +8,7 @@
 // StudipLitSearchPluginUlb.class.php
 //
 //
-// Copyright (c) 2003 André Noack <noack@data-quest.de>
+// Copyright (c) 2003 AndrÃ© Noack <noack@data-quest.de>
 // Modified by Cornelius Hempel, 2004
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@ require_once 'StudipLitSearchPluginGvk.class.php';
 *
 *
 * @access   public
-* @author   André Noack <noack@data-quest.de>
+* @author   AndrÃ© Noack <noack@data-quest.de>
 * @package
 **/
 class StudipLitSearchPluginUlb extends StudipLitSearchPluginGvk
@@ -43,14 +43,14 @@ class StudipLitSearchPluginUlb extends StudipLitSearchPluginGvk
     function __construct()
     {
         parent::__construct();
-        $this->description = "Universitäts- und Landesbibliothek (ULB)";
+        $this->description = "UniversitÃ¤ts- und Landesbibliothek (ULB)";
         $this->z_host = "sru.gbv.de/opac-de-3";
-        $this->z_profile = array('1016' => _("Basisindex [ALL]"), '2' => _("Körperschaftsname [KOS]"),
-                                '3' => _("Kongress [KNS]"),'4' => _("Titelstichwörter [TIT]"),
-                                '5' => _("Serienstichwörter [SER]"), '7' => _("ISBN [ISB]"),
+        $this->z_profile = array('1016' => _("Basisindex [ALL]"), '2' => _("KÃ¶rperschaftsname [KOS]"),
+                                '3' => _("Kongress [KNS]"),'4' => _("TitelstichwÃ¶rter [TIT]"),
+                                '5' => _("SerienstichwÃ¶rter [SER]"), '7' => _("ISBN [ISB]"),
                                 '8' => _("ISSN [ISS]"), '12' => _("PICA Prod.-Nr [PPN]"),
                                 '21' => _("alle Klassifikationen [SYS]"), '1004' => _("Person, Author [PER]"),
-                                '1005' => _("Körperschaften [KOR]"), '1006' => _("Kongresse [KON]"),
+                                '1005' => _("KÃ¶rperschaften [KOR]"), '1006' => _("Kongresse [KON]"),
                                 '1007' => _("alle Nummern [NUM]"));
     }
 }

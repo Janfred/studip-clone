@@ -8,6 +8,6 @@
     endforeach;
     ?>
    <p>
-     <a href="<?= URLHelper::getLink('resources.php?view=resources') ?>"><?= _("zurück") ?></a>
+     <a href="<?= URLHelper::getLink('resources.php?view=resources') ?>"><?= _("zurÃ¼ck") ?></a>
    </p>
 </div>

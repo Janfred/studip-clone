@@ -51,8 +51,8 @@ class ExternElementList extends ExternElement {
             $this->config = $config;
         
         $this->name = "List";
-        $this->real_name = _("Aufzählungsliste");
-        $this->description = _("Eigenschaften einer Aufzählungsliste.");
+        $this->real_name = _("AufzÃ¤hlungsliste");
+        $this->description = _("Eigenschaften einer AufzÃ¤hlungsliste.");
     }
     
     function toStringEdit ($post_vars = "", $faulty_values = "",
@@ -74,7 +74,7 @@ class ExternElementList extends ExternElement {
         
         $headline = $edit_form->editHeadline(_("Einzug"));
         $title = _("Linker Einzug:");
-        $info = _("Geben Sie an, wie weit (Pixel) die Aufzählungsliste im Absatz links eingerückt werden soll.");
+        $info = _("Geben Sie an, wie weit (Pixel) die AufzÃ¤hlungsliste im Absatz links eingerÃ¼ckt werden soll.");
         $content = $edit_form->editTextfieldGeneric("margin", $title, $info, 3, 3);
         
         $content_table .= $edit_form->editContentTable($headline, $content);

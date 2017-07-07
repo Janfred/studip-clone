@@ -2,8 +2,8 @@
     <section>
         <label for="target_group">
             <?= sprintf(ngettext(
-                    'In welche Gruppe soll die gewählte Person verschoben werden?',
-                    'In welche Gruppe sollen die %u gewählten Personen verschoben werden?',
+                    'In welche Gruppe soll die gewÃ¤hlte Person verschoben werden?',
+                    'In welche Gruppe sollen die %u gewÃ¤hlten Personen verschoben werden?',
                     count($members)),
                 count($members)) ?>
             <select name="target_group">

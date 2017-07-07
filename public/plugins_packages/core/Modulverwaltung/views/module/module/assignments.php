@@ -1,5 +1,5 @@
 <section>
-    <h3><?= _('Verwendet in Studiengängen') ?></h3>
+    <h3><?= _('Verwendet in StudiengÃ¤ngen') ?></h3>
     <? $trails = $modul->getTrails(array('Studiengang', 'StgteilVersion', 'StgteilAbschnitt')); ?>
 <? if (count($trails)) : ?>
     <ul>

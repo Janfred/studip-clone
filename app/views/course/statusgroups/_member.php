@@ -2,7 +2,7 @@
 <tr>
 <? if ($is_tutor && !$is_locked) : ?>
     <td>
-        <input aria-label="<?= _('Mitglieder auswählen') ?>"
+        <input aria-label="<?= _('Mitglieder auswÃ¤hlen') ?>"
                type="checkbox" name="group[<?= $group->id ?>][<?= $m->user_id ?>]"
                class="groupmembers-<?= $group->id ?>" value="1">
     </td>

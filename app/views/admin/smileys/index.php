@@ -22,7 +22,7 @@
                 <th><?= _('Smiley') ?></th>
                 <th><?= _('Smileyname') ?></th>
                 <th>&Sigma;</th>
-                <th><?= _('Kürzel') ?></th>
+                <th><?= _('KÃ¼rzel') ?></th>
                 <th>&Sigma;</th>
             <? if ($favorites_enabled): ?>
                 <th><?= _('Favoriten') ?></th>
@@ -62,7 +62,7 @@
                         <?= Icon::create('edit', 'clickable')->asImg() ?>
                     </a>
                     <a href="<?= $controller->url_for('admin/smileys/delete', $smiley->id, $view) ?>"
-                       title="<?= htmlReady(sprintf(_('Smiley "%s" löschen'), $smiley->name)) ?>">
+                       title="<?= htmlReady(sprintf(_('Smiley "%s" lÃ¶schen'), $smiley->name)) ?>">
                         <?= Icon::create('trash', 'clickable')->asImg() ?>
                     </a>
                 </td>
@@ -74,10 +74,10 @@
                 <td>
                     <input class="middle" type="checkbox" data-proxyfor=":checkbox[name^=smiley_id]"
                            data-activates="button[name=bulk-delete]"
-                           name="check_all" title="<?= _('Alle Benutzer auswählen') ?>">
+                           name="check_all" title="<?= _('Alle Benutzer auswÃ¤hlen') ?>">
                 </td>
                 <td colspan="<?= $favorites_enabled ? 7 : 6 ?>">
-                    <?= Studip\Button::createCancel(_('Markierte löschen'), 'bulk-delete') ?>
+                    <?= Studip\Button::createCancel(_('Markierte lÃ¶schen'), 'bulk-delete') ?>
                 </td>
             </tr>
         </tfoot>

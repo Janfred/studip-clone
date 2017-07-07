@@ -20,14 +20,14 @@
     <? if ($questionnaire['startdate']): ?>
         <?= date('d.m.Y H:i', $questionnaire['startdate']) ?>
     <? else: ?>
-        <?= _('händisch') ?>
+        <?= _('hÃ¤ndisch') ?>
     <? endif; ?>
     </td>
     <td>
     <? if ($questionnaire['stopdate']): ?>
         <?= date('d.m.Y H:i', $questionnaire['stopdate']) ?>
     <? else: ?>
-        <?= _('händisch') ?>
+        <?= _('hÃ¤ndisch') ?>
     <? endif; ?>
     </td>
     <td class="context">
@@ -38,7 +38,7 @@
             <? if ($assignment['range_id'] === 'start') : ?>
                 <?= _('Stud.IP Startseite')?>
             <? elseif ($assignment['range_id'] === 'public') : ?>
-                <?= _('Öffentlich per Link')?>
+                <?= _('Ã–ffentlich per Link')?>
             <? endif ?>
 
             <? if ($assignment['range_type'] === 'user') : ?>
@@ -100,9 +100,9 @@
         );
         $menu->addLink(
             $controller->link_for('questionnaire/delete/'  .$questionnaire->id),
-            _('Fragebogen löschen'),
+            _('Fragebogen lÃ¶schen'),
             Icon::create('trash', 'clickable'),
-            ['data-confirm' => _('Wirklich löschen?')]
+            ['data-confirm' => _('Wirklich lÃ¶schen?')]
         );
         echo $menu->render();
         ?>

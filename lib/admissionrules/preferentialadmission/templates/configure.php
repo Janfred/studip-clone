@@ -27,12 +27,12 @@
     <a href="<?= URLHelper::getURL('dispatch.php/userfilter/filter/configure/prefadmission_conditions') ?>"
        onclick="return STUDIP.UserFilter.configureCondition('condition', '<?=
             URLHelper::getLink('dispatch.php/userfilter/filter/configure/prefadmission_conditions') ?>')">
-        <?= Icon::create('add', 'clickable', ['title' => _('Bedingung hinzufügen')])->asImg(16, ["alt" => _('Bedingung hinzufügen')]) ?>
-        <?= _('Bedingung hinzufügen') ?>
+        <?= Icon::create('add', 'clickable', ['title' => _('Bedingung hinzufÃ¼gen')])->asImg(16, ["alt" => _('Bedingung hinzufÃ¼gen')]) ?>
+        <?= _('Bedingung hinzufÃ¼gen') ?>
     </a>
 </div>
 <br>
 <label class="caption">
     <input type="checkbox" name="favor_semester"<?= $rule->getFavorSemester() ? ' checked' : '' ?>/>
-    <?= _('Höhere Fachsemester bevorzugen') ?>
+    <?= _('HÃ¶here Fachsemester bevorzugen') ?>
 </label>

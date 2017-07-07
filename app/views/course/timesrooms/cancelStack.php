@@ -5,9 +5,9 @@
     <?= $this->render_partial('course/timesrooms/_cancel_form.php') ?>
 
     <footer data-dialog-button>
-        <?= Studip\Button::createAccept(_('Übernehmen'), 'cancel') ?>
+        <?= Studip\Button::createAccept(_('Ãœbernehmen'), 'cancel') ?>
     <? if (Request::int('fromDialog')): ?>
-        <?= Studip\LinkButton::create(_('Zurück zur Übersicht'),
+        <?= Studip\LinkButton::create(_('ZurÃ¼ck zur Ãœbersicht'),
               $controller->url_for('course/timesrooms/index'),
               array('data-dialog' => 'size=big')) ?>
     <? endif; ?>

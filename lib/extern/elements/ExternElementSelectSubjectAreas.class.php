@@ -54,7 +54,7 @@ class ExternElementSelectSubjectAreas extends ExternElement {
 
         $this->name = "SelectSubjectAreas";
         $this->real_name = _("Auswahl der anzuzeigenden Studienbereiche");
-        $this->description = _("Sie können hier die Studienbereiche auswählen, die auf der externen Seite ausgegeben werden sollen.");
+        $this->description = _("Sie kÃ¶nnen hier die Studienbereiche auswÃ¤hlen, die auf der externen Seite ausgegeben werden sollen.");
         $this->attributes = array('subjectareasselected', 'selectallsubjectareas', 'reverseselection');
 
     }
@@ -86,14 +86,14 @@ class ExternElementSelectSubjectAreas extends ExternElement {
         $element_headline = $this->getEditFormHeadline($edit_form);
 
         $title = _("Alle Studienbereiche anzeigen:");
-        $info = _("Wählen Sie diese Option, wenn alle Veranstaltungen aus allen Studienbereichen angezeigt werden sollen - unabhängig von unten vorgenommener Auswahl.");
+        $info = _("WÃ¤hlen Sie diese Option, wenn alle Veranstaltungen aus allen Studienbereichen angezeigt werden sollen - unabhÃ¤ngig von unten vorgenommener Auswahl.");
         $values = '1';
         $names = '';
         $table = $edit_form->editCheckboxGeneric('selectallsubjectareas', $title, $info, $values, $names);
         $table .= $edit_form->editSelectSubjectAreas(new StudipSemTreeSearch('dummy', 'SelectSubjectAreas', FALSE));
 
         $title = _("Auswahl umkehren:");
-        $info = _("Wählen Sie diese Option, wenn Veranstaltungen aus den ausgewählten Bereichen nicht angezeigt werden sollen.");
+        $info = _("WÃ¤hlen Sie diese Option, wenn Veranstaltungen aus den ausgewÃ¤hlten Bereichen nicht angezeigt werden sollen.");
         $values = '1';
         $names = '';
         $table .= $edit_form->editCheckboxGeneric('reverseselection', $title, $info, $values, $names);

@@ -32,10 +32,10 @@ $start_pages = array(
 
         <? if (!$GLOBALS['perm']->have_perm('root')): ?>
         <label>
-            <?= _('Persönliche Startseite') ?>
-            <?= tooltipIcon(_('Sie können hier einstellen, welche Seite standardmäßig nach dem Einloggen '
-                .'angezeigt wird. Wenn Sie zum Beispiel regelmäßig die Seite &raquo;Meine '
-                .'Veranstaltungen&laquo; nach dem Login aufrufen, so können Sie dies hier '
+            <?= _('PersÃ¶nliche Startseite') ?>
+            <?= tooltipIcon(_('Sie kÃ¶nnen hier einstellen, welche Seite standardmÃ¤ÃŸig nach dem Einloggen '
+                .'angezeigt wird. Wenn Sie zum Beispiel regelmÃ¤ÃŸig die Seite &raquo;Meine '
+                .'Veranstaltungen&laquo; nach dem Login aufrufen, so kÃ¶nnen Sie dies hier '
                 .'direkt einstellen.')) ?>
             <select name="personal_startpage">
             <? foreach ($start_pages as $index => $label): ?>
@@ -52,21 +52,21 @@ $start_pages = array(
                    value="1"
                 <? if ($config->SKIPLINKS_ENABLE) echo 'checked'; ?>>
             <?= _('Skiplinks einblenden') ?>
-            <?= tooltipIcon(_('Mit dieser Einstellung wird nach dem ersten Drücken der Tab-Taste eine '
+            <?= tooltipIcon(_('Mit dieser Einstellung wird nach dem ersten DrÃ¼cken der Tab-Taste eine '
                 .'Liste mit Skiplinks eingeblendet, mit deren Hilfe Sie mit der Tastatur '
-                .'schneller zu den Hauptinhaltsbereichen der Seite navigieren können. '
-                .'Zusätzlich wird der aktive Bereich einer Seite hervorgehoben.')) ?>
+                .'schneller zu den Hauptinhaltsbereichen der Seite navigieren kÃ¶nnen. '
+                .'ZusÃ¤tzlich wird der aktive Bereich einer Seite hervorgehoben.')) ?>
         </label>
 
         <label>
             <input type="checkbox" name="accesskey_enable"
                    aria-describedby="accesskey_enable_description" value="1"
                 <? if ($config->ACCESSKEY_ENABLE) echo 'checked'; ?>>
-            <?= _('Tastenkombinationen für Hauptfunktionen') ?>
-            <?= tooltipIcon(_('Mit dieser Einstellung können Sie für die meisten in der Kopfzeile '
-                .'erreichbaren Hauptfunktionen eine Bedienung über Tastenkombinationen '
+            <?= _('Tastenkombinationen fÃ¼r Hauptfunktionen') ?>
+            <?= tooltipIcon(_('Mit dieser Einstellung kÃ¶nnen Sie fÃ¼r die meisten in der Kopfzeile '
+                .'erreichbaren Hauptfunktionen eine Bedienung Ã¼ber Tastenkombinationen '
                 .'aktivieren. <br>Die Tastenkombination wird im Tooltip des jeweiligen '
-                .'Icons angezeigt.')." "._('Diese kann für jeden Browser und jedes Betriebssystem unterschiedlich '
+                .'Icons angezeigt.')." "._('Diese kann fÃ¼r jeden Browser und jedes Betriebssystem unterschiedlich '
                     .'sein (siehe <a href="http://en.wikipedia.org/wiki/Accesskey" '
                     .'target="_blank"">Wikipedia</a>).')) ?>
         </label>
@@ -77,7 +77,7 @@ $start_pages = array(
                    value="1"
                 <? if ($config->SHOWSEM_ENABLE) echo 'checked'; ?>>
             <?= _('Semesteranzeige auf &raquo;Meine Veranstaltungen&laquo;');?>
-            <?= tooltipIcon(_('Mit dieser Einstellung können Sie auf der Seite &raquo;Meine '
+            <?= tooltipIcon(_('Mit dieser Einstellung kÃ¶nnen Sie auf der Seite &raquo;Meine '
                 .'Veranstaltungen&laquo; die Einblendung des Start- und Endsemesters '
                 .'hinter jeder Veranstaltung aktivieren.')) ?>
         </label>
@@ -88,9 +88,9 @@ $start_pages = array(
                    aria-describedby="tour_autostart_disable_description" value="1"
                 <? if ($config->TOUR_AUTOSTART_DISABLE) echo 'checked'; ?>>
             <?= _('Autostart von Touren verhindern');?>
-            <?= tooltipIcon(_('Mit dieser Einstellung können Sie verhindern, dass Touren zu einzelnen '
+            <?= tooltipIcon(_('Mit dieser Einstellung kÃ¶nnen Sie verhindern, dass Touren zu einzelnen '
                 .'Stud.IP-Seiten automatisch starten, wenn Sie die Seite aufrufen. Die Touren '
-                .'können weiterhin über die Hilfe gestartet werden.')) ?>
+                .'kÃ¶nnen weiterhin Ã¼ber die Hilfe gestartet werden.')) ?>
         </label>
         <? endif ?>
     </fieldset>
@@ -104,8 +104,8 @@ $start_pages = array(
             <input type="checkbox" name="personal_notifications_activated"
                    aria-describedby="personal_notifications_activated_description" value="1"
                 <? if (PersonalNotifications::isActivated($user->user_id)) echo 'checked'; ?>>
-            <?= _('Benachrichtigungen über Javascript') ?>
-            <?= tooltipIcon(_('Hiermit wird in der Kopfzeile dargestellt, wenn es Benachrichtigungen für '
+            <?= _('Benachrichtigungen Ã¼ber Javascript') ?>
+            <?= tooltipIcon(_('Hiermit wird in der Kopfzeile dargestellt, wenn es Benachrichtigungen fÃ¼r '
                 .'Sie gibt. Die Benachrichtigungen werden auch angezeigt, wenn Sie nicht die '
                 .'Seite neuladen.')) ?>
         </label>
@@ -115,10 +115,10 @@ $start_pages = array(
                    aria-describedby="personal_notifications_audio_activated_description" value="1"
                 <? if (PersonalNotifications::isAudioActivated($user->user_id)) echo 'checked'; ?>>
             <?= _('Audio-Feedback zu Benachrichtigungen') ?>
-            <?= tooltipIcon(_('Wenn eine neue Benachrichtigung für Sie reinkommt, ' .
-                'werden Sie mittels eines kleinen Plopps darüber in Kenntnis gesetzt ' .
+            <?= tooltipIcon(_('Wenn eine neue Benachrichtigung fÃ¼r Sie reinkommt, ' .
+                'werden Sie mittels eines kleinen Plopps darÃ¼ber in Kenntnis gesetzt ' .
                 '- auch wenn Sie gerade einen anderen Browsertab anschauen. Der Plopp ist ' .
-                'nur zu hören, wenn Sie die Benachrichtigungen über Javascript aktiviert haben.')) ?>
+                'nur zu hÃ¶ren, wenn Sie die Benachrichtigungen Ã¼ber Javascript aktiviert haben.')) ?>
         </label>
     </fieldset>
 

@@ -7,7 +7,7 @@
 // StudipAuthStandard.class.php
 // Basic Stud.IP authentication, using the Stud.IP database
 //
-// Copyright (c) 2003 André Noack <noack@data-quest.de>
+// Copyright (c) 2003 AndrÃ© Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -30,7 +30,7 @@
 * Basic Stud.IP authentication, using the Stud.IP database
 *
 * @access   public
-* @author   André Noack <noack@data-quest.de>
+* @author   AndrÃ© Noack <noack@data-quest.de>
 * @package
 */
 class StudipAuthStandard extends StudipAuthAbstract
@@ -61,13 +61,13 @@ class StudipAuthStandard extends StudipAuthAbstract
     {
         $user = User::findByUsername($username);
         if (!$user || !$password || mb_strlen($password) > 72) {
-            $this->error_msg= _("Ungültige Benutzername/Passwort-Kombination!") ;
+            $this->error_msg= _("UngÃ¼ltige Benutzername/Passwort-Kombination!") ;
             return false;
         } elseif ($user->username != $username) {
             $this->error_msg = _("Bitte achten Sie auf korrekte Gro&szlig;-Kleinschreibung beim Username!");
             return false;
         } elseif (!is_null($user->auth_plugin) && $user->auth_plugin != "standard") {
-            $this->error_msg = sprintf(_("Dieser Benutzername wird bereits über %s authentifiziert!"),$user->auth_plugin) ;
+            $this->error_msg = sprintf(_("Dieser Benutzername wird bereits Ã¼ber %s authentifiziert!"),$user->auth_plugin) ;
             return false;
         } else {
             $pass = $user->password;   // Password is stored as a md5 hash

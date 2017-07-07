@@ -29,7 +29,7 @@
         </tr>
         <tr>
             <td>
-                <strong><?= _('Gültigkeit') ?></strong>
+                <strong><?= _('GÃ¼ltigkeit') ?></strong>
             </td>
             <td nowrap>
                 <?= _('von Semester:') ?>
@@ -51,7 +51,7 @@
                         <?= htmlReady($sem->name) ?>
                     </span>
                 <? else : ?>
-                    <?= _('unbegrenzt gültig') ?>
+                    <?= _('unbegrenzt gÃ¼ltig') ?>
                 <? endif; ?>
                 <br>
                 <?= _('Fassung:') ?>
@@ -84,7 +84,7 @@
                 <? if($studiengang->typ != 'mehrfach') :?>
                     <?= _('Diesem Studiengang wird ein Fach direkt zugewiesen') ?>
                 <? else: ?>
-                    <?= _('Diesem Studiengang können mehrere Studiengangteile zugewiesen werden.') ?>
+                    <?= _('Diesem Studiengang kÃ¶nnen mehrere Studiengangteile zugewiesen werden.') ?>
                 <? endif;?>
             </td>
         </tr>

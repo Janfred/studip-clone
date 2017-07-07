@@ -119,7 +119,7 @@ class PluginAdministration
 
         if ($pluginid === NULL) {
             rmdirr($plugindir);
-            throw new PluginInstallationException(_('Das Plugin enthält keine gültige Plugin-Klasse.'));
+            throw new PluginInstallationException(_('Das Plugin enthÃ¤lt keine gÃ¼ltige Plugin-Klasse.'));
         }
 
         // register additional plugin classes in this package

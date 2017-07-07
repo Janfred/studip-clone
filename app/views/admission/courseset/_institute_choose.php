@@ -20,7 +20,7 @@
     </select>
     <br/><br/>
     <div style="font-weight:bold">
-    <?=_("Präfix des Namens:")?>
+    <?=_("PrÃ¤fix des Namens:")?>
     </div>
     <div>
     <input type="text" name="set_name_prefix" value="<?=htmlReady($set_name_prefix)?>" size="40">
@@ -59,6 +59,6 @@
     <?=SemesterData::GetSemesterSelector(array('name'=>'select_semester_id'), $current_semester_id, 'semester_id', true)?>
     </div>
     <div>
-    <?= Studip\Button::create(_('Auswählen'), 'choose_institut', array('title' => _("Einrichtung auswählen"))) ?>
+    <?= Studip\Button::create(_('AuswÃ¤hlen'), 'choose_institut', array('title' => _("Einrichtung auswÃ¤hlen"))) ?>
     </div>
 </form>

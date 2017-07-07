@@ -38,7 +38,7 @@
             <tr class="sortable">
             <? if ($is_dozent && !$tutor_is_locked): ?>
                 <th>
-                    <input aria-label="<?= sprintf(_('Alle %s auswählen'), $status_groups['tutor']) ?>"
+                    <input aria-label="<?= sprintf(_('Alle %s auswÃ¤hlen'), $status_groups['tutor']) ?>"
                            type="checkbox" name="all" value="1" data-proxyfor=":checkbox[name^=tutor]">
                 </th>
             <? endif ?>
@@ -75,7 +75,7 @@
             <tr>
             <? if ($is_dozent && !$tutor_is_locked): ?>
                 <td>
-                    <input aria-label="<?= sprintf(_('%s auswählen'), $status_groups['tutor']) ?>"
+                    <input aria-label="<?= sprintf(_('%s auswÃ¤hlen'), $status_groups['tutor']) ?>"
                            type="checkbox" name="tutor[<?= $tutor['user_id'] ?>]" value="1">
                 </td>
             <? endif ?>
@@ -113,7 +113,7 @@
                     <? if ($is_tutor) : ?>
                         <? $actionMenu->addLink(
                             $controller->url_for('course/members/add_comment/' . $tutor['user_id']),
-                            _('Bemerkung hinzufügen'),
+                            _('Bemerkung hinzufÃ¼gen'),
                             Icon::create('comment', 'clickable'),
                             ['data-dialog' => 'size=auto']
                         ) ?>
@@ -147,14 +147,14 @@
         <tfoot>
             <tr>
                 <td colspan="6">
-                    <select name="action_tutor" id="tutor_action" aria-label="<?= _('Aktion ausführen') ?>">
-                        <option value="">- <?= _('Aktion auswählen') ?></option>
+                    <select name="action_tutor" id="tutor_action" aria-label="<?= _('Aktion ausfÃ¼hren') ?>">
+                        <option value="">- <?= _('Aktion auswÃ¤hlen') ?></option>
                         <option value="downgrade"><?= sprintf(_('Zu %s herunterstufen'), $status_groups['autor']) ?></option>
                         <option value="remove"><?= _('Austragen') ?></option>
                         <option value="message"><?=_('Nachricht senden')?></option>
                         <!--<option value="copy_to_course"><?= _('In Seminar verschieben/kopieren') ?></option>-->
                     </select>
-                    <?= Button::create(_('Ausführen'), 'submit_autor') ?>
+                    <?= Button::create(_('AusfÃ¼hren'), 'submit_autor') ?>
                 </td>
             </tr>
         </tfoot>

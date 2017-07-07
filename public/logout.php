@@ -3,8 +3,8 @@
 # Lifter003: TODO
 # Lifter010: TODO
 /*
-logout.php - Ausloggen aus Stud.IP und aufr‰umen
-Copyright (C) 2000 Stefan Suchi <suchi@gmx.de>, AndrÈ Noack <andre.noack@gmx.net>,
+logout.php - Ausloggen aus Stud.IP und aufr√§umen
+Copyright (C) 2000 Stefan Suchi <suchi@gmx.de>, Andr√© Noack <andre.noack@gmx.net>,
 Cornelis Kater <ckater@gwdg.de>
 
 This program is free software; you can redistribute it and/or

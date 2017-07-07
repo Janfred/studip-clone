@@ -76,7 +76,7 @@ class ExternElementTableParagraphText extends ExternElement {
         
         $headline = $edit_form->editHeadline(_("Einzug"));
         $title = _("Linker Einzug:");
-        $info = _("Geben Sie an, wie weit (Pixel) der Text im Absatz links eingerückt werden soll.");
+        $info = _("Geben Sie an, wie weit (Pixel) der Text im Absatz links eingerÃ¼ckt werden soll.");
         $content = $edit_form->editTextfieldGeneric("margin", $title, $info, 3, 3);
         
         $content_table .= $edit_form->editContentTable($headline, $content);

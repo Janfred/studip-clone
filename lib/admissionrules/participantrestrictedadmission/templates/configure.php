@@ -13,7 +13,7 @@
     <label for="enable_FCFS">
     <input <?=($rule->prio_exists ? 'disabled' : '')?> type="checkbox" id="enable_FCFS"  name="enable_FCFS" value="1" <?= (!is_null($rule->getDistributionTime()) && !$rule->getDistributionTime() ? "checked" : ""); ?>>
     <?=_("<u>Keine</u> automatische Platzverteilung (Windhund-Verfahren)")?>
-    <?=($rule->prio_exists ? tooltipicon(_("Es existieren bereits Anmeldungen für die automatische Platzverteilung.")) : '')?>
+    <?=($rule->prio_exists ? tooltipicon(_("Es existieren bereits Anmeldungen fÃ¼r die automatische Platzverteilung.")) : '')?>
     </label>
 <? endif ?>
 <script>

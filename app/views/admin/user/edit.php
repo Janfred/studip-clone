@@ -11,9 +11,9 @@ use Studip\Button, Studip\LinkButton;
     <?= CSRFProtection::tokenTag() ?>
     <table class="default nohover collapsable">
         <caption>
-            <?= sprintf(_('Benutzerverwaltung für %s'), htmlReady($user->getFullName())) ?>
+            <?= sprintf(_('Benutzerverwaltung fÃ¼r %s'), htmlReady($user->getFullName())) ?>
         <? if ($prelim): ?>
-            (<?= _('vorläufiger Benutzer') ?>)
+            (<?= _('vorlÃ¤ufiger Benutzer') ?>)
         <? endif; ?>
         <? if ($user->locked): ?>
             <br>
@@ -115,7 +115,7 @@ use Studip\Button, Studip\LinkButton;
                 </td>
                 <td colspan="2">
                 <? if (StudipAuthAbstract::CheckField('user_info.geschlecht', $user->auth_plugin) || LockRules::check($user->user_id, 'gender')): ?>
-                    <?= !$user->geschlecht ? _('unbekannt') : ($user->geschlecht == 1 ? _('männlich') : _('weiblich')) ?>
+                    <?= !$user->geschlecht ? _('unbekannt') : ($user->geschlecht == 1 ? _('mÃ¤nnlich') : _('weiblich')) ?>
                 <? else: ?>
                     <label>
                         <input type="radio" name="geschlecht" value="0"
@@ -125,7 +125,7 @@ use Studip\Button, Studip\LinkButton;
                     <label>
                         <input type="radio" name="geschlecht" value="1"
                                 <? if ($user->geschlecht == 1) echo 'checked'; ?>>
-                        <?= _('männlich') ?>
+                        <?= _('mÃ¤nnlich') ?>
                     </label>
                     <label>
                         <input type="radio" name="geschlecht" value="2"
@@ -227,7 +227,7 @@ use Studip\Button, Studip\LinkButton;
                     <? if ($GLOBALS['MAIL_VALIDATE_BOX']) : ?>
                         <label>
                             <input type="checkbox" name="disable_mail_host_check" value="1">
-                            <?= _('Mailboxüberprüfung deaktivieren') ?>
+                            <?= _('MailboxÃ¼berprÃ¼fung deaktivieren') ?>
                         </label>
                     <? endif ?>
                 <? endif ?>
@@ -283,7 +283,7 @@ use Studip\Button, Studip\LinkButton;
                     <?= htmlReady($user->validation_key) ?>
                     <label>
                         <input type="checkbox" name="delete_val_key" value="1">
-                        <?= _('löschen') ?>
+                        <?= _('lÃ¶schen') ?>
                     </label>
                 </td>
             </tr>
@@ -301,7 +301,7 @@ use Studip\Button, Studip\LinkButton;
                     <label>
                         <input type="checkbox" onchange="jQuery('input[name=expiration_date]').val('');"
                                name="expiration_date_delete" value="1">
-                        <?= _('löschen') ?>
+                        <?= _('lÃ¶schen') ?>
                     </label>
                 </td>
             </tr>
@@ -320,19 +320,19 @@ use Studip\Button, Studip\LinkButton;
                     <label for="new_studiengang"><?= _('Neuer Studiengang') ?></label>
                 </td>
                 <td colspan="2">
-                    <select name="new_studiengang" id="new_studiengang" aria-label="<?= _('-- Bitte Fach auswählen --')?>">
-                        <option selected value="none"><?= _('-- Bitte Fach auswählen --')?></option>
+                    <select name="new_studiengang" id="new_studiengang" aria-label="<?= _('-- Bitte Fach auswÃ¤hlen --')?>">
+                        <option selected value="none"><?= _('-- Bitte Fach auswÃ¤hlen --')?></option>
                         <? foreach ($faecher as $fach) :?>
                             <?= sprintf('<option value="%s">%s</option>', $fach->id, htmlReady(my_substr($fach->name, 0, 50)));?>
                         <? endforeach?>
                     </select>
-                    <select name="new_abschluss" id="new_abschluss" aria-label="<?= _('-- Bitte Abschluss auswählen --')?>">
-                        <option selected value="none"><?= _('-- Bitte Abschluss auswählen --')?></option>
+                    <select name="new_abschluss" id="new_abschluss" aria-label="<?= _('-- Bitte Abschluss auswÃ¤hlen --')?>">
+                        <option selected value="none"><?= _('-- Bitte Abschluss auswÃ¤hlen --')?></option>
                         <? foreach ($abschluesse as $abschluss) :?>
                             <?= sprintf('<option value="%s">%s</option>' . "\n", $abschluss->id, htmlReady(my_substr($abschluss->name, 0, 50)));?>
                         <? endforeach?>
                     </select>
-                    <select name="fachsem" aria-label="<?= _("Bitte Fachsemester wählen") ?>">
+                    <select name="fachsem" aria-label="<?= _("Bitte Fachsemester wÃ¤hlen") ?>">
                         <? for ($i = 1; $i <= 50; $i += 1): ?>
                             <option><?= $i ?></option>
                         <? endfor; ?>
@@ -360,7 +360,7 @@ use Studip\Button, Studip\LinkButton;
                             <br>
                             <select name="change_version[<?= $usc->fach_id ?>][<?= $usc->abschluss_id ?>]"
                                     aria-labelledby="version_label">
-                                <option value=""><?= _('-- Bitte Version auswählen --') ?></option>
+                                <option value=""><?= _('-- Bitte Version auswÃ¤hlen --') ?></option>
                             <? foreach ($versionen as $version) : ?>
                                 <option <? if ($version->getId() == $usc->version_id) echo 'selected'; ?>
                                         value="<?= htmlReady($version->getId()) ?>">
@@ -369,7 +369,7 @@ use Studip\Button, Studip\LinkButton;
                             <? endforeach; ?>
                             </select>,<br>
                         <? else : ?>
-                            <?= tooltipIcon(_('Keine Version in der gewählten Fach-Abschluss-Kombination verfügbar.'), true) ?>
+                            <?= tooltipIcon(_('Keine Version in der gewÃ¤hlten Fach-Abschluss-Kombination verfÃ¼gbar.'), true) ?>
                         <? endif; ?>
                     <? endif ?>
                 </td>
@@ -377,7 +377,7 @@ use Studip\Button, Studip\LinkButton;
                     <a href="<?= $controller->url_for('admin/user/delete_studycourse/' . $user->user_id . '/' . $usc->fach_id . '/' . $usc->abschluss_id) ?>">
                         <?= Icon::create('trash', 'clickable')->asImg([
                             'class' => 'text-top',
-                            'title' => _('Diesen Studiengang löschen'),
+                            'title' => _('Diesen Studiengang lÃ¶schen'),
                         ]) ?>
                     </a>
                 </td>
@@ -390,7 +390,7 @@ use Studip\Button, Studip\LinkButton;
                 <td colspan="2">
                     <select name="new_student_inst" id="new_student_inst" class="nested-select">
                         <option value="" class="is-placeholder">
-                            <?= _('-- Bitte Einrichtung auswählen --') ?>
+                            <?= _('-- Bitte Einrichtung auswÃ¤hlen --') ?>
                         </option>
                     <? foreach ($available_institutes as $i) : ?>
                         <? if (!isset($institutes[$i['Institut_id']])) : ?>
@@ -417,7 +417,7 @@ use Studip\Button, Studip\LinkButton;
                         <a href="<?= $controller->url_for('admin/user/delete_institute/' . $user->user_id . '/' . $inst_membership->institut_id) ?>">
                             <?= Icon::create('trash', 'clickable')->asImg([
                                 'class' => 'text-top',
-                                'title' => _('Diese Einrichtung löschen'),
+                                'title' => _('Diese Einrichtung lÃ¶schen'),
                             ]) ?>
                         </a>
                     <? endif; ?>
@@ -442,7 +442,7 @@ use Studip\Button, Studip\LinkButton;
                 <td colspan="2">
                     <select name="new_inst" id="new_inst" class="nested-select">
                         <option value="" class="is-placeholder">
-                            <?= _('-- Bitte Einrichtung auswählen --') ?>
+                            <?= _('-- Bitte Einrichtung auswÃ¤hlen --') ?>
                         </option>
                     <? foreach ($available_institutes as $i) : ?>
                         <? if (InstituteMember::countBySql('user_id = ? AND institut_id = ?', [$user->user_id, $i['Institut_id']]) == 0
@@ -482,7 +482,7 @@ use Studip\Button, Studip\LinkButton;
                         <a href="<?= $controller->url_for('admin/user/delete_institute/' . $user->user_id . '/' . $inst_membership->institut_id) ?>">
                             <?= Icon::create('trash', 'clickable')->asImg([
                                 'class' => 'text-top',
-                                'title' => _('Diese Einrichtung löschen'),
+                                'title' => _('Diese Einrichtung lÃ¶schen'),
                             ]) ?>
                         </a>
                     <? endif; ?>
@@ -495,17 +495,17 @@ use Studip\Button, Studip\LinkButton;
         <tbody>
             <tr class="header-row">
                 <th colspan="3" class="toggle-indicator">
-                    <a class="toggler"><strong><?= _('Nutzerdomänen') ?></strong></a>
+                    <a class="toggler"><strong><?= _('NutzerdomÃ¤nen') ?></strong></a>
                 </th>
             </tr>
             <tr>
                 <td>
-                    <label for="new_userdomain"><?= _('Neue Nutzerdomäne') ?></label>
+                    <label for="new_userdomain"><?= _('Neue NutzerdomÃ¤ne') ?></label>
                 </td>
                 <td colspan="2">
                 <? if (!empty($domains)) : ?>
                     <select name="new_userdomain" id="new_userdomain">
-                        <option selected value="none"><?= _('-- Bitte Nutzerdomäne auswählen --') ?></option>
+                        <option selected value="none"><?= _('-- Bitte NutzerdomÃ¤ne auswÃ¤hlen --') ?></option>
                     <? foreach ($domains as $domain) : ?>
                         <option value="<?= $domain->getID() ?>">
                             <?= htmlReady(my_substr($domain->getName(), 0, 50)) ?>
@@ -519,7 +519,7 @@ use Studip\Button, Studip\LinkButton;
             <? foreach ($userdomains as $i => $domain): ?>
                 <tr>
                     <td>
-                        <?= $i + 1 ?>. <?= _('Nutzerdomäne') ?>
+                        <?= $i + 1 ?>. <?= _('NutzerdomÃ¤ne') ?>
                     </td>
                     <td>
                         <?= htmlReady($domain->getName()) ?>
@@ -528,7 +528,7 @@ use Studip\Button, Studip\LinkButton;
                         <a href="<?= $controller->url_for('admin/user/delete_userdomain/' . $user->user_id . '?domain_id=' . $domain->getID()) ?>">
                             <?= Icon::create('trash', 'clickable')->asImg([
                                 'class' => 'text-top',
-                                'title' => _('Aus dieser Nutzerdomäne austragen'),
+                                'title' => _('Aus dieser NutzerdomÃ¤ne austragen'),
                             ]) ?>
                         </a>
                     </td>
@@ -552,7 +552,7 @@ use Studip\Button, Studip\LinkButton;
                 <td colspan="2">
                     <select name="lock_rule" id="lock_rule">
                         <option value="none">
-                            <?= _('-- Bitte Sperrebene auswählen --') ?>
+                            <?= _('-- Bitte Sperrebene auswÃ¤hlen --') ?>
                         </option>
                     <? foreach (LockRule::findAllByType('user') as $rule) : ?>
                         <option value="<?= $rule->getId() ?>" <? if ($user['lock_rule'] == $rule->getId()) echo 'selected'; ?>>
@@ -580,7 +580,7 @@ use Studip\Button, Studip\LinkButton;
                             <?= htmlReady($entry->getName()) ?>:
                         </label>
                     <? if (!$entry->isVisible($user->perms)): ?>
-                        <?= tooltipIcon(_('Systemfeld (für die Person selbst nicht sichtbar)')) ?>
+                        <?= tooltipIcon(_('Systemfeld (fÃ¼r die Person selbst nicht sichtbar)')) ?>
                     <? endif; ?>
                     </td>
                     <td colspan="2">
@@ -601,7 +601,7 @@ use Studip\Button, Studip\LinkButton;
                 <td colspan="3">
                     <label>
                         <input name="u_edit_send_mail" value="1" checked type="checkbox">
-                        <?= _('Emailbenachrichtigung bei Änderung der Daten verschicken?') ?>
+                        <?= _('Emailbenachrichtigung bei Ã„nderung der Daten verschicken?') ?>
                     </label>
                 </td>
             </tr>

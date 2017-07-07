@@ -168,7 +168,7 @@ switch( $command ) {
         $answer->delete ();
   } else {
      /* Cannot delete templates of other users */
-     $report = EvalCommon::createReportMessage(_("Keine Berechtigung zum Lˆschen."),
+     $report = EvalCommon::createReportMessage(_("Keine Berechtigung zum L√∂schen."),
                       EVAL_PIC_ERROR, EVAL_CSS_ERROR);
   }
   $command="";
@@ -176,7 +176,7 @@ switch( $command ) {
 
  /* -------------------------------------------------------------------- */
  case "add_answers":
-  // Bevor etwas hinzugef¸gt wird nochmal die Speicherungsroutine laufen lassen
+  // Bevor etwas hinzugef√ºgt wird nochmal die Speicherungsroutine laufen lassen
   if(!Request::option('onthefly')){
      $question=save1($myuserid);
   }else{
@@ -246,7 +246,7 @@ switch( $command ) {
       if($nummer==0){
      $report =
         EvalCommon::createReportMessage(
-        _("Dem Template wurden keine Antworten zugewiesen oder keine der Antworten  enthielt einen Text. F¸gen Sie Antworten an, oder lˆschen Sie das Template."),
+        _("Dem Template wurden keine Antworten zugewiesen oder keine der Antworten  enthielt einen Text. F√ºgen Sie Antworten an, oder l√∂schen Sie das Template."),
                         EVAL_PIC_ERROR,
                         EVAL_CSS_ERROR);
      $command = "continue_edit";
@@ -261,7 +261,7 @@ switch( $command ) {
      if($text==""){
         $report =
            EvalCommon::createReportMessage(
-           _("Leere Antworten sind nicht zul‰ssig, lˆschen Sie betreffende Felder oder geben Sie einen Text ein."),
+           _("Leere Antworten sind nicht zul√§ssig, l√∂schen Sie betreffende Felder oder geben Sie einen Text ein."),
                            EVAL_PIC_ERROR,
                            EVAL_CSS_ERROR);
         $command = "continue_edit";
@@ -283,13 +283,13 @@ switch( $command ) {
    }
 
    if (!Request::option('onthefly') && ! $question->getText()) {
-       $report = EvalCommon::createReportMessage(_("Geben Sie einen Namen f¸r die Vorlage ein."),
+       $report = EvalCommon::createReportMessage(_("Geben Sie einen Namen f√ºr die Vorlage ein."),
                          EVAL_PIC_ERROR,
                          EVAL_CSS_ERROR);
        $command = "continue_edit";
        break;
    }
-   /*POSITION DER NƒCHSTEN ZEILE ‹BERDENKEN ---------------------------------*/
+   /*POSITION DER N√ÑCHSTEN ZEILE √úBERDENKEN ---------------------------------*/
    // $lib->setUniqueName ($question, $db, $myuserid, YES);
    /* ------------------------------------------------- end: check userinput */
 
@@ -414,13 +414,13 @@ if( !$command || $command == "back" ) {
     $form->attr( "action", URLHelper::getLink("?page=edit&evalID=".$evalID));
     $form->attr( "method", "post" );
     $form->html(CSRFProtection::tokenTag());
-    $form->cont( Button::create(_('zur¸ck'), 'template_back_button', array('title' => _('Zur¸ck zur Auswahl'))) );
+    $form->cont( Button::create(_('zur√ºck'), 'template_back_button', array('title' => _('Zur√ºck zur Auswahl'))) );
     $td->cont( $form );
 
     /* on the fly info message -------------------------------------------- */
     if( $command == "create_question_answers" || Request::option('onthefly') ) {
    $report = EvalCommon::createReportMessage(
-           sprintf(_("Weisen Sie der links %sausgew‰hlten%s Frage hier Antworten zu:"),
+           sprintf(_("Weisen Sie der links %sausgew√§hlten%s Frage hier Antworten zu:"),
               "<span class=\"eval_highlight\">", "</span>"),
            EVAL_PIC_INFO, EVAL_CSS_INFO );
     }
@@ -453,7 +453,7 @@ if( $command ) {
     $td = new HTM( "td" );
     $td->attr( "class", "table_row_odd" );
 
-      /*¸bergebe an create Form das template, dass ver‰ndert werden soll*/
+      /*√ºbergebe an create Form das template, dass ver√§ndert werden soll*/
 
     switch( $command ) {
       case "editpol_scale":
@@ -520,8 +520,8 @@ if( $command ) {
        //$td->cont( $lib->createTemplateFormMul( $question ) );
        break;
       case "continue_edit":
-       /*Im Fall direkt question->answers flag mit¸bergeben*/
-       /*$template_type ¸berpr¸fen------------------------------------------*/
+       /*Im Fall direkt question->answers flag mit√ºbergeben*/
+       /*$template_type √ºberpr√ºfen------------------------------------------*/
        switch( Request::option('template_type') ) {
       /* --------------------------------------------------------------- */
      case EVALQUESTION_TYPE_POL:
@@ -668,7 +668,7 @@ function save1($myuserid){
        //$answerdiff;
     }
     if($answerdiff > 0){
-       /*differenz abziehen => answers ¸berspringen*/
+       /*differenz abziehen => answers √ºberspringen*/
        $i=$i+$answerdiff;
        $ausgleich=$ausgleich-$answerdiff;
     }

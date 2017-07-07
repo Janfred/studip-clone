@@ -1,4 +1,4 @@
-<h1><?= _("Teilnahmebeschränkte Veranstaltungen") ?></h1>
+<h1><?= _("TeilnahmebeschrÃ¤nkte Veranstaltungen") ?></h1>
 <?= $this->render_partial('admission/restricted_courses/_institute_choose.php')?>
 <br>
 <? if (count($courses)) : ?>
@@ -24,7 +24,7 @@
                 <td><?= htmlReady($course['admission_turnout'])?></td>
                 <td><?= htmlReady($course['count_teilnehmer'] + $course['count_prelim'])?>
                 <? if ($course['admission_prelim'] && $course['count_prelim']) : ?>
-                <? $text = _("vorläufige Teilnahme: ") . $course['count_prelim']; ?>
+                <? $text = _("vorlÃ¤ufige Teilnahme: ") . $course['count_prelim']; ?>
                     <?= tooltipIcon($text) ?>
                 <? endif ?>
                 <td><?= htmlReady(isset($course['count_claiming']) ? $course['count_claiming'] : '-')?></td>

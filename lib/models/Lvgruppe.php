@@ -481,7 +481,7 @@ class Lvgruppe extends ModuleManagementModelTreeItem
     {
         $name = '';
         /*
-         * Gießen
+         * GieÃŸen
         $modul = Modul::find($modul_id);
         if ($modul) {
             $name = $modul->responsible_institute->institute->getShortName();

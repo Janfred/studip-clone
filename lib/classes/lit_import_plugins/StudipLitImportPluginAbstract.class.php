@@ -84,11 +84,11 @@ class StudipLitImportPluginAbstract {
     // function upload_file($xmlfile, $xmlfile_size, $xmlfile_name) {
     function upload_file() {
         if (!$this->xmlfile_name) {
-            PageLayout::postError(_("Sie haben keine Datei zum Hochladen ausgewählt!"));
+            PageLayout::postError(_("Sie haben keine Datei zum Hochladen ausgewÃ¤hlt!"));
             return false;
         }
         if ($this->xmlfile_size == 0) {
-            PageLayout::postError(_("Sie haben eine leere Datei zum Hochladen ausgewählt!"));
+            PageLayout::postError(_("Sie haben eine leere Datei zum Hochladen ausgewÃ¤hlt!"));
             return false;
         }
         
@@ -101,7 +101,7 @@ class StudipLitImportPluginAbstract {
         } else {
             // na dann lesen wir mal...
             if (!($fp = fopen($newfile, "r"))) {
-                PageLayout::postError(_("Importdatei konnte nicht geöffnet werden"));
+                PageLayout::postError(_("Importdatei konnte nicht geÃ¶ffnet werden"));
                 @unlink($newfile);
                 return false;
             }
@@ -165,7 +165,7 @@ class StudipLitImportPluginAbstract {
                     return false;
                 }
             } else {
-                PageLayout::postError(_("Keine Listeneinträge gefunden"));
+                PageLayout::postError(_("Keine ListeneintrÃ¤ge gefunden"));
                 return false;
             }
         }
@@ -182,7 +182,7 @@ class StudipLitImportPluginAbstract {
         } else {
             $ret = '';
             for ($i = 0; $i < count($this->error_msg); ++$i){
-                $ret .= $this->error_msg[$i]['type'] . "§" . htmlReady($this->error_msg[$i]['msg']) . "§";
+                $ret .= $this->error_msg[$i]['type'] . "Â§" . htmlReady($this->error_msg[$i]['msg']) . "Â§";
             }
             return $ret;
         }

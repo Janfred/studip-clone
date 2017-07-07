@@ -33,10 +33,10 @@ class Settings_StudiesController extends Settings_SettingsController
             throw new AccessDeniedException();
         }
 
-        PageLayout::setHelpKeyword('Basis.HomepageUniversit‰reDaten');
+        PageLayout::setHelpKeyword('Basis.HomepageUniversit√§reDaten');
         PageLayout::setTitle(_('Studiengang bearbeiten'));
         Navigation::activateItem('/profile/edit/studies');
-        SkipLinks::addIndex(_('F‰cher und Abschl¸sse ausw‰hlen'), 'select_fach_abschluss');
+        SkipLinks::addIndex(_('F√§cher und Abschl√ºsse ausw√§hlen'), 'select_fach_abschluss');
         SkipLinks::addIndex(_('Zu Einrichtungen zuordnen'), 'select_institute');
 
         $this->allow_change = [
@@ -136,10 +136,10 @@ class Settings_StudiesController extends Settings_SettingsController
         }
 
         if ($any_change) {
-            PageLayout::postSuccess(_('Die Zuordnung zu Studieng‰ngen wurde ge‰ndert.'));
+            PageLayout::postSuccess(_('Die Zuordnung zu Studieng√§ngen wurde ge√§ndert.'));
 
             setTempLanguage($this->user->user_id);
-            $this->postPrivateMessage(_("Die Zuordnung zu Studieng‰ngen wurde ge‰ndert!\n"));
+            $this->postPrivateMessage(_("Die Zuordnung zu Studieng√§ngen wurde ge√§ndert!\n"));
             restoreLanguage();
         }
 
@@ -192,10 +192,10 @@ class Settings_StudiesController extends Settings_SettingsController
         }
 
         if ($delete || $new) {
-            PageLayout::postSuccess(_('Die Zuordnung zu Einrichtungen wurde ge‰ndert.'));
+            PageLayout::postSuccess(_('Die Zuordnung zu Einrichtungen wurde ge√§ndert.'));
 
             setTempLanguage($this->user->user_id);
-            $this->postPrivateMessage(_("Die Zuordnung zu Einrichtungen wurde ge‰ndert!\n"));
+            $this->postPrivateMessage(_("Die Zuordnung zu Einrichtungen wurde ge√§ndert!\n"));
             restoreLanguage();
         }
 

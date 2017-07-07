@@ -21,6 +21,6 @@
 </table>
 <? else : ?>
 <span class="mvv-no-entry">
-<?= _('Diese Lehrveranstaltungsgruppe wurde für das ausgewählte Semester keinen Modulteilen zugeordnet.') ?>
+<?= _('Diese Lehrveranstaltungsgruppe wurde fÃ¼r das ausgewÃ¤hlte Semester keinen Modulteilen zugeordnet.') ?>
 </span>
 <? endif; ?>

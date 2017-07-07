@@ -28,7 +28,7 @@
             <input type="text" name="new_topic" id="new_topic"
                    placeholder="<?= _('Thema suchen oder neu anlegen') ?>">
             <?= Studip\Button::create(
-                _('Thema hinzufügen'), 'add_topic',
+                _('Thema hinzufÃ¼gen'), 'add_topic',
                 ['onclick' => 'STUDIP.Dates.addTopic(); return false;']
             ) ?>
         </label>
@@ -36,7 +36,7 @@
 
 <? if (count($teachers) > 1): ?>
     <fieldset class="studip-selection <?= $metadata_locked ? 'disabled' : ''?>" data-attribute-name="assigned_teachers">
-        <legend><?= _('Durchführende Lehrende') ?></legend>
+        <legend><?= _('DurchfÃ¼hrende Lehrende') ?></legend>
 
         <section class="studip-selection-selected">
             <h2><?= _('Zugewiesene Lehrende') ?></h2>
@@ -79,7 +79,7 @@
         <? endforeach; ?>
                 <li class="empty-placeholder">
                     <?= sprintf(
-                            _('Ihre Auswahl entspricht dem Zustand "%s" und wird beim Speichern zurückgesetzt'),
+                            _('Ihre Auswahl entspricht dem Zustand "%s" und wird beim Speichern zurÃ¼ckgesetzt'),
                             _('Kein spezieller Lehrender zugewiesen')
                     ) ?>
                 </li>

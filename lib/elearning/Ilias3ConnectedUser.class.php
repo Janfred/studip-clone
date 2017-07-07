@@ -9,7 +9,7 @@
 *
 * This class contains methods to handle connected ILIAS 3 user-accounts.
 *
-* @author   Arne Schröder <schroeder@data-quest.de>
+* @author   Arne SchrÃ¶der <schroeder@data-quest.de>
 * @access   public
 * @modulegroup  elearning_interface_modules
 * @module       Ilias3ConnectedUser
@@ -157,14 +157,14 @@ class Ilias3ConnectedUser extends ConnectedUser
 
         // data for user-category in ILIAS 3
         $object_data["title"] = sprintf(_("Eigene Daten von %s (%s)."), $this->getName(), $this->getId());
-        $object_data["description"] = sprintf(_("Hier befinden sich die persönlichen Lernmodule des Benutzers %s."), $this->getName());
+        $object_data["description"] = sprintf(_("Hier befinden sich die persÃ¶nlichen Lernmodule des Benutzers %s."), $this->getName());
         $object_data["type"] = "cat";
         $object_data["owner"] = $this->getId();
 
         $cat = $connected_cms[$this->cms_type]->soap_client->getReferenceByTitle($object_data["title"]);
         if ($cat != false && $connected_cms[$this->cms_type]->soap_client->checkReferenceById($cat) )
         {
-            $messages["info"] .= sprintf(_("Ihre persönliche Kategorie wurde bereits angelegt."), $this->login) . "<br>\n";
+            $messages["info"] .= sprintf(_("Ihre persÃ¶nliche Kategorie wurde bereits angelegt."), $this->login) . "<br>\n";
             $this->category = $cat;
         }
         else
@@ -183,7 +183,7 @@ class Ilias3ConnectedUser extends ConnectedUser
         $role_data["description"] = sprintf(_("User-Rolle von %s. Diese Rolle wurde von Stud.IP generiert."), $this->getName());
         $role_id = $connected_cms[$this->cms_type]->soap_client->getObjectByTitle($role_data["title"], "role");
         if ($role_id != false)
-            $messages["info"] .= sprintf(_("Ihre persönliche Userrolle wurde bereits angelegt."), $this->login) . "<br>\n";
+            $messages["info"] .= sprintf(_("Ihre persÃ¶nliche Userrolle wurde bereits angelegt."), $this->login) . "<br>\n";
         else
             $role_id = $connected_cms[$this->cms_type]->soap_client->addRoleFromTemplate($role_data, $this->category, $connected_cms[$this->cms_type]->user_role_template_id);
         $connected_cms[$this->cms_type]->soap_client->addUserRoleEntry($this->getId(), $role_id);

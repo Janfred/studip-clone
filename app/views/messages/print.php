@@ -20,7 +20,7 @@
 <?php if (count($msg['attachments'])) : ?>
     <hr>
     <div style="font-weight:bold">
-    <?php echo _("Dateianhänge:")?>
+    <?php echo _("DateianhÃ¤nge:")?>
     </div>
     <?php foreach($msg['attachments'] as $one) : ?>
     <div>

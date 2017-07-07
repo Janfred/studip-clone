@@ -131,14 +131,14 @@ PluginEngine::loadPlugins();
 if ((Navigation::hasItem('/course/admin') || $GLOBALS['perm']->have_perm('admin'))
     && ($perm->have_studip_perm('tutor', Context::getId()) && Context::isCourse())
     && (!Context::isCourse() || !$GLOBALS['SEM_CLASS'][$GLOBALS['SEM_TYPE'][Context::getArtNum()]['class']]['studygroup_mode'])) {
-    $plus_nav = new Navigation(_('Mehr Ö'), 'dispatch.php/course/plus/index');
-    $plus_nav->setDescription(_("Mehr Stud.IP-Funktionen f¸r Ihre Veranstaltung"));
+    $plus_nav = new Navigation(_('Mehr ‚Ä¶'), 'dispatch.php/course/plus/index');
+    $plus_nav->setDescription(_("Mehr Stud.IP-Funktionen f√ºr Ihre Veranstaltung"));
     Navigation::addItem('/course/modules', $plus_nav);
 }
 // add navigation item for profile: add modules
 if (Navigation::hasItem('/profile/edit')) {
-    $plus_nav = new Navigation(_('Mehr Ö'), 'dispatch.php/profilemodules/index');
-    $plus_nav->setDescription(_("Mehr Stud.IP-Funktionen f¸r Ihr Profil"));
+    $plus_nav = new Navigation(_('Mehr ‚Ä¶'), 'dispatch.php/profilemodules/index');
+    $plus_nav->setDescription(_("Mehr Stud.IP-Funktionen f√ºr Ihr Profil"));
     Navigation::addItem('/profile/modules', $plus_nav);
 }
 if ($user_did_login) {

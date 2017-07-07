@@ -54,7 +54,7 @@ class ExternElementMainTemplateDownload extends ExternElementMain {
                 'icondefault'
         );
         $this->real_name = _("Grundeinstellungen");
-        $this->description = _("In den Grundeinstellungen können Sie allgemeine Daten des Moduls ändern.");
+        $this->description = _("In den Grundeinstellungen kÃ¶nnen Sie allgemeine Daten des Moduls Ã¤ndern.");
         parent::__construct($module_name, $data_fields, $field_names, $config);
         $this->edit_function = 'editSort';
     }
@@ -119,32 +119,32 @@ class ExternElementMainTemplateDownload extends ExternElementMain {
         
         $headline = $edit_form->editHeadline(_("Weitere Angaben"));
         
-        $title = _("Max. Länge der Beschreibung:");
+        $title = _("Max. LÃ¤nge der Beschreibung:");
         $info = _("Geben Sie an, wieviele Zeichen der Beschreibung der Datei ausgegeben werden sollen.");
         $table = $edit_form->editTextfieldGeneric("lengthdesc", $title, $info, 3, 3);
         
         $title = _("Namensformat:");
-        $info = _("Wählen Sie, wie Personennamen formatiert werden sollen.");
+        $info = _("WÃ¤hlen Sie, wie Personennamen formatiert werden sollen.");
         $values = array("", "no_title_short", "no_title", "no_title_rev", "full", "full_rev");
         $names = array(_("keine Auswahl"), _("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
                 _("Dr. Peter Meyer"), _("Meyer, Peter, Dr."));
         $table .= $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
         
         $title = _("Datumsformat:");
-        $info = _("Wählen Sie, wie Datumsangaben formatiert werden sollen.");
+        $info = _("WÃ¤hlen Sie, wie Datumsangaben formatiert werden sollen.");
         $values = array("%d. %b. %Y", "%d.%m.%Y", "%d.%m.%y", "%d. %B %Y", "%m/%d/%y");
         $names = array(_("25. Nov. 2003"), _("25.11.2003"), _("25.11.03"),
                 _("25. November 2003"), _("11/25/03"));
         $table .= $edit_form->editOptionGeneric("dateformat", $title, $info, $values, $names);
         
         $title = _("Sprache:");
-        $info = _("Wählen Sie eine Sprache für die Datumsangaben aus.");
+        $info = _("WÃ¤hlen Sie eine Sprache fÃ¼r die Datumsangaben aus.");
         $values = array("", "de_DE", "en_GB");
         $names = array(_("keine Auswahl"), _("Deutsch"), _("Englisch"));
         $table .= $edit_form->editOptionGeneric("language", $title, $info, $values, $names);
         
         $title = _("Keine Dateien:");
-        $info = _("Dieser Text wird an Stelle der Tabelle ausgegeben, wenn keine Dateien zum Download verfügbar sind.");
+        $info = _("Dieser Text wird an Stelle der Tabelle ausgegeben, wenn keine Dateien zum Download verfÃ¼gbar sind.");
         $table .= $edit_form->editTextareaGeneric("nodatatext", $title, $info, 3, 50);
         
         $content_table .= $edit_form->editContentTable($headline, $table);
@@ -164,14 +164,14 @@ class ExternElementMainTemplateDownload extends ExternElementMain {
                 _("sonstige Dateien:")
         );
         $icon_infos = array(
-                _("Geben Sie die URL eines Bildes ein, dass als Icon für Bild-Dateien dienen soll. Erlaubte Formate: jpg, png, gif. "),
-                _("Geben Sie die URL eines Bildes ein, dass als Icon für Text-Dateien dienen soll. Erlaubte Formate: jpg, png, gif. "),
-                _("Geben Sie die URL eines Bildes ein, dass als Icon für PDF-Dateien dienen soll. Erlaubte Formate: jpg, png, gif. "),
-                _("Geben Sie die URL eines Bildes ein, dass als Icon für Powerpoint-Dateien dienen soll. Erlaubte Formate: jpg, png, gif. "),
-                _("Geben Sie die URL eines Bildes ein, dass als Icon für Excel-Dateien dienen soll. Erlaubte Formate: jpg, png, gif. "),
-                _("Geben Sie die URL eines Bildes ein, dass als Icon für RTF-Dateien dienen soll. Erlaubte Formate: jpg, png, gif. "),
-                _("Geben Sie die URL eines Bildes ein, dass als Icon für komprimierte Dateien dienen soll. Erlaubte Formate: jpg, png, gif. "),
-                _("Geben Sie die URL eines Bildes ein, dass als Icon für alle anderen Dateiformate dienen soll. ")
+                _("Geben Sie die URL eines Bildes ein, dass als Icon fÃ¼r Bild-Dateien dienen soll. Erlaubte Formate: jpg, png, gif. "),
+                _("Geben Sie die URL eines Bildes ein, dass als Icon fÃ¼r Text-Dateien dienen soll. Erlaubte Formate: jpg, png, gif. "),
+                _("Geben Sie die URL eines Bildes ein, dass als Icon fÃ¼r PDF-Dateien dienen soll. Erlaubte Formate: jpg, png, gif. "),
+                _("Geben Sie die URL eines Bildes ein, dass als Icon fÃ¼r Powerpoint-Dateien dienen soll. Erlaubte Formate: jpg, png, gif. "),
+                _("Geben Sie die URL eines Bildes ein, dass als Icon fÃ¼r Excel-Dateien dienen soll. Erlaubte Formate: jpg, png, gif. "),
+                _("Geben Sie die URL eines Bildes ein, dass als Icon fÃ¼r RTF-Dateien dienen soll. Erlaubte Formate: jpg, png, gif. "),
+                _("Geben Sie die URL eines Bildes ein, dass als Icon fÃ¼r komprimierte Dateien dienen soll. Erlaubte Formate: jpg, png, gif. "),
+                _("Geben Sie die URL eines Bildes ein, dass als Icon fÃ¼r alle anderen Dateiformate dienen soll. ")
         );
         $info_add = _("Wenn Sie keine URL angeben, wird ein Standard-Icon ausgegeben.");
         

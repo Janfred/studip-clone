@@ -18,20 +18,20 @@
                 <?= _('Titel:') ?>
                 <input type="text" size="60" maxlength="255" name="step_title"
                        value="<?= $step ? htmlReady($step->title) : '' ?>"
-                       placeholder="<?= _('Bitte geben Sie einen Titel für den Schritt an') ?>">
+                       placeholder="<?= _('Bitte geben Sie einen Titel fÃ¼r den Schritt an') ?>">
             </label>
 
             <label>
                 <?= _('Inhalt:') ?>
                 <textarea cols="60" rows="5" name="step_tip"
-                          placeholder="<?= _('Bitte geben Sie den Text für diesen Schritt ein') ?>"><?= $step ? htmlReady($step->tip) : '' ?></textarea>
+                          placeholder="<?= _('Bitte geben Sie den Text fÃ¼r diesen Schritt ein') ?>"><?= $step ? htmlReady($step->tip) : '' ?></textarea>
             </label>
 
             <label>
                 <span class="required"><?= _('Art:') ?></span>
                 <select name="step_interactive">
                     <option value="0" <? if (!$step->interactive) echo 'selected'; ?>>
-                        <?= _('Geführt') ?>
+                        <?= _('GefÃ¼hrt') ?>
                     </option>
                     <option value="1" <? if ($step->interactive) echo ' selected'; ?>>
                         <?= _('Interaktiv') ?>
@@ -47,7 +47,7 @@
                     <span class="required"><?= _('Seite:') ?></span>
                     <input type="text" size="60" maxlength="255" name="step_route"
                            value="<?= $step ? htmlReady($step->route) : '' ?>"
-                           placeholder="<?= _('Route für den Schritt (z.B. "dispatch.php/profile")') ?>">
+                           placeholder="<?= _('Route fÃ¼r den Schritt (z.B. "dispatch.php/profile")') ?>">
                 </label>
                 <label>
                     <?= _('CSS-Selektor:') ?>

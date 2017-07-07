@@ -6,7 +6,7 @@
 
 $error_message = "";
 
-// stimmt die übergebene range_id?
+// stimmt die Ã¼bergebene range_id?
 $query = "SELECT 1 FROM Institute WHERE Institut_id = ?";
 $statement = DBManager::get()->prepare($query);
 $statement->execute(array($this->config->range_id));

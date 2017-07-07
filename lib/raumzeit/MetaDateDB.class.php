@@ -8,7 +8,7 @@
 // This file is part of Stud.IP
 // MetaDateDB.class.php
 //
-// Datenbank-Abfragen für MetaDate.class.php
+// Datenbank-Abfragen fÃ¼r MetaDate.class.php
 //
 // +--------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -30,7 +30,7 @@
  * MetaDateDB.class.php
  *
  *
- * @author      Till Glöggler <tgloeggl@uos.de>
+ * @author      Till GlÃ¶ggler <tgloeggl@uos.de>
  * @version     19. Oktober 2005
  * @access      protected
  * @package     raumzeit

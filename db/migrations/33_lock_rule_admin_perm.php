@@ -11,7 +11,7 @@ class LockRuleAdminPerm extends Migration
         $db = DBManager::get();
 
         $name = 'AUX_RULE_ADMIN_PERM';
-        $description = 'mit welchem Status dürfen Zusatzangaben definiert werden (admin, root)';
+        $description = 'mit welchem Status dÃ¼rfen Zusatzangaben definiert werden (admin, root)';
         $time = time();
 
         $db->exec("
@@ -22,7 +22,7 @@ class LockRuleAdminPerm extends Migration
         ");
 
         $name = 'LOCK_RULE_ADMIN_PERM';
-        $description = 'mit welchem Status dürfen Sperrebenen angepasst werden (admin, root)';
+        $description = 'mit welchem Status dÃ¼rfen Sperrebenen angepasst werden (admin, root)';
 
         $db->exec("
             INSERT INTO config

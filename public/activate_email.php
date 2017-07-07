@@ -24,7 +24,7 @@ function reenter_mail() {
     echo '<br>';
     echo '<form action="' . URLHelper::getLink() . '" method="post" class="default">';
     echo '<fieldset>';
-    echo '<legend>'._('Sollten Sie keine E-Mail erhalten haben, können Sie sich einen neuen Aktivierungsschlüssel zuschicken lassen. Geben Sie dazu Ihre gewünschte E-Mail-Adresse unten an') . '</legend>'
+    echo '<legend>'._('Sollten Sie keine E-Mail erhalten haben, kÃ¶nnen Sie sich einen neuen AktivierungsschlÃ¼ssel zuschicken lassen. Geben Sie dazu Ihre gewÃ¼nschte E-Mail-Adresse unten an') . '</legend>'
         . CSRFProtection::tokenTag()
         .'<input type="hidden" name="uid" value="'. htmlReady(Request::option('uid')) .'">'
         .'<label>' . _('E-Mail')
@@ -41,10 +41,10 @@ function reenter_mail() {
 function mail_explain() {
     echo '<form action="' . URLHelper::getLink() . '" method="post" class="default">';
     echo '<fieldset>';
-    echo '<legend>' .  _('Sie haben Ihre E-Mail-Adresse geändert. 
-    Um diese frei zu schalten müssen Sie den Ihnen an Ihre neue Adresse zugeschickten Aktivierungs Schlüssel im unten stehenden Eingabefeld eintragen.') . '</legend>';
+    echo '<legend>' .  _('Sie haben Ihre E-Mail-Adresse geÃ¤ndert. 
+    Um diese frei zu schalten mÃ¼ssen Sie den Ihnen an Ihre neue Adresse zugeschickten Aktivierungs SchlÃ¼ssel im unten stehenden Eingabefeld eintragen.') . '</legend>';
     echo CSRFProtection::tokenTag();
-    echo '<label>' . _('Aktivierungs Schlüssel')
+    echo '<label>' . _('Aktivierungs SchlÃ¼ssel')
         .'<input type="text" name="key"><input name="uid" type="hidden" value="'.htmlReady(Request::option('uid')).'">';
     echo '</fieldset>';
     echo '<footer>' . Button::createAccept() . '</footer>';
@@ -77,22 +77,22 @@ if(Request::get('key') !== null) {
         $sth->execute(array($uid));
         unset($_SESSION['semi_logged_in']);
         head(PageLayout::getTitle());
-        PageLayout::postSuccess(_('Ihre E-Mail-Adresse wurde erfolgreich geändert.'));
+        PageLayout::postSuccess(_('Ihre E-Mail-Adresse wurde erfolgreich geÃ¤ndert.'));
         printf(' <a href="' . URLHelper::getLink('index.php') . '">%s</a>', _('Zum Login'));
     } else if ($key == '') {
         head(PageLayout::getTitle());
-        PageLayout::postInfo(_('Ihre E-Mail-Adresse ist bereits geändert.'));
+        PageLayout::postInfo(_('Ihre E-Mail-Adresse ist bereits geÃ¤ndert.'));
         printf(' <a href="' . URLHelper::getLink('index.php') . '">%s</a>', _('Zum Login'));
     } else {
         if (Request::get('key')) {
-            PageLayout::postError(_("Falscher Bestätigungscode."));
+            PageLayout::postError(_("Falscher BestÃ¤tigungscode."));
         }
         head(PageLayout::getTitle());
         mail_explain();
         if($_SESSION['semi_logged_in'] == Request::option('uid')) {
             reenter_mail();
         } else {
-            printf(_('Sie können sich %seinloggen%s und sich den Bestätigungscode neu oder an eine andere E-Mail-Adresse schicken lassen.'),
+            printf(_('Sie kÃ¶nnen sich %seinloggen%s und sich den BestÃ¤tigungscode neu oder an eine andere E-Mail-Adresse schicken lassen.'),
                     '<a href="' . URLHelper::getLink('index.php?again=yes') . '">', '</a>');
         }
     }
@@ -107,7 +107,7 @@ if(Request::get('key') !== null) {
         }
         
     } else {
-        PageLayout::postError(_('Die eingegebenen E-Mail-Adressen stimmen nicht überein. Bitte überprüfen Sie Ihre Eingabe.'));
+        PageLayout::postError(_('Die eingegebenen E-Mail-Adressen stimmen nicht Ã¼berein. Bitte Ã¼berprÃ¼fen Sie Ihre Eingabe.'));
     }
     mail_explain();
     reenter_mail();

@@ -20,9 +20,9 @@ $options['direct_parent'] = true;
 
 <div class="files_source_selector" <? if ($hidden) echo ' style="display: none;"'; ?>>
 <? if ($copymode === 'move') : ?>
-    <?= _('Ziel zum Verschieben auswählen') ?>
+    <?= _('Ziel zum Verschieben auswÃ¤hlen') ?>
 <? else : ?>
-    <?= _('Ziel zum Kopieren auswählen') ?>
+    <?= _('Ziel zum Kopieren auswÃ¤hlen') ?>
 <? endif ?>
 
     <div class="file_select_possibilities">

@@ -2,8 +2,8 @@
 <?= $controller->renderMessages() ?>
 <table class="default collapsable">
     <caption>
-        <?= _('Liste der Studiengänge') ?>
-        <span class="actions"><? printf(_('%s Studiengänge'), $count) ?></span>
+        <?= _('Liste der StudiengÃ¤nge') ?>
+        <span class="actions"><? printf(_('%s StudiengÃ¤nge'), $count) ?></span>
     </caption>
     <colgroup>
         <col>

@@ -29,11 +29,11 @@ class Settings_PrivacyController extends Settings_SettingsController
         parent::before_filter($action, $args);
 
         PageLayout::setHelpKeyword('Basis.MyStudIPPrivacy');
-        PageLayout::setTitle(_('Privatsph‰re'));
+        PageLayout::setTitle(_('Privatsph√§re'));
 
         Navigation::activateItem('/profile/settings/privacy');
 
-        SkipLinks::addIndex(_('Privatsph‰re'), 'layout_content', 100);
+        SkipLinks::addIndex(_('Privatsph√§re'), 'layout_content', 100);
     }
 
     /**

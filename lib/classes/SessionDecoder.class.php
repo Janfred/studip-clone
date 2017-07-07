@@ -7,7 +7,7 @@
  *
  * decodes serialized PHP session data
  *
- * @author      André Noack <noack@data-quest>, Suchi & Berg GmbH <info@data-quest.de>
+ * @author      AndrÃ© Noack <noack@data-quest>, Suchi & Berg GmbH <info@data-quest.de>
  * @access      public
  * @package     core
  */
@@ -15,7 +15,7 @@
 // This file is part of Stud.IP
 // SessionDecoder.class.php
 //
-// Copyright (C) 2008 André Noack <noack@data-quest>, data-quest GmbH <info@data-quest.de>
+// Copyright (C) 2008 AndrÃ© Noack <noack@data-quest>, data-quest GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License

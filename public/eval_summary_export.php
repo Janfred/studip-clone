@@ -52,7 +52,7 @@ require_once 'lib/export/export_xml_func.inc.php';
 // Start of Output
 $eval_id = Request::option('eval_id');
 
-// Überprüfen, ob die Evaluation existiert oder der Benutzer genügend Rechte hat
+// ÃœberprÃ¼fen, ob die Evaluation existiert oder der Benutzer genÃ¼gend Rechte hat
 $eval = new Evaluation($eval_id);
 $eval->check();
 if (EvaluationObjectDB::getEvalUserRangesWithNoPermission($eval) == YES || count($eval->errorArray) > 0) {
@@ -573,7 +573,7 @@ if ($evaluation = $statement->fetch(PDO::FETCH_ASSOC)) {
         fputs($fo_file,"    <fo:block text-align=\"start\" space-before.optimum=\"10pt\" line-height=\"10pt\" font-size=\"8pt\">\n");
         fputs($fo_file,"      ". xml_escape($number_of_votes." "._("Teilnehmer insgesamt")).".\n");
         fputs($fo_file,"      ". xml_escape(($evaluation['anonymous']==0  ? _('Die Teilnahme war nicht anonym.') : _('Die Teilnahme war anonym.'))."\n"));
-        fputs($fo_file,"      " . xml_escape(_("Eigentümer").": ".$db_owner.". "._("Erzeugt am").": ".date("d.m.Y H:i:s"))."\n");
+        fputs($fo_file,"      " . xml_escape(_("EigentÃ¼mer").": ".$db_owner.". "._("Erzeugt am").": ".date("d.m.Y H:i:s"))."\n");
         fputs($fo_file,"    </fo:block>\n");
     }
 

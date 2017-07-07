@@ -2,7 +2,7 @@
 
 $GLOBALS['MVV_STGTEILVERSION']['FASSUNG_TYP'] = array(
     'akkreditierung'    => array('visible' => 1, 'name' => _('Akkreditierungsfassung')),
-    'aenderung'         => array('visible' => 1, 'name' => _('Änderungsfassung')),
+    'aenderung'         => array('visible' => 1, 'name' => _('Ã„nderungsfassung')),
     'reform'            => array('visible' => 1, 'name' => _('Reformfassung')),
     'deregulierung'     => array('visible' => 1, 'name' => _('Deregulierungsfassung'))
 );
@@ -22,17 +22,17 @@ $GLOBALS['MVV_MODUL']['KP_KOEFFIZIENT'] = 30;
 $GLOBALS['MVV_MODUL']['PERSONEN_GRUPPEN'] = array(
     'values'            => array(
         'verantwortung'     => array('visible' => 1, 'name' => _('Modulverantwortung')),
-        'pruefung'          => array('visible' => 1, 'name' => _('Prüfung')),
+        'pruefung'          => array('visible' => 1, 'name' => _('PrÃ¼fung')),
         'beratung'          => array('visible' => 1, 'name' => _('Modulberatung'))
     )
 );
 
 $GLOBALS['MVV_MODUL']['TERMIN_TYPEN'] = array(
     'values'            => array(
-        'pruefung'          => array('visible' => 1, 'name' => _('Prüfung')),
-        'nach'              => array('visible' => 1, 'name' => _('Nachprüfung')),
-        'ausgleich'         => array('visible' => 1, 'name' => _('Ausgleichsprüfung')),
-        'wiederholung'      => array('visible' => 1, 'name' => _('Wiederholungsprüfung')),
+        'pruefung'          => array('visible' => 1, 'name' => _('PrÃ¼fung')),
+        'nach'              => array('visible' => 1, 'name' => _('NachprÃ¼fung')),
+        'ausgleich'         => array('visible' => 1, 'name' => _('AusgleichsprÃ¼fung')),
+        'wiederholung'      => array('visible' => 1, 'name' => _('WiederholungsprÃ¼fung')),
         'einschreibung'     => array('visible' => 1, 'name' => _('Einschreibung'))
     ),
     'default'           => ''
@@ -45,14 +45,14 @@ $GLOBALS['MVV_MODUL']['SPRACHE'] = array(
         'AR'                => array('visible' => 1, 'name' => _('Arabisch')),
         'BS'                => array('visible' => 1, 'name' => _('Bosnisch/Kroatisch/Serbisch')),
         'ZH'                => array('visible' => 1, 'name' => _('Chinesisch')),
-        'FR'                => array('visible' => 1, 'name' => _('Französisch')),
+        'FR'                => array('visible' => 1, 'name' => _('FranzÃ¶sisch')),
         'GRC'               => array('visible' => 1, 'name' => _('Griechisch')),
-        'HE'                => array('visible' => 1, 'name' => _('Hebräisch')),
+        'HE'                => array('visible' => 1, 'name' => _('HebrÃ¤isch')),
         'IT'                => array('visible' => 1, 'name' => _('Italienisch')),
         'JA'                => array('visible' => 1, 'name' => _('Japanisch')),
         'LA'                => array('visible' => 1, 'name' => _('Latein')),
         'EL'                => array('visible' => 1, 'name' => _('Neugriechisch')),
-        'NI'                => array('visible' => 1, 'name' => _('Niederländisch')),
+        'NI'                => array('visible' => 1, 'name' => _('NiederlÃ¤ndisch')),
         'NO'                => array('visible' => 1, 'name' => _('Norwegisch')),
         'PL'                => array('visible' => 1, 'name' => _('Polnisch')),
         'PT'                => array('visible' => 1, 'name' => _('Portugiesisch')),
@@ -60,7 +60,7 @@ $GLOBALS['MVV_MODUL']['SPRACHE'] = array(
         'SV'                => array('visible' => 1, 'name' => _('Schwedisch')),
         'ES'                => array('visible' => 1, 'name' => _('Spanisch')),
         'CS'                => array('visible' => 1, 'name' => _('Tschechisch')),
-        'TR'                => array('visible' => 1, 'name' => _('Türkisch')),
+        'TR'                => array('visible' => 1, 'name' => _('TÃ¼rkisch')),
         'UK'                => array('visible' => 1, 'name' => _('Ukrainisch')),
         'HU'                => array('visible' => 1, 'name' => _('Ungarisch'))
     ),
@@ -71,7 +71,7 @@ $GLOBALS['MVV_MODULTEIL']['SPRACHE'] = $GLOBALS['MVV_MODUL']['SPRACHE'];
 
 $GLOBALS['MVV_MODUL']['PRUEF_EBENE'] = array(
     'values'            => array(
-        'abschliessend'     => array('visible' => 1, 'name' => _('modulabschließend')),
+        'abschliessend'     => array('visible' => 1, 'name' => _('modulabschlieÃŸend')),
         'begleitend'        => array('visible' => 1, 'name' => _('modulbegleitend'))
     ),
     'default'           => ''
@@ -107,7 +107,7 @@ $GLOBALS['MVV_STUDIENGANG']['STATUS'] = $GLOBALS['MVV_MODUL']['STATUS'];
 
 $GLOBALS['MVV_MODUL']['INSTITUT_GRUPPEN'] = array(
     'values'            => array(
-        'hauptverantwortlich' => array('visible' => 1, 'name' => _('Hauptverantwortliche (geschäftsführende) Einrichtung')),
+        'hauptverantwortlich' => array('visible' => 1, 'name' => _('Hauptverantwortliche (geschÃ¤ftsfÃ¼hrende) Einrichtung')),
         'verantwortlich'      => array('visible' => 1, 'name' => _('Verantwortliche Einrichtung'))
     )
 );
@@ -137,18 +137,18 @@ $GLOBALS['MVV_MODULTEIL']['LERNLEHRFORM'] = array(
             'ringvorlesung'         => array('visible' => 1, 'name' => _('Ringvorlesung'), 'parent' => 'g_vorlesung'),
         'g_seminar'             => array('visible' => 1, 'name' => _('Seminar'), 'parent' => ''),
             'seminar'               => array('visible' => 1, 'name' => _('Seminar'), 'parent' => 'g_seminar'),
-            'einfuehrungsseminar'   => array('visible' => 1, 'name' => _('Einführungsseminar'), 'parent' => 'g_seminar'),
+            'einfuehrungsseminar'   => array('visible' => 1, 'name' => _('EinfÃ¼hrungsseminar'), 'parent' => 'g_seminar'),
             'proseminar'            => array('visible' => 1, 'name' => _('Proseminar'), 'parent' => 'g_seminar'),
             'hauptseminar'          => array('visible' => 1, 'name' => _('Hauptseminar'), 'parent' => 'g_seminar'),
             'obersemminar'          => array('visible' => 1, 'name' => _('Oberseminar'), 'parent' => 'g_seminar'),
-        'g_uebung'              => array('visible' => 1, 'name' => _('Übung/Tutorium/Sprache'), 'parent' => ''),
-            'uebung'                => array('visible' => 1, 'name' => _('Übung'), 'parent' => 'g_uebung'),
+        'g_uebung'              => array('visible' => 1, 'name' => _('Ãœbung/Tutorium/Sprache'), 'parent' => ''),
+            'uebung'                => array('visible' => 1, 'name' => _('Ãœbung'), 'parent' => 'g_uebung'),
             'tutorium'              => array('visible' => 1, 'name' => _('Tutorium'), 'parent' => 'g_uebung'),
             'sprachkurs'            => array('visible' => 1, 'name' => _('Sprachkurs'), 'parent' => 'g_uebung'),
-            'sprachuebung'          => array('visible' => 1, 'name' => _('Sprachübung'), 'parent' => 'g_uebung'),
-            'lektuereuebung'        => array('visible' => 1, 'name' => _('Lektüreübung'), 'parent' => 'g_uebung'),
-            'uebersetzungsuebung'   => array('visible' => 1, 'name' => _('Übersetzungsübung'), 'parent' => 'g_uebung'),
-            'stiluebung'            => array('visible' => 1, 'name' => _('Stilübung'), 'parent' => 'g_uebung'),
+            'sprachuebung'          => array('visible' => 1, 'name' => _('SprachÃ¼bung'), 'parent' => 'g_uebung'),
+            'lektuereuebung'        => array('visible' => 1, 'name' => _('LektÃ¼reÃ¼bung'), 'parent' => 'g_uebung'),
+            'uebersetzungsuebung'   => array('visible' => 1, 'name' => _('ÃœbersetzungsÃ¼bung'), 'parent' => 'g_uebung'),
+            'stiluebung'            => array('visible' => 1, 'name' => _('StilÃ¼bung'), 'parent' => 'g_uebung'),
         'g_kolloquium'          => array('visible' => 1, 'name' => _('Kolloquium'), 'parent' => ''),
             'kolloquium'            => array('visible' => 1, 'name' => _('Kolloquium'), 'parent' => 'g_kolloquium'),
             'forschungskolloquium'  => array('visible' => 1, 'name' => _('Forschungskolloquium'), 'parent' => 'g_kolloquium'),
@@ -157,7 +157,7 @@ $GLOBALS['MVV_MODULTEIL']['LERNLEHRFORM'] = array(
             'exkursion'             => array('visible' => 1, 'name' => _('Exkursion'), 'parent' => 'g_praxis'),
             'praktischerkurs'       => array('visible' => 1, 'name' => _('Praktischer Kurs'), 'parent' => 'g_praxis'),
             'sportpraktischerkurs'  => array('visible' => 1, 'name' => _('Sportpraktischer Kurs'), 'parent' => 'g_praxis'),
-            'kuenstlerischerunterricht' => array('visible' => 1, 'name' => _('Künstlerischer Unterricht'), 'parent' => 'g_praxis'),
+            'kuenstlerischerunterricht' => array('visible' => 1, 'name' => _('KÃ¼nstlerischer Unterricht'), 'parent' => 'g_praxis'),
             'praktikum'             => array('visible' => 1, 'name' => _('Praktikum'), 'parent' => 'g_praxis'),
         'g_projekt'             => array('visible' => 1, 'name' => _('Projekt'), 'parent' => ''),
             'projekt'               => array('visible' => 1, 'name' => _('Projekt'), 'parent' => 'g_projekt'),
@@ -165,33 +165,33 @@ $GLOBALS['MVV_MODULTEIL']['LERNLEHRFORM'] = array(
             'projektpraktikum'      => array('visible' => 1, 'name' => _('Projektpraktikum'), 'parent' => 'g_projekt'),
             'szenischesprojekt'     => array('visible' => 1, 'name' => _('Szenisches Projekt'), 'parent' => 'g_projekt'),
         'g_sonstiges'           => array('visible' => 1, 'name' => _('Sonstiges'), 'parent' => ''),
-            'freielektuere'         => array('visible' => 1, 'name' => _('Freie Lektüre'), 'parent' => 'g_sonstiges'),
+            'freielektuere'         => array('visible' => 1, 'name' => _('Freie LektÃ¼re'), 'parent' => 'g_sonstiges'),
             'grundkurs'             => array('visible' => 1, 'name' => _('Grundkurs'), 'parent' => 'g_sonstiges'),
             'klausur'               => array('visible' => 1, 'name' => _('Klausur'), 'parent' => 'g_sonstiges'),
             'kursus'                => array('visible' => 1, 'name' => _('Kursus'), 'parent' => 'g_sonstiges'),
             'modul'                 => array('visible' => 1, 'name' => _('Modul'), 'parent' => 'g_sonstiges'),
             'repetitorium'          => array('visible' => 1, 'name' => _('Repetitorium'), 'parent' => 'g_sonstiges'),
-            'selbstaendigebetreutearbeit' => array('visible' => 1, 'name' => _('Selbständige betreute Arbeit'), 'parent' => 'g_sonstiges'),
+            'selbstaendigebetreutearbeit' => array('visible' => 1, 'name' => _('SelbstÃ¤ndige betreute Arbeit'), 'parent' => 'g_sonstiges'),
             'workshop'              => array('visible' => 1, 'name' => _('Workshop'), 'parent' => 'g_sonstiges'),
         'g_kombinationen'       => array('visible' => 1, 'name' => _('Kombinationen'), 'parent' => ''),
             'vorlesungseminar'      => array('visible' => 1, 'name' => _('Vorlesung oder Seminar'), 'parent' => 'g_kombinationen'),
             'vorlesungproseminar'   => array('visible' => 1, 'name' => _('Vorlesung oder Proseminar'), 'parent' => 'g_kombinationen'),
             'vorlesunghauptseminar' => array('visible' => 1, 'name' => _('Vorlesung oder Hauptseminar'), 'parent' => 'g_kombinationen'),
-            'vorlesunguebung'       => array('visible' => 1, 'name' => _('Vorlesung oder Übung'), 'parent' => 'g_kombinationen'),
-            'vorlsemlektuere'       => array('visible' => 1, 'name' => _('Vorlesung, Seminar oder Lektüreübung'), 'parent' => 'g_kombinationen'),
-            'vorlsemeinf'           => array('visible' => 1, 'name' => _('Vorlesung, Seminar oder Einführungsveranstaltungen'), 'parent' => 'g_kombinationen'),
-            'vorlsemeinflektuere'   => array('visible' => 1, 'name' => _('Vorlesung, Seminar, Einführung oder Lektüreübung'), 'parent' => 'g_kombinationen'),
+            'vorlesunguebung'       => array('visible' => 1, 'name' => _('Vorlesung oder Ãœbung'), 'parent' => 'g_kombinationen'),
+            'vorlsemlektuere'       => array('visible' => 1, 'name' => _('Vorlesung, Seminar oder LektÃ¼reÃ¼bung'), 'parent' => 'g_kombinationen'),
+            'vorlsemeinf'           => array('visible' => 1, 'name' => _('Vorlesung, Seminar oder EinfÃ¼hrungsveranstaltungen'), 'parent' => 'g_kombinationen'),
+            'vorlsemeinflektuere'   => array('visible' => 1, 'name' => _('Vorlesung, Seminar, EinfÃ¼hrung oder LektÃ¼reÃ¼bung'), 'parent' => 'g_kombinationen'),
             'seminaroberseminar'    => array('visible' => 1, 'name' => _('Seminar oder Oberseminar'), 'parent' => 'g_kombinationen'),
             'seminarprojektseminar' => array('visible' => 1, 'name' => _('Seminar oder Projektseminar'), 'parent' => 'g_kombinationen'),
-            'seminaruebung'         => array('visible' => 1, 'name' => _('Seminar oder Übung'), 'parent' => 'g_kombinationen'),
-            'seminarlektuere'       => array('visible' => 1, 'name' => _('Seminar oder Lektürekurs'), 'parent' => 'g_kombinationen'),
+            'seminaruebung'         => array('visible' => 1, 'name' => _('Seminar oder Ãœbung'), 'parent' => 'g_kombinationen'),
+            'seminarlektuere'       => array('visible' => 1, 'name' => _('Seminar oder LektÃ¼rekurs'), 'parent' => 'g_kombinationen'),
             'seminarszenischesprojekt' => array('visible' => 1, 'name' => _('Seminar oder Szenisches Projekt'), 'parent' => 'g_kombinationen'),
-            'seminaruebungexkursion' => array('visible' => 1, 'name' => _('Seminar, Übung oder Exkursion'), 'parent' => 'g_kombinationen'),
-            'semszenprojektkuenstleistung' => array('visible' => 1, 'name' => _('Seminar, Szenisches Projekt oder eigene Künstlerische Leistung'), 'parent' => 'g_kombinationen'),
-            'uebungprojekt'        => array('visible' => 1, 'name' => _('Übung oder Projekt'), 'parent' => 'g_kombinationen'),
-            'uebungtutorium'       => array('visible' => 1, 'name' => _('Übung oder Tutorium'), 'parent' => 'g_kombinationen'),
-            'uebunglektuerekurs'   => array('visible' => 1, 'name' => _('Übung oder Lektürekurs'), 'parent' => 'g_kombinationen'),
-            'szenprojektkuenstleistung' => array('visible' => 1, 'name' => _('Szenisches Projekt oder eigene künstlerische Leistung'), 'parent' => 'g_kombinationen'),
+            'seminaruebungexkursion' => array('visible' => 1, 'name' => _('Seminar, Ãœbung oder Exkursion'), 'parent' => 'g_kombinationen'),
+            'semszenprojektkuenstleistung' => array('visible' => 1, 'name' => _('Seminar, Szenisches Projekt oder eigene KÃ¼nstlerische Leistung'), 'parent' => 'g_kombinationen'),
+            'uebungprojekt'        => array('visible' => 1, 'name' => _('Ãœbung oder Projekt'), 'parent' => 'g_kombinationen'),
+            'uebungtutorium'       => array('visible' => 1, 'name' => _('Ãœbung oder Tutorium'), 'parent' => 'g_kombinationen'),
+            'uebunglektuerekurs'   => array('visible' => 1, 'name' => _('Ãœbung oder LektÃ¼rekurs'), 'parent' => 'g_kombinationen'),
+            'szenprojektkuenstleistung' => array('visible' => 1, 'name' => _('Szenisches Projekt oder eigene kÃ¼nstlerische Leistung'), 'parent' => 'g_kombinationen'),
             'praktkursfestivalorga' => array('visible' => 1, 'name' => _('Praktischer Kurs oder Festivalorganisation'), 'parent' => 'g_kombinationen'),
     ),
     'default'           => ''

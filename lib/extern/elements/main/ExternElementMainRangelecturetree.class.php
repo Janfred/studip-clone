@@ -51,7 +51,7 @@ class ExternElementMainRangeLectureTree extends ExternElementMain {
                 'bodyclass'
         );
         $this->real_name = _("Grundeinstellungen");
-        $this->description = _("In den Grundeinstellungen können Sie allgemeine Daten des Moduls ändern.");
+        $this->description = _("In den Grundeinstellungen kÃ¶nnen Sie allgemeine Daten des Moduls Ã¤ndern.");
         parent::__construct($module_name, $data_fields, $field_names, $config);
     }
     
@@ -89,14 +89,14 @@ class ExternElementMainRangeLectureTree extends ExternElementMain {
         $attributes = array("table_width", "table_align", "table_border", "table_bgcolor",
                 "table_bordercolor", "table_cellpadding", "table_cellspacing", "table_class",
                 "table_style");
-        $headline = array("table" => _("Umschließende Tabelle"));
+        $headline = array("table" => _("UmschlieÃŸende Tabelle"));
         $content_table .= $edit_form->getEditFormContent($attributes, $headline);
         $content_table .= $edit_form->editBlankContent();
         
         $headline = $edit_form->editHeadline(_("Weitere Angaben"));
         
         $title = _("HTML-Header/Footer:");
-        $info = _("Anwählen, wenn die Seite als komplette HTML-Seite ausgegeben werden soll, z.B. bei direkter Verlinkung oder in einem Frameset.");
+        $info = _("AnwÃ¤hlen, wenn die Seite als komplette HTML-Seite ausgegeben werden soll, z.B. bei direkter Verlinkung oder in einem Frameset.");
         $wholesite_values = "1";
         $wholesite_names = "";
         $table = $edit_form->editCheckboxGeneric("wholesite", $title, $info, $wholesite_values, $wholesite_names);

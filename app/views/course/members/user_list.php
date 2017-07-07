@@ -38,7 +38,7 @@
             <tr class="sortable">
             <? if($is_tutor) :?>
                 <th>
-                    <input aria-label="<?= sprintf(_('Alle %s auswählen'), $status_groups['user']) ?>"
+                    <input aria-label="<?= sprintf(_('Alle %s auswÃ¤hlen'), $status_groups['user']) ?>"
                            type="checkbox" name="all" value="1" data-proxyfor=":checkbox[name^=user]">
                 </th>
             <? endif ?>
@@ -75,7 +75,7 @@
             <tr>
             <? if($is_tutor) :?>
                 <td>
-                    <input aria-label="<?= sprintf(_('%s auswählen'), $status_groups['user']) ?>"
+                    <input aria-label="<?= sprintf(_('%s auswÃ¤hlen'), $status_groups['user']) ?>"
                            type="checkbox" name="user[<?= $leser['user_id'] ?>]" value="1">
                 </td>
             <? endif ?>
@@ -133,8 +133,8 @@
         <tfoot>
             <tr>
                 <td colspan="6">
-                    <select name="action_user" id="user_action" aria-label="<?= _('Aktion ausführen') ?>">
-                        <option value="">- <?= _('Aktion auswählen') ?></option>
+                    <select name="action_user" id="user_action" aria-label="<?= _('Aktion ausfÃ¼hren') ?>">
+                        <option value="">- <?= _('Aktion auswÃ¤hlen') ?></option>
                         <option value="upgrade">
                             <?= sprintf(_('Zu %s hochstufen'), htmlReady($status_groups['autor'])) ?>
                         </option>
@@ -149,7 +149,7 @@
                         <option value="message"><?=_('Nachricht senden')?></option>
                         <!--<option value="copy_to_course"><?= _('In Seminar verschieben/kopieren') ?></option>-->
                     </select>
-                    <?= Button::create(_('Ausführen'), 'submit_user') ?>
+                    <?= Button::create(_('AusfÃ¼hren'), 'submit_user') ?>
                 </td>
             </tr>
         </tfoot>

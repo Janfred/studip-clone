@@ -5,7 +5,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      André Noack <noack@data-quest.de>
+ * @author      AndrÃ© Noack <noack@data-quest.de>
  * @author      <mlunzena@uos.de>
  * @author      Jan-Hendrik Willms <tleilax+studip@gmail.com>
  * @copyright   2015 Stud.IP Core-Group

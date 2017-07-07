@@ -14,7 +14,7 @@ class ScoreConfigOption extends Migration
             (config_id, field, value, is_default, `type`, `range`, section, mkdate, chdate, description, comment)
             VALUES
             ('e6b6b8be6caf8abf0904c29e30e9b129', 'SCORE_ENABLE', '1', 1, 'boolean', 'global', 'modules', 
-             UNIX_TIMESTAMP(),  UNIX_TIMESTAMP(), 'Schaltet ein oder aus, ob die Rangliste und die Score-Funktion global verfügbar sind.', '')
+             UNIX_TIMESTAMP(),  UNIX_TIMESTAMP(), 'Schaltet ein oder aus, ob die Rangliste und die Score-Funktion global verfÃ¼gbar sind.', '')
         ");
     }
 

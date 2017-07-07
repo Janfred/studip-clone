@@ -47,7 +47,7 @@
 
                     <? if ($modul->kapazitaet > 0): ?>
                         <tr>
-                            <td style="width: 20%; font-weight: bold;"><?= _('Kapazität Modul') ?></td>
+                            <td style="width: 20%; font-weight: bold;"><?= _('KapazitÃ¤t Modul') ?></td>
                             <td>
                                 <?= $modul->kapazitaet ?>
                                 <? if (mb_strlen($deskriptor->kommentar_kapazitaet) > 0): ?>
@@ -59,19 +59,19 @@
                     <? endif; ?>
                     <? if (mb_strlen($pruef_ebene) > 0): ?>
                         <tr>
-                            <td style="width: 20%; font-weight: bold;"><?= _('Prüfungsebene') ?></td>
+                            <td style="width: 20%; font-weight: bold;"><?= _('PrÃ¼fungsebene') ?></td>
                             <td><?= $pruef_ebene ?></td>
                         </tr>
                     <? endif; ?>
                     <? if (mb_strlen($deskriptor->pruef_vorleistung)) : ?>
                         <tr>
-                            <td style="width: 20%; font-weight: bold;"><?= _('Prüfungsvorleistung Modul') ?></td>
+                            <td style="width: 20%; font-weight: bold;"><?= _('PrÃ¼fungsvorleistung Modul') ?></td>
                             <td><?= formatReady($deskriptor->pruef_vorleistung) ?></td>
                         </tr>
                     <? endif; ?>
                     <? if (mb_strlen($deskriptor->pruef_leistung)) : ?>
                         <tr>
-                            <td style="width: 20%; font-weight: bold;"><?= _('Prüfungsleistung Modul') ?></td>
+                            <td style="width: 20%; font-weight: bold;"><?= _('PrÃ¼fungsleistung Modul') ?></td>
                             <td><?= formatReady($deskriptor->pruef_leistung) ?></td>
                         </tr>
                     <? endif; ?>
@@ -93,7 +93,7 @@
             <? endif; ?>
             <th <? if ($type === 2): ?> colspan="3" <? endif; ?> ><?= _('Semesterveranstaltungen') ?></th>
             <? if ($type === 1): ?>
-                <th><?= _('Prüfungsleistung') ?></th>    
+                <th><?= _('PrÃ¼fungsleistung') ?></th>    
             <? endif; ?>
         </tr>
         <? foreach ($modulTeile as $modul_teil): ?>
@@ -106,7 +106,7 @@
                     <? endif; ?>
                     <? /* if ($lvGruppe['kapazitaet'] > 0): ?>
                         <br/>
-                        <b><?= _('Kapazität') ?>: </b> <?= $lvGruppe['kapazitaet'] ?>
+                        <b><?= _('KapazitÃ¤t') ?>: </b> <?= $lvGruppe['kapazitaet'] ?>
                     <? endif; */ ?>
                     <? if (mb_strlen($modul_teil['voraussetzung']) > 0): ?>
                         <br>
@@ -135,10 +135,10 @@
                 <? if ($type === 1): ?>
                     <td>
                         <? if (mb_strlen($modul_teil['pruef_vorleistung']) > 0) : ?>
-                            <b><?= _('Prüfungsvorleistung') ?>:</b> <?= $modul_teil['pruef_vorleistung'] ?>
+                            <b><?= _('PrÃ¼fungsvorleistung') ?>:</b> <?= $modul_teil['pruef_vorleistung'] ?>
                         <? endif; ?>
                         <? if (mb_strlen($modul_teil['pruef_leistung']) > 0) : ?>
-                            <b><?= _('Prüfungsform') ?>:</b> <br/><?= $modul_teil['pruef_leistung'] ?> (<?= $modul_teil['anteil_note'] ?> %)
+                            <b><?= _('PrÃ¼fungsform') ?>:</b> <br/><?= $modul_teil['pruef_leistung'] ?> (<?= $modul_teil['anteil_note'] ?> %)
                         <? endif; ?>
                     </td>
                 <? endif; ?>

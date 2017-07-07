@@ -41,29 +41,29 @@ $hash = Seminar_Register_Auth::get_validation_hash($user->id);
 // hier wird noch mal berechnet, welches secret in der Bestaetigungsmail uebergeben wurde
 $secret = Request::option('secret');
 PageLayout::setHelpKeyword('Basis.AnmeldungMail');
-PageLayout::setTitle(_('Bestätigung der E-Mail-Adresse'));
+PageLayout::setTitle(_('BestÃ¤tigung der E-Mail-Adresse'));
 
 //user bereits vorhanden
 if ($perm->have_perm('autor')) {
     $info = sprintf(_('Sie haben schon den Status <b>%s</b> im System.
-                       Eine Aktivierung des Accounts ist nicht mehr nötig, um Schreibrechte zu bekommen'), $auth->auth['perm']);
+                       Eine Aktivierung des Accounts ist nicht mehr nÃ¶tig, um Schreibrechte zu bekommen'), $auth->auth['perm']);
     $details = array();
-    $details[] = sprintf('<a href="%s">%s</a>', URLHelper::getLink('index.php'), _('zurück zur Startseite'));
+    $details[] = sprintf('<a href="%s">%s</a>', URLHelper::getLink('index.php'), _('zurÃ¼ck zur Startseite'));
     $message = MessageBox::info($info, $details);
 }
 
 //  So, wer bis hier hin gekommen ist gehoert zur Zielgruppe...
 // Volltrottel (oder abuse)
 else if (empty($secret)) {
-    $message = MessageBox::error(_('Sie müssen den vollständigen Link aus der Bestätigungsmail in die Adresszeile Ihres Browsers kopieren.'));
+    $message = MessageBox::error(_('Sie mÃ¼ssen den vollstÃ¤ndigen Link aus der BestÃ¤tigungsmail in die Adresszeile Ihres Browsers kopieren.'));
 }
 
 // abuse (oder Volltrottel)
 else if ($secret != $hash) {
-    $error = _('Der übergebene <em>Secret-Code</em> ist nicht korrekt.');
+    $error = _('Der Ã¼bergebene <em>Secret-Code</em> ist nicht korrekt.');
     $details = array();
-    $details[] = _('Sie müssen unter dem Benutzernamen eingeloggt sein, für den Sie die Bestätigungsmail erhalten haben.');
-    $details[] = _('Und Sie müssen den vollständigen Link aus der Bestätigungsmail in die Adresszeile Ihres Browsers kopieren.');
+    $details[] = _('Sie mÃ¼ssen unter dem Benutzernamen eingeloggt sein, fÃ¼r den Sie die BestÃ¤tigungsmail erhalten haben.');
+    $details[] = _('Und Sie mÃ¼ssen den vollstÃ¤ndigen Link aus der BestÃ¤tigungsmail in die Adresszeile Ihres Browsers kopieren.');
     $message = MessageBox::error($error, $details);
 
     // Mail an abuse
@@ -73,7 +73,7 @@ else if ($secret != $hash) {
     StudipMail::sendAbuseMessage("Validation", "Secret falsch\n\nUser: $username\n\nIP: $REMOTE_ADDR\nZeit: $Zeit\n");
 }
 
-// alles paletti, Status ändern
+// alles paletti, Status Ã¤ndern
 else if ($secret == $hash) {
     $query = "UPDATE auth_user_md5 SET perms = 'autor' WHERE user_id = ?";
     $statement = DBManager::get()->prepare($query);
@@ -84,7 +84,7 @@ else if ($secret == $hash) {
         $message = MessageBox::error($error, $details);
     } else {
         $success = _('Ihr Status wurde erfolgreich auf <em>autor</em> gesetzt.<br>
-                      Damit dürfen Sie in den meisten Veranstaltungen schreiben, für die Sie sich anmelden.');
+                      Damit dÃ¼rfen Sie in den meisten Veranstaltungen schreiben, fÃ¼r die Sie sich anmelden.');
         $details = array();
         $details[] = _('Einige Veranstaltungen erfordern allerdings bei der Anmeldung die Eingabe eines Passwortes.
                         Dieses Passwort erfahren Sie von den Lehrenden der Veranstaltung.');
@@ -93,9 +93,9 @@ else if ($secret == $hash) {
         // Auto-Inserts
         AutoInsert::instance()->saveUser($user->id, "autor");
 
-        $auth->logout();    // einen Logout durchführen, um erneuten Login zu erzwingen
+        $auth->logout();    // einen Logout durchfÃ¼hren, um erneuten Login zu erzwingen
 
-        $info = sprintf(_('Die Statusänderung wird erst nach einem erneuten %sLogin%s wirksam!<br>
+        $info = sprintf(_('Die StatusÃ¤nderung wird erst nach einem erneuten %sLogin%s wirksam!<br>
                           Deshalb wurden Sie jetzt automatisch ausgeloggt.'),
                         '<a href="index.php?again=yes"><em>',
                         '</em></a>');

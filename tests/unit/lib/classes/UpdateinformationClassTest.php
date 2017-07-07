@@ -38,7 +38,7 @@ class UpdateInformationCase extends PHPUnit_Framework_TestCase
         $this->assertEquals("strangedata", $new_data['test.myfunc2']);
     }
     
-    //kann man nicht automatischtesten, da abh‰ngig von $_SERVER
+    //kann man nicht automatischtesten, da abh√§ngig von $_SERVER
     //function test_iscollecting() {}
 
 }

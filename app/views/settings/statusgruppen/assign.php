@@ -6,9 +6,9 @@
     <fieldset>
         <legend><?= _('Person einer Gruppe zuordnen') ?></legend>
         <label>
-            <?= _('Einrichtung und Funktion auswählen') ?>:
+            <?= _('Einrichtung und Funktion auswÃ¤hlen') ?>:
             <select required name="role_id" class="role-selector">
-                <option value="">-- <?= _('Bitte auswählen') ?> --</option>
+                <option value="">-- <?= _('Bitte auswÃ¤hlen') ?> --</option>
                 <? foreach ($admin_insts as $data): ?>
                     <optgroup label="<?= htmlReady(mb_substr($data['Name'], 0, 70)) ?>">
                         <? Statusgruppe::displayOptionsForRoles($data['groups']) ?>

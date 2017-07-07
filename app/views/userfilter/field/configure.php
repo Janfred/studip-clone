@@ -23,7 +23,7 @@
     <?= (!$is_first ? '<strong>' . _("und") . '</strong>' : '')?>
     <div class="conditionfield">
     <select name="field[]" class="conditionfield_class" size="1" onchange="STUDIP.UserFilter.getConditionFieldConfiguration(this, '<?= $controller->url_for('userfilter/field/configure') ?>')">
-        <option value="">-- <?= _('bitte auswählen') ?> --</option>
+        <option value="">-- <?= _('bitte auswÃ¤hlen') ?> --</option>
         <?php foreach ($conditionFields as $className => $displayName) { ?>
         <option value="<?= $className ?>"><?= htmlReady($displayName) ?></option>
         <?php } ?>

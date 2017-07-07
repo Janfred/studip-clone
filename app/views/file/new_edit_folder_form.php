@@ -14,7 +14,7 @@
 
 <fieldset class="select_terms_of_use">
     <legend>
-        <?= _('Ordnertyp auswählen') ?>
+        <?= _('Ordnertyp auswÃ¤hlen') ?>
     </legend>
 
 <? foreach ($folder_types as $folder_type) : ?>

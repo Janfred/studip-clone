@@ -44,7 +44,7 @@
 
                     <? if ($modul->kapazitaet > 0): ?>
                         <tr>
-                            <th><?= _('Kapazität Modul') ?></th>
+                            <th><?= _('KapazitÃ¤t Modul') ?></th>
                             <td>
                                 <?= $modul->kapazitaet ?>
                                 <? if (mb_strlen($deskriptor->kommentar_kapazitaet) > 0): ?>
@@ -56,19 +56,19 @@
                     <? endif; ?>
                     <? if (mb_strlen($pruef_ebene) > 0): ?>
                         <tr>
-                            <th><?= _('Prüfungsebene') ?></th>
+                            <th><?= _('PrÃ¼fungsebene') ?></th>
                             <td><?= $pruef_ebene ?></td>
                         </tr>
                     <? endif; ?>
                     <? if (mb_strlen($deskriptor->pruef_vorleistung)) : ?>
                         <tr>
-                            <th><?= _('Prüfungsvorleistung Modul') ?></th>
+                            <th><?= _('PrÃ¼fungsvorleistung Modul') ?></th>
                             <td><?= formatReady($deskriptor->pruef_vorleistung) ?></td>
                         </tr>
                     <? endif; ?>
                     <? if (mb_strlen($deskriptor->pruef_leistung)) : ?>
                         <tr>
-                            <th><?= _('Prüfungsleistung Modul') ?></th>
+                            <th><?= _('PrÃ¼fungsleistung Modul') ?></th>
                             <td><?= formatReady($deskriptor->pruef_leistung) ?></td>
                         </tr>
                     <? endif; ?>
@@ -91,7 +91,7 @@
             <? endif; ?>
             <th <? if ($type === 2): ?> colspan="3" <? endif; ?> ><?= _('Semesterveranstaltungen') ?></th>
             <? if ($type === 1): ?>
-                <th><?= _('Prüfungsleistung') ?></th>    
+                <th><?= _('PrÃ¼fungsleistung') ?></th>    
             <? endif; ?>
         </tr>
 
@@ -105,7 +105,7 @@
                         <? endif; ?>
                         <? if ($lvGruppe['kapazitaet'] > 0): ?>
                             <br/>
-                            <b><?= _('Kapazität') ?>: </b> <?= htmlReady($lvGruppe['kapazitaet']) ?>
+                            <b><?= _('KapazitÃ¤t') ?>: </b> <?= htmlReady($lvGruppe['kapazitaet']) ?>
                         <? endif; ?>
                         <? if (mb_strlen($lvGruppe['voraussetzung']) > 0): ?>
                             <br/>
@@ -133,10 +133,10 @@
                 <? if ($type === 1): ?>
                     <td width="40%">
                         <? if (mb_strlen($lvGruppe['pruef_vorleistung']) > 0) : ?>
-                            <b><?= _('Prüfungsvorleistung') ?>:</b> <?= htmlReady($lvGruppe['pruef_vorleistung']) ?>
+                            <b><?= _('PrÃ¼fungsvorleistung') ?>:</b> <?= htmlReady($lvGruppe['pruef_vorleistung']) ?>
                         <? endif; ?>
                         <? if (mb_strlen($lvGruppe['pruef_leistung']) > 0) : ?>
-                            <b><?= _('Prüfungsform') ?>:</b> <br/><?= htmlReady($lvGruppe['pruef_leistung']) ?> (<?= htmlReady($lvGruppe['anteil_note']) ?> %)
+                            <b><?= _('PrÃ¼fungsform') ?>:</b> <br/><?= htmlReady($lvGruppe['pruef_leistung']) ?> (<?= htmlReady($lvGruppe['anteil_note']) ?> %)
                         <? endif; ?>
                     </td>
                 <? endif; ?>
@@ -148,9 +148,9 @@
         <td colspan="3">
             <?
             if (trim($modul->fassung_nr) != '' && $modul->beschlussdatum) {
-                printf(_('In der Fassung des <b>%d</b>. Beschlusses vom <b>%s</b>. Bitte beachten Sie: Die Modulinformationen stehen an dieser Stelle ohne Gewähr.'), htmlReady($modul->fassung_nr), date('d.m.Y', $modul->beschlussdatum));
+                printf(_('In der Fassung des <b>%d</b>. Beschlusses vom <b>%s</b>. Bitte beachten Sie: Die Modulinformationen stehen an dieser Stelle ohne GewÃ¤hr.'), htmlReady($modul->fassung_nr), date('d.m.Y', $modul->beschlussdatum));
             } else {
-                echo _('Bitte beachten Sie: Die Modulinformationen stehen an dieser Stelle ohne Gewähr.');
+                echo _('Bitte beachten Sie: Die Modulinformationen stehen an dieser Stelle ohne GewÃ¤hr.');
             }
             ?>
         </td>

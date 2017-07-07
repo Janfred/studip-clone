@@ -21,7 +21,7 @@
 </div>
 <? endif; ?>
 <script type="text/javascript" language="javascript">
-    //Die Autovervollst�ndigen-Funktion aktivieren:
+    //Die Autovervollstï¿½ndigen-Funktion aktivieren:
     jQuery(function () {
         STUDIP.QuickSearch.autocomplete("<?= $id ?>",
             "<?= URLHelper::getURL("dispatch.php/quicksearch/response/".$query_id) ?>",

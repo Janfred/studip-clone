@@ -10,9 +10,9 @@
     <? else : ?>
         <div style="margin-top: 13px;">
             <? if ($questionnaire['resultvisibility'] === "afterending") : ?>
-                <?= MessageBox::info(_("Die Ergebnisse des Fragebogens werden veröffentlich, wenn die Befragung abgeschlossen ist.")) ?>
+                <?= MessageBox::info(_("Die Ergebnisse des Fragebogens werden verÃ¶ffentlich, wenn die Befragung abgeschlossen ist.")) ?>
             <? else : ?>
-                <?= MessageBox::info(_("Die Ergebnisse der Befragung werden nicht über Stud.IP ausgewertet.")) ?>
+                <?= MessageBox::info(_("Die Ergebnisse der Befragung werden nicht Ã¼ber Stud.IP ausgewertet.")) ?>
            <? endif ?>
         </div>
     <? endif ?>
@@ -24,7 +24,7 @@
             <?= _("Die Teilnahme ist nicht anonym.") ?>
         <? endif ?>
         <? if ($questionnaire['stopdate']) : ?>
-            <?= sprintf(_("Sie können den Fragebogen beantworten bis zum %s um %s Uhr."), date("d.m.Y", $questionnaire['stopdate']), date("H:i", $questionnaire['stopdate'])) ?>
+            <?= sprintf(_("Sie kÃ¶nnen den Fragebogen beantworten bis zum %s um %s Uhr."), date("d.m.Y", $questionnaire['stopdate']), date("H:i", $questionnaire['stopdate'])) ?>
         <? endif ?>
     </div>
 
@@ -33,7 +33,7 @@
     </script>
     <div data-dialog-button style="max-height: none; opacity: 1; text-align: center;">
         <? if ($questionnaire->isAnswerable() && $questionnaire['editanswers']) : ?>
-            <?= \Studip\LinkButton::create($questionnaire->isAnswered() ? _("Antwort ändern") : _("Beantworten"), URLHelper::getURL("dispatch.php/questionnaire/answer/".$questionnaire->getId(), array('range_type' => $range_type, 'range_id' => $range_id)), array('data-dialog' => "1")) ?>
+            <?= \Studip\LinkButton::create($questionnaire->isAnswered() ? _("Antwort Ã¤ndern") : _("Beantworten"), URLHelper::getURL("dispatch.php/questionnaire/answer/".$questionnaire->getId(), array('range_type' => $range_type, 'range_id' => $range_id)), array('data-dialog' => "1")) ?>
         <? endif ?>
         <? if ($questionnaire->isEditable()) : ?>
             <?= \Studip\LinkButton::create(_("Ergebnisse herunterladen"), URLHelper::getURL("dispatch.php/questionnaire/export/".$questionnaire->getId())) ?>

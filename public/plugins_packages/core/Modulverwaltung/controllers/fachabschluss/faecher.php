@@ -42,11 +42,11 @@ class Fachabschluss_FaecherController extends MVVController
     public function index_action()
     {
         //set title
-        PageLayout::setTitle(_('Verwaltung der Fächer'));
+        PageLayout::setTitle(_('Verwaltung der FÃ¤cher'));
 
         $this->initPageParams();
 
-        // Nur Fächer mit verantwortlichen Einrichtungen an denen der User
+        // Nur FÃ¤cher mit verantwortlichen Einrichtungen an denen der User
         // eine Rolle hat
         $filter = array('mfi.institut_id' => MvvPerm::getOwnInstitutes());
 
@@ -58,7 +58,7 @@ class Fachabschluss_FaecherController extends MVVController
             $this->fach_id = null;
         }
         if (sizeof($this->faecher) == 0) {
-            PageLayout::postInfo(_('Es wurden noch keine Fächer angelegt.'));
+            PageLayout::postInfo(_('Es wurden noch keine FÃ¤cher angelegt.'));
         }
         $this->count = Fach::getCount($filter);
 
@@ -66,8 +66,8 @@ class Fachabschluss_FaecherController extends MVVController
 
         $helpbar = Helpbar::get();
         $widget = new HelpbarWidget();
-        $widget->addElement(new WidgetElement(_('Auf diesen Seiten können Sie Fächer verwalten und neue Fächer anlegen.').'</br>'));
-        $widget->addElement(new WidgetElement(_('Ein Fach kann aufgeklappt werden, um die Abschlüsse anzuzeigen, die dem Fach bereits zugeordnet wurden.')));
+        $widget->addElement(new WidgetElement(_('Auf diesen Seiten kÃ¶nnen Sie FÃ¤cher verwalten und neue FÃ¤cher anlegen.').'</br>'));
+        $widget->addElement(new WidgetElement(_('Ein Fach kann aufgeklappt werden, um die AbschlÃ¼sse anzuzeigen, die dem Fach bereits zugeordnet wurden.')));
         $helpbar->addWidget($widget);
     }
 
@@ -95,7 +95,7 @@ class Fachabschluss_FaecherController extends MVVController
             $success_message = _('Das Fach "%s" wurde angelegt.');
         } else {
             PageLayout::setTitle(_('Fach bearbeiten'));
-            $success_message = _('Das Fach "%s" wurde geändert.');
+            $success_message = _('Das Fach "%s" wurde geÃ¤ndert.');
         }
         //save changes
         if (Request::submitted('store')) {
@@ -120,7 +120,7 @@ class Fachabschluss_FaecherController extends MVVController
                 if ($stored) {
                     PageLayout::postSuccess(sprintf($success_message, htmlReady($this->fach->name)));
                 } else {
-                    PageLayout::postInfo(_('Es wurden keine Änderungen vorgenommen.'));
+                    PageLayout::postInfo(_('Es wurden keine Ã„nderungen vorgenommen.'));
                 }
                 $this->redirect($this->url_for('/index'));
                 return;
@@ -140,7 +140,7 @@ class Fachabschluss_FaecherController extends MVVController
             $this->setSidebar();
             $sidebar = Sidebar::get();
             $action_widget = $sidebar->getWidget('actions');
-            $action_widget->addLink(_('Log-Einträge dieses Faches'),
+            $action_widget->addLink(_('Log-EintrÃ¤ge dieses Faches'),
                     $this->url_for('shared/log_event/show/Fach', $this->fach->getId()),
                     Icon::create('log', 'clickable'))->asDialog();
         }
@@ -155,15 +155,15 @@ class Fachabschluss_FaecherController extends MVVController
         if (Request::submitted('yes')) {
             CSRFProtection::verifyUnsafeRequest();
             if ($fach->isNew()) {
-                PageLayout::postError( _('Das Fach kann nicht gelöscht werden (unbekanntes Fach).'));
+                PageLayout::postError( _('Das Fach kann nicht gelÃ¶scht werden (unbekanntes Fach).'));
             } else {
                 $name = $fach->name;
                 $fach->delete();
-                PageLayout::postSuccess(sprintf(_('Das Fach "%s" wurde gelöscht.'), htmlReady($name)));
+                PageLayout::postSuccess(sprintf(_('Das Fach "%s" wurde gelÃ¶scht.'), htmlReady($name)));
             }
         }
         if (!Request::isPost()) {
-            $this->flash_set('dialog', sprintf(_('Wollen Sie wirklich das Fach "%s" löschen?'),
+            $this->flash_set('dialog', sprintf(_('Wollen Sie wirklich das Fach "%s" lÃ¶schen?'),
                             $fach->name),
                     '/delete/' . $fach->id,
                     '/index');
@@ -182,13 +182,13 @@ class Fachabschluss_FaecherController extends MVVController
 
         $this->fachbereiche = Fach::getAllFachbereiche(
                 $this->sortby, $this->order, $filter);
-        PageLayout::setTitle(_('Fächer nach Fachbereichen gruppiert'));
+        PageLayout::setTitle(_('FÃ¤cher nach Fachbereichen gruppiert'));
 
         $this->setSidebar();
 
         $helpbar = Helpbar::get();
         $widget = new HelpbarWidget();
-        $widget->addElement(new WidgetElement(_('Ein Fachbereich kann aufgeklappt werden, um die Fächer anzuzeigen, die dem Fachbereich bereits zugeordnet wurden.')));
+        $widget->addElement(new WidgetElement(_('Ein Fachbereich kann aufgeklappt werden, um die FÃ¤cher anzuzeigen, die dem Fachbereich bereits zugeordnet wurden.')));
         $helpbar->addWidget($widget);
     }
 
@@ -228,7 +228,7 @@ class Fachabschluss_FaecherController extends MVVController
         $sidebar->setImage('sidebar/learnmodule-sidebar.png');
 
         $widget  = new ViewsWidget();
-        $widget->addLink( _('Fächer mit zugeordneten Abschlüssen'),
+        $widget->addLink( _('FÃ¤cher mit zugeordneten AbschlÃ¼ssen'),
                 $this->url_for('/index'))->setActive(
                                 in_array($this->action, words('index details')));
         $widget->addLink( _('Gruppierung nach Fachbereichen'),

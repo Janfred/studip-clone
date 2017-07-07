@@ -53,8 +53,8 @@ class ExternElementTableParagraphSubHeadline extends ExternElement {
             $this->config = $config;
         
         $this->name = "TableParagraphSubHeadline";
-        $this->real_name = _("Überschrift eines Unterabsatzes");
-        $this->description = _("Angaben zur Formatierung der Überschrift eines Unterabsatzes.");
+        $this->real_name = _("Ãœberschrift eines Unterabsatzes");
+        $this->description = _("Angaben zur Formatierung der Ãœberschrift eines Unterabsatzes.");
     }
     
     function toStringEdit ($post_vars = "", $faulty_values = "",
@@ -76,7 +76,7 @@ class ExternElementTableParagraphSubHeadline extends ExternElement {
         
         $headline = $edit_form->editHeadline(_("Einzug"));
         $title = _("Linker Einzug:");
-        $info = _("Geben Sie an, wie weit (Pixel) die Überschrift im Absatz links eingerückt werden soll.");
+        $info = _("Geben Sie an, wie weit (Pixel) die Ãœberschrift im Absatz links eingerÃ¼ckt werden soll.");
         $content = $edit_form->editTextfieldGeneric("margin", $title, $info, 3, 3);
         
         $content_table .= $edit_form->editContentTable($headline, $content);

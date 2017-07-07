@@ -122,10 +122,10 @@ class SemClassesConvertIntoDb extends Migration
         $SEM_TYPE  = $GLOBALS['SEM_TYPE_OLD_VAR'];
 
         if (!(is_array($SEM_CLASS) && count($SEM_CLASS))) {
-            throw new Exception('Migration 93 kann nicht durchgeführt werden,
-                da die vorhandenen Einstellungen für $SEM_CLASS und $SEM_TYPE
-                nicht aus der Datei config.inc.php ausgelesen werden können. Entfernen
-                Sie diese Einstellungen erst, nachdem diese Migration durchgeführt wurde!');
+            throw new Exception('Migration 93 kann nicht durchgefÃ¼hrt werden,
+                da die vorhandenen Einstellungen fÃ¼r $SEM_CLASS und $SEM_TYPE
+                nicht aus der Datei config.inc.php ausgelesen werden kÃ¶nnen. Entfernen
+                Sie diese Einstellungen erst, nachdem diese Migration durchgefÃ¼hrt wurde!');
         }
 
         $slots = array(

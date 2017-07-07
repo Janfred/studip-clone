@@ -70,13 +70,13 @@ class HTML extends HTMLempty
             if (in_array($classname, $valid_classes)) {
                 $this->_content[] = $_content;
             } else {
-                trigger_error('Ungültiges Objekt: "' . $classname . '"', E_USER_ERROR);
+                trigger_error('UngÃ¼ltiges Objekt: "' . $classname . '"', E_USER_ERROR);
             }
         } elseif (is_scalar($_content)) {
             $this->_content[] = (string)$_content;
         } else {
 #trigger_error('Parameter muss ein Objekt oder Scalar sein',E_USER_ERROR);
-            echo "Fehler in HTML.class.php: Es fehlt ein addHTMLContent-Element für ein Element des Typs \"&lt;" . $this->getName() . "&gt;\"<br>";
+            echo "Fehler in HTML.class.php: Es fehlt ein addHTMLContent-Element fÃ¼r ein Element des Typs \"&lt;" . $this->getName() . "&gt;\"<br>";
         }
     }
     
@@ -146,7 +146,7 @@ class HTML extends HTMLempty
             foreach ($attribute as $name => $value) {
                 $attributes .= ($name . '=&gt;"' . $value . '"; ');
             }
-            print "Fehler in HTML.class.php: Es fehlt ein Content-Element für ein Element des Typs \"&lt;" . $this->getName() . "&gt;\" (Attribute: $attributes).";
+            print "Fehler in HTML.class.php: Es fehlt ein Content-Element fÃ¼r ein Element des Typs \"&lt;" . $this->getName() . "&gt;\" (Attribute: $attributes).";
             
             return;
         }
@@ -163,7 +163,7 @@ class HTML extends HTMLempty
                 } else {
                     $output .= $content->createContent($indent + 4);
                 }
-                // Rekursion lässt grüßen ...                
+                // Rekursion lÃ¤sst grÃ¼ÃŸen ...                
             } else {
                 // Content ist ein String. Jeden Zeile
                 // geben wir getrennt aus

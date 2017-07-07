@@ -1,5 +1,5 @@
 <h2 class="hide-in-dialog">
-    <?= _('Bearbeiten von Konfigurationsparameter für den Nutzer: ') ?>
+    <?= _('Bearbeiten von Konfigurationsparameter fÃ¼r den Nutzer: ') ?>
     <?= htmlReady(User::find($user_id)->getFullname()) ?>
 </h2>
 

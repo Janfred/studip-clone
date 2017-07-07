@@ -72,11 +72,11 @@ use Studip\Button, Studip\LinkButton;
     <? endif ?>
     <footer>
         <? if ($rule) : ?>
-            <?= Button::createAccept(_('Übernehmen'), 'uebernehmen', ['title' => _('Änderungen übernehmen')]) ?>
+            <?= Button::createAccept(_('Ãœbernehmen'), 'uebernehmen', ['title' => _('Ã„nderungen Ã¼bernehmen')]) ?>
         <? else : ?>
             <?= Button::createAccept(_('Erstellen'), 'erstellen', ['title' => _('Neue Regel erstellen')]) ?>
         <? endif ?>
-        <?= LinkButton::createCancel(_('Abbrechen'), $controller->url_for('admin/specification'), ['title' => _('Zurück zur Übersicht')]) ?>
+        <?= LinkButton::createCancel(_('Abbrechen'), $controller->url_for('admin/specification'), ['title' => _('ZurÃ¼ck zur Ãœbersicht')]) ?>
     </footer>
 </form>
 

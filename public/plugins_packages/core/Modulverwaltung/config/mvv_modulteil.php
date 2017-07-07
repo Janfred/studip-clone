@@ -330,7 +330,7 @@ $privileges = array(
                 'MVVFreigabe'   => 3
             )
         ),
-         // verknüpfte Objekte
+         // verknÃ¼pfte Objekte
         'lvgruppen' => array(
             'default' => array(
                 'MVVEntwickler'     => 1,

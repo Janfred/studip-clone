@@ -4,13 +4,13 @@ class AddMissingLogActions extends Migration
     static $log_actions = array(
         array(
             'name'        => 'USER_CHANGE_PASSWORD',
-            'description' => 'Nutzerpasswort geändert',
-            'template'    => '%user ändert/setzt das Passwort für %user(%affected)',
+            'description' => 'Nutzerpasswort geÃ¤ndert',
+            'template'    => '%user Ã¤ndert/setzt das Passwort fÃ¼r %user(%affected)',
             'active'      => 0
         ), array(
             'name'        => 'SEM_CHANGE_CYCLE',
-            'description' => 'Regelmäßige Zeit geändert',
-            'template'    => '%user hat in %sem(%affected) die regelmäßige Zeit %info geändert',
+            'description' => 'RegelmÃ¤ÃŸige Zeit geÃ¤ndert',
+            'template'    => '%user hat in %sem(%affected) die regelmÃ¤ÃŸige Zeit %info geÃ¤ndert',
             'active'      => 1
         )
     );

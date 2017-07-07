@@ -1,8 +1,8 @@
 <div><?= htmlReady($type) ?>:</div>
 <label>
-    <div><?= _('Ein Ordner für Materialien, welche nur zum Download zu Verfügung gestellt werden sollen.') ?></div>
+    <div><?= _('Ein Ordner fÃ¼r Materialien, welche nur zum Download zu VerfÃ¼gung gestellt werden sollen.') ?></div>
     <div>
-        <?= _('Den Inhalt des Ordners können nur Lehrende und TutorInnen verändern.') ?>
-        <?= _('Die normalen Teilnehmenden der Veranstaltung können diese Materialien nur herunterladen.') ?>
+        <?= _('Den Inhalt des Ordners kÃ¶nnen nur Lehrende und TutorInnen verÃ¤ndern.') ?>
+        <?= _('Die normalen Teilnehmenden der Veranstaltung kÃ¶nnen diese Materialien nur herunterladen.') ?>
     </div>
 </label>

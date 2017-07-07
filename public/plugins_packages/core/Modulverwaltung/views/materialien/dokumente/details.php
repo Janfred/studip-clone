@@ -82,7 +82,7 @@
             </tr>
             <? if ($dokument->mkdate != $dokument->chdate) : ?>
             <tr>
-                <td><strong><?= _('Letzte Änderung am:') ?></strong></td>
+                <td><strong><?= _('Letzte Ã„nderung am:') ?></strong></td>
                 <td>
                     <?= strftime('%x, %X', $dokument->chdate) . ', ' ?>
                     <?= get_fullname($dokument->editor_id) ?>

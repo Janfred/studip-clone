@@ -22,7 +22,7 @@
                     <? endif ?>
                 </dd>
                 <? if ($next_date) : ?>
-                    <dt><?= _('Nächster Termin') ?></dt>
+                    <dt><?= _('NÃ¤chster Termin') ?></dt>
                     <dd><?= $next_date ?></dd>
                 <? else : ?>
                     <dt><?= _('Erster Termin') ?></dt>

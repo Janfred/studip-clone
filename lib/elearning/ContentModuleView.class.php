@@ -8,7 +8,7 @@
 *
 * This class contains methods for output of connected module data.
 *
-* @author   Arne Schröder <schroeder@data-quest.de>
+* @author   Arne SchrÃ¶der <schroeder@data-quest.de>
 * @access   public
 * @modulegroup  elearning_interface_modules
 * @module       ContentModuleView

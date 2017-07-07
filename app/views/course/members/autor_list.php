@@ -46,7 +46,7 @@
             <tr class="sortable">
             <? if ($is_tutor && !$is_locked) : ?>
                 <th>
-                    <input aria-label="<?= sprintf(_('Alle %s auswählen'), $status_groups['autor']) ?>"
+                    <input aria-label="<?= sprintf(_('Alle %s auswÃ¤hlen'), $status_groups['autor']) ?>"
                            type="checkbox" name="all" value="1" data-proxyfor=":checkbox[name^=autor]">
                 </th>
             <? endif ?>
@@ -83,7 +83,7 @@
             <tr>
             <? if ($is_tutor && !$is_locked) : ?>
                 <td>
-                    <input aria-label="<?= sprintf(_('%s auswählen'), $status_groups['autor']) ?>"
+                    <input aria-label="<?= sprintf(_('%s auswÃ¤hlen'), $status_groups['autor']) ?>"
                            type="checkbox" name="autor[<?= $autor['user_id'] ?>]" value="1">
                 </td>
             <? endif ?>
@@ -125,7 +125,7 @@
                     <? if ($is_tutor) : ?>
                         <? $actionMenu->addLink(
                             $controller->url_for('course/members/add_comment/' . $autor['user_id']),
-                            _('Bemerkung hinzufügen'),
+                            _('Bemerkung hinzufÃ¼gen'),
                             Icon::create('comment', 'clickable'),
                             ['data-dialog' => 'size=auto']
                         ) ?>
@@ -172,8 +172,8 @@
         <tfoot>
             <tr>
                 <td colspan="<?= $cols_foot ?>">
-                    <select name="action_autor" id="action_autor" aria-label="<?= _('Aktion ausführen') ?>">
-                        <option value="">- <?= _('Aktion wählen') ?></option>
+                    <select name="action_autor" id="action_autor" aria-label="<?= _('Aktion ausfÃ¼hren') ?>">
+                        <option value="">- <?= _('Aktion wÃ¤hlen') ?></option>
                     <? if($is_dozent) : ?>
                         <option value="upgrade">
                             <?= sprintf(_('Zu %s hochstufen'), htmlReady($status_groups['tutor'])) ?>
@@ -198,7 +198,7 @@
                     <? endif ?>
                         <option value="message"><?=_('Nachricht senden')?></option>
                     </select>
-                    <?= Button::create(_('Ausführen'), 'submit_autor') ?>
+                    <?= Button::create(_('AusfÃ¼hren'), 'submit_autor') ?>
                 </td>
             </tr>
         </tfoot>

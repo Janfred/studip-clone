@@ -29,7 +29,7 @@
         </tr>
         <tr>
             <td>
-                <?= _('Beschreibungstext für die Suche') ?>
+                <?= _('Beschreibungstext fÃ¼r die Suche') ?>
             </td>
             <td class="sem_class_name">
                 <div>
@@ -55,11 +55,11 @@
                 <div class="add">
                     <div style="display: none; margin-left: 37px;">
                         <input type="text" id="new_sem_type" onBlur="if (!this.value) jQuery(this).closest('.add').children().toggle();">
-                        <a href="" onClick="STUDIP.admin_sem_class.add_sem_type(); return false;"><?= Icon::create('arr_2up', 'sort')->asImg(['class' => "text-bottom", "title" => _("hinzufügen")]) ?></a>
+                        <a href="" onClick="STUDIP.admin_sem_class.add_sem_type(); return false;"><?= Icon::create('arr_2up', 'sort')->asImg(['class' => "text-bottom", "title" => _("hinzufÃ¼gen")]) ?></a>
                     </div>
                     <div style="margin-left: 21px;">
                         <a href="#" onClick="jQuery(this).closest('.add').children().toggle(); jQuery('#new_sem_type').focus(); return false;">
-                            <?= Icon::create('add', 'clickable')->asImg(['class' => "text-bottom", "title" => _("Veranstaltungstyp hinzufügen")]) ?>
+                            <?= Icon::create('add', 'clickable')->asImg(['class' => "text-bottom", "title" => _("Veranstaltungstyp hinzufÃ¼gen")]) ?>
                         </a>
                     </div>
                 </div>
@@ -86,21 +86,21 @@
             <td colspan="2"><h3><?= _("Voreinstellungen beim Anlegen einer Veranstaltung") ?></h3></td>
         </tr>
         <tr class="sub">
-            <td><label for="compact_mode"><?= _("Kompaktmodus für den Veranstaltungsassistenten") ?></label></td>
+            <td><label for="compact_mode"><?= _("Kompaktmodus fÃ¼r den Veranstaltungsassistenten") ?></label></td>
             <td><input type="checkbox" id="compact_mode" value="1"<?= $sem_class['compact_mode'] ? " checked" : "" ?>></td>
         </tr>
         <tr class="sub">
             <td><label for="turnus_default"><?= _("Turnus") ?></label></td>
             <td>
                 <select id="turnus_default">
-                    <option value="0"<?= $sem_class['turnus_default'] == 0 ? " selected" : "" ?>><?= _("Regelmäßige Termine") ?></option>
-                    <option value="1"<?= $sem_class['turnus_default'] == 1 ? " selected" : "" ?>><?= _("Unregelmäßige Termine") ?></option>
+                    <option value="0"<?= $sem_class['turnus_default'] == 0 ? " selected" : "" ?>><?= _("RegelmÃ¤ÃŸige Termine") ?></option>
+                    <option value="1"<?= $sem_class['turnus_default'] == 1 ? " selected" : "" ?>><?= _("UnregelmÃ¤ÃŸige Termine") ?></option>
                     <option value="-1"<?= $sem_class['turnus_default'] == -1 ? " selected" : "" ?>><?= _("Keine Termine") ?></option>
                 </select>
             </td>
         </tr>
         <tr class="sub">
-            <td><label for="default_read_level"><?= _("Lesbar für Nutzer") ?></label></td>
+            <td><label for="default_read_level"><?= _("Lesbar fÃ¼r Nutzer") ?></label></td>
             <td>
                 <select id="default_read_level">
                     <option value="0"<?= $sem_class['default_read_level'] == 0 ? " selected" : "" ?>><?= _("Unangemeldet an Veranstaltung") ?></option>
@@ -109,7 +109,7 @@
             </td>
         </tr>
         <tr class="sub">
-            <td><label for="default_write_level"><?= _("Schreibbar für Nutzer") ?></label></td>
+            <td><label for="default_write_level"><?= _("Schreibbar fÃ¼r Nutzer") ?></label></td>
             <td>
                 <select id="default_write_level">
                     <option value="0"<?= $sem_class['default_write_level'] == 0 ? " selected" : "" ?>><?= _("Unangemeldet an Veranstaltung") ?></option>
@@ -122,7 +122,7 @@
             <td>
                 <select id="admission_prelim_default">
                     <option value="0"<?= $sem_class['admission_prelim_default'] == 0 ? " selected" : "" ?>><?= _("direkter Eintrag") ?></option>
-                    <option value="1"<?= $sem_class['admission_prelim_default'] == 1 ? " selected" : "" ?>><?= _("vorläufiger Eintrag") ?></option>
+                    <option value="1"<?= $sem_class['admission_prelim_default'] == 1 ? " selected" : "" ?>><?= _("vorlÃ¤ufiger Eintrag") ?></option>
                 </select>
             </td>
         </tr>
@@ -139,11 +139,11 @@
             <td colspan="2"><h3><?= _("Forum") ?></h3></td>
         </tr>
         <tr class="sub">
-            <td><label for="topic_create_autor"><?= _("Autoren dürfen Themen anlegen.") ?></label></td>
+            <td><label for="topic_create_autor"><?= _("Autoren dÃ¼rfen Themen anlegen.") ?></label></td>
             <td><input type="checkbox" id="topic_create_autor" value="1"<?= $sem_class['topic_create_autor'] ? " checked" : "" ?>></td>
         </tr>
         <tr class="sub">
-            <td><label for="write_access_nobody"><?= _("Unangemeldete Nutzer (nobody) dürfen posten.") ?></label></td>
+            <td><label for="write_access_nobody"><?= _("Unangemeldete Nutzer (nobody) dÃ¼rfen posten.") ?></label></td>
             <td><input type="checkbox" id="write_access_nobody" value="1"<?= $sem_class['write_access_nobody'] ? " checked" : "" ?>></td>
         </tr>
 
@@ -187,7 +187,7 @@
             <td><input type="checkbox" id="module" value="1"<?= $sem_class['module'] ? " checked" : "" ?>></td>
         </tr>
         <tr class="sub">
-            <td><label for="course_creation_forbidden"><?= _("Anlegeassistent für diesen Typ sperren.") ?></label></td>
+            <td><label for="course_creation_forbidden"><?= _("Anlegeassistent fÃ¼r diesen Typ sperren.") ?></label></td>
             <td><input type="checkbox" id="course_creation_forbidden" value="1"<?= $sem_class['course_creation_forbidden'] ? " checked" : "" ?>></td>
         </tr>
         <tr class="sub">
@@ -204,13 +204,13 @@
             </td>
             <td>
                 <? $container = array(
-                    'overview' => array('name' => _("Übersicht")),
+                    'overview' => array('name' => _("Ãœbersicht")),
                     'admin' => array('name' => _("Verwaltung")),
                     'forum' => array('name' => _("Forum")),
                     'participants' => array('name' => _("Teilnehmerseite")),
                     'documents' => array('name' => _("Dateibereich")),
                     'schedule' => array('name' => _("Terminseite")),
-                    'literature' => array('name' => _("Literaturübersicht")),
+                    'literature' => array('name' => _("LiteraturÃ¼bersicht")),
                     'scm' => array('name' => _("Freie Informationen")),
                     'wiki' => array('name' => _("Wiki")),
                     'resources' => array('name' => _("Ressourcen")),
@@ -239,7 +239,7 @@
                 <? endforeach ?>
                 <br>
                 <div container="plugins" id="plugins">
-                    <h2 title="<?= _("Diese Plugins sind standardmäßig bei den Veranstaltungen dieser Klasse aktiviert.") ?>"><?= _("Plugins") ?></h2>
+                    <h2 title="<?= _("Diese Plugins sind standardmÃ¤ÃŸig bei den Veranstaltungen dieser Klasse aktiviert.") ?>"><?= _("Plugins") ?></h2>
                     <div class="droparea">
                         <? foreach ($modules as $module_name => $module_info) : ?>
                         <? $module_attribute = $sem_class->getModuleMetadata($module_name); ?>
@@ -259,7 +259,7 @@
                 </div>
                 <hr>
                 <div container="deactivated" id="deactivated_modules">
-                    <h2 title="<?= _("Diese Module sind standardmäßig nicht aktiviert.") ?>"><?= _("Nichtaktivierte Inhaltselemente") ?></h2>
+                    <h2 title="<?= _("Diese Module sind standardmÃ¤ÃŸig nicht aktiviert.") ?>"><?= _("Nichtaktivierte Inhaltselemente") ?></h2>
                     <div class="droparea">
                         <? foreach ($modules as $module_name => $module_info) {
                             $module_id = $module_info['id'];
@@ -287,7 +287,7 @@
                 <?= Studip\Button::create(_("Speichern"), "save", array('onClick' => "STUDIP.admin_sem_class.saveData(); return false;"))?>
                 <? if ($sem_class->countSeminars() === 0) : ?>
                     <input type="hidden" name="delete_sem_class" value="<?= Request::int("id") ?>">
-                    <?= Studip\Button::create(_("Löschen"), "delete", array('onClick' => "return window.confirm('"._("Wirklich löschen?")."');"))?>
+                    <?= Studip\Button::create(_("LÃ¶schen"), "delete", array('onClick' => "return window.confirm('"._("Wirklich lÃ¶schen?")."');"))?>
                 <? endif ?>
                 </form>
             </td>
@@ -297,9 +297,9 @@
 
 <div id="sem_type_delete_question_title" style="display: none;"><?= _("Sicherheitsabfrage") ?></div>
 <div id="sem_type_delete_question" style="display: none;">
-    <p class="info"><?= _("Wirklich den Veranstaltungstyp löschen?") ?></p>
+    <p class="info"><?= _("Wirklich den Veranstaltungstyp lÃ¶schen?") ?></p>
     <input type="hidden" id="sem_type_for_deletion">
-    <?= Studip\LinkButton::create(_("Löschen"), array('onclick' => "STUDIP.admin_sem_class.delete_sem_type(); return false;")) ?>
+    <?= Studip\LinkButton::create(_("LÃ¶schen"), array('onclick' => "STUDIP.admin_sem_class.delete_sem_type(); return false;")) ?>
     <?= Studip\LinkButton::create(_("Abbrechen"), array('onclick' => "jQuery(this).closest('#sem_type_delete_question').dialog('close'); return false;")) ?>
 </div>
 

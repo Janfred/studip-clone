@@ -9,7 +9,7 @@
  *
  * This class contains methods to handle ILIAS 4 learning modules and tests.
  *
- * @author    Arne Schröder <schroeder@data-quest.de>
+ * @author    Arne SchrÃ¶der <schroeder@data-quest.de>
  * @access    public
  * @modulegroup    elearning_interface_modules
  * @module        Ilias4ContentModule
@@ -51,7 +51,7 @@ class Ilias4ContentModule extends Ilias3ContentModule
         $connected_cms[$this->cms_type]->soap_client->setCachingStatus(false);
         $connected_cms[$this->cms_type]->soap_client->clearCache();
 
-        // Check, ob Kurs in ILIAS gelöscht wurde
+        // Check, ob Kurs in ILIAS gelÃ¶scht wurde
         if (($crs_id != false) AND ($connected_cms[$this->cms_type]->soap_client->getObjectByReference($crs_id) == false)) {
             ObjectConnections::unsetConnection($seminar_id, $crs_id, "crs", $this->cms_type);
             $messages["info"] .= _("Der zugeordnete ILIAS-Kurs (ID $crs_id) existiert nicht mehr. Ein neuer Kurs wird angelegt.") . "<br>";

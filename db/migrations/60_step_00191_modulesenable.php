@@ -16,51 +16,51 @@ class Step00191ModulesEnable extends Migration
         return array(
             array('field' => 'CHAT_ENABLE',
                   'value' => $this->getValue('CHAT_ENABLE'),
-                  'comment' => 'Schaltet ein oder aus, ob der Chat global verfügbar ist.',
+                  'comment' => 'Schaltet ein oder aus, ob der Chat global verfÃ¼gbar ist.',
             ),
             array('field' => 'CALENDAR_ENABLE',
                   'value' => $this->getValue('CALENDAR_ENABLE'),
-                  'comment' => 'Schaltet ein oder aus, ob der Kalender global verfügbar ist.',
+                  'comment' => 'Schaltet ein oder aus, ob der Kalender global verfÃ¼gbar ist.',
             ),
             array('field' => 'EXPORT_ENABLE',
                   'value' => $this->getValue('EXPORT_ENABLE'),
-                  'comment' => 'Schaltet ein oder aus, ob der Export global verfügbar ist.',
+                  'comment' => 'Schaltet ein oder aus, ob der Export global verfÃ¼gbar ist.',
             ),
             array('field' => 'EXTERN_ENABLE',
                   'value' => $this->getValue('EXTERN_ENABLE'),
-                  'comment' => 'Schaltet ein oder aus, ob die externen Seiten global verfügbar sind.',
+                  'comment' => 'Schaltet ein oder aus, ob die externen Seiten global verfÃ¼gbar sind.',
             ),
             array('field' => 'VOTE_ENABLE',
                   'value' => $this->getValue('VOTE_ENABLE'),
-                  'comment' => 'Schaltet ein oder aus, ob die Umfragen global verfügbar sind.',
+                  'comment' => 'Schaltet ein oder aus, ob die Umfragen global verfÃ¼gbar sind.',
             ),
             array('field' => 'ELEARNING_INTERFACE_ENABLE',
                   'value' => $this->getValue('ELEARNING_INTERFACE_ENABLE', 0),
-                  'comment' => 'Schaltet ein oder aus, ob die Lernmodule global verfügbar sind.',
+                  'comment' => 'Schaltet ein oder aus, ob die Lernmodule global verfÃ¼gbar sind.',
             ),
             array('field' => 'STM_ENABLE',
                   'value' => $this->getValue('STM_ENABLE', 0),
-                  'comment' => 'Schaltet ein oder aus, ob die Studienmodule global verfügbar sind.',
+                  'comment' => 'Schaltet ein oder aus, ob die Studienmodule global verfÃ¼gbar sind.',
             ),
             array('field' => 'WIKI_ENABLE',
                   'value' => $this->getValue('WIKI_ENABLE'),
-                  'comment' => 'Schaltet ein oder aus, ob das Wiki global verfügbar ist.',
+                  'comment' => 'Schaltet ein oder aus, ob das Wiki global verfÃ¼gbar ist.',
             ),
             array('field' => 'SMILEYADMIN_ENABLE',
                   'value' => $this->getValue('SMILEYADMIN_ENABLE'),
-                  'comment' => 'Schaltet ein oder aus, ob die Administration der Smileys verfügbar ist.',
+                  'comment' => 'Schaltet ein oder aus, ob die Administration der Smileys verfÃ¼gbar ist.',
             ),
             array('field' => 'LOG_ENABLE',
                   'value' => $this->getValue('LOG_ENABLE'),
-                  'comment' => 'Schaltet ein oder aus, ob das Log global verfügbar ist.',
+                  'comment' => 'Schaltet ein oder aus, ob das Log global verfÃ¼gbar ist.',
             ),
             array('field' => 'SCM_ENABLE',
                   'value' => $this->getValue('SCM_ENABLE'),
-                  'comment' => 'Schaltet ein oder aus, ob freie Informationsseiten global verfügbar sind.',
+                  'comment' => 'Schaltet ein oder aus, ob freie Informationsseiten global verfÃ¼gbar sind.',
             ),
             array('field' => 'BANNER_ADS_ENABLE',
                   'value' => $this->getValue('BANNER_ADS_ENABLE', 0),
-                  'comment' => 'Schaltet ein oder aus, ob die Bannerwerbung global verfügbar ist.',
+                  'comment' => 'Schaltet ein oder aus, ob die Bannerwerbung global verfÃ¼gbar ist.',
             )
         );
     }
@@ -79,7 +79,7 @@ class Step00191ModulesEnable extends Migration
         }
 
         // new
-        $db->exec("INSERT IGNORE INTO `config` ( `config_id` , `parent_id` , `field` , `value` , `is_default` , `type` , `range` , `section` , `position` , `mkdate` , `chdate` , `description` , `comment` , `message_template` ) VALUES ( MD5('LITERATURE_ENABLE'), '', 'LITERATURE_ENABLE', '1', '1', 'boolean', 'global', 'modules', '0', '".time()."', '".time()."', 'Schaltet ein oder aus, ob die Literaturverwaltung global verfügbar ist.', '', '')");
+        $db->exec("INSERT IGNORE INTO `config` ( `config_id` , `parent_id` , `field` , `value` , `is_default` , `type` , `range` , `section` , `position` , `mkdate` , `chdate` , `description` , `comment` , `message_template` ) VALUES ( MD5('LITERATURE_ENABLE'), '', 'LITERATURE_ENABLE', '1', '1', 'boolean', 'global', 'modules', '0', '".time()."', '".time()."', 'Schaltet ein oder aus, ob die Literaturverwaltung global verfÃ¼gbar ist.', '', '')");
 
         //changing studygroup config
         $db->exec("UPDATE config SET value = REPLACE (value, '|', ' ') WHERE field = 'STUDYGROUP_SETTINGS'");

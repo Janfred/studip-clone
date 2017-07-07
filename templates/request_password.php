@@ -48,8 +48,8 @@ try {
                         <section>
                             <?= _('Bitte geben Sie Ihre E-Mail-Adresse an, die Sie in ' .
                                   'Stud.IP benutzen. An diese Adresse wird ihnen eine ' .
-                                  'E-Mail geschickt, die einen Best‰tigungslink enth‰lt, ' .
-                                  'mit dem Sie ein neues Passwort anfordern kˆnnen.<br>' .
+                                  'E-Mail geschickt, die einen Best√§tigungslink enth√§lt, ' .
+                                  'mit dem Sie ein neues Passwort anfordern k√∂nnen.<br>' .
                                   'Bitte beachten Sie die Hinweise in dieser E-Mail.') ?>
                         </section>
                     <? endif ?>

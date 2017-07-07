@@ -54,14 +54,14 @@
             <td style="text-align: right">
             <? if ($tasks[$i]->valid): ?>
                 <a data-dialog href="<?= $controller->url_for('admin/cronjobs/tasks/execute', $tasks[$i]->task_id) ?>">
-                    <?= Icon::create('play', 'clickable', ['title' => _('Aufgabe ausführen')])->asImg() ?>
+                    <?= Icon::create('play', 'clickable', ['title' => _('Aufgabe ausfÃ¼hren')])->asImg() ?>
                 </a>
             <? endif; ?>
                 <a href="<?= $controller->url_for('admin/cronjobs/logs/task', $tasks[$i]->task_id) ?>">
                     <?= Icon::create('log', 'clickable', ['title' => _('Log anzeigen')])->asImg() ?>
                 </a>
                 <a href="<?= $controller->url_for('admin/cronjobs/tasks/delete', $tasks[$i]->task_id, $page) ?>">
-                    <?= Icon::create('trash', 'clickable', ['title' => _('Aufgabe löschen')])->asImg() ?>
+                    <?= Icon::create('trash', 'clickable', ['title' => _('Aufgabe lÃ¶schen')])->asImg() ?>
                 </a>
             </td>
         </tr>
@@ -72,12 +72,12 @@
         <tr>
             <td colspan="3">
                 <select name="action" data-activates=".cronjobs button[name=bulk]">
-                    <option value="">- <?= _('Aktion auswählen') ?></option>
+                    <option value="">- <?= _('Aktion auswÃ¤hlen') ?></option>
                     <option value="activate"><?= _('Aktivieren') ?></option>
                     <option value="deactivate"><?= _('Deaktivieren') ?></option>
-                    <option value="delete"><?= _('Löschen') ?></option>
+                    <option value="delete"><?= _('LÃ¶schen') ?></option>
                 </select>
-                <?= Button::createAccept(_('Ausführen'), 'bulk') ?>
+                <?= Button::createAccept(_('AusfÃ¼hren'), 'bulk') ?>
             </td>
             <td colspan="3" style="text-align: right; vertical-align: middle;">
             <?

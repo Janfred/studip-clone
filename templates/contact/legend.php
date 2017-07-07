@@ -20,7 +20,7 @@
         </li>
         <li>
             <?= Icon::create('trash', 'clickable')->asImg() ?>
-            <?= _('Kontakt löschen') ?>
+            <?= _('Kontakt lÃ¶schen') ?>
         </li>
     <? else: ?>
         <li>

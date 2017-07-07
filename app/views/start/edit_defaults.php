@@ -31,7 +31,7 @@
         </ul>
     </div>
 
-    <h2><?= _('Nicht standardmäßig aktivierte Widgets') ?></h2>
+    <h2><?= _('Nicht standardmÃ¤ÃŸig aktivierte Widgets') ?></h2>
     <div class="available-widgets">
         <ul class="portal-widget-list" style="clear: both;">
         <? foreach ($widgets as $widget) : ?>

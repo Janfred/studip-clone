@@ -101,7 +101,7 @@ class ScoreController extends AuthenticatedController
         $sidebar->setImage('sidebar/medal-sidebar.png');
 
         $actions = new OptionsWidget();
-        $actions->addCheckbox(_('Ihren Wert veröffentlichen'),
+        $actions->addCheckbox(_('Ihren Wert verÃ¶ffentlichen'),
                               $this->current_user->score,
                               $this->url_for('score/publish'),
                               $this->url_for('score/unpublish'));
@@ -118,7 +118,7 @@ class ScoreController extends AuthenticatedController
         $user = User::findCurrent();
         $user->score = Score::getMyScore($user);
         $user->store();
-        PageLayout::postMessage(MessageBox::success(_('Ihr Wert wurde auf der Rangliste veröffentlicht.')));
+        PageLayout::postMessage(MessageBox::success(_('Ihr Wert wurde auf der Rangliste verÃ¶ffentlicht.')));
         $this->redirect('score');
     }
 
@@ -130,7 +130,7 @@ class ScoreController extends AuthenticatedController
         $user = User::findCurrent();
         $user->score = 0;
         $user->store();
-        PageLayout::postMessage(MessageBox::success(_('Ihr Wert wurde von der Rangliste gelöscht.')));
+        PageLayout::postMessage(MessageBox::success(_('Ihr Wert wurde von der Rangliste gelÃ¶scht.')));
         $this->redirect('score');
     }
 }

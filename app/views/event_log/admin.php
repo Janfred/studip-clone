@@ -7,7 +7,7 @@
 
 <h3><?= _('Konfiguration der Logging-Funktionen') ?></h3>
 
-<p><?= _('Sie können hier einen Teil der Logging-Funktionen direkt verändern.') ?></p>
+<p><?= _('Sie kÃ¶nnen hier einen Teil der Logging-Funktionen direkt verÃ¤ndern.') ?></p>
 
 <form action="<?= $controller->url_for('event_log/save/'.urlencode($edit_id)) ?>" method="POST">
 <?= CSRFProtection::tokenTag() ?>

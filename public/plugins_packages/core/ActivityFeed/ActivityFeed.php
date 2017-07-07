@@ -1,14 +1,14 @@
 <?php
 /**
- * @author      AndrÈ Klaﬂen <klassen@elan-ev.de>
- * @author      Till Glˆggler <tgloeggl@uos.de>
+ * @author      Andr√© Kla√üen <klassen@elan-ev.de>
+ * @author      Till Gl√∂ggler <tgloeggl@uos.de>
  * @license     GPL 2 or later
  */
 class ActivityFeed extends StudIPPlugin implements PortalPlugin
 {
     public function getPluginName()
     {
-        return _('Aktivit‰ten');
+        return _('Aktivit√§ten');
     }
 
     public function getPortalTemplate()
@@ -26,7 +26,7 @@ class ActivityFeed extends StudIPPlugin implements PortalPlugin
         $navigation->setImage(Icon::create('headache+visibility-visible', 'clickable'));
         $navigation->setLinkAttributes([
             'id'    => 'toggle-user-activities',
-            'title' => _('Eigene Aktivit‰ten ein-/ausblenden'),
+            'title' => _('Eigene Aktivit√§ten ein-/ausblenden'),
         ]);
         $icons[] = $navigation;
 
@@ -34,7 +34,7 @@ class ActivityFeed extends StudIPPlugin implements PortalPlugin
         $navigation->setImage(Icon::create('no-activity', 'clickable'));
         $navigation->setLinkAttributes([
             'id'    => 'toggle-all-activities',
-            'title' => _('Aktivit‰tsdetails ein-/ausblenden'),
+            'title' => _('Aktivit√§tsdetails ein-/ausblenden'),
         ]);
         $icons[] = $navigation;
 
@@ -66,7 +66,7 @@ class ActivityFeed extends StudIPPlugin implements PortalPlugin
 
         if (count($errors) > 0) {
             PageLayout::postInfo(
-                _('Das Aktivit‰ten-Plugin konnte nicht vollst‰ndig aktiviert werden.'),
+                _('Das Aktivit√§ten-Plugin konnte nicht vollst√§ndig aktiviert werden.'),
                 $errors
             );
         }

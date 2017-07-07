@@ -28,7 +28,7 @@ class Settings_AccountController extends Settings_SettingsController
     {
         parent::before_filter($action, $args);
 
-        PageLayout::setHelpKeyword('Basis.HomepagePersönlicheDaten');
+        PageLayout::setHelpKeyword('Basis.HomepagePersÃ¶nlicheDaten');
         PageLayout::setTitle(_('Benutzerkonto bearbeiten'));
         Navigation::activateItem('/profile/edit/profile');
         SkipLinks::addIndex(_('Benutzerkonto bearbeiten'), 'layout_content');
@@ -76,17 +76,17 @@ class Settings_AccountController extends Settings_SettingsController
         }
 
         if ($this->user->store()) {
-            $success[] = _('Ihre persönlichen Daten wurden geändert.');
+            $success[] = _('Ihre persÃ¶nlichen Daten wurden geÃ¤ndert.');
 
             // Inform the user about this change
             setTempLanguage($this->user->user_id);
-            $this->postPrivateMessage(_("Ihre persönlichen Daten wurden geändert.\n"));
+            $this->postPrivateMessage(_("Ihre persÃ¶nlichen Daten wurden geÃ¤ndert.\n"));
             restoreLanguage();
         }
 
-        //nur nötig wenn der user selbst seine daten ändert
+        //nur nÃ¶tig wenn der user selbst seine daten Ã¤ndert
         if (!$this->restricted) {
-            // Vorname verändert ?
+            // Vorname verÃ¤ndert ?
             $vorname = trim(Request::get('vorname'));
             if ($this->shallChange('auth_user_md5.Vorname', 'name', $vorname)) {
                 // Vorname nicht korrekt oder fehlend
@@ -94,11 +94,11 @@ class Settings_AccountController extends Settings_SettingsController
                     $errors[] = _('Der Vorname fehlt oder ist unsinnig!');
                 } else {
                     $this->user->Vorname = $vorname;
-                    $success[] = _('Ihr Vorname wurde geändert!');
+                    $success[] = _('Ihr Vorname wurde geÃ¤ndert!');
                 }
             }
 
-            // Nachname verändert ?
+            // Nachname verÃ¤ndert ?
             $nachname = trim(Request::get('nachname'));
             if ($this->shallChange('auth_user_md5.Nachname', 'name', $nachname)) {
                 // Nachname nicht korrekt oder fehlend
@@ -106,7 +106,7 @@ class Settings_AccountController extends Settings_SettingsController
                     $errors[] = _('Der Nachname fehlt oder ist unsinnig!');
                 } else {
                     $this->user->Nachname = $nachname;
-                    $success[] = _('Ihr Nachname wurde geändert!');
+                    $success[] = _('Ihr Nachname wurde geÃ¤ndert!');
                 }
             }
 
@@ -114,12 +114,12 @@ class Settings_AccountController extends Settings_SettingsController
             $new_username = trim(Request::get('new_username'));
             if ($this->shallChange('auth_user_md5.username', 'username', $new_username)) {
                 if (!$this->validator->ValidateUsername($new_username)) {
-                    $errors[] = _('Der gewählte Benutzername ist nicht lang genug!');
+                    $errors[] = _('Der gewÃ¤hlte Benutzername ist nicht lang genug!');
                 } else if (User::countBySql('username = ?', [$new_username]) > 0) {
-                    $errors[] =  _('Der Benutzername wird bereits von einem anderen Benutzer verwendet. Bitte wählen Sie einen anderen Benutzernamen!');
+                    $errors[] =  _('Der Benutzername wird bereits von einem anderen Benutzer verwendet. Bitte wÃ¤hlen Sie einen anderen Benutzernamen!');
                 } else {
                     $this->user->username = $new_username;
-                    $success[] = _('Ihr Benutzername wurde geändert!');
+                    $success[] = _('Ihr Benutzername wurde geÃ¤ndert!');
 
                     URLHelper::addLinkParam('username', $this->user->username);
 
@@ -137,7 +137,7 @@ class Settings_AccountController extends Settings_SettingsController
                 if (!$is_sso && !$auth->isAuthenticated($this->user->username, Request::get('password'))) {
                     $errors[] = _('Das aktuelle Passwort wurde nicht korrekt eingegeben.');
                 } else if ($email1 !== $email2) {
-                    $errors[] = _('Die Wiederholung der E-Mail-Adresse stimmt nicht mit Ihrer Eingabe überein.');
+                    $errors[] = _('Die Wiederholung der E-Mail-Adresse stimmt nicht mit Ihrer Eingabe Ã¼berein.');
                 } else {
                     if ($this->user->changeEmail($email1)) {
                         $this->user->email = $email1;
@@ -147,9 +147,9 @@ class Settings_AccountController extends Settings_SettingsController
         }
 
         if (count($errors) > 0) {
-            PageLayout::postError(_('Bitte überprüfen Sie Ihre Eingaben:'), $errors);
+            PageLayout::postError(_('Bitte Ã¼berprÃ¼fen Sie Ihre Eingaben:'), $errors);
         } else if ($this->user->store()) {
-            PageLayout::postSuccess(_('Ihre Nutzerdaten wurden geändert.'), $success);
+            PageLayout::postSuccess(_('Ihre Nutzerdaten wurden geÃ¤ndert.'), $success);
             if (count($info) > 0) {
                 PageLayout::postInfo(_('Bitte beachten Sie:'), $info);
             }

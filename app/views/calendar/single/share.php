@@ -15,7 +15,7 @@
         <? if (!$short_id) : ?>
         <tr>
             <td>
-                <?= _('Sie können sich eine Adresse generieren lassen, mit der Sie Termine aus Ihrem Stud.IP-Terminkalender in externen Terminkalendern einbinden können.') ?>
+                <?= _('Sie kÃ¶nnen sich eine Adresse generieren lassen, mit der Sie Termine aus Ihrem Stud.IP-Terminkalender in externen Terminkalendern einbinden kÃ¶nnen.') ?>
                 <div style="text-align: center;">
                     <?= Button::create(_('Adresse generieren!'), 'new_id') ?>
                 </div>
@@ -24,7 +24,7 @@
         <? else : ?>
         <tr>
             <td>
-                <?= _('Die folgende Adresse können Sie in externe Terminkalenderanwendungen eintragen, um Ihre Termine dort anzuzeigen:') ?>
+                <?= _('Die folgende Adresse kÃ¶nnen Sie in externe Terminkalenderanwendungen eintragen, um Ihre Termine dort anzuzeigen:') ?>
                 <? $url = URLHelper::getLink($GLOBALS['ABSOLUTE_URI_STUDIP'] . 'dispatch.php/ical/index/' . $short_id, null, true) ?>
                 <div style="font-weight: bold;">
                     <a href="<?= $url ?>" target="_blank"><?= htmlReady($url) ?></a>
@@ -34,13 +34,13 @@
         <tr>
             <td>
                 <?= Button::create(_('Neue Adresse generieren.'), 'new_id') ?>
-                <?= _('(Achtung: Die alte Adresse wird damit ungültig!)') ?>
+                <?= _('(Achtung: Die alte Adresse wird damit ungÃ¼ltig!)') ?>
             </td>
         </tr>
         <tr>
             <td>
-                <?= Button::create(_('Adresse löschen.'), 'delete_id') ?>
-                <?= _('(Ein Zugriff auf Ihre Termine über diese Adresse ist dann nicht mehr möglich!)') ?>
+                <?= Button::create(_('Adresse lÃ¶schen.'), 'delete_id') ?>
+                <?= _('(Ein Zugriff auf Ihre Termine Ã¼ber diese Adresse ist dann nicht mehr mÃ¶glich!)') ?>
             </td>
         </tr>
         <tr>

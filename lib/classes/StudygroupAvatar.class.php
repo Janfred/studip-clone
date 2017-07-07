@@ -17,7 +17,7 @@
  * @package    studip
  * @subpackage lib
  *
- * @author    Marcus Lunzenauer (mlunzena@uos), Till Glöggler (tgloeggl@uos)
+ * @author    Marcus Lunzenauer (mlunzena@uos), Till GlÃ¶ggler (tgloeggl@uos)
  * @copyright (c) Authors
  * @since     1.10
  */

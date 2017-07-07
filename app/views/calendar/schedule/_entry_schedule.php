@@ -49,7 +49,7 @@ use Studip\Button, Studip\LinkButton;
 
         <? if ($show_entry['id']) : ?>
             <?= LinkButton::create(
-                    _('Löschen'),
+                    _('LÃ¶schen'),
                     $controller->url_for('calendar/schedule/delete/'. $show_entry['id']),
                     array('style' => 'margin-right: 20px')) ?>
         <? endif ?>

@@ -29,7 +29,7 @@ class AddOptionStep152 extends Migration
             VALUES (
             MD5( 'ENABLE_PROTECTED_DOWNLOAD_RESTRICTION' ) , '', 'ENABLE_PROTECTED_DOWNLOAD_RESTRICTION',
             '0', '1', 'boolean', 'global', '', '0', UNIX_TIMESTAMP( ) , UNIX_TIMESTAMP( ) ,
-            'Schaltet die Überprüfung (fester Teilnehmerkreis) bei Download von als geschützt markierten Dateien ein',
+            'Schaltet die ÃœberprÃ¼fung (fester Teilnehmerkreis) bei Download von als geschÃ¼tzt markierten Dateien ein',
             '', ''
             )
             ");

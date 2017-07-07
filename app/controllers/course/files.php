@@ -58,7 +58,7 @@ class Course_FilesController extends AuthenticatedController
         }
         if ($this->topFolder && $this->topFolder->isWritable($GLOBALS['user']->id)) {
             $actions->addLink(
-                _('Datei hinzufügen'),
+                _('Datei hinzufÃ¼gen'),
                 '#',
                 Icon::create('file+add', 'clickable'),
                 ['onclick' => "STUDIP.Files.openAddFilesWindow(); return false;"]

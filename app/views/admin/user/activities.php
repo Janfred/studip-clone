@@ -23,7 +23,7 @@
                     <? if ($query['details']) : ?>
                         <a href="<?= $controller->url_for('admin/user/activities/' . $user['user_id'], ['view' => $query['details']] + $params) ?>"
                             <?= Request::isXhr() ? 'data-dialog="size=50%"' :  ''?>>
-                            <?= Icon::create('info-circle', 'clickable', ['title' => _('Übersicht anzeigen')])->asImg('16') ?>
+                            <?= Icon::create('info-circle', 'clickable', ['title' => _('Ãœbersicht anzeigen')])->asImg('16') ?>
                         </a>
                     <? endif ?>
                 </td>
@@ -36,14 +36,14 @@
     <? if (Request::get('view') == 'courses') : ?>
         <?= $this->render_partial('admin/user/_course_list.php',
                 ['memberships' => $sections['courses'],
-                 'headline'    => _('Übersicht Veranstaltungen'),
+                 'headline'    => _('Ãœbersicht Veranstaltungen'),
                  'class'       => 'courses']) ?>
     <? endif ?>
 
     <? if (Request::get('view') == 'closed_courses') : ?>
         <?= $this->render_partial('admin/user/_course_list.php',
                 ['memberships' => $sections['closed_courses'],
-                 'headline'    => _('Übersicht geschlossene Veranstaltungen'),
+                 'headline'    => _('Ãœbersicht geschlossene Veranstaltungen'),
                  'class'       => 'closed_courses']) ?>
     <? endif ?>
 
@@ -69,6 +69,6 @@
 
 <? if (Request::int('from_index')) : ?>
     <footer data-dialog-button>
-        <?= \Studip\LinkButton::create(_('Zurück zur Übersicht'), $controller->url_for('admin/user')) ?>
+        <?= \Studip\LinkButton::create(_('ZurÃ¼ck zur Ãœbersicht'), $controller->url_for('admin/user')) ?>
     </footer>
 <? endif ?>

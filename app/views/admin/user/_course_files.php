@@ -1,7 +1,7 @@
 <section class="contentbox">
     <header>
         <h1>
-            <?= _('Dateiübersicht Veranstaltungen') ?>
+            <?= _('DateiÃ¼bersicht Veranstaltungen') ?>
         </h1>
     </header>
     <? foreach ($course_files as $semester_name => $file_date) : ?>

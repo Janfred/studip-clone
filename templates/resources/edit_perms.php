@@ -15,7 +15,7 @@
             <th><?= _('Name') ?></th>
             <th style="text-align: center;"><?= _('Aktionen') ?></th>
             <th>&nbsp;</th>
-            <th style="text-align: center;"><?= _('Suchen/hinzufügen') ?></th>
+            <th style="text-align: center;"><?= _('Suchen/hinzufÃ¼gen') ?></th>
         </tr>
     </thead>
     <tbody>
@@ -27,7 +27,7 @@
             <td colspan="2">&nbsp;</td>
             <td valign="top">
                 <label>
-                    <?= _('NutzerInnen hinzufügen') ?><br>
+                    <?= _('NutzerInnen hinzufÃ¼gen') ?><br>
                     <? showSearchForm('search_root_user', $search_string_search_root_user, TRUE, FALSE, TRUE) ?>
                 </label>
             </td>
@@ -42,16 +42,16 @@
                 (<?= get_username($user['user_id']); ?>)
                 <br>
             <? if ($user['perms'] == 'admin'): ?>
-                <?= _('<b>Admin</b>: Nutzer kann sämtliche Belegungen und Eigenschaften ändern und Rechte vergeben') ?>
+                <?= _('<b>Admin</b>: Nutzer kann sÃ¤mtliche Belegungen und Eigenschaften Ã¤ndern und Rechte vergeben') ?>
             <? elseif ($user['perms'] == 'tutor'): ?>
-                <?= _('<b>Tutor</b>: Nutzer kann sämtliche Belegungen ändern') ?>
+                <?= _('<b>Tutor</b>: Nutzer kann sÃ¤mtliche Belegungen Ã¤ndern') ?>
             <? elseif ($user['perms'] == 'autor'): ?>
-                <?= _('<b>Autor</b>: Nutzer kann nur eigene Belegungen ändern') ?>
+                <?= _('<b>Autor</b>: Nutzer kann nur eigene Belegungen Ã¤ndern') ?>
             <? endif; ?>
             </td>
             <td valign="middle" align="center">
                 <a href="<?=URLHelper::getLink('?delete_root_user_id=' . $user['user_id']) ?>">
-                    <?=Icon::create('trash', 'clickable')->asImg(['class' => 'text-top', 'title' => _('Berechtigungen löschen')]) ?>
+                    <?=Icon::create('trash', 'clickable')->asImg(['class' => 'text-top', 'title' => _('Berechtigungen lÃ¶schen')]) ?>
                 </a>
             </td>
             <td colspan="2">&nbsp;</td>

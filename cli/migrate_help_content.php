@@ -3,13 +3,13 @@
 /**
 * migrate_help_content.php
 *
-* @author       Arne Schröder <schroeder@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
+* @author       Arne SchrÃ¶der <schroeder@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @access       public
 */
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 //
-// Copyright (C) 2014 Arne Schröder <schroeder@data-quest.de>,
+// Copyright (C) 2014 Arne SchrÃ¶der <schroeder@data-quest.de>,
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -80,7 +80,7 @@ if (count($count)) {
             'type' => 'string',
             'range' => 'global',
             'section' => 'global',
-            'description' => _('Aktuelle Version der Helpbar-Einträge in Stud.IP')
+            'description' => _('Aktuelle Version der Helpbar-EintrÃ¤ge in Stud.IP')
             ));
     else
         Config::get()->store('HELP_CONTENT_CURRENT_VERSION', $argv[1]);

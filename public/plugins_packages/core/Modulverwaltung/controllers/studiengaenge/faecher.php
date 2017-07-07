@@ -21,7 +21,7 @@ class Studiengaenge_FaecherController
 {
     public function index_action()
     {
-        PageLayout::setTitle(_('Verwaltung der Studiengangteile - Studiengangteile gruppiert nach Fächern'));
+        PageLayout::setTitle(_('Verwaltung der Studiengangteile - Studiengangteile gruppiert nach FÃ¤chern'));
 
         $this->initPageParams();
         $this->initSearchParams();

@@ -55,8 +55,8 @@ $commentable = $GLOBALS['perm']->have_perm("autor") ? true : (bool) $commentable
             } ?>
         </div>
     <? else : ?>
-        <div class="contextinfo" title="<?= _("Öffentlich") ?>">
-            <div class="name"><?= _("Öffentlich") ?></div>
+        <div class="contextinfo" title="<?= _("Ã–ffentlich") ?>">
+            <div class="name"><?= _("Ã–ffentlich") ?></div>
         </div>
     <? endif ?>
     <? if ($thread['context_type'] === "public") : ?>

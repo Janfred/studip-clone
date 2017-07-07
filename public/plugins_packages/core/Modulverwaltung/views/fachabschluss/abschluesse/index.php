@@ -1,8 +1,8 @@
 <?= $this->controller->renderMessages() ?>
 <table class="default collapsable">
     <caption>
-        <?= _('Abschlüsse mit verwendeten Fächern') ?>
-        <span class="actions"><? printf(ngettext('%s Abschluss', '%s Abschlüsse', $count), $count) ?></span>
+        <?= _('AbschlÃ¼sse mit verwendeten FÃ¤chern') ?>
+        <span class="actions"><? printf(ngettext('%s Abschluss', '%s AbschlÃ¼sse', $count), $count) ?></span>
     </caption>
     <colgroup>
         <col>
@@ -13,7 +13,7 @@
         <tr class="sortable">
                 <?= $controller->renderSortLink('/index', _('Abschluss'), 'name') ?>
                 <?= $controller->renderSortLink('/index', _('Abschluss-Kategorie'), 'kategorie_name') ?>
-                <?= $controller->renderSortLink('/index', ('Fächer'), 'count_faecher') ?>
+                <?= $controller->renderSortLink('/index', ('FÃ¤cher'), 'count_faecher') ?>
             <th> </th>
         </tr>
     </thead>
@@ -38,10 +38,10 @@
         <? if (MvvPerm::havePermCreate($abschluss)) : ?>
             <? if (!$abschluss->count_faecher) : ?>
             <a href="<?= $controller->url_for('/delete', $abschluss->id) ?>">
-                <?= Icon::create('trash', 'clickable', array('title' => _('Abschluss löschen')))->asImg(); ?>
+                <?= Icon::create('trash', 'clickable', array('title' => _('Abschluss lÃ¶schen')))->asImg(); ?>
             </a>
             <? else : ?>
-                <?= Icon::create('trash', 'inactive', array('title' => _('Abschluss kann nicht glöscht werden')))->asImg(); ?>
+                <?= Icon::create('trash', 'inactive', array('title' => _('Abschluss kann nicht glÃ¶scht werden')))->asImg(); ?>
             <? endif; ?>
         <? endif; ?>
         </td>

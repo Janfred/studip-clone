@@ -5,7 +5,7 @@
             <input type="hidden" name="step" value="<?= $stepnumber ?>">
         <? if (!$first_step): ?>
             <?= Studip\Button::create(
-                _('Zurück'),
+                _('ZurÃ¼ck'),
                 'back',
                 $dialog ? ['data-dialog' => 'size=50%'] : []
             ) ?>
@@ -19,7 +19,7 @@
     </form>
 <? else : ?>
     <?= Studip\LinkButton::createCancel(
-        _('Zurück zu meiner Veranstaltungsübersicht'),
+        _('ZurÃ¼ck zu meiner VeranstaltungsÃ¼bersicht'),
         $controller->url_for($GLOBALS['perm']->have_perm('admin') ? 'admin/courses' : 'my_courses'),
         ['data-dialog-button' => '']
     ) ?>

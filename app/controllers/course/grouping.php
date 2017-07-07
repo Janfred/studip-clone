@@ -13,7 +13,7 @@
  * @package     admin
  */
 
-require_once 'lib/export/export_studipdata_func.inc.php'; // Funktionne für den Export
+require_once 'lib/export/export_studipdata_func.inc.php'; // Funktionne fÃ¼r den Export
 require_once 'lib/export/export_linking_func.inc.php';
 
 /**
@@ -38,7 +38,7 @@ class Course_GroupingController extends AuthenticatedController
 
         // Allow only tutor and upwards
         if (!$GLOBALS['perm']->have_studip_perm('tutor', $this->course->id)) {
-            throw new AccessDeniedException(_('Sie haben leider nicht die notwendige Berechtigung für diese Aktion.'));
+            throw new AccessDeniedException(_('Sie haben leider nicht die notwendige Berechtigung fÃ¼r diese Aktion.'));
         }
     }
 
@@ -407,7 +407,7 @@ class Course_GroupingController extends AuthenticatedController
                 break;
         }
 
-        PageLayout::setTitle(sprintf(_('%s hinzufügen'), $title));
+        PageLayout::setTitle(sprintf(_('%s hinzufÃ¼gen'), $title));
 
         $this->courses = $this->flash['courses'];
         $searchtype = new PermissionSearch(
@@ -477,12 +477,12 @@ class Course_GroupingController extends AuthenticatedController
                 $this->sync_users($this->course->id, $child);
                 NotificationCenter::postNotification('CourseDidAddToGroup', $child, $this->course->id);
                 StudipLog::log('SEM_ADD_TO_GROUP', $child, $this->course->id, null, null, $GLOBALS['user']->id);
-                PageLayout::postSuccess(_('Die Unterveranstaltung wurde hinzugefügt.'));
+                PageLayout::postSuccess(_('Die Unterveranstaltung wurde hinzugefÃ¼gt.'));
             } else {
-                PageLayout::postError(_('Die Unterveranstaltung konnte nicht hinzugefügt werden.'));
+                PageLayout::postError(_('Die Unterveranstaltung konnte nicht hinzugefÃ¼gt werden.'));
             }
         } else {
-            PageLayout::postError(_('Bitte geben Sie eine Veranstaltung an, die als Unterveranstaltung hinzugefügt werden soll.'));
+            PageLayout::postError(_('Bitte geben Sie eine Veranstaltung an, die als Unterveranstaltung hinzugefÃ¼gt werden soll.'));
         }
         $this->relocate('course/grouping/children');
     }
@@ -557,13 +557,13 @@ class Course_GroupingController extends AuthenticatedController
 
         if (count($fail) > 0) {
             PageLayout::postError(
-                _('In folgenden Veranstaltungen sind Probleme beim Eintragen der gewünschten Personen aufgetreten:'),
+                _('In folgenden Veranstaltungen sind Probleme beim Eintragen der gewÃ¼nschten Personen aufgetreten:'),
                 array_keys($fail)
             );
         } else {
             PageLayout::postSuccess(ngettext(
-                'Die gewählte Person wurde eingetragen.',
-                'Die gewählten Personen wurden eingetragen.',
+                'Die gewÃ¤hlte Person wurde eingetragen.',
+                'Die gewÃ¤hlten Personen wurden eingetragen.',
                 count(Request::optionArray('users'))
             ));
         }

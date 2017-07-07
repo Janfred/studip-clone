@@ -2,7 +2,7 @@
     <header>
         <h1>
             <?php if ($group->id != 'nogroup' && $is_tutor && !$is_locked) : ?>
-                <input aria-label="<?= _('Gruppe auswählen') ?>"
+                <input aria-label="<?= _('Gruppe auswÃ¤hlen') ?>"
                        type="checkbox" name="groups[]"
                        class="groupselector" value="<?= $group->id ?>"
                        id="<?= $group->id ?>" style="float:left"/>
@@ -40,12 +40,12 @@
             <?php elseif ($group->id != 'nogroup' && $group->selfassign &&
                 $group->selfassign_start > time()) : ?>
                 <?= Icon::create('door-enter', 'inactive',
-                    array('title' => sprintf(_('Der Eintrag in diese Gruppe ist möglich ab %s.'),
+                    array('title' => sprintf(_('Der Eintrag in diese Gruppe ist mÃ¶glich ab %s.'),
                         date('d.m.Y H:i', $group->selfassign_start)))) ?>
             <?php elseif ($group->id != 'nogroup' && $group->selfassign &&
                 $group->selfassign_end && $group->selfassign_end < time()) : ?>
                 <?= Icon::create('door-enter', 'inactive',
-                    array('title' => sprintf(_('Der Eintrag in diese Gruppe war möglich bis %s.'),
+                    array('title' => sprintf(_('Der Eintrag in diese Gruppe war mÃ¶glich bis %s.'),
                         date('d.m.Y H:i', $group->selfassign_end)))) ?>
             <?php elseif ($group->id != 'nogroup' && $group->isMember($GLOBALS['user']->id)) : ?>
                 <a href="<?= $controller->url_for('course/statusgroups/leave', $group->id) ?>">
@@ -73,8 +73,8 @@
                           ->condition(!($is_participants_locked || $is_locked))
                           ->addMultiPersonSearch(
                               MultiPersonSearch::get('add_statusgroup_member' . $group->id)
-                                  ->setTitle(_('Personen hinzufügen'))
-                                  ->setLinkText(_('Personen hinzufügen'))
+                                  ->setTitle(_('Personen hinzufÃ¼gen'))
+                                  ->setLinkText(_('Personen hinzufÃ¼gen'))
                                   ->setSearchObject($memberSearch)
                                   ->setDefaultSelectedUser($group->members->pluck('user_id'))
                                   ->setDataDialogStatus(Request::isXhr())
@@ -101,14 +101,14 @@
                           )
                           ->addLink(
                               $controller->url_for('course/statusgroups/delete', $group->id),
-                              _('Löschen'),
+                              _('LÃ¶schen'),
                               Icon::create('trash', 'clickable', [
                                   'title' => sprintf(
-                                      _('Gruppe %s löschen'),
+                                      _('Gruppe %s lÃ¶schen'),
                                       $group->name
                                    )
                               ]),
-                              ['data-confirm' => _('Soll die Gruppe wirklich gelöscht werden?')]
+                              ['data-confirm' => _('Soll die Gruppe wirklich gelÃ¶scht werden?')]
                           ) ?>
                 <?php else : ?>
                     <a href="<?= $controller->url_for('messages/write', array(
@@ -147,7 +147,7 @@
                 <tr class="sortable">
                     <?php if ($is_tutor && !$is_locked) : ?>
                         <th>
-                            <input aria-label="<?= sprintf(_('Alle Mitglieder dieser Gruppe auswählen')) ?>"
+                            <input aria-label="<?= sprintf(_('Alle Mitglieder dieser Gruppe auswÃ¤hlen')) ?>"
                                    type="checkbox" name="all" value="1"
                                    data-proxyfor=":checkbox.groupmembers-<?= $group->id ?>">
                         </th>
@@ -201,11 +201,11 @@
                                 <?php if (!$is_locked) : ?>
                                     <div class="memberselect">
                                         <label>
-                                            <input aria-label="<?= sprintf(_('Alle Mitglieder dieser Gruppe auswählen')) ?>"
+                                            <input aria-label="<?= sprintf(_('Alle Mitglieder dieser Gruppe auswÃ¤hlen')) ?>"
                                                    type="checkbox" name="all" value="1"
                                                    data-proxyfor=":checkbox.groupmembers-<?= $group->id ?>"
                                                    data-activates="select#members-action-<?= $group->id ?>">
-                                            <?= _('Alle Mitglieder dieser Gruppe auswählen') ?>
+                                            <?= _('Alle Mitglieder dieser Gruppe auswÃ¤hlen') ?>
                                         </label>
                                     </div>
                                     <div class="memberactions">
@@ -218,7 +218,7 @@
                                                 <?php endif ?>
                                             </select>
                                         </label>
-                                        <?= Studip\Button::create(_('Ausführen'), 'batch_members['.$group->id.']',
+                                        <?= Studip\Button::create(_('AusfÃ¼hren'), 'batch_members['.$group->id.']',
                                             array('data-dialog' => 'size=auto')) ?>
                                     </div>
                                 <?php endif ?>

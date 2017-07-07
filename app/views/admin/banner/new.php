@@ -7,7 +7,7 @@
         <tbody>
             <tr>
                 <td>
-                    <label for="imgfile"><?= _('Bilddatei auswählen:') ?></label>
+                    <label for="imgfile"><?= _('Bilddatei auswÃ¤hlen:') ?></label>
                 </td>
                 <td>
                     <input id="imgfile" name="imgfile" type="file" accept="image/*">
@@ -89,7 +89,7 @@
             </tr>
             <tr>
                 <td>
-                    <label for="priority"><?= _('Priorität:')?></label>
+                    <label for="priority"><?= _('PrioritÃ¤t:')?></label>
                 </td>
                 <td>
                     <select name="priority">

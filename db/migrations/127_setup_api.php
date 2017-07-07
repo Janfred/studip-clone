@@ -196,7 +196,7 @@ class SetupApi extends Migration
             ':field'       => 'API_OAUTH_AUTH_PLUGIN',
             ':value'       => 'Standard',
             ':type'        => 'string',
-            ':description' => 'Definiert das für OAuth verwendete Authentifizierungsverfahren',
+            ':description' => 'Definiert das fÃ¼r OAuth verwendete Authentifizierungsverfahren',
         ));
     }
 

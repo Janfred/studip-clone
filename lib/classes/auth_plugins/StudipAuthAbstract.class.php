@@ -8,7 +8,7 @@
 // StudipAuthAbstract.class.php
 // Abstract class, used as a template for authentication plugins
 //
-// Copyright (c) 2003 André Noack <noack@data-quest.de>
+// Copyright (c) 2003 AndrÃ© Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -37,7 +37,7 @@
 *
 * @abstract
 * @access   public
-* @author   André Noack <noack@data-quest.de>
+* @author   AndrÃ© Noack <noack@data-quest.de>
 * @package
 */
 class StudipAuthAbstract {
@@ -346,11 +346,11 @@ class StudipAuthAbstract {
         if ($user) {
             $auth_plugin = $user->auth_plugin;
             if ($auth_plugin === null) {
-                $this->error_msg = _("Dies ist ein vorläufiger Benutzer.") . "<br>";
+                $this->error_msg = _("Dies ist ein vorlÃ¤ufiger Benutzer.") . "<br>";
                 return false;
             }
             if ($auth_plugin != $this->plugin_name){
-                $this->error_msg = sprintf(_("Dieser Benutzername wird bereits über %s authentifiziert!"),$auth_plugin) . "<br>";
+                $this->error_msg = sprintf(_("Dieser Benutzername wird bereits Ã¼ber %s authentifiziert!"),$auth_plugin) . "<br>";
                 return false;
             }
             return $user;

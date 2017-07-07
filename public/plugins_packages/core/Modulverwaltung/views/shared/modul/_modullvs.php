@@ -5,10 +5,10 @@
             <th><?= _('Lehrveranstaltungs&shy;form') ?></th>
             <th><?= _('Veranstaltungs&shy;titel') ?></th>
             <th><?= _('SWS') ?></th>
-            <th><?= _('Workload Präsenz') ?></th>
+            <th><?= _('Workload PrÃ¤senz') ?></th>
             <th><?= _('Workload Vor- / Nach&shy;bereitung') ?></th>
             <th><?= _('Workload selbstge&shy;staltete Arbeit') ?></th>
-            <th><?= _('Workload Prüfung incl. Vorbereitung') ?></th>
+            <th><?= _('Workload PrÃ¼fung incl. Vorbereitung') ?></th>
             <th><?= _('Workload Summe') ?></th>
         </tr>
     </thead>
@@ -19,8 +19,8 @@
         <? $nummer_modulteil = 1; ?>
         <? foreach ($modul->modulteile as $modulTeil): ?>
             <? $modulTeilDeskriptor = $modulTeil->getDeskriptor();
-            // Für die Kenntlichmachung der Modulteile in Listen die Nummer des
-            // Modulteils und den ausgewählten Namen verwenden.
+            // FÃ¼r die Kenntlichmachung der Modulteile in Listen die Nummer des
+            // Modulteils und den ausgewÃ¤hlten Namen verwenden.
             // Ist keine Nummer vorhanden, dann Durchnummerieren und Standard-
             // Bezeichnung verwenden.
             if (trim($modulTeil->nummer)) {

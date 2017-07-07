@@ -14,14 +14,14 @@ class Step00247ForumDataMigration extends Migration
         // check px_topics-consistency
         $problems = DBManager::get()->query("SELECT * FROM px_topics WHERE topic_id = parent_id")->fetchAll();
         if (sizeof($problems) > 0) {
-            echo _('Sie haben fehlerhafte Einträge in ihrer px_topics-Tabelle. Folgende Einträge zeigen auf sich selbst (parent_id = topic_id)');
+            echo _('Sie haben fehlerhafte EintrÃ¤ge in ihrer px_topics-Tabelle. Folgende EintrÃ¤ge zeigen auf sich selbst (parent_id = topic_id)');
             echo "\n";
             foreach ($problems as $prob) {
                 echo implode(', ', $prob) ."\n";
             }
 
             echo "\n";
-            echo _('Beheben Sie zuerst die fehlerhaften Einträge und führen Sie danach diese Migration erneut aus!');
+            echo _('Beheben Sie zuerst die fehlerhaften EintrÃ¤ge und fÃ¼hren Sie danach diese Migration erneut aus!');
             echo "\n\n";
             die;
         }
@@ -292,7 +292,7 @@ class Step00247ForumDataMigration extends Migration
         if ($stmt->fetchColumn() == 0) {
             $stmt = DBManager::get()->prepare("INSERT INTO forum_entries
                 (topic_id, seminar_id, name, mkdate, chdate, lft, rgt, depth)
-                VALUES (?, ?, 'Übersicht', UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), 0, 1, 0)");
+                VALUES (?, ?, 'Ãœbersicht', UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), 0, 1, 0)");
             $stmt->execute(array($seminar_id, $seminar_id));
         }
 

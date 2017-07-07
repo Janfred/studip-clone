@@ -35,7 +35,7 @@
         <thead>
             <tr>
                 <th><?= _('Aktiv') ?></th>
-                <th><?= _('Überschrift') ?></th>
+                <th><?= _('Ãœberschrift') ?></th>
                 <th><?= _('Sprache') ?></th>
                 <th><?= _('Typ') ?></th>
                 <th><?= _('Zugang') ?></th>
@@ -67,7 +67,7 @@
                 </td>
                 <td><?= count($tour->steps) ?></td>
                 <td class="actions">
-                    <? Icon::create('trash', 'clickable', ['title' => _('Tour löschen')])->asInput([
+                    <? Icon::create('trash', 'clickable', ['title' => _('Tour lÃ¶schen')])->asInput([
                         'name' => 'tour_remove_' . $tour_id,
                     ]) ?>
 
@@ -79,8 +79,8 @@
                 ) ?>
                 <? $actionMenu->addButton(
                     'tour_remove_' . $tour_id,
-                    _('Tour löschen'),
-                    Icon::create('trash', 'clickable', ['title' => _('Tour löschen')])
+                    _('Tour lÃ¶schen'),
+                    Icon::create('trash', 'clickable', ['title' => _('Tour lÃ¶schen')])
                 ) ?>
                     <?= $actionMenu->render() ?>
                 </td>

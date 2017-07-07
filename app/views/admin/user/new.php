@@ -79,7 +79,7 @@ use Studip\Button, Studip\LinkButton;
             <input id="unknown" type="radio"<?= (!$user['geschlecht']) ? ' checked' : '' ?> name="geschlecht" value="0">
             <label for="unknown"><?= _("unbekannt") ?></label>
             <input id="male" type="radio"<?= ($user['geschlecht'] == 1) ? ' checked' : '' ?> name="geschlecht" value="1">
-            <label for="male"><?= _("männlich") ?></label>
+            <label for="male"><?= _("mÃ¤nnlich") ?></label>
             <input id="female" type="radio"<?= ($user['geschlecht'] == 2) ? ' checked' : '' ?> name="geschlecht" value="2">
             <label for="female"><?= _("weiblich") ?></label>
         </td>
@@ -121,7 +121,7 @@ use Studip\Button, Studip\LinkButton;
             <input class="user_form" type="email" name="Email" value="<?= htmlReady($user['Email']) ?>" <?= (!$prelim ? 'required' : '')?>>
             <? if ($GLOBALS['MAIL_VALIDATE_BOX']) : ?>
                 <input type="checkbox" id="disable_mail_host_check" name="disable_mail_host_check" value="1">
-                <label for="disable_mail_host_check"><?= _("Mailboxüberprüfung deaktivieren") ?></label>
+                <label for="disable_mail_host_check"><?= _("MailboxÃ¼berprÃ¼fung deaktivieren") ?></label>
             <? endif ?>
         </td>
     </tr>
@@ -132,7 +132,7 @@ use Studip\Button, Studip\LinkButton;
         <td>
             <select id="institut" class="user_form nested-select" name="institute" onchange="jQuery('#admin_special').toggle( jQuery('#institut').val() != '0' && jQuery('#perm').val() == 'admin')">
                 <option value="" class="is-placeholder">
-                    <?= _('-- Bitte Einrichtung auswählen --') ?>
+                    <?= _('-- Bitte Einrichtung auswÃ¤hlen --') ?>
                 </option>
         <? foreach ($faks as $fak) : ?>
                 <option value="<?= $fak['Institut_id'] ?>" <?= ($user['institute'] == $fak['Institut_id']) ? 'selected' : '' ?> class="<?= $fak['is_fak'] ? 'nested-item-header' : 'nested-item'; ?>">
@@ -156,11 +156,11 @@ use Studip\Button, Studip\LinkButton;
 <? if (count($domains) > 0) : ?>
     <tr>
         <td>
-            <?= _("Nutzerdomäne:") ?>
+            <?= _("NutzerdomÃ¤ne:") ?>
         </td>
         <td>
             <select class="user_form" name="select_dom_id">
-                <option value=""><?= _('-- Bitte Nutzerdomäne auswählen --') ?></option>
+                <option value=""><?= _('-- Bitte NutzerdomÃ¤ne auswÃ¤hlen --') ?></option>
             <? foreach($domains as $domain) : ?>
                 <option value="<?= $domain->getID() ?>"><?= htmlReady($domain->getName()) ?></option>
             <? endforeach ?>

@@ -12,5 +12,5 @@
 </ul>
 <?php if ($rule->getFavorSemester()) : ?>
 <br/>
-<i><?= _('Höhere Fachsemester werden bevorzugt behandelt.') ?></i>
+<i><?= _('HÃ¶here Fachsemester werden bevorzugt behandelt.') ?></i>
 <?php endif ?>

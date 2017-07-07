@@ -158,7 +158,7 @@ class AdminCourseFilter
     {
         $semester = Semester::find($semester_id);
         if (!$semester) {
-            throw new Exception("Das ausgewählte Semester scheint nicht zu existieren.");
+            throw new Exception("Das ausgewÃ¤hlte Semester scheint nicht zu existieren.");
         }
         $this->settings['query']['where']['semester'] = "(seminare.start_time <= :semester_beginn AND ((:semester_beginn <= seminare.start_time + seminare.duration_time) OR (seminare.duration_time = -1)))";
         $this->settings['parameter']['semester_beginn'] = $semester['beginn'];

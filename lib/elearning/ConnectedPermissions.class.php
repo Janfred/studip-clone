@@ -8,7 +8,7 @@
 *
 * This class contains methods to handle permissions on connected objects.
 *
-* @author   Arne Schröder <schroeder@data-quest.de>
+* @author   Arne SchrÃ¶der <schroeder@data-quest.de>
 * @access   public
 * @modulegroup  elearning_interface_modules
 * @module       ConnectedPermission

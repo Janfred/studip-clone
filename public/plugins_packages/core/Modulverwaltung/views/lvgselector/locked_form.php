@@ -3,7 +3,7 @@
 ?>
 <div id="lvgruppe_selection">
     <em>
-        <?= _("Sie dürfen die Modulzuordnung dieser Veranstaltung nicht verändern.") ?>
+        <?= _("Sie dÃ¼rfen die Modulzuordnung dieser Veranstaltung nicht verÃ¤ndern.") ?>
         <?= _("Diese Sperrung ist von einer Administratorin oder einem Administrator vorgenommen worden.") ?>
     </em>
     <div id="lvgruppe_selection_chosen" style="width: 50%;">

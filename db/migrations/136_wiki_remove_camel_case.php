@@ -29,10 +29,10 @@ class WikiRemoveCamelCase extends Migration
     function fixWikiLinks($body) {
         // $camel_case = wiki-links-short in WikiFormat.php before migration
         $camel_case = '\b('
-            . '(?:[A-Zƒ÷‹]|&[AOU]uml;)'              // upper-case letter
-            . '(?:[a-z\d‰ˆ¸ﬂ]|&[aou]uml;|&szlig;)+'  // lower-case letter, or digit
-            . '(?:[A-Zƒ÷‹]|&[AOU]uml;)'
-            . '(?:[\w\d‰ˆ¸ﬂ]|&[aou]uml;|&szlig;)*'   // underscore, digit, lower-case letter
+            . '(?:[A-Z√Ñ√ñ√ú]|&[AOU]uml;)'              // upper-case letter
+            . '(?:[a-z\d√§√∂√º√ü]|&[aou]uml;|&szlig;)+'  // lower-case letter, or digit
+            . '(?:[A-Z√Ñ√ñ√ú]|&[AOU]uml;)'
+            . '(?:[\w\d√§√∂√º√ü]|&[aou]uml;|&szlig;)*'   // underscore, digit, lower-case letter
             . ')';
         $open_tag = '(?:\[\[)';
         $close_tag = '(?:(?:\|(?:.*?))?\]\])';       // with optional |text]]

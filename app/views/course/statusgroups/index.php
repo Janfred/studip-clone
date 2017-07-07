@@ -15,21 +15,21 @@
         <footer>
             <div class="groupselection">
                 <label>
-                    <input aria-label="<?= sprintf(_('Alle Gruppen auswählen')) ?>"
+                    <input aria-label="<?= sprintf(_('Alle Gruppen auswÃ¤hlen')) ?>"
                            type="checkbox" name="allgroups" value="1"
                            data-proxyfor=":checkbox.groupselector"
                            data-activates="select#batch-groups-action">
-                    <?= _('Alle Gruppen auswählen') ?>
+                    <?= _('Alle Gruppen auswÃ¤hlen') ?>
                 </label>
             </div>
             <div class="groupactions">
                 <label>
                     <select name="groups_action" id="batch-groups-action" disabled>
                         <option value="edit"><?= _('Bearbeiten') ?></option>
-                        <option value="delete"><?= _('Löschen') ?></option>
+                        <option value="delete"><?= _('LÃ¶schen') ?></option>
                     </select>
                 </label>
-                <?= Studip\Button::create(_('Ausführen'), 'batch_groups', array('data-dialog' => 'size=auto')) ?>
+                <?= Studip\Button::create(_('AusfÃ¼hren'), 'batch_groups', array('data-dialog' => 'size=auto')) ?>
             </div>
         </footer>
     <?php endif ?>

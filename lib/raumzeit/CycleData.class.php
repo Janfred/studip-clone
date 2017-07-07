@@ -7,7 +7,7 @@
 // This file is part of Stud.IP
 // CycleData.class.php
 //
-// Repräsentiert ein Turnusdatum eines MetaDates
+// ReprÃ¤sentiert ein Turnusdatum eines MetaDates
 //
 // +--------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@
  * keys and the new fields from SeminarCycleDate (see CycleData::$alias)
  *
  *
- * @author      Till Glöggler <tgloeggl@uos.de>
+ * @author      Till GlÃ¶ggler <tgloeggl@uos.de>
  * @version     19. Oktober 2005
  * @access      protected
  * @package     raumzeit

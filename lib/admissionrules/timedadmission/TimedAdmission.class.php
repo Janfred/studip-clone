@@ -64,7 +64,7 @@ class TimedAdmission extends AdmissionRule
      */
     public static function getDescription() {
         return _("Anmelderegeln dieses Typs legen ein Zeitfenster fest, in ".
-            "dem die Anmeldung zu Veranstaltungen möglich ist. Es kann auch ".
+            "dem die Anmeldung zu Veranstaltungen mÃ¶glich ist. Es kann auch ".
             "nur ein Start- oder Endzeitpunkt angegeben werden.");
     }
 

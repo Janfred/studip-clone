@@ -47,7 +47,7 @@ class SubjectConditionAny extends UserFilterField
      */
     public function getName()
     {
-        return _('Alle Studienf‰cher');
+        return _('Alle Studienf√§cher');
     }
 
 } /* end of class SubjectCondition */

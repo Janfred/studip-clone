@@ -111,7 +111,7 @@ class WysiwygController extends \AuthenticatedController
                 ]));
 
                 if (!$top_folder->createSubfolder($wysiwyg_folder)) {
-                    $this->render_json(_('WYSIWYG-Ordner f¸r hochgeladene Dateien konnte nicht erstellt werden!'));
+                    $this->render_json(_('WYSIWYG-Ordner f√ºr hochgeladene Dateien konnte nicht erstellt werden!'));
                     return;
                 }
             } else {
@@ -340,7 +340,7 @@ class WysiwygController extends \AuthenticatedController
             );
         } else {
             throw new WysiwygHttpExceptionBadRequest(
-                _('Die Anfrage enth‰lt ung¸ltige Werte.')
+                _('Die Anfrage enth√§lt ung√ºltige Werte.')
             );
         }
         // all unknown parameters are ignored

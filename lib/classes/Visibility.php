@@ -216,7 +216,7 @@ class Visibility
         Visibility::addPrivacySetting(_("Allgemeine Daten"), "commondata", 0, 0, $user);
         Visibility::addPrivacySetting(_("Private Daten"), "privatedata", 0, 0, $user);
         Visibility::addPrivacySetting(_("Studien-/Einrichtungsdaten"), "studdata", 0, 0, $user);
-        Visibility::addPrivacySetting(_("Zus‰tzliche Datenfelder"), "additionaldata", 0, 0, $user);
+        Visibility::addPrivacySetting(_("Zus√§tzliche Datenfelder"), "additionaldata", 0, 0, $user);
         Visibility::addPrivacySetting(_("Eigene Kategorien"), "owncategory", 0, 0, $user);
         // Visibility::addPrivacySetting(_("Plugins"), "plugins", 0, 0, $user);
         // self::createHomepagePluginEntries($user);

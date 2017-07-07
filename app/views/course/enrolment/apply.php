@@ -37,7 +37,7 @@
         </div>
     <? endif ?>
     <div data-dialog-button>
-    <?= Studip\Button::createCancel(_("Schließen"), 'cancel') ?>
+    <?= Studip\Button::createCancel(_("SchlieÃŸen"), 'cancel') ?>
     </div>
     <?= CSRFProtection::tokenTag() ?>
     </form>

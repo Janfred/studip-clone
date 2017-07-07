@@ -110,12 +110,12 @@ if (Request::submitted('newButton')){
     $eval = new Evaluation ($evalID, NULL, EVAL_LOAD_NO_CHILDREN);
     if ($eval->isError ()) {
         $error = EvalCommon::createReportMessage (
-            _("Es wurde eine ungültige Evaluations-ID übergeben."),
+            _("Es wurde eine ungÃ¼ltige Evaluations-ID Ã¼bergeben."),
             EVAL_PIC_ERROR, EVAL_CSS_ERROR);
         $error_msgs[] = $error->createContent();
     } elseif ($evalID == NULL) {
         $error = EvalCommon::createReportMessage (
-            _("Es wurde keine Evaluations-ID übergeben"),
+            _("Es wurde keine Evaluations-ID Ã¼bergeben"),
             EVAL_PIC_ERROR, EVAL_CSS_ERROR);
         $error_msgs[] = $error->createContent();
     }
@@ -124,7 +124,7 @@ if (Request::submitted('newButton')){
 
     $debug .= "keine evalID!<br>";
     $error = EvalCommon::createReportMessage (
-        _("Es wurde keine Evaluations-ID übergeben"),
+        _("Es wurde keine Evaluations-ID Ã¼bergeben"),
         EVAL_PIC_ERROR, EVAL_CSS_ERROR);
     $error_msgs[] = $error->createContent();
 }
@@ -156,7 +156,7 @@ $eval = new Evaluation($evalID, NULL, EVAL_LOAD_NO_CHILDREN);
 // someone has voted
 if ($eval->hasVoted()){
     $error = EvalCommon::createReportMessage (
-        _("An dieser Evaluation hat bereits jemand teilgenommen. Sie darf nicht mehr verändert werden."),
+        _("An dieser Evaluation hat bereits jemand teilgenommen. Sie darf nicht mehr verÃ¤ndert werden."),
         EVAL_PIC_ERROR, EVAL_CSS_ERROR);
     $error_msgs[] = $error->createContent();
 }
@@ -184,9 +184,9 @@ if ( $authorID != $user->id ) {
     if ($no_permisson > 0){
     
         if ( $no_permisson == 1 )
-            $no_permisson_msg = _("Sie haben in einem Bereich, in welchem diese Evaluation hängt, nicht aussreichene Rechte, um diese Eval zu bearbeiten.");
+            $no_permisson_msg = _("Sie haben in einem Bereich, in welchem diese Evaluation hÃ¤ngt, nicht aussreichene Rechte, um diese Eval zu bearbeiten.");
         else
-            $no_permisson_msg = sprintf (_("Sie haben in %s Bereichen, in denen diese Evaluation hängt, nicht aussreichene Rechte, um diese Eval zu bearbeiten."), $no_permisson);
+            $no_permisson_msg = sprintf (_("Sie haben in %s Bereichen, in denen diese Evaluation hÃ¤ngt, nicht aussreichene Rechte, um diese Eval zu bearbeiten."), $no_permisson);
 
         $error = EvalCommon::createReportMessage (
             $no_permisson_msg,
@@ -242,8 +242,8 @@ $EditTree = new EvaluationTreeEditView($itemID, $evalID);
 # Send messages to the tree ================================================ #
 
 if ( Request::submitted('newButton') ) {
-    $EditTree->msg["root"] = "msg§"
-        . _("Erstellen Sie nun eine Evaluation.<br> Der erste Gruppierungsblock ist bereits angelegt worden. Wenn Sie ihn öffnen, können Sie dort weitere Gruppierungsblöcke oder Fragenblöcke anlegen.");
+    $EditTree->msg["root"] = "msgÂ§"
+        . _("Erstellen Sie nun eine Evaluation.<br> Der erste Gruppierungsblock ist bereits angelegt worden. Wenn Sie ihn Ã¶ffnen, kÃ¶nnen Sie dort weitere GruppierungsblÃ¶cke oder FragenblÃ¶cke anlegen.");
 }
 
 # ============================================ end: Send messages to the tree #

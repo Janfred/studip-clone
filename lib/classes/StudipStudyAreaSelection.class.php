@@ -81,8 +81,8 @@ class StudipStudyAreaSelection {
      * @return void
      */
     private function sortAreas() {
-        $lambda = create_function('$a, $b', 'return strcoll($a->getPath(" · "), '.
-                                                           '$b->getPath(" · "));');
+        $lambda = create_function('$a, $b', 'return strcoll($a->getPath(" Â· "), '.
+                                                           '$b->getPath(" Â· "));');
         uasort($this->areas, $lambda);
     }
 
@@ -151,7 +151,7 @@ class StudipStudyAreaSelection {
     }
 
     static function sortSearchResult($a, $b) {
-        return strcmp($a->getPath('·'), $b->getPath('·'));
+        return strcmp($a->getPath('Â·'), $b->getPath('Â·'));
     }
 
 

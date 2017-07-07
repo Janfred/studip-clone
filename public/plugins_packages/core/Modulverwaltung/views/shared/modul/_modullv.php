@@ -16,7 +16,7 @@
             <td style="width: 70%;" data-mvv-field="mvv_modulteil.sws mvv_modulteil_deskriptor.sws_alternative"><?= $modulTeil->sws ?: '' ?></td>
         </tr>
         <tr>
-            <td style="width: 30%;"><strong><?= _('Workload Präsenz') ?></strong></td>
+            <td style="width: 30%;"><strong><?= _('Workload PrÃ¤senz') ?></strong></td>
             <td style="width: 70%;" data-mvv-field="mvv_modulteil.wl_praesenz mvv_modulteil_deskriptor.kommentar_wl_praesenz"><?= $modulTeil->wl_praesenz ?> <?= MVVController::trim($modulTeilDeskriptor->kommentar_wl_praesenz) ? sprintf(" (%s)", formatReady($modulTeilDeskriptor->kommentar_wl_praesenz)) : '' ?></td>
         </tr>
         <tr>
@@ -28,7 +28,7 @@
             <td style="width: 70%;" data-mvv-field="mvv_modulteil.wl_selbst mvv_modulteil_deskriptor.kommentar_wl_selbst"><?= $modulTeil->wl_selbst ?> <?= MVVController::trim($modulTeilDeskriptor->kommentar_wl_selbst) ? sprintf(" (%s)", formatReady($modulTeilDeskriptor->kommentar_wl_selbst)) : '' ?></td>
         </tr>
         <tr>
-            <td style="width: 30%;"><strong><?= _('Workload Prüfung incl. Vorbereitung') ?></strong></td>
+            <td style="width: 30%;"><strong><?= _('Workload PrÃ¼fung incl. Vorbereitung') ?></strong></td>
             <td style="width: 70%;" data-mvv-field="mvv_modulteil.wl_pruef mvv_modulteil_deskriptor.kommentar_wl_pruef"><?= $modulTeil->wl_pruef ?> <?= MVVController::trim($modulTeilDeskriptor->kommentar_wl_pruef) ? sprintf(" (%s)", formatReady($modulTeilDeskriptor->kommentar_wl_pruef)) : '' ?></td>
         </tr>  
         <tr>
@@ -41,12 +41,12 @@
     <tbody>
         <? if (trim($modulTeilDeskriptor->pruef_vorleistung)) : ?>
         <tr>
-            <td style="width: 30%;"><strong><?= _('Prüfungsvorleistung') ?></strong></td>
+            <td style="width: 30%;"><strong><?= _('PrÃ¼fungsvorleistung') ?></strong></td>
             <td style="width: 70%;" data-mvv-field="mvv_modulteil_deskriptor.pruef_vorleistung"><?= formatReady($modulTeilDeskriptor->pruef_vorleistung) ?></td>
         </tr>
         <? endif; ?>
         <tr>
-            <td style="width: 30%;"><strong><?= _('Prüfungsform') ?></strong></td>
+            <td style="width: 30%;"><strong><?= _('PrÃ¼fungsform') ?></strong></td>
             <td style="width: 70%;" data-mvv-field="mvv_modulteil_deskriptor.pruef_leistung"><?= formatReady($modulTeilDeskriptor->pruef_leistung) ?></td>
         </tr>
     </tbody>
@@ -58,7 +58,7 @@
             <td style="width: 70%;" data-mvv-field="mvv_modulteil.semester"><?= $GLOBALS['MVV_NAME_SEMESTER']['values'][$modulTeil->semester]['name'] ?></td>
         </tr>
         <tr>
-            <td style="width: 30%;"><strong><?= _('Aufnahmekapazität') ?></strong></td>
+            <td style="width: 30%;"><strong><?= _('AufnahmekapazitÃ¤t') ?></strong></td>
             <td style="width: 70%;" data-mvv-field="mvv_modulteil.kapazitaet mvv_modulteil_deskriptor.kommentar_kapazitaet"><?= trim($modulTeil->kapazitaet) ?: _('unbegrenzt') ?> <?= MVVController::trim($modulTeilDeskriptor->kommentar_kapazitaet) ? sprintf("(%s)", formatReady($modulTeilDeskriptor->kommentar_kapazitaet)) : '' ?></td>
         </tr>
         <? if ($modulTeil->pflicht) : ?>

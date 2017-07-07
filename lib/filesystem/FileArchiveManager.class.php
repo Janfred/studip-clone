@@ -114,7 +114,7 @@ class FileArchiveManager
                         if (file_exists($archive->filename) && filesize($archive->filename) > $archive_max_size) {
                             throw new FileArchiveManagerException(
                                 sprintf(
-                                    _('Das ZIP-Archiv ist zu groß! Die maximal erlaubte Größe ist %d bytes!'),
+                                    _('Das ZIP-Archiv ist zu groÃŸ! Die maximal erlaubte GrÃ¶ÃŸe ist %d bytes!'),
                                     $archive_max_size
                                 )
                             );
@@ -212,7 +212,7 @@ class FileArchiveManager
         if (file_exists($archive->filename) && filesize($archive->filename) > $archive_max_size) {
             throw new FileArchiveManagerException(
                 sprintf(
-                    _('Das ZIP-Archiv ist zu groß! Die maximal erlaubte Größe ist %d bytes!'),
+                    _('Das ZIP-Archiv ist zu groÃŸ! Die maximal erlaubte GrÃ¶ÃŸe ist %d bytes!'),
                     $archive_max_size
                 )
             );
@@ -269,7 +269,7 @@ class FileArchiveManager
         // check if archive path is set:
         if (!$archive_file_path) {
             throw new FileArchiveManagerException(
-                _('Der Zielpfad für das Archiv wurde nicht angegeben!')
+                _('Der Zielpfad fÃ¼r das Archiv wurde nicht angegeben!')
             );
         }
 
@@ -359,7 +359,7 @@ class FileArchiveManager
 
         if (!$archive_file_path) {
             throw new FileArchiveManagerException(
-                _('Der Zielpfad für das Archiv wurde nicht angegeben!')
+                _('Der Zielpfad fÃ¼r das Archiv wurde nicht angegeben!')
             );
         }
 
@@ -379,7 +379,7 @@ class FileArchiveManager
      * Returns all children of a folder type.
      *
      * @param FolderType $folder
-     * @return array
+     *Â @return array
      */
     private static function getFolderChildren(FolderType $folder)
     {

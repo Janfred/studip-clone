@@ -55,7 +55,7 @@ class ExternEditHtml extends ExternEditGeneric {
     * @return   string A complete table row includes a closed table with the form.
     */
     function editHeight ($attribute) {
-        $info = _("Geben Sie die Höhe der Tabellenzeile in Pixeln an.");
+        $info = _("Geben Sie die HÃ¶he der Tabellenzeile in Pixeln an.");
         $form_name = $this->element_name . "_" . $attribute;
         $value = $this->getValue($attribute);
 
@@ -67,7 +67,7 @@ class ExternEditHtml extends ExternEditGeneric {
         $out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
         $out .= "<tr><td{$this->width_1}>";
         $out .= "<font size=\"2\">";
-        $out .= _("Zeilenhöhe:");
+        $out .= _("ZeilenhÃ¶he:");
         $out .= "</font></td>\n";
         $out .= "<td{$this->width_2} nowrap=\"nowrap\"><input type=\"text\" name=\"$form_name\" size=\"3\"";
         $out .= " maxlength=\"3\" value=\"$value\"><font size=\"2\">&nbsp;Pixel&nbsp; \n";
@@ -86,7 +86,7 @@ class ExternEditHtml extends ExternEditGeneric {
     * @return   string A complete table row includes a closed table with the form.
     */
     function editBorder ($attribute) {
-        $info = _("Geben Sie die Breite des äußeren Tabellenrahmens in Pixeln an.");
+        $info = _("Geben Sie die Breite des Ã¤uÃŸeren Tabellenrahmens in Pixeln an.");
         $form_name = $this->element_name . "_" . $attribute;
         $value = $this->getValue($attribute);
 
@@ -117,7 +117,7 @@ class ExternEditHtml extends ExternEditGeneric {
     * @return   string A complete table row includes a closed table with the form.
     */
     function editColor ($attribute) {
-        $info = _("Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in das Textfeld ein, oder wählen Sie eine Farbe aus der Auswahlliste.");
+        $info = _("Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in das Textfeld ein, oder wÃ¤hlen Sie eine Farbe aus der Auswahlliste.");
         $titel = _("Schriftfarbe");
 
         return $this->editColorGeneric($attribute, $titel, $info);
@@ -131,7 +131,7 @@ class ExternEditHtml extends ExternEditGeneric {
     * @return   string A complete table row includes a closed table with the form.
     */
     function editBgcolor ($attribute) {
-        $info = _("Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in das Textfeld ein, oder wählen Sie eine Farbe aus der Auswahlliste.");
+        $info = _("Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in das Textfeld ein, oder wÃ¤hlen Sie eine Farbe aus der Auswahlliste.");
         $title = _("Hintergrundfarbe:");
 
         return $this->editColorGeneric($attribute, $title, $info);
@@ -145,7 +145,7 @@ class ExternEditHtml extends ExternEditGeneric {
     * @return   string A complete table row includes a closed table with the form.
     */
     function editBordercolor ($attribute) {
-        $info = _("Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in das Textfeld ein, oder wählen Sie eine Farbe aus der Auswahlliste.");
+        $info = _("Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in das Textfeld ein, oder wÃ¤hlen Sie eine Farbe aus der Auswahlliste.");
         $title = _("Rahmenfarbe");
 
         return $this->editColorGeneric($attribute, $title, $info);
@@ -160,7 +160,7 @@ class ExternEditHtml extends ExternEditGeneric {
     */
 
     function editBgcolor2 ($attribute) {
-        $info = _("Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in das Textfeld ein, oder wählen Sie eine Farbe aus der Auswahlliste. ");
+        $info = _("Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in das Textfeld ein, oder wÃ¤hlen Sie eine Farbe aus der Auswahlliste. ");
         $info .= _("Diese Farbe wird als zweite Farbe bei aktiviertem Zebra-Effekt ausgegeben.");
         $title = _("2. Hintergrundf.:");
 
@@ -175,7 +175,7 @@ class ExternEditHtml extends ExternEditGeneric {
     */
 
     function editText ($attribute) {
-        $info = _("Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in das Textfeld ein, oder wählen Sie eine Farbe aus der Auswahlliste. ");
+        $info = _("Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in das Textfeld ein, oder wÃ¤hlen Sie eine Farbe aus der Auswahlliste. ");
         $info .= _("Diese Farbe wird seitenweit als Schriftfarbe benutzt.");
         $title = _("Schriftfarbe:");
 
@@ -190,8 +190,8 @@ class ExternEditHtml extends ExternEditGeneric {
     */
 
     function editLink ($attribute) {
-        $info = _("Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in das Textfeld ein, oder wählen Sie eine Farbe aus der Auswahlliste. ");
-        $info .= _("Diese Farbe wird seitenweit für Verweise zu noch nicht besuchten Zielen benutzt.");
+        $info = _("Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in das Textfeld ein, oder wÃ¤hlen Sie eine Farbe aus der Auswahlliste. ");
+        $info .= _("Diese Farbe wird seitenweit fÃ¼r Verweise zu noch nicht besuchten Zielen benutzt.");
         $title = _("Linkfarbe (nicht besucht):");
 
         return $this->editColorGeneric($attribute, $title, $info);
@@ -205,8 +205,8 @@ class ExternEditHtml extends ExternEditGeneric {
     */
 
     function editVlink ($attribute) {
-        $info = _("Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in das Textfeld ein, oder wählen Sie eine Farbe aus der Auswahlliste. ");
-        $info .= _("Diese Farbe wird seitenweit für Verweise zu bereits besuchten Zielen benutzt.");
+        $info = _("Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in das Textfeld ein, oder wÃ¤hlen Sie eine Farbe aus der Auswahlliste. ");
+        $info .= _("Diese Farbe wird seitenweit fÃ¼r Verweise zu bereits besuchten Zielen benutzt.");
         $title = _("Linkfarbe (besucht):");
 
         return $this->editColorGeneric($attribute, $title, $info);
@@ -220,8 +220,8 @@ class ExternEditHtml extends ExternEditGeneric {
     */
 
     function editAlink ($attribute) {
-        $info = _("Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in das Textfeld ein, oder wählen Sie eine Farbe aus der Auswahlliste. ");
-        $info .= _("Diese Farbe wird seitenweit für aktivierte Verweise benutzt.");
+        $info = _("Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in das Textfeld ein, oder wÃ¤hlen Sie eine Farbe aus der Auswahlliste. ");
+        $info .= _("Diese Farbe wird seitenweit fÃ¼r aktivierte Verweise benutzt.");
         $title = _("Linkfarbe (aktiviert):");
 
         return $this->editColorGeneric($attribute, $title, $info);
@@ -449,14 +449,14 @@ class ExternEditHtml extends ExternEditGeneric {
     * @return   string A complete table row includes a closed table with the form.
     */
     function editAlign ($attribute) {
-        $info = _("Wählen Sie aus der Auswahlliste die Art der horizontalen Ausrichtung.");
+        $info = _("WÃ¤hlen Sie aus der Auswahlliste die Art der horizontalen Ausrichtung.");
         $form_name = $this->element_name . "_" . $attribute;
         $value = $this->getValue($attribute);
 
         $align_types = array(
             "" => _("keine Auswahl"),
-            "left" => _("linksbündig"),
-            "right" => _("rechtsbündig"),
+            "left" => _("linksbÃ¼ndig"),
+            "right" => _("rechtsbÃ¼ndig"),
           "center" => _("zentriert")
         );
         if ($this->faulty_values[$form_name][0])
@@ -492,14 +492,14 @@ class ExternEditHtml extends ExternEditGeneric {
     * @return   string A complete table row includes a closed table with the form.
     */
     function editValign ($attribute) {
-        $info = _("Wählen Sie aus der Auswahlliste die Art der vertikalen Ausrichtung.");
+        $info = _("WÃ¤hlen Sie aus der Auswahlliste die Art der vertikalen Ausrichtung.");
         $form_name = $this->element_name . "_" . $attribute;
         $value = $this->getValue($attribute);
 
         $valign_types = array(
             "" => _("keine Auswahl"),
-            "top" => _("obenbündig"),
-            "bottom" => _("untenbündig"),
+            "top" => _("obenbÃ¼ndig"),
+            "bottom" => _("untenbÃ¼ndig"),
           "center" => _("zentriert")
         );
         if ($this->faulty_values[$form_name][0])
@@ -535,8 +535,8 @@ class ExternEditHtml extends ExternEditGeneric {
     * @return   string A complete table row includes a closed table with the form.
     */
     function editSize ($attribute) {
-        $info = _("Geben Sie die relative Schriftgröße an.");
-        $title = _("Schriftgröße:");
+        $info = _("Geben Sie die relative SchriftgrÃ¶ÃŸe an.");
+        $title = _("SchriftgrÃ¶ÃŸe:");
         $values = array("", "1", "2", "3", "4", "5", "6", "7");
         $names = array(_("keine Auswahl"), "1", "2", "3", "4", "5", "6", "7");
 
@@ -552,7 +552,7 @@ class ExternEditHtml extends ExternEditGeneric {
     */
     function editFace ($attribute) {
         $title = _("Schriftart:");
-        $info = _("Wählen Sie eine Schriftart aus.");
+        $info = _("WÃ¤hlen Sie eine Schriftart aus.");
 
         return $this->editFaceGeneric($attribute, $title, $info);
     }
@@ -608,8 +608,8 @@ class ExternEditHtml extends ExternEditGeneric {
     * @return   string A complete table row includes a closed table with the form.
     */
     function editZebraTd ($attribute) {
-        $info = _("Aktivieren Sie einen vertikalen oder horizontalen Zebra-Effekt für Tabellenzeilen/-spalten. ");
-        $info .= _("Geben Sie hierfür eine zweite Hintergrundfarbe an.");
+        $info = _("Aktivieren Sie einen vertikalen oder horizontalen Zebra-Effekt fÃ¼r Tabellenzeilen/-spalten. ");
+        $info .= _("Geben Sie hierfÃ¼r eine zweite Hintergrundfarbe an.");
         $title = _("Zebra-Effekt:");
         $names = array(_("aus"), _("horizontal"), _("vertikal"));
         $values = array("", "HORIZONTAL", "VERTICAL");
@@ -625,8 +625,8 @@ class ExternEditHtml extends ExternEditGeneric {
     * @return   string A complete table row includes a closed table with the form.
     */
     function editZebraTh ($attribute) {
-        $info = _("Aktivieren Sie einen Zebra-Effekt für die Spaltenüberschriften. ");
-        $info .= _("Geben Sie hierfür eine zweite Hintergrundfarbe an.");
+        $info = _("Aktivieren Sie einen Zebra-Effekt fÃ¼r die SpaltenÃ¼berschriften. ");
+        $info .= _("Geben Sie hierfÃ¼r eine zweite Hintergrundfarbe an.");
         $title = _("Zebra-Effekt:");
         $names = array(_("aus"), _("an"));
         $values = array("", "1");
@@ -642,7 +642,7 @@ class ExternEditHtml extends ExternEditGeneric {
     * @return   string A complete table row includes a closed table with the form.
     */
     function editBackground ($attribute) {
-        $info = _("Geben Sie die URL eines Bildes an, das als Hintergrundbild für die gesamte Seite dienen soll.");
+        $info = _("Geben Sie die URL eines Bildes an, das als Hintergrundbild fÃ¼r die gesamte Seite dienen soll.");
         $title = _("Hintergrundbild:");
 
         return $this->editTextfieldGeneric($attribute, $title, $info, 35, 150);

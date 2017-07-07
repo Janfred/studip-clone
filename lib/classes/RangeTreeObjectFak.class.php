@@ -8,7 +8,7 @@
 // RangeTreeObjectFak.class.php
 // Class to handle items in the "range tree"
 // 
-// Copyright (c) 2002 AndrÈ Noack <noack@data-quest.de> 
+// Copyright (c) 2002 Andr√© Noack <noack@data-quest.de> 
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -28,10 +28,10 @@
 /**
 * class for items in the "range tree"
 *
-* This class is used for items in the tree which are "Fakult‰ten"
+* This class is used for items in the tree which are "Fakult√§ten"
 *
 * @access   public
-* @author   AndrÈ Noack <noack@data-quest.de>
+* @author   Andr√© Noack <noack@data-quest.de>
 * @package  
 */
 class RangeTreeObjectFak extends RangeTreeObject {
@@ -46,7 +46,7 @@ class RangeTreeObjectFak extends RangeTreeObject {
     function __construct($item_id) {
         parent::__construct($item_id); //calling the baseclass constructor
         $this->initItemDetail();
-        $this->item_data_mapping = array('Strasse' => _("Straﬂe"), 'Plz' => _("Ort"), 'telefon' => _("Tel."), 'fax' => _("Fax"),
+        $this->item_data_mapping = array('Strasse' => _("Stra√üe"), 'Plz' => _("Ort"), 'telefon' => _("Tel."), 'fax' => _("Fax"),
                                         'url' => _("Homepage"), 'email' => _("Kontakt"));
         $this->item_data['type_num'] = $this->item_data['type'];
         $this->item_data['type'] = ($this->item_data['type']) ? $GLOBALS['INST_TYPE'][$this->item_data['type']]['name'] : $GLOBALS['INST_TYPE'][1]['name'];

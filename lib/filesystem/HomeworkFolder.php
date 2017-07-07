@@ -27,7 +27,7 @@ class HomeworkFolder extends PermissionEnabledFolder
      */
     public static function getTypeName()
     {
-        return _('Ordner für Hausarbeiten');
+        return _('Ordner fÃ¼r Hausarbeiten');
     }
 
     public static function availableInRange($range_id_or_object, $user_id)

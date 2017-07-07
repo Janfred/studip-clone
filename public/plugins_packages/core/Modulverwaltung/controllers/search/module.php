@@ -65,7 +65,7 @@ class Search_ModuleController extends MVVController
         $helpbar = Helpbar::get();
         $widget = new HelpbarWidget();
         $widget->addElement(new WidgetElement($template->render().'</br>'));
-        $widget->addElement(new WidgetElement(_('Auch unvollständige Namen (mindestens 3 Zeichen) werden akzeptiert.')));
+        $widget->addElement(new WidgetElement(_('Auch unvollstÃ¤ndige Namen (mindestens 3 Zeichen) werden akzeptiert.')));
         $helpbar->addWidget($widget);
 
         $this->initPageParams();
@@ -120,8 +120,8 @@ class Search_ModuleController extends MVVController
 
             if ($do_search) {
                 PageLayout::postInfo(sprintf(ngettext(
-                            '%s Modul gefunden für die Suche nach <em>%s</em>',
-                            '%s Module gefunden für die Suche nach <em>%s</em>',
+                            '%s Modul gefunden fÃ¼r die Suche nach <em>%s</em>',
+                            '%s Module gefunden fÃ¼r die Suche nach <em>%s</em>',
                             count($this->search_result['Modul'])),
                             count($this->search_result['Modul']),
                             htmlReady($this->sterm)));
@@ -161,7 +161,7 @@ class Search_ModuleController extends MVVController
                 || count($drill_down['studiengaenge']['objects'])
                 || count($drill_down['faecher']['objects'])) {
             
-            $widget = new SelectWidget(_('Studiengänge'),
+            $widget = new SelectWidget(_('StudiengÃ¤nge'),
                 $this->url_for('',array('sterm' => $this->sterm, 'type' => 'Studiengang')), 'id');
             $options = array(0 => 'Alle');
             if(!empty($drill_down['studiengaenge']['objects'])){
@@ -174,7 +174,7 @@ class Search_ModuleController extends MVVController
             $sidebar->addWidget($widget, 'studiengaenge_filter');
 
 
-            $widget = new SelectWidget(_('Fächer'),
+            $widget = new SelectWidget(_('FÃ¤cher'),
                 $this->url_for('',array('sterm' => $this->sterm, 'type' => 'Fach')), 'id');
             $options = array(0 => 'Alle');
             if(!empty($drill_down['faecher']['objects'])){
@@ -283,7 +283,7 @@ class Search_ModuleController extends MVVController
         // only valid (semesters between start and end of module)
         // semesters for selector
         // $sem_valid = false;
-        // Augsburg Module ohne Angabe der Gültigkeit
+        // Augsburg Module ohne Angabe der GÃ¼ltigkeit
         $sem_valid = !((boolean) $this->modul->start);
         $sem_number = 1;
         foreach (Semester::getAll() as $semester) {
@@ -556,7 +556,7 @@ class Search_ModuleController extends MVVController
         // only valid (semesters between start and end of module)
         // semesters for selector
         // $sem_valid = false;
-        // Augsburg Module ohne Angabe der Gültigkeit
+        // Augsburg Module ohne Angabe der GÃ¼ltigkeit
         $sem_valid = !((boolean) $this->modul->start);
         $sem_number = 1;
         foreach (Semester::getAll() as $semester) {

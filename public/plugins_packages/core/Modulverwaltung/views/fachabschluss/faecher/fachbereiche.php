@@ -1,13 +1,13 @@
 <?= $this->controller->renderMessages() ?>
 <table class="default collapsable">
-    <caption><?= _('Fächer gruppiert nach Fachbereichen') ?></cpation>
+    <caption><?= _('FÃ¤cher gruppiert nach Fachbereichen') ?></cpation>
     <colgroup>
         <col>
         <col style="width: 30%;">
     <thead>
         <tr class="sortable">
             <?= $controller->renderSortLink('fachabschluss/faecher/fachbereiche/',  _('Fachbereich'), 'name') ?>
-            <?= $controller->renderSortLink('fachabschluss/faecher/fachbereiche/', _('Fächer'), 'faecher', array('style' => 'text-align: center;')) ?>
+            <?= $controller->renderSortLink('fachabschluss/faecher/fachbereiche/', _('FÃ¤cher'), 'faecher', array('style' => 'text-align: center;')) ?>
         </tr>
     </thead>
     <? foreach ($fachbereiche as $fachbereich): ?>

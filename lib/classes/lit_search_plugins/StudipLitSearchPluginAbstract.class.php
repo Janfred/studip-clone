@@ -8,7 +8,7 @@
 // StudipLitSearchPluginAbstract.class.php
 //
 //
-// Copyright (c) 2003 André Noack <noack@data-quest.de>
+// Copyright (c) 2003 AndrÃ© Noack <noack@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@
 *
 *
 * @access   public
-* @author   André Noack <noack@data-quest.de>
+* @author   AndrÃ© Noack <noack@data-quest.de>
 * @package
 **/
 class StudipLitSearchPluginAbstract {
@@ -78,7 +78,7 @@ class StudipLitSearchPluginAbstract {
         } else {
             $ret = '';
             for ($i = 0; $i < count($this->error_msg); ++$i){
-                $ret .= $this->error_msg[$i]['type'] . "§" . htmlReady($this->error_msg[$i]['msg']) . "§";
+                $ret .= $this->error_msg[$i]['type'] . "Â§" . htmlReady($this->error_msg[$i]['msg']) . "Â§";
             }
             return $ret;
         }

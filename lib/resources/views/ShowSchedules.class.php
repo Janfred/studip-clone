@@ -133,7 +133,7 @@ class ShowSchedules
                     <script>
                         jQuery("#startTime").datepicker();
                     </script>
-                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;<?= Button::create(_('Auswählen'), 'jump') ?>
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;<?= Button::create(_('AuswÃ¤hlen'), 'jump') ?>
                 </td>
                 <td width="66%" valign="bottom">
                     <input type="text" name="schedule_length_factor" size=2 maxlength=2 / value="<? if (!$this->length_factor) echo "1"; else echo $this->length_factor; ?>">
@@ -378,7 +378,7 @@ class ShowSchedules
                     ?>
                 </td>
                 <td align="center">
-                    <a href="<?= URLHelper::getLink('?quick_view='.$this->used_view.'&quick_view_mode='.$view_mode.'&next_week=TRUE')?>"><?= Icon::create('arr_2right', 'clickable', ['title' => _("Nächste Woche anzeigen")])->asImg(16, ["alt" => _("Nächste Woche anzeigen"), "border" => 0]) ?></a>
+                    <a href="<?= URLHelper::getLink('?quick_view='.$this->used_view.'&quick_view_mode='.$view_mode.'&next_week=TRUE')?>"><?= Icon::create('arr_2right', 'clickable', ['title' => _("NÃ¤chste Woche anzeigen")])->asImg(16, ["alt" => _("NÃ¤chste Woche anzeigen"), "border" => 0]) ?></a>
                 </td>
             </tr>
             <tr>
@@ -387,7 +387,7 @@ class ShowSchedules
                     <a href="<?= URLHelper::getLink('', array('quick_view' => $this->used_view,
                                                               'quick_view_mode' => $view_mode,
                                                               'time_range' => $_SESSION['resources_data']['schedule_time_range'] ? 'FALSE' : -1)) ?>">
-                        <?= Icon::create('arr_2up', 'clickable', ['title' => _('Frühere Belegungen anzeigen')])->asImg(['class' => 'middle']) ?>
+                        <?= Icon::create('arr_2up', 'clickable', ['title' => _('FrÃ¼here Belegungen anzeigen')])->asImg(['class' => 'middle']) ?>
                     </a>
                 <? endif; ?>
                 </td>
@@ -419,7 +419,7 @@ class ShowSchedules
                     <a href="<?= URLHelper::getLink('', array('quick_view' => $this->used_view,
                                                               'quick_view_mode' => $view_mode,
                                                               'time_range' => $_SESSION['resources_data']['schedule_time_range'] ? 'FALSE' : 1)) ?>">
-                        <?= Icon::create('arr_2down', 'clickable', ['title' => _('Spätere Belegungen anzeigen')])->asImg() ?>
+                        <?= Icon::create('arr_2down', 'clickable', ['title' => _('SpÃ¤tere Belegungen anzeigen')])->asImg() ?>
                     </a>
                 <? endif; ?>
                 </td>
@@ -440,12 +440,12 @@ class ShowSchedules
         $cats = $schedule->categories;
         $eventcat_names = array(
             'na'   => _('Keine'),
-            'd'    => _('Täglich'),
-            'w'    => ucfirst(_('wöchentlich')),
-            'sd'   => _('Mehrtägig'),
+            'd'    => _('TÃ¤glich'),
+            'w'    => ucfirst(_('wÃ¶chentlich')),
+            'sd'   => _('MehrtÃ¤gig'),
             'm'    => _('Monatlich'),
-            'y'    => _('Jährlich'),
-            'meta' => _('Einzeltermin zu regelmäßigen Veranstaltungszeiten')
+            'y'    => _('JÃ¤hrlich'),
+            'meta' => _('Einzeltermin zu regelmÃ¤ÃŸigen Veranstaltungszeiten')
         );
         $sidebar = Sidebar::get();
         $legende_widget = new SidebarWidget();
@@ -485,7 +485,7 @@ class ShowSchedules
                 echo _('vorlesungsfreie Zeit');
             }
         } else {
-            echo _('kein Semester verfügbar');
+            echo _('kein Semester verfÃ¼gbar');
         }
     }
 }

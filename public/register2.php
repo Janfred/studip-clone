@@ -32,7 +32,7 @@ page_open(array("sess" => "Seminar_Session", "auth" => $my_auth, "perm" => "Semi
 if (!Config::get()->ENABLE_SELF_REGISTRATION){
     ob_start();
     PageLayout::postError(_("Registrierung ausgeschaltet"),
-            [_("In dieser Installation ist die Möglichkeit zur Registrierung ausgeschaltet."),
+            [_("In dieser Installation ist die MÃ¶glichkeit zur Registrierung ausgeschaltet."),
              '<a href="index.php">' . _("Hier geht es zur Startseite."). '</a>']);
 
     $template = $GLOBALS['template_factory']->open('layouts/base.php');

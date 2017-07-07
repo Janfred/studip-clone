@@ -308,7 +308,7 @@ class Dokument extends ModuleManagementModel
             }
             if (!preg_match('%^(https?|ftp)://%', $this->url) || $this->url == '') {
                 $ret['url'] = true;
-                $messages[] = _('Die URL ist ungültig.');
+                $messages[] = _('Die URL ist ungÃ¼ltig.');
                 $rejected = true;
             } else if ($this->isNew()) {
                 $dokument = $this->findBySql('url = ' . DBManager::get()->quote($this->url));

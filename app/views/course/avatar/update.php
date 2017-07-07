@@ -16,12 +16,12 @@ use Studip\Button, Studip\LinkButton;
       method="post" style="float: left">
     <?= CSRFProtection::tokenTag() ?>
     <input type="hidden" name="MAX_FILE_SIZE" value="1000000">
-    <label for="upload-input"><?= _("Wählen Sie ein Bild für die Veranstaltung:") ?></label>
+    <label for="upload-input"><?= _("WÃ¤hlen Sie ein Bild fÃ¼r die Veranstaltung:") ?></label>
     <input id="upload-input" name="avatar" type="file">
 
     <p class="quiet">
         <?= Icon::create('info-circle', 'inactive')->asImg(16, ["style" => 'vertical-align: middle;']) ?>
-        <? printf(_('Die Bilddatei darf max. %s groß sein, es sind nur Dateien mit den Endungen %s, %s oder %s erlaubt!'),
+        <? printf(_('Die Bilddatei darf max. %s groÃŸ sein, es sind nur Dateien mit den Endungen %s, %s oder %s erlaubt!'),
                 relsize(Avatar::MAX_FILE_SIZE),
                 '<b>.jpg</b>', '<b>.png</b>', '<b>.gif</b>') ?>
     </p>

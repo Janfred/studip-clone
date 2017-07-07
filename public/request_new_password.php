@@ -49,11 +49,11 @@ include 'lib/seminar_open.php';
 if (!(Config::get()->ENABLE_REQUEST_NEW_PASSWORD_BY_USER && in_array('Standard', $GLOBALS['STUDIP_AUTH_PLUGIN'])) || $auth->auth["uid"] != "nobody") {
     ob_start();
     if ($auth->auth["uid"] != "nobody") {
-        $message = _("Sie können kein neues Passwort anfordern, wenn Sie bereits eingeloggt sind.");
+        $message = _("Sie kÃ¶nnen kein neues Passwort anfordern, wenn Sie bereits eingeloggt sind.");
     } else {
-        $message = _("Das Anfordern eines neuen Passwortes durch den Benutzer ist in dieser Stud.IP-Installation nicht möglich.");
+        $message = _("Das Anfordern eines neuen Passwortes durch den Benutzer ist in dieser Stud.IP-Installation nicht mÃ¶glich.");
     }
-    PageLayout::postError(_("Passwortanforderung nicht möglich!"), [$message]);
+    PageLayout::postError(_("Passwortanforderung nicht mÃ¶glich!"), [$message]);
     
     $template                     = $GLOBALS['template_factory']->open('layouts/base.php');
     $template->content_for_layout = ob_get_clean();
@@ -75,10 +75,10 @@ $email = trim(Request::get('email'));
 if ($email != "") {
     $validator = new email_validation_class();
     if (!$validator->ValidateEmailAddress($email)) {
-        // E-Mail ungültig
-        $msg['error'][] = _("Die E-Mail-Adresse ist ungültig!");
+        // E-Mail ungÃ¼ltig
+        $msg['error'][] = _("Die E-Mail-Adresse ist ungÃ¼ltig!");
     } else {
-        // Suche Benutzer über E-Mail-Adresse
+        // Suche Benutzer Ã¼ber E-Mail-Adresse
         $userlist = User::findByEmail($email);
         
         if (count($userlist) === 0) {
@@ -88,13 +88,13 @@ if ($email != "") {
         } elseif (count($userlist) === 1) {
             $one_user = current($userlist);
             if ($one_user['auth_plugin'] != 'standard' || in_array($one_user['perms'], words('root admin'))) {
-                $msg['error'][] = sprintf(_("Ihr Passwort kann nur durch einen Adminstrator geändert werden. Bitte fordern Sie gegebenenfalls %sper E-Mail%s ein neues Passwort an."),
+                $msg['error'][] = sprintf(_("Ihr Passwort kann nur durch einen Adminstrator geÃ¤ndert werden. Bitte fordern Sie gegebenenfalls %sper E-Mail%s ein neues Passwort an."),
                     "<a href=\"mailto:{$GLOBALS['UNI_CONTACT']}?subject=" . rawurlencode("Stud.IP Passwort vergessen - ".Config::get()->UNI_NAME_CLEAN) . "&amp;body=" . rawurlencode("Ich habe mein Passwort vergessen. Bitte senden Sie mir ein Neues.\nMein Nutzername: " . htmlReady($uname) . "\n") . "\">",
                     "</a>");
             } else {
-                // Bestätigungslink senden
+                // BestÃ¤tigungslink senden
                 $step          = 2;
-                $msg['info'][] = sprintf(_("In Kürze wird Ihnen eine E-Mail an die Adresse %s mit einem Bestätigungslink geschickt. Bitte beachten Sie die Hinweise in dieser E-Mail. Sollten Sie keine E-Mail erhalten haben, vergewissern Sie sich, ob diese evtl. in einem Spam-Ordner abgelegt wurde."), $one_user['Email']);
+                $msg['info'][] = sprintf(_("In KÃ¼rze wird Ihnen eine E-Mail an die Adresse %s mit einem BestÃ¤tigungslink geschickt. Bitte beachten Sie die Hinweise in dieser E-Mail. Sollten Sie keine E-Mail erhalten haben, vergewissern Sie sich, ob diese evtl. in einem Spam-Ordner abgelegt wurde."), $one_user['Email']);
                 $username      = $one_user['username'];
                 $vorname       = $one_user['Vorname'];
                 $nachname      = $one_user['Nachname'];
@@ -107,7 +107,7 @@ if ($email != "") {
                 StudipMail::sendMessage($one_user['Email'], $subject, $mailbody);
             }
         } else {
-            // Mehrere Benutzer für E-Mail
+            // Mehrere Benutzer fÃ¼r E-Mail
             $msg['error'][] = _("Diese E-Mail-Adresse wird von mehreren Benutzern genutzt!");
             $msg['info'][]  = $admin_link;
         }
@@ -121,7 +121,7 @@ if ($email != "") {
 
 /*
     #################################################
-    ### Auswerten des Bestätigungslinks           ###
+    ### Auswerten des BestÃ¤tigungslinks           ###
     #################################################
 */
 
@@ -134,7 +134,7 @@ if (Request::submitted('id')) {
         $user_management = new UserManagement($requesting_user['user_id']);
         if ($user_management->changePassword($user_management->generate_password(6))) {
             StudipLog::USER_NEWPWD($requesting_user['user_id'], null, 'Passwort neu setzen angefordert', null, $requesting_user['user_id']);
-            $msg['success'][] = sprintf(_("Ihnen wird in Kürze eine E-Mail an die Adresse %s mit Ihrem neuen Passwort geschickt. Bitte beachten Sie die Hinweise in dieser E-Mail."), $requesting_user['Email']);
+            $msg['success'][] = sprintf(_("Ihnen wird in KÃ¼rze eine E-Mail an die Adresse %s mit Ihrem neuen Passwort geschickt. Bitte beachten Sie die Hinweise in dieser E-Mail."), $requesting_user['Email']);
         } else {
             $msg['error'][] = _("Das Passwort konnte nicht gesetzt werden. Bitte wiederholen Sie den Vorgang oder fordern Sie ein neues Passwort per E-Mail an.");
             $msg['info'][]  = $admin_link;
@@ -152,7 +152,7 @@ if (!Request::int('step') && empty($step)) {
 $request_template = $GLOBALS['template_factory']->open('request_password');
 $request_template->set_attribute('step', intval($step));
 $request_template->set_attribute('messages', $msg);
-$request_template->set_attribute('link_startpage', sprintf(_("Zurück zur %sStartseite%s."), '<a href="./index.php?cancel_login=1">', '</a>'));
+$request_template->set_attribute('link_startpage', sprintf(_("ZurÃ¼ck zur %sStartseite%s."), '<a href="./index.php?cancel_login=1">', '</a>'));
 $request_template->set_attribute('email', $email);
 
 PageLayout::setHelpKeyword('Basis.AnmeldungPasswortAnfrage');

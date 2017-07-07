@@ -8,7 +8,7 @@
 // DbSnapshot.class.php
 // Class to provide snapshots of mysql result sets
 // Uses PHPLib DB Abstraction
-// Copyright (c) 2002 André Noack <andre.noack@gmx.net>
+// Copyright (c) 2002 AndrÃ© Noack <andre.noack@gmx.net>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -31,7 +31,7 @@
  * Uses DB abstraction layer of PHPLib
  *
  * @access   public
- * @author   André Noack <andre.noack@gmx.net>
+ * @author   AndrÃ© Noack <andre.noack@gmx.net>
  * @package  DBTools
  **/
 class DbSnapshot
@@ -244,13 +244,13 @@ class DbSnapshot
         } else {
             uasort($sortfields, create_function('$a,$b', '
                     $a = mb_strtolower($a);
-                    $a = str_replace("ä","ae",$a);
-                    $a = str_replace("ö","oe",$a);
-                    $a = str_replace("ü","ue",$a);
+                    $a = str_replace("Ã¤","ae",$a);
+                    $a = str_replace("Ã¶","oe",$a);
+                    $a = str_replace("Ã¼","ue",$a);
                     $b = mb_strtolower($b);
-                    $b = str_replace("ä","ae",$b);
-                    $b = str_replace("ö","oe",$b);
-                    $b = str_replace("ü","ue",$b);
+                    $b = str_replace("Ã¤","ae",$b);
+                    $b = str_replace("Ã¶","oe",$b);
+                    $b = str_replace("Ã¼","ue",$b);
                     return strnatcasecmp($a,$b);'));
             if ($order == "DESC") {
                 $sortfields = array_reverse($sortfields, true);

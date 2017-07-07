@@ -18,7 +18,7 @@ class Tic5661AddConfig extends Migration
             'section'     => 'global',
             'description' => 'Gibt an, nach wieviel Tagen ein Eintrag als alt '
                            . 'angesehen und nicht mehr rot markiert werden '
-                           . 'soll (0 angeben, um nur das tatsäcliche Alter) '
+                           . 'soll (0 angeben, um nur das tatsÃ¤cliche Alter) '
                            . 'zu betrachten.',
         ));
     }

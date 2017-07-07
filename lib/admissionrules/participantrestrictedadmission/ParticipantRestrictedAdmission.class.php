@@ -40,7 +40,7 @@ class ParticipantRestrictedAdmission extends AdmissionRule
     {
         parent::__construct($ruleId, $courseSetId);
         $this->first_come_first_served_allowed = (bool)Config::get()->ENABLE_COURSESET_FCFS;
-        $this->default_message = _('Es stehen keine weiteren Pl‰tze zur Verf¸gung.');
+        $this->default_message = _('Es stehen keine weiteren Pl√§tze zur Verf√ºgung.');
         if ($ruleId) {
             $this->load();
         } else {
@@ -91,7 +91,7 @@ class ParticipantRestrictedAdmission extends AdmissionRule
      * Return this rule's name.
      */
     public static function getName() {
-        return _("Beschr‰nkte Teilnehmeranzahl");
+        return _("Beschr√§nkte Teilnehmeranzahl");
     }
 
     /**
@@ -210,7 +210,7 @@ class ParticipantRestrictedAdmission extends AdmissionRule
         }
         $ddate = strtotime($data['distributiondate'] . ' ' . $data['distributiontime']);
         if (!$data['enable_FCFS'] && (!$data['distributiondate'] || $ddate < (time() + $this->minimum_timespan_to_distribution_time*60))) {
-            $errors[] = sprintf(_('Bitte geben Sie f¸r die Platzverteilung ein Datum an, das weiter in der Zukunft liegt. Das fr¸hestmˆgliche Datum ist %s.'), strftime('%x %R', time() + $this->minimum_timespan_to_distribution_time*60));
+            $errors[] = sprintf(_('Bitte geben Sie f√ºr die Platzverteilung ein Datum an, das weiter in der Zukunft liegt. Das fr√ºhestm√∂gliche Datum ist %s.'), strftime('%x %R', time() + $this->minimum_timespan_to_distribution_time*60));
         }
         return $errors;
     }

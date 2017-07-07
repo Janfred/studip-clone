@@ -14,7 +14,7 @@
     $random_id = mb_substr(md5(uniqid('pagination', true)), -8);
 ?>
 <p id="pagination-label-<?= $random_id ?>" class="audible">
-    <?= _('Blättern') ?>
+    <?= _('BlÃ¤ttern') ?>
 </p>
 <ul class="pagination" role="navigation"
     aria-labelledby="pagination-label-<?= $random_id ?>">
@@ -22,7 +22,7 @@
     <li class="prev">
         <a href="<?= URLHelper::getLink(sprintf($pagelink, $cur_page - 1)) ?>" rel="prev" <?= $dialog ? $dialog : ''?>>
             <span class="audible"><?= _('Eine Seite') ?></span>
-            <?= _('zurück') ?>
+            <?= _('zurÃ¼ck') ?>
         </a>
     </li>
 <? endif; ?>

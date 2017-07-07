@@ -59,7 +59,7 @@ class ContactController extends AuthenticatedController
             }
         }
         if ($imported) {
-            PageLayout::postMessage(MessageBox::success(sprintf(_("%s Kontakte wurden hinzugefügt."), $imported)));
+            PageLayout::postMessage(MessageBox::success(sprintf(_("%s Kontakte wurden hinzugefÃ¼gt."), $imported)));
         }
         $mps->clearSession();
 
@@ -98,7 +98,7 @@ class ContactController extends AuthenticatedController
 
         // Init person search
         $mps = MultiPersonSearch::get('contacts')
-            ->setTitle(_('Kontakte hinzufügen'))
+            ->setTitle(_('Kontakte hinzufÃ¼gen'))
             ->setDefaultSelectedUser($this->allContacts->pluck('user_id'))
             ->setExecuteURL($this->url_for('contact/index/' . $filter))
             ->setSearchObject(new StandardSearch('user_id'));
@@ -113,7 +113,7 @@ class ContactController extends AuthenticatedController
             $this->title = $selected->name;
 
             // Set title of multipersonsearch
-            $mps->setTitle(sprintf(_('Kontakte zu %s hinzufügen'), $selected->name));
+            $mps->setTitle(sprintf(_('Kontakte zu %s hinzufÃ¼gen'), $selected->name));
             $mps->addQuickfilter(_('Kontakte'), User::findCurrent()->contacts->pluck('user_id'));
         }
 

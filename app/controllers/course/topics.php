@@ -24,7 +24,7 @@ class Course_TopicsController extends AuthenticatedController
             }
             if (Request::submitted("delete_topic")) {
                 $topic->delete();
-                PageLayout::postMessage(MessageBox::success(_("Thema gelöscht.")));
+                PageLayout::postMessage(MessageBox::success(_("Thema gelÃ¶scht.")));
             } else {
                 $topic['title'] = Request::get("title");
                 $topic['description'] = Studip\Markup::purifyHtml(Request::get("description"));

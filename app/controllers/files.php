@@ -82,7 +82,7 @@ class FilesController extends AuthenticatedController
 
         if ($folder->isWritable($GLOBALS['user']->id)) {
             $actions->addLink(
-                _('Datei hinzufügen'),
+                _('Datei hinzufÃ¼gen'),
                 '#',
                 Icon::create('file+add', 'clickable'),
                 array('onClick' => "STUDIP.Files.openAddFilesWindow(); return false;")
@@ -198,7 +198,7 @@ class FilesController extends AuthenticatedController
      */
     public function configure_action()
     {
-        PageLayout::setTitle(_('Dateibereich zur Konfiguration auswählen'));
+        PageLayout::setTitle(_('Dateibereich zur Konfiguration auswÃ¤hlen'));
 
         $this->configure_urls = [];
         foreach (PluginManager::getInstance()->getPlugins('FilesystemPlugin') as $plugin) {
@@ -219,7 +219,7 @@ class FilesController extends AuthenticatedController
     {
         $this->plugin = PluginManager::getInstance()->getPluginById($plugin_id);
         if (!$this->plugin->isPersonalFileArea()) {
-            throw new Exception(_('Dieser Bereich ist nicht verfügbar.'));
+            throw new Exception(_('Dieser Bereich ist nicht verfÃ¼gbar.'));
         }
 
         $navigation = $this->plugin->getFileSelectNavigation();

@@ -13,10 +13,10 @@
                 <?= htmlReady($group['name']) ?>
             </a>
             <? if ($group['visible'] == 0) : ?>
-                <? $infotext = _("Versteckte Studiengruppen können über die Suchfunktionen nicht gefunden werden."); ?>
+                <? $infotext = _("Versteckte Studiengruppen kÃ¶nnen Ã¼ber die Suchfunktionen nicht gefunden werden."); ?>
                 <? $infotext .= " "; ?>
                 <? if (Config::get()->ALLOW_DOZENT_VISIBILITY) : ?>
-                    <? $infotext .= _("Um die Studiengruppe sichtbar zu machen, wählen Sie den Punkt \"Sichtbarkeit\" im Administrationsbereich der Veranstaltung."); ?>
+                    <? $infotext .= _("Um die Studiengruppe sichtbar zu machen, wÃ¤hlen Sie den Punkt \"Sichtbarkeit\" im Administrationsbereich der Veranstaltung."); ?>
                 <? else : ?>
                     <? $infotext .= _("Um die Studiengruppe sichtbar zu machen, wenden Sie sich an die Admins."); ?>
                 <? endif ?>

@@ -11,7 +11,7 @@ shuffle($likes);
     $text = '';
     if (array_search($GLOBALS['user']->id, $likes) !== false) {
         if (sizeof($likes) > 1) {
-            $text = '<span class="tooltip">' . sprintf(_('Dir und %s weiteren gef‰llt das.'), (sizeof($likes) - 1));
+            $text = '<span class="tooltip">' . sprintf(_('Dir und %s weiteren gef√§llt das.'), (sizeof($likes) - 1));
             $text .= '<span class="tooltip-content">';
             foreach ($likes as $user_id) {
                 if ($user_id != $GLOBALS['user']->id) {
@@ -20,10 +20,10 @@ shuffle($likes);
             }
             $text .= '</span></span>';
         } else {
-            $text = _('Dir gef‰llt das.');
+            $text = _('Dir gef√§llt das.');
         }
     } else {
-        $text = '<span class="tooltip">' . sprintf(_('%s gef‰llt das.'), sizeof($likes));
+        $text = '<span class="tooltip">' . sprintf(_('%s gef√§llt das.'), sizeof($likes));
         $text .= '<span class="tooltip-content">';
         foreach ($likes as $user_id) {
             $text .= htmlReady(get_fullname($user_id)) .'<br>';
@@ -38,10 +38,10 @@ endif ?>
 <!-- like/dislike links -->
 <? if (!in_array($GLOBALS['user']->id, $likes)) : ?>
     <a href="<?= PluginEngine::getLink('coreforum/index/like/'. $topic_id) ?>" onClick="jQuery('#like_<?= $topic_id ?>').load('<?= PluginEngine::getLink('coreforum/index/like/'. $topic_id) ?>'); return false;">
-        <?= _('Gef‰llt mir!'); ?>
+        <?= _('Gef√§llt mir!'); ?>
     </a>
 <? else : ?>
     <a href="<?= PluginEngine::getLink('coreforum/index/dislike/'. $topic_id) ?>" onClick="jQuery('#like_<?= $topic_id ?>').load('<?= PluginEngine::getLink('coreforum/index/dislike/'. $topic_id) ?>'); return false;">
-        <?= _('Gef‰llt mir nicht mehr!'); ?>
+        <?= _('Gef√§llt mir nicht mehr!'); ?>
     </a>
 <? endif ?>

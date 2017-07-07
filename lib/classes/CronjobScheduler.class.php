@@ -277,13 +277,13 @@ class CronjobScheduler
 
                 // Inform roots about the escalated cronjob
                 $subject = sprintf('[Cronjobs] %s: %s',
-                                   _('Eskalierte Ausführung'),
+                                   _('Eskalierte AusfÃ¼hrung'),
                                    $schedule->title);
 
                 $message = sprintf(_('Der Cronjob "%s" wurde deaktiviert, da '
-                                    .'seine Ausführungsdauer die maximale '
-                                    .'Ausführungszeit von %u Sekunden '
-                                    .'überschritten hat.') . "\n",
+                                    .'seine AusfÃ¼hrungsdauer die maximale '
+                                    .'AusfÃ¼hrungszeit von %u Sekunden '
+                                    .'Ã¼berschritten hat.') . "\n",
                                    $schedule->title,
                                    $escalation_time);
 
@@ -336,14 +336,14 @@ class CronjobScheduler
 
                 // Send mail to root accounts
                 $subject = sprintf('[Cronjobs] %s: %s',
-                                   _('Fehlerhafte Ausführung'),
+                                   _('Fehlerhafte AusfÃ¼hrung'),
                                    $schedule->title);
 
-                $message = sprintf(_('Der Cronjob "%s" wurde deaktiviert, da bei der Ausführung ein Fehler aufgetreten ist.'), $schedule->title) . "\n";
+                $message = sprintf(_('Der Cronjob "%s" wurde deaktiviert, da bei der AusfÃ¼hrung ein Fehler aufgetreten ist.'), $schedule->title) . "\n";
                 $message .= "\n";
                 $message .= display_exception($e) . "\n";
 
-                $message .= _('Für weiterführende Informationen klicken Sie bitten den folgenden Link:') . "\n";
+                $message .= _('FÃ¼r weiterfÃ¼hrende Informationen klicken Sie bitten den folgenden Link:') . "\n";
 
                 $old = URLHelper::setBaseURL($GLOBALS['ABSOLUTE_URI_STUDIP']);
                 $message .= URLHelper::getURL('dispatch.php/admin/cronjobs/logs/schedule/' . $schedule->schedule_id);

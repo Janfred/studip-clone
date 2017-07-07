@@ -53,10 +53,10 @@ if (Request::option('com') == 'new') {
                 $module = ExternModule::GetInstance($range_id, $type['module'], '', 'NEW');
             }
             else {
-                echo MessageBox::error(sprintf(_('Es wurden bereits %s Konfigurationen angelegt. Sie können für dieses Module keine weiteren Konfigurationen anlegen.')
+                echo MessageBox::error(sprintf(_('Es wurden bereits %s Konfigurationen angelegt. Sie kÃ¶nnen fÃ¼r dieses Module keine weiteren Konfigurationen anlegen.')
                     , $GLOBALS['EXTERN_MAX_CONFIGURATIONS']));
                 
-                echo LinkButton::create("<< " . _("Zurück"), URLHelper::getURL('?list=TRUE'));
+                echo LinkButton::create("<< " . _("ZurÃ¼ck"), URLHelper::getURL('?list=TRUE'));
                 $template = $GLOBALS['template_factory']->open('layouts/base.php');
                 $template->content_for_layout = ob_get_clean();
                 echo $template->render();
@@ -130,15 +130,15 @@ if (Request::option('com') == 'store') {
         if ($edit == "Main" && $_POST["Main_name"] != $module->config->config_name) {
             if (!ExternConfig::ChangeName($module->config->range_id, $module->getType(), $module->config->getId(),
                     $module->config->config_name, $_POST["Main_name"])) {
-                PageLayout::postError(_('Der Konfigurationsname wurde bereits für eine Konfiguration dieses Moduls vergeben. Bitte geben Sie einen anderen Namen ein.'));
+                PageLayout::postError(_('Der Konfigurationsname wurde bereits fÃ¼r eine Konfiguration dieses Moduls vergeben. Bitte geben Sie einen anderen Namen ein.'));
                 $module->printoutEdit($edit_open, "$_POST", "", $edit);
             }
             $module->store($edit, $_POST);
-            PageLayout::postSuccess(_('Die eingegebenen Werte wurden übernommen und der Name der Konfiguration geändert.'));
+            PageLayout::postSuccess(_('Die eingegebenen Werte wurden Ã¼bernommen und der Name der Konfiguration geÃ¤ndert.'));
             $module->printoutEdit($edit_open, "", "", $edit);
         } else {
             $module->store($edit, $_POST);
-            PageLayout::postSuccess(_('Die eingegebenen Werte wurden übernommen.'));
+            PageLayout::postSuccess(_('Die eingegebenen Werte wurden Ã¼bernommen.'));
             $module->printoutEdit($edit_open, "", "", $edit);
         }
     }
@@ -146,10 +146,10 @@ if (Request::option('com') == 'store') {
 
 
 if (!$edit_open[$edit]) {
-    echo  LinkButton::create("<< " . _("Zurück"), URLHelper::getURL('?list=TRUE'));;
+    echo  LinkButton::create("<< " . _("ZurÃ¼ck"), URLHelper::getURL('?list=TRUE'));;
 }
 
-Helpbar::get()->addPlainText(_('Information'), _('Um die Werte eines einzelnen Elements zu ändern, klicken Sie bitte den "Übernehmen"-Button innerhalb des jeweiligen Elements.'));
+Helpbar::get()->addPlainText(_('Information'), _('Um die Werte eines einzelnen Elements zu Ã¤ndern, klicken Sie bitte den "Ãœbernehmen"-Button innerhalb des jeweiligen Elements.'));
 
 // the type of this module is not Global
 if ($module->getType() != 0) {

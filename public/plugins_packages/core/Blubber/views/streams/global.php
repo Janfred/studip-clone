@@ -27,7 +27,7 @@
 
 <div id="threadwriter" class="globalstream">
     <div class="row writer">
-        <div class="context_selector select" title="<?= _("Kontext der Nachricht auswählen") ?>">
+        <div class="context_selector select" title="<?= _("Kontext der Nachricht auswÃ¤hlen") ?>">
             <? $width = "50" ?>
             <?= Icon::create("blubber", "clickable")->asImg($width, ['class' => "select click"]) ?>
             <?= Assets::img($plugin->getPluginURL()."/assets/images/public_blue.svg", array('class' => "public click", 'height' => $width."px")) ?>
@@ -42,7 +42,7 @@
         </label>
     </div>
 
-    <div id="context_selector_title" style="display: none;"><?= _("Kontext auswählen") ?></div>
+    <div id="context_selector_title" style="display: none;"><?= _("Kontext auswÃ¤hlen") ?></div>
     <div id="context_selector" style="display: none;">
         <input type="hidden" name="content_type" id="context_type" value="">
         <table style="width: 100%">
@@ -52,7 +52,7 @@
                         <label>
                             <?= Assets::img($plugin->getPluginURL()."/assets/images/public.svg", array('class' => "text-bottom", 'height' => "32px")) ?>
                             <br>
-                            <?= _("Öffentlich") ?>
+                            <?= _("Ã–ffentlich") ?>
                         </label>
                     </td>
                     <td style="width: 70%">
@@ -86,7 +86,7 @@
                         <a href="<?= URLHelper::getLink("dispatch.php/contact") ?>"><?= _("Legen Sie eine Kontaktgruppe an, um an mehrere Kontakte zugleich zu blubbern.") ?></a>
                         <? endif ?>
                         <br>
-                        <?= _("Fügen Sie einzelne Personen mittels @Nutzernamen im Text der Nachricht oder der Kommentare hinzu.") ?>
+                        <?= _("FÃ¼gen Sie einzelne Personen mittels @Nutzernamen im Text der Nachricht oder der Kommentare hinzu.") ?>
                     </td>
                     <td style="width: 15%">
                         <?= Icon::create('checkbox-checked', 'info')->asImg(['class' => "text-bottom check"]) ?>

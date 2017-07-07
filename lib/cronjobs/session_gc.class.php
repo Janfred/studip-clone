@@ -2,7 +2,7 @@
 /**
 * session_gc.class.php
 *
-* @author André Noack <noack@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
+* @author AndrÃ© Noack <noack@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @access public
 * @since  2.4
 */

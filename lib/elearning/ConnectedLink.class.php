@@ -8,7 +8,7 @@
 *
 * This class contains methods to generate links to connected content-management-systems.
 *
-* @author   Arne Schröder <schroeder@data-quest.de>
+* @author   Arne SchrÃ¶der <schroeder@data-quest.de>
 * @access   public
 * @modulegroup  elearning_interface_modules
 * @module       ConnectedLink
@@ -96,7 +96,7 @@ class ConnectedLink
         if ($connected_cms[$this->cms_type]->content_module[$current_module]->isConnected())
             $output .= "&nbsp;" . Button::create(_('Entfernen'), 'remove');
         else
-            $output .= "&nbsp;" . Button::create(_('Hinzufügen'), 'add');
+            $output .= "&nbsp;" . Button::create(_('HinzufÃ¼gen'), 'add');
         $output .= "</form>";
 
         return $output;

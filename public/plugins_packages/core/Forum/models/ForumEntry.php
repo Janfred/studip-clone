@@ -7,7 +7,7 @@
  * published by the Free Software Foundation; either version 3 of
  * the License, or (at your option) any later version.
  *
- * @author      Till Glöggler <tgloeggl@uos.de>
+ * @author      Till GlÃ¶ggler <tgloeggl@uos.de>
  * @license     http://www.gnu.org/licenses/gpl-3.0.html GPL version 3
  * @category    Stud.IP
  */
@@ -1165,7 +1165,7 @@ class ForumEntry {
         if ($stmt->fetchColumn() == 0) {
             $stmt = DBManager::get()->prepare("INSERT INTO forum_entries
                 (topic_id, seminar_id, name, mkdate, chdate, lft, rgt, depth)
-                VALUES (?, ?, 'Übersicht', UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), 0, 1, 0)");
+                VALUES (?, ?, 'Ãœbersicht', UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), 0, 1, 0)");
             $stmt->execute(array($seminar_id, $seminar_id));
         }
 
@@ -1187,7 +1187,7 @@ class ForumEntry {
                 'seminar_id'  => $seminar_id,
                 'user_id'     => '',
                 'name'        => _('Allgemeine Diskussion'),
-                'content'     => _('Hier ist Raum für allgemeine Diskussionen'),
+                'content'     => _('Hier ist Raum fÃ¼r allgemeine Diskussionen'),
                 'author'      => '',
                 'author_host' => ''
             );

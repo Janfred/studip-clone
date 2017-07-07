@@ -4,8 +4,8 @@
 # Lifter003: TODO
 # Lifter010: TODO
 /*
-rss.php - Ausgabe der persönlcihen News als rss-Feed
-Copyright (C) 2005  Philipp Hügelmeyer <phuegelm@uni-osnabrueck.de>
+rss.php - Ausgabe der pers≈°nlcihen News als rss-Feed
+Copyright (C) 2005  Philipp H≈∏gelmeyer <phuegelm@uni-osnabrueck.de>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License

@@ -2,10 +2,10 @@
 <? if (isset($new_room_request_type)) : ?>
     <input type="hidden" name="new_room_request_type" value="<?= $new_room_request_type ?>">
 <? endif ?>
-<?= MessageBox::info(_('Geben Sie den gewünschten Raum und/oder Raumeigenschaften an. Ihre Raumanfrage wird von der
-                    zuständigen Raumverwaltung bearbeitet.'),
-    array(_('<b>Achtung:</b> Um später einen passenden Raum für Ihre Veranstaltung zu bekommen,
-        geben Sie bitte <span style="text-decoration: underline">immer</span> die gewünschten Eigenschaften mit an!')
+<?= MessageBox::info(_('Geben Sie den gewÃ¼nschten Raum und/oder Raumeigenschaften an. Ihre Raumanfrage wird von der
+                    zustÃ¤ndigen Raumverwaltung bearbeitet.'),
+    array(_('<b>Achtung:</b> Um spÃ¤ter einen passenden Raum fÃ¼r Ihre Veranstaltung zu bekommen,
+        geben Sie bitte <span style="text-decoration: underline">immer</span> die gewÃ¼nschten Eigenschaften mit an!')
     )) ?>
 
 <section class="times-rooms-grid ">
@@ -35,13 +35,13 @@ if ($request_resource_id = $request->getResourceId()) :
     $resObject = ResourceObject::Factory($request_resource_id);
 ?>
     <section style="margin: 20px 0;">
-        <h2><?= _('Gewünschter Raum') ?></h2>
+        <h2><?= _('GewÃ¼nschter Raum') ?></h2>
 
         <p>
             <strong><?= htmlReady($resObject->getName()) ?></strong>
-            <?= Icon::create('trash', 'clickable', ['title' => _('den ausgewählten Raum löschen')])->asInput(['type' => 'image', 'style' => 'vertical-align:middle', 'name' => 'reset_resource_id']) ?>
+            <?= Icon::create('trash', 'clickable', ['title' => _('den ausgewÃ¤hlten Raum lÃ¶schen')])->asInput(['type' => 'image', 'style' => 'vertical-align:middle', 'name' => 'reset_resource_id']) ?>
             <? if($resObject->getPlainProperties(false, true)): ?>
-            <?= tooltipIcon(_('Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:') . " \n" . $resObject->getPlainProperties(false, true)) ?>
+            <?= tooltipIcon(_('Der ausgewÃ¤hlte Raum bietet folgende der wÃ¼nschbaren Eigenschaften:') . " \n" . $resObject->getPlainProperties(false, true)) ?>
             <? endif; ?>
         </p>
         <input type="hidden" name="selected_room" value="<?= htmlready($request_resource_id) ?>">
@@ -58,7 +58,7 @@ if ($request_resource_id = $request->getResourceId()) :
         <? if ($request->getCategoryId()) : ?>
             <? if (count($room_categories)) : ?>
                 <label for="select_room_type">
-                    <?= _('Gewählter Raumtyp') ?>
+                    <?= _('GewÃ¤hlter Raumtyp') ?>
                 </label>
 
 
@@ -71,18 +71,18 @@ if ($request_resource_id = $request->getResourceId()) :
                         ) ?>
                     <? endforeach ?>
                 </select>
-                <?= Icon::create("accept", "clickable", ['title' => _('Raumtyp auswählen')])
+                <?= Icon::create("accept", "clickable", ['title' => _('Raumtyp auswÃ¤hlen')])
                         ->asInput(['type'  => "image",
                                    'style' => "vertical-align:middle",
                                    'name'  => "send_room_type",
-                                   'value' => _("Raumtyp auswählen")]) ?>
-                <?= Icon::create('refresh', 'clickable', ['title' => _('alle Angaben zurücksetzen')])->asInput(["type" => "image", "style" => "vertical-align:middle", "name" => "reset_room_type"]) ?>
+                                   'value' => _("Raumtyp auswÃ¤hlen")]) ?>
+                <?= Icon::create('refresh', 'clickable', ['title' => _('alle Angaben zurÃ¼cksetzen')])->asInput(["type" => "image", "style" => "vertical-align:middle", "name" => "reset_room_type"]) ?>
 
 
             <? endif ?>
             <? $props = $request->getAvailableProperties() ?>
             <? if (!empty($props)) : ?>
-                <h4><?= _('Folgende Eigenschaften sind wünschbar:') ?></h4>
+                <h4><?= _('Folgende Eigenschaften sind wÃ¼nschbar:') ?></h4>
                 <? foreach ($props as $index => $prop) : ?>
                     <section>
 
@@ -134,24 +134,24 @@ if ($request_resource_id = $request->getResourceId()) :
             <? endif ?>
         <? else : ?>
             <label for="select_room_type">
-                <?= _('Bitte geben Sie zunächst einen Raumtyp an, der für Sie am besten geeignet ist') ?>
+                <?= _('Bitte geben Sie zunÃ¤chst einen Raumtyp an, der fÃ¼r Sie am besten geeignet ist') ?>
             </label>
             <select name="select_room_type" id="select_room_type" style="width:auto;">
-                <option value=""><?= _('bitte auswählen') ?></option>
+                <option value=""><?= _('bitte auswÃ¤hlen') ?></option>
                 <? foreach ($room_categories as $rc) : ?>
                     <option value="<?= $rc["category_id"] ?>"><?= htmlReady($rc["name"]) ?></option>
                 <? endforeach ?>
             </select>
-            <?= Icon::create("accept", "clickable", ['title' => _('Raumtyp auswählen')])
+            <?= Icon::create("accept", "clickable", ['title' => _('Raumtyp auswÃ¤hlen')])
                     ->asInput(['type'  => "image",
                                'style' => "vertical-align:middle",
                                'name'  => "send_room_type",
-                               'value' => _("Raumtyp auswählen")]) ?>
+                               'value' => _("Raumtyp auswÃ¤hlen")]) ?>
         <? endif ?>
 
         <? if ($request->category_id) : ?>
             <section>
-                <?= Studip\Button::create(_('Passende Räume suchen'), 'search_properties') ?>
+                <?= Studip\Button::create(_('Passende RÃ¤ume suchen'), 'search_properties') ?>
             </section>
         <? endif ?>
     </section>
@@ -163,7 +163,7 @@ if ($request_resource_id = $request->getResourceId()) :
         <? if (!empty($search_result)) : ?>
             <? if (count($search_result)) : ?>
                 <p>
-                    <strong><?= sizeof($search_result) ?></strong> <?= (!$search_by_properties ? _("Räume gefunden:") : _("passende Räume gefunden.")) ?>
+                    <strong><?= sizeof($search_result) ?></strong> <?= (!$search_by_properties ? _("RÃ¤ume gefunden:") : _("passende RÃ¤ume gefunden.")) ?>
                 </p>
             <? endif ?>
             <div class="selectbox">
@@ -189,10 +189,10 @@ if ($request_resource_id = $request->getResourceId()) :
                     <? endforeach ?>
                 </fieldset>
             </div>
-            <?= Studip\Button::create(_("Raum als Wunschraum auswählen"), 'send_room') ?>
+            <?= Studip\Button::create(_("Raum als Wunschraum auswÃ¤hlen"), 'send_room') ?>
             <?= Studip\Button::create(_("neue Suche starten"), 'reset_room_search') ?>
             <? if ($search_by_properties) : ?>
-                <p><strong><?= _('Diese Räume erfüllen die Wunschkriterien, die Sie links angegeben haben.') ?></strong>
+                <p><strong><?= _('Diese RÃ¤ume erfÃ¼llen die Wunschkriterien, die Sie links angegeben haben.') ?></strong>
                 </p>
             <? endif ?>
         <? else : ?>
@@ -229,6 +229,6 @@ if ($request_resource_id = $request->getResourceId()) :
     <h2><?= _('Nachricht an den Raumadministrator') ?></h2>
 
 
-        <textarea name="comment" cols="58" rows="4" placeholder="<?= _('Weitere Wünsche oder Bemerkungen zur gewünschten Raumbelegung') ?>"
+        <textarea name="comment" cols="58" rows="4" placeholder="<?= _('Weitere WÃ¼nsche oder Bemerkungen zur gewÃ¼nschten Raumbelegung') ?>"
                   style="width:90%"><?= htmlReady($request->getComment()); ?></textarea>
 </section>

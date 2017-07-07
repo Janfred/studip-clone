@@ -20,7 +20,7 @@ class RefactorConfigLocal extends Migration
                 'type' => "string"
             ),
             "MEDIA_CACHE_MAX_LENGTH" => array(
-                'description' => "Maximale Größe von Dateien, die im Media-Cache gecached werden (in Bytes)?",
+                'description' => "Maximale GrÃ¶ÃŸe von Dateien, die im Media-Cache gecached werden (in Bytes)?",
                 'type' => "integer"
             ),
             "MEDIA_CACHE_LIFETIME" => array(
@@ -62,7 +62,7 @@ class RefactorConfigLocal extends Migration
                 'default' => 0
             ),
             "SOAP_USE_PHP5" => array(
-                'description' => "Sollen PHP-Bibliotheken für SOAP verwendet werden?",
+                'description' => "Sollen PHP-Bibliotheken fÃ¼r SOAP verwendet werden?",
                 'type' => "boolean",
                 'default' => 0
             ),

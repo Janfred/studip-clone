@@ -8,7 +8,7 @@
 // StudipSemTreeView.class.php
 // Class to print out the seminar tree
 //
-// Copyright (c) 2003 AndrÈ Noack <noack@data-quest.de>
+// Copyright (c) 2003 Andr√© Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -32,7 +32,7 @@
 * This class prints out a html representation of the whole or part of the tree
 *
 * @access   public
-* @author   AndrÈ Noack <noack@data-quest.de>
+* @author   Andr√© Noack <noack@data-quest.de>
 * @package
 */
 class StudipSemTreeView extends TreeView {
@@ -118,13 +118,13 @@ class StudipSemTreeView extends TreeView {
     function getItemHeadPics($item_id){
         $head = "";
         $head .= "<a href=\"";
-        $head .= ($this->open_items[$item_id])? URLHelper::getLink($this->getSelf("close_item={$item_id}")) . "\"" . tooltip(_("Dieses Element schlieﬂen"),true) . ">"
-                                            : URLHelper::getLink($this->getSelf("open_item={$item_id}")) . "\"" . tooltip(_("Dieses Element ˆffnen"),true) . ">";
+        $head .= ($this->open_items[$item_id])? URLHelper::getLink($this->getSelf("close_item={$item_id}")) . "\"" . tooltip(_("Dieses Element schlie√üen"),true) . ">"
+                                            : URLHelper::getLink($this->getSelf("open_item={$item_id}")) . "\"" . tooltip(_("Dieses Element √∂ffnen"),true) . ">";
         $head .= Icon::create($this->open_items[$item_id] ? 'arr_1down' : 'arr_1right', 'clickable');
         $head .= (!$this->open_items[$item_id]) ? Assets::img('forumleer.gif', array('size' => '5')) : "";
         $head .= "</a>";
         if ($this->tree->hasKids($item_id)){
-            $head .= Icon::create('folder-full', 'clickable', ['title' => $this->open_ranges[$item_id]?_('Alle Unterelemente schliessen'):_('Alle Unterelemente ˆffnen')])->asImg(16, ['class' => 'text-top']);
+            $head .= Icon::create('folder-full', 'clickable', ['title' => $this->open_ranges[$item_id]?_('Alle Unterelemente schliessen'):_('Alle Unterelemente √∂ffnen')])->asImg(16, ['class' => 'text-top']);
         } else {
             $head .= Icon::create('folder-empty', 'clickable', ['title' => _('Dieses Element hat keine Unterelemente')])->asImg();
         }
@@ -143,16 +143,16 @@ class StudipSemTreeView extends TreeView {
             $content .= "\n<tr><td class=\"table_row_even\" align=\"left\" colspan=\"2\">";
             $content .= formatReady($this->tree->tree_data[$item_id]['info']) . "</td></tr>";
         }
-        $content .= "<tr><td colspan=\"2\" class=\"table_row_even\">" . sprintf(_("Alle Veranstaltungen innerhalb dieses Bereiches in der %s‹bersicht%s"),
+        $content .= "<tr><td colspan=\"2\" class=\"table_row_even\">" . sprintf(_("Alle Veranstaltungen innerhalb dieses Bereiches in der %s√úbersicht%s"),
                 "<a href=\"" . URLHelper::getLink($this->getSelf("cmd=show_sem_range&item_id=$item_id")) ."\">","</a>") . "</td></tr>";
         $content .= "<tr><td colspan=\"2\">&nbsp;</td></tr>";
         if ($this->tree->getNumEntries($item_id) - $this->tree->tree_data[$item_id]['lonely_sem']){
-            $content .= "<tr><td class=\"table_row_even\" align=\"left\" colspan=\"2\"><b>" . _("Eintr‰ge auf dieser Ebene:");
+            $content .= "<tr><td class=\"table_row_even\" align=\"left\" colspan=\"2\"><b>" . _("Eintr√§ge auf dieser Ebene:");
             $content .= "</b>\n</td></tr>";
             $entries = $this->tree->getSemData($item_id);
             $content .= $this->getSemDetails($entries->getGroupedResult("seminar_id"));
         } else {
-            $content .= "\n<tr><td class=\"table_row_even\" colspan=\"2\">" . _("Keine Eintr‰ge auf dieser Ebene vorhanden!") . "</td></tr>";
+            $content .= "\n<tr><td class=\"table_row_even\" colspan=\"2\">" . _("Keine Eintr√§ge auf dieser Ebene vorhanden!") . "</td></tr>";
         }
         if ($this->tree->tree_data[$item_id]['lonely_sem']){
             $content .= "<tr><td class=\"table_row_even\" align=\"left\" colspan=\"2\"><b>" . _("Nicht zugeordnete Veranstaltungen auf dieser Ebene:");

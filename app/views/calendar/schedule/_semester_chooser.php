@@ -12,6 +12,6 @@
     <? endforeach ?>
     </select>
     <noscript>
-        <?= Icon::create('accept', 'accept', ['title' => _('auswählen')])->asInput(["type" => "image", "class" => "middle"]) ?>
+        <?= Icon::create('accept', 'accept', ['title' => _('auswÃ¤hlen')])->asInput(["type" => "image", "class" => "middle"]) ?>
     </noscript>
 </form>

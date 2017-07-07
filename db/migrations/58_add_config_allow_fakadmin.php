@@ -1,7 +1,7 @@
 <?php
 class AddConfigAllowFakadmin extends Migration
 {
-    public $options = array('INST_FAK_ADMIN_PERMS' => '"none" Fakult‰tsadmin darf Einrichtungen weder anlegen noch lˆschen, "create" Fakult‰tsadmin darf Einrichtungen anlegen, aber nicht lˆschen, "all" Fakult‰tsadmin darf Einrichtungen anlegen und lˆschen.');
+    public $options = array('INST_FAK_ADMIN_PERMS' => '"none" Fakult√§tsadmin darf Einrichtungen weder anlegen noch l√∂schen, "create" Fakult√§tsadmin darf Einrichtungen anlegen, aber nicht l√∂schen, "all" Fakult√§tsadmin darf Einrichtungen anlegen und l√∂schen.');
     
     function description () 
     {

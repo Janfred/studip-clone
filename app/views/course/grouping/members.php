@@ -55,7 +55,7 @@
         <footer>
             <label>
                 <input type="checkbox" data-proxyfor=":checkbox.courses" data-activates="#actions-courses">
-                <?= _('Alle Veranstaltungen auswählen') ?>
+                <?= _('Alle Veranstaltungen auswÃ¤hlen') ?>
             </label>
             <span class="actions">
                 <select id="actions-courses" name="action" disabled>
@@ -76,7 +76,7 @@
                 </select>
                 <input type="hidden" name="course" value="<?= $current->id ?>">
 
-                <?= Studip\Button::createAccept(_('Ausführen'), 'courses_action') ?>
+                <?= Studip\Button::createAccept(_('AusfÃ¼hren'), 'courses_action') ?>
             </span>
         </footer>
     </section>

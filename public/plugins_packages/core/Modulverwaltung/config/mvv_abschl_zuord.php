@@ -2,7 +2,7 @@
 
 /**
  * mvv_abschl_zuord.php
- * Configures the permissions for assignments of Abschlüsse to Abschluss-
+ * Configures the permissions for assignments of AbschlÃ¼sse to Abschluss-
  * Kategorien (table mvv_abschl_zuord)
  *
  * This program is free software; you can redistribute it and/or

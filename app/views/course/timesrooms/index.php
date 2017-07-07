@@ -8,12 +8,12 @@
 <? endif ?>
 
 <? if ($show['regular']) : ?>
-    <!--Regelmäßige Termine-->
+    <!--RegelmÃ¤ÃŸige Termine-->
     <?= $this->render_partial('course/timesrooms/_regularEvents.php') ?>
 <? endif; ?>
 
 <? if ($show['irregular']) : ?>
-    <!--Unregelmäßige Termine-->
+    <!--UnregelmÃ¤ÃŸige Termine-->
     <?= $this->render_partial('course/timesrooms/_irregularEvents') ?>
 <? endif; ?>
 

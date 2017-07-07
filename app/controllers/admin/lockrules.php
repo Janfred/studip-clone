@@ -8,7 +8,7 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * @author      André Noack <noack@data-quest.de>
+ * @author      AndrÃ© Noack <noack@data-quest.de>
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
  * @category    Stud.IP
  * @package     admin
@@ -85,9 +85,9 @@ class Admin_LockrulesController extends AuthenticatedController
         if (Request::submitted('ok')) {
             $ok = $this->handle_form_data();
             if ($ok === false) {
-               PageLayout::postMessage(MessageBox::error(_('Die Änderungen der Sperrebene konnten nicht gespeichert werden.'), $this->msg['error']));
+               PageLayout::postMessage(MessageBox::error(_('Die Ã„nderungen der Sperrebene konnten nicht gespeichert werden.'), $this->msg['error']));
            } else if ($ok) {
-                PageLayout::postMessage(MessageBox::success(_('Die Änderungen wurden gespeichert.')));
+                PageLayout::postMessage(MessageBox::success(_('Die Ã„nderungen wurden gespeichert.')));
            }
         }
 
@@ -96,7 +96,7 @@ class Admin_LockrulesController extends AuthenticatedController
         $info->addElement(new WidgetElement( sprintf(_('Diese Sperrebene wird von %s Objekten benutzt.'), $this->lock_rule->getUsage())));
         $this->sidebar->addWidget($info);
         $actions = new ActionsWidget();
-        $actions->addLink(_('Diese Ebene löschen'), $this->url_for('admin/lockrules/delete/' . $this->lock_rule->getid()), Icon::create('trash', 'clickable'));
+        $actions->addLink(_('Diese Ebene lÃ¶schen'), $this->url_for('admin/lockrules/delete/' . $this->lock_rule->getid()), Icon::create('trash', 'clickable'));
         $actions->addLink(_('Bearbeiten abbrechen'), $this->url_for('admin/lockrules'), Icon::create('decline', 'clickable'));
         $this->sidebar->addWidget($actions);
 
@@ -130,7 +130,7 @@ class Admin_LockrulesController extends AuthenticatedController
         }
         CSRFProtection::verifyUnsafeRequest();
         if ($this->lock_rule->delete()) {
-            PageLayout::postMessage(MessageBox::success(_('Die Sperrebene wurde gelöscht.')));
+            PageLayout::postMessage(MessageBox::success(_('Die Sperrebene wurde gelÃ¶scht.')));
         }
         $this->redirect($this->url_for('admin/lockrules'));
     }
@@ -143,7 +143,7 @@ class Admin_LockrulesController extends AuthenticatedController
         $this->lock_rule->permission = Request::option('lockdata_permission');
         $this->lock_rule->attributes = Request::intArray('lockdata_attributes');
         if (!$this->lock_rule->name) {
-            $this->msg['error'][] = _('Bitte geben Sie einen Namen für die Sperrebene an!');
+            $this->msg['error'][] = _('Bitte geben Sie einen Namen fÃ¼r die Sperrebene an!');
             return false;
         }
         return $this->lock_rule->store();

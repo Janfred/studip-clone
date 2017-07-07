@@ -70,7 +70,7 @@ class HTMLempty
     if (preg_match('/^[a-zA-Z.:][\w\-_.:]*$/i', $name)) {
       $this->_name = $name;
     } else {
-      trigger_error("Unerlaubter Name für ein HTML-Element : '" .
+      trigger_error("Unerlaubter Name fÃ¼r ein HTML-Element : '" .
                     $name . "'", E_USER_ERROR);
     }
   }
@@ -88,35 +88,35 @@ class HTMLempty
       if (preg_match('/^[a-zA-Z.:][\w\-_.:]*$/i', $name)) {
         $this->_attribute[$name] = $wert;
       } else {
-        trigger_error("Unerlaubter Name für ein HTML-Attribut : '" . $name . "'",
+        trigger_error("Unerlaubter Name fÃ¼r ein HTML-Attribut : '" . $name . "'",
                       E_USER_ERROR);
       }
     } else {
       if (is_scalar($name)) {
-        // Dies braucht man, falls man Attribute hinzufügen
+        // Dies braucht man, falls man Attribute hinzufÃ¼gen
         // will, die keinen Wert haben, wie man es bei
         // <option selected> kennt
         if (preg_match('/^[a-zA-Z.:][\w\-_.:]*$/i', $name)) {
           $this->_attribute[$name] = $name;
-          // Da wir gültiges HTML bzw XML schreiben
+          // Da wir gÃ¼ltiges HTML bzw XML schreiben
           // muss jedes Attribut auch einen Wert haben
           // selected wird dann zu selected="selected"
         } else {
-          trigger_error("Unerlaubter Name für ein HTML-Attribut : '" . $name . "'",
+          trigger_error("Unerlaubter Name fÃ¼r ein HTML-Attribut : '" . $name . "'",
                         E_USER_ERROR);
         }
       } elseif (is_array($name)) {
         // Jedes Arrayelement durchgehen
         foreach ($name as $key => $wert) {
           if (is_int($key)) {
-            // Arrayelement wurde mit $foo[] hinzugefügt
-            // also ohne Schlüssel. Ich nehme dann an
+            // Arrayelement wurde mit $foo[] hinzugefÃ¼gt
+            // also ohne SchlÃ¼ssel. Ich nehme dann an
             // das es sich um ein Attribut wie
             // 'selected' oder 'readonly' handelt
             if (preg_match('/^[a-zA-Z.:][\w\-_.:]*$/i', $wert)) {
               $this->_attribute[$wert] = $wert;
             } else {
-              trigger_error("Unerlaubter Name für ein HTML-Attribut : '" .
+              trigger_error("Unerlaubter Name fÃ¼r ein HTML-Attribut : '" .
                             $wert . "'", E_USER_ERROR);
             }
           } else {
@@ -124,7 +124,7 @@ class HTMLempty
             if (preg_match('/^[a-zA-Z.:][\w\-_.:]*$/i', $key)) {
               $this->_attribute[$key] = $wert;
             } else {
-              trigger_error("Unerlaubter Name für ein HTML-Attribut : '" .
+              trigger_error("Unerlaubter Name fÃ¼r ein HTML-Attribut : '" .
                             $key . "'", E_USER_ERROR);
             }
           }

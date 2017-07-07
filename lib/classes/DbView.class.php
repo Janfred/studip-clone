@@ -8,7 +8,7 @@
 // DbView.class.php
 // Class to provide simple Views and Prepared Statements
 // Mainly for MySql, may work with other DBs (not tested)
-// Copyright (c) 2002 André Noack <andre.noack@gmx.net>
+// Copyright (c) 2002 AndrÃ© Noack <andre.noack@gmx.net>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@
  * Uses DB abstraction layer of PHPLib
  *
  * @access   public
- * @author   André Noack <andre.noack@gmx.net>
+ * @author   AndrÃ© Noack <andre.noack@gmx.net>
  * @package  DBTools
  */
 class DbView
@@ -313,7 +313,7 @@ class DbView
         if (!$query_list = self::$dbviews[$name]["query"])
             $this->halt("View not found: $name");
         (is_array($query_list)) ? $query = $query_list[0] : $query = $query_list;
-        $tokens = preg_split("/[\?§\&]/", $query);
+        $tokens = preg_split("/[\?Â§\&]/", $query);
         if (count($tokens) > 1) {
             $types = [];
             $token = 0;
@@ -322,7 +322,7 @@ class DbView
                     case '?':
                         $types[$token++] = 1;
                         break;
-                    case '§':
+                    case 'Â§':
                         $types[$token++] = 2;
                         break;
                     case '&':

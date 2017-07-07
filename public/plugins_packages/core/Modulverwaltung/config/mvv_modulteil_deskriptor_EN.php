@@ -55,9 +55,9 @@
 
 
 // Tabelle mvv_modulteil_deskriptor_EN
-// Es muss unterschieden werden zwischen dem Deskriptor für die Default-Sprache
-// (Übersetzer hat keine Berechtigung) und den Deskriptoren in weiteren Sprachen
-// (Übersetzer ist Schreibberechtigt)
+// Es muss unterschieden werden zwischen dem Deskriptor fÃ¼r die Default-Sprache
+// (Ãœbersetzer hat keine Berechtigung) und den Deskriptoren in weiteren Sprachen
+// (Ãœbersetzer ist Schreibberechtigt)
 $privileges = array(
     'lock_status' => array(
         'ausgelaufen'

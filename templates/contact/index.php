@@ -14,7 +14,7 @@
                     <?= _('Alle aufklappen') ?>
             <? endif; ?>
                     <?= sprintf(
-                        ngettext('(%d Eintrag)', '(%d Einträge)', $size_of_book),
+                        ngettext('(%d Eintrag)', '(%d EintrÃ¤ge)', $size_of_book),
                         $size_of_book
                     ) ?>
                 </a>

@@ -115,7 +115,7 @@ class Settings_CategoriesController extends Settings_SettingsController
         $name     = $category->name;
 
         if ($category->range_id !== $GLOBALS['user']->user_id) {
-            PageLayout::postError(_('Sie haben leider nicht die notwendige Berechtigung für diese Aktion.'))
+            PageLayout::postError(_('Sie haben leider nicht die notwendige Berechtigung fÃ¼r diese Aktion.'))
                  ->redirect('settings/categories');
             return;
         }
@@ -126,10 +126,10 @@ class Settings_CategoriesController extends Settings_SettingsController
         }
 
         if ($category->delete()) {
-            PageLayout::postSuccess(_('Kategorie "%s" gelöscht!'), $name);
+            PageLayout::postSuccess(_('Kategorie "%s" gelÃ¶scht!'), $name);
             Visibility::removePrivacySetting('kat_' . $id);
         } else {
-            PageLayout::postError(_('Kategorie "%s" konnte nicht gelöscht werden!'), $name);
+            PageLayout::postError(_('Kategorie "%s" konnte nicht gelÃ¶scht werden!'), $name);
         }
 
         $this->redirect('settings/categories');
@@ -144,14 +144,14 @@ class Settings_CategoriesController extends Settings_SettingsController
         $categories = $request['categories'];
         foreach ($categories as $id => $data) {
             if (empty($data['name'])) {
-                PageLayout::postError(_('Kategorien ohne Namen können nicht gespeichert werden!'));
+                PageLayout::postError(_('Kategorien ohne Namen kÃ¶nnen nicht gespeichert werden!'));
                 continue;
             }
             $category = Kategorie::find($id);
             $category->name    = $data['name'];
             $category->content = Studip\Markup::purifyHtml($data['content']);
             if ($category->store()) {
-                PageLayout::postSuccess(_('Kategorien geändert!'));
+                PageLayout::postSuccess(_('Kategorien geÃ¤ndert!'));
                 Visibility::renamePrivacySetting('kat_' . $category->id, $category->name);
             }
         }

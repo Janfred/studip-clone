@@ -7,7 +7,7 @@
 // This file is part of Stud.IP
 // IssueDB.class.php
 //
-// Datenbank-Abfragen für Issue.class.php
+// Datenbank-Abfragen fÃ¼r Issue.class.php
 //
 // +--------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@
  * IssueDB.class.php
  *
  *
- * @author      Till Glöggler <tgloeggl@uos.de>
+ * @author      Till GlÃ¶ggler <tgloeggl@uos.de>
  * @version     19. Oktober 2005
  * @access      protected
  * @package     raumzeit

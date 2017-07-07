@@ -32,7 +32,7 @@ jQuery(document).ready(function() {
     <fieldset>
         <legend><?= _('Herzlich willkommen!') ?></legend>
 
-        <p><?= _('Bitte füllen Sie zur Anmeldung das Formular aus:') ?></p>
+        <p><?= _('Bitte fÃ¼llen Sie zur Anmeldung das Formular aus:') ?></p>
 
         <label for="username">
             <?= _('Benutzername') ?>
@@ -54,7 +54,7 @@ jQuery(document).ready(function() {
         </label>
 
         <label for="password2">
-            <?= _('Passwortbestätigung') ?>
+            <?= _('PasswortbestÃ¤tigung') ?>
             <em class="required"></em>
             <input type="password" name="password2" id="password2"
                    onchange="STUDIP.register.checkpassword2()"
@@ -125,7 +125,7 @@ jQuery(document).ready(function() {
 
             <label>
                 <input type="radio" <? if ($geschlecht == 1) echo "checked" ?> name="geschlecht" value="1">
-                <?= _("männlich") ?>
+                <?= _("mÃ¤nnlich") ?>
             </label>
 
             <label>

@@ -42,7 +42,7 @@
                     <tbody>
                     <tr>
                         <td colspan="4">
-                            <?= _('Sie haben keine Kontakte ausgewählt.') ?>
+                            <?= _('Sie haben keine Kontakte ausgewÃ¤hlt.') ?>
                         </td>
                     </tr>
                     </tbody>
@@ -59,7 +59,7 @@
             <tfoot>
             <tr>
                 <td colspan="4">
-                    <? printf(_('Zum Adressbuch (%u Einträge) klicken Sie %shier%s.'),
+                    <? printf(_('Zum Adressbuch (%u EintrÃ¤ge) klicken Sie %shier%s.'),
                         $contact_count,
                         '<a href="' . $controller->link_for('contact') . '">', '</a>') ?>
                 </td>

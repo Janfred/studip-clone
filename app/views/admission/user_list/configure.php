@@ -1,14 +1,14 @@
 <?php
 use Studip\Button, Studip\LinkButton;
 
-Helpbar::get()->addPlainText(_('Info'), "Personenlisten dienen dazu, um Sonderfälle erfassen zu ".
-                                        "können, die in Anmeldeverfahren gesondert behandelt ".
-                                        "werden sollen (Härtefälle etc.).");
+Helpbar::get()->addPlainText(_('Info'), "Personenlisten dienen dazu, um SonderfÃ¤lle erfassen zu ".
+                                        "kÃ¶nnen, die in Anmeldeverfahren gesondert behandelt ".
+                                        "werden sollen (HÃ¤rtefÃ¤lle etc.).");
 Helpbar::get()->addPlainText(_('Info'), "Stellen Sie hier ein, wie die Chancen bei der ".
-                                        "Platzverteilung verändert werden sollen. Ein Wert ".
+                                        "Platzverteilung verÃ¤ndert werden sollen. Ein Wert ".
                                         "von 1 bedeutet normale Verteilung, ein Wert kleiner ".
-                                        "als 1 führt zur Benachteiligung, mit einem Wert ".
-                                        "größer als 1 werden die betreffenden Personen ".
+                                        "als 1 fÃ¼hrt zur Benachteiligung, mit einem Wert ".
+                                        "grÃ¶ÃŸer als 1 werden die betreffenden Personen ".
                                         "bevorzugt.");
 ?>
 <?= $this->render_partial('dialog/confirm_dialog') ?>
@@ -77,7 +77,7 @@ Helpbar::get()->addPlainText(_('Info'), "Stellen Sie hier ein, wie die Chancen b
             <?= _('Personen') ?>
             <span class="actions">
                 <?= MultiPersonSearch::get('add_userlist_member_' . $userlist_id)
-                    ->setTitle(_('Personen zur Liste hinzufügen'))
+                    ->setTitle(_('Personen zur Liste hinzufÃ¼gen'))
                     ->setSearchObject($userSearch)
                     ->setDefaultSelectedUser(array_map(function ($u) { return $u->id; }, $users))
                     ->setDataDialogStatus(Request::isXhr())

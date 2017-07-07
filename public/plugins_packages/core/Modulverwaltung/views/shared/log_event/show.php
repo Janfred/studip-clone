@@ -55,13 +55,13 @@ use Studip\Button, Studip\LinkButton;
         <?= sprintf(_('Eintrag %s - %s von %s'), $start + 1, $start + count($log_events), $num_entries) ?>
         <input type="hidden" name="start" value="<?= $start ?>">
         <? if ($start > 0): ?>
-          <?= Button::create('<< '. _("Zurück"), 'back',array('data-dialog' => '')) ?>
+          <?= Button::create('<< '. _("ZurÃ¼ck"), 'back',array('data-dialog' => '')) ?>
         <? endif ?>
         <? if ($start + count($log_events) < $num_entries): ?>
           <?= Button::create(_('Weiter') . " >>", 'forward',array('data-dialog' => '')) ?>
         <? endif ?>
     <? else: ?>
-      <?= _('keine Einträge gefunden') ?>
+      <?= _('keine EintrÃ¤ge gefunden') ?>
     <? endif ?>
     </p>
   <? endif ?>

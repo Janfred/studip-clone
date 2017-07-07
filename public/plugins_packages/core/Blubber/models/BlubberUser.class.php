@@ -84,18 +84,18 @@ class BlubberUser extends User implements BlubberContact {
             . $posting['root_id']
             . ($posting['context_type'] === "course" ? '?cid='.$posting['Seminar_id'] : "");
         $body = sprintf(
-            gettext("%s hat Sie in einem Blubber erwähnt. Zum Beantworten klicken auf Sie auf folgenen Link:\n\n%s\n"),
+            gettext("%s hat Sie in einem Blubber erwÃ¤hnt. Zum Beantworten klicken auf Sie auf folgenen Link:\n\n%s\n"),
             get_fullname(),
             $url
         );
         if ($posting['context_type'] === "course" && !$GLOBALS['perm']->have_studip_perm("user", $posting['Seminar_id'], $this->getId())) {
             $body .= "\n\n" .
-                    _("Sie sind noch kein Mitglied der zugehörigen Veranstaltung. Melden Sie sich erst hier an, damit Sie den Blubber sehen können: ") .
+                    _("Sie sind noch kein Mitglied der zugehÃ¶rigen Veranstaltung. Melden Sie sich erst hier an, damit Sie den Blubber sehen kÃ¶nnen: ") .
                     ($GLOBALS['SEM_CLASS'][$GLOBALS['SEM_TYPE'][Course::find($posting['Seminar_id'])->status]['class']]['studygroup_mode'] 
                         ? $GLOBALS['ABSOLUTE_URI_STUDIP']."dispatch.php/course/studygroup/details/".$posting['Seminar_id']
                         : $GLOBALS['ABSOLUTE_URI_STUDIP']."dispatch.php/course/details?sem_id=".$posting['Seminar_id']);
         }
-        $mention_text = _("Sie wurden erwähnt.");
+        $mention_text = _("Sie wurden erwÃ¤hnt.");
         restoreLanguage();
         $messaging->insert_message(
             $body,

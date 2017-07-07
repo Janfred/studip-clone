@@ -318,12 +318,12 @@ class EvaluationObjectDB extends DatabaseObject {
 
     /* check input -------------------------------------------------------- */
     if (!empty ($rangeID) && !is_scalar ($rangeID))
-      return $this->throwError (1, _("‹bergebene RangeID ist ung¸ltig."));
+      return $this->throwError (1, _("√úbergebene RangeID ist ung√ºltig."));
     if ($state != "" &&
    $state != EVAL_STATE_NEW &&
    $state != EVAL_STATE_ACTIVE &&
    $state != EVAL_STATE_STOPPED)
-      return $this->throwError (2, _("‹bergebener Status ist ung¸ltig."));
+      return $this->throwError (2, _("√úbergebener Status ist ung√ºltig."));
 
     if ( get_userid($rangeID) != NULL && $rangeID != NULL)
       $rangeID = get_userid($rangeID);

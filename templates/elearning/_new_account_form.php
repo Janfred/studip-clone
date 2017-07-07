@@ -13,7 +13,7 @@
 <tr>
     <td class="table_row_even" align="left" valign="middle" colspan="2">
     <? if ($module_title) : ?>
-        <?=sprintf( _('Hier gelangen Sie zum gewählten Lernmodul "%s":'), htmlReady($module_title) )?>
+        <?=sprintf( _('Hier gelangen Sie zum gewÃ¤hlten Lernmodul "%s":'), htmlReady($module_title) )?>
         <br>
         <br>
         <?=$module_links?>
@@ -67,7 +67,7 @@
         </td>
         <td class="table_row_even" align="left" valign="middle">
             <br>
-            <?=Button::createAccept(_('Bestätigen'), 'next')?>
+            <?=Button::createAccept(_('BestÃ¤tigen'), 'next')?>
             <br>
         </td>
     </tr>
@@ -75,7 +75,7 @@
         <td align="center" valign="middle" colspan="2">
             <br>
             <input type="HIDDEN" name="assign" value="1">
-            <?=Button::create('<< ' . _('Zurück'), 'go_back')?>
+            <?=Button::create('<< ' . _('ZurÃ¼ck'), 'go_back')?>
         </td>
     </tr>
 <? elseif ($step == 'new_account') : ?>
@@ -83,7 +83,7 @@
         <td class="table_row_even" align="left" valign="middle" colspan="2">
             <br>
             <font size="-1">
-            <?=sprintf(_("Geben Sie nun ein Passwort für Ihren neuen Benutzeraccount in %s ein."),  htmlReady($cms_title))?>
+            <?=sprintf(_("Geben Sie nun ein Passwort fÃ¼r Ihren neuen Benutzeraccount in %s ein."),  htmlReady($cms_title))?>
             </font>
             <br>
         </td>
@@ -123,7 +123,7 @@
         </td>
         <td class="table_row_even" align="left" valign="middle">
             <br>
-            <?=Button::createAccept(_('Bestätigen'), 'next')?>
+            <?=Button::createAccept(_('BestÃ¤tigen'), 'next')?>
             <br>
         </td>
     </tr>
@@ -131,7 +131,7 @@
         <td align="center" valign="middle" colspan="2">
             <br>
             <input type="HIDDEN" name="assign" value="1">
-            <?=Button::create('<< ' . _('Zurück'), 'go_back')?>
+            <?=Button::create('<< ' . _('ZurÃ¼ck'), 'go_back')?>
         </td>
     </tr>
 <? else : ?>
@@ -139,21 +139,21 @@
     <td class="table_row_even" align="left" valign="middle" colspan="2">
     <font size="-1">
     <? if ($is_connected) : ?>
-        <?=sprintf(_("Ihr Stud.IP-Account wurde bereits mit einem %s-Account verknüpft. Wenn Sie den verknüpften "
+        <?=sprintf(_("Ihr Stud.IP-Account wurde bereits mit einem %s-Account verknÃ¼pft. Wenn Sie den verknÃ¼pften "
                     ."Account durch einen anderen, bereits existierenden Account ersetzen wollen, klicken Sie auf "
                     ."\"zuordnen\"."), $cms_title)?>
         <br>
         <br>
     <? else :?>
-        <?=sprintf(_("Wenn Sie innerhalb von %s bereits über einen BenutzerInnen-Account verfügen, können Sie ihn "
-                    ."jetzt \"zuordnen\". Anderenfalls wird automatisch ein neuer Account in %s für Sie erstellt, "
+        <?=sprintf(_("Wenn Sie innerhalb von %s bereits Ã¼ber einen BenutzerInnen-Account verfÃ¼gen, kÃ¶nnen Sie ihn "
+                    ."jetzt \"zuordnen\". Anderenfalls wird automatisch ein neuer Account in %s fÃ¼r Sie erstellt, "
                     ."wenn Sie auf \"weiter\" klicken."), $cms_title, $cms_title)?>
         <br>
         <br>
     <? endif ?>
 
     <center>
-    <?=Button::create('<< ' . _('Zurück'), 'go_back')?>
+    <?=Button::create('<< ' . _('ZurÃ¼ck'), 'go_back')?>
     <?=Button::create(_('Zuordnen'), 'assign', array('title' => _('Bestehenden Account zuordnen')))?>
     <? if (! $is_connected) : ?>
         <?=Button::create(_('Weiter') . ' >>', 'next')?>

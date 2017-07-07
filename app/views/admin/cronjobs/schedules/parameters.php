@@ -44,7 +44,7 @@
     <? elseif ($data['type'] === 'select'): ?>
         <select name="parameters[<?= $task->task_id ?>][<?= htmlReady($key) ?>]">
         <? if ($data['status'] === 'optional'): ?>
-            <option value=""><?= _('Bitte wählen Sie einen Wert aus') ?></option>
+            <option value=""><?= _('Bitte wÃ¤hlen Sie einen Wert aus') ?></option>
         <? endif; ?>
         <? foreach ($data['values'] as $k => $l): ?>
             <option value="<?= htmlReady($k) ?>"

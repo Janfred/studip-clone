@@ -240,13 +240,13 @@ class FileController extends AuthenticatedController
 
             if ($file_ref->name) {
                 if ($file_ref->store()) {
-                    PageLayout::postSuccess(_('Änderungen gespeichert!'));
+                    PageLayout::postSuccess(_('Ã„nderungen gespeichert!'));
                 } else {
-                    PageLayout::postError(_('Fehler beim Speichern der Änderungen!'));
+                    PageLayout::postError(_('Fehler beim Speichern der Ã„nderungen!'));
                 }
                 $this->redirectToFolder($this->folder);
             } else {
-                PageLayout::postError(_('Bitte geben Sie einen Namen für die Datei ein!'));
+                PageLayout::postError(_('Bitte geben Sie einen Namen fÃ¼r die Datei ein!'));
             }
         }
     }
@@ -287,7 +287,7 @@ class FileController extends AuthenticatedController
                 }
 
             } else {
-                $this->errors[] = _('Es wurde keine neue Dateiversion gewählt!');
+                $this->errors[] = _('Es wurde keine neue Dateiversion gewÃ¤hlt!');
             }
 
             if ($this->errors) {
@@ -694,9 +694,9 @@ class FileController extends AuthenticatedController
         }
 
         if ($folder->deleteFile($file_ref->id)) {
-            PageLayout::postSuccess(_('Datei wurde gelöscht.'));
+            PageLayout::postSuccess(_('Datei wurde gelÃ¶scht.'));
         } else {
-            PageLayout::postError(_('Datei konnte nicht gelöscht werden.'));
+            PageLayout::postError(_('Datei konnte nicht gelÃ¶scht werden.'));
         }
         $this->redirectToFolder($folder);
     }
@@ -813,7 +813,7 @@ class FileController extends AuthenticatedController
                     );
                     $this->render_nothing();
                 } else {
-                    PageLayout::postSuccess(_('Datei wurde hinzugefügt.'));
+                    PageLayout::postSuccess(_('Datei wurde hinzugefÃ¼gt.'));
 
                     $redirect = 'files/index/' . $folder_id;
                     if ($this->to_folder_type->range_type === 'course') {
@@ -822,14 +822,14 @@ class FileController extends AuthenticatedController
                     $this->redirect($redirect);
                 }
             } else {
-                PageLayout::postError(_('Konnte die Datei nicht hinzufügen.'), [$error]);
+                PageLayout::postError(_('Konnte die Datei nicht hinzufÃ¼gen.'), [$error]);
             }
         }
 
         if (Request::get('plugin')) {
             $this->filesystemplugin = PluginManager::getInstance()->getPlugin(Request::get('plugin'));
             PageLayout::setTitle(sprintf(
-                _('Datei hinzufügen von %s'),
+                _('Datei hinzufÃ¼gen von %s'),
                 $this->filesystemplugin->getPluginName()
             ));
 
@@ -976,7 +976,7 @@ class FileController extends AuthenticatedController
                     $this->render_nothing();
                 }
             } else {
-                PageLayout::postError(_('Die angegebene URL ist ungültig.'));
+                PageLayout::postError(_('Die angegebene URL ist ungÃ¼ltig.'));
             }
         }
     }
@@ -1022,7 +1022,7 @@ class FileController extends AuthenticatedController
             $folder_type = Request::get('folder_type', 'StandardFolder');
             if (!is_subclass_of($folder_type, 'FolderType')) {
                 throw new Exception(
-                    _('Der gewünschte Ordnertyp ist ungültig!')
+                    _('Der gewÃ¼nschte Ordnertyp ist ungÃ¼ltig!')
                 );
             }
             $new_folder = new $folder_type();
@@ -1115,9 +1115,9 @@ class FileController extends AuthenticatedController
         $parent_folder = $folder->getParent();
 
         if ($folder->delete()) {
-            PageLayout::postSuccess(_('Ordner wurde gelöscht!'));
+            PageLayout::postSuccess(_('Ordner wurde gelÃ¶scht!'));
         } else {
-            PageLayout::postError(_('Ordner konnte nicht gelöscht werden!'));
+            PageLayout::postError(_('Ordner konnte nicht gelÃ¶scht werden!'));
         }
         $this->redirectToFolder($parent_folder);
     }
@@ -1230,16 +1230,16 @@ class FileController extends AuthenticatedController
             if (empty($errors) || $count_files > 0 || $count_folders > 0) {
                 if (count($filerefs) == 1) {
                     if ($source_folder) {
-                        PageLayout::postSuccess(_('Der Ordner wurde gelöscht!'));
+                        PageLayout::postSuccess(_('Der Ordner wurde gelÃ¶scht!'));
                     } else {
-                        PageLayout::postSuccess(_('Die Datei wurde gelöscht!'));
+                        PageLayout::postSuccess(_('Die Datei wurde gelÃ¶scht!'));
                     }
                 } elseif ($count_files > 0 && $count_folders > 0) {
-                    PageLayout::postSuccess(sprintf(_('Es wurden %s Ordner und %s Dateien gelöscht!'), $count_folders, $count_files));
+                    PageLayout::postSuccess(sprintf(_('Es wurden %s Ordner und %s Dateien gelÃ¶scht!'), $count_folders, $count_files));
                 } elseif ($count_files > 0) {
-                    PageLayout::postSuccess(sprintf(_('Es wurden  %s Dateien gelöscht!'), $count_files));
+                    PageLayout::postSuccess(sprintf(_('Es wurden  %s Dateien gelÃ¶scht!'), $count_files));
                 } else {
-                    PageLayout::postSuccess(sprintf(_('Es wurden %s Ordner gelöscht!'), $count_folders));
+                    PageLayout::postSuccess(sprintf(_('Es wurden %s Ordner gelÃ¶scht!'), $count_folders));
                 }
             } else {
                 PageLayout::postError(_('Es ist ein Fehler aufgetreten!'), $errors);

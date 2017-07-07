@@ -52,7 +52,7 @@ class ExternElementMainNews extends ExternElementMain {
                 'copyright', 'author', 'showdateauthor', 'notauthorlink'
         );
         $this->real_name = _("Grundeinstellungen");
-        $this->description = _("In den Grundeinstellungen können Sie allgemeine Daten des Moduls ändern.");
+        $this->description = _("In den Grundeinstellungen kÃ¶nnen Sie allgemeine Daten des Moduls Ã¤ndern.");
         parent::__construct($module_name, $data_fields, $field_names, $config);
     }
     
@@ -121,7 +121,7 @@ class ExternElementMainNews extends ExternElementMain {
         $table .= $edit_form->editRadioGeneric("showdateauthor", $title, $info, $values, $names);
         
         $title = _("Autorenname nicht verlinken:");
-        $info = _("Wählen Sie diese Option, wenn der Autorenname nicht auf das Modul Personendetails verlinkt werden soll.");
+        $info = _("WÃ¤hlen Sie diese Option, wenn der Autorenname nicht auf das Modul Personendetails verlinkt werden soll.");
         $values = "1";
         $names = "";
         $table .= $edit_form->editCheckboxGeneric("notauthorlink", $title, $info, $values, $names);
@@ -132,21 +132,21 @@ class ExternElementMainNews extends ExternElementMain {
         $headline = $edit_form->editHeadline(_("Weitere Angaben"));
         
         $title = _("Namensformat:");
-        $info = _("Wählen Sie, wie Personennamen formatiert werden sollen.");
+        $info = _("WÃ¤hlen Sie, wie Personennamen formatiert werden sollen.");
         $values = array("", "no_title_short", "no_title", "no_title_rev", "full", "full_rev", "last");
         $names = array(_("keine Auswahl"), _("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
                 _("Dr. Peter Meyer"), _("Meyer, Peter, Dr."), _("Meyer"));
         $table = $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
         
         $title = _("Datumsformat:");
-        $info = _("Wählen Sie, wie Datumsangaben formatiert werden sollen.");
+        $info = _("WÃ¤hlen Sie, wie Datumsangaben formatiert werden sollen.");
         $values = array("%d. %b. %Y", "%d.%m.%Y", "%d.%m.%y", "%d. %B %Y", "%m/%d/%y");
         $names = array(_("25. Nov. 2003"), "25.11.2003", "25.11.03",
                 _("25. November 2003"), "11/25/03");
         $table .= $edit_form->editOptionGeneric("dateformat", $title, $info, $values, $names);
         
         $title = _("Sprache:");
-        $info = _("Wählen Sie eine Sprache für die Datumsangaben aus.");
+        $info = _("WÃ¤hlen Sie eine Sprache fÃ¼r die Datumsangaben aus.");
         $values = array("", "de_DE", "en_GB");
         $names = array(_("keine Auswahl"), _("Deutsch"), _("Englisch"));
         $table .= $edit_form->editOptionGeneric("language", $title, $info, $values, $names);
@@ -158,7 +158,7 @@ class ExternElementMainNews extends ExternElementMain {
         $table .= $edit_form->editRadioGeneric("studiplink", $title, $info, $values, $names);
         
         $title = _("HTML-Header/Footer:");
-        $info = _("Anwählen, wenn die Seite als komplette HTML-Seite ausgegeben werden soll, z.B. bei direkter Verlinkung oder in einem Frameset.");
+        $info = _("AnwÃ¤hlen, wenn die Seite als komplette HTML-Seite ausgegeben werden soll, z.B. bei direkter Verlinkung oder in einem Frameset.");
         $values = "1";
         $names = "";
         $table .= $edit_form->editCheckboxGeneric("wholesite", $title, $info, $values, $names);
@@ -172,15 +172,15 @@ class ExternElementMainNews extends ExternElementMain {
         $table .= $edit_form->editTextfieldGeneric("title", $title, $info, 50, 200);
         
         $title = _("Keine News:");
-        $info = _("Dieser Text wird an Stelle der Tabelle ausgegeben, wenn keine News verfügbar sind.");
+        $info = _("Dieser Text wird an Stelle der Tabelle ausgegeben, wenn keine News verfÃ¼gbar sind.");
         $table .= $edit_form->editTextareaGeneric("nodatatext", $title, $info, 3, 50);
         
         $title = _("Copyright:");
-        $info = _("Geben Sie hier einen Copyright-Vermerk an. Dieser wird im Meta-Tag \"copyright\" ausgegeben, wenn Sie die Option \"HTML-Header/Footer\" angewählt haben.");
+        $info = _("Geben Sie hier einen Copyright-Vermerk an. Dieser wird im Meta-Tag \"copyright\" ausgegeben, wenn Sie die Option \"HTML-Header/Footer\" angewÃ¤hlt haben.");
         $table .= $edit_form->editTextfieldGeneric("copyright", $title, $info, 50, 200);
         
         $title = _("Autor:");
-        $info = _("Geben Sie hier den Namen des Seitenautors an. Dieser wird im Meta-Tag \"author\" ausgegeben, wenn Sie die Option \"HTML-Header/Footer\" angewählt haben.");
+        $info = _("Geben Sie hier den Namen des Seitenautors an. Dieser wird im Meta-Tag \"author\" ausgegeben, wenn Sie die Option \"HTML-Header/Footer\" angewÃ¤hlt haben.");
         $table .= $edit_form->editTextfieldGeneric("author", $title, $info, 50, 200);
         
         $content_table .= $edit_form->editContentTable($headline, $table);

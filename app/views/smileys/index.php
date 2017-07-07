@@ -30,7 +30,7 @@ $data = array_filter($data);
 <? if (Smiley::getShort()): ?>
     <li <? if ($view === 'short') echo 'class="current"'; ?>>
         <a href="<?= $controller->url_for('smileys/index/short') ?>" data-dialog>
-            <?= _('Kürzel') ?>
+            <?= _('KÃ¼rzel') ?>
         </a>
     </li>
 <? endif; ?>
@@ -73,7 +73,7 @@ $data = array_filter($data);
                         <tr>
                             <th><?= _('Bild') ?></th>
                             <th><?= _('Code') ?></th>
-                            <th><?= _('Kürzel') ?></th>
+                            <th><?= _('KÃ¼rzel') ?></th>
                         <? if ($favorites_activated): ?>
                             <th class="actions">
                                 <abbr title="<?= _('Favorit') ?>">

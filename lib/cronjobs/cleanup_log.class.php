@@ -37,7 +37,7 @@ class CleanupLogJob extends CronJob
      */
     public static function getName()
     {
-        return _('Logs aufr‰umen');
+        return _('Logs aufr√§umen');
     }
 
     /**
@@ -45,8 +45,8 @@ class CleanupLogJob extends CronJob
      */
     public static function getDescription()
     {
-        return _('Entfernt abgelaufene Log-Eintr‰ge sowohl f¸r das '
-                .'Eventsystem als auch f¸r die Cronjobs');
+        return _('Entfernt abgelaufene Log-Eintr√§ge sowohl f√ºr das '
+                .'Eventsystem als auch f√ºr die Cronjobs');
     }
 
     /**
@@ -61,21 +61,21 @@ class CleanupLogJob extends CronJob
                 'type'        => 'boolean',
                 'default'     => true,
                 'status'      => 'optional',
-                'description' => _('Sollen die Logeintr‰ge f¸r Cronjobs auch gelˆscht werden'),
+                'description' => _('Sollen die Logeintr√§ge f√ºr Cronjobs auch gel√∂scht werden'),
             ),
             'cronjobs-success' => array(
                 'type'        => 'integer',
                 'default'     => 7,
                 'status'      => 'optional',
-                'description' => _('Nach wievielen Tagen sollen Logeintr‰ge f¸r '
-                                  .'erfolgreiche Cronjobs gelˆscht werden (0 f¸r nie)'),
+                'description' => _('Nach wievielen Tagen sollen Logeintr√§ge f√ºr '
+                                  .'erfolgreiche Cronjobs gel√∂scht werden (0 f√ºr nie)'),
             ),
             'cronjobs-error' => array(
                 'type'        => 'integer',
                 'default'     => 28,
                 'status'      => 'optional',
-                'description' => _('Nach wievielen Tagen sollen Logeintr‰ge f¸r '
-                                  .'fehlgeschlagene Cronjobs gelˆscht werden (0 f¸r nie)'),
+                'description' => _('Nach wievielen Tagen sollen Logeintr√§ge f√ºr '
+                                  .'fehlgeschlagene Cronjobs gel√∂scht werden (0 f√ºr nie)'),
             ),
         );
     }

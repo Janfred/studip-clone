@@ -58,7 +58,7 @@ class Calendar_ContentboxController extends StudipController {
 
         // Forge title
         if ($this->termine) {
-            $this->title = sprintf(_('Termine für die Zeit vom %s bis zum %s'), strftime("%d. %B %Y", $this->start), strftime("%d. %B %Y", $this->start + $this->timespan));
+            $this->title = sprintf(_('Termine fÃ¼r die Zeit vom %s bis zum %s'), strftime("%d. %B %Y", $this->start), strftime("%d. %B %Y", $this->start + $this->timespan));
         } else {
             $this->title = _('Termine');
         }
@@ -77,7 +77,7 @@ class Calendar_ContentboxController extends StudipController {
             // Build info
             $info = array();
             if ($courseDate->dozenten[0]) {
-                $info[_('Durchführende Dozenten')] = join(', ', $courseDate->dozenten->getFullname());
+                $info[_('DurchfÃ¼hrende Dozenten')] = join(', ', $courseDate->dozenten->getFullname());
             }
             if ($courseDate->statusgruppen[0]) {
                 $info[_('Beteiligte Gruppen')] = join(', ', $courseDate->statusgruppen->getValue('name'));
@@ -139,7 +139,7 @@ class Calendar_ContentboxController extends StudipController {
                 'room' => $termin->getLocation(),
                 'info' => array(
                     _('Kategorie') => $termin->toStringCategories(),
-                    _('Priorität') => $termin->toStringPriority(),
+                    _('PrioritÃ¤t') => $termin->toStringPriority(),
                     _('Sichtbarkeit') => $termin->toStringAccessibility(),
                     _('Wiederholung') => $termin->toStringRecurrence())
             );

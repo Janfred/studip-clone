@@ -97,8 +97,8 @@ class ExternModuleTemplateLecturedetails extends ExternModule {
         $this->elements['LinkInternPersondetails']->real_name = _("Verlinkung zum Modul MitarbeiterInnendetails");
         $this->elements['LinkInternPersondetails']->link_module_type = array(2, 14);
         $this->elements['TemplateLectureData']->real_name = _("Haupttemplate");
-        $this->elements['TemplateNews']->real_name = _("Template für News");
-        $this->elements['TemplateStudipData']->real_name = _("Template für statistische Daten aus Stud.IP");
+        $this->elements['TemplateNews']->real_name = _("Template fÃ¼r News");
+        $this->elements['TemplateStudipData']->real_name = _("Template fÃ¼r statistische Daten aus Stud.IP");
 
     }
 
@@ -114,7 +114,7 @@ class ExternModuleTemplateLecturedetails extends ExternModule {
     }
 
     function getMarkerDescription ($element_name) {
-        $markers['TemplateLectureData'][] = array('__GLOBAL__', _("Globale Variablen (gültig im gesamten Template)."));
+        $markers['TemplateLectureData'][] = array('__GLOBAL__', _("Globale Variablen (gÃ¼ltig im gesamten Template)."));
         $markers['TemplateLectureData'][] = array('###STUDIP-EDIT-HREF###', '');
         $markers['TemplateLectureData'][] = array('###STUDIP-REGISTER-HREF###', '');
 
@@ -169,8 +169,8 @@ class ExternModuleTemplateLecturedetails extends ExternModule {
 
         $this->insertDatafieldMarkers('sem', $markers, 'TemplateLectureData');
 
-        $markers['TemplateLectureData'][] = array('###NEWS###', _("Inhalt aus dem Template für News"));
-        $markers['TemplateLectureData'][] = array('###STUDIP-DATA###', 'Inhalt aus dem Template für statistische Daten aus Stud.IP');
+        $markers['TemplateLectureData'][] = array('###NEWS###', _("Inhalt aus dem Template fÃ¼r News"));
+        $markers['TemplateLectureData'][] = array('###STUDIP-DATA###', 'Inhalt aus dem Template fÃ¼r statistische Daten aus Stud.IP');
 
         $markers['TemplateLectureData'][] = array('<!-- BEGIN RANGE-PATHES -->', '');
         $markers['TemplateLectureData'][] = array('<!-- BEGIN RANGE-PATH -->', '');
@@ -191,7 +191,7 @@ class ExternModuleTemplateLecturedetails extends ExternModule {
         $markers['TemplateNews'][] = array('###NEWS_DATE###', '');
         $markers['TemplateNews'][] = array('###NEWS_ADMIN-MESSAGE###', '');
         $markers['TemplateNews'][] = array('###NEWS_NO###', '');
-        $markers['TemplateNews'][] = array('###FULLNAME###', _("Vollständiger Name des Autors."));
+        $markers['TemplateNews'][] = array('###FULLNAME###', _("VollstÃ¤ndiger Name des Autors."));
         $markers['TemplateNews'][] = array('###LASTNAME###', _("Nachname des Autors."));
         $markers['TemplateNews'][] = array('###FIRSTNAME###', _("Vorname des Autors."));
         $markers['TemplateNews'][] = array('###TITLEFRONT###', _("Titel des Autors (vorangestellt)."));

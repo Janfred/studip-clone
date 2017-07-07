@@ -58,7 +58,7 @@ $info = ExternConfig::GetInfo($range_id, $config_id);
         <td><?= $info["make_date"] ?></td>
     </tr>
     <tr>
-        <td><?= _('Letzte Änderung') ?></td>
+        <td><?= _('Letzte Ã„nderung') ?></td>
         <td><?= $info["change_date"] ?></td>
     </tr>
     <tr>
@@ -72,24 +72,24 @@ if ($info['module_type'] != 0)  :?>
     <? if ($info['level'] == 1) : ?>
         <p><strong><?= _('Direkter Link') ?></strong></p>
         <blockquote><a href="<?= $info['link'] ?>" target=\"_blank\"><?= $info['link_br'] ?></a></blockquote>
-        <p><?= _('Diese Adresse können Sie in einen Link auf Ihrer Website integrieren, um auf die Ausgabe des Moduls zu verweisen.') ?></p>
+        <p><?= _('Diese Adresse kÃ¶nnen Sie in einen Link auf Ihrer Website integrieren, um auf die Ausgabe des Moduls zu verweisen.') ?></p>
     <? endif ?>
 
     <? if (Config::get()->EXTERN_SRI_ENABLE && sri_is_enabled(Context::getId())) : ?>
         <p><strong><?= _("Stud.IP-Remote-Include (SRI)  Schnittstelle") ?></strong></p>
-        <p><?= _('Der unten aufgeführte Textblock ermöglicht Ihnen den Zugriff auf die Stud.IP-Remote-Include-Schnittstelle (SRI).') ?></p>
+        <p><?= _('Der unten aufgefÃ¼hrte Textblock ermÃ¶glicht Ihnen den Zugriff auf die Stud.IP-Remote-Include-Schnittstelle (SRI).') ?></p>
         <blockquote>
             <pre><?= $info['sri'] ?></pre>
         </blockquote>
         <p><?= _('Kopieren Sie dieses Code-Schnipsel in eine beliebige Stelle im HTML-Quelltext einer Seite Ihrer Website.') ?></p>
-        <p><?= _('Durch eine spezielle Art des Seitenaufrufs, wird an dieser Stelle die Ausgabe des Moduls eingefügt.') ?></p>
+        <p><?= _('Durch eine spezielle Art des Seitenaufrufs, wird an dieser Stelle die Ausgabe des Moduls eingefÃ¼gt.') ?></p>
         <p><strong><?= _('Link zur SRI-Schnittstelle') ?></strong></p>
         <blockquote>
             <?= $info['link_sri'] ?>
         </blockquote>
-        <p><?= sprintf(_('Ersetzen Sie %s durch die URL der Seite, in die Sie die Ausgabe des Moduls einfügen wollen. Diese Seite muss obigen Code-Schnipsel enthalten.'), _('URL_DER_INCLUDE_SEITE')) ?></p>
+        <p><?= sprintf(_('Ersetzen Sie %s durch die URL der Seite, in die Sie die Ausgabe des Moduls einfÃ¼gen wollen. Diese Seite muss obigen Code-Schnipsel enthalten.'), _('URL_DER_INCLUDE_SEITE')) ?></p>
     <? endif ?>
 <? endif ?>
 
 
-<?= LinkButton::create('<<  ' . _('Zurück'), URLHelper::getURL('', ['list' => true])); ?>
+<?= LinkButton::create('<<  ' . _('ZurÃ¼ck'), URLHelper::getURL('', ['list' => true])); ?>

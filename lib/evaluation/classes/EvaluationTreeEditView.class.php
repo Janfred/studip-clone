@@ -286,7 +286,7 @@ function showEvalTree(){
         case ARRANGMENT_BLOCK:
             $group =& $this->tree->getGroupObject($this->moveItemID);
             $title = htmlready ($group->getTitle());
-            $msg = sprintf(_("Sie haben den Gruppierungsblock <b>%s</b> zum Verschieben ausgewählt. Sie können ihn nun in einen leeren Gruppierungsblock, einen Gruppierungsblock ohne Frageblöcke oder in die oberste Ebene verschieben."),$title);
+            $msg = sprintf(_("Sie haben den Gruppierungsblock <b>%s</b> zum Verschieben ausgewÃ¤hlt. Sie kÃ¶nnen ihn nun in einen leeren Gruppierungsblock, einen Gruppierungsblock ohne FrageblÃ¶cke oder in die oberste Ebene verschieben."),$title);
 
             break;
 
@@ -295,12 +295,12 @@ function showEvalTree(){
             $title = htmlready ($group->getTitle());
             if (!$title)
                 $title = NO_QUESTION_GROUP_TITLE;
-            $msg = sprintf(_("Sie haben den Fragenblock <b>%s</b> zum Verschieben ausgewählt. Sie können ihn nun in einen leeren Gruppierungsblock oder einen Gruppierungsblock mit Frageblöcke verschieben."),$title);
+            $msg = sprintf(_("Sie haben den Fragenblock <b>%s</b> zum Verschieben ausgewÃ¤hlt. Sie kÃ¶nnen ihn nun in einen leeren Gruppierungsblock oder einen Gruppierungsblock mit FrageblÃ¶cke verschieben."),$title);
             break;
 
         default:
 
-            $msg = _("Es wurde ein ungültiger Block zum verschieben ausgewählt.");
+            $msg = _("Es wurde ein ungÃ¼ltiger Block zum verschieben ausgewÃ¤hlt.");
             break;
     }
 
@@ -542,7 +542,7 @@ function getItemHeadPics ( $itemID ){
     $img->addAttr ("border","0");
     $img->addAttr ("align","baseline");
     $img->addAttr ("hspace","2");
-    $img->addString (tooltip (_("Dieser Block ist geöffnet."),true));
+    $img->addString (tooltip (_("Dieser Block ist geÃ¶ffnet."),true));
     $head = $img->createContent();
 
    } else {
@@ -555,7 +555,7 @@ function getItemHeadPics ( $itemID ){
     $img->addAttr ("border","0");
     $img->addAttr ("align","baseline");
     $img->addAttr ("hspace","2");
-    $img->addString (tooltip (_("Diesen Block öffnen."),true));
+    $img->addString (tooltip (_("Diesen Block Ã¶ffnen."),true));
 
     $a->addContent ($img);
 
@@ -578,8 +578,8 @@ function getItemHeadPics ( $itemID ){
         $group = &$this->tree->getGroupObject($itemID);
 
         $tooltip = ($group->getNumberChildren () == 0)
-            ? _("Dieser Gruppierungsblock enthält keine Blöcke.")
-            : sprintf(_("Dieser Grupppierungsblock enthält %s Blöcke."),
+            ? _("Dieser Gruppierungsblock enthÃ¤lt keine BlÃ¶cke.")
+            : sprintf(_("Dieser Grupppierungsblock enthÃ¤lt %s BlÃ¶cke."),
                 $group->getNumberChildren ());
 
         $image = ($group->getNumberChildren () == 0)
@@ -593,8 +593,8 @@ function getItemHeadPics ( $itemID ){
         $group = &$this->tree->getGroupObject($itemID);
 
         $tooltip = ($group->getNumberChildren () == 0)
-            ? _("Dieser Fragenblock enthält keine Fragen.")
-            : sprintf(_("Dieser Fragenblock enthält %s Fragen."),
+            ? _("Dieser Fragenblock enthÃ¤lt keine Fragen.")
+            : sprintf(_("Dieser Fragenblock enthÃ¤lt %s Fragen."),
                 $group->getNumberChildren ());
 
         $image = ($group->getNumberChildren () == 0)
@@ -976,7 +976,7 @@ function getItemHead($itemID){
         }
 
         $head = "&nbsp;<a class=\"tree\" href=\""
-            . URLHelper::getLink($this->getSelf("itemID={$itemID}",false)) . "\"" . tooltip(_("Diesen Block öffnen"),true) . ">";
+            . URLHelper::getLink($this->getSelf("itemID={$itemID}",false)) . "\"" . tooltip(_("Diesen Block Ã¶ffnen"),true) . ">";
 
         if ($this->tree->tree_data[$itemID]['name'] == "" && $mode == QUESTION_BLOCK)
             $head .= NO_QUESTION_GROUP_TITLE;
@@ -994,7 +994,7 @@ function getItemHead($itemID){
     else
         $itemID2 = $itemID;
 
-    // the "verschiebäfinger"
+    // the "verschiebÃ¤finger"
     if ($this->moveItemID &&
         ($this->tree->tree_data[$itemID]['parent_id'] != $this->moveItemID) &&
         ($mode == ARRANGMENT_BLOCK || $itemID == ROOT_BLOCK) &&
@@ -1011,7 +1011,7 @@ function getItemHead($itemID){
         $moveItem = "   </td>\n"
             . "   <td align=\"right\" valign=\"middle\" class=\"printhead\" nowrap=\"nowrap\">\n"
             . $this->createLinkImage(EVAL_PIC_MOVE_GROUP,
-                _("Den ausgwählten Block in diesen Block verschieben"),
+                _("Den ausgwÃ¤hlten Block in diesen Block verschieben"),
                 "&itemID=$itemID&cmd=MoveGroup",
                 NO,NULL,NO)
             . "&nbsp;";
@@ -1072,7 +1072,7 @@ function getItemHead($itemID){
 function getItemMessage($itemID, $colspan = 1)
 {
     if ($this->msg[$itemID]) {
-        $msg = explode("§", $this->msg[$itemID]);
+        $msg = explode("Â§", $this->msg[$itemID]);
 
         if ($msg[0] == 'msg') {
             $msg[0] = 'success';
@@ -1160,7 +1160,7 @@ function parseCommand(){
 
        if (!$found){
         foreach( $_REQUEST as $key => $value ) {
-            if( preg_match( "/cmd_(.*)_#(.*)_§(.*)_button?/", $key, $command ) )
+            if( preg_match( "/cmd_(.*)_#(.*)_Â§(.*)_button?/", $key, $command ) )
                 break;
         }
        }
@@ -1193,7 +1193,7 @@ function execCommandCancel(){
     $itemID = Request::option('startItemID');
 
     $this->anchor = $itemID;
-    $this->msg[$this->startItemID] .= "info§"
+    $this->msg[$this->startItemID] .= "infoÂ§"
         . sprintf(_("Die Aktion wurde abgebrochen."));
     return false;
 }
@@ -1229,8 +1229,8 @@ function execCommandUpdateItem ( $no_delete = false ){
         if ($this->tree->eval->isError)
             return EvalCommon::showErrorReport ($this->tree->eval,
                 _("Fehler beim Einlesen (root-item)"));
-        $this->msg[$this->itemID] = "msg§"
-            . _("Veränderungen wurden gespeichert.");
+        $this->msg[$this->itemID] = "msgÂ§"
+            . _("VerÃ¤nderungen wurden gespeichert.");
 
         break;
      case ARRANGMENT_BLOCK:
@@ -1243,8 +1243,8 @@ function execCommandUpdateItem ( $no_delete = false ){
         if ($group->isError)
             return EvalCommon::showErrorReport ($this->tree->eval,
                 _("Fehler beim Einlesen (Block)"));
-        $this->msg[$this->itemID] = "msg§"
-            . _("Veränderungen wurden gespeichert.");
+        $this->msg[$this->itemID] = "msgÂ§"
+            . _("VerÃ¤nderungen wurden gespeichert.");
         $group = null;
         break;
      case QUESTION_BLOCK:
@@ -1268,14 +1268,14 @@ function execCommandUpdateItem ( $no_delete = false ){
             }
             if ($no_answers == 1){
                 if ($this->msg[$this->itemID])
-                    $this->msg[$this->itemID] .= "<br>"._("Einer Frage wurden noch keine Antwortenmöglichkeiten zugewiesen.");
+                    $this->msg[$this->itemID] .= "<br>"._("Einer Frage wurden noch keine AntwortenmÃ¶glichkeiten zugewiesen.");
                 else
-                    $this->msg[$this->itemID] .= "info§"._("Einer Frage  wurden noch keine Antwortenmöglichkeiten zugewiesen.");
+                    $this->msg[$this->itemID] .= "infoÂ§"._("Einer Frage  wurden noch keine AntwortenmÃ¶glichkeiten zugewiesen.");
             } elseif ($no_answers > 1){
                 if ($this->msg[$this->itemID])
-                    $this->msg[$this->itemID] .= "<br>".sprintf(_("%s Fragen wurden noch keine Antwortenmöglichkeiten zugewiesen."),$no_answers);
+                    $this->msg[$this->itemID] .= "<br>".sprintf(_("%s Fragen wurden noch keine AntwortenmÃ¶glichkeiten zugewiesen."),$no_answers);
                 else
-                    $this->msg[$this->itemID] .= "info§".sprintf(_("%s Fragen wurden noch keine Antwortenmöglichkeiten zugewiesen."),$no_answers);
+                    $this->msg[$this->itemID] .= "infoÂ§".sprintf(_("%s Fragen wurden noch keine AntwortenmÃ¶glichkeiten zugewiesen."),$no_answers);
             }
 
         }
@@ -1284,10 +1284,10 @@ function execCommandUpdateItem ( $no_delete = false ){
             return EvalCommon::showErrorReport ($this->tree->eval,
                 _("Fehler beim Einlesen (Fragenblock)"));
         if ($this->msg[$this->itemID])
-            $this->msg[$this->itemID] .= "<br>"._("Veränderungen wurden gespeichert.");
+            $this->msg[$this->itemID] .= "<br>"._("VerÃ¤nderungen wurden gespeichert.");
         else
-            $this->msg[$this->itemID] .= "msg§"
-                . _("Veränderungen wurden gespeichert.");
+            $this->msg[$this->itemID] .= "msgÂ§"
+                . _("VerÃ¤nderungen wurden gespeichert.");
 
         if ($msg)
             $this->msg[$this->itemID] = $this->msg[$this->itemID]."<br>".$msg;
@@ -1295,8 +1295,8 @@ function execCommandUpdateItem ( $no_delete = false ){
 #   }
         break;
      default:
-        $this->msg[$this->itemID] .= "info§"
-            . _("Falscher Blocktyp. Es wurden keine Veränderungen vorgenommen.");
+        $this->msg[$this->itemID] .= "infoÂ§"
+            . _("Falscher Blocktyp. Es wurden keine VerÃ¤nderungen vorgenommen.");
         break;
     }
 
@@ -1324,44 +1324,44 @@ function execCommandAssertDeleteItem(){
     $title = htmlready ($group->getTitle ());
 
     // constructing the message
-    $this->msg[$this->itemID] = "info§";
+    $this->msg[$this->itemID] = "infoÂ§";
 
     if ($group->getChildType() == "EvaluationQuestion"){
         if ($numberofchildren){
             $this->msg[$this->itemID] .= ""
             . sprintf(
-                _("Sie beabsichtigen den Fragenblock <b>%s</b> inklusive aller Fragen zu löschen. "),
+                _("Sie beabsichtigen den Fragenblock <b>%s</b> inklusive aller Fragen zu lÃ¶schen. "),
                 $title)
-            . sprintf(_("Es werden insgesamt %s Fragen gelöscht!") ,$numberofchildren);
+            . sprintf(_("Es werden insgesamt %s Fragen gelÃ¶scht!") ,$numberofchildren);
         } else {
             $this->msg[$this->itemID] .= ""
             . sprintf(
-                _("Sie beabsichtigen den Fragenblock <b>%s</b> inklusive aller Fragen zu löschen. "),
+                _("Sie beabsichtigen den Fragenblock <b>%s</b> inklusive aller Fragen zu lÃ¶schen. "),
                 $title);
         }
         $this->msg[$this->itemID] .= "<br>"
-            . _("Wollen Sie diesen Fragenblock wirklich löschen?");
+            . _("Wollen Sie diesen Fragenblock wirklich lÃ¶schen?");
     } else {
         if ($numberofchildren){
             $this->msg[$this->itemID] .= ""
             . sprintf(
-                _("Sie beabsichtigen den Gruppierungsblock <b>%s</b> inklusive aller Unterblöcke zu löschen. "),
+                _("Sie beabsichtigen den Gruppierungsblock <b>%s</b> inklusive aller UnterblÃ¶cke zu lÃ¶schen. "),
                 $title)
-            . sprintf(_("Es werden insgesamt %s Unterblöcke gelöscht!"),$numberofchildren);
+            . sprintf(_("Es werden insgesamt %s UnterblÃ¶cke gelÃ¶scht!"),$numberofchildren);
         } else {
             $this->msg[$this->itemID] .= ""
             . sprintf(
-                _("Sie beabsichtigen den Gruppierungsblock <b>%s</b> inklusive aller Unterblöcke zu löschen. "),
+                _("Sie beabsichtigen den Gruppierungsblock <b>%s</b> inklusive aller UnterblÃ¶cke zu lÃ¶schen. "),
                 $title);
         }
         $this->msg[$this->itemID] .= "<br>"
-        . _("Wollen Sie diesen Gruppierungsblock wirklich löschen?");
+        . _("Wollen Sie diesen Gruppierungsblock wirklich lÃ¶schen?");
     }
 
     $this->msg[$this->itemID] .= "<br><br>"
         . LinkButton::createAccept(_('JA!'),
                 $this->getSelf('cmd[DeleteItem]=1'),
-                array('title' => _('Löschen')))
+                array('title' => _('LÃ¶schen')))
         . "&nbsp;"
         . LinkButton::createCancel(_('NEIN!'),
                 $this->getSelf('cmd[Cancel]=1'),
@@ -1391,19 +1391,19 @@ function execCommandDeleteItem(){
 
     if ($group->isError)
         return EvalCommon::showErrorReport ($group,
-            _("Fehler beim Löschen eines Block."));
+            _("Fehler beim LÃ¶schen eines Block."));
 
     if ($group->getChildType() == "EvaluationQuestion"){
         if ($numberofchildren){
-            $this->msg[$parentID] = "msg§" . sprintf(_("Der Fragenblock <b>%s</b> und alle darin enthaltenen Fragen (insgesamt %s) wurden gelöscht. "),$title,$numberofchildren);
+            $this->msg[$parentID] = "msgÂ§" . sprintf(_("Der Fragenblock <b>%s</b> und alle darin enthaltenen Fragen (insgesamt %s) wurden gelÃ¶scht. "),$title,$numberofchildren);
         } else {
-            $this->msg[$parentID] = "msg§" . sprintf(_("Der Fragenblock <b>%s</b> wurde gelöscht. "), $title);
+            $this->msg[$parentID] = "msgÂ§" . sprintf(_("Der Fragenblock <b>%s</b> wurde gelÃ¶scht. "), $title);
         }
     } else {
         if ($numberofchildren){
-            $this->msg[$parentID] = "msg§" . sprintf(_("Der Gruppierungsblock <b>%s</b> und alle Unterblöcke (insgesamt %s) wurden gelöscht. "),$title,$numberofchildren);
+            $this->msg[$parentID] = "msgÂ§" . sprintf(_("Der Gruppierungsblock <b>%s</b> und alle UnterblÃ¶cke (insgesamt %s) wurden gelÃ¶scht. "),$title,$numberofchildren);
         } else {
-            $this->msg[$parentID] = "msg§" . sprintf(_("Der Gruppierungsblock <b>%s</b> wurde gelöscht. "), $title);
+            $this->msg[$parentID] = "msgÂ§" . sprintf(_("Der Gruppierungsblock <b>%s</b> wurde gelÃ¶scht. "), $title);
         }
     }
 
@@ -1436,7 +1436,7 @@ function execCommandAddGroup(){
         if ($this->tree->eval->isError)
             return EvalCommon::showErrorReport ($this->tree->eval,
                 _("Fehler beim Anlegen eines neuen Blocks."));
-        $this->msg[$this->itemID] = "msg§"
+        $this->msg[$this->itemID] = "msgÂ§"
             . _("Ein neuer Gruppierungsblock wurde angelegt.");
     }// group
     elseif ($mode == ARRANGMENT_BLOCK){
@@ -1446,7 +1446,7 @@ function execCommandAddGroup(){
         if ($parentgroup->isError)
             return EvalCommon::showErrorReport ($parentgroup,
                 _("Fehler beim Anlegen eines neuen Blocks."));
-        $this->msg[$this->itemID] = "msg§"
+        $this->msg[$this->itemID] = "msgÂ§"
             . _("Ein neuer Gruppierungsblock wurde angelegt.");
     }
 
@@ -1480,7 +1480,7 @@ function execCommandAddQGroup(){
         if ($this->tree->eval->isError)
             return EvalCommon::showErrorReport ($this->tree->eval,
                 _("Fehler beim Anlegen eines neuen Blocks."));
-        $this->msg[$this->itemID] = "msg§"
+        $this->msg[$this->itemID] = "msgÂ§"
             . _("Ein neuer Fragenblock wurde angelegt.");
     }// group
     elseif ($mode == ARRANGMENT_BLOCK){
@@ -1491,11 +1491,11 @@ function execCommandAddQGroup(){
             return EvalCommon::showErrorReport ($parentgroup,
                 _("Fehler beim Anlegen eines neuen Blocks."));
         if (Request::option("templateID") != "")
-            $this->msg[$this->itemID] = "msg§"
+            $this->msg[$this->itemID] = "msgÂ§"
                 . sprintf(_("Ein neuer Fragenblock mit der Antwortenvorlage <b>%s</b> wurde angelegt."),
                     htmlReady ($template->getText()));
         else
-            $this->msg[$this->itemID] = "msg§"
+            $this->msg[$this->itemID] = "msgÂ§"
                 . sprintf(_("Ein neuer Fragenblock mit keiner Antwortenvorlage wurde angelegt."),
                     1);
     }
@@ -1532,7 +1532,7 @@ function execCommandChangeTemplate(){
     } else
         $templateTitle = NO_TEMPLATE_GROUP;
 
-    $this->msg[$this->itemID] = "msg§"
+    $this->msg[$this->itemID] = "msgÂ§"
             . sprintf(_("Die Vorlage <b>%s</b> wurde dem Fragenblock zugeordnet."),
                 $templateTitle);
 
@@ -1615,11 +1615,11 @@ function execCommandAddQuestions(){
     }
 
     if ($addquestions == "1")
-        $this->msg[$this->itemID] = "msg§"
-            . _("Es wurde eine neue Frage hinzugefügt.");
+        $this->msg[$this->itemID] = "msgÂ§"
+            . _("Es wurde eine neue Frage hinzugefÃ¼gt.");
     else
-        $this->msg[$this->itemID] = "msg§"
-            . sprintf(_("Es wurden %s neue Fragen hinzugefügt."),$addquestions);
+        $this->msg[$this->itemID] = "msgÂ§"
+            . sprintf(_("Es wurden %s neue Fragen hinzugefÃ¼gt."),$addquestions);
 
     $this->execCommandUpdateItem( NO );
 
@@ -1651,14 +1651,14 @@ function execCommandDeleteQuestions(){
     }
 
     if ($deletecount == "1")
-        $this->msg[$this->itemID] = "msg§"
-            . _("Es wurde eine Frage gelöscht.");
+        $this->msg[$this->itemID] = "msgÂ§"
+            . _("Es wurde eine Frage gelÃ¶scht.");
     elseif ($deletecount > 1)
-        $this->msg[$this->itemID] = "msg§"
-            . sprintf(_("Es wurden %s Fragen gelöscht."),$deletecount);
+        $this->msg[$this->itemID] = "msgÂ§"
+            . sprintf(_("Es wurden %s Fragen gelÃ¶scht."),$deletecount);
     else
-        $this->msg[$this->itemID] = "msg§"
-            . _("Es wurde keine Frage gelöscht.");
+        $this->msg[$this->itemID] = "msgÂ§"
+            . _("Es wurde keine Frage gelÃ¶scht.");
 
     $this->execCommandUpdateItem();
 
@@ -1686,11 +1686,11 @@ function execCommandQuestionAnswersCreate(){
     $question = new EvaluationQuestion($questionID);
     $questiontitle = htmlReady($question->getText());
 
-    $this->msg[$this->itemID] = "msg§"
-#           . sprintf(_("Sie können nun der Frage <b>%s</b> im rechten Bereich Antworten zuweisen.")
+    $this->msg[$this->itemID] = "msgÂ§"
+#           . sprintf(_("Sie kÃ¶nnen nun der Frage <b>%s</b> im rechten Bereich Antworten zuweisen.")
 #               , $questiontitle)
 #           . "<br>"
-            . _("Veränderungen wurden gespeichert.");
+            . _("VerÃ¤nderungen wurden gespeichert.");
 
     return true;
 }
@@ -1708,8 +1708,8 @@ function execCommandQuestionAnswersCreated(){
     $question = new EvaluationQuestion(Request::get("questionID"));
     $title = htmlready ($question->getTitle());
 
-    $this->msg[$this->itemID] = "msg§"
-        . sprintf(_("Der Frage <b>%s</b> wurden Antwortenmöglichkeiten zugewiesen."),$title);
+    $this->msg[$this->itemID] = "msgÂ§"
+        . sprintf(_("Der Frage <b>%s</b> wurden AntwortenmÃ¶glichkeiten zugewiesen."),$title);
 
     $this->changed = true;
 
@@ -1727,7 +1727,7 @@ function execCommandMoveQuestionUp(){
     $this->execCommandUpdateItem();
 
     foreach( $_REQUEST as $key => $value ) {
-        if( preg_match( "/cmd_(.*)_#(.*)_§(.*)_button(_x)?/", $key, $command ) )
+        if( preg_match( "/cmd_(.*)_#(.*)_Â§(.*)_button(_x)?/", $key, $command ) )
             break;
     }
 
@@ -1738,13 +1738,13 @@ function execCommandMoveQuestionUp(){
         "up");
 
     if ($oldposition == 0)
-        $this->msg[$this->itemID] = "msg§"
+        $this->msg[$this->itemID] = "msgÂ§"
             . _("Die Frage wurde von Position 1 an die letzte Stelle verschoben.");
     else
-        $this->msg[$this->itemID] = "msg§"
+        $this->msg[$this->itemID] = "msgÂ§"
             . sprintf(_("Die Frage wurde von Position %s nach oben verschoben."), $oldposition+1);
 
-    $this->msg[$this->itemID] .= "<br>". _("Veränderungen wurden gespeichert.");
+    $this->msg[$this->itemID] .= "<br>". _("VerÃ¤nderungen wurden gespeichert.");
     return true;
 }
 
@@ -1759,7 +1759,7 @@ function execCommandMoveQuestionDown(){
     $this->execCommandUpdateItem();
 
     foreach( $_REQUEST as $key => $value ) {
-        if( preg_match( "/cmd_(.*)_#(.*)_§(.*)_button(_x)?/", $key, $command ) )
+        if( preg_match( "/cmd_(.*)_#(.*)_Â§(.*)_button(_x)?/", $key, $command ) )
             break;
     }
 
@@ -1770,14 +1770,14 @@ function execCommandMoveQuestionDown(){
         "down");
 
     if ($oldposition == $numberchild-1)
-    $this->msg[$this->itemID] = "msg§"
+    $this->msg[$this->itemID] = "msgÂ§"
             . sprintf(_("Die Frage wurde von Position %s an die erste Stelle verschoben.")
                 , $oldposition+1);
     else
-    $this->msg[$this->itemID] = "msg§"
+    $this->msg[$this->itemID] = "msgÂ§"
             . sprintf(_("Die Frage wurde von Position %s nach oben verschoben."), $oldposition+1);
 
-    $this->msg[$this->itemID] .= "<br>". _("Veränderungen wurden gespeichert.");
+    $this->msg[$this->itemID] .= "<br>". _("VerÃ¤nderungen wurden gespeichert.");
     return true;
 }
 
@@ -1796,7 +1796,7 @@ function execCommandMove(){
 
     $this->swapPosition($this->itemID, $group->objectID, $oldposition, $direction);
 
-    $this->msg[$this->itemID] = "msg§ ";
+    $this->msg[$this->itemID] = "msgÂ§ ";
     if (($this->itemID != ROOT_BLOCK)
         && ($group->getChildType() == "EvaluationQuestion"))
         $this->msg[$this->itemID] .= _("Fragenblock");
@@ -1833,15 +1833,15 @@ function execCommandMoveGroup(){
     $moveGroupeID = Request::option('moveGroupeID');
 
     if (!$this->moveItemID){
-        $this->msg[$this->itemID] = "msg§"
-            . _("Fehler beim Verschieben eines Blocks. Es wurde kein Block zum verschieben ausgewählt.");
+        $this->msg[$this->itemID] = "msgÂ§"
+            . _("Fehler beim Verschieben eines Blocks. Es wurde kein Block zum verschieben ausgewÃ¤hlt.");
         return false;
     }
 
     $mode = $this->getInstance ($this->itemID);
 
     if (!$mode){
-        $this->msg[$this->itemID] = "msg§"
+        $this->msg[$this->itemID] = "msgÂ§"
             . _("Fehler beim Verschieben eines Blocks. Der Zielblock besitzt keinen Typ.");
         return false;
     }
@@ -1849,7 +1849,7 @@ function execCommandMoveGroup(){
     $move_mode = $this->getInstance ($this->moveItemID);
 
     if (!$move_mode){
-        $this->msg[$this->itemID] = "msg§"
+        $this->msg[$this->itemID] = "msgÂ§"
             . _("Fehler beim Verschieben eines Blocks. Der Zielblock besitzt keinen Typ.");
         return false;
     }
@@ -1864,8 +1864,8 @@ function execCommandMoveGroup(){
 
             if ($children = $this->tree->eval->getChildren()){
                 if ($this->getInstance( $children[0]->getObjectID()) != $move_mode){
-                    $this->msg[$this->itemID] = "msg§"
-                        . _("Fehler beim Verschieben eines Blocks. Der ausgewählte Block und der Zielblock besitzen verschiedene Typen.");
+                    $this->msg[$this->itemID] = "msgÂ§"
+                        . _("Fehler beim Verschieben eines Blocks. Der ausgewÃ¤hlte Block und der Zielblock besitzen verschiedene Typen.");
                     return false;
                 }
             }
@@ -1904,7 +1904,7 @@ function execCommandMoveGroup(){
                 return EvalCommon::showErrorReport ($newgroup,
                     _("Fehler beim Verschieben eines Blocks."));
 
-            $this->msg[$this->itemID] = "msg§"
+            $this->msg[$this->itemID] = "msgÂ§"
                 . sprintf(_("Der Block <b>%s</b> wurde in die Hauptebene verschoben."),
                     $move_group_title);
             break;
@@ -1914,8 +1914,8 @@ function execCommandMoveGroup(){
             $group = &$this->tree->getGroupObject($this->itemID);
             if ($children = $group->getChildren()){
                 if ($this->getInstance( $children[0]->getObjectID()) != $move_mode){
-                    $this->msg[$this->itemID] = "msg§"
-                        . _("Fehler beim Verschieben eines Blocks. Der ausgewählte Block und der Zielblock besitzen verschiedene Typen.");
+                    $this->msg[$this->itemID] = "msgÂ§"
+                        . _("Fehler beim Verschieben eines Blocks. Der ausgewÃ¤hlte Block und der Zielblock besitzen verschiedene Typen.");
                     return false;
                 }
             }
@@ -1957,7 +1957,7 @@ function execCommandMoveGroup(){
                     _("Fehler beim Verschieben eines Blocks."));
 
 
-            $this->msg[$this->itemID] = "msg§"
+            $this->msg[$this->itemID] = "msgÂ§"
                 . sprintf(_("Der Block <b>%s</b> wurde in diesen Gruppierungsblock verschoben."),
                     $move_group_title);
             break;
@@ -1968,8 +1968,8 @@ function execCommandMoveGroup(){
 
             if ($children = $group->getChildren()){
                 if ($this->getInstance( $children[0]->getObjectID()) != $move_mode){
-                    $this->msg[$this->itemID] = "msg§"
-                        . _("Fehler beim Verschieben eines Blocks. Der ausgewählte Block und der Zielblock besitzen verschiedene Typen.");
+                    $this->msg[$this->itemID] = "msgÂ§"
+                        . _("Fehler beim Verschieben eines Blocks. Der ausgewÃ¤hlte Block und der Zielblock besitzen verschiedene Typen.");
                     return false;
                 }
             }
@@ -1977,12 +1977,12 @@ function execCommandMoveGroup(){
             $oldparentID = $move_group->getParentID ();
             if ($oldparentID == ROOT_BLOCK){
 
-                $this->msg[$this->itemID] = "msg§"
+                $this->msg[$this->itemID] = "msgÂ§"
                         . _("Fehler beim Verschieben eines Blocks. Ein Fragenblock kann nicht auf die oberste Ebene verschoben werden.");
                     return false;
             } elseif ($oldparentID == $this->evalID){
 
-                $this->msg[$this->itemID] = "msg§"
+                $this->msg[$this->itemID] = "msgÂ§"
                         . _("Fehler beim Verschieben eines Blocks. Ein Fragenblock kann nicht auf die oberste Ebene verschoben werden.");
                     return false;
             } else {
@@ -2016,7 +2016,7 @@ function execCommandMoveGroup(){
                 return EvalCommon::showErrorReport ($oldparent,
                     _("Fehler beim Verschieben eines Blocks."));
 
-            $this->msg[$this->itemID] = "msg§"
+            $this->msg[$this->itemID] = "msgÂ§"
                 . sprintf(_("Der Block <b>%s</b> wurde in diesen Fragenblock verschoben."),
                     $move_group_title);
 
@@ -2049,7 +2049,7 @@ function execCommandMoveGroup(){
 */
 function createButtonbar ( $show = ARRANGMENT_BLOCK ){
 
-    $infotext = _("Sie können ...") . "\n";
+    $infotext = _("Sie kÃ¶nnen ...") . "\n";
 
     $table = new HTML ("table");
     $table->addAttr ("width","100%");
@@ -2069,12 +2069,12 @@ function createButtonbar ( $show = ARRANGMENT_BLOCK ){
 
     // the update-button
     $buttons = "&nbsp;"
-        . Button::create(_('Übernehmen'),
+        . Button::create(_('Ãœbernehmen'),
                 'cmd[UpdateItem]',
-                array('title' => _('Die Veränderungen innerhalb des Blockes speichern.')));
+                array('title' => _('Die VerÃ¤nderungen innerhalb des Blockes speichern.')));
 
     $infotext .= "\n"
-        . _("- die Veränderungen dieses Blocks speichern.");
+        . _("- die VerÃ¤nderungen dieses Blocks speichern.");
 
     // the new group-button
    if ($show == "both" || $show == ARRANGMENT_BLOCK || $show == ROOT_BLOCK){
@@ -2083,7 +2083,7 @@ function createButtonbar ( $show = ARRANGMENT_BLOCK ){
                 'cmd[AddGroup]',
                 array( 'title' => _('Einen neuen Gruppierungsblock erstellen.')));
     $infotext .= "\n"
-        . _("- einen neuen Gruppierungsblock innerhalb dieses Blockes erstellen, in welchem Sie weitere Gruppierungs- oder Fragenblöcke anlegen können.");
+        . _("- einen neuen Gruppierungsblock innerhalb dieses Blockes erstellen, in welchem Sie weitere Gruppierungs- oder FragenblÃ¶cke anlegen kÃ¶nnen.");
    }
 
     // the new question-group-button
@@ -2093,9 +2093,9 @@ function createButtonbar ( $show = ARRANGMENT_BLOCK ){
         . $this->createTemplateSelection()
         . Button::create(_('Erstellen'),
                 'cmd[AddQGroup]',
-                array( 'title' => _('Einen neuen Fragenblock mit der ausgewählten Antwortenvorlage erstellen.')));
+                array( 'title' => _('Einen neuen Fragenblock mit der ausgewÃ¤hlten Antwortenvorlage erstellen.')));
     $infotext .= "\n"
-        . _("- einen neuen Fragenblock innherhalb dieses Blockes erstellen. Geben Sie dazu bitte eine Antwortenvorlage an, welche für alle Fragen des neuen Fragenblockes verwendet wird.");
+        . _("- einen neuen Fragenblock innherhalb dieses Blockes erstellen. Geben Sie dazu bitte eine Antwortenvorlage an, welche fÃ¼r alle Fragen des neuen Fragenblockes verwendet wird.");
    }
 
     // the move-button
@@ -2142,18 +2142,18 @@ function createButtonbar ( $show = ARRANGMENT_BLOCK ){
     $button->addAttr ("style", "vertical-align:middle;");
     $button->addAttr ("border", "0");
     $button->addAttr ("src", EVAL_PIC_DELETE_GROUP);
-    $button->addString (Tooltip (_("Diesen Block und alle seine Unterblöcke löschen.")));
+    $button->addString (Tooltip (_("Diesen Block und alle seine UnterblÃ¶cke lÃ¶schen.")));
 
     $buttons .= ($movebutton)
         ? "&nbsp;"
         : $seperator;
-    $buttons .=  Button::create(_('Löschen'),
+    $buttons .=  Button::create(_('LÃ¶schen'),
             'cmd[AssertDeleteItem]',
-            array('title' => _('Diesen Block (und alle seine Unterblöcke) löschen..')));
+            array('title' => _('Diesen Block (und alle seine UnterblÃ¶cke) lÃ¶schen..')));
 #   $buttons .= $button->createContent ();
 
     $infotext .= "\n"
-        . _("- diesen Block und seine Unterblöcke löschen.");
+        . _("- diesen Block und seine UnterblÃ¶cke lÃ¶schen.");
    }
 
     // the abort-button
@@ -2309,7 +2309,7 @@ function createTitleInput($mode = ROOT_BLOCK){
         case ROOT_BLOCK:
             $title_label = _("Titel der Evaluation");
             $title       = htmlReady ($this->tree->eval->getTitle());
-            $text_label  = _("Zusätzlicher Text");
+            $text_label  = _("ZusÃ¤tzlicher Text");
             $text        = wysiwygReady ($this->tree->eval->getText());
             break;
 
@@ -2317,7 +2317,7 @@ function createTitleInput($mode = ROOT_BLOCK){
             $title_label = _("Titel des Gruppierungsblocks");
             $group       =  &$this->tree->getGroupObject($this->itemID);
             $title       = htmlReady ($group->getTitle());
-            $text_label  = _("Zusätzlicher Text");
+            $text_label  = _("ZusÃ¤tzlicher Text");
             $text        = wysiwygReady ($group->getText());
             break;
 
@@ -2326,11 +2326,11 @@ function createTitleInput($mode = ROOT_BLOCK){
             $title_info  = _("Die Angabe des Titels ist bei einem Fragenblock optional.");
             $group       =  &$this->tree->getGroupObject($this->itemID);
             $title       = htmlReady ($group->getTitle());
-            $text_label  = _("Zusätzlicher Text");
+            $text_label  = _("ZusÃ¤tzlicher Text");
             $text        = wysiwygReady ($group->getText());
             break;
     }
-    $text_info = _("Die Angabe des zusätzlichen Textes ist optional.");
+    $text_info = _("Die Angabe des zusÃ¤tzlichen Textes ist optional.");
 
     $table = new HTML ("table");
     $table->addAttr ("width","98%");
@@ -2399,15 +2399,15 @@ function createUpdateButton ( $mode = NULL ){
         ." <tr>\n"
         . "  <td align=center>\n"
 //      . "   <input type=hidden name=\"cmd\" value=\"UpdateItem\">\n"
-        . Button::create(_('Übernehmen'),
+        . Button::create(_('Ãœbernehmen'),
                 'cmd[UpdateItem]',
-                array('title' => _('Änderungen übernehmen.')));
+                array('title' => _('Ã„nderungen Ã¼bernehmen.')));
 
     if($mode == NULL){
         $button .= "&nbsp;&nbsp;|&nbsp;&nbsp;"._("Diesen Block")."&nbsp;"
-            . Button::create(_('Löschen'),
+            . Button::create(_('LÃ¶schen'),
                     'cmd[AssertDeleteItem]',
-                    array('title', _('Diesen Block und alle seine Unterblöcke löschen.')));
+                    array('title', _('Diesen Block und alle seine UnterblÃ¶cke lÃ¶schen.')));
     }
 
     $button .= "  </td>\n"
@@ -2449,7 +2449,7 @@ function createGlobalFeatures (){
 
     $td = new HTML ("td");
     $td->addAttr ("style","border-bottom:0px dotted black;");
-    $td->addContent (_("Die Auswertung der Evaluation läuft"));
+    $td->addContent (_("Die Auswertung der Evaluation lÃ¤uft"));
     $td->addContent (":");
 
     $tr->addContent ($td);
@@ -2529,7 +2529,7 @@ function createQuestionFeatures(){
 
     $td = new HTMl ("td");
     $td->addAttr ("style","border-bottom:0px dotted black;");
-    $td->addContent (_("Die Fragen dieses Blocks müssen beantwortet werden (Pflichtfelder):"));
+    $td->addContent (_("Die Fragen dieses Blocks mÃ¼ssen beantwortet werden (Pflichtfelder):"));
 
     $tr->addContent ($td);
 
@@ -2564,9 +2564,9 @@ function createQuestionFeatures(){
     $td->addAttr ("style","border-bottom:0px dotted black;");
     $td->addHTMLContent (sprintf(_("Diesem Fragenblock ist die Antwortenvorlage <b>%s</b> zugewiesen."),
                 $templateTitle));
-    $text = _("Das Zuweisen einer Antwortenvorlage ändert alle Antwortenmöglichkeiten der Fragen dieses Fragenblocks.");
+    $text = _("Das Zuweisen einer Antwortenvorlage Ã¤ndert alle AntwortenmÃ¶glichkeiten der Fragen dieses Fragenblocks.");
     if ($templateTitle == NO_TEMPLATE_GROUP)
-        $text .= " "._("Da dieser Fragenblock keine Antwortenvorlage benutzt, würde ein Zuweisen einer Antwortenvorlage zum Verlust aller eingegebenen Antworten führen.");
+        $text .= " "._("Da dieser Fragenblock keine Antwortenvorlage benutzt, wÃ¼rde ein Zuweisen einer Antwortenvorlage zum Verlust aller eingegebenen Antworten fÃ¼hren.");
 
     $td->addHTMLContent ($this->createImage(EVAL_PIC_HELP,
         $text));
@@ -2580,7 +2580,7 @@ function createQuestionFeatures(){
     $td->addContent (" ");
     $td->addHTMLContent (Button::create(_('Zuweisen'),
             'cmd[ChangeTemplate]',
-            array('title' => _('Eine andere Antwortenvorlage für diesen Fragenblock auswählen'))));
+            array('title' => _('Eine andere Antwortenvorlage fÃ¼r diesen Fragenblock auswÃ¤hlen'))));
     $tr->addContent ($td);
     $table->addContent ($tr);
 
@@ -2664,7 +2664,7 @@ function createQuestionForm(){
     $td2->addAttr ("class",$showclass);
 
     $b = new HTML ("b");
-    $b->addContent (_("Löschen"));
+    $b->addContent (_("LÃ¶schen"));
 
     $td2->addContent ($b);
     $tr2->addContent ($td2);
@@ -2769,7 +2769,7 @@ function createQuestionForm(){
 
      $button = new HTMLempty ("input");
      $button->addAttr ("type", "image");
-     $button->addAttr ("name", "cmd_MoveQuestionUp_#".$question->getObjectID()."_§".$question->getPosition()."_button");
+     $button->addAttr ("name", "cmd_MoveQuestionUp_#".$question->getObjectID()."_Â§".$question->getPosition()."_button");
      $button->addAttr ("style", "vertical-align:middle;");
      $button->addAttr ("border", "0");
      $button->addAttr ("src", EVAL_PIC_MOVE_UP);
@@ -2779,7 +2779,7 @@ function createQuestionForm(){
 
      $button = new HTMLempty ("input");
      $button->addAttr ("type", "image");
-     $button->addAttr ("name", "cmd_MoveQuestionDown_#".$question->getObjectID()."_§".$question->getPosition()."_button");
+     $button->addAttr ("name", "cmd_MoveQuestionDown_#".$question->getObjectID()."_Â§".$question->getPosition()."_button");
      $button->addAttr ("style", "vertical-align:middle;");
      $button->addAttr ("border", "0");
      $button->addAttr ("src", EVAL_PIC_MOVE_DOWN);
@@ -2813,13 +2813,13 @@ function createQuestionForm(){
      // hat noch keine antworten
      if ($question->getChildren() == NULL){
         $image = EVAL_PIC_CREATE_ANSWERS;
-        $text = _("Dieser Frage wurden noch keine Antwortenmöglichkeiten zugewiesen. Drücken Sie auf den Doppelfpeil, um dies jetzt zu tun.");
-        $tooltip = tooltip (_("Dieser Frage Antwortenmöglichkeiten zuweisen."));
+        $text = _("Dieser Frage wurden noch keine AntwortenmÃ¶glichkeiten zugewiesen. DrÃ¼cken Sie auf den Doppelfpeil, um dies jetzt zu tun.");
+        $tooltip = tooltip (_("Dieser Frage AntwortenmÃ¶glichkeiten zuweisen."));
     } else {
         $image = EVAL_PIC_EDIT_ANSWERS;
-        $text = _("Dieser Frage wurden bereits folgende Antwortenmöglichkeiten zugewiesen:")
+        $text = _("Dieser Frage wurden bereits folgende AntwortenmÃ¶glichkeiten zugewiesen:")
             . " ";
-        $tooltip = tooltip (_("Die zugewiesenen Antwortenmöglichkeiten bearbeiten."));
+        $tooltip = tooltip (_("Die zugewiesenen AntwortenmÃ¶glichkeiten bearbeiten."));
         $text .= "\n";
         while ($answer = $question->getNextChild()){
             $text .= "\"".$answer->getText()."\"\n ";
@@ -2918,9 +2918,9 @@ function createQuestionForm(){
     $td2->addContent (_("Frage/en"));
     $td2->addContent (" ");
     $td2->addHTMLContent (
-        Button::create(_('Hinzufügen'),
+        Button::create(_('HinzufÃ¼gen'),
                 'cmd[AddQuestions]',
-                array('title' => _('Fragen hinzufügen')))
+                array('title' => _('Fragen hinzufÃ¼gen')))
             );
 
     $tr2->addContent($td2);
@@ -2934,9 +2934,9 @@ function createQuestionForm(){
 
     $td2->addContent ($font);
     $td2->addHTMLContent (
-        Button::create(_('Löschen'),
+        Button::create(_('LÃ¶schen'),
                 'cmd[DeleteQuestions]',
-                array('title' => _('Markierte Fragen löschen')))
+                array('title' => _('Markierte Fragen lÃ¶schen')))
         );
 
     $tr2->addContent ($td2);

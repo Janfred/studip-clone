@@ -29,12 +29,12 @@ class PublicCoursesController extends AuthenticatedController
         parent::before_filter($action, $args);
 
         if (!Config::get()->ENABLE_FREE_ACCESS) {
-            throw new AccessDeniedException(_('÷ffentliche Veranstaltungen sind nicht aktiviert.'));
+            throw new AccessDeniedException(_('√ñffentliche Veranstaltungen sind nicht aktiviert.'));
         }
 
         Navigation::activateItem('/browse');
 
-        PageLayout::setTitle(_('÷ffentliche Veranstaltungen'));
+        PageLayout::setTitle(_('√ñffentliche Veranstaltungen'));
         PageLayout::setHelpKeyword('Basis.SymboleFreieVeranstaltungen');
 
         // we are definitely not in an lexture or institute
@@ -131,7 +131,7 @@ class PublicCoursesController extends AuthenticatedController
         $statement->execute(array($seminar_ids));
         while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
             $nav = new Navigation('news', '');
-            $nav->setImage(Icon::create('news', 'inactive', ["title" => sprintf(_('%s Ank¸ndigungen'),$row['count'])]));
+            $nav->setImage(Icon::create('news', 'inactive', ["title" => sprintf(_('%s Ank√ºndigungen'),$row['count'])]));
             $seminars[$row['range_id']]['navigations']['news'] = $nav;
         }
 
@@ -144,7 +144,7 @@ class PublicCoursesController extends AuthenticatedController
         $statement->execute(array($seminar_ids));
         while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
             $nav = new Navigation('scm', 'dispatch.php/course/scm');
-            $nav->setImage(Icon::create('infopage', 'inactive', ["title" => sprintf(_('%s Eintr‰ge'),$row['count'])]));
+            $nav->setImage(Icon::create('infopage', 'inactive', ["title" => sprintf(_('%s Eintr√§ge'),$row['count'])]));
             $seminars[$row['range_id']]['navigations']['scm'] = $nav;
         }
 

@@ -51,7 +51,7 @@ class ExternElementMainLecturedetails extends ExternElementMain {
                 'nameformat', 'urlcss', 'title', 'language', 'copyright', 'author'
         );
         $this->real_name = _("Grundeinstellungen");
-        $this->description = _("In den Grundeinstellungen können Sie allgemeine Daten des Moduls ändern.");
+        $this->description = _("In den Grundeinstellungen kÃ¶nnen Sie allgemeine Daten des Moduls Ã¤ndern.");
         parent::__construct($module_name, $data_fields, $field_names, $config);
     }
     
@@ -138,14 +138,14 @@ class ExternElementMainLecturedetails extends ExternElementMain {
         
         $headline = $edit_form->editHeadline(_("Weitere Angaben"));
         
-        $title = _("Absatzüberschrift in eigener Zeile:");
-        $info = _("Diese Option bewirkt, dass die Überschrift eines Absatzes in einer eigenen Zeile ausgegeben wird. Ist diese Option nicht ausgewählt, wird die Überschrift dem Text des Absatzes direkt vorangestellt.");
+        $title = _("AbsatzÃ¼berschrift in eigener Zeile:");
+        $info = _("Diese Option bewirkt, dass die Ãœberschrift eines Absatzes in einer eigenen Zeile ausgegeben wird. Ist diese Option nicht ausgewÃ¤hlt, wird die Ãœberschrift dem Text des Absatzes direkt vorangestellt.");
         $values = "1";
         $names = "";
         $table = $edit_form->editCheckboxGeneric("headlinerow", $title, $info, $values, $names);
         
         $title = _("Bereichspfad ab Ebene:");
-        $info = _("Wählen Sie, ab welcher Ebene der Bereichspfad ausgegeben werden soll.");
+        $info = _("WÃ¤hlen Sie, ab welcher Ebene der Bereichspfad ausgegeben werden soll.");
         $values = array("1", "2", "3", "4", "5");
         $names = array("1", "2", "3", "4", "5");
         $table .= $edit_form->editOptionGeneric("rangepathlevel", $title, $info, $values, $names);
@@ -163,26 +163,26 @@ class ExternElementMainLecturedetails extends ExternElementMain {
         $table .= $edit_form->editRadioGeneric("studiplink", $title, $info, $value, $names);
         
         $title = _("Stud.IP-Link-Ziel:");
-        $info = _("Ziel des Stud.IP-Links. Entweder direkter Einsprung zur Anmeldeseite oder in den Administrationsbereich (nur für berechtigte Nutzer) der Veranstaltung");
+        $info = _("Ziel des Stud.IP-Links. Entweder direkter Einsprung zur Anmeldeseite oder in den Administrationsbereich (nur fÃ¼r berechtigte Nutzer) der Veranstaltung");
         $value = array("signin", "admin");
         $names = array(_("Anmeldung"), _("Administrationsbereich"));
         $table .= $edit_form->editRadioGeneric("studiplinktarget", $title, $info, $value, $names);
         
         $title = _("HTML-Header/Footer:");
-        $info = _("Anwählen, wenn die Seite als komplette HTML-Seite ausgegeben werden soll, z.B. bei direkter Verlinkung oder in einem Frameset.");
+        $info = _("AnwÃ¤hlen, wenn die Seite als komplette HTML-Seite ausgegeben werden soll, z.B. bei direkter Verlinkung oder in einem Frameset.");
         $values = "1";
         $names = "";
         $table .= $edit_form->editCheckboxGeneric("wholesite", $title, $info, $values, $names);
         
         $title = _("Namensformat:");
-        $info = _("Wählen Sie, wie Personennamen formatiert werden sollen.");
+        $info = _("WÃ¤hlen Sie, wie Personennamen formatiert werden sollen.");
         $values = array("", "no_title_short", "no_title", "no_title_rev", "full", "full_rev");
         $names = array(_("keine Auswahl"), _("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
                 _("Dr. Peter Meyer"), _("Meyer, Peter, Dr."));
         $table .= $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
         
         $title = _("Sprache:");
-        $info = _("Wählen Sie eine Sprache für die Datumsangaben aus.");
+        $info = _("WÃ¤hlen Sie eine Sprache fÃ¼r die Datumsangaben aus.");
         $values = array("", "de_DE", "en_GB");
         $names = array(_("keine Auswahl"), _("Deutsch"), _("Englisch"));
         $table .= $edit_form->editOptionGeneric("language", $title, $info, $values, $names);
@@ -196,11 +196,11 @@ class ExternElementMainLecturedetails extends ExternElementMain {
         $table .= $edit_form->editTextfieldGeneric("title", $title, $info, 50, 200);
         
         $title = _("Copyright:");
-        $info = _("Geben Sie hier einen Copyright-Vermerk an. Dieser wird im Meta-Tag \"copyright\" ausgegeben, wenn Sie die Option \"HTML-Header/Footer\" angewählt haben.");
+        $info = _("Geben Sie hier einen Copyright-Vermerk an. Dieser wird im Meta-Tag \"copyright\" ausgegeben, wenn Sie die Option \"HTML-Header/Footer\" angewÃ¤hlt haben.");
         $table .= $edit_form->editTextfieldGeneric("copyright", $title, $info, 50, 200);
         
         $title = _("Autor:");
-        $info = _("Geben Sie hier den Namen des Seitenautors an. Dieser wird im Meta-Tag \"author\" ausgegeben, wenn Sie die Option \"HTML-Header/Footer\" angewählt haben.");
+        $info = _("Geben Sie hier den Namen des Seitenautors an. Dieser wird im Meta-Tag \"author\" ausgegeben, wenn Sie die Option \"HTML-Header/Footer\" angewÃ¤hlt haben.");
         $table .= $edit_form->editTextfieldGeneric("author", $title, $info, 50, 200);
         
         $content_table .= $edit_form->editContentTable($headline, $table);

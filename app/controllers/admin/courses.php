@@ -662,15 +662,15 @@ class Admin_CoursesController extends AuthenticatedController
         if (Request::option('institute')) {
             $GLOBALS['user']->cfg->store('ADMIN_COURSES_TEACHERFILTER', null);
             $GLOBALS['user']->cfg->store('MY_INSTITUTES_DEFAULT', Request::option('institute'));
-            PageLayout::postMessage(MessageBox::success('Die gew¸nschte Einrichtung wurde ausgew‰hlt!'));
+            PageLayout::postMessage(MessageBox::success('Die gew√ºnschte Einrichtung wurde ausgew√§hlt!'));
         }
 
         if (Request::option('sem_select')) {
             $GLOBALS['user']->cfg->store('MY_COURSES_SELECTED_CYCLE', Request::option('sem_select'));
             if (Request::option('sem_select') !== "all") {
-                PageLayout::postMessage(MessageBox::success(sprintf(_('Das %s wurde ausgew‰hlt'), Semester::find(Request::option('sem_select'))->name)));
+                PageLayout::postMessage(MessageBox::success(sprintf(_('Das %s wurde ausgew√§hlt'), Semester::find(Request::option('sem_select'))->name)));
             } else {
-                PageLayout::postMessage(MessageBox::success(_('Semesterfilter abgew‰hlt')));
+                PageLayout::postMessage(MessageBox::success(_('Semesterfilter abgew√§hlt')));
             }
         }
 
@@ -717,7 +717,7 @@ class Admin_CoursesController extends AuthenticatedController
             }
 
             if ($result) {
-                PageLayout::postMessage(MessageBox::success(_('Die gew¸nschten ƒnderungen wurden erfolgreich durchgef¸hrt!')));
+                PageLayout::postMessage(MessageBox::success(_('Die gew√ºnschten √Ñnderungen wurden erfolgreich durchgef√ºhrt!')));
             }
             if ($errors) {
                 PageLayout::postMessage(MessageBox::error(_('Bei den folgenden Veranstaltungen ist ein Fehler aufgetreten'), array_map('htmlReady', $errors)));
@@ -766,7 +766,7 @@ class Admin_CoursesController extends AuthenticatedController
             }
         }
 
-        PageLayout::postMessage(MessageBox::success(_('Die gew¸nschten ƒnderungen wurden ausgef¸hrt!')));
+        PageLayout::postMessage(MessageBox::success(_('Die gew√ºnschten √Ñnderungen wurden ausgef√ºhrt!')));
         $this->redirect('admin/courses/index');
     }
 
@@ -803,7 +803,7 @@ class Admin_CoursesController extends AuthenticatedController
             }
 
             if ($result) {
-                PageLayout::postMessage(MessageBox::success(_('Die Sichtbarkeit wurde bei den gew¸nschten Veranstatungen erfolgreich ge‰ndert!')));
+                PageLayout::postMessage(MessageBox::success(_('Die Sichtbarkeit wurde bei den gew√ºnschten Veranstatungen erfolgreich ge√§ndert!')));
             }
             if ($errors) {
                 PageLayout::postMessage(MessageBox::error(_('Bei den folgenden Veranstaltungen ist ein Fehler aufgetreten'), array_map('htmlReady', $errors)));
@@ -852,7 +852,7 @@ class Admin_CoursesController extends AuthenticatedController
             }
 
             if ($result) {
-                PageLayout::postMessage(MessageBox::success(_('Die gew¸nschten ƒnderungen wurden erfolgreich durchgef¸hrt!')));
+                PageLayout::postMessage(MessageBox::success(_('Die gew√ºnschten √Ñnderungen wurden erfolgreich durchgef√ºhrt!')));
             }
             if ($errors) {
                 PageLayout::postMessage(MessageBox::error(_('Bei den folgenden Veranstaltungen ist ein Fehler aufgetreten'), array_map('htmlReady', $errors)));
@@ -891,7 +891,7 @@ class Admin_CoursesController extends AuthenticatedController
         // select the action area
         if (Request::option('action_area')) {
             $GLOBALS['user']->cfg->store('MY_COURSES_ACTION_AREA', Request::option('action_area'));
-            PageLayout::postMessage(MessageBox::success(_('Der Aktionsbereich wurde erfolgreich ¸bernommen!')));
+            PageLayout::postMessage(MessageBox::success(_('Der Aktionsbereich wurde erfolgreich √ºbernommen!')));
         }
 
         $this->redirect('admin/courses/index');
@@ -904,7 +904,7 @@ class Admin_CoursesController extends AuthenticatedController
     {
         if (Request::option('course_type')) {
             $GLOBALS['user']->cfg->store('MY_COURSES_TYPE_FILTER', Request::option('course_type'));
-            PageLayout::postMessage(MessageBox::success(_('Der gew¸nschte Veranstaltungstyp wurde ¸bernommen!')));
+            PageLayout::postMessage(MessageBox::success(_('Der gew√ºnschte Veranstaltungstyp wurde √ºbernommen!')));
         }
         $this->redirect('admin/courses/index');
     }
@@ -978,8 +978,8 @@ class Admin_CoursesController extends AuthenticatedController
                 'attributes' => ['data-dialog' => 'size=big'],
             ),
             3 => array(
-                'name'       => _('Zeiten / R‰ume'),
-                'title'      => _('Zeiten / R‰ume'),
+                'name'       => _('Zeiten / R√§ume'),
+                'title'      => _('Zeiten / R√§ume'),
                 'url'        => 'dispatch.php/course/timesrooms/index?cid=%s',
                 'attributes' => ['data-dialog' => 'size=big'],
                 'params'     => array(
@@ -1101,9 +1101,9 @@ class Admin_CoursesController extends AuthenticatedController
             'teachers'      => _('Lehrende'),
             'members'       => _('Teilnehmende'),
             'waiting'       => _('Personen auf Warteliste'),
-            'preliminary'   => _('Vorl‰ufige Anmeldungen'),
+            'preliminary'   => _('Vorl√§ufige Anmeldungen'),
             'contents'      => _('Inhalt'),
-            'last_activity' => _('Letzte Aktivit‰t'),
+            'last_activity' => _('Letzte Aktivit√§t'),
         );
     }
 

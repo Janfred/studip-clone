@@ -17,7 +17,7 @@
 
 <div id="threadwriter" class="globalstream">
     <div class="row writer">
-        <div class="context_selector select" title="<?= _("Kontext der Nachricht auswählen") ?>">
+        <div class="context_selector select" title="<?= _("Kontext der Nachricht auswÃ¤hlen") ?>">
             <? $width = "50" ?>
             <?= Icon::create("blubber", "clickable")->asImg($width, array('class' => "select click")) ?>
             <?= Assets::img($plugin->getPluginURL()."/assets/images/public_blue.svg", array('class' => "public click", 'height' => $width."px")) ?>
@@ -31,7 +31,7 @@
             <?= Icon::create('upload', 'clickable')->asImg(['class' => "text-bottom upload"]) ?>
         </label>
     </div>
-    <div id="context_selector_title" style="display: none;"><?= _("Kontext auswählen") ?></div>
+    <div id="context_selector_title" style="display: none;"><?= _("Kontext auswÃ¤hlen") ?></div>
     <div id="context_selector" style="display: none;">
         <input type="hidden" name="content_type" id="context_type" value="">
         <table style="width: 100%">
@@ -41,7 +41,7 @@
                         <label>
                             <?= Assets::img($plugin->getPluginURL()."/assets/images/public.svg", array('class' => "text-bottom", 'height' => "32px")) ?>
                             <br>
-                            <?= _("Öffentlich") ?>
+                            <?= _("Ã–ffentlich") ?>
                         </label>
                     </td>
                     <td style="width: 70%">
@@ -77,7 +77,7 @@
                         <a href="<?= URLHelper::getLink("dispatch.php/contact") ?>"><?= _("Legen Sie eine Kontaktgruppe an, um an mehrere Kontakte zugleich zu blubbern.") ?></a>
                         <? endif ?>
                         <br>
-                        <?= _("Fügen Sie einzelne Personen mittels @Nutzernamen im Text der Nachricht oder der Kommentare hinzu.") ?>
+                        <?= _("FÃ¼gen Sie einzelne Personen mittels @Nutzernamen im Text der Nachricht oder der Kommentare hinzu.") ?>
                     </td>
                     <td style="width: 15%">
                         <?= Icon::create('checkbox-checked', 'info')->asImg(['class' => "text-bottom check"]) ?>
@@ -150,7 +150,7 @@ if ($streamAvatar->is_customized()) {
 
 $actions = new ActionsWidget();
 $actions->addLink(_("Diesen Stream bearbeiten"), PluginEngine::getURL($plugin, array(), 'streams/edit/'.$stream->getId()), Icon::create("edit", "clickable"));
-$actions->addLink(_("Diesen Stream löschen"), PluginEngine::getURL($plugin, array(), 'streams/delete/'.$stream->getId()), Icon::create("trash", "clickable"), array('onclick' => "return window.confirm('"._("Wirklich löschen?")."');"));
+$actions->addLink(_("Diesen Stream lÃ¶schen"), PluginEngine::getURL($plugin, array(), 'streams/delete/'.$stream->getId()), Icon::create("trash", "clickable"), array('onclick' => "return window.confirm('"._("Wirklich lÃ¶schen?")."');"));
 $sidebar->addWidget($actions);
 
 $controller->addTagCloudWidgetToSidebar($tags, 'custom/' . $stream->getId());

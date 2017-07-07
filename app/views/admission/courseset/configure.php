@@ -1,9 +1,9 @@
 <?php
 use Studip\Button, Studip\LinkButton;
 
-Helpbar::get()->addPlainText(_('Regeln'), _('Hier können Sie die Regeln, Eigenschaften und Zuordnungen des Anmeldesets bearbeiten.'));
-Helpbar::get()->addPlainText(_('Info'), _('Sie können das Anmeldeset allen Einrichtungen zuordnen, an denen Sie mindestens Dozentenrechte haben.'));
-Helpbar::get()->addPlainText(_('Sichtbarkeit'), _('Alle Veranstaltungen der Einrichtungen, an denen Sie mindestens Dozentenrechte haben, können zum Anmeldeset hinzugefügt werden.'));
+Helpbar::get()->addPlainText(_('Regeln'), _('Hier kÃ¶nnen Sie die Regeln, Eigenschaften und Zuordnungen des Anmeldesets bearbeiten.'));
+Helpbar::get()->addPlainText(_('Info'), _('Sie kÃ¶nnen das Anmeldeset allen Einrichtungen zuordnen, an denen Sie mindestens Dozentenrechte haben.'));
+Helpbar::get()->addPlainText(_('Sichtbarkeit'), _('Alle Veranstaltungen der Einrichtungen, an denen Sie mindestens Dozentenrechte haben, kÃ¶nnen zum Anmeldeset hinzugefÃ¼gt werden.'));
 
 // Load assigned course IDs.
 $courseIds = $courseset ? $courseset->getCourses() : array();
@@ -34,7 +34,7 @@ if ($flash['error']) {
                 <?= _('Sichtbarkeit:') ?>
             </label>
             <input type="checkbox" id="private" name="private"<?= $courseset ? ($courseset->getPrivate() ? ' checked="checked"' : '') : 'checked' ?>/>
-            <?= _('Dieses Anmeldeset soll nur für mich selbst und alle Administratoren sichtbar und benutzbar sein.') ?>
+            <?= _('Dieses Anmeldeset soll nur fÃ¼r mich selbst und alle Administratoren sichtbar und benutzbar sein.') ?>
         <?  endif ?>
         <? if ($courseset) : ?>
         <label class="caption">
@@ -77,11 +77,11 @@ if ($flash['error']) {
             <?php } else { ?>
                 <?php if ($instSearch) { ?>
                 <div id="institutes">
-                    <?= Icon::create('arr_2down', 'sort', ['title' => _('Einrichtung hinzufügen')])->asImg(16, ["alt" => _('Einrichtung hinzufügen'), "onclick" => "STUDIP.Admission.updateInstitutes($('#institute_id_1_realvalue').val(), '".$controller->url_for('admission/courseset/institutes',$courseset?$courseset->getId():'')."', '".$controller->url_for('admission/courseset/instcourses',$courseset?$courseset->getId():'')."', 'add')"]) ?>
+                    <?= Icon::create('arr_2down', 'sort', ['title' => _('Einrichtung hinzufÃ¼gen')])->asImg(16, ["alt" => _('Einrichtung hinzufÃ¼gen'), "onclick" => "STUDIP.Admission.updateInstitutes($('#institute_id_1_realvalue').val(), '".$controller->url_for('admission/courseset/institutes',$courseset?$courseset->getId():'')."', '".$controller->url_for('admission/courseset/instcourses',$courseset?$courseset->getId():'')."', 'add')"]) ?>
                     <?= $instSearch ?>
                     <?= Icon::create('search', 'clickable', ['title' => _("Suche starten")])->asImg()?>
                 </div>
-                <i><?=  _('Sie haben noch keine Einrichtung ausgewählt. Benutzen Sie obige Suche, um dies zu tun.') ?></i>
+                <i><?=  _('Sie haben noch keine Einrichtung ausgewÃ¤hlt. Benutzen Sie obige Suche, um dies zu tun.') ?></i>
                 <?php } else { ?>
                 <i><?=  _('Sie sind keiner Einrichtung zugeordnet.') ?></i>
                 <?php } ?>
@@ -117,7 +117,7 @@ if ($flash['error']) {
             </div>
             <? if (count($courseIds) && $courseset->getAdmissionRule('ParticipantRestrictedAdmission')) : ?>
                 <div>
-                        <?= LinkButton::create(_('Ausgewählte Veranstaltungen konfigurieren'),
+                        <?= LinkButton::create(_('AusgewÃ¤hlte Veranstaltungen konfigurieren'),
                             $controller->url_for('admission/courseset/configure_courses/' . $courseset->getId()),
                             array('data-dialog' => 'size=big')
                             ); ?>
@@ -164,7 +164,7 @@ if ($flash['error']) {
             <br/>
             <?php } ?>
             <div style="clear: both;">
-                    <?= LinkButton::create(_('Anmelderegel hinzufügen'),
+                    <?= LinkButton::create(_('Anmelderegel hinzufÃ¼gen'),
                         $controller->url_for('admission/rule/select_type' . ($courseset ? '/'.$courseset->getId() : '')),
                         array(
                             'onclick' => "return STUDIP.Admission.selectRuleType(this)"
@@ -220,7 +220,7 @@ if ($flash['error']) {
         <? endif ?>
         <? endif ?>
         <label for="infotext" class="caption">
-            <?= _('Weitere Hinweise für die Teilnehmenden:') ?>
+            <?= _('Weitere Hinweise fÃ¼r die Teilnehmenden:') ?>
         </label>
         <textarea cols="60" rows="3" name="infotext"><?= $courseset ? htmlReady($courseset->getInfoText()) : '' ?></textarea>
     </fieldset>

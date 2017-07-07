@@ -49,7 +49,7 @@ class VeranstaltungResourcesAssign {
     //Konstruktor
     function __construct($seminar_id=FALSE)
     {
-        //make shure to load all the classes from resources, if this class is extern used °change if the classes are storen in own scripts
+        //make shure to load all the classes from resources, if this class is extern used Â°change if the classes are storen in own scripts
         $this->seminar_id = $seminar_id;
         $this->dont_check=FALSE;
     }

@@ -27,7 +27,7 @@ class Visibilityapi extends Migration {
 
         $category = array('Studien-/Einrichtungsdaten' => 'studdata',
             'Private Daten' => 'privatedata',
-            'Zusätzliche Datenfelder' => 'additionaldata',
+            'ZusÃ¤tzliche Datenfelder' => 'additionaldata',
             'Eigene Kategorien' => 'owncategory',
             'Allgemeine Daten' => 'commondata');
 

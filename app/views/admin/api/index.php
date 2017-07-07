@@ -40,7 +40,7 @@
             <td class="actions">
                 <a href="<?= $controller->url_for('admin/api/keys', $consumer->id) ?>"
                    data-dialog="size=auto"
-                   title="<?= htmlReady(sprintf(_('Schlüssel anzeigen für Applikation "%s"'), $consumer->title)) ?>">
+                   title="<?= htmlReady(sprintf(_('SchlÃ¼ssel anzeigen fÃ¼r Applikation "%s"'), $consumer->title)) ?>">
                     <?= Icon::create('info-circle', 'clickable')->asImg() ?>
                 </a>
                 <a href="<?= $controller->url_for('admin/api/edit', $consumer->id) ?>" title="<?= _('Applikation bearbeiten') ?>" data-dialog>

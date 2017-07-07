@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @author      Till Glˆggler <tgloeggl@uos.de>
- * @author      AndrÈ Klaﬂen <klassen@elan-ev.de>
+ * @author      Till Gl√∂ggler <tgloeggl@uos.de>
+ * @author      Andr√© Kla√üen <klassen@elan-ev.de>
  * @license     GPL 2 or later
  */
 
@@ -68,9 +68,9 @@ class LiteratureProvider implements ActivityProvider
         if ($event == 'LitListDidUpdate') {
             $verb = 'edited';
             if ($type == 'sem') {
-                $summary = _('Die Literaturliste %s wurde von %s in der Veranstaltung "%s" ge‰ndert.');
+                $summary = _('Die Literaturliste %s wurde von %s in der Veranstaltung "%s" ge√§ndert.');
             } else {
-                $summary = _('Die Literaturliste %s wurde von %s in der Einrichtung "%s" ge‰ndert.');
+                $summary = _('Die Literaturliste %s wurde von %s in der Einrichtung "%s" ge√§ndert.');
             }
         } elseif ($event == 'LitListDidCreate') {
             $verb = 'created';
@@ -89,9 +89,9 @@ class LiteratureProvider implements ActivityProvider
         } elseif ($event == 'LitListElementDidUpdate') {
             $verb = 'edited';
             if ($type == 'sem') {
-                $summary = _('Es wurde %s von %s in eine Literaturliste in der Veranstaltung "%s" ge‰ndert.');
+                $summary = _('Es wurde %s von %s in eine Literaturliste in der Veranstaltung "%s" ge√§ndert.');
             } else {
-                $summary = _('Es wurde %s von %s in eine Literaturliste in der Einrichtung "%s" ge‰ndert.');
+                $summary = _('Es wurde %s von %s in eine Literaturliste in der Einrichtung "%s" ge√§ndert.');
             }
         } elseif ($event == 'LitListElementDidInsert') {
             $verb = 'created';

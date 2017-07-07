@@ -28,7 +28,7 @@ if ($input['type'] === "textarea") : ?>
 
 if ($input['type'] === "select") : ?>
     <? if (!$input['choices'][$input['value']] && !(isset($input['changable'])  && $input['changable'])): ?>
-        <?= _("Keine Änderung möglich") ?>
+        <?= _("Keine Ã„nderung mÃ¶glich") ?>
     <? else: ?>
     <select <?=$is_locked ?> name="<?= $input['name'] ?>" <? if ($input['must']) echo 'required'; ?>>
 <? foreach ($input['choices'] as $choice_value => $choice_name): ?>
@@ -63,7 +63,7 @@ if ($input['type'] === "multiselect") : ?>
 
 if ($input['type'] === 'nested-select'): ?>
 <? if (isset($input['changable']) && !$input['changable']): ?>
-        <?= _("Keine Änderung möglich") ?>
+        <?= _("Keine Ã„nderung mÃ¶glich") ?>
 <? else: ?>
     <select <?= $is_locked ?> name="<?= $input['name'] ?>" class="nested-select" <? if ($input['must']) echo 'required'; ?> <? if ($input['multiple']) echo 'multiple'; ?>>
   <? foreach ($input['choices'] as $outer_id => $group): ?>

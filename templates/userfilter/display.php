@@ -16,7 +16,7 @@ if ($filter->show_user_count) {
     $user_count = count($filter->getUsers());
     $fieldText .= ' ('.sprintf(_('%s Personen'), $user_count);
     if (!$user_count) {
-        $fieldText .= Icon::create('exclaim-circle', 'attention', ['title' => _("Niemand erfüllt diese Bedingung.")])->asImg();
+        $fieldText .= Icon::create('exclaim-circle', 'attention', ['title' => _("Niemand erfÃ¼llt diese Bedingung.")])->asImg();
     }
     $fieldText .= ')';
 }

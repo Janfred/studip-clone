@@ -17,11 +17,11 @@ if (!$values['parent_course'] || !in_array($values['parent_course'], array_keys(
                 <? if ($GLOBALS['perm']->have_studip_perm('tutor', $semid)) : ?>
                     <a href="<?= $controller->url_for('admin/courses/toggle_complete/' . $semid) ?>"
                        class="course-completion <? if ($values['is_complete']) echo 'course-complete'; ?>"
-                       title="<?= _('Bearbeitungsstatus ändern') ?>">
-                        <?= _('Bearbeitungsstatus ändern') ?>
+                       title="<?= _('Bearbeitungsstatus Ã¤ndern') ?>">
+                        <?= _('Bearbeitungsstatus Ã¤ndern') ?>
                     </a>
                 <? else : ?>
-                    <?= Icon::create('radiobutton-checked', $values['is_complete'] ? 'status-green' : 'status-red', ['title' => _('Bearbeitungsstatus kann nicht von Ihnen geändert werden.')])->asImg() ?>
+                    <?= Icon::create('radiobutton-checked', $values['is_complete'] ? 'status-green' : 'status-red', ['title' => _('Bearbeitungsstatus kann nicht von Ihnen geÃ¤ndert werden.')])->asImg() ?>
                 <? endif ?>
                 <? else: ?>
                 <?=
@@ -115,7 +115,7 @@ if (!$values['parent_course'] || !in_array($values['parent_course'], array_keys(
         <? endif ?>
         <? if (in_array('preliminary', $view_filter)) : ?>
             <td style="text-align: center;">
-                <a title="<?=_('Vorläufige Anmeldungen') ?>" href="<?= URLHelper::getLink('dispatch.php/course/members', array('cid' => $semid))?>">
+                <a title="<?=_('VorlÃ¤ufige Anmeldungen') ?>" href="<?= URLHelper::getLink('dispatch.php/course/members', array('cid' => $semid))?>">
                     <?= $values['prelim'] ?>
                 </a>
             </td>
@@ -143,7 +143,7 @@ if (!$values['parent_course'] || !in_array($values['parent_course'], array_keys(
         <? endif ?>
         <? if (in_array('last_activity', $view_filter)) : ?>
             <td style="text-align: center;">
-                        <span title="<?=_('Datum der letzten Aktivität in dieser Veranstaltung')?>">
+                        <span title="<?=_('Datum der letzten AktivitÃ¤t in dieser Veranstaltung')?>">
                             <?= htmlReady(date('d.m.Y', $values['last_activity'])); ?>
                         </span>
             </td>
