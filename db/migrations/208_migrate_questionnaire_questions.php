@@ -88,8 +88,9 @@ class MigrateQuestionnaireQuestions extends Migration
     {
         $stmt = $this->db->prepare('SELECT * FROM  `questionnaire_questions`');
         $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
 
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $stmt;
     }
 
     private function findOwner($questionID)
@@ -115,8 +116,9 @@ class MigrateQuestionnaireQuestions extends Migration
             WHERE answerdata LIKE  '%{\"answers\":%'
         ");
         $stmt->execute([]);
+        $stmt->setFetchMode(PDO::FETCH_NUM);
 
-        return $stmt->fetch(PDO::FETCH_NUM);
+        return $stmt;
     }
 
     private function migrateMCAnswers()
