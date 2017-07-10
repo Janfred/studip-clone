@@ -317,11 +317,11 @@ STUDIP.Forum = {
         jQuery.ajax(STUDIP.URLHelper.getURL('plugins.php/coreforum/index/update_entry/' + topic_id + '?cid=' + STUDIP.Forum.seminar_id), {
             type: 'POST',
             data: jQuery('form[data-topicid='+ topic_id +']').serializeObject(),
-
+            
             error: function(data) {
                 alert('Server meldet: ' + data.statusText);
             },
-
+            
             success: function (data) {
                 var json = jQuery.parseJSON(data);
                 // set the new name and content
@@ -463,7 +463,8 @@ STUDIP.Forum = {
     forwardEntry: function(topic_id) {
         var title   = 'WG: ' + jQuery('span[data-edit-topic=' + topic_id +'] [name=name]').attr('value');
         var content = jQuery('span[data-edit-topic=' + topic_id +'] textarea[name=content]').val().trim();
-        var nl      = STUDIP.editor_enabled ? '<br>' : "\n";
+        var is_html = STUDIP.wysiwyg.isHtml(content);
+        var nl      = is_html ? '<br>' : "\n";
         var text    = 'Die Senderin/der Sender dieser Nachricht möchte Sie auf den folgenden Beitrag aufmerksam machen. '.toLocaleString()
                     + nl + nl
                     + 'Link zum Beitrag: '.toLocaleString()
@@ -473,7 +474,7 @@ STUDIP.Forum = {
                     + nl + nl
                     + content
                     + nl + nl;
-        if (STUDIP.editor_enabled) {
+        if (is_html) {
             text = STUDIP.wysiwyg.markAsHtml(text);
         }
         STUDIP.Dialog.fromURL(STUDIP.URLHelper.getURL('dispatch.php/messages/write'), {
@@ -732,7 +733,7 @@ STUDIP.Forum = {
         jQuery('.closeButtons').attr('onclick', 'STUDIP.Forum.openThreadFromThread("' + topic_id + '", '+ page +'); return false;');
         jQuery('.closeButtons').closest("li").css('background-image', "url(" + STUDIP.ASSETS_URL + 'images/icons/blue/lock-unlocked.svg' + ")");
         jQuery('.hideWhenClosed').hide();
-
+        
         STUDIP.Forum.cancelNewEntry();
 
         STUDIP.Forum.closeThread(topic_id, topic_id, page, true);
