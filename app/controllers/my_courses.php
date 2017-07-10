@@ -219,13 +219,9 @@ class MyCoursesController extends AuthenticatedController
 
         PageLayout::setTitle($this->title);
 
-        if (Request::isXhr()) {
-            $this->set_layout(null);
-            $this->response->add_header('Content-Type', 'text/html;charset=Windows-1252');
-        } else {
-            PageLayout::setHelpKeyword('Basis.VeranstaltungenOrdnen');
-            Navigation::activateItem('/browse/my_courses/list');
-        }
+
+        PageLayout::setHelpKeyword('Basis.VeranstaltungenOrdnen');
+        Navigation::activateItem('/browse/my_courses/list');
 
         $this->current_semester = $sem ? : Semester::findCurrent()->semester_id;
 

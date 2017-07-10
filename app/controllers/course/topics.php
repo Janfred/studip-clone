@@ -108,11 +108,7 @@ class Course_TopicsController extends AuthenticatedController
         $this->topic = new CourseTopic($topic_id);
         $this->dates = CourseDate::findBySeminar_id(Context::getId());
 
-        if (Request::isXhr()) {
-            $this->set_layout(null);
-            $this->set_content_type('text/html;Charset=windows-1252');
-            PageLayout::setTitle($topic_id ? sprintf(_('Bearbeiten: %s'), $this->topic['title']) : _("Neues Thema erstellen"));
-        }
+        PageLayout::setTitle($topic_id ? sprintf(_('Bearbeiten: %s'), $this->topic['title']) : _("Neues Thema erstellen"));
     }
 
     public function allow_public_action()
@@ -193,12 +189,7 @@ class Course_TopicsController extends AuthenticatedController
                 "seminar_id"
             );
         }
-
-        if (Request::isXhr()) {
-            $this->set_layout(null);
-            $this->set_content_type('text/html;Charset=windows-1252');
-            PageLayout::setTitle(_("Themen aus Veranstaltung kopieren"));
-        }
+        PageLayout::setTitle(_("Themen aus Veranstaltung kopieren"));
     }
 
     public function fetch_topics_action()

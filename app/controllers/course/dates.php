@@ -4,7 +4,6 @@ require_once 'lib/raumzeit/raumzeit_functions.inc.php';
 class Course_DatesController extends AuthenticatedController
 {
     protected $allow_nobody = true;
-    protected $utf8decode_xhr = true;
 
     public function before_filter(&$action, &$args)
     {

@@ -146,8 +146,6 @@ class Course_DetailsController extends AuthenticatedController
         }
 
         if (Request::isXhr()) {
-            $this->set_layout(null);
-            $this->response->add_header('Content-Type', 'text/html;charset=Windows-1252');
             PageLayout::setTitle($this->title);
         } else {
             PageLayout::setHelpKeyword("Basis.InVeranstaltungDetails");
