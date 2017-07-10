@@ -53,7 +53,7 @@ class DbView
      * @var      array $params
      */
     public $params = [];
-    
+
     /**
      * Database Object
      *
@@ -107,11 +107,11 @@ class DbView
      * @var      boolean $debug
      */
     public $debug = false;
-    
+
     static protected $dbviewfiles = [];
-    
+
     static protected $dbviews = [];
-    
+
     public static function addView($view)
     {
         $view = mb_strtolower($view);
@@ -119,7 +119,7 @@ class DbView
             self::$dbviewfiles[$view] = 0;
         }
     }
-    
+
     /**
      * Convenience method that combines addView() and returns an instance.
      *
@@ -132,10 +132,10 @@ class DbView
     public static function getView($view, $db = '')
     {
         self::addView($view);
-        
+
         return new self($db);
     }
-    
+
     /**
      * Constructor
      *
@@ -157,7 +157,7 @@ class DbView
         }
         $this->init_views();
     }
-    
+
     public function init_views()
     {
         foreach (self::$dbviewfiles as $view => $status) {
@@ -169,7 +169,7 @@ class DbView
             }
         }
     }
-    
+
     public function __get($view)
     {
         if (isset(self::$dbviews[$view])) {
@@ -178,7 +178,7 @@ class DbView
             return null;
         }
     }
-    
+
     /**
      * print error message and exit script
      *
@@ -196,15 +196,14 @@ class DbView
         }
         die;
     }
-    
+
     public function get_query()
     {
         $parsed_query = $this->get_parsed_query(func_get_args());
         $this->db->cache_query($parsed_query);
-        
         return $this->db;
     }
-    
+
     public function get_parsed_query($query_list)
     {
         $parsed_query     = "";
@@ -222,11 +221,11 @@ class DbView
         } else {
             $parsed_query = $this->query_list;
         }
-        
+
         return $parsed_query;
     }
-    
-    
+
+
     public function parse_query(&$query)
     {
         if (is_array($query)) {
@@ -255,22 +254,22 @@ class DbView
                 }
             }
         }
-        
+
         return $query;
     }
-    
-    
+
+
     public function get_temp_table($sub_query)
     {
         $id    = $this->get_uniqid();
         $pk    = ($this->pk) ? "PRIMARY KEY($this->pk)" : "auto_" . $id . " INT NOT NULL AUTO_INCREMENT PRIMARY KEY";
         $query = "CREATE TEMPORARY TABLE temp_$id ($pk) ENGINE=$this->temp_table_type $sub_query";
         $this->db->query($query);
-        
+
         return " temp_" . $id . " ";
     }
-    
-    
+
+
     public function get_temp_values($sub_query)
     {
         $this->db->query($sub_query);
@@ -282,17 +281,17 @@ class DbView
             }
             $value_list = $this->get_value_list($result);
         }
-        
+
         return $value_list;
     }
-    
+
     public function get_uniqid()
     {
         mt_srand((double)microtime() * 1000000);
-        
+
         return md5(uniqid(mt_rand(), 1));
     }
-    
+
     public function get_value_list($list)
     {
         $value_list = false;
@@ -300,10 +299,10 @@ class DbView
             $value_list = "'$list[0]'";
         else
             $value_list = "'" . join("','", $list) . "'";
-        
+
         return $value_list;
     }
-    
+
     public function get_view($name)
     {
         if (self::$dbviews[$name]["pk"])
@@ -313,12 +312,12 @@ class DbView
         if (!$query_list = self::$dbviews[$name]["query"])
             $this->halt("View not found: $name");
         (is_array($query_list)) ? $query = $query_list[0] : $query = $query_list;
-        $tokens = preg_split("/[\?§\&]/", $query);
+        $tokens = preg_split("/[\?§\&]/u", $query);
         if (count($tokens) > 1) {
             $types = [];
             $token = 0;
-            for ($i = 0; $i < mb_strlen($query); $i++) {
-                switch ($query{$i}) {
+            foreach (preg_split('//u', $query, null, PREG_SPLIT_NO_EMPTY) as $i => $c) {
+                switch ($c) {
                     case '?':
                         $types[$token++] = 1;
                         break;
@@ -356,10 +355,9 @@ class DbView
                 $this->params = [];
         }
         (is_array($query_list)) ? $query_list[0] = $query : $query_list = $query;
-        
         return $query_list;
     }
-    
+
     public function Get_union()
     {
         $queries     = func_get_args();
@@ -370,7 +368,7 @@ class DbView
                 $view->db->query("REPLACE INTO $union_table " . $view->get_parsed_query($queries[$i]));
             }
         }
-        
+
         return $union_table;
     }
 }
