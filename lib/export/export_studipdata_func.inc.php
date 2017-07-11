@@ -577,7 +577,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
                           LEFT JOIN abschluss AS a USING (abschluss_id)
                           WHERE seminar_id = :seminar_id
                           GROUP BY aum.user_id
-                          ORDER BY Nachname";
+                          ORDER BY Nachname, Vorname";
                 $parameters[':seminar_id'] = $ex_sem_id;
             } else {
                 $query = "SELECT DISTINCT ui.*, aum.*, su.*, FROM_UNIXTIME(su.mkdate) AS registration_date,
@@ -591,7 +591,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
                           LEFT JOIN abschluss AS a USING (abschluss_id)
                           WHERE statusgruppe_id = :statusgruppe_id AND seminar_id = :seminar_id
                           GROUP BY aum.user_id
-                          ORDER BY Nachname";
+                          ORDER BY Nachname, Vorname";
                 $parameters[':seminar_id']      = $ex_sem_id;
                 $parameters[':statusgruppe_id'] = $key1;
             }
@@ -608,7 +608,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
                       LEFT JOIN abschluss AS a USING (abschluss_id)
                       WHERE seminar_id = :seminar_id AND asu.status = 'accepted'
                       GROUP BY aum.user_id
-                      ORDER BY Nachname";
+                      ORDER BY Nachname, Vorname";
             $parameters[':seminar_id'] = $ex_sem_id;
         } elseif ($key1 == 'awaiting') {
             $query = "SELECT ui.*, aum.*, asu.comment,
@@ -639,7 +639,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
                         LEFT JOIN fach AS sg ON (user_studiengang.fach_id = sg.fach_id)
                         LEFT JOIN abschluss AS a USING (abschluss_id)
                         WHERE aum.user_id IN (:users)
-                        GROUP BY aum.user_id ORDER BY Nachname";
+                        GROUP BY aum.user_id ORDER BY Nachname, Vorname";
         } else {
             $query = "SELECT ui.*, aum.*, su.*, FROM_UNIXTIME(su.mkdate) AS registration_date,
                              GROUP_CONCAT(CONCAT_WS(',', sg.name, a.name, us.semester) SEPARATOR '; ') AS nutzer_studiengaenge
@@ -651,7 +651,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
                       LEFT JOIN abschluss AS a USING (abschluss_id)
                       WHERE seminar_id = :seminar_id AND su.status = :status
                       GROUP BY aum.user_id
-                      ORDER BY " . ($key1 == 'dozent' ? 'position, ' : '') . "Nachname";
+                      ORDER BY " . ($key1 == 'dozent' ? 'position, ' : '') . "Nachname, Vorname";
             $parameters[':seminar_id'] = $ex_sem_id;
             $parameters[':status']     = $key1;
         }

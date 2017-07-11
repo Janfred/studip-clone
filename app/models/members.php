@@ -380,6 +380,11 @@ class MembersModel
      */
     function getMembers($sort_status = 'autor', $order_by = 'nachname asc')
     {
+        list($order, $asc) = explode(' ', $order_by);
+        if ($order === 'nachname') {
+            $order_by = 'nachname ' . $asc . ',vorname ' . $asc;
+        }
+
         $query = "SELECT su.user_id,username,vorname,nachname,email,status,position,su.mkdate,su.visible,su.comment,
                 " . $GLOBALS['_fullname_sql']['full_rev'] . " as fullname
                 FROM seminar_user su INNER JOIN auth_user_md5 USING(user_id)
@@ -394,9 +399,9 @@ class MembersModel
         foreach (words('user autor tutor dozent') as $status) {
             $filtered_members[$status] = $members->findBy('status', $status);
             if ($status == $sort_status) {
-                $filtered_members[$status]->orderBy($order_by, (mb_strpos($order_by, 'nachname') === false ? SORT_NUMERIC : SORT_LOCALE_STRING));
+                $filtered_members[$status]->orderBy($order_by, $order !== 'nachname' ? SORT_NUMERIC : SORT_LOCALE_STRING);
             } else {
-                $filtered_members[$status]->orderBy(in_array($status, words('tutor dozent')) ? 'position,nachname' : 'nachname asc');
+                $filtered_members[$status]->orderBy(in_array($status, words('tutor dozent')) ? 'position,nachname,vorname' : 'nachname,vorname');
             }
         }
         return $filtered_members;
@@ -409,6 +414,11 @@ class MembersModel
      */
     function getAdmissionMembers($sort_status = 'autor', $order_by = 'nachname asc')
     {
+        list($order, $asc) = explode(' ', $order_by);
+        if ($order === 'nachname') {
+            $order_by = 'nachname ' . $asc . ',vorname ' . $asc;
+        }
+
         $cs = CourseSet::getSetForCourse($this->course_id);
         $claiming = array();
         if (is_object($cs) && !$cs->hasAlgorithmRun()) {
@@ -437,7 +447,7 @@ class MembersModel
         foreach (words('awaiting accepted claiming') as $status) {
             $filtered_members[$status] = $application_members->findBy('status', $status);
             if ($status == $sort_status) {
-                $filtered_members[$status]->orderBy($order_by, (mb_strpos($order_by, 'nachname') === false ? SORT_NUMERIC : SORT_LOCALE_STRING));
+                $filtered_members[$status]->orderBy($order_by, $order !== 'nachname' ? SORT_NUMERIC : SORT_LOCALE_STRING);
             }
         }
         return $filtered_members;
