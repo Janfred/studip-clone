@@ -175,8 +175,8 @@ if ($sem_id) {
 if (mb_strlen($name) > 2) {
     $name = str_replace('%', '\%', $name);
     $name = str_replace('_', '\_', $name);
-    $filter[] = "CONCAT(Vorname, ' ', Nachname) LIKE CONCAT('%', :needle, '%')";
-    $parameters[':needle'] = $name;
+    $filter[] = "(CONCAT(Vorname, ' ', Nachname) LIKE :needle OR CONCAT(Nachname, ' ', Vorname) LIKE :needle OR CONCAT(Nachname, ', ', Vorname) LIKE :needle)";
+    $parameters[':needle'] = '%' . $name . '%';
 }
 
 if (count($filter)) {
