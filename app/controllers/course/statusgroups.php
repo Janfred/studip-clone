@@ -401,8 +401,8 @@ class Course_StatusgroupsController extends AuthenticatedController
      */
     public function delete_member_action($user_id, $group_id)
     {
-        if ($this->is_tutor || $user_id == $GLOBALS['user']->id) {
-            $g = Statusgruppen::find($group_id);
+        $g = Statusgruppen::find($group_id);
+        if ($this->is_tutor || ($user_id == $GLOBALS['user']->id && $g->userMayLeave($user_id))) {
             $s = StatusgruppeUser::find(array($group_id, $user_id));
             $name = $s->user->getFullname();
             if ($s->delete()) {
@@ -522,7 +522,7 @@ class Course_StatusgroupsController extends AuthenticatedController
 
         $g = Statusgruppen::find($group_id);
 
-        if ($g->isMember($GLOBALS['user']->id)) {
+        if ($g->userMayLeave($GLOBALS['user']->id)) {
             $s = StatusgruppeUser::find(array($group_id, $GLOBALS['user']->id));
             if ($s->delete()) {
                 PageLayout::postSuccess(sprintf(

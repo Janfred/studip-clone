@@ -378,6 +378,18 @@ class Statusgruppen extends SimpleORMap
     }
 
     /**
+     * Checks if a user could leave this group
+     *
+     * @param string $user_id The user id
+     * @return boolean <b>true</b> if user is allowed to leave
+     */
+    public function userMayLeave($user_id)
+    {
+        return $this->isMember($user_id)
+            && ($this->selfassign && (!$this->selfassign_end || $this->selfassign_end > time()));
+    }
+
+    /**
      * Checks if the user is already in an exclusive group of this range
      *
      * @param string $user_id The user id

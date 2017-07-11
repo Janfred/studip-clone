@@ -244,6 +244,17 @@ class MessagesController extends AuthenticatedController {
                         case 'inst_status':
                             $query = "SELECT b.user_id,'rec' as snd_rec FROM user_inst a, auth_user_md5 b WHERE a.Institut_id = ? AND a.user_id = b.user_id AND a.inst_perms = ? ORDER BY Nachname, Vorname";
                             break;
+                        case 'not_grouped':
+                            $query = "SELECT seminar_user.user_id,'rec' as snd_rec FROM seminar_user
+                                     INNER JOIN auth_user_md5 USING (user_id)
+                                     LEFT JOIN statusgruppen ON range_id = seminar_id 
+                                     LEFT JOIN statusgruppe_user ON statusgruppen.statusgruppe_id = statusgruppe_user.statusgruppe_id  
+                                     AND seminar_user.user_id = statusgruppe_user.user_id
+                                     WHERE seminar_id = ? 
+                                     GROUP BY seminar_user.user_id 
+                                     HAVING count(statusgruppe_user.statusgruppe_id) = 0 
+                                     ORDER BY Nachname, Vorname";
+                            break;
                     }
                     $this->default_message->receivers = DBManager::get()->fetchAll($query, $params, 'MessageUser::build');
                 }

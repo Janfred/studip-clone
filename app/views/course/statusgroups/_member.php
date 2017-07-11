@@ -58,7 +58,7 @@
             ['data-dialog' => 'size=auto']
                 );
            }
-           if ($group->id !== 'nogroup' && ($is_tutor || $m->user_id === $GLOBALS['user']->id)) {
+           if ($group->id !== 'nogroup' && ($is_tutor || ($m->user_id === $GLOBALS['user']->id && $group->userMayLeave($GLOBALS['user']->id)))) {
                 $actions->addLink(
             $controller->url_for('course/statusgroups/delete_member', $m->user_id, $group->id),
             _('Aus der Gruppe entfernen'),

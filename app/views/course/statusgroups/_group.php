@@ -32,26 +32,28 @@
                     ]) ?>
                 </a>
             <?php endif ?>
-            <?php if ($group->id != 'nogroup' && $group->userMayJoin($GLOBALS['user']->id)) : ?>
-                <a href="<?= $controller->url_for('course/statusgroups/join', $group->id) ?>">
-                    <?= Icon::create('door-enter', 'clickable',
-                        array('title' => sprintf(_('Mitglied von Gruppe %s werden'),
-                            htmlReady($group->name)))) ?></a>
-            <?php elseif ($group->id != 'nogroup' && $group->selfassign &&
-                $group->selfassign_start > time()) : ?>
-                <?= Icon::create('door-enter', 'inactive',
-                    array('title' => sprintf(_('Der Eintrag in diese Gruppe ist möglich ab %s.'),
-                        date('d.m.Y H:i', $group->selfassign_start)))) ?>
-            <?php elseif ($group->id != 'nogroup' && $group->selfassign &&
-                $group->selfassign_end && $group->selfassign_end < time()) : ?>
-                <?= Icon::create('door-enter', 'inactive',
-                    array('title' => sprintf(_('Der Eintrag in diese Gruppe war möglich bis %s.'),
-                        date('d.m.Y H:i', $group->selfassign_end)))) ?>
-            <?php elseif ($group->id != 'nogroup' && $group->isMember($GLOBALS['user']->id)) : ?>
-                <a href="<?= $controller->url_for('course/statusgroups/leave', $group->id) ?>">
-                    <?= Icon::create('door-leave', 'clickable',
-                        array('title' => sprintf(_('Aus Gruppe %s austragen'),
-                            htmlReady($group->name)))) ?></a>
+            <?php if (!$GLOBALS['perm']->have_perm('admin')) : ?>
+                <?php if ($group->id != 'nogroup' && $group->userMayJoin($GLOBALS['user']->id)) : ?>
+                    <a href="<?= $controller->url_for('course/statusgroups/join', $group->id) ?>">
+                        <?= Icon::create('door-enter', 'clickable',
+                            array('title' => sprintf(_('Mitglied von Gruppe %s werden'),
+                                htmlReady($group->name)))) ?></a>
+                <?php elseif ($group->id != 'nogroup' && $group->selfassign &&
+                    $group->selfassign_start > time()) : ?>
+                    <?= Icon::create('door-enter', 'inactive',
+                        array('title' => sprintf(_('Der Eintrag in diese Gruppe ist möglich ab %s.'),
+                            date('d.m.Y H:i', $group->selfassign_start)))) ?>
+                <?php elseif ($group->id != 'nogroup' && $group->selfassign &&
+                    $group->selfassign_end && $group->selfassign_end < time()) : ?>
+                    <?= Icon::create('door-enter', 'inactive',
+                        array('title' => sprintf(_('Der Eintrag in diese Gruppe war möglich bis %s.'),
+                            date('d.m.Y H:i', $group->selfassign_end)))) ?>
+                <?php elseif ($group->id != 'nogroup' && $group->userMayLeave($GLOBALS['user']->id)) : ?>
+                    <a href="<?= $controller->url_for('course/statusgroups/leave', $group->id) ?>">
+                        <?= Icon::create('door-leave', 'clickable',
+                            array('title' => sprintf(_('Aus Gruppe %s austragen'),
+                                htmlReady($group->name)))) ?></a>
+                <?php endif ?>
             <?php endif ?>
             <?php if ($is_tutor) : ?>
                 <?php if ($group->id != 'nogroup') : ?>
@@ -112,7 +114,8 @@
                           ) ?>
                 <?php else : ?>
                     <a href="<?= $controller->url_for('messages/write', array(
-                        'rec_uname' => $members->pluck('username'),
+                        'filter' => 'not_grouped',
+                        'course_id' => $course_id,
                         'default_subject' => htmlReady($course_title).' ('.htmlReady($group->name).')'
                     )) ?>" data-dialog="size=auto;">
                         <?= Icon::create('mail', 'clickable', [
