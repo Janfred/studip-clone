@@ -177,9 +177,9 @@ function restoreLanguage() {
 * @access   public
 */
 function setLocaleEnv($language, $language_domain = ''){
-    putenv("LANG=$language.utf8");
-    putenv("LANGUAGE=$language.utf8");
-    putenv("LC_ALL=$language.utf8");
+    putenv("LANG=$language.UTF-8");
+    putenv("LANGUAGE=$language.UTF-8");
+    putenv("LC_ALL=$language.UTF-8");
     $ret = setlocale(LC_ALL, '');
     setlocale(LC_NUMERIC, 'C');
     if($language_domain){
