@@ -41,10 +41,13 @@ function lastActivity ($sem_id)
         $queries = array(
             // Veranstaltungs-data
             "SELECT chdate FROM seminare WHERE Seminar_id = :id",
-            // Folder
-            "SELECT MAX(chdate) AS chdate FROM folder WHERE range_id = :id",
-            // Dokuments
-            "SELECT MAX(chdate) AS chdate FROM dokumente WHERE seminar_id = :id",
+            // Folders
+            "SELECT MAX(chdate) AS chdate FROM folders WHERE range_id = :id",
+            // Documents
+            "SELECT MAX(file_refs.chdate) AS chdate FROM file_refs
+                INNER JOIN folders
+                ON file_refs.folder_id = folders.id
+                WHERE folders.range_id = :id",
             // SCM
             "SELECT MAX(chdate) AS chdate FROM scm WHERE range_id = :id",
             // Dates
@@ -255,30 +258,36 @@ function dump_sem($sem_id, $print_view = false)
     }
     $dumpRow(_('Forenbeiträge:'), $count);
 
-    if ($Modules['documents']) {
-        //do not show hidden documents
-        $unreadable_folders = array();
-        if ($print_view) {
-            $check_user = $print_view === true ? $GLOBALS['user']->id : $print_view;
-            if ($Modules['documents_folder_permissions'] || StudipDocumentTree::ExistsGroupFolders($sem_id)) {
-                if (!$GLOBALS['perm']->have_studip_perm('tutor', $sem_id, $check_user)) {
-                    $folder_tree = TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $sem_id,'entity_type' => 'sem'));
-                    $unreadable_folders = $folder_tree->getUnReadableFolders($check_user);
-                }
-            }
-        }
-        $query = "SELECT COUNT(*) FROM dokumente WHERE seminar_id = ?";
-        $parameters = array($sem_id);
-
-        if (count($unreadable_folders) > 0) {
-            $query .= " AND range_id NOT IN(?)";
-            $parameters[] = $unreadable_folders;
-        }
-        $statement = DBManager::get()->prepare($query);
-        $statement->execute($parameters);
-        $docs = $statement->fetchColumn();
+    $num_files = 0;
+    $course_top_folder = Folder::findTopFolder($sem_id);
+    if ($course_top_folder) {
+        $course_top_folder = $course_top_folder->getTypedFolder();
     }
-    $dumpRow(_('Dokumente:'), $docs ?: 0);
+    
+    $user_id = $print_view === true ? $GLOBALS['user']->id : $print_view;
+
+    $readable_files_user_id = $user_id;
+    
+    if ($Modules['documents']) {
+        //Get the amount of readable files for a user with status autor in the course:
+
+        $autor = CourseMember::findOneBySql("status = 'autor'");
+        if ($autor) {
+            echo "DEBUG: autor found: " . $autor->user_id;
+            $readable_files_user_id = $autor->user_id;
+            $num_files = FileManager::countFilesInFolder($course_top_folder, true, null, $autor->user_id);
+        } else {
+            $dozent = CourseMember::findOneBySql("status = 'dozent'");
+            echo "DEBUG: dozent found: " . $dozent->user_id;
+            $readable_files_user_id = $dozent->user_id;
+            $num_files = FileManager::countFilesInFolder($course_top_folder, true, null, $dozent->user_id);
+        }
+    }
+
+    echo "DEBUG: readable_files_user_id = $readable_files_user_id ";
+    die();
+    
+    $dumpRow(_('Dokumente:'), $num_files ? $num_files : 0);
 
     $dump.= '</table>' . "\n";
 
@@ -319,42 +328,36 @@ function dump_sem($sem_id, $print_view = false)
     // Dateien anzeigen
     if ($Modules['documents']) {
 
-        $link_text = _('Hinweis: Diese Datei wurde nicht archiviert, da sie lediglich verlinkt wurde.');
-        $query = "SELECT name, filename, mkdate, filesize, Nachname AS nachname,
-                         IF(url != '', CONCAT('{$link_text}', ' / ', description), description) AS description
-                  FROM dokumente
-                  LEFT JOIN auth_user_md5 USING (user_id)
-                  WHERE seminar_id = ?";
-        $parameters = array($sem_id);
+        if ($course_top_folder) {
+            list($file_refs, $folders) = array_values(
+                FileManager::getFolderFilesRecursive(
+                    $course_top_folder,
+                    $readable_files_user_id
+                )
+            );
+            
+            $link_text = _('Hinweis: Diese Datei wurde nicht archiviert, da sie lediglich verlinkt wurde.');
 
-        if (count($unreadable_folders) > 0) {
-            $query .= " AND range_id NOT IN (?)";
-            $parameters[] = $unreadable_folders;
-        }
+            
+            if ($file_refs) {
+                $dump .= '<br>';
+                $dump .= '<table width="100%" border="1" cellpadding="2" cellspacing="0">';
+                $dump .= '<tr><td align="left" colspan="3" class="table_header_bold">';
+                $dump .= '<h2 class="table_header_bold">&nbsp;' . _('Dateien:') . '</h2>';
+                $dump .= '</td></tr>' . "\n";
 
-        $statement = DBManager::get()->prepare($query);
-        $statement->execute($parameters);
-        $dbresult = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-        if (count($dbresult) > 0) {
-            $dump .= '<br>';
-            $dump .= '<table width="100%" border="1" cellpadding="2" cellspacing="0">';
-            $dump .= '<tr><td align="left" colspan="3" class="table_header_bold">';
-            $dump .= '<h2 class="table_header_bold">&nbsp;' . _('Dateien:') . '</h2>';
-            $dump .= '</td></tr>' . "\n";
-
-            foreach ($dbresult as $row) {
-                $name = ($row['name'] && $row['name'] != $row['filename'])
-                      ? $row['name'] . ' (' . $row['filename'] . ')'
-                      : $row['filename'];
-                $dump .= sprintf('<tr><td width="100%%"><b>%s</b><br>%s (%u KB)</td><td>%s</td><td>%s</td></tr>' . "\n",
-                                 htmlReady($name),
-                                 htmlReady($row['description']),
-                                 round($row['filesize'] / 1024),
-                                 htmlReady($row['nachname']),
-                                 date('d.m.Y', $row['mkdate']));
+                foreach ($file_refs as $file_ref) {
+                    $dump .= sprintf(
+                        '<tr><td width="100%%"><b>%s</b><br>%s (%u KB)</td><td>%s</td><td>%s</td></tr>' . "\n",
+                        htmlReady($file_ref->name),
+                        htmlReady($file_ref->description),
+                        round($file_ref->file->size / 1024),
+                        htmlReady($file_ref->owner->nachname),
+                        date('d.m.Y', $file_ref->mkdate)
+                    );
+                }
             }
-
+            
             $dump .= '</table>' . "\n";
         }
     }
@@ -365,18 +368,6 @@ function dump_sem($sem_id, $print_view = false)
     {
         $dump .= '<br>';
 
-        // Prepare statement that obtains the number of document a specific
-        // user has uploaded into a specific seminar
-        $documents_params = array($sem_id, null);
-        $query = "SELECT COUNT(*) FROM dokumente WHERE Seminar_id = ? AND user_id = ?";
-        if (count($unreadable_folders) > 0) {
-            $query .= " AND range_id NOT IN (?)";
-            $documents_params[] = $unreadable_folders;
-
-        }
-        $documents_statement = DBManager::get()->prepare($query);
-        // Prepare statement that obtains all participants of a specific
-        // seminar with a specific status
         $ext_vis_query = get_ext_vis_query('seminar_user');
         $query = "SELECT user_id, {$_fullname_sql['full']} AS fullname,
                          {$ext_vis_query} AS user_is_visible
@@ -406,20 +397,28 @@ function dump_sem($sem_id, $print_view = false)
                 $dump .= '<th width="10%">' . _('Dokumente') . '</th></tr>' . "\n";
 
                 foreach ($users as $user) {
-                    $documents_params[1] = $user['user_id'];
-                    $documents_statement->execute($documents_params);
-                    $count = $documents_statement->fetchColumn() ?: 0;
-                    $documents_statement->closeCursor();
+                    //Count the files the user owns in the course:
 
+                    $user_files_count = FileManager::countFilesInFolder(
+                        $course_top_folder,
+                        true,
+                        $user['user_id']
+                    );
+                    
                     // get number of postings for this user from all forum-modules
                     $postings = 0;
                     foreach ($forum_modules as $plugin) {
                         $postings += $plugin->getNumberOfPostingsForUser($user['user_id'], $sem_id);
                     }
 
-                    $dump .= sprintf('<tr><td>%s</td><td align="center">%u</td><td align="center">%u</td></tr>' . "\n",
-                                     $user['user_is_visible'] ? htmlReady($user['fullname']) : _('(unsichtbareR NutzerIn)'),
-                                     $postings, $count);
+                    $dump .= sprintf(
+                        '<tr><td>%s</td><td align="center">%u</td><td align="center">%u</td></tr>' . "\n",
+                        $user['user_is_visible']
+                        ? htmlReady($user['fullname'])
+                        : _('(unsichtbareR NutzerIn)'),
+                        $postings,
+                        $user_files_count
+                    );
                 } // eine Zeile zuende
 
                 $dump.= '</table>' . "\n";

@@ -24,7 +24,6 @@
  */
 class FileManager
 {
-
     //FILE HELPER METHODS
 
     /**
@@ -1136,27 +1135,52 @@ class FileManager
 
     /**
      * Counts the number of files inside a folder and its subfolders.
-     * The search result can be limited to the files belonging to one user.
+     * The search result can be limited to the files belonging to one user
+     * and/or to the files which are readable for one user.
      *
      * @param FolderType $folder The folder whose files shall be counted.
      * @param bool $count_subfolders True, if files subfolders shall be counted, too (default). False otherwise.
-     * @param string $user_id Optional user_id to count only files of one user specified by his ID.
+     * @param string $owner_id Optional user-ID to count only files of one user specified by the ID.
+     * @param string $user_id Optional user-ID to count only files the user (specified by this user-ID) can read.
      *
      * @return int The amount of files inside the folder (and its subfolders).
      */
-    public static function countFilesInFolder(FolderType $folder, $count_subfolders = true, $user_id = null)
+    public static function countFilesInFolder(FolderType $folder, $count_subfolders = true, $owner_id = null, $user_id = null)
     {
         $num_files = 0;
 
-        if ($user_id === null) {
-            //If the user_id is not set we can simply count the number of all files.
-            $num_files = count($folder->getFiles());
+        if ($owner_id === null) {
+            //If the owner_id is not set we can simply count the number of all files.
+            $folder_files = $folder->getFiles();
+            if ($user_id === null) {
+                //If the user_id is also not set we can simply count all files in this folder:
+                $num_files = count($folder_files);
+            } else {
+                //$user_id is set: We must check for each file if it is readable for the user
+                //specified by $user_id:
+                if ($folder->isReadable($user_id)) {
+                    foreach ($folder_files as $folder_file) {
+                        if ($folder->isFileDownloadable($folder_file->id, $user_id)) {
+                            $num_files++;
+                        }
+                    }
+                }
+            }
         } else {
-            //If the user_id is set we must check who owns the file
-            //and count only those files whose user_id matches the user_id specified.
+            //If the owner_id is set we must check who owns the file
+            //and count only those files whose user_id matches the owner_id specified.
             foreach ($folder->getFiles() as $file) {
-                if ($file->user_id === $user_id) {
-                    $num_files++;
+                if ($file->user_id === $owner_id) {
+                    if ($user_id) {
+                        //user-ID is set: only if the file is downloadable
+                        //it will be counted!
+                        if ($folder->isFileDownloadable($file->id, $user_id)) {
+                            $num_files++;
+                        }
+                    } else {
+                        //No user-ID set: we can count the file
+                        $num_files++;
+                    }
                 }
             }
         }
@@ -1168,6 +1192,7 @@ class FileManager
                 $num_files += self::countFilesInFolder(
                     $subfolder,
                     $count_subfolders,
+                    $owner_id,
                     $user_id
                 );
             }

@@ -21,6 +21,7 @@
  */
 class FileArchiveManager
 {
+    
     //ARCHIVE HELPER METHODS
 
     /**
@@ -32,7 +33,7 @@ class FileArchiveManager
      * @param string $archive_fs_path The path of the file inside the archive's file system.
      * @param bool $do_user_permission_checks Set to true if reading/downloading permissions
      *     shall be checked. False otherwise. Default is true.
-     * @param bool $skip_check_for_user_permissions Set to true, if a file
+     * @param bool $ignore_user Set to true, if a file
      *     which has no download restrictions shall be included
      *     and the user-specific download condition check shall be ignored.
      *     If this parameter is set to true, the user_id parameter is irrelevant.
@@ -48,7 +49,7 @@ class FileArchiveManager
         $user_id = null,
         $archive_fs_path = '',
         $do_user_permission_checks = true,
-        $skip_check_for_user_permissions = false
+        $ignore_user = false
     )
     {
         $archive_max_size = Config::get()->ZIP_DOWNLOAD_MAX_SIZE * 1024 * 1024; //1048576 bytes = 1 Mebibyte
@@ -71,7 +72,7 @@ class FileArchiveManager
                 //FileRef is readable and downloadable for the user (identified by $user_id).
                 $adding_allowed = true;
             }
-        } elseif ($skip_check_for_user_permissions) {
+        } elseif ($ignore_user) {
             //we have to check the download condition by looking at the
             //terms of use object of the FileRef:
             if ($file_ref->terms_of_use && $file_ref->terms_of_use->download_condition == 0) {
@@ -142,7 +143,7 @@ class FileArchiveManager
      *     shall be checked. False otherwise. Default is true.
      * @param bool $keep_hierarchy True, if the folder hierarchy shall be kept.
      *     False, if the folder hierarchy shall be flattened.
-     * @param bool $skip_check_for_user_permissions Set to true, if a folder
+     * @param bool $ignore_user Set to true, if a folder
      *     of type StandardFolder shall be included without checking
      *     if the user (identified by user_id) can read it.
      * @return bool True on success, false on failure.
@@ -157,7 +158,7 @@ class FileArchiveManager
         $archive_fs_path = '',
         $do_user_permission_checks = true,
         $keep_hierarchy = true,
-        $skip_check_for_user_permissions = false
+        $ignore_user = false
     ) {
         $archive_max_size = Config::get()->ZIP_DOWNLOAD_MAX_SIZE * 1024 * 1024; //1048576 bytes = 1 Mebibyte
 
@@ -167,7 +168,7 @@ class FileArchiveManager
                 //Folder is not readable:
                 return false;
             }
-        } elseif ($skip_check_for_user_permissions
+        } elseif ($ignore_user
             && !($folder instanceof StandardFolder)
             && in_array($folder->range_type, ['course', 'institute']))
         {
@@ -192,7 +193,7 @@ class FileArchiveManager
                 //keep hierarchy in zip file (files and subdirectories)
                 $keep_hierarchy ? $folder_zip_path . '/' : '',
                 $do_user_permission_checks,
-                $skip_check_for_user_permissions
+                $ignore_user
             );
         }
 
@@ -205,7 +206,7 @@ class FileArchiveManager
                 $keep_hierarchy ? $folder_zip_path . '/' : '',
                 $do_user_permission_checks,
                 $keep_hierarchy,
-                $skip_check_for_user_permissions
+                $ignore_user
             );
         }
 
@@ -241,7 +242,7 @@ class FileArchiveManager
      *     Default is true.
      * @param bool $keep_hierarchy True, if the folder hierarchy shall be kept.
      *     False, if the folder hierarchy shall be flattened. Default is true.
-     * @param bool $skip_check_for_user_permissions Set to true, if all files
+     * @param bool $ignore_user Set to true, if all files
      *     which have no download restrictions and all folders which are of type
      *     StandardFolder shall be included and the user-specific
      *     download condition check shall be ignored.
@@ -260,7 +261,7 @@ class FileArchiveManager
         $archive_file_path = '',
         $do_user_permission_checks = true,
         $keep_hierarchy = true,
-        $skip_check_for_user_permissions = false
+        $ignore_user = false
     )
     {
         $archive_max_num_files = Config::get()->ZIP_DOWNLOAD_MAX_FILES;
@@ -304,7 +305,7 @@ class FileArchiveManager
                     $user_id,
                     '',
                     $do_user_permission_checks,
-                    $skip_check_for_user_permissions
+                    $ignore_user
                 );
             } elseif ($file_area_object instanceof Folder || $file_area_object instanceof FolderType) {
                 $folder = $file_area_object;
@@ -320,7 +321,7 @@ class FileArchiveManager
                     '',
                     $do_user_permission_checks,
                     $keep_hierarchy,
-                    $skip_check_for_user_permissions
+                    $ignore_user
                 );
             }
         }
