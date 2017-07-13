@@ -338,7 +338,7 @@ class ModulesNotification extends Modules {
                 } else if ($r_data['neuedokumente'] > 0) {
                     $text = _("1 neues Dokument hochgeladen:");
                 }
-                $redirect = '&redirect_to=folder.php&cmd=all';
+                $redirect = '&redirect_to=dispatch.php/course/files/flat';
                 $icon = Icon::create("files", "clickable");
                 break;
             case 'schedule' :
