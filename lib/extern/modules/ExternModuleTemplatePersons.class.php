@@ -182,7 +182,7 @@ class ExternModuleTemplatePersons extends ExternModule {
                 $query .= "LEFT JOIN auth_user_md5 aum USING(user_id) ";
                 $query .= "LEFT JOIN user_info USING(user_id) LEFT JOIN user_inst ui USING(user_id) ";
                 $query .= "WHERE su.statusgruppe_id IN (?) AND Institut_id = ? ";
-                $query .= "' AND ".get_ext_vis_query()." ORDER BY ";
+                $query .= " AND ".get_ext_vis_query()." ORDER BY ";
                 $query .= "s.position ASC, su.position ASC";
             }
             $parameters = array($this->config->getValue('Main', 'groupsvisible'), $this->config->range_id);
