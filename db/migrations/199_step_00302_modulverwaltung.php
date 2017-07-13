@@ -560,7 +560,7 @@ class Step00302Modulverwaltung extends Migration
          */
         StudipLog::registerActionPlugin('MVV_MODUL_NEW', 'MVV: Modul erstellen', '%user erstellt neues Modul %modul(%affected).', 'MVVPlugin');
         StudipLog::registerActionPlugin('MVV_MODUL_UPDATE', 'MVV: Modul ändern', '%user ändert Modul %modul(%affected).', 'MVVPlugin');
-        StudipLog::registerActionPlugin('MVV_MODUL_DEL', 'MV: Modul löschen', '%user löscht Modul %modul(%affected).', 'MVVPlugin');
+        StudipLog::registerActionPlugin('MVV_MODUL_DEL', 'MVV: Modul löschen', '%user löscht Modul %modul(%affected).', 'MVVPlugin');
 
         StudipLog::registerActionPlugin('MVV_STUDIENGANG_NEW', 'MVV: Studiengang erstellen', '%user erstellt neuen Studiengang %stg(%affected).', 'MVVPlugin');
         StudipLog::registerActionPlugin('MVV_STUDIENGANG_UPDATE', 'MVV: Studiengang ändern', '%user ändert Studiengang %stg(%affected).', 'MVVPlugin');
