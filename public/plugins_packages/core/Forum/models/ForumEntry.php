@@ -1156,7 +1156,7 @@ class ForumEntry {
      */
     function checkRootEntry($seminar_id)
     {
-        setTempLanguage(Config::get()->DEFAULT_LANGUAGE);
+        setTempLanguage();
 
         // check, if the root entry in the topic tree exists
         $stmt = DBManager::get()->prepare("SELECT COUNT(*) FROM forum_entries

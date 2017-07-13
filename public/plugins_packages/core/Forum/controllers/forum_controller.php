@@ -53,9 +53,6 @@ class ForumController extends StudipController {
             $this->picturepath = '/'. $this->dispatcher->trails_root . '/img';
         }
 
-        // we want to display the dates in german
-        setlocale(LC_TIME, 'de_DE@euro', 'de_DE', 'de', 'ge');
-
         // the default for displaying timestamps
         $this->time_format_string = "%a %d. %B %Y, %H:%M";
         $this->time_format_string_short = "%d.%m.%Y, %H:%M";

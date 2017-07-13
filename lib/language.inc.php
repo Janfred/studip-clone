@@ -161,8 +161,8 @@ function setTempLanguage ($uid = FALSE, $temp_language = "") {
 * @access   public
 */
 function restoreLanguage() {
-    global $_language_domain, $_language;
-    setLocaleEnv($_language, $_language_domain);
+    global $_language_domain;
+    setLocaleEnv($_SESSION['_language'], $_language_domain);
 }
 
 /**
