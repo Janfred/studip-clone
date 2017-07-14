@@ -1421,14 +1421,14 @@ class MyRealmModel
 
         $stmt = DBManager::get()->prepare(
             "SELECT admission_seminar_user.*, seminare.status as sem_status, " .
-            "seminare.Name, seminare.Ort " .
+            "seminare.Name, seminare.Ort, seminare.admission_binding " .
             "FROM admission_seminar_user " .
             "INNER JOIN seminare USING(seminar_id) " .
             "WHERE user_id = ? " .
             "ORDER BY admission_seminar_user.status, name");
         $stmt->execute(array($user_id));
 
-        $waitlists = array_merge($claiming, $stmt->fetchAll());
+        $waitlists = array_merge($claiming, $stmt->fetchAll(PDO::FETCH_ASSOC));
 
         return $waitlists;
     }
