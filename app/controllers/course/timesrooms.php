@@ -939,16 +939,26 @@ class Course_TimesroomsController extends AuthenticatedController
             $cycle->end_offset = NULL;
         }
 
+        $changed_dates = 0;
         if (Request::int('course_type')) {
-            $cycle->setSingleDateType(Request::int('course_type'));
+            $changed_dates = $cycle->setSingleDateType(Request::int('course_type'));
         }
 
-        if ($cycle->isDirty()) {
+        if ($changed_dates > 0 || $cycle->isDirty()) {
             $cycle->chdate = time();
             $cycle->store();
+
+            if ($changed_dates > 0) {
+                PageLayout::postSuccess(sprintf(ngettext(
+                    _('Die Art des Termins wurde bei 1 Termin geändert'),
+                    _('Die Art des Termins wurde bei %u Terminen geändert'),
+                    $changed_dates
+                ), $changed_dates));
+            }
         } else {
             PageLayout::postInfo(_('Es wurden keine Ã„nderungen vorgenommen'));
         }
+
         $this->redirect('course/timesrooms/index');
     }
 
