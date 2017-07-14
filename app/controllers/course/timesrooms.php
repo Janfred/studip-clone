@@ -950,8 +950,8 @@ class Course_TimesroomsController extends AuthenticatedController
 
             if ($changed_dates > 0) {
                 PageLayout::postSuccess(sprintf(ngettext(
-                    _('Die Art des Termins wurde bei 1 Termin geändert'),
-                    _('Die Art des Termins wurde bei %u Terminen geändert'),
+                    _('Die Art des Termins wurde bei 1 Termin geÃ¤ndert'),
+                    _('Die Art des Termins wurde bei %u Terminen geÃ¤ndert'),
                     $changed_dates
                 ), $changed_dates));
             }
