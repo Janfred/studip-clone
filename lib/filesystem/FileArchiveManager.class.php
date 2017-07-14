@@ -274,18 +274,19 @@ class FileArchiveManager
             );
         }
 
-        // We can create the Zip archive now since its path exists in the file system.
+        // $file_area_objects must be a non-empty array!
+        // Otherwise we would return an empty Zip archive.
+        if (!is_array($file_area_objects) || empty($file_area_objects)) {
+            return false;
+        }
+
+        // We can create the Zip archive now since its path exists in the file system
+        // and furthermore there are file area objects available.
         $archive = new ZipArchive();
         if (!$archive->open($archive_file_path, ZipArchive::CREATE | ZipArchive::OVERWRITE)) {
             throw new FileArchiveManagerException('Error opening new ZIP archive!');
         }
-
-        // $file_area_objects must be a non-empty array!
-        // Otherwise we return an empty Zip archive.
-        if (!is_array($file_area_objects) || empty($file_area_objects)) {
-            return $archive;
-        }
-
+        
         //Check if more file area objects than allowed shall be packed:
         //In that case, stop here.
         if ($archive_max_num_files && count($file_area_objects) > $archive_max_num_files) {
