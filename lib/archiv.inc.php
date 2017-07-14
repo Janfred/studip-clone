@@ -271,12 +271,22 @@ function dump_sem($sem_id, $print_view = false)
     if ($Modules['documents']) {
         //Get the amount of readable files for a user with status autor in the course:
 
-        $autor = CourseMember::findOneBySql("status = 'autor'");
+        $autor = CourseMember::findOneBySql(
+            "seminar_id = :course_id AND status = 'autor'",
+            [
+                'course_id' => $sem_id
+            ]
+        );
         if ($autor) {
             $readable_files_user_id = $autor->user_id;
             $num_files = FileManager::countFilesInFolder($course_top_folder, true, null, $autor->user_id);
         } else {
-            $dozent = CourseMember::findOneBySql("status = 'dozent'");
+            $dozent = CourseMember::findOneBySql(
+                "seminar_id = :course_id AND status = 'dozent'",
+                [
+                    'course_id' => $sem_id
+                ]
+            );
             $readable_files_user_id = $dozent->user_id;
             $num_files = FileManager::countFilesInFolder($course_top_folder, true, null, $dozent->user_id);
         }
@@ -327,12 +337,13 @@ function dump_sem($sem_id, $print_view = false)
             list($file_refs, $folders) = array_values(
                 FileManager::getFolderFilesRecursive(
                     $course_top_folder,
-                    $readable_files_user_id
+                    $readable_files_user_id,
+                    true
                 )
             );
             
             $link_text = _('Hinweis: Diese Datei wurde nicht archiviert, da sie lediglich verlinkt wurde.');
-
+            
             
             if ($file_refs) {
                 $dump .= '<br>';

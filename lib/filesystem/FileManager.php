@@ -1209,16 +1209,31 @@ class FileManager
      * @param FolderType $top_folder The folder whose content shall be retrieved.
      * @param string $user_id The ID of the user who wishes to get all
      *     files and subfolders of a folder.
+     * @param bool $check_file_permissions Set to true, if file permissions shall be checked.
+     *     Defaults to false.
      * @return mixed[] A mixed array with FolderType and FileRef objects.
      */
-    public static function getFolderFilesRecursive(FolderType $top_folder, $user_id)
+    public static function getFolderFilesRecursive(FolderType $top_folder, $user_id, $check_file_permissions = false)
     {
         $files = [];
         $folders = [];
-        $array_walker = function ($top_folder) use (&$array_walker, &$folders, &$files, $user_id) {
+        $array_walker = function ($top_folder) use (
+            &$array_walker, &$folders, &$files, $user_id, $check_file_permissions
+        ) {
             if ($top_folder->isVisible($user_id) && $top_folder->isReadable($user_id)) {
                 $folders[$top_folder->getId()] = $top_folder;
-                $files = array_merge($files, $top_folder->getFiles());
+                if ($check_file_permissions) {
+                    //We must check for each file if it is downloadable for the user
+                    //specified by user_id:
+                    $top_folder_file_refs = $top_folder->getFiles();
+                    foreach ($top_folder_file_refs as $file_ref) {
+                        if ($top_folder->isFileDownloadable($file_ref->id, $user_id)) {
+                            $files[] = $file_ref;
+                        }
+                    }
+                } else {
+                    $files = array_merge($files, $top_folder->getFiles());
+                }
                 array_walk($top_folder->getSubFolders(), $array_walker);
             }
         };
