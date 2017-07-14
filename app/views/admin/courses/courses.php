@@ -163,9 +163,12 @@
                     <? if (is_a($actions[$selected_action]['multimode'], "\\Studip\\Button")) : ?>
                         <?= $actions[$selected_action]['multimode'] ?>
                     <? else : ?>
-                        <?= Studip\Button::createAccept(is_string($actions[$selected_action]['multimode'])
-                            ? $actions[$selected_action]['multimode']
-                            : $actions[$selected_action]['title'], 'save_action') ?>
+                        <?= Studip\Button::createAccept(
+                                is_string($actions[$selected_action]['multimode'])
+                                    ? $actions[$selected_action]['multimode']
+                                    : $actions[$selected_action]['title'],
+                                'save_action',
+                                $selected_action == 16 ? array('data-dialog' => 1) : null) ?>
                     <? endif ?>
                 </th>
             </tr>
