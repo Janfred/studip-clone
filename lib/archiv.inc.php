@@ -273,20 +273,15 @@ function dump_sem($sem_id, $print_view = false)
 
         $autor = CourseMember::findOneBySql("status = 'autor'");
         if ($autor) {
-            echo "DEBUG: autor found: " . $autor->user_id;
             $readable_files_user_id = $autor->user_id;
             $num_files = FileManager::countFilesInFolder($course_top_folder, true, null, $autor->user_id);
         } else {
             $dozent = CourseMember::findOneBySql("status = 'dozent'");
-            echo "DEBUG: dozent found: " . $dozent->user_id;
             $readable_files_user_id = $dozent->user_id;
             $num_files = FileManager::countFilesInFolder($course_top_folder, true, null, $dozent->user_id);
         }
     }
 
-    echo "DEBUG: readable_files_user_id = $readable_files_user_id ";
-    die();
-    
     $dumpRow(_('Dokumente:'), $num_files ? $num_files : 0);
 
     $dump.= '</table>' . "\n";
