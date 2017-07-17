@@ -63,7 +63,7 @@ use Studip\Button, Studip\LinkButton;
           <? if ($lock->isLocked($lock_data)): ?>
             <?= MessageBox::info(sprintf(_('Die Migration wurde %s von %s bereits angestossen und läuft noch.'),
                                          reltime($lock_data['timestamp']),
-                                         User::find($lock_data['user_id'])->getFullName()),
+                                         htmlReady(User::find($lock_data['user_id'])->getFullName())),
                                  array(sprintf(_('Sollte während der Migration ein Fehler aufgetreten sein, so können Sie ' .
                                                  'diese Sperre durch den unten stehenden Link oder das Löschen der Datei ' .
                                                  '<em>%s</em> auflösen.'), $lock->getFilename()))) ?>
