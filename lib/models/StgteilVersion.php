@@ -115,7 +115,7 @@ class StgteilVersion extends ModuleManagementModelTreeItem
             $filter = null, $row_count = null, $offset = null)
     {
         $sortby = self::createSortStatement($sortby, $order, 'start',
-                array('count_abschnitte'));
+                array('start', 'count_abschnitte', 'count_dokumente'));
         return parent::getEnrichedByQuery('SELECT mvv_stgteilversion.*, '
                 . 'start_sem.beginn AS start, '
                 . 'COUNT(abschnitt_id) AS count_abschnitte, '
