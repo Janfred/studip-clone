@@ -19,6 +19,19 @@ class Utf8Conversion extends Migration
         );
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+        // check if the necessary MySQL-settings are present
+        $result = $pdo->query("SHOW VARIABLES LIKE 'innodb_file_format'");
+        $var = $result->fetch(PDO::FETCH_KEY_PAIR);
+        if (mb_strtolower($var['innodb_file_format']) != 'barracuda') {
+            throw new Exception('Could not convert Database: You need to set \'innodb_file_format\' = \'Barracuda\'');
+        }
+
+        $result = $pdo->query("SHOW VARIABLES LIKE 'innodb_large_prefix'");
+        $var = $result->fetch(PDO::FETCH_KEY_PAIR);
+        if (mb_strtolower($var['innodb_large_prefix']) != 'on') {
+            throw new Exception('Could not convert Database: You need to set \'innodb_large_prefix\' = 1');
+        }
+
         // create a helper-function in MySQL
         $pdo->exec("
         CREATE FUNCTION entity_decode(txt TEXT CHARSET utf8mb4) RETURNS TEXT
