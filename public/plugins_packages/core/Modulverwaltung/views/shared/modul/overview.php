@@ -13,10 +13,12 @@
             <dl>
             <? foreach ($GLOBALS['MVV_MODUL']['PERSONEN_GRUPPEN']['values'] as $key => $gruppe) : ?>
                 <? if ($gruppe['visible'] && is_array($modulVerantwortung[$key])) : ?>
-                <dt><?= $gruppe['name'] ?></dt>
-                    <? foreach ($modulVerantwortung[$key] as $modul_user): ?>
-                    <dd><?= htmlReady($modul_user->user->getFullName('no_title')) ?></dd>
-                    <? endforeach; ?>
+                <dt><?= htmlReady($gruppe['name']) ?></dt>
+                <? foreach ($modulVerantwortung[$key] as $modul_user): ?>
+                <? if ($modul_user->user) : ?>
+                <dd><?= htmlReady($modul_user->user->getFullname('no_title')) ?></dd>
+                <? endif; ?>
+                <? endforeach; ?>
                 <? endif; ?>
             <? endforeach; ?>
             </dl>
@@ -29,7 +31,7 @@
                 <? if (mb_strlen($teilnahmeVoraussetzung) > 0): ?>
                     <tr>
                         <td style="width: 20%; font-weight: bold;"><?= _('Teilnahmevoraussetzungen') ?></td>
-                        <td ><?= $teilnahmeVoraussetzung ?></td>
+                        <td ><?= formatReady($teilnahmeVoraussetzung) ?></td>
                     </tr>
                 <? endif; ?>
                 <? if (mb_strlen($deskriptor->kommentar)) : ?>
@@ -49,7 +51,7 @@
                         <tr>
                             <td style="width: 20%; font-weight: bold;"><?= _('Kapazität Modul') ?></td>
                             <td>
-                                <?= $modul->kapazitaet ?>
+                                <?= htmlReady($modul->kapazitaet) ?>
                                 <? if (mb_strlen($deskriptor->kommentar_kapazitaet) > 0): ?>
                                     (<?= formatReady($deskriptor->kommentar_kapazitaet) ?>)
                                 <? endif; ?>
@@ -60,7 +62,7 @@
                     <? if (mb_strlen($pruef_ebene) > 0): ?>
                         <tr>
                             <td style="width: 20%; font-weight: bold;"><?= _('Prüfungsebene') ?></td>
-                            <td><?= $pruef_ebene ?></td>
+                            <td><?= htmlReady($pruef_ebene) ?></td>
                         </tr>
                     <? endif; ?>
                     <? if (mb_strlen($deskriptor->pruef_vorleistung)) : ?>
@@ -100,17 +102,13 @@
             <tr>
                 <? if ($type === 1): ?>
                 <td>  
-                    <b> <?= $modul_teil['name'] ?> </b> 
+                    <b> <?= htmlReady($modul_teil['name']) ?> </b> 
                     <? if (mb_strlen($modul_teil['kommentar']) > 0): ?>
-                    <br>(<?= $modul_teil['kommentar'] ?>)
+                    <?= $modul_teil['kommentar'] ? '<br>(' . formatReady($modul_teil['kommentar']) . ')' : '' ?>
                     <? endif; ?>
-                    <? /* if ($lvGruppe['kapazitaet'] > 0): ?>
-                        <br/>
-                        <b><?= _('Kapazität') ?>: </b> <?= $lvGruppe['kapazitaet'] ?>
-                    <? endif; */ ?>
                     <? if (mb_strlen($modul_teil['voraussetzung']) > 0): ?>
                         <br>
-                        <b><?= _('Teilnahmevoraussetzungen') ?>:</b> <?= $modul_teil['voraussetzung'] ?>
+                        <b><?= _('Teilnahmevoraussetzungen') ?>:</b> <?= formatReady($modul_teil['voraussetzung']) ?>
                     <? endif; ?>
                 </td>
                 <? endif; ?>
@@ -124,21 +122,25 @@
                         <? foreach ($gruppe['courses'] as $course): ?>
                             <li>
                                 <a href="<?= URLHelper::getLink('dispatch.php/course/details', ['sem_id' => $course->id]) ?>">
-                                <?= htmlReady($course['VeranstaltungsNummer']) . ' - ' . htmlReady($course['Name']) ?>
+                                <?= htmlReady(($course['VeranstaltungsNummer'] ? $course['VeranstaltungsNummer'] . ' - ' : '') . $course['Name']) ?>
                                 </a>
+                                <? if ($course['visible'] != 1) : ?>
+                                <em><?= _('[versteckt]') ?></em>
+                                <? endif; ?>
                             </li>
                         <? endforeach; ?>
                         </ul>
                         <? endif; ?>
                     <? endforeach; ?>
                 </td>
-                <? if ($type === 1): ?>
+                <? if ($type === 1) : ?>
                     <td>
                         <? if (mb_strlen($modul_teil['pruef_vorleistung']) > 0) : ?>
-                            <b><?= _('Prüfungsvorleistung') ?>:</b> <?= $modul_teil['pruef_vorleistung'] ?>
+                            <b><?= _('Prüfungsvorleistung') ?>:</b> <?= htmlReady($modul_teil['pruef_vorleistung']) ?>
+                        
                         <? endif; ?>
                         <? if (mb_strlen($modul_teil['pruef_leistung']) > 0) : ?>
-                            <b><?= _('Prüfungsform') ?>:</b> <br/><?= $modul_teil['pruef_leistung'] ?> (<?= $modul_teil['anteil_note'] ?> %)
+                            <b><?= _('Prüfungsform') ?>:</b> <br/><?= htmlReady($modul_teil['pruef_leistung']) ?> (<?= ($modul_teil['anteil_note'] ? '(' . htmlReady($modul_teil['anteil_note']) . '%)' : '') ?>
                         <? endif; ?>
                     </td>
                 <? endif; ?>

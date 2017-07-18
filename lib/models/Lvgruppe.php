@@ -108,12 +108,7 @@ class Lvgruppe extends ModuleManagementModelTreeItem
         if ($semester_id) {
             $semester = Semester::find($semester_id);
             if ($semester) {
-                if (trim($filter_sql)) {
-                    $filter_sql .= ' AND';
-                } else {
-                    $filter_sql .= ' WHERE';
-                }
-                $filter_sql = trim($filter_sql) ? $filter_sql  : ' AND';
+                $filter_sql = trim($filter_sql) ? $filter_sql . ' AND' : $filter_sql . ' WHERE';
                 
                 $filter_sql .= ' ((seminare.duration_time = -1 '
                         . 'AND seminare.start_time < :beginn) '
@@ -151,7 +146,7 @@ class Lvgruppe extends ModuleManagementModelTreeItem
     }
     
     /**
-     * Rturns the number of LV-Gruppen optionally reduced by
+     * Returns the number of LV-Gruppen optionally reduced by
      * filter criteria.
      * 
      * @param array $filter Key-value pairs of filed names and values
@@ -173,12 +168,7 @@ class Lvgruppe extends ModuleManagementModelTreeItem
             $semester_id = func_get_arg(1);
             $semester = Semester::find($semester_id);
             if ($semester) {
-                if (trim($filter_sql)) {
-                    $filter_sql .= ' AND';
-                } else {
-                    $filter_sql .= ' WHERE';
-                }
-                $filter_sql = trim($filter_sql) ? $filter_sql  : ' AND';
+                $filter_sql = trim($filter_sql) ? $filter_sql . ' AND' : $filter_sql . ' WHERE';
                 $filter_sql .= ' (seminare.start_time >= ? '
                         . 'AND seminare.start_time <= ?) '
                         . 'OR (seminare.start_time <= ? AND seminare.start_time '
@@ -376,30 +366,84 @@ class Lvgruppe extends ModuleManagementModelTreeItem
     }
     
     /**
-     * Retrieves corses this LV-Gruppe is assigned to. Filtered by a given
-     * semester.
+     * Retrieves courses this LV-Gruppe is assigned to. Filtered by a given
+     * semester considering the global visibility or the the visibility
+     * for a given user.
      * 
      * @param string $semester_id The id of a semester.
+     * @param mixed $only_visible Boolean true retrieves only visible courses, false
+     * retrieves all courses. If $only_visible is an user id it depends on the users
+     * status which courses will be retrieved.
      * @return array An array of course data.
      */
-    public function getAssignedCoursesBySemester($semester_id)
+    public function getAssignedCoursesBySemester($semester_id, $only_visible = true)
     {
         $semester = Semester::find($semester_id);
         if ($semester) {
-            $stmt = DBManager::get()->prepare('SELECT seminar_id, Name, '
-                . 'VeranstaltungsNummer FROM seminare sem '
+            $sql = 'SELECT seminar_id, Name, '
+                . 'VeranstaltungsNummer, sem.visible FROM seminare sem '
                 . 'LEFT JOIN mvv_lvgruppe_seminar mls USING(seminar_id) '
                 . 'WHERE mls.lvgruppe_id = :id '
                 . 'AND ((sem.start_time <= :semester_beginn '
                 . 'AND sem.start_time + sem.duration_time >= :semester_beginn) '
                 . 'OR (sem.start_time BETWEEN :semester_beginn AND :semester_ende) '
-                . 'OR (sem.start_time <= :semester_beginn AND sem.duration_time = -1)) '
-                . 'AND sem.visible = 1 ');
-            $stmt->execute(array(
-                ':id' => $this->getId(),
-                ':semester_beginn' => $semester->beginn,
-                ':semester_ende' => $semester->ende
-            ));
+                . 'OR (sem.start_time <= :semester_beginn AND sem.duration_time = -1)) ';
+            if ($only_visible === false) {
+                $stmt = DBManager::get()->prepare($sql);
+                $stmt->execute(array(
+                    ':id' => $this->getId(),
+                    ':semester_beginn' => $semester->beginn,
+                    ':semester_ende' => $semester->ende
+                ));
+            } else if ($only_visible === true) {
+                $stmt = DBManager::get()->prepare($sql . ' AND sem.visible = 1 ');
+                $stmt->execute(array(
+                    ':id' => $this->getId(),
+                    ':semester_beginn' => $semester->beginn,
+                    ':semester_ende' => $semester->ende
+                ));
+            } else {
+                $user_perm = $GLOBALS['perm']->get_perm($only_visible);
+                if ($user_perm == 'root') {
+                    $stmt = DBManager::get()->prepare($sql);
+                    $stmt->execute(array(
+                        ':id' => $this->getId(),
+                        ':semester_beginn' => $semester->beginn,
+                        ':semester_ende' => $semester->ende
+                    ));
+                } else if ($user_perm == 'admin') {
+                    $perm_institute_ids = [];
+                    foreach (Institute::getMyInstitutes($only_visible) as $perm_institute) {
+                        $perm_institute_ids[] = $perm_institute['Institut_id'];
+                    }
+                    $stmt = DBManager::get()->prepare($sql
+                        . 'AND (sem.visible = 1 OR (sem.visible = 0 '
+                        . 'AND sem.institut_id IN (:perm_institutes))) ');
+                    $stmt->execute(array(
+                        ':id' => $this->getId(),
+                        ':semester_beginn' => $semester->beginn,
+                        ':semester_ende' => $semester->ende,
+                        ':perm_institutes' => $perm_institute_ids
+                    ));
+                } else {
+                    $stmt = DBManager::get()->prepare('SELECT seminar_id, Name, '
+                        . 'VeranstaltungsNummer, sem.visible FROM seminare sem '
+                        . 'LEFT JOIN mvv_lvgruppe_seminar mls USING(seminar_id) '
+                        . 'INNER JOIN seminar_user USING(seminar_id) '
+                        . 'WHERE mls.lvgruppe_id = :id '
+                        . 'AND ((sem.start_time <= :semester_beginn '
+                        . 'AND sem.start_time + sem.duration_time >= :semester_beginn) '
+                        . 'OR (sem.start_time BETWEEN :semester_beginn AND :semester_ende) '
+                        . 'OR (sem.start_time <= :semester_beginn AND sem.duration_time = -1)) '
+                        . 'AND (sem.visible = 1 OR (sem.visible = 0 AND seminar_user.user_id = :user_id))');
+                    $stmt->execute(array(
+                        ':id' => $this->getId(),
+                        ':semester_beginn' => $semester->beginn,
+                        ':semester_ende' => $semester->ende,
+                        ':user_id' => $only_visible
+                    ));
+                }
+            }
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
         return array();

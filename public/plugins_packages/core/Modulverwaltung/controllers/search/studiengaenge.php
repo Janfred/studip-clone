@@ -247,9 +247,9 @@ class Search_StudiengaengeController extends MVVController
                     $countcourses = 0;
                     foreach ($abschnitt_modul->modul->modulteile as $teil) {
                         $lvg = Lvgruppe::findByModulteil($teil->id);
-                        if($lvg) {
+                        if ($lvg) {
                             foreach ($lvg as $lv) {
-                                $courses = $lv->getAssignedCoursesBySemester($this->active_sem->id);
+                                $courses = $lv->getAssignedCoursesBySemester($this->active_sem->id, $GLOBALS['user']->id);
                                 $countcourses += count($courses);
                             }
                         }
@@ -306,69 +306,54 @@ class Search_StudiengaengeController extends MVVController
     private function getSemester($version)
     {
         if (!$version) {
-            return array();
+            return [];
         }
         $start_sem = Semester::find($version->start_sem);
         $end_sem = Semester::find($version->end_sem);
-        $start = $start_sem ? $start_sem->beginn : 0;
-        $end = $end_sem ? $end_sem->beginn : PHP_INT_MAX;
-        /*
-        $version_semester = Semester::findBySQL('beginn BETWEEN ? AND ?', array($start, $end));
-        if (!count($version_semester)) {
-            return array();
-        }
-
-        $semester_array = SemesterData::GetSemesterArray();
-        foreach ($semester_array as $value) {
-            if (isset($value['beginn']) && $value['beginn']) {
-                $sem_start_times[] = $value['beginn'];
-            }
-        }
-        $sem_number_sql = 'INTERVAL(start_time,' . join(',', $sem_start_times) . ')';
-        $sem_number_end_sql = 'IF(duration_time=-1,' . count($sem_start_times)
-                . ',INTERVAL(start_time+duration_time,'
-                . join(',', $sem_start_times) . '))';
-        $semester = array();
-        $stmt = DBManager::get()->prepare('SELECT DISTINCT  '
-                . $sem_number_sql . " AS sem_number_start, "
-                . $sem_number_end_sql . " AS sem_number_end "
-                . 'FROM mvv_stgteilabschnitt '
-                . 'INNER JOIN mvv_stgteilabschnitt_modul USING(abschnitt_id) '
-                . 'INNER JOIN mvv_modulteil USING(modul_id) '
-                . 'INNER JOIN mvv_lvgruppe_modulteil USING(modulteil_id) '
-                . 'INNER JOIN mvv_lvgruppe_seminar USING(lvgruppe_id) '
-                . 'INNER JOIN seminare sem USING(seminar_id) '
-                . 'WHERE mvv_stgteilabschnitt.version_id = ? '
-                . 'AND sem.visible = 1 '
-                . 'ORDER BY sem_number_start');
-        $stmt->execute(array($version->getId()));
-        $sem_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        foreach ($sem_data as $sem) {
-            foreach (range($sem['sem_number_start'], $sem['sem_number_end']) as $num) {
-                if ($semester_array[$num]['beginn'] >= $start
-                        && $semester_array[$num]['beginn'] <= $end) {
-                    $semester[$semester_array[$num]['semester_id']] = $semester_array[$num];
-                }
-            }
-        }
-        */
-        $semester = array();
-        $stmt = DBManager::get()->prepare('SELECT 1
+        $start = (int) ($start_sem ? $start_sem->beginn : 0);
+        $end = (int) ($end_sem ? $end_sem->beginn : PHP_INT_MAX);
+        $semester = [];
+        $sql = 'SELECT 1
                 FROM mvv_stgteilabschnitt
                 INNER JOIN mvv_stgteilabschnitt_modul USING(abschnitt_id)
+                INNER JOIN mvv_modul mm USING(modul_id)
                 INNER JOIN mvv_modulteil USING(modul_id)
                 INNER JOIN mvv_lvgruppe_modulteil USING(modulteil_id)
                 INNER JOIN mvv_lvgruppe_seminar USING(lvgruppe_id)
-                INNER JOIN seminare sem USING(seminar_id)
-                WHERE mvv_stgteilabschnitt.version_id = ?
-                AND sem.visible = 1
-                AND sem.start_time <= ? AND (? <= (sem.start_time + sem.duration_time) OR sem.duration_time = -1)
-                LIMIT 1'
-                );
+                INNER JOIN seminare sem USING(seminar_id) 
+                LEFT JOIN semester_data mm_start_sem ON mm.start = mm_start_sem.semester_id 
+                LEFT JOIN semester_data mm_end_sem ON mm.end = mm_end_sem.semester_id ';
+        // visibility of courses depends on user permission
+        $user_perm = $GLOBALS['perm']->get_perm();
+        if ($user_perm == 'root') {
+            $sql_add = '';
+            $parameters = [];
+        } else if ($user_perm == 'admin') {
+            $perm_institute_ids = [];
+            foreach (Institute::getMyInstitutes($GLOBALS['user']->id) as $perm_institute) {
+                $perm_institute_ids[] = $perm_institute['Institut_id'];
+            }
+            $parameters = [':perm_institutes' => $perm_institute_ids];
+            $where_add = 'AND (sem.visible = 1 OR (sem.visible = 0 '
+                . 'AND sem.institut_id IN (:perm_institutes))) ';
+        } else {
+            $sql .= 'LEFT JOIN seminar_user USING(seminar_id) ';
+            $where_add = 'AND (sem.visible = 1 OR (sem.visible = 0 AND seminar_user.user_id = :user_id)) ';
+            $parameters = [':user_id' => $GLOBALS['user']->id];
+        }
+        $sql .= 'WHERE mvv_stgteilabschnitt.version_id = :version
+                AND ((mm_start_sem.beginn IS NULL AND mm_end_sem.ende IS NULL)
+                OR (mm_start_sem.beginn <= :beginn
+                AND (mm_end_sem.ende >= :ende OR mm_end_sem.ende IS NULL)))
+                AND sem.start_time <= :beginn AND (:beginn <= (sem.start_time 
+                + sem.duration_time) OR sem.duration_time = -1) ';
+        $stmt = DBManager::get()->prepare($sql . $where_add . ' LIMIT 1');
         foreach (Semester::getAll() as $one) {
             if ($one->beginn >= $start && $one->beginn <= $end) {
-                $stmt->execute(array($version->getId(), $one->beginn, $one->beginn));
+                $stmt->execute(array_merge($parameters,
+                        [':version' => $version->getId(),
+                         ':beginn' => $one->beginn,
+                         ':ende' => $one->ende]));
                 if ($stmt->fetchColumn()) {
                     $semester[$one->id] = $one;
                 }
