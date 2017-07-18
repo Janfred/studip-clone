@@ -305,7 +305,7 @@ function download_config($range_id, $config_id, $module) {
  */
 function store_config($range_id, $config_id, $jsonconfig)
 {
-    $extern = new ExternConfigDB($range_id, '', $config_id);
+    $extern = new ExternConfigDb($range_id, '', $config_id);
     $extern->config = $jsonconfig;
     return ($extern->store()) ? true : false;
 }
