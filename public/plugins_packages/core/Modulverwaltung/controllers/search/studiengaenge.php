@@ -193,30 +193,34 @@ class Search_StudiengaengeController extends MVVController
         if (!$studiengangTeil || count($versionen) === 0) {
             PageLayout::postInfo(_('Kein Verlaufsplan im gewählten Bereich verfügbar.'));
         } else {
-            $version_id = Request::option('version');
+            $version_id = Request::option('version', $this->sessGet('selected_version'));
             if ($versionen->findOneBy('id', $version_id)) {
                 $this->cur_version_id = $version_id;
             } else {
                 $this->cur_version_id = $this->findCurrentVersion($versionen);
             }
-
+            $this->sessSet('selected_version', $this->cur_version_id);
+            
             $this->semesters = $this->getSemester($versionen->findOneBy('id', $this->cur_version_id));
 
             $semester_time_switch = (int) Config::get()->getValue('SEMESTER_TIME_SWITCH');
             $cur_semester = Semester::findByTimestamp(time()
                     + $semester_time_switch * 7 * 24 * 60 * 60);
-            if ($cur_semester) {
-                $this->active_sem = Semester::find($this->sessGet('selected_semester', $cur_semester->id));
+            
+            $active_semester = $this->sessGet('selected_semester');
+            if ($active_semester) {
+                $this->active_sem = $this->semesters[$active_semester];
+            } else if ($cur_semester) {
+                $this->active_sem = $cur_semester->id;
             } else {
                 $this->active_sem = Semester::find($this->sessGet('selected_semester', Semester::findCurrent()->id));
             }
             $this->active_sem = $this->semesters[$this->active_sem->id] ? $this->active_sem : null;
-            if (!$this->active_sem && count($this->semesters) == 1) {
+            if (!$this->active_sem && count($this->semesters)) {
                 $active_sem = reset($this->semesters);
                 $this->active_sem = Semester::find($active_sem['semester_id']);
             }
-            $this->setVersionSelectWidget($versionen, $this->cur_version_id, $this->semesters);
-
+            $this->setVersionSelectWidget($versionen);
 
             $abschnitte = StgteilAbschnitt::findByStgteilVersion($this->cur_version_id);
             $abschnitteData = array();
@@ -318,42 +322,19 @@ class Search_StudiengaengeController extends MVVController
                 INNER JOIN mvv_stgteilabschnitt_modul USING(abschnitt_id)
                 INNER JOIN mvv_modul mm USING(modul_id)
                 INNER JOIN mvv_modulteil USING(modul_id)
-                INNER JOIN mvv_lvgruppe_modulteil USING(modulteil_id)
-                INNER JOIN mvv_lvgruppe_seminar USING(lvgruppe_id)
-                INNER JOIN seminare sem USING(seminar_id) 
                 LEFT JOIN semester_data mm_start_sem ON mm.start = mm_start_sem.semester_id 
-                LEFT JOIN semester_data mm_end_sem ON mm.end = mm_end_sem.semester_id ';
-        // visibility of courses depends on user permission
-        $user_perm = $GLOBALS['perm']->get_perm();
-        if ($user_perm == 'root') {
-            $sql_add = '';
-            $parameters = [];
-        } else if ($user_perm == 'admin') {
-            $perm_institute_ids = [];
-            foreach (Institute::getMyInstitutes($GLOBALS['user']->id) as $perm_institute) {
-                $perm_institute_ids[] = $perm_institute['Institut_id'];
-            }
-            $parameters = [':perm_institutes' => $perm_institute_ids];
-            $where_add = 'AND (sem.visible = 1 OR (sem.visible = 0 '
-                . 'AND sem.institut_id IN (:perm_institutes))) ';
-        } else {
-            $sql .= 'LEFT JOIN seminar_user USING(seminar_id) ';
-            $where_add = 'AND (sem.visible = 1 OR (sem.visible = 0 AND seminar_user.user_id = :user_id)) ';
-            $parameters = [':user_id' => $GLOBALS['user']->id];
-        }
-        $sql .= 'WHERE mvv_stgteilabschnitt.version_id = :version
+                LEFT JOIN semester_data mm_end_sem ON mm.end = mm_end_sem.semester_id
+                WHERE mvv_stgteilabschnitt.version_id = :version
                 AND ((mm_start_sem.beginn IS NULL AND mm_end_sem.ende IS NULL)
                 OR (mm_start_sem.beginn <= :beginn
                 AND (mm_end_sem.ende >= :ende OR mm_end_sem.ende IS NULL)))
-                AND sem.start_time <= :beginn AND (:beginn <= (sem.start_time 
-                + sem.duration_time) OR sem.duration_time = -1) ';
-        $stmt = DBManager::get()->prepare($sql . $where_add . ' LIMIT 1');
+                LIMIT 1';
+        $stmt = DBManager::get()->prepare($sql);
         foreach (Semester::getAll() as $one) {
             if ($one->beginn >= $start && $one->beginn <= $end) {
-                $stmt->execute(array_merge($parameters,
-                        [':version' => $version->getId(),
+                $stmt->execute([':version' => $version->getId(),
                          ':beginn' => $one->beginn,
-                         ':ende' => $one->ende]));
+                         ':ende' => $one->ende]);
                 if ($stmt->fetchColumn()) {
                     $semester[$one->id] = $one;
                 }
@@ -361,7 +342,7 @@ class Search_StudiengaengeController extends MVVController
         }
         return array_reverse($semester);
     }
-
+    
     private function findCurrentVersion($versions)
     {
         $semester_data = Semester::getAll();
@@ -390,14 +371,13 @@ class Search_StudiengaengeController extends MVVController
      *
      * @param string $selected
      */
-    private function setVersionSelectWidget($versions, $selected, $semesters = null)
+    private function setVersionSelectWidget($versions)
     {
 
         $semester_time_switch = (int) Config::get()->getValue('SEMESTER_TIME_SWITCH');
         $cur_semester = Semester::findByTimestamp(time()
             + $semester_time_switch * 7 * 24 * 60 * 60);
-        $active_sem = Semester::find($this->sessGet('selected_semester', $cur_semester->id));
-
+        
         $sidebar = Sidebar::get();
 
         $widget = new SelectWidget(_('Versionen-Auswahl'),
@@ -406,27 +386,19 @@ class Search_StudiengaengeController extends MVVController
         foreach ($versions as $version) {
             $options[$version->id] = $version->getDisplayName(false, false);
         }
-        $widget->setOptions($options, $selected);
+        $widget->setOptions($options, $this->cur_version_id);
         $widget->setMaxLength(100);
         $sidebar->addWidget($widget, 'version_filter');
-
 
         $widget = new SelectWidget(_('Semesterauswahl'),
             '', 'semester');
         $options = [];
-        if (!$semesters) {
-            $vers = StgteilVersion::find($selected);
-            $semesters = $this->getSemester($vers);
-        }
-        foreach ($semesters as $sem) {
+        foreach ($this->semesters as $sem) {
             $options[$sem['semester_id']] = $sem['name'];
         }
-        $widget->setOptions($options, $active_sem->semester_id);
+        $widget->setOptions($options, $this->active_sem->id);
         $widget->setMaxLength(100);
         $sidebar->addWidget($widget, 'sem_filter');
-
-
-
     }
 
 }
