@@ -288,6 +288,7 @@ class ExternModuleTemplateLecturedetails extends ExternModule {
                     $content['LECTUREDETAILS']['LECTURERS']['LECTURER'][$l]['TITLEFRONT'] = ExternModule::ExtHtmlReady($rowlec['title_front']);
                     $content['LECTUREDETAILS']['LECTURERS']['LECTURER'][$l]['TITLEREAR'] = ExternModule::ExtHtmlReady($rowlec['title_rear']);
                     $content['LECTUREDETAILS']['LECTURERS']['LECTURER'][$l]['UNAME'] = $rowlec['username'];
+                    $content['LECTUREDETAILS']['LECTURERS']['LECTURER'][$l]['LECTURER-NO'] = $l + 1;
                     $l++;
                 }
             }
@@ -309,6 +310,7 @@ class ExternModuleTemplateLecturedetails extends ExternModule {
                     $content['LECTUREDETAILS']['TUTORS']['TUTOR'][$l]['TUTOR_TITLEFRONT'] = ExternModule::ExtHtmlReady($rowtut['title_front']);
                     $content['LECTUREDETAILS']['TUTORS']['TUTOR'][$l]['TUTOR_TITLEREAR'] = ExternModule::ExtHtmlReady($rowtut['title_rear']);
                     $content['LECTUREDETAILS']['TUTORS']['TUTOR'][$l]['TUTOR_UNAME'] = $rowtut['username'];
+                    $content['LECTUREDETAILS']['TUTORS']['TUTOR'][$l]['TUTOR-NO'] = $l + 1;
                     $l++;
                 }
             }
