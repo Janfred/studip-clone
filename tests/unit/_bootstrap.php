@@ -114,6 +114,7 @@ if (!class_exists('StudipTestHelper')) {
 
             foreach ($tables as $db_table) {
                 include TEST_FIXTURES_PATH."simpleormap/$db_table.php";
+                $db_fields = $pk = array();
                 foreach ($result as $rs) {
                     $db_fields[mb_strtolower($rs['name'])] = array(
                         'name'    => $rs['name'],
