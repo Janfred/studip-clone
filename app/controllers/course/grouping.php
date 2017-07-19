@@ -391,19 +391,23 @@ class Course_GroupingController extends AuthenticatedController
             case 'add_dozent':
                 $this->permission = 'dozent';
                 $title = get_title_for_status('dozent', 2, $this->course->status);
+                $perms = ['dozent'];
                 break;
             case 'add_deputy':
                 $this->permission = 'deputy';
                 $title = _('Vertretung/en');
+                $perms = ['dozent'];
                 break;
             case 'add_tutor':
                 $this->permission = 'tutor';
                 $title = get_title_for_status('tutor', 2, $this->course->status);
+                $perms = ['tutor', 'dozent'];
                 break;
             case 'add_autor':
             default:
                 $this->permission = 'autor';
                 $title = get_title_for_status('autor', 2, $this->course->status);
+                $perms = ['autor', 'tutor', 'dozent'];
                 break;
         }
 
@@ -414,7 +418,7 @@ class Course_GroupingController extends AuthenticatedController
             'user',
             sprintf(_('%s suchen'), $title),
             'user_id',
-            ['permission' => 'dozent', 'exclude_user' => []]
+            ['permission' => $perms, 'exclude_user' => []]
         );
 
         $this->search =  QuickSearch::get('user_id', $searchtype)
