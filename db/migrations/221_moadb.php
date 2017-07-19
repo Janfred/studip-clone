@@ -298,7 +298,7 @@ class Moadb extends Migration
             'FILESYSTEM_MULTICOPY_ENABLE',
             'DOCUMENTS_EMBEDD_FLASH_MOVIES')"
         );
-        $db->exec("DROP TABLE `doc_filetype`, `doc_filetype_forbidden`, `doc_usergroup_config`, `dokumente`, `files_backend_studip`, `files_backend_url`, `files_share`, `folder`, `_files`, `_file_refs`, `document_licenses`");
+        $db->exec("DROP TABLE IF EXISTS `doc_filetype`, `doc_filetype_forbidden`, `doc_usergroup_config`, `dokumente`, `files_backend_studip`, `files_backend_url`, `files_share`, `folder`, `_files`, `_file_refs`, `document_licenses`");
 
         SimpleORMap::expireTableScheme();
     }
