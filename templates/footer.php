@@ -36,6 +36,6 @@
 <? endif; ?>
 </div>
 <script>
-STUDIP.Navigation = <?= json_encode(ResponsiveHelper::getNavigationArray()) ?>;
+STUDIP.Navigation = <?= json_encode(ResponsiveHelper::getNavigationArray(), JSON_PARTIAL_OUTPUT_ON_ERROR) ?: '[]' ?>;
 </script>
 <!-- Ende Footer -->
