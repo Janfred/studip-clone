@@ -342,6 +342,9 @@
 
 <? if ($studyAreaTree) : ?>
     <article class="studip">
+        <header>
+            <h1><?= _('Studienbereiche') ?></h1>
+        </header>
         <section>
             <ul class="collapsable css-tree">
                 <?= $this->render_partial('study_area/tree.php', array('node' => $studyAreaTree, 'open' => true, 'dont_open' => Config::get()->COURSE_SEM_TREE_CLOSED_LEVELS)) ?>
@@ -352,6 +355,9 @@
 
 <? if ($study_areas && count($study_areas) > 0) : ?>
     <article class="studip">
+        <header>
+            <h1><?= _('Studienbereiche') ?></h1>
+        </header>
         <section>
             <ul class="list-unstyled">
                 <? foreach ($study_areas as $area) : ?>
@@ -369,7 +375,7 @@
 <?
 // Ausgabe der Modulzuordnung MVV
 if ($mvv_pathes) : ?>
-    <section class="contentbox">
+    <article class="studip">
         <header>
             <h1><?= _('Modulzuordnungen') ?></h1>
         </header>
@@ -384,7 +390,7 @@ if ($mvv_pathes) : ?>
                 <? endforeach; ?>
             </ul>
         </section>
-    </section>
+    </article>
 <? endif; ?>
 
 <? if ($course->beschreibung) : ?>
