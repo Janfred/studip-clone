@@ -82,7 +82,7 @@
                             ['data-dialog' => 'size=auto']
                         ) ?>
                         <? $actionMenu->addLink(
-                            URLHelper::getLink('dispatch.php/course/members/cancel_subscription/' . $m->user_id),
+                            $controller->url_for('course/grouping/remove_members', $current->id, $m->user_id),
                             _('Aus Veranstaltung austragen'),
                             Icon::create('door-leave', 'clickable', [
                                 'title' => sprintf(

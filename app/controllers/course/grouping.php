@@ -357,13 +357,16 @@ class Course_GroupingController extends AuthenticatedController
      * Removes selected members from given course.
      * @param string $course_id the course to remove members from
      */
-    public function remove_members_action($course_id)
+    public function remove_members_action($course_id, $user_id = null)
     {
         $s = Seminar::getInstance($course_id);
 
         $success = 0;
         $fail    = 0;
-        foreach ($this->flash['users'] as $user) {
+
+        $users = $user_id ? [$user_id] : $this->flash['users'];
+
+        foreach ($users as $user) {
             if ($s->deleteMember($user)) {
                 $success += 1;
             } else {
