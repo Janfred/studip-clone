@@ -326,6 +326,9 @@ class AdminCourseFilter
         if ($count_courses && $count_courses <= $this->max_show_courses) {
             $settings = $this->settings;
             $this->settings['query']['select'] = array();
+            if (preg_match('/teilnehmer|waiting|prelim/',  $this->settings['query']['orderby'])) {
+                $this->settings['query']['orderby'] = Config::get()->IMPORTANT_SEMNUMBER ? "seminare.veranstaltungsnummer, seminare.name" : "seminare.name";
+            }
             $ret = $this->getCourses(false);
             $this->settings = $settings;
             return $ret;
