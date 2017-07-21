@@ -1043,7 +1043,7 @@ class Admin_CoursesController extends AuthenticatedController
             ),
         );
 
-        if (!PluginEngine::getPlugin('MVVPlugin') || !PluginEngine::getPlugin('MVVPlugin')->isVisible()) {
+        if (!PluginEngine::getPlugin('MVVPlugin')) {
             unset($actions[19]);
         }
 

@@ -25,16 +25,15 @@ class MVVPlugin extends StudipPlugin implements SystemPlugin, Loggable {
     function __construct() {
         parent::__construct();
 
-        $this->restoreConfig();
         $this->me = mb_strtolower(__CLASS__);
         if ($this->isVisibleSearch()) {
             $this->setNavigationSearch();
         }
 
         if ($this->isVisible()) {
-            $this->setNavigationAdminCourse();
             $this->setNavigation();
         }
+        $this->setNavigationAdminCourse();
         PageLayout::addScript($this->getPluginUrl() . '/public/javascripts/coursewizard.js');
     }
 
@@ -110,7 +109,9 @@ class MVVPlugin extends StudipPlugin implements SystemPlugin, Loggable {
     private function setNavigationAdminCourse()
     {
         // add navigation to admin area
-        if (Course::findCurrent() && Navigation::hasItem('/course/admin') && Course::findCurrent()->getSemClass()->offsetget('module')) {
+        if (Course::findCurrent()
+                && Navigation::hasItem('/course/admin')
+                && Course::findCurrent()->getSemClass()->offsetGet('module')) {
             $nav = new Navigation(_('LV-Gruppen'), PluginEngine::getUrl(
                     $this->me, array(), 'lvgselector',
                     array('list' => 'TRUE')));
@@ -188,22 +189,8 @@ class MVVPlugin extends StudipPlugin implements SystemPlugin, Loggable {
                 have_studip_perm('tutor', Context::getId());
     }
 
-    public function isVisibleSeminareAssi() {
-        if ($this->isVisible()) {
-            $page = basename($_SERVER['PHP_SELF']);
-            if ($page == 'admin_seminare_assi.php') {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public function getDisplayTitle() {
         return _('Module');
-    }
-
-    public function restoreConfig() {
-
     }
 
     private function init()

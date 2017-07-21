@@ -13,9 +13,7 @@
  * @since       3.5
  */
 
-require_once dirname(__FILE__) . '/MVV.class.php';
-
-class LvgselectorController extends MVVController
+class LvgselectorController extends StudipController
 {
 
     // see Trails_Controller#before_filter
@@ -38,18 +36,13 @@ class LvgselectorController extends MVVController
     /**
      * This method shows the lvgruppen selection form for a given course ID.
      *
-     * @param  string     the MD5ish ID of the course
-     *
      * @return void
      */
-    public function index_action($course_id = '-')
+    public function index_action()
     {
-        global $perm;
-
         if (Request::get('from')) {
             $this->url_params['from'] = Request::get('from');
         }
-        $course_id = $this->course_id;
 
         if (!Request::isXHR()) {
             Navigation::activateItem('/course/admin/lvgruppen');
@@ -60,7 +53,7 @@ class LvgselectorController extends MVVController
 
         // is locked?
         // Set global state in MVV_ACCESS_ASSIGN_LVGRUPPEN
-        $this->locked = $this->is_locked($course_id);
+        $this->locked = $this->is_locked($this->course_id);
 
         // DOES the course's class permit "lvgruppen"?
         $this->lvgruppen_not_allowed = !$this->course->getSemClass()->offsetGet('module');
@@ -69,16 +62,16 @@ class LvgselectorController extends MVVController
             return $this->render_text(MessageBox::info(_('Für diesen Veranstaltungstyp ist die Zuordnung zu Lehrveranstaltungsgruppen nicht vorgesehen.')));
         }
         $this->open_lvg_nodes = array();
-        if (Request::submitted("open_nodes")) {
-            $already_open_nodes = (array)json_decode(Request::get("open_nodes"));
+        if (Request::submitted('open_nodes')) {
+            $already_open_nodes = (array)json_decode(Request::get('open_nodes'));
             foreach ($already_open_nodes as $open_lvgnode) {
                 $this->open_lvg_nodes[] = $open_lvgnode;
             }
         }
 
         if (!$this->locked && !$this->lvgruppen_not_allowed) {
-            if (Request::option("open_node")) {
-                $node_to_open = Request::get("open_node");
+            if (Request::option('open_node')) {
+                $node_to_open = Request::get('open_node');
                 if (!in_array($node_to_open, $this->open_lvg_nodes)) {
                     $this->open_lvg_nodes[] = $node_to_open;
                 } else {
@@ -87,8 +80,8 @@ class LvgselectorController extends MVVController
                 }
             }
 
-            if(Request::submitted("lvgruppe_selection")){
-                $lvgruppe_selection = Request::getArray("lvgruppe_selection");
+            if(Request::submitted('lvgruppe_selection')){
+                $lvgruppe_selection = Request::getArray('lvgruppe_selection');
                 if(isset($lvgruppe_selection['details'])) {
                     foreach (array_keys($lvgruppe_selection['details']) as $lvgid) {
                         $detail = $this->getLVGroupDetails($lvgid);
@@ -99,7 +92,7 @@ class LvgselectorController extends MVVController
                     foreach (array_keys($lvgruppe_selection['remove']) as $lvgid) {
                         $this->selection->remove($lvgid);
                     }
-                    $this->store_selection($course_id, $this->selection);
+                    $this->store_selection($this->course_id, $this->selection);
                 }
             }
 
@@ -107,8 +100,8 @@ class LvgselectorController extends MVVController
                 $this->selection->add($assign[0]);
             }
 
-            if(Request::submitted("save")){
-                $this->save_action($course_id);
+            if(Request::submitted('save')){
+                $this->save_action();
             }
 
             $lvgtree = new StudipLvgruppeSelection();
@@ -175,11 +168,10 @@ class LvgselectorController extends MVVController
      */
     public function save_action()
     {
-        $course_id = $this->course_id;
-        if ($this->is_locked($course_id)) {
+        if ($this->is_locked($this->course_id)) {
             throw new AccessDeniedException();
         }
-        $selected = Request::getArray("lvgruppe_selection");
+        $selected = Request::getArray('lvgruppe_selection');
 
         $selection = new StudipLvgruppeSelection();
 
@@ -190,7 +182,7 @@ class LvgselectorController extends MVVController
                 $open_nodes[] = $area_id;
             }
         }
-        $this->store_selection($course_id, $selection);
+        $this->store_selection($this->course_id, $selection);
 
         if (Request::get('from')) {
             $url = URLHelper::getURL('dispatch.php/'.Request::get('from'));
@@ -211,8 +203,7 @@ class LvgselectorController extends MVVController
      */
     public function remove_action()
     {
-        $course_id = $this->course_id;
-        if ($this->is_locked($course_id)) {
+        if ($this->is_locked($this->course_id)) {
             throw new AccessDeniedException();
         }
 
@@ -223,7 +214,7 @@ class LvgselectorController extends MVVController
             return $this->render_nothing();
         }
 
-        $selection = new StudipLvgruppeSelection($course_id);
+        $selection = new StudipLvgruppeSelection($this->course_id);
 
         // MVV: no problem here to delete LvGruppe
 
@@ -232,7 +223,7 @@ class LvgselectorController extends MVVController
             return $this->render_nothing();
         }
         $selection->remove($id);
-        $this->store_selection($course_id, $selection);
+        $this->store_selection($this->course_id, $selection);
         $this->render_nothing();
     }
 
@@ -297,10 +288,10 @@ class LvgselectorController extends MVVController
     {
         $helpbar = Helpbar::get();
         $widget = new HelpbarWidget();
-        $widget->addElement(new WidgetElement(_("Auf dieser Seite kann die Veranstaltung ausgewählten Lehrveranstaltungsgruppen zugeordnet werden.")));
+        $widget->addElement(new WidgetElement(_('Auf dieser Seite kann die Veranstaltung ausgewählten Lehrveranstaltungsgruppen zugeordnet werden.')));
         $helpbar->addWidget($widget);
 
-        if ($GLOBALS['perm']->have_perm("admin")) {
+        if ($GLOBALS['perm']->have_perm('admin')) {
             $admin_list_template = AdminList::getInstance()
                     ->getSelectTemplate($this->course_id);
             if ($admin_list_template) {
