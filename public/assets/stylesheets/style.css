@@ -4669,7 +4669,6 @@ input.quicksearchbox {
   -moz-border-left-colors: none;
   border-image: none;
   float: left;
-  height: 22px;
   width: 250px;
 }
 .quicksearch_frame input[type=submit] {
@@ -4685,7 +4684,7 @@ input.quicksearchbox {
   -moz-background-size: 16px 16px;
   -o-background-size: 16px 16px;
   background-size: 16px 16px;
-  background-position: center 3px;
+  background-position: center 4px;
   background-repeat: no-repeat;
   vertical-align: top;
   margin-left: -30px;
