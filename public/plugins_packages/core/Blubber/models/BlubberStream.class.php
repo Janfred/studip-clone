@@ -243,7 +243,7 @@ class BlubberStream extends SimpleORMap {
      */
     public function fetchTags($since = null, $limit = null) {
         list($sql, $parameters) = $this->getThreadsSql();
-        $sql = strtr($sql, array('FROM blubber' => 'FROM blubber INNER JOIN blubber_tags bt1 USING(topic_id) '));
+        $sql = strtr($sql, array('FROM blubber ' => 'FROM blubber INNER JOIN blubber_tags bt1 USING(topic_id) '));
         $statement = DBManager::get()->prepare(
             "SELECT blubber_tags.tag, SUM(1) AS counter " .
             "FROM (".$sql.") AS threads " .
