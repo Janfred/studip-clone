@@ -146,7 +146,7 @@ class Module_ModuleController extends MVVController
                 $this->url_for('module/download/details', $this->modul->id, $sprache),
                 Icon::create('file-word', 'clickable'));
             $action_widget->addLink( _('Modulbeschreibung als PDF'),
-                $this->url_for('module/download/details/' . $this->modul->id, ['pdf' => '1']),
+                $this->url_for('module/download/details/' . $this->modul->id . '/' . $sprache, ['pdf' => '1']),
                 Icon::create('file-pdf', 'clickable'));
             $action_widget->addLink( _('Vergleich mit anderem Modul'),
                 $this->url_for('/diff_select', $this->modul->id),
