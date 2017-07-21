@@ -460,7 +460,7 @@ STUDIP.Blubber = {
             'modal': true,
             'hide': "fade",
             'show': "fade",
-            'width': "60%"
+            'width': "auto"
         });
     },
     /**
