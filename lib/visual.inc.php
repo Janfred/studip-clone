@@ -115,10 +115,9 @@ function quotes_encode($text, $author = '')
  * @return string        HTML code computed by applying markup-rules.
  */
 // TODO remove unused function arguments
-function formatReady($text, $trim=TRUE, $extern=FALSE, $wiki=FALSE, $show_comments='icon')
-{
-    return sprintf(FORMATTED_CONTENT_WRAPPER,
-                   Markup::apply(new StudipFormat(), $text, $trim));
+function formatReady($text, $trim=TRUE, $extern=FALSE, $wiki=FALSE, $show_comments='icon') {
+    $formatted = Markup::apply(new StudipFormat(), $text, $trim);
+    return $formatted ? sprintf(FORMATTED_CONTENT_WRAPPER, $formatted) : '';
 }
 
 /**
@@ -149,9 +148,9 @@ function formatLinks($text, $nl2br=TRUE){
  * @param  string $trim  Trim leading and trailing whitespace, if TRUE.
  * @return string        HTML code computed by applying markup-rules.
  */
-function wikiReady($text, $trim=TRUE){
-    return sprintf(FORMATTED_CONTENT_WRAPPER,
-                   Markup::apply(new WikiFormat(), $text, $trim));
+function wikiReady($text, $trim=TRUE) {
+    $formatted = Markup::apply(new WikiFormat(), $text, $trim);
+    return $formatted ? sprintf(FORMATTED_CONTENT_WRAPPER, $formatted) : '';
 }
 
 /**
