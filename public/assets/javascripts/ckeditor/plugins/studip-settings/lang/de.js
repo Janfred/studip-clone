@@ -1,18 +1,18 @@
 CKEDITOR.plugins.setLang('studip-settings', 'de', {
     buttonLabel: 'WYSIWYG Einstellungen\n(Editor deaktivieren, usw.)',
-    savingChanges: '...speichere Änderungen.',
+    savingChanges: '...speichere Ã„nderungen.',
     abort: 'Abbrechen',
-    savedChanges: 'Änderungen wurden gespeichert.',
+    savedChanges: 'Ã„nderungen wurden gespeichert.',
     information: 'Info',
     status: 'Status:',
     response: 'Response:',
     savingFailed: 'Speichern fehlgeschlagen.',
     dialogTitle: 'Einstellungen',
     disableEditorLabel: 'WYSIWYG Editor ausschalten',
-    disableEditorInfo: 'Mit dieser Einstellung können Sie den'
-        + ' WYSIWYG Editor ausschalten. Dadurch müssen'
+    disableEditorInfo: 'Mit dieser Einstellung kÃ¶nnen Sie den'
+        + ' WYSIWYG Editor ausschalten. Dadurch mÃ¼ssen'
         + ' Sie gegebenenfalls Texte in HTML schreiben.'
-        + ' Der Editor wird erst vollständig entfernt'
-        + ' wenn man die Seite neu lädt.',
+        + ' Der Editor wird erst vollstÃ¤ndig entfernt'
+        + ' wenn man die Seite neu lÃ¤dt.',
 });
 

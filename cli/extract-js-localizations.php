@@ -181,9 +181,6 @@ $translations = array(
 <? endforeach; ?>
 );
 
-// translations have to be UTF8 for #json_encode
-$translations = $plugin->utf8EncodeArray($translations);
-
 ?>
 <?= '<?=' ?> json_encode($translations) <?= '?>' ?>
 <?

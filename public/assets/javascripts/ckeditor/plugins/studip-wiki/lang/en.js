@@ -7,7 +7,7 @@ CKEDITOR.plugins.setLang('studip-wiki', 'en', {
     invalidPageName:
         'The page name must contain at least one character.'
         + ' Only the following characters are allowed:'
-        + ' a-z A-Z ÄÖÜ äöü ß 0-9 -_:.( )/@#§ and space.',
+        + ' a-z A-Z Ã„Ã–Ãœ Ã¤Ã¶Ã¼ ÃŸ 0-9 -_:.( )/@#Â§ and space.',
     pageNameLabel: 'Wiki Page',
     wikiLinkTemplate: '[[Wiki Page]]',
 });

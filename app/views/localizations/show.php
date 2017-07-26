@@ -188,8 +188,5 @@ $translations = array(
     '%s hat geschrieben:' => _('%s hat geschrieben:'),
 );
 
-// translations have to be UTF8 for #json_encode
-$translations = $plugin->utf8EncodeArray($translations);
-
 ?>
 <?= json_encode($translations) ?>

@@ -20,7 +20,7 @@
         });
 
         editor.ui.addButton('blockquote', {
-            label: 'Zitat einfügen'.toLocaleString(),
+            label: 'Zitat einfÃ¼gen'.toLocaleString(),
             command: 'insertStudipQuote',
             toolbar: 'quote'
         });
@@ -32,7 +32,7 @@
         });
 
         editor.ui.addButton('RemoveQuote', {
-            label: 'Zitat löschen'.toLocaleString(),
+            label: 'Zitat lÃ¶schen'.toLocaleString(),
             command: 'removeQuote',
             toolbar: 'quote'
         });
