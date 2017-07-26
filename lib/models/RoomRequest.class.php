@@ -190,13 +190,44 @@ class RoomRequest extends SimpleORMap
 
     public function getSeats()
     {
-        $available_properties = $this->getAvailableProperties();
-        foreach ($this->properties as $key => $val) {
-            if ($available_properties[$key]["system"] == 2) {
-                return $val["state"];
-            }
-        }
-        return false;
+        //The following statement makes the assumption that a
+        //resource property with a system-value of 2 is a
+        //seats property.
+        //Furthermore it is based on the assumption that only
+        //one such property exists for a room request.
+        $db = DBManager::get();
+
+        //Explaination:
+        //Get the state from a resource request's property
+        //where the property is requestable (defined in the
+        //resource request's category) and where the property
+        //has a system value of '2' (defined in the
+        //property's definition). Furthermore the property
+        //must belong to this room request.
+        $stmt = $db->prepare(
+            "SELECT rrp.state
+            FROM resources_requests_properties rrp
+            INNER JOIN
+                resources_categories_properties rcp
+                ON rrp.property_id = rcp.property_id
+                INNER JOIN
+                    resources_properties rp
+                    ON rcp.property_id = rp.property_id
+            WHERE
+                rcp.requestable = '1'
+            AND
+                rp.system = '2'
+            AND
+                rrp.request_id = :request_id;"
+        );
+
+        $stmt->execute(
+            array(
+                'request_id' => $this->request_id
+            )
+        );
+
+        return $stmt->fetchColumn(0);
     }
 
     public function setResourceId($value)
