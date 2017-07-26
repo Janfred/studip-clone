@@ -56,6 +56,7 @@ class RoomRequest extends SimpleORMap
             'foreign_key' => 'resource_id',
             'assoc_func' => 'Factory'
         );
+        $config['registered_callbacks']['after_initialize'][] = 'cbInitProperties';
         parent::configure($config);
     }
 
@@ -195,7 +196,6 @@ class RoomRequest extends SimpleORMap
         //seats property.
         //Furthermore it is based on the assumption that only
         //one such property exists for a room request.
-        $db = DBManager::get();
 
         //Explaination:
         //Get the state from a resource request's property
@@ -204,30 +204,13 @@ class RoomRequest extends SimpleORMap
         //has a system value of '2' (defined in the
         //property's definition). Furthermore the property
         //must belong to this room request.
-        $stmt = $db->prepare(
-            "SELECT rrp.state
-            FROM resources_requests_properties rrp
-            INNER JOIN
-                resources_categories_properties rcp
-                ON rrp.property_id = rcp.property_id
-                INNER JOIN
-                    resources_properties rp
-                    ON rcp.property_id = rp.property_id
-            WHERE
-                rcp.requestable = '1'
-            AND
-                rp.system = '2'
-            AND
-                rrp.request_id = :request_id;"
-        );
-
-        $stmt->execute(
-            array(
-                'request_id' => $this->request_id
-            )
-        );
-
-        return $stmt->fetchColumn(0);
+        $available_properties = $this->getAvailableProperties();
+        foreach ($this->properties as $key => $val) {
+            if ($available_properties[$key]["system"] == 2) {
+                return $val["state"];
+            }
+        }
+        return false;
     }
 
     public function setResourceId($value)
@@ -403,10 +386,9 @@ class RoomRequest extends SimpleORMap
         return $found;
     }
 
-    public function restore()
+    public function cbInitProperties()
     {
-        $found = parent::restore();
-        if ($found) {
+        if ($this->getId()) {
             $db = DBManager::get();
             $st = $db->prepare("SELECT a.property_id, state, mkdate, chdate, type, name, options, system
                                 FROM resources_requests_properties a
@@ -419,7 +401,6 @@ class RoomRequest extends SimpleORMap
         } else {
             $this->inititalizeProperties();
         }
-        return $found;
     }
 
     //private
