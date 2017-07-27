@@ -43,9 +43,9 @@
 
                             <? $actionMenu->addButton(
                                     'delete_step',
-                                    _('Schritt lsöchen'),
+                                    _('Schritt löschen'),
                                     Icon::create('trash', 'clickable',
-                                            ['title'        => _('Studiengangteil löschen'),
+                                            ['title'        => _('Schritt löschen'),
                                              'formaction'   => $controller->url_for('admin/coursewizardsteps/delete/' . $step->id),
                                              'data-confirm' => sprintf(_('Soll der Eintrag "%s" wirklich gelöscht werden?'), htmlReady($step->name)),
                                              'style'        => 'margin: 0px']))
