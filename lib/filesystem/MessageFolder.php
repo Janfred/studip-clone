@@ -45,9 +45,11 @@ class MessageFolder implements FolderType
      * manually when we can't find the top folder by the method
      * Folder::getTopFolder.
      *
-     * @param string $message_id The message-ID of the message whose top folder shall be returned
+     * @param string $message_id The message-ID of the message whose top folder
+     *     shall be returned
      *
-     * @return MessageFolder|null The top folder of the message identified by $message_id. If the folder can't be retrieved, null is returned.
+     * @return MessageFolder|null The top folder of the message identified by
+     *     $message_id. If the folder can't be retrieved, null is returned.
      */
     public static function findTopFolder($message_id)
     {
@@ -71,7 +73,13 @@ class MessageFolder implements FolderType
      */
     public static function createTopFolder($message_id)
     {
-        return new MessageFolder(Folder::createTopFolder($message_id, 'message', 'MessageFolder'));
+        return new MessageFolder(
+            Folder::createTopFolder(
+                $message_id,
+                'message',
+                'MessageFolder'
+            )
+        );
     }
 
     /**
@@ -142,9 +150,11 @@ class MessageFolder implements FolderType
     /**
      * This method checks if a specified user can read the MessageFolder object.
      *
-     * @param string $user_id The ID of the user whose read permission shall be checked.
+     * @param string $user_id The ID of the user whose read permission
+     *     shall be checked.
      *
-     * @return True, if the user, specified by $user_id, can read the folder, false otherwise.
+     * @return True, if the user, specified by $user_id, can read the folder,
+     *     false otherwise.
      */
     public function isReadable($user_id)
     {
@@ -196,7 +206,8 @@ class MessageFolder implements FolderType
     }
 
     /**
-     * Returns the files of this MessageFolder (e.g. the attachments of a message).
+     * Returns the files of this MessageFolder (e.g. the attachments
+     * of a message).
      *
      * @return FileRef[] An array of FileRef objects containing all files
      *     that are placed inside this folder.
@@ -237,7 +248,8 @@ class MessageFolder implements FolderType
      * This method handles file upload validation.
      *
      * @param array $uploaded_file The uploaded file that shall be validated.
-     * @param string $user_id The user who wishes to upload a file in this MessageFolder.
+     * @param string $user_id The user who wishes to upload a file
+     *     in this MessageFolder.
      *
      * @return string|null An error message on failure, null on success.
      */
@@ -253,7 +265,12 @@ class MessageFolder implements FolderType
             );
         }
 
-        $extension = strtolower(pathinfo($uploaded_file['name'], PATHINFO_EXTENSION));
+        $extension = strtolower(
+            pathinfo(
+                $uploaded_file['name'],
+                PATHINFO_EXTENSION
+            )
+        );
         $types = array_map('strtolower', $upload_type['file_types']);
 
         if (!in_array($extension, $types) && $upload_type['type'] === 'deny') {
@@ -263,21 +280,28 @@ class MessageFolder implements FolderType
             );
         }
         if (in_array($extension, $types) && $upload_type['type'] === 'allow') {
-            return sprintf(_('Sie dürfen den Dateityp %s nicht hochladen!'), $extension);
+            return sprintf(
+                _('Sie dürfen den Dateityp %s nicht hochladen!'),
+                $extension
+            );
         }
     }
 
     /**
      * This method handles creating a file inside the MessageFolder.
      *
-     * @param File|array $file The file that shall be created inside the MessageFolder.
+     * @param File|array $file The file that shall be created inside
+     *     the MessageFolder.
      *
-     * @return FileRef|null On success, a FileRef for the given file is returned. Null otherwise.
+     * @return FileRef|null On success, a FileRef for the given file
+     *     is returned. Null otherwise.
      */
     public function createFile($file)
     {
         if (!$this->folder) {
-            return MessageBox::error(_('Datei kann nicht erstellt werden, da kein Ordner angegeben wurde, in dem diese erstellt werden kann!'));
+            return MessageBox::error(
+                _('Datei kann nicht erstellt werden, da kein Ordner angegeben wurde, in dem diese erstellt werden kann!')
+            );
         }
 
         $new_file = $file;
@@ -310,7 +334,8 @@ class MessageFolder implements FolderType
     /**
      * Handles the deletion of a file inside this folder.
      *
-     * @param string $file_ref_id The ID of the FileRef whose file shall be deleted.
+     * @param string $file_ref_id The ID of the FileRef whose file
+     *     shall be deleted.
      *
      * @return True, if the file has been deleted successfully, false otherwise.
      */
@@ -335,7 +360,8 @@ class MessageFolder implements FolderType
     /**
      * Stores the MessageFolder object.
      *
-     * @return True, if the MessageFolder has been stored successfully, false otheriwse.
+     * @return True, if the MessageFolder has been stored successfully,
+     *     false otheriwse.
      */
     public function store()
     {
@@ -359,7 +385,8 @@ class MessageFolder implements FolderType
     /**
      * Deletes the MessageFolder object.
      *
-     * @return True, if the MessageFolder has been deleted successfully, false otheriwse.
+     * @return True, if the MessageFolder has been deleted successfully,
+     *     false otheriwse.
      */
     public function delete()
     {

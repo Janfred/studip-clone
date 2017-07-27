@@ -27,12 +27,13 @@ class FileManager
     //FILE HELPER METHODS
 
     /**
-     * Removes special characters from the file name (and by that cleaning the file name)
-     * so that the file name which is returned by this method works on every operating system.
+     * Removes special characters from the file name (and by that cleaning
+     * the file name) so that the file name which is returned by this method
+     * works on every operating system.
      *
      * @param string $file_name The file name that shall be "cleaned".
-     * @param bool $shorten_name True, if the file name shall be shortened to 31 characters.
-     *     False, if the full length shall be kept (default).
+     * @param bool $shorten_name True, if the file name shall be shortened to
+     *     31 characters. False, if the full length shall be kept (default).
      *
      * @return string The "cleaned" file name.
      */
@@ -43,9 +44,17 @@ class FileManager
             return $file_name;
         }
 
-        $bad_characters = [':', chr(92), '/', '"', '>', '<', '*', '|', '?', ' ', '(', ')', '&', '[', ']', '#', chr(36), '\'', '*', ';', '^', '`', '{', '}', '|', '~', chr(255)];
+        $bad_characters = [
+            ':', chr(92), '/', '"', '>', '<', '*', '|', '?',
+            ' ', '(', ')', '&', '[', ']', '#', chr(36), '\'',
+            '*', ';', '^', '`', '{', '}', '|', '~', chr(255)
+        ];
 
-        $replacement_characters = ['', '', '', '', '', '', '', '', '', '_', '', '', '+', '', '', '', '', '', '', '-', '', '', '', '', '-', '', ''];
+        $replacement_characters = [
+            '', '', '', '', '', '', '', '', '',
+            '_', '', '', '+', '', '', '', '', '',
+            '', '-', '', '', '', '', '-', '', ''
+        ];
 
         //All control characters shall be deleted:
         for($i = 0; $i < 0x20; $i++) {
@@ -53,7 +62,11 @@ class FileManager
             $replacement_characters[] = '';
         }
 
-        $clean_file_name = str_replace($bad_characters, $replacement_characters, $file_name);
+        $clean_file_name = str_replace(
+            $bad_characters,
+            $replacement_characters,
+            $file_name
+        );
 
         if($clean_file_name[0] == '.') {
             $clean_file_name = mb_substr($clean_file_name, 1, mb_strlen($clean_file_name));
@@ -152,9 +165,11 @@ class FileManager
     /**
      * Builds a download URL for the file archive of an archived course.
      *
-     * @param ArchivedCourse $archived_course An archived course whose file archive is requested.
-     * @param bool $protected_archive True, if the protected file archive is requested.
-     *     False, if the "readable for everyone" file archive is requested (default).
+     * @param ArchivedCourse $archived_course An archived course whose file
+     *     archive is requested.
+     * @param bool $protected_archive True, if the protected file archive
+     *     is requested. False, if the "readable for everyone" file archive
+     *     is requested (default).
      *
      * @return string The download link for the file or an empty string on failure.
      */
@@ -190,9 +205,11 @@ class FileManager
     /**
      * Builds a download link for the file archive of an archived course.
      *
-     * @param ArchivedCourse $archived_course An archived course whose file archive is requested.
-     * @param bool $protected_archive True, if the protected file archive is requested.
-     *     False, if the "readable for everyone" file archive is requested (default).
+     * @param ArchivedCourse $archived_course An archived course whose file
+     *     archive is requested.
+     * @param bool $protected_archive True, if the protected file archive
+     *     is requested. False, if the "readable for everyone" file archive
+     *     is requested (default).
      *
      * @return string The download link for the file or an empty string on failure.
      */
@@ -201,7 +218,12 @@ class FileManager
         $protected_archive = false
     )
     {
-        return htmlReady(self::getDownloadURLForArchivedCourse($archived_course, $protected_archive));
+        return htmlReady(
+            self::getDownloadURLForArchivedCourse(
+                $archived_course,
+                $protected_archive
+            )
+        );
     }
 
     /**
@@ -212,7 +234,12 @@ class FileManager
         $download_file_name = null
     )
     {
-        return htmlReady(self::getDownloadURLForTemporaryFile($temporary_file_name, $download_file_name));
+        return htmlReady(
+            self::getDownloadURLForTemporaryFile(
+                $temporary_file_name,
+                $download_file_name
+            )
+        );
     }
 
 
@@ -309,7 +336,13 @@ class FileManager
 
                 //validate the upload by looking at the folder where the
                 //uploaded file shall be stored:
-                if ($folder_error = $folder->validateUpload(['name' => $filename, 'size' => $size], $user_id)) {
+                if ($folder_error = $folder->validateUpload(
+                    [
+                        'name' => $filename,
+                        'size' => $size
+                    ],
+                    $user_id)
+                ) {
                     $error[] = $folder_error;
                     continue;
                 }
@@ -741,7 +774,8 @@ class FileManager
      * @param string $name The name for the new folder
      * @param string $description The description of the new folder
      *
-     * @returns FolderType|string[] Either the FolderType object of the new folder or an Array with error messages.
+     * @returns FolderType|string[] Either the FolderType object of the
+     *     new folder or an Array with error messages.
      *
      */
     public static function createSubFolder(
@@ -1071,10 +1105,12 @@ class FileManager
      * path in the operating system's file system.
      *
      * @param FolderType folder The folder whose content shall be copied.
-     * @param string path The path in the operating system's file system where the content shall be copied into.
+     * @param string path The path in the operating system's file system
+     *     where the content shall be copied into.
      * @param string user_id The user who wishes to copy the content.
-     * @param string min_perms If set, the selection of subfolders and files is limited to those
-     *     which are visible for users having the minimum permissions.
+     * @param string min_perms If set, the selection of subfolders and files
+     *     is limited to those which are visible for users having
+     *     the minimum permissions.
      * @param bool ignore_perms If set to true, files are copied without checking
      *     the minimum permissions or the permissions of the user given by user_id.
      * @return bool True on success, false on error.
@@ -1139,13 +1175,21 @@ class FileManager
      * and/or to the files which are readable for one user.
      *
      * @param FolderType $folder The folder whose files shall be counted.
-     * @param bool $count_subfolders True, if files subfolders shall be counted, too (default). False otherwise.
-     * @param string $owner_id Optional user-ID to count only files of one user specified by the ID.
-     * @param string $user_id Optional user-ID to count only files the user (specified by this user-ID) can read.
+     * @param bool $count_subfolders True, if files subfolders shall also
+     *     be counted, too (default). False otherwise.
+     * @param string $owner_id Optional user-ID to count only files of one
+     *     user specified by the ID.
+     * @param string $user_id Optional user-ID to count only files the user
+     *     (specified by this user-ID) can read.
      *
      * @return int The amount of files inside the folder (and its subfolders).
      */
-    public static function countFilesInFolder(FolderType $folder, $count_subfolders = true, $owner_id = null, $user_id = null)
+    public static function countFilesInFolder(
+        FolderType $folder,
+        $count_subfolders = true,
+        $owner_id = null,
+        $user_id = null
+    )
     {
         $num_files = 0;
 
@@ -1209,11 +1253,15 @@ class FileManager
      * @param FolderType $top_folder The folder whose content shall be retrieved.
      * @param string $user_id The ID of the user who wishes to get all
      *     files and subfolders of a folder.
-     * @param bool $check_file_permissions Set to true, if file permissions shall be checked.
-     *     Defaults to false.
+     * @param bool $check_file_permissions Set to true, if file permissions
+     *     shall be checked. Defaults to false.
      * @return mixed[] A mixed array with FolderType and FileRef objects.
      */
-    public static function getFolderFilesRecursive(FolderType $top_folder, $user_id, $check_file_permissions = false)
+    public static function getFolderFilesRecursive(
+        FolderType $top_folder,
+        $user_id,
+        $check_file_permissions = false
+    )
     {
         $files = [];
         $folders = [];
@@ -1316,7 +1364,13 @@ class FileManager
             || mb_stripos($url_parts['host'], 'loopback') !== false
             || (filter_var($url_parts['host'], FILTER_VALIDATE_IP) !== false
                 && (mb_strpos($url_parts['host'], '127') === 0
-                    || filter_var($url_parts['host'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false)
+                    || filter_var(
+                        $url_parts['host'],
+                        FILTER_VALIDATE_IP,
+                        FILTER_FLAG_IPV4
+                        | FILTER_FLAG_NO_PRIV_RANGE
+                        | FILTER_FLAG_NO_RES_RANGE
+                    ) === false)
                )
         ) {
             return ['response' => 'HTTP/1.0 400 Bad Request', 'response_code' => 400];

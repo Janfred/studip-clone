@@ -171,7 +171,9 @@ class InboxOutboxFolder implements FolderType
      */
     public function setDataFromEditTemplate($folderdata)
     {
-        return MessageBox::error(_('InboxOutbox-Ordner können nicht bearbeitet werden!'));
+        return MessageBox::error(
+            _('InboxOutbox-Ordner können nicht bearbeitet werden!')
+        );
     }
     public function store()
     {
@@ -192,7 +194,9 @@ class InboxOutboxFolder implements FolderType
      */
     public function createFile($file)
     {
-        return MessageBox::error(_('In InboxOutbox-Ordnern können keine Dateien erzeugt werden!'));
+        return MessageBox::error(
+            _('In InboxOutbox-Ordnern können keine Dateien erzeugt werden!')
+        );
     }
 
     /**
@@ -208,7 +212,9 @@ class InboxOutboxFolder implements FolderType
      */
     public function createSubfolder(FolderType $folderdata)
     {
-        throw new UnexpectedValueException(_('In InboxOutbox-Ordnern können keine nutzerdefinierten Unterordner erzeugt werden!'));
+        throw new UnexpectedValueException(
+            _('In InboxOutbox-Ordnern können keine nutzerdefinierten Unterordner erzeugt werden!')
+        );
     }
 
     /**

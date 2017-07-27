@@ -21,7 +21,7 @@
  */
 class FileArchiveManager
 {
-    
+
     //ARCHIVE HELPER METHODS
 
     /**
@@ -341,13 +341,14 @@ class FileArchiveManager
      * @param FileRef[] $file_refs Array of FileRef objects.
      * @param User $user The user who wishes to pack files.
      * @param string $archive_file_path The path for the archive file.
-     * @param bool $do_user_permission_checks Set to true if reading/downloading permissions
-     *     shall be checked. False otherwise. Default is true.
+     * @param bool $do_user_permission_checks Set to true if reading/downloading
+     *     permissions shall be checked. False otherwise. Default is true.
      *
      * @return bool True, if the archive file was created and saved successfully
      *     at $archive_file_path, false otherwise.
      *
-     * @throws Exception|FileArchiveManagerException If an error occurs a general exception or a more special exception is thrown.
+     * @throws Exception|FileArchiveManagerException If an error occurs
+     *     a general exception or a more special exception is thrown.
      */
     public static function createArchiveFromFileRefs(
         $file_refs,
@@ -411,7 +412,8 @@ class FileArchiveManager
      * @return bool True, if the archive file was created and saved successfully
      *     at $archive_file_path, false otherwise.
      *
-     * @throws Exception|FileArchiveManagerException If an error occurs a general exception or a more special exception is thrown.
+     * @throws Exception|FileArchiveManagerException If an error occurs
+     *     a general exception or a more special exception is thrown.
      */
     public static function createArchiveFromFolder(
         FolderType $folder,
@@ -445,7 +447,8 @@ class FileArchiveManager
      * @return bool True, if the archive file was created and saved successfully
      *     at $archive_file_path, false otherwise.
      *
-     * @throws Exception|FileArchiveManagerException If an error occurs a general exception or a more special exception is thrown.
+     * @throws Exception|FileArchiveManagerException If an error occurs
+     *     a general exception or a more special exception is thrown.
      */
     public static function createArchiveFromCourse(
         $course_id,
@@ -491,7 +494,8 @@ class FileArchiveManager
      * @return bool True, if the archive file was created and saved successfully
      *     at $archive_file_path, false otherwise.
      *
-     * @throws Exception|FileArchiveManagerException If an error occurs a general exception or a more special exception is thrown.
+     * @throws Exception|FileArchiveManagerException If an error occurs
+     *     a general exception or a more special exception is thrown.
      */
     public static function createArchiveFromInstitute(
         $institute_id,
@@ -534,7 +538,8 @@ class FileArchiveManager
      * @return bool True, if the archive file was created and saved successfully
      *     at $archive_file_path, false otherwise.
      *
-     * @throws Exception|FileArchiveManagerException If an error occurs a general exception or a more special exception is thrown.
+     * @throws Exception|FileArchiveManagerException If an error occurs
+     *     a general exception or a more special exception is thrown.
      */
     public static function createArchiveFromUser(
         $user_id,
@@ -823,9 +828,11 @@ class FileArchiveManager
                 );
             } else {
                 //we extract one file:
+                //$entry_info['name'] is necessary because we need the full path
+                //to the entry inside the archive.
                 $file_ref = self::extractFileFromArchive(
                     $archive,
-                    $entry_info['name'], //this is necessary because we need the full path to the entry inside the archive
+                    $entry_info['name'],
                     $extracted_entry_destination_folder,
                     $user
                 );

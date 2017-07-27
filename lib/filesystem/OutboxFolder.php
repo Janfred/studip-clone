@@ -20,7 +20,7 @@ class OutboxFolder extends InboxOutboxFolder
 
     /**
      * Returns a localised name of the OutboxFolder type.
-     * 
+     *
      * @return string The localised name of this folder type.
      */
     public static function getTypeName()
@@ -30,25 +30,32 @@ class OutboxFolder extends InboxOutboxFolder
 
     /**
      * Returns the Icon object for the OutboxFolder type.
-     * 
+     *
      * @return Icon An icon object with the icon for this folder type.
      */
     public function getIcon($role)
     {
-        return Icon::create(count($this->getFiles()) ? 'folder-inbox-full' : 'folder-inbox-empty', $role);
+        return Icon::create(
+            count($this->getFiles())
+            ? 'folder-inbox-full'
+            : 'folder-inbox-empty',
+            $role
+        );
     }
 
     /**
      * Gets all attachments of sent messages of a specific user
      * and places the attachments inside this folder.
-     * 
-     * @return FileRef[] Array of FileRef objects representing the message attachments.
+     *
+     * @return FileRef[] Array of FileRef objects representing the message
+     *     attachments.
      */
     public function getFiles()
     {
         //get all folders of the user that belongs to a received message:
         $message_folders = Folder::findBySql(
-            "INNER JOIN message_user ON folders.range_id = message_user.message_id
+            "INNER JOIN message_user
+            ON folders.range_id = message_user.message_id
             WHERE
             folders.range_type = 'message'
             AND
