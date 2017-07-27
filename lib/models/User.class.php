@@ -1162,20 +1162,20 @@ class User extends AuthUserMd5
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
 
-        $query = "UPDATE IGNORE questionnaire_assignments SET range_id = ? WHERE range_id = ?";
-        $statement = DBManager::get()->prepare($query);
-        $statement->execute(array($new_id, $old_id));
-
         $query = "UPDATE IGNORE questionnaire_assignments SET user_id = ? WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
 
-        self::removeDoubles('questionnaire_anonymous_answers', 'anonymous_answer_id', $new_id, $old_id);
+        $query = "UPDATE IGNORE questionnaire_assignments SET range_id = ? WHERE range_id = ?";
+        $statement = DBManager::get()->prepare($query);
+        $statement->execute(array($new_id, $old_id));
+
+        self::removeDoubles('questionnaire_anonymous_answers', 'questionnaire_id', $new_id, $old_id);
         $query = "UPDATE IGNORE questionnaire_anonymous_answers SET user_id = ? WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
 
-        self::removeDoubles('questionnaire_answers', 'answer_id', $new_id, $old_id);
+        self::removeDoubles('questionnaire_answers', 'question_id', $new_id, $old_id);
         $query = "UPDATE IGNORE questionnaire_answers SET user_id = ? WHERE user_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array($new_id, $old_id));
