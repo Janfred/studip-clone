@@ -454,12 +454,6 @@ class ExternSemBrowseTemplate extends SemBrowse {
                         // create turnus field
                         $sem_turnus = Seminar::getInstance($seminar_id)->getDatesExport(array('show_room' => true));
 
-                        // shorten, if string too long
-                        if (mb_strlen($sem_turnus) > 70) {
-                            $sem_turnus = mb_substr($sem_turnus, 0,
-                                    mb_strpos(mb_substr($sem_turnus, 70, mb_strlen($sem_turnus)), ",") +71);
-                            $sem_turnus .= "...";
-                        }
                         $content['LECTURES']['GROUP'][$i]['LECTURE'][$j]['CYCLE'] = ExternModule::ExtHtmlReady($sem_turnus);
 
                         $doz_name = array_keys($sem_data[$seminar_id]['fullname']);
