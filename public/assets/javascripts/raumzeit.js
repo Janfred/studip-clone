@@ -41,19 +41,38 @@
                 } else {
                     $(select).empty().append(me.data('options').clone(true));
                 }
+                
+                if ($(this).parents('form').attr('action').split('saveDate/').length > 1) {
+                    var singleDate = $(this).parents('form').attr('action').split('saveDate/')[1].split('?')[0];
+                } else {
+                   var singleDate = undefined; 
+                }
+                if ($( "input[name='checked_dates']" ).length > 0) {
+                    var checked_dates = $( "input[name='checked_dates']" ).val().split(',');
+                    var ndate = [];
+                } else {
+                    var checked_dates = [singleDate];
+                    var startDate = $( "input[name='date']" ).val();
+                    var start_time = $( "input[name='start_time']" ).val().split(':');
+                    var end_time = $( "input[name='end_time']" ).val().split(':');
+                    var date_obj = [{name: 'startDate', value: startDate}, 
+                        {name: 'start_stunde', value: start_time[0]},
+                        {name: 'start_minute', value: start_time[1]},
+                        {name: 'end_stunde', value: end_time[0]},
+                        {name: 'end_minute', value: end_time[1]}];
+                }
+
                 $.ajax({
                     type: 'POST',
                     url: STUDIP.ABSOLUTE_URI_STUDIP + 'dispatch.php/resources/helpers/bookable_rooms',
                     data: {
                         rooms: _.pluck(select.options, 'value'),
-                        selected_dates: _.pluck($('input[name="singledate[]"]:checked'), 'value'),
-                        singleDateID: $('input[name=singleDateID]').attr('value'),
-                        new_date: _.map($('#startDate,#start_stunde,#start_minute,#end_stunde,#end_minute'), function (v) {
-                            return {name: v.id, value: v.value};
-                        })
+                        selected_dates: checked_dates,
+                        singleDateID: singleDate,                                      
+                        new_date: date_obj
                     },
                     success: function (result) {
-                        if ($.isArray(result)) {
+                        if ($.isArray(result)) {                            
                             if (result.length) {
                                 var not_bookable_rooms = _.map(result, function (v) {
                                     return $(select).children('option[value=' + v + ']').text().trim();
@@ -81,7 +100,7 @@
         STUDIP.Raumzeit.disableBookableRooms($('.bookable_rooms_action'));
     });
 
-    $(document).on('ready dialog-update', function () {
+    $(document).on('ready', function () {
         $('.bookable_rooms_action').show();
     });
 
@@ -118,3 +137,17 @@
         }
     });
 }(jQuery, STUDIP, _));
+
+STUDIP.Raumzeit = {
+    disableBookableRooms: function (icon) {
+        var select = $(icon).prev('select')[0];
+        var me = $(icon);
+        select.title = '';
+        $(select).children('option').each(function () {
+            $(this).prop('disabled', false);
+        });
+
+        me.attr('data-state', false);
+        me.attr('title', 'Nur buchbare Räume anzeigen'.toLocaleString());
+    }
+};

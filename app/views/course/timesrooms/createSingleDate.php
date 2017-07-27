@@ -29,8 +29,8 @@
 
     <? if (Config::get()->RESOURCES_ENABLE) : ?>
         <label>
-            <?= _('Raum') ?>
-            <select name="room">
+            <?= _('Raum') ?>            
+            <select name="room" style="width: calc(100% - 23px);">
                 <option value="nothing"><?= _('<em>Keinen</em> Raum buchen') ?></option>
                 <? $resList->reset();
                 if ($resList->numberOfRooms()) : ?>
@@ -41,10 +41,14 @@
                         </option>
                     <? endwhile ?>
                 <? endif ?>
-            </select>
-            <a href="#" class="bookable_rooms_action" title="<?= _('Nur buchbare Räume anzeigen') ?>">
-                <?= Icon::create('room-clear', 'clickable')->asImg(16) ?>
-            </a>
+            </select>            
+            <?= Icon::create('room-clear', 'clickable', 
+                array(
+                        'class' => "bookable_rooms_action", 
+                        'title' => _("Nur buchbare Räume anzeigen"),
+                        "style" => "float: right; top: -23px; position: relative;"
+                    )
+                ); ?>
         </label>
     <? endif ?>
 

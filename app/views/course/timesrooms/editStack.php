@@ -1,7 +1,8 @@
 <form method="post" action="<?= $controller->url_for('course/timesrooms/saveStack/' . $cycle_id, $linkAttributes) ?>"
       class="default collapsable" data-dialog="size=big">
     <?= CSRFProtection::tokenTag()?>
-    <input type="hidden" name="method" value="edit">
+    <input type="hidden" name="method" value="edit">    
+    <input type="hidden" name="checked_dates" value="<?= implode(',',$_SESSION['_checked_dates']); ?>">
 
     <fieldset>
         <legend><?= _('Raumangaben') ?></legend>

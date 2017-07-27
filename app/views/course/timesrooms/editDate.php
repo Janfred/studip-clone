@@ -34,7 +34,7 @@
         <legend><?= _('Raumangaben') ?></legend>
         <? if (Config::get()->RESOURCES_ENABLE && $resList->numberOfRooms()) : ?>
             <label>
-                <input type="radio" name="room" value="room"
+                <input style="display: inline;" type="radio" name="room" value="room"
                        id="room" <?= $date->room_assignment->resource_id ? 'checked' : '' ?>>
 
                 <select name="room_sd" style="display: inline-block; width: 50%;" class="single_room">
@@ -46,6 +46,7 @@
                         </option>
                     <? endforeach; ?>
                 </select>
+                <?= Icon::create('room-clear', 'clickable', array('class' => "bookable_rooms_action", 'title' => _("Nur buchbare Räume anzeigen"))); ?>
             </label>
         <? endif; ?>
         <label class="horizontal">

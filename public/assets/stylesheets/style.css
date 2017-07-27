@@ -7339,9 +7339,6 @@ ul.termin_related li {
 div.at_least_one_teacher {
   width: 325px;
 }
-.bookable_rooms_action {
-  display: none;
-}
 .is_ex_termin {
   color: #646a72;
   text-decoration: line-through;
