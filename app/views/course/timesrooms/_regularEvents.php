@@ -65,9 +65,7 @@
                         _('Diesen Zeitraum löschen'),
                         Icon::create('trash', 'clickable', ['title' => _('Diesen Zeitraum löschen')]),
                         ['formaction'   => $controller->url_for('course/timesrooms/deleteCycle/' . $metadate_id, $linkAttributes),
-                         'data-confirm' => _('Soll dieser Zeitraum wirklich gelöscht werden?'),
-                         'style'        => 'margin: 0px',]
-                    ) ?>
+                         'data-confirm' => _('Soll dieser Zeitraum wirklich gelöscht werden?')]) ?>
                     <?= $actionMenu->render() ?>
                     <? endif ?>
                 </header>

@@ -100,7 +100,6 @@ $is_exTermin = $termin instanceof CourseExDate;
             'name'         => 'delete_single_date',
             'data-confirm' => _('Diesen Termin wiederherstellen?') . implode("\n", $warning),
             'formaction'   => $controller->url_for('course/timesrooms/undeleteSingle/' . $termin->termin_id),
-            'style'        => 'margin: 0px',
         ]; ?>
         <? if (Request::isXhr()) : ?>
             <? $params['data-dialog'] = 'size=auto' ?>
@@ -123,7 +122,6 @@ $is_exTermin = $termin instanceof CourseExDate;
             'type'         => 'image',
             'class'        => 'middle',
             'name'         => 'delete_single_date',
-            'style'        => 'margin: 0px',
             'data-confirm' => _('Wollen Sie diesen Termin wirklich löschen / ausfallen lassen?') . (!empty($warning) ? implode("\n", $warning) : ''),
             'formaction'   => $controller->url_for(
                 'course/timesrooms/deleteSingle/' . $termin->termin_id,

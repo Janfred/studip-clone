@@ -47,8 +47,7 @@
                                     Icon::create('trash', 'clickable',
                                             ['title'        => _('Schritt löschen'),
                                              'formaction'   => $controller->url_for('admin/coursewizardsteps/delete/' . $step->id),
-                                             'data-confirm' => sprintf(_('Soll der Eintrag "%s" wirklich gelöscht werden?'), htmlReady($step->name)),
-                                             'style'        => 'margin: 0px']))
+                                             'data-confirm' => sprintf(_('Soll der Eintrag "%s" wirklich gelöscht werden?'), htmlReady($step->name))]))
                             ?>
                             <?= $actionMenu->render() ?>
                         </td>

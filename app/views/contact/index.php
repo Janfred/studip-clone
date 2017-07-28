@@ -66,8 +66,7 @@
                                         $filter ? _('Kontakt aus Gruppe entfernen') : _('Kontakt entfernen'),
                                         Icon::create('person+remove', 'clickable',
                                                 ['data-confirm' => sprintf(_('Wollen Sie %s wirklich von der Liste entfernen'), htmlReady($contact->username)),
-                                                 'formaction'   => $controller->url_for('contact/remove/' . $filter, ['user' => $contact->username]),
-                                                 'style'       => 'margin: 0px'])) ?>
+                                                 'formaction'   => $controller->url_for('contact/remove/' . $filter, ['user' => $contact->username])])) ?>
                                 <?= $actionMenu->render() ?>
                             </td>
                         </tr>

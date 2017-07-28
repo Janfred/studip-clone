@@ -4349,12 +4349,6 @@ button.button[disabled]:hover {
   margin-left: 5px;
   margin-right: 0;
 }
-.button-icon {
-  border: none;
-  background-color: transparent;
-  padding: 0px;
-  cursor: pointer;
-}
 /* --- MessageBoxes --------------------------------------------------------- */
 div.messagebox {
   background: no-repeat 10px 10px;
