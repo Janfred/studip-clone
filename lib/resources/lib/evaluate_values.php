@@ -2071,8 +2071,16 @@ if (Request::submitted('inc_request') || Request::submitted('dec_request')
             //add already assigned resource_ids to the check-set and remember those assigns
             foreach($assignObjects as $assObj){
                 if ($assObj->getResourceId()){
-                    if(!$_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["considered_resources"][$assObj->getResourceId()])
-                        $_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["considered_resources"][$assObj->getResourceId()] = array("type"=>"matching");
+                    // add current assignments to the front of the list
+                    $considered_resources = $_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["considered_resources"];
+                    $search_limit_high = $_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["search_limit_high"];
+                    $considered_length = count($considered_resources);
+                    $considered_resources = array($assObj->getResourceId() => array('type' => 'matching')) + $considered_resources;
+                    // increase search_limit_high if additional match was added
+                    if (count($considered_resources) > $considered_length && $search_limit_high == $reqObj->last_search_result_count) {
+                        ++$_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["search_limit_high"];
+                    }
+                    $_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["considered_resources"] = $considered_resources;
                 }
                 $_SESSION['resources_data']["requests_working_on"][$_SESSION['resources_data']["requests_working_pos"]]["assign_objects"][$assObj->getId()] = array("resource_id" => $assObj->getResourceId());
             }
