@@ -150,6 +150,13 @@
         }
     });
 
+    // simulate formaction attribute for input[type=image] in IE11
+    $(document).on('click', 'input[type=image][formaction]', function () {
+        if ($(this).attr('data-confirm') === undefined) {
+            $(this).closest('form').attr('action', $(this).attr('formaction'));
+        }
+    });
+
     // Use select2 for crossbrowser compliant select styling and
     // handling
     $.fn.select2.amd.define("select2/i18n/de", [], function() {
