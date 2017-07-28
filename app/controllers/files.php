@@ -227,6 +227,10 @@ class FilesController extends AuthenticatedController
 
         URLHelper::bindLinkParam('to_plugin', get_class($this->plugin));
 
+        $args = func_get_args();
+        array_shift($args);
+        $folder_id = implode("/", $args);
+
         $this->topFolder      = $this->plugin->getFolder($folder_id);
         $this->controllerpath = 'files/system/' . $plugin_id;
 
