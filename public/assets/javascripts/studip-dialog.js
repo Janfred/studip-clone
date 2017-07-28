@@ -571,7 +571,7 @@
         return $.Deferred(function (defer) {
             STUDIP.Dialog.show(question, {
                 id: 'confirmation-dialog',
-                title: 'Bitte best�tigen Sie die Aktion'.toLocaleString(),
+                title: 'Bitte bestätigen Sie die Aktion'.toLocaleString(),
                 size: 'fit',
                 wikilink: false,
                 dialogClass: 'studip-confirmation',

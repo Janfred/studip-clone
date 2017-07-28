@@ -37,10 +37,10 @@ $attributes = function (array $attributes) {
             <? elseif ($action['type'] === 'button'): ?>
                 <label>
                 <? if ($action['icon']): ?>
-                    <?= $action['icon']->asInput(['name' => $action['name']]) ?>
+                    <?= $action['icon']->asInput(array_merge($action['attributes'], ['name' => $action['name']])) ?>
                 <? else: ?>
                     <span class="action-menu-no-icon"></span>
-                    <button type="submit" name="<?= htmlReady($action['name']) ?>" style="display: none;"></button>
+                    <button type="submit" name="<?= htmlReady($action['name']) ?>" style="display: none;" <?= $attributes($action['attributes']) ?>></button>
                 <? endif; ?>
                     <?= htmlReady($action['label']) ?>
                 </label>
