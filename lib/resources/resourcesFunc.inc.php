@@ -393,7 +393,7 @@ function getMyRoomRequests($user_id = '', $semester_id = null, $only_not_closed 
             $criteria .= " AND NOT EXISTS (SELECT * FROM resources_requests_user_status WHERE resources_requests_user_status.request_id=rr.request_id AND resources_requests_user_status.user_id=".DBManager::get()->quote($user_id).") ";
         }
         if ($regular) {
-            $criteria .= " AND EXISTS (SELECT * FROM termine WHERE range_id=rr.seminar_id AND date > UNIX_TIMESTAMP() AND metadate_id IS NOT NULL AND metadate_id != '') "; 
+            $criteria .= " AND rr.termin_id = '' AND EXISTS (SELECT * FROM termine WHERE range_id=rr.seminar_id AND date > UNIX_TIMESTAMP() AND metadate_id IS NOT NULL AND metadate_id != '') "; 
         }
     }
 
