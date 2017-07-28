@@ -11,12 +11,12 @@
         <legend><?= _('Zeitraum') ?></legend>
         <label for="block_appointments_start_day" class="col-3">
             <?= _('Startdatum') ?>
-            <input type="text" class="size-s has-date-picker" id="block_appointments_start_day"
+            <input type="text" class="size-s has-date-picker" data-date-picker='{"<=":"#block_appointments_end_day"}' id="block_appointments_start_day"
                    name="block_appointments_start_day" value="<?= $request['block_appointments_start_day'] ?>">
         </label>
         <label for="block_appointments_end_day" class="col-3">
             <?= _('Enddatum') ?>
-            <input type="text" class="size-s has-date-picker" id="block_appointments_end_day"
+            <input type="text" class="size-s has-date-picker" data-date-picker='{">=":"#block_appointments_start_day"}' id="block_appointments_end_day"
                    name="block_appointments_end_day" value="<?= $request['block_appointments_end_day'] ?>">
         </label>
         <label for="block_appointments_start_time" class="col-3">
