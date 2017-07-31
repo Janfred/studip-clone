@@ -237,7 +237,12 @@ class Search_StudiengaengeController extends MVVController
                 //$module = Modul::findByStgteilAbschnitt($abschnitt->getId());
                 $abschnitt_module = $abschnitt->getModulAssignments();
                 foreach ($abschnitt_module as $abschnitt_modul) {
-
+                    
+                    // module is not public visible
+                    if (!$abschnitt_modul->modul->hasPublicStatus()) {
+                        continue;
+                    }
+                    
                     $start_sem = Semester::find($abschnitt_modul->modul->start);
                     $end_sem = Semester::find($abschnitt_modul->modul->end);
                     if ($start_sem->beginn > $this->active_sem->beginn || ($this->active_sem->ende > $end_sem->ende && $end_sem != null)) {
