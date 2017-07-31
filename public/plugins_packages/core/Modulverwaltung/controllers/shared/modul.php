@@ -139,77 +139,6 @@ class Shared_ModulController extends MVVController
         $display_language = Request::get('display_language', null);
         ModuleManagementModel::setLanguage($display_language);
         
-        $modulVerantwortung = array();
-        foreach ($modul->assigned_users as $users) {
-            foreach ($users as $user) {
-                if (!isset($modulVerantwortung[$user->gruppe])) {
-                    $modulVerantwortung[$user->gruppe] = array(
-                        'name' => $GLOBALS['MVV_MODUL']['PERSONEN_GRUPPEN']['values'][$user->gruppe]['name'],
-                        'users' => array()
-                    );
-                }
-                $modulVerantwortung[$user->gruppe]['users'][$user->user_id] = array(
-                    'name' => get_fullname($user->user_id),
-                    'id' => $user->user_id
-                );
-            }
-        }
-
-        $modulTeilData = array();
-        $nummer_modulteil = 1;
-        foreach ($modul->modulteile as $modulTeil) {
-
-            $deskriptor = $modulTeil->getDeskriptor($display_language);
-            // Für die Kenntlichmachung der Modulteile in Listen die Nummer des
-            // Modulteils und den ausgewählten Namen verwenden.
-            // Ist keine Nummer vorhanden, dann Durchnummerieren und Standard-
-            // Bezeichnung verwenden.
-            if (trim($modulTeil->nummer)) {
-                $num_bezeichnung = $GLOBALS['MVV_MODULTEIL']['NUM_BEZEICHNUNG']['values'][$modulTeil->num_bezeichnung]['name'];
-                $name_kurz = sprintf('%s %d', $num_bezeichnung, $modulTeil->nummer);
-            } else {
-                $num_bezeichnung_default = $GLOBALS['MVV_MODULTEIL']['NUM_BEZEICHNUNG']['default'];
-                $name_kurz = $GLOBALS['MVV_MODULTEIL']['NUM_BEZEICHNUNG']['values'][$num_bezeichnung_default]['name']
-                        . ' ' . $nummer_modulteil;
-                $nummer_modulteil++;
-            }
-            $modulTeilData[$modulTeil->getId()] = array(
-                'lernform' => $GLOBALS['MVV_MODULTEIL']['LERNLEHRFORM']['values'][$modulTeil->lernlehrform]['name'],
-                'sws' => $modulTeil->sws,
-                'name_kurz' => $name_kurz,
-                'bezeichnung' => $deskriptor->bezeichnung,
-                'anteil_note' => $modulTeil->anteil_note,
-                'modulteil' => $modulTeil->getDisplayName(),
-                'wl_preasenz' => $modulTeil->wl_praesenz,
-                'wl_bereitung' => $modulTeil->wl_bereitung,
-                'wl_selbst' => $modulTeil->wl_selbst,
-                'wl_pruef' => $modulTeil->wl_pruef,
-                'kommentar_wl_preasenz' => $deskriptor->kommentar_wl_praesenz,
-                'kommentar_wl_bereitung' => $deskriptor->kommentar_wl_bereitung,
-                'kommentar_wl_selbst' => $deskriptor->kommentar_wl_selbst,
-                'kommentar_wl_pruef' => $deskriptor->kommentar_wl_pruef,
-                'pruef_vorleistung' => $deskriptor->pruef_vorleistung,
-                'pruef_leistung' => $deskriptor->pruef_leistung,
-                'pflicht' => $modulTeil->pflicht ? _('Ja') : _('Nein'),
-                'kommentar_pflicht' => $deskriptor->kommentar_pflicht,
-                'kapazitaet' => $modulTeil->kapazitaet,
-                'voraussetzung' => $deskriptor->voraussetzung,
-                'kommentar_kapazitaet' => $deskriptor->kommentar_kapazitaet,
-                'lvGruppen' => array()
-            );
-            
-            $lvGruppen = Lvgruppe::findByModulteil($modulTeil->getId());
-            foreach ($lvGruppen as $lvGruppe) {
-                $courses = array();
-                foreach ($lvGruppe->getAssignedCoursesBySemester($currentSemester['semester_id'], $GLOBALS['user']->id) as $seminar) {
-                    $courses[$seminar['seminar_id']] = $seminar;
-                }
-                $modulTeilData[$modulTeil->getId()]['lvGruppen'][$lvGruppe->getId()] = array(
-                    'courses' => $courses,
-                    'alt_texte' => $lvGruppe->alttext
-                );
-            }
-        }
         $this->semesterSelector = SemesterData::GetSemesterSelector(null, $currentSemester['semester_id'], 'semester_id', false);
         $this->modul = $modul;
         $this->pruefungsEbene = $GLOBALS['MVV_MODUL']['PRUEF_EBENE']['values'][$modul->pruef_ebene]['name'];
@@ -222,11 +151,7 @@ class Shared_ModulController extends MVVController
                 $this->instituteName = _('unbekannte Einrichtung');
             }
         }
-        $this->modulVerantwortung = $modulVerantwortung;
-        $this->modulTeilData = $modulTeilData;
         $this->type = $type;
-        $this->modulTeile = $modul->modulteile;
-        $this->modulUser = $modul->assigned_users;
         $this->semester = $currentSemester;
 	$this->display_language = $display_language;
 	PageLayout::setTitle($modul->getDisplayName());

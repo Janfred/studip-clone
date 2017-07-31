@@ -9,7 +9,7 @@
     <tbody>
         <? foreach ($modul->modulteile as $modulTeil): ?>
             <?
-            $modulTeilDeskriptor = $modulTeil->getDeskriptor();
+            $modulTeilDeskriptor = $modulTeil->getDeskriptor($display_language);
             // Für die Kenntlichmachung der Modulteile in Listen die Nummer des
             // Modulteils und den ausgewählten Namen verwenden.
             // Ist keine Nummer vorhanden, dann Durchnummerieren und Standard-
@@ -31,7 +31,7 @@
             </tr>                  
         <? endforeach; ?>
         <tr data-mvv-id="<?= $modul->getId(); ?>" data-mvv-type="modul">
-            <? $modulDeskriptor = $modul->getDeskriptor() ?>
+            <? $modulDeskriptor = $modul->getDeskriptor($display_language) ?>
             <td style="vertical-align: top; font-weight: bold;">
                 <?= _('Gesamtmodul') ?>
             </td>

@@ -18,7 +18,7 @@
         <? $modulSumme = 0; ?>
         <? $nummer_modulteil = 1; ?>
         <? foreach ($modul->modulteile as $modulTeil): ?>
-            <? $modulTeilDeskriptor = $modulTeil->getDeskriptor();
+            <? $modulTeilDeskriptor = $modulTeil->getDeskriptor($display_language);
             // Für die Kenntlichmachung der Modulteile in Listen die Nummer des
             // Modulteils und den ausgewählten Namen verwenden.
             // Ist keine Nummer vorhanden, dann Durchnummerieren und Standard-

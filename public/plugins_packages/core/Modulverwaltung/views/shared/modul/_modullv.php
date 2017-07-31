@@ -1,5 +1,5 @@
 <? $modulTeil = $modul->modulteile->first(); ?>
-<? $modulTeilDeskriptor = $modulTeil->getDeskriptor(); ?>
+<? $modulTeilDeskriptor = $modulTeil->getDeskriptor($display_language); ?>
 <table class="mvv-modul-details default nohover" data-mvv-id="<?= $modulTeil->id; ?>" data-mvv-type="modulteil">
     <tbody>
         <? $modulTeilSumme = $modulTeil->wl_praesenz + $modulTeil->wl_bereitung + $modulTeil->wl_selbst + $modulTeil->wl_pruef ?>
