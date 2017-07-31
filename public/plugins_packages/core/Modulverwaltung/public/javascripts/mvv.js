@@ -316,11 +316,7 @@ MVV.Chooser = {
                     }
                     parent.after(data);
                 } else {
-                    jQuery('.mvv-version-content').fadeOut(400, function(){
-                        jQuery('.mvv-version-content').nextAll().remove();
-                        jQuery('.mvv-version-content').after(data);
-                        jQuery('.mvv-version-content').last().fadeIn();
-                    });
+                    location.reload();
                 }
             }
         });
