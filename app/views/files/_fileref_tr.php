@@ -48,7 +48,7 @@
     <? endif; ?>
     </td>
     <td title="<?= strftime('%x %X', $file_ref->chdate) ?>" data-sort-value="<?= $file_ref->chdate ?>" class="responsive-hidden">
-        <?= reltime($file_ref->chdate) ?>
+        <?= $file_ref->chdate ? reltime($file_ref->chdate) : "" ?>
     </td>
     <td class="actions">
     <?php

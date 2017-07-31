@@ -42,7 +42,7 @@ $owner = User::find($folder->user_id) ?: new User();
     <? endif; ?>
     </td>
     <td title="<?= strftime('%x %X', $folder->mkdate) ?>" data-sort-value="<?= $folder->mkdate ?>" class="responsive-hidden">
-        <?= reltime($folder->mkdate) ?>
+        <?= $folder->mkdate ? reltime($folder->mkdate) : "" ?>
     </td>
     <td class="actions">
     <?php
