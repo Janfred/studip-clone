@@ -78,13 +78,15 @@ MVV.CourseWizard = {
     {
         var searchterm = $('#lvgroup-tree-search').val();
         if (searchterm != '') {
-            var params = 'step=' + $('input[name="step"]').val() +
-                '&method=searchLVGroupTree' +
-                '&parameter[]=' + searchterm;
             $.ajax(
                 $('#studyareas').data('ajax-url'),
                 {
-                    data: params,
+                    data: {
+                        'step': $('input[name="step"]').val(),
+                        'method': 'searchLVGroupTree',
+                        'parameter[]': searchterm
+                    },
+                    method: "POST",
                     beforeSend: function(xhr, settings) {
                         $('#lvgroup-tree-search-start').css('display', 'none');
                         $('#lvgroup-tree-search-start').parent().append(
