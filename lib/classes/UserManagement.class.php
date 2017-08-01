@@ -376,7 +376,7 @@ class UserManagement
         $this->user_data->setData($newuser);
 
         if ($this->user_data['auth_user_md5.auth_plugin'] == 'standard') {
-            $password = $this->generate_password(6);
+            $password = $this->generate_password(8);
             $this->user_data['auth_user_md5.password'] = self::getPwdHasher()->HashPassword($password);
         }
 
@@ -741,7 +741,7 @@ class UserManagement
             return FALSE;
         }
 
-        $password = $this->generate_password(6);
+        $password = $this->generate_password(8);
         $this->user_data['auth_user_md5.password'] = self::getPwdHasher()->HashPassword($password);
 
         if (!$this->storeToDatabase()) {

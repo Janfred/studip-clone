@@ -37,8 +37,8 @@ STUDIP.register = {
         STUDIP.register.clearErrors('password');
 
         var checked = true;
-        if (jQuery('input[name=password]').val().length < 4) {
-            STUDIP.register.addError('password', "Das Passwort ist zu kurz, es sollte mindestens 4 Zeichen lang sein.".toLocaleString());
+        if (jQuery('input[name=password]').val().length < 8) {
+            STUDIP.register.addError('password', "Das Passwort ist zu kurz, es sollte mindestens 8 Zeichen lang sein.".toLocaleString());
             document.login.password.focus();
             checked = false;
         }

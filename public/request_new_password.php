@@ -132,7 +132,7 @@ if (Request::submitted('id')) {
     
     if ($requesting_user) {
         $user_management = new UserManagement($requesting_user['user_id']);
-        if ($user_management->changePassword($user_management->generate_password(6))) {
+        if ($user_management->changePassword($user_management->generate_password(8))) {
             StudipLog::USER_NEWPWD($requesting_user['user_id'], null, 'Passwort neu setzen angefordert', null, $requesting_user['user_id']);
             $msg['success'][] = sprintf(_("Ihnen wird in Kürze eine E-Mail an die Adresse %s mit Ihrem neuen Passwort geschickt. Bitte beachten Sie die Hinweise in dieser E-Mail."), $requesting_user['Email']);
         } else {

@@ -67,7 +67,7 @@ class Settings_PasswordController extends Settings_SettingsController
             $errors[] = _('Das aktuelle Passwort wurde nicht korrekt eingegeben.');
         }
         if (!$this->validator->ValidatePassword($password)) {
-            $errors[] = _('Das Passwort ist zu kurz - es sollte mindestens 4 Zeichen lang sein.');
+            $errors[] = _('Das Passwort ist zu kurz - es sollte mindestens 8 Zeichen lang sein.');
         } else if ($password !== $confirm) {
             $errors[] = _('Die Wiederholung Ihres Passworts stimmt nicht mit Ihrer Eingabe überein.');
         } else if ($password == $this->user['username']) {
