@@ -87,7 +87,7 @@ class StartController extends AuthenticatedController
                 $settings->addElement(new LinkElement(
                     ucfirst($permission),
                     $this->url_for('start/edit_defaults/' . $permission),
-                    Icon::create('link-intern', 'clickable'), array('data-dialog' => '')
+                    Icon::create('link-intern', 'clickable'), ['data-dialog' => '']
                 ));
             }
 
@@ -95,25 +95,28 @@ class StartController extends AuthenticatedController
         }
         if ($GLOBALS['perm']->get_perm() == 'user') {
             PageLayout::postMessage(MessageBox::info(_('Sie haben noch nicht auf Ihre Bestätigungsmail geantwortet.'),
-                array(
+                [
                     _('Bitte holen Sie dies nach, um Stud.IP Funktionen wie das Belegen von Veranstaltungen nutzen zu können.'),
                     sprintf(_('Bei Problemen wenden Sie sich an: %s'), '<a href="mailto:'.$GLOBALS['UNI_CONTACT'].'">'.$GLOBALS['UNI_CONTACT'].'</a>')
-                )
+                ]
             ));
 
+            $details = Studip\LinkButton::create(_('Bestätigungsmail erneut verschicken'),
+                    $this->url_for('start/resend_validation_mail')
+                );
+
+            if(!StudipAuthAbstract::CheckField('auth_user_md5.Email', $GLOBALS['user']->auth_plugin) && !LockRules::check($GLOBALS['user']->id, 'email')) {
+                $details .= ' ';
+                $details .= Studip\LinkButton::create(_('Email-Adresse ändern'),
+                    $this->url_for('start/edit_mail_address'),
+                    [
+                        'data-dialog' => 'size=auto',
+                        'title'       => _('Email-Adresse')
+                    ]);
+            }
             PageLayout::postMessage(MessageBox::info(
                     sprintf(_('Haben Sie die Bestätigungsmail an Ihre Adresse "%s" nicht erhalten?'), htmlReady($GLOBALS['user']->Email)),
-                    array(
-                        Studip\LinkButton::create(_('Bestätigungsmail erneut verschicken'),
-                            $this->url_for('start/resend_validation_mail')
-                        ) . ' '
-                        . Studip\LinkButton::create(_('Email-Adresse ändern'),
-                            $this->url_for('start/edit_mail_address'), array(
-                                'data-dialog' => "size=auto",
-                                'title'       => _('Email-Adresse')
-                            )
-                        ),
-                    )
+                    [$details]
             ));
         }
     }
@@ -202,7 +205,7 @@ class StartController extends AuthenticatedController
      *
      * @return void
      */
-    function delete_action($id)
+    public function delete_action($id)
     {
         if (Request::isPost()) {
             if (Request::submitted('yes')) {
@@ -218,7 +221,7 @@ class StartController extends AuthenticatedController
         } else {
             $message = sprintf(_('Sind Sie sicher, dass Sie das Widget "%s" von der Startseite entfernen möchten?'),
                                WidgetHelper::getWidgetName($id));
-            $this->flash['question'] = createQuestion2($message, array(), array(), $this->url_for('start/delete/' . $id));
+            $this->flash['question'] = createQuestion2($message, [], [], $this->url_for('start/delete/' . $id));
         }
         $this->redirect('start');
     }
@@ -250,7 +253,7 @@ class StartController extends AuthenticatedController
      *
      * @return void
      */
-    function storeNewOrder_action()
+    public function storeNewOrder_action()
     {
         WidgetHelper::storeNewPositions(Request::get('widget'), Request::get('position'), Request::get('column'));
         $this->render_nothing();
@@ -261,7 +264,7 @@ class StartController extends AuthenticatedController
      *
      * @return void
      */
-    function resend_validation_mail_action()
+    public function resend_validation_mail_action()
     {
         if ($GLOBALS['perm']->get_perm() == 'user') {
             Seminar_Register_Auth::sendValidationMail($GLOBALS['user']);
@@ -278,14 +281,14 @@ class StartController extends AuthenticatedController
      *
      * @return void
      */
-    function edit_mail_address_action()
+    public function edit_mail_address_action()
     {
         // only allow editing of mail-address here if user has not yet validated
         if ($GLOBALS['perm']->get_perm() != 'user') {
             $this->redirect('start');
             return;
         }
-
+        $this->restricted = (StudipAuthAbstract::CheckField('auth_user_md5.Email', $GLOBALS['user']->auth_plugin) && LockRules::check($GLOBALS['user']->id, 'email'));
         $this->email = $GLOBALS['user']->Email;
     }
 
@@ -294,11 +297,19 @@ class StartController extends AuthenticatedController
      *
      * @return void
      */
-    function change_mail_address_action()
+    public function change_mail_address_action()
     {
+        $email1 = Request::get('email1');
+        $email2 = Request::get('email2');
         if ($GLOBALS['perm']->get_perm() == 'user') {
+
+            if($email1 != $email2) {
+                PageLayout::postError(_('Die Wiederholung der E-Mail-Adresse stimmt nicht mit Ihrer Eingabe überein.'));
+                $this->redirect('start/edit_mail_address');
+                return;
+            }
             $user = new User($GLOBALS['user']->id);
-            $user->Email = Request::get('email');
+            $user->Email = $email1;
             $user->store();
 
             $GLOBALS['user']->Email = $user->Email;
@@ -309,6 +320,6 @@ class StartController extends AuthenticatedController
             ));
         }
 
-        $this->redirect('start');
+        $this->relocate('start');
     }
 }
