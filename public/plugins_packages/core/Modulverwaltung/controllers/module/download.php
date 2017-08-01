@@ -31,6 +31,7 @@ class Module_DownloadController extends MVVController
         $factory = $this->get_template_factory();
 
         if ($as_pdf) {
+            $this->set_content_type('application/pdf');
 
             $doc = new ExportPDF();
 
