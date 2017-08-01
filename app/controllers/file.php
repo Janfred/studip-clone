@@ -683,12 +683,22 @@ class FileController extends AuthenticatedController
     {
         CSRFProtection::verifyUnsafeRequest();
 
-        $file_ref = FileRef::find($file_ref_id);
+        if (Request::get("to_plugin")) {
+            $args = func_get_args();
+            $file_id = implode("/", $args);
+            $plugin = PluginManager::getInstance()->getPlugin(Request::get("to_plugin"));
+            if (!$plugin) {
+                throw new Trails_Exception(404, _('Plugin existiert nicht.'));
+            }
+            $file_ref = $plugin->getPreparedFile($file_id);
+        } else {
+            $file_ref = FileRef::find($file_ref_id);
+        }
         if (!$file_ref) {
             throw new Trails_Exception(404, _('Datei nicht gefunden.'));
         }
 
-        $folder = $file_ref->folder->getTypedFolder();
+        $folder = $file_ref->foldertype;
         if (!$folder || !$folder->isFileWritable($file_ref->id, $GLOBALS['user']->id)) {
             throw new AccessDeniedException();
         }

@@ -739,12 +739,8 @@ class FileManager
      */
     public static function deleteFileRef(FileRef $file_ref, User $user)
     {
-        $folder = $file_ref->folder;
-        if (!$folder) {
-            return [_('Dateireferenz ist keinem Ordner zugeordnet!')];
-        }
+        $folder_type = $file_ref->foldertype;
 
-        $folder_type = $folder->getTypedFolder();
         if (!$folder_type) {
             return [_('Ordnertyp des Quellordners konnte nicht ermittelt werden!')];
         }

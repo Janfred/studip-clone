@@ -32,6 +32,9 @@
  */
 class FileRef extends SimpleORMap
 {
+
+    protected $folder_type;
+
     protected static function configure($config = [])
     {
         $config['db_table'] = 'file_refs';
@@ -59,6 +62,8 @@ class FileRef extends SimpleORMap
         $config['additional_fields']['download_url']['get'] = 'getDownloadURL';
         $config['additional_fields']['author_name']['get'] = 'getAuthorName';
         $config['additional_fields']['is_link']['get'] = 'isLink';
+        $config['additional_fields']['foldertype']['set'] = 'setFolderType';
+        $config['additional_fields']['foldertype']['get'] = 'getFolderType';
 
         $config['registered_callbacks']['after_delete'][] = 'cbRemoveFileIfOrphaned';
         $config['registered_callbacks']['before_store'][] = 'cbMakeUniqueFilename';
@@ -187,6 +192,20 @@ class FileRef extends SimpleORMap
     public function isLink()
     {
         return $this->file->url_access_type === 'redirect';
+    }
+
+    public function setFolderType(FolderType $folder_type)
+    {
+        $this->folder_type = $folder_type;
+    }
+
+    public function getFolderType()
+    {
+        if ($this->folder_type) {
+            return $this->folder_type;
+        } elseif($this->folder) {
+            return $this->folder->getTypedFolder();
+        }
     }
 
     /**
