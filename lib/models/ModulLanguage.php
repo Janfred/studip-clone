@@ -50,7 +50,7 @@ class ModulLanguage extends ModuleManagementModel
         return $languages;
     }
 
-    public function getDisplayName()
+    public function getDisplayName($options = self::DISPLAY_DEFAULT)
     {
         return $GLOBALS['MVV_MODUL']['SPRACHE']['values'][$this->lang]['name'];
     }

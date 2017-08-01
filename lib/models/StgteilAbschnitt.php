@@ -209,14 +209,6 @@ class StgteilAbschnitt extends ModuleManagementModelTreeItem
     }
 
     /**
-     * TODO
-     */
-    public function getDisplayName()
-    {
-        return parent::getDisplayName();
-    }
-    
-    /**
      * Returns all assignments of Module to this Studiengangteil-Abschnitt.
      * 
      * @return SimpleORMapCollection A collection of Module.

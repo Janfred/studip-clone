@@ -269,19 +269,19 @@ class Modul extends ModuleManagementModelTreeItem
         return StgteilabschnittModul::findBySQL('modul_id = ?', [$this->id]);
     }
 
-    public function getDisplayName(/*$with_code = true, $hide_semester = false */) {
-
-        $args = func_get_args();
-        $with_code = array_key_exists(0, $args)? $args[0] : true;
-        $hide_semester = array_key_exists(1, $args)? $args[1] : false;
+    public function getDisplayName($options = self::DISPLAY_DEFAULT) {
         if ($this->isNew()) {
             return '';
         }
-
+        
+        $options = ($options !== self::DISPLAY_DEFAULT)
+                ? $options : self::DISPLAY_CODE;
+        $with_code = $options & self::DISPLAY_CODE;
+        
         $name = $with_code ? $this->code . ' - ' : '';
         $name .= $this->getDeskriptor()->bezeichnung;
 
-        if ($hide_semester) {
+        if ($options & self::DISPLAY_SEMESTER) {
             $sem_validity = $this->getDisplaySemesterValidity();
             if ($sem_validity) {
                 $name .= ', ' . $sem_validity;

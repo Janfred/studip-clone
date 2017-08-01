@@ -245,15 +245,16 @@ class StgteilVersion extends ModuleManagementModelTreeItem
                 });
     }
 
-    public function getDisplayName(/*$with_stgteil = true , $with_fach = true*/)
+    public function getDisplayName($options = self::DISPLAY_DEFAULT)
     {
         if ($this->isNew()) {
             return '';
         }
-
-        $args = func_get_args();
-        $with_stgteil = array_key_exists(0, $args)? $args[0] : true;
-        $with_fach = array_key_exists(1, $args)? $args[1] : true;
+        
+        $options = ($options !== self::DISPLAY_DEFAULT)
+                ? $options : (self::DISPLAY_STGTEIL | self::DISPLAY_FACH);
+        $with_stgteil = $options & self::DISPLAY_STGTEIL;
+        $with_fach = $options & self::DISPLAY_FACH;
         $start_sem = Semester::find($this->start_sem);
         $end_sem = Semester::find($this->end_sem);
         $fassung_nr = $this->fassung_nr ? $this->fassung_nr

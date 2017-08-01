@@ -16,6 +16,43 @@
 
 abstract class ModuleManagementModel extends SimpleORMap
 {
+    /**
+     * Usable as option for ModuleManagementModel::getDisplayName().
+     * Use the deafault display options for this object.
+     */
+    const DISPLAY_DEFAULT = 1;
+    
+    /**
+     * Usable as option for ModuleManagementModel::getDisplayName().
+     * Displays semesters of the validity period if available for this object.
+     */
+    const DISPLAY_SEMESTER = 2;
+    
+    /**
+     * Usable as option for ModuleManagementModel::getDisplayName().
+     * Displays the code (usually a unique identifier) if available for this object.
+     */
+    const DISPLAY_CODE = 4;
+    
+    /**
+     * Usable as option for ModuleManagementModel::getDisplayName().
+     * Displays the name of the faculty if available for this object.
+     */
+    const DISPLAY_FACULTY = 8;
+    
+    /**
+     * Usable as option for ModuleManagementModel::getDisplayName().
+     * Displays the name of the Fach (subject of study) if available for this object.
+     */
+    const DISPLAY_FACH = 16;
+    
+    /**
+     * Usable as option for ModuleManagementModel::getDisplayName().
+     * Displays the name of the Studiengangteil if available for this object.
+     */
+    const DISPLAY_STGTEIL = 32;
+    
+    
 
     protected static $filter_params = array();
     protected $is_dirty = false;
@@ -470,10 +507,10 @@ abstract class ModuleManagementModel extends SimpleORMap
      * of the mvv objects to display more complex names glued together from
      * fields of related objects.
      *
-     * @param mixed An optinal parameter.
+     * @param mixed $options An optional parameter to set display options.
      * @return string The name for
      */
-    public function getDisplayName()
+    public function getDisplayName($options = self::DISPLAY_DEFAULT)
     {
         if ($this->isField('name')) {
             return $this->getValue('name');
@@ -511,9 +548,9 @@ abstract class ModuleManagementModel extends SimpleORMap
      * the joins with the semester_data table and table aliases in the sql
      * statement.
      *
-     * @param type $filter An associative array with filters where the key is
+     * @param array $filter An associative array with filters where the key is
      * the column name to filter against the given value.
-     * @param type $where if true returns a complete where statement
+     * @param bool $where if true returns a complete where statement
      * @return string The sql clause
      */
     public static function getFilterSql($filter, $where = false, $or_sql = null)
@@ -598,8 +635,8 @@ abstract class ModuleManagementModel extends SimpleORMap
      *
      * @param string|array $sort The field(s) to sort by.
      * @param string $order The direction (ASC|DESC)
-     * @param type $standard_field
-     * @param type $additional_fields Calculated columns.
+     * @param string $standard_field
+     * @param array $additional_fields Calculated columns.
      * @return string The sort query part.
      */
     protected static function createSortStatement($sort, $order = 'ASC',

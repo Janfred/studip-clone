@@ -296,8 +296,8 @@ class Search_StudiengaengeController extends MVVController
             $this->versionen = $versionen;
             // Augsburg
             // Ausgabe des Namens ohne Fach (dieses ist im Zusatz bereits enthalten)
-            // $this->studiengangTeilName = $studiengangTeil->getDisplayName();
-            $this->studiengangTeilName = $studiengangTeil->getDisplayName(false);
+            // $this->studiengangTeilName = $studiengangTeil->getDisplayName(0);
+            $this->studiengangTeilName = $studiengangTeil->getDisplayName();
             $this->self_url = $this->url_for('search/studiengaenge/verlauf/' . $stgteil_id . '/');
             $this->modul_url = $this->url_for('search/module/detail/');
             $this->modulTeil_url = $this->url_for('modulteil/show/');
@@ -389,7 +389,7 @@ class Search_StudiengaengeController extends MVVController
                 '', 'version');
         $options = [];
         foreach ($versions as $version) {
-            $options[$version->id] = $version->getDisplayName(false, false);
+            $options[$version->id] = $version->getDisplayName(0);
         }
         $widget->setOptions($options, $this->cur_version_id);
         $widget->setMaxLength(100);

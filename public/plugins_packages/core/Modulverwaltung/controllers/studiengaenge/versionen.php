@@ -158,7 +158,7 @@ class Studiengaenge_VersionenController extends SharedVersionController
         foreach (StudiengangTeil::findByFach($this->chooser_filter['fach'],
                 null, 'zusatz,kp', 'ASC') as $stgteil) {
             $this->lists['stgteile_fach']['elements'][$stgteil->id] = array(
-                'name' => $stgteil->getDisplayName(false));
+                'name' => $stgteil->getDisplayName());
         }
         $this->lists['stgteile_fach']['headline'] = _('Studiengangteil');
         $this->lists['stgteile_fach']['stop'] = 1;

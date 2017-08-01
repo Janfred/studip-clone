@@ -33,7 +33,7 @@
     <? foreach ($variants as $variant) : ?>
         <li>
             <a href="<?= $controller->link_for('/diff', $modul->id, $variant->id) ?>">
-            <?= htmlReady($variant->getDisplayName(true)) ?>
+            <?= htmlReady($variant->getDisplayName()) ?>
             </a>
         </li>
     <? endforeach; ?>

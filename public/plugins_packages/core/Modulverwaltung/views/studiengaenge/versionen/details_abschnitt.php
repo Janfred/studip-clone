@@ -10,9 +10,9 @@
             <tr id="modul_<?= $assignment->modul->id ?>" class="header-row">
                 <td class="toggle-indicator">
                     <? if (count($assignment->modul->modulteile)) : ?>
-                    <a class="mvv-load-in-new-row" href="<?= $controller->url_for('/modulteile/' . join('/', $assignment->getId())) ?>"><?= htmlReady($assignment->getDisplayName(true)) ?></a>
+                    <a class="mvv-load-in-new-row" href="<?= $controller->url_for('/modulteile/' . join('/', $assignment->getId())) ?>"><?= htmlReady($assignment->getDisplayName()) ?></a>
                     <? else : ?>
-                    <?= htmlReady($assignment->getDisplayName(true)) ?>
+                    <?= htmlReady($assignment->getDisplayName()) ?>
                     <? endif; ?>
                     <? if (trim($assignment->modulcode) || trim($assignment->bezeichnung)) : ?>
                     <span style="color: #636a71; font-size: smaller;">

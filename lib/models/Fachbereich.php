@@ -176,20 +176,16 @@ class Fachbereich extends ModuleManagementModelTreeItem
         return count($this->getChildren()) > 0;
     }
 
-    public function getDisplayName(/*$without_faculty = false*/)
+    public function getDisplayName($options = self::DISPLAY_DEFAULT)
     {
-        $args = func_get_args();
-        $without_faculty = array_key_exists(0, $args)? $args[0] : false;
         if ($this->isFaculty()) {
             return $this->getValue('Name');
         }
-        if($without_faculty) {
-            return ($this->name);
-        }else {
+        if ($options & self::DISPLAY_FACULTY) {
             return (Fachbereich::get($this->getValue('fakultaets_id'))->getShortName()
                 . ' - ' . $this->name);
         }
-
+        return ($this->name);
     }
 
     /**

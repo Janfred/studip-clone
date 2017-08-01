@@ -2,10 +2,10 @@
     <tr class="table-header header-row" id="modul_<?= $modul->id ?>">
             <td class="toggle-indicator">
                 <a class="mvv-load-in-new-row" style="display: inline;" href="<?= $controller->url_for('/details/' . $modul->id . '/' . '#' . $modul->id) ?>">
-                    <?= htmlReady($modul->getDisplayName(ModuleManagementModel::DISPLAY_CODE)) ?>
+                    <?= htmlReady($modul->getDisplayName(ModuleManagementModel::DISPLAY_CODE | ModuleManagementModel::DISPLAY_SEMESTER)) ?>
                 </a> 
                 <a style="display: inline; background-image: none; padding-left: 5px; "
-                	data-dialog title="<?= htmlReady($modul->getDisplayName(ModuleManagementModel::DISPLAY_CODE | ModuleManagementModel::DISPLAY_SEMESTER)) . ' (' . _('Vollständige Modulbeschreibung') . ')' ?>" href="<?= $controller->url_for('shared/modul/description/' . $modul->id) ?>">
+                	data-dialog title="<?= htmlReady($modul->getDisplayName(ModuleManagementModel::DISPLAY_CODE | ModuleManagementModel::DISPLAY_SEMESTER)) . ' (' . _('Vollst�ndige Modulbeschreibung') . ')' ?>" href="<?= $controller->url_for('shared/modul/description/' . $modul->id) ?>">
                     <?= Assets::img('icons/16/blue/info-circle.png') ?>
                 </a>
             </td>

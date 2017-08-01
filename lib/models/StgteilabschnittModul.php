@@ -50,12 +50,13 @@ class StgteilabschnittModul extends ModuleManagementModelTreeItem
             : _('Modul'));
     }
 
-    public function getDisplayName(/*$with_code = false*/)
+    public function getDisplayName($options = self::DISPLAY_DEFAULT)
     {
-        $args = func_get_args();
-        $with_code = array_key_exists(0, $args)? $args[0] : false;
+        $options = ($options !== self::DISPLAY_DEFAULT)
+                ? $options : self::DISPLAY_CODE;
+        $with_code = $options & self::DISPLAY_CODE;
         if ($this->isNew()) {
-            return parent::getDisplayName();
+            return parent::getDisplayName($options);
         }
 
         /* Augsburg

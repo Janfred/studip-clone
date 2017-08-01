@@ -100,8 +100,8 @@ abstract class ModuleManagementModelTreeItem extends ModuleManagementModel imple
     private function checkFilter(MvvTreeItem $item)
     {
         $filter = self::$object_filter[get_class($item)];
-        if ($filter) {
-            $checked = $filter['func']($item, $filter['params']);
+        if ($filter && is_callable($filter)) {
+            $checked = $filter($item);
             if (!$checked) {
                 return false;
             }
@@ -136,17 +136,20 @@ abstract class ModuleManagementModelTreeItem extends ModuleManagementModel imple
      * Formats the trails to pathes. The path consists of alle names of the
      * objects of a trail glued together with the given delimiter.
      * 
-     * @param type $trails
-     * @param type $delimiter
+     * @param array $trails All trails as array.
+     * @param string $delimiter A string used as the "glue".
+     * @param int $display_options Display options set by constants defined
+     * in class ModuleManagementModel.
      * @return type
      */
-    public static function getPathes($trails, $delimiter = ' · ')
+    public static function getPathes($trails, $delimiter = ' · ',
+            $display_options = self::DISPLAY_DEFAULT)
     {
         $pathes =  array();
         foreach ($trails as $trail) {
             $pathes[] = join($delimiter, array_map(
-                    function($a) {
-                        return $a->getDisplayName();
+                    function($a) use ($display_options) {
+                        return $a->getDisplayName($display_options);
                     }, $trail));
         }
         sort($pathes, SORT_LOCALE_STRING);
@@ -192,11 +195,10 @@ abstract class ModuleManagementModelTreeItem extends ModuleManagementModel imple
      * @param array $params Parameters used by filter function.
      * @throws InvalidArgumentException
      */
-    public static function setObjectFilter($class_name, $filter_func, $params)
+    public static function setObjectFilter($class_name, $filter_func)
     {
         if (in_array('MvvTreeItem', class_implements($class_name))) {
-            self::$object_filter[$class_name] =
-                    ['func' => $filter_func, 'params' => $params];
+            self::$object_filter[$class_name] = $filter_func;
         } else {
             throw new InvalidArgumentException();
         }

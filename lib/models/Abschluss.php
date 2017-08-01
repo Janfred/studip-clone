@@ -322,7 +322,7 @@ class Abschluss extends ModuleManagementModelTreeItem
         return Studiengang::findByAbschluss($this->getId());
     }
     
-    public function getDisplayName()
+    public function getDisplayName($options = self::DISPLAY_DEFAULT)
     {
         if ($this->name_kurz) {
             return sprintf('%s (%s)', $this->name, $this->name_kurz);

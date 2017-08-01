@@ -549,14 +549,14 @@ class MVVPlugin extends StudipPlugin implements SystemPlugin, Loggable {
             foreach ($module as $modul) {
                 $result[] = array(
                     $modul->getId(),
-                    $modul->getDisplayName(true)
+                    $modul->getDisplayName()
                 );
             }
             foreach ($deskriptoren as $desk) {
                 $modul = Modul::find($desk->modul_id);
                 $result[] = array(
                     $modul->getId(),
-                    $modul->getDisplayName(true)
+                    $modul->getDisplayName()
                 );
             }
         }

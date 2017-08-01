@@ -129,7 +129,8 @@ class LVGroupsWizardStep implements CourseWizardStep
                 if ($c->stat != 'genehmigt') {
                     continue;
                 } elseif (isset($c->start)) {
-                    $mvv_start = Semester::find($c->start)->beginn;
+                    $mvv_start = Semester::find($c->start);
+                    $mvv_start = $mvv_start ? $mvv_start->beginn : 0;
                     $mvv_end = Semester::find($c->end);
                     $mvv_end = $mvv_end ? $mvv_end->ende : PHP_INT_MAX;
 
@@ -138,10 +139,19 @@ class LVGroupsWizardStep implements CourseWizardStep
                     }
                 }
             }
-
+            
+            // name of module maybe differs from original module title if it
+            // is assigned to a Studiengangteilabschnitt
+            if (is_a($c, 'Modul')) {
+                $stgteilabschnitt_modul = StgteilabschnittModul::find([$mvvid[0], $c->id]);
+                $name = $stgteilabschnitt_modul->getDisplayName();
+            } else {
+                $name = $c->getDisplayName();
+            }
+            
             $level[] = array(
-                'id' => $c->getId().'-'.$mvvid[0],
-                'name' => $c->getDisplayname(),
+                'id' => $c->id . '-' . $mvvid[0],
+                'name' => studip_utf8encode($name),
                 'has_children' => $c->hasChildren(),
                 'parent' => $c->getTrailParentId(),
                 'assignable' => $c->isAssignable(),
@@ -188,7 +198,7 @@ class LVGroupsWizardStep implements CourseWizardStep
     public function getLVGroupDetails($id) {
         $mvvid = explode('-', $id);
         $area = Lvgruppe::find($mvvid[0]);
-        $mvv_plugin = PluginEngine::getPlugin("MVVPlugin");
+        $mvv_plugin = PluginEngine::getPlugin('MVVPlugin');
         $mvv_basepath = $mvv_plugin->getPluginPath();
 
         $factory = new Flexi_TemplateFactory($mvv_basepath.'/views');

@@ -129,7 +129,7 @@ class Modulteil extends ModuleManagementModelTreeItem
                 , array($lvgruppe_id));
     }
 
-    public function getDisplayName() {
+    public function getDisplayName($options = self::DISPLAY_DEFAULT) {
         $name = '';
         if ($this->num_bezeichnung) {
             $name .= $GLOBALS['MVV_MODULTEIL']['NUM_BEZEICHNUNG']['values'][$this->num_bezeichnung]['name'];

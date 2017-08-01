@@ -125,7 +125,7 @@
                 <? foreach ($fachbereiche as $fachbereich) : ?>
                     <? if (count($perm_institutes) == 0
                             || in_array($fachbereich->getId(), $perm_institutes)) : ?>
-                    <option value="<?= $fachbereich->getId() ?>"<?= ($fachbereich->getId() == $selected_fachbereich ? ' selected' : '') ?>><?= htmlReady($fachbereich->getDisplayName(true)) . ' (' . $fachbereich->count_objects . ')' ?></option>
+                    <option value="<?= $fachbereich->getId() ?>"<?= ($fachbereich->getId() == $selected_fachbereich ? ' selected' : '') ?>><?= htmlReady($fachbereich->getDisplayName()) . ' (' . $fachbereich->count_objects . ')' ?></option>
                     <? endif; ?>
                 <? endforeach; ?>
             </select>

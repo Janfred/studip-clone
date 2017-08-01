@@ -67,10 +67,10 @@
                                         </a>
                                         <? if($modul['veranstaltungen']):?>                          
                                         <a data-dialog href="<?= $controller->url_for('shared/modul/overview', $modul_id, $active_sem->getId(), ['display_language' => ModuleManagementModel::getLanguage()])  ?>">
-                                            <?= htmlReady($abschnitt_modul->getDisplayName(true)) ?>
+                                            <?= htmlReady($abschnitt_modul->getDisplayName()) ?>
                                         </a>
                                         <? else: ?>
-                                            <?= htmlReady($abschnitt_modul->getDisplayName(true)) ?>
+                                            <?= htmlReady($abschnitt_modul->getDisplayName()) ?>
                                         <? endif; ?>
                                     </td>
                                 <? endif; ?>

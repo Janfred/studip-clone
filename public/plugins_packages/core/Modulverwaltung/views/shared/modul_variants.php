@@ -4,7 +4,7 @@
 <? foreach ($variants as $variant) : ?>
     <li>
         <a href="<?= $link . '/' . $variant->getId() ?>">
-        <?= htmlReady($variant->getDisplayName(true)) ?>
+        <?= htmlReady($variant->getDisplayName()) ?>
         </a>
     </li>
 <? endforeach; ?>

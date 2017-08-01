@@ -142,10 +142,11 @@ class StudiengangTeil extends ModuleManagementModelTreeItem
         return false;
     }
 
-    public function getDisplayName(/*$with_fach = true*/)
+    public function getDisplayName($options = self::DISPLAY_DEFAULT)
     {
-        $args = func_get_args();
-        $with_fach = array_key_exists(0, $args)? $args[0] : true;
+        $options = $options !== self::DISPLAY_DEFAULT
+                ? $options : self::DISPLAY_FACH;
+        $with_fach = $options & self::DISPLAY_FACH;
         if ($this->isNew()) {
             return '';
         }

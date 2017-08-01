@@ -381,7 +381,7 @@ class Studiengang extends ModuleManagementModelTreeItem
         return self::get();
     }
 
-    public function getDisplayName()
+    public function getDisplayName($options = self::DISPLAY_DEFAULT)
     {
         return $this->name . ($this->abschluss->category->name ?
                 ' (' . $this->abschluss->category->name . ')' : '');
