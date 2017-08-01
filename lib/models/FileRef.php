@@ -194,7 +194,7 @@ class FileRef extends SimpleORMap
         return $this->file->url_access_type === 'redirect';
     }
 
-    public function setFolderType(FolderType $folder_type)
+    public function setFolderType($field, FolderType $folder_type)
     {
         $this->folder_type = $folder_type;
     }
