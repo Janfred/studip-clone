@@ -32,6 +32,9 @@ class FileController extends AuthenticatedController
             case 'user':
                 $this->relocate('files/index/' . $folder->getId(), ['cid' => null]);
                 break;
+            default:
+                $this->relocate('files/system/' . $folder->range_type . '/' . $folder->getId(), ['cid' => null]);
+                break;
         }
     }
 
