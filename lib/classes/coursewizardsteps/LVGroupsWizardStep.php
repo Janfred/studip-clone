@@ -50,7 +50,7 @@ class LVGroupsWizardStep implements CourseWizardStep
             foreach ($values['lvgruppe_selection']['areas'] as $area_id) {
                 $lvgroup = Lvgruppe::find($area_id);
                 $selection->add($lvgroup);
-                //$open_nodes[] = $area_id;
+                $open_nodes[] = $area_id;
             }
         }
 
@@ -169,13 +169,13 @@ class LVGroupsWizardStep implements CourseWizardStep
     public function searchLVGroupTree($searchterm, $utf=true, $id_only=false)
     {
         $result = array();
-        $mvv_plugin = PluginEngine::getPlugin("MVVPlugin");
+        $mvv_plugin = PluginEngine::getPlugin('MVVPlugin');
         $mvv_basepath = $mvv_plugin->getPluginPath();
 
         $factory = new Flexi_TemplateFactory($mvv_basepath.'/views');
         $tpl = new Flexi_PhpTemplate('lvgselector/entry_trails', $factory);
 
-        $selection = self::get_selection(Request::get("cid"));
+        $selection = self::get_selection(Request::get('cid'));
         $selectedlvg = array();
         if (!empty($selection)) {
             $selectedlvg = $selection->getLvGruppenIDs();
@@ -411,10 +411,11 @@ class LVGroupsWizardStep implements CourseWizardStep
              * still assignable.
              */
             if ($a->isAssignable()) {
-                $data['lvgroups'][] = $a->id;
+                $data[] = $a->id;
             }
         }
-        $values[__CLASS__] = $data;
+        
+        $values[__CLASS__]['lvgruppe_selection']['areas'] = $data;
         return $values;
     }
 
