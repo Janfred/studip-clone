@@ -10,7 +10,7 @@
             <?= htmlReady($current['name']) ?>
         </a>
         <a data-dialog="title='<?= $current['name'] ?>'" href="<?= URLHelper::getLink('plugins.php/mvvplugin/shared/modul/description/' . $modul_id) ?>">
-        <?= Icon::create('info-circle', 'clickable', ['title' => _('Vollständige Modulbeschreibung')]); ?>
+        <?= Icon::create('info-circle', 'clickable', ['title' => _('VollstÃ¤ndige Modulbeschreibung')]); ?>
         </a>
     <? else : ?>
         <?= htmlReady($current['name']) ?>
