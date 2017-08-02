@@ -50,9 +50,17 @@ class Search_AngebotController extends MVVController
         }
         $filter = ['mvv_studiengang.stat' => $status_filter];
         $faecher = Fach::getAllEnriched('name', 'ASC', null, null, $filter);
+        
+        // sort by display name
+        $faecher_sort = [];
+        foreach ($faecher as $key => $fach) {
+            $faecher_sort[$fach->getDisplayName() . $key] = $fach;
+        }
+        ksort($faecher_sort, SORT_LOCALE_STRING);
+        
         $result = array();
         $chars = array();
-        foreach ($faecher as $fach) {
+        foreach ($faecher_sort as $fach) {
             $char = $fach->name[0];
 
             foreach ($fach->abschluesse as $abschluss) {

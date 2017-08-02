@@ -56,6 +56,13 @@ class Search_StudiengaengeController extends MVVController
         $kategorie = AbschlussKategorie::get($kategorie_id);
         $studiengaenge = Studiengang::findByAbschlussKategorie($kategorie->getId());
 
+        // sort by display name
+        $studiengaenge_sort = [];
+        foreach ($studiengaenge as $key => $studiengang) {
+            $studiengaenge_sort[$studiengang->getDisplayName() . $key] = $studiengang;
+        }
+        ksort($studiengaenge_sort, SORT_LOCALE_STRING);
+
         $status_filter = [];
         foreach ($GLOBALS['MVV_STUDIENGANG']['STATUS']['values'] as $key => $status) {
             if ($status['public']) {
@@ -65,7 +72,7 @@ class Search_StudiengaengeController extends MVVController
 
         $studiengaenge_abschluss = array();
         $abschluesse = array();
-        foreach ($studiengaenge as $studiengang) {
+        foreach ($studiengaenge_sort as $studiengang) {
             if (in_array($studiengang->stat, $status_filter)) {
                 $abschluss = Abschluss::find($studiengang->abschluss_id);
                 $abschluesse[$abschluss->getId()] = $abschluss;
