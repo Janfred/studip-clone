@@ -218,6 +218,14 @@ class Modulteil extends ModuleManagementModelTreeItem
         }
         $copy->deskriptoren = SimpleORMapCollection::createFromArray($deskriptoren);
 
+        $languages = [];
+        foreach ($this->languages as $language) {
+            $cloned_language = clone $language;
+            $cloned_language->setNew(true);
+            $languages[] = $cloned_language;
+        }
+        $copy->languages = SimpleORMapCollection::createFromArray($languages);
+        
         if ($deep) {
             $lvgruppen = [];
             foreach ($this->lvgruppen_assignments as $lvgruppe) {

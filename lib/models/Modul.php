@@ -270,15 +270,14 @@ class Modul extends ModuleManagementModelTreeItem
     }
 
     public function getDisplayName($options = self::DISPLAY_DEFAULT) {
-        if ($this->isNew()) {
-            return '';
-        }
-        
         $options = ($options !== self::DISPLAY_DEFAULT)
                 ? $options : self::DISPLAY_CODE;
         $with_code = $options & self::DISPLAY_CODE;
+        if ($this->isNew()) {
+            return parent::getDisplayName($options);
+        }
         
-        $name = $with_code ? $this->code . ' - ' : '';
+        $name = ($with_code && trim($code)) ? $code . ' - ' : '';
         $name .= $this->getDeskriptor()->bezeichnung;
 
         if ($options & self::DISPLAY_SEMESTER) {
@@ -552,7 +551,7 @@ class Modul extends ModuleManagementModelTreeItem
         $languages = [];
         foreach ($this->languages as $assigned_language) {
             $cloned_language = clone $assigned_language;
-            $assigned_language->setNew(true);
+            $cloned_language->setNew(true);
             $languages[] = $cloned_language;
         }
         $copy->languages = SimpleORMapCollection::createFromArray($languages);
