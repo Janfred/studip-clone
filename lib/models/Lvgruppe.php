@@ -126,7 +126,6 @@ class Lvgruppe extends ModuleManagementModelTreeItem
                 . 'LEFT JOIN semester_data as end_sem ON end_sem.semester_id = mvv_modul.end ';
             }
         }
-        
         $query = 'SELECT mvv_lvgruppe.*, '
                 . 'COUNT(DISTINCT seminare.seminar_id) AS `count_seminare`, '
                 . 'COUNT(DISTINCT archiv.seminar_id) AS `count_archiv`, '
@@ -142,7 +141,7 @@ class Lvgruppe extends ModuleManagementModelTreeItem
                 . $filter_sql
                 . 'GROUP BY lvgruppe_id '
                 . 'ORDER BY ' . $sortby;
-        return parent::getEnrichedByQuery($query, $params, $row_count, $offset);
+        return parent::getEnrichedByQuery($query, $params, $row_count, $offset); 
     }
     
     /**
@@ -157,8 +156,9 @@ class Lvgruppe extends ModuleManagementModelTreeItem
      */
     public static function getCount($filter = null /*, $semester_id = null*/)
     {
-        if ($filter) {
-            $filter_sql = self::getFilterSql($filter, true);
+        if (!is_null($filter)) {
+            $filter_sql = is_array($filter)
+                    ? self::getFilterSql($filter, true) : $filter;
         } else {
             $filter_sql = '';
         }
@@ -195,22 +195,37 @@ class Lvgruppe extends ModuleManagementModelTreeItem
      * the name of the LV-Gruppe, the code and the name of related modules
      * 
      * @param string $term The search term.
-     * @param null $filter Not used.
+     * @param array|string $filter An array with filter options or a where part. 
      * @return object A SimpleORMapCollection of LV-Gruppen.
      */
     public static function findBySearchTerm($term, $filter = null)
     {
+        if (!is_null($filter)) {
+            $filter_sql = is_array($filter)
+                    ? self::getFilterSql($filter) : $filter;
+        } else {
+            $filter_sql = '';
+        }
+        
         $term = '%' . $term . '%';
         return parent::getEnrichedByQuery(
-                "SELECT mlg.*, GROUP_CONCAT(DISTINCT mm.modul_id SEPARATOR ',') "
+                "SELECT mvv_lvgruppe.*, GROUP_CONCAT(DISTINCT mvv_modul.modul_id SEPARATOR ',') "
                 . 'AS `assigned_modul_ids` '
-                . 'FROM mvv_lvgruppe mlg '
+                . 'FROM mvv_lvgruppe '
                 . 'INNER JOIN mvv_lvgruppe_modulteil USING(lvgruppe_id) '
                 . 'INNER JOIN mvv_modulteil USING(modulteil_id) '
-                . 'INNER JOIN mvv_modul mm USING(modul_id) '
-                . 'INNER JOIN mvv_modul_deskriptor mmd USING(modul_id)'
-                . 'WHERE mlg.name LIKE :search_term OR mm.code LIKE :search_term '
-                . 'OR mmd.bezeichnung LIKE :search_term '
+                . 'INNER JOIN mvv_modul USING(modul_id) '
+                . 'INNER JOIN mvv_modul_deskriptor USING(modul_id) '
+                . 'INNER JOIN mvv_stgteilabschnitt_modul USING(modul_id) '
+                . 'INNER JOIN mvv_stgteilabschnitt USING(abschnitt_id) '
+                . 'INNER JOIN mvv_stgteilversion USING(version_id) '
+                . 'LEFT JOIN semester_data start_sem '
+                . 'ON (mvv_modul.start = start_sem.semester_id) '
+                . 'LEFT JOIN semester_data end_sem '
+                . 'ON (mvv_modul.end = end_sem.semester_id) '
+                . 'WHERE (mvv_lvgruppe.name LIKE :search_term OR mvv_modul.code LIKE :search_term '
+                . 'OR mvv_modul_deskriptor.bezeichnung LIKE :search_term) '
+                . $filter_sql
                 //. 'OR mmd.bezeichnung_kurz LIKE :search_term '
                 . 'GROUP BY lvgruppe_id '
                 . 'ORDER BY `name`', array(':search_term' => $term));

@@ -551,6 +551,8 @@ abstract class ModuleManagementModel extends SimpleORMap
      * @param array $filter An associative array with filters where the key is
      * the column name to filter against the given value.
      * @param bool $where if true returns a complete where statement
+     * @param string SQL-where part glued with an "OR" at the end of the
+     * filter sql part.
      * @return string The sql clause
      */
     public static function getFilterSql($filter, $where = false, $or_sql = null)

@@ -31,6 +31,9 @@ class LVGroupsWizardStep implements CourseWizardStep
         $mvv_plugin = PluginEngine::getPlugin('MVVPlugin');
         $mvv_basepath = $mvv_plugin->getPluginPath();
 
+        // store start time of semester selected in first step
+        $course_start_time = reset($values)['start_time'];
+        
         // We only need our own stored values here.
         $values = $values[__CLASS__];
 
@@ -41,20 +44,26 @@ class LVGroupsWizardStep implements CourseWizardStep
 
         $lvgtree = new StudipLvgruppeSelection();
 
-
         $selection = self::get_selection($temp_id);
         if (!empty($values['lvgruppe_selection']['areas'])) {
             foreach ($values['lvgruppe_selection']['areas'] as $area_id) {
                 $lvgroup = Lvgruppe::find($area_id);
                 $selection->add($lvgroup);
-                $open_nodes[] = $area_id;
             }
         }
 
         $selection_details = $values['lvgruppe_selection']['area_details'];
 
-        $open_nodes = !empty($values['open_lvg_nodes']) ? $values['open_lvg_nodes'] : array();
-
+        if ($_SESSION[__CLASS__]['course_start_time'] != $course_start_time) {
+            // don't store previously opened nodes
+            // because we get in trouble if the semester has changed
+            $open_nodes = [];
+        } else {
+            $open_nodes = !empty($values['open_lvg_nodes']) ? $values['open_lvg_nodes'] : array();
+        }
+        
+        $_SESSION[__CLASS__]['course_start_time'] = $course_start_time;
+        
         $tpl->set_attribute('open_lvg_nodes', $open_nodes);
         $tpl->set_attribute('selection', $selection);
         $tpl->set_attribute('selection_details', $selection_details);
@@ -110,8 +119,14 @@ class LVGroupsWizardStep implements CourseWizardStep
         $searchtree = array();
 
         $course = Course::findCurrent();
-        $course_start = $course ? $course->start_time : $_SESSION['wizarstep_course_starttime'];
-        $course_end = ($course->end_time < 0 || is_null($course->end_time)) ? PHP_INT_MAX : $course->end_time;
+        if ($course) {
+            $course_start = $course->start_time;
+            $course_end = ($course->end_time < 0 || is_null($course->end_time)) ? PHP_INT_MAX : $course->end_time;
+        } else {
+            $semester = Semester::findByTimestamp($_SESSION[__CLASS__]['course_start_time']);
+            $course_start = $semester->beginn;
+            $course_end = $semester->ende;
+        }
 
         $lvgtree = new StudipLvgruppeSelection();
 
@@ -176,10 +191,42 @@ class LVGroupsWizardStep implements CourseWizardStep
         if (!empty($selection)) {
             $selectedlvg = $selection->getLvGruppenIDs();
         }
-
-        foreach (Lvgruppe::findBySearchTerm($searchterm) as $area) {
-            $inlist = in_array($area->id, $selectedlvg);
-            if ($inlist) continue;
+        
+        $course = Course::findCurrent();
+        if ($course) {
+            $course_start = $course->start_time;
+            $course_end = ($course->end_time < 0 || is_null($course->end_time)) ? PHP_INT_MAX : $course->end_time;
+        } else {
+            $semester = Semester::findByTimestamp($_SESSION[__CLASS__]['course_start_time']);
+            $course_start = $semester->beginn;
+            $course_end = $semester->ende;
+        }
+        
+        $status_modul = [];
+        foreach ($GLOBALS['MVV_MODUL']['STATUS']['values'] as $name => $status) {
+            if ($status['public'] && $status['visible']) {
+                $status_modul[] = $name;
+            }
+        }
+        
+        $status_version = [];
+        foreach ($GLOBALS['MVV_STGTEILVERSION']['STATUS']['values'] as $name => $status) {
+            if ($status['public'] && $status['visible']) {
+                $status_version[] = $name;
+            }
+        }
+        
+        $filter = [
+            'mvv_modul.stat'          => $status_modul,
+            'mvv_stgteilversion.stat' => $status_version,
+            'start_sem.beginn'        => $course_end,
+            'end_sem.ende'            => $course_start
+        ];
+        
+        foreach (Lvgruppe::findBySearchTerm($searchterm, $filter) as $area) {
+            if (in_array($area->id, $selectedlvg)) {
+                continue;
+            }
 
             $renderd = $tpl->render_partial('coursewizard/lvgroups/lvgroup_searchentry', compact('area', 'inlist'));
             $data = array(
