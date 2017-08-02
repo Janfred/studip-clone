@@ -311,18 +311,18 @@ class MVVController extends StudipController
     protected function reset_page($action = '')
     {
         $this->page_params_suffix = $this->paramSuffix($action);
-
+        
         // reset page chooser
         $this->page = 1;
-        $this->sessRemove('page');
+        $this->sessRemove('page' . $this->page_params_suffix);
         URLHelper::removeLinkParam('page' . $this->page_params_suffix);
 
         // reset sorting
         $this->sortby = '';
-        $this->sessRemove('sortby');
+        $this->sessRemove('sortby' . $this->page_params_suffix);
         URLHelper::removeLinkParam('sortby' . $this->page_params_suffix);
         $this->order = 'DESC';
-        $this->sessRemove('order');
+        $this->sessRemove('order' . $this->page_params_suffix);
         URLHelper::removeLinkParam('order' . $this->page_params_suffix);
     }
 
