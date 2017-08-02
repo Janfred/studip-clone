@@ -277,7 +277,7 @@ class Modul extends ModuleManagementModelTreeItem
             return parent::getDisplayName($options);
         }
         
-        $name = ($with_code && trim($code)) ? $code . ' - ' : '';
+        $name = ($with_code && trim($this->code)) ? $this->code . ' - ' : '';
         $name .= $this->getDeskriptor()->bezeichnung;
 
         if ($options & self::DISPLAY_SEMESTER) {
