@@ -792,7 +792,7 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
         $record = new $class();
         $param_arr = array();
         $where = '';
-        $where_param = is_array($arguments[0]) ? $arguments[0] : words($arguments[0]);
+        $where_param = is_array($arguments[0]) ? $arguments[0] : array($arguments[0]);
         $prefix = mb_strstr($name, 'by', true);
         $field = mb_substr($name, mb_strlen($prefix)+2);
         switch ($prefix) {
