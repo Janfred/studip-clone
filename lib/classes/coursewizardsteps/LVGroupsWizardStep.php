@@ -28,11 +28,8 @@ class LVGroupsWizardStep implements CourseWizardStep
      */
     public function getStepTemplate($values, $stepnumber, $temp_id)
     {
-        $mvv_plugin = PluginEngine::getPlugin("MVVPlugin");
+        $mvv_plugin = PluginEngine::getPlugin('MVVPlugin');
         $mvv_basepath = $mvv_plugin->getPluginPath();
-
-        $first_step = reset($values);
-        $_SESSION['wizarstep_course_starttime'] = $first_step['start_time'];
 
         // We only need our own stored values here.
         $values = $values[__CLASS__];
@@ -106,7 +103,6 @@ class LVGroupsWizardStep implements CourseWizardStep
         return is_string($id) && $id !== '' && $id !== '-';
     }
 
-
     public function getLVGroupTreeLevel($parentId, $parentClass)
     {
         $level = array();
@@ -166,7 +162,7 @@ class LVGroupsWizardStep implements CourseWizardStep
         }
     }
 
-    public function searchLVGroupTree($searchterm, $utf=true, $id_only=false)
+    public function searchLVGroupTree($searchterm)
     {
         $result = array();
         $mvv_plugin = PluginEngine::getPlugin('MVVPlugin');
@@ -302,18 +298,19 @@ class LVGroupsWizardStep implements CourseWizardStep
      */
     public function validate($values)
     {
-        // We only need our own stored values here.
-        $values = $values[__CLASS__];
         $ok = true;
-       /* $errors = array();
-        if (!$values['lvgruppe_selection']['areas']) {
+        $errors = array();
+        
+        // optional step if study areas step is activated and at least one area is assigned
+        if (!count($values['StudyAreasWizardStep']['studyareas'])
+                && !count($values[__CLASS__]['lvgruppe_selection']['areas'])) {
             $ok = false;
             $errors[] = _('Der Veranstaltung muss mindestens eine Lehrveranstaltungsgruppe zugeordnet sein.');
         }
         if ($errors) {
             PageLayout::postMessage(MessageBox::error(
                 _('Bitte beheben Sie erst folgende Fehler, bevor Sie fortfahren:'), $errors));
-        }*/
+        }
         return $ok;
     }
 
@@ -326,11 +323,8 @@ class LVGroupsWizardStep implements CourseWizardStep
      */
     public function storeValues($course, $values)
     {
-        // We only need our own stored values here.
-        $values = $values[__CLASS__];
-
         $selection = new StudipLvgruppeSelection($course->id);
-        foreach ($values['lvgruppe_selection']['areas'] as $lvg_id) {
+        foreach ($values[__CLASS__]['lvgruppe_selection']['areas'] as $lvg_id) {
             $area = Lvgruppe::find($lvg_id);
             $selection->add($area);
         }
@@ -345,8 +339,7 @@ class LVGroupsWizardStep implements CourseWizardStep
 
     /**
      * Checks if the current step needs to be executed according
-     * to already given values. A good example are study areas which
-     * are only needed for certain sem_classes.
+     * to already given values.
      *
      * @param Array $values values specified from previous steps
      * @return bool Is the current step required for a new course?
@@ -357,18 +350,18 @@ class LVGroupsWizardStep implements CourseWizardStep
         // Set global state in MVV_ACCESS_ASSIGN_LVGRUPPEN
         $locked = $this->is_locked($values);
 
-        // DOES the course's class permit "lvgruppen"?
-        // get the courstype from the first step (normally "BasicDataWizardStep")
-        $coursetype = reset($values)['coursetype'];
-        $class = $GLOBALS['SEM_TYPE'][$coursetype]['class'];
-        $lvgruppen_not_allowed = !$GLOBALS['SEM_CLASS'][$class]['module'];
-
-        if (!$locked && !$lvgruppen_not_allowed) {
-            return true;
-        } else {
-            return false;
+        $coursetype = 1;
+        foreach ($values as $class)
+        {
+            if ($class['coursetype'])
+            {
+                $coursetype = $class['coursetype'];
+                break;
+            }
         }
-
+        $category = SeminarCategories::GetByTypeId($coursetype);
+        
+        return (!$locked && $category->module);
     }
 
     public function is_locked($values)

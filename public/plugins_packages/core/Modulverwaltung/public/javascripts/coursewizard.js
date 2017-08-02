@@ -104,7 +104,11 @@ MVV.CourseWizard = {
                         	$("#lvgsearchresults ul").empty();
                         	$("#lvgsearchresults").show();
                         	for (i = 0; i < items.length; i++) {
-                        		$("#lvgsearchresults ul").append(items[i].html_string);
+                                    lvgroup_html = $(items[i].html_string);
+                                    if ($('#lvgroup-tree-assigned-' + items[i].id).length) {
+                                        lvgroup_html.find('input').first().css('visibility', 'hidden');
+                                    }
+                                    $("#lvgsearchresults ul").append(lvgroup_html);
                         	}
                         	
                         } else {
@@ -211,7 +215,7 @@ MVV.CourseWizard = {
      */
     assignNode: function(id)
     {
-        var root = $('#lvgroup-tree-assigned-nodes');
+        var root = $('#lvgroup-tree-assigned-selected');
         var params = 'step=' + $('input[name="step"]').val() +
             '&method=getAncestorTree' +
             '&parameter[]=' + id;
@@ -226,14 +230,16 @@ MVV.CourseWizard = {
                     $('#loading-overlay').remove();
                     var items = $.parseJSON(data);
                     
-                    var input = $('<input>').
-                    attr('type', 'hidden').
-                    attr('name', 'lvgroups[]').
-                    attr('value', items.id);
-                    $('#lvgroup-tree-assigned-selected').before(input);
-                    $('#lvgroup-tree-assigned-selected').append(items.html_string);
-                    
                     var lvgid = id.split('-');
+                    if ($('#lvgroup-tree-assigned-' + lvgid).length === 0) {
+                        var input = $('<input>').
+                        attr('type', 'hidden').
+                        attr('name', 'lvgroups[]').
+                        attr('value', items.id);
+                        root.before(input);
+                        root.append(items.html_string);
+                    }
+                    
                     $("input[name*='assign["+lvgid[0]+"']").each(function(){
                 		$(this).hide();
                 	});

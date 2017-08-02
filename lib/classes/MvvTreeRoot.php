@@ -95,35 +95,38 @@ class MvvTreeRoot implements MvvTreeItem
     /**
      * @see MvvTreeItem::getTrails()
      */
-    public function getTrails($types = null, $mode = null, $path = null, $last = null)
+    public function getTrails($types = null, $mode = null, $path = null, $in_recursion = false)
     {
         $path = $path ?: ModuleManagementModelTreeItem::$TRAIL_DEFAULT;
         $types = $types ?: $path;
-        
-        $trails = array();
+        $trails = [];
         $class_name = get_class($this);
+        $next = $path[array_search($class_name, $path) + 1];
+        $parents = $this->getParents($next);
         
-        if ($last) {
-            $current = $path[array_search($last, $path) + 1];
-        } else {
-            $current = reset($path);
-        }
-        $parents = $this->getParents($current);
         foreach ($parents as $parent) {
-            if ($current != end($types)) {
-                foreach ($parent->getTrails($types, $mode, $path, $current) as $trail) {
+            if ($parent) {
+                foreach ($parent->getTrails($types, $mode, $path, true) as $trail) {
                     if (in_array($class_name, $types)) {
                         $trail[$class_name] = $this;
                     }
-                    $trails[] = $trail;
+                    if (!$in_recursion) {
+                        if (($mode & MvvTreeItem::TRAIL_SHOW_INCOMPLETE)
+                            || count($trail) == count($types)) {
+                            $trails[] = $trail;
+                        }
+                    } else {
+                        $trails[] = $trail;
+                    }
                 }
             }
         }
+        
         if (empty($trails) && in_array($class_name, $types)) {
             $trails = array(array($class_name => $this));
         }
+        
         return $trails;
     }
-    
-    
+
 }

@@ -10,8 +10,8 @@
             <ul id="lvgroup-tree-assigned-selected">
 
               <? foreach ($selection->getAreas() as $area) : ?>
-                <?= $this->render_partial('coursewizard/lvgroups/lvgroup_entry', compact('area')) ?>
-              <? endforeach ?>
+                    <?= $this->render_partial('coursewizard/lvgroups/lvgroup_entry', compact('area')) ?>
+              <? endforeach; ?>
 
             </ul>
         </li>
@@ -20,7 +20,7 @@
 <? if (!$values['locked']) : ?>
 
 	<div id="lvgroup-tree-open-nodes">
-	<? foreach ($open_lvg_nodes as $opennode): ?>
+	<? foreach ($open_lvg_nodes as $opennode) : ?>
 		<input type="hidden" name="open_lvg_nodes[]" value="<?= $opennode; ?>">
 	<? endforeach; ?>
 	</div>
@@ -29,7 +29,7 @@
         data-forward-url="<?= $no_js_url ?>" data-no-search-result="<?=_('Es wurde kein Suchergebnis gefunden.') ?>">
         <h2><?= _('Lehrveranstaltungsgruppen Suche') ?></h2>
         <div>
-            <input type="text" size="40" name="search" id="lvgroup-tree-search"
+            <input type="text" size="40" style="width: auto;" name="search" id="lvgroup-tree-search"
                    value="<?= $values['searchterm'] ?>"/>
             <span id="lvgroup-tree-search-start">
                 <?= Icon::create('search', 'clickable')->asInput(["name" => 'start_search', "onclick" => "return MVV.CourseWizard.searchTree()", "class" => $search_result?'hidden-no-js':'']) ?>
@@ -49,27 +49,27 @@
         <ul class="collapsable css-tree">
             <li class="lvgroup-tree-root tree-loaded keep-node">
                 <input type="checkbox" id="root" checked="checked"/>
-                <label for="root">
+                <label for="root" class="undecorated">
                     <?= htmlReady($GLOBALS['UNI_NAME_CLEAN']) ?>
                 </label>
                 <ul>
-                <?php foreach ($tree as $node) : ?>
+                <? foreach ($tree as $node) : ?>
                 <?= $this->render_partial('coursewizard/lvgroups/_node',
                         array('node' => $node, 'stepnumber' => $stepnumber,
                             'temp_id' => $temp_id, 'values' => $values,
                             'open_nodes' => $open_nodes ?: array(),
                             'search_result' => $search_result ?: array())) ?>
-                <?php endforeach ?>
+                <? endforeach; ?>
                 </ul>
             </li>
         </ul>
     </div>
-    <?php if ($values['open_node']) : ?>
+    <? if ($values['open_node']) : ?>
     <input type="hidden" name="open_node" value="<?= $values['open_node'] ?>"/>
-    <?php endif ?>
-    <?php if ($values['searchterm']) : ?>
+    <? endif; ?>
+    <? if ($values['searchterm']) : ?>
     <input type="hidden" name="searchterm" value="<?= $values['searchterm'] ?>"/>
-    <?php endif ?>
+    <? endif; ?>
     <script type="text/javascript" language="JavaScript">
     //<!--
     $(function() {
@@ -86,4 +86,4 @@
     });
     //-->
     </script>
-<? endif ?>
+<? endif; ?>

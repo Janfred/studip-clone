@@ -94,6 +94,6 @@ interface MvvTreeItem
      * the class names as keys. Each trail consists of the objects defined by the
      * types parameter and have the same order as the types array.
      */
-    public function getTrails($types = null, $mode = null, $path = null, $last = null);
+    public function getTrails($types = null, $mode = null, $path = null, $in_recursion = false);
     
 }
