@@ -43,7 +43,7 @@ class Studiengaenge_FachbereicheController
         
         $this->fachbereiche = Fachbereich::getFachbereiche(
                 $this->sortby, $this->order,
-                ['Institut.Institut_id' => $perm_institutes]);
+                ['Institute.Institut_id' => $perm_institutes]);
 
         $this->setSidebar();
     }
