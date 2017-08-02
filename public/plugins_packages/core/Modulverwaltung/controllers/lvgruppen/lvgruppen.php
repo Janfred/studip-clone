@@ -83,19 +83,13 @@ class Lvgruppen_LvgruppenController extends MVVController
                 $this->order,
                 Lvgruppe::getFilterSql($filter, true, $author_sql),
                 self::$items_per_page,
-                self::$items_per_page * ($this->page - 1),
+                self::$items_per_page * (($this->page ?: 1) - 1),
                 $this->semester_filter);
         if (!empty($this->filter)) {
             $this->search_result['Lvgruppe'] = $this->lvgruppen->pluck('id');
         }
         
-        $this->count = count(Lvgruppe::getAllEnriched(
-                $this->sortby,
-                $this->order,
-                Lvgruppe::getFilterSql($filter, true, $author_sql),
-                null,
-                null,
-                $this->semester_filter));
+        $this->count = Lvgruppe::getCount($filter, $this->semester_filter);
         
         $helpbar = Helpbar::get();
         $widget = new HelpbarWidget();
@@ -136,6 +130,9 @@ class Lvgruppen_LvgruppenController extends MVVController
                     $this->lvgruppe->getAllAssignedCourses(false, $next_sem->id));
             }
             $this->display_semesters[] = $semester;
+            // show only pathes to Studiengaenge valid in given semesters
+            $this->set_trails_filter(end($this->display_semesters)->beginn,
+                    reset($this->display_semesters)->ende);
         } else {
             // show courses of all elapsed, current and next semesters
             $this->courses = $this->lvgruppe->getAllAssignedCourses();
@@ -144,9 +141,6 @@ class Lvgruppen_LvgruppenController extends MVVController
                     Semester::findBySQL('beginn <= ? ORDER BY beginn DESC',
                             [$next_sem->beginn]);
         }
-
-        $this->set_trails_filter(end($this->display_semesters)->beginn,
-                reset($this->display_semesters)->beginn);
 
         $this->trail_classes = words('Modulteil Modul StgteilAbschnitt StgteilVersion '
                 . 'Studiengang Fachbereich');
@@ -278,10 +272,10 @@ class Lvgruppen_LvgruppenController extends MVVController
         if ($this->semester_filter == all) {
             $semester = Semester::getAll();
             $this->set_trails_filter(end($semester)->beginn,
-                    reset($semester)->beginn);
+                    reset($semester)->ende);
         } else {
             $semester = Semester::find($this->semester_filter);
-            $this->set_trails_filter($semester->beginn, $semester->beginn);
+            $this->set_trails_filter($semester->beginn, $semester->ende);
         }
 
         $this->response->add_header('Content-type', 'application/vnd.ms-excel');
@@ -295,6 +289,7 @@ class Lvgruppen_LvgruppenController extends MVVController
     public function search_action()
     {
         $this->reset_search('Lvgruppe');
+        $this->reset_page();
         $this->do_search('Lvgruppe',
                 trim(Request::get('lvgruppe_suche_parameter')),
                 Request::option('lvgruppe_suche'));
@@ -307,6 +302,7 @@ class Lvgruppen_LvgruppenController extends MVVController
     public function reset_search_action()
     {
         $this->reset_search('Lvgruppe');
+        $this->reset_page();
         $this->redirect($this->url_for('/index'));
     }
 
@@ -332,15 +328,13 @@ class Lvgruppen_LvgruppenController extends MVVController
      */
     private function sidebar_filter()
     {
-
+        $selected_fachbereich = '';
         if (!empty($this->filter['mvv_modul_inst.institut_id'])) {
-            if (is_array($this->filter['mvv_modul_inst.institut_id'])) {
-                $selected_fachbereich = $this->filter['mvv_modul_inst.institut_id'][0];
+            if (count($this->filter['mvv_modul_inst.institut_id']) > 1) {
+                $selected_fachbereich = '';
             } else {
                 $selected_fachbereich = $this->filter['mvv_modul_inst.institut_id'];
             }
-        } else {
-            $selected_fachbereich = '';
         }
         
         $sidebar = Sidebar::get();
@@ -349,6 +343,7 @@ class Lvgruppen_LvgruppenController extends MVVController
             $this->url_for('/set_filter', array('fachbereich_filter' => $selected_fachbereich)), 'semester_filter');
         
         $widget->addElement(new SelectElement('all', _('Alle')), 'sem_select-all');
+        $widget->addElement(new SelectElement('no', _('Nicht verwendet')), 'sem_select-no');
         
         foreach (array_reverse(Semester::getAll()) as $semester) {
             
@@ -370,21 +365,21 @@ class Lvgruppen_LvgruppenController extends MVVController
             $widget->class = 'institute-list';
             
             $widget->addElement(
-                new SelectElement("",_('-- Einrichtung wählen --')), 'select-none');
-            
-            
-            
-            foreach (Lvgruppe::getAllAssignedInstitutes('name', 'ASC') as $institut) {
+                new SelectElement('select-none', _('Alle'), $selected_fachbereich == ''));
+
+            $institutes = Institute::getInstitutes();
+          //  foreach (Lvgruppe::getAllAssignedInstitutes('name', 'ASC') as $institut) {
+            foreach ($institutes as $institute) {
                 if (!(count($perm_institutes) == 0
-                    || in_array($institut->institut_id, $perm_institutes))) continue;
+                    || in_array($institute['Institut_id'], $perm_institutes))) continue;
                 
                 $widget->addElement(
                     new SelectElement(
-                        $institut->institut_id,
-                        ($institut->institut_id != $institut->fakultaets_id ? ' ' : '') . $institut->name,
-                        $institut->institut_id === $selected_fachbereich
+                        $institute['Institut_id'],
+                        ($institute['is_fak'] ? '' : ' ') . $institute['Name'],
+                        $institute['Institut_id'] === $selected_fachbereich
                         ),
-                    'select-' . $institut->name
+                    'select-' . $institute['Name']
                     );
             
             }
@@ -409,10 +404,10 @@ class Lvgruppen_LvgruppenController extends MVVController
                 ? Request::option('semester_filter') : null;
 
         // store filter
+        $this->reset_page();
         $this->sessSet('filter', $this->filter);
         $this->sessSet('semester_filter', $this->semester_filter);
-        $this->sessRemove('page');
-        $this->perform_relayed('index');
+        $this->redirect($this->url_for('/index'));
     }
 
     public function reset_filter_action()
@@ -421,8 +416,8 @@ class Lvgruppen_LvgruppenController extends MVVController
         $this->sessRemove('filter');
         $this->semester_filter = null;
         $this->sessRemove('semester_filter');
-        $this->sessRemove('page');
-        $this->perform_relayed('index');
+        $this->reset_page();
+        $this->redirect($this->url_for('/index'));
     }
 
     /**
@@ -447,27 +442,15 @@ class Lvgruppen_LvgruppenController extends MVVController
         $sidebar->addWidget($widget, 'search');
     }
 
-    private function set_trails_filter($end, $start)
+    private function set_trails_filter($start, $end)
     {
         // show only pathes with modules valid in the selected semester
         ModuleManagementModelTreeItem::setObjectFilter('Modulteil',
-            function ($mt, $params) {
-                $start_sem = Semester::find($mt->modul->start);
-                $end_sem = Semester::find($mt->modul->end);
-                if ($end_sem) {
-                    if (($params['start'] >= $start_sem->beginn
-                            && $params['start'] <= $end_sem->ende)
-                        || ($params['ende'] >= $start_sem->beginn
-                            && $params['ende'] <= $end_sem->ende)) {
-                        return true;
-                    }
-                } else {
-                    if ($params['end'] >= $start_sem->beginn) {
-                        return true;
-                    }
-                }
-                return false;
-            }, compact(words('start end'))
+            function ($mt) use ($start, $end) {
+                $modul_start = Semester::find($mt->modul->start)->beginn ?: 0;
+                $modul_end = Semester::find($mt->modul->end)->ende ?: PHP_INT_MAX;
+                return ($modul_start <= $end && $modul_end >= $start);
+            }
         );
     }
 }

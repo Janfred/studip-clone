@@ -89,21 +89,22 @@ class Course_DetailsController extends AuthenticatedController
                         ? PHP_INT_MAX
                         : $this->course->end_time;
                 // set filter to show only pathes with valid semester data
-                ModuleManagementModelTreeItem::setObjectFilter('Modul', function ($modul) use ($course_start, $course_end) {
-                    // check for public status
-                    if (!$GLOBALS['MVV_MODUL']['STATUS']['values'][$modul->stat]['public']) {
-                        return false;
-                    }
-                    $modul_start = Semester::find($modul->start);
-                    $modul_start = $modul_start ? $modul_start->beginn : 0;
-                    $modul_end = Semester::find($modul->end);
-                    $modul_end = $modul_end ? $modul_end->ende : PHP_INT_MAX;
-                    if ($course_end < $modul_start || $course_start > $modul_end) {
-                       return false;
-                    }
-                    return true;
-                }, []);
+                ModuleManagementModelTreeItem::setObjectFilter('Modul',
+                    function ($modul) use ($course_start, $course_end) {
+                        // check for public status
+                        if (!$GLOBALS['MVV_MODUL']['STATUS']['values'][$modul->stat]['public']) {
+                            return false;
+                        }
+                        $modul_start = Semester::find($modul->start)->beginn ?: 0;
+                        $modul_end = Semester::find($modul->end)->ende ?: PHP_INT_MAX;
+                        return ($modul_start <= $course_end && $modul_end >= $course_start);
+                    });
 
+                ModuleManagementModelTreeItem::setObjectFilter('StgteilVersion',
+                    function ($version) {
+                        return (bool) $GLOBALS['MVV_STGTEILVERSION']['STATUS']['values'][$version->stat]['public'];
+                    });
+                
                 $trail_classes = array('Modulteil', 'StgteilabschnittModul', 'StgteilAbschnitt', 'StgteilVersion');
                 $mvv_object_pathes = MvvCourse::get($this->course->getId())->getTrails($trail_classes);
                 if ($mvv_object_pathes) {

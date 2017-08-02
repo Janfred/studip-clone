@@ -33,7 +33,7 @@
         data-forward-url="<?= $no_js_url ?>" data-no-search-result="<?=_('Es wurde kein Suchergebnis gefunden.') ?>">
         <h2><?= _('Lehrveranstaltungsgruppen Suche') ?></h2>
         <div>
-            <input type="text" size="40" name="search" id="lvgroup-tree-search"
+            <input type="text" style="width: auto;" size="40" name="search" id="lvgroup-tree-search"
                    value="<?= $values['searchterm'] ?>"/>
             <span id="lvgroup-tree-search-start">
                 <?= Icon::create('search', 'clickable')->asInput(["name" => 'start_search', "onclick" => "return MVV.CourseWizard.searchTree()", "class" => $search_result?'hidden-no-js':'']) ?>

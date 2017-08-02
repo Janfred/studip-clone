@@ -8,24 +8,18 @@
         <th><?= _('Modul') ?></th>
         <th><?= _('Modulteil') ?></th>
     </tr>
-    <? $trail_object_classes = array('Abschluss', 'Studiengang', 'StgteilVersion',
-                    'StgteilabschnittModul', 'Modulteil'); ?>
+    <? $trail_classes = words('Modulteil Modul StgteilAbschnitt StgteilVersion '
+                . 'Studiengang Fachbereich'); ?>
     <? foreach ($lvgruppen as $lvgruppe) : ?>
-        <? $trails = $lvgruppe->getTrails(array_reverse($trail_object_classes)); ?>
+        <? $trails = $lvgruppe->getTrails($trail_classes, MvvTreeItem::TRAIL_SHOW_INCOMPLETE); ?>
+    <? //var_dump($trails) ?>
         <? if (count($trails)) : ?>
             <? foreach ($trails as $trail) : ?>
                 <tr>
                     <td><?= htmlReady($lvgruppe->getDisplayName()) ?></td>
-                    <? if ($trail['Modul']->responsible_institute) : ?>
-                        <td>
-                        <?= htmlReady($trail['Modul']->responsible_institute->institute->getDisplayName()) ?>
-                        </td>
-                    <? else : ?>
-                        <td></td>
-                    <? endif; ?>
-                <? foreach ($trail_object_classes as $trail_object_class) : ?>
-                    <? if ($trail[$trail_object_class]) : ?>
-                        <td><?= htmlReady($trail[$trail_object_class]->getDisplayName()) ?></td>
+                <? foreach (array_reverse($trail_classes) as $trail_class) : ?>
+                    <? if ($trail[$trail_class]) : ?>
+                        <td><?= htmlReady($trail[$trail_class]->getDisplayName()) ?></td>
                     <? else : ?>
                         <td></td>
                     <? endif; ?>

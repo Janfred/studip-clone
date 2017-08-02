@@ -1,16 +1,7 @@
 <?
 if (!$pathes) {
-    /**
-     * TODO simplify filter for complete pathes
-     */
-    $complete_trails = array();
     $trails = $area->getTrails(array('Modulteil', 'StgteilabschnittModul',  'StgteilAbschnitt', 'StgteilVersion', 'Studiengang'));
-    foreach ($trails as $trail) {
-        if (count($trail) == 5) {
-            $complete_trails[] = $trail;
-        }
-    }
-    $pathes = ModuleManagementModelTreeItem::getPathes($complete_trails);
+    $pathes = ModuleManagementModelTreeItem::getPathes($trails);
 }
 ?>
 <? if (count($pathes)) : ?>

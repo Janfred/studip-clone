@@ -244,9 +244,57 @@ class LVGroupsWizardStep implements CourseWizardStep
         $mvv_plugin = PluginEngine::getPlugin('MVVPlugin');
         $mvv_basepath = $mvv_plugin->getPluginPath();
 
+        $course = Course::findCurrent();
+        if ($course) {
+            $course_start = $course->start_time;
+            $course_end = ($course->end_time < 0 || is_null($course->end_time)) ? PHP_INT_MAX : $course->end_time;
+        } else {
+            $semester = Semester::findByTimestamp($_SESSION[__CLASS__]['course_start_time']);
+            $course_start = $semester->beginn;
+            $course_end = $semester->ende;
+        }
+        
+        $status_modul = [];
+        foreach ($GLOBALS['MVV_MODUL']['STATUS']['values'] as $name => $status) {
+            if ($status['public'] && $status['visible']) {
+                $status_modul[] = $name;
+            }
+        }
+
+        ModuleManagementModelTreeItem::setObjectFilter('Modul',
+            function ($modul) use ($course_start, $course_end, $status_modul) {
+                if (!in_array($modul->stat, $status_modul)) {
+                    return false;
+                }
+                $modul_start = Semester::find($modul->start)->beginn ?: 0;
+                $modul_end = Semester::find($modul->end)->ende ?: PHP_INT_MAX;
+                return ($modul_start <= $course_end && $modul_end >= $course_start);
+            });
+        
+        $status_version = [];
+        foreach ($GLOBALS['MVV_STGTEILVERSION']['STATUS']['values'] as $name => $status) {
+            if ($status['public'] && $status['visible']) {
+                $status_version[] = $name;
+            }
+        }
+        
+        ModuleManagementModelTreeItem::setObjectFilter('StgteilVersion',
+            function ($version) use ($status_version) {
+                return in_array($version->stat, $status_version);
+            });
+        
+        $trails = $area->getTrails([
+            'Modulteil',
+            'StgteilabschnittModul',
+            'StgteilAbschnitt',
+            'StgteilVersion',
+            'Studiengang']);
+        $pathes = ModuleManagementModelTreeItem::getPathes($trails);
+        
         $factory = new Flexi_TemplateFactory($mvv_basepath.'/views');
         $tpl = new Flexi_PhpTemplate('lvgselector/entry_trails', $factory);
-        $rendered = $tpl->render_partial('lvgselector/entry_trails', compact('area'));
+        $rendered = $tpl->render_partial('lvgselector/entry_trails',
+                compact('area', 'pathes'));
 
         $data = array(
             'id' => $area->id,

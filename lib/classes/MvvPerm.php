@@ -425,6 +425,10 @@ class MvvPerm {
         if (self::$user_role_institutes[$user_id] === null) {
             $institutes = array();
             foreach ($roles as $role) {
+                
+                // don't check system roles or roles not related to MVV
+                if (stripos($role->rolename, 'MVV') !== 0) continue;
+                
                 if ($role->rolename === 'MVVAdmin' || $GLOBALS['perm']->have_perm('root')) {
                     $institutes = array();
                     break;

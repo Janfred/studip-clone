@@ -109,21 +109,16 @@ class Lvgruppe extends ModuleManagementModelTreeItem
             $semester = Semester::find($semester_id);
             if ($semester) {
                 $filter_sql = trim($filter_sql) ? $filter_sql . ' AND' : $filter_sql . ' WHERE';
-                
-                $filter_sql .= ' ((seminare.duration_time = -1 '
-                        . 'AND seminare.start_time < :beginn) '
-                        . 'OR (seminare.duration_time > 0 '
-                        . 'AND seminare.start_time < :beginn '
-                        . 'AND seminare.start_time + seminare.duration_time >= :ende) '
-                        . 'OR (seminare.start_time = :beginn)) '
-                        . 'AND (start_sem.beginn <= :beginn AND '
-                        . 'IF(ISNULL(end_sem.ende), 1, end_sem.ende > :beginn)) ';
+                $filter_sql .= ' (seminare.start_time <= :beginn '
+                        . 'AND ((:beginn <= seminare.start_time + seminare.duration_time) '
+                        . 'OR (seminare.duration_time = -1)))'
+                        . 'AND (start_sem.beginn <= :ende AND '
+                        . 'IF(ISNULL(end_sem.ende), 1, end_sem.ende >= :beginn)) ';
                 $params = array(':beginn' => $semester->beginn,
                     ':ende' => $semester->ende);
-                
                 $semester_join = 'LEFT JOIN mvv_modul ON mvv_modul.modul_id = mvv_modulteil.modul_id '
                 . 'LEFT JOIN semester_data as start_sem ON start_sem.semester_id = mvv_modul.start '
-                . 'LEFT JOIN semester_data as end_sem ON end_sem.semester_id = mvv_modul.end ';
+                . 'LEFT JOIN semester_data as end_sem ON end_sem.semester_id = mvv_modul.end ';   
             }
         }
         $query = 'SELECT mvv_lvgruppe.*, '
@@ -168,13 +163,23 @@ class Lvgruppe extends ModuleManagementModelTreeItem
             $semester_id = func_get_arg(1);
             $semester = Semester::find($semester_id);
             if ($semester) {
-                $filter_sql = trim($filter_sql) ? $filter_sql . ' AND' : $filter_sql . ' WHERE';
-                $filter_sql .= ' (seminare.start_time >= ? '
-                        . 'AND seminare.start_time <= ?) '
-                        . 'OR (seminare.start_time <= ? AND seminare.start_time '
-                        . '+ seminare.duration_time >= ?) ';
-                $params = array($semester->beginn, $semester->ende,
-                    $semester->beginn, $semester->ende);
+                if (trim($filter_sql)) {
+                    $filter_sql .= ' AND';
+                } else {
+                    $filter_sql .= ' WHERE';
+                }
+                
+                $filter_sql = trim($filter_sql) ? $filter_sql  : ' AND';
+                $filter_sql .= ' (seminare.start_time <= :beginn '
+                        . 'AND ((:beginn <= seminare.start_time + seminare.duration_time) '
+                        . 'OR (seminare.duration_time = -1)))'
+                        . 'AND (start_sem.beginn <= :ende AND '
+                        . 'IF(ISNULL(end_sem.ende), 1, end_sem.ende >= :beginn)) ';
+                $params = array(':beginn' => $semester->beginn,
+                    ':ende' => $semester->ende);
+                $semester_join = 'LEFT JOIN mvv_modul ON mvv_modul.modul_id = mvv_modulteil.modul_id '
+                . 'LEFT JOIN semester_data as start_sem ON start_sem.semester_id = mvv_modul.start '
+                . 'LEFT JOIN semester_data as end_sem ON end_sem.semester_id = mvv_modul.end ';
             }
         }
         $query = 'SELECT COUNT(DISTINCT(mvv_lvgruppe.lvgruppe_id)) '
@@ -184,6 +189,7 @@ class Lvgruppe extends ModuleManagementModelTreeItem
                 . 'LEFT JOIN mvv_lvgruppe_modulteil USING(lvgruppe_id) '
                 . 'LEFT JOIN mvv_modulteil USING(modulteil_id) '
                 . 'LEFT JOIN mvv_modul_inst USING(modul_id) '
+                . $semester_join
                 . $filter_sql;
         $db = DBManager::get()->prepare($query);
         $db->execute($params);
