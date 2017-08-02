@@ -711,10 +711,12 @@ class Module_ModuleController extends MVVController
                 }
             }
 
-            // check permission (add a Modulteil to Modul)
-            $perm = MvvPerm::get($this->modul);
-            if (!$perm->haveFieldPermModulteile(MvvPerm::PERM_CREATE)) {
-                throw new Exception(_('Keine Berechtigung.'));
+            // check permission (add a Modulteil to Modul) if Modulteil is new
+            if ($this->modulteil->isNew()) {
+                $perm = MvvPerm::get($this->modul);
+                if (!$perm->haveFieldPermModulteile(MvvPerm::PERM_CREATE)) {
+                    throw new Exception(_('Keine Berechtigung.'));
+                }
             }
 
             try {
