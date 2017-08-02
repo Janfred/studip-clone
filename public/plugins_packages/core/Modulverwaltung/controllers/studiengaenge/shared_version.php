@@ -566,20 +566,18 @@ class SharedVersionController extends MVVController
     {
         $this->assignment = StgteilabschnittModul::find(
                 array($abschnitt_id, $modul_id));
+        $this->modul = Modul::find($modul_id);
+        $this->abschnitt_id = $abschnitt_id;
         if ($this->assignment) {
-            $this->abschnitt_id = $abschnitt_id;
-            $this->modul = $this->assignment->modul;
-            if (!Request::isXhr()) {
-                $this->modul_id = $this->assignment->modul->id;
-                $this->abschnitt_id = $this->assignment->abschnitt->id;
-                $this->abschnitte = $this->assignment->abschnitt->version->abschnitte;
-                $this->version_id = $this->assignment->abschnitt->version->id;
-                $this->stgteil_id = $this->assignment->abschnitt->version->studiengangteil->id;
-                $this->perform_relayed('index');
+            if (Request::isXhr()) {
+                $this->render_template('studiengaenge/versionen/modulteile');
+                return;
+            } else {
+                $this->perform_relayed('details_abschnitt', $this->abschnitt_id, $this->modul->id);
                 return;
             }
         }
-        $this->render_template('studiengaenge/versionen/modulteile');
+        $this->redirect('index');
     }
 
     public function modulteil_semester_action($abschnitt_id, $modulteil_id)
@@ -618,8 +616,9 @@ class SharedVersionController extends MVVController
                     }
                     if ($is_modified) {
                         PageLayout::postSuccess(
-                                sprintf(_('Die Zuordnung der Fachsemester zum Modulteil "%s" im Abschnitt "%s" wurde geändert.'),
+                                sprintf(_('Die Zuordnung der Fachsemester zum Modulteil "%s" des Moduls "%s" im Abschnitt "%s" wurde geändert.'),
                                 htmlReady($this->modulteil->getDisplayName()),
+                                htmlReady($this->modulteil->modul->getDisplayName()),
                                 htmlReady($this->abschnitt_modul->abschnitt->getDisplayName())));
                     } else {
                         PageLayout::postInfo(
@@ -628,7 +627,7 @@ class SharedVersionController extends MVVController
                     /*$this->relocate('/modulteile',
                             $this->abschnitt_modul->abschnitt_id,
                             $this->abschnitt_modul->modul_id);*/
-                    $this->relocate('/index');
+                    $this->relocate('/details_abschnitt/' . join('/', [$this->abschnitt_modul->abschnitt_id, $this->abschnitt_modul->modul_id]));
                     return;
                 }
                 $this->render_template('studiengaenge/versionen/modulteil_semester', $this->layout);
@@ -715,7 +714,7 @@ class SharedVersionController extends MVVController
         $this->render_nothing();
     }
 
-    public function details_abschnitt_action($abschnitt_id)
+    public function details_abschnitt_action($abschnitt_id, $modul_id = null)
     {
         $this->abschnitt = StgteilAbschnitt::find($abschnitt_id);
         if (!$this->abschnitt) {
@@ -756,6 +755,12 @@ class SharedVersionController extends MVVController
         if (Request::isXhr()) {
             $this->render_template('studiengaenge/versionen/details_abschnitt');
         } else {
+            if ($modul_id) {
+                $this->modul = Modul::find($modul_id);
+                $this->abschnitt_id = $this->abschnitt->id;
+                $this->modul_id = $this->modul->id;
+                $this->stgteil_id = $this->version->studiengangteil->id;
+            }
             $this->abschnitte_action($this->version_id);
         }
     }
