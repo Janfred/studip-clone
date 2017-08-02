@@ -374,7 +374,20 @@
 
 <?
 // Ausgabe der Modulzuordnung MVV
-if ($mvv_pathes) : ?>
+if ($mvv_tree) : ?>
+    <article class="studip">
+        <header>
+            <h1><?= _('Modulzuordnungen') ?></h1>
+        </header>
+        <section>
+            <ul class="collapsable css-tree">
+                <?= $mvv_tmpl_factory->render('shared/mvv_tree.php', array('tree' => $mvv_tree, 'node' => 'start')) ?>
+            </ul>
+        </section>
+    </article>
+<? endif; ?>
+
+<? if ($mvv_pathes) : ?>
     <article class="studip">
         <header>
             <h1><?= _('Modulzuordnungen') ?></h1>
