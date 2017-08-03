@@ -62,20 +62,27 @@
             <td>
                 <? $trails = $modul->getTrails(array('StgteilAbschnitt', 'StgteilVersion', 'Studiengang')); ?>
                 <? if (count($trails)) : ?>
+                    <? $pathes = $modul->getPathes($trails, ' > ') ?>
+                    <? if (count($pathes) > 9) : ?>
+                    <input type="checkbox" class="mvv-cb-more" id="cb_more_studycourses" checked>
+                    <? endif; ?>
                     <ul>
-                    <? foreach ($modul->getPathes($trails, ' > ') as $i => $path) : ?>
-                        <? $version = $trails[$i]['StgteilVersion']['version_id'];?>
-                        <? $statement = DBManager::get()->prepare(
-                                 'SELECT `mvv_stgteilabschnitt_modul`.`abschnitt_id`  '
-                               . 'FROM mvv_stgteilabschnitt_modul LEFT JOIN mvv_stgteilabschnitt USING(abschnitt_id) '
-                               . 'WHERE modul_id = ? AND version_id = ?');
-                           $statement->execute(array($modul->getId(), $version));
-                           $res = $statement->fetchOne();
-                           $affect_id = $res['abschnitt_id'];
-                        ?>
-                        <li data-mvv-field="mvv_stgteilabschnitt_modul" data-mvv-id="<?= $affect_id; ?>" data-mvv-cooid="<?= $modul->getId(); ?>">
-                            <?= htmlReady($path) ?>
-                        </li>
+                    <? foreach ($pathes as $i => $path) : ?>
+                    <? $version = $trails[$i]['StgteilVersion']['version_id'];?>
+                    <? $statement = DBManager::get()->prepare(
+                             'SELECT `mvv_stgteilabschnitt_modul`.`abschnitt_id`  '
+                           . 'FROM mvv_stgteilabschnitt_modul LEFT JOIN mvv_stgteilabschnitt USING(abschnitt_id) '
+                           . 'WHERE modul_id = ? AND version_id = ?');
+                       $statement->execute(array($modul->getId(), $version));
+                       $res = $statement->fetchOne();
+                       $affect_id = $res['abschnitt_id'];
+                    ?>
+                    <li data-mvv-field="mvv_stgteilabschnitt_modul" data-mvv-id="<?= $affect_id; ?>" data-mvv-cooid="<?= $modul->getId(); ?>">
+                        <?= htmlReady($path)?>
+                        <? if (!$download && (count($pathes) > 9 && $i == 4)) : ?>
+                        <label class="cb-more-label" for="cb_more_studycourses"><?= _('mehr...') ?></label>
+                        <? endif; ?>
+                    </li>
                     <? endforeach; ?>
                     </ul>
                 <? endif; ?>

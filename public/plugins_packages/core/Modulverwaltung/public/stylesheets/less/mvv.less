@@ -152,6 +152,22 @@ table {
             text-align: left;
             vertical-align: top;
         }
+        
+        input[type=checkbox].mvv-cb-more {
+            display: none;
+            &:checked ~ ul li {
+                &:nth-child(n+6) {
+                    height: 0;
+                    visibility: hidden;
+                }
+                & label.cb-more-label {
+                    display: block;
+                }
+            }
+            & ~ ul label.cb-more-label {
+                display: none;
+            }
+        }
     }
 
     &.mvv-semsterdata {
