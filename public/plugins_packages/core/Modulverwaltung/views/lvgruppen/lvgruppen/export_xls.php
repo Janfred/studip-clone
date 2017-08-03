@@ -12,7 +12,6 @@
                 . 'Studiengang Fachbereich'); ?>
     <? foreach ($lvgruppen as $lvgruppe) : ?>
         <? $trails = $lvgruppe->getTrails($trail_classes, MvvTreeItem::TRAIL_SHOW_INCOMPLETE); ?>
-    <? //var_dump($trails) ?>
         <? if (count($trails)) : ?>
             <? foreach ($trails as $trail) : ?>
                 <tr>

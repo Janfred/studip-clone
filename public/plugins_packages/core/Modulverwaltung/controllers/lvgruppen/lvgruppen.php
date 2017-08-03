@@ -278,8 +278,12 @@ class Lvgruppen_LvgruppenController extends MVVController
             $this->set_trails_filter($semester->beginn, $semester->ende);
         }
 
+        $this->response->add_header('Content-Description', 'File Transfer');
+        $this->response->add_header('Content-Transfer-Encoding' , 'binary');
         $this->response->add_header('Content-type', 'application/vnd.ms-excel');
-        $this->response->add_header('Content-Disposition', 'attachment; filename="lvgruppen.xls"');
+        $this->response->add_header('Content-Disposition',
+                'attachment; filename=lv_gruppen.xls');
+        $this->response->add_header('Pragma', 'private');
         $this->render_template('lvgruppen/lvgruppen/export_xls', null);
     }
 
