@@ -31,8 +31,12 @@ class LVGroupsWizardStep implements CourseWizardStep
         $mvv_plugin = PluginEngine::getPlugin('MVVPlugin');
         $mvv_basepath = $mvv_plugin->getPluginPath();
 
+        // retrieve class of step 1 from step registry
+        $step_one_class = CourseWizardStepRegistry::findOneBySQL('number = 1 AND enabled = 1')
+                ->classname;
+        
         // store start time of semester selected in first step
-        $course_start_time = reset($values)['start_time'];
+        $course_start_time = $values[$step_one_class]['start_time'];
         
         // We only need our own stored values here.
         $values = $values[__CLASS__];
