@@ -222,6 +222,7 @@ class Lvgruppe extends ModuleManagementModelTreeItem
                 . 'INNER JOIN mvv_modulteil USING(modulteil_id) '
                 . 'INNER JOIN mvv_modul USING(modul_id) '
                 . 'INNER JOIN mvv_modul_deskriptor USING(modul_id) '
+                . 'INNER JOIN mvv_modul_inst USING(modul_id) '
                 . 'INNER JOIN mvv_stgteilabschnitt_modul USING(modul_id) '
                 . 'INNER JOIN mvv_stgteilabschnitt USING(abschnitt_id) '
                 . 'INNER JOIN mvv_stgteilversion USING(version_id) '
