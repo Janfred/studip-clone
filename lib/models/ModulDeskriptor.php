@@ -102,4 +102,18 @@ class ModulDeskriptor extends ModuleManagementModel
         return $institutes;
     }
 
+    /**
+     * Returns the language identifier as the variant of the descriptor object.
+     * 
+     * @see ModuleManagementModel::getVariant()
+     * @return string The language identifier.
+     */
+    public function getVariant()
+    {
+        if ($this->sprache == $GLOBALS['MVV_MODUL_DESKRIPTOR']['SPRACHE']['default']) {
+            return '';
+        }
+        return $this->sprache;
+    }
+
 }

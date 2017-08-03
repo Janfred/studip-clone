@@ -841,4 +841,15 @@ abstract class ModuleManagementModel extends SimpleORMap
         return array();
     }
 
+    /**
+     * Returns a string that identify a variant of this object. returns null if
+     * no possible variants exists for this object.
+     * 
+     * @return string String to identify a variant.
+     */
+    public function getVariant()
+    {
+        return '';
+    }
+
 }

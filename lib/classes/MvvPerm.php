@@ -59,8 +59,7 @@ class MvvPerm {
         static $perm_objects;
 
         if (is_object($mvv_object)) {
-            $id = $mvv_object->getId();
-            $index = get_class($mvv_object) . (is_array($id) ? join('', $id) : $id);
+            $index = get_class($mvv_object) . $mvv_object->id;
         } else {
             $index = $mvv_object;
         }
@@ -76,6 +75,7 @@ class MvvPerm {
             }
 
             $perm_objects[$index] = new MvvPerm($mvv_object);
+            $perm_objects[$index]->setVariant($mvv_object->getVariant());
         }
         return $perm_objects[$index];
     }
@@ -142,7 +142,7 @@ class MvvPerm {
 
     public function setVariant($variant)
     {
-        $this->variant = $variant;
+        $this->variant = trim($variant);
         return $this;
     }
 
@@ -172,7 +172,8 @@ class MvvPerm {
             $mvv_object = new $object;
         }
         if (!$mvv_object instanceof ModuleManagementModel) {
-            throw new InvalidArgumentException('Wrong object type. Only MVV objects of type ModuleManagementModel are allowed.');
+            throw new InvalidArgumentException('Wrong object type. Only MVV '
+                        . 'objects of type ModuleManagementModel are allowed.');
         }
         $user_id = is_null($user_id) ? $GLOBALS['user']->id : $user_id;
         if ($GLOBALS['perm']->get_perm($user_id) == 'root' ) {
@@ -199,8 +200,8 @@ class MvvPerm {
         $institut_ids = array_unique($inst_ids);
         $status = $status ?: $mvv_object->getStatus();
         $roles = self::getRoles($user_id);
-        $variant = $variant ? '_' . $variant : '';
-        $mvv_table = $table_meta['table'] . $variant;
+        $variant = $variant ?: $mvv_object->getVariant();
+        $mvv_table = $table_meta['table'] . ($variant ? '_' . $variant : '');
         self::getPrivileges($mvv_table);
         $perm = 0;
         foreach ($roles as $role) {
@@ -248,7 +249,7 @@ class MvvPerm {
         $institute_ids = SimpleORMapCollection::createFromArray(
                 $this->mvv_object->getResponsibleInstitutes())->pluck('id');
         return $this->havePerm($perm, $this->mvv_object->getStatus(), $user_id,
-                $institute_ids, $this->variant);
+                $institute_ids);
     }
 
     public function haveDfEntryPerm($df_entry, $perm)
