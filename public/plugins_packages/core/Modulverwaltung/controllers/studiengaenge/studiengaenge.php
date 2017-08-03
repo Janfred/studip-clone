@@ -161,7 +161,7 @@ class Studiengaenge_StudiengaengeController extends MVVController
                 //No "fach" object has been found:
                 //Use the entered names and short names
                 $this->studiengang->name =
-                    trim(Request::get('studiengang_id_parameter'));
+                    trim(Request::get('fach_id_parameter'));
                 $this->studiengang->name_en = trim(Request::get('name_en'));
                 $this->studiengang->name_kurz = trim(Request::get('name_kurz'));
                 $this->studiengang->name_kurz_en = trim(Request::get('name_kurz_en'));

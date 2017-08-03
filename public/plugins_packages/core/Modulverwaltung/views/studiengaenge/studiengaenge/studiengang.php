@@ -18,7 +18,7 @@
             <? if ($perm->haveFieldPerm('name', MvvPerm::PERM_WRITE)) : ?>
             <?= $search ?>
             <? else : ?>
-            <input readonly type="text" name="studiengang_id_parameter"  size="60" maxlength="255" value="<?= htmlReady($studiengang->name) ?>">
+            <input readonly type="text" name="fach_id_parameter"  size="60" maxlength="255" value="<?= htmlReady($studiengang->name) ?>">
             <? endif; ?>
         </label>
         <label>
