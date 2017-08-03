@@ -723,6 +723,9 @@ abstract class ModuleManagementModel extends SimpleORMap
         if (isset($GLOBALS['MVV_LANGUAGES']['values'][$language])) {
             setLocaleEnv($GLOBALS['MVV_LANGUAGES']['values'][$language]['locale']);
             self::$language = $language;
+            // load config file again
+            $mvv_plugin = PluginEngine::getPlugin('MVVPlugin');
+            require $mvv_plugin->getPluginPath() . '/mvv_config.php';
         }
     }
 
