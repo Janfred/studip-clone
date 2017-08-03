@@ -151,6 +151,11 @@ class Course_DetailsController extends AuthenticatedController
                             }
                         }
                     }
+                    // to prevent collisions of object ids in the tree
+                    // in the case of same objects listed in more than one part
+                    // of the tree
+                    $this->id_sfx = new stdClass();
+                    $this->id_sfx->c = 1;
                 }
             }
         }

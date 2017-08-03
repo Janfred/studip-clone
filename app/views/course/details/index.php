@@ -381,7 +381,7 @@ if ($mvv_tree) : ?>
         </header>
         <section>
             <ul class="collapsable css-tree">
-                <?= $mvv_tmpl_factory->render('shared/mvv_tree.php', array('tree' => $mvv_tree, 'node' => 'start')) ?>
+                <?= $mvv_tmpl_factory->render('shared/mvv_tree.php', array('tree' => $mvv_tree, 'node' => 'start', 'id_sfx' => $id_sfx)) ?>
             </ul>
         </section>
     </article>
