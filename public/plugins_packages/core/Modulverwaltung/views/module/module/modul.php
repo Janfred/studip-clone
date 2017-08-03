@@ -666,18 +666,18 @@ if ($GLOBALS['MVV_MODUL']['SPRACHE']['default'] != $deskriptor->sprache) {
     <footer>
     <? if ($deskriptor->isNew()) : ?>
         <? if ($perm_d->havePermCreate()) : ?>
-            <?= Button::createAccept(_('anlegen'), 'store', array('title' => _('Modul anlegen'))) ?>
+            <?= Button::createAccept(_('Anlegen'), 'store', array('title' => _('Modul anlegen'))) ?>
         <? endif; ?>
     <? else : ?>
         <? if ($perm_d->havePermWrite()) : ?>
-            <?= Button::createAccept(_('übernehmen'), 'store', array('title' => _('Änderungen übernehmen'))) ?>
+            <?= Button::createAccept(_('Übernehmen'), 'store', array('title' => _('Änderungen übernehmen'))) ?>
         <? endif; ?>
         <? if (!$def_lang) : ?>
             <?= Button::create(_('Löschen'), 'delete', ['title' => _('Deskriptor löschen'), 'data-confirm' => _('Soll dieser Deskriptor gelöscht werden?'),
                 'formaction' => $controller->url_for('/delete_modul_deskriptor', $deskriptor->id)]); ?>
         <? endif; ?>
     <? endif; ?>
-        <?= LinkButton::createCancel(_('abbrechen'), $cancel_url, array('title' => _('zurück zur Übersicht'))) ?>
+        <?= LinkButton::createCancel(_('Abbrechen'), $cancel_url, array('title' => _('zurück zur Übersicht'))) ?>
     </footer>
 </form>
 <? if (!$def_lang) : ?>

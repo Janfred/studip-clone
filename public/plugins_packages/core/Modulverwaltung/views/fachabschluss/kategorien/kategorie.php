@@ -58,13 +58,13 @@
     <footer data-dialog-buttons>
     <? if ($abschluss_kategorie->isNew()) : ?>
         <? if ($perm->havePermCreate()) : ?>
-        <?= Button::createAccept(_('anlegen'), 'store', array('title' => _('Abschluss-Kategorie anlegen'))) ?>
+        <?= Button::createAccept(_('Anlegen'), 'store', array('title' => _('Abschluss-Kategorie anlegen'))) ?>
         <? endif; ?>
     <? else : ?>
         <? if ($perm->havePermWrite()) : ?>
-        <?= Button::createAccept(_('übernehmen'), 'store', array('title' => _('Änderungen übernehmen'))) ?>
+        <?= Button::createAccept(_('Übernehmen'), 'store', array('title' => _('Änderungen übernehmen'))) ?>
         <? endif; ?>
     <? endif; ?>
-        <?= LinkButton::createCancel(_('abbrechen'), $controller->url_for('fachabschluss/kategorien'), array('title' => _('zurück zur Übersicht'))) ?>
+        <?= LinkButton::createCancel(_('Abbrechen'), $controller->url_for('fachabschluss/kategorien'), array('title' => _('zurück zur Übersicht'))) ?>
     </footer>
 </form>

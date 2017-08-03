@@ -395,7 +395,7 @@ if ($GLOBALS['MVV_MODULTEIL']['SPRACHE']['default'] != $deskriptor->sprache) {
                 'formaction' => $controller->url_for('/delete_modulteil_deskriptor', $deskriptor->id)]); ?>
         <? endif; ?>
     <? endif; ?>
-    <?= LinkButton::createCancel(_('abbrechen'), $cancel_url, array('title' => _('zurück zur Übersicht'))) ?>
+    <?= LinkButton::createCancel(_('Abbrechen'), $cancel_url, array('title' => _('zurück zur Übersicht'))) ?>
     </footer>
 </form>
 <? if (!$def_lang) : ?>

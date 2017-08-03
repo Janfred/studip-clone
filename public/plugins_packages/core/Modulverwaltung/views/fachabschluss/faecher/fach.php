@@ -101,13 +101,13 @@
     <footer data-dialog-button>
     <? if ($fach->isNew()) : ?>
         <? if ($perm->havePermCreate()) : ?>
-            <?= Button::createAccept(_('anlegen'), 'store', array('title' => _('Fach anlegen'))) ?>
+            <?= Button::createAccept(_('Anlegen'), 'store', array('title' => _('Fach anlegen'))) ?>
         <? endif; ?>
     <? else : ?>
         <? if ($perm->havePermWrite()) : ?>
-            <?= Button::createAccept(_('übernehmen'), 'store', array('title' => _('Änderungen übernehmen'))) ?>
+            <?= Button::createAccept(_('Übernehmen'), 'store', array('title' => _('Änderungen übernehmen'))) ?>
         <? endif; ?>
     <? endif; ?>
-        <?= LinkButton::createCancel(_('abbrechen'), $controller->url_for('/index'), array('title' => _('zurück zur Übersicht'))) ?>
+        <?= LinkButton::createCancel(_('Abbrechen'), $controller->url_for('/index'), array('title' => _('zurück zur Übersicht'))) ?>
     </footer>
 </form>

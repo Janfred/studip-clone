@@ -26,7 +26,7 @@
         </label>
     </fieldset>
     <footer data-dialog-button >
-        <?= Button::createAccept(_('übernehmen'), 'store', array('title' => _('Änderungen übernehmen'))) ?>
-        <?= LinkButton::createCancel(_('abbrechen'), $controller->url_for('/'), array('title' => _('zurück zur Übersicht'))) ?>
+        <?= Button::createAccept(_('Übernehmen'), 'store', array('title' => _('Änderungen übernehmen'))) ?>
+        <?= LinkButton::createCancel(_('Abbrechen'), $controller->url_for('/'), array('title' => _('zurück zur Übersicht'))) ?>
     </footer>
 </form>

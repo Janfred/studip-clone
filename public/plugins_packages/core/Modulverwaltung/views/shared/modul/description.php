@@ -3,7 +3,7 @@
     <? foreach ($modul->deskriptoren->pluck('sprache') as $language) : ?>
         <? $lang = $GLOBALS['MVV_MODUL_DESKRIPTOR']['SPRACHE']['values'][$language]; ?>
         <a data-dialog="size=auto;title='<?= htmlReady($modul->getDisplayName()) ?>'" href="<?= $controller->url_for('/description/' . $modul->id . '/', array('display_language' => $language)) ?>">
-            <img src="<?= Assets::image_path('languages/lang_' . strtolower($language) . '.gif') ?>" alt="<?= $lang['name'] ?>" title="<?= $lang['name'] ?>">
+            <img src="<?= Assets::image_path('languages/lang_' . mb_strtolower($language) . '.gif') ?>" alt="<?= $lang['name'] ?>" title="<?= $lang['name'] ?>">
         </a>
     <? endforeach; ?>
 </div>

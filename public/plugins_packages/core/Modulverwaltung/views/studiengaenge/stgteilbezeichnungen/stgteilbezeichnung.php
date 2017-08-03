@@ -36,10 +36,10 @@
     </fieldset>
     <footer data-dialog-button>
         <? if ($stgteilbezeichnung->isNew()) : ?>
-        <?= Button::createAccept(_('anlegen'), 'store', array('title' => _('Studiengangteil-Bezeichnung anlegen'))) ?>
+        <?= Button::createAccept(_('Anlegen'), 'store', array('title' => _('Studiengangteil-Bezeichnung anlegen'))) ?>
         <? else : ?>
-        <?= Button::createAccept(_('übernehmen'), 'store', array('title' => _('Änderungen übernehmen'))) ?>
+        <?= Button::createAccept(_('Übernehmen'), 'store', array('title' => _('Änderungen übernehmen'))) ?>
         <? endif; ?>
-        <?= LinkButton::createCancel(_('abbrechen'), $controller->url_for('studiengaenge/stgteilbezeichnungen/index'), array('title' => _('zurück zur Übersicht'))) ?>
+        <?= LinkButton::createCancel(_('Abbrechen'), $controller->url_for('studiengaenge/stgteilbezeichnungen/index'), array('title' => _('zurück zur Übersicht'))) ?>
     </footer>
 </form>

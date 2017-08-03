@@ -54,10 +54,10 @@
     <input type="hidden" name="version_id" value="<?= $this->version->id ?>">
     <footer data-dialog-button >
         <? if ($abschnitt->isNew()) : ?>
-        <?= Button::createAccept(_('anlegen'), 'store', array('title' => _('Abschnitt anlegen'))) ?>
+        <?= Button::createAccept(_('Anlegen'), 'store', array('title' => _('Abschnitt anlegen'))) ?>
         <? else : ?>
-        <?= Button::createAccept(_('übernehmen'), 'store', array('title' => _('Änderungen übernehmen'))) ?>
+        <?= Button::createAccept(_('Übernehmen'), 'store', array('title' => _('Änderungen übernehmen'))) ?>
         <? endif; ?>
-        <?= LinkButton::createCancel(_('abbrechen'), $cancel_url, array('title' => _('zurück zur Übersicht'))) ?>
+        <?= LinkButton::createCancel(_('Abbrechen'), $cancel_url, array('title' => _('zurück zur Übersicht'))) ?>
     </footer>
 </form>

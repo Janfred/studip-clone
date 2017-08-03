@@ -15,7 +15,7 @@
         <?= _('Die Änderungen werden erst gespeichert, wenn das Hauptformular gespeichert wurde!') ?>
     </fieldset>
     <footer data-dialog-button>
-        <?= LinkButton::createAccept(_('übernehmen'), '#dokumente_' . $dokument->getId(), array('title' => _('Änderungen übernehmen'))) ?>
-        <?= LinkButton::createCancel(_('abbrechen'), '', array('title' => _('Bearbeitung abbrechen'))) ?>
+        <?= LinkButton::createAccept(_('Übernehmen'), '#dokumente_' . $dokument->getId(), array('title' => _('Änderungen übernehmen'))) ?>
+        <?= LinkButton::createCancel(_('Abbrechen'), '', array('title' => _('Bearbeitung abbrechen'))) ?>
     </footer>
 </form>

@@ -5,7 +5,7 @@
 <h1>
     <?= $headline ?>
 </h1>
-<form class="default" action="<?= $submit_url ?>" method="post">
+<form data-dialog class="default" action="<?= $submit_url ?>" method="post">
     <?= CSRFProtection::tokenTag() ?>
     <fieldset>
         <legend><?= _('Bezeichnung') ?></legend>
@@ -35,11 +35,11 @@
     <footer data-dialog-button>
         <? if ($lvgruppe->isNew()) : ?>
             <? if ($perm->havePermCreate()) : ?>
-            <?= Button::createAccept(_('anlegen'), 'store', array('title' => _('Lehrveranstaltungsgruppe anlegen'))) ?>
+            <?= Button::createAccept(_('Anlegen'), 'store', array('title' => _('Lehrveranstaltungsgruppe anlegen'))) ?>
             <? endif; ?>
         <? elseif ($perm->havePermWrite()) : ?>
-        <?= Button::createAccept(_('übernehmen'), 'store', array('title' => _('Änderungen übernehmen'))) ?>
+        <?= Button::createAccept(_('Übernehmen'), 'store', array('title' => _('Änderungen übernehmen'))) ?>
         <? endif; ?>
-        <?= LinkButton::createCancel(_('abbrechen'), $cancel_url, array('title' => _('zurück zur Übersicht'))) ?>
+        <?= LinkButton::createCancel(_('Abbrechen'), $cancel_url, array('title' => _('zurück zur Übersicht'))) ?>
     </footer>
 </form>

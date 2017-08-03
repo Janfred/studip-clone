@@ -10,23 +10,23 @@
                    id="<?= $modulteil->getId() ?>">
                 <tr class="header-row">
                     <td class="toggle-indicator">
-                        <? if (count($modulteil->lvgruppen) || $perm->haveFieldPermLvgruppen(MvvPerm::PERM_CREATE)) : ?>
+                    <? if (count($modulteil->lvgruppen) || $perm->haveFieldPermLvgruppen(MvvPerm::PERM_CREATE)) : ?>
                             <a class="mvv-load-in-new-row"
                                href="<?= $controller->url_for('/modulteil_lvg', $modulteil->id) ?>"><?= htmlReady($modulteil->getDisplayName()) ?></a>
-                        <? else : ?>
+                    <? else : ?>
                             <?= htmlReady($modulteil->getDisplayName()) ?>
-                        <? endif; ?>
+                    <? endif; ?>
                     </td>
                     <td class="dont-hide actions" style="white-space: nowrap;">
-                        <? if ($perm->havePermWrite()) : ?>
-                            <? foreach ($modulteil->deskriptoren->pluck('sprache') as $language) : ?>
-                                <? $lang = $GLOBALS['MVV_MODUL_DESKRIPTOR']['SPRACHE']['values'][$language]; ?>
-                                <a href="<?= $controller->url_for('/modulteil/' . join('/', [$modulteil->id, $institut_id]), ['display_language' => $language]) ?>">
-                                    <img src="<?= Assets::image_path('languages/lang_' . mb_strtolower($language) . '.gif') ?>"
+                    <? if ($perm->havePermWrite()) : ?>
+                        <? foreach ($modulteil->deskriptoren->pluck('sprache') as $language) : ?>
+                        <? $lang = $GLOBALS['MVV_MODUL_DESKRIPTOR']['SPRACHE']['values'][$language]; ?>
+                            <a href="<?= $controller->url_for('/modulteil/' . join('/', [$modulteil->id, $institut_id]), ['display_language' => $language]) ?>">
+                                <img src="<?= Assets::image_path('languages/lang_' . mb_strtolower($language) . '.gif') ?>"
                                          alt="<?= $lang['name'] ?>" title="<?= $lang['name'] ?>">
-                                </a>
-                            <? endforeach; ?>
-                        <? endif; ?>
+                            </a>
+                        <? endforeach; ?>
+                    <? endif; ?>
                     </td>
                     <td class="dont-hide actions" style="white-space: nowrap;">
                     <? $actionMenu = ActionMenu::get() ?>
@@ -39,7 +39,7 @@
                              'title'       => _('Neue LV-Gruppe anlegen')]
                         ) ?>
                     <? endif; ?>
-                    <? if ($perm->havePermWrite()) : ?>
+                        <? if ($perm->havePermWrite()) : ?>
                         <? $actionMenu->addLink(
                             $controller->url_for('/modulteil/' . $modulteil->id),
                             _('Modulteil bearbeiten'),

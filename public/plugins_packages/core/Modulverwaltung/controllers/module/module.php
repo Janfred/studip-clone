@@ -923,21 +923,22 @@ class Module_ModuleController extends MVVController
                         $stored_modulteil = $this->lvg_modulteil->store();
                     }
                 } catch (InvalidValuesException $e) {
-                     PageLayout::postError(htmlReady($e->getMessage()));
+                     $this->flash_set('error', htmlReady($e->getMessage()));
                 }
                 if ($stored !== false && $stored_modulteil !== false) {
                     if ($stored) {
-                        PageLayout::postSuccess(sprintf(_('LV-Gruppe "%s" geändert.'),
+                        PageLayout::postSuccess(sprintf(_('LV-Gruppe "%s" angelegt.'),
                                 htmlReady($this->lvgruppe->getDisplayName())));
                     } else {
                         PageLayout::postInfo(_('Es wurden keine Änderungen vorgenommen.'));
                     }
-                    $this->redirect($this->url_for('/details',
-                            $this->modulteil->modul_id, $this->modulteil->id));
+                    $this->relocate('/details',
+                            $this->modulteil->modul_id, $this->modulteil->id);
                     return;
                 }
             }
         }
+        $this->response->add_header('X-Title', _('Neue LV-Gruppe anlegen'));
         $this->render_template('module/module/lvgruppe');
     }
 
