@@ -20,6 +20,9 @@ class Module_DownloadController extends MVVController
 
     public function details_action($modul_id, $language = null)
     {
+        $language = Request::get('display_language', $language);
+        ModuleManagementModel::setLanguage($language);
+        
         $modul = Modul::find($modul_id);
         if (!$modul) {
             throw new Exception(_('Ungültiges Modul'));
@@ -42,7 +45,7 @@ class Module_DownloadController extends MVVController
             $doc->SetFont('helvetica', '', 8);
             $doc->writeHTML($template->render(), false, false, true);
 
-            $doc->Output($modul->getDisplayName() . '.pdf', 'D');
+            $doc->Output(FileManager::cleanFileName($modul->getDisplayName() . '.pdf'), 'D');
 
             $this->render_nothing();
         } else {
@@ -52,7 +55,8 @@ class Module_DownloadController extends MVVController
 
             $content = $template->render();
             $this->response->add_header('Content-type', 'application/msword');
-            $this->response->add_header('Content-Disposition', 'attachment; filename="' . $modul->getDisplayName() . '.doc"');
+            $this->response->add_header('Content-Disposition', 'attachment; filename="'
+                    . FileManager::cleanFileName($modul->getDisplayName() . '.doc') . '"');
             $this->render_text($content);
         }
         return;
