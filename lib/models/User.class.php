@@ -169,23 +169,12 @@ class User extends AuthUserMd5
     }
 
     /**
-     * build object with given data and mark it as existing
-     *
-     * @param $data array assoc array of record
-     * @return User
-     */
-    public static function buildExisting($data)
-    {
-        return self::build($data, true);
-    }
-
-    /**
      * build new object with given data
      *
      * @param $data array assoc array of record
      * @return User
      */
-    public static function build($data, $is_new = false)
+    public static function build($data, $is_new = true)
     {
         $user = new User();
         $user->info = new UserInfo();
@@ -194,8 +183,7 @@ class User extends AuthUserMd5
         foreach (array_keys($user->db_fields) as $field) {
             $user->content_db[$field] = $user->content[$field];
         }
-        $user->info = UserInfo::build($data);
-        $user->info->setNew($is_new);
+        $user->info = UserInfo::build($data, $is_new);
         return $user;
     }
 
@@ -224,8 +212,7 @@ class User extends AuthUserMd5
      */
     public static function findByUsername($username)
     {
-        $found = parent::findByUsername($username);
-        return isset($found[0]) ? $found[0] : null;
+        return parent::findOneByUsername($username);
     }
 
     /**

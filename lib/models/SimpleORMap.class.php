@@ -407,7 +407,7 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
     /**
      * creates new record with given data in db
      * returns the new object or null
-     * @param array assoc array of record
+     * @param array $data assoc array of record
      * @return SimpleORMap
      */
     public static function create($data)
@@ -425,9 +425,9 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
     /**
      * build object with given data
      *
-     * @param array assoc array of record
-     * @param bool set object to new state
-     * @return SimpleORMap
+     * @param array $data assoc array of record
+     * @param bool $is_new set object to new state
+     * @return static
      */
     public static function build($data, $is_new = true)
     {
@@ -438,6 +438,12 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
         return $record;
     }
 
+    /**
+     * build object with given data and mark it as existing
+     *
+     * @param $data array assoc array of record
+     * @return static
+     */
     public static function buildExisting($data)
     {
         return self::build($data, false);
@@ -450,7 +456,7 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
      * (but changes are not yet stored)
      *
      * @param array $data
-     * @return SimpleORMap
+     * @return static
      */
     public static function import($data)
     {
@@ -731,8 +737,8 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
 
     /**
      * deletes objects specified by sql clause
-     * @param string sql clause to use on the right side of WHERE
-     * @param array parameters for query
+     * @param string $where sql clause to use on the right side of WHERE
+     * @param array $params parameters for query
      * @return number
      */
     public static function deleteBySQL($where, $params = array())
@@ -746,8 +752,8 @@ class SimpleORMap implements ArrayAccess, Countable, IteratorAggregate
      * the param could be a string, an assoc array containing primary key field
      * or an already matching object. In all these cases an object is returned
      *
-     * @param mixed id as string, object or assoc array
-     * @return NULL|object
+     * @param mixed $id_or_object id as string, object or assoc array
+     * @return static
      */
     public static function toObject($id_or_object)
     {
