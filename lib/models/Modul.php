@@ -278,7 +278,7 @@ class Modul extends ModuleManagementModelTreeItem
         }
         
         $name = ($with_code && trim($this->code)) ? $this->code . ' - ' : '';
-        $name .= $this->getDeskriptor()->bezeichnung;
+        $name .= $this->getDeskriptor(self::getLanguage())->bezeichnung;
 
         if ($options & self::DISPLAY_SEMESTER) {
             $sem_validity = $this->getDisplaySemesterValidity();
