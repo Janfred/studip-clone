@@ -205,12 +205,21 @@ $GLOBALS['MVV_MODULTEIL_FACHSEMESTER'] = 10;
 
 // Status des zugeordneten Fachsemesters
 $GLOBALS['MVV_MODULTEIL_STGABSCHNITT']['STATUS'] = array(
-    'values'            => array(
-        'kann'              => array('visible' => 1, 'name' => _('kann')),
-        'soll'              => array('visible' => 1, 'name' => _('soll')),
-        'muss'              => array('visible' => 1, 'name' => _('muss'))
+    'values' => array(
+        'kann' => array(
+            'visible' => 1,
+            'name'    => _('kann'),
+            'icon'    => 'o'),
+        'soll' => array(
+            'visible' => 1,
+            'name'    => _('soll'),
+            'icon'    => '+'),
+        'muss' => array(
+            'visible' => 1,
+            'name'    => _('muss'),
+            'icon'    => '#')
     ),
-    'default'           => ''
+    'default' => ''
 );
 
 $GLOBALS['MVV_STGTEILVERSION']['STATUS'] = $GLOBALS['MVV_MODUL']['STATUS'];

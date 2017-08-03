@@ -76,10 +76,9 @@
                                 <? endif; ?>
                                 <td><?= htmlReady($modulTeil['name']) ?> </td>
                                 <? for ($i = 1; $i <= $max_fachsemester; $i++) : ?>
-                                    <? if ($modulTeil['fachsemester'][$fachsemesterData[$i]] == 'kann') : ?>
-                                <td class="mvv-type-kann"><span title="<? printf(_('%s Semester (kann)'), $i . ModuleManagementModel::getLocaleOrdinalNumberSuffix($i)) ?>">o</span></td>
-                                    <? elseif ($modulTeil['fachsemester'][$fachsemesterData[$i]] == 'soll') : ?>
-                                <td class="mvv-type-soll"><span title="<? printf(_('%s Semester (soll)'), $i . ModuleManagementModel::getLocaleOrdinalNumberSuffix($i)) ?>">+</td>
+                                    <? $fachsemester_typ = $GLOBALS['MVV_MODULTEIL_STGABSCHNITT']['STATUS']['values'][$modulTeil['fachsemester'][$fachsemesterData[$i]]] ?>
+                                    <? if ($fachsemester_typ['visible']) : ?>
+                                <td class="mvv-type-<?= $modulTeil['fachsemester'][$fachsemesterData[$i]] ?>"><pan title="<? printf(_('%s Semester (%s)'), $i . ModuleManagementModel::getLocaleOrdinalNumberSuffix($i), $fachsemester_typ['name']) ?>"><?= $fachsemester_typ['icon'] ?></span></td>
                                     <? else : ?>
                                     <td class="mvv-type">&nbsp;</td>
                                     <? endif; ?>
