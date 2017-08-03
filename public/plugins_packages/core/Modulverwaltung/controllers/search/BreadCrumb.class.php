@@ -21,23 +21,41 @@ class BreadCrumb
     {
         $this->trail = isset($_SESSION['mvv_trail']) ? $_SESSION['mvv_trail'] : array();
     }
-
-    public function append($name)
+    
+    public function append($object, $id = null)
     {
-        if ($init) {
-            $_SESSION['mvv_trail'] = array();
-            $this->trail = array();
-        }
-        
         $trail = $this->trail;
-        $trail[] = array('name' => $name, 'uri' => $_SERVER['REQUEST_URI']);
-        $newTrail = array();
+        if (is_object($object)) {
+            $id = $object->id;
+            $trail[$id] = [
+                'type' => get_class($object),
+                'uri' => $_SERVER['REQUEST_URI']
+            ];
+        } else if (is_array($object)) {
+            $id = reset($object)->id;
+            foreach ($object as $obj) {
+                if ($obj->id != $id) {
+                    $additional_objects[get_class($obj)] = $obj->id;
+                }
+            }
+            $trail[$id] = [
+                'type' => get_class($object[0]),
+                'addition' => $additional_objects,
+                'uri' => $_SERVER['REQUEST_URI']
+            ];
+        } else {
+            $trail[$id] = [
+                'name' => $object,
+                'uri' => $_SERVER['REQUEST_URI']
+            ];
+        }
+        $newTrail = [];
         $lastElement = false;
-        foreach ($trail as $order => $trail) {
+        foreach ($trail as $key => $trail_item) {
             if ($lastElement)
                 break;
-            $newTrail[$order] = $trail;
-            if ($trail['name'] === $name) {
+            $newTrail[$key] = $trail_item;
+            if ($key === $id) {
                 $lastElement = true;
             }
         }

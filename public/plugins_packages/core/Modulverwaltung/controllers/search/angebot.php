@@ -84,7 +84,7 @@ class Search_AngebotController extends MVVController
         array_walk($chars, 'link_chars', '<a href="#%s">%s</a>');
 
         $this->breadCrumb->init();
-        $this->breadCrumb->append(_('Studienangebot von A bis Z'));
+        $this->breadCrumb->append(_('Studienangebot von A bis Z'), 'A bis Z');
         $this->faecher = $result;
         $this->chars = $chars;
         $this->name = _('Studienangebot von A bis Z');
@@ -135,8 +135,7 @@ class Search_AngebotController extends MVVController
         $this->fach = Fach::find($fach_id);
         $this->abschluss = Abschluss::find($abschluss_id);
         $this->studiengaenge = $studiengaenge;
-        $this->breadCrumb->append($this->fach->getDisplayName()
-                . ' (' . $this->abschluss->getDisplayName() . ')');
+        $this->breadCrumb->append([$this->fach, $this->abschluss]);
         $this->url = 'search/angebot/studiengang';
 
         if ($this->abschluss && $studiengang_id) {
@@ -144,6 +143,12 @@ class Search_AngebotController extends MVVController
             $this->studiengangName = $studiengang->getDisplayName();
             $this->studiengang_id = $studiengang->getId();
             $this->info = $studiengang->beschreibung;
+        }
+        if(count($studiengaenge) == 1) {
+            foreach($studiengaenge as $studiengang) {
+                $this->redirect($this->url . '/' . $studiengang->id);
+                return;
+            }
         }
     }
 

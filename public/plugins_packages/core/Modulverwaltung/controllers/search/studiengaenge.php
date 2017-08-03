@@ -48,7 +48,7 @@ class Search_StudiengaengeController extends MVVController
         $this->abschluss_url = $this->url_for('abschlusskategorie/show/');
 
         $this->breadCrumb->init();
-        $this->breadCrumb->append(_('Studienangebot'));
+        $this->breadCrumb->append(_('Studienangebot'), 'Studienangebot');
     }
 
     public function kategorie_action($kategorie_id)
@@ -79,7 +79,7 @@ class Search_StudiengaengeController extends MVVController
                 $studiengaenge_abschluss[$studiengang->abschluss_id][$studiengang->getId()] = $studiengang;
             }
         }
-        $this->breadCrumb->append($kategorie->getDisplayName());
+        $this->breadCrumb->append($kategorie);
         $this->kategorie = $kategorie;
         $this->abschluesse = $abschluesse;
         $this->studiengaenge = $studiengaenge_abschluss;
@@ -105,7 +105,7 @@ class Search_StudiengaengeController extends MVVController
         $method = $studiengang->typ;
         $this->studiengangName = $studiengang->getDisplayName();
         $this->abschlussName = Abschluss::get($studiengang->abschluss_id)->getDisplayName();
-        $this->breadCrumb->append($this->studiengangName);
+        $this->breadCrumb->append($studiengang);
         $this->$method($studiengang_id);
     }
 
@@ -157,6 +157,16 @@ class Search_StudiengaengeController extends MVVController
         if (!$this->verlauf_url) {
             $this->verlauf_url = 'search/studiengaenge/verlauf';
         }
+
+        if(count($studiengang->stgteil_assignments) == 1) {
+            foreach($studiengang->stgteil_assignments as $assignment) {
+                $url = $this->verlauf_url . '/' . $assignment->stgteil_id . '/'. $assignment->stgteil_bez_id . '/' . $assignment->studiengang_id;
+                $response = $this->relay($url);
+                $this->content = $response->body;
+                $this->render_template('shared/content', $this->layout);
+            }
+            return;
+        }
         $this->render_template('search/studiengaenge/mehrfach', $this->layout);
     }
 
@@ -179,7 +189,7 @@ class Search_StudiengaengeController extends MVVController
             if (!$this->verlauf_url) {
                 $this->verlauf_url = 'search/studiengaenge/verlauf';
             }
-            $this->breadCrumb->append(Studiengang::get($studiengang_id)->getDisplayName());
+            $this->breadCrumb->append(Studiengang::find($studiengang_id));
             $this->render_template('search/studiengaenge/einfach', $this->layout);
         }
     }
@@ -290,10 +300,10 @@ class Search_StudiengaengeController extends MVVController
             if ($studiengang_id) {
                 if ($stgteil_bez_id) {
                     $this->stgTeilBez = StgteilBezeichnung::get($stgteil_bez_id);
-                    $this->breadCrumb->append($this->stgTeilBez->getDisplayName() . ': ' . $studiengangTeil->getDisplayName());
+                    $this->breadCrumb->append([$this->stgTeilBez, $studiengangTeil]);
                 } else {
                     $this->stgTeilBez = StgteilBezeichnung::get($stgteil_bez_id);
-                    $this->breadCrumb->append($studiengangTeil->getDisplayName());
+                    $this->breadCrumb->append($studiengangTeil);
                 }
                 $this->studiengang = Studiengang::get($studiengang_id);
             }
