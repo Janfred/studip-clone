@@ -90,7 +90,6 @@ javascripts:
     - javascripts/multi_select.js
     - javascripts/multi_person_search.js
     - javascripts/browse.js
-    - javascripts/tabs.js
     - javascripts/audio.js
     - javascripts/calendar.js
     - javascripts/schedule.js
