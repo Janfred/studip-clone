@@ -90,15 +90,12 @@ if (isset($_COOKIE['navigation-length'])) {
         <? endif; ?>
 
         <? if (is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm('autor')): ?>
-
-            <? $active = false;
-                if (Navigation::hasItem('/profile')) {
-                    $active = Navigation::getItem('/profile')->isActive();
-                }
+            <? $active = Navigation::hasItem('/profile')
+                      && Navigation::getItem('/profile')->isActive();
             ?>
 
             <!-- User-Avatar -->
-            <li class="header_avatar_container <?= $active ? 'active' : '' ?>" id="barTopAvatar">
+            <li class="header_avatar_container <? if ($active) echo 'active'; ?>" id="barTopAvatar">
 
             <? if (is_object($GLOBALS['perm']) && PersonalNotifications::isActivated() && $GLOBALS['perm']->have_perm('autor')) : ?>
                 <? $notifications = PersonalNotifications::getMyNotifications() ?>
@@ -130,43 +127,25 @@ if (isset($_COOKIE['navigation-length'])) {
                 <div id="notification_container"></div>
             <? endif; ?>
 
-
+            <? if (Navigation::hasItem('/avatar')): ?>
                 <div id="header_avatar_menu">
                 <?php
                     $action_menu = ContentGroupMenu::get();
                     $action_menu->setLabel(User::findCurrent()->getFullName());
                     $action_menu->setIcon(Avatar::getAvatar(User::findCurrent()->id)->getImageTag(Avatar::MEDIUM));
-                    $action_menu->addLink(
-                        URLHelper::getURL('dispatch.php/profile', array(), true),
-                        _('Profil'),
-                        Icon::create('person', 'clickable')
-                    );
-                    $action_menu->addLink(
-                        URLHelper::getURL('dispatch.php/files'),
-                        _('Meine Dateien'),
-                        Icon::create('folder-empty', 'clickable')
-                    );
-                    $action_menu->addLink(
-                        URLHelper::getURL('dispatch.php/settings/account'),
-                        _('Nutzerdaten'),
-                        Icon::create('key', 'clickable')
-                    );
-                    $action_menu->addLink(
-                        URLHelper::getURL('dispatch.php/settings/general'),
-                        _('Einstellungen'),
-                        Icon::create('admin', 'clickable')
-                    );
-                    $action_menu->addLink(
-                        URLHelper::getURL('logout.php'),
-                        _('Logout'),
-                        Icon::create('door-leave', 'clickable')
-                    );
+
+                    foreach (Navigation::getItem('/avatar') as $subnav) {
+                        $action_menu->addLink(
+                            $subnav->getURL(),
+                            $subnav->getTitle(),
+                            $subnav->getImage()
+                        );
+                    }
                 ?>
                 <?= $action_menu->render(); ?>
-               </div>
-               <?= Icon::create('arr_1down', 'info_alt', array('id' => 'avatar-arrow')); ?>
-
-
+                </div>
+                <?= Icon::create('arr_1down', 'info_alt', ['id' => 'avatar-arrow']); ?>
+            <? endif; ?>
             </li>
         <? endif; ?>
 

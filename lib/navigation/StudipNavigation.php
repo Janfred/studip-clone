@@ -59,6 +59,9 @@ class StudipNavigation extends Navigation
 
             // search page
             $this->addSubNavigation('search', new SearchNavigation());
+
+            // avatar menu
+            $this->addSubNavigation('avatar', new AvatarNavigation());
         }
 
         // tools page
