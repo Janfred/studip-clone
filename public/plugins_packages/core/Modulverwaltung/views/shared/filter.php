@@ -75,9 +75,6 @@
         <? if ($perm_institutes !== false) : ?>
         <label>
             <?= _('Verantw. Einrichtung:') ?><br>
-            <select name="institut_filter" class="sidebar-selectlist nested-select submit-upon-select">
-                <option value=""><?= _('-- Einrichtung wählen --') ?></option>
-=======
             <select name="institut_filter" class="sidebar-selectlist nested-select" onchange="document.getElementById('index_filter').submit();">
                 <option value=""><?= _('Alle') ?></option>
                 <? $fak = '' ?>
@@ -85,18 +82,6 @@
                     <?
                     if (count($perm_institutes) == 0
                             || in_array($institut->getId(), $perm_institutes)) {
-                        /*
-                        if ($institut->isFaculty()) {
-                            $fak = $institut->fakultaets_id;
-                            echo '<option value="' . $institut->getId()
-                                . ($institut->getId() == $selected_institut ?
-                                        '" selected' : '"')
-                                . ' class="nested-item-header">'
-                                . htmlReady($institut->name
-                                . ' (' . $institut->count_objects . ')') . '</option>';
-                        } else {
-                         * 
-                         */
                             echo '<option value="' . $institut->getId()
                                 . ($institut->getId() == $selected_institut ?
                                     '" selected' : '"')
@@ -104,7 +89,6 @@
                                 . htmlReady($institut->name
                                 . ' (' . $institut->count_objects . ')')
                                 . '</option>';
-                     //   }
                     }
                     ?>
                 <? endforeach; ?>
