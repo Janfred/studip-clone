@@ -366,7 +366,7 @@ class Moadb extends Migration
 
         $folder_type = $folder_type == 'StandardFolder' && isset($folder['permission']) && $folder['permission'] != 7 ? 'PermissionEnabledFolder' : $folder_type;
         $data_content = $data_content == '' && isset($folder['permission']) && $folder['permission'] != 7 ? json_encode(['permission' => $folder['permission']]): $data_content;
-        if ($folder['range_id']) {
+        if (isset($folder['range_id'])) {
             $insert_folder->execute(array($folder['folder_id'], $folder['user_id'], $folder['range_id'], $range_id, $range_type, $folder_type, $folder['name'], $data_content, (string)$folder['description'], $folder['mkdate'], $folder['chdate']));
         }
         $subfolders = $db->fetchAll("SELECT * FROM folder WHERE range_id = ?", array($folder['folder_id']));
