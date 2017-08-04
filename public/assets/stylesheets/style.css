@@ -8028,6 +8028,12 @@ table.default tr.subcourses td:nth-child(-n+4) {
   #web_migrate div.index_container {
     top: 0;
   }
+  #index div.index_container .messagebox,
+  #request_new_password div.index_container .messagebox,
+  #web_migrate div.index_container .messagebox {
+    margin-top: 120px;
+    margin-left: 20px;
+  }
   #index div.index_container #background-desktop,
   #request_new_password div.index_container #background-desktop,
   #web_migrate div.index_container #background-desktop {
@@ -8037,12 +8043,15 @@ table.default tr.subcourses td:nth-child(-n+4) {
   #request_new_password div.index_container #background-mobile,
   #web_migrate div.index_container #background-mobile {
     display: block;
+    margin-top: 85px;
   }
   #index div.index_container div.index_main,
   #request_new_password div.index_container div.index_main,
   #web_migrate div.index_container div.index_main {
-    margin-top: 150px;
-    width: 100%;
+    margin-top: 36px;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: calc(100% - 40px);
   }
   #index div.index_container div.index_main nav,
   #request_new_password div.index_container div.index_main nav,

@@ -11,26 +11,34 @@
     #layout_page {
         margin: 15px 5px;
     }
-  #index, #request_new_password, #web_migrate {
-    div.index_container {
-      top: 0;
+    #index, #request_new_password, #web_migrate {
+        div.index_container {
+            top: 0;
 
-      #background-desktop {
-        display: none;
-      }
+            .messagebox {
+                margin-top: 120px;
+                margin-left: 20px;
+            }
 
-      #background-mobile {
-        display: block;
-      }
+            #background-desktop {
+                display: none;
+            }
 
-      div.index_main {
-        margin-top: 150px;
-        width: 100%;
+            #background-mobile {
+                display: block;
+                margin-top: 85px;
+            }
 
-        nav {
-          display: inline;
+            div.index_main {
+                margin-top: 36px;
+                padding-left: 20px;
+                padding-right: 20px;
+                width: ~"calc(100% - 40px)";
+
+                nav {
+                    display: inline;
+                }
+            }
         }
-      }
     }
-  }
 });
