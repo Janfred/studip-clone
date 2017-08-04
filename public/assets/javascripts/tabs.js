@@ -29,7 +29,6 @@
                 }), function (item) {
                     return $(item).data('orig-text', $(item).text());
                 });
-                $(window).resize(this.compress);
             }
         }
 
@@ -107,7 +106,7 @@
     $(function () {
         var tabs;
         tabs = new STUDIP.Tabs($("#tabs"));
-        return tabs.compress();
+        return tabs;
     });
 
 }).call(this);
