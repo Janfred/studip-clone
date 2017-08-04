@@ -89,10 +89,6 @@ else
 
 echo $header_template->render();
 
-if (Config::get()->SHOW_TERMS_ON_FIRST_LOGIN && is_object($GLOBALS['user']) && $GLOBALS['user']->id != 'nobody')
-{
-    require_once('lib/terms.inc.php');
-    check_terms($GLOBALS['user']->id, $GLOBALS['_language_path']);
-}
+
 
 ?>

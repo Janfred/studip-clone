@@ -46,40 +46,53 @@ function check_terms($userid, $_language_path) {
 
     if ($GLOBALS['auth']->auth['uid'] != 'nobody' && !empty($GLOBALS['user']) && !$GLOBALS['user']->cfg->getValue('TERMS_ACCEPTED'))
     {
+        ob_start();
+        PageLayout::setTitle(_('Nutzungsbedingungen'));
 ?>
 
-<table align="center" border="0" cellpadding="1" cellspacing="0">
-    <tr>
-        <td class="table_header_bold">
-            <?= Icon::create('door-enter', 'info_alt')->asImg() ?>
-            <b><?=_("Nutzungsbedingungen")?></b>
-        </td>
-    </tr>
-    <tr>
-        <td class="blank">
-        <p><br><?=_("Stud.IP ist ein Open Source Projekt und steht unter der Gnu General Public License (GPL). Das System befindet sich in der ständigen Weiterentwicklung.")?></p>
-        <p><?=_("Um den vollen Funktionsumfang von Stud.IP nutzen zu können, müssen Sie sich am System anmelden.")?><br>
-        <?=_("Das hat viele Vorzüge:")?></p>
+<section class="contentbox">
+    <header>
+        <h1><?= _('Was ist Stud.IP?') ?></h1>
+    </header>
+    <section>
+        <?= _('Stud.IP ist ein Open Source Projekt und steht unter der Gnu General Public License (GPL). Das System befindet sich in der ständigen Weiterentwicklung.') ?>
+
+        <? printf(_('Für Vorschläge und Kritik findet sich immer ein Ohr. Wenden Sie sich hierzu entweder an die %sStud.IP Crew%s oder direkt an Ihren lokalen %sSupport%s.'),
+            "<a href=\"mailto:studip-users@lists.sourceforge.net\">", "</a>",
+            "<a href=\"dispatch.php/siteinfo/show\">", "</a>") ?>
+        <br><br>
+        <?= _('Um den vollen Funktionsumfang von Stud.IP nutzen zu können, müssen Sie sich am System anmelden.') ?><br>
+        <?= _('Das hat viele Vorzüge:') ?><br>
+
         <ul>
-            <li><?=_("Zugriff auf Ihre Daten von jedem internetfähigen Rechner weltweit,")?></li>
-            <li><?=_("Anzeige neuer Mitteilungen oder Dateien seit Ihrem letzten Besuch,")?></li>
-            <li><?=_("Ein eigenes Profil im System,")?></li>
-            <li><?=_("die Möglichkeit anderen Personen Nachrichten zu schicken oder mit ihnen zu chatten,")?></li>
-            <li><?=_("und vieles mehr.")?></li>
+            <li><?= _('Zugriff auf Ihre Daten von jedem internetfähigen Rechner weltweit,') ?>
+            <li><?= _('Anzeige neuer Mitteilungen oder Dateien seit Ihrem letzten Besuch,') ?>
+            <li><?= _('Eine eigenes Profil im System,') ?>
+            <li><?= _('die Möglichkeit anderen Personen Nachrichten zu schicken oder mit ihnen zu chatten,') ?>
+            <li><?= _('und vieles mehr.') ?></li>
         </ul>
-        <p><?=_("Mit der Anmeldung werden die nachfolgenden Nutzungsbedingungen akzeptiert:")?></p>
-        <? include("locale/$_language_path/LC_HELP/pages/nutzung.html"); ?>
-        <p align="center">
-        <a href="<?= URLHelper::getLink(Request::url(), array('i_accept_the_terms' => 'yes')) ?>"><b><?=_("Ich erkenne die Nutzungsbedingungen an")?></b></a>
-        </p>
-        <br>
-        </td>
-    </tr>
-</table>
+        <?= _('Mit der Anmeldung werden die nachfolgenden Nutzungsbedingungen akzeptiert:') ?>
+    </section>
+</section>
+
+<? include('locale/' . $GLOBALS['_language_path'] . '/LC_HELP/pages/nutzung.html'); ?>
+
+<footer>
+    <div class="button-group">
+        <?= Studip\LinkButton::create(_('Ich erkenne die Nutzungsbedingungen an'), URLHelper::getLink(Request::url(), array('i_accept_the_terms' => 'yes'))) ?>
+        <?= Studip\LinkButton::create(_('Ich stimme den Nutzungsbedingungen nicht zu'), URLHelper::getLink('logout.php')) ?>
+    </div>
+</footer>
 
 <?php
-    include ('lib/include/html_end.inc.php');
-    die;
+    $layout = $GLOBALS['template_factory']->open('layouts/base.php');
+
+    $layout->content_for_layout = ob_get_clean();
+
+    echo $layout->render();
+    page_close();
+    die();
     }
+
 }
 ?>

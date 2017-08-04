@@ -5,7 +5,7 @@
     <section>
         <?= _('Stud.IP ist ein Open Source Projekt und steht unter der Gnu General Public License (GPL). Das System befindet sich in der ständigen Weiterentwicklung.') ?>
 
-        <? printf(_('Für Vorschläge und Kritik findet sich immer ein Ohr. Wenden Sie sich hierzu entweder an die %sStud.IP Crew%s oder direkt an die %sEntwickler%s.'),
+        <? printf(_('Für Vorschläge und Kritik findet sich immer ein Ohr. Wenden Sie sich hierzu entweder an die %sStud.IP Crew%s oder direkt an Ihren lokalen %sSupport%s.'),
             "<a href=\"mailto:studip-users@lists.sourceforge.net\">", "</a>",
             "<a href=\"dispatch.php/siteinfo/show\">", "</a>") ?>
         <br><br>

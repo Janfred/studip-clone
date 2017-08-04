@@ -147,3 +147,9 @@ if ($user_did_login) {
 if ($seminar_open_redirected) {
     startpage_redirect(UserConfig::get($user->id)->PERSONAL_STARTPAGE);
 }
+
+if (Config::get()->SHOW_TERMS_ON_FIRST_LOGIN && is_object($GLOBALS['user']) && $GLOBALS['user']->id != 'nobody')
+{
+    require_once('lib/terms.inc.php');
+    check_terms($GLOBALS['user']->id, $GLOBALS['_language_path']);
+}
