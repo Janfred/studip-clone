@@ -410,7 +410,7 @@ class Studiengang extends ModuleManagementModelTreeItem
                 . 'ON Institute.fakultaets_id = faculties.Institut_id '
                 . Fachbereich::getFilterSql($filter, true)
                 . 'GROUP BY Institute.Institut_id '
-                . 'ORDER BY faculty_name, is_faculty DESC, name', array());
+                . 'ORDER BY name', array());
     }
 
     /**

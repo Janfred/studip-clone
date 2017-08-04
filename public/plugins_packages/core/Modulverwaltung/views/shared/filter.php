@@ -21,8 +21,8 @@
     <? if (isset($zuordnungen)) : ?>
     <label>
         <?= _('Zugeordnet zu Objekten:') ?>
-        <select name="zuordnung_filter" class="sidebar-selectlist submit-upon-select">
-            <option value=""><?= _('-- Objekt wählen --') ?></option>
+        <select name="zuordnung_filter" class="sidebar-selectlist" onchange="document.getElementById('index_filter').submit();">
+            <option value=""><?= _('Alle') ?></option>
             <? foreach ($zuordnungen as $object_type => $zuordnung) : ?>
             <option value="<?= $object_type ?>"
                 <?= ($object_type == $selected_zuordnung ? ' selected' : '') ?>><?= htmlReady($object_type::getClassDisplayName()) ?></option>
@@ -33,8 +33,8 @@
     <? if (isset($status)) : ?>
     <label>
         <?= _('Status:') ?><br>
-        <select name="status_filter" class="sidebar-selectlist submit-upon-select">
-            <option value=""><?= _('-- Status wählen --') ?></option>
+        <select name="status_filter" class="sidebar-selectlist" onchange="document.getElementById('index_filter').submit();">
+            <option value=""><?= _('Alle') ?></option>
             <? foreach ($status_array as $key => $stat) : ?>
             <? if ($status[$key]['count_objects']) : ?>
             <option value="<?= $key ?>"
@@ -50,8 +50,8 @@
     <? if (isset($kategorien)) : ?>
     <label>
         <?= _('Kategorie:') ?><br>
-        <select name="kategorie_filter" class="sidebar-selectlist submit-upon-select">
-            <option value=""><?= _('-- Kategorie wählen --') ?></option>
+        <select name="kategorie_filter" class="sidebar-selectlist" onchange="document.getElementById('index_filter').submit();">
+            <option value=""><?= _('Alle') ?></option>
             <? foreach ($kategorien as $kategorie) : ?>
             <option value="<?= $kategorie->getId() ?>"
                 <?= ($kategorie->getId() == $selected_kategorie || (!isset($abschluesse) || $abschluesse[$selected_abschluss]->kategorie_id == $kategorie->getId()) ? ' selected' : '') ?>><?= htmlReady($kategorie->name) . ' (' . $kategorie->count_objects . ')'  ?></option>
@@ -63,7 +63,7 @@
     <label>
         <?= _('Abschluss:') ?><br>
         <select name="abschluss_filter" class="sidebar-selectlist" onChange="document.getElementById('index_filter').submit();">
-            <option value=""><?= _('-- Abschluss wählen --') ?></option>
+            <option value=""><?= _('Alle') ?></option>
             <? foreach ($abschluesse as $abschluss) : ?>
             <option value="<?= $abschluss->getId() ?>"<?= ($abschluss->getId() == $selected_abschluss ? ' selected' : '') ?>><?= htmlReady($abschluss->name) . ' (' . $abschluss->count_objects . ')' ?></option>
             <? endforeach; ?>
@@ -77,11 +77,15 @@
             <?= _('Verantw. Einrichtung:') ?><br>
             <select name="institut_filter" class="sidebar-selectlist nested-select submit-upon-select">
                 <option value=""><?= _('-- Einrichtung wählen --') ?></option>
+=======
+            <select name="institut_filter" class="sidebar-selectlist nested-select" onchange="document.getElementById('index_filter').submit();">
+                <option value=""><?= _('Alle') ?></option>
                 <? $fak = '' ?>
                 <? foreach ($institute as $institut) : ?>
                     <?
                     if (count($perm_institutes) == 0
                             || in_array($institut->getId(), $perm_institutes)) {
+                        /*
                         if ($institut->isFaculty()) {
                             $fak = $institut->fakultaets_id;
                             echo '<option value="' . $institut->getId()
@@ -91,15 +95,8 @@
                                 . htmlReady($institut->name
                                 . ' (' . $institut->count_objects . ')') . '</option>';
                         } else {
-                            /*
-                            if ($fak != $institut->fakultaets_id) {
-                                $fak = $institut->fakultaets_id;
-                                echo '<option value="" disabled class="nested-item-header">'
-                                    . htmlReady($institut->faculty_name)
-                                    . '</option>';
-                            }
-                             * 
-                             */
+                         * 
+                         */
                             echo '<option value="' . $institut->getId()
                                 . ($institut->getId() == $selected_institut ?
                                     '" selected' : '"')
@@ -107,7 +104,7 @@
                                 . htmlReady($institut->name
                                 . ' (' . $institut->count_objects . ')')
                                 . '</option>';
-                        }
+                     //   }
                     }
                     ?>
                 <? endforeach; ?>
@@ -120,12 +117,12 @@
         <? if ($perm_institutes !== false) : ?>
         <label>
             <?= $fachbereich_caption ?: _('Fachbereiche:') ?><br>
-            <select name="fachbereich_filter" class="sidebar-selectlist submit-upon-select">
-                <option value=""><?= _('-- Fachbereich wählen --') ?></option>
+            <select name="fachbereich_filter" class="sidebar-selectlist nested-select institute-list" onchange="document.getElementById('index_filter').submit();">
+                <option value=""><?= _('Alle') ?></option>
                 <? foreach ($fachbereiche as $fachbereich) : ?>
                     <? if (count($perm_institutes) == 0
                             || in_array($fachbereich->getId(), $perm_institutes)) : ?>
-                    <option value="<?= $fachbereich->getId() ?>"<?= ($fachbereich->getId() == $selected_fachbereich ? ' selected' : '') ?>><?= htmlReady($fachbereich->getDisplayName()) . ' (' . $fachbereich->count_objects . ')' ?></option>
+                    <option class="nested-item" value="<?= $fachbereich->getId() ?>"<?= ($fachbereich->getId() == $selected_fachbereich ? ' selected' : '') ?>><?= htmlReady($fachbereich->getDisplayName()) . ' (' . $fachbereich->count_objects . ')' ?></option>
                     <? endif; ?>
                 <? endforeach; ?>
             </select>

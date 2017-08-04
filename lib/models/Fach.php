@@ -354,7 +354,7 @@ class Fach extends ModuleManagementModelTreeItem
                 . Fachbereich::getFilterSql(array('mvv_stg_stgteil.studiengang_id'
                     => $studiengang_ids))
                 . 'GROUP BY Institute.Institut_id '
-                . 'ORDER BY is_fak DESC, fak_name ASC, name ASC');
+                . 'ORDER BY name ASC');
     }
 
     /**

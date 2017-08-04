@@ -1314,7 +1314,7 @@ class Module_ModuleController extends MVVController
         $template->set_attribute('institute_count', 'count_objects');
         $template->set_attribute('selected_institut',
                 $this->filter['mvv_modul_inst.institut_id']);
-
+        
         // Semesters
         $semesters = new SimpleCollection(Semester::getAll());
         $semesters = $semesters->orderBy('beginn desc');
