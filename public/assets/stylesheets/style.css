@@ -2097,9 +2097,17 @@ form.default label.packed button {
   text-align: left;
   white-space: nowrap;
 }
-#barTopAvatar .action-menu-content a,
-#header_avatar_menu .action-menu-content a {
+#barTopAvatar .action-menu-content a:link,
+#header_avatar_menu .action-menu-content a:link,
+#barTopAvatar .action-menu-content a:visited,
+#header_avatar_menu .action-menu-content a:visited {
   color: #28497c;
+}
+#barTopAvatar .action-menu-content a:hover,
+#header_avatar_menu .action-menu-content a:hover,
+#barTopAvatar .action-menu-content a:active,
+#header_avatar_menu .action-menu-content a:active {
+  color: #d60000;
 }
 #barTopAvatar .action-menu-content div,
 #header_avatar_menu .action-menu-content div {
@@ -4733,7 +4741,7 @@ input.quicksearchbox {
   padding: 10px;
   position: fixed;
   top: 20px;
-  z-index: 3000;
+  z-index: 1000;
 }
 #skip_link_navigation ul {
   list-style-type: none;

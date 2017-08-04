@@ -123,8 +123,13 @@
         text-align: left;
         white-space: nowrap;
 
-        a {
+        a:link,
+        a:visited {
             color: @base-color;
+        }
+        a:hover,
+        a:active {
+            color: @active-color;
         }
 
         div {
