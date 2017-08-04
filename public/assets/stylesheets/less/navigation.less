@@ -33,28 +33,12 @@ body:not(.fixed) #barTopMenu {
             }
         }
 
-        img.original {
+        img {
             margin: 5px 0px;
             .square(28px);
         }
-        canvas.punch {
-            display: none;
-            margin: 0px;
-            margin-bottom: 5px;
-            width: 42px;
-            height: 32px;
-        }
         &[data-badge]:not([data-badge="0"]) {
             position: relative;
-
-            &.canvasready {
-                img.original {
-                    display: none;
-                }
-                canvas.punch {
-                    display: inline-block;
-                }
-            }
 
             &::before, &::after {
                 position: absolute;
@@ -65,29 +49,35 @@ body:not(.fixed) #barTopMenu {
 
             // Just draw the badge
             &::before {
-                background-color: @red;
-                border-radius: 8px;
-                content: ' ';
-                display: inline-block;
                 .square(16px);
-            }
 
-            // Write the text on top of the badge so it will never
-            // expand the badge into regions we don't want.
-            // Text may overflow into the icon. There's no good way
-            // to prevent that...
-            &::after {
-                content: attr(data-badge);
+                background-color: @red;
+                border: 3px solid @dark-gray-color-5;
+                border-radius: 50%;
                 color: white;
-                width: 16px;
-                text-align: right;
-
+                content: attr(data-badge);
+                display: inline-block;
                 font-size: 10px;
-                text-align: center;
-                text-overflow: ellipsis;
-                vertical-align: top;
-                white-space: nowrap;
+                z-index: 2;
             }
+
+            // // Write the text on top of the badge so it will never
+            // // expand the badge into regions we don't want.
+            // // Text may overflow into the icon. There's no good way
+            // // to prevent that...
+            // &::after {
+            //     content: attr(data-badge);
+            //     color: white;
+            //     width: 16px;
+            //     text-align: right;
+            //
+            //     font-size: 10px;
+            //     text-align: center;
+            //     text-overflow: ellipsis;
+            //     vertical-align: top;
+            //     white-space: nowrap;
+            //     z-index: 3;
+            // }
         }
     }
 
@@ -104,8 +94,7 @@ body:not(.fixed) #barTopMenu {
         }
     }
 
-    img,
-    canvas {
+    img {
         -webkit-filter:hue-rotate(350deg) saturate(8.7%) brightness(177.3%) !important;
         filter: hue-rotate(350deg) saturate(8.7%) brightness(177.3%) !important;
     }
@@ -132,7 +121,6 @@ body:not(.fixed) #barTopMenu {
             opacity: 1;
         }
         > a {
-            canvas,
             img {
                 -webkit-filter:hue-rotate(0deg) saturate(100%) brightness(100%) !important;
                 filter: hue-rotate(0deg) saturate(100%) brightness(100%) !important;
@@ -204,7 +192,7 @@ body:not(.fixed) #barTopMenu {
 
                     padding: 0.5em 1em;
                 }
-                img, canvas {
+                img {
                     .flex-item(1, 0, 24px);
                     .square(24px);
                     margin: 2px 0.7em 0 0;
@@ -275,12 +263,6 @@ body.fixed {
 
         // Hide menu
         display: none;
-
-        // Hide action menu and canvas (which is kinda obsolete)
-        #nav_extra,
-        canvas {
-            display: none;
-        }
 
         img {
             filter: url('filter.svg#brightness'); // IE?
