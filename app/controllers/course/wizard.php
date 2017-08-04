@@ -123,7 +123,7 @@ class Course_WizardController extends AuthenticatedController
             if ($this->getValues()) {
                 // Batch creation of several courses at once.
                 if ($batch = Request::getArray('batchcreate')) {
-                    $numbering = $batch['numbering'] == 'number' ? 1 : 'A';
+                    $numbering = ($batch['numbering'] == 'number' ? 1 : 'A');
                     $success = 0;
                     $failed = 0;
                     // Create given number of courses.
@@ -131,7 +131,7 @@ class Course_WizardController extends AuthenticatedController
                         if ($newcourse = $this->createCourse($i == $batch['number'] ? true : false)) {
                             // Add corresponding number/letter to name or number of newly created course.
                             if ($batch['add_number_to'] == 'name') {
-                                $newcourse->name += ' ' . $numbering;
+                                $newcourse->name .= ' ' . $numbering;
                             } else if ($batch['add_number_to'] == 'number') {
                                 $newcourse->veranstaltungsnummer = $batch['numbering'] == 'number' ?
                                     $numbering : $newcourse->veranstaltungsnummer . ' ' . $numbering;
@@ -159,7 +159,7 @@ class Course_WizardController extends AuthenticatedController
                     }
 
                     $this->redirect(URLHelper::getURL('dispatch.php/course/grouping/children',
-                        ['cid' => $this->flash['batchcreate']['parent']]));
+                        ['cid' => $batch['parent']]));
                 } else {
                     if ($this->course = $this->createCourse()) {
                         // A studygroup has been created.
