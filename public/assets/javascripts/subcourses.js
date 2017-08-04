@@ -24,7 +24,16 @@
             $.ajax(
                 $(this).data('get-subcourses-url'),
                 {
+                    beforeSend: function(xhr, settings) {
+                        $('<div class="loading" style="padding: 10px">').html(
+                                $('<img>').
+                                    attr('src', STUDIP.ASSETS_URL + 'images/ajax-indicator-black.svg').
+                                    css('width', '24').
+                                    css('height', '24')
+                        ).insertAfter(row);
+                    },
                     success: function (data, status, xhr) {
+                        $(row).siblings('div.loading').remove();
                         $(data).insertAfter(row);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
