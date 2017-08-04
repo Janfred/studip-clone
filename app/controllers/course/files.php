@@ -27,7 +27,7 @@ class Course_FilesController extends AuthenticatedController
 
         PageLayout::addSqueezePackage('tablesorterfork');
         PageLayout::setHelpKeyword('Basis.Dateien');
-        PageLayout::setTitle($this->course->getFullname() . ' - ' . _('Dateien'));
+        PageLayout::setTitle(Context::get()->getFullname() . ' - ' . _('Dateien'));
 
         Navigation::activateItem('/course/files');
     }
