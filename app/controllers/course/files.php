@@ -127,7 +127,7 @@ class Course_FilesController extends AuthenticatedController
 
         //find all files in all subdirectories:
         list($this->files, $this->folders) = array_values(FileManager::getFolderFilesRecursive($this->topFolder, $GLOBALS['user']->id));
-
+        $this->files = SimpleCollection::createFromArray($this->files)->orderBy('chdate desc');
         $this->range_type = 'course';
         $this->render_template('files/flat.php', $this->layout);
     }

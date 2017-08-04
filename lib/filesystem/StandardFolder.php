@@ -250,7 +250,7 @@ class StandardFolder implements FolderType
         // that have been added to this folder aren't included in
         // $this->folderdata->subfolders although they are in the database.
         $subfolders = [];
-        $database_subfolders = Folder::findByParent_id($this->getId());
+        $database_subfolders = Folder::findByParent_id($this->getId(), "ORDER BY name");
         foreach ($database_subfolders as $subfolder) {
             //check FolderType of subfolder
             $subfolders[] = $subfolder->getTypedFolder();
@@ -266,7 +266,7 @@ class StandardFolder implements FolderType
         // We must load the files (FileRefs) directly from the database
         // since files that were added to this folder object after it was
         // created are not included in the file_refs attribute:
-        return FileRef::findByFolder_id($this->getId());
+        return FileRef::findByFolder_id($this->getId(), "ORDER BY name");
     }
 
     /**
