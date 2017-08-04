@@ -79,7 +79,7 @@ function check_terms($userid, $_language_path) {
 
 <footer>
     <div class="button-group">
-        <?= Studip\LinkButton::create(_('Ich erkenne die Nutzungsbedingungen an'), URLHelper::getLink(Request::url(), array('i_accept_the_terms' => 'yes'))) ?>
+        <?= Studip\LinkButton::create(_('Ich erkenne die Nutzungsbedingungen an'), URLHelper::getLink("", array('i_accept_the_terms' => 'yes'))) ?>
         <?= Studip\LinkButton::create(_('Ich stimme den Nutzungsbedingungen nicht zu'), URLHelper::getLink('logout.php')) ?>
     </div>
 </footer>
