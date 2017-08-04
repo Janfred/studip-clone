@@ -34,7 +34,7 @@ if (isset($_COOKIE['navigation-length'])) {
         <? if (Navigation::hasItem('/links')): ?>
             <? foreach (Navigation::getItem('/links') as $nav): ?>
                 <? if ($nav->isVisible()) : ?>
-                    <li <? if ($nav->isActive()) echo 'class="active"'; ?>>
+                    <li class="<? if ($nav->isActive()) echo 'active'; ?> <?= htmlReady($nav->getLinkAttributes()['class']) ?>">
                         <a
                             <? if (is_internal_url($url = $nav->getURL())) : ?>
                                 href="<?= URLHelper::getLink($url) ?>"

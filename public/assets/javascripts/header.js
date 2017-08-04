@@ -1,10 +1,10 @@
-/*jslint browser: true, white: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, newcap: true, immed: true, indent: 4, onevar: false */
-/*global window, $, jQuery, _ */
+/*jslint browser: true, nomen: true */
+/*global jQuery, STUDIP, _ */
 
-(function ($) {
+(function ($, STUDIP) {
+    'use strict';
 
     var fold,
-        $wrapper,
         was_below_the_fold = false,
         scroll = function (scrolltop) {
             var is_below_the_fold = scrolltop > fold,
@@ -47,38 +47,15 @@
         if ($('#barBottomContainer').length > 0) {
             STUDIP.HeaderMagic.enable();
         }
-
-        $(window).on('scroll resize', function() {
-            moveTopAvatar();
-        });
-    });
-
-    $('#barBottomright').ready(function(){
-        $('#barBottomright ul li:not(".action-menu-item"):contains("Logout")').addClass('responsive-visible');
-    })
-
-    $('#notification_container').ready(function(){
-        moveTopAvatar();
-    });
-
-    function moveTopAvatar() {
-        var should_move = $(window).scrollTop() >= $('#flex-header').offset().top
-                          && !$('html').is('.responsive-display');
-
-        $('#notification_container').toggleClass('fixed', should_move);
-        $('#barTopAvatar').toggleClass('fixed', should_move);
-        $('#barTopAvatar .action-menu-icon').toggleClass('fixed', should_move);
-        $('#barTopAvatar .action-menu-content').toggleClass('fixed', should_move);
-    };
-
-    $(document).on('click', '#avatar-arrow', function (event) {
+    }).on('click', '#avatar-arrow', function (event) {
         event.stopPropagation();
         $('#header_avatar_menu .action-menu-icon').trigger('click');
     });
 
-}(jQuery));
+}(jQuery, STUDIP));
 
 (function ($) {
+    'use strict';
 
     // Render a version of the icon with a punched out area for the badge
     function renderCanvas(canvas, width, height) {

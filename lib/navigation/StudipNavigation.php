@@ -92,7 +92,9 @@ class StudipNavigation extends Navigation
 
         // login / logout
         if (is_object($user) && $user->id != 'nobody') {
-            $links->addSubNavigation('logout', new Navigation(_('Logout'), 'logout.php'));
+            $nav = new Navigation(_('Logout'), 'logout.php');
+            $nav->setLinkAttributes(['class' => 'responsive-visible']);
+            $links->addSubNavigation('logout', $nav);
         } else {
             if (in_array('CAS', $GLOBALS['STUDIP_AUTH_PLUGIN'])) {
                 $links->addSubNavigation('login_cas', new Navigation(_('Login CAS'), Request::url(), array('again' => 'yes', 'sso' => 'cas')));
