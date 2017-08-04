@@ -6766,7 +6766,7 @@ div.index_container {
   top: 111px;
   bottom: 0px;
   width: 100%;
-  height: calc(100% - 81px);
+  height: calc(100% - 71px);
 }
 div.index_container ul#tabs {
   display: none;
@@ -6790,14 +6790,14 @@ div.index_container #background-mobile {
 }
 div.index_container div.messagebox {
   margin-left: 50px;
-  margin-top: 25px;
+  margin-top: 50px;
   width: 428px;
 }
 div.index_container div.index_main {
   background-color: rgba(255, 255, 255, 0.8);
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
   margin-left: 50px;
-  margin-top: 50px;
+  margin-top: 25px;
   width: 500px;
 }
 div.index_container div.index_main > div {
