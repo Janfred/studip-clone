@@ -1,5 +1,3 @@
-<h1><?= _('Unterveranstaltungen') ?></h1>
-
 <form class="default" action="<?= $controller->url_for('course/grouping/assign_child') ?>">
     <fieldset>
         <legend>

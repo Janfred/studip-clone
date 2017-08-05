@@ -1,6 +1,3 @@
-<h1>
-    <?= _('Zuordnung zu Hauptveranstaltung') ?>
-</h1>
 <? if ($parent) : ?>
     <form class="default" action="<?= $controller->url_for('course/grouping/unassign_parent') ?>">
         <section>
