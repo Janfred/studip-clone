@@ -14,7 +14,7 @@ $attributes = function (array $attributes) {
 ?>
 <nav class="action-menu">
     <a class="action-menu-icon" title="<?= htmlReady($label) ?>"
-       aria-expanded="false" aria-label="<?= htmlReady($aria_label) ?>">
+       aria-expanded="false" aria-label="<?= htmlReady($aria_label) ?>" href="#">
         <?= $image ?>
     </a>
     <div class="action-menu-content">

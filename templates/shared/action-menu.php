@@ -13,7 +13,7 @@ $attributes = function (array $attributes) {
 };
 ?>
 <nav class="action-menu">
-    <a class="action-menu-icon" title="<?= _('Aktionen') ?>" aria-expanded="false" aria-label="<?= _("Aktionsmenü") ?>">
+    <a class="action-menu-icon" title="<?= _('Aktionen') ?>" aria-expanded="false" aria-label="<?= _("Aktionsmenü") ?>" href="#">
         <div></div>
         <div></div>
         <div></div>

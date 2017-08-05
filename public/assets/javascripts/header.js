@@ -49,9 +49,9 @@
         if ($('#barBottomContainer').length > 0) {
             STUDIP.HeaderMagic.enable();
         }
-    }).on('click', '#avatar-arrow', function (event) {
+    }).on('mousedown', '#avatar-arrow', function (event) {
         event.stopPropagation();
-        $('#header_avatar_menu .action-menu-icon').trigger('click');
+        $('#header_avatar_menu .action-menu-icon').trigger('mousedown');
     });
 
 }(jQuery, STUDIP));

@@ -5,8 +5,16 @@
     'use strict';
 
     // Open action menu on click on the icon
-    $(document).on('click', '.action-menu-icon', function (event) {
+    $(document).on('mousedown focus', '.action-menu-icon', function (event) {
         var menu = $(this).closest('.action-menu');
+        if ((event.type !== "mousedown") && menu.is(".bymousedown")) {
+            menu.removeClass("bymousedown");
+            event.stopPropagation();
+            return false;
+        }
+        if (event.type === "mousedown") {
+            menu.addClass("bymousedown");
+        }
 
         // Close other menus (and remove contentbox overflow handling)
         if (!menu.is('.active')) {
