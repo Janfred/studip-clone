@@ -4648,7 +4648,7 @@ form#quicksearch {
   align-items: center;
 }
 input.quicksearchbox {
-  background-color: #e7ebf1;
+  background-color: #f3f5f8;
   border: 1px solid #b1b4b9;
   color: #28497c;
   font-size: 14px;
@@ -9762,10 +9762,6 @@ label[for="responsive-toggle"]::before {
   vertical-align: text-top;
   width: 20px;
 }
-#responsive-toggle:checked + #responsive-navigation {
-  left: 0;
-  height: 100vh;
-}
 #responsive-navigation {
   background-color: #365a90;
   background-image: -moz-linear-gradient(left, #1f4171, #365a90);
@@ -9782,10 +9778,11 @@ label[for="responsive-toggle"]::before {
   -moz-transition: left 300ms;
   -o-transition: left 300ms;
   transition: left 300ms;
+  left: -276px;
   position: fixed;
   top: 40px;
   bottom: 0;
-  left: -276px;
+  height: 100vh;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -9794,6 +9791,9 @@ label[for="responsive-toggle"]::before {
   margin-bottom: 40px;
   border-right: 6px solid rgba(0, 0, 0, 0.5);
   overflow: auto;
+}
+#responsive-navigation.visible {
+  left: 0;
 }
 #responsive-navigation > li:first-child {
   border-top: none;

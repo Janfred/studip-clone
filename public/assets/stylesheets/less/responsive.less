@@ -56,20 +56,21 @@ label[for="responsive-toggle"] {
     .icon('before', 'hamburger-icon', 'info_alt', 20);
 }
 
-#responsive-toggle:checked + #responsive-navigation {
-    left: 0;
-    height: 100vh;
-}
-
 #responsive-navigation {
     #gradient > .horizontal(@brand-color-darker, @brand-color-light);
     .background-clip(content-box);
     .transition(left 300ms);
 
+
+    left: (-@responsive-menu-width - @responsive-menu-shadow-width);
+    &.visible {
+        left: 0;
+    }
+
     position: fixed;
     top: @header-bar-container-height; // + 1px white border
     bottom: 0;
-    left: (-@responsive-menu-width - @responsive-menu-shadow-width);
+    height: 100vh;
 
     .box-sizing(border-box);
     max-width: @responsive-menu-width;
