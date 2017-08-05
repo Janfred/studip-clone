@@ -52,7 +52,7 @@
                     CalendarEvent::PARTSTAT_ACCEPTED => _('Angenommen'),
                     CalendarEvent::PARTSTAT_DECLINED => _('Abgelehnt'),
                     CalendarEvent::PARTSTAT_DELEGATED => _('Angenommen (keine Teilnahme)'),
-                    CalendarEvent::PARTSTAT_NEEDS_ACTION => _('')) ?>
+                    CalendarEvent::PARTSTAT_NEEDS_ACTION => '') ?>
             <? $show_members = $event->attendees->findOneBy('range_id',
                     $calendar->getRangeId(), '!=') ?>
             <? // Entkommentieren, wenn Mitglieder eines Termins sichtbar sein
