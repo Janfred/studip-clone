@@ -69,7 +69,7 @@ class FileController extends AuthenticatedController
             $default_license = ContentTermsOfUse::find(
                 'UNDEF_LICENSE'
             );
-            
+
             foreach ($validatedFiles['files'] as $file) {
                 if ($fileref = $folder->createFile($file)) {
                     //If no terms of use is set for the file ref
@@ -541,7 +541,7 @@ class FileController extends AuthenticatedController
         if ($folder) {
             $tmp_file = tempnam($GLOBALS['TMP_PATH'], 'doc');
             $folder = $folder->getTypedFolder();
-            $is_windows = strpos($_SERVER['HTTP_USER_AGENT'], 'Windows') !== false;
+            $use_dos_encoding = version_compare(PHP_VERSION, '5.6', '>=') || strpos($_SERVER['HTTP_USER_AGENT'], 'Windows') !== false;
 
             $result = FileArchiveManager::createArchive(
                 [$folder],
@@ -550,7 +550,7 @@ class FileController extends AuthenticatedController
                 true,
                 true,
                 false,
-                $is_windows ? 'ISO-8859-1' : 'UTF-8'
+                $use_dos_encoding ? 'CP850' : 'UTF-8'
             );
 
             if ($result) {
@@ -1180,7 +1180,7 @@ class FileController extends AuthenticatedController
             //bulk downloading:
             $tmp_file = tempnam($GLOBALS['TMP_PATH'], 'doc');
             $user = User::findCurrent();
-            $is_windows = strpos($_SERVER['HTTP_USER_AGENT'], 'Windows') !== false;
+            $use_dos_encoding = version_compare(PHP_VERSION, '5.6', '>=') || strpos($_SERVER['HTTP_USER_AGENT'], 'Windows') !== false;
 
             //collect file area objects by looking at their IDs:
             $file_area_objects = [];
@@ -1212,7 +1212,7 @@ class FileController extends AuthenticatedController
                 true,
                 true,
                 false,
-                $is_windows ? 'ISO-8859-1' : 'UTF-8'
+                $use_dos_encoding ? 'CP850' : 'UTF-8'
 
             );
 

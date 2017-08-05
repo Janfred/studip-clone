@@ -176,7 +176,7 @@ var_dump($filename);
     public function convertLocalFilename($filename)
     {
         if ($this->output_encoding != 'UTF-8') {
-            return mb_convert_encoding($filename, $this->output_encoding, 'UTF-8');
+            return iconv('UTF-8', $this->output_encoding . '//TRANSLIT', $filename);
         } else {
             return $filename;
         }
