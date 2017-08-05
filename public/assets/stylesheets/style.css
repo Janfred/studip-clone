@@ -3557,11 +3557,12 @@ section.contentbox > article.indented > header {
   vertical-align: middle;
 }
 .action-menu .action-menu-icon {
-  width: 20px;
-  height: 20px;
   z-index: 3;
   position: relative;
   cursor: pointer;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
 }
 .action-menu .action-menu-content {
   position: absolute;
