@@ -2117,7 +2117,7 @@ form.default label.packed button {
 .header_avatar_container,
 #header_avatar_menu .action-menu-icon {
   z-index: 1003;
-  margin: 3px 0px 0px 0px;
+  margin: 3.5px 0px 0px 0px;
 }
 .header_avatar_container {
   align-items: center;
