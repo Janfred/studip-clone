@@ -131,17 +131,19 @@ if (isset($_COOKIE['navigation-length'])) {
             <? if (Navigation::hasItem('/avatar')): ?>
                 <div id="header_avatar_menu">
                 <?php
-                    $action_menu = ContentGroupMenu::get();
-                    $action_menu->setLabel(User::findCurrent()->getFullName());
-                    $action_menu->setIcon(Avatar::getAvatar(User::findCurrent()->id)->getImageTag(Avatar::MEDIUM));
+                $action_menu = ContentGroupMenu::get();
+                $action_menu->setLabel(User::findCurrent()->getFullName());
+                $action_menu->setAriaLabel(_("Profilmenü"));
+                $action_menu->setIcon(Avatar::getAvatar(User::findCurrent()->id)->getImageTag(Avatar::MEDIUM));
 
-                    foreach (Navigation::getItem('/avatar') as $subnav) {
-                        $action_menu->addLink(
-                            URLHelper::getURL($subnav->getURL()),
-                            $subnav->getTitle(),
-                            $subnav->getImage()
-                        );
-                    }
+                foreach (Navigation::getItem('/avatar') as $subnav) {
+                    $action_menu->addLink(
+                        URLHelper::getURL($subnav->getURL()),
+                        $subnav->getTitle(),
+                        $subnav->getImage()
+                    );
+                }
+                SkipLinks::addIndex(_("Profilmenü"), "header_avatar_menu");
                 ?>
                 <?= $action_menu->render(); ?>
                 </div>

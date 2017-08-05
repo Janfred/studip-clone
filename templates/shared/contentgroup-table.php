@@ -23,9 +23,10 @@ if ($rows > 1) {
 ?>
 
 <nav class="action-menu">
-    <div class="action-menu-icon" title="<?= htmlReady($label) ?>">
+    <a class="action-menu-icon" title="<?= htmlReady($label) ?>"
+       aria-expanded="false" aria-label="<?= htmlReady($aria_label) ?>">
         <?= $image ?>
-    </div>
+    </a>
     <div class="action-menu-content">
         <div class="action-menu-title">
             <?= htmlReady($label) ?>

@@ -21,6 +21,7 @@
                     && $(this).parent().is('section.contentbox > article');
             }).addClass('force-visible-overflow');
 
+        $(this).attr("aria-expanded", $(this).closest('.action-menu').is(".active") ? "true" : "false");
         // Stop event so the following close event will not be fired
         event.stopPropagation();
     });

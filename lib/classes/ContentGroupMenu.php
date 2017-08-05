@@ -33,6 +33,7 @@ class ContentGroupMenu
     private $columns = 1;
     private $image   = null;
     private $label;
+    private $aria_label;
 
 
     /**
@@ -43,6 +44,7 @@ class ContentGroupMenu
     private function __construct()
     {
         $this->label = _('Aktionen');
+        $this->aria_label = _('Aktionsmenü');
     }
 
     /**
@@ -171,33 +173,34 @@ class ContentGroupMenu
         }
 
         //if ($this->rows > 1 || $this->columns > 1 || $this->image) {
-            if ($this->rows > 1 || $this->columns > 1) {
-                $template_file = self::TEMPLATE_FILE_TABLE;
-            } else {
-                $template_file = self::TEMPLATE_FILE_ROWS;
+        if ($this->rows > 1 || $this->columns > 1) {
+            $template_file = self::TEMPLATE_FILE_TABLE;
+        } else {
+            $template_file = self::TEMPLATE_FILE_ROWS;
+        }
+        $template = $GLOBALS['template_factory']->open($template_file);
+        $template->actions = $this->actions;
+
+        $has_link_icons = false;
+        foreach ($this->actions as $action) {
+            if (!empty($action['icon'])) {
+                $has_link_icons = true;
+                break;
             }
-            $template = $GLOBALS['template_factory']->open($template_file);
-            $template->actions = $this->actions;
+        }
+        $template->has_link_icons = $has_link_icons;
 
-            $has_link_icons = false;
-            foreach ($this->actions as $action) {
-                if (!empty($action['icon'])) {
-                    $has_link_icons = true;
-                    break;
-                }
-            }
-            $template->has_link_icons = $has_link_icons;
+        $template->rows    = $this->rows;
+        $template->columns = $this->columns;
 
-            $template->rows    = $this->rows;
-            $template->columns = $this->columns;
+        if ($this->image) {
+            $template->image = $this->image;
+        } else {
+            $template->image = "<div></div><div></div><div></div>";
+        }
 
-            if ($this->image) {
-                $template->image = $this->image;
-            } else {
-                $template->image = "<div></div><div></div><div></div>";
-            }
-
-            $template->label = $this->label;
+        $template->label = $this->label;
+        $template->aria_label = $this->aria_label;
 
 
         /*} else {
@@ -249,6 +252,16 @@ class ContentGroupMenu
     public function setLabel($label)
     {
         $this->label = $label;
+    }
+
+    /**
+     * Sets the label of the menu.
+     *
+     * @param String $label label for the menu
+     */
+    public function setAriaLabel($label)
+    {
+        $this->aria_label = $label;
     }
 
     /**
