@@ -1237,7 +1237,7 @@ function format_help_url($keyword)
     preg_match('/^(\d+\.\d+)/', $GLOBALS['SOFTWARE_VERSION'], $v);
     $version = $v[0];
 
-    $help_query = sprintf('http://docs.studip.de/help/%s/%s/%s%s',
+    $help_query = sprintf('https://hilfe.studip.de/help/%s/%s/%s%s',
                           $version, $lang, $loc, $helppage);
     return $help_query;
 }
@@ -1326,7 +1326,7 @@ function words($string)
  *
  * @param mixed $data
  *
- * @return mixed unaltered input $data 
+ * @return mixed unaltered input $data
  */
 function studip_utf8encode($data)
 {
@@ -1340,7 +1340,7 @@ function studip_utf8encode($data)
  *
  * @param mixed $data
  *
- * @return mixed unaltered input $data 
+ * @return mixed unaltered input $data
  */
 function studip_utf8decode($data)
 {
