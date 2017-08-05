@@ -19,7 +19,7 @@ Helpbar::get()->addPlainText(_('Info'), "Stellen Sie hier ein, wie die Chancen b
         <span class="required">
             <?= _('Name der Personenliste') ?>
         </span>
-        <input type="text" size="60" maxlength="255" name="name" value="<?= $userlist ? htmlReady($userlist->getName()) : '' ?>"/>
+        <input type="text" size="60" maxlength="255" name="name" value="<?= $userlist ? htmlReady($userlist->getName()) : '' ?>" required>
     </label>
     <br/>
     <label for="factor">
@@ -116,8 +116,9 @@ Helpbar::get()->addPlainText(_('Info'), "Stellen Sie hier ein, wie die Chancen b
                     </td>
                     <td class="actions">
                         <a href="<?= $controller->url_for('admission/userlist/delete_member',
-                            $userlist_id, $u->id) ?>" onclick="return confirm('<?= sprintf(
-                            _('Soll %s wirklich von der Liste entfernt werden?'), $u->getFullname()) ?>');">
+                            $userlist_id, $u->id) ?>" class="userlist-delete-user"
+                            data-confirm="<?= sprintf(_('Soll %s wirklich von der Liste entfernt werden?'),
+                                $u->getFullname()) ?>">
                             <?= Icon::create('trash', 'clickable') ?>
                         </a>
                     </td>

@@ -179,5 +179,3 @@ class Admission_UserListController extends AuthenticatedController
     }
 
 }
-
-?>
