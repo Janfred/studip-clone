@@ -1391,11 +1391,14 @@ class MyRealmModel
 
     public static function getWaitingList($user_id)
     {
-        $claiming = DBManager::get()->fetchAll(
-            "SELECT set_id, priorities.seminar_id,'claiming' as status, seminare.Name, seminare.Ort
+        $sql = "SELECT set_id, priorities.seminar_id,'claiming' as status, seminare.Name, seminare.Ort,
+                priorities.priority, coursesets.name AS cname
             FROM priorities
             INNER JOIN seminare USING(seminar_id)
-            WHERE user_id = ?", array($user_id));
+            INNER JOIN coursesets USING (set_id)
+            WHERE priorities.user_id = ?
+            ORDER BY coursesets.name, priorities.priority";
+        $claiming = DBManager::get()->fetchAll($sql, array($user_id));
         $csets    = array();
         foreach ($claiming as $k => $claim) {
             if (!$csets[$claim['set_id']]) {

@@ -54,6 +54,10 @@
                 <a href="<?= URLHelper::getLink('dispatch.php/course/details/', array('sem_id' => $wait['seminar_id'], 'send_from_search_page' => 'dispatch.php/my_courses/index', 'send_from_search' => 'TRUE')) ?>">
                     <?= htmlReady($seminar_name) ?>
                 </a>
+                <?php if ($wait['status'] == 'claiming') : ?>
+                    <br>
+                    <?= sprintf(_('Priorität %1$u im Anmeldeset "%2$s"'), $wait['priority'], $wait['cname']) ?>
+                <?php endif ?>
             </td>
             <td class="hidden-small-down">
                 <a data-dialog="size=auto" href="<?= $controller->url_for(sprintf('course/details/index/%s', $wait['seminar_id'])) ?>">
