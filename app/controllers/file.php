@@ -112,7 +112,7 @@ class FileController extends AuthenticatedController
                     $output['redirect'] = $this->url_for('file/unzipquestion', [
                         'file_refs' => $ref_ids
                     ]);
-                } elseif (in_array($folder->range_type, ['course', 'institute'])) {
+                } elseif (in_array($folder->range_type, ['course', 'institute', 'user'])) {
                     $ref_ids = [];
                     foreach ($storedFiles as $file_ref) {
                         $ref_ids[] = $file_ref->getId();
