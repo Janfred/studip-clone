@@ -2025,3 +2025,6 @@ textarea.ui-resizable-handle.ui-resizable-s {
 .ms-container .ms-optgroup-label {
   color: #8b8f95;
 }
+.ui-menu .ui-menu-item {
+  list-style: none;
+}
