@@ -2010,7 +2010,7 @@ form.default label.packed button {
   z-index: 10000;
 }
 #barBottomContainer #barBottomLeft {
-  padding: 0 15px;
+  padding: 0px 15px;
   z-index: 2;
 }
 #layout_footer a,
@@ -2589,7 +2589,7 @@ label[for="barTopMenu-toggle"] {
   -moz-background-size: 16px 16px;
   -o-background-size: 16px 16px;
   background-size: 16px 16px;
-  background-position: 5px center;
+  background-position: 0px center;
   background-repeat: no-repeat;
   color: #fff;
   line-height: 40px;
@@ -2618,7 +2618,7 @@ body.fixed #barTopMenu {
   background-color: #28497c;
   list-style: none;
   margin: 0px 0px 0px -15px;
-  padding: 0;
+  padding: 0px 0px 0px 0px;
   width: -moz-fit-content;
   width: -webkit-fit-content;
   width: fit-content;
@@ -2630,7 +2630,7 @@ body.fixed #barTopMenu img {
   filter: contrast(0) brightness(2);
   width: 16px;
   height: 16px;
-  margin-right: 0.4em;
+  margin-right: 0.8em;
 }
 body.fixed #barTopMenu li {
   padding: 0.25em 15px;
