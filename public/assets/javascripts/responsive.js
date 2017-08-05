@@ -53,7 +53,7 @@
         $('<input type="checkbox" id="responsive-toggle">').appendTo(wrapper);
         wrapper.append(menu);
 
-        $('#barBottomright > ul').prepend($('<li>', {html: wrapper}));
+        $('<li>', {html: wrapper}).prependTo('#barBottomright > ul');
     }
 
     // Responsifies the layout. Builds the responsive menu from existing
@@ -94,6 +94,28 @@
                 $(this).show();
             });
         }).trigger('change');
+
+        var sidebar_avatar_menu = $('<div class="sidebar-widget sidebar-avatar-menu">'),
+            avatar_menu = $('#header_avatar_menu'),
+            title = $('.action-menu-title', avatar_menu).text(),
+            list = $('<ul class="widget-list widget-links">');
+        $('<div class="sidebar-widget-header">').text(title).appendTo(sidebar_avatar_menu);
+
+        $('.action-menu-item', avatar_menu).each(function () {
+            var src  = $('img', this).attr('src'),
+                link = $('a', this).clone();
+
+            link.find('img').remove();
+
+            $('<li>').append(link).css({
+                backgroundSize: '16px',
+                backgroundImage: 'url(' + src + ')'
+            }).appendTo(list);
+        });
+
+        $('<div class="sidebar-widget-content">').append(list).appendTo(sidebar_avatar_menu);
+
+        $('#layout-sidebar > .sidebar').prepend(sidebar_avatar_menu);
     }
 
     function setResponsiveDisplay(state) {
@@ -111,7 +133,7 @@
         }
     }
 
-    // Build responsife menu on domready or resize
+    // Build responsive menu on domready or resize
     $(document).ready(function () {
         if (media_query.matches) {
             responsify();
@@ -124,4 +146,30 @@
             setResponsiveDisplay(media_query.matches);
         });
     });
+
+    // Trigger search in responsive display
+    $(document).on('click', '#quicksearch .quicksearchbutton', function () {
+        if ($('html').is(':not(.responsive-display)') || $('#quicksearch').is('.open')) {
+            return;
+        }
+
+        $('#quicksearch').addClass('open');
+        $('.quicksearchbox').focus();
+
+        return false;
+    }).on('blur', '#quicksearch.open .quicksearchbox', function () {
+        if (!this.value.trim().length) {
+            $('#quicksearch').removeClass('open');
+        }
+    }).on('autocompleteopen', function (event) {
+        if ($(event.target).closest('#quicksearch').length === 0) {
+            return;
+        }
+        $('body > .ui-autocomplete').css({
+            left: 0,
+            right: 0,
+            boxSizing: 'border-box'
+        });
+    });
+
 }(jQuery));

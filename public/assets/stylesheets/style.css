@@ -8022,9 +8022,6 @@ table.default tr.subcourses td:nth-child(-n+4) {
     margin-top: 5px;
     width: 153px;
   }
-  #layout_page {
-    margin: 15px 5px;
-  }
   #index div.index_container,
   #request_new_password div.index_container,
   #web_migrate div.index_container {
@@ -9915,10 +9912,8 @@ label[for="responsive-toggle"]::before {
   #tabs2,
   .sidebar-image,
   #sidebar-navigation,
-  #quicksearch,
-  #layout_footer,
-  li#quicksearch_item,
-  #barTopFont {
+  #barTopFont,
+  #footer {
     display: none !important;
   }
   .responsive-hidden {
@@ -10086,6 +10081,64 @@ label[for="responsive-toggle"]::before {
     margin-left: auto;
     margin-right: auto;
   }
+  #layout_footer {
+    display: block;
+    min-width: 0;
+    width: 100vw;
+  }
+}
+.sidebar-avatar-menu {
+  display: none;
+  margin-top: 0 !important;
+}
+.responsive-display .sidebar-avatar-menu {
+  display: block;
+}
+.responsive-display #quicksearch_item {
+  padding: 0;
+}
+.responsive-display #quicksearch {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-box-flex;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  -moz-box-direction: normal;
+  -moz-box-orient: horizontal;
+  -webkit-box-orient: horizontal;
+  flex-direction: row;
+  -webkit-justify-content: flex-end;
+  justify-content: flex-end;
+}
+.responsive-display #quicksearch .quicksearchbox {
+  -webkit-transition: all 300ms;
+  -moz-transition: all 300ms;
+  -o-transition: all 300ms;
+  transition: all 300ms;
+  opacity: 0;
+  max-width: 0;
+}
+.responsive-display #quicksearch.open .quicksearchbox {
+  opacity: 1;
+  max-width: 1000px;
+  width: 100% !important;
+}
+.responsive-display #barBottomright ul li:first-child {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 0 auto;
+  -ms-flex: 1 0 auto;
+  -moz-box-flex: 1;
+  flex: 1 0 auto;
+}
+.responsive-display #barBottomright ul li#quicksearch_item {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 100%;
+  -ms-flex: 1 1 100%;
+  -moz-box-flex: 1;
+  flex: 1 1 100%;
 }
 body:not(.fixed) #barTopMenu > li.active {
   border-bottom: 0;
