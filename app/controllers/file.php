@@ -541,11 +541,16 @@ class FileController extends AuthenticatedController
         if ($folder) {
             $tmp_file = tempnam($GLOBALS['TMP_PATH'], 'doc');
             $folder = $folder->getTypedFolder();
+            $is_windows = strpos($_SERVER['HTTP_USER_AGENT'], 'Windows') !== false;
 
             $result = FileArchiveManager::createArchive(
                 [$folder],
                 $user->id,
-                $tmp_file
+                $tmp_file,
+                true,
+                true,
+                false,
+                $is_windows ? 'ISO-8859-1' : 'UTF-8'
             );
 
             if ($result) {
@@ -1175,6 +1180,7 @@ class FileController extends AuthenticatedController
             //bulk downloading:
             $tmp_file = tempnam($GLOBALS['TMP_PATH'], 'doc');
             $user = User::findCurrent();
+            $is_windows = strpos($_SERVER['HTTP_USER_AGENT'], 'Windows') !== false;
 
             //collect file area objects by looking at their IDs:
             $file_area_objects = [];
@@ -1202,7 +1208,12 @@ class FileController extends AuthenticatedController
             $result = FileArchiveManager::createArchive(
                 $file_area_objects,
                 $user->id,
-                $tmp_file
+                $tmp_file,
+                true,
+                true,
+                false,
+                $is_windows ? 'ISO-8859-1' : 'UTF-8'
+
             );
 
             if ($result) {

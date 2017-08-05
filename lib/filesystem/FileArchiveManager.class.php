@@ -248,6 +248,7 @@ class FileArchiveManager
      *     download condition check shall be ignored.
      *     If this parameter is set to true, the user_id parameter is irrelevant.
      *     The default for this parameter is false.
+     * @param string $zip_encoding encoding for filenames in zip
      *
      * @return bool True, if the archive file was created and saved successfully
      *     at $archive_file_path, false otherwise.
@@ -261,7 +262,8 @@ class FileArchiveManager
         $archive_file_path = '',
         $do_user_permission_checks = true,
         $keep_hierarchy = true,
-        $ignore_user = false
+        $ignore_user = false,
+        $zip_encoding = 'UTF-8'
     )
     {
         $archive_max_num_files = Config::get()->ZIP_DOWNLOAD_MAX_FILES;
@@ -282,11 +284,11 @@ class FileArchiveManager
 
         // We can create the Zip archive now since its path exists in the file system
         // and furthermore there are file area objects available.
-        $archive = new ZipArchive();
+        $archive = new Studip\ZipArchive();
         if (!$archive->open($archive_file_path, ZipArchive::CREATE | ZipArchive::OVERWRITE)) {
             throw new FileArchiveManagerException('Error opening new ZIP archive!');
         }
-        
+        $archive->setOutputEncoding($zip_encoding);
         //Check if more file area objects than allowed shall be packed:
         //In that case, stop here.
         if ($archive_max_num_files && count($file_area_objects) > $archive_max_num_files) {
@@ -680,11 +682,11 @@ class FileArchiveManager
      * @param string $archive_path The path of the file in the archive.
      * @param FolderType $target_folder The folder where the file shall be stored.
      * @param User $user The user who wishes to extract the file from the archive.
-     * 
+     *
      * @return FileRef|null FileRef instance on success, null otherwise.
      */
     public static function extractFileFromArchive(
-        ZipArchive $archive,
+        Studip\ZipArchive $archive,
         $archive_path,
         FolderType $target_folder,
         User $user
@@ -698,8 +700,8 @@ class FileArchiveManager
         }
 
         $file = new File();
-        $file->user_id   = $user_id;
-        $file->name      = basename($archive_path);
+        $file->user_id   = $user->id;
+        $file->name      = $archive->convertArchiveFilename(basename($archive_path));
         $file->mime_type = get_mime_type($file->name);
         $file->size      = $file_info['size'];
         $file->storage   = 'disk';
@@ -753,24 +755,20 @@ class FileArchiveManager
         $user_id = null
     )
     {
-        if (!$user_id) {
-            return [];
-        }
-
-        $user = User::find($user_id);
+        $user = $user_id ? User::find($user_id) : User::findCurrent();
         if (!$user) {
             return [];
         }
 
         // Determine, if the folder is writable for the user identified by $user_id:
-        if (!$folder->isWritable($user_id)) {
+        if (!$folder->isWritable($user->id)) {
             return [];
         }
 
         // Determine if we can keep the zip archive's folder hierarchy:
         $keep_hierarchy = $folder->isSubfolderAllowed($user->id);
 
-        $archive = new ZipArchive();
+        $archive = new Studip\ZipArchive();
         $archive->open($archive_file_ref->file->getPath());
 
         // loop over all entries in the zip archive and put each entry

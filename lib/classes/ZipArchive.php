@@ -1,4 +1,5 @@
 <?php
+
 namespace Studip;
 
 /**
@@ -13,6 +14,21 @@ namespace Studip;
  */
 class ZipArchive extends \ZipArchive
 {
+    /**
+     * @var string encoding for filenames in zip
+     */
+    protected $output_encoding = 'UTF-8';
+
+    public function getOutputEncoding()
+    {
+        return $this->output_encoding;
+    }
+
+    public function setOutputEncoding($string)
+    {
+        return $this->output_encoding = $string;
+    }
+
     /**
      * Create and open an archive. Will add .zip extension if missing.
      *
@@ -58,7 +74,7 @@ class ZipArchive extends \ZipArchive
      *
      * @static
      * @param String $filename Name of the zip archive
-     * @param String $path     Local path to extract to
+     * @param String $path Local path to extract to
      * @return bool indicating whether the archive could be extracted.
      * @todo A little more error checking would be nice.
      */
@@ -75,8 +91,9 @@ class ZipArchive extends \ZipArchive
         $ok = true;
         for ($i = 0; $i < $archive->numFiles; $i += 1) {
             $zip_filename = $archive->getNameIndex($i, self::FL_UNCHANGED);
-            $filename = self::convertArchiveFilename($zip_filename);
-
+            var_dump($zip_filename);
+            $filename = $archive->convertArchiveFilename($zip_filename);
+var_dump($filename);
             if (mb_strpos($filename, '../') !== false) {
                 continue;
             }
@@ -85,6 +102,7 @@ class ZipArchive extends \ZipArchive
             } else {
                 $dirname = trim(dirname($filename), '/');
             }
+            var_dump($dirname);
             if ($dirname && $dirname !== '.') {
                 if (!is_dir($path . $dirname)) {
                     if (mkdir($path . $dirname, 0777, true) === false) {
@@ -110,19 +128,19 @@ class ZipArchive extends \ZipArchive
     /**
      * Adds a single file.
      *
-     * @param String $filename  Name of the file to add
+     * @param String $filename Name of the file to add
      * @param String $localname Name of the file inside the archive,
      *                          will default to $filename
-     * @param int   $start      Unused but required (according to php doc)
-     * @param int   $length     Unused but required (according to php doc)
+     * @param int $start Unused but required (according to php doc)
+     * @param int $length Unused but required (according to php doc)
      * @return false on error, $localname otherwise
      */
     public function addFile($filename, $localname = null, $start = 0, $length = 0)
     {
-        $localname = self::convertLocalFilename($localname ?: basename($filename));
+        $localname = $this->convertLocalFilename($localname ?: basename($filename));
         return parent::addFile($filename, $localname, $start, $length)
-             ? $localname
-             : false;
+            ? $localname
+            : false;
     }
 
     /**
@@ -154,23 +172,27 @@ class ZipArchive extends \ZipArchive
      * Converts the filename to a format that a zip file should be able
      * to handle.
      *
-     * @param String $file Name of the input file
+     * @param String $filename Name of the input file
      * @return String containing the converted filename
      */
-    private static function convertLocalFilename($filename)
+    public function convertLocalFilename($filename)
     {
-        return iconv('ISO-8859-1', 'IBM437', $filename);
+        if ($this->output_encoding != 'UTF-8') {
+            return mb_convert_encoding($filename, $this->output_encoding, 'UTF-8');
+        } else {
+            return $filename;
+        }
     }
 
     /**
      * Converts the filename from a format that a zip file should be able
      * to handle.
      *
-     * @param String $file Name of the input file from the archive
+     * @param String $filename Name of the input file from the archive
      * @return String containing the converted filename
      */
-    private static function convertArchiveFilename($filename)
+    public function convertArchiveFilename($filename)
     {
-        return iconv('IBM437', 'ISO-8859-1', $filename);
+        return mb_convert_encoding($filename, $this->output_encoding, ['UTF-8', 'ISO-8859-1', 'IBM437']);
     }
 }
