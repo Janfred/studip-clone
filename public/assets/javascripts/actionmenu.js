@@ -33,6 +33,9 @@
         // Stop event so the following close event will not be fired
         event.stopPropagation();
     });
+    $(document).on('click', '.action-menu-icon', function (event) {
+        return false;
+    });
 
     // Close action menu on click outside
     $(document).on('click', function (event) {

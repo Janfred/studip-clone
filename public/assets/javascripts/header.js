@@ -49,7 +49,7 @@
         if ($('#barBottomContainer').length > 0) {
             STUDIP.HeaderMagic.enable();
         }
-    }).on('mousedown', '#avatar-arrow', function (event) {
+    }).on('click', '#avatar-arrow', function (event) {
         event.stopPropagation();
         $('#header_avatar_menu .action-menu-icon').trigger('mousedown');
     });

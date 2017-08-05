@@ -143,7 +143,7 @@ if (isset($_COOKIE['navigation-length'])) {
                         $subnav->getImage()
                     );
                 }
-                SkipLinks::addIndex(_("Profilmenü"), "header_avatar_menu");
+                SkipLinks::addIndex(_("Profilmenü"), "header_avatar_menu", 2);
                 ?>
                 <?= $action_menu->render(); ?>
                 </div>
