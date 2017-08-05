@@ -172,7 +172,7 @@ STUDIP.CourseWizard = {
     getTreeChildren: function(node, assignable)
     {
         var target = $('.' + (assignable ? 'sem-tree-' : 'sem-tree-assign-') + node);
-        if (!target.hasClass('tree-loaded')) {
+        if (!target.hasClass('tree-loaded') && target.find('.tree-loading').length == 0) {
             var params = 'step=' + $('input[name="step"]').val() +
                 '&method=getSemTreeLevel' +
                 '&parameter[]=' + $('#' + node).attr('id');
@@ -191,6 +191,7 @@ STUDIP.CourseWizard = {
                         );
                     },
                     success: function (data, status, xhr) {
+                        target.find('li.sem-tree-result').remove();
                         var items = $.parseJSON(data);
                         target.find('.tree-loading').remove();
                         if (items.length > 0) {
