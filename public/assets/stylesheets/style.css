@@ -2421,12 +2421,11 @@ body:not(.fixed) #barTopMenu a[data-badge]:not([data-badge="0"]) {
 body:not(.fixed) #barTopMenu a[data-badge]:not([data-badge="0"])::before {
   position: absolute;
   left: 50%;
-  margin-left: 5px;
   top: 0;
-}
-body:not(.fixed) #barTopMenu a[data-badge]:not([data-badge="0"])::before {
+  margin-left: 5px;
   width: 16px;
   height: 16px;
+  background-clip: content-box;
   background-color: #d60000;
   border: 3px solid #f5f6f6;
   border-radius: 50%;
