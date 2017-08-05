@@ -180,7 +180,7 @@ if (isset($_COOKIE['navigation-length'])) {
                     ]) ?>
                     <br>
                     <div class="navtitle">
-                        <?= _('Weitere') ?>&hellip;
+                        <?= _('Mehr') ?>&hellip;
                     </div>
                 </a>
             </label>
