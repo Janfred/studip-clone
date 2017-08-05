@@ -2494,6 +2494,9 @@ body:not(.fixed) #barTopMenu > .overflow > label img {
   transition: transform 300ms;
   transform: rotate(90deg);
 }
+body:not(.fixed) #barTopMenu > .overflow > label > a[data-badge]::before {
+  transition: opacity 300ms;
+}
 body:not(.fixed) #barTopMenu > .overflow:hover label ~ ul,
 body:not(.fixed) #barTopMenu > .overflow input[type="checkbox"]:checked ~ ul {
   max-height: 1000px;
@@ -2503,6 +2506,10 @@ body:not(.fixed) #barTopMenu > .overflow input[type="checkbox"]:checked img,
 body:not(.fixed) #barTopMenu > .overflow:hover label ~ label img,
 body:not(.fixed) #barTopMenu > .overflow input[type="checkbox"]:checked ~ label img {
   transform: rotate(180deg);
+}
+body:not(.fixed) #barTopMenu > .overflow:hover label > a[data-badge]::before,
+body:not(.fixed) #barTopMenu > .overflow input[type="checkbox"]:checked > a[data-badge]::before {
+  opacity: 0;
 }
 body:not(.fixed) #barTopMenu > .overflow > ul {
   display: block;

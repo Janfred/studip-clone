@@ -19,16 +19,18 @@
 
     // Enable shrinking of navigation
     var shrinker  = function () {
-        var main = $('#barTopMenu'),
-            sink = $('li.overflow', main),
-            x = 0,
-            index = false;
+        var main  = $('#barTopMenu'),
+            sink  = $('li.overflow', main),
+            x     = 0,
+            index = false,
+            total = 0;
         if (main.length === 0 || sink.length === 0) {
             return;
         }
 
         // Reset sink (hide and lose all content)
         main.removeClass('overflown');
+        $('> label > a', sink).removeAttr('data-badge');
         $('li', sink).remove().insertBefore(sink);
 
         if ($('html').is('.responsive-display')) {
@@ -46,9 +48,16 @@
         });
 
         if (index !== false) {
-            $('li:not(.overflow)', main).slice(index - 2).remove().prependTo($('ul', sink));
+            $('li:not(.overflow)', main)
+                .slice(index - 2)
+                .detach()
+                .prependTo($('ul', sink))
+                .each(function () {
+                    total += parseInt($('a', this).data().badge, 10) || 0;
+                });
 
             main.addClass('overflown');
+            $('> label > a', sink).attr('data-badge', total);
         }
 
         setCookie('navigation-length', main.children(':not(.overflow)').length, 30);

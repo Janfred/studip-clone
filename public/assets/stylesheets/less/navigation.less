@@ -133,16 +133,24 @@ body:not(.fixed) #barTopMenu {
             transform: rotate(90deg);
         }
 
+        // Define transition duration for possible badge on overflow
+        > label > a[data-badge]::before {
+            transition: opacity 300ms;
+        }
+
         // Display menu on activation
         &:hover label,
         input[type="checkbox"]:checked {
-             ~ ul {
+            ~ ul {
                 max-height: 1000px;
             }
-             img,
-             ~ label img {
-                 transform: rotate(180deg);
-             }
+            img,
+            ~ label img {
+                transform: rotate(180deg);
+            }
+            > a[data-badge]::before {
+                opacity: 0;
+            }
         }
 
         > ul {
