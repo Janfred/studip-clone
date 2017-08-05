@@ -5,13 +5,11 @@
     </header>
     <?php foreach ($groups as $group) : ?>
         <?= $this->render_partial('course/statusgroups/_group',
-            array('group' => $group['group'], 'members' => $group['members'])) ?>
+            array('group' => $group['group'], 'membercount' => $group['membercount'],
+                'members' => $group['members'], 'joinable' => $group['joinable'], 'load' => $group['load'],
+                'order' => $order, 'sort_by' => $sort_by)) ?>
     <?php endforeach ?>
-    <?php if ($no_group) : ?>
-        <?= $this->render_partial('course/statusgroups/_group',
-            array('group' => $no_group['group'], 'members' => $no_group['members'])) ?>
-    <?php endif ?>
-    <?php if (count($groups) > 1 && $is_tutor && !$is_locked) : ?>
+    <?php if ((count($groups) > $ungrouped_count ? 2 : 1) && $is_tutor && !$is_locked) : ?>
         <footer>
             <div class="groupselection">
                 <label>

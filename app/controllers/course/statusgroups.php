@@ -75,9 +75,6 @@ class Course_StatusgroupsController extends AuthenticatedController
         // Find all statusgroups for this course.
         $groups = Statusgruppen::findBySeminar_id($this->course_id);
 
-        // Helper array for collecting all group members.
-        $grouped_users = array();
-
         /*
          * Check if the current user may join any group at all. This is needed
          * for deciding if a Sidebar action for joining a group will be
@@ -85,54 +82,104 @@ class Course_StatusgroupsController extends AuthenticatedController
          */
         $joinable = false;
 
+        // Fetch membercounts (all at once for performance)
+        $membercounts = array_column(DBManager::get()->fetchAll(
+            "SELECT u.`statusgruppe_id`, COUNT(u.`user_id`) as membercount
+                FROM `statusgruppen` s
+    	            JOIN `statusgruppe_user` u USING (`statusgruppe_id`)
+                WHERE s.`range_id` = ?
+                GROUP BY u.`statusgruppe_id`",
+                [$this->course_id]),
+            'membercount',
+            'statusgruppe_id'
+        );
+
+
         // Now build actual groups.
         $this->groups = array();
         foreach ($groups as $g) {
 
-            $groupmembers = $g->members->pluck('user_id');
-            if ($this->sort_group == $g->id) {
-                $sorted = StatusgroupsModel::sortGroupMembers(
-                    $this->allmembers->findBy('user_id', $groupmembers),
-                    $this->sort_by, $this->order);
-            } else {
-                $sorted = StatusgroupsModel::sortGroupMembers(
-                    $this->allmembers->findBy('user_id', $groupmembers));
+            $groupdata = [
+                'group' => $g,
+                'membercount' => $membercounts[$g->id]
+            ];
+
+            /*
+             * We only need to load members for a group that shall be sorted
+             * explicitly, as this group will be loaded at once and not via AJAX.
+             */
+            if ($g->id == $this->sort_group) {
+                $groupmembers = $g->members->pluck('user_id');
+                if ($this->sort_group == $g->id) {
+                    $sorted = StatusgroupsModel::sortGroupMembers(
+                        $this->allmembers->findBy('user_id', $groupmembers),
+                        $this->sort_by, $this->order);
+                } else {
+                    $sorted = StatusgroupsModel::sortGroupMembers(
+                        $this->allmembers->findBy('user_id', $groupmembers));
+                }
+
+                $groupdata['members'] = $sorted;
+                $groupdata['load'] = true;
             }
 
-            $this->groups[] = array(
-                'group' => $g,
-                'members' => $sorted
-            );
-            $grouped_users = array_merge($grouped_users, $groupmembers);
-
             if (!$this->is_tutor && $g->userMayJoin($GLOBALS['user']->id)) {
+                $groupdata['joinable'] = true;
                 $joinable = true;
             }
 
+            $this->groups[] = $groupdata;
         }
 
-        // Find course members who are in no group at all.
-        $ungrouped = $this->allmembers->findBy('user_id', $grouped_users, '!=');
-        if ($ungrouped) {
-
-            if ($this->sort_group == 'nogroup') {
-                $members = StatusgroupsModel::sortGroupMembers($ungrouped,
-                    $this->sort_by, $this->order);
-            } else {
-                $members = StatusgroupsModel::sortGroupMembers($ungrouped);
-            }
-
+        /*
+         * Get number of users that are in no group, this is needed
+         * for displaying in group header.
+         */
+        $ungrouped_count = DBManager::get()->fetchFirst(
+            "SELECT COUNT(s.`user_id`) FROM `seminar_user` s WHERE s.`Seminar_id` = :course AND NOT EXISTS (
+                    SELECT u.`user_id` FROM `statusgruppe_user` u
+                    WHERE u.`statusgruppe_id` IN (:groups) AND u.`user_id` = s.`user_id`)",
+            [
+                'course' => $this->course_id,
+                'groups' => DBManager::get()->fetchFirst(
+                    "SELECT `statusgruppe_id` FROM `statusgruppen` WHERE `range_id` = ?",
+                    [$this->course_id])
+            ]);
+        $ungrouped_count = $ungrouped_count[0];
+        if ($ungrouped_count > 0) {
             // Create dummy entry for "no group" users.
             $no_group = new StdClass();
             $no_group->id = 'nogroup';
             $no_group->name = _('keiner Gruppe zugeordnet');
             $no_group->size = 0;
             $no_group->selfassign = 0;
-            $this->no_group = array(
-                'group' => $no_group,
-                'members' => $members
-            );
 
+            $groupdata = [
+                'group' => $no_group,
+                'membercount' => $ungrouped_count,
+                'joinable' => false
+            ];
+
+            if ($this->sort_group == 'nogroup') {
+                $nogroupmembers = DBManager::get()->fetchAll("SELECT s.* FROM `seminar_user` s
+                    WHERE `Seminar_id` = :course AND NOT EXISTS (
+                        SELECT `user_id` FROM `statusgruppe_user`
+                        WHERE `statusgruppe_id` IN (:groups) AND `user_id` = s.`user_id`)",
+                    [
+                        'course' => $this->course_id,
+                        'groups' => array_map(function ($g) { return $g->id; }, $groups)
+                    ]);
+
+                $members = new SimpleCollection();
+                foreach ($nogroupmembers as $m) {
+                    $members->append(CourseMember::build($m));
+                }
+
+                $groupdata['members'] = StatusgroupsModel::sortGroupMembers($members, $this->sort_by, $this->order);
+
+                $groupdata['load'] = true;
+            }
+            $this->groups[] = $groupdata;
         }
 
         // Prepare search object for MultiPersonSearch.
@@ -199,6 +246,54 @@ class Course_StatusgroupsController extends AuthenticatedController
                 $this->url_for('course/statusgroups/joinables'),
                     Icon::create('door-enter', 'clickable'))->asDialog('size=auto');
             $sidebar->addWidget($actions);
+        }
+    }
+
+    /**
+     * Fetches the members of the given group.
+     *
+     * @param String $group_id the statusgroup to get members for.
+     */
+    public function getgroup_action($group_id)
+    {
+        if ($group_id != 'nogroup') {
+            $this->group = Statusgruppen::find($group_id);
+            if (count($this->group->members) > 0) {
+                $this->members = StatusgroupsModel::sortGroupMembers(
+                    SimpleCollection::createFromArray(
+                        CourseMember::findBySQL("`Seminar_id` = ? AND `user_id` IN (?)",
+                        [$this->course_id, $this->group->members->pluck('user_id')])
+                    )
+                );
+            } else {
+                $this->members = [];
+            }
+        } else {
+            // Create dummy entry for "no group" users.
+            $no_group = new StdClass();
+            $no_group->id = 'nogroup';
+            $no_group->name = _('keiner Gruppe zugeordnet');
+            $no_group->size = 0;
+            $no_group->selfassign = 0;
+
+            $members = DBManager::get()->fetchAll("SELECT s.* FROM `seminar_user` s
+                    WHERE `Seminar_id` = :course AND NOT EXISTS (
+                        SELECT `user_id` FROM `statusgruppe_user`
+                        WHERE `statusgruppe_id` IN (:groups) AND `user_id` = s.`user_id`)",
+                [
+                    'course' => $this->course_id,
+                    'groups' => DBManager::get()->fetchFirst(
+                        "SELECT `statusgruppe_id` FROM `statusgruppen` WHERE `range_id` = ?",
+                        [$this->course_id])
+                ]);
+
+            $this->members = new SimpleCollection();
+            foreach ($members as $m) {
+                $this->members->append(CourseMember::build($m));
+            }
+            $this->members = StatusgroupsModel::sortGroupMembers($this->members);
+
+            $this->group = $no_group;
         }
     }
 

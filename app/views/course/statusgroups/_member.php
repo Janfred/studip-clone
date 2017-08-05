@@ -4,7 +4,8 @@
     <td>
         <input aria-label="<?= _('Mitglieder auswählen') ?>"
                type="checkbox" name="group[<?= $group->id ?>][<?= $m->user_id ?>]"
-               class="groupmembers-<?= $group->id ?>" value="1">
+               class="groupmembers-<?= $group->id ?>" value="1"
+               data-activates="select#members-action-<?= $group->id ?>">
     </td>
 <? endif ?>
     <td>
