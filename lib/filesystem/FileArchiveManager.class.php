@@ -777,14 +777,14 @@ class FileArchiveManager
 
         for($i = 0; $i < $archive->numFiles; $i++) {
             $entry_info = $archive->statIndex($i);
-
+            $entry_info_name = $archive->convertArchiveFilename($entry_info['name']);
             // split the entry's path into its path and its name component:
-            $entry_path = ltrim(pathinfo($entry_info['name'], PATHINFO_DIRNAME), '.');
-            $entry_name = pathinfo($entry_info['name'], PATHINFO_BASENAME);
+            $entry_path = ltrim(pathinfo($entry_info_name, PATHINFO_DIRNAME), '.');
+            $entry_name = pathinfo($entry_info_name, PATHINFO_BASENAME);
 
             // check if $entry_info['name'] ends with a slash:
             // In that case it is a directory entry:
-            $entry_is_directory = preg_match('/\/$/', $entry_info['name']);
+            $entry_is_directory = preg_match('/\/$/', $entry_info_name);
 
             //The folder where the extracted file/folder shall be inserted:
             $extracted_entry_destination_folder = $folder;
@@ -830,7 +830,7 @@ class FileArchiveManager
                 //to the entry inside the archive.
                 $file_ref = self::extractFileFromArchive(
                     $archive,
-                    $entry_info['name'],
+                    $entry_info_name,
                     $extracted_entry_destination_folder,
                     $user
                 );
