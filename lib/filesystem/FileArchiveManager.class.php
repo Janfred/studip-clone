@@ -830,7 +830,7 @@ class FileArchiveManager
                 //to the entry inside the archive.
                 $file_ref = self::extractFileFromArchive(
                     $archive,
-                    $entry_info_name,
+                    $entry_info['name'],
                     $extracted_entry_destination_folder,
                     $user
                 );
