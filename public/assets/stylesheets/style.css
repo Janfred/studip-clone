@@ -2135,7 +2135,6 @@ form.default label.packed button {
   border: 1px solid #b1b4b9;
 }
 #notification_marker.alert {
-  border: thin solid #fff;
   background-color: #d60000;
   color: #fff;
 }
