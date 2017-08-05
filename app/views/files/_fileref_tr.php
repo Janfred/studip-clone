@@ -7,7 +7,9 @@
                id="file_checkbox_<?= $file_ref->id ?>"
                value="<?= $file_ref->id ?>"
                <? if (in_array($file_ref->id, (array)$marked_element_ids)) echo 'checked'; ?>>
-        <label for="file_checkbox_<?=$file_ref->id?>"><span></span></label>
+        <label for="file_checkbox_<?=$file_ref->id?>" class="text-bottom">
+            <span></span>
+        </label>
     <? endif ?>
     </td>
     <td class="document-icon" data-sort-value="1">

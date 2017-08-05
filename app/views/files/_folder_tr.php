@@ -17,7 +17,9 @@ $owner = User::find($folder->user_id) ?: new User();
                value="<?= $folder->getId() ?>"
                onchange="STUDIP.Files.toggleBulkButtons();"
                <? if (in_array($folder->getId(), (array)$marked_element_ids)) echo 'checked'; ?>>
-        <label for="file_checkbox_<?= $folder->getId() ?>"><span></span></label>
+        <label for="file_checkbox_<?= $folder->getId() ?>" class="text-bottom">
+            <span></span>
+        </label>
     <? endif?>
     </td>
     <td class="document-icon" data-sort-value="0">
