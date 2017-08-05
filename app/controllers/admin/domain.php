@@ -25,6 +25,8 @@ class Admin_DomainController extends AuthenticatedController
 
         parent::before_filter($action, $args);
 
+        $this->set_sidebar();
+
         # user must have root permission
         $perm->check('root');
 
