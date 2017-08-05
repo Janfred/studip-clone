@@ -24,6 +24,8 @@
                     );
                     menu.prependTo('#flex-header');
 
+                    STUDIP.NavigationShrinker();
+
                     $('#barTopMenu-toggle').prop('checked', false);
                 }
 
