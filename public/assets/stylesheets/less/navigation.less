@@ -40,7 +40,7 @@ body:not(.fixed) #barTopMenu {
         &[data-badge]:not([data-badge="0"]) {
             position: relative;
 
-            &::before, &::after {
+            &::before {
                 position: absolute;
                 left: 50%;
                 margin-left: 5px;
@@ -60,24 +60,6 @@ body:not(.fixed) #barTopMenu {
                 font-size: 10px;
                 z-index: 2;
             }
-
-            // // Write the text on top of the badge so it will never
-            // // expand the badge into regions we don't want.
-            // // Text may overflow into the icon. There's no good way
-            // // to prevent that...
-            // &::after {
-            //     content: attr(data-badge);
-            //     color: white;
-            //     width: 16px;
-            //     text-align: right;
-            //
-            //     font-size: 10px;
-            //     text-align: center;
-            //     text-overflow: ellipsis;
-            //     vertical-align: top;
-            //     white-space: nowrap;
-            //     z-index: 3;
-            // }
         }
     }
 
@@ -191,6 +173,10 @@ body:not(.fixed) #barTopMenu {
                     .flex-align-items(center);
 
                     padding: 0.5em 1em;
+
+                    &[data-badge]:not([data-badge="0"])::before {
+                        left: 21px;
+                    }
                 }
                 img {
                     .flex-item(1, 0, 24px);

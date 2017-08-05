@@ -2414,8 +2414,7 @@ body:not(.fixed) #barTopMenu a img {
 body:not(.fixed) #barTopMenu a[data-badge]:not([data-badge="0"]) {
   position: relative;
 }
-body:not(.fixed) #barTopMenu a[data-badge]:not([data-badge="0"])::before,
-body:not(.fixed) #barTopMenu a[data-badge]:not([data-badge="0"])::after {
+body:not(.fixed) #barTopMenu a[data-badge]:not([data-badge="0"])::before {
   position: absolute;
   left: 50%;
   margin-left: 5px;
@@ -2544,6 +2543,9 @@ body:not(.fixed) #barTopMenu > .overflow > ul li a {
   -moz-box-align: center;
   align-items: center;
   padding: 0.5em 1em;
+}
+body:not(.fixed) #barTopMenu > .overflow > ul li a[data-badge]:not([data-badge="0"])::before {
+  left: 21px;
 }
 body:not(.fixed) #barTopMenu > .overflow > ul li img {
   -webkit-box-flex: 1;
