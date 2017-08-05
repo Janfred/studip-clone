@@ -91,7 +91,6 @@ class ZipArchive extends \ZipArchive
         $ok = true;
         for ($i = 0; $i < $archive->numFiles; $i += 1) {
             $zip_filename = $archive->getNameIndex($i, self::FL_UNCHANGED);
-            var_dump($zip_filename);
             $filename = $archive->convertArchiveFilename($zip_filename);
 var_dump($filename);
             if (mb_strpos($filename, '../') !== false) {
@@ -102,7 +101,6 @@ var_dump($filename);
             } else {
                 $dirname = trim(dirname($filename), '/');
             }
-            var_dump($dirname);
             if ($dirname && $dirname !== '.') {
                 if (!is_dir($path . $dirname)) {
                     if (mkdir($path . $dirname, 0777, true) === false) {
@@ -193,6 +191,10 @@ var_dump($filename);
      */
     public function convertArchiveFilename($filename)
     {
-        return mb_convert_encoding($filename, $this->output_encoding, ['UTF-8', 'ISO-8859-1', 'IBM437']);
+        if (!mb_detect_encoding($filename, 'UTF-8', true)) {
+            return mb_convert_encoding($filename, $this->output_encoding, 'CP850');
+        } else {
+            return $filename;
+        }
     }
 }
