@@ -10,6 +10,9 @@ $translations = array(
     // app/views/messages/overview.php
     'Wirklich %s Nachrichten löschen?' => _('Wirklich %s Nachrichten löschen?'),
 
+    // js-errors.js
+    'Die Person ist bereits eingetragen.' => _('Die Person ist bereits eingetragen.'),
+
     // public/assets/javascripts/admission.js
     'Wird geladen' => _('Wird geladen'),
     'Anmelderegel konfigurieren' => _('Anmelderegel konfigurieren'),
@@ -36,6 +39,13 @@ $translations = array(
     // public/assets/javascripts/file_system.js
     'Objekt aufklappen' => _('Objekt aufklappen'),
     'Objekt zuklappen' => _('Objekt zuklappen'),
+
+    // public/assets/javascripts/files.js
+    'Datei hinzufügen' => _('Datei hinzufügen'),
+    'Datei ist zu groß oder hat eine nicht erlaubte Endung.' => _('Datei ist zu groß oder hat eine nicht erlaubte Endung.'),
+    'Datei hochladen' => _('Datei hochladen'),
+    'Lizenz auswählen: %s Dateien' => _('Lizenz auswählen: %s Dateien'),
+    'Lizenz auswählen' => _('Lizenz auswählen'),
 
     // public/assets/javascripts/forms.js
     'Zeichen verbleibend: ' => _('Zeichen verbleibend: '),
@@ -73,6 +83,7 @@ $translations = array(
     'Alle Räume anzeigen' => _('Alle Räume anzeigen'),
     'Wollen Sie die gewünschten Termine wirklich löschen?' => _('Wollen Sie die gewünschten Termine wirklich löschen?'),
     'Sind Sie sicher, dass Sie die regelmäßige Zeit ändern möchten?' => _('Sind Sie sicher, dass Sie die regelmäßige Zeit ändern möchten?'),
+    'Nur buchbare Räume anzeigen' => _('Nur buchbare Räume anzeigen'),
 
     // public/assets/javascripts/register.js
     'Der Benutzername ist zu kurz, er sollte mindestens 4 Zeichen lang sein.' => _('Der Benutzername ist zu kurz, er sollte mindestens 4 Zeichen lang sein.'),
@@ -102,9 +113,6 @@ $translations = array(
     // public/assets/javascripts/studip-helper-attributes.js
     'Wollen Sie die Aktion wirklich ausführen?' => _('Wollen Sie die Aktion wirklich ausführen?'),
     'Die beiden Werte "$1" und "$2" stimmen nicht überein. ' => _('Die beiden Werte "$1" und "$2" stimmen nicht überein. '),
-
-    // public/assets/javascripts/studip-jquery.multi-select.tweaks.js
-    'Die Person ist bereits eingetragen.' => _('Die Person ist bereits eingetragen.'),
 
     // public/assets/javascripts/studip-secure-forms.js
     'Ihre Eingaben wurden bislang noch nicht gespeichert.' => _('Ihre Eingaben wurden bislang noch nicht gespeichert.'),
@@ -145,6 +153,13 @@ $translations = array(
     'Fr' => _('Fr'),
     'Sa' => _('Sa'),
 
+    // public/assets/javascripts/toolbar.js
+    'Soll der WYSIWYG Editor aktiviert werden?' => _('Soll der WYSIWYG Editor aktiviert werden?'),
+    'Die Seite muss danach neu geladen werden, um den WYSIWYG Editor zu laden.' => _('Die Seite muss danach neu geladen werden, um den WYSIWYG Editor zu laden.'),
+    'Das Aktivieren des WYSIWYG Editors ist fehlgeschlagen.' => _('Das Aktivieren des WYSIWYG Editors ist fehlgeschlagen.'),
+    'URL' => _('URL'),
+    'Status' => _('Status'),
+
     // public/assets/javascripts/tour.js
     'Fehler beim Aufruf des Tour-Controllers' => _('Fehler beim Aufruf des Tour-Controllers'),
 
@@ -170,6 +185,7 @@ $translations = array(
     'Sind sie sicher, dass Sie diesen Bereich löschen möchten? ' => _('Sind sie sicher, dass Sie diesen Bereich löschen möchten? '),
     'Es werden auch alle Beiträge in diesem Bereich gelöscht!' => _('Es werden auch alle Beiträge in diesem Bereich gelöscht!'),
     'Anonym' => _('Anonym'),
+    '%s hat geschrieben:' => _('%s hat geschrieben:'),
     'Die Senderin/der Sender dieser Nachricht möchte Sie auf den folgenden Beitrag aufmerksam machen. ' => _('Die Senderin/der Sender dieser Nachricht möchte Sie auf den folgenden Beitrag aufmerksam machen. '),
     'Link zum Beitrag: ' => _('Link zum Beitrag: '),
     'Beitrag verschieben' => _('Beitrag verschieben'),
@@ -183,9 +199,6 @@ $translations = array(
     'Suche zurücksetzen' => _('Suche zurücksetzen'),
     'Keine Angabe beim Fach' => _('Keine Angabe beim Fach'),
 
-    // public/plugins_packages/core/Forum/javascript/forum.js
-    // public/assets/javascripts/ckeditor/plugins/studip-quote/plugin.js
-    '%s hat geschrieben:' => _('%s hat geschrieben:'),
 );
 
 ?>
