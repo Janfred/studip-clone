@@ -4018,6 +4018,20 @@ article.studip > footer:empty {
   display: none !important;
   border: 0 !important;
 }
+article.new.toggle > header::before {
+  background-repeat: no-repeat;
+  content: ' ';
+  display: inline-block;
+  height: 16px;
+  margin-right: 0;
+  background-image: url("../images/icons/red/arr_1right.svg");
+  -webkit-background-size: 16px 16px;
+  -moz-background-size: 16px 16px;
+  -o-background-size: 16px 16px;
+  background-size: 16px 16px;
+  vertical-align: text-top;
+  width: 16px;
+}
 section.comments {
   text-align: center;
   border-color: #d0d7e3;
@@ -4648,7 +4662,7 @@ form#quicksearch {
   align-items: center;
 }
 input.quicksearchbox {
-  background-color: #f3f5f8;
+  background-color: #ececed;
   border: 1px solid #b1b4b9;
   color: #28497c;
   font-size: 14px;
