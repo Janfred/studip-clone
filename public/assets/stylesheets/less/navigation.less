@@ -252,8 +252,12 @@ body.fixed {
         background-color: @base-color;
 
         list-style: none;
-        margin: 0 -10px;
+        margin: 0px 0px 0px -15px;
         padding: 0;
+
+        width: -moz-fit-content;
+        width: -webkit-fit-content;
+        width: fit-content;
 
         // Hide menu
         display: none;
@@ -299,7 +303,13 @@ body.fixed {
                     margin: 0;
                     padding: 0;
                 }
+
+                &:last-child {
+                    padding-bottom: 10px;
+                }
             }
+
+            
         }
     }
     #barBottomLeft:hover #barTopMenu,

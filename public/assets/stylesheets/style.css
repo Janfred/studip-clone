@@ -2616,8 +2616,11 @@ body.fixed label[for="barTopMenu-toggle"] {
 body.fixed #barTopMenu {
   background-color: #28497c;
   list-style: none;
-  margin: 0 -10px;
+  margin: 0px 0px 0px -15px;
   padding: 0;
+  width: -moz-fit-content;
+  width: -webkit-fit-content;
+  width: fit-content;
   display: none;
 }
 body.fixed #barTopMenu img {
@@ -2670,6 +2673,9 @@ body.fixed #barTopMenu li.overflow ul {
   list-style: none;
   margin: 0;
   padding: 0;
+}
+body.fixed #barTopMenu li.overflow:last-child {
+  padding-bottom: 10px;
 }
 body.fixed #barBottomLeft:hover #barTopMenu,
 body.fixed #barTopMenu-toggle:checked ~ #barTopMenu {
@@ -4722,7 +4728,7 @@ input.quicksearchbox {
   padding: 10px;
   position: fixed;
   top: 20px;
-  z-index: 1000;
+  z-index: 3000;
 }
 #skip_link_navigation ul {
   list-style-type: none;
