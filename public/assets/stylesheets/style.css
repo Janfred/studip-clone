@@ -2090,8 +2090,8 @@ form.default label.packed button {
 #header_avatar_menu .action-menu-content {
   z-index: 1002;
   position: absolute;
-  top: 34px;
-  right: -18px;
+  top: 39px;
+  right: -31px;
   /*padding: 4px 28px 4px 8px;*/
   background: #fff;
   box-shadow: 1px 1px 1px #8b8f95;
@@ -2117,7 +2117,9 @@ form.default label.packed button {
 .header_avatar_container,
 #header_avatar_menu .action-menu-icon {
   z-index: 1003;
-  margin: 2px 0px 0px 0px;
+  margin: 3px 0px 0px 0px;
+}
+.header_avatar_container {
   align-items: center;
 }
 #notification_marker {
