@@ -22,8 +22,6 @@ class Shared_LogEventController extends MVVController
     public function before_filter(&$action, &$args)
     {
         if (Request::isXhr()) {
-            $this->response->add_header('Content-Type',
-                    'text/html; charset=WINDOWS-1252');
             $this->set_layout(null);
         }
     }

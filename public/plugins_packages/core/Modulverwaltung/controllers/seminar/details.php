@@ -24,8 +24,6 @@ class Seminar_DetailsController extends MVVController
         ModuleManagementModel::setLanguage($_SESSION['_language']);
 
         if (Request::isXhr()) {
-            $this->response->add_header('Content-Type',
-                    'text/html; charset=WINDOWS-1252');
             $this->set_layout(null);
         }
     }

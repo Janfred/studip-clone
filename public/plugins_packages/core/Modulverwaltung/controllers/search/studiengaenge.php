@@ -30,8 +30,6 @@ class Search_StudiengaengeController extends MVVController
         $this->breadCrumb = new BreadCrumb();
 
         if (Request::isXhr()) {
-            $this->response->add_header('Content-Type',
-                    'text/html; charset=WINDOWS-1252');
             $this->set_layout(null);
         }
     }

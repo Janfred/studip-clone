@@ -26,8 +26,6 @@ class Module_InstituteController extends Module_ModuleController
         URLHelper::bindLinkParam('institut_id', $this->institut_id);
 
         if (Request::isXhr()) {
-            $this->response->add_header('Content-Type',
-                    'text/html; charset=WINDOWS-1252');
             $this->set_layout(null);
         }
     }

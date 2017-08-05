@@ -33,8 +33,6 @@ class Studiengaenge_VersionenController extends SharedVersionController
         URLHelper::bindLinkParam('chooser', $this->chooser_filter);
 
         if (Request::isXhr()) {
-            $this->response->add_header('Content-Type',
-                    'text/html; charset=WINDOWS-1252');
             $this->set_layout(null);
         }
     }

@@ -30,8 +30,6 @@ class Fachabschluss_FaecherController extends MVVController
         Navigation::activateItem($this->me . '/fachabschluss/faecher');
         $this->action = $action;
         if (Request::isXhr()) {
-            $this->response->add_header('Content-Type',
-                    'text/html; charset=WINDOWS-1252');
             $this->set_layout(null);
         }
     }

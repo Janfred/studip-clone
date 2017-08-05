@@ -32,8 +32,6 @@ class Studiengaenge_StudiengaengeController extends MVVController
         $this->parent_id = Request::option('parent_id');
         URLHelper::bindLinkParam('parent_id', $this->parent_id);
         if (Request::isXhr()) {
-            $this->response->add_header('Content-Type',
-                    'text/html; charset=WINDOWS-1252');
             $this->set_layout(null);
         }
     }

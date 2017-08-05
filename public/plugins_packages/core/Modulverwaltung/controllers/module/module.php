@@ -405,7 +405,6 @@ class Module_ModuleController extends MVVController
     {
         $response = $this->relay('shared/modul/description', $modul_id);
         if (Request::isXhr()) {
-            $this->response->add_header('Content-Type', 'text/html; charset=WINDOWS-1252');
             $this->render_text($response->body);
         } else {
             $this->render_nothing();
