@@ -1,6 +1,6 @@
 /*******************************************************************************
-    Druck-Stylesheet für Stud.IP
-    - nur pt Größenangaben verwenden
+    Druck-Stylesheet f�r Stud.IP
+    - nur pt Gr��enangaben verwenden
     - auf background-colors verzichten (werden nicht gedruckt)
 *******************************************************************************/
 html,
@@ -51,7 +51,8 @@ button.button,
 #layout-sidebar,
 .helpbar-container,
 .helpbar,
-#skip_link_navigation {
+#skip_link_navigation,
+#barTopFont {
   display: none !important;
 }
 img {

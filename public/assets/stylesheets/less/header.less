@@ -22,7 +22,8 @@
     top: 0px;
     z-index: 10000;
 
-    #barBottomLeft {
+    #barBottomLeft,
+    #barTopFont {
         padding: 0px 15px;
         z-index: 2;
     }
@@ -320,10 +321,13 @@
     }
 }
 #barTopFont {
-    display: inline;
     color: @white;
-    margin-left: 16px;
+    margin-left: 0px;
     z-index: 1002;
+    position: absolute;
+    left: 80px;
+    top: 0px;
+    line-height: @bar-bottom-container-height;
 }
 
 .studip-logo {

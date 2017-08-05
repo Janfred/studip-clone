@@ -2009,7 +2009,8 @@ form.default label.packed button {
   top: 0px;
   z-index: 10000;
 }
-#barBottomContainer #barBottomLeft {
+#barBottomContainer #barBottomLeft,
+#barBottomContainer #barTopFont {
   padding: 0px 15px;
   z-index: 2;
 }
@@ -2330,10 +2331,13 @@ li#notification_container:hover .list {
   visibility: visible;
 }
 #barTopFont {
-  display: inline;
   color: #fff;
-  margin-left: 16px;
+  margin-left: 0px;
   z-index: 1002;
+  position: absolute;
+  left: 80px;
+  top: 0px;
+  line-height: 40px;
 }
 .studip-logo {
   font: 0/0 a;
@@ -9910,7 +9914,8 @@ label[for="responsive-toggle"]::before {
   #sidebar-navigation,
   #quicksearch,
   #layout_footer,
-  li#quicksearch_item {
+  li#quicksearch_item,
+  #barTopFont {
     display: none !important;
   }
   .responsive-hidden {

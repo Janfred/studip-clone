@@ -23,10 +23,11 @@ if (isset($_COOKIE['navigation-length'])) {
             <?= _('Menü') ?>
         </label>
         <? // The main menu will be placed here when scrolled, see navigation.less ?>
-        <div id="barTopFont">
-            <?= htmlReady(Config::get()->UNI_NAME_CLEAN) ?>
-        </div>
     </div>
+    <div id="barTopFont">
+        <?= "langer langer Text...";// htmlReady(Config::get()->UNI_NAME_CLEAN) ?>
+    </div>  
+    
     <!-- Dynamische Links ohne Icons -->
     <div id="barBottomright">
         <ul>
