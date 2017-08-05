@@ -17,14 +17,11 @@
 # Stefan Suchi <suchi@data-quest.de>, 2014
 # tthelen <tobias.thelen@uni-osnabrueck.de>, 2013
 # xdf <andre.klassen@gmail.com>, 2013
-#: ../app/views/calendar/group/_attendees.php:51
-#: ../app/views/calendar/single/_tooltip.php:55
-#: ../app/views/calendar/single/_attendees.php:15
 msgid ""
 msgstr ""
 "Project-Id-Version: Stud.IP\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-05 21:04+0200\n"
+"POT-Creation-Date: 2017-08-05 21:19+0200\n"
 "PO-Revision-Date: 2016-04-25 12:32+0000\n"
 "Last-Translator: mbohnsack <bohnsack@me.com>\n"
 "Language-Team: English (http://www.transifex.com/studip/studip/language/"
@@ -742,7 +739,7 @@ msgstr "Content of the Quicklinks widget:"
 #: ../app/views/tour/admin_details.php:107
 #: ../app/views/my_courses/groups.php:54
 #: ../app/views/userfilter/filter/configure.php:17
-#: ../app/views/admission/user_list/configure.php:131
+#: ../app/views/admission/user_list/configure.php:132
 #: ../app/views/admission/courseset/configure.php:229
 #: ../app/views/admission/courseset/configure_courses.php:53
 #: ../app/views/admission/rule/configure.php:11
@@ -885,7 +882,7 @@ msgstr "Save"
 #: ../app/views/tour/edit_step.php:178 ../app/views/tour/admin_details.php:108
 #: ../app/views/my_courses/groups.php:55
 #: ../app/views/userfilter/filter/configure.php:18
-#: ../app/views/admission/user_list/configure.php:132
+#: ../app/views/admission/user_list/configure.php:133
 #: ../app/views/admission/courseset/configure.php:231
 #: ../app/views/admission/courseset/configure.php:235
 #: ../app/views/admission/rule/select_type.php:24
