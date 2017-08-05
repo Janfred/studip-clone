@@ -44,7 +44,7 @@ class ContentGroupMenu
     private function __construct()
     {
         $this->label = _('Aktionen');
-        $this->aria_label = _('Aktionsmen¸');
+        $this->aria_label = _('Aktionsmen√º');
     }
 
     /**
