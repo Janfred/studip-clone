@@ -8,7 +8,7 @@ Helpbar::get()->addPlainText(_('Info'), "Hier sehen Sie alle Personenlisten, auf
                                         "haben.");
 ?>
 <?= $this->render_partial('dialog/confirm_dialog') ?>
-<h1><?= _('Personenlisten') ?></h1>
+
 <?php
 if ($userlists) {
 ?>
