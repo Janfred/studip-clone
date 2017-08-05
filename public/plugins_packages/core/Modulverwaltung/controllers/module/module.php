@@ -58,10 +58,10 @@ class Module_ModuleController extends MVVController
         // Nur Module von verantwortlichen Einrichtungen an denen der User
         // eine Rolle hat
         $this->filter = array_merge(
+                (array) $this->filter,
                 array(
                     'mvv_modul.modul_id' => $search_result,
-                    'mvv_modul_inst.institut_id' => MvvPerm::getOwnInstitutes()),
-                (array) $this->filter);
+                    'mvv_modul_inst.institut_id' => MvvPerm::getOwnInstitutes()));
 
         //get data
         $this->module = Modul::getAllEnriched(
@@ -1287,9 +1287,12 @@ class Module_ModuleController extends MVVController
         // Nur Module von verantwortlichen Einrichtungen an denen der User
         // eine Rolle hat
         $own_institutes = MvvPerm::getOwnInstitutes();
-        $modul_ids = null;
+        
+        $modul_filter = array_merge(
+                ['mvv_modul_inst.gruppe' => 'hauptverantwortlich'],
+                $this->filter);
 
-        $modul_ids = Modul::findByFilter($this->filter);
+        $modul_ids = Modul::findByFilter($modul_filter);
 
         $institute_filter = [
             'mvv_modul.stat'             => $this->filter['mvv_modul.stat'],
