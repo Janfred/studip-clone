@@ -442,7 +442,7 @@ class Abschluss extends ModuleManagementModelTreeItem
         return $stmt->fetchColumn();
     }
     
-    public function store()
+    public function store($validate = true)
     {
         if ($this->isNew() || $this->isDirty()) {
             $this->editor_id = $GLOBALS['user']->id;
@@ -451,7 +451,7 @@ class Abschluss extends ModuleManagementModelTreeItem
             }
         }
         
-        return parent::store();
+        return parent::store($validate);
     }
 
 }

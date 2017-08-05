@@ -257,7 +257,7 @@ abstract class ModuleManagementModel extends SimpleORMap
     }
 
     /**
-     * @see SimpleOrMap::store()
+     * @see SimpleOrMap::delete()
      * Triggers logging.
      */
     public function delete() {
