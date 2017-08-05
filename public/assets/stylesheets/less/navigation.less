@@ -142,7 +142,7 @@ body:not(.fixed) #barTopMenu {
         &:hover label,
         input[type="checkbox"]:checked {
             ~ ul {
-                max-height: 1000px;
+                display: block;
             }
             img,
             ~ label img {
@@ -154,7 +154,7 @@ body:not(.fixed) #barTopMenu {
         }
 
         > ul {
-            display: block;
+            display: none;
 
             position: absolute;
             right: 0;
@@ -166,10 +166,11 @@ body:not(.fixed) #barTopMenu {
             padding: 0;
 
             background-color: @dark-gray-color-5;
+            border: 1px solid @dark-gray-color-40;
+            border-top: 0;
 
             min-width: 150px;
             max-width: 250px;
-            max-height: 0;
             overflow: hidden;
 
             li {

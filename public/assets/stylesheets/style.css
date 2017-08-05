@@ -2499,7 +2499,7 @@ body:not(.fixed) #barTopMenu > .overflow > label > a[data-badge]::before {
 }
 body:not(.fixed) #barTopMenu > .overflow:hover label ~ ul,
 body:not(.fixed) #barTopMenu > .overflow input[type="checkbox"]:checked ~ ul {
-  max-height: 1000px;
+  display: block;
 }
 body:not(.fixed) #barTopMenu > .overflow:hover label img,
 body:not(.fixed) #barTopMenu > .overflow input[type="checkbox"]:checked img,
@@ -2512,7 +2512,7 @@ body:not(.fixed) #barTopMenu > .overflow input[type="checkbox"]:checked > a[data
   opacity: 0;
 }
 body:not(.fixed) #barTopMenu > .overflow > ul {
-  display: block;
+  display: none;
   position: absolute;
   right: 0;
   top: 100%;
@@ -2521,9 +2521,10 @@ body:not(.fixed) #barTopMenu > .overflow > ul {
   margin: 5px 0 0;
   padding: 0;
   background-color: #f5f6f6;
+  border: 1px solid #b1b4b9;
+  border-top: 0;
   min-width: 150px;
   max-width: 250px;
-  max-height: 0;
   overflow: hidden;
 }
 body:not(.fixed) #barTopMenu > .overflow > ul li {
