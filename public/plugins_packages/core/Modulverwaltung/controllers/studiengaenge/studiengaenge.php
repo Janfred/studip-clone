@@ -327,13 +327,13 @@ class Studiengaenge_StudiengaengeController extends MVVController
             $this->stgteile_bez = StgteilBezeichnung::getAllSorted();
             Request::set('stgteil_id_parameter',  $this->flash['qs_stgteil']);
             $query = "SELECT stgteil_id, CONCAT(mf.name, ' ', mst.kp, ' cp' "
-                    . "' (', mst.zusatz, ')') FROM "
-                    . 'mvv_stgteil mst LEFT JOIN fach mf USING(fach_id) '
+                    . "' (', mst.zusatz, ')') AS stgteil_name FROM "
+                    . 'mvv_stgteil mst INNER JOIN fach mf USING(fach_id) '
                     . 'WHERE (mst.zusatz LIKE :input '
                     . 'OR mf.name LIKE :input) '
                     . "AND stgteil_id NOT IN('"
                     . join("','", $this->bez_stgteile->pluck('id'))
-                    . "')";
+                    . "') ORDER BY stgteil_name";
             $search = new SQLSearch($query, _('Studiengangteil suchen'),
                     'stgteil_id');
             $this->qs_search_stgteil_id = md5(serialize($search));
@@ -358,7 +358,7 @@ class Studiengaenge_StudiengaengeController extends MVVController
         }
         $query = "SELECT stgteil_id, CONCAT(mf.name, ' ', mst.kp, ' cp' "
                 . "' (', mst.zusatz, ')') AS stgteil_name FROM "
-                . 'mvv_stgteil mst LEFT JOIN fach mf USING(fach_id) '
+                . 'mvv_stgteil mst INNER JOIN fach mf USING(fach_id) '
                 . 'WHERE (mst.zusatz LIKE :input '
                 . 'OR mf.name LIKE :input) '
                 . "AND stgteil_id NOT IN('"
