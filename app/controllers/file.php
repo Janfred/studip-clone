@@ -179,7 +179,21 @@ class FileController extends AuthenticatedController
     public function details_action($file_area_object_id = null)
     {
         //check if the file area object is a FileRef:
-        if ($this->file_ref = FileRef::find($file_area_object_id)) {
+        if (Request::get("to_plugin")) {
+            $file_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/file/details/") + strlen("dispatch.php/file/details/"));
+            if (strpos($file_id, "?") !== false) {
+                $file_id = substr($file_id, 0, strpos($file_id, "?"));
+            }
+            $plugin = PluginManager::getInstance()->getPlugin(Request::get("to_plugin"));
+            if (!$plugin) {
+                throw new Trails_Exception(404, _('Plugin existiert nicht.'));
+            }
+            $this->file_ref = $plugin->getPreparedFile($file_id);
+        } else {
+            $this->file_ref = FileRef::find($file_area_object_id);
+        }
+
+        if ($this->file_ref) {
             //file system object is a FileRef
             PageLayout::setTitle($this->file_ref->name);
 
@@ -190,7 +204,7 @@ class FileController extends AuthenticatedController
             // NOTE: The following can only work properly for folders which are
             // stored in the database, since remote folders
             // (for example owncloud/nextcloud folders) are not stored in the database.
-            $folder = $this->file_ref->folder->getTypedFolder();
+            $folder = $this->file_ref->folder_type;
             if (!$folder->isVisible(User::findCurrent()->id)) {
                 throw new AccessDeniedException();
             }
@@ -200,6 +214,7 @@ class FileController extends AuthenticatedController
             //load the previous and next file in the folder,
             //if the folder is of type FolderType.
             if ($folder->isReadable(User::findCurrent()->id)) {
+                $current_file_ref_id = null;
                 foreach ($folder->getFiles() as $folder_file_ref) {
                     $last_file_ref_id = $current_file_ref_id;
                     $current_file_ref_id = $folder_file_ref->id;
@@ -215,7 +230,6 @@ class FileController extends AuthenticatedController
                         //the foreach loop:
                         break;
                     }
-
                 }
             }
 
