@@ -18,6 +18,11 @@ class FileController extends AuthenticatedController
 {
     protected $utf8decode_xhr = true;
 
+    function validate_args(&$args, $types = NULL)
+    {
+        reset($args);
+    }
+
     /**
      * This is a helper method that decides where a redirect shall be made
      * in case of error or success after an action was executed.
@@ -184,6 +189,7 @@ class FileController extends AuthenticatedController
             if (strpos($file_id, "?") !== false) {
                 $file_id = substr($file_id, 0, strpos($file_id, "?"));
             }
+            $file_id = urldecode($file_id);
             $plugin = PluginManager::getInstance()->getPlugin(Request::get("to_plugin"));
             if (!$plugin) {
                 throw new Trails_Exception(404, _('Plugin existiert nicht.'));
@@ -724,6 +730,7 @@ class FileController extends AuthenticatedController
             if (strpos($file_id, "?") !== false) {
                 $file_id = substr($file_id, 0, strpos($file_id, "?"));
             }
+            $file_id = urldecode($file_id);
             $plugin = PluginManager::getInstance()->getPlugin(Request::get("to_plugin"));
             if (!$plugin) {
                 throw new Trails_Exception(404, _('Plugin existiert nicht.'));
