@@ -222,8 +222,8 @@ class Studiengaenge_StudiengangteileController extends SharedVersionController
             $this->do_search('StudiengangTeil',
                 trim(Request::get('stgteil_suche_parameter')),
                 Request::option('stgteil_suche'), $filter);
-            $this->redirect($this->url_for('/index'));
         }
+        $this->redirect($this->url_for('/index'));
     }
 
     /**
@@ -232,6 +232,7 @@ class Studiengaenge_StudiengangteileController extends SharedVersionController
     public function reset_search_action()
     {
         $this->reset_search('StudiengangTeil');
+        $this->reset_page();
         $this->redirect($this->url_for('/index'));
     }
 
