@@ -30,7 +30,7 @@
                                 continue;
                             } ?>
                             <option value="<?= $calendar_user->owner_id ?>"<?= ($range_id == $calendar_user->owner_id ? ' selected' : '') ?>>
-                                <?= htmlReady($calendar_user->owner->getFullname()) ?>
+                                <?= htmlReady($calendar_user->owner->getFullname('full-rev')) ?>
                             </option>
                         <? endforeach ?>
                         </optgroup>
