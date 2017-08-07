@@ -138,7 +138,7 @@ if (isset($_COOKIE['navigation-length'])) {
 
                 foreach (Navigation::getItem('/avatar') as $subnav) {
                     $action_menu->addLink(
-                        URLHelper::getURL($subnav->getURL()),
+                        URLHelper::getURL($subnav->getURL(), [], true),
                         $subnav->getTitle(),
                         $subnav->getImage()
                     );
