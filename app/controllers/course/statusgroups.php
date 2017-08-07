@@ -101,7 +101,7 @@ class Course_StatusgroupsController extends AuthenticatedController
 
             $groupdata = [
                 'group' => $g,
-                'membercount' => $membercounts[$g->id]
+                'membercount' => $membercounts[$g->id] ?: 0
             ];
 
             /*
