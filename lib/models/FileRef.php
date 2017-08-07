@@ -215,8 +215,7 @@ class FileRef extends SimpleORMap
      */
     public function isImage()
     {
-        return $this->file
-            && mb_strpos($this->file->mime_type, 'image/') === 0;
+        return mb_strpos($this->mime_type, 'image/') === 0;
     }
 
     /**
@@ -226,8 +225,7 @@ class FileRef extends SimpleORMap
      */
     public function isAudio()
     {
-        return $this->file
-            && mb_strpos($this->file->mime_type, 'audio/') === 0;
+        return mb_strpos($this->mime_type, 'audio/') === 0;
     }
 
 
@@ -238,7 +236,6 @@ class FileRef extends SimpleORMap
      */
     public function isVideo()
     {
-        return $this->file
-            && mb_strpos($this->file->mime_type, 'video/') === 0;
+        return mb_strpos($this->mime_type, 'video/') === 0;
     }
 }

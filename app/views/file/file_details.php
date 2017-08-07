@@ -4,14 +4,14 @@
     <div id="preview_container">
     <? if ($is_downloadable): ?>
         <? if ($file_ref->isImage()): ?>
-            <img src="<?= htmlReady($file_ref->getDownloadURL()) ?>" class="file_preview"
-                 <? if ($file_ref->file) printf('type="%s"', $file_ref->file->mime_type); ?>>
+            <img src="<?= htmlReady($file_ref->download_url) ?>" class="file_preview"
+                 <? if ($file_ref->file) printf('type="%s"', $file_ref->mime_type); ?>>
         <? elseif ($file_ref->isAudio()): ?>
-            <audio controls="controls" src="<?= htmlReady($file_ref->getDownloadURL()) ?>" class="file_preview"
-                    <? if ($file_ref->file) printf('type="%s"', $file_ref->file->mime_type); ?>></audio>
+            <audio controls="controls" src="<?= htmlReady($file_ref->download_url) ?>" class="file_preview"
+                    <? if ($file_ref->file) printf('type="%s"', $file_ref->mime_type); ?>></audio>
         <? elseif ($file_ref->isVideo()): ?>
-            <video controls="controls" src="<?= htmlReady($file_ref->getDownloadURL()) ?>" class="file_preview"
-                   <? if ($file_ref->file) printf('type="%s"', $file_ref->file->mime_type); ?>></video>
+            <video controls="controls" src="<?= htmlReady($file_ref->download_url) ?>" class="file_preview"
+                   <? if ($file_ref->file) printf('type="%s"', $file_ref->mime_type); ?>></video>
         <? endif; ?>
     <? endif; ?>
 
