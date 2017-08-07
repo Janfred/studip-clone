@@ -104,7 +104,10 @@ class CourseGroupFolder extends StandardFolder
      */
     public function getIcon($role = Icon::DEFAULT_ROLE)
     {
-        return Icon::create('group2', $role);
+        $shape = count($this->getSubfolders()) + count($this->getFiles()) === 0
+            ? 'folder-group-empty'
+            : 'folder-group-full';
+        return Icon::create($shape, $role);
     }
 
     /**
