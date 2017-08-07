@@ -210,7 +210,7 @@ class FileController extends AuthenticatedController
             // NOTE: The following can only work properly for folders which are
             // stored in the database, since remote folders
             // (for example owncloud/nextcloud folders) are not stored in the database.
-            $folder = $this->file_ref->folder_type;
+            $folder = $this->file_ref->foldertype;
             if (!$folder->isVisible(User::findCurrent()->id)) {
                 throw new AccessDeniedException();
             }
