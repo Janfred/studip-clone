@@ -179,10 +179,15 @@ class ContentTermsOfUse extends SimpleORMap
      */
     public function fileIsDownloadable(FileRef $file_ref, $allow_owner = true, $user_id = null)
     {
-        $user_id = $user_id ?: $GLOBALS['user_id'];
+        $user_id = $user_id ?: $GLOBALS['user']->id;
 
-        if ($allow_owner && ($file_ref->user_id === $GLOBALS['user']->id || $GLOBALS['perm']->have_perm('root', $user_id))) {
-            return true;
+        if ($allow_owner) {
+            if ($file_ref->user_id === $GLOBALS['user']->id || Seminar_Perm::get()->have_perm('root', $user_id)) {
+                return true;
+            }
+            if (in_array($file_ref->folder->range_type, ['course', 'institute']) && Seminar_Perm::get()->have_studip_perm('tutor', $file_ref->folder->range_id, $user_id)) {
+                return true;
+            }
         }
 
         if ($this->download_condition == 1) {

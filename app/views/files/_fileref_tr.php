@@ -30,7 +30,7 @@
         <?= htmlReady($file_ref->name) ?>
     <? endif ?>
     <? if ($file_ref->terms_of_use && $file_ref->terms_of_use->download_condition > 0): ?>
-        <?= Icon::create('lock-locked', Icon::ROLE_INFO)->asImg(['class' => 'text-top', 'title' => _('Das Herunterladen dieser Datei ist nur eingeschränkt möglich.')]) ?>
+        <?= Icon::create('lock-locked', $current_folder->isFileDownloadable($file_ref, $GLOBALS['user']->id) ? ICON::ROLE_INACTIVE : Icon::ROLE_INFO)->asImg(['class' => 'text-top', 'title' => _('Das Herunterladen dieser Datei ist nur eingeschränkt möglich.')]) ?>
     <? endif; ?>
     </td>
     <td title="<?= number_format($file_ref->size, 0, ',', '.') . ' Byte' ?>" data-sort-value="<?= $file_ref->size ?>" class="responsive-hidden">
