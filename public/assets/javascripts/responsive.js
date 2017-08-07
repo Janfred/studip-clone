@@ -66,7 +66,7 @@
 
         addMenu();
 
-        if ($('#layout-sidebar > section > :not(#sidebar-navigation,.sidebar-image)').length > 0) {
+        if ($('#layout-sidebar > section').length > 0) {
             $('<li id="sidebar-menu">').on('click', function () {
                 $('#responsive-toggle').prop('checked', false);
                 $('#responsive-navigation').removeClass('visible');
