@@ -19,7 +19,10 @@
                         <? endforeach ?>
                         </optgroup>
                     <? endif; ?>
-                    <? $calendar_users = CalendarUser::getOwners($GLOBALS['user']->id); ?>
+                    <? $calendar_users = CalendarUser::getOwners($GLOBALS['user']->id)->getArrayCopy(); ?>
+                    <? usort($calendar_users, function ($a, $b) {
+                        return strnatcmp($a->owner->Nachname, $b->owner->Nachname);
+                    }); ?>
                     <? if (count($calendar_users)) : ?>
                         <optgroup style="font-weight:bold;" label="<?= _('Einzelkalender:') ?>">
                         <? foreach ($calendar_users as $calendar_user) : ?>
