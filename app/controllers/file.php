@@ -706,8 +706,10 @@ class FileController extends AuthenticatedController
         CSRFProtection::verifyUnsafeRequest();
 
         if (Request::get("to_plugin")) {
-            $args = func_get_args();
-            $file_id = implode("/", $args);
+            $file_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/file/delete/") + strlen("dispatch.php/file/delete/"));
+            if (strpos($file_id, "?") !== false) {
+                $file_id = substr($file_id, 0, strpos($file_id, "?"));
+            }
             $plugin = PluginManager::getInstance()->getPlugin(Request::get("to_plugin"));
             if (!$plugin) {
                 throw new Trails_Exception(404, _('Plugin existiert nicht.'));
