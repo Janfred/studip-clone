@@ -1092,7 +1092,7 @@ class Admin_CoursesController extends AuthenticatedController
      */
     private function getViewFilters()
     {
-        return array(
+        $views = array(
             'number'        => _('Nr.'),
             'name'          => _('Name'),
             'type'          => _('Veranstaltungstyp'),
@@ -1105,6 +1105,12 @@ class Admin_CoursesController extends AuthenticatedController
             'contents'      => _('Inhalt'),
             'last_activity' => _('Letzte Aktivität'),
         );
+        foreach (PluginManager::getInstance()->getPlugins("AdminCourseContents") as $plugin) {
+            foreach ($plugin->adminAvailableContents() as $index => $label) {
+                $views[$plugin->getPluginId() . "_" . $index] = $label;
+            }
+        }
+        return $views;
     }
 
     /**

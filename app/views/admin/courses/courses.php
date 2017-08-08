@@ -50,7 +50,16 @@
         <? $colspan++ ?>
         <col width="8%">
     <? endif ?>
+        <? foreach (PluginManager::getInstance()->getPlugins("AdminCourseContents") as $plugin) : ?>
+            <? foreach ($plugin->adminAvailableContents() as $index => $label) : ?>
+                <? if (in_array($plugin->getPluginId()."_".$index, $view_filter)) : ?>
+                    <? $colspan++ ?>
+                    <col width="8%">
+                <? endif ?>
+            <? endforeach ?>
+        <? endforeach ?>
         <col width="15%">
+
     </colgroup>
     <caption>
         <? if (!$GLOBALS['user']->cfg->MY_COURSES_SELECTED_CYCLE || ($GLOBALS['user']->cfg->MY_COURSES_SELECTED_CYCLE === "all")) : ?>
@@ -151,6 +160,13 @@
                 <?= _('letzte Aktivität') ?>
             </th>
         <? endif ?>
+        <? foreach (PluginManager::getInstance()->getPlugins("AdminCourseContents") as $plugin) : ?>
+            <? foreach ($plugin->adminAvailableContents() as $index => $label) : ?>
+                <? if (in_array($plugin->getPluginId()."_".$index, $view_filter)) : ?>
+                    <th style="width: <?= $nav_elements * 27 ?>px"><?= htmlReady($label) ?></th>
+                <? endif ?>
+            <? endforeach ?>
+        <? endforeach ?>
         <th style="text-align: center" class="actions">
             <?= _('Aktion') ?>
         </th>

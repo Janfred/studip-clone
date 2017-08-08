@@ -6,6 +6,7 @@
  */
 if (!$values['parent_course'] || !in_array($values['parent_course'], array_keys($courses))) : ?>
     <?php
+    $course = Course::find($semid);
     $children = [];
     if ($GLOBALS['SEM_CLASS'][$GLOBALS['SEM_TYPE'][$values['status']]['class']]['is_group']) {
         $children = Course::findbyParent_Course($semid);
@@ -143,11 +144,21 @@ if (!$values['parent_course'] || !in_array($values['parent_course'], array_keys(
         <? endif ?>
         <? if (in_array('last_activity', $view_filter)) : ?>
             <td style="text-align: center;">
-                        <span title="<?=_('Datum der letzten Aktivität in dieser Veranstaltung')?>">
-                            <?= htmlReady(date('d.m.Y', $values['last_activity'])); ?>
-                        </span>
+                <span title="<?=_('Datum der letzten Aktivität in dieser Veranstaltung')?>">
+                    <?= htmlReady(date('d.m.Y', $values['last_activity'])); ?>
+                </span>
             </td>
         <? endif ?>
+        <? foreach (PluginManager::getInstance()->getPlugins("AdminCourseContents") as $plugin) : ?>
+            <? foreach ($plugin->adminAvailableContents() as $index => $label) : ?>
+                <? if (in_array($plugin->getPluginId()."_".$index, $view_filter)) : ?>
+                    <td style="text-align: center;">
+                        <? $content = $plugin->adminAreaGetCourseContent($course, $index) ?>
+                        <?= is_a($content, "Flexi_Template") ? $content->render() : $content ?>
+                    </td>
+                <? endif ?>
+            <? endforeach ?>
+        <? endforeach ?>
         <td style="text-align: right;" class="actions">
             <? if ($actions[$selected_action]['multimode'] && is_numeric($selected_action)) : ?>
                 <? if ($GLOBALS['perm']->have_studip_perm('tutor', $semid)) : ?>
