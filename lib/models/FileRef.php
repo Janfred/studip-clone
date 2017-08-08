@@ -34,6 +34,7 @@ class FileRef extends SimpleORMap
 {
 
     protected $folder_type;
+    protected $download_url;
 
     protected static function configure($config = [])
     {
@@ -59,6 +60,7 @@ class FileRef extends SimpleORMap
 
         $config['additional_fields']['size'] = ['file', 'size'];
         $config['additional_fields']['mime_type'] = ['file', 'mime_type'];
+        $config['additional_fields']['download_url']['set'] = 'setDownloadURL';
         $config['additional_fields']['download_url']['get'] = 'getDownloadURL';
         $config['additional_fields']['author_name']['get'] = 'getAuthorName';
         $config['additional_fields']['is_link']['get'] = 'isLink';
@@ -97,6 +99,16 @@ class FileRef extends SimpleORMap
     }
 
     /**
+     * Overrides the usual download url that this file_ref would get by the system (sendfile.php...)
+     * Use this method by cloud plugins.
+     * If you set download URL to null, the normal sendfile.php will be set as default download URL.
+     * @param $url : string as URL or null to set URL to sendfile.php-URL
+     */
+    public function setDownloadURL($field, $url) {
+        $this->download_url = $url;
+    }
+
+    /**
      * Returns the download-URL for the FileRef.
      *
      * @param string $dltype The download type: 'normal', 'zip', 'force' or 'force_download'.
@@ -105,6 +117,9 @@ class FileRef extends SimpleORMap
      */
     public function getDownloadURL($dltype = 'normal')
     {
+        if ($this->download_url) {
+            return $this->download_url;
+        }
         $mode = Config::get()->SENDFILE_LINK_MODE ?: 'normal';
         $link = [];
         $type = '0';

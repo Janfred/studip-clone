@@ -258,25 +258,37 @@ class FileController extends AuthenticatedController
      */
     public function edit_action($file_ref_id)
     {
-        $file_ref = FileRef::find($file_ref_id);
-        $this->folder = FileManager::getTypedFolder($file_ref->folder_id);
+        if (Request::get("to_plugin")) {
+            $file_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/file/edit/") + strlen("dispatch.php/edit/details/"));
+            if (strpos($file_id, "?") !== false) {
+                $file_id = substr($file_id, 0, strpos($file_id, "?"));
+            }
+            $file_id = urldecode($file_id);
+            $plugin = PluginManager::getInstance()->getPlugin(Request::get("to_plugin"));
+            if (!$plugin) {
+                throw new Trails_Exception(404, _('Plugin existiert nicht.'));
+            }
+            $this->file_ref = $plugin->getPreparedFile($file_id);
+        } else {
+            $this->file_ref = FileRef::find($file_ref_id);
+        }
+        $this->folder = $this->file_ref->foldertype;
 
-        if (!$this->folder || !$this->folder->isFileEditable($file_ref->id, $GLOBALS['user']->id)) {
+        if (!$this->folder || !$this->folder->isFileEditable($this->file_ref->id, $GLOBALS['user']->id)) {
             throw new AccessDeniedException();
         }
 
         $this->content_terms_of_use_entries = ContentTermsOfUse::findAll();
-        $this->file_ref = $file_ref;
         if (Request::isPost()) {
             //form was sent
             CSRFProtection::verifyUnsafeRequest();
 
-            $file_ref->name        = trim(Request::get('name'));
-            $file_ref->description = Request::get('description');
-            $file_ref->content_terms_of_use_id = Request::get('content_terms_of_use_id');
+            $this->file_ref->name        = trim(Request::get('name'));
+            $this->file_ref->description = Request::get('description');
+            $this->file_ref->content_terms_of_use_id = Request::get('content_terms_of_use_id');
 
-            if ($file_ref->name) {
-                if ($file_ref->store()) {
+            if ($this->file_ref->name) {
+                if ($this->file_ref->store()) {
                     PageLayout::postSuccess(_('Änderungen gespeichert!'));
                 } else {
                     PageLayout::postError(_('Fehler beim Speichern der Änderungen!'));
@@ -293,14 +305,26 @@ class FileController extends AuthenticatedController
      */
     public function update_action($file_ref_id)
     {
-        $file_ref = FileRef::find($file_ref_id);
-        $this->folder = FileManager::getTypedFolder($file_ref->folder_id);
+        if (Request::get("to_plugin")) {
+            $file_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/file/update/") + strlen("dispatch.php/file/update/"));
+            if (strpos($file_id, "?") !== false) {
+                $file_id = substr($file_id, 0, strpos($file_id, "?"));
+            }
+            $file_id = urldecode($file_id);
+            $plugin = PluginManager::getInstance()->getPlugin(Request::get("to_plugin"));
+            if (!$plugin) {
+                throw new Trails_Exception(404, _('Plugin existiert nicht.'));
+            }
+            $this->file_ref = $plugin->getPreparedFile($file_id);
+        } else {
+            $this->file_ref = FileRef::find($file_ref_id);
+        }
+        $this->folder = $this->file_ref->foldertype;
 
-        if (!$this->folder || !$this->folder->isFileEditable($file_ref->id, $GLOBALS['user']->id)) {
+        if (!$this->folder || !$this->folder->isFileEditable($this->file_ref->id, $GLOBALS['user']->id)) {
             throw new AccessDeniedException();
         }
 
-        $this->file_ref = $file_ref;
         $this->errors = [];
 
         if (Request::submitted('confirm')) {
