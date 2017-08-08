@@ -16,7 +16,7 @@ $DB_STUDIP_DATABASE = "studip";
 //ABSOLUTE_PATH_STUDIP should end with a '/'
 //$ABSOLUTE_PATH_STUDIP = $STUDIP_BASE_PATH . '/public/';
 //$CANONICAL_RELATIVE_PATH_STUDIP
-$ABSOLUTE_URI_STUDIP = 'https://develop.studip.de/studip/';
+if (!$ABSOLUTE_URI_STUDIP) $ABSOLUTE_URI_STUDIP = 'https://develop.studip.de/studip/';
 
 //path to the temporary folder
 $TMP_PATH ="/tmp/studip";                                   //the system temp path
@@ -31,7 +31,7 @@ $CACHE_IS_SESSION_STORAGE = false;                 //store session data in cache
 ----------------------------------------------------------------
 enable or disable the Stud.IP internal modules, set and basic settings*/
 
-$FOP_SH_CALL = "JAVACMD=/usr/bin/java /opt/fop-0.20.5/fop.sh";                       //path to fop
+$FOP_SH_CALL = "/usr/bin/fop";                       //path to fop
 
 
 /*domain name and path translation
