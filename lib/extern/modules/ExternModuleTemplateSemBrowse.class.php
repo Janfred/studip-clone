@@ -463,7 +463,7 @@ class ExternModuleTemplateSemBrowse extends ExternModule {
             $tmp_file = basename($this->createResultXls());
             if ($tmp_file) {
                 ob_end_clean();
-                header('Location: ' . getDownloadLink($tmp_file, _("ErgebnisVeranstaltungssuche.xls"), 4));
+                header('Location: ' . FileManager::getDownloadURLForTemporaryFile($tmp_file, _("ErgebnisVeranstaltungssuche.xls"), 4));
                 page_close();
                 die;
             }

@@ -43,6 +43,7 @@ $EVAL_AUSWERTUNG_GRAPH_FORMAT = Config::get()->EVAL_AUSWERTUNG_GRAPH_FORMAT ?: '
 include 'lib/seminar_open.php'; // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
+require_once 'vendor/phplot/phplot.php';
 require_once 'lib/evaluation/evaluation.config.php';
 require_once EVAL_FILE_EVAL;
 require_once EVAL_FILE_OBJECTDB;
@@ -59,7 +60,7 @@ if (EvaluationObjectDB::getEvalUserRangesWithNoPermission($eval) == YES || count
     throw new Exception(_("Diese Evaluation ist nicht vorhanden oder Sie haben nicht ausreichend Rechte!"));
 }
 
-$tmp_path_export = $GLOBALS['TMP_PATH']. '/export/';
+$tmp_path_export = $GLOBALS['TMP_PATH'];
 export_tmp_gc();
 
 // Template vorhanden?
@@ -75,6 +76,93 @@ function do_template($column)
     global $has_template, $eval_templates;
 
     return ($has_template==0 || ($has_template==1 && $eval_templates[$column]));
+}
+
+/**
+ * returning the type of the graph
+ *
+ * @return string
+ */
+function do_graph_template()
+{
+    global $eval_templates, $has_template, $question_type;
+
+    if ($has_template == 1) {
+        if ($question_type == 'likertskala') {
+            return $eval_templates['likertscale_gfx_type'];
+        }
+        if ($question_type == 'multiplechoice') {
+            return $eval_templates['mchoice_scale_gfx_type'];
+        }
+        if ($question_type == 'polskala') {
+            return $eval_templates['polscale_gfx_type'];
+        }
+    }
+    return 'bars';
+}
+
+/**
+ * drawing the graph for a evaluation question
+ *
+ * @param array() $data
+ * @param string $evalquestion_id
+ */
+function do_graph($data, $evalquestion_id)
+{
+    global $tmp_path_export, $auth;
+
+    $type = do_graph_template();
+
+    //Define the object
+    if ($type == "pie") {
+        // Beim pie muss die Zeichenflaeche etwas groesser gewaehlt werden...
+        $graph = new PHPlot(500,300);
+    } else {
+        $graph = new PHPlot(300,250);
+    }
+
+    if ($type == "pie") {
+        // Beim pie muss das Array umgeformt werden. Bug in PHPlot?
+        $tmp = array();
+        $tmp2 = array();
+        $legend = array();
+        array_push($tmp,"Test");
+        foreach($data as $k=>$d) {
+            array_push($tmp, $d[1]);
+            array_push($legend, $d[0]);
+        }
+        array_push($tmp2, $tmp);
+        $data = $tmp2;
+        $graph->SetLegend($legend);
+    }
+
+    //Data Colors
+    $graph->SetDataColors(
+        array("blue", "green", "yellow", "red", "PeachPuff", "orange", "pink", "lavender",
+            "navy", "peru", "salmon", "maroon", "magenta", "orchid", "ivory"),
+        array("black") //Border Colors
+    );
+
+    if(!empty($data)) {
+        $max_x = max(array_map('next',$data));
+        $graph->SetPlotAreaWorld(NULL, 0); // y-achse bei 0 starten
+        $graph->SetPrecisionY(0); //anzahl kommastellen y-achse
+        $graph->SetYTickIncrement($max_x < 10 ? 1 : round($max_x/10));
+        $graph->SetPlotBgColor(array(222,222,222));
+        $graph->SetDataType("text-data");
+        $graph->SetFileFormat(Config::get()->EVAL_AUSWERTUNG_GRAPH_FORMAT);
+        $graph->SetOutputFile($tmp_path_export."/evalsum".$evalquestion_id.$auth->auth["uid"].".".Config::get()->EVAL_AUSWERTUNG_GRAPH_FORMAT);
+        $graph->SetIsInline(true);
+        $graph->SetDataValues($data);
+        $graph->SetPlotType($type);
+        $graph->SetXLabelAngle(count($data) < 10 ? 0 : 90);
+        //$graph->SetShading(0); // kein 3D
+
+        $graph->SetLineWidth(1);
+        $graph->SetDrawXDataLabels(true);
+        //Draw it
+        $graph->DrawGraph();
+    }
 }
 
 function freetype_answers ($parent_id, $anz_nutzer) {
@@ -173,11 +261,15 @@ function answers ($parent_id, $anz_nutzer, $question_type) {
         else $edit .= "                  <fo:table-cell ><fo:block font-size=\"8pt\">".$answer_counter." (".$prozente."%)</fo:block></fo:table-cell>\n";
         $edit .= "                </fo:table-row>\n";
 
+        array_push($summary, array($antwort_nummer."(".$prozente."%)",$answer_counter));
+
         array_push($ret_array["antwort_texte"], ($answer['text'] != "" ? $answer['text'] : $answer['value']));
                 array_push($ret_array["auswertung"], array($answer_counter, $prozente, ($answer['residual']==0 ? $prozente_wo_residual : null)));
                 if ($has_residual) $ret_array["has_residual"] = 1;
 
     }
+    do_graph($summary, $parent_id);
+
     if ($gesamte_antworten > 0 && $antwort_durchschnitt > 0) $antwort_durchschnitt = ROUND($antwort_durchschnitt / $gesamte_antworten, 3);
 
     $ret_array["antwort_durchschnitt"] = $antwort_durchschnitt;
@@ -598,7 +690,7 @@ if ($evaluation = $statement->fetch(PDO::FETCH_ASSOC)) {
     $err = exec($str);
 
     if (file_exists($pdffile) && filesize($pdffile)) {
-        header('Location: ' . getDownloadLink( basename($pdffile), "evaluation.pdf", 2, 'force'));
+        header('Location: ' . FileManager::getDownloadURLForTemporaryFile( basename($pdffile), "evaluation.pdf", 2, 'force'));
         unlink($tmp_path_export."/evalsum".$evaluation['eval_id'].$auth->auth["uid"].".fo");
     } else {
         echo "Fehler beim PDF-Export!<BR>".$err;

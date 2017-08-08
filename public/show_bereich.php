@@ -114,7 +114,7 @@ case "s":
 if (Request::int('send_excel')){
     $tmpfile = basename($sem_browse_obj->create_result_xls($excel_text));
     if($tmpfile){
-        header('Location: ' . getDownloadLink( $tmpfile, _("Veranstaltungsübersicht.xls"), 4));
+        header('Location: ' . FileManager::getDownloadURLForTemporaryFile( $tmpfile, _("Veranstaltungsübersicht.xls"), 4));
         page_close();
         die;
     }

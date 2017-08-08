@@ -90,7 +90,7 @@ class Search_CoursesController extends AuthenticatedController
         $sem_browse_obj = new SemBrowse();
         $tmpfile = basename($sem_browse_obj->create_result_xls());
         if ($tmpfile) {
-            $this->redirect(getDownloadLink( $tmpfile, _("ErgebnisVeranstaltungssuche.xls"), 4));
+            $this->redirect(FileManager::getDownloadURLForTemporaryFile($tmpfile, _("ErgebnisVeranstaltungssuche.xls"), 4));
         } else {
             $this->render_nothing();
         }
