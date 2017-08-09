@@ -57,11 +57,14 @@ class Module_ModuleController extends MVVController
 
         // Nur Module von verantwortlichen Einrichtungen an denen der User
         // eine Rolle hat
+        if (!$this->filter['mvv_modul_inst.institut_id']) {
+            unset($this->filter['mvv_modul_inst.institut_id']);
+        }
         $this->filter = array_merge(
-                (array) $this->filter,
                 array(
                     'mvv_modul.modul_id' => $search_result,
-                    'mvv_modul_inst.institut_id' => MvvPerm::getOwnInstitutes()));
+                    'mvv_modul_inst.institut_id' => MvvPerm::getOwnInstitutes()),
+                $this->filter);
 
         //get data
         $this->module = Modul::getAllEnriched(
@@ -1283,27 +1286,23 @@ class Module_ModuleController extends MVVController
      */
     private function sidebar_filter()
     {
-        $template_factory = $this->get_template_factory();
         // Nur Module von verantwortlichen Einrichtungen an denen der User
         // eine Rolle hat
-        $own_institutes = MvvPerm::getOwnInstitutes();
-        
+        if (!$this->filter['mvv_modul_inst.institut_id']) {
+            unset($this->filter['mvv_modul_inst.institut_id']);
+        }
         $modul_filter = array_merge(
-                ['mvv_modul_inst.gruppe' => 'hauptverantwortlich'],
+                ['mvv_modul_inst.gruppe' => 'hauptverantwortlich',
+                    'mvv_modul_inst.institut_id' => MvvPerm::getOwnInstitutes()],
                 $this->filter);
-
+        
         $modul_ids = Modul::findByFilter($modul_filter);
 
-        $institute_filter = [
-            'mvv_modul.stat'             => $this->filter['mvv_modul.stat'],
-            'mvv_modul_inst.institut_id' => $own_institutes,
-            'mvv_modul_inst.gruppe'      => 'hauptverantwortlich',
-            'start_sem.beginn'           => $this->filter['start_sem.beginn'],
-            'end_sem.ende'               => $this->filter['end_sem.ende']];
-
+        $template_factory = $this->get_template_factory();
         $template = $template_factory->open('shared/filter');
 
         // Status
+        $modul_ids = Modul::findByFilter($modul_filter);
         $template->set_attribute('status', Modul::findStatusByIds($modul_ids));
         $template->set_attribute('selected_status',
                 $this->filter['mvv_modul.stat']);
@@ -1312,7 +1311,7 @@ class Module_ModuleController extends MVVController
 
         // Institutes
         $template->set_attribute('institute',
-                Modul::getAllAssignedInstitutes('name', 'ASC', $institute_filter));
+                Modul::getAllAssignedInstitutes('name', 'ASC', $modul_filter));
         $template->set_attribute('institute_count', 'count_objects');
         $template->set_attribute('selected_institut',
                 $this->filter['mvv_modul_inst.institut_id']);

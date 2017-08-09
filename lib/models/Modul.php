@@ -736,9 +736,9 @@ class Modul extends ModuleManagementModelTreeItem
      * @return array An array with status key as key and an array of name of
      * status and number of Module with this status.
      */
-    public static function findStatusByIds($modul_ids = array())
+    public static function findStatusByIds($modul_ids = null)
     {
-        if (is_array($modul_ids) && count($modul_ids)) {
+        if (is_array($modul_ids)) {
             $stmt = DBManager::get()->prepare(
                 "SELECT IFNULL(stat, '__undefined__') AS stat, "
                 . 'COUNT(modul_id) AS count_module '
