@@ -61,8 +61,6 @@ require_once EVAL_LIB_COMMON;
 require_once EVAL_LIB_SHOW;
 # ====================================================== end: including files #
 
-header('Content-Type:text/html;charset=windows-1252');
-
 /* Create objects ---------------------------------------------------------- */
 $db  = new EvaluationDB();
 $lib = new EvalShow();
