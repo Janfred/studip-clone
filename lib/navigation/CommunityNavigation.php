@@ -55,8 +55,6 @@ class CommunityNavigation extends Navigation
         // online list
         $navigation = new Navigation(_('Wer ist online?'), 'dispatch.php/online/index');
         $this->addSubNavigation('online', $navigation);
-        $navigation = new Navigation(_('Karte'), 'dispatch.php/online/onlinemap');
-        $this->addSubNavigation('onlinemap', $navigation);
 
         // contacts
         $navigation = new Navigation(_('Kontakte'), 'dispatch.php/contact');
