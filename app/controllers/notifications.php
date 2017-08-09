@@ -29,7 +29,7 @@ class NotificationsController extends AuthenticatedController
         parent::before_filter($action, $args);
 
         //PageLayout::setHelpKeyword('Basis.InteraktionWhosOnline');
-        PageLayout::setTitle(_('Persönliche Benachrichtigungen'));
+        PageLayout::setTitle(_('PersÃ¶nliche Benachrichtigungen'));
         Navigation::activateItem('/messaging');
         SkipLinks::addIndex(_('Wer ist online?'), 'layout_content', 100);
     }
