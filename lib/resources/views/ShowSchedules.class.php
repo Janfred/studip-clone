@@ -164,7 +164,7 @@ class ShowSchedules
         $stdout = fopen('php://output', 'w');
         $assign_events = new AssignEventList($this->start_time, $this->end_time, $this->resource_id, '', '', true);
 
-        header('Content-Type: text/csv; charset=windows-1252');
+        header('Content-Type: text/csv; charset=utf-8');
         header('Content-Disposition: attachment; filename="' . $name . '.csv"');
         header('Pragma: public');
 
