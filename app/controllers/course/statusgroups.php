@@ -718,7 +718,12 @@ class Course_StatusgroupsController extends AuthenticatedController
                                 $room_name = DBManager::get()->fetchOne(
                                     "SELECT `name` FROM `resources_objects` WHERE `resource_id` = ?",
                                     array(array_pop(array_keys($rooms))));
-                                $name .= ' ' . $room_name['name'];
+                                $name .= ' (' . $room_name['name'] . ')';
+                            } else {
+                                $room = trim(array_pop(array_keys($cd->getFreeTextPredominantRoom())));
+                                if ($room) {
+                                    $name .= ' (' . $room . ')';
+                                }
                             }
 
                             $group = StatusgroupsModel::updateGroup('', $name,
