@@ -63,6 +63,7 @@ class Module_ModuleController extends MVVController
         $this->filter = array_merge(
                 array(
                     'mvv_modul.modul_id' => $search_result,
+                    'mvv_modul_inst.gruppe' => 'hauptverantwortlich',
                     'mvv_modul_inst.institut_id' => MvvPerm::getOwnInstitutes()),
                 $this->filter);
 
