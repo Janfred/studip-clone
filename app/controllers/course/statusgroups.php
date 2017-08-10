@@ -161,19 +161,21 @@ class Course_StatusgroupsController extends AuthenticatedController
             ];
 
             if ($this->sort_group == 'nogroup') {
-                $nogroupmembers = DBManager::get()->fetchAll("SELECT s.* FROM `seminar_user` s
+                $nogroupmembers = DBManager::get()->fetchAll("SELECT seminar_user.*,
+                    aum.vorname,aum.nachname,aum.email,
+                    aum.username,ui.title_front,ui.title_rear
+                    FROM seminar_user
+                    LEFT JOIN auth_user_md5 aum USING (user_id)
+                    LEFT JOIN user_info ui USING (user_id)
                     WHERE `Seminar_id` = :course AND NOT EXISTS (
                         SELECT `user_id` FROM `statusgruppe_user`
-                        WHERE `statusgruppe_id` IN (:groups) AND `user_id` = s.`user_id`)",
+                        WHERE `statusgruppe_id` IN (:groups) AND `user_id` = seminar_user.`user_id`)",
                     [
                         'course' => $this->course_id,
                         'groups' => array_map(function ($g) { return $g->id; }, $groups)
-                    ]);
+                    ], 'CourseMember::buildExisting');
 
-                $members = new SimpleCollection();
-                foreach ($nogroupmembers as $m) {
-                    $members->append(CourseMember::build($m));
-                }
+                $members = new SimpleCollection($nogroupmembers);
 
                 $groupdata['members'] = StatusgroupsModel::sortGroupMembers($members, $this->sort_by, $this->order);
 
@@ -261,8 +263,16 @@ class Course_StatusgroupsController extends AuthenticatedController
             if (count($this->group->members) > 0) {
                 $this->members = StatusgroupsModel::sortGroupMembers(
                     SimpleCollection::createFromArray(
-                        CourseMember::findBySQL("`Seminar_id` = ? AND `user_id` IN (?)",
-                        [$this->course_id, $this->group->members->pluck('user_id')])
+                        DBManager::get()->fetchAll("SELECT seminar_user.*,
+                    aum.vorname,aum.nachname,aum.email,
+                    aum.username,ui.title_front,ui.title_rear
+                    FROM seminar_user
+                    LEFT JOIN auth_user_md5 aum USING (user_id)
+                    LEFT JOIN user_info ui USING (user_id)
+                    WHERE
+                            `Seminar_id` = ? AND `user_id` IN (?)",
+                        [$this->course_id, $this->group->members->pluck('user_id')],
+                        'CourseMember::buildExisting')
                     )
                 );
             } else {
@@ -276,21 +286,23 @@ class Course_StatusgroupsController extends AuthenticatedController
             $no_group->size = 0;
             $no_group->selfassign = 0;
 
-            $members = DBManager::get()->fetchAll("SELECT s.* FROM `seminar_user` s
+            $members = DBManager::get()->fetchAll("SELECT seminar_user.*,
+                    aum.vorname,aum.nachname,aum.email,
+                    aum.username,ui.title_front,ui.title_rear
+                    FROM seminar_user
+                    LEFT JOIN auth_user_md5 aum USING (user_id)
+                    LEFT JOIN user_info ui USING (user_id)
                     WHERE `Seminar_id` = :course AND NOT EXISTS (
                         SELECT `user_id` FROM `statusgruppe_user`
-                        WHERE `statusgruppe_id` IN (:groups) AND `user_id` = s.`user_id`)",
+                        WHERE `statusgruppe_id` IN (:groups) AND `user_id` = seminar_user.`user_id`)",
                 [
                     'course' => $this->course_id,
                     'groups' => DBManager::get()->fetchFirst(
                         "SELECT `statusgruppe_id` FROM `statusgruppen` WHERE `range_id` = ?",
                         [$this->course_id])
-                ]);
+                ], 'CourseMember::buildExisting');
 
-            $this->members = new SimpleCollection();
-            foreach ($members as $m) {
-                $this->members->append(CourseMember::build($m));
-            }
+            $this->members = new SimpleCollection($members);
             $this->members = StatusgroupsModel::sortGroupMembers($this->members);
 
             $this->group = $no_group;

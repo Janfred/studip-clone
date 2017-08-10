@@ -127,6 +127,6 @@ class CourseMember extends SimpleORMap
 
     function getUserFullname($format = "full")
     {
-        return User::buildExisting(array_merge(array('motto' => ''), $this->toArray('vorname nachname username title_front title_rear')))->getFullname($format);
+        return User::build(array_merge(array('motto' => ''), $this->toArray('vorname nachname username title_front title_rear')))->getFullname($format);
     }
 }
