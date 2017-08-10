@@ -97,7 +97,7 @@
                 </td>
                 <td>
                     <?= $this->render_partial('course/members/_studycourse.php', [
-                            'studycourses' => new SimpleCollection(UserStudyCourse::findByUser($autor['user_id']))
+                            'studycourses' => new SimpleCollection(UserStudyCourse::findByUser($leser['user_id']))
                     ]) ?>
                 </td>
             <? endif ?>

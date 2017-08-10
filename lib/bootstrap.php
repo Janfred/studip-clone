@@ -229,7 +229,7 @@ namespace {
         Metrics::gauge('core.database.queries', $query_count, 0.1);
     }, Metrics::startTimer());
 
-    //include 'tools/debug/StudipDebugPDO.class.php';
+    include 'tools/debug/StudipDebugPDO.class.php';
 
     /**
      * @deprecated
