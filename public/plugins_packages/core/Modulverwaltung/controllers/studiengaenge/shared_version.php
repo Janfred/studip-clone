@@ -293,7 +293,8 @@ class SharedVersionController extends MVVController
             $this->abschnitt->name_en = trim(Request::get('name_en'));
             $this->abschnitt->kommentar = trim(Request::get('kommentar'));
             $this->abschnitt->kommentar_en = trim(Request::get('kommentar_en'));
-            $this->abschnitt->kp = trim(Request::int('kp'));
+            $abschnitt_kp = trim(Request::get('kp'));
+            $this->abschnitt->kp = mb_strlen($abschnitt_kp) ? intval($abschnitt_kp) : null;
             $this->abschnitt->ueberschrift = trim(Request::get('ueberschrift'));
             $this->abschnitt->ueberschrift_en = trim(Request::get('ueberschrift_en'));
             try {
