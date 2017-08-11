@@ -23,7 +23,7 @@ $owner = User::find($folder->user_id) ?: new User();
     <? endif?>
     </td>
     <td class="document-icon" data-sort-value="0">
-    <a href="<?= $controller->link_for('file/details/' . $folder->getId())  ?>" data-dialog>
+    <a href="<?= $controller->link_for($controllerpath . '/' . $folder->getId())  ?>">
             <?= $folder->getIcon('clickable')->asImg(26) ?>
         </a>
     </td>
