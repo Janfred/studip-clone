@@ -635,12 +635,30 @@ class Admin_CoursesController extends AuthenticatedController
                 $row['semester'] = $sem->start_semester->name;
             }
 
+            foreach (PluginManager::getInstance()->getPlugins("AdminCourseContents") as $plugin) {
+                foreach ($plugin->adminAvailableContents() as $index => $label) {
+                    if (in_array($plugin->getPluginId()."_".$index, $filter_config)) {
+                        $content = $plugin->adminAreaGetCourseContent($course, $index);
+                        $row[$plugin->getPluginId()."_".$index] = is_a($content, "Flexi_Template")
+                            ? $content->render()
+                            : $content;
+                    }
+                }
+            }
+
             $data[$course_id] = $row;
         }
 
         $captions = array();
         foreach ($filter_config as $index) {
             $captions[$index] = $view_filters[$index];
+        }
+        foreach (PluginManager::getInstance()->getPlugins("AdminCourseContents") as $plugin) {
+            foreach ($plugin->adminAvailableContents() as $index => $label) {
+                if (in_array($plugin->getPluginId()."_".$index, $filter_config)) {
+                    $captions[$plugin->getPluginId()."_".$index] = $label;
+                }
+            }
         }
 
         $tmpname = md5(uniqid('Veranstaltungsexport'));
