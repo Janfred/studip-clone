@@ -8428,32 +8428,6 @@ table.default tr.subcourses td:nth-child(-n+4) {
   text-align: center;
   vertical-align: middle;
 }
-.modal-overlay {
-  background: rgba(40, 73, 124, 0.5);
-  opacity: 1;
-  position: fixed;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-}
-.modal-overlay-local {
-  background-color: rgba(109, 114, 122, 0.5);
-  position: absolute;
-}
-.modal-overlay-ajax {
-  background-image: url("../images/ajax_indicator_small.gif");
-  background-image: none, url("../images/ajax-indicator-white.svg");
-  background-position: center;
-  background-repeat: no-repeat;
-}
-.modal-overlay-ajax.modal-overlay-dark {
-  background-image: none, url("../images/ajax-indicator-black.svg");
-}
-#layout_wrapper.has-overlay {
-  -webkit-filter: blur(1px);
-  filter: blur(1px);
-}
 .ui-dialog.studip-confirmation {
   min-width: 30em;
 }
@@ -8499,6 +8473,80 @@ table.default tr.subcourses td:nth-child(-n+4) {
 }
 .ui-dialog.studip-confirmation .ui-dialog-buttonpane .ui-dialog-buttonset > * {
   display: inline-block;
+}
+.modal-overlay {
+  background: rgba(40, 73, 124, 0.5);
+  opacity: 1;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+.modal-overlay-local {
+  background-color: rgba(109, 114, 122, 0.5);
+  position: absolute;
+}
+.modal-overlay-ajax {
+  background-image: url("../images/ajax_indicator_small.gif");
+  background-image: none, url("../images/ajax-indicator-white.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.modal-overlay-ajax.modal-overlay-dark {
+  background-image: none, url("../images/ajax-indicator-black.svg");
+}
+.modal-overlay.ui-front {
+  cursor: wait;
+}
+.modal-overlay.ui-front h1 {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin-bottom: 0;
+  padding-bottom: 100px;
+  color: #fff;
+  border-bottom: 0;
+}
+.modal-overlay.ui-front progress {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin-top: 45px;
+  width: 80%;
+  height: 20px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-size: auto;
+  border: none;
+  border-radius: 2px;
+  box-shadow: 0 0 3px #e2e3e4;
+  background-color: #6d727a;
+}
+.modal-overlay.ui-front progress::-moz-progress-bar,
+.modal-overlay.ui-front progress::-webkit-progress-value {
+  background-color: #fac599;
+  transition: all 300ms;
+}
+.modal-overlay.ui-front ul.overlay-progress-log {
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  right: 10%;
+  list-style: none;
+  margin: 60px 0 0;
+  padding: 0;
+  text-align: center;
+  color: white;
+  max-height: 120px;
+  overflow: hidden;
+}
+#layout_wrapper.has-overlay {
+  -webkit-filter: blur(1px);
+  filter: blur(1px);
 }
 ul,
 ol {

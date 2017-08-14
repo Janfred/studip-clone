@@ -91,7 +91,7 @@
                 margin-top: 2px;
             }
         }
-    
+
         .ui-button-text-only .ui-button-text {
             padding: 0;
             white-space: nowrap;
@@ -129,39 +129,6 @@
     display: table-cell;
     text-align: center;
     vertical-align: middle;
-}
-
-.modal-overlay {
-    .ui-widget-overlay;
-
-    position: fixed;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    
-    &-local {
-        background-color: fadeout(@light-gray-color, 50%);
-        position: absolute;
-    }
-    &-ajax {
-        // Fallback to gif for browsers that don't support svg. Fortunately,
-        // the support for multiple background images and svg covers the same
-        // browsers (except for some old android versions that we can neglect). 
-        // Thus said, if the loading animation looks ugly - update your
-        // browser ffs!
-        background-image: url("@{image-path}/ajax_indicator_small.gif");
-        background-image: none, url("@{image-path}/ajax-indicator-white.svg");
-        background-position: center;
-        background-repeat: no-repeat;
-    }
-    &-ajax.modal-overlay-dark {
-        background-image: none, url("@{image-path}/ajax-indicator-black.svg");
-    }
-}
-#layout_wrapper.has-overlay {
-    -webkit-filter: blur(1px);
-    filter: blur(1px);
 }
 
 
