@@ -9992,10 +9992,10 @@ label[for="responsive-toggle"]::before {
     display: none;
   }
   #barBottomright .list.below {
-    left: -185px;
+    left: -210px;
   }
   #barBottomright .list.below:before {
-    left: 185px;
+    left: 210px;
   }
   #barBottomright > ul > li {
     flex: 1 0 auto;
