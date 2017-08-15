@@ -59,13 +59,11 @@
         }, delay);
     };
     STUDIP.Overlay.hide = function () {
-        if (this.element === null) {
-            return;
-        }
-
         this.schedule(function () {
-            this.element.remove();
-            this.element = null;
+            if (this.element !== null) {
+                this.element.remove();
+                this.element = null;
+            }
 
             $('#layout_wrapper').removeClass('has-overlay');
             $(window).off('beforeunload.overlay');
