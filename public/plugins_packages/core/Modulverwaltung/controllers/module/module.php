@@ -913,8 +913,8 @@ class Module_ModuleController extends MVVController
                 $this->headline = _('Neue Lehrveranstaltungsgruppe anlegen.');
             } else {
                 PageLayout::setTitle(_('Lehrveranstaltungsgruppe bearbeiten'));
-                $success_message = _('Die Lehveranstaltungsgruppe "%s" wurde geändert.');
-                $this->headline = sprintf(_('Lehrveranstaltungsgrupgjjgjpe "%s" bearbeiten.'),
+                $success_message = _('Die Lehrveranstaltungsgruppe "%s" wurde geändert.');
+                $this->headline = sprintf(_('Lehrveranstaltungsgruppe "%s" bearbeiten.'),
                     $this->lvgruppe->getDisplayName());
             }
             $this->cancel_url = $this->url_for('/index');

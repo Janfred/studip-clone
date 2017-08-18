@@ -162,7 +162,7 @@ class Lvgruppen_LvgruppenController extends MVVController
             $this->headline = _('Neue Lehrveranstaltungsgruppe anlegen.');
         } else {
             PageLayout::setTitle(_('Lehrveranstaltungsgruppe bearbeiten'));
-            $success_message = _('Die Lehveranstaltungsgruppe "%s" wurde geändert.');
+            $success_message = _('Die Lehrveranstaltungsgruppe "%s" wurde geändert.');
             $this->headline = sprintf(_('Lehrveranstaltungsgruppe "%s" bearbeiten.'),
                 $this->lvgruppe->getDisplayName());
         }
