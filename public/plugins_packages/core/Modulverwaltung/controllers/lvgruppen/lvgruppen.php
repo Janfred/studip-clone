@@ -179,7 +179,7 @@ class Lvgruppen_LvgruppenController extends MVVController
                 $this->lvgruppe->verifyPermission();
                 $stored = $this->lvgruppe->store();
             } catch (InvalidValuesException $e) {
-                 PageLayout::postError(htmlReady($e->getMessage()));
+                 $this->flash_set('error', htmlReady($e->getMessage()));
             }
             if ($stored !== false) {
                 $this->sessSet('sortby', 'chdate');
@@ -190,19 +190,9 @@ class Lvgruppen_LvgruppenController extends MVVController
                 } else {
                     PageLayout::postInfo(_('Es wurden keine Änderungen vorgenommen.'));
                 }
-                $this->redirect($this->url_for('/index'));
+                $this->relocate('/index');
                 return;
             }
-        }
-
-        $this->setSidebar();
-        if (!$this->lvgruppe->isNew()) {
-            $sidebar = Sidebar::get();
-            $widget  = new ActionsWidget();
-            $widget->addLink( _('Log-Einträge dieser LV-Gruppe'),
-                    $this->url_for('shared/log_event/show', $this->lvgruppe->getId()),
-                    Icon::create('log', 'clickable'), array('data-dialog' => 'size=auto'));
-            $sidebar->addWidget($widget);
         }
     }
 

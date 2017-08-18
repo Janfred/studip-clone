@@ -897,7 +897,7 @@ class Module_ModuleController extends MVVController
         $this->redirect($this->url_for('/details', $modulteil->modul_id, $modulteil->id));
     }
 
-    public function new_lvgruppe_action($modulteil_id, $lvgruppe_id = null)
+    public function lvgruppe_action($modulteil_id, $lvgruppe_id = null)
     {
         $this->modulteil = Modulteil::find($modulteil_id);
         if (is_null($this->modulteil)) {
@@ -906,8 +906,19 @@ class Module_ModuleController extends MVVController
             return;
         } else {
             $this->lvgruppe = Lvgruppe::get($lvgruppe_id);
+            if ($this->lvgruppe->isNew()) {
+                $this->lvgruppe = new Lvgruppe();
+                PageLayout::setTitle(_('Neue Lehrveranstaltungsgruppe anlegen'));
+                $success_message = _('Die Lehrveranstaltungsgruppe "%s" wurde angelegt.');
+                $this->headline = _('Neue Lehrveranstaltungsgruppe anlegen.');
+            } else {
+                PageLayout::setTitle(_('Lehrveranstaltungsgruppe bearbeiten'));
+                $success_message = _('Die Lehveranstaltungsgruppe "%s" wurde geändert.');
+                $this->headline = sprintf(_('Lehrveranstaltungsgrupgjjgjpe "%s" bearbeiten.'),
+                    $this->lvgruppe->getDisplayName());
+            }
             $this->cancel_url = $this->url_for('/index');
-            $this->submit_url = $this->url_for('/new_lvgruppe', $this->modulteil->id,
+            $this->submit_url = $this->url_for('/lvgruppe', $this->modulteil->id,
                         $this->lvgruppe->id);
             if (Request::submitted('store')) {
                 CSRFProtection::verifyUnsafeRequest();
@@ -930,7 +941,7 @@ class Module_ModuleController extends MVVController
                 }
                 if ($stored !== false && $stored_modulteil !== false) {
                     if ($stored) {
-                        PageLayout::postSuccess(sprintf(_('LV-Gruppe "%s" angelegt.'),
+                        PageLayout::postSuccess(sprintf($success_message,
                                 htmlReady($this->lvgruppe->getDisplayName())));
                     } else {
                         PageLayout::postInfo(_('Es wurden keine Änderungen vorgenommen.'));
@@ -941,8 +952,7 @@ class Module_ModuleController extends MVVController
                 }
             }
         }
-        $this->response->add_header('X-Title', _('Neue LV-Gruppe anlegen'));
-        $this->render_template('module/module/lvgruppe');
+        $this->render_template('lvgruppen/lvgruppen/lvgruppe');
     }
 
     public function delete_action($modul_id)

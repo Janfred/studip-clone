@@ -2,7 +2,7 @@
 <?= $controller->jsUrl() ?>
 <?= $controller->renderMessages() ?>
 <? $perm = MvvPerm::get($lvgruppe) ?>
-<form data-dialog class="default" action="<?= $submit_url ?>" method="post">
+<form data-dialog="size=auto" class="default" action="<?= $submit_url ?>" method="post">
     <?= CSRFProtection::tokenTag() ?>
     <fieldset>
         <legend><?= _('Bezeichnung') ?></legend>

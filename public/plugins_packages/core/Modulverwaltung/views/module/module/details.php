@@ -32,7 +32,7 @@
                     <? $actionMenu = ActionMenu::get() ?>
                     <? if (MvvPerm::havePermCreate('Lvgruppe') && $perm->haveFieldPermLvgruppen(MvvPerm::PERM_CREATE)) : ?>
                         <? $actionMenu->addLink(
-                            $controller->url_for('/new_lvgruppe/' . $modulteil->id),
+                            $controller->url_for('/lvgruppe/' . $modulteil->id),
                             _('Neue LV-Gruppe anlegen'),
                             Icon::create('file+add', 'clickable', ['title' => _('Neue LV-Gruppe anlegen')]),
                             ['data-dialog' => 'size=auto',

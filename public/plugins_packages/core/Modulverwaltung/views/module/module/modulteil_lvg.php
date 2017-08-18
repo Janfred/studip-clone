@@ -13,7 +13,7 @@
                     <? $actionMenu = ActionMenu::get() ?>
                     <? if (MvvPerm::haveFieldPermLvgruppen($modulteil, MvvPerm::PERM_WRITE)) : ?>
                         <? $actionMenu->addLink(
-                            $controller->url_for('/new_lvgruppe/' . $modulteil->id . '/' . $lvgruppe->id),
+                            $controller->url_for('/lvgruppe/' . $modulteil->id . '/' . $lvgruppe->id),
                             _('LV-Gruppe bearbeiten'),
                             Icon::create('edit', 'clickable', ['title' => _('LV-Gruppe bearbeiten')]),
                             ['data-dialog' => 'size=auto',
