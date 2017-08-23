@@ -6,6 +6,11 @@
         return;
     }
 
+    // Create jQuery "plugin" that just reverses the elements' order. This is
+    // neccessary since the navigation is built and afterwards, we need to
+    // check the navigation's open status in reverse order (from bottom to top)
+    jQuery.fn.reverse = [].reverse;
+
     var media_query = window.matchMedia('(max-width: 768px)');
 
     // Builds a dom element from a navigation object
@@ -95,7 +100,7 @@
             $(this).siblings('ul').hide(0, function () {
                 $(this).show();
             });
-        }).trigger('change');
+        }).reverse().trigger('change');
 
         var sidebar_avatar_menu = $('<div class="sidebar-widget sidebar-avatar-menu">'),
             avatar_menu = $('#header_avatar_menu'),
