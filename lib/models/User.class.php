@@ -338,7 +338,7 @@ class User extends AuthUserMd5
         //datafields
         if (!is_null($attributes['datafields']) && count($attributes['datafields']) > 0) {
             foreach ($attributes['datafields'] as $id => $entry) {
-                $query .= "AND de.datafield_id = :df_id_". $id ." AND de.content = :df_content_". $id ." ";
+                $query .= "AND de.datafield_id = :df_id_". $id ." AND de.content LIKE :df_content_". $id ." ";
                 $params[':df_id_' . $id] = $id;
                 $params[':df_content_' . $id] = $entry;
             }
