@@ -38,23 +38,9 @@ class MyRealmModel
     {
         if ($my_obj["modules"]["documents"]) {
             //the document module is available in the object
-
             $db = DBManager::get();
-            $result = $db->query(
-                "SELECT visitdate FROM object_user_visits
-                WHERE user_id = " . $db->quote($user_id) . "
-                AND object_id = " . $db->quote($object_id) . "
-                AND type = 'sem'
-                LIMIT 1"
-            );
 
-            $last_visit_date = 0;
-
-            if($result) {
-                $last_visit_date = $result->fetchColumn(0);
-            }
-
-
+            $last_visit_date = $my_obj["visitdate"];
             $top_folder = Folder::findTopFolder($object_id);
             if(!$top_folder) {
                 return null;
@@ -85,7 +71,7 @@ class MyRealmModel
                 WHERE 
                 (file_refs.mkdate > :last_visit_date
                 OR file_refs.chdate > :last_visit_date)
-                AND folders.folder_type = 'StandardFolder'
+                AND folders.folder_type IN ('StandardFolder', 'RootFolder')
                 AND folders.range_id = :range_id
                 AND file_refs.user_id <> :user_id",
                 [
@@ -102,7 +88,7 @@ class MyRealmModel
             //and then add those files to a list if the folder is readable
             //for the current user.
             $nonstandard_folders = Folder::findBySql(
-                "folder_type <> 'StandardFolder'
+                "folder_type NOT IN ('StandardFolder', 'RootFolder')
                 AND range_id = :range_id",
                 [
                     'range_id' => $object_id
@@ -110,13 +96,12 @@ class MyRealmModel
             );
 
 
-            $filter_closure = function($file_ref) use ($last_visit_date) {
-                if(!($file_ref instanceof FileRef)) {
-                    //we only want FileRef objects!
+            $filter_closure = function($file_ref) use ($last_visit_date, $user_id) {
+                if ($file_ref->user_id === $user_id) {
                     return false;
                 }
 
-                if($file_ref->mkdate > $last_visit_date) {
+                if ($file_ref->mkdate > $last_visit_date) {
                     return true;
                 }
                 //if this is executed the file is not new:
@@ -146,7 +131,7 @@ class MyRealmModel
             if ($new_files_count > 0) {
                 $navigation->setURL(
                     URLHelper::getURL(
-                        'dispatch.php/course/files/flat',
+                        'dispatch.php/' . ($my_obj["obj_type"] == 'sem' ? 'course' : 'institute')  . '/files/flat',
                         [
                             'select' => 'new'
                         ]
@@ -171,7 +156,7 @@ class MyRealmModel
             } else {
                 $navigation->setURL(
                     URLHelper::getURL(
-                        'dispatch.php/course/files/index'
+                        'dispatch.php/' . ($my_obj["obj_type"] == 'sem' ? 'course' : 'institute')  . '/files/index'
                     )
                 );
                 $navigation->setImage(
