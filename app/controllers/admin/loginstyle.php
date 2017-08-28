@@ -37,7 +37,7 @@ class Admin_LoginStyleController extends AuthenticatedController
      */
     public function index_action()
     {
-        $this->pictures = Loginbackground::findBySQL("1 ORDER BY `background_id`");
+        $this->pictures = LoginBackground::findBySQL("1 ORDER BY `background_id`");
     }
 
     /**
@@ -57,7 +57,7 @@ class Admin_LoginStyleController extends AuthenticatedController
         $fail = 0;
         foreach ($_FILES['pictures']['name'] as $index => $filename) {
             if ($_FILES['pictures']['error'][$index] === UPLOAD_ERR_OK) {
-                $entry = new Loginbackground();
+                $entry = new LoginBackground();
                 $entry->filename = $filename;
                 $entry->desktop = Request::int('desktop', 0);
                 $entry->mobile = Request::int('mobile', 0);
@@ -98,7 +98,7 @@ class Admin_LoginStyleController extends AuthenticatedController
      */
     public function delete_action($id)
     {
-        $pic = Loginbackground::find($id);
+        $pic = LoginBackground::find($id);
         if ($pic->in_release) {
             PageLayout::postError(_('Dieses Bild wird vom System mitgeliefert und kann daher nicht gelöscht werden.'));
         } elseif ($pic->delete()) {
@@ -118,7 +118,7 @@ class Admin_LoginStyleController extends AuthenticatedController
      */
     public function activation_action($id, $view, $newStatus)
     {
-        $pic = Loginbackground::find($id);
+        $pic = LoginBackground::find($id);
         $pic->$view = $newStatus;
         if ($pic->store()) {
             PageLayout::postSuccess(_('Der Aktivierungsstatus wurde gespeichert.'));
