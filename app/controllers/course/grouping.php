@@ -33,7 +33,7 @@ class Course_GroupingController extends AuthenticatedController
     public function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
-
+        checkObject();
         $this->course = Course::findCurrent();
 
         // Allow only tutor and upwards

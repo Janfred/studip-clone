@@ -1,4 +1,4 @@
-<form class="default" action="<?= $controller->url_for('course/grouping/assign_child') ?>">
+<form class="default" method="post" action="<?= $controller->url_for('course/grouping/assign_child') ?>">
     <fieldset>
         <legend>
             <?= _('Bereits zugeordnet') ?>

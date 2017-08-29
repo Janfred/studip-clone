@@ -1,5 +1,5 @@
 <? if ($parent) : ?>
-    <form class="default" action="<?= $controller->url_for('course/grouping/unassign_parent') ?>">
+    <form class="default" method="post" action="<?= $controller->url_for('course/grouping/unassign_parent') ?>">
         <section>
             <p>
                 <?= sprintf(
@@ -22,7 +22,7 @@
     <p>
         <?= _('Diese Veranstaltung ist noch keiner Hauptveranstaltung zugeordnet.') ?>
     </p>
-    <form class="default" action="<?= $controller->url_for('course/grouping/assign_parent') ?>">
+    <form class="default" method="post" action="<?= $controller->url_for('course/grouping/assign_parent') ?>">
         <section>
             <?= $search->render() ?>
         </section>
