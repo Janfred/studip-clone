@@ -291,7 +291,7 @@ jQuery(document).ready(function () {
                 var last_left = null;
                 return function (top, left) {
                     if (last_left !== left) {
-                        $('#flex-header,#layout_footer,#barBottomContainer').css({
+                        $('#flex-header,#tabs,#layout_footer,#barBottomContainer').css({
                             transform: 'translate3d(' + left + 'px,0,0)'
                         });
                     }
