@@ -1,4 +1,3 @@
-<h2><?= htmlReady($institute->getFullname())?></h2>
 <ul style="list-style-type:none;padding:0px;">
     <? if ($institute->strasse) : ?>
         <li><b><?=_("Straße:")?></b> <?=htmlReady($institute->strasse)?></li>
