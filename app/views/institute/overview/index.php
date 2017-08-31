@@ -41,7 +41,7 @@
 
         <? foreach ($institute->datafields->getTypedDatafield() as $entry): ?>
             <? if ($entry->isVisible() && $entry->getValue()): ?>
-                <dt<?= htmlReady($entry->getName()) ?></dt>
+                <dt><?= htmlReady($entry->getName()) ?></dt>
                 <dd><?= $entry->getDisplayValue() ?></dd>
             <? endif?>
         <? endforeach ?>
