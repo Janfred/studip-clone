@@ -3,52 +3,51 @@
         <h1><?= _('Grunddaten') ?></h1>
     </header>
     <section>
-        <dl>
-            <? if (Context::get()->Untertitel != '') : ?>
-                <dt>
-                    <?= _('Untertitel') ?>
-                </dt>
-                <dd>
-                    <?= htmlReady(Context::get()->Untertitel) ?>
-                </dd>
-            <? endif ?>
-            <? if (!$studygroup_mode) : ?>
-                <dt><?= _('Zeit / Veranstaltungsort') ?></dt>
-                <dd>
-                    <? if ($times_rooms) : ?>
-                        <?= $times_rooms ?>
-                    <? else : ?>
-                        <?= _('Die Zeiten der Veranstaltung stehen nicht fest.') ?>
-                    <? endif ?>
-                </dd>
-                <? if ($next_date) : ?>
-                    <dt><?= _('Nächster Termin') ?></dt>
-                    <dd><?= $next_date ?></dd>
-                <? else : ?>
-                    <dt><?= _('Erster Termin') ?></dt>
-                    <dd>
-                        <? if ($first_date) : ?>
-                            <?= $first_date ?>
-                        <? else : ?>
-                            <?= _('Die Zeiten der Veranstaltung stehen nicht fest.') ?>
-                        <? endif ?>
-                    </dd>
-                <? endif ?>
-                <? printf('<dt>%s</dt> <dd>%s</dd>', get_title_for_status('dozent', $num_dozenten), implode(', ', $show_dozenten)); ?>
+        <dl style="margin: 0;">
+        <? if (Context::get()->Untertitel != '') : ?>
+            <dt><?= _('Untertitel') ?></dt>
+            <dd>
+                <?= htmlReady(Context::get()->Untertitel) ?>
+            </dd>
+        <? endif ?>
+        <? if (!$studygroup_mode) : ?>
+            <dt><?= _('Zeit / Veranstaltungsort') ?></dt>
+            <dd>
+                <?= $times_rooms ?: _('Die Zeiten der Veranstaltung stehen nicht fest.') ?>
+            </dd>
+            <? if ($next_date) : ?>
+                <dt><?= _('Nächster Termin') ?></dt>
+                <dd><?= $next_date ?></dd>
             <? else : ?>
-                <? if ($sem->description) : ?>
-                    <dt><?= _('Beschreibung') ?></dt>
-                    <dd><?= formatLinks($sem->description) ?></dd>
-                <? endif ?>
-                <dt><?= _('Moderiert von') ?></dt>
+                <dt><?= _('Erster Termin') ?></dt>
                 <dd>
-                    <? $mods = [] ?>
-                    <? foreach ($all_mods as $mod) : ?>
-                        <? $mods[] = '<a href="' . URLHelper::getLink("dispatch.php/profile?username=" . $mod['username']) . '">' . htmlready($mod['fullname']) . '</a>'; ?>
-                    <? endforeach ?>
-                    <?= implode(', ', $mods) ?>
+                <? if ($first_date) : ?>
+                    <?= $first_date ?>
+                <? else : ?>
+                    <?= _('Die Zeiten der Veranstaltung stehen nicht fest.') ?>
+                <? endif ?>
                 </dd>
             <? endif ?>
+            <dt><?= get_title_for_status('dozent', $num_dozenten) ?></dt>
+            <dd><?= implode(', ', $show_dozenten) ?> </dd>
+        <? else : ?>
+            <? if ($sem->description) : ?>
+                <dt><?= _('Beschreibung') ?></dt>
+                <dd><?= formatLinks($sem->description) ?></dd>
+            <? endif ?>
+            <dt><?= _('Moderiert von') ?></dt>
+            <dd>
+                <ul class="list-csv">
+                <? foreach ($all_mods as $mod) : ?>
+                    <li>
+                        <a href="<?= URLHelper::getLink('dispatch.php/profile', ['username' => $mod['username']]) ?>">
+                            <?= htmlready($mod['fullname']) ?>
+                        </a>
+                    </li>
+                <? endforeach ?>
+                </ul>
+            </dd>
+        <? endif ?>
         </dl>
     </section>
 </section>

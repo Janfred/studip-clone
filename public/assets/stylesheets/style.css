@@ -1973,6 +1973,9 @@ form.default label.packed button {
 }
 /* --- header.css ----------------------------------------------------------- */
 #layout_wrapper {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
   padding-top: 40px;
 }
 #barBottomContainer {

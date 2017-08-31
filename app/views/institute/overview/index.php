@@ -1,40 +1,53 @@
-<ul style="list-style-type:none;padding:0px;">
-    <? if ($institute->strasse) : ?>
-        <li><b><?=_("Straße:")?></b> <?=htmlReady($institute->strasse)?></li>
-    <? endif ?>
+<article class="studip">
+    <header>
+        <h1><?= _('Grunddaten') ?></h1>
+    </header>
+    <section>
+        <dl style="margin: 0">
+        <? if ($institute->strasse) : ?>
+            <dt><?= _('Straße') ?></dt>
+            <dd><?= htmlReady($institute->strasse) ?></dd>
+        <? endif ?>
 
-    <? if ($institute->Plz) : ?>
-        <li><b><?=_("Ort:")?></b> <?=htmlReady($institute->Plz)?></li>
-    <? endif ?>
+        <? if ($institute->Plz) : ?>
+            <dt><?= _('Ort') ?></dt>
+            <dd><?= htmlReady($institute->Plz) ?></dd>
+        <? endif ?>
 
-    <? if ($institute->telefon) : ?>
-        <li><b><?=_("Tel.:")?></b> <?=htmlReady($institute->telefon)?></li>
-    <? endif ?>
+        <? if ($institute->telefon) : ?>
+            <dt><?=_('Telefon')?></dt>
+            <dd><?= htmlReady($institute->telefon) ?></dd>
+        <? endif ?>
 
-    <? if ($institute->fax) : ?>
-        <li><b><?=_("Fax:")?></b> <?=htmlReady($institute->fax)?></li>
-    <? endif ?>
+        <? if ($institute->fax) : ?>
+            <dt><?= _('Fax') ?></dt>
+            <dd><?= htmlReady($institute->fax) ?></dd>
+        <? endif ?>
 
-    <? if ($institute->url) : ?>
-        <li><b><?=_("Homepage:")?></b> <?=htmlReady($institute->url)?></li>
-    <? endif ?>
+        <? if ($institute->url) : ?>
+            <dt><?= _('Homepage') ?></dt>
+            <dd><?= htmlReady($institute->url) ?></dd>
+        <? endif ?>
 
-    <? if ($institute->email) : ?>
-        <li><b><?=_("E-Mail:")?></b> <?=htmlReady($institute->email)?></li>
-    <? endif ?>
+        <? if ($institute->email) : ?>
+            <dt><?= _('E-Mail') ?></dt>
+            <dd><?= htmlReady($institute->email) ?></dd>
+        <? endif ?>
 
-    <? if ($institute->fakultaets_id) : ?>
-        <li><b><?=_("Fakultät:")?></b> <?=htmlReady($institute->faculty->name)?></li>
-    <? endif ?>
+        <? if ($institute->fakultaets_id) : ?>
+            <dt><?= _('Fakultät') ?></dt>
+            <dd><?= htmlReady($institute->faculty->name) ?></dd>
+        <? endif ?>
 
-    <? foreach ($institute->datafields->map(function ($d) {return $d->getTypedDatafield();}) as $entry) : ?>
-        <? if ($entry->isVisible() && $entry->getValue()) : ?>
-            <li><b><?=htmlReady($entry->getName())?>: </b>
-            <?=$entry->getDisplayValue();?>
-            </li>
-        <? endif?>
-    <? endforeach ?>
-</ul>
+        <? foreach ($institute->datafields->getTypedDatafield() as $entry): ?>
+            <? if ($entry->isVisible() && $entry->getValue()): ?>
+                <dt<?= htmlReady($entry->getName()) ?></dt>
+                <dd><?= $entry->getDisplayValue() ?></dd>
+            <? endif?>
+        <? endforeach ?>
+        </dl>
+    </section>
+</article>
 
 <?= $news ?>
 <?= $dates ?>
@@ -54,4 +67,3 @@ foreach ($plugins as $plugin) {
         $layout->clear_attributes();
     }
 }
-?>
