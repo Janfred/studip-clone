@@ -126,10 +126,10 @@ class Settings_CategoriesController extends Settings_SettingsController
         }
 
         if ($category->delete()) {
-            PageLayout::postSuccess(_('Kategorie "%s" gelöscht!'), $name);
+            PageLayout::postSuccess(sprintf(_('Kategorie "%s" gelöscht!'), $name));
             Visibility::removePrivacySetting('kat_' . $id);
         } else {
-            PageLayout::postError(_('Kategorie "%s" konnte nicht gelöscht werden!'), $name);
+            PageLayout::postError(sprintf(_('Kategorie "%s" konnte nicht gelöscht werden!'), $name));
         }
 
         $this->redirect('settings/categories');

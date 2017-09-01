@@ -47,11 +47,17 @@ class Settings_DeputiesController extends Settings_SettingsController
             $this->check_ticket();
 
             if (isDeputy($deputy_id, $this->user->user_id)) {
-                PageLayout::postError(_('%s ist bereits als Vertretung eingetragen.'), get_fullname($deputy_id, 'full'));
+                PageLayout::postError(sprintf(
+                    _('%s ist bereits als Vertretung eingetragen.'),
+                    get_fullname($deputy_id, 'full')
+                ));
             } else if ($deputy_id == $this->user->user_id) {
                 PageLayout::postError(_('Sie können sich nicht als Ihre eigene Vertretung eintragen!'));
             } else if (addDeputy($deputy_id, $this->user->user_id)) {
-                PageLayout::postSuccess(_('%s wurde als Vertretung eingetragen.'), get_fullname($deputy_id, 'full'));
+                PageLayout::postSuccess(sprintf(
+                    _('%s wurde als Vertretung eingetragen.'),
+                    get_fullname($deputy_id, 'full')
+                ));
             } else {
                 PageLayout::postError(_('Fehler beim Eintragen der Vertretung!'));
             }
@@ -135,10 +141,11 @@ class Settings_DeputiesController extends Settings_SettingsController
         if (count($delete) > 0) {
             $deleted = deleteDeputy($delete, $this->user->user_id);
             if ($deleted) {
-                PageLayout::postSuccess($deleted == 1
-                    ? _('Die Vertretung wurde entfernt.')
-                    : _('Es wurden %s Vertretungen entfernt.'),
-                    $deleted);
+                PageLayout::postSuccess(sprintf(ngettext(
+                    _('Die Vertretung wurde entfernt.'),
+                    _('Es wurden %s Vertretungen entfernt.'),
+                    $deleted
+                ), $deleted));
             } else {
                 PageLayout::postError(_('Fehler beim Entfernen der Vertretung(en).'));
             }
