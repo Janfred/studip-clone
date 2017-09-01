@@ -274,7 +274,7 @@ class StudyAreasWizardStep implements CourseWizardStep
             } else {
                 $data = array(
                     'id' => $c->id,
-                    'name' => $c->name,
+                    'name' => (string)$c->name,
                     'has_children' => $c->hasChildren(),
                     'parent' => $node->id,
                     'assignable' => $c->isAssignable(),
