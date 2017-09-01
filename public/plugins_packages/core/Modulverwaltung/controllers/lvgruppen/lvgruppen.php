@@ -122,11 +122,12 @@ class Lvgruppen_LvgruppenController extends MVVController
                 $this->semester_filter);
             $semester = Semester::find($this->semester_filter);            
             if ($semester && $semester->getcurrent()) {
-                $next_sem = Semester::findNext();
-                $this->display_semesters[] = $next_sem;
+                $this->next_sem = Semester::findNext();
+                $this->display_semesters[] = $this->next_sem;
                 $this->courses = array_merge($this->courses,
-                    $this->lvgruppe->getAllAssignedCourses(false, $next_sem->id));
+                    $this->lvgruppe->getAllAssignedCourses(false, $this->next_sem->id));
             }
+            $this->current_sem = $semester;
             $this->display_semesters[] = $semester;
             // show only pathes to Studiengaenge valid in given semesters
             $this->set_trails_filter(end($this->display_semesters)->beginn,
@@ -134,15 +135,17 @@ class Lvgruppen_LvgruppenController extends MVVController
         } else {
             // show courses of all elapsed, current and next semesters
             $this->courses = $this->lvgruppe->getAllAssignedCourses();
-            $next_sem = Semester::findNext();
+            $this->next_sem = Semester::findNext();
+            $this->current_sem = Semester::findCurrent();
+            
             $this->display_semesters =
-                    Semester::findBySQL('beginn <= ? ORDER BY beginn DESC',
-                            [$next_sem->beginn]);
+                    Semester::findBySQL('1 ORDER BY beginn DESC');
         }
 
+        $this->sem_filter = $this->semester_filter;
+        
         $this->trail_classes = words('Modulteil Modul StgteilAbschnitt StgteilVersion '
                 . 'Studiengang Fachbereich');
-
         $this->trails = $this->lvgruppe->getTrails(
                 $this->trail_classes, MvvTreeItem::TRAIL_SHOW_INCOMPLETE);
 

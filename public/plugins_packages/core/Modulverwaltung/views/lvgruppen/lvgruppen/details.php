@@ -34,17 +34,30 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="2"><strong><?= _('Zugeordnete Lehrveranstaltungen:') ?></strong><br>
+                <td colspan="2">
+                    <strong><?= _('Zugeordnete Lehrveranstaltungen:') ?></strong>
                 <? if (count($courses) == 0) : ?>
-                    <span class="mvv-no-entry">
+                    <div class="mvv-no-entry">
                     <?= _('Dieser Lehrveranstaltungsgruppe wurde für das ausgewählte Semester keine Lehrveranstaltung zugeordnet.') ?>
+                    </div>
+                <? elseif ($sem_filter == 'all') : ?>
+                    <span style="margin-left: 20%" onClick="jQuery('#mvv-lvgruppen-semester').find('.mvv-sem-hidden').slideToggle(); jQuery(this).find('span').toggle(); return false;">
+                        <a href="<?= $controller->url_for('/details/' . $lvgruppe->id, array('all_sem' => 1)) ?>">
+                            <span>
+                                <?= Icon::create('arr_1up', 'clickable', ['style' => 'vertical-align:text-bottom;'])->asImg(); ?>
+                                <?= _('Alle Semester anzeigen') ?>
+                            </span>
+                            <span style="display: none;">
+                                <?= Icon::create('arr_1down', 'clickable', ['style' => 'vertical-align:text-bottom;'])->asImg(); ?>
+                                <?= _('Nur aktuelle Semester anzeigen') ?>
+                            </span>
+                        </a>
                     </span>
-                <? else : ?>
-                    <ul style="list-style-type:none;">
+                    <ul style="list-style-type:none;" id="mvv-lvgruppen-semester">
                         <? foreach ($display_semesters as $semester) : ?>
                             <? if ($courses[$semester->id]) : ?>
-                            	<? $hidden_sem = ($sem_num > 1 && Request::get('all_sem', 0) == 0 ) ? true : false;  ?>
-                                <li<?= ($hidden_sem ? ' style="display:none;" class="mvv-sem-hidden"' : '') ?>>
+                            	<? $show_sem = ($semester->id == $current_sem->id || $semester->id == $next_sem->id || Request::get('all_sem', 0))  ?>
+                                <li<?= (!$show_sem ? ' style="display:none;" class="mvv-sem-hidden"' : '') ?>>
                                     <strong><?= htmlReady($semester->name) ?></strong>
                                     <ul style="list-style-type:none;">
                                     <? foreach ($courses[$semester->id] as $course) : ?>
@@ -57,17 +70,27 @@
                                     </ul>
                                 </li>
                             <? endif; ?>
-                            <? $sem_num++; ?>
                         <? endforeach; ?>
-                    </ul>       
-                    <? if ($hidden_sem) : ?>
-                    <div onClick="jQuery(this).prev().find('.mvv-sem-hidden').slideToggle(); return false;">
-                        <a href="<?= $controller->url_for('/details/' . $lvgruppe->id, array('all_sem' => 1)) ?>">
-                            <?= Icon::create('arr_1right', 'clickable')->asImg(); ?>
-                            <?= _('Frühere Semester.') ?>
-                        </a>
-                    </div>
-                    <? endif; ?>
+                    </ul>
+                <? else : ?>
+                    <ul style="list-style-type:none;" id="mvv-lvgruppen-semester">
+                        <? foreach ($display_semesters as $semester) : ?>
+                            <? if ($courses[$semester->id]) : ?>
+                                <li>
+                                    <strong><?= htmlReady($semester->name) ?></strong>
+                                    <ul style="list-style-type:none;">
+                                    <? foreach ($courses[$semester->id] as $course) : ?>
+                                        <li>
+                                            <a href="<?= URLHelper::getLink('dispatch.php/course/details', ['sem_id' => $course['seminar_id']]) ?>">
+                                                <?= htmlReady(($course['VeranstaltungsNummer'] ? $course['VeranstaltungsNummer'] . ' - ' : '') . $course['Name']) ?>
+                                            </a>
+                                        </li>
+                                    <? endforeach; ?>
+                                    </ul>
+                                </li>
+                            <? endif; ?>
+                        <? endforeach; ?>
+                    </ul>
                 <? endif; ?>
                 </td>
             </tr>
