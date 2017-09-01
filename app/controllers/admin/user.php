@@ -787,6 +787,7 @@ class Admin_UserController extends AuthenticatedController
                 $details = explode('§', str_replace(['msg§', 'info§', 'error§'], '', mb_substr($UserManagement->msg, 0, -1)));
                 PageLayout::postSuccess(_('Person wurde angelegt.'), $details);
                 $this->redirect('admin/user/edit/' . $user_id);
+                return;
             } else {
                 //get message
                 $details = explode('§', str_replace(['msg§', 'info§', 'error§'], '', mb_substr($UserManagement->msg, 0, -1)));
@@ -1509,7 +1510,7 @@ class Admin_UserController extends AuthenticatedController
             $sidebar->addWidget($export);
         }
 
-        if (!$this->user) {
+        if (!is_object($this->user)) {
             return;
         }
 
