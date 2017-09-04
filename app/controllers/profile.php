@@ -172,7 +172,9 @@ class ProfileController extends AuthenticatedController
                 $ausgabe_inhalt[$value] = $this->current_user[$key];
             }
         }
-        $this->ausgabe_inhalt = array_filter($ausgabe_inhalt);
+        $this->ausgabe_inhalt = array_filter($ausgabe_inhalt, function ($item) {
+            return (string)$item;
+        });
 
         //public folders
         $folders = Folder::findBySQL("range_type='user' AND range_id = ? AND folder_type = 'PublicFolder'", [$this->current_user->user_id]);
