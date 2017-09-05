@@ -50,11 +50,22 @@ jQuery(function ($) {
                     var index = $(this).index();
                     $(this).data('sort-fixed', index);
                 });
-                $(this).on('sortEnd', function () {
+                $(this).on('sortStart', function () {
+                    $('tbody tr[data-sort-fixed]', this).each(function () {
+                        var hidden = $(this).is(':hidden');
+                        $(this).data('sort-hidden', hidden);
+                    });
+                }).on('sortEnd', function () {
                     var table = this;
-                    $('tbody tr[data-sort-fixed]', table).remove().each(function () {
-                        var index = $(this).data('sortFixed');
+                    $('tbody tr[data-sort-fixed]', table).detach().each(function () {
+                        var index  = $(this).data('sort-fixed');
                         $('tbody tr:eq(' + index + ')', table).before(this);
+
+                        if ($(this).data('sort-hidden')) {
+                            setTimeout(function () {
+                                $(this).hide();
+                            }.bind(this), 100);
+                        }
                     });
                 });
             }
