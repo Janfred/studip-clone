@@ -810,7 +810,17 @@ table.default > tbody > tr.new > td {
 }
 table.default > tbody > tr.new > td:first-child {
   padding-left: 0px;
-  border-left: 2px solid #d60000;
+  position: relative;
+}
+table.default > tbody > tr.new > td:first-child::before {
+  display: block;
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 2px;
+  background-color: #d60000;
 }
 table.default > tbody > tr.new > td .action-menu {
   font-weight: normal;

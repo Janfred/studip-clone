@@ -440,7 +440,18 @@ table.default {
         font-weight: bold;
         &:first-child {
             padding-left: 0px;
-            border-left: 2px solid @red;
+            position: relative;
+            &::before {
+                display: block;
+                content: '';
+                position: absolute;
+
+                top: 0;
+                bottom: 0;
+                left: 0;
+                width: 2px;
+                background-color: @red;
+            }
         }
         .action-menu {
             font-weight: normal;
