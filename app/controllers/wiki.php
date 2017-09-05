@@ -20,6 +20,17 @@ class WikiController extends AuthenticatedController
         $this->range_id = Context::getId();
     }
 
+    /**
+     * Display dialog to create a new wiki page.
+     */
+    public function create_action()
+    {
+        Navigation::activateItem('/course/wiki/show');
+
+        $this->keyword  = Request::get('keyword');
+        getShowPageInfobox($keyword, true);
+    }
+
     public function store_action($version)
     {
         $body = Request::get('body');

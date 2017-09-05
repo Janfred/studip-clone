@@ -991,9 +991,10 @@ function wikiEdit($keyword, $wikiData, $user_id, $backpage=NULL)
     }
 
     $template = $GLOBALS['template_factory']->open('wiki/edit.php');
-    $template->keyword = $keyword;
-    $template->version = $version;
-    $template->body    = $body;
+    $template->keyword  = $keyword;
+    $template->version  = $version;
+    $template->lastpage = $lastpage;
+    $template->body     = $body;
     $cont = $template->render();
 
     printcontent(0, 0, $cont, '');
@@ -1266,6 +1267,13 @@ function getShowPageInfobox($keyword, $latest_version)
     $element = new WidgetElement($toccont_empty ? _('Keine QuickLinks vorhanden') : $toccont);
     $element->icon = Icon::create('link-intern', 'clickable');
     $widget->addElement($element);
+    $sidebar->addWidget($widget);
+
+    // Create new wiki page
+    $widget = new ActionsWidget();
+    $widget->addLink(_('Neue Wiki-Seite anlegen'),
+                         URLHelper::getLink('dispatch.php/wiki/create' .'?keyword=' . urlencode($keyword)),
+                         Icon::create('add', 'clickable'), array('data-dialog' => 'size=auto'));
     $sidebar->addWidget($widget);
 
     // Backlinks

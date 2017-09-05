@@ -135,7 +135,7 @@ if ($view=="listall") {
         throw new AccessDeniedException(_('Sie haben keine Berechtigung, Seiten zu editieren!'));
     }
 
-    // prevent malformed urls: keword must be set
+    // prevent malformed urls: keyword must be set
     if (!$keyword) {
         throw new InvalidArgumentException(_('Es wurde keine zu editierende Seite übergeben!'));
     }
@@ -154,9 +154,24 @@ if ($view=="listall") {
     if (!$perm->have_studip_perm("autor", Context::getId())) {
         throw new AccessDeniedException(_('Sie haben keine Berechtigung, Seiten zu editieren!'));
     }
+
+    // prevent malformed urls: keyword must be set
+    if (!$keyword) {
+        throw new InvalidArgumentException(_('Es wurde keine zu editierende Seite übergeben!'));
+    }
+
+    $wikiData = getWikiPage($keyword, 0); // always get newest page
+
+    // warning in the case of an existing wiki page
+    if ($wikiData) {
+        PageLayout::postInfo(sprintf(_('Die Wiki-Seite "%s" existiert bereits. Änderungen hier überschreiben diese Seite!'), htmlReady($keyword)));
+    }
+
     // set lock
     setWikiLock(null, $user->id, Context::getId(), $keyword);
-    wikiEdit($keyword, NULL, $user->id, Request::quoted('lastpage'));
+
+    //show form
+    wikiEdit($keyword, $wikiData, $user->id, Request::quoted('lastpage'));
 
 } else {
     // Default action: Display WikiPage (+ logic for submission)
