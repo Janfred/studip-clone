@@ -21,38 +21,38 @@ abstract class ModuleManagementModel extends SimpleORMap
      * Use the deafault display options for this object.
      */
     const DISPLAY_DEFAULT = 1;
-    
+
     /**
      * Usable as option for ModuleManagementModel::getDisplayName().
      * Displays semesters of the validity period if available for this object.
      */
     const DISPLAY_SEMESTER = 2;
-    
+
     /**
      * Usable as option for ModuleManagementModel::getDisplayName().
      * Displays the code (usually a unique identifier) if available for this object.
      */
     const DISPLAY_CODE = 4;
-    
+
     /**
      * Usable as option for ModuleManagementModel::getDisplayName().
      * Displays the name of the faculty if available for this object.
      */
     const DISPLAY_FACULTY = 8;
-    
+
     /**
      * Usable as option for ModuleManagementModel::getDisplayName().
      * Displays the name of the Fach (subject of study) if available for this object.
      */
     const DISPLAY_FACH = 16;
-    
+
     /**
      * Usable as option for ModuleManagementModel::getDisplayName().
      * Displays the name of the Studiengangteil if available for this object.
      */
     const DISPLAY_STGTEIL = 32;
-    
-    
+
+
 
     protected static $filter_params = array();
     protected $is_dirty = false;
@@ -483,7 +483,7 @@ abstract class ModuleManagementModel extends SimpleORMap
             $class = get_called_class();
             $model_object = new $class();
             foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $data) {
-                $pkey = '';
+                $pkey = [];
                 foreach ($model_object->pk as $pk) {
                     $pkey[]= $data[$model_object->db_fields[$pk]['name']];
                 }
@@ -847,7 +847,7 @@ abstract class ModuleManagementModel extends SimpleORMap
     /**
      * Returns a string that identify a variant of this object. returns null if
      * no possible variants exists for this object.
-     * 
+     *
      * @return string String to identify a variant.
      */
     public function getVariant()
