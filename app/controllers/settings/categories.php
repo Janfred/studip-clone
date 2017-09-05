@@ -141,6 +141,8 @@ class Settings_CategoriesController extends Settings_SettingsController
     public function store_action()
     {
         $request = Request::getInstance();
+        $changed = false;
+
         $categories = $request['categories'];
         foreach ($categories as $id => $data) {
             if (empty($data['name'])) {
@@ -150,12 +152,15 @@ class Settings_CategoriesController extends Settings_SettingsController
             $category = Kategorie::find($id);
             $category->name    = $data['name'];
             $category->content = Studip\Markup::purifyHtml($data['content']);
-            if ($category->store()) {
-                PageLayout::postSuccess(_('Kategorien geändert!'));
+            if ($category->isDirty() && $category->store()) {
+                $changed = true;
                 Visibility::renamePrivacySetting('kat_' . $category->id, $category->name);
             }
         }
 
+        if ($changed) {
+            PageLayout::postSuccess(_('Kategorien geändert!'));
+        }
         $this->redirect('settings/categories');
     }
 
