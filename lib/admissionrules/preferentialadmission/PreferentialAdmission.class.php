@@ -155,6 +155,18 @@ class PreferentialAdmission extends AdmissionRule
                  * Finally, set bonuses for the users affected by conditions.
                  */
                 $endbonus = $this->setSemesterBonus($courseset, $grouped, $maxbonus + 1);
+            /*
+             * No conditions given, just group all users
+             * by their semester of study.
+             */
+            } else {
+                // Build list of users by semester of study.
+                $grouped = $this->getSemesterGroups(
+                    array_keys(AdmissionPriority::getPriorities($courseset->getId())),
+                    false);
+
+                // Assign corresponding bonus to users.
+                $maxbonus = $this->setSemesterBonus($courseset, $grouped);
             }
         }
     }
