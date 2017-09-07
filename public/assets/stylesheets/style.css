@@ -8096,6 +8096,8 @@ table.default tr.subcourses td:nth-child(-n+4) {
     margin-top: 36px;
     padding-left: 20px;
     padding-right: 20px;
+    position: absolute;
+    top: 200px;
     width: calc(100% - 40px);
   }
   #index div.index_container div.index_main nav,
@@ -10163,11 +10165,6 @@ label[for="responsive-toggle"]::before {
   #layout-sidebar .widget-links li.active:before,
   #layout-sidebar .widget-links li.active:after {
     display: none;
-  }
-  #index div.index_container,
-  #request_new_password div.index_container,
-  #web_migrate div.index_container {
-    top: 35px;
   }
   #index div.index_container div.index_main,
   #request_new_password div.index_container div.index_main,
