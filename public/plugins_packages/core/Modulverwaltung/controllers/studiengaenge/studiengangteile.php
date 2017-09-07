@@ -40,11 +40,11 @@ class Studiengaenge_StudiengangteileController extends SharedVersionController
         $this->initPageParams();
         $this->initSearchParams();
 
-        $search_result = $this->getSearchResult('StudiengangTeil');
-
         // Nur Studiengangteile mit zugeordnetem Fach an dessen verantwortlicher
         // Einrichtung der User eine Rolle hat
-        $filter['mfi.institut_id'] = MvvPerm::getOwnInstitutes();
+        $this->filter['mfi.institut_id'] = MvvPerm::getOwnInstitutes();
+        
+        $search_result = $this->getSearchResult('StudiengangTeil');
 
         //get data
         if (sizeof($search_result)) {
@@ -57,9 +57,12 @@ class Studiengaenge_StudiengangteileController extends SharedVersionController
         } else {
             $this->stgteile = StudiengangTeil::getAllEnriched(
                     $this->sortby, $this->order,
-                    $filter, self::$items_per_page,
+                    $this->filter, self::$items_per_page,
                     self::$items_per_page * ($this->page - 1));
-            $this->count = StudiengangTeil::getCount($filter);
+            if (sizeof($this->stgteile) == 0) {
+                PageLayout::postInfo(_('Es wurden noch keine Studiengangteile angelegt.'));
+            }
+            $this->count = StudiengangTeil::getCount($this->filter);
         }
 
         $this->show_sidebar_search = true;
