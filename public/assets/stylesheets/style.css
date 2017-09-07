@@ -6788,7 +6788,7 @@ div.index_container {
   top: 111px;
   bottom: 0px;
   width: 100%;
-  height: calc(100% - 71px);
+  height: calc(100% - 145px);
 }
 div.index_container ul#tabs {
   display: none;
@@ -6819,7 +6819,7 @@ div.index_container div.index_main {
   background-color: rgba(255, 255, 255, 0.8);
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
   margin-left: 50px;
-  margin-top: 25px;
+  margin-top: 50px;
   width: 500px;
 }
 div.index_container div.index_main > div {
@@ -6878,6 +6878,25 @@ div.index_container div.index_main nav div.login_link a {
 div.index_container div.index_main nav div.login_link a p {
   font-size: 0.5em;
   color: #6d727a;
+}
+body#index .messagebox {
+  margin-bottom: -25px;
+}
+body#index div#layout_footer {
+  position: relative;
+  top: -34px;
+}
+@-moz-document url-prefix() {
+  div.index_container {
+    height: calc(100% - 145px);
+  }
+  body#index {
+    height: calc(100% - 34px);
+  }
+  body#index div#layout_footer {
+    position: inherit;
+    top: 0;
+  }
 }
 /* --- news --------------------------------------------------- */
 #news_dialog_content {
