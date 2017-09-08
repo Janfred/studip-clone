@@ -173,7 +173,7 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 
     private function getContent ($args = null, $raw = false) {
         if ($raw) {
-            $this->setRawOutput();
+            self::SetRawOutput();
         }
 
         if (trim($this->config->getValue('TemplateListInstitutes', 'template'))) {

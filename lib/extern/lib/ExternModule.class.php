@@ -49,7 +49,7 @@ class ExternModule {
     var $field_names = array();
     var $data_fields = array();
     var $args = array();
-    var $is_raw_output = FALSE;
+    private static $is_raw_output = false;
 
 
     /**
@@ -419,32 +419,32 @@ class ExternModule {
         }
     }
 
-    function setRawOutput ($raw = TRUE) {
-        $this->is_raw_output = $raw;
+    public static function SetRawOutput ($raw = TRUE) {
+        self::$is_raw_output = $raw;
     }
 
-    function extHtmlReady ($text, $allow_links = FALSE) {
-        if ($this->is_raw_output) {
+    public static function ExtHtmlReady ($text, $allow_links = FALSE) {
+        if (self::$is_raw_output) {
             return $text;
         }
         return $allow_links ? formatLinks($text) : htmlReady($text);
     }
 
-    function extFormatReady ($text) {
-        if ($this->is_raw_output) {
+    public static function ExtFormatReady ($text) {
+        if (self::$is_raw_output) {
             return $text;
         }
         return formatReady($text, TRUE, TRUE, FALSE);
     }
 
-    function extWikiReady ($text, $show_comments = 'all') {
-        if ($this->is_raw_output) {
+    public static function ExtWikiReady ($text, $show_comments = 'all') {
+        if (self::$is_raw_output) {
             return $text;
         }
         return wikiReady($text, TRUE, TRUE, $show_comments);
     }
 
-    function GetOrderedModuleTypes () {
+    public static function GetOrderedModuleTypes () {
         $order = array();
         foreach ($GLOBALS['EXTERN_MODULE_TYPES'] as $key => $module) {
             $order[$GLOBALS['EXTERN_MODULE_TYPES'][$key]['order']] = $key;

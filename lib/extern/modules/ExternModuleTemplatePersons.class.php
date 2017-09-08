@@ -129,7 +129,7 @@ class ExternModuleTemplatePersons extends ExternModule {
 
     function getContent ($args = NULL, $raw = FALSE) {
         if ($raw) {
-            $this->setRawOutput();
+            self::SetRawOutput();
         }
 
         if (!$all_groups = get_all_statusgruppen($this->config->range_id)) {
