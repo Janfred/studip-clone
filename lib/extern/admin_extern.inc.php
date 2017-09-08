@@ -48,7 +48,7 @@ if (Request::option('view') == 'extern_global') {
     $range_id = 'studip';
     URLHelper::addLinkParam('view', 'extern_global');
 } else {
-    $range_id = Context::getId() ? Context::getId() : '';
+    $range_id = Context::getId();
     URLHelper::addLinkParam('view', 'extern_inst');
 }
 URLHelper::addLinkParam('cid', $range_id);
@@ -71,9 +71,8 @@ if ($range_id != 'studip') {
     Navigation::activateItem('/admin/locations/external');
 }
 $mod=Request::quoted('mod');//Change header_line if open object
-$header_line = Context::getHeaderLine();
-if ($header_line) {
-    PageLayout::setTitle($header_line." - ".PageLayout::getTitle());
+if (Context::getId()) {
+    PageLayout::setTitle(Context::getHeaderLine()." - ".PageLayout::getTitle());
     foreach ($GLOBALS['EXTERN_MODULE_TYPES'] as $key => $type) {
         if ($type["module"] == $mod) {
             PageLayout::setTitle(PageLayout::getTitle() . " ({$GLOBALS['EXTERN_MODULE_TYPES'][$key]['name']})");
