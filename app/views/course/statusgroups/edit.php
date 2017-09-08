@@ -31,7 +31,7 @@
             <label>
                 <?= _('Selbsteintrag erlaubt ab') ?>
                 <input type="text" size="20" name="selfassign_start" id="selfassign_start" value="<?= $group->selfassign_start ?
-                    date('d.m.Y H:i', $group->selfassign_start) : date('d.m.Y H:i') ?>" data-datetime-picker>
+                    date('d.m.Y H:i', $group->selfassign_start) : '' ?>" data-datetime-picker>
             </label>
         </section>
         <section>
