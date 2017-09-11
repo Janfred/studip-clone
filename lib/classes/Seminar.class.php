@@ -2457,6 +2457,12 @@ class Seminar
     {
         $info = array();
         $user = User::find($user_id);
+        if ($this->getSemClass()->isGroup()) {
+            $info['enrolment_allowed'] = false;
+            $info['cause'] = 'grouped';
+            $info['description'] = _("Dies ist eine Veranstaltungsgruppe. Sie können sich nur in deren Unterveranstaltungen eintragen.");
+            return $info;
+        }
         if ($this->read_level == 0 && get_config('ENABLE_FREE_ACCESS') && !$GLOBALS['perm']->get_studip_perm($this->getId(), $user_id)) {
             $info['enrolment_allowed'] = true;
             $info['cause'] = 'free_access';

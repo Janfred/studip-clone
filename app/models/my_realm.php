@@ -990,6 +990,7 @@ class MyRealmModel
                 if ($course->parent_course) {
                     $_course['parent_course'] = $course->parent_course;
                 }
+                $_course['is_group']       = $course->getSemClass()->isGroup();
                 // add the the course to the correct semester
                 self::getObjectValues($_course);
 

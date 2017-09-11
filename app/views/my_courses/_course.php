@@ -112,25 +112,27 @@
 
         </td>
         <td style="text-align: right" class="hidden-small-down">
-        <? if (in_array($course['user_status'], ['dozent', 'tutor'])) : ?>
-            <? $adminmodule = $sem_class->getModule("admin"); ?>
-            <? if ($adminmodule) : ?>
-                <? $adminnavigation = $adminmodule->getIconNavigation($course['seminar_id'], 0, $GLOBALS['user']->id); ?>
-            <? endif ?>
+        <? if (!$course['is_group']) : ?>
+            <? if (in_array($course['user_status'], ['dozent', 'tutor'])) : ?>
+                <? $adminmodule = $sem_class->getModule("admin"); ?>
+                <? if ($adminmodule) : ?>
+                    <? $adminnavigation = $adminmodule->getIconNavigation($course['seminar_id'], 0, $GLOBALS['user']->id); ?>
+                <? endif ?>
 
-            <? if ($adminnavigation) : ?>
-                <a href="<?= URLHelper::getLink($adminnavigation->getURL(), array('cid' => $course['seminar_id'])) ?>">
-                    <?= $adminnavigation->getImage()->asImg(20, $adminnavigation->getLinkAttributes()) ?>
+                <? if ($adminnavigation) : ?>
+                    <a href="<?= URLHelper::getLink($adminnavigation->getURL(), array('cid' => $course['seminar_id'])) ?>">
+                        <?= $adminnavigation->getImage()->asImg(20, $adminnavigation->getLinkAttributes()) ?>
+                    </a>
+                <? endif ?>
+            <? elseif ($course['admission_binding']) : ?>
+                <a href="<?= $controller->url_for('my_courses/decline_binding') ?>">
+                    <?= Icon::create('door-leave+decline', 'inactive', ['title' => _("Die Teilnahme ist bindend. Bitte wenden Sie sich an die Lehrenden.")])->asImg(20) ?>
+                </a>
+            <? else: ?>
+                <a href="<?= $controller->url_for('my_courses/decline/' . $course['seminar_id'], ['cmd' => 'suppose_to_kill']) ?>">
+                    <?= Icon::create('door-leave', 'inactive', ['title' => _('aus der Veranstaltung abmelden')])->asImg(20) ?>
                 </a>
             <? endif ?>
-        <? elseif ($course['admission_binding']) : ?>
-            <a href="<?= $controller->url_for('my_courses/decline_binding') ?>">
-                <?= Icon::create('door-leave+decline', 'inactive', ['title' => _("Die Teilnahme ist bindend. Bitte wenden Sie sich an die Lehrenden.")])->asImg(20) ?>
-            </a>
-        <? else: ?>
-            <a href="<?= $controller->url_for('my_courses/decline/' . $course['seminar_id'], ['cmd' => 'suppose_to_kill']) ?>">
-                <?= Icon::create('door-leave', 'inactive', ['title' => _('aus der Veranstaltung abmelden')])->asImg(20) ?>
-            </a>
         <? endif ?>
         </td>
     </tr>
