@@ -27,7 +27,7 @@ class AreaController extends ForumController
             'name'        => $name,
             'content'     => $content,
             'author'      => get_fullname($GLOBALS['user']->id),
-            'author_host' => getenv('REMOTE_ADDR')
+            'author_host' => ($GLOBALS['user']->id == 'nobody') ? getenv('REMOTE_ADDR') : ''
         ), $this->getId());
 
         ForumCat::addArea($category_id, $new_id);

@@ -18,7 +18,7 @@ class ForumIssue
 {
     /**
      * Get the id of the topic linked to the issue denoted by the passed id.
-     * 
+     *
      * @param string $issue_id
      * @return string  the id of the linked topic
      */
@@ -27,13 +27,13 @@ class ForumIssue
         $stmt = DBManager::get()->prepare("SELECT topic_id FROM forum_entries_issues
             WHERE issue_id = ?");
         $stmt->execute(array($issue_id));
-        
+
         return ($stmt->fetchColumn());
     }
 
     /**
      * Create/Update the linked posting for the passed issue_id
-     * 
+     *
      * @param string $seminar_id
      * @param string $issue_id    issue id to link to
      * @param string $title       (new) title of the posting
@@ -57,9 +57,9 @@ class ForumIssue
                 'name'        => $title ?: _('Ohne Titel'),
                 'content'     => $content,
                 'author'      => get_fullname($GLOBALS['user']->id),
-                'author_host' => getenv('REMOTE_ADDR')
+                'author_host' => ($GLOBALS['user']->id == 'nobody') ? getenv('REMOTE_ADDR') : ''
             ), $seminar_id);
-            
+
             $stmt = DBManager::get()->prepare("INSERT INTO forum_entries_issues
                 (issue_id, topic_id) VALUES (?, ?)");
             $stmt->execute(array($issue_id, $topic_id));
@@ -68,7 +68,7 @@ class ForumIssue
 
     /**
      * Remove the link for the posting denoted by the passed topic_id
-     * 
+     *
      * @param object $notification
      * @param string $topic_id
      */

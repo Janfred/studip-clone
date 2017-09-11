@@ -390,7 +390,7 @@ class IndexController extends ForumController
             'name'        => Request::get('name') ?: '',
             'content'     => Studip\Markup::purifyHtml(Request::get('content')),
             'author'      => $fullname,
-            'author_host' => getenv('REMOTE_ADDR'),
+            'author_host' => ($GLOBALS['user']->id == 'nobody') ? getenv('REMOTE_ADDR') : '',
             'anonymous'   => Config::get()->FORUM_ANONYMOUS_POSTINGS ? Request::get('anonymous') ? : 0 : 0
         ), $parent_id);
 

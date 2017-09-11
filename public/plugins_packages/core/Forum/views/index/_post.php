@@ -16,7 +16,7 @@
 
 <form method="post" data-topicid="<?= $post['topic_id'] ?>" action="<?= PluginEngine::getLink('coreforum/index/update_entry/' . $post['topic_id']) ?>">
     <?= CSRFProtection::tokenTag() ?>
-    
+
 <div class="real_posting posting<?= $highlight_topic == $post['topic_id'] ? ' highlight' : '' ?>" style="position: relative;" id="forumposting_<?= htmlReady($post['topic_id']) ?>">
     <a class="marked" href="<?= PluginEngine::getLink('coreforum/index/unset_favorite/'. $post['topic_id']) ?>"
             onClick="STUDIP.Forum.unsetFavorite('<?= $post['topic_id'] ?>'); return false;" title="<?= _('Beitrag nicht mehr merken') ?>"
@@ -34,14 +34,18 @@
                 <? elseif (!$post['user_id']) : ?>
                     <?= Avatar::getAvatar('nobody')->getImageTag(Avatar::SMALL,
                         array('title' => _('Stud.IP'))) ?>
-                    <?= _('von Stud.IP erstellt') ?>, 
+                    <?= _('von Stud.IP erstellt') ?>,
                     <?= strftime($time_format_string_short, (int)$post['mkdate']) ?>
                 <? else : ?>
                 <a href="<?= URLHelper::getLink('dispatch.php/profile', array('username' =>  get_username($post['user_id']))) ?>">
                     <?= Avatar::getAvatar($post['user_id'])->getImageTag(Avatar::SMALL,
                         array('title' => get_username($post['user_id']))) ?>
 
-                    <?= htmlReady(get_fullname($post['user_id'])) ?>,
+                    <? if ($post['user_id'] == 'nobody' && $post['author']) : ?>
+                        <?= htmlReady($post['author']) ?>,
+                    <? else : ?>
+                        <?= htmlReady(get_fullname($post['user_id'])) ?>,
+                    <? endif ?>
                     <?= strftime($time_format_string_short, (int)$post['mkdate']) ?>
                 </a>
                 <? endif ?>
@@ -49,7 +53,7 @@
                 <br>
             </div>
 
-            <? if ($post['depth'] < 3) : ?>  
+            <? if ($post['depth'] < 3) : ?>
             <span data-edit-topic="<?= $post['topic_id'] ?>" <?= $edit_posting == $post['topic_id'] ? '' : 'style="display: none;"' ?>>
                 <input type="text" name="name" value="<?= htmlReady($post['name_raw']) ?>" data-reset="<?= htmlReady($post['name_raw']) ?>" style="width: 100%">
             </span>
@@ -64,7 +68,7 @@
                     <span name="name" value="<?= htmlReady($parent_topic['name']) ?>"></span>
                 </span>
             <? endif ?>
-            
+
             <span data-show-topic="<?= $post['topic_id'] ?>">
                 <a href="<?= PluginEngine::getLink('coreforum/index/index/' . $post['topic_id'] .'?'. http_build_query(array('highlight' => $highlight)) ) ?>#<?= $post['topic_id'] ?>">
                 <? if ($show_full_path) : ?>
@@ -85,7 +89,7 @@
             <span data-edit-topic="<?= $post['topic_id'] ?>" <?= $edit_posting == $post['topic_id'] ? '' : 'style="display: none;"' ?>>
                 <textarea data-textarea="<?= $post['topic_id'] ?>" data-reset="<?= wysiwygReady($post['content_raw']) ?>" name="content" class="add_toolbar wysiwyg"><?= wysiwygReady($post['content_raw']) ?></textarea>
             </span>
-            
+
             <span data-show-topic="<?= $post['topic_id'] ?>" data-topic-content="<?= $post['topic_id'] ?>" <?= $edit_posting != $post['topic_id'] ? '' : 'style="display: none;"' ?>>
                 <?= ForumHelpers::highlight($post['content'], $highlight) ?>
                 <?= OpenGraph::extract(formatReady(ForumEntry::removeQuotes($post['content_raw'])))->render() ?>
@@ -103,10 +107,10 @@
 
             <?= Studip\LinkButton::createCancel(_('Abbrechen'), PluginEngine::getLink('coreforum/index/index/'. $post['topic_id'] .'#'. $post['topic_id']),
                 array('onClick' => "STUDIP.Forum.cancelEditEntry('". $post['topic_id'] ."'); return false;")) ?>
-            
+
             <?= Studip\LinkButton::create(_('Vorschau'), "javascript:STUDIP.Forum.preview('". $post['topic_id'] ."', 'preview_". $post['topic_id'] ."');") ?>
         </span>
-                
+
         <span data-show-topic="<?= $post['topic_id'] ?>" <?= $edit_posting != $post['topic_id'] ? '' : 'style="display: none;"' ?>>
             <!-- Aktions-Buttons für diesen Beitrag -->
 
@@ -120,14 +124,14 @@
             <? endif ?>
 
             <? if ($section == 'index' && $perms['edit']) : ?>
-                <?= Studip\LinkButton::create(_('Beitrag bearbeiten'), PluginEngine::getUrl('coreforum/index/index/' 
+                <?= Studip\LinkButton::create(_('Beitrag bearbeiten'), PluginEngine::getUrl('coreforum/index/index/'
                       . $post['topic_id'] .'/?edit_posting=' . $post['topic_id']), array(
                           'onClick' => "STUDIP.Forum.editEntry('". $post['topic_id'] ."'); return false;",
                           'class'   => !$perms['edit_closed'] ? 'hideWhenClosed' : '',
                           'style'   => !$can_edit_closed ? 'display: none' : ''
                 )) ?>
             <? endif ?>
-            
+
             <? if ($section == 'index') : ?>
             <span <?= (!$perms['edit_close'] && !$perms['remove_entry']) ? 'class="hideWhenClosed"': '' ?>
                 <?= (!$perms['edit'] && !$perms['remove_entry']) ? 'style="display: none"' : '' ?>>
@@ -146,7 +150,7 @@
             <? endif ?>
 
             <? if (ForumPerm::has('forward_entry', $seminar_id)) : ?>
-            <?= Studip\LinkButton::create(_('Beitrag weiterleiten'), 
+            <?= Studip\LinkButton::create(_('Beitrag weiterleiten'),
                     "javascript:STUDIP.Forum.forwardEntry('". $post['topic_id'] ."')", array('class' => 'js')) ?>
             <? endif ?>
         </span>
@@ -223,13 +227,13 @@
                     <?= _('von Stud.IP erstellt') ?><br>
                 <? endif ?>
             </dd>
-            
+
             <dd class="posting_icons">
                 <!-- Favorit -->
                 <span id="favorite_<?= $post['topic_id'] ?>">
                     <?= $this->render_partial('index/_favorite', array('topic_id' => $post['topic_id'], 'favorite' => $post['fav'])) ?>
                 </span>
-                    
+
                 <!-- Permalink -->
                 <a href="<?= PluginEngine::getLink('coreforum/index/index/' . $post['topic_id'] .'#'. $post['topic_id']) ?>">
                     <?= Icon::create('group', 'clickable', ['title' => _('Link zu diesem Beitrag')])->asImg() ?>
@@ -250,12 +254,12 @@
             </dd>
             <? endforeach ?>
         </dl>
-        
+
         <? if ($is_new): ?>
         <span class="new_posting">
             <?= Icon::create('forum+new', 'attention', ['title' => _("Dieser Beitrag ist seit Ihrem letzten Besuch hinzugekommen.")])->asImg(16) ?>
         </span>
-        <? endif ?>  
+        <? endif ?>
     </span>
 
     <div class="clear"></div>
