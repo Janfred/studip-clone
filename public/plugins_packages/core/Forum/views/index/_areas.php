@@ -1,5 +1,4 @@
 <? if (empty($list)) return; ?>
-<br>
 <div id="sortable_areas">
 <? foreach ($list as $category_id => $entries) : ?>
 <a name="cat_<?= $category_id ?>"></a>
@@ -64,11 +63,11 @@
     <? if (!empty($entries)) foreach ($entries as $entry) : ?>
         <?= $this->render_partial('area/add', compact('entry')) ?>
     <? endforeach; ?>
-    
+
     <? if ($category_id && ForumPerm::has('add_area', $seminar_id) && Request::get('add_area') == $category_id) : ?>
         <?= $this->render_partial('area/_add_area_form') ?>
     <? endif ?>
-    
+
     <? if (!$entries): ?>
     <!-- this row allows dropping on otherwise empty categories -->
     <tr class="sort-disabled">
