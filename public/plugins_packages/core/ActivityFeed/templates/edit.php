@@ -9,7 +9,7 @@
                 <? foreach ($provider as $prv_id => $prv_name) : ?>
                 <label>
                     <input type="checkbox" name="provider[<?= $context ?>][]" value="<?= htmlReady($prv_id) ?>"
-                        <?= empty($config) || in_array($prv_id, $config[$context]) ? 'checked' : ''?>>
+                        <?= empty($config) || (is_array($config[$context]) && in_array($prv_id, $config[$context])) ? 'checked' : ''?>>
                     <?= htmlReady($prv_name) ?>
                 </label>
                 <? endforeach ?>

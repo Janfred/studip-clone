@@ -108,10 +108,12 @@ abstract class Context
                 $ctype = $this->getContextType();
                 $filtered_classes = $filter->getType()->$ctype;
 
-                foreach ($filtered_classes as $class) {
-                    $iclass = 'Studip\\Activity\\' .ucfirst($class) .'Provider';
-                    if ($provider instanceof $iclass) {
-                        $filtered_providers[$iclass] =  $provider;
+                if (is_array($filtered_classes)) {
+                    foreach ($filtered_classes as $class) {
+                        $iclass = 'Studip\\Activity\\' .ucfirst($class) .'Provider';
+                        if ($provider instanceof $iclass) {
+                            $filtered_providers[$iclass] =  $provider;
+                        }
                     }
                 }
             }

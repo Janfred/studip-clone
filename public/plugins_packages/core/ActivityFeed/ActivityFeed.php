@@ -87,7 +87,8 @@ class ActivityFeed extends StudIPPlugin implements PortalPlugin
             );
         }
 
-        $provider = Request::optionArray('provider');
+        $provider = Request::getArray('provider');
+
         WidgetHelper::addWidgetUserConfig($GLOBALS['user']->id, 'ACTIVITY_FEED', $provider);
 
         header('X-Dialog-Close: 1');
