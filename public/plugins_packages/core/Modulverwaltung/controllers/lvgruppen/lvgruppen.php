@@ -328,7 +328,7 @@ class Lvgruppen_LvgruppenController extends MVVController
             if (count($this->filter['mvv_modul_inst.institut_id']) > 1) {
                 $selected_fachbereich = '';
             } else {
-                $selected_fachbereich = $this->filter['mvv_modul_inst.institut_id'];
+                $selected_fachbereich = reset($this->filter['mvv_modul_inst.institut_id']);
             }
         }
         
@@ -359,11 +359,10 @@ class Lvgruppen_LvgruppenController extends MVVController
              
             $widget->class = 'institute-list';
             
-            $widget->addElement(
-                new SelectElement('select-none', _('Alle'), $selected_fachbereich == ''));
+            $widget->addElement(new SelectElement('select-none', _('Alle'), $selected_fachbereich == ''));
+            $widget->addElement(new SelectElement('select-no', _('Nicht verwendet'), $selected_fachbereich == 'select-no'));
 
             $institutes = Institute::getInstitutes();
-          //  foreach (Lvgruppe::getAllAssignedInstitutes('name', 'ASC') as $institut) {
             foreach ($institutes as $institute) {
                 if (!(count($perm_institutes) == 0
                     || in_array($institute['Institut_id'], $perm_institutes))) continue;

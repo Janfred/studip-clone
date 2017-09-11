@@ -121,10 +121,15 @@ class Lvgruppe extends ModuleManagementModelTreeItem
                 . 'LEFT JOIN semester_data as end_sem ON end_sem.semester_id = mvv_modul.end ';   
             }
         }
-        $query = 'SELECT mvv_lvgruppe.*, '
+        $query = 'SELECT mvv_lvgruppe.*, mvv_lvgruppe.lvgruppe_id AS lvg_id, '
                 . 'COUNT(DISTINCT seminare.seminar_id) AS `count_seminare`, '
                 . 'COUNT(DISTINCT archiv.seminar_id) AS `count_archiv`, '
-                . 'COUNT(DISTINCT modulteil_id) AS `count_modulteile` '
+                // get ALL assigned modulteile, not only the modulteile from modules
+                // where the responsible institute is set by the filter
+                // (maybe the filter is set to the institutes where the user has a mvv role)
+                . 'COALESCE((SELECT COUNT(DISTINCT modulteil_id) FROM mvv_lvgruppe_modulteil '
+                    . 'WHERE mvv_lvgruppe_modulteil.lvgruppe_id = lvg_id '
+                    . 'GROUP BY lvgruppe_id), 0) AS `count_modulteile` '
                 . 'FROM mvv_lvgruppe '
                 . 'LEFT JOIN mvv_lvgruppe_seminar USING(lvgruppe_id) '
                 . 'LEFT JOIN archiv ON mvv_lvgruppe_seminar.seminar_id = archiv.seminar_id '
