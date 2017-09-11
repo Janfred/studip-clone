@@ -34,7 +34,11 @@
         <?= Icon::create('arr_1down', Icon::ROLE_CLICKABLE)->asImg(24, ['class' => 'arrow']) ?>
         <?= Icon::create('check-circle', Icon::ROLE_CLICKABLE)->asImg(32, ['class' => 'check']) ?>
     </label>
-    <? $folder_template = $folder_type['instance']->getEditTemplate() ?>
+    <? if ($folder_type['class'] === get_class($folder)) : ?>
+        <? $folder_template = $folder->getEditTemplate() ?>
+    <? else : ?>
+        <? $folder_template = $folder_type['instance']->getEditTemplate() ?>
+    <? endif; ?>
     <? if ($folder_template) : ?>
         <div class="terms_of_use_description">
             <div class="description">

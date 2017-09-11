@@ -1121,6 +1121,7 @@ class FileController extends AuthenticatedController
                 PageLayout::postMessage($result);
             }
         }
+        $this->folder = $new_folder ?: new StandardFolder();
     }
 
     /**

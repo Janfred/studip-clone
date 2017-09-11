@@ -813,13 +813,15 @@ class FileManager
 
         // check if the sub folder type is creatable in a StandardFolder,
         // if the destination folder is a StandardFolder:
-        if (!$folder_type_class_name::availableInRange($destination_folder->range_id, $user->id))
-        {
-            $errors[] = sprintf(
-                _('Ein Ordner vom Typ %s kann nicht in einem Ordner vom Typ %s erzeugt werden!'),
-                get_class($sub_folder_type),
-                'StandardFolder'
-            );
+        if (!in_array($folder_type_class_name, ['InboxFolder', 'OutboxFolder'])) {
+            if (!$folder_type_class_name::availableInRange($destination_folder->range_id, $user->id))
+            {
+                $errors[] = sprintf(
+                    _('Ein Ordner vom Typ %s kann nicht in einem Ordner vom Typ %s erzeugt werden!'),
+                    get_class($sub_folder_type),
+                    'StandardFolder'
+                );
+            }
         }
 
         if (!$destination_folder->isSubfolderAllowed($user->id)) {
