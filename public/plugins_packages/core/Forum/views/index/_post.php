@@ -123,7 +123,7 @@
                 )) ?>
             <? endif ?>
 
-            <? if ($section == 'index' && $perms['edit']) : ?>
+            <? if ($perms['edit']) : ?>
                 <?= Studip\LinkButton::create(_('Beitrag bearbeiten'), PluginEngine::getUrl('coreforum/index/index/'
                       . $post['topic_id'] .'/?edit_posting=' . $post['topic_id']), array(
                           'onClick' => "STUDIP.Forum.editEntry('". $post['topic_id'] ."'); return false;",
@@ -132,11 +132,11 @@
                 )) ?>
             <? endif ?>
 
-            <? if ($section == 'index') : ?>
             <span <?= (!$perms['edit_close'] && !$perms['remove_entry']) ? 'class="hideWhenClosed"': '' ?>
                 <?= (!$perms['edit'] && !$perms['remove_entry']) ? 'style="display: none"' : '' ?>>
                 <? $confirmLink = PluginEngine::getURL('coreforum/index/delete_entry/' . $post['topic_id'])  ?>
-                <? $confirmLinkApproved = PluginEngine::getURL('coreforum/index/delete_entry/' . $post['topic_id'] . '?approve_delete=1')  ?>
+                <? $confirmLinkApproved = PluginEngine::getURL('coreforum/index/delete_entry/' .
+                    $post['topic_id'] . '?approve_delete=1&section=' . $section .'&page=' . ForumHelpers::getPage())  ?>
                 <? if ($constraint['depth'] == $post['depth']) : /* this is not only a posting, but a thread */ ?>
                     <? $confirmText = _('Wenn Sie diesen Beitrag löschen wird ebenfalls das gesamte Thema gelöscht. Sind Sie sicher, dass Sie das tun möchten?')  ?>
                     <?= Studip\LinkButton::create(_('Thema löschen'), $confirmLink,
@@ -147,7 +147,6 @@
                         array('onClick' => "STUDIP.Forum.showDialog('$confirmText', '$confirmLinkApproved'); return false;")) ?>
                 <? endif ?>
             </span>
-            <? endif ?>
 
             <? if (ForumPerm::has('forward_entry', $seminar_id)) : ?>
             <?= Studip\LinkButton::create(_('Beitrag weiterleiten'),

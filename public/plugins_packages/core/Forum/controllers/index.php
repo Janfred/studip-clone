@@ -436,7 +436,12 @@ class IndexController extends ForumController
             $this->render_template('messages');
             $this->flash['messages'] = null;
         } else {
-            $this->redirect(PluginEngine::getLink('coreforum/index/index/' . $parent['id'] .'/'. $page));
+            if (Request::option('section') == 'index') {
+                $this->redirect(PluginEngine::getLink('coreforum/index/index/' . $parent['id'] .'/'. $page));
+            } else {
+                $this->redirect(PluginEngine::getLink('coreforum/index/' . Request::option('section')
+                    . '/' . Request::int('page')));
+            }
         }
     }
 
