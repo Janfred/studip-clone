@@ -3,6 +3,7 @@
     jQuery(document).ready(function() {
         STUDIP.ActivityFeed.user_id = '<?= $user_id ?>';
         STUDIP.ActivityFeed.scrolledfrom = '<?= $scrolledfrom ?>';
+        STUDIP.ActivityFeed.filter = '<?= json_encode($config) ?>';
         STUDIP.ActivityFeed.init();
     });
 </script>

@@ -91,6 +91,7 @@ abstract class Context
     }
 
     /**
+     * Filter the passed the providers to match the passed filter
      *
      * @param type $providers
      * @param \Studip\Activity\Filter $filter
@@ -100,15 +101,18 @@ abstract class Context
     {
         $filtered_providers = array();
 
-        if (is_null($filter->getType())) {
+        if (empty($filter->getType())) {
             $filtered_providers = $providers;
         } else {
             foreach ($providers as $provider) {
-                // $filtered_class = 'Studip\Activity\\' . ucfirst($filter->getType()) . 'Provider';
-                $filtered_class = $filter->getType();
+                $ctype = $this->getContextType();
+                $filtered_classes = $filter->getType()->$ctype;
 
-                if ($provider instanceof $filtered_class) {
-                    $filtered_providers[] =  $provider;
+                foreach ($filtered_classes as $class) {
+                    $iclass = 'Studip\\Activity\\' .ucfirst($class) .'Provider';
+                    if ($provider instanceof $iclass) {
+                        $filtered_providers[$iclass] =  $provider;
+                    }
                 }
             }
         }

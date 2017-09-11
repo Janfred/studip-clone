@@ -71,7 +71,7 @@ class Activity extends \RESTAPI\RouteMap
 
 
         if (!empty($filtertype)) {
-            $filter->setType($filtertype);
+            $filter->setType(json_decode($filtertype));
         }
 
         if ($scrollfrom) {

@@ -5,17 +5,18 @@
         initial: true,
         scrolledfrom: null,
         maxheight: null,
+        filter: null,
 
         init: function() {
             STUDIP.ActivityFeed.maxheight = parseInt($('#stream-container').css('max-height').replace(/[^-\d\.]/g, ''));
 
-            STUDIP.ActivityFeed.loadFeed('');
+            STUDIP.ActivityFeed.loadFeed(STUDIP.ActivityFeed.filter);
 
             $('#stream-container').scroll(function () {
                 var scrollBottom = $('#stream-container').scrollTop() + $('#stream-container').height() + 250;
 
                 if ($('#stream-container').prop('scrollHeight') < scrollBottom) {
-                    STUDIP.ActivityFeed.loadFeed('');
+                    STUDIP.ActivityFeed.loadFeed(STUDIP.ActivityFeed.filter);
                 }
             });
 
@@ -86,15 +87,10 @@
 
 
                     if ($('#stream-container').height() < STUDIP.ActivityFeed.maxheight) {
-                        STUDIP.ActivityFeed.loadFeed('');
+                        STUDIP.ActivityFeed.loadFeed(filtertype);
                     }
                 }
             });
-
-        },
-
-        update : function(html) {
-            $('#afeed').replaceWith(html);
 
         },
 
@@ -107,6 +103,20 @@
 
             // update toggle status for user's own activities
             $('.activity:has(.provider_circle.right)').toggle(show_own);
+        },
+
+        updateFilter: function(filter) {
+            STUDIP.ActivityFeed.filter = filter;
+            STUDIP.ActivityFeed.initial = true;
+            STUDIP.ActivityFeed.scrolledfrom = Math.floor(Date.now() / 1000);
+
+            $('#stream-container').html('<div class="loading-indicator">'
+                + '<span class="load-1"></span>'
+                + '<span class="load-2"></span>'
+                + '<span class="load-3"></span>'
+                + '</div>');
+
+            STUDIP.ActivityFeed.init();
         }
     };
 })(jQuery, STUDIP);

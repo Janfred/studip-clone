@@ -38,7 +38,7 @@ class Stream implements \ArrayAccess, \Countable, \IteratorAggregate
         }
 
         //fetch avaible contextes in given timespan
-        $available_contexts = \DbManager::get()->fetchGroupedPairs(
+        $available_contexts = \DBManager::get()->fetchGroupedPairs(
             "SELECT DISTINCT context,context_id FROM activities WHERE mkdate BETWEEN ? AND ?",
             array($filter->getStartDate(), $filter->getEndDate()));
 
