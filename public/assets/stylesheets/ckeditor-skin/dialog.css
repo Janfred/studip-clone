@@ -1,6 +1,6 @@
 /**
  * dialog.css - Stud.IP styles for CKEditor dialogs.
- * 
+ *
  * Based on Moono skin sources:
  * Copyright (c) 2003-2014, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
@@ -65,7 +65,7 @@ Comments in this file will give more details about each of the above blocks.
 	-webkit-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
 	-moz-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
 	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
-	background: #ffffff url("../../images/vendor/jquery-ui/ui-bg_inset-hard_100_fcfdfd_1x100.png") 50% bottom repeat-x;
+	background: #ffffff 50% bottom repeat-x;
 	font-family: Lato;
 }
 
