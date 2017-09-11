@@ -91,20 +91,13 @@
         <?= _('Endwoche') ?>
         <select name="endWeek">
             <? if (isset($end_semester_weeks['ende'])) : ?>
-                <? $selected = isset($cycle->end_offset) ? $cycle->end_offset : end($end_semester_weeks['ende'])['value'];?>
+                <? $selected = isset($cycle->end_offset) ? $cycle->end_offset : -1 ?>
                 <? foreach ($end_semester_weeks['ende'] as $end_sem_week) : ?>
                     <option value="<?= $end_sem_week['value'] ?>"
                         <?= (Request::get('endWeek', $selected) == $end_sem_week['value']) ? 'selected' : '' ?>>
-                        <?= htmlReady($end_sem_week['label']) ?>
+                            <?= htmlReady($end_sem_week['label']) ?>
                     </option>
                 <? endforeach; ?>
-            <? endif; ?>
-
-            <? if(count($end_semester_weeks['ende']) > 1) : ?>
-                <option value="-1"
-                    <?= ( $cycle->end_offset == null) ? 'selected' : '' ?>>
-                        <?= _('Alle Semester') ?>
-                </option>
             <? endif; ?>
 
             <? foreach ($clean_weeks as $semester => $weeks) : ?>

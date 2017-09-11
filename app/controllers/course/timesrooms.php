@@ -130,7 +130,6 @@ class Course_TimesroomsController extends AuthenticatedController
         $this->current_semester = Semester::findCurrent();
         $this->cycle_dates      = array();
 
-
         foreach ($this->course->cycles as $cycle) {
             foreach ($cycle->getAllDates() as $val) {
                 foreach ($this->semester as $sem) {
@@ -846,6 +845,10 @@ class Course_TimesroomsController extends AuthenticatedController
                     }
                 }
             }
+
+            if (count($end_semester) > 1) {
+                $this->end_semester_weeks['ende'][] = array('value' => -1, 'label' => _('Alle Semester'));
+            }
         }
     }
 
@@ -865,8 +868,7 @@ class Course_TimesroomsController extends AuthenticatedController
             $this->redirect('course/timesrooms/createCycle');
 
             return;
-        } elseif (Request::int('startWeek') > Request::int('endWeek') && Request::int('endWeek', null) != NULL
-                    && Request::int('endWeek', null) != -1) {
+        } elseif (Request::int('startWeek') > Request::int('endWeek') && Request::int('endWeek') != -1) {
             $this->storeRequest();
             PageLayout::postError(_('Die Endwoche liegt vor der Startwoche. Bitte überprüfen Sie diese Angabe!'));
             $this->redirect('course/timesrooms/createCycle');
@@ -885,7 +887,7 @@ class Course_TimesroomsController extends AuthenticatedController
         $cycle->start_time  = date('H:i:00', $start);
         $cycle->end_time    = date('H:i:00', $end);
 
-        if($cycle->end_offset == -1) {
+        if ($cycle->end_offset == -1) {
             $cycle->end_offset = NULL;
         }
 
@@ -935,7 +937,7 @@ class Course_TimesroomsController extends AuthenticatedController
         $cycle->week_offset = Request::int('startWeek');
         $cycle->end_offset  = Request::int('endWeek');
 
-        if($cycle->end_offset == -1) {
+        if ($cycle->end_offset == -1) {
             $cycle->end_offset = NULL;
         }
 
@@ -1065,17 +1067,6 @@ class Course_TimesroomsController extends AuthenticatedController
     }
 
     /**
-     * Sets the start semester for the given course.
-     *
-     */
-    public function setSemester_action()
-    {
-
-
-
-    }
-
-    /**
      * Calculates new end_offset value for given SeminarCycleDate Object
      *
      * @param object of SeminarCycleDate
@@ -1084,7 +1075,6 @@ class Course_TimesroomsController extends AuthenticatedController
      *
      * @return int
      */
-
     public function getNewEndOffset($cycle, $old_start_weeks, $new_start_weeks)
     {
         // if end_offset is null (endless lifespan) it should stay null

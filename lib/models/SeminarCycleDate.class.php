@@ -379,10 +379,10 @@ class SeminarCycleDate extends SimpleORMap
                 }
             }
 
-            if($this->end_offset == null) {
+            if (is_null($this->end_offset)) {
                 // check if seminar is endless (duration_time == -1)
-                if($course->duration_time == -1) {
-                    $last_sem = Semester::findOneBySQL("1 ORDER BY vorles_ende DESC");
+                if ($course->duration_time == -1) {
+                    $last_sem = Semester::findOneBySQL('1 ORDER BY beginn DESC');
                     $end_time_offset = $last_sem->vorles_ende;
                 } else {
                     $end_time_offset = $course->end_semester->vorles_ende;
@@ -390,7 +390,6 @@ class SeminarCycleDate extends SimpleORMap
             } else {
                 $end_time_offset = $course->start_semester->vorles_beginn + ($this->end_offset + 1) * 7 * 24 * 60 * 60;
             }
-
 
             if ($date->date < $course->start_semester->vorles_beginn + $this->week_offset * 7 * 24 * 60 * 60 ||
                 $date->date > $end_time_offset
@@ -445,10 +444,10 @@ class SeminarCycleDate extends SimpleORMap
         }
 
         // check if cycle has a fix end (end_offset == null -> endless)
-        if($this->end_offset == null) {
+        if (is_null($this->end_offset)) {
             // check if seminar is endless (duration_time == -1)
-            if($course->duration_time == -1) {
-                $last_sem = Semester::findOneBySQL("1 ORDER BY vorles_ende DESC");
+            if ($course->duration_time == -1) {
+                $last_sem = Semester::findOneBySQL('1 ORDER BY beginn DESC');
                 $sem_end = $last_sem->vorles_ende;
             } else {
                 $sem_end = $course->end_semester->vorles_ende;
@@ -540,10 +539,10 @@ class SeminarCycleDate extends SimpleORMap
         $course = Course::find($this->seminar_id);
 
         // check if cycle has a fix end (end_offset == null -> endless)
-        if($this->end_offset == null) {
+        if (is_null($this->end_offset)) {
             // check if seminar is endless (duration_time == -1)
-            if($course->duration_time == -1) {
-                $last_sem = Semester::findOneBySQL("1 ORDER BY vorles_ende DESC");
+            if ($course->duration_time == -1) {
+                $last_sem = Semester::findOneBySQL('1 ORDER BY beginn DESC');
                 $end_time_offset = $last_sem->vorles_ende;
             } else {
                 $end_time_offset = $course->end_semester->vorles_ende;
@@ -608,7 +607,7 @@ class SeminarCycleDate extends SimpleORMap
             $end_time = strtotime('+ 1 week', $end_time);
             $week++;
 
-        } while ($end_time < $sem_end && $end_time < $end_time_offset );
+        } while ($end_time < $sem_end && $end_time < $end_time_offset);
 
         //calulate trurnus
         if ($this->cycle != 0) {
