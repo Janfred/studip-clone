@@ -21,21 +21,21 @@ class LiteratureProvider implements ActivityProvider
 
         if ($activity->context == "course") {
 
-            $url = \URLHelper::getUrl("dispatch.php/course/literature?cid={$activity->context_id}&view=literatur_sem");
+            $url = \URLHelper::getUrl("dispatch.php/literature/edit_list?cid={$activity->context_id}&view=literatur_sem&open_item={$activity->object_id}#anchor");
             $route = null;
 
             $activity->object_url = array(
-                $url => _('Zur Literatur der Veranstaltung')
+                $url => _('Zur Literaturliste in der Veranstaltung')
             );
 
             $activity->object_route = $route;
 
         } elseif ($activity->context == "institute") {
-            $url = \URLHelper::getUrl("dispatch.php/course/literature?cid={$activity->context_id}&view=literatur_sem");
+            $url = \URLHelper::getUrl("dispatch.php/literature/edit_list?cid={$activity->context_id}&view=literatur_sem&open_item={$activity->object_id}#anchor");
             $route= null;
 
             $activity->object_url = array(
-                $url => _('Zur Literatur der Einrichtung')
+                $url => _('Zur Literaturliste in der Einrichtung')
             );
 
             $activity->object_route = $route;
@@ -54,10 +54,11 @@ class LiteratureProvider implements ActivityProvider
     public function postActivity($event, $info)
     {
         $range_id = $info['range_id'];
-        $name = $info['name'];
-        $type = get_object_type($range_id);
-        $user_id = $GLOBALS['user']->id;
-        $mkdate = time();
+        $list_id  = $info['list_id'];
+        $name     = $info['name'];
+        $type     = get_object_type($range_id);
+        $user_id  = $GLOBALS['user']->id;
+        $mkdate   = time();
 
         if ($type == 'sem') {
             $course = \Course::find($range_id);
@@ -68,44 +69,44 @@ class LiteratureProvider implements ActivityProvider
         if ($event == 'LitListDidUpdate') {
             $verb = 'edited';
             if ($type == 'sem') {
-                $summary = _('Die Literaturliste %s wurde von %s in der Veranstaltung "%s" geändert.');
+                $summary = _('Die Literaturliste "%s" wurde von %s in der Veranstaltung "%s" geändert.');
             } else {
-                $summary = _('Die Literaturliste %s wurde von %s in der Einrichtung "%s" geändert.');
+                $summary = _('Die Literaturliste "%s" wurde von %s in der Einrichtung "%s" geändert.');
             }
         } elseif ($event == 'LitListDidCreate') {
             $verb = 'created';
             if ($type == 'sem') {
-                $summary = _('Die Literaturliste %s wurde von %s in der Veranstaltung "%s" erstellt.');
+                $summary = _('Die Literaturliste "%s" wurde von %s in der Veranstaltung "%s" erstellt.');
             } else {
-                $summary = _('Die Literaturliste %s wurde von %s in der Einrichtung "%s" erstellt.');
+                $summary = _('Die Literaturliste "%s" wurde von %s in der Einrichtung "%s" erstellt.');
             }
         } elseif ($event == 'LitListDidDelete') {
             $verb = 'voided';
             if ($type == 'sem') {
-                $summary = _('Die Literaturliste %s wurde von %s in der Veranstaltung "%s" entfernt.');
+                $summary = _('Die Literaturliste "%s" wurde von %s in der Veranstaltung "%s" entfernt.');
             } else {
-                $summary = _('Die Literaturliste %s wurde von %s in der Einrichtung "%s" entfernt.');
+                $summary = _('Die Literaturliste "%s" wurde von %s in der Einrichtung "%s" entfernt.');
             }
         } elseif ($event == 'LitListElementDidUpdate') {
             $verb = 'edited';
             if ($type == 'sem') {
-                $summary = _('Es wurde %s von %s in eine Literaturliste in der Veranstaltung "%s" geändert.');
+                $summary = _('Es wurde der Eintrag "%s" von %s in einer Literaturliste in der Veranstaltung "%s" geändert.');
             } else {
-                $summary = _('Es wurde %s von %s in eine Literaturliste in der Einrichtung "%s" geändert.');
+                $summary = _('Es wurde der Eintrag "%s" von %s in einer Literaturliste in der Einrichtung "%s" geändert.');
             }
         } elseif ($event == 'LitListElementDidInsert') {
             $verb = 'created';
             if ($type == 'sem') {
-                $summary = _('Es wurde %s von %s in eine Literaturliste in der Veranstaltung "%s" erstellt.');
+                $summary = _('Es wurde von %s%s ein Eintrag zu einer Literaturliste in der Veranstaltung "%s" hinzugefügt.');
             } else {
-                $summary = _('Es wurde %s von %s in eine Literaturliste in der Einrichtung "%s" erstellt.');
+                $summary = _('Es wurde von %s%s ein Eintrag zu einer Literaturliste in der Einrichtung "%s" hinzugefügt.');
             }
         } elseif ($event == 'LitListElementDidDelete') {
             $verb = 'voided';
             if ($type == 'sem') {
-                $summary = _('Es wurde %s von %s aus einer Literaturliste in der Veranstaltung "%s" entfernt.');
+                $summary = _('Es wurde aus der Literaturliste "%s" von %s in der Veranstaltung "%s" ein Eintrag entfernt.');
             } else {
-                $summary = _('Es wurde %s von %s aus einer Literaturliste in der Einrichtung "%s" entfernt.');
+                $summary = _('Es wurde aus der Literaturliste "%s" von %s in der Einrichtung "%s" ein Eintrag entfernt.');
             }
         }
 
@@ -121,7 +122,7 @@ class LiteratureProvider implements ActivityProvider
                     'actor_type'   => 'user',           // who initiated the activity?
                     'actor_id'     => $user_id,         // id of initiator
                     'verb'         => $verb,            // the activity type
-                    'object_id'    => $name,            // the id of the referenced object
+                    'object_id'    => $list_id,         // the id of the referenced object
                     'object_type'  => 'literaturelist', // type of activity object
                     'mkdate'       =>  $mkdate
                 )
