@@ -2347,13 +2347,13 @@ class Seminar
 
                 // ... check if user is member in another sibling ...
                 $other = CourseMember::findBySQL(
-                    "`user_id` = :user AND `Seminar_id` IN (:courses)",
-                    ['user' => $user_id, 'courses' => $this->parent->children->pluck('seminar_id')]
+                    "`user_id` = :user AND `Seminar_id` IN (:courses) AND `Seminar_id` != :this",
+                    ['user' => $user_id, 'courses' => $this->parent->children->pluck('seminar_id'), 'this' => $this->id]
                 );
 
                 // ... and delete from parent course if this was the only
                 // course membership in this family.
-                if (count($other) === 0) {
+                if (count($other) == 0) {
                     $m = CourseMember::find([$this->parent_course, $user_id]);
                     if ($m) {
                         $m->delete();

@@ -492,6 +492,29 @@ class MyCoursesController extends AuthenticatedController
                     // Are successor available
                     update_admission($course_id);
 
+                    // If this course is a child of another course...
+                    if ($current_seminar->parent_course) {
+
+                        // ... check if user is member in another sibling ...
+                        $other = CourseMember::findBySQL(
+                            "`user_id` = :user AND `Seminar_id` IN (:courses) AND `Seminar_id` != :this",
+                            [
+                                'user' => $GLOBALS['user']->id,
+                                'courses' => $current_seminar->parent->children->pluck('seminar_id'),
+                                'this' => $course_id
+                            ]
+                        );
+
+                        // ... and delete from parent course if this was the only
+                        // course membership in this family.
+                        if (count($other) == 0) {
+                            $m = CourseMember::find([$current_seminar->parent_course, $GLOBALS['user']->id]);
+                            if ($m) {
+                                $m->delete();
+                            }
+                        }
+                    }
+
                     PageLayout::postMessage(MessageBox::success(sprintf(_("Erfolgreich von Veranstaltung <b>%s</b> abgemeldet."),
                         htmlReady($current_seminar->name))));
                 }
