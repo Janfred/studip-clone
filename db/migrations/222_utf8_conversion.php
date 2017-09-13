@@ -121,8 +121,10 @@ class Utf8Conversion extends Migration
                     }
 
                     if ($collation) {
+                        $null = $column['Null'] === 'YES' ? ' NULL' : ' NOT NULL';
+                        $default = isset($column['Default']) ? ' DEFAULT ' . $db->quote($column['Default']) : '';
                         $change_query[] = ' CHANGE `'. $column[0] .'` `'. $column[0] .'` '
-                           .  $column[1] . ' CHARACTER SET '. $charset .' COLLATE ' . $collation;
+                           . $column[1] . ' CHARACTER SET '. $charset .' COLLATE ' . $collation . $null . $default;
                    }
                 }
 
