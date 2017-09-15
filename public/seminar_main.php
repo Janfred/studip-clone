@@ -40,6 +40,17 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 $course_id = Context::getId();
 
+if (!$course_id && Request::get('cid')) {
+    $archive_id = Request::get('cid');
+    $archived = ArchivedCourse::find($archive_id);
+    if ($archived) {
+        header('Location: ' . URLHelper::getURL('dispatch.php/search/archive', [
+            'criteria' => $archived->name,
+        ]));
+        die;
+    }
+}
+
 if (!$course_id) {
     throw new CheckObjectException(_('Sie haben kein Objekt gewählt.'));
 }
