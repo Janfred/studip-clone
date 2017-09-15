@@ -40,6 +40,10 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 $course_id = Context::getId();
 
+if (!$course_id) {
+    throw new CheckObjectException(_('Sie haben kein Objekt gewählt.'));
+}
+
 //set visitdate for course, when coming from my_courses
 if (Request::get('auswahl')) {
     object_set_visit($course_id, "sem");
