@@ -106,18 +106,26 @@ class Course_BasicdataController extends AuthenticatedController
         );
 
         $this->institutional = array();
-        $institutes = Institute::getMyInstitutes();
+        $my_institutes = Institute::getMyInstitutes();
+        $institutes = Institute::getInstitutes();
+        foreach ($institutes as $institute) {
+            if ($institute['Institut_id'] === $data['institut_id']) {
+                if (!in_array($institute, $my_institutes)) {
+	                $my_institutes[] = $institute;
+                }
+                break;
+            }
+        }
         $this->institutional[] = array(
             'title'   => _('Heimat-Einrichtung'),
             'name'    => 'course_institut_id',
             'must'    => true,
             'type'    => 'nested-select',
             'value'   => $data['institut_id'],
-            'choices' => $this->instituteChoices($institutes),
+            'choices' => $this->instituteChoices($my_institutes),
             'locked'  => LockRules::Check($course_id, 'Institut_id')
         );
 
-        $institutes = Institute::getInstitutes();
         $sem_institutes = $sem->getInstitutes();
         $this->institutional[] = array(
             'title'    => _('beteiligte Einrichtungen'),
