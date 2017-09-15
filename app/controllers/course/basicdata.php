@@ -110,7 +110,14 @@ class Course_BasicdataController extends AuthenticatedController
         $institutes = Institute::getInstitutes();
         foreach ($institutes as $institute) {
             if ($institute['Institut_id'] === $data['institut_id']) {
-                if (!in_array($institute, $my_institutes)) {
+                $found = false;
+                foreach ($my_institutes as $inst) {
+                    if ($inst['Institut_id'] === $institute['Institut_id']) {
+                        $found = true;
+                        break;
+                    }
+                }
+                if (!$found) {
 	                $my_institutes[] = $institute;
                 }
                 break;
