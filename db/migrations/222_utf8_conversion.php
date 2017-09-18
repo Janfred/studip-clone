@@ -79,13 +79,12 @@ class Utf8Conversion extends Migration
         // convert database to utf-8
         $db->exec("ALTER DATABASE `{$GLOBALS['DB_STUDIP_DATABASE']}`
             CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
-        echo "<pre>\n";
 
         // convert tables and columns to utf-8
         foreach($db->query("SHOW TABLES")->fetchAll() as $data) {
             try {
                 // TODO: check EVERY column for the current collation and keep the correct type (bin, etc.)
-                // echo 'Converting table:' . $data[0] ."\n";
+                // $this->write('Converting table: ' . $data[0]);
 
                 $query = 'ALTER TABLE `'. $data[0] .'` ';
                 $change_query = array();
@@ -121,10 +120,12 @@ class Utf8Conversion extends Migration
                     }
 
                     if ($collation) {
-                        $null = $column['Null'] === 'YES' ? ' NULL' : ' NOT NULL';
+                        $null    = $column['Null'] === 'YES' ? ' NULL' : ' NOT NULL';
                         $default = isset($column['Default']) ? ' DEFAULT ' . $db->quote($column['Default']) : '';
+                        $extra   = $column['Extra'] != '' ? ' ' . $column['Extra'] : '';
+                        $comment = $column['Comment'] != '' ? ' COMMENT ' . $db->quote($column['Comment']) : '';
                         $change_query[] = ' CHANGE `'. $column[0] .'` `'. $column[0] .'` '
-                           . $column[1] . ' CHARACTER SET '. $charset .' COLLATE ' . $collation . $null . $default;
+                           . $column[1] . ' CHARACTER SET '. $charset .' COLLATE ' . $collation . $null . $default . $extra . $comment;
                    }
                 }
 
@@ -142,9 +143,8 @@ class Utf8Conversion extends Migration
                 $db->exec($query = "ALTER TABLE `{$data[0]}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
 
             } catch (PDOException $e) {
-                echo $query ."\n";
-                echo $e->getMessage();
-                echo "\n\n";
+                $this->write($query);
+                $this->write($e->getMessage());
             }
         }
 
