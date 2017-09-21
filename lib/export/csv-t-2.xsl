@@ -46,7 +46,7 @@
 		<xsl:text>Privatadr;</xsl:text>
 		<xsl:text>Privatnr;</xsl:text>
 		<xsl:text>E-Mail;</xsl:text>
-		<xsl:text>Studieng�nge;</xsl:text>
+		<xsl:text>Studiengänge;</xsl:text>
 		<xsl:if test="$datafields">
 			<xsl:for-each select="$datafields">
 			    <xsl:text>"</xsl:text>

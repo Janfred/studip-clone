@@ -13,7 +13,7 @@
 </xsl:choose>: <xsl:value-of select="name"/>
 				</h1>
 <xsl:if test="fakultaet">
-				<b>Fakult�t: </b>
+				<b>Fakultät: </b>
 				<xsl:value-of select="fakultaet"/>
 				<br/>
 </xsl:if>

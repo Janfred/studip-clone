@@ -10,7 +10,7 @@
 	<xsl:otherwise>Einrichtung</xsl:otherwise>
 </xsl:choose>: <xsl:value-of select="name"/>
 <xsl:if test="fakultaet">
-Fakult�t: <xsl:value-of select="fakultaet"/>
+Fakultät: <xsl:value-of select="fakultaet"/>
 </xsl:if>
 <xsl:if test="homepage">
 Homepage: <xsl:value-of select="homepage"/>
