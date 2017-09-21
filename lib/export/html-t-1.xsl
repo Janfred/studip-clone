@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="WINDOWS-1252"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
-	<xsl:output method="html" encoding="WINDOWS-1252"/>
+	<xsl:output method="html" encoding="UTF-8"/>
 	<xsl:template match="/">
 	<html>
+        <meta charset="utf-8"/>
 		<body>
 		<xsl:for-each select="studip">
 				<h1>Veranstaltung: <xsl:value-of select="@range"/></h1>

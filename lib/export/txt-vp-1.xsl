@@ -1,17 +1,18 @@
-<?xml version="1.0" encoding="WINDOWS-1252"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
-	<xsl:output method="text" encoding="WINDOWS-1252"/>
+	<xsl:output method="text" encoding="UTF-8"/>
 	<xsl:template match="/">
+    <xsl:text>&#xFEFF;</xsl:text>
 	<xsl:for-each select="studip">
 	<xsl:for-each select="institut">
------------------------------------------------------------------		
+-----------------------------------------------------------------
 <xsl:choose>
 	<xsl:when test="type"><xsl:value-of select="type"/></xsl:when>
 	<xsl:otherwise>Einrichtung</xsl:otherwise>
 </xsl:choose>: <xsl:value-of select="name"/>
 -----------------------------------------------------------------
 		<xsl:if test="fakultaet">
-		Fakultät: <xsl:value-of select="fakultaet"/>
+		FakultÃ¤t: <xsl:value-of select="fakultaet"/>
 		</xsl:if>
 		<xsl:if test="homepage">
 		Homepage: <xsl:value-of select="homepage"/>
@@ -37,11 +38,11 @@
 		</xsl:text><xsl:value-of select="@key"/>: <xsl:text>				</xsl:text><xsl:value-of select="."/>
 		</xsl:for-each>
 		</xsl:if>
-				
+
 			<xsl:if test="seminare">
-     ------------------------------------------------------------		
+     ------------------------------------------------------------
 	Veranstaltungen
-     ------------------------------------------------------------		
+     ------------------------------------------------------------
 			<xsl:choose>
 				<xsl:when test="seminare/gruppe">
 				<xsl:for-each select="seminare/gruppe">
@@ -69,9 +70,9 @@
 			</xsl:choose>
 		</xsl:if>
 		<xsl:if test="personen">
-     ------------------------------------------------------------		
+     ------------------------------------------------------------
 	MitarbeiterInnen
-     ------------------------------------------------------------		
+     ------------------------------------------------------------
 						<xsl:choose>
 							<xsl:when test="personen/gruppe">
 								<xsl:for-each select="personen/gruppe">
@@ -89,7 +90,7 @@
 						</xsl:choose>
 					</xsl:if>
 				</xsl:for-each>
-				
+
 				Generiert von Stud.IP Version <xsl:value-of select="@version"/>
 			</xsl:for-each>
 	</xsl:template>
@@ -97,13 +98,13 @@
 <xsl:template name="showperson">
 	<xsl:for-each select="person">
 	- <xsl:if test="titel">
-				<xsl:value-of select="titel"/><xsl:text> </xsl:text> 
+				<xsl:value-of select="titel"/><xsl:text> </xsl:text>
 				</xsl:if>
 				<xsl:value-of select="vorname"/>
 				<xsl:text> </xsl:text>
 				<xsl:value-of select="nachname"/>
 				<xsl:if test="titel2">
-					<xsl:text>, </xsl:text><xsl:value-of select="titel2"/> 
+					<xsl:text>, </xsl:text><xsl:value-of select="titel2"/>
 				</xsl:if>
 				<xsl:if test="telefon">
 		Telefon: <xsl:value-of select="telefon"/>
@@ -180,7 +181,7 @@
 					ECTS: <xsl:value-of select="ects"/>
 		</xsl:if>
 		<xsl:if test="bereiche">
-				Bereich: 
+				Bereich:
 <xsl:for-each select="bereiche/bereich"><xsl:text>					</xsl:text><xsl:value-of select="."/><xsl:text>
 </xsl:text></xsl:for-each>
 		</xsl:if>
@@ -192,5 +193,5 @@
 <xsl:text>
 </xsl:text>
 	</xsl:for-each>
-</xsl:template>		
+</xsl:template>
 </xsl:stylesheet>

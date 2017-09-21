@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="WINDOWS-1252"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:exsl="http://exslt.org/common"
 	xmlns:func="http://exslt.org/functions"
 	xmlns:str="http://exslt.org/strings">
 
-	<xsl:output method="text" encoding="WINDOWS-1252"/>
+	<xsl:output method="text" encoding="UTF-8"/>
 
 	<xsl:key name="datafields-by-key" match="//personen//datenfeld" use="@key"/>
 
@@ -35,6 +35,7 @@
 	<xsl:variable name="zusatzangaben" select="exsl:node-set($collect-zusatzangaben)/entry"/>
 
 	<xsl:template match="/">
+        <xsl:text>&#xFEFF;</xsl:text>
 		<xsl:text>Position;</xsl:text>
 		<xsl:text>Anrede;</xsl:text>
 		<xsl:text>Titel;</xsl:text>
@@ -45,7 +46,7 @@
 		<xsl:text>Privatadr;</xsl:text>
 		<xsl:text>Privatnr;</xsl:text>
 		<xsl:text>E-Mail;</xsl:text>
-		<xsl:text>Studiengänge;</xsl:text>
+		<xsl:text>Studiengï¿½nge;</xsl:text>
 		<xsl:if test="$datafields">
 			<xsl:for-each select="$datafields">
 			    <xsl:text>"</xsl:text>
