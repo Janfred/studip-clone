@@ -164,14 +164,20 @@ class UserFilter
      *
      * @return boolean
      */
-    public function isFulfilled($userId) {
-        $fulfilled = true;
+    public function isFulfilled($userId)
+    {
+        $additional = [];
+        foreach ($this->fields as $field) {
+            $additional[$field->userDataDbField] = $field->value;
+        }
+
         // Check all fields.
         foreach ($this->fields as $field) {
-            $fulfilled = $fulfilled &&
-                $field->checkValue($field->getUserValues($userId));
+            if (!$field->checkValue($field->getUserValues($userId, $additional))) {
+                return false;
+            }
         }
-        return $fulfilled;
+        return true;
     }
 
     /**
