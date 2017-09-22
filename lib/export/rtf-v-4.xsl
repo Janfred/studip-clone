@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="WINDOWS-1252"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/strings">
-	<xsl:output method="text" encoding="WINDOWS-1252"/>
+	<xsl:output method="text" encoding="UTF-8"/>
 	<xsl:template match="/">
 		<xsl:for-each select="studip">
 			<xsl:text>{\rtf1\ansi\ansicpg1252\deff0\deflang1031{\fonttbl{\f0\fnil\fcharset0 Times New Roman;}}
@@ -40,7 +40,7 @@
 </xsl:choose>: <xsl:value-of select="name"/>
 <xsl:if test="fakultaet">
 			<xsl:text>
-\par\par\fs24\b Fakult\'e4t: \b0 </xsl:text>
+\par\par\fs24\b Fakultät: \b0 </xsl:text>
 			<xsl:value-of select="fakultaet"/>
 </xsl:if>
 <xsl:if test="homepage">

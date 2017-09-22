@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="WINDOWS-1252"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
-	<xsl:output method="html" encoding="WINDOWS-1252"/>
+	<xsl:output method="html" encoding="UTF-8"/>
 	<xsl:template match="/">
 <xsl:text>{\rtf1\ansi\ansicpg1252\deff0\deflang1031{\fonttbl{\f0\fnil\fcharset0 Times New Roman;}}
 \viewkind4\uc1\pard</xsl:text>

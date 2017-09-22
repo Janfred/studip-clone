@@ -77,6 +77,31 @@ global $ex_type, $o_mode, $xml_file_id, $format, $choose, $xslt_files, $export_e
     return true;
 }
 
+/**
+ * Convert all 2, 3 and 4 byte UTF-8 characters to the RTF unicode sequence \uX
+ *
+ * @param  string $utf8_text rft document
+ * @return string converted document
+ */
+function encode_utf8_for_rtf($utf8_text)
+{
+    $utf8_patterns = array(
+      "[\xC0-\xDF][\x80-\xBF]",
+      "[\xE0-\xEF][\x80-\xBF]{2}",
+      "[\xF0-\xF7][\x80-\xBF]{3}",
+    );
+    $unicode_text = $utf8_text;
+
+    foreach($utf8_patterns as $pattern) {
+        $unicode_text = preg_replace_callback("/$pattern/",
+        function($treffer) {
+            return '\u'. hexdec(bin2hex(mb_convert_encoding($treffer[0], 'UCS-4', 'UTF-8'))).'?';
+        },
+        $unicode_text);
+    }
+
+    return $unicode_text;
+}
 
 $export_pagename = _("Download der Ausgabedatei");
 $xslt_process = false;
@@ -102,6 +127,12 @@ if (!CheckParamRUN()) {
     $result_doc = $xh->transformToXML($xml_doc);
     if ($result_doc) {
         $processed = true;
+
+        // if the output format is rtf, convert utf-8 chars to rtf escape sequences
+        if ($format == 'rtf') {
+            $result_doc = encode_utf8_for_rtf($result_doc);
+        }
+
         file_put_contents($result, $result_doc);
     } else {
         $xh = libxml_get_last_error();
