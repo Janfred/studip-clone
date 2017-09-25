@@ -419,7 +419,7 @@ class QuestionnaireController extends AuthenticatedController
             $csv[] = $csv_line;
         }
         $this->response->add_header('Content-Type', "text/csv");
-        $this->response->add_header('Content-Disposition', "attachment; filename=".$this->questionnaire['title'].".csv");
+        $this->response->add_header('Content-Disposition', "attachment; filename=\"".addslashes($this->questionnaire['title']).".csv\"");
         $this->render_text(array_to_csv($csv));
     }
 
