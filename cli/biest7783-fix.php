@@ -34,7 +34,7 @@ if (count($args) < 1) {
 
 $semester_ids = explode(',', implode(',', array_map('trim', $args)));
 foreach ($semester_ids as $index => $semester_id) {
-    if ($semster_id === 'current') {
+    if ($semester_id === 'current') {
         $semester_id = Semester::findCurrent()->id;
     } elseif ($semester_id === 'next') {
         $semester_id = Semester::findNext()->id;
