@@ -1037,28 +1037,31 @@ class ForumEntry {
 
         // move the affected entries "outside" the tree
         $stmt = DBManager::get()->prepare("UPDATE forum_entries
-            SET lft = lft * -1, rgt = (rgt * -1)
+            SET lft = lft * -1, rgt = rgt * -1
             WHERE seminar_id = ? AND lft >= ? AND rgt <= ?");
-        $stmt->execute(array($constraints['seminar_id'], $constraints['lft'], $constraints['rgt']));
+        $stmt->execute([$constraints['seminar_id'], $constraints['lft'], $constraints['rgt']]);
 
         // update the lft and rgt values of the parent to reflect the "deletion"
         $diff = $constraints['rgt'] - $constraints['lft'] + 1;
-        $stmt = DBManager::get()->prepare("UPDATE forum_entries SET lft = lft - $diff
+        $stmt = DBManager::get()->prepare("UPDATE forum_entries SET lft = lft - ?
             WHERE lft > ? AND seminar_id = ?");
-        $stmt->execute(array($constraints['rgt'], $constraints['seminar_id']));
+        $stmt->execute([$diff, $constraints['rgt'], $constraints['seminar_id']]);
 
-        $stmt = DBManager::get()->prepare("UPDATE forum_entries SET rgt = rgt - $diff
+        $stmt = DBManager::get()->prepare("UPDATE forum_entries SET rgt = rgt - ?
             WHERE rgt > ? AND seminar_id = ?");
-        $stmt->execute(array($constraints['rgt'], $constraints['seminar_id']));
+        $stmt->execute([$diff, $constraints['rgt'], $constraints['seminar_id']]);
 
         // make some space by updating the lft and rgt values of the target node
         $constraints_destination = ForumEntry::getConstraints($destination);
         $size = $constraints['rgt'] - $constraints['lft'] + 1;
 
-        DBManager::get()->exec("UPDATE forum_entries SET lft = lft + $size
-            WHERE lft > ". $constraints_destination['rgt'] ." AND seminar_id = '". $constraints_destination['seminar_id'] ."'");
-        DBManager::get()->exec("UPDATE forum_entries SET rgt = rgt + $size
-            WHERE rgt >= ". $constraints_destination['rgt'] ." AND seminar_id = '". $constraints_destination['seminar_id'] . "'");
+        $stmt = DBManager::get()->prepare("UPDATE forum_entries SET lft = lft + ?
+            WHERE lft > ? AND seminar_id = ?");
+        $stmt->execute([$size, $constraints_destination['rgt'], $constraints_destination['seminar_id']]);
+
+        $stmt = DBManager::get()->prepare("UPDATE forum_entries SET rgt = rgt + ?
+            WHERE rgt >= ? AND seminar_id = ?");
+        $stmt->execute([$size, $constraints_destination['rgt'], $constraints_destination['seminar_id']]);
 
         //move the entries from "outside" the tree to the target node
         $constraints_destination = ForumEntry::getConstraints($destination);
@@ -1068,25 +1071,24 @@ class ForumEntry {
         // determine if we need to add, subtract or even do nothing to/from the depth
         $depth_mod = $constraints_destination['depth'] - $constraints['depth'] + 1;
 
-        DBManager::get()->exec("UPDATE forum_entries
-            SET depth = depth + (" . $depth_mod .")
-            WHERE seminar_id = '". $constraints_destination['seminar_id'] ."'
-                AND lft < 0");
+        $stmt = DBManager::get()->prepare("UPDATE forum_entries
+            SET depth = depth + ?
+            WHERE seminar_id = ? AND lft < 0");
+        $stmt->execute([$depth_mod, $constraints_destination['seminar_id']]);
 
         // if the depth is larger than 3, fix it
-        DBManager::get()->exec("UPDATE forum_entries
+        $stmt = DBManager::get()->prepare("UPDATE forum_entries
             SET depth = 3
-            WHERE seminar_id = '". $constraints_destination['seminar_id'] ."'
-                AND depth > 3
-                AND lft < 0");
+            WHERE seminar_id = ? AND depth > 3 AND lft < 0");
+        $stmt->execute([$constraints_destination['seminar_id']]);
 
         // move the tree to its destination
         $diff = ($constraints_destination['rgt'] - ($constraints['rgt'] - $constraints['lft'])) - 1 - $constraints['lft'];
 
-        DBManager::get()->exec("UPDATE forum_entries
-            SET lft = (lft * -1) + $diff, rgt = (rgt * -1) + $diff
-            WHERE seminar_id = '". $constraints_destination['seminar_id'] ."'
-                AND lft < 0");
+        $stmt = DBManager::get()->prepare("UPDATE forum_entries
+            SET lft = (lft * -1) + ?, rgt = (rgt * -1) + ?
+            WHERE seminar_id = ? AND lft < 0");
+        $stmt->execute([$diff, $diff, $constraints_destination['seminar_id']]);
 
         if ($depth_mod != 0) {
             self::fix_ordering($topic_id);
@@ -1099,19 +1101,21 @@ class ForumEntry {
 
         $entry = ForumEntry::getConstraints($parent_id);
 
-        $stmt= $db->prepare('SELECT * FROM forum_entries
+        $stmt= $db->prepare('SELECT topic_id FROM forum_entries
                                WHERE lft > ? AND rgt < ? AND depth = 3
                                     AND seminar_id = ?
                                ORDER BY mkdate');
 
-        $stmt->execute(array($entry['lft'], $entry['rgt'], $entry['seminar_id']));
+        $stmt->execute([$entry['lft'], $entry['rgt'], $entry['seminar_id']]);
 
         $lft = $entry['lft'] + 1;
         $rgt = $lft + 1;
 
-        while ($data = $stmt->fetch()) {
-            $db->query('UPDATE forum_entries SET lft='. $lft .', rgt='.
-                $rgt .' WHERE topic_id ="'. $data['topic_id'] .'";');
+        $inner_stmt = $db->prepare("UPDATE forum_entries SET lft=?, rgt=?
+            WHERE topic_id = ?");
+        while ($topic_id = $stmt->fetchColumn()) {
+            $inner_stmt->execute([$lft, $rgt, $topic_id]);
+
             $lft += 2;
             $rgt += 2;
         }
