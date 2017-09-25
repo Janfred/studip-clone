@@ -1030,7 +1030,7 @@ class ForumEntry {
      *
      * @return void
      */
-    function move($topic_id, $destination)
+    static function move($topic_id, $destination)
     {
         // #TODO: Zusammenfassen in eine Transaktion!!!
         $constraints = ForumEntry::getConstraints($topic_id);
@@ -1073,13 +1073,48 @@ class ForumEntry {
             WHERE seminar_id = '". $constraints_destination['seminar_id'] ."'
                 AND lft < 0");
 
+        // if the depth is larger than 3, fix it
+        DBManager::get()->exec("UPDATE forum_entries
+            SET depth = 3
+            WHERE seminar_id = '". $constraints_destination['seminar_id'] ."'
+                AND depth > 3
+                AND lft < 0");
+
         // move the tree to its destination
         $diff = ($constraints_destination['rgt'] - ($constraints['rgt'] - $constraints['lft'])) - 1 - $constraints['lft'];
 
-        DBManager::get()->exec("UPDATe forum_entries
+        DBManager::get()->exec("UPDATE forum_entries
             SET lft = (lft * -1) + $diff, rgt = (rgt * -1) + $diff
             WHERE seminar_id = '". $constraints_destination['seminar_id'] ."'
                 AND lft < 0");
+
+        if ($depth_mod != 0) {
+            self::fix_ordering($topic_id);
+        }
+    }
+
+    private static function fix_ordering($parent_id)
+    {
+        $db = DBManager::get();
+
+        $entry = ForumEntry::getConstraints($parent_id);
+
+        $stmt= $db->prepare('SELECT * FROM forum_entries
+                               WHERE lft > ? AND rgt < ? AND depth = 3
+                                    AND seminar_id = ?
+                               ORDER BY mkdate');
+
+        $stmt->execute(array($entry['lft'], $entry['rgt'], $entry['seminar_id']));
+
+        $lft = $entry['lft'] + 1;
+        $rgt = $lft + 1;
+
+        while ($data = $stmt->fetch()) {
+            $db->query('UPDATE forum_entries SET lft='. $lft .', rgt='.
+                $rgt .' WHERE topic_id ="'. $data['topic_id'] .'";');
+            $lft += 2;
+            $rgt += 2;
+        }
     }
 
     /**
