@@ -315,7 +315,7 @@ function get_obj_clause($table_name, $range_field, $count_field, $if_clause,
  */
 function get_my_obj_values (&$my_obj, $user_id)
 {
-    $threshold = ($config = Config::get()->NEW_INDICATOR_THRESHOLD) ? strtotime("-{$config} days 0:00:00") : 0;
+    $threshold = object_get_visit_threshold();
 
     $db2 = new DB_seminar;
     $db2->query("CREATE TEMPORARY TABLE IF NOT EXISTS myobj_".$user_id." ( object_id char(32) NOT NULL, PRIMARY KEY (object_id)) ENGINE = MEMORY");

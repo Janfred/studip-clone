@@ -36,7 +36,7 @@ class StartNavigation extends Navigation
             }
 
             if (Config::get()->VOTE_ENABLE && WidgetHelper::hasWidget($GLOBALS['user']->id, 'Evaluations')) {
-                $threshold = Config::get()->NEW_INDICATOR_THRESHOLD ? strtotime("-{".Config::get()->NEW_INDICATOR_THRESHOLD."} days 0:00:00") : 0;
+                $threshold = object_get_visit_threshold();
                 $statement = DBManager::get()->prepare("
                     SELECT COUNT(*)
                     FROM questionnaire_assignments
@@ -62,7 +62,7 @@ class StartNavigation extends Navigation
                           GROUP BY a.range_id";
                 $statement = DBManager::get()->prepare($query);
                 $statement->bindValue(':user_id', $GLOBALS['user']->id);
-                $statement->bindValue(':threshold', ($threshold = Config::get()->NEW_INDICATOR_THRESHOLD) ? strtotime("-{$threshold} days 0:00:00") : 0);
+                $statement->bindValue(':threshold', $threshold);
                 $statement->execute();
                 $vote += (int)$statement->fetchColumn();
             }

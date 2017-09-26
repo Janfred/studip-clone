@@ -198,7 +198,7 @@ class MyRealmModel
             $statement = DBManager::get()->prepare($sql);
             $statement->bindValue(':user_id', $user_id);
             $statement->bindValue(':course_id', $object_id);
-            $statement->bindValue(':threshold', ($threshold = Config::get()->NEW_INDICATOR_THRESHOLD) ? strtotime("-{$threshold} days 0:00:00") : 0);
+            $statement->bindValue(':threshold', object_get_visit_threshold());
             $statement->execute();
             $result = $statement->fetch(PDO::FETCH_ASSOC);
             if (!empty($result)) {
@@ -273,7 +273,7 @@ class MyRealmModel
         $statement = DBManager::get()->prepare($sql);
         $statement->bindValue(':user_id', $user_id);
         $statement->bindValue(':course_id', $object_id);
-        $statement->bindValue(':threshold', ($threshold = Config::get()->NEW_INDICATOR_THRESHOLD) ? strtotime("-{$threshold} days 0:00:00") : 0);
+        $statement->bindValue(':threshold', object_get_visit_threshold());
         $statement->execute();
         $result = $statement->fetch(PDO::FETCH_ASSOC);
 
@@ -351,7 +351,7 @@ class MyRealmModel
             $statement = DBManager::get()->prepare($sql);
             $statement->bindValue(':user_id', $user_id);
             $statement->bindValue(':course_id', $object_id);
-            $statement->bindValue(':threshold', ($threshold = Config::get()->NEW_INDICATOR_THRESHOLD) ? strtotime("-{$threshold} days 0:00:00") : 0);
+            $statement->bindValue(':threshold', object_get_visit_threshold());
             $statement->execute();
             $result = $statement->fetch(PDO::FETCH_ASSOC);
 
@@ -425,7 +425,7 @@ class MyRealmModel
             $statement = DBManager::get()->prepare($sql);
             $statement->bindValue(':user_id', $user_id);
             $statement->bindValue(':course_id', $object_id);
-            $statement->bindValue(':threshold', ($threshold = Config::get()->NEW_INDICATOR_THRESHOLD) ? strtotime("-{$threshold} days 0:00:00") : 0);
+            $statement->bindValue(':threshold', object_get_visit_threshold());
             $statement->execute();
             $result = $statement->fetch(PDO::FETCH_ASSOC);
 
@@ -452,7 +452,7 @@ class MyRealmModel
             $statement = DBManager::get()->prepare($sql);
             $statement->bindValue(':user_id', $user_id);
             $statement->bindValue(':course_id', $object_id);
-            $statement->bindValue(':threshold', ($threshold = Config::get()->NEW_INDICATOR_THRESHOLD) ? strtotime("-{$threshold} days 0:00:00") : 0);
+            $statement->bindValue(':threshold', object_get_visit_threshold());
             $statement->execute();
             $result = $statement->fetch(PDO::FETCH_ASSOC);
 
@@ -533,7 +533,7 @@ class MyRealmModel
             $statement = DBManager::get()->prepare($sql);
             $statement->bindValue(':user_id', $user_id);
             $statement->bindValue(':course_id', $object_id);
-            $statement->bindValue(':threshold', ($threshold = Config::get()->NEW_INDICATOR_THRESHOLD) ? strtotime("-{$threshold} days 0:00:00") : 0);
+            $statement->bindValue(':threshold', object_get_visit_threshold());
             $statement->execute();
             $result = $statement->fetch(PDO::FETCH_ASSOC);
 
@@ -610,7 +610,7 @@ class MyRealmModel
             $statement = DBManager::get()->prepare($sql);
             $statement->bindValue(':user_id', $user_id);
             $statement->bindValue(':course_id', $object_id);
-            $statement->bindValue(':threshold', ($threshold = Config::get()->NEW_INDICATOR_THRESHOLD) ? strtotime("-{$threshold} days 0:00:00") : 0);
+            $statement->bindValue(':threshold', object_get_visit_threshold());
             $statement->execute();
             $result = $statement->fetch(PDO::FETCH_ASSOC);
             if (!empty($result)) {
@@ -673,7 +673,7 @@ class MyRealmModel
         $count = 0;
         $neue  = 0;
 
-        $threshold = Config::get()->NEW_INDICATOR_THRESHOLD ? strtotime("-{".Config::get()->NEW_INDICATOR_THRESHOLD."} days 0:00:00") : 0;
+        $threshold = object_get_visit_threshold();
         $statement = DBManager::get()->prepare("
             SELECT COUNT(DISTINCT questionnaires.questionnaire_id) AS count,
                 COUNT(IF((questionnaires.chdate > IFNULL(object_user_visits.visitdate, :threshold) AND questionnaires.user_id !=:user_id), questionnaires.questionnaire_id, NULL)) AS new,
@@ -724,7 +724,7 @@ class MyRealmModel
         $statement = DBManager::get()->prepare($sql);
         $statement->bindValue(':user_id', $user_id);
         $statement->bindValue(':course_id', $object_id);
-        $statement->bindValue(':threshold', ($threshold = Config::get()->NEW_INDICATOR_THRESHOLD) ? strtotime("-{$threshold} days 0:00:00") : 0);
+        $statement->bindValue(':threshold', object_get_visit_threshold());
         $statement->execute();
         $result = $statement->fetch(PDO::FETCH_ASSOC);
         if (!empty($result)) {
@@ -1097,7 +1097,7 @@ class MyRealmModel
                 $statement = DBManager::get()->prepare($sql);
                 $statement->bindValue(':user_id', $user_id);
                 $statement->bindValue(':course_id', $object_id);
-                $statement->bindValue(':threshold', ($threshold = Config::get()->NEW_INDICATOR_THRESHOLD) ? strtotime("-{$threshold} days 0:00:00") : 0);
+                $statement->bindValue(':threshold', object_get_visit_threshold());
                 $statement->execute();
                 $result = $statement->fetch(PDO::FETCH_ASSOC);
 
@@ -1121,7 +1121,7 @@ class MyRealmModel
                 $statement = DBManager::get()->prepare($sql);
                 $statement->bindValue(':user_id', $user_id);
                 $statement->bindValue(':course_id', $object_id);
-                $statement->bindValue(':threshold', ($threshold = Config::get()->NEW_INDICATOR_THRESHOLD) ? strtotime("-{$threshold} days 0:00:00") : 0);
+                $statement->bindValue(':threshold', object_get_visit_threshold());
                 $statement->execute();
                 $result = $statement->fetch(PDO::FETCH_ASSOC);
 
@@ -1202,8 +1202,8 @@ class MyRealmModel
      */
     public static function getAdditionalNavigations($object_id, &$my_obj_values, $sem_class = null, $user_id)
     {
-        if ($threshold = Config::get()->NEW_INDICATOR_THRESHOLD) {
-            $my_obj_values['visitdate'] = max($my_obj_values['visitdate'], strtotime("-{$threshold} days 0:00:00"));
+        if ($threshold = object_get_visit_threshold()) {
+            $my_obj_values['visitdate'] = max($my_obj_values['visitdate'], $threshold);
         }
 
         $plugin_navigation = MyRealmModel::getPluginNavigationForSeminar($object_id, $my_obj_values['visitdate']);
