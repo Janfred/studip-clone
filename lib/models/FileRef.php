@@ -35,6 +35,7 @@ class FileRef extends SimpleORMap
 
     protected $folder_type;
     protected $download_url;
+    public $path_to_blob;
 
     protected static function configure($config = [])
     {
