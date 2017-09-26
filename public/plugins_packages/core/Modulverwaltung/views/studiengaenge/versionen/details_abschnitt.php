@@ -22,7 +22,7 @@
                     <? endif; ?>
                 </td>
                 <td class="dont-hide" style="white-space: nowrap;">
-                <? if (MvvPerm::havePermWrite($assignment)) : ?>
+                <? if (MvvPerm::haveFieldPermModul_zuordnungen($abschnitt, MvvPerm::PERM_WRITE)) : ?>
                     <a data-dialog="" href="<?= $controller->url_for('/modul_zuordnung', $abschnitt->id, $assignment->modul->id) ?>">
                         <?= Icon::create('edit', 'clickable', array('title' => _('Modulzuordnung bearbeiten')))->asImg(); ?>
                     </a>
@@ -36,7 +36,7 @@
             </tr>
             <? if ($modul_id == $assignment->modul->id) : ?>
             <tr class="loaded-details nohover">
-                <?= $this->render_partial('studiengaenge/versionen/modulteile', array('modul' => $assignment->modul, 'abschnitt_id' => $abschnitt->id)) ?>
+                <?= $this->render_partial('studiengaenge/versionen/modulteile', array('modul' => $assignment->modul, 'abschnitt_id' => $abschnitt->id, 'assignment' => $assignment)) ?>
             </tr>
             <? endif; ?>
         </tbody>

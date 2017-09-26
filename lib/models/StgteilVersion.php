@@ -455,6 +455,7 @@ class StgteilVersion extends ModuleManagementModelTreeItem
         }
         return $ret;
     }
+    
     /**
      * @return string The status (see mvv_config.php)
      */
@@ -465,4 +466,20 @@ class StgteilVersion extends ModuleManagementModelTreeItem
         }
         return parent::getStatus();
     }
+    
+    /**
+     * Returns the responsible institutes.
+     * Inherits the responsible institutes from Studiengangteil
+     * 
+     * @return array Array of institute objects.
+     */
+    public function getResponsibleInstitutes()
+    {
+        $parent = reset($this->getParents());
+        if ($parent) {
+            return $parent->getResponsibleInstitutes();
+        }
+        return parent::getResponsibleInstitutes();
+    }
+    
 }

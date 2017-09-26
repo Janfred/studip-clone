@@ -232,4 +232,16 @@ class StgteilAbschnitt extends ModuleManagementModelTreeItem
         }
         return parent::getStatus();
     }
+    
+    /**
+     * Returns the responsible institutes.
+     * Inherits the responsible institutes from Studiengangteil-Version
+     * 
+     * @return array Array of institute objects.
+     */
+    public function getResponsibleInstitutes()
+    {
+        return $this->version->getResponsibleInstitutes();
+    }
+    
 }
