@@ -95,7 +95,10 @@ namespace Studip\Squeeze {
      */
     function shouldPackage()
     {
-        return \Studip\ENV !== 'development' && !\Request::submitted('debug_assets');
+        // HOTFIX for BIEST 7620 <https://develop.studip.de/trac/ticket/7620>
+        // TODO: Fix this for good
+        return false;
+        // return \Studip\ENV !== 'development' && !\Request::submitted('debug_assets');
     }
 
     /**
