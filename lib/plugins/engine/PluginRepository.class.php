@@ -60,7 +60,12 @@ class PluginRepository
         $metadata = $cache->read($cache_key);
 
         if ($metadata === false) {
-            $metadata = @file_get_contents($url);
+            // Set small timeout for the rare case that the repository is not
+            // available
+            $context = stream_context_create(['http' => [
+                'timeout' => 5,
+            ]]);
+            $metadata = @file_get_contents($url, false, $context);
 
             if ($metadata === false) {
                 throw new Exception(sprintf(_('Fehler beim Zugriff auf %s'), $url));
