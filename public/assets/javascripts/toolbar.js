@@ -20,7 +20,7 @@
             }
         }
 
-        return $(element).outerWidth(true) || $(element).css('width');
+        return $(element).css('width') || $(element).outerWidth(true);
     }
 
     STUDIP.Toolbar = {
