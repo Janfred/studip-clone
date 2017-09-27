@@ -52,7 +52,7 @@
                                         <?= htmlReady($abschnitt['name']) ?><br/><?= $abschnitt['creditPoints'] ? $abschnitt['creditPoints'] . ' ' . _('CP') : '' ?>
                                         <? if (trim($abschnitt['kommentar'])) : ?>
                                             <a data-dialog title="<?= sprintf(_('%s (Kommentar)'), htmlReady($abschnitt['name'])) ?>" href="<?= $controller->url_for('search/studiengaenge/kommentar', $abschnitt_id) ?>">
-                                                <?= Icon::create('log', 'clickable', array('title' => _('Vollständige Modulbeschreibung')))->asImg(); ?>
+                                                <?= Icon::create('item', 'clickable', array('title' => _('Zusatzinformationen zum Studiengangsabschnitt')))->asImg(); ?>
                                             </a>
                                         <? endif; ?>
                                     </td>
