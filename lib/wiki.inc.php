@@ -467,11 +467,11 @@ function showDeleteDialog($keyword, $version) {
         $msg .= _("Diese Version ist die derzeit einzige. Nach dem Löschen ist die Seite komplett gelöscht.") . "<br>";
     }
     //TODO: modaler dialog benutzen
-    $msg.=LinkButton::create(_('Ja!'), URLHelper::getURL("?cmd=really_delete&keyword=".urlencode($keyword)."&version=$version&dellatest=$islatest"));
+    $msg.=LinkButton::createAccept(_('Ja'), URLHelper::getURL("?cmd=really_delete&keyword=".urlencode($keyword)."&version=$version&dellatest=$islatest"));
     $lnk = "?keyword=".urlencode($keyword); // what to do when delete is aborted
     if (!$islatest) $lnk .= "&version=$version";
-    $msg .= LinkButton::create(_("NEIN!"), URLHelper::getLink($lnk));
-    $msg.='<p>'. sprintf(_("Um alle Versionen einer Seite auf einmal zu löschen, klicken Sie %shier%s."),'<a href="'.URLHelper::getLink('?cmd=delete_all&keyword='.urlencode($keyword)).'">','</a>');
+    $msg .= LinkButton::createCancel(_("Nein"), URLHelper::getURL($lnk));
+
     PageLayout::postMessage(MessageBox::info($msg));
     return $version;
 }
@@ -501,10 +501,10 @@ function showDeleteAllDialog($keyword) {
         }
     }
     //TODO: modaler dialog benutzen
-    $msg.="<a href=\"".URLHelper::getLink("?cmd=really_delete_all&keyword=".urlencode($keyword))."\">" .Button::createAccept(_('Ja!')) . "</a>&nbsp; \n";
+    $msg.="<a href=\"".URLHelper::getLink("?cmd=really_delete_all&keyword=".urlencode($keyword))."\">" .Button::createAccept(_('Ja')) . "</a>&nbsp; \n";
     $lnk = "?keyword=".urlencode($keyword); // what to do when delete is aborted
     if (!$islatest) $lnk .= "&version=$version";
-    $msg.="<a href=\"".URLHelper::getLink($lnk)."\">" . Button::createCancel(_('NEIN!')) . "</a>\n";
+    $msg.="<a href=\"".URLHelper::getLink($lnk)."\">" . Button::createCancel(_('Nein')) . "</a>\n";
     PageLayout::postMessage(MessageBox::info($msg));
 }
 
@@ -1493,6 +1493,8 @@ function showWikiPage($keyword, $version, $special="", $show_comments="icon", $h
             }
             if ($perm->have_studip_perm("tutor", Context::getId())) {
                 $edit.=LinkButton::create(_('Löschen'),URLHelper::getURL("?keyword=".urlencode($keyword)."&cmd=delete&version=latest"));
+                // Neuer Button zum Löschen aller Versionen auf der Ebene des Bearbeitens und Löschens statt im Bestätigungsdialog des Löschens
+                $edit.=LinkButton::create(_('Alle Versionen löschen'), URLHelper::getURL('?cmd=delete_all&keyword='.urlencode($keyword)));
             }
         }
         $edit .= "<br>&nbsp;";
