@@ -17,34 +17,25 @@ select {
         display: none;
     }
 
-
     border: @select-border;
     border-radius: @select-border-radius;
-    padding: 1px 20px 1px 8px;
+    padding: 1px 8px 1px 8px;
     position: relative;
     white-space: nowrap;
 
-    &:not([multiple]) {
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    &:not([multiple]) {
+    &:not([multiple]):not([size]) {
         // Allow all other paddings to be overwritten but the right padding
         // to ensure the icon is always clearly visible
-        padding-right: 20px !important;
+        padding-right: 20px;
 
         .background-icon('arr_1down', 'clickable', @select-arrow-size);
         background-position: right 4px center;
         background-repeat: no-repeat;
 
-        &:not([size]) {
-            height: @select-height-default;
-            line-height: 1;
-        }
-    }
-    &[multiple] {
-        padding-right: 8px;
+        height: @select-height-default;
+        line-height: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     &:focus {
