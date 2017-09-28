@@ -120,7 +120,7 @@ class UserFilter
      * @return Array
      */
     public function getUsers() {
-        $users = array();
+        $users = null;
         foreach ($this->fields as $field) {
             // Check if restrictions for the field value must be taken into consideration.
             $restrictions = array();
@@ -136,7 +136,7 @@ class UserFilter
                     }
                 }
             }
-            $users = $users ? array_intersect($users, $field->getUsers($restrictions)) : $field->getUsers($restrictions);
+            $users = isset($users) ? array_intersect($users, $field->getUsers($restrictions)) : $field->getUsers($restrictions);
         }
         return $users;
     }
