@@ -276,7 +276,7 @@ class ModulesNotification extends Modules {
             if ($nav->getBadgeNumber()) {
                 $url = 'seminar_main.php?again=yes&auswahl=' . $range_id . '&redirect_to=' . strtr($nav->getURL(), '?', '&');
                 $icon = $nav->getImage();
-                $tab = array_pop($plugin->getTabNavigation());
+                $tab = array_pop($plugin->getTabNavigation($range_id));
                 if ($tab instanceof Navigation && $tab->isVisible()) {
                     $text = $tab->getTitle();
                 }
