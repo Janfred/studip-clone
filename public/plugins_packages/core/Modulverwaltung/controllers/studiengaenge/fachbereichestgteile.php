@@ -30,11 +30,11 @@ class Studiengaenge_FachbereichestgteileController
         
         // Nur Studiengangteile mit zugeordnetem Fach an dessen verantwortlicher
         // Einrichtung der User eine Rolle hat
-        $filter['mfi.institut_id'] = MvvPerm::getOwnInstitutes();
+        $filter['mvv_fach_inst.institut_id'] = MvvPerm::getOwnInstitutes();
         
         //get data
         if (count($search_result)) {
-            $filter['ms.stgteil_id'] = $search_result;
+            $filter['mvv_stgteil.stgteil_id'] = $search_result;
         }
         $this->fachbereiche = StudiengangTeil::getAssignedFachbereiche(
             $this->sortby, $this->order, $filter);

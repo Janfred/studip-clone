@@ -42,10 +42,11 @@ class Studiengaenge_StudiengangteileController extends SharedVersionController
 
         // Nur Studiengangteile mit zugeordnetem Fach an dessen verantwortlicher
         // Einrichtung der User eine Rolle hat
-        $this->filter['mfi.institut_id'] = MvvPerm::getOwnInstitutes();
-        
-        $search_result = $this->getSearchResult('StudiengangTeil');
+        $this->filter['mvv_fach_inst.institut_id'] = MvvPerm::getOwnInstitutes();
 
+        $search_result = $this->getSearchResult('StudiengangTeil');
+        $filter = $this->filter;
+        unset($filter['start_sem.beginn'], $filter['end_sem.ende']);
         //get data
         if (sizeof($search_result)) {
             $filter['stgteil_id'] = $search_result;
@@ -57,12 +58,12 @@ class Studiengaenge_StudiengangteileController extends SharedVersionController
         } else {
             $this->stgteile = StudiengangTeil::getAllEnriched(
                     $this->sortby, $this->order,
-                    $this->filter, self::$items_per_page,
+                    $filter, self::$items_per_page,
                     self::$items_per_page * ($this->page - 1));
             if (sizeof($this->stgteile) == 0) {
                 PageLayout::postInfo(_('Es wurden noch keine Studiengangteile angelegt.'));
             }
-            $this->count = StudiengangTeil::getCount($this->filter);
+            $this->count = StudiengangTeil::getCount($filter);
         }
 
         $this->show_sidebar_search = true;
@@ -218,7 +219,7 @@ class Studiengaenge_StudiengangteileController extends SharedVersionController
             $perm_institutes = MvvPerm::getOwnInstitutes();
             $filter = array();
             if (count($perm_institutes)) {
-                $filter['mfi.institut_id'] = $perm_institutes;
+                $filter['mvv_fach_inst.institut_id'] = $perm_institutes;
             }
             $this->reset_search('StudiengangTeil');
             $this->reset_page();

@@ -323,18 +323,22 @@ class SharedVersionController extends MVVController
     {
         $this->version = StgteilVersion::find($version_id);
 
-        $query = "SELECT mm.modul_id, CONCAT(mmd.bezeichnung, ', ',"
-                . "IF(ISNULL(mm.code), '', mm.code),"
-                . "IF(ISNULL(sd1.name), '', CONCAT(', ', IF(ISNULL(sd2.name),"
-                . "CONCAT('ab ', sd1.name),CONCAT(sd1.name, ' - ', sd2.name))))) AS modul_name "
-                . 'FROM mvv_modul mm LEFT JOIN mvv_modul_deskriptor mmd '
-                . "ON mm.modul_id = mmd.modul_id AND mmd.sprache = '"
+        // search for modules so status of version doesn't matter
+        $filter = $this->filter;
+        unset($filter['mvv_stgteilversion.stat']);
+        $query = "SELECT mvv_modul.modul_id, CONCAT(mvv_modul_deskriptor.bezeichnung, ', ',"
+                . "IF(ISNULL(mvv_modul.code), '', mvv_modul.code),"
+                . "IF(ISNULL(start_sem.name), '', CONCAT(', ', IF(ISNULL(end_sem.name),"
+                . "CONCAT('ab ', start_sem.name),CONCAT(start_sem.name, ' - ', end_sem.name))))) AS modul_name "
+                . 'FROM mvv_modul LEFT JOIN mvv_modul_deskriptor '
+                . "ON mvv_modul.modul_id = mvv_modul_deskriptor.modul_id AND mvv_modul_deskriptor.sprache = '"
                 . $GLOBALS['MVV_MODUL_DESKRIPTOR']['SPRACHE']['default']
-                . "' LEFT JOIN semester_data sd1 ON mm.start = sd1.semester_id "
-                . 'LEFT JOIN semester_data sd2 ON mm.end = sd2.semester_id '
-                . "WHERE (mm.code LIKE :input "
-                . 'OR mmd.bezeichnung LIKE :input) '
-                . "ORDER BY modul_name";
+                . "' LEFT JOIN semester_data start_sem ON mvv_modul.start = start_sem.semester_id "
+                . 'LEFT JOIN semester_data end_sem ON mvv_modul.end = end_sem.semester_id '
+                . "WHERE (mvv_modul.code LIKE :input "
+                . 'OR mvv_modul_deskriptor.bezeichnung LIKE :input) '
+                . ModuleManagementModel::getFilterSql($filter)
+                . 'ORDER BY modul_name';
         $search = new SQLSearch($query, _('Modul suchen'),
                 'modul_id_' . $this->version->id);
         $this->qs_search_modul_version_id = md5(serialize($search));
@@ -731,6 +735,10 @@ class SharedVersionController extends MVVController
         $this->assignments = StgteilabschnittModul::findByStgteilAbschnitt(
                 $this->abschnitt->getId(),
                 $this->filter);
+        
+        // search for modules so status of version doesn't matter
+        $filter = $this->filter;
+        unset($filter['mvv_stgteilversion.stat']);
         $query = "SELECT mvv_modul.modul_id, CONCAT(mvv_modul_deskriptor.bezeichnung, ', ',"
                 . "IF(ISNULL(mvv_modul.code), '', mvv_modul.code),"
                 . "IF(ISNULL(start_sem.name), '', CONCAT(', ', IF(ISNULL(end_sem.name),"
@@ -745,7 +753,7 @@ class SharedVersionController extends MVVController
                 . 'AND mvv_modul.modul_id NOT IN(SELECT msm.modul_id FROM '
                 . 'mvv_stgteilabschnitt_modul msm WHERE abschnitt_id = '
                 . DBManager::get()->quote($this->abschnitt_id)
-                . ') ' . ModuleManagementModel::getFilterSql($this->filter)
+                . ') ' . ModuleManagementModel::getFilterSql($filter)
                 . ' ORDER BY modul_name';
         $search = new SQLSearch($query, _('Modul suchen'));
         $this->qs_search_modul_abschnitt_id = md5(serialize($search));

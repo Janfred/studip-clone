@@ -46,8 +46,14 @@ class Fachabschluss_FaecherController extends MVVController
 
         // Nur Fächer mit verantwortlichen Einrichtungen an denen der User
         // eine Rolle hat
-        $filter = array('mfi.institut_id' => MvvPerm::getOwnInstitutes());
-
+        $filter = array('mvv_fach_inst.institut_id' => MvvPerm::getOwnInstitutes());
+        
+        $this->count = Fach::getCount($filter);
+        
+        if ($this->count < self::$items_per_page * ($this->page - 1)) {
+            $this->page = 1;
+        }
+        
         //get data
         $this->faecher = Fach::getAllEnriched($this->sortby, $this->order,
                 self::$items_per_page,
@@ -55,10 +61,9 @@ class Fachabschluss_FaecherController extends MVVController
         if (!isset($this->fach_id)) {
             $this->fach_id = null;
         }
-        if (sizeof($this->faecher) == 0) {
+        if (count($this->faecher) == 0) {
             PageLayout::postInfo(_('Es wurden noch keine Fächer angelegt.'));
         }
-        $this->count = Fach::getCount($filter);
 
         $this->setSidebar();
 
@@ -174,7 +179,7 @@ class Fachabschluss_FaecherController extends MVVController
      */
     public function fachbereiche_action()
     {
-        $filter = array('mfi.institut_id' => MvvPerm::getOwnInstitutes());
+        $filter = array('mvv_fach_inst.institut_id' => MvvPerm::getOwnInstitutes());
 
         $this->initPageParams('fachbereiche');
 

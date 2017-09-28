@@ -103,10 +103,10 @@ class Fach extends ModuleManagementModelTreeItem
     {
         $sortby = self::createSortStatement($sortby, $order, 'name',
                 array('count_abschluesse'));
-        return parent::getEnrichedByQuery('SELECT mf.*, '
+        return parent::getEnrichedByQuery('SELECT fach.*, '
                 . 'COUNT(DISTINCT abschluss_id) as `count_abschluesse` '
-                . 'FROM fach mf '
-                . 'LEFT JOIN mvv_fach_inst mfi USING(fach_id) '
+                . 'FROM fach '
+                . 'LEFT JOIN mvv_fach_inst USING(fach_id) '
                 . 'LEFT JOIN mvv_stgteil USING(fach_id) '
                 . 'LEFT JOIN mvv_stg_stgteil USING(stgteil_id) '
                 . 'LEFT JOIN mvv_studiengang USING(studiengang_id) '
@@ -124,10 +124,10 @@ class Fach extends ModuleManagementModelTreeItem
      */
     public static function getCount($filter = null)
     {
-        $query = 'SELECT COUNT(DISTINCT(mf.fach_id)) '
-                . 'FROM fach mf '
-                . 'LEFT JOIN mvv_fach_inst mfi '
-                . 'ON mf.fach_id = mfi.fach_id '
+        $query = 'SELECT COUNT(DISTINCT(fach.fach_id)) '
+                . 'FROM fach '
+                . 'LEFT JOIN mvv_fach_inst '
+                . 'ON fach.fach_id = mvv_fach_inst.fach_id '
                 . self::getFilterSql($filter, true);
         $db = DBManager::get()->prepare($query);
         $db->execute();
@@ -150,10 +150,10 @@ class Fach extends ModuleManagementModelTreeItem
     {
         $sortby = self::createSortStatement($sortby, $order, 'name',
                 array('count_stgteile'));
-        return parent::getEnrichedByQuery('SELECT mf.*, '
+        return parent::getEnrichedByQuery('SELECT fach.*, '
                 . 'COUNT(stgteil_id) as `count_stgteile` '
-                . 'FROM fach mf '
-                . 'INNER JOIN mvv_fach_inst mfi USING(fach_id) '
+                . 'FROM fach '
+                . 'INNER JOIN mvv_fach_inst USING(fach_id) '
                 . 'INNER JOIN mvv_stgteil USING(fach_id) '
                 . self::getFilterSql($filter, true)
                 . 'GROUP BY fach_id '
@@ -294,12 +294,12 @@ class Fach extends ModuleManagementModelTreeItem
     {
         $sortby = self::createSortStatement($sortby, $order, 'name',
                 array('count_stgteile'));
-        return parent::getEnrichedByQuery('SELECT mf.*, '
+        return parent::getEnrichedByQuery('SELECT fach.*, '
                 . 'COUNT(DISTINCT stgteil_id) as `count_stgteile` '
-                . 'FROM fach mf '
-                . 'INNER JOIN mvv_fach_inst mfi USING(fach_id)'
-                . 'INNER JOIN mvv_stgteil ms USING(fach_id) '
-                . 'WHERE ms.stgteil_id IN(?) '
+                . 'FROM fach '
+                . 'INNER JOIN mvv_fach_inst USING(fach_id)'
+                . 'INNER JOIN mvv_stgteil USING(fach_id) '
+                . 'WHERE mvv_stgteil.stgteil_id IN(?) '
                 . self::getFilterSql($filter)
                 . 'GROUP BY fach_id '
                 . 'ORDER BY ' . $sortby, array((array) $stgteil_ids),
@@ -429,13 +429,13 @@ class Fach extends ModuleManagementModelTreeItem
         $sortby = ($sortby == 'name' ? 'name' : 'faecher');
         $order = ($order == 'ASC' ? 'ASC' : 'DESC');
         $fachbereiche = array();
-        $stmt = DBManager::get()->prepare('SELECT i.Name as `name`, '
-                . 'i.Institut_id as `institut_id`, '
+        $stmt = DBManager::get()->prepare('SELECT Institute.Name as `name`, '
+                . 'Institute.Institut_id as `institut_id`, '
                 . 'COUNT(DISTINCT fach_id) as `faecher` '
-                . 'FROM Institute i '
-                . 'LEFT JOIN mvv_fach_inst mfi ON i.Institut_id = mfi.institut_id '
+                . 'FROM Institute '
+                . 'LEFT JOIN mvv_fach_inst ON Institute.Institut_id = mvv_fach_inst.institut_id '
                 . self::getFilterSql($filter, true)
-                . 'GROUP BY i.Institut_id '
+                . 'GROUP BY Institute.Institut_id '
                 . 'ORDER BY ' . $sortby . ' ' . $order);
         $stmt->execute();
         foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $fachbereich) {

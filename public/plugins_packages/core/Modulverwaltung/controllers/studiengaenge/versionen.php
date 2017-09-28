@@ -166,7 +166,7 @@ class Studiengaenge_VersionenController extends SharedVersionController
 
     protected function chooser_index()
     {
-        $filter = array('mfi.institut_id' => MvvPerm::getOwnInstitutes());
+        $filter = array('mvv_fach_inst.institut_id' => MvvPerm::getOwnInstitutes());
         foreach (StudiengangTeil::getAssignedFachbereiche('name', 'ASC', $filter)
                 as $key => $fachbereich) {
             $this->lists['index']['elements'][$key] = array(
@@ -231,6 +231,7 @@ class Studiengaenge_VersionenController extends SharedVersionController
                     $this->filter['start_sem.beginn'] = $current_sem->beginn;
                     $this->filter['end_sem.ende'] = $current_sem->beginn;
                 }
+                $this->sessSet('filter', $this->filter);
             }
 
             $this->versionen = StgteilVersion::findByStgteil($stgteil_id,

@@ -237,18 +237,18 @@ class StudiengangTeil extends ModuleManagementModelTreeItem
                 'fach_name',
                 words('fach_name stgteil_name count_fachberater count_versionen'));
         return parent::getEnrichedByQuery(
-                'SELECT mst.*, CONCAT(mf.name, ": ", '
-                . 'mst.zusatz, " (", mst.kp, " CP)") AS stgteil_name, '
-                . 'mf.name AS fach_name, '
-                . 'COUNT(DISTINCT mfb.user_id) AS count_fachberater, '
-                . 'COUNT(DISTINCT msv.version_id) AS count_versionen '
-                . 'FROM mvv_stgteil mst '
-                . 'LEFT JOIN fach mf USING(fach_id) '
-                . 'LEFT JOIN mvv_fach_inst mfi USING(fach_id) '
-                . 'LEFT JOIN mvv_fachberater mfb USING(stgteil_id) '
-                . 'LEFT JOIN mvv_stgteilversion msv USING(stgteil_id) '
+                'SELECT mvv_stgteil.*, CONCAT(fach.name, ": ", '
+                . 'mvv_stgteil.zusatz, " (", mvv_stgteil.kp, " KP)") AS stgteil_name, '
+                . 'fach.name AS fach_name, '
+                . 'COUNT(DISTINCT mvv_fachberater.user_id) AS count_fachberater, '
+                . 'COUNT(DISTINCT mvv_stgteilversion.version_id) AS count_versionen '
+                . 'FROM mvv_stgteil '
+                . 'LEFT JOIN fach USING(fach_id) '
+                . 'LEFT JOIN mvv_fach_inst USING(fach_id) '
+                . 'LEFT JOIN mvv_fachberater USING(stgteil_id) '
+                . 'LEFT JOIN mvv_stgteilversion USING(stgteil_id) '
                 . self::getFilterSql($filter, true)
-                . 'GROUP BY mst.stgteil_id '
+                . 'GROUP BY mvv_stgteil.stgteil_id '
                 . 'ORDER BY ' . $sortby, array(), $row_count, $offset);
     }
 
@@ -261,12 +261,12 @@ class StudiengangTeil extends ModuleManagementModelTreeItem
      */
     public static function getCount($filter = null)
     {
-        $query = 'SELECT COUNT(DISTINCT(mst.stgteil_id)) '
-                . 'FROM mvv_stgteil mst '
-                . 'LEFT JOIN fach mf USING(fach_id) '
-                . 'LEFT JOIN mvv_fach_inst mfi USING(fach_id) '
-                . 'LEFT JOIN mvv_fachberater mfb USING(stgteil_id) '
-                . 'LEFT JOIN mvv_stgteilversion msv USING(stgteil_id) '
+        $query = 'SELECT COUNT(DISTINCT(mvv_stgteilversion.stgteil_id)) '
+                . 'FROM mvv_stgteil '
+                . 'LEFT JOIN fach USING(fach_id) '
+                . 'LEFT JOIN mvv_fach_inst USING(fach_id) '
+                . 'LEFT JOIN mvv_fachberater USING(stgteil_id) '
+                . 'LEFT JOIN mvv_stgteilversion USING(stgteil_id) '
                 . self::getFilterSql($filter, true);
         $db = DBManager::get()->query($query);
         return $db->fetchColumn(0);

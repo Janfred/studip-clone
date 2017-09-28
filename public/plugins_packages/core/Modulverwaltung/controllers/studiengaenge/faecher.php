@@ -30,7 +30,7 @@ class Studiengaenge_FaecherController
         
         // Nur Studiengangteile mit zugeordnetem Fach an dessen verantwortlicher
         // Einrichtung der User eine Rolle hat
-        $filter['mfi.institut_id'] = MvvPerm::getOwnInstitutes();
+        $filter['mvv_fach_inst.institut_id'] = MvvPerm::getOwnInstitutes();
         
         //get data
         if (count($search_result)) {
