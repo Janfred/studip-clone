@@ -138,7 +138,7 @@ class UserFilter
             }
             $users = isset($users) ? array_intersect($users, $field->getUsers($restrictions)) : $field->getUsers($restrictions);
         }
-        return $users;
+        return (array) $users;
     }
 
     /**
