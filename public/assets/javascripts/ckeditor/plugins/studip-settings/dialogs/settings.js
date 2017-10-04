@@ -86,7 +86,6 @@ CKEDITOR.dialog.add('settingsDialog', function (editor) {
         width: 400,
         height: 200,
         resizable: CKEDITOR.DIALOG_RESIZE_NONE,
-        buttons: [CKEDITOR.dialog.okButton],
         contents: [{
             elements: [{
                 type: 'checkbox',
@@ -115,7 +114,6 @@ CKEDITOR.dialog.add('settingsDialog', function (editor) {
         }],
         onLoad: function (event) {
             $(this.parts.footer.$).append(status);
-            this.parts.close.remove();
             dialog = this;
         },
         onShow: function (event) {
