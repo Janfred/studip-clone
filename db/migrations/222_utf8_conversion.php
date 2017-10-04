@@ -166,8 +166,8 @@ class Utf8Conversion extends Migration
         if (is_array($data)) {
             $new_data = array();
             foreach ($data as $key => $value) {
-                $key = studip_utf8encode($key);
-                $new_data[$key] = studip_utf8encode($value);
+                $key = $this->legacy_studip_utf8encode($key);
+                $new_data[$key] = $this->legacy_studip_utf8encode($value);
             }
             return $new_data;
         }
