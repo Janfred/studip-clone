@@ -1527,7 +1527,7 @@ class Admin_CoursesController extends AuthenticatedController
 
         $temp = $GLOBALS['user']->cfg->MY_COURSES_ADMIN_VIEW_FILTER_ARGS;
         if ($temp) {
-            $config = json_decode($temp);
+            $config = json_decode($temp, true);
             $config = array_intersect($config, $available_filters);
         } else {
             $config = array();
