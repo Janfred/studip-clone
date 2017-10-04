@@ -255,9 +255,10 @@ class messaging
      */
     function insert_message($message, $rec_uname, $user_id='', $time='', $tmp_message_id='', $set_deleted='', $signature='', $subject='', $force_email='', $priority='normal', $tags = null)
     {
-        global $user;
+        // wenn keine user_id uebergeben
+        $user_id = $user_id ?: $GLOBALS['user']->id;
 
-        $my_messaging_settings = UserConfig::get($user->id)->MESSAGING_SETTINGS;
+        $my_messaging_settings = UserConfig::get($user_id)->MESSAGING_SETTINGS;
 
         // wenn kein subject uebergeben
         $subject = $subject ?: _('Ohne Betreff');
@@ -269,9 +270,6 @@ class messaging
 
         // wenn keine id uebergeben
         $tmp_message_id = $tmp_message_id ?: md5(uniqid('321losgehtes', true));
-
-        // wenn keine user_id uebergeben
-        $user_id = $user_id ?: $user->id;
 
         # send message now
         if ($user_id != '____%system%____')  { // real-user message
@@ -380,10 +378,7 @@ class messaging
         }
 
         // Obtain all users that should receive a notification
-        $user_ids = $rec_id;
-        if (is_object($GLOBALS['user'])) {
-            $user_ids = array_diff($user_ids, array($GLOBALS['user']->id));
-        }
+        $user_ids = array_diff($rec_id, array($user_id));
 
         // Create notifications
         PersonalNotifications::add(
