@@ -241,7 +241,13 @@ class StgteilAbschnitt extends ModuleManagementModelTreeItem
      */
     public function getResponsibleInstitutes()
     {
-        return $this->version->getResponsibleInstitutes();
+        if ($this->version) {
+            return $this->version->getResponsibleInstitutes();
+        } else {
+            //In case no responsible institutes can be
+            //determined we must return an empty array:
+            return array();
+        }
     }
     
 }
