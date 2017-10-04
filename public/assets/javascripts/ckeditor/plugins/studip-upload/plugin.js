@@ -1,5 +1,6 @@
 CKEDITOR.plugins.add('studip-upload', {
     icons: 'upload',
+    hidpi: true,
     lang: 'de,en',
     init: function(editor){
         var lang = editor.lang['studip-upload'];

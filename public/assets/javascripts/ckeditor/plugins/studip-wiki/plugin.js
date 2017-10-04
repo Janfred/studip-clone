@@ -1,6 +1,7 @@
 CKEDITOR.plugins.add('studip-wiki', {
     requires: 'widget',
     icons: 'wikilink',
+    hidpi: true,
     lang: 'de,en',
     init: function (editor) {
         var lang = editor.lang['studip-wiki'];
