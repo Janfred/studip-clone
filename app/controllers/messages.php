@@ -558,7 +558,13 @@ class MessagesController extends AuthenticatedController {
             $this->msg['to'] = $GLOBALS['user']->id == $message->autor_id ?
                 join(', ', $message->getRecipients()->pluck('fullname')) :
                 $GLOBALS['user']->getFullname() . ' ' . sprintf(_('(und %d weitere)'), $message->getNumRecipients()-1);
-            $this->msg['attachments'] = $message->attachments->toArray('filename filesize');
+
+            if ($attachment_folder = Folder::findOneByRange_id($this->message->id)) {
+                $this->msg['attachments'] = array_map(
+                    function ($fileref) { return $fileref->file->toArray('name size'); },
+                    $attachment_folder->getFiles());
+            }
+
             PageLayout::setTitle($this->msg['subject']);
             $this->set_layout($GLOBALS['template_factory']->open('layouts/base'));
         } else {
