@@ -33,6 +33,7 @@ class Utf8Conversion extends Migration
         }
 
         // create a helper-function in MySQL
+        $pdo->exec("DROP FUNCTION IF EXISTS entity_decode");
         $pdo->exec("
         CREATE FUNCTION entity_decode(txt TEXT CHARSET utf8mb4) RETURNS TEXT
             CHARSET utf8mb4
@@ -75,6 +76,12 @@ class Utf8Conversion extends Migration
 
         $db = DBManager::get();
 
+        // convert selected columns from serialized data to JSON data
+        $this->convert_to_json('extern_config', 'config');
+        $this->convert_to_json('aux_lock_rules', 'attributes');
+        $this->convert_to_json('aux_lock_rules', 'sorting');
+        $this->convert_to_json('user_config', 'value', "field = 'MY_COURSES_ADMIN_VIEW_FILTER_ARGS'");
+        $this->convert_to_json('mail_queue_entries', 'mail');
 
         // convert database to utf-8
         $db->exec("ALTER DATABASE `{$GLOBALS['DB_STUDIP_DATABASE']}`
@@ -149,9 +156,65 @@ class Utf8Conversion extends Migration
         }
 
         // drop helper-function
-        $db->exec("DROP FUNCTION entity_decode");
+        $db->exec("DROP FUNCTION IF EXISTS entity_decode");
 
         SimpleORMap::expireTableScheme();
+    }
+
+    private function legacy_studip_utf8encode($data)
+    {
+        if (is_array($data)) {
+            $new_data = array();
+            foreach ($data as $key => $value) {
+                $key = studip_utf8encode($key);
+                $new_data[$key] = studip_utf8encode($value);
+            }
+            return $new_data;
+        }
+
+        if (!preg_match('/[\200-\377]/', $data) && !preg_match("'&#[0-9]+;'", $data)) {
+            return $data;
+        } else {
+            return mb_decode_numericentity(
+                mb_convert_encoding($data,'UTF-8', 'WINDOWS-1252'),
+                array(0x100, 0xffff, 0, 0xffff),
+                'UTF-8'
+            );
+        }
+    }
+
+    private function convert_to_json($table, $column, $where = null)
+    {
+        $db = DBManager::get();
+
+        // get primary keys
+        $result = $db->query("SHOW KEYS FROM $table WHERE Key_name = 'PRIMARY'");
+        $keys = array();
+
+        while ($data = $result->fetch(PDO::FETCH_ASSOC)) {
+            $keys[] = $data['Column_name'];
+        }
+
+        // retrieve and convert data
+        $result = $db->query("SELECT `". implode('`,`', $keys) ."`, `$column` FROM `$table` WHERE ". ($where ?: '1'));
+
+        while ($data = $result->fetch(PDO::FETCH_ASSOC)) {
+            $content = unserialize(legacy_studip_utf8decode($data[$column]));
+
+            if ($content !== false) {
+                // encode all data
+                $json = json_encode($this->legacy_studip_utf8encode($content), true);
+
+                $query = "UPDATE `$table` SET `$column` = ". $db->quote($json) ."\n WHERE ";
+
+                $where_query = array();
+                foreach ($keys as $key) {
+                    $where_query[] = "`$key` = ". $db->quote($data[$key]);
+                }
+
+                $db->exec($query . implode(' AND ', $where_query));
+            }
+        }
     }
 
     public function down()

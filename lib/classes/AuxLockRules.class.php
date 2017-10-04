@@ -32,8 +32,8 @@ class AuxLockRules
             'lock_id' => $data['lock_id'],
             'name' => $data['name'],
             'description' => $data['description'],
-            'attributes' => unserialize($data['attributes']),
-            'order' => unserialize($data['sorting'])
+            'attributes' => json_decode($data['attributes']),
+            'order' => json_decode($data['sorting'])
         );
     }
 
@@ -69,8 +69,8 @@ class AuxLockRules
     static function createLockRule($name, $description, $fields, $order) 
     {
         $id = md5(uniqid(rand()));
-        $attributes = serialize($fields);
-        $sorting = serialize($order);
+        $attributes = json_encode($fields);
+        $sorting = json_encode($order);
         $stmt = DBManager::get()->prepare('INSERT INTO aux_lock_rules '
                     . '(lock_id, name, description, attributes, sorting) '
                 . 'VALUES (?, ?, ?, ?, ?)');
@@ -80,8 +80,8 @@ class AuxLockRules
 
     static function updateLockRule($id, $name, $description, $fields, $order) 
     {
-        $attributes = serialize($fields);
-        $sorting = serialize($order);
+        $attributes = json_encode($fields);
+        $sorting = json_encode($order);
         $stmt = DBManager::get()->prepare('UPDATE aux_lock_rules '
                     . 'SET name = ?, description = ?, attributes = ?, sorting = ? '
                     . 'WHERE lock_id = ?');

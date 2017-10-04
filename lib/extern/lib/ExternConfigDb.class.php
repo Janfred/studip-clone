@@ -51,7 +51,7 @@ class ExternConfigDb extends ExternConfig {
     */
     function store () {
         parent::store();
-        $serialized_config = serialize($this->config);
+        $serialized_config = json_encode($this->config);
 
         if (mb_strlen($serialized_config)) {
             $stmt = DBManager::get()->prepare("UPDATE extern_config 
@@ -77,7 +77,7 @@ class ExternConfigDb extends ExternConfig {
         $statement->execute($parameters);
         $row = $statement->fetchColumn();
         if ($row) {
-            $this->config = unserialize(stripslashes($row));
+            $this->config = json_decode(stripslashes($row));
         } else {
             ExternModule::printError();
         }
@@ -87,7 +87,7 @@ class ExternConfigDb extends ExternConfig {
         if (!parent::insertConfiguration()) {
             return false;
         }
-         $serialized_config = serialize($config_obj->config);
+         $serialized_config = json_encode($config_obj->config);
          $time = time();
          $query = "INSERT INTO extern_config VALUES (?,?,?,?,0,?,?,?)";
          $statement = DBManager::get()->prepare($query);

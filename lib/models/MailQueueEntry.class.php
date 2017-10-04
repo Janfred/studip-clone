@@ -29,9 +29,8 @@ class MailQueueEntry extends SimpleORMap
     protected static function configure($config = array())
     {
         $config['db_table'] = 'mail_queue_entries';
-        $config['registered_callbacks']['before_store'][] = 'cbSerializeMail';
-        $config['registered_callbacks']['after_store'][] = 'cbUnserializeMail';
-        $config['registered_callbacks']['after_initialize'][] = 'cbUnserializeMail';
+        $config['serialized_fields']['mail'] = "JSONArrayObject";
+
         parent::configure($config);
     }
 
@@ -82,36 +81,6 @@ class MailQueueEntry extends SimpleORMap
             "OR (last_try > (UNIX_TIMESTAMP() - 60 * 60) AND tries < 25) ORDER BY mkdate".
             ($limit > 0 ? " LIMIT ". (int) $limit : "")
         );
-    }
-
-    /**
-     * Serializes the mail-object to the database.
-     * @return true
-     */
-    protected function cbSerializeMail()
-    {
-        if ($this->content['mail']) {
-            $this->content['mail'] = serialize($this->content['mail']);
-        }
-        if ($this->content_db['mail']) {
-            $this->content_db['mail'] = serialize($this->content_db['mail']);
-        }
-        return true;
-    }
-
-    /**
-     * Unserializes the mail-object from the database.
-     * @return true
-     */
-    protected function cbUnserializeMail()
-    {
-        if ($this->content['mail']) {
-            $this->content['mail'] = unserialize($this->content['mail']);
-        }
-        if ($this->content_db['mail']) {
-            $this->content_db['mail'] = unserialize($this->content_db['mail']);
-        }
-        return true;
     }
 
     /**

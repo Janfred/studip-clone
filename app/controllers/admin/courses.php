@@ -1527,7 +1527,7 @@ class Admin_CoursesController extends AuthenticatedController
 
         $temp = $GLOBALS['user']->cfg->MY_COURSES_ADMIN_VIEW_FILTER_ARGS;
         if ($temp) {
-            $config = unserialize($temp);
+            $config = json_decode($temp);
             $config = array_intersect($config, $available_filters);
         } else {
             $config = array();
@@ -1549,7 +1549,7 @@ class Admin_CoursesController extends AuthenticatedController
     private function setFilterConfig($config)
     {
         $config = $config ?: array_keys($this->getViewFilters());
-        $GLOBALS['user']->cfg->store('MY_COURSES_ADMIN_VIEW_FILTER_ARGS', serialize($config));
+        $GLOBALS['user']->cfg->store('MY_COURSES_ADMIN_VIEW_FILTER_ARGS', json_encode($config));
 
         return $config;
     }
