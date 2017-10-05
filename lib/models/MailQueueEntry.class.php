@@ -46,7 +46,7 @@ class MailQueueEntry extends SimpleORMap
     static public function add(StudipMail $mail, $message_id = null, $user_id = null)
     {
         $queue_entry = new MailQueueEntry();
-        $queue_entry['mail'] = $mail;
+        $queue_entry['mail'] = $mail->toArray();
         $queue_entry['message_id'] = $message_id;
         $queue_entry['user_id'] = $user_id;
         $queue_entry['tries'] = 0;
@@ -90,8 +90,10 @@ class MailQueueEntry extends SimpleORMap
      */
     public function send()
     {
-        if (is_a($this->mail, "StudipMail")) {
-            $success = $this->mail->send();
+        $mail = new StudipMail($this->mail);
+
+        if (is_a($mail, "StudipMail")) {
+            $success = $mail->send();
             if ($success) {
                 if ($this['message_id'] && $this['user_id']) {
                     //Noch in message_user als versendet vermerken?

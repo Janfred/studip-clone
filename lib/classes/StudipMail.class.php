@@ -128,11 +128,15 @@ class StudipMail
      * configuration settings. The return path is always set to MAIL_ABUSE
      *
      */
-    function __construct() {
+    function __construct($data = null) {
         $mail_localhost = ($GLOBALS['MAIL_LOCALHOST'] == "") ? $_SERVER["SERVER_NAME"] : $GLOBALS['MAIL_LOCALHOST'];
         $this->setSenderEmail($GLOBALS['MAIL_ENV_FROM'] == "" ? "wwwrun@" . $mail_localhost : $GLOBALS['MAIL_ENV_FROM']);
         $this->setSenderName($GLOBALS['MAIL_FROM'] == "" ? 'Stud.IP - ' . Config::get()->UNI_NAME_CLEAN : $GLOBALS['MAIL_FROM']);
         $this->setReplyToEmail($GLOBALS['MAIL_ABUSE'] == "" ? "abuse@" . $mail_localhost : $GLOBALS['MAIL_ABUSE']);
+
+        if ($data) {
+            $this->setData($data);
+        }
     }
 
     /**
@@ -414,6 +418,18 @@ class StudipMail
         } else {
             Log::error(get_class($transporter) . '::Send() - ' . $error);
             return false;
+        }
+    }
+
+    public function toArray()
+    {
+        return get_object_vars($this);
+    }
+
+    public function setData($data)
+    {
+        foreach ($data as $name => $value) {
+            $this->$name = $value;
         }
     }
 }
