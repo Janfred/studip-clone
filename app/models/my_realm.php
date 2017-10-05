@@ -1495,7 +1495,9 @@ class MyRealmModel
                 foreach ($courses as $course) {
                     $_tmp_courses[$sem_key][(string)$sem_tree_names[$sem_tree_id]][$course['seminar_id']] = $course;
                 }
-                unset($_tmp_courses[$sem_key][$sem_tree_id]);
+                if ($sem_tree_names[$sem_tree_id]) {
+                    unset($_tmp_courses[$sem_key][$sem_tree_id]);
+                }
             }
         }
 
