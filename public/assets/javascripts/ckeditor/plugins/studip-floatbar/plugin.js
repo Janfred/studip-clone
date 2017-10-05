@@ -40,7 +40,7 @@
         editor.config.sharedSpaces = { top: toolbar.attr('id') };
 
         // add listener for later intialization tasks (don't activate inside a dialog)
-        if (!$(editor.element.$).closest('.ui-dialog')) {
+        if (!$(editor.element.$).closest('.ui-dialog').length) {
             CKEDITOR.on('instanceReady', onInstanceReady);
         }
     }
