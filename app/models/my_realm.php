@@ -1492,7 +1492,9 @@ class MyRealmModel
             //Now we have to replace the sem_tree IDs in the second layer
             //of the $_tmp_courses array with the sem_tree names:
             foreach ($_tmp_courses[$sem_key] as $sem_tree_id => $courses) {
-                $_tmp_courses[$sem_key][(string)$sem_tree_names[$sem_tree_id]] = $courses;
+                foreach ($courses as $course) {
+                    $_tmp_courses[$sem_key][(string)$sem_tree_names[$sem_tree_id]][$course['seminar_id']] = $course;
+                }
                 unset($_tmp_courses[$sem_key][$sem_tree_id]);
             }
         }
