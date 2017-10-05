@@ -12,12 +12,20 @@
  * @category    Stud.IP
  */
 
-class ForumCat {
-    
+class ForumCat extends SimpleORMap
+{
+
+    protected static function configure($config = array())
+    {
+        $config['db_table'] = 'forum_categories';
+        parent::configure($config);
+    }
+
+
     /**
      * Return a list of all areas with their categories.
      * Empty categories are excluded by default
-     * 
+     *
      * @param string $seminar_id    the seminar_id the retrieve the categories for
      * @param string $exclude_null  if false, empty categories are returned as well
      * @return array list of categories
@@ -34,10 +42,10 @@ class ForumCat {
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
+
     /**
      * return a list of all categories for the passed seminar
-     * 
+     *
      * @param string $seminar_id  the seminar_id the retrieve the categories for
      * @return array  list of categories
      */
@@ -47,13 +55,23 @@ class ForumCat {
             WHERE seminar_id = ? ORDER BY pos ASC");
         $stmt->execute(array($seminar_id));
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $list = array();
+
+        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $area) {
+            $cat = new ForumCat();
+            $cat->setData($area, true);
+            $cat->setNew(false);
+            $list[] = $cat;
+        }
+
+        return $list;
+        // return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
+
     /**
      * Returns the name of the associated category for an area denoted by the
      * passed topic_id
-     * 
+     *
      * @param string $topic_id
      * @return string  the name of the category
      */
@@ -63,7 +81,7 @@ class ForumCat {
             LEFT JOIN forum_categories_entries AS fce USING (category_id)
             WHERE fce.topic_id = ?");
         $stmt->execute(array($topic_id));
-        
+
         return $stmt->fetchColumn();
     }
 
@@ -71,7 +89,7 @@ class ForumCat {
     /**
      * Adds a new category with the passed name to the passed seminar and
      * returns the id of the newly created category
-     * 
+     *
      * @param string $seminar_id
      * @param string $name  the name of the new category
      * @return string  the id of the newly created category
@@ -83,9 +101,9 @@ class ForumCat {
             VALUES (?, ?, ?)");
 
         $category_id = md5(uniqid(rand()));
-        
+
         $stmt->execute(array($category_id, $seminar_id, $name));
-        
+
         return $category_id;
     }
 
@@ -93,7 +111,7 @@ class ForumCat {
     /**
      * Remove the category with the passed id. The seminar_id is used only
      * to be certain.
-     * 
+     *
      * @param string $category_id  The ID of the category to be deleted
      * @param string $seminar_id  Seminar-ID the category belongs to
      */
@@ -104,7 +122,7 @@ class ForumCat {
             forum_categories
             WHERE category_id = ?");
         $stmt->execute(array($category_id));
-        
+
         // set all entries to default category
         $stmt = DBManager::get()->prepare("UPDATE
             forum_categories_entries
@@ -113,10 +131,10 @@ class ForumCat {
         $stmt->execute(array($seminar_id, $category_id));
     }
 
-    
+
     /**
      * Set the position for the passed category to the passed value
-     * 
+     *
      * @param string $category_id  the ID of the category to update
      * @param int $pos             the new position
      */
@@ -125,14 +143,14 @@ class ForumCat {
         $stmt = DBManager::get()->prepare("UPDATE
             forum_categories
             SET pos = ? WHERE category_id = ?");
-        $stmt->execute(array($pos, $category_id));        
+        $stmt->execute(array($pos, $category_id));
     }
 
-    
+
     /**
      * Add the passed area to the passed category and remove it from all
      * other categories.
-     * 
+     *
      * @param string $category_id  the ID of the category
      * @param string $area_id      the ID of the area to add the category to
      */
@@ -156,11 +174,11 @@ class ForumCat {
             (category_id, topic_id, pos) VALUES (?, ?, ?)");
         $stmt->execute(array($category_id, $area_id, $new_pos));
     }
-    
-    
+
+
     /**
      * Remove the passed area from all categories.
-     * 
+     *
      * @param string $area_id  the ID of the area to be removed
      */
     static function removeArea($area_id)
@@ -171,10 +189,10 @@ class ForumCat {
         $stmt->execute(array($area_id));
     }
 
-    
+
     /**
      * Set the position for the passed category to the passed value
-     * 
+     *
      * @param string $area_id  the ID of the area to update
      * @param int    $pos      the new position
      */
@@ -183,13 +201,13 @@ class ForumCat {
         $stmt = DBManager::get()->prepare("UPDATE
             forum_categories_entries
             SET pos = ? WHERE topic_id = ?");
-        $stmt->execute(array($pos, $area_id));        
+        $stmt->execute(array($pos, $area_id));
     }
-    
-    
+
+
     /**
      * Set the name for the passed category
-     * 
+     *
      * @param string $category_id  the ID of the category to update
      * @param string $name         the name to set
      */
@@ -200,12 +218,12 @@ class ForumCat {
             SET entry_name = ? WHERE category_id = ?");
         $stmt->execute(array($name, $category_id));
     }
-    
+
     /**
      * Return the data for the passed category_id
-     * 
+     *
      * @param type $category_id
-     * 
+     *
      * @return array the data for the passed category_id
      */
     static function get($category_id)
@@ -213,28 +231,28 @@ class ForumCat {
         $stmt = DBManager::get()->prepare("SELECT * FROM forum_categories
             WHERE category_id = ?");
         $stmt->execute(array($category_id));
-        
+
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    
+
     /**
      * Return the areas for the passed category_id
-     * 
+     *
      * @param type $category_id
      * @param type $start  limit start (optional)
      * @param type $limit  number of entries to fetch (optional, default is 20)
-     * 
+     *
      * @return array the data for the passed category_id
      */
     static function getAreas($category_id, $start = null, $num = 20)
     {
         $category = self::get($category_id);
-        
+
         $limit = '';
         if ($start !== null && $num) {
             $limit = " LIMIT $start, $num";
         }
-        
+
         if ($category_id == $category['seminar_id']) {
             $stmt = DBManager::get()->prepare("SELECT fe.* FROM forum_entries AS fe
                 LEFT JOIN forum_categories_entries AS fce USING (topic_id)
@@ -247,10 +265,10 @@ class ForumCat {
                 LEFT JOIN forum_entries USING(topic_id)
                 WHERE category_id = ?
                 ORDER BY pos ASC" . $limit);
-    
+
             $stmt->execute(array($category_id));
         }
-        
+
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
