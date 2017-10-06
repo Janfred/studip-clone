@@ -150,8 +150,7 @@ STUDIP.News = {
                         if (obj.length > 0) {
                             jQuery('#admin_news_form').submit();
                         } else {
-                            var url = location.href.split('?');
-                            location.replace(url[0] + '?nsave=1');
+                            location.replace(STUDIP.URLHelper.getURL(location.href, {'nsave': 1}));
                         }
                     }
                     // fix added elements (as in application.js)
