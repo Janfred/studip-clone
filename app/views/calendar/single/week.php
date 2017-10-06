@@ -13,7 +13,7 @@ if ($at >= $settings['start']
     $start = $settings['end'] - 2;
     $end = 23;
 }
-$tab_arr = '';
+$tab_arr = [];
 $max_columns = 0;
 $week_type = $settings['type_week'] == 'SHORT' ? 5 : 7;
 $rows = ($end - $start + 1) * 3600 / $settings['step_week'];
