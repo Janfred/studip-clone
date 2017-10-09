@@ -176,9 +176,8 @@ class ExternSemBrowse extends SemBrowse {
             }
             if (Request::option('aggregation')) {
                 $i = Institute::find($this->config->range_id);
-                $children = count($i->sub_institutes) > 0 ?
-                    $i->sub_institutes->pluck('institut_id') :
-                    [$i->institut_id];
+                $children = $i->sub_institutes->pluck('institut_id');
+                $children[] = $i->institut_id;
                 $sem_inst_query = " AND seminare.Institut_id IN ('".(implode("', '", $children))."')";
             }
 
