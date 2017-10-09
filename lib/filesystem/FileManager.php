@@ -603,11 +603,9 @@ class FileManager
     {
         // first we have to make sure if the user has the permissions to read the source folder
         // and the permissions to write to the destination folder:
-        if (!$source->folder) {
-            return [_('Dateireferenz ist keinem Ordner zugeordnet!')];
-        }
 
-        $source_folder = $source->folder->getTypedFolder();
+
+        $source_folder = $source->getFolderType();
         if (!$source_folder) {
             return [_('Ordnertyp des Quellordners konnte nicht ermittelt werden!')];
         }
@@ -622,6 +620,49 @@ class FileManager
                     $destination_folder->name
                 )
             ];
+        }
+
+        if ($source_folder instanceof VirtualFolderType) {
+            
+            $file_meta = array(
+                'name' => [$source->name], 
+                'error' => [0],
+                'type' => [$source->mime_type],
+                'tmp_name' => [$source->path_to_blob],
+                'size' => [$source->size]);
+            $fcopy = self::handleFileUpload($file_meta, $destination_folder, $user->id);
+            $file_copy = $fcopy["files"][0]; 
+
+            $new_reference = new FileRef();
+            $new_reference->file_id     = $file_copy->id;
+            $new_reference->folder_id   = $destination_folder->id;
+            $new_reference->name        = $file_copy->name;
+            $new_reference->description = $source->description;
+            $new_reference->user_id     = $user->id;
+            $new_reference->content_terms_of_use_id = $source->content_terms_of_use_id;
+
+            if ($new_reference->store()) {
+                return $new_reference;            
+            } else {
+                $file_copy->delete();
+                return [$error ?: _('Daten konnten nicht kopiert werden!')];
+            }
+
+        }
+
+        if ($destination_folder instanceof VirtualFolderType) {
+            
+            $file = File::find($source->file_id);
+            
+            $filedata['name'] = $destination_folder->getId() . '/' . $source->name;
+            $filedata['tmp_path'] = $file->getPath();
+
+            if ($destination_folder->createFile($filedata)) {
+                $plugin =  PluginManager::getInstance()->getPluginById($destination_folder->range_type);
+                return $plugin->getPreparedFile($filedata['name']);
+            } else {
+                return [$error ?: _('Daten konnten nicht kopiert werden!')];
+            }
         }
 
         if ($source->user_id === $user->id) {
@@ -698,13 +739,65 @@ class FileManager
      */
     public static function moveFileRef(FileRef $source, FolderType $destination_folder, User $user)
     {
-        if (!Folder::exists($source->folder_id)) {
-            return [_('Dateireferenz ist keinem Ordner zugeordnet!')];
-        }
-
-        $source_folder = $source->folder->getTypedFolder();
+        $source_folder = $source->getFolderType();
         if (!$source_folder) {
             return [_('Ordnertyp des Quellordners konnte nicht ermittelt werden!')];
+        }
+
+        if ($source_folder instanceof VirtualFolderType) {
+            
+            if (!$source_folder->isFileWritable($source, $user->id) ||
+            !$source_folder->isReadable($user->id) ||
+            !$destination_folder->isWritable($user->id)
+            ) {
+                return [sprintf(
+                    _('Ungenügende Berechtigungen zum Verschieben der Datei %s in Ordner %s!'),
+                    $source->name,
+                    $destination_folder->name
+                )];
+            }  
+
+            $file_meta = array(
+                'name' => [$source->name], 
+                'error' => [0],
+                'type' => [$source->mime_type],
+                'tmp_name' => [$source->path_to_blob],
+                'size' => [$source->size]);
+            $fcopy = self::handleFileUpload($file_meta, $destination_folder, $user->id);
+            $file_copy = $fcopy["files"][0]; 
+
+            $new_reference = new FileRef();
+            $new_reference->file_id     = $file_copy->id;
+            $new_reference->folder_id   = $destination_folder->id;
+            $new_reference->name        = $file_copy->name;
+            $new_reference->description = $source->description;
+            $new_reference->user_id     = $user->id;
+            $new_reference->content_terms_of_use_id = $source->content_terms_of_use_id;
+
+            if ($new_reference->store()) {
+                $source_folder->deleteFile($source->id);
+                return $new_reference;            
+            } else {
+                $file_copy->delete();
+                return [$error ?: _('Daten konnten nicht gespeichert werden!')];
+            }
+
+        }
+
+        if ($destination_folder instanceof VirtualFolderType) {
+            
+            $file = File::find($source->file_id);
+            
+            $filedata['name'] = $destination_folder->getId() . '/' . $source->name;
+            $filedata['tmp_path'] = $file->getPath();
+
+            if ($destination_folder->createFile($filedata)) {
+                self::deleteFileRef($source, $user);
+                $plugin =  PluginManager::getInstance()->getPluginById($destination_folder->range_type);
+                return $plugin->getPreparedFile($filedata['name']);
+            } else {
+                return [$error ?: _('Daten konnten nicht gespeichert werden!')];
+            }
         }
 
         // the user must have the permissions to write into the source file,

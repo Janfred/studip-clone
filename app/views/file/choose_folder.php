@@ -130,7 +130,7 @@ switch ($top_folder->range_type) {
         $check = $mods->getStatus('documents', $top_folder->range_id) > 0;
         break;
     default:
-        $check = false;
+        $check = is_numeric($top_folder->range_type);
         break;
 }
 ?>

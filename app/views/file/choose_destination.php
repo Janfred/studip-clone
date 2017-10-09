@@ -46,7 +46,7 @@ $options['direct_parent'] = true;
         <? if ($plugin->isPersonalFileArea()) : ?>
             <? $nav = $plugin->getFileSelectNavigation() ?>
             <? if ($nav) : ?>
-                <a href="<?= $controller->link_for('/choose_folder/', array_merge($options, ['plugin' => get_class($plugin)])) ?>" data-dialog>
+                <a href="<?= $controller->link_for('/choose_folder/', array_merge($options, ['to_plugin' => get_class($plugin)])) ?>" data-dialog>
                     <?= $nav->getImage()->asImg(50) ?>
                     <?= htmlReady($nav->getTitle()) ?>
                 </a>
