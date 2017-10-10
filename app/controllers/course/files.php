@@ -116,6 +116,18 @@ class Course_FilesController extends AuthenticatedController
      **/
     public function flat_action()
     {
+        $sidebar = Sidebar::get();
+
+        $actions = new ActionsWidget();
+        $actions->addLink(
+            _('Neue Dateien herunterladen'),
+            $this->url_for('course/files/newest_files'),
+            Icon::create('download', 'clickable'),
+            ['cid' => $this->course->id]
+        );
+
+        $sidebar->addWidget($actions);
+
         $this->marked_element_ids = [];
 
         $folder = Folder::findTopFolder($this->course->id);
@@ -130,5 +142,81 @@ class Course_FilesController extends AuthenticatedController
         $this->files = SimpleCollection::createFromArray($this->files)->orderBy('chdate desc');
         $this->range_type = 'course';
         $this->render_template('files/flat.php', $this->layout);
+    }
+
+    /**
+     * Packs all files in this course which are considered new
+     * to the current user into a ZIP file and send it to the user.
+     */
+    public function newest_files_action()
+    {
+        $user = User::findCurrent();
+
+        //Get the course's top folder:
+        $folder = Folder::findTopFolder($this->course->id);
+        if (!$folder) {
+            throw new Exception(_('Fehler beim Laden des Hauptordners!'));
+        }
+
+        $this->top_folder = $folder->getTypedFolder();
+
+        //Get all files of the course:
+        list($files, $folders) = array_values(
+            FileManager::getFolderFilesRecursive(
+                $this->top_folder,
+                $user->id,
+                true
+            )
+        );
+
+        $last_visitdate = $this->last_visitdate;
+
+        //Only select those files which are newer than the last visit date:
+        $relevant_file_refs = [];
+
+        foreach ($files as $file_ref) {
+            if ($file_ref->chdate > $this->last_visitdate) {
+                $relevant_file_refs[] = $file_ref;
+            }
+        }
+
+        if (!$relevant_file_refs) {
+            //There are no new files: Display an info message
+            //and return to the flat file view of the course:
+            PageLayout::postInfo(
+                _('Es sind keine neuen Dateien in dieser Veranstaltung verfügbar!')
+            );
+
+            $this->redirect(
+                'course/files/flat',
+                [
+                    'cid' => $this->course->id
+                ]
+            );
+            return;
+        }
+
+        $tmp_file = tempnam($GLOBALS['TMP_PATH'], 'doc');
+
+        //Create a ZIP archive from all relevant files the user may see:
+        $archive = FileArchiveManager::createArchiveFromFileRefs(
+            $relevant_file_refs,
+            $user,
+            $tmp_file,
+            true
+        );
+
+        if ($archive) {
+            //ZIP file has been created successfully.
+            //Redirect to the ZIP file download URL:
+            $this->redirect(
+                FileManager::getDownloadURLForTemporaryFile(
+                    basename($tmp_file),
+                    basename($tmp_file) . '.zip'
+                )
+            );
+        } else {
+            throw new Exception('Error while creating ZIP archive!');
+        }
     }
 }
