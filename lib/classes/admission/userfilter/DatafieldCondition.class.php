@@ -92,7 +92,7 @@ class DatafieldCondition extends UserFilterField
         $select = "SELECT user_id FROM
                     auth_user_md5 LEFT JOIN
                   datafields_entries ON range_id = user_id AND datafield_id = ?
-                  WHERE IFNULL(content, ?)
+                  WHERE perms IN ('user','autor','tutor','dozent') AND IFNULL(content, ?)
                   " . $this->compareOperator . " ?";
         $users = $db->fetchFirst($select, array($this->datafield_id, $this->null_yields,$this->value));
         return $users;
@@ -110,7 +110,7 @@ class DatafieldCondition extends UserFilterField
         $result = DBManager::get()->fetchColumn(
             "SELECT content FROM datafields_entries
             WHERE datafield_id = ? AND range_id = ?", array($this->datafield_id, $userId));
-        return array(is_null($result) ? $this->null_yields : $result);
+        return array($result === null || $result === false ? $this->null_yields : $result);
     }
 
     /**
