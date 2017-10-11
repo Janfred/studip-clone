@@ -304,11 +304,13 @@ jQuery(document).ready(function () {
     };
 
     if ($('.no-touch #layout_content').length > 0) {
-        // Try to fix now
-        fixScrolling();
+        window.matchMedia('screen').addListener(function() {
+            // Try to fix now
+            fixScrolling();
 
-        // and fix again on window load and resize
-        $(window).on('resize load', _.debounce(fixScrolling, 100));
+            // and fix again on window load and resize
+            $(window).on('resize load', _.debounce(fixScrolling, 100));
+        });
     }
 });
 
