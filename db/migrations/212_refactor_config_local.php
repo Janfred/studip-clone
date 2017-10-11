@@ -177,19 +177,17 @@ class RefactorConfigLocal extends Migration
                 'config_id'   => md5($name),
                 'name'        => $name,
                 'type'        => $data['type'],
-                'value'       => $data['default'] ?: "",
+                'value'       => $data['default'],
                 'range'       => 'global',
-                'section'     => $data['section'] ?: "global",
+                'section'     => $data['section'] ?: 'global',
                 'description' => $data['description']
             );
             $stmt_default->execute($option);
-            if ($GLOBALS[$name] !== $option['value']) {
-                $option['config_id'] = md5($name . "___VALUE");
-                $option['value'] = $data['default'] ?: "";
+            if (isset($GLOBALS[$name]) && $GLOBALS[$name] != $option['value']) {
+                $option['config_id'] = md5($name . '___VALUE');
                 $option['value'] = $GLOBALS[$name];
                 $stmt_value->execute($option);
             }
         }
     }
-
 }
