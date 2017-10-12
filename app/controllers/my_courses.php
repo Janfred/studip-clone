@@ -589,14 +589,16 @@ class MyCoursesController extends AuthenticatedController
 
         foreach ($my_obj as $courses) {
 
-            if ($group_field !== 'sem_number') {
-                // tlx: If array is 2-dimensional, merge it into a 1-dimensional
-                $courses = call_user_func_array('array_merge', $courses);
-            }
+            if (is_array($courses)) {
+                if ($group_field !== 'sem_number') {
+                    // tlx: If array is 2-dimensional, merge it into a 1-dimensional
+                    $courses = call_user_func_array('array_merge', $courses);
+                }
 
-            foreach ($courses as $course) {
-                if ($this->check_course($course)) {
-                    return true;
+                foreach ($courses as $course) {
+                    if ($this->check_course($course)) {
+                        return true;
+                    }
                 }
             }
         }
