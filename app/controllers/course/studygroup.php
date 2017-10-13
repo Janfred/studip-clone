@@ -85,15 +85,13 @@ class Course_StudygroupController extends AuthenticatedController
 
             $stmt = DBManager::get()->prepare("SELECT * FROM admission_seminar_user"
                                               . " WHERE user_id = ? AND seminar_id = ?");
-            $stmt->execute(array($GLOBALS['user']->id, $id));
+            $stmt->execute([$GLOBALS['user']->id, $id]);
             $data = $stmt->fetch();
 
             if ($data['status'] == 'accepted') {
                 $membership_requested = true;
             }
-            if (StudygroupModel::isInvited($GLOBALS['user']->id, $id)) {
-                $invited = true;
-            }
+            $invited = StudygroupModel::isInvited($GLOBALS['user']->id, $id);
 
             $participant = $perm->have_studip_perm('autor', $id);
 
@@ -103,46 +101,57 @@ class Course_StudygroupController extends AuthenticatedController
                 $send_from_search_page = Request::get('send_from_search_page');
             }
 
-            $icon = Icon::create('schedule', 'clickable');
-            if ($GLOBALS['perm']->have_studip_perm('autor', $studygroup->getId()) || $membership_requested) {
-                $action = _("Persönlicher Status:");
+            $icon = Icon::create('door-enter', 'clickable');
+            if ($GLOBALS['perm']->have_studip_perm('autor', $studygroup->id) || $membership_requested) {
+                $action = _('Persönlicher Status:');
                 if ($membership_requested) {
                     $icon = $icon->copyWithRole('info');
-                    $infotext = _("Mitgliedschaft bereits beantragt!");
+                    $infotext = _('Mitgliedschaft bereits beantragt!');
                 } else {
-                    $infolink = URLHelper::getURL('seminar_main.php?auswahl=' . $studygroup->getId());
-                    $infotext = _("Direkt zur Studiengruppe");
+                    $infolink = URLHelper::getLink('seminar_main.php', ['auswahl' => $studygroup->id]);
+                    $infotext = _('Direkt zur Studiengruppe');
                 }
             } else if ($GLOBALS['perm']->have_perm('admin')) {
-                $action   = _("Hinweis:");
+                $action   = _('Hinweis');
                 $infotext = _('Sie sind Admin und können sich daher nicht für Studiengruppen anmelden.');
                 $icon     = Icon::create('decline', 'attention');
             } else {
-                $action           = _("Aktionen:");
-                $infolink         = URLHelper::getScriptURL('dispatch.php/course/enrolment/apply/' . $studygroup->getId());
-                $infolink_options = array('data-dialog' => '');
+                $action           = _('Aktionen');
+                $infolink         = $this->link_for("course/enrolment/apply/{$studygroup->id}");
+                $infolink_options = ['data-dialog' => ''];
                 // customize link text if user is invited or group access is restricted
-                if ($invited === true) {
-                    $infotext = _("Einladung akzeptieren");
+                if ($invited) {
+                    $infotext = _('Einladung akzeptieren');
                 } elseif ($studygroup->admission_prelim) {
-                    $infotext = _("Mitgliedschaft beantragen");
+                    $infotext = _('Mitgliedschaft beantragen');
                 } else {
-                    $infotext = _("Studiengruppe beitreten");
+                    $infotext = _('Studiengruppe beitreten');
                 }
             }
             $sidebar = Sidebar::get();
-            $sidebar->setTitle(_("Details"));
+            $sidebar->setTitle(_('Details'));
             $sidebar->setContextAvatar(StudygroupAvatar::getAvatar($studygroup->id));
+
             $iwidget = new SidebarWidget();
-            $iwidget->setTitle(_("Information"));
-            $iwidget->addElement(new WidgetElement(_("Hier sehen Sie weitere Informationen zur Studiengruppe. Außerdem können Sie ihr beitreten/eine Mitgliedschaft beantragen.")));
+            $iwidget->setTitle(_('Information'));
+            $iwidget->addElement(new WidgetElement(_('Hier sehen Sie weitere Informationen zur Studiengruppe. Außerdem können Sie ihr beitreten/eine Mitgliedschaft beantragen.')));
             $sidebar->addWidget($iwidget);
+
             $awidget = new LinksWidget();
             $awidget->setTitle($action);
             $awidget->addLink($infotext, $infolink, $icon, $infolink_options);
             if ($send_from_search_page) {
-                $awidget->addLink(_("zurück zur Suche"), URLHelper::getURL($send_from_search_page), Icon::create('schedule', 'info'));
+                $awidget->addLink(
+                    _('zurück zur Suche'),
+                    URLHelper::getURL($send_from_search_page),
+                    Icon::create('link-intern')
+                );
             }
+            $awidget->addLink(
+                _('Link zu dieser Studiengruppe'),
+                $this->link_for("course/studygroup/details/{$studygroup->id}"),
+                Icon::create('group')
+            );
             $sidebar->addWidget($awidget);
             $this->sidebarActions = $awidget->getElements();
         }

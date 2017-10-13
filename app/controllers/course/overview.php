@@ -135,12 +135,22 @@ class Course_OverviewController extends AuthenticatedController
         $sidebar->setImage('sidebar/seminar-sidebar.png');
 
         $links = new ActionsWidget();
-        $links->addLink(
-            _('Link zu dieser Veranstaltung'),
-            $this->url_for('course/details', ['sem_id' => $this->course->id]),
-            Icon::create('group')
-        );
+        if ($this->studygroup_mode) {
+            $links->addLink(
+                _('Link zu dieser Studiengruppe'),
+                $this->link_for("course/studygroup/details/{$this->course->id}"),
+                Icon::create('group')
+            );
+        } else {
+            $links->addLink(
+                _('Link zu dieser Veranstaltung'),
+                $this->link_for('course/details', [
+                    'sem_id' => $this->course->id,
+                    'cid'    => null,
+                ]),
+                Icon::create('group')
+            );
+        }
         $sidebar->addWidget($links);
     }
-
 }
