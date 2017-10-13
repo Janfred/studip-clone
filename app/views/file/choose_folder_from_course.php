@@ -53,7 +53,7 @@ jQuery(function ($) {
                 </td>
                 <td>
                     <a href="<?= $controller->link_for('file/choose_folder_from_course/', array_merge($options, ['course_id' => $course->id])) ?>" data-dialog>
-                        <?= htmlReady($course->name) ?>
+                        <?= htmlReady($course->getFullname()) ?>
                     </a>
                 </td>
                 <td>

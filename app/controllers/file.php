@@ -664,8 +664,15 @@ class FileController extends AuthenticatedController
             $query = "SELECT seminare.*
                       FROM seminare
                       INNER JOIN seminar_user ON (seminar_user.Seminar_id = seminare.Seminar_id)
-                      WHERE seminar_user.user_id = :user_id
-                      ORDER BY seminare.duration_time = -1, seminare.start_time DESC, seminare.name ASC";
+                      WHERE seminar_user.user_id = :user_id";
+            if (Config::get()->DEPUTIES_ENABLE) {
+                $query .= " UNION
+                    SELECT `seminare`.*
+                    FROM `seminare`
+                    INNER JOIN `deputies` ON (`deputies`.`range_id` = `seminare`.`Seminar_id`)
+                    WHERE `deputies`.`user_id` = :user_id";
+            }
+            $query .= " ORDER BY duration_time = -1, start_time DESC, Name ASC";
             $statement = DBManager::get()->prepare($query);
             $statement->execute([':user_id' => $GLOBALS['user']->id]);
             $this->courses = [];
@@ -838,8 +845,15 @@ class FileController extends AuthenticatedController
             $query = "SELECT seminare.*
                       FROM seminare
                       INNER JOIN seminar_user ON (seminar_user.Seminar_id = seminare.Seminar_id)
-                      WHERE seminar_user.user_id = :user_id
-                      ORDER BY seminare.duration_time = -1, seminare.start_time DESC, seminare.name ASC";
+                      WHERE seminar_user.user_id = :user_id";
+            if (Config::get()->DEPUTIES_ENABLE) {
+                $query .= " UNION
+                    SELECT `seminare`.*
+                    FROM `seminare`
+                    INNER JOIN `deputies` ON (`deputies`.`range_id` = `seminare`.`Seminar_id`)
+                    WHERE `deputies`.`user_id` = :user_id";
+            }
+            $query .= " ORDER BY duration_time = -1, start_time DESC, Name ASC";
             $statement = DBManager::get()->prepare($query);
             $statement->execute(['user_id' => $GLOBALS['user']->id]);
 
