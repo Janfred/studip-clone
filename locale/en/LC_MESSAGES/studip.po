@@ -12367,7 +12367,7 @@ msgid ""
 "Sie sind nicht in einer zugelassenenen Nutzerdomäne, Sie können sich nicht "
 "eintragen!"
 msgstr ""
-"You cannot participate. You are account is associated with a user domain not "
+"You cannot participate. Your account is associated with a user domain not "
 "suitable for this course."
 
 #: ../lib/classes/Seminar.class.php:2534
