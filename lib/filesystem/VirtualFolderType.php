@@ -232,6 +232,35 @@ class VirtualFolderType implements FolderType
     }
 
     /**
+     * @param string $file_ref_id
+     * @return bool
+     */
+    public function copyFile($file_ref_id)
+    {
+        return true;
+    }
+
+    /**
+     * @param string $file_ref_id
+     * @return bool
+     */
+    public function moveFile($file_ref_id)
+    {
+        return true;
+    }
+
+    /**
+     * @param string $file_ref_id
+     * @param string $name
+     * @param string $description
+     * @param string $content_terms_of_use_id
+     * @return bool
+     */
+    public function editFile($file_ref_id, $name, $description,  $content_terms_of_use_id){
+        return true;
+    }
+
+    /**
      * @param FolderType $folderdata
      * @return FolderType
      */

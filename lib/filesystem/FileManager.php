@@ -346,19 +346,26 @@ class FileManager
                     $error[] = $folder_error;
                     continue;
                 }
-
-                $file = new File();
-                $file->id        = $file->getNewId();
-                $file->user_id   = $user_id;
-                $file->name      = $filename;
-                $file->mime_type = $filetype;
-                $file->size      = $size;
-                $file->storage   = 'disk';
-                if ($file->connectWithDataFile($tmpname)) {
-                    $file->store();
-                    $result['files'][] = $file;
+                
+                if ($folder instanceof VirtualFolderType) {
+                    if (!$folder->createFile($uploaded_file)){
+                        $error[] = _('Ein Systemfehler ist beim Upload aufgetreten.');
+                    }
                 } else {
-                    $error[] = _('Ein Systemfehler ist beim Upload aufgetreten.');
+
+                    $file = new File();
+                    $file->id        = $file->getNewId();
+                    $file->user_id   = $user_id;
+                    $file->name      = $filename;
+                    $file->mime_type = $filetype;
+                    $file->size      = $size;
+                    $file->storage   = 'disk';
+                    if ($file->connectWithDataFile($tmpname)) {
+                        $file->store();
+                        $result['files'][] = $file;
+                    } else {
+                        $error[] = _('Ein Systemfehler ist beim Upload aufgetreten.');
+                    }
                 }
             }
         }
@@ -655,7 +662,7 @@ class FileManager
             $file = File::find($source->file_id);
             
             $filedata['name'] = $destination_folder->getId() . '/' . $source->name;
-            $filedata['tmp_path'] = $file->getPath();
+            $filedata['tmp_name'] = $file->getPath();
 
             if ($destination_folder->createFile($filedata)) {
                 $plugin =  PluginManager::getInstance()->getPluginById($destination_folder->range_type);
@@ -789,7 +796,7 @@ class FileManager
             $file = File::find($source->file_id);
             
             $filedata['name'] = $destination_folder->getId() . '/' . $source->name;
-            $filedata['tmp_path'] = $file->getPath();
+            $filedata['tmp_name'] = $file->getPath();
 
             if ($destination_folder->createFile($filedata)) {
                 self::deleteFileRef($source, $user);

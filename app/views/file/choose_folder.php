@@ -3,8 +3,8 @@ $options = [];
 if (Request::get('to_plugin')) {
     $options['to_plugin'] = Request::get('to_plugin');
 }
-if (Request::get('plugin')) {
-    $options['plugin'] = Request::get('plugin');
+if (Request::get('from_plugin')) {
+    $options['from_plugin'] = Request::get('from_plugin');
 }
 if (Request::get('fileref_id')) {
     $options['fileref_id'] = Request::get('fileref_id');
@@ -146,7 +146,7 @@ switch ($top_folder->range_type) {
         <?= Studip\LinkButton::createAccept(
             $options['copymode'] === 'copy' ? _('Hierher kopieren') : _('Hierher verschieben'),
             $controller->url_for('files/copyhandler/' . $top_folder->getId(), [
-                'plugin'     => $options['plugin'],
+                'from_plugin'     => $options['from_plugin'],
                 'to_plugin'  => $options['to_plugin'],
                 'fileref_id' => $options['fileref_id'],
                 'copymode'   => $options['copymode']

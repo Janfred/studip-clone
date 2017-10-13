@@ -3,6 +3,9 @@ $options = [];
 if (Request::get('to_plugin')) {
     $options['to_plugin'] = Request::get('to_plugin');
 }
+if (Request::get('from_plugin')) {
+    $options['from_plugin'] = Request::get('from_plugin');
+}
 if (Request::get('range_type')) {
     $options['range_type'] = Request::get('range_type');
 }

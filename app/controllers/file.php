@@ -45,8 +45,8 @@ class FileController extends AuthenticatedController
 
     public function upload_action($folder_id)
     {
-        $folder = FileManager::getTypedFolder($folder_id, Request::get('to_plugin'));
-        URLHelper::addLinkParam('to_plugin', Request::get('to_plugin'));
+        $folder = FileManager::getTypedFolder($folder_id, Request::get('from_plugin'));
+        URLHelper::addLinkParam('from_plugin', Request::get('from_plugin'));
 
         if (!$folder || !$folder->isWritable($GLOBALS['user']->id)) {
             throw new AccessDeniedException();
@@ -75,6 +75,10 @@ class FileController extends AuthenticatedController
                 'UNDEF_LICENSE'
             );
 
+            if ($folder instanceof VirtualFolderType) {
+                $validatedFiles['files'] = [];
+            }
+            
             foreach ($validatedFiles['files'] as $file) {
                 if ($fileref = $folder->createFile($file)) {
                     //If no terms of use is set for the file ref
@@ -184,13 +188,13 @@ class FileController extends AuthenticatedController
     public function details_action($file_area_object_id = null)
     {
         //check if the file area object is a FileRef:
-        if (Request::get("to_plugin")) {
+        if (Request::get("from_plugin")) {
             $file_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/file/details/") + strlen("dispatch.php/file/details/"));
             if (strpos($file_id, "?") !== false) {
                 $file_id = substr($file_id, 0, strpos($file_id, "?"));
             }
             $file_id = urldecode($file_id);
-            $plugin = PluginManager::getInstance()->getPlugin(Request::get("to_plugin"));
+            $plugin = PluginManager::getInstance()->getPlugin(Request::get("from_plugin"));
             if (!$plugin) {
                 throw new Trails_Exception(404, _('Plugin existiert nicht.'));
             }
@@ -258,17 +262,26 @@ class FileController extends AuthenticatedController
      */
     public function edit_action($file_ref_id)
     {
-        if (Request::get("to_plugin")) {
-            $file_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/file/edit/") + strlen("dispatch.php/edit/details/"));
+        
+        if (Request::get("from_plugin")) {
+
+            $file_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/file/edit/") + strlen("dispatch.php/edit/edit/"));
+
             if (strpos($file_id, "?") !== false) {
                 $file_id = substr($file_id, 0, strpos($file_id, "?"));
             }
+
+            $file_ref_id = $file_id;
+            
             $file_id = urldecode($file_id);
-            $plugin = PluginManager::getInstance()->getPlugin(Request::get("to_plugin"));
+            $plugin = PluginManager::getInstance()->getPlugin(Request::get("from_plugin"));
             if (!$plugin) {
                 throw new Trails_Exception(404, _('Plugin existiert nicht.'));
             }
+            
             $this->file_ref = $plugin->getPreparedFile($file_id);
+            $this->from_plugin = Request::get("from_plugin");
+
         } else {
             $this->file_ref = FileRef::find($file_ref_id);
         }
@@ -282,21 +295,44 @@ class FileController extends AuthenticatedController
         if (Request::isPost()) {
             //form was sent
             CSRFProtection::verifyUnsafeRequest();
+            $this->errors = [];
 
-            $this->file_ref->name        = trim(Request::get('name'));
-            $this->file_ref->description = Request::get('description');
-            $this->file_ref->content_terms_of_use_id = Request::get('content_terms_of_use_id');
+            $new_name = trim(Request::get('name'));
+            $new_description = Request::get('description');
+            $new_content_terms_of_use_id = Request::get('content_terms_of_use_id');
 
-            if ($this->file_ref->name) {
-                if ($this->file_ref->store()) {
-                    PageLayout::postSuccess(_('Änderungen gespeichert!'));
-                } else {
-                    PageLayout::postError(_('Fehler beim Speichern der Änderungen!'));
+
+            if (Request::get("from_plugin")) {
+                if (!$this->folder->editFile($file_ref_id, rawurlencode($new_name), $new_description, $new_content_terms_of_use_id)) {                    
+                    $this->errors = array_merge($this->errors, $result);
                 }
-                $this->redirectToFolder($this->folder);
             } else {
-                PageLayout::postError(_('Bitte geben Sie einen Namen für die Datei ein!'));
+                $result = FileManager::editFileRef(
+                    $this->file_ref,
+                    User::findCurrent(),
+                    $new_name,
+                    $new_description,
+                    $new_content_terms_of_use_id             
+                );
+
+                if (!$result instanceof FileRef) {
+                    $this->errors = array_merge($this->errors, $result);
+                }
             }
+
+            if ($this->errors) {
+                PageLayout::postError(
+                    sprintf(
+                        _('Fehler beim Ändern der Datei %s!'),
+                        $this->file_ref->name
+                    ),
+                    $this->errors
+                );
+            } else {
+                PageLayout::postSuccess(_('Änderungen gespeichert!'));
+                $this->redirectToFolder($this->folder);
+            }
+            
         }
     }
 
@@ -305,13 +341,13 @@ class FileController extends AuthenticatedController
      */
     public function update_action($file_ref_id)
     {
-        if (Request::get("to_plugin")) {
+        if (Request::get("from_plugin")) {
             $file_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/file/update/") + strlen("dispatch.php/file/update/"));
             if (strpos($file_id, "?") !== false) {
                 $file_id = substr($file_id, 0, strpos($file_id, "?"));
             }
             $file_id = urldecode($file_id);
-            $plugin = PluginManager::getInstance()->getPlugin(Request::get("to_plugin"));
+            $plugin = PluginManager::getInstance()->getPlugin(Request::get("from_plugin"));
             if (!$plugin) {
                 throw new Trails_Exception(404, _('Plugin existiert nicht.'));
             }
@@ -557,7 +593,7 @@ class FileController extends AuthenticatedController
     public function choose_destination_action($fileref_id, $copymode = null)
     {
      
-        if (Request::get("to_plugin")) {
+        if (Request::get("from_plugin")) {
             $file_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/file/choose_destination/") + strlen("dispatch.php/file/choose_destination/"));
             if (strpos($file_id, "?") !== false) {
                 $file_id = substr($file_id, 0, strpos($file_id, "?"));
@@ -570,14 +606,14 @@ class FileController extends AuthenticatedController
 
             $this->copymode = $copymode;
             $this->fileref_id = $fileref_id;
+
+            $file_id = urldecode($fileref_id);
             
-            $file_id = urldecode($file_id);
-            $plugin = PluginManager::getInstance()->getPlugin(Request::get("to_plugin"));
+            $plugin = PluginManager::getInstance()->getPlugin(Request::get("from_plugin"));
             if (!$plugin) {
                 throw new Trails_Exception(404, _('Plugin existiert nicht.'));
             }
             $this->file_ref = $plugin->getPreparedFile($file_id);       
-            
 
         } else {
 
@@ -593,11 +629,11 @@ class FileController extends AuthenticatedController
         $refs = explode('-', $fileref_id);
         $first_ref = $this->file_ref;
         
-        if ($first_ref && Request::submitted("to_plugin")) {
+        if ($first_ref && Request::submitted("from_plugin")) {
             $this->parent_folder = $this->file_ref->foldertype;
         } elseif ($first_ref) {
             $this->parent_folder = Folder::find($first_ref->folder_id);
-        } elseif (!Request::submitted("to_plugin")) {
+        } elseif (!Request::submitted("from_plugin")) {
             $folder = Folder::find($refs[0]);
             if ($folder) {
                 $this->parent_folder = Folder::find($folder->parent_id);
@@ -606,7 +642,7 @@ class FileController extends AuthenticatedController
             throw new AccessDeniedException();
         }
 
-        $this->plugin = Request::get('to_plugin');
+        $this->plugin = Request::get('from_plugin');
     }
 
 
@@ -650,7 +686,7 @@ class FileController extends AuthenticatedController
             $folder = Folder::findTopFolder(Request::get("course_id"));
             $this->redirect($this->url_for(
                 'file/choose_folder/' . $folder->getId(), [
-                    'to_plugin'  => Request::get('to_plugin'),
+                    'from_plugin'  => Request::get('from_plugin'),
                     'fileref_id' => Request::get('fileref_id'),
                     'copymode'   => Request::get('copymode'),
                     'isfolder'   => Request::get('isfolder')
@@ -659,7 +695,7 @@ class FileController extends AuthenticatedController
             return;
         }
 
-        $this->plugin = Request::get('to_plugin');
+        $this->plugin = Request::get('from_plugin');
         if (!$GLOBALS['perm']->have_perm("admin")) {
             $query = "SELECT seminare.*
                       FROM seminare
@@ -689,7 +725,7 @@ class FileController extends AuthenticatedController
             $folder = Folder::findTopFolder(Request::get("Institut_id"));
             $this->redirect($this->url_for(
                 'file/choose_folder/' . $folder->getId(), [
-                    'to_plugin'  => Request::get('to_plugin'),
+                    'from_plugin'  => Request::get('from_plugin'),
                     'fileref_id' => Request::get('fileref_id'),
                     'copymode'   => Request::get('copymode'),
                     'isfolder'   => Request::get('isfolder'),
@@ -724,7 +760,7 @@ class FileController extends AuthenticatedController
         }
 
         $this->instsearch = SQLSearch::get($sql, _('Einrichtung suchen'), 'Institut_id');
-        $this->plugin = Request::get('to_plugin');
+        $this->plugin = Request::get('from_plugin');
     }
 
     public function choose_folder_action($folder_id = null)
@@ -789,13 +825,13 @@ class FileController extends AuthenticatedController
     {
         CSRFProtection::verifyUnsafeRequest();
 
-        if (Request::get("to_plugin")) {
+        if (Request::get("from_plugin")) {
             $file_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/file/delete/") + strlen("dispatch.php/file/delete/"));
             if (strpos($file_id, "?") !== false) {
                 $file_id = substr($file_id, 0, strpos($file_id, "?"));
             }
             $file_id = urldecode($file_id);
-            $plugin = PluginManager::getInstance()->getPlugin(Request::get("to_plugin"));
+            $plugin = PluginManager::getInstance()->getPlugin(Request::get("from_plugin"));
             if (!$plugin) {
                 throw new Trails_Exception(404, _('Plugin existiert nicht.'));
             }
@@ -879,11 +915,11 @@ class FileController extends AuthenticatedController
 
         if (Request::isPost()) {
             //copy
-            if (Request::get('plugin')) {
-                $plugin = PluginManager::getInstance()->getPlugin(Request::get('plugin'));
+            if (Request::get('from_plugin')) {
+                $plugin = PluginManager::getInstance()->getPlugin(Request::get('from_plugin'));
                 $filedata = $file = $plugin->getPreparedFile(Request::get('file_id'));
 
-                if (!$file['tmp_path'] && $file['url']) {
+                if (!$file['tmp_name'] && $file['url']) {
                     $fileobject = new File();
                     $fileobject->url  = $file['url'];
                     $fileobject->name = $file['name'];
@@ -952,8 +988,8 @@ class FileController extends AuthenticatedController
             }
         }
 
-        if (Request::get('plugin')) {
-            $this->filesystemplugin = PluginManager::getInstance()->getPlugin(Request::get('plugin'));
+        if (Request::get('from_plugin')) {
+            $this->filesystemplugin = PluginManager::getInstance()->getPlugin(Request::get('from_plugin'));
             PageLayout::setTitle(sprintf(
                 _('Datei hinzufügen von %s'),
                 $this->filesystemplugin->getPluginName()
@@ -1024,8 +1060,8 @@ class FileController extends AuthenticatedController
 
     public function add_url_action($folder_id)
     {
-        $this->top_folder = FileManager::getTypedFolder($folder_id, Request::get('to_plugin'));
-        URLHelper::addLinkParam('to_plugin', Request::get('to_plugin'));
+        $this->top_folder = FileManager::getTypedFolder($folder_id, Request::get('from_plugin'));
+        URLHelper::addLinkParam('from_plugin', Request::get('from_plugin'));
         if (!$this->top_folder || !$this->top_folder->isWritable($GLOBALS['user']->id)) {
             throw new AccessDeniedException();
         }
@@ -1112,8 +1148,8 @@ class FileController extends AuthenticatedController
      */
     public function new_folder_action($folder_id)
     {
-        $parent_folder = FileManager::getTypedFolder($folder_id, Request::get('to_plugin'));
-        URLHelper::addLinkParam('to_plugin', Request::get('to_plugin'));
+        $parent_folder = FileManager::getTypedFolder($folder_id, Request::get('from_plugin'));
+        URLHelper::addLinkParam('from_plugin', Request::get('from_plugin'));
         if (!$parent_folder || !$parent_folder->isWritable($GLOBALS['user']->id)|| !$parent_folder->isSubfolderAllowed($GLOBALS['user']->id)) {
             throw new AccessDeniedException();
         }
@@ -1178,8 +1214,8 @@ class FileController extends AuthenticatedController
      */
     public function edit_folder_action($folder_id)
     {
-        $folder = FileManager::getTypedFolder($folder_id, Request::get('to_plugin'));
-        URLHelper::addLinkParam('to_plugin', Request::get('to_plugin'));
+        $folder = FileManager::getTypedFolder($folder_id, Request::get('from_plugin'));
+        URLHelper::addLinkParam('from_plugin', Request::get('from_plugin'));
         if (!$folder || !$folder->isEditable($GLOBALS['user']->id)) {
             throw new AccessDeniedException();
         }
@@ -1233,8 +1269,8 @@ class FileController extends AuthenticatedController
     public function delete_folder_action($folder_id)
     {
         CSRFProtection::verifyUnsafeRequest();
-        $folder = FileManager::getTypedFolder($folder_id, Request::get('to_plugin'));
-        URLHelper::addLinkParam('to_plugin', Request::get('to_plugin'));
+        $folder = FileManager::getTypedFolder($folder_id, Request::get('from_plugin'));
+        URLHelper::addLinkParam('from_plugin', Request::get('from_plugin'));
         if (!$folder || !$folder->isEditable($GLOBALS['user']->id)) {
             throw new AccessDeniedException();
         }
@@ -1255,8 +1291,8 @@ class FileController extends AuthenticatedController
     public function bulk_action($folder_id)
     {
         CSRFProtection::verifyUnsafeRequest();
-        $parent_folder = FileManager::getTypedFolder($folder_id, Request::get('to_plugin'));
-        URLHelper::addLinkParam('to_plugin', Request::get('to_plugin'));
+        $parent_folder = FileManager::getTypedFolder($folder_id, Request::get('from_plugin'));
+        URLHelper::addLinkParam('from_plugin', Request::get('from_plugin'));
         if (!$parent_folder || !$parent_folder->isReadable($GLOBALS['user']->id)) {
             throw new AccessDeniedException();
         }
@@ -1384,8 +1420,8 @@ class FileController extends AuthenticatedController
 
     public function open_folder_action($folder_id)
     {
-        $folder = FileManager::getTypedFolder($folder_id, Request::get('to_plugin'));
-        URLHelper::addLinkParam('to_plugin', Request::get('to_plugin'));
+        $folder = FileManager::getTypedFolder($folder_id, Request::get('from_plugin'));
+        URLHelper::addLinkParam('from_plugin', Request::get('from_plugin'));
         if (!$folder || !$folder->isVisible($GLOBALS['user']->id)) {
             throw new AccessDeniedException();
         }

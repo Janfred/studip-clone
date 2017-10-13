@@ -225,7 +225,7 @@ class FilesController extends AuthenticatedController
         $navigation = $this->plugin->getFileSelectNavigation();
         PageLayout::setTitle($navigation->getTitle());
 
-        URLHelper::bindLinkParam('to_plugin', get_class($this->plugin));
+        URLHelper::bindLinkParam('from_plugin', get_class($this->plugin));
 
         $args = func_get_args();
         array_shift($args);
@@ -241,7 +241,7 @@ class FilesController extends AuthenticatedController
     public function copyhandler_action($destination_id)
     {
         $to_plugin = Request::get('to_plugin');
-        $plugin    = Request::get('plugin');
+        $from_plugin    = Request::get('from_plugin');
 
         $fileref_id = Request::get('fileref_id');
         $copymode   = Request::get('copymode');
@@ -249,11 +249,11 @@ class FilesController extends AuthenticatedController
         $user = User::findCurrent();
 
         if ($to_plugin) {
-            $plugin_instance = PluginManager::getInstance()->getPlugin($to_plugin);
-            if (!$plugin_instance) {
+            $destination_plugin = PluginManager::getInstance()->getPlugin($to_plugin);
+            if (!$destination_plugin) {
                 throw new Trails_Exception(404, _('Plugin existiert nicht.'));
             }
-            $destination_folder = $plugin_instance->getFolder($destination_id);
+            $destination_folder = $destination_plugin->getFolder($destination_id);
         } else {
             $destination_folder = Folder::find($destination_id)->getTypedFolder();
         }
@@ -268,13 +268,25 @@ class FilesController extends AuthenticatedController
             
             foreach ($filerefs as $fileref) {
                 
-                if (Request::get("plugin")) {
-                    $plugin = PluginManager::getInstance()->getPlugin(Request::get("plugin"));
-                    if (!$plugin) {
+                if ($from_plugin && $to_plugin && $from_plugin == $to_plugin) {
+
+                    if ($copymode === 'move') {
+                        $destination_folder->moveFile($fileref);
+                    } else {
+                        $destination_folder->copyFile($fileref);
+                    }
+                    if (!is_array($result)) {
+                        $count_files += 1;
+                    }
+
+                } elseif ($from_plugin) {
+
+                    $source_plugin = PluginManager::getInstance()->getPlugin($from_plugin);
+                    if (!$source_plugin) {
                         throw new Trails_Exception(404, _('Plugin existiert nicht.'));
                     }
                     
-                    if ($source = $plugin->getPreparedFile($fileref, true)) {
+                    if ($source = $source_plugin->getPreparedFile($fileref, true)) {
                         if ($copymode === 'move') {
                             $result = FileManager::moveFileRef($source, $destination_folder, $user);
                         } else {
@@ -367,8 +379,8 @@ class FilesController extends AuthenticatedController
             case 'user':
                 return $this->redirect(URLHelper::getUrl('dispatch.php/files/index/' . $destination_folder->getId()));
             default:
-                if ($plugin_instance) {
-                    return $this->redirect(URLHelper::getUrl('dispatch.php/files/system/' . $plugin_instance->getPluginId() .'/'. $destination_folder->getId()));
+                if ($destination_plugin) {
+                    return $this->redirect(URLHelper::getUrl('dispatch.php/files/system/' . $destination_plugin->getPluginId() .'/'. $destination_folder->getId()));
                 } else {
                     return $this->redirect(URLHelper::getUrl('dispatch.php/course/files/index/' . $destination_folder->getId()));
                 }
