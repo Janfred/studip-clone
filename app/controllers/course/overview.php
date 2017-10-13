@@ -33,7 +33,6 @@ class Course_OverviewController extends AuthenticatedController
         // add skip link
         SkipLinks::addIndex(Navigation::getItem('/course/main/info')->getTitle(), 'main_content', 100);
 
-
         $this->sem             = Seminar::getInstance($this->course_id);
         $sem_class             = $this->sem->getSemClass();
         $this->studygroup_mode = $sem_class['studygroup_mode'];
@@ -134,6 +133,14 @@ class Course_OverviewController extends AuthenticatedController
 
         $sidebar = Sidebar::get();
         $sidebar->setImage('sidebar/seminar-sidebar.png');
+
+        $links = new ActionsWidget();
+        $links->addLink(
+            _('Link zu dieser Veranstaltung'),
+            $this->url_for('course/details', ['sem_id' => $this->course->id]),
+            Icon::create('group')
+        );
+        $sidebar->addWidget($links);
     }
 
 }

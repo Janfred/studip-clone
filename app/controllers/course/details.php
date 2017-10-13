@@ -104,7 +104,7 @@ class Course_DetailsController extends AuthenticatedController
                     function ($version) {
                         return (bool) $GLOBALS['MVV_STGTEILVERSION']['STATUS']['values'][$version->stat]['public'];
                     });
-                
+
                 $trail_classes = array('Modulteil', 'StgteilabschnittModul', 'StgteilAbschnitt', 'StgteilVersion');
                 $mvv_object_pathes = MvvCourse::get($this->course->getId())->getTrails($trail_classes);
                 if ($mvv_object_pathes) {
@@ -182,11 +182,14 @@ class Course_DetailsController extends AuthenticatedController
         if (Request::isXhr()) {
             PageLayout::setTitle($this->title);
         } else {
-            PageLayout::setHelpKeyword("Basis.InVeranstaltungDetails");
-            PageLayout::setTitle($this->title . " - " . _("Details"));
+            PageLayout::setHelpKeyword('Basis.InVeranstaltungDetails');
+            PageLayout::setTitle($this->title . ' - ' . _('Details'));
             PageLayout::addSqueezePackage('admission');
             PageLayout::addSqueezePackage('enrolment');
-            if ($GLOBALS['SessionSeminar'] == $this->course->id) {
+
+            $sidebar = Sidebar::Get();
+
+            if ($GLOBALS['SessionSeminar'] === $this->course->id) {
                 Navigation::activateItem('/course/main/details');
                 SkipLinks::addIndex(Navigation::getItem('/course/main/details')->getTitle(), 'main_content', 100);
             } else {
@@ -194,61 +197,73 @@ class Course_DetailsController extends AuthenticatedController
                 $enrolment_info = $this->sem->getEnrolmentInfo($GLOBALS['user']->id);
             }
 
-            $sidebar = Sidebar::Get();
-            if ($sidebarlink) {
-                $sidebar->setContextAvatar(CourseAvatar::getAvatar($this->course->id));
-            }
             $sidebar->setTitle(_('Details'));
             $links = new ActionsWidget();
-            $links->addLink(_("Drucken"),
-                URLHelper::getScriptLink("dispatch.php/course/details/index/" . $this->course->id), Icon::create('print', 'clickable'),
-                array('class' => 'print_action', 'target' => '_blank'));
+            $links->addLink(
+                _('Drucken'),
+                $this->url_for("course/details/index/{$this->course->id}"),
+                Icon::create('print'),
+                ['class' => 'print_action', 'target' => '_blank']
+            );
             if ($enrolment_info['enrolment_allowed'] && $sidebarlink) {
-                if (in_array($enrolment_info['cause'], words('member root courseadmin'))) {
-                    $abo_msg = _("direkt zur Veranstaltung");
+                if (in_array($enrolment_info['cause'], ['member', 'root', 'courseadmin'])) {
+                    $abo_msg = _('direkt zur Veranstaltung');
                 } else {
-                    $abo_msg = _("Zugang zur Veranstaltung");
+                    $abo_msg = _('Zugang zur Veranstaltung');
                     if ($this->sem->admission_binding) {
-                        PageLayout::postMessage(MessageBox::info(_('Die Anmeldung ist verbindlich, Teilnehmende können sich nicht selbst austragen.')));
+                        PageLayout::postInfo(_('Die Anmeldung ist verbindlich, Teilnehmende können sich nicht selbst austragen.'));
                     }
                 }
-                $links->addLink($abo_msg,
-                    URLHelper::getScriptLink("dispatch.php/course/enrolment/apply/" . $this->course->id), Icon::create('door-enter', 'clickable'),
-                    array('data-dialog' => 'size=big'));
+                $links->addLink(
+                    $abo_msg,
+                    $this->url_for("course/enrolment/apply/{$this->course->id}"),
+                    Icon::create('door-enter'),
+                    ['data-dialog' => 'size=big']
+                );
 
             }
 
-
             if (Config::get()->SCHEDULE_ENABLE
-                && !$GLOBALS['perm']->have_studip_perm("user", $this->course->id)
+                && !$GLOBALS['perm']->have_studip_perm('user', $this->course->id)
                 && !$GLOBALS['perm']->have_perm('admin')
                 && $this->sem->getMetaDateCount()
             ) {
-                $query = "SELECT COUNT(*) FROM schedule_seminare WHERE seminar_id = ? AND user_id = ?";
-                if (!DBManager::Get()->fetchColumn($query, array($this->course->id,
-                    $GLOBALS['user']->id))
-                ) {
-                    $links->addLink(_("Nur im Stundenplan vormerken"), URLHelper::getLink("dispatch.php/calendar/schedule/addvirtual/" . $this->course->id), Icon::create('info', 'clickable'));
+                $query = "SELECT 1
+                          FROM `schedule_seminare`
+                          WHERE `seminar_id` = ? AND `user_id` = ?";
+                $penciled = DBManager::Get()->fetchColumn($query, [
+                    $this->course->id,
+                    $GLOBALS['user']->id,
+                ]);
+                if (!$penciled) {
+                    $links->addLink(
+                        _('Nur im Stundenplan vormerken'),
+                        $this->url_for("calendar/schedule/addvirtual/{$this->course->id}"),
+                        Icon::create('info')
+                    );
                 }
             }
 
             if ($this->send_from_search_page) {
-                $links->addLink(_("Zurück zur letzten Auswahl"), URLHelper::getLink($this->send_from_search_page), Icon::create('link-intern', 'clickable'));
+                $links->addLink(
+                    _('Zurück zur letzten Auswahl'),
+                    URLHelper::getLink($this->send_from_search_page),
+                    Icon::create('link-intern')
+                );
             }
+
+            $links->addLink(
+                _('Link zu dieser Veranstaltung'),
+                $this->url_for('course/details', ['sem_id' => $this->course->id]),
+                Icon::create('group')
+            );
 
             if ($links->hasElements()) {
                 $sidebar->addWidget($links);
             }
-            $sidebar->setImage('sidebar/seminar-sidebar.png');
-            $sidebar->setContextAvatar(CourseAvatar::getAvatar($this->course->id));
-
-
-            $sidebar = Sidebar::Get();
-            $sidebar->setImage('sidebar/seminar-sidebar.png');
-            $sidebar->setContextAvatar(CourseAvatar::getAvatar($this->course->id));
 
             if ($enrolment_info['description']) {
-                PageLayout::postMessage(MessageBox::info($enrolment_info['description']));
+                PageLayout::postInfo($enrolment_info['description']);
             }
         }
     }
