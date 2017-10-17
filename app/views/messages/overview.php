@@ -25,13 +25,13 @@
             <? endif ?>
         </caption>
         <colgroup>
+            <col class="hidden-small-down">
             <col>
             <col>
             <col>
-            <col>
-            <col>
+            <col class="hidden-small-down">
             <col style="width: 120px">
-            <col>
+            <col class="hidden-small-down">
         </colgroup>
         <thead>
             <tr>

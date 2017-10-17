@@ -149,14 +149,17 @@ class MessagesController extends AuthenticatedController {
             // Try to redirect to overview of recevied/sent messages if
             // controller is not called via ajax to ensure message is loaded
             // in dialog.
-            $target = ($this->message->autor_id === $GLOBALS['user']->id)
+            $target = $this->message->autor_id === $GLOBALS['user']->id
                     ? $this->url_for('messages/sent/' . $message_id)
                     : $this->url_for('messages/overview/' . $message_id);
 
             $script = sprintf('if (STUDIP.Dialog.shouldOpen()) { location.href = "%s"; }', $target);
-            PageLayout::addHeadElement('script', array(), $script);
+            PageLayout::addHeadElement('script', [], sprintf(
+                'jQuery(function () { %s });',
+                $script
+            ));
         }
-        $this->message->markAsRead($GLOBALS["user"]->id);
+        $this->message->markAsRead($GLOBALS['user']->id);
     }
 
     /**
@@ -247,12 +250,12 @@ class MessagesController extends AuthenticatedController {
                         case 'not_grouped':
                             $query = "SELECT seminar_user.user_id,'rec' as snd_rec FROM seminar_user
                                      INNER JOIN auth_user_md5 USING (user_id)
-                                     LEFT JOIN statusgruppen ON range_id = seminar_id 
-                                     LEFT JOIN statusgruppe_user ON statusgruppen.statusgruppe_id = statusgruppe_user.statusgruppe_id  
+                                     LEFT JOIN statusgruppen ON range_id = seminar_id
+                                     LEFT JOIN statusgruppe_user ON statusgruppen.statusgruppe_id = statusgruppe_user.statusgruppe_id
                                      AND seminar_user.user_id = statusgruppe_user.user_id
-                                     WHERE seminar_id = ? 
-                                     GROUP BY seminar_user.user_id 
-                                     HAVING count(statusgruppe_user.statusgruppe_id) = 0 
+                                     WHERE seminar_id = ?
+                                     GROUP BY seminar_user.user_id
+                                     HAVING count(statusgruppe_user.statusgruppe_id) = 0
                                      ORDER BY Nachname, Vorname";
                             break;
                     }
