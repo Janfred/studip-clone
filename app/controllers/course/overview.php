@@ -134,16 +134,16 @@ class Course_OverviewController extends AuthenticatedController
         $sidebar = Sidebar::get();
         $sidebar->setImage('sidebar/seminar-sidebar.png');
 
-        $links = new ActionsWidget();
+        $share = new ShareWidget();
         if ($this->studygroup_mode) {
-            $links->addLink(
+            $share->addCopyableLink(
                 _('Link zu dieser Studiengruppe'),
                 $this->link_for("course/studygroup/details/{$this->course->id}"),
                 Icon::create('group')
             );
         } else {
-            $links->addLink(
-                _('Link zu dieser Veranstaltung'),
+            $share->addCopyableLink(
+                _('Link zu dieser Veranstaltung kopieren'),
                 $this->link_for('course/details', [
                     'sem_id' => $this->course->id,
                     'cid'    => null,
@@ -151,6 +151,6 @@ class Course_OverviewController extends AuthenticatedController
                 Icon::create('group')
             );
         }
-        $sidebar->addWidget($links);
+        $sidebar->addWidget($share);
     }
 }

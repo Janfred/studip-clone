@@ -252,18 +252,20 @@ class Course_DetailsController extends AuthenticatedController
                 );
             }
 
-            $links->addLink(
-                _('Link zu dieser Veranstaltung'),
+            if ($links->hasElements()) {
+                $sidebar->addWidget($links);
+            }
+
+            $share = new ShareWidget();
+            $share->addCopyableLink(
+                _('Link zu dieser Veranstaltung kopieren'),
                 $this->link_for('course/details', [
                     'sem_id' => $this->course->id,
                     'cid'    => null,
                 ]),
                 Icon::create('group')
             );
-
-            if ($links->hasElements()) {
-                $sidebar->addWidget($links);
-            }
+            $sidebar->addWidget($share);
 
             if ($enrolment_info['description']) {
                 PageLayout::postInfo($enrolment_info['description']);

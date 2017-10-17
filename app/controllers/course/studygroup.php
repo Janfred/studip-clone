@@ -147,13 +147,17 @@ class Course_StudygroupController extends AuthenticatedController
                     Icon::create('link-intern')
                 );
             }
-            $awidget->addLink(
-                _('Link zu dieser Studiengruppe'),
+            $sidebar->addWidget($awidget);
+
+            $this->sidebarActions = $awidget->getElements();
+
+            $ashare = new ShareWidget();
+            $ashare->addCopyableLink(
+                _('Link zu dieser Studiengruppe kopieren'),
                 $this->link_for("course/studygroup/details/{$studygroup->id}"),
                 Icon::create('group')
             );
-            $sidebar->addWidget($awidget);
-            $this->sidebarActions = $awidget->getElements();
+            $sidebar->addWidget($ashare);
         }
         $this->studygroup = $studygroup;
     }
