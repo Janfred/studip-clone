@@ -45,7 +45,21 @@ class FileController extends AuthenticatedController
 
     public function upload_action($folder_id)
     {
-        $folder = FileManager::getTypedFolder($folder_id, Request::get('from_plugin'));
+        if (Request::get("from_plugin")) {
+            $folder_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/file/upload/") + strlen("dispatch.php/file/upload/"));
+            if (strpos($folder_id, "?") !== false) {
+                $folder_id = substr($folder_id, 0, strpos($folder_id, "?"));
+            }
+            $folder_id = urldecode($folder_id);
+            $plugin = PluginManager::getInstance()->getPlugin(Request::get("from_plugin"));
+            if (!$plugin) {
+                throw new Trails_Exception(404, _('Plugin existiert nicht.'));
+            }
+            $folder = $plugin->getFolder($folder_id);
+        } else {
+            $folder = FileManager::getTypedFolder($folder_id);
+        }
+        
         URLHelper::addLinkParam('from_plugin', Request::get('from_plugin'));
 
         if (!$folder || !$folder->isWritable($GLOBALS['user']->id)) {
@@ -199,6 +213,7 @@ class FileController extends AuthenticatedController
                 throw new Trails_Exception(404, _('Plugin existiert nicht.'));
             }
             $this->file_ref = $plugin->getPreparedFile($file_id);
+            $this->from_plugin = Request::get("from_plugin");
         } else {
             $this->file_ref = FileRef::find($file_area_object_id);
         }
@@ -265,7 +280,7 @@ class FileController extends AuthenticatedController
         
         if (Request::get("from_plugin")) {
 
-            $file_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/file/edit/") + strlen("dispatch.php/edit/edit/"));
+            $file_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/file/edit/") + strlen("dispatch.php/file/edit/"));
 
             if (strpos($file_id, "?") !== false) {
                 $file_id = substr($file_id, 0, strpos($file_id, "?"));
@@ -352,6 +367,7 @@ class FileController extends AuthenticatedController
                 throw new Trails_Exception(404, _('Plugin existiert nicht.'));
             }
             $this->file_ref = $plugin->getPreparedFile($file_id);
+            $this->from_plugin = Request::get("from_plugin");
         } else {
             $this->file_ref = FileRef::find($file_ref_id);
         }
@@ -776,6 +792,12 @@ class FileController extends AuthenticatedController
             }
         }
         if (Request::get('to_plugin')) {
+            $folder_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/file/choose_folder/") + strlen("dispatch.php/file/choose_folder/"));
+            if (strpos($folder_id, "?") !== false) {
+                $folder_id = substr($folder_id, 0, strpos($folder_id, "?"));
+            }
+            $folder_id = urldecode($folder_id);
+
             $this->filesystemplugin = PluginManager::getInstance()->getPlugin(Request::get('to_plugin'));
             if (Request::get('search') && $this->filesystemplugin->hasSearch()) {
                 $this->top_folder = $this->filesystemplugin->search(
@@ -1060,7 +1082,20 @@ class FileController extends AuthenticatedController
 
     public function add_url_action($folder_id)
     {
-        $this->top_folder = FileManager::getTypedFolder($folder_id, Request::get('from_plugin'));
+        if (Request::get("from_plugin")) {
+            $folder_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/file/add_url/") + strlen("dispatch.php/file/add_url/"));
+            if (strpos($folder_id, "?") !== false) {
+                $folder_id = substr($folder_id, 0, strpos($folder_id, "?"));
+            }
+            $folder_id = urldecode($folder_id);
+            $plugin = PluginManager::getInstance()->getPlugin(Request::get("from_plugin"));
+            if (!$plugin) {
+                throw new Trails_Exception(404, _('Plugin existiert nicht.'));
+            }
+            $this->top_folder = $plugin->getFolder($folder_id);
+        } else {
+            $this->top_folder = FileManager::getTypedFolder($folder_id);
+        }
         URLHelper::addLinkParam('from_plugin', Request::get('from_plugin'));
         if (!$this->top_folder || !$this->top_folder->isWritable($GLOBALS['user']->id)) {
             throw new AccessDeniedException();
@@ -1148,7 +1183,21 @@ class FileController extends AuthenticatedController
      */
     public function new_folder_action($folder_id)
     {
-        $parent_folder = FileManager::getTypedFolder($folder_id, Request::get('from_plugin'));
+        if (Request::get("from_plugin")) {
+            $folder_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/file/new_folder/") + strlen("dispatch.php/file/new_folder/"));
+            if (strpos($folder_id, "?") !== false) {
+                $folder_id = substr($folder_id, 0, strpos($folder_id, "?"));
+            }
+            $folder_id = urldecode($folder_id);
+            $plugin = PluginManager::getInstance()->getPlugin(Request::get("from_plugin"));
+            if (!$plugin) {
+                throw new Trails_Exception(404, _('Plugin existiert nicht.'));
+            }
+            $parent_folder = $plugin->getFolder($folder_id);
+        } else {
+            $parent_folder = FileManager::getTypedFolder($folder_id);
+        }
+        
         URLHelper::addLinkParam('from_plugin', Request::get('from_plugin'));
         if (!$parent_folder || !$parent_folder->isWritable($GLOBALS['user']->id)|| !$parent_folder->isSubfolderAllowed($GLOBALS['user']->id)) {
             throw new AccessDeniedException();
@@ -1187,8 +1236,10 @@ class FileController extends AuthenticatedController
                     _('Der gewünschte Ordnertyp ist ungültig!')
                 );
             }
+            $request = Request::getInstance();
+            $request->offsetSet('parent_id', $folder_id);
             $new_folder = new $folder_type();
-            $result = $new_folder->setDataFromEditTemplate(Request::getInstance());
+            $result = $new_folder->setDataFromEditTemplate($request);
             if ($result instanceof FolderType) {
                 $new_folder->user_id = User::findCurrent()->id;
                 if ($parent_folder->createSubfolder($new_folder)) {
@@ -1214,7 +1265,20 @@ class FileController extends AuthenticatedController
      */
     public function edit_folder_action($folder_id)
     {
-        $folder = FileManager::getTypedFolder($folder_id, Request::get('from_plugin'));
+        if (Request::get("from_plugin")) {
+            $folder_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/file/edit_folder/") + strlen("dispatch.php/file/edit_folder/"));
+            if (strpos($folder_id, "?") !== false) {
+                $folder_id = substr($folder_id, 0, strpos($folder_id, "?"));
+            }
+            $folder_id = urldecode($folder_id);
+            $plugin = PluginManager::getInstance()->getPlugin(Request::get("from_plugin"));
+            if (!$plugin) {
+                throw new Trails_Exception(404, _('Plugin existiert nicht.'));
+            }
+            $folder = $plugin->getFolder($folder_id);
+        } else {
+            $folder = FileManager::getTypedFolder($folder_id);
+        }
         URLHelper::addLinkParam('from_plugin', Request::get('from_plugin'));
         if (!$folder || !$folder->isEditable($GLOBALS['user']->id)) {
             throw new AccessDeniedException();
@@ -1269,7 +1333,21 @@ class FileController extends AuthenticatedController
     public function delete_folder_action($folder_id)
     {
         CSRFProtection::verifyUnsafeRequest();
-        $folder = FileManager::getTypedFolder($folder_id, Request::get('from_plugin'));
+
+        if (Request::get("from_plugin")) {
+            $folder_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/file/delete_folder/") + strlen("dispatch.php/file/delete_folder/"));
+            if (strpos($folder_id, "?") !== false) {
+                $folder_id = substr($folder_id, 0, strpos($folder_id, "?"));
+            }
+            $folder_id = urldecode($folder_id);
+            $plugin = PluginManager::getInstance()->getPlugin(Request::get("from_plugin"));
+            if (!$plugin) {
+                throw new Trails_Exception(404, _('Plugin existiert nicht.'));
+            }
+            $folder = $plugin->getFolder($folder_id);
+        } else {
+            $folder = FileManager::getTypedFolder($folder_id);
+        }
         URLHelper::addLinkParam('from_plugin', Request::get('from_plugin'));
         if (!$folder || !$folder->isEditable($GLOBALS['user']->id)) {
             throw new AccessDeniedException();

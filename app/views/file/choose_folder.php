@@ -65,7 +65,7 @@ if (Request::get('copymode')) {
             <th><?= _('Name') ?></th>
         </tr>
     </thead>
-<? if ($top_folder->parent_id && ($top_folder->parent_id !== $top_folder->getId())) : ?>
+<? if (($top_folder->parent_id || $top_folder instanceof VirtualFolderType) && ($top_folder->parent_id !== $top_folder->getId())) : ?>
     <tbody>
         <tr>
             <td colspan="2">

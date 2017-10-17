@@ -408,7 +408,7 @@ class FileManager
         $errors = [];
 
         // Do some checks:
-        $folder = self::getTypedFolder($source->folder_id);
+        $folder = $source->getFolderType();
         if (!$folder || !$folder->isFileEditable($source->id, $user->id)) {
             $errors[] = sprintf(
                 _('Sie sind nicht dazu berechtigt, die Datei %s zu aktualisieren!'),
@@ -431,6 +431,26 @@ class FileManager
         // new file:
 
         $data_file = null;
+
+        if ($folder instanceof VirtualFolderType) {
+            if ($update_other_references) {
+            } else {
+                if (!$update_filename) {
+                    $uploaded_file_data['name'] = $source->name;
+                } else {
+                    if(!$folder->deleteFile($source->getId())){
+                        $errors[] = _('Aktualisierte Datei konnte nicht ins Stud.IP Dateisystem übernommen werden!');
+                        return $errors;
+                    }
+                }
+                if(!$folder->createFile($uploaded_file_data)){
+                    $errors[] = _('Aktualisierte Datei konnte nicht ins Stud.IP Dateisystem übernommen werden!');
+                    return $errors;
+                }
+            }
+            return $source;
+        }
+
 
         if ($update_other_references) {
             // We want to update all file references. In that case we can just
@@ -630,7 +650,7 @@ class FileManager
         }
 
         if ($source_folder instanceof VirtualFolderType) {
-            
+
             $file_meta = array(
                 'name' => [$source->name], 
                 'error' => [0],
@@ -658,7 +678,7 @@ class FileManager
         }
 
         if ($destination_folder instanceof VirtualFolderType) {
-            
+
             $file = File::find($source->file_id);
             
             $filedata['name'] = $destination_folder->getId() . '/' . $source->name;

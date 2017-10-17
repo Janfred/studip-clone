@@ -1,4 +1,4 @@
-<form action="<?= $controller->link_for('file/update/' . $file_ref->id) ?>"
+<form action="<?= $controller->link_for('file/update/' . $file_ref->id, ['from_plugin' => $from_plugin]) ?>"
       enctype="multipart/form-data" method="post" class="default">
 
     <?= CSRFProtection::tokenTag() ?>

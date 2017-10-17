@@ -249,6 +249,13 @@ class FilesController extends AuthenticatedController
         $user = User::findCurrent();
 
         if ($to_plugin) {
+
+            $destination_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/files/copyhandler/") + strlen("dispatch.php/files/copyhandler/")); 
+            if (strpos($destination_id, "?") !== false) {
+                $destination_id = substr($destination_id, 0, strpos($destination_id, "?"));
+            }              
+            $destination_id = urldecode($destination_id);
+
             $destination_plugin = PluginManager::getInstance()->getPlugin($to_plugin);
             if (!$destination_plugin) {
                 throw new Trails_Exception(404, _('Plugin existiert nicht.'));

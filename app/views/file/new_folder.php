@@ -1,5 +1,5 @@
 <form method="post" class="default" data-dialog="reload-on-close" action="<?= $controller->url_for('file/new_folder/' . $parent_folder_id) ?>">
-    <?= CSRFProtection::tokenTag() ?>
+    <?= CSRFProtection::tokenTag() ?>    
     <?= $this->render_partial('file/new_edit_folder_form.php', [
         'name'            => $name,
         'description'     => $description,
