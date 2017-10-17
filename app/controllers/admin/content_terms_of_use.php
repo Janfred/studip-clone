@@ -33,6 +33,8 @@ class Admin_ContentTermsOfUseController extends AuthenticatedController
             throw new AccessDeniedException();
         }
 
+        PageLayout::setHelpKeyword('Dateien.Nutzungsbedingungen');
+
         Navigation::activateItem('/admin/locations/content_terms_of_use');
     }
 
