@@ -245,14 +245,36 @@ class Statusgruppen extends SimpleORMap
 
     /**
      * Delete or create a folder
-     * TODO: update(false) löscht? muss anders
      * @param boolean $set <b>true</b> Create a folder
-     * <b>false</b> Delete the folder
+     * <b>false</b> Unlink the existing folder from the group
      */
     public function updateFolder($set)
     {
-        if (!$this->hasFolder() && $set) {
+        // Keep existing folder, but disconnect it from group.
+        if ($this->hasFolder() && !$set) {
+            $folder = $this->getFolder();
+            $folder->type = 'StandardFolder';
+            unset($folder->data_content['group']);
+            return $folder->store();
+        }
 
+        // Create new CourseGroupFolder under top folder.
+        if (!$this->hasFolder() && $set) {
+            $topFolder = Folder::findTopFolder($this->range_id);
+            if ($topFolder) {
+                $folderdata = [
+                    'user_id' => $GLOBALS['user']->id,
+                    'parent_id' => $topFolder->id,
+                    'range_id' => $this->range_id,
+                    'range_type' => 'course',
+                    'folder_type' => 'CourseGroupFolder',
+                    'name' => _('Dateiordner der Gruppe:') . ' ' . $this->name,
+                    'data_content' => ['group' => $this->id],
+                    'description' => _('Ablage für Ordner und Dokumente dieser Gruppe')
+                ];
+                $groupFolder = new CourseGroupFolder($folderdata);
+                return $groupFolder->store();
+            }
         }
     }
 
