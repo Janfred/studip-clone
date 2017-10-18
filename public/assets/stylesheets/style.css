@@ -5288,11 +5288,11 @@ html.cssanimations .copyable-link-animation div {
   pointer-events: none;
 }
 html.cssanimations .copyable-link-animation a {
-  -webkit-animation: "copyable-links-confirmation-front" 1.5s linear;
-  -moz-animation: "copyable-links-confirmation-front" 1.5s linear;
-  animation: "copyable-links-confirmation-front" 1.5s linear;
+  -webkit-animation: copyable-links-confirmation-front 1.5s linear;
+  -moz-animation: copyable-links-confirmation-front 1.5s linear;
+  animation: copyable-links-confirmation-front 1.5s linear;
 }
-@-webkit-keyframes "copyable-links-confirmation-front" {
+@-webkit-keyframes copyable-links-confirmation-front {
   0% {
     opacity: 1;
     transform: rotateX(0);
@@ -5310,7 +5310,7 @@ html.cssanimations .copyable-link-animation a {
     transform: rotateX(0);
   }
 }
-@-moz-keyframes "copyable-links-confirmation-front" {
+@-moz-keyframes copyable-links-confirmation-front {
   0% {
     opacity: 1;
     transform: rotateX(0);
@@ -5328,7 +5328,7 @@ html.cssanimations .copyable-link-animation a {
     transform: rotateX(0);
   }
 }
-@-o-keyframes "copyable-links-confirmation-front" {
+@-o-keyframes copyable-links-confirmation-front {
   0% {
     opacity: 1;
     transform: rotateX(0);
@@ -5346,7 +5346,7 @@ html.cssanimations .copyable-link-animation a {
     transform: rotateX(0);
   }
 }
-@keyframes "copyable-links-confirmation-front" {
+@keyframes copyable-links-confirmation-front {
   0% {
     opacity: 1;
     transform: rotateX(0);
@@ -5365,11 +5365,11 @@ html.cssanimations .copyable-link-animation a {
   }
 }
 html.cssanimations .copyable-link-animation div {
-  -webkit-animation: "copyable-links-confirmation-back" 1.5s linear;
-  -moz-animation: "copyable-links-confirmation-back" 1.5s linear;
-  animation: "copyable-links-confirmation-back" 1.5s linear;
+  -webkit-animation: copyable-links-confirmation-back 1.5s linear;
+  -moz-animation: copyable-links-confirmation-back 1.5s linear;
+  animation: copyable-links-confirmation-back 1.5s linear;
 }
-@-webkit-keyframes "copyable-links-confirmation-back" {
+@-webkit-keyframes copyable-links-confirmation-back {
   0% {
     opacity: 0;
     transform: rotateX(180deg);
@@ -5387,7 +5387,7 @@ html.cssanimations .copyable-link-animation div {
     transform: rotateX(180deg);
   }
 }
-@-moz-keyframes "copyable-links-confirmation-back" {
+@-moz-keyframes copyable-links-confirmation-back {
   0% {
     opacity: 0;
     transform: rotateX(180deg);
@@ -5405,7 +5405,7 @@ html.cssanimations .copyable-link-animation div {
     transform: rotateX(180deg);
   }
 }
-@-o-keyframes "copyable-links-confirmation-back" {
+@-o-keyframes copyable-links-confirmation-back {
   0% {
     opacity: 0;
     transform: rotateX(180deg);
@@ -5423,7 +5423,7 @@ html.cssanimations .copyable-link-animation div {
     transform: rotateX(180deg);
   }
 }
-@keyframes "copyable-links-confirmation-back" {
+@keyframes copyable-links-confirmation-back {
   0% {
     opacity: 0;
     transform: rotateX(180deg);
