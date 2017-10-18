@@ -19,12 +19,30 @@
         document.execCommand('Copy');
         dummy.remove();
 
-        // Show visual confirmation
-        $('<div class="copyable-link-confirmation">')
-            .text('Link wurde kopiert'.toLocaleString())
-            .insertBefore(this);
-        $(this).parent().addClass('copyable-link-animation').on('animationend', function () {
-            $(this).removeClass('copyable-link-animation').find('.copyable-link-confirmation').remove();
+        // Show visual hint using a deferred (this way we don't need to
+        // duplicate the functionality in the done() handler)
+        $.Deferred(function (dfd) {
+            var parent       = $(this).parent(),
+                confirmation = $('<div class="copyable-link-confirmation">');
+            confirmation.text('Link wurde kopiert'.toLocaleString());
+            confirmation.insertBefore(this);
+
+            parent.addClass('copyable-link-animation');
+
+            // Resolve deferred when animation has ended (if available) or
+            // after 1 second if animations are not available
+            if ($('html').hasClass('cssanimations')) {
+                parent.on('animationend', function () {
+                    dfd.resolveWith(this, [confirmation, parent]);
+                });
+            } else {
+                setTimeout(function () {
+                    dfd.resolveWith(this, [confirmation, parent]);
+                }.bind(this), 1000);
+            }
+        }.bind(this)).done(function (confirmation, parent) {
+            confirmation.remove();
+            parent.removeClass('copyable-link-animation');
         });
     });
 }(jQuery));

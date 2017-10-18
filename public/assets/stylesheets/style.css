@@ -5257,88 +5257,6 @@ div.clear {
 .copyable-link-animation {
   position: relative;
 }
-.copyable-link-animation a,
-.copyable-link-animation div {
-  backface-visibility: hidden;
-  pointer-events: none;
-}
-.copyable-link-animation a {
-  -webkit-animation: "copyable-links-confirmation-front" 1s linear;
-  -moz-animation: "copyable-links-confirmation-front" 1s linear;
-  animation: "copyable-links-confirmation-front" 1s linear;
-}
-@-webkit-keyframes "copyable-links-confirmation-front" {
-  0% {
-    opacity: 1;
-    transform: rotateX(0);
-  }
-  25% {
-    opacity: 0;
-    transform: rotateX(180deg);
-  }
-  75% {
-    opacity: 0;
-    transform: rotateX(180deg);
-  }
-  100% {
-    transform: rotateX(0);
-    opacity: 1;
-  }
-}
-@-moz-keyframes "copyable-links-confirmation-front" {
-  0% {
-    opacity: 1;
-    transform: rotateX(0);
-  }
-  25% {
-    opacity: 0;
-    transform: rotateX(180deg);
-  }
-  75% {
-    opacity: 0;
-    transform: rotateX(180deg);
-  }
-  100% {
-    transform: rotateX(0);
-    opacity: 1;
-  }
-}
-@-o-keyframes "copyable-links-confirmation-front" {
-  0% {
-    opacity: 1;
-    transform: rotateX(0);
-  }
-  25% {
-    opacity: 0;
-    transform: rotateX(180deg);
-  }
-  75% {
-    opacity: 0;
-    transform: rotateX(180deg);
-  }
-  100% {
-    transform: rotateX(0);
-    opacity: 1;
-  }
-}
-@keyframes "copyable-links-confirmation-front" {
-  0% {
-    opacity: 1;
-    transform: rotateX(0);
-  }
-  25% {
-    opacity: 0;
-    transform: rotateX(180deg);
-  }
-  75% {
-    opacity: 0;
-    transform: rotateX(180deg);
-  }
-  100% {
-    transform: rotateX(0);
-    opacity: 1;
-  }
-}
 .copyable-link-animation div {
   position: absolute;
   top: 0;
@@ -5346,9 +5264,6 @@ div.clear {
   bottom: 0;
   left: 0;
   text-align: center;
-  -webkit-animation: "copyable-links-confirmation-back" 1s linear;
-  -moz-animation: "copyable-links-confirmation-back" 1s linear;
-  animation: "copyable-links-confirmation-back" 1s linear;
 }
 .copyable-link-animation div::before {
   background-repeat: no-repeat;
@@ -5364,16 +5279,106 @@ div.clear {
   vertical-align: text-top;
   width: 16px;
 }
+html.no-cssanimations .copyable-link-animation a {
+  visibility: hidden;
+}
+html.cssanimations .copyable-link-animation a,
+html.cssanimations .copyable-link-animation div {
+  backface-visibility: hidden;
+  pointer-events: none;
+}
+html.cssanimations .copyable-link-animation a {
+  -webkit-animation: "copyable-links-confirmation-front" 1.5s linear;
+  -moz-animation: "copyable-links-confirmation-front" 1.5s linear;
+  animation: "copyable-links-confirmation-front" 1.5s linear;
+}
+@-webkit-keyframes "copyable-links-confirmation-front" {
+  0% {
+    opacity: 1;
+    transform: rotateX(0);
+  }
+  33% {
+    opacity: 0;
+    transform: rotateX(180deg);
+  }
+  66% {
+    opacity: 0;
+    transform: rotateX(180deg);
+  }
+  100% {
+    opacity: 1;
+    transform: rotateX(0);
+  }
+}
+@-moz-keyframes "copyable-links-confirmation-front" {
+  0% {
+    opacity: 1;
+    transform: rotateX(0);
+  }
+  33% {
+    opacity: 0;
+    transform: rotateX(180deg);
+  }
+  66% {
+    opacity: 0;
+    transform: rotateX(180deg);
+  }
+  100% {
+    opacity: 1;
+    transform: rotateX(0);
+  }
+}
+@-o-keyframes "copyable-links-confirmation-front" {
+  0% {
+    opacity: 1;
+    transform: rotateX(0);
+  }
+  33% {
+    opacity: 0;
+    transform: rotateX(180deg);
+  }
+  66% {
+    opacity: 0;
+    transform: rotateX(180deg);
+  }
+  100% {
+    opacity: 1;
+    transform: rotateX(0);
+  }
+}
+@keyframes "copyable-links-confirmation-front" {
+  0% {
+    opacity: 1;
+    transform: rotateX(0);
+  }
+  33% {
+    opacity: 0;
+    transform: rotateX(180deg);
+  }
+  66% {
+    opacity: 0;
+    transform: rotateX(180deg);
+  }
+  100% {
+    opacity: 1;
+    transform: rotateX(0);
+  }
+}
+html.cssanimations .copyable-link-animation div {
+  -webkit-animation: "copyable-links-confirmation-back" 1.5s linear;
+  -moz-animation: "copyable-links-confirmation-back" 1.5s linear;
+  animation: "copyable-links-confirmation-back" 1.5s linear;
+}
 @-webkit-keyframes "copyable-links-confirmation-back" {
   0% {
     opacity: 0;
     transform: rotateX(180deg);
   }
-  25% {
+  33% {
     opacity: 1;
     transform: rotateX(0);
   }
-  75% {
+  66% {
     opacity: 1;
     transform: rotateX(0);
   }
@@ -5387,11 +5392,11 @@ div.clear {
     opacity: 0;
     transform: rotateX(180deg);
   }
-  25% {
+  33% {
     opacity: 1;
     transform: rotateX(0);
   }
-  75% {
+  66% {
     opacity: 1;
     transform: rotateX(0);
   }
@@ -5405,11 +5410,11 @@ div.clear {
     opacity: 0;
     transform: rotateX(180deg);
   }
-  25% {
+  33% {
     opacity: 1;
     transform: rotateX(0);
   }
-  75% {
+  66% {
     opacity: 1;
     transform: rotateX(0);
   }
@@ -5423,11 +5428,11 @@ div.clear {
     opacity: 0;
     transform: rotateX(180deg);
   }
-  25% {
+  33% {
     opacity: 1;
     transform: rotateX(0);
   }
-  75% {
+  66% {
     opacity: 1;
     transform: rotateX(0);
   }
