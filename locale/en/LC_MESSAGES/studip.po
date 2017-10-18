@@ -17874,7 +17874,7 @@ msgstr "Students"
 #: ../lib/export/export_studipdata_func.inc.php:546
 #: ../lib/export/export_studipdata_func.inc.php:554 ../config/config.inc.php:92
 msgid "Leser/-innen"
-msgstr "Participants"
+msgstr "Readers"
 
 #: ../lib/export/export_studipdata_func.inc.php:547
 #: ../lib/export/export_studipdata_func.inc.php:555 ../config/config.inc.php:94
@@ -34068,7 +34068,7 @@ msgstr "Seats will be assigned automatically."
 #: ../app/controllers/course/enrolment.php:103
 #, fuzzy
 msgid "Diese Veranstaltung ist teilnahmebeschränkt."
-msgstr "Participants"
+msgstr "This course is admission limited."
 
 #: ../app/controllers/course/enrolment.php:104
 #, php-format
