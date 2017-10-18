@@ -11,7 +11,14 @@
 require_once __DIR__ . '/studip_cli_env.inc.php';
 require_once __DIR__ . '/../config/config_local.inc.php';
 require_once __DIR__ . '/../app/models/members.php';
-require_once __DIR__ . '/../lib/log_events.inc.php';
+
+function output($what) {
+    if (StudipVersion::olderThan(4)) {
+        $what = studip_utf8encode($what);
+    }
+
+    fwrite(STDOUT, $what);
+}
 
 $opts    = getopt('d', ['dry-run']);
 $dry_run = isset($opts['d']) || isset($opts['dry-run']);
@@ -28,7 +35,7 @@ if ($arg_stop !== false) {
 }
 
 if (count($args) < 1) {
-    fwrite(STDOUT, "Fix for Biest 7783 - Use {$argv[0]} [--dry-run/-d] <semester_id,current,next>\n");
+    output("Fix for Biest 7783 - Use {$argv[0]} [--dry-run/-d] <semester_id,current,next>\n");
     exit(0);
 }
 
@@ -39,7 +46,7 @@ foreach ($semester_ids as $index => $semester_id) {
     } elseif ($semester_id === 'next') {
         $semester_id = Semester::findNext()->id;
     } elseif (Semester::find($semester_id) === null) {
-        fwrite(STDOUT, "Semester id {$semester_id} is invalid\n");
+        output("Semester id {$semester_id} is invalid\n");
         exit(0);
     }
 
@@ -105,10 +112,10 @@ foreach ($sets as $set_id => $course_ids) {
 
     if ($remove) {
         $owner = User::find($courseset->getUserId())->getFullname();
-        fwrite(STDOUT, studip_utf8encode("= Anmeldeset {$courseset->getName()} ({$owner}):\n"));
+        output("= Anmeldeset {$courseset->getName()} ({$owner}):\n");
 
         foreach ($remove as $row) {
-            fwrite(STDOUT, "  - Veranstaltung {$row['course']->getFullname()}:\n");
+            output("  - Veranstaltung {$row['course']->getFullname()}:\n");
             foreach ($row['status'] as $status => $users) {
                 $user_ids = array_map(function (User $user) {
                     return $user->id;
@@ -116,12 +123,12 @@ foreach ($sets as $set_id => $course_ids) {
 
                 if ($dry_run) {
                     foreach ($users as $user) {
-                        fwrite(STDOUT, "    - Nutzer {$user->getFullname()}\n");
+                        output("    - Nutzer {$user->getFullname()}\n");
                     }
                 } else {
                     $result = $row['members']->cancelAdmissionSubscription($user_ids, $status);
                     foreach ($result as $row) {
-                        fwrite(STDOUT, "    - Nutzer {$row}\n");
+                        output("    - Nutzer {$row}\n");
                     }
                 }
 
