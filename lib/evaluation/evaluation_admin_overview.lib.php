@@ -1898,7 +1898,7 @@ class EvalOverview {
                 // title
                 $td_r = new HTML("td");
                 $td_r->addHTMLContent("&nbsp;");
-                $td_r->addHTMLContent(($db->getRangename($assigned_rangeID, NO)));
+                $td_r->addContent($db->getRangename($assigned_rangeID, NO));
 #         $td_r->addContent ($db->getRangename($assigned_rangeID));
                 $tr_r->addContent($td_r);
 
