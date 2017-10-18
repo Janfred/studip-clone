@@ -468,7 +468,7 @@
                 $(event.target).dialog('option', 'position', position);
             },
             open: function () {
-                var helpbar_element = $('.helpbar a[href*="docs.studip.de"]'),
+                var helpbar_element = $('.helpbar a[href*="hilfe.studip.de"]'),
                     tooltip = helpbar_element.text(),
                     link    = options.wiki_link || helpbar_element.attr('href'),
                     element = $('<a class="ui-dialog-titlebar-wiki" target="_blank">').attr('href', link).attr('title', tooltip);
