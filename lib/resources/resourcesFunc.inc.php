@@ -281,7 +281,7 @@ function getFormattedResult($result, $mode="bad", $bad_message_text = '', $good_
             $bad_message.= ", ".$resObj->getFormattedLink($val2["begin"], _("Raumplan anzeigen"));
             $i++;
         }
-        
+
         if ($locks) {
             $bad_message.="<br><span style=\"color: red\">"._("Die gewünschten Belegungen kollidieren mit folgenden Sperrzeiten:")."</span>";
             $bad_message.="<br>";
@@ -393,7 +393,7 @@ function getMyRoomRequests($user_id = '', $semester_id = null, $only_not_closed 
             $criteria .= " AND NOT EXISTS (SELECT * FROM resources_requests_user_status WHERE resources_requests_user_status.request_id=rr.request_id AND resources_requests_user_status.user_id=".DBManager::get()->quote($user_id).") ";
         }
         if ($regular) {
-            $criteria .= " AND rr.termin_id = '' AND EXISTS (SELECT * FROM termine WHERE range_id=rr.seminar_id AND date > UNIX_TIMESTAMP() AND metadate_id IS NOT NULL AND metadate_id != '') "; 
+            $criteria .= " AND rr.termin_id = '' AND EXISTS (SELECT * FROM termine WHERE range_id=rr.seminar_id AND date > UNIX_TIMESTAMP() AND metadate_id IS NOT NULL AND metadate_id != '') ";
         }
     }
 
@@ -671,9 +671,8 @@ function search_administrable_seminars ($search_string = '', $user_id = '')
             $type = _('Veranstaltungen');
             $query = "SELECT Seminar_id AS id, Name AS name,
                              '{$type}' AS art, 'admin' AS perms
-                      FROM seminar_inst
-                      LEFT JOIN seminare USING (seminar_id)
-                      WHERE seminar_inst.institut_id IN (:inst_ids) AND ({$search_sql})
+                      FROM seminare
+                      WHERE Institut_id IN (:inst_ids) AND ({$search_sql})
                       ORDER BY Name";
             $parameters[':inst_ids'] = $institute_ids;
         break;
@@ -814,13 +813,11 @@ function search_administrable_objects($search_string='', $user_id='', $sem=TRUE)
 
         if ($sem && count($my_inst_ids) > 0) {
             $type = _('Veranstaltungen');
-            $query = "SELECT a.seminar_id AS id, Name AS name,
+            $query = "SELECT Seminar_id AS id, Name AS name,
                              '{$type}' AS art, 'admin' AS perms
-                      FROM  seminar_inst AS a
-                      LEFT JOIN seminare USING (seminar_id)
-                      WHERE a.Institut_id IN (:inst_ids)
+                      FROM seminare
+                      WHERE Institut_id IN (:inst_ids)
                         AND ({$search_sql['seminar']})
-                      GROUP BY a.seminar_id
                       ORDER BY Name";
             $statement = DBManager::get()->prepare($query);
             $statement->bindValue(':inst_ids', array_keys($my_inst_ids));
