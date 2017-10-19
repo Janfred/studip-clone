@@ -275,24 +275,11 @@ class FilesController extends AuthenticatedController
             
             foreach ($filerefs as $fileref) {
                 
-                if ($from_plugin && $to_plugin && $from_plugin == $to_plugin) {
-
-                    if ($copymode === 'move') {
-                        $destination_folder->moveFile($fileref);
-                    } else {
-                        $destination_folder->copyFile($fileref);
-                    }
-                    if (!is_array($result)) {
-                        $count_files += 1;
-                    }
-
-                } elseif ($from_plugin) {
-
+                if ($from_plugin) {
                     $source_plugin = PluginManager::getInstance()->getPlugin($from_plugin);
                     if (!$source_plugin) {
                         throw new Trails_Exception(404, _('Plugin existiert nicht.'));
-                    }
-                    
+                    }                    
                     if ($source = $source_plugin->getPreparedFile($fileref, true)) {
                         if ($copymode === 'move') {
                             $result = FileManager::moveFileRef($source, $destination_folder, $user);
@@ -302,8 +289,7 @@ class FilesController extends AuthenticatedController
                         if (!is_array($result)) {
                             $count_files += 1;
                         }
-                    }
-                    
+                    }                    
                 } else {                
                     if ($source = FileRef::find($fileref)) {
                         if ($copymode === 'move') {

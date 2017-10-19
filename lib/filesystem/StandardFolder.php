@@ -295,8 +295,9 @@ class StandardFolder implements FolderType
             $newfile->mime_type = $file['type'];
             $newfile->size      = $file['size'];
             $newfile->storage   = 'disk';
+            $newfile->user_id   = $file['$user_id'];
             $newfile->id        = $newfile->getNewId();
-            $newfile->connectWithDataFile($file['tmp_path']);
+            $newfile->connectWithDataFile($file['tmp_name']);
 
             $file_ref_data['description'] = $file['description'];
             $file_ref_data['content_terms_of_use_id'] = $file['content_terms_of_use_id'];

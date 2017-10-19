@@ -29,8 +29,8 @@ $options['direct_parent'] = true;
 <? endif ?>
 
     <div class="file_select_possibilities">
-    <? if ($parent_folder instanceof VirtualFolderType) : ?>
-        <a href="<?= $controller->link_for('/choose_folder/' . $parent_folder->getId(), array_merge($options, ['to_plugin' => $parent_folder->range_id ])) ?>" data-dialog>
+    <? if ($options['from_plugin']) : ?>
+        <a href="<?= $controller->link_for('/choose_folder/' . $parent_folder->getId(), array_merge($options, ['to_plugin' => $options['from_plugin'] ])) ?>" data-dialog>
     <? else: ?>
         <a href="<?= $controller->link_for('/choose_folder/' . $parent_folder->getId(), $options) ?>" data-dialog>
     <? endif; ?>

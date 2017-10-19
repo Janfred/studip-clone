@@ -326,6 +326,7 @@ class FileManager
                     'type'     => $filetype,
                     'tmp_name' => $tmpname,
                     'size'     => $size,
+                    'user_id'  => $user_id,
                     'error'    => $uploaded_files['error'][$key]
                 ];
                 $upload_errors = self::checkUploadedFileStatus($uploaded_file);
@@ -346,27 +347,14 @@ class FileManager
                     $error[] = $folder_error;
                     continue;
                 }
-                
-                if ($folder instanceof VirtualFolderType) {
-                    if (!$folder->createFile($uploaded_file)){
-                        $error[] = _('Ein Systemfehler ist beim Upload aufgetreten.');
-                    }
-                } else {
 
-                    $file = new File();
-                    $file->id        = $file->getNewId();
-                    $file->user_id   = $user_id;
-                    $file->name      = $filename;
-                    $file->mime_type = $filetype;
-                    $file->size      = $size;
-                    $file->storage   = 'disk';
-                    if ($file->connectWithDataFile($tmpname)) {
-                        $file->store();
-                        $result['files'][] = $file;
-                    } else {
-                        $error[] = _('Ein Systemfehler ist beim Upload aufgetreten.');
-                    }
+                $new_reference = $folder->createFile($uploaded_file);
+                if (!$new_reference){
+                    $error[] = _('Ein Systemfehler ist beim Upload aufgetreten.');
+                } else {
+                    $result['files'][] = $new_reference;
                 }
+
             }
         }
         return array_merge($result, compact('error'));
@@ -432,7 +420,7 @@ class FileManager
 
         $data_file = null;
 
-        if ($folder instanceof VirtualFolderType) {
+        if (!$source->file) {
             if ($update_other_references) {
             } else {
                 if (!$update_filename) {
@@ -443,12 +431,13 @@ class FileManager
                         return $errors;
                     }
                 }
-                if(!$folder->createFile($uploaded_file_data)){
+                $new_reference = $folder->createFile($uploaded_file_data);
+                if(!$new_reference){
                     $errors[] = _('Aktualisierte Datei konnte nicht ins Stud.IP Dateisystem übernommen werden!');
                     return $errors;
                 }
             }
-            return $source;
+            return $new_reference;
         }
 
 
@@ -649,7 +638,38 @@ class FileManager
             ];
         }
 
-        if ($source_folder instanceof VirtualFolderType) {
+        $source_plugin = PluginManager::getInstance()->getPlugin($source_folder->range_id);
+        if (!$source_plugin) {
+            $source_plugin = PluginManager::getInstance()->getPlugin($source_folder->range_type);;
+        }
+        $destination_plugin = PluginManager::getInstance()->getPlugin($destination_folder->range_id);
+        if (!$destination_plugin) {
+            $destination_plugin = PluginManager::getInstance()->getPlugin($destination_folder->range_type);;
+        }
+
+        if ($source->user_id === $user->id && !$destination_plugin && !$source_plugin) {
+             
+            // the user is the owner of the file: we can simply make a new reference to it
+             $new_reference = new FileRef();
+             $new_reference->file_id     = $source->file_id;
+             $new_reference->folder_id   = $destination_folder->getId();
+             $new_reference->name        = $source->file->name;
+             $new_reference->description = $source->description;
+             $new_reference->user_id     = $user->id;
+             $new_reference->content_terms_of_use_id = $source->content_terms_of_use_id;
+ 
+             if ($new_reference->store()) {
+                 return $new_reference;
+             }
+ 
+             return[_('Neue Referenz kann nicht erzeugt werden!')];
+            
+        } else {
+
+
+            if (!$source->path_to_blob && $source->file_id) {
+                $source->path_to_blob = File::find($source->file_id)->getPath();
+            }
 
             $file_meta = array(
                 'name' => [$source->name], 
@@ -657,102 +677,23 @@ class FileManager
                 'type' => [$source->mime_type],
                 'tmp_name' => [$source->path_to_blob],
                 'size' => [$source->size]);
-            $fcopy = self::handleFileUpload($file_meta, $destination_folder, $user->id);
-            $file_copy = $fcopy["files"][0]; 
 
-            $new_reference = new FileRef();
-            $new_reference->file_id     = $file_copy->id;
-            $new_reference->folder_id   = $destination_folder->id;
-            $new_reference->name        = $file_copy->name;
-            $new_reference->description = $source->description;
-            $new_reference->user_id     = $user->id;
+            $fcopy = self::handleFileUpload($file_meta, $destination_folder, $user->id);            
+            $new_reference = $fcopy["files"][0];
             $new_reference->content_terms_of_use_id = $source->content_terms_of_use_id;
+
+            if ($destination_plugin) {
+                return $new_reference; 
+            }
 
             if ($new_reference->store()) {
                 return $new_reference;            
             } else {
-                $file_copy->delete();
-                return [$error ?: _('Daten konnten nicht kopiert werden!')];
-            }
-
-        }
-
-        if ($destination_folder instanceof VirtualFolderType) {
-
-            $file = File::find($source->file_id);
-            
-            $filedata['name'] = $destination_folder->getId() . '/' . $source->name;
-            $filedata['tmp_name'] = $file->getPath();
-
-            if ($destination_folder->createFile($filedata)) {
-                $plugin =  PluginManager::getInstance()->getPluginById($destination_folder->range_type);
-                return $plugin->getPreparedFile($filedata['name']);
-            } else {
+                $new_reference->delete();
                 return [$error ?: _('Daten konnten nicht kopiert werden!')];
             }
         }
 
-        if ($source->user_id === $user->id) {
-            // the user is the owner of the file: we can simply make a new reference to it
-            $new_reference = new FileRef();
-            $new_reference->file_id     = $source->file_id;
-            $new_reference->folder_id   = $destination_folder->getId();
-            $new_reference->name        = $source->file->name;
-            $new_reference->description = $source->description;
-            $new_reference->user_id     = $user->id;
-            $new_reference->content_terms_of_use_id = $source->content_terms_of_use_id;
-
-            if ($new_reference->store()) {
-                return $new_reference;
-            }
-
-            return[_('Neue Referenz kann nicht erzeugt werden!')];
-        }
-
-        // the user is not the owner of the file: we must copy the file object, too!
-        $file_copy = new File();
-        $file_copy->user_id     = $user->id;
-        $file_copy->mime_type   = $source->file->mime_type;
-        $file_copy->size        = $source->file->size;
-        $file_copy->storage     = $source->file->storage;
-        $file_copy->author_name = $source->file->author_name;
-
-        // The File object's name is unchanged here.
-        // It must only be unique for the file reference (see below).
-        $file_copy->name = $source->file->name;
-
-        $error = null;
-        if ($file_copy->store()) {
-            //ok, file is stored, now we need to copy the real data:
-
-            //first we must create a directory:
-            $destination_directory = pathinfo($file_copy->getPath(), PATHINFO_DIRNAME);
-
-            if (!$destination_directory) {
-                $error = _('Zielverzeichnis konnte nicht ermittelt werden!');
-            } elseif (!is_dir($destination_directory) && !mkdir($destination_directory)) {
-                $error = _('Zielverzeichnis konnte nicht erstellt werden!');
-            } elseif (copy($source->file->getPath(), $file_copy->getPath())) {
-                //ok, create the file ref for the copied file:
-                $new_reference = new FileRef();
-                $new_reference->file_id     = $file_copy->id;
-                $new_reference->folder_id   = $destination_folder->id;
-                $new_reference->name        = $file_copy->name;
-                $new_reference->description = $source->description;
-                $new_reference->user_id     = $user->id;
-                $new_reference->content_terms_of_use_id = $source->content_terms_of_use_id;
-
-                if ($new_reference->store()) {
-                    return $new_reference;
-                }
-
-                $error = _('Neue Referenz kann nicht erzeugt werden!');
-            }
-        }
-
-        //error while copying: delete $file_copy to avoid orphaned entries in the database
-        $file_copy->delete();
-        return [$error ?: _('Daten konnten nicht kopiert werden!')];
     }
 
     /**
@@ -771,81 +712,43 @@ class FileManager
             return [_('Ordnertyp des Quellordners konnte nicht ermittelt werden!')];
         }
 
-        if ($source_folder instanceof VirtualFolderType) {
-            
-            if (!$source_folder->isFileWritable($source, $user->id) ||
-            !$source_folder->isReadable($user->id) ||
-            !$destination_folder->isWritable($user->id)
-            ) {
-                return [sprintf(
-                    _('Ungenügende Berechtigungen zum Verschieben der Datei %s in Ordner %s!'),
+        if (!$source_folder->isReadable($user->id) || !$destination_folder->isWritable($user->id)) {
+            //the user is not permitted to read the source folder
+            //or to write to the destination folder!
+            return [
+                sprintf(
+                    _('Ungenügende Berechtigungen zum Kopieren der Datei %s in Ordner %s!'),
                     $source->name,
                     $destination_folder->name
-                )];
-            }  
+                )
+            ];
+        }
 
-            $file_meta = array(
-                'name' => [$source->name], 
-                'error' => [0],
-                'type' => [$source->mime_type],
-                'tmp_name' => [$source->path_to_blob],
-                'size' => [$source->size]);
-            $fcopy = self::handleFileUpload($file_meta, $destination_folder, $user->id);
-            $file_copy = $fcopy["files"][0]; 
+        $source_plugin = PluginManager::getInstance()->getPlugin($source_folder->range_id);
+        if (!$source_plugin) {
+            $source_plugin = PluginManager::getInstance()->getPlugin($source_folder->range_type);;
+        }
+        $destination_plugin = PluginManager::getInstance()->getPlugin($destination_folder->range_id);
+        if (!$destination_plugin) {
+            $destination_plugin = PluginManager::getInstance()->getPlugin($destination_folder->range_type);;
+        }
 
-            $new_reference = new FileRef();
-            $new_reference->file_id     = $file_copy->id;
-            $new_reference->folder_id   = $destination_folder->id;
-            $new_reference->name        = $file_copy->name;
-            $new_reference->description = $source->description;
-            $new_reference->user_id     = $user->id;
-            $new_reference->content_terms_of_use_id = $source->content_terms_of_use_id;
+        if (!$source_plugin && !$destination_plugin) {
+           
+            $source->folder_id = $destination_folder->id;
+            if ($source->store()) {
+                return $source;
+            }    
+            return [_('Datei konnte nicht gespeichert werden.')];
 
-            if ($new_reference->store()) {
-                $source_folder->deleteFile($source->id);
-                return $new_reference;            
-            } else {
-                $file_copy->delete();
-                return [$error ?: _('Daten konnten nicht gespeichert werden!')];
+        } else {
+            $copy = self::copyFileRef($source, $destination_folder, $user);
+            if($copy instanceof FileRef) {
+                $source_folder->deleteFile($source->getId());                
             }
-
+            return $copy; 
         }
 
-        if ($destination_folder instanceof VirtualFolderType) {
-            
-            $file = File::find($source->file_id);
-            
-            $filedata['name'] = $destination_folder->getId() . '/' . $source->name;
-            $filedata['tmp_name'] = $file->getPath();
-
-            if ($destination_folder->createFile($filedata)) {
-                self::deleteFileRef($source, $user);
-                $plugin =  PluginManager::getInstance()->getPluginById($destination_folder->range_type);
-                return $plugin->getPreparedFile($filedata['name']);
-            } else {
-                return [$error ?: _('Daten konnten nicht gespeichert werden!')];
-            }
-        }
-
-        // the user must have the permissions to write into the source file,
-        // to read the source folder and to write into the destination folder.
-        if (!$source_folder->isFileWritable($user->id) ||
-            !$source_folder->isReadable($user->id) ||
-            !$destination_folder->isWritable($user->id)
-        ) {
-            return [sprintf(
-                _('Ungenügende Berechtigungen zum Verschieben der Datei %s in Ordner %s!'),
-                $source->name,
-                $destination_folder->name
-            )];
-        }
-
-        $source->folder_id = $destination_folder->id;
-        if ($source->store()) {
-            return $source;
-        }
-
-        return [_('Datei konnte nicht gespeichert werden.')];
     }
 
     /**
@@ -859,7 +762,7 @@ class FileManager
      */
     public static function deleteFileRef(FileRef $file_ref, User $user)
     {
-        $folder_type = $file_ref->foldertype;
+        $folder_type = $file_ref->getFolderType();
 
         if (!$folder_type) {
             return [_('Ordnertyp des Quellordners konnte nicht ermittelt werden!')];
@@ -872,7 +775,7 @@ class FileManager
             )];
         }
 
-        if ($file_ref->delete()) {
+        if ($folder_type->deleteFile($file_ref->getId())) {
             return $file_ref;
         }
 

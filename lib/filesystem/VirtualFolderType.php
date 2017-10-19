@@ -213,6 +213,7 @@ class VirtualFolderType implements FolderType
 
     /**
      * @param array|ArrayAccess $filedata
+     * @return FileRef
      */
     public function createFile($filedata)
     {
@@ -220,6 +221,7 @@ class VirtualFolderType implements FolderType
             $filedata = (object) $filedata;
         }
         $this->files[] = $filedata;
+        return end($this->files);
     }
 
     /**
@@ -228,35 +230,6 @@ class VirtualFolderType implements FolderType
      */
     public function deleteFile($file_ref_id)
     {
-        return true;
-    }
-
-    /**
-     * @param string $file_ref_id
-     * @return bool
-     */
-    public function copyFile($file_ref_id)
-    {
-        return true;
-    }
-
-    /**
-     * @param string $file_ref_id
-     * @return bool
-     */
-    public function moveFile($file_ref_id)
-    {
-        return true;
-    }
-
-    /**
-     * @param string $file_ref_id
-     * @param string $name
-     * @param string $description
-     * @param string $content_terms_of_use_id
-     * @return bool
-     */
-    public function editFile($file_ref_id, $name, $description,  $content_terms_of_use_id){
         return true;
     }
 

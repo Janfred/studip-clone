@@ -88,31 +88,19 @@ class FileController extends AuthenticatedController
             $default_license = ContentTermsOfUse::find(
                 'UNDEF_LICENSE'
             );
-
-            if ($folder instanceof VirtualFolderType) {
-                $validatedFiles['files'] = [];
-            }
             
-            foreach ($validatedFiles['files'] as $file) {
-                if ($fileref = $folder->createFile($file)) {
-                    //If no terms of use is set for the file ref
-                    //we must set it to a default terms of use
-                    //and update the fileref.
-                    if (!$fileref->content_terms_of_use_id
-                        and $default_license) {
-                        $fileref->content_terms_of_use_id = $default_license->id;
-                        if ($fileref->isDirty()) {
-                            $fileref->store();
-                        }
+            foreach ($validatedFiles['files'] as $fileref) {
+                //If no terms of use is set for the file ref
+                //we must set it to a default terms of use
+                //and update the fileref.
+                if (!$fileref->content_terms_of_use_id
+                    and $default_license) {
+                    $fileref->content_terms_of_use_id = $default_license->id;
+                    if ($fileref->isDirty()) {
+                        $fileref->store();
                     }
-                    $storedFiles[] = $fileref;
-                } else {
-                    $this->render_json(['message' => MessageBox::error(
-                        _('Die hochgeladene Datei konnte nicht dem Ordner zugeordnet werden!')
-                    )]);
-
-                    return;
                 }
+                $storedFiles[] = $fileref;
             }
             if (count($storedFiles) > 0 && !Request::isXhr()) {
                 PageLayout::postSuccess(
@@ -150,7 +138,7 @@ class FileController extends AuthenticatedController
                     $this->current_folder     = $folder;
                     $this->marked_element_ids = [];
 
-                    $output['new_html'][] = $this->render_template_as_string('files/_fileref_tr');
+                    $output['new_html'][] = ['html' => $this->render_template_as_string('files/_fileref_tr')];
                 }
 
                 $this->render_json($output);
@@ -318,9 +306,7 @@ class FileController extends AuthenticatedController
 
 
             if (Request::get("from_plugin")) {
-                if (!$this->folder->editFile($file_ref_id, rawurlencode($new_name), $new_description, $new_content_terms_of_use_id)) {                    
-                    $this->errors = array_merge($this->errors, $result);
-                }
+                $result = $this->folder->editFile($file_ref_id, rawurlencode($new_name), $new_description, $new_content_terms_of_use_id);
             } else {
                 $result = FileManager::editFileRef(
                     $this->file_ref,
@@ -329,11 +315,12 @@ class FileController extends AuthenticatedController
                     $new_description,
                     $new_content_terms_of_use_id             
                 );
-
-                if (!$result instanceof FileRef) {
-                    $this->errors = array_merge($this->errors, $result);
-                }
             }
+
+            if (!$result instanceof FileRef) {
+                $this->errors = array_merge($this->errors, $result);
+            }
+            
 
             if ($this->errors) {
                 PageLayout::postError(

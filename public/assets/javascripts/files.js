@@ -133,11 +133,11 @@
             }
 
             $.each(html, function (i, value) {
-                var tr = $(value);
-                if ($('#' + tr.attr('id')).length > 0) {
-                    $('#' + tr.attr('id')).replaceWith(tr);
+                var tr = $(value).attr('id');
+                if ($(document.getElementById(tr)).length > 0) {
+                    $(document.getElementById(tr)).replaceWith(value);
                 } else {
-                    tr.hide().appendTo('.documents[data-folder_id] tbody.files').delay(500 + delay + i * 200).fadeIn(300);
+                    $(value).hide().appendTo('.documents[data-folder_id] tbody.files').delay(500 + delay + i * 200).fadeIn(300);
                 }
             });
 
