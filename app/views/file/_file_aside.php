@@ -11,6 +11,10 @@
                 <td><?= relSize($file_ref->size, false) ?></td>
             </tr>
             <tr>
+                <td><?= _('Downloads') ?></td>
+                <td><?= htmlReady($file_ref->downloads) ?></td>
+            </tr>
+            <tr>
                 <td><?= _('Erstellt') ?></td>
                 <td><?= date('d.m.Y H:i', $file_ref->mkdate) ?></td>
             </tr>
