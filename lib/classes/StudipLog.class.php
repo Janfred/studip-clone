@@ -51,6 +51,10 @@ class StudipLog
     public static function log($action_name, $affected = null,
             $coaffected = null, $info = null, $dbg_info = null, $user_id = null)
     {
+        if (!Config::get()->LOG_ENABLE) {
+            return;
+        }
+
         $log_action = SimpleORMapCollection::createFromArray(
                 LogAction::findByName($action_name))->first();
         if (!$log_action) {
