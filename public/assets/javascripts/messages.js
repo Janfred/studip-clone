@@ -50,7 +50,7 @@ STUDIP.Messages = {
 
             var new_adressee = jQuery("#template_adressee").clone();
             new_adressee.find("input").val(user_id);
-            new_adressee.find(".visual").html(name);
+            new_adressee.find(".visual").text(name);
             new_adressee.removeAttr("id").appendTo("#adressees").fadeIn();
         });
         jQuery(form).closest(".ui-dialog-content").dialog("close");
