@@ -59,15 +59,11 @@ class FileArchiveManager
         $adding_allowed = false;
 
         if ($do_user_permission_checks) {
-            $folder = $file_ref->folder;
+            $folder = $file_ref->getFolderType();
             if (!$folder) {
                 return false;
             }
-
-            $folder = $folder->getTypedFolder();
-            if (!$folder) {
-                return false;
-            }
+            
             if ($folder->isReadable($user_id) && $folder->isFileDownloadable($file_ref->id, $user_id)) {
                 //FileRef is readable and downloadable for the user (identified by $user_id).
                 $adding_allowed = true;
@@ -107,23 +103,29 @@ class FileArchiveManager
                     }
                 } else {
                     //The FileRef references a file:
-                    $file_path = $file->getPath();
-                    if ($file_path && file_exists($file_path)) {
-                        $archive->addFile($file_path, $archive_fs_path . $file_ref->name);
-
-                        //The archive file may not exist if it is empty!
-                        if (file_exists($archive->filename) && filesize($archive->filename) > $archive_max_size) {
-                            throw new FileArchiveManagerException(
-                                sprintf(
-                                    _('Das ZIP-Archiv ist zu groß! Die maximal erlaubte Größe ist %d bytes!'),
-                                    $archive_max_size
-                                )
-                            );
-                        }
-
-                        return true;
-                    }
+                    $file_path = $file->getPath();                    
                 }
+            } else {
+
+                if ($file_ref->path_to_blob) {
+                    //The FileRef references a pluginfile:
+                    $file_path = $file_ref->path_to_blob;                    
+                }                
+            }
+            if ($file_path && file_exists($file_path)) {
+                $archive->addFile($file_path, $archive_fs_path . $file_ref->name);
+
+                //The archive file may not exist if it is empty!
+                if (file_exists($archive->filename) && filesize($archive->filename) > $archive_max_size) {
+                    throw new FileArchiveManagerException(
+                        sprintf(
+                            _('Das ZIP-Archiv ist zu groß! Die maximal erlaubte Größe ist %d bytes!'),
+                            $archive_max_size
+                        )
+                    );
+                }
+
+                return true;
             }
         }
 
@@ -186,6 +188,17 @@ class FileArchiveManager
             $archive->addEmptyDir($folder_zip_path);
         }
         foreach ($folder->getFiles() as $file_ref) {
+            
+            if (!$file_ref instanceof FileRef) {
+                $plugin = PluginManager::getInstance()->getPlugin($folder->range_id);
+                if (!$plugin) {
+                    $plugin = PluginManager::getInstance()->getPlugin($folder->range_type);;
+                }
+                if ($plugin) {
+                    $file_ref = $plugin->getPreparedFile($file_ref->id, true);
+                }
+            }
+            
             self::addFileRefToArchive(
                 $archive,
                 $file_ref,
