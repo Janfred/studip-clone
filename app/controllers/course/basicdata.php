@@ -400,6 +400,8 @@ class Course_BasicdataController extends AuthenticatedController
     {
         global $perm;
 
+        CSRFProtection::verifySecurityToken();
+
         $course_number_format = Config::get()->COURSE_NUMBER_FORMAT;
         $sem = Seminar::getInstance($course_id);
         $this->msg = array();
@@ -507,6 +509,8 @@ class Course_BasicdataController extends AuthenticatedController
     }
 
     public function add_member_action($course_id, $status = 'dozent') {
+        CSRFProtection::verifySecurityToken();
+
         // load MultiPersonSearch object
         $mp = MultiPersonSearch::load("add_member_" . $status . $course_id);
         $fail = false;
@@ -609,6 +613,8 @@ class Course_BasicdataController extends AuthenticatedController
     {
         global $user, $perm;
 
+        CSRFProtection::verifySecurityToken();
+
         $sem = Seminar::getInstance($course_id);
         $this->msg = array();
         if ($perm->have_studip_perm("dozent", $sem->getId())) {
@@ -647,6 +653,8 @@ class Course_BasicdataController extends AuthenticatedController
     public function deletedeputy_action($course_id, $deputy)
     {
         global $user, $perm;
+
+        CSRFProtection::verifySecurityToken();
 
         $sem = Seminar::getInstance($course_id);
         $this->msg = array();
@@ -687,6 +695,8 @@ class Course_BasicdataController extends AuthenticatedController
     {
         global $user, $perm;
 
+        CSRFProtection::verifySecurityToken();
+
         $sem = Seminar::getInstance($course_id);
         $this->msg = array();
         if ($perm->have_studip_perm("dozent", $sem->getId())) {
@@ -721,6 +731,8 @@ class Course_BasicdataController extends AuthenticatedController
     public function priorityupfor_action($course_id, $user_id, $status = "dozent")
     {
         global $user, $perm;
+
+        CSRFProtection::verifySecurityToken();
 
         $sem = Seminar::getInstance($course_id);
         $this->msg = array();
@@ -757,6 +769,8 @@ class Course_BasicdataController extends AuthenticatedController
     {
         global $user, $perm;
 
+        CSRFProtection::verifySecurityToken();
+
         $sem = Seminar::getInstance($course_id);
         $this->msg = array();
         if ($perm->have_studip_perm("dozent", $sem->getId())) {
@@ -782,6 +796,8 @@ class Course_BasicdataController extends AuthenticatedController
     }
 
     public function switchdeputy_action($course_id, $newstatus) {
+        CSRFProtection::verifySecurityToken();
+
         $course = Seminar::getInstance($course_id);
         switch($newstatus) {
             case 'dozent':
