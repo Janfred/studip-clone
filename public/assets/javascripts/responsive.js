@@ -87,12 +87,7 @@
         $('#responsive-navigation :checkbox').on('change', function () {
             var li = $(this).closest('li');
             if ($(this).is(':checked')) {
-                li.siblings(':not(#responsive-navigation > li)').slideUp();
-                if (li.is('#responsive-navigation > li')) {
                     li.siblings().find(':checkbox:checked').prop('checked', false);
-                }
-            } else {
-                $(this).closest('li').siblings().slideDown();
             }
 
             // Force redraw of submenu (at least ios safari/chrome would
