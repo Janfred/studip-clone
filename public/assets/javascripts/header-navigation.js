@@ -77,13 +77,9 @@
     });
 
     // Reshrink on resize
-    $(window).on('resize', function () {
-        STUDIP.NavigationShrinker();
-    });
+    $(window).on('resize', _.debounce(STUDIP.NavigationShrinker, 100));
 
     // Shrink on domready
-    $(document).ready(function () {
-        STUDIP.NavigationShrinker();
-    });
+    $(document).ready(STUDIP.NavigationShrinker);
 
 }(jQuery, STUDIP));

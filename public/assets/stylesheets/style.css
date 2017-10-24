@@ -1723,7 +1723,6 @@ form.default label.packed button {
   min-height: 45px;
 }
 #current_page_title {
-  display: inline;
   font-weight: bold;
   font-size: 1.4em;
   position: relative;

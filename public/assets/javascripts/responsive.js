@@ -11,7 +11,7 @@
     // check the navigation's open status in reverse order (from bottom to top)
     jQuery.fn.reverse = [].reverse;
 
-    var media_query = window.matchMedia('(max-width: 768px)');
+    var media_query = window.matchMedia('(max-width: 767px)');
 
     // Builds a dom element from a navigation object
     function buildMenu(navigation, path, id) {
