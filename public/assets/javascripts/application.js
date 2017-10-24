@@ -44,7 +44,6 @@ jQuery(document).on('click', '.messagebox .messagebox_buttons a', function () {
 jQuery(function () {
     // AJAX Indicator
     STUDIP.ajax_indicator = true;
-    STUDIP.URLHelper.base_url = STUDIP.ABSOLUTE_URI_STUDIP;
 
     STUDIP.study_area_selection.initialize();
 

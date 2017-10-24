@@ -12,7 +12,7 @@
 
             chunks.push('expires=' + date.toUTCString());
         }
-        chunks.push('path=' + STUDIP.URLHelper.getURL('a', true).slice(0, -1));
+        chunks.push('path=/' + STUDIP.URLHelper.getURL('a', true).slice(0, -1).split('/').slice(3).join('/'));
 
         document.cookie = chunks.join(';');
     }

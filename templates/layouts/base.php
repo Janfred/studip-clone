@@ -51,6 +51,8 @@ if ($navigation) {
 
     <script>
         STUDIP.ABSOLUTE_URI_STUDIP = "<?= $GLOBALS['ABSOLUTE_URI_STUDIP'] ?>";
+        STUDIP.URLHelper.base_url = STUDIP.ABSOLUTE_URI_STUDIP;
+
         STUDIP.ASSETS_URL = "<?= $GLOBALS['ASSETS_URL'] ?>";
         STUDIP.STUDIP_SHORT_NAME = "<?= htmlReady(Config::get()->STUDIP_SHORT_NAME) ?>";
         STUDIP.jsupdate_enable = <?= is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm('autor') && PersonalNotifications::isActivated() ? 'true' : 'false' ?>;
