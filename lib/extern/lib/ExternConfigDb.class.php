@@ -77,7 +77,7 @@ class ExternConfigDb extends ExternConfig {
         $statement->execute($parameters);
         $row = $statement->fetchColumn();
         if ($row) {
-            $this->config = json_decode(stripslashes($row), true);
+            $this->config = json_decode($row, true);
         } else {
             ExternModule::printError();
         }
