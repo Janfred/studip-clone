@@ -82,7 +82,7 @@ if ($args) {
 
             // check for compatible version
             if ((isset($min_version) && StudipVersion::olderThan($min_version)) ||
-                (isset($max_version) && StudipVersion::newerThan($max_version)) {
+                (isset($max_version) && StudipVersion::newerThan($max_version))) {
                 throw new PluginInstallationException(_('Das Plugin ist mit dieser Stud.IP-Version nicht kompatibel.'));
             }
 
