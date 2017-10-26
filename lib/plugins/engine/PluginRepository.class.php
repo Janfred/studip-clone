@@ -86,10 +86,8 @@ class PluginRepository
                 $min_version = trim($release['studipMinVersion']);
                 $max_version = trim($release['studipMaxVersion']);
 
-                if (($min_version &&
-                      version_compare($min_version, $SOFTWARE_VERSION) > 0) ||
-                    ($max_version &&
-                      version_compare($max_version, $SOFTWARE_VERSION) < 0)) {
+                if (($min_version && StudipVersion::olderThan($min_version)) ||
+                    ($max_version && StudipVersion::newerThan($max_version))) {
                     // plugin is not compatible, so skip it
                     continue;
                 }

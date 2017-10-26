@@ -75,8 +75,8 @@ class PluginAdministration
         $max_version = $manifest['studipMaxVersion'];
 
         // check for compatible version
-        if (isset($min_version) && version_compare($min_version, $SOFTWARE_VERSION) > 0 ||
-            isset($max_version) && version_compare($max_version, $SOFTWARE_VERSION) < 0) {
+        if ((isset($min_version) && StudipVersion::olderThan($min_version)) ||
+            (isset($max_version) && StudipVersion::newerThan($max_version))) {
             rmdirr($packagedir);
             throw new PluginInstallationException(_('Das Plugin ist mit dieser Stud.IP-Version nicht kompatibel.'));
         }
@@ -453,8 +453,8 @@ class PluginAdministration
         $max_version = $manifest['studipMaxVersion'];
 
         // check for compatible version
-        if (isset($min_version) && version_compare($min_version, $GLOBALS['SOFTWARE_VERSION']) > 0 ||
-            isset($max_version) && version_compare($max_version, $GLOBALS['SOFTWARE_VERSION']) < 0) {
+        if ((isset($min_version) && StudipVersion::olderThan($min_version)) ||
+            (isset($max_version) && StudipVersion::newerThan($max_version))) {
             throw new PluginInstallationException(_('Das Plugin ist mit dieser Stud.IP-Version nicht kompatibel.'));
         }
 
