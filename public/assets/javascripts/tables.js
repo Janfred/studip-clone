@@ -59,7 +59,11 @@ jQuery(function ($) {
                     var table = this;
                     $('tbody tr[data-sort-fixed]', table).detach().each(function () {
                         var index  = $(this).data('sort-fixed');
-                        $('tbody tr:eq(' + index + ')', table).before(this);
+                        if ($('tbody tr', table).length === 0) {
+                            $('tbody:first', table).append(this);
+                        } else {
+                            $('tbody tr:eq(' + index + ')', table).before(this);
+                        }
 
                         if ($(this).data('sort-hidden')) {
                             setTimeout(function () {
