@@ -116,6 +116,7 @@ class UserFilterField
         } else {
             $cOp = $this->compareOperator;
         }
+
         foreach ($values as $value) {
             if (eval("return ('".$value."'".$cOp."'".$this->value."');"))
             {
@@ -273,17 +274,27 @@ class UserFilterField
      * whether they fit.
      *
      * @param  String $userId User to check.
-     * @param  Array additional conditions that are required for check.
-     * @return The value(s) for this user.
+     * @param  array $additional conditions that are required for check.
+     * @return array The value(s) for this user.
      */
-    public function getUserValues($userId, $additional=null) {
+    public function getUserValues($userId, $additional = null) {
         $result = array();
-        // Get degrees for user.
-        $stmt = DBManager::get()->prepare(
-            "SELECT DISTINCT `".$this->userDataDbField."` ".
+        $query = "SELECT DISTINCT `".$this->userDataDbField."` ".
             "FROM `".$this->userDataDbTable."` ".
-            "WHERE `user_id`=?");
-        $stmt->execute(array($userId));
+            "WHERE `user_id`=?";
+        $parameters = array($userId);
+        // Additional requirements given...
+        if (is_array($additional)) {
+            foreach ($additional as $a_condition) {
+                if ($a_condition->id != $this->id && $this->userDataDbTable == $a_condition->userDataDbTable) {
+                    $query .= " AND `" . $a_condition->userDataDbField . "` " . $a_condition->compareOperator . "?";
+                    $parameters[] = $a_condition->value;
+                }
+            }
+        }
+        // Get semester of study for user.
+        $stmt = DBManager::get()->prepare($query);
+        $stmt->execute($parameters);
         while ($current = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $result[] = $current[$this->userDataDbField];
         }
