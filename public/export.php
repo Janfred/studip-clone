@@ -143,7 +143,7 @@ else
     Wenden Sie sich bitte an die Administratoren."), [_("Exportmodul nicht eingebunden")]);
 
 }
-if (!in_array($o_mode, words('direct', 'passthrough'))) {
+if (!in_array($o_mode, ['direct', 'passthrough'])) {
     $template = $GLOBALS['template_factory']->open('layouts/base.php');
     $template->content_for_layout = ob_get_clean();
 
