@@ -300,7 +300,6 @@ class SingleDate
         $this->chdate = time();
         if ($this->ex_termin) {
             $this->killAssign();
-            $this->killIssue();
         }
 
         // date_typ = 0 defaults to TERMIN_TYP[1] because there never exists one with zero
