@@ -38,7 +38,7 @@ class Settings_GeneralController extends Settings_SettingsController
      */
     public function index_action()
     {
-        $this->user_language = $_SESSION['_language'] ?: Config::get()->DEFAULT_LANGUAGE;
+        $this->user_language = getUserLanguage($this->user->id);
     }
 
     /**
@@ -50,7 +50,10 @@ class Settings_GeneralController extends Settings_SettingsController
 
         $language = Request::get('forced_language');
         if (array_key_exists($language, $GLOBALS['INSTALLED_LANGUAGES'])) {
-            $this->user->preferred_language = $_SESSION['_language'] = $language;
+            $this->user->preferred_language = $language;
+            if ($GLOBALS['user']->id === $this->user->id) {
+                $_SESSION['_language'] = $language;
+            }
             $this->user->store();
         }
 
@@ -59,7 +62,7 @@ class Settings_GeneralController extends Settings_SettingsController
         $this->config->store('SHOWSEM_ENABLE', Request::int('showsem_enable'));
         $this->config->store('SKIPLINKS_ENABLE', Request::int('skiplinks_enable'));
         $this->config->store('TOUR_AUTOSTART_DISABLE', Request::int('tour_autostart_disable'));
-        
+
         if (Request::int('personal_notifications_activated')) {
             PersonalNotifications::activate();
         } else {
