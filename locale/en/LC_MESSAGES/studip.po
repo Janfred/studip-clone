@@ -36483,7 +36483,7 @@ msgstr "Message sent."
 
 #: ../app/controllers/messages.php:526 ../app/views/localizations/show.php:61
 msgid "Sie haben nicht angegeben, wer die Nachricht empfangen soll!"
-msgstr "You did not "
+msgstr "You did not specify who should receive the message!"
 
 #: ../app/controllers/messages.php:560
 #, php-format
