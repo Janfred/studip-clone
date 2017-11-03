@@ -46,16 +46,21 @@
         </table>
         <div id="news_basic_content" style="<?=$news_isvisible['news_basic'] ? '' : 'display: none'?>">
             <table class="default nohover">
+            <colgroup>
+                <col width="33%">
+                <col width="33%">
+                <col width="33%">
+            </colgroup>
             <tbody>
                 <tr>
-                    <td colspan="2">
+                    <td colspan="3">
                         <label><?= _("Titel") ?><br>
                         <input type="text" name="news_topic" class="news_topic news_prevent_submit" aria-label="<?= _('Titel der Ankündigung') ?>"
                                value="<?= htmlReady($news['topic']) ?>"></label>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2">
+                    <td colspan="3">
                         <label><?= _("Inhalt") ?><br>
                         <? list ($body, $admin_msg) = explode("<admin_msg>", $news['body']); ?>
                         <textarea class="news_body add_toolbar wysiwyg" name="news_body" rows="6"
@@ -69,7 +74,7 @@
                             <?= _('Veröffentlichungsdatum') ?><br>
                             <input type="text" class="news_date news_prevent_submit"
                                    name="news_startdate" id="news_startdate"
-                                   data-date-picker='{"<=":"#news_enddate"}'
+                                   data-date-picker='{">=":"today"}'
                                    value="<? if ($news['date']) echo date('d.m.Y', $news['date']); ?>"
                                    aria-label="<?= _('Einstelldatum') ?>">
                         </label>
@@ -79,14 +84,24 @@
                             <?= _('Ablaufdatum') ?><br>
                             <input type="text" class="news_date news_prevent_submit"
                                    name="news_enddate" id="news_enddate"
-                                   data-date-picker='{">=":"#news_startdate"}'
+                                   data-date-picker='{">=":"#news_startdate","offset":"#news_duration"}'
                                    value="<? if ($news['expire']) echo date('d.m.Y', $news['date'] + $news['expire']) ?>"
                                    aria-label="<?= _('Ablaufdatum') ?>">
                         </label>
                     </td>
+                    <td>
+                        <label>
+                            <?= _('Laufzeit in Tagen') ?><br>
+                            <input type="number" class="news_date news_prevent_submit"
+                                   name="news_duration" id="news_duration"
+                                   value="<?= $news['expire'] ? floor($news['expire'] / (24 * 60 * 60)) : 7 ?>"
+                                   aria-label="<?= _('Laufeit') ?>"
+                                   min="0">
+                        </label>
+                    </td>
                 </tr>
                 <tr>
-                    <td colspan="2">
+                    <td colspan="3">
                     <? if ($anker == 'news_comments') : ?>
                         <a name='anker'></a>
                     <? endif ?>

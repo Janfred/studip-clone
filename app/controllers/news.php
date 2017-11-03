@@ -116,11 +116,11 @@ class NewsController extends StudipController
         if ($this->show_all_news) {
             URLHelper::addLinkParam('nshow_all', 1);
         }
-        $this->news = StudipNews::GetNewsByRange($range_id, !$this->show_all_news, true);
-        $this->count_all_news  = $this->show_all_news ? count($this->news) : count(StudipNews::GetNewsByRange($range_id, false));
-        $this->rss_id = Config::get()->NEWS_RSS_EXPORT_ENABLE ? StudipNews::GetRssIdFromRangeId($range_id) : false;
-        $this->range = $range_id;
-        $this->nobody = !$GLOBALS['user']->id || $GLOBALS['user']->id === 'nobody';
+        $this->news           = StudipNews::GetNewsByRange($range_id, !$this->show_all_news, true);
+        $this->count_all_news = $this->show_all_news ? count($this->news) : count(StudipNews::GetNewsByRange($range_id, false));
+        $this->rss_id         = Config::get()->NEWS_RSS_EXPORT_ENABLE ? StudipNews::GetRssIdFromRangeId($range_id) : false;
+        $this->range          = $range_id;
+        $this->nobody         = !$GLOBALS['user']->id || $GLOBALS['user']->id === 'nobody';
 
         $this->visit();
     }
@@ -150,18 +150,26 @@ class NewsController extends StudipController
     public function edit_news_action($id = '', $context_range = '', $template_id = '')
     {
         // initialize
-        $this->news_isvisible = array('news_basic' => true, 'news_comments' => false, 'news_areas' => false);
-        $ranges = array();
-        $this->ranges = array();
-        $this->area_options_selectable = array();
-        $this->area_options_selected = array();
-        $this->may_delete = false;
-        $this->route = "news/edit_news/$id";
+        $ranges = [];
+
+        $this->ranges                  = [];
+        $this->area_options_selectable = [];
+        $this->area_options_selected   = [];
+        $this->may_delete              = false;
+        $this->route                   = "news/edit_news/{$id}";
+
+        $this->news_isvisible = [
+            'news_basic' => true,
+            'news_comments' => false,
+            'news_areas' => false,
+        ];
+
         if ($context_range) {
-            $this->route .= "/$context_range";
+            $this->route .= "/{$context_range}";
             if ($template_id)
-                $this->route .= "/$template_id";
+                $this->route .= "/{$template_id}";
         }
+
         $msg_object = new messaging();
 
         if ($id === 'new') {
@@ -171,17 +179,9 @@ class NewsController extends StudipController
             $this->title = _('Ankündigung bearbeiten');
 
         // user has to have autor permission at least
-        if (! $GLOBALS['perm']->have_perm(autor)) {
+        if (!$GLOBALS['perm']->have_perm(autor)) {
             $this->set_status(401);
             return $this->render_nothing();
-        }
-
-        // Output as dialog (Ajax-Request) or as Stud.IP page?
-        if (Request::isXhr()) {
-            $this->set_layout(null);
-            PageLayout::setTitle($this->title);
-        } else {
-            $this->set_layout($GLOBALS['template_factory']->open('layouts/base'));
         }
 
         // load news and comment data and check if user has permission to edit
@@ -220,19 +220,11 @@ class NewsController extends StudipController
                 $this->anker = 'news_comments';
                 $allow_comments = 1;
             }
-            if ($news->getValue('topic') != $topic
-                || $news->getValue('body') != $body
-                || $news->getValue('date') != $date
-                || $news->getValue('allow_comments') != $allow_comments
-                || $news->getValue('expire') != $expire)
-            {
-                    $changed = true;
-            }
-            $news->setValue('topic', $topic);
-            $news->setValue('body', $body);
-            $news->setValue('date', $date);
-            $news->setValue('expire', $expire);
-            $news->setValue('allow_comments', $allow_comments);
+            $news->topic          = $topic;
+            $news->body           = $body;
+            $news->date           = $date;
+            $news->expire         = $expire;
+            $news->allow_comments = $allow_comments;
         } elseif ($id) {
             // if news id given check for valid id and load ranges
             if ($news->isNew()) {
@@ -265,15 +257,15 @@ class NewsController extends StudipController
             } elseif ($changed_areas) {
                 PageLayout::postInfo(sprintf(_('%s zugeordnete Bereiche wurden nicht übernommen, weil Sie dort keine Ankündigungen erstellen dürfen.'), $changed_areas));
             }
-            $news->setValue('topic', $news_template->getValue('topic'));
-            $news->setValue('body', $news_template->getValue('body'));
-            $news->setValue('date', $news_template->getValue('date'));
-            $news->setValue('expire', $news_template->getValue('expire'));
-            $news->setValue('allow_comments', $news_template->getValue('allow_comments'));
+            $news->topic          = $news_template->topic;
+            $news->body           = $news_template->body;
+            $news->date           = $news_template->date;
+            $news->expire         = $news_template->expire;
+            $news->allow_comments = $news_template->allow_comments;
         } else {
             // for new news, set startdate to today and range to dialog context
-            $news->setValue('date', strtotime(date('Y-m-d')));// + 12*60*60;
-            $news->setValue('expire', 604800);
+            $news->date   = strtotime(date('Y-m-d'));// + 12*60*60;
+            $news->expire = 7 * 24 * 60 * 60;
             if ($context_range && $context_range !== 'template') {
                 $add_range = new NewsRange(array('', $context_range));
                 $ranges[] = $add_range->toArray();
@@ -347,7 +339,6 @@ class NewsController extends StudipController
             // reload comments
             if (!$this->flash['question_text']) {
                 $this->comments = StudipComment::GetCommentsForObject($id);
-                $changed = true;
             }
         }
         if ($news->havePermission('delete')) {
@@ -407,7 +398,6 @@ class NewsController extends StudipController
                     if (!isset($this->ranges[$range_id])) {
                         if ($news->haveRangePermission('edit', $range_id)) {
                             $news->addRange($range_id);
-                            $changed = true;
                         } else {
                             PageLayout::postError(sprintf(_('Sie haben keine Berechtigung zum Ändern der Bereichsverknüpfung für "%s".'), htmlReady($area_title)));
                             $error++;
@@ -423,7 +413,6 @@ class NewsController extends StudipController
                 {
                     if ($news->havePermission('unassign', $range_id)) {
                         $news->deleteRange($range_id);
-                        $changed = true;
                     } else {
                         PageLayout::postError(_('Sie haben keine Berechtigung zum Ändern der Bereichsverknüpfung.'));
                         $error++;
@@ -433,14 +422,14 @@ class NewsController extends StudipController
 
             // save news
             if ($news->validate() && !$error) {
-                if (($news->getValue('user_id') !== $GLOBALS['user']->id)) {
-                    $news->setValue('chdate_uid', $GLOBALS['user']->id);
-                    setTempLanguage($news->getValue('user_id'));
-                    $msg = sprintf(_('Ihre Ankündigung "%s" wurde von %s verändert.'), $news->getValue('topic'), get_fullname() . ' ('.get_username().')'). "\n";
-                    $msg_object->insert_message($msg, get_username($news->getValue('user_id')) , "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("Ankündigung geändert"));
+                if ($news->user_id !== $GLOBALS['user']->id) {
+                    $news->chdate_uid = $GLOBALS['user']->id;
+                    setTempLanguage($news->user_id);
+                    $msg = sprintf(_('Ihre Ankündigung "%s" wurde von %s verändert.'), $news->topic, get_fullname() . ' ('.get_username().')'). "\n";
+                    $msg_object->insert_message($msg, get_username($news->user_id) , "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("Ankündigung geändert"));
                     restoreLanguage();
                 } else {
-                    $news->setValue('chdate_uid', '');
+                    $news->chdate_uid = '';
                 }
 
                 $news->store();
@@ -448,7 +437,7 @@ class NewsController extends StudipController
                 PageLayout::postSuccess(_('Die Ankündigung wurde gespeichert.'));
                 if (!Request::isXhr() && !$id) {
                     // in fallback mode redirect to edit page with proper news id
-                    $this->redirect('news/edit_news/' . $news->getValue('news_id'));
+                    $this->redirect('news/edit_news/' . $news->id);
                 } elseif (Request::isXhr()) {
                     // if in dialog mode send empty result (STUDIP.News closes dialog and initiates reload)
                     $this->render_nothing();
@@ -699,8 +688,8 @@ class NewsController extends StudipController
             }
             $query .= " ORDER BY sem_name ASC";
             $statement = DBManager::get()->prepare($query);
-            $statement->bindValue(':user_id', $GLOBALS['auth']->auth['uid']);
-            $statement->bindValue(':start', $current_semester["beginn"]);
+            $statement->bindValue(':user_id', $GLOBALS['user']->id);
+            $statement->bindValue(':start', $current_semester->beginn);
             $statement->execute();
             $seminars = $statement->fetchAll(PDO::FETCH_ASSOC);
             foreach($seminars as $key => $sem) {
