@@ -8188,13 +8188,10 @@ form.settings-avatar footer {
   display: block;
   white-space: nowrap;
 }
-#select_fach_abschluss tbody td:first-child {
-  padding-top: 2em;
-}
 #select_fach_abschluss tbody td:last-child {
-  padding-top: .5em;
+  padding-right: .5em;
 }
-#select_fach_abschluss tbody td:before {
+#select_fach_abschluss tbody td::before {
   content: attr(data-label);
   font-weight: bold;
   width: 6.5em;
@@ -8208,7 +8205,7 @@ form.settings-avatar footer {
   border-bottom: 1px solid #e2e3e4;
 }
 @media (min-width: 576px) {
-  #select_fach_abschluss tbody td:before {
+  #select_fach_abschluss tbody td::before {
     display: none;
   }
   #select_fach_abschluss tbody th,

@@ -102,14 +102,25 @@ class Settings_StudiesController extends Settings_SettingsController
             $new_studiengang = Request::option('new_studiengang');
             if ($new_studiengang && $new_studiengang != 'none') {
                 if (!$this->hasStudiengang()) {
-                    Visibility::addPrivacySetting(_("Wo ich studiere"), 'studying', 'studdata');
+                    Visibility::addPrivacySetting(_('Wo ich studiere'), 'studying', 'studdata');
                 }
-                $any_change = !is_null(UserStudyCourse::create([
-                    'user_id'      => $this->user->user_id,
-                    'fach_id'      => $new_studiengang,
-                    'semester'     => Request::int('fachsem'),
-                    'abschluss_id' => Request::option('new_abschluss'),
-                ]));
+                $abschluss_id = Request::option('new_abschluss');
+                $duplicate    = UserStudyCourse::exists([
+                    $this->user->user_id,
+                    $new_studiengang,
+                    $abschluss_id,
+                ]);
+
+                if ($duplicate) {
+                    PageLayout::postInfo(_('Dieser Studiengang ist bereits eingetragen'));
+                } else {
+                    $any_change = !is_null(UserStudyCourse::create([
+                        'user_id'      => $this->user->user_id,
+                        'fach_id'      => $new_studiengang,
+                        'semester'     => Request::int('fachsem'),
+                        'abschluss_id' => Request::option('new_abschluss'),
+                    ]));
+                }
             }
 
             // store versions if module management is enabled
