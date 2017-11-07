@@ -620,7 +620,6 @@ class FileManager
         // first we have to make sure if the user has the permissions to read the source folder
         // and the permissions to write to the destination folder:
 
-
         $source_folder = $source->getFolderType();
         if (!$source_folder) {
             return [_('Ordnertyp des Quellordners konnte nicht ermittelt werden!')];
@@ -666,22 +665,46 @@ class FileManager
             
         } else {
 
+            if ($source_plugin && $source_plugin->getFolder($source->id)){
 
-            if (!$source->path_to_blob && $source->file_id) {
-                $source->path_to_blob = File::find($source->file_id)->getPath();
+                $source = $source_plugin->getFolder($source->id);
+ 
+                $new_folder = new StandardFolder($source);
+                $new_folder->user_id = $user->id;    
+                $new_folder->name = $source->name;
+
+                $destination_folder->createSubfolder($new_folder);
+
+                if($new_folder) {
+                    foreach ($source->getSubfolders() as $subsubfolder) {
+                        $fake_ref = $source_plugin->getPreparedFile($subsubfolder->id);
+                        $return[] = self::copyFileRef($fake_ref, $new_folder, $user);
+                    }
+                    foreach ($source->getFiles() as $subfile) {
+                        $subfile_ref = $source_plugin->getPreparedFile($subfile->id, true);
+                        $return[] = self::copyFileRef($subfile_ref, $new_folder, $user);
+                    }                    
+                }
+                return $new_folder;
+                
+            } else {            
+
+                if (!$source->path_to_blob && $source->file_id) {
+                    $source->path_to_blob = File::find($source->file_id)->getPath();
+                }
+
+                $file_meta = array(
+                    'name' => [$source->name], 
+                    'error' => [0],
+                    'type' => [$source->mime_type],
+                    'tmp_name' => [$source->path_to_blob],
+                    'size' => [$source->size]);
+            
+                $fcopy = self::handleFileUpload($file_meta, $destination_folder, $user->id);            
+                $new_reference = $fcopy["files"][0];
+                $new_reference->content_terms_of_use_id = $source->content_terms_of_use_id;
+
             }
-
-            $file_meta = array(
-                'name' => [$source->name], 
-                'error' => [0],
-                'type' => [$source->mime_type],
-                'tmp_name' => [$source->path_to_blob],
-                'size' => [$source->size]);
-
-            $fcopy = self::handleFileUpload($file_meta, $destination_folder, $user->id);            
-            $new_reference = $fcopy["files"][0];
-            $new_reference->content_terms_of_use_id = $source->content_terms_of_use_id;
-
             if ($destination_plugin) {
                 return $new_reference; 
             }
@@ -743,7 +766,7 @@ class FileManager
 
         } else {
             $copy = self::copyFileRef($source, $destination_folder, $user);
-            if($copy instanceof FileRef) {
+            if(!is_array($copy)) {
                 $source_folder->deleteFile($source->getId());                
             }
             return $copy; 

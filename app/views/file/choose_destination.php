@@ -1,8 +1,8 @@
 <?php
 $options = array();
-if (Request::get('to_plugin')) {
+/*if (Request::get('to_plugin')) {
     $options['to_plugin'] = Request::get('to_plugin');
-}
+}*/
 if (Request::get('from_plugin')) {
     $options['from_plugin'] = Request::get('from_plugin');
 }
@@ -17,6 +17,8 @@ if (Request::get('isfolder')) {
 }
 if ($fileref_id) {
     $options['fileref_id'] = $fileref_id;
+} elseif (Request::getArray('fileref_id')) {
+    $options['fileref_id'] = Request::getArray('fileref_id');
 }
 $options['direct_parent'] = true;
 ?>

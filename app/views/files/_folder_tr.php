@@ -72,13 +72,13 @@ $owner = User::find($folder->user_id) ?: new User();
         }
         if ($folder->isEditable($GLOBALS['user']->id)) {
            $actionMenu->addLink(
-               $controller->url_for('file/choose_destination/' . $folder->getId(), ['copymode' => 'move', 'isfolder' => 1]),
+               $controller->url_for('file/choose_destination/move/' . $folder->getId(), ['isfolder' => 1]),
                 _('Ordner verschieben'),
                 Icon::create('folder-empty+move_right', 'clickable', ['size' => 20]),
                 ['data-dialog' => 'size=auto']
             );
             $actionMenu->addLink(
-                $controller->url_for('file/choose_destination/' . $folder->getId(), ['copymode' => 'copy', 'isfolder' => 1]),
+                $controller->url_for('file/choose_destination/copy/' . $folder->getId(), ['isfolder' => 1]),
                 _('Ordner kopieren'),
                 Icon::create('folder-empty+add', 'clickable', ['size' => 20]),
                 ['data-dialog' => 'size=auto']

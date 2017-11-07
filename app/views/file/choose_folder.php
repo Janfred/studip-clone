@@ -6,8 +6,8 @@ if (Request::get('to_plugin')) {
 if (Request::get('from_plugin')) {
     $options['from_plugin'] = Request::get('from_plugin');
 }
-if (Request::get('fileref_id')) {
-    $options['fileref_id'] = Request::get('fileref_id');
+if (Request::getArray('fileref_id')) {
+    $options['fileref_id'] = Request::getArray('fileref_id');
 }
 if (Request::get('isfolder')) {
     $options['isfolder'] = Request::get('isfolder');
@@ -159,7 +159,7 @@ switch ($top_folder->range_type) {
 <? if (Request::get('direct_parent')): ?>
     <?= Studip\LinkButton::create(
         _('Zurück'),
-        $controller->url_for('/choose_destination/' . $options['fileref_id'], $options),
+        $controller->url_for('/choose_destination/' . $options['copymode'] , $options),
         ['data-dialog' => 'size=auto']
     ) ?>
 <? elseif ($top_folder->range_type === 'course') : ?>

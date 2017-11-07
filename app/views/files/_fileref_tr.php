@@ -90,7 +90,7 @@
         }
         if ($current_folder->isFileWritable($file_ref->id, $GLOBALS['user']->id)) {
             $actionMenu->addLink(
-                $controller->url_for('file/choose_destination/' . $file_ref->id .'/move'),
+                $controller->url_for('file/choose_destination/move/' . $file_ref->id),
                 _('Datei verschieben'),
                 Icon::create('file+move_right', Icon::ROLE_CLICKABLE, ['size' => 20]),
                 ['data-dialog' => 'size=auto']
@@ -98,7 +98,7 @@
         }
         if ($current_folder->isFileDownloadable($file_ref, $GLOBALS['user']->id)) {
             $actionMenu->addLink(
-                $controller->url_for('file/choose_destination/' . $file_ref->id . '/copy'),
+                $controller->url_for('file/choose_destination/copy/' . $file_ref->id),
                 _('Datei kopieren'),
                 Icon::create('file+add', Icon::ROLE_CLICKABLE, ['size' => 20]),
                 ['data-dialog' => 'size=auto']

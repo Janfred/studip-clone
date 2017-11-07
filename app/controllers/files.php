@@ -243,7 +243,7 @@ class FilesController extends AuthenticatedController
         $to_plugin = Request::get('to_plugin');
         $from_plugin    = Request::get('from_plugin');
 
-        $fileref_id = Request::get('fileref_id');
+        $fileref_id = Request::getArray('fileref_id');
         $copymode   = Request::get('copymode');
 
         $user = User::findCurrent();
@@ -270,7 +270,7 @@ class FilesController extends AuthenticatedController
         $count_files   = 0;
         $count_folders = 0;
 
-        $filerefs = explode('-', $fileref_id);
+        $filerefs = $fileref_id;
         if (!empty($filerefs)) {
             
             foreach ($filerefs as $fileref) {
@@ -279,7 +279,7 @@ class FilesController extends AuthenticatedController
                     $source_plugin = PluginManager::getInstance()->getPlugin($from_plugin);
                     if (!$source_plugin) {
                         throw new Trails_Exception(404, _('Plugin existiert nicht.'));
-                    }                    
+                    }  
                     if ($source = $source_plugin->getPreparedFile($fileref, true)) {
                         if ($copymode === 'move') {
                             $result = FileManager::moveFileRef($source, $destination_folder, $user);

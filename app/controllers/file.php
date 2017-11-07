@@ -593,49 +593,49 @@ class FileController extends AuthenticatedController
         }
     }
 
-    public function choose_destination_action($fileref_id, $copymode = null)
+    public function choose_destination_action($copymode, $fileref_id = null)
     {
+
+        if (empty($fileref_id)) {
+            $fileref_id = Request::getArray('fileref_id');
+        }
+        $this->copymode = $copymode;
+        $this->fileref_id = $fileref_id;
      
         if (Request::get("from_plugin")) {
-            $file_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/file/choose_destination/") + strlen("dispatch.php/file/choose_destination/"));
-            if (strpos($file_id, "?") !== false) {
-                $file_id = substr($file_id, 0, strpos($file_id, "?"));
-            }
-
-            if (strpos($file_id, "/") !== false) {
-                $copymode = substr($file_id, strlen($file_id)-4);
-                $fileref_id = str_replace('/'.$copymode, "", $file_id);
-            }
-
-            $this->copymode = $copymode;
+            
+            if (is_array($fileref_id)) {
+                $file_id = $fileref_id[0];
+            } else {
+                $file_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/file/choose_destination/".$copymode."/") + strlen("dispatch.php/file/choose_destination/".$copymode."/"));
+                if (strpos($file_id, "?") !== false) {
+                    $file_id = substr($file_id, 0, strpos($file_id, "?"));
+                }
+                $fileref_id = array(urldecode($file_id));
+            }            
+            $file_id = $fileref_id[0];
             $this->fileref_id = $fileref_id;
 
-            $file_id = urldecode($fileref_id);
-            
             $plugin = PluginManager::getInstance()->getPlugin(Request::get("from_plugin"));
             if (!$plugin) {
                 throw new Trails_Exception(404, _('Plugin existiert nicht.'));
             }
-            $this->file_ref = $plugin->getPreparedFile($file_id);       
-
+            $this->file_ref = $plugin->getPreparedFile($file_id); 
         } else {
 
-            if ($copymode) {
-                $this->copymode = $copymode;
-            }
-            $this->fileref_id = $fileref_id;
-
-            $refs = explode('-', $fileref_id);
-            $this->file_ref = FileRef::find($refs[0]);
+            if (is_array($fileref_id)) {
+                $refs = $fileref_id;
+                $this->file_ref = FileRef::find($refs[0]);
+            } else {
+                $this->file_ref = FileRef::find($fileref_id);
+                $this->fileref_id = array($fileref_id);
+            }            
         }
 
-        $refs = explode('-', $fileref_id);
-        $first_ref = $this->file_ref;
-        
-        if ($first_ref && Request::submitted("from_plugin")) {
+        if ($this->file_ref && Request::submitted("from_plugin")) {
             $this->parent_folder = $this->file_ref->foldertype;
-        } elseif ($first_ref) {
-            $this->parent_folder = Folder::find($first_ref->folder_id);
+        } elseif ($this->file_ref) {
+            $this->parent_folder = Folder::find($this->file_ref->folder_id);
         } elseif (!Request::submitted("from_plugin")) {
             $folder = Folder::find($refs[0]);
             if ($folder) {
@@ -1419,10 +1419,12 @@ class FileController extends AuthenticatedController
             foreach ($ids as $id) {
 
                 if (Request::get("from_plugin")) {
-                    if ($plugin->isFolder($id)) {
-                        $file_area_objects[] = $plugin->getFolder($id);
-                    } else {
-                        $file_area_objects[] = $plugin->getPreparedFile($id, true);
+                    $fa_object = $plugin->getFolder($id);
+                    if (!$fa_object) {
+                        $fa_object = $plugin->getPreparedFile($id, true);
+                    }
+                    if ($fa_object) {
+                        $file_area_objects[] = $fa_object;
                     }                  
                 } else {
                 //check if the ID references a FileRef:
@@ -1468,12 +1470,10 @@ class FileController extends AuthenticatedController
             }
         } elseif (Request::submitted('copy')) {
             //bulk copying
-            $selected_elements = Request::getArray('ids');
-            $this->redirect('file/choose_destination/' . implode('-', $selected_elements) . '/copy');
+            $this->redirect($this->url_for('file/choose_destination/copy', ['fileref_id' => Request::getArray('ids')]));
         } elseif (Request::submitted('move')) {
             //bulk moving
-            $selected_elements = Request::getArray('ids');
-            $this->redirect('file/choose_destination/' . implode('-', $selected_elements) . '/move');
+            $this->redirect($this->url_for('file/choose_destination/move', ['fileref_id' => Request::getArray('ids')]));
         } elseif (Request::submitted('delete')) {
             //bulk deleting
             $errors = array();
@@ -1483,15 +1483,25 @@ class FileController extends AuthenticatedController
             $user = User::findCurrent();
             $selected_elements = Request::getArray('ids');
             foreach ($selected_elements as $element) {
-                if ($file_ref = FileRef::find($element)) {
-                    $parent_folder_id = $file_ref->folder_id;
+                
+                if (Request::get("from_plugin")) {
+                    $foldertype = $plugin->getFolder($element);
+                    if (!$foldertype) {
+                        $file_ref = $plugin->getPreparedFile($element, true);
+                    }                  
+                } else {
+                    $file_ref = FileRef::find($element);
+                    if(!$file_ref) {
+                        $foldertype = FileManager::getTypedFolder($element);
+                    }
+                }
+                
+                if ($file_ref) {
                     $result = $parent_folder->deleteFile($element);
                     if (!is_array($result)) {
                         $count_files += 1;
                     }
-                } elseif ($folder = Folder::find($element)) {
-                    $parent_folder_id = $folder->parent_id;
-                    $foldertype = $folder->getTypedFolder();
+                } elseif ($foldertype) {
                     $folder_files = count($foldertype->getFiles());
                     $folder_subfolders = count($foldertype->getSubfolders());
                     $result = FileManager::deleteFolder($foldertype, $user);

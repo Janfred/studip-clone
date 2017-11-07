@@ -9,8 +9,8 @@ if (Request::get('from_plugin')) {
 if (Request::get('range_type')) {
     $options['range_type'] = Request::get('range_type');
 }
-if (Request::get('fileref_id')) {
-    $options['fileref_id'] = Request::get('fileref_id');
+if (Request::getArray('fileref_id')) {
+    $options['fileref_id'] = Request::getArray('fileref_id');
 }
 if (Request::get('isfolder')) {
     $options['isfolder'] = Request::get('isfolder');
@@ -71,7 +71,7 @@ jQuery(function ($) {
 <div data-dialog-button>
     <?= Studip\LinkButton::create(
         _('Zurück'),
-        $controller->url_for('file/choose_destination/' . $options['fileref_id'], $options),
+        $controller->url_for('file/choose_destination/' . $options['copymode'], $options),
         ['data-dialog' => 'size=auto']
     ) ?>
 </div>
