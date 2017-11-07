@@ -43,6 +43,14 @@ use Studip\Button, Studip\LinkButton;
 
         <table class="default">
             <caption>
+                <div class="actions" title="<?= _('Gesamt (aktiv/inaktiv)') ?>">
+                    <?= sprintf(
+                        _('%u Plugins (%u/%u)'),
+                        count($plugins),
+                        count(array_filter($plugins, function ($p) { return $p['enabled']; })),
+                        count(array_filter($plugins, function ($p) { return !$p['enabled']; }))
+                    ) ?>
+                </div>
                 <?= _('Verwaltung von Plugins') ?>
             </caption>
             <thead>
