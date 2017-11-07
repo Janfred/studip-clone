@@ -1,11 +1,4 @@
-<form class="default" action="<?= $controller->url_for('course/statusgroups/batch_save_groups') ?>" method="post">
-    <section>
-        <label>
-            <?= _('Gruppengröße') ?>
-            <input type="number" name="size" value="<?= intval($size) ?>" min="0">
-            <?= $different_sizes ? '(' . _('verschiedene Werte') . ')' : '' ?>
-        </label>
-    </section>
+<form class="default" action="<?= $controller->url_for('course/statusgroups/batch_save_groups_selfassign') ?>" method="post">
     <section>
         <label>
             <input type="checkbox" name="selfassign" value="1"<?= $selfassign == 1 ? ' checked' : '' ?>>

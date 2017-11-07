@@ -1,6 +1,8 @@
 <?php
-    if ($edit) {
-        echo $this->render_partial('course/statusgroups/_edit_groups', array('groups' => $groups));
+    if ($edit_size) {
+        echo $this->render_partial('course/statusgroups/_edit_groups_size', array('groups' => $groups));
+    } else if ($edit_selfassign) {
+        echo $this->render_partial('course/statusgroups/_edit_groups_selfassign', array('groups' => $groups));
     } else if ($askdelete) {
         echo $this->render_partial('course/statusgroups/_askdelete_groups', array('groups' => $groups));
     } else if ($movemembers) {

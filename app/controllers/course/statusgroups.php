@@ -834,10 +834,25 @@ class Course_StatusgroupsController extends AuthenticatedController
                     $this->groups = SimpleCollection::createFromArray(
                         Statusgruppen::findMany($groups))->orderBy('position, name');
                     switch (Request::option('groups_action')) {
-                        case 'edit':
-                            PageLayout::setTitle(_('Einstellungen bearbeiten'));
-                            $this->edit = true;
+                        case 'edit_size':
+                            PageLayout::setTitle(_('Gruppengröße bearbeiten'));
+                            $this->edit_size = true;
+
                             $sizes = array();
+
+                            // Check for diverging values on all groups.
+                            foreach ($this->groups as $group) {
+                                $sizes[$group->size] = true;
+                            }
+
+                            // Get default group size
+                            $this->size = max(array_keys($sizes));
+
+                            break;
+                        case 'edit_selfassign':
+                            PageLayout::setTitle(_('Selbsteintrag bearbeiten'));
+                            $this->edit_selfassign = true;
+
                             $selfassign = 0;
                             $exclusive = 0;
                             $selfassign_start = array();
@@ -845,65 +860,40 @@ class Course_StatusgroupsController extends AuthenticatedController
 
                             // Check for diverging values on all groups.
                             foreach ($this->groups as $group) {
-                                $sizes[$group->size] = true;
-                                if ($group->selfassign == 1) {
+                                if ($group->selfassign = 1) {
                                     $selfassign++;
                                 }
                                 if ($group->selfassign == 2) {
                                     $selfassign++;
                                     $exclusive++;
                                 }
-                                if ($group->selfassign_start) {
-                                    $selfassign_start[$group->selfassign_start] = true;
-                                }
-                                if ($group->selfassign_end) {
-                                    $selfassign_end[$group->selfassign_end] = true;
-                                }
+                                $selfassign_start[$group->selfassign_start] = true;
+                                $selfassign_end[$group->selfassign_end] = true;
                             }
 
-                            // Get default group size
-                            $this->size = max(array_keys($sizes));
-
-                            // Only one entry => all groups have same size.
-                            if (count($sizes) == 1) {
-                                $this->different_sizes = 0;
-                            } else {
-                                $this->different_sizes = 1;
+                            if ($selfassign > 0) {
+                                $this->selfassign = true;
                             }
 
-                            // Selfassign enabled for all selected groups?
-                            if ($selfassign == 0) {
-                                $this->selfassign = 0;
-                            } else if ($selfassign == count($groups)) {
-                                $this->selfassign = 1;
-                            } else {
-                                $this->selfassign = -1;
-                            }
-
-                            // Exclusive entry set for all selected groups?
-                            if ($exclusive == 0) {
-                                $this->exclusive = 0;
-                            } else if ($exclusive == count($groups)) {
-                                $this->exclusive = 1;
-                            } else {
-                                $this->exclusive = -1;
+                            if ($exclusive > 0) {
+                                $this->exclusive = true;
                             }
 
                             // Selfassign start time set for all selected groups?
-                            if (count($selfassign_start) == 1) {
+                            if (count($selfassign_start) <= 1) {
                                 // Just one entry, take it as value for all.
                                 $start = array_pop(array_keys($selfassign_start));
-                                $this->selfassign_start = $start ? date('d.m.Y H:i', $start) : date('d.m.Y H:i');
+                                $this->selfassign_start = $start ? date('d.m.Y H:i', $start) : '';
                             } else {
                                 // Different entries, mark this.
                                 $this->selfassign_start = -1;
                             }
 
                             // Selfassign end time set for all selected groups?
-                            if (count($selfassign_end) == 1) {
+                            if (count($selfassign_end) <= 1) {
                                 // Just one entry, take it as value for all.
                                 $end = array_pop(array_keys($selfassign_end));
-                                $this->selfassign_end = $end ? date('d.m.Y H:i', $end) : date('d.m.Y H:i');
+                                $this->selfassign_end = $end ? date('d.m.Y H:i', $end) : '';
                             } else {
                                 // Different entries, mark this.
                                 $this->selfassign_end = -1;
@@ -984,18 +974,50 @@ class Course_StatusgroupsController extends AuthenticatedController
      *
      * @throws Trails_Exception 403 if access not allowed with current permission level.
      */
-    public function batch_save_groups_action()
+    public function batch_save_groups_size_action()
     {
         if ($this->is_tutor) {
             CSRFProtection::verifyUnsafeRequest();
             $groups = Statusgruppen::findMany(Request::getArray('groups'));
+
             foreach ($groups as $g) {
                 StatusgroupsModel::updateGroup($g->id, $g->name,
                     $g->position, $this->course_id,
                     Request::int('size', 0),
-                    Request::int('selfassign', 0) + Request::int('exclusive', 0),
-                    strtotime(Request::get('selfassign_start', 'now')),
-                    strtotime(Request::get('selfassign_end', 0)),
+                    $g->selfassign, $g->selfassign_start, $g->selfassign_end,
+                    false);
+            }
+            PageLayout::postSuccess(_('Die Einstellungen der ausgewählten Gruppen wurden gespeichert.'));
+            $this->relocate('course/statusgroups');
+        } else {
+            throw new Trails_Exception(403);
+        }
+    }
+
+    /**
+     * Sets data for several groups at once.
+     *
+     * @throws Trails_Exception 403 if access not allowed with current permission level.
+     */
+    public function batch_save_groups_selfassign_action()
+    {
+        if ($this->is_tutor) {
+            CSRFProtection::verifyUnsafeRequest();
+            $groups = Statusgruppen::findMany(Request::getArray('groups'));
+
+            $selfassign = Request::int('selfassign', 0);
+            $selfassign_start = 0;
+            $selfassign_end = 0;
+            if ($selfassign) {
+                $selfassign += Request::int('exclusive', 0);
+                $selfassign_start = strtotime(Request::get('selfassign_start', 'now'));
+                $selfassign_end = strtotime(Request::get('selfassign_end', 0));
+            }
+
+            foreach ($groups as $g) {
+                StatusgroupsModel::updateGroup($g->id, $g->name,
+                    $g->position, $this->course_id, $g->size,
+                    $selfassign, $selfassign_start, $selfassign_end,
                     false);
             }
             PageLayout::postSuccess(_('Die Einstellungen der ausgewählten Gruppen wurden gespeichert.'));
