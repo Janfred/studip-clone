@@ -342,7 +342,7 @@ STUDIP.Blubber = {
         }
         jQuery.each(file_info, function (index, file) {
             if (file.size > 0) {
-                data.append(index, file);
+                data.append(index, file, file.name.normalize());
                 files += 1;
             }
         });
