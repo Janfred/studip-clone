@@ -111,4 +111,40 @@ class ArchiveController extends AuthenticatedController
     }
     
     
+    public function delete_action($course_id = null)
+    {
+        $this->findArchivedCourse($course_id);
+        if ($this->course) {
+            $course_name = $this->course->name;
+            if ($this->course->delete()) {
+                PageLayout::postSuccess(
+                    sprintf(
+                        _('Die Veranstaltung %1$s wurde aus dem Archiv gelöscht!'),
+                        $course_name
+                    )
+                );
+            } else {
+                PageLayout::postError(
+                    sprintf(
+                        _('Fehler beim Löschen der Veranstaltung %1$s aus dem Archiv!'),
+                        $course_name
+                    )
+                );
+            }
+        }
+
+        //This action is called from the course archive search page.
+        //Because of that we should redirect to that page
+        //when this action is finished:
+        $this->redirect(
+            URLHelper::getURL(
+                'dispatch.php/search/archive',
+                [
+                    'criteria' => Request::get('criteria'),
+                    'selectedSemester' => Request::get('selectedSemester'),
+                    'selectedDepartment' => Request::get('selectedDepartment')
+                ]
+            )
+        );
+    }
 }
