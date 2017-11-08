@@ -2,9 +2,7 @@
     <colgroup>
         <col width="40">
         <col>
-    <? if (!$moderator_list) : ?>
         <col width="48">
-    <? endif ?>
     </colgroup>
     <caption>
         <?= $title ?>
@@ -13,9 +11,7 @@
         <tr>
             <th data-sort="false"></th>
             <th data-sort="text"><?= _('Name') ?></th>
-        <? if (!$moderator_list) : ?>
             <th data-sort="false" class="actions"><?= _('Aktionen') ?></th>
-        <? endif ?>
         </tr>
     </thead>
     <tbody>
@@ -34,7 +30,6 @@
                     <?= htmlReady($fullname) ?>
                 </a>
             </td>
-        <? if (!$moderator_list) : ?>
             <td class="actions">
                 <a href="<?= $controller->url_for('messages/write', array('rec_uname' => $m['username'])) ?>"
                    data-dialog="size=50%">
@@ -44,7 +39,6 @@
                     <?= $this->render_partial('course/studygroup/_members_options.php', compact('m')) ?>
                 <? endif ?>
             </td>
-        <? endif ?>
         </tr>
     <? endforeach ?>
     </tbody>
