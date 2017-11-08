@@ -113,6 +113,10 @@ class ArchiveController extends AuthenticatedController
     
     public function delete_action($course_id = null)
     {
+        if (archiv_check_perm($course_id) != 'admin') {
+            throw new AccessDeniedException();
+        }
+
         $this->findArchivedCourse($course_id);
         if ($this->course) {
             $course_name = $this->course->name;
