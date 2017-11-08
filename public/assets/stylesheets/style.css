@@ -4197,6 +4197,7 @@ a.button,
 button.button {
   background: white;
   border: 1px solid #28497c;
+  border-radius: 0;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -5677,6 +5678,7 @@ a:hover.calhead {
   .calhead label {
     background: white;
     border: 1px solid #28497c;
+    border-radius: 0;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -8518,6 +8520,7 @@ table.default tr.subcourses td:nth-child(-n+4) {
 .ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button {
   background: white;
   border: 1px solid #28497c;
+  border-radius: 0;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
