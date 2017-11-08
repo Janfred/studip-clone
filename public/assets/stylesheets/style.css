@@ -4738,10 +4738,10 @@ input.quicksearchbox {
 .ui-autocomplete {
   z-index: 99999;
 }
-.QuickSearchSelect {
+.quicksearch_select {
   width: calc(100% - 32px);
 }
-.QuickSearchSelect + input[type=submit] {
+.quicksearch_select + input[type=submit] {
   float: none;
   margin-left: 0px;
   height: 30px;

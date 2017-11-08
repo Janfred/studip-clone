@@ -16,7 +16,7 @@ if ($withButton) : ?>
             print ' '.$attr_name.'="'.$attr_value.'"';
         }
     }
-    ?> name="<?= $name ?>" class="QuickSearchSelect <?= array_key_exists('class', $withAttributes) ? htmlReady($withAttributes['class']) : '' ?>">
+    ?> name="<?= $name ?>" class="quicksearch_select <?= array_key_exists('class', $withAttributes) ? htmlReady($withAttributes['class']) : '' ?>">
 <? if (count($searchresults)) : ?>
   <? foreach ($searchresults as $result) : ?>
   <option value="<?= htmlReady($result[0]) ?>"><?= htmlReady($result[1]) ?></option>
