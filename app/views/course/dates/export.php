@@ -37,7 +37,10 @@
             }
             ?>
             <tr>
-                <td width="25%"><?= htmlReady($date['date'])  ?></td>
+                <td width="25%">
+                    <div><?= htmlReady($date['date'])  ?></div>
+                    <div>(<?= htmlReady($date['type']) ?>)</div>
+                </td>
                 <td width="25%"><?= htmlReady($date['title']) ?></td>
                 <td width="25%">
                     <? if (count($date['related_persons']) != $lecturer_count) : ?>

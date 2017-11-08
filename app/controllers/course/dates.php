@@ -332,7 +332,8 @@ class Course_DatesController extends AuthenticatedController
                         'description' => $description,
                         'start' => $singledate->getStartTime(),
                         'related_persons' => $singledate->getRelatedPersons(),
-                        'room' => $singledate->getRoom() ?: $singledate->raum
+                        'room' => $singledate->getRoom() ?: $singledate->raum,
+                        'type' => $GLOBALS['TERMIN_TYP'][$singledate->getDateType()]['name']
                     );
                 } elseif ($singledate->getComment()) {
                     $dates[] = array(
@@ -341,7 +342,8 @@ class Course_DatesController extends AuthenticatedController
                         'description' => '',
                         'start' => $singledate->getStartTime(),
                         'related_persons' => array(),
-                        'room' => ''
+                        'room' => '',
+                        'type' => $GLOBALS['TERMIN_TYP'][$singledate->getDateType()]['name']
                     );
                 }
             }
