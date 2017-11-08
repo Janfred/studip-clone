@@ -440,7 +440,7 @@
                         });
                     }
                     if (options.blob) {
-                        formData.append(paramName, options.blob, file.name.normalize());
+                        formData.append(paramName, options.blob, file.name);
                     } else {
                         $.each(options.files, function (index, file) {
                             // This check allows the tests to run with
