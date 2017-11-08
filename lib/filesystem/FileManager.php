@@ -1062,6 +1062,7 @@ class FileManager
         }
 
         $source_folder->parent_id = $destination_folder->getId();
+        $source_folder->range_id = $destination_folder->range_id;
         $source_folder->store();
         return $source_folder;
     }
