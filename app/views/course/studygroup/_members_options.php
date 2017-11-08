@@ -10,7 +10,7 @@
     </a>
 <? endif ?>
 
-<? if ($m['user_id'] !== $GLOBALS['user']->id && !array_key_exists($m['user_id'], $moderators)): ?>
+<? if ($m['user_id'] !== $GLOBALS['user']->id && $GLOBALS['perm']->have_studip_perm('dozent', $sem_id)): ?>
     <a href="<?=$controller->url_for('course/studygroup/edit_members/'.$sem_id.'/remove?user='.$m['username'])?>">
         <?= Icon::create('trash', 'clickable', ['title' => _('Rauswerfen')])->asImg(20)?>
     </a>
