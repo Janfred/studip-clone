@@ -121,6 +121,19 @@ if ($navigation) {
     <? /* <div id="layout_push"></div> */ ?>
 </div>
 
+<div id="qr_code" class="questionnaire_qr_code">
+    <div>
+        <?= Assets::img("logos/logoklein.png", array('style' => "height: 40px;")) ?>
+    </div>
+    <div class="code"></div>
+    <div>
+        <span class="url"></span>
+    </div>
+    <div>
+        <span class="description"></span>
+    </div>
+</div>
+
 
     <?= SkipLinks::getHTML() ?>
 </body>

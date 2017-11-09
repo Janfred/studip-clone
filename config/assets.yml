@@ -63,6 +63,7 @@ javascripts:
     - javascripts/vendor/lodash.underscore-3.10.1.js
     - javascripts/l10n.js
     - javascripts/vendor/chartist.min.js
+    - javascripts/vendor/qrcode.min.js
     - javascripts/init.js
 
     - javascripts/vendor/select2-4.0.3.min.js
@@ -106,6 +107,7 @@ javascripts:
     - javascripts/dates.js
     - javascripts/tour.js
     - javascripts/questionnaire.js
+    - javascripts/qrcode.js
     - javascripts/tables.js
     - javascripts/start.js
     - javascripts/responsive.js
