@@ -81,7 +81,7 @@ STUDIP.Messages = {
     upload_files: function (files) {
         for (var i = 0; i < files.length; i++) {
             var fd = new FormData();
-            fd.append('file', files[i], files[i].name.normalize());
+            fd.append('file', files[i], files[i].name);
             var statusbar = jQuery("#statusbar_container .statusbar").first().clone().show();
             statusbar.appendTo("#statusbar_container");
             fd.append('message_id', jQuery("#message_id").val());
