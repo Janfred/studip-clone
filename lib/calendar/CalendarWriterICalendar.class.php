@@ -280,7 +280,7 @@ class CalendarWriteriCalendar extends CalendarWriter
         //  $result .= 'DTSTAMP:' . $this->_exportDateTime(time()) . $this->newline;
         $result .= "END:VEVENT" . $this->newline;
 
-        return utf8_encode($result);
+        return $result;
     }
 
     /**

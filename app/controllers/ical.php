@@ -71,7 +71,7 @@ class iCalController extends StudipController
             $this->response->add_header('Content-Transfer-Encoding', 'binary');
             $this->response->add_header('Pragma', 'public');
             $this->response->add_header('Cache-Control', 'private');
-            $this->response->add_header('Content-Length', mb_strlen($content));
+            $this->response->add_header('Content-Length', strlen($content));
             $this->render_text($content);
         } else {
             // delayed response to prevent brute force attacks ???
