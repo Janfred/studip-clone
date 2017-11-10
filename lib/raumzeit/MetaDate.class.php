@@ -607,7 +607,7 @@ class MetaDate
 
         // get the first presence date after sem_begin
         $day_of_week = date('l', strtotime('Sunday + ' . $this->cycles[$metadate_id]->day . ' days'));
-        $stamp = strtotime('this ' . $day_of_week, $sem_begin);
+        $stamp = strtotime('this week ' . $day_of_week, $sem_begin);
 
         $start_time = mktime(
             (int)$this->cycles[$metadate_id]->start_stunde,     // Hour
@@ -630,6 +630,9 @@ class MetaDate
 
             // if dateExists is true, the singledate will not be created. Default is of course to create the singledate
             $dateExists = false;
+
+            // do not create singledates if they are earlier than the semester start
+            if ($end_time < $sem_begin) $dateExists = true;
 
             // do not create singledates, if they are earlier then the chosen start-week
             if ($start_woche > $week || (isset($end_woche) && $week > $end_woche)) $dateExists = true;

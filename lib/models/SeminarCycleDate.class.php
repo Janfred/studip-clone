@@ -438,9 +438,7 @@ class SeminarCycleDate extends SimpleORMap
         $ret = array();
 
         if ($startAfterTimeStamp == 0) {
-            $sem_begin = $course->start_semester->vorles_beginn;
-        } else {
-            $sem_begin = $startAfterTimeStamp;
+            $startAfterTimeStamp = $course->start_semester->vorles_beginn;
         }
 
         // check if cycle has a fix end (end_offset == null -> endless)
@@ -457,7 +455,7 @@ class SeminarCycleDate extends SimpleORMap
         }
 
         $semester = Semester::findBySQL('beginn <= :ende AND ende >= :start',
-                array('start' => $sem_begin, 'ende' => $sem_end));
+                array('start' => $startAfterTimeStamp, 'ende' => $sem_end));
 
         foreach ($semester as $val) {
 
@@ -473,13 +471,7 @@ class SeminarCycleDate extends SimpleORMap
                     $corr = 0;
                 }
 
-                if ($val['vorles_beginn'] < $sem_begin) {
-                    $start = $sem_begin;
-                } else {
-                    $start = $val['vorles_beginn'];
-                }
-
-                $ret[$val['semester_id']] = $this->createSemesterTerminSlots($start, $val['vorles_ende'], $startAfterTimeStamp, $corr);
+                $ret[$val['semester_id']] = $this->createSemesterTerminSlots($val['vorles_beginn'], $val['vorles_ende'], $startAfterTimeStamp, $corr);
         }
         return $ret;
     }
@@ -515,7 +507,7 @@ class SeminarCycleDate extends SimpleORMap
 
         // get the first presence date after sem_begin
         $day_of_week = date('l', strtotime('Sunday + ' . $this->weekday . ' days'));
-        $stamp = strtotime('this ' . $day_of_week, $sem_begin);
+        $stamp = strtotime('this week ' . $day_of_week, max($sem_begin, $startAfterTimeStamp));
 
         $start = explode(':', $this->start_time);
 
@@ -556,6 +548,11 @@ class SeminarCycleDate extends SimpleORMap
 
             // if dateExists is true, the singledate will not be created. Default is of course to create the singledate
             $dateExists = false;
+
+            // do not create singledates if they are earlier than the semester start
+            if ($end_time < $sem_begin) {
+                $dateExists = true;
+            }
 
             /*
              * We only create dates, which do not already exist, so we do not overwrite existing dates.
