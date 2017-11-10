@@ -2048,7 +2048,7 @@ function readfile_chunked($filename, $start = null, $end = null) {
                 $chunksize = $end - $p + 1;
             }
             $buffer = fread($handle, $chunksize);
-            $bytes += mb_strlen($buffer);
+            $bytes += strlen($buffer);
             echo $buffer;
         }
         fclose($handle);
