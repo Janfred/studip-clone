@@ -93,15 +93,15 @@ class PluginRepository
                 }
 
                 $meta_data = array(
-                    'version'     => (string)$release['version'],
-                    'url'         => (string)$release['url'],
-                    'description' => (string)$plugin['description'],
-                    'plugin_url'  => (string)$plugin['homepage'],
-                    'image'       => (string)$plugin['image'],
-                    'score'       => (string)$plugin['score']
+                    'version'     => (string) $release['version'],
+                    'url'         => (string) $release['url'],
+                    'description' => (string) $plugin['description'],
+                    'plugin_url'  => (string) $plugin['homepage'],
+                    'image'       => (string) $plugin['image'],
+                    'score'       => (string) $plugin['score']
                 );
 
-                $this->registerPlugin((string)$plugin['name'], $meta_data);
+                $this->registerPlugin((string) $plugin['name'], $meta_data);
             }
         }
     }
