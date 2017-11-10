@@ -647,7 +647,7 @@ class FileManager
         }
 
         if ($source->user_id === $user->id && !$destination_plugin && !$source_plugin) {
-             
+
             // the user is the owner of the file: we can simply make a new reference to it
              $new_reference = new FileRef();
              $new_reference->file_id     = $source->file_id;
@@ -656,21 +656,21 @@ class FileManager
              $new_reference->description = $source->description;
              $new_reference->user_id     = $user->id;
              $new_reference->content_terms_of_use_id = $source->content_terms_of_use_id;
- 
+
              if ($new_reference->store()) {
                  return $new_reference;
              }
- 
+
              return[_('Neue Referenz kann nicht erzeugt werden!')];
-            
+
         } else {
 
             if ($source_plugin && $source_plugin->getFolder($source->id)){
 
                 $source = $source_plugin->getFolder($source->id);
- 
+
                 $new_folder = new StandardFolder($source);
-                $new_folder->user_id = $user->id;    
+                $new_folder->user_id = $user->id;
                 $new_folder->name = $source->name;
 
                 $destination_folder->createSubfolder($new_folder);
@@ -683,34 +683,34 @@ class FileManager
                     foreach ($source->getFiles() as $subfile) {
                         $subfile_ref = $source_plugin->getPreparedFile($subfile->id, true);
                         $return[] = self::copyFileRef($subfile_ref, $new_folder, $user);
-                    }                    
+                    }
                 }
                 return $new_folder;
-                
-            } else {            
+
+            } else {
 
                 if (!$source->path_to_blob && $source->file_id) {
                     $source->path_to_blob = File::find($source->file_id)->getPath();
                 }
 
                 $file_meta = array(
-                    'name' => [$source->name], 
+                    'name' => [$source->name],
                     'error' => [0],
                     'type' => [$source->mime_type],
                     'tmp_name' => [$source->path_to_blob],
                     'size' => [$source->size]);
-            
-                $fcopy = self::handleFileUpload($file_meta, $destination_folder, $user->id);            
+
+                $fcopy = self::handleFileUpload($file_meta, $destination_folder, $user->id);
                 $new_reference = $fcopy["files"][0];
                 $new_reference->content_terms_of_use_id = $source->content_terms_of_use_id;
 
             }
             if ($destination_plugin) {
-                return $new_reference; 
+                return $new_reference;
             }
 
             if ($new_reference->store()) {
-                return $new_reference;            
+                return $new_reference;
             } else {
                 $new_reference->delete();
                 return [$error ?: _('Daten konnten nicht kopiert werden!')];
@@ -757,19 +757,19 @@ class FileManager
         }
 
         if (!$source_plugin && !$destination_plugin) {
-           
+
             $source->folder_id = $destination_folder->id;
             if ($source->store()) {
                 return $source;
-            }    
+            }
             return [_('Datei konnte nicht gespeichert werden.')];
 
         } else {
             $copy = self::copyFileRef($source, $destination_folder, $user);
             if(!is_array($copy)) {
-                $source_folder->deleteFile($source->getId());                
+                $source_folder->deleteFile($source->getId());
             }
-            return $copy; 
+            return $copy;
         }
 
     }
@@ -1425,7 +1425,7 @@ class FileManager
         if ($url_parts['scheme'] === 'ftp') {
             if (preg_match('/[^a-z0-9_.-]/i', $url_parts['host'])) { // exists umlauts ?
                 $IDN = new idna_convert();
-                $out = $IDN->encode(utf8_encode($url_parts['host'])); // false by error
+                $out = $IDN->encode($url_parts['host']); // false by error
                 $url_parts['host'] = $out ?: $url_parts['host'];
             }
 
@@ -1485,7 +1485,7 @@ class FileManager
         }
         if (preg_match('/[^a-z0-9_.-]/i', $host)) { // exists umlauts ?
             $IDN = new idna_convert();
-            $out = $IDN->encode(utf8_encode($host)); // false by error
+            $out = $IDN->encode($host); // false by error
             $host = $out ?: $host;
         }
         $socket = @fsockopen(($ssl ? 'ssl://' : '') . $host, $port, $errno, $errstr, 10);

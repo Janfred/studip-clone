@@ -280,12 +280,8 @@ function download_config($range_id, $config_id, $module) {
         $extern->parse();
         $extern->config['config_type'] = $module;
 
-        // utf8-encode all values
-        $config = $extern->config;
-        array_walk_recursive($config, 'utf8Encode');
-
         // create json, working only with utf8-encoded data
-        $extern_attributes = json_encode($config);
+        $extern_attributes = json_encode($extern->config);
 
         echo indentJson($extern_attributes);
 
@@ -361,24 +357,3 @@ function indentJson($str) {
     return $strOut;
 }
 
-/**
- * for use with functions like array_walk. utf8_encode's the passed parameters
- *
- * @param  mixed  $value  the array-value
- * @param  mixed  $key    the array-key
- */
-function utf8Encode(&$value, &$key) {
-    $value = utf8_encode($value);
-    $key   = utf8_encode($key);
-}
-
-/**
- * for use with functions like array_walk. utf8_decode's the passed parameters
- *
- * @param  mixed  $value  the array-value
- * @param  mixed  $key    the array-key
- */
-function utf8Decode(&$value, &$key) {
-    $value = utf8_decode($value);
-    $key   = utf8_decode($key);
-}

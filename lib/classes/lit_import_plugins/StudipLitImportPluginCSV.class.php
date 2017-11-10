@@ -5,8 +5,8 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // StudipLitImportPluginCSV.class.php
-// 
-// 
+//
+//
 // Copyright (c) 2006 Jan Kulmann <jankul@zmml.uni-bremen.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -28,14 +28,14 @@ require_once 'StudipLitImportPluginAbstract.class.php';
 /**
 *
 *
-* 
 *
-* @access   public  
-* @author   Jan Kulmann <jankul@zmml.uni-bremen.de> 
-* @package  
+*
+* @access   public
+* @author   Jan Kulmann <jankul@zmml.uni-bremen.de>
+* @package
 **/
 class StudipLitImportPluginCSV extends StudipLitImportPluginAbstract {
-    
+
     function __construct(){
         // immer erst den parent-contructor aufrufen!
         parent::__construct();
@@ -44,7 +44,7 @@ class StudipLitImportPluginCSV extends StudipLitImportPluginAbstract {
     function parse($data){
         return $data;
     }
-    
+
     function import($data) {
         global $auth, $_msg;
             $msg = &$_msg;
@@ -74,19 +74,14 @@ class StudipLitImportPluginCSV extends StudipLitImportPluginAbstract {
                     $fields["dc_publisher"] .= " ".$parts[3];
                     $fields["dc_date"]       = $parts[4]."-01-01";
                     $fields["dc_subject"]    = $parts[5];
-                    $fields["dc_identifier"] = " ISBN: ".$parts[6];             
+                    $fields["dc_identifier"] = " ISBN: ".$parts[6];
 
-                                /*if ($fields["dc_identifier"]) $fields["dc_identifier"] = utf8_decode($fields["dc_identifier"]);
-                                if ($fields["dc_publisher"]) $fields["dc_publisher"] = utf8_decode($fields["dc_publisher"]);
-                                if ($fields["dc_title"]) $fields["dc_title"] = utf8_decode($fields["dc_title"]);
-                                if ($fields["dc_creator"]) $fields["dc_creator"] = utf8_decode($fields["dc_creator"]);
-                                if ($fields["dc_subject"]) $fields["dc_subject"] = utf8_decode($fields["dc_subject"]);*/
 
                                 if (!trim($fields["dc_creator"])) $fields["dc_creator"] = "Unbekannt";
                                 if (!trim($fields["dc_title"])) $fields["dc_title"] = "";
 
                     if ( $fields["dc_title"] != "") array_push($fields_arr, $fields);
-                    
+
                 }
             }
 

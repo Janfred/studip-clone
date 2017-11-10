@@ -64,9 +64,7 @@ class CalendarParserICalendar extends CalendarParser
         // the CR is optional for files imported from Korganizer (non-standard)
         $data = preg_replace('/\x0D?\x0A[\x20\x09]/', '', $data);
 
-        // UTF-8 decoding
-        $v_calendar = utf8_decode($data);
-        if (!preg_match('/BEGIN:VCALENDAR(\r\n|\r|\n)([\W\w]*)END:VCALENDAR\r?\n?/', $v_calendar, $matches)) {
+        if (!preg_match('/BEGIN:VCALENDAR(\r\n|\r|\n)([\W\w]*)END:VCALENDAR\r?\n?/', $data, $matches)) {
             $_calendar_error->throwError(ErrorHandler::ERROR_CRITICAL, _("Die Import-Datei ist keine gültige iCalendar-Datei!"));
             return false;
         }

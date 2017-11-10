@@ -5,8 +5,8 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // StudipLitImportPluginEndNote.class.php
-// 
-// 
+//
+//
 // Copyright (c) 2006 Jan Kulmann <jankul@zmml.uni-bremen.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -28,14 +28,14 @@ require_once 'StudipLitImportPluginAbstract.class.php';
 /**
 *
 *
-* 
 *
-* @access   public  
-* @author   Jan Kulmann <jankul@zmml.uni-bremen.de> 
-* @package  
+*
+* @access   public
+* @author   Jan Kulmann <jankul@zmml.uni-bremen.de>
+* @package
 **/
 class StudipLitImportPluginEndNote extends StudipLitImportPluginAbstract {
-    
+
     function __construct(){
         // immer erst den parent-contructor aufrufen!
         parent::__construct();
@@ -57,7 +57,7 @@ class StudipLitImportPluginEndNote extends StudipLitImportPluginAbstract {
         }
         return $domTree;
     }
-    
+
     function import($domTree) {
         global $auth, $_msg;
             $msg = &$_msg;
@@ -124,12 +124,12 @@ class StudipLitImportPluginEndNote extends StudipLitImportPluginAbstract {
                                     $fields["dc_date"] = $y->textContent."-01-01";
                                     $dates .= $y->textContent.",";
                             }
- 
-                            if ($fields["dc_identifier"]) $fields["dc_identifier"] = utf8_decode(mb_substr($fields["dc_identifier"],0,-1));
-                            if ($fields["dc_publisher"]) $fields["dc_publisher"] = utf8_decode(mb_substr($fields["dc_publisher"],0,-1));
-                            if ($fields["dc_title"]) $fields["dc_title"] = utf8_decode(mb_substr($fields["dc_title"],0,-1));
-                            if ($fields["dc_creator"]) $fields["dc_creator"] = utf8_decode(mb_substr($fields["dc_creator"],0,-1));
-                            if ($fields["dc_subject"]) $fields["dc_subject"] = utf8_decode(mb_substr($fields["dc_subject"],0,-1));
+
+                            if ($fields["dc_identifier"]) $fields["dc_identifier"] = mb_substr($fields["dc_identifier"],0,-1);
+                            if ($fields["dc_publisher"]) $fields["dc_publisher"] = mb_substr($fields["dc_publisher"],0,-1);
+                            if ($fields["dc_title"]) $fields["dc_title"] = mb_substr($fields["dc_title"],0,-1);
+                            if ($fields["dc_creator"]) $fields["dc_creator"] = mb_substr($fields["dc_creator"],0,-1);
+                            if ($fields["dc_subject"]) $fields["dc_subject"] = mb_substr($fields["dc_subject"],0,-1);
 
                             if (!trim($fields["dc_creator"])) $fields["dc_creator"] = "Unbekannt";
                             if (!trim($fields["dc_title"])) $fields["dc_title"] = "";

@@ -230,7 +230,7 @@ class Admin_AutoinsertController extends AuthenticatedController
         $filters = array_filter(Request::getArray('filter'));
 
         if (empty($filters)) {
-            $data = array('error' => utf8_encode(_('Keine Filterkriterien gewählt')));
+            $data = array('error' => _('Keine Filterkriterien gewählt'));
         } else {
             $userlookup = new UserLookup();
             foreach ($filters as $type => $values) {

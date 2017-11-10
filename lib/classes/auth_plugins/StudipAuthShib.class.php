@@ -31,7 +31,6 @@ class StudipAuthShib extends StudipAuthSSO
             $auth = file_get_contents($this->validate_url.'/'.$_REQUEST['token']);
 
             $this->userdata = json_decode($auth, true);
-            $this->userdata = array_map('utf8_decode', $this->userdata);
 
             if (isset($this->local_domain)) {
                 $this->userdata['username'] =
@@ -117,7 +116,7 @@ class StudipAuthShib extends StudipAuthSSO
         foreach ($_SERVER as $key => $value) {
             if (mb_substr($key, 0, 10) == 'HTTP_SHIB_') {
                 $key = mb_strtolower(mb_substr($key, 10));
-                $this->userdata[$key] = utf8_decode($value);
+                $this->userdata[$key] = $value;
             }
         }
 

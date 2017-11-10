@@ -90,9 +90,6 @@ if (Request::option('com') == "do_upload_config") {
 
     $jsonconfig = json_decode($file_content_wo_tabs, true);
 
-    // utf8-decode the values after json_decode has worked on it
-    array_walk_recursive($jsonconfig, 'utf8Decode');
-
     if (!check_config($jsonconfig, Request::quoted('check_module'))) {
         PageLayout::postError(_('Die Konfigurationsdatei hat den falschen Modultyp!'));
     } else if (!store_config($range_id, $config_id, $jsonconfig)) {
