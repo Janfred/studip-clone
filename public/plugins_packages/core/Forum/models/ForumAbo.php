@@ -18,7 +18,7 @@ require_once('lib/messaging.inc.php');
 class ForumAbo
 {
     /**
-     * add the passed user as a watcher for the passed topic (including all 
+     * add the passed user as a watcher for the passed topic (including all
      * current and future childs)
      *
      * @param string $topic_id
@@ -125,14 +125,14 @@ class ForumAbo
         // notify users
         foreach ($users as $data) {
             $user_id = $data['user_id'];
-            
+
             //In cases where the user is a member of the course
             //or the topic is part of the forum of an institute
             //we must send a notification.
-            
-            
+
+
             $topic_range_type = get_object_type($topic['seminar_id']);
-            
+
             if($topic_range_type == 'sem') {
                 $user_is_course_member = CourseMember::countBySql(
                     'user_id = :user_id AND seminar_id = :seminar_id',
@@ -141,7 +141,7 @@ class ForumAbo
                         'seminar_id' => $topic['seminar_id']
                     ]
                 );
-                
+
                 if(!$user_is_course_member) {
                     //The topic belongs to a course and the user is not
                     //a member of the course. We must not send notifications
@@ -149,16 +149,19 @@ class ForumAbo
                     continue;
                 }
             }
-            
-            
-            
-            // create subject and content
-            setTempLanguage(get_userid($user_id));
+
+
+            $user = User::find($user_id);
 
             // check if user wants an email for all or selected messages only
             $force_email = false;
             if ($messaging->user_wants_email($user_id)) {
                 $force_email = true;
+            }
+            // do not send mails when account is locked or expired
+            $expiration = UserConfig::get($user->id)->EXPIRATION_DATE;
+            if ($user->locked || ($expiration > 0 && $expiration < time())) {
+                $force_email = false;
             }
             $parent_id = ForumEntry::getParentTopicId($topic['topic_id']);
 
@@ -195,7 +198,7 @@ class ForumAbo
                     ->getValue('MAIL_AS_HTML');
 
                 StudipMail::sendMessage(
-                    User::find($user_id)->email,
+                    $user->email,
                     $subject,
                     addslashes($textMessage),
                     $userWantsHtml ? $htmlMessage : null
