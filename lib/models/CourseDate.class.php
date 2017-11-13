@@ -270,6 +270,9 @@ class CourseDate extends SimpleORMap
 
         $ex_date = new CourseExDate();
         $ex_date->setData($date);
+        if ($room = $this->getRoom()) {
+            $ex_date['resource_id'] = $room->getId();
+        }
         $ex_date->setId($ex_date->getNewId());
 
         if ($ex_date->store()) {
