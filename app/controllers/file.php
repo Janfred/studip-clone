@@ -50,7 +50,6 @@ class FileController extends AuthenticatedController
             if (strpos($folder_id, "?") !== false) {
                 $folder_id = substr($folder_id, 0, strpos($folder_id, "?"));
             }
-            $folder_id = urldecode($folder_id);
             $plugin = PluginManager::getInstance()->getPlugin(Request::get("from_plugin"));
             if (!$plugin) {
                 throw new Trails_Exception(404, _('Plugin existiert nicht.'));
@@ -604,7 +603,7 @@ class FileController extends AuthenticatedController
                 if (strpos($file_id, "?") !== false) {
                     $file_id = substr($file_id, 0, strpos($file_id, "?"));
                 }
-                $fileref_id = array(urldecode($file_id));
+                $fileref_id = array($file_id);
             }            
             $file_id = $fileref_id[0];
             $this->fileref_id = $fileref_id;
@@ -649,11 +648,9 @@ class FileController extends AuthenticatedController
         if (Request::get("from_plugin")) {
             $folder_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/file/download_folder/") + strlen("dispatch.php/file/download_folder/"));
 
-            
             if (strpos($folder_id, "?") !== false) {
                 $folder_id = substr($folder_id, 0, strpos($folder_id, "?"));
             }
-            $folder_id = urldecode($folder_id);
             $plugin = PluginManager::getInstance()->getPlugin(Request::get("from_plugin"));
             if (!$plugin) {
                 throw new Trails_Exception(404, _('Plugin existiert nicht.'));
@@ -795,7 +792,6 @@ class FileController extends AuthenticatedController
             if (strpos($folder_id, "?") !== false) {
                 $folder_id = substr($folder_id, 0, strpos($folder_id, "?"));
             }
-            $folder_id = urldecode($folder_id);
 
             $this->filesystemplugin = PluginManager::getInstance()->getPlugin(Request::get('to_plugin'));
             if (Request::get('search') && $this->filesystemplugin->hasSearch()) {
@@ -1085,7 +1081,6 @@ class FileController extends AuthenticatedController
             if (strpos($folder_id, "?") !== false) {
                 $folder_id = substr($folder_id, 0, strpos($folder_id, "?"));
             }
-            $folder_id = urldecode($folder_id);
             $plugin = PluginManager::getInstance()->getPlugin(Request::get("from_plugin"));
             if (!$plugin) {
                 throw new Trails_Exception(404, _('Plugin existiert nicht.'));
@@ -1186,7 +1181,6 @@ class FileController extends AuthenticatedController
             if (strpos($folder_id, "?") !== false) {
                 $folder_id = substr($folder_id, 0, strpos($folder_id, "?"));
             }
-            $folder_id = urldecode($folder_id);
             $plugin = PluginManager::getInstance()->getPlugin(Request::get("from_plugin"));
             if (!$plugin) {
                 throw new Trails_Exception(404, _('Plugin existiert nicht.'));
@@ -1268,7 +1262,6 @@ class FileController extends AuthenticatedController
             if (strpos($folder_id, "?") !== false) {
                 $folder_id = substr($folder_id, 0, strpos($folder_id, "?"));
             }
-            $folder_id = urldecode($folder_id);
             $plugin = PluginManager::getInstance()->getPlugin(Request::get("from_plugin"));
             if (!$plugin) {
                 throw new Trails_Exception(404, _('Plugin existiert nicht.'));
@@ -1339,7 +1332,6 @@ class FileController extends AuthenticatedController
             if (strpos($folder_id, "?") !== false) {
                 $folder_id = substr($folder_id, 0, strpos($folder_id, "?"));
             }
-            $folder_id = urldecode($folder_id);
             $plugin = PluginManager::getInstance()->getPlugin(Request::get("from_plugin"));
             if (!$plugin) {
                 throw new Trails_Exception(404, _('Plugin existiert nicht.'));
@@ -1375,7 +1367,6 @@ class FileController extends AuthenticatedController
             if (strpos($folder_id, "?") !== false) {
                 $folder_id = substr($folder_id, 0, strpos($folder_id, "?"));
             }
-            $folder_id = urldecode($folder_id);
             $plugin = PluginManager::getInstance()->getPlugin(Request::get("from_plugin"));
             if (!$plugin) {
                 throw new Trails_Exception(404, _('Plugin existiert nicht.'));
