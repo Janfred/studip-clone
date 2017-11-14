@@ -247,7 +247,11 @@ class FileController extends AuthenticatedController
             $this->render_template('file/file_details');
         } else {
             //file area object is not a FileRef: maybe it's a folder:
-            $this->folder = FileManager::getTypedFolder($file_area_object_id);
+            if (Request::get("from_plugin")) {
+                $this->folder = $plugin->getFolder($file_id);
+            } else {
+                $this->folder = FileManager::getTypedFolder($file_area_object_id);
+            }
             if (!$this->folder || !$this->folder->isVisible($GLOBALS['user']->id)) {
                 throw new AccessDeniedException();
             }

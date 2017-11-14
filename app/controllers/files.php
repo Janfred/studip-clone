@@ -19,6 +19,11 @@ class FilesController extends AuthenticatedController
 {
     protected $utf8decode_xhr = true;
 
+    function validate_args(&$args, $types = NULL)
+    {
+        reset($args);
+    }
+
     public function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
@@ -229,7 +234,7 @@ class FilesController extends AuthenticatedController
 
         $args = func_get_args();
         array_shift($args);
-        $folder_id = implode("/", $args);
+        $folder_id = implode("/", array_map("rawurlencode", $args));
 
         $this->topFolder      = $this->plugin->getFolder($folder_id);
         $this->controllerpath = 'files/system/' . $plugin_id;
