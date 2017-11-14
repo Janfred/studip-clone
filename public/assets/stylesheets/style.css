@@ -3144,7 +3144,7 @@ select.sidebar-selectlist {
   clear: both;
   height: 28px;
   position: relative;
-  top: 15px;
+  top: -1px;
   min-width: 32px;
   /*width: 100%;*/
   float: right;
