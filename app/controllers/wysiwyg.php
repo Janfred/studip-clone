@@ -142,7 +142,7 @@ class WysiwygController extends \AuthenticatedController
                 //all files were uploaded successfully:
                 $storedFiles = [];
                 foreach ($validatedFiles['files'] as $file) {
-                    if ($fileref = $wysiwyg_folder->createFile($file)) {
+                    if ($fileref = $wysiwyg_folder->createFile($file->file)) {
                         $response['files'][] = [
                             'name' => $fileref->name,
                             'type' => $fileref->file->mime_type,
