@@ -141,14 +141,12 @@ class WysiwygController extends \AuthenticatedController
 
                 //all files were uploaded successfully:
                 $storedFiles = [];
-                foreach ($validatedFiles['files'] as $file) {
-                    if ($fileref = $wysiwyg_folder->createFile($file->file)) {
-                        $response['files'][] = [
-                            'name' => $fileref->name,
-                            'type' => $fileref->file->mime_type,
-                            'url'  => $fileref->getDownloadURL()
-                        ];
-                    }
+                foreach ($validatedFiles['files'] as $fileref) {
+                    $response['files'][] = [
+                        'name' => $fileref->name,
+                        'type' => $fileref->file->mime_type,
+                        'url'  => $fileref->getDownloadURL()
+                    ];
                 }
             }
         } catch (AccessDeniedException $e) {
