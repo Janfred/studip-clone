@@ -47,9 +47,6 @@ $PLUGIN_ASSETS_PATH = $STUDIP_BASE_PATH . '/data/assets_cache';
 // path to uploaded documents (wwwrun needs write-perm there)
 $UPLOAD_PATH = $STUDIP_BASE_PATH . "/data/upload_doc";
 
-// path to uploaded user-documents (wwwrun needs write-perm there)
-$USER_DOC_PATH = $STUDIP_BASE_PATH . "/data/user_doc";
-
 // path to Stud.IP archive (wwwrun needs write-perm there)
 $ARCHIV_PATH = $STUDIP_BASE_PATH . "/data/archiv";
 
@@ -78,11 +75,11 @@ $FOP_SH_CALL = "/usr/bin/fop";                        //path to fop
 $EXTERN_SERVER_NAME = "";                               //define name, if you use special setup
 
 $ELEARNING_INTERFACE_MODULES = array(
-    "ilias4" => array(
-        "name" => "ILIAS 4",
+    "ilias5" => array(
+        "name" => "ILIAS 5",
         "ABSOLUTE_PATH_ELEARNINGMODULES" => "http://<your Ilias installation>/",
         "ABSOLUTE_PATH_SOAP" => "http://<your Ilias installation>/webservice/soap/server.php?wsdl",
-        "CLASS_PREFIX" => "Ilias4",
+        "CLASS_PREFIX" => "Ilias5",
         "auth_necessary" => true,
         "USER_AUTO_CREATE" => true,
         "USER_PREFIX" => "",
