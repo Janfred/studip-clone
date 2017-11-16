@@ -4,4 +4,4 @@ origin=core
 version=1.0
 summary=Modulverwaltung
 displayname=Modulverwaltung
-icon = ../../../assets/images/icons/16/black/module.png
+icon = ../../../assets/images/icons/black/module.svg
