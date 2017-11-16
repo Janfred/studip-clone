@@ -216,7 +216,7 @@ function getValidDeputyPerms($min_perm_only = false) {
  */
 function haveDeputyPerm($user_id='') {
     global $perm;
-    $minimum_perm = get_config('DEPUTIES_MIN_PERM');
+    $minimum_perm = Config::get()->DEPUTIES_MIN_PERM;
     if (!$user_id) {
         $user_id = $GLOBALS['user']->id;
     }
@@ -323,8 +323,8 @@ function getMyDeputySeminarsQuery($type, $sem_number_sql, $sem_number_end_sql, $
  * @return activation status of the default deputy functionality.
  */
 function isDefaultDeputyActivated() {
-    return get_config('DEPUTIES_ENABLE') &&
-        get_config('DEPUTIES_DEFAULTENTRY_ENABLE');
+    return Config::get()->DEPUTIES_ENABLE &&
+        Config::get()->DEPUTIES_DEFAULTENTRY_ENABLE;
 }
 
 /**
@@ -335,8 +335,7 @@ function isDefaultDeputyActivated() {
  *         functionality.
  */
 function isDeputyEditAboutActivated() {
-    return get_config('DEPUTIES_ENABLE') &&
-        get_config('DEPUTIES_DEFAULTENTRY_ENABLE') &&
-        get_config('DEPUTIES_EDIT_ABOUT_ENABLE');
+    return Config::get()->DEPUTIES_ENABLE &&
+        Config::get()->DEPUTIES_DEFAULTENTRY_ENABLE &&
+        Config::get()->DEPUTIES_EDIT_ABOUT_ENABLE;
 }
-?>
