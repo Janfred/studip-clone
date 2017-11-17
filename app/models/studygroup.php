@@ -122,26 +122,36 @@ class StudygroupModel
      */
     public static function accept_user($username, $sem_id)
     {
-        $query     = "SELECT user_id
+        $query = "SELECT user_id
                   FROM admission_seminar_user AS asu
-                  LEFT JOIN auth_user_md5 AS au USING (user_id)
+                  JOIN auth_user_md5 AS au USING (user_id)
                   WHERE au.username = ? AND asu.seminar_id = ?";
         $statement = DBManager::get()->prepare($query);
-        $statement->execute(array($username, $sem_id));
-        if ($data = $statement->fetch()) {
-            $accept_user_id = $data['user_id'];
-
-            $query     = "INSERT INTO seminar_user
+        $statement->execute([$username, $sem_id]);
+        if ($accept_user_id = $statement->fetchColumn()) {
+            $query = "INSERT INTO seminar_user
                         (user_id, seminar_id, status, position, gruppe,
                          notification, mkdate, comment, visible)
                       VALUES (?, ?, 'autor', 0, 8, 0, UNIX_TIMESTAMP(), '', 'yes')";
             $statement = DBManager::get()->prepare($query);
-            $statement->execute(array($accept_user_id, $sem_id));
+            $statement->execute([$accept_user_id, $sem_id]);
 
-            $query     = "DELETE FROM admission_seminar_user
+            $query = "DELETE FROM admission_seminar_user
                       WHERE user_id = ? AND seminar_id = ?";
             $statement = DBManager::get()->prepare($query);
-            $statement->execute(array($accept_user_id, $sem_id));
+            $statement->execute([$accept_user_id, $sem_id]);
+
+            // Post equivalent notifications to a regular course
+            $seminar = Seminar::getInstance($sem_id);
+            NotificationCenter::postNotification(
+                'CourseDidGetMember', $seminar, $accept_user_id
+            );
+            NotificationCenter::postNotification(
+                'CourseDidChangeMember', $seminar, $accept_user_id
+            );
+            NotificationCenter::postNotification(
+                'UserDidEnterCourse', $sem_id, $accept_user_id
+            );
         }
     }
 
@@ -155,7 +165,7 @@ class StudygroupModel
      */
     public static function deny_user($username, $sem_id)
     {
-        $query     = "DELETE FROM admission_seminar_user
+        $query = "DELETE FROM admission_seminar_user
                   WHERE user_id = ? AND seminar_id = ?";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array(
@@ -175,7 +185,7 @@ class StudygroupModel
      */
     public static function promote_user($username, $sem_id, $perm)
     {
-        $query     = "UPDATE seminar_user
+        $query = "UPDATE seminar_user
                   SET status = ?
                   WHERE Seminar_id = ? AND user_id = ?";
         $statement = DBManager::get()->prepare($query);
@@ -196,13 +206,21 @@ class StudygroupModel
      */
     public static function remove_user($username, $sem_id)
     {
-        $query     = "DELETE FROM seminar_user
+        $user_id = get_userid($username);
+
+        $query = "DELETE FROM seminar_user
                   WHERE Seminar_id = ? AND user_id = ?";
         $statement = DBManager::get()->prepare($query);
-        $statement->execute(array(
-            $sem_id,
-            get_userid($username)
-        ));
+        $statement->execute([$sem_id, $user_id]);
+
+        // Post equivalent notifications to a regular course
+        $seminar = Seminar::getInstance($sem_id);
+        NotificationCenter::postNotification(
+            'CourseDidChangeMember', $seminar, $user_id
+        );
+        NotificationCenter::postNotification(
+            'UserDidLeaveCourse', $sem_id, $user_id
+        );
     }
 
     /**
