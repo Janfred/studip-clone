@@ -794,7 +794,6 @@ table.default > tbody > tr > th {
   text-align: left;
 }
 table.default > tbody > tr > td {
-  padding-left: 1px;
   border-bottom: 1px solid #e2e3e4;
   transition: background-color 0.3s;
 }
@@ -809,7 +808,6 @@ table.default > tbody > tr.new > td {
   font-weight: bold;
 }
 table.default > tbody > tr.new > td:first-child {
-  padding-left: 0px;
   position: relative;
 }
 table.default > tbody > tr.new > td:first-child::before {
