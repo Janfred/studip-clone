@@ -363,7 +363,7 @@ function export_sem($inst_id, $ex_sem_id = 'all')
     if (count($ex_sem_class) > 0) {
         $allowed_sem_types = array();
         foreach(array_keys($ex_sem_class) as $semclassid) {
-            $allowed_sem_types += array_keys(SeminarCategories::get($semclassid)->getTypes());
+            $allowed_sem_types = array_merge($allowed_sem_types, array_keys(SeminarCategories::get($semclassid)->getTypes()));
         }
         $addquery .= " AND seminare.status IN (:status) ";
         $parameters[':status'] = $allowed_sem_types;
