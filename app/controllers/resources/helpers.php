@@ -263,7 +263,7 @@ class Resources_HelpersController extends AuthenticatedController
         }
 
         $this->response->add_header('Content-Type', 'text/csv');
-        $this->response->add_header('Content-Disposition', 'attachment; filename=' . _('Anfragenliste') . '.csv');
+        $this->response->add_header('Content-Disposition', 'attachment; ' . encode_header_parameter('filename', _('Anfragenliste') . '.csv'));
         $this->render_text(array_to_csv($data));
     }
 

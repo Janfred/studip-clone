@@ -1347,7 +1347,6 @@ function studip_utf8decode($data)
     return $data;
 }
 
-
 /**
  * Encodes a string or array from UTF-8 to Stud.IP encoding (WINDOWS-1252/ISO-8859-1 with numeric HTML-ENTITIES)
  *
@@ -1444,6 +1443,25 @@ function studip_json_encode($data, $options = 0)
     $json = json_encode($data, $options);
 
     return $json;
+}
+
+/**
+ * Encode an HTTP header parameter (e.g. filename for 'Content-Disposition').
+ *
+ * @param string $name  parameter name
+ * @param string $value parameter value
+ *
+ * @return string encoded header text (using RFC 2616 or 5987 encoding)
+ */
+function encode_header_parameter($name, $value)
+{
+    if (preg_match('/[\200-\377]/', $value)) {
+        // use RFC 2616 encoding (ext-parameter)
+        return $name . "*=UTF-8''" . urlencode($value);
+    } else {
+        // use RFC 5987 encoding (quoted-string)
+        return $name . '="' . addslashes($value) . '"';
+    }
 }
 
 /**

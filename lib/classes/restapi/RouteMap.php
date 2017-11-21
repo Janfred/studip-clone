@@ -859,9 +859,9 @@ abstract class RouteMap
         }
 
         if ($opts['disposition'] === 'attachment' || isset($opts['filename'])) {
-            $this->response['Content-Disposition'] = 'attachment';
+            $this->response['Content-Disposition'] = 'attachment; ';
             $filename = $opts['filename'] ?: $path;
-            $this->response['Content-Disposition'] .= sprintf('; filename="%s"', basename($filename));
+            $this->response['Content-Disposition'] .= encode_header_parameter('filename', basename($filename));
         }
 
         elseif ($opts['disposition'] === 'inline') {

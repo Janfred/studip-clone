@@ -210,7 +210,7 @@ if ($_SERVER['HTTPS'] == "on"){
 }
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Content-Type: $content_type");
-header("Content-Disposition: $content_disposition; filename=\"$file_name\"");
+header("Content-Disposition: $content_disposition; " . encode_header_parameter('filename', $file_name));
 
 
 Metrics::increment('core.file_download');

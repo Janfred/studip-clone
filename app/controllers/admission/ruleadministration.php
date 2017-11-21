@@ -214,7 +214,7 @@ class Admission_RuleAdministrationController extends AuthenticatedController
         );
 
         header('Content-Type: application/zip');
-        header('Content-Disposition: attachment; filename="'.$filename.'"');
+        header('Content-Disposition: attachment; ' . encode_header_parameter('filename', $filename));
         header('Content-Length: '.filesize($filepath));
         header('Pragma: public');
 

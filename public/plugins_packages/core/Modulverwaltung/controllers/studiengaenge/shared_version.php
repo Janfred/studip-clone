@@ -232,7 +232,7 @@ class SharedVersionController extends MVVController
             } else {
                 $content = $template->render();
                 $this->response->add_header('Content-type', 'application/msword');
-                $this->response->add_header('Content-Disposition', 'attachment; filename="' . $version->getDisplayName() . '.doc"');
+                $this->response->add_header('Content-Disposition', 'attachment; ' . encode_header_parameter('filename', $version->getDisplayName() . '.doc'));
                 $this->render_text($content);
             }
         }

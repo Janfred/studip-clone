@@ -276,7 +276,7 @@ function download_config($range_id, $config_id, $module) {
     // show download-content
     if ($result['c'] == 1) {
         header("Content-Type: text/plain");
-        header("Content-Disposition: attachment; filename=$config_id.cfg");
+        header("Content-Disposition: attachment; " . encode_header_parameter('filename', $config_id . '.cfg'));
         $extern->parse();
         $extern->config['config_type'] = $module;
 

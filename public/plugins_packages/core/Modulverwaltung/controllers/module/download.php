@@ -55,8 +55,8 @@ class Module_DownloadController extends MVVController
 
             $content = $template->render();
             $this->response->add_header('Content-type', 'application/msword');
-            $this->response->add_header('Content-Disposition', 'attachment; filename="'
-                    . FileManager::cleanFileName($modul->getDisplayName() . '.doc') . '"');
+            $this->response->add_header('Content-Disposition', 'attachment; '
+                    . encode_header_parameter('filename', FileManager::cleanFileName($modul->getDisplayName() . '.doc')));
             $this->render_text($content);
         }
         return;

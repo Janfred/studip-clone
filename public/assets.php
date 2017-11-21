@@ -53,13 +53,12 @@ if (!$type || !$id) {
             // Set appropriate header
             $response['Content-Type']        = 'text/css';
             $response['Content-Length']      = $model->size;
-            $response['Content-Disposition'] = 'inline;filename="' . $model->filename . '"';
+            $response['Content-Disposition'] = 'inline; ' . encode_header_parameter('filename', $model->filename);
 
             // Store cache information
             if (Studip\ENV !== 'development') {
                 $response['Last-Modified'] = gmdate('D, d M Y H:i:s', $model->chdate) . ' GMT';
-                $response['Expires']       = gmdate('D, d M Y H:i:s', $model->chdate + 
-    PluginAsset::CACHE_DURATION) . ' GMT';
+                $response['Expires']       = gmdate('D, d M Y H:i:s', $model->chdate + PluginAsset::CACHE_DURATION) . ' GMT';
             }
         }
     }

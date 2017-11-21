@@ -192,7 +192,7 @@ class ContactController extends AuthenticatedController
         }
 
         header("Content-type: text/x-vCard;charset=" . $charset); //application/octet-stream MIME
-        header("Content-disposition: attachment; filename=" . $filename . ".vcf");
+        header("Content-disposition: attachment; " . encode_header_parameter('filename', $filename . '.vcf'));
         header("Pragma: private");
 
         $this->vCard = vCard::export($user);

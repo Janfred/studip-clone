@@ -360,7 +360,7 @@ class Course_DatesController extends AuthenticatedController
         $filename = FileManager::cleanFileName($course['name'] . '-' . _("Ablaufplan") . '.doc');
 
         $this->set_content_type(get_mime_type($filename));
-        $this->response->add_header('Content-Disposition', 'attachment;filename="' . $filename . '"');
+        $this->response->add_header('Content-Disposition', 'attachment; ' . encode_header_parameter('filename', $filename));
         $this->response->add_header('Expires', 0);
         $this->response->add_header('Cache-Control', 'private');
         $this->response->add_header('Pragma', 'cache');
