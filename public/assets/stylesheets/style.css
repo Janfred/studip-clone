@@ -1,5 +1,5 @@
 /*******************************************************************************
-  Standard-Stylesheet f�r Stud.IP im Safire-Design
+  Standard-Stylesheet für Stud.IP im Safire-Design
   - use http://www.colorzilla.com/gradient-editor/ for gradients
 *******************************************************************************/
 @font-face {
@@ -2132,6 +2132,53 @@ form.default label.packed button {
 .header_avatar_container {
   align-items: center;
 }
+#barTopFont {
+  color: #fff;
+  margin-left: 0px;
+  z-index: 1002;
+  position: absolute;
+  left: 88px;
+  top: 0px;
+  line-height: 40px;
+}
+.studip-logo {
+  font: 0/0 a;
+  color: transparent;
+  text-shadow: none;
+  background-color: transparent;
+  border: 0;
+  background-repeat: no-repeat;
+  background-image: url("../images/logos/studip4-logo.png");
+  background-image: none, url("../images/logos/studip4-logo.svg");
+  background-size: 130px 92px;
+  display: block;
+  width: 130px;
+  height: 92px;
+}
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .studip-logo {
+    background-image: url("../images/logos/studip4-logo@2x.png");
+    -webkit-background-size: 130px 92px;
+    -moz-background-size: 130px 92px;
+    -o-background-size: 130px 92px;
+    background-size: 130px 92px;
+  }
+}
+#barTopStudip {
+  margin-left: 20px;
+  margin-right: 12px;
+}
+#barTopLogo {
+  left: 0;
+  position: absolute;
+  top: 0;
+}
+#flex-header {
+  height: 80px;
+  background-color: #f5f6f6;
+  position: relative;
+  z-index: 3;
+}
 #notification_marker {
   width: 48px;
   margin-left: 0px;
@@ -2244,7 +2291,7 @@ li#notification_container:hover .list {
   left: 380px;
 }
 #notification_container .list.below {
-  left: -360px;
+  left: -356px;
 }
 #notification_container .list.left {
   right: 0px;
@@ -2343,52 +2390,62 @@ li#notification_container:hover .list {
 #notification_container .list .item:hover .options.hidden {
   visibility: visible;
 }
-#barTopFont {
-  color: #fff;
-  margin-left: 0px;
-  z-index: 1002;
-  position: absolute;
-  left: 88px;
-  top: 0px;
-  line-height: 40px;
-}
-.studip-logo {
-  font: 0/0 a;
-  color: transparent;
-  text-shadow: none;
-  background-color: transparent;
-  border: 0;
-  background-repeat: no-repeat;
-  background-image: url("../images/logos/studip4-logo.png");
-  background-image: none, url("../images/logos/studip4-logo.svg");
-  background-size: 130px 92px;
-  display: block;
-  width: 130px;
-  height: 92px;
-}
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  .studip-logo {
-    background-image: url("../images/logos/studip4-logo@2x.png");
-    -webkit-background-size: 130px 92px;
-    -moz-background-size: 130px 92px;
-    -o-background-size: 130px 92px;
-    background-size: 130px 92px;
-  }
-}
-#barTopStudip {
-  margin-left: 20px;
-  margin-right: 12px;
-}
-#barTopLogo {
-  left: 0;
-  position: absolute;
-  top: 0;
-}
-#flex-header {
-  height: 80px;
-  background-color: #f5f6f6;
+#notification_container a.mark-all-as-read {
   position: relative;
+  margin-top: 10px;
+  background-image: url("../images/icons/blue/decline.svg");
+  -webkit-background-size: 16px 16px;
+  -moz-background-size: 16px 16px;
+  -o-background-size: 16px 16px;
+  background-size: 16px 16px;
+  background-color: #c5c7ca;
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  border-bottom: thin solid #a7aaaf;
+  margin: 0;
+  padding: 5px 5px 5px 14px;
   z-index: 3;
+  -webkit-transition: all 300ms;
+  -moz-transition: all 300ms;
+  -o-transition: all 300ms;
+  transition: all 300ms;
+  max-height: 31px;
+}
+#notification_container a.mark-all-as-read:before {
+  border: 10px solid rgba(197, 199, 202, 0);
+  content: "";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-bottom-color: #c5c7ca;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -10px;
+}
+#notification_container a.mark-all-as-read:after {
+  border: 9px solid rgba(197, 199, 202, 0);
+  content: "";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-bottom-color: #c5c7ca;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -9px;
+}
+#notification_container a.mark-all-as-read::before,
+#notification_container a.mark-all-as-read::after {
+  left: 380px;
+  z-index: 2;
+}
+#notification_container a.mark-all-as-read.hidden {
+  border-bottom-width: 0;
+  max-height: 0;
+  opacity: 0;
+  padding-bottom: 0;
+  padding-top: 0;
 }
 /* --- main navigation ----------------------------------------------------- */
 body:not(.fixed) #barTopMenu {

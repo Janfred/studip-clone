@@ -4,37 +4,17 @@
 # Lifter003: TODO
 # Lifter010: TODO
 /**
-* header
-*
-* head line of Stud.IP
-*
-* @author       Stefan Suchi <suchi@data-quest.de>
-* @author       Michael Riehemann <michael.riehemann@uni-oldenburg.de>
-* @access       public
-* @modulegroup  visual
-* @module       header.php
-* @package      studip_core
-*/
-
-// +---------------------------------------------------------------------------+
-// This file is part of Stud.IP
-// header.php
-// head line of Stud.IP
-// Copyright (C) 2000 Ralf Stockmann <rstockm@gwdg.de>, Stefan Suchi <suchi@data-quest.de>
-// +---------------------------------------------------------------------------+
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2
-// of the License, or any later version.
-// +---------------------------------------------------------------------------+
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-// +---------------------------------------------------------------------------+
+ * head line of Stud.IP
+ *
+ * @author       Stefan Suchi <suchi@data-quest.de>
+ * @author       Michael Riehemann <michael.riehemann@uni-oldenburg.de>
+ * @author       Ralf Stockmann <rstockm@gwdg.de>
+ * @license      GPL2 or any later version
+ * @access       public
+ * @modulegroup  visual
+ * @module       header.php
+ * @package      studip_core
+ */
 
 /* ---
  * Mögliche Datenschutz-/Sichtbarkeitsentscheidung: Beim ersten Login wird ein
@@ -44,8 +24,7 @@
  * Bei Nutzung dieser Funktion unbedingt die Texte unter locale/de/LC_HELP/visibility_decision.php bzw.
  * locale/en/LC_HELP/visibility_decision.php an die lokalen Verhältnisse anpassen!
  */
-if (Config::get()->USER_VISIBILITY_CHECK && is_object($GLOBALS['user']) && $GLOBALS['user']->id != 'nobody')
-{
+if (Config::get()->USER_VISIBILITY_CHECK && is_object($GLOBALS['user']) && $GLOBALS['user']->id !== 'nobody') {
    require_once('lib/user_visible.inc.php');
    first_decision($GLOBALS['user']->id);
 }
@@ -81,14 +60,8 @@ if (PageLayout::isHeaderEnabled()) //Einige Seiten benötigen keinen Header, spr
                                                  $semester_data[$default_semester]['name'] :
                                                  _("alle Semester");
     }
-}
-else
-{
+} else {
     $header_template = $GLOBALS['template_factory']->open('noheader');
 }
 
 echo $header_template->render();
-
-
-
-?>

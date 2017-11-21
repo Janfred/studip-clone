@@ -70,16 +70,24 @@ class JsupdaterController extends AuthenticatedController
      */
     public function mark_notification_read_action($id)
     {
-        PersonalNotifications::markAsRead($id);
-        if (Request::isXhr() && !Request::isDialog()) {
-            $this->render_nothing();
+        if ($id === 'all') {
+            PersonalNotifications::markAllAsRead();
         } else {
+            PersonalNotifications::markAsRead($id);
+        }
+
+        $url = false;
+        if ($id === 'all') {
+            $url = Request::get('return_to');
+        } elseif (!Request::isXhr() || Request::isDialog()) {
             $notification = new PersonalNotifications($id);
-            if ($notification->url) {
-                $this->redirect(URLHelper::getUrl(TransformInternalLinks($notification->url)));
-            } else {
-                $this->render_nothing();
-            }
+            $url = $notification->url;
+        }
+
+        if ($url) {
+            $this->redirect(URLHelper::getUrl(TransformInternalLinks($url)));
+        } else {
+            $this->render_nothing();
         }
     }
 

@@ -55,7 +55,8 @@ class PersonalNotifications extends SimpleORMap
 
     protected $unseen = null;
 
-    protected function cbExpireCache($notification) {
+    protected function cbExpireCache($notification)
+    {
         $query = "SELECT user_id
                   FROM personal_notifications_user
                   WHERE personal_notification_id = :id";
@@ -202,6 +203,27 @@ class PersonalNotifications extends SimpleORMap
             'user_id' => $user_id,
             'url' => $pn['url']
         ));
+    }
+
+    /**
+     * Marks all notifications as read by the user. It won't appear anymore in
+     * the notification-list on top of its site.
+     * @param string|null $user_id : ID of special user the notification should belong to or (default:) null for current user
+     * @return boolean : true on success, false if it failed.
+     */
+    public static function markAllAsRead($user_id = null)
+    {
+        if (!$user_id) {
+            $user_id = $GLOBALS['user']->id;
+        }
+        self::expireCache($user_id);
+
+        $query = "UPDATE `personal_notifications_user`
+                  SET `seen` = '1'
+                  WHERE `user_id` = :user_id AND `seen` = 0";
+        $statement = DBManager::get()->prepare($query);
+        $statement->bindValue(':user_id', $user_id);
+        return $statement->execute();
     }
 
     /**
