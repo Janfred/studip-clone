@@ -35590,8 +35590,8 @@ msgstr "The deleted appointment %s has not been changed."
 
 #: ../app/controllers/course/timesrooms.php:1039
 #, fuzzy, php-format
-msgid "Startsemester ändern (%s)"
-msgstr "Change start semester"
+msgid "Semesterlaufzeit ändern (%s)"
+msgstr "Change semester terms"
 
 #: ../app/controllers/course/timesrooms.php:1044
 #: ../app/controllers/my_courses.php:685

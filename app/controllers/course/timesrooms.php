@@ -1038,8 +1038,14 @@ class Course_TimesroomsController extends AuthenticatedController
     {
         if (!$this->locked) {
             $actions = new ActionsWidget();
-            $actions->addLink(sprintf(_('Startsemester ändern (%s)'), $this->course->start_semester->name),
-                              $this->url_for('course/timesrooms/editSemester'), Icon::create('date', 'clickable'))->asDialog('size=400');
+            $actions->addLink(
+                sprintf(
+                    _('Semesterlaufzeit ändern (%s)'),
+                    $this->course->getFullname('sem-duration-name')
+                ),
+                $this->url_for('course/timesrooms/editSemester'),
+                Icon::create('date', 'clickable')
+            )->asDialog('size=400');
             Sidebar::Get()->addWidget($actions);
         }
 
