@@ -29312,8 +29312,8 @@ msgstr "Mark as read"
 
 #: ../templates/personal_notifications/notification.php:13
 #, php-format
-msgid "... und %s weitere"
-msgstr "... and %s more"
+msgid "... und %u weitere"
+msgstr "... and %u more"
 
 #: ../templates/privacy.php:7
 msgid "Stud.IP - Erläuterungen zum Datenschutz im Überblick"
@@ -35590,8 +35590,8 @@ msgstr "The deleted appointment %s has not been changed."
 
 #: ../app/controllers/course/timesrooms.php:1039
 #, fuzzy, php-format
-msgid "Semesterlaufzeit ändern (%s)"
-msgstr "Change semester terms"
+msgid "Semester ändern (%s)"
+msgstr "Change semesters"
 
 #: ../app/controllers/course/timesrooms.php:1044
 #: ../app/controllers/my_courses.php:685

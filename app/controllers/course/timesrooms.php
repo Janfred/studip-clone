@@ -1040,7 +1040,7 @@ class Course_TimesroomsController extends AuthenticatedController
             $actions = new ActionsWidget();
             $actions->addLink(
                 sprintf(
-                    _('Semesterlaufzeit ändern (%s)'),
+                    _('Semester ändern (%s)'),
                     $this->course->getFullname('sem-duration-name')
                 ),
                 $this->url_for('course/timesrooms/editSemester'),
