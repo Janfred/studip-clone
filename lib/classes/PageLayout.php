@@ -97,11 +97,16 @@ class PageLayout
     public static function initialize()
     {
         // set favicon
+        self::addHeadElement('link', array('rel' => 'apple-touch-icon', 'sizes' => '180x180', 'href' => Assets::image_path('apple-touch-icon.png')));
+        self::addHeadElement('link', array('rel' => 'icon', 'type' => 'image/png', 'sizes' => '32x32', 'href' => Assets::image_path('favicon-32x32.png')));
+        self::addHeadElement('link', array('rel' => 'icon', 'type' => 'image/png', 'sizes' => '16x16', 'href' => Assets::image_path('favicon-16x16.png')));
+        self::addHeadElement('link', array('rel' => 'manifest', 'href' => Assets::image_path('manifest.json')));
+        self::addHeadElement('link', array('rel' => 'mask-icon', 'href' => Assets::image_path('safari-pinned-tab.svg')));
         self::addHeadElement('link', array('rel' => 'shortcut icon', 'href' => Assets::image_path('favicon.png')));
-        self::addHeadElement('link', array('rel' => 'apple-touch-icon', 'href' => Assets::image_path('touch-icon-ipad3.png'), 'size' => '144x144'));
-        self::addHeadElement('link', array('rel' => 'apple-touch-icon', 'href' => Assets::image_path('touch-icon-iphone4.png'), 'size' => '114x114'));
-        self::addHeadElement('link', array('rel' => 'apple-touch-icon', 'href' => Assets::image_path('touch-icon-ipad.png'), 'size' => '72x72'));
-        self::addHeadElement('link', array('rel' => 'apple-touch-icon', 'href' => Assets::image_path('touch-icon-iphone.png')));
+        self::addHeadElement('meta', array('name' => 'TileColor', 'content' => '#2b5797'));
+        self::addHeadElement('meta', array('name' => 'TileImage', 'content' => Assets::image_path('mstile-144x144.png')));
+        self::addHeadElement('meta', array('name' => 'msapplication-config', 'content' => Assets::image_path('browserconfig.xml')));
+        self::addHeadElement('meta', array('name' => 'theme-color', 'content' => '#ffffff'));
 
         // set initial width for mobile devices
         self::addHeadElement('meta', array('name' => 'viewport', 'content' => 'width=device-width, initial-scale=1.0'));
