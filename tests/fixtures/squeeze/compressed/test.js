@@ -1,1 +1,0 @@
-var stack=[],length=stack.length;while(length--){if(stack[length]==a){alert("Smörebrö")}}(function(){var b=function(c){return new wrapper(c)}}).call(this);

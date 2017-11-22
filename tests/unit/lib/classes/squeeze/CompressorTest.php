@@ -19,22 +19,19 @@ use \Studip\Squeeze\Compressor;
 
 class SqueezeCompressorTest extends \PHPUnit_Framework_TestCase
 {
-
-    function skipTestWithoutJava()
+    function skipTestWithoutCompressors()
     {
-        if (in_array($this->getName(),
-                     array("testCompress", "testCallCompressor"))) {
+        if (in_array($this->getName(), ['testCompress', 'testCallCompressor'])) {
             $compressor = new Compressor(new Configuration());
-            if (!$compressor->getJavaCompatibility("java")) {
+            if (!$compressor->hasJsCompressor() && !$compressor->hasCssCompressor()) {
                 $this->markTestSkipped('TODO Skip');
             }
         }
     }
 
-
     function setUp()
     {
-        $this->skipTestWithoutJava();
+        $this->skipTestWithoutCompressors();
         $GLOBALS['CACHING_ENABLE'] = false;
 
         $this->STUDIP_BASE_PATH = $GLOBALS['STUDIP_BASE_PATH'];
@@ -46,41 +43,12 @@ class SqueezeCompressorTest extends \PHPUnit_Framework_TestCase
         $GLOBALS['STUDIP_BASE_PATH'] = $this->STUDIP_BASE_PATH;
     }
 
-    /**
-     * @dataProvider javaCompatibility
-     */
-    function testCheckJava($version, $compatible)
-    {
-        $conf = new Configuration();
-        $conf['compressor_options'] = array("java" => "echo $version");
-
-        $compressor = new Compressor($conf);
-        $this->assertEquals($compatible, $compressor->hasJava());
-    }
-
-    function javaCompatibility()
-    {
-        return json_decode('[["1.4", true], ["1.3", false]]');
-    }
-
-    function testCompress()
-    {
-        $conf = Configuration::load(
-            TEST_FIXTURES_PATH."squeeze/assets.yml");
-        $compressor = new Compressor($conf);
-        $paths = array("src/bar.js", "src/foo.js");
-
-        $this->assertStringEqualsFile(
-            TEST_FIXTURES_PATH . 'squeeze/compressed/test.js',
-            $compressor->compress($paths));
-    }
-
     function testCallCompressor()
     {
         $compressor = new Compressor(new Configuration());
         $js = "function A() { this.stuff = 42; }";
-        $expected = "function A(){this.stuff=42};";
-        $this->assertEquals($expected, $compressor->callCompressor($js));
+        $expected = "function A(){this.stuff=42}\n";
+        $this->assertEquals($expected, $compressor->callJsCompressor($js));
     }
 
     function testCallCompressorWithSyntaxError()
