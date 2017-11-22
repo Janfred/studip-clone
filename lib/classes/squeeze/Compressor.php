@@ -37,7 +37,7 @@ class Compressor
 
     private function concatenateAssets($paths)
     {
-        $files = array_map(array($this, "getFileAsUTF8"), $paths);
+        $files = array_map([$this, 'getFileAsUTF8'], $paths);
         return join("\n", $files);
     }
 
@@ -60,8 +60,12 @@ class Compressor
 
     public function hasJsCompressor()
     {
-        exec("which " . self::JS_COMPRESSOR, $result);
-        return (bool)$result;
+        try {
+            $result = $this->procOpen("which " . self::JS_COMPRESSOR);
+            return (bool)$result;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 
     public function callJsCompressor($js)
@@ -72,8 +76,12 @@ class Compressor
 
     public function hasCssCompressor()
     {
-        exec("which " . self::CSS_COMPRESSOR, $result);
-        return (bool)$result;
+        try {
+            $result = $this->procOpen("which " . self::CSS_COMPRESSOR);
+            return (bool)$result;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 
     public function callCssCompressor($css)
@@ -82,16 +90,16 @@ class Compressor
         return $this->procOpen($command, $css);
     }
 
-    private function procOpen($command, $stdin)
+    private function procOpen($command, $stdin = '')
     {
         $cwd = $GLOBALS['TMP_PATH'];
 
         $err = tempnam($cwd, 'squeeze');
-        $descriptorspec = array(
-            array("pipe", "r"),
-            array("pipe", "w"),
-            array("file", $err, "a")
-        );
+        $descriptorspec = [
+            ['pipe', 'r'],
+            ['pipe', 'w'],
+            ['file', $err, 'a']
+        ];
 
         $process = proc_open($command, $descriptorspec, $pipes);
 
