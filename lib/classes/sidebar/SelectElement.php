@@ -11,6 +11,7 @@ class SelectElement extends WidgetElement
     protected $id;
     protected $label;
     protected $active;
+    protected $tooltip;
     protected $is_header = false;
     protected $indent_level = null;
 
@@ -23,11 +24,12 @@ class SelectElement extends WidgetElement
      * @param String $label  Label/text content of the element
      * @param bool   $active Indicates whether the element is active
      */
-    public function __construct($id, $label, $active = false)
+    public function __construct($id, $label, $active = false, $tooltip = null)
     {
-        $this->id     = $id;
-        $this->label  = $label;
-        $this->active = $active;
+        $this->id      = $id;
+        $this->label   = $label;
+        $this->active  = $active;
+        $this->tooltip = $tooltip;
     }
 
     /**
@@ -74,6 +76,18 @@ class SelectElement extends WidgetElement
     public function getLabel()
     {
         return ltrim($this->label, ' ');
+    }
+
+    /**
+     * Returns the tooltip content of the element. It is stripped
+     * of all leading whitespace.
+     *
+     * @return String tooltip content of the element
+     * @see SelectElement::getIndentLevel
+     */
+    public function getTooltip()
+    {
+        return ltrim($this->tooltip, ' ');
     }
 
     /**

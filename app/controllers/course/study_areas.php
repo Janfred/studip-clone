@@ -82,7 +82,15 @@ class Course_StudyAreasController extends AuthenticatedController
                     $list->setUrl("?#admin_top_links");
                     $list->setSelectParameterName("cid");
                     foreach (AdminCourseFilter::get()->getCoursesForAdminWidget() as $seminar) {
-                        $list->addElement(new SelectElement($seminar['Seminar_id'], $seminar['Name']), 'select-' . $seminar['Seminar_id']);
+                        $list->addElement(
+                            new SelectElement(
+                                $seminar['Seminar_id'],
+                                $seminar['Name'],
+                                ($seminar['Seminar_id'] === $_SESSION['SessionSeminar']),
+                                $seminar['VeranstaltungsNummer']." ".$seminar['Name']
+                            ),
+                            'select-' . $seminar['Seminar_id']
+                        );
                     }
                     $list->setSelection($this->course->id);
                     $sidebar->addWidget($list);
