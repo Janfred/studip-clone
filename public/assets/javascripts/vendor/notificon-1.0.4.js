@@ -7,12 +7,12 @@ Copyright (c) 2011 Matt Williams <matt@makeable.co.uk>. All rights reserved.
 Redistribution and use in source and binary forms, with or without modification, are
 permitted provided that the following conditions are met:
 
-1. Redistributions of source code must retain the above copyright notice, this list of
-conditions and the following disclaimer.
+   1. Redistributions of source code must retain the above copyright notice, this list of
+      conditions and the following disclaimer.
 
-2. Redistributions in binary form must reproduce the above copyright notice, this list
-of conditions and the following disclaimer in the documentation and/or other materials
-provided with the distribution.
+   2. Redistributions in binary form must reproduce the above copyright notice, this list
+      of conditions and the following disclaimer in the documentation and/or other materials
+      provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY MATT WILLIAMS ''AS IS'' AND ANY EXPRESS OR IMPLIED
 WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
@@ -40,7 +40,7 @@ or implied, of Matt Williams.
     }
     if (!document.createElement('canvas').getContext) {
       unsupported = true;
-      if (typeof console !== "undefined") {
+      if (console) {
         console.log('Notificon: requires canvas support');
       }
       return false;
@@ -53,12 +53,8 @@ or implied, of Matt Williams.
       options = {};
     }
     var defaults = {
-      font: "10px monospace",
       color: "#000000",
       stroke: "rgba(255,255,255,0.85)",
-      align: 'right',
-      valign: 'bottom',
-      width: 4,
       favicon: getExistingFavicon()
     };
     for (var key in defaults) {
@@ -103,24 +99,16 @@ or implied, of Matt Williams.
     document.getElementsByTagName('head')[0].appendChild(link);
   };
 
-  var getCoords = function getCoords(options) {
-    return {
-      x: options.align.toLowerCase() === 'left' ? 0 : 16,
-      y: options.valign.toLowerCase() === 'top' ? 0 : 18
-    };
-  };
-
-  var drawLabel = function drawLabel(canvas, label, options) {
+  var drawLabel = function drawLabel(canvas, label, color, stroke) {
     var context = canvas.getContext("2d");
-    var coords = getCoords(options);
-    context.font = options.font;
-    context.fillStyle = options.color;
-    context.textAlign = options.align;
-    context.textBaseline = options.valign;
-    context.strokeStyle = options.stroke;
-    context.lineWidth = options.width;
-    context.strokeText(label, coords.x, coords.y);
-    context.fillText(label, coords.x, coords.y);
+    context.font = "10px monospace";
+    context.fillStyle = color;
+    context.textAlign = 'right';
+    context.textBaseline = "top";
+    context.strokeStyle = stroke;
+    context.lineWidth = 4;
+    context.strokeText(label,16,6);
+    context.fillText(label,16,6);
   };
 
   var imgToCanvas = function imgToCanvas(img) {
@@ -139,30 +127,28 @@ or implied, of Matt Williams.
 
     var options = mergeDefaultOptions(myOptions);
 
-    label = "" + label;
     if (!label.length) {
       return changeFavicon(options.favicon);
     }
 
     var img = document.createElement("img");
     img.src = options.favicon;
-    img.crossOrigin = 'anonymous';
     img.onload = function() {
       var canvas = imgToCanvas(img);
       if (label) {
-        drawLabel(canvas, label, options);
+        drawLabel(canvas, label, options.color, options.stroke);
       }
       try {
         return changeFavicon(canvas.toDataURL("image/png"));
       } catch(e) {
-        if (typeof console !== "undefined") {
+        if (console) {
           console.log('Notificon: cannot use icons located on a different domain (' + favicon + ')');
           return false;
         }
       }
     };
     img.onerror = function() {
-      if (typeof console !== "undefined") {
+      if (console) {
         console.log('Notificon: image not found (' + options.favicon + ')');
         return false;
       }
@@ -172,10 +158,6 @@ or implied, of Matt Williams.
 
   var Notificon = function(label, options) {
     createNotificon(label, options);
-  };
-
-  Notificon.reset = function reset() {
-    removeNotificon();
   };
 
   if (typeof exports !== 'undefined') {

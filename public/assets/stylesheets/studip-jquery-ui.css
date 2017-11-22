@@ -1622,7 +1622,7 @@ a.ui-button:active,
   background: #fff;
 }
 .ui-widget-header {
-  background-color: #899bba;
+  background-color: #899ab9;
   background-image: none;
 }
 .ui-widget_columnl {
@@ -1639,7 +1639,7 @@ a.ui-button:active,
   padding: 2%;
 }
 .ui-widget_head {
-  background-color: #899bba;
+  background-color: #899ab9;
   color: white;
   font-size: 1.3em;
   line-height: 30px;
@@ -1672,7 +1672,7 @@ a.ui-button:active,
 .ui-state-active,
 .ui-widget-content .ui-state-active,
 .ui-widget-header .ui-state-active {
-  background-color: #899bba;
+  background-color: #899ab9;
   color: white;
 }
 .ui-datepicker-header .ui-icon {
@@ -1685,8 +1685,8 @@ a.ui-button:active,
   background: #e7ebf1;
   border-radius: 0;
   border: none;
-  border-top: 1px solid #e2e3e5;
-  border-bottom: 1px solid #e2e3e5;
+  border-top: 1px solid #e2e3e4;
+  border-bottom: 1px solid #e2e3e4;
   color: #000;
   font-size: 10pt;
   margin: 0;
@@ -1698,7 +1698,7 @@ a.ui-button:active,
   margin: 0;
   padding: 0;
   border: 0;
-  border-bottom: 1px solid #e2e3e5;
+  border-bottom: 1px solid #e2e3e4;
 }
 .ui-state-hover,
 .ui-widget-content .ui-state-hover,
@@ -1709,13 +1709,13 @@ a.ui-button:active,
   background-image: none;
 }
 .ui-datepicker-calendar .ui-state-active {
-  color: #365a90;
+  color: #36598f;
 }
 .ui-datepicker-calendar .ui-state-active.ui-state-hover {
   color: white;
 }
 .ui-autocomplete {
-  border: 1px solid #a8abb0;
+  border: 1px solid #a7aaaf;
   padding: 1px;
 }
 .ui-autocomplete .ui-menu-item .ui-menu-item-wrapper {
@@ -1760,6 +1760,17 @@ textarea.ui-resizable-handle.ui-resizable-s {
 }
 .ui-timepicker-div .ui_tpicker_unit_hide {
   display: none;
+}
+.ui-timepicker-div .ui_tpicker_time .ui_tpicker_time_input {
+  background: none;
+  color: inherit;
+  border: none;
+  outline: none;
+  border-bottom: solid 1px #555;
+  width: 95%;
+}
+.ui-timepicker-div .ui_tpicker_time .ui_tpicker_time_input:focus {
+  border-bottom-color: #aaa;
 }
 .ui-timepicker-rtl {
   direction: rtl;
@@ -1899,7 +1910,7 @@ textarea.ui-resizable-handle.ui-resizable-s {
 }
 .ms-container .ms-selectable,
 .ms-container .ms-selection {
-  color: #3d444f;
+  color: #3c434e;
   width: 47%;
 }
 .ms-container .ms-selectable li.ms-elem-selectable,
@@ -1908,7 +1919,7 @@ textarea.ui-resizable-handle.ui-resizable-s {
 .ms-container .ms-selection li.ms-elem-selection {
   background: #fff;
   border-bottom-color: #e7ebf1;
-  color: #3d444f;
+  color: #3c434e;
   padding: 2px;
 }
 .ms-container .ms-selectable li,
@@ -1942,7 +1953,7 @@ textarea.ui-resizable-handle.ui-resizable-s {
 .ms-container .ms-selectable li.disabled,
 .ms-container .ms-selection li.disabled {
   background-color: #e7ebf1;
-  color: #3d444f;
+  color: #3c434e;
   cursor: not-allowed;
 }
 .ms-container .ms-selectable li[style*="background-image"],
@@ -2023,7 +2034,7 @@ textarea.ui-resizable-handle.ui-resizable-s {
   position: relative;
 }
 .ms-container .ms-optgroup-label {
-  color: #8b8f95;
+  color: #8a8e95;
 }
 .ui-menu .ui-menu-item {
   list-style: none;

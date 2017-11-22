@@ -77,7 +77,7 @@ if (!$controllerpath) {
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="8">
+            <td colspan="7">
                 <span class="multibuttons">
                     <?= Studip\Button::create(_('Herunterladen'), 'download', [
                         'disabled' => '',

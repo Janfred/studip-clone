@@ -30,7 +30,7 @@ class FilesController extends AuthenticatedController
 
         PageLayout::setTitle(_('Meine Dateien'));
         PageLayout::setHelpKeyword('Basis.Dateien');
-        PageLayout::addSqueezePackage('tablesorterfork');
+        PageLayout::addSqueezePackage('tablesorter');
 
         $this->user = User::findCurrent();
         $this->last_visitdate = time();
@@ -255,10 +255,10 @@ class FilesController extends AuthenticatedController
 
         if ($to_plugin) {
 
-            $destination_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/files/copyhandler/") + strlen("dispatch.php/files/copyhandler/")); 
+            $destination_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/files/copyhandler/") + strlen("dispatch.php/files/copyhandler/"));
             if (strpos($destination_id, "?") !== false) {
                 $destination_id = substr($destination_id, 0, strpos($destination_id, "?"));
-            }              
+            }
             $destination_id = urldecode($destination_id);
 
             $destination_plugin = PluginManager::getInstance()->getPlugin($to_plugin);
@@ -277,14 +277,14 @@ class FilesController extends AuthenticatedController
 
         $filerefs = $fileref_id;
         if (!empty($filerefs)) {
-            
+
             foreach ($filerefs as $fileref) {
-                
+
                 if ($from_plugin) {
                     $source_plugin = PluginManager::getInstance()->getPlugin($from_plugin);
                     if (!$source_plugin) {
                         throw new Trails_Exception(404, _('Plugin existiert nicht.'));
-                    }  
+                    }
                     if ($source = $source_plugin->getPreparedFile($fileref, true)) {
                         if ($copymode === 'move') {
                             $result = FileManager::moveFileRef($source, $destination_folder, $user);
@@ -294,8 +294,8 @@ class FilesController extends AuthenticatedController
                         if (!is_array($result)) {
                             $count_files += 1;
                         }
-                    }                    
-                } else {                
+                    }
+                } else {
                     if ($source = FileRef::find($fileref)) {
                         if ($copymode === 'move') {
                             $result = FileManager::moveFileRef($source, $destination_folder, $user);
@@ -319,7 +319,7 @@ class FilesController extends AuthenticatedController
                             $count_files   += $children[0];
                             $count_folders += $children[1];
                         }
-                    }                   
+                    }
                 }
                 if (is_array($result)) {
                     $errors = array_merge($errors, $result);

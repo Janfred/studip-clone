@@ -27,7 +27,7 @@ class Institute_FilesController extends AuthenticatedController
         $this->institute = Institute::findCurrent();
         object_set_visit_module('documents');
 
-        PageLayout::addSqueezePackage('tablesorterfork');
+        PageLayout::addSqueezePackage('tablesorter');
         PageLayout::setHelpKeyword("Basis.Dateien");
         PageLayout::setTitle($this->institute->getFullname() . " - " . _("Dateien"));
 

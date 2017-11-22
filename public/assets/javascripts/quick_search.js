@@ -141,7 +141,6 @@ STUDIP.QuickSearch = {
                 });
             }
         }
-        jQuery('#' + name).placehold();
     },
 
     // start searching now

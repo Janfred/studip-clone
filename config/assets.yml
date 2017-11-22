@@ -1,25 +1,24 @@
 compress: true
 javascripts:
   jquery: &jquery
-    - javascripts/jquery/jquery-3.1.0.js
-    - javascripts/jquery/jquery-ui-1.12.0.js
-    - javascripts/jquery/jquery.placehold-1.0.1.js
-    - javascripts/jquery/jquery-ui-timepicker-1.5.5.js
+    - javascripts/jquery/jquery-3.2.1.js
+    - javascripts/jquery/jquery-ui-1.12.1.js
+    - javascripts/jquery/jquery-ui-timepicker-1.6.3.js
     - javascripts/jquery/jquery.multi-select-0.9.12.js
-    - javascripts/jquery/jquery.scrollTo-2.1.1.js
-    - javascripts/jquery/jquery.ui.touch-punch.min.js
+    - javascripts/jquery/jquery.scrollTo-2.1.2.js
+    - javascripts/jquery/jquery.ui.touch-punch-0.2.3.js
 
     - javascripts/studip-jquery-tweaks.js
     - javascripts/studip-jquery.multi-select.tweaks.js
 
   modernizr: &modernizr
-    - javascripts/vendor/modernizr-2.8.3.js
+    - javascripts/vendor/modernizr-3.5.0.js
 
   highlight: &highlight
-    - javascripts/vendor/highlight.pack.js
+    - javascripts/vendor/highlight-9.12.0.js
 
   header: &header
-    - javascripts/vendor/notificon.js
+    - javascripts/vendor/notificon-1.0.4.js
     - javascripts/header.js
     - javascripts/header-navigation.js
     - javascripts/personal_notifications.js
@@ -30,8 +29,8 @@ javascripts:
     - javascripts/smiley-picker.js
 
   wysiwyg: &wysiwyg
-    - javascripts/jquery/jquery.fileupload.js
-    - javascripts/jquery/jquery.iframe-transport.js
+    - javascripts/jquery/jquery.fileupload-9.19.1.js
+    - javascripts/jquery/jquery.iframe-transport-9.19.1.js
     - javascripts/ckeditor/ckeditor.js
     - javascripts/wysiwyg.js
 
@@ -48,25 +47,22 @@ javascripts:
     - javascripts/jquery/jquery.nestable-4f93032cfa.js
 
   tablesorter: &tablesorter
-    - javascripts/jquery/jquery.tablesorter-2.22.5.js
-    - javascripts/jquery/jquery.tablesorter.pager-2.22.5.js
-
-  tablesorterfork: &tablesorterfork
-    - javascripts/jquery/jquery.tablesorter-fork-2.27.8.js
-    - javascripts/jquery/jquery.tablesorter-fork-2.27.8.widgets.js
+    - javascripts/jquery/jquery.tablesorter-2.29.0.js
+    - javascripts/jquery/jquery.tablesorter.pager-2.28.8.js
+    - javascripts/jquery/jquery.tablesorter.widgets-2.29.0.js
 
   base:
     - *jquery
     - *modernizr
     - *highlight
 
-    - javascripts/vendor/lodash.underscore-3.10.1.js
+    - javascripts/vendor/lodash.underscore-4.17.4.js
     - javascripts/l10n.js
-    - javascripts/vendor/chartist.min.js
-    - javascripts/vendor/qrcode.min.js
+    - javascripts/vendor/chartist-0.11.0.js
+    - javascripts/vendor/qrcode-04f46c6.js
     - javascripts/init.js
 
-    - javascripts/vendor/select2-4.0.3.min.js
+    - javascripts/vendor/select2.full-4.0.5.js
 
     - javascripts/studip-ui.js
     - javascripts/studip-helper-attributes.js
@@ -160,7 +156,7 @@ javascripts:
     - javascripts/document.js
 
   lightbox:
-    - javascripts/jquery/lightbox/lightbox.min.js
+    - javascripts/jquery/lightbox/lightbox-2.9.0.js
 
   subcourses:
     - javascripts/subcourses.js

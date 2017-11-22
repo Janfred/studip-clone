@@ -2399,6 +2399,7 @@ li#notification_container:hover .list {
   -o-transition: all 300ms;
   transition: all 300ms;
   max-height: 31px;
+  overflow: hidden;
 }
 #notification_container a.mark-all-as-read:before {
   border: 10px solid rgba(197, 199, 202, 0);

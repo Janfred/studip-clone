@@ -5,7 +5,7 @@
  * http://flesler.blogspot.com/2007/10/jqueryscrollto.html
  * @projectDescription Lightweight, cross-browser and highly customizable animated scrolling with jQuery
  * @author Ariel Flesler
- * @version 2.1.1
+ * @version 2.1.2
  */
 ;(function(factory) {
 	'use strict';
@@ -35,7 +35,7 @@
 	function isWin(elem) {
 		return !elem.nodeName ||
 			$.inArray(elem.nodeName.toLowerCase(), ['iframe','#document','html','body']) !== -1;
-	}		
+	}
 
 	$.fn.scrollTo = function(target, duration, settings) {
 		if (typeof duration === 'object') {
@@ -68,7 +68,7 @@
 			var win = isWin(this),
 				elem = win ? this.contentWindow || window : this,
 				$elem = $(elem),
-				targ = target, 
+				targ = target,
 				attr = {},
 				toff;
 
@@ -83,9 +83,9 @@
 					}
 					// Relative/Absolute selector
 					targ = win ? $(targ) : $(targ, elem);
-					if (!targ.length) return;
 					/* falls through */
 				case 'object':
+					if (targ.length === 0) return;
 					// DOMElement / jQuery
 					if (targ.is || targ.style) {
 						// Get the real position of the target
@@ -184,7 +184,7 @@
 	}
 
 	// Add special hooks so that window scroll properties can be animated
-	$.Tween.propHooks.scrollLeft = 
+	$.Tween.propHooks.scrollLeft =
 	$.Tween.propHooks.scrollTop = {
 		get: function(t) {
 			return $(t.elem)[t.prop]();
