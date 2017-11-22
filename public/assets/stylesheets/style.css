@@ -2074,29 +2074,28 @@ form.default label.packed button {
   margin: 7px 8px;
   cursor: pointer;
 }
-#barTopAvatar #header_avatar,
-#header_avatar_menu #header_avatar,
-#barTopAvatar .action-menu-icon,
+#header_avatar_menu {
+  height: 30px;
+  margin: 0;
+  vertical-align: text-bottom;
+  z-index: 1003;
+}
 #header_avatar_menu .action-menu-icon {
   border: 1px solid #b1b4b8;
   background: #f5f6f6;
   height: 28px;
+  margin: 0;
+  position: relative;
   width: 28px;
   z-index: 1;
-  position: relative;
 }
-#barTopAvatar #header_avatar img,
-#header_avatar_menu #header_avatar img,
-#barTopAvatar .action-menu-icon img,
 #header_avatar_menu .action-menu-icon img {
   height: 100%;
   width: 100%;
 }
-#barTopAvatar .action-menu-title,
 #header_avatar_menu .action-menu-title {
   margin: 0em 0 0.3em;
 }
-#barTopAvatar .action-menu-content,
 #header_avatar_menu .action-menu-content {
   z-index: 1002;
   position: absolute;
@@ -2108,26 +2107,16 @@ form.default label.packed button {
   text-align: left;
   white-space: nowrap;
 }
-#barTopAvatar .action-menu-content a:link,
 #header_avatar_menu .action-menu-content a:link,
-#barTopAvatar .action-menu-content a:visited,
 #header_avatar_menu .action-menu-content a:visited {
   color: #28497c;
 }
-#barTopAvatar .action-menu-content a:hover,
 #header_avatar_menu .action-menu-content a:hover,
-#barTopAvatar .action-menu-content a:active,
 #header_avatar_menu .action-menu-content a:active {
   color: #d60000;
 }
-#barTopAvatar .action-menu-content div,
 #header_avatar_menu .action-menu-content div {
   color: #000;
-}
-.header_avatar_container,
-#header_avatar_menu .action-menu-icon {
-  z-index: 1003;
-  margin: 5px 0px 0px 0px;
 }
 .header_avatar_container {
   align-items: center;

@@ -94,15 +94,20 @@
     }
 }
 
-#barTopAvatar, #header_avatar_menu {
+#header_avatar_menu {
+    height: 30px;
+    margin: 0;
+    vertical-align: text-bottom;
+    z-index: 1003;
 
-    #header_avatar, .action-menu-icon {
+    .action-menu-icon {
         border: 1px solid @dark-gray-color-40;
         background: @dark-gray-color-5;
         height: 28px;
+        margin: 0;
+        position: relative;
         width: 28px;
         z-index: 1;
-        position: relative;
 
         img {
             height: 100%;
@@ -138,11 +143,6 @@
             color: #000;
         }
     }
-}
-
-.header_avatar_container, #header_avatar_menu .action-menu-icon {
-    z-index: 1003;
-    margin: 5px 0px 0px 0px;
 }
 
 .header_avatar_container {
