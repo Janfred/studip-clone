@@ -18,7 +18,7 @@ javascripts:
     - javascripts/vendor/highlight-9.12.0.js
 
   header: &header
-    - javascripts/vendor/notificon-1.0.4.js
+    - javascripts/vendor/favico.js-0.3.10.js
     - javascripts/header.js
     - javascripts/header-navigation.js
     - javascripts/personal_notifications.js

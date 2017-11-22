@@ -1,14 +1,33 @@
 /*jslint browser: true, nomen: true, unparam: true, newcap: true */
-/*global Notification, jQuery, STUDIP, _, Notificon */
+/*global Notification, jQuery, STUDIP, _, Favico */
 
-(function ($) {
+(function ($, STUDIP, Favico) {
     'use strict';
 
     var stack = {},
         originalTitle,
-        favicon_url,
         audio_notification = false,
-        directlydeleted = [];
+        directlydeleted = [],
+        favicon = null;
+
+    function updateFavicon(text) {
+        if (favicon === null) {
+            var valid = $('head').find('link[rel=icon]').first();
+            $('head').find('link[rel*=icon]').not(valid).remove();
+
+            favicon = new Favico({
+                bgColor: '#d60000',
+                textColor: '#fff',
+                fontStyle: 'normal',
+                fontFamily: 'Lato',
+                position: 'right',
+                type: 'rectangle'
+            });
+        }
+        favicon.badge(text);
+    }
+
+    STUDIP.favicon = updateFavicon;
 
     // Wrapper function that creates a desktop notification from given data
     function create_desktop_notification(data) {
@@ -127,7 +146,7 @@
             }
             if (old_count !== count) {
                 $('#notification_marker').text(count);
-                Notificon(count || '', {favicon: favicon_url});
+                updateFavicon(count);
                 $('#notification_container .mark-all-as-read').toggleClass('hidden', count < 2);
             }
         },
@@ -168,7 +187,6 @@
             });
 
             originalTitle = window.document.title;
-            favicon_url = $('link[rel="shortcut icon"]').attr('href');
             STUDIP.PersonalNotifications.newNotifications = process_notifications;
 
             if ($('#audio_notification').length > 0) {
@@ -180,4 +198,4 @@
         $('#notification_container .mark-all-as-read').click(STUDIP.PersonalNotifications.markAllAsRead);
     });
 
-}(jQuery));
+}(jQuery, STUDIP, Favico));
