@@ -14,31 +14,34 @@ namespace Studip\Squeeze;
 
 class Compressor
 {
+    const JS_COMPRESSOR = 'uglifyjs';
+    const JS_OPTIONS    = '--compress --mangle --';
 
-    const PATH_TO_JAVA = "java";
+    const CSS_COMPRESSOR = 'cleancss';
+    const CSS_OPTIONS    = '--skip-rebase -O 2';
 
-    function __construct($configuration)
+    public function __construct($configuration)
     {
         $this->configuration = $configuration;
     }
 
-    function compress($paths)
+    public function compress($paths)
     {
         $js = $this->concatenateAssets($paths);
-        if ($this->shouldCompress() && $this->hasJava()) {
-            $js = $this->callCompressor($js);
+        if ($this->shouldCompress() && $this->hasJsCompressor()) {
+            $js = $this->callJsCompressor($js);
         }
 
         return $js;
     }
 
-    function concatenateAssets($paths)
+    private function concatenateAssets($paths)
     {
         $files = array_map(array($this, "getFileAsUTF8"), $paths);
         return join("\n", $files);
     }
 
-    function getFileAsUTF8($path)
+    private function getFileAsUTF8($path)
     {
         $content = file_get_contents(
             $this->configuration['assets_root'] . "/$path");
@@ -50,48 +53,36 @@ class Compressor
         return $content;
     }
 
-    function shouldCompress()
+    public function shouldCompress()
     {
         return $this->configuration['compress'];
     }
 
-    function hasJava()
+    public function hasJsCompressor()
     {
-        return $this->getJavaCompatibility($this->pathToJava());
+        exec("which " . self::JS_COMPRESSOR, $result);
+        return (bool)$result;
     }
 
-    function getJavaCompatibility($java)
+    public function callJsCompressor($js)
     {
-        exec("$java -version 2>&1", $output, $status);
-        if ($status === 0) {
-            $matched = preg_match('/\d+\.\d+/', $output[0], $matches);
-            if ($matched === 1) {
-                return version_compare('1.4', $matches[0], '<=');
-            }
-        }
-        return FALSE;
+        $command = self::JS_COMPRESSOR . ' ' . self::JS_OPTIONS;
+        return $this->procOpen($command, $js);
     }
 
-    function callCompressor($js, $type = 'js')
+    public function hasCssCompressor()
     {
-        $java = $this->pathToJava();
-        $jar  = $this->pathToJar();
-
-        return $this->procOpen("$java -jar $jar --type $type", $js);
+        exec("which " . self::CSS_COMPRESSOR, $result);
+        return (bool)$result;
     }
 
-    function pathToJava()
+    public function callCssCompressor($css)
     {
-        return @$this->configuration['compressor_options']['java'] ?: self::PATH_TO_JAVA;
+        $command = self::CSS_COMPRESSOR . ' ' . self::CSS_OPTIONS;
+        return $this->procOpen($command, $css);
     }
 
-    function pathToJar()
-    {
-        global $STUDIP_BASE_PATH;
-        return "$STUDIP_BASE_PATH/vendor/yuicompressor/yuicompressor-2.4.7.jar";
-    }
-
-    function procOpen($command, $stdin)
+    private function procOpen($command, $stdin)
     {
         $cwd = $GLOBALS['TMP_PATH'];
 

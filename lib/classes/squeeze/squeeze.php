@@ -11,16 +11,6 @@
  * the License, or (at your option) any later version.
  */
 
-namespace {
-    // emulate #ctype_digit, unless it exists
-    // yaml lib needs it
-    if (!function_exists('ctype_digit')) {
-        function ctype_digit($text) {
-            return preg_match('/^\d+$/', $text);
-        }
-    }
-}
-
 namespace Studip\Squeeze {
 
     /**
@@ -42,9 +32,9 @@ namespace Studip\Squeeze {
         $compressor = new Compressor($configuration);
         if (is_array($configuration['css'])) {
             $compress = $compressor->shouldCompress();
-            if ($compress && !$compressor->hasJava()) {
+            if ($compress && !$compressor->hasCssCompressor()) {
                 $compress = false;
-                error_log('CSS could not be compressed, since Java is missing.');
+                error_log('CSS could not be compressed, since compressor is missing.');
             }
 
             $config_time = filemtime($configFile);
@@ -56,7 +46,7 @@ namespace Studip\Squeeze {
                     if (!file_exists($dest) || (max($config_time, filemtime($src)) > filemtime($dest))) {
                         $contents = file_get_contents($src);
                         if ($compress) {
-                            $contents = $compressor->callCompressor($contents, 'css');
+                            $contents = $compressor->callCssCompressor($contents);
                             $contents = preg_replace('/\s*\+\s*/', ' + ', $contents);
                         }
                         file_put_contents($dest, $contents);
@@ -95,10 +85,8 @@ namespace Studip\Squeeze {
      */
     function shouldPackage()
     {
-        // HOTFIX for BIEST 7620 <https://develop.studip.de/trac/ticket/7620>
-        // TODO: Fix this for good
-        return false;
-        // return \Studip\ENV !== 'development' && !\Request::submitted('debug_assets');
+        return \Studip\ENV !== 'development'
+            && !\Request::submitted('debug_assets');
     }
 
     /**
