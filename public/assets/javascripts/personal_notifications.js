@@ -27,8 +27,6 @@
         favicon.badge(text);
     }
 
-    STUDIP.favicon = updateFavicon;
-
     // Wrapper function that creates a desktop notification from given data
     function create_desktop_notification(data) {
         var notification = new Notification(STUDIP.STUDIP_SHORT_NAME, {
