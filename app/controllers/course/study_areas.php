@@ -77,17 +77,17 @@ class Course_StudyAreasController extends AuthenticatedController
                 }
                 $sidebar->addWidget($links);
                 // Entry list for admin upwards.
-                if ($GLOBALS['perm']->have_studip_perm("admin", $GLOBALS['SessionSeminar'])) {
+                if ($GLOBALS['perm']->have_studip_perm('admin', $GLOBALS['SessionSeminar'])) {
                     $list = new SelectorWidget();
-                    $list->setUrl("?#admin_top_links");
-                    $list->setSelectParameterName("cid");
+                    $list->setUrl('?#admin_top_links');
+                    $list->setSelectParameterName('cid');
                     foreach (AdminCourseFilter::get()->getCoursesForAdminWidget() as $seminar) {
                         $list->addElement(
                             new SelectElement(
                                 $seminar['Seminar_id'],
                                 $seminar['Name'],
-                                ($seminar['Seminar_id'] === $_SESSION['SessionSeminar']),
-                                $seminar['VeranstaltungsNummer']." ".$seminar['Name']
+                                $seminar['Seminar_id'] === $_SESSION['SessionSeminar'],
+                                $seminar['VeranstaltungsNummer'] . ' ' . $seminar['Name']
                             ),
                             'select-' . $seminar['Seminar_id']
                         );

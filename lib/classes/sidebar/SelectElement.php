@@ -75,7 +75,7 @@ class SelectElement extends WidgetElement
      */
     public function getLabel()
     {
-        return ltrim($this->label, ' ');
+        return ltrim($this->label);
     }
 
     /**
@@ -87,7 +87,7 @@ class SelectElement extends WidgetElement
      */
     public function getTooltip()
     {
-        return ltrim($this->tooltip, ' ');
+        return ltrim($this->tooltip);
     }
 
     /**

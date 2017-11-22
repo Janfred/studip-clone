@@ -70,17 +70,17 @@ class Course_RoomRequestsController extends AuthenticatedController
         $actions->addLink(_('Neue Raumanfrage erstellen'), $this->url_for('course/room_requests/new/' . $this->course_id), Icon::create('add', 'clickable'));
         Sidebar::get()->addWidget($actions);
 
-        if ($GLOBALS['perm']->have_perm("admin")) {
+        if ($GLOBALS['perm']->have_perm('admin')) {
             $list = new SelectorWidget();
-            $list->setUrl("?#admin_top_links");
-            $list->setSelectParameterName("cid");
+            $list->setUrl('?#admin_top_links');
+            $list->setSelectParameterName('cid');
             foreach (AdminCourseFilter::get()->getCoursesForAdminWidget() as $seminar) {
                 $list->addElement(
                     new SelectElement(
                         $seminar['Seminar_id'],
                         $seminar['Name'],
-                        ($seminar['Seminar_id'] === $_SESSION['SessionSeminar']),
-                        $seminar['VeranstaltungsNummer']." ".$seminar['Name']
+                        $seminar['Seminar_id'] === $_SESSION['SessionSeminar'],
+                        $seminar['VeranstaltungsNummer'] . ' ' . $seminar['Name']
                     ),
                     'select-' . $seminar['Seminar_id']
                 );

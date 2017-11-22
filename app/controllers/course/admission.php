@@ -62,18 +62,18 @@ class Course_AdmissionController extends AuthenticatedController
     {
         URLHelper::addLinkParam('return_to_dialog', Request::isDialog());
         $this->sidebar = Sidebar::get();
-        $this->sidebar->setImage("sidebar/seminar-sidebar.png");
+        $this->sidebar->setImage('sidebar/seminar-sidebar.png');
         if ($GLOBALS['perm']->have_perm('admin')) {
             $list = new SelectorWidget();
-            $list->setUrl("?#admin_top_links");
-            $list->setSelectParameterName("cid");
+            $list->setUrl('?#admin_top_links');
+            $list->setSelectParameterName('cid');
             foreach (AdminCourseFilter::get()->getCoursesForAdminWidget() as $seminar) {
                 $list->addElement(
                     new SelectElement(
                         $seminar['Seminar_id'],
                         $seminar['Name'],
-                        ($seminar['Seminar_id'] === $_SESSION['SessionSeminar']),
-                        $seminar['VeranstaltungsNummer']." ".$seminar['Name']
+                        $seminar['Seminar_id'] === $_SESSION['SessionSeminar'],
+                        $seminar['VeranstaltungsNummer'] . ' ' . $seminar['Name']
                     ),
                     'select-' . $seminar['Seminar_id']
                 );

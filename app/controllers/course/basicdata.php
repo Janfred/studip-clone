@@ -380,17 +380,17 @@ class Course_BasicdataController extends AuthenticatedController
         }
         $sidebar->addWidget($widget);
         // Entry list for admin upwards.
-        if ($perm->have_studip_perm("admin",$this->course_id)) {
+        if ($perm->have_studip_perm('admin',$this->course_id)) {
             $list = new SelectorWidget();
-            $list->setUrl("?#admin_top_links");
-            $list->setSelectParameterName("cid");
+            $list->setUrl('?#admin_top_links');
+            $list->setSelectParameterName('cid');
             foreach (AdminCourseFilter::get()->getCoursesForAdminWidget() as $seminar) {
                 $list->addElement(
                     new SelectElement(
                         $seminar['Seminar_id'],
                         $seminar['Name'],
-                        ($seminar['Seminar_id'] === $_SESSION['SessionSeminar']),
-                        $seminar['VeranstaltungsNummer']." ".$seminar['Name']
+                        $seminar['Seminar_id'] === $_SESSION['SessionSeminar'],
+                        $seminar['VeranstaltungsNummer'] . ' ' . $seminar['Name']
                     ),
                     'select-' . $seminar['Seminar_id']
                 );
