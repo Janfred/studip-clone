@@ -56,7 +56,7 @@ class SqueezeCompressorTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('\Studip\Squeeze\Exception');
         $compressor = new Compressor(new Configuration());
         $js = "function A()";
-        $compressor->callCompressor($js);
+        $compressor->callJsCompressor($js);
     }
 
 }
