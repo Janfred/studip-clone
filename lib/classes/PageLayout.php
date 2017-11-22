@@ -102,7 +102,6 @@ class PageLayout
         self::addHeadElement('link', array('rel' => 'icon', 'type' => 'image/png', 'sizes' => '16x16', 'href' => Assets::image_path('favicon-16x16.png')));
         self::addHeadElement('link', array('rel' => 'manifest', 'href' => Assets::image_path('manifest.json')));
         self::addHeadElement('link', array('rel' => 'mask-icon', 'href' => Assets::image_path('safari-pinned-tab.svg')));
-        self::addHeadElement('link', array('rel' => 'shortcut icon', 'href' => Assets::image_path('favicon.png')));
         self::addHeadElement('meta', array('name' => 'TileColor', 'content' => '#2b5797'));
         self::addHeadElement('meta', array('name' => 'TileImage', 'content' => Assets::image_path('mstile-144x144.png')));
         self::addHeadElement('meta', array('name' => 'msapplication-config', 'content' => Assets::image_path('browserconfig.xml')));
