@@ -3,7 +3,12 @@
 <? elseif (!empty($courses)): ?>
     <?= $this->render_partial('admin/courses/courses.php', compact('courses')) ?>
 <? elseif ($count_courses): ?>
-    <?= MessageBox::info(sprintf(_('Es wurden %u Veranstaltungen gefunden. Grenzen Sie diese mit den Filtermöglichkeiten weiter ein oder %slassen Sie alle anzeigen%s.'), $count_courses, '<a href="'.URLHelper::getLink("dispatch.php/admin/courses", array('display' => "all")).'">', '</a>')) ?>
+    <?= MessageBox::info(sprintf(
+        _('Es wurden %u Veranstaltungen gefunden. Grenzen Sie diese mit den Filtermöglichkeiten weiter ein oder %slassen Sie alle anzeigen%s.'),
+        $count_courses,
+        '<a href="' . $controller->url_for('admin/courses', ['display' => 'all']) . '">',
+        '</a>'
+    )) ?>
 <? else: ?>
     <?= MessageBox::info(_('Ihre Suche ergab keine Treffer')) ?>
 <? endif; ?>

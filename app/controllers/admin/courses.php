@@ -1233,7 +1233,7 @@ class Admin_CoursesController extends AuthenticatedController
         }
         $filter->storeSettings();
         $this->count_courses = $filter->countCourses();
-        if ($this->count_courses && (($this->count_courses <= $filter->max_show_courses) || (Request::get("display") === "all"))) {
+        if ($this->count_courses && ($this->count_courses <= $filter->max_show_courses || Request::get('display') === 'all')) {
             $courses = $filter->getCourses();
         } else {
             return array();
