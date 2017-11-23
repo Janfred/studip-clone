@@ -61,7 +61,7 @@ class StudipAutoloader
      */
     public static function register()
     {
-        spl_autoload_register(array(get_called_class(), 'loadClass'));
+        spl_autoload_register('static::loadClass');
     }
 
 
@@ -70,7 +70,7 @@ class StudipAutoloader
      */
     public static function unregister()
     {
-        spl_autoload_unregister(array(get_called_class(), 'loadClass'));
+        spl_autoload_unregister('static::loadClass');
     }
 
 
@@ -189,6 +189,7 @@ class StudipAutoloader
 
             $filename = self::resolvePathAndFilename($item['path'], $class_file);
             if ($filename !== false) {
+                self::$class_lookup[$class] = $filename;
                 return $filename;
             }
         }
