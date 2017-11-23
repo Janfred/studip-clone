@@ -168,6 +168,27 @@ class CourseExDate extends SimpleORMap
      */
     public function unCancelDate()
     {
+        //NOTE: If you modify this method make sure the changes
+        //are also inserted in SingleDateDB::storeSingleDate
+        //and CourseDate::cancelDate to keep the behavior consistent
+        //across Stud.IP!
+
+        //These statements are used below to update the relations
+        //of this ex-date.
+        $db = DBManager::get();
+
+        $groups_stmt = $db->prepare(
+            "UPDATE termin_related_groups
+            SET termin_id = :termin_id
+            WHERE termin_id = :ex_termin_id;"
+        );
+
+        $persons_stmt = $db->prepare(
+            "UPDATE termin_related_persons
+            SET range_id = :termin_id
+            WHERE range_id = :ex_termin_id;"
+        );
+
         $ex_date = $this->toArray();
 
         //REMOVE content
@@ -178,6 +199,26 @@ class CourseExDate extends SimpleORMap
         $date->setId($date->getNewId());
 
         if ($date->store()) {
+            //Update the relations to the ex-date so that they
+            //use the ID of the new date.
+
+            $groups_stmt->execute(
+                [
+                    'termin_id' => $date->id,
+                    'ex_termin_id' => $this->id
+                ]
+            );
+
+            $persons_stmt->execute(
+                [
+                    'termin_id' => $date->id,
+                    'ex_termin_id' => $this->id
+                ]
+            );
+
+            //After we updated the relations so that they refer to the
+            //new date we can delete this ex-date and return the date:
+
             StudipLog::log('SEM_UNDELETE_SINGLEDATE', $this->termin_id, $this->range_id, 'Cycle_id: ' . $this->metadate_id);
             $this->delete();
             return $date;

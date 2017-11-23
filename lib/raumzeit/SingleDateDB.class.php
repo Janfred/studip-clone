@@ -38,6 +38,11 @@ class SingleDateDB
 {
     static function storeSingleDate($termin)
     {
+        //NOTE: If you modify this method make sure the changes
+        //are also inserted in CourseDate::cancelDate and
+        //CourseExDate::unCancelDate to keep the behavior consistent
+        //across Stud.IP!
+
         $table = 'termine';
 
         if ($termin->isExTermin()) {
