@@ -16,21 +16,21 @@
 class Course_CancelDatesController extends AuthenticatedController
 {
     protected $utf8decode_xhr = true;
-    
+
     /**
      * common tasks for all actions
      */
     public function before_filter(&$action, &$args)
     {
         global $perm;
-        
+
         parent::before_filter($action, $args);
-        
+
         if (Request::get('termin_id')) {
             $this->dates[0]  = new SingleDate(Request::option('termin_id'));
             $this->course_id = $this->dates[0]->range_id;
         }
-        
+
         if (Request::get('issue_id')) {
             $this->issue_id  = Request::option('issue_id');
             $this->dates     = array_values(array_map(function ($data) {
@@ -46,11 +46,11 @@ class Course_CancelDatesController extends AuthenticatedController
         PageLayout::setHelpKeyword('Basis.VeranstaltungenVerwaltenAendernVonZeitenUndTerminen');
         PageLayout::setTitle(Course::findCurrent()->getFullname() . " - " . _('Veranstaltungstermine absagen'));
     }
-    
+
     public function index_action()
     {
     }
-    
+
     public function store_action()
     {
         CSRFProtection::verifyUnsafeRequest();
@@ -70,10 +70,10 @@ class Course_CancelDatesController extends AuthenticatedController
         PageLayout::postSuccess(_('Folgende Termine wurden abgesagt') . ($msg ? ' (' . $msg . '):' : ':'), array_map(function ($d) {
             return $d->toString();
         }, $this->dates));
-        
+
         $this->redirect($this->url_for('course/dates'));
     }
-    
+
     public function after_filter($action, $args)
     {
         if (Request::isXhr()) {
@@ -88,5 +88,5 @@ class Course_CancelDatesController extends AuthenticatedController
         }
         parent::after_filter($action, $args);
     }
-    
+
 }

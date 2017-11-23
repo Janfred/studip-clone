@@ -364,4 +364,29 @@ class CourseDate extends SimpleORMap
             }
         }
     }
+
+    /**
+     * Returns a list of all possible warnings that should be considered when
+     * this date is deleted.
+     *
+     * @return array of warnings
+     */
+    public function getDeletionWarnings()
+    {
+        $warnings = [];
+        if (count($this->topics) > 0) {
+            if (Config::get()->RESOURCES_ENABLE_EXPERT_SCHEDULE_VIEW) {
+                $warnings[] = _('Diesem Termin ist im Ablaufplan ein Thema zugeordnet.') . "\n"
+                            . _('Titel und Beschreibung des Themas bleiben erhalten und können in der Expertenansicht des Ablaufplans einem anderen Termin wieder zugeordnet werden.');
+            } else {
+                $warnings[] = _('Diesem Termin ist ein Thema zugeordnet.');
+            }
+        }
+
+        if (Config::get()->RESOURCES_ENABLE && $this->getRoom()) {
+            $warnings[] = _('Dieser Termin hat eine Raumbuchung, welche mit dem Termin gelöscht wird.');
+        }
+
+        return $warnings;
+    }
 }

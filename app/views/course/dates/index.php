@@ -25,16 +25,19 @@
     <caption><?= htmlReady($semester['name']) ?></caption>
         <colgroup class="hidden-small-down">
         <? if (count($course->statusgruppen) > 0): ?>
-            <col width="30%">
+            <col>
             <col width="10%">
             <col width="20%">
             <col width="20%">
             <col width="20%">
         <? else: ?>
-            <col width="30%">
+            <col>
             <col width="10%">
             <col width="30%">
             <col width="30%">
+        <? endif; ?>
+        <? if ($has_access): ?>
+            <col width="48px">
         <? endif; ?>
         </colgroup>
     <thead>
@@ -46,6 +49,9 @@
         <? endif; ?>
             <th data-sort="text" class="hidden-small-down"><?= _('Thema') ?></th>
             <th data-sort="text"><?= _('Raum') ?></th>
+        <? if ($has_access): ?>
+            <th datasort="false"></th>
+        <? endif; ?>
         </tr>
     </thead>
     <tbody>
@@ -54,17 +60,16 @@
         foreach ($dates as $key => $date) {
             $dateSemester = Semester::findByTimestamp($date['date']);
             if ($dateSemester && $semester->getId() === $dateSemester->getId()) {
-                 if (is_null($is_next_date) && $date['end_time'] >= time() && !is_a($date, "CourseExDate")) {
-                     $is_next_date = $key;
-                 }
-                 echo $this->render_partial(
-                    'course/dates/_date_row.php',
-                    array(
-                        'date' => $date,
-                        'is_next_date' => $is_next_date === $key,
-                        'course' => $course
-                    )
-                );
+                if (is_null($is_next_date) && $date['end_time'] >= time() && !is_a($date, 'CourseExDate')) {
+                    $is_next_date = $key;
+                }
+                $partial = $date instanceof CourseExDate ? '_date_row-exdate' : '_date_row';
+                echo $this->render_partial("course/dates/{$partial}.php", [
+                    'date'         => $date,
+                    'is_next_date' => $is_next_date === $key,
+                    'course'       => $course,
+                    'has_acces'    => $has_access,
+                ]);
             } elseif (!$dateSemester && !in_array($key, $lostDateKeys)) {
                 $lostDateKeys[] = $key;
             }
@@ -74,7 +79,7 @@
 </table>
 <? endforeach; ?>
 
-<? if (count($lostDateKeys)): ?>
+<? if (count($lostDateKeys) > 0): ?>
 <table class="dates default sortable-table" data-sortlist="[[0, 0]]" data-table-id="none">
     <caption><?= _('Ohne Semester') ?></caption>
     <thead>

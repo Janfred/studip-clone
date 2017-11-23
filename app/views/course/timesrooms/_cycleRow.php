@@ -70,7 +70,7 @@ $is_exTermin = $termin instanceof CourseExDate;
     <? if ($is_exTermin): ?>
         <? $actionMenu->addLink(
             $controller->url_for(
-                'course/timesrooms/cancel/' . $termin->termin_id
+                'course/timesrooms/cancel/' . $termin->id
                 . ($termin->metadate_id ? '/' . $termin->metadate_id : ''),
                 $linkAttributes
             ),
@@ -79,27 +79,12 @@ $is_exTermin = $termin instanceof CourseExDate;
             ['data-dialog' => 'size=50%']
         ) ?>
 
-        <? $warning = [] ?>
-        <? $course_topic = CourseTopic::findByTermin_id($termin->id) ?>
-        <? if (!empty($course_topic)) : ?>
-            <? if (Config::get()->RESOURCES_ENABLE_EXPERT_SCHEDULE_VIEW) : ?>
-                <? $warning[] = _('Diesem Termin ist im Ablaufplan ein Thema zugeordnet.
-                    Titel und Beschreibung des Themas bleiben erhalten und können in der Expertenansicht des Ablaufplans einem anderen Termin wieder zugeordnet werden.'); ?>
-            <? else : ?>
-                <? $warning[] = _('Diesem Termin ist ein Thema zugeordnet.'); ?>
-            <? endif ?>
-        <? endif ?>
-
-        <? if (Config::get()->RESOURCES_ENABLE && $termin->getRoom()) : ?>
-            <? $warning[] = _('Dieser Termin hat eine Raumbuchung, welche mit dem Termin gelöscht wird.'); ?>
-        <? endif ?>
-
         <? $params = [
             'type'         => 'image',
             'class'        => 'middle',
             'name'         => 'delete_single_date',
-            'data-confirm' => _('Diesen Termin wiederherstellen?') . implode("\n", $warning),
-            'formaction'   => $controller->url_for('course/timesrooms/undeleteSingle/' . $termin->termin_id),
+            'data-confirm' => _('Diesen Termin wiederherstellen?'),
+            'formaction'   => $controller->url_for('course/timesrooms/undeleteSingle/' . $termin->id),
         ]; ?>
         <? if (Request::isXhr()) : ?>
             <? $params['data-dialog'] = 'size=auto' ?>
@@ -113,18 +98,20 @@ $is_exTermin = $termin instanceof CourseExDate;
 
     <? elseif (!$locked) : ?>
         <? $actionMenu->addLink(
-            $controller->url_for('course/timesrooms/editDate/' . $termin->termin_id, $linkAttributes),
+            $controller->url_for('course/timesrooms/editDate/' . $termin->id, $linkAttributes),
             _('Termin bearbeiten'),
             Icon::create('edit', 'clickable', ['title' => _('Diesen Termin bearbeiten')]),
             ['data-dialog' => '']
         ) ?>
+
         <? $params = [
             'type'         => 'image',
             'class'        => 'middle',
             'name'         => 'delete_single_date',
-            'data-confirm' => _('Wollen Sie diesen Termin wirklich löschen / ausfallen lassen?') . (!empty($warning) ? implode("\n", $warning) : ''),
+            'data-confirm' => _('Wollen Sie diesen Termin wirklich löschen / ausfallen lassen?')
+                              . '<br>' . implode('<br>', $termin->getDeletionWarnings()),
             'formaction'   => $controller->url_for(
-                'course/timesrooms/deleteSingle/' . $termin->termin_id,
+                'course/timesrooms/deleteSingle/' . $termin->id,
                 ['cycle_id' => $termin->metadate_id] + $linkAttributes
             ),
         ]; ?>

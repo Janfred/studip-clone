@@ -6635,15 +6635,41 @@ fieldset.document-admin-search label {
   display: inline-block;
   width: 49%;
 }
-.themen_list,
-.dozenten_list {
+.dozenten-list {
   margin: 0px;
   padding: 0px;
   list-style-type: none;
 }
-.themen_list > * {
-  background-color: #e7ebf1;
-  margin: 2px;
+.themen-list-container {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-box-flex;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  -moz-box-direction: normal;
+  -moz-box-orient: horizontal;
+  -webkit-box-orient: horizontal;
+  flex-direction: row;
+}
+.themen-list-container > * {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  -moz-box-flex: 1;
+  flex: 1;
+}
+.themen-list-container > a {
+  -webkit-box-flex: 0;
+  -webkit-flex: 0;
+  -ms-flex: 0;
+  -moz-box-flex: 0;
+  flex: 0;
+  -webkit-align-self: flex-end;
+  -ms-align-self: flex-end;
+  align-self: flex-end;
 }
 table.dates {
   width: calc(100% - 4px);
@@ -6651,8 +6677,15 @@ table.dates {
 table.dates .themen_list > * {
   background-color: transparent;
 }
-table.dates .ausfall {
+table.dates tr.ausfall {
+  -webkit-transition: opacity 300ms;
+  -moz-transition: opacity 300ms;
+  -o-transition: opacity 300ms;
+  transition: opacity 300ms;
   opacity: 0.5;
+}
+table.dates tr.ausfall:hover {
+  opacity: 1;
 }
 table.dates .nextdate {
   background-color: #d0d7e3;
@@ -6667,6 +6700,9 @@ table.dates .draggable-topic-handle {
   cursor: move;
   background: transparent url("../images/anfasser_24.png") 3px center no-repeat;
   padding-left: 12px;
+}
+table.dates .ui-draggable-dragging img.icon-shape-trash {
+  display: none;
 }
 .file_uploader {
   display: none;

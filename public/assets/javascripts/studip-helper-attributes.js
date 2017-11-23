@@ -31,17 +31,17 @@
         var proxied = $(this).data('proxyfor'),
             $proxied = $(proxied).filter(':not(:disabled)'),
             $checked = $proxied.filter(':checked'),
-            $indeterminate = $proxied.filter(function() {
+            $indeterminate = $proxied.filter(function () {
                 return $(this).prop('indeterminate');
             });
         $(this).prop('checked', $proxied.length > 0 && $proxied.length === $checked.length);
-        $(this).prop('indeterminate', $checked.length > 0 && $checked.length < $proxied.length || $indeterminate.length > 0);
+        $(this).prop('indeterminate', ($checked.length > 0 && $checked.length < $proxied.length) || $indeterminate.length > 0);
         $(this).trigger('change');
     }).on('change', ':checkbox[data-proxiedby]', function () {
         var proxy = $(this).data('proxiedby');
         $(proxy).trigger('update.proxy');
     });
-    
+
     $(document).ready(connectProxyAndProxied);
     $(document).on('dialog-update', connectProxyAndProxied);
 
@@ -118,7 +118,7 @@
                         || element.find('[title]:first').attr('title')
                         || 'Wollen Sie die Aktion wirklich ausführen?'.toLocaleString();
 
-            STUDIP.Dialog.confirm(question, function () {
+            STUDIP.Dialog.confirm(question).done(function () {
                 var content = element.data().confirm;
 
                 // We need to trigger the native event because for
@@ -134,7 +134,7 @@
             });
         }
     }
-    $(document).on('click', 'a[data-confirm],input[data-confirm],button[data-confirm]', confirmation_handler);
+    $(document).on('click', 'a[data-confirm],input[data-confirm],button[data-confirm],img[data-confirm]', confirmation_handler);
     $(document).on('submit', 'form[data-confirm]', confirmation_handler);
 
     // Ensures an element has the same value as another element.

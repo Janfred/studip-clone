@@ -17,8 +17,8 @@
                 dataType: 'json',
                 type: 'post'
             }).done(function (response) {
-                $('#new_topic').closest('[data-termin-id]').find('.themen_list').append(response.li);
-                $('#date_' + termin_id).find('.themen_list').append(response.li);
+                $('#new_topic').closest('[data-termin-id]').find('.themen-list').append(response.li);
+                $('#date_' + termin_id).find('.themen-list').append(response.li);
             });
 
             $('#new_topic').val('');
@@ -47,8 +47,8 @@
 
     // Drag and drop support for topics in date list
     function createDraggable() {
-        $('.dates tbody tr:not(:only-child) .themen_list li > a.title:not(.draggable-topic)').each(function () {
-            if ($(this).closest('.themen_list').next('a').length === 0) {
+        $('.dates tbody tr:not(:only-child) .themen-list li > a.title:not(.draggable-topic)').each(function () {
+            if ($(this).closest('.themen-list').next('a').length === 0) {
                 return;
             }
 
@@ -56,7 +56,7 @@
 
             $(this).children().addClass('draggable-topic-handle');
 
-            $(this).addClass('draggable-topic').data('table-id', table_id).attr('data-table-id', table_id).draggable({
+            $(this).closest('li').addClass('draggable-topic').data('table-id', table_id).attr('data-table-id', table_id).draggable({
                 axis: 'y',
                 containment: $(this).closest('tbody'),
                 handle: '.draggable-topic-handle',
@@ -72,7 +72,7 @@
 
         $(document).ajaxComplete(createDraggable);
 
-        $('.themen_list').each(function () {
+        $('.themen-list').each(function () {
             var table_id = $(this).closest('table').data().tableId;
             $(this).closest('td').addClass('topic-droppable').droppable({
                 accept: '.draggable-topic[data-table-id="' + table_id + '"]',

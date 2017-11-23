@@ -11,9 +11,9 @@ class Course_DatesController extends AuthenticatedController
         checkObject();
         checkObjectModule('schedule');
 
-        $course = Course::findCurrent();
-        if ($course) {
-            PageLayout::setTitle($course->getFullname() . ' ' . _('Termine'));
+        $this->course = Context::get();
+        if ($this->course) {
+            PageLayout::setTitle($this->course->getFullname() . ' ' . _('Termine'));
         } else {
             PageLayout::setTitle(_('Termine'));
         }
@@ -23,16 +23,16 @@ class Course_DatesController extends AuthenticatedController
 
         Sidebar::get()->setImage('sidebar/date-sidebar.png');
 
-        $this->show_raumzeit = $course->getSemClass()->offsetGet('show_raumzeit');
+        $this->show_raumzeit = $this->course->getSemClass()->offsetGet('show_raumzeit');
+        $this->has_access    = $this->hasAccess();
     }
 
     public function index_action()
     {
-        $this->course = Course::findCurrent();
-        if ($GLOBALS['perm']->have_studip_perm('tutor', $this->course->id) && Request::isPost() && Request::option("termin_id") && Request::get("topic_title")) {
-            $date = new CourseDate(Request::option("termin_id"));
+        if ($this->hasAccess() && Request::isPost() && Request::option('termin_id') && Request::get('topic_title')) {
+            $date = new CourseDate(Request::option('termin_id'));
             $seminar_id = $date['range_id'];
-            $title = Request::get("topic_title");
+            $title = Request::get('topic_title');
             $topic = CourseTopic::findByTitle($seminar_id, $title);
             if (!$topic) {
                 $topic = new CourseTopic();
@@ -52,13 +52,15 @@ class Course_DatesController extends AuthenticatedController
         Navigation::activateItem('/course/schedule/dates');
 
         object_set_visit_module('schedule');
+        $this->assignLockRulesToTemplate();
+
         $this->last_visitdate = object_get_visit($this->course->id, 'schedule');
-        $this->dates = $this->course->getDatesWithExdates();
+        $this->dates          = $this->course->getDatesWithExdates();
 
         // set up sidebar
         $actions = new ActionsWidget();
 
-        if (!$this->show_raumzeit && $GLOBALS['perm']->have_studip_perm('tutor', $this->course->id)) {
+        if (!$this->show_raumzeit && $this->hasAccess()) {
             $actions->addLink(
                 _('Neuer Einzeltermin'),
                 $this->url_for('course/dates/singledate'),
@@ -93,18 +95,7 @@ class Course_DatesController extends AuthenticatedController
         );
 
         if ($this->hasAccess()) {
-            $this->cancelled_dates_locked = LockRules::Check(
-                $this->date->range_id,
-                'cancelled_dates'
-            );
-            $this->metadata_locked = LockRules::Check(
-                $this->date->range_id,
-                'edit_dates_in_schedule'
-            );
-            $this->dates_locked = LockRules::Check(
-                $this->date->range_id,
-                'room_time'
-            );
+            $this->assignLockRulesToTemplate();
 
             $this->teachers = array_map(function (CourseMember $member) {
                 return $member->user;
@@ -126,13 +117,10 @@ class Course_DatesController extends AuthenticatedController
      */
     public function singledate_action($termin_id = null)
     {
+        $this->checkAccess();
+        $this->assignLockRulesToTemplate();
+
         Navigation::activateItem('/course/schedule/dates');
-
-        $course = Course::findCurrent();
-
-        if (!$GLOBALS['perm']->have_studip_perm('tutor', $course->id)) {
-            throw new AccessDeniedException();
-        }
 
         if (Request::isPost()) {
             CSRFProtection::verifyUnsafeRequest();
@@ -155,7 +143,7 @@ class Course_DatesController extends AuthenticatedController
             }
             $termin->raum     = Request::get('freeRoomText_sd');
             $termin->autor_id = $GLOBALS['user']->id;
-            $termin->range_id = $course->getId();
+            $termin->range_id = $this->course->id;
             $termin->date     = $start_time;
             $termin->end_time = $end_time;
             $termin->date_typ = Request::int('dateType');
@@ -174,10 +162,9 @@ class Course_DatesController extends AuthenticatedController
 
         } else {
             $this->date = new CourseDate();
-            $xtitle = _("Einzeltermin anlegen");
+            $xtitle = _('Einzeltermin anlegen');
         }
-        $this->cancelled_dates_locked = LockRules::Check($this->date->range_id, 'cancelled_dates');
-        $this->dates_locked = LockRules::Check($this->date->range_id, 'room_time');
+
         PageLayout::setTitle($xtitle);
     }
 
@@ -188,10 +175,10 @@ class Course_DatesController extends AuthenticatedController
      */
     public function save_details_action($date_id)
     {
+        $this->checkAccess();
+
         CSRFProtection::verifyUnsafeRequest();
-        if (!$GLOBALS['perm']->have_studip_perm("tutor", Context::getId())) {
-            throw new AccessDeniedException();
-        }
+
         $termin = CourseDate::find($date_id);
         if ($termin) {
             $termin->date_typ = Request::get('dateType');
@@ -251,11 +238,12 @@ class Course_DatesController extends AuthenticatedController
         $date->addTopic($topic);
 
         $factory = $this->get_template_factory();
-        $output = array('topic_id' => $topic->getId());
+        $output = ['topic_id' => $topic->id];
 
-        $template = $factory->open($this->get_default_template("_topic_li"));
-        $template->set_attribute("topic", $topic);
-        $template->set_attribute("date", $date);
+        $template = $factory->open($this->get_default_template('_topic_li'));
+        $template->topic      = $topic;
+        $template->date       = $date;
+        $template->has_access = $this->hasAccess();
         $output['li'] = $template->render();
 
         $this->render_json($output);
@@ -308,8 +296,7 @@ class Course_DatesController extends AuthenticatedController
 
     public function export_action()
     {
-        $course = Context::get();
-        $sem = new Seminar($course);
+        $sem = new Seminar($this->course);
         $themen =& $sem->getIssues();
 
         $termine = getAllSortedSingleDates($sem);
@@ -350,16 +337,17 @@ class Course_DatesController extends AuthenticatedController
         }
 
         $factory = $this->get_template_factory();
-        $template = $factory->open($this->get_default_template("export"));
+        $template = $factory->open($this->get_default_template('export'));
 
         $template->set_attribute('dates', $dates);
-        $template->lecturer_count = $course->countMembersWithStatus('dozent');
+        $template->lecturer_count = $this->course->countMembersWithStatus('dozent');
         $content = $template->render();
 
         $content = mb_encode_numericentity($content, array(0x80, 0xffff, 0, 0xffff), 'utf-8');
-        $filename = FileManager::cleanFileName($course['name'] . '-' . _("Ablaufplan") . '.doc');
+        $filename = FileManager::cleanFileName($this->course['name'] . '-' . _('Ablaufplan') . '.doc');
 
         $this->set_content_type(get_mime_type($filename));
+        $this->response->add_header('Content-Length', strlen($content));
         $this->response->add_header('Content-Disposition', 'attachment; ' . encode_header_parameter('filename', $filename));
         $this->response->add_header('Expires', 0);
         $this->response->add_header('Cache-Control', 'private');
@@ -369,7 +357,7 @@ class Course_DatesController extends AuthenticatedController
 
     private function hasAccess()
     {
-        return $GLOBALS['perm']->have_studip_perm('tutor', Context::getId());
+        return $GLOBALS['perm']->have_studip_perm('tutor', $this->course->id);
     }
 
     private function checkAccess()
@@ -377,5 +365,21 @@ class Course_DatesController extends AuthenticatedController
         if (!$this->hasAccess()) {
             throw new AccessDeniedException();
         }
+    }
+
+    private function assignLockRulesToTemplate()
+    {
+        $this->cancelled_dates_locked = LockRules::Check(
+            $this->course->id,
+            'cancelled_dates'
+        );
+        $this->metadata_locked = LockRules::Check(
+            $this->course->id,
+            'edit_dates_in_schedule'
+        );
+        $this->dates_locked = LockRules::Check(
+            $this->course->id,
+            'room_time'
+        );
     }
 }

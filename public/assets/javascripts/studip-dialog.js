@@ -437,7 +437,7 @@
         // Ensure dimensions fit in viewport
         width  = Math.min(width, $('body').width() * 0.95);
         height = Math.min(height, $('body').height() * 0.9);
-        if (previous !== false && width > previous.dimensions.width && height > previous.dimensions.height) {
+        if (previous && previous.hasOwnProperty('dimensions') && width > previous.dimensions.width && height > previous.dimensions.height) {
             width = width > previous.dimensions.width ? previous.dimensions.width * 0.95 : width;
             height = height > previous.dimensions.height ? previous.dimensions.height * 0.95 : height;
         }
@@ -541,7 +541,7 @@
                 try {
                     instance.element.dialog('destroy');
                     instance.element.remove();
-                } catch (ignore_again) {
+                } catch (ignore) {
                 }
             }
 
@@ -611,7 +611,7 @@
 
         $('body').append(form);
 
-        STUDIP.Dialog.confirm(question, function () {
+        STUDIP.Dialog.confirm(question).done(function () {
             form.submit();
         });
 

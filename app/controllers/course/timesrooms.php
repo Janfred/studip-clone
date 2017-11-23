@@ -474,7 +474,7 @@ class Course_TimesroomsController extends AuthenticatedController
      *
      * @param String $termin_id Id of the previously removed date
      */
-    public function undeleteSingle_action($termin_id)
+    public function undeleteSingle_action($termin_id, $from_dates = false)
     {
         $ex_termin = CourseExDate::find($termin_id);
         $termin    = $ex_termin->unCancelDate();
@@ -483,11 +483,15 @@ class Course_TimesroomsController extends AuthenticatedController
             $this->displayMessages();
         }
 
-        $params = array();
-        if ($termin->metadate_id != '') {
-            $params['contentbox_open'] = $termin->metadate_id;
+        if ($from_dates) {
+            $this->redirect("course/dates#date_{$termin_id}");
+        } else {
+            $params = [];
+            if ($termin->metadate_id != '') {
+                $params['contentbox_open'] = $termin->metadate_id;
+            }
+            $this->redirect($this->url_for('course/timesrooms/index', $params));
         }
-        $this->redirect($this->url_for('course/timesrooms/index', $params));
     }
 
     /**
