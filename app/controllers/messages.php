@@ -218,20 +218,20 @@ class MessagesController extends AuthenticatedController {
         }
 
         //check if the message shall be sent to all (or some) members of a course:
-        if (Request::get("filter") && Request::option("course_id")) {
+        if (Request::get('filter') && Request::option("course_id")) {
             $course = new Course(Request::option('course_id'));
-            if ($GLOBALS['perm']->have_studip_perm("tutor", Request::option('course_id')) || $course->getSemClass()['studygroup_mode']) {
-                $this->default_message->receivers = array();
-                if (Request::get("filter") === 'claiming') {
-                    $cs = CourseSet::getSetForCourse(Request::option("course_id"));
+            if ($GLOBALS['perm']->have_studip_perm('tutor', $course->id) || $course->getSemClass()['studygroup_mode'] || $course->student_mailing) {
+                $this->default_message->receivers = [];
+                if (Request::get('filter') === 'claiming') {
+                    $cs = CourseSet::getSetForCourse($course->id);
                     if (is_object($cs) && !$cs->hasAlgorithmRun()) {
-                        foreach (AdmissionPriority::getPrioritiesByCourse($cs->getId(), Request::option("course_id")) as $user_id => $p) {
-                            $this->default_message->receivers[] = MessageUser::build(array('user_id' => $user_id, 'snd_rec' => 'rec'));
+                        foreach (AdmissionPriority::getPrioritiesByCourse($cs->getId(), $course->id) as $user_id => $p) {
+                            $this->default_message->receivers[] = MessageUser::build(['user_id' => $user_id, 'snd_rec' => 'rec']);
                         }
                     }
                 } else {
-                    $params = array(Request::option('course_id'), Request::option('who'));
-                    switch (Request::get("filter")) {
+                    $params = [$course->id, Request::option('who')];
+                    switch (Request::get('filter')) {
                         case 'send_sms_to_all':
                             $query = "SELECT b.user_id,'rec' as snd_rec FROM seminar_user a, auth_user_md5 b WHERE a.Seminar_id = ? AND a.user_id = b.user_id AND a.status = ? ORDER BY Nachname, Vorname";
                             break;

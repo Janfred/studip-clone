@@ -25,13 +25,23 @@ class OptionsWidget extends ListWidget
      * @param String $toggle_url_off Optional alternative url to explicitely
      *                               turn off the checkbox ($toggle_url will
      *                               then act as $toggle_url_on)
+     * @param Array  $attributes  Optional additional attributes for the anchor
      */
-    public function addCheckbox($label, $state, $toggle_url, $toggle_url_off = null)
+    public function addCheckbox($label, $state, $toggle_url, $toggle_url_off = null, array $attributes = [])
     {
-        $content = sprintf('<a href="%s" class="options-checkbox options-%s">%s</a>',
-                           ($state && $toggle_url_off !== null) ? $toggle_url_off : $toggle_url,
-                           $state ? 'checked' : 'unchecked',
-                           htmlReady($label));
+        // Prepare attributes
+        $attr = [];
+        foreach ($attributes as $key => $value) {
+            $attr[] = sprintf('%s="%s"', $key, htmlReady($value));
+        }
+
+        $content = sprintf(
+            '<a href="%s" class="options-checkbox options-%s" %s>%s</a>',
+            ($state && $toggle_url_off !== null) ? $toggle_url_off : $toggle_url,
+            $state ? 'checked' : 'unchecked',
+            implode(' ', $attr),
+            htmlReady($label)
+        );
         $this->addElement(new WidgetElement($content));
     }
 

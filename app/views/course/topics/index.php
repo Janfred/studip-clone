@@ -123,10 +123,15 @@ if ($GLOBALS['perm']->have_studip_perm("tutor", Context::getId())) {
         Icon::create('topic+add', 'clickable'),
         array('data-dialog' => "buttons")
     );
-    $actions->addLink(
-        _("Themen öffentlich einsehbar"),
-        URLHelper::getURL("dispatch.php/course/topics/allow_public"),
-        Icon::create(Course::findCurrent()->public_topics ? 'checkbox-checked' : 'checkbox-unchecked', 'clickable')
-    );
 }
 $sidebar->addWidget($actions);
+
+if ($GLOBALS['perm']->have_studip_perm('tutor', Context::getId())) {
+    $options = new OptionsWidget();
+    $options->addCheckbox(
+        _('Themen öffentlich einsehbar'),
+        Context::get()->public_topics,
+        $controller->url_for('course/topics/allow_public')
+    );
+    $sidebar->addWidget($options);
+}
