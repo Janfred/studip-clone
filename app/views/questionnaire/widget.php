@@ -17,17 +17,17 @@
         </nav>
     </header>
 
-    <? if (!count($questionnaire_data)): ?>
+    <? if ($questionnaire_data): ?>
+        <? foreach ($questionnaire_data as $questionnaire): ?>
+            <?= $this->render_partial("questionnaire/_widget_questionnaire", array('questionnaire' => Questionnaire::buildExisting($questionnaire), 'range_type' => $range_type, 'range_id' => $range_id)) ?>
+        <? endforeach; ?>
+    <? elseif (!$suppress_empty_output): ?>
         <section class="noquestionnaires">
             <?= _('Es sind keine Fragebögen vorhanden.') ?>
             <? if ($allowed_to_add) : ?>
                 <?= _("Um neue Fragebögen zu erstellen, klicken Sie rechts auf das Plus.") ?>
             <? endif ?>
         </section>
-    <? else: ?>
-        <? foreach ($questionnaire_data as $questionnaire): ?>
-            <?= $this->render_partial("questionnaire/_widget_questionnaire", array('questionnaire' => Questionnaire::buildExisting($questionnaire), 'range_type' => $range_type, 'range_id' => $range_id)) ?>
-        <? endforeach; ?>
     <? endif; ?>
         <footer>
             <? if (Request::get('questionnaire_showall')): ?>
