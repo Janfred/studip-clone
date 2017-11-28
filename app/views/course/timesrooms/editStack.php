@@ -53,7 +53,6 @@
         <label>
             <?= _('Art') ?>
             <select name="course_type" id="course_type" class="size-s">
-                <option><?=_('Bitte wählen')?></option>
                 <? foreach ($GLOBALS['TERMIN_TYP'] as $id => $value) : ?>
                     <option value="<?= $id ?>"><?= htmlReady($value['name']) ?></option>
                 <? endforeach ?>
