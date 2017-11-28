@@ -173,15 +173,13 @@ class MessagesController extends AuthenticatedController {
         $this->message_id = Request::option("message_id") ?: md5(uniqid("neWMesSagE"));
 
 
-        $this->to = [];
+        $this->to = array();
         $this->default_message = new Message();
         $this->default_message->setId($this->default_message->getNewId());
 
         //flag to determine if the message is forwarded or not:
         $forward_message = false;
 
-        // Flag whether to display the course name instead of the receivers
-        $this->displayed_course = false;
 
         //check if a receiver is given:
         if (Request::username("rec_uname")) {
@@ -200,14 +198,27 @@ class MessagesController extends AuthenticatedController {
         }
 
         //check if the message shall be sent to all members of a status group:
-        if (Request::option("group_id")) {
-            $this->default_message->receivers = array();
-            $group = Statusgruppen::find(Request::option("group_id"));
-            if (($group['range_id'] === $GLOBALS['user']->id)
-                    || ($GLOBALS['perm']->have_studip_perm("autor", $group['range_id']))) {
+        if (Request::option('group_id')) {
+            $this->default_message->receivers = [];
+            $group  = Statusgruppen::find(Request::option('group_id'));
+
+            // Exclude hidden course members from mails if not at least tutor
+            $hidden = [];
+            $course = Course::find($group->range_id);
+            if ($course && !$GLOBALS['perm']->have_studip_perm('tutor', $course->id)) {
+                $hidden = $course->members->findBy('visible', 'no')->pluck('user_id');
+            }
+
+            if ($group['range_id'] === $GLOBALS['user']->id
+                || $GLOBALS['perm']->have_studip_perm('autor', $group['range_id']))
+            {
                 foreach ($group->members as $member) {
+                    if (in_array($member->user_id, $hidden)) {
+                        continue;
+                    }
+
                     $user = new MessageUser();
-                    $user->setData(array('user_id' => $member['user_id'], 'snd_rec' => "rec"));
+                    $user->setData(['user_id' => $member['user_id'], 'snd_rec' => 'rec']);
                     $this->default_message->receivers[] = $user;
                 }
             }
@@ -232,71 +243,97 @@ class MessagesController extends AuthenticatedController {
                         }
                     }
                 } else {
+                    // Exclude hidden course members from mail if not at least tutor
+                    $additional = '';
+                    if (!$GLOBALS['perm']->have_studip_perm('tutor', $course->id)) {
+                        $additonal = " AND seminar_user.visible != 'no'";
+                    }
+
                     $params = [$course->id, Request::option('who')];
                     switch (Request::get('filter')) {
                         case 'send_sms_to_all':
-                            $query = "SELECT b.user_id,'rec' as snd_rec FROM seminar_user a, auth_user_md5 b WHERE a.Seminar_id = ? AND a.user_id = b.user_id AND a.status = ? ORDER BY Nachname, Vorname";
+                            $query = "SELECT user_id, 'rec' AS snd_rec
+                                      FROM seminar_user
+                                      JOIN auth_user_md5 USING (user_id)
+                                      WHERE Seminar_id = ? AND status = ? {$additonal}
+                                      ORDER BY Nachname, Vorname";
                             break;
                         case 'all':
-                            $query = "SELECT user_id,'rec' as snd_rec FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE Seminar_id = ? ORDER BY Nachname, Vorname";
+                            $query = "SELECT user_id, 'rec' AS snd_rec
+                                      FROM seminar_user
+                                      JOIN auth_user_md5 USING (user_id)
+                                      WHERE Seminar_id = ? {$additonal}
+                                      ORDER BY Nachname, Vorname";
                             break;
                         case 'prelim':
-                            $query = "SELECT user_id,'rec' as snd_rec FROM admission_seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE seminar_id = ? AND status='accepted' ORDER BY Nachname, Vorname";
+                            $query = "SELECT user_id, 'rec' AS snd_rec
+                                      FROM admission_seminar_user
+                                      JOIN auth_user_md5 USING (user_id)
+                                      WHERE seminar_id = ? AND status = 'accepted'
+                                        {$additonal}
+                                      ORDER BY Nachname, Vorname";
                             break;
                         case 'awaiting':
-                            $query = "SELECT user_id,'rec' as snd_rec FROM admission_seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE seminar_id = ? AND status='awaiting' ORDER BY Nachname, Vorname";
+                            $query = "SELECT user_id, 'rec' AS snd_rec
+                                      FROM admission_seminar_user
+                                      JOIN auth_user_md5 USING (user_id)
+                                      WHERE seminar_id = ? AND status = 'awaiting'
+                                        {$additonal}
+                                      ORDER BY Nachname, Vorname";
                             break;
                         case 'inst_status':
-                            $query = "SELECT b.user_id,'rec' as snd_rec FROM user_inst a, auth_user_md5 b WHERE a.Institut_id = ? AND a.user_id = b.user_id AND a.inst_perms = ? ORDER BY Nachname, Vorname";
+                            $query = "SELECT user_id, 'rec' AS snd_rec
+                                      FROM user_inst
+                                      JOIN auth_user_md5 USING (user_id)
+                                      WHERE Institut_id = ? AND inst_perms = ?
+                                        {$additonal}
+                                      ORDER BY Nachname, Vorname";
                             break;
                         case 'not_grouped':
-                            $query = "SELECT seminar_user.user_id,'rec' as snd_rec FROM seminar_user
-                                     INNER JOIN auth_user_md5 USING (user_id)
-                                     LEFT JOIN statusgruppen ON range_id = seminar_id
-                                     LEFT JOIN statusgruppe_user ON statusgruppen.statusgruppe_id = statusgruppe_user.statusgruppe_id
-                                     AND seminar_user.user_id = statusgruppe_user.user_id
-                                     WHERE seminar_id = ?
-                                     GROUP BY seminar_user.user_id
-                                     HAVING count(statusgruppe_user.statusgruppe_id) = 0
-                                     ORDER BY Nachname, Vorname";
+                            $query = "SELECT seminar_user.user_id, 'rec' as snd_rec
+                                      FROM seminar_user
+                                      JOIN auth_user_md5 USING (user_id)
+                                      LEFT JOIN statusgruppen ON range_id = seminar_id
+                                      LEFT JOIN statusgruppe_user ON statusgruppen.statusgruppe_id = statusgruppe_user.statusgruppe_id
+                                        AND seminar_user.user_id = statusgruppe_user.user_id
+                                      WHERE seminar_id = ?
+                                      GROUP BY seminar_user.user_id
+                                      HAVING COUNT(statusgruppe_user.statusgruppe_id) = 0
+                                      ORDER BY Nachname, Vorname";
                             break;
                     }
                     $this->default_message->receivers = DBManager::get()->fetchAll($query, $params, 'MessageUser::build');
                 }
             }
 
-            if ($course->student_mailing) {
-            //if (!$GLOBALS['perm']->have_studip_perm('tutor', $course->id) && $course->student_mailing) {
-                $this->displayed_course = $course;
-            }
         }
 
         if (Request::option('prof_id') && Request::option('deg_id') && $GLOBALS['perm']->have_perm('root')) {
             $query = "SELECT DISTINCT user_id,'rec' as snd_rec
             FROM user_studiengang
             WHERE fach_id = ? AND abschluss_id = ?";
-            $this->default_message->receivers = DBManager::get()->fetchAll($query, array(
+            $this->default_message->receivers = DBManager::get()->fetchAll($query, [
                 Request::option('prof_id'),
                 Request::option('deg_id')
-            ), 'MessageUser::build');
+            ], 'MessageUser::build');
         }
 
         if (Request::option('sd_id') && $GLOBALS['perm']->have_perm('root')) {
-            $query = "SELECT DISTINCT user_id,'rec' as snd_rec
-            FROM user_studiengang
-            WHERE abschluss_id = ?";
-            $this->default_message->receivers = DBManager::get()->fetchAll($query, array(
+            $query = "SELECT DISTINCT user_id, 'rec' AS snd_rec
+                      FROM user_studiengang
+                      WHERE abschluss_id = ?";
+            $this->default_message->receivers = DBManager::get()->fetchAll($query, [
                 Request::option('sd_id')
-            ), 'MessageUser::build');
+            ], 'MessageUser::build');
         }
 
         if (Request::option('sp_id') && $GLOBALS['perm']->have_perm('root')) {
             $query = "SELECT DISTINCT user_id,'rec' as snd_rec
             FROM user_studiengang
             WHERE fach_id = ?";
-            $this->default_message->receivers = DBManager::get()->fetchAll($query, array(
+            $this->default_message->receivers = DBManager::get()->fetchAll($query, [
                 Request::option('sp_id')
-            ), 'MessageUser::build');
+            ], 'MessageUser::build');
         }
 
         if (!$this->default_message->receivers->count() && is_array($_SESSION['sms_data']['p_rec'])) {
