@@ -144,17 +144,22 @@ namespace {
     // Prime autoloader if cache is enabled (this cannot be in autoloader's
     // bootstrap because the stud.ip cache needs to have a db conenction)
     if ($GLOBALS['CACHING_ENABLE']) {
-        $cache_key = 'STUDIP#autoloader-classes';
-
-        $cache  = StudipCacheFactory::getCache();
-        $cached = $cache->read($cache_key);
+        $cached = StudipCacheFactory::getCache()->read('STUDIP#autoloader-classes');
         if ($cached) {
-            StudipAutoloader::addClassLookups(json_decode($cached, true));
+            $class_lookup = json_decode($cached, true);
+            $lookup_hash  = md5($cached);
+            StudipAutoloader::addClassLookups($class_lookup);
         }
 
-        register_shutdown_function(function () use ($cache, $cache_key) {
+        register_shutdown_function(function () use ($lookup_hash) {
             $cached = json_encode(StudipAutoloader::$class_lookup, JSON_UNESCAPED_UNICODE);
-            $cache->write($cache_key, $cached, 7 * 24 * 60 * 60);
+            if (md5($cached) !== $lookup_hash) {
+                StudipCacheFactory::getCache()->write(
+                    'STUDIP#autoloader-classes',
+                    $cached,
+                    7 * 24 * 60 * 60
+                );
+            }
         });
     }
 

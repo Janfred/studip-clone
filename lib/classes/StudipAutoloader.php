@@ -158,17 +158,35 @@ class StudipAutoloader
      */
     public static function loadClass($class)
     {
-        if (isset(self::$class_lookup[$class])) {
-            $file = self::$class_lookup[$class];
-        } else {
-            $file = self::findFile($class);
-        }
+        $file = self::lookupClass($class) ?: self::findFile($class);
 
         if ($file) {
+            self::$class_lookup[$class] = $file;
+
             include $file;
 
             return true;
         }
+    }
+
+    /**
+     * Tries to locate a class in the lookup array.
+     *
+     * @param string $class Class name
+     * @return string with filename or false
+     */
+    private static function lookupClass($class)
+    {
+        if (!isset(self::$class_lookup[$class])) {
+            return false;
+        }
+
+        $file = self::$class_lookup[$class];
+        if (file_exists($file)) {
+            return $file;
+        }
+        unset(self::$class_lookup[$class]);
+        return false;
     }
 
     /**
@@ -189,7 +207,6 @@ class StudipAutoloader
 
             $filename = self::resolvePathAndFilename($item['path'], $class_file);
             if ($filename !== false) {
-                self::$class_lookup[$class] = $filename;
                 return $filename;
             }
         }
