@@ -2,7 +2,13 @@
     <input type="hidden" name="message_id" id="message_id" value="<?= htmlReady($default_message->id) ?>">
     <input type="hidden" name="answer_to" value="<?= htmlReady($answer_to) ?>">
     <div>
-        <label for="user_id_1"><h4><?= _("An") ?></h4></label>
+        <label for="user_id_1"><h4><?= _('An') ?></h4></label>
+    <? if ($displayed_course): ?>
+        <?= htmlReady(sprintf(_('die Teilnehmenden von "%s"'), $displayed_course->getFullName())) ?>
+        <? foreach ($default_message->getRecipients() as $user) : ?>
+            <input type="hidden" name="message_to[]" value="<?= htmlReady($user->user_id) ?>">
+        <? endforeach; ?>
+    <? else: ?>
         <ul class="clean" id="adressees">
             <li id="template_adressee" style="display: none;" class="adressee">
                 <input type="hidden" name="message_to[]" value="">
@@ -56,6 +62,7 @@
         <script>
             STUDIP.MultiPersonSearch.init();
         </script>
+    <? endif; ?>
     </div>
     <div>
         <label>

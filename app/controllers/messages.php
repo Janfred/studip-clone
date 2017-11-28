@@ -173,13 +173,15 @@ class MessagesController extends AuthenticatedController {
         $this->message_id = Request::option("message_id") ?: md5(uniqid("neWMesSagE"));
 
 
-        $this->to = array();
+        $this->to = [];
         $this->default_message = new Message();
         $this->default_message->setId($this->default_message->getNewId());
 
         //flag to determine if the message is forwarded or not:
         $forward_message = false;
 
+        // Flag whether to display the course name instead of the receivers
+        $this->displayed_course = false;
 
         //check if a receiver is given:
         if (Request::username("rec_uname")) {
@@ -263,6 +265,10 @@ class MessagesController extends AuthenticatedController {
                 }
             }
 
+            if ($course->student_mailing) {
+            //if (!$GLOBALS['perm']->have_studip_perm('tutor', $course->id) && $course->student_mailing) {
+                $this->displayed_course = $course;
+            }
         }
 
         if (Request::option('prof_id') && Request::option('deg_id') && $GLOBALS['perm']->have_perm('root')) {
