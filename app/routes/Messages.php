@@ -89,46 +89,46 @@ class Messages extends \RESTAPI\RouteMap
         return $message_json;
     }
 
-    
+
     /**
      * Get the root file folder of a message.
      * The root file folder contains all files
      * that were appended to the message.
-     * 
+     *
      * @get /message/:message_id/file_folder
      */
     public function getTopFolder($message_id)
     {
         //first we check if the user exists:
         $message = \Message::find($message_id);
-        
+
         $user = \User::findCurrent();
-        
+
         if(!$user) {
             $this->halt(404, 'User not found!');
         }
-        
+
         if(!$message->permissionToRead($user->id)) {
             $this->halt(403, 'You are not allowed to read this message or its appended files!');
         }
-        
+
         //we can get the top folder:
         $top_folder = \Folder::findTopFolder($message->id, 'message');
-        
+
         $top_folder = $top_folder->getTypedFolder();
         if(!$top_folder) {
             $this->halt(500, 'Folder type not found!');
         }
-        
-        
+
+
         if(!$top_folder->isReadable($user->id)) {
             $this->halt(403, 'You are not allowed to read the top folder of this message!');
         }
-        
+
         return $top_folder->getEditTemplate();
     }
-    
-    
+
+
     /**
      * Schreibt eine neue Nachricht.
      *
@@ -232,17 +232,15 @@ class Messages extends \RESTAPI\RouteMap
         }
 
         $current_user = self::currentUser();
+        $message_user = $message->originator->user_id === $current_user
+                      ? $message->originator
+                      : $message->receivers->findBy('user_id', $current_user);
 
-        $mus = $message->users->filter(
-            function ($mu) use ($current_user) {
-                return $mu->user_id === $current_user;
-            });
-        if (!sizeof($mus)) {
+        if (!$message_user) {
             $this->error(401);
         }
 
-        $deleted = $mus->pluck("deleted");
-        if (sizeof($deleted) == array_sum($deleted)) {
+        if ($message_user->deleted) {
             $this->notFound("Message not found");
         }
 
@@ -284,7 +282,7 @@ class Messages extends \RESTAPI\RouteMap
 
         return $result;
     }
-    
+
     private function getFoldersMetaData($folders, $user_id, $box)
     {
         foreach ($folders as $id => $name) {
@@ -294,7 +292,7 @@ class Messages extends \RESTAPI\RouteMap
                 'unread' => count(self::folder($user_id, $box === 'inbox' ? 'rec' : 'snd', $id, true)),
             );
         }
-        
+
         return $folders;
     }
 
@@ -302,37 +300,42 @@ class Messages extends \RESTAPI\RouteMap
     {
         $user_id = self::currentUser();
 
-        $my_mu = $message->receivers->filter(
-            function ($mu) use ($user_id) { return $mu->user_id === $user_id; });
+        $my_mu = $message->receivers->filter(function ($mu) use ($user_id) {
+            return $mu->user_id === $user_id;
+        });
+        if ($message->originator->user_id === $user_id) {
+            $my_mu[] = $message->originator;
+        }
 
-        $my_roles = array(
+        $my_roles = [
             'snd' => $message->autor_id === $user_id,
-            'rec' => in_array('rec', $my_mu->pluck('snd_rec')));
+            'rec' => in_array('rec', $my_mu->pluck('snd_rec')),
+        ];
 
-        $json = $message->toArray(words("message_id subject message mkdate priority"));
+        $json = $message->toArray(words('message_id subject message mkdate priority'));
 
         // formatted message
         $json['message_html'] = formatReady($json['message']) ?: '';
 
         // sender
         $sender = $message->getSender();
-        $json['sender'] = $this->urlf('/user/%s', array($message->autor_id));
+        $json['sender'] = $this->urlf('/user/%s', array($message->author->id));
 
         // recipients
         if ($my_roles['snd']) {
-            $json['recipients'] = array();
+            $json['recipients'] = [];
             foreach ($message->getRecipients() as $r) {
-                $json['recipients'][] = $this->urlf('/user/%s', array($r->id));
+                $json['recipients'][] = $this->urlf('/user/%s', [$r->user_id]);
             }
         } else {
-            $json['recipients'] = array($this->urlf('/user/%s', array($user_id)));
+            $json['recipients'] = array($this->urlf('/user/%s', [$user_id]));
         }
 
         // attachments
-        if (sizeof($message->attachments)) {
-            $json['attachments'] = array();
-            foreach ($message->attachments as $att) {
-                $json['attachments'][] = $this->urlf('/file/%s', array($att->id));
+        if ($message->attachment_folder && count($message->attachment_folder->file_refs) > 0) {
+            $json['attachments'] = [];
+            foreach ($message->attachment_folder->file_refs as $ref) {
+                $json['attachments'][] = $this->urlf('/file/%s', [$ref->id]);
             }
         }
 
@@ -347,12 +350,13 @@ class Messages extends \RESTAPI\RouteMap
         }
 
         // folders
-        $json['folders'] = array();
+        $json['folders'] = [];
         foreach ($my_mu as $mu) {
-            $json['folders'][] =
-                $this->folderURL($user_id,
-                                 $mu->snd_rec === 'rec' ? 'inbox' : 'outbox',
-                                 0);
+            $json['folders'][] = $this->folderURL(
+                $user_id,
+                $mu->snd_rec === 'rec' ? 'inbox' : 'outbox',
+                0
+            );
         }
         return $json;
     }
