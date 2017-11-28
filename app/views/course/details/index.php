@@ -308,6 +308,10 @@
     </article>
 <? endif ?>
 
+<? if (isset($public_files)) : ?>
+    <?= $this->render_partial('profile/public_files') ?>
+<? endif ?>
+
 <article class="studip">
     <header>
         <h1><?= _('Veranstaltungsort') ?></h1>

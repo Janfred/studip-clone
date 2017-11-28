@@ -70,6 +70,21 @@ class Course_DetailsController extends AuthenticatedController
         $this->course_domains    = UserDomain::getUserDomainsForSeminar($this->course->id);
         $this->sem = new Seminar($this->course);
 
+        //public folders
+        $folders = Folder::findBySQL("range_type='course' AND range_id = ? AND folder_type = 'CoursePublicFolder'", [$this->course->id]);
+        $public_files = [];
+        $public_folders =[];
+        foreach ($folders as $folder) {
+            $one_public_folder = $folder->getTypedFolder();
+            $all_files = FileManager::getFolderFilesRecursive($one_public_folder, $GLOBALS['user']->id);
+            $public_files = array_merge($public_files, $all_files['files']);
+            $public_folders = array_merge($public_folders, $all_files['folders']);
+        }
+        if (count($public_files)) {
+            $this->public_files = $public_files;
+            $this->public_folders = $public_folders;
+        }
+
         // Retrive display of sem_tree
         if (Config::get()->COURSE_SEM_TREE_DISPLAY) {
             $this->studyAreaTree = StudipStudyArea::backwards($this->course->study_areas);
