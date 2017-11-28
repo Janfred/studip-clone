@@ -253,8 +253,9 @@ class Search_StudiengaengeController extends MVVController
                 $abschnitt_module = $abschnitt->getModulAssignments();
                 foreach ($abschnitt_module as $abschnitt_modul) {
                     
-                    // module is not public visible
-                    if (!$abschnitt_modul->modul->hasPublicStatus()) {
+                    // module is not public visible or section has no module
+                    // if no modules show only subheading
+                    if (!$abschnitt_modul->modul || !$abschnitt_modul->modul->hasPublicStatus()) {
                         continue;
                     }
                     
