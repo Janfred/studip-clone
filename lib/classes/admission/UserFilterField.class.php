@@ -84,12 +84,14 @@ class UserFilterField
             '=' => _('ist'),
             '!=' => _('ist nicht')
         );
-        // Get all available values from database.
-        $stmt = DBManager::get()->query(
-            "SELECT DISTINCT `".$this->valuesDbIdField."`, `".$this->valuesDbNameField."` ".
-            "FROM `".$this->valuesDbTable."` ORDER BY `".$this->valuesDbNameField."` ASC");
-        while ($current = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $this->validValues[$current[$this->valuesDbIdField]] = $current[$this->valuesDbNameField];
+        if ($this->valuesDbNameField) {
+            // Get all available values from database.
+            $stmt = DBManager::get()->query(
+                "SELECT DISTINCT `".$this->valuesDbIdField."`, `".$this->valuesDbNameField."` ".
+                "FROM `".$this->valuesDbTable."` ORDER BY `".$this->valuesDbNameField."` ASC");
+            while ($current = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $this->validValues[$current[$this->valuesDbIdField]] = $current[$this->valuesDbNameField];
+            }
         }
         if ($fieldId) {
             $this->id = $fieldId;
