@@ -58,7 +58,7 @@
      */
     function normalizeConfig(input) {
         var config = {
-            always: false,
+            always: null,
             exists: false
         };
         if ($.isPlainObject(input)) {
@@ -95,7 +95,7 @@
 
             if (config.always === true) {
                 changed = true;
-            } else {
+            } else if (config.always !== false) {
                 items.filter('[name]').each(function () {
                     changed = changed
                            || (this.defaultValue !== undefined && this.value !== this.defaultValue);
