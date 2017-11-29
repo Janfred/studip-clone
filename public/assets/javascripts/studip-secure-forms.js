@@ -14,7 +14,11 @@
  *
  * {
  *     always: Secures the element regardless of it's changed state. If a
- *             form should always be secured, use this.
+ *             form should always be secured, use this. If you want to exclude
+ *             an element from the security check, set always on that element
+ *             to false (but you should use the shorthand `data-secure="false"`
+ *             since the wording "always" is a little bit misleading in this
+ *             case).
  *     exists: Dynamically added nodes cannot be detected and thus will
  *             never be taken into account when detecting whether the
  *             element's value has changed. Specify a css selector that
