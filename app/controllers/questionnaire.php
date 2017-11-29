@@ -277,32 +277,13 @@ class QuestionnaireController extends AuthenticatedController
                 }
                 if (!$answered_before && !$this->questionnaire['anonymous'] && ($this->questionnaire['user_id'] !== $GLOBALS['user']->id)) {
                     $url = URLHelper::getURL("dispatch.php/questionnaire/evaluate/" . $this->questionnaire->getId(), array(), true);
-                    foreach ($this->questionnaire->assignments as $assignment) {
-                        if ($assignment['range_type'] === "course") {
-                            $url = URLHelper::getURL("dispatch.php/course/overview#" . $this->questionnaire->getId(), array(
-                                'cid' => $assignment['range_id'],
-                                'contentbox_type' => "vote",
-                                'contentbox_open' => $this->questionnaire->getId()
-                            ));
-                        } elseif ($assignment['range_type'] === "profile") {
-                            $url = URLHelper::getURL("dispatch.php/profile#" . $this->questionnaire->getId(), array(
-                                'contentbox_type' => "vote",
-                                'contentbox_open' => $this->questionnaire->getId()
-                            ), true);
-                        } elseif ($assignment['range_type'] === "start") {
-                            $url = URLHelper::getURL("dispatch.php/start#" . $this->questionnaire->getId(), array(
-                                'contentbox_type' => "vote",
-                                'contentbox_open' => $this->questionnaire->getId()
-                            ), true);
-                        }
-                        break;
-                    }
                     PersonalNotifications::add(
                         $this->questionnaire['user_id'],
                         $url,
                         sprintf(_("%s hat an der Befragung '%s' teilgenommen."), get_fullname(), $this->questionnaire['title']),
                         "questionnaire_" . $this->questionnaire->getId(),
-                        Icon::create('vote', 'clickable')
+                        Icon::create('vote', 'clickable'),
+                        true
                     );
                 }
             }
