@@ -96,7 +96,7 @@
             if (config.always === true) {
                 changed = true;
             } else {
-                items.each(function () {
+                items.filter('[name]').each(function () {
                     changed = changed
                            || (this.defaultValue !== undefined && this.value !== this.defaultValue);
                 });
