@@ -8799,6 +8799,7 @@ table.default tr.subcourses td:nth-child(-n+4) {
   font-weight: bold;
   padding: 15px 15px 15px 55px;
   text-align: left;
+  max-height: 60vh;
 }
 .ui-dialog.studip-confirmation .ui-dialog-buttonpane {
   text-align: center;
