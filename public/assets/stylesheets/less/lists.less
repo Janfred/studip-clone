@@ -54,3 +54,14 @@ dl {
       font-weight: bold;
   }
 }
+
+// reset the visualization of different levels of unordered lists
+.formatted-content ul {
+  list-style-type: disc;
+  ul {
+    list-style-type: circle;
+    ul {
+      list-style-type: square;
+    }
+  }
+}

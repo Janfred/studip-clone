@@ -8932,6 +8932,15 @@ ol ol {
 dl dt {
   font-weight: bold;
 }
+.formatted-content ul {
+  list-style-type: disc;
+}
+.formatted-content ul ul {
+  list-style-type: circle;
+}
+.formatted-content ul ul ul {
+  list-style-type: square;
+}
 select {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
