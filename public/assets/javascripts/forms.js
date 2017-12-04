@@ -77,41 +77,47 @@
 
     // Display a visible hint that indicates how many characters the user may
     // input if the element has a maxlength restriction.
-    function createLengthHint() {
-        $('form.default input[maxlength]:not(.no-hint), form.default textarea[maxlength]:not(.no-hint)').each(function () {
-            if ($(this).data('length-hint')) {
-                return;
-            }
 
-            var width = $(this).outerWidth(true),
-                hint  = $('<div class="length-hint">').hide(),
-                wrap  = $('<div class="length-hint-wrapper">').width(width);
+    $(document).on('focus', 'form.default [maxlength]:not(.no-hint)', function () {
+        if (!$(this).is('textarea,input') || $(this).data('length-hint')) {
+            return;
+        }
 
-            $(this).wrap(wrap);
+        var width   = $(this).outerWidth(true),
+            hint    = $('<div class="length-hint">').hide(),
+            wrap    = $('<div class="length-hint-wrapper">').width(width),
+            timeout = null;
 
-            hint.text('Zeichen verbleibend: '.toLocaleString());
+        $(this).wrap(wrap);
 
-            hint.append('<span class="length-hint-counter">');
-            hint.insertBefore(this);
+        hint.text('Zeichen verbleibend: '.toLocaleString());
 
-            $(this).focus(function () {
+        hint.append('<span class="length-hint-counter">');
+        hint.insertBefore(this);
+
+        $(this).focus(function () {
+            clearTimeout(timeout);
+            timeout = setTimeout(function () {
                 hint.finish().show('slide', {direction: 'down'}, 300);
-            }).blur(function () {
+            }, 200);
+        }).blur(function () {
+            clearTimeout(timeout);
+            timeout = setTimeout(function () {
                 hint.finish().hide('slide', {direction: 'down'}, 300);
-            }).on('focus propertychange change keyup', function () {
-                var count = $(this).val().length,
-                    max   = parseInt($(this).attr('maxlength'), 10);
+            }, 200);
+        }).on('focus propertychange change keyup', function () {
+            var count = $(this).val().length,
+                max   = parseInt($(this).attr('maxlength'), 10);
 
-                hint.find('.length-hint-counter').text(max - count);
-            });
-
-            $(this).data('length-hint', true);
-
-            $(this).trigger('change');
+            hint.find('.length-hint-counter').text(max - count);
         });
-    }
 
-    $(document).ready(createLengthHint).on('dialog-update', createLengthHint);
+        $(this).data('length-hint', true);
+
+        setTimeout(function () {
+            $(this).focus();
+        }.bind(this), 0);
+    });
 
     // Automatic form submission handler when a select has changed it's value.
     // Due to accessibility issues, an intuitive select[onchange=form.submit()]
