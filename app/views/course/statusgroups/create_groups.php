@@ -1,4 +1,4 @@
-<form class="default" action="<?= $controller->url_for('course/statusgroups/batch_create') ?>" method="post" data-secure="input">
+<form class="default" action="<?= $controller->url_for('course/statusgroups/batch_create') ?>" method="post" data-secure>
     <fieldset>
         <legend>
             <?= _('Wie sollen Gruppen angelegt werden?') ?>

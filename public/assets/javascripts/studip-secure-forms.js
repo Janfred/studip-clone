@@ -100,9 +100,13 @@
             if (config.always === true) {
                 changed = true;
             } else if (config.always !== false) {
-                items.filter('[name]').each(function () {
+                items.filter('[name]').filter(':not(:checkbox,:radio)').each(function () {
                     changed = changed
                            || (this.defaultValue !== undefined && this.value !== this.defaultValue);
+                });
+                items.filter('[name]').filter(':checkbox,:radio').each(function () {
+                    changed = changed
+                           || (this.defaultChecked !== undefined && this.checked !== this.defaultChecked);
                 });
             }
 
