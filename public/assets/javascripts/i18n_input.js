@@ -21,7 +21,7 @@
                     var opt   = $(this).find('option:selected'),
                         index = opt.index();
                     languages.not(':eq(' + index + ')').hide();
-                    languages.eq(index).show().focus();
+                    languages.eq(index).show().find(':input').trigger('focus');
                     $(this).css('background-image', opt.css('background-image'));
                 });
                 languages.each(function (id, lang) {
