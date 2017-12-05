@@ -92,18 +92,42 @@ class MailQueueEntry extends SimpleORMap
     {
         $mail = new StudipMail($this->mail);
 
+        //The cronjob message will be included in the mail queue
+        //cronjob's log. We must output the message via echo
+        //to get it into the log.
+        $cronjob_message = sprintf(
+            'sending message %1$s (sender: %2$s, %3$d recipient(s))...',
+            $this->message_id,
+            $mail->getSenderName(),
+            count($mail->getRecipients())
+        );
+
         if (is_a($mail, "StudipMail")) {
             $success = $mail->send();
             if ($success) {
+                $cronjob_message .= 'DONE';
                 if ($this['message_id'] && $this['user_id']) {
                     //Noch in message_user als versendet vermerken?
                 }
                 $this->delete();
             } else {
+                $cronjob_message .= 'FAILURE';
                 $this['tries'] = $this['tries'] + 1;
                 $this['last_try'] = time();
                 $this->store();
             }
+            if ($this['tries'] > 0) {
+                //If sending the message has failed at least once
+                //we add the amount of tries to the cronjob message.
+                $cronjob_message .= sprintf(
+                    '(t=%1$d)',
+                    $this['tries']
+                );
+            }
+        } else {
+            $cronjob_message .= 'ERROR(no_studip_mail)';
         }
+
+        echo $cronjob_message . "\n";
     }
 }
