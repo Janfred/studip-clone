@@ -175,7 +175,7 @@ if ($filesize && $file_ref->file->storage == 'disk') {
             header("Content-Range: bytes $start-$end/$filesize");
             exit;
         }
-        if ($range == '-') {
+        if ($range[0] == '-') {
             $c_start = $filesize - mb_substr($range, 1);
         } else {
             $range  = explode('-', $range);
