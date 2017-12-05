@@ -125,9 +125,11 @@ class MailQueueEntry extends SimpleORMap
                 );
             }
         } else {
+            //The mail could not be created from the provided data:
             $cronjob_message .= 'ERROR(no_studip_mail)';
         }
 
+        //Output the message with a newline character:
         echo $cronjob_message . "\n";
     }
 }
