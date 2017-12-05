@@ -42,7 +42,7 @@ class SendMailQueueJob extends CronJob
     {
         $status_messages = MailQueueEntry::sendAll(
             Config::get()->MAILQUEUE_SEND_LIMIT,
-            true
+            (bool)$parameters['verbose']
         );
 
         //We output one status message per line:
