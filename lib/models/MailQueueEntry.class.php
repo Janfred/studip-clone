@@ -71,65 +71,88 @@ class MailQueueEntry extends SimpleORMap
      * hours) it will stay in the mailqueue table but won't be sent anymore.
      * Each mail will only be tried to deliver once per hour. So if it fails
      * Stud.IP will try again next hour.
+     *
+     * @param int $limit The maximum amount of messages to be sent.
+     * @param bool $output_status_messages Wheter status messages shall be
+     *     created or not. The default is false (no status messages).
+     *
+     * @return array An empty array if no status messages are output
+     *     or an array with status messages, one for each mail.
      */
-    static public function sendAll($limit = null)
+    static public function sendAll($limit = null, $output_status_messages = false)
     {
-        self::findEachBySQL(function ($m) {
+        //The status messages will be returned
+        $status_messages = [];
+
+        self::findEachBySQL(function ($m)
+            use (&$status_messages, $output_status_messages) {
+            if ($output_status_messages) {
+                //In case that status messages for each mail shall be output
+                //we must reconstruct the StudipMail object.
+                $mail = new StudipMail($m->mail);
+                $status_message = sprintf(
+                    'sending message %1$s (sender: %2$s, %3$u recipient(s))...',
+                    $m->message_id,
+                    $mail->getSenderName(),
+                    count($mail->getRecipients())
+                );
+
+                if ($m->send()) {
+                    $status_message .= 'DONE';
+                } else {
+                    $status_message .= 'FAILURE';
+                }
+                if ($m->tries > 0) {
+                    //If sending the message has failed at least once
+                    //we add the amount of tries to the cronjob message.
+                    $status_message .= sprintf(
+                        '(t=%u)',
+                        $m->tries
+                    );
+                }
+
+                $status_messages[] = $status_message;
+            } else {
                 $m->send();
+            }
         },
             "tries = '0' " .
             "OR (last_try > (UNIX_TIMESTAMP() - 60 * 60) AND tries < 25) ORDER BY mkdate".
             ($limit > 0 ? " LIMIT ". (int) $limit : "")
         );
+
+        //If $output_status_messages is set all status messages
+        //will be returned. Otherwise an empty array is returned.
+        return $status_messages;
     }
 
     /**
      * Sends the object in the mailqueue. If this succeeds, the object will be
      * deleted immediately. Otherwise the field "tries" in the mailqueue table
      * will be incremented by one.
+     *
+     * @return bool True, if the mail in the mailqueue entry could be sent,
+     *     false otherwise.
      */
     public function send()
     {
         $mail = new StudipMail($this->mail);
 
-        //The cronjob message will be included in the mail queue
-        //cronjob's log. We must output the message via echo
-        //to get it into the log.
-        $cronjob_message = sprintf(
-            'sending message %1$s (sender: %2$s, %3$d recipient(s))...',
-            $this->message_id,
-            $mail->getSenderName(),
-            count($mail->getRecipients())
-        );
-
         if (is_a($mail, "StudipMail")) {
             $success = $mail->send();
             if ($success) {
-                $cronjob_message .= 'DONE';
                 if ($this['message_id'] && $this['user_id']) {
                     //Noch in message_user als versendet vermerken?
                 }
                 $this->delete();
+                return true;
             } else {
-                $cronjob_message .= 'FAILURE';
                 $this['tries'] = $this['tries'] + 1;
                 $this['last_try'] = time();
                 $this->store();
+                return false;
             }
-            if ($this['tries'] > 0) {
-                //If sending the message has failed at least once
-                //we add the amount of tries to the cronjob message.
-                $cronjob_message .= sprintf(
-                    '(t=%1$d)',
-                    $this['tries']
-                );
-            }
-        } else {
-            //The mail could not be created from the provided data:
-            $cronjob_message .= 'ERROR(no_studip_mail)';
         }
-
-        //Output the message with a newline character:
-        echo $cronjob_message . "\n";
+        return false;
     }
 }
