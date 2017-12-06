@@ -5,7 +5,9 @@
             <?= Assets::img($image, array('alt' => '')) ?>
         <? if ($avatar) : ?>
             <div class="sidebar-context">
-                <?= $avatar->getImageTag(Avatar::MEDIUM) ?>
+                <a href="<?= htmlReady($avatar->getURL(Avatar::ORIGINAL)) ?>" data-lightbox="sidebar-avatar" data-title="<?= htmlReady(PageLayout::getTitle()) ?>">
+                    <?= $avatar->getImageTag(Avatar::MEDIUM) ?>
+                </a>
             </div>
         <? endif ?>
         </div>

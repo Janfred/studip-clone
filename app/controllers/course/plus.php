@@ -16,9 +16,6 @@ class Course_PlusController extends AuthenticatedController
 
     public function index_action($range_id = null)
     {
-
-        PageLayout::addSqueezePackage('lightbox');
-
         PageLayout::setTitle(_("Mehr Funktionen"));
 
         $id = $GLOBALS['SessionSeminar'];

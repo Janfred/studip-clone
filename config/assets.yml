@@ -60,6 +60,7 @@ javascripts:
     - javascripts/l10n.js
     - javascripts/vendor/chartist-0.11.0.js
     - javascripts/vendor/qrcode-04f46c6.js
+    - javascripts/jquery/lightbox/lightbox-2.9.0.js
     - javascripts/init.js
 
     - javascripts/vendor/select2.full-4.0.5.js
@@ -155,9 +156,6 @@ javascripts:
     - *tablesorter
     - javascripts/document.js
 
-  lightbox:
-    - javascripts/jquery/lightbox/lightbox-2.9.0.js
-
   subcourses:
     - javascripts/subcourses.js
 
@@ -167,6 +165,7 @@ css:
     studip-jquery-ui.css: screen, print
     jshighlight_tomorrow.css: screen, print
     chartist.min.css: screen, print
+    lightbox.css: screen
     style.css:  screen
     print.css:  print
 
@@ -175,5 +174,3 @@ css:
 
   statusgroups:
     statusgroups.css: screen
-  lightbox:
-    lightbox.css: screen
