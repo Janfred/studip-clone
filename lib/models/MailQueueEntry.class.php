@@ -87,7 +87,7 @@ class MailQueueEntry extends SimpleORMap
             $status_message = sprintf(
                 'sending message %1$s (sender: %2$s, %3$u recipient(s))...',
                 $m->message_id,
-                $mail->getSenderName(),
+                $mail->getSenderEmail(),
                 count($mail->getRecipients())
             );
 
