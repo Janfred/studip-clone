@@ -48,4 +48,23 @@ class SendMailQueueJob extends CronJob
         //We output one status message per line:
         echo implode("\n", $status_messages);
     }
+
+    /**
+     * Returns a list of available parameters for this cronjob.
+     * See the description in the CronJob class for a specification
+     * for the returned array.
+     *
+     * @return array A list of available parameters for this cronjob.
+     */
+    public static function getParameters()
+    {
+        return [
+            'verbose' => [
+                'type'        => 'boolean',
+                'default'     => false,
+                'status'      => 'optional',
+                'description' => _('Sollen Ausgaben erzeugt werden? Diese sind später im Log des Cronjobs sichtbar.'),
+            ],
+        ];
+    }
 }
