@@ -11,7 +11,7 @@
     <table cellspacing="0" cellpadding="0" border="1" width="100%">
 
         <tr>
-            <th colspan="4">
+            <th colspan="5">
                 <h2><?= htmlReady(PageLayout::getTitle())?></h2>
             </th>
         </tr>
@@ -27,7 +27,7 @@
                         $grenze = $zwsem['ende'];
                         ?>
                         <tr>
-                            <td colspan="4">
+                            <td colspan="5">
                                 <h3><?= htmlReady($zwsem['name']) ?></h3>
                             </td>
                         </tr>
@@ -37,19 +37,28 @@
             }
             ?>
             <tr>
-                <td width="25%">
+                <td width="20%">
                     <div><?= htmlReady($date['date'])  ?></div>
                     <div>(<?= htmlReady($date['type']) ?>)</div>
                 </td>
-                <td width="25%"><?= htmlReady($date['title']) ?></td>
-                <td width="25%">
+                <td width="20%"><?= htmlReady($date['title']) ?></td>
+                <td width="20%">
                     <? if (count($date['related_persons']) != $lecturer_count) : ?>
                         <? foreach ($date['related_persons'] as $key => $user_id) {
                             echo ($key > 0 ? ", " : "").htmlReady(get_fullname($user_id));
                         } ?>
                     <? endif ?>
                 </td>
-                <td width="25%"><?= htmlReady($date['room']) ?></td>
+                <td width="20%">
+                    <? if (count($date['groups']) != $group_count) : ?>
+                        <? foreach ($date['groups'] as $key => $statusgruppe_id) {
+                            echo ($key > 0 ? ", " : "").htmlReady(Statusgruppen::find($statusgruppe_id)->name);
+                        } ?>
+                    <? else : ?>
+                        <?= _("alle") ?>
+                    <? endif ?>
+                </td>
+                <td width="20%"><?= htmlReady($date['room']) ?></td>
             </tr>
             <? if ($date['description']) : ?>
             <tr>

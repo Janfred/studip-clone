@@ -319,6 +319,7 @@ class Course_DatesController extends AuthenticatedController
                         'description' => $description,
                         'start' => $singledate->getStartTime(),
                         'related_persons' => $singledate->getRelatedPersons(),
+                        'groups' => $singledate->getRelatedGroups(),
                         'room' => $singledate->getRoom() ?: $singledate->raum,
                         'type' => $GLOBALS['TERMIN_TYP'][$singledate->getDateType()]['name']
                     );
@@ -329,6 +330,7 @@ class Course_DatesController extends AuthenticatedController
                         'description' => '',
                         'start' => $singledate->getStartTime(),
                         'related_persons' => array(),
+                        'groups' => array(),
                         'room' => '',
                         'type' => $GLOBALS['TERMIN_TYP'][$singledate->getDateType()]['name']
                     );
@@ -341,6 +343,7 @@ class Course_DatesController extends AuthenticatedController
 
         $template->set_attribute('dates', $dates);
         $template->lecturer_count = $this->course->countMembersWithStatus('dozent');
+        $template->group_count = count($this->course->statusgruppen);
         $content = $template->render();
 
         $content = mb_encode_numericentity($content, array(0x80, 0xffff, 0, 0xffff), 'utf-8');
