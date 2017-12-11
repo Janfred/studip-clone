@@ -80,6 +80,11 @@ if (!class_exists('StudipArrayCache')) {
             unset($this->data);
         }
 
+        function flush()
+        {
+            $this->data = array();
+        }
+
         function read($key)
         {
             return $this->data[$key];
