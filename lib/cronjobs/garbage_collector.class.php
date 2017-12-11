@@ -83,6 +83,10 @@ class GarbageCollectorJob extends CronJob
 
         \Studip\Activity\Activity::doGarbageCollect();
 
+        // clean db cache
+        $cache = new StudipDbCache();
+        $cache->purge();
+
         // Remove old plugin assets
         PluginAsset::deleteBySQL('chdate < ?', array(time() - PluginAsset::CACHE_DURATION));
 

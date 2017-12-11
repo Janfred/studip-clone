@@ -30,6 +30,11 @@ interface StudipCache
     function expire($arg);
 
     /**
+     * Expire all items from the cache.
+     */
+    function flush();
+
+    /**
      * Retrieve item from the server.
      *
      * Example:
@@ -48,11 +53,10 @@ interface StudipCache
      * Store data at the server.
      *
      * @param string $name     the item's key.
-     * @param string $content  the item's content.
+     * @param mixed  $content  the item's content (will be serialized if necessary).
      * @param int    $expired  the item's expiry time in seconds. Optional, defaults to 12h.
      *
      * @return bool     returns TRUE on success or FALSE on failure.
      */
     function write($name, $content, $expires = self::DEFAULT_EXPIRATION);
 }
-

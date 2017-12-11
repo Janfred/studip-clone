@@ -51,6 +51,23 @@ class StudipCacheProxy implements StudipCache
     }
 
     /**
+     * Expire all items from the cache.
+     */
+    public function flush()
+    {
+        if (in_array('flush', $this->proxy_these)) {
+            try {
+                $operation = new StudipCacheOperation(array('', 'flush'));
+                $operation->parameters = serialize(array());
+                $operation->store();
+            } catch (Exception $e) {
+            }
+        }
+
+        return $this->actual_cache->flush();
+    }
+
+    /**
      * Reads just a single key from the cache.
      *
      * @param  string $key The item's key

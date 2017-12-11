@@ -41,6 +41,14 @@ class StudipNullCache implements StudipCache {
 
 
     /**
+     * Expire all items from the cache.
+     */
+    function flush()
+    {
+    }
+
+
+    /**
      * Reads just a single key from the cache.
      *
      * @param  string  the key
@@ -57,7 +65,7 @@ class StudipNullCache implements StudipCache {
      * Store data at the server.
      *
      * @param string   the item's key.
-     * @param string   the item's content.
+     * @param mixed    the item's content (will be serialized if necessary).
      * @param int      the item's expiry time in seconds. Defaults to 12h.
      *
      * @returns mixed  returns TRUE on success or FALSE on failure.

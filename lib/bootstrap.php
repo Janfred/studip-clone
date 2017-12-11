@@ -147,8 +147,10 @@ namespace {
         $cached = StudipCacheFactory::getCache()->read('STUDIP#autoloader-classes');
         if ($cached) {
             $class_lookup = json_decode($cached, true);
-            $lookup_hash  = md5($cached);
-            StudipAutoloader::addClassLookups($class_lookup);
+            if (is_array($class_lookup)) {
+                $lookup_hash = md5($cached);
+                StudipAutoloader::addClassLookups($class_lookup);
+            }
         }
 
         register_shutdown_function(function () use ($lookup_hash) {
