@@ -1,3 +1,5 @@
+@background_size: 16px;
+
 #rulelist div.admissionrule {
     display: list-item;
     list-style-type: disc;
@@ -30,4 +32,28 @@
 
 .check_actions a {
     cursor: pointer;
+}
+
+.waitlist_move {
+    .waitlist_move_label {
+        display: inline-block; 
+        background-repeat: no-repeat; 
+        background-size: @background_size @background_size; 
+        width: @background_size; 
+        height: @background_size; 
+    }
+    > input[type="checkbox"] {
+        display: none;
+        + label {
+            .waitlist_move_label;
+            background: url("@{image-path}/icons/red/room-occupied.svg");   
+            &:hover { 
+                cursor: pointer; 
+            }  
+        } 
+    }     
+    > input[type="checkbox"]:checked + label { 
+        .waitlist_move_label;
+        background: url("@{image-path}/icons/green/room-clear.svg"); 
+    }
 }

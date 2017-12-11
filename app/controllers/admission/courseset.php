@@ -406,7 +406,8 @@ class Admission_CoursesetController extends AuthenticatedController
         $this->count_multi_members = count($multi_members);
 
         if ($csv == 'csv') {
-            $captions = array(_("Nummer"), _("Name"), _("versteckt"), _("Zeiten"), _("Dozenten"), _("max. Teilnehmer"), _("Teilnehmer aktuell"), _("Anzahl Anmeldungen"),_("Anzahl Anmeldungen Prio 1"), _("Warteliste"), _("max. Anzahl Warteliste"), _("vorläufige Anmeldung"), _("verbindliche Anmeldung"));
+            $captions = array(_("Nummer"), _("Name"), _("versteckt"), _("Zeiten"), _("Dozenten"), _("max. Teilnehmer"), _("Teilnehmer aktuell"), _("Anzahl Anmeldungen"),_("Anzahl Anmeldungen Prio 1"), _("Warteliste"), _("max. Anzahl Warteliste"), 
+                _("automatisches Nachrücken aus der Warteliste") , _("vorläufige Anmeldung"), _("verbindliche Anmeldung"));
             $data = array();
             foreach ($this->courses as $course) {
                 $row = array();
@@ -421,6 +422,7 @@ class Admission_CoursesetController extends AuthenticatedController
                 $row[] = $this->applications[$course->id]['h'];
                 $row[] = $course->admission_disable_waitlist ? _("nein") : _("ja");
                 $row[] = $course->admission_waitlist_max > 0 ? $course->admission_waitlist_max : '';
+                $row[] = $course->admission_disable_waitlist_move > 0 ? _("nein") : _("ja"); 
                 $row[] = $course->admission_prelim ? _("ja") : _("nein");
                 $row[] = $course->admission_binding ? _("ja") : _("nein");
                 $data[] = $row;
@@ -502,6 +504,7 @@ class Admission_CoursesetController extends AuthenticatedController
             $admission_turnouts = Request::intArray('configure_courses_turnout');
             $admission_waitlists = Request::intArray('configure_courses_disable_waitlist');
             $admission_waitlists_max = Request::intArray('configure_courses_waitlist_max');
+            $admission_disable_waitlist_move = Request::intArray('admission_disable_waitlist_move'); 
             $admission_bindings = Request::intArray('configure_courses_binding');
             $admission_prelims = Request::intArray('configure_courses_prelim');
             $hidden = Request::intArray('configure_courses_hidden');
@@ -512,6 +515,7 @@ class Admission_CoursesetController extends AuthenticatedController
                     $course->admission_turnout = $admission_turnouts[$course->id];
                     $course->admission_disable_waitlist = isset($admission_waitlists[$course->id]) ? 0 : 1;
                     $course->admission_waitlist_max = $course->admission_disable_waitlist ? 0 : $admission_waitlists_max[$course->id];
+                    $course->admission_disable_waitlist_move = isset($admission_disable_waitlist_move[$course->id]) ? 0 : 1;
                     $course->admission_binding = @$admission_bindings[$course->id] ?: 0;
                     $course->admission_prelim = @$admission_prelims[$course->id] ?: 0;
                     $course->visible = @$hidden[$course->id] ? 0 : 1;
