@@ -22,7 +22,7 @@ class StudipCacheFactory
      *
      * @var string
      */
-    const DEFAULT_CACHE_CLASS = 'StudipDbCache';
+    const DEFAULT_CACHE_CLASS = 'StudipFileCache';
 
     /**
      * singleton instance
