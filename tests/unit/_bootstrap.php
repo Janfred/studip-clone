@@ -40,22 +40,6 @@ define("TEST_FIXTURES_PATH", dirname(dirname(__FILE__)) . "/fixtures/");
 require 'lib/classes/StudipAutoloader.php';
 require 'lib/functions.php';
 
-// minimal support for running with PHPUnit 6.x
-if (!class_exists('PHPUnit_Framework_TestCase')) {
-    abstract class PHPUnit_Framework_TestCase extends PHPUnit\Framework\TestCase
-    {
-        public function getMock($classname)
-        {
-            return $this->createMock($classname);
-        }
-
-        public function setExpectedException($exception)
-        {
-            return $this->expectException($exception);
-        }
-    }
-}
-
 $STUDIP_BASE_PATH = realpath(dirname(__FILE__) . '/../..');
 
 StudipAutoloader::register();
@@ -84,6 +68,22 @@ if (isset($config['modules']['config']['Db'])) {
         $config['modules']['config']['Db']['password']);
 } else {
     //DBManager::getInstance()->setConnection('studip', 'sqlite://'. $GLOBALS ,'', '');
+}
+
+// minimal support for running with PHPUnit 6.x
+if (!class_exists('PHPUnit_Framework_TestCase')) {
+    abstract class PHPUnit_Framework_TestCase extends PHPUnit\Framework\TestCase
+    {
+        public function getMock($classname)
+        {
+            return $this->createMock($classname);
+        }
+
+        public function setExpectedException($exception)
+        {
+            return $this->expectException($exception);
+        }
+    }
 }
 
 // create "fake" cache class
