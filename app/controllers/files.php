@@ -230,7 +230,7 @@ class FilesController extends AuthenticatedController
         $navigation = $this->plugin->getFileSelectNavigation();
         PageLayout::setTitle($navigation->getTitle());
 
-        URLHelper::bindLinkParam('from_plugin', get_class($this->plugin));
+        URLHelper::addLinkParam('from_plugin', get_class($this->plugin));
 
         $args = func_get_args();
         array_shift($args);
