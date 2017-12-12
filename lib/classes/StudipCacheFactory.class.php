@@ -22,7 +22,7 @@ class StudipCacheFactory
      *
      * @var string
      */
-    const DEFAULT_CACHE_CLASS = 'StudipFileCache';
+    const DEFAULT_CACHE_CLASS = 'StudipDbCache';
 
     /**
      * singleton instance
@@ -194,6 +194,12 @@ class StudipCacheFactory
 
         # default class
         if (is_null($cache_class)) {
+            $version = new DBSchemaVersion();
+            if ($version->get() < 224) {
+                // db cache is not yet available, use StudipNullCache
+                return 'StudipNullCache';
+            }
+
             return self::DEFAULT_CACHE_CLASS;
         }
 

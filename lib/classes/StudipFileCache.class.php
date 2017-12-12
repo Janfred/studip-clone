@@ -88,7 +88,7 @@ class StudipFileCache implements StudipCache {
      * Expire all items from the cache.
      */
     public function flush() {
-        return $this->purge();
+        rmdirr($this->dir);
     }
 
     /**
