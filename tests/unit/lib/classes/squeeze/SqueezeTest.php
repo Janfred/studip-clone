@@ -28,6 +28,7 @@ class SqueezeTest extends \PHPUnit_Framework_TestCase
         $GLOBALS['STUDIP_BASE_PATH'] = realpath(dirname(__FILE__) . '/../../../../../');
 
         \Studip\Squeeze\packageAll(TEST_FIXTURES_PATH."squeeze/assets.yml");
+        $this->assertTrue(true);
 
         $GLOBALS['STUDIP_BASE_PATH'] = $tmp;
     }

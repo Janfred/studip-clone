@@ -100,6 +100,7 @@ class CSRFRequestTest extends PHPUnit_Framework_TestCase
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST['security_token'] = $this->token;
         CSRFProtection::verifyUnsafeRequest();
+        $this->assertTrue(true);
     }
 
     function testSafeRequest()
@@ -123,6 +124,7 @@ class CSRFRequestTest extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XmlHttpRequest';
         unset($_POST['security_token']);
         CSRFProtection::verifyUnsafeRequest();
+        $this->assertTrue(true);
     }
 
     function testUnsafeXHRWithToken()
@@ -131,5 +133,6 @@ class CSRFRequestTest extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XmlHttpRequest';
         $_POST['security_token'] = $this->token;
         CSRFProtection::verifyUnsafeRequest();
+        $this->assertTrue(true);
     }
 }

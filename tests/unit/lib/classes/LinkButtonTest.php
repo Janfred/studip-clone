@@ -21,7 +21,7 @@ class LinkButtonTestCase extends PHPUnit_Framework_TestCase
 {
     function testCreate()
     {
-        LinkButton::create();
+        $this->assertNotNull(LinkButton::create());
     }
 
     function testCreateWithLabel()

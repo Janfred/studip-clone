@@ -325,7 +325,7 @@ class Assets
      *
      * @ignore
      */
-    private function compute_public_path($source, $dir, $ext)
+    private static function compute_public_path($source, $dir, $ext)
     {
 
         # add extension if not present
