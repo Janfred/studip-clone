@@ -343,7 +343,7 @@ class Course_DatesController extends AuthenticatedController
 
         $template->set_attribute('dates', $dates);
         $template->lecturer_count = $this->course->countMembersWithStatus('dozent');
-        $template->group_count = count($this->course->statusgruppen);
+        $template->group_count = count($course->statusgruppen); 
         $content = $template->render();
 
         $content = mb_encode_numericentity($content, array(0x80, 0xffff, 0, 0xffff), 'utf-8');

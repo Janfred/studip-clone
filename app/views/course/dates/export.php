@@ -50,7 +50,7 @@
                     <? endif ?>
                 </td>
                 <td width="20%">
-                    <? if (!count($date['groups']) || (count($date['groups']) >= $group_count)) : ?>
+                    <? if (count($date['groups']) && count($date['groups']) < $group_count) : ?>
                         <? foreach ($date['groups'] as $key => $statusgruppe_id) {
                             echo ($key > 0 ? ", " : "").htmlReady(Statusgruppen::find($statusgruppe_id)->name);
                         } ?>
