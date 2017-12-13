@@ -106,11 +106,8 @@ class StudipFileCache implements StudipCache {
                 @flock($f, LOCK_SH);
                 $result = stream_get_contents($f);
                 @fclose($f);
-                if (($decoded = json_decode($result, true)) !== NULL) {
-                    $result = $decoded;
-                }
             }
-            return $result;
+            return unserialize($result);
         }
         return false;
     }
@@ -128,7 +125,7 @@ class StudipFileCache implements StudipCache {
     public function write($key, $content, $expire = 43200) {
         $this->expire($key);
         $file = $this->getPathAndFile($key, $expire);
-        return @file_put_contents($file, json_encode($content), LOCK_EX);
+        return @file_put_contents($file, serialize($content), LOCK_EX);
     }
 
     /**

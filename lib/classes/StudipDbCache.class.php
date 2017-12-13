@@ -59,7 +59,7 @@ class StudipDbCache implements StudipCache
         $stmt->execute(array($arg, time()));
         $result = $stmt->fetchColumn();
 
-        return $result !== false ? json_decode($result, true) : false;
+        return $result !== false ? unserialize($result) : false;
     }
 
     /**
@@ -76,6 +76,6 @@ class StudipDbCache implements StudipCache
         $db = DBManager::get();
 
         $stmt = $db->prepare('REPLACE INTO cache VALUES(?, ?, ?)');
-        $stmt->execute(array($name, json_encode($content), time() + $expires));
+        $stmt->execute(array($name, serialize($content), time() + $expires));
     }
 }

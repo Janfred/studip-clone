@@ -12,8 +12,8 @@ class DbCacheTable extends Migration
         $db = DBManager::get();
 
         $db->exec('CREATE TABLE cache (
-                   cache_key varchar(255) NOT NULL,
-                   content MEDIUMTEXT NOT NULL,
+                   cache_key varchar(255) COLLATE latin1_bin NOT NULL,
+                   content MEDIUMBLOB NOT NULL,
                    expires INT(11) NOT NULL,
                    PRIMARY KEY (cache_key)
                    ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC');
