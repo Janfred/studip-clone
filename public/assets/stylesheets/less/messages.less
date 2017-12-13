@@ -56,7 +56,14 @@ a.message-tag {
 #adressees {
     max-height: 60px;
     overflow: auto;
-    li:after { content:"," };
+    li.adressee {
+        white-space: nowrap;
+    }
+    li:after {
+        content: ",";
+        margin-left: -5px;
+        margin-right: 2px;
+    };
     li:last-child:after { content:"" };
     ul, li {
         list-style: none;
