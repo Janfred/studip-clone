@@ -266,7 +266,11 @@ class SeminarCycleDate extends SimpleORMap
             $result = parent::store();
             if ($result) {
                 $course = Course::find($this->seminar_id);
-                $new_dates = $this->createTerminSlots($course->start_semester->vorles_beginn + $this->week_offset*7*24*60*60);
+                //create start timestamp
+                $date = new DateTime();
+                $date->setTimestamp($course->start_semester->vorles_beginn);
+                $date->modify(sprintf('+%s week', $this->week_offset));
+                $new_dates = $this->createTerminSlots($date->getTimestamp());
                 if (!empty($new_dates)) {
                     foreach ($new_dates as $semester_dates) {
                         foreach ($semester_dates['dates'] as $date) {
@@ -400,10 +404,12 @@ class SeminarCycleDate extends SimpleORMap
         //restore for updated singledate entries
         $this->restore();
 
-        $old_cycle->week_offset = $this->week_offset;
-        $old_cycle->end_offset = $this->end_offset;
-        $new_dates = $this->createTerminSlots($course->start_semester->vorles_beginn + $this->week_offset * 7 * 24 * 60 * 60);
-
+        //create start timestamp
+        $date = new DateTime();
+        $date->setTimestamp($course->start_semester->vorles_beginn);
+        $date->modify(sprintf('+%s week', $this->week_offset));
+        $new_dates = $this->createTerminSlots($date->getTimestamp());
+        
         $update_count = 0;
 
         foreach ($new_dates as $semester_dates) {
