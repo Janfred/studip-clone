@@ -328,11 +328,8 @@ class AdminCourseFilter
         $count_courses = $this->countCourses();
         if ($count_courses && $count_courses <= $this->max_show_courses) {
             $settings = $this->settings;
-            list($orderby) = explode(' ', $settings['query']['orderby']);
             $this->settings['query']['select'] = array();
-            if (isset($settings['query']['select'][$orderby])) {
-                $this->settings['query']['orderby'] = Config::get()->IMPORTANT_SEMNUMBER ? "seminare.veranstaltungsnummer, seminare.name" : "seminare.name";
-            }
+            $this->settings['query']['orderby'] = Config::get()->IMPORTANT_SEMNUMBER ? 'seminare.veranstaltungsnummer, seminare.name' : 'seminare.name';
             $ret = $this->getCourses(false);
             $this->settings = $settings;
             return $ret;
