@@ -611,6 +611,10 @@ class Admin_CoursesController extends AuthenticatedController
                 $row['room_time'] = $_room ?: _('nicht angegeben');
             }
 
+            if (in_array('requests', $filter_config)) {
+                $row['requests'] = $course['requests'];
+            }
+
             if (in_array('teachers', $filter_config)) {
                 $row['teachers'] = implode(', ', array_map(function ($d) {return $d['fullname'];}, $course['dozenten']));
             }
@@ -1116,6 +1120,7 @@ class Admin_CoursesController extends AuthenticatedController
             'type'          => _('Veranstaltungstyp'),
             'room_time'     => _('Raum/Zeit'),
             'semester'      => _('Semester'),
+            'requests'      => _('Raumanfragen'),
             'teachers'      => _('Lehrende'),
             'members'       => _('Teilnehmende'),
             'waiting'       => _('Personen auf Warteliste'),

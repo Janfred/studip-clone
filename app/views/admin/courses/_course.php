@@ -94,6 +94,13 @@ if (!$values['parent_course'] || !in_array($values['parent_course'], array_keys(
                 <? endif?>
             </td>
         <? endif?>
+        <? if (in_array('requests', $view_filter)) : ?>
+            <td style="text-align: center;">
+                <a title="<?=_('Raumanfragen')?>" href="<?= URLHelper::getLink('dispatch.php/course/room_requests', array('cid' => $semid))?>">
+                    <?= $values['requests'] ?>
+                </a>
+            </td>
+        <? endif ?>
         <? if (in_array('teachers', $view_filter)) : ?>
             <td>
                 <?= $this->render_partial_collection('my_courses/_dozent', $values['dozenten']) ?>

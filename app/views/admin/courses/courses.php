@@ -26,6 +26,10 @@
         <? $colspan++ ?>
         <col width="10%">
     <? endif ?>
+    <? if (in_array('requests', $view_filter)) : ?>
+        <? $colspan++ ?>
+        <col width="5%">
+    <? endif ?>
     <? if (in_array('teachers', $view_filter)) : ?>
         <? $colspan++ ?>
         <col width="10%">
@@ -118,6 +122,17 @@
             <th <?= ($sortby == 'start_time') ? sprintf('class="sort%s"', mb_strtolower($sortFlag)) : '' ?>>
                 <a href="<?= URLHelper::getLink('', array('sortby'   => 'start_time', 'sortFlag' => mb_strtolower($sortFlag))) ?>">
                     <?= _('Semester') ?>
+                </a>
+            </th>
+        <? endif ?>
+        <? if (in_array('requests', $view_filter)) : ?>
+            <th <?= ($sortby == 'requests') ? sprintf('class="sort%s"', mb_strtolower($sortFlag)) : '' ?>>
+                <a href="<?=
+                URLHelper::getLink('', array('sortby'   => 'requests',
+                                             'sortFlag' => mb_strtolower($sortFlag))) ?>">
+                    <abbr title="<?= _('Raumanfragen') ?>">
+                        <?= _('RA') ?>
+                    </abbr>
                 </a>
             </th>
         <? endif ?>
