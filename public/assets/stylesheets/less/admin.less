@@ -144,7 +144,10 @@ table.attribute_table {
     td .course-completion {
         .background-icon('radiobutton-checked', 'status-red');
 
-        &.course-complete {
+        &[data-course-completion="1"] {
+            .background-icon('radiobutton-checked', 'status-yellow');
+        }
+        &[data-course-completion="2"] {
             .background-icon('radiobutton-checked', 'status-green');
         }
 

@@ -260,7 +260,7 @@ class AdminCourseFilter
         if (!in_array($flag, words('ASC DESC'))) {
             throw new Exception("Sortierreihenfolge undefiniert.");
         }
-        if (in_array($attribute, words('VeranstaltungsNummer Name status teilnehmer waiting prelim requests is_complete start_time'))) {
+        if (in_array($attribute, words('VeranstaltungsNummer Name status teilnehmer waiting prelim requests completion start_time'))) {
             $this->settings['query']['orderby'] = $attribute . ' ' . $flag;
         }
         return $this;

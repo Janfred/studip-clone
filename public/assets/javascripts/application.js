@@ -314,14 +314,17 @@ jQuery(document).ready(function () {
 });
 
 jQuery(document).on('click', '.course-admin td .course-completion', function () {
-    var href = $(this).attr('href'),
-        that = this;
+    var href    = $(this).attr('href'),
+        timeout = window.setTimeout(function () {
+            $(this).addClass('ajaxing');
+        }.bind(this), 300);;
 
-    $(this).addClass('ajaxing');
+    $.getJSON(href).done(function (completion) {
+        clearTimeout(timeout);
 
-    $.getJSON(href, function (complete) {
-        $(that).removeClass('ajaxing').toggleClass('course-complete', complete);
-    });
+        $(this).removeClass('ajaxing').attr('data-course-completion', completion);
+    }.bind(this));
+
     return false;
 });
 

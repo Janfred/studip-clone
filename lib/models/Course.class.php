@@ -48,7 +48,7 @@
  * @property string lock_rule database column
  * @property string admission_waitlist_max database column
  * @property string admission_disable_waitlist_move database column
- * @property string is_complete database column
+ * @property string completion database column
  * @property string public_topics database column
  * @property string parent_course database column
  * @property string end_time computed column read/write
@@ -437,5 +437,26 @@ class Course extends SimpleORMap
         return $this->visible
             || $GLOBALS['perm']->have_perm(Config::get()->SEM_VISIBILITY_PERM, $user_id)
             || $GLOBALS['perm']->have_studip_perm('user', $this->id, $user_id);
+    }
+
+    /**
+     * Returns the appropriate icon for the completion status.
+     *
+     * Mapping (completion -> icon role):
+     * - 0 => status-red
+     * - 1 => status-yellow
+     * - 2 => status-green
+     *
+     * @return Icon class
+     */
+    public function getCompletionIcon()
+    {
+        $role = Icon::ROLE_STATUS_RED;
+        if ($this->completion == 1) {
+            $role = Icon::ROLE_STATUS_YELLOW;
+        } elseif ($this->completion == 2) {
+            $role = Icon::ROLE_STATUS_GREEN;
+        }
+        return Icon::create('radiobutton-checked', $role);
     }
 }

@@ -14,22 +14,22 @@ if (!$values['parent_course'] || !in_array($values['parent_course'], array_keys(
     ?>
     <tr id="course-<?= $semid ?>"<?= $parent ? ' class="subcourses subcourse-' . $parent . '"' : '' ?> data-course-id="<?= $semid ?>">
         <td>
-            <? if (Config::get()->ADMIN_COURSES_SHOW_COMPLETE): ?>
-                <? if ($GLOBALS['perm']->have_studip_perm('tutor', $semid)) : ?>
-                    <a href="<?= $controller->url_for('admin/courses/toggle_complete/' . $semid) ?>"
-                       class="course-completion <? if ($values['is_complete']) echo 'course-complete'; ?>"
-                       title="<?= _('Bearbeitungsstatus ändern') ?>">
-                        <?= _('Bearbeitungsstatus ändern') ?>
-                    </a>
-                <? else : ?>
-                    <?= Icon::create('radiobutton-checked', $values['is_complete'] ? 'status-green' : 'status-red', ['title' => _('Bearbeitungsstatus kann nicht von Ihnen geändert werden.')])->asImg() ?>
-                <? endif ?>
-                <? else: ?>
-                <?=
-                CourseAvatar::getAvatar($semid)->is_customized()
+        <? if (Config::get()->ADMIN_COURSES_SHOW_COMPLETE): ?>
+            <? if ($GLOBALS['perm']->have_studip_perm('tutor', $semid)) : ?>
+                <a href="<?= $controller->url_for('admin/courses/toggle_complete/' . $semid) ?>"
+                   class="course-completion"
+                   data-course-completion="<?= $values['completion'] ?>"
+                   title="<?= _('Bearbeitungsstatus ändern') ?>">
+                    <?= _('Bearbeitungsstatus ändern') ?>
+                </a>
+            <? else : ?>
+                <?= $course->getCompletionIcon()->asImg(['title' => _('Bearbeitungsstatus kann nicht von Ihnen geändert werden.')]) ?>
+            <? endif ?>
+        <? else: ?>
+            <?= CourseAvatar::getAvatar($semid)->is_customized()
                     ? CourseAvatar::getAvatar($semid)->getImageTag(Avatar::SMALL, array('title' => htmlReady(trim($values['Name']))))
-                    : Icon::create('seminar', 'clickable', ['title' => htmlReady(trim($values['Name']))])->asImg(20) ?>
-            <? endif; ?>
+                    : Icon::create('seminar')->asImg(20, ['title' => htmlReady(trim($values['Name']))]) ?>
+        <? endif; ?>
         </td>
         <? if (in_array('number', $view_filter)) : ?>
             <td>
