@@ -14,7 +14,7 @@
     <strong>
         <?= sprintf(_('Sichtbar von %s bis %s'),
             strftime('%X %x', $folder->start_time),
-            dstrftime('%x %X', $folder->end_time)) ?>
+            strftime('%x %X', $folder->end_time)) ?>
     </strong>
     <br>
 <?php endif ?>
