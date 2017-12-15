@@ -31,7 +31,10 @@
                 <li>
                     <label>
                         <input type="checkbox" name="remove_sem[]" value="<?= htmlReady($assignment['range_id']) ?>" style="display: none;">
-                        <span><?= htmlReady(Course::find($assignment['range_id'])->name) ?></span>
+                        <? $course = Course::find($assignment['range_id']) ?>
+                        <a href="<?= URLHelper::getLink("seminar_main.php", array('auswahl' => $course->getId())) ?>">
+                            <?= htmlReady((Config::get()->IMPORTANT_SEMNUMBER ? $course->veranstaltungsnummer." " : "").$course->name) ?>
+                        </a>
                         <?= Icon::create("trash", "clickable")->asimg("20px", array('class' => "text-bottom", 'title' => _("Zuweisung zur Veranstaltung aufheben."))) ?>
                     </label>
                 </li>
