@@ -17,6 +17,11 @@
             </ul>
         </li>
     </ul>
+    <? if(!$values['locked']) : ?>
+        <div data-dialog-button class="hidden-no-js">
+            <?= Studip\Button::createAccept(_('Speichern')) ?>
+        </div>
+    <? endif ?>
 </div>
 <? if (!$values['locked']) : ?>
     <div id="studyareas" data-ajax-url="<?= $ajax_url ?>"
@@ -62,7 +67,7 @@
     <?php if ($values['searchterm']) : ?>
     <input type="hidden" name="searchterm" value="<?= $values['searchterm'] ?>"/>
     <?php endif ?>
-    <script type="text/javascript" language="JavaScript">
+    <script>
     //<!--
     $(function() {
         var element = $('#sem-tree-search');
