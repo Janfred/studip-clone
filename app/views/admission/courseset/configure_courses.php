@@ -28,11 +28,16 @@
             <td><?= $course->getNumParticipants() ?></td>
             <td><?= sprintf("%d / %d", $applications[$course->id]['c'],$applications[$course->id]['h']) ?></td>
             <td style="white-space:nowrap">
-                <input <?=$editable?> type="checkbox" name="configure_courses_disable_waitlist[<?= $course->id?>]" value="1" <?= $course->admission_disable_waitlist ? '' : 'checked' ?>>
-                <input <?=$editable?> type="text" size="2" name="configure_courses_waitlist_max[<?= $course->id?>]" value="<?= $course->admission_waitlist_max ?: ''?>">
+                <input <?=$editable?> type="checkbox" name="configure_courses_disable_waitlist[<?= $course->id?>]" value="1" <?= $course->admission_disable_waitlist ? '' : 'checked' ?>
+                    data-activates="#waitlist_move_<?= $course->id?>, #waitlist_max_<?= $course->id?>">
 
-                <input <?=$editable?> type="checkbox" class="waitlist_move_toggle" 
-                    id="waitlist_move_<?= $course->id?>"
+                <input <?=$editable?> id="waitlist_max_<?= $course->id?>"
+                    type="text" size="2" name="configure_courses_waitlist_max[<?= $course->id?>]"
+                    value="<?= $course->admission_waitlist_max ?: ''?>"
+                     <?= $course->admission_disable_waitlist ? 'disabled' : ''?>>
+
+                <input <?=$editable?> type="checkbox" class="waitlist_move_toggle"
+                    id="waitlist_move_<?= $course->id?>" <?= $course->admission_disable_waitlist ? 'disabled' : ''?>
                     name="admission_disable_waitlist_move[<?= $course->id?>]" value="1"
                     <? if (!$course->admission_disable_waitlist_move) echo 'checked'; ?>>
 
@@ -44,19 +49,35 @@
     <? endforeach ?>
     </tbody>
 </table>
-<div>
-    <?=_("Anzahl aller Teilnehmenden:")?> <?=$count_distinct_members?>
-    <?  if ($count_distinct_members) : ?>
-        <a href="<?= $controller->link_for('admission/courseset/configure_courses/' . $set_id .'/download_all_members')?>" title="<?= _("Download")?>">
-        <?= Icon::create('file-office', 'clickable')->asImg()?></a>
-    <? endif ?>
+<div style="float:left">
+    <div>
+        <?=_("Anzahl aller Teilnehmenden:")?> <?=$count_distinct_members?>
+        <?  if ($count_distinct_members) : ?>
+            <a href="<?= $controller->link_for('admission/courseset/configure_courses/' . $set_id .'/download_all_members')?>" title="<?= _("Download")?>">
+                <?= Icon::create('file-office', 'clickable')->asImg()?>
+            </a>
+        <? endif ?>
+    </div>
+    <div>
+        <?=_("Mehrfachteilnahmen:")?> <?=$count_multi_members?>
+        <?  if ($count_multi_members) : ?>
+            <a href="<?= $controller->link_for('admission/courseset/configure_courses/' . $set_id .'/download_multi_members')?>" title="<?= _("Download")?>">
+                <?= Icon::create('file-office', 'clickable')->asImg()?>
+            </a>
+        <? endif ?>
+    </div>
 </div>
-<div>
-    <?=_("Mehrfachteilnahmen:")?> <?=$count_multi_members?>
-    <?  if ($count_multi_members) : ?>
-        <a href="<?= $controller->link_for('admission/courseset/configure_courses/' . $set_id .'/download_multi_members')?>" title="<?= _("Download")?>">
-        <?= Icon::create('file-office', 'clickable')->asImg()?></a>
-    <? endif ?>
+<div style="float:right; text-align: right;">
+    <div>
+        <?= _('automatisches Nachrücken aus den Wartelisten ist aktiviert')?>
+        <?= Icon::create('room-clear', 'status-green', ['style' => 'float:right']) ?>
+        <br>
+        <?= _('automatisches Nachrücken aus den Wartelisten ist deaktiviert')?>
+        <?= Icon::create('room-occupied', 'status-red', ['style' => 'float:right']) ?>
+        <br>
+        <?= _('Die Warteliste für die Veranstaltung ist deaktiviert')?>
+        <?= Icon::create('room-request', 'inactive', ['style' => 'float:right']) ?>
+    </div>
 </div>
 <div data-dialog-button>
 <?= Studip\Button::create(_("Speichern"), 'configure_courses_save') ?>
