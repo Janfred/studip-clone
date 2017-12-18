@@ -41,7 +41,6 @@ class ProfileModulesController extends AuthenticatedController
         // Set Navigation
         PageLayout::setHelpKeyword("Basis.ProfileModules");
         PageLayout::setTitle(_("Mehr Funktionen"));
-        PageLayout::addSqueezePackage('lightbox');
         Navigation::activateItem('/profile/modules');
 
         // Get current user.
