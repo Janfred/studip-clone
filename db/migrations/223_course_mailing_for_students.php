@@ -13,7 +13,7 @@ class CourseMailingForStudents extends Migration
     public function down()
     {
         $query = "ALTER TABLE `seminare`
-                    DROP COLUMN ``";
+                    DROP COLUMN `student_mailing`";
         DBManager::get()->exec($query);
 
         SimpleORMap::expireTableScheme();
