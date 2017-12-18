@@ -1,6 +1,7 @@
 <?php
 /**
  * TimedFolder.php
+ * A folder type that provides time-based access to its contents.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -16,14 +17,23 @@ class TimedFolder extends PermissionEnabledFolder
 {
 
     /**
-     * @var int
+     * @var int start of folder visibility (0 for always)
      */
     public $start_time;
+
     /**
-     * @var int
+     * @var int end of folder visibility (0 for always)
      */
     public $end_time;
 
+    /**
+     * Provides the ranges this folder type is available in for the given user.
+     * Doesn't really make sense in other contexts than a course.
+     *
+     * @param string $range_id_or_object the object (or object ID) to check for
+     * @param $user_id the user to check for (must have at least 'tutor' perm in given course)
+     * @return bool available or not?
+     */
     public static function availableInRange($range_id_or_object, $user_id)
     {
         $course = Course::toObject($range_id_or_object);
@@ -42,6 +52,13 @@ class TimedFolder extends PermissionEnabledFolder
         return _('Zeitgesteuerter Ordner');
     }
 
+    /**
+     * Is the current folder visible for the given user?
+     * That depends on parent folder visibility and time settings.
+     *
+     * @param string|null $user_id the user to check visibility for
+     * @return bool visible or not?
+     */
     public function isVisible($user_id = null)
     {
         $now = time();
@@ -68,6 +85,8 @@ class TimedFolder extends PermissionEnabledFolder
 
     /**
      * TimedFolder constructor.
+     *
+     * @param array|null $folderdata data to create folder with
      */
     public function __construct($folderdata = null)
     {
@@ -84,7 +103,7 @@ class TimedFolder extends PermissionEnabledFolder
     }
 
     /**
-     * Returns the description template for a instance of a TimedFolder type
+     * Returns the description template for a instance of a TimedFolder type.
      *
      * @return Flexi_Template A description template for a instance of the type TimedFolder
      */
