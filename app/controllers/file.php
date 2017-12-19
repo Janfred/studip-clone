@@ -937,24 +937,35 @@ class FileController extends AuthenticatedController
             //copy
             if (Request::get('from_plugin')) {
                 $plugin = PluginManager::getInstance()->getPlugin(Request::get('from_plugin'));
-                $filedata = $file = $plugin->getPreparedFile(Request::get('file_id'));
-
+                $filedata = $file = $plugin->getPreparedFile(Request::get('file_id'), true);
                 if (!$file['tmp_name'] && $file['url']) {
-                    $fileobject = new File();
-                    $fileobject->url  = $file['url'];
-                    $fileobject->name = $file['name'];
-                    $fileobject->url_access_type = $file['url_access_type'] ?: 'redirect';
+                    if ($file->path_to_blob) {
+                        //Cloud-file
+                        $fileobject = array(
+                            'name' => $file['name'],
+                            'tmp_name' => $file->path_to_blob,
+                            'type' => $file->mime_type ?: get_mime_type($file['name']),
+                            'size' => $file->size
+                        );
+                        $file = $fileobject;
+                    } else {
+                        //URL-file
+                        $fileobject = new File();
+                        $fileobject->url = $file['url'];
+                        $fileobject->name = $file['name'];
+                        $fileobject->url_access_type = $file['url_access_type'] ?: 'redirect';
 
-                    $meta = FileManager::fetchURLMetadata($file['url']);
-                    if ($meta['response_code'] === 200) {
-                        if (!$fileobject->name) {
-                            $fileobject->name = $meta['filename'] ?: 'unknown';
+                        $meta = FileManager::fetchURLMetadata($file['url']);
+                        if ($meta['response_code'] === 200) {
+                            if (!$fileobject->name) {
+                                $fileobject->name = $meta['filename'] ?: 'unknown';
+                            }
+                            $fileobject->size = $meta['Content-Length'];
+                            $fileobject->mime_type = mb_strstr($meta['Content-Type'], ';', true);
                         }
-                        $fileobject->size = $meta['Content-Length'];
-                        $fileobject->mime_type = mb_strstr($meta['Content-Type'], ';', true);
-                    }
 
-                    $file = $fileobject;
+                        $file = $fileobject;
+                    }
                 }
             } else {
                 $file = FileRef::find(Request::get('file_id'))->file;
@@ -996,7 +1007,6 @@ class FileController extends AuthenticatedController
                     $this->render_nothing();
                 } else {
                     PageLayout::postSuccess(_('Datei wurde hinzugefügt.'));
-
                     $redirect = 'files/index/' . $folder_id;
                     if ($this->to_folder_type->range_type === 'course') {
                         $redirect = 'course/' . $redirect;
@@ -1018,6 +1028,10 @@ class FileController extends AuthenticatedController
             if (Request::get('search') && $this->filesystemplugin->hasSearch()) {
                 $this->top_folder = $this->filesystemplugin->search(Request::get('search'), Request::getArray('parameter'));
             } else {
+                $folder_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/file/choose_file/") + strlen("dispatch.php/file/choose_file/"));
+                if (strpos($folder_id, "?") !== false) {
+                    $folder_id = substr($folder_id, 0, strpos($folder_id, "?"));
+                }
                 $this->top_folder = $this->filesystemplugin->getFolder($folder_id, true);
                 if (is_a($this->top_folder, 'Flexi_Template')) {
                     $this->top_folder->select    = true;

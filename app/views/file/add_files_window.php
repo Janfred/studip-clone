@@ -3,6 +3,9 @@ $options = [];
 if (Request::get('to_plugin')) {
     $options['to_plugin'] = Request::get('to_plugin');
 }
+if (Request::get('from_plugin')) {
+    $options['from_plugin'] = Request::get('from_plugin');
+}
 if (Request::get('to_folder_id')) {
     $options['to_folder_id'] = Request::get('to_folder_id');
 }
@@ -34,7 +37,7 @@ if ($folder_id) {
         <? if ($plugin->isSource()) : ?>
             <? $nav = $plugin->getFileSelectNavigation() ?>
             <? if ($nav): ?>
-                <a href="<?= $controller->link_for('file/choose_file/', array_merge($options, ['plugin' => get_class($plugin)])) ?>" data-dialog>
+                <a href="<?= $controller->link_for('file/choose_file/', array_merge($options, ['from_plugin' => get_class($plugin)])) ?>" data-dialog>
                     <?= $nav->getImage()->asImg(50) ?>
                     <?= htmlReady($nav->getTitle()) ?>
                 </a>
