@@ -938,7 +938,7 @@ class FileController extends AuthenticatedController
             if (Request::get('from_plugin')) {
                 $plugin = PluginManager::getInstance()->getPlugin(Request::get('from_plugin'));
                 $filedata = $file = $plugin->getPreparedFile(Request::get('file_id'), true);
-                if (!$file['tmp_name'] && $file['url']) {
+                if (!isset($file['tmp_name'])) {
                     if ($file->path_to_blob) {
                         //Cloud-file
                         $fileobject = array(
@@ -948,7 +948,7 @@ class FileController extends AuthenticatedController
                             'size' => $file->size
                         );
                         $file = $fileobject;
-                    } else {
+                    } elseif($file['url']) {
                         //URL-file
                         $fileobject = new File();
                         $fileobject->url = $file['url'];
