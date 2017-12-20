@@ -174,9 +174,9 @@ class NewsController extends StudipController
 
         if ($id === 'new') {
             unset($id);
-            $this->title = _('Ankündigung erstellen');
+            PageLayout::setTitle(_('Ankündigung erstellen'));
         } else
-            $this->title = _('Ankündigung bearbeiten');
+            PageLayout::setTitle(_('Ankündigung bearbeiten'));
 
         // user has to have autor permission at least
         if (!$GLOBALS['perm']->have_perm(autor)) {

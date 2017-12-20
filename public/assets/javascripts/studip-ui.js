@@ -270,7 +270,7 @@
                 max_date = null,
                 temp;
 
-            if (offset === undefined && $(selector).data('offset')) {
+            if ((offset === undefined) && $(selector).data('offset')) {
                 temp   = $(selector).data('offset');
                 offset = parseInt($(temp).val(), 10);
             }
@@ -318,7 +318,7 @@
                 min_date = null,
                 temp;
 
-            if (offset === undefined && $(selector).data('offset')) {
+            if ((offset === undefined) && $(selector).data('offset')) {
                 temp   = $(selector).data('offset');
                 offset = parseInt($(temp).val(), 10);
             }
