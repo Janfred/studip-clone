@@ -123,10 +123,11 @@ $vis_query = get_vis_query('auth_user_md5', 'search') . ' AS visible';
 // quick search
 $search_object = new SQLSearch("SELECT username, CONCAT(Vorname, ' ', Nachname, ' (', username, ')'), CONCAT(Vorname, ' ', Nachname), $vis_query" .
                                " FROM auth_user_md5 LEFT JOIN user_visibility USING (user_id)" .
-                               " WHERE ( " .
-                                " CONCAT(Vorname, ' ', Nachname) LIKE :input OR ".
+                               " WHERE " .
+                                " CONCAT(Vorname, ' ', Nachname) LIKE :input OR".
                                 " CONCAT(Nachname, ' ', Vorname) LIKE :input OR".
-                                " CONCAT(Nachname, ', ', Vorname) LIKE :input)".
+                                " CONCAT(Nachname, ', ', Vorname) LIKE :input OR".
+                                " username LIKE :input".
                                " HAVING visible = 1".
                                " ORDER BY Nachname, Vorname", _('Personen suchen'), 'username');
 
@@ -175,7 +176,7 @@ if ($sem_id) {
 if (mb_strlen($name) > 2) {
     $name = str_replace('%', '\%', $name);
     $name = str_replace('_', '\_', $name);
-    $filter[] = "(CONCAT(Vorname, ' ', Nachname) LIKE :needle OR CONCAT(Nachname, ' ', Vorname) LIKE :needle OR CONCAT(Nachname, ', ', Vorname) LIKE :needle)";
+    $filter[] = "(CONCAT(Vorname, ' ', Nachname) LIKE :needle OR CONCAT(Nachname, ' ', Vorname) LIKE :needle OR CONCAT(Nachname, ', ', Vorname) LIKE :needle OR username LIKE :needle)";
     $parameters[':needle'] = '%' . $name . '%';
 }
 
