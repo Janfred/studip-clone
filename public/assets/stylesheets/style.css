@@ -5312,11 +5312,23 @@ div.clear {
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+  color: #444444;
 }
 #qr_code .code > div {
   margin-left: auto;
   margin-right: auto;
   text-align: center;
+}
+#qr_code .code img {
+  width: 70vh;
+  height: 70vh;
+}
+#qr_code .header {
+  background-image: url("../images/logos/logoklein.png");
+  height: 100px;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
 }
 #qr_code:-moz-full-screen {
   display: flex;
@@ -5329,13 +5341,6 @@ div.clear {
 }
 #qr_code:fullscreen {
   display: flex;
-}
-#qr_code .code img {
-  width: 70vh;
-  height: 70vh;
-}
-a[data-qr-code] .qrcode_image {
-  display: none;
 }
 .copyable-link-animation {
   position: relative;

@@ -121,10 +121,23 @@
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
+    color: #444444;
     .code > div {
         margin-left: auto;
         margin-right: auto;
         text-align: center;
+    }
+    .code img {
+        width: 70vh;
+        height: 70vh;
+    }
+
+    .header {
+        background-image: url("@{image-path}/logos/logoklein.png");
+        height: 100px;
+        width: 100%;
+        background-repeat: no-repeat;
+        background-position: center center;
     }
 }
 #qr_code:-moz-full-screen {
@@ -140,11 +153,3 @@
     display: flex;
 }
 
-#qr_code .code img {
-    width: 70vh;
-    height: 70vh;
-}
-
-a[data-qr-code] .qrcode_image {
-    display: none;
-}
