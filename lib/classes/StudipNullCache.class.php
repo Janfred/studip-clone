@@ -2,7 +2,6 @@
 # Lifter002: TODO
 # Lifter007: TODO
 # Lifter003: TODO
-# Lifter010: TODO
 
 /*
  * Copyright (C) 2007 - Marcus Lunzenauer <mlunzena@uos.de>
@@ -25,9 +24,8 @@
  * @since     1.6
  */
 
-class StudipNullCache implements StudipCache {
-
-
+class StudipNullCache implements StudipCache
+{
     /**
      * Expires just a single key.
      *
@@ -35,18 +33,16 @@ class StudipNullCache implements StudipCache {
      *
      * @return void
      */
-    function expire($key)
+    public function expire($key)
     {
     }
-
 
     /**
      * Expire all items from the cache.
      */
-    function flush()
+    public function flush()
     {
     }
-
 
     /**
      * Reads just a single key from the cache.
@@ -55,11 +51,10 @@ class StudipNullCache implements StudipCache {
      *
      * @return mixed   the corresponding value
      */
-    function read($key)
+    public function read($key)
     {
         return FALSE;
     }
-
 
     /**
      * Store data at the server.
@@ -71,9 +66,8 @@ class StudipNullCache implements StudipCache {
      * @returns mixed  returns TRUE on success or FALSE on failure.
      *
      */
-    function write($name, $content, $expire = 43200)
+    public function write($name, $content, $expire = 43200)
     {
         return FALSE;
     }
 }
-

@@ -31,8 +31,8 @@
  * @author    André Noack <noack@data-quest.de>
  * @version   2
  */
-class StudipFileCache implements StudipCache {
-
+class StudipFileCache implements StudipCache
+{
     /**
      * full path to cache directory
      *
@@ -67,7 +67,8 @@ class StudipFileCache implements StudipCache {
      *
      * @return string
      */
-    public function getCacheDir() {
+    public function getCacheDir()
+    {
         return $this->dir;
     }
 
@@ -78,8 +79,9 @@ class StudipFileCache implements StudipCache {
      * @param string $key
      * @return void
      */
-    public function expire($key) {
-        if($file = $this->getPathAndFile($key)){
+    public function expire($key)
+    {
+        if ($file = $this->getPathAndFile($key)){
             @unlink($file);
         }
     }
@@ -87,7 +89,8 @@ class StudipFileCache implements StudipCache {
     /**
      * Expire all items from the cache.
      */
-    public function flush() {
+    public function flush()
+    {
         rmdirr($this->dir);
     }
 
@@ -99,8 +102,9 @@ class StudipFileCache implements StudipCache {
      * @param string a cache key
      * @return string|bool
      */
-    public function read($key) {
-        if($file = $this->check($key)){
+    public function read($key)
+    {
+        if ($file = $this->check($key)){
             $f = @fopen($file, 'rb');
             if ($f) {
                 @flock($f, LOCK_SH);
@@ -122,7 +126,8 @@ class StudipFileCache implements StudipCache {
      * @return int|bool the number of bytes that were written to the file,
      *         or false on failure
      */
-    public function write($key, $content, $expire = 43200) {
+    public function write($key, $content, $expire = 43200)
+    {
         $this->expire($key);
         $file = $this->getPathAndFile($key, $expire);
         return @file_put_contents($file, serialize($content), LOCK_EX);
@@ -135,8 +140,9 @@ class StudipFileCache implements StudipCache {
      * @param string a cache key to check
      * @return string|bool the path to the cache file or false if expired
      */
-    private function check($key){
-        if($file = $this->getPathAndFile($key)){
+    private function check($key)
+    {
+        if ($file = $this->getPathAndFile($key)){
             list($id,$expire) = explode('-',basename($file));
             if (time() < $expire) {
                 return $file;
@@ -159,17 +165,20 @@ class StudipFileCache implements StudipCache {
      * @param int expiry time in seconds
      * @return string|bool full path to cache item or false on failure
      */
-    private function getPathAndFile($key, $expire = null){
+    private function getPathAndFile($key, $expire = null)
+    {
         $id = hash('md5', $key);
         $path = $this->dir . mb_substr($id,0,2);
-        if(!is_dir($path)){
-            if(!@mkdir($path, 0700)) throw new Exception('Could not create directory: ' .$path);
+        if (!is_dir($path)){
+            if (!@mkdir($path, 0700)) {
+                throw new Exception('Could not create directory: ' . $path);
+            }
         }
-        if(!is_null($expire)){
+        if (!is_null($expire)){
             return $path . '/' . $id.'-'.(time() + $expire);
         } else {
             $files = @glob($path . '/' . $id . '*');
-            if(count($files)){
+            if (count($files)){
                 return $files[0];
             }
         }
@@ -182,14 +191,15 @@ class StudipFileCache implements StudipCache {
      * @param bool echo messages if set to false
      * @return int the number of deleted files
      */
-    public function purge($be_quiet = true){
+    public function purge($be_quiet = true)
+    {
         $now = time();
         $deleted = 0;
-        foreach(@glob($this->dir . '*', GLOB_ONLYDIR) as $current_dir){
-            foreach(@glob($current_dir . '/' . '*') as $file){
+        foreach (@glob($this->dir . '*', GLOB_ONLYDIR) as $current_dir){
+            foreach (@glob($current_dir . '/' . '*') as $file){
                 list($id,$expire) = explode('-', basename($file));
                 if ($expire < $now) {
-                    if(@unlink($file)){
+                    if (@unlink($file)){
                         ++$deleted;
                         if (!$be_quiet){
                             echo "File: $file deleted.\n";
