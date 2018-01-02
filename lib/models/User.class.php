@@ -329,7 +329,7 @@ class User extends AuthUserMd5
         //inactivity
         if (!is_null($attributes['inaktiv']) && $attributes['inaktiv'][0] != 'nie') {
             $comp = in_array(trim($attributes['inaktiv'][0]), ['=', '>', '<=']) ? $attributes['inaktiv'][0] : '=';
-            $days = (int)$attributes['  inaktiv'][1];
+            $days = (int)$attributes['inaktiv'][1];
             $query .= "AND uo.last_lifesign {$comp} UNIX_TIMESTAMP(TIMESTAMPADD(DAY, -{$days}, NOW())) ";
         } elseif (!is_null($attributes['inaktiv'])) {
             $query .= "AND uo.last_lifesign IS NULL ";
