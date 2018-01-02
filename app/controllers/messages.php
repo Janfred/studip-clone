@@ -233,7 +233,7 @@ class MessagesController extends AuthenticatedController {
         //check if the message shall be sent to all (or some) members of a course:
         if (Request::get('filter') && Request::option("course_id")) {
             $course = new Course(Request::option('course_id'));
-            if ($GLOBALS['perm']->have_studip_perm('tutor', $course->id) || $course->getSemClass()['studygroup_mode'] || $course->student_mailing) {
+            if ($GLOBALS['perm']->have_studip_perm('tutor', $course->id) || $course->getSemClass()['studygroup_mode'] || CourseConfig::get($course->id)->COURSE_STUDENT_MAILING) {
                 $this->default_message->receivers = [];
                 if (Request::get('filter') === 'claiming') {
                     $cs = CourseSet::getSetForCourse($course->id);

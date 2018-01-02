@@ -1,5 +1,4 @@
 <?php
-# Lifter010: TODO
 /**
  * Config.class.php
  * provides access to global configuration
@@ -17,7 +16,6 @@
 
 class Config implements ArrayAccess, Countable, IteratorAggregate
 {
-
     private static $instance = null;
 
     /**
@@ -69,7 +67,7 @@ class Config implements ArrayAccess, Countable, IteratorAggregate
      * to circumvent fetching from database
      * @param array $data
      */
-    function __construct($data = null)
+    public function __construct($data = null)
     {
         $this->fetchData($data);
     }
@@ -82,11 +80,11 @@ class Config implements ArrayAccess, Countable, IteratorAggregate
      * @param string filter by part of name
      * @return array
      */
-    function getFields($range = null, $section = null, $name = null)
+    public function getFields($range = null, $section = null, $name = null)
     {
         $temp = $this->metadata;
 
-        if (in_array($range, words('global user'))) {
+        if (in_array($range, words('global user course'))) {
             $temp = array_filter($temp, function ($a) use ($range) {
                 return $a['range'] === $range;
             });
@@ -110,7 +108,7 @@ class Config implements ArrayAccess, Countable, IteratorAggregate
      * @param srting $field
      * @return array
      */
-    function getMetadata($field)
+    public function getMetadata($field)
     {
         return $this->metadata[$field];
     }
@@ -122,7 +120,8 @@ class Config implements ArrayAccess, Countable, IteratorAggregate
      * @param string $field
      * @return Ambigous
      */
-    function getValue($field) {
+    public function getValue($field)
+    {
         if (array_key_exists($field, $this->data)) {
             return $this->data[$field];
         }
@@ -138,7 +137,8 @@ class Config implements ArrayAccess, Countable, IteratorAggregate
      * @param unknown_type $value
      * @return
      */
-    function setValue($field, $value) {
+    public function setValue($field, $value)
+    {
         if (array_key_exists($field, $this->data)) {
             return $this->data[$field] = $value;
         }
@@ -154,19 +154,22 @@ class Config implements ArrayAccess, Countable, IteratorAggregate
     /**
      * magic method for dynamic properties
      */
-    function __get($field) {
+    public function __get($field)
+    {
         return $this->getValue($field);
     }
     /**
      * magic method for dynamic properties
      */
-    function __set($field, $value) {
+    public function __set($field, $value)
+    {
          return $this->setValue($field, $value);
     }
     /**
      * magic method for dynamic properties
      */
-    function __isset($field) {
+    public function __isset($field)
+    {
         return isset($this->data[$field]);
     }
     /**
@@ -216,8 +219,20 @@ class Config implements ArrayAccess, Countable, IteratorAggregate
             $this->data = $data;
         } else {
             $this->data = array();
-            $db = DbManager::get();
-            $rs = $db->query("SELECT field, value, type, section, `range`, description, comment, is_default FROM `config` ORDER BY is_default DESC, section, field");
+            $db = DBManager::get();
+            $version = new DBSchemaVersion();
+            if ($version->get() < 226) {
+                $query = "SELECT field, value, type, section, `range`, description, comment, is_default
+                          FROM `config`
+                          ORDER BY is_default DESC, section, field";
+            } else {
+                $query = "SELECT config.field, IFNULL(config_values.value, config.value) AS value, type, section, `range`, description,
+                                 config_values.comment, config_values.value IS NULL AS is_default
+                          FROM config
+                          LEFT JOIN config_values ON config.field = config_values.field AND range_id = 'studip'
+                          ORDER BY section, config.field";
+            }
+            $rs = $db->query($query);
             while ($row = $rs->fetch(PDO::FETCH_ASSOC)) {
                 // set the the type of the default entry for the modified entry
                 if (!empty($this->metadata[$row['field']])) {
@@ -253,7 +268,7 @@ class Config implements ArrayAccess, Countable, IteratorAggregate
      * @throws InvalidArgumentException
      * @return boolean
      */
-    function store($field, $data)
+    public function store($field, $data)
     {
         if (!is_array($data) || !isset($data['value'])) {
             $values['value'] = $data;
@@ -274,40 +289,30 @@ class Config implements ArrayAccess, Countable, IteratorAggregate
                 $values['value'] = (string)$values['value'];
         }
 
-        $entries = ConfigEntry::findByField($field);
-        if (count($entries) === 0) {
+        $entry = ConfigEntry::find($field);
+        if (!isset($entry)) {
             throw new InvalidArgumentException($field . " not found in config table");
         }
 
         if (isset($values['value'])) {
-            if(count($entries) == 1 &&  $entries[0]->is_default == 1) {
-                $entries[1] = clone $entries[0];
-                $entries[1]->setId($entries[1]->getNewId());
-                $entries[1]->setNew(true);
-                $entries[1]->is_default = 0;
-            }
-            $value_entry = $entries[0]->is_default == 1 ? $entries[1] : $entries[0];
-            $old_value = $value_entry->value;
+            $value_entry = new ConfigValue(array($field, 'studip'));
+            $old_value = $value_entry->isNew() ? $entry->value : $value_entry->value;
             $value_entry->value = $values['value'];
-        }
-
-        foreach ($entries as $entry) {
-            if (isset($values['section'])) {
-                $entry->section = $values['section'];
-            }
             if (isset($values['comment'])) {
-                $entry->comment = $values['comment'];
+                $value_entry->comment = $values['comment'];
             }
-
-            // store the default-type for the modified entry
-            $entry->type = $this->metadata[$field]['type'];
-
-            if (count($entries) > 1 && !$entry->is_default && $entry->value == $entries[0]->value) {
-                $ret += $entry->delete();
+            if ($value_entry->value == $entry->value) {
+                $ret += $value_entry->delete();
             } else {
-                $ret += $entry->store();
+                $ret += $value_entry->store();
             }
         }
+
+        if (isset($values['section'])) {
+            $entry->section = $values['section'];
+            $ret += $entry->store();
+        }
+
         if ($ret) {
             $this->fetchData();
             if (isset($value_entry)) {
@@ -324,27 +329,16 @@ class Config implements ArrayAccess, Countable, IteratorAggregate
      * @throws InvalidArgumentException
      * @return Ambigous <NULL, ConfigEntry>
      */
-    function create($field, $data = array())
+    public function create($field, $data = array())
     {
         if (!$field) {
             throw new InvalidArgumentException("config fieldname is mandatory");
         }
-        $exists = ConfigEntry::findByField($field);
-        if (count($exists)) {
+        $entry = new ConfigEntry($field);
+        if (!$entry->isNew()) {
             throw new InvalidArgumentException("config $field already exists");
         }
-        $entry = new ConfigEntry();
         $entry->setData($data);
-        $entry->setId(md5($field));
-        $entry->field = $field;
-        $entry->is_default = 1;
-        $entry->comment = '';
-        if (!isset($data['value'])) {
-            $entry->value = '';
-        }
-        if(!$entry->type) {
-            $entry->type = 'string';
-        }
         $ret = $entry->store() ? $entry : null;
         if ($ret) {
             $this->fetchData();
@@ -358,12 +352,13 @@ class Config implements ArrayAccess, Countable, IteratorAggregate
      * @throws InvalidArgumentException
      * @return integer number of deleted rows
      */
-    function delete($field)
+    public function delete($field)
     {
         if (!$field) {
             throw new InvalidArgumentException("config fieldname is mandatory");
         }
-        $deleted = ConfigEntry::deleteBySql("field=" . DbManager::get()->quote($field));
+        ConfigValue::deleteBySql('field=?', array($field));
+        $deleted = ConfigEntry::deleteBySql('field=?', array($field));
         if ($deleted) {
             $this->fetchData();
         }

@@ -1006,7 +1006,8 @@ class UserManagement
         // delete the datafields
         $localEntries = DataFieldEntry::removeAll($this->user_data['auth_user_md5.user_id']);
 
-        UserConfigEntry::deleteByUser($this->user_data['auth_user_md5.user_id']);
+        // delete user config values
+        ConfigValue::deleteBySQL('range_id = ?', array($this->user_data['auth_user_md5.user_id']));
 
         // delete all remaining user data
         $queries = array(

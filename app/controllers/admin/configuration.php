@@ -35,7 +35,14 @@ class Admin_ConfigurationController extends AuthenticatedController
         // set navigation
         Navigation::activateItem('/admin/config/configuration');
 
-        $this->setupSidebar(mb_strpos($action, 'user') !== false);
+        if (mb_strpos($action, 'user') !== false) {
+            $range_type = 'user';
+        } else if (mb_strpos($action, 'course') !== false) {
+            $range_type = 'course';
+        } else {
+            $range_type = 'global';
+        }
+        $this->setupSidebar($range_type);
     }
 
     /**
@@ -159,6 +166,60 @@ class Admin_ConfigurationController extends AuthenticatedController
     }
 
     /**
+     * Show all parameters for a course or show the system course parameters
+     *
+     * @param mixed $give_all
+     */
+    public function course_configuration_action($give_all = null)
+    {
+        PageLayout::setTitle(_('Verwalten von Veranstaltungskonfigurationen'));
+
+        $range_id = Request::option('range_id');
+        if ($range_id) {
+            $this->configs   = ConfigurationModel::searchCourseConfiguration($range_id);
+            $this->title     = sprintf(_('Vorhandene Konfigurationsparameter für "%s"'),
+                                       Course::find($range_id)->getFullname());
+            $this->linkchunk = 'admin/configuration/edit_course_config/' . $range_id . '?id=';
+        } else {
+            $this->configs   = ConfigurationModel::searchCourseConfiguration(null, true);
+            $this->title     = _('Globale Konfigurationsparameter für alle Veranstaltungen');
+            $this->linkchunk = 'admin/configuration/edit_configuration/?id=';
+        }
+        $this->has_sections = false;
+        $this->render_action('user_configuration');
+    }
+
+    /**
+     * Change course parameter for one course (value)
+     *
+     * @param String $range_id
+     */
+    public function edit_course_config_action($range_id)
+    {
+        PageLayout::setTitle(_('Konfigurationsparameter editieren'));
+
+        $field = Request::get('id');
+
+        if (Request::isPost()) {
+            CSRFProtection::verifyUnsafeRequest();
+
+            $value = Request::get('value');
+            if ($this->validateInput($field, $value)) {
+                CourseConfig::get($range_id)->store($field, $value);
+
+                PageLayout::postSuccess(sprintf(_('Der Konfigurationseintrag: %s wurde erfolgreich geändert!'), $field));
+
+                $this->redirect('admin/configuration/course_configuration?range_id=' . $range_id);
+            }
+        }
+
+        $this->config   = ConfigurationModel::showCourseConfiguration($range_id, $field);
+        $this->range_id = $range_id;
+        $this->field    = $field;
+        $this->value    = $this->flash['value'] ?: null;
+    }
+
+    /**
      * Validates given input
      *
      * @param String $field Config field to validate
@@ -193,9 +254,9 @@ class Admin_ConfigurationController extends AuthenticatedController
     /**
      * Sets up the sidebar
      *
-     * @param bool $user_section Adjust sidebar to user section?
+     * @param bool $range_type Determine the sidebar search type
      */
-    protected function setupSidebar($user_section = false)
+    protected function setupSidebar($range_type)
     {
         // Basic info and layout
         $sidebar = Sidebar::Get();
@@ -204,23 +265,32 @@ class Admin_ConfigurationController extends AuthenticatedController
 
         // Views
         $views = new ViewsWidget();
-        $views->addLink(_('Globale Konfiguration'),
-                        $this->url_for('admin/configuration/configuration'))
-              ->setActive(!$user_section);
-        $views->addLink(_('Personenkonfiguration'),
-                        $this->url_for('admin/configuration/user_configuration'))
-              ->setActive($user_section);
+        $views->addLink(
+            _('Globale Konfiguration'),
+            $this->url_for('admin/configuration/configuration')
+        )->setActive($range_type === 'global');
+        $views->addLink(
+            _('Personenkonfiguration'),
+            $this->url_for('admin/configuration/user_configuration')
+        )->setActive($range_type === 'user');
+        $views->addLink(
+            _('Veranstaltungskonfiguration'),
+            $this->url_for('admin/configuration/course_configuration')
+        )->setActive($range_type === 'course');
         $sidebar->addWidget($views);
 
         // Add section selector when not in user mode
-        if (!$user_section) {
+        if ($range_type === 'global') {
             $options = array();
             foreach (ConfigurationModel::getConfig() as $key => $value) {
                 $options[$key] = $key ?: '- ' . _('Ohne Kategorie') . ' -';
             }
-            $widget = new SelectWidget(_('Anzeigefilter'),
-                                       $this->url_for('admin/configuration/configuration'),
-                                       'section', 'get');
+            $widget = new SelectWidget(
+                _('Anzeigefilter'),
+                $this->url_for('admin/configuration/configuration'),
+                'section',
+                'get'
+            );
             $widget->addElement(new SelectElement(-1, _('alle anzeigen')));
             $widget->setOptions($options);
             $sidebar->addWidget($widget);
@@ -228,11 +298,20 @@ class Admin_ConfigurationController extends AuthenticatedController
 
         // Add specific searches (specific user when in user mode, keyword
         // otherwise)
-        if ($user_section) {
+        if ($range_type === 'user') {
             $search = new SearchWidget($this->url_for('admin/configuration/user_configuration'));
-            $search->addNeedle(_('Person suchen'), 'user_id', true,
-                               new StandardSearch('user_id'),
-                               'function () { $(this).closest("form").submit(); }');
+            $search->addNeedle(
+                _('Person suchen'), 'user_id', true,
+                new StandardSearch('user_id'),
+                'function () { $(this).closest("form").submit(); }'
+            );
+        } else if ($range_type === 'course') {
+            $search = new SearchWidget($this->url_for('admin/configuration/course_configuration'));
+            $search->addNeedle(
+                _('Veranstaltung suchen'), 'range_id', true,
+                new StandardSearch('Seminar_id'),
+                'function () { $(this).closest("form").submit(); }'
+            );
         } else {
             $search = new SearchWidget($this->url_for('admin/configuration/configuration'));
             $search->addNeedle(_('Suchbegriff'), 'needle', true);

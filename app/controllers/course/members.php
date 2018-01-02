@@ -1350,11 +1350,12 @@ class Course_MembersController extends AuthenticatedController
     private function createSidebar($filtered_members)
     {
         $sem = Seminar::GetInstance($this->course_id);
+        $config = CourseConfig::get($this->course_id);
 
         $sidebar = Sidebar::get();
         $widget  = $sidebar->addWidget(new ActionsWidget());
 
-        if ($this->is_tutor || $sem->student_mailing) {
+        if ($this->is_tutor || $config->COURSE_STUDENT_MAILING) {
             $url = URLHelper::getLink('dispatch.php/messages/write', [
                 'course_id'       => $this->course_id,
                 'default_subject' => $this->subject,
@@ -1583,7 +1584,7 @@ class Course_MembersController extends AuthenticatedController
                 $options = new OptionsWidget();
                 $options->addCheckbox(
                     _('Rundmails von Studierenden erlauben'),
-                    $sem->student_mailing,
+                    $config->COURSE_STUDENT_MAILING,
                     $this->url_for('course/members/toggle_student_mailing/1'),
                     $this->url_for('course/members/toggle_student_mailing/0'),
                     ['title' => _('Über diese Option können Sie Studierenden das Schreiben von Nachrichten an alle anderen Teilnehmer der Veranstaltung erlauben')]
@@ -1651,9 +1652,8 @@ class Course_MembersController extends AuthenticatedController
             throw new AccessDeniedException();
         }
 
-        $course = Course::find($this->course_id);
-        $course->student_mailing = (bool)$state;
-        $course->store();
+        $config = CourseConfig::get($this->course_id);
+        $config->store('COURSE_STUDENT_MAILING', $state);
 
         $this->redirect('course/members');
     }

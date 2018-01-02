@@ -27,7 +27,7 @@ class ConfigurationModel
     }
 
     /**
-     * Search the user configuration from the user_config or give all parameter
+     * Search the user configuration from the config or give all parameter
      * with range=user
      *
      * @param   string $user_id
@@ -45,7 +45,7 @@ class ConfigurationModel
             $uconfig = UserConfig::get($user_id);
             foreach ($uconfig as $field => $value) {
                 $data = $config->getMetadata($field);
-                if(!count($data)) {
+                if (!count($data)) {
                     $data['field'] = $field;
                     $data['type'] = 'string';
                     $data['description'] = 'missing in table `config`';
@@ -89,6 +89,68 @@ class ConfigurationModel
         return $data;
     }
 
+    /**
+     * Search the course configuration from the config or give all parameter
+     * with range=course
+     *
+     * @param   string $range_id
+     * @param   string $give_all
+     *
+     * @return array()
+     */
+    public static function searchCourseConfiguration($range_id = null, $give_all = false)
+    {
+        $config = Config::get();
+        $allconfigs = array();
+        if (!is_null($range_id)) {
+            $course = Course::find($range_id);
+
+            $uconfig = CourseConfig::get($range_id);
+            foreach ($uconfig as $field => $value) {
+                $data = $config->getMetadata($field);
+                if(!count($data)) {
+                    $data['field'] = $field;
+                    $data['type'] = 'string';
+                    $data['description'] = 'missing in table `config`';
+                }
+                $data['value'] = $value;
+                $data['fullname'] = $course->getFullname();
+                $allconfigs[] = $data;
+            }
+        }
+
+        if ($give_all) {
+            foreach ($config->getFields('course') as $field) {
+                $metadata = $config->getMetadata($field);
+                $metadata['value'] = $config->$field;
+                $allconfigs[] = $metadata;
+            }
+        }
+        return $allconfigs;
+    }
+
+    /**
+     * Show the course configuration for one parameter
+     *
+     * @param   string $range_id
+     * @param   string $field
+     *
+     * @return  array()
+     */
+    public static function showCourseConfiguration($range_id, $field)
+    {
+        $uconfig = CourseConfig::get($range_id);
+        $config = Config::get();
+        $data = $config->getMetadata($field);
+        if (!count($data)) {
+            $data['field'] = $field;
+            $data['type'] = 'string';
+            $data['description'] = 'missing in table `config`';
+        }
+        $data['value'] = $uconfig->$field;
+        $data['fullname'] = Course::find($range_id)->getFullname();
+        return $data;
+    }
 
     /**
      * Show all information for one configuration parameter

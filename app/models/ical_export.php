@@ -90,10 +90,10 @@ class IcalExport
     public static function getUserIdByKey($key)
     {
         $where = "field = 'ICAL_EXPORT_KEY' AND value = " . DBManager::get()->quote($key);
-        $user_config_entries = UserConfigEntry::findBySql($where);
+        $user_config_entries = ConfigValue::findBySql($where);
         
         if (isset($user_config_entries[0])) {
-            return $user_config_entries[0]->getValue('user_id');
+            return $user_config_entries[0]->getValue('range_id');
         } else {
             return false;
         }
