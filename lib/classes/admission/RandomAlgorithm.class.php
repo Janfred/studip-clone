@@ -46,7 +46,12 @@ class RandomAlgorithm extends AdmissionAlgorithm
     {
         Log::DEBUG('start seat distribution for course set: ' . $courseSet->getId());
         $groups_quota = array();
-        $conditional_rule = $courseSet->getAdmissionRule('ConditionalAdmission');
+        $conditional_rule = array_pop(
+            array_filter($courseSet->getAdmissionRules(), function ($r) {
+                return $r instanceof ConditionalAdmission
+                    && count($r->getConditionGroups());
+            })
+        );
         $conditiongroups = $conditional_rule ? $conditional_rule->getConditionGroups() : array();
         if (count($conditiongroups)) {
             foreach (array_keys($conditiongroups) as $group_id) {
@@ -166,7 +171,12 @@ class RandomAlgorithm extends AdmissionAlgorithm
         };
 
         $groups_quota = array();
-        $conditional_rule = $courseSet->getAdmissionRule('ConditionalAdmission');
+        $conditional_rule = array_pop(
+            array_filter($courseSet->getAdmissionRules(), function ($r) {
+                return $r instanceof ConditionalAdmission
+                    && count($r->getConditionGroups());
+            })
+        );
         $conditiongroups = $conditional_rule ? $conditional_rule->getConditionGroups() : array();
         if (count($conditiongroups)) {
             foreach (array_keys($conditiongroups) as $group_id) {
