@@ -1209,7 +1209,7 @@ class FileController extends AuthenticatedController
         }
         
         URLHelper::addLinkParam('from_plugin', Request::get('from_plugin'));
-        if (!$parent_folder || !$parent_folder->isWritable($GLOBALS['user']->id)|| !$parent_folder->isSubfolderAllowed($GLOBALS['user']->id)) {
+        if (!$parent_folder || !$parent_folder->isSubfolderAllowed($GLOBALS['user']->id)) {
             throw new AccessDeniedException();
         }
 
