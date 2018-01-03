@@ -2382,7 +2382,7 @@ li#notification_container:hover .list {
 #notification_container a.mark-all-as-read {
   position: relative;
   margin-top: 10px;
-  background-image: url("../images/icons/blue/decline.svg");
+  background-image: url("../images/icons/blue/accept.svg");
   -webkit-background-size: 16px 16px;
   -moz-background-size: 16px 16px;
   -o-background-size: 16px 16px;
