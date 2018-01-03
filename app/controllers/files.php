@@ -259,7 +259,6 @@ class FilesController extends AuthenticatedController
             if (strpos($destination_id, "?") !== false) {
                 $destination_id = substr($destination_id, 0, strpos($destination_id, "?"));
             }
-            $destination_id = urldecode($destination_id);
 
             $destination_plugin = PluginManager::getInstance()->getPlugin($to_plugin);
             if (!$destination_plugin) {
