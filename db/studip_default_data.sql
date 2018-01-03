@@ -2,14 +2,14 @@
 -- Dumping data for table `admissionrules`
 --
 
-INSERT INTO `admissionrules` (`id`, `ruletype`, `active`, `mkdate`) VALUES(1, 'ConditionalAdmission', 1, 1399476073);
-INSERT INTO `admissionrules` (`id`, `ruletype`, `active`, `mkdate`) VALUES(2, 'LimitedAdmission', 1, 1399476073);
-INSERT INTO `admissionrules` (`id`, `ruletype`, `active`, `mkdate`) VALUES(3, 'LockedAdmission', 1, 1399476073);
-INSERT INTO `admissionrules` (`id`, `ruletype`, `active`, `mkdate`) VALUES(4, 'PasswordAdmission', 1, 1399476073);
-INSERT INTO `admissionrules` (`id`, `ruletype`, `active`, `mkdate`) VALUES(5, 'TimedAdmission', 1, 1399476073);
-INSERT INTO `admissionrules` (`id`, `ruletype`, `active`, `mkdate`) VALUES(6, 'ParticipantRestrictedAdmission', 1, 1399476073);
-INSERT INTO `admissionrules` (`id`, `ruletype`, `active`, `mkdate`) VALUES(7, 'CourseMemberAdmission', 1, 1436546684);
-INSERT INTO `admissionrules` (`id`, `ruletype`, `active`, `mkdate`) VALUES(8, 'PreferentialAdmission', 1, 1483462780);
+INSERT INTO `admissionrules` (`id`, `ruletype`, `active`, `mkdate`, `path`) VALUES(1, 'ConditionalAdmission', 1, 1388682201, 'lib/admissionrules/conditionaladmission');
+INSERT INTO `admissionrules` (`id`, `ruletype`, `active`, `mkdate`, `path`) VALUES(2, 'LimitedAdmission', 1, 1388682201, 'lib/admissionrules/limitedadmission');
+INSERT INTO `admissionrules` (`id`, `ruletype`, `active`, `mkdate`, `path`) VALUES(3, 'LockedAdmission', 1, 1388682201, 'lib/admissionrules/lockedadmission');
+INSERT INTO `admissionrules` (`id`, `ruletype`, `active`, `mkdate`, `path`) VALUES(4, 'PasswordAdmission', 1, 1388682201, 'lib/admissionrules/passwordadmission');
+INSERT INTO `admissionrules` (`id`, `ruletype`, `active`, `mkdate`, `path`) VALUES(5, 'TimedAdmission', 1, 1388682201, 'lib/admissionrules/timedadmission');
+INSERT INTO `admissionrules` (`id`, `ruletype`, `active`, `mkdate`, `path`) VALUES(6, 'ParticipantRestrictedAdmission', 1, 1388682201, 'lib/admissionrules/participantrestrictedadmission');
+INSERT INTO `admissionrules` (`id`, `ruletype`, `active`, `mkdate`, `path`) VALUES(7, 'CourseMemberAdmission', 1, 1414584420, 'lib/admissionrules/coursememberadmission');
+INSERT INTO `admissionrules` (`id`, `ruletype`, `active`, `mkdate`, `path`) VALUES(8, 'PreferentialAdmission', 1, 1465458738, 'lib/admissionrules/preferentialadmission');
 
 --
 -- Dumping data for table `admissionrule_compat`
