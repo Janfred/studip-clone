@@ -5,7 +5,7 @@ namespace RESTAPI\Routes;
  * @author  André Klaßen <andre.klassen@elan-ev.de>
  * @author  <mlunzena@uos.de>
  * @license GPL 2 or later
- * @condition user_id ^[0-9a-f]{32}$
+ * @condition user_id ^[0-9a-f]{1,32}$
  */
 class User extends \RESTAPI\RouteMap
 {
@@ -193,37 +193,37 @@ class User extends \RESTAPI\RouteMap
         $result = array_slice($institutes, $this->offset, $this->limit);
         return $this->paginated($result, count($institutes), compact('user_id'));
     }
-    
-    
+
+
     /**
      * Get the root file folder of a user's file area.
-     * 
+     *
      * @get /user/:user_id/top_folder
      */
     public function getTopFolder($user_id)
     {
         //first we check if the user exists:
         $user = \User::find($user_id);
-        
+
         if(!$user) {
             $this->halt(404, 'User not found!');
         }
-        
+
         if($user->id != \User::findCurrent()->id) {
             $this->halt(403, "You are not allowed to see another user's personal file area!");
         }
-        
+
         //then we can get the top folder:
         $top_folder = \Folder::findTopFolder($user->id, 'user');
-        
+
         $top_folder_type = $top_folder->getTypedFolder();
-        
-        
+
+
         if(!$top_folder_type->isReadable(\User::findCurrent()->id)) {
             $this->halt(403, 'You are not allowed to read the top folder of another user\'s file area!');
         }
-        
+
         return $top_folder->toRawArray();
     }
-    
+
 }
