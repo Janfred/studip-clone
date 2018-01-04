@@ -85,7 +85,7 @@ class JsupdaterController extends AuthenticatedController
         }
 
         if ($url) {
-            $this->redirect(URLHelper::getUrl(TransformInternalLinks($url)));
+            $this->redirect(URLHelper::getURL(TransformInternalLinks($url)));
         } else {
             $this->render_nothing();
         }
