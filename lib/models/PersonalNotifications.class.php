@@ -115,18 +115,15 @@ class PersonalNotifications extends SimpleORMap
         $notification['dialog']  = $dialog ? 1 : 0;
         $notification->store();
 
-
-        $query = "INSERT INTO personal_notifications_user (user_id, personal_notification_id, seen)
-                  VALUES (:user_id, :id, '0')";
-        $insert_statement = DBManager::get()->prepare($query);
-        $insert_statement->bindValue(':id', $notification->id);
-
         foreach ($user_ids as $user_id) {
             self::expireCache($user_id);
 
             if (self::isActivated($user_id)) {
-                $insert_statement->bindValue(':user_id', $user_id);
-                $insert_statement->execute();
+                $assignment = new PersonalNotificationsUser();
+                $assignment['personal_notification_id'] = $notification->id;
+                $assignment['user_id'] = $user_id;
+                $assignment['seen'] = 0;
+                $assignment->store();
             }
         }
         return true;
