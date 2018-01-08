@@ -37,7 +37,7 @@ class I18NString
     public function __toString()
     {
         if (isset($_SESSION['_language'])
-            && $_SESSION['_language'] != Config::get()->DEFAULT_LANGUAGE
+            && $_SESSION['_language'] != key($GLOBALS['CONTENT_LANGUAGES'])
             && $this->translation($_SESSION['_language'])
         ) {
             return $this->translation($_SESSION['_language']);

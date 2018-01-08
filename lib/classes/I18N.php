@@ -20,7 +20,7 @@ class I18N
     public static function input($name, $value, $attributes = array())
     {
         $languages = $GLOBALS['CONTENT_LANGUAGES'];
-        $base_lang = Config::get()->DEFAULT_LANGUAGE;
+        $base_lang = key($languages);
         $enabled = self::isEnabled();
         $result = '';
 
@@ -85,7 +85,7 @@ class I18N
     public static function textarea($name, $value, $attributes = array())
     {
         $languages = $GLOBALS['CONTENT_LANGUAGES'];
-        $base_lang = Config::get()->DEFAULT_LANGUAGE;
+        $base_lang = key($languages);
         $wysiwyg = in_array('wysiwyg', words($attributes['class']));
         $enabled = self::isEnabled();
         $result = '';
