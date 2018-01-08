@@ -31,25 +31,3 @@
 .check_actions a {
     cursor: pointer;
 }
-
-.waitlist_move_toggle {
-    @background_size: 16px;
-
-    display: none;
-
-    + label {
-        .background-icon('room-occupied', 'status-red');
-
-        display: inline-block;
-        background-repeat: no-repeat;
-        cursor: pointer;
-        .square(@background_size);
-    }
-
-    &:checked + label {
-        .background-icon('room-clear', 'status-green');
-    }
-    &:disabled + label {
-        .background-icon('room-request', 'inactive');
-    }
-}
