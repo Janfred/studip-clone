@@ -83,6 +83,7 @@ class CalendarInstscheduleModel
      * @param int     $end_hour      the end hour
      * @param string  $institute_id  the ID of the institute
      * @param array   $days          the days to be displayed
+     *
      * @return array  an array containing the entries
      */
     static function getInstituteEntries($user_id, $semester, $start_hour, $end_hour, $institute_id, $days)
@@ -90,16 +91,34 @@ class CalendarInstscheduleModel
         // fetch seminar-entries, show invisible seminars if the user has enough perms
         $visibility_perms = $GLOBALS['perm']->have_perm(get_config('SEM_VISIBILITY_PERM'));
 
+        $inst_ids = array();
+        $institut = new Institute($institute_id);
+
+        if (!$institut->isFaculty() || $GLOBALS['user']->cfg->MY_INSTITUTES_INCLUDE_CHILDREN) {
+            // If the institute is not a faculty or the child insts are included,
+            // pick the institute IDs of the faculty/institute and of all sub-institutes.
+            $inst_ids[] = $institute_id;
+            if ($institut->isFaculty()) {
+                foreach ($institut->sub_institutes->pluck("Institut_id") as $institut_id) {
+                    $inst_ids[] = $institut_id;
+                }
+            }
+        } else {
+            // If the institute is a faculty and the child insts are not included,
+            // pick only the institute id of the faculty:
+            $inst_ids[] = $institute_id;
+        }
+
         $stmt = DBManager::get()->prepare("SELECT * FROM seminare
             LEFT JOIN seminar_inst ON (seminare.Seminar_id = seminar_inst.seminar_id)
-            WHERE seminar_inst.institut_id = :institute
+            WHERE seminar_inst.institut_id IN (:institute)
                 AND (start_time = :begin
                     OR (start_time < :begin AND duration_time = -1)
                     OR (start_time + duration_time >= :begin AND start_time <= :begin)) "
                     . (!$visibility_perms ? " AND visible='1'" : ""));
 
-        $stmt->bindParam(':begin', $semester['beginn']);
-        $stmt->bindParam(':institute', $institute_id);
+        $stmt->bindValue(':begin', $semester['beginn']);
+        $stmt->bindValue(':institute', $inst_ids, StudipPDO::PARAM_ARRAY);
         $stmt->execute();
 
         while ($entry = $stmt->fetch()) {

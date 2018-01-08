@@ -116,6 +116,28 @@ class Calendar_InstscheduleController extends AuthenticatedController
                  'semester_id'  => $this->current_semester['semester_id']]),
             Icon::create('print', 'clickable'),
             ['target' => '_blank']);
+
+        $actions->addLink(_("Darstellung ändern"),
+            $this->url_for('calendar/schedule/settings'),
+            Icon::create('admin', 'clickable'),
+            array('data-dialog' => '')
+        );
+
+        // only show this setting if we have indeed a faculty where children might exist
+        if (Context::get()->isFaculty()) {
+            if ($GLOBALS['user']->cfg->MY_INSTITUTES_INCLUDE_CHILDREN) {
+                $actions->addLink(_("Untergeordnete Institute ignorieren"),
+                    $this->url_for('calendar/instschedule/include_children/0'),
+                    Icon::create('checkbox-checked', 'clickable')
+                );
+            } else {
+                $actions->addLink(_("Untergeordnete Institute einbeziehen"),
+                    $this->url_for('calendar/instschedule/include_children/1'),
+                    Icon::create('checkbox-unchecked', 'clickable')
+                );
+            }
+        }
+
         Sidebar::Get()->addWidget($actions);
         $semesterSelector = new SemesterSelectorWidget($this->url_for('calendar/instschedule'), 'semester_id', 'post');
         $semesterSelector->includeAll(false);
@@ -155,5 +177,17 @@ class Calendar_InstscheduleController extends AuthenticatedController
         $this->day   = $day_names[(int)$day];
 
         $this->render_template('calendar/instschedule/_entry_details');
+    }
+
+    /**
+     * Toggle config setting to include children in schedule for the current faculty
+     *
+     * @param  int $include_childs  0 / false to exclude children 1 / true to include them
+     */
+    function include_children_action($include_childs)
+    {
+        $GLOBALS['user']->cfg->store('MY_INSTITUTES_INCLUDE_CHILDREN', $include_childs ? 1 : 0);
+
+        $this->redirect('calendar/instschedule/index');
     }
 }

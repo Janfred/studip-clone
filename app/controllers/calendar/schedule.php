@@ -513,7 +513,11 @@ class Calendar_ScheduleController extends AuthenticatedController
 
         UserConfig::get($user->id)->store('SCHEDULE_SETTINGS', $this->my_schedule_settings);
 
-        $this->redirect('calendar/schedule');
+        if (Context::isInstitute()) {
+            $this->redirect('calendar/instschedule');
+        } else {
+            $this->redirect('calendar/schedule');
+        }
     }
 
 }

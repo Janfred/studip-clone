@@ -683,7 +683,15 @@ class Admin_CoursesController extends AuthenticatedController
     {
         if (Request::option('institute')) {
             $GLOBALS['user']->cfg->store('ADMIN_COURSES_TEACHERFILTER', null);
-            $GLOBALS['user']->cfg->store('MY_INSTITUTES_DEFAULT', Request::option('institute'));
+            $inst = explode('_', Request::option('institute'));
+            $GLOBALS['user']->cfg->store('MY_INSTITUTES_DEFAULT', $inst[0]);
+
+            if ($inst[1] == 'withinst') {
+                $GLOBALS['user']->cfg->store('MY_INSTITUTES_INCLUDE_CHILDREN', 1);
+            } else {
+                $GLOBALS['user']->cfg->store('MY_INSTITUTES_INCLUDE_CHILDREN', 0);
+            }
+
             PageLayout::postMessage(MessageBox::success('Die gewünschte Einrichtung wurde ausgewählt!'));
         }
 
@@ -1158,23 +1166,23 @@ class Admin_CoursesController extends AuthenticatedController
             //and all its institutes.
             //Otherwise we just display the courses of the faculty.
 
-            $instituteIdFields = explode('_', $GLOBALS['user']->cfg->MY_INSTITUTES_DEFAULT);
+            $inst_id = $GLOBALS['user']->cfg->MY_INSTITUTES_DEFAULT;
 
-            $institut = new Institute($instituteIdFields[0]);
+            $institut = new Institute($inst_id);
 
-            if (!$institut->isFaculty() || ($instituteIdFields[1] == 'withinst')) {
-                //The institute is not a faculty or the institute-ID had the string _i appended:
-                //Pick the institute IDs of the faculty/institute and of all sub-institutes.
-                $inst_ids[] = $instituteIdFields[0];
+            if (!$institut->isFaculty() || $GLOBALS['user']->cfg->MY_INSTITUTES_INCLUDE_CHILDREN) {
+                // If the institute is not a faculty or the child insts are included,
+                // pick the institute IDs of the faculty/institute and of all sub-institutes.
+                $inst_ids[] = $inst_id;
                 if ($institut->isFaculty()) {
                     foreach ($institut->sub_institutes->pluck("Institut_id") as $institut_id) {
                         $inst_ids[] = $institut_id;
                     }
                 }
             } else {
-                //The institute is a faculty and the string _i wasn't appended to the institute-ID:
-                //Pick only the institute ID of the faculty:
-                $inst_ids[] = $instituteIdFields[0];
+                // If the institute is a faculty and the child insts are not included,
+                // pick only the institute id of the faculty:
+                $inst_ids[] = $inst_id;
             }
         }
 
@@ -1363,7 +1371,7 @@ class Admin_CoursesController extends AuthenticatedController
                     new SelectElement(
                         $institut['Institut_id'] . '_withinst', //_withinst = with institutes
                         ' ' . $institut['Name'] . ' +' . _('Institute'),
-                        $GLOBALS['user']->cfg->MY_INSTITUTES_DEFAULT === $institut['Institut_id'] . '_withinst'
+                        ($GLOBALS['user']->cfg->MY_INSTITUTES_DEFAULT === $institut['Institut_id'] && $GLOBALS['user']->cfg->MY_INSTITUTES_INCLUDE_CHILDREN)
                     ),
                     'select-' . $institut['Name'] . '-with_institutes'
                 );
