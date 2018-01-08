@@ -885,6 +885,10 @@ class FileController extends AuthenticatedController
     public function choose_file_from_course_action($folder_id)
     {
         if (Request::get('course_id')) {
+            $folder_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/file/choose_file_from_course/") + strlen("dispatch.php/file/choose_file_from_course/"));
+            if (strpos($folder_id, "?") !== false) {
+                $folder_id = substr($folder_id, 0, strpos($folder_id, "?"));
+            }
             $folder = Folder::findTopFolder(Request::get('course_id'));
             $this->redirect($this->url_for(
                 'file/choose_file/' . $folder->getId(), [
