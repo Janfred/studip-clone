@@ -21,25 +21,39 @@ use Studip\Button, Studip\LinkButton;
                     &nbsp;
                 </th>
                 <th <?= ($sortby == 'perms') ? 'class="sort' . $order . '"' : '' ?>>
-                    <a href="<?= URLHelper::getLink('?sortby=perms&order=' . $order . '&toggle=' . ($sortby == 'perms')) ?>"><?= _("Status") ?></a>
+                    <a href="<?= $controller->url_for('admin/user',['sortby' =>'perms', 'order'=> $order ,'toggle' => ($sortby == 'perms')]) ?>">
+                        <?= _("Status") ?>
+                    </a>
                 </th>
                 <th <?= ($sortby == 'Vorname') ? 'class="sort' . $order . '"' : '' ?>>
-                    <a href="<?= URLHelper::getLink('?sortby=Vorname&order=' . $order . '&toggle=' . ($sortby == 'Vorname')) ?>"><?= _("Vorname") ?></a>
+                    <a href="<?= $controller->url_for('admin/user', ['sortby' => 'Vorname', 'order' => $order, 'toggle' => ($sortby == 'Vorname')]) ?>">
+                        <?= _("Vorname") ?>
+                    </a>
                 </th>
                 <th <?= ($sortby == 'Nachname') ? 'class="sort' . $order . '"' : '' ?>>
-                    <a href="<?= URLHelper::getLink('?sortby=Nachname&order=' . $order . '&toggle=' . ($sortby == 'Nachname')) ?>"><?= _("Nachname") ?></a>
+                    <a href="<?= $controller->url_for('admin/user', ['sortby' => 'Nachname' , 'order' => $order, 'toggle' => ($sortby == 'Nachname')]) ?>">
+                        <?= _("Nachname") ?>
+                    </a>
                 </th>
                 <th <?= ($sortby == 'Email') ? 'class="sort' . $order . '"' : '' ?>>
-                    <a href="<?= URLHelper::getLink('?sortby=Email&order=' . $order . '&toggle=' . ($sortby == 'Email')) ?>"><?= _("E-Mail") ?></a>
+                    <a href="<?= $controller->url_for('admin/user', ['sortby' => 'Email', 'order' => $order, 'toggle' => ($sortby == 'Email')]) ?>">
+                        <?= _("E-Mail") ?>
+                    </a>
                 </th>
                 <th <?= ($sortby == 'changed') ? 'class="sort' . $order . '"' : '' ?>>
-                    <a href="<?= URLHelper::getLink('?sortby=changed&order=' . $order . '&toggle=' . ($sortby == 'changed')) ?>"><?= _("inaktiv") ?></a>
+                    <a href="<?= $controller->url_for('admin/user', ['sortby' => 'changed', 'order' => $order, 'toggle' => ($sortby == 'changed')]) ?>">
+                        <?= _("inaktiv") ?>
+                    </a>
                 </th>
                 <th <?= ($sortby == 'mkdate') ? 'class="sort' . $order . '"' : '' ?>>
-                    <a href="<?= URLHelper::getLink('?sortby=mkdate&order=' . $order . '&toggle=' . ($sortby == 'mkdate')) ?>"><?= _("registriert seit") ?></a>
+                    <a href="<?= $controller->url_for('admin/user', ['sortby' => 'mkdate', 'order' => $order , 'toggle' => ($sortby == 'mkdate')]) ?>">
+                        <?= _("registriert seit") ?>
+                    </a>
                 </th>
                 <th colspan="2" <?= ($sortby == 'auth_plugin') ? 'class="sort' . $order . '"' : '' ?>>
-                    <a href="<?= URLHelper::getLink('?sortby=auth_plugin&order=' . $order . '&toggle=' . ($sortby == 'auth_plugin')) ?>"><?= _("Authentifizierung") ?></a>
+                    <a href="<?= $controller->url_for('admin/user', ['sortby'=> 'auth_plugin', 'order' => $order ,'toggle' => ($sortby == 'auth_plugin')]) ?>">
+                        <?= _("Authentifizierung") ?>
+                    </a>
                 </th>
             </tr>
         </thead>
@@ -50,14 +64,14 @@ use Studip\Button, Studip\LinkButton;
                 <tr>
                     <td style="white-space:nowrap;">
                         <input class="check_all" type="checkbox" name="user_ids[]" value="<?= $user['user_id'] ?>">
-                        <a href="<?= URLHelper::getLink('dispatch.php/profile', ['username' => $user['username']]) ?>"
-                           title="<?= _('Profil des Benutzers anzeigen') ?>">
+                        <a href="<?= $controller->url_for('admin/user/edit/' . $user['user_id']) ?>"
+                           title="<?= _('Nutzer bearbeiten') ?>">
                             <?= Avatar::getAvatar($user->user_id, $user->username)->getImageTag(Avatar::SMALL, ['title' => htmlReady($user->getFullName())]) ?>
                         </a>
                     </td>
                     <td>
-                        <a href="<?= URLHelper::getLink('dispatch.php/profile', ['username' => $user->username]) ?>"
-                           title="<?= _('Profil des Benutzers anzeigen') ?>">
+                        <a href="<?= $controller->url_for('admin/user/edit/' . $user['user_id']) ?>"
+                           title="<?= _('Nutzer bearbeiten') ?>">
                             <?= $user->username ?>
                         </a>
                         <?  if ($user->locked) :?>
@@ -117,38 +131,69 @@ use Studip\Button, Studip\LinkButton;
                         $actionMenu = ActionMenu::get();
                         $actionMenu->addLink(
                                 $controller->url_for('admin/user/edit/' . $user->user_id),
-                                _('Detailansicht des Benutzers anzeigen'),
-                                Icon::create('edit', 'clickable', ['title' => _('Diesen Benutzer bearbeiten')]));
+                                _('Nutzer bearbeiten'),
+                                Icon::create('edit', 'clickable', tooltip2(_('Diesen Nutzer bearbeiten'))));
 
+                        $actionMenu->addLink(
+                            $controller->url_for('profile',['username' => $user->username]),
+                            _('Zum Profil'),
+                            Icon::create('person', 'clickable', ['title' => _('Zum Profil')])
+                        );
                         if ($GLOBALS['perm']->have_perm('root')) {
                             $actionMenu->addLink(
                                 $controller->url_for('admin/user/activities/' . $user->user_id, ['from_index' => 1]),
                                 _('Datei- und Aktivitätsübersicht'),
-                                Icon::create('vcard', 'clickable', ['title' => _('Datei- und Aktivitätsübersicht')]),
+                                Icon::create('vcard', 'clickable', tooltip2(_('Datei- und Aktivitätsübersicht'))),
                                 ['data-dialog' => 'size=50%']
                             );
+                            if (Config::get()->LOG_ENABLE) {
+                                $actionMenu->addLink(
+                                    $controller->url_for('event_log/show', ['search' => $user->username, 'type' => 'user', 'object_id' => $user->id]),
+                                    _('Personeneinträge im Log'),
+                                    Icon::create('log', 'clickable', tooltip2(_('Personeneinträge im Log')))
+                                );
+                            }
                         }
+
+                        $actionMenu->addLink(
+                            $controller->url_for('messages/write', ['rec_uname' => $user->username]),
+                            _('Nachricht an Nutzer verschicken'),
+                            Icon::create('mail', 'clickable', tooltip2(_('Nachricht an Nutzer verschicken'))),
+                            ['data-dialog' => 'size=auto']
+                        );
+
                         if ($user->locked) {
                             $actionMenu->addLink(
                                 $controller->url_for('admin/user/unlock/' . $user->user_id, ['from_index' => 1]),
-                                _('Personenaccount entsperren'),
-                                Icon::create('lock-unlocked', 'clickable', ['title' => _('Personenaccount entsperren')])
+                                _('Nutzeraccount entsperren'),
+                                Icon::create('lock-unlocked', 'clickable', tooltip2(_('Nutzeraccount entsperren')))
                             );
                         } else {
                             $actionMenu->addLink(
                                 $controller->url_for('admin/user/lock_comment/' . $user->user_id, ['from_index' => 1]),
-                                _('Personenaccount sperren'),
-                                Icon::create('lock-locked', 'clickable', ['title' => _('Personenaccount sperren')]),
+                                _('Nutzeraccount sperren'),
+                                Icon::create('lock-locked', 'clickable', tooltip2(_('Nutzeraccount sperren'))),
                                 ['data-dialog' => 'size=auto']
                             );
                         }
-                        $actionMenu->addButton(
-                            'delete_user',
-                            _('Benutzer löschen'),
-                            Icon::create('trash', 'clickable', [
-                                'title'      => _('Benutzer löschen'),
-                                 'formaction' => $controller->url_for('admin/user/bulk/' . $user->user_id, ['method' => 'delete'])])
-                        );
+
+                        if ($user->auth_plugin !== 'preliminary' && ($GLOBALS['perm']->have_perm('root') || $GLOBALS['perm']->is_fak_admin() || !in_array($user->perms, words('root admin')))) {
+                            if (!StudipAuthAbstract::CheckField('auth_user_md5.password', $user->auth_plugin)) {
+                                $actionMenu->addLink(
+                                    $controller->url_for('admin/user/change_password/' . $user->user_id, ['from_index' => 1]),
+                                    _('Neues Passwort setzen'),
+                                    Icon::create('key', 'clickable', tooltip2(_('Neues Passwort setzen')))
+                                );
+                            }
+
+                            $actionMenu->addButton(
+                                'delete_user',
+                                _('Nutzer löschen'),
+                                Icon::create('trash', 'clickable',
+                                    tooltip2(_('Nutzer löschen')) +
+                                    ['formaction' => $controller->url_for('admin/user/bulk/' . $user->user_id, ['method' => 'delete'])])
+                            );
+                        }
                         ?>
                         <?= $actionMenu->render() ?>
                     </td>

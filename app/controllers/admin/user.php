@@ -895,7 +895,11 @@ class Admin_UserController extends AuthenticatedController
             $details = explode('§', str_replace(['msg§', 'info§', 'error§'], '', mb_substr($UserManagement->msg, 0, -1)));
             PageLayout::postError(_('Die Änderungen konnten nicht gespeichert werden.'), $details);
         }
-        $this->redirect('admin/user/edit/' . $user_id);
+        if (Request::int('from_index')) {
+            $this->redirect('admin/user');
+        } else {
+            $this->redirect('admin/user/edit/' . $user_id);
+        }
     }
 
     /**
