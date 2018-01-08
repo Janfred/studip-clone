@@ -10,49 +10,49 @@ use Studip\Button, Studip\LinkButton;
     <?= CSRFProtection::tokenTag() ?>
     <table class="default">
         <caption>
-            <?= sprintf(_("Suchergebnis: es wurden %s Personen gefunden"), count($users)) ?>
+            <?= sprintf(_('Suchergebnis: es wurden %s Personen gefunden'), count($users)) ?>
         </caption>
         <thead>
             <tr class="sortable">
-                <th colspan="2" <?= ($sortby == 'username') ? 'class="sort' . $order . '"' : '' ?>>
-                    <a href="<?= URLHelper::getLink('?sortby=username&order=' . $order . '&toggle=' . ($sortby == 'username')) ?>"><?= _("Benutzername") ?></a>
-                </th>
-                <th>
-                    &nbsp;
-                </th>
-                <th <?= ($sortby == 'perms') ? 'class="sort' . $order . '"' : '' ?>>
-                    <a href="<?= $controller->url_for('admin/user',['sortby' =>'perms', 'order'=> $order ,'toggle' => ($sortby == 'perms')]) ?>">
-                        <?= _("Status") ?>
+                <th colspan="2" <?= $sortby === 'username' ? 'class="sort' . $order . '"' : '' ?>>
+                    <a href="<?= $controller->url_for('admin/user', ['sortby' => 'username', 'order' => $order, 'toggle' => $sortby === 'username']) ?>">
+                        <?= _('Benutzername') ?>
                     </a>
                 </th>
-                <th <?= ($sortby == 'Vorname') ? 'class="sort' . $order . '"' : '' ?>>
-                    <a href="<?= $controller->url_for('admin/user', ['sortby' => 'Vorname', 'order' => $order, 'toggle' => ($sortby == 'Vorname')]) ?>">
-                        <?= _("Vorname") ?>
+                <th>&nbsp;</th>
+                <th <?= $sortby === 'perms' ? 'class="sort' . $order . '"' : '' ?>>
+                    <a href="<?= $controller->url_for('admin/user',['sortby' =>'perms', 'order'=> $order ,'toggle' => $sortby === 'perms']) ?>">
+                        <?= _('Status') ?>
                     </a>
                 </th>
-                <th <?= ($sortby == 'Nachname') ? 'class="sort' . $order . '"' : '' ?>>
-                    <a href="<?= $controller->url_for('admin/user', ['sortby' => 'Nachname' , 'order' => $order, 'toggle' => ($sortby == 'Nachname')]) ?>">
-                        <?= _("Nachname") ?>
+                <th <?= $sortby === 'Vorname' ? 'class="sort' . $order . '"' : '' ?>>
+                    <a href="<?= $controller->url_for('admin/user', ['sortby' => 'Vorname', 'order' => $order, 'toggle' => $sortby === 'Vorname']) ?>">
+                        <?= _('Vorname') ?>
                     </a>
                 </th>
-                <th <?= ($sortby == 'Email') ? 'class="sort' . $order . '"' : '' ?>>
-                    <a href="<?= $controller->url_for('admin/user', ['sortby' => 'Email', 'order' => $order, 'toggle' => ($sortby == 'Email')]) ?>">
-                        <?= _("E-Mail") ?>
+                <th <?= $sortby === 'Nachname' ? 'class="sort' . $order . '"' : '' ?>>
+                    <a href="<?= $controller->url_for('admin/user', ['sortby' => 'Nachname' , 'order' => $order, 'toggle' => $sortby === 'Nachname']) ?>">
+                        <?= _('Nachname') ?>
                     </a>
                 </th>
-                <th <?= ($sortby == 'changed') ? 'class="sort' . $order . '"' : '' ?>>
-                    <a href="<?= $controller->url_for('admin/user', ['sortby' => 'changed', 'order' => $order, 'toggle' => ($sortby == 'changed')]) ?>">
-                        <?= _("inaktiv") ?>
+                <th <?= $sortby === 'Email' ? 'class="sort' . $order . '"' : '' ?>>
+                    <a href="<?= $controller->url_for('admin/user', ['sortby' => 'Email', 'order' => $order, 'toggle' => $sortby === 'Email']) ?>">
+                        <?= _('E-Mail') ?>
                     </a>
                 </th>
-                <th <?= ($sortby == 'mkdate') ? 'class="sort' . $order . '"' : '' ?>>
-                    <a href="<?= $controller->url_for('admin/user', ['sortby' => 'mkdate', 'order' => $order , 'toggle' => ($sortby == 'mkdate')]) ?>">
-                        <?= _("registriert seit") ?>
+                <th <?= $sortby === 'changed' ? 'class="sort' . $order . '"' : '' ?>>
+                    <a href="<?= $controller->url_for('admin/user', ['sortby' => 'changed', 'order' => $order, 'toggle' => $sortby === 'changed']) ?>">
+                        <?= _('inaktiv') ?>
                     </a>
                 </th>
-                <th colspan="2" <?= ($sortby == 'auth_plugin') ? 'class="sort' . $order . '"' : '' ?>>
-                    <a href="<?= $controller->url_for('admin/user', ['sortby'=> 'auth_plugin', 'order' => $order ,'toggle' => ($sortby == 'auth_plugin')]) ?>">
-                        <?= _("Authentifizierung") ?>
+                <th <?= $sortby === 'mkdate' ? 'class="sort' . $order . '"' : '' ?>>
+                    <a href="<?= $controller->url_for('admin/user', ['sortby' => 'mkdate', 'order' => $order , 'toggle' => $sortby === 'mkdate']) ?>">
+                        <?= _('registriert seit') ?>
+                    </a>
+                </th>
+                <th colspan="2" <?= $sortby === 'auth_plugin' ? 'class="sort' . $order . '"' : '' ?>>
+                    <a href="<?= $controller->url_for('admin/user', ['sortby'=> 'auth_plugin', 'order' => $order ,'toggle' => $sortby === 'auth_plugin']) ?>">
+                        <?= _('Authentifizierung') ?>
                     </a>
                 </th>
             </tr>
@@ -97,18 +97,10 @@ use Studip\Button, Studip\LinkButton;
                         ?>
                         <?= tooltipHtmlIcon(htmlReady($tooltxt, true, true)) ?>
                     </td>
-                    <td>
-                        <?= $user['perms'] ?>
-                    </td>
-                    <td>
-                        <?= htmlReady($user->Vorname) ?>
-                    </td>
-                    <td>
-                        <?= htmlReady($user->nachname) ?>
-                    </td>
-                    <td>
-                        <?= htmlReady($user->email) ?>
-                    </td>
+                    <td><?= $user['perms'] ?></td>
+                    <td><?= htmlReady($user->Vorname) ?></td>
+                    <td><?= htmlReady($user->nachname) ?></td>
+                    <td><?= htmlReady($user->email) ?></td>
                     <td>
                         <? if ($user->online->last_lifesign != "") :
                             $inactive = time() - $user->online->last_lifesign;
@@ -123,16 +115,17 @@ use Studip\Button, Studip\LinkButton;
                         <?= $inactive ?>
                     </td>
                     <td>
-                        <?= ($user->mkdate) ? date("d.m.Y", $user->mkdate) : _('unbekannt') ?>
+                        <?= $user->mkdate ? date("d.m.Y", $user->mkdate) : _('unbekannt') ?>
                     </td>
                     <td><?= htmlReady($user['auth_plugin'] === null ? _('vorläufig') : $user->auth_plugin) ?></td>
                     <td class="actions" nowrap>
                         <?
                         $actionMenu = ActionMenu::get();
                         $actionMenu->addLink(
-                                $controller->url_for('admin/user/edit/' . $user->user_id),
-                                _('Nutzer bearbeiten'),
-                                Icon::create('edit', 'clickable', tooltip2(_('Diesen Nutzer bearbeiten'))));
+                            $controller->url_for('admin/user/edit/' . $user->user_id),
+                            _('Nutzer bearbeiten'),
+                            Icon::create('edit', 'clickable', tooltip2(_('Diesen Nutzer bearbeiten')))
+                        );
 
                         $actionMenu->addLink(
                             $controller->url_for('profile',['username' => $user->username]),
@@ -191,7 +184,8 @@ use Studip\Button, Studip\LinkButton;
                                 _('Nutzer löschen'),
                                 Icon::create('trash', 'clickable',
                                     tooltip2(_('Nutzer löschen')) +
-                                    ['formaction' => $controller->url_for('admin/user/bulk/' . $user->user_id, ['method' => 'delete'])])
+                                    ['formaction' => $controller->url_for('admin/user/bulk/' . $user->user_id, ['method' => 'delete'])]
+                                )
                             );
                         }
                         ?>
