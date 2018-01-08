@@ -45,7 +45,7 @@
         CKEDITOR_BASEPATH = "<?= Assets::url('javascripts/ckeditor/') ?>";
         String.locale = "<?= htmlReady(strtr($_SESSION['_language'], '_', '-')) ?>";
     </script>
-    <? if ($_SESSION['_language'] !== $GLOBALS['DEFAULT_LANGUAGE']): ?>
+    <? if ($_SESSION['_language'] !== 'de_DE'): ?>
         <link rel="localization" hreflang="<?= htmlReady(strtr($_SESSION['_language'], '_', '-')) ?>"
               href="<?= URLHelper::getScriptLink('dispatch.php/localizations/' . $_SESSION['_language']) ?>" type="application/vnd.oftn.l10n+json">
     <? endif ?>

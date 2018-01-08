@@ -36,11 +36,10 @@ class I18NString
      */
     public function __toString()
     {
-        if (isset($_SESSION['_language'])
-            && $_SESSION['_language'] != key($GLOBALS['CONTENT_LANGUAGES'])
-            && $this->translation($_SESSION['_language'])
-        ) {
-            return $this->translation($_SESSION['_language']);
+        $language = $_SESSION['_language'];
+
+        if (isset($language) && $language != key($GLOBALS['CONTENT_LANGUAGES'])) {
+            return $this->translation($language) ?: $this->base;
         }
 
         return (string)$this->base;
@@ -89,7 +88,6 @@ class I18NString
      */
     public function translation($lang)
     {
-
         return $this->toArray()[$lang];
     }
 
