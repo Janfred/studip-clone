@@ -233,7 +233,7 @@ class FilesController extends AuthenticatedController
         URLHelper::addLinkParam('to_plugin', get_class($this->plugin));
         URLHelper::addLinkParam('from_plugin', get_class($this->plugin));
 
-        $folder_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/files/system/".$this->plugin->getPluginId()."/") + strlen("dispatch.php/files/system/".$this->plugin->getPluginId()."/"));
+        $folder_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/files/system/".$this->plugin->getPluginId()) + strlen("dispatch.php/files/system/".$this->plugin->getPluginId()));
         if (strpos($folder_id, "?") !== false) {
             $folder_id = substr($folder_id, 0, strpos($folder_id, "?"));
         }
