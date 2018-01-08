@@ -20,6 +20,9 @@ class ConfigValues extends Migration
                    FROM user_config LEFT JOIN config ON user_config.field = config.field AND is_default = 1
                    WHERE config_id IS NULL");
 
+        // delete duplicate config values in user_config
+        $db->exec('DELETE c1 FROM user_config c1 JOIN user_config c2 USING(field, user_id) WHERE c1.userconfig_id > c2.userconfig_id');
+
         // drop unused fields and update range
         $db->exec("ALTER TABLE config DROP parent_id, DROP position, DROP message_template,
                    CHANGE field field varchar(255) COLLATE latin1_bin NOT NULL,
