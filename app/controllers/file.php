@@ -1098,12 +1098,12 @@ class FileController extends AuthenticatedController
 
     public function add_url_action($folder_id)
     {
-        if (Request::get("from_plugin")) {
+        if (Request::get("to_plugin")) {
             $folder_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/file/add_url/") + strlen("dispatch.php/file/add_url/"));
             if (strpos($folder_id, "?") !== false) {
                 $folder_id = substr($folder_id, 0, strpos($folder_id, "?"));
             }
-            $plugin = PluginManager::getInstance()->getPlugin(Request::get("from_plugin"));
+            $plugin = PluginManager::getInstance()->getPlugin(Request::get("to_plugin"));
             if (!$plugin) {
                 throw new Trails_Exception(404, _('Plugin existiert nicht.'));
             }
@@ -1111,7 +1111,7 @@ class FileController extends AuthenticatedController
         } else {
             $this->top_folder = FileManager::getTypedFolder($folder_id);
         }
-        URLHelper::addLinkParam('from_plugin', Request::get('from_plugin'));
+        URLHelper::addLinkParam('to_plugin', Request::get('to_plugin'));
         if (!$this->top_folder || !$this->top_folder->isWritable($GLOBALS['user']->id)) {
             throw new AccessDeniedException();
         }
