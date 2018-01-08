@@ -38,7 +38,10 @@ class Calendar_InstscheduleController extends AuthenticatedController
             if (Request::getArray('days')) {
                 $this->days = array_keys(Request::getArray('days'));
             } else {
-                $this->days = array(0,1,2,3,4,5,6);
+                $this->days = $my_schedule_settings['glb_days'];
+                foreach ($this->days as $key => $day_number) {
+                    $this->days[$key] = ($day_number + 6) % 7;
+                }
             }
         } else {
             $this->days = explode(',', $days);
@@ -117,24 +120,27 @@ class Calendar_InstscheduleController extends AuthenticatedController
             Icon::create('print', 'clickable'),
             ['target' => '_blank']);
 
-        $actions->addLink(_("Darstellung ändern"),
-            $this->url_for('calendar/schedule/settings'),
-            Icon::create('admin', 'clickable'),
-            array('data-dialog' => '')
-        );
+        // Only admins should have the ability to change their schedule settings here - they have no other schedule
+        if ($GLOBALS['perm']->have_perm('admin')) {
+            $actions->addLink(_("Darstellung ändern"),
+                $this->url_for('calendar/schedule/settings'),
+                Icon::create('admin', 'clickable'),
+                array('data-dialog' => '')
+            );
 
-        // only show this setting if we have indeed a faculty where children might exist
-        if (Context::get()->isFaculty()) {
-            if ($GLOBALS['user']->cfg->MY_INSTITUTES_INCLUDE_CHILDREN) {
-                $actions->addLink(_("Untergeordnete Institute ignorieren"),
-                    $this->url_for('calendar/instschedule/include_children/0'),
-                    Icon::create('checkbox-checked', 'clickable')
-                );
-            } else {
-                $actions->addLink(_("Untergeordnete Institute einbeziehen"),
-                    $this->url_for('calendar/instschedule/include_children/1'),
-                    Icon::create('checkbox-unchecked', 'clickable')
-                );
+            // only show this setting if we have indeed a faculty where children might exist
+            if (Context::get()->isFaculty()) {
+                if ($GLOBALS['user']->cfg->MY_INSTITUTES_INCLUDE_CHILDREN) {
+                    $actions->addLink(_("Untergeordnete Institute ignorieren"),
+                        $this->url_for('calendar/instschedule/include_children/0'),
+                        Icon::create('checkbox-checked', 'clickable')
+                    );
+                } else {
+                    $actions->addLink(_("Untergeordnete Institute einbeziehen"),
+                        $this->url_for('calendar/instschedule/include_children/1'),
+                        Icon::create('checkbox-unchecked', 'clickable')
+                    );
+                }
             }
         }
 
