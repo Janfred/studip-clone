@@ -152,20 +152,27 @@ class TimedFolder extends PermissionEnabledFolder
         $start = strtotime($request['start_time']);
         $end = strtotime($request['end_time']);
 
-        if (!$end || $start < $end) {
-            $this->folderdata['data_content']['start_time'] = $start;
+        if (!$start && !$end) {
+
+            return MessageBox::error(_('Bitte geben Sie eine Start- und/oder Endzeit an.'));
+
         } else {
-            PageLayout::postError(_('Die Startzeit muss kleiner als die Endzeit sein.'));
-            $this->folderdata['data_content']['start_time'] = 0;
+
+            if (!$end || $start < $end) {
+                $this->folderdata['data_content']['start_time'] = $start;
+            } else {
+                return MessageBox::error(_('Die Startzeit muss kleiner als die Endzeit sein.'));
+            }
+
+            if (!$start || $end > $start) {
+                $this->folderdata['data_content']['end_time'] = $end;
+            } else {
+                $this->folderdata['data_content']['end_time'] = 0;
+            }
+
+            return parent::setDataFromEditTemplate($request);
         }
 
-        if (!$start || $end > $start) {
-            $this->folderdata['data_content']['end_time'] = $end;
-        } else {
-            $this->folderdata['data_content']['end_time'] = 0;
-        }
-
-        return parent::setDataFromEditTemplate($request);
     }
 
 }
