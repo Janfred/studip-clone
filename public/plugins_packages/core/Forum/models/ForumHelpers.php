@@ -231,7 +231,7 @@ class ForumHelpers {
         $document->setHeaderTitle(sprintf(_("Forum \"%s\""), $seminar_name['name']));
         $document->addPage();
 
-        foreach ($data['list'] as $entry) {
+        foreach ($data as $entry) {
             if (Config::get()->FORUM_ANONYMOUS_POSTINGS && $entry['anonymous']) {
                 $author = _('anonym');
             } else {
@@ -242,15 +242,15 @@ class ForumHelpers {
                     $document->addPage();
                 }
                 $first_page = false;
-                $document->addContent('++++**'. _('Bereich') .': '. $entry['name_raw'] .'**++++' . "\n");
+                $document->addContent('<h1>'. _('Bereich') .': '. $entry['name_raw'] .'</h1>' . "\n");
                 $document->addContent($entry['content_raw']);
                 $document->addContent("\n\n");
             } else if ($entry['depth'] == 2) {
-                $document->addContent('++**'. _('Thema') .': '. $entry['name_raw'] .'**++' . "\n");
+                $document->addContent('<h2>'. _('Thema') .': '. $entry['name_raw'] .'</h2>' . "\n");
                 $document->addContent('%%' . sprintf(_('erstellt von %s am %s'), $author,
                     strftime('%A %d. %B %Y, %H:%M', (int)$entry['mkdate'])) . '%%' . "\n");
                 $document->addContent($entry['content_raw']);
-                $document->addContent("\n\n");
+                $document->addContent("\n--\n");
             } else if ($entry['depth'] == 3) {
                 $document->addContent('**'.$entry['name_raw'] .'**' . "\n");
                 $document->addContent('%%' . sprintf(_('erstellt von %s am %s'), $author,

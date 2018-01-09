@@ -686,7 +686,19 @@ class ForumEntry {
                 break;
 
             case 'dump':
-                return ForumEntry::getEntries($parent_id, ForumEntry::WITH_CHILDS, '', 'ASC', 0, false);
+                $constraint = ForumEntry::getConstraints($parent_id);
+                $seminar_id = $constraint['seminar_id'];
+                $depth      = $constraint['depth'] + 1;
+
+                $stmt = DBManager::get()->prepare("SELECT * FROM forum_entries
+                    WHERE (forum_entries.seminar_id = ?
+                        AND forum_entries.seminar_id != forum_entries.topic_id
+                        AND lft > ? AND rgt < ?) "
+                    . ($depth > 2 ? " OR forum_entries.topic_id = ". DBManager::get()->quote($parent_id) : '')
+                    . " ORDER BY forum_entries.lft ASC");
+                $stmt->execute(array($seminar_id, $constraint['lft'], $constraint['rgt']));
+
+                return ForumEntry::parseEntries($stmt->fetchAll(PDO::FETCH_ASSOC));
                 break;
 
             case 'flat':
