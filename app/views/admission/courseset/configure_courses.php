@@ -29,11 +29,13 @@
             <td><?= sprintf("%d / %d", $applications[$course->id]['c'],$applications[$course->id]['h']) ?></td>
             <td style="white-space:nowrap">
                 <input <?=$editable?> type="checkbox" name="configure_courses_disable_waitlist[<?= $course->id?>]" value="1" <?= $course->admission_disable_waitlist ? '' : 'checked' ?>
+                    title="<?= htmlReady(sprintf(_('Warteliste für %s aktivieren'), $course->name)) ?>"
                     data-activates="#waitlist_move_<?= $course->id?>, #waitlist_max_<?= $course->id?>">
 
                 <input <?=$editable?> id="waitlist_max_<?= $course->id?>"
                     type="text" size="2" name="configure_courses_waitlist_max[<?= $course->id?>]"
                     value="<?= $course->admission_waitlist_max ?: ''?>"
+                    title="<?= htmlReady(sprintf(_('Anzahl der Plätze auf der Warteliste für %s'), $course->name)) ?>"
                      <?= $course->admission_disable_waitlist ? 'disabled' : ''?>>
 
                 <input <?=$editable?> type="checkbox"
