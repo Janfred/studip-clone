@@ -4,14 +4,18 @@
     <table class="default nohover">
         <caption><?= htmlReady($folder->name) ?></caption>
         <tbody>
-            <tr>
-                <td><?= _('Erstellt') ?></td>
-                <td><?= date('d.m.Y H:i', $folder->mkdate) ?></td>
-            </tr>
-            <tr>
-                <td><?= _('Geändert') ?></td>
-                <td><?= date('d.m.Y H:i', $folder->chdate) ?></td>
-            </tr>
+            <? if ($folder->mkdate) : ?>
+                <tr>
+                    <td><?= _('Erstellt') ?></td>
+                    <td><?= date('d.m.Y H:i', $folder->mkdate) ?></td>
+                </tr>
+            <? endif ?>
+            <? if ($folder->chdate) : ?>
+                <tr>
+                    <td><?= _('Geändert') ?></td>
+                    <td><?= date('d.m.Y H:i', $folder->chdate) ?></td>
+                </tr>
+            <? endif ?>
             <tr>
                 <td><?= _('Besitzer/-in') ?></td>
                 <td>
