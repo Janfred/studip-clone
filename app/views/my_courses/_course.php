@@ -4,14 +4,10 @@
         <td <? if (!$children) echo 'class="gruppe' . $course['gruppe'] . '"'; ?>></td>
         <td>
         <? if ($sem_class['studygroup_mode']) : ?>
-            <?= StudygroupAvatar::getAvatar($course['seminar_id'])->is_customized()
-                ? StudygroupAvatar::getAvatar($course['seminar_id'])->getImageTag(Avatar::SMALL, tooltip2($course['name']))
-                : Icon::create('studygroup', 'clickable', ['title' => $course['name']])->asImg(20)
+            <?= StudygroupAvatar::getAvatar($course['seminar_id'])->getImageTag(Avatar::SMALL, tooltip2($course['name']))
             ?>
         <? else : ?>
-            <?= CourseAvatar::getAvatar($course['seminar_id'])->is_customized()
-                ? CourseAvatar::getAvatar($course['seminar_id'])->getImageTag(Avatar::SMALL, tooltip2($course['name']))
-                : Icon::create('seminar', 'clickable', ['title' => $course['name']])->asImg(20)
+            <?= CourseAvatar::getAvatar($course['seminar_id'])->getImageTag(Avatar::SMALL, tooltip2($course['name']))
             ?>
         <? endif ?>
         </td>

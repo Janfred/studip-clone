@@ -2,10 +2,8 @@
     <tr>
         <td class="gruppe<?= $group['gruppe'] ?>"></td>
         <td>
-            <?=
-            CourseAvatar::getAvatar($group['seminar_id'])->is_customized()
-                ? CourseAvatar::getAvatar($group['seminar_id'])->getImageTag(Avatar::SMALL, tooltip2(htmlReady($group['name'])))
-                : Icon::create('studygroup', 'clickable', ['title' => htmlReady($group['name'])])->asImg(20) ?>
+            <?= CourseAvatar::getAvatar($group['seminar_id'])->getImageTag(Avatar::SMALL, tooltip2(htmlReady($group['name'])))
+            ?>
         </td>
         <td style="text-align: left">
             <a href="<?= URLHelper::getLink('seminar_main.php', array('auswahl' => $group['seminar_id'])) ?>"

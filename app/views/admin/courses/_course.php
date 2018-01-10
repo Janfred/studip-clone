@@ -26,9 +26,7 @@ if (!$values['parent_course'] || !in_array($values['parent_course'], array_keys(
                 <?= $course->getCompletionIcon()->asImg(['title' => _('Bearbeitungsstatus kann nicht von Ihnen geändert werden.')]) ?>
             <? endif ?>
         <? else: ?>
-            <?= CourseAvatar::getAvatar($semid)->is_customized()
-                    ? CourseAvatar::getAvatar($semid)->getImageTag(Avatar::SMALL, array('title' => htmlReady(trim($values['Name']))))
-                    : Icon::create('seminar')->asImg(20, ['title' => htmlReady(trim($values['Name']))]) ?>
+            <?= CourseAvatar::getAvatar($semid)->getImageTag(Avatar::SMALL, array('title' => htmlReady(trim($values['Name'])))) ?>
         <? endif; ?>
         </td>
         <? if (in_array('number', $view_filter)) : ?>
