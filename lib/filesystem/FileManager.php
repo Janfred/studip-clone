@@ -695,12 +695,13 @@ class FileManager
                 }
 
                 $file_meta = array(
-                    'name' => [$source->name],
+                    'name' => $source->name,
                     'error' => [0],
-                    'type' => [$source->mime_type],
-                    'tmp_name' => [$source->path_to_blob],
+                    'type' => $source->mime_type,
+                    'tmp_name' => $source->path_to_blob,
                     'url' => $source->file->url,
-                    'size' => [$source->size]);
+                    'size' => $source->size
+                );
 
                 if ($source->file->url) {
                     if ($destination_plugin) {
