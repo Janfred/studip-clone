@@ -325,6 +325,7 @@ class FileManager
                     'name'     => $filename,
                     'type'     => $filetype,
                     'tmp_name' => $tmpname,
+                    'url'      => "",
                     'size'     => $size,
                     'user_id'  => $user_id,
                     'error'    => $uploaded_files['error'][$key]
@@ -698,10 +699,36 @@ class FileManager
                     'error' => [0],
                     'type' => [$source->mime_type],
                     'tmp_name' => [$source->path_to_blob],
+                    'url' => $source->file->url,
                     'size' => [$source->size]);
 
-                $fcopy = self::handleFileUpload($file_meta, $destination_folder, $user->id);
-                $new_reference = $fcopy["files"][0];
+                if ($source->file->url) {
+                    if ($destination_plugin) {
+                        $destination_folder->createFile($file_meta);
+                    } else {
+                        $copied_file = new File();
+                        $copied_file->setData($source->file);
+                        $copied_file['user_id'] = $user->id;
+                        $copied_file->setId($copied_file->getNewId());
+                        $copied_file->store();
+
+                        $fileurl = new FileURL();
+                        $fileurl->setData($source->file->file_url->toArray());
+                        $fileurl['file_id'] = $copied_file->getId();
+                        $fileurl->store();
+
+                        $new_reference = new FileRef();
+                        $new_reference->file_id     = $copied_file->id;
+                        $new_reference->folder_id   = $destination_folder->getId();
+                        $new_reference->name        = $source->file->name;
+                        $new_reference->description = $source->description;
+                        $new_reference->user_id     = $user->id;
+                    }
+                } else {
+                    $fcopy = self::handleFileUpload($file_meta, $destination_folder, $user->id);
+                    $new_reference = $fcopy["files"][0];
+                }
+
                 $new_reference->content_terms_of_use_id = $source->content_terms_of_use_id;
 
             }
