@@ -1271,9 +1271,12 @@ function getShowPageInfobox($keyword, $latest_version)
 
     // Create new wiki page
     $widget = new ActionsWidget();
-    $widget->addLink(_('Neue Wiki-Seite anlegen'),
-                         URLHelper::getLink('dispatch.php/wiki/create' .'?keyword=' . urlencode($keyword)),
-                         Icon::create('add', 'clickable'), array('data-dialog' => 'size=auto'));
+    $widget->addLink(
+        _('Neue Wiki-Seite anlegen'),
+        URLHelper::getLink('dispatch.php/wiki/create', compact('keyword')),
+        Icon::create('add'),
+        ['data-dialog' => 'size=auto']
+    );
     $sidebar->addWidget($widget);
 
     // Backlinks
