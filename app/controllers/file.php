@@ -633,7 +633,7 @@ class FileController extends AuthenticatedController
         } elseif ($this->file_ref) {
             $this->parent_folder = Folder::find($this->file_ref->folder_id);
         } elseif (!Request::submitted("from_plugin")) {
-            $folder = Folder::find($refs[0]);
+            $folder = Folder::find(is_array($fileref_id) ? $fileref_id[0] : $fileref_id);
             if ($folder) {
                 $this->parent_folder = Folder::find($folder->parent_id);
             }
