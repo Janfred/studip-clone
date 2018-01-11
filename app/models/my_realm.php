@@ -55,7 +55,7 @@ class MyRealmModel
             //count all files in standard folders for the object.
             $files_count = FileRef::countBySql(
                 "INNER JOIN folders ON folders.id = file_refs.folder_id
-                WHERE 
+                WHERE
                 folders.folder_type = 'StandardFolder'
                 AND folders.range_id = :range_id",
                 [
@@ -68,7 +68,7 @@ class MyRealmModel
             //to allow a wider use of this method.
             $new_files_count = FileRef::countBySql(
                 "INNER JOIN folders ON folders.id = file_refs.folder_id
-                WHERE 
+                WHERE
                 (file_refs.mkdate > :last_visit_date
                 OR file_refs.chdate > :last_visit_date)
                 AND folders.folder_type IN ('StandardFolder', 'RootFolder')
@@ -1039,11 +1039,14 @@ class MyRealmModel
         if ($group_field == 'sem_number' && !$params['order_by']) {
             foreach ($sem_courses as $index => $courses) {
                 uasort($courses, function ($a, $b) {
+                    $precondition = 0;
                     if (Config::get()->IMPORTANT_SEMNUMBER) {
-                        return $a['gruppe'] == $b['gruppe'] ? strcmp($a['number'], $b['number']) : $a['gruppe'] - $b['gruppe'];
-                    } else {
-                        return $a['gruppe'] == $b['gruppe'] ? strcmp($a['temp_name'], $b['temp_name']) : $a['gruppe'] - $b['gruppe'];
+                        $precondition = strcmp($a['number'], $b['number']);
                     }
+
+                    return $precondition
+                        ?: ($a['gruppe'] - $b['gruppe'])
+                        ?: strcmp($a['temp_name'], $b['temp_name']);
                 });
                 $sem_courses[$index] = $courses;
             }
