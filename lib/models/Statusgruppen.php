@@ -396,7 +396,7 @@ class Statusgruppen extends SimpleORMap
     {
         return !$this->isMember($user_id)
             && $this->hasSpace()
-            && ($this->selfAssign != 2 || !$this->userHasExclusiveGroup($user_id));
+            && ($this->selfassign != 2 || !$this->userHasExclusiveGroup($user_id));
     }
 
     /**
@@ -419,7 +419,7 @@ class Statusgruppen extends SimpleORMap
      */
     public function userHasExclusiveGroup($user_id)
     {
-        $sql = "SELECT 1 FROM statusgruppe_user JOIN statusgruppen USING (statusgruppe_id) WHERE range_id = ? AND user_id = ?";
+        $sql = "SELECT 1 FROM statusgruppe_user JOIN statusgruppen USING (statusgruppe_id) WHERE selfassign = 2 AND range_id = ? AND user_id = ?";
         $stmt = DBManager::get()->prepare($sql);
         $stmt->execute(array($this->range_id, $user_id));
         return $stmt->fetchColumn();
