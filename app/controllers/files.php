@@ -241,7 +241,13 @@ class FilesController extends AuthenticatedController
         $this->topFolder      = $this->plugin->getFolder($folder_id);
         $this->controllerpath = 'files/system/' . $plugin_id;
 
-        $this->buildSidebar($this->topFolder, false);
+        if (!$this->topFolder) {
+            PageLayout::postError(
+                _('Ordner nicht gefunden!')
+            );
+        } else {
+            $this->buildSidebar($this->topFolder, false);
+        }
         $this->render_action('index');
     }
 

@@ -1,3 +1,4 @@
+<? if ($topFolder): ?>
 <?php
 if (!$controllerpath) {
     $controllerpath = 'files/index';
@@ -125,3 +126,4 @@ if (!$controllerpath) {
     'folder_id' => $topFolder->getId(),
     'hidden'    => true,
 ]) ?>
+<? endif ?>
