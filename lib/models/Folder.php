@@ -171,7 +171,12 @@ class Folder extends SimpleORMap
      */
     public function cbMakeUniqueName()
     {
-        if (isset($this->parentfolder) && $this->isFieldDirty('name')) {
+        //If this folder has a parent folder we must check if either the
+        //name or the parent_id field has changed recently.
+        //If one of those fields has changed we must request an unique name
+        //to avoid duplicate folder names.
+        if (isset($this->parentfolder) &&
+            ($this->isFieldDirty('name') || $this->isFieldDirty('parent_id'))) {
             $this->name = $this->parentfolder->getUniqueName($this->name);
         }
     }
