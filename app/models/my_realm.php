@@ -1039,13 +1039,13 @@ class MyRealmModel
         if ($group_field == 'sem_number' && !$params['order_by']) {
             foreach ($sem_courses as $index => $courses) {
                 uasort($courses, function ($a, $b) {
-                    $precondition = 0;
+                    $extra_condition = 0;
                     if (Config::get()->IMPORTANT_SEMNUMBER) {
-                        $precondition = strcmp($a['number'], $b['number']);
+                        $extra_condition = strcmp($a['number'], $b['number']);
                     }
 
-                    return $precondition
-                        ?: ($a['gruppe'] - $b['gruppe'])
+                    return ($a['gruppe'] - $b['gruppe'])
+                        ?: $extra_condition
                         ?: strcmp($a['temp_name'], $b['temp_name']);
                 });
                 $sem_courses[$index] = $courses;
