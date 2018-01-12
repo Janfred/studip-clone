@@ -4,7 +4,7 @@
     <?= $this->render_partial('admin/courses/courses.php', compact('courses')) ?>
 <? elseif ($count_courses): ?>
     <?= MessageBox::info(sprintf(
-        _('Es wurden %u Veranstaltungen gefunden. Grenzen Sie diese mit den Filtermöglichkeiten weiter ein oder %slassen Sie alle anzeigen%s.'),
+        _('Es wurden %u Veranstaltungen gefunden. Grenzen Sie das Suchergebnis mit den Filtermöglichkeiten weiter ein, oder %slassen Sie sich alle Veranstaltungen anzeigen%s.'),
         $count_courses,
         '<a href="' . $controller->url_for('admin/courses', ['display' => 'all']) . '">',
         '</a>'
