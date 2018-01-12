@@ -1030,24 +1030,14 @@ class FileManager
             )];
         }
 
-        //the user has the permissions to copy the folder
-        $unique_name = Folder::find($destination_folder->getId())->getUniqueName($source_folder->name);
-        $unique_id   = Folder::find($destination_folder->getId())->getNewId();
-        $folder_class_name = get_class($source_folder);
-
-        $clone_folder = clone Folder::find($source_folder->getId());
-        $clone_folder->setNew(true);
-
-        $clone_folder->id         = $unique_id;
-        $clone_folder->user_id    = $user->id;
-        $clone_folder->parent_id  = $destination_folder->id;
-        $clone_folder->range_id   = $destination_folder->range_id;
-        $clone_folder->range_type = $destination_folder->range_type;
-        $clone_folder->name       = $unique_name;
-        if ($clone_folder->store()) {
-            $new_folder = new $folder_class_name($clone_folder);
-            $new_folder->store();
-        }
+        //The user has the permissions to copy the folder.
+        //We must copy the source folder first.
+        //The copy must be the same folder type like the destination folder.
+        //Therefore we must first get the destination folder's FolderType class.
+        $destination_folder_type = get_class($destination_folder);
+        $new_folder = new $destination_folder_type();
+        $new_folder->name = $source_folder->name;
+        $destination_folder->createSubfolder($new_folder);
 
         //now we go through all subfolders and copy them:
         foreach ($source_folder->getSubfolders() as $sub_folder) {
