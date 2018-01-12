@@ -19,6 +19,7 @@
  */
 class HomeworkFolder extends PermissionEnabledFolder
 {
+    public static $sorter = 2;
 
     /**
      * Returns a localised name of the HomeworkFolder type.

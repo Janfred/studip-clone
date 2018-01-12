@@ -1077,7 +1077,7 @@ class FileManager
                 $source_folder->name,
                 $destination_folder->name
             )];
-        }        
+        }
 
         $destination_folder->createSubfolder(
             $source_folder
@@ -1139,9 +1139,15 @@ class FileManager
             if (!is_a($declared_class, 'FolderType', true)) {
                 continue;
             }
-            $result[] = $declared_class;
+            $reflected_ft = new ReflectionClass($declared_class);
+            $ft_sorter = $reflected_ft->getStaticPropertyValue('sorter', PHP_INT_MAX);
+            if ($ft_sorter == 0 && $declared_class != 'StandardFolder') {
+                $ft_sorter = PHP_INT_MAX;
+            }
+            $result[$declared_class] = $ft_sorter;
         }
-        return $result;
+        asort($result, SORT_NUMERIC);
+        return array_keys($result);
     }
 
     /**

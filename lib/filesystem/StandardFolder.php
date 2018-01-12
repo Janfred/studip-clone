@@ -17,6 +17,9 @@
  */
 class StandardFolder implements FolderType
 {
+
+    public static $sorter = 0;
+
     /**
      * @var Folder
      */

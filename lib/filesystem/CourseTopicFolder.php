@@ -14,6 +14,10 @@
  */
 class CourseTopicFolder extends StandardFolder implements FolderType
 {
+
+    public static $sorter = 1;
+
+
     public static function getTypeName()
     {
         return _('Themen-Ordner');

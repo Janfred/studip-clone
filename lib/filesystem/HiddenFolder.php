@@ -14,6 +14,10 @@
  */
 class HiddenFolder extends PermissionEnabledFolder
 {
+
+    public static $sorter = 6;
+
+
     // nobody can see, write or read in this folder except the lecturer and his tutors
     protected $permission = 0;
 

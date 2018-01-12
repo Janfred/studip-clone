@@ -14,6 +14,9 @@
  */
 class MaterialFolder extends PermissionEnabledFolder
 {
+
+    public static $sorter = 3;
+
     public static function availableInRange($range_id_or_object, $user_id)
     {
         $range_id = is_object($range_id_or_object) ? $range_id_or_object->id : $range_id_or_object;

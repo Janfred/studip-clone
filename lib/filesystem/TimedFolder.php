@@ -16,6 +16,8 @@
 class TimedFolder extends PermissionEnabledFolder
 {
 
+    public static $sorter = 5;
+
     /**
      * @var int start of folder visibility (0 for always)
      */

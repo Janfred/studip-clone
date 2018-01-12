@@ -14,6 +14,9 @@
  */
 class PublicFolder extends StandardFolder
 {
+
+    public static $sorter = 1;
+
     /**
      * Returns a localised name of the PublicFolder type.
      *

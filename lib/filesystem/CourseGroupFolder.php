@@ -14,6 +14,9 @@
  */
 class CourseGroupFolder extends StandardFolder
 {
+
+    public static $sorter = 4;
+
     // the id from the associated group
     protected $group_id;
 
