@@ -54,7 +54,8 @@ STUDIP.QuickSearch = {
                 },
                 position: $('#' + name).is('.expand-to-left') ? {
                     my: 'right top',
-                    at: 'right bottom'
+                    at: 'right bottom',
+                    collision: 'none'
                 } : {
                     my: 'left top',
                     at: 'left bottom',
