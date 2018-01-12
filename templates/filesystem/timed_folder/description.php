@@ -29,7 +29,7 @@
     </div>
     <div>
         <?= _('Den Inhalt des Ordners können nur Lehrende und TutorInnen verändern.') ?>
-        <?= _('Die normalen Teilnehmenden der Veranstaltung können diese Materialien nur herunterladen.') ?>
+        <?= _('Alle anderen Teilnehmenden der Veranstaltung können diese Materialien nur herunterladen.') ?>
     </div>
 <? endif ?>
 <? if (count($own_files) > 0) : ?>
