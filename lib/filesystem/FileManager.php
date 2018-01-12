@@ -1087,8 +1087,8 @@ class FileManager
                 $source_folder->name,
                 $destination_folder->name
             )];
-        }
-
+        }        
+        $source_folder->name = Folder::find($destination_folder->getId())->getUniqueName($source_folder->name);
         $source_folder->parent_id = $destination_folder->getId();
         $source_folder->range_id = $destination_folder->range_id;
         $source_folder->store();
