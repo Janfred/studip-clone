@@ -365,7 +365,11 @@ class IndexController extends ForumController
             throw new Exception('missing seminar_id/topic_id while adding a new entry!');
         }
 
-        ForumPerm::check('add_entry', $this->getId(), $parent_id);
+        if ($this->seminar_id == $parent_id) {
+            ForumPerm::check('add_area', $this->getId(), $parent_id);
+        } else {
+            ForumPerm::check('add_entry', $this->getId(), $parent_id);
+        }
 
         $constraints = ForumEntry::getConstraints($parent_id);
 
