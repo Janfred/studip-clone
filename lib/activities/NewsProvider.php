@@ -107,6 +107,11 @@ class NewsProvider implements ActivityProvider
     {
         $news = new \StudipNews($activity->object_id);
 
+        // do not show unpublished news
+        if ($news->date > time()) {
+            return false;
+        }
+
         $activity->content = '<b>' . htmlReady($news->topic)
             .'</b><br>'. formatReady($news->body);
 
