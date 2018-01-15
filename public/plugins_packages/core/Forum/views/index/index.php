@@ -244,7 +244,8 @@ if ($section === 'index' && ForumPerm::has('pdfexport', $seminar_id)) {
 
 <? endif ?>
 
-    <? if (ForumPerm::has('add_entry', $seminar_id)): ?>
+<? if ( (ForumPerm::has('add_area', $this->seminar_id))
+    || ($constraint['depth'] >= 1 && ForumPerm::has('add_entry', $seminar_id)) ): ?>
         <?= $this->render_partial('index/_new_entry') ?>
     <? endif ?>
 </div>
