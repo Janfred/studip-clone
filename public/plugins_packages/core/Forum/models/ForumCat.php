@@ -47,30 +47,6 @@ class ForumCat extends SimpleORMap
     }
 
     /**
-     * return a list of all categories for the passed seminar
-     *
-     * @param string $seminar_id  the seminar_id the retrieve the categories for
-     * @return array  list of categories
-     */
-    public static function getList($seminar_id)
-    {
-        $stmt = DBManager::get()->prepare("SELECT * FROM forum_categories
-            WHERE seminar_id = ? ORDER BY pos ASC");
-        $stmt->execute(array($seminar_id));
-
-        $list = array();
-
-        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $area) {
-            $cat = new ForumCat();
-            $cat->setData($area, true);
-            $cat->setNew(false);
-            $list[] = $cat;
-        }
-
-        return $list;
-    }
-
-    /**
      * Returns the name of the associated category for an area denoted by the
      * passed topic_id
      *

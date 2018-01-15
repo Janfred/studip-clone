@@ -27,15 +27,16 @@ class Forum extends \RESTAPI\RouteMap
             $this->error(401);
         }
 
-        $categories = \ForumCat::getList($course_id, false);
+        $categories = \ForumCat::findBySeminar_id($course_id, 'ORDER BY pos ASC');
         $total      = sizeof($categories);
         $categories = array_splice($categories, (int)$this->offset, (int)$this->limit ?: 10);
 
         $json = array();
         foreach ($categories as $cat) {
-            $uri = $this->urlf('/forum_category/%s', array(htmlReady($cat['category_id'])));
-            $cat['course_id'] = $cat['seminar_id'];
-            $json[$uri] = $this->categoryToJson($cat);
+            $json_cat = $cat->toArray();
+            $uri = $this->urlf('/forum_category/%s', array(htmlReady($json_cat['category_id'])));
+            $json_cat['course_id'] = $json_cat['seminar_id'];
+            $json[$uri] = $this->categoryToJson($json_cat);
         }
 
         $this->etag(md5(serialize($json)));
