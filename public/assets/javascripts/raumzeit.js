@@ -41,11 +41,11 @@
                 } else {
                     $(select).empty().append(me.data('options').clone(true));
                 }
-                
+
                 if ($(this).parents('form').attr('action').split('saveDate/').length > 1) {
                     var singleDate = $(this).parents('form').attr('action').split('saveDate/')[1].split('?')[0];
                 } else {
-                   var singleDate = undefined; 
+                   var singleDate = undefined;
                 }
                 if ($( "input[name='checked_dates']" ).length > 0) {
                     var checked_dates = $( "input[name='checked_dates']" ).val().split(',');
@@ -55,7 +55,7 @@
                     var startDate = $( "input[name='date']" ).val();
                     var start_time = $( "input[name='start_time']" ).val().split(':');
                     var end_time = $( "input[name='end_time']" ).val().split(':');
-                    var date_obj = [{name: 'startDate', value: startDate}, 
+                    var date_obj = [{name: 'startDate', value: startDate},
                         {name: 'start_stunde', value: start_time[0]},
                         {name: 'start_minute', value: start_time[1]},
                         {name: 'end_stunde', value: end_time[0]},
@@ -66,13 +66,13 @@
                     type: 'POST',
                     url: STUDIP.ABSOLUTE_URI_STUDIP + 'dispatch.php/resources/helpers/bookable_rooms',
                     data: {
-                        rooms: _.pluck(select.options, 'value'),
+                        rooms: _.map(select.options, 'value'),
                         selected_dates: checked_dates,
-                        singleDateID: singleDate,                                      
+                        singleDateID: singleDate,
                         new_date: date_obj
                     },
                     success: function (result) {
-                        if ($.isArray(result)) {                            
+                        if ($.isArray(result)) {
                             if (result.length) {
                                 var not_bookable_rooms = _.map(result, function (v) {
                                     return $(select).children('option[value=' + v + ']').text().trim();

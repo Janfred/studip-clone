@@ -13,10 +13,10 @@ STUDIP.Admission = {
             courseFilter = '%%%';
         }
         var data = {
-                'courses[]' : _.pluck($('#courselist input:checked'), 'id'),
+                'courses[]' : _.map($('#courselist input:checked'), 'id'),
                 'course_filter' : courseFilter,
                 'semester' : $('select[name="semester"]').val(),
-                'institutes[]' : $.merge(_.pluck($('input[name="institutes[]"]:hidden'), 'value'), _.pluck($('input[name="institutes[]"]:checked'), 'value'))
+                'institutes[]' : $.merge(_.map($('input[name="institutes[]"]:hidden'), 'value'), _.map($('input[name="institutes[]"]:checked'), 'value'))
             };
         var loading = 'Wird geladen'.toLocaleString();
         $('#instcourses').empty();
@@ -40,7 +40,7 @@ STUDIP.Admission = {
             width: '450',
             title: 'Anmelderegel konfigurieren'.toLocaleString(),
             id: 'configurerule',
-            data: {ruleId : ruleId, rules : _.pluck($('#rules input[name="rules[]"]'), 'value')},
+            data: {ruleId : ruleId, rules : _.map($('#rules input[name="rules[]"]'), 'value')},
         });
 
         return false;
@@ -50,7 +50,7 @@ STUDIP.Admission = {
         STUDIP.Dialog.fromURL(source, {
             title: 'Anmelderegel konfigurieren'.toLocaleString(),
             size: 'auto',
-            data: {rules : _.pluck($('#rules input[name="rules[]"]'), 'value')},
+            data: {rules : _.map($('#rules input[name="rules[]"]'), 'value')},
             method: 'post',
             id: 'configurerule'
         });
