@@ -24,9 +24,10 @@ class Userfilter_FieldController extends AuthenticatedController
     public function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
-
+        if ($GLOBALS['perm']->have_perm('admin') || ($GLOBALS['perm']->have_perm('dozent') && get_config('ALLOW_DOZENT_COURSESET_ADMIN'))) {
+            Navigation::activateItem('/tools/coursesets');;
+        }
         PageLayout::setTitle(_('Bedingung'));
-        Navigation::activateItem('/tools/coursesets');
         PageLayout::addSqueezePackage('userfilter');
     }
 

@@ -45,7 +45,7 @@ use Studip\Button, Studip\LinkButton;
                     <?= $condition->toString() ?>
                     <a href="#" onclick="return STUDIP.UserFilter.removeConditionField($(this).parent())"
                         class="conditionfield_delete">
-                    <?= Assets::img('icons/16/blue/trash.png'); ?></a>
+                    <?= Icon::create('trash', 'clickable')->asImg(); ?></a>
                     <input type="hidden" name="conditions[]" value="<?= htmlReady(ObjectBuilder::exportAsJson($condition)) ?>">
                     <input type="hidden" name="conditiongroup_<?=$condition->getId()?>" value="">
                 </div>
@@ -66,7 +66,7 @@ use Studip\Button, Studip\LinkButton;
                             <?= $condition->toString() ?>
                             <a href="#" onclick="return STUDIP.UserFilter.removeConditionField($(this).parent())"
                                         class="conditionfield_delete">
-                            <?= Assets::img('icons/16/blue/trash.png'); ?></a>
+                            <?= Icon::create('trash', 'clickable')->asImg(); ?></a>
                             <input type="hidden" name="conditions[]" value="<?= htmlReady(ObjectBuilder::exportAsJson($condition)) ?>">
                             <input type="hidden" name="conditiongroup_<?=$condition->getId()?>" value="<?= $conditiongroup_id ?>">
                         </div>
