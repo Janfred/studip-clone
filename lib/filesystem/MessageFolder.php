@@ -373,6 +373,7 @@ class MessageFolder implements FolderType
      */
     public function createSubfolder(FolderType $folderdata)
     {
+        return null;
     }
 
     /**

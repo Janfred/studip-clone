@@ -339,7 +339,12 @@ class StandardFolder implements FolderType
         $foldertype->range_id   = $this->folderdata['range_id'];
         $foldertype->range_type = $this->folderdata['range_type'];
         $foldertype->parent_id  = $this->folderdata['id'];
-        return $foldertype->store();
+        if($foldertype->store()) {
+            return $foldertype;
+        }
+
+        #In case something went wrong while storing the subfolder:
+        return null;
     }
 
     /**
