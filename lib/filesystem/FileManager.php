@@ -726,6 +726,14 @@ class FileManager
                         $new_reference->user_id     = $user->id;
                     }
                 } else {
+                    $file_meta = array(
+                        'name' => array($source->name),
+                        'error' => [0],
+                        'type' => array($source->mime_type),
+                        'tmp_name' => array($source->path_to_blob),
+                        'url' => array($source->file->url),
+                        'size' => array($source->size)
+                    );
                     $fcopy = self::handleFileUpload($file_meta, $destination_folder, $user->id);
                     $new_reference = $fcopy["files"][0];
                 }
