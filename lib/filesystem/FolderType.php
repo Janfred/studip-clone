@@ -181,7 +181,8 @@ interface FolderType
 
     /**
      * @param  $foldertype FolderType
-     * @return bool
+     * @return FolderType A FolderType instance representing
+     *     the created subfolder.
      */
     public function createSubfolder(FolderType $foldertype);
 

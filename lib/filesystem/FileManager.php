@@ -1037,7 +1037,7 @@ class FileManager
         $destination_folder_type = get_class($destination_folder);
         $new_folder = new $destination_folder_type();
         $new_folder->name = $source_folder->name;
-        $destination_folder->createSubfolder($new_folder);
+        $new_folder = $destination_folder->createSubfolder($new_folder);
 
         //now we go through all subfolders and copy them:
         foreach ($source_folder->getSubfolders() as $sub_folder) {
@@ -1079,10 +1079,9 @@ class FileManager
             )];
         }
 
-        $destination_folder->createSubfolder(
+        return $destination_folder->createSubfolder(
             $source_folder
         );
-        return $source_folder;
     }
 
     /**
