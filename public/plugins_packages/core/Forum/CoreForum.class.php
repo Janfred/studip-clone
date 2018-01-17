@@ -47,10 +47,6 @@ class CoreForum extends StudipPlugin implements ForumModule
     /* interface method */
     public function getTabNavigation($course_id)
     {
-        if (!$this->isActivated($course_id)) {
-            return;
-        }
-
         $navigation = new Navigation(_('Forum'), PluginEngine::getURL($this, array(), 'index'));
         $navigation->setImage(Icon::create('forum', 'info_alt'));
 
@@ -74,10 +70,6 @@ class CoreForum extends StudipPlugin implements ForumModule
     /* interface method */
     function getIconNavigation($course_id, $last_visit, $user_id = null)
     {
-        if (!$this->isActivated($course_id)) {
-            return;
-        }
-
         if ($GLOBALS['perm']->have_studip_perm('user', $course_id)) {
             $num_entries = ForumVisit::getCount($course_id, ForumVisit::getVisit($course_id));
             $text = ForumHelpers::getVisitText($num_entries, $course_id);

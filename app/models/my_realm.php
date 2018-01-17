@@ -778,18 +778,18 @@ class MyRealmModel
      * @param $visitdate
      * @return mixed
      */
-    public static function getPluginNavigationForSeminar($seminar_id, $visitdate)
+    public static function getPluginNavigationForSeminar($seminar_id, $sem_class, $user_id, $visitdate)
     {
-        $plugin_navigation[$seminar_id] = array();
-        $plugins                        = PluginEngine::getPlugins('StandardPlugin', $seminar_id);
-
-        if (empty($plugins)) return $plugin_navigation[$seminar_id];
+        $plugin_navigation = array();
+        $plugins = PluginEngine::getPlugins('StandardPlugin', $seminar_id);
 
         foreach ($plugins as $plugin) {
-            $nav = $plugin->getIconNavigation($seminar_id, $visitdate, $GLOBALS['user']->id);
-            if ($nav instanceof Navigation) $plugin_navigation[$seminar_id][get_class($plugin)] = $nav;
+            if (!$sem_class->isSlotModule(get_class($plugin))) {
+                $nav = $plugin->getIconNavigation($seminar_id, $visitdate, $user_id);
+                if ($nav instanceof Navigation) $plugin_navigation[get_class($plugin)] = $nav;
+            }
         }
-        return $plugin_navigation[$seminar_id];
+        return $plugin_navigation;
     }
 
 
@@ -1203,14 +1203,14 @@ class MyRealmModel
      * @param $user_id
      * @return array
      */
-    public static function getAdditionalNavigations($object_id, &$my_obj_values, $sem_class = null, $user_id)
+    public static function getAdditionalNavigations($object_id, &$my_obj_values, $sem_class, $user_id)
     {
         if ($threshold = object_get_visit_threshold()) {
             $my_obj_values['visitdate'] = max($my_obj_values['visitdate'], $threshold);
         }
 
-        $plugin_navigation = MyRealmModel::getPluginNavigationForSeminar($object_id, $my_obj_values['visitdate']);
-        $available_modules = 'CoreForum participants documents overview scm schedule wiki vote literature elearning_interface';
+        $plugin_navigation = MyRealmModel::getPluginNavigationForSeminar($object_id, $sem_class, $user_id, $my_obj_values['visitdate']);
+        $available_modules = 'forum participants documents overview scm schedule wiki vote literature elearning_interface';
 
         foreach (words($available_modules) as $key) {
 
@@ -1236,7 +1236,6 @@ class MyRealmModel
             }
 
             $function = 'check' . ucfirst($key);
-            $main_nav = true;
 
             if (method_exists(__CLASS__, $function)) {
                 $params = array(&$my_obj_values,
@@ -1250,27 +1249,16 @@ class MyRealmModel
 
             }
 
-            if ($sem_class && !empty($plugin_navigation)) {
+            if ($sem_class) {
                 $module = $sem_class->getModule($key);
-                if (!is_null($module)) {
-                    if (property_exists($module, 'plugin_info')) {
-                        $navigation[$key] = $plugin_navigation[get_class($module)];
-                        // Workaround to get the badge-information on overview
-                        // if still badge number exists something new in blubber or forum exists
-                        if ($navigation[$key] && ((int)$navigation[$key]->getBadgeNumber() > 0)) {
-                            $my_obj_values['last_modified'] = time();
-                        }
-                        $main_nav = false;
-                        unset($plugin_navigation[get_class($module)]);
-                    }
+                if ($module instanceof StandardPlugin) {
+                    $nav = $module->getIconNavigation($object_id, $my_obj_values['visitdate'], $user_id);
                 }
             }
 
             // add the main navigation item to resultset
-            if ($main_nav) {
-                $navigation[$key] = $nav;
-                unset($nav);
-            }
+            $navigation[$key] = $nav;
+            unset($nav);
         }
 
         $navigation = array_merge($navigation, $plugin_navigation);
@@ -1456,7 +1444,7 @@ class MyRealmModel
             foreach ($institutes as $index => $inst) {
                 $institutes[$index]['modules']    = $Modules->getLocalModules($inst['institut_id'], 'inst', $inst['modules'], $inst['type'] ? : 1);
                 $institutes[$index]['obj_type']   = 'inst';
-                $institutes[$index]['navigation'] = MyRealmModel::getAdditionalNavigations($inst['institut_id'], $institutes[$index], null, $GLOBALS['user']->id);
+                $institutes[$index]['navigation'] = MyRealmModel::getAdditionalNavigations($inst['institut_id'], $institutes[$index], SemClass::getDefaultInstituteClass($inst['type']), $GLOBALS['user']->id);
             }
             unset($Modules);
         }
