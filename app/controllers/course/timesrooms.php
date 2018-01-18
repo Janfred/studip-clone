@@ -447,29 +447,6 @@ class Course_TimesroomsController extends AuthenticatedController
     }
 
     /**
-     * Removes a single date
-     *
-     * @param String $termin_id Id of the date
-     * @param String $sub_cmd Sub command to be executed
-     */
-    public function deleteSingle_action($termin_id, $sub_cmd = 'delete')
-    {
-        CSRFProtection::verifyUnsafeRequest();
-        $cycle_id = Request::option('cycle_id');
-        if ($cycle_id) {
-            $sub_cmd = 'cancel';
-        }
-        $this->deleteDate($termin_id, $sub_cmd, $cycle_id);
-        $this->displayMessages();
-
-        $params = array();
-        if ($cycle_id) {
-            $params['contentbox_open'] = $cycle_id;
-        }
-        $this->redirect($this->url_for('course/timesrooms/index', $params));
-    }
-
-    /**
      * Restores a previously removed date.
      *
      * @param String $termin_id Id of the previously removed date

@@ -119,9 +119,17 @@ $is_exTermin = $termin instanceof CourseExDate;
             <? $params['data-dialog'] = 'size=big' ?>
         <? endif ?>
 
-        <? $actionMenu->addButton(
-            'delete_part',
-            _('Termin löschen'), Icon::create('trash', 'clickable', $params)
+        <? $actionMenu->addLink(
+            $controller->url_for(
+                'course/timesrooms/stack',
+                [
+                    'single_dates[]' => $termin->termin_id,
+                    'method' => 'preparecancel'
+                ]
+            ),
+            _('Termin löschen'),
+            Icon::create('trash', 'clickable'),
+            ['data-dialog' => '1']
         ) ?>
     <? endif; ?>
         <?= $actionMenu->render() ?>
