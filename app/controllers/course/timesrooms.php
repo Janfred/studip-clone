@@ -650,6 +650,7 @@ class Course_TimesroomsController extends AuthenticatedController
             $new_ex_termin   = $termin->cancelDate();
             if ($new_ex_termin !== null) {
                 $msg .= sprintf('<li>%s</li>', $new_ex_termin->getFullname());
+                $deleted_dates[] = $new_ex_termin;
             }
         }
         $msg .= '</ul>';
