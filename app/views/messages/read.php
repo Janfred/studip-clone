@@ -24,13 +24,13 @@
                 <? $num_recipients = $message->getNumRecipients() ?>
                 <?= $num_recipients > 1 ? sprintf(_("%s Personen"), $num_recipients) : _("Eine Person") ?>
                 <? else : ?>
-                <ul class='clean' id="adressees">
+                <ul class="clean list-csv" id="adressees">
                 <? foreach ($message->getRecipients() as $message_user) : ?>
                     <li>
                         <a href="<?= URLHelper::getLink("dispatch.php/profile", array('username' => $message_user["username"])) ?>">
-                            <?= htmlReady($message_user['fullname']) ?>
-                        </a>
-                    </li>
+                            <?= htmlReady($message_user['fullname']) ?><!-- avoid extra space before ::after
+                     --></a><!--
+                 --></li>
                 <? endforeach ?>
                 </ul>
                 <? endif ?>

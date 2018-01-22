@@ -3,14 +3,14 @@
     <input type="hidden" name="answer_to" value="<?= htmlReady($answer_to) ?>">
     <div>
         <label for="user_id_1"><h4><?= _("An") ?></h4></label>
-        <ul class="clean" id="adressees">
+        <ul class="clean list-csv" id="adressees">
             <li id="template_adressee" style="display: none;" class="adressee">
                 <input type="hidden" name="message_to[]" value="">
                 <span class="visual"></span>
                 <a class="remove_adressee"><?= Icon::create('trash', 'clickable')->asImg(['class' => "text-bottom"]) ?></a>
             </li>
             <? foreach ($default_message->getRecipients() as $user) : ?>
-            <li style="padding: 0px;" class="adressee">
+            <li class="adressee">
                 <input type="hidden" name="message_to[]" value="<?= htmlReady($user['user_id']) ?>">
                 <span class="visual">
                     <?= htmlReady($user['fullname']) ?>
