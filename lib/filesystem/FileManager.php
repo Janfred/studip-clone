@@ -705,7 +705,7 @@ class FileManager
 
                 if ($source->file->url) {
                     if ($destination_plugin) {
-                        $destination_folder->createFile($file_meta);
+                        $new_reference = $destination_folder->createFile($file_meta);
                     } else {
                         $copied_file = new File();
                         $copied_file->setData($source->file);
