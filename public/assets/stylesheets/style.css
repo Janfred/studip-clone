@@ -4692,6 +4692,7 @@ a.message-tag::before {
   display: flex;
   -webkit-justify-content: flex-start;
   justify-content: flex-start;
+  margin-top: 1ex;
 }
 .message-search-wrapper > * {
   margin-right: 1em;

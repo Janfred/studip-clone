@@ -3,7 +3,7 @@
     <input type="hidden" name="answer_to" value="<?= htmlReady($answer_to) ?>">
     <div>
         <label for="user_id_1"><h4><?= _("An") ?></h4></label>
-        <ul class="clean list-csv" id="adressees">
+        <ul class="list-csv" id="adressees">
             <li id="template_adressee" style="display: none;" class="adressee">
                 <input type="hidden" name="message_to[]" value="">
                 <span class="visual"></span>

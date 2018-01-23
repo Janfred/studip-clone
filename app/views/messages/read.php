@@ -24,7 +24,7 @@
                 <? $num_recipients = $message->getNumRecipients() ?>
                 <?= $num_recipients > 1 ? sprintf(_("%s Personen"), $num_recipients) : _("Eine Person") ?>
                 <? else : ?>
-                <ul class="clean list-csv" id="adressees">
+                <ul class="list-csv" id="adressees">
                 <? foreach ($message->getRecipients() as $message_user) : ?>
                     <li>
                         <a href="<?= URLHelper::getLink("dispatch.php/profile", array('username' => $message_user["username"])) ?>">
