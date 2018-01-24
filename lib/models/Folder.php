@@ -177,7 +177,7 @@ class Folder extends SimpleORMap
         //to avoid duplicate folder names.
         if (isset($this->parentfolder) &&
             ($this->isFieldDirty('name') || $this->isFieldDirty('parent_id'))) {
-            $this->name = $this->parentfolder->getUniqueName($this->name);
+            $this->name = $this->parentfolder->getUniqueName($this->name, true);
         }
     }
 
@@ -217,22 +217,36 @@ class Folder extends SimpleORMap
      * to the file name to make it unique. The unique file name is returned.
      *
      * @param string $file_name The file name that shall be checked for uniqueness.
+     * @param bool $folder_naming_mode Enable (true) or disable (false) the
+     *     Folder naming mode. The default is false (disabled).
+     *     If folder naming mode is set to true, the number in square brackets
+     *     is appended to the end of the name instead of being inserted before
+     *     the last dot in the name.
      *
      * @return string An unique filename.
      */
-    public function getUniqueName($file_name)
+    public function getUniqueName($file_name, $folder_naming_mode = false)
     {
         $c = 0;
-        $ext = pathinfo($file_name, PATHINFO_EXTENSION);
-        if ($ext) {
-            $name = substr($file_name, 0, -mb_strlen('.' . $ext));
+        if ($folder_naming_mode) {
+            //Folder naming mode: simply append the number in square brackets.
+            $original_name = $file_name;
+            while ($this->fileExists($file_name)) {
+                $file_name = $original_name . '[' . ++$c . ']';
+            }
         } else {
-            $name = $file_name;
-        }
-        while ($this->fileExists($file_name)) {
-            $file_name = $name . '[' . ++$c . ']';
+            //File naming mode: The last dot in the name is important.
+            $ext = pathinfo($file_name, PATHINFO_EXTENSION);
             if ($ext) {
-                $file_name .= '.' . $ext;
+                $name = substr($file_name, 0, -mb_strlen('.' . $ext));
+            } else {
+                $name = $file_name;
+            }
+            while ($this->fileExists($file_name)) {
+                $file_name = $name . '[' . ++$c . ']';
+                if ($ext) {
+                    $file_name .= '.' . $ext;
+                }
             }
         }
         return $file_name;
