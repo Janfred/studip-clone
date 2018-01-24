@@ -1039,6 +1039,36 @@ class FileManager
         }
 
         //The user has the permissions to copy the folder.
+
+        //Now we must check if a folder is to be copied inside itself
+        //or one of its subfolders. This is not allowed since it
+        //leads to infinite recursion.
+
+        $recursion_error = false;
+
+        //First we check if the source folder is the destination folder:
+        if ($destination_folder->getId() == $source_folder->getId()) {
+            $recursion_error = true;
+        }
+
+        //After that we search the hierarchy of the destination folder
+        //for the ID of the source folder:
+        $parent = $destination_folder->getParent();
+        while ($parent) {
+            if ($parent->getId() == $source_folder->getId()) {
+                $recursion_error = true;
+                break;
+            }
+            $parent = $parent->getParent();
+        }
+
+        if ($recursion_error) {
+            return [
+                _('Ein Ordner kann nicht in sich selbst oder einen seiner Unterordner kopiert werden!')
+            ];
+        }
+
+
         //We must copy the source folder first.
         //The copy must be the same folder type like the destination folder.
         //Therefore we must first get the destination folder's FolderType class.
@@ -1085,6 +1115,29 @@ class FileManager
                 $source_folder->name,
                 $destination_folder->name
             )];
+        }
+
+        //Check if the destination folder is a subfolder of the source folder
+        //or if destination and source folder are identical:
+        $recursion_error = false;
+
+        if ($destination_folder->getId() == $source_folder->getId()) {
+            $recursion_error = true;
+        }
+
+        $parent = $destination_folder->getParent();
+        while ($parent) {
+            if ($parent->getId() == $source_folder->getId()) {
+                $recursion_error = true;
+                break;
+            }
+            $parent = $parent->getParent();
+        }
+
+        if ($recursion_error) {
+            return [
+                _('Ein Ordner kann nicht in sich selbst oder einen seiner Unterordner verschoben werden!')
+            ];
         }
 
         return $destination_folder->createSubfolder(
