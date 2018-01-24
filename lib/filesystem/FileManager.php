@@ -1038,6 +1038,8 @@ class FileManager
             )];
         }
 
+
+
         //The user has the permissions to copy the folder.
 
         //Now we must check if a folder is to be copied inside itself
@@ -1072,7 +1074,10 @@ class FileManager
         //We must copy the source folder first.
         //The copy must be the same folder type like the destination folder.
         //Therefore we must first get the destination folder's FolderType class.
-        $destination_folder_type = get_class($destination_folder);
+        $new_folder_class = get_class($source_folder);
+        $destination_folder_type = in_array($new_folder_class, self::getAvailableFolderTypes($destination_folder->range_id, $user->id))
+            ? $new_folder_class
+            : "StandardFolder";
         $new_folder = new $destination_folder_type();
         $new_folder->name = $source_folder->name;
         $new_folder = $destination_folder->createSubfolder($new_folder);
