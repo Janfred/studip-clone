@@ -16,7 +16,7 @@
  */
 class FileController extends AuthenticatedController
 {
-    protected $utf8decode_xhr = true;
+    protected $allow_nobody = true;
 
     function validate_args(&$args, $types = NULL)
     {
@@ -58,7 +58,7 @@ class FileController extends AuthenticatedController
         } else {
             $folder = FileManager::getTypedFolder($folder_id);
         }
-        
+
         URLHelper::addLinkParam('from_plugin', Request::get('from_plugin'));
 
         if (!$folder || !$folder->isWritable($GLOBALS['user']->id)) {
@@ -87,7 +87,7 @@ class FileController extends AuthenticatedController
             $default_license = ContentTermsOfUse::find(
                 'UNDEF_LICENSE'
             );
-            
+
             foreach ($validatedFiles['files'] as $fileref) {
                 //If no terms of use is set for the file ref
                 //we must set it to a default terms of use
@@ -217,7 +217,7 @@ class FileController extends AuthenticatedController
             // (for example owncloud/nextcloud folders) are not stored in the database.
             $folder = $this->file_ref->foldertype;
             if (!$folder->isVisible(User::findCurrent()->id)) {
-                throw new AccessDeniedException();
+                throw new AccessDeniedException(User::findCurrent()->id);
             }
             $this->is_downloadable = $folder->isFileDownloadable($this->file_ref->id, User::findCurrent()->id);
             $this->is_editable     = $folder->isFileEditable($this->file_ref->id, User::findCurrent()->id);
@@ -267,7 +267,7 @@ class FileController extends AuthenticatedController
      */
     public function edit_action($file_ref_id)
     {
-        
+
         if (Request::get("from_plugin")) {
             $file_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/file/edit/") + strlen("dispatch.php/file/edit/"));
             if (strpos($file_id, "?") !== false) {
@@ -278,7 +278,7 @@ class FileController extends AuthenticatedController
             if (!$plugin) {
                 throw new Trails_Exception(404, _('Plugin existiert nicht.'));
             }
-            
+
             $this->file_ref = $plugin->getPreparedFile($file_id);
             $this->from_plugin = Request::get("from_plugin");
 
@@ -310,14 +310,14 @@ class FileController extends AuthenticatedController
                     User::findCurrent(),
                     $new_name,
                     $new_description,
-                    $new_content_terms_of_use_id             
+                    $new_content_terms_of_use_id
                 );
             }
 
             if (!$result instanceof FileRef) {
                 $this->errors = array_merge($this->errors, $result);
             }
-            
+
 
             if ($this->errors) {
                 PageLayout::postError(
@@ -331,7 +331,7 @@ class FileController extends AuthenticatedController
                 PageLayout::postSuccess(_('Änderungen gespeichert!'));
                 $this->redirectToFolder($this->folder);
             }
-            
+
         }
     }
 
@@ -597,9 +597,9 @@ class FileController extends AuthenticatedController
         }
         $this->copymode = $copymode;
         $this->fileref_id = $fileref_id;
-     
+
         if (Request::get("from_plugin")) {
-            
+
             if (is_array($fileref_id)) {
                 $file_id = $fileref_id[0];
             } else {
@@ -608,7 +608,7 @@ class FileController extends AuthenticatedController
                     $file_id = substr($file_id, 0, strpos($file_id, "?"));
                 }
                 $fileref_id = array($file_id);
-            }            
+            }
             $file_id = $fileref_id[0];
             $this->fileref_id = $fileref_id;
 
@@ -616,7 +616,7 @@ class FileController extends AuthenticatedController
             if (!$plugin) {
                 throw new Trails_Exception(404, _('Plugin existiert nicht.'));
             }
-            $this->file_ref = $plugin->getPreparedFile($file_id); 
+            $this->file_ref = $plugin->getPreparedFile($file_id);
         } else {
 
             if (is_array($fileref_id)) {
@@ -625,7 +625,7 @@ class FileController extends AuthenticatedController
             } else {
                 $this->file_ref = FileRef::find($fileref_id);
                 $this->fileref_id = array($fileref_id);
-            }            
+            }
         }
 
         if ($this->file_ref && Request::submitted("from_plugin")) {
@@ -648,7 +648,7 @@ class FileController extends AuthenticatedController
     public function download_folder_action($folder_id)
     {
         $user = User::findCurrent();
-        
+
         if (Request::get("from_plugin")) {
             $folder_id = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "dispatch.php/file/download_folder/") + strlen("dispatch.php/file/download_folder/"));
 
@@ -659,7 +659,7 @@ class FileController extends AuthenticatedController
             if (!$plugin) {
                 throw new Trails_Exception(404, _('Plugin existiert nicht.'));
             }
-            $foldertype = $plugin->getFolder($folder_id);       
+            $foldertype = $plugin->getFolder($folder_id);
 
         } else {
             $folder = Folder::find($folder_id);
@@ -669,7 +669,7 @@ class FileController extends AuthenticatedController
         }
         if ($foldertype) {
             $tmp_file = tempnam($GLOBALS['TMP_PATH'], 'doc');
-            
+
             $use_dos_encoding = version_compare(PHP_VERSION, '5.6', '<=') || strpos($_SERVER['HTTP_USER_AGENT'], 'Windows') !== false;
 
             $result = FileArchiveManager::createArchive(
@@ -1211,7 +1211,7 @@ class FileController extends AuthenticatedController
         } else {
             $parent_folder = FileManager::getTypedFolder($folder_id);
         }
-        
+
         URLHelper::addLinkParam('from_plugin', Request::get('from_plugin'));
         if (!$parent_folder || !$parent_folder->isSubfolderAllowed($GLOBALS['user']->id)) {
             throw new AccessDeniedException();
@@ -1329,7 +1329,7 @@ class FileController extends AuthenticatedController
             }
             if ($folder_type !== get_class($folder)) {
                 $folder = new $folder_type($folder);
-            }            
+            }
             $request = Request::getInstance();
             $request->offsetSet('parent_id', $folder->getParent()->getId());
             $result = $folder->setDataFromEditTemplate($request);
@@ -1430,7 +1430,7 @@ class FileController extends AuthenticatedController
                     }
                     if ($fa_object) {
                         $file_area_objects[] = $fa_object;
-                    }                  
+                    }
                 } else {
                 //check if the ID references a FileRef:
                     $filesystem_item = FileRef::find($id);
@@ -1488,19 +1488,19 @@ class FileController extends AuthenticatedController
             $user = User::findCurrent();
             $selected_elements = Request::getArray('ids');
             foreach ($selected_elements as $element) {
-                
+
                 if (Request::get("from_plugin")) {
                     $foldertype = $plugin->getFolder($element);
                     if (!$foldertype) {
                         $file_ref = $plugin->getPreparedFile($element, true);
-                    }                  
+                    }
                 } else {
                     $file_ref = FileRef::find($element);
                     if(!$file_ref) {
                         $foldertype = FileManager::getTypedFolder($element);
                     }
                 }
-                
+
                 if ($file_ref) {
                     $result = $parent_folder->deleteFile($element);
                     if (!is_array($result)) {

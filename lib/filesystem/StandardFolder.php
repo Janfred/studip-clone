@@ -106,8 +106,23 @@ class StandardFolder implements FolderType
      */
     public function isVisible($user_id)
     {
-        $visible = ($this->range_type === 'user' && $this->range_id === $user_id)
-                    || Seminar_Perm::get()->have_studip_perm('user', $this->range_id, $user_id);
+        if ($this->range_type === 'user') {
+            $visible = $this->range_id === $user_id;
+        }
+
+        if ($this->range_type === 'institute' ) {
+            $visible = Config::get()->ENABLE_FREE_ACCESS || Seminar_Perm::get()->have_perm('user', $user_id);
+        }
+
+        if ($this->range_type === 'course') {
+            if (($user_id === null || $user_id === 'nobody')  && Config::get()->ENABLE_FREE_ACCESS) {
+                $range = $this->getRangeObject();
+                $visible = isset($range) && $range->lesezugriff == 0;
+            } else {
+                $visible = Seminar_Perm::get()->have_studip_perm('user', $this->range_id, $user_id);
+            }
+        }
+
         if ($visible && $parent_folder = $this->getParent()) {
             return $parent_folder->isVisible($user_id);
         }
@@ -121,8 +136,7 @@ class StandardFolder implements FolderType
      */
     public function isReadable($user_id)
     {
-        $readable = ($this->range_type === 'user' && $this->range_id === $user_id)
-                     || Seminar_Perm::get()->have_studip_perm('user', $this->range_id, $user_id);
+        $readable = $this->isVisible($user_id);
         if ($readable && $parent_folder = $this->getParent()) {
             return $parent_folder->isReadable($user_id);
         }
@@ -430,4 +444,23 @@ class StandardFolder implements FolderType
         return $fileref->user_id == $user_id
             || $GLOBALS['perm']->have_studip_perm('tutor', $this->range_id, $user_id);
     }
+
+    /**
+     * returns the object for the range_id of the folder
+     *
+     * @return Course|Institute|User
+     */
+    public function getRangeObject()
+    {
+        $range = null;
+        if ($this->range_type && $this->range_id) {
+            if (Context::getId() === $this->range_id) {
+                $range = Context::get();
+            } else {
+                $range = call_user_func([$this->range_type, 'find'], $this->range_id);
+            }
+        }
+        return $range;
+    }
+
 }

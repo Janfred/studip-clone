@@ -18,7 +18,8 @@
             <? endforeach ?>
         <? endif; ?>
         </tbody>
-    <tfoot>
+        <? if ($GLOBALS['user']->id !== 'nobody') : ?>
+        <tfoot>
         <tr>
             <td colspan="8">
                 <?= Studip\Button::create(_('Herunterladen'), 'download') ?>
@@ -34,7 +35,8 @@
             <? endif ?>
            </td>
         </tr>
-    </tfoot>
+        </tfoot>
+        <? endif ?>
 </table>
 </form>
 

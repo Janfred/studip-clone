@@ -96,7 +96,7 @@
                 ['data-dialog' => 'size=auto']
             );
         }
-        if ($current_folder->isFileDownloadable($file_ref, $GLOBALS['user']->id)) {
+        if ($current_folder->isFileDownloadable($file_ref, $GLOBALS['user']->id) && $GLOBALS['user']->id !== 'nobody') {
             $actionMenu->addLink(
                 $controller->url_for('file/choose_destination/copy/' . $file_ref->id),
                 _('Datei kopieren'),

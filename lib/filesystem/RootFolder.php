@@ -34,12 +34,8 @@ class RootFolder extends StandardFolder
      */
     public function __get($attribute)
     {
-        if ($attribute === 'name' && $this->range_type && $this->range_id) {
-            if (Context::getId() === $this->range_id) {
-                $range = Context::get();
-            } else {
-                $range = call_user_func([$this->range_type, 'find'], $this->range_id);
-            }
+        if ($attribute === 'name') {
+            $range = $this->getRangeObject();
             return isset($range) ? $range->getFullname('short') : '';
         }
         return $this->folderdata[$attribute];

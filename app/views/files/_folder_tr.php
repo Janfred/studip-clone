@@ -63,7 +63,7 @@ $owner = User::find($folder->user_id) ?: new User();
                 ['data-dialog' => '1']
             );
         }
-        if ($folder->isReadable($GLOBALS['user']->id)) {
+        if ($folder->isReadable($GLOBALS['user']->id) && $GLOBALS['user']->id !== 'nobody') {
             $actionMenu->addLink(
                 $controller->url_for('file/download_folder/' . $folder->getId()),
                 _('Ordner herunterladen'),
