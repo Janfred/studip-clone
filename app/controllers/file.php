@@ -703,7 +703,7 @@ class FileController extends AuthenticatedController
             $this->redirect($this->url_for(
                 'file/choose_folder/' . $folder->getId(), [
                     'from_plugin'  => Request::get('from_plugin'),
-                    'fileref_id' => Request::get('fileref_id'),
+                    'fileref_id' => Request::getArray('fileref_id'),
                     'copymode'   => Request::get('copymode'),
                     'isfolder'   => Request::get('isfolder')
                 ]
@@ -742,7 +742,7 @@ class FileController extends AuthenticatedController
             $this->redirect($this->url_for(
                 'file/choose_folder/' . $folder->getId(), [
                     'from_plugin'  => Request::get('from_plugin'),
-                    'fileref_id' => Request::get('fileref_id'),
+                    'fileref_id' => Request::getArray('fileref_id'),
                     'copymode'   => Request::get('copymode'),
                     'isfolder'   => Request::get('isfolder'),
                 ]
