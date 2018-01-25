@@ -39,7 +39,7 @@ class I18NString
         $language = $_SESSION['_language'];
 
         if (isset($language) && $language != key($GLOBALS['CONTENT_LANGUAGES'])) {
-            return $this->translation($language) ?: $this->base;
+            return $this->translation($language) ?: (string)$this->base;
         }
 
         return (string)$this->base;
