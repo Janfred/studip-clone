@@ -106,6 +106,23 @@ class StandardFolder implements FolderType
      */
     public function isVisible($user_id)
     {
+        $visible = $this->isVisibleNonRecursive($user_id);
+
+        if ($visible && $parent_folder = $this->getParent()) {
+            return $parent_folder->isVisible($user_id);
+        }
+
+        return $visible;
+    }
+
+    /**
+     * @param string $user_id
+     * @return bool
+     */
+    private function isVisibleNonRecursive($user_id)
+    {
+        $visible = false;
+
         if ($this->range_type === 'user') {
             $visible = $this->range_id === $user_id;
         }
@@ -122,11 +139,6 @@ class StandardFolder implements FolderType
                 $visible = Seminar_Perm::get()->have_studip_perm('user', $this->range_id, $user_id);
             }
         }
-
-        if ($visible && $parent_folder = $this->getParent()) {
-            return $parent_folder->isVisible($user_id);
-        }
-
         return $visible;
     }
 
@@ -136,7 +148,7 @@ class StandardFolder implements FolderType
      */
     public function isReadable($user_id)
     {
-        $readable = $this->isVisible($user_id);
+        $readable = $this->isVisibleNonRecursive($user_id);
         if ($readable && $parent_folder = $this->getParent()) {
             return $parent_folder->isReadable($user_id);
         }
@@ -406,12 +418,13 @@ class StandardFolder implements FolderType
         if (in_array($this->range_type, ['course', 'institute'])) {
             if (is_object($fileref->terms_of_use)) {
                 //terms of use are defined for this file!
-                return $fileref->terms_of_use->fileIsDownloadable($fileref, true, $user_id);
+                return $this->isReadable($user_id) && $fileref->terms_of_use->fileIsDownloadable($fileref, true, $user_id);
+            } else {
+                return $this->isReadable($user_id) && $GLOBALS['perm']->have_studip_perm('user', $this->range_id, $user_id);
             }
-            return $GLOBALS['perm']->have_studip_perm('user', $this->range_id, $user_id);
         }
 
-        return true;
+        return false;
     }
 
     /**

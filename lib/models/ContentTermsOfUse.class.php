@@ -216,10 +216,6 @@ class ContentTermsOfUse extends SimpleORMap
         }
 
         if ($this->download_condition == 2) {
-            return (bool)Config::get()->ALLOW_DOWNLOAD_FOR_UNKNOWN_LICENSE;
-        }
-
-        if ($this->download_condition == 3) {
             return false;
         }
 

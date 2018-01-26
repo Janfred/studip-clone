@@ -217,7 +217,7 @@ class FileController extends AuthenticatedController
             // (for example owncloud/nextcloud folders) are not stored in the database.
             $folder = $this->file_ref->foldertype;
             if (!$folder->isVisible(User::findCurrent()->id)) {
-                throw new AccessDeniedException(User::findCurrent()->id);
+                throw new AccessDeniedException();
             }
             $this->is_downloadable = $folder->isFileDownloadable($this->file_ref->id, User::findCurrent()->id);
             $this->is_editable     = $folder->isFileEditable($this->file_ref->id, User::findCurrent()->id);
@@ -1522,8 +1522,8 @@ class FileController extends AuthenticatedController
             }
 
             if (empty($errors) || $count_files > 0 || $count_folders > 0) {
-                if (count($filerefs) == 1) {
-                    if ($source_folder) {
+                if ($count_files == 1) {
+                    if ($count_folders) {
                         PageLayout::postSuccess(_('Der Ordner wurde gelöscht!'));
                     } else {
                         PageLayout::postSuccess(_('Die Datei wurde gelöscht!'));
