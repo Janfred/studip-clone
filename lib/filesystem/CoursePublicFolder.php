@@ -41,7 +41,7 @@ class CoursePublicFolder extends StandardFolder
     }
 
     /**
-     * CoursePublicFolders are always visible.
+     * CoursePublicFolders are visible for all logged in users.
      *
      * @param string $user_id The user who wishes to see the folder.
      *
@@ -49,11 +49,16 @@ class CoursePublicFolder extends StandardFolder
      */
     public function isVisible($user_id)
     {
+        if ($user_id === null || $user_id === 'nobody') {
+            $range = $this->getRangeObject();
+            return Config::get()->ENABLE_FREE_ACCESS && isset($range) && $range->lesezugriff == 0;
+        }
+
         return true;
     }
 
     /**
-     * CoursePublicFolders are always readable.
+     * CoursePublicFolders are readable for all logged in users.
      *
      * @param string $user_id The user who wishes to read the folder.
      *
@@ -61,7 +66,7 @@ class CoursePublicFolder extends StandardFolder
      */
     public function isReadable($user_id)
     {
-        return true;
+        return $this->isVisible($user_id);
     }
 
     /**
@@ -75,7 +80,7 @@ class CoursePublicFolder extends StandardFolder
     }
 
     /**
-     * Files in CoursePublicFolders are always downloadable.
+     * Files in CoursePublicFolders are downloadable for all logged in users.
      *
      * @param string $file_id The ID to a FileRef.
      * @param string $user_id The user who wishes to downlaod the file.
@@ -84,7 +89,6 @@ class CoursePublicFolder extends StandardFolder
      */
     public function isFileDownloadable($file_id, $user_id)
     {
-        //public folder => everyone can download a file
-        return true;
+        return $this->isVisible($user_id);
     }
 }
