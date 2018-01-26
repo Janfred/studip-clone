@@ -303,7 +303,7 @@ class FileController extends AuthenticatedController
 
 
             if (Request::get("from_plugin")) {
-                $result = $this->folder->editFile($file_ref_id, rawurlencode($new_name), $new_description, $new_content_terms_of_use_id);
+                $result = $this->folder->editFile($file_ref_id, $new_name, $new_description, $new_content_terms_of_use_id);
             } else {
                 $result = FileManager::editFileRef(
                     $this->file_ref,
