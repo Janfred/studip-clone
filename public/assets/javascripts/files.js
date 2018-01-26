@@ -271,18 +271,14 @@
 
         // workaround to wait for tables.js to be executed first
         $(function () {
-            if ($('table.documents').length > 0) {
-                $('table.documents').data('tablesorter').widgets = ['filter'];
-                $('table.documents').data('tablesorter').widgetOptions = {
-                    filter_columnFilters: false,
-                    filter_saveFilters: true,
-                    filter_reset: '.reset',
-                    filter_ignoreCase: true,
-                    filter_startsWith: false
-                };
-                $('table.documents.flat').trigger('applyWidgets');
-                $.tablesorter.filter.bindSearch($('table.documents'), $('.tablesorterfilter'));
-            }
+            $('table.documents.flat').filterTable({
+                highlightClass: 'filter-match',
+                ignoreColumns: [0, 1, 3, 5, 6],
+                inputSelector: '.sidebar .tablesorterfilter',
+                minChars: 1,
+                minRows: 1
+            });
+
         });
 
         $(document).on('click', '#file_license_chooser_1 > input[type=radio]', STUDIP.Files.updateTermsOfUseDescription);

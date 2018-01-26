@@ -27,7 +27,7 @@ class Course_FilesController extends AuthenticatedController
         $this->course = Course::findCurrent();
         $this->last_visitdate = object_get_visit($this->course->id, 'documents');
 
-        PageLayout::addSqueezePackage('tablesorter');
+        PageLayout::addSqueezePackage('files');
         PageLayout::setHelpKeyword('Basis.Dateien');
         PageLayout::setTitle(Context::get()->getFullname() . ' - ' . _('Dateien'));
 

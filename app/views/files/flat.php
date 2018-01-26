@@ -5,7 +5,7 @@
         <tbody>
         <? if (count($files) === 0): ?>
             <tr>
-                <td colspan="8" class="empty">
+                <td colspan="7" class="empty">
                     <?= _('Keine Dateien vorhanden.') ?>
                 </td>
             </tr>
@@ -21,7 +21,7 @@
         <? if ($GLOBALS['user']->id !== 'nobody') : ?>
         <tfoot>
         <tr>
-            <td colspan="8">
+            <td colspan="7">
                 <?= Studip\Button::create(_('Herunterladen'), 'download') ?>
 
             <? if ($topFolder->isWritable($GLOBALS['user']->id)): ?>

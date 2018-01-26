@@ -52,7 +52,7 @@ if (!$controllerpath) {
 
     <tbody class="subfolders">
         <tr class="empty" data-sort-fixed <?= count($topFolder->getFiles()) + count($topFolder->getSubfolders()) > 0 ? ' style="display: none;"' : "" ?>>
-            <td colspan="8">
+            <td colspan="7">
                 <?= _('Dieser Ordner ist leer') ?>
             </td>
         </tr>
