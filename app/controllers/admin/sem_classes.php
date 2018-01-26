@@ -47,7 +47,7 @@ class Admin_SemClassesController extends AuthenticatedController
                 $statement = DBManager::get()->prepare(
                     "INSERT INTO sem_classes SET name = :name, mkdate = UNIX_TIMESTAMP(), chdate = UNIX_TIMESTAMP() " .
                 "");
-                NotificationCenter::postNotification('SeminarClassDidCreate', Request::get("add_name"), $GLOBALS['user']->id); 
+                NotificationCenter::postNotification('SeminarClassDidCreate', Request::get("add_name"), $GLOBALS['user']->id);
                 $statement->execute(array('name' => Request::get("add_name")));
                 $id = DBManager::get()->lastInsertId();
                 if (Request::get("add_like")) {
@@ -73,8 +73,8 @@ class Admin_SemClassesController extends AuthenticatedController
             'CoreStudygroupAdmin' => array('id' => "CoreStudygroupAdmin", 'name' => _("Studiengruppen-Verwaltung"), 'enabled' => true),
             'CoreDocuments' => array('id' => "CoreDocuments", 'name' => _("Kern-Dateibereich"), 'enabled' => true),
             'CoreSchedule' => array('id' => "CoreSchedule", 'name' => _("Kern-Termine"), 'enabled' => true),
-            'CoreParticipants' => array('id' => "CoreParticipants", 'name' => _("Kern-Teilnehmer"), 'enabled' => true),
-            'CoreStudygroupParticipants' => array('id' => "CoreStudygroupParticipants", 'name' => _("Kern-Studiengruppen-Teilnehmer"), 'enabled' => true),
+            'CoreParticipants' => array('id' => "CoreParticipants", 'name' => _("Kern-Teilnehmende"), 'enabled' => true),
+            'CoreStudygroupParticipants' => array('id' => "CoreStudygroupParticipants", 'name' => _("Kern-Studiengruppen-Teilnehmende"), 'enabled' => true),
             'CoreLiterature' => array('id' => "CoreLiterature", 'name' => _("Kern-Literatur"), 'enabled' => true),
             'CoreScm' => array('id' => "CoreScm", 'name' => _("Kern-Freie-Informationen"), 'enabled' => true),
             'CoreWiki' => array('id' => "CoreWiki", 'name' => _("Kern-Wiki"), 'enabled' => true),
@@ -155,7 +155,7 @@ class Admin_SemClassesController extends AuthenticatedController
                 'name' => $name,
                 'sem_class' => Request::get("sem_class")
             ));
-            NotificationCenter::postNotification('SeminarTypeDidCreate', $name, $GLOBALS['user']->id); 
+            NotificationCenter::postNotification('SeminarTypeDidCreate', $name, $GLOBALS['user']->id);
             $id = DBManager::get()->lastInsertId();
             $GLOBALS['SEM_TYPE'] = SemType::refreshTypes();
             $this->sem_type = $GLOBALS['SEM_TYPE'][$id];

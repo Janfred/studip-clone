@@ -408,7 +408,7 @@ class Admission_CoursesetController extends AuthenticatedController
         if ($csv === 'csv') {
             $captions = [
                 _('Nummer'), _('Name'), _('versteckt'), _('Zeiten'), _('Dozenten'),
-                _('max. Teilnehmer'), _('Teilnehmer aktuell'), _('Anzahl Anmeldungen'),
+                _('max. Teilnehmende'), _('Teilnehmende aktuell'), _('Anzahl Anmeldungen'),
                 _('Anzahl Anmeldungen Prio 1'), _('Warteliste'), _('max. Anzahl Warteliste'),
                 _('automatisches Nachrücken aus der Warteliste') , _('vorläufige Anmeldung'),
                 _('verbindliche Anmeldung'),
@@ -466,7 +466,7 @@ class Admission_CoursesetController extends AuthenticatedController
                         $this->redirect(
                             FileManager::getDownloadURLForTemporaryFile(
                                 $tmpname,
-                                'Gesamtteilnehmerliste_' . $courseset->getName() . '.csv'
+                                'Gesamtteilnehmendenliste_' . $courseset->getName() . '.csv'
                             )
                         );
                         return;

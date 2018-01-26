@@ -108,7 +108,7 @@ class Modul extends ModuleManagementModelTreeItem
         $config['additional_fields']['languagesofinstruction']['set'] = false;
 
         $config['alias_fields']['flexnow_id'] = 'flexnow_modul';
-        
+
         $config['default_values']['stat'] = $GLOBALS['MVV_MODUL']['STATUS']['default'];
 
         parent::configure($config);
@@ -276,7 +276,7 @@ class Modul extends ModuleManagementModelTreeItem
         if ($this->isNew()) {
             return parent::getDisplayName($options);
         }
-        
+
         $name = ($with_code && trim($this->code)) ? $this->code . ' - ' : '';
         $name .= $this->getDeskriptor(self::getLanguage())->bezeichnung;
 
@@ -565,7 +565,7 @@ class Modul extends ModuleManagementModelTreeItem
                 $modulteile[] = $modulteil_copy;
             }
             $copy->modulteile = SimpleORMapCollection::createFromArray($modulteile);
-            
+
             if ($with_assignments) {
                 $abschnitte_modul = [];
                 foreach ($this->abschnitte_modul as $abschnitt_modul) {
@@ -574,7 +574,7 @@ class Modul extends ModuleManagementModelTreeItem
                     $abschnitte_modul[] = $cloned_abschnitt_modul;
                 }
                 $copy->abschnitte_modul = SimpleORMapCollection::createFromArray($abschnitte_modul);
-            } 
+            }
         }
         return $copy;
     }
@@ -931,7 +931,7 @@ class Modul extends ModuleManagementModelTreeItem
             if (!((preg_match('/\d{0,4}/', $this->kapazitaet)
                     && $this->kapazitaet > 0) || $this->kapazitaet === '')) {
                 $ret['kapazitaet'] = true;
-                $messages[] = _('Die Kapazität/Teilnehmerzahl des Moduls muss angegeben werden.');
+                $messages[] = _('Die Kapazität/Teilnehmendenzahl des Moduls muss angegeben werden.');
                 $rejected = true;
             }
             if (!(preg_match('/\d{1,3}/', $this->kp) && $this->kp >= 1)) {

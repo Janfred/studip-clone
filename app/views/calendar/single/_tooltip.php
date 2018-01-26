@@ -62,7 +62,7 @@
             <? $show_members_visiter = true; ?>
             <? if ($show_members && $show_members_visiter) : ?>
             <div>
-                <b><?= _('Teilnehmer:') ?></b>
+                <b><?= _('Teilnehmende:') ?></b>
                     <?= implode(', ', $event->attendees->map(
                         function ($att) use ($event, $group_status) {
                             if ($event->havePermission(Event::PERMISSION_OWN, $att->owner->id)) {

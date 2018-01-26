@@ -1,7 +1,7 @@
 <? use Studip\Button, Studip\LinkButton; ?>
 <form action="" method="post">
     <div>
-        <b><?= _('Eigener Teilnehmerstatus') ?>:</b>
+        <b><?= _('Eigener Teilnehmendenstatus') ?>:</b>
         <? $group_status = array(
             CalendarEvent::PARTSTAT_TENTATIVE => _('Abwartend'),
             CalendarEvent::PARTSTAT_ACCEPTED => _('Angenommen'),

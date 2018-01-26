@@ -13,7 +13,7 @@
 	<xsl:text>Untertitel;</xsl:text>
 	<xsl:text>Raum;</xsl:text>
 	<xsl:text>Art;</xsl:text>
-	<xsl:text>max. Teilnehmer;</xsl:text>
+	<xsl:text>max. Teilnehmende;</xsl:text>
 	<xsl:text>ECTS;</xsl:text>
 	<xsl:text>Vorbesprechung;</xsl:text>
 	<xsl:text>erster Termin;</xsl:text>

@@ -41,7 +41,7 @@
         <tr class="table_header header-row">
             <th class="toggle-indicator" colspan="3">
                 <a class="toggler">
-                    <?=_('Teilnehmerliste übernehmen')?>
+                    <?=_('Teilnehmendenliste übernehmen')?>
                 </a>
             </th>
         </tr>
@@ -49,7 +49,7 @@
             <td>
                 <?=_('Eingabeformat')?>:
 
-                <?= tooltipHtmlIcon(sprintf(_('In das Textfeld <strong>Teilnehmerliste übernehmen</strong> können Sie eine Liste mit Namen von %s eingeben,
+                <?= tooltipHtmlIcon(sprintf(_('In das Textfeld <strong>Teilnehmendenliste übernehmen</strong> können Sie eine Liste mit Namen von %s eingeben,
                     die in die Veranstaltung aufgenommen werden sollen. Wählen Sie in der Auswahlbox das gewünschte Format, in dem Sie die Namen eingeben möchten.<br />
                     <strong>Eingabeformat</strong><br/>
                     <strong>Nachname, Vorname &crarr;</strong><br />Geben Sie dazu in jede Zeile den Nachnamen und (optional) den Vornamen getrennt durch ein Komma oder ein Tabulatorzeichen ein.<br />

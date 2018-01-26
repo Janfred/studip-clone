@@ -47,7 +47,7 @@ $data_sem["location"] = _("A 123, 1. Stock");
 $data_sem["semester"] = "WS 2003/2004";
 $data_sem["time"] = _("Di. 8:30 - 13:30, Mi. 8:30 - 13:30, Do. 8:30 - 13:30");
 $data_sem["number"] = "1234";
-$data_sem["teilnehmer"] = str_repeat(_("Teilnehmer") . " ", 6);
+$data_sem["teilnehmer"] = str_repeat(_("Teilnehmende") . " ", 6);
 $data_sem["requirements"] = str_repeat(_("Voraussetzungen") . " ", 6);
 $data_sem["lernorga"] = str_repeat(_("Lernorganisation") . " ", 6);
 $data_sem["leistung"] = str_repeat(_("Leistungsnachweis") . " ", 6);
@@ -219,7 +219,7 @@ if ($this->config->getValue("Main", "studipinfo")) {
     echo "<tr$headline_tr><td$headline_td>$headline_div";
     echo "<font$headline_font>" . $this->config->getValue("StudipInfo", "headline");
     echo "<font>$headline_div_end</td></tr>\n";
-    
+
     $pre_font = $this->config->getAttributes("StudipInfo", "font");
     echo "<tr$content_tr><td$content_td>$content_div";
     echo "<font$pre_font>" . $this->config->getValue("StudipInfo", "homeinst");
@@ -228,15 +228,15 @@ if ($this->config->getValue("Main", "studipinfo")) {
             $this->config->getAttributes("LinkInternSimple", "a"),
             _("Heimatinstitut"));
     echo "<br></font>\n";
-    
+
     echo "<font$pre_font>" . $this->config->getValue("StudipInfo", "involvedinst");
     echo "&nbsp;</font><font$content_font>";
     echo str_repeat(_("Beteiligte Institute") . " ", 5) . "<br></font>\n";
-    
+
     echo "<font$pre_font>" . $this->config->getValue("StudipInfo", "countuser");
     echo "&nbsp;</font><font$content_font>";
     echo "23<br></font>\n";
-    
+
     echo "<font$pre_font>" . $this->config->getValue("StudipInfo", "countpostings");
     echo "&nbsp;</font><font$content_font>";
     echo "42<br></font>\n";

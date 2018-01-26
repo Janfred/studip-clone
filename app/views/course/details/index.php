@@ -57,9 +57,9 @@
                 <td>
                     <strong>
                     <? if ($sem->isAdmissionEnabled()) : ?>
-                        <?= _('maximale Teilnehmeranzahl') ?>
+                        <?= _('maximale Teilnehmendenanzahl') ?>
                     <? else : ?>
-                        <?= _('erwartete Teilnehmeranzahl') ?>
+                        <?= _('erwartete Teilnehmendenanzahl') ?>
                     <? endif ?>
                     </strong>
                 </td>

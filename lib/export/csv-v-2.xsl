@@ -7,7 +7,7 @@
 	<xsl:text>Typ;</xsl:text>
 	<xsl:text>Dozenten;</xsl:text>
 	<xsl:text>Titel;</xsl:text>
-	<xsl:text>max. Teilnehmer;</xsl:text>
+	<xsl:text>max. Teilnehmende;</xsl:text>
 	<xsl:text>ECTS;</xsl:text>
 	<xsl:text>Termin</xsl:text>
 <xsl:text>

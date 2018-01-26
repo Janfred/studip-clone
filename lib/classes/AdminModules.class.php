@@ -57,7 +57,7 @@ class AdminModules extends ModulesNotification {
         $this->registered_modules["schedule"]["msg_deactivate"] = _("Die Ablaufplanverwaltung kann jederzeit deaktiviert werden.");
 
         $this->registered_modules["participants"]["msg_activate"] = _("Die Teilnehmendenverwaltung kann jederzeit aktiviert werden.");
-        $this->registered_modules["participants"]["msg_deactivate"] = _("Die Teilnehmendenverwaltung kann jederzeit deaktiviert werden. Bachten Sie, dass Sie dann keine normalen Teilnehmer verwalten können!");
+        $this->registered_modules["participants"]["msg_deactivate"] = _("Die Teilnehmendenverwaltung kann jederzeit deaktiviert werden. Beachten Sie, dass Sie dann keine normalen Teilnehmenden verwalten können!");
 
         $this->registered_modules["personal"]["msg_activate"] = _("Die Personalliste kann jederzeit aktiviert werden.");
         $this->registered_modules["personal"]["msg_deactivate"] = _("Die Personalliste kann jederzeit deaktiviert werden.");

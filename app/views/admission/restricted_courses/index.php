@@ -6,7 +6,7 @@
             <tr class="sortable">
                 <th class="sortasc"><?= _("Anmeldeset")?></th>
                 <th><?= _("Name")?></th>
-                <th><?= _("max. Teilnehmer")?></th>
+                <th><?= _("max. Teilnehmende")?></th>
                 <th><?= _("Teilnehmer aktuell")?></th>
                 <th><?= _("Anmeldungen")?></th>
                 <th><?= _("Warteliste")?></th>

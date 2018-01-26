@@ -33,7 +33,7 @@
         <? endif ?>
         <input type="hidden" name="courseset_claimed" value="<?= ($already_claimed ? '0' : '1') ?>" >
         <div>
-        (<?= sprintf(_("max. Teilnehmeranzahl: %s / Anzahl der Anmeldungen: %s"), $priocourses->admission_turnout, $num_claiming) ?>)
+        (<?= sprintf(_("max. Teilnehmendenanzahl: %s / Anzahl der Anmeldungen: %s"), $priocourses->admission_turnout, $num_claiming) ?>)
         </div>
     <? endif ?>
     <div data-dialog-button>

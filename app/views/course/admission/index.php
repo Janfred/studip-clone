@@ -105,9 +105,9 @@
     <form class="default" action="<?= $controller->link_for('/change_admission_turnout') ?>" method="post">
         <?= CSRFProtection::tokenTag() ?>
         <fieldset>
-            <legend><?= _('Beschränkte Teilnehmeranzahl') ?></legend>
+            <legend><?= _('Beschränkte Teilnehmendenanzahl') ?></legend>
             <div>
-                <?= _('Bitte geben Sie hier an, wieviele Personen maximal für die Veranstaltung vorgesehen sind, 
+                <?= _('Bitte geben Sie hier an, wieviele Personen maximal für die Veranstaltung vorgesehen sind,
                 und ob eine Warteliste erstellt werden soll, falls die Zahl der Anmeldungen die maximale Personenzahl überschreitet.'); ?>
             </div>
 
@@ -149,7 +149,7 @@
             </fieldset>
         </fieldset>
         <footer>
-            <?= Studip\Button::create(_('Teilnehmeranzahl ändern'), 'change_admission_turnout', ['data-dialog' => '']) ?>
+            <?= Studip\Button::create(_('Teilnehmendenanzahl ändern'), 'change_admission_turnout', ['data-dialog' => '']) ?>
         </footer>
     </form>
     <br>

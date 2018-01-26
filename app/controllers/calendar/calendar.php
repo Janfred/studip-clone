@@ -237,9 +237,9 @@ class Calendar_CalendarController extends AuthenticatedController
 
       //      $default_selected_user = array($this->calendar->getRangeId());
             $this->mps = MultiPersonSearch::get('add_adressees')
-                ->setLinkText(_('Mehrere Teilnehmer hinzufügen'))
+                ->setLinkText(_('Mehrere Teilnehmende hinzufügen'))
        //         ->setDefaultSelectedUser($default_selected_user)
-                ->setTitle(_('Mehrere Teilnehmer hinzufügen'))
+                ->setTitle(_('Mehrere Teilnehmende hinzufügen'))
                 ->setExecuteURL($this->url_for($this->base . 'edit'))
                 ->setJSFunctionOnSubmit('STUDIP.Messages.add_adressees')
                 ->setSearchObject($search_obj);
@@ -374,7 +374,7 @@ class Calendar_CalendarController extends AuthenticatedController
                                         . ')';
                             }
                         }
-                        $msg_text .= '**' . _('Teilnehmer:') . '** ' . implode(', ', $member);
+                        $msg_text .= '**' . _('Teilnehmende:') . '** ' . implode(', ', $member);
                         $msg_text .= "\n\n" . _('Hier kommen Sie direkt zum Termin in Ihrem Kalender:') . "\n";
                         $msg_text .= URLHelper::getURL('dispatch.php/calendar/single/edit/'
                                 . $this->event->getAuthorId() . '/' . $this->event->event_id);

@@ -175,11 +175,11 @@ class SingleCalendar
         foreach ($attendee_ids as $attendee_id) {
             if (trim($attendee_id)) {
                 $attendee_calendar = new SingleCalendar($attendee_id);
-                
+
                 // SEMBBS
                 // Gruppentermine können ab Calendar::PERMISSION_READABLE angelegt werden
                 // if ($attendee_calendar->havePermission(Calendar::PERMISSION_READABLE)) {
-                    
+
                 if ($attendee_calendar->havePermission(Calendar::PERMISSION_WRITABLE)
                         || Config::get()->CALENDAR_GRANT_ALL_INSERT) {
                     $attendee_event = new CalendarEvent(
@@ -204,7 +204,7 @@ class SingleCalendar
         if (count($recipient_ids)) {
             $this->sendStoreMessage($attendee_event, $is_new, $recipient_ids);
         }
-        
+
         $events_delete = CalendarEvent::findBySQL('event_id = ? AND range_id NOT IN(?)',
                 array($event->event_id, $new_attendees));
         foreach ($events_delete as $event_delete) {
@@ -343,14 +343,14 @@ class SingleCalendar
 
     /**
      * Returns the range object (user, course, institute) of this calendar.
-     * 
+     *
      * @return int The object range.
      */
     public function getRangeObject()
     {
         return $this->range_object;
     }
-    
+
     /**
      * Returns the permission of the given user for this calendar.
      *
@@ -488,7 +488,7 @@ class SingleCalendar
      *
      * @param CalendarEvent $event The new or updated event.
      * @param bool $is_new True if the event is new.
-     * @param null|array Array with user_ids of the recipients. If not set the 
+     * @param null|array Array with user_ids of the recipients. If not set the
      * owner of the given event is used as recipient.
      */
     protected function sendStoreMessage($event, $is_new, $recipient_ids = null)
@@ -524,7 +524,7 @@ class SingleCalendar
             $msg_text .= '**' . _("Wiederholung:") . "** $event_data\n";
         }
         if (get_config('CALENDAR_GROUP_ENABLE') && $event->attendees->count()) {
-            $msg_text .= '**' . _("Teilnehmer:") . '** ';
+            $msg_text .= '**' . _("Teilnehmende:") . '** ';
             $msg_text .= implode(', ', $event->attendees->map(
                 function ($att) use ($event) {
                     $att_name = $att->user->getFullname();
@@ -542,7 +542,7 @@ class SingleCalendar
         $msg_text .= "\n\n" . _('Hier kommen Sie direkt zum Termin in Ihrem Kalender:') . "\n";
                 $msg_text .= URLHelper::getURL('dispatch.php/calendar/single/edit/'
                     . implode('/', $event->getId()), false);
-        
+
         $recipient_unames = is_array($recipient_ids)
                 ? array_map('get_username', $recipient_ids)
                 : array(get_username($event->range_id));
@@ -573,7 +573,7 @@ class SingleCalendar
                 || $calendar_event->havePermission(Event::PERMISSION_OWN)) {
 
             if (!($calendar_event
-                    && $calendar_event->havePermission(Event::PERMISSION_WRITABLE))) {                
+                    && $calendar_event->havePermission(Event::PERMISSION_WRITABLE))) {
                 return false;
             }
 
@@ -608,7 +608,7 @@ class SingleCalendar
      * by another user.
      *
      * @param CalendarEvent $event The deleted event.
-     * @param null|array Array with user_ids of the recipients. If not set the 
+     * @param null|array Array with user_ids of the recipients. If not set the
      * owner of the given event is used as recipient.
      */
     protected function sendDeleteMessage($event, $recipient_ids = null)
@@ -893,7 +893,7 @@ class SingleCalendar
     {
         $lwst = mktime(12, 0, 0, date('n', $lwst), date('j', $lwst), date('Y', $lwst));
         $hgst = mktime(12, 0, 0, date('n', $hgst), date('j', $hgst), date('Y', $hgst));
-        
+
         // if this date is in the exceptions?
         if ($event->getProperty('EXDATE')) {
             $exdates = explode(',', $event->getProperty('EXDATE'));
@@ -1163,7 +1163,7 @@ class SingleCalendar
         }
         $lwst = mktime(12, 0, 0, date('n', $lwst), date('j', $lwst), date('Y', $lwst));
         $hgst = mktime(12, 0, 0, date('n', $hgst), date('j', $hgst), date('Y', $hgst));
-        
+
         // if this date is in the exceptions return false
         $exdates = explode(',', $properties['EXDATE']);
         foreach ($exdates as $exdate) {
@@ -1222,7 +1222,7 @@ class SingleCalendar
         $dst_offset = (date('I', $this->getStart()) - date('I', $this->getEnd())) * 3600;
         $start += $dst_offset;
         $end += $dst_offset;
-        
+
         $term = array();
         $em = $this->adapt_events($start, $end, $step);
         $max_cols = 0;
@@ -1418,13 +1418,13 @@ class SingleCalendar
                 }
             }
         }
-        
+
         uasort($tmp_events, function($a, $b) {return $a->start - $b->start;});
         $map = array();
         foreach (array_keys($tmp_events) as $key) {
             $map[] = $map_events[$key];
         }
-        
+
         return array(
             'events' => array_values($tmp_events),
             'map' => $map,

@@ -108,7 +108,7 @@ class Ilias4ConnectedLink extends Ilias3ConnectedLink
             $output .= "<br>";
             $output .= "<input type=\"RADIO\" name=\"write_permission\" value=\"autor\">";
             $output .= _("Mit Schreibrechten für alle Personen dieser Veranstaltung") . "&nbsp;";
-            $output .= Icon::create('info-circle', 'inactive', ['title' => _('Lehrende, Tutor/-innen und Teilnehmer/-innen haben Schreibzugriff für Inhalte und Struktur des Lernmoduls. Tutor/-innen und Lehrende können die Verknüpfung zur Veranstaltung wieder löschen.')])->asImg();
+            $output .= Icon::create('info-circle', 'inactive', ['title' => _('Lehrende, Tutor/-innen und Teilnehmende haben Schreibzugriff für Inhalte und Struktur des Lernmoduls. Tutor/-innen und Lehrende können die Verknüpfung zur Veranstaltung wieder löschen.')])->asImg();
             $output .= "</div>";
             $output .= "</div><br>" . Button::create(_('Hinzufügen'), 'add') . "<br>";
         } else {

@@ -45,7 +45,7 @@
     </section>
     <footer>
         <p>
-            <?= _('Teilnehmer') ?>: <?= $evaluation->getNumberOfVotes() ?>
+            <?= _('Teilnehmende') ?>: <?= $evaluation->getNumberOfVotes() ?>
         </p>
         <p>
             <?= _('Anonym') ?>: <?= $evaluation->anonymous ? _('Ja') : _('Nein') ?>

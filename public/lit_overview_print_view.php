@@ -70,7 +70,7 @@ if (is_array($_SESSION['_lit_data'])){
             }
             $content = mb_substr($content,0,-2);
             $content .= "<br>";
-            $content .= "<b>" . _("Teilnehmeranzahl (erwartet/angemeldet):") . "</b>&nbsp;&nbsp;";
+            $content .= "<b>" . _("Teilnehmendenanzahl (erwartet/angemeldet):") . "</b>&nbsp;&nbsp;";
             $content .= ($estimated_p ? $estimated_p : _("unbekannt"));
             $content .= ' / ' . (int)$participants;
             $content .= "<br>";

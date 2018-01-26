@@ -295,7 +295,7 @@ class ExternModuleLecturedetails extends ExternModule {
         $data_sem["semester"] = "WS 2003/2004";
         $data_sem["time"] = _("Di. 8:30 - 13:30, Mi. 8:30 - 13:30, Do. 8:30 - 13:30");
         $data_sem["number"] = "1234";
-        $data_sem["teilnehmer"] = str_repeat(_("Teilnehmer") . " ", 6);
+        $data_sem["teilnehmer"] = str_repeat(_("Teilnehmende") . " ", 6);
         $data_sem["requirements"] = str_repeat(_("Voraussetzungen") . " ", 6);
         $data_sem["lernorga"] = str_repeat(_("Lernorganisation") . " ", 6);
         $data_sem["leistung"] = str_repeat(_("Leistungsnachweis") . " ", 6);

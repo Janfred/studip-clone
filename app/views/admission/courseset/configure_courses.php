@@ -7,8 +7,8 @@
                 <th><?= _("versteckt")?></th>
                 <th><?= _("vorläufige Anmeldung")?></th>
                 <th><?= _("verbindliche Anmeldung")?></th>
-                <th><?= _("max. Teilnehmer")?></th>
-                <th><?= _("Teilnehmer aktuell")?></th>
+                <th><?= _("max. Teilnehmende")?></th>
+                <th><?= _("Teilnehmende aktuell")?></th>
                 <th><?= _("Anmeldungen")?></th>
                 <th><?= _("Warteliste")?></th>
             </tr>

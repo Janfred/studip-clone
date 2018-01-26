@@ -47,7 +47,7 @@ if ($sem_browse_obj->show_result && count($_SESSION['sem_browse_data']['search_r
     }
     $sidebar->addWidget($grouping);
 } else {
-    $toplist_names = array("dummy",_("Teilnehmeranzahl"), _("die meisten Materialien"), _("aktivste Veranstaltungen"),_("neueste Veranstaltungen"));
+    $toplist_names = array("dummy",_("Teilnehmendenanzahl"), _("die meisten Materialien"), _("aktivste Veranstaltungen"),_("neueste Veranstaltungen"));
     $toplist = new LinksWidget();
     $toplist->setTitle(_("Topliste: ").$toplist_names[$_SESSION['sem_portal']["toplist"] ?: 4]);
     foreach ((array) $toplist_entries as $key => $entry) {

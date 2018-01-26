@@ -206,7 +206,7 @@ function freetype_answers($parent_id, $anz_nutzer)
     echo "      </table>\n";
     echo "    </td>\n";
     echo "  </tr>\n";
-    echo "  <tr><td colspan=\"2\"><font size=\"-1\">"._("Anzahl der Teilnehmer").": ".$anz_nutzer."</font></td></tr>\n";
+    echo "  <tr><td colspan=\"2\"><font size=\"-1\">"._("Anzahl der Teilnehmenden").": ".$anz_nutzer."</font></td></tr>\n";
 }
 
 function user_answers_residual($parent_id)
@@ -310,7 +310,7 @@ function answers($parent_id, $anz_nutzer, $question_type)
     } else {
         $txt .= "<td colspan=\"2\"><font size=\"-1\"><b>&#x2205;</b>-"._("Antwort").": ".$antwort_durchschnitt.($has_residual==0 ? "" : "<b>*</b>")."</font></td><td>";
     }
-    $txt .= "          <font size=\"-1\">"._("Anzahl der Teilnehmer").": ".$anz_nutzer."</font></td></tr>";
+    $txt .= "          <font size=\"-1\">"._("Anzahl der Teilnehmenden").": ".$anz_nutzer."</font></td></tr>";
 
     if ($has_residual) $txt .= "        <tr class=\"blank\"><td colspan=\"3\"><font size=\"-1\"><b>*</b>"._("Werte ohne Enthaltungen").".</font></td></tr>";
     $txt .= "      </table>";
@@ -449,7 +449,7 @@ function groups($parent_id)
                                             foreach ($questions["antwort_texte"] as $k2=>$v2) { // 1. Unterebene, hier sind die Antworttexte abgelegt
                                                 echo "<td><font size=\"-1\">".$v2."</font></td>";
                                             }
-                        echo "<td align=\"center\"><font size=\"-1\"><b>&#x2211;</b></font></td><td align=\"center\"><font size=\"-1\"><b>&#x2205;</b></font></td><td align=\"center\"><font size=\"-1\">"._("Teilnehmer")."</font></td>";
+                        echo "<td align=\"center\"><font size=\"-1\"><b>&#x2211;</b></font></td><td align=\"center\"><font size=\"-1\"><b>&#x2205;</b></font></td><td align=\"center\"><font size=\"-1\">"._("Teilnehmende")."</font></td>";
                                             echo "</tr>";
                                             $antworten_angezeigt = TRUE;
                                         }
@@ -577,7 +577,7 @@ if ($evaluation = $statement->fetch(PDO::FETCH_ASSOC)) {
   if (do_template("show_total_stats")) {
     echo "  <tr>\n";
     echo "    <td colspan=\"2\" class=\"blank\"><font size=\"-1\">\n";
-    echo "      &nbsp;&nbsp;".$number_of_votes." "._("Teilnehmer insgesamt").".&nbsp;";
+    echo "      &nbsp;&nbsp;".$number_of_votes." "._("Teilnehmende insgesamt").".&nbsp;";
     echo "      ". ($evaluation['anonymous'] == 0 ? _('Die Teilnahme war nicht anonym.') : _('Die Teilnahme war anonym.')) . ' ';
     echo "      "._("Eigentümer").": ".$db_owner.". ".("Erzeugt am").": ".date('d.m.Y H:i:s');
     echo "    </font></td>\n";

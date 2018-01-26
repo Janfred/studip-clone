@@ -36,8 +36,8 @@ class CourseMemberAdmission extends AdmissionRule
     public function __construct($ruleId='', $courseSetId = '')
     {
         parent::__construct($ruleId, $courseSetId);
-        $this->default_message = _('Sie sind nicht als Teilnehmer der Veranstaltung: %s eingetragen.');
-        $this->default_message1 = _('Sie dürfen nicht als Teilnehmer der Veranstaltung: %s eingetragen sein.');
+        $this->default_message = _('Sie sind nicht in der Veranstaltung "%s" eingetragen.');
+        $this->default_message1 = _('Sie dürfen nicht in der Veranstaltung "%s" eingetragen sein.');
         if ($ruleId) {
             $this->load();
         } else {

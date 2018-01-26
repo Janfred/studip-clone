@@ -88,7 +88,7 @@ class Course_BasicdataController extends AuthenticatedController
             'locked' => LockRules::Check($course_id, 'ects')
         );
         $this->attributes[] = array(
-            'title' => _("max. Teilnehmerzahl"),
+            'title' => _("max. Teilnehmendenzahl"),
             'name' => "course_admission_turnout",
             'must' => false,
             'type' => 'number',

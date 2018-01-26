@@ -358,7 +358,7 @@ class SiteinfoMarkupEngine {
         $template = $this->template_factory->open('toplist');
         switch ($item) {
             case "mostparticipants":
-                $template->heading = _("die meisten Teilnehmer");
+                $template->heading = _("die meisten Teilnehmenden");
                 $sql = "SELECT seminar_user.seminar_id,
                                seminare.name AS display,
                                count(seminar_user.seminar_id) AS count

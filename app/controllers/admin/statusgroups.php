@@ -99,7 +99,7 @@ class Admin_StatusgroupsController extends AuthenticatedController
                     AND auth_user_md5.perms IN ('autor', 'tutor', 'dozent')
                     AND auth_user_md5.visible <> 'never'
                 ORDER BY Vorname, Nachname";
-        $this->searchType = new SQLSearch($query, _('Teilnehmer suchen'), 'username');
+        $this->searchType = new SQLSearch($query, _('Teilnehmende/n suchen'), 'username');
     }
 
     /**

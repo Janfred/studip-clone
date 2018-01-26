@@ -5,7 +5,7 @@
             <th><?= _('Startet') ?></th>
             <th><?= _('Endet') ?></th>
             <th><?= _('Eingebunden') ?></th>
-            <th><?= _('Teilnehmer') ?></th>
+            <th><?= _('Teilnehmende') ?></th>
             <th class="actions"><?= _('Aktionen') ?></th>
         </tr>
     </thead>

@@ -183,7 +183,7 @@ function freetype_answers ($parent_id, $anz_nutzer) {
         fputs($fo_file,"                </fo:table-row>\n");
     }
     fputs($fo_file,"                <fo:table-row>\n");
-    fputs($fo_file,"                  <fo:table-cell ><fo:block font-size=\"8pt\">"._("Anzahl der Teilnehmer").": ".$anz_nutzer."</fo:block></fo:table-cell>\n");
+    fputs($fo_file,"                  <fo:table-cell ><fo:block font-size=\"8pt\">"._("Anzahl der Teilnehmenden").": ".$anz_nutzer."</fo:block></fo:table-cell>\n");
     fputs($fo_file,"                </fo:table-row>\n");
 }
 
@@ -279,7 +279,7 @@ function answers ($parent_id, $anz_nutzer, $question_type) {
 
     if ($question_type=="multiplechoice") {
         $txt .= "                <fo:table-row>\n";
-        $txt .= "                  <fo:table-cell ><fo:block space-before.optimum=\"5pt\" font-size=\"8pt\">"._("Anzahl der Teilnehmer").": ".$anz_nutzer."</fo:block></fo:table-cell>\n";
+        $txt .= "                  <fo:table-cell ><fo:block space-before.optimum=\"5pt\" font-size=\"8pt\">"._("Anzahl der Teilnehmenden").": ".$anz_nutzer."</fo:block></fo:table-cell>\n";
         $txt .= "                  <fo:table-cell ><fo:block space-before.optimum=\"5pt\" font-size=\"8pt\"></fo:block></fo:table-cell>\n";
         $txt .= "                </fo:table-row>\n";
 
@@ -289,7 +289,7 @@ function answers ($parent_id, $anz_nutzer, $question_type) {
         $txt .= "                </fo:table-row>\n";
     } else {
         $txt .= "                <fo:table-row>\n";
-        $txt .= "                  <fo:table-cell ><fo:block space-before.optimum=\"5pt\" font-size=\"8pt\">"._("Anzahl der Teilnehmer").": ".$anz_nutzer."</fo:block></fo:table-cell>\n";
+        $txt .= "                  <fo:table-cell ><fo:block space-before.optimum=\"5pt\" font-size=\"8pt\">"._("Anzahl der Teilnehmenden").": ".$anz_nutzer."</fo:block></fo:table-cell>\n";
         $txt .= "                  <fo:table-cell ><fo:block space-before.optimum=\"5pt\" font-size=\"8pt\"></fo:block></fo:table-cell>\n";
         $txt .= "                </fo:table-row>\n";
 
@@ -481,7 +481,7 @@ function groups ($parent_id) {
                         fputs($fo_file, "&#x2205;");
                         fputs($fo_file,"          </fo:block></fo:table-cell >");
                         fputs($fo_file,"          <fo:table-cell ><fo:block text-align=\"center\" space-before.optimum=\"10pt\" font-size=\"7pt\">\n");
-                        fputs($fo_file, _("Teilnehmer"));
+                        fputs($fo_file, _("Teilnehmende"));
                         fputs($fo_file,"          </fo:block></fo:table-cell >");
 
                         fputs($fo_file,"        </fo:table-row>\n");
@@ -663,7 +663,7 @@ if ($evaluation = $statement->fetch(PDO::FETCH_ASSOC)) {
 
     if (do_template("show_total_stats")) {
         fputs($fo_file,"    <fo:block text-align=\"start\" space-before.optimum=\"10pt\" line-height=\"10pt\" font-size=\"8pt\">\n");
-        fputs($fo_file,"      ". xml_escape($number_of_votes." "._("Teilnehmer insgesamt")).".\n");
+        fputs($fo_file,"      ". xml_escape($number_of_votes." "._("Teilnehmende insgesamt")).".\n");
         fputs($fo_file,"      ". xml_escape(($evaluation['anonymous']==0  ? _('Die Teilnahme war nicht anonym.') : _('Die Teilnahme war anonym.'))."\n"));
         fputs($fo_file,"      " . xml_escape(_("Eigentümer").": ".$db_owner.". "._("Erzeugt am").": ".date("d.m.Y H:i:s"))."\n");
         fputs($fo_file,"    </fo:block>\n");

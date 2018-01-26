@@ -162,7 +162,7 @@
             <td><label for="show_raumzeit"><?= _("Zeige Raum-Zeit-Seite an.") ?></label></td>
             <td><input type="checkbox" id="show_raumzeit" value="1"<?= $sem_class['show_raumzeit'] ? " checked" : "" ?>></td>
         </tr>
-        
+
         <tr>
             <td colspan="2"><h3><?= _("Sonstiges") ?></h3></td>
         </tr>
@@ -207,7 +207,7 @@
                     'overview' => array('name' => _("Übersicht")),
                     'admin' => array('name' => _("Verwaltung")),
                     'forum' => array('name' => _("Forum")),
-                    'participants' => array('name' => _("Teilnehmerseite")),
+                    'participants' => array('name' => _("Teilnehmendenseite")),
                     'documents' => array('name' => _("Dateibereich")),
                     'schedule' => array('name' => _("Terminseite")),
                     'literature' => array('name' => _("Literaturübersicht")),

@@ -1,7 +1,7 @@
 <tbody class="collapsed">
     <tr class="header-row">
         <th colspan="3" class="toggle-indicator">
-            <a class="toggler"><?= _('Teilnehmer hinzufügen') ?>
+            <a class="toggler"><?= _('Teilnehmende/n hinzufügen') ?>
                 <?
                 if ($event->attendees->count()) {
                     $count_attendees = $event->attendees->filter(
@@ -16,9 +16,9 @@
                 ?>
                 <? if ($count_attendees) : ?>
                     <? if ($count_attendees < $event->attendees->count()) : ?>
-                        <?= sprintf(ngettext('(%s weiterer Teilnehmer)', '(%s weitere Teilnehmer)', $count_attendees), $count_attendees) ?>
+                        <?= sprintf(ngettext('(%s weitere/r Teilnehmende/r)', '(%s weitere Teilnehmende)', $count_attendees), $count_attendees) ?>
                     <? else : ?>
-                        <?= sprintf(_('(%s Teilnehmer)'), $count_attendees) ?>
+                        <?= sprintf(_('(%s Teilnehmende)'), $count_attendees) ?>
                     <? endif; ?>
                 <? endif; ?>
             </a>
@@ -27,7 +27,7 @@
     <tr>
         <td colspan="3">
             <div>
-                <label for="user_id_1"><h4><?= _('Teilnehmer') ?></h4></label>
+                <label for="user_id_1"><h4><?= _('Teilnehmende') ?></h4></label>
                 <ul class="clean" id="adressees">
                     <li id="template_adressee" style="display: none;" class="adressee">
                         <input type="hidden" name="attendees[]" value="">
@@ -61,7 +61,7 @@
                                     (<?= $group_status[$attendee->group_status] ?>)
                                 <? endif; ?>
                             </span>
-                            <a class="remove_adressee"><?= Icon::create('trash', 'clickable', array('title' => _('Teilnehmer entfernen')))->asImg(16, ['class' => 'text-bottom']) ?></a>
+                            <a class="remove_adressee"><?= Icon::create('trash', 'clickable', array('title' => _('Teilnehmende/n entfernen')))->asImg(16, ['class' => 'text-bottom']) ?></a>
                         </li>
                         <? endif; ?>
                     <? endforeach ?>

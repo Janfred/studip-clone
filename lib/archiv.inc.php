@@ -263,11 +263,11 @@ function dump_sem($sem_id, $print_view = false)
     if ($course_top_folder) {
         $course_top_folder = $course_top_folder->getTypedFolder();
     }
-    
+
     $user_id = $print_view === true ? $GLOBALS['user']->id : $print_view;
 
     $readable_files_user_id = $user_id;
-    
+
     if ($Modules['documents']) {
         //Get the amount of readable files for a user with status autor in the course:
 
@@ -341,10 +341,10 @@ function dump_sem($sem_id, $print_view = false)
                     true
                 )
             );
-            
+
             $link_text = _('Hinweis: Diese Datei wurde nicht archiviert, da sie lediglich verlinkt wurde.');
-            
-            
+
+
             if ($file_refs) {
                 $dump .= '<br>';
                 $dump .= '<table width="100%" border="1" cellpadding="2" cellspacing="0">';
@@ -363,7 +363,7 @@ function dump_sem($sem_id, $print_view = false)
                     );
                 }
             }
-            
+
             $dump .= '</table>' . "\n";
         }
     }
@@ -410,7 +410,7 @@ function dump_sem($sem_id, $print_view = false)
                         true,
                         $user['user_id']
                     );
-                    
+
                     // get number of postings for this user from all forum-modules
                     $postings = 0;
                     foreach ($forum_modules as $plugin) {
@@ -672,21 +672,21 @@ function in_archiv ($sem_id)
         }
     }
 
-    
+
     //Archive files:
-    
-    
+
+
     //Get the top folder of the course:
     $top_folder = Folder::findTopFolder($sem_id);
     if($top_folder) {
         $top_folder = $top_folder->getTypedFolder();
     }
-    
+
     //Collect all subfolders and files which are directly below the top folder:
-    
+
     $readable_items = []; //files and folders which are readable for all course participants
     $protected_archive_items = []; //all files and folders of the course
-    
+
     foreach($top_folder->getSubfolders() as $subfolder) {
         $protected_archive_items[] = $subfolder;
         if($subfolder instanceof StandardFolder) {
@@ -697,7 +697,7 @@ function in_archiv ($sem_id)
             $readable_items[] = $subfolder;
         }
     }
-    
+
     foreach($top_folder->getFiles() as $file_ref) {
         $protected_archive_items[] = $file_ref;
         if($file_ref->terms_of_use) {
@@ -708,21 +708,21 @@ function in_archiv ($sem_id)
             }
         }
     }
-    
-    
+
+
     //Create the standard file archive if there are files and folders which
     //are readable (or downloadable) for everyone in the course:
-    
+
     $archive_file_id = '';
-    
+
     if (!empty($readable_items)) {
         //list of readable items isn't empty
-        
+
         //create name for the archive ZIP file:
         $archive_file_id = md5('archive_' . $sem_id);
-        
+
         $archive_path = $ARCHIV_PATH . '/' . $archive_file_id;
-        
+
         FileArchiveManager::createArchive(
             $readable_items,
             'nobody',
@@ -731,34 +731,34 @@ function in_archiv ($sem_id)
             true, //keep hierarchy
             true //skip check for user permissions
         );
-        
+
         if(!file_exists($archive_path)) {
             //empty archive or error during archive creation:
             $archive_file_id = ''; //no archive
         }
-        
+
     }
-    
-    
+
+
     //Create the protected file archive which contains all files of the course.
-    
+
     $archive_protected_files_zip_id = md5('protected_archive_' . $sem_id);
-    
+
     $archive_protected_files_path = $ARCHIV_PATH . '/' . $archive_protected_files_zip_id;
-    
+
     FileArchiveManager::createArchive(
         $protected_archive_items,
         null,
         $archive_protected_files_path,
         false //no permission checks
     );
-    
+
     if(!file_exists($archive_protected_files_path)) {
         //empty archive or error during archive creation:
         $archive_protected_files_zip_id = ''; //no protected files archive
     }
-    
-    
+
+
     //We're done with archiving: Store a new archived course in the database:
     $query = "INSERT INTO archiv
                 (seminar_id, name, untertitel, beschreibung, start_time,

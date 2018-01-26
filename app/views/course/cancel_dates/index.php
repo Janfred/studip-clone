@@ -17,7 +17,7 @@
         </label>
         <label>
             <input type="checkbox" name="cancel_dates_snd_message" value="1">
-            <?= _('Benachrichtigung über ausfallende Termine an alle Teilnehmer verschicken') ?>
+            <?= _('Benachrichtigung über ausfallende Termine an alle Teilnehmenden verschicken') ?>
         </label>
     </fieldset>
     <? if ($issue_id) : ?>
@@ -29,4 +29,3 @@
         <?= Studip\Button::createAccept(_('Speichern')) ?>
     </footer>
 </form>
-

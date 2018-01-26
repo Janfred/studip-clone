@@ -167,7 +167,7 @@ class Resources_HelpersController extends AuthenticatedController
     {
         $data[] = array(_('V.-Nummer'), _('Titel'), _('Dozenten'), _('Anfrager'), _('Startsemester'), _('Datum der Erstellung'),
             _('Datum der letzten Änderung'), _('angeforderte Belegungszeiten'), _('gewünschte Raumeigenschaften'), _('angeforderter Raum'),
-            _('Teilnehmeranzahl'), _('Kommentar des Anfragenden'));
+            _('Teilnehmendenanzahl'), _('Kommentar des Anfragenden'));
 
         $resources_data = unserialize($_SESSION['resources_data']);
 

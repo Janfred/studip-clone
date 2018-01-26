@@ -20,7 +20,7 @@
 </section>
 <section>
     <label for="wizard-maxmembers">
-        <?= _('max. Teilnehmerzahl') ?>
+        <?= _('max. Teilnehmendenzahl') ?>
     </label>
     <input type="number" name="maxmembers" id="wizard-maxmember" min="0" value="<?= htmlReady($values['maxmembers']) ?>"/>
 </section>

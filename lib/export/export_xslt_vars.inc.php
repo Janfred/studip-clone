@@ -5,9 +5,9 @@
 # Lifter010: TODO
 /**
 * Config file for xslt-script inclusion
-* 
-* This file contains several arrays, that define which xslt-scripts are available to the export-module. 
-* To add new designs and file-formats to the export-module, just add a new set of filetype, name, 
+*
+* This file contains several arrays, that define which xslt-scripts are available to the export-module.
+* To add new designs and file-formats to the export-module, just add a new set of filetype, name,
 * description and format-name to this file.
 *
 * @author       Arne Schroeder <schroeder@data.quest.de>
@@ -161,7 +161,7 @@ $xslt_files["csv-warteliste"]["file"] = "csv-t-2.xsl";
 $xslt_files["csv-warteliste"]["csv"] = true;
 
 $xslt_files["csv-gruppen"]["name"] = _("Liste der Teilnehmenden mit Gruppen");
-$xslt_files["csv-gruppen"]["desc"] = _("Modul zur Ausgabe von Personendaten mit Gruppenzugehörigkeit als CSV-Datei. Es werden die Grunddaten der TeilnehmerInnen einer einzelnen Veranstaltung in eine Tabelle geschrieben. Es werden auch die Kontingente und Studiengänge ausgegeben. Die Ausgabe-Datei kann in Excel bearbeitet werden.");
+$xslt_files["csv-gruppen"]["desc"] = _("Modul zur Ausgabe von Personendaten mit Gruppenzugehörigkeit als CSV-Datei. Es werden die Grunddaten der Teilnehmenden einer einzelnen Veranstaltung in eine Tabelle geschrieben. Es werden auch die Kontingente und Studiengänge ausgegeben. Die Ausgabe-Datei kann in Excel bearbeitet werden.");
 $xslt_files["csv-gruppen"]["file"] = "csv-t-3.xsl";
 $xslt_files["csv-gruppen"]["csv"] = true;
 

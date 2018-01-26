@@ -65,7 +65,7 @@
                 <? endif ?>
             </tr>
             <tr>
-                <td><?= _('aktuelle Teilnehmerzahl') ?></td>
+                <td><?= _('aktuelle Teilnehmendenzahl') ?></td>
                 <td><?= $semObj->getNumberOfParticipants('total') ?></td>
             </tr>
             <tr>

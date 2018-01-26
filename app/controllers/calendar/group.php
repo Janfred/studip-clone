@@ -12,7 +12,7 @@ class Calendar_GroupController extends Calendar_CalendarController
         $this->base = 'calendar/group/';
         parent::before_filter($action, $args);
     }
-    
+
     protected function createSidebar($active = 'week', $calendar = null)
     {
         parent::createSidebar($active, $calendar);
@@ -36,14 +36,14 @@ class Calendar_GroupController extends Calendar_CalendarController
         $title = sprintf(_('Terminkalender der Gruppe "%s"'), $group->name);
         return $title;
     }
-    
+
     public function index_action()
     {
         // switch to the view the user has selected in his personal settings
         $default_view = $this->settings['view'] ?: 'week';
         $this->redirect($this->url_for('calendar/group/' . $default_view));
     }
-    
+
     public function edit_action($range_id = null, $event_id = null)
     {
         $this->range_id = $range_id ?: $this->range_id;
@@ -62,9 +62,9 @@ class Calendar_GroupController extends Calendar_CalendarController
                 $this->attendee_ids = array($user_id);
             }
         }
-        
+
         $this->event = $this->calendar->getEvent($event_id);
-        
+
         if ($this->event->isNew()) {
             $this->event = $this->calendar->getNewEvent();
             if (Request::get('isdayevent')) {
@@ -103,7 +103,7 @@ class Calendar_GroupController extends Calendar_CalendarController
                 PageLayout::setTitle($this->getTitle($this->calendar, _('Termin bearbeiten')));
             }
         }
-        
+
         if (get_config('CALENDAR_GROUP_ENABLE')
                 && $this->calendar->getRange() == Calendar::RANGE_USER) {
             $search_obj = new SQLSearch("SELECT auth_user_md5.user_id, {$GLOBALS['_fullname_sql']['full_rev']} as fullname, username, perms "
@@ -121,12 +121,12 @@ class Calendar_GroupController extends Calendar_CalendarController
                 _('Nutzer suchen'), 'user_id');
             $this->quick_search = QuickSearch::get('user_id', $search_obj)
                     ->fireJSFunctionOnSelect('STUDIP.Messages.add_adressee');
-            
+
       //      $default_selected_user = array($this->calendar->getRangeId());
             $this->mps = MultiPersonSearch::get('add_adressees')
-                ->setLinkText(_('Mehrere Teilnehmer hinzufügen'))
+                ->setLinkText(_('Mehrere Teilnehmende hinzufügen'))
        //         ->setDefaultSelectedUser($default_selected_user)
-                ->setTitle(_('Mehrere Teilnehmer hinzufügen'))
+                ->setTitle(_('Mehrere Teilnehmende hinzufügen'))
                 ->setExecuteURL($this->url_for($this->base . 'edit'))
                 ->setJSFunctionOnSubmit('STUDIP.Messages.add_adressees')
                 ->setSearchObject($search_obj);
@@ -145,7 +145,7 @@ class Calendar_GroupController extends Calendar_CalendarController
                 );
             }
         }
-        
+
         $stored = false;
         if (Request::submitted('store')) {
             $stored = $this->storeEventData($this->event, $this->calendar);
@@ -172,7 +172,7 @@ class Calendar_GroupController extends Calendar_CalendarController
             $this->render_template('calendar/single/edit', $this->layout);
         }
     }
-    
+
     public function day_action($range_id = null)
     {
         $this->range_id = $range_id ?: $this->range_id;
@@ -188,22 +188,22 @@ class Calendar_GroupController extends Calendar_CalendarController
                         $this->atime, null, $this->restrictions);
             }
         }
-        
+
         PageLayout::setTitle($this->getTitle($group)
                 . ' - ' . _('Tagesansicht'));
         Navigation::activateItem('/calendar/calendar');
 
         $this->last_view = 'day';
-        
+
         $this->createSidebar('day');
         $this->createSidebarFilter();
     }
-    
+
     /**
      * Returns the Statusgruppe for the given calendar.
-     * 
+     *
      * @param SingleCalendar The calendar of the group owner.
-     * @return Statusgruppen The found group. 
+     * @return Statusgruppen The found group.
      * @throws AccessDeniedException If the group does not exists or the owner
      * of the calendar is not the owner of the group.
      */
@@ -220,7 +220,7 @@ class Calendar_GroupController extends Calendar_CalendarController
         }
         return $group;
     }
-    
+
     public function week_action($range_id = null)
     {
         $this->range_id = $range_id ?: $this->range_id;
@@ -249,17 +249,17 @@ class Calendar_GroupController extends Calendar_CalendarController
                 $n++;
             }
         }
-        
+
         PageLayout::setTitle($this->getTitle($group)
                 . ' - ' . _('Wochenansicht'));
         Navigation::activateItem('/calendar/calendar');
 
         $this->last_view = 'week';
-        
+
         $this->createSidebar('week');
         $this->createSidebarFilter();
     }
-    
+
     public function month_action($range_id = null)
     {
         $this->range_id = $range_id ?: $this->range_id;
@@ -294,11 +294,11 @@ class Calendar_GroupController extends Calendar_CalendarController
         Navigation::activateItem('/calendar/calendar');
 
         $this->last_view = 'month';
-        
+
         $this->createSidebar('month');
         $this->createSidebarFilter();
     }
-    
+
     public function year_action($range_id = null)
     {
         $this->range_id = $range_id ?: $this->range_id;
@@ -307,7 +307,7 @@ class Calendar_GroupController extends Calendar_CalendarController
         $this->calendars[0] = new SingleCalendar(
                 $GLOBALS['user']->id, $start, $end);
         $this->count_lists[0] = $this->calendars[0]->getListCountEvents();
-        
+
         // check and get the group
         $group = $this->getGroup($this->calendars[0]);
         $n = 1;
@@ -320,7 +320,7 @@ class Calendar_GroupController extends Calendar_CalendarController
                 $n++;
             }
         }
-        
+
         PageLayout::setTitle($this->getTitle($group)
                 . ' - ' . _('Jahresansicht'));
         Navigation::activateItem("/calendar/calendar");

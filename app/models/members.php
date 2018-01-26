@@ -239,7 +239,7 @@ class MembersModel
                 }
             }
         } else if ($consider_contingent) {
-            $msg = MessageBox::error(_('Es stehen keine weiteren Plätze mehr im Teilnehmerkontingent zur Verfügung.'));
+            $msg = MessageBox::error(_('Es stehen keine weiteren Plätze mehr im Teilnehmendenkontingent zur Verfügung.'));
         } else {
             $msg = MessageBox::error(_('Beim Eintragen ist ein Fehler aufgetreten.
                 Bitte versuchen Sie es erneut oder wenden Sie sich an einen Systemadministrator'));

@@ -1034,7 +1034,7 @@ class Course_MembersController extends AuthenticatedController
 
                 PageLayout::postSuccess($message);
             } else {
-                $message = _("Es stehen keine weiteren Plätze mehr im Teilnehmerkontingent zur Verfügung.");
+                $message = _("Es stehen keine weiteren Plätze mehr im Teilnehmendenkontingent zur Verfügung.");
                 PageLayout::postError($message);
             }
         } else {
@@ -1457,7 +1457,7 @@ class Course_MembersController extends AuthenticatedController
                 "OR auth_user_md5.username LIKE :input) " .
                 "AND auth_user_md5.perms IN ('autor', 'tutor', 'dozent') " .
                 " AND auth_user_md5.visible <> 'never' " .
-                "ORDER BY Vorname, Nachname", _("Teilnehmer suchen"), "username");
+                "ORDER BY Vorname, Nachname", _("Teilnehmende/n suchen"), "username");
 
                 // quickfilter: tutors of institut
                 $sql = "SELECT user_id FROM user_inst WHERE Institut_id = ? AND inst_perms = 'autor'";
@@ -1506,7 +1506,7 @@ class Course_MembersController extends AuthenticatedController
                 }
             }
 
-            $widget->addLink(_('Teilnehmerliste importieren'),
+            $widget->addLink(_('Teilnehmendenliste importieren'),
                              $this->url_for('course/members/import_autorlist'), Icon::create('community+add', 'clickable'));
 
 
@@ -1587,7 +1587,7 @@ class Course_MembersController extends AuthenticatedController
                     $config->COURSE_STUDENT_MAILING,
                     $this->url_for('course/members/toggle_student_mailing/1'),
                     $this->url_for('course/members/toggle_student_mailing/0'),
-                    ['title' => _('Über diese Option können Sie Studierenden das Schreiben von Nachrichten an alle anderen Teilnehmer der Veranstaltung erlauben')]
+                    ['title' => _('Über diese Option können Sie Studierenden das Schreiben von Nachrichten an alle anderen Teilnehmenden der Veranstaltung erlauben')]
                 );
                 $sidebar->addWidget($options);
             }

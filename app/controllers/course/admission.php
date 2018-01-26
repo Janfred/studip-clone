@@ -112,7 +112,7 @@ class Course_AdmissionController extends AuthenticatedController
             PageLayout::postMessage(MessageBox::info(_("Für diese Veranstaltung sind keine Anmelderegeln festgelegt. Die Veranstaltung ist damit für alle Nutzer zugänglich.")));
         } else {
             if ($this->current_courseset->isSeatDistributionEnabled() && !$this->course->admission_turnout) {
-                PageLayout::postMessage(MessageBox::info(_("Diese Veranstaltung ist teilnahmebeschränkt, aber die maximale Teilnehmeranzahl ist nicht gesetzt.")));
+                PageLayout::postMessage(MessageBox::info(_("Diese Veranstaltung ist teilnahmebeschränkt, aber die maximale Teilnehmendenanzahl ist nicht gesetzt.")));
             }
         }
         $lockdata = LockRules::getObjectRule($this->course_id);
@@ -136,10 +136,10 @@ class Course_AdmissionController extends AuthenticatedController
             $this->course->setData($request);
             if ($this->course->isFieldDirty('admission_prelim')) {
                 if ($this->course->admission_prelim == 1 && $this->course->getNumParticipants()) {
-                    $question = _("Sie beabsichtigen den Anmeldemodus auf vorläufiger Eintrag zu ändern. Sollen die bereits in der Veranstaltung eingetragenen Teilnehmer in vorläufige Teilnehmer umgewandelt werden?");
+                    $question = _("Sie beabsichtigen den Anmeldemodus auf vorläufiger Eintrag zu ändern. Sollen die bereits in der Veranstaltung eingetragenen Teilnehmenden in vorläufige Teilnehmende umgewandelt werden?");
                 }
                 if ($this->course->admission_prelim == 0 && $this->course->getNumPrelimParticipants()) {
-                    $question = _("Sie beabsichtigen den Anmeldemodus auf direkten Eintrag zu ändern. Sollen die vorläufigen Teilnehmer in die Veranstaltung übernommen werden (ansonsten werden die vorläufigen Teilnehmer aus der Veranstaltung entfernt) ?");
+                    $question = _("Sie beabsichtigen den Anmeldemodus auf direkten Eintrag zu ändern. Sollen die vorläufigen Teilnehmenden in die Veranstaltung übernommen werden (ansonsten werden die vorläufigen Teilnehmenden aus der Veranstaltung entfernt) ?");
                 }
             }
             if (Request::submittedSome('change_admission_prelim_no', 'change_admission_prelim_yes') || !$question) {
@@ -156,7 +156,7 @@ class Course_AdmissionController extends AuthenticatedController
                         restoreLanguage();
                     }
                     if ($num_moved) {
-                        PageLayout::postMessage(MessageBox::success(sprintf(_("%s Teilnehmer wurden auf vorläufigen Eintrag gesetzt."), $num_moved)));
+                        PageLayout::postMessage(MessageBox::success(sprintf(_("%s Teilnehmende wurden auf vorläufigen Eintrag gesetzt."), $num_moved)));
                     }
                 }
                 if ($this->course->admission_prelim == 0 && $this->course->getNumPrelimParticipants()) {
@@ -172,7 +172,7 @@ class Course_AdmissionController extends AuthenticatedController
                             restoreLanguage();
                         }
                         if ($num_moved) {
-                            PageLayout::postMessage(MessageBox::success(sprintf(_("%s Teilnehmer wurden in die Veranstaltung übernommen."), $num_moved)));
+                            PageLayout::postMessage(MessageBox::success(sprintf(_("%s Teilnehmende wurden in die Veranstaltung übernommen."), $num_moved)));
                         }
                     }
                     if (Request::submitted('change_admission_prelim_no')) {
@@ -186,7 +186,7 @@ class Course_AdmissionController extends AuthenticatedController
                             $num_moved += $applicant->delete();
                         }
                         if ($num_moved) {
-                            PageLayout::postMessage(MessageBox::success(sprintf(_("%s vorläufige Teilnehmer wurden entfernt."), $num_moved)));
+                            PageLayout::postMessage(MessageBox::success(sprintf(_("%s vorläufige Teilnehmende wurden entfernt."), $num_moved)));
                             $this->course->resetRelation('admission_applicants');
                         }
                     }
@@ -243,7 +243,7 @@ class Course_AdmissionController extends AuthenticatedController
     function change_admission_turnout_action()
     {
         CSRFProtection::verifyUnsafeRequest();
-        PageLayout::setTitle(_('Teilnehmeranzahl ändern'));
+        PageLayout::setTitle(_('Teilnehmendenanzahl ändern'));
 
         if (Request::submitted('change_admission_turnout')) {
             $request = Request::extract('admission_turnout int, admission_disable_waitlist submitted, admission_disable_waitlist_move submitted, admission_waitlist_max int');
@@ -292,7 +292,7 @@ class Course_AdmissionController extends AuthenticatedController
                 }
 
                 if ($this->course->store()) {
-                    PageLayout::postMessage(MessageBox::success(_("Die Teilnehmeranzahl wurde geändert.")));
+                    PageLayout::postMessage(MessageBox::success(_("Die Teilnehmendenanzahl wurde geändert.")));
                 }
                 unset($question);
             }

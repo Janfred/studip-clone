@@ -74,7 +74,7 @@ class ParticipantRestrictedAdmission extends AdmissionRule
      * subclass) does.
      */
     public static function getDescription() {
-        return _("Anmelderegeln dieses Typs legen fest, ob die zugeordneten Veranstaltungen eine maximale Teilnehmeranzahl haben. Die Platzverteilung erfolgt automatisiert.");
+        return _("Anmelderegeln dieses Typs legen fest, ob die zugeordneten Veranstaltungen eine maximale Teilnehmendenanzahl haben. Die Platzverteilung erfolgt automatisiert.");
     }
 
     /**
@@ -91,7 +91,7 @@ class ParticipantRestrictedAdmission extends AdmissionRule
      * Return this rule's name.
      */
     public static function getName() {
-        return _("Beschränkte Teilnehmeranzahl");
+        return _("Beschränkte Teilnehmendenanzahl");
     }
 
     /**

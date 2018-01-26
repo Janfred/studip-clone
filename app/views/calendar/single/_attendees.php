@@ -14,7 +14,7 @@
         CalendarEvent::PARTSTAT_DELEGATED => _('Angenommen (keine Teilnahme)'),
         CalendarEvent::PARTSTAT_NEEDS_ACTION => '') ?>
     <div>
-        <b><?= _('Teilnehmer:') ?></b>
+        <b><?= _('Teilnehmende:') ?></b>
         <?= implode(', ', $event->attendees->map(
             function ($att) use ($event, $group_status) {
                 $profil_link = ObjectdisplayHelper::link($att->user);

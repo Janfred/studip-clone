@@ -90,7 +90,7 @@ class AdvancedBasicDataWizardStep extends BasicDataWizardStep
                     array(_('Untertitel der Veranstalung'),
                         _('Art der Veranstaltung'),
                         _('ECTS-Punkte der Veranstaltung'),
-                        _('Max. Teilnehmerzahl der Veranstaltung')));
+                        _('Max. Teilnehmendenzahl der Veranstaltung')));
         }
         return $course;
     }

@@ -54,11 +54,11 @@
 
         <label id="questionnaire_editanswers" <?= $questionnaire['anonymous'] ? 'style="display: none"' : '' ?>>
             <input type="checkbox" name="questionnaire[editanswers]" value="1"<?= $questionnaire['editanswers'] || $questionnaire->isNew() ? " checked" : "" ?>>
-            <?= _("Teilnehmer dürfen ihre Antworten revidieren") ?>
+            <?= _("Teilnehmende dürfen ihre Antworten revidieren") ?>
         </label>
 
         <label>
-            <?= _("Ergebnisse an Teilnehmer") ?>
+            <?= _("Ergebnisse an Teilnehmende") ?>
             <select name="questionnaire[resultvisibility]">
                 <option value="always"<?= $questionnaire['resultvisibility'] === "always" ? " selected" : "" ?>><?= _("Immer.") ?></option>
                 <option value="afterending"<?= $questionnaire['resultvisibility'] === "afterending" ? " selected" : "" ?>><?= _("Nach Ende der Befragung.") ?></option>
