@@ -1306,29 +1306,35 @@ class FileController extends AuthenticatedController
 
         $this->folder_types = [];
 
-        foreach ($folder_types as $folder_type) {
-            $folder_type_instance = new $folder_type(
-                ['range_id' => $parent_folder->range_id,
-                 'range_type' => $parent_folder->range_type,
-                 'parent_id' => $parent_folder->getId()]
-            );
-            $this->folder_types[] = [
-                'class'    => $folder_type,
-                'instance' => $folder_type_instance,
-                'name'     => $folder_type::getTypeName(),
-                'icon'     => $folder_type_instance->getIcon('clickable')
-            ];
+        if (!is_a($folder, 'VirtualFolderType')) {
+            foreach ($folder_types as $folder_type) {
+                $folder_type_instance = new $folder_type(
+                    [
+                        'range_id' => $parent_folder->range_id,
+                        'range_type' => $parent_folder->range_type,
+                        'parent_id' => $parent_folder->getId()
+                    ]
+                );
+                $this->folder_types[] = [
+                    'class'    => $folder_type,
+                    'instance' => $folder_type_instance,
+                    'name'     => $folder_type::getTypeName(),
+                    'icon'     => $folder_type_instance->getIcon('clickable')
+                ];
+            }
         }
 
 
         if (Request::submitted('edit')) {
             CSRFProtection::verifyUnsafeRequest();
-            $folder_type = Request::get('folder_type', get_class($folder));
-            if (!is_subclass_of($folder_type, 'FolderType') || !class_exists($folder_type)) {
-                throw new InvalidArgumentException(_('Unbekannter Ordnertyp!'));
-            }
-            if ($folder_type !== get_class($folder)) {
-                $folder = new $folder_type($folder);
+            if (!is_a($folder, 'VirtualFolderType')) {
+                $folder_type = Request::get('folder_type', get_class($folder));
+                if (!is_subclass_of($folder_type, 'FolderType') || !class_exists($folder_type)) {
+                    throw new InvalidArgumentException(_('Unbekannter Ordnertyp!'));
+                }
+                if ($folder_type !== get_class($folder)) {
+                    $folder = new $folder_type($folder);
+                }
             }
             $request = Request::getInstance();
             $request->offsetSet('parent_id', $folder->getParent()->getId());
