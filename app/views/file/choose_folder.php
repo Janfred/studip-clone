@@ -20,7 +20,7 @@ if (Request::get('copymode')) {
 <div style="text-align: center; margin-bottom: 20px;">
     <?= $options['copymode'] === 'copy' ? _('Kopieren nach') : _('Verschieben nach') ?>
     <?= Icon::create('folder-full', Icon::ROLE_INFO)->asImg(20, ['class' => 'text-bottom']) ?>
-    <?= htmlReady($to_folder->parent_id ? $to_folder->name : _('Hauptordner')) ?>
+    <?= htmlReady($top_folder_name) ?>
 </div>
 
 <? /*if ($filesystemplugin && $filesystemplugin->hasSearch()) : ?>
