@@ -177,10 +177,13 @@ class Context
     /**
      * Get Fullname of current context, to use it in the page-title
      *
-     * @return string
+     * @return string or null if no context is available
      */
     public static function getHeaderLine()
     {
+        if (!self::$context) {
+            return null;
+        }
         return self::get()->getFullname();
     }
 
