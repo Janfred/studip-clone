@@ -41,6 +41,27 @@ class Moadb extends Migration
         $db->exec("UPDATE `file_refs` SET content_terms_of_use_id = 'TEXT_NO_LICENSE' WHERE content_terms_of_use_id = '7'");
     }
 
+    private function insertFilesTour($db)
+    {
+        $db->exec("INSERT INTO `help_tours` (`global_tour_id`, `tour_id`, `name`, `description`, `type`, `roles`, `version`, `language`, `studip_version`, `installation_id`, `author_email`, `mkdate`, `chdate`) VALUES
+('e9959c638e0c2578cccee24702e886f4', '0b542c6c891af499763356f2c7218f7f', 'Was ist neu in Stud.IP 4.0?', 'Was ist neu in Stud.IP 4.0?', 'tour', 'autor,tutor,dozent,admin,root', 1, 'de', '4.0', '', '', 1514883131, 0)");
+
+        $db->exec("INSERT INTO `help_tour_settings` (`tour_id`, `active`, `access`) VALUES
+('0b542c6c891af499763356f2c7218f7f', 1, 'autostart_once')");
+
+        $db->exec("INSERT INTO `help_tour_steps` (`tour_id`, `step`, `title`, `tip`, `orientation`, `interactive`, `css_selector`, `route`, `action_prev`, `action_next`, `author_email`, `mkdate`, `chdate`) VALUES
+('0b542c6c891af499763356f2c7218f7f', 1, 'Willkommen in Stud.IP 4!', 'Unter der Haube ist alles neu, auch an der Oberfläche hat sich einiges getan.', 'B', 0, '', 'dispatch.php/start', '', '', 'root@localhost', 1514883131, 1514883295),
+('0b542c6c891af499763356f2c7218f7f', 2, '', 'Die wichtigsten Neuigkeiten im Schnelldurchlauf:', 'B', 0, '', 'dispatch.php/start', '', '', 'root@localhost', 1514883334, 1514883383),
+('0b542c6c891af499763356f2c7218f7f', 3, '', 'Die Startseite lässt sich anpassen. Sie können selbst bestimmen, was angezeigt werden soll. Per Drag & Drop können sie die Position der Elemente auf der Startseite verändern.', 'R', 0, '.sidebar-widget:eq(1) A:eq(0)', 'dispatch.php/start', '', '', 'root@localhost', 1514883313, 1516748869),
+('0b542c6c891af499763356f2c7218f7f', 4, '', 'Alle persönlichen Funktionen sind in diesem Menü zusammengefasst. Der persönliche Dateibereich ist nun immer standardmäßig eingeschaltet.', 'B', 0, '#avatar-arrow', 'dispatch.php/start', '', '', 'root@localhost', 1514883360, 1516749166),
+('0b542c6c891af499763356f2c7218f7f', 5, '', 'Alle Dateibereiche wurden in Stud.IP 4 komplett überarbeitet. Im persönlichen Dateibereich finden sich u.a. Nachrichtenanhänge. Sie können aber auch eigene Ordner erstellen und diese auf ihrer Profilseite anderen zugänglich machen. In Veranstaltungen gibt es weitere Typen von Dateiordnern, wie den Hausaufgabenordner.', 'B', 0, '', 'dispatch.php/files', '', '', 'root@localhost', 1514883588, 1514883588),
+('0b542c6c891af499763356f2c7218f7f', 6, '', 'Falls von der Hochschule gestattet, können Sie hier Owncloud/Nextcloud oder Powerfolder für die Dateiverwaltung koppeln.', 'R', 0, '.sidebar-widget:eq(0) A:eq(0)', 'dispatch.php/files', '', '', 'root@localhost', 1514883641, 1516749255),
+('0b542c6c891af499763356f2c7218f7f', 7, '', 'Weniger häufig benötigte Funktionen sind in Stud.IP 4 hinter dem Aktionsmenü mit den drei Punkten zu finden.', 'LT', 0, 'table.documents nav.action-menu', 'dispatch.php/files', '', '', 'root@localhost', 1514883706, 1516749543),
+('0b542c6c891af499763356f2c7218f7f', 8, '', 'Ebenfalls neu ist die dezente Navigationszeile. Der gerade aktive Bereich wird durch eine Linie angezeigt.', 'B', 0, '#tabs', 'dispatch.php/files', '', '', 'root@localhost', 1514883773, 1514883781),
+('0b542c6c891af499763356f2c7218f7f', 9, '', 'Das waren die allerwichtigsten Dinge im Überblick. In Stud.IP 4 hat sich aber noch viel mehr getan. Jedes Detail wurde durchdacht und verbessert . Damit ist Stud.IP 4 das modernste Open-Source-LMS auf dem Markt.', 'B', 0, '', 'dispatch.php/files', '', '', 'root@localhost', 1514883871, 1514883871),
+('0b542c6c891af499763356f2c7218f7f', 10, 'Das Stud.IP-Team wünscht viel Erolg bei der Arbeit mit Stud.IP 4!', '', 'B', 0, '', 'dispatch.php/start', '', '', 'root@localhost', 1514883886, 1514883946)");
+    }
+
     public function up()
     {
         $db = DBManager::get();
@@ -301,6 +322,9 @@ class Moadb extends Migration
         $db->exec("DROP TABLE IF EXISTS `doc_filetype`, `doc_filetype_forbidden`, `doc_usergroup_config`, `dokumente`, `files_backend_studip`, `files_backend_url`, `files_share`, `folder`, `_files`, `_file_refs`, `document_licenses`");
 
         SimpleORMap::expireTableScheme();
+
+        //add help tour
+        $this->insertFilesTour($db);
     }
 
 
