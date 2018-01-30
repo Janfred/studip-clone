@@ -510,11 +510,11 @@ td.tree-elbow-end svg {
 }
 /* --- Styles fuer printhead und printcontent ------------------------------- */
 table td.printcontent {
-  background-color: #f3f5f8;
+  background-color: #f5f6f6;
   text-align: left;
 }
 table td.printcontent:hover {
-  background-color: #f3f5f8;
+  background-color: #f5f6f6;
 }
 table td.printhead2 {
   background-image: url("../images/content_object_arr-right.png");
@@ -528,16 +528,23 @@ table td.printhead3 {
 }
 /* classes for sortable table headers --------------------------------------- */
 tr.sortable {
-  background-color: #f4f7f9;
+  background-color: #f5f6f6;
 }
-tr.sortable th.sortasc {
+tr.sortable th.sortasc::after,
+tr.sortable th.sortdesc::after {
+  width: 16px;
+  height: 16px;
+  background-position: center;
   background-repeat: no-repeat;
-  background-position: left center;
+  content: ' ';
+  display: inline-block;
+  vertical-align: text-bottom;
+}
+tr.sortable th.sortasc::after {
   background-image: url("../images/dreieck_up.png");
-  padding-left: 17px;
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  tr.sortable th.sortasc {
+  tr.sortable th.sortasc::after {
     background-image: url("../images/dreieck_up@2x.png");
     -webkit-background-size: 16px 16px;
     -moz-background-size: 16px 16px;
@@ -545,14 +552,11 @@ tr.sortable th.sortasc {
     background-size: 16px 16px;
   }
 }
-tr.sortable th.sortdesc {
-  background-repeat: no-repeat;
-  background-position: left center;
+tr.sortable th.sortdesc::after {
   background-image: url("../images/dreieck_down.png");
-  padding-left: 17px;
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  tr.sortable th.sortdesc {
+  tr.sortable th.sortdesc::after {
     background-image: url("../images/dreieck_down@2x.png");
     -webkit-background-size: 16px 16px;
     -moz-background-size: 16px 16px;
