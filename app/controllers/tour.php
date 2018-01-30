@@ -47,7 +47,7 @@ class TourController extends AuthenticatedController
         ];
 
         $this->help_admin = $GLOBALS['perm']->have_perm('root')
-                         || $GLOBALS['user']->hasRole('Hilfe-Administrator(in)');
+                         || $GLOBALS['user']->getAuthenticatedUser()->hasRole('Hilfe-Administrator(in)');
     }
 
     /**
