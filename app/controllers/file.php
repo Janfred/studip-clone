@@ -1049,6 +1049,54 @@ class FileController extends AuthenticatedController
                 throw new AccessException();
             }
         }
+
+        $this->to_folder_name = _('Hauptordner');
+
+        //A top folder can have its parent-ID set to empty string
+        //or its folder_type set to 'RootFolder'.
+        if ($this->to_folder_type->parent_id == ''
+            or $this->to_folder_type->folder_type == 'RootFolder') {
+            //We have a root folder. Now we check if its range-ID
+            //references a Stud.IP object and set the displayed folder name
+            //to the name of that object.
+            if ($this->to_folder_type->range_id) {
+                $range_type = Folder::findRangeTypeById($this->to_folder_type->range_id);
+
+                switch ($range_type) {
+                    case 'course': {
+                        $course = Course::find($this->to_folder_type->range_id);
+                        if ($course) {
+                            $this->to_folder_name = $course->getFullName();
+                        }
+                        break;
+                    }
+                    case 'institute': {
+                        $institute = Institute::find($this->to_folder_type->range_id);
+                        if ($institute) {
+                            $this->to_folder_name = $institute->getFullName();
+                        }
+                        break;
+                    }
+                    case 'user': {
+                        $user = User::find($this->to_folder_type->range_id);
+                        if ($user) {
+                            $this->to_folder_name = $user->getFullName();
+                        }
+                        break;
+                    }
+                    case 'message': {
+                        $message = Message::find($this->to_folder_type->range_id);
+                        if ($message) {
+                            $this->to_folder_name = $message->subject;
+                        }
+                        break;
+                    }
+                }
+            }
+        } else {
+            //The folder is not a top folder. We can use its name directly.
+            $this->to_folder_name = $this->to_folder_type->name;
+        }
     }
 
     public function edit_license_action()

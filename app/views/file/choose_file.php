@@ -14,7 +14,7 @@ if (Request::get('to_folder_id')) {
 <div style="text-align: center; margin-bottom: 20px;">
     <?= _('Kopieren nach') ?>
     <?= Icon::create('folder-full', Icon::ROLE_INFO)->asImg(20, ['class' => 'text-bottom']) ?>
-    <?= htmlReady($to_folder_type->range_id ? $to_folder_type->name : _('Hauptordner')) ?>
+    <?= htmlReady($to_folder_name) ?>
 </div>
 
 <? if ($filesystemplugin && $filesystemplugin->hasSearch()) : ?>
