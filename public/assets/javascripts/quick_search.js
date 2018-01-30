@@ -117,7 +117,7 @@ STUDIP.QuickSearch = {
                     jQuery('#' + name + "_realvalue").attr("value", ui.item.item_id);
                     //and execute a special function defined before by the programmer:
                     if (func) {
-                        var proceed = func.bind(event.target)(ui.item.item_id, ui.item.label);
+                        var proceed = func.bind(event.target)(ui.item.item_id, ui.item.value);
                         if (!proceed) {
                             jQuery(this).val("");
                             return false;
