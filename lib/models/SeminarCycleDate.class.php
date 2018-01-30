@@ -409,7 +409,7 @@ class SeminarCycleDate extends SimpleORMap
         $date->setTimestamp($course->start_semester->vorles_beginn);
         $date->modify(sprintf('+%s week', $this->week_offset));
         $new_dates = $this->createTerminSlots($date->getTimestamp());
-        
+
         $update_count = 0;
 
         foreach ($new_dates as $semester_dates) {
@@ -464,20 +464,7 @@ class SeminarCycleDate extends SimpleORMap
                 array('start' => $startAfterTimeStamp, 'ende' => $sem_end));
 
         foreach ($semester as $val) {
-
-                // correction calculation, if the semester does not start on monday
-                $dow = date("w", $val['vorles_beginn']);
-                if ($dow <= 5) {
-                    $corr = ($dow - 1) * -1;
-                } elseif ($dow == 6) {
-                    $corr = 2;
-                } elseif ($dow == 0) {
-                    $corr = 1;
-                } else {
-                    $corr = 0;
-                }
-
-                $ret[$val['semester_id']] = $this->createSemesterTerminSlots($val['vorles_beginn'], $val['vorles_ende'], $startAfterTimeStamp, $corr);
+                $ret[$val['semester_id']] = $this->createSemesterTerminSlots($val['vorles_beginn'], $val['vorles_ende'], $startAfterTimeStamp);
         }
         return $ret;
     }
@@ -490,10 +477,9 @@ class SeminarCycleDate extends SimpleORMap
      * @param int    timestamp of semester start
      * @param int    timestamp of semester end
      * @param int    alternative timestamp to start from
-     * @param int    correction calculation, if the semester does not start on monday (number of days?)
      * @return array returns an array of two arrays of SingleDate objects: 'dates' => all new and surviving dates, 'dates_to_delete' => obsolete dates
      */
-    private function createSemesterTerminSlots($sem_begin, $sem_end, $startAfterTimeStamp, $corr)
+    private function createSemesterTerminSlots($sem_begin, $sem_end, $startAfterTimeStamp)
     {
 
         $dates = array();
@@ -504,6 +490,7 @@ class SeminarCycleDate extends SimpleORMap
         $existingSingleDates =& $this->getAllDates();
 
         $start_woche = $this->week_offset;
+        $turnus_offset = 0;
 
         // This variable is used to check if a given singledate shall be created in a bi-weekly seminar.
         if ($start_woche == -1) {
@@ -558,6 +545,7 @@ class SeminarCycleDate extends SimpleORMap
             // do not create singledates if they are earlier than the semester start
             if ($end_time < $sem_begin) {
                 $dateExists = true;
+                $turnus_offset = 1;
             }
 
             /*
@@ -614,7 +602,7 @@ class SeminarCycleDate extends SimpleORMap
 
         //calulate trurnus
         if ($this->cycle != 0) {
-           return $this->calculateTurnusDates($dates);
+            return $this->calculateTurnusDates($dates, $turnus_offset);
         }
         return array('dates' => $dates, 'dates_to_delete' => $dates_to_delete);
     }
@@ -624,11 +612,12 @@ class SeminarCycleDate extends SimpleORMap
      * Calculate turnus for singledate entries
      *
      * @param array $dates
+     * @param int $turnus_offset correction for turnus calculation if first date is not within semester
      * @return array
      */
-    public function calculateTurnusDates($dates)
+    public function calculateTurnusDates($dates, $turnus_offset)
     {
-        $week_count = 0;
+        $week_count = 0 + $turnus_offset;
         $dates_to_store = array();
         $dates_to_delete = array();
         foreach ($dates as $date) {
