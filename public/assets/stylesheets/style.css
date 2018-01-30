@@ -7063,6 +7063,14 @@ table.documents th {
 table.documents.flat td.filter-match {
   background-color: #fce2cc;
 }
+/*
+For the file and folder table in the selection dialogs
+when adding a file or copying/moving things:
+*/
+td.document-icon {
+  max-width: 40px;
+  width: 40px;
+}
 /* classes for the evaluation modules in Stud.IP ---------------------------- */
 .eval_title {
   font-size: 1.2em;
