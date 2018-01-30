@@ -54,9 +54,9 @@ class Institute_BasicdataController extends AuthenticatedController
             throw new AccessDeniedException();
         }
 
-        //Change header_line if open object
-        $header_line = Context::getHeaderLine();
-        if ($header_line) {
+        // Change header_line if open object
+        if ($i_view !== 'new') {
+            $header_line = Context::getHeaderLine();
             PageLayout::setTitle($header_line . ' - ' . PageLayout::getTitle());
         }
 
