@@ -11,6 +11,8 @@
                 <th><?= _("Teilnehmende aktuell")?></th>
                 <th><?= _("Anmeldungen")?></th>
                 <th><?= _("Warteliste")?></th>
+                <th><?= _("Plätze")?></th>
+                <th><?= _("Nachrücken")?></th>
             </tr>
         </thead>
     <tbody>
@@ -31,19 +33,21 @@
                 <input <?=$editable?> type="checkbox" name="configure_courses_disable_waitlist[<?= $course->id?>]" value="1" <?= $course->admission_disable_waitlist ? '' : 'checked' ?>
                     title="<?= htmlReady(sprintf(_('Warteliste für %s aktivieren'), $course->name)) ?>"
                     data-activates="#waitlist_move_<?= $course->id?>, #waitlist_max_<?= $course->id?>">
-
+            </td>
+            <td style="white-space:nowrap">
                 <input <?=$editable?> id="waitlist_max_<?= $course->id?>"
                     type="text" size="2" name="configure_courses_waitlist_max[<?= $course->id?>]"
                     value="<?= $course->admission_waitlist_max ?: ''?>"
                     title="<?= htmlReady(sprintf(_('Anzahl der Plätze auf der Warteliste für %s'), $course->name)) ?>"
                      <?= $course->admission_disable_waitlist ? 'disabled' : ''?>>
-
+            </td>
+            <td style="white-space:nowrap">
                 <input <?=$editable?> type="checkbox"
                     id="waitlist_move_<?= $course->id?>" <?= $course->admission_disable_waitlist ? 'disabled' : ''?>
                     name="admission_disable_waitlist_move[<?= $course->id?>]" value="1"
                     title="<?= htmlReady(sprintf(_('Aktivieren des automatischen Nachrückens aus der Warteliste für %s'), $course->name)) ?>"
                     <? if (!$course->admission_disable_waitlist_move) echo 'checked'; ?>>
-                </td>
+            </td>
         </tr>
     <? endforeach ?>
     </tbody>
