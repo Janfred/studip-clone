@@ -271,14 +271,15 @@
 
         // workaround to wait for tables.js to be executed first
         $(function () {
-            $('table.documents.flat').filterTable({
-                highlightClass: 'filter-match',
-                ignoreColumns: [0, 1, 3, 5, 6],
-                inputSelector: '.sidebar .tablesorterfilter',
-                minChars: 1,
-                minRows: 1
-            });
-
+            if ($.fn.hasOwnProperty('filterTable')) {
+                $('table.documents.flat').filterTable({
+                    highlightClass: 'filter-match',
+                    ignoreColumns: [0, 1, 3, 5, 6],
+                    inputSelector: '.sidebar .tablesorterfilter',
+                    minChars: 1,
+                    minRows: 1
+                });
+            }
         });
 
         $(document).on('click', '#file_license_chooser_1 > input[type=radio]', STUDIP.Files.updateTermsOfUseDescription);
