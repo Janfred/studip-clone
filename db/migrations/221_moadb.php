@@ -317,7 +317,12 @@ class Moadb extends Migration
             'PERSONALDOCUMENT_OPEN_ACCESS_ROOT_PRIVILEDGED',
             'PERSONALDOCUMENT_ENABLE',
             'FILESYSTEM_MULTICOPY_ENABLE',
-            'DOCUMENTS_EMBEDD_FLASH_MOVIES')"
+            'DOCUMENTS_EMBEDD_FLASH_MOVIES',
+            'ALLOW_DOWNLOAD_FOR_UNKNOWN_LICENSE',
+            'COPYRIGHT_DIALOG_ON_UPLOAD',
+            'LICENSE_PREAMBLE',
+            'DEFAULT_LICENSE_ON_UPLOAD'
+            )"
         );
         $db->exec("DROP TABLE IF EXISTS `doc_filetype`, `doc_filetype_forbidden`, `doc_usergroup_config`, `dokumente`, `files_backend_studip`, `files_backend_url`, `files_share`, `folder`, `_files`, `_file_refs`, `document_licenses`");
 
