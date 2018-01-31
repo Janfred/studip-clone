@@ -446,9 +446,23 @@ class FileManager
             // We want to update all file references. In that case we can just
             // use the $source FileRef's file directly.
             $data_file = $source->file;
+
+            $connect_success = $data_file->connectWithDataFile($uploaded_file_data['tmp_name']);
+            if (!$connect_success) {
+                $errors[] = _('Aktualisierte Datei konnte nicht ins Stud.IP Dateisystem übernommen werden!');
+                return $errors;
+            }
+            // moving the file was successful:
+            // update the File object:
+            $data_file->size      = filesize($data_file->getPath());
+            $data_file->mime_type = get_mime_type($uploaded_file_data['name']);
+            if ($update_filename) {
+                $data_file->name = $uploaded_file_data['name'];
+            }
+            $data_file->store();
         } else {
             // If we want to keep the old version of the file in all other
-            // File references we must create a new File object and link it
+            // File references we must create a new File object and link
             // the $source FileRef to it:
 
             $upload_errors = self::checkUploadedFileStatus($uploaded_file_data);
@@ -462,27 +476,30 @@ class FileManager
             $data_file->storage = 'disk';
             $data_file->id      = $data_file->getNewId();
 
+            $connect_success = $data_file->connectWithDataFile($uploaded_file_data['tmp_name']);
+            if (!$connect_success) {
+                $errors[] = _('Aktualisierte Datei konnte nicht ins Stud.IP Dateisystem übernommen werden!');
+                return $errors;
+            }
+
+            // moving the file was successful:
+            // update the File object:
+            $data_file->size      = filesize($data_file->getPath());
+            $data_file->mime_type = get_mime_type($uploaded_file_data['name']);
+            if ($update_filename) {
+                $data_file->name = $uploaded_file_data['name'];
+            }
+            $data_file->store();
+
             $source->file = $data_file;
+            $source->store();
         }
-
-        $connect_success = $data_file->connectWithDataFile($uploaded_file_data['tmp_name']);
-        if (!$connect_success) {
-            $errors[] = _('Aktualisierte Datei konnte nicht ins Stud.IP Dateisystem übernommen werden!');
-            return $errors;
-        }
-
-        // moving the file was successful:
-        // update File and FileRef object:
-        $data_file->size      = filesize($data_file->getPath());
-        $data_file->mime_type = get_mime_type($uploaded_file_data['name']);
-        if ($update_filename) {
-            $data_file->name = $uploaded_file_data['name'];
-        }
-        $data_file->store();
 
         if ($update_filename) {
             $source->name = $uploaded_file_data['name'];
-            $source->store();
+            if ($source->isDirty()) {
+                $source->store();
+            }
 
             //We must find all FileRefs that point to $data_file
             //and change their name, too:
@@ -494,7 +511,9 @@ class FileManager
 
             foreach ($other_file_refs as $other_file_ref) {
                 $other_file_ref->name = $uploaded_file_data['name'];
-                $other_file_ref->store();
+                if ($other_file_ref->isDirty()) {
+                    $other_file_ref->store();
+                }
             }
         }
 
