@@ -1449,9 +1449,9 @@ class FileController extends AuthenticatedController
             if ($result instanceof FolderType) {
                 if ($folder->store()) {
                     PageLayout::postSuccess(_('Der Ordner wurde bearbeitet.'));
-                    $this->response->add_header('X-Dialog-Close', '1');
-                    $this->render_nothing();
                 }
+                $this->response->add_header('X-Dialog-Close', '1');
+                $this->render_nothing();
             } else {
                 PageLayout::postMessage($result);
             }
