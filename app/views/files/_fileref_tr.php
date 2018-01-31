@@ -14,7 +14,7 @@
     </td>
     <td class="document-icon" data-sort-value="1">
     <? if ($current_folder->isFileDownloadable($file_ref, $GLOBALS['user']->id)) : ?>
-        <a href="<?= htmlReady($file_ref->download_url) ?>">
+        <a href="<?= htmlReady($file_ref->getDownloadURL('force_download')) ?>">
             <?= Icon::create(FileManager::getIconNameForMimeType($file_ref->mime_type), Icon::ROLE_CLICKABLE)->asImg(24) ?>
         </a>
     <? else : ?>
@@ -23,7 +23,7 @@
     </td>
     <td data-sort-value="<?= htmlReady($file_ref->name) ?>">
     <? if ($current_folder->isFileDownloadable($file_ref, $GLOBALS['user']->id)) : ?>
-        <a href="<?= htmlReady($file_ref->download_url) ?>" target="_blank">
+        <a href="<?= htmlReady($controller->url_for('file/details/' . $file_ref->id)) ?>" data-dialog="">
             <?= htmlReady($file_ref->name) ?>
         </a>
     <? else : ?>
