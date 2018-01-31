@@ -86,34 +86,32 @@ if (Request::get('copymode')) {
     </tbody>
 <? else : ?>
     <? foreach ($top_folder->getSubfolders() as $subfolder) : ?>
+        <? if ($subfolder->isWritable($GLOBALS['user']->id)): ?>
         <tr <? if ($full_access) printf('data-file="%s"', $subfolder->getId()) ?> <? if ($full_access) printf('data-folder="%s"', $subfolder->getId()); ?>>
             <td class="document-icon" data-sort-value="0">
-            <? if ($subfolder->isReadable($GLOBALS['user']->id)) : ?>
-                <a href="<?= $controller->link_for('/choose_folder/' . $subfolder->getId(), $options) ?>" data-dialog>
-            <? endif ?>
-            <? if ($is_empty): ?>
-                <?= Icon::create('folder-empty', Icon::ROLE_CLICKABLE)->asImg(24) ?>
-            <? else: ?>
-                <?= Icon::create('folder-full', Icon::ROLE_CLICKABLE)->asImg(24) ?>
-            <? endif; ?>
-            <? if ($subfolder->isReadable($GLOBALS['user']->id)) : ?>
+                <a href="<?= $controller->link_for('/choose_folder/' . $subfolder->getId(), $options) ?>"
+                   data-dialog>
+                    <? if ($is_empty): ?>
+                        <?= Icon::create('folder-empty', Icon::ROLE_CLICKABLE)->asImg(24) ?>
+                    <? else: ?>
+                        <?= Icon::create('folder-full', Icon::ROLE_CLICKABLE)->asImg(24) ?>
+                    <? endif; ?>
                 </a>
-            <? endif ?>
             </td>
             <td>
-            <? if ($subfolder->isReadable($GLOBALS['user']->id)) : ?>
-                <a href="<?= $controller->link_for('/choose_folder/' . $subfolder->getId(), $options) ?>" data-dialog>
+                <a href="<?= $controller->link_for('/choose_folder/' . $subfolder->getId(), $options) ?>"
+                   data-dialog>
                     <?= htmlReady($subfolder->name) ?>
                 </a>
-            <? else: ?>
-                <?= htmlReady($subfolder->name) ?>
-            <? endif; ?>
-            <? if ($subfolder->description): ?>
-                <small class="responsive-hidden"><?= htmlReady($subfolder->description) ?></small>
-            <? endif; ?>
+                <? if ($subfolder->description): ?>
+                    <small class="responsive-hidden">
+                        <?= htmlReady($subfolder->description) ?>
+                    </small>
+                <? endif; ?>
             </td>
         </tr>
-    <? endforeach; ?>
+        <? endif ?>
+    <? endforeach ?>
     </tbody>
 <? endif; ?>
 </table>
