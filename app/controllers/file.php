@@ -301,6 +301,15 @@ class FileController extends AuthenticatedController
             $new_description = Request::get('description');
             $new_content_terms_of_use_id = Request::get('content_terms_of_use_id');
 
+            //Check if the FileRef is unmodified:
+            if (($new_name == $this->file_ref->name) &&
+                ($new_description == $this->file_ref->description) &&
+                ($new_content_terms_of_use_id == $this->file_ref->content_terms_of_use_id)) {
+                //The FileRef is unmodified. We can redirect to the folder
+                //where the FileRef is stored in.
+                $this->redirectToFolder($this->folder);
+                return;
+            }
 
             if (Request::get("from_plugin")) {
                 $result = $this->folder->editFile($file_ref_id, $new_name, $new_description, $new_content_terms_of_use_id);
