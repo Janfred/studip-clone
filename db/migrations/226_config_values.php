@@ -89,7 +89,7 @@ class ConfigValues extends Migration
                    SET student_mailing = value WHERE field = 'COURSE_STUDENT_MAILING'");
 
         // delete no longer supported values
-        $db->exec("DELETE config, config_values FROM config JOIN config_values USING(field) WHERE `range` = 'course'");
+        $db->exec("DELETE config, config_values FROM config LEFT JOIN config_values USING(field) WHERE `range` = 'course'");
 
         // restore old primary key
         $db->exec("ALTER TABLE config
