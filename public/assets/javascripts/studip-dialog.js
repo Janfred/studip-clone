@@ -129,6 +129,10 @@
                 buttons[index] = handler;
             }
 
+            if ($(this).is(':disabled')) {
+                classes = classes + ' disabled';
+            }
+
             buttons[index]['class'] = classes;
         });
 
