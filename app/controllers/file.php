@@ -244,7 +244,7 @@ class FileController extends AuthenticatedController
                 }
             }
 
-            $this->render_template('file/file_details');
+            $this->render_action('file_details');
         } else {
             //file area object is not a FileRef: maybe it's a folder:
             if (Request::get("from_plugin")) {
@@ -258,7 +258,7 @@ class FileController extends AuthenticatedController
 
             //file system object is a Folder
             PageLayout::setTitle($this->folder->name);
-            $this->render_template('file/folder_details');
+            $this->render_action('folder_details');
         }
     }
 

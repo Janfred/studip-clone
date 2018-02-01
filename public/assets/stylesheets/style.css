@@ -4310,6 +4310,7 @@ button.button[disabled]:hover {
 .button-with-empty-icon,
 .button.accept,
 .button.cancel,
+.button.download,
 .button.edit,
 .button.move-up,
 .button.move-down,
@@ -4323,6 +4324,7 @@ button.button[disabled]:hover {
 .button-with-empty-icon:before,
 .button.accept:before,
 .button.cancel:before,
+.button.download:before,
 .button.edit:before,
 .button.move-up:before,
 .button.move-down:before,
@@ -4361,6 +4363,20 @@ button.button[disabled]:hover {
 }
 .button.cancel:hover:before {
   background-image: url("../images/icons/white/decline.svg");
+  -webkit-background-size: 16px 16px;
+  -moz-background-size: 16px 16px;
+  -o-background-size: 16px 16px;
+  background-size: 16px 16px;
+}
+.button.download:before {
+  background-image: url("../images/icons/blue/download2.svg");
+  -webkit-background-size: 16px 16px;
+  -moz-background-size: 16px 16px;
+  -o-background-size: 16px 16px;
+  background-size: 16px 16px;
+}
+.button.download:hover:before {
+  background-image: url("../images/icons/white/download2.svg");
   -webkit-background-size: 16px 16px;
   -moz-background-size: 16px 16px;
   -o-background-size: 16px 16px;
@@ -8759,14 +8775,14 @@ table.default tr.subcourses td:nth-child(-n+4) {
   background-size: 16px 16px;
 }
 .ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.download:before {
-  background-image: url("../images/icons/blue/download.svg");
+  background-image: url("../images/icons/blue/download2.svg");
   -webkit-background-size: 16px 16px;
   -moz-background-size: 16px 16px;
   -o-background-size: 16px 16px;
   background-size: 16px 16px;
 }
 .ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.download:hover:before {
-  background-image: url("../images/icons/white/download.svg");
+  background-image: url("../images/icons/white/download2.svg");
   -webkit-background-size: 16px 16px;
   -moz-background-size: 16px 16px;
   -o-background-size: 16px 16px;
