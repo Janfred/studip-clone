@@ -108,8 +108,10 @@
     function extractButtons(element) {
         var buttons = {};
         $('[data-dialog-button]', element).hide().find('a,button').addBack().filter('a,button').each(function () {
-            var label = $(this).text(),
-                cancel = $(this).is('.cancel'),
+            var label   = $(this).text(),
+                cancel  = $(this).is('.cancel'),
+                index   = cancel ? 'cancel' : label,
+                classes = $(this).attr('class').replace(/\bbutton\b/, '').trim(),
                 handler;
 
             handler = function (event) {
@@ -119,14 +121,15 @@
             handler = handler.bind(this);
 
             if ($(this).is('.accept,.cancel')) {
-                buttons[cancel ? 'cancel' : label] = {
+                buttons[index] = {
                     text: label,
-                    click: handler,
-                    'class': cancel ? 'cancel' : 'accept'
+                    click: handler
                 };
             } else {
-                buttons[label] = handler;
+                buttons[index] = handler;
             }
+
+            buttons[index]['class'] = classes;
         });
 
         return buttons;
