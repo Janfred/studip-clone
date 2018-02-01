@@ -4314,8 +4314,10 @@ button.button[disabled]:hover {
 .button.move-up,
 .button.move-down,
 .button.add,
+.button.download,
 .ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.accept,
-.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.cancel {
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.cancel,
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.download {
   white-space: nowrap;
 }
 .button-with-empty-icon:before,
@@ -4325,8 +4327,10 @@ button.button[disabled]:hover {
 .button.move-up:before,
 .button.move-down:before,
 .button.add:before,
+.button.download:before,
 .ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.accept:before,
-.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.cancel:before {
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.cancel:before,
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.download:before {
   background: no-repeat;
   content: " ";
   float: left;
@@ -4413,6 +4417,20 @@ button.button[disabled]:hover {
 }
 .button.add:hover:before {
   background-image: url("../images/icons/white/add.svg");
+  -webkit-background-size: 16px 16px;
+  -moz-background-size: 16px 16px;
+  -o-background-size: 16px 16px;
+  background-size: 16px 16px;
+}
+.button.download:before {
+  background-image: url("../images/icons/blue/download.svg");
+  -webkit-background-size: 16px 16px;
+  -moz-background-size: 16px 16px;
+  -o-background-size: 16px 16px;
+  background-size: 16px 16px;
+}
+.button.download:hover:before {
+  background-image: url("../images/icons/white/download.svg");
   -webkit-background-size: 16px 16px;
   -moz-background-size: 16px 16px;
   -o-background-size: 16px 16px;
@@ -8735,6 +8753,20 @@ table.default tr.subcourses td:nth-child(-n+4) {
 }
 .ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.cancel:hover:before {
   background-image: url("../images/icons/white/decline.svg");
+  -webkit-background-size: 16px 16px;
+  -moz-background-size: 16px 16px;
+  -o-background-size: 16px 16px;
+  background-size: 16px 16px;
+}
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.download:before {
+  background-image: url("../images/icons/blue/download.svg");
+  -webkit-background-size: 16px 16px;
+  -moz-background-size: 16px 16px;
+  -o-background-size: 16px 16px;
+  background-size: 16px 16px;
+}
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-buttonpane .ui-button.download:hover:before {
+  background-image: url("../images/icons/white/download.svg");
   -webkit-background-size: 16px 16px;
   -moz-background-size: 16px 16px;
   -o-background-size: 16px 16px;
