@@ -45,9 +45,9 @@
     ) ?>
 <? endif; ?>
 <? if ($is_downloadable) : ?>
-    <?= Studip\LinkButton::create(
+    <?= Studip\LinkButton::createDownload(
         _('Herunterladen'),
-        $file_ref->getDownloadURL()
+        $file_ref->getDownloadURL('force_download')
     ) ?>
 <? endif; ?>
 </div>
