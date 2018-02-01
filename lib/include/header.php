@@ -24,11 +24,6 @@
  * Bei Nutzung dieser Funktion unbedingt die Texte unter locale/de/LC_HELP/visibility_decision.php bzw.
  * locale/en/LC_HELP/visibility_decision.php an die lokalen Verhältnisse anpassen!
  */
-if (Config::get()->USER_VISIBILITY_CHECK && is_object($GLOBALS['user']) && $GLOBALS['user']->id !== 'nobody') {
-   require_once('lib/user_visible.inc.php');
-   first_decision($GLOBALS['user']->id);
-}
-
 if (PageLayout::isHeaderEnabled()) //Einige Seiten benötigen keinen Header, sprich Navigation (Evaluation usw.)
 {
     $header_template = $GLOBALS['template_factory']->open('header');

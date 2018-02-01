@@ -1,4 +1,4 @@
-<h1><font color"red">THIS IS JUST AN EXAMPLE TEXT. DON'T USE UNMODIFIED.</font></h1>
+<?= MessageBox::error('THIS IS JUST AN EXAMPLE TEXT. DON\'T USE UNMODIFIED.')?>
 <table width="100%" border="0" cellspacing="10" cellpadding="10">
 <tr>
 <td colspan=2><h1>Changes of visibility in Stud.IP</h1>
@@ -52,7 +52,8 @@ You <em>now</em> have the possibility to decide whether to be visible as usual a
 </td>
 </tr>
 <tr>
-<td width=50% align=center valign=top><a href="<?=URLHelper::getLink('?vis_state=yes&vis_cmd=apply')?>"><?= Assets::img('an.png') ?><br>become visible</a></td>
+<td width=50% align=center valign=top>
+    <?= \Studip\LinkButton::create('Become visible',URLHelper::getLink('?vis_state=yes&vis_cmd=apply')) ?>
 </tr>
 </table>
 </td>
@@ -64,7 +65,9 @@ You <em>now</em> have the possibility to decide whether to be visible as usual a
 <p>I note that my personal data - as described and well-founded in the <a href="<?= URLHelper::getLink('datenschutz.php') ?>" class="link-intern" target="_blank">explanation of data protection</a> - is nevertheless accessible for administrators and partly for lecturers of my courses.
 </tr>
 <tr>
-<td width=50% align=center valign=top><a href="<?=URLHelper::getLink('?vis_state=no&vis_cmd=apply')?>"><?= Assets::img('aus.png') ?><br>become invisible</a></td>
+<td width=50% align=center valign=top>
+    <?= \Studip\LinkButton::create('Become visible',URLHelper::getLink('?vis_state=no&vis_cmd=apply')) ?>
+</td>
 </tr>
 </table>
 </td></tr>

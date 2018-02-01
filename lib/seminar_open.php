@@ -135,21 +135,28 @@ if ((Navigation::hasItem('/course/admin') || $GLOBALS['perm']->have_perm('admin'
     $plus_nav->setDescription(_("Mehr Stud.IP-Funktionen für Ihre Veranstaltung"));
     Navigation::addItem('/course/modules', $plus_nav);
 }
+
 // add navigation item for profile: add modules
 if (Navigation::hasItem('/profile/edit')) {
     $plus_nav = new Navigation(_('Mehr …'), 'dispatch.php/profilemodules/index');
     $plus_nav->setDescription(_("Mehr Stud.IP-Funktionen für Ihr Profil"));
     Navigation::addItem('/profile/modules', $plus_nav);
 }
+
 if ($user_did_login) {
     NotificationCenter::postNotification('UserDidLogin', $user->id);
 }
+
 if ($seminar_open_redirected) {
     startpage_redirect(UserConfig::get($user->id)->PERSONAL_STARTPAGE);
 }
 
-if (Config::get()->SHOW_TERMS_ON_FIRST_LOGIN && is_object($GLOBALS['user']) && $GLOBALS['user']->id != 'nobody')
-{
+if (Config::get()->SHOW_TERMS_ON_FIRST_LOGIN && is_object($GLOBALS['user']) && $GLOBALS['user']->id != 'nobody') {
     require_once('lib/terms.inc.php');
     check_terms($GLOBALS['user']->id, $GLOBALS['_language_path']);
+}
+
+if (Config::get()->USER_VISIBILITY_CHECK && is_object($GLOBALS['user']) && $GLOBALS['user']->id !== 'nobody') {
+    require_once('lib/user_visible.inc.php');
+    first_decision($GLOBALS['user']->id);
 }

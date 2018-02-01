@@ -1,4 +1,4 @@
-<h1><font color="red">DIES IST NUR EIN BEISPIELTEXT. NICHT OHNE LOKALE ANPASSUNGEN VERWENDEN!</font></h1>
+<?= MessageBox::error('DIES IST NUR EIN BEISPIELTEXT. NICHT OHNE LOKALE ANPASSUNGEN VERWENDEN!') ?>
 <table width="100%" border="0" cellspacing="10" cellpadding="10">
 <tr>
 <td colspan=2><h1>Änderungen zur Sichtbarkeit in Stud.IP</h1>
@@ -60,7 +60,9 @@ anderen zugänglich sind.</p>
 </td>
 </tr>
 <tr>
-    <td width=50% align=center valign=top><a href="<?=URLHelper::getLink('?vis_state=yes&vis_cmd=apply')?>"><?= Assets::img('an.png') ?><br>sichtbar werden</a></td>
+    <td width=50% align=center valign=top>
+        <?= \Studip\LinkButton::create('Sichtbar werden',URLHelper::getLink('?vis_state=yes&vis_cmd=apply')) ?>
+    </td>
 </tr>
 </table>
 </td>
@@ -74,7 +76,9 @@ beschrieben und begründet dennoch Administrator/-innen und, in Teilen, den
 Lehrenden meiner Veranstaltungen zugänglich sind.
 </tr>
 <tr>
-    <td width=50% align=center valign=top><a href="<?=URLHelper::getLink('?vis_state=no&vis_cmd=apply')?>"><?= Assets::img('aus.png') ?><br>unsichtbar werden</a></td>
+    <td width=50% align=center valign=top>
+        <?= \Studip\LinkButton::create('Unsichtbar werden',URLHelper::getLink('?vis_state=no&vis_cmd=apply')) ?>
+    </td>
 </tr>
 </table>
 </td></tr>
