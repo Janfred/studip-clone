@@ -34,7 +34,7 @@
             <td>
                 <?= count($domain->getUsers()) ?>
             </td>
-            <td class="actions">
+            <td class="action">
                 <a href="<?= $controller->url_for('admin/domain/edit?id=' . $domain->getID()) ?>">
                     <?= Icon::create('edit', 'clickable', ['title' => _('bearbeiten')])->asImg() ?>
                 </a>
