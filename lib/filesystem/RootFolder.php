@@ -48,7 +48,7 @@ class RootFolder extends StandardFolder
     public function isWritable($user_id)
     {
         return ($this->range_type === 'user' && $this->range_id === $user_id)
-            || Seminar_Perm::get()->have_studip_perm('tutor', $this->range_id, $user_id);
+            || Seminar_Perm::get()->have_studip_perm('autor', $this->range_id, $user_id);
     }
 
     /**
