@@ -625,7 +625,13 @@ class FileController extends AuthenticatedController
             if (!$plugin) {
                 throw new Trails_Exception(404, _('Plugin existiert nicht.'));
             }
-            $this->file_ref = $plugin->getPreparedFile($file_id);
+
+            if (!Request::get("isfolder")) {
+                $this->file_ref = $plugin->getPreparedFile($file_id);
+            } else {
+                $this->parent_folder = $plugin->getFolder($file_id);
+            }
+            
         } else {
 
             if (is_array($fileref_id)) {
@@ -633,6 +639,7 @@ class FileController extends AuthenticatedController
                 $this->file_ref = FileRef::find($refs[0]);
             } else {
                 $this->file_ref = FileRef::find($fileref_id);
+
                 $this->fileref_id = array($fileref_id);
             }
         }
@@ -646,7 +653,7 @@ class FileController extends AuthenticatedController
             if ($folder) {
                 $this->parent_folder = Folder::find($folder->parent_id);
             }
-        } else {
+        } elseif (!$this->parent_folder) {
             throw new AccessDeniedException();
         }
 
