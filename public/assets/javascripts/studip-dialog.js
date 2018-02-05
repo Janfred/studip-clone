@@ -111,8 +111,10 @@
             var label   = $(this).text(),
                 cancel  = $(this).is('.cancel'),
                 index   = cancel ? 'cancel' : label,
-                classes = $(this).attr('class').replace(/\bbutton\b/, '').trim(),
+                classes = $(this).attr('class') || '',
                 handler;
+
+            classes = classes.replace(/\bbutton\b/, '').trim();
 
             handler = function (event) {
                 // TODO: Find a convenient way to disable buttons
