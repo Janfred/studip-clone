@@ -10,9 +10,6 @@ $translations = array(
     // app/views/messages/overview.php
     'Wirklich %s Nachrichten löschen?' => _('Wirklich %s Nachrichten löschen?'),
 
-    // js-errors.js
-    'Die Person ist bereits eingetragen.' => _('Die Person ist bereits eingetragen.'),
-
     // public/assets/javascripts/admission.js
     'Wird geladen' => _('Wird geladen'),
     'Anmelderegel konfigurieren' => _('Anmelderegel konfigurieren'),
@@ -35,6 +32,9 @@ $translations = array(
     'Freitag' => _('Freitag'),
     'Samstag' => _('Samstag'),
     'Sonntag' => _('Sonntag'),
+
+    // public/assets/javascripts/copyable-links.js
+    'Link wurde kopiert' => _('Link wurde kopiert'),
 
     // public/assets/javascripts/file_system.js
     'Objekt aufklappen' => _('Objekt aufklappen'),
@@ -114,7 +114,10 @@ $translations = array(
     'Wollen Sie die Aktion wirklich ausführen?' => _('Wollen Sie die Aktion wirklich ausführen?'),
     'Die beiden Werte "$1" und "$2" stimmen nicht überein. ' => _('Die beiden Werte "$1" und "$2" stimmen nicht überein. '),
 
-    // public/assets/javascripts/studip-secure-forms.js
+    // public/assets/javascripts/studip-jquery.multi-select.tweaks.js
+    'Die Person ist bereits eingetragen.' => _('Die Person ist bereits eingetragen.'),
+
+    // public/assets/javascripts/studip-overlay.js
     'Ihre Eingaben wurden bislang noch nicht gespeichert.' => _('Ihre Eingaben wurden bislang noch nicht gespeichert.'),
 
     // public/assets/javascripts/studip-ui.js
