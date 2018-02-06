@@ -358,15 +358,21 @@ class StandardFolder implements FolderType
 
     /**
      * @param FolderType $foldertype
-     * @return bool
+     * @return FolderType|null
      */
     public function createSubfolder(FolderType $foldertype)
     {
-        $foldertype->range_id   = $this->folderdata['range_id'];
-        $foldertype->range_type = $this->folderdata['range_type'];
-        $foldertype->parent_id  = $this->folderdata['id'];
-        if($foldertype->store()) {
-            return $foldertype;
+        $type = get_class($foldertype);
+        if (!$type::availableInRange($this->folderdata['range_type'], $GLOBALS['user']->id)) {
+            $type = get_class($this);
+        }
+        $folder = new $type();
+        $folder->name = $foldertype->name;
+        $folder->range_id = $this->folderdata['range_id'];
+        $folder->range_type = $this->folderdata['range_type'];
+        $folder->parent_id = $this->folderdata['id'];
+        if ($folder->store()) {
+            return $folder;
         }
 
         #In case something went wrong while storing the subfolder:

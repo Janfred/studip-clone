@@ -817,7 +817,7 @@ class FileManager
 
         } else {
             $copy = self::copyFileRef($source, $destination_folder, $user);
-            if(!is_array($copy)) {
+            if (!is_array($copy)) {
                 $source_folder->deleteFile($source->getId());
             }
             return $copy;
@@ -1108,8 +1108,8 @@ class FileManager
         //now go through all files and copy them, too:
         foreach ($source_folder->getFiles() as $file_ref) {
             if (!($file_ref instanceof FileRef)) {
-                $file_ref = FileRef::build($file_ref, false);
-                $file_ref->setFolderType($source_folder);
+                $file_ref = FileRef::build((array) $file_ref, false);
+                $file_ref->setFolderType('foldertype', $source_folder);
             }
             $result = self::copyFileRef($file_ref, $new_folder, $user);
             if (!$result instanceof FileRef) {
@@ -1164,9 +1164,37 @@ class FileManager
             ];
         }
 
-        return $destination_folder->createSubfolder(
+        $new_folder = $destination_folder->createSubfolder(
             $source_folder
         );
+        if (!is_a($new_folder, "FolderType")) {
+            return [_('Fehler beim Verschieben des Ordners.')];
+        } else {
+            //now we go through all subfolders and move them:
+            foreach ($source_folder->getSubfolders() as $sub_folder) {
+                $result = self::moveFolder($sub_folder, $new_folder, $user);
+                if (!$result instanceof FolderType) {
+                    //error
+                    return $result;
+                }
+            }
+
+            //now go through all files and move them, too:
+            foreach ($source_folder->getFiles() as $file_ref) {
+                if (!($file_ref instanceof FileRef)) {
+                    $file_ref = FileRef::build((array) $file_ref, false);
+                    $file_ref->setFolderType('foldertype', $source_folder);
+                }
+                $result = self::moveFileRef($file_ref, $new_folder, $user);
+                if (!$result instanceof FileRef) {
+                    //error
+                    return $result;
+                }
+            }
+
+            $source_folder->delete();
+            return $new_folder;
+        }
     }
 
     /**
