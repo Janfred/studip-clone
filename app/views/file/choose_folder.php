@@ -147,6 +147,7 @@ switch ($top_folder->range_type) {
                 'from_plugin'     => $options['from_plugin'],
                 'to_plugin'  => $options['to_plugin'],
                 'fileref_id' => $options['fileref_id'],
+                'isfolder'   => $options['isfolder'],
                 'copymode'   => $options['copymode']
             ])
         ) ?>

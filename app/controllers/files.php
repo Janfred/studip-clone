@@ -292,14 +292,30 @@ class FilesController extends AuthenticatedController
                     if (!$source_plugin) {
                         throw new Trails_Exception(404, _('Plugin existiert nicht.'));
                     }
-                    if ($source = $source_plugin->getPreparedFile($fileref, true)) {
-                        if ($copymode === 'move') {
-                            $result = FileManager::moveFileRef($source, $destination_folder, $user);
-                        } else {
-                            $result = FileManager::copyFileRef($source, $destination_folder, $user);
+                    if (Request::get("isfolder")) {
+                        if ($source_folder = $source_plugin->getFolder($fileref)) {
+                            if ($copymode === 'move') {
+                                $result = FileManager::moveFolder($source_folder, $destination_folder, $user);
+                            } else {
+                                $result = FileManager::copyFolder($source_folder, $destination_folder, $user);
+                            }
+                            if (!is_array($result)) {
+                                $count_folders += 1;
+                                $children = $this->countChildren($result);
+                                $count_files   += $children[0];
+                                $count_folders += $children[1];
+                            }
                         }
-                        if (!is_array($result)) {
-                            $count_files += 1;
+                    } else {
+                        if ($source = $source_plugin->getPreparedFile($fileref, true)) {
+                            if ($copymode === 'move') {
+                                $result = FileManager::moveFileRef($source, $destination_folder, $user);
+                            } else {
+                                $result = FileManager::copyFileRef($source, $destination_folder, $user);
+                            }
+                            if (!is_array($result)) {
+                                $count_files += 1;
+                            }
                         }
                     }
                 } else {
