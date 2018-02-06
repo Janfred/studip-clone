@@ -142,6 +142,11 @@ class Admin_CourseWizardStepsController extends AuthenticatedController
         $this->redirect($this->url_for('admin/coursewizardsteps'));
     }
 
+    /**
+     * Toggles the activation state of a step.
+     *
+     * @param string $id Id of the step
+     */
     public function toggle_enabled_action($id)
     {
         $step = CourseWizardStepRegistry::find($id);
