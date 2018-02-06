@@ -144,6 +144,8 @@ class Stream implements \ArrayAccess, \Countable, \IteratorAggregate
 
             if (in_array($activity->actor_id, array('____%system%____', 'system')) !== false) {
                 $actor = _('Stud.IP');
+            } elseif ($activity->actor_type === 'anonymous') {
+                $actor = _('Anonym');
             } else {
                 $actor = get_fullname($activity->actor_id);
             }

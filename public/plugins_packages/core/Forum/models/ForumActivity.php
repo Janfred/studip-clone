@@ -49,14 +49,14 @@ class ForumActivity
         if ($post['user_id'] == $GLOBALS['user']->id) {
             $content = sprintf(
                 _('%s hat seinen eigenen Beitrag vom %s editiert.'),
-                get_fullname($post['user_id']),
+                self::getPostUsername($post),
                 date('d.m.y, H:i', $post['mkdate'])
             );
         } else {
             $content = sprintf(
                 _('%s hat den Beitrag von %s vom %s editiert.'),
-                get_fullname($post['user_id']),
                 get_fullname($GLOBALS['user']->id),
+                self::getPostUsername($post),
                 date('d.m.y, H:i', $post['mkdate'])
             );
         }
@@ -77,14 +77,14 @@ class ForumActivity
         if ($post['user_id'] == $GLOBALS['user']->id) {
             $content = sprintf(
                 _('%s hat seinen Beitrag vom %s gelöscht.'),
-                get_fullname($GLOBALS['user']->id),
+                self::getPostUsername($post),
                 date('d.m.y, H:i', $post['mkdate'])
             );
         } else {
             $content = sprintf(
                 _('%s hat den Beitrag von %s vom %s gelöscht.'),
-                get_fullname($post['user_id']),
                 get_fullname($GLOBALS['user']->id),
+                self::getPostUsername($post),
                 date('d.m.y, H:i', $post['mkdate'])
             );
         }
@@ -104,20 +104,39 @@ class ForumActivity
 
         $obj = get_object_name($range_id, $type);
 
-        $activity = Studip\Activity\Activity::create(
-            array(
-                'provider'     => 'Studip\Activity\ForumProvider',
-                'context'      => $type === 'sem' ? 'course' : 'institute',
-                'context_id'   => $post['seminar_id'],
-                'content'      => null,
-                'actor_type'   => 'user',             // who initiated the activity?
-                'actor_id'     => $post['user_id'],   // id of initiator
-                'verb'         => $verb,              // the activity type
-                'object_id'    => $post['topic_id'],  // the id of the referenced object
-                'object_type'  => 'forum',            // type of activity object
-                'mkdate'       => $post['mkdate'] ?: time()
-            )
-        );
+        $data = [
+            'provider'     => 'Studip\Activity\ForumProvider',
+            'context'      => $type === 'sem' ? 'course' : 'institute',
+            'context_id'   => $post['seminar_id'],
+            'content'      => null,
+            'actor_type'   => 'user',             // who initiated the activity?
+            'actor_id'     => $post['user_id'],   // id of initiator
+            'verb'         => $verb,              // the activity type
+            'object_id'    => $post['topic_id'],  // the id of the referenced object
+            'object_type'  => 'forum',            // type of activity object
+            'mkdate'       => $post['mkdate'] ?: time()
+        ];
 
+        if ($post['anonymous']) {
+            $data['actor_type'] = 'anonymous';
+            $data['actor_id']   = '';
+        }
+
+        $activity = Studip\Activity\Activity::create($data);
+    }
+
+    /**
+     * Returns the poster's name for a forum post.
+     *
+     * @param array $post
+     * @return string
+     */
+    private static function getPostUsername($post)
+    {
+        if ($post['anonymous']) {
+            return _('Anonym');
+        }
+
+        return get_fullname($post['user_id']);
     }
 }

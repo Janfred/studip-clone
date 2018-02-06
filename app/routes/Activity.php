@@ -132,7 +132,6 @@ class Activity extends \RESTAPI\RouteMap
         $stream = new \Studip\Activity\Stream($contexts, $filter);
         $data = $stream->toArray();
 
-
         foreach ($data as $key => $act) {
             $actor = array(
                 'type' => $data[$key]['actor_type'],
@@ -142,6 +141,10 @@ class Activity extends \RESTAPI\RouteMap
             if ($data[$key]['actor_type'] == 'user') {
                 $a_user = \User::findFull($data[$key]['actor_id']);
                 $actor['details'] = User::getMiniUser($this, $a_user ?: new \User());
+            } elseif ($data[$key]['actor_type'] === 'anonymous') {
+                $actor['details'] = [
+                    'name' => _('Anonym'),
+                ];
             }
 
             unset($data[$key]['actor_type']);

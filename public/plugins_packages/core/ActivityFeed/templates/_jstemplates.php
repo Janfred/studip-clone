@@ -53,9 +53,11 @@
             <% } %>
             </span>
             <div class="activity-heading">
+            <% if (activity.actor.type !== 'anonymous') { %>
                 <a href="<%- STUDIP.URLHelper.resolveURL('dispatch.php/profile?username=' + activity.actor.details.name.username) %>">
                     <img src="<%- activity.actor.details.avatar_small  %>">
                 </a>
+            <% } %>
                 <h3>
                     <%- activity.title %>
                 </h3>
