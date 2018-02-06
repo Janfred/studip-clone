@@ -666,22 +666,77 @@ class FileManager
             $destination_plugin = PluginManager::getInstance()->getPlugin($destination_folder->range_type);;
         }
 
-        if ($source->user_id === $user->id && !$destination_plugin && !$source_plugin) {
+        if (!$destination_plugin && !$source_plugin) {
+            //We copy a file from a Stud.IP file area to another
+            //Stud.IP file area. No file system plugin is involved.
+            if ($source->user_id === $user->id) {
+                //The user is the owner of the file:
+                //We can simply make a new reference to it
+                $new_reference = new FileRef();
+                $new_reference->file_id     = $source->file_id;
+                $new_reference->folder_id   = $destination_folder->getId();
+                $new_reference->name        = $source->file->name;
+                $new_reference->description = $source->description;
+                $new_reference->user_id     = $user->id;
+                $new_reference->content_terms_of_use_id = $source->content_terms_of_use_id;
 
-            // the user is the owner of the file: we can simply make a new reference to it
-             $new_reference = new FileRef();
-             $new_reference->file_id     = $source->file_id;
-             $new_reference->folder_id   = $destination_folder->getId();
-             $new_reference->name        = $source->file->name;
-             $new_reference->description = $source->description;
-             $new_reference->user_id     = $user->id;
-             $new_reference->content_terms_of_use_id = $source->content_terms_of_use_id;
+                if ($new_reference->store()) {
+                    return $new_reference;
+                }
+            } else {
+                //The user is not the owner of the file:
+                //We must also copy the data (the File object).
 
-             if ($new_reference->store()) {
-                 return $new_reference;
-             }
+                $copied_file = new File();
+                $copied_file->user_id = $user->id;
+                $copied_file->mime_type = $source->file->mime_type;
+                $copied_file->name = $source->file->name;
+                $copied_file->size = $source->file->size;
+                $copied_file->storage = $source->file->storage;
+                $copied_file->author_name = $user->getFullName('no_title');
+                $copied_file->id = $copied_file->getNewId();
+                if ($copied_file->storage == 'disk') {
+                    //We must copy the physical data.
+                    $copy_path = $GLOBALS['TMP_PATH'] . '/' . $copied_file->id;
+                    if (!copy($source->file->getPath(), $copy_path)) {
+                        return [
+                            _('Daten konnten nicht kopiert werden!')
+                        ];
+                    }
+                    if ($copied_file->connectWithDataFile($copy_path)) {
+                        @unlink($copy_path);
+                    } else {
+                        return [
+                            _('Daten konnten nicht kopiert werden!')
+                        ];
+                    }
+                } else {
+                    //We can simply copy the URL field's value.
+                    $copied_file->url = $source->file->url;
+                }
 
-             return[_('Neue Referenz kann nicht erzeugt werden!')];
+                if (!$copied_file->store()) {
+                    return [
+                        _('Daten konnten nicht kopiert werden!')
+                    ];
+                }
+
+                //We finished copying the real data.
+                //Now we must copy the FileRef:
+                $copied_reference = new FileRef();
+                $copied_reference->file_id = $copied_file->id;
+                $copied_reference->folder_id = $destination_folder->getId();
+                $copied_reference->name = $source->name;
+                $copied_reference->description = $source->description;
+                $copied_reference->user_id = $user->id;
+                $copied_reference->content_terms_of_use_id = $source->content_terms_of_use_id;
+
+                if ($copied_reference->store()) {
+                    return $copied_reference;
+                }
+            }
+
+            return[_('Neue Referenz kann nicht erzeugt werden!')];
 
         } else {
 
