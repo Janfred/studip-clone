@@ -1111,6 +1111,9 @@ class FileManager
 
         //now go through all files and copy them, too:
         foreach ($source_folder->getFiles() as $file_ref) {
+            if (!($file_ref instanceof FileRef)) {
+                $file_ref = FileRef::build($file_ref, false);
+            }
             $result = self::copyFileRef($file_ref, $new_folder, $user);
             if (!$result instanceof FileRef) {
                 return $result;
