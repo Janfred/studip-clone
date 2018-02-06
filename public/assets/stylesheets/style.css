@@ -3657,6 +3657,9 @@ section.contentbox > article.indented > header {
 .action-menu .action-menu-item a {
   padding-left: 0;
 }
+.action-menu .action-menu-item a[disabled] {
+  color: #636971;
+}
 .action-menu .action-menu-item img,
 .action-menu .action-menu-item svg,
 .action-menu .action-menu-item .action-menu-no-icon,

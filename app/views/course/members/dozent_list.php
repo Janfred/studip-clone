@@ -80,6 +80,13 @@
                         Icon::create('mail', 'clickable', ['title' => sprintf('Nachricht mit Weiterleitung an %s senden', $fullname)]),
                         ['data-dialog' => '1']
                     ) ?>
+                <? else: ?>
+                    <? $actionMenu->addLink(
+                        '#',
+                        _('Nachricht mit Mailweiterleitung senden'),
+                        Icon::create('mail', Icon::ROLE_INACTIVE),
+                        ['disabled' => true]
+                    ) ?>
                 <? endif ?>
                 <? if (!$dozent_is_locked && $is_dozent && $user_id !== $dozent['user_id'] && count($dozenten) > 1) : ?>
                     <? $actionMenu->addLink(

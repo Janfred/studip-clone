@@ -144,6 +144,13 @@
                             ]),
                             ['data-dialog' => '']
                         ) ?>
+                    <? else: ?>
+                        <? $actionMenu->addLink(
+                            '#',
+                            _('Nachricht mit Mailweiterleitung senden'),
+                            Icon::create('mail', Icon::ROLE_INACTIVE),
+                            ['disabled' => true]
+                        ) ?>
                     <? endif ?>
                     <? if ($is_tutor && !$is_locked) : ?>
                         <? $actionMenu->addLink(

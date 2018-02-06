@@ -115,6 +115,13 @@
                             Icon::create('mail', 'clickable', ['title' => sprintf(_('Nachricht mit Weiterleitung an %s senden'), $fullname)]),
                             ['data-dialog' => '']
                         ) ?>
+                    <? else: ?>
+                        <? $actionMenu->addLink(
+                            '#',
+                            _('Nachricht mit Mailweiterleitung senden'),
+                            Icon::create('mail', Icon::ROLE_INACTIVE),
+                            ['disabled' => true]
+                        ) ?>
                     <? endif ?>
 
                     <? if ($is_tutor) : ?>
