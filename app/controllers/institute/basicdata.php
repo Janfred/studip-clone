@@ -274,21 +274,12 @@ class Institute_BasicdataController extends AuthenticatedController
             // no way expensive, so it can be constructed twice, don't worry)
             $modules = new Modules;
             $module_list = $modules->getLocalModules($institute->id, 'inst', $institute->modules, $institute->type);
-            if (isset($module_list['documents'])) {
-                create_folder(
-                    _('Allgemeiner Dateiordner'),
-                    _('Ablage für allgemeine Ordner und Dokumente der Einrichtung'),
-                    $institute->id,
-                    7,
-                    $institute->id
-                );
-            }
 
             // Report success
             $message = sprintf(_('Die Einrichtung "%s" wurde erfolgreich angelegt.'), $institute->name);
             PageLayout::postMessage(MessageBox::success($message));
 
-            object_set_visit($institute_id, "inst");
+            object_set_visit($institute->id, "inst");
         } else {
             // Report success
             $message = sprintf(_('Die Änderung der Einrichtung "%s" wurde erfolgreich gespeichert.'), htmlReady($institute->name));
