@@ -685,27 +685,23 @@ class FileManager
 
         } else {
 
-            if ($source_plugin && $source_plugin->getFolder($source->id)){
+            if ($source_plugin) {
+                $prepared_file_ref = $source_plugin->getPreparedFile($source->id, true);
 
-                $source = $source_plugin->getFolder($source->id);
+                $file_meta = array(
+                    'name' => $prepared_file_ref->name,
+                    'error' => [0],
+                    'type' => $prepared_file_ref->mime_type,
+                    'tmp_name' => $prepared_file_ref->path_to_blob,
+                    'size' => $prepared_file_ref->size
+                );
+                $result = $destination_folder->createFile($file_meta);
 
-                $new_folder = new StandardFolder($source);
-                $new_folder->user_id = $user->id;
-                $new_folder->name = $source->name;
-
-                $destination_folder->createSubfolder($new_folder);
-
-                if($new_folder) {
-                    foreach ($source->getSubfolders() as $subsubfolder) {
-                        $fake_ref = $source_plugin->getPreparedFile($subsubfolder->id);
-                        $return[] = self::copyFileRef($fake_ref, $new_folder, $user);
-                    }
-                    foreach ($source->getFiles() as $subfile) {
-                        $subfile_ref = $source_plugin->getPreparedFile($subfile->id, true);
-                        $return[] = self::copyFileRef($subfile_ref, $new_folder, $user);
-                    }
+                if (is_a($result, "MessageBox")) {
+                    return [$result->message];
+                } else {
+                    return $result;
                 }
-                return $new_folder;
 
             } else {
 
@@ -1113,6 +1109,7 @@ class FileManager
         foreach ($source_folder->getFiles() as $file_ref) {
             if (!($file_ref instanceof FileRef)) {
                 $file_ref = FileRef::build($file_ref, false);
+                $file_ref->setFolderType($source_folder);
             }
             $result = self::copyFileRef($file_ref, $new_folder, $user);
             if (!$result instanceof FileRef) {
