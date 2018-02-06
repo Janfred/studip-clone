@@ -81,7 +81,7 @@ class Admin_CourseWizardStepsController extends AuthenticatedController
      * Saves data for a new or existing step.
      * @param string $id ID of the step to save; if empty, create new step.
      */
-    public function save_action($id='')
+    public function save_action($id = '')
     {
         CSRFProtection::verifyUnsafeRequest();
         if (Request::submitted('submit')) {
@@ -122,7 +122,7 @@ class Admin_CourseWizardStepsController extends AuthenticatedController
         }
         $this->redirect($this->url_for('admin/coursewizardsteps'));
     }
-    
+
     /**
      * Deletes the given entry from step registry.
      * @param $id ID of the entry to delete
@@ -140,6 +140,22 @@ class Admin_CourseWizardStepsController extends AuthenticatedController
             }
         }
         $this->redirect($this->url_for('admin/coursewizardsteps'));
+    }
+
+    public function toggle_enabled_action($id)
+    {
+        $step = CourseWizardStepRegistry::find($id);
+        $step->enabled = !$step->enabled;
+        $step->store();
+
+        if (!Request::isXhr()) {
+            $message = $step->enabled
+                     ? _('Der Schritt wurde aktiviert')
+                     : _('Der Schritt wurde deaktiviert');
+            PageLayout::postSuccess($message);
+        }
+
+        $this->redirect("admin/coursewizardsteps#wizard-step-{$id}");
     }
 
 }

@@ -9,26 +9,6 @@
                .siblings().removeClass('selected');
     });
 
-    // Global handler:
-    // Toggle a table element. The url of the link will be called, an ajax
-    // indicator will be shown instead of the element and the whole table row
-    // will be replaced with the row with the same id from the response.
-    // Thus, in your controller you only have to execute the appropriate
-    // action and redraw the page with the new state.
-    $(document).on('click', 'a[data-behaviour~="ajax-toggle"]', function (event) {
-        var $that = $(this),
-            href  = $that.attr('href'),
-            id    = $that.closest('tr').attr('id');
-
-        $that.prop('disabled', true).addClass('ajaxing');
-        $.get(href, function (response) {
-            var row = $('#' + id, response);
-            $that.closest('tr').replaceWith(row);
-        });
-
-        event.preventDefault();
-    });
-
     // Cron item:
     // Display the following element and focus it's inherent input element
     // if no value from a select element has been chosen. Hide the following
