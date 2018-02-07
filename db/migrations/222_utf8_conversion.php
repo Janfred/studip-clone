@@ -158,6 +158,8 @@ class Utf8Conversion extends Migration
             }
         }
 
+        $db->exec("ALTER TABLE `session_data` CHANGE COLUMN `val` `val` mediumblob NOT NULL");
+
         // drop helper-function
         $db->exec("DROP FUNCTION IF EXISTS entity_decode");
 
