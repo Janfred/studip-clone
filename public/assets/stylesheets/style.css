@@ -3001,7 +3001,8 @@ div#sidebar-navigation div.sidebar-widget-content {
   width: 270px;
 }
 .sidebar .course-avatar-medium,
-.sidebar .stream-avatar-medium {
+.sidebar .stream-avatar-medium,
+.sidebar .avatar-medium {
   max-width: 75px;
   height: 75px;
 }

@@ -131,7 +131,8 @@ class Sidebar extends WidgetContainer
         if ($this->context_avatar === null) {
             $breadcrumbs = $this->getBreadCrumbs();
             $keys = array_keys($breadcrumbs);
-            if (reset($keys) === 'course') {
+            $main_navigation = reset($keys);
+            if ($main_navigation === 'course') {
                 $course = Course::findCurrent();
                 if ($course) {
                     if ($course->getSemClass()->offsetGet('studygroup_mode')) {
@@ -144,6 +145,14 @@ class Sidebar extends WidgetContainer
                     $avatar = InstituteAvatar::getAvatar($institute->id);
                 }
                 $this->setContextAvatar($avatar);
+            }
+            if ($main_navigation === 'profile') {
+                if ($keys[1] !== "index") {
+                    $user = Request::get("username")
+                        ? User::findByUsername(Request::get("username"))
+                        : User::findCurrent();
+                    $this->setContextAvatar(Avatar::getAvatar($user->id));
+                }
             }
         }
 
