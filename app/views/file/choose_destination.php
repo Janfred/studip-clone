@@ -30,15 +30,17 @@ $options['direct_parent'] = true;
     <?= _('Ziel zum Kopieren auswählen') ?>
 <? endif ?>
 
-    <div class="file_select_possibilities">
-    <? if ($options['from_plugin']) : ?>
+<div class="file_select_possibilities">
+    <? if ($parent_folder->isWritable($GLOBALS['user']->id) || count($parent_folder->getSubfolders())): ?>
+        <? if ($options['from_plugin']) : ?>
         <a href="<?= $controller->link_for('/choose_folder/' . $parent_folder->getId(), array_merge($options, ['to_plugin' => $options['from_plugin'] ])) ?>" data-dialog>
-    <? else: ?>
+        <? else: ?>
         <a href="<?= $controller->link_for('/choose_folder/' . $parent_folder->getId(), $options) ?>" data-dialog>
-    <? endif; ?>
+        <? endif ?>
             <?= Icon::create('folder-parent', Icon::ROLE_CLICKABLE)->asImg(50) ?>
             <?= _('Aktueller Ordner') ?>
         </a>
+    <? endif ?>
         <a href="<?= $controller->link_for('/choose_folder/' . Folder::findTopFolder($GLOBALS['user']->id)->getId(), $options) ?>" data-dialog>
             <?= Icon::create('files', Icon::ROLE_CLICKABLE)->asImg(50) ?>
             <?= _('Meine Dateien') ?>
