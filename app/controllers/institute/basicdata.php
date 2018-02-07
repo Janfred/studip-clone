@@ -431,14 +431,25 @@ class Institute_BasicdataController extends AuthenticatedController
             }
 
             //Delete all documents of the institute:
-            $top_folder = Folder::getTopFolder($i_id);
+
+            //We must use findOneBySql since findTopFolder cannot determine if
+            //the folder exists. The institute has already been deleted and
+            //therefore the method findRangeTypeById (called in findTopFolder)
+            //cannot determine the range, causing findTopFolder to return null.
+            $top_folder = Folder::findOneBySql(
+                "range_id = :range_id AND parent_id = ''",
+                [
+                    'range_id' => $i_id
+                ]
+            );
+
             $file_result = false;
-            if(!$top_folder->is_new()) {
-                //The top folder already existed and wasn't created in this instance:
+            if ($top_folder) {
+                //The top folder for the deleted institute exists:
                 //We can safely delete it (and its content):
                 $file_result = $top_folder->delete();
             }
-            
+
             if ($file_result) {
                 $details[] = _('Alle Dokumente gelöscht.');
             }
