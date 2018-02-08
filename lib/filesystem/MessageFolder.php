@@ -166,11 +166,11 @@ class MessageFolder implements FolderType
     }
 
     /**
-     * MessageFolders are never writable.
+     * MessageFolders are only writable for their owners.
      */
     public function isWritable($user_id)
     {
-        return false;
+        return $user_id === $this->folder->user_id;
     }
 
     /**
