@@ -530,6 +530,10 @@ table td.printhead3 {
 tr.sortable {
   background-color: #f5f6f6;
 }
+tr.sortable th.sortasc .tablesorter-header-inner,
+tr.sortable th.sortdesc .tablesorter-header-inner {
+  display: inline-block;
+}
 tr.sortable th.sortasc::after,
 tr.sortable th.sortdesc::after {
   width: 16px;
