@@ -92,7 +92,6 @@ class ZipArchive extends \ZipArchive
         for ($i = 0; $i < $archive->numFiles; $i += 1) {
             $zip_filename = $archive->getNameIndex($i, self::FL_UNCHANGED);
             $filename = $archive->convertArchiveFilename($zip_filename);
-var_dump($filename);
             if (mb_strpos($filename, '../') !== false) {
                 continue;
             }
