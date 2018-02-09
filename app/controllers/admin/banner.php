@@ -18,7 +18,7 @@ class Admin_BannerController extends AuthenticatedController
     /**
      * Common tasks for all actions.
      */
-    function before_filter(&$action, &$args)
+    public function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
 
@@ -28,7 +28,7 @@ class Admin_BannerController extends AuthenticatedController
         $GLOBALS['perm']->check('root');
 
         // set navigation
-        Navigation::activateItem('/admin/config/banner');
+        Navigation::activateItem('/admin/locations/banner');
 
         //pagelayout
         PageLayout::setTitle(_('Verwaltung der Banner'));
@@ -64,7 +64,7 @@ class Admin_BannerController extends AuthenticatedController
     /**
      * Administration view for banner
      */
-    function index_action()
+    public function index_action()
     {
         $this->banners = Banner::getAllBanners();
     }
@@ -418,8 +418,11 @@ class Admin_BannerController extends AuthenticatedController
         $sidebar->setImage('sidebar/admin-sidebar.png');
 
         $actions = new ActionsWidget();
-        $actions->addLink(_('Übersicht'), $this->url_for('admin/banner'), Icon::create('visibility-visible', 'clickable'));
-        $actions->addLink(_('Neues Banner anlegen'), $this->url_for('admin/banner/new'), Icon::create('add', 'clickable'));
+        $actions->addLink(
+            _('Neues Banner anlegen'),
+            $this->url_for('admin/banner/new'),
+            Icon::create('add')
+        )->asDialog('size=auto');
 
         $sidebar->addWidget($actions);
     }

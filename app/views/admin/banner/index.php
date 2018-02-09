@@ -5,7 +5,6 @@
                        $controller->url_for('admin/banner/delete', $flash['delete']['banner_id'])) ?>
 <? endif; ?>
 
-<h3><?= _('Verwaltung von Werbebannern') ?></h3>
 <table class="default">
     <thead>
         <tr>
@@ -53,7 +52,7 @@
                 <a class="load-in-new-row" href="<?= $controller->url_for('admin/banner/info',  $banner["ad_id"]) ?>?path=<?= urlencode($banner['banner_path']) ?>">
                     <?= Icon::create('info', 'clickable', ['title' => _('Eigenschaften')])->asImg() ?>
                 </a>
-                <a href="<?= $controller->url_for('admin/banner/edit', $banner["ad_id"]) ?>?path=<?= urlencode($banner['banner_path']) ?>">
+                <a href="<?= $controller->url_for('admin/banner/edit', $banner["ad_id"]) ?>?path=<?= urlencode($banner['banner_path']) ?>" data-dialog="size=auto">
                     <?= Icon::create('edit', 'clickable', ['title' => _('Banner bearbeiten')])->asImg() ?>
                 </a>
                 <a href="<?= $controller->url_for('admin/banner/reset', $banner['ad_id']) ?>">

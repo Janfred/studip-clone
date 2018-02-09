@@ -1,6 +1,6 @@
 <? use Studip\Button, Studip\LinkButton; ?>
 
-<h3><?= _('Neues Banner anlegen') ?></h3>
+<h3 class="hide-in-dialog"><?= _('Neues Banner anlegen') ?></h3>
 
 <form action="<?= $controller->url_for('admin/banner/new') ?>" method="post" enctype="multipart/form-data">
     <table class="default">
@@ -100,7 +100,7 @@
                 </td>
             </tr>
         </tbody>
-        <tfoot>
+        <tfoot data-dialog-button>
             <tr>
                 <td>&nbsp;</td>
                 <td>
@@ -120,4 +120,3 @@ jQuery(function ($) {
     }).change();
 });
 </script>
-

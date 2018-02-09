@@ -1,5 +1,5 @@
 <? use Studip\Button, Studip\LinkButton; ?>
-<h3><?= _('Banner editieren') ?></h3>
+<h3 class="hide-in-dialog"><?= _('Banner editieren') ?></h3>
 
 <form action="<?= $controller->url_for('admin/banner/edit', $banner['ad_id']) ?>" method="post" enctype="multipart/form-data">
     <?= CSRFProtection::tokenTag() ?>
@@ -97,7 +97,7 @@
                 </td>
             </tr>
         </tbody>
-        <tfoot>
+        <tfoot data-dialog-button>
             <tr>
                 <td colspan="4" align="center">
                     <label for = "update">
@@ -108,4 +108,3 @@
         </tfoot>
     </table>
 </form>
-

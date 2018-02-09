@@ -120,12 +120,16 @@ class AdminNavigation extends Navigation
             $navigation->addSubNavigation('sem_classes', new Navigation(_('Veranstaltungskategorien'), 'dispatch.php/admin/sem_classes/overview'));
             $navigation->addSubNavigation('loginstyle', new Navigation(_('Startbildschirm'), 'dispatch.php/admin/loginstyle'));
             $navigation->addSubNavigation(
-                  'content_terms_of_use',
-                    new Navigation(
-                       _('Inhalts-Nutzungsbedingungen'),
-                        'dispatch.php/admin/content_terms_of_use/index'
-                   )
-                );
+                'content_terms_of_use',
+                new Navigation(
+                    _('Inhalts-Nutzungsbedingungen'),
+                    'dispatch.php/admin/content_terms_of_use/index'
+                )
+            );
+
+            if (Config::get()->BANNER_ADS_ENABLE) {
+                $navigation->addSubNavigation('banner', new Navigation(_('Werbebanner'), 'dispatch.php/admin/banner'));
+            }
         }
         $this->addSubNavigation('locations', $navigation);
 
@@ -138,10 +142,6 @@ class AdminNavigation extends Navigation
             $navigation->addSubNavigation('roles', new Navigation(_('Rollen'), 'dispatch.php/admin/role'));
             $navigation->addSubNavigation('datafields', new Navigation(_('Datenfelder'), 'dispatch.php/admin/datafields'));
             $navigation->addSubNavigation('configuration', new Navigation(_('Konfiguration'), 'dispatch.php/admin/configuration/configuration'));
-
-            if (Config::get()->BANNER_ADS_ENABLE) {
-                $navigation->addSubNavigation('banner', new Navigation(_('Werbebanner'), 'dispatch.php/admin/banner'));
-            }
 
             $navigation->addSubNavigation('coursewizardsteps',
                 new Navigation(_('Anlegeassistent'), 'dispatch.php/admin/coursewizardsteps'));
