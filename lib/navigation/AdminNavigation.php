@@ -62,6 +62,7 @@ class AdminNavigation extends Navigation
 
             if ($perm->have_perm('root')) {
                 $navigation->addSubNavigation('user_domains', new Navigation(_('Nutzerdomänen'), 'dispatch.php/admin/domain'));
+                $navigation->addSubNavigation('auto_insert', new Navigation(_('Automatisiertes Eintragen'), 'dispatch.php/admin/autoinsert'));
             }
             $this->addSubNavigation('user', $navigation);
         }
@@ -106,8 +107,6 @@ class AdminNavigation extends Navigation
 
 
         if ($perm->have_perm('root')) {
-            $navigation->addSubNavigation('auto_insert', new Navigation(_('Automatisiertes Eintragen'), 'dispatch.php/admin/autoinsert'));
-
             if (Config::get()->SEMESTER_ADMINISTRATION_ENABLE) {
                 $navigation->addSubNavigation('semester', new Navigation(_('Semester'), 'dispatch.php/admin/semester'));
                 $navigation->addSubNavigation('holidays', new Navigation(_('Ferien'), 'dispatch.php/admin/holidays'));
