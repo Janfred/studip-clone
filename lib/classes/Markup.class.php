@@ -391,7 +391,7 @@ class Markup
         $text, $trim = true, $br = false, $double_encode = true
     ) {
         $text = htmlspecialchars($text, ENT_QUOTES, 'utf-8', $double_encode);
-        $text = preg_replace('/&amp;#([1-9]{1,1}[0-9]{2,});/u', '&#$1;', $text);
+
         if ($trim) {
             $text = trim($text);
         }
