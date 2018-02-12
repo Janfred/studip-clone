@@ -137,7 +137,7 @@ function getLatestVersion($keyword, $range_id) {
               ORDER BY version DESC
               LIMIT 1";
     $statement = DBManager::get()->prepare($query);
-    $statement->execute(array(decodeHTML($keyword), $range_id));
+    $statement->execute(array($keyword, $range_id));
     return $statement->fetch(PDO::FETCH_ASSOC);
 }
 
@@ -154,7 +154,7 @@ function getFirstVersion($keyword, $range_id) {
               ORDER BY version ASC
               LIMIT 1";
     $statement = DBManager::get()->prepare($query);
-    $statement->execute(array(decodeHTML($keyword), $range_id));
+    $statement->execute(array($keyword, $range_id));
     return $statement->fetch(PDO::FETCH_ASSOC);
 }
 
@@ -403,7 +403,7 @@ function refreshBacklinks($keyword, $str)
         $statement = DBManager::get()->prepare($query);
 
         foreach ($wikiLinkList as $key => $value) {
-            $statement->execute(array(Context::getId(), $keyword, decodeHTML($value)));
+            $statement->execute(array(Context::getId(), $keyword, $value));
         }
     }
 }
@@ -768,16 +768,14 @@ function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch)
                       FROM wiki
                       WHERE range_id = ? AND body LIKE CONCAT('%', ?, '%') AND keyword = ?
                       ORDER BY version DESC";
-            $parameters = array($range_id, $searchfor, $keyword);
-//            $q="SELECT * FROM wiki WHERE range_id='$range_id' AND body LIKE '%$searchfori%' AND keyword='$keyword' ORDER BY version DESC";
+            $parameters = array($range_id, htmlReady($searchfor), $keyword);
         } else if (!$searchcurrentversions) {
             // search in all versions of all pages
             $query = "SELECT *
                       FROM wiki
                       WHERE range_id = ? AND body LIKE CONCAT('%', ?, '%')
                       ORDER BY keyword ASC, version DESC";
-            $parameters = array($range_id, $searchfor);
-//            $q="SELECT * FROM wiki WHERE range_id='$range_id' AND body LIKE '%$searchfori%' ORDER BY keyword ASC, version DESC";
+            $parameters = array($range_id, htmlReady($searchfor));
         } else {
             // search only latest versions of all pages
             $query = "SELECT *
@@ -788,8 +786,7 @@ function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch)
                           WHERE w2.range_id =? AND w2.keyword = w1.keyword
                       )
                       ORDER BY w1.keyword ASC";
-             $parameters = array($range_id, $searchfor, $range_id);
-//            $q="SELECT * FROM wiki AS w1 WHERE range_id='$range_id' AND version=(SELECT MAX(version) FROM wiki AS w2 WHERE w2.range_id='$range_id' AND w2.keyword=w1.keyword) AND w1.body LIKE '%$searchfori%' ORDER BY w1.keyword ASC";
+             $parameters = array($range_id, htmlReady($searchfor), $range_id);
         }
         $statement = DBManager::get()->prepare($query);
         $statement->execute($parameters);
@@ -870,7 +867,7 @@ function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch)
         // Pagename
         print($tdheadleft);
         print("<a href=\"".URLHelper::getLink("?keyword=".$result['keyword']."&version=".$result['version']."&hilight=$searchfor&searchfor=$searchfor")."\">");
-        print($result['keyword']."</a>");
+        print(htmlReady($result['keyword'])."</a>");
         print($tdtail);
         // display hit previews
         $offset=0; // step through text
