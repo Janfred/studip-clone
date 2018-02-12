@@ -32,7 +32,7 @@ class Course extends \RESTAPI\RouteMap
         // setting up semester to filter by
         $semester = null;
         $semester_id = \Request::get('semester');
-        if (mb_strlen($semester_id)) {
+        if ($semester_id) {
             $semester = \Semester::find($semester_id);
             if (!$semester) {
                 $this->error(400, "Semester not found.");
@@ -45,9 +45,12 @@ class Course extends \RESTAPI\RouteMap
         $memberships = $memberships->limit($this->offset, $this->limit);
         $memberships_json = $this->membershipsToJSON($memberships);
         $this->etag(md5(serialize($memberships_json)));
-        return $this->paginated($memberships_json,
-                                $total,
-                                compact('user_id'), array('semester' => $semester_id));
+        return $this->paginated(
+            $memberships_json,
+            $total,
+            compact('user_id'),
+            ['semester' => $semester_id]
+        );
     }
 
     /**
@@ -91,40 +94,43 @@ class Course extends \RESTAPI\RouteMap
         $members = $members->limit($this->offset, $this->limit);
         $members_json = $this->membersToJSON($course, $members);
         $this->etag(md5(serialize($members_json)));
-        return $this->paginated($members_json,
-                                $total,
-                                compact('course_id'), array('status' => $status_filter));
+        return $this->paginated(
+            $members_json,
+            $total,
+            compact('course_id'),
+            ['status' => $status_filter]
+        );
     }
 
-    
+
     /**
      * Get the root file folder of a course.
-     * 
+     *
      * @get /course/:course_id/top_folder
      */
     public function getTopFolder($course_id)
     {
         //first we check if the course exists:
         $course = $this->requireCourse($course_id);
-        
+
         //then we can get the top folder:
         $top_folder = \Folder::findTopFolder($course->id, 'course');
-        
+
         $top_folder = $top_folder->getTypedFolder();
         if(!$top_folder) {
             $this->halt(500, 'Folder type not found!');
         }
-        
-        
+
+
         if(!$top_folder->isReadable(\User::findCurrent()->id)) {
             $this->halt(403, 'You are not allowed to read the top folder of this course!');
         }
-        
+
         return $top_folder->getEditTemplate();
     }
-    
-    
-    
+
+
+
     /**************************************************/
     /* PRIVATE HELPER METHODS                         */
     /**************************************************/
@@ -132,7 +138,8 @@ class Course extends \RESTAPI\RouteMap
     private function findMembershipsByUserId($user_id, $semester)
     {
         $memberships = \SimpleORMapCollection::createFromArray(
-            \CourseMember::findBySQL('user_id = ? ORDER BY mkdate ASC', array($user_id)));
+            \CourseMember::findBySQL('user_id = ? ORDER BY mkdate ASC', [$user_id])
+        );
 
         // filter by semester
         if ($semester) {
@@ -151,7 +158,7 @@ class Course extends \RESTAPI\RouteMap
 
     private function membershipsToJSON($memberships)
     {
-        $json = array();
+        $json = [];
 
         foreach ($memberships as $membership) {
             $course_json = $this->courseToJSON($course = $membership->course);
@@ -159,48 +166,49 @@ class Course extends \RESTAPI\RouteMap
             // add group color
             $course_json['group'] = (int) $membership->gruppe;
 
-            $json[$this->urlf("/course/%s", array($course->id))] = $course_json;
+            $json[$this->urlf("/course/%s", [$course->id])] = $course_json;
         }
         return $json;
     }
 
     private function courseToJSON($course)
     {
-        $json = array();
+        $json = [];
 
-        $json['course_id'] = $course->id;
-        $json['number'] = $course->VeranstaltungsNummer;
-        $json['title'] = $course->Name;
-        $json['subtitle'] = $course->Untertitel;
-        $json['type'] = $course->status;
-        $json['description'] = $course->Beschreibung;
-        $json['location'] = $course->Ort;
+        $json['course_id']   = $course->id;
+        $json['number']      = $course->VeranstaltungsNummer;
+        $json['title']       = (string) $course->Name;
+        $json['subtitle']    = (string) $course->Untertitel;
+        $json['type']        = $course->status;
+        $json['description'] = (string) $course->Beschreibung;
+        $json['location']    = (string) $course->Ort;
 
         // lecturers
         foreach ($course->getMembersWithStatus('dozent') as $lecturer) {
-            $url = $this->urlf('/user/%s', array(htmlReady($lecturer->user_id)));
+            $url = $this->urlf('/user/%s', [htmlReady($lecturer->user_id)]);
             $json['lecturers'][$url] = User::getMiniUser($this, $lecturer->user);
         }
 
         // other members
         foreach (words("user autor tutor dozent") as $status) {
-            $json['members'][$status] = $this->urlf('/course/%s/members?status=%s', array($course->id, $status));
+            $json['members'][$status] = $this->urlf('/course/%s/members?status=%s', [$course->id, $status]);
             $json['members'][$status . '_count'] = $course->countMembersWithStatus($status);
         }
 
         foreach (words("start_semester end_semester") as $key) {
-            $json[$key] = $course->$key ? $this->urlf('/semester/%s', array(htmlReady($course->$key->id))) : null;
+            $json[$key] = $course->$key ? $this->urlf('/semester/%s', [htmlReady($course->$key->id)]) : null;
         }
 
         $modules = new \Modules;
         $activated = $modules->getLocalModules($course->id, 'sem');
-        $json['modules'] = array();
-        foreach (array('forum'     => 'forum_categories',
-                       'documents' => 'files',
-                       'wiki'      => 'wiki') as $module => $uri) {
+        $json['modules'] = [];
+        foreach (['forum'     => 'forum_categories',
+                  'documents' => 'files',
+                  'wiki'      => 'wiki'] as $module => $uri)
+        {
 
             if ($activated[$module]) {
-                $json['modules'][$module] = $this->urlf('/course/%s/%s', array(htmlReady($course->id), $uri));
+                $json['modules'][$module] = $this->urlf('/course/%s/%s', [htmlReady($course->id), $uri]);
             }
         }
         return $json;
@@ -221,15 +229,15 @@ class Course extends \RESTAPI\RouteMap
 
     private function membersToJSON($course, $members)
     {
-        $json = array();
+        $json = [];
 
         foreach ($members as $member) {
-            $url = $this->urlf('/user/%s', array($member->user_id));
+            $url = $this->urlf('/user/%s', [$member->user_id]);
             $avatar = \Avatar::getAvatar($member->user_id);
-            $json[$url] = array(
+            $json[$url] = [
                 'member' => User::getMiniUser($this, $member->user),
                 'status' => $member->status
-            );
+            ];
         }
         return $json;
     }
