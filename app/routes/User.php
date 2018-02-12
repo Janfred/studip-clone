@@ -95,16 +95,6 @@ class User extends \RESTAPI\RouteMap
             'privadr'         => strip_tags($get_field('privadr', 'privadr')),
         );
 
-        $query = "SELECT value
-                  FROM user_config
-                  WHERE field = ? AND user_id = ?";
-        $statement = \DBManager::get()->prepare($query);
-        $statement->execute(array('SKYPE_NAME', $user_id));
-        $user['skype'] = $statement->fetchColumn() ?: '';
-        $statement->closeCursor();
-
-        $user['skype_show'] = null;
-
         // Data fields
         $datafields = array();
         foreach (\DataFieldEntry::getDataFieldEntries($user_id, 'user') as $entry) {
