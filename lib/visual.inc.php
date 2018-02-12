@@ -115,9 +115,13 @@ function quotes_encode($text, $author = '')
  * @return string        HTML code computed by applying markup-rules.
  */
 // TODO remove unused function arguments
-function formatReady($text, $trim=TRUE, $extern=FALSE, $wiki=FALSE, $show_comments='icon') {
+function formatReady($text, $trim = true, $extern = false, $wiki = false, $show_comments = 'icon')
+{
     $formatted = Markup::apply(new StudipFormat(), $text, $trim);
-    return $formatted ? sprintf(FORMATTED_CONTENT_WRAPPER, $formatted) : '';
+
+    return $formatted
+        ? sprintf(FORMATTED_CONTENT_WRAPPER, $formatted)
+        : '';
 }
 
 /**

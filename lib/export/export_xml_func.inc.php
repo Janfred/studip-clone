@@ -139,10 +139,8 @@ function xml_footer()
 
 /**
  * escapes special characters for xml use
- * optinally encodes to utf8
  *
  * @param string $string the string to escape
- * @param bool $utf8encode encode the string as utf-8
  * @return string
  */
 function xml_escape($string)
