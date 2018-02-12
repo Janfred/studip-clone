@@ -116,17 +116,12 @@ class Course extends \RESTAPI\RouteMap
         //then we can get the top folder:
         $top_folder = \Folder::findTopFolder($course->id, 'course');
 
-        $top_folder = $top_folder->getTypedFolder();
-        if(!$top_folder) {
-            $this->halt(500, 'Folder type not found!');
+        if ($top_folder) {
+            $file_system_api = new FileSystem();
+            return $file_system_api->getFolder($top_folder->id);
+        } else {
+            $this->halt(404, 'Folder not found!');
         }
-
-
-        if(!$top_folder->isReadable(\User::findCurrent()->id)) {
-            $this->halt(403, 'You are not allowed to read the top folder of this course!');
-        }
-
-        return $top_folder->getEditTemplate();
     }
 
 
