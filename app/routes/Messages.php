@@ -8,72 +8,52 @@ namespace RESTAPI\Routes;
  * @condition message_id ^[a-f0-9]{32}$
  * @condition user_id ^[a-f0-9]{32}$
  * @condition box ^(inbox|outbox)$
- * @condition folder_id ^[0-9]+$
  */
 class Messages extends \RESTAPI\RouteMap
 {
     /**
-     * Liefert die vorhandenen Nachrichtenordner des autorisierten
-     * Nutzers zurück. Der Parameter bestimmt je nach Wert, auf
-     * welchen Bereich zugegriffen werden soll.
-     * Die Rückgabe beinhaltet pro Ordner den Namen, die Anzahl
-     * aller Nachrichten sowie die Anzahl der ungelesenen Nachrichten.
+     * Liefert die Anzahl der vorhandenen Nachrichten des autorisierten Nutzers
+     * zurück. Der Parameter bestimmt je nach Wert, auf welchen Bereich
+     * (Posteingang bzw. Postausgang) zugegriffen werden soll.
+     * Die Rückgabe beinhaltet jeweils die Anzahl aller Nachrichten sowie die
+     * Anzahl der ungelesenen Nachrichten.
+     *
+     * @head /user/:user_id/:box
+     */
+    public function indexOfMessages($user_id, $box)
+    {
+        if ($user_id !== self::currentUser()) {
+            $this->error(401);
+        }
+
+        return $this->countMessages($user_id, $box);
+    }
+
+    /**
+     * Liefert die vorhandenen Nachrichten des autorisierten Nutzers zurück.
      *
      * @get /user/:user_id/:box
      */
-    public function indexOfFolders($user_id, $box)
+    public function getMessages($user_id, $box)
     {
         if ($user_id !== self::currentUser()) {
             $this->error(401);
         }
 
-        $folders = self::getUserFolders($user_id, $box);
-        $total = count($folders);
-        $folders = $this->getFoldersMetaData($folders, $user_id, $box);
-        $folders = $this->linkFolders($user_id, $box,
-                                      array_slice($folders, $this->offset, $this->limit, true));
-
-        return $this->paginated($folders, $total, compact('user_id', 'box'));
-    }
-
-
-    /**
-     * Liefert die vorhandenen Nachrichten eines Ordners des
-     * autorisierten Nutzers zurück.
-     *
-     * @get /user/:user_id/:box/:folder_id
-     */
-    public function showFolder($user_id, $box, $folder_id)
-    {
-        $settings = \UserConfig::get($user_id)->MESSAGING_SETTINGS ?: array();
-
-        $type = mb_substr($box, 0, -3);
-        if ($folder_id != 0 && (
-                !isset($settings['folder'][$type][$folder_id])
-                || $settings['folder'][$type][$folder_id] === 'dummy'
-            )) {
-            $this->notFound();
-        }
-
-        // only your messages!
-        if ($user_id !== self::currentUser()) {
-            $this->error(401);
-        }
-
-        // get all messages in the user's folder
-        $ids = self::folder($user_id, $box === 'inbox' ? 'rec' : 'snd', $folder_id);
+        $ids   = $this->getMessageIds($user_id, $box);
         $total = count($ids);
-        $ids = array_slice($ids, $this->offset, $this->limit, true);
 
-        $messages = array();
-        if (sizeof($ids)) {
-            foreach (\Message::findMany($ids) as $msg) {
-                $url = $this->urlf('/message/%s', array($msg->id));
-                $messages[$url] = $this->messageToJSON($msg);
-            }
+        $ids = array_slice($ids, $this->offset, $this->limit);
+
+        $messages = [];
+        if (count($ids) > 0) {
+            \Message::findEachMany(function ($message) use (&$messages) {
+                $url = $this->urlf('/message/%s', $message->id);
+                $messages[$url] = $this->messageToJSON($message);
+            }, $ids, 'ORDER BY mkdate DESC');
         }
-        $this->etag(md5(serialize($messages)));
-        return $this->paginated($messages, $total, compact('user_id', 'box', 'folder_id'));
+
+        return $this->paginated($messages, $total, compact('user_id', 'box'));
     }
 
     /**
@@ -91,9 +71,8 @@ class Messages extends \RESTAPI\RouteMap
 
 
     /**
-     * Get the root file folder of a message.
-     * The root file folder contains all files
-     * that were appended to the message.
+     * Get the root file folder of a message. The root file folder contains all
+     * files that were appended to the message.
      *
      * @get /message/:message_id/file_folder
      */
@@ -104,7 +83,7 @@ class Messages extends \RESTAPI\RouteMap
 
         $user = \User::findCurrent();
 
-        if(!$user) {
+        if (!$user) {
             $this->halt(404, 'User not found!');
         }
 
@@ -160,9 +139,7 @@ class Messages extends \RESTAPI\RouteMap
 
 
     /**
-     * Eine Nachricht als (un)gelesen markieren oder in einen anderen
-     * Ordner verschieben (Ordner werden dabei als Array und vollständig
-     * angegeben, [/user/:user_id/:box/:folder]).
+     * Eine Nachricht als (un)gelesen markieren.
      *
      * @put /message/:message_id
      */
@@ -171,10 +148,6 @@ class Messages extends \RESTAPI\RouteMap
 
         $message = $this->requireMessage($message_id);
         $user_id = $this->currentUser();
-
-        if (isset($this->data['folders'])) {
-            $this->moveMessageToFolders($message, $this->data['folders']);
-        }
 
         if (isset($this->data['unread'])) {
             if ($this->data['unread']) {
@@ -186,7 +159,6 @@ class Messages extends \RESTAPI\RouteMap
 
         $this->halt(204);
     }
-
 
     /**
      * Löscht eine Nachricht.
@@ -205,7 +177,6 @@ class Messages extends \RESTAPI\RouteMap
         $this->status(204);
     }
 
-
     /**************************************************/
     /* PRIVATE HELPER METHODS                         */
     /**************************************************/
@@ -213,11 +184,6 @@ class Messages extends \RESTAPI\RouteMap
     private static function currentUser()
     {
         return $GLOBALS['user']->id;
-    }
-
-    private function folderURL($user_id, $box, $folder_id)
-    {
-        return $this->urlf('/user/%s/%s/%s', array($user_id, $box, $folder_id));
     }
 
     private function requireMessage($message_id)
@@ -242,55 +208,6 @@ class Messages extends \RESTAPI\RouteMap
         return $message;
     }
 
-
-    private static function getUserFolders($user_id, $box)
-    {
-        $folders = array();
-        $folders['in'][0]  = _('Posteingang');
-        $folders['out'][0] = _('Postausgang');
-
-        return self::filterDeleted($folders[mb_substr($box, 0, -3)]);
-    }
-
-
-    private static function filterDeleted($folder_list)
-    {
-        $result = array();
-        foreach ($folder_list as $key => $value) {
-            // the first folder and every non-dummy folder are ok
-            if ($key === 0 || $value !== 'dummy') {
-                $result[$key] = $value;
-            }
-        }
-        return $result;
-    }
-
-
-    private function linkFolders($user_id, $box, $folders)
-    {
-        $result = array();
-
-        foreach ($folders as $id => $content) {
-            $url = $this->folderURL($user_id, $box, $id);
-            $result[$url] = $content;
-        }
-
-        return $result;
-    }
-
-    private function getFoldersMetaData($folders, $user_id, $box)
-    {
-        foreach ($folders as $id => $name) {
-            $folders[$id] = array(
-                'name'   => $name,
-                'total'  => count(self::folder($user_id, $box === 'inbox' ? 'rec' : 'snd', $id)),
-                'unread' => count(self::folder($user_id, $box === 'inbox' ? 'rec' : 'snd', $id, true)),
-            );
-        }
-
-        return $folders;
-    }
-
     private function messageToJSON($message)
     {
         $user_id = self::currentUser();
@@ -311,6 +228,9 @@ class Messages extends \RESTAPI\RouteMap
 
         // formatted message
         $json['message_html'] = formatReady($json['message']) ?: '';
+
+        // Tags
+        $json['tags'] = $message->getTags($user_id);
 
         // sender
         $sender = $message->getSender();
@@ -344,69 +264,30 @@ class Messages extends \RESTAPI\RouteMap
             }
         }
 
-        // folders
-        $json['folders'] = [];
-        foreach ($my_mu as $mu) {
-            $json['folders'][] = $this->folderURL(
-                $user_id,
-                $mu->snd_rec === 'rec' ? 'inbox' : 'outbox',
-                0
-            );
-        }
         return $json;
     }
 
-    private static function folder($user_id, $sndrec, $folder, $unread = null)
+    private function countMessages($user_id, $box)
     {
-        $temp = \MessageUser::findBySQL('user_id = ? AND snd_rec = ? AND deleted = 0',
-                                        array($user_id, $sndrec));
-        $messages = \SimpleORMapCollection::createFromArray($temp);
-        if ($unread !== null) {
-            $messages = $messages->filter(function ($message) use ($unread) {
-                return $message->readed == ($unread ? 0 : 1);
-            });
-        }
-        return $messages->pluck('message_id');
-    }
+        $condition = 'user_id = ? AND snd_rec = ? AND deleted = 0';
+        $params    = [$user_id, $box === 'inbox' ? 'rec' : 'snd'];
 
-    private function moveMessageToFolders($message, $folders)
-    {
-        $to_store = array();
-        $user_id = self::currentUser();
-
-        $current_folders = $message->users->findBy("user_id", $user_id);
-        $existing_folders = array(
-            'inbox'  => self::getUserFolders($user_id, 'inbox'),
-            'outbox' => self::getUserFolders($user_id, 'outbox')
+        $total  = \MessageUser::countBySQL($condition, $params);
+        $unread = \MessageUser::countBySQL(
+            $condition . ' AND readed = 0',
+            $params
         );
 
-
-        $uri_tmpl = new \RESTAPI\UriTemplate('/user/:user_id/:box/:folder_id');
-        foreach ($folders as $folder) {
-            if ($uri_tmpl->match($folder, $params)) {
-
-                if ($params["user_id"] !== $user_id) {
-                    $this->error(401);
-                }
-
-                if (!in_array($params["box"], words("inbox outbox"))) {
-                    $this->error(400);
-                }
-
-                $old = $current_folders->findBy("snd_rec", $params["box"] === "inbox" ? "rec" : "snd")->first();
-                if (!$old) {
-                    $this->error(409, 'Cannot move to ' . $params['box']);
-                }
-
-                if (!isset($existing_folders[$params["box"]][$params['folder_id']])) {
-                    $this->error(409, 'Target folder does not exist.');
-                }
-
-                $old->folder = $params["folder_id"];
-                $to_store[] = $old;
-            }
-        }
-
-        array_map(function ($record) { $record->store(); }, $to_store);
+        return compact('total', 'unread');
     }
+
+    private function getMessageIds($user_id, $box)
+    {
+        return \MessageUser::findAndMapBySQL(function ($row) {
+            return $row->message_id;
+        }, 'user_id = ? AND snd_rec = ? AND deleted = 0 ORDER BY mkdate DESC', [
+            $user_id, $box === 'inbox' ? 'rec' : 'snd'
+        ]);
+    }
+
 }
