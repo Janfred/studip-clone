@@ -20,9 +20,9 @@
         <tr>
             <td><strong><?= _("An") ?></strong></td>
             <td>
-                <? if ($message["autor_id"] !== $GLOBALS["user"]->id) : ?>
                 <? $num_recipients = $message->getNumRecipients() ?>
-                <?= $num_recipients > 1 ? sprintf(_("%s Personen"), $num_recipients) : _("Eine Person") ?>
+                <? if ($message["autor_id"] !== $GLOBALS["user"]->id && (!$message['show_adressees'] || $num_recipients > Config::get()->SHOW_ADRESSEES_LIMIT)) : ?>
+                    <?= $num_recipients > 1 ? sprintf(_("%s Personen"), $num_recipients) : _("Eine Person") ?>
                 <? else : ?>
                 <ul class="list-csv" id="adressees">
                 <? foreach ($message->getRecipients() as $message_user) : ?>

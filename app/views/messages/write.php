@@ -161,6 +161,14 @@
                         <input type="checkbox" name="message_mail" id="message_mail" value="1"<?= $mailforwarding ? " checked" : "" ?>>
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        <label for="show_adressees"><strong><?= _("Sollen die Adressaten für die Empfänger sichtbar sein?") ?></strong></label>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="show_adressees" id="show_adressees" value="1"<?= $show_adressees ? " checked" : "" ?>>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>

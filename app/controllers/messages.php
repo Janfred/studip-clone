@@ -442,6 +442,10 @@ class MessagesController extends AuthenticatedController {
         }
         $settings = UserConfig::get($GLOBALS['user']->id)->MESSAGING_SETTINGS;
         $this->mailforwarding = Request::get('emailrequest') ? true : $settings['request_mail_forward'];
+        $this->show_adressees = true;
+        if (Request::get('inst_id') || Request::get('course_id') || Request::option('group_id')) {
+            $this->show_adressees = false;
+        }
         if (trim($settings['sms_sig'])) {
             if (Studip\Markup::editorEnabled()) {
                 $this->default_message['message'] .= Studip\Markup::markAsHtml('<br><hr>' . Studip\Markup::markupToHtml($settings['sms_sig']));
@@ -546,7 +550,7 @@ class MessagesController extends AuthenticatedController {
                     $rec_uname[] = get_username($user_id);
                 }
             }
-            $messaging->send_as_email =  Request::int("message_mail");
+            $messaging->send_as_email = Request::int("message_mail");
             $messaging->insert_message(
                 Studip\Markup::purifyHtml(Request::get("message_body")),
                 $rec_uname,
@@ -558,7 +562,8 @@ class MessagesController extends AuthenticatedController {
                 Request::get("message_subject"),
                 "",
                 'normal',
-                trim(Request::get("message_tags")) ?: null
+                trim(Request::get("message_tags")) ?: null,
+                Request::int("show_adressees", 0)
             );
             if (Request::option('answer_to')) {
                 $old_message = Message::find(Request::option('answer_to'));

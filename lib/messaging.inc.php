@@ -253,7 +253,7 @@ class messaging
      * @param $force_email
      * @param $priority
      */
-    function insert_message($message, $rec_uname, $user_id='', $time='', $tmp_message_id='', $set_deleted='', $signature='', $subject='', $force_email='', $priority='normal', $tags = null)
+    function insert_message($message, $rec_uname, $user_id='', $time='', $tmp_message_id='', $set_deleted='', $signature='', $subject='', $force_email='', $priority='normal', $tags = null, $show_adressees = false)
     {
         // wenn keine user_id uebergeben
         $user_id = $user_id ?: $GLOBALS['user']->id;
@@ -288,14 +288,15 @@ class messaging
         }
 
         // insert message
-        $query = "INSERT INTO message (message_id, autor_id, subject, message, priority, mkdate)
-                  VALUES (?, ?, ?, ?, ?, UNIX_TIMESTAMP())";
+        $query = "INSERT INTO message (message_id, autor_id, subject, message, show_adressees, priority, mkdate)
+                  VALUES (?, ?, ?, ?, ?, ?, UNIX_TIMESTAMP())";
         $statement = DBManager::get()->prepare($query);
         $statement->execute(array(
             $tmp_message_id,
             $snd_user_id,
             $subject,
             $message,
+            (int) $show_adressees,
             $priority,
         ));
         // insert snd
