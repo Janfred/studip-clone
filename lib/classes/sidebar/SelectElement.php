@@ -20,9 +20,10 @@ class SelectElement extends WidgetElement
      * element) and a label (text content of the according option
      * element).
      *
-     * @param String $id     Id of the element
-     * @param String $label  Label/text content of the element
-     * @param bool   $active Indicates whether the element is active
+     * @param String      $id      Id of the element
+     * @param String      $label   Label/text content of the element
+     * @param bool        $active  Indicates whether the element is active
+     * @param String|null $tooltip Optional Title attribute for the element
      */
     public function __construct($id, $label, $active = false, $tooltip = null)
     {

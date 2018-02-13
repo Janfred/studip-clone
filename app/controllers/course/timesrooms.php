@@ -1045,8 +1045,12 @@ class Course_TimesroomsController extends AuthenticatedController
             $list->setUrl($this->url_for('/index'));
             $list->setSelectParameterName('cid');
             foreach (AdminCourseFilter::get()->getCourses(false) as $seminar) {
-                $element = new SelectElement($seminar['Seminar_id'],
-                                             $seminar['Name']);
+                $element = new SelectElement(
+                    $seminar['Seminar_id'],
+                    $seminar['Name'],
+                    $seminar['Seminar_id'] === Context::get()->id,
+                    $seminar['VeranstaltungsNummer'] . ' ' . $seminar['Name']
+                );
                 $list->addElement($element, 'select-' . $seminar['Seminar_id']);
             }
             $list->setSelection($this->course->id);

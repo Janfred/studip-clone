@@ -389,7 +389,7 @@ class Course_BasicdataController extends AuthenticatedController
                     new SelectElement(
                         $seminar['Seminar_id'],
                         $seminar['Name'],
-                        $seminar['Seminar_id'] === $_SESSION['SessionSeminar'],
+                        $seminar['Seminar_id'] === Context::get()->id,
                         $seminar['VeranstaltungsNummer'] . ' ' . $seminar['Name']
                     ),
                     'select-' . $seminar['Seminar_id']
