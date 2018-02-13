@@ -88,7 +88,7 @@ class QuicksearchController extends AuthenticatedController
                 'item_id'          => $result[0],
                 'item_name'        => $this->highlight($needle, $result[1]),
                 'item_description' => '',
-                'item_search_name' => end($result),
+                'item_search_name' => $result[1],
             );
 
             if ($this->search instanceof StandardSearch && $this->search->extendedLayout) {
