@@ -177,6 +177,8 @@ class AdminNavigation extends Navigation
             if (Config::get()->API_ENABLED) {
                 $navigation->addSubNavigation('api', new Navigation(_('API'), 'dispatch.php/admin/api'));
             }
+
+            $navigation->addSubNavigation('globalsearch', new Navigation(_('Globale Suche'), 'dispatch.php/globalsearch/settings'));
         }
         if ($perm->have_perm(Config::get()->AUX_RULE_ADMIN_PERM ? Config::get()->AUX_RULE_ADMIN_PERM : 'admin')) {
             $navigation->addSubNavigation('specification', new Navigation(_('Zusatzangaben'), 'dispatch.php/admin/specification'));

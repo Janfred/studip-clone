@@ -56,36 +56,12 @@ if (isset($_COOKIE['navigation-length'])) {
                 <?= PageLayout::getCustomQuicksearch() ?>
             <? else: ?>
                 <li id="quicksearch_item">
-                    <form id="search_sem_quick_search_frame" role="search" action="<?= URLHelper::getLink('dispatch.php/search/courses', array('send' => 'yes', 'group_by' => '0') + $link_params) ?>" method="post">
-                        <?= CSRFProtection::tokenTag() ?>
-                        <script>
-                            var selectSem = function (seminar_id, name) {
-                                document.location = "<?= URLHelper::getURL("dispatch.php/course/details/", array("send_from_search" => 1, "send_from_search_page" => URLHelper::getURL("dispatch.php/search/courses?keep_result_set=1")))  ?>&sem_id=" + seminar_id;
-                            };
-                        </script>
-                        <?php
-                        print QuickSearch::get("search_sem_quick_search", new SeminarSearch())
-                            ->setAttributes(array(
-                                "title" => sprintf(_('Nach Veranstaltungen suchen (%s)'), htmlready($search_semester_name)),
-                                "class" => "quicksearchbox expand-to-left"
-                            ))
-                            ->fireJSFunctionOnSelect("selectSem")
-                            ->noSelectbox()
-                            ->render();
-                        //Komisches Zeugs, das die StmBrowse.class.php braucht:
-                        print '<input type="hidden" name="search_sem_1508068a50572e5faff81c27f7b3a72f" value="1">';
-                        //Ende des komischen Zeugs.
-                        ?>
-                        <input type="hidden" name="search_sem_sem" value="<?= $search_semester_nr ?>">
-                        <input type="hidden" name="search_sem_qs_choose" value="title_lecturer_number">
-                        <?= Icon::create('search', 'info_alt')->asInput([
-                            'title' => sprintf(_('Nach Veranstaltungen suchen (%s)'), htmlready($search_semester_name)),
-                            'type'  => 'image',
-                            'class' => 'quicksearchbutton',
-                            'name'  => 'search_sem_do_search',
-                            'value' => 'OK',
-                        ]) ?>
-                    </form>
+                    <script>
+                        var selectSem = function (seminar_id, name) {
+                            document.location = "<?= URLHelper::getURL("dispatch.php/course/details/", array("send_from_search" => 1, "send_from_search_page" => URLHelper::getURL("dispatch.php/search/courses?keep_result_set=1")))  ?>&sem_id=" + seminar_id;
+                        };
+                    </script>
+                    <?= $GLOBALS['template_factory']->render('globalsearch/searchbar') ?>
                 </li>
             <? endif; ?>
         <? endif; ?>
