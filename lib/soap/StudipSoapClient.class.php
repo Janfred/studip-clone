@@ -14,6 +14,8 @@ class StudipSoapClient
 
         $this->soap_client = new soap_client($path, true);
         $this->soap_client->soap_defencoding = 'UTF-8';
+        $this->soap_client->decode_utf8 = false;
+        $this->soap_client->setDebugLevel(0);
 
         $err = $this->soap_client->getError();
         if ($err)
