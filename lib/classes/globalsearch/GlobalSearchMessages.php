@@ -79,7 +79,7 @@ class GlobalSearchMessages extends GlobalSearchModule
             'description' => self::mark($message->message, $search, true),
             'additional'  => htmlReady($additional),
             'expand'      => self::getSearchURL($search),
-            'user'        => $message->author->getFullName()
+            'user'        => $message->author ? $message->author->getFullName() : _('unbekannt')
         ];
         return $result;
     }

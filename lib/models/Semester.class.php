@@ -54,6 +54,8 @@ class Semester extends SimpleORMap
             'set' => false,
         );
 
+        $config['alias_fields']['token'] = 'semester_token';
+
         parent::configure($config);
     }
 
