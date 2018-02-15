@@ -57,6 +57,7 @@
 
                 // No results found...
                 if (!$.isPlainObject(json) || $.isEmptyObject(json)) {
+                    wrapper.removeClass('is-searching');
                     resultsDiv.html(resultsDiv.data('no-result'));
                     return;
                 }
